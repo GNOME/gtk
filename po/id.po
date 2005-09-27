@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:41-0400\n"
+"POT-Creation-Date: 2005-09-27 00:50-0400\n"
 "PO-Revision-Date: 2005-05-18 22:28+0300\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -66,6 +66,7 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Format berkas gambar pada berkas %s tidak dikenali"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
+#, c-format
 msgid "Unrecognized image file format"
 msgstr "Format berkas gambar tidak dikenali"
 
@@ -87,14 +88,17 @@ msgstr ""
 "format : %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
+#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Memori yang tersedia tidak mencukupi untuk menyimpan gambar"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1467
+#, c-format
 msgid "Failed to open temporary file"
 msgstr "Berkas sementara tidak dapat dibuka"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1492
+#, c-format
 msgid "Failed to read from temporary file"
 msgstr "Berkas sementara tidak dapat dibaca"
 
@@ -113,6 +117,7 @@ msgstr ""
 "tidak tersimpan: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1970 gdk-pixbuf/gdk-pixbuf-io.c:2020
+#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 "Memori yang tersedia tidak mencukupi untuk menyimpan gambar ke dalam buffer"
@@ -132,14 +137,17 @@ msgstr ""
 "menyebutkan alasan errornya"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
+#, c-format
 msgid "Image header corrupt"
 msgstr "Kepala berkas gambar rusak"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
+#, c-format
 msgid "Image format unknown"
 msgstr "Format gambar tidak dikenal"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Data piksel gambar rusak"
 
@@ -150,23 +158,28 @@ msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "Tidak bisa menyediakan ruang untuk gambar sebesar %u byte"
 
 #: gdk-pixbuf/io-ani.c:244
+#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Ada data error pada bagian ikon pada animasi"
 
 #: gdk-pixbuf/io-ani.c:337
+#, c-format
 msgid "Unsupported animation type"
 msgstr "Tipe animasi tidak bisa dibuka"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+#, c-format
 msgid "Invalid header in animation"
 msgstr "Header pada animasi tidak benar"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Tidak cukup memori untuk membuka animasi ini"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Ada bagian yang rusak pada animasi"
 
@@ -176,26 +189,32 @@ msgstr "Format gambar ANI"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
+#, c-format
 msgid "BMP image has bogus header data"
 msgstr "Gambar BMP ini memiliki data header yang aneh"
 
 #: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:401
+#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Tidak cukup memori untuk membuka gambar bitmap"
 
 #: gdk-pixbuf/io-bmp.c:287
+#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "Gambar BMP ini memiliki ukuran header yang tidak dikenal"
 
 #: gdk-pixbuf/io-bmp.c:325
+#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Gambar BMP topdown tidak dapat dikompresi"
 
 #: gdk-pixbuf/io-bmp.c:1203
+#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas BMP"
 
 #: gdk-pixbuf/io-bmp.c:1244
+#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Berkas BMP tidak dapat ditulis"
 
@@ -209,6 +228,7 @@ msgid "Failure reading GIF: %s"
 msgstr "Ada error saat membaca berkas GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Ada data yang hilang pada berkas GIF ini (mungkin rusak?)"
 
@@ -218,35 +238,43 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Error intern pada pembuka berkas GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:575
+#, c-format
 msgid "Stack overflow"
 msgstr "Stack meluap"
 
 #: gdk-pixbuf/io-gif.c:635
+#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "Pembuka gambar GIF tidak mengenali isi berkas ini"
 
 #: gdk-pixbuf/io-gif.c:664
+#, c-format
 msgid "Bad code encountered"
 msgstr "Ada kode yang salah"
 
 #: gdk-pixbuf/io-gif.c:674
+#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Ada entri tabel sirkular pada berkas GIF"
 
 #: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
 #: gdk-pixbuf/io-gif.c:1612
+#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Tidak cukup memori untuk membuka berkas GIF"
 
 #: gdk-pixbuf/io-gif.c:947
+#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Tidak cukup memori untuk melakukan komposisi bingkai dalam  berkas GIF"
 
 #: gdk-pixbuf/io-gif.c:1116
+#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Gambar dalam berkas GIF rusak (kompresi LZWnya salah)"
 
 #: gdk-pixbuf/io-gif.c:1166
+#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Berkas ini bukan berkas GIF"
 
@@ -256,6 +284,7 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Versi %s berkas GIF ini tidak bisa dibuka"
 
 #: gdk-pixbuf/io-gif.c:1287
+#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -264,6 +293,7 @@ msgstr ""
 "memiliki peta warna lokal."
 
 #: gdk-pixbuf/io-gif.c:1519
+#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "Gambar GIF rusak atau tidak lengkap."
 
@@ -273,38 +303,47 @@ msgstr "Format gambar GIF"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
 #: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
+#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Tidak cukup memori untuk membuka ikon"
 
 #: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:338
+#, c-format
 msgid "Invalid header in icon"
 msgstr "Header error pada ikon"
 
 #: gdk-pixbuf/io-ico.c:301
+#, c-format
 msgid "Icon has zero width"
 msgstr "Ikon memiliki lebar 0"
 
 #: gdk-pixbuf/io-ico.c:311
+#, c-format
 msgid "Icon has zero height"
 msgstr "Ikon memiliki tinggi 0"
 
 #: gdk-pixbuf/io-ico.c:363
+#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Ikon terkompresi tidak bisa dibuka"
 
 #: gdk-pixbuf/io-ico.c:396
+#, c-format
 msgid "Unsupported icon type"
 msgstr "Tipe ikon tidak bisa dibuka"
 
 #: gdk-pixbuf/io-ico.c:490
+#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Tidak cukup memori untuk membuka berkas ICO"
 
 #: gdk-pixbuf/io-ico.c:955
+#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "Gambar ini terlalu besar untuk berkas ICO"
 
 #: gdk-pixbuf/io-ico.c:966
+#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "Kursor hotspot di luar gambar"
 
@@ -323,6 +362,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Ada error saat membuka berkas gambar JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:352
+#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -337,6 +377,7 @@ msgstr "Ruang warna JPEG tidak bisa ditampilkan (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
 #: gdk-pixbuf/io-jpeg.c:955
+#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas JPEG"
 
@@ -359,18 +400,22 @@ msgid "The JPEG image format"
 msgstr "Format gambar JPEG"
 
 #: gdk-pixbuf/io-pcx.c:191
+#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Tidak dapat mengalokasikan memori untuk header"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
+#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Tidak dapat mengalokasikan memori untuk buffer konteks"
 
 #: gdk-pixbuf/io-pcx.c:607
+#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Gambar memiliki tinggi dan/atau lebar yang salah"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
+#, c-format
 msgid "Image has unsupported bpp"
 msgstr "Gambar ini memiliki bpp yang tidak dapat ditampilkan"
 
@@ -380,22 +425,27 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Gambar ini memiliki jumlah bidang %d-bit yang tidak dapat ditampilkan"
 
 #: gdk-pixbuf/io-pcx.c:648
+#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Tidak dapat membuat pixbuf baru"
 
 #: gdk-pixbuf/io-pcx.c:656
+#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Tidak dapat mengalokasikan memori untuk data baris"
 
 #: gdk-pixbuf/io-pcx.c:663
+#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Tidak dapat mengalokasikan memori untuk data berpalet"
 
 #: gdk-pixbuf/io-pcx.c:710
+#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "Tidak berhasil memperoleh semua baris pada gambar PCX"
 
 #: gdk-pixbuf/io-pcx.c:717
+#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "TIdak ada palet pada data PCX"
 
@@ -404,22 +454,27 @@ msgid "The PCX image format"
 msgstr "Format gambar PCX"
 
 #: gdk-pixbuf/io-png.c:55
+#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Nilai bit per channel pada gambar PNG salah."
 
 #: gdk-pixbuf/io-png.c:136
+#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "PNG tertransformasi memiliki lebar atau tinggi 0"
 
 #: gdk-pixbuf/io-png.c:144
+#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Nilai bit ber channel pada berkas PNG tertransformasi tidak bernilai 8"
 
 #: gdk-pixbuf/io-png.c:153
+#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "PNG tertransformasi bukan dalam mode RGB atau RGBA"
 
 #: gdk-pixbuf/io-png.c:162
+#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "PNG tertransformasi berisi nilai channel yang salah, seharusnya bernilai 3 "
@@ -432,6 +487,7 @@ msgstr "Error fatal pada berkas gambar PNG: %s"
 
 # r gdk-pixbuf/io-png.c:301
 #: gdk-pixbuf/io-png.c:301
+#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Tidak cukup memori untuk meload berkas PNG"
 
@@ -445,6 +501,7 @@ msgstr ""
 "aplikasi untuk mengurangi penggunaan memori"
 
 #: gdk-pixbuf/io-png.c:669
+#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Error fatal saat membaca berkas gambar PNG"
 
@@ -454,11 +511,13 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Error fatal saat membaca berkas gambar PNG: %s"
 
 #: gdk-pixbuf/io-png.c:810
+#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Key untuk teks bagian PNG harus berukuran antara 1 dan 79 karakter."
 
 #: gdk-pixbuf/io-png.c:818
+#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Key untuk teks bagian PNG harus dalam karakter ASCII"
 
@@ -492,72 +551,89 @@ msgid "The PNG image format"
 msgstr "Format gambar PNG"
 
 #: gdk-pixbuf/io-pnm.c:252
+#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "Pembuka PNM mengalami kegagalan, harusnya menemukan bilangan bulat"
 
 #: gdk-pixbuf/io-pnm.c:284
+#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "Berkas PNM berisi byte awal yang salah"
 
 #: gdk-pixbuf/io-pnm.c:314
+#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Berkas PNM tidak dikenali"
 
 #: gdk-pixbuf/io-pnm.c:339
+#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "Berkas PNM memiliki gambar dengan lebar 0"
 
 #: gdk-pixbuf/io-pnm.c:360
+#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "Berkas PNM memiliki gambar dengan tinggi 0"
 
 #: gdk-pixbuf/io-pnm.c:383
+#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Warna maksimum PNM bernilai 0"
 
 #: gdk-pixbuf/io-pnm.c:391
+#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Nilai warna maksimum dalam berkas PNM terlalu besar"
 
 #: gdk-pixbuf/io-pnm.c:399
+#, c-format
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Saya tidak bisa membuka berkas PNM dengan nilai warna maksimum lebih dari 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
+#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Tipe gambar PNM raw tidak bisa dibaca"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
+#, c-format
 msgid "PNM image format is invalid"
 msgstr "Format gambar PNM yang ditemukan salah"
 
 #: gdk-pixbuf/io-pnm.c:663
+#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Pembuka gambar PNM tidak bisa membaca subformat PNM ini"
 
 #: gdk-pixbuf/io-pnm.c:718
+#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Akhir berkas dijumpai secara mendadak"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
+#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Format PNM raw harus berisi satu whitespace sebelum data gambar"
 
 #: gdk-pixbuf/io-pnm.c:777
+#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Tidak dapat mengalokasikan memori untuk membuka gambar PNM"
 
 #: gdk-pixbuf/io-pnm.c:827
+#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr ""
 "Memori yang tersedia tidak mencukupi untuk membuka struktur konteks PNM"
 
 #: gdk-pixbuf/io-pnm.c:878
+#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Akhir data gambar PNM berakhir secara mendadak"
 
 #: gdk-pixbuf/io-pnm.c:1010
+#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas PNM"
 
@@ -566,18 +642,22 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Keluarga format gambar PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:126
+#, c-format
 msgid "RAS image has bogus header data"
 msgstr "Gambar RAS memiliki data header yang salah"
 
 #: gdk-pixbuf/io-ras.c:148
+#, c-format
 msgid "RAS image has unknown type"
 msgstr "Gambar RAS memiliki tipe yang tidak dikenali"
 
 #: gdk-pixbuf/io-ras.c:156
+#, c-format
 msgid "unsupported RAS image variation"
 msgstr "varian gambar RAS yang tidak dapat dibuka"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Memori yang tersedia tidak mencukupi untuk membuka gambar RAS"
 
@@ -586,55 +666,68 @@ msgid "The Sun raster image format"
 msgstr "Format gambar raster Sun"
 
 #: gdk-pixbuf/io-tga.c:154
+#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Tidak dapat mengalokasikan memori untuk struktur IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:173
+#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Tidak dapat mengalokasikan memori untuk data IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:184
+#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "Tidak dapat melakukan realokasi data IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:214
+#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Tidak dapat mengalokasikan data sementara IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:348
+#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Tidak dapat mengalokasikan pixbuf baru"
 
 #: gdk-pixbuf/io-tga.c:689
+#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Tidak dapat mengalokasikan struktur peta warna"
 
 #: gdk-pixbuf/io-tga.c:696
+#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Tidak dapat mengalokasikan isi peta warna"
 
 #: gdk-pixbuf/io-tga.c:718
+#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Kedalaman bit untuk entri peta warna salah"
 
 #: gdk-pixbuf/io-tga.c:736
+#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Tidak dapat mengalokasikan memori untuk kepala TGA"
 
 #: gdk-pixbuf/io-tga.c:769
+#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "Gambar TGA ini memiliki dimensi yang salah"
 
 #: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
 #: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
+#, c-format
 msgid "TGA image type not supported"
 msgstr "Tipe gambar TGA jenis ini tidak dapat dibuka"
 
 #: gdk-pixbuf/io-tga.c:858
+#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Tidak dapat mengalokasikan memori untuk struktur konteks TGA"
 
 #: gdk-pixbuf/io-tga.c:923
+#, c-format
 msgid "Excess data in file"
 msgstr "Data berlebih pada file"
 
@@ -651,15 +744,18 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Tidak dapat menentukan tinggi gambar (file TIFFnya rusak)"
 
 #: gdk-pixbuf/io-tiff.c:188
+#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "Lebar atau tinggi gambar TIFF ini bernilai nol"
 
 #: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
+#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensi gambar TIFF ini terlampau besar"
 
 #: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
 #: gdk-pixbuf/io-tiff.c:572
+#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas TIFF"
 
@@ -684,18 +780,22 @@ msgid "The TIFF image format"
 msgstr "Format gambar TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
+#, c-format
 msgid "Image has zero width"
 msgstr "Gambar memiliki lebar nol"
 
 #: gdk-pixbuf/io-wbmp.c:264
+#, c-format
 msgid "Image has zero height"
 msgstr "Gambar memiliki tinggi nol"
 
 #: gdk-pixbuf/io-wbmp.c:275
+#, c-format
 msgid "Not enough memory to load image"
 msgstr "Memori tidak mencukupi untuk membuka gambar"
 
 #: gdk-pixbuf/io-wbmp.c:334
+#, c-format
 msgid "Couldn't save the rest"
 msgstr "Saya tidak dapat menyimpan sisa data"
 
@@ -704,14 +804,17 @@ msgid "The WBMP image format"
 msgstr "Format gambar WBMP"
 
 #: gdk-pixbuf/io-xbm.c:287
+#, c-format
 msgid "Invalid XBM file"
 msgstr "Berkas XBM ini tidak dapat dibuka"
 
 #: gdk-pixbuf/io-xbm.c:297
+#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas gambar XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
+#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "Saat membuka gambar XBM ini, ada kegagalan saat menulis ke berkas sementara"
@@ -721,38 +824,47 @@ msgid "The XBM image format"
 msgstr "Format gambar XBM"
 
 #: gdk-pixbuf/io-xpm.c:467
+#, c-format
 msgid "No XPM header found"
 msgstr "Header XPM tidak dijumpai"
 
 #: gdk-pixbuf/io-xpm.c:476
+#, c-format
 msgid "Invalid XPM header"
 msgstr "Kepala XPM tidak benar"
 
 #: gdk-pixbuf/io-xpm.c:484
+#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "Berkas XPM ini memiliki lebar gambar <= 0"
 
 #: gdk-pixbuf/io-xpm.c:492
+#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "Berkas XPM ini memiliki tinggi gambar <= 0"
 
 #: gdk-pixbuf/io-xpm.c:500
+#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Berkas XPM ini memiliki jumlah karakter per pixel yang salah"
 
 #: gdk-pixbuf/io-xpm.c:507
+#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "Berkas XPM ini memiliki jumlah warna yang tidak benar"
 
 #: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
+#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Tidak dapat mengalokasikan memori untuk membuka gambar XPM"
 
 #: gdk-pixbuf/io-xpm.c:542
+#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "Saya tidak dapat membaca peta warna XPM"
 
 #: gdk-pixbuf/io-xpm.c:771
+#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Saat membuka gambar XPM ini, ada kegagalan menulis ke berkas sementara"
 
@@ -1077,7 +1189,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:647
+#: gtk/gtkcalendar.c:648
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1085,7 +1197,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:661
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1097,7 +1209,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1549
+#: gtk/gtkcalendar.c:1558
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1112,7 +1224,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1826
+#: gtk/gtkcalendar.c:1835
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1257,20 +1369,20 @@ msgstr "Roda Warna"
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
-#: gtk/gtkentry.c:4560 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtkentry.c:4570 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: gtk/gtkfilechooser.c:1672 gtk/gtkfilechooser.c:1716
-#: gtk/gtkfilechooser.c:1791 gtk/gtkfilechooser.c:1835
+#: gtk/gtkfilechooser.c:1681 gtk/gtkfilechooser.c:1725
+#: gtk/gtkfilechooser.c:1800 gtk/gtkfilechooser.c:1844
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Nama berkas ini salah: %s"
@@ -1335,139 +1447,142 @@ msgstr "Isi folder tidak dapat ditampilkan"
 msgid "Could not get information about '%s': %s"
 msgstr "Informasi tentang '%s' tidak tersedia: %s"
 
-#: gtk/gtkfilechooserdefault.c:2353
+#: gtk/gtkfilechooserdefault.c:2356
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Masukkan folder '%s' ke dalam buku alamat"
 
-#: gtk/gtkfilechooserdefault.c:2394
+#: gtk/gtkfilechooserdefault.c:2397
+#, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Masukkan folder ini ke dalam buku alamat"
 
-#: gtk/gtkfilechooserdefault.c:2396
+#: gtk/gtkfilechooserdefault.c:2399
+#, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Masukkan folder terpilih ke dalam buku alamat"
 
-#: gtk/gtkfilechooserdefault.c:2436
+#: gtk/gtkfilechooserdefault.c:2439
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Hapus buku alamat '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: gtk/gtkfilechooserdefault.c:2870
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Buku alamat %s tidak dapat dibuat karena nama pathnya salah."
 
-#: gtk/gtkfilechooserdefault.c:3082
+#: gtk/gtkfilechooserdefault.c:3085
 msgid "Remove"
 msgstr "Hapus"
 
-#: gtk/gtkfilechooserdefault.c:3091
+#: gtk/gtkfilechooserdefault.c:3094
 msgid "Rename..."
 msgstr "Ganti nama..."
 
-#: gtk/gtkfilechooserdefault.c:3214
+#: gtk/gtkfilechooserdefault.c:3217
 msgid "Shortcuts"
 msgstr "Jalan Pintas"
 
-#: gtk/gtkfilechooserdefault.c:3268
+#: gtk/gtkfilechooserdefault.c:3271
 msgid "Folder"
 msgstr "Folder"
 
-#: gtk/gtkfilechooserdefault.c:3324 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3327 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "T_ambah"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3334
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Masukkan folder terpilih ke dalam Buku Alamat"
 
-#: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3339 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "Hapu_s"
 
-#: gtk/gtkfilechooserdefault.c:3343
+#: gtk/gtkfilechooserdefault.c:3346
 msgid "Remove the selected bookmark"
 msgstr "Hapus buku alamat yang sedang dipilih"
 
-#: gtk/gtkfilechooserdefault.c:3443
+#: gtk/gtkfilechooserdefault.c:3446
 msgid "Could not select file"
 msgstr "Berkas tidak dapat dipilih"
 
-#: gtk/gtkfilechooserdefault.c:3499
+#: gtk/gtkfilechooserdefault.c:3502
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Berkas %s tidak dapat dipilih karena nama pathnya salah."
 
-#: gtk/gtkfilechooserdefault.c:3571
+#: gtk/gtkfilechooserdefault.c:3574
 msgid "_Add to Bookmarks"
 msgstr "M_asukkan dalam Buku Alamat"
 
-#: gtk/gtkfilechooserdefault.c:3581
+#: gtk/gtkfilechooserdefault.c:3584
 msgid "Open _Location"
 msgstr "Buka _Lokasi"
 
-#: gtk/gtkfilechooserdefault.c:3593
+#: gtk/gtkfilechooserdefault.c:3596
 msgid "Show _Hidden Files"
 msgstr "Tampilkan Berkas _Tersembunyi"
 
-#: gtk/gtkfilechooserdefault.c:3717 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3720 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Berkas"
 
-#: gtk/gtkfilechooserdefault.c:3762
+#: gtk/gtkfilechooserdefault.c:3765
 msgid "Name"
 msgstr "Nama"
 
-#: gtk/gtkfilechooserdefault.c:3787
+#: gtk/gtkfilechooserdefault.c:3790
 msgid "Size"
 msgstr "Ukuran"
 
-#: gtk/gtkfilechooserdefault.c:3800
+#: gtk/gtkfilechooserdefault.c:3803
 msgid "Modified"
 msgstr "Tgl Perubahan"
 
-#: gtk/gtkfilechooserdefault.c:3832
+#: gtk/gtkfilechooserdefault.c:3835
 msgid "Select which types of files are shown"
 msgstr "Pilih jenis berkas yang ingin ditampilkan"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3868
+#: gtk/gtkfilechooserdefault.c:3871
 msgid "Create Fo_lder"
 msgstr "Buat Fo_lder Baru"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3989
+#: gtk/gtkfilechooserdefault.c:3992
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: gtk/gtkfilechooserdefault.c:4029
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "_Browse for other folders"
 msgstr "_Lihat folder lainnya"
 
-#: gtk/gtkfilechooserdefault.c:4284
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Save in _folder:"
 msgstr "Simpan ke dalam _folder:"
 
-#: gtk/gtkfilechooserdefault.c:4286
+#: gtk/gtkfilechooserdefault.c:4289
 msgid "Create in _folder:"
 msgstr "Buat di dalam _folder:"
 
-#: gtk/gtkfilechooserdefault.c:5318
+#: gtk/gtkfilechooserdefault.c:5321
+#, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Tidak dapat mengganti folder karena tidak berada pada komputer lokal"
 
-#: gtk/gtkfilechooserdefault.c:5880
+#: gtk/gtkfilechooserdefault.c:5883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Jalan pintas  %s tidak ada"
 
-#: gtk/gtkfilechooserdefault.c:6135
+#: gtk/gtkfilechooserdefault.c:6138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Berkas \"%s\" sudah ada. Ingin menimpanya?"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1475,78 +1590,78 @@ msgstr ""
 "Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru "
 "bila Anda menimpanya."
 
-#: gtk/gtkfilechooserdefault.c:6143
+#: gtk/gtkfilechooserdefault.c:6146
 msgid "_Replace"
 msgstr "_Ganti nama"
 
-#: gtk/gtkfilechooserdefault.c:6634
+#: gtk/gtkfilechooserdefault.c:6637
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s tidak dapat dipasang"
 
-#: gtk/gtkfilechooserdefault.c:6926
+#: gtk/gtkfilechooserdefault.c:6932
 msgid "Type name of new folder"
 msgstr "Ketikkan nama untuk folder baru ini"
 
-#: gtk/gtkfilechooserdefault.c:6968
+#: gtk/gtkfilechooserdefault.c:6974
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:6970
+#: gtk/gtkfilechooserdefault.c:6976
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6972
+#: gtk/gtkfilechooserdefault.c:6978
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:6980
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7020 gtk/gtkfilechooserdefault.c:7044
+#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/gtkfilechooserdefault.c:7031
+#: gtk/gtkfilechooserdefault.c:7037
 msgid "Today"
 msgstr "Hari Ini"
 
-#: gtk/gtkfilechooserdefault.c:7033
+#: gtk/gtkfilechooserdefault.c:7039
 msgid "Yesterday"
 msgstr "Kemarin"
 
-#: gtk/gtkfilechooserdefault.c:7115
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Cannot change folder"
 msgstr "Folder tidak dapat diganti"
 
-#: gtk/gtkfilechooserdefault.c:7116
+#: gtk/gtkfilechooserdefault.c:7122
 msgid "The folder you specified is an invalid path."
 msgstr "Folder yang Anda sebutkan tidak benar."
 
-#: gtk/gtkfilechooserdefault.c:7155
+#: gtk/gtkfilechooserdefault.c:7161
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nama berkas tidak dapat dibuat dari '%s' dan '%s'"
 
-#: gtk/gtkfilechooserdefault.c:7191
+#: gtk/gtkfilechooserdefault.c:7197
 msgid "Could not select item"
 msgstr "Objek tidak dapat dipilih"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7237
 msgid "Open Location"
 msgstr "Buka Lokasi"
 
-#: gtk/gtkfilechooserdefault.c:7238
+#: gtk/gtkfilechooserdefault.c:7244
 msgid "Save in Location"
 msgstr "Simpan Pada"
 
-#: gtk/gtkfilechooserdefault.c:7265
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "_Location:"
 msgstr "_Lokasi: "
 
@@ -1742,6 +1857,7 @@ msgid "Error creating directory '%s': %s"
 msgstr "Error saat membuat direktori '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
+#, c-format
 msgid "This file system does not support mounting"
 msgstr "Sistem berkas ini tidak dapat dikaitkan"
 
@@ -1829,7 +1945,7 @@ msgstr "U_kuran:"
 msgid "_Preview:"
 msgstr "_Contoh:"
 
-#: gtk/gtkfontsel.c:1383
+#: gtk/gtkfontsel.c:1388
 msgid "Font Selection"
 msgstr "Pilih Fonta"
 

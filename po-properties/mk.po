@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:42-0400\n"
+"POT-Creation-Date: 2005-09-27 00:51-0400\n"
 "PO-Revision-Date: 2005-08-11 21:07+0200\n"
 "Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -92,7 +92,7 @@ msgstr "Стандарден приказ"
 msgid "The default display for GDK"
 msgstr "Стандарден приказ за GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Екран"
 
@@ -1044,7 +1044,7 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Render detail to pass to the theme engine"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:530
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:533
 msgid "Icon Name"
 msgstr "Име на икона"
 
@@ -2055,11 +2055,11 @@ msgstr "Покажи скриени"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:275
 msgid "Do overwrite confirmation"
 msgstr "Do overwrite confirmation"
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:276
 msgid ""
 "Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
 "overwrite confirmation dialog if the user selects a file name that already "
@@ -2476,7 +2476,7 @@ msgstr "Show menu images"
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:539
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:542
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
@@ -4532,7 +4532,7 @@ msgstr "Color to use for odd rows"
 msgid "Whether to display the column"
 msgstr "Whether to display the column"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:461
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:464
 msgid "Resizable"
 msgstr "Со променлива големина"
 
@@ -4880,35 +4880,35 @@ msgstr "Нацртај граница"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Size of areas outside the widget's allocation to draw"
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:422
 msgid "Window Type"
 msgstr "Тип на прозорец"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:423
 msgid "The type of the window"
 msgstr "Типот на прозорецот"
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:431
 msgid "Window Title"
 msgstr "Наслов на прозорец"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:432
 msgid "The title of the window"
 msgstr "Насловот на прозорецот"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:439
 msgid "Window Role"
 msgstr "Виткање на прозорец"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:440
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unique identifier for the window to be used when restoring a session"
 
-#: gtk/gtkwindow.c:444
+#: gtk/gtkwindow.c:447
 msgid "Allow Shrink"
 msgstr "Дозволи намалување"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:449
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4917,23 +4917,23 @@ msgstr ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:456
 msgid "Allow Grow"
 msgstr "Allow Grow"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:457
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "If TRUE, users can expand the window beyond its minimum size"
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:465
 msgid "If TRUE, users can resize the window"
 msgstr "If TRUE, users can resize the window"
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:472
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:473
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4941,74 +4941,74 @@ msgstr ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:480
 msgid "Window Position"
 msgstr "Позиција на прозорецот"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:481
 msgid "The initial position of the window"
 msgstr "The initial position of the window"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:489
 msgid "Default Width"
 msgstr "Стандардна широчина"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:490
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Стандардната широчина за прозорецот, се користи при прикажување на прозорецот"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:499
 msgid "Default Height"
 msgstr "Стандардна височина"
 
-#: gtk/gtkwindow.c:497
+#: gtk/gtkwindow.c:500
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Стандардната височина за прозорецот, се користи при прикажување на прозорецот"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:509
 msgid "Destroy with Parent"
 msgstr "Destroy with Parent"
 
-#: gtk/gtkwindow.c:507
+#: gtk/gtkwindow.c:510
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "If this window should be destroyed when the parent is destroyed"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:517
 msgid "Icon"
 msgstr "Икона"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:518
 msgid "Icon for this window"
 msgstr "Иконата за овој прозорец"
 
-#: gtk/gtkwindow.c:531
+#: gtk/gtkwindow.c:534
 msgid "Name of the themed icon for this window"
 msgstr "Името на иконата од темата за овој прозорец"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:549
 msgid "Is Active"
 msgstr "Е активно"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:550
 msgid "Whether the toplevel is the current active window"
 msgstr "Whether the toplevel is the current active window"
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:557
 msgid "Focus in Toplevel"
 msgstr "Focus in Toplevel"
 
-#: gtk/gtkwindow.c:555
+#: gtk/gtkwindow.c:558
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Whether the input focus is within this GtkWindow"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:565
 msgid "Type hint"
 msgstr "Type hint"
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:566
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5016,59 +5016,59 @@ msgstr ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:574
 msgid "Skip taskbar"
 msgstr "Прескокни лента со програми"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:575
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE if the window should not be in the task bar."
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:582
 msgid "Skip pager"
 msgstr "Прескокни пејџер"
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:583
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE if the window should not be in the pager."
 
-#: gtk/gtkwindow.c:587
+#: gtk/gtkwindow.c:590
 msgid "Urgent"
 msgstr "Итно"
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:591
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "TRUE if the window should be brought to the user's attention."
 
-#: gtk/gtkwindow.c:602
+#: gtk/gtkwindow.c:605
 msgid "Accept focus"
 msgstr "Прифати фокус"
 
-#: gtk/gtkwindow.c:603
+#: gtk/gtkwindow.c:606
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE if the window should receive the input focus."
 
-#: gtk/gtkwindow.c:617
+#: gtk/gtkwindow.c:620
 msgid "Focus on map"
 msgstr "Focus on map"
 
-#: gtk/gtkwindow.c:618
+#: gtk/gtkwindow.c:621
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE if the window should receive the input focus when mapped."
 
-#: gtk/gtkwindow.c:632
+#: gtk/gtkwindow.c:635
 msgid "Decorated"
 msgstr "Украсено"
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:636
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Whether the window should be decorated by the window manager"
 
-#: gtk/gtkwindow.c:648
+#: gtk/gtkwindow.c:651
 msgid "Gravity"
 msgstr "Гравитација"
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:652
 msgid "The window gravity of the window"
 msgstr "The window gravity of the window"
 

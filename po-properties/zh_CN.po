@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:42-0400\n"
+"POT-Creation-Date: 2005-09-27 00:51-0400\n"
 "PO-Revision-Date: 2005-07-23 15:01+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -92,7 +92,7 @@ msgstr "默认显示"
 msgid "The default display for GDK"
 msgstr "GDK 的默认显示"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "屏幕"
 
@@ -1005,7 +1005,7 @@ msgstr "细节"
 msgid "Render detail to pass to the theme engine"
 msgstr "传递给主题引擎的渲染细节"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:530
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:533
 msgid "Icon Name"
 msgstr "图标名称"
 
@@ -2001,11 +2001,11 @@ msgstr "显示隐藏文件"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否显示隐藏的文件或文件夹。"
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:275
 msgid "Do overwrite confirmation"
 msgstr "执行覆盖确认"
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:276
 msgid ""
 "Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
 "overwrite confirmation dialog if the user selects a file name that already "
@@ -2416,7 +2416,7 @@ msgstr "显示菜单图像"
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:539
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:542
 msgid "The screen where this window will be displayed"
 msgstr "此窗口要显示的屏幕"
 
@@ -4409,7 +4409,7 @@ msgstr "奇数行所使用的颜色"
 msgid "Whether to display the column"
 msgstr "是否显示列"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:461
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:464
 msgid "Resizable"
 msgstr "可改变大小"
 
@@ -4745,187 +4745,187 @@ msgstr "绘制边框"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "部件外要绘制的区域大小"
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:422
 msgid "Window Type"
 msgstr "窗口类型"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:423
 msgid "The type of the window"
 msgstr "窗口的类型"
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:431
 msgid "Window Title"
 msgstr "窗口标题"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:432
 msgid "The title of the window"
 msgstr "窗口的标题"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:439
 msgid "Window Role"
 msgstr "窗口角色"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:440
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "恢复会话时要使用的窗口唯一标识符"
 
-#: gtk/gtkwindow.c:444
+#: gtk/gtkwindow.c:447
 msgid "Allow Shrink"
 msgstr "可缩小"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:449
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr "若为 TRUE，则窗口将没有最小尺寸。选中此设置十之八九会有问题"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:456
 msgid "Allow Grow"
 msgstr "可放大"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:457
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "若为 TRUE，则用户可以将窗口放大至超过最小尺寸"
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:465
 msgid "If TRUE, users can resize the window"
 msgstr "若为 TRUE，则用户可以改变窗口的大小"
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:472
 msgid "Modal"
 msgstr "模态"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:473
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr "若为 TRUE，则窗口为模态的(此窗口弹出后其他窗口不可用)"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:480
 msgid "Window Position"
 msgstr "窗口位置"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:481
 msgid "The initial position of the window"
 msgstr "窗口的初始位置"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:489
 msgid "Default Width"
 msgstr "默认宽度"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:490
 msgid "The default width of the window, used when initially showing the window"
 msgstr "默认的窗口宽度，在初次显示窗口时使用"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:499
 msgid "Default Height"
 msgstr "默认高度"
 
-#: gtk/gtkwindow.c:497
+#: gtk/gtkwindow.c:500
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "默认的窗口高度，在初次显示窗口时使用"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:509
 msgid "Destroy with Parent"
 msgstr "随主窗口关闭"
 
-#: gtk/gtkwindow.c:507
+#: gtk/gtkwindow.c:510
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "当关闭主窗口时是否连此窗口也一起关闭"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:517
 msgid "Icon"
 msgstr "图标"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:518
 msgid "Icon for this window"
 msgstr "窗口的图标"
 
-#: gtk/gtkwindow.c:531
+#: gtk/gtkwindow.c:534
 msgid "Name of the themed icon for this window"
 msgstr "此窗口的主题图标名称"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:549
 msgid "Is Active"
 msgstr "为激活"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:550
 msgid "Whether the toplevel is the current active window"
 msgstr "顶级是否为当前激活窗口"
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:557
 msgid "Focus in Toplevel"
 msgstr "聚焦顶级窗口"
 
-#: gtk/gtkwindow.c:555
+#: gtk/gtkwindow.c:558
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "输入焦点是否位于此 GtkWindow"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:565
 msgid "Type hint"
 msgstr "类型提示"
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:566
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "帮助环境环境理解这是哪种类型的窗口以及如何对待它。"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:574
 msgid "Skip taskbar"
 msgstr "跳过任务栏"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:575
 msgid "TRUE if the window should not be in the task bar."
 msgstr "窗口是否要显示在任务栏上。"
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:582
 msgid "Skip pager"
 msgstr "跳过桌面选择器"
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:583
 msgid "TRUE if the window should not be in the pager."
 msgstr "窗口是否要显示在桌面选择器上。"
 
-#: gtk/gtkwindow.c:587
+#: gtk/gtkwindow.c:590
 msgid "Urgent"
 msgstr "紧急"
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:591
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "如果窗口要引起用户注意，则为 TRUE。"
 
-#: gtk/gtkwindow.c:602
+#: gtk/gtkwindow.c:605
 msgid "Accept focus"
 msgstr "接受焦点"
 
-#: gtk/gtkwindow.c:603
+#: gtk/gtkwindow.c:606
 msgid "TRUE if the window should receive the input focus."
 msgstr "窗口是否要接受输入焦点。"
 
-#: gtk/gtkwindow.c:617
+#: gtk/gtkwindow.c:620
 msgid "Focus on map"
 msgstr "映射时获得焦点"
 
-#: gtk/gtkwindow.c:618
+#: gtk/gtkwindow.c:621
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "窗口是否要在映射时接受输入焦点。"
 
-#: gtk/gtkwindow.c:632
+#: gtk/gtkwindow.c:635
 msgid "Decorated"
 msgstr "装饰"
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:636
 msgid "Whether the window should be decorated by the window manager"
 msgstr "窗口是否要由窗口管理器装饰"
 
-#: gtk/gtkwindow.c:648
+#: gtk/gtkwindow.c:651
 msgid "Gravity"
 msgstr "重力"
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:652
 msgid "The window gravity of the window"
 msgstr "窗口的窗口重力"
 

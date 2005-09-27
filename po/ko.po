@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:41-0400\n"
+"POT-Creation-Date: 2005-09-27 00:50-0400\n"
 "PO-Revision-Date: 2005-08-22 23:04+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -67,6 +67,7 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
+#, c-format
 msgid "Unrecognized image file format"
 msgstr "알 수 없는 그림 파일 형식"
 
@@ -86,14 +87,17 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
+#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1467
+#, c-format
 msgid "Failed to open temporary file"
 msgstr "임시 파일을 여는 데 실패했습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1492
+#, c-format
 msgid "Failed to read from temporary file"
 msgstr "임시 파일을 읽는 데 실패했습니다"
 
@@ -112,6 +116,7 @@ msgstr ""
 "지 않았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1970 gdk-pixbuf/gdk-pixbuf-io.c:2020
+#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
 
@@ -130,14 +135,17 @@ msgstr ""
 "만, 실패한 이유를 넘겨주지 않았습니다"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
+#, c-format
 msgid "Image header corrupt"
 msgstr "잘못된 그림 헤더"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
+#, c-format
 msgid "Image format unknown"
 msgstr "알 수 없는 그림 형식"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#, c-format
 msgid "Image pixel data corrupt"
 msgstr "잘못된 그림 픽셀 데이타"
 
@@ -148,23 +156,28 @@ msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u 바이트의 그림 버퍼를 할당하는 데 실패했습니다"
 
 #: gdk-pixbuf/io-ani.c:244
+#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "움직이는 그림안에 뜻밖의 아이콘 부분이 있습니다"
 
 #: gdk-pixbuf/io-ani.c:337
+#, c-format
 msgid "Unsupported animation type"
 msgstr "지원하지 않는 움직이는 그림 형식"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+#, c-format
 msgid "Invalid header in animation"
 msgstr "움직이는 그림의 헤더가 잘못되었습니다"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#, c-format
 msgid "Not enough memory to load animation"
 msgstr "움직이는 그림을 읽어 들이는 데 메모리가 부족합니다"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+#, c-format
 msgid "Malformed chunk in animation"
 msgstr "움직이는 그림에 잘못된 부분이 있습니다"
 
@@ -174,26 +187,32 @@ msgstr "ANI 그림 형식"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
+#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP 그림이 잘못된 헤더 데이타를 가지고 있습니다"
 
 #: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:401
+#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "비트맵 그림을 읽는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-bmp.c:287
+#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니다"
 
 #: gdk-pixbuf/io-bmp.c:325
+#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "톱다운 BMP 그림은 압축할 수 없습니다"
 
 #: gdk-pixbuf/io-bmp.c:1203
+#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "BMP 파일을 저장하는 데 필요한 메모리 할당을 할 수 없습니다"
 
 #: gdk-pixbuf/io-bmp.c:1244
+#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "BMP 파일에 쓸 수 없습니다"
 
@@ -207,6 +226,7 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 파일에 데이타가 부족합니다 (중간에 잘린 파일?)"
 
@@ -216,35 +236,43 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF 읽기에서 내부 오류 (%s)"
 
 #: gdk-pixbuf/io-gif.c:575
+#, c-format
 msgid "Stack overflow"
 msgstr "스택 넘침"
 
 #: gdk-pixbuf/io-gif.c:635
+#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF 그림 읽기에서 이 그림을 이해할 수 없습니다."
 
 #: gdk-pixbuf/io-gif.c:664
+#, c-format
 msgid "Bad code encountered"
 msgstr "잘못된 코드 발견"
 
 #: gdk-pixbuf/io-gif.c:674
+#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "GIF 파일에 순환 테이블 항목"
 
 #: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
 #: gdk-pixbuf/io-gif.c:1612
+#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-gif.c:947
+#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF 파일의 프레임을 만드는 데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-gif.c:1116
+#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 그림이 잘못되었습니다 (잘못된 LZW 압축)"
 
 #: gdk-pixbuf/io-gif.c:1166
+#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "GIF 파일이 아닌 것 같습니다"
 
@@ -254,12 +282,14 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF 파일 형식의 버전 %s은(는) 지원되지 않습니다."
 
 #: gdk-pixbuf/io-gif.c:1287
+#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬러맵이 없습니다."
 
 #: gdk-pixbuf/io-gif.c:1519
+#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
 
@@ -269,38 +299,47 @@ msgstr "GIF 그림 형식"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
 #: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
+#, c-format
 msgid "Not enough memory to load icon"
 msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
 
 #: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:338
+#, c-format
 msgid "Invalid header in icon"
 msgstr "아이콘의 헤더가 잘못되었습니다"
 
 #: gdk-pixbuf/io-ico.c:301
+#, c-format
 msgid "Icon has zero width"
 msgstr "아이콘의 너비가 0입니다"
 
 #: gdk-pixbuf/io-ico.c:311
+#, c-format
 msgid "Icon has zero height"
 msgstr "아이콘의 높이가 0입니다"
 
 #: gdk-pixbuf/io-ico.c:363
+#, c-format
 msgid "Compressed icons are not supported"
 msgstr "압축된 아이콘은 지원하지 않습니다"
 
 #: gdk-pixbuf/io-ico.c:396
+#, c-format
 msgid "Unsupported icon type"
 msgstr "지원하지 않는 아이콘 형식"
 
 #: gdk-pixbuf/io-ico.c:490
+#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "ICO 파일을 읽는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-ico.c:955
+#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "그림을 ICO로 저장하기에는 너무 큽니다"
 
 #: gdk-pixbuf/io-ico.c:966
+#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "핫스폿이 그림 바깥에 있습니다"
 
@@ -319,6 +358,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG 파일 해석중 오류 (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:352
+#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -333,6 +373,7 @@ msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
 #: gdk-pixbuf/io-jpeg.c:955
+#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
 
@@ -356,18 +397,22 @@ msgid "The JPEG image format"
 msgstr "JPEG 그림 형식"
 
 #: gdk-pixbuf/io-pcx.c:191
+#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "헤더에 필요한 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
+#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "컨텍스트 버퍼에 필요한 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-pcx.c:607
+#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "그림의 폭이나 높이, 혹은 둘 다 잘못되었습니다"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
+#, c-format
 msgid "Image has unsupported bpp"
 msgstr "그림의 픽셀당 비트수를 지원하지 않습니다"
 
@@ -377,22 +422,27 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "그림의 %d비트 플레인을 지원하지 않습니다"
 
 #: gdk-pixbuf/io-pcx.c:648
+#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "새 픽스버퍼를 만들 수 없습니다"
 
 #: gdk-pixbuf/io-pcx.c:656
+#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "라인 데이터에 쓸 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-pcx.c:663
+#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "팔레트 데이터에 쓸 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-pcx.c:710
+#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "PCXX 그림에서 읽지 못한 라인이 있습니다"
 
 #: gdk-pixbuf/io-pcx.c:717
+#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "PCX 데이터의 끝까지 팔레트를 발견하지 못했습니다"
 
@@ -401,22 +451,27 @@ msgid "The PCX image format"
 msgstr "PCX 그림 형식"
 
 #: gdk-pixbuf/io-png.c:55
+#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다."
 
 #: gdk-pixbuf/io-png.c:136
+#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "변환된 PNG의 너비나 높이가 0입니다."
 
 #: gdk-pixbuf/io-png.c:144
+#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "변환된 PNG의 채널 당 비트수가 8이 아닙니다."
 
 #: gdk-pixbuf/io-png.c:153
+#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "변환된 PNG가 RGB나 RGBA 형식이 아닙니다."
 
 #: gdk-pixbuf/io-png.c:162
+#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr "변환된 PNG의 채널 수를 지원하지 않습니다. 3이나 4가 되어야 합니다."
 
@@ -426,6 +481,7 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG 그림 파일에서 치명적인 오류: %s"
 
 #: gdk-pixbuf/io-png.c:301
+#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG 파일을 읽어들이는 데 메모리가 부족합니다"
 
@@ -439,6 +495,7 @@ msgstr ""
 "행중인 프로그램을 끝내보십시오"
 
 #: gdk-pixbuf/io-png.c:669
+#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류"
 
@@ -448,11 +505,13 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류: %s"
 
 #: gdk-pixbuf/io-png.c:810
+#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다."
 
 #: gdk-pixbuf/io-png.c:818
+#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다."
 
@@ -482,71 +541,88 @@ msgid "The PNG image format"
 msgstr "PNG 그림 형식"
 
 #: gdk-pixbuf/io-pnm.c:252
+#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "PNM 읽어들이기에서 정수가 나와야 하는 상황에서, 정수가 나오지 않았습니다"
 
 #: gdk-pixbuf/io-pnm.c:284
+#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM 파일의 최초 바이트가 올바르지 못합니다"
 
 #: gdk-pixbuf/io-pnm.c:314
+#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM 파일이 인식 가능한 PNM 서브포맷에 맞지 않습니다"
 
 #: gdk-pixbuf/io-pnm.c:339
+#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM 파일의 그림 너비가 0입니다"
 
 #: gdk-pixbuf/io-pnm.c:360
+#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM 파일의 그림 높이가 0입니다"
 
 #: gdk-pixbuf/io-pnm.c:383
+#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM 파일의 최대 색 값이 0입니다"
 
 #: gdk-pixbuf/io-pnm.c:391
+#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
 
 #: gdk-pixbuf/io-pnm.c:399
+#, c-format
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "최대 색 값이 255보다 큰 PNM 파일은 처리할 수 없습니다"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
+#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "원시 PNM 그림 형식이 잘못되었습니다"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
+#, c-format
 msgid "PNM image format is invalid"
 msgstr "PNM 그림 형식이 잘못되었습니다"
 
 #: gdk-pixbuf/io-pnm.c:663
+#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않습니다"
 
 #: gdk-pixbuf/io-pnm.c:718
+#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "파일이 갑작스럽게 끝났습니다"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
+#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "원시 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
 
 #: gdk-pixbuf/io-pnm.c:777
+#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-pnm.c:827
+#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM 컨텍스트 구조를 읽어들이는 데 메모리가 부족합니다"
 
 #: gdk-pixbuf/io-pnm.c:878
+#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "PNM 그림 데이타가 갑자기 끝났습니다"
 
 #: gdk-pixbuf/io-pnm.c:1010
+#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM 파일 읽는데 메모리 부족"
 
@@ -555,18 +631,22 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM 그림 형식 패밀리"
 
 #: gdk-pixbuf/io-ras.c:126
+#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS 그림이 잘못된 헤더 데이타를 가지고 있습니다"
 
 #: gdk-pixbuf/io-ras.c:148
+#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS 그림의 형식을 알 수 없습니다"
 
 #: gdk-pixbuf/io-ras.c:156
+#, c-format
 msgid "unsupported RAS image variation"
 msgstr "지원하지 않는 RAS 그림 형식"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "RAS 그림을 읽어들이는데 메모리가 충분하지 않습니다"
 
@@ -575,55 +655,68 @@ msgid "The Sun raster image format"
 msgstr "Sun 래스터 그림 형식"
 
 #: gdk-pixbuf/io-tga.c:154
+#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer 구조에 쓸 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:173
+#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer 데이터에 쓸 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:184
+#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "IOBuffer 데이터를 다시 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:214
+#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "임시 IOBuffer 데이터를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:348
+#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "새 픽스버퍼를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:689
+#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "컬러맵 구조를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:696
+#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "컬러맵 항목을 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:718
+#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "지원하지 않는 컬러맵 항목의 색상 모드"
 
 #: gdk-pixbuf/io-tga.c:736
+#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:769
+#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 그림의 크기가 잘못되었습니다"
 
 #: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
 #: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
+#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA 그림 형식은 지원하지 않습니다"
 
 #: gdk-pixbuf/io-tga.c:858
+#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-tga.c:923
+#, c-format
 msgid "Excess data in file"
 msgstr "파일에 너무 많은 데이타"
 
@@ -640,15 +733,18 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "그림 높이를 얻을 수 없습니다 (틀린 TIFF 파일)"
 
 #: gdk-pixbuf/io-tiff.c:188
+#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF 그림의 너비나 높이가 0입니다"
 
 #: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
+#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF 그림의 크기가 너무 큽니다"
 
 #: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
 #: gdk-pixbuf/io-tiff.c:572
+#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF 파일 여는데 메모리 부족"
 
@@ -673,18 +769,22 @@ msgid "The TIFF image format"
 msgstr "TIFF 그림 형식"
 
 #: gdk-pixbuf/io-wbmp.c:246
+#, c-format
 msgid "Image has zero width"
 msgstr "그림의 너비가 0입니다"
 
 #: gdk-pixbuf/io-wbmp.c:264
+#, c-format
 msgid "Image has zero height"
 msgstr "그림의 높이가 0입니다"
 
 #: gdk-pixbuf/io-wbmp.c:275
+#, c-format
 msgid "Not enough memory to load image"
 msgstr "그림을 읽어들이는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-wbmp.c:334
+#, c-format
 msgid "Couldn't save the rest"
 msgstr "나머지를 저장할 수 없습니다"
 
@@ -693,14 +793,17 @@ msgid "The WBMP image format"
 msgstr "WBMP 그림 형식"
 
 #: gdk-pixbuf/io-xbm.c:287
+#, c-format
 msgid "Invalid XBM file"
 msgstr "잘못된 XBM 파일"
 
 #: gdk-pixbuf/io-xbm.c:297
+#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM 그림 파일을 읽어들이기에 메모리가 부족합니다"
 
 #: gdk-pixbuf/io-xbm.c:441
+#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
 
@@ -709,40 +812,49 @@ msgid "The XBM image format"
 msgstr "XBM 그림 형식"
 
 #: gdk-pixbuf/io-xpm.c:467
+#, c-format
 msgid "No XPM header found"
 msgstr "XPM 헤더를 찾을 수 없습니다"
 
 #: gdk-pixbuf/io-xpm.c:476
+#, c-format
 msgid "Invalid XPM header"
 msgstr "잘못된 XPM 헤더"
 
 # 의문: 부등호를 문장에 쓰는 hacker writing style - 한국어에서도 유지시켜야 하나?
 #: gdk-pixbuf/io-xpm.c:484
+#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XPM 파일의 그림 너비가 <= 0"
 
 # 의문: 부등호를 문장에 쓰는 hacker writing style - 한국어에서도 유지시켜야 하나?
 #: gdk-pixbuf/io-xpm.c:492
+#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XPM 파일의 그림 높이가 <= 0"
 
 #: gdk-pixbuf/io-xpm.c:500
+#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM 파일이 잘못된 픽셀당 문자 수를 가지고 있습니다"
 
 #: gdk-pixbuf/io-xpm.c:507
+#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM 파일이 잘못된 색 개수를 가지고 있습니다"
 
 #: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
+#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
 
 #: gdk-pixbuf/io-xpm.c:542
+#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "XPM 컬러맵을 읽을 수 없습니다"
 
 #: gdk-pixbuf/io-xpm.c:771
+#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
 
@@ -1067,7 +1179,7 @@ msgstr "백슬래시"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:647
+#: gtk/gtkcalendar.c:648
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1075,7 +1187,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:661
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1087,7 +1199,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1549
+#: gtk/gtkcalendar.c:1558
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1102,7 +1214,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1826
+#: gtk/gtkcalendar.c:1835
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1246,20 +1358,20 @@ msgstr "색상환"
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:4560 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
-#: gtk/gtkentry.c:4570 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
-#: gtk/gtkfilechooser.c:1672 gtk/gtkfilechooser.c:1716
-#: gtk/gtkfilechooser.c:1791 gtk/gtkfilechooser.c:1835
+#: gtk/gtkfilechooser.c:1681 gtk/gtkfilechooser.c:1725
+#: gtk/gtkfilechooser.c:1800 gtk/gtkfilechooser.c:1844
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "잘못된 파일 이름: %s"
@@ -1323,217 +1435,220 @@ msgstr "폴더 내용을 표시할 수 없습니다"
 msgid "Could not get information about '%s': %s"
 msgstr "'%s'에 관한 정보를 가져오지 못했습니다: %s"
 
-#: gtk/gtkfilechooserdefault.c:2353
+#: gtk/gtkfilechooserdefault.c:2356
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:2394
+#: gtk/gtkfilechooserdefault.c:2397
+#, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "현재 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:2396
+#: gtk/gtkfilechooserdefault.c:2399
+#, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "선택한 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:2436
+#: gtk/gtkfilechooserdefault.c:2439
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' 책갈피를 지웁니다"
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: gtk/gtkfilechooserdefault.c:2870
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "%s에 대한 책갈피를 더할 수 없습니다.  경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:3082
+#: gtk/gtkfilechooserdefault.c:3085
 msgid "Remove"
 msgstr "지우기"
 
-#: gtk/gtkfilechooserdefault.c:3091
+#: gtk/gtkfilechooserdefault.c:3094
 msgid "Rename..."
 msgstr "이름 바꾸기..."
 
-#: gtk/gtkfilechooserdefault.c:3214
+#: gtk/gtkfilechooserdefault.c:3217
 msgid "Shortcuts"
 msgstr "바로 가기"
 
-#: gtk/gtkfilechooserdefault.c:3268
+#: gtk/gtkfilechooserdefault.c:3271
 msgid "Folder"
 msgstr "폴더"
 
-#: gtk/gtkfilechooserdefault.c:3324 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3327 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "더하기(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3334
 msgid "Add the selected folder to the Bookmarks"
 msgstr "선택한 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3339 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "지우기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:3343
+#: gtk/gtkfilechooserdefault.c:3346
 msgid "Remove the selected bookmark"
 msgstr "선택한 북마크를 지웁니다"
 
-#: gtk/gtkfilechooserdefault.c:3443
+#: gtk/gtkfilechooserdefault.c:3446
 msgid "Could not select file"
 msgstr "파일을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:3499
+#: gtk/gtkfilechooserdefault.c:3502
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "'%s' 파일을 선택할 수 없습니다.  경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:3571
+#: gtk/gtkfilechooserdefault.c:3574
 msgid "_Add to Bookmarks"
 msgstr "책갈피에 더하기(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3581
+#: gtk/gtkfilechooserdefault.c:3584
 msgid "Open _Location"
 msgstr "위치 열기(_L)"
 
-#: gtk/gtkfilechooserdefault.c:3593
+#: gtk/gtkfilechooserdefault.c:3596
 msgid "Show _Hidden Files"
 msgstr "숨겨진 파일 표시(_H)"
 
-#: gtk/gtkfilechooserdefault.c:3717 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3720 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "파일"
 
-#: gtk/gtkfilechooserdefault.c:3762
+#: gtk/gtkfilechooserdefault.c:3765
 msgid "Name"
 msgstr "이름"
 
-#: gtk/gtkfilechooserdefault.c:3787
+#: gtk/gtkfilechooserdefault.c:3790
 msgid "Size"
 msgstr "크기"
 
-#: gtk/gtkfilechooserdefault.c:3800
+#: gtk/gtkfilechooserdefault.c:3803
 msgid "Modified"
 msgstr "고쳐짐"
 
-#: gtk/gtkfilechooserdefault.c:3832
+#: gtk/gtkfilechooserdefault.c:3835
 msgid "Select which types of files are shown"
 msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3868
+#: gtk/gtkfilechooserdefault.c:3871
 msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3989
+#: gtk/gtkfilechooserdefault.c:3992
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4029
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4284
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4286
+#: gtk/gtkfilechooserdefault.c:4289
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5318
+#: gtk/gtkfilechooserdefault.c:5321
+#, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:5880
+#: gtk/gtkfilechooserdefault.c:5883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6135
+#: gtk/gtkfilechooserdefault.c:6138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserdefault.c:6143
+#: gtk/gtkfilechooserdefault.c:6146
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:6634
+#: gtk/gtkfilechooserdefault.c:6637
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6926
+#: gtk/gtkfilechooserdefault.c:6932
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:6968
+#: gtk/gtkfilechooserdefault.c:6974
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:6970
+#: gtk/gtkfilechooserdefault.c:6976
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6972
+#: gtk/gtkfilechooserdefault.c:6978
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:6980
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7020 gtk/gtkfilechooserdefault.c:7044
+#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:7031
+#: gtk/gtkfilechooserdefault.c:7037
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:7033
+#: gtk/gtkfilechooserdefault.c:7039
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserdefault.c:7115
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Cannot change folder"
 msgstr "폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7116
+#: gtk/gtkfilechooserdefault.c:7122
 msgid "The folder you specified is an invalid path."
 msgstr "지정한 폴더의 경로가 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:7155
+#: gtk/gtkfilechooserdefault.c:7161
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s' 및 '%s'에서 파일 이름을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7191
+#: gtk/gtkfilechooserdefault.c:7197
 msgid "Could not select item"
 msgstr "항목을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7237
 msgid "Open Location"
 msgstr "위치 열기"
 
-#: gtk/gtkfilechooserdefault.c:7238
+#: gtk/gtkfilechooserdefault.c:7244
 msgid "Save in Location"
 msgstr "위치에 저장"
 
-#: gtk/gtkfilechooserdefault.c:7265
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "_Location:"
 msgstr "위치(_L):"
 
@@ -1731,6 +1846,7 @@ msgid "Error creating directory '%s': %s"
 msgstr "'%s' 디렉토리를 만드는 데 오류가 발생했습니다: %s"
 
 #: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
+#, c-format
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 
@@ -1819,7 +1935,7 @@ msgstr "크기(_Z):"
 msgid "_Preview:"
 msgstr "미리보기(_P):"
 
-#: gtk/gtkfontsel.c:1383
+#: gtk/gtkfontsel.c:1388
 msgid "Font Selection"
 msgstr "글꼴 선택"
 

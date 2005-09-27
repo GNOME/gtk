@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:42-0400\n"
+"POT-Creation-Date: 2005-09-27 00:51-0400\n"
 "PO-Revision-Date: 2004-02-21 18:21-0600\n"
 "Last-Translator: Dinesh Nadarajah <dinesh_list@sbcglobal.net>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"
@@ -89,7 +89,7 @@ msgstr "கொடா நிலை காட்சி(திரை)"
 msgid "The default display for GDK"
 msgstr ""
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "திரை"
 
@@ -1066,7 +1066,7 @@ msgstr "விவரங்கள்"
 msgid "Render detail to pass to the theme engine"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:530
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:533
 #, fuzzy
 msgid "Icon Name"
 msgstr "எழுத்துரு பெயர்"
@@ -2118,11 +2118,11 @@ msgstr "மறைந்திருப்பதை காண்பிக்க�
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "கோப்புகளை படைக்கும்/கையாளும் பொத்தான்களை காண்பிக்கப்பட வேண்டுமா."
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:275
 msgid "Do overwrite confirmation"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:276
 msgid ""
 "Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
 "overwrite confirmation dialog if the user selects a file name that already "
@@ -2571,7 +2571,7 @@ msgstr "பட்டி உருவங்களை காட்டுக"
 msgid "Whether images should be shown in menus"
 msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:539
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:542
 msgid "The screen where this window will be displayed"
 msgstr ""
 
@@ -4703,7 +4703,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr "Whether to display the column"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:461
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:464
 msgid "Resizable"
 msgstr "அளவு மாற்றக்கூடியது"
 
@@ -5073,36 +5073,36 @@ msgstr "தத்தல் எல்லை"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:422
 msgid "Window Type"
 msgstr "சாளர வகை"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:423
 msgid "The type of the window"
 msgstr "சாளரத்தின் வகை"
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:431
 msgid "Window Title"
 msgstr "சாளர தலைப்பு"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:432
 msgid "The title of the window"
 msgstr "சாளரத்தின் தலைப்பு"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:439
 #, fuzzy
 msgid "Window Role"
 msgstr "சாளர தலைப்பு"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:440
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:444
+#: gtk/gtkwindow.c:447
 msgid "Allow Shrink"
 msgstr "Allow Shrink"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:449
 #, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5111,25 +5111,25 @@ msgstr ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:456
 msgid "Allow Grow"
 msgstr "வளர்ச்சி அநுமதி"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:457
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "If TRUE, users can expand the window beyond its minimum size."
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:465
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "TRUE என்றால், பயனரால் சாளரத்தின் அளவை மாற்ற முடியும்."
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:472
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:473
 #, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
@@ -5138,144 +5138,144 @@ msgstr ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:480
 msgid "Window Position"
 msgstr "சாளரத்தின் இடம்"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:481
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "தொடங்கும்போது சாளரத்தின் இடம்"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:489
 msgid "Default Width"
 msgstr "கொடா நிலை அகளம்"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:490
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை அகளம்."
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:499
 msgid "Default Height"
 msgstr "கொடா நிலை உயரம்"
 
-#: gtk/gtkwindow.c:497
+#: gtk/gtkwindow.c:500
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை உயரம்"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:509
 msgid "Destroy with Parent"
 msgstr "பெற்றோரை அழி"
 
-#: gtk/gtkwindow.c:507
+#: gtk/gtkwindow.c:510
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "If this window should be destroyed when the parent is destroyed"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:517
 msgid "Icon"
 msgstr "குறும்படம்"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:518
 msgid "Icon for this window"
 msgstr "இந்த சாளரத்தின் குறும்படம்"
 
-#: gtk/gtkwindow.c:531
+#: gtk/gtkwindow.c:534
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "இந்த சாளரத்தின் குறும்படம்"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:549
 #, fuzzy
 msgid "Is Active"
 msgstr "Active"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:550
 #, fuzzy
 msgid "Whether the toplevel is the current active window"
 msgstr "Whether the widget is the default widget"
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:557
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:555
+#: gtk/gtkwindow.c:558
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:565
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:566
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:574
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:575
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:582
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:583
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
 
-#: gtk/gtkwindow.c:587
+#: gtk/gtkwindow.c:590
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:591
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr ""
 "If TRUE, the widget will receive the default action when it is focused."
 
-#: gtk/gtkwindow.c:602
+#: gtk/gtkwindow.c:605
 #, fuzzy
 msgid "Accept focus"
 msgstr "Has focus"
 
-#: gtk/gtkwindow.c:603
+#: gtk/gtkwindow.c:606
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr ""
 "If TRUE, the widget will receive the default action when it is focused."
 
-#: gtk/gtkwindow.c:617
+#: gtk/gtkwindow.c:620
 msgid "Focus on map"
 msgstr ""
 
-#: gtk/gtkwindow.c:618
+#: gtk/gtkwindow.c:621
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 "If TRUE, the widget will receive the default action when it is focused."
 
-#: gtk/gtkwindow.c:632
+#: gtk/gtkwindow.c:635
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:636
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
-#: gtk/gtkwindow.c:648
+#: gtk/gtkwindow.c:651
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:652
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "சாளரத்தின் வகை"

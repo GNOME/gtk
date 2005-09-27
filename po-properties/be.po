@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:42-0400\n"
+"POT-Creation-Date: 2005-09-27 00:51-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -96,7 +96,7 @@ msgstr "Дапомны дысплей"
 msgid "The default display for GDK"
 msgstr "Дапомны дысплей для GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Экран"
 
@@ -1081,7 +1081,7 @@ msgstr "Дэталь"
 msgid "Render detail to pass to the theme engine"
 msgstr "Дэталь адлюстраваньня для перадачы рухавіку тэмы"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:530
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:533
 #, fuzzy
 msgid "Icon Name"
 msgstr "Назва шрыфту"
@@ -2142,11 +2142,11 @@ msgstr "Адлюстраваць тэкст"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Ці павінны быць адлюстраваны кнопкі для стварэньня/зьмяненьня файла."
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:275
 msgid "Do overwrite confirmation"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:276
 msgid ""
 "Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
 "overwrite confirmation dialog if the user selects a file name that already "
@@ -2589,7 +2589,7 @@ msgstr "Паказаць лычкі"
 msgid "Whether images should be shown in menus"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:539
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:542
 msgid "The screen where this window will be displayed"
 msgstr "Экран, дзе гэтае акно будзе адлюстравана"
 
@@ -4742,7 +4742,7 @@ msgstr "Колер, што выкарыстоўваецца для няцотн�
 msgid "Whether to display the column"
 msgstr "Ці будзе адлюстроўвацца слупок"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:461
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:464
 msgid "Resizable"
 msgstr "Зьмяняемая шырыня"
 
@@ -5096,36 +5096,36 @@ msgstr "Мяжы лычкі"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:422
 msgid "Window Type"
 msgstr "Тып акна"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:423
 msgid "The type of the window"
 msgstr "Тып гэтага акна"
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:431
 msgid "Window Title"
 msgstr "Назоў акна"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:432
 msgid "The title of the window"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:439
 #, fuzzy
 msgid "Window Role"
 msgstr "Назоў акна"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:440
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:444
+#: gtk/gtkwindow.c:447
 msgid "Allow Shrink"
 msgstr "Дазваляць сьцісканьне"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:449
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5134,25 +5134,25 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне гэтага "
 "значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:456
 msgid "Allow Grow"
 msgstr "Дазваляць рост"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:457
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно замест яго "
 "найменьшага памеру."
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:465
 msgid "If TRUE, users can resize the window"
 msgstr "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць зьмяняць памеры акна."
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:472
 msgid "Modal"
 msgstr "Мадальнае"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:473
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5160,77 +5160,77 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць быць "
 "выкарыстаны, покуль гэтае акно ня будзе зачынена)."
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:480
 msgid "Window Position"
 msgstr "Становішча акна"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:481
 msgid "The initial position of the window"
 msgstr "Пачатковае становішча акна."
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:489
 msgid "Default Width"
 msgstr "Дапомная шырыня"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:490
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Дапомная шырыня акна; выкарыстоўваецца пры першапачатковым адлюстраваньні "
 "акна."
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:499
 msgid "Default Height"
 msgstr "Дапомная вышыня"
 
-#: gtk/gtkwindow.c:497
+#: gtk/gtkwindow.c:500
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Дапомная вышыня акна; выкарыстоўваецца пры першапачатковым адлюстраваньні "
 "акна."
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:509
 msgid "Destroy with Parent"
 msgstr "Зьнішчыць з бацькоўскім"
 
-#: gtk/gtkwindow.c:507
+#: gtk/gtkwindow.c:510
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ці павінна гэта акно быць зьнішчына разам з бацькоўскім."
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:517
 msgid "Icon"
 msgstr "Значка"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:518
 msgid "Icon for this window"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkwindow.c:531
+#: gtk/gtkwindow.c:534
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:549
 msgid "Is Active"
 msgstr "Актыўны"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:550
 msgid "Whether the toplevel is the current active window"
 msgstr "Ці зьяўляецца верхні ўзровень бягучым актыўным акном."
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:557
 msgid "Focus in Toplevel"
 msgstr "Засяроджаньне на вехнім узроўні"
 
-#: gtk/gtkwindow.c:555
+#: gtk/gtkwindow.c:558
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Ці знаходзіцца засяроджаньне ўводу ў межах гэтага GtkWindow."
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:565
 msgid "Type hint"
 msgstr "Падказкі"
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:566
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5238,65 +5238,65 @@ msgstr ""
 "Падказкі значна спрашчаюць жыцьцё й дапамагаюць зразумець што за акно перад "
 "вамі й што зь ім рабіць."
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:574
 msgid "Skip taskbar"
 msgstr "Мінуць панэль задач"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:575
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць на панэлі задач."
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:582
 msgid "Skip pager"
 msgstr "Мінуць пэйджар"
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:583
 msgid "TRUE if the window should not be in the pager."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:587
+#: gtk/gtkwindow.c:590
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:591
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:602
+#: gtk/gtkwindow.c:605
 #, fuzzy
 msgid "Accept focus"
 msgstr "Засяроджаньне"
 
-#: gtk/gtkwindow.c:603
+#: gtk/gtkwindow.c:606
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:617
+#: gtk/gtkwindow.c:620
 #, fuzzy
 msgid "Focus on map"
 msgstr "Засяроджаньне на вехнім узроўні"
 
-#: gtk/gtkwindow.c:618
+#: gtk/gtkwindow.c:621
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:632
+#: gtk/gtkwindow.c:635
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:636
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:648
+#: gtk/gtkwindow.c:651
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:652
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "Тып гэтага акна"

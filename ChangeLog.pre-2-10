@@ -1,3 +1,13 @@
+2005-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.8.4 ===
+
+	* NEWS: Updates
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Pop below the entry if there's more free space below the entry 
+	than above.  (#316948, Tommi Komulainen)
+
 2005-09-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_shape_combine_mask): Set

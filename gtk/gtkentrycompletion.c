@@ -1387,7 +1387,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else if (x + popup_req.width > monitor.x + monitor.width)
     x = monitor.x + monitor.width - popup_req.width;
   
-  if (y + entry_req.height + popup_req.height <= monitor.y + monitor.height)
+  if (y + entry_req.height + popup_req.height <= monitor.y + monitor.height ||
+      y - monitor.y < (monitor.y + monitor.height) - (y + entry_req.height))
     {
       y += entry_req.height;
       above = FALSE;

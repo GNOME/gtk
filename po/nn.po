@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:41-0400\n"
+"POT-Creation-Date: 2005-09-27 00:50-0400\n"
 "PO-Revision-Date: 2004-03-21 21:36+0100\n"
 "Last-Translator: Åsmund Skjæveland\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -73,6 +73,7 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Klarte ikkje å kjenna att biletefilformatet på fila «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
+#, c-format
 msgid "Unrecognized image file format"
 msgstr "Ukjent biletefilformat"
 
@@ -92,14 +93,17 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Denne utgåva av gdk-pixbuf kan ikkje lagra bileteformatet: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
+#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Ikkje nok minne til å lagra bilete til tilbakekall"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1467
+#, c-format
 msgid "Failed to open temporary file"
 msgstr "Klarte ikkje opna mellombels fil"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1492
+#, c-format
 msgid "Failed to read from temporary file"
 msgstr "Klarte ikkje å lesa frå mellombels fil"
 
@@ -118,6 +122,7 @@ msgstr ""
 "alle data vart lagra: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1970 gdk-pixbuf/gdk-pixbuf-io.c:2020
+#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ikkje nok minne til å lagra biletet til eit buffer"
 
@@ -136,14 +141,17 @@ msgstr ""
 "gav inga feilmelding"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
+#, c-format
 msgid "Image header corrupt"
 msgstr "Øydelagt biletehovud"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
+#, c-format
 msgid "Image format unknown"
 msgstr "Ukjent bileteformat"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Øydelagte pikseldata i biletet"
 
@@ -155,23 +163,28 @@ msgstr[0] "klarte ikkje å setja av eit mellomlager på %u byte til biletet"
 msgstr[1] "klarte ikkje å setja av eit mellomlager på %u byte til biletet"
 
 #: gdk-pixbuf/io-ani.c:244
+#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Uventa ikondel i animasjon"
 
 #: gdk-pixbuf/io-ani.c:337
+#, c-format
 msgid "Unsupported animation type"
 msgstr "Animasjonstypen er ikkje støtta"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+#, c-format
 msgid "Invalid header in animation"
 msgstr "Ugyldig hovud i animasjonen"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Ikkje nok minne til å lasta animasjon"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Feil i ein del av animasjonen"
 
@@ -181,28 +194,32 @@ msgstr "Bileteformatet ANI"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
+#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP-biletet har ugyldige data i hovudet"
 
 #: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:401
+#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Ikkje nok minne til å lasta punktbilete"
 
 #: gdk-pixbuf/io-bmp.c:287
+#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP-biletet har ein storleik på biletehovudet som ikkje er støtta"
 
 #: gdk-pixbuf/io-bmp.c:325
+#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1203
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Kan ikkje setja av minne til å lasta JPEG-bilete"
 
 #: gdk-pixbuf/io-bmp.c:1244
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Kunne ikkje konvertera filnamnet"
 
@@ -216,6 +233,7 @@ msgid "Failure reading GIF: %s"
 msgstr "Klarte ikkje å lesa GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil manglar data (Har fila vorte kutta?)"
 
@@ -225,37 +243,43 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Intern feil i GIF-lastaren (%s)"
 
 #: gdk-pixbuf/io-gif.c:575
+#, c-format
 msgid "Stack overflow"
 msgstr "Stabeloverflyt"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
+#, fuzzy, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF-biletelastaren skjønar ikkje dette biletet"
 
 #: gdk-pixbuf/io-gif.c:664
+#, c-format
 msgid "Bad code encountered"
 msgstr "Fann ugyldig kode"
 
 #: gdk-pixbuf/io-gif.c:674
+#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Sirkulær tabelloppføring i GIF-fila"
 
 #: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
 #: gdk-pixbuf/io-gif.c:1612
+#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Ikkje nok minne til å lasta GIF-fila"
 
 #: gdk-pixbuf/io-gif.c:947
-#, fuzzy
+#, fuzzy, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Ikkje nok minne til å lasta GIF-fila"
 
 #: gdk-pixbuf/io-gif.c:1116
+#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-biletet er øydelagt (ikkje rett LZW-kompresjon)"
 
 #: gdk-pixbuf/io-gif.c:1166
+#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Fila ser ikkje ut til å vera ei GIF-fil"
 
@@ -265,6 +289,7 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Versjon %s av GIF-filformatet er ikkje støtta"
 
 #: gdk-pixbuf/io-gif.c:1287
+#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -273,6 +298,7 @@ msgstr ""
 "noko lokalt fargekart."
 
 #: gdk-pixbuf/io-gif.c:1519
+#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-biletet var avkutta eller ufullstendig."
 
@@ -282,38 +308,47 @@ msgstr "GIF-bileteformatet"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
 #: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
+#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Ikkje nok minne til å lasta ikonet"
 
 #: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:338
+#, c-format
 msgid "Invalid header in icon"
 msgstr "Ugyldig hovud i ikon"
 
 #: gdk-pixbuf/io-ico.c:301
+#, c-format
 msgid "Icon has zero width"
 msgstr "Ikonet har breidde null"
 
 #: gdk-pixbuf/io-ico.c:311
+#, c-format
 msgid "Icon has zero height"
 msgstr "Ikonet har høgde null"
 
 #: gdk-pixbuf/io-ico.c:363
+#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Komprimerte ikon er ikkje støtta"
 
 #: gdk-pixbuf/io-ico.c:396
+#, c-format
 msgid "Unsupported icon type"
 msgstr "Ikontypen er ikkje støtta"
 
 #: gdk-pixbuf/io-ico.c:490
+#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Ikkje nok minne til å lasta ICO-fila"
 
 #: gdk-pixbuf/io-ico.c:955
+#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "Biletet er for stort til å lagrast som ICO"
 
 #: gdk-pixbuf/io-ico.c:966
+#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "Peikarpunktet utanfor biletet"
 
@@ -332,6 +367,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Feil under tolking av JPEG-biletefil (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:352
+#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -346,6 +382,7 @@ msgstr "Ustøtta JPEG-fargerom (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
 #: gdk-pixbuf/io-jpeg.c:955
+#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kan ikkje setja av minne til å lasta JPEG-bilete"
 
@@ -370,18 +407,22 @@ msgid "The JPEG image format"
 msgstr "JPEG-bileteformatet"
 
 #: gdk-pixbuf/io-pcx.c:191
+#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Kan ikkje setja av minne til hovud"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
+#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Kan ikkje setja av minne til kontekstmellomlager"
 
 #: gdk-pixbuf/io-pcx.c:607
+#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Biletet har ugyldig høgde og/eller breidde"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
+#, c-format
 msgid "Image has unsupported bpp"
 msgstr "Biletet har eit ustøtta tal på bitar per piksel"
 
@@ -391,23 +432,28 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Biletet har eit ustøtta tal på %d-bit-plan"
 
 #: gdk-pixbuf/io-pcx.c:648
+#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Kan ikkje laga nytt pixbuf"
 
 #: gdk-pixbuf/io-pcx.c:656
+#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Kan ikkje setja av minne til linjedata"
 
 # TRN: Kva er "paletted" data?
 #: gdk-pixbuf/io-pcx.c:663
+#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Kan ikkje setja av minne til palettert data"
 
 #: gdk-pixbuf/io-pcx.c:710
+#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "Fekk ikkje alle linjene i PCX-biletet"
 
 #: gdk-pixbuf/io-pcx.c:717
+#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "Fann ikkje nokon palett på slutten av PCX-data"
 
@@ -416,22 +462,27 @@ msgid "The PCX image format"
 msgstr "Bileteformatet PCX"
 
 #: gdk-pixbuf/io-png.c:55
+#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Talet på bitar per kanal i PNG-biletet er ugyldig."
 
 #: gdk-pixbuf/io-png.c:136
+#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformert PNG har null breidde eller høgde."
 
 #: gdk-pixbuf/io-png.c:144
+#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Bitar per kanal i transformert PNG er ikkje 8."
 
 #: gdk-pixbuf/io-png.c:153
+#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Transformert PNG er ikkje RGB eller RGBA."
 
 #: gdk-pixbuf/io-png.c:162
+#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Transformert PNG har eit tal på kanalar som ikkje er støtta. Må vera 3 eller "
@@ -443,6 +494,7 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "Fatal feil i PNG-biletefil: %s"
 
 #: gdk-pixbuf/io-png.c:301
+#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Ikkje nok minne til å lasta PNG-fil"
 
@@ -456,6 +508,7 @@ msgstr ""
 "program for å frigjera minne"
 
 #: gdk-pixbuf/io-png.c:669
+#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Fatal feil under lesing av PNG-biletefil"
 
@@ -465,11 +518,13 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: gdk-pixbuf/io-png.c:810
+#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: gdk-pixbuf/io-png.c:818
+#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Nøklane til PNG-tekstbitar må vera ASCII-teikn."
 
@@ -500,72 +555,87 @@ msgid "The PNG image format"
 msgstr "PNG-bileteformatet"
 
 #: gdk-pixbuf/io-pnm.c:252
+#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNG-lastaren fann ikkje venta heiltal"
 
 #: gdk-pixbuf/io-pnm.c:284
+#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM-fila har ein feil i den fyrste byten."
 
 #: gdk-pixbuf/io-pnm.c:314
+#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM-fila er ikkje i eit gjenkjent underformat av PNM"
 
 #: gdk-pixbuf/io-pnm.c:339
+#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM-fila har ei biletebreidde på 0"
 
 #: gdk-pixbuf/io-pnm.c:360
+#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM-fila har ei biletehøgde på 0"
 
 #: gdk-pixbuf/io-pnm.c:383
+#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Største fargeverdi i PNM-fila er 0"
 
 #: gdk-pixbuf/io-pnm.c:391
+#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Største fargeverdi i PNM-fila er for stor"
 
 #: gdk-pixbuf/io-pnm.c:399
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "Kan ikkje handsama PNM-filer med fargeverdiar større enn 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
+#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Rå PNM-biletetype er ugyldig"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
+#, c-format
 msgid "PNM image format is invalid"
 msgstr "PNM-formatet er ugyldig"
 
 #: gdk-pixbuf/io-pnm.c:663
+#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM-biletelastaren støttar ikkje dette underformatet av PNM"
 
 #: gdk-pixbuf/io-pnm.c:718
+#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Fila sluttar for tidleg"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
+#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Rå PNM-format krev nøyaktig eitt blankt teikn før datablokka"
 
 #: gdk-pixbuf/io-pnm.c:777
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Kan ikkje setja av minne tll å lasta PNM-biletet"
 
 #: gdk-pixbuf/io-pnm.c:827
+#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Ikkje nok minne til å lasta PNM-kontekststruktur"
 
 #: gdk-pixbuf/io-pnm.c:878
+#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Uventa slutt på PNM-biletedata"
 
 #: gdk-pixbuf/io-pnm.c:1010
+#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Ikkje nok minne til å lasta PNM-fila"
 
@@ -574,18 +644,22 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM-bileteformatfamilien"
 
 #: gdk-pixbuf/io-ras.c:126
+#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS-biletet har ugyldige data i headeren"
 
 #: gdk-pixbuf/io-ras.c:148
+#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS-biletet har ukjent type"
 
 #: gdk-pixbuf/io-ras.c:156
+#, c-format
 msgid "unsupported RAS image variation"
 msgstr "Biletevariasjonen i RAS-biletet er ikkje støtta"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Ikkje nok minne til å lasta RAS-bilete"
 
@@ -594,64 +668,68 @@ msgid "The Sun raster image format"
 msgstr "Sun raster-bileteformat"
 
 #: gdk-pixbuf/io-tga.c:154
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Kan ikkje setja av minne til IOBuffer-struktur"
 
 #: gdk-pixbuf/io-tga.c:173
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Kan ikkje setja av minne til IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:184
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "Kan ikkje setja av minne på nytt (realloc) til IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:214
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Kan ikkje setja av mellombels IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:348
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Kan ikkje setja av nytt pixbuf"
 
 #: gdk-pixbuf/io-tga.c:689
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Kan ikkje setja av minne til fargekart-struktur"
 
 #: gdk-pixbuf/io-tga.c:696
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Kan ikkje setja av minne til fargekartoppføringar"
 
 #: gdk-pixbuf/io-tga.c:718
+#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Uventa mange bits i fargekartoppføringar"
 
 #: gdk-pixbuf/io-tga.c:736
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Kan ikkje setja av minne til TGA-hovud"
 
 #: gdk-pixbuf/io-tga.c:769
+#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-bilete har ugyldige dimensjonar"
 
 #: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
 #: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
+#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA-biletetypen er ikkje støtta"
 
 #: gdk-pixbuf/io-tga.c:858
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Kan ikkje setja av minne til TGA-kontekststruktur"
 
 #: gdk-pixbuf/io-tga.c:923
+#, c-format
 msgid "Excess data in file"
 msgstr "Overflødige data i fila"
 
@@ -668,15 +746,18 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Kan ikkje finna biletehøgda (ugyldig TIFF-fil)"
 
 #: gdk-pixbuf/io-tiff.c:188
+#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "Breidda eller høgda til TIFF-biletet er null"
 
 #: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
+#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF-bildet er for stort"
 
 #: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
 #: gdk-pixbuf/io-tiff.c:572
+#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikkje nok minne til å opna TIFF-biletet"
 
@@ -701,18 +782,22 @@ msgid "The TIFF image format"
 msgstr "TIFF-bileteformatet"
 
 #: gdk-pixbuf/io-wbmp.c:246
+#, c-format
 msgid "Image has zero width"
 msgstr "Biletet har null breidde"
 
 #: gdk-pixbuf/io-wbmp.c:264
+#, c-format
 msgid "Image has zero height"
 msgstr "Biletet har null høgde"
 
 #: gdk-pixbuf/io-wbmp.c:275
+#, c-format
 msgid "Not enough memory to load image"
 msgstr "Ikkje nok minne til å lasta bilete"
 
 #: gdk-pixbuf/io-wbmp.c:334
+#, c-format
 msgid "Couldn't save the rest"
 msgstr "Kunne ikkje lagra resten"
 
@@ -721,14 +806,17 @@ msgid "The WBMP image format"
 msgstr "WBMP-bileteformatet"
 
 #: gdk-pixbuf/io-xbm.c:287
+#, c-format
 msgid "Invalid XBM file"
 msgstr "Ugyldig XBM-fil"
 
 #: gdk-pixbuf/io-xbm.c:297
+#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Ikkje nok minne itl å lasta XBM-biletefil"
 
 #: gdk-pixbuf/io-xbm.c:441
+#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Klarte ikkje å skriva mellombels fil medan XBM-fil vart lasta"
 
@@ -737,41 +825,47 @@ msgid "The XBM image format"
 msgstr "XBM-bileteformatet"
 
 #: gdk-pixbuf/io-xpm.c:467
+#, c-format
 msgid "No XPM header found"
 msgstr "Fann ikkje noko XBM-hovud"
 
 #: gdk-pixbuf/io-xpm.c:476
-#, fuzzy
+#, fuzzy, c-format
 msgid "Invalid XPM header"
 msgstr "Ugyldig XBM-fil"
 
 #: gdk-pixbuf/io-xpm.c:484
+#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XBM-biletet har breidde mindre enn eller lik null"
 
 #: gdk-pixbuf/io-xpm.c:492
+#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XBM-biletet har høgde mindre enn eller lik null"
 
 #: gdk-pixbuf/io-xpm.c:500
+#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM-fila har ugyldig tal på teikn per piksel"
 
 #: gdk-pixbuf/io-xpm.c:507
+#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-fila har ikkje gyldig tal fargar"
 
 #: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Kan ikkje setja av minne til å lasta XPM-bilete"
 
 #: gdk-pixbuf/io-xpm.c:542
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot read XPM colormap"
 msgstr "Kan ikkje lesa XPM-fargekart"
 
 #: gdk-pixbuf/io-xpm.c:771
+#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Klarte ikkje å skriva til mellombels fil medan XPM-fila vart lasta"
 
@@ -1097,7 +1191,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:647
+#: gtk/gtkcalendar.c:648
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1105,7 +1199,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:661
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1117,7 +1211,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1549
+#: gtk/gtkcalendar.c:1558
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1132,7 +1226,7 @@ msgstr ""
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1826
+#: gtk/gtkcalendar.c:1835
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1281,20 +1375,20 @@ msgstr "Hjul"
 msgid "Color Selection"
 msgstr "Fargeval"
 
-#: gtk/gtkentry.c:4560 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "Marker _alt"
 
-#: gtk/gtkentry.c:4570 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "Inndata _metoder"
 
-#: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "Set _inn Unicode-kontrollteikn"
 
-#: gtk/gtkfilechooser.c:1672 gtk/gtkfilechooser.c:1716
-#: gtk/gtkfilechooser.c:1791 gtk/gtkfilechooser.c:1835
+#: gtk/gtkfilechooser.c:1681 gtk/gtkfilechooser.c:1725
+#: gtk/gtkfilechooser.c:1800 gtk/gtkfilechooser.c:1844
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Ugyldig filnamn: %s"
@@ -1370,238 +1464,240 @@ msgstr ""
 "Klarte ikkje å finna informasjon om %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2353
+#: gtk/gtkfilechooserdefault.c:2356
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2394
+#: gtk/gtkfilechooserdefault.c:2397
+#, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2396
+#: gtk/gtkfilechooserdefault.c:2399
+#, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2436
+#: gtk/gtkfilechooserdefault.c:2439
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: gtk/gtkfilechooserdefault.c:2870
 #, fuzzy, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
 
-#: gtk/gtkfilechooserdefault.c:3082
+#: gtk/gtkfilechooserdefault.c:3085
 #, fuzzy
 msgid "Remove"
 msgstr "Fje_rn"
 
-#: gtk/gtkfilechooserdefault.c:3091
+#: gtk/gtkfilechooserdefault.c:3094
 #, fuzzy
 msgid "Rename..."
 msgstr "_Gje nytt namn"
 
-#: gtk/gtkfilechooserdefault.c:3214
+#: gtk/gtkfilechooserdefault.c:3217
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3268
+#: gtk/gtkfilechooserdefault.c:3271
 msgid "Folder"
 msgstr "Mappe"
 
-#: gtk/gtkfilechooserdefault.c:3324 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3327 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Legg til"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3334
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3339 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: gtk/gtkfilechooserdefault.c:3343
+#: gtk/gtkfilechooserdefault.c:3346
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3443
+#: gtk/gtkfilechooserdefault.c:3446
 #, fuzzy
 msgid "Could not select file"
 msgstr ""
 "Kunne ikkje merka %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:3499
+#: gtk/gtkfilechooserdefault.c:3502
 #, fuzzy, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
 
-#: gtk/gtkfilechooserdefault.c:3571
+#: gtk/gtkfilechooserdefault.c:3574
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3581
+#: gtk/gtkfilechooserdefault.c:3584
 #, fuzzy
 msgid "Open _Location"
 msgstr "Opna adresse"
 
-#: gtk/gtkfilechooserdefault.c:3593
+#: gtk/gtkfilechooserdefault.c:3596
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3717 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3720 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilechooserdefault.c:3762
+#: gtk/gtkfilechooserdefault.c:3765
 msgid "Name"
 msgstr "Namn"
 
-#: gtk/gtkfilechooserdefault.c:3787
+#: gtk/gtkfilechooserdefault.c:3790
 msgid "Size"
 msgstr "Storleik"
 
-#: gtk/gtkfilechooserdefault.c:3800
+#: gtk/gtkfilechooserdefault.c:3803
 msgid "Modified"
 msgstr "Endra"
 
-#: gtk/gtkfilechooserdefault.c:3832
+#: gtk/gtkfilechooserdefault.c:3835
 msgid "Select which types of files are shown"
 msgstr ""
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3868
+#: gtk/gtkfilechooserdefault.c:3871
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Lag ny _mappe"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3989
+#: gtk/gtkfilechooserdefault.c:3992
 msgid "_Name:"
 msgstr "_Namn:"
 
-#: gtk/gtkfilechooserdefault.c:4029
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "_Browse for other folders"
 msgstr "_Bla etter andre mapper"
 
-#: gtk/gtkfilechooserdefault.c:4284
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Save in _folder:"
 msgstr "Lagra i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:4286
+#: gtk/gtkfilechooserdefault.c:4289
 msgid "Create in _folder:"
 msgstr "Lag i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:5318
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:5321
+#, fuzzy, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikkje gå til mappa. Ho er ikkje lokal"
 
-#: gtk/gtkfilechooserdefault.c:5880
+#: gtk/gtkfilechooserdefault.c:5883
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "snarvegen %s finst ikkje"
 
-#: gtk/gtkfilechooserdefault.c:6135
+#: gtk/gtkfilechooserdefault.c:6138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6143
+#: gtk/gtkfilechooserdefault.c:6146
 #, fuzzy
 msgid "_Replace"
 msgstr "_Gje nytt namn"
 
-#: gtk/gtkfilechooserdefault.c:6634
+#: gtk/gtkfilechooserdefault.c:6637
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Kunne ikkje merka %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6926
+#: gtk/gtkfilechooserdefault.c:6932
 msgid "Type name of new folder"
 msgstr "Skriv namnet på den nye mappa"
 
-#: gtk/gtkfilechooserdefault.c:6968
+#: gtk/gtkfilechooserdefault.c:6974
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:6970
+#: gtk/gtkfilechooserdefault.c:6976
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Ki"
 
-#: gtk/gtkfilechooserdefault.c:6972
+#: gtk/gtkfilechooserdefault.c:6978
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mi"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:6980
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gi"
 
-#: gtk/gtkfilechooserdefault.c:7020 gtk/gtkfilechooserdefault.c:7044
+#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserdefault.c:7031
+#: gtk/gtkfilechooserdefault.c:7037
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:7033
+#: gtk/gtkfilechooserdefault.c:7039
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:7115
+#: gtk/gtkfilechooserdefault.c:7121
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "Lag i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:7116
+#: gtk/gtkfilechooserdefault.c:7122
 #, fuzzy
 msgid "The folder you specified is an invalid path."
 msgstr "Kan ikkje gå til den oppgjevne mappa. Stien er ugyldig."
 
-#: gtk/gtkfilechooserdefault.c:7155
+#: gtk/gtkfilechooserdefault.c:7161
 #, fuzzy, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 "Klarte ikkje å byggja eit filnamn av «%s» og «%s»:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7191
+#: gtk/gtkfilechooserdefault.c:7197
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "Kunne ikkje merka %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7237
 msgid "Open Location"
 msgstr "Opna adresse"
 
-#: gtk/gtkfilechooserdefault.c:7238
+#: gtk/gtkfilechooserdefault.c:7244
 #, fuzzy
 msgid "Save in Location"
 msgstr "Opna adresse"
 
-#: gtk/gtkfilechooserdefault.c:7265
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "_Location:"
 msgstr "_Adresse:"
 
@@ -1797,6 +1893,7 @@ msgid "Error creating directory '%s': %s"
 msgstr "Feil ved oppretting av katalogen «%s»: %s"
 
 #: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
+#, c-format
 msgid "This file system does not support mounting"
 msgstr "Dette filsystemet støttar ikkje montering"
 
@@ -1883,7 +1980,7 @@ msgstr "S_torleik:"
 msgid "_Preview:"
 msgstr "_Førehandsvising:"
 
-#: gtk/gtkfontsel.c:1383
+#: gtk/gtkfontsel.c:1388
 msgid "Font Selection"
 msgstr "Skrifttypeval"
 

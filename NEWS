@@ -1,3 +1,37 @@
+Overview of Changes from GTK+ 2.8.3 to GTK+ 2.8.4
+=================================================
+* GtkFileChooser
+ - Turn off the profiling code [Federico Mena Quintero]
+* GtkEntryCompletion
+ - Make completion work with multibyte characters
+   [Tommi Komulainen]
+ - Improve positioning of large popups [Tommi Komulainen]
+* GtkTreeView
+ - Make column reordering by DND work better [Dan
+   Winship]
+* GtkCalendar
+ - Correctly determine the first weekday from
+   nl_langinfo() [Stanislav Brabec]
+* GtkFontSel, GtkFontButton
+ - Handle invalid font names better [Michael R. Walton,
+   Ed Catmur]
+* Deliver destroy events [Chris Lahey]
+* Fix redrawing of widgets in the the presence
+  of shaped child windows [Dan Winship]
+* Win32 changes
+ - Prune unnecessary mouse events [Tor Lillqvist]
+ - Fix memory corruption when using display 
+   names [Tor Lillqvist]
+* Other bug fixes [Alexander Larsson, John Cupitt,
+  John Finlay, Kjartan Maraas, Thomas Leonard,
+  Guillaume Cottenceau, Alexander Nedotsukov, Tim Janik,
+  Tor Lillqvist, Tommi Komulainen
+* Documentation improvements [Guillaume Cottenceau,
+  Torsten Schoenfeld, Damon Chaplin, Vincent Untz,
+  Tommi Komulainen, Federico Mena Quintero
+* New and updated translations (bg,bn,et,eu,fr,gl,hi,it,
+  ku,ru,sr,sv,tr,vi)
+
 Overview of Changes from GTK+ 2.8.2 to GTK+ 2.8.3
 =================================================
 * Fix problems with the handling of initial settings

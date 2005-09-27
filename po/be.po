@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 13:41-0400\n"
+"POT-Creation-Date: 2005-09-27 00:50-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -69,6 +69,7 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Немагчыма распазнаць фармат файла з малюнкам \"%s\"."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
+#, c-format
 msgid "Unrecognized image file format"
 msgstr "Нераспазнаваемы фармат файла з малюнкам."
 
@@ -89,17 +90,17 @@ msgstr ""
 "Гэтая зборка gdk-pixbuf не падтрымлівае захаваньне малюнкаў у фармаце %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
-#, fuzzy
+#, fuzzy, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Недастаткова памяці для загрузкі XBM файла з малюнкам"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1467
-#, fuzzy
+#, fuzzy, c-format
 msgid "Failed to open temporary file"
 msgstr "Памылка адчыненьня TIFF малюнка"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1492
-#, fuzzy
+#, fuzzy, c-format
 msgid "Failed to read from temporary file"
 msgstr "Памылка запісу ў часовы файл, пры загрузцы XBM малюнка"
 
@@ -118,7 +119,7 @@ msgstr ""
 "даньні могуць быць не захаваны: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1970 gdk-pixbuf/gdk-pixbuf-io.c:2020
-#, fuzzy
+#, fuzzy, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недастаткова памяці для загрузкі XBM файла з малюнкам"
 
@@ -137,14 +138,17 @@ msgstr ""
 "загрузкі малюнку '%s', але няма зьвестак аб прычыне памылкі."
 
 #: gdk-pixbuf/gdk-pixdata.c:147
+#, c-format
 msgid "Image header corrupt"
 msgstr "Загаловак малюнка пашкоджаны"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
+#, c-format
 msgid "Image format unknown"
 msgstr "Невядомы фармат малюнка"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Даньні малюнку пашкоджаны"
 
@@ -156,23 +160,28 @@ msgstr[0] "немагчыма разьмеркаваць буфэр у %u бай
 msgstr[1] "немагчыма разьмеркаваць буфэр у %u байтаў"
 
 #: gdk-pixbuf/io-ani.c:244
+#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Нечаканы кавалак значкі ў анімацыі"
 
 #: gdk-pixbuf/io-ani.c:337
+#, c-format
 msgid "Unsupported animation type"
 msgstr "Непадтрымліваемы від анімацыі"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+#, c-format
 msgid "Invalid header in animation"
 msgstr "Нерэчаісны загаловак у анімыцыі"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Нехапае памяці для загрузкі анімацыі"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Выродлівы кавалак у анімацыі"
 
@@ -182,28 +191,32 @@ msgstr "ANI - фармат выявы"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
+#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP малюнак мае падробленыя дадзеныя загалоўку"
 
 #: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:401
+#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Нехапае памяці каб загрузіць растравы малюнак"
 
 #: gdk-pixbuf/io-bmp.c:287
+#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP малюнак мае непадтрымліваемы памер загалоўку"
 
 #: gdk-pixbuf/io-bmp.c:325
+#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1203
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Немагчыма разьмеркаваць памяць для загрузкі JPEG файла"
 
 #: gdk-pixbuf/io-bmp.c:1244
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Немагчыма пераўтварыць назву файла"
 
@@ -217,6 +230,7 @@ msgid "Failure reading GIF: %s"
 msgstr "Памылка чытаньня GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "У GIF файле былі прапушчаны некаторыя даньні (магчыма ён быў абрэзаны?)"
@@ -227,37 +241,43 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Унутраная памылка ў загрузчыку GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:575
+#, c-format
 msgid "Stack overflow"
 msgstr "Перапаўненьне стэку"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
+#, fuzzy, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "Загрузчык GIF не можа зразумець гэты малюнак."
 
 #: gdk-pixbuf/io-gif.c:664
+#, c-format
 msgid "Bad code encountered"
 msgstr "Сустрэўся дрэнны код."
 
 #: gdk-pixbuf/io-gif.c:674
+#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Колавы таблічны запіс у GIF файле."
 
 #: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
 #: gdk-pixbuf/io-gif.c:1612
+#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Нехапае памяці для загрузкі GIF файла."
 
 #: gdk-pixbuf/io-gif.c:947
-#, fuzzy
+#, fuzzy, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Нехапае памяці для загрузкі GIF файла."
 
 #: gdk-pixbuf/io-gif.c:1116
+#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF малюнак пашкоджаны (недакладнае LZW-сьцісканьне.)"
 
 #: gdk-pixbuf/io-gif.c:1166
+#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Файл не выглядае як GIF файл."
 
@@ -267,6 +287,7 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Вэрсыя %s фармату GIF не падтрымліваецца."
 
 #: gdk-pixbuf/io-gif.c:1287
+#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -275,6 +296,7 @@ msgstr ""
 "мапы колераў."
 
 #: gdk-pixbuf/io-gif.c:1519
+#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF малюнак быў абрэзаны ці незавершаны."
 
@@ -284,38 +306,47 @@ msgstr "GIF - фармат відарыса"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
 #: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
+#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Нехапае памяці для загрузкі значкі"
 
 #: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:338
+#, c-format
 msgid "Invalid header in icon"
 msgstr "Нерэчаісны загаловак значкі"
 
 #: gdk-pixbuf/io-ico.c:301
+#, c-format
 msgid "Icon has zero width"
 msgstr "Значка мае нулявую шырыню"
 
 #: gdk-pixbuf/io-ico.c:311
+#, c-format
 msgid "Icon has zero height"
 msgstr "Значка мае нулявую вышыню"
 
 #: gdk-pixbuf/io-ico.c:363
+#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Сьціснутыя значкі не падтрымліваюцца"
 
 #: gdk-pixbuf/io-ico.c:396
+#, c-format
 msgid "Unsupported icon type"
 msgstr "Непадтрымліваемы від значкі"
 
 #: gdk-pixbuf/io-ico.c:490
+#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Нехапае памяці для загрузкі ICO файла"
 
 #: gdk-pixbuf/io-ico.c:955
+#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr ""
 
 #: gdk-pixbuf/io-ico.c:966
+#, c-format
 msgid "Cursor hotspot outside image"
 msgstr ""
 
@@ -334,6 +365,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Памылка успрыняцьця файла з JPEG малюнкам (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:352
+#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -348,6 +380,7 @@ msgstr "Непадтрымліваемая колеравая прастора J
 
 #: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
 #: gdk-pixbuf/io-jpeg.c:955
+#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Немагчыма разьмеркаваць памяць для загрузкі JPEG файла"
 
@@ -373,22 +406,22 @@ msgid "The JPEG image format"
 msgstr "JPEG - фармат відарыса"
 
 #: gdk-pixbuf/io-pcx.c:191
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Немагчыма разьмеркаваць запісы colormap"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Немагчыма разьмеркаваць памяць для струк�уры TGA"
 
 #: gdk-pixbuf/io-pcx.c:607
-#, fuzzy
+#, fuzzy, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Малюнак мае нулявую вышыню"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
-#, fuzzy
+#, fuzzy, c-format
 msgid "Image has unsupported bpp"
 msgstr "BMP малюнак мае непадтрымліваемы памер загалоўку"
 
@@ -398,25 +431,27 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "BMP малюнак мае непадтрымліваемы памер загалоўку"
 
 #: gdk-pixbuf/io-pcx.c:648
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Немагчыма разьмеркаваць новы pixbuf"
 
 #: gdk-pixbuf/io-pcx.c:656
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Немагчыма разьмеркаваць памяць для дадзеных IOBuffer"
 
 #: gdk-pixbuf/io-pcx.c:663
-#, fuzzy
+#, fuzzy, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Немагчыма разьмеркаваць памяць для дадзеных IOBuffer"
 
 #: gdk-pixbuf/io-pcx.c:710
+#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:717
+#, c-format
 msgid "No palette found at end of PCX data"
 msgstr ""
 
@@ -426,22 +461,27 @@ msgid "The PCX image format"
 msgstr "BMP - фармат відарысу"
 
 #: gdk-pixbuf/io-png.c:55
+#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Нерэчаіснае значэньне біт на канал для малюнка PNG."
 
 #: gdk-pixbuf/io-png.c:136
+#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Пераўтвораны PNG малюнак мае нулявую вы�ыні ці шырыню."
 
 #: gdk-pixbuf/io-png.c:144
+#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Колькасьць біт на канал у пераўтвораным PNG малюнке не 8."
 
 #: gdk-pixbuf/io-png.c:153
+#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Пераўтвораны PNG не з'яўляецца RGB ці RGBA."
 
 #: gdk-pixbuf/io-png.c:162
+#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Пераўтвораны PNG мае непадтрымліваемую колькасьці каналаў, павінна быць 3 "
@@ -453,6 +493,7 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "Невыправімая памылка ў PNG файле: %s"
 
 #: gdk-pixbuf/io-png.c:301
+#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Недастаткова памяці для загрузкі  PNG файл�."
 
@@ -466,6 +507,7 @@ msgstr ""
 "завершыць нека�орыя дадаткі, каб зьменьшыць выкарыстаньне памяці."
 
 #: gdk-pixbuf/io-png.c:669
+#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Невыправімая памылка чытаньня PNG файла"
 
@@ -475,11 +517,13 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Невыправімая памылка чытаньня PNG файла: %s"
 
 #: gdk-pixbuf/io-png.c:810
+#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Ключы для тэкставых кавалкаў PNG павінны быць ад 1 да 79 знакаў."
 
 #: gdk-pixbuf/io-png.c:818
+#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ключы для тэкставых кавалкаў PNG павінны быць ASCII знакамі."
 
@@ -513,74 +557,89 @@ msgid "The PNG image format"
 msgstr "PNM - фармат відарыса"
 
 #: gdk-pixbuf/io-pnm.c:252
+#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "загрузчык PNM спадзяваўся адшукаць цэлы лік, але не знайшоў"
 
 #: gdk-pixbuf/io-pnm.c:284
+#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM файл мае нерэчаісны першапачатковы бай�"
 
 #: gdk-pixbuf/io-pnm.c:314
+#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Нераспазнаны PNM падфармат у файле PNM"
 
 #: gdk-pixbuf/io-pnm.c:339
+#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM файл мае нулявую шырыню малюнка"
 
 #: gdk-pixbuf/io-pnm.c:360
+#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM файл мае нулявую вышыню малюнка"
 
 #: gdk-pixbuf/io-pnm.c:383
+#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Найбольшае значэньне колеру ў PNM файле - 0"
 
 #: gdk-pixbuf/io-pnm.c:391
+#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Найбольшае значэньне колеру ў PNM файле вельмі вялікае"
 
 #: gdk-pixbuf/io-pnm.c:399
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Немагчыма працаваць з PNM файламі ў якіх на�большае значэньне колеру больш "
 "за 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
+#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Нерэчаісны від малюнку для Raw PNM"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
+#, c-format
 msgid "PNM image format is invalid"
 msgstr "Нерэчаісны фармат малюнка PNM"
 
 #: gdk-pixbuf/io-pnm.c:663
+#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Загрузчык PNM малюнкаў не падтрымлівае гэ�ы PNM падфармат"
 
 #: gdk-pixbuf/io-pnm.c:718
+#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Сустрэўся датэрміновы EOF (канец файла) "
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
+#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Фармат PNM патрабуе дакладна адзін прагал перад даньнямі ўзор"
 
 #: gdk-pixbuf/io-pnm.c:777
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Немагыма атрымаць памяць для загрузкі PNM малюнка"
 
 #: gdk-pixbuf/io-pnm.c:827
+#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Нехапае памяці для загрузкі структуры зьместу PNM"
 
 #: gdk-pixbuf/io-pnm.c:878
+#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Нечаканае завяршэнне дадзеных PNM малюнка"
 
 #: gdk-pixbuf/io-pnm.c:1010
+#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Недастаткова памяці для загрузкі PNM файла"
 
@@ -589,18 +648,22 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM - сямейства фарматаў відарыса"
 
 #: gdk-pixbuf/io-ras.c:126
+#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS малюнак мае падробленыя даньні ў загалоўку"
 
 #: gdk-pixbuf/io-ras.c:148
+#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS малюнак мае невядомы від"
 
 #: gdk-pixbuf/io-ras.c:156
+#, c-format
 msgid "unsupported RAS image variation"
 msgstr "непадтрымліваемая разнавід RAS малюнку"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Нехапае памяці для загрузкі RAS малюнка"
 
@@ -609,64 +672,68 @@ msgid "The Sun raster image format"
 msgstr "Растравы фармат відарыса Sun"
 
 #: gdk-pixbuf/io-tga.c:154
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Немагчыма разьмеркаваць памяць для струк�уры IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:173
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Немагчыма разьмеркаваць памяць для дадзеных IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:184
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "Немагчыма пераразьмеркаваць даньні з IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:214
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Немагчыма разьмеркаваць часовыя дадзеныя IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:348
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Немагчыма разьмеркаваць новы pixbuf"
 
 #: gdk-pixbuf/io-tga.c:689
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Немагчыма разьмеркаваць структуру colormap"
 
 #: gdk-pixbuf/io-tga.c:696
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Немагчыма разьмеркаваць запісы colormap"
 
 #: gdk-pixbuf/io-tga.c:718
+#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Нечаканая глыбіня колеру для запісаў мапы колераў"
 
 #: gdk-pixbuf/io-tga.c:736
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Немагчыма разьмеркаваць памяць для загалоўка TGA"
 
 #: gdk-pixbuf/io-tga.c:769
+#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA малюнак мае нерэчаісныя памеры"
 
 #: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
 #: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
+#, c-format
 msgid "TGA image type not supported"
 msgstr "Непадтрымліваемы від TGA файла"
 
 #: gdk-pixbuf/io-tga.c:858
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Немагчыма разьмеркаваць памяць для струк�уры TGA"
 
 #: gdk-pixbuf/io-tga.c:923
+#, c-format
 msgid "Excess data in file"
 msgstr "Лішак даньняў у файле"
 
@@ -683,15 +750,18 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Немагчыма атрымаць вышыню малюнка (дрэнны TIFF файл)"
 
 #: gdk-pixbuf/io-tiff.c:188
+#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "Шырыня ці вышыня TIFF файла - нуль"
 
 #: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
+#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "Памеры TIFF малюнку вельмі вялікія"
 
 #: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
 #: gdk-pixbuf/io-tiff.c:572
+#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недастаткова памяці для адчыненьня TIFF фа�ла"
 
@@ -716,18 +786,22 @@ msgid "The TIFF image format"
 msgstr "TIFF фармат відарыса"
 
 #: gdk-pixbuf/io-wbmp.c:246
+#, c-format
 msgid "Image has zero width"
 msgstr "Малюнак мае нулявую шырыню"
 
 #: gdk-pixbuf/io-wbmp.c:264
+#, c-format
 msgid "Image has zero height"
 msgstr "Малюнак мае нулявую вышыню"
 
 #: gdk-pixbuf/io-wbmp.c:275
+#, c-format
 msgid "Not enough memory to load image"
 msgstr "Нехапае памяці для загрузкі малюнка"
 
 #: gdk-pixbuf/io-wbmp.c:334
+#, c-format
 msgid "Couldn't save the rest"
 msgstr "Не атрымалась захаваць астатняе"
 
@@ -736,14 +810,17 @@ msgid "The WBMP image format"
 msgstr "WBMP фармат відарыса"
 
 #: gdk-pixbuf/io-xbm.c:287
+#, c-format
 msgid "Invalid XBM file"
 msgstr "Нерэчаісны XBM файл"
 
 #: gdk-pixbuf/io-xbm.c:297
+#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Недастаткова памяці для загрузкі XBM файла з малюнкам"
 
 #: gdk-pixbuf/io-xbm.c:441
+#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Памылка запісу ў часовы файл, пры загрузцы XBM малюнка"
 
@@ -752,41 +829,47 @@ msgid "The XBM image format"
 msgstr "XBM фармат відарыса"
 
 #: gdk-pixbuf/io-xpm.c:467
+#, c-format
 msgid "No XPM header found"
 msgstr "XPM ня знойдзен"
 
 #: gdk-pixbuf/io-xpm.c:476
-#, fuzzy
+#, fuzzy, c-format
 msgid "Invalid XPM header"
 msgstr "Нерэчаісны XBM файл"
 
 #: gdk-pixbuf/io-xpm.c:484
+#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XPM файл мае шырыню малюнка <= 0"
 
 #: gdk-pixbuf/io-xpm.c:492
+#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XPM файл мае вышыню малюнка <= 0"
 
 #: gdk-pixbuf/io-xpm.c:500
+#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM мае нерэчаісную колькасьц сымбаляў на кропку"
 
 #: gdk-pixbuf/io-xpm.c:507
+#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM файл мае нерэчаісную колькасьць колераў"
 
 #: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Немагчыма разьмеркаваць памяць для загрузкі XPM малюнка"
 
 #: gdk-pixbuf/io-xpm.c:542
-#, fuzzy
+#, fuzzy, c-format
 msgid "Cannot read XPM colormap"
 msgstr "Немагчыма прачытаць карту колераў для XPM"
 
 #: gdk-pixbuf/io-xpm.c:771
+#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Невыправімая памылка запісу ў часовы фа�л пад час загрузкі малюнку XPM"
 
@@ -1113,7 +1196,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:647
+#: gtk/gtkcalendar.c:648
 #, fuzzy
 msgid "calendar:MY"
 msgstr "ачысьціць"
@@ -1122,7 +1205,7 @@ msgstr "ачысьціць"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:661
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr ""
 
@@ -1134,7 +1217,7 @@ msgstr ""
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1549
+#: gtk/gtkcalendar.c:1558
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1149,7 +1232,7 @@ msgstr ""
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1826
+#: gtk/gtkcalendar.c:1835
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1295,22 +1378,22 @@ msgstr "Пракрутка"
 msgid "Color Selection"
 msgstr "Выбар шрыфта"
 
-#: gtk/gtkentry.c:4560 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7125
 #, fuzzy
 msgid "Select _All"
 msgstr "Адзначыць усё"
 
-#: gtk/gtkentry.c:4570 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "Мэтады _ўводу"
 
-#: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7146
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "Уставіць кіруючы знак Unicode"
 
-#: gtk/gtkfilechooser.c:1672 gtk/gtkfilechooser.c:1716
-#: gtk/gtkfilechooser.c:1791 gtk/gtkfilechooser.c:1835
+#: gtk/gtkfilechooser.c:1681 gtk/gtkfilechooser.c:1725
+#: gtk/gtkfilechooser.c:1800 gtk/gtkfilechooser.c:1844
 #, fuzzy, c-format
 msgid "Invalid filename: %s"
 msgstr "Нерэчаісны XBM файл"
@@ -1377,240 +1460,243 @@ msgstr ""
 msgid "Could not get information about '%s': %s"
 msgstr "Немагчыма распазнаць фармат файла з малюнкам \"%s\"."
 
-#: gtk/gtkfilechooserdefault.c:2353
+#: gtk/gtkfilechooserdefault.c:2356
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2394
+#: gtk/gtkfilechooserdefault.c:2397
+#, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2396
+#: gtk/gtkfilechooserdefault.c:2399
+#, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2436
+#: gtk/gtkfilechooserdefault.c:2439
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: gtk/gtkfilechooserdefault.c:2870
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3082
+#: gtk/gtkfilechooserdefault.c:3085
 #, fuzzy
 msgid "Remove"
 msgstr "Прыбраць"
 
-#: gtk/gtkfilechooserdefault.c:3091
+#: gtk/gtkfilechooserdefault.c:3094
 #, fuzzy
 msgid "Rename..."
 msgstr "_Перайменаваць"
 
-#: gtk/gtkfilechooserdefault.c:3214
+#: gtk/gtkfilechooserdefault.c:3217
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3268
+#: gtk/gtkfilechooserdefault.c:3271
 #, fuzzy
 msgid "Folder"
 msgstr "Каталёгі"
 
-#: gtk/gtkfilechooserdefault.c:3324 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3327 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "Дадаць"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3334
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3339 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "Прыбраць"
 
-#: gtk/gtkfilechooserdefault.c:3343
+#: gtk/gtkfilechooserdefault.c:3346
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3443
+#: gtk/gtkfilechooserdefault.c:3446
 #, fuzzy
 msgid "Could not select file"
 msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:3499
+#: gtk/gtkfilechooserdefault.c:3502
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3571
+#: gtk/gtkfilechooserdefault.c:3574
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3581
+#: gtk/gtkfilechooserdefault.c:3584
 #, fuzzy
 msgid "Open _Location"
 msgstr "_Выбар: "
 
-#: gtk/gtkfilechooserdefault.c:3593
+#: gtk/gtkfilechooserdefault.c:3596
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3717 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3720 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilechooserdefault.c:3762
+#: gtk/gtkfilechooserdefault.c:3765
 #, fuzzy
 msgid "Name"
 msgstr "Назва _колеру:"
 
-#: gtk/gtkfilechooserdefault.c:3787
+#: gtk/gtkfilechooserdefault.c:3790
 msgid "Size"
 msgstr "Памер"
 
-#: gtk/gtkfilechooserdefault.c:3800
+#: gtk/gtkfilechooserdefault.c:3803
 #, fuzzy
 msgid "Modified"
 msgstr "Рэжым"
 
-#: gtk/gtkfilechooserdefault.c:3832
+#: gtk/gtkfilechooserdefault.c:3835
 msgid "Select which types of files are shown"
 msgstr ""
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3868
+#: gtk/gtkfilechooserdefault.c:3871
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Стварыць тэчку"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3989
+#: gtk/gtkfilechooserdefault.c:3992
 #, fuzzy
 msgid "_Name:"
 msgstr "Назва _колеру:"
 
-#: gtk/gtkfilechooserdefault.c:4029
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4284
+#: gtk/gtkfilechooserdefault.c:4287
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "Стварыць тэчку"
 
-#: gtk/gtkfilechooserdefault.c:4286
+#: gtk/gtkfilechooserdefault.c:4289
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "Стварыць тэчку"
 
-#: gtk/gtkfilechooserdefault.c:5318
+#: gtk/gtkfilechooserdefault.c:5321
+#, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5880
+#: gtk/gtkfilechooserdefault.c:5883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6135
+#: gtk/gtkfilechooserdefault.c:6138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6143
+#: gtk/gtkfilechooserdefault.c:6146
 #, fuzzy
 msgid "_Replace"
 msgstr "_Перайменаваць"
 
-#: gtk/gtkfilechooserdefault.c:6634
+#: gtk/gtkfilechooserdefault.c:6637
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6926
+#: gtk/gtkfilechooserdefault.c:6932
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6968
+#: gtk/gtkfilechooserdefault.c:6974
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:6970
+#: gtk/gtkfilechooserdefault.c:6976
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6972
+#: gtk/gtkfilechooserdefault.c:6978
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:6980
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7020 gtk/gtkfilechooserdefault.c:7044
+#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
 #, fuzzy
 msgid "Unknown"
 msgstr "(невядомы)"
 
-#: gtk/gtkfilechooserdefault.c:7031
+#: gtk/gtkfilechooserdefault.c:7037
 #, fuzzy
 msgid "Today"
 msgstr "Мадальнае"
 
-#: gtk/gtkfilechooserdefault.c:7033
+#: gtk/gtkfilechooserdefault.c:7039
 msgid "Yesterday"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7115
+#: gtk/gtkfilechooserdefault.c:7121
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "Стварыць тэчку"
 
-#: gtk/gtkfilechooserdefault.c:7116
+#: gtk/gtkfilechooserdefault.c:7122
 msgid "The folder you specified is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7155
+#: gtk/gtkfilechooserdefault.c:7161
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7191
+#: gtk/gtkfilechooserdefault.c:7197
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7237
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7238
+#: gtk/gtkfilechooserdefault.c:7244
 #, fuzzy
 msgid "Save in Location"
 msgstr "_Выбар: "
 
-#: gtk/gtkfilechooserdefault.c:7265
+#: gtk/gtkfilechooserdefault.c:7271
 #, fuzzy
 msgid "_Location:"
 msgstr "_Выбар: "
@@ -1807,6 +1893,7 @@ msgid "Error creating directory '%s': %s"
 msgstr "Памылка стварэньня каталёгу \"%s\": %s\n"
 
 #: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
+#, c-format
 msgid "This file system does not support mounting"
 msgstr ""
 
@@ -1893,7 +1980,7 @@ msgstr "Памер:"
 msgid "_Preview:"
 msgstr "Прыклад:"
 
-#: gtk/gtkfontsel.c:1383
+#: gtk/gtkfontsel.c:1388
 msgid "Font Selection"
 msgstr "Выбар шрыфта"
 
