@@ -1,3 +1,8 @@
+2005-09-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkclipboard.c (request_image_received_func): Don't unref
+	NULL.  (#316828, Tor Lillqvist)
+
 2005-09-28  Tor Lillqvist  <tml@novell.com>
 
 	* modules/input/imime.c: Include <config.h>. (#317444, Kazuki
