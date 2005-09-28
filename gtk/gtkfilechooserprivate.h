@@ -135,6 +135,12 @@ typedef enum {
   LOAD_FINISHED			/* Model is fully loaded and inserted into the tree */
 } LoadState;
 
+typedef enum {
+  RELOAD_EMPTY,			/* No folder has been set */
+  RELOAD_HAS_FOLDER,		/* We have a folder, although it may not be completely loaded yet; no need to reload */
+  RELOAD_WAS_UNMAPPED		/* We had a folder but got unmapped; reload is needed */
+} ReloadState;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -182,6 +188,7 @@ struct _GtkFileChooserDefault
   GtkTreeModelSort *sort_model;
 
   LoadState load_state;
+  ReloadState reload_state;
   guint load_timeout_id;
 
   GSList *pending_select_paths;
