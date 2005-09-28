@@ -1,5 +1,8 @@
 2005-09-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (_gtk_selection_request): Free mult_atoms 
+	here. (#317039, Paolo Borelli)
+
 	* gtk/gtktexttag.h: 
 	* gtk/gtktexttag.c (gtk_text_attributes_ref): Return the attributes
 	to make this function work as boxed copy function.  (#317455,
