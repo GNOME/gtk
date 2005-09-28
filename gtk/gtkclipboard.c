@@ -1032,7 +1032,8 @@ request_image_received_func (GtkClipboard     *clipboard,
 
   info->callback (clipboard, result, info->user_data);
   g_free (info);
-  g_object_unref (result);
+  if (result)
+    g_object_unref (result);
 }
 
 /**
