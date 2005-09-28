@@ -2044,7 +2044,7 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
  *
  * Returns: the #GtkTextAttributes that were passed in
  **/
-void
+GtkTextAttributes *
 gtk_text_attributes_ref (GtkTextAttributes *values)
 {
   g_return_if_fail (values != NULL);
