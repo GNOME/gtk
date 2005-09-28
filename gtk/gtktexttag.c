@@ -2041,13 +2041,17 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
  * @values: a #GtkTextAttributes
  * 
  * Increments the reference count on @values.
+ *
+ * Returns: the #GtkTextAttributes that were passed in
  **/
-void
+GtkTextAttributes* 
 gtk_text_attributes_ref (GtkTextAttributes *values)
 {
   g_return_if_fail (values != NULL);
 
   values->refcount += 1;
+
+  return values;
 }
 
 /**
