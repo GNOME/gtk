@@ -20,6 +20,7 @@
  * $Id$
  */
 
+#include <config.h>
 #include <string.h>
 
 #include "gtk/gtkintl.h"
