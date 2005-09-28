@@ -1831,6 +1831,8 @@ _gtk_selection_request (GtkWidget *widget,
 	      info->conversions[i].property = gdk_x11_xatom_to_atom_for_display (display,
 										 ((glong *)mult_atoms)[2*i + 1]);
 	    }
+
+	  g_free (mult_atoms);
 	}
       else
 #endif
