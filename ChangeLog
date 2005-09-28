@@ -1,5 +1,9 @@
 2005-09-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttag.c (gtk_text_attributes_ref): Return the attributes
+	to make this function work as boxed copy function.  (#317455,
+	Gustavo Carneiro)
+
 	* gtk/gtkclipboard.c (request_image_received_func): Don't unref
 	NULL.  (#316828, Tor Lillqvist)
 
