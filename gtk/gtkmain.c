@@ -297,9 +297,18 @@ _gtk_get_localedir (void)
 {
   static char *gtk_localedir = NULL;
   if (gtk_localedir == NULL)
-    gtk_localedir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib\\locale");
+    {
+      gchar *temp;
+      
+      temp = g_win32_get_package_installation_subdirectory
+        (GETTEXT_PACKAGE, dll_name, "lib\\locale");
 
+      /* gtk_localedir is passed to bindtextdomain() which isn't
+       * UTF-8-aware.
+       */
+      gtk_localedir = g_win32_locale_filename_from_utf8 (temp);
+      g_free (temp);
+    }
   return gtk_localedir;
 }
 
