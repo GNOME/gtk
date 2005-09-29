@@ -130,6 +130,8 @@ static gboolean gtk_paned_cancel_position       (GtkPaned         *paned);
 static gboolean gtk_paned_toggle_handle_focus   (GtkPaned         *paned);
 
 static GType    gtk_paned_child_type            (GtkContainer     *container);
+static void     gtk_paned_grab_notify           (GtkWidget        *widget,
+		                                 gboolean          was_grabbed);
 
 static GtkContainerClass *parent_class = NULL;
 
@@ -223,6 +225,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->button_release_event = gtk_paned_button_release;
   widget_class->motion_notify_event = gtk_paned_motion;
   widget_class->grab_broken_event = gtk_paned_grab_broken;
+  widget_class->grab_notify = gtk_paned_grab_notify;
   
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -925,6 +928,26 @@ gtk_paned_grab_broken (GtkWidget          *widget,
   return TRUE;
 }
 
+static void
+stop_drag (GtkPaned *paned)
+{
+  paned->in_drag = FALSE;
+  paned->drag_pos = -1;
+  paned->position_set = TRUE;
+  gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (paned)),
+			      paned->priv->grab_time);
+}
+
+static void
+gtk_paned_grab_notify (GtkWidget *widget,
+		       gboolean   was_grabbed)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+
+  if (!was_grabbed && paned->in_drag)
+    stop_drag (paned);
+}
+
 static gboolean
 gtk_paned_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
@@ -933,11 +956,8 @@ gtk_paned_button_release (GtkWidget      *widget,
 
   if (paned->in_drag && (event->button == 1))
     {
-      paned->in_drag = FALSE;
-      paned->drag_pos = -1;
-      paned->position_set = TRUE;
-      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
-				  paned->priv->grab_time);
+      stop_drag (paned);
+
       return TRUE;
     }
 
