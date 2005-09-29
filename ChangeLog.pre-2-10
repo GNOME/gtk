@@ -1,5 +1,8 @@
 2005-09-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c (gtk_button_set_image): Check arguments.  (#317491,
+	Paolo Borelli)
+
 	* gtk/gtkpaned.c (gtk_paned_grab_notify): Stop drags when being
 	grab shadowed.  (#317332)
 
