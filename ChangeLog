@@ -1,5 +1,7 @@
 2005-09-29  Tor Lillqvist  <tml@novell.com>
 
+	* gtk-zip.sh.in: DLLs are always in bin nowadays, no need to test.
+
 	* gtk/gtkmain.c (_gtk_get_localedir): The locale directory is
 	passed to bindtextdomain() which isn't UTF-8-aware, so convert to
 	system codepage using g_win32_locale_filename_from_utf8().
