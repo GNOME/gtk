@@ -1,3 +1,8 @@
+2005-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_grab_notify): Stop drags when being
+	grab shadowed.  (#317332)
+
 2005-09-29  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: DLLs are always in bin nowadays, no need to test.
