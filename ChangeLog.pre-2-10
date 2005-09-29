@@ -1,3 +1,7 @@
+2005-09-29  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: DLLs are always in bin nowadays, no need to test.
+
 2005-09-28  Federico Mena Quintero  <federico@ximian.com>
 
 	* tests/autotestfilechooser.c (test_reload_sequence): Oops, return
