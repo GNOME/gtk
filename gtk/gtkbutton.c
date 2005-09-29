@@ -1845,8 +1845,13 @@ void
 gtk_button_set_image (GtkButton *button,
 		      GtkWidget *image)
 {
-  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+  GtkButtonPrivate *priv;
 
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
+
+  priv = GTK_BUTTON_GET_PRIVATE (button);
+ 
   priv->image = image;
   priv->image_is_stock = (image == NULL);
 
