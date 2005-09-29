@@ -62,8 +62,14 @@ struct cell_params {
 
 #define TESTR "RIGHT JUSTIFIED This is really truly verily some very long text\n\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205"
 
+
+/* DO NOT CHANGE THE ROWS!  They are numbered so that we can refer to
+ * problematic rows in bug reports.  If you need a different test, just add a
+ * new row at the bottom.  Also, please add your new row numbers to this column -------------------------------+
+ * to keep things tidy.                                                                                        v
+ */
 static const struct cell_params cell_params[] = {
-  { "xp yp xa ya se wi he wc ww wm sp el", "",    0,  0, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 0 */
+  { "xp yp xa ya se wi he wc ww wm sp el", "",    0,  0, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO },  /* 0 */
 
   /* Test alignment */
 
