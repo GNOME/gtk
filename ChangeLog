@@ -1,3 +1,17 @@
+2005-09-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* tests/testcellrenderertext.c: New file with a set of tests for
+	GtkCellRendererText.  The idea is to run a text renderer through
+	most of its interesting property values to see that it works
+	correctly.
+
+	* tests/Makefile.am: Added testcellrenderertext.
+
+	* gtk/gtkfilechooserdefault.c (load_set_model): Mark the
+	entry/exit of this function for profiling.
+	(gtk_file_chooser_default_style_set): Mark the start/end of the
+	calls to the parent class and the the signal emission for profiling.
+
 2005-09-29  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c (_gtk_get_localedir): The locale directory is
@@ -23,6 +37,7 @@
 	* modules/input/imime.c: Include <config.h>. (#317444, Kazuki
 	Iwamoto)
 
+>>>>>>> 1.7129
 2005-09-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Don't reload the current folder unnecessarily on ::map().
