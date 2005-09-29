@@ -114,9 +114,9 @@ _gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, c
     profile_add_indent (indent);
 
   if (profile_indent == 0)
-    str = g_strdup_printf ("MARK: %s %s %s", func, msg1 ? msg1 : "", msg2 ? msg2 : "");
+    str = g_strdup_printf ("MARK: %s %s %s", func ? func : "", msg1 ? msg1 : "", msg2 ? msg2 : "");
   else
-    str = g_strdup_printf ("MARK: %*c %s %s %s", profile_indent - 1, ' ', func, msg1 ? msg1 : "", msg2 ? msg2 : "");
+    str = g_strdup_printf ("MARK: %*c %s %s %s", profile_indent - 1, ' ', func ? func : "", msg1 ? msg1 : "", msg2 ? msg2 : "");
 
   access (str, F_OK);
   g_free (str);
@@ -3097,6 +3097,9 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   /* Tree */
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
+#ifdef PROFILE_FILE_CHOOSER
+  g_object_set_data (impl->browse_shortcuts_tree_view, "fmq-name", "shortcuts");
+#endif
   g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
 		    G_CALLBACK (tree_view_keybinding_cb), impl);
   g_signal_connect (impl->browse_shortcuts_tree_view, "popup-menu",
@@ -3605,6 +3608,9 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
+#ifdef PROFILE_FILE_CHOOSER
+  g_object_set_data (impl->browse_files_tree_view, "fmq-name", "file_list");
+#endif
   g_object_set_data (G_OBJECT (impl->browse_files_tree_view), I_("GtkFileChooserDefault"), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
 
@@ -4574,13 +4580,17 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
+  profile_msg ("    parent class style_set start", NULL);
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+  profile_msg ("    parent class style_set end", NULL);
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
     change_icon_theme (impl);
 
+  profile_msg ("    emit default-size-changed start", NULL);
   g_signal_emit_by_name (widget, "default-size-changed");
+  profile_msg ("    emit default-size-changed end", NULL);
 
   profile_end ("end", NULL);
 }
@@ -4858,9 +4868,12 @@ set_busy_cursor (GtkFileChooserDefault *impl,
 static void
 load_set_model (GtkFileChooserDefault *impl)
 {
+  profile_start ("start", NULL);
+
   g_assert (impl->browse_files_model != NULL);
   g_assert (impl->sort_model == NULL);
 
+  profile_msg ("    gtk_tree_model_sort_new_with_model start", NULL);
   impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->browse_files_model));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
@@ -4868,15 +4881,20 @@ load_set_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
   impl->list_sort_ascending = TRUE;
+  profile_msg ("    gtk_tree_model_sort_new_with_model end", NULL);
 
   g_signal_connect (impl->sort_model, "sort-column-changed",
 		    G_CALLBACK (list_sort_column_changed_cb), impl);
 
+  profile_msg ("    gtk_tree_view_set_model start", NULL);
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
 			   GTK_TREE_MODEL (impl->sort_model));
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+  profile_msg ("    gtk_tree_view_set_model end", NULL);
+
+  profile_end ("end", NULL);
 }
 
 /* Timeout callback used when the loading timer expires */

@@ -37,7 +37,6 @@
 	* modules/input/imime.c: Include <config.h>. (#317444, Kazuki
 	Iwamoto)
 
->>>>>>> 1.7129
 2005-09-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Don't reload the current folder unnecessarily on ::map().
