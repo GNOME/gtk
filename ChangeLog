@@ -1,5 +1,13 @@
 2005-09-28  Federico Mena Quintero  <federico@ximian.com>
 
+	* tests/autotestfilechooser.c (test_reload_sequence): Oops, return
+	if the unmap test fails.
+	(test_reload_sequence): Use gtk_widget_show_now() instead of
+	gtk_widget_show() for the dialog.
+	Thanks to Tim Janik for noticing these.
+
+2005-09-28  Federico Mena Quintero  <federico@ximian.com>
+
 	* tests/testcellrenderertext.c: New file with a set of tests for
 	GtkCellRendererText.  The idea is to run a text renderer through
 	most of its interesting property values to see that it works

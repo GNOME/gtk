@@ -257,7 +257,7 @@ test_action_widgets (void)
 					GTK_STOCK_OK,
 					GTK_RESPONSE_ACCEPT,
 					NULL);
-  gtk_widget_show (dialog);
+  gtk_widget_show_now (dialog);
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog));
 
@@ -322,7 +322,7 @@ test_reload_sequence (gboolean set_folder_before_map)
 
   /* After mapping, it is loading some folder, either the one that was explicitly set or the default one */
 
-  gtk_widget_show (dialog);
+  gtk_widget_show_now (dialog);
 
   passed = (impl->current_folder != NULL
 	    && impl->browse_files_model != NULL
@@ -347,10 +347,12 @@ test_reload_sequence (gboolean set_folder_before_map)
 	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
 		: TRUE));
+  if (!passed)
+    return FALSE;
 
   /* Map it again! */
 
-  gtk_widget_show (dialog);
+  gtk_widget_show_now (dialog);
   
   passed = (impl->current_folder != NULL
 	    && impl->browse_files_model != NULL
