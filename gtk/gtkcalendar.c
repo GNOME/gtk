@@ -565,7 +565,9 @@ gtk_calendar_init (GtkCalendar *calendar)
   time_t tmp_time;
   GtkCalendarPrivate *priv;
   gchar *year_before;
-  gchar *week_start, week_startsub = 1;
+  gchar *langinfo;
+  gint week_1stday = 0;
+  gint first_weekday = 1;
   guint week_origin;
 
   priv = calendar->priv = G_TYPE_INSTANCE_GET_PRIVATE (calendar,
@@ -652,16 +654,18 @@ gtk_calendar_init (GtkCalendar *calendar)
     g_warning ("Whoever translated calendar:MY did so wrongly.\n");
 
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
-  week_start = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
-  week_origin = GPOINTER_TO_INT (nl_langinfo (_NL_TIME_WEEK_1STDAY));
-  if (week_origin == 19971130)
-    week_startsub = 0;
-  else if (week_origin == 19971201)
-    week_startsub = 1;
+  langinfo = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
+  first_weekday = langinfo[0];
+  langinfo = nl_langinfo (_NL_TIME_WEEK_1STDAY);
+  week_origin = GPOINTER_TO_INT (langinfo);
+  if (week_origin == 19971130) /* Sunday */
+    week_1stday = 0;
+  else if (week_origin == 19971201) /* Monday */
+    week_1stday = 1;
   else
     g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.\n");
 
-  priv->week_start = (*((unsigned char *) week_start) - week_startsub) % 7;
+  priv->week_start = (week_1stday + first_weekday - 1) % 7;
 #else
   /* Translate to calendar:week_start:0 if you want Sunday to be the
    * first day of the week to calendar:week_start:1 if you want Monday
