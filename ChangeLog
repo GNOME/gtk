@@ -1,5 +1,10 @@
 2005-09-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_init): Another attempt
+	to correct the calculations for the first week day. We may
+	just have to remove this code if too many locales turn out 
+	to have broken data. 
+
 	* gtk/gtkimage.c (gtk_image_expose): Don't leak pixbuf in
 	some cases.  (#317611, Tommi Komulainen)
 
