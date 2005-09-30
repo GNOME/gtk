@@ -1,3 +1,20 @@
+2005-10-01  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (blit_from_pixmap): In case
+	BitBlt() fails with ERROR_INVALID_HANDLE, the most probable cause
+	is that the the desktop isn't visible because the session has been
+	switched, the screen is locked, or a terminal server session
+	disconnected, so no error message necessary. (#137796)
+
+	It is of course remotely possible that BitBlt() failing with
+	ERROR_INVALID_HANDLE might also be caused by some other
+	problem. We could strive for perfection and track whether the
+	desktop is visible by using WTSRegisterSessionNotification() and
+	handling WM_WTSESSION_CHANGE. I think that's overdoing it just for
+	this issue, though. If we would track desktop visibility, we
+	should then avoid even trying to update the display at all while
+	the desktop isn't visible.
+
 2005-09-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Another attempt

@@ -1592,8 +1592,10 @@ blit_from_pixmap (gboolean              use_fg_bg,
 	}
       
       if (ok)
-	GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
-			   srcdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
+	if (!BitBlt (hdc, xdest, ydest, width, height,
+		     srcdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)) &&
+	    GetLastError () != ERROR_INVALID_HANDLE)
+	  WIN32_GDI_FAILED ("BitBlt");
       
       /* Restore source's color table if necessary */
       if (ok && newtable_size > 0 && oldtable_size > 0)
