@@ -1784,9 +1784,6 @@ gtk_image_expose (GtkWidget      *widget,
 				   image_bound.height,
 				   GDK_RGB_DITHER_NORMAL,
 				   0, 0);
-
-                  g_object_unref (pixbuf);
-                  pixbuf = NULL;
                 }
             }
           else
@@ -1829,6 +1826,9 @@ gtk_image_expose (GtkWidget      *widget,
           gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
         }
       
+      if (pixbuf)
+	g_object_unref (pixbuf);
+
     } /* if widget is drawable */
 
   return FALSE;
