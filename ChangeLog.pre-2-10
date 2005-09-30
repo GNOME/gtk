@@ -1,3 +1,9 @@
+2005-09-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksocket-x11.c (_gtk_socket_windowing_size_request):
+	Prevent overflow when storing size hints in an unsigned
+	short variable. Tracked down by Ray Strode and Søren Sandmann.
+
 2005-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_set_image): Check arguments.  (#317491,
@@ -310,7 +316,8 @@ Thu Sep 15 15:27:55 2005  Tim Janik  <timj@imendio.com>
 
 2005-09-14  Tristan Van Berkom <tvb@cvs.gnome.org>
 
-	* gtk/gtkcolorbutton.c: Check "color" argument in gtk_color_button_set_color ()
+	* gtk/gtkcolorbutton.c: Check "color" argument in 
+	gtk_color_button_set_color ()
 
 2005-09-14  Matthias Clasen  <mclasen@redhat.com>
 

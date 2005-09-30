@@ -101,13 +101,13 @@ _gtk_socket_windowing_size_request (GtkSocket *socket)
     {
       if (hints.flags & PMinSize)
 	{
-	  socket->request_width = hints.min_width;
-	  socket->request_height = hints.min_height;
+	  socket->request_width = MAX (hints.min_width, 1);
+	  socket->request_height = MAX (hints.min_height, 1);
 	}
       else if (hints.flags & PBaseSize)
 	{
-	  socket->request_width = hints.base_width;
-	  socket->request_height = hints.base_height;
+	  socket->request_width = MAX (hints.base_width, 1);
+	  socket->request_height = MAX (hints.base_height, 1);
 	}
     }
   socket->have_size = TRUE;
