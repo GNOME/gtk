@@ -1774,22 +1774,17 @@ gtk_image_expose (GtkWidget      *widget,
                 }
 
               if (pixbuf)
-                {
-                  gdk_draw_pixbuf (widget->window,
-				   widget->style->black_gc,
-				   pixbuf,
-				   image_bound.x - x,
-				   image_bound.y - y,
-				   image_bound.x,
-				   image_bound.y,
-				   image_bound.width,
-				   image_bound.height,
-				   GDK_RGB_DITHER_NORMAL,
-				   0, 0);
-
-                  g_object_unref (pixbuf);
-                  pixbuf = NULL;
-                }
+                gdk_draw_pixbuf (widget->window,
+			         widget->style->black_gc,
+				 pixbuf,
+				 image_bound.x - x,
+				 image_bound.y - y,
+				 image_bound.x,
+				 image_bound.y,
+				 image_bound.width,
+				 image_bound.height,
+				 GDK_RGB_DITHER_NORMAL,
+				 0, 0);
             }
           else
             {
@@ -1830,6 +1825,9 @@ gtk_image_expose (GtkWidget      *widget,
           gdk_gc_set_clip_mask (widget->style->black_gc, NULL);
           gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
         }
+
+      if (pixbuf)
+        g_object_unref (pixbuf);
       
     } /* if widget is drawable */
 

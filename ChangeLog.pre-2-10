@@ -1,5 +1,8 @@
 2005-09-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimage.c (gtk_image_expose): Don't leak pixbuf in
+	some cases.  (#317611, Tommi Komulainen)
+
 	* gtk/gtksocket-x11.c (_gtk_socket_windowing_size_request):
 	Prevent overflow when storing size hints in an unsigned 
 	short variable. Tracked down by Ray Strode and Søren Sandmann.
