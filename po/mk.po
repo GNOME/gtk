@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:50-0400\n"
+"POT-Creation-Date: 2005-10-03 14:06-0400\n"
 "PO-Revision-Date: 2005-08-11 17:56+0200\n"
 "Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -931,7 +931,7 @@ msgstr "Поставување на Gdk знамиња за дебагирање
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:407 gtk/gtkmain.c:410
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "ЗНАМИЊА"
 
@@ -1199,7 +1199,7 @@ msgstr "|Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:648
+#: gtk/gtkcalendar.c:650
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1207,7 +1207,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:670
+#: gtk/gtkcalendar.c:674
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1219,7 +1219,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1558
+#: gtk/gtkcalendar.c:1562
 msgid "year measurement template|2000"
 msgstr "year measurement template|2000"
 
@@ -1234,7 +1234,7 @@ msgstr "year measurement template|2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1835
+#: gtk/gtkcalendar.c:1839
 msgid "calendar year format|%Y"
 msgstr "календарски формат на годината|%Y"
 
@@ -1562,38 +1562,38 @@ msgid "Create Fo_lder"
 msgstr "Креирај па_пка"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:3996
 msgid "_Name:"
 msgstr "_Име:"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Browse for other folders"
 msgstr "_Разгледај други папки"
 
-#: gtk/gtkfilechooserdefault.c:4287
+#: gtk/gtkfilechooserdefault.c:4305
 msgid "Save in _folder:"
 msgstr "Зачувај во _папка:"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4307
 msgid "Create in _folder:"
 msgstr "Креирај во _папка:"
 
-#: gtk/gtkfilechooserdefault.c:5321
+#: gtk/gtkfilechooserdefault.c:5347
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Не можам да ја сменам папката поради тоа што не е локална"
 
-#: gtk/gtkfilechooserdefault.c:5883
+#: gtk/gtkfilechooserdefault.c:5910
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Кратенката %s не постои"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6165
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Датотека со името \"%s\" веќе постои.  Дали сакате да ја замените?"
 
-#: gtk/gtkfilechooserdefault.c:6141
+#: gtk/gtkfilechooserdefault.c:6168
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1601,20 +1601,20 @@ msgstr ""
 "Датотеката веќе постои во \"%s\".  Ако ја замените ќе ја замените нејзината "
 "содржина."
 
-#: gtk/gtkfilechooserdefault.c:6146
+#: gtk/gtkfilechooserdefault.c:6173
 msgid "_Replace"
 msgstr "_Замени"
 
-#: gtk/gtkfilechooserdefault.c:6637
+#: gtk/gtkfilechooserdefault.c:6664
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не можам да монтирам %s"
 
-#: gtk/gtkfilechooserdefault.c:6932
+#: gtk/gtkfilechooserdefault.c:6959
 msgid "Type name of new folder"
 msgstr "Внесете име за новата папка"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:7001
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1622,59 +1622,59 @@ msgstr[0] "%d бајт"
 msgstr[1] "%d бајти"
 msgstr[2] "%d бајти"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7003
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6978
+#: gtk/gtkfilechooserdefault.c:7005
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6980
+#: gtk/gtkfilechooserdefault.c:7007
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
+#: gtk/gtkfilechooserdefault.c:7053 gtk/gtkfilechooserdefault.c:7077
 msgid "Unknown"
 msgstr "Непознато"
 
-#: gtk/gtkfilechooserdefault.c:7037
+#: gtk/gtkfilechooserdefault.c:7064
 msgid "Today"
 msgstr "Денес"
 
-#: gtk/gtkfilechooserdefault.c:7039
+#: gtk/gtkfilechooserdefault.c:7066
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserdefault.c:7121
+#: gtk/gtkfilechooserdefault.c:7148
 msgid "Cannot change folder"
 msgstr "Не можам да сменам папка"
 
-#: gtk/gtkfilechooserdefault.c:7122
+#: gtk/gtkfilechooserdefault.c:7149
 msgid "The folder you specified is an invalid path."
 msgstr "Папката што ја одредивте е невалидна патека."
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7188
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Не можам да изградам име на датотека од '%s' и '%s'"
 
-#: gtk/gtkfilechooserdefault.c:7197
+#: gtk/gtkfilechooserdefault.c:7224
 msgid "Could not select item"
 msgstr "Не можам да изберам предмет"
 
-#: gtk/gtkfilechooserdefault.c:7237
+#: gtk/gtkfilechooserdefault.c:7264
 msgid "Open Location"
 msgstr "Отвори локација"
 
-#: gtk/gtkfilechooserdefault.c:7244
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "Save in Location"
 msgstr "Зачувај на локација"
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7298
 msgid "_Location:"
 msgstr "_Локација:"
 
@@ -2091,27 +2091,27 @@ msgid "Select All"
 msgstr "Избери ги Сите"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:400
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Вчитај додатно модули за GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "МОДУЛИ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:403
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Направи ги сите предупредувања фатални"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Поставување на GTK+ знамиња за дебагирање"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Отстранување на GTK+ знамиња за дебагирање"
 
@@ -2120,15 +2120,15 @@ msgstr "Отстранување на GTK+ знамиња за дебагира�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:493
+#: gtk/gtkmain.c:502
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "GTK+ Options"
 msgstr "Опции за GTK+"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "Show GTK+ Options"
 msgstr "Покажи опции за GTK+"
 
@@ -2145,17 +2145,17 @@ msgstr "Група"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Копчето за радио на кое што припаѓа ова копче."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2403
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не можам да ја најдам датотеката: \"%s\""
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3045 gtk/gtkrc.c:3048
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Не успеав да ја лоцирам сликата на патеката: \"%s\""
 
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3483
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Патека на елементот: \"%s\" мора да е апсолутна, %s, линија %d"

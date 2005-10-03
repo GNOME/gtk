@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -695,7 +695,7 @@ msgstr ""
 "Törəmənin valideynən başlanğıcına yoxsa sonuna nəzələn paketlənəcəyini "
 "müəyyən edən GtkPackType"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Yer"
@@ -3051,60 +3051,60 @@ msgstr "Düşən indikator böyüklüyü"
 msgid "Spacing around indicator"
 msgstr "İndikator ətrafındakı boşluq"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Pəncərə ayırıcısının piksel olaraq yeri (0 dəyəri sol/üst tərəfə doğru bütün "
 "sahə deməkdir)"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "Yer Seçimi"
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "Mövqe xassəsi istifadə ediləcəksə TRUE"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "Dəstək Bötüklüyü"
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "Qulp ehi"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 msgid "Minimal Position"
 msgstr "Minimal Mövqe"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr "\"position\" xassəsi üçün mümkün olan ən kiçik qiymət"
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 msgid "Maximal Position"
 msgstr "Maksimal Mövqe"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr "\"position\" xassəsi üçün mümkün olan ən böyük qiymət"
 
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 msgid "Resize"
 msgstr "Ölçüləndir"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "TRUE isə, ölçüləndirilən widget ilə bərabər törəmə də böyüyəcək/"
 "genişləyəcəkdir"
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 msgid "Shrink"
 msgstr "Genişlət"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE isə, törəmə məcbu qiymətdən daha kiçik ola bilər"
 

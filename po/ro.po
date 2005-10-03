@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:50-0400\n"
+"POT-Creation-Date: 2005-10-03 14:06-0400\n"
 "PO-Revision-Date: 2005-08-14 23:40+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -926,7 +926,7 @@ msgstr "Flag-uri de depanare Gdk de setat"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:407 gtk/gtkmain.c:410
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1194,7 +1194,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:648
+#: gtk/gtkcalendar.c:650
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1202,7 +1202,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:670
+#: gtk/gtkcalendar.c:674
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1214,7 +1214,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1558
+#: gtk/gtkcalendar.c:1562
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1229,7 +1229,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1835
+#: gtk/gtkcalendar.c:1839
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1557,117 +1557,117 @@ msgid "Create Fo_lder"
 msgstr "Creea_ză director"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:3996
 msgid "_Name:"
 msgstr "_Nume:"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Browse for other folders"
 msgstr "Navigare în al_te directoare"
 
-#: gtk/gtkfilechooserdefault.c:4287
+#: gtk/gtkfilechooserdefault.c:4305
 msgid "Save in _folder:"
 msgstr "Salvează în _director:"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4307
 msgid "Create in _folder:"
 msgstr "Creează în _director:"
 
-#: gtk/gtkfilechooserdefault.c:5321
+#: gtk/gtkfilechooserdefault.c:5347
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Nu pot deschide directorul deoarece nu este local"
 
-#: gtk/gtkfilechooserdefault.c:5883
+#: gtk/gtkfilechooserdefault.c:5910
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Combinaţia de taste %s nu există"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6165
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Un fişier cu numele „%s” există deja. Doriţi să îl înlocuiţi?"
 
-#: gtk/gtkfilechooserdefault.c:6141
+#: gtk/gtkfilechooserdefault.c:6168
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Fişierul există deja în „%s”. Înlocuindu-l îi veţi suprascrie conţinutul."
 
-#: gtk/gtkfilechooserdefault.c:6146
+#: gtk/gtkfilechooserdefault.c:6173
 msgid "_Replace"
 msgstr "În_locuieşte"
 
-#: gtk/gtkfilechooserdefault.c:6637
+#: gtk/gtkfilechooserdefault.c:6664
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nu am reuşit să montez %s"
 
-#: gtk/gtkfilechooserdefault.c:6932
+#: gtk/gtkfilechooserdefault.c:6959
 msgid "Type name of new folder"
 msgstr "Introduceţi numele noului director"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:7001
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octeţi"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7003
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f O"
 
-#: gtk/gtkfilechooserdefault.c:6978
+#: gtk/gtkfilechooserdefault.c:7005
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6980
+#: gtk/gtkfilechooserdefault.c:7007
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
+#: gtk/gtkfilechooserdefault.c:7053 gtk/gtkfilechooserdefault.c:7077
 msgid "Unknown"
 msgstr "Nu se ştie"
 
-#: gtk/gtkfilechooserdefault.c:7037
+#: gtk/gtkfilechooserdefault.c:7064
 msgid "Today"
 msgstr "Azi"
 
-#: gtk/gtkfilechooserdefault.c:7039
+#: gtk/gtkfilechooserdefault.c:7066
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: gtk/gtkfilechooserdefault.c:7121
+#: gtk/gtkfilechooserdefault.c:7148
 msgid "Cannot change folder"
 msgstr "Nu pot schimba directorul"
 
-#: gtk/gtkfilechooserdefault.c:7122
+#: gtk/gtkfilechooserdefault.c:7149
 msgid "The folder you specified is an invalid path."
 msgstr "Directorul specificat este o cale invalidă."
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7188
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nu am putut construi un nume de fişier din „%s” şi „%s”"
 
-#: gtk/gtkfilechooserdefault.c:7197
+#: gtk/gtkfilechooserdefault.c:7224
 msgid "Could not select item"
 msgstr "Nu am putut selecta itemul"
 
-#: gtk/gtkfilechooserdefault.c:7237
+#: gtk/gtkfilechooserdefault.c:7264
 msgid "Open Location"
 msgstr "Deschide locaţia"
 
-#: gtk/gtkfilechooserdefault.c:7244
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "Save in Location"
 msgstr "Salvează în locaţia"
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7298
 msgid "_Location:"
 msgstr "_Locaţie: "
 
@@ -2077,27 +2077,27 @@ msgid "Select All"
 msgstr "Selectează tot"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:400
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Încarcă alte module GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULE"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:403
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Orice atenţionare e fatală"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Flag-urile de depanare GTK+ sunt setate"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Flag-urile de depanare GTK+ sunt nesetate"
 
@@ -2106,15 +2106,15 @@ msgstr "Flag-urile de depanare GTK+ sunt nesetate"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:493
+#: gtk/gtkmain.c:502
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "GTK+ Options"
 msgstr "Opţiuni GTK+"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "Show GTK+ Options"
 msgstr "Arată opţiunile GTK+"
 
@@ -2131,17 +2131,17 @@ msgstr "Grup"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Widget-ul „radio” în al cărui grup aparţine acest buton."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2403
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nu pot găsi fişierul „include”: „%s”"
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3045 gtk/gtkrc.c:3048
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nu pot localiza fişierul imagine în pixmap_path: „%s”"
 
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3483
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Calea elementului pixmap: „%s” trebuie să fie absolută, %s, linia %d"

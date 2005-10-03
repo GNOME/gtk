@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2005-08-31 10:06+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -675,7 +675,7 @@ msgstr ""
 "En GtkPackType viser om etterkommeren er pakket med referanse til start "
 "eller slutt av opphavet"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Posisjon"
@@ -2996,57 +2996,57 @@ msgstr "Størrelse på nedtrekksindikator"
 msgid "Spacing around indicator"
 msgstr "Plass rundt indikatoren"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Posisjon for «paned»-separator i piksler (0 betyr øverst til venstre)"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "Posisjon satt"
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "SANN hvis egenskapen Position skal brukes"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "Størrelse på håndtak"
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "Størrelse på håndtak"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 msgid "Minimal Position"
 msgstr "Minste posisjon"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Minste mulige verdi for egenskapen «position»"
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 msgid "Maximal Position"
 msgstr "Største posisjon"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr "Største mulige verdi for egenskapen «position»"
 
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 msgid "Resize"
 msgstr "Endre størrelse"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "Hvis SANN vil etterkommer utvides og krypmes sammen med paned-komponenten"
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 msgid "Shrink"
 msgstr "Krymp"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Hvis SANN vil etter kommer gjøres mindre enn forespurt størrelse"
 

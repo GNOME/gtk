@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -787,7 +787,7 @@ msgid ""
 msgstr ""
 
 # gtk/gtkpaned.c:208 gtk/gtkruler.c:138
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "स्थिति"
@@ -3686,68 +3686,68 @@ msgid "Spacing around indicator"
 msgstr "सूचकाभोवतीची रिकामी जागा"
 
 # gtk/gtkpaned.c:209
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "अक्षरमालेतील विभाजकाची स्थिती (० म्हणजे डाव्या किंवा वरच्या दिशेने)"
 
 # gtk/gtkpaned.c:217
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "स्थितीत"
 
 # gtk/gtkpaned.c:218
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "स्थितीमुल्य वापरायचे असेल तर हे बरोबर आहे"
 
 # gtk/gtkpaned.c:224
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "हॅन्डलचा आकार"
 
 # gtk/gtkpaned.c:225
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "हॅन्डलची रुंदी"
 
 # gtk/gtkscale.c:173
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 #, fuzzy
 msgid "Minimal Position"
 msgstr "मूल्य स्थिती"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr ""
 
 # gtk/gtkscale.c:173
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 #, fuzzy
 msgid "Maximal Position"
 msgstr "मूल्य स्थिती"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 #, fuzzy
 msgid "Resize"
 msgstr "आकार बदलता येतो"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 
 # gtk/gtkwindow.c:424
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 #, fuzzy
 msgid "Shrink"
 msgstr "आकुंचित करावे"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 

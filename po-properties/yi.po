@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -694,7 +694,7 @@ msgstr ""
 "אַ Gtk פּאַקן־סאָרט װאָס באַשטעטיקט אױב דאָס קינד פּאַקט זיך רעלאַטיװ צום אָנהײב אָדער "
 "סוף פֿון טאַטע־מאַמע"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "פּאָזיציע"
@@ -3123,62 +3123,62 @@ msgstr "גרײס פֿון אַראָפּשפּרינג װײַזער"
 msgid "Spacing around indicator"
 msgstr "אָפּרוקונג אַרום דעם װײַזער"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "פּאָזיציע פֿון טאַפֿליע אָפּרוקער, אין בילדצעלן (0 מײנט צו דעם ראַנד אױף לינקס אָדער "
 "אױבן)"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "באַשטעטיק פּאָזיציע"
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "אױב „יאָ“, װעט מען ניצן די באַשטעטיקטע פּאָזיציע"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "הענטל גרײס"
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "הענטל ברײט"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 #, fuzzy
 msgid "Minimal Position"
 msgstr "באַטרעף־פּאָזיציע"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr ""
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 #, fuzzy
 msgid "Maximal Position"
 msgstr "באַטרעף־פּאָזיציע"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr ""
 
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 #, fuzzy
 msgid "Resize"
 msgstr "גרײס־סטרױערעװדיק"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 #, fuzzy
 msgid "Shrink"
 msgstr "דערלאָז שרימפּן"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 

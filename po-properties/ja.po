@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2005-07-31 22:04+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -670,7 +670,7 @@ msgstr ""
 "親ウィジェットの開始または終了に追従して子ウィジェットがパックされるかどうか "
 "(GtkPackType で指定する)"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "位置"
@@ -2987,58 +2987,58 @@ msgstr "ドロップダウン表示する表示部の大きさ"
 msgid "Spacing around indicator"
 msgstr "表示部の枠の間隔"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "ペインを分割するセパレータの位置をピクセル単位で指定します (0: 左/上になりま"
 "す)"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "位置の設定"
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "位置プロパティを使用する場合は TRUE にします"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "取っ手のサイズ"
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "取っ手の幅"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 msgid "Minimal Position"
 msgstr "最小位置"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr "\"位置\" プロパティの最小値"
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 msgid "Maximal Position"
 msgstr "最大位置"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr "\"位置\" プロパティの最大値"
 
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 msgid "Resize"
 msgstr "サイズ変更"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "TRUE にすると、子をペインド・ウィジェットに沿って拡大縮小できる"
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 msgid "Shrink"
 msgstr "縮小"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE にすると、子は要求されたサイズよりも小さくすることができる"
 

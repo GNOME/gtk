@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2004-03-24 05:39+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -686,7 +686,7 @@ msgid ""
 "start or end of the parent"
 msgstr "Određuje je li sadržani element vezan za početak ili kraj roditelja"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Položaj"
@@ -3056,60 +3056,60 @@ msgstr "Veličina padajućeg pokazatelja"
 msgid "Spacing around indicator"
 msgstr "Razmak oko pokazatelja"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Pozicija razdvojnika ploča u točkama (0 označava skroz na lijevoj strani ili "
 "na vrhu)"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr "Postavljena pozicija"
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 msgid "TRUE if the Position property should be used"
 msgstr "Uključeno ukoliko treba koristiti osobinu za poziciju"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr "Veličina ručke"
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 msgid "Width of handle"
 msgstr "Širina rukovanja"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 msgid "Minimal Position"
 msgstr "Najmanji položaj"
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Najmanja moguća vrijednost za svojstvo \"position\""
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 msgid "Maximal Position"
 msgstr "Najveće mjesto"
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 msgid "Largest possible value for the \"position\" property"
 msgstr "Najveća moguća vrijednost za svojstvo \"position\""
 
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 msgid "Resize"
 msgstr "Promjena veličine"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "Ukoliko je postavljeno, dijete se širi i skuplja zajedno sa okvirnim "
 "elementom"
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 msgid "Shrink"
 msgstr "Smanji"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Ukoliko je postavljeno, dijete ne može biti manje nego što je u početku "

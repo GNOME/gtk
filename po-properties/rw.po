@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:51-0400\n"
+"POT-Creation-Date: 2005-10-03 14:07-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -763,7 +763,7 @@ msgid ""
 "start or end of the parent"
 msgstr "A i ni Na: Indango Kuri i Gutangira Cyangwa Impera Bya i"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:245
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "umwanya"
@@ -3468,63 +3468,63 @@ msgstr "Bya Kugushahasi"
 msgid "Spacing around indicator"
 msgstr ""
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:249
 #, fuzzy
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Bya Mutandukanya in Pigiseli 0 Byose i Kuri i Ibumoso: Hejuru:"
 
-#: gtk/gtkpaned.c:254
+#: gtk/gtkpaned.c:257
 msgid "Position Set"
 msgstr ""
 
-#: gtk/gtkpaned.c:255
+#: gtk/gtkpaned.c:258
 #, fuzzy
 msgid "TRUE if the Position property should be used"
 msgstr "NIBA i indangakintu"
 
-#: gtk/gtkpaned.c:261
+#: gtk/gtkpaned.c:264
 msgid "Handle Size"
 msgstr ""
 
-#: gtk/gtkpaned.c:262
+#: gtk/gtkpaned.c:265
 #, fuzzy
 msgid "Width of handle"
 msgstr "Bya"
 
-#: gtk/gtkpaned.c:278
+#: gtk/gtkpaned.c:281
 msgid "Minimal Position"
 msgstr ""
 
-#: gtk/gtkpaned.c:279
+#: gtk/gtkpaned.c:282
 #, fuzzy
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Agaciro kugirango i Ibirindiro indangakintu"
 
-#: gtk/gtkpaned.c:296
+#: gtk/gtkpaned.c:299
 msgid "Maximal Position"
 msgstr ""
 
-#: gtk/gtkpaned.c:297
+#: gtk/gtkpaned.c:300
 #, fuzzy
 msgid "Largest possible value for the \"position\" property"
 msgstr "Agaciro kugirango i Ibirindiro indangakintu"
 
 # starmath/source\smres.src:RID_TOOLBOXWINDOW.6.RID_SIZEXY.text
-#: gtk/gtkpaned.c:314
+#: gtk/gtkpaned.c:317
 msgid "Resize"
 msgstr "Kuringaniza"
 
-#: gtk/gtkpaned.c:315
+#: gtk/gtkpaned.c:318
 #, fuzzy
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "i Na Na: i"
 
-#: gtk/gtkpaned.c:330
+#: gtk/gtkpaned.c:333
 msgid "Shrink"
 msgstr "Kugabanuka"
 
-#: gtk/gtkpaned.c:331
+#: gtk/gtkpaned.c:334
 #, fuzzy
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "i Gitoya"

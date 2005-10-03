@@ -112,7 +112,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:50-0400\n"
+"POT-Creation-Date: 2005-10-03 14:06-0400\n"
 "PO-Revision-Date: 2005-07-25 12:47+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
@@ -1019,7 +1019,7 @@ msgstr "સુયોજિત કરવા માટેના Gdk ડિબગ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:407 gtk/gtkmain.c:410
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1287,7 +1287,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:648
+#: gtk/gtkcalendar.c:650
 msgid "calendar:MY"
 msgstr "કેલેન્ડર:MY"
 
@@ -1295,7 +1295,7 @@ msgstr "કેલેન્ડર:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:670
+#: gtk/gtkcalendar.c:674
 msgid "calendar:week_start:0"
 msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત:૧"
 
@@ -1307,7 +1307,7 @@ msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1558
+#: gtk/gtkcalendar.c:1562
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1322,7 +1322,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1835
+#: gtk/gtkcalendar.c:1839
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1645,119 +1645,119 @@ msgid "Create Fo_lder"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:3996
 msgid "_Name:"
 msgstr "નામ (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Browse for other folders"
 msgstr "બીજા ફોલ્ડરો માટે શોધો (_B)"
 
-#: gtk/gtkfilechooserdefault.c:4287
+#: gtk/gtkfilechooserdefault.c:4305
 msgid "Save in _folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_F):"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4307
 msgid "Create in _folder:"
 msgstr "ફોલ્ડરમાં બનાવો (_F):"
 
-#: gtk/gtkfilechooserdefault.c:5321
+#: gtk/gtkfilechooserdefault.c:5347
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ફોલ્ડર બદલી શકતા નથી કારણ કે તે સ્થાનિક પથ નથી"
 
-#: gtk/gtkfilechooserdefault.c:5883
+#: gtk/gtkfilechooserdefault.c:5910
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ટૂંકાણ %s અસ્તિત્વમાં નથી"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6165
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હાજર છે.  શું તમે તેને બદલવા માંગો છો?"
 
-#: gtk/gtkfilechooserdefault.c:6141
+#: gtk/gtkfilechooserdefault.c:6168
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
-#: gtk/gtkfilechooserdefault.c:6146
+#: gtk/gtkfilechooserdefault.c:6173
 msgid "_Replace"
 msgstr "બદલો (_R)"
 
-#: gtk/gtkfilechooserdefault.c:6637
+#: gtk/gtkfilechooserdefault.c:6664
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:6932
+#: gtk/gtkfilechooserdefault.c:6959
 msgid "Type name of new folder"
 msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:7001
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d બાઇટ"
 msgstr[1] "%d બાઇટો"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7003
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6978
+#: gtk/gtkfilechooserdefault.c:7005
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6980
+#: gtk/gtkfilechooserdefault.c:7007
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
+#: gtk/gtkfilechooserdefault.c:7053 gtk/gtkfilechooserdefault.c:7077
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
 # #-#-#-#-#  libgnomeui.HEAD.hi.po (libgnomeui-2.0.hi)  #-#-#-#-#
 # libgnomeui/gnome-file-entry.c:216
-#: gtk/gtkfilechooserdefault.c:7037
+#: gtk/gtkfilechooserdefault.c:7064
 msgid "Today"
 msgstr "આજે"
 
-#: gtk/gtkfilechooserdefault.c:7039
+#: gtk/gtkfilechooserdefault.c:7066
 msgid "Yesterday"
 msgstr "ગઇકાલે"
 
-#: gtk/gtkfilechooserdefault.c:7121
+#: gtk/gtkfilechooserdefault.c:7148
 msgid "Cannot change folder"
 msgstr "ફોલ્ડર બદલી શકતા નથી"
 
-#: gtk/gtkfilechooserdefault.c:7122
+#: gtk/gtkfilechooserdefault.c:7149
 msgid "The folder you specified is an invalid path."
 msgstr "તમે સ્પષ્ટ કરેલ ફોલ્ડર એ અયોગ્ય પાથ છે."
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7188
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s' અને '%s' માંથી ફાઈલ નામ બનાવી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:7197
+#: gtk/gtkfilechooserdefault.c:7224
 msgid "Could not select item"
 msgstr "વસ્તુ પસંદ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:7237
+#: gtk/gtkfilechooserdefault.c:7264
 msgid "Open Location"
 msgstr "જગ્યા ખોલો"
 
-#: gtk/gtkfilechooserdefault.c:7244
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "Save in Location"
 msgstr "સ્થાનમાં સંગ્રહો"
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7298
 msgid "_Location:"
 msgstr "જગ્યા (_L):"
 
@@ -2165,27 +2165,27 @@ msgid "Select All"
 msgstr "બધું પસંદ કરો"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:400
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "વધારાના GTK+ મોડ્યુલો લાવો"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:403
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "બધી ચેતવણીઓ ઘાતક બનાવો"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "સુયોજિત કરવા માટેના GTK+ ડિબગીંગ ફ્લેગો"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "નહિં સુયોજિત કરવા માટેના GTK+ ડિબગીંગ ફ્લેગો"
 
@@ -2194,15 +2194,15 @@ msgstr "નહિં સુયોજિત કરવા માટેના GTK+ 
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:493
+#: gtk/gtkmain.c:502
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "GTK+ Options"
 msgstr "GTK+ વિકલ્પો"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "Show GTK+ Options"
 msgstr "GTK+ વિકલ્પો બતાવો"
 
@@ -2219,17 +2219,17 @@ msgstr "જૂથ"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "રેડિયો બટન કે જેના જૂથનો આ બટન ભાગ છે."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2403
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "સમાવવા માટેની ફાઈલ ને શોધવામાં નિષ્ફળ: \"%s\""
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3045 gtk/gtkrc.c:3048
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path માં ચિત્ર ફાઈલ મેળવવામાં નિષ્ફળ: \"%s\""
 
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3483
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "ચિત્ર પથનો ભાગ: \"%s\" ચોક્કસ હોવો જોઈએ, %s, લીટી %d"

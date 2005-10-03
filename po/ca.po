@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-27 00:50-0400\n"
+"POT-Creation-Date: 2005-10-03 14:06-0400\n"
 "PO-Revision-Date: 2005-08-25 12:15+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -930,7 +930,7 @@ msgstr "Senyaladors de depuració de Gdk per a habilitar"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:407 gtk/gtkmain.c:410
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "SENYALADORS"
 
@@ -1198,7 +1198,7 @@ msgstr "Barra_invertida"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:648
+#: gtk/gtkcalendar.c:650
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1206,7 +1206,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:670
+#: gtk/gtkcalendar.c:674
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1218,7 +1218,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1558
+#: gtk/gtkcalendar.c:1562
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1233,7 +1233,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1835
+#: gtk/gtkcalendar.c:1839
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1564,38 +1564,38 @@ msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:3996
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Browse for other folders"
 msgstr "Na_vega per unes altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:4287
+#: gtk/gtkfilechooserdefault.c:4305
 msgid "Save in _folder:"
 msgstr "De_sa en la carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4307
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:5321
+#: gtk/gtkfilechooserdefault.c:5347
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:5883
+#: gtk/gtkfilechooserdefault.c:5910
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: gtk/gtkfilechooserdefault.c:6138
+#: gtk/gtkfilechooserdefault.c:6165
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
 
-#: gtk/gtkfilechooserdefault.c:6141
+#: gtk/gtkfilechooserdefault.c:6168
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1603,79 +1603,79 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si ho reemplaceu sobreescriureu el seu "
 "contingut."
 
-#: gtk/gtkfilechooserdefault.c:6146
+#: gtk/gtkfilechooserdefault.c:6173
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:6637
+#: gtk/gtkfilechooserdefault.c:6664
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:6932
+#: gtk/gtkfilechooserdefault.c:6959
 msgid "Type name of new folder"
 msgstr "Nom del tipus de la nova carpeta"
 
-#: gtk/gtkfilechooserdefault.c:6974
+#: gtk/gtkfilechooserdefault.c:7001
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7003
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:6978
+#: gtk/gtkfilechooserdefault.c:7005
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:6980
+#: gtk/gtkfilechooserdefault.c:7007
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:7026 gtk/gtkfilechooserdefault.c:7050
+#: gtk/gtkfilechooserdefault.c:7053 gtk/gtkfilechooserdefault.c:7077
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:7037
+#: gtk/gtkfilechooserdefault.c:7064
 msgid "Today"
 msgstr "Avui"
 
-#: gtk/gtkfilechooserdefault.c:7039
+#: gtk/gtkfilechooserdefault.c:7066
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: gtk/gtkfilechooserdefault.c:7121
+#: gtk/gtkfilechooserdefault.c:7148
 msgid "Cannot change folder"
 msgstr "No es pot canviar de carpeta"
 
-#: gtk/gtkfilechooserdefault.c:7122
+#: gtk/gtkfilechooserdefault.c:7149
 msgid "The folder you specified is an invalid path."
 msgstr "La carpeta que heu especificat és un camí invàlid."
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7188
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "No s'ha pogut construir el nom del fitxer des de «%s» i «%s»"
 
-#: gtk/gtkfilechooserdefault.c:7197
+#: gtk/gtkfilechooserdefault.c:7224
 msgid "Could not select item"
 msgstr "No s'ha pogut seleccionar l'element"
 
-#: gtk/gtkfilechooserdefault.c:7237
+#: gtk/gtkfilechooserdefault.c:7264
 msgid "Open Location"
 msgstr "Obre una ubicació"
 
-#: gtk/gtkfilechooserdefault.c:7244
+#: gtk/gtkfilechooserdefault.c:7271
 msgid "Save in Location"
 msgstr "Desa en una ubicació"
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7298
 msgid "_Location:"
 msgstr "_Ubicació:"
 
@@ -2090,27 +2090,27 @@ msgid "Select All"
 msgstr "Selecciona-ho tot"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:400
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Carrega mòduls de GTK+ addicionals"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MÒDULS"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:403
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Considera que tots els avisos són greus"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Senyaladors de depuració de GTK+ per a habilitar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Senyaladors de depuració de GTK+ per a deshabilitar"
 
@@ -2121,15 +2121,15 @@ msgstr "Senyaladors de depuració de GTK+ per a deshabilitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:493
+#: gtk/gtkmain.c:502
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "GTK+ Options"
 msgstr "Opcions de GTK+"
 
-#: gtk/gtkmain.c:576
+#: gtk/gtkmain.c:585
 msgid "Show GTK+ Options"
 msgstr "Mostra les opcions de GTK+"
 
@@ -2146,18 +2146,18 @@ msgstr "Grup"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "El botó d'eina de ràdio al qual pertany aquest grup."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2403
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No s'ha pogut trobar el fitxer per a incloure: «%s»"
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3045 gtk/gtkrc.c:3048
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
 
 #
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3483
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""

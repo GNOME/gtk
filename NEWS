@@ -1,3 +1,20 @@
+Overview of Changes from GTK+ 2.8.4 to GTK+ 2.8.5
+=================================================
+* GtkFileChooser
+ - Don't clear the file name entry too often when
+   in SAVE mode.  [Jürg Billeter]
+ - Reduce the startup time in OPEN mode [Federico 
+   Mena Quintero]
+* Stop drag in GtkPaned when grab shadowed [Matthias Clasen]
+* Correct the calculation for the first weekday
+  in GtkCalendar [Matthias Clasen]
+* Use a larger buffer when determining the image
+  format in gdk-pixbuf [Sebastian Bacher, Dom Lachowicz]
+* Win32 bug fixes [Kazuki Iwamoto, Tor Lillqvist]
+* Other bug fixes [Tor Lillqvist, Gustavo Carneiro,
+  Paolo Borelli, Ray Strode, Søren Sandmann, Tommi Komulainen,
+  Benjamin Berg]
+
 Overview of Changes from GTK+ 2.8.3 to GTK+ 2.8.4
 =================================================
 * GtkFileChooser
