@@ -52,7 +52,7 @@ static guint    pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
 /* Internal data */
 
-#define LOADER_HEADER_SIZE 128
+#define LOADER_HEADER_SIZE 1024
 
 typedef struct
 {
