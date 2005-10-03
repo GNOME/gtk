@@ -840,7 +840,7 @@ gdk_pixbuf_new_from_file (const char *filename,
 	GdkPixbuf *pixbuf;
 	int size;
 	FILE *f;
-	guchar buffer[256];
+	guchar buffer[1024];
 	GdkPixbufModule *image_module;
 	gchar *display_name;
 

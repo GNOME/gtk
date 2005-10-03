@@ -136,7 +136,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 	GdkPixbufAnimation *animation;
 	int size;
 	FILE *f;
-	guchar buffer [128];
+	guchar buffer [1024];
 	GdkPixbufModule *image_module;
         gchar *display_name;
         gboolean locked = FALSE;
