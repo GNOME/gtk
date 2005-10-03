@@ -1,3 +1,8 @@
+2005-10-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_clear_realized_style): Unref the style when
+	removing it from the hash table.  (#314696, Benjamin Berg)
+
 2005-10-01  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (blit_from_pixmap): In case
