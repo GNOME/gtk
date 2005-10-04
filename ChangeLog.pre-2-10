@@ -1,3 +1,8 @@
+2005-10-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Call 
+	calendar_compute_days() after setting priv->week_start.
+	
 2005-10-03  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:

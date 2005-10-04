@@ -598,8 +598,6 @@ gtk_calendar_init (GtkCalendar *calendar)
   calendar->month = tm->tm_mon;
   calendar->year  = 1900 + tm->tm_year;
 
-  calendar_compute_days (calendar);
-
   for (i=0;i<31;i++)
     calendar->marked_date[i] = FALSE;
   calendar->num_marked_dates = 0;
@@ -684,6 +682,8 @@ gtk_calendar_init (GtkCalendar *calendar)
       priv->week_start = 0;
     }
 #endif
+
+  calendar_compute_days (calendar);
 }
 
 
