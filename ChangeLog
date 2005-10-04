@@ -1,5 +1,10 @@
 2005-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_init): Call 
+	calendar_compute_days() after setting priv->week_start.
+
+2005-10-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkrc.c (gtk_rc_clear_realized_style): Unref the style when
 	removing it from the hash table.  (#314696, Benjamin Berg)
 
