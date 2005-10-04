@@ -1,3 +1,15 @@
+2005-10-04  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkpathbar.c (get_dir_name): Don't special-case Home and
+	Desktop; just use their real names on the file system for the
+	user-visible names.
+
+	* gtk/gtkfilechooserdefault.c
+	(shortcuts_append_home): Don't special-case the name of "Home";
+	just use the folder name.
+
 2005-10-04  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Make it compile without

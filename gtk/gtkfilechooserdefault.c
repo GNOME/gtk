@@ -1430,7 +1430,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
   error = NULL;
-  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, _("Home"), FALSE, &error);
+  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, NULL, FALSE, &error);
   if (!impl->has_home)
     error_getting_info_dialog (impl, home_path, error);
 

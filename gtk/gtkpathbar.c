@@ -1016,13 +1016,7 @@ button_data_free (ButtonData *button_data)
 static const char *
 get_dir_name (ButtonData *button_data)
 {
-  if (button_data->type == HOME_BUTTON)
-    return _("Home");
-  else if (button_data->type == DESKTOP_BUTTON)
-    return _("Desktop");
-  else
-    return button_data->dir_name;
-
+  return button_data->dir_name;
 }
 
 /* We always want to request the same size for the label, whether
