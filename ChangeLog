@@ -1,3 +1,8 @@
+2005-10-04  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Make it compile without
+	HAVE__NL_TIME_FIRST_WEEKDAY. (#317910, Mathias Hasselmann)
+
 2005-10-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_clear_realized_style): Revert the change
