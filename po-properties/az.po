@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-03 14:07-0400\n"
+"POT-Creation-Date: 2005-10-04 01:25-0400\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -2113,11 +2113,11 @@ msgstr "Yazı növü seçmə dialoqunun etiketi"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:701
+#: gtk/gtkfilechooserdefault.c:710
 msgid "Default file chooser backend"
 msgstr "Ön qurğulu fayl seçici backend-i"
 
-#: gtk/gtkfilechooserdefault.c:702
+#: gtk/gtkfilechooserdefault.c:711
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ön qurğulu olarq işlədiləcək GtkFileChooser backend-inin adı"
 

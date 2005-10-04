@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-03 14:07-0400\n"
+"POT-Creation-Date: 2005-10-04 01:25-0400\n"
 "PO-Revision-Date: 2005-08-14 22:12+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -2109,11 +2109,11 @@ msgstr "Titlul dialogului de selectare fişiere."
 msgid "The desired width of the button widget, in characters."
 msgstr "Lăţimea dorită a widget-ului buton în caractere."
 
-#: gtk/gtkfilechooserdefault.c:701
+#: gtk/gtkfilechooserdefault.c:710
 msgid "Default file chooser backend"
 msgstr "Suport implicit pentru selectorul de fişiere"
 
-#: gtk/gtkfilechooserdefault.c:702
+#: gtk/gtkfilechooserdefault.c:711
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Numele suportului GtkFileChooser de utilizat implicit"
 

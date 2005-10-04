@@ -1,3 +1,13 @@
+Overview of Changes from GTK+ 2.8.5 to GTK+ 2.8.6
+=================================================
+* GtkFileChooser
+ - Don't reload the current folder unnecessarily on map [Federico
+   Mena Quintero]
+* Revert a change from 2.8.5 that could lead to assertion 
+  failures when finalizing GtkStyles [Matthias Clasen]
+* Remove context prefixes from Portugese translations [Duarte 
+  Henriques]
+  
 Overview of Changes from GTK+ 2.8.4 to GTK+ 2.8.5
 =================================================
 * GtkFileChooser

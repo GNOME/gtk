@@ -1,5 +1,9 @@
 2005-10-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.6 ===
+
+	* NEWS: Updates
+
 	* gtk/gtkrc.c (gtk_rc_clear_realized_style): Revert the change
 	from yesterday, since it leads to assertion failures.  (#317879,
 	Sebastian Bacher)
