@@ -234,6 +234,10 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 		<entry>home-folder</entry>
 		<entry><keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo></entry>
 	      </row>
+	      <row>
+		<entry>desktop-folder</entry>
+		<entry><keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo></entry>
+	      </row>
 	    </tbody>
 	  </tgroup>
 	</informaltable>
@@ -426,6 +430,40 @@ class "GtkFileChooserDefault" binding "misc-shortcut"
 	  folder in the file list.  By default this is bound to
 	  <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>
 	  (the Home key in the numeric keypad also works).
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+
+      <refsect3 id="GtkFileChooserDefault-desktop-folder">
+	<title>The &quot;GtkFileChooserDefault::desktop-folder&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser show the user's Desktop
+	  folder in the file list.  By default this is bound to
+	  <keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo>.
 	</para>
 
 	<variablelist role="params">

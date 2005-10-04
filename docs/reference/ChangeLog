@@ -1,3 +1,8 @@
+2005-10-04  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Document the "desktop-folder"
+	binding signal.
+
 2005-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/gcs.sgml: Fix a comment.
