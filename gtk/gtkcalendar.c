@@ -565,10 +565,14 @@ gtk_calendar_init (GtkCalendar *calendar)
   time_t tmp_time;
   GtkCalendarPrivate *priv;
   gchar *year_before;
+#ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   gchar *langinfo;
   gint week_1stday = 0;
   gint first_weekday = 1;
   guint week_origin;
+#else
+  gchar *week_start;
+#endif
 
   priv = calendar->priv = G_TYPE_INSTANCE_GET_PRIVATE (calendar,
 						       GTK_TYPE_CALENDAR,
