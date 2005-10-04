@@ -79,8 +79,8 @@
 
 
 /* Profiling stuff */
-
-#define PROFILE_FILE_CHOOSER
+#include <unistd.h>
+#undef PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
 
 #ifdef HAVE_UNISTD_H
@@ -155,6 +155,7 @@ enum {
   UP_FOLDER,
   DOWN_FOLDER,
   HOME_FOLDER,
+  DESKTOP_FOLDER,
   LAST_SIGNAL
 };
 
@@ -313,6 +314,7 @@ static void location_popup_handler (GtkFileChooserDefault *impl,
 static void up_folder_handler      (GtkFileChooserDefault *impl);
 static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
+static void desktop_folder_handler (GtkFileChooserDefault *impl);
 static void update_appearance      (GtkFileChooserDefault *impl);
 
 static void set_current_filter   (GtkFileChooserDefault *impl,
@@ -538,6 +540,14 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
+  signals[DESKTOP_FOLDER] =
+    _gtk_binding_signal_new (I_("desktop-folder"),
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (desktop_folder_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (class);
 
@@ -580,6 +590,10 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Home, GDK_MOD1_MASK,
 				"home-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_d, GDK_MOD1_MASK,
+				"desktop-folder",
 				0);
 
   _gtk_file_chooser_install_properties (gobject_class);
@@ -624,11 +638,11 @@ static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
-
+#define PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-
+#undef PROFILE_FILE_CHOOSER
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
@@ -1312,7 +1326,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
   error = NULL;
-  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, _("Home"), FALSE, &error);
+  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, NULL, FALSE, &error);
   if (!impl->has_home)
     error_getting_info_dialog (impl, home_path, error);
 
@@ -3098,7 +3112,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
 #ifdef PROFILE_FILE_CHOOSER
-  g_object_set_data (impl->browse_shortcuts_tree_view, "fmq-name", "shortcuts");
+  g_object_set_data (G_OBJECT (impl->browse_shortcuts_tree_view), "fmq-name", "shortcuts");
 #endif
   g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
 		    G_CALLBACK (tree_view_keybinding_cb), impl);
@@ -3609,7 +3623,7 @@ create_file_list (GtkFileChooserDefault *impl)
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
 #ifdef PROFILE_FILE_CHOOSER
-  g_object_set_data (impl->browse_files_tree_view, "fmq-name", "file_list");
+  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), "fmq-name", "file_list");
 #endif
   g_object_set_data (G_OBJECT (impl->browse_files_tree_view), I_("GtkFileChooserDefault"), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
@@ -5181,10 +5195,11 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 
   pending_select_paths_process (impl);
   set_busy_cursor (impl, FALSE);
-
+#define PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** FINISHED LOADING", F_OK);
 #endif
+#undef PROFILE_FILE_CHOOSER
 
   profile_end ("end", NULL);
 }
@@ -7330,21 +7345,37 @@ down_folder_handler (GtkFileChooserDefault *impl)
   _gtk_path_bar_down (GTK_PATH_BAR (impl->browse_path_bar));
 }
 
-/* Handler for the "home-folder" keybinding signal */
+/* Switches to SHORTCUTS_HOME or SHORTCUTS_DESKTOP */
 static void
-home_folder_handler (GtkFileChooserDefault *impl)
+switch_to_shortcut (GtkFileChooserDefault *impl,
+		    ShortcutsIndex where)
 {
   int pos;
   GtkTreeIter iter;
 
-  if (!impl->has_home)
-    return; /* Should we put up an error dialog? */
+  g_assert (where == SHORTCUTS_HOME || where == SHORTCUTS_DESKTOP);
 
-  pos = shortcuts_get_index (impl, SHORTCUTS_HOME);
+  pos = shortcuts_get_index (impl, where);
   if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
     g_assert_not_reached ();
 
   shortcuts_activate_iter (impl, &iter);
+}
+
+/* Handler for the "home-folder" keybinding signal */
+static void
+home_folder_handler (GtkFileChooserDefault *impl)
+{
+  if (impl->has_home)
+    switch_to_shortcut (impl, SHORTCUTS_HOME);
+}
+
+/* Handler for the "desktop-folder" keybinding signal */
+static void
+desktop_folder_handler (GtkFileChooserDefault *impl)
+{
+  if (impl->has_desktop)
+    switch_to_shortcut (impl, SHORTCUTS_DESKTOP);
 }
 
 

@@ -1,3 +1,18 @@
+2005-10-04  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkpathbar.c (get_dir_name): Don't special-case Home and
+	Desktop; just use their real names on the file system for the
+	user-visible names.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_class_init): Add a "desktop-folder"
+	binding signal, and bind it to M-d by default.
+	(desktop_folder_handler): Implement the default handler.
+	(home_folder_handler): Use a helper function.
+	(switch_to_shortcut): New helper function.
+	(shortcuts_append_home): Don't special-case the name of "Home";
+	just use the folder name.
+
 2005-10-04  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Make it compile without
