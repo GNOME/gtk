@@ -240,7 +240,7 @@ msgstr "Lỗi nội tại trong bộ tải tập tin dạng GIF (%s)"
 #: gdk-pixbuf/io-gif.c:575
 #, c-format
 msgid "Stack overflow"
-msgstr "Tràn đống"
+msgstr "Tràn stack"
 
 #: gdk-pixbuf/io-gif.c:635
 #, c-format
@@ -1097,11 +1097,11 @@ msgstr "Làm cho các cuộc gọi X đồng bộ"
 
 #: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2103
 msgid "License"
-msgstr "Quyền"
+msgstr "Giấy phép"
 
 #: gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
-msgstr "Quyền của chương trình"
+msgstr "Giấy phép của chương trình"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:509
@@ -1111,7 +1111,7 @@ msgstr "Công t_rạng"
 #. Add the license button
 #: gtk/gtkaboutdialog.c:519
 msgid "_License"
-msgstr "_Quyền"
+msgstr "_Giấy phép"
 
 #: gtk/gtkaboutdialog.c:756
 #, c-format
@@ -1988,7 +1988,7 @@ msgstr "Nhập"
 
 #: gtk/gtkinputdialog.c:244
 msgid "No extended input devices"
-msgstr "Không có thiết bị nhập đã mở rộng nào."
+msgstr "Không có thiết bị nhập mở rộng nào."
 
 #: gtk/gtkinputdialog.c:256
 msgid "_Device:"
@@ -2562,27 +2562,27 @@ msgstr "Rỗng"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr "Am-ha-rit (EZ+)"
+msgstr "Amharic (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr "Dấu móc dưới"
+msgstr "Cedilla"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Ki-rin (đã chuyển ngữ)"
+msgstr "Ki-rin (chuyển ngữ)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "In-u-ch-ti-tut (đã chuyển ngữ)"
+msgstr "Inuktitut (chuyển ngữ)"
 
 #. ID
 #: modules/input/imipa.c:145
 msgid "IPA"
-msgstr "IPA"
+msgstr "IPA (Phiên âm quốc tế)"
 
 #. ID
 #: modules/input/imthai-broken.c:178
@@ -2592,12 +2592,12 @@ msgstr "Thái (bị ngắt)"
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Thi-gợ-ric-na Ê-ri-tợ-re-an (EZ+)"
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Thi-gợ-ric-na Ê-ti-ô-pi (EZ+)"
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
@@ -2607,7 +2607,7 @@ msgstr "Việt (VIQR)"
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "Phương pháp gõ X"
+msgstr "Phương pháp gõ X (XIM)"
 
 #: tests/testfilechooser.c:205
 #, c-format
