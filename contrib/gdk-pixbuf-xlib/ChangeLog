@@ -1,3 +1,8 @@
+2005-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-xlib-2.0.pc.in (Requires): Require
+	gmodule-no-export-2.0 instead of gmodule-2.0
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===
