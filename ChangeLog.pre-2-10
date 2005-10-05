@@ -1,5 +1,19 @@
 2005-10-04  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (switch_to_shortcut): Take a
+	shortcut position, not a ShortcutsIndex, to make the function more
+	generic.
+	(home_folder_handler): Pass the resolved index to
+	switch_to_shortcut(), rather than just SHORTCUTS_HOME.
+	(desktop_folder_handler): Likewise for SHORTCUTS_DESKTOP.
+	(gtk_file_chooser_default_class_init): Add a "quick-bookmark"
+	binding signal, and bind it to Alt-1, Alt-2. ..., Alt-0.  These
+	make the respective key switch to the first, second, ..., tenth
+	bookmark.
+	(quick_bookmark_handler): Implement.
+
+2005-10-04  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkpathbar.c (get_dir_name): Don't special-case Home and
 	Desktop; just use their real names on the file system for the
 	user-visible names.

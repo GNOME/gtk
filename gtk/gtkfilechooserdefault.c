@@ -156,6 +156,7 @@ enum {
   DOWN_FOLDER,
   HOME_FOLDER,
   DESKTOP_FOLDER,
+  QUICK_BOOKMARK,
   LAST_SIGNAL
 };
 
@@ -315,6 +316,8 @@ static void up_folder_handler      (GtkFileChooserDefault *impl);
 static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
 static void desktop_folder_handler (GtkFileChooserDefault *impl);
+static void quick_bookmark_handler (GtkFileChooserDefault *impl,
+				    gint                   bookmark_index);
 static void update_appearance      (GtkFileChooserDefault *impl);
 
 static void set_current_filter   (GtkFileChooserDefault *impl,
@@ -489,9 +492,13 @@ _gtk_file_chooser_default_get_type (void)
 static void
 gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 {
+  static const guint quick_bookmark_keyvals[10] = {
+    GDK_1, GDK_2, GDK_3, GDK_4, GDK_5, GDK_6, GDK_7, GDK_8, GDK_9, GDK_0
+  };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
+  int i;
 
   parent_class = g_type_class_peek_parent (class);
 
@@ -548,6 +555,14 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
+  signals[QUICK_BOOKMARK] =
+    _gtk_binding_signal_new (I_("quick-bookmark"),
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (quick_bookmark_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__INT,
+			     G_TYPE_NONE, 1, G_TYPE_INT);
 
   binding_set = gtk_binding_set_by_class (class);
 
@@ -595,6 +610,12 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_d, GDK_MOD1_MASK,
 				"desktop-folder",
 				0);
+
+  for (i = 0; i < 10; i++)
+    gtk_binding_entry_add_signal (binding_set,
+				  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
+				  "quick-bookmark",
+				  1, G_TYPE_INT, i);
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -7345,17 +7366,13 @@ down_folder_handler (GtkFileChooserDefault *impl)
   _gtk_path_bar_down (GTK_PATH_BAR (impl->browse_path_bar));
 }
 
-/* Switches to SHORTCUTS_HOME or SHORTCUTS_DESKTOP */
+/* Switches to the shortcut in the specified index */
 static void
 switch_to_shortcut (GtkFileChooserDefault *impl,
-		    ShortcutsIndex where)
+		    int pos)
 {
-  int pos;
   GtkTreeIter iter;
 
-  g_assert (where == SHORTCUTS_HOME || where == SHORTCUTS_DESKTOP);
-
-  pos = shortcuts_get_index (impl, where);
   if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
     g_assert_not_reached ();
 
@@ -7367,7 +7384,7 @@ static void
 home_folder_handler (GtkFileChooserDefault *impl)
 {
   if (impl->has_home)
-    switch_to_shortcut (impl, SHORTCUTS_HOME);
+    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_HOME));
 }
 
 /* Handler for the "desktop-folder" keybinding signal */
@@ -7375,7 +7392,28 @@ static void
 desktop_folder_handler (GtkFileChooserDefault *impl)
 {
   if (impl->has_desktop)
-    switch_to_shortcut (impl, SHORTCUTS_DESKTOP);
+    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_DESKTOP));
+}
+
+static void
+quick_bookmark_handler (GtkFileChooserDefault *impl,
+			gint bookmark_index)
+{
+  int bookmark_pos;
+  GtkTreePath *path;
+
+  if (bookmark_index < 0 || bookmark_index >= impl->num_bookmarks)
+    return;
+
+  bookmark_pos = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS) + bookmark_index;
+
+  path = gtk_tree_path_new_from_indices (bookmark_pos, -1);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
+				path, NULL,
+				FALSE, 0.0, 0.0);
+  gtk_tree_path_free (path);
+
+  switch_to_shortcut (impl, bookmark_pos);
 }
 
 
