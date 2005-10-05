@@ -25,6 +25,17 @@ Installation
 
 See the file 'INSTALL'
 
+Release notes for 2.10
+======================
+
+* The hexadecimal Unicode input feature has been reworked. It no longer
+  blocks the use of the sixteen Ctrl-Shift-<hex digit> key sequences. Now
+  it only uses Ctrl-Shift-u.
+
+* A memory leak in GtkStyle handling has been fixed. This may expose bugs
+  in third-party widgets which forget to call gtk_style_attach() in their
+  realize functions.
+
 Release notes
 =============
 

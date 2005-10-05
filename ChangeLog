@@ -1,5 +1,7 @@
 2005-10-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Start collecting release notes for 2.10.
+
 	* gtk/gtkrc.c (gtk_rc_clear_realized_style): Readd the memory
 	leak fix, since the assertion failures were traced to 
 	an xchat bug.  (#314696)
