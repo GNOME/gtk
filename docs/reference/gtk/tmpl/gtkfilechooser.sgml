@@ -238,6 +238,10 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 		<entry>desktop-folder</entry>
 		<entry><keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo></entry>
 	      </row>
+	      <row>
+		<entry>quick-bookmark</entry>
+		<entry><keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo> through <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo></entry>
+	      </row>
 	    </tbody>
 	  </tgroup>
 	</informaltable>
@@ -472,6 +476,60 @@ class "GtkFileChooserDefault" binding "misc-shortcut"
 	    <listitem>
 	      <simpara>
 		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+
+      <refsect3 id="GtkFileChooserDefault-quick-bookmark">
+	<title>The &quot;GtkFileChooserDefault::quick-bookmark&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              gint bookmark_index,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser switch to the bookmark
+	  specified in the <parameter>bookmark_index</parameter> parameter.
+	  For example, if you have three bookmarks, you can pass 0, 1, 2 to
+	  this signal to switch to each of them, respectively.  By default this is bound to
+	  <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo>,
+	  <keycombo><keycap>Alt</keycap><keycap>2</keycap></keycombo>, 
+	  etc. until
+	  <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo>.  Note
+	  that in the default binding,
+	  that <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo> is
+	  actually defined to switch to the bookmark at index 0, and so on
+	  successively;
+	  <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo> is
+	  defined to switch to the bookmark at index 10.
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>bookmark_indes</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		index of the bookmark to switch to; the indices start at 0.
 	      </simpara>
 	    </listitem>
 	  </varlistentry>
