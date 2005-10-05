@@ -1336,7 +1336,10 @@ gtk_rc_clear_realized_style (gpointer key,
 			     gpointer data)
 {
   GSList *rc_styles = key;
+  GtkStyle *style = value;
   GSList *tmp_list = rc_styles;
+
+  g_object_unref (style);
  
   while (tmp_list)
     {
