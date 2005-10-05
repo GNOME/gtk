@@ -716,6 +716,10 @@ gtk_style_new (void)
  * it to a particular visual and colormap. The process may 
  * involve the creation of a new style if the style has already 
  * been attached to a window with a different style and colormap.
+ *
+ * Since this function may return a new object, you have to use it 
+ * in the following way: 
+ * <literal>style = gtk_style_attach (style, window)</literal>
  **/
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
@@ -792,10 +796,19 @@ gtk_style_attach (GtkStyle  *style,
   return new_style;
 }
 
+/**
+ * gtk_style_detach:
+ * @style: a #GtkStyle
+ *
+ * Detaches a style from a window. If the style is not attached
+ * to any windows anymore, it is unrealized. See gtk_style_attach().
+ * 
+ */
 void
 gtk_style_detach (GtkStyle *style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (style->attach_count > 0);
   
   style->attach_count -= 1;
   if (style->attach_count == 0)

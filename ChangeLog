@@ -1,3 +1,9 @@
+2005-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_detach):
+	(gtk_style_attach):  Documentation improvements.
+	(gtk_style_detach): Assert that the attach_count is > 0.
+
 2005-10-04  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (switch_to_shortcut): Take a
