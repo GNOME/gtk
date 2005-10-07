@@ -2047,7 +2047,7 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 GtkTextAttributes* 
 gtk_text_attributes_ref (GtkTextAttributes *values)
 {
-  g_return_if_fail (values != NULL);
+  g_return_val_if_fail (values != NULL, NULL);
 
   values->refcount += 1;
 
