@@ -70,6 +70,8 @@ struct _GtkTextBuffer
   
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
+
+  guint has_selection : 1;
 };
 
 struct _GtkTextBufferClass
@@ -336,6 +338,8 @@ void gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
 gboolean        gtk_text_buffer_get_modified            (GtkTextBuffer *buffer);
 void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
                                                          gboolean       setting);
+
+gboolean        gtk_text_buffer_get_has_selection       (GtkTextBuffer *buffer);
 
 void gtk_text_buffer_add_selection_clipboard    (GtkTextBuffer     *buffer,
 						 GtkClipboard      *clipboard);

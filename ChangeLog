@@ -1,3 +1,10 @@
+2005-10-06  Matthias Clasen  <mclasen@redhat.com> 
+		
+	* gtk/gtk.symbols:
+	* gtk/gtktextbuffer.h:
+	* gtk/gtktextbuffer.c: Add a readonly has-selection property
+	with a getter.  (#318161, Paolo Borelli)
+
 2005-10-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* README.in: Start collecting release notes for 2.10.

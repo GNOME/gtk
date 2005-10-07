@@ -41,6 +41,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+
 typedef struct _ClipboardRequest ClipboardRequest;
 
 struct _ClipboardRequest
@@ -75,7 +76,8 @@ enum {
   PROP_TAG_TABLE,
   
   /* Normal */
-  PROP_TEXT
+  PROP_TEXT,
+  PROP_HAS_SELECTION
 };
 
 enum {
@@ -113,6 +115,9 @@ static void gtk_text_buffer_real_remove_tag            (GtkTextBuffer     *buffe
                                                         const GtkTextIter *start_char,
                                                         const GtkTextIter *end_char);
 static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffer);
+static void gtk_text_buffer_real_mark_set              (GtkTextBuffer     *buffer,
+                                                        const GtkTextIter *iter,
+                                                        GtkTextMark       *mark);
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 static void          free_log_attr_cache (GtkTextLogAttrCache *cache);
@@ -180,6 +185,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
   klass->changed = gtk_text_buffer_real_changed;
+  klass->mark_set = gtk_text_buffer_real_mark_set;
 
   /* Construct */
   g_object_class_install_property (object_class,
@@ -207,6 +213,21 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                         P_("Current text of the buffer"),
 							"",
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextBuffer:has-selection:
+   *
+   * Whether the buffer has some text currently selected.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_HAS_SELECTION,
+                                   g_param_spec_boolean ("has-selection",
+                                                         P_("Has selection"),
+                                                         P_("Whether the buffer has some text currently selected"),
+                                                         FALSE,
+                                                         G_PARAM_READABLE));
 
   signals[INSERT_TEXT] =
     g_signal_new (I_("insert_text"),
@@ -445,6 +466,10 @@ gtk_text_buffer_get_property (GObject         *object,
 			  gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE));
       break;
     }
+
+    case PROP_HAS_SELECTION:
+      g_value_set_boolean (value, text_buffer->has_selection);
+      break;
 
     default:
       break;
@@ -2197,6 +2222,28 @@ gtk_text_buffer_real_changed (GtkTextBuffer *buffer)
 }
 
 static void
+gtk_text_buffer_real_mark_set (GtkTextBuffer *buffer,
+                               const GtkTextIter *iter,
+                               GtkTextMark *mark)
+{
+  if (mark == gtk_text_buffer_get_insert (buffer) ||
+      mark == gtk_text_buffer_get_selection_bound (buffer))
+    {
+      gboolean has_selection;
+
+      has_selection = gtk_text_buffer_get_selection_bounds (buffer,
+                                                            NULL,
+                                                            NULL);
+
+      if (has_selection != buffer->has_selection)
+        {
+          buffer->has_selection = has_selection;
+          g_object_notify (G_OBJECT (buffer), "has-selection");
+        }
+    }
+}
+
+static void
 gtk_text_buffer_emit_tag (GtkTextBuffer *buffer,
                           GtkTextTag *tag,
                           gboolean apply,
@@ -2696,6 +2743,24 @@ gtk_text_buffer_set_modified (GtkTextBuffer      *buffer,
       buffer->modified = fixed_setting;
       g_signal_emit (buffer, signals[MODIFIED_CHANGED], 0);
     }
+}
+
+/**
+ * gtk_text_buffer_get_has_selection:
+ * @buffer: a #GtkTextBuffer 
+ * 
+ * Indicates whether the buffer has some text currently selected.
+ * 
+ * Return value: %TRUE if the there is text selected
+ *
+ * Since: 2.10
+ **/
+gboolean
+gtk_text_buffer_get_has_selection (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+
+  return buffer->has_selection;
 }
 
 

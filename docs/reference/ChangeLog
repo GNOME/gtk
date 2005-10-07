@@ -1,3 +1,7 @@
+2005-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_text_buffer_get_has_selection().
+
 2005-10-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkfilechooser.sgml: Document the "quick-bookmark"
