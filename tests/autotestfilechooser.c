@@ -24,6 +24,7 @@
 #define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
 
 #include <config.h>
+#include <string.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include "gtk/gtkfilechooserprivate.h"
@@ -280,6 +281,7 @@ test_reload_sequence (gboolean set_folder_before_map)
   GtkWidget *dialog;
   GtkFileChooserDefault *impl;
   gboolean passed;
+  char *folder;
 
   passed = TRUE;
 
@@ -305,6 +307,10 @@ test_reload_sequence (gboolean set_folder_before_map)
 		&& ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 		    ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
 		    : TRUE));
+
+      folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+      passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+      g_free (folder);
     }
   else
     {
@@ -315,8 +321,12 @@ test_reload_sequence (gboolean set_folder_before_map)
 			  && impl->load_state == LOAD_EMPTY
 			  && impl->reload_state == RELOAD_EMPTY
 			  && impl->load_timeout_id == 0);
+
+      folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+      passed = passed && (folder == NULL);
     }
 
+  log_test (passed, "test_reload_sequence(): initial status");
   if (!passed)
     return FALSE;
 
@@ -332,6 +342,12 @@ test_reload_sequence (gboolean set_folder_before_map)
 	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
 		: TRUE));
+
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  passed = passed && (folder != NULL);
+  g_free (folder);
+
+  log_test (passed, "test_reload_sequence(): status after map");
   if (!passed)
     return FALSE;
 
@@ -350,6 +366,14 @@ test_reload_sequence (gboolean set_folder_before_map)
   if (!passed)
     return FALSE;
 
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  passed = passed && (folder != NULL);
+  g_free (folder);
+
+  log_test (passed, "test_reload_sequence(): status after unmap");
+  if (!passed)
+    return FALSE;
+
   /* Map it again! */
 
   gtk_widget_show_now (dialog);
@@ -365,8 +389,13 @@ test_reload_sequence (gboolean set_folder_before_map)
   if (!passed)
     return FALSE;
 
-  gtk_widget_destroy (dialog);
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  passed = passed && (folder != NULL);
+  g_free (folder);
 
+  log_test (passed, "test_reload_sequence(): status after re-map");
+
+  gtk_widget_destroy (dialog);
   return passed;
 }
 
@@ -386,13 +415,177 @@ test_reload (void)
   return passed;
 }
 
+static gboolean
+test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_dialog, gboolean set_folder_on_dialog)
+{
+  gboolean passed;
+  GtkWidget *window;
+  GtkWidget *button;
+  char *folder;
+  gboolean must_have_folder_initially;
+  GtkWidget *dialog;
+
+  passed = TRUE;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  must_have_folder_initially = (use_dialog && set_folder_on_dialog);
+
+  if (use_dialog)
+    {
+      dialog = gtk_file_chooser_dialog_new ("Test", NULL, action,
+					    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					    GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					    NULL);
+      button = gtk_file_chooser_button_new_with_dialog (dialog);
+
+      if (set_folder_on_dialog)
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
+    }
+  else
+    {
+      button = gtk_file_chooser_button_new ("Test", action);
+      dialog = NULL; /* keep gcc happy */
+    }
+
+  gtk_container_add (GTK_CONTAINER (window), button);
+
+  /* Pre-map; no folder is set */
+
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
+  if (must_have_folder_initially)
+    passed = passed && (folder != NULL);
+  else
+    passed = passed && (folder == NULL);
+
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, pre-map, %s",
+	    get_action_name (action),
+	    use_dialog,
+	    set_folder_on_dialog,
+	    must_have_folder_initially ? "must have folder" : "folder must not be set");
+
+  /* Map; folder should be set */
+
+  gtk_widget_show_all (window);
+  gtk_widget_show_now (window);
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
+  passed = passed && (folder != NULL);
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, mapped, must have folder",
+	    get_action_name (action),
+	    use_dialog,
+	    set_folder_on_dialog);
+  g_free (folder);
+
+  /* Unmap; folder should be set */
+
+  gtk_widget_hide (window);
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
+  passed = passed && (folder != NULL);
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, unmapped, must have folder",
+	    get_action_name (action),
+	    use_dialog,
+	    set_folder_on_dialog);
+  g_free (folder);
+
+  /* Re-map; folder should be set */
+
+  gtk_widget_show_now (window);
+  folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
+  passed = passed && (folder != NULL);
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, re-mapped, must have folder",
+	    get_action_name (action),
+	    use_dialog,
+	    set_folder_on_dialog);
+  g_free (folder);
+
+  gtk_widget_destroy (window);
+
+  return passed;
+}
+
+static gboolean
+test_button_folder_states (void)
+{
+  /* GtkFileChooserButton only supports OPEN and SELECT_FOLDER */
+  static const GtkFileChooserAction actions_to_test[] = {
+    GTK_FILE_CHOOSER_ACTION_OPEN,
+    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+  };
+  gboolean passed;
+  int i;
+
+  passed = TRUE;
+
+  for (i = 0; i < G_N_ELEMENTS (actions_to_test); i++)
+    {
+      passed = passed && test_button_folder_states_for_action (actions_to_test[i], FALSE, FALSE);
+      passed = passed && test_button_folder_states_for_action (actions_to_test[i], TRUE, FALSE);
+      passed = passed && test_button_folder_states_for_action (actions_to_test[i], TRUE, TRUE);
+      log_test (passed, "test_button_folder_states(): action %s", get_action_name (actions_to_test[i]));
+    }
+
+  log_test (passed, "test_button_folder_states(): all supported actions");
+  return passed;
+}
+
+static int num_warnings;
+static int num_errors;
+static int num_critical_errors;
+
+static void
+log_override_cb (const gchar   *log_domain,
+		 GLogLevelFlags log_level,
+		 const gchar   *message,
+		 gpointer       user_data)
+{
+  if (log_level & G_LOG_LEVEL_WARNING)
+    num_warnings++;
+
+  if (log_level & G_LOG_LEVEL_ERROR)
+    num_errors++;
+
+  if (log_level & G_LOG_LEVEL_CRITICAL)
+    num_critical_errors++;
+
+  g_log_default_handler (log_domain, log_level, message, user_data);
+}
+
 int
 main (int argc, char **argv)
 {
+  static const char *domains[] = {
+    "Glib", "GLib-GObject", "GModule", "GThread", "Pango", "Gdk", "GdkPixbuf", "Gtk", "libgnomevfs"
+  };
+
+  gboolean passed;
+  gboolean zero_warnings;
+  gboolean zero_errors;
+  gboolean zero_critical_errors;
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (domains); i++)
+    g_log_set_handler (domains[i],
+		       G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING,
+		       log_override_cb, NULL);
+
   gtk_init (&argc, &argv);
 
-  test_action_widgets ();
-  test_reload ();
+  passed = test_action_widgets ();
+  passed = passed && test_reload ();
+  passed = passed && test_button_folder_states ();
+  log_test (passed, "main(): main tests");
+
+  zero_warnings = num_warnings == 0;
+  zero_errors = num_errors == 0;
+  zero_critical_errors = num_critical_errors == 0;
+
+  log_test (zero_warnings, "main(): zero warnings (actual number %d)", num_warnings);
+  log_test (zero_errors, "main(): zero errors (actual number %d)", num_errors);
+  log_test (zero_critical_errors, "main(): zero critical errors (actual number %d)", num_critical_errors);
+
+  passed = passed && zero_warnings && zero_errors && zero_critical_errors;
+
+  log_test (passed, "main(): ALL TESTS");
 
   return 0;
 }
