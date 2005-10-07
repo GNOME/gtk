@@ -78,16 +78,17 @@
 
 
 
-/* Profiling stuff */
-#undef PROFILE_FILE_CHOOSER
-#ifdef PROFILE_FILE_CHOOSER
-
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #ifdef G_OS_WIN32
 #include <io.h>
 #endif
+
+/* Profiling stuff */
+#undef PROFILE_FILE_CHOOSER
+#ifdef PROFILE_FILE_CHOOSER
+
 
 #ifndef F_OK 
 #define F_OK 0
