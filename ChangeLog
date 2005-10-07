@@ -1,5 +1,8 @@
 2005-10-07   Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: Remove a redundant (and
+	unconditional) include of unistd.h  (#318211, Kazuki Iwamoto)
+
 	* gtk/gtktexttag.c (gtk_text_attributes_ref): Use
 	g_return_val_if_fail(), not g_return_if_fail().  (#318412,
 	Kazuki Iwamoto)

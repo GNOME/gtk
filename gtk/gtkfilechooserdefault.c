@@ -79,7 +79,6 @@
 
 
 /* Profiling stuff */
-#include <unistd.h>
 #undef PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
 
