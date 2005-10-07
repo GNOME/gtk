@@ -1,3 +1,9 @@
+2005-10-07  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkfilechooserdefault.c: remove some explicit #defines of
+	PROFILE_FILE_CHOOSER because they break compilation after the
+	removal of <unistd.h>.
+
 2005-10-07   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Remove a redundant (and
