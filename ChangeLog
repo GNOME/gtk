@@ -1,3 +1,24 @@
+2005-10-07  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	Fixes bug #317999:
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder):
+	Clarify the documentation on when this can return NULL.
+	(gtk_file_chooser_get_current_folder_uri): Likewise.
+
+	* gtk/gtkfilechooserbutton.c (struct
+	_GtkFileChooserButtonPrivate): Added a folder_has_been_set flag;
+	we use it to keep track of whether a folder has been set.
+	(gtk_file_chooser_button_map):  Implement.  If no folder has been
+	loaded before, we at least try to load $cwd here.
+	(gtk_file_chooser_button_constructor): If the construct-time
+	dialog already has a folder set, turn on our folder_has_been_set
+	flag.
+	(dialog_current_folder_changed_cb): Turn on our
+	folder_has_been_set flag.
+
 2005-10-07   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_attributes_ref): Use 

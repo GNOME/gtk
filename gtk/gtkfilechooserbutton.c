@@ -155,6 +155,9 @@ struct _GtkFileChooserButtonPrivate
 
   /* Used for hiding/showing the dialog when the button is hidden */
   guint8 active                       : 1;
+
+  /* Used to track whether we need to set a default current folder on ::map() */
+  guint8 folder_has_been_set          : 1;
 };
 
 
@@ -211,6 +214,7 @@ static void     gtk_file_chooser_button_show_all           (GtkWidget        *wi
 static void     gtk_file_chooser_button_hide_all           (GtkWidget        *widget);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
+static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
 static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
 							    gboolean          group_cycling);
 static void     gtk_file_chooser_button_style_set          (GtkWidget        *widget,
@@ -322,6 +326,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->hide_all = gtk_file_chooser_button_hide_all;
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
+  widget_class->map = gtk_file_chooser_button_map;
   widget_class->style_set = gtk_file_chooser_button_style_set;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
@@ -593,6 +598,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   GObject *object;
   GtkFileChooserButtonPrivate *priv;
   GSList *list;
+  char *current_folder;
 
   object = (*G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->constructor) (type,
 										  n_params,
@@ -625,6 +631,13 @@ gtk_file_chooser_button_constructor (GType                  type,
 					       GTK_RESPONSE_ACCEPT,
 					       GTK_RESPONSE_CANCEL,
 					       -1);
+    }
+
+  current_folder = gtk_file_chooser_get_current_folder_uri (GTK_FILE_CHOOSER (priv->dialog));
+  if (current_folder != NULL)
+    {
+      priv->folder_has_been_set = TRUE;
+      g_free (current_folder);
     }
 
   g_free (priv->backend);
@@ -1011,6 +1024,28 @@ gtk_file_chooser_button_hide (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->hide)
     (*GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->hide) (widget);
+}
+
+static void
+gtk_file_chooser_button_map (GtkWidget *widget)
+{
+  GtkFileChooserButtonPrivate *priv;
+
+  priv = GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE (widget);
+
+  if (!priv->folder_has_been_set)
+    {
+      char *current_working_dir;
+
+      current_working_dir = g_get_current_dir ();
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), current_working_dir);
+      g_free (current_working_dir);
+
+      priv->folder_has_been_set = TRUE;
+    }
+
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map)
+    (*GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map) (widget);
 }
 
 static gboolean
@@ -2064,7 +2099,15 @@ static void
 dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 				  gpointer        user_data)
 {
-  g_signal_emit_by_name (user_data, "current-folder-changed");
+  GtkFileChooserButton *button;
+  GtkFileChooserButtonPrivate *priv;
+
+  button = GTK_FILE_CHOOSER_BUTTON (user_data);
+  priv = GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+  priv->folder_has_been_set = TRUE;
+
+  g_signal_emit_by_name (button, "current-folder-changed");
 }
 
 static void

@@ -700,9 +700,11 @@ gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
  * Gets the current folder of @chooser as a local filename.
  * See gtk_file_chooser_set_current_folder().
  * 
- * Return value: the full path of the current folder, or %NULL
- *  if the current path cannot be represented as a local filename.
- *  Free with g_free().
+ * Return value: the full path of the current folder, or %NULL if the current
+ * path cannot be represented as a local filename.  Free with g_free().  This
+ * function will also return %NULL if the file chooser was unable to load the
+ * last folder that was requested from it; for example, as would be for calling
+ * gtk_file_chooser_set_current_folder() on a nonexistent folder.
  *
  * Since: 2.4
  **/
@@ -1019,8 +1021,10 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
  * Gets the current folder of @chooser as an URI.
  * See gtk_file_chooser_set_current_folder_uri().
  * 
- * Return value: the URI for the current folder.
- *  Free with g_free().
+ * Return value: the URI for the current folder.  Free with g_free().  This
+ * function will also return %NULL if the file chooser was unable to load the
+ * last folder that was requested from it; for example, as would be for calling
+ * gtk_file_chooser_set_current_folder_uri() on a nonexistent folder.
  *
  * Since: 2.4
  */
