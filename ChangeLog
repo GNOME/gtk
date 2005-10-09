@@ -1,3 +1,8 @@
+2005-10-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testcombo.c: Demonstrate how to use custom widgets in
+	a GtkComboBox.  
+
 2005-10-07  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes bug #317999:
