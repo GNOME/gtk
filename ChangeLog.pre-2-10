@@ -1,3 +1,11 @@
+2005-10-10  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* gtk/gtkfilechooser.h (GtkFileChooserError): Add ALREADY_EXISTS error
+	code.
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_add_shortcut_folder): Return an error code
+	when the shortcut already exists in the sidebar.  (#147521)
+
 2005-10-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testcombo.c: Demonstrate how to use custom widgets in

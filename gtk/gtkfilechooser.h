@@ -55,7 +55,8 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 
 typedef enum {
   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-  GTK_FILE_CHOOSER_ERROR_BAD_FILENAME
+  GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+  GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS
 } GtkFileChooserError;
 
 GQuark gtk_file_chooser_error_quark (void);

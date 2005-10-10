@@ -5846,6 +5846,23 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
   if (!check_is_folder (impl->file_system, path, error))
     return FALSE;
 
+  /* Avoid adding duplicates */
+  pos = shortcut_find_position (impl, path);
+  if (pos >= 0 && pos < shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR))
+    {
+      gchar *uri;
+
+      uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
+		   _("shortcut %s already exists"),
+		   uri);
+      g_free (uri);
+
+      return FALSE;
+    }
+
   pos = shortcuts_get_pos_for_shortcut_folder (impl, impl->num_shortcuts);
 
   result = shortcuts_insert_path (impl, pos, FALSE, NULL, path, NULL, FALSE, error);
