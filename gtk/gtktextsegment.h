@@ -158,8 +158,10 @@ GtkTextLineSegment *_gtk_char_segment_new                  (const gchar    *text
                                                             guint           len);
 GtkTextLineSegment *_gtk_char_segment_new_from_two_strings (const gchar    *text1,
                                                             guint           len1,
+							    guint           chars1,
                                                             const gchar    *text2,
-                                                            guint           len2);
+                                                            guint           len2,
+							    guint           chars2);
 GtkTextLineSegment *_gtk_toggle_segment_new                (GtkTextTagInfo *info,
                                                             gboolean        on);
 

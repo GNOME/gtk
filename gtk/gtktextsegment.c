@@ -211,8 +211,12 @@ _gtk_char_segment_new (const gchar *text, guint len)
 }
 
 GtkTextLineSegment*
-_gtk_char_segment_new_from_two_strings (const gchar *text1, guint len1,
-                                        const gchar *text2, guint len2)
+_gtk_char_segment_new_from_two_strings (const gchar *text1, 
+					guint        len1, 
+					guint        chars1,
+                                        const gchar *text2, 
+					guint        len2, 
+					guint        chars2)
 {
   GtkTextLineSegment *seg;
 
@@ -227,9 +231,7 @@ _gtk_char_segment_new_from_two_strings (const gchar *text1, guint len1,
   memcpy (seg->body.chars + len1, text2, len2);
   seg->body.chars[len1+len2] = '\0';
 
-  /* In principle this function could probably take chars1 and chars2
-     as args, since it's typically used to merge two char segments */
-  seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
+  seg->char_count = chars1 + chars2;
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     char_segment_self_check (seg);
@@ -326,8 +328,12 @@ char_segment_cleanup_func (segPtr, line)
     }
 
   newPtr =
-    _gtk_char_segment_new_from_two_strings (segPtr->body.chars, segPtr->byte_count,
-                                            segPtr2->body.chars, segPtr2->byte_count);
+    _gtk_char_segment_new_from_two_strings (segPtr->body.chars, 
+					    segPtr->byte_count,
+					    segPtr->char_count,
+                                            segPtr2->body.chars, 
+					    segPtr2->byte_count,
+					    segPtr2->char_count);
 
   newPtr->next = segPtr2->next;
 

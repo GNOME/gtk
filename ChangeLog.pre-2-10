@@ -1,3 +1,15 @@
+2005-10-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): Try to match an off 
+	toggle here with the matching on toggle if it immediately follows. 
+	This is a common case, and handling it here prevents quadratic blowup 
+	in cleanup_line() below.  (#317125)
+
+	* gtk/gtktextsegment.h: 
+	* gtk/gtktextsegment.c (_gtk_char_segment_new_from_two_strings): Pass
+	the character counts into this function instead of computing them
+	again.
+
 2005-10-10  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* gtk/gtkfilechooser.h (GtkFileChooserError): Add ALREADY_EXISTS error

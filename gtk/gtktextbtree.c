@@ -1,5 +1,5 @@
 /*
- * gtktextbtree.c --
+ * Gtktextbtree.c --
  *
  *      This file contains code that manages the B-tree representation
  *      of text for the text buffer and implements character and
@@ -732,7 +732,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
                                              * of the deletion range. */
   GtkTextLineSegment *last_seg;             /* The segment just after the end
                                              * of the deletion range. */
-  GtkTextLineSegment *seg, *next;
+  GtkTextLineSegment *seg, *next, *next2;
   GtkTextLine *curline;
   GtkTextBTreeNode *curnode, *node;
   GtkTextBTree *tree;
@@ -885,12 +885,29 @@ _gtk_text_btree_delete (GtkTextIter *start,
               seg->next = start_line->segments;
               start_line->segments = seg;
             }
-          else
-            {
+          else if (prev_seg->next &&
+		   seg->type == &gtk_text_toggle_off_type &&
+		   prev_seg->next->type == &gtk_text_toggle_on_type &&
+		   seg->body.toggle.info == prev_seg->next->body.toggle.info)
+	    {
+	      /* Try to match an off toggle with the matching on toggle
+	       * if it immediately follows. This is a common case, and
+	       * handling it here prevents quadratic blowup in
+	       * cleanup_line() below. See bug 317125.
+	       */
+	      next2 = prev_seg->next->next;
+	      g_free ((char *)prev_seg->next);
+	      prev_seg->next = next2;
+	      g_free ((char *)seg);
+	      seg = NULL;
+	    }
+	  else
+	    {
               seg->next = prev_seg->next;
               prev_seg->next = seg;
             }
-          if (seg->type->leftGravity)
+
+          if (seg && seg->type->leftGravity)
             {
               prev_seg = seg;
             }
@@ -4718,16 +4735,20 @@ cleanup_line (GtkTextLine *line)
   while (changed)
     {
       changed = FALSE;
-      for (prev_p = &line->segments, seg = *prev_p;
-           seg != NULL;
-           prev_p = &(*prev_p)->next, seg = *prev_p)
+      prev_p = &line->segments;
+      for (seg = *prev_p; seg != NULL; seg = *prev_p)
         {
           if (seg->type->cleanupFunc != NULL)
             {
               *prev_p = (*seg->type->cleanupFunc)(seg, line);
               if (seg != *prev_p)
-                changed = TRUE;
+		{
+		  changed = TRUE;
+		  continue;
+		}
             }
+
+	  prev_p = &(*prev_p)->next;
         }
     }
 }
