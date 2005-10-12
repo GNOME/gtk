@@ -485,7 +485,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
         /* we expect it's not to be closed */
         g_return_val_if_fail (priv->closed == FALSE, FALSE);
   
-        if (priv->image_module == NULL)
+        if (count > 0 && priv->image_module == NULL)
                 {
                         gint eaten;
       
@@ -727,7 +727,9 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
         /* we expect it's not closed */
         g_return_val_if_fail (priv->closed == FALSE, TRUE);
   
-        /* We have less the 128 bytes in the image.  Flush it, and keep going. */
+        /* We have less the LOADER_HEADER_SIZE bytes in the image.  
+         * Flush it, and keep going. 
+         */
         if (priv->image_module == NULL)
                 {
                         GError *tmp = NULL;

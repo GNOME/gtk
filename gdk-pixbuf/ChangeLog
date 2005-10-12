@@ -1,3 +1,9 @@
+2005-10-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Only call
+	gdk_pixbuf_loader_eat_header_write() when count > 0.  (#318589,
+	Bogdan Nicula)
+
 2005-10-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.6 ===
