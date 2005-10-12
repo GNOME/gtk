@@ -4,6 +4,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "config.h"
 #include "demo-common.h"
 
 static GtkWidget *window = NULL;
@@ -132,8 +133,8 @@ about_cb (GtkAction *action,
   gtk_about_dialog_set_url_hook (activate_url, NULL, NULL);
   gtk_show_about_dialog (GTK_WINDOW (window),
 			 "name", "GTK+ Code Demos",
-			 "version", "2.4.3",
-			 "copyright", "(C) 1997-2004 The GTK+ Team",
+			 "version", PACKAGE_VERSION,
+			 "copyright", "(C) 1997-2005 The GTK+ Team",
 			 "license", license,
 			 "website", "http://www.gtk.org",
 			 "comments", "Program to demonstrate GTK+ functions.",

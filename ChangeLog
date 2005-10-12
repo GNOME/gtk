@@ -1,3 +1,8 @@
+2005-10-12  Stefan Kost  <ensonic@users.sf.net>
+
+	* demos/gtk-demo/appwindow.c: (about_cb):
+	  use PACKAGE_VERSION,bump year (#318654)
+
 2005-10-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_delete): Try to match an off 
