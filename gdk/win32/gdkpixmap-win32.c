@@ -209,7 +209,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
     case 1:
     case 24:
     case 32:
-      bmi.bmiHeader.biBitCount = depth;
+      bmi.bmiHeader.biBitCount = _gdk_windowing_get_bits_for_depth (gdk_display_get_default (), depth);
       break;
 
     case 4:
