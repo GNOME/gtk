@@ -127,6 +127,7 @@ _gdk_win32_new_image (GdkVisual *visual,
   image->width = width;
   image->height = height;
   image->depth = depth;
+  image->bits_per_pixel = _gdk_windowing_get_bits_for_depth (gdk_display_get_default (), depth);
   switch (depth)
     {
     case 1:
@@ -142,7 +143,7 @@ _gdk_win32_new_image (GdkVisual *visual,
       image->bpp = 2;
       break;
     case 24:
-      image->bpp = 3;
+      image->bpp = image->bits_per_pixel / 8;
       break;
     case 32:
       image->bpp = 4;
@@ -157,7 +158,6 @@ _gdk_win32_new_image (GdkVisual *visual,
     image->bpl = ((width - 1)/8 + 1)*4;
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-  image->bits_per_pixel = image->depth;
   image->mem = bits;
 
   return image;
@@ -423,8 +423,6 @@ _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
       return 16;
 
     case 24:
-      return 24;
-
     case 32:
       return 32;
     }

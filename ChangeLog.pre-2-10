@@ -1,3 +1,23 @@
+2005-10-13  Tor Lillqvist  <tml@novell.com>
+
+	Set visual depth to 24 for 32 bits-per-pixel devices on
+	Win32. This allows gdk_drawable_real_draw_pixbuf() to use the
+	optimized composite_0888() function rather than the slower image
+	dithering functions to draw pixbufs (#313993, John Ehresman)
+
+	* gdk/win32/gdkimage-win32.c (_gdk_win32_new_image): Use
+	_gdk_windowing_get_bits_for_depth() to initialize
+	GdkImage::bits_per_pixel.
+	(_gdk_windowing_get_bits_for_depth): Return 32 bits for depth 24.
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_new): Use
+	_gdk_windowing_get_bits_for_depth() to initialize
+	BITMAPINFOHEADER::biBitCount.
+
+	* gdk/win32/gdkvisual-win32.c (_gdk_visual_init): Set
+	GdkVisual::depth to 24 even if GetDeviceCaps(BITSPIXEL) returns
+	32.
+
 2005-10-12  Stefan Kost  <ensonic@users.sf.net>
 
 	* demos/gtk-demo/appwindow.c: (about_cb):
