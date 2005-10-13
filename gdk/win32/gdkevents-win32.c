@@ -2421,13 +2421,12 @@ gdk_event_translate (MSG  *msg,
 	  !(HIWORD (msg->lParam) & KF_ALTDOWN))
 	break;
 
-      /* Let the system handle Alt-Tab, Alt-Space, Alt-Enter and
-       * Alt-F4 unless the keyboard is grabbed.
+      /* Let the system handle Alt-Tab, Alt-Space and Alt-F4 unless
+       * the keyboard is grabbed.
        */
       if (k_grab_window == NULL &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
-	   msg->wParam == VK_RETURN ||
 	   msg->wParam == VK_F4))
 	break;
 
