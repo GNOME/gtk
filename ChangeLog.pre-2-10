@@ -1,5 +1,11 @@
 2005-10-13  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't treat
+	Alt-Enter specially. It does not have any special meaning and
+	should be passed on to the application. (#318378, Tim Evans)
+
+2005-10-13  Tor Lillqvist  <tml@novell.com>
+
 	Set visual depth to 24 for 32 bits-per-pixel devices on
 	Win32. This allows gdk_drawable_real_draw_pixbuf() to use the
 	optimized composite_0888() function rather than the slower image
