@@ -344,133 +344,15 @@ gdk_display_supports_selection_notification (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return TRUE;
+  return FALSE;
 }
 
-static HWND _hwnd_next_viewer = NULL;
-
-/*
- * maybe this should be integrated with the default message loop - or maybe not ;-)
- */
-static LRESULT CALLBACK
-_win32_on_clipboard_change (HWND   hwnd,
-                            UINT   message,
-                            WPARAM wparam,
-                            LPARAM lparam)
-{
-  switch (message)
-    {
-    case WM_DESTROY : /* remove us from chain */
-      {
-        ChangeClipboardChain (hwnd, _hwnd_next_viewer);
-        return 0; 
-      }
-    case WM_CHANGECBCHAIN :
-      {
-        HWND hwndRemove = (HWND) wparam; /* handle of window being removed */
-        HWND hwndNext   = (HWND) lparam; /* handle of next window in chain */
-        if (hwndRemove == _hwnd_next_viewer)
-          _hwnd_next_viewer = hwndNext == hwnd ? NULL : hwndNext;
-        return 0;
-      }
-    case WM_DRAWCLIPBOARD :
-      {
-        /* Create the appropriate gdk events */
-
-#ifdef G_ENABLE_DEBUG
-	if ((_gdk_debug_flags & GDK_DEBUG_DND) &&
-	    OpenClipboard (hwnd))
-	  {
-	    HWND hwndOwner = GetClipboardOwner ();
-	    UINT nFormat = 0;
-	    
-	    g_print ("WM_DRAWCLIPBOARD: owner:%p formats: ", hwndOwner);
-	    for (; 0 != (nFormat = EnumClipboardFormats (nFormat));)
-	      {
-		g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
-	      }
-	    g_print ("\n");
-	    CloseClipboard ();
-          }
-#endif
-        /* XXX: generate the apropriate GdkEventOwnerChange ... */
-
-        /* don't break the chain */
-        return PostMessage (_hwnd_next_viewer, message, wparam, lparam);
-      }
-    default :
-      return DefWindowProc (hwnd, message, wparam, lparam);
-    }
-}
-
-/*
- * Creates a hidden window and adds it to the clipboard chain
- */
-HWND
-_gdk_win32_register_clipboard_notification (void)
-{
-  WNDCLASS wclass;
-  HWND     hwnd;
-  ATOM     klass;
-
-  memset (&wclass, 0, sizeof(WNDCLASS));
-  wclass.lpszClassName = "GdkClipboardNotification";
-  wclass.lpfnWndProc   = _win32_on_clipboard_change;
-  wclass.hInstance     = _gdk_app_hmodule;
-
-  klass = RegisterClass (&wclass);
-  if (!klass)
-    return NULL;
-
-  hwnd = CreateWindow (MAKEINTRESOURCE(klass),
-                       NULL, WS_POPUP,
-                       0, 0, 0, 0, NULL, NULL,
-                       _gdk_app_hmodule, NULL);
-  if (!hwnd)
-    {
-      UnregisterClass (MAKEINTRESOURCE(klass), _gdk_app_hmodule);
-      return NULL;
-    }
-  _hwnd_next_viewer = SetClipboardViewer (hwnd);
-  return hwnd;
-}
-
-/*
- * The whole function would only make sense if the gdk/win32 clipboard
- * model is rewritten to do delayed rendering. Currently this is only
- * testcode and as noted in
- * http://mail.gnome.org/archives/gtk-devel-list/2004-May/msg00113.html
- * probably not worth bothering ;)
- */
 gboolean 
 gdk_display_request_selection_notification (GdkDisplay *display,
                                             GdkAtom     selection)
 
 {
-  static HWND hwndViewer = NULL;
-  gboolean ret = FALSE;
-
-  GDK_NOTE (DND, 
-            g_print ("gdk_display_request_selection_notification (..., %s)",
-                     gdk_atom_name (selection)));
-
-  if (GDK_SELECTION_CLIPBOARD == selection)
-    {
-      if (!hwndViewer)
-        {
-          hwndViewer = _gdk_win32_register_clipboard_notification ();
-          GDK_NOTE (DND, g_print (" registered"));
-        }
-      ret = (hwndViewer != NULL);
-    }
-  else if (GDK_SELECTION_PRIMARY == selection)
-    {
-      /* seems to work by default ? */
-      GDK_NOTE (DND, g_print (" by default"));
-      ret = TRUE;
-    }
-  GDK_NOTE (DND, g_print (" -> %s\n", ret ? "TRUE" : "FALSE"));
-  return ret;
+  return FALSE;
 }
 
 gboolean
@@ -486,5 +368,4 @@ gdk_display_store_clipboard (GdkDisplay *display,
 			     GdkAtom    *targets,
 			     gint        n_targets)
 {
-  /* XXX: implement it (or maybe not as long as we don't support delayed rendering?) */
 }

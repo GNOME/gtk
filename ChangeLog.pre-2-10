@@ -1,3 +1,21 @@
+2005-10-14  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c: Remove the clipboard viewer code.
+	It didn't really do anything useful, and was just confusing and
+	incomplete. Comments claimed we don't do delayed rendering, but in
+	fact we do, for images. (The delayed rendering code has other
+	problems, though, see #168173.) The clipboard viewer code was
+	probably even buggy (the WM_CHANGECBCHAIN handled didn't propagate
+	the message when necessary). It was just test code, it said so in
+	a comment. Add something similar back later if necessary.
+
+	(_win32_on_clipboard_change,
+	_gdk_win32_register_clipboard_notification): Remove.
+
+	(gdk_display_supports_selection_notification,
+	gdk_display_request_selection_notification): Always just return
+	FALSE. We didn't generate any GDK_OWNER_CHANGE events anywhere.
+
 2005-10-13  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't treat
