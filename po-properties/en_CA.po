@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-30 16:41-0400\n"
+"POT-Creation-Date: 2005-10-14 12:47-0400\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -362,8 +362,8 @@ msgstr "Sensitive"
 msgid "Whether the action is enabled."
 msgstr "Whether the action is enabled."
 
-#: gtk/gtkaction.c:290 gtk/gtkactiongroup.c:149 gtk/gtktreeviewcolumn.c:226
-#: gtk/gtkwidget.c:448
+#: gtk/gtkaction.c:290 gtk/gtkactiongroup.c:149 gtk/gtkstatusicon.c:184
+#: gtk/gtktreeviewcolumn.c:226 gtk/gtkwidget.c:448
 msgid "Visible"
 msgstr "Visible"
 
@@ -986,6 +986,38 @@ msgstr "Cell background set"
 msgid "Whether this tag affects the cell background color"
 msgstr "Whether this tag affects the cell background colour"
 
+#: gtk/gtkcellrendereraccel.c:107
+msgid "Accelerator key"
+msgstr "Accelerator key"
+
+#: gtk/gtkcellrendereraccel.c:108
+msgid "The keyval of the accelerator"
+msgstr "The keyval of the accelerator"
+
+#: gtk/gtkcellrendereraccel.c:124
+msgid "Accelerator modifiers"
+msgstr "Accelerator modifiers"
+
+#: gtk/gtkcellrendereraccel.c:125
+msgid "The modifier mask of the accelerator"
+msgstr "The modifier mask of the accelerator"
+
+#: gtk/gtkcellrendereraccel.c:142
+msgid "Accelerator keycode"
+msgstr "Accelerator keycode"
+
+#: gtk/gtkcellrendereraccel.c:143
+msgid "The hardware keycode of the accelerator"
+msgstr "The hardware keycode of the accelerator"
+
+#: gtk/gtkcellrendereraccel.c:162
+msgid "Accelerator Mode"
+msgstr "Accelerator Mode"
+
+#: gtk/gtkcellrendereraccel.c:163
+msgid "The type of accelerators"
+msgstr "The type of accelerators"
+
 #: gtk/gtkcellrenderercombo.c:89
 msgid "Model"
 msgstr "Model"
@@ -1034,7 +1066,7 @@ msgstr "Pixbuf Expander Closed"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander"
 
-#: gtk/gtkcellrendererpixbuf.c:169 gtk/gtkimage.c:203
+#: gtk/gtkcellrendererpixbuf.c:169 gtk/gtkimage.c:203 gtk/gtkstatusicon.c:141
 msgid "Stock ID"
 msgstr "Stock ID"
 
@@ -1042,7 +1074,7 @@ msgstr "Stock ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "The stock ID of the stock icon to render"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:177 gtk/gtkstatusicon.c:166
 msgid "Size"
 msgstr "Size"
 
@@ -1058,11 +1090,12 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Render detail to pass to the theme engine"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:535
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkstatusicon.c:149
+#: gtk/gtkwindow.c:535
 msgid "Icon Name"
 msgstr "Icon Name"
 
-#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:262
+#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:262 gtk/gtkstatusicon.c:150
 msgid "The name of the icon from the icon theme"
 msgstr "The name of the icon from the icon theme"
 
@@ -1080,7 +1113,7 @@ msgid "Value of the progress bar"
 msgstr "Value of the progress bar"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:212
 msgid "Text"
 msgstr "Text"
 
@@ -1271,7 +1304,7 @@ msgstr ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Width In Characters"
@@ -1469,6 +1502,7 @@ msgid "Spacing around check or radio indicator"
 msgstr "Spacing around check or radio indicator"
 
 #: gtk/gtkcheckmenuitem.c:119 gtk/gtktogglebutton.c:135
+#: gtk/gtktoggletoolbutton.c:131
 msgid "Active"
 msgstr "Active"
 
@@ -1500,7 +1534,7 @@ msgstr "Use alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the colour an alpha value"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkfilechooserbutton.c:353
+#: gtk/gtkcolorbutton.c:217 gtk/gtkfilechooserbutton.c:358
 #: gtk/gtkfontbutton.c:175 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Title"
@@ -2082,31 +2116,31 @@ msgstr ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialogue if necessary."
 
-#: gtk/gtkfilechooserbutton.c:338
+#: gtk/gtkfilechooserbutton.c:343
 msgid "Dialog"
 msgstr "Dialogue"
 
-#: gtk/gtkfilechooserbutton.c:339
+#: gtk/gtkfilechooserbutton.c:344
 msgid "The file chooser dialog to use."
 msgstr "The file chooser dialogue to use."
 
-#: gtk/gtkfilechooserbutton.c:354
+#: gtk/gtkfilechooserbutton.c:359
 msgid "The title of the file chooser dialog."
 msgstr "The title of the file chooser dialogue."
 
-#: gtk/gtkfilechooserbutton.c:368
+#: gtk/gtkfilechooserbutton.c:373
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
-#: gtk/gtkfilechooserdefault.c:588
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:589
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
-#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194 gtk/gtkstatusicon.c:133
 msgid "Filename"
 msgstr "Filename"
 
@@ -2360,6 +2394,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
 #: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:510
+#: gtk/gtktrayicon-x11.c:94
 msgid "Orientation"
 msgstr "Orientation"
 
@@ -2393,11 +2428,11 @@ msgstr "Selection Box Alpha"
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:162 gtk/gtkstatusicon.c:125
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:163
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:126
 msgid "A GdkPixbuf to display"
 msgstr "A GdkPixbuf to display"
 
@@ -2425,11 +2460,11 @@ msgstr "Mask"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Mask bitmap to use with GdkImage or GdkPixmap"
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:195 gtk/gtkstatusicon.c:134
 msgid "Filename to load and display"
 msgstr "Filename to load and display"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:204 gtk/gtkstatusicon.c:142
 msgid "Stock ID for a stock image to display"
 msgstr "Stock ID for a stock image to display"
 
@@ -2465,11 +2500,11 @@ msgstr "Animation"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
 
-#: gtk/gtkimage.c:269
+#: gtk/gtkimage.c:269 gtk/gtkstatusicon.c:157
 msgid "Storage type"
 msgstr "Storage type"
 
-#: gtk/gtkimage.c:270
+#: gtk/gtkimage.c:270 gtk/gtkstatusicon.c:158
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
 
@@ -2994,6 +3029,14 @@ msgstr "Forward stepper"
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
+#: gtk/gtkobject.c:334
+msgid "User Data"
+msgstr "User Data"
+
+#: gtk/gtkobject.c:335
+msgid "Anonymous User Data Pointer"
+msgstr "Anonymous User Data Pointer"
+
 #: gtk/gtkoptionmenu.c:195
 msgid "The menu of options"
 msgstr "The menu of options"
@@ -3205,6 +3248,7 @@ msgstr ""
 "is the current action of its group."
 
 #: gtk/gtkradioaction.c:157 gtk/gtkradiobutton.c:114
+#: gtk/gtkradiomenuitem.c:374
 msgid "Group"
 msgstr "Group"
 
@@ -3215,6 +3259,10 @@ msgstr "The radio action to whose group this action belongs."
 #: gtk/gtkradiobutton.c:115
 msgid "The radio button whose group this widget belongs to."
 msgstr "The radio button to whose group this widget belongs."
+
+#: gtk/gtkradiomenuitem.c:375
+msgid "The radio menu item whose group this widget belongs to."
+msgstr "The radio menu item whose group this widget belongs to."
 
 #: gtk/gtkrange.c:329
 msgid "Update policy"
@@ -3726,6 +3774,22 @@ msgstr "Whether the statusbar has a grip for resizing the toplevel"
 msgid "Style of bevel around the statusbar text"
 msgstr "Style of bevel around the statusbar text"
 
+#: gtk/gtkstatusicon.c:167
+msgid "The size of the icon"
+msgstr "The size of the icon"
+
+#: gtk/gtkstatusicon.c:176
+msgid "Blinking"
+msgstr "Blinking"
+
+#: gtk/gtkstatusicon.c:177
+msgid "Whether or not the status icon is blinking"
+msgstr "Whether or not the status icon is blinking"
+
+#: gtk/gtkstatusicon.c:185
+msgid "Whether or not the status icon is visible"
+msgstr "Whether or not the status icon is visible"
+
 #: gtk/gtktable.c:161
 msgid "Rows"
 msgstr "Rows"
@@ -3854,17 +3918,25 @@ msgstr "Word Wrap"
 msgid "Whether words are wrapped at widget edges"
 msgstr "Whether words are wrapped at widget edges"
 
-#: gtk/gtktextbuffer.c:188
+#: gtk/gtktextbuffer.c:194
 msgid "Tag Table"
 msgstr "Tag Table"
 
-#: gtk/gtktextbuffer.c:189
+#: gtk/gtktextbuffer.c:195
 msgid "Text Tag Table"
 msgstr "Text Tag Table"
 
-#: gtk/gtktextbuffer.c:207
+#: gtk/gtktextbuffer.c:213
 msgid "Current text of the buffer"
 msgstr "Current text of the buffer"
+
+#: gtk/gtktextbuffer.c:227
+msgid "Has selection"
+msgstr "Has selection"
+
+#: gtk/gtktextbuffer.c:228
+msgid "Whether the buffer has some text currently selected"
+msgstr "Whether the buffer has some text currently selected"
 
 #: gtk/gtktexttag.c:201
 msgid "Tag name"
@@ -4242,7 +4314,7 @@ msgstr "Create the same proxies as a radio action"
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "Whether the proxies for this action look like radio action proxies"
 
-#: gtk/gtktogglebutton.c:136
+#: gtk/gtktogglebutton.c:136 gtk/gtktoggletoolbutton.c:132
 msgid "If the toggle button should be pressed in or not"
 msgstr "If the toggle button should be pressed in or not"
 
@@ -4403,6 +4475,10 @@ msgid ""
 msgstr ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+
+#: gtk/gtktrayicon-x11.c:95
+msgid "The orientation of the tray"
+msgstr "The orientation of the tray"
 
 #: gtk/gtktreemodelsort.c:331
 msgid "TreeModelSort Model"
