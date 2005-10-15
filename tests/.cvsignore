@@ -4,6 +4,7 @@ makefile.mingw
 makefile.msc
 .deps
 .libs
+autotestfilechooser
 pixbuf-lowmem
 pixbuf-random
 pixbuf-random-image
@@ -14,8 +15,10 @@ pixbuf-threads
 simple
 stresstest-toolbar
 testactions
+testaccel
 testcairo
 testcalendar
+testcellrenderertext
 testcombo
 testcombochange
 testdnd
@@ -38,6 +41,7 @@ testselection
 testsocket
 testsocket_child
 testspinbutton
+teststatusicon
 testtext
 testtextbuffer
 testtoolbar
