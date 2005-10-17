@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-22 06:41+0000\n"
-"PO-Revision-Date: 2005-09-22 13:09+0300\n"
+"PO-Revision-Date: 2005-10-15 10:51+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -181,7 +181,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr "ANI pildivorming"
+msgstr "ANI-pildivorming"
 
 #: ../gdk-pixbuf/io-bmp.c:228 ../gdk-pixbuf/io-bmp.c:306
 #: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:361
@@ -211,7 +211,7 @@ msgstr "BMP-faili pole võimalik kirjutada"
 
 #: ../gdk-pixbuf/io-bmp.c:1293
 msgid "The BMP image format"
-msgstr "BMP pildivorming"
+msgstr "BMP-pildivorming"
 
 #: ../gdk-pixbuf/io-gif.c:220
 #, c-format
@@ -326,7 +326,7 @@ msgstr "Toetamata värvisügavus %d ICO-faili jaoks."
 
 #: ../gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
-msgstr "ICO pildivorming"
+msgstr "ICO-pildivorming"
 
 #: ../gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -365,12 +365,11 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' pole "
-"lubatud."
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' pole lubatud."
 
 #: ../gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
-msgstr "JPEG pildivorming"
+msgstr "JPEG-pildivorming"
 
 #: ../gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
@@ -411,11 +410,11 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
-msgstr "PCX andmete lõpust ei leitud paletti"
+msgstr "PCX-andmete lõpust ei leitud paletti"
 
 #: ../gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
-msgstr "PCX pildivorming"
+msgstr "PCX-pildivorming"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -497,7 +496,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-png.c:1026
 msgid "The PNG image format"
-msgstr "PNG pildivorming"
+msgstr "PNG-pildivorming"
 
 #: ../gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
@@ -725,7 +724,7 @@ msgstr "Tõrge XBM-pildi laadimise käigus ajutisse faili kirjutamisel"
 
 #: ../gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
-msgstr "XBM pildivorming"
+msgstr "XBM-pildivorming"
 
 #: ../gdk-pixbuf/io-xpm.c:467
 msgid "No XPM header found"
@@ -766,7 +765,7 @@ msgstr "Tõrge ajutise faili kirjutamisel XPM-pildi laadimisel"
 
 #: ../gdk-pixbuf/io-xpm.c:806
 msgid "The XPM image format"
-msgstr "XPM pildivorming"
+msgstr "XPM-pildivorming"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:115
