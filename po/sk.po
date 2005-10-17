@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-17 06:44+0200\n"
-"PO-Revision-Date: 2005-10-17 06:47+0200\n"
+"PO-Revision-Date: 2005-10-18 01:00+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -832,135 +832,135 @@ msgstr "Ladiace príznaky Gdk, ktoré vypnúť"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "keyboard label|BackSpace"
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "keyboard label|Tab"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "keyboard label|Enter"
+msgstr "Enter"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "keyboard label|Pause"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "keyboard label|Scroll_Lock"
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "keyboard label|Sys_Req"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "keyboard label|Esc"
+msgstr "Esc"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "keyboard label|Alt"
+msgstr "Alt"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "keyboard label|Home"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr "keyboard label|Page_Up"
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr "keyboard label|Page_Down"
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr "keyboard label|End"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "keyboard label|Begin"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "keyboard label|Print"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr "keyboard label|Insert"
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "keyboard label|Num_Lock"
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "keyboard label|KP_Medzera"
+msgstr "KP_Medzera"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr "keyboard label|KP_Tab"
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "keyboard label|KP_Enter"
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "keyboard label|KP_Home"
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "keyboard label|KP_Left"
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "keyboard label|KP_Up"
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "keyboard label|KP_Right"
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "keyboard label|KP_Down"
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "keyboard label|KP_Page_Up"
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "keyboard label|KP_Prior"
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "keyboard label|KP_Page_Down"
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "keyboard label|KP_Next"
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "keyboard label|KP_End"
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "keyboard label|KP_Begin"
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "keyboard label|KP_Insert"
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "keyboard label|KP_Delete"
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "keyboard label|Delete"
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1048,7 +1048,7 @@ msgstr "Grafika od"
 #.
 #: ../gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr "keyboard label|Shift"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1058,7 +1058,7 @@ msgstr "keyboard label|Shift"
 #.
 #: ../gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr "keyboard label|Ctrl"
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1068,7 +1068,7 @@ msgstr "keyboard label|Ctrl"
 #.
 #: ../gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr "keyboard label|Alt"
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1078,7 +1078,7 @@ msgstr "keyboard label|Alt"
 #.
 #: ../gtk/gtkaccellabel.c:609
 msgid "keyboard label|Super"
-msgstr "keyboard label|Super"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1088,7 +1088,7 @@ msgstr "keyboard label|Super"
 #.
 #: ../gtk/gtkaccellabel.c:623
 msgid "keyboard label|Hyper"
-msgstr "keyboard label|Hyper"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1098,17 +1098,17 @@ msgstr "keyboard label|Hyper"
 #.
 #: ../gtk/gtkaccellabel.c:637
 msgid "keyboard label|Meta"
-msgstr "keyboard label|Meta"
+msgstr "Meta"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:651
 msgid "keyboard label|Space"
-msgstr "keyboard label|Medzera"
+msgstr "Medzera"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:655
 msgid "keyboard label|Backslash"
-msgstr "keyboard label|Backslash"
+msgstr "Backslash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1178,7 +1178,7 @@ msgstr "Nová klávesová skratka..."
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"

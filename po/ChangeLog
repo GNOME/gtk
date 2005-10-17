@@ -1,3 +1,7 @@
+2005-10-17  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Fixed translations with context (thanks to Sergej Chodarev).
+
 2005-10-17  Priit Laes  <plaes@cvs.gnome.org>
 
 	* et.po: Translation updated by Ivar Smolin.
