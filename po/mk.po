@@ -2146,42 +2146,42 @@ msgstr "_Напушти цел екран"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:336
 msgid "Navigation|_Bottom"
-msgstr "Navigation|_Bottom"
+msgstr "_Дно"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr "Navigation|_First"
+msgstr "_Прво"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr "Navigation|_Last"
+msgstr "_Последно"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr "Navigation|_Top"
+msgstr "_Врв"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr "Navigation|_Back"
+msgstr "_Назад"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr "Navigation|_Down"
+msgstr "_Долу"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr "Navigation|_Forward"
+msgstr "_Напред"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr "Navigation|_Up"
+msgstr "_Горе"
 
 #: ../gtk/gtkstock.c:351
 msgid "_Harddisk"
@@ -2222,62 +2222,62 @@ msgstr "_Рипни до"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:361
 msgid "Justify|_Center"
-msgstr "Порамни|_Во центар"
+msgstr "_Во центар"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr "Порамни|_Цело"
+msgstr "_Цело"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr "Порамни|_На лево"
+msgstr "_На лево"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
 msgid "Justify|_Right"
-msgstr "Порамни|_На десно"
+msgstr "_На десно"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Медиум|_Мотај напред"
+msgstr "_Мотај напред"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Медиум|_Напред"
+msgstr "_Напред"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Медиум|П_ауза"
+msgstr "П_ауза"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:376
 msgid "Media|_Play"
-msgstr "Медиа|_Пушти"
+msgstr "_Пушти"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Медиа|Прет_ходно"
+msgstr "Прет_ходно"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:380
 msgid "Media|_Record"
-msgstr "Медиум|_Снимај"
+msgstr "_Снимај"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Медиум|М_отај назад"
+msgstr "М_отај назад"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:384
 msgid "Media|_Stop"
-msgstr "Медиум|_Стоп"
+msgstr "_Стоп"
 
 #: ../gtk/gtkstock.c:385
 msgid "_Network"
