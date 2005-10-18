@@ -481,8 +481,6 @@ xdg_mime_get_mime_type_for_file (const char  *file_name,
 
       statbuf = &buf;
     }
-  else
-    printf ("don't restat\n");
 
   if (!S_ISREG (statbuf->st_mode))
     return XDG_MIME_TYPE_UNKNOWN;
@@ -495,7 +493,7 @@ xdg_mime_get_mime_type_for_file (const char  *file_name,
   if (data == NULL)
     return XDG_MIME_TYPE_UNKNOWN;
         
-      file = fopen (file_name, "r");
+  file = fopen (file_name, "r");
   if (file == NULL)
     {
       free (data);
