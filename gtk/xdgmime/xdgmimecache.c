@@ -176,8 +176,8 @@ cache_magic_matchlet_compare_to_data (XdgMimeCache *cache,
 	{
 	  for (j = 0; j < data_length; j++)
 	    {
-	      if ((cache->buffer[data_offset + j] & cache->buffer[mask_offset + j]) !=
-		  ((((unsigned char *) data)[j + i]) & cache->buffer[mask_offset + j]))
+	      if ((((unsigned char *)cache->buffer)[data_offset + j] & ((unsigned char *)cache->buffer)[mask_offset + j]) !=
+		  ((((unsigned char *) data)[j + i]) & ((unsigned char *)cache->buffer)[mask_offset + j]))
 		{
 		  valid_matchlet = FALSE;
 		  break;
@@ -188,7 +188,7 @@ cache_magic_matchlet_compare_to_data (XdgMimeCache *cache,
 	{
 	  for (j = 0; j < data_length; j++)
 	    {
-	      if (cache->buffer[data_offset + j] != ((unsigned char *) data)[j + i])
+	      if (((unsigned char *)cache->buffer)[data_offset + j] != ((unsigned char *) data)[j + i])
 		{
 		  valid_matchlet = FALSE;
 		  break;
@@ -296,7 +296,7 @@ cache_alias_lookup (const char *alias)
   for (i = 0; _caches[i]; i++)
     {
       XdgMimeCache *cache = _caches[i];
-      xdg_uint32_t list_offset = GET_UINT32 (cache->buffer, 4 );
+      xdg_uint32_t list_offset = GET_UINT32 (cache->buffer, 4);
       xdg_uint32_t n_entries = GET_UINT32 (cache->buffer, list_offset);
       xdg_uint32_t offset;
 
