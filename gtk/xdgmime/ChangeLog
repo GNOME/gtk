@@ -1,3 +1,8 @@
+2005-10-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimecache.c: Make magic comparisons work correctly
+	in the cache.
+
 2005-10-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.6 ===
