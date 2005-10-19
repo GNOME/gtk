@@ -1,7 +1,3 @@
-# translation of eu.po to Basque
-# translation of eu.po to Basque
-# translation of eu.po to Basque
-# translation of gtk+.gtk-2-2.po to basque
 # translation of gtk+.gtk-2-2.po to basque
 # Copyright (C) 1999, 2004, 2005 Free Software Foundation, Inc.
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
@@ -13,7 +9,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-09-05 18:40+0200\n"
-"PO-Revision-Date: 2005-04-13 20:19+0200\n"
+"PO-Revision-Date: 2005-09-05 18:40+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team:  <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1140,7 +1136,7 @@ msgstr "%y"
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "aurrerapen-barraren etiketa|%d %%"
+msgstr "%% %d"
 
 #: ../gtk/gtkcolorbutton.c:221 ../gtk/gtkcolorbutton.c:576
 msgid "Pick a Color"
@@ -2196,42 +2192,42 @@ msgstr "_Utzi pantaila osoa"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
-msgstr "Nabigazioa|_Behean"
+msgstr "_Behean"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
 msgid "Navigation|_First"
-msgstr "Nabigazioa|_Lehena"
+msgstr "_Lehena"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Last"
-msgstr "Nabigazioa|_Azkena"
+msgstr "_Azkena"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
 msgid "Navigation|_Top"
-msgstr "Nabigazioa|_Goian"
+msgstr "_Goian"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Back"
-msgstr "Nabigazioa|_Atzera"
+msgstr "_Atzera"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
-msgstr "Nabigazioa|_Behera"
+msgstr "_Behera"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
-msgstr "Nabigazioa|A_urrera"
+msgstr "A_urrera"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "Nabigazioa|_Gora"
+msgstr "_Gora"
 
 #: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
@@ -2277,64 +2273,64 @@ msgstr "_Jauzi hona:"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
 msgid "Justify|_Center"
-msgstr "Justifikatu|_Erdian"
+msgstr "_Erdian"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:365
 msgid "Justify|_Fill"
-msgstr "Justifikatu|_Bete"
+msgstr "_Bete"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
 msgid "Justify|_Left"
-msgstr "Justifikatu|E_zkerrera"
+msgstr "E_zkerrera"
 
 #
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:369
 msgid "Justify|_Right"
-msgstr "Justifikatu|E_skuinera"
+msgstr "E_skuinera"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:372
 msgid "Media|_Forward"
-msgstr "Euskarria|A_urrera"
+msgstr "A_urrera"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:374
 msgid "Media|_Next"
-msgstr "Euskarria|_Hurrengoa"
+msgstr "_Hurrengoa"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:376
 msgid "Media|P_ause"
-msgstr "Euskarria|P_ausarazi"
+msgstr "P_ausarazi"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:378
 msgid "Media|_Play"
-msgstr "Euskarria|_Erreproduzitu"
+msgstr "_Erreproduzitu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:380
 msgid "Media|Pre_vious"
-msgstr "Euskarria|_Aurrekoa"
+msgstr "_Aurrekoa"
 
 #
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:382
 msgid "Media|_Record"
-msgstr "Euskarria|_Grabatu"
+msgstr "_Grabatu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:384
 msgid "Media|R_ewind"
-msgstr "Euskarria|_Birbobinatu"
+msgstr "_Birbobinatu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:386
 msgid "Media|_Stop"
-msgstr "Euskarria|_Gelditu"
+msgstr "_Gelditu"
 
 #: ../gtk/gtkstock.c:387
 msgid "_Network"
