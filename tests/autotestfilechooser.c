@@ -282,8 +282,11 @@ test_reload_sequence (gboolean set_folder_before_map)
   GtkFileChooserDefault *impl;
   gboolean passed;
   char *folder;
+  char *current_working_dir;
 
   passed = TRUE;
+
+  current_working_dir = g_get_current_dir ();
 
   dialog = gtk_file_chooser_dialog_new ("Test file chooser",
 					NULL,
@@ -299,14 +302,14 @@ test_reload_sequence (gboolean set_folder_before_map)
     {
       gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
 
-      passed = (impl->current_folder != NULL
-		&& impl->browse_files_model != NULL
-		&& (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		&& impl->reload_state == RELOAD_HAS_FOLDER
-		&& (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-		&& ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		    ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
-		    : TRUE));
+      passed = passed && (impl->current_folder != NULL
+			  && impl->browse_files_model != NULL
+			  && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+			  && impl->reload_state == RELOAD_HAS_FOLDER
+			  && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+			  && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+			      ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+			      : TRUE));
 
       folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
       passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
@@ -323,79 +326,83 @@ test_reload_sequence (gboolean set_folder_before_map)
 			  && impl->load_timeout_id == 0);
 
       folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
-      passed = passed && (folder == NULL);
+      passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
     }
 
   log_test (passed, "test_reload_sequence(): initial status");
-  if (!passed)
-    return FALSE;
 
   /* After mapping, it is loading some folder, either the one that was explicitly set or the default one */
 
   gtk_widget_show_now (dialog);
 
-  passed = (impl->current_folder != NULL
-	    && impl->browse_files_model != NULL
-	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-	    && impl->reload_state == RELOAD_HAS_FOLDER
-	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
-		: TRUE));
+  passed = passed && (impl->current_folder != NULL
+		      && impl->browse_files_model != NULL
+		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		      && impl->reload_state == RELOAD_HAS_FOLDER
+		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
-  passed = passed && (folder != NULL);
+  if (set_folder_before_map)
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+
   g_free (folder);
 
   log_test (passed, "test_reload_sequence(): status after map");
-  if (!passed)
-    return FALSE;
 
   /* Unmap it; we should still have a folder */
 
   gtk_widget_hide (dialog);
 
-  passed = (impl->current_folder != NULL
-	    && impl->browse_files_model != NULL
-	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-	    && impl->reload_state == RELOAD_WAS_UNMAPPED
-	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
-		: TRUE));
-  if (!passed)
-    return FALSE;
+  passed = passed && (impl->current_folder != NULL
+		      && impl->browse_files_model != NULL
+		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		      && impl->reload_state == RELOAD_WAS_UNMAPPED
+		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
-  passed = passed && (folder != NULL);
+  if (set_folder_before_map)
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+
   g_free (folder);
 
   log_test (passed, "test_reload_sequence(): status after unmap");
-  if (!passed)
-    return FALSE;
 
   /* Map it again! */
 
   gtk_widget_show_now (dialog);
-  
-  passed = (impl->current_folder != NULL
-	    && impl->browse_files_model != NULL
-	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-	    && impl->reload_state == RELOAD_HAS_FOLDER
-	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
-		: TRUE));
-  if (!passed)
-    return FALSE;
+
+  passed = passed && (impl->current_folder != NULL
+		      && impl->browse_files_model != NULL
+		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		      && impl->reload_state == RELOAD_HAS_FOLDER
+		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
-  passed = passed && (folder != NULL);
+  if (set_folder_before_map)
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+
   g_free (folder);
 
   log_test (passed, "test_reload_sequence(): status after re-map");
 
   gtk_widget_destroy (dialog);
+  g_free (current_working_dir);
+
   return passed;
 }
 
@@ -422,14 +429,16 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   GtkWidget *window;
   GtkWidget *button;
   char *folder;
-  gboolean must_have_folder_initially;
   GtkWidget *dialog;
+  char *current_working_dir;
+  gboolean must_have_cwd;
 
   passed = TRUE;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  current_working_dir = g_get_current_dir ();
+  must_have_cwd = !(use_dialog && set_folder_on_dialog);
 
-  must_have_folder_initially = (use_dialog && set_folder_on_dialog);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   if (use_dialog)
     {
@@ -453,50 +462,70 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   /* Pre-map; no folder is set */
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
-  if (must_have_folder_initially)
-    passed = passed && (folder != NULL);
+  if (must_have_cwd)
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
   else
-    passed = passed && (folder == NULL);
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
 
   log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, pre-map, %s",
 	    get_action_name (action),
 	    use_dialog,
 	    set_folder_on_dialog,
-	    must_have_folder_initially ? "must have folder" : "folder must not be set");
+	    must_have_cwd ? "must have $cwd" : "must have explicit folder");
 
   /* Map; folder should be set */
 
   gtk_widget_show_all (window);
   gtk_widget_show_now (window);
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
-  passed = passed && (folder != NULL);
-  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, mapped, must have folder",
+
+  if (must_have_cwd)
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, mapped, %s",
 	    get_action_name (action),
 	    use_dialog,
-	    set_folder_on_dialog);
+	    set_folder_on_dialog,
+	    must_have_cwd ? "must have $cwd" : "must have explicit folder");
   g_free (folder);
 
   /* Unmap; folder should be set */
 
   gtk_widget_hide (window);
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
-  passed = passed && (folder != NULL);
-  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, unmapped, must have folder",
+
+  if (must_have_cwd)
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, unmapped, %s",
 	    get_action_name (action),
 	    use_dialog,
-	    set_folder_on_dialog);
+	    set_folder_on_dialog,
+	    must_have_cwd ? "must have $cwd" : "must have explicit folder");
   g_free (folder);
 
   /* Re-map; folder should be set */
 
   gtk_widget_show_now (window);
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
-  passed = passed && (folder != NULL);
-  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, re-mapped, must have folder",
+
+  if (must_have_cwd)
+    passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
+  else
+    passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
+
+  log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, re-mapped, %s",
 	    get_action_name (action),
 	    use_dialog,
-	    set_folder_on_dialog);
+	    set_folder_on_dialog,
+	    must_have_cwd ? "must have $cwd" : "must have explicit folder");
   g_free (folder);
+
+  g_free (current_working_dir);
 
   gtk_widget_destroy (window);
 

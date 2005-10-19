@@ -1,3 +1,16 @@
+2005-10-18  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes bug #317999:
+
+	* tests/autotestfilechooser.c
+	(test_button_folder_states_for_action): Test that we have either
+	$cwd or the explicitly-set folder.
+	(test_reload_sequence): Likewise.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_current_folder): If our reload_state
+	is RELOAD_EMPTY, return a GtkFilePath corresponding to $cwd.
+
 2005-10-14  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c: Remove the clipboard viewer code.

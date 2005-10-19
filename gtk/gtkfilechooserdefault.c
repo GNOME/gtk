@@ -86,7 +86,7 @@
 #endif
 
 /* Profiling stuff */
-#undef PROFILE_FILE_CHOOSER
+#define PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
 
 
@@ -5414,6 +5414,21 @@ static GtkFilePath *
 gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+
+  if (impl->reload_state == RELOAD_EMPTY)
+    {
+      char *current_working_dir;
+      GtkFilePath *path;
+
+      /* We are unmapped, or we had an error while loading the last folder.  We'll return
+       * the $cwd since once we get (re)mapped, we'll load $cwd anyway unless the caller
+       * explicitly calls set_current_folder() on us.
+       */
+      current_working_dir = g_get_current_dir ();
+      path = gtk_file_system_filename_to_path (impl->file_system, current_working_dir);
+      g_free (current_working_dir);
+      return path;
+    }
 
   return gtk_file_path_copy (impl->current_folder);
 }
