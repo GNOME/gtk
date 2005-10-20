@@ -1,3 +1,8 @@
+2005-10-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c: Apply a patch from Ross Burton
+	to fix compiler warnings.  (#318762)
+
 2005-10-19  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:

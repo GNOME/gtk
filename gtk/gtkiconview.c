@@ -1734,7 +1734,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 			  GtkCellRenderer *cell,
 			  gboolean         start_editing)
 {
-  GtkIconViewItem *item;
+  GtkIconViewItem *item = NULL;
   GtkIconViewCellInfo *info =  NULL;
   GList *l;
   gint i, cell_pos;
@@ -3988,7 +3988,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
   if (use_align)
     {
-      gint x, y, width, height;
+      gint x, y;
       gint focus_width;
       gfloat offset, value;
 
@@ -4457,7 +4457,6 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
 {
   gint start_index = -1;
   gint end_index = -1;
-  GtkIconViewItem *item;
   GList *icons;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
@@ -7141,6 +7140,7 @@ gtk_icon_view_item_accessible_text_get_character_at_offset (AtkText *text,
   return unichar;
 }
 
+#if 0
 static void
 get_pango_text_offsets (PangoLayout     *layout,
                         GtkTextBuffer   *buffer,
@@ -7263,6 +7263,7 @@ get_pango_text_offsets (PangoLayout     *layout,
   gtk_text_buffer_get_iter_at_offset (buffer, start_iter, *start_offset);
   gtk_text_buffer_get_iter_at_offset (buffer, end_iter, *end_offset);
 }
+#endif
 
 static gchar*
 gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text,
@@ -7618,9 +7619,11 @@ gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
 {
   GtkIconViewItemAccessible *item;
   GtkIconView *icon_view;
+#if 0
   PangoRectangle char_rect;
   const gchar *item_text;
   gint index;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7656,10 +7659,12 @@ gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
 {
   GtkIconViewItemAccessible *item;
   GtkIconView *icon_view;
+  gint offset = -1;
+#if 0
   const gchar *item_text;
   gint index;
-  gint offset;
   gint l_x, l_y;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -8857,7 +8862,6 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
   GtkWidget *widget;
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)
