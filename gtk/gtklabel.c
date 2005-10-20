@@ -2951,7 +2951,7 @@ gtk_label_create_window (GtkLabel *label)
   attributes.y = widget->allocation.y;
   attributes.width = widget->allocation.width;
   attributes.height = widget->allocation.height;
-  attributes.window_type = GDK_WINDOW_TEMP;
+  attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.override_redirect = TRUE;
   attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),

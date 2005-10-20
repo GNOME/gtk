@@ -1,3 +1,8 @@
+2005-10-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_create_window): Use GDK_WINDOW_CHILD
+	for the selection window.  (#318806, Alex Larsson)
+
 2005-10-18  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes bug #317999:
