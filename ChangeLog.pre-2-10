@@ -1,3 +1,9 @@
+2005-10-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstock.c: Define GTK_STOCK_[DIS]CONNECT here,
+	and not only in the header.  String addition.  (#318939,
+	Richard Hult)
+
 2005-10-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Apply a patch from Ross Burton
