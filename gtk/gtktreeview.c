@@ -10393,6 +10393,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
    * it is much slower than just going to the point.
    */
   if (! GTK_WIDGET_VISIBLE (tree_view) ||
+      ! GTK_WIDGET_REALIZED (tree_view) ||
       GTK_WIDGET_ALLOC_NEEDED (tree_view) || 
       GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
     {
