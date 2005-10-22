@@ -1,3 +1,8 @@
+2005-10-22  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/*: Sync with HEAD, since most Win32
+	installers still ship GTK+ 2.6.x.
+	
 2005-08-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Backport from 2.8.

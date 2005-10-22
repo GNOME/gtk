@@ -24,6 +24,7 @@
  * Useful resources:
  *
  *  http://lxr.mozilla.org/mozilla/source/gfx/src/windows/nsNativeThemeWin.cpp
+ *  http://lxr.mozilla.org/seamonkey/source/widget/src/windows/nsLookAndFeel.cpp
  *  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/userex/functions/drawthemebackground.asp
  */
 
@@ -37,6 +38,7 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtk.h"
+/* #include <gdk/gdkwin32.h> */
 #include "gdk/win32/gdkwin32.h"
 
 
@@ -65,48 +67,48 @@ typedef enum {
 
 #define PART_SIZE 13
 
-static const char check_aa_bits[] = {
+static const guint8 check_aa_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const char check_base_bits[] = {
+static const guint8 check_base_bits[] = {
  0x00,0x00,0x00,0x00,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
  0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0x00,0x00,0x00,0x00};
-static const char check_black_bits[] = {
+static const guint8 check_black_bits[] = {
  0x00,0x00,0xfe,0x0f,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
  0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x00,0x00};
-static const char check_dark_bits[] = {
+static const guint8 check_dark_bits[] = {
  0xff,0x1f,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
  0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00};
-static const char check_light_bits[] = {
+static const guint8 check_light_bits[] = {
  0x00,0x00,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
  0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0xfe,0x1f};
-static const char check_mid_bits[] = {
+static const guint8 check_mid_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
  0x08,0x00,0x08,0x00,0x08,0x00,0x08,0xfc,0x0f,0x00,0x00};
-static const char check_text_bits[] = {
+static const guint8 check_text_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x03,0x88,0x03,0xd8,0x01,0xf8,
  0x00,0x70,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const char radio_base_bits[] = {
+static const guint8 radio_base_bits[] = {
  0x00,0x00,0x00,0x00,0xf0,0x01,0xf8,0x03,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
  0x07,0xfc,0x07,0xf8,0x03,0xf0,0x01,0x00,0x00,0x00,0x00};
-static const char radio_black_bits[] = {
+static const guint8 radio_black_bits[] = {
  0x00,0x00,0xf0,0x01,0x0c,0x02,0x04,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
  0x00,0x02,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const char radio_dark_bits[] = {
+static const guint8 radio_dark_bits[] = {
  0xf0,0x01,0x0c,0x06,0x02,0x00,0x02,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
  0x00,0x01,0x00,0x02,0x00,0x02,0x00,0x00,0x00,0x00,0x00};
-static const char radio_light_bits[] = {
+static const guint8 radio_light_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
  0x10,0x00,0x10,0x00,0x08,0x00,0x08,0x0c,0x06,0xf0,0x01};
-static const char radio_mid_bits[] = {
+static const guint8 radio_mid_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x04,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
  0x08,0x00,0x08,0x00,0x04,0x0c,0x06,0xf0,0x01,0x00,0x00};
-static const char radio_text_bits[] = {
+static const guint8 radio_text_bits[] = {
  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xe0,0x00,0xf0,0x01,0xf0,0x01,0xf0,
  0x01,0xe0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 
 static struct {
-  const char *bits;
+  const guint8 *bits;
   GdkBitmap  *bmap;
 } parts[] = {
   { check_aa_bits, NULL },
@@ -128,7 +130,7 @@ static gboolean
 get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
 {
 #if 0
-  /* TODO: this crashes. need to figure out why and how to fix it */
+  /* TODO: this causes crashes later because the font name is in UCS2, and the pango fns don't deal with that gracefully */
   if (xp_theme_get_system_font(klazz, type, out_lf))
     return TRUE;
   else
@@ -255,8 +257,7 @@ get_family_name (LOGFONT *lfp, HDC pango_win32_hdc)
   gchar *string = NULL;
   gchar *name;
 
-  gint i, l;
-  gsize nbytes;
+  size_t i, l, nbytes;
 
   /* If lfFaceName is ASCII, assume it is the common (English) name
    * for the font. Is this valid? Do some TrueType fonts have
@@ -274,7 +275,7 @@ get_family_name (LOGFONT *lfp, HDC pango_win32_hdc)
   if ((hfont = CreateFontIndirect (lfp)) == NULL)
     goto fail0;
 
-  if ((oldhfont = SelectObject (pango_win32_hdc, hfont)) == NULL)
+  if ((oldhfont = (HFONT)SelectObject (pango_win32_hdc, hfont)) == NULL)
     goto fail1;
 
   if (!pango_win32_get_name_header (pango_win32_hdc, &header))
@@ -552,9 +553,6 @@ get_system_metric(XpThemeClass klazz, int id)
 static void
 setup_msw_rc_style(void)
 {
-  /* TODO: Owen says:
-  	 "If your setup_system_styles() function called gtk_rc_parse_string(), then you are just piling a new set of strings on top each time the theme changes .. the old ones won't be removed" */
-
   char buf[1024], font_buf[256], *font_ptr;
 
   GdkColor menu_color;
@@ -569,6 +567,8 @@ setup_msw_rc_style(void)
   GdkColor bg_prelight;
   GdkColor base_prelight;
   GdkColor text_prelight;
+
+  gboolean xp_theme = xp_theme_is_active();
 
   /* Prelight */
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT, &fg_prelight);
@@ -632,11 +632,22 @@ setup_msw_rc_style(void)
 	     "style \"msw-menu-bar\" = \"msw-menu\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "GtkMenuBar::shadow-type = out\n"
+	     "GtkMenuBar::shadow-type = %s\n"
 	     "}widget_class \"*MenuBar*\" style \"msw-menu-bar\"\n",
 	     btn_face.red,
 	     btn_face.green,
-	     btn_face.blue);
+	     btn_face.blue,
+	     (xp_theme ? "etched-in" : "out"));
+  gtk_rc_parse_string(buf);
+
+  g_snprintf(buf, sizeof (buf),
+	     "style \"msw-toolbar\" = \"msw-default\"\n"
+	     "{\n"
+		 "GtkHandleBox::shadow-type = %s\n"
+		 "GtkToolbar::shadow-type = %s\n"
+	     "}widget_class \"*HandleBox*\" style \"msw-toolbar\"\n",
+	     (xp_theme ? "none" : "out"),
+	     (xp_theme ? "none" : "out"));
   gtk_rc_parse_string(buf);
 
   /* enable tooltip fonts */
@@ -714,9 +725,13 @@ setup_msw_rc_style(void)
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*VScrollbar*\" style \"msw-vscrollbar\"\n",
+	     "GtkScale::slider-length = %d\n"
+	     "GtkScrollbar::min-slider-length = 8\n"
+	     "}widget_class \"*VScrollbar*\" style \"msw-vscrollbar\"\n"
+	     "widget_class \"*VScale*\" style \"msw-vscrollbar\"\n",
 	     GetSystemMetrics(SM_CYVTHUMB),
-	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
+	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL),
+	     11);
   gtk_rc_parse_string(buf);
 
   g_snprintf(buf, sizeof (buf),
@@ -725,9 +740,13 @@ setup_msw_rc_style(void)
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*HScrollbar*\" style \"msw-hscrollbar\"\n",
+	     "GtkScale::slider-length = %d\n"
+	     "GtkScrollbar::min-slider-length = 8\n"
+	     "}widget_class \"*HScrollbar*\" style \"msw-hscrollbar\"\n"
+	     "widget_class \"*HScale*\" style \"msw-hscrollbar\"\n",
 	     GetSystemMetrics(SM_CXHTHUMB),
-	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL));
+	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL),
+	     11);
   gtk_rc_parse_string(buf);
 
   /* radio/check button sizes */
@@ -765,7 +784,7 @@ setup_system_styles(GtkStyle *style)
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->text[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_PRELIGHT]);
 
-  /* Default forgeground */
+  /* Default foreground */
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_NORMAL]);
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_GRAYTEXT,      &style->fg[GTK_STATE_INSENSITIVE]);
@@ -1404,13 +1423,13 @@ draw_box (GtkStyle      *style,
           return;
         }
     }
-
   else if (detail && !strcmp (detail, "slider"))
     {
       if (GTK_IS_SCROLLBAR(widget))
         {
           GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
           gboolean is_v = GTK_IS_VSCROLLBAR(widget);
+
           if (xp_theme_draw(window,
                             is_v
                             ? XP_THEME_ELEMENT_SCROLLBAR_V
@@ -1478,8 +1497,7 @@ draw_box (GtkStyle      *style,
         {
           gboolean is_vertical = GTK_IS_VSCROLLBAR(widget);
 
-          if (GTK_IS_RANGE(widget)
-              && xp_theme_draw(window,
+          if (xp_theme_draw(window,
                                is_vertical
                                ? XP_THEME_ELEMENT_TROUGH_V
                                : XP_THEME_ELEMENT_TROUGH_H,
@@ -1525,14 +1543,23 @@ draw_box (GtkStyle      *style,
 	{
 	  gboolean is_vertical = GTK_IS_VSCALE(widget);
 
-	  parent_class->draw_box (style, window, state_type, GTK_SHADOW_NONE, area,
+	  if(!xp_theme_is_active ()) {
+		  parent_class->draw_box (style, window, state_type, GTK_SHADOW_NONE, area,
 				  widget, detail, x, y, width, height);
+  	  }
 
-	  if(is_vertical)
-	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, (2 * x + width)/2, y, 1, height);
-	  else
-	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, x, (2 * y + height)/2, width, 1);
+	  if(is_vertical) {
+	    if(xp_theme_draw(window, XP_THEME_ELEMENT_SCALE_TROUGH_V, style, (2 * x + width)/2, y, 2, height, state_type, area))
+	    	return;
 
+		parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, (2 * x + width)/2, y, 1, height);
+      }
+	  else {
+	    if(xp_theme_draw(window, XP_THEME_ELEMENT_SCALE_TROUGH_H, style, x, (2 * y + height)/2, width, 2, state_type, area))
+	    	return;
+
+		parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, x, (2 * y + height)/2, width, 1);
+      }
 	  return;
 	}
     }
@@ -1545,64 +1572,70 @@ draw_box (GtkStyle      *style,
         }
     }
   else if (detail && (strcmp (detail, "vscrollbar") == 0 || strcmp (detail, "hscrollbar") == 0))
-    {
-      GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
-      if (shadow_type == GTK_SHADOW_IN)
-	shadow_type = GTK_SHADOW_ETCHED_IN;
-      if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
-	shadow_type = GTK_SHADOW_OUT;
-    }
-  else if (detail && strcmp (detail, "handlebox_bin") == 0)
-    {
+  {
+       GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
+	  if (shadow_type == GTK_SHADOW_IN)
+	  	shadow_type = GTK_SHADOW_ETCHED_IN;
+       if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+           shadow_type = GTK_SHADOW_OUT;
+  }
+  else if (detail && (strcmp (detail, "handlebox_bin") == 0 || strcmp (detail, "toolbar") == 0 ||
+  			strcmp (detail, "menubar") == 0))
+  {
       if (xp_theme_draw(window, XP_THEME_ELEMENT_REBAR,
                         style, x, y, width, height, state_type, area))
         {
           return;
         }
+  }
+  else if (detail &&
+	   (!strcmp(detail, "handlebox"))) /* grip */
+    {
     }
   else
-    {
-      const gchar * name = gtk_widget_get_name (widget);
-      
-      if (name && !strcmp (name, "gtk-tooltips")) {
-	if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
-	  {
-	    return;
-	  }
-	else {
-	  HBRUSH brush;
-	  gint xoff, yoff;
-	  GdkDrawable *drawable;
-	  RECT rect;
-	  HDC hdc;
-	  
-	  if (!GDK_IS_WINDOW(window))
-	    {
-	      xoff = 0;
-	      yoff = 0;
-	      drawable = window;
-	    }
-	  else
-	    {
-	      gdk_window_get_internal_paint_info(window, &drawable, &xoff, &yoff);
-	    }
-	  
-	  rect.left = x - xoff;
-	  rect.top = y - yoff;
-	  rect.right = rect.left + width;
-	  rect.bottom = rect.top + height;
-	  
-	  hdc = gdk_win32_hdc_get(window, style->dark_gc[state_type], 0);
-	  brush = GetSysColorBrush(COLOR_3DDKSHADOW);
-	  if (brush)
-	    FrameRect(hdc, &rect, brush);
-	  InflateRect(&rect, -1, -1);
-	  FillRect(hdc, &rect, (HBRUSH) (COLOR_INFOBK+1));
-	  
-	  return;
-	}
-      }
-    }
+  {
+	 const gchar * name = gtk_widget_get_name (widget);
+
+	  if (name && !strcmp (name, "gtk-tooltips")) {
+     	 if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
+     	   {
+  			return;
+    	    }
+		else {
+    	 	HBRUSH brush;
+			gint xoff, yoff;
+			GdkDrawable *drawable;
+			RECT rect;
+    	 	HDC hdc;
+
+  			if (!GDK_IS_WINDOW(window))
+    		{
+      			xoff = 0;
+      			yoff = 0;
+      			drawable = window;
+    		}
+  			else
+  			{
+    			gdk_window_get_internal_paint_info(window, &drawable, &xoff, &yoff);
+   	 		}
+
+			rect.left = x - xoff;
+			rect.top = y - yoff;
+			rect.right = rect.left + width;
+			rect.bottom = rect.top + height;
+
+			hdc = gdk_win32_hdc_get(window, style->dark_gc[state_type], 0);
+	        brush = GetSysColorBrush(COLOR_3DDKSHADOW);
+			if (brush)
+         		FrameRect(hdc, &rect, brush);
+       		InflateRect(&rect, -1, -1);
+       		FillRect(hdc, &rect, (HBRUSH) (COLOR_INFOBK+1));
+
+       		return;
+		}
+
+   		}
+  }
 
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
@@ -1693,30 +1726,31 @@ draw_extension(GtkStyle *style,
                gint height,
                GtkPositionType gap_side)
 {
-  if (detail && !strcmp(detail, "tab"))
+  if (GTK_IS_NOTEBOOK(widget) && detail && !strcmp(detail, "tab"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-      GtkPositionType pos_type = gtk_notebook_get_tab_pos(notebook);
+      gint x2, y2, w2, h2;
 
-      if (pos_type == GTK_POS_TOP && state_type == GTK_STATE_NORMAL)
-          height += XP_EDGE_SIZE;
+      x2 = x; y2 = y; w2 = width; h2 = height;
+      if (gap_side == GTK_POS_TOP && state_type == GTK_STATE_NORMAL) {
+          /*h2 += XP_EDGE_SIZE;*/
+	  }
+      else if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL) {
+          /*h2 += XP_EDGE_SIZE;*/
+	  }
+      else if (gap_side == GTK_POS_LEFT && state_type == GTK_STATE_NORMAL) {
+          x2 += 1;
+          w2 -= XP_EDGE_SIZE;
+	  }
+      else if (gap_side == GTK_POS_RIGHT && state_type == GTK_STATE_NORMAL) {
+          w2 -= (XP_EDGE_SIZE + 1);
+	  }
 
-#if 0
-      /* FIXME: pos != TOP to be implemented */
-      else if (pos_type == GTK_POS_BOTTOM)
-	y -= XP_EDGE_SIZE;
-      else if (pos_type == GTK_POS_RIGHT)
-	width += XP_EDGE_SIZE;
-      else if (pos_type == GTK_POS_LEFT)
-	height -= XP_EDGE_SIZE;
-#endif
-
-      if (pos_type == GTK_POS_TOP
-          && xp_theme_draw
+      if (xp_theme_draw
           (window, gtk_notebook_get_current_page(notebook)==0
            ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
            : XP_THEME_ELEMENT_TAB_ITEM,
-           style, x, y, width, height, state_type, area))
+           style, x2, y2, w2, h2, state_type, area))
         {
           return;
         }
@@ -1733,12 +1767,10 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
               gint y, gint width, gint height, GtkPositionType gap_side,
               gint gap_x, gint gap_width)
 {
-  if (detail && !strcmp(detail, "notebook"))
+  if (GTK_IS_NOTEBOOK(widget) && detail && !strcmp(detail, "notebook"))
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-
       /* FIXME: pos != TOP to be implemented */
-      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
+      if (gap_side == GTK_POS_TOP && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
 			state_type, area))
         {
           return;
@@ -1804,13 +1836,22 @@ draw_hline (GtkStyle		*style,
 	    gint		 x2,
 	    gint		 y)
 {
-
+#if 0
   if (detail && !strcmp(detail, "menuitem")) {
 	  if (xp_theme_draw(window, XP_THEME_ELEMENT_MENU_SEPARATOR, style,
 	  		x1, y, x2, style->ythickness, state_type, area)) {
 			return;
 	  }
+  } else if (detail && !strcmp(detail, "toolbar")) {
+	  if (xp_theme_draw(window, XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_H, style,
+	  		x1, y, x2, style->ythickness, state_type, area)) {
+			return;
+	  }
   }
+
+  if(xp_theme_draw(window, XP_THEME_ELEMENT_LINE_H, style, x1, y, x2, style->ythickness, state_type, area))
+  	return;
+#endif
 
   parent_class->draw_hline (style, window, state_type, area, widget,
 			    detail, x1, x2, y);
@@ -1827,8 +1868,43 @@ draw_vline (GtkStyle		*style,
 	    gint		 y2,
 	    gint		 x)
 {
+#if 0
+	if (detail && !strcmp(detail, "toolbar")) {
+	  if (xp_theme_draw(window, XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_V, style,
+	  		x, y1, style->xthickness, y2, state_type, area)) {
+			return;
+	  }
+	}
+
+  if(xp_theme_draw(window, XP_THEME_ELEMENT_LINE_V, style, x, y1, style->xthickness, y2, state_type, area))
+  	return;
+#endif
+
   parent_class->draw_vline (style, window, state_type, area, widget,
 			    detail, y1, y2, x);
+}
+
+static void
+draw_slider (GtkStyle *style,
+             GdkWindow *window,
+             GtkStateType state_type,
+             GtkShadowType shadow_type,
+             GdkRectangle *area,
+             GtkWidget *widget,
+             const gchar *detail,
+             gint x,
+             gint y,
+             gint width,
+             gint height,
+             GtkOrientation orientation)
+{
+	  if(GTK_IS_SCALE(widget) &&
+	     xp_theme_draw(window, ((orientation ==  GTK_ORIENTATION_VERTICAL) ? XP_THEME_ELEMENT_SCALE_SLIDER_V : XP_THEME_ELEMENT_SCALE_SLIDER_H), style, x, y, width, height, state_type, area)) {
+			return;
+		}
+
+	  parent_class->draw_slider (style, window, state_type, shadow_type, area, widget,
+							    detail, x, y, width, height, orientation);
 }
 
 static void
@@ -1845,12 +1921,9 @@ draw_resize_grip (GtkStyle      *style,
                        gint           height)
 {
 	if (detail && !strcmp(detail, "statusbar")) {
-#if 0
-		/* DAL: TODO: find out why this regressed */
 		if (xp_theme_draw(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width, height,
                            state_type, area))
 			return;
-#endif
 	}
 
 	parent_class->draw_resize_grip (style, window, state_type, area,
@@ -1887,63 +1960,51 @@ draw_handle (GtkStyle        *style,
         {
           return;
         }
+ 	}
 
-      /* grippers are just flat boxes when they're not a toolbar */
-      parent_class->draw_box (style, window, state_type, shadow_type,
-                              area, widget, detail, x, y, width, height);
-    }
-  else if (!GTK_IS_PANED (widget))
+  if (!GTK_IS_PANED(widget)) {
+  gint                xthick, ythick;
+  GdkGC              *light_gc, *dark_gc, *shadow_gc;
+  GdkRectangle        dest;
+
+	sanitize_size (window, &width, &height);
+
+  gtk_paint_box(style, window, state_type, shadow_type, area, widget,
+		detail, x, y, width, height);
+
+  light_gc = style->light_gc[state_type];
+  dark_gc = style->dark_gc[state_type];
+  shadow_gc = style->mid_gc[state_type];
+
+  xthick = style->xthickness;
+  ythick = style->ythickness;
+
+  dest.x = x + xthick;
+  dest.y = y + ythick;
+  dest.width = width - (xthick * 2);
+  dest.height = height - (ythick * 2);
+
+  gdk_gc_set_clip_rectangle(light_gc, &dest);
+  gdk_gc_set_clip_rectangle(dark_gc, &dest);
+  gdk_gc_set_clip_rectangle(shadow_gc, &dest);
+
+  if (dest.width < dest.height)
     {
-      /* TODO: Draw handle boxes as double lines: || */
-      parent_class->draw_handle (style, window, state_type, shadow_type,
-                                 area, widget, detail, x, y, width, height,
-                                 orientation);
-    }
-}
-
-static GdkPixbuf *
-render_icon (GtkStyle            *style,
-	     const GtkIconSource *source,
-             GtkTextDirection     direction,
-             GtkStateType         state,
-             GtkIconSize          size,
-             GtkWidget           *widget,
-             const gchar         *detail)
-{
-  if (gtk_icon_source_get_state_wildcarded (source) && state == GTK_STATE_INSENSITIVE)
-    {
-      GdkPixbuf *normal, *insensitive;
-      int i, j, w, h, rs;
-      guchar *pixels, *row;
-
-      normal = parent_class->render_icon (style, source, direction,
-					  GTK_STATE_NORMAL, size,
-					  widget, detail);
-      /* copy and add alpha channel at the same time */
-      insensitive = gdk_pixbuf_add_alpha (normal, FALSE, 0, 0, 0);
-      g_object_unref (normal);
-      /* remove all colour */
-      gdk_pixbuf_saturate_and_pixelate (insensitive, insensitive, 0.0, FALSE);
-      /* make partially transparent */
-      w = gdk_pixbuf_get_width (insensitive);
-      h = gdk_pixbuf_get_height (insensitive);
-      rs = gdk_pixbuf_get_rowstride (insensitive);
-      pixels = gdk_pixbuf_get_pixels (insensitive);
-      for (j=0; j<h; j++)
-	{
-	  row = pixels + j * rs;
-	  for (i=0; i<w; i++)
-	    {
-	      row[i*4 + 3] = (guchar)(row[i*4 + 3] * 0.6);
-	    }
-	}
-      return insensitive;
+	  gdk_draw_line(window, light_gc, dest.x, dest.y, dest.x, dest.height);
+	  gdk_draw_line(window, dark_gc, dest.x + (dest.width / 2), dest.y, dest.x + (dest.width / 2), dest.height);
+	  gdk_draw_line(window, shadow_gc, dest.x + dest.width, dest.y, dest.x + dest.width, dest.height);
     }
   else
     {
-      return parent_class->render_icon (style, source, direction,
-					state, size,
-					widget, detail);
+
+	  gdk_draw_line(window, light_gc, dest.x, dest.y, dest.x + dest.width, dest.y);
+	  gdk_draw_line(window, dark_gc, dest.x, dest.y + (dest.height / 2), dest.x + dest.width, dest.y + (dest.height / 2));
+	  gdk_draw_line(window, shadow_gc, dest.x, dest.y + dest.height, dest.x + dest.width, dest.y + dest.height);
+    }
+
+  gdk_gc_set_clip_rectangle(shadow_gc, NULL);
+  gdk_gc_set_clip_rectangle(light_gc, NULL);
+  gdk_gc_set_clip_rectangle(dark_gc, NULL);
     }
 }
 
@@ -1978,7 +2039,7 @@ msw_style_class_init (MswStyleClass *klass)
   style_class->draw_vline = draw_vline;
   style_class->draw_handle = draw_handle;
   style_class->draw_resize_grip = draw_resize_grip;
-  style_class->render_icon = render_icon;
+  style_class->draw_slider = draw_slider;
 }
 
 GType msw_type_style = 0;

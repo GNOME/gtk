@@ -30,10 +30,7 @@ style "msw-default"
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander-size = 12
 
-  # etched-in is closer to how Win32's explorer.exe does things, but it makes apps with
-  # multiple toolbars or a menubar and a toolbar look like garbage
-  GtkToolbar::shadow-type = out
-  GtkHandleBox::shadow-type = out
+  GtkScrolledWindow::scrollbar_spacing = 1
 
   engine "wimp" 
   {
