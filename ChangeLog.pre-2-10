@@ -1,3 +1,10 @@
+2005-10-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): check for the
+	widget being realized, in addition to being visible, to avoid
+	running into precondition check in gtk_tree_view_get_cell_area().
+	(approved by Kris).
+
 2005-10-22  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw_style.c (setup_msw_rc_style): 
