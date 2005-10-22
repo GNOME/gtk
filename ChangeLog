@@ -1,3 +1,12 @@
+2005-10-22  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c (setup_msw_rc_style): 
+	Experimentally, scrollbar steppers can shrink to 8 pixels on 
+	Win32. Reflect that in the theme.
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Experimentally,
+	there is a 1-pixel border between a scrollbar and its child
+	in ScrolledWindows on Win32. Reflect that in the theme.
+	
 2005-10-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstock.c: Define GTK_STOCK_[DIS]CONNECT here,

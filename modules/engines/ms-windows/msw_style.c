@@ -726,6 +726,7 @@ setup_msw_rc_style(void)
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
 	     "GtkScale::slider-length = %d\n"
+	     "GtkScrollbar::min-slider-length = 8\n"
 	     "}widget_class \"*VScrollbar*\" style \"msw-vscrollbar\"\n"
 	     "widget_class \"*VScale*\" style \"msw-vscrollbar\"\n",
 	     GetSystemMetrics(SM_CYVTHUMB),
@@ -740,6 +741,7 @@ setup_msw_rc_style(void)
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
 	     "GtkScale::slider-length = %d\n"
+	     "GtkScrollbar::min-slider-length = 8\n"
 	     "}widget_class \"*HScrollbar*\" style \"msw-hscrollbar\"\n"
 	     "widget_class \"*HScale*\" style \"msw-hscrollbar\"\n",
 	     GetSystemMetrics(SM_CXHTHUMB),
