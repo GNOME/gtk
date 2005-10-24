@@ -4557,10 +4557,13 @@ popup_targets_received (GtkClipboard     *clipboard,
   
   if (GTK_WIDGET_REALIZED (entry))
     {
-      gboolean clipboard_contains_text = gtk_selection_data_targets_include_text (data);
+      gboolean clipboard_contains_text;
       GtkWidget *menuitem;
       GtkWidget *submenu;
+      gboolean show_input_method_menu;
+      gboolean show_unicode_menu;
       
+        clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       if (entry->popup_menu)
 	gtk_widget_destroy (entry->popup_menu);
       
@@ -4594,33 +4597,46 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
-      menuitem = gtk_separator_menu_item_new ();
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
+                    "gtk-show-input-method-menu", &show_input_method_menu,
+                    "gtk-show-unicode-menu", &show_unicode_menu,
+                    NULL);
       
-      menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
-      gtk_widget_set_sensitive (menuitem, entry->editable);      
-      gtk_widget_show (menuitem);
-      submenu = gtk_menu_new ();
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+      if (show_input_method_menu || show_unicode_menu)
+        {
+          menuitem = gtk_separator_menu_item_new ();
+          gtk_widget_show (menuitem);
+          gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+        }
       
-      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      if (show_input_method_menu)
+        {
+          menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
+          gtk_widget_set_sensitive (menuitem, entry->editable);      
+          gtk_widget_show (menuitem);
+          submenu = gtk_menu_new ();
+          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+          
+          gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
-      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
-					    GTK_MENU_SHELL (submenu));
+          gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
+                                                GTK_MENU_SHELL (submenu));
+        }
       
-      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
-      gtk_widget_show (menuitem);
-      
-      submenu = gtk_menu_new ();
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);      
-
-      _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
-                                                    unichar_chosen_func,
-                                                    entry);
-      if (!entry->editable)
-        gtk_widget_set_sensitive (menuitem, FALSE);
+      if (show_unicode_menu)
+        {
+          menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
+          gtk_widget_set_sensitive (menuitem, entry->editable);      
+          gtk_widget_show (menuitem);
+          
+          submenu = gtk_menu_new ();
+          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+          gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);      
+          
+          _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
+                                                        unichar_chosen_func,
+                                                        entry);
+        }
       
       g_signal_emit (entry,
 		     signals[POPULATE_POPUP],

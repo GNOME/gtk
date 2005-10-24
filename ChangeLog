@@ -1,3 +1,15 @@
+2005-10-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Add settings to hide the input method and Unicode control character
+	submenus in the context menus of GtkEntry and GtkTextView.  
+	
+	* gdk/x11/gdkevents-x11.c: Map GTK+ settings to X settings.
+	
+	* gtk/gtksettings.c (gtk_settings_class_init): Declare GTK+ settings here.
+
+	* gtk/gtktextview.c (popup_targets_received): 
+	* gtk/gtkentry.c (popup_targets_received): Use the settings here.
+
 2005-10-24  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): emitting

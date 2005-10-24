@@ -2805,6 +2805,8 @@ static const struct
   { "Gtk/MenuBarAccel", "gtk-menu-bar-accel" },
   { "Gtk/CursorThemeName", "gtk-cursor-theme-name" },
   { "Gtk/CursorThemeSize", "gtk-cursor-theme-size" },
+  { "Gtk/ShowInputMethodMenu", "gtk-show-input-method-menu" },
+  { "Gtk/ShowUnicodeMenu", "gtk-show-unicode-menu" },
   { "Xft/Antialias", "gtk-xft-antialias" },
   { "Xft/Hinting", "gtk-xft-hinting" },
   { "Xft/HintStyle", "gtk-xft-hintstyle" },
