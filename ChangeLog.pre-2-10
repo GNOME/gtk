@@ -1,3 +1,13 @@
+2005-10-24  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): emitting
+	row-has-child-toggled when the level is not in the cache does not
+	make sense.  (This bug probably crept in during the early stages
+	of GtkTreeModelSort when there wasn't a correct row-has-child-toggled
+	implementation yet),
+	(gtk_tree_model_sort_real_unref_node): only get the child iter
+	when we will actually also use it.
+
 2005-10-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): check for the

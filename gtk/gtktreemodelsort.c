@@ -700,22 +700,6 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
 
       if (!elt->children)
 	{
-	  GtkTreePath *tmppath;
-	  GtkTreeIter  tmpiter;
-
-	  tmpiter.stamp = tree_model_sort->stamp;
-	  tmpiter.user_data = level;
-	  tmpiter.user_data2 = elt;
-
-	  tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &tmpiter);
-	  if (tmppath)
-	    {
-	      gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (data),
-						    tmppath,
-						    &tmpiter);
-	      gtk_tree_path_free (tmppath);
-	    }
-
 	  /* not covering this signal */
 	  goto done;
 	}
@@ -1286,7 +1270,6 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
 				     gboolean      propagate_unref)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
-  GtkTreeIter child_iter;
   SortLevel *level;
   SortElt *elt;
 
@@ -1294,10 +1277,13 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->child_model != NULL);
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->stamp == iter->stamp);
 
-  GET_CHILD_ITER (tree_model, &child_iter, iter);
-
   if (propagate_unref)
-    gtk_tree_model_unref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
+    {
+      GtkTreeIter child_iter;
+
+      GET_CHILD_ITER (tree_model, &child_iter, iter);
+      gtk_tree_model_unref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
+    }
 
   level = iter->user_data;
   elt = iter->user_data2;
