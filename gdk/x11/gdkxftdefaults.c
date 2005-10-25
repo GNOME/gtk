@@ -200,9 +200,9 @@ init_xft_settings (GdkScreen *screen)
 	      break;
 	    }
 	}
+#endif
 
       screen_x11->xft_rgba = subpixel;
-#endif
     }
 
   if (!get_double_default (xdisplay, "dpi", &dpi_double))
