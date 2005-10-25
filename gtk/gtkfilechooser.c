@@ -273,9 +273,9 @@ gtk_file_chooser_class_init (gpointer g_iface)
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("do-overwrite-confirmation",
 							     P_("Do overwrite confirmation"),
-							     P_("Whether a file chooser in save mode"
+							     P_("Whether a file chooser in save mode "
 								"will present an overwrite confirmation dialog "
-								" if necessary."),
+								"if necessary."),
 							     FALSE,
 							     GTK_PARAM_READWRITE));
 }
