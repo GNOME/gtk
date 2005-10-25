@@ -1,3 +1,9 @@
+2005-10-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkxftdefaults.c (init_xft_settings): Make the 
+	initialization of screen_x11->xft_rgba more explicit.  (#319627,
+	Bogdan Nicula)
+
 2005-10-22  Michael Natterer  <mitch@imendio.com>
 
 	Merged from HEAD:
