@@ -1,3 +1,21 @@
+2005-10-25  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #311955, reported by Markku Vire; and a lot more.
+
+	* gtk/gtktreemodelfilter.c: Made this thing work correctly.
+	Levels can now have invisible nodes cached, functions have been
+	rewritten/refactored to take this into account; also the logic in
+	some functions has been corrected.
+	
+	Each referenced node now references all visible children or a single
+	invisible child, in order to be able to monitor all changes in the
+	child model required for correct operation.
+
+	When a virtual root is set, all nodes on the virtual root level are
+	referenced.
+
+	At last, a bunch of random bug fixes and comment updates.
+
 2005-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktexttagtable.c (gtk_text_tag_table_foreach): Add some
