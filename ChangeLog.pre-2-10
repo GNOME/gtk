@@ -1,5 +1,8 @@
 2005-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_foreach): Add some
+	more docs.  (#319722, Paolo Borelli)
+
 	* gdk/x11/gdkxftdefaults.c (init_xft_settings): Make the 
 	initialization of screen_x11->xft_rgba more explicit.  (#319627,
 	Bogdan Nicula)

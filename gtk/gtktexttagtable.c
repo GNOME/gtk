@@ -386,7 +386,8 @@ list_foreach (gpointer data, gpointer user_data)
  * @data: user data
  *
  * Calls @func on each tag in @table, with user data @data.
- * 
+ * Note that the table may not be modified while iterating 
+ * over it (you can't add/remove tags).
  **/
 void
 gtk_text_tag_table_foreach (GtkTextTagTable       *table,
