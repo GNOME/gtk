@@ -26,7 +26,7 @@
 icon themes. 
 </para>
 <para>
-If expects to be given the path to a icon theme directory containing an
+It expects to be given the path to a icon theme directory containing an
 <filename>index.theme</filename>, e.g. <filename>/usr/share/icons/hicolor</filename>, 
 and writes a <filename>icon-theme.cache</filename> containing cached information
 about the icons in the directory tree below the given directory.
