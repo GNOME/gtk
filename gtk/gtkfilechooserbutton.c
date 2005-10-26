@@ -1994,10 +1994,21 @@ open_dialog (GtkFileChooserButton *button)
 
       if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_IS_WINDOW (toplevel))
         {
-          if (GTK_WINDOW (toplevel) != gtk_window_get_transient_for (GTK_WINDOW (priv->dialog)))
- 	    gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
-					  GTK_WINDOW (toplevel));
+	  GtkWindow *transient_parent = gtk_window_get_transient_for (GTK_WINDOW (priv->dialog));
+	  
+	  if (GTK_WINDOW (toplevel) != transient_parent)
+	    {
+	      if (transient_parent && transient_parent->group)
+		gtk_window_group_remove_window (transient_parent->group, 
+						GTK_WINDOW (priv->dialog));
 	      
+	      gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
+					    GTK_WINDOW (toplevel));
+	      if (GTK_WINDOW (toplevel)->group)
+		gtk_window_group_add_window (GTK_WINDOW (toplevel)->group, 
+					     GTK_WINDOW (priv->dialog));
+	    }
+	  
 	  gtk_window_set_modal (GTK_WINDOW (priv->dialog),
 				gtk_window_get_modal (GTK_WINDOW (toplevel)));
 	}
@@ -2310,7 +2321,7 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
  * 
  * Creates a #GtkFileChooserButton widget which uses @dialog as it's
  * file-picking window. Note that @dialog must be a #GtkFileChooserDialog (or
- * subclass).
+ * subclass) and must not have %GTK_DIALOG_DESTROY_WITH_PARENT set.
  * 
  * Returns: a new button widget.
  * 
