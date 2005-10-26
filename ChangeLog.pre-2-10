@@ -1,5 +1,9 @@
 2005-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	Fix some issues with background drawing in RTL.  (#318781,
+	Eric Cazeaux)
+
 	* gtk/gtktexttagtable.c (gtk_text_tag_table_foreach): Add some
 	more docs.  (#319722, Paolo Borelli)
 

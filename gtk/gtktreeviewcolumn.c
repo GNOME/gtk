@@ -2706,7 +2706,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   real_cell_area = *cell_area;
   real_background_area = *background_area;
 
-  depth = real_cell_area.x - real_background_area.x - horizontal_separator/2;
+
+  if (rtl)
+    depth = real_background_area.width - real_cell_area.width - horizontal_separator/2;
+  else
+    depth = real_cell_area.x - real_background_area.x - horizontal_separator/2;
 
   real_cell_area.x += focus_line_width;
   real_cell_area.y += focus_line_width;
@@ -2761,7 +2765,16 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       real_cell_area.width = info->real_width;
       real_cell_area.width -= 2 * focus_line_width;
-      real_background_area.width = info->real_width + horizontal_separator + depth;
+
+      if (list->next)
+	{
+	  real_background_area.width = info->real_width + horizontal_separator + depth ;
+	}
+      else
+	{
+          /* fill the rest of background for the last cell */
+	  real_background_area.width = background_area->x + background_area->width - real_background_area.x;
+	}
 
       rtl_cell_area = real_cell_area;
       rtl_background_area = real_background_area;
@@ -2893,7 +2906,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       real_cell_area.x += (real_cell_area.width + tree_column->spacing);
-      real_background_area.x += (real_background_area.width + tree_column->spacing);
+      real_background_area.x += (real_background_area.width + tree_column->spacing - (2 * focus_line_width ));
+
+      /* Only needed for first cell */
+      depth=0;
     }
 
   /* iterate list for PACK_END cells */
