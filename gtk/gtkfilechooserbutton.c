@@ -2306,7 +2306,7 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
  * 
  * Creates a #GtkFileChooserButton widget which uses @dialog as it's
  * file-picking window. Note that @dialog must be a #GtkFileChooserDialog (or
- * subclass).
+ * subclass) and must not have %GTK_DIALOG_DESTROY_WITH_PARENT set.
  * 
  * Returns: a new button widget.
  * 
