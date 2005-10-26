@@ -486,7 +486,7 @@ msgstr "下部パディング"
 
 #: gtk/gtkalignment.c:183
 msgid "The padding to insert at the bottom of the widget."
-msgstr "子ウィジェットの下部に挿入するパティング"
+msgstr "子ウィジェットの下部に挿入するパディング"
 
 #: gtk/gtkalignment.c:199
 msgid "Left Padding"
@@ -502,7 +502,7 @@ msgstr "右側パディング"
 
 #: gtk/gtkalignment.c:217
 msgid "The padding to insert at the right of the widget."
-msgstr "ウィジェットの右側に挿入するパティング"
+msgstr "ウィジェットの右側に挿入するパディング"
 
 #: gtk/gtkarrow.c:101
 msgid "Arrow direction"
@@ -1623,7 +1623,7 @@ msgstr "フレーム有り"
 
 #: gtk/gtkcombobox.c:676
 msgid "Whether the combo box draws a frame around the child"
-msgstr "コンボボックスの子の周囲にフレームを描画するかどうか"
+msgstr "コンボ・ボックスの子の周囲にフレームを描画するかどうか"
 
 #: gtk/gtkcombobox.c:684
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
@@ -3166,7 +3166,7 @@ msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"プログレスバーが文字列全体を表示できる区画を持たない場合、文字列を Ellipsize "
+"プログレス・バーが文字列全体を表示できる区画を持たない場合、文字列を Ellipsize "
 "する場所です"
 
 #: gtk/gtkradioaction.c:140
@@ -4863,7 +4863,7 @@ msgstr "ウィンドウの種別"
 
 #: gtk/gtkwindow.c:420
 msgid "The type of the window"
-msgstr "ウインドウの種類"
+msgstr "ウィンドウの種類"
 
 #: gtk/gtkwindow.c:428
 msgid "Window Title"
@@ -4871,7 +4871,7 @@ msgstr "ウィンドウのタイトル"
 
 #: gtk/gtkwindow.c:429
 msgid "The title of the window"
-msgstr "ウインドウのタイトル"
+msgstr "ウィンドウのタイトル"
 
 #: gtk/gtkwindow.c:436
 msgid "Window Role"
