@@ -2388,7 +2388,7 @@ msgstr "開く(_O)"
 
 #: gtk/gtkstock.c:390
 msgid "_Paste"
-msgstr "貼り付け"
+msgstr "貼り付け(_P)"
 
 #: gtk/gtkstock.c:391
 msgid "_Preferences"
