@@ -1,5 +1,12 @@
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_new_with_dialog): 
+	Point out that destroy-with-parent is a bad idea for the dialog
+	passed to this function.  (#318943, Christian Persch)
+	
+	* gtk/gtkfilechooserbutton.c (open_dialog): Add the dialog to the
+	window group, if necessary (#318943, Christian Persch)
+
 	* */Makefile.am: use $(GLIB_MKENUMS) instead of
 	glib-mkenums.  (#318582, Damien Carbery)
 
