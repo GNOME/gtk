@@ -1,5 +1,8 @@
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Clarify
+	docs.  (#317682, Christian - Manny Calavera - Neumair)
+
 	* gdk/x11/gdkdnd-x11.c: Remove an extra const which doesn't
 	seem to affect the placement of the data in the readonly 
 	section, and causes problems with some compilers.  (#317844)
