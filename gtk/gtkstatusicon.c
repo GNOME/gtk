@@ -702,7 +702,7 @@ static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
 			      GdkEventButton *event)
 {
-  if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+  if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
     {
       emit_activate_signal (status_icon);
       return TRUE;

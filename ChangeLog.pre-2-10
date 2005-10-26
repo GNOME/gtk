@@ -1,3 +1,8 @@
+2005-10-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstatusicon.c: Emit activate on single-click,
+	not on double-click, change proposed by Milosz Derezynski.
+
 2005-10-25  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #311955, reported by Markku Vire; and a lot more.
