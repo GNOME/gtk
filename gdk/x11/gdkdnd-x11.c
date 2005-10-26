@@ -136,7 +136,7 @@ static GList *contexts;
 const static struct {
   const char *atom_name;
   GdkFilterFunc func;
-} const xdnd_filters[] = {
+} xdnd_filters[] = {
   { "XdndEnter",    xdnd_enter_filter },
   { "XdndLeave",    xdnd_leave_filter },
   { "XdndPosition", xdnd_position_filter },
