@@ -1,3 +1,9 @@
+2005-10-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c: Remove an extra const which doesn't
+	seem to affect the placement of the data in the readonly
+	section, and causes problems with some compilers.  (#317844)
+
 2005-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
