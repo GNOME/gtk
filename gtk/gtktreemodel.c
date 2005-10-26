@@ -1476,7 +1476,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
  * gtk_tree_model_rows_reordered:
  * @tree_model: A #GtkTreeModel
  * @path: A #GtkTreePath pointing to the tree node whose children have been reordered
- * @iter: A valid #GtkTreeIter pointing to the node whose children have been reordered
+ * @iter: A valid #GtkTreeIter pointing to the node whose children have been reordered, or %NULL if the depth of @path is 0.
  * @new_order: an array of integers mapping the current position of each child
  *      to its old position before the re-ordering,
  *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
