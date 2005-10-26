@@ -234,7 +234,7 @@ BUILT_SOURCES =					\
 gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
 stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
-	( cd $(srcdir) && glib-mkenums \
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
 			--fhead "#ifndef __GDK_ENUM_TYPES_H__\n#define __GDK_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
 			--fprod "/* enumerations from \"@filename@\" */\n" \
 			--vhead "GType @enum_name@_get_type (void) G_GNUC_CONST;\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
@@ -244,7 +244,7 @@ stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
 gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
-	( cd $(srcdir) && glib-mkenums \
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
 			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"\n#include \"gdkalias.h\"\n" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--ftail "\n#define __GDK_ENUM_TYPES_C__\n#include \"gdkaliasdef.c\"\n" \

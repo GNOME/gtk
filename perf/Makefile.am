@@ -72,7 +72,7 @@ marshalers.c: @REBUILD@ marshalers.list
 typebuiltins.h: stamp-typebuiltins.h
 	@true
 stamp-typebuiltins.h: @REBUILD@ $(headers_with_enums) Makefile
-	( cd $(srcdir) && glib-mkenums \
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
 			--fhead "#ifndef __TYPE_BUILTINS_H__\n#define __TYPE_BUILTINS_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
 			--fprod "/* enumerations from \"@filename@\" */\n" \
 			--vhead "GType @enum_name@_get_type (void) G_GNUC_CONST;\n#define GTK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
@@ -82,7 +82,7 @@ stamp-typebuiltins.h: @REBUILD@ $(headers_with_enums) Makefile
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
 typebuiltins.c: @REBUILD@ $(headers_with_enums) Makefile
-	( cd $(srcdir) && glib-mkenums \
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
 			--fhead "#include \"gtkwidgetprofiler.h\"" \
 			--ftail "#define __TYPE_BUILTINS_C__\n" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \

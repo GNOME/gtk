@@ -1,5 +1,8 @@
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* */Makefile.am: use $(GLIB_MKENUMS) instead of 
+	glib-mkenums.  (#318582, Damien Carbery)
+
 	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Clarify
 	docs.  (#317682, Christian - Manny Calavera - Neumair)
 
