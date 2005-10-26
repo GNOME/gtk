@@ -1,5 +1,8 @@
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): Don't crash
+	on duplicate destroy.  (#318953, Gustavo Carneiro)
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_new_with_dialog): 
 	Point out that destroy-with-parent is a bad idea for the dialog
 	passed to this function.  (#318943, Christian Persch)

@@ -1408,13 +1408,13 @@ gtk_tree_view_destroy (GtkObject *object)
 	}
     }
 
-  if (tree_view->priv->search_destroy)
+  if (tree_view->priv->search_destroy && tree_view->priv->search_user_data)
     {
       (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
       tree_view->priv->search_user_data = NULL;
     }
 
-  if (tree_view->priv->row_separator_destroy)
+  if (tree_view->priv->row_separator_destroy && tree_view->priv->row_separator_data)
     {
       (* tree_view->priv->row_separator_destroy) (tree_view->priv->row_separator_data);
       tree_view->priv->row_separator_data = NULL;
