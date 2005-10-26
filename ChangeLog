@@ -1,5 +1,8 @@
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbtree.c (gtk_text_btree_resolve_bidi): Only use text
+	segments when determining text direction.  (#319065, Tommi Komulainen)
+
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Don't crash
 	on duplicate destroy.  (#318953, Gustavo Carneiro)
 

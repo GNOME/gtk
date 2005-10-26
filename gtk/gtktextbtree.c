@@ -589,7 +589,7 @@ gtk_text_btree_resolve_bidi (GtkTextIter *start,
       
       while (seg)
         {
-          if (seg->byte_count > 0)
+          if (seg->type == &gtk_text_char_type && seg->byte_count > 0)
             {
 	      PangoDirection pango_dir;
 
