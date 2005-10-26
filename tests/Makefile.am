@@ -169,6 +169,10 @@ testactions_LDADD = $(LDADDS)
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c
 
+testentrycompletion_SOURCES = 	\
+	prop-editor.c		\
+	testentrycompletion.c
+
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
 	testfilechooser.c 	

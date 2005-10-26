@@ -1,5 +1,9 @@
 2005-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/Makefile.am:
+	* tests/testentrycompletion.c: Apply a patch by Christian
+	Persch to add property editors.
+
 	* gtk/gtkstatusicon.c: Emit activate on single-click,
 	not on double-click, change proposed by Milosz Derezynski.
 
