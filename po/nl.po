@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-15 12:37+0200\n"
-"PO-Revision-Date: 2005-08-12 03:43+0200\n"
+"POT-Creation-Date: 2005-10-24 21:13+0200\n"
+"PO-Revision-Date: 2005-10-25 01:53+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -1458,7 +1458,7 @@ msgstr "_Toevoegen"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "De geselecteerde map toevoegen aan de favorieten"
 
-#: ../gtk/gtkfilechooserdefault.c:3348 ../gtk/gtkstock.c:398
+#: ../gtk/gtkfilechooserdefault.c:3348 ../gtk/gtkstock.c:400
 msgid "_Remove"
 msgstr "_Verwijderen"
 
@@ -1555,17 +1555,17 @@ msgstr "Aanma_ken in map:"
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan niet naar de map gaan omdat deze niet lokaal is"
 
-#: ../gtk/gtkfilechooserdefault.c:5954
+#: ../gtk/gtkfilechooserdefault.c:5969
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snelkoppeling %s bestaat niet"
 
-#: ../gtk/gtkfilechooserdefault.c:6209
+#: ../gtk/gtkfilechooserdefault.c:6224
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Een bestand met de naam \"%s\" bestaat al. Wilt u het vervangen?"
 
-#: ../gtk/gtkfilechooserdefault.c:6212
+#: ../gtk/gtkfilechooserdefault.c:6227
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1573,79 +1573,79 @@ msgstr ""
 "Het bestand bestaat al in \"%s\".  Bij vervangen zal de inhoud worden "
 "overschreven."
 
-#: ../gtk/gtkfilechooserdefault.c:6217
+#: ../gtk/gtkfilechooserdefault.c:6232
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: ../gtk/gtkfilechooserdefault.c:6708
+#: ../gtk/gtkfilechooserdefault.c:6723
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kon %s niet aankoppelen"
 
-#: ../gtk/gtkfilechooserdefault.c:7003
+#: ../gtk/gtkfilechooserdefault.c:7018
 msgid "Type name of new folder"
 msgstr "Geef de naam van de nieuwe map"
 
-#: ../gtk/gtkfilechooserdefault.c:7045
+#: ../gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: ../gtk/gtkfilechooserdefault.c:7047
+#: ../gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: ../gtk/gtkfilechooserdefault.c:7049
+#: ../gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: ../gtk/gtkfilechooserdefault.c:7051
+#: ../gtk/gtkfilechooserdefault.c:7066
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: ../gtk/gtkfilechooserdefault.c:7097 ../gtk/gtkfilechooserdefault.c:7121
+#: ../gtk/gtkfilechooserdefault.c:7112 ../gtk/gtkfilechooserdefault.c:7136
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../gtk/gtkfilechooserdefault.c:7108
+#: ../gtk/gtkfilechooserdefault.c:7123
 msgid "Today"
 msgstr "Vandaag"
 
-#: ../gtk/gtkfilechooserdefault.c:7110
+#: ../gtk/gtkfilechooserdefault.c:7125
 msgid "Yesterday"
 msgstr "Gisteren"
 
-#: ../gtk/gtkfilechooserdefault.c:7192
+#: ../gtk/gtkfilechooserdefault.c:7207
 msgid "Cannot change folder"
 msgstr "Kan map niet wijzigen"
 
-#: ../gtk/gtkfilechooserdefault.c:7193
+#: ../gtk/gtkfilechooserdefault.c:7208
 msgid "The folder you specified is an invalid path."
 msgstr "De door u opgegeven map is een ongeldig pad."
 
-#: ../gtk/gtkfilechooserdefault.c:7232
+#: ../gtk/gtkfilechooserdefault.c:7247
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kon geen bestandnaam maken van '%s' en '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:7268
+#: ../gtk/gtkfilechooserdefault.c:7283
 msgid "Could not select item"
 msgstr "Kon item niet selecteren"
 
-#: ../gtk/gtkfilechooserdefault.c:7308
+#: ../gtk/gtkfilechooserdefault.c:7323
 msgid "Open Location"
 msgstr "Locatie openen"
 
-#: ../gtk/gtkfilechooserdefault.c:7315
+#: ../gtk/gtkfilechooserdefault.c:7330
 msgid "Save in Location"
 msgstr "Opslaan in locatie"
 
-#: ../gtk/gtkfilechooserdefault.c:7342
+#: ../gtk/gtkfilechooserdefault.c:7357
 msgid "_Location:"
 msgstr "_Locatie:"
 
@@ -2192,69 +2192,77 @@ msgid "_Close"
 msgstr "Sl_uiten"
 
 #: ../gtk/gtkstock.c:324
+msgid "C_onnect"
+msgstr "_Verbinden"
+
+#: ../gtk/gtkstock.c:325
 msgid "_Convert"
 msgstr "_Converteren"
 
-#: ../gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:326
 msgid "_Copy"
 msgstr "_Kopiëren"
 
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:327
 msgid "Cu_t"
 msgstr "K_nippen"
 
-#: ../gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:328
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: ../gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:329
+msgid "_Disconnect"
+msgstr "_Verbinding verbreken"
+
+#: ../gtk/gtkstock.c:330
 msgid "_Execute"
 msgstr "_Uitvoeren"
 
-#: ../gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:331
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: ../gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:332
 msgid "_Find"
 msgstr "_Zoeken"
 
-#: ../gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:333
 msgid "Find and _Replace"
 msgstr "Zoeken en _Vervangen"
 
-#: ../gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:334
 msgid "_Floppy"
 msgstr "_Diskette"
 
 # schermvullend/volledig scherm
-#: ../gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:335
 msgid "_Fullscreen"
 msgstr "_Schermvullend"
 
-#: ../gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
 msgstr "_Schermvullend verlaten"
 
 # Navigation wordt o.a. gebruikt bij het doorlopen van
 # configuratie-assistenten en bij webbrowsers
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
 msgstr "_Onderste"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:340
 msgid "Navigation|_First"
 msgstr "_Eerste"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:342
 msgid "Navigation|_Last"
 msgstr "_Laatste"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:344
 msgid "Navigation|_Top"
 msgstr "_Bovenste"
 
@@ -2262,12 +2270,12 @@ msgstr "_Bovenste"
 # Forward-Back Volgende-Vorige
 # voorlopig laten staan op Terug (12-08-2005)
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:346
 msgid "Navigation|_Back"
 msgstr "_Terug"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
 msgstr "_Neer"
 
@@ -2276,150 +2284,150 @@ msgstr "_Neer"
 # Volgende dus. Desnoods zou 'Heen' (Forward-Back <-> Heen-Terug)
 # ook kunnen, maar dat is minder mooit.
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
 msgstr "_Volgende"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
 msgstr "_Op"
 
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
 msgstr "_Harde schijf"
 
-#: ../gtk/gtkstock.c:352
+#: ../gtk/gtkstock.c:354
 msgid "_Help"
 msgstr "_Hulp"
 
 # honk/huis/thuis/persoonlijk/persoonlijke map
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:355
 msgid "_Home"
 msgstr "_Thuis"
 
 # Inspringen verhogen/Meer inspringen
-#: ../gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:356
 msgid "Increase Indent"
 msgstr "Meer inspringen"
 
 # Inspringen verlagen/Minder inspringen<
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:357
 msgid "Decrease Indent"
 msgstr "Minder inspringen"
 
-#: ../gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:358
 msgid "_Index"
 msgstr "_Index"
 
-#: ../gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:359
 msgid "_Information"
 msgstr "_Informatie"
 
 # _schuin/_schuingedrukt/_cursief
 # voorzover ik kan zien alleen in gucharmap gebruikt.
-#: ../gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:360
 msgid "_Italic"
 msgstr "_Schuingedrukt"
 
 # ga naar
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:361
 msgid "_Jump to"
 msgstr "_Spring naar"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:363
 msgid "Justify|_Center"
 msgstr "Ge_centreerd"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:365
 msgid "Justify|_Fill"
 msgstr "_Uitvullen"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:367
 msgid "Justify|_Left"
 msgstr "_Links"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:369
 msgid "Justify|_Right"
 msgstr "_Rechts"
 
 # Was _Voorwaarts, maar bij media moet het Vooruit zijn
 # of Vooruitspoelen (vergelijk Back: Terugspoelen)
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:372
 msgid "Media|_Forward"
 msgstr "_Vooruitspoelen"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:374
 msgid "Media|_Next"
 msgstr "_Volgende"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:376
 msgid "Media|P_ause"
 msgstr "_Pauzeren"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:378
 msgid "Media|_Play"
 msgstr "_Afspelen"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:380
 msgid "Media|Pre_vious"
 msgstr "V_orige"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:382
 msgid "Media|_Record"
 msgstr "Op_nemen"
 
 # Terug of Terugspoelen
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:382
+#: ../gtk/gtkstock.c:384
 msgid "Media|R_ewind"
 msgstr "_Terugspoelen"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:384
+#: ../gtk/gtkstock.c:386
 msgid "Media|_Stop"
 msgstr "_Stoppen"
 
-#: ../gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:387
 msgid "_Network"
 msgstr "_Netwerk"
 
-#: ../gtk/gtkstock.c:386
+#: ../gtk/gtkstock.c:388
 msgid "_New"
 msgstr "_Nieuw"
 
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:389
 msgid "_No"
 msgstr "_Nee"
 
 # Ok/OK
-#: ../gtk/gtkstock.c:388
+#: ../gtk/gtkstock.c:390
 msgid "_OK"
 msgstr "_OK"
 
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:391
 msgid "_Open"
 msgstr "_Openen"
 
-#: ../gtk/gtkstock.c:390
+#: ../gtk/gtkstock.c:392
 msgid "_Paste"
 msgstr "_Plakken"
 
-#: ../gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:393
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: ../gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:394
 msgid "_Print"
 msgstr "Af_drukken"
 
@@ -2429,96 +2437,96 @@ msgstr "Af_drukken"
 # gnomebugzilla: #310874 Gnumeric gebruikt 'Opslaan _als' en '_Afdrukvoorbeeld'
 # De meest veilige letter in Afdrukvoorbeeld is waarschijnlijk de b of de k.
 # Kies voorlopig de b (22-07-2005)
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:395
 msgid "Print Pre_view"
 msgstr "Afdrukvoor_beeld"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:396
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:397
 msgid "_Quit"
 msgstr "A_fsluiten"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:398
 msgid "_Redo"
 msgstr "Op_nieuw"
 
 # herladen/verversen
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:399
 msgid "_Refresh"
 msgstr "_Verversen"
 
-#: ../gtk/gtkstock.c:399
+#: ../gtk/gtkstock.c:401
 msgid "_Revert"
 msgstr "_Terugdraaien"
 
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:402
 msgid "_Save"
 msgstr "Op_slaan"
 
-#: ../gtk/gtkstock.c:401
+#: ../gtk/gtkstock.c:403
 msgid "Save _As"
 msgstr "Opslaan _als"
 
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:404
 msgid "_Color"
 msgstr "_Kleur"
 
-#: ../gtk/gtkstock.c:403
+#: ../gtk/gtkstock.c:405
 msgid "_Font"
 msgstr "_Lettertype"
 
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:406
 msgid "_Ascending"
 msgstr "_Oplopend"
 
-#: ../gtk/gtkstock.c:405
+#: ../gtk/gtkstock.c:407
 msgid "_Descending"
 msgstr "_Aflopend"
 
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:408
 msgid "_Spell Check"
 msgstr "_Spellingscontrole"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:409
 msgid "_Stop"
 msgstr "_Stoppen"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:410
 msgid "_Strikethrough"
 msgstr "_Doorhalen"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:411
 msgid "_Undelete"
 msgstr "Ter_ugplaatsen"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:412
 msgid "_Underline"
 msgstr "_Onderstrepen"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:413
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:414
 msgid "_Yes"
 msgstr "_Ja"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:415
 msgid "_Normal Size"
 msgstr "_Normale afmeting"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:416
 msgid "Best _Fit"
 msgstr "Best _passend"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:417
 msgid "Zoom _In"
 msgstr "_Inzoomen"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:418
 msgid "Zoom _Out"
 msgstr "_Uitzoomen"
 
