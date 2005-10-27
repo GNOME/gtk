@@ -1,48 +1,7 @@
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to 
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.hy.po to
-# translation of gtk+.HEAD.15.07.1.hy.po to
-# This file is distributed under the same license as the PACKAGE package.
+# translation of gtk+.HEAD.hy.po to armenian
+# This file is distributed under the same license as the gtk+ package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-# Lilit Azizbekyan <lilita@support17>, 2005.
+# Lilit Azizbekyan <l@freenet.am>, 2005.
 # Lilit Sargsyan <magicliliac@yahoo.co.uk>, 2005.
 #
 msgid ""
@@ -464,12 +423,12 @@ msgstr "Ձևափոխված PNG–ի բիթ առ հոսք հատկանիշը 8 չ
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "Ձևափոխված է PNG–ն, այլ ոչ RGB–ն կամ RGBA–ն"
+msgstr "Ձևափոխված PNG,  ոչ RGB կամ RGBA"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"Ձևափոխված PNG–ն ունի չապահովվող քանակությամբ ալիքներ. վավեր են 3-ը կամ 4-ը"
+"Ձևափոխված PNG ֆայլը ունի չապահովվող քանակությամբ ալիքներ. վավեր են 3-ը կամ 4-ը"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -586,7 +545,7 @@ msgstr "Ֆայլի վաղահաս վերջ"
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "Չմշակված PNM ֆորմատները պահանջում են ուղիղ մեկ միավոր ազատ տարածություն "
-"մոդելային կամ նմուշային տվյալներից առաջ"
+"նմուշային տվյալներից առաջ"
 
 #: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
@@ -618,7 +577,7 @@ msgstr "RAS պատկերի տեսակն անհայտ է"
 
 #: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "չապահովվող RAS պատկերի փոփոխություն կամ շեղում կամ տարբերակ"
+msgstr "չապահովվող RAS պատկերի փոփոխություն"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
@@ -1041,7 +1000,7 @@ msgstr "Ծրագրի արտոնագիրը"
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:509
 msgid "C_redits"
-msgstr "Ն_շանակություն"
+msgstr "Ե_րախտիք"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:519
@@ -1186,9 +1145,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Մինչ այդ ընտրված գույնը, այժմ ընտրվող գույնի հետ համեմատելու համար։ Դուք "
+"Այժմ ընտրվող գույնի հետ համեմատելու համար մինչ այդ ընտրված գույնը։ Դուք "
 "կարող եք քաշելով տանել այս գույնը դեպի գունակազմի միավորը կամ ընտրել այս "
-"գույնը որպես ընթացիկ քաշել տանելով այն դեպի հարակից գունանմուշը։"
+"գույնը որպես ընթացիկ քաշելով այն դեպի հարակից գունանմուշը։"
 
 #: gtk/gtkcolorsel.c:570
 msgid ""
@@ -1207,17 +1166,17 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Քլիք արեք այս գունակազմի վրա այն ընթացիկ գույնը դարձնելու համար։ Որպեսզի "
-"փոխեք այս միավորը, քաշելով բերեք գունանմուշը այստեղ կամ աջ քլիք արեք և "
-"ընտրեք \"Պահպանեք գույնն այստեղ։\""
+"Կտացրեք այս գունակազմի վրա այն ընթացիկ գույնը դարձնելու համար։"
+"Այս միավորը փոխելու համար, քաշեք գունանմուշը այստեղ կամ աջ կտոց արեք և "
+"ընտրեք \"Պահպանել գույնն այստեղ։\""
 
 #: gtk/gtkcolorsel.c:1953
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Արտաքին օղակից կամ շրջանից ընտրե՛ք Ձեր ցանկացած գույնը։ Ընտրե՛ք այդ գույնի "
-"մգությունը կամ պայծառությունը or բացությունը, օգտագործելով ներսի եռանկյունը։"
+"Արտաքին օղակից ընտրե՛ք Ձեր ցանկացած գույնը։ Ընտրե՛ք այդ գույնի "
+"մգությունը կամ լուսավորությունը, կիրառելով ներսի եռանկյունը։"
 
 #: gtk/gtkcolorsel.c:1978
 msgid ""
@@ -1292,8 +1251,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Դուք կարող եք մուտքագրել HTML տեսակի կամ ոճի վաթսուն գույնային արժեքներից "
-"մեկը կամ պարզապես գույնի անվանում, ինչպիսին է ՛նարնջագույնը՛ այս տարբերակում։"
+"Դուք կարող եք մուտքագրել HTML ոճի տասնվեցական գույնային արժեք"
+"կամ պարզապես գույնի անվանում, ինչպիսին է ՛նարնջագույն՛ այս տարբերակում։"
 
 #: gtk/gtkcolorsel.c:2062
 msgid "_Palette"
@@ -1309,11 +1268,11 @@ msgstr "Գույնի ընտրություն"
 
 #: gtk/gtkentry.c:4560 gtk/gtktextview.c:7125
 msgid "Select _All"
-msgstr "Ընտրել_Բոլորը կամ Ամբողջը"
+msgstr "Ընտրել _Ամբողջը"
 
 #: gtk/gtkentry.c:4570 gtk/gtktextview.c:7135
 msgid "Input _Methods"
-msgstr ""
+msgstr "Ներմուծման _Ձևեր"
 
 #: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
 #, fuzzy
@@ -1534,11 +1493,11 @@ msgstr "_Վերանվանել"
 #: gtk/gtkfilechooserdefault.c:6634
 #, fuzzy, c-format
 msgid "Could not mount %s"
-msgstr "Չհաջողվեց մոնտաժել կամ տեղակայել %s–ը"
+msgstr "Չհաջողվեց միացնել՝ %s"
 
 #: gtk/gtkfilechooserdefault.c:6926
 msgid "Type name of new folder"
-msgstr "Հավաքե՛ք կամ տպե՛ք նոր ֆոլդերի անվանումը"
+msgstr "Տպե՛ք նոր պանակի անվանումը"
 
 #: gtk/gtkfilechooserdefault.c:6968
 #, c-format
@@ -1565,7 +1524,7 @@ msgstr "%.1f G"
 #: gtk/gtkfilechooserdefault.c:7020 gtk/gtkfilechooserdefault.c:7044
 #, fuzzy
 msgid "Unknown"
-msgstr "Անհայտ կամ անծանոթ"
+msgstr "Անհայտ"
 
 #: gtk/gtkfilechooserdefault.c:7031
 msgid "Today"
@@ -1629,12 +1588,12 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 "\"%s\" ֆայլը գտնվում է մեկ այլ մեքենայի կամ սարքի վրա (որը կոչվում է %s) և "
-"կարող է այս ծրագրի համար հասանելի կամ մատչելի չլինել։\n"
-"Համոզվա՞ծ եք, որ ուզում կամ ցանկանում եք ընտրել այն։"
+"կարող է այս ծրագրի համար հասանելի չլինել։\n"
+"Համոզվա՞ծ եք, որ ցանկանում եք ընտրել այն։"
 
 #: gtk/gtkfilesel.c:1114
 msgid "_New Folder"
-msgstr "_Նոր Ֆոլդեր"
+msgstr "_Նոր պանակ"
 
 #: gtk/gtkfilesel.c:1125
 msgid "De_lete File"
@@ -1809,7 +1768,7 @@ msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ս
 #: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
 #, fuzzy
 msgid "This file system does not support mounting"
-msgstr "Ֆայլային համակարգը չի ապահովում մոնտաժ անելը կամ տեղակայելը"
+msgstr "Այս ֆայլային համակարգը հնարավոր չէ միացնել"
 
 #: gtk/gtkfilesystemunix.c:639
 #, fuzzy
@@ -1819,7 +1778,7 @@ msgstr "Ֆայլային համակարգ"
 #: gtk/gtkfilesystemunix.c:796
 #, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Չհաջողվեց ստանալ կամ գտնել կամ ճարել պահուստային պատկերակ %s–ի համար"
+msgstr "Չհաջողվեց ստանալ պահուստային պատկերակ %s–ի համար"
 
 #: gtk/gtkfilesystemunix.c:891
 #, c-format
@@ -1853,7 +1812,7 @@ msgstr "'/': %s–ի համար ինֆորմացիա ստանալիս սխալ �
 #: gtk/gtkfilesystemwin32.c:611
 #, fuzzy, c-format
 msgid "Network Drive (%s)"
-msgstr "Ցանցային Շարժակ կամ Հաղորդակ (%s)"
+msgstr "Ցանցային Սկավառակ (%s)"
 
 #: gtk/gtkfilesystemwin32.c:650
 #, c-format
@@ -1862,7 +1821,7 @@ msgstr "%s (%s)"
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
 msgid "Pick a Font"
-msgstr "Ընտրեք Ֆոնտը կամ Տառատեսակը"
+msgstr "Ընտրեք Տառատեսակը"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:286
@@ -1976,7 +1935,7 @@ msgstr "_Առանցքներ"
 #: gtk/gtkinputdialog.c:342
 #, fuzzy
 msgid "_Keys"
-msgstr "_Բանալիներ կամ ստեղներ"
+msgstr "_Ստեղներ"
 
 #: gtk/gtkinputdialog.c:562
 msgid "X"
@@ -2021,7 +1980,7 @@ msgstr "մաքրել"
 
 #: gtk/gtklabel.c:3985
 msgid "Select All"
-msgstr "Ընտրել Բոլորը կամ Ամբողջը"
+msgstr "Ընտրել Ամբողջը"
 
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:400
@@ -2092,13 +2051,13 @@ msgstr "Անհնարին է տեղակայել պատկերային ֆայլը p
 #, fuzzy, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
-"Pixmap ուղու: \"%s\" տարրը պետք է լինի կատարյալ կամ բացարձակ, %s, տող կամ "
-"գիծ %d"
+"Pixmap ուղու: \"%s\" տարրը պետք է լինի բացարձակ, %s, տող %d"
+""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:308
 msgid "Information"
-msgstr "Ինֆորմացիա"
+msgstr "Տեղեկատվություն"
 
 #: gtk/gtkstock.c:309
 msgid "Warning"
@@ -2117,7 +2076,7 @@ msgstr "Հարց"
 #.
 #: gtk/gtkstock.c:316
 msgid "_About"
-msgstr "_Մասին"
+msgstr "_Ծրագրի Մասին"
 
 #: gtk/gtkstock.c:318
 msgid "_Apply"
@@ -2130,7 +2089,7 @@ msgstr "_Թավատառ"
 #: gtk/gtkstock.c:320
 #, fuzzy
 msgid "_Cancel"
-msgstr "_Ոչինչ չանել"
+msgstr "_Հրաշարվել"
 
 #: gtk/gtkstock.c:321
 msgid "_CD-Rom"
@@ -2150,7 +2109,7 @@ msgstr "_Ձևափոխել"
 
 #: gtk/gtkstock.c:325
 msgid "_Copy"
-msgstr "_Պատճենահանել"
+msgstr "_Պատճենել"
 
 #: gtk/gtkstock.c:326
 msgid "Cu_t"
@@ -2182,17 +2141,17 @@ msgstr "_Ճկուն մագնիսական սկավառակ"
 
 #: gtk/gtkstock.c:333
 msgid "_Fullscreen"
-msgstr ""
+msgstr "Ամբթղջ էկրանով"
 
 #: gtk/gtkstock.c:334
 msgid "_Leave Fullscreen"
-msgstr ""
+msgstr "Թողել ամբողջ էկրանով"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
 #, fuzzy
 msgid "Navigation|_Bottom"
-msgstr "Նավարկություն|_Տակամաս կամ ստորին մաս"
+msgstr "Նավարկություն|_Ստորին մաս"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
@@ -2232,11 +2191,11 @@ msgstr "Նավարկություն|_Վերև"
 #: gtk/gtkstock.c:351
 #, fuzzy
 msgid "_Harddisk"
-msgstr "_Կարծր կամ կոշտ սկավառակ"
+msgstr "_Կոշտ սկավառակ"
 
 #: gtk/gtkstock.c:352
 msgid "_Help"
-msgstr "_Օգնություն"
+msgstr "_Ձեռնարկ"
 
 #: gtk/gtkstock.c:353
 msgid "_Home"
@@ -2293,45 +2252,45 @@ msgstr "Հավասարեցում|_Աջ"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Միջնորդներ|_Առաջ"
+msgstr "Մեդիա|_Առաջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Միջնորդներ|_Հաջորդը"
+msgstr "Մեդիա|_Հաջորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Միջնորդներ|Ըն_դմիջում"
+msgstr "Մեդիա|Սպ_ասել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 #, fuzzy
 msgid "Media|_Play"
-msgstr "Միջնորդներ|_Նվագել կամ Խաղալ"
+msgstr "Մեդիա|_Նվագել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Միջնորդներ|_Նա_խորդը"
+msgstr "Միջնորդներ|Նա_խորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
-msgstr "Միջնորդներ|_Ձայնագրել կամ Գրառել"
+msgstr "Միջնորդներ|_Ձայնագրել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Միջնորդներ|Վե_րափաթաթում"
+msgstr "Միջնորդներ|Հե_տադարձ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
-msgstr "Միջնորդներ|_Դադարել կամ Դադարեցնել կամ Կանգ առնել"
+msgstr "Մեդիա|_Կանգ"
 
 #: gtk/gtkstock.c:385
 msgid "_Network"
@@ -2348,7 +2307,7 @@ msgstr "_Ոչ"
 #: gtk/gtkstock.c:388
 #, fuzzy
 msgid "_OK"
-msgstr "_Այո կամ Լավ"
+msgstr "_Այո"
 
 #: gtk/gtkstock.c:389
 msgid "_Open"
@@ -2361,7 +2320,7 @@ msgstr "_Փակցնել"
 
 #: gtk/gtkstock.c:391
 msgid "_Preferences"
-msgstr "_Նախընտրություններ"
+msgstr "_Նախընտրանքներ"
 
 #: gtk/gtkstock.c:392
 msgid "_Print"
@@ -2374,21 +2333,21 @@ msgstr ""
 #: gtk/gtkstock.c:394
 #, fuzzy
 msgid "_Properties"
-msgstr "_Հատկություններ կամ Հատկանիշներ"
+msgstr "_Հատկություններ"
 
 #: gtk/gtkstock.c:395
 msgid "_Quit"
-msgstr "_Դադարեցնել"
+msgstr "_Ելք"
 
 #: gtk/gtkstock.c:396
 #, fuzzy
 msgid "_Redo"
-msgstr "_Կրկին անել կամ նորից"
+msgstr "_Առաջ"
 
 #: gtk/gtkstock.c:397
 #, fuzzy
 msgid "_Refresh"
-msgstr "_Նորացնել կամ թարմացնել"
+msgstr "_Թարմացնել"
 
 #: gtk/gtkstock.c:399
 msgid "_Revert"
@@ -2396,11 +2355,11 @@ msgstr "_Վերադառնալ նախկին վիճակին"
 
 #: gtk/gtkstock.c:400
 msgid "_Save"
-msgstr "_Պահպանել"
+msgstr "_Պահել"
 
 #: gtk/gtkstock.c:401
 msgid "Save _As"
-msgstr "Պահպանել _Որպես"
+msgstr "Պահել _Որպես"
 
 #: gtk/gtkstock.c:402
 msgid "_Color"
@@ -2420,12 +2379,12 @@ msgstr "_Իջեցում"
 
 #: gtk/gtkstock.c:406
 msgid "_Spell Check"
-msgstr "_Ուղղագրության կամ Տառասխալների Ստուգում"
+msgstr "_Ուղղագրության Ստուգում"
 
 #: gtk/gtkstock.c:407
 #, fuzzy
 msgid "_Stop"
-msgstr "_Կանգ առնել կամ Դադարեցնել"
+msgstr "_Կանգ"
 
 #: gtk/gtkstock.c:408
 msgid "_Strikethrough"
@@ -2441,7 +2400,7 @@ msgstr "_Ընդգծել"
 
 #: gtk/gtkstock.c:411
 msgid "_Undo"
-msgstr "_Արածը հետ բերել կամ գործողությունը հետ կատարել"
+msgstr "_Հետ"
 
 #: gtk/gtkstock.c:412
 msgid "_Yes"
@@ -2453,30 +2412,30 @@ msgstr "_Նորմալ Չափս"
 
 #: gtk/gtkstock.c:414
 msgid "Best _Fit"
-msgstr "Լավագույն _Հարմարը կամ Հարմարություն"
+msgstr "Լավագույն Դարսվածք"
 
 #: gtk/gtkstock.c:415
 msgid "Zoom _In"
-msgstr ""
+msgstr "Մեծացնել"
 
 #: gtk/gtkstock.c:416
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Փոքրացնել"
 
 #: gtk/gtktextutil.c:53
 #, fuzzy
 msgid "LRM _Left-to-right mark"
-msgstr "LRM _Ձախից աջ նշան կամ նիշ"
+msgstr ""
 
 #: gtk/gtktextutil.c:54
 #, fuzzy
 msgid "RLM _Right-to-left mark"
-msgstr "RLM _Աջից ձախ նշան կամ նիշ"
+msgstr ""
 
 #: gtk/gtktextutil.c:55
 #, fuzzy
 msgid "LRE Left-to-right _embedding"
-msgstr "LRE Ձախից աջ_դարսում՞՞՞՞"
+msgstr ""
 
 #: gtk/gtktextutil.c:56
 msgid "RLE Right-to-left e_mbedding"
@@ -2497,17 +2456,17 @@ msgstr ""
 #: gtk/gtktextutil.c:60
 #, fuzzy
 msgid "ZWS _Zero width space"
-msgstr "ԶԼՏ _Զրոյական լայնքային տարածություն"
+msgstr "ZWS _Զրոյական լայնքային տարածություն"
 
 #: gtk/gtktextutil.c:61
 #, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ԶԼՀ Զրոյական լայնքային _հյուս"
+msgstr "ZWJ Զրոյական լայնքային _հյուս"
 
 #: gtk/gtktextutil.c:62
 #, fuzzy
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ԶԼԱՀ Զրոյական լայնքային _ապահյուս"
+msgstr "ZWNJ Զրոյական լայնքային _ապահյուս"
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -2554,7 +2513,7 @@ msgstr "Ենթակետ"
 #: modules/input/imcyrillic-translit.c:217
 #, fuzzy
 msgid "Cyrillic (Transliterated)"
-msgstr "Կիրիլիցա (Տառափոխված կամ Տառափոխարինված)"
+msgstr "Կիրիլիցա (Տառափոխված"
 
 #. ID
 #: modules/input/iminuktitut.c:127
@@ -2571,7 +2530,7 @@ msgstr "IPA"
 #: modules/input/imthai-broken.c:178
 #, fuzzy
 msgid "Thai (Broken)"
-msgstr "Թայլանդերեն (Կոտրված կամ Կտրտված)"
+msgstr "Թայլանդերեն ()"
 
 #. ID
 #: modules/input/imti-er.c:453
