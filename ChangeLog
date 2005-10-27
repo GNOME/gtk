@@ -1,4 +1,9 @@
-2005-10-26  Michael Natterer  <mitch@imendio.com>
+2005-10-27  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkthemes.c (gtk_theme_engine_load): fix typo
+	(G_MODUE_BIND_LAZY -> G_MODULE_BIND_LAZY).
+
+2005-10-27  Michael Natterer  <mitch@imendio.com>
 
 	Merged from HEAD:
 
