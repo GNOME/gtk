@@ -1,3 +1,11 @@
+2005-10-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/clipboard.c (paste_received): Only set the
+	text if it is not NULL.  (#319930, Thomas Klausner)
+
+	* gtk/gtkselection.c (gtk_selection_data_get_pixbuf): Close the
+	loader before trying to get the pixbuf.  (#319930, Thomas Klausner)
+
 2005-10-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_system_module_load): 

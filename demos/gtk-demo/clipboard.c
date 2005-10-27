@@ -41,7 +41,8 @@ paste_received (GtkClipboard *clipboard,
   entry = GTK_WIDGET (user_data);
   
   /* Set the entry text */
-  gtk_entry_set_text (GTK_ENTRY (entry), text);
+  if(text)
+    gtk_entry_set_text (GTK_ENTRY (entry), text);
 }
 
 void
