@@ -1,5 +1,9 @@
 2005-10-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Be more 
+	careful about initializing cell_area.  (#319382, Tommi
+	Komulainen)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Don't eat
 	Ctrl-PageUp/PageDown.  (#318670, Christian Neumair)
 
