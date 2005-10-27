@@ -3,19 +3,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # Lilit Azizbekyan <l@freenet.am>, 2005.
 # Lilit Sargsyan <magicliliac@yahoo.co.uk>, 2005.
-#
+# Norayr Chilingaryan <norik@freenet.am>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-24 13:34-0400\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
+"Language-Team:  <norik@freenet.am>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Content-Transfer-Encoding: 16bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: KBabel 1.9.1\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:856
@@ -49,7 +49,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:462
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Անհնար է բեռնել պատկեր բեռնող մոդուլը՝ %s: %s"
+msgstr "Չի հաջողվում բեռնել պատկեր բեռնող մոդուլը՝ %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:477
 #, c-format
@@ -114,7 +114,7 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"Պատկերը գրելուց չհաջողվեց փակել '%s' , հնարավոր է տվյալներն ամբողջությամբ "
+"Պատկերը գրելուց չհաջողվեց փակել '%s' , հնարավոր է տվյալները"
 "չեն պահպանվել՝ %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1970 gdk-pixbuf/gdk-pixbuf-io.c:2020
@@ -345,7 +345,7 @@ msgstr "Չապահովվող JPEG գունային երանգ (%s)"
 #: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
 #: gdk-pixbuf/io-jpeg.c:955
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Անհնարէ հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
+msgstr "Չի հաջողվել հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
 
 #: gdk-pixbuf/io-jpeg.c:897
 #, c-format
@@ -527,7 +527,7 @@ msgstr "Անհնար է օգտագործել 255–ից մեծ գունային 
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
-msgstr "Հում PNM պատկերի տեսակը սխալ է"
+msgstr "Անմշակ PNM պատկերի տեսակը սխալ է"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
@@ -544,12 +544,12 @@ msgstr "Ֆայլի վաղահաս վերջ"
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
-"Չմշակված PNM ֆորմատները պահանջում են ուղիղ մեկ միավոր ազատ տարածություն "
+"Անմշակ PNM ֆորմատները պահանջում են ուղիղ մեկ միավոր ազատ տարածություն "
 "նմուշային տվյալներից առաջ"
 
 #: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "Անհնար է հատկացնել հիշողություն PNM պատկերը բեռնելու համար"
+msgstr "Չի հաջողվում հատկացնել հիշողություն PNM պատկերը բեռնելու համար"
 
 #: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
@@ -589,32 +589,32 @@ msgstr "Sun–ի պատկերացանցային ֆորմատ"
 
 #: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Անհնար է հիշողություն հատկացնել IOBuffer կառուցվածքի (struct) համար"
+msgstr "Չի հաջողվում հիշողություն հատկացնել IOBuffer կառուցվածքի (struct) համար"
 
 #: gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Անհնար է հիշողություն հատկացնել IOBuffer տվյալներին"
+msgstr "Չի հաջողվում հիշողություն հատկացնել IOBuffer տվյալներին"
 
 #: gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
-msgstr "Անհնար է վերաբաշխել IOBuffer տվյալները"
+msgstr "Չի հաջողվում վերաբաշխել IOBuffer տվյալները"
 
 #: gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Անհնար է վերաբաշխել IOBuffer ժամանակավոր տվյալները"
+msgstr "Չի հաջողվում վերաբաշխել IOBuffer ժամանակավոր տվյալները"
 
 #: gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
-msgstr "Անհնար է հատկացնել նոր pixbuf գրադարան"
+msgstr "Չի հաջողվում հատկացնել նոր pixbuf գրադարան"
 
 #: gdk-pixbuf/io-tga.c:689
 #, fuzzy
 msgid "Cannot allocate colormap structure"
-msgstr "Անհնար է կիրառել գունային քարտեզի կառուցվածք"
+msgstr "Չի հաջողվում հատկացնել գունային քարտեզի կառուցվածք"
 
 #: gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
-msgstr "Անհնար է հատկացնել գունային քարտեզի միավորները"
+msgstr "Չի հաջողվում հատկացնել գունային քարտեզի միավորները"
 
 #: gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
@@ -622,7 +622,7 @@ msgstr "Գունային քարտեզի միավորների անսպասելի 
 
 #: gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
-msgstr "Անհնարին է հատկացնել TGA հեդերի հիշողություն"
+msgstr "Չի հաջողվում հատկացնել TGA հեդերի հիշողություն"
 
 #: gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
@@ -635,7 +635,7 @@ msgstr "Պատկերի TGA տեսակը չի ապահովվում"
 
 #: gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
-msgstr "Անհնար է հիշողություն հատկացնել TGA կոնտեքստի կառուցվածքին"
+msgstr "Չի հաջողվում հիշողություն հատկացնել TGA կոնտեքստի կառուցվածքին"
 
 #: gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
@@ -749,11 +749,11 @@ msgstr "XPM ֆայլում գույների քանակը սխալ է"
 
 #: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "Անհնար է հիշողություն հատկացնել XPM պատկերը բեռնելու համար"
+msgstr "Չի հաջողվում հիշողություն հատկացնել XPM պատկերը բեռնելու համար"
 
 #: gdk-pixbuf/io-xpm.c:542
 msgid "Cannot read XPM colormap"
-msgstr "Անհնար է կարդալ XPM գունային քարտեզը"
+msgstr "Չի հաջողվում կարդալ XPM գունային քարտեզը"
 
 #: gdk-pixbuf/io-xpm.c:771
 msgid "Failed to write to temporary file when loading XPM image"
@@ -1167,7 +1167,7 @@ msgid ""
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 "Կտացրեք այս գունակազմի վրա այն ընթացիկ գույնը դարձնելու համար։"
-"Այս միավորը փոխելու համար, քաշեք գունանմուշը այստեղ կամ աջ կտոց արեք և "
+"Այս միավորը փոխելու համար, քաշեք գունանմուշը այստեղ կամ աջ կտտոց արեք և "
 "ընտրեք \"Պահպանել գույնն այստեղ։\""
 
 #: gtk/gtkcolorsel.c:1953
@@ -1183,7 +1183,7 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Քլիք արեք ակնակաթիլը, այնուհետև քլիք արեք Ձեր էկրանի ցանկացած մասում գտնվող "
+"Կտացրեք ակնակաթիլը, այնուհետև կտացրեք Ձեր էկրանի ցանկացած մասում գտնվող "
 "որևէ մի գույնի վրա, որպեսզի ընտրեք այդ գույնը։"
 
 #: gtk/gtkcolorsel.c:1987
@@ -1321,7 +1321,7 @@ msgstr "Չհաջողվեց հանել էջանշանը"
 
 #: gtk/gtkfilechooserdefault.c:1033
 msgid "The folder could not be created"
-msgstr "Չհաջողվեց ստեղծել ֆոլդեր"
+msgstr "Չհաջողվեց ստեղծել պանակ"
 
 #: gtk/gtkfilechooserdefault.c:1046
 msgid ""
@@ -1335,7 +1335,7 @@ msgstr "Ֆայլի սխալ անուն"
 
 #: gtk/gtkfilechooserdefault.c:1069
 msgid "The folder contents could not be displayed"
-msgstr "Հնարավոր չէ ցուցադրել ֆոլդերի պարունակությունը"
+msgstr "Հնարավոր չէ ցուցադրել պանակի պարունակությունը"
 
 #: gtk/gtkfilechooserdefault.c:1289
 #, c-format
@@ -1345,15 +1345,15 @@ msgstr "Չհաջողվեց ինֆորմացիա ստանալ '%s': %s–ի մա�
 #: gtk/gtkfilechooserdefault.c:2353
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Ավելացնել '%s' ֆոլդերը էջանշաններին"
+msgstr "Ավելացնել '%s' պանակը էջանշաններին"
 
 #: gtk/gtkfilechooserdefault.c:2394
 msgid "Add the current folder to the bookmarks"
-msgstr "Ավելացնել ընթացիկ ֆոլդերը էջանշաններին"
+msgstr "Ավելացնել ընթացիկ պանակը էջանշաններին"
 
 #: gtk/gtkfilechooserdefault.c:2396
 msgid "Add the selected folders to the bookmarks"
-msgstr "Ավելացնել ընտրված ֆոլդերները էջանշաններին"
+msgstr "Ավելացնել ընտրված պանակը էջանշաններին"
 
 #: gtk/gtkfilechooserdefault.c:2436
 #, c-format
@@ -1376,11 +1376,11 @@ msgstr "Վերանվանել..."
 
 #: gtk/gtkfilechooserdefault.c:3214
 msgid "Shortcuts"
-msgstr "Կարճ ուղիներ"
+msgstr "Պիտակներ"
 
 #: gtk/gtkfilechooserdefault.c:3268
 msgid "Folder"
-msgstr "Ֆոլդեր"
+msgstr "Պանակ"
 
 #: gtk/gtkfilechooserdefault.c:3324 gtk/gtkstock.c:317
 msgid "_Add"
@@ -1388,7 +1388,7 @@ msgstr "_Ավելացնել"
 
 #: gtk/gtkfilechooserdefault.c:3331
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Ավելացնել ընտրված ֆոլդերը Էջանշաններին"
+msgstr "Ավելացնել ընտրված պանակը Էջանշաններին"
 
 #: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:398
 msgid "_Remove"
@@ -1458,21 +1458,21 @@ msgstr "_Browse for other folders"
 
 #: gtk/gtkfilechooserdefault.c:4284
 msgid "Save in _folder:"
-msgstr "Պահպանել _ֆոլդերում."
+msgstr "Պահպանել _պանակում."
 
 #: gtk/gtkfilechooserdefault.c:4286
 msgid "Create in _folder:"
-msgstr "Ստեղծել _ֆոլդերում."
+msgstr "Ստեղծել _պանակում."
 
 #: gtk/gtkfilechooserdefault.c:5318
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
-msgstr "Անհնարին է փոխել ֆոլդերը, քանի որ այն տեղական չէ"
+msgstr "Չի հաջողվում փոխել պանակը, քանի որ այն տեղական չէ"
 
 #: gtk/gtkfilechooserdefault.c:5880
 #, c-format
 msgid "Shortcut %s does not exist"
-msgstr "%s կարճ ուղին գոյություն չունի"
+msgstr "%s պիտակը գոյություն չունի"
 
 #: gtk/gtkfilechooserdefault.c:6135
 #, c-format
@@ -1536,11 +1536,11 @@ msgstr "Երեկ"
 
 #: gtk/gtkfilechooserdefault.c:7115
 msgid "Cannot change folder"
-msgstr "Անհնարին է փոխել ֆոլդերը"
+msgstr "Չի հաջողվում փոխել պանակը"
 
 #: gtk/gtkfilechooserdefault.c:7116
 msgid "The folder you specified is an invalid path."
-msgstr "Ձեր նշած ֆոլդերը սխալ ուղի ունի։"
+msgstr "Նշած պանակը սխալ ուղի է։"
 
 #: gtk/gtkfilechooserdefault.c:7155
 #, c-format
@@ -1565,11 +1565,11 @@ msgstr "_Տեղադրություն."
 
 #: gtk/gtkfilesel.c:727
 msgid "Folders"
-msgstr "Ֆոլդերներ"
+msgstr "Պանակներ"
 
 #: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
-msgstr "Ֆոլ_դերներ"
+msgstr "Պան_ակներ"
 
 #: gtk/gtkfilesel.c:767
 msgid "_Files"
@@ -1578,7 +1578,7 @@ msgstr "_Ֆայլեր"
 #: gtk/gtkfilesel.c:855 gtk/gtkfilesel.c:2242
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Ֆոլդերն անընթեռնելի է: %s"
+msgstr "Պանակն անընթեռնելի է: %s"
 
 #: gtk/gtkfilesel.c:984
 #, fuzzy, c-format
@@ -1608,7 +1608,7 @@ msgstr "_Վերանվանել Ֆայլը"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"\"%s\" ֆոլդերի անվանումը պարունակում է նշաններ, որոնք չի թույլատրվում "
+"\"%s\" պանակի անվանումը պարունակում է նշաններ, որոնք չի թույլատրվում "
 "օգտագործել ֆայլերի անվանման մեջ"
 
 #: gtk/gtkfilesel.c:1440
@@ -1631,15 +1631,15 @@ msgstr ""
 msgid "Error creating folder \"%s\": %s\n"
 msgstr ""
 "\"%s\": %s\n"
-" ֆոլդերը ստեղծելու սխալ"
+" պանակը ստեղծելու սխալ"
 
 #: gtk/gtkfilesel.c:1483
 msgid "New Folder"
-msgstr "Նոր Ֆոլդեր"
+msgstr "Նոր Պանակ"
 
 #: gtk/gtkfilesel.c:1498
 msgid "_Folder name:"
-msgstr "_Ֆոլդերի անվանում."
+msgstr "_Պանակի վերնագիր՝"
 
 #: gtk/gtkfilesel.c:1522
 msgid "C_reate"
@@ -2040,12 +2040,12 @@ msgstr "Ռադիո գործիքի կոճակ, որի խմբին պատկանու
 #: gtk/gtkrc.c:2400
 #, fuzzy, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Անհնարին է ճարել ընդգրկել ֆայլը: \"%s\""
+msgstr "Չի հաջողվում գտնել include ֆայլը՝ \"%s\""
 
 #: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Անհնարին է տեղակայել պատկերային ֆայլը pixmap_path: \"%s\"–ի մեջ"
+msgstr "Չի հաջողվում գտնել պատկերային ֆայլը pixmap_path–ի մեջ՝ \"%s\""
 
 #: gtk/gtkrc.c:3480
 #, fuzzy, c-format
@@ -2461,17 +2461,17 @@ msgstr "ZWS _Զրոյական լայնքային տարածություն"
 #: gtk/gtktextutil.c:61
 #, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWJ Զրոյական լայնքային _հյուս"
+msgstr ""
 
 #: gtk/gtktextutil.c:62
 #, fuzzy
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ Զրոյական լայնքային _ապահյուս"
+msgstr ""
 
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Անհնարին է տեղակայել թեմատիկ գործիքը մոդուլ_ուղու մեջ: \"%s\","
+msgstr "Չի հաջողվում գտնել թեմաների շարժիչը module_path մեջ՝ \"%s\","
 
 #: gtk/gtktipsquery.c:186
 #, fuzzy
@@ -2502,7 +2502,7 @@ msgstr "Դատարկ"
 #: modules/input/imam-et.c:454
 #, fuzzy
 msgid "Amharic (EZ+)"
-msgstr "Amharic (EZ+)"
+msgstr ""
 
 #. ID
 #: modules/input/imcedilla.c:91
@@ -2513,7 +2513,7 @@ msgstr "Ենթակետ"
 #: modules/input/imcyrillic-translit.c:217
 #, fuzzy
 msgid "Cyrillic (Transliterated)"
-msgstr "Կիրիլիցա (Տառափոխված"
+msgstr "Կիրիլիցա (Տառափոխված)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
@@ -2530,7 +2530,7 @@ msgstr "IPA"
 #: modules/input/imthai-broken.c:178
 #, fuzzy
 msgid "Thai (Broken)"
-msgstr "Թայլանդերեն ()"
+msgstr "Թայլանդերեն (Broken)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -2540,7 +2540,7 @@ msgstr ""
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr ""
 
 #. ID
 #: modules/input/imviqr.c:244
@@ -2555,7 +2555,7 @@ msgstr ""
 #: tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Չհաջողվեց '%s': %s ֆայլի համար ինֆորմացիա ստանալ"
+msgstr "Չհաջողվեց ստանալ '%s' ֆայլի մասին տեղեկատվություն՝ %s"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"
