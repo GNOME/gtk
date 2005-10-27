@@ -1074,7 +1074,7 @@ gtk_file_system_module_load (GTypeModule *module)
 {
   GtkFileSystemModule *fs_module = GTK_FILE_SYSTEM_MODULE (module);
   
-  fs_module->library = g_module_open (fs_module->path, 0);
+  fs_module->library = g_module_open (fs_module->path, G_MODULE_BIND_LAZY);
   if (!fs_module->library)
     {
       g_warning (g_module_error());

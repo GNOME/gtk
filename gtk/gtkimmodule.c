@@ -95,7 +95,7 @@ gtk_im_module_load (GTypeModule *module)
 {
   GtkIMModule *im_module = GTK_IM_MODULE (module);
   
-  im_module->library = g_module_open (im_module->path, 0);
+  im_module->library = g_module_open (im_module->path, G_MODULE_BIND_LAZY);
   if (!im_module->library)
     {
       g_warning (g_module_error());
