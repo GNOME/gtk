@@ -1,5 +1,8 @@
 2005-10-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Don't eat
+	Ctrl-PageUp/PageDown.  (#318670, Christian Neumair)
+
 	* demos/gtk-demo/clipboard.c (paste_received): Only set the
 	text if it is not NULL.  (#319930, Thomas Klausner)
 
@@ -29,7 +32,7 @@
 	glib-mkenums.  (#318582, Damien Carbery)
 
 	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Clarify
-	docs.  (#317682, Christian - Manny Calavera - Neumair)
+	docs.  (#317682, Christian Neumair)
 
 	* gdk/x11/gdkdnd-x11.c: Remove an extra const which doesn't
 	seem to affect the placement of the data in the readonly 

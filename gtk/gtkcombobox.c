@@ -3492,6 +3492,9 @@ gtk_combo_box_key_press (GtkWidget   *widget,
       return TRUE;
     }
 
+  if (state != 0)
+    return FALSE;
+
   switch (event->keyval) 
     {
     case GDK_Down:
