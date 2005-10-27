@@ -1415,16 +1415,16 @@ gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data)
     {
       loader = gdk_pixbuf_loader_new ();
       
-      if (gdk_pixbuf_loader_write (loader, 
-				   selection_data->data,
-				   selection_data->length,
-				   NULL))
-	result = gdk_pixbuf_loader_get_pixbuf (loader);
+      gdk_pixbuf_loader_write (loader, 
+			       selection_data->data,
+			       selection_data->length,
+			       NULL);
+      gdk_pixbuf_loader_close (loader, NULL);
+      result = gdk_pixbuf_loader_get_pixbuf (loader);
       
       if (result)
 	g_object_ref (result);
       
-      gdk_pixbuf_loader_close (loader, NULL);
       g_object_unref (loader);
     }
 
