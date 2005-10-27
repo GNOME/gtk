@@ -264,16 +264,13 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      g_value_set_object (value,
-                          cellpixbuf->pixbuf ? G_OBJECT (cellpixbuf->pixbuf) : NULL);
+      g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
-      g_value_set_object (value,
-                          cellpixbuf->pixbuf_expander_open ? G_OBJECT (cellpixbuf->pixbuf_expander_open) : NULL);
+      g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf_expander_open));
       break;
     case PROP_PIXBUF_EXPANDER_CLOSED:
-      g_value_set_object (value,
-                          cellpixbuf->pixbuf_expander_closed ? G_OBJECT (cellpixbuf->pixbuf_expander_closed) : NULL);
+      g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf_expander_closed));
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, priv->stock_id);
@@ -303,7 +300,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 				       const GValue *value,
 				       GParamSpec   *pspec)
 {
-  GdkPixbuf *pixbuf;
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
   GtkCellRendererPixbufPrivate *priv;
 
@@ -312,28 +308,34 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      pixbuf = (GdkPixbuf*) g_value_get_object (value);
-      if (pixbuf)
-        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf)
 	g_object_unref (cellpixbuf->pixbuf);
-      cellpixbuf->pixbuf = pixbuf;
+      cellpixbuf->pixbuf = (GdkPixbuf*) g_value_dup_object (value);
+      if (cellpixbuf->pixbuf)
+        {
+          if (priv->stock_id)
+            {
+              g_free (priv->stock_id);
+              priv->stock_id = NULL;
+              g_object_notify (object, "stock-id");
+            }
+          if (priv->icon_name)
+            {
+              g_free (priv->icon_name);
+              priv->icon_name = NULL;
+              g_object_notify (object, "icon-name");
+            }
+        }
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
-      pixbuf = (GdkPixbuf*) g_value_get_object (value);
-      if (pixbuf)
-        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf_expander_open)
 	g_object_unref (cellpixbuf->pixbuf_expander_open);
-      cellpixbuf->pixbuf_expander_open = pixbuf;
+      cellpixbuf->pixbuf_expander_open = (GdkPixbuf*) g_value_dup_object (value);
       break;
     case PROP_PIXBUF_EXPANDER_CLOSED:
-      pixbuf = (GdkPixbuf*) g_value_get_object (value);
-      if (pixbuf)
-        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf_expander_closed)
 	g_object_unref (cellpixbuf->pixbuf_expander_closed);
-      cellpixbuf->pixbuf_expander_closed = pixbuf;
+      cellpixbuf->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
       break;
     case PROP_STOCK_ID:
       if (priv->stock_id)
@@ -342,12 +344,26 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
             {
               g_object_unref (cellpixbuf->pixbuf);
               cellpixbuf->pixbuf = NULL;
+              g_object_notify (object, "pixbuf");
             }
           g_free (priv->stock_id);
-	  g_free (priv->icon_name);
-	  priv->icon_name = NULL;
         }
-      priv->stock_id = g_strdup (g_value_get_string (value));
+      priv->stock_id = g_value_dup_string (value);
+      if (priv->stock_id)
+        {
+          if (cellpixbuf->pixbuf)
+            {
+              g_object_unref (cellpixbuf->pixbuf);
+              cellpixbuf->pixbuf = NULL;
+              g_object_notify (object, "pixbuf");
+            }
+          if (priv->icon_name)
+            {
+              g_free (priv->icon_name);
+              priv->icon_name = NULL;
+              g_object_notify (object, "icon-name");
+            }
+        }
       break;
     case PROP_STOCK_SIZE:
       priv->stock_size = g_value_get_uint (value);
@@ -355,7 +371,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
     case PROP_STOCK_DETAIL:
       if (priv->stock_detail)
         g_free (priv->stock_detail);
-      priv->stock_detail = g_strdup (g_value_get_string (value));
+      priv->stock_detail = g_value_dup_string (value);
       break;
     case PROP_ICON_NAME:
       if (priv->icon_name)
@@ -364,11 +380,26 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 	    {
 	      g_object_unref (cellpixbuf->pixbuf);
 	      cellpixbuf->pixbuf = NULL;
+              g_object_notify (object, "pixbuf");
 	    }
-	  g_free (priv->stock_id);
 	  g_free (priv->icon_name);
 	}
-      priv->icon_name = g_strdup (g_value_get_string (value));
+      priv->icon_name = g_value_dup_string (value);
+      if (priv->icon_name)
+        {
+	  if (cellpixbuf->pixbuf)
+	    {
+              g_object_unref (cellpixbuf->pixbuf);
+              cellpixbuf->pixbuf = NULL;
+              g_object_notify (object, "pixbuf");
+	    }
+          if (priv->stock_id)
+            {
+              g_free (priv->stock_id);
+              priv->stock_id = NULL;
+              g_object_notify (object, "stock-id");
+            }
+        }
       break;
     case PROP_FOLLOW_STATE:
       priv->follow_state = g_value_get_boolean (value);
@@ -376,12 +407,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
-    }
-
-  if (cellpixbuf->pixbuf && priv->stock_id)
-    {
-      g_object_unref (cellpixbuf->pixbuf);
-      cellpixbuf->pixbuf = NULL;
     }
 }
 
@@ -419,6 +444,8 @@ gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
                                                priv->stock_id,
                                                priv->stock_size,
                                                priv->stock_detail);
+
+  g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
 }
 
 static void 
@@ -458,6 +485,8 @@ gtk_cell_renderer_pixbuf_create_named_icon_pixbuf (GtkCellRendererPixbuf *cellpi
       g_warning ("could not load image: %s\n", error->message);
       g_error_free (error);
     }
+
+  g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
 }
 
 static GdkPixbuf *

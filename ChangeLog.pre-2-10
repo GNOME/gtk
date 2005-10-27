@@ -1,3 +1,22 @@
+2005-10-26  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	Fix bug #319974:
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
+	make sure that setting any of pixbuf/stock-id/icon-name resets the
+	others because they are mutually exclusive, and that unsetting any
+	of them only resets the pixbuf and nothing else. Also added
+	some missing g_object_notify().
+
+	(gtk_cell_renderer_pixbuf_get_property): simplified calls to
+	g_value_set_object().
+
+	(gtk_cell_renderer_pixbuf_create_stock_pixbuf)
+	(gtk_cell_renderer_pixbuf_create_named_icon_pixbuf): added
+	g_object_notify ("pixbuf").
+
 2005-10-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Be more 
