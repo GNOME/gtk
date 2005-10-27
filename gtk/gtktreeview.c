@@ -2265,12 +2265,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
 	   list; list = (rtl ? list->prev : list->next))
 	{
-	  column = list->data;
+	  GtkTreeViewColumn *candidate = list->data;
 
-	  if (!column->visible)
+	  if (!candidate->visible)
 	    continue;
 
-	  background_area.width = column->width;
+	  background_area.width = candidate->width;
 	  if ((background_area.x > (gint) event->x) ||
 	      (background_area.x + background_area.width <= (gint) event->x))
 	    {
@@ -2279,6 +2279,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    }
 
 	  /* we found the focus column */
+	  column = candidate;
 	  cell_area = background_area;
 	  cell_area.width -= horizontal_separator;
 	  cell_area.height -= vertical_separator;
