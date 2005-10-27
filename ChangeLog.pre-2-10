@@ -1,5 +1,8 @@
 2005-10-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Don't eat
+	Ctrl-PageUp/PageDown.  (#318670, Christian Neumair)
+
 	* demos/gtk-demo/clipboard.c (paste_received): Only set the
 	text if it is not NULL.  (#319930, Thomas Klausner)
 
