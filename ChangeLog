@@ -1,5 +1,8 @@
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Add the little 
+	stars.  (#319985, Bastien Nocera)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_entry_flush_timeout): Return
 	FALSE, so we don't flush repeatedly.  (#319151, Alexander Larsson)
 
