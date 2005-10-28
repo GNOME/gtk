@@ -1,5 +1,12 @@
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): Fix the anchor of the default
+	drag cursors.  (#319200, Federico Mena Quintero)
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_key_press_event): Handle
+	Shift-G to go to the previous match, like firefox.  (#320061, Christian
+	Neumair)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Add the little 
 	stars.  (#319985, Bastien Nocera)
 
