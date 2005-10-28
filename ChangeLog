@@ -1,5 +1,8 @@
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Add the popup
+	window to the toplevels window group.  (#319912, Christian Persch)
+
 	* gtk/gtkdnd.c (gtk_drag_get_cursor): Fix the anchor of the default
 	drag cursors.  (#319200, Federico Mena Quintero)
 
