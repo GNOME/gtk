@@ -438,7 +438,7 @@ static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
-  GtkWidget *vbox, *hbox, *button;
+  GtkWidget *vbox, *hbox, *button, *image;
 
   /* Data */
   priv = GTK_ABOUT_DIALOG_GET_PRIVATE (about);
@@ -506,7 +506,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CLOSE);
 
   /* Add the credits button */
-  button = gtk_button_new_from_stock (_("C_redits"));
+  button = gtk_button_new_from_mnemonic (_("C_redits"));
+  image = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
   gtk_widget_set_no_show_all (button, TRUE);
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
