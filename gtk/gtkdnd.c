@@ -610,7 +610,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
       if (!cursor_pixbuf)
 	{
 	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
-	  icon_anchor = GTK_ANCHOR_NORTH;
+	  icon_anchor = GTK_ANCHOR_NORTH_WEST;
 	  icon_x = icon_y = -2;
 	}
       else
