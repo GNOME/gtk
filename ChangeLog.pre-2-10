@@ -1,5 +1,9 @@
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_key_press_event): Handle
+	Shift-G to go to the previous match, like firefox.  (#320061, Christian 
+	Neumair)
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_build_level): Fix a
 	C99ism.  (#320000, Kazuki Iwamoto)
 

@@ -12700,6 +12700,13 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
+  if (((event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+      && (event->keyval == GDK_g || event->keyval == GDK_G))
+    {
+      gtk_tree_view_search_move (widget, tree_view, TRUE);
+      retval = TRUE;
+    }
+
   /* select next matching iter */
   if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
     {
@@ -12707,7 +12714,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
-  if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK
+  if (((event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) == GDK_CONTROL_MASK)
       && (event->keyval == GDK_g || event->keyval == GDK_G))
     {
       gtk_tree_view_search_move (widget, tree_view, FALSE);
