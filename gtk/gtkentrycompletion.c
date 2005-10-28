@@ -1417,6 +1417,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
   GtkTreeViewColumn *column;
   GList *renderers;
+  GtkWidget *toplevel;
 
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
@@ -1438,6 +1439,11 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   _gtk_entry_completion_resize_popup (completion);
 
+  toplevel = gtk_widget_get_toplevel (completion->priv->entry);
+  if (GTK_IS_WINDOW (toplevel))
+    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+				 GTK_WINDOW (completion->priv->popup_window));
+  
   gtk_widget_show (completion->priv->popup_window);
     
   gtk_grab_add (completion->priv->popup_window);

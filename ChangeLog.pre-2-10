@@ -1,3 +1,8 @@
+2005-10-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Add the popup
+	window to the toplevels window group.  (#319912, Christian Persch)
+
 2005-10-28  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_deleted): fix
