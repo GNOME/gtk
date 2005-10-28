@@ -1,5 +1,8 @@
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_build_level): Fix a
+	C99ism.  (#320000, Kazuki Iwamoto)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Add the little 
 	stars.  (#319985, Bastien Nocera)
 

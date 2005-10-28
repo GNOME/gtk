@@ -613,6 +613,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
        * to make sure that we get all signals for this level.
        */
       FilterElt filter_elt;
+      GtkTreeIter f_iter;
 
       filter_elt.offset = 0;
       filter_elt.zero_ref_count = 0;
@@ -624,8 +625,6 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
         filter_elt.iter = first_node;
 
       g_array_append_val (new_level->array, filter_elt);
-
-      GtkTreeIter f_iter;
 
       f_iter.stamp = filter->priv->stamp;
       f_iter.user_data = new_level;
