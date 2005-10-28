@@ -1709,7 +1709,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
                 break;
               }
 
-          if (v_indices[level] > c_indices[level])
+          if (common_prefix && v_indices[level] > c_indices[level])
             (v_indices[level])--;
         }
     }

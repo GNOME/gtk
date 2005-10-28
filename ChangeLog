@@ -1,3 +1,8 @@
+2005-10-28  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_deleted): fix
+	stupid thinko.
+
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_get_cursor): Fix the anchor of the default
