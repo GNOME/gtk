@@ -1,3 +1,8 @@
+2005-10-28  Erdal Ronahi  <erdal.ronahi@gmail.com>
+
+	* configure.in: Added ku (Kurdish) to ALL_LINGUAS
+			Wondered why there was no ku there before??
+
 2005-10-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Add the popup
