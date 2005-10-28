@@ -9020,7 +9020,7 @@ gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 
   GDK_THREADS_LEAVE ();
 
-  return TRUE;
+  return FALSE;
 }
 
 /* Cut and paste from gtkwindow.c */
