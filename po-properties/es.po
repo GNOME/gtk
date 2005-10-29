@@ -1,160 +1,4 @@
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# translation of gtk+-properties.HEAD.po to Spanish
-# GTK+'s Spanish translation.
+# GTK+-properties Spanish translation.
 # Copyright © 1999-2002 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
@@ -164,14 +8,12 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003, 2004, 2005.
-#
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-22 23:44+0200\n"
-"PO-Revision-Date: 2005-10-22 23:40+0200\n"
+"POT-Creation-Date: 2005-10-29 15:12+0200\n"
+"PO-Revision-Date: 2005-10-29 15:16+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2330,10 +2172,9 @@ msgid "Do overwrite confirmation"
 msgstr "Hacer confirmación de sobreescritura"
 
 #: ../gtk/gtkfilechooser.c:276
-#, fuzzy
 msgid ""
-"Whether a file chooser in save modewill present an overwrite confirmation "
-"dialog  if necessary."
+"Whether a file chooser in save mode will present an overwrite confirmation "
+"dialog if necessary."
 msgstr ""
 "Indica si un selector de archivos en modo guardar presentará un diálogo de "
 "confirmación de sobreescritura si fuese necesario."
@@ -3755,11 +3596,11 @@ msgstr "Dibujar"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indica si el separador se dibuja, o sólo se deja en blanco"
 
-#: ../gtk/gtksettings.c:200
+#: ../gtk/gtksettings.c:202
 msgid "Double Click Time"
 msgstr "Tiempo del doble pulsación"
 
-#: ../gtk/gtksettings.c:201
+#: ../gtk/gtksettings.c:203
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3767,11 +3608,11 @@ msgstr ""
 "Tiempo máximo permitido entre dos pulsaciones para ser considerados como una "
 "pulsación doble (en milisegundos)"
 
-#: ../gtk/gtksettings.c:208
+#: ../gtk/gtksettings.c:210
 msgid "Double Click Distance"
 msgstr "Distancia de la pulsación doble"
 
-#: ../gtk/gtksettings.c:209
+#: ../gtk/gtksettings.c:211
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3779,27 +3620,27 @@ msgstr ""
 "Distancia máxima permitida entre dos pulsaciones para ser considerados como "
 "una pulsación doble (en píxeles)"
 
-#: ../gtk/gtksettings.c:216
+#: ../gtk/gtksettings.c:218
 msgid "Cursor Blink"
 msgstr "Parpadeo del cursor"
 
-#: ../gtk/gtksettings.c:217
+#: ../gtk/gtksettings.c:219
 msgid "Whether the cursor should blink"
 msgstr "Indica si el cursor debe parpadear"
 
-#: ../gtk/gtksettings.c:224
+#: ../gtk/gtksettings.c:226
 msgid "Cursor Blink Time"
 msgstr "Tiempo de parpadeo del cursor"
 
-#: ../gtk/gtksettings.c:225
+#: ../gtk/gtksettings.c:227
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Duración del ciclo de parpadeo del cursor, en milisegundos"
 
-#: ../gtk/gtksettings.c:232
+#: ../gtk/gtksettings.c:234
 msgid "Split Cursor"
 msgstr "Dividir cursor"
 
-#: ../gtk/gtksettings.c:233
+#: ../gtk/gtksettings.c:235
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3807,143 +3648,163 @@ msgstr ""
 "Indica si deben mostrarse dos cursores para el texto mezclado de izquierda-a-"
 "derecha y derecha-a-izquierda"
 
-#: ../gtk/gtksettings.c:240
+#: ../gtk/gtksettings.c:242
 msgid "Theme Name"
 msgstr "Nombre del tema"
 
-#: ../gtk/gtksettings.c:241
+#: ../gtk/gtksettings.c:243
 msgid "Name of theme RC file to load"
 msgstr "Nombre del archivo RC de tema que cargar"
 
-#: ../gtk/gtksettings.c:248
+#: ../gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Nombre del tema de iconos"
 
-#: ../gtk/gtksettings.c:249
+#: ../gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Nombre del tema de iconos que utilizar"
 
-#: ../gtk/gtksettings.c:257
+#: ../gtk/gtksettings.c:259
 msgid "Key Theme Name"
 msgstr "Nombre del tema de teclas"
 
-#: ../gtk/gtksettings.c:258
+#: ../gtk/gtksettings.c:260
 msgid "Name of key theme RC file to load"
 msgstr "Nombre del archivo RC de tema de teclas que cargar"
 
-#: ../gtk/gtksettings.c:266
+#: ../gtk/gtksettings.c:268
 msgid "Menu bar accelerator"
 msgstr "Acelerador de la barra de menús"
 
-#: ../gtk/gtksettings.c:267
+#: ../gtk/gtksettings.c:269
 msgid "Keybinding to activate the menu bar"
 msgstr "Combinación de teclas para activar la barra de menús"
 
-#: ../gtk/gtksettings.c:275
+#: ../gtk/gtksettings.c:277
 msgid "Drag threshold"
 msgstr "Umbral del arrastre"
 
-#: ../gtk/gtksettings.c:276
+#: ../gtk/gtksettings.c:278
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Número de píxeles que el cursor puede mover antes de iniciar el arrastre"
 
-#: ../gtk/gtksettings.c:284
+#: ../gtk/gtksettings.c:286
 msgid "Font Name"
 msgstr "Nombre de la tipografía"
 
-#: ../gtk/gtksettings.c:285
+#: ../gtk/gtksettings.c:287
 msgid "Name of default font to use"
 msgstr "Nombre de la tipografía predeterminada a utilizar"
 
-#: ../gtk/gtksettings.c:293
+#: ../gtk/gtksettings.c:295
 msgid "Icon Sizes"
 msgstr "Tamaños de los iconos"
 
-#: ../gtk/gtksettings.c:294
+#: ../gtk/gtksettings.c:296
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lista de tamaños de los iconos (gtk-menu=16,16:gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:302
+#: ../gtk/gtksettings.c:304
 msgid "GTK Modules"
 msgstr "Módulos GTK"
 
-#: ../gtk/gtksettings.c:303
+#: ../gtk/gtksettings.c:305
 msgid "List of currently active GTK modules"
 msgstr "Lista de módulos GTK activos actualmente"
 
-#: ../gtk/gtksettings.c:312
+#: ../gtk/gtksettings.c:314
 msgid "Xft Antialias"
 msgstr "Suavizado Xft"
 
-#: ../gtk/gtksettings.c:313
+#: ../gtk/gtksettings.c:315
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
 "1=predeterminado"
 
-#: ../gtk/gtksettings.c:322
+#: ../gtk/gtksettings.c:324
 msgid "Xft Hinting"
 msgstr "Hinting Xft"
 
-#: ../gtk/gtksettings.c:323
+#: ../gtk/gtksettings.c:325
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica si se debe usar el hinting de las tipografías Xft; 0=no, 1 =sí, -"
 "1=predeterminado"
 
-#: ../gtk/gtksettings.c:332
+#: ../gtk/gtksettings.c:334
 msgid "Xft Hint Style"
 msgstr "Estilo de hinting Xft"
 
-#: ../gtk/gtksettings.c:333
+#: ../gtk/gtksettings.c:335
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "Qué grado de hinting usar: ninguno, ligero, medio o completo"
 
-#: ../gtk/gtksettings.c:342
+#: ../gtk/gtksettings.c:344
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:343
+#: ../gtk/gtksettings.c:345
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Tipo de suavizado de subpíxel: ninguno, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:354
 msgid "Xft DPI"
 msgstr "PPP Xft (DPI)"
 
-#: ../gtk/gtksettings.c:353
+#: ../gtk/gtksettings.c:355
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Resolución para Xft, en 1024 * puntos/pulgada. -1 para usar el valor "
 "predeterminado."
 
-#: ../gtk/gtksettings.c:362
+#: ../gtk/gtksettings.c:364
 msgid "Cursor theme name"
 msgstr "Nombre del tema del cursor"
 
-#: ../gtk/gtksettings.c:363
+#: ../gtk/gtksettings.c:365
 msgid "Name of the cursor theme to use"
 msgstr "Nombre del tema de cursor que utilizar"
 
-#: ../gtk/gtksettings.c:371
+#: ../gtk/gtksettings.c:373
 msgid "Cursor theme size"
 msgstr "Tamaño del tema del cursor"
 
-#: ../gtk/gtksettings.c:372
+#: ../gtk/gtksettings.c:374
 msgid "Size to use for cursors"
 msgstr "Tamaño que se va a usar para los cursores"
 
-#: ../gtk/gtksettings.c:382
+#: ../gtk/gtksettings.c:384
 msgid "Alternative button order"
 msgstr "Orden de los botones alternativo"
 
-#: ../gtk/gtksettings.c:383
+#: ../gtk/gtksettings.c:385
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Indica si los botones en los diálogos deben usar un orden de botones "
 "alternativo"
+
+#: ../gtk/gtksettings.c:393
+msgid "Show the 'Input Methods' menu"
+msgstr "Mostrar el menú de métodos de entrada"
+
+#: ../gtk/gtksettings.c:394
+msgid ""
+"Whether the context menus of entries and text views should offer to change "
+"the input method"
+msgstr "Indica si los menús de contexto y las vistas de texto deberían ofrecer cambiar el método de entrada"
+
+#: ../gtk/gtksettings.c:402
+msgid "Show the 'Insert Unicode Control Character' menu"
+msgstr "Mostrar el menú «Insertar carácter de control Unicode»"
+
+#: ../gtk/gtksettings.c:403
+msgid ""
+"Whether the context menus of entries and text views should offer to insert "
+"control characters"
+msgstr "Indica si los menús de contexto de las estradas y las vistas de texto deben ofrecer insertar caracteres de control"
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
