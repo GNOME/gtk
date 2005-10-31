@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-14 12:47-0400\n"
+"POT-Creation-Date: 2005-10-31 14:26-0500\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -2110,8 +2110,8 @@ msgstr "Do overwrite confirmation"
 
 #: gtk/gtkfilechooser.c:276
 msgid ""
-"Whether a file chooser in save modewill present an overwrite confirmation "
-"dialog  if necessary."
+"Whether a file chooser in save mode will present an overwrite confirmation "
+"dialog if necessary."
 msgstr ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialogue if necessary."
@@ -3496,11 +3496,11 @@ msgstr "Draw"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Whether the separator is drawn, or just blank"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:202
 msgid "Double Click Time"
 msgstr "Double Click Time"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:203
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3508,11 +3508,11 @@ msgstr ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:210
 msgid "Double Click Distance"
 msgstr "Double Click Distance"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:211
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3520,27 +3520,27 @@ msgstr ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:218
 msgid "Cursor Blink"
 msgstr "Cursor Blink"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:219
 msgid "Whether the cursor should blink"
 msgstr "Whether the cursor should blink"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:226
 msgid "Cursor Blink Time"
 msgstr "Cursor Blink Time"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:227
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Length of the cursor blink cycle, in milleseconds"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:234
 msgid "Split Cursor"
 msgstr "Split Cursor"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:235
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3548,135 +3548,159 @@ msgstr ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:242
 msgid "Theme Name"
 msgstr "Theme Name"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:243
 msgid "Name of theme RC file to load"
 msgstr "Name of theme RC file to load"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Icon Theme Name"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Name of icon theme to use"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
 msgid "Key Theme Name"
 msgstr "Key Theme Name"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:260
 msgid "Name of key theme RC file to load"
 msgstr "Name of key theme RC file to load"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:268
 msgid "Menu bar accelerator"
 msgstr "Menu bar accelerator"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:269
 msgid "Keybinding to activate the menu bar"
 msgstr "Keybinding to activate the menu bar"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:277
 msgid "Drag threshold"
 msgstr "Drag threshold"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:278
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Number of pixels the cursor can move before dragging"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:286
 msgid "Font Name"
 msgstr "Font Name"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:287
 msgid "Name of default font to use"
 msgstr "Name of default font to use"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:295
 msgid "Icon Sizes"
 msgstr "Icon Sizes"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:296
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:304
 msgid "GTK Modules"
 msgstr "GTK Modules"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:305
 msgid "List of currently active GTK modules"
 msgstr "List of currently active GTK modules"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:314
 msgid "Xft Antialias"
 msgstr "Xft Antialias"
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:315
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:324
 msgid "Xft Hinting"
 msgstr "Xft Hinting"
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:325
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:334
 msgid "Xft Hint Style"
 msgstr "Xft Hint Style"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:335
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:344
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:345
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:354
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:355
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:364
 msgid "Cursor theme name"
 msgstr "Cursor theme name"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:365
 msgid "Name of the cursor theme to use"
 msgstr "Name of the cursor theme to use"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:373
 msgid "Cursor theme size"
 msgstr "Cursor theme size"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:374
 msgid "Size to use for cursors"
 msgstr "Size to use for cursors"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:384
 msgid "Alternative button order"
 msgstr "Alternative button order"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:385
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Whether buttons in dialogues should use the alternative button order"
+
+#: gtk/gtksettings.c:393
+msgid "Show the 'Input Methods' menu"
+msgstr "Show the 'Input Methods' menu"
+
+#: gtk/gtksettings.c:394
+msgid ""
+"Whether the context menus of entries and text views should offer to change "
+"the input method"
+msgstr ""
+"Whether the context menus of entries and text views should offer to change "
+"the input method"
+
+#: gtk/gtksettings.c:402
+msgid "Show the 'Insert Unicode Control Character' menu"
+msgstr "Show the 'Insert Unicode Control Character' menu"
+
+#: gtk/gtksettings.c:403
+msgid ""
+"Whether the context menus of entries and text views should offer to insert "
+"control characters"
+msgstr ""
+"Whether the context menus of entries and text views should offer to insert "
+"control characters"
 
 #: gtk/gtksizegroup.c:267
 msgid "Mode"
