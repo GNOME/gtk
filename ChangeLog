@@ -1,3 +1,9 @@
+Tue Nov  1 16:18:24 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkrbtree.[hc]: get rid of GAllocator usage, allocate and free 
+	nodes via the g_slice_*() API.
+	_gtk_rbtree_new(): fixed wrong node allocation via g_new().
+
 2005-11-01  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkprivate-win32.h

@@ -22,7 +22,6 @@
 #include "gtkdebug.h"
 #include "gtkalias.h"
 
-static void        _gtk_rbnode_validate_allocator (GAllocator *allocator);
 static GtkRBNode * _gtk_rbnode_new                (GtkRBTree  *tree,
 						   gint        height);
 static void        _gtk_rbnode_free               (GtkRBNode  *node);
@@ -43,76 +42,11 @@ static inline void _fixup_parity                  (GtkRBTree  *tree,
 
 
 
-/* node allocation
- */
-struct _GAllocator /* from gmem.c */
-{
-  gchar      *name;
-  guint16     n_preallocs;
-  guint       is_unused : 1;
-  guint       type : 4;
-  GAllocator *last;
-  GMemChunk  *mem_chunk;
-  GtkRBNode  *free_nodes; /* implementation specific */
-};
-
-
-G_LOCK_DEFINE_STATIC (current_allocator);
-static GAllocator *current_allocator = NULL;
-
-
-/* HOLDS: current_allocator_lock */
-static void
-_gtk_rbnode_validate_allocator (GAllocator *allocator)
-{
-  g_return_if_fail (allocator != NULL);
-  g_return_if_fail (allocator->is_unused == TRUE);
-
-  if (allocator->type != G_ALLOCATOR_NODE)
-    {
-      allocator->type = G_ALLOCATOR_NODE;
-      if (allocator->mem_chunk)
-	{
-	  g_mem_chunk_destroy (allocator->mem_chunk);
-	  allocator->mem_chunk = NULL;
-	}
-    }
-
-  if (!allocator->mem_chunk)
-    {
-      allocator->mem_chunk = g_mem_chunk_new (allocator->name,
-					      sizeof (GtkRBNode),
-					      sizeof (GtkRBNode) * allocator->n_preallocs,
-					      G_ALLOC_ONLY);
-      allocator->free_nodes = NULL;
-    }
-
-  allocator->is_unused = FALSE;
-}
-
 static GtkRBNode *
 _gtk_rbnode_new (GtkRBTree *tree,
 		 gint       height)
 {
-  GtkRBNode *node;
-
-  G_LOCK (current_allocator);
-  if (!current_allocator)
-    {
-      GAllocator *allocator = g_allocator_new ("GTK+ default GtkRBNode allocator",
-					       128);
-      _gtk_rbnode_validate_allocator (allocator);
-      allocator->last = NULL;
-      current_allocator = allocator;
-    }
-  if (!current_allocator->free_nodes)
-    node = g_chunk_new (GtkRBNode, current_allocator->mem_chunk);
-  else
-    {
-      node = current_allocator->free_nodes;
-      current_allocator->free_nodes = node->left;
-    }
-  G_UNLOCK (current_allocator);
+  GtkRBNode *node = g_slice_new (GtkRBNode);
 
   node->left = tree->nil;
   node->right = tree->nil;
@@ -128,21 +62,16 @@ _gtk_rbnode_new (GtkRBTree *tree,
 static void
 _gtk_rbnode_free (GtkRBNode *node)
 {
-  G_LOCK (current_allocator);
-  node->left = current_allocator->free_nodes;
-  current_allocator->free_nodes = node;
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
-      /* unfortunately node->left has to continue to point to
-       * a node...
-       */
+      node->left = (gpointer) 0xdeadbeef;
       node->right = (gpointer) 0xdeadbeef;
       node->parent = (gpointer) 0xdeadbeef;
       node->offset = 56789;
       node->count = 56789;
       node->flags = 0;
     }
-  G_UNLOCK (current_allocator);
+  g_slice_free (GtkRBNode, node);
 }
 
 static void
@@ -400,33 +329,6 @@ _gtk_rbtree_remove_node_fixup (GtkRBTree *tree,
   GTK_RBNODE_SET_COLOR (node, GTK_RBNODE_BLACK);
 }
 
-/* Public functions */
-void
-_gtk_rbnode_push_allocator (GAllocator *allocator)
-{
-  G_LOCK (current_allocator);
-  _gtk_rbnode_validate_allocator ( allocator );
-  allocator->last = current_allocator;
-  current_allocator = allocator;
-  G_UNLOCK (current_allocator);
-}
-
-void
-_gtk_rbnode_pop_allocator (void)
-{
-  G_LOCK (current_allocator);
-  if (current_allocator)
-    {
-      GAllocator *allocator;
-
-      allocator = current_allocator;
-      current_allocator = allocator->last;
-      allocator->last = NULL;
-      allocator->is_unused = TRUE;
-    }
-  G_UNLOCK (current_allocator);
-}
-
 GtkRBTree *
 _gtk_rbtree_new (void)
 {
@@ -436,7 +338,7 @@ _gtk_rbtree_new (void)
   retval->parent_tree = NULL;
   retval->parent_node = NULL;
 
-  retval->nil = g_new0 (GtkRBNode, 1);
+  retval->nil = g_slice_new (GtkRBNode);
   retval->nil->left = NULL;
   retval->nil->right = NULL;
   retval->nil->parent = NULL;

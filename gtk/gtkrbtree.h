@@ -111,8 +111,6 @@ struct _GtkRBNode
 #define GTK_RBNODE_FLAG_SET(node, flag) 	(node?(((node->flags&flag)==flag)?TRUE:FALSE):FALSE)
 
 
-void       _gtk_rbtree_push_allocator   (GAllocator             *allocator);
-void       _gtk_rbtree_pop_allocator    (void);
 GtkRBTree *_gtk_rbtree_new              (void);
 void       _gtk_rbtree_free             (GtkRBTree              *tree);
 void       _gtk_rbtree_remove           (GtkRBTree              *tree);
