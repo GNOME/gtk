@@ -1,5 +1,7 @@
 2005-11-01  Tor Lillqvist  <tml@novell.com>
 
+	* config.h.win32.in: Sync with what configure produces.
+
 	* configure.in: Don't look for X_PACKAGES unless building for
 	x11. (#313986, John Ehresman)
 
