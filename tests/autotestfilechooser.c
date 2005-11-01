@@ -21,6 +21,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* TODO:
+ *
+ * - Use g_log_set_default_handler() instead of the mess of specific handlers we
+ *   have in main().
+ *
+ * - In test_reload_sequence(), test that the selection is preserved properly
+ *   between unmap/map.
+ *
+ * - More tests!
+ */
+
 #define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
 
 #include <config.h>
@@ -591,6 +602,8 @@ main (int argc, char **argv)
   gboolean zero_errors;
   gboolean zero_critical_errors;
   int i;
+
+  /* FIXME: use g_log_set_default_handler() instead of this mess */
 
   for (i = 0; i < G_N_ELEMENTS (domains); i++)
     g_log_set_handler (domains[i],
