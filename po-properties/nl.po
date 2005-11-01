@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-15 12:37+0200\n"
-"PO-Revision-Date: 2005-07-22 01:23+0200\n"
+"POT-Creation-Date: 2005-10-31 22:18+0100\n"
+"PO-Revision-Date: 2005-11-01 17:24+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -104,7 +104,7 @@ msgstr "Standaard display"
 msgid "The default display for GDK"
 msgstr "Het standaard display voor GDK"
 
-#: ../gdk/gdkpango.c:510 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:541
+#: ../gdk/gdkpango.c:510 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:543
 msgid "Screen"
 msgstr "Scherm"
 
@@ -113,12 +113,29 @@ msgstr "Scherm"
 msgid "the GdkScreen for the renderer"
 msgstr "het GdkScreen voor de renderer"
 
+# Lettertypes/lettertypeopties
+#: ../gdk/gdkscreen.c:104
+msgid "Font options"
+msgstr "Lettertypeopties"
+
+#: ../gdk/gdkscreen.c:105
+msgid "The default font options for the screen"
+msgstr "De standaard lettertypeopties voor het scherm"
+
+#: ../gdk/gdkscreen.c:112
+msgid "Font resolution"
+msgstr "Lettertyperesolutie"
+
+#: ../gdk/gdkscreen.c:113
+msgid "The resolution for fonts on the screen"
+msgstr "De resolutie van lettertypes op het scherm"
+
 # Naam programma
-#: ../gtk/gtkaboutdialog.c:206
+#: ../gtk/gtkaboutdialog.c:204
 msgid "Program name"
 msgstr "Programmanaam"
 
-#: ../gtk/gtkaboutdialog.c:207
+#: ../gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -126,44 +143,44 @@ msgstr ""
 "De naam van het programma. Als dit niet is ingesteld wordt standaard "
 "g_get_application_name() gebruikt"
 
-#: ../gtk/gtkaboutdialog.c:221
+#: ../gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr "Programmaversie"
 
-#: ../gtk/gtkaboutdialog.c:222
+#: ../gtk/gtkaboutdialog.c:220
 msgid "The version of the program"
 msgstr "De versie van het programma"
 
-#: ../gtk/gtkaboutdialog.c:236
+#: ../gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr "Copyright-tekenreeks"
 
-#: ../gtk/gtkaboutdialog.c:237
+#: ../gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr "Copyright-informatie over het programma"
 
-#: ../gtk/gtkaboutdialog.c:254
+#: ../gtk/gtkaboutdialog.c:252
 msgid "Comments string"
 msgstr "Opmerking-tekenreeks"
 
-#: ../gtk/gtkaboutdialog.c:255
+#: ../gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr "Opmerkingen over het programma"
 
 # webstek
-#: ../gtk/gtkaboutdialog.c:289
+#: ../gtk/gtkaboutdialog.c:287
 msgid "Website URL"
 msgstr "Website URL"
 
-#: ../gtk/gtkaboutdialog.c:290
+#: ../gtk/gtkaboutdialog.c:288
 msgid "The URL for the link to the website of the program"
 msgstr "De URL voor de link naar de website van het programma"
 
-#: ../gtk/gtkaboutdialog.c:306
+#: ../gtk/gtkaboutdialog.c:304
 msgid "Website label"
 msgstr "Website-label"
 
-#: ../gtk/gtkaboutdialog.c:307
+#: ../gtk/gtkaboutdialog.c:305
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -171,46 +188,46 @@ msgstr ""
 "De label voor de link naar de website van het programma. Als dit niet is "
 "ingesteld wordt standaard de URL gebruikt"
 
-#: ../gtk/gtkaboutdialog.c:323
+#: ../gtk/gtkaboutdialog.c:321
 msgid "Authors"
 msgstr "Auteurs"
 
-#: ../gtk/gtkaboutdialog.c:324
+#: ../gtk/gtkaboutdialog.c:322
 msgid "List of authors of the program"
 msgstr "Lijst met de makers van het programma"
 
-#: ../gtk/gtkaboutdialog.c:340
+#: ../gtk/gtkaboutdialog.c:338
 msgid "Documenters"
 msgstr "Documentalisten"
 
-#: ../gtk/gtkaboutdialog.c:341
+#: ../gtk/gtkaboutdialog.c:339
 msgid "List of people documenting the program"
 msgstr "Lijst van degenen die het programma hebben gedocumenteerd"
 
-#: ../gtk/gtkaboutdialog.c:357
+#: ../gtk/gtkaboutdialog.c:355
 msgid "Artists"
 msgstr "Artiesten"
 
-#: ../gtk/gtkaboutdialog.c:358
+#: ../gtk/gtkaboutdialog.c:356
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 "Lijst van degenen die hebben bijgedragen aan het grafische werk van het "
 "programma"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:373
 msgid "Translator credits"
 msgstr "Vertalers"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:374
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "De vertalers. Deze tekenreeks moet als vertaalbaar worden gemarkeerd"
 
-#: ../gtk/gtkaboutdialog.c:391
+#: ../gtk/gtkaboutdialog.c:389
 msgid "Logo"
 msgstr "Logo"
 
-#: ../gtk/gtkaboutdialog.c:392
+#: ../gtk/gtkaboutdialog.c:390
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -218,29 +235,29 @@ msgstr ""
 "Een logo voor het info-dialoogvenster. Als er geen logo is gegeven wordt "
 "standaard gtk_window_het_default_icon_list() gebruikt."
 
-#: ../gtk/gtkaboutdialog.c:407
+#: ../gtk/gtkaboutdialog.c:405
 msgid "Logo Icon Name"
 msgstr "Logo-pictogram"
 
 # dat als logo wordt gebruikt in het info-venster.
-#: ../gtk/gtkaboutdialog.c:408
+#: ../gtk/gtkaboutdialog.c:406
 msgid "A named icon to use as the logo for the about box."
 msgstr "Een pictogram met naam voor een logo in het info-venster."
 
-#: ../gtk/gtkaboutdialog.c:421
+#: ../gtk/gtkaboutdialog.c:419
 msgid "Wrap license"
 msgstr "Licentie doorloop"
 
 # of de licentietekst omgebogen wordt
-#: ../gtk/gtkaboutdialog.c:422
+#: ../gtk/gtkaboutdialog.c:420
 msgid "Whether to wrap the license text."
 msgstr "Of de licentietekst doorloopt."
 
-#: ../gtk/gtkaboutdialog.c:429
+#: ../gtk/gtkaboutdialog.c:427
 msgid "Link Color"
 msgstr "Link-kleur"
 
-#: ../gtk/gtkaboutdialog.c:430
+#: ../gtk/gtkaboutdialog.c:428
 msgid "Color of hyperlinks"
 msgstr "De kleur van hyperlinks"
 
@@ -269,7 +286,7 @@ msgid "A unique name for the action."
 msgstr "Een unieke naar voor de actie."
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:226 ../gtk/gtkexpander.c:206
-#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:322 ../gtk/gtktoolbutton.c:187
+#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:322 ../gtk/gtktoolbutton.c:185
 msgid "Label"
 msgstr "Label"
 
@@ -373,7 +390,8 @@ msgid "Whether the action is enabled."
 msgstr "Of de actie wordt gebruikt"
 
 #: ../gtk/gtkaction.c:290 ../gtk/gtkactiongroup.c:149
-#: ../gtk/gtktreeviewcolumn.c:226 ../gtk/gtkwidget.c:448
+#: ../gtk/gtkstatusicon.c:184 ../gtk/gtktreeviewcolumn.c:226
+#: ../gtk/gtkwidget.c:448
 msgid "Visible"
 msgstr "Zichtbaar"
 
@@ -651,7 +669,7 @@ msgstr "Spatiëring"
 msgid "The amount of space between children"
 msgstr "De hoeveelheid ruimte tussen dochters"
 
-#: ../gtk/gtkbox.c:141 ../gtk/gtknotebook.c:477 ../gtk/gtktoolbar.c:558
+#: ../gtk/gtkbox.c:141 ../gtk/gtknotebook.c:477 ../gtk/gtktoolbar.c:598
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -659,7 +677,7 @@ msgstr "Homogeen"
 msgid "Whether the children should all be the same size"
 msgstr "Of de dochters allemaal dezelfde afmetingen moeten hebben"
 
-#: ../gtk/gtkbox.c:149 ../gtk/gtkpreview.c:134 ../gtk/gtktoolbar.c:550
+#: ../gtk/gtkbox.c:149 ../gtk/gtkpreview.c:133 ../gtk/gtktoolbar.c:590
 #: ../gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "Uitklappen"
@@ -717,7 +735,7 @@ msgstr ""
 "Tekst van het labelwidget op de knop, indien de knop een labelwidget bevat"
 
 #: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:343
-#: ../gtk/gtktoolbutton.c:194
+#: ../gtk/gtktoolbutton.c:192
 msgid "Use underline"
 msgstr "Gebruik onderstreping"
 
@@ -740,7 +758,7 @@ msgstr ""
 "Indien aangevinkt wordt het label gebruikt om een voorraad-item te kiezen in "
 "plaats van weergegeven te worden"
 
-#: ../gtk/gtkbutton.c:250 ../gtk/gtkcombobox.c:683
+#: ../gtk/gtkbutton.c:250 ../gtk/gtkcombobox.c:680
 msgid "Focus on click"
 msgstr "Aandacht bij klikken"
 
@@ -1004,6 +1022,39 @@ msgstr "Cel-achtergrond aangezet"
 msgid "Whether this tag affects the cell background color"
 msgstr "Of dit etiket de cel-achtergrondkleur beïnvloedt"
 
+#: ../gtk/gtkcellrendereraccel.c:107
+msgid "Accelerator key"
+msgstr "Sneltoets"
+
+#: ../gtk/gtkcellrendereraccel.c:108
+msgid "The keyval of the accelerator"
+msgstr "De waarde van de sneltoets"
+
+#: ../gtk/gtkcellrendereraccel.c:124
+msgid "Accelerator modifiers"
+msgstr "Controletoets voor sneltoets"
+
+# huh?
+#: ../gtk/gtkcellrendereraccel.c:125
+msgid "The modifier mask of the accelerator"
+msgstr "Het bitmasker van de controletoets voor sneltoetsen"
+
+#: ../gtk/gtkcellrendereraccel.c:142
+msgid "Accelerator keycode"
+msgstr "Sneltoets-waarde"
+
+#: ../gtk/gtkcellrendereraccel.c:143
+msgid "The hardware keycode of the accelerator"
+msgstr "De hardware-waarde van de sneltoets"
+
+#: ../gtk/gtkcellrendereraccel.c:162
+msgid "Accelerator Mode"
+msgstr "Sneltoetsmodus"
+
+#: ../gtk/gtkcellrendereraccel.c:163
+msgid "The type of accelerators"
+msgstr "Het type sneltoets"
+
 #: ../gtk/gtkcellrenderercombo.c:89
 msgid "Model"
 msgstr "Model"
@@ -1057,6 +1108,7 @@ msgid "Pixbuf for closed expander"
 msgstr "Pixbuf voor gesloten uitklapbare item"
 
 #: ../gtk/gtkcellrendererpixbuf.c:169 ../gtk/gtkimage.c:203
+#: ../gtk/gtkstatusicon.c:141
 msgid "Stock ID"
 msgstr "Standaard-ID"
 
@@ -1064,7 +1116,7 @@ msgstr "Standaard-ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "Het standaard-ID van het weer te geven standaardpictogram"
 
-#: ../gtk/gtkcellrendererpixbuf.c:177
+#: ../gtk/gtkcellrendererpixbuf.c:177 ../gtk/gtkstatusicon.c:166
 msgid "Size"
 msgstr "Afmeting"
 
@@ -1082,11 +1134,12 @@ msgid "Render detail to pass to the theme engine"
 msgstr "Weergavedetail door te geven aan de thema-motor"
 
 #: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:261
-#: ../gtk/gtkwindow.c:533
+#: ../gtk/gtkstatusicon.c:149 ../gtk/gtkwindow.c:535
 msgid "Icon Name"
 msgstr "Pictogramnaam"
 
 #: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:262
+#: ../gtk/gtkstatusicon.c:150
 msgid "The name of the icon from the icon theme"
 msgstr "De naam van het pictogram uit het pictogramthema"
 
@@ -1104,7 +1157,7 @@ msgstr "Waarde van de voortgangsbalk"
 
 #: ../gtk/gtkcellrendererprogress.c:134 ../gtk/gtkcellrenderertext.c:219
 #: ../gtk/gtkentry.c:577 ../gtk/gtkprogressbar.c:221
-#: ../gtk/gtktextbuffer.c:206
+#: ../gtk/gtktextbuffer.c:212
 msgid "Text"
 msgstr "Tekst"
 
@@ -1299,14 +1352,11 @@ msgstr ""
 msgid "Ellipsize"
 msgstr "Ellipsis"
 
-# if at all, vertalen?
 #: ../gtk/gtkcellrenderertext.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
-"have enough room to display the entire string, if at all"
-msgstr ""
-"De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer de cel-"
-"renderer niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
+"have enough room to display the entire string"
+msgstr "De positie waar bij voorkeur een ellipsis geplaatst wordt in de tekenreeks wanneer de cel-renderer niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:372
 #: ../gtk/gtklabel.c:455
@@ -1329,7 +1379,7 @@ msgstr ""
 "Hoe de tekenreeks in meerdere regels wordt gebroken wanneer de cel-renderer "
 "niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
 
-#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
+#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:570
 msgid "Wrap width"
 msgstr "Terugloopbreedte"
 
@@ -1492,7 +1542,7 @@ msgid "Draw the toggle button as a radio button"
 msgstr "Teken de schakelknop als selectievak"
 
 #: ../gtk/gtkcheckbutton.c:101 ../gtk/gtkcheckmenuitem.c:142
-#: ../gtk/gtkoptionmenu.c:203
+#: ../gtk/gtkoptionmenu.c:201
 msgid "Indicator Size"
 msgstr "Indicatorgrootte"
 
@@ -1501,7 +1551,7 @@ msgid "Size of check or radio indicator"
 msgstr "Grootte van aankruis- of selectie-indicator"
 
 #: ../gtk/gtkcheckbutton.c:109 ../gtk/gtkexpander.c:256
-#: ../gtk/gtkoptionmenu.c:209
+#: ../gtk/gtkoptionmenu.c:207
 msgid "Indicator Spacing"
 msgstr "Indicatorspatiëring"
 
@@ -1510,6 +1560,7 @@ msgid "Spacing around check or radio indicator"
 msgstr "Spatiëring rondom aanvink- of selectie-indicator"
 
 #: ../gtk/gtkcheckmenuitem.c:119 ../gtk/gtktogglebutton.c:135
+#: ../gtk/gtktoggletoolbutton.c:131
 msgid "Active"
 msgstr "Actief"
 
@@ -1533,72 +1584,72 @@ msgstr "Weergeven als radiomenu-item"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Of het menu-item moet worden weergegeven als een radiomenu-item"
 
-#: ../gtk/gtkcolorbutton.c:204
+#: ../gtk/gtkcolorbutton.c:202
 msgid "Use alpha"
 msgstr "Alpha gebruiken"
 
-#: ../gtk/gtkcolorbutton.c:205
+#: ../gtk/gtkcolorbutton.c:203
 msgid "Whether or not to give the color an alpha value"
 msgstr "Of aan de kleur een alpha-waarde moet worden gegeven"
 
-#: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkfilechooserbutton.c:358
-#: ../gtk/gtkfontbutton.c:177 ../gtk/gtktreeviewcolumn.c:299
+#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkfilechooserbutton.c:358
+#: ../gtk/gtkfontbutton.c:175 ../gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Titel"
 
-#: ../gtk/gtkcolorbutton.c:220
+#: ../gtk/gtkcolorbutton.c:218
 msgid "The title of the color selection dialog"
 msgstr "De titel van het kleurselectievenster"
 
-#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1888
+#: ../gtk/gtkcolorbutton.c:232 ../gtk/gtkcolorsel.c:1884
 msgid "Current Color"
 msgstr "Huidige Kleur"
 
-#: ../gtk/gtkcolorbutton.c:235
+#: ../gtk/gtkcolorbutton.c:233
 msgid "The selected color"
 msgstr "De geselecteerde kleur"
 
-#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1895
+#: ../gtk/gtkcolorbutton.c:247 ../gtk/gtkcolorsel.c:1891
 msgid "Current Alpha"
 msgstr "Huidig Alpha"
 
-#: ../gtk/gtkcolorbutton.c:250
+#: ../gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "De geselecteerde doorzichtigheid (0 is volledig transparant, 65535 is "
 "volledig dekkend)"
 
-#: ../gtk/gtkcolorsel.c:1874
+#: ../gtk/gtkcolorsel.c:1870
 msgid "Has Opacity Control"
 msgstr "Heeft een regelpaneel voor doorzichtigheid"
 
-#: ../gtk/gtkcolorsel.c:1875
+#: ../gtk/gtkcolorsel.c:1871
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Of de kleurenkiezer ook de doorzichtigheid kan instellen"
 
-#: ../gtk/gtkcolorsel.c:1881
+#: ../gtk/gtkcolorsel.c:1877
 msgid "Has palette"
 msgstr "Heeft palet"
 
-#: ../gtk/gtkcolorsel.c:1882
+#: ../gtk/gtkcolorsel.c:1878
 msgid "Whether a palette should be used"
 msgstr "Of een kleurenpalet gebruikt moet worden"
 
-#: ../gtk/gtkcolorsel.c:1889
+#: ../gtk/gtkcolorsel.c:1885
 msgid "The current color"
 msgstr "De huidige kleur"
 
-#: ../gtk/gtkcolorsel.c:1896
+#: ../gtk/gtkcolorsel.c:1892
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "De huidige waarde van doorzichtigheid (0 is volledig transparant, 65535 is "
 "volledig dekkend)"
 
-#: ../gtk/gtkcolorsel.c:1910
+#: ../gtk/gtkcolorsel.c:1906
 msgid "Custom palette"
 msgstr "Eigen palet"
 
-#: ../gtk/gtkcolorsel.c:1911
+#: ../gtk/gtkcolorsel.c:1907
 msgid "Palette to use in the color selector"
 msgstr "Te grbuiken kleurenkaart in de kleurenselectie"
 
@@ -1642,41 +1693,42 @@ msgstr "Waarde in lijst"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegeven waardes altijd in de lijst aanwezig moeten zijn"
 
-#: ../gtk/gtkcombobox.c:556
+#: ../gtk/gtkcombobox.c:553
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:557
+#: ../gtk/gtkcombobox.c:554
 msgid "The model for the combo box"
 msgstr "Het model voor de combo-box"
 
+# hoe moeten we dit zien?
 # grid: netwerk, rooster, raster
 # layouting: indeling
-#: ../gtk/gtkcombobox.c:574
-msgid "Wrap width for layouting the items in a grid"
+#: ../gtk/gtkcombobox.c:571
+msgid "Wrap width for laying out the items in a grid"
 msgstr "Breedte laten doorlopen om de items in te delen op een rooster"
 
-#: ../gtk/gtkcombobox.c:596
+#: ../gtk/gtkcombobox.c:593
 msgid "Row span column"
 msgstr "'Row span' kolom"
 
-#: ../gtk/gtkcombobox.c:597
+#: ../gtk/gtkcombobox.c:594
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
-#: ../gtk/gtkcombobox.c:618
+#: ../gtk/gtkcombobox.c:615
 msgid "Column span column"
 msgstr "'Column span' kolom"
 
-#: ../gtk/gtkcombobox.c:619
+#: ../gtk/gtkcombobox.c:616
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolom die de 'colomn span' waarden bevat"
 
-#: ../gtk/gtkcombobox.c:639
+#: ../gtk/gtkcombobox.c:636
 msgid "Active item"
 msgstr "Actieve item"
 
-#: ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkcombobox.c:637
 msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
@@ -1684,31 +1736,31 @@ msgstr "Het item dat momenteel actief is"
 # afscheurlijn/afscheurmogelijkheid
 # afscheurlijn aan menus toevoegen
 # Menus hebben afscheurlijn<
-#: ../gtk/gtkcombobox.c:659 ../gtk/gtkuimanager.c:232
+#: ../gtk/gtkcombobox.c:656 ../gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Afscheurlijn aan menus toevoegen"
 
-#: ../gtk/gtkcombobox.c:660
+#: ../gtk/gtkcombobox.c:657
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of dropdowns een afscheurlijn moeten hebben"
 
-#: ../gtk/gtkcombobox.c:675 ../gtk/gtkentry.c:534
+#: ../gtk/gtkcombobox.c:672 ../gtk/gtkentry.c:534
 msgid "Has Frame"
 msgstr "Heeft kader"
 
-#: ../gtk/gtkcombobox.c:676
+#: ../gtk/gtkcombobox.c:673
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Of de combobox een kader rond de dochter tekent"
 
-#: ../gtk/gtkcombobox.c:684
+#: ../gtk/gtkcombobox.c:681
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Of de combobox de aandacht krijgt als het met de muis wordt aangeklikt"
 
-#: ../gtk/gtkcombobox.c:690
+#: ../gtk/gtkcombobox.c:687
 msgid "Appears as list"
 msgstr "Verschijnt als lijst"
 
-#: ../gtk/gtkcombobox.c:691
+#: ../gtk/gtkcombobox.c:688
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Of dropdowns als lijsten getoond worden in plaats van als menus"
 
@@ -1916,11 +1968,11 @@ msgstr ""
 "De horizontale opstelling, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL "
 "indelingen"
 
-#: ../gtk/gtkentry.c:832
+#: ../gtk/gtkentry.c:854
 msgid "Select on focus"
 msgstr "Selecteren bij aandacht"
 
-#: ../gtk/gtkentry.c:833
+#: ../gtk/gtkentry.c:855
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Of de inhoud van een veld wordt geselecteerd als het veld de aandacht krijgt"
@@ -2034,7 +2086,7 @@ msgstr "De tekst van het label bevat XML-opmaak. Bekijk pango_parse_markup()"
 msgid "Space to put between the label and the child"
 msgstr "Ruimte tussen het label en de dochter"
 
-#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:201
+#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:199
 msgid "Label widget"
 msgstr "Labelwidget"
 
@@ -2123,7 +2175,7 @@ msgstr "Extra widget"
 msgid "Application supplied widget for extra options."
 msgstr "Widget door toepassing geleverd voor extra opties."
 
-#: ../gtk/gtkfilechooser.c:252
+#: ../gtk/gtkfilechooser.c:252 ../gtk/gtkfilesel.c:572
 msgid "Select Multiple"
 msgstr "Meerdere selecteren"
 
@@ -2143,14 +2195,12 @@ msgstr "Of verborgen bestanden en mappen moeten worden weergegeven"
 msgid "Do overwrite confirmation"
 msgstr "Overschrijven bevestigen"
 
+# file chooser = file selector
 #: ../gtk/gtkfilechooser.c:276
 msgid ""
-"Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
-"overwrite confirmation dialog if the user selects a file name that already "
-"exists."
-msgstr ""
-"Of een bestandskiezer in GTK_FILE_CHOOSER_ACTION_SAVE-modus een bevestiging "
-"vraagt wanneer de gebruiker een bestandsnaam kiest die al bestaat."
+"Whether a file chooser in save mode will present an overwrite confirmation "
+"dialog if necessary."
+msgstr "Of een bestandskiezer in opslag-modus een overschijfbevestiging vraagt wanneer de gebruiker een bestandsnaam kiest die al bestaat."
 
 #: ../gtk/gtkfilechooserbutton.c:343
 msgid "Dialog"
@@ -2168,15 +2218,15 @@ msgstr "De titel van het bestandsselectie-dialoogvenster."
 msgid "The desired width of the button widget, in characters."
 msgstr "De gewenste breedte van het knop-widget, in lettertekens."
 
-#: ../gtk/gtkfilechooserdefault.c:710
+#: ../gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Standaard backend bestandkiezer"
 
-#: ../gtk/gtkfilechooserdefault.c:711
+#: ../gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 
-#: ../gtk/gtkfilesel.c:558 ../gtk/gtkimage.c:194
+#: ../gtk/gtkfilesel.c:558 ../gtk/gtkimage.c:194 ../gtk/gtkstatusicon.c:133
 msgid "Filename"
 msgstr "Bestandsnaam"
 
@@ -2194,10 +2244,6 @@ msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Of knoppen voor het maken/wijzigen van bestanden weergegeven moeten worden"
 
-#: ../gtk/gtkfilesel.c:572
-msgid "Select multiple"
-msgstr "Selecteer meerdere"
-
 #: ../gtk/gtkfixed.c:123 ../gtk/gtklayout.c:615
 msgid "X position"
 msgstr "X positie"
@@ -2214,51 +2260,51 @@ msgstr "Y positie"
 msgid "Y position of child widget"
 msgstr "Y positie van dochterwidget"
 
-#: ../gtk/gtkfontbutton.c:178
+#: ../gtk/gtkfontbutton.c:176
 msgid "The title of the font selection dialog"
 msgstr "De titel van het lettertypeselectie-dialoogvenster"
 
-#: ../gtk/gtkfontbutton.c:193 ../gtk/gtkfontsel.c:216
+#: ../gtk/gtkfontbutton.c:191 ../gtk/gtkfontsel.c:216
 msgid "Font name"
 msgstr "Lettertypenaam"
 
-#: ../gtk/gtkfontbutton.c:194
+#: ../gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
 msgstr "De naam van het geselecteerde lettertype"
 
-#: ../gtk/gtkfontbutton.c:195
+#: ../gtk/gtkfontbutton.c:193
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:209
+#: ../gtk/gtkfontbutton.c:207
 msgid "Use font in label"
 msgstr "Lettertype gebruiken in label"
 
-#: ../gtk/gtkfontbutton.c:210
+#: ../gtk/gtkfontbutton.c:208
 msgid "Whether the label is drawn in the selected font"
 msgstr "Of de labeltekst in het geselecteerde lettertype staat"
 
-#: ../gtk/gtkfontbutton.c:224
+#: ../gtk/gtkfontbutton.c:222
 msgid "Use size in label"
 msgstr "Grootte gebruiken in label"
 
-#: ../gtk/gtkfontbutton.c:225
+#: ../gtk/gtkfontbutton.c:223
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Of de labeltekst in het geselecteerd lettertypegrootte staat"
 
-#: ../gtk/gtkfontbutton.c:240
+#: ../gtk/gtkfontbutton.c:238
 msgid "Show style"
 msgstr "Stijl tonen"
 
-#: ../gtk/gtkfontbutton.c:241
+#: ../gtk/gtkfontbutton.c:239
 msgid "Whether the selected font style is shown in the label"
 msgstr "Of de geselecteerde lettertypestijl getoond wordt in het label"
 
-#: ../gtk/gtkfontbutton.c:255
+#: ../gtk/gtkfontbutton.c:253
 msgid "Show size"
 msgstr "Grootte tonen"
 
-#: ../gtk/gtkfontbutton.c:256
+#: ../gtk/gtkfontbutton.c:254
 msgid "Whether selected font size is shown in the label"
 msgstr "Of de geselecteerde lettertypegrootte getoond wordt in het label"
 
@@ -2316,8 +2362,8 @@ msgid "A widget to display in place of the usual frame label"
 msgstr ""
 "Een widget dat weergegeven wordt in plaats van het gebruikelijk kaderlabel"
 
-#: ../gtk/gtkhandlebox.c:208 ../gtk/gtkmenubar.c:227 ../gtk/gtkstatusbar.c:205
-#: ../gtk/gtktoolbar.c:599 ../gtk/gtkviewport.c:153
+#: ../gtk/gtkhandlebox.c:208 ../gtk/gtkmenubar.c:225 ../gtk/gtkstatusbar.c:203
+#: ../gtk/gtktoolbar.c:639 ../gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "Schaduwtype"
 
@@ -2429,7 +2475,7 @@ msgid "Column Spacing"
 msgstr "Kolom-spatiëring"
 
 #: ../gtk/gtkiconview.c:661
-msgid "Space which is inserted between grid column"
+msgid "Space which is inserted between grid columns"
 msgstr "Ruimte die tussen kolommen van het rooster geplaatst wordt"
 
 #: ../gtk/gtkiconview.c:676
@@ -2441,7 +2487,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ruimte die aan de randen van de pictogramweergave geplaatst wordt"
 
 #: ../gtk/gtkiconview.c:693 ../gtk/gtkprogressbar.c:153
-#: ../gtk/gtktoolbar.c:508
+#: ../gtk/gtktoolbar.c:510 ../gtk/gtktrayicon-x11.c:94
 msgid "Orientation"
 msgstr "Oriëntatie"
 
@@ -2479,11 +2525,11 @@ msgstr "Selectieveld alpha"
 msgid "Opacity of the selection box"
 msgstr "Doorzichtigheid van het selectieveld"
 
-#: ../gtk/gtkimage.c:162
+#: ../gtk/gtkimage.c:162 ../gtk/gtkstatusicon.c:125
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: ../gtk/gtkimage.c:163
+#: ../gtk/gtkimage.c:163 ../gtk/gtkstatusicon.c:126
 msgid "A GdkPixbuf to display"
 msgstr "Een weer te geven GdkPixbuf"
 
@@ -2511,11 +2557,11 @@ msgstr "Masker"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Te gebruiken bitmapmasker voor GdkImage of GdkPixmap"
 
-#: ../gtk/gtkimage.c:195
+#: ../gtk/gtkimage.c:195 ../gtk/gtkstatusicon.c:134
 msgid "Filename to load and display"
 msgstr "Te laden en weer te geven bestandsnaam"
 
-#: ../gtk/gtkimage.c:204
+#: ../gtk/gtkimage.c:204 ../gtk/gtkstatusicon.c:142
 msgid "Stock ID for a stock image to display"
 msgstr "Standaard-ID voor een weer te geven standaardafbeelding"
 
@@ -2527,7 +2573,7 @@ msgstr "Pictogramverzameling"
 msgid "Icon set to display"
 msgstr "Weer te geven pictogramverzameling"
 
-#: ../gtk/gtkimage.c:219
+#: ../gtk/gtkimage.c:219 ../gtk/gtktoolbar.c:565
 msgid "Icon size"
 msgstr "Pictogramafmetingen"
 
@@ -2553,11 +2599,11 @@ msgstr "Animatie"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation om weer te geven"
 
-#: ../gtk/gtkimage.c:269
+#: ../gtk/gtkimage.c:269 ../gtk/gtkstatusicon.c:157
 msgid "Storage type"
 msgstr "Opslagtype"
 
-#: ../gtk/gtkimage.c:270
+#: ../gtk/gtkimage.c:270 ../gtk/gtkstatusicon.c:158
 msgid "The representation being used for image data"
 msgstr "De te gebruiken representatie voor afbeeldingsdata"
 
@@ -2573,7 +2619,7 @@ msgstr "Menu-afbeeldingen tonen"
 msgid "Whether images should be shown in menus"
 msgstr "Of afbeeldingen in menus worden getoond"
 
-#: ../gtk/gtkinvisible.c:118 ../gtk/gtkwindow.c:542
+#: ../gtk/gtkinvisible.c:118 ../gtk/gtkwindow.c:544
 msgid "The screen where this window will be displayed"
 msgstr "Het scherm waar dit venster wordt getoond"
 
@@ -2649,18 +2695,16 @@ msgstr ""
 #: ../gtk/gtklabel.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
-"enough room to display the entire string, if at all"
-msgstr ""
-"De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer het label "
-"niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
+"enough room to display the entire string"
+msgstr "De positie waar bij voorkeur een ellipsis geplaatst wordt in de tekenreeks wanneer het label niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
 
 #: ../gtk/gtklabel.c:476
 msgid "Single Line Mode"
-msgstr "Enkele regel modus"
+msgstr "Enkele-regel modus"
 
 #: ../gtk/gtklabel.c:477
 msgid "Whether the label is in single line mode"
-msgstr "Of het label in enkele regel modus staat"
+msgstr "Of het label in enkele-regel modus staat"
 
 #: ../gtk/gtklabel.c:494
 msgid "Angle"
@@ -2668,7 +2712,7 @@ msgstr "Hoek"
 
 #: ../gtk/gtklabel.c:495
 msgid "Angle at which the label is rotated"
-msgstr "Hoek waarmee het label wordt gedraaid"
+msgstr "Hoek waaronder het label wordt gedraaid"
 
 #: ../gtk/gtklabel.c:515
 msgid "Maximum Width In Characters"
@@ -2821,39 +2865,39 @@ msgstr ""
 "naar dit submenu, op een ander menu-item komt"
 
 # verpakkingsrichting
-#: ../gtk/gtkmenubar.c:201
+#: ../gtk/gtkmenubar.c:199
 msgid "Pack direction"
 msgstr "Verpakrichting"
 
-#: ../gtk/gtkmenubar.c:202
+#: ../gtk/gtkmenubar.c:200
 msgid "The pack direction of the menubar"
 msgstr "De verpakrichting van de menubalk"
 
-#: ../gtk/gtkmenubar.c:218
+#: ../gtk/gtkmenubar.c:216
 msgid "Child Pack direction"
 msgstr "Dochter-verpakrichting"
 
-#: ../gtk/gtkmenubar.c:219
+#: ../gtk/gtkmenubar.c:217
 msgid "The child pack direction of the menubar"
 msgstr "De dochter-verpakrichting van de menubalk"
 
-#: ../gtk/gtkmenubar.c:228
+#: ../gtk/gtkmenubar.c:226
 msgid "Style of bevel around the menubar"
 msgstr "Stijl van de rand rondom de menubalk"
 
-#: ../gtk/gtkmenubar.c:235 ../gtk/gtktoolbar.c:575
+#: ../gtk/gtkmenubar.c:233 ../gtk/gtktoolbar.c:615
 msgid "Internal padding"
 msgstr "Interne opvulling"
 
-#: ../gtk/gtkmenubar.c:236
+#: ../gtk/gtkmenubar.c:234
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Hoeveelheid kaderruimte tussen de menubalkschaduw en de menu-items"
 
-#: ../gtk/gtkmenubar.c:243
+#: ../gtk/gtkmenubar.c:241
 msgid "Delay before drop down menus appear"
 msgstr "Vertraging voordat drop-down-menus verschijnen"
 
-#: ../gtk/gtkmenubar.c:244
+#: ../gtk/gtkmenubar.c:242
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vertraging voordat submenus van een menubalk verschijnen"
 
@@ -2865,11 +2909,11 @@ msgstr "Aandacht pakken"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Een boolese die aangeeft of het menu toetsenbordaandacht neemt"
 
-#: ../gtk/gtkmenutoolbutton.c:270 ../gtk/gtkoptionmenu.c:196
+#: ../gtk/gtkmenutoolbutton.c:268 ../gtk/gtkoptionmenu.c:194
 msgid "Menu"
 msgstr "Menu"
 
-#: ../gtk/gtkmenutoolbutton.c:271
+#: ../gtk/gtkmenutoolbutton.c:269
 msgid "The dropdown menu"
 msgstr "Het dropdown menu"
 
@@ -3090,15 +3134,23 @@ msgstr "Voorwaardse stapper"
 msgid "Display the standard forward arrow button"
 msgstr "Geef de standaard voorwaardse pijlknop weer"
 
-#: ../gtk/gtkoptionmenu.c:197
+#: ../gtk/gtkobject.c:334
+msgid "User Data"
+msgstr "Gebruikersdata"
+
+#: ../gtk/gtkobject.c:335
+msgid "Anonymous User Data Pointer"
+msgstr "Anonieme gebruikersdatapointer"
+
+#: ../gtk/gtkoptionmenu.c:195
 msgid "The menu of options"
 msgstr "Het menu met opties"
 
-#: ../gtk/gtkoptionmenu.c:204
+#: ../gtk/gtkoptionmenu.c:202
 msgid "Size of dropdown indicator"
 msgstr "Grootte van de dropdown-indicator"
 
-#: ../gtk/gtkoptionmenu.c:210
+#: ../gtk/gtkoptionmenu.c:208
 msgid "Spacing around indicator"
 msgstr "Spatiëring rondom de indicator"
 
@@ -3157,7 +3209,7 @@ msgstr "Krimpen"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Indien WAAR, kan de dochter kleiner worden dan vereist"
 
-#: ../gtk/gtkpreview.c:135
+#: ../gtk/gtkpreview.c:134
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
@@ -3290,10 +3342,7 @@ msgstr "Tekst die weergegeven wordt in de voortgangsbalk"
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
-"De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer de "
-"voortgangsbalk niet voldoende ruimte heeft om de gehele tekenreeks weer te "
-"geven."
+msgstr "De positie waar bij voorkeur een ellipsis geplaatst wordt in de tekenreeks wanneer de voortgangsbalk niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
 
 #: ../gtk/gtkradioaction.c:140
 msgid "The value"
@@ -3308,6 +3357,7 @@ msgstr ""
 "deze actie de huidige actie van zijn groep is."
 
 #: ../gtk/gtkradioaction.c:157 ../gtk/gtkradiobutton.c:114
+#: ../gtk/gtkradiomenuitem.c:374
 msgid "Group"
 msgstr "Groep"
 
@@ -3321,6 +3371,12 @@ msgstr "De keuzeactie wiens groep deze actie toebehoort."
 #: ../gtk/gtkradiobutton.c:115
 msgid "The radio button whose group this widget belongs to."
 msgstr "Het keuzerondje wiens groep dit widget toebehoort."
+
+# de widget is eigendom van de groep van het keuzerondje
+# de radioknop van de groep waartoe dit widget behoort.
+#: ../gtk/gtkradiomenuitem.c:375
+msgid "The radio menu item whose group this widget belongs to."
+msgstr "Het keuzemenu-item wiens groep dit widget toebehoort."
 
 #: ../gtk/gtkrange.c:329
 msgid "Update policy"
@@ -3507,12 +3563,12 @@ msgstr ""
 "Geef een tweede voorwaardse pijlknop weer aan de overstaande kant van de "
 "schuifbalk"
 
-#: ../gtk/gtkscrolledwindow.c:239 ../gtk/gtktext.c:606
+#: ../gtk/gtkscrolledwindow.c:239 ../gtk/gtktext.c:607
 #: ../gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: ../gtk/gtkscrolledwindow.c:246 ../gtk/gtktext.c:614
+#: ../gtk/gtkscrolledwindow.c:246 ../gtk/gtktext.c:615
 #: ../gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Verticale aanpassing"
@@ -3566,11 +3622,11 @@ msgstr "Tekenen"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Of de scheiding getoond wordt of onzichtbaar is"
 
-#: ../gtk/gtksettings.c:200
+#: ../gtk/gtksettings.c:202
 msgid "Double Click Time"
 msgstr "Dubbelklik-tijd"
 
-#: ../gtk/gtksettings.c:201
+#: ../gtk/gtksettings.c:203
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3579,11 +3635,11 @@ msgstr ""
 "als een dubbelklik (in milliseconden)"
 
 # itt dubbelkliktijd 
-#: ../gtk/gtksettings.c:208
+#: ../gtk/gtksettings.c:210
 msgid "Double Click Distance"
 msgstr "Dubbelklik-afstand"
 
-#: ../gtk/gtksettings.c:209
+#: ../gtk/gtksettings.c:211
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3591,27 +3647,27 @@ msgstr ""
 "Maximale afstand tussen twee keer klikken zodat het nog beschouwd kan worden "
 "als een dubbelklik (in beeldpunten)"
 
-#: ../gtk/gtksettings.c:216
+#: ../gtk/gtksettings.c:218
 msgid "Cursor Blink"
 msgstr "Knipperende cursor"
 
-#: ../gtk/gtksettings.c:217
+#: ../gtk/gtksettings.c:219
 msgid "Whether the cursor should blink"
 msgstr "Of de cursor moet knipperen"
 
-#: ../gtk/gtksettings.c:224
+#: ../gtk/gtksettings.c:226
 msgid "Cursor Blink Time"
 msgstr "Cursor knippertijd"
 
-#: ../gtk/gtksettings.c:225
+#: ../gtk/gtksettings.c:227
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Lengte van de cursor knippercyclus, in milliseconden"
 
-#: ../gtk/gtksettings.c:232
+#: ../gtk/gtksettings.c:234
 msgid "Split Cursor"
 msgstr "Gespleten Cursor"
 
-#: ../gtk/gtksettings.c:233
+#: ../gtk/gtksettings.c:235
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3619,141 +3675,161 @@ msgstr ""
 "Of de twee cursors weergegeven moeten worden voor gemengd links-naar-rechts "
 "en rechts-naar-links"
 
-#: ../gtk/gtksettings.c:240
+#: ../gtk/gtksettings.c:242
 msgid "Theme Name"
 msgstr "Thema-naam"
 
-#: ../gtk/gtksettings.c:241
+#: ../gtk/gtksettings.c:243
 msgid "Name of theme RC file to load"
 msgstr "Naam van het te laden RC themabestand"
 
-#: ../gtk/gtksettings.c:248
+#: ../gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Pictogramthema-naam"
 
-#: ../gtk/gtksettings.c:249
+#: ../gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Naam van het gebruikte pictogramthema"
 
-#: ../gtk/gtksettings.c:257
+#: ../gtk/gtksettings.c:259
 msgid "Key Theme Name"
 msgstr "Sleutel thema-naam"
 
-#: ../gtk/gtksettings.c:258
+#: ../gtk/gtksettings.c:260
 msgid "Name of key theme RC file to load"
 msgstr "Naam van het te laden sleutel RC themabestand"
 
-#: ../gtk/gtksettings.c:266
+#: ../gtk/gtksettings.c:268
 msgid "Menu bar accelerator"
 msgstr "Menubalk sneltoets"
 
-#: ../gtk/gtksettings.c:267
+#: ../gtk/gtksettings.c:269
 msgid "Keybinding to activate the menu bar"
 msgstr "Sneltoets om de menubalk te activeren"
 
-#: ../gtk/gtksettings.c:275
+#: ../gtk/gtksettings.c:277
 msgid "Drag threshold"
 msgstr "Sleepdrempel"
 
-#: ../gtk/gtksettings.c:276
+#: ../gtk/gtksettings.c:278
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Aantal beeldpunten dat de cursor moet bewegen om het slepen te activeren"
 
-#: ../gtk/gtksettings.c:284
+#: ../gtk/gtksettings.c:286
 msgid "Font Name"
 msgstr "Lettertypenaam"
 
-#: ../gtk/gtksettings.c:285
+#: ../gtk/gtksettings.c:287
 msgid "Name of default font to use"
 msgstr "Naam van het standaard lettertype"
 
-#: ../gtk/gtksettings.c:293
+#: ../gtk/gtksettings.c:295
 msgid "Icon Sizes"
 msgstr "Pictogramafmetingen"
 
-#: ../gtk/gtksettings.c:294
+#: ../gtk/gtksettings.c:296
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lijst van pictogramafmetingen (gtk-menu=16,16:gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:302
+#: ../gtk/gtksettings.c:304
 msgid "GTK Modules"
 msgstr "GTK-modules"
 
-#: ../gtk/gtksettings.c:303
+#: ../gtk/gtksettings.c:305
 msgid "List of currently active GTK modules"
 msgstr "Lijst met actieve GTK-modules"
 
-#: ../gtk/gtksettings.c:312
+#: ../gtk/gtksettings.c:314
 msgid "Xft Antialias"
 msgstr "Xft-antialias"
 
-#: ../gtk/gtksettings.c:313
+#: ../gtk/gtksettings.c:315
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Of Xft-lettertypen antialias krijgen; 0=nee, 1=ja, -1=standaard"
 
-#: ../gtk/gtksettings.c:322
+#: ../gtk/gtksettings.c:324
 msgid "Xft Hinting"
 msgstr "Xft-hinting"
 
-#: ../gtk/gtksettings.c:323
+#: ../gtk/gtksettings.c:325
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Of Xft-lettertypen hinting krijgen; 0=nee, 1=ja, -1=standaard"
 
-#: ../gtk/gtksettings.c:332
+#: ../gtk/gtksettings.c:334
 msgid "Xft Hint Style"
 msgstr "Xft hint stijl"
 
 # moet hintnone etc vertaald worden?
-#: ../gtk/gtksettings.c:333
+#: ../gtk/gtksettings.c:335
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Welk soort hinting gebruikt wordt; hintnone, hintslight, hintmedium of "
 "hintfull"
 
-#: ../gtk/gtksettings.c:342
+#: ../gtk/gtksettings.c:344
 msgid "Xft RGBA"
 msgstr "Xft-RGBA"
 
-#: ../gtk/gtksettings.c:343
+#: ../gtk/gtksettings.c:345
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type subpixel antialias; none, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:354
 msgid "Xft DPI"
 msgstr "Xft-DPI"
 
-#: ../gtk/gtksettings.c:353
+#: ../gtk/gtksettings.c:355
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Resolutie voor Xft, in 1024 * punten/inch. Standaardwaarde: -1 "
 
-#: ../gtk/gtksettings.c:362
+#: ../gtk/gtksettings.c:364
 msgid "Cursor theme name"
 msgstr "Cursorthema-naam"
 
-#: ../gtk/gtksettings.c:363
+#: ../gtk/gtksettings.c:365
 msgid "Name of the cursor theme to use"
 msgstr "Naam van het gebruikte cursorthema"
 
 # geen streepje tussen thema en grootte
 # het gaat om de grootte van de cursors
-#: ../gtk/gtksettings.c:371
+#: ../gtk/gtksettings.c:373
 msgid "Cursor theme size"
 msgstr "Cursorthema grootte"
 
-#: ../gtk/gtksettings.c:372
+#: ../gtk/gtksettings.c:374
 msgid "Size to use for cursors"
 msgstr "De grootte van de cursors"
 
-#: ../gtk/gtksettings.c:382
+#: ../gtk/gtksettings.c:384
 msgid "Alternative button order"
 msgstr "Alternatieve knoppenvolgorde"
 
-#: ../gtk/gtksettings.c:383
+#: ../gtk/gtksettings.c:385
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Of knoppen in dialoogvensters in de alternatieve knopvolgorde moeten staan"
+
+#: ../gtk/gtksettings.c:393
+msgid "Show the 'Input Methods' menu"
+msgstr "Toon het menu 'Invoermethodes'"
+
+#: ../gtk/gtksettings.c:394
+msgid ""
+"Whether the context menus of entries and text views should offer to change "
+"the input method"
+msgstr "Of het contextmenu bij invoervelden en tekstvelden de optie bevat voor het wijzigen van invoermethode"
+
+#: ../gtk/gtksettings.c:402
+msgid "Show the 'Insert Unicode Control Character' menu"
+msgstr "Toon het menu 'Unicode controleteken invoegen'"
+
+#: ../gtk/gtksettings.c:403
+msgid ""
+"Whether the context menus of entries and text views should offer to insert "
+"control characters"
+msgstr "Of het contextmenu bij invoervelden en tekstvelden de optie bevat voor het invoeren van controletekens"
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
@@ -3841,20 +3917,37 @@ msgstr "Leest de huidige waarde, of zet een nieuwe"
 msgid "Style of bevel around the spin button"
 msgstr "Stijl van de rand rondom de spinknop"
 
-#: ../gtk/gtkstatusbar.c:178
+#: ../gtk/gtkstatusbar.c:176
 msgid "Has Resize Grip"
 msgstr "Heeft handvat voor grootte"
 
 # resize: groter kleiner maken
-#: ../gtk/gtkstatusbar.c:179
+#: ../gtk/gtkstatusbar.c:177
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr ""
 "Of de statusbalk een handvat heeft voor het aanpassen van de grootte van het "
 "topniveau"
 
-#: ../gtk/gtkstatusbar.c:206
+#: ../gtk/gtkstatusbar.c:204
 msgid "Style of bevel around the statusbar text"
 msgstr "Stijl van de rand om de statusbalktekst"
+
+#: ../gtk/gtkstatusicon.c:167
+msgid "The size of the icon"
+msgstr "De grootte van het pictogram"
+
+# pulseren/knipperen
+#: ../gtk/gtkstatusicon.c:176
+msgid "Blinking"
+msgstr "Knipperen"
+
+#: ../gtk/gtkstatusicon.c:177
+msgid "Whether or not the status icon is blinking"
+msgstr "Of de statuspictogram knippert"
+
+#: ../gtk/gtkstatusicon.c:185
+msgid "Whether or not the status icon is visible"
+msgstr "Of de statuspictogram zichtbaar is"
 
 #: ../gtk/gtktable.c:161
 msgid "Rows"
@@ -3962,41 +4055,49 @@ msgid ""
 msgstr ""
 "Extra ruimte tussen de dochter en haar boven en onderburen, in beeldpunten"
 
-#: ../gtk/gtktext.c:607
+#: ../gtk/gtktext.c:608
 msgid "Horizontal adjustment for the text widget"
 msgstr "Horizontale aanpassing voor de tekstwidget"
 
-#: ../gtk/gtktext.c:615
+#: ../gtk/gtktext.c:616
 msgid "Vertical adjustment for the text widget"
 msgstr "Verticale aanpassing voor de tekstwidget"
 
-#: ../gtk/gtktext.c:622
+#: ../gtk/gtktext.c:623
 msgid "Line Wrap"
 msgstr "Regelterugloop"
 
-#: ../gtk/gtktext.c:623
+#: ../gtk/gtktext.c:624
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Of regels teruglopen aan de randen van widgets"
 
-#: ../gtk/gtktext.c:630
+#: ../gtk/gtktext.c:631
 msgid "Word Wrap"
 msgstr "Woordafbreking"
 
-#: ../gtk/gtktext.c:631
+#: ../gtk/gtktext.c:632
 msgid "Whether words are wrapped at widget edges"
 msgstr "Of woorden afgebroken worden aan de randen van widgets"
 
-#: ../gtk/gtktextbuffer.c:188
+#: ../gtk/gtktextbuffer.c:194
 msgid "Tag Table"
 msgstr "Etiket-tabel"
 
-#: ../gtk/gtktextbuffer.c:189
+#: ../gtk/gtktextbuffer.c:195
 msgid "Text Tag Table"
 msgstr "Tekst etiket-tabel"
 
-#: ../gtk/gtktextbuffer.c:207
+#: ../gtk/gtktextbuffer.c:213
 msgid "Current text of the buffer"
 msgstr "De huidige tekst van de buffer"
+
+#: ../gtk/gtktextbuffer.c:227
+msgid "Has selection"
+msgstr "Heeft selectie"
+
+#: ../gtk/gtktextbuffer.c:228
+msgid "Whether the buffer has some text currently selected"
+msgstr "Of de buffer momenteel geselecteerde tekst bevat"
 
 #: ../gtk/gtktexttag.c:201
 msgid "Tag name"
@@ -4387,7 +4488,7 @@ msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
 "Of de proxies voor deze actie er uit zien als proxies voor radio-acties"
 
-#: ../gtk/gtktogglebutton.c:136
+#: ../gtk/gtktogglebutton.c:136 ../gtk/gtktoggletoolbutton.c:132
 msgid "If the toggle button should be pressed in or not"
 msgstr "Of de schakelknop ingedrukt moet zijn of niet"
 
@@ -4403,101 +4504,113 @@ msgstr "Teken indicator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Of het schakelgedeelte van een knop weergegeven wordt"
 
-#: ../gtk/gtktoolbar.c:509
+#: ../gtk/gtktoolbar.c:511
 msgid "The orientation of the toolbar"
 msgstr "De oriëntatie van de werkbalk"
 
-#: ../gtk/gtktoolbar.c:517
+#: ../gtk/gtktoolbar.c:519
 msgid "Toolbar Style"
 msgstr "Werkbalkstijl"
 
-#: ../gtk/gtktoolbar.c:518
+#: ../gtk/gtktoolbar.c:520
 msgid "How to draw the toolbar"
 msgstr "Hoe de werkbalk te tekenen"
 
-#: ../gtk/gtktoolbar.c:525
+#: ../gtk/gtktoolbar.c:527
 msgid "Show Arrow"
 msgstr "Pijl tonen"
 
-#: ../gtk/gtktoolbar.c:526
+#: ../gtk/gtktoolbar.c:528
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Of een pijl wordt getoond als de werkbalk niet past"
 
 # vertalen of niet?
 # werktip
 # tip
-#: ../gtk/gtktoolbar.c:541
+#: ../gtk/gtktoolbar.c:543
 msgid "Tooltips"
 msgstr "Tooltips"
 
-#: ../gtk/gtktoolbar.c:542
+#: ../gtk/gtktoolbar.c:544
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr "Of de tooltips van de werkbalk actief zijn of niet"
 
-#: ../gtk/gtktoolbar.c:551
+#: ../gtk/gtktoolbar.c:566
+msgid "Size of icons in this toolbar"
+msgstr "Grootte van pictogrammen in deze werkbalk"
+
+#: ../gtk/gtktoolbar.c:581
+msgid "Icon size set"
+msgstr "Pictogramgrootte ingesteld"
+
+#: ../gtk/gtktoolbar.c:582
+msgid "Whether the icon-size property has been set"
+msgstr "Of de grootte van de pictogrammen is ingesteld"
+
+#: ../gtk/gtktoolbar.c:591
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Of het item meer ruimte moet krijgen als de werkbalk groter wordt"
 
-#: ../gtk/gtktoolbar.c:559
+#: ../gtk/gtktoolbar.c:599
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Of het item dezelfde afmeting moet hebben als andere homogene items"
 
-#: ../gtk/gtktoolbar.c:566
+#: ../gtk/gtktoolbar.c:606
 msgid "Spacer size"
 msgstr "Afstandhoudergrootte"
 
-#: ../gtk/gtktoolbar.c:567
+#: ../gtk/gtktoolbar.c:607
 msgid "Size of spacers"
 msgstr "Grootte van afstandhouders"
 
-#: ../gtk/gtktoolbar.c:576
+#: ../gtk/gtktoolbar.c:616
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Hoeveelheid kaderruimte tussen de werkbalkschaduw en de knoppen"
 
-#: ../gtk/gtktoolbar.c:584
+#: ../gtk/gtktoolbar.c:624
 msgid "Space style"
 msgstr "Afstandhouderstijl"
 
-#: ../gtk/gtktoolbar.c:585
+#: ../gtk/gtktoolbar.c:625
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Of afstandhouders verticale lijnen zijn of gewoon leeg"
 
-#: ../gtk/gtktoolbar.c:592
+#: ../gtk/gtktoolbar.c:632
 msgid "Button relief"
 msgstr "Knopreliëf"
 
-#: ../gtk/gtktoolbar.c:593
+#: ../gtk/gtktoolbar.c:633
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type rand rondom werkbalkknoppen"
 
-#: ../gtk/gtktoolbar.c:600
+#: ../gtk/gtktoolbar.c:640
 msgid "Style of bevel around the toolbar"
 msgstr "Stijl van de rand rondom de werkbalk"
 
-#: ../gtk/gtktoolbar.c:606
+#: ../gtk/gtktoolbar.c:646
 msgid "Toolbar style"
 msgstr "Werkbalkstijl"
 
-#: ../gtk/gtktoolbar.c:607
+#: ../gtk/gtktoolbar.c:647
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Of de standaard werkbalk alleen tekst heeft, of tekst en pictogrammen, of "
 "alleen pictogrammen enz. "
 
-#: ../gtk/gtktoolbar.c:613
+#: ../gtk/gtktoolbar.c:653
 msgid "Toolbar icon size"
 msgstr "Pictogramgrootte op werkbalk"
 
-#: ../gtk/gtktoolbar.c:614
+#: ../gtk/gtktoolbar.c:654
 msgid "Size of icons in default toolbars"
 msgstr "Grootte van pictogrammen in de standaard werkbalk"
 
-#: ../gtk/gtktoolbutton.c:188
+#: ../gtk/gtktoolbutton.c:186
 msgid "Text to show in the item."
 msgstr "De tekst die in het item wordt getoond."
 
-#: ../gtk/gtktoolbutton.c:195
+#: ../gtk/gtktoolbutton.c:193
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
@@ -4505,31 +4618,31 @@ msgstr ""
 "Indien aangevinkt betekent een onderstreping in de labeleigenschap dat het "
 "volgende teken gebruikt moet worden voor de sneltoets in het overvloeimenu"
 
-#: ../gtk/gtktoolbutton.c:202
+#: ../gtk/gtktoolbutton.c:200
 msgid "Widget to use as the item label"
 msgstr "Het te gebruiken widget voor het item-label"
 
-#: ../gtk/gtktoolbutton.c:208
+#: ../gtk/gtktoolbutton.c:206
 msgid "Stock Id"
 msgstr "Standaard-ID"
 
-#: ../gtk/gtktoolbutton.c:209
+#: ../gtk/gtktoolbutton.c:207
 msgid "The stock icon displayed on the item"
 msgstr "Het standaard pictogram weergegeven op het item"
 
-#: ../gtk/gtktoolbutton.c:225
+#: ../gtk/gtktoolbutton.c:223
 msgid "Icon name"
 msgstr "Pictogramnaam"
 
-#: ../gtk/gtktoolbutton.c:226
+#: ../gtk/gtktoolbutton.c:224
 msgid "The name of the themed icon displayed on the item"
 msgstr "De naam van het thema-pictogram weergegeven op het item"
 
-#: ../gtk/gtktoolbutton.c:232
+#: ../gtk/gtktoolbutton.c:230
 msgid "Icon widget"
 msgstr "Pictogram-widget"
 
-#: ../gtk/gtktoolbutton.c:233
+#: ../gtk/gtktoolbutton.c:231
 msgid "Icon widget to display in the item"
 msgstr "Weer te geven pictogramwidget in het item"
 
@@ -4540,6 +4653,10 @@ msgid ""
 msgstr ""
 "Of de werkbalkitem belangrijk wordt geacht. Indien WAAR, tonen "
 "werkbalkknoppen de tekst in GTK_TOOLBAR_BOTH_HORIZ modus"
+
+#: ../gtk/gtktrayicon-x11.c:95
+msgid "The orientation of the tray"
+msgstr "De oriëntatie van de balk"
 
 #: ../gtk/gtktreemodelsort.c:331
 msgid "TreeModelSort Model"
@@ -4695,7 +4812,7 @@ msgstr "De kleur van de oneven rijen"
 msgid "Whether to display the column"
 msgstr "Of de kolom moet worden weergegeven"
 
-#: ../gtk/gtktreeviewcolumn.c:234 ../gtk/gtkwindow.c:464
+#: ../gtk/gtktreeviewcolumn.c:234 ../gtk/gtkwindow.c:466
 msgid "Resizable"
 msgstr "Herschaalbaar"
 
@@ -5048,37 +5165,37 @@ msgstr "Kader tekenen"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Grootte van gebieden rond het widget toegewezen gebied"
 
-#: ../gtk/gtkwindow.c:422
+#: ../gtk/gtkwindow.c:424
 msgid "Window Type"
 msgstr "Venstertype"
 
-#: ../gtk/gtkwindow.c:423
+#: ../gtk/gtkwindow.c:425
 msgid "The type of the window"
 msgstr "Het type venster"
 
-#: ../gtk/gtkwindow.c:431
+#: ../gtk/gtkwindow.c:433
 msgid "Window Title"
 msgstr "Venstertitel"
 
-#: ../gtk/gtkwindow.c:432
+#: ../gtk/gtkwindow.c:434
 msgid "The title of the window"
 msgstr "De titel van het venster"
 
-#: ../gtk/gtkwindow.c:439
+#: ../gtk/gtkwindow.c:441
 msgid "Window Role"
 msgstr "Venster-rol"
 
-#: ../gtk/gtkwindow.c:440
+#: ../gtk/gtkwindow.c:442
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Unieke identificatie voor het venster dat gebruikt wordt bij het herstellen "
 "van een sessie"
 
-#: ../gtk/gtkwindow.c:447
+#: ../gtk/gtkwindow.c:449
 msgid "Allow Shrink"
 msgstr "Krimpen toestaan"
 
-#: ../gtk/gtkwindow.c:449
+#: ../gtk/gtkwindow.c:451
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5087,24 +5204,24 @@ msgstr ""
 "Indien WAAR (TRUE) heeft het venster geen minimumgrootte. Dit is in 99% van "
 "de gevallen een slecht idee"
 
-#: ../gtk/gtkwindow.c:456
+#: ../gtk/gtkwindow.c:458
 msgid "Allow Grow"
 msgstr "Groeien toestaan"
 
-#: ../gtk/gtkwindow.c:457
+#: ../gtk/gtkwindow.c:459
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Indien WAAR (TRUE), kan het venster vergroot worden voorbij de minimumgrootte"
 
-#: ../gtk/gtkwindow.c:465
+#: ../gtk/gtkwindow.c:467
 msgid "If TRUE, users can resize the window"
 msgstr "Indien WAAR (TRUE), kan de afmeting van het venster worden aangepast"
 
-#: ../gtk/gtkwindow.c:472
+#: ../gtk/gtkwindow.c:474
 msgid "Modal"
 msgstr "Modaal"
 
-#: ../gtk/gtkwindow.c:473
+#: ../gtk/gtkwindow.c:475
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5112,75 +5229,75 @@ msgstr ""
 "Indien WAAR (TRUE), is het venster modaal: andere vensters kunnen niet "
 "worden gebruikt zolang deze bovenaan staat"
 
-#: ../gtk/gtkwindow.c:480
+#: ../gtk/gtkwindow.c:482
 msgid "Window Position"
 msgstr "Vensterpositie"
 
-#: ../gtk/gtkwindow.c:481
+#: ../gtk/gtkwindow.c:483
 msgid "The initial position of the window"
 msgstr "De beginpositie van het venster"
 
-#: ../gtk/gtkwindow.c:489
+#: ../gtk/gtkwindow.c:491
 msgid "Default Width"
 msgstr "Standaardbreedte"
 
-#: ../gtk/gtkwindow.c:490
+#: ../gtk/gtkwindow.c:492
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "De standaardbreedte van het venster als het voor het eerst getoond wordt"
 
-#: ../gtk/gtkwindow.c:499
+#: ../gtk/gtkwindow.c:501
 msgid "Default Height"
 msgstr "Standaardhoogte"
 
-#: ../gtk/gtkwindow.c:500
+#: ../gtk/gtkwindow.c:502
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "De standaardhoogte van het venster als het voor het eerst getoond wordt"
 
-#: ../gtk/gtkwindow.c:509
+#: ../gtk/gtkwindow.c:511
 msgid "Destroy with Parent"
 msgstr "Vernietig samen met moeder"
 
-#: ../gtk/gtkwindow.c:510
+#: ../gtk/gtkwindow.c:512
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 "Of dit venster vernietigd moet worden als het moedervenster vernietigd wordt"
 
-#: ../gtk/gtkwindow.c:517
+#: ../gtk/gtkwindow.c:519
 msgid "Icon"
 msgstr "Pictogram"
 
-#: ../gtk/gtkwindow.c:518
+#: ../gtk/gtkwindow.c:520
 msgid "Icon for this window"
 msgstr "Pictogram voor dit venster"
 
-#: ../gtk/gtkwindow.c:534
+#: ../gtk/gtkwindow.c:536
 msgid "Name of the themed icon for this window"
 msgstr "Naam van het themapictogram voor dit venster"
 
-#: ../gtk/gtkwindow.c:549
+#: ../gtk/gtkwindow.c:551
 msgid "Is Active"
 msgstr "Is actief"
 
-#: ../gtk/gtkwindow.c:550
+#: ../gtk/gtkwindow.c:552
 msgid "Whether the toplevel is the current active window"
 msgstr "Of het topniveau het huidige actieve venster is"
 
-#: ../gtk/gtkwindow.c:557
+#: ../gtk/gtkwindow.c:559
 msgid "Focus in Toplevel"
 msgstr "Aandacht in topniveau"
 
-#: ../gtk/gtkwindow.c:558
+#: ../gtk/gtkwindow.c:560
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Of het invoeraandacht zich in dit GtkWindow bevindt"
 
-#: ../gtk/gtkwindow.c:565
+#: ../gtk/gtkwindow.c:567
 msgid "Type hint"
 msgstr "Soort hint"
 
-#: ../gtk/gtkwindow.c:566
+#: ../gtk/gtkwindow.c:568
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5188,68 +5305,76 @@ msgstr ""
 "Hint waarmee de werkomgeving wordt geholpen te begrijpen wat voor soort "
 "venster dit is, en hoe het moet worden behandeld"
 
-#: ../gtk/gtkwindow.c:574
+#: ../gtk/gtkwindow.c:576
 msgid "Skip taskbar"
 msgstr "Taakbalk overslaan"
 
-#: ../gtk/gtkwindow.c:575
+#: ../gtk/gtkwindow.c:577
 msgid "TRUE if the window should not be in the task bar."
 msgstr "WAAR (TRUE) als het venster niet in de taakbalk hoort"
 
 # in Gnome-nl is er voor gekozen de pager te vertalen met: werkbladwisselaar
-#: ../gtk/gtkwindow.c:582
+#: ../gtk/gtkwindow.c:584
 msgid "Skip pager"
 msgstr "Werkbladwisselaar overslaan"
 
-#: ../gtk/gtkwindow.c:583
+#: ../gtk/gtkwindow.c:585
 msgid "TRUE if the window should not be in the pager."
 msgstr "WAAR (TRUE) als het venster niet in de werkbladwisselaar hoort"
 
 # belangrijk/dringend
-#: ../gtk/gtkwindow.c:590
+#: ../gtk/gtkwindow.c:592
 msgid "Urgent"
 msgstr "Dringend"
 
-#: ../gtk/gtkwindow.c:591
+#: ../gtk/gtkwindow.c:593
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr ""
 "WAAR (TRUE) als het venster onder de aandacht van de gebruiker moet worden "
 "gebracht."
 
 # aandacht
-#: ../gtk/gtkwindow.c:605
+#: ../gtk/gtkwindow.c:607
 msgid "Accept focus"
 msgstr "Accepteert aandacht"
 
-#: ../gtk/gtkwindow.c:606
+#: ../gtk/gtkwindow.c:608
 msgid "TRUE if the window should receive the input focus."
 msgstr "WAAR (TRUE) als het venster de invoeraandacht moet krijgen."
 
 # projectie/realisering
-#: ../gtk/gtkwindow.c:620
+#: ../gtk/gtkwindow.c:622
 msgid "Focus on map"
 msgstr "Aandacht bij realisering"
 
-#: ../gtk/gtkwindow.c:621
+#: ../gtk/gtkwindow.c:623
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 "WAAR (TRUE) als het venster de invoeraandacht moet krijgen bij realisering."
 
 # versiering beter dan decoratie(=onderscheiding)
-#: ../gtk/gtkwindow.c:635
+#: ../gtk/gtkwindow.c:637
 msgid "Decorated"
 msgstr "Met versiering"
 
 # vensterbeheer ipv window manager?
-#: ../gtk/gtkwindow.c:636
+#: ../gtk/gtkwindow.c:638
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Of het venster de versiering van de window-manager moet krijgen."
 
-#: ../gtk/gtkwindow.c:651
+#: ../gtk/gtkwindow.c:652
+msgid "Deletable"
+msgstr "Verwijderbaar"
+
+#: ../gtk/gtkwindow.c:653
+msgid "Whether the window frame should have a close button"
+msgstr "Of het vensterkader een afsluitknop moet hebben"
+
+#: ../gtk/gtkwindow.c:669
 msgid "Gravity"
 msgstr "Zwaartekracht"
 
-#: ../gtk/gtkwindow.c:652
+#: ../gtk/gtkwindow.c:670
 msgid "The window gravity of the window"
 msgstr "De zwaartekrachtstijl voor het venster"
 
@@ -5270,6 +5395,9 @@ msgstr "IM-statusstijl"
 #: ../modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden afgebeeld"
+
+#~ msgid "Select multiple"
+#~ msgstr "Selecteer meerdere"
 
 #~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 #~ msgstr "Of deze tekst verborgen is. Dit is niet geïmplementeerd in GTK 2.0"
