@@ -287,12 +287,17 @@ gdk_property_change (GdkWindow    *window,
 	     g_free (prop_name),
 	     g_free (type_name)));
 
+  /* We should never come here for these types */
+  g_return_if_fail (type != GDK_TARGET_STRING);
+  g_return_if_fail (type != _text);
+  g_return_if_fail (type != _compound_text);
+  g_return_if_fail (type != _save_targets);
+
   if (property == _gdk_selection_property
       && format == 8
       && mode == GDK_PROP_MODE_REPLACE)
     {
-      if ((type == GDK_TARGET_STRING && GetACP () == 1252) ||
-	  type == _utf8_string)
+      if (type == _utf8_string)
 	{
 	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
 	    {
@@ -300,29 +305,17 @@ gdk_property_change (GdkWindow    *window,
 	      return;
 	    }
 
-	  if (type == _utf8_string)
-	    {
-	      /* Check if only ASCII */
-	      for (i = 0; i < nelements; i++)
-		if (data[i] >= 0200)
-		  break;
-	    }
-	  else /* if (type == GDK_TARGET_STRING) */
-	    {
-	      /* Check that no 0200..0240 chars present, as they
-	       * differ between ISO-8859-1 and CP1252.
-	       */
-	      for (i = 0; i < nelements; i++)
-		if (data[i] >= 0200 && data[i] < 0240)
-		  break;
-	    }
 	  nchars = g_utf8_strlen (data, nelements);
+
+	  /* Check if only ASCII */
+	  for (i = 0; i < nelements; i++)
+	    if (data[i] >= 0200)
+	      break;
 
 	  if (i == nelements)
 	    {
-	      /* If UTF-8 and only ASCII, or if STRING (ISO-8859-1)
-	       * and system codepage is CP1252, use CF_TEXT and the
-	       * data as such.
+	      /* If UTF-8 and only ASCII, use CF_TEXT and the data as
+	       * such.
 	       */
 	      method = SYSTEM_CODEPAGE;
 	      size = nelements;
@@ -360,8 +353,16 @@ gdk_property_change (GdkWindow    *window,
 
 	      const guchar *p = data;
 
+	      /* WordPad on XP, at least, doesn't seem to grok \uc0
+	       * -encoded Unicode characters. Oh well, use \uc1 then,
+	       * with a question mark as the "ANSI" stand-in for each
+	       * non-ASCII Unicode character. (WordPad for XP? This
+	       * code path is for Win9x! Yes, but I don't have Win9x,
+	       * so I use XP to test, using the G_WIN32_PRETEND_WIN9X
+	       * environment variable.)
+	       */
 	      method = RICH_TEXT;
-	      rtf = g_string_new ("{\\rtf1\\uc0 ");
+	      rtf = g_string_new ("{\\rtf1\\uc1 ");
 
 	      while (p < data + nelements)
 		{
@@ -383,11 +384,11 @@ gdk_property_change (GdkWindow    *window,
 		      guchar *q;
 		      gint n;
 		      
-		      rtf = g_string_append (rtf, "\\uNNNNN ");
-		      rtf->len -= 6; /* five digits and a space */
+		      rtf = g_string_append (rtf, "\\uNNNNN ?");
+		      rtf->len -= 7; /* five digits a space and a question mark */
 		      q = rtf->str + rtf->len;
-		      n = g_sprintf (q, "%d ", g_utf8_get_char (p));
-		      g_assert (n <= 6);
+		      n = g_sprintf (q, "%d ?", g_utf8_get_char (p));
+		      g_assert (n <= 7);
 		      rtf->len += n;
 		      
 		      p = g_utf8_next_char (p);
@@ -444,8 +445,10 @@ gdk_property_change (GdkWindow    *window,
 		  lcidptr = GlobalLock (hlcid);
 		  *lcidptr = lcid;
 		  GlobalUnlock (hlcid);
+		  GDK_NOTE (DND, g_print ("... SetClipboardData(CF_LOCALE,%p)\n",
+					  hlcid));
 		  if (!SetClipboardData (CF_LOCALE, hlcid))
-		    WIN32_API_FAILED ("SetClipboardData (CF_LOCALE)"), ok = FALSE;
+		    WIN32_API_FAILED ("SetClipboardData(CF_LOCALE)"), ok = FALSE;
 		}
 	      break;
 
@@ -464,8 +467,10 @@ gdk_property_change (GdkWindow    *window,
 		  guchar *utf8ptr = GlobalLock (hutf8);
 		  memmove (utf8ptr, data, nelements);
 		  GlobalUnlock (hutf8);
+		  GDK_NOTE (DND, g_print ("... SetClipboardData('UTF8_STRING',%p)\n",
+					  hutf8));
 		  if (!SetClipboardData (_cf_utf8_string, hutf8))
-		    WIN32_API_FAILED ("SetClipboardData (UTF8_STRING)");
+		    WIN32_API_FAILED ("SetClipboardData('UTF8_STRING')");
 		}
 	      break;
 
@@ -474,6 +479,8 @@ gdk_property_change (GdkWindow    *window,
 	    }
 
 	  GlobalUnlock (hdata);
+	  GDK_NOTE (DND, g_print ("... SetClipboardData(%s,%p)\n",
+				  _gdk_win32_cf_to_string (cf), hdata));
 	  if (ok && !SetClipboardData (cf, hdata))
 	    WIN32_API_FAILED ("SetClipboardData"), ok = FALSE;
       
@@ -482,6 +489,7 @@ gdk_property_change (GdkWindow    *window,
 	}
       else
         {
+	  GDK_NOTE (DND, g_print ("... delayed rendering\n"));
 	  /* Delayed Rendering. We can't assign hdata to the clipboard
 	   * here as type may be "image/png", "image/jpg", etc.  In
 	   * this case there's a further conversion afterwards.

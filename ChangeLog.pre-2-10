@@ -1,5 +1,32 @@
 2005-11-01  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c (_gdk_windowing_init): Add more
+	pre-interned GdkAtoms and pre-registered clipboard formats. Sort
+	their declarations, definitions and assignments into a more
+	logical and consistent order.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_cf_to_string): Include the
+	CF_ prefix for the predefined clipboard format names. Put quotes
+	around registered format names to distinguish them.
+	
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Return
+	immediately with a warning if the property type is STRING, TEXT,
+	COMPOUND_TEXT or SAVE_TARGETS, as these are X11-specific that we
+	should never pretend to handle on Win32. Handle only UTF8_STRING
+	here, other formats with delayed rendering. Use \uc1 instead of
+	\uc0 when generating Rich Text Format for easier testability on
+	XP, where WordPad misinterprets \uc0 encoded characters. Add more
+	GDK_NOTE debugging output for Clipboard operations.
+
+	* gdk/win32/gdkselection-win32.c: Debugging printout improvements.
+	(gdk_selection_convert): Don't pretent to handle STRING, just
+	UTF8_STRING. Streamline error handling, don't unnecessarily have a
+	GError which then isn't used for anything anyway if it gets set.
+	(gdk_win32_selection_add_targets): Skip also STRING, TEXT,
+	COMPOUND_TEXT and SAVE_TARGETS in addition to UTF8_STRING.
+
 	* config.h.win32.in: Sync with what configure produces.
 
 	* configure.in: Don't look for X_PACKAGES unless building for

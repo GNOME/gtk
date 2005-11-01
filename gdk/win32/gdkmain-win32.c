@@ -110,20 +110,21 @@ _gdk_windowing_init (void)
 
   _cf_rtf = RegisterClipboardFormat ("Rich Text Format");
   _cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
+  _cf_image_bmp = RegisterClipboardFormat ("image/bmp");
 
-  _utf8_string = gdk_atom_intern ("UTF8_STRING", FALSE);
+  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  _wm_transient_for = gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE);
   _targets = gdk_atom_intern ("TARGETS", FALSE);
-
+  _save_targets = gdk_atom_intern ("SAVE_TARGETS", FALSE);
+  _utf8_string = gdk_atom_intern ("UTF8_STRING", FALSE);
+  _text = gdk_atom_intern ("TEXT", FALSE);
+  _compound_text = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
   _text_uri_list = gdk_atom_intern ("text/uri-list", FALSE);
   _image_bmp = gdk_atom_intern ("image/bmp", FALSE);
 
   _local_dnd = gdk_atom_intern ("LocalDndSelection", FALSE);
   _gdk_win32_dropfiles = gdk_atom_intern ("DROPFILES_DND", FALSE);
   _gdk_ole2_dnd = gdk_atom_intern ("OLE2_DND", FALSE);
-
-  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
-
-  _wm_transient_for = gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE);
 
   _gdk_win32_selection_init ();
 }
@@ -932,7 +933,7 @@ _gdk_win32_cf_to_string (UINT format)
 
   switch (format)
     {
-#define CASE(x) case CF_##x: return #x
+#define CASE(x) case CF_##x: return "CF_" #x
       CASE (BITMAP);
       CASE (DIB);
 #ifdef CF_DIBV5
@@ -965,7 +966,7 @@ _gdk_win32_cf_to_string (UINT format)
 	  format <= CF_PRIVATELAST)
 	return static_printf ("CF_PRIVATE%d", format - CF_PRIVATEFIRST);
       if (GetClipboardFormatName (format, buf, sizeof (buf)))
-	return static_printf ("%s", buf);
+	return static_printf ("'%s'", buf);
       else
 	return static_printf ("unk-%#lx", format);
     }

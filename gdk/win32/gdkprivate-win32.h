@@ -472,11 +472,16 @@ extern guint		 _scancode_rshift;
 /* Registered clipboard formats */
 extern WORD		 _cf_rtf;
 extern WORD		 _cf_utf8_string;
+extern WORD		 _cf_image_bmp;
 
-/* GdkAtoms: targets */
-extern GdkAtom           _utf8_string;
+/* GdkAtoms: properties, targets and types */
+extern GdkAtom		 _gdk_selection_property;
+extern GdkAtom		 _wm_transient_for;
 extern GdkAtom		 _targets;
-
+extern GdkAtom		 _save_targets;
+extern GdkAtom           _utf8_string;
+extern GdkAtom		 _text;
+extern GdkAtom		 _compound_text;
 extern GdkAtom		 _text_uri_list;
 extern GdkAtom		 _image_bmp;
 
@@ -484,10 +489,6 @@ extern GdkAtom		 _image_bmp;
 extern GdkAtom           _local_dnd;
 extern GdkAtom		 _gdk_win32_dropfiles;
 extern GdkAtom		 _gdk_ole2_dnd;
-
-extern GdkAtom		 _gdk_selection_property;
-
-extern GdkAtom		 _wm_transient_for;
 
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;

@@ -201,17 +201,22 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 {
   HWND hwnd;
   GdkEvent tmp_event;
-  gchar *sel_name;
 
   g_return_val_if_fail (display == _gdk_display, FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
-  GDK_NOTE (DND,
-	    (sel_name = gdk_atom_name (selection),
-	     g_print ("gdk_selection_owner_set: %p %#x (%s)\n",
-		      (owner ? GDK_WINDOW_HWND (owner) : NULL),
-		      (guint) selection, sel_name),
-	     g_free (sel_name)));
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *sel_name;
+
+    GDK_NOTE (DND,
+	      (sel_name = gdk_atom_name (selection),
+	       g_print ("gdk_selection_owner_set_for_display: %p %#x (%s)\n",
+			(owner ? GDK_WINDOW_HWND (owner) : NULL),
+			(guint) selection, sel_name),
+	       g_free (sel_name)));
+  }
+#endif
 
   if (selection != GDK_SELECTION_CLIPBOARD)
     {
@@ -237,6 +242,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
     return FALSE;
 
   _ignore_destroy_clipboard = TRUE;
+  GDK_NOTE (DND, g_print ("... EmptyClipboard()\n"));
   if (!API_CALL (EmptyClipboard, ()))
     {
       _ignore_destroy_clipboard = FALSE;
@@ -275,7 +281,6 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
                                      GdkAtom     selection)
 {
   GdkWindow *window;
-  gchar *sel_name;
 
   g_return_val_if_fail (display == _gdk_display, NULL);
   g_return_val_if_fail (selection != GDK_NONE, NULL);
@@ -292,12 +297,18 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
 
   window = gdk_window_lookup ((GdkNativeWindow) g_hash_table_lookup (sel_owner_table, selection));
 
-  GDK_NOTE (DND,
-	    (sel_name = gdk_atom_name (selection),
-	     g_print ("gdk_selection_owner_get: %#x (%s) = %p\n",
-		      (guint) selection, sel_name,
-		      (window ? GDK_WINDOW_HWND (window) : NULL)),
-	     g_free (sel_name)));
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *sel_name;
+    
+    GDK_NOTE (DND,
+	      (sel_name = gdk_atom_name (selection),
+	       g_print ("gdk_selection_owner_get: %#x (%s) = %p\n",
+			(guint) selection, sel_name,
+			(window ? GDK_WINDOW_HWND (window) : NULL)),
+	       g_free (sel_name)));
+  }
+#endif
 
   return window;
 }
@@ -331,8 +342,6 @@ gdk_selection_convert (GdkWindow *requestor,
 {
   HGLOBAL hdata;
   GdkAtom property = _gdk_selection_property;
-  gchar *sel_name, *tgt_name;
-  GError *error = NULL;
 
   g_return_if_fail (selection != GDK_NONE);
   g_return_if_fail (requestor != NULL);
@@ -340,15 +349,21 @@ gdk_selection_convert (GdkWindow *requestor,
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  GDK_NOTE (DND,
-	    (sel_name = gdk_atom_name (selection),
-	     tgt_name = gdk_atom_name (target),
-	     g_print ("gdk_selection_convert: %p %#x (%s) %#x (%s)\n",
-		      GDK_WINDOW_HWND (requestor),
-		      (guint) selection, sel_name,
-		      (guint) target, tgt_name),
-	     g_free (sel_name),
-	     g_free (tgt_name)));
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *sel_name, *tgt_name;
+    
+    GDK_NOTE (DND,
+	      (sel_name = gdk_atom_name (selection),
+	       tgt_name = gdk_atom_name (target),
+	       g_print ("gdk_selection_convert: %p %#x (%s) %#x (%s)\n",
+			GDK_WINDOW_HWND (requestor),
+			(guint) selection, sel_name,
+			(guint) target, tgt_name),
+	       g_free (sel_name),
+	       g_free (tgt_name)));
+  }
+#endif
 
   if (selection == GDK_SELECTION_CLIPBOARD && target == _targets)
     {
@@ -401,16 +416,14 @@ gdk_selection_convert (GdkWindow *requestor,
 	data[i++] = _image_bmp;
 
       if (i > 0)
-	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
-					 32, (guchar *) data, i * sizeof (GdkAtom));
+	_gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
+				       32, (guchar *) data, i * sizeof (GdkAtom));
       else             
 	property = GDK_NONE;
 
       API_CALL (CloseClipboard, ());
     }
-  else if (selection == GDK_SELECTION_CLIPBOARD &&
-	   (target == GDK_TARGET_STRING ||
-	    target == _utf8_string))
+  else if (selection == GDK_SELECTION_CLIPBOARD && target == _utf8_string)
     {
       /* Converting the CLIPBOARD selection means he wants the
        * contents of the clipboard. Get the clipboard data, and store
@@ -448,14 +461,10 @@ gdk_selection_convert (GdkWindow *requestor,
 		  p++;
 		}
 
-	      data = g_utf16_to_utf8 (wcs, wclen, NULL, NULL, &error);
+	      data = g_utf16_to_utf8 (wcs, wclen, NULL, NULL, NULL);
 	      g_free (wcs);
 
-	      if (!data)
-		{
-		  g_error_free (error);
-		}
-	      else
+	      if (data)
 		_gdk_selection_property_store (requestor, target, 8,
 					       data, strlen (data) + 1);
 	      GlobalUnlock (hdata);
@@ -532,12 +541,10 @@ gdk_selection_convert (GdkWindow *requestor,
 		}
 	      g_free (wcs);
 
-	      data = g_utf16_to_utf8 (wcs2, wclen2, NULL, &length, &error);
+	      data = g_utf16_to_utf8 (wcs2, wclen2, NULL, &length, NULL);
 	      g_free (wcs2);
 
-	      if (!data)
-		g_error_free (error);
-	      else
+	      if (data)
 		_gdk_selection_property_store (requestor, target, 8,
 					       data, length + 1);
 	      GlobalUnlock (hdata);
@@ -548,14 +555,13 @@ gdk_selection_convert (GdkWindow *requestor,
 
       API_CALL (CloseClipboard, ());
     }
-  else if (selection == GDK_SELECTION_CLIPBOARD &&
-           target == _image_bmp)
+  else if (selection == GDK_SELECTION_CLIPBOARD && target == _image_bmp)
     {
       guchar *data;
 
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
-      if ((hdata = GetClipboardData (RegisterClipboardFormat ("image/bmp"))) != NULL)
+      if ((hdata = GetClipboardData (_cf_image_bmp)) != NULL)
 	{
 	  /* "image/bmp" is the first choice. */
 	  guchar *ptr;
@@ -751,24 +757,26 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
                                        GdkAtom     property,
                                        guint32     time)
 {
-#ifdef G_ENABLE_DEBUG
-  gchar *sel_name, *tgt_name, *prop_name;
-#endif
-
   g_return_if_fail (display == _gdk_display);
 
-  GDK_NOTE (DND,
-	    (sel_name = gdk_atom_name (selection),
-	     tgt_name = gdk_atom_name (target),
-	     prop_name = gdk_atom_name (property),
-	     g_print ("gdk_selection_send_notify_for_display: %#x %#x (%s) %#x (%s) %#x (%s)\n",
-		      requestor,
-		      (guint) selection, sel_name,
-		      (guint) target, tgt_name,
-		      (guint) property, prop_name),
-	     g_free (sel_name),
-	     g_free (tgt_name),
-	     g_free (prop_name)));
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *sel_name, *tgt_name, *prop_name;
+
+    GDK_NOTE (DND,
+	      (sel_name = gdk_atom_name (selection),
+	       tgt_name = gdk_atom_name (target),
+	       prop_name = gdk_atom_name (property),
+	       g_print ("gdk_selection_send_notify_for_display: %p %#x (%s) %#x (%s) %#x (%s)\n",
+			(gpointer) requestor,
+			(guint) selection, sel_name,
+			(guint) target, tgt_name,
+			(guint) property, prop_name),
+	       g_free (sel_name),
+	       g_free (tgt_name),
+	       g_free (prop_name)));
+  }
+#endif
 }
 
 /* It's hard to say whether implementing this actually is of any use
@@ -783,18 +791,23 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
 					    gint          length,
 					    gchar      ***list)
 {
-  gchar *enc_name;
   gchar *result;
   const gchar *charset;
   gchar *source_charset;
 
   g_return_val_if_fail (display == _gdk_display, 0);
 
-  GDK_NOTE (DND, (enc_name = gdk_atom_name (encoding),
-		  g_print ("gdk_text_property_to_text_list_for_display: %s %d %.20s %d\n",
-			   enc_name, format, text, length),
-		  g_free (enc_name)));
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *enc_name;
 
+    GDK_NOTE (DND, (enc_name = gdk_atom_name (encoding),
+		    g_print ("gdk_text_property_to_text_list_for_display: %s %d %.20s %d\n",
+			     enc_name, format, text, length),
+		    g_free (enc_name)));
+  }
+#endif
+    
   if (!list)
     return 0;
 
@@ -1021,6 +1034,27 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
   GSList *convertable_formats, *format;
   gboolean has_set_dib = FALSE, has_real_dib = FALSE;
 
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_DND)
+    {
+      gchar *sel_name = gdk_atom_name (selection);
+      
+      g_print ("gdk_win32_selection_add_targets: %p: %s: ",
+	       owner ? GDK_WINDOW_HWND (owner) : NULL,
+	       sel_name);
+      g_free (sel_name);
+
+      for (i = 0; i < n_targets; i++)
+	{
+	  gchar *tgt_name = gdk_atom_name (targets[i]);
+
+	  g_print ("%s ", tgt_name);
+	  g_free (tgt_name);
+	}
+      g_print ("\n");
+    }
+#endif
+
   if (selection != GDK_SELECTION_CLIPBOARD)
     return;
 
@@ -1039,17 +1073,25 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
     {
       gchar *target_name;
 
-      if (targets[i] == _utf8_string)
+      if (targets[i] == _utf8_string ||
+	  targets[i] == GDK_TARGET_STRING ||
+	  targets[i] == _text ||
+	  targets[i] == _compound_text ||
+	  targets[i] == _save_targets)
 	continue;
 
       target_name = gdk_atom_name (targets[i]);
-      if (!(formatid = RegisterClipboardFormat (target_name))) {
-	WIN32_API_FAILED ("RegisterClipboardFormat");
-	API_CALL (CloseClipboard, ());
-	g_free (target_name);
-	return;
-      }
+      if (!(formatid = RegisterClipboardFormat (target_name)))
+	{
+	  WIN32_API_FAILED ("RegisterClipboardFormat");
+	  API_CALL (CloseClipboard, ());
+	  g_free (target_name);
+	  return;
+	}
       g_hash_table_replace (_format_atom_table, GINT_TO_POINTER (formatid), targets[i]);
+
+      GDK_NOTE (DND, g_print ("... SetClipboardData(%s,NULL)\n",
+			      _gdk_win32_cf_to_string (formatid)));
       SetClipboardData (formatid, NULL);
 
       /* We should replace the previous image format associated with
@@ -1064,10 +1106,12 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 	  g_hash_table_replace (_format_atom_table,
 				GINT_TO_POINTER (CF_DIB),
 				targets[i]);
-	  if (!has_set_dib) {
-	    SetClipboardData (CF_DIB, NULL);
-	    has_set_dib = TRUE;
-	  }
+	  if (!has_set_dib)
+	    {
+	      GDK_NOTE (DND, g_print ("... SetClipboardData(CF_DIB,NULL)\n"));
+	      SetClipboardData (CF_DIB, NULL);
+	      has_set_dib = TRUE;
+	    }
 	  has_real_dib = TRUE;
 	  g_free (target_name);
 	  continue;
@@ -1085,6 +1129,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 		  g_hash_table_replace (_format_atom_table,
 					GINT_TO_POINTER (CF_DIB),
 					targets[i]);
+		  GDK_NOTE (DND, g_print ("... SetClipboardData(CF_DIB,NULL)\n"));
 		  SetClipboardData (CF_DIB, NULL);
 		  has_set_dib = TRUE;
 		  break;
@@ -1132,10 +1177,11 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
       ptr = GlobalLock (hdata);
       memmove (ptr, ptr + sizeof (BITMAPFILEHEADER), size);
       GlobalUnlock (hdata);
-      if (!(hdatanew = GlobalReAlloc (hdata, size, 0))) {
-	WIN32_API_FAILED ("GlobalReAlloc");
-	GlobalFree (hdata); /* the old hdata is not freed if error */
-      }
+      if (!(hdatanew = GlobalReAlloc (hdata, size, 0)))
+	{
+	  WIN32_API_FAILED ("GlobalReAlloc");
+	  GlobalFree (hdata); /* the old hdata is not freed if error */
+	}
       return hdatanew;
     }
 
