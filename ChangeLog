@@ -1,5 +1,14 @@
 2005-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c: Remove some g_return_if_fail() from
+	static functions, replace some others by g_assert().
+	
+	* gtk/gtktextview.c (selection_motion_event_handler) 
+	(gtk_text_view_start_selection_drag): Keep track of the original
+	selection boundaries during a drag selection, in order to correctly
+	decide when to extend or shrink the selection.  (#320167,
+	reported by Arvind S N, patch by Paolo Borelli)
+
 	* gtk/gtktextbtree.c (_gtk_text_line_char_to_byte_offsets): 
 	* gtk/gtktextiter.c (gtk_text_iter_backward_chars): Replace
 	manual offset calculations by g_utf8_offset_to_pointer().
