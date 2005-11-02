@@ -455,7 +455,7 @@ add_move_binding (GtkBindingSet  *binding_set,
                   GtkMovementStep step,
                   gint            count)
 {
-  g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
+  g_assert ((modmask & GDK_SHIFT_MASK) == 0);
 
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
                                 "move_cursor", 3,
@@ -2458,8 +2458,8 @@ gtk_text_view_get_tabs (GtkTextView *text_view)
  * the cursor off.
  **/
 void
-gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
-                                     gboolean       setting)
+gtk_text_view_set_cursor_visible (GtkTextView *text_view,
+				  gboolean     setting)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2491,7 +2491,7 @@ gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
  * Return value: whether the insertion mark is visible
  **/
 gboolean
-gtk_text_view_get_cursor_visible    (GtkTextView   *text_view)
+gtk_text_view_get_cursor_visible (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 
@@ -2569,7 +2569,7 @@ gtk_text_view_finalize (GObject *object)
 
   text_view = GTK_TEXT_VIEW (object);
 
-  g_return_if_fail (text_view->buffer == NULL);
+  g_assert (text_view->buffer == NULL);
 
   gtk_text_view_destroy_layout (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
@@ -4359,9 +4359,6 @@ static void
 gtk_text_view_add (GtkContainer *container,
                    GtkWidget    *child)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
   /* This is pretty random. */
   gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (container),
                                      child,
@@ -4376,10 +4373,6 @@ gtk_text_view_remove (GtkContainer *container,
   GSList *iter;
   GtkTextView *text_view;
   GtkTextViewChild *vc;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == (GtkWidget*) container);
 
   text_view = GTK_TEXT_VIEW (container);
 
@@ -5592,12 +5585,32 @@ extend_selection (GtkTextView *text_view,
     }
 }
  
-static gint
-selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, gpointer data)
-{
-  SelectionGranularity granularity = GPOINTER_TO_INT (data);
 
-  if (granularity == SELECT_CHARACTERS) 
+typedef struct
+{
+  SelectionGranularity granularity;
+  GtkTextMark *orig_start;
+  GtkTextMark *orig_end;
+} SelectionData;
+
+static void
+selection_data_free (SelectionData *data)
+{
+  if (data->orig_start != NULL)
+    gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (data->orig_start),
+                                 data->orig_start);
+  if (data->orig_end != NULL)
+    gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (data->orig_end),
+                                 data->orig_end);
+  g_free (data);
+}
+
+static gint
+selection_motion_event_handler (GtkTextView    *text_view, 
+				GdkEventMotion *event, 
+				SelectionData  *data)
+{
+  if (data->granularity == SELECT_CHARACTERS) 
     {
       move_mark_to_pointer_and_scroll (text_view, "insert");
     }
@@ -5606,11 +5619,14 @@ selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, g
       gint x, y;
       GdkModifierType state;
       GtkTextIter start, end;
-      GtkTextIter old_start, old_end;    
       GtkTextIter ins, bound;    
       GtkTextBuffer *buffer;
+      gboolean extend;
       
       buffer = get_buffer (text_view);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &ins, data->orig_start);
+      gtk_text_buffer_get_iter_at_mark (buffer, &bound, data->orig_end);
 
       gdk_window_get_pointer (text_view->text_window->bin_window,
 			      &x, &y, &state);
@@ -5620,57 +5636,27 @@ selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, g
 					 event->x + text_view->xoffset,
 					 event->y + text_view->yoffset); 
       
-      extend_selection (text_view, granularity, &start, &end);
+      extend = !gtk_text_iter_in_range (&start, &ins, &bound);
 
-      /* Extend selection */
-      gtk_text_buffer_get_iter_at_mark (buffer, 
-					&ins, 
-					gtk_text_buffer_get_insert (buffer));
-      gtk_text_buffer_get_iter_at_mark (buffer, 
-					    &bound,
-					    gtk_text_buffer_get_selection_bound (buffer));
+      extend_selection (text_view, data->granularity, &start, &end);
 
-      if (gtk_text_iter_compare (&ins, &bound) < 0) 
-	{
-	  old_start = ins;
-	  old_end = bound;
-	}
+      if (extend)
+        {
+          /* Extend selection */
+          gtk_text_iter_order (&ins, &start);
+          gtk_text_iter_order (&end, &bound);
+          gtk_text_buffer_select_range (buffer, &ins, &bound);
+        }
       else
-	{
-	  old_start = bound;
-	  old_end = ins;
-	}
-
-      if (gtk_text_iter_compare (&start, &old_start) < 0) 
-	{
-	  /* newly selected unit before the current selection */
-	  ins = start;
-	  bound = old_end;
-	}
-      else if (gtk_text_iter_compare (&old_end, &end) < 0)
-	{
-	  /* newly selected unit after the current selection */
-	  ins = end;
-	  bound = old_start;
-	}
-      else if (gtk_text_iter_equal (&ins, &old_start)) 
-	{
-	  /* newly selected unit inside the current selection at the start */
-	  if (!gtk_text_iter_equal (&ins, &start))
-	    ins = end;
-	}
-      else
-	{
-	  /* newly selected unit inside the current selection at the end */
-	  if (!gtk_text_iter_equal (&ins, &end))
-	    ins = start;
-	}
-
-      gtk_text_buffer_select_range (buffer, &ins, &bound);
+        {
+          /* Shrink selection */
+          gtk_text_iter_order (&ins, &start);
+          gtk_text_iter_order (&end, &bound);
+          gtk_text_buffer_select_range (buffer, &ins, &end);
+        }
 
       gtk_text_view_scroll_mark_onscreen (text_view, 
-					  gtk_text_buffer_get_mark (buffer,
-								    "insert"));
+					  gtk_text_buffer_get_insert (buffer));
     }
 
   /* If we had to scroll offscreen, insert a timeout to do so
@@ -5694,16 +5680,18 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 {
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
-  SelectionGranularity granularity;
+  SelectionData *data;
 
-  g_return_if_fail (text_view->selection_drag_handler == 0);
+  g_assert (text_view->selection_drag_handler == 0);
+  
+  data = g_new0 (SelectionData, 1);
 
   if (button->type == GDK_2BUTTON_PRESS)
-    granularity = SELECT_WORDS;
+    data->granularity = SELECT_WORDS;
   else if (button->type == GDK_3BUTTON_PRESS)
-    granularity = SELECT_LINES;
+    data->granularity = SELECT_LINES;
   else 
-    granularity = SELECT_CHARACTERS;
+    data->granularity = SELECT_CHARACTERS;
 
   gtk_grab_add (GTK_WIDGET (text_view));
 
@@ -5711,7 +5699,7 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   
   start = *iter;
   
-  extend_selection (text_view, granularity, &start, &end);
+  extend_selection (text_view, data->granularity, &start, &end);
 
   if (button->state & GDK_SHIFT_MASK)
     {
@@ -5730,15 +5718,22 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 
   gtk_text_buffer_select_range (buffer, &end, &start);
 
-  text_view->selection_drag_handler = g_signal_connect (text_view,
-                                                        "motion_notify_event",
-                                                        G_CALLBACK (selection_motion_event_handler),
-                                                        GINT_TO_POINTER (granularity));
+  data->orig_start = gtk_text_buffer_create_mark (buffer, NULL,
+                                                  &start, TRUE);
+  data->orig_end = gtk_text_buffer_create_mark (buffer, NULL,
+                                                &end, TRUE);
+
+  text_view->selection_drag_handler = g_signal_connect_data (text_view,
+							     "motion_notify_event",
+							     G_CALLBACK (selection_motion_event_handler),
+							     data,
+							     (GClosureNotify) selection_data_free, 0);
 }
 
 /* returns whether we were really dragging */
 static gboolean
-gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
+gtk_text_view_end_selection_drag (GtkTextView    *text_view, 
+				  GdkEventButton *event)
 {
   if (text_view->selection_drag_handler == 0)
     return FALSE;
@@ -6416,8 +6411,6 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
                                       GtkAdjustment *vadj)
 {
   gboolean need_adjust = FALSE;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   if (hadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
