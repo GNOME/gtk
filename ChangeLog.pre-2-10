@@ -1,3 +1,16 @@
+2005-11-02  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcolor-win32.c
+	* gdk/win32/gdkscreen-win32.c
+	* gdk/win32/gdkwindow-win32.c: Whitespace consistency
+	fixes. Remove superfluous test for GdkWindow* parameters being
+	non-NULL. Testing GDK_IS_WINDOW() is enough. As there is only one
+	GdkScreen and one GdkDisplay in the Win32 backend, use those
+	variables instead of the getter functions. For GdkDisplay* and
+	GdkScreen* parameters, check that they are equal to the
+	corresponding singleton variables instead of the more general
+	GDK_IS_DISPLAY() or GDK_IS_SCREEN().
+
 2005-11-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c: Remove some g_return_if_fail() from

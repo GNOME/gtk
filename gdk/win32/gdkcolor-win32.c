@@ -599,6 +599,8 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
   static GdkColormap *colormap = NULL;
   GdkColormapPrivateWin32 *private;
 
+  g_return_val_if_fail (screen == _gdk_screen, NULL);
+
   if (!colormap)
     {
       colormap = g_object_new (gdk_colormap_get_type (), NULL);
@@ -652,7 +654,7 @@ gdk_colormap_change (GdkColormap *colormap,
   PALETTEENTRY *pe;
   int i;
 
-  g_return_if_fail (colormap != NULL);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
   cmapp = GDK_WIN32_COLORMAP_DATA (colormap);
 
@@ -694,7 +696,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
   gint return_val;
   gint i;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), 0);
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
 
   private = GDK_WIN32_COLORMAP_DATA (colormap);
 
@@ -1143,6 +1145,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
   g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
   g_return_val_if_fail (colors != NULL, FALSE);
+  g_return_val_if_fail (success != NULL, ncolors);
 
   private = GDK_WIN32_COLORMAP_DATA (colormap);
 
@@ -1301,8 +1304,8 @@ gdk_colormap_match_color (GdkColormap *cmap,
 GdkScreen*
 gdk_colormap_get_screen (GdkColormap *cmap)
 {
-  g_return_val_if_fail (cmap != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_COLORMAP (cmap), NULL);
 
-  return gdk_screen_get_default ();
+  return _gdk_screen;
 }
 
