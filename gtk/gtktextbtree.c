@@ -4157,16 +4157,11 @@ _gtk_text_line_char_to_byte_offsets (GtkTextLine *line,
 
   if (seg->type == &gtk_text_char_type)
     {
-      *seg_byte_offset = 0;
-      while (offset > 0)
-        {
-          gint bytes;
-          const char * start = seg->body.chars + *seg_byte_offset;
+      const char *p;
 
-          bytes = g_utf8_next_char (start) - start;
-          *seg_byte_offset += bytes;
-          offset -= 1;
-        }
+      p = g_utf8_offset_to_pointer (seg->body.chars, offset);
+
+      *seg_byte_offset = p - seg->body.chars;
 
       g_assert (*seg_byte_offset < seg->byte_count);
 

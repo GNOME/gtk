@@ -1,3 +1,10 @@
+2005-11-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_line_char_to_byte_offsets): 
+	* gtk/gtktextiter.c (gtk_text_iter_backward_chars): Replace
+	manual offset calculations by g_utf8_offset_to_pointer().
+	(#320360, Paolo Borelli)
+
 2005-11-01  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkprivate-win32.h
