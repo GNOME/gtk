@@ -703,8 +703,8 @@ gdk_window_new_internal (GdkWindow     *parent,
   if (GDK_WINDOW_HWND (window) != hwndNew)
     {
       g_warning ("gdk_window_new: gdk_event_translate::WM_CREATE (%p, %p) HWND mismatch.",
-		GDK_WINDOW_HWND (window),
-		hwndNew);
+		 GDK_WINDOW_HWND (window),
+		 hwndNew);
 
       /* HB: IHMO due to a race condition the handle was increased by
        * one, which causes much trouble. Because I can't find the 
@@ -2845,12 +2845,14 @@ gdk_window_begin_move_drag (GdkWindow *window,
    * the left pointer button was clicked in the titlebar. This will only work
    * if the button is down when this function is called, and will only work
    * with button 1 (left), since Windows only allows window dragging using the
-   * left mouse button */
+   * left mouse button.
+   */
   if (button != 1)
     return;
   
   /* Must break the automatic grab that occured when the button was pressed,
-   * otherwise it won't work */
+   * otherwise it won't work.
+   */
   gdk_display_pointer_ungrab (_gdk_display, 0);
 
   DefWindowProc (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, HTCAPTION,
