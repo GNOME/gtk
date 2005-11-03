@@ -1,5 +1,24 @@
 2005-11-03  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/Makefile.am: Include gtkstatusicon.c on all platforms.
+
+	* gtk/gtkstatusicon.c: Implement for Win32. Use code from
+	gtktrayicon-win32.c as applicable. (gtktrayicon-win32.c is not
+	necessary and can be removed from CVS. It has never been mentioned
+	in gtk/Makefile.am.) No tray icon widget, GtkImage or GtkTooltips
+	are used on Win32. One label widget is used (but never shown) as
+	gtk_widget_render_icon() needs a widget.
+
+	Ifdefs used as necessary in several places. It might be cleaner to
+	split out the backend-specific parts to separate files, or at
+	least collect them into separate blocks in the file.
+
+	(wndproc): New function. Window procedure to monitor mouse events
+	in the system tray icon. Call gtk_status_icon_button_press() as
+	needed.
+	(create_tray_observer): New function. Creates a hidden window that
+	only serves as a tray icon message observer.
+
 	* tests/teststatusicon.c (icon_activated): Position the dialog
 	with GTK_WIN_POS_CENTER.
 	(do_quit): New function, hide and unref the GtkStatusIcon, and

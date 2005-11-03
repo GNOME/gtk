@@ -470,6 +470,7 @@ gtk_c_sources =                 \
 	gtksocket.c		\
 	gtkspinbutton.c		\
 	gtkstatusbar.c		\
+	gtkstatusicon.c		\
 	gtkstock.c		\
 	gtkstyle.c		\
 	gtktable.c		\
@@ -543,8 +544,7 @@ gtk_c_sources += \
 	gtkplug-x11.c   \
 	gtksocket-x11.c \
 	gtkxembed.c     \
-	gtktrayicon-x11.c   \
-	gtkstatusicon.c
+	gtktrayicon-x11.c
 else
 if USE_WIN32
 gtk_private_h_sources += gtkwin32embed.h
