@@ -113,6 +113,8 @@ icon_activated (GtkStatusIcon *icon)
 				       GTK_BUTTONS_CLOSE,
 				       "You wanna test the status icon ?");
 
+      gtk_window_set_position (dialog, GTK_WIN_POS_CENTER);
+
       g_object_set_data_full (G_OBJECT (icon), "test-status-icon-dialog",
 			      dialog, (GDestroyNotify) gtk_widget_destroy);
 
@@ -160,6 +162,15 @@ check_activated (GtkCheckMenuItem *item,
 				gtk_check_menu_item_get_active (item));
 }
 
+static void
+do_quit (GtkMenuItem   *item,
+	 GtkStatusIcon *icon)
+{
+  gtk_status_icon_set_visible (icon, FALSE);
+  g_object_unref (icon);
+  gtk_main_quit ();
+}
+
 static void 
 popup_menu (GtkStatusIcon *icon,
 	    guint          button,
@@ -173,6 +184,13 @@ popup_menu (GtkStatusIcon *icon,
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), 
 				  gtk_status_icon_get_blinking (icon));
   g_signal_connect (menuitem, "activate", G_CALLBACK (check_activated), icon);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Quit");
+  g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), icon);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 

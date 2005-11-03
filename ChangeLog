@@ -1,3 +1,11 @@
+2005-11-03  Tor Lillqvist  <tml@novell.com>
+
+	* tests/teststatusicon.c (icon_activated): Position the dialog
+	with GTK_WIN_POS_CENTER.
+	(do_quit): New function, hide and unref the GtkStatusIcon, and
+	call gtk_main_quit().
+	(popup_menu): Add a Quit menu item that calls do_quit().
+	
 2005-11-02  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcolor-win32.c
