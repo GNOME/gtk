@@ -1,14 +1,19 @@
 2005-11-03  Tor Lillqvist  <tml@novell.com>
 
-	* gdk/win32/gdkcursor-win32.c (pixbuf_to_hbitmaps_alpha_winxp):
-	Rename the variables for the color bitmap to have "color" in their
-	name, for similarity with pixbuf_to_hbitmaps_normal(). Create a
-	color bitmap for the mask, too, instead of creating a b&w bitmap
-	with CreateBitmap(). Set up the mask bitmap's contents, ones for
-	those pixels in the color bitmap where the alpha is zero, zero for
-	other pixels. We used to use an unitialized mask bitmap! This
-	meant that icons and cursors created presumably worked more or
-	less by accident. Totally blank icons with zero alpha everywhere
+	* gdk/win32/gdkcursor-win32.c: As there is only one GdkDisplay in
+	the Win32 backend, check that GdkDisplay* parameters are equal to
+	_gdk_display instead of using the unnecessarily general
+	GDK_IS_DISPLAY().
+
+	(pixbuf_to_hbitmaps_alpha_winxp): Rename the variables for the
+	color bitmap to have "color" in their name, for similarity with
+	pixbuf_to_hbitmaps_normal(). Create a color bitmap for the mask,
+	too, instead of creating a b&w bitmap with CreateBitmap(). Set up
+	the mask bitmap's contents, ones for those pixels in the color
+	bitmap where the alpha is zero, zero for other pixels. We used to
+	use an unitialized mask bitmap! This meant that icons and cursors
+	created presumably worked more or less by accident. Totally blank
+	icons with zero alpha everywhere
 	(as used by gtktrayicon.c) definitely did not work as expected.
 
 	* gtk/Makefile.am: Include gtkstatusicon.c on all platforms.
