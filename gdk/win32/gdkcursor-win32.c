@@ -651,41 +651,49 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
    * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
    */
   HBITMAP hColorBitmap, hMaskBitmap;
-  guchar *indata, *inrow;
-  guchar *outdata, *outrow;
-  gint width, height, i, j, rowstride;
+  guchar *indata, *inrow, *maskdata, *maskrow;
+  guchar *colordata, *colorrow;
+  gint width, height, i, j, rowstride, bmstride;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
 
-  hColorBitmap = create_alpha_bitmap (width, height, &outdata);
+  hColorBitmap = create_alpha_bitmap (width, height, &colordata);
   if (!hColorBitmap)
     return FALSE;
-  hMaskBitmap = CreateBitmap (width, height, 1, 1, NULL);
+  hMaskBitmap = create_color_bitmap (width, height, &maskdata);
   if (!hMaskBitmap)
     {
       DeleteObject (hColorBitmap);
       return FALSE;
     }
 
-  /* rows are always aligned on 4-byte boundarys, but here our pixels are always 4 bytes */
+  bmstride = width * 3;
+  if (bmstride % 4 != 0)
+    bmstride += 4 - (bmstride % 4);
+
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   for (j=0; j<height; j++)
     {
-      outrow = outdata + 4*j*width;
-      inrow  = indata  + (height-j-1)*rowstride;
+      colorrow = colordata + 4*j*width;
+      maskrow = maskdata + j*bmstride;
+      inrow = indata  + (height-j-1)*rowstride;
       for (i=0; i<width; i++)
 	{
-	  outrow[4*i+0] = inrow[4*i+2];
-	  outrow[4*i+1] = inrow[4*i+1];
-	  outrow[4*i+2] = inrow[4*i+0];
-	  outrow[4*i+3] = inrow[4*i+3];
+	  colorrow[4*i+0] = inrow[4*i+2];
+	  colorrow[4*i+1] = inrow[4*i+1];
+	  colorrow[4*i+2] = inrow[4*i+0];
+	  colorrow[4*i+3] = inrow[4*i+3];
+	  if (inrow[4*i+3] == 0)
+	    maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 255;
+	  else
+	    maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 0;
 	}
     }
 
-  if (color) *color = hColorBitmap;
-  if (mask) *mask = hMaskBitmap;
+  *color = hColorBitmap;
+  *mask = hMaskBitmap;
 
   return TRUE;
 }
@@ -731,7 +739,7 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
     {
       colorrow = colordata + j*bmstride;
       maskrow = maskdata + j*bmstride;
-      inrow  = indata  + (height-j-1)*rowstride;
+      inrow = indata  + (height-j-1)*rowstride;
       for (i=0; i<width; i++)
 	{
 	  if (has_alpha && inrow[nc*i+3] < 128)
@@ -749,8 +757,8 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
 	}
     }
 
-  if (color) *color = hColorBitmap;
-  if (mask) *mask = hMaskBitmap;
+  *color = hColorBitmap;
+  *mask = hMaskBitmap;
 
   return TRUE;
 }
