@@ -13,8 +13,8 @@
 	bitmap where the alpha is zero, zero for other pixels. We used to
 	use an unitialized mask bitmap! This meant that icons and cursors
 	created presumably worked more or less by accident. Totally blank
-	icons with zero alpha everywhere
-	(as used by gtktrayicon.c) definitely did not work as expected.
+	icons with zero alpha everywhere (as used by gtktrayicon.c)
+	definitely did not work as expected.
 
 	* gtk/Makefile.am: Include gtkstatusicon.c on all platforms.
 
