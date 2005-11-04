@@ -1,3 +1,36 @@
+2005-11-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Store builtin stock icons in an icon cache, instead of
+	populating a hash table with pixbufs at startup, to save both
+	memory and startup time.
+
+	* gtk/stock-icons/*: Reorganize the icons in a directory structure
+	suitable for gtk-update-icon-cache, and rename them to match the
+	stock ids.
+
+	* gtk/gtkiconcache.[hc]: Support non-mmapped icon caches, and
+	add _gtk_icon_cache_has_icon_in_directory().
+
+	* gtk/updateiconcache.c: Support a --source <VARIABLE> argument
+	to store the contents of the icon cache in a C header.
+
+	* gtk/gtkbuiltincache.h: Generated private header which contains 
+	the icon cache for the builtin icons.
+
+	* gtk/gtkicontheme.c: Create a GtkIconCache for the builtin
+	icons, and use that in addition to the hash table whenever
+	builtin icons are searched.
+
+	* gtk/gtkiconfactory.c: Add GTK_ICON_SOURCE_STATIC_ICON_NAME and
+	use it for static stock ids. 
+	(get_default_icons): Don't add the builtin
+	icons to the icon theme, just register the stock ids.
+	(render_fallback_image): Take the fallback image out of the
+	builtin icon cache.
+	
+	* gtk/Makefile.am: Remove stock-icons from SUBDIRS and add 
+	the necessary machinery to rebuild gtkbuiltincache.h.
+
 2005-11-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings): applied patch

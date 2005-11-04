@@ -30,7 +30,7 @@
 #include <string.h>
 #include <pango/pango-utils.h>	/* For pango_scan_* */
 #include "gtkiconfactory.h"
-#include "stock-icons/gtkstockpixbufs.h"
+#include "gtkiconcache.h"
 #include "gtkdebug.h"
 #include "gtkicontheme.h"
 #include "gtksettings.h"
@@ -45,6 +45,7 @@ static GSList *all_icon_factories = NULL;
 typedef enum {
   GTK_ICON_SOURCE_EMPTY,
   GTK_ICON_SOURCE_ICON_NAME,
+  GTK_ICON_SOURCE_STATIC_ICON_NAME,
   GTK_ICON_SOURCE_FILENAME,
   GTK_ICON_SOURCE_PIXBUF
 } GtkIconSourceType;
@@ -360,7 +361,7 @@ register_stock_icon (GtkIconFactory *factory,
   GtkIconSet *set = gtk_icon_set_new ();
   GtkIconSource source = GTK_ICON_SOURCE_INIT (TRUE, TRUE, TRUE);
 
-  source.type = GTK_ICON_SOURCE_ICON_NAME;
+  source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
   source.source.icon_name = (gchar *)stock_id;
   gtk_icon_set_add_source (set, &source);
   
@@ -377,12 +378,12 @@ register_bidi_stock_icon (GtkIconFactory *factory,
   GtkIconSet *set = gtk_icon_set_new ();
   GtkIconSource source = GTK_ICON_SOURCE_INIT (FALSE, TRUE, TRUE);
 
-  source.type = GTK_ICON_SOURCE_ICON_NAME;
+  source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
   source.source.icon_name = (gchar *)stock_id_ltr;
   source.direction = GTK_TEXT_DIR_LTR;
   gtk_icon_set_add_source (set, &source);
   
-  source.type = GTK_ICON_SOURCE_ICON_NAME;
+  source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
   source.source.icon_name = (gchar *)stock_id_rtl;
   source.direction = GTK_TEXT_DIR_RTL;
   gtk_icon_set_add_source (set, &source);
@@ -392,415 +393,146 @@ register_bidi_stock_icon (GtkIconFactory *factory,
 }
 
 static void
-add_default_image (const gchar  *stock_id,
-		   gint          size,
-		   const guchar *inline_data)
-{
-  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_inline (-1, inline_data, FALSE, NULL);
-  g_assert (pixbuf);
-
-  gtk_icon_theme_add_builtin_icon (stock_id, size, pixbuf);
-  
-  g_object_unref (pixbuf);
-}
-
-static void
-add_icon (GtkIconFactory *factory,
-	  const gchar    *stock_id,
-	  gint            size,
-	  const guchar   *inline_data)
-{
-  register_stock_icon (factory, stock_id);
-
-  add_default_image (stock_id, size, inline_data);
-}
-
-static void
-add_icon2 (GtkIconFactory *factory,
-	   const gchar    *stock_id,
-	   gint            size1,
-	   const guchar   *inline_data1,
-	   gint            size2,
-	   const guchar   *inline_data2)
-{
-  register_stock_icon (factory, stock_id);
-  
-  add_default_image (stock_id, size1, inline_data1);
-  add_default_image (stock_id, size2, inline_data2);
-}
-
-static void
-add_icon_bidi2 (GtkIconFactory *factory,
-		const gchar    *stock_id,
-		gint            size1,
-		const guchar   *inline_data_ltr1,
-		const guchar   *inline_data_rtl1,
-		gint            size2,
-		const guchar   *inline_data_ltr2,
-		const guchar   *inline_data_rtl2)
-{
-  gchar *stock_id_ltr = g_strconcat (stock_id, "-ltr", NULL);
-  gchar *stock_id_rtl = g_strconcat (stock_id, "-rtl", NULL);
-  
-  register_bidi_stock_icon (factory, stock_id,
-			    stock_id_ltr, stock_id_rtl);
-  
-  add_default_image (stock_id_ltr, size1, inline_data_ltr1);
-  add_default_image (stock_id_ltr, size2, inline_data_ltr2);
-
-  add_default_image (stock_id_rtl, size1, inline_data_rtl1);
-  add_default_image (stock_id_rtl, size2, inline_data_rtl2);
-  
-  g_free (stock_id_ltr);
-  g_free (stock_id_rtl);
-}
-
-static void
 get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
 
-  /* Have dialog size */
-  add_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION, 48, stock_dialog_authentication_48);
-  add_icon (factory, GTK_STOCK_DIALOG_ERROR, 48, stock_dialog_error_48);
-  add_icon (factory, GTK_STOCK_DIALOG_INFO, 48, stock_dialog_info_48);
-  add_icon (factory, GTK_STOCK_DIALOG_QUESTION, 48, stock_dialog_question_48);
-  add_icon (factory, GTK_STOCK_DIALOG_WARNING, 48, stock_dialog_warning_48);
-  
-  /* Have dnd size */
-  add_icon (factory, GTK_STOCK_DND, 32, stock_dnd_32);
-  add_icon (factory, GTK_STOCK_DND_MULTIPLE, 32, stock_dnd_multiple_32);
-  
-  /* Have button sizes */
-  add_icon (factory, GTK_STOCK_APPLY, 20, stock_apply_20);
-  add_icon (factory, GTK_STOCK_CANCEL, 20, stock_cancel_20);
-  add_icon (factory, GTK_STOCK_NO, 20, stock_no_20);
-  add_icon (factory, GTK_STOCK_OK, 20, stock_ok_20);
-  add_icon (factory, GTK_STOCK_YES, 20, stock_yes_20);
-
-  /* Generic + button sizes */
-  add_icon2 (factory, GTK_STOCK_CLOSE,
-	     20, stock_close_20,
-	     24, stock_close_24);
-
-  /* Generic + menu sizes */  
-  add_icon2 (factory, GTK_STOCK_ADD,
-	     16, stock_add_16,
-	     24, stock_add_24);
-
-  add_icon2 (factory, GTK_STOCK_JUSTIFY_CENTER,
-	     16, stock_align_center_16,
-	     24, stock_align_center_24);
-
-  add_icon2 (factory, GTK_STOCK_JUSTIFY_FILL,
-	     16, stock_align_justify_16,
-	     24, stock_align_justify_24);
-
-  add_icon2 (factory, GTK_STOCK_JUSTIFY_LEFT,
-	     16, stock_align_left_16,
-	     24, stock_align_left_24);
-	     
-  add_icon2 (factory, GTK_STOCK_JUSTIFY_RIGHT,
-	     16, stock_align_right_16,
-	     24, stock_align_right_24);
-
-  add_icon2 (factory, GTK_STOCK_GOTO_BOTTOM,
-	     16, stock_bottom_16,
-	     24, stock_bottom_24);
-	     
-  add_icon2 (factory, GTK_STOCK_CDROM,
-	     16, stock_cdrom_16,
-	     24, stock_cdrom_24);
-
-  add_icon2 (factory, GTK_STOCK_CONVERT,
-	     16, stock_convert_16,
-	     24, stock_convert_24);
-
-  add_icon2 (factory, GTK_STOCK_COPY,
-	     16, stock_copy_16,
-	     24, stock_copy_24);
-
-  add_icon2 (factory, GTK_STOCK_CUT,
-	     16, stock_cut_16,
-	     24, stock_cut_24);
-
-  add_icon2 (factory, GTK_STOCK_GO_DOWN,
-	     16, stock_down_arrow_16,
-	     24, stock_down_arrow_24);
-
-  add_icon2 (factory, GTK_STOCK_EXECUTE,
-	     16, stock_exec_16,
-	     24, stock_exec_24);
-
-  add_icon2 (factory, GTK_STOCK_QUIT,
-	     16, stock_exit_16,
-	     24, stock_exit_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_GOTO_FIRST,
-		  16, stock_first_16, stock_last_16,
-		  24, stock_first_24, stock_last_24);
-
-  add_icon2 (factory, GTK_STOCK_SELECT_FONT,
-	     16, stock_font_16,
-	     24, stock_font_24);
-
-  add_icon2 (factory, GTK_STOCK_FULLSCREEN,
-	     16, stock_fullscreen_16,
-	     24, stock_fullscreen_24);
-
-  add_icon2 (factory, GTK_STOCK_LEAVE_FULLSCREEN,
-	     16, stock_leave_fullscreen_16,
-	     24, stock_leave_fullscreen_24);
-
-  add_icon2 (factory, GTK_STOCK_HARDDISK,
-	     16, stock_harddisk_16,
-	     24, stock_harddisk_24);
-
-  add_icon2 (factory, GTK_STOCK_HELP,
-	     16, stock_help_16,
-	     24, stock_help_24);
-
-  add_icon2 (factory, GTK_STOCK_HOME,
-	     16, stock_home_16,
-	     24, stock_home_24);
-
-  add_icon2 (factory, GTK_STOCK_INFO,
-	     16, stock_info_16,
-	     24, stock_info_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_JUMP_TO,
-		  16, stock_jump_to_16, stock_jump_to_rtl_16,
-		  24, stock_jump_to_24, stock_jump_to_rtl_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_GOTO_LAST,
-		  16, stock_last_16, stock_first_16,
-		  24, stock_last_24, stock_first_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_GO_BACK,
-		  16, stock_left_arrow_16, stock_right_arrow_16,
-		  24, stock_left_arrow_24, stock_right_arrow_24);
-
-  add_icon2 (factory, GTK_STOCK_MISSING_IMAGE,
-	     16, stock_missing_image_16,
-	     24, stock_missing_image_24);
-
-  add_icon2 (factory, GTK_STOCK_NETWORK,
-	     16, stock_network_16,
-	     24, stock_network_24);
-
-  add_icon2 (factory, GTK_STOCK_NEW,
-	     16, stock_new_16,
-	     24, stock_new_24);
-
-  add_icon2 (factory, GTK_STOCK_OPEN,
-	     16, stock_open_16,
-	     24, stock_open_24);
-
-  add_icon2 (factory, GTK_STOCK_PASTE,
-	     16, stock_paste_16,
-	     24, stock_paste_24);
-
-  add_icon2 (factory, GTK_STOCK_PREFERENCES,
-	     16, stock_preferences_16,
-	     24, stock_preferences_24);
-
-  add_icon2 (factory, GTK_STOCK_PRINT,
-	     16, stock_print_16,
-	     24, stock_print_24);
-
-  add_icon2 (factory, GTK_STOCK_PRINT_PREVIEW,
-	     16, stock_print_preview_16,
-	     24, stock_print_preview_24);
-
-  add_icon2 (factory, GTK_STOCK_PROPERTIES,
-	     16, stock_properties_16,
-	     24, stock_properties_24);
-  
-  add_icon_bidi2 (factory, GTK_STOCK_REDO,
-		  16, stock_redo_16, stock_redo_rtl_16,
-		  24, stock_redo_24, stock_redo_rtl_24);
-
-  add_icon2 (factory, GTK_STOCK_REMOVE,
-	     16, stock_remove_16,
-	     24, stock_remove_24);
-
-  add_icon2 (factory, GTK_STOCK_REFRESH,
-	     16, stock_refresh_16,
-	     24, stock_refresh_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_REVERT_TO_SAVED,
-		  16, stock_revert_16, stock_revert_rtl_16,
-		  24, stock_revert_24, stock_revert_rtl_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_GO_FORWARD,
-		  16, stock_right_arrow_16, stock_left_arrow_16,
-		  24, stock_right_arrow_24, stock_left_arrow_24);
-
-  add_icon2 (factory, GTK_STOCK_SAVE,
-	     16, stock_save_16,
-	     24, stock_save_24);
-
-  add_icon2 (factory, GTK_STOCK_FLOPPY,
-	     16, stock_save_16,
-	     24, stock_save_24);
-
-  add_icon2 (factory, GTK_STOCK_SAVE_AS,
-	     16, stock_save_as_16,
-	     24, stock_save_as_24);
-
-  add_icon2 (factory, GTK_STOCK_FIND,
-	     16, stock_search_16,
-	     24, stock_search_24);
-
-  add_icon2 (factory, GTK_STOCK_FIND_AND_REPLACE,
-	     16, stock_search_replace_16,
-	     24, stock_search_replace_24);
-
-  add_icon2 (factory, GTK_STOCK_SORT_DESCENDING,
-	     16, stock_sort_descending_16,
-	     24, stock_sort_descending_24);
-
-  add_icon2 (factory, GTK_STOCK_SORT_ASCENDING,
-	     16, stock_sort_ascending_16,
-	     24, stock_sort_ascending_24);
-
-  add_icon2 (factory, GTK_STOCK_SPELL_CHECK,
-	     16, stock_spellcheck_16,
-	     24, stock_spellcheck_24);
-
-  add_icon2 (factory, GTK_STOCK_STOP,
-	     16, stock_stop_16,
-	     24, stock_stop_24);
-
-  add_icon2 (factory, GTK_STOCK_BOLD,
-	     16, stock_text_bold_16,
-	     24, stock_text_bold_24);
-
-  add_icon2 (factory, GTK_STOCK_ITALIC,
-	     16, stock_text_italic_16,
-	     24, stock_text_italic_24);
-
-  add_icon2 (factory, GTK_STOCK_STRIKETHROUGH,
-	     16, stock_text_strikethrough_16,
-	     24, stock_text_strikethrough_24);
-
-  add_icon2 (factory, GTK_STOCK_UNDERLINE,
-	     16, stock_text_underline_16,
-	     24, stock_text_underline_24);
-
-  add_icon2 (factory, GTK_STOCK_INDENT,
-	     16, stock_text_indent_16,
-	     24, stock_text_indent_24);
-
-  add_icon2 (factory, GTK_STOCK_UNINDENT,
-	     16, stock_text_unindent_16,
-	     24, stock_text_unindent_24);
-
-  add_icon2 (factory, GTK_STOCK_GOTO_TOP,
-	     16, stock_top_16,
-	     24, stock_top_24);
-
-  add_icon2 (factory, GTK_STOCK_DELETE,
-	     16, stock_trash_16,
-	     24, stock_trash_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_UNDELETE,
-		  16, stock_undelete_16, stock_undelete_rtl_16,
-		  24, stock_undelete_24, stock_undelete_rtl_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_UNDO,
-		  16, stock_undo_16, stock_undo_rtl_16,
-		  24, stock_undo_24, stock_undo_rtl_24);
-
-  add_icon2 (factory, GTK_STOCK_GO_UP,
-	     16, stock_up_arrow_16,
-	     24, stock_up_arrow_24);
-
-  add_icon2 (factory, GTK_STOCK_FILE,
-	     16, stock_file_16,
-	     24, stock_file_24);
-
-  add_icon2 (factory, GTK_STOCK_DIRECTORY,
-	     16, stock_directory_16,
-	     24, stock_directory_24);
-
-  add_icon2 (factory, GTK_STOCK_ABOUT,
-	     16, stock_about_16,
-	     24, stock_about_24);
-
-  add_icon2 (factory, GTK_STOCK_CONNECT,
-	     16, stock_connect_16,
-	     24, stock_connect_24);
-
-  add_icon2 (factory, GTK_STOCK_DISCONNECT,
-	     16, stock_disconnect_16,
-	     24, stock_disconnect_24);
-
-  add_icon2 (factory, GTK_STOCK_EDIT,
-	     16, stock_edit_16,
-	     24, stock_edit_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_MEDIA_FORWARD,
-	     16, stock_media_forward_16, stock_media_rewind_16,
-	     24, stock_media_forward_24, stock_media_rewind_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_MEDIA_NEXT,
-	     16, stock_media_next_16, stock_media_previous_16,
-	     24, stock_media_next_24, stock_media_previous_24);
-
-  add_icon2 (factory, GTK_STOCK_MEDIA_PAUSE,
-	     16, stock_media_pause_16,
-	     24, stock_media_pause_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_MEDIA_PLAY,
-	     16, stock_media_play_16, stock_media_play_rtl_16,
-	     24, stock_media_play_24, stock_media_play_rtl_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_MEDIA_PREVIOUS,
-	     16, stock_media_previous_16, stock_media_next_16,
-	     24, stock_media_previous_24, stock_media_next_24);
-
-  add_icon2 (factory, GTK_STOCK_MEDIA_RECORD,
-	     16, stock_media_record_16,
-	     24, stock_media_record_24);
-
-  add_icon_bidi2 (factory, GTK_STOCK_MEDIA_REWIND,
-	     16, stock_media_rewind_16, stock_media_forward_16,
-	     24, stock_media_rewind_24, stock_media_forward_24);
-
-  add_icon2 (factory, GTK_STOCK_MEDIA_STOP,
-	     16, stock_media_stop_16,
-	     24, stock_media_stop_24);
-
-  add_icon2 (factory, GTK_STOCK_INDEX, 
-	     16, stock_index_16,
-	     24, stock_index_24);
-
-  add_icon2 (factory, GTK_STOCK_ZOOM_100, 
-	     16, stock_zoom_1_16,
-	     24, stock_zoom_1_24);
-
-  add_icon2 (factory, GTK_STOCK_ZOOM_IN, 
-	     16, stock_zoom_in_16,
-	     24, stock_zoom_in_24);
-
-  add_icon2 (factory, GTK_STOCK_ZOOM_OUT, 
-	     16, stock_zoom_out_16,
-	     24, stock_zoom_out_24);
-
-  add_icon2 (factory, GTK_STOCK_ZOOM_FIT, 
-	     16, stock_zoom_fit_16,
-	     24, stock_zoom_fit_24);
-
-  add_icon2 (factory, GTK_STOCK_SELECT_ALL, 
-	     16, stock_select_all_16,
-	     24, stock_select_all_24);
-
-  /* Generic size only */
-
-  add_icon (factory, GTK_STOCK_CLEAR, 24, stock_clear_24);
-  add_icon (factory, GTK_STOCK_SELECT_COLOR, 24, stock_colorselector_24);
-  add_icon (factory, GTK_STOCK_COLOR_PICKER, 25, stock_color_picker_25);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_ERROR);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_INFO);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_QUESTION);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_WARNING);
+  register_stock_icon (factory, GTK_STOCK_DND);
+  register_stock_icon (factory, GTK_STOCK_DND_MULTIPLE);
+  register_stock_icon (factory, GTK_STOCK_APPLY);
+  register_stock_icon (factory, GTK_STOCK_CANCEL);
+  register_stock_icon (factory, GTK_STOCK_NO);
+  register_stock_icon (factory, GTK_STOCK_OK);
+  register_stock_icon (factory, GTK_STOCK_YES);
+  register_stock_icon (factory, GTK_STOCK_CLOSE);
+  register_stock_icon (factory, GTK_STOCK_ADD);
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_CENTER);
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_FILL);
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_LEFT);
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_RIGHT);
+  register_stock_icon (factory, GTK_STOCK_GOTO_BOTTOM);
+  register_stock_icon (factory, GTK_STOCK_CDROM);
+  register_stock_icon (factory, GTK_STOCK_CONVERT);
+  register_stock_icon (factory, GTK_STOCK_COPY);
+  register_stock_icon (factory, GTK_STOCK_CUT);
+  register_stock_icon (factory, GTK_STOCK_GO_DOWN);
+  register_stock_icon (factory, GTK_STOCK_EXECUTE);
+  register_stock_icon (factory, GTK_STOCK_QUIT);
+  register_bidi_stock_icon (factory,  
+			    GTK_STOCK_GOTO_FIRST, 
+			    GTK_STOCK_GOTO_FIRST "-ltr", 
+			    GTK_STOCK_GOTO_FIRST "-rtl");
+  register_stock_icon (factory, GTK_STOCK_SELECT_FONT);
+  register_stock_icon (factory, GTK_STOCK_FULLSCREEN);
+  register_stock_icon (factory, GTK_STOCK_LEAVE_FULLSCREEN);
+  register_stock_icon (factory, GTK_STOCK_HARDDISK);
+  register_stock_icon (factory, GTK_STOCK_HELP);
+  register_stock_icon (factory, GTK_STOCK_HOME);
+  register_stock_icon (factory, GTK_STOCK_INFO);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_JUMP_TO,
+			    GTK_STOCK_JUMP_TO "-ltr",
+			    GTK_STOCK_JUMP_TO "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_GOTO_LAST,
+			    GTK_STOCK_GOTO_LAST "-ltr",
+			    GTK_STOCK_GOTO_LAST "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_GO_BACK,
+			    GTK_STOCK_GO_BACK "-ltr",
+			    GTK_STOCK_GO_BACK "-rtl");
+  register_stock_icon (factory, GTK_STOCK_MISSING_IMAGE);
+  register_stock_icon (factory, GTK_STOCK_NETWORK);
+  register_stock_icon (factory, GTK_STOCK_NEW);
+  register_stock_icon (factory, GTK_STOCK_OPEN);
+  register_stock_icon (factory, GTK_STOCK_PASTE);
+  register_stock_icon (factory, GTK_STOCK_PREFERENCES);
+  register_stock_icon (factory, GTK_STOCK_PRINT);
+  register_stock_icon (factory, GTK_STOCK_PRINT_PREVIEW);
+  register_stock_icon (factory, GTK_STOCK_PROPERTIES);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_REDO,
+			    GTK_STOCK_REDO "-ltr",
+			    GTK_STOCK_REDO "-rtl");
+  register_stock_icon (factory, GTK_STOCK_REMOVE);
+  register_stock_icon (factory, GTK_STOCK_REFRESH);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_REVERT_TO_SAVED,
+			    GTK_STOCK_REVERT_TO_SAVED "-ltr",
+			    GTK_STOCK_REVERT_TO_SAVED "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_GO_FORWARD,
+			    GTK_STOCK_GO_FORWARD "-ltr",
+			    GTK_STOCK_GO_FORWARD "-rtl");
+  register_stock_icon (factory, GTK_STOCK_SAVE);
+  register_stock_icon (factory, GTK_STOCK_FLOPPY);
+  register_stock_icon (factory, GTK_STOCK_SAVE_AS);
+  register_stock_icon (factory, GTK_STOCK_FIND);
+  register_stock_icon (factory, GTK_STOCK_FIND_AND_REPLACE);
+  register_stock_icon (factory, GTK_STOCK_SORT_DESCENDING);
+  register_stock_icon (factory, GTK_STOCK_SORT_ASCENDING);
+  register_stock_icon (factory, GTK_STOCK_SPELL_CHECK);
+  register_stock_icon (factory, GTK_STOCK_STOP);
+  register_stock_icon (factory, GTK_STOCK_BOLD);
+  register_stock_icon (factory, GTK_STOCK_ITALIC);
+  register_stock_icon (factory, GTK_STOCK_STRIKETHROUGH);
+  register_stock_icon (factory, GTK_STOCK_UNDERLINE);
+  register_stock_icon (factory, GTK_STOCK_INDENT);
+  register_stock_icon (factory, GTK_STOCK_UNINDENT);
+  register_stock_icon (factory, GTK_STOCK_GOTO_TOP);
+  register_stock_icon (factory, GTK_STOCK_DELETE);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_UNDELETE,
+			    GTK_STOCK_UNDELETE "-ltr",
+			    GTK_STOCK_UNDELETE "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_UNDO,
+			    GTK_STOCK_UNDO "-ltr",
+			    GTK_STOCK_UNDO "-rtl");
+  register_stock_icon (factory, GTK_STOCK_GO_UP);
+  register_stock_icon (factory, GTK_STOCK_FILE);
+  register_stock_icon (factory, GTK_STOCK_DIRECTORY);
+  register_stock_icon (factory, GTK_STOCK_ABOUT);
+  register_stock_icon (factory, GTK_STOCK_CONNECT);
+  register_stock_icon (factory, GTK_STOCK_DISCONNECT);
+  register_stock_icon (factory, GTK_STOCK_EDIT);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_MEDIA_FORWARD,
+			    GTK_STOCK_MEDIA_FORWARD "-ltr",
+			    GTK_STOCK_MEDIA_FORWARD "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_MEDIA_NEXT,
+			    GTK_STOCK_MEDIA_NEXT "-ltr",
+			    GTK_STOCK_MEDIA_NEXT "-rtl");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_PAUSE);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_MEDIA_PLAY,
+			    GTK_STOCK_MEDIA_PLAY "-ltr",
+			    GTK_STOCK_MEDIA_PLAY "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_MEDIA_PREVIOUS,
+			    GTK_STOCK_MEDIA_PREVIOUS "-ltr",
+			    GTK_STOCK_MEDIA_PREVIOUS "-rtl");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_RECORD);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_MEDIA_REWIND,
+			    GTK_STOCK_MEDIA_REWIND "-ltr",
+			    GTK_STOCK_MEDIA_REWIND "-rtl");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_STOP);
+  register_stock_icon (factory, GTK_STOCK_INDEX);
+  register_stock_icon (factory, GTK_STOCK_ZOOM_100);
+  register_stock_icon (factory, GTK_STOCK_ZOOM_IN);
+  register_stock_icon (factory, GTK_STOCK_ZOOM_OUT);
+  register_stock_icon (factory, GTK_STOCK_ZOOM_FIT);
+  register_stock_icon (factory, GTK_STOCK_SELECT_ALL);
+  register_stock_icon (factory, GTK_STOCK_CLEAR);
+  register_stock_icon (factory, GTK_STOCK_SELECT_COLOR);
+  register_stock_icon (factory, GTK_STOCK_COLOR_PICKER);
 }
 
 /************************************************************
@@ -1823,6 +1555,7 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 	    }
 	  break;
 	case GTK_ICON_SOURCE_ICON_NAME:
+	case GTK_ICON_SOURCE_STATIC_ICON_NAME:
 	  pixbuf = render_icon_name_pixbuf (source, style,
 					    direction, state, size,
 					    widget, detail);
@@ -1839,6 +1572,8 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
   return pixbuf;
 }
 
+extern GtkIconCache *_builtin_cache;
+
 static GdkPixbuf*
 render_fallback_image (GtkStyle          *style,
                        GtkTextDirection   direction,
@@ -1852,7 +1587,9 @@ render_fallback_image (GtkStyle          *style,
 
   if (fallback_source.type == GTK_ICON_SOURCE_EMPTY)
     {
-      GdkPixbuf *pixbuf = gdk_pixbuf_new_from_inline (-1, stock_missing_image_24, FALSE, NULL);
+      GdkPixbuf *pixbuf = _gtk_icon_cache_get_icon (_builtin_cache,
+						    GTK_STOCK_MISSING_IMAGE,
+						    "24");
       gtk_icon_source_set_pixbuf (&fallback_source, pixbuf);
       g_object_unref (pixbuf);
     }
@@ -2163,6 +1900,7 @@ gtk_icon_source_copy (const GtkIconSource *source)
   switch (copy->type)
     {
     case GTK_ICON_SOURCE_EMPTY:
+    case GTK_ICON_SOURCE_STATIC_ICON_NAME:
       break;
     case GTK_ICON_SOURCE_ICON_NAME:
       copy->source.icon_name = g_strdup (copy->source.icon_name);
@@ -2223,6 +1961,8 @@ icon_source_clear (GtkIconSource *source)
       break;
     case GTK_ICON_SOURCE_ICON_NAME:
       g_free (source->source.icon_name);
+      /* fall thru */
+    case GTK_ICON_SOURCE_STATIC_ICON_NAME:
       source->source.icon_name = NULL;
       break;
     case GTK_ICON_SOURCE_FILENAME:
@@ -2370,7 +2110,8 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
 {
   g_return_val_if_fail (source != NULL, NULL);
 
-  if (source->type == GTK_ICON_SOURCE_ICON_NAME)
+  if (source->type == GTK_ICON_SOURCE_ICON_NAME ||
+     source->type == GTK_ICON_SOURCE_STATIC_ICON_NAME)
     return source->source.icon_name;
   else
     return NULL;

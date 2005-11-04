@@ -42,6 +42,7 @@ static gboolean force_update = FALSE;
 static gboolean ignore_theme_index = FALSE;
 static gboolean quiet = FALSE;
 static gboolean index_only = FALSE;
+static gchar *var_name = "-";
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -1207,10 +1208,70 @@ build_cache (const gchar *path)
     g_printerr ("Cache file created successfully.\n");
 }
 
+void
+write_csource (const gchar *path)
+{
+  gchar *cache_path;
+  gchar *data;
+  guint8 d;
+  gsize len;
+  gint pos;
+  gint i;
+
+  cache_path = g_build_filename (path, CACHE_NAME, NULL);
+  if (!g_file_get_contents (cache_path, &data, &len, NULL))
+    exit (1);
+  
+  g_printf ("#ifdef __SUNPRO_C\n");
+  g_printf ("#pragma align 4 (%s)\n", var_name);   
+  g_printf ("#endif\n");
+  
+  g_printf ("#ifdef __GNUC__\n");
+  g_printf ("static const guint8 %s[] __attribute__ ((__aligned__ (4))) = \n", var_name);
+  g_printf ("#else\n");
+  g_printf ("static const guint8 %s[] = \n", var_name);
+  g_printf ("#endif\n");
+  g_printf ("{ ""\n  \"");
+  
+  pos = 3;
+  for (i = 0; i < len; i++)
+    {
+      d = data[i];
+      if (pos > 70)
+	{
+	  g_printf ("\"\n  \"");
+	  pos = 3;
+	}
+      if (d < 33 || d > 126 || d == '?')
+	{
+	  g_printf ("\\%.3o", d);
+	  pos += 4;
+	  continue;
+	}
+      if (d == '\\')
+	{
+	  g_printf ("\\\\");
+	  pos += 2;
+	}
+      else if (d == '"')
+	{
+	  g_printf ("\\\"");
+	  pos += 2;
+	}
+      else 
+	{
+	  g_printf ("%c", d);
+	  pos += 1;
+	}
+    }
+  g_printf ("\"};\n");
+}
+
 static GOptionEntry args[] = {
   { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
   { "ignore-theme-index", 't', 0, G_OPTION_ARG_NONE, &ignore_theme_index, "Don't check for the existence of index.theme", NULL },
   { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, "Don't include image data in the cache", NULL },
+  { "source", 'c', 0, G_OPTION_ARG_STRING, &var_name, "Output a C header file", "NAME" },
   { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, "Turn off verbose output", NULL },
   { NULL }
 };
@@ -1246,6 +1307,9 @@ main (int argc, char **argv)
 
   g_type_init ();
   build_cache (path);
+
+  if (strcmp (var_name, "-") != 0)
+    write_csource (path);
 
   return 0;
 }

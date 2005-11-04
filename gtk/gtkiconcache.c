@@ -70,7 +70,8 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
       GTK_NOTE (ICONTHEME, 
 		g_print ("unmapping icon cache\n"));
 
-      g_mapped_file_free (cache->map);
+      if (cache->map)
+	g_mapped_file_free (cache->map);
       g_free (cache);
     }
 }
@@ -146,13 +147,26 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   return cache;
 }
 
-static int
+GtkIconCache *
+_gtk_icon_cache_new (const gchar *data)
+{
+  GtkIconCache *cache;
+
+  cache = g_new0 (GtkIconCache, 1);
+  cache->ref_count = 1;
+  cache->map = NULL;
+  cache->buffer = (gchar *)data;
+  
+  return cache;
+}
+
+static gint
 get_directory_index (GtkIconCache *cache,
 		     const gchar *directory)
 {
   guint32 dir_list_offset;
-  int n_dirs;
-  int i;
+  gint n_dirs;
+  gint i;
   
   dir_list_offset = GET_UINT32 (cache->buffer, 8);
 
@@ -322,6 +336,62 @@ _gtk_icon_cache_has_icon (GtkIconCache *cache,
 	return TRUE;
 	  
       chain_offset = GET_UINT32 (cache->buffer, chain_offset);
+    }
+
+  return FALSE;
+}
+
+gboolean
+_gtk_icon_cache_has_icon_in_directory (GtkIconCache *cache,
+				       const gchar  *icon_name,
+				       const gchar  *directory)
+{
+  guint32 hash_offset;
+  guint32 n_buckets;
+  guint32 chain_offset;
+  gint hash;
+  gboolean found_icon = FALSE;
+  gint directory_index;
+
+  directory_index = get_directory_index (cache, directory);
+
+  if (directory_index == -1)
+    return FALSE;
+  
+  hash_offset = GET_UINT32 (cache->buffer, 4);
+  n_buckets = GET_UINT32 (cache->buffer, hash_offset);
+
+  hash = icon_name_hash (icon_name) % n_buckets;
+
+  chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * hash);
+  while (chain_offset != 0xffffffff)
+    {
+      guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
+      gchar *name = cache->buffer + name_offset;
+
+      if (strcmp (name, icon_name) == 0)
+	{
+	  found_icon = TRUE;
+	  break;
+	}
+	  
+      chain_offset = GET_UINT32 (cache->buffer, chain_offset);
+    }
+
+  if (found_icon)
+    {
+      guint32 image_list_offset = GET_UINT32 (cache->buffer, chain_offset + 8);
+      guint32 n_images =  GET_UINT32 (cache->buffer, image_list_offset);
+      guint32 image_offset = image_list_offset + 4;
+      gint i;
+      for (i = 0; i < n_images; i++)
+	{
+	  guint16 index = GET_UINT16 (cache->buffer, image_offset);
+	  
+	  if (index == directory_index)
+	    return TRUE;
+	  image_offset += 8;
+	}
     }
 
   return FALSE;

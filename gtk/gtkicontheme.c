@@ -38,11 +38,11 @@
 #include "gtkicontheme.h"
 #include "gtkiconfactory.h"
 #include "gtkiconcache.h"
+#include "gtkbuiltincache.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
-
 
 #define DEFAULT_THEME_NAME "hicolor"
 
@@ -111,8 +111,6 @@ struct _GtkIconInfo
    */
   gchar *cp_filename;
 #endif
-  GdkPixbuf *builtin_pixbuf;
-
   /* Cache pixbuf (if there is any) */
   GdkPixbuf *cache_pixbuf;
 
@@ -226,7 +224,7 @@ static GtkIconInfo *icon_info_new_builtin     (BuiltinIcon *icon);
 static IconSuffix suffix_from_name (const char *name);
 
 static BuiltinIcon *find_builtin_icon (const gchar *icon_name,
-				       gint         size,
+				       gint        size,
 				       gint        *min_difference_p,
 				       gboolean    *has_larger_p);
 
@@ -235,6 +233,11 @@ static GObjectClass *parent_class = NULL;
 static guint signal_changed = 0;
 
 static GHashTable *icon_theme_builtin_icons;
+
+/* also used in gtkiconfactory.c */
+GtkIconCache *_builtin_cache = NULL;
+static GList *builtin_dirs = NULL;
+
 
 GType
 gtk_icon_theme_get_type (void)
@@ -1231,16 +1234,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
       l = l->next;
     }
 
-  if (!found_default)
-    {
-      BuiltinIcon *builtin = find_builtin_icon (icon_name, size, NULL, NULL);
-      if (builtin)
-	{
-	  icon_info = icon_info_new_builtin (builtin);
-	  goto out;
-	}
-    }
-  
+  g_assert (found_default);
+
   unthemed_icon = g_hash_table_lookup (priv->unthemed_icons, icon_name);
   if (unthemed_icon)
     {
@@ -1409,6 +1404,10 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
 
   if (g_hash_table_lookup_extended (priv->all_icons,
 				    icon_name, NULL, NULL))
+    return TRUE;
+
+  if (_builtin_cache &&
+      _gtk_icon_cache_has_icon (_builtin_cache, icon_name))
     return TRUE;
 
   if (icon_theme_builtin_icons &&
@@ -1812,6 +1811,40 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
   return suffix;
 }
 
+static void
+_gtk_icon_theme_ensure_builtin_cache (void)
+{
+  static gboolean initialized = FALSE;
+  IconThemeDir *dir;
+  gint sizes[5] = { 16, 20, 24, 32, 48 };
+  gint n_sizes = G_N_ELEMENTS (sizes);
+  gint i;
+
+  if (!initialized)
+    {
+      initialized = TRUE;
+
+      _builtin_cache = _gtk_icon_cache_new ((gchar *)builtin_icons);
+
+      for (i = 0; i < n_sizes; i++)
+	{
+	  dir = g_new (IconThemeDir, 1);
+	  dir->type = ICON_THEME_DIR_THRESHOLD;
+	  dir->context = 0;
+	  dir->size = sizes[i];
+	  dir->min_size = sizes[i];
+	  dir->max_size = sizes[i];
+	  dir->threshold = 2;
+	  dir->dir = NULL;
+	  dir->icon_data = NULL;
+	  dir->subdir = g_strdup_printf ("%d", sizes[i]);
+	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
+
+	  builtin_dirs = g_list_append (builtin_dirs, dir);
+	}
+    }
+}
+
 static GtkIconInfo *
 theme_lookup_icon (IconTheme          *theme,
 		   const char         *icon_name,
@@ -1819,7 +1852,7 @@ theme_lookup_icon (IconTheme          *theme,
 		   gboolean            allow_svg,
 		   gboolean            use_builtin)
 {
-  GList *l;
+  GList *dirs, *l;
   IconThemeDir *dir, *min_dir;
   char *file;
   int min_difference, difference;
@@ -1834,17 +1867,24 @@ theme_lookup_icon (IconTheme          *theme,
   /* Builtin icons are logically part of the default theme and
    * are searched before other subdirectories of the default theme.
    */
+  _gtk_icon_theme_ensure_builtin_cache ();
+
   if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0 && use_builtin)
     {
-      closest_builtin = find_builtin_icon (icon_name, size,
+      closest_builtin = find_builtin_icon (icon_name, 
+					   size,
 					   &min_difference,
 					   &has_larger);
 
       if (min_difference == 0)
 	return icon_info_new_builtin (closest_builtin);
-    }
 
-  l = theme->dirs;
+      dirs = builtin_dirs;
+    }
+  else
+    dirs = theme->dirs;
+
+  l = dirs;
   while (l != NULL)
     {
       dir = l->data;
@@ -1885,6 +1925,12 @@ theme_lookup_icon (IconTheme          *theme,
 	}
 
       l = l->next;
+
+      if (l == NULL && dirs == builtin_dirs)
+	{
+	  dirs = theme->dirs;
+	  l = dirs;
+	}
     }
 
   if (closest_builtin)
@@ -2287,7 +2333,7 @@ icon_info_new_builtin (BuiltinIcon *icon)
 {
   GtkIconInfo *icon_info = icon_info_new ();
 
-  icon_info->builtin_pixbuf = g_object_ref (icon->pixbuf);
+  icon_info->cache_pixbuf = g_object_ref (icon->pixbuf);
   icon_info->dir_type = ICON_THEME_DIR_THRESHOLD;
   icon_info->dir_size = icon->size;
   icon_info->threshold = 2;
@@ -2313,8 +2359,8 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
   g_return_val_if_fail (icon_info != NULL, NULL);
 
   copy = g_memdup (icon_info, sizeof (GtkIconInfo));
-  if (copy->builtin_pixbuf)
-    g_object_ref (copy->builtin_pixbuf);
+  if (copy->cache_pixbuf)
+    g_object_ref (copy->cache_pixbuf);
   if (copy->pixbuf)
     g_object_ref (copy->pixbuf);
   if (copy->load_error)
@@ -2348,8 +2394,6 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
   if (icon_info->cp_filename)
     g_free (icon_info->cp_filename);
 #endif
-  if (icon_info->builtin_pixbuf)
-    g_object_unref (icon_info->builtin_pixbuf);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
@@ -2430,7 +2474,10 @@ gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
 
-  return icon_info->builtin_pixbuf;
+  if (icon_info->filename)
+    return NULL;
+  
+  return icon_info->cache_pixbuf;
 }
 
 static GdkPixbuf *
@@ -2540,9 +2587,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
   /* At this point, we need to actually get the icon; either from the
    * builting image or by loading the file
    */
-  if (icon_info->builtin_pixbuf)
-    source_pixbuf = g_object_ref (icon_info->builtin_pixbuf);
-  else if (icon_info->cache_pixbuf)
+  if (icon_info->cache_pixbuf)
     source_pixbuf = g_object_ref (icon_info->cache_pixbuf);
   else
     {

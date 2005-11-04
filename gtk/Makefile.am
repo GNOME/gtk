@@ -1,6 +1,6 @@
 # Makefile.am for gtk+/gtk
 
-SUBDIRS=stock-icons theme-bits
+SUBDIRS=theme-bits
 
 if OS_UNIX
 SUBDIRS += xdgmime
@@ -568,7 +568,8 @@ gtk_built_public_sources =			\
 # built sources that don't get installed
 gtk_built_private_headers =			\
 	gtkalias.h				\
-	gtkmarshalers.h
+	gtkmarshalers.h				\
+	gtkbuiltincache.h
 
 gtk_built_sources =				\
 	gtkaliasdef.c				\
@@ -734,20 +735,243 @@ gtk_query_immodules_2_0_LDADD = $(LDADDS)
 
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
-
-gtk_update_icon_cache_DEPENDENCIES = $(DEPS)
-gtk_update_icon_cache_LDADD = $(LDADDS)
+gtk_update_icon_cache_LDADD = $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 
 gtk_update_icon_cache_SOURCES = updateiconcache.c
 
-.PHONY: files test test-debug
+.PHONY: files test test-debug icons
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 	  echo $$p; \
 	done
 
+STOCK_ICONS = \
+	stock-icons/16/gtk-about.png  			\
+	stock-icons/16/gtk-add.png    			\
+	stock-icons/16/gtk-cdrom.png  			\
+	stock-icons/16/gtk-connect.png        		\
+	stock-icons/16/gtk-convert.png        		\
+	stock-icons/16/gtk-copy.png   			\
+	stock-icons/16/gtk-cut.png    			\
+	stock-icons/16/gtk-delete.png 			\
+	stock-icons/16/gtk-directory.png      		\
+	stock-icons/16/gtk-disconnect.png     		\
+	stock-icons/16/gtk-edit.png   			\
+	stock-icons/16/gtk-execute.png        		\
+	stock-icons/16/gtk-file.png   			\
+	stock-icons/16/gtk-find-and-replace.png       	\
+	stock-icons/16/gtk-find.png   			\
+	stock-icons/16/gtk-floppy.png 			\
+	stock-icons/16/gtk-fullscreen.png     		\
+	stock-icons/16/gtk-go-back-ltr.png    		\
+	stock-icons/16/gtk-go-back-rtl.png    		\
+	stock-icons/16/gtk-go-down.png        		\
+	stock-icons/16/gtk-go-forward-ltr.png 		\
+	stock-icons/16/gtk-go-forward-rtl.png 		\
+	stock-icons/16/gtk-goto-bottom.png    		\
+	stock-icons/16/gtk-goto-first-ltr.png 		\
+	stock-icons/16/gtk-goto-first-rtl.png 		\
+	stock-icons/16/gtk-goto-last-ltr.png  		\
+	stock-icons/16/gtk-goto-last-rtl.png  		\
+	stock-icons/16/gtk-goto-top.png       		\
+	stock-icons/16/gtk-go-up.png  			\
+	stock-icons/16/gtk-harddisk.png       		\
+	stock-icons/16/gtk-help.png   			\
+	stock-icons/16/gtk-home.png   			\
+	stock-icons/16/gtk-indent.png 			\
+	stock-icons/16/gtk-index.png  			\
+	stock-icons/16/gtk-info.png   			\
+	stock-icons/16/gtk-jump-to-ltr.png    		\
+	stock-icons/16/gtk-jump-to-rtl.png    		\
+	stock-icons/16/gtk-justify-center.png 		\
+	stock-icons/16/gtk-justify-fill.png   		\
+	stock-icons/16/gtk-justify-left.png   		\
+	stock-icons/16/gtk-justify-right.png  		\
+	stock-icons/16/gtk-leave-fullscreen.png       	\
+	stock-icons/16/gtk-media-forward-ltr.png      	\
+	stock-icons/16/gtk-media-forward-rtl.png      	\
+	stock-icons/16/gtk-media-next-ltr.png 		\
+	stock-icons/16/gtk-media-next-rtl.png 		\
+	stock-icons/16/gtk-media-pause.png    		\
+	stock-icons/16/gtk-media-play-ltr.png 		\
+	stock-icons/16/gtk-media-play-rtl.png 		\
+	stock-icons/16/gtk-media-previous-ltr.png     	\
+	stock-icons/16/gtk-media-previous-rtl.png     	\
+	stock-icons/16/gtk-media-record.png   		\
+	stock-icons/16/gtk-media-rewind-ltr.png       	\
+	stock-icons/16/gtk-media-rewind-rtl.png       	\
+	stock-icons/16/gtk-media-stop.png     		\
+	stock-icons/16/gtk-missing-image.png  		\
+	stock-icons/16/gtk-network.png        		\
+	stock-icons/16/gtk-new.png    			\
+	stock-icons/16/gtk-open.png   			\
+	stock-icons/16/gtk-paste.png  			\
+	stock-icons/16/gtk-preferences.png    		\
+	stock-icons/16/gtk-print.png  			\
+	stock-icons/16/gtk-print-preview.png  		\
+	stock-icons/16/gtk-properties.png     		\
+	stock-icons/16/gtk-quit.png   			\
+	stock-icons/16/gtk-redo-ltr.png       		\
+	stock-icons/16/gtk-redo-rtl.png       		\
+	stock-icons/16/gtk-refresh.png        		\
+	stock-icons/16/gtk-remove.png 			\
+	stock-icons/16/gtk-revert-to-saved-ltr.png    	\
+	stock-icons/16/gtk-revert-to-saved-rtl.png    	\
+	stock-icons/16/gtk-save-as.png        		\
+	stock-icons/16/gtk-save.png   			\
+	stock-icons/16/gtk-select-all.png     		\
+	stock-icons/16/gtk-select-font.png    		\
+	stock-icons/16/gtk-sort-ascending.png	 	\
+	stock-icons/16/gtk-sort-descending.png        	\
+	stock-icons/16/gtk-spell-check.png    		\
+	stock-icons/16/gtk-stop.png   			\
+	stock-icons/16/gtk-strikethrough.png  		\
+	stock-icons/16/gtk-font.png   			\
+	stock-icons/16/gtk-undelete-ltr.png   		\
+	stock-icons/16/gtk-undelete-rtl.png   		\
+	stock-icons/16/gtk-underline.png      		\
+	stock-icons/16/gtk-undo-ltr.png       		\
+	stock-icons/16/gtk-undo-rtl.png       		\
+	stock-icons/16/gtk-unindent.png       		\
+	stock-icons/16/gtk-zoom-100.png       		\
+	stock-icons/16/gtk-zoom-fit.png       		\
+	stock-icons/16/gtk-zoom-in.png        		\
+	stock-icons/16/gtk-zoom-out.png       		\
+	stock-icons/16/gtk-italic.png 			\
+	stock-icons/16/gtk-bold.png   			\
+	stock-icons/20/gtk-apply.png  			\
+	stock-icons/20/gtk-cancel.png 			\
+	stock-icons/20/gtk-close.png  			\
+	stock-icons/20/gtk-no.png     			\
+	stock-icons/20/gtk-ok.png     			\
+	stock-icons/20/gtk-yes.png    			\
+	stock-icons/24/gtk-about.png  			\
+	stock-icons/24/gtk-add.png    			\
+	stock-icons/24/gtk-bold.png   			\
+	stock-icons/24/gtk-cdrom.png  			\
+	stock-icons/24/gtk-clear.png  			\
+	stock-icons/24/gtk-close.png  			\
+	stock-icons/24/gtk-color-picker.png   		\
+	stock-icons/24/gtk-connect.png        		\
+	stock-icons/24/gtk-convert.png        		\
+	stock-icons/24/gtk-copy.png   			\
+	stock-icons/24/gtk-cut.png    			\
+	stock-icons/24/gtk-directory.png      		\
+	stock-icons/24/gtk-disconnect.png     		\
+	stock-icons/24/gtk-edit.png   			\
+	stock-icons/24/gtk-execute.png        		\
+	stock-icons/24/gtk-file.png   			\
+	stock-icons/24/gtk-find-and-replace.png       	\
+	stock-icons/24/gtk-find.png   			\
+	stock-icons/24/gtk-font.png   			\
+	stock-icons/24/gtk-fullscreen.png     		\
+	stock-icons/24/gtk-go-back-ltr.png    		\
+	stock-icons/24/gtk-goto-top.png       		\
+	stock-icons/24/gtk-go-down.png        		\
+	stock-icons/24/gtk-goto-bottom.png    		\
+	stock-icons/24/gtk-goto-first-ltr.png 		\
+	stock-icons/24/gtk-goto-first-rtl.png 		\
+	stock-icons/24/gtk-goto-last-ltr.png  		\
+	stock-icons/24/gtk-goto-last-rtl.png  		\
+	stock-icons/24/gtk-go-up.png  			\
+	stock-icons/24/gtk-harddisk.png       		\
+	stock-icons/24/gtk-help.png   			\
+	stock-icons/24/gtk-home.png   			\
+	stock-icons/24/gtk-indent.png 			\
+	stock-icons/24/gtk-index.png  			\
+	stock-icons/24/gtk-info.png   			\
+	stock-icons/24/gtk-italic.png 			\
+	stock-icons/24/gtk-jump-to-ltr.png    		\
+	stock-icons/24/gtk-jump-to-rtl.png    		\
+	stock-icons/24/gtk-justify-center.png 		\
+	stock-icons/24/gtk-justify-fill.png   		\
+	stock-icons/24/gtk-justify-left.png   		\
+	stock-icons/24/gtk-justify-right.png  		\
+	stock-icons/24/gtk-leave-fullscreen.png       	\
+	stock-icons/24/gtk-media-forward-ltr.png      	\
+	stock-icons/24/gtk-media-forward-rtl.png      	\
+	stock-icons/24/gtk-media-next-ltr.png 		\
+	stock-icons/24/gtk-media-next-rtl.png 		\
+	stock-icons/24/gtk-media-pause.png    		\
+	stock-icons/24/gtk-media-play-ltr.png 		\
+	stock-icons/24/gtk-media-play-rtl.png 		\
+	stock-icons/24/gtk-media-previous-ltr.png     	\
+	stock-icons/24/gtk-media-previous-rtl.png     	\
+	stock-icons/24/gtk-media-record.png   		\
+	stock-icons/24/gtk-media-rewind-ltr.png       	\
+	stock-icons/24/gtk-media-rewind-rtl.png       	\
+	stock-icons/24/gtk-media-stop.png     		\
+	stock-icons/24/gtk-missing-image.png  		\
+	stock-icons/24/gtk-network.png        		\
+	stock-icons/24/gtk-new.png    			\
+	stock-icons/24/gtk-open.png   			\
+	stock-icons/24/gtk-paste.png  			\
+	stock-icons/24/gtk-preferences.png    		\
+	stock-icons/24/gtk-print.png  			\
+	stock-icons/24/gtk-print-preview.png  		\
+	stock-icons/24/gtk-properties.png     		\
+	stock-icons/24/gtk-quit.png   			\
+	stock-icons/24/gtk-redo-ltr.png       		\
+	stock-icons/24/gtk-redo-rtl.png       		\
+	stock-icons/24/gtk-refresh.png        		\
+	stock-icons/24/gtk-remove.png 			\
+	stock-icons/24/gtk-revert-to-saved-ltr.png   	\
+	stock-icons/24/gtk-revert-to-saved-rtl.png    	\
+	stock-icons/24/gtk-select-font.png    		\
+	stock-icons/24/gtk-save-as.png        		\
+	stock-icons/24/gtk-floppy.png 			\
+	stock-icons/24/gtk-select-all.png     		\
+	stock-icons/24/gtk-select-color.png   		\
+	stock-icons/24/gtk-sort-ascending.png 		\
+	stock-icons/24/gtk-sort-descending.png        	\
+	stock-icons/24/gtk-spell-check.png    		\
+	stock-icons/24/gtk-stop.png   			\
+	stock-icons/24/gtk-strikethrough.png  		\
+	stock-icons/24/gtk-delete.png 			\
+	stock-icons/24/gtk-undelete-ltr.png   		\
+	stock-icons/24/gtk-undelete-rtl.png   		\
+	stock-icons/24/gtk-underline.png      		\
+	stock-icons/24/gtk-undo-ltr.png       		\
+	stock-icons/24/gtk-undo-rtl.png       		\
+	stock-icons/24/gtk-unindent.png       		\
+	stock-icons/24/gtk-zoom-100.png       		\
+	stock-icons/24/gtk-zoom-fit.png       		\
+	stock-icons/24/gtk-zoom-in.png        		\
+	stock-icons/24/gtk-zoom-out.png       		\
+	stock-icons/24/gtk-go-forward-ltr.png 		\
+	stock-icons/24/gtk-go-forward-rtl.png 		\
+	stock-icons/24/gtk-go-back-rtl.png    		\
+	stock-icons/24/gtk-save.png   			\
+	stock-icons/32/gtk-dnd-multiple.png   		\
+	stock-icons/32/gtk-dnd.png    			\
+	stock-icons/48/gtk-dialog-authentication.png  	\
+	stock-icons/48/gtk-dialog-error.png   		\
+	stock-icons/48/gtk-dialog-info.png    		\
+	stock-icons/48/gtk-dialog-question.png        	\
+	stock-icons/48/gtk-dialog-warning.png
+
+icons:
+	for i in 16 24; do                                              \
+	   (cd stock-icons/$$i 	                                        \
+	   $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png           \
+	   $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png           \
+	   $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png         \
+	   $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png         \
+	   $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png   \
+	   $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png   \
+	   $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png    \
+	   $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png    \
+	   $(LN_S) gtk-floppy.png gtk-save.png                          \
+	   cd ../..)                                                    \
+	done
+
+gtkbuiltincache.h: @REBUILD@ gtk-update-icon-cache icons
+	./gtk-update-icon-cache --force --ignore-theme-index 	\
+	   --source builtin_icons stock-icons > gtkbuiltincache.h
+
 EXTRA_DIST +=                   \
+	$(STOCK_ICONS)		\
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\
