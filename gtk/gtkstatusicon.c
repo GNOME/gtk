@@ -1273,10 +1273,12 @@ gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
   else
     {
       WCHAR *wcs = g_utf8_to_utf16 (tooltip_text, -1, NULL, NULL, NULL);
+
       status_icon->priv->nid.uFlags |= NIF_TIP;
       wcsncpy (status_icon->priv->nid.szTip, wcs,
 	       G_N_ELEMENTS (status_icon->priv->nid.szTip) - 1);
       status_icon->priv->nid.szTip[G_N_ELEMENTS (status_icon->priv->nid.szTip) - 1] = 0;
+      g_free (wcs);
     }
   if (status_icon->priv->nid.hWnd != NULL && status_icon->priv->visible)
     if (!Shell_NotifyIconW (NIM_MODIFY, &status_icon->priv->nid))
