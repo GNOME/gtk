@@ -1467,7 +1467,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 	  if (!rc_file->is_string)
 	    {
 	      if (!g_lstat (rc_file->name, &statbuf) && 
-		  (statbuf.st_mtime > rc_file->mtime))
+		  (statbuf.st_mtime != rc_file->mtime))
 		{
 		  mtime_modified = TRUE;
 		  break;
