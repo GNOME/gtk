@@ -719,6 +719,10 @@ xdg_mime_list_mime_parents (const char *mime)
     return _xdg_mime_cache_list_mime_parents (mime);
 
   parents = xdg_mime_get_mime_parents (mime);
+
+  if (!parents)
+    return NULL;
+
   for (i = 0; parents[i]; i++) ;
   
   n = (i + 1) * sizeof (char *);
