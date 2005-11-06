@@ -4,6 +4,9 @@
 	the Win32 backend, check that GdkDisplay* parameters are equal to
 	_gdk_display instead of using the unnecessarily general
 	GDK_IS_DISPLAY().
+	(_gdk_win32_pixbuf_to_hicon_supports_alpha): Check
+	G_WIN32_IS_NT_BASED() first, so we can pretend being on Win9x
+	by setting the G_WIN32_PRETEND_WIN9X environment variable.
 
 	Make icon masks work on Win98 (#320152, Peter Zelezny)
 
