@@ -4,9 +4,19 @@
 	the Win32 backend, check that GdkDisplay* parameters are equal to
 	_gdk_display instead of using the unnecessarily general
 	GDK_IS_DISPLAY().
+	(pixbuf_to_hbitmaps_alpha_winxp): Rename the variables for the
+	color bitmap to have "color" in their name, for similarity with
+	pixbuf_to_hbitmaps_normal(). Create an 1-bit mask bitmap (DIB
+	section) using create_color_bitmap(), not CreateBitmap().
+	Initialize the mask bitmap with ones for those pixels in the color
+	bitmap where the alpha is zero, zeros for other pixels. Although
+	the docs claim otherwise, using an unitialized bitmap for the mask
+	together with a color bitmap that has alpha did not work if the
+	color bitmap had zero alpha everywhere, like the blank icon used
+	in gtktrayicon.c.
 	(_gdk_win32_pixbuf_to_hicon_supports_alpha): Check
-	G_WIN32_IS_NT_BASED() first, so we can pretend being on Win9x
-	by setting the G_WIN32_PRETEND_WIN9X environment variable.
+	G_WIN32_IS_NT_BASED() first, so we can pretend being on Win9x by
+	setting the G_WIN32_PRETEND_WIN9X environment variable.
 
 	Make icon masks work on Win98 (#320152, Peter Zelezny)
 
