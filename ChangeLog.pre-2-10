@@ -1,5 +1,10 @@
 2005-11-06  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkcursor-win32.c: As there is only one GdkDisplay in
+	the Win32 backend, check that GdkDisplay* parameters are equal to
+	_gdk_display instead of using the unnecessarily general
+	GDK_IS_DISPLAY().
+
 	Make icon masks work on Win98 (#320152, Peter Zelezny)
 
 	* gdk/win32/gdkcursor-win32.c (create_color_bitmap): Take also a

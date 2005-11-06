@@ -136,7 +136,7 @@ gdk_cursor_new_for_display (GdkDisplay   *display,
 {
   HCURSOR hcursor;
 
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
 
   hcursor = _gdk_win32_data_to_wcursor (cursor_type);
 
@@ -365,7 +365,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
   HCURSOR hcursor = NULL;
   int i;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
 
   for (i = 0; i < G_N_ELEMENTS(_default_cursors); i++)
     {
@@ -520,7 +520,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 {
   HCURSOR hcursor;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
   g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
   g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
@@ -534,7 +534,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 gboolean 
 gdk_display_supports_cursor_alpha (GdkDisplay    *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
 
   return _gdk_win32_pixbuf_to_hicon_supports_alpha ();
 }
@@ -542,7 +542,7 @@ gdk_display_supports_cursor_alpha (GdkDisplay    *display)
 gboolean 
 gdk_display_supports_cursor_color (GdkDisplay    *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
 
   return TRUE;
 }
@@ -550,7 +550,7 @@ gdk_display_supports_cursor_color (GdkDisplay    *display)
 guint     
 gdk_display_get_default_cursor_size (GdkDisplay    *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+  g_return_val_if_fail (display == _gdk_display, 0);
   
   return MIN (GetSystemMetrics (SM_CXCURSOR), GetSystemMetrics (SM_CYCURSOR));
 }
@@ -560,7 +560,7 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
 				     guint       *width,
 				     guint       *height)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (display == _gdk_display);
   
   if (width)
     *width = GetSystemMetrics (SM_CXCURSOR);
