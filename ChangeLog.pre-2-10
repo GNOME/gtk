@@ -1,3 +1,13 @@
+2005-11-06  Tor Lillqvist  <tml@novell.com>
+
+	Make icon masks work on Win98 (#320152, Peter Zelezny)
+
+	* gdk/win32/gdkcursor-win32.c (create_color_bitmap): Take also a
+	parameter for the depth of the bitmap, so that this function can
+	be used to create 1-bit bitmaps, too.
+	(pixbuf_to_hbitmaps_normal): Create an 1-bit bitmap for the mask,
+	and initialize it properly.
+
 2005-11-04  Michael Natterer  <mitch@imendio.com>
 
 	Merged from HEAD:
