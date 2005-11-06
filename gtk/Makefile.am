@@ -952,18 +952,27 @@ STOCK_ICONS = \
 	stock-icons/48/gtk-dialog-warning.png
 
 icons:
-	for i in 16 24; do                                              \
-	   (cd stock-icons/$$i                                          \
-	   $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png           \
-	   $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png           \
-	   $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png         \
-	   $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png         \
-	   $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png   \
-	   $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png   \
-	   $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png    \
-	   $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png    \
-	   $(LN_S) gtk-floppy.png gtk-save.png                          \
-	   cd ../..)                                                    \
+	for i in 16 24; do							\
+	   (cd stock-icons/$$i							\
+	   && rm -f gtk-go-back-rtl.png						\
+	   && $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png		\
+	   && rm -f gtk-go-forward-rtl.png					\
+	   && $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png		\
+	   && rm -f gtk-goto-last-rtl.png					\
+	   && $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png		\
+	   && rm -f gtk-goto-first-rtl.png					\
+	   && $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png		\
+	   && rm -f gtk-media-rewind-rtl.png					\
+	   && $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png	\
+	   && rm -f gtk-media-forward-rtl.png					\
+	   && $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png	\
+	   && rm -f gtk-media-previous-rtl.png					\
+	   && $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png		\
+	   && rm -f gtk-media-next-rtl.png					\
+	   && $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png		\
+	   && rm -f gtk-save.png						\
+	   && $(LN_S) gtk-floppy.png gtk-save.png				\
+	   && cd ../..)								\
 	done
 
 gtkbuiltincache.h: @REBUILD@ gtk-update-icon-cache$(EXEEXT) icons

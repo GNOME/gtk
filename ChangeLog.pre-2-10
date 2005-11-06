@@ -1,3 +1,8 @@
+2005-11-06  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/Makefile.am (icons): fixed rule to actually create the
+	symlinks, erroring out if anything goes wrong.
+
 2005-11-06  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/updateiconcache.c (build_cache): Can't rename a file if the
