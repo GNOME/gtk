@@ -1,5 +1,14 @@
 2005-11-06  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/updateiconcache.c (build_cache): Can't rename a file if the
+	target exists on Win32. First rename the target temporarily, then
+	if the renaming of the source to target fails, restore the
+	original name for the target.
+
+	* gtk/Makefile.am: Use EXEEXT in the dependency on gtk-update-icon-cache.
+
+2005-11-06  Tor Lillqvist  <tml@novell.com>
+
 	(pixbuf_to_hbitmaps_alpha_winxp): Use an 1-bit mask bitmap,
 	like pixbuf_to_hbitmaps_normal().
 	(_gdk_win32_pixbuf_to_hicon_supports_alpha): Check

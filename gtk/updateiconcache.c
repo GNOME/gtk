@@ -1143,6 +1143,9 @@ void
 build_cache (const gchar *path)
 {
   gchar *cache_path, *tmp_cache_path;
+#ifdef G_OS_WIN32
+  gchar *bak_cache_path = NULL;
+#endif
   GHashTable *files;
   gboolean retval;
   FILE *cache;
@@ -1188,11 +1191,42 @@ build_cache (const gchar *path)
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
 
+#ifdef G_OS_WIN32
+  if (g_file_test (cache_path, G_FILE_TEST_EXISTS))
+    {
+      bak_cache_path = g_strconcat (cache_path, ".bak", NULL);
+      g_unlink (bak_cache_path);
+      if (g_rename (cache_path, bak_cache_path) == -1)
+	{
+	  g_printerr ("Could not rename %s to %s: %s, removing %s then.\n",
+		      cache_path, bak_cache_path,
+		      g_strerror (errno),
+		      cache_path);
+	  g_unlink (cache_path);
+	  bak_cache_path = NULL;
+	}
+    }
+#endif
+
   if (g_rename (tmp_cache_path, cache_path) == -1)
     {
+      g_printerr ("Could not rename %s to %s: %s\n",
+		  tmp_cache_path, cache_path,
+		  g_strerror (errno));
       g_unlink (tmp_cache_path);
+#ifdef G_OS_WIN32
+      if (bak_cache_path != NULL)
+	if (g_rename (bak_cache_path, cache_path) == -1)
+	  g_printerr ("Could not rename %s back to %s: %s.\n",
+		      bak_cache_path, cache_path,
+		      g_strerror (errno));
+#endif
       exit (1);
     }
+#ifdef G_OS_WIN32
+  if (bak_cache_path != NULL)
+    g_unlink (bak_cache_path);
+#endif
 
   /* Update time */
   /* FIXME: What do do if an error occurs here? */

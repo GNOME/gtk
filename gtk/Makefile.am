@@ -953,7 +953,7 @@ STOCK_ICONS = \
 
 icons:
 	for i in 16 24; do                                              \
-	   (cd stock-icons/$$i 	                                        \
+	   (cd stock-icons/$$i                                          \
 	   $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png           \
 	   $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png           \
 	   $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png         \
@@ -966,7 +966,7 @@ icons:
 	   cd ../..)                                                    \
 	done
 
-gtkbuiltincache.h: @REBUILD@ gtk-update-icon-cache icons
+gtkbuiltincache.h: @REBUILD@ gtk-update-icon-cache$(EXEEXT) icons
 	./gtk-update-icon-cache --force --ignore-theme-index 	\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
 
