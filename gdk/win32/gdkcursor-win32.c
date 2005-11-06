@@ -550,7 +550,7 @@ gdk_display_supports_cursor_color (GdkDisplay    *display)
 guint     
 gdk_display_get_default_cursor_size (GdkDisplay    *display)
 {
-  g_return_val_if_fail (display == _gdk_display, FALSE);
+  g_return_val_if_fail (display == _gdk_display, 0);
   
   return MIN (GetSystemMetrics (SM_CXCURSOR), GetSystemMetrics (SM_CYCURSOR));
 }
@@ -560,7 +560,7 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
 				     guint       *width,
 				     guint       *height)
 {
-  g_return_val_if_fail (display == _gdk_display, FALSE);
+  g_return_if_fail (display == _gdk_display);
   
   if (width)
     *width = GetSystemMetrics (SM_CXCURSOR);
@@ -613,19 +613,32 @@ create_alpha_bitmap (gint width, gint height, guchar **outdata)
 }
 
 static HBITMAP
-create_color_bitmap (gint width, gint height, guchar **outdata)
+create_color_bitmap (gint     width,
+		     gint     height,
+		     guchar **outdata,
+		     gint     bits)
 {
-  BITMAPV4HEADER bi;
+  struct {
+    BITMAPV4HEADER bmiHeader;
+    RGBQUAD bmiColors[2];
+  } bmi;
   HDC hdc;
   HBITMAP hBitmap;
 
-  ZeroMemory (&bi, sizeof (BITMAPV4HEADER));
-  bi.bV4Size = sizeof (BITMAPV4HEADER);
-  bi.bV4Width = width;
-  bi.bV4Height = height;
-  bi.bV4Planes = 1;
-  bi.bV4BitCount = 24;
-  bi.bV4V4Compression = BI_RGB;
+  ZeroMemory (&bmi, sizeof (bmi));
+  bmi.bmiHeader.bV4Size = sizeof (BITMAPV4HEADER);
+  bmi.bmiHeader.bV4Width = width;
+  bmi.bmiHeader.bV4Height = height;
+  bmi.bmiHeader.bV4Planes = 1;
+  bmi.bmiHeader.bV4BitCount = bits;
+  bmi.bmiHeader.bV4V4Compression = BI_RGB;
+
+  /* when bits is 1, these will be used.
+   * bmiColors[0] already zeroed from ZeroMemory()
+   */
+  bmi.bmiColors[1].rgbBlue = 0xFF;
+  bmi.bmiColors[1].rgbGreen = 0xFF;
+  bmi.bmiColors[1].rgbRed = 0xFF;
 
   hdc = GetDC (NULL);
   if (!hdc)
@@ -633,7 +646,7 @@ create_color_bitmap (gint width, gint height, guchar **outdata)
       WIN32_GDI_FAILED ("GetDC");
       return NULL;
     }
-  hBitmap = CreateDIBSection (hdc, (BITMAPINFO *)&bi, DIB_RGB_COLORS,
+  hBitmap = CreateDIBSection (hdc, (BITMAPINFO *)&bmi, DIB_RGB_COLORS,
 			      (PVOID *) outdata, NULL, (DWORD)0);
   if (hBitmap == NULL)
     WIN32_GDI_FAILED ("CreateDIBSection");
@@ -651,9 +664,10 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
    * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
    */
   HBITMAP hColorBitmap, hMaskBitmap;
-  guchar *indata, *inrow, *maskdata, *maskrow;
-  guchar *colordata, *colorrow;
-  gint width, height, i, j, rowstride, bmstride;
+  guchar *indata, *inrow;
+  guchar *colordata, *colorrow, *maskdata, *maskbyte;
+  gint width, height, i, j, rowstride;
+  guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
@@ -661,23 +675,27 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
   hColorBitmap = create_alpha_bitmap (width, height, &colordata);
   if (!hColorBitmap)
     return FALSE;
-  hMaskBitmap = create_color_bitmap (width, height, &maskdata);
+  hMaskBitmap = create_color_bitmap (width, height, &maskdata, 1);
   if (!hMaskBitmap)
     {
       DeleteObject (hColorBitmap);
       return FALSE;
     }
 
-  bmstride = width * 3;
-  if (bmstride % 4 != 0)
-    bmstride += 4 - (bmstride % 4);
+  /* MSDN says mask rows are aligned to "LONG" boundaries */
+  maskstride = width / 8;
+  if (maskstride % 4 != 0)
+    maskstride += 4 - (maskstride % 4);
+  if (maskstride < 4)	/* one word minimum */
+    maskstride = 4;
 
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   for (j=0; j<height; j++)
     {
       colorrow = colordata + 4*j*width;
-      maskrow = maskdata + j*bmstride;
+      maskbyte = maskdata + j*maskstride;
+      mask_bit = 0x80;
       inrow = indata  + (height-j-1)*rowstride;
       for (i=0; i<width; i++)
 	{
@@ -686,9 +704,15 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
 	  colorrow[4*i+2] = inrow[4*i+0];
 	  colorrow[4*i+3] = inrow[4*i+3];
 	  if (inrow[4*i+3] == 0)
-	    maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 255;
+	    maskbyte[0] |= mask_bit;	/* turn ON bit */
 	  else
-	    maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 0;
+	    maskbyte[0] &= ~mask_bit;	/* turn OFF bit */
+	  mask_bit >>= 1;
+	  if (mask_bit == 0)
+	    {
+	      mask_bit = 0x80;
+	      maskbyte++;
+	    }
 	}
     }
 
@@ -708,17 +732,18 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
    */
   HBITMAP hColorBitmap, hMaskBitmap;
   guchar *indata, *inrow;
-  guchar *colordata, *colorrow, *maskdata, *maskrow;
+  guchar *colordata, *colorrow, *maskdata, *maskbyte;
   gint width, height, i, j, rowstride, nc, bmstride;
   gboolean has_alpha;
+  guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
 
-  hColorBitmap = create_color_bitmap (width, height, &colordata);
+  hColorBitmap = create_color_bitmap (width, height, &colordata, 24);
   if (!hColorBitmap)
     return FALSE;
-  hMaskBitmap  = create_color_bitmap (width, height, &maskdata);
+  hMaskBitmap = create_color_bitmap (width, height, &maskdata, 1);
   if (!hMaskBitmap)
     {
       DeleteObject (hColorBitmap);
@@ -730,6 +755,13 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
   if (bmstride % 4 != 0)
     bmstride += 4 - (bmstride % 4);
 
+  /* MSDN says mask rows are aligned to "LONG" boundaries */
+  maskstride = width / 8;
+  if (maskstride % 4 != 0)
+    maskstride += 4 - (maskstride % 4);
+  if (maskstride < 4)	/* one word minimum */
+    maskstride = 4;
+
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   nc = gdk_pixbuf_get_n_channels (pixbuf);
@@ -738,21 +770,28 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
   for (j=0; j<height; j++)
     {
       colorrow = colordata + j*bmstride;
-      maskrow = maskdata + j*bmstride;
+      maskbyte = maskdata + j*maskstride;
+      mask_bit = 0x80;
       inrow = indata  + (height-j-1)*rowstride;
       for (i=0; i<width; i++)
 	{
 	  if (has_alpha && inrow[nc*i+3] < 128)
 	    {
 	      colorrow[3*i+0] = colorrow[3*i+1] = colorrow[3*i+2] = 0;
-	      maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 255;
+	      maskbyte[0] |= mask_bit;	/* turn ON bit */
 	    }
 	  else
 	    {
 	      colorrow[3*i+0] = inrow[nc*i+2];
 	      colorrow[3*i+1] = inrow[nc*i+1];
 	      colorrow[3*i+2] = inrow[nc*i+0];
-	      maskrow[3*i+0] = maskrow[3*i+1] = maskrow[3*i+2] = 0;
+	      maskbyte[0] &= ~mask_bit;	/* turn OFF bit */
+	    }
+	  mask_bit >>= 1;
+	  if (mask_bit == 0)
+	    {
+	      mask_bit = 0x80;
+	      maskbyte++;
 	    }
 	}
     }
@@ -814,15 +853,21 @@ _gdk_win32_pixbuf_to_hicon_supports_alpha (void)
 
   if (!is_win_xp_checked)
     {
-      OSVERSIONINFO version;
-
       is_win_xp_checked = TRUE;
-      memset (&version, 0, sizeof (version));
-      version.dwOSVersionInfoSize = sizeof (version);
-      is_win_xp = GetVersionEx (&version)
-	&& version.dwPlatformId == VER_PLATFORM_WIN32_NT
-	&& (version.dwMajorVersion > 5
-	    || (version.dwMajorVersion == 5 && version.dwMinorVersion >= 1));
+
+      if (!G_WIN32_IS_NT_BASED ())
+	is_win_xp = FALSE;
+      else
+	{
+	  OSVERSIONINFO version;
+
+	  memset (&version, 0, sizeof (version));
+	  version.dwOSVersionInfoSize = sizeof (version);
+	  is_win_xp = GetVersionEx (&version)
+	    && version.dwPlatformId == VER_PLATFORM_WIN32_NT
+	    && (version.dwMajorVersion > 5
+		|| (version.dwMajorVersion == 5 && version.dwMinorVersion >= 1));
+	}
     }
   return is_win_xp;
 }

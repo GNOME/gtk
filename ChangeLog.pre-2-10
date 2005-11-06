@@ -1,3 +1,21 @@
+2005-11-06  Tor Lillqvist  <tml@novell.com>
+
+	(pixbuf_to_hbitmaps_alpha_winxp): Use an 1-bit mask bitmap,
+	like pixbuf_to_hbitmaps_normal().
+	(_gdk_win32_pixbuf_to_hicon_supports_alpha): Check
+	G_WIN32_IS_NT_BASED() first, so we can pretend being on Win9x by
+	setting the G_WIN32_PRETEND_WIN9X environment variable.
+	
+2005-11-06  Tor Lillqvist  <tml@novell.com>
+
+	Make icon masks work on Win98 (#320152, Peter Zelezny)
+
+	* gdk/win32/gdkcursor-win32.c (create_color_bitmap): Take also a
+	parameter for the depth of the bitmap, so that this function can
+	be used to create 1-bit bitmaps, too.
+	(pixbuf_to_hbitmaps_normal): Create an 1-bit bitmap for the mask,
+	and initialize it properly.
+
 2005-11-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Store builtin stock icons in an icon cache, instead of
