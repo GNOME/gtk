@@ -18,6 +18,8 @@
 	G_WIN32_IS_NT_BASED() first, so we can pretend being on Win9x by
 	setting the G_WIN32_PRETEND_WIN9X environment variable.
 
+2005-11-06  Tor Lillqvist  <tml@novell.com>
+
 	Make icon masks work on Win98 (#320152, Peter Zelezny)
 
 	* gdk/win32/gdkcursor-win32.c (create_color_bitmap): Take also a
