@@ -2900,6 +2900,7 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
   const GtkFilePath *file_path;
   GtkFilePath *file_path_copy;
   GError *error;
+  gchar *name;
 
   /* Get the selected path */
 
@@ -2915,12 +2916,13 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
   g_assert (old_position >= 0 && old_position < impl->num_bookmarks);
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+		      SHORTCUTS_COL_NAME, &name,
 		      SHORTCUTS_COL_DATA, &col_data,
 		      SHORTCUTS_COL_IS_VOLUME, &is_volume,
 		      -1);
   g_assert (col_data != NULL);
   g_assert (!is_volume);
-
+  
   file_path = col_data;
   file_path_copy = gtk_file_path_copy (file_path); /* removal below will free file_path, so we need a copy */
 
@@ -2934,7 +2936,10 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
 
   error = NULL;
   if (gtk_file_system_remove_bookmark (impl->file_system, file_path_copy, &error))
-    shortcuts_add_bookmark_from_path (impl, file_path_copy, new_position);
+    {
+      shortcuts_add_bookmark_from_path (impl, file_path_copy, new_position);
+      gtk_file_system_set_bookmark_label (impl->file_system, file_path_copy, name);
+    }
   else
     error_adding_bookmark_dialog (impl, file_path_copy, error);
 
