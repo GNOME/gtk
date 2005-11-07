@@ -1,3 +1,12 @@
+2005-11-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktoolitem.c (_gtk_tool_item_toolbar_reconfigured): 
+	Raise the drag_window after reconfiguring the 
+	toolbar.  (#320803, Christian Persch)
+
+	* gtk/gtkrbtree.c: Plug a small memory leak.  (#320777,
+	Antonio Sacchi)
+	
 2005-11-07  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c (pixbuf_to_hbitmaps_normal):
