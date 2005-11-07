@@ -683,11 +683,7 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
     }
 
   /* MSDN says mask rows are aligned to "LONG" boundaries */
-  maskstride = width / 8;
-  if (maskstride % 4 != 0)
-    maskstride += 4 - (maskstride % 4);
-  if (maskstride < 4)	/* one word minimum */
-    maskstride = 4;
+  maskstride = (((width + 31) & ~31) >> 3);
 
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
