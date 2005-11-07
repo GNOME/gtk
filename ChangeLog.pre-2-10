@@ -1,5 +1,9 @@
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): 
+	Don't popup the completions if the focus has already been
+	moved somewhere else.  (#319914, Christian Persch)
+
 	* gtk/gtktoolitem.c (_gtk_tool_item_toolbar_reconfigured): 
 	Raise the drag_window after reconfiguring the 
 	toolbar.  (#320803, Christian Persch)
