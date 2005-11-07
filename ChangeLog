@@ -1,5 +1,9 @@
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolitem.c (_gtk_tool_item_toolbar_reconfigured): 
+	Raise the drag_window after reconfiguring the 
+	toolbar.  (#320803, Christian Persch)
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkfilechooserbutton.h: 
 	* gtk/gtkfilechooserbutton.c: Add a focus-on-click property
