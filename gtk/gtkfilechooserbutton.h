@@ -82,6 +82,9 @@ void                  gtk_file_chooser_button_set_title        (GtkFileChooserBu
 gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_width_chars  (GtkFileChooserButton *button,
 								gint                  n_chars);
+gboolean              gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button);
+void                  gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
+                                                                  gboolean              focus_on_click);
 
 G_END_DECLS
 
