@@ -472,7 +472,7 @@ _gtk_rbtree_free (GtkRBTree *tree)
   if (tree->parent_node &&
       tree->parent_node->children == tree)
     tree->parent_node->children = NULL;
-  _gtk_rbnode_free (tree->nil);
+  g_free (tree->nil);
   g_free (tree);
 }
 
