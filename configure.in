@@ -993,10 +993,10 @@ if test $cross_compiling = yes; then
   fi
 fi
 
-if test ! -f $srcdir/gtk/stock-icons/gtkstockpixbufs.h && 
+if test ! -f $srcdir/gtk/gtkbuiltincache.h && 
    test "x$REBUILD_PNGS" = "x#" ; then
      AC_MSG_ERROR([
-*** gtkstockpixbufs.h is not in the tree, and cannot be built
+*** gtkbuiltincache.h is not in the tree, and cannot be built
 *** because you don't have libpng, or (when cross-compiling) you 
 *** don't have a prebuilt gdk-pixbuf-csource on the host system.])
 fi
@@ -1628,7 +1628,6 @@ gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
-gtk/stock-icons/Makefile
 gtk/theme-bits/Makefile
 gtk/xdgmime/Makefile
 modules/Makefile

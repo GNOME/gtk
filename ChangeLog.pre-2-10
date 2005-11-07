@@ -1,3 +1,7 @@
+2005-11-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Adjust to the stock icon changes.
+	
 2005-11-07  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c (pixbuf_to_hbitmaps_normal):

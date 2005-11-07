@@ -14,8 +14,9 @@
 <cmdsynopsis>
 <command>gtk-update-icon-cache</command>
 <arg choice="opt">--force</arg>
-<arg choice="opt">--index-only</arg>
 <arg choice="opt">--ignore-theme-index</arg>
+<arg choice="opt">--index-only</arg>
+<arg choice="opt">--source<arg>name</arg></arg>
 <arg choice="opt">--quiet</arg>
 <arg choice="req">iconpath</arg>
 </cmdsynopsis>
@@ -44,8 +45,8 @@ multiple applications, the overall memory consumption is reduced as well.
   <varlistentry>
     <term>--force</term>
     <term>-f</term>
-    <listitem><para>Overwrite an existing cache file even if it appears to be uptodate.
-    </para></listitem>
+    <listitem><para>Overwrite an existing cache file even if it appears to be 
+         uptodate.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -63,6 +64,14 @@ multiple applications, the overall memory consumption is reduced as well.
     <term>-i</term>
     <listitem><para>Don't include image data in the cache.
     </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>--source</term>
+    <term>-c</term>
+    <listitem><para>Output a C header file declaring a constant 
+     <replaceable>name</replaceable> with the contents of the icon 
+     cache.</para></listitem>
   </varlistentry>
 
   <varlistentry>
