@@ -63,6 +63,7 @@ struct _GtkPathBar
   guint slider_visible : 1;
   guint need_timer : 1;
   guint ignore_click : 1;
+  guint scrolling_up : 1;
 };
 
 struct _GtkPathBarClass

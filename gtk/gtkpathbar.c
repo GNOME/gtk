@@ -125,6 +125,7 @@ get_slider_button (GtkPathBar  *path_bar,
   gtk_widget_push_composite_child ();
 
   button = gtk_button_new ();
+  gtk_button_set_focus_on_click (button, FALSE);
   gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (arrow_type, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
   gtk_widget_show_all (button);
@@ -730,9 +731,9 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
 
   if (path_bar->timer)
     {
-      if (GTK_WIDGET_HAS_FOCUS (path_bar->up_slider_button))
+      if (path_bar->scrolling_up)
 	gtk_path_bar_scroll_up (path_bar->up_slider_button, path_bar);
-      else if (GTK_WIDGET_HAS_FOCUS (path_bar->down_slider_button))
+      else 
 	gtk_path_bar_scroll_down (path_bar->down_slider_button, path_bar);
 
       if (path_bar->need_timer) 
@@ -770,18 +771,21 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 				  GdkEventButton *event,
 				  GtkPathBar     *path_bar)
 {
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
-    gtk_widget_grab_focus (widget);
-
   if (event->type != GDK_BUTTON_PRESS || event->button != 1)
     return FALSE;
 
   path_bar->ignore_click = FALSE;
 
   if (widget == path_bar->up_slider_button)
-    gtk_path_bar_scroll_up (path_bar->up_slider_button, path_bar);
+    {
+      path_bar->scrolling_up = TRUE;
+      gtk_path_bar_scroll_up (path_bar->up_slider_button, path_bar);
+    }
   else if (widget == path_bar->down_slider_button)
-     gtk_path_bar_scroll_down (path_bar->down_slider_button, path_bar);
+    {
+      path_bar->scrolling_up = FALSE;
+      gtk_path_bar_scroll_down (path_bar->down_slider_button, path_bar);
+    }
 
   if (!path_bar->timer)
     {
@@ -1147,6 +1151,7 @@ make_directory_button (GtkPathBar  *path_bar,
 
   button_data->type = find_button_type (path_bar, path);
   button_data->button = gtk_toggle_button_new ();
+  gtk_button_set_focus_on_click (button_data->button, FALSE);
 
   switch (button_data->type)
     {

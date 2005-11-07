@@ -1,5 +1,10 @@
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.[hc]: Set focus-on-click to FALSE for all buttons.
+	Don't grab focus when a slider button is pressed, instead, use
+	a bit in the pathbar struct to determine whether to scroll up
+	or down.  (#314486, Carlos Garnacho)
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): 
 	Don't popup the completions if the focus has already been
 	moved somewhere else.  (#319914, Christian Persch)
