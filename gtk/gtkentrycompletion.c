@@ -1425,6 +1425,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (!GTK_WIDGET_MAPPED (completion->priv->entry))
     return;
 
+  if (!GTK_WIDGET_HAS_FOCUS (completion->priv->entry))
+    return;
+
   completion->priv->ignore_enter = TRUE;
     
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
