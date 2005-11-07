@@ -1137,10 +1137,10 @@ _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 
   g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
   
-  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
-
   if (tool_item->priv->drag_window)
     gdk_window_raise (tool_item->priv->drag_window);
+
+  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 }
 
 #define __GTK_TOOL_ITEM_C__
