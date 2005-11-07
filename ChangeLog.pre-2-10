@@ -1,3 +1,7 @@
+Mon Nov  7 16:15:16 2005  Tim Janik  <timj@imendio.com>
+
+	* configure.in: fixed missing $X_CFLAGS setup in case x11.pc is present.
+
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Adjust to the stock icon changes.

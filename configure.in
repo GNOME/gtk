@@ -1049,6 +1049,7 @@ if test "x$gdktarget" = "xx11"; then
     have_base_x_pc=true
     X_PACKAGES="$X_PACKAGES x11 xext"
     x_libs="`pkg-config --libs x11 xext`"
+    X_CFLAGS="`pkg-config --cflags x11 xext`"
     
     # Strip out any .la files that pkg-config might give us (this happens
     # with -uninstalled.pc files)
