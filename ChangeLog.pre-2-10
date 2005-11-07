@@ -1,3 +1,8 @@
+2005-11-07  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c (pixbuf_to_hbitmaps_normal):
+	Correct the calculation of maskstride. (#320152, Peter Zelezny)
+
 2005-11-06  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c: As there is only one GdkDisplay in
