@@ -2089,7 +2089,7 @@ msgstr "_Թավատառ"
 #: gtk/gtkstock.c:320
 #, fuzzy
 msgid "_Cancel"
-msgstr "_Հրաշարվել"
+msgstr "_Հրաժարվել"
 
 #: gtk/gtkstock.c:321
 msgid "_CD-Rom"
