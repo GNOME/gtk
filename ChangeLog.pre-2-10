@@ -1,5 +1,8 @@
 2005-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkgc.c (gdk_gc_finalize): Unref tile and stipple when
+	finalizing a gc.  (#320789, Nickolay V. Shmyrev)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_list): Ignore
 	icons if they would make the request large enough to cause
 	Xlib to loose the connection.  (#320909, Claudio Saavedra)
