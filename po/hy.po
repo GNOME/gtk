@@ -2151,42 +2151,42 @@ msgstr "Թողել ամբողջ էկրանով"
 #: gtk/gtkstock.c:336
 #, fuzzy
 msgid "Navigation|_Bottom"
-msgstr "Նավարկություն|_Ստորին մաս"
+msgstr "Ստորին մաս"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr "Նավարկություն|_Առաջին"
+msgstr "Առաջին"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr "Նավարկություն|_Վերջին"
+msgstr "Վերջին"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr "Նավարկություն|_Վերին մաս"
+msgstr "Վերին մաս"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr "Նավարկություն|_Հետ"
+msgstr "Հետ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr "Նավարկություն|_Ներքև"
+msgstr "Ներքև"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr "Նավարկություն|_Առաջ"
+msgstr "Առաջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr "Նավարկություն|_Վերև"
+msgstr "Վերև"
 
 #: gtk/gtkstock.c:351
 #, fuzzy
@@ -2217,7 +2217,7 @@ msgstr "_Ցանկ"
 #: gtk/gtkstock.c:357
 #, fuzzy
 msgid "_Information"
-msgstr "Ինֆորմացիա"
+msgstr "Տեղեկատվություն"
 
 #: gtk/gtkstock.c:358
 msgid "_Italic"
@@ -2226,75 +2226,75 @@ msgstr "_Շեղատառ"
 #: gtk/gtkstock.c:359
 #, fuzzy
 msgid "_Jump to"
-msgstr "_Թռիչք դեպի"
+msgstr "_Անցնել դեպի"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
 #, fuzzy
 msgid "Justify|_Center"
-msgstr "Հավասարեցում|_Կենտրոն"
+msgstr "Կենտրոն"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr ""
+msgstr "Լցնել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr "Հավասարեցում|_Ձախ"
+msgstr "Ձախ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Justify|_Right"
-msgstr "Հավասարեցում|_Աջ"
+msgstr "Աջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Մեդիա|_Առաջ"
+msgstr "Առաջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Մեդիա|_Հաջորդը"
+msgstr "Հաջորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Մեդիա|Սպ_ասել"
+msgstr "Սպասել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 #, fuzzy
 msgid "Media|_Play"
-msgstr "Մեդիա|_Նվագել"
+msgstr "Նվագել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Միջնորդներ|Նա_խորդը"
+msgstr "Նախորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
-msgstr "Միջնորդներ|_Ձայնագրել"
+msgstr "Ձայնագրել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Միջնորդներ|Հե_տադարձ"
+msgstr "դեպի սկիզբ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
-msgstr "Մեդիա|_Կանգ"
+msgstr "Կանգ"
 
 #: gtk/gtkstock.c:385
 msgid "_Network"
-msgstr "_Ցանց"
+msgstr "Ցանց"
 
 #: gtk/gtkstock.c:386
 msgid "_New"
