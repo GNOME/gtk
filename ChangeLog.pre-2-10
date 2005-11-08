@@ -1,3 +1,9 @@
+2005-11-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_list): Ignore
+	icons if they would make the request large enough to cause
+	Xlib to loose the connection.  (#320909, Claudio Saavedra)
+
 2005-11-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdk.symbols
