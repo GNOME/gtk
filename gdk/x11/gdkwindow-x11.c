@@ -2273,6 +2273,69 @@ gdk_window_set_type_hint (GdkWindow        *window,
 		   (guchar *)&atom, 1);
 }
 
+/**
+ * gdk_window_get_type_hint:
+ * @window: A toplevel #GdkWindow
+ *
+ * This function returns the type hint set for a window.
+ *
+ * Return value: The type hint set for @window
+ *
+ * Since: 2.10
+ **/
+GdkWindowTypeHint
+gdk_window_get_type_hint (GdkWindow *window)
+{
+  GdkDisplay *display;
+  GdkWindowTypeHint type;
+  Atom type_return;
+  gint format_return;
+  gulong nitems_return;
+  gulong bytes_after_return;
+  guchar *data = NULL;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return GDK_WINDOW_TYPE_HINT_NORMAL;
+
+  type = GDK_WINDOW_TYPE_HINT_NORMAL;
+
+  display = gdk_drawable_get_display (window);
+
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE"),
+                          0, G_MAXLONG, False, XA_ATOM, &type_return,
+                          &format_return, &nitems_return, &bytes_after_return,
+                          &data) == Success)
+    {
+      if ((type_return == XA_ATOM) && (format_return == 32) &&
+          (data) && (nitems_return == 1))
+        {
+          Atom atom = (Atom) *data;
+
+          if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DIALOG"))
+            type = GDK_WINDOW_TYPE_HINT_DIALOG;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_MENU"))
+            type = GDK_WINDOW_TYPE_HINT_MENU;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_TOOLBAR"))
+            type = GDK_WINDOW_TYPE_HINT_TOOLBAR;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_UTILITY"))
+            type = GDK_WINDOW_TYPE_HINT_UTILITY;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_SPLASH"))
+            type = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DOCK"))
+            type = GDK_WINDOW_TYPE_HINT_DOCK;
+          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DESKTOP"))
+            type = GDK_WINDOW_TYPE_HINT_DESKTOP;
+        }
+
+      if (type_return != None && data != NULL)
+        XFree (data);
+    }
+
+  return type;
+}
 
 static void
 gdk_wmspec_change_state (gboolean   add,

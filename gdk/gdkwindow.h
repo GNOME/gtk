@@ -436,8 +436,10 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   max_height,
 					  gint		   flags);
 #endif
-void          gdk_window_set_type_hint    (GdkWindow       *window,
-					   GdkWindowTypeHint hint);
+void              gdk_window_set_type_hint (GdkWindow        *window,
+                                            GdkWindowTypeHint hint);
+GdkWindowTypeHint gdk_window_get_type_hint (GdkWindow        *window);
+
 void          gdk_window_set_modal_hint   (GdkWindow       *window,
                                            gboolean         modal);
 

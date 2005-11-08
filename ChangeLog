@@ -1,3 +1,10 @@
+2005-11-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdk.symbols
+	* gdk/gdkwindow.h
+	* gdk/x11/gdkwindow-x11.c: added gdk_window_get_type_hint() (patch
+	extracted from maemo-gtk). Fixes bug #320872.
+
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_reorder): Don't

@@ -706,6 +706,7 @@ gdk_window_focus
 gdk_window_set_hints
 gdk_window_get_deskrelative_origin
 #endif
+gdk_window_get_type_hint
 gdk_window_set_type_hint
 gdk_window_set_modal_hint
 gdk_window_set_skip_taskbar_hint
