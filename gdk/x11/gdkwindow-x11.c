@@ -3967,6 +3967,12 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   toplevel->user_time = timestamp_long;
 }
 
+#define GDK_SELECTION_MAX_SIZE(display)                                 \
+  MIN(262144,                                                           \
+      XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) == 0     \
+       ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
+       : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
+
 /**
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
@@ -3995,6 +4001,7 @@ gdk_window_set_icon_list (GdkWindow *window,
   gint x, y;
   gint n_channels;
   GdkDisplay *display;
+  gint n;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -4005,7 +4012,7 @@ gdk_window_set_icon_list (GdkWindow *window,
   
   l = pixbufs;
   size = 0;
-  
+  n = 0;
   while (l)
     {
       pixbuf = l->data;
@@ -4014,8 +4021,16 @@ gdk_window_set_icon_list (GdkWindow *window,
       width = gdk_pixbuf_get_width (pixbuf);
       height = gdk_pixbuf_get_height (pixbuf);
       
+      /* silently ignore overlarge icons */
+      if (size + 2 + width * height > GDK_SELECTION_MAX_SIZE(display))
+	{
+	  g_warning ("gdk_window_set_icon_list: icons too large");
+	  break;
+	}
+     
+      n++;
       size += 2 + width * height;
-
+      
       l = g_list_next (l);
     }
 
@@ -4023,7 +4038,7 @@ gdk_window_set_icon_list (GdkWindow *window,
 
   l = pixbufs;
   p = data;
-  while (l)
+  while (l && n > 0)
     {
       pixbuf = l->data;
       
@@ -4056,6 +4071,7 @@ gdk_window_set_icon_list (GdkWindow *window,
 	}
 
       l = g_list_next (l);
+      n--;
     }
 
   if (size > 0)
