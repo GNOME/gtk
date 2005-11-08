@@ -1611,11 +1611,6 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkWindowHints  geom_mask)
 {
   GdkWindowImplWin32 *impl;
-#if 0
-  WINDOWPLACEMENT size_hints;
-  RECT rect;
-  gint new_width = 0, new_height = 0;
-#endif
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1637,92 +1632,18 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
     {
       GDK_NOTE (MISC, g_print ("... MIN_SIZE: %dx%d\n",
 			       geometry->min_width, geometry->min_height));
-
-#if 0
-      /* Check if the current size of the window is in bounds */
-      GetClientRect (GDK_WINDOW_HWND (window), &rect);
-
-      if (rect.right < geometry->min_width &&
-	  rect.bottom < geometry->min_height)
-	{
-	  new_width = geometry->min_width;
-	  new_height = geometry->min_height;
-	}
-      else if (rect.right < geometry->min_width)
-	{
-	  new_width = geometry->min_width;
-	  new_height = rect.bottom;
-	}
-      else if (rect.bottom < geometry->min_height)
-	{
-	  new_width = rect.right;
-	  new_height = geometry->min_height;
-	}
-#endif
     }
   
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
       GDK_NOTE (MISC, g_print ("... MAX_SIZE: %dx%d\n",
 			       geometry->max_width, geometry->max_height));
-
-#if 0
-      /* Check if the current size of the window is in bounds */
-      GetClientRect (GDK_WINDOW_HWND (window), &rect);
-
-      if (rect.right > geometry->max_width &&
-	  rect.bottom > geometry->max_height)
-	{
-	  new_width = geometry->max_width;
-	  new_height = geometry->max_height;
-	}
-      else if (rect.right > geometry->max_width)
-	{
-	  new_width = geometry->max_width;
-	  new_height = rect.bottom;
-	}
-      else if (rect.bottom > geometry->max_height)
-	{
-	  new_width = rect.right;
-	  new_height = geometry->max_height;
-	}
-#endif
     }
-
-#if 0
-  /* Apply new size constraints */
-  if (new_width != 0 && new_height != 0)
-    gdk_window_resize (window, new_width, new_height);
-#endif
 
   if (geom_mask & GDK_HINT_BASE_SIZE)
     {
       GDK_NOTE (MISC, g_print ("... BASE_SIZE: %dx%d\n",
 			       geometry->base_width, geometry->base_height));
-
-#if 0
-      size_hints.length = sizeof (size_hints);
-
-      if (API_CALL (GetWindowPlacement, (GDK_WINDOW_HWND (window), &size_hints)))
-	{
-	  GDK_NOTE (MISC,
-		    g_print ("... rcNormalPosition: (%ld,%ld)--(%ld,%ld)\n",
-			     size_hints.rcNormalPosition.left,
-			     size_hints.rcNormalPosition.top,
-			     size_hints.rcNormalPosition.right,
-			     size_hints.rcNormalPosition.bottom));
-	  size_hints.rcNormalPosition.right =
-	    size_hints.rcNormalPosition.left + geometry->base_width;
-	  size_hints.rcNormalPosition.bottom =
-	    size_hints.rcNormalPosition.top + geometry->base_height;
-	  GDK_NOTE (MISC, g_print ("... setting: rcNormal: (%ld,%ld)--(%ld,%ld)\n",
-				   size_hints.rcNormalPosition.left,
-				   size_hints.rcNormalPosition.top,
-				   size_hints.rcNormalPosition.right,
-				   size_hints.rcNormalPosition.bottom));
-	  API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window), &size_hints));
-	}
-#endif
     }
   
   if (geom_mask & GDK_HINT_RESIZE_INC)
