@@ -2151,42 +2151,42 @@ msgstr "Թողել ամբողջ էկրանով"
 #: gtk/gtkstock.c:336
 #, fuzzy
 msgid "Navigation|_Bottom"
-msgstr "Նավարկություն|_Ստորին մաս"
+msgstr "Ստորին մաս"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr "Նավարկություն|_Առաջին"
+msgstr "Առաջին"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr "Նավարկություն|_Վերջին"
+msgstr "Վերջին"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr "Նավարկություն|_Վերին մաս"
+msgstr "Վերին մաս"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr "Նավարկություն|_Հետ"
+msgstr "Հետ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr "Նավարկություն|_Ներքև"
+msgstr "Ներքև"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr "Նավարկություն|_Առաջ"
+msgstr "Առաջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr "Նավարկություն|_Վերև"
+msgstr "Վերև"
 
 #: gtk/gtkstock.c:351
 #, fuzzy
