@@ -188,6 +188,10 @@ gdk_gc_finalize (GObject *object)
     gdk_region_destroy (priv->clip_region);
   if (gc->colormap)
     g_object_unref (gc->colormap);
+  if (priv->tile)
+    g_object_unref (priv->tile);
+  if (priv->stipple)
+    g_object_unref (priv->stipple);
 
   G_OBJECT_CLASS (gdk_gc_parent_class)->finalize (object);
 }
