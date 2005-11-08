@@ -2089,7 +2089,7 @@ msgstr "_Թավատառ"
 #: gtk/gtkstock.c:320
 #, fuzzy
 msgid "_Cancel"
-msgstr "_Հրաշարվել"
+msgstr "_Հրաժարվել"
 
 #: gtk/gtkstock.c:321
 msgid "_CD-Rom"
@@ -2226,71 +2226,71 @@ msgstr "_Շեղատառ"
 #: gtk/gtkstock.c:359
 #, fuzzy
 msgid "_Jump to"
-msgstr "_Թռիչք դեպի"
+msgstr "_Անցնել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
 #, fuzzy
 msgid "Justify|_Center"
-msgstr "Հավասարեցում|_Կենտրոն"
+msgstr "Կենտրոն"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr ""
+msgstr "Լցնել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr "Հավասարեցում|_Ձախ"
+msgstr "Ձախ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Justify|_Right"
-msgstr "Հավասարեցում|_Աջ"
+msgstr "Աջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Մեդիա|_Առաջ"
+msgstr "Առաջ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Մեդիա|_Հաջորդը"
+msgstr "Հաջորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Մեդիա|Սպ_ասել"
+msgstr "Սպասել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 #, fuzzy
 msgid "Media|_Play"
-msgstr "Մեդիա|_Նվագել"
+msgstr "Նվագել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Միջնորդներ|Նա_խորդը"
+msgstr "Նախորդը"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
-msgstr "Միջնորդներ|_Ձայնագրել"
+msgstr "Ձայնագրել"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Միջնորդներ|Հե_տադարձ"
+msgstr "դեպի սկիզբ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
-msgstr "Մեդիա|_Կանգ"
+msgstr "Կանգ"
 
 #: gtk/gtkstock.c:385
 msgid "_Network"
