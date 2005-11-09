@@ -919,14 +919,34 @@ draw_stepper (GtkRange     *range,
   gint arrow_width;
   gint arrow_height;
 
+  gboolean arrow_insensitive = FALSE;
+
   /* More to get the right clip region than for efficiency */
   if (!gdk_rectangle_intersect (area, rect, &intersection))
     return;
 
   intersection.x += widget->allocation.x;
   intersection.y += widget->allocation.y;
-  
-  if (!GTK_WIDGET_IS_SENSITIVE (range))
+
+  if (((!range->inverted && (arrow_type == GTK_ARROW_DOWN ||
+                             arrow_type == GTK_ARROW_RIGHT)) ||
+       (range->inverted  && (arrow_type == GTK_ARROW_UP ||
+                             arrow_type == GTK_ARROW_LEFT))) &&
+      range->adjustment->value >=
+      (range->adjustment->upper - range->adjustment->page_size))
+    {
+      arrow_insensitive = TRUE;
+    }
+  else if (((!range->inverted && (arrow_type == GTK_ARROW_UP ||
+                                  arrow_type == GTK_ARROW_LEFT)) ||
+            (range->inverted  && (arrow_type == GTK_ARROW_DOWN ||
+                                  arrow_type == GTK_ARROW_RIGHT))) &&
+           range->adjustment->value <= range->adjustment->lower)
+    {
+      arrow_insensitive = TRUE;
+    }
+
+  if (!GTK_WIDGET_IS_SENSITIVE (range) || arrow_insensitive)
     state_type = GTK_STATE_INSENSITIVE;
   else if (clicked)
     state_type = GTK_STATE_ACTIVE;
@@ -934,8 +954,8 @@ draw_stepper (GtkRange     *range,
     state_type = GTK_STATE_PRELIGHT;
   else 
     state_type = GTK_STATE_NORMAL;
-  
-  if (clicked)
+
+  if (clicked && ! arrow_insensitive)
     shadow_type = GTK_SHADOW_IN;
   else
     shadow_type = GTK_SHADOW_OUT;
@@ -955,7 +975,7 @@ draw_stepper (GtkRange     *range,
   arrow_x = widget->allocation.x + rect->x + (rect->width - arrow_width) / 2;
   arrow_y = widget->allocation.y + rect->y + (rect->height - arrow_height) / 2;
   
-  if (clicked)
+  if (clicked && ! arrow_insensitive)
     {
       gint arrow_displacement_x;
       gint arrow_displacement_y;

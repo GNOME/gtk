@@ -1,3 +1,10 @@
+Wed Nov  9 16:29:42 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkrange.c: patch from maemo-gtk that changes GtkRange
+	to render its arrows insensitive when the adjustment is in
+	its min or max position. this makes range arrow behaviour 
+	consistent with spin button behaviour. (#321056)
+
 2005-11-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/gdkinternals.h
