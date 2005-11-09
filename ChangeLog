@@ -1,5 +1,15 @@
 2005-11-09  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/gdkinternals.h
+	* gdk/gdk.c (gdk_debug_keys[]): Add new GDK_DEBUG_DRAW flag to
+	the GdkDebugFlag enum.
+
+	* gdk/win32/gdkdrawable-win32.c: Use DRAW to trigger GDK_NOTEs in
+	this file instead of MISC. Now asking for MISC will give mainly
+	window manipulation debugging output with the Win32 backend.
+
+2005-11-09  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkwindow-win32.c: Remove unnecessary includes.
 
 	(_gdk_win32_get_adjusted_client_rect): Remove this two-line
