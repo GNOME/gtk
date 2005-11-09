@@ -1,5 +1,49 @@
 2005-11-09  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkwindow-win32.c: Remove unnecessary includes.
+
+	(_gdk_win32_get_adjusted_client_rect): Remove this two-line
+	function which was used only in one place.
+
+	(get_outer_rect): Use _gdk_win32_adjust_client_rect().
+
+	(gdk_window_set_geometry_hints): If we have identical minimum and
+	maximum size hints, remove the resize and maximize
+	decorations/functions. (#104514)
+
+	If we have a maximum size hint, remove the maximize
+	decoration/function but ensure the resize decoration/function is
+	available. Otherwise ensure both resize and maximize
+	decorations/functions are there.
+
+	(set_or_clear_style_bits): Factored out common code from
+	gdk_window_set_decorations() and gdk_window_set_functions(). 
+
+	Hack the window style setting once more: Only touch the window
+	style bits corresponding to the GdkWMDecoration or GdkWMFunction
+	parameter bitmasks. Hopefully this finally is the correct thing to
+	do. We used to clear all other bits than those that were being
+	set, or set all other bits than those that were being cleared.
+
+	Take into account that adding or removing decorations leaves the
+	window's outer size unchanged, i.e., the client area's size and
+	position change. This is apparently not what we want, so change
+	also the window's (outer) position and size appropriately so that
+	the client area's position and size stay constant.
+
+	gtk-demo's color selector dialog is now non-resizable like on X11
+	(I tested with metacity in GNOME). Torn off menus are shrinkable
+	vertically but have a maximum size, and are not maximizable or
+	minimizable, like on X11.
+
+	(gdk_window_set_decorations, gdk_window_set_functions): Let
+	set_or_clear_decorations() do most of the job.
+
+	* gdk/win32/gdkprivate-win32.h: Remove declaration of
+	_gdk_win32_get_adjusted_client_rect().
+
+2005-11-09  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkwindow-win32.h (struct _GdkWindowImplWin32)
 	* gdk/win32/gdkwindow-win32.c (gdk_window_impl_win32_init,
 	gdk_window_get_type_hint, gdk_window_get_type_hint): Store the

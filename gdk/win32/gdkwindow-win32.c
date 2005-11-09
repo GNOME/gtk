@@ -29,11 +29,7 @@
 #include <config.h>
 #include <stdlib.h>
 
-#include "gdk.h" /* gdk_rectangle_intersect */
-#include "gdkevents.h"
-#include "gdkpixmap.h"
-#include "gdkwindow.h"
-#include "gdkdisplay.h"
+#include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
@@ -204,14 +200,6 @@ _gdk_win32_adjust_client_rect (GdkWindow *window,
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
   API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
-}
-
-void
-_gdk_win32_get_adjusted_client_rect (GdkWindow *window,
-				     RECT      *rect)
-{
-  GetClientRect (GDK_WINDOW_HWND (window), rect);
-  _gdk_win32_adjust_client_rect (window, rect);
 }
 
 static GdkColormap*
@@ -901,16 +889,11 @@ get_outer_rect (GdkWindow *window,
 		gint       height,
 		RECT      *rect)
 {
-  LONG style, exstyle;
-      
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-      
   rect->left = rect->top = 0;
   rect->right = width;
   rect->bottom = height;
       
-  API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
+  _gdk_win32_adjust_client_rect (window, rect);
 }
 
 static void
@@ -1240,6 +1223,7 @@ gdk_window_resize (GdkWindow *window,
   else
     {
       RECT outer_rect;
+
       get_outer_rect (window, width, height, &outer_rect);
 
       GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,0,0,%ld,%ld,"
@@ -1640,6 +1624,27 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... MAX_SIZE: %dx%d\n",
 			       geometry->max_width, geometry->max_height));
     }
+
+  if ((geom_mask & GDK_HINT_MIN_SIZE) &&
+      (geom_mask & GDK_HINT_MAX_SIZE) &&
+      geometry->min_width == geometry->max_width &&
+      geometry->min_height == geometry->max_height)
+    gdk_window_set_decorations (window,
+				GDK_DECOR_ALL |
+				GDK_DECOR_RESIZEH |
+				GDK_DECOR_MAXIMIZE);
+  else if (geom_mask & GDK_HINT_MAX_SIZE)
+    {
+      gdk_window_set_decorations (window,
+				  GDK_DECOR_ALL |
+				  GDK_DECOR_MAXIMIZE);
+      gdk_window_set_decorations (window,
+				  GDK_DECOR_RESIZEH);
+    }
+  else
+    gdk_window_set_decorations (window,
+				GDK_DECOR_RESIZEH |
+				GDK_DECOR_MAXIMIZE);
 
   if (geom_mask & GDK_HINT_BASE_SIZE)
     {
@@ -2286,7 +2291,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GDK_WINDOW_HWND (window),
 			       GDK_WINDOW_HWND (mask)));
 
-      _gdk_win32_get_adjusted_client_rect (window, &rect);
+      GetClientRect (GDK_WINDOW_HWND (window), &rect);
+      _gdk_win32_adjust_client_rect (window, &rect);
 
       OffsetRgn (hrgn, -rect.left, -rect.top);
       OffsetRgn (hrgn, x, y);
@@ -2488,26 +2494,60 @@ gdk_window_set_group (GdkWindow *window,
   g_warning ("gdk_window_set_group not implemented");
 }
 
+static void
+set_or_clear_style_bits (GdkWindow *window,
+			 gboolean   clear_bits,
+			 int        bits)
+{
+  LONG style, exstyle;
+  RECT rect, before, after;
+
+  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+  GetClientRect (GDK_WINDOW_HWND (window), &before);
+  after = before;
+  AdjustWindowRectEx (&before, style, FALSE, exstyle);
+
+  if (clear_bits)
+    style &= ~bits;
+  else
+    style |= bits;
+
+  SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
+
+  AdjustWindowRectEx (&after, style, FALSE, exstyle);
+
+  GetWindowRect (GDK_WINDOW_HWND (window), &rect);
+  rect.left += after.left - before.left;
+  rect.top += after.top - before.top;
+  rect.right += after.right - before.right;
+  rect.bottom += after.bottom - before.bottom;
+
+  SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+		rect.left, rect.top,
+		rect.right - rect.left, rect.bottom - rect.top,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE | 
+		SWP_NOREPOSITION | SWP_NOZORDER);
+}
+
 void
 gdk_window_set_decorations (GdkWindow      *window,
 			    GdkWMDecoration decorations)
 {
-  LONG style, bits;
-  const LONG settable_bits = WS_BORDER|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_MAXIMIZEBOX;
+  int bits;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  GDK_NOTE (MISC, g_print ("gdk_window_set_decorations: %p: %s%s%s%s%s%s%s\n",
+  GDK_NOTE (MISC, g_print ("gdk_window_set_decorations: %p: %s %s%s%s%s%s%s\n",
 			   GDK_WINDOW_HWND (window),
-			   (decorations & GDK_DECOR_ALL ? "ALL " : ""),
+			   (decorations & GDK_DECOR_ALL ? "clearing" : "setting"),
 			   (decorations & GDK_DECOR_BORDER ? "BORDER " : ""),
 			   (decorations & GDK_DECOR_RESIZEH ? "RESIZEH " : ""),
 			   (decorations & GDK_DECOR_TITLE ? "TITLE " : ""),
 			   (decorations & GDK_DECOR_MENU ? "MENU " : ""),
 			   (decorations & GDK_DECOR_MINIMIZE ? "MINIMIZE " : ""),
 			   (decorations & GDK_DECOR_MAXIMIZE ? "MAXIMIZE " : "")));
-
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
 
   bits = 0;
 
@@ -2524,16 +2564,7 @@ gdk_window_set_decorations (GdkWindow      *window,
   if (decorations & GDK_DECOR_MAXIMIZE)
     bits |= WS_MAXIMIZEBOX;
 
-  if (decorations & GDK_DECOR_ALL)
-    style |= settable_bits, style &= ~bits;
-  else
-    style &= ~settable_bits, style |= bits;
-  
-  SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
-  SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		0, 0, 0, 0,
-		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
-		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
+  set_or_clear_style_bits (window, (decorations & GDK_DECOR_ALL), bits);
 }
 
 gboolean
@@ -2567,21 +2598,18 @@ void
 gdk_window_set_functions (GdkWindow    *window,
 			  GdkWMFunction functions)
 {
-  LONG style, bits;
-  const LONG settable_bits = (WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU);
+  int bits;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  GDK_NOTE (MISC, g_print ("gdk_window_set_functions: %p: %s%s%s%s%s%s\n",
+  GDK_NOTE (MISC, g_print ("gdk_window_set_functions: %p: %s %s%s%s%s%s\n",
 			   GDK_WINDOW_HWND (window),
-			   (functions & GDK_FUNC_ALL ? "ALL " : ""),
+			   (functions & GDK_FUNC_ALL ? "clearing" : "setting"),
 			   (functions & GDK_FUNC_RESIZE ? "RESIZE " : ""),
 			   (functions & GDK_FUNC_MOVE ? "MOVE " : ""),
 			   (functions & GDK_FUNC_MINIMIZE ? "MINIMIZE " : ""),
 			   (functions & GDK_FUNC_MAXIMIZE ? "MAXIMIZE " : ""),
 			   (functions & GDK_FUNC_CLOSE ? "CLOSE " : "")));
-
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
 
   bits = 0;
 
@@ -2596,16 +2624,7 @@ gdk_window_set_functions (GdkWindow    *window,
   if (functions & GDK_FUNC_CLOSE)
     bits |= WS_SYSMENU;
   
-  if (functions & GDK_FUNC_ALL)
-    style |= settable_bits, style &= ~bits;
-  else
-    style &= ~settable_bits, style |= bits;
-  
-  SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
-  SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		0, 0, 0, 0,
-		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
-		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
+  set_or_clear_style_bits (window, (functions & GDK_FUNC_ALL), bits);
 }
 
 static void
