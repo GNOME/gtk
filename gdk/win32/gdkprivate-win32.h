@@ -356,9 +356,6 @@ HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
 void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 					 RECT      *RECT);
 
-void	_gdk_win32_get_adjusted_client_rect (GdkWindow *window,
-					     RECT      *RECT);
-
 void    _gdk_selection_property_delete (GdkWindow *);
 
 void    _gdk_dropfiles_store (gchar *data);
