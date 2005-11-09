@@ -132,6 +132,7 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
+  impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->extension_events_selected = FALSE;
 }
 
@@ -3144,6 +3145,9 @@ gdk_window_set_type_hint (GdkWindow        *window,
 
   GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint: %p: %d\n",
 			   GDK_WINDOW_HWND (window), hint));
+
+  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->type_hint = hint;
+
   switch (hint)
     {
     case GDK_WINDOW_TYPE_HINT_DIALOG:
@@ -3178,6 +3182,17 @@ gdk_window_set_type_hint (GdkWindow        *window,
     case GDK_WINDOW_TYPE_HINT_NORMAL:
       break;
     }
+}
+
+GdkWindowTypeHint
+gdk_window_get_type_hint (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return GDK_WINDOW_TYPE_HINT_NORMAL;
+
+  return GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->type_hint;
 }
 
 void

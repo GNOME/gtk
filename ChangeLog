@@ -1,5 +1,13 @@
 2005-11-09  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkwindow-win32.h (struct _GdkWindowImplWin32)
+	* gdk/win32/gdkwindow-win32.c (gdk_window_impl_win32_init,
+	gdk_window_get_type_hint, gdk_window_get_type_hint): Store the
+	type hint. Implement gdk_window_get_type_hint() by just returning
+	the hint stored.
+
+2005-11-09  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_geometry_hints):
 	Remove code that has been permanently ifdeffed out for two years.
 
