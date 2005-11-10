@@ -1,5 +1,8 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_motion_resize_column): Another
+	erroneous semicolon.
+
 	* gdk/x11/gdkcolor-x11.c (gdkx_colormap_get): Remove an erroneous
 	semicolon. 
 
