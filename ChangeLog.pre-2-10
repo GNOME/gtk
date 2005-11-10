@@ -1,5 +1,8 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkcolor-x11.c (gdkx_colormap_get): Remove an erroneous
+	semicolon. 
+
 	Don't corrupt odd keymaps (#316638, Kean Johnston)
 	
 	* gdk/x11/gdkkeys-x11.c (set_symbol): Auxiliary function to

@@ -1371,7 +1371,7 @@ gdkx_colormap_get (Colormap xcolormap)
   GdkColormap *colormap;
 
   if (xcolormap == DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-				    GDK_SCREEN_XNUMBER (screen)));
+				    GDK_SCREEN_XNUMBER (screen)))
     return g_object_ref (gdk_screen_get_system_colormap (screen));
 
   colormap = gdk_colormap_lookup (screen, xcolormap);
