@@ -1,3 +1,10 @@
+2005-11-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtktreeview.h: 
+	* gtk/gtktreeview.c: Implement a getter for headers-clickable.
+	(#163851, Richard Hult)
+
 2005-11-10  Michael Natterer  <mitch@imendio.com>
 
 	Applied patch from maemo-gtk that addresses many issues wrt

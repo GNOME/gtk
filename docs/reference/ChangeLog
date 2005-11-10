@@ -1,3 +1,7 @@
+2005-11-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new api.
+
 2005-11-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-update-icon-cache.xml: 

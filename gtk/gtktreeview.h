@@ -149,6 +149,7 @@ gboolean               gtk_tree_view_get_headers_visible           (GtkTreeView 
 void                   gtk_tree_view_set_headers_visible           (GtkTreeView               *tree_view,
 								    gboolean                   headers_visible);
 void                   gtk_tree_view_columns_autosize              (GtkTreeView               *tree_view);
+gboolean               gtk_tree_view_get_headers_clickable         (GtkTreeView *tree_view);
 void                   gtk_tree_view_set_headers_clickable         (GtkTreeView               *tree_view,
 								    gboolean                   setting);
 void                   gtk_tree_view_set_rules_hint                (GtkTreeView               *tree_view,

@@ -1265,6 +1265,9 @@ gtk_tree_view_get_property (GObject    *object,
     case PROP_HEADERS_VISIBLE:
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));
       break;
+    case PROP_HEADERS_CLICKABLE:
+      g_value_set_boolean (value, gtk_tree_view_get_headers_clickable (tree_view));
+      break;
     case PROP_EXPANDER_COLUMN:
       g_value_set_object (value, tree_view->priv->expander_column);
       break;
@@ -9793,6 +9796,28 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
   g_object_notify (G_OBJECT (tree_view), "headers-clickable");
 }
 
+
+/**
+ * gtk_tree_view_get_headers_clickable:
+ * @tree_view: A #GtkTreeView.
+ *
+ * Return value: %TRUE if all header columns are clickable, otherwise %FALSE
+ *
+ * Since: 2.10
+ **/
+gboolean 
+gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
+{
+  GList *list;
+  
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    if (!GTK_TREE_VIEW_COLUMN (list->data)->clickable)
+      return FALSE;
+
+  return TRUE;
+}
 
 /**
  * gtk_tree_view_set_rules_hint
