@@ -541,6 +541,7 @@ gdk_pango_renderer_new (GdkScreen *screen)
 
 static void
 on_renderer_display_closed (GdkDisplay       *display,
+                            gboolean          is_error,
 			    GdkPangoRenderer *renderer)
 {
   g_signal_handlers_disconnect_by_func (renderer->priv->screen,

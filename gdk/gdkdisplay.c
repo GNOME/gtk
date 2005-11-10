@@ -175,7 +175,14 @@ gdk_display_dispose (GObject *object)
   _gdk_displays = g_slist_remove (_gdk_displays, object);
 
   if (gdk_display_get_default() == display)
-    gdk_display_manager_set_default_display (gdk_display_manager_get(), NULL);
+    {
+      if (_gdk_displays)
+        gdk_display_manager_set_default_display (gdk_display_manager_get(),
+                                                 _gdk_displays->data);
+      else
+        gdk_display_manager_set_default_display (gdk_display_manager_get(),
+                                                 NULL);
+    }
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }

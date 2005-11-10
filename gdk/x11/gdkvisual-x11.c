@@ -63,19 +63,6 @@ static const gchar *const visual_names[] =
 
 #endif /* G_ENABLE_DEBUG */
 
-static void
-gdk_visual_finalize (GObject *object)
-{
-  g_error ("A GdkVisual object was finalized. This should not happen");
-}
-
-static void
-gdk_visual_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_visual_finalize;
-}
-
-
 GType
 gdk_visual_get_type (void)
 {
@@ -88,7 +75,7 @@ gdk_visual_get_type (void)
         sizeof (GdkVisualClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_visual_class_init,
+        (GClassInitFunc) NULL,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkVisualPrivate),
@@ -605,7 +592,7 @@ gdk_visual_add (GdkVisual *visual)
   
   if (!screen_x11->visual_hash)
     screen_x11->visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
-						 (GEqualFunc) gdk_visual_equal);
+                                                (GEqualFunc) gdk_visual_equal);
 
   g_hash_table_insert (screen_x11->visual_hash, private->xvisual, visual);
 }

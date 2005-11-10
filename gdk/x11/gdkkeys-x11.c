@@ -53,7 +53,8 @@
 #  endif
 #endif /* HAVE_XKB */
 
-typedef struct _GdkKeymapX11 GdkKeymapX11;
+typedef struct _GdkKeymapX11   GdkKeymapX11;
+typedef struct _GdkKeymapClass GdkKeymapX11Class;
 
 #define GDK_TYPE_KEYMAP_X11          (gdk_keymap_x11_get_type ())
 #define GDK_KEYMAP_X11(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_X11, GdkKeymapX11))
@@ -103,8 +104,12 @@ struct _GdkKeymapX11
 #define KEYMAP_USE_XKB(keymap) GDK_DISPLAY_X11 ((keymap)->display)->use_xkb
 #define KEYMAP_XDISPLAY(keymap) GDK_DISPLAY_XDISPLAY ((keymap)->display)
 
-static GType gdk_keymap_x11_get_type (void);
-static void  gdk_keymap_x11_init     (GdkKeymapX11 *keymap);
+static GType gdk_keymap_x11_get_type   (void);
+static void  gdk_keymap_x11_class_init (GdkKeymapX11Class *klass);
+static void  gdk_keymap_x11_init       (GdkKeymapX11      *keymap);
+static void  gdk_keymap_x11_finalize   (GObject           *object);
+
+static GdkKeymapClass *parent_class = NULL;
 
 static GType
 gdk_keymap_x11_get_type (void)
@@ -118,7 +123,7 @@ gdk_keymap_x11_get_type (void)
 	  sizeof (GdkKeymapClass),
 	  (GBaseInitFunc) NULL,
 	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) NULL,
+	  (GClassInitFunc) gdk_keymap_x11_class_init,
 	  NULL,           /* class_finalize */
 	  NULL,           /* class_data */
 	  sizeof (GdkKeymapX11),
@@ -132,6 +137,16 @@ gdk_keymap_x11_get_type (void)
     }
   
   return object_type;
+}
+
+static void
+gdk_keymap_x11_class_init (GdkKeymapX11Class *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_keymap_x11_finalize;
 }
 
 static void
@@ -157,6 +172,25 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   keymap->current_cache_serial = 0;
 #endif
 
+}
+
+static void
+gdk_keymap_x11_finalize (GObject *object)
+{
+  GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (object);
+
+  if (keymap_x11->keymap)
+    XFree (keymap_x11->keymap);
+
+  if (keymap_x11->mod_keymap)
+    XFreeModifiermap (keymap_x11->mod_keymap);
+
+#ifdef HAVE_XKB
+  if (keymap_x11->xkb_desc)
+    XkbFreeClientMap (keymap_x11->xkb_desc, 0, True);
+#endif
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static inline void

@@ -1,3 +1,49 @@
+2005-11-10  Michael Natterer  <mitch@imendio.com>
+
+	Applied patch from maemo-gtk that addresses many issues wrt
+	display migration and display closing (bug #85715).
+
+	* gdk/gdkdisplay.c (gdk_display_dispose): don't just set the
+	default display to NULL when it's closed. Instead set the most
+	recently opened display as new default (if one exists).
+
+	* gdk/gdkpango.c (on_renderer_display_closed): fixed signature
+	of this callback.
+
+	* gdk/gdkscreen.c (gdk_screen_dispose): check if the GCs still
+	exist before unrefing them.
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): if the screen
+	is closed, allow destruction of the root window.
+
+	* gdk/x11/gdkdisplay-x11.c: moved some stuff from finalize() to
+	dispose(), free stuff that was leaked before.
+
+	* gdk/x11/gdkevents-x11.c (_gdk_x11_events_uninit_screen): check if
+	the xsettings_client still exists before destroying it.
+
+	* gdk/x11/gdkkeys-x11.c: added finalization and free the allocated
+	X resources.
+
+	* gdk/x11/gdkpixmap-x11.c: moved stuff from finalize() to new
+	dispose() implementation.
+
+	* gdk/x11/gdkscreen-x11.c: moved stuff from finalize() to
+	dispose() and check if it still exists before unrefing it. Set
+	their pointers to NULL/None *after* upchaining in dispose(),
+	because X11 implementations of members of the parent class still
+	need them for their own destruction.
+
+	* gdk/x11/gdkvisual-x11.c: removed finalize() implementation which
+	was g_error()ing when finalizing a visual.
+
+	* gtk/gtkclipboard.c (gtk_clipboard_finalize): don't use
+	get_clipboard_widget() because it would create the widget if it
+	doesn't exist. Use g_object_get_data() directly instead.
+
+	* gtk/gtktextdisplay.c (on_renderer_display_closed): fixed signature
+	of this callback.
+
 2005-11-10  Simos Xenitellis  <simos@gnome.org>
 
 	* configure.in: Added Tatar (tt) to ALL_LINGUAS.

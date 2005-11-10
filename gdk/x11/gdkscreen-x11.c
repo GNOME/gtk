@@ -34,6 +34,8 @@
 #include "gdkx.h"
 #include "gdkalias.h"
 
+#include <X11/Xatom.h>
+
 #ifdef HAVE_SOLARIS_XINERAMA
 #include <X11/extensions/xinerama.h>
 #endif
@@ -286,50 +288,60 @@ gdk_screen_x11_dispose (GObject *object)
 
   _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
 
-  g_object_unref (screen_x11->default_colormap);
-  screen_x11->default_colormap = NULL;
+  if (screen_x11->default_colormap)
+    {
+      g_object_unref (screen_x11->default_colormap);
+      screen_x11->default_colormap = NULL;
+    }
+
+  if (screen_x11->system_colormap)
+    {
+      g_object_unref (screen_x11->system_colormap);
+      screen_x11->system_colormap = NULL;
+    }
 
   if (screen_x11->rgba_colormap)
     {
       g_object_unref (screen_x11->rgba_colormap);
       screen_x11->rgba_colormap = NULL;
     }
-  
-  screen_x11->root_window = NULL;
+
+  if (screen_x11->root_window)
+    _gdk_window_destroy (screen_x11->root_window, TRUE);
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 
   screen_x11->xdisplay = NULL;
   screen_x11->xscreen = NULL;
   screen_x11->screen_num = -1;
   screen_x11->xroot_window = None;
   screen_x11->wmspec_check_window = None;
-  
-  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
 gdk_screen_x11_finalize (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
-  /* int i; */
-  g_object_unref (screen_x11->root_window);
+  gint          i;
+
+  if (screen_x11->root_window)
+    g_object_unref (screen_x11->root_window);
 
   if (screen_x11->renderer)
     g_object_unref (screen_x11->renderer);
-  
-  /* Visual Part (Need to implement finalize for Visuals for a clean
-   * finalize) */
-  /* for (i=0;i<screen_x11->nvisuals;i++)
-    g_object_unref (screen_x11->visuals[i]);*/
+
+  /* Visual Part */
+  for (i = 0; i < screen_x11->nvisuals; i++)
+    g_object_unref (screen_x11->visuals[i]);
   g_free (screen_x11->visuals);
   g_hash_table_destroy (screen_x11->visual_hash);
 
-  g_free (screen_x11->window_manager_name);  
+  g_free (screen_x11->window_manager_name);
 
   g_hash_table_destroy (screen_x11->colormap_hash);
-  /* X settings */
-  g_free (screen_x11->xsettings_client);
+
   g_free (screen_x11->monitors);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

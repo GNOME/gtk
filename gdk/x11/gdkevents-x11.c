@@ -193,8 +193,11 @@ _gdk_x11_events_uninit_screen (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
-  xsettings_client_destroy (screen_x11->xsettings_client);
-  screen_x11->xsettings_client = NULL;
+  if (screen_x11->xsettings_client)
+    {
+      xsettings_client_destroy (screen_x11->xsettings_client);
+      screen_x11->xsettings_client = NULL;
+    }
 }
 
 void 

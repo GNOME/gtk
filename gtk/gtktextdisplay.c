@@ -647,6 +647,7 @@ render_para (GtkTextRenderer    *text_renderer,
 
 static void
 on_renderer_display_closed (GdkDisplay       *display,
+                            gboolean          is_error,
 			    GtkTextRenderer  *text_renderer)
 {
   g_signal_handlers_disconnect_by_func (text_renderer->screen,
@@ -671,8 +672,9 @@ get_text_renderer (GdkScreen *screen)
       g_object_set_data_full (G_OBJECT (screen), I_("gtk-text-renderer"), text_renderer,
 			      (GDestroyNotify)g_object_unref);
 
-      g_signal_connect (gdk_screen_get_display (screen), "closed",
-			G_CALLBACK (on_renderer_display_closed), text_renderer);
+      g_signal_connect_object (gdk_screen_get_display (screen), "closed",
+                               G_CALLBACK (on_renderer_display_closed),
+                               text_renderer, 0);
     }
 
   return text_renderer;

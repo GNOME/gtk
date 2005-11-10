@@ -62,6 +62,7 @@ static void gdk_pixmap_impl_x11_get_size   (GdkDrawable        *drawable,
 
 static void gdk_pixmap_impl_x11_init       (GdkPixmapImplX11      *pixmap);
 static void gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass);
+static void gdk_pixmap_impl_x11_dispose    (GObject            *object);
 static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
@@ -116,9 +117,28 @@ gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass)
   
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->dispose  = gdk_pixmap_impl_x11_dispose;
   object_class->finalize = gdk_pixmap_impl_x11_finalize;
 
   drawable_class->get_size = gdk_pixmap_impl_x11_get_size;
+}
+
+static void
+gdk_pixmap_impl_x11_dispose (GObject *object)
+{
+  GdkPixmapImplX11 *impl = GDK_PIXMAP_IMPL_X11 (object);
+  GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_X11 (impl)->wrapper);
+  GdkDisplay *display = GDK_PIXMAP_DISPLAY (wrapper);
+
+  if (!display->closed)
+    {
+      if (!impl->is_foreign)
+	XFreePixmap (GDK_DISPLAY_XDISPLAY (display), GDK_PIXMAP_XID (wrapper));
+    }
+
+  _gdk_xid_table_remove (display, GDK_PIXMAP_XID (wrapper));
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
@@ -131,16 +151,10 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
   if (!display->closed)
     {
       GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
-	
 
       _gdk_x11_drawable_finish (GDK_DRAWABLE (draw_impl));
-
-      if (!impl->is_foreign)
-	XFreePixmap (GDK_DISPLAY_XDISPLAY (display), GDK_PIXMAP_XID (wrapper));
     }
-      
-  _gdk_xid_table_remove (display, GDK_PIXMAP_XID (wrapper));
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

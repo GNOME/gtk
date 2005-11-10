@@ -50,9 +50,9 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
-static void                 gdk_display_x11_class_init         (GdkDisplayX11Class *class);
-static void                 gdk_display_x11_dispose            (GObject            *object);
-static void                 gdk_display_x11_finalize           (GObject            *object);
+static void   gdk_display_x11_class_init         (GdkDisplayX11Class *class);
+static void   gdk_display_x11_dispose            (GObject            *object);
+static void   gdk_display_x11_finalize           (GObject            *object);
 
 #ifdef HAVE_X11R6
 static void gdk_internal_connection_watch (Display  *display,
@@ -717,18 +717,20 @@ gdk_x11_display_ungrab (GdkDisplay * display)
 static void
 gdk_display_x11_dispose (GObject *object)
 {
-  GdkDisplayX11 *display_x11;
-  gint i;
-  
-  display_x11 = GDK_DISPLAY_X11 (object);
-  
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
+  gint           n_screens;
+  gint           i;
+
+  n_screens = ScreenCount (display_x11->xdisplay);
+
+  for (i = 0; i < n_screens; i++)
     _gdk_screen_close (display_x11->screens[i]);
 
-  g_source_destroy (display_x11->event_source);
-
-  XCloseDisplay (display_x11->xdisplay);
-  display_x11->xdisplay = NULL;
+  if (display_x11->event_source)
+    {
+      g_source_destroy (display_x11->event_source);
+      display_x11->event_source = NULL;
+    }
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -737,11 +739,13 @@ static void
 gdk_display_x11_finalize (GObject *object)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
-  int i;
-  GList *tmp;
-  /* FIXME need to write GdkKeymap finalize fct 
-     g_object_unref (display_x11->keymap);
-   */
+  gint           n_screens;
+  gint           i;
+
+  /* Keymap */
+  if (display_x11->keymap)
+    g_object_unref (display_x11->keymap);
+
   /* Free motif Dnd */
   if (display_x11->motif_target_lists)
     {
@@ -753,30 +757,40 @@ gdk_display_x11_finalize (GObject *object)
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);
   g_hash_table_destroy (display_x11->atom_to_virtual);
+
   /* Leader Window */
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
+
   /* list of filters for client messages */
+  g_list_foreach (display_x11->client_filters, (GFunc) g_free, NULL);
   g_list_free (display_x11->client_filters);
+
   /* List of event window extraction functions */
   g_slist_foreach (display_x11->event_types, (GFunc)g_free, NULL);
   g_slist_free (display_x11->event_types);
+
   /* X ID hashtable */
   g_hash_table_destroy (display_x11->xid_ht);
+
   /* input GdkDevice list */
   /* FIXME need to write finalize fct */
-  for (tmp = display_x11->input_devices; tmp; tmp = tmp->next)
-    g_object_unref (tmp->data);
+  g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_x11->input_devices);
+
   /* input GdkWindow list */
-  for (tmp = display_x11->input_windows; tmp; tmp = tmp->next)
-    g_object_unref (tmp->data);
+  g_list_foreach (display_x11->input_windows, (GFunc) g_object_unref, NULL);
   g_list_free (display_x11->input_windows);
+
   /* Free all GdkScreens */
+  n_screens = ScreenCount (display_x11->xdisplay);
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     g_object_unref (display_x11->screens[i]);
   g_free (display_x11->screens);
+
   g_free (display_x11->startup_notification_id);
-  
+
+  XCloseDisplay (display_x11->xdisplay);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -852,10 +866,13 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   const gchar *startup_id;
   
-  if (display)
-    gdk_display = GDK_DISPLAY_XDISPLAY (display);
-  else
-    gdk_display = NULL;
+  if (!display)
+    {
+      gdk_display = NULL;
+      return;
+    }
+
+  gdk_display = GDK_DISPLAY_XDISPLAY (display);
 
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;
