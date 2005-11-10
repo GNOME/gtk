@@ -454,6 +454,7 @@ static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
 						      gint        *tx,
 						      gint        *ty);
 
+static gboolean gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
@@ -1264,6 +1265,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_HEADERS_VISIBLE:
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));
+      break;
+    case PROP_HEADERS_CLICKABLE:
+      g_value_set_boolean (value, gtk_tree_view_get_headers_clickable (tree_view));
       break;
     case PROP_EXPANDER_COLUMN:
       g_value_set_object (value, tree_view->priv->expander_column);
@@ -9807,6 +9811,21 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
     gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
 
   g_object_notify (G_OBJECT (tree_view), "headers-clickable");
+}
+
+
+static gboolean 
+gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
+{
+  GList *list;
+  
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    if (!GTK_TREE_VIEW_COLUMN (list->data)->clickable)
+      return FALSE;
+
+  return TRUE;
 }
 
 

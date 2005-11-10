@@ -1,3 +1,8 @@
+2005-11-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c: Implement a getter for headers-clickable.
+	(#163851, Richard Hult)
+
 2005-11-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c
