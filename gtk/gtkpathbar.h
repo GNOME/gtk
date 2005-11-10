@@ -72,6 +72,7 @@ struct _GtkPathBarClass
 
   void (* path_clicked) (GtkPathBar  *path_bar,
 			 GtkFilePath *file_path,
+			 GtkFilePath *child_path,
 			 gboolean     child_is_hidden);
 };
 

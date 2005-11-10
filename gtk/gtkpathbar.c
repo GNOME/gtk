@@ -191,8 +191,9 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_BOOLEAN,
-		  G_TYPE_NONE, 2,
+		  _gtk_marshal_VOID__POINTER_POINTER_BOOLEAN,
+		  G_TYPE_NONE, 3,
+		  G_TYPE_POINTER,
 		  G_TYPE_POINTER,
 		  G_TYPE_BOOLEAN);
 }
@@ -942,17 +943,23 @@ button_clicked_cb (GtkWidget *button,
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
+  GtkFilePath *child_path;
   if (button_list->prev)
     {
       ButtonData *child_data;
 
       child_data = BUTTON_DATA (button_list->prev->data);
+      child_path = child_data->path;
       child_is_hidden = child_data->file_is_hidden;
     }
   else
-    child_is_hidden = FALSE;
+    {
+      child_path = NULL;
+      child_is_hidden = FALSE;
+    }
 
-  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, button_data->path, child_is_hidden);
+  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0,
+		 button_data->path, child_path, child_is_hidden);
 }
 
 static GdkPixbuf *

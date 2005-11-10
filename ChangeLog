@@ -1,5 +1,14 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	Improve navigation to parent folders.  (#318444, Andrei Yurkevich)
+	
+	* gtk/gtkpathbar.[hc]: Add a child_path argument to
+	the path_clicked signal.
+	* gtk/gtkfilechooserdefault.c (path_bar_clicked): Select the
+	child_path, if it is provided.
+	* gtk/marshalers.list (path_bar_clicked): Add the necessary
+	glue.
+
 	* gtk/gtkmenu.c: Fix some compiler warnings. (#321141,
 	Kjartan Maraas)
 	
