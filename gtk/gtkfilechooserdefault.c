@@ -488,6 +488,7 @@ static void select_func (GtkFileSystemModel *model,
 
 static void path_bar_clicked           (GtkPathBar            *path_bar,
 					GtkFilePath           *file_path,
+					GtkFilePath	      *child_path,
 					gboolean               child_is_hidden,
 					GtkFileChooserDefault *impl);
 
@@ -6929,6 +6930,7 @@ list_row_activated (GtkTreeView           *tree_view,
 static void
 path_bar_clicked (GtkPathBar            *path_bar,
 		  GtkFilePath           *file_path,
+		  GtkFilePath		*child_path,
 		  gboolean               child_is_hidden,
 		  GtkFileChooserDefault *impl)
 {
@@ -6941,6 +6943,18 @@ path_bar_clicked (GtkPathBar            *path_bar,
    */
   if (child_is_hidden)
     g_object_set (impl, "show-hidden", TRUE, NULL);
+    
+  /* Say we have "/foo/bar/baz" and the user clicks on "bar". We should then
+   * focus the "baz" entry in the files list - the reason for this is that
+   * if user furst changed to /foo/bar/baz from /foo/bar unintentionally instead
+   * of /foo/bar/baz1, it will take quite some time to scroll to baz1 in the file
+   * list, especially if this directory contains lots of folders
+   */
+  if (child_path != NULL)
+    {
+      gtk_file_chooser_default_select_path (impl, child_path, NULL);
+      browse_files_center_selected_row (impl);
+    }
 }
 
 static const GtkFileInfo *
