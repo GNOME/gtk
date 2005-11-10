@@ -1,5 +1,12 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Add show-popup and hide-popup signals and
+	emit them when the popup is shown or hidden.  (#162531, Tommi
+	Komulainen)
+
+	* tests/testcombo.c: Add an example of popuplating a combobox
+	on click.
+
 	* gtk/gtktreeview.c (gtk_tree_view_motion_resize_column): Another
 	erroneous semicolon.
 

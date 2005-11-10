@@ -183,6 +183,8 @@ struct _GtkComboBoxPrivate
 
 enum {
   CHANGED,
+  POPUP_SHOW,
+  POPUP_HIDE,
   LAST_SIGNAL
 };
 
@@ -205,6 +207,7 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 #define SCROLL_TIME  100
 
 /* common */
+
 static void     gtk_combo_box_class_init           (GtkComboBoxClass *klass);
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
@@ -421,6 +424,11 @@ static void     combo_cell_data_func                         (GtkCellLayout   *c
 							      GtkTreeModel    *tree_model,
 							      GtkTreeIter     *iter,
 							      gpointer         data);
+static void     gtk_combo_box_child_show                     (GtkWidget       *widget,
+							      gpointer         user_data);
+static void     gtk_combo_box_child_hide                     (GtkWidget       *widget,
+							      gpointer         user_data);
+
 
 /* GtkCellEditable method implementations */
 static void gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
@@ -537,6 +545,25 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  combo_box_signals[POPUP_SHOW] =
+    g_signal_new ("popup-show",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_LAST,
+                  NULL,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  combo_box_signals[POPUP_HIDE] =
+    g_signal_new ("popup-hide",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_LAST,
+                  NULL,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
 
   /* properties */
   /**
@@ -1056,6 +1083,8 @@ gtk_combo_box_menu_show (GtkWidget *menu,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
+  gtk_combo_box_child_show (menu, user_data);
+
   combo_box->priv->popup_in_progress = TRUE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 TRUE);
@@ -1067,6 +1096,8 @@ gtk_combo_box_menu_hide (GtkWidget *menu,
                          gpointer   user_data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  gtk_combo_box_child_hide(menu,user_data);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 FALSE);
@@ -1143,6 +1174,13 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 	  
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 
+	  g_signal_connect (GTK_WINDOW(combo_box->priv->popup_window),"show",
+			    G_CALLBACK (gtk_combo_box_child_show),
+			    combo_box);
+	  g_signal_connect (GTK_WINDOW(combo_box->priv->popup_window),"hide",
+			    G_CALLBACK (gtk_combo_box_child_hide),
+			    combo_box);
+  	  
 	  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
 	  if (GTK_IS_WINDOW (toplevel))
 	    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
@@ -2082,6 +2120,24 @@ gtk_combo_box_forall (GtkContainer *container,
 
   if (GTK_BIN (container)->child)
     (* callback) (GTK_BIN (container)->child, callback_data);
+}
+
+static void 
+gtk_combo_box_child_show (GtkWidget *widget,
+			  gpointer   user_data) 
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  g_signal_emit_by_name (combo_box, "popup-show", NULL, NULL);    
+}
+
+static void 
+gtk_combo_box_child_hide (GtkWidget *widget,
+			  gpointer   user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);  
+
+  g_signal_emit_by_name (combo_box, "popup-hide", NULL, NULL);
 }
 
 static gboolean
@@ -3314,6 +3370,19 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                                         0, 0, NULL,
                                         gtk_combo_box_list_button_released,
                                         NULL);
+
+  g_signal_handlers_disconnect_matched (combo_box->priv->popup_window,
+					G_SIGNAL_MATCH_DATA,
+					0, 0, NULL, 
+					gtk_combo_box_child_show,
+					NULL);
+
+  g_signal_handlers_disconnect_matched (combo_box->priv->popup_window,
+					G_SIGNAL_MATCH_DATA,
+					0, 0, NULL, 
+					gtk_combo_box_child_hide,
+					NULL);
+  
   if (combo_box->priv->box)
     g_signal_handlers_disconnect_matched (combo_box->priv->box,
 					  G_SIGNAL_MATCH_DATA,
