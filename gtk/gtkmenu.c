@@ -2193,7 +2193,7 @@ gtk_menu_size_request (GtkWidget      *widget,
     {
       gint part;
       gint toggle_size;
-      guint l, r, t, b;
+      gint l, r, t, b;
 
       child = children->data;
       children = children->next;
@@ -2322,7 +2322,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
               gint i;
-	      guint l, r, t, b;
+	      gint l, r, t, b;
 
 	      get_effective_child_attach (child, &l, &r, &t, &b);
 
@@ -3754,8 +3754,8 @@ compute_child_offset (GtkMenu   *menu,
 		      gboolean  *is_last_child)
 {
   GtkMenuPrivate *priv = gtk_menu_get_private (menu);
-  guint item_top_attach;
-  guint item_bottom_attach;
+  gint item_top_attach;
+  gint item_bottom_attach;
   gint child_offset = 0;
   gint i;
 
@@ -4062,7 +4062,7 @@ find_child_containing (GtkMenuShell *menu_shell,
 
   for (list = menu_shell->children; list; list = list->next)
     {
-      guint l, r, t, b;
+      gint l, r, t, b;
 
       if (!_gtk_menu_item_is_selectable (list->data))
         continue;
@@ -4083,7 +4083,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
   gint i;
-  guint l, r, t, b;
+  gint l, r, t, b;
   GtkWidget *match = NULL;
 
   if (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL)

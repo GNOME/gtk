@@ -1,5 +1,8 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c: Fix some compiler warnings. (#321141,
+	Kjartan Maraas)
+	
 	* gtk/gtk.symbols: 
 	* gtk/gtktreeview.h: 
 	* gtk/gtktreeview.c: Implement a getter for headers-clickable.
