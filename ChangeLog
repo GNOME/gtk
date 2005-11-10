@@ -1,3 +1,7 @@
+2005-11-10  Simos Xenitellis  <simos@gnome.org>
+
+	* configure.in: Added Tatar (tt) to ALL_LINGUAS.
+
 Wed Nov  9 16:29:42 2005  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkrange.c: patch from maemo-gtk that changes GtkRange
