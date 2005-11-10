@@ -323,10 +323,26 @@ get_symbol (const KeySym *syms,
   gint index;
 
   index = KEYSYM_INDEX(keymap_x11, group, level);
-  if (index > keymap_x11->keysyms_per_keycode)
+  if (index >= keymap_x11->keysyms_per_keycode)
       return NoSymbol;
 
   return syms[index];
+}
+
+static void
+set_symbol (KeySym       *syms, 
+	    GdkKeymapX11 *keymap_x11, 
+	    gint          group, 
+	    gint          level, 
+	    KeySym        sym)
+{
+  gint index;
+
+  index = KEYSYM_INDEX(keymap_x11, group, level);
+  if (index >= keymap_x11->keysyms_per_keycode)
+      return;
+
+  syms[index] = sym;
 }
 
 static void
@@ -374,7 +390,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	  for (i = 0 ; i < 2 ; i++)
 	    {
 	      if (get_symbol (syms, keymap_x11, i, 0) == GDK_Tab)
-		syms[KEYSYM_INDEX (keymap_x11, i, 1)] = GDK_ISO_Left_Tab;
+		set_symbol (syms, keymap_x11, i, 1, GDK_ISO_Left_Tab);
 	    }
 
           /*
@@ -389,8 +405,8 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
               gdk_keyval_convert_case (get_symbol (syms, keymap_x11, 0, 0), &lower, &upper);
               if (lower != upper)
                 {
-                  syms[KEYSYM_INDEX (keymap_x11, 0, 0)] = lower;
-                  syms[KEYSYM_INDEX (keymap_x11, 0, 1)] = upper;
+		  set_symbol (syms, keymap_x11, 0, 0, lower);
+		  set_symbol (syms, keymap_x11, 0, 1, upper);
                 }
             }
       
@@ -1201,7 +1217,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     
     /* ---- End stuff GDK adds to the original Xlib version ---- */
     
-    return (syms[col]!=NoSymbol);
+    return (syms[col] != NoSymbol);
 }
 #endif /* HAVE_XKB */
 
