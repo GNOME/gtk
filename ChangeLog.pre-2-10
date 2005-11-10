@@ -1,5 +1,13 @@
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	Don't corrupt odd keymaps (#316638, Kean Johnston)
+	
+	* gdk/x11/gdkkeys-x11.c (set_symbol): Auxiliary function to
+	handle frobbing keymaps with odd numbers of syms/code.
+	
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Use set_symbol() to 
+	frob the keymap.
+
 	Improve navigation to parent folders.  (#318444, Andrei Yurkevich)
 	
 	* gtk/gtkpathbar.[hc]: Add a child_path argument to
