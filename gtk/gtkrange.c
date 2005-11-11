@@ -45,7 +45,9 @@ enum {
   PROP_0,
   PROP_UPDATE_POLICY,
   PROP_ADJUSTMENT,
-  PROP_INVERTED
+  PROP_INVERTED,
+  PROP_LOWER_STEPPER_SENSITIVITY,
+  PROP_UPPER_STEPPER_SENSITIVITY
 };
 
 enum {
@@ -89,6 +91,10 @@ struct _GtkRangeLayout
   /* "grabbed" mouse location, OUTSIDE for no grab */
   MouseLocation grab_location;
   gint grab_button; /* 0 if none */
+
+  /* Stepper sensitivity */
+  GtkSensitivityType lower_sensitivity;
+  GtkSensitivityType upper_sensitivity;
 };
 
 
@@ -347,7 +353,25 @@ gtk_range_class_init (GtkRangeClass *class)
 							P_("Invert direction slider moves to increase range value"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_LOWER_STEPPER_SENSITIVITY,
+                                   g_param_spec_enum ("lower-stepper-sensitivity",
+						      P_("Lower stepper sensitivity"),
+						      P_("The sensitivity policy for the stepper that points to the adjustment's lower side"),
+						      GTK_TYPE_SENSITIVITY_TYPE,
+						      GTK_SENSITIVITY_AUTO,
+						      GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_UPPER_STEPPER_SENSITIVITY,
+                                   g_param_spec_enum ("upper-stepper-sensitivity",
+						      P_("Upper stepper sensitivity"),
+						      P_("The sensitivity policy for the stepper that points to the adjustment's upper side"),
+						      GTK_TYPE_SENSITIVITY_TYPE,
+						      GTK_SENSITIVITY_AUTO,
+						      GTK_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
 							     P_("Slider Width"),
@@ -419,6 +443,12 @@ gtk_range_set_property (GObject      *object,
     case PROP_INVERTED:
       gtk_range_set_inverted (range, g_value_get_boolean (value));
       break;
+    case PROP_LOWER_STEPPER_SENSITIVITY:
+      gtk_range_set_lower_stepper_sensitivity (range, g_value_get_enum (value));
+      break;
+    case PROP_UPPER_STEPPER_SENSITIVITY:
+      gtk_range_set_upper_stepper_sensitivity (range, g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -445,6 +475,12 @@ gtk_range_get_property (GObject      *object,
       break;
     case PROP_INVERTED:
       g_value_set_boolean (value, range->inverted);
+      break;
+    case PROP_LOWER_STEPPER_SENSITIVITY:
+      g_value_set_enum (value, gtk_range_get_lower_stepper_sensitivity (range));
+      break;
+    case PROP_UPPER_STEPPER_SENSITIVITY:
+      g_value_set_enum (value, gtk_range_get_upper_stepper_sensitivity (range));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -474,6 +510,8 @@ gtk_range_init (GtkRange *range)
   range->layout->mouse_y = -1;
   range->layout->grab_location = MOUSE_OUTSIDE;
   range->layout->grab_button = 0;
+  range->layout->lower_sensitivity = GTK_SENSITIVITY_AUTO;
+  range->layout->upper_sensitivity = GTK_SENSITIVITY_AUTO;
   range->timer = NULL;  
 }
 
@@ -638,6 +676,92 @@ gtk_range_get_inverted (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   return range->inverted;
+}
+
+/**
+ * gtk_range_set_lower_stepper_sensitivity:
+ * @range:       a #GtkRange
+ * @sensitivity: the lower stepper's sensitivity policy.
+ *
+ * Sets the sensitivity policy for the stepper that points to the
+ * 'lower' end of the GtkRange's adjustment.
+ *
+ * Sine: 2.10
+ **/
+void
+gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
+                                         GtkSensitivityType  sensitivity)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  if (range->layout->lower_sensitivity != sensitivity)
+    {
+      range->layout->lower_sensitivity = sensitivity;
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+      g_object_notify (G_OBJECT (range), "lower-stepper-sensitivity");
+    }
+}
+
+/**
+ * gtk_range_get_lower_stepper_sensitivity:
+ * @range: a #GtkRange
+ *
+ * Gets the sensitivity policy for the stepper that points to the
+ * 'lower' end of the GtkRange's adjustment.
+ *
+ * Return value: The lower stepper's sensitivity policy.
+ *
+ * Since: 2.10
+ **/
+GtkSensitivityType
+gtk_range_get_lower_stepper_sensitivity (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_SENSITIVITY_AUTO);
+
+  return range->layout->lower_sensitivity;
+}
+
+/**
+ * gtk_range_set_upper_stepper_sensitivity:
+ * @range:       a #GtkRange
+ * @sensitivity: the upper stepper's sensitivity policy.
+ *
+ * Sets the sensitivity policy for the stepper that points to the
+ * 'upper' end of the GtkRange's adjustment.
+ *
+ * Sine: 2.10
+ **/
+void
+gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
+                                         GtkSensitivityType  sensitivity)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  if (range->layout->upper_sensitivity != sensitivity)
+    {
+      range->layout->upper_sensitivity = sensitivity;
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+      g_object_notify (G_OBJECT (range), "upper-stepper-sensitivity");
+    }
+}
+
+/**
+ * gtk_range_get_upper_stepper_sensitivity:
+ * @range: a #GtkRange
+ *
+ * Gets the sensitivity policy for the stepper that points to the
+ * 'upper' end of the GtkRange's adjustment.
+ *
+ * Return value: The upper stepper's sensitivity policy.
+ *
+ * Since: 2.10
+ **/
+GtkSensitivityType
+gtk_range_get_upper_stepper_sensitivity (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_SENSITIVITY_AUTO);
+
+  return range->layout->upper_sensitivity;
 }
 
 /**
@@ -919,7 +1043,7 @@ draw_stepper (GtkRange     *range,
   gint arrow_width;
   gint arrow_height;
 
-  gboolean arrow_insensitive = FALSE;
+  gboolean arrow_sensitive = TRUE;
 
   /* More to get the right clip region than for efficiency */
   if (!gdk_rectangle_intersect (area, rect, &intersection))
@@ -928,25 +1052,48 @@ draw_stepper (GtkRange     *range,
   intersection.x += widget->allocation.x;
   intersection.y += widget->allocation.y;
 
-  if (((!range->inverted && (arrow_type == GTK_ARROW_DOWN ||
-                             arrow_type == GTK_ARROW_RIGHT)) ||
-       (range->inverted  && (arrow_type == GTK_ARROW_UP ||
-                             arrow_type == GTK_ARROW_LEFT))) &&
-      range->adjustment->value >=
-      (range->adjustment->upper - range->adjustment->page_size))
+  if ((!range->inverted && (arrow_type == GTK_ARROW_DOWN ||
+                            arrow_type == GTK_ARROW_RIGHT)) ||
+      (range->inverted  && (arrow_type == GTK_ARROW_UP ||
+                            arrow_type == GTK_ARROW_LEFT)))
     {
-      arrow_insensitive = TRUE;
+      switch (range->layout->upper_sensitivity)
+        {
+        case GTK_SENSITIVITY_AUTO:
+          arrow_sensitive =
+            (range->adjustment->value <
+             (range->adjustment->upper - range->adjustment->page_size));
+          break;
+
+        case GTK_SENSITIVITY_ON:
+          arrow_sensitive = TRUE;
+          break;
+
+        case GTK_SENSITIVITY_OFF:
+          arrow_sensitive = FALSE;
+          break;
+        }
     }
-  else if (((!range->inverted && (arrow_type == GTK_ARROW_UP ||
-                                  arrow_type == GTK_ARROW_LEFT)) ||
-            (range->inverted  && (arrow_type == GTK_ARROW_DOWN ||
-                                  arrow_type == GTK_ARROW_RIGHT))) &&
-           range->adjustment->value <= range->adjustment->lower)
+  else
     {
-      arrow_insensitive = TRUE;
+      switch (range->layout->lower_sensitivity)
+        {
+        case GTK_SENSITIVITY_AUTO:
+          arrow_sensitive =
+            (range->adjustment->value > range->adjustment->lower);
+          break;
+
+        case GTK_SENSITIVITY_ON:
+          arrow_sensitive = TRUE;
+          break;
+
+        case GTK_SENSITIVITY_OFF:
+          arrow_sensitive = FALSE;
+          break;
+        }
     }
 
-  if (!GTK_WIDGET_IS_SENSITIVE (range) || arrow_insensitive)
+  if (!GTK_WIDGET_IS_SENSITIVE (range) || !arrow_sensitive)
     state_type = GTK_STATE_INSENSITIVE;
   else if (clicked)
     state_type = GTK_STATE_ACTIVE;
@@ -955,7 +1102,7 @@ draw_stepper (GtkRange     *range,
   else 
     state_type = GTK_STATE_NORMAL;
 
-  if (clicked && ! arrow_insensitive)
+  if (clicked && arrow_sensitive)
     shadow_type = GTK_SHADOW_IN;
   else
     shadow_type = GTK_SHADOW_OUT;
@@ -975,7 +1122,7 @@ draw_stepper (GtkRange     *range,
   arrow_x = widget->allocation.x + rect->x + (rect->width - arrow_width) / 2;
   arrow_y = widget->allocation.y + rect->y + (rect->height - arrow_height) / 2;
   
-  if (clicked && ! arrow_insensitive)
+  if (clicked && arrow_sensitive)
     {
       gint arrow_displacement_x;
       gint arrow_displacement_y;

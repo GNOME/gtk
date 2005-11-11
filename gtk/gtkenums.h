@@ -133,6 +133,14 @@ typedef enum
   GTK_ICON_SIZE_DIALOG
 } GtkIconSize;
 
+/* automatic sensitivity */
+typedef enum
+{
+  GTK_SENSITIVITY_AUTO,
+  GTK_SENSITIVITY_ON,
+  GTK_SENSITIVITY_OFF
+} GtkSensitivityType;
+
 #ifndef GTK_DISABLE_DEPRECATED
 /* side types */
 typedef enum

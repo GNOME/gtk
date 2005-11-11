@@ -1,3 +1,17 @@
+2005-11-11  Michael Natterer  <mitch@imendio.com>
+
+	Added per-stepper API for GtkRange's stepper sensitivity as
+	discussed in bug #321056:
+
+	* gtk/gtkenums.h: added GtkSensitivityType which can be
+	{ AUTO, ON, OFF }.
+
+	* gtk/gtkrange.[ch]: added properties "lower-stepper-sensitivity"
+	and "upper-stepper-sensitivity" and public getters/setters for
+	them. Changed stepper drawing to honor the new properties.
+
+	* gtk/gtk.symbols: added the new symbols.
+
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: Add show-popup and hide-popup signals and

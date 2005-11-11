@@ -129,29 +129,39 @@ struct _GtkRangeClass
 };
 
 
-GType          gtk_range_get_type               (void) G_GNUC_CONST;
+GType              gtk_range_get_type                      (void) G_GNUC_CONST;
 
-void           gtk_range_set_update_policy (GtkRange      *range,
-                                            GtkUpdateType  policy);
-GtkUpdateType  gtk_range_get_update_policy (GtkRange      *range);
-void           gtk_range_set_adjustment    (GtkRange      *range,
-                                            GtkAdjustment *adjustment);
-GtkAdjustment* gtk_range_get_adjustment    (GtkRange      *range);
-void           gtk_range_set_inverted      (GtkRange      *range,
-                                            gboolean       setting);
-gboolean       gtk_range_get_inverted      (GtkRange      *range);
-void           gtk_range_set_increments    (GtkRange      *range,
-                                            gdouble        step,
-                                            gdouble        page);
-void           gtk_range_set_range         (GtkRange      *range,
-                                            gdouble        min,
-                                            gdouble        max);
-void           gtk_range_set_value         (GtkRange      *range,
-                                            gdouble        value);
-gdouble        gtk_range_get_value         (GtkRange      *range);
+void               gtk_range_set_update_policy             (GtkRange      *range,
+                                                            GtkUpdateType  policy);
+GtkUpdateType      gtk_range_get_update_policy             (GtkRange      *range);
 
-gdouble	      _gtk_range_get_wheel_delta   (GtkRange           *range,
-					    GdkScrollDirection  direction);
+void               gtk_range_set_adjustment                (GtkRange      *range,
+                                                            GtkAdjustment *adjustment);
+GtkAdjustment*     gtk_range_get_adjustment                (GtkRange      *range);
+
+void               gtk_range_set_inverted                  (GtkRange      *range,
+                                                            gboolean       setting);
+gboolean           gtk_range_get_inverted                  (GtkRange      *range);
+
+void               gtk_range_set_lower_stepper_sensitivity (GtkRange      *range,
+                                                            GtkSensitivityType sensitivity);
+GtkSensitivityType gtk_range_get_lower_stepper_sensitivity (GtkRange      *range);
+void               gtk_range_set_upper_stepper_sensitivity (GtkRange      *range,
+                                                            GtkSensitivityType sensitivity);
+GtkSensitivityType gtk_range_get_upper_stepper_sensitivity (GtkRange      *range);
+
+void               gtk_range_set_increments                (GtkRange      *range,
+                                                            gdouble        step,
+                                                            gdouble        page);
+void               gtk_range_set_range                     (GtkRange      *range,
+                                                            gdouble        min,
+                                                            gdouble        max);
+void               gtk_range_set_value                     (GtkRange      *range,
+                                                            gdouble        value);
+gdouble            gtk_range_get_value                     (GtkRange      *range);
+
+gdouble	          _gtk_range_get_wheel_delta               (GtkRange      *range,
+                                                            GdkScrollDirection direction);
 
 
 G_END_DECLS
