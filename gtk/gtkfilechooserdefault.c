@@ -1275,12 +1275,6 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
-      if (!check_is_folder (impl->file_system, path, error))
-	{
-	  profile_end ("end - is not folder", NULL);
-	  return FALSE;
-	}
-
       if (label)
 	label_copy = g_strdup (label);
       else
@@ -2034,14 +2028,6 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
  
   if (shortcut_find_position (impl, path) != -1)
     return FALSE;
-
-  /* FIXME: this check really belongs in gtk_file_system_insert_bookmark.  */
-  error = NULL;
-  if (!check_is_folder (impl->file_system, path, &error))
-    {
-      error_adding_bookmark_dialog (impl, path, error);
-      return FALSE;
-    }
 
   error = NULL;
   if (!gtk_file_system_insert_bookmark (impl->file_system, path, pos, &error))
@@ -6759,7 +6745,10 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
       const GtkFilePath *file_path;
 
       file_path = col_data;
-      change_folder_and_display_error (impl, file_path);
+      if (check_is_folder (impl->file_system, file_path, NULL))
+	change_folder_and_display_error (impl, file_path);
+      else
+	gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (impl), file_path, NULL);
     }
 }
 

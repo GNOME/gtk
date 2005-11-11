@@ -1,5 +1,15 @@
 2005-11-11  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): Do not
+	check whether the path is a folder.  It is useful to bookmark
+	files as well (e.g. todo.txt), and this will also help
+	performance.
+	(shortcuts_add_bookmark_from_path): Likewise.
+	(shortcuts_activate_iter): Change folders or select files, as
+	appropriate.
+
+2005-11-11  Federico Mena Quintero  <federico@ximian.com>
+
 	* tests/autotestfilechooser.c (main): Use
 	g_log_set_default_handler() instead of explicitly setting a
 	handler for each domain.
