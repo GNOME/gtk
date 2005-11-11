@@ -1,5 +1,9 @@
 2005-11-11  Federico Mena Quintero  <federico@ximian.com>
 
+	* tests/autotestfilechooser.c (main): Use
+	g_log_set_default_handler() instead of explicitly setting a
+	handler for each domain.
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): Only get
 	the base path of the volume if it is mounted.
 

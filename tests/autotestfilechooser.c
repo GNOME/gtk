@@ -568,6 +568,7 @@ test_button_folder_states (void)
   return passed;
 }
 
+static GLogFunc default_log_handler;
 static int num_warnings;
 static int num_errors;
 static int num_critical_errors;
@@ -587,35 +588,30 @@ log_override_cb (const gchar   *log_domain,
   if (log_level & G_LOG_LEVEL_CRITICAL)
     num_critical_errors++;
 
-  g_log_default_handler (log_domain, log_level, message, user_data);
+  (* default_log_handler) (log_domain, log_level, message, user_data);
 }
 
 int
 main (int argc, char **argv)
 {
-  static const char *domains[] = {
-    "Glib", "GLib-GObject", "GModule", "GThread", "Pango", "Gdk", "GdkPixbuf", "Gtk", "libgnomevfs"
-  };
-
   gboolean passed;
   gboolean zero_warnings;
   gboolean zero_errors;
   gboolean zero_critical_errors;
-  int i;
 
-  /* FIXME: use g_log_set_default_handler() instead of this mess */
-
-  for (i = 0; i < G_N_ELEMENTS (domains); i++)
-    g_log_set_handler (domains[i],
-		       G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING,
-		       log_override_cb, NULL);
+  default_log_handler = g_log_set_default_handler (log_override_cb, NULL);
+  passed = TRUE;
 
   gtk_init (&argc, &argv);
 
-  passed = test_action_widgets ();
+  /* Start tests */
+
+  passed = passed && test_action_widgets ();
   passed = passed && test_reload ();
   passed = passed && test_button_folder_states ();
   log_test (passed, "main(): main tests");
+
+  /* Warnings and errors */
 
   zero_warnings = num_warnings == 0;
   zero_errors = num_errors == 0;
@@ -624,6 +620,8 @@ main (int argc, char **argv)
   log_test (zero_warnings, "main(): zero warnings (actual number %d)", num_warnings);
   log_test (zero_errors, "main(): zero errors (actual number %d)", num_errors);
   log_test (zero_critical_errors, "main(): zero critical errors (actual number %d)", num_critical_errors);
+
+  /* Done */
 
   passed = passed && zero_warnings && zero_errors && zero_critical_errors;
 
