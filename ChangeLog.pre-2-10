@@ -1,3 +1,10 @@
+2005-11-11  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): Only get
+	the base path of the volume if it is mounted.
+
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_motion_resize_column): Remove
