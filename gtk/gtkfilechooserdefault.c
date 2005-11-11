@@ -1540,16 +1540,21 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
       if (impl->local_only)
 	{
-	  GtkFilePath *base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
-	  if (base_path != NULL)
+	  if (gtk_file_system_volume_get_is_mounted (impl->file_system, volume))
 	    {
-	      gboolean is_local = gtk_file_system_path_is_local (impl->file_system, base_path);
-	      gtk_file_path_free (base_path);
-	      
-	      if (!is_local)
+	      GtkFilePath *base_path;
+
+	      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+	      if (base_path != NULL)
 		{
-		  gtk_file_system_volume_free (impl->file_system, volume);
-		  continue;
+		  gboolean is_local = gtk_file_system_path_is_local (impl->file_system, base_path);
+		  gtk_file_path_free (base_path);
+
+		  if (!is_local)
+		    {
+		      gtk_file_system_volume_free (impl->file_system, volume);
+		      continue;
+		    }
 		}
 	    }
 	}

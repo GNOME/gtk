@@ -1,3 +1,8 @@
+2005-11-11  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): Only get
+	the base path of the volume if it is mounted.
+
 2005-11-11  Michael Natterer  <mitch@imendio.com>
 
 	Added per-stepper API for GtkRange's stepper sensitivity as
