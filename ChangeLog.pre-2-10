@@ -1,3 +1,10 @@
+2005-11-12  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Bug #313627. Make win32 
+	theme's handling of toolbars, handleboxes, and menubars more in-line
+	with Microsoft's IE style.
+	* modules/engines/ms-windows/*.c: Indentation cleanups
+	
 2005-11-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Make builtin icons work in gtk_window_set_icon_name() 
