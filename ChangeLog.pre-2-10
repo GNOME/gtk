@@ -1,3 +1,11 @@
+2005-11-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Make builtin icons work in gtk_window_set_icon_name() 
+	(#321046, Maxim Udushlivy)
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_get_icon_sizes): 
+	Also check builtin icons.
+
 2005-11-12  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c (filename_get_info): Don't hide
