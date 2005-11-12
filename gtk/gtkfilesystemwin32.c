@@ -1525,9 +1525,7 @@ filename_get_info (const gchar     *filename,
       
       if (types & GTK_FILE_INFO_IS_HIDDEN)
 	{
-	  /* Unix dot convention or the Windows hidden attribute */
-	  gboolean is_hidden = basename[0] == '.' ||
-	    !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
+	  gboolean is_hidden = !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
 	  gtk_file_info_set_is_hidden (info, is_hidden);
 	}
 
