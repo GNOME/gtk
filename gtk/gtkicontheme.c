@@ -1486,6 +1486,8 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 
   if (icon_theme_builtin_icons)
     {
+      GList *icons;
+
       icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
       
       for ( ; icons; icons = icons->next);

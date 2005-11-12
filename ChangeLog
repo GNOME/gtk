@@ -1,3 +1,7 @@
+2005-11-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: Make it compile.
+
 2005-11-12  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw_style.c: Bug #313627. Make win32 
