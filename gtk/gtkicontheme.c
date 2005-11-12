@@ -937,31 +937,25 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
       g_free (path);
     }
 
+  if (theme_file || strcmp (theme_name, DEFAULT_THEME_NAME) == 0)
+    {
+      theme = g_new0 (IconTheme, 1);
+      theme->name = g_strdup (theme_name);
+      priv->themes = g_list_prepend (priv->themes, theme);
+    }
+
   if (theme_file == NULL)
     return;
-  
-  theme = g_new (IconTheme, 1);
+
   theme->display_name = 
     g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
   if (!theme->display_name)
-    {
-      g_warning ("Theme file for %s has no name\n", theme_name);
-      g_free (theme);
-      g_key_file_free (theme_file);
-      return;
-    }
+    g_warning ("Theme file for %s has no name\n", theme_name);
 
   dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "Directories", NULL, NULL);
   if (!dirs)
-    {
-      g_warning ("Theme file for %s has no directories\n", theme_name);
-      g_free (theme->display_name);
-      g_free (theme);
-      g_key_file_free (theme_file);
-      return;
-    }
+    g_warning ("Theme file for %s has no directories\n", theme_name);
   
-  theme->name = g_strdup (theme_name);
   theme->comment = 
     g_key_file_get_locale_string (theme_file, 
 				  "Icon Theme", "Comment",
@@ -978,9 +972,6 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   g_strfreev (dirs);
   
   theme->dirs = g_list_reverse (theme->dirs);
-
-  /* Prepend the finished theme */
-  priv->themes = g_list_prepend (priv->themes, theme);
 
   themes = g_key_file_get_string_list (theme_file,
 				       "Icon Theme",
@@ -1129,10 +1120,46 @@ load_themes (GtkIconTheme *icon_theme)
 }
 
 static void
+_gtk_icon_theme_ensure_builtin_cache (void)
+{
+  static gboolean initialized = FALSE;
+  IconThemeDir *dir;
+  gint sizes[5] = { 16, 20, 24, 32, 48 };
+  gint n_sizes = G_N_ELEMENTS (sizes);
+  gint i;
+
+  if (!initialized)
+    {
+      initialized = TRUE;
+
+      _builtin_cache = _gtk_icon_cache_new ((gchar *)builtin_icons);
+
+      for (i = 0; i < n_sizes; i++)
+	{
+	  dir = g_new (IconThemeDir, 1);
+	  dir->type = ICON_THEME_DIR_THRESHOLD;
+	  dir->context = 0;
+	  dir->size = sizes[i];
+	  dir->min_size = sizes[i];
+	  dir->max_size = sizes[i];
+	  dir->threshold = 2;
+	  dir->dir = NULL;
+	  dir->icon_data = NULL;
+	  dir->subdir = g_strdup_printf ("%d", sizes[i]);
+	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
+
+	  builtin_dirs = g_list_append (builtin_dirs, dir);
+	}
+    }
+}
+
+static void
 ensure_valid_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
   GTimeVal tv;
+
+  _gtk_icon_theme_ensure_builtin_cache ();
 
   if (priv->themes_valid)
     {
@@ -1196,7 +1223,6 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   UnthemedIcon *unthemed_icon;
   gboolean allow_svg;
   gboolean use_builtin;
-  gboolean found_default;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
@@ -1218,23 +1244,14 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 
   ensure_valid_themes (icon_theme);
 
-  found_default = FALSE;
-  l = priv->themes;
-  while (l != NULL)
+  for (l = priv->themes; l; l = l->next)
     {
       IconTheme *theme = l->data;
-      
-      if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
-	found_default = TRUE;
       
       icon_info = theme_lookup_icon (theme, icon_name, size, allow_svg, use_builtin);
       if (icon_info)
 	goto out;
-      
-      l = l->next;
     }
-
-  g_assert (found_default);
 
   unthemed_icon = g_hash_table_lookup (priv->unthemed_icons, icon_name);
   if (unthemed_icon)
@@ -1450,11 +1467,10 @@ gint *
 gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 			       const char   *icon_name)
 {
-  GList *l, *d;
+  GList *l, *d, *icons;
   GHashTable *sizes;
   gint *result, *r;
-  guint suffix;
-  
+  guint suffix;  
   GtkIconThemePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
@@ -1481,6 +1497,32 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 		g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
 	    }
 	}
+    }
+
+  for (d = builtin_dirs; d; d = d->next)
+    {
+      IconThemeDir *dir = d->data;
+      
+      suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);	  
+      if (suffix != ICON_SUFFIX_NONE)
+	{
+	  if (suffix == ICON_SUFFIX_SVG)
+	    g_hash_table_insert (sizes, GINT_TO_POINTER (-1), NULL);
+	  else
+	    g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
+	}
+    }
+
+  if (icon_theme_builtin_icons)
+    {
+      icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
+      
+      for ( ; icons; icons = icons->next);
+      {
+	BuiltinIcon *icon = icons->data;
+	
+	g_hash_table_insert (sizes, GINT_TO_POINTER (icon->size), NULL);
+      }      
     }
 
   r = result = g_new0 (gint, g_hash_table_size (sizes) + 1);
@@ -1811,40 +1853,6 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
   return suffix;
 }
 
-static void
-_gtk_icon_theme_ensure_builtin_cache (void)
-{
-  static gboolean initialized = FALSE;
-  IconThemeDir *dir;
-  gint sizes[5] = { 16, 20, 24, 32, 48 };
-  gint n_sizes = G_N_ELEMENTS (sizes);
-  gint i;
-
-  if (!initialized)
-    {
-      initialized = TRUE;
-
-      _builtin_cache = _gtk_icon_cache_new ((gchar *)builtin_icons);
-
-      for (i = 0; i < n_sizes; i++)
-	{
-	  dir = g_new (IconThemeDir, 1);
-	  dir->type = ICON_THEME_DIR_THRESHOLD;
-	  dir->context = 0;
-	  dir->size = sizes[i];
-	  dir->min_size = sizes[i];
-	  dir->max_size = sizes[i];
-	  dir->threshold = 2;
-	  dir->dir = NULL;
-	  dir->icon_data = NULL;
-	  dir->subdir = g_strdup_printf ("%d", sizes[i]);
-	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
-
-	  builtin_dirs = g_list_append (builtin_dirs, dir);
-	}
-    }
-}
-
 static GtkIconInfo *
 theme_lookup_icon (IconTheme          *theme,
 		   const char         *icon_name,
@@ -1867,8 +1875,6 @@ theme_lookup_icon (IconTheme          *theme,
   /* Builtin icons are logically part of the default theme and
    * are searched before other subdirectories of the default theme.
    */
-  _gtk_icon_theme_ensure_builtin_cache ();
-
   if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0 && use_builtin)
     {
       closest_builtin = find_builtin_icon (icon_name, 
@@ -2944,8 +2950,6 @@ find_builtin_icon (const gchar *icon_name,
   gint min_difference = G_MAXINT;
   gboolean has_larger = FALSE;
   BuiltinIcon *min_icon = NULL;
-  
-  _gtk_icon_factory_ensure_default_icons ();
   
   if (!icon_theme_builtin_icons)
     return NULL;
