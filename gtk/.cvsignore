@@ -21,6 +21,7 @@ testdnd
 stamp-gtktypebuiltins.h
 stamp-gtkmarshal.h
 stamp-gtkmarshalers.h
+stamp-icons
 gtk-query-immodules-2.0
 .saved
 gtkalias.h
