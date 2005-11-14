@@ -1490,12 +1490,13 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 
       icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
       
-      for ( ; icons; icons = icons->next);
-      {
-	BuiltinIcon *icon = icons->data;
+      while (icons)
+        {
+	  BuiltinIcon *icon = icons->data;
 	
-	g_hash_table_insert (sizes, GINT_TO_POINTER (icon->size), NULL);
-      }      
+	  g_hash_table_insert (sizes, GINT_TO_POINTER (icon->size), NULL);
+          icons = icons->next;
+        }      
     }
 
   r = result = g_new0 (gint, g_hash_table_size (sizes) + 1);
