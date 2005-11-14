@@ -1,3 +1,8 @@
+2005-11-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_search): Make
+	limit an inclusive boundary.  (#321299)
+
 2005-11-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/Makefile.am: fixed icon rules so gtkbuiltincache.h is only
