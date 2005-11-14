@@ -233,24 +233,20 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
   GtkCellRendererTogglePrivate *priv;
 
   priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (object);
-  
+
   switch (param_id)
     {
     case PROP_ACTIVE:
       celltoggle->active = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT(object), "active");
       break;
     case PROP_INCONSISTENT:
       priv->inconsistent = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT (object), "inconsistent");
       break;
     case PROP_ACTIVATABLE:
       celltoggle->activatable = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT(object), "activatable");
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT(object), "radio");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -260,7 +256,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
 
 /**
  * gtk_cell_renderer_toggle_new:
- * 
+ *
  * Creates a new #GtkCellRendererToggle. Adjust rendering
  * parameters using object properties. Object properties can be set
  * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
@@ -268,7 +264,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
  * can bind the "active" property on the cell renderer to a boolean value
  * in the model, thus causing the check button to reflect the state of
  * the model.
- * 
+ *
  * Return value: the new cell renderer
  **/
 GtkCellRenderer *
