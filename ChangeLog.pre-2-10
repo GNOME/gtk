@@ -1,5 +1,8 @@
 2005-11-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextiter.c (gtk_text_iter_forward_search): Make
+	limit an inclusive boundary.  (#321299)
+
 	* NEWS: Updates
 
 2005-11-12  Matthias Clasen  <mclasen@redhat.com>

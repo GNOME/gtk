@@ -4685,7 +4685,7 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
         {
           if (limit == NULL ||
               (limit &&
-               gtk_text_iter_compare (&end, limit) < 0))
+               gtk_text_iter_compare (&end, limit) <= 0))
             {
               retval = TRUE;
               
