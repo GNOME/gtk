@@ -1,5 +1,8 @@
 2005-11-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkcolor.c (gdk_color_parse): Documentation 
+	improvements.  (#321338)
+
 	* gtk/gtktextiter.c (gtk_text_iter_forward_search): Make
 	limit an inclusive boundary.  (#321299)
 
