@@ -335,7 +335,7 @@ gdk_color_get_type (void)
  * by <function>XParseColor</function>; these include
  * name for a color from <filename>rgb.txt</filename>, such as
  * <literal>DarkSlateGray</literal>, or a hex specification
- * such as <literal>305050</literal>.
+ * such as <literal>&num;3050b2</literal> or <literal>&num;35b</literal>.
  * 
  * Return value: %TRUE if the parsing succeeded.
  **/
