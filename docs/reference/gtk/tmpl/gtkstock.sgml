@@ -113,7 +113,7 @@ used for right-to-left locales.
 <!-- ##### MACRO GTK_STOCK_ABOUT ##### -->
 <para>
 The "About" item.
-<inlinegraphic fileref="stock_about_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-about.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -122,7 +122,7 @@ The "About" item.
 <!-- ##### MACRO GTK_STOCK_ADD ##### -->
 <para>
 The "Add" item.
-<inlinegraphic fileref="stock_add_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-add.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -130,7 +130,7 @@ The "Add" item.
 <!-- ##### MACRO GTK_STOCK_APPLY ##### -->
 <para>
 The "Apply" item.
-<inlinegraphic fileref="stock_apply_20.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-apply.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -138,7 +138,7 @@ The "Apply" item.
 <!-- ##### MACRO GTK_STOCK_BOLD ##### -->
 <para>
 The "Bold" item.
-<inlinegraphic fileref="stock_text_bold_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-bold.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -146,7 +146,7 @@ The "Bold" item.
 <!-- ##### MACRO GTK_STOCK_CANCEL ##### -->
 <para>
 The "Cancel" item.
-<inlinegraphic fileref="stock_cancel_20.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-cancel.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -154,7 +154,7 @@ The "Cancel" item.
 <!-- ##### MACRO GTK_STOCK_CDROM ##### -->
 <para>
 The "CD-Rom" item.
-<inlinegraphic fileref="stock_cdrom_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-cdrom.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -162,7 +162,7 @@ The "CD-Rom" item.
 <!-- ##### MACRO GTK_STOCK_CLEAR ##### -->
 <para>
 The "Clear" item.
-<inlinegraphic fileref="stock_clear_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-clear.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -170,7 +170,7 @@ The "Clear" item.
 <!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
 <para>
 The "Close" item.
-<inlinegraphic fileref="stock_close_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-close.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -178,7 +178,7 @@ The "Close" item.
 <!-- ##### MACRO GTK_STOCK_COLOR_PICKER ##### -->
 <para>
 The "Color Picker" item.
-<inlinegraphic fileref="stock_color_picker_25.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-color-picker.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.2
@@ -187,7 +187,7 @@ The "Color Picker" item.
 <!-- ##### MACRO GTK_STOCK_CONVERT ##### -->
 <para>
 The "Convert" item.
-<inlinegraphic fileref="stock_convert_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-convert.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -195,7 +195,7 @@ The "Convert" item.
 <!-- ##### MACRO GTK_STOCK_CONNECT ##### -->
 <para>
 The "Connect" icon.
-<inlinegraphic fileref="stock_connect_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-connect.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -204,7 +204,7 @@ The "Connect" icon.
 <!-- ##### MACRO GTK_STOCK_COPY ##### -->
 <para>
 The "Copy" item.
-<inlinegraphic fileref="stock_copy_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-copy.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -212,7 +212,7 @@ The "Copy" item.
 <!-- ##### MACRO GTK_STOCK_CUT ##### -->
 <para>
 The "Cut" item.
-<inlinegraphic fileref="stock_cut_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-cut.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -220,7 +220,7 @@ The "Cut" item.
 <!-- ##### MACRO GTK_STOCK_DELETE ##### -->
 <para>
 The "Delete" item.
-<inlinegraphic fileref="stock_trash_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-delete.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -228,7 +228,7 @@ The "Delete" item.
 <!-- ##### MACRO GTK_STOCK_DIALOG_AUTHENTICATION ##### -->
 <para>
 The "Authentication" item.
-<inlinegraphic fileref="stock_dialog_authentication_48.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dialog-authentication.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -237,7 +237,7 @@ The "Authentication" item.
 <!-- ##### MACRO GTK_STOCK_DIALOG_ERROR ##### -->
 <para>
 The "Error" item.
-<inlinegraphic fileref="stock_dialog_error_48.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dialog-error.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -245,7 +245,7 @@ The "Error" item.
 <!-- ##### MACRO GTK_STOCK_DIALOG_INFO ##### -->
 <para>
 The "Information" item.
-<inlinegraphic fileref="stock_dialog_info_48.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dialog-info.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -253,7 +253,7 @@ The "Information" item.
 <!-- ##### MACRO GTK_STOCK_DIALOG_QUESTION ##### -->
 <para>
 The "Question" item.
-<inlinegraphic fileref="stock_dialog_question_48.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dialog-question.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -261,7 +261,7 @@ The "Question" item.
 <!-- ##### MACRO GTK_STOCK_DIALOG_WARNING ##### -->
 <para>
 The "Warning" item.
-<inlinegraphic fileref="stock_dialog_warning_48.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dialog-warning.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -269,7 +269,7 @@ The "Warning" item.
 <!-- ##### MACRO GTK_STOCK_DIRECTORY ##### -->
 <para>
 The "Directory" icon.
-<inlinegraphic fileref="stock_directory_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-directory.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -278,7 +278,7 @@ The "Directory" icon.
 <!-- ##### MACRO GTK_STOCK_DISCONNECT ##### -->
 <para>
 The "Disconnect" icon.
-<inlinegraphic fileref="stock_disconnect_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-disconnect.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -287,7 +287,7 @@ The "Disconnect" icon.
 <!-- ##### MACRO GTK_STOCK_DND ##### -->
 <para>
 The "Drag-And-Drop" icon.
-<inlinegraphic fileref="stock_dnd_32.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dnd.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -295,7 +295,7 @@ The "Drag-And-Drop" icon.
 <!-- ##### MACRO GTK_STOCK_DND_MULTIPLE ##### -->
 <para>
 The "Drag-And-Drop multiple" icon.
-<inlinegraphic fileref="stock_dnd_multiple_32.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-dnd-multiple.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -303,7 +303,7 @@ The "Drag-And-Drop multiple" icon.
 <!-- ##### MACRO GTK_STOCK_EDIT ##### -->
 <para>
 The "Edit" item.
-<inlinegraphic fileref="stock_edit_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-edit.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -312,7 +312,7 @@ The "Edit" item.
 <!-- ##### MACRO GTK_STOCK_EXECUTE ##### -->
 <para>
 The "Execute" item.
-<inlinegraphic fileref="stock_exec_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-execute.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -321,7 +321,7 @@ The "Execute" item.
 <para>
 <para>
 The "File" icon.
-<inlinegraphic fileref="stock_file_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-file.png" format="PNG"></inlinegraphic>
 </para>
 </para>
 
@@ -331,7 +331,7 @@ The "File" icon.
 <!-- ##### MACRO GTK_STOCK_FIND ##### -->
 <para>
 The "Find" item.
-<inlinegraphic fileref="stock_search_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-search.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -339,7 +339,7 @@ The "Find" item.
 <!-- ##### MACRO GTK_STOCK_FIND_AND_REPLACE ##### -->
 <para>
 The "Find and Replace" item.
-<inlinegraphic fileref="stock_search_replace_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-find-and-replace.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -347,7 +347,7 @@ The "Find and Replace" item.
 <!-- ##### MACRO GTK_STOCK_FLOPPY ##### -->
 <para>
 The "Floppy" item.
-<inlinegraphic fileref="stock_save_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-floppy.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -355,7 +355,7 @@ The "Floppy" item.
 <!-- ##### MACRO GTK_STOCK_FULLSCREEN ##### -->
 <para>
 The "Fullscreen" item.
-<inlinegraphic fileref="stock_fullscreen_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-fullscreen.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.8
@@ -364,7 +364,7 @@ The "Fullscreen" item.
 <!-- ##### MACRO GTK_STOCK_GOTO_BOTTOM ##### -->
 <para>
 The "Bottom" item.
-<inlinegraphic fileref="stock_bottom_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-bottom.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -372,9 +372,9 @@ The "Bottom" item.
 <!-- ##### MACRO GTK_STOCK_GOTO_FIRST ##### -->
 <para>
 The "First" item.
-<inlinegraphic fileref="stock_first_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-first-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_last_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-first-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -382,9 +382,9 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_GOTO_LAST ##### -->
 <para>
 The "Last" item.
-<inlinegraphic fileref="stock_last_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-last-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_first_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-last-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -392,7 +392,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_GOTO_TOP ##### -->
 <para>
 The "Top" item.
-<inlinegraphic fileref="stock_top_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-goto-top.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -400,9 +400,9 @@ The "Top" item.
 <!-- ##### MACRO GTK_STOCK_GO_BACK ##### -->
 <para>
 The "Back" item.
-<inlinegraphic fileref="stock_left_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-back-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_right_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-back-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -410,7 +410,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_GO_DOWN ##### -->
 <para>
 The "Down" item.
-<inlinegraphic fileref="stock_down_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-down.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -418,9 +418,9 @@ The "Down" item.
 <!-- ##### MACRO GTK_STOCK_GO_FORWARD ##### -->
 <para>
 The "Forward" item.
-<inlinegraphic fileref="stock_right_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-forward-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_left_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-forward-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -428,7 +428,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_GO_UP ##### -->
 <para>
 The "Up" item.
-<inlinegraphic fileref="stock_up_arrow_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-go-up.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -436,7 +436,7 @@ The "Up" item.
 <!-- ##### MACRO GTK_STOCK_HARDDISK ##### -->
 <para>
 The "Harddisk" item.
-<inlinegraphic fileref="stock_harddisk_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-harddisk.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -445,7 +445,7 @@ The "Harddisk" item.
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
 <para>
 The "Help" item.
-<inlinegraphic fileref="stock_help_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-help.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -453,7 +453,7 @@ The "Help" item.
 <!-- ##### MACRO GTK_STOCK_HOME ##### -->
 <para>
 The "Home" item.
-<inlinegraphic fileref="stock_home_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-home.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -461,7 +461,7 @@ The "Home" item.
 <!-- ##### MACRO GTK_STOCK_INDENT ##### -->
 <para>
 The "Indent" item.
-<inlinegraphic fileref="stock_text_indent_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-indent.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -470,7 +470,7 @@ The "Indent" item.
 <!-- ##### MACRO GTK_STOCK_INDEX ##### -->
 <para>
 The "Index" item.
-<inlinegraphic fileref="stock_index_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-index.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -478,7 +478,7 @@ The "Index" item.
 <!-- ##### MACRO GTK_STOCK_INFO ##### -->
 <para>
 The "Info" item.
-<inlinegraphic fileref="stock_info_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-info.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.8
@@ -487,7 +487,7 @@ The "Info" item.
 <!-- ##### MACRO GTK_STOCK_ITALIC ##### -->
 <para>
 The "Italic" item.
-<inlinegraphic fileref="stock_text_italic_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-italic.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -495,9 +495,9 @@ The "Italic" item.
 <!-- ##### MACRO GTK_STOCK_JUMP_TO ##### -->
 <para>
 The "Jump to" item.
-<inlinegraphic fileref="stock_jump_to_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-jump-to-ltr.png" format="PNG"></inlinegraphic>
 RTL-variant 
-<inlinegraphic fileref="stock_jump_to_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-jump-to-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -505,7 +505,7 @@ RTL-variant
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_CENTER ##### -->
 <para>
 The "Center" item.
-<inlinegraphic fileref="stock_align_center_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-justify-center.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -513,7 +513,7 @@ The "Center" item.
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_FILL ##### -->
 <para>
 The "Fill" item.
-<inlinegraphic fileref="stock_align_justify_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-justify-fill.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -521,7 +521,7 @@ The "Fill" item.
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_LEFT ##### -->
 <para>
 The "Left" item.
-<inlinegraphic fileref="stock_align_left_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-justify-left.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -529,7 +529,7 @@ The "Left" item.
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_RIGHT ##### -->
 <para>
 The "Right" item.
-<inlinegraphic fileref="stock_align_right_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-justify-right.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -537,7 +537,7 @@ The "Right" item.
 <!-- ##### MACRO GTK_STOCK_LEAVE_FULLSCREEN ##### -->
 <para>
 The "Leave Fullscreen" item.
-<inlinegraphic fileref="stock_leave_fullscreen_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-leave-fullscreen.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.8
@@ -546,9 +546,9 @@ The "Leave Fullscreen" item.
 <!-- ##### MACRO GTK_STOCK_MEDIA_FORWARD ##### -->
 <para>
 The "Media Forward" item.
-<inlinegraphic fileref="stock_media_forward_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-forward-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_media_rewind_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-forward-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -557,9 +557,9 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_MEDIA_NEXT ##### -->
 <para>
 The "Media Next" item.
-<inlinegraphic fileref="stock_media_next_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-next-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_media_previous_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-next-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -568,7 +568,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_MEDIA_PAUSE ##### -->
 <para>
 The "Media Pause" item.
-<inlinegraphic fileref="stock_media_pause_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-pause.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -577,9 +577,9 @@ The "Media Pause" item.
 <!-- ##### MACRO GTK_STOCK_MEDIA_PLAY ##### -->
 <para>
 The "Media Play" item.
-<inlinegraphic fileref="stock_media_play_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-play-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_media_play_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-play-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -588,9 +588,9 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_MEDIA_PREVIOUS ##### -->
 <para>
 The "Media Previous" item.
-<inlinegraphic fileref="stock_media_previous_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-previous-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_media_next_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-previous-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -599,7 +599,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_MEDIA_RECORD ##### -->
 <para>
 The "Media Record" item.
-<inlinegraphic fileref="stock_media_record_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-record.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -608,9 +608,9 @@ The "Media Record" item.
 <!-- ##### MACRO GTK_STOCK_MEDIA_REWIND ##### -->
 <para>
 The "Media Rewind" item.
-<inlinegraphic fileref="stock_media_rewind_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-rewind-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_media_forward_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-rewind-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -619,7 +619,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_MEDIA_STOP ##### -->
 <para>
 The "Media Stop" item.
-<inlinegraphic fileref="stock_media_stop_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-media-stop.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -628,7 +628,7 @@ The "Media Stop" item.
 <!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
 <para>
 The "Missing image" icon.
-<inlinegraphic fileref="stock_broken_image_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-missing-image.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -636,7 +636,7 @@ The "Missing image" icon.
 <!-- ##### MACRO GTK_STOCK_NETWORK ##### -->
 <para>
 The "Network" item.
-<inlinegraphic fileref="stock_network_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-network.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -645,7 +645,7 @@ The "Network" item.
 <!-- ##### MACRO GTK_STOCK_NEW ##### -->
 <para>
 The "New" item.
-<inlinegraphic fileref="stock_new_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-new.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -653,7 +653,7 @@ The "New" item.
 <!-- ##### MACRO GTK_STOCK_NO ##### -->
 <para>
 The "No" item.
-<inlinegraphic fileref="stock_no_20.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-no.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -661,7 +661,7 @@ The "No" item.
 <!-- ##### MACRO GTK_STOCK_OK ##### -->
 <para>
 The "OK" item.
-<inlinegraphic fileref="stock_ok_20.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-ok.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -669,7 +669,7 @@ The "OK" item.
 <!-- ##### MACRO GTK_STOCK_OPEN ##### -->
 <para>
 The "Open" item.
-<inlinegraphic fileref="stock_open_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-open.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -677,7 +677,7 @@ The "Open" item.
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
 The "Paste" item.
-<inlinegraphic fileref="stock_paste_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-paste.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -685,7 +685,7 @@ The "Paste" item.
 <!-- ##### MACRO GTK_STOCK_PREFERENCES ##### -->
 <para>
 The "Preferences" item.
-<inlinegraphic fileref="stock_preferences_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-preferences.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -693,7 +693,7 @@ The "Preferences" item.
 <!-- ##### MACRO GTK_STOCK_PRINT ##### -->
 <para>
 The "Print" item.
-<inlinegraphic fileref="stock_print_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-print.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -701,7 +701,7 @@ The "Print" item.
 <!-- ##### MACRO GTK_STOCK_PRINT_PREVIEW ##### -->
 <para>
 The "Print Preview" item.
-<inlinegraphic fileref="stock_print_preview_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-print-preview.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -709,7 +709,7 @@ The "Print Preview" item.
 <!-- ##### MACRO GTK_STOCK_PROPERTIES ##### -->
 <para>
 The "Properties" item.
-<inlinegraphic fileref="stock_properties_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-properties.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -717,7 +717,7 @@ The "Properties" item.
 <!-- ##### MACRO GTK_STOCK_QUIT ##### -->
 <para>
 The "Quit" item.
-<inlinegraphic fileref="stock_exit_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-quit.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -725,9 +725,9 @@ The "Quit" item.
 <!-- ##### MACRO GTK_STOCK_REDO ##### -->
 <para>
 The "Redo" item.
-<inlinegraphic fileref="stock_redo_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-redo-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_redo_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-redo-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -735,7 +735,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_REFRESH ##### -->
 <para>
 The "Refresh" item.
-<inlinegraphic fileref="stock_refresh_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-refresh.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -743,7 +743,7 @@ The "Refresh" item.
 <!-- ##### MACRO GTK_STOCK_REMOVE ##### -->
 <para>
 The "Remove" item.
-<inlinegraphic fileref="stock_remove_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-remove.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -751,9 +751,9 @@ The "Remove" item.
 <!-- ##### MACRO GTK_STOCK_REVERT_TO_SAVED ##### -->
 <para>
 The "Revert" item.
-<inlinegraphic fileref="stock_revert_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-revert-to-saved-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_revert_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-revert-to-saved-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -761,7 +761,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_SAVE ##### -->
 <para>
 The "Save" item.
-<inlinegraphic fileref="stock_save_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-save.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -769,7 +769,7 @@ The "Save" item.
 <!-- ##### MACRO GTK_STOCK_SAVE_AS ##### -->
 <para>
 The "Save As" item.
-<inlinegraphic fileref="stock_save_as_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-save-as.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -777,7 +777,7 @@ The "Save As" item.
 <!-- ##### MACRO GTK_STOCK_SELECT_ALL ##### -->
 <para>
 The "Select All" item.
-<inlinegraphic fileref="stock_select_all_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-select-all.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.10
@@ -786,7 +786,7 @@ The "Select All" item.
 <!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
 <para>
 The "Color" item.
-<inlinegraphic fileref="stock_colorselector_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-select-color.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -794,7 +794,7 @@ The "Color" item.
 <!-- ##### MACRO GTK_STOCK_SELECT_FONT ##### -->
 <para>
 The "Font" item.
-<inlinegraphic fileref="stock_font_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-font.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -802,7 +802,7 @@ The "Font" item.
 <!-- ##### MACRO GTK_STOCK_SORT_ASCENDING ##### -->
 <para>
 The "Ascending" item.
-<inlinegraphic fileref="stock_sort_ascending_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-sort-ascending.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -810,7 +810,7 @@ The "Ascending" item.
 <!-- ##### MACRO GTK_STOCK_SORT_DESCENDING ##### -->
 <para>
 The "Descending" item.
-<inlinegraphic fileref="stock_sort_descending_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-sort-descending.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -818,7 +818,7 @@ The "Descending" item.
 <!-- ##### MACRO GTK_STOCK_SPELL_CHECK ##### -->
 <para>
 The "Spell Check" item.
-<inlinegraphic fileref="stock_spellcheck_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-spell-check.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -826,7 +826,7 @@ The "Spell Check" item.
 <!-- ##### MACRO GTK_STOCK_STOP ##### -->
 <para>
 The "Stop" item.
-<inlinegraphic fileref="stock_stop_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-stop.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -834,7 +834,7 @@ The "Stop" item.
 <!-- ##### MACRO GTK_STOCK_STRIKETHROUGH ##### -->
 <para>
 The "Strikethrough" item.
-<inlinegraphic fileref="stock_text_strikethrough_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-strikethrough.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -842,9 +842,9 @@ The "Strikethrough" item.
 <!-- ##### MACRO GTK_STOCK_UNDELETE ##### -->
 <para>
 The "Undelete" item.
-<inlinegraphic fileref="stock_undelete_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-undelete-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_undelete_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-undelete-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -852,7 +852,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_UNDERLINE ##### -->
 <para>
 The "Underline" item.
-<inlinegraphic fileref="stock_text_underline_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-underline.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -860,9 +860,9 @@ The "Underline" item.
 <!-- ##### MACRO GTK_STOCK_UNDO ##### -->
 <para>
 The "Undo" item.
-<inlinegraphic fileref="stock_undo_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-undo-ltr.png" format="PNG"></inlinegraphic>
 RTL variant
-<inlinegraphic fileref="stock_undo_rtl_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-undo-rtl.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -870,7 +870,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_UNINDENT ##### -->
 <para>
 The "Unindent" item.
-<inlinegraphic fileref="stock_text_unindent_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-unindent.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -879,7 +879,7 @@ The "Unindent" item.
 <!-- ##### MACRO GTK_STOCK_YES ##### -->
 <para>
 The "Yes" item.
-<inlinegraphic fileref="stock_yes_20.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-yes.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -887,7 +887,7 @@ The "Yes" item.
 <!-- ##### MACRO GTK_STOCK_ZOOM_100 ##### -->
 <para>
 The "Zoom 100%" item.
-<inlinegraphic fileref="stock_zoom_1_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-zoom-100.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -895,7 +895,7 @@ The "Zoom 100%" item.
 <!-- ##### MACRO GTK_STOCK_ZOOM_FIT ##### -->
 <para>
 The "Zoom to Fit" item.
-<inlinegraphic fileref="stock_zoom_fit_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-zoom-fit.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -903,7 +903,7 @@ The "Zoom to Fit" item.
 <!-- ##### MACRO GTK_STOCK_ZOOM_IN ##### -->
 <para>
 The "Zoom In" item.
-<inlinegraphic fileref="stock_zoom_in_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-zoom-in.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -911,7 +911,7 @@ The "Zoom In" item.
 <!-- ##### MACRO GTK_STOCK_ZOOM_OUT ##### -->
 <para>
 The "Zoom Out" item.
-<inlinegraphic fileref="stock_zoom_out_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-zoom-out.png" format="PNG"></inlinegraphic>
 </para>
 
 

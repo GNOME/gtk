@@ -1,3 +1,9 @@
+2005-11-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkstock.sgml: 
+	* gtk/Makefile.am (HTML_IMAGES): Update stock documentation
+	to refer to the new icon names.
+
 2005-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new api.
