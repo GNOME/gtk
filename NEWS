@@ -1,3 +1,60 @@
+Overview of Changes from GTK+ 2.8.6 to GTK+ 2.8.7
+=================================================
+* GtkFileChooser
+ - Don't special-case the names of Home and Desktop 
+   [Federico Mena Quintero]
+ - Avoid loading more than one directory initially.
+   [Federico]
+ - Make the file chooser work better with window
+   groups [Christian Persch]
+ - Improve keynav in the pathbar [Carlos Garnacho,
+   Andrei Yurkevich]
+ - Don't access unmounted volumes [Federico]
+* GtkTextView
+ - Avoid quadratic blowup when deleting text with
+   lots of tags [Matthias Clasen]
+ - Fix drag-selection corner cases [Arvind S N, 
+   Paolo Borelli]
+* GtkEntry
+ - Add the entry completion popup to the window
+   group  [Christian Persch]
+* GtkTreeView
+ - Fix background drawing in RTL locales [Eric Cazeaux]
+ - Handle Shift-G for going back in typeahead 
+   search [Christian Neumair]
+* GtkComboBox
+ - Leave Ctrl-PageUp/PageDown to applications 
+   [Christian Neumair]
+* Fix compilation problems with gtkcalendar.c 
+  [Matthias Hasselmann]
+* Add labels for GTK_STOCK_CONNECT and 
+  GTK_STOCK_DISCONNECT items [Richard Hult]
+* Resolve symbols in dlopened modules lazily  [Laszlo
+  Peter]
+* GDK
+ - Don't try to set overlarge window icons [Claudio 
+   Saavedra]
+ - Improve handling of odd keymaps [Kean Johnston]
+* Win32 changes
+ - Speed up compositing [John Ehresman]
+ - Improve handling of clipboard [Tor Lillqvist]
+ - Improve visuals of scrollbars, toolbars, handleboxes
+   and menubars in the ms-windows theme [Dom Lachowicz]
+ - Make icon masks work on Win98 [Peter Zelezny]
+ - Hide resize and maximize buttons on non-resizable
+   windows [Tor]
+ - Don't hide dotfiles [Tor]
+* Bug fixes [Kazuki Iwamoto, Ross Burton, Michael
+  Natterer, Bogdan Nicula, Damien Carbery, Gustavo
+  Carneiro, Tommi Komulainen, Thomas Klausner, 
+  Alexander Larsson, Bastien Nocera, Federico
+  Mena Quintero, John Ehresman, Paolo Borelli,
+  Antonio Sacchi, Christian Persch, Carlos
+  Garnacho, Jeremy Cook, Nickolay V. Shmyrev,
+  Richard Hult, Maxim Udushlivy]
+* Documentation improvements [Paolo Borelli,
+  Christian Neumair, Christian Persch
+
 Overview of Changes from GTK+ 2.8.5 to GTK+ 2.8.6
 =================================================
 * GtkFileChooser
