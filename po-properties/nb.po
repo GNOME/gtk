@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-04 01:25-0400\n"
+"POT-Creation-Date: 2005-11-15 12:00-0500\n"
 "PO-Revision-Date: 2005-08-31 10:06+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -1255,7 +1255,7 @@ msgstr ""
 "Det prioriterte stedet å forkorte strengen hvis celletegneren ikke har nok "
 "plass til å vise hele strengen, hvis i det hele tatt"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Bredde i tegn"
@@ -1484,7 +1484,7 @@ msgstr "Bruk alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Om fargen skal få en alphaverdi eller ikke"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:353
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Tittel"
@@ -1964,11 +1964,11 @@ msgstr "Etikett-widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Et widget som vises i stedet for den vanlige utvideretiketten"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:716
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
 msgid "Expander Size"
 msgstr "Størrelse på utvider"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
 msgid "Size of the expander arrow"
 msgstr "Størrelse på utviderpil"
 
@@ -2073,27 +2073,27 @@ msgstr ""
 "bekreftelsedialog for overskriving hvis brukeren velger et filnavn som "
 "allerede eksisterer."
 
-#: gtk/gtkfilechooserbutton.c:338
+#: gtk/gtkfilechooserbutton.c:343
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:339
+#: gtk/gtkfilechooserbutton.c:344
 msgid "The file chooser dialog to use."
 msgstr "Filvelgingsdialog som skal brukes."
 
-#: gtk/gtkfilechooserbutton.c:354
+#: gtk/gtkfilechooserbutton.c:359
 msgid "The title of the file chooser dialog."
 msgstr "Tittelen på dialogen for filvalg."
 
-#: gtk/gtkfilechooserbutton.c:368
+#: gtk/gtkfilechooserbutton.c:373
 msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredden på knappelementet, i tegn."
 
-#: gtk/gtkfilechooserdefault.c:710
+#: gtk/gtkfilechooserdefault.c:711
 msgid "Default file chooser backend"
 msgstr "Forvalgt motor for filvelger"
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:712
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på GtkFileChooser-motor som skal brukes som forvalg"
 
@@ -2365,11 +2365,11 @@ msgstr ""
 "Hvordan teksten og ikonet til hvert element er plassert i forhold til "
 "hverandre"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Kan omorganiseres"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
 msgid "View is reorderable"
 msgstr "Visningen kan omorganiseres"
 
@@ -3377,11 +3377,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en sekundær knapp med framoverpil på motsatt side av rullefeltet"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
 msgid "Horizontal Adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
@@ -4390,140 +4390,140 @@ msgstr "TreeModelSort modell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modell som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:571
 msgid "TreeView Model"
 msgstr "TreeView modell"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "The model for the tree view"
 msgstr "Modell for treevisning"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horisontal justering for widget"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:588
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering for widget"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:595
 msgid "Headers Visible"
 msgstr "Synlig topptekst"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Show the column header buttons"
 msgstr "Vis knapper for kolonnetopptekst"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:603
 msgid "Headers Clickable"
 msgstr "Topptekst kan klikkes"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Column headers respond to click events"
 msgstr "Kolonnetitler svarer på klikk"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Expander Column"
 msgstr "Utviderkolonne"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Set the column for the expander column"
 msgstr "Sett kolonne for utviderkolonne"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:627
 msgid "Rules Hint"
 msgstr "Regelhint"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sett et hint til temamotoren for å tegne rader i alternerende farger"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:635
 msgid "Enable Search"
 msgstr "Aktiver søk"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "View allows user to search through columns interactively"
 msgstr "Visning lar bruker søke gjennom kolonner interaktivt"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:643
 msgid "Search Column"
 msgstr "Søkekolonne"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Model column to search through when searching through code"
 msgstr "Modellkolonne som skal søkes gjennom ved søk i koden"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:664
 msgid "Fixed Height Mode"
 msgstr "Fast høyde"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Gjør GtkTreeView raskere ved å anta at alle rader har samme høyde"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:685
 msgid "Hover Selection"
 msgstr "Svevende utvalg"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Whether the selection should follow the pointer"
 msgstr "Om utvalget skal følge pekeren"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:705
 msgid "Hover Expand"
 msgstr "Utvid når pekeren henger over"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Om rader skal utvides/sammensunket når pekeren beveger seg over dem"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 msgid "Vertical Separator Width"
 msgstr "Bredde på vertikal separator"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikalt mellomrom mellom celler. Må være et liketall"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:735
 msgid "Horizontal Separator Width"
 msgstr "Bredde på horisontal separator"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horisontalt mellomrom mellom celler. Må være et liketall"
 
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:744
 msgid "Allow Rules"
 msgstr "Tillat linjaler"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow drawing of alternating color rows"
 msgstr "Tillat tegning av alternerende fargerader"
 
-#: gtk/gtktreeview.c:750
+#: gtk/gtktreeview.c:751
 msgid "Indent Expanders"
 msgstr "Indenter utvidere"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Make the expanders indented"
 msgstr "Gjør utvidere indentert"
 
-#: gtk/gtktreeview.c:757
+#: gtk/gtktreeview.c:758
 msgid "Even Row Color"
 msgstr "Farge for like rader"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Color to use for even rows"
 msgstr "Farge som skal brukes for like rader"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Odd Row Color"
 msgstr "Farge for ulike rader"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Color to use for odd rows"
 msgstr "Farge som skal brukes for ulike rader"
 

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-04 01:25-0400\n"
+"POT-Creation-Date: 2005-11-15 12:00-0500\n"
 "PO-Revision-Date: 2005-07-26 22:19+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -1286,7 +1286,7 @@ msgstr ""
 "Der bevorzugte Bereich zur Auslassung in der Zeichenkette, falls der "
 "Renderer der Zelle nicht genug Platz hat, um sie komplett anzuzeigen"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Breite in Zeichen"
@@ -1517,7 +1517,7 @@ msgstr "Alpha verwenden"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Soll der Farbe ein Alphawert gegeben werden?"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:353
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Titel"
@@ -2016,11 +2016,11 @@ msgstr ""
 "Ein Widget, das anstatt der üblichen Ausklapperbeschriftung angezeigt werden "
 "soll"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:716
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
 msgid "Expander Size"
 msgstr "Ausklappergröße"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
 msgid "Size of the expander arrow"
 msgstr "Größe des Ausklapppfeils"
 
@@ -2128,27 +2128,27 @@ msgstr ""
 "zur Bestätigung des Überschreibens anzeigt, falls der Benutzer einen bereits "
 "vorhandenen Dateinamen auswählt."
 
-#: gtk/gtkfilechooserbutton.c:338
+#: gtk/gtkfilechooserbutton.c:343
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:339
+#: gtk/gtkfilechooserbutton.c:344
 msgid "The file chooser dialog to use."
 msgstr "Der Dateiwähler, der verwendet werden soll."
 
-#: gtk/gtkfilechooserbutton.c:354
+#: gtk/gtkfilechooserbutton.c:359
 msgid "The title of the file chooser dialog."
 msgstr "Der Titel des Dateiwählers."
 
-#: gtk/gtkfilechooserbutton.c:368
+#: gtk/gtkfilechooserbutton.c:373
 msgid "The desired width of the button widget, in characters."
 msgstr "Die gewünschte Breite des Knopfes in Zeichen"
 
-#: gtk/gtkfilechooserdefault.c:710
+#: gtk/gtkfilechooserdefault.c:711
 msgid "Default file chooser backend"
 msgstr "Vorgabe-Backend des Dateiwählers"
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:712
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Der Name des per Vorgabe zu verwendenden GtkFileChooser-Backends"
 
@@ -2428,11 +2428,11 @@ msgstr ""
 "Legt fest, wie Text und Symbol von jedem Element relativ zueinander "
 "positioniert werden"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Umstellbar"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
 msgid "View is reorderable"
 msgstr "Die Ansicht kann umsortiert werden"
 
@@ -3481,11 +3481,11 @@ msgstr ""
 "Einen zweiten Vorwärtspfeil am gegenüberliegenden Ende des Rollbalkens "
 "anzeigen"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
@@ -4520,151 +4520,151 @@ msgstr "TreeModelSort-Modell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Das von TreeModelSort zum Sortieren verwendete Modell"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:571
 msgid "TreeView Model"
 msgstr "Baumansichtsmodell"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "The model for the tree view"
 msgstr "Das Modell für die Baumansicht"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment for the widget"
 msgstr "Die horizontale Stellgröße für das Widget"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:588
 msgid "Vertical Adjustment for the widget"
 msgstr "Die vertikale Stellgröße für das Widget"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:595
 msgid "Headers Visible"
 msgstr "Sichtbare Köpfe"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Show the column header buttons"
 msgstr "Die Spaltenkopf-Knöpfe anzeigen"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:603
 msgid "Headers Clickable"
 msgstr "Klickbare Köpfe"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Column headers respond to click events"
 msgstr "Die Spaltenköpfe sollen auf Klick-Ereignisse reagieren"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Expander Column"
 msgstr "Ausklapper-Spalte"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Set the column for the expander column"
 msgstr "Die Spalte für die Ausklapper einstellen"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:627
 msgid "Rules Hint"
 msgstr "Streifenwink"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Einen Wink an die Themen-Engine übergeben, dass Zeilen in wechselnden Farben "
 "gezeichnet werden sollen"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:635
 msgid "Enable Search"
 msgstr "Suche aktivieren"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Die Ansicht soll es dem Benutzer erlauben, Spalten interaktiv zu durchsuchen"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:643
 msgid "Search Column"
 msgstr "Suchspalte"
 
 # CHECK - Code?
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Model column to search through when searching through code"
 msgstr ""
 "Die Modellspalte, die durchsucht werden soll, wenn der Code durchsucht wird"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:664
 msgid "Fixed Height Mode"
 msgstr "Feste Höhe-Modus"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Beschleunigt GtkTreeView durch die Annahme, dass alle Zeilen gleich hoch "
 "sind."
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:685
 msgid "Hover Selection"
 msgstr "Schwebende Auswahl"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Whether the selection should follow the pointer"
 msgstr "Soll die Auswahl dem Zeige folgen?"
 
 # CHECK - »Expand on hover« oder »Hover the expansion«?
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:705
 msgid "Hover Expand"
 msgstr "Schwebendes Ausdehnen"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Legt fest, ob Zeilen aus-/eingeklappt werden, wenn der Zeiger sich über sie "
 "bewegt"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 msgid "Vertical Separator Width"
 msgstr "Breite des vertikalen Trennbalkens"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Der vertikale Abstand zwischen den Zellen. Muss eine gerade Zahl sein"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:735
 msgid "Horizontal Separator Width"
 msgstr "Breite des horizontalen Trennbalkens"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr ""
 "Der horizontale Abstand zwischen den Zellen. Muss eine gerade Zahl sein"
 
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:744
 msgid "Allow Rules"
 msgstr "Lesehilfen erlauben"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow drawing of alternating color rows"
 msgstr "Die Darstellung von farblich abwechselnden Zeilen erlauben"
 
-#: gtk/gtktreeview.c:750
+#: gtk/gtktreeview.c:751
 msgid "Indent Expanders"
 msgstr "Ausklapper einrücken"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Make the expanders indented"
 msgstr "Die Ausklapper einrücken"
 
-#: gtk/gtktreeview.c:757
+#: gtk/gtktreeview.c:758
 msgid "Even Row Color"
 msgstr "Farbe der geraden Spalten"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Color to use for even rows"
 msgstr "Die für ungerade Zeilen zu verwendende Farbe"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Odd Row Color"
 msgstr "Farbe der ungeraden Spalten"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Color to use for odd rows"
 msgstr "Die für gerade Zeilen zu verwendende Farbe"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-04 01:25-0400\n"
+"POT-Creation-Date: 2005-11-15 12:00-0500\n"
 "PO-Revision-Date: 2005-04-11 02:41+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -1263,7 +1263,7 @@ msgstr ""
 "El lloc preferit de la cadena per inserir els punts suspensius, si el "
 "representador de cadenes no conté espai suficient per mostrar tota la cadena"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Amplada en caràcters"
@@ -1492,7 +1492,7 @@ msgstr "Utilitza alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Si s'ha de donar un valor alfa al color"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:353
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Títol"
@@ -1976,11 +1976,11 @@ msgstr "Giny etiqueta"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Un giny per visualitzar en lloc de la típica etiqueta expansora"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:716
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
 msgid "Expander Size"
 msgstr "Mida de l'expansor"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
 msgid "Size of the expander arrow"
 msgstr "Mida de la fila expansora"
 
@@ -2089,27 +2089,27 @@ msgstr ""
 "confirmació de sobreescriptura quan l'usuari seleccioni un nom de fitxer que "
 "ja existeix."
 
-#: gtk/gtkfilechooserbutton.c:338
+#: gtk/gtkfilechooserbutton.c:343
 msgid "Dialog"
 msgstr "Diàleg"
 
-#: gtk/gtkfilechooserbutton.c:339
+#: gtk/gtkfilechooserbutton.c:344
 msgid "The file chooser dialog to use."
 msgstr "El diàleg de selecció de fitxer a utilitzar."
 
-#: gtk/gtkfilechooserbutton.c:354
+#: gtk/gtkfilechooserbutton.c:359
 msgid "The title of the file chooser dialog."
 msgstr "El títol del diàleg de selecció de fitxers."
 
-#: gtk/gtkfilechooserbutton.c:368
+#: gtk/gtkfilechooserbutton.c:373
 msgid "The desired width of the button widget, in characters."
 msgstr "L'amplada desitjada del giny botó, en caràcters."
 
-#: gtk/gtkfilechooserdefault.c:710
+#: gtk/gtkfilechooserdefault.c:711
 msgid "Default file chooser backend"
 msgstr "Rerefons predeterminat del selector de fitxers"
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:712
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nom del rerefons del GtkFileChooser predeterminat"
 
@@ -2380,11 +2380,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "El posicionament relatiu entre el text i la icona de cada element"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
 msgid "View is reorderable"
 msgstr "La vista és reordenable"
 
@@ -3420,11 +3420,11 @@ msgstr ""
 "Mostra un botó secundari de desplaçament endavant a l'altra banda de la "
 "barra de desplaçament"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
 msgid "Horizontal Adjustment"
 msgstr "Ajust horitzontal"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
 msgid "Vertical Adjustment"
 msgstr "Ajust vertical"
 
@@ -4471,148 +4471,148 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "El model per a TreeModelSort a ordenar"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:571
 msgid "TreeView Model"
 msgstr "Model de vista d'arbre"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "The model for the tree view"
 msgstr "El model per la vista d'arbre"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajustament horitzontal pel giny"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:588
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajustament vertical pel giny"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:595
 msgid "Headers Visible"
 msgstr "Capçaleres visibles"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Show the column header buttons"
 msgstr "Mostra botons en els encapçalaments de columna"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:603
 msgid "Headers Clickable"
 msgstr "Capçaleres clicables"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Column headers respond to click events"
 msgstr "Les capçaleres de columna responen als clics"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Expander Column"
 msgstr "Columna expansora"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Set the column for the expander column"
 msgstr "Estableix la columna per a la columna expansora"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:627
 msgid "Rules Hint"
 msgstr "Indicació de les regles"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Estableix una pista en el motor de temes per dibuixar files en colors "
 "alternants"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:635
 msgid "Enable Search"
 msgstr "Habilita la cerca"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "La visualització permet a l'usuari cercar interactivament a través de "
 "columnes"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:643
 msgid "Search Column"
 msgstr "Cerca columna"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Model column to search through when searching through code"
 msgstr "Columna model a cercar mitjançant recerca amb codi"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:664
 msgid "Fixed Height Mode"
 msgstr "Mode d'alçària fixa"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Fa més ràpid el GtkTreeView en assumir que totes les files tenen la mateixa "
 "alçària"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:685
 msgid "Hover Selection"
 msgstr "Segueix el punter"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Whether the selection should follow the pointer"
 msgstr "Si la selecció ha de seguir el punter"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:705
 msgid "Hover Expand"
 msgstr "Expandeix amb el punter"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Si les files s'haurien d'expandir o reduir quan el punter s'hi mou per sobre"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 msgid "Vertical Separator Width"
 msgstr "Amplada del separador vertical"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Espai vertical entre cel·les. Ha de ser un número parell"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:735
 msgid "Horizontal Separator Width"
 msgstr "Amplada del separador horitzontal"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Espai horitzontal entre cel·les. Ha de ser un número parell"
 
 # FIXME (josep)
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:744
 msgid "Allow Rules"
 msgstr "Permet regles"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow drawing of alternating color rows"
 msgstr "Permet el dibuix de les files del color que s'alternen"
 
-#: gtk/gtktreeview.c:750
+#: gtk/gtktreeview.c:751
 msgid "Indent Expanders"
 msgstr "Ampliadors de sagnat"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Make the expanders indented"
 msgstr "Fes els expansors sagnats"
 
-#: gtk/gtktreeview.c:757
+#: gtk/gtktreeview.c:758
 msgid "Even Row Color"
 msgstr "Color de la fila parell"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Color to use for even rows"
 msgstr "Color a utilitzar a les files parells"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Odd Row Color"
 msgstr "Color de la fila imparell"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Color to use for odd rows"
 msgstr "Color a utilitzar a les files imparells"
 

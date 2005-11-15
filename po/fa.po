@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-04 01:25-0400\n"
+"POT-Creation-Date: 2005-11-15 12:00-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -813,52 +813,52 @@ msgstr "نوشتن پرونده‌ی موقت هنگام بار کردن تصو�
 msgid "The XBM image format"
 msgstr "قالب تصویر XBM"
 
-#: gdk-pixbuf/io-xpm.c:467
+#: gdk-pixbuf/io-xpm.c:468
 #, c-format
 msgid "No XPM header found"
 msgstr "سرصفحه‌ی XPM یافت نشد"
 
-#: gdk-pixbuf/io-xpm.c:476
+#: gdk-pixbuf/io-xpm.c:477
 #, fuzzy, c-format
 msgid "Invalid XPM header"
 msgstr "پرونده‌ی XBM نامعتبر"
 
-#: gdk-pixbuf/io-xpm.c:484
+#: gdk-pixbuf/io-xpm.c:485
 #, c-format
 msgid "XPM file has image width <= 0"
 msgstr "عرض تصویر پرونده‌ی XPM کمتر یا مساوی صفر است"
 
-#: gdk-pixbuf/io-xpm.c:492
+#: gdk-pixbuf/io-xpm.c:493
 #, c-format
 msgid "XPM file has image height <= 0"
 msgstr "ارتفاع تصویر پرونده‌ی XPM کمتر یا مساوی صفر است"
 
-#: gdk-pixbuf/io-xpm.c:500
+#: gdk-pixbuf/io-xpm.c:501
 #, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "تعداد نویسه بر نقطه‌ی XPM نامعتبر است"
 
-#: gdk-pixbuf/io-xpm.c:507
+#: gdk-pixbuf/io-xpm.c:510
 #, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "تعداد رنگهای پرونده‌ی XPM نامعتبر است"
 
-#: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 #, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "نمی‌توان برای بار کردن تصویر XPM حافظه تخصیص داد"
 
-#: gdk-pixbuf/io-xpm.c:542
+#: gdk-pixbuf/io-xpm.c:545
 #, c-format
 msgid "Cannot read XPM colormap"
 msgstr "نمی‌توان نقشه‌رنگ XPM را خواند"
 
-#: gdk-pixbuf/io-xpm.c:771
+#: gdk-pixbuf/io-xpm.c:774
 #, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "نوشتن در پرونده‌ی موقت هنگام بار کردن تصویر XPM شکست خورد"
 
-#: gdk-pixbuf/io-xpm.c:806
+#: gdk-pixbuf/io-xpm.c:809
 msgid "The XPM image format"
 msgstr "قالب تصویر XPM"
 
@@ -1087,7 +1087,7 @@ msgstr "رنگ‌ها"
 msgid "Make X calls synchronous"
 msgstr "تماسهای با X همگام شوند"
 
-#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2103
+#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2105
 msgid "License"
 msgstr "مجوز"
 
@@ -1102,32 +1102,32 @@ msgid "C_redits"
 msgstr "دست‌اندرکاران"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:519
+#: gtk/gtkaboutdialog.c:521
 msgid "_License"
 msgstr "_مجوز"
 
-#: gtk/gtkaboutdialog.c:756
+#: gtk/gtkaboutdialog.c:758
 #, c-format
 msgid "About %s"
 msgstr "درباره‌ی %s"
 
-#: gtk/gtkaboutdialog.c:2031
+#: gtk/gtkaboutdialog.c:2033
 msgid "Credits"
 msgstr "دست‌اندرکاران"
 
-#: gtk/gtkaboutdialog.c:2057
+#: gtk/gtkaboutdialog.c:2059
 msgid "Written by"
 msgstr "نوشته‌ی"
 
-#: gtk/gtkaboutdialog.c:2060
+#: gtk/gtkaboutdialog.c:2062
 msgid "Documented by"
 msgstr "مستندسازی از"
 
-#: gtk/gtkaboutdialog.c:2072
+#: gtk/gtkaboutdialog.c:2074
 msgid "Translated by"
 msgstr "ترجمه از"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2078
 msgid "Artwork by"
 msgstr "طرح‌ها و تصاویر از"
 
@@ -1180,7 +1180,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:648
+#: gtk/gtkcalendar.c:652
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1188,7 +1188,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:672
+#: gtk/gtkcalendar.c:676
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:6"
 
@@ -1200,7 +1200,7 @@ msgstr "calendar:week_start:6"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1562
+#: gtk/gtkcalendar.c:1566
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1215,7 +1215,7 @@ msgstr ""
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1839
+#: gtk/gtkcalendar.c:1843
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1360,20 +1360,20 @@ msgstr "چرخ رنگ"
 msgid "Color Selection"
 msgstr "انتخاب رنگ"
 
-#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7118
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7128
 msgid "Input _Methods"
 msgstr "روش‌های ورودی"
 
-#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7139
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
-#: gtk/gtkfilechooser.c:1681 gtk/gtkfilechooser.c:1725
-#: gtk/gtkfilechooser.c:1800 gtk/gtkfilechooser.c:1844
+#: gtk/gtkfilechooser.c:1685 gtk/gtkfilechooser.c:1729
+#: gtk/gtkfilechooser.c:1804 gtk/gtkfilechooser.c:1848
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "نام پرونده‌ی نامعتبر: %s"
@@ -1382,13 +1382,11 @@ msgstr "نام پرونده‌ی نامعتبر: %s"
 msgid "Select A File"
 msgstr "یک پرونده انتخاب کنید"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1433
-#: gtk/gtkpathbar.c:1020
+#: gtk/gtkfilechooserbutton.c:68
 msgid "Home"
 msgstr "آغازه"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1468
-#: gtk/gtkpathbar.c:1022
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "رومیزی"
 
@@ -1397,265 +1395,265 @@ msgstr "رومیزی"
 msgid "(None)"
 msgstr "(هیچ‌کدام)"
 
-#: gtk/gtkfilechooserbutton.c:1531
+#: gtk/gtkfilechooserbutton.c:1566
 msgid "Other..."
 msgstr "غیره..."
 
-#: gtk/gtkfilechooserdefault.c:1010
+#: gtk/gtkfilechooserdefault.c:1011
 msgid "Could not retrieve information about the file"
 msgstr "نمی‌توان اطلاعاتی درباره‌ی پرونده بازیابی کرد"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Could not add a bookmark"
 msgstr "نمی‌توان چوب‌الفی اضافه کرد"
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1033
 msgid "Could not remove bookmark"
 msgstr "نمی‌توان چوب‌الف را حذف کرد"
 
-#: gtk/gtkfilechooserdefault.c:1043
+#: gtk/gtkfilechooserdefault.c:1044
 msgid "The folder could not be created"
 msgstr "نمی‌توان پوشه را ایجاد کرد"
 
-#: gtk/gtkfilechooserdefault.c:1056
+#: gtk/gtkfilechooserdefault.c:1057
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1069
+#: gtk/gtkfilechooserdefault.c:1070
 msgid "Invalid file name"
 msgstr "نام پرونده‌ی نامعتبر"
 
-#: gtk/gtkfilechooserdefault.c:1079
+#: gtk/gtkfilechooserdefault.c:1080
 msgid "The folder contents could not be displayed"
 msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 
-#: gtk/gtkfilechooserdefault.c:1299
+#: gtk/gtkfilechooserdefault.c:1300
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "نمی‌توان درباره‌ی «%s» اطلاعات گرفت: %s"
 
-#: gtk/gtkfilechooserdefault.c:2365
+#: gtk/gtkfilechooserdefault.c:2371
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی «%s» به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:2406
+#: gtk/gtkfilechooserdefault.c:2412
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی فعلی به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:2408
+#: gtk/gtkfilechooserdefault.c:2414
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "اضافه کردن پوشه‌های انتخاب‌شده به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:2448
+#: gtk/gtkfilechooserdefault.c:2454
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "حذف چوب‌الف «%s»"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2885
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "نمی‌توان برای «%s» چوب‌الفی اضافه کرد چون نام مسیر نامعتبری است."
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3105
 #, fuzzy
 msgid "Remove"
 msgstr "حذف"
 
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3114
 #, fuzzy
 msgid "Rename..."
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserdefault.c:3226
+#: gtk/gtkfilechooserdefault.c:3237
 msgid "Shortcuts"
 msgstr "میانبرها"
 
-#: gtk/gtkfilechooserdefault.c:3280
+#: gtk/gtkfilechooserdefault.c:3291
 msgid "Folder"
 msgstr "پوشه"
 
-#: gtk/gtkfilechooserdefault.c:3336 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3347 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_افزودن"
 
-#: gtk/gtkfilechooserdefault.c:3343
+#: gtk/gtkfilechooserdefault.c:3354
 #, fuzzy
 msgid "Add the selected folder to the Bookmarks"
 msgstr "افزودن پوشه‌ی انتخاب‌شده به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:3348 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3359 gtk/gtkstock.c:400
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserdefault.c:3355
+#: gtk/gtkfilechooserdefault.c:3366
 msgid "Remove the selected bookmark"
 msgstr "حذف پوشه‌های انتخاب‌شده"
 
-#: gtk/gtkfilechooserdefault.c:3455
+#: gtk/gtkfilechooserdefault.c:3466
 #, fuzzy
 msgid "Could not select file"
 msgstr "نمی‌توان مورد را انتخاب کرد"
 
-#: gtk/gtkfilechooserdefault.c:3511
+#: gtk/gtkfilechooserdefault.c:3522
 #, fuzzy, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "نمی‌توان برای «%s» چوب‌الفی اضافه کرد چون نام مسیر نامعتبری است."
 
-#: gtk/gtkfilechooserdefault.c:3583
+#: gtk/gtkfilechooserdefault.c:3594
 #, fuzzy
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به میانبرها"
 
-#: gtk/gtkfilechooserdefault.c:3593
+#: gtk/gtkfilechooserdefault.c:3604
 msgid "Open _Location"
 msgstr "باز کردن _مکان"
 
-#: gtk/gtkfilechooserdefault.c:3605
+#: gtk/gtkfilechooserdefault.c:3616
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: gtk/gtkfilechooserdefault.c:3729 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3740 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3785
 msgid "Name"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserdefault.c:3799
+#: gtk/gtkfilechooserdefault.c:3810
 msgid "Size"
 msgstr "اندازه"
 
-#: gtk/gtkfilechooserdefault.c:3812
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "Modified"
 msgstr "تغییریافته"
 
-#: gtk/gtkfilechooserdefault.c:3844
+#: gtk/gtkfilechooserdefault.c:3855
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3880
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "Create Fo_lder"
 msgstr "ایجاد پو_شه"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:4005
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "_Name:"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserdefault.c:4045
+#: gtk/gtkfilechooserdefault.c:4056
 msgid "_Browse for other folders"
 msgstr "_مرور برای سایر پوشه‌ها"
 
-#: gtk/gtkfilechooserdefault.c:4314
+#: gtk/gtkfilechooserdefault.c:4325
 msgid "Save in _folder:"
 msgstr "ذخیره در پو_شه‌ی:"
 
-#: gtk/gtkfilechooserdefault.c:4316
+#: gtk/gtkfilechooserdefault.c:4327
 msgid "Create in _folder:"
 msgstr "ایجاد در پو_شه‌ی:"
 
-#: gtk/gtkfilechooserdefault.c:5389
+#: gtk/gtkfilechooserdefault.c:5400
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "نمی‌توان به پوشه رفت چون محلی نیست"
 
-#: gtk/gtkfilechooserdefault.c:5954
+#: gtk/gtkfilechooserdefault.c:5980
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "میانبر %s وجود ندارد"
 
-#: gtk/gtkfilechooserdefault.c:6209
+#: gtk/gtkfilechooserdefault.c:6235
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6212
+#: gtk/gtkfilechooserdefault.c:6238
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6217
+#: gtk/gtkfilechooserdefault.c:6243
 #, fuzzy
 msgid "_Replace"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserdefault.c:6708
+#: gtk/gtkfilechooserdefault.c:6734
 #, c-format
 msgid "Could not mount %s"
 msgstr "نمی‌توان %s را سوار کرد"
 
-#: gtk/gtkfilechooserdefault.c:7003
+#: gtk/gtkfilechooserdefault.c:7042
 msgid "Type name of new folder"
 msgstr "نام پوشه‌ی جدید را وارد کنید"
 
 # c-format
-#: gtk/gtkfilechooserdefault.c:7045
+#: gtk/gtkfilechooserdefault.c:7084
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%Id بایت"
 
-#: gtk/gtkfilechooserdefault.c:7047
+#: gtk/gtkfilechooserdefault.c:7086
 #, c-format
 msgid "%.1f K"
 msgstr "%I.1f کیلو"
 
-#: gtk/gtkfilechooserdefault.c:7049
+#: gtk/gtkfilechooserdefault.c:7088
 #, c-format
 msgid "%.1f M"
 msgstr "%I.1f مگا"
 
-#: gtk/gtkfilechooserdefault.c:7051
+#: gtk/gtkfilechooserdefault.c:7090
 #, c-format
 msgid "%.1f G"
 msgstr "%I.1f گیگا"
 
-#: gtk/gtkfilechooserdefault.c:7097 gtk/gtkfilechooserdefault.c:7121
+#: gtk/gtkfilechooserdefault.c:7136 gtk/gtkfilechooserdefault.c:7160
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserdefault.c:7108
+#: gtk/gtkfilechooserdefault.c:7147
 msgid "Today"
 msgstr "امروز"
 
-#: gtk/gtkfilechooserdefault.c:7110
+#: gtk/gtkfilechooserdefault.c:7149
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: gtk/gtkfilechooserdefault.c:7192
+#: gtk/gtkfilechooserdefault.c:7231
 msgid "Cannot change folder"
 msgstr "نمی‌توان پوشه را تغییر داد"
 
-#: gtk/gtkfilechooserdefault.c:7193
+#: gtk/gtkfilechooserdefault.c:7232
 msgid "The folder you specified is an invalid path."
 msgstr "پوشه‌ای که مشخص کرده‌اید مسیر نامعتبری است."
 
-#: gtk/gtkfilechooserdefault.c:7232
+#: gtk/gtkfilechooserdefault.c:7271
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "نمی‌توان از «%s» و «%s» نام پرونده ساخت"
 
-#: gtk/gtkfilechooserdefault.c:7268
+#: gtk/gtkfilechooserdefault.c:7307
 msgid "Could not select item"
 msgstr "نمی‌توان مورد را انتخاب کرد"
 
-#: gtk/gtkfilechooserdefault.c:7308
+#: gtk/gtkfilechooserdefault.c:7347
 msgid "Open Location"
 msgstr "باز کردن مکان"
 
-#: gtk/gtkfilechooserdefault.c:7315
+#: gtk/gtkfilechooserdefault.c:7354
 msgid "Save in Location"
 msgstr "ذخیره در مکان"
 
-#: gtk/gtkfilechooserdefault.c:7342
+#: gtk/gtkfilechooserdefault.c:7381
 msgid "_Location:"
 msgstr "_مکان:"
 
@@ -2182,317 +2180,326 @@ msgid "_Close"
 msgstr "_بستن"
 
 #: gtk/gtkstock.c:324
-msgid "_Convert"
+#, fuzzy
+msgid "C_onnect"
 msgstr "_تبدیل"
 
 #: gtk/gtkstock.c:325
+msgid "_Convert"
+msgstr "_تبدیل"
+
+#: gtk/gtkstock.c:326
 msgid "_Copy"
 msgstr "_نسخه‌برداری"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Delete"
 msgstr "_حذف"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
+msgid "_Disconnect"
+msgstr ""
+
+#: gtk/gtkstock.c:330
 msgid "_Execute"
 msgstr "ا_جرا"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:331
 msgid "_Edit"
 msgstr "_ویرایش"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:332
 msgid "_Find"
 msgstr "_یافتن"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:333
 msgid "Find and _Replace"
 msgstr "یافتن و _جای‌گزینی"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:334
 msgid "_Floppy"
 msgstr "دیسک _نرم"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:335
 msgid "_Fullscreen"
 msgstr ""
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:340
 msgid "Navigation|_First"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:342
 msgid "Navigation|_Last"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:344
 msgid "Navigation|_Top"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:344
+#: gtk/gtkstock.c:346
 msgid "Navigation|_Back"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:346
+#: gtk/gtkstock.c:348
 msgid "Navigation|_Down"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:348
+#: gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:352
 msgid "Navigation|_Up"
 msgstr ""
 
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:353
 msgid "_Harddisk"
 msgstr "دیسک _سخت"
 
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:354
 msgid "_Help"
 msgstr "_راهنما"
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:355
 msgid "_Home"
 msgstr "آ_غازه"
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:356
 msgid "Increase Indent"
 msgstr "افزایش تورفتگی"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:357
 msgid "Decrease Indent"
 msgstr "کاهش تورفتگی"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:358
 msgid "_Index"
 msgstr "_نمایه"
 
-#: gtk/gtkstock.c:357
+#: gtk/gtkstock.c:359
 #, fuzzy
 msgid "_Information"
 msgstr "اطلاعات"
 
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:360
 msgid "_Italic"
 msgstr "ای_تالیک"
 
-#: gtk/gtkstock.c:359
+#: gtk/gtkstock.c:361
 msgid "_Jump to"
 msgstr "_پرش به"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:361
+#: gtk/gtkstock.c:363
 #, fuzzy
 msgid "Justify|_Center"
 msgstr "_مرکز"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:363
+#: gtk/gtkstock.c:365
 msgid "Justify|_Fill"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:365
+#: gtk/gtkstock.c:367
 msgid "Justify|_Left"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:369
 #, fuzzy
 msgid "Justify|_Right"
 msgstr "_راست"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgid "Media|_Forward"
 msgstr "_جلو"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgid "Media|_Next"
 msgstr "_بعدی"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgid "Media|P_ause"
 msgstr "مک_ث"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:378
 #, fuzzy
 msgid "Media|_Play"
 msgstr "پ_خش"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|Pre_vious"
 msgstr "_قبلی"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:382
 #, fuzzy
 msgid "Media|_Record"
 msgstr "_ضبط:"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|R_ewind"
 msgstr "_عقب بردن"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:386
 #, fuzzy
 msgid "Media|_Stop"
 msgstr "_توقف"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:387
 msgid "_Network"
 msgstr "_شبکه"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:388
 msgid "_New"
 msgstr "_جدید"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:389
 msgid "_No"
 msgstr "_نه"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:390
 msgid "_OK"
 msgstr "_تأیید"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:391
 msgid "_Open"
 msgstr "_باز کردن"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:392
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:393
 msgid "_Preferences"
 msgstr "_ترجیحات"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:394
 msgid "_Print"
 msgstr "_چاپ"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:395
 msgid "Print Pre_view"
 msgstr "پی_ش‌نمایش چاپ"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:396
 msgid "_Properties"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:397
 msgid "_Quit"
 msgstr "_خروج"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:398
 msgid "_Redo"
 msgstr "_دوباره"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:399
 msgid "_Refresh"
 msgstr "_نوسازی"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:401
 msgid "_Revert"
 msgstr "باز_گشت"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:402
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:403
 msgid "Save _As"
 msgstr "ذخیره با _نام"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:404
 msgid "_Color"
 msgstr "_رنگ"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:405
 msgid "_Font"
 msgstr "_قلم"
 
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:406
 msgid "_Ascending"
 msgstr "_صعودی"
 
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:407
 msgid "_Descending"
 msgstr "_نزولی"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:408
 msgid "_Spell Check"
 msgstr "_غلطیابی املایی"
 
-#: gtk/gtkstock.c:407
+#: gtk/gtkstock.c:409
 msgid "_Stop"
 msgstr "_توقف"
 
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:410
 msgid "_Strikethrough"
 msgstr "_خط‌خورده"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:411
 msgid "_Undelete"
 msgstr "احیا"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:412
 msgid "_Underline"
 msgstr "_زیرخط‌دار"
 
-#: gtk/gtkstock.c:411
+#: gtk/gtkstock.c:413
 msgid "_Undo"
 msgstr "_برگشت حرکت"
 
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:414
 msgid "_Yes"
 msgstr "_بله"
 
-#: gtk/gtkstock.c:413
+#: gtk/gtkstock.c:415
 msgid "_Normal Size"
 msgstr "اندازه‌ی _عادی"
 
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:416
 msgid "Best _Fit"
 msgstr "بهترین اندازه"
 
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:417
 msgid "Zoom _In"
 msgstr "زوم به _داخل"
 
-#: gtk/gtkstock.c:416
+#: gtk/gtkstock.c:418
 msgid "Zoom _Out"
 msgstr "زوم به _خارج"
 

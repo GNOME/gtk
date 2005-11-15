@@ -1,5 +1,7 @@
 2005-11-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.7 ===
+
 	* NEWS: Updates
 
 	* gtk/gtktreestore.c (gtk_tree_store_move): Fix a memory
