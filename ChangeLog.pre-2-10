@@ -1,3 +1,8 @@
+2005-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_move): Fix a memory
+	leak.  (#321032, Peter Zelezny)
+
 2005-11-15  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_finalize): destroy
