@@ -1,3 +1,10 @@
+2005-11-15  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_finalize): destroy
+	display->xid_ht as late as possible (right before XCloseDisplay)
+	because it still needs to be around when the display's screens are
+	finalized. (#85715)
+
 2005-11-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_data_set_uris): Don't
