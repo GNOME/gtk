@@ -2257,7 +2257,6 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
   if (depth)
     {
       gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_store), &parent_iter, path);
-      gtk_tree_path_free (path);
 
       parent = G_NODE (parent_iter.user_data);
     }
@@ -2322,7 +2321,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 	  b = G_NODE (dst_b.user_data);
 	}
 
-      /* if a is NULL, a is NULL too -- we are at the end of the list
+      /* if a is NULL, b is NULL too -- we are at the end of the list
        * yes and we leak memory here ...
        */
       if (position)
@@ -2465,17 +2464,18 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   if (depth)
     {
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (tree_store), &parent_iter);
+      tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (tree_store), &parent_iter);
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
-				     path, &parent_iter, order);
+				     tmppath, &parent_iter, order);
     }
   else
     {
-      path = gtk_tree_path_new ();
+      tmppath = gtk_tree_path_new ();
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
-				     path, NULL, order);
+				     tmppath, NULL, order);
     }
 
+  gtk_tree_path_free (tmppath);
   gtk_tree_path_free (path);
   if (position)
     gtk_tree_path_free (pos_path);

@@ -1,3 +1,10 @@
+2005-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+	* gtk/gtktreestore.c (gtk_tree_store_move): Fix a memory
+	leak.  (#321032, Peter Zelezny)
+
 2005-11-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_data_set_uris): Don't
