@@ -405,7 +405,8 @@ file_buffer (enum buf_op op, gpointer handle)
 		/* Fall through to the xpm_read_string. */
 
 	case op_body:
-		xpm_read_string (h->infile, &h->buffer, &h->buffer_size);
+		if(!xpm_read_string (h->infile, &h->buffer, &h->buffer_size))
+			return NULL;
 		return h->buffer;
 
 	default:
@@ -500,7 +501,9 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
                              _("XPM has invalid number of chars per pixel"));
 		return NULL;
 	}
-	if (n_col <= 0 || n_col >= G_MAXINT / (cpp + 1)) {
+	if (n_col <= 0 || 
+	    n_col >= G_MAXINT / (cpp + 1) || 
+	    n_col >= G_MAXINT / sizeof (XPMColor)) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,

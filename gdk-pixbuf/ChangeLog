@@ -1,3 +1,8 @@
+2005-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-xpm.c: Fix several integer overflows which have been
+	reported as CVE-2005-3186 and CVE-2005-2975.
+
 2005-10-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Only call
