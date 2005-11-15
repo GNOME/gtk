@@ -1,5 +1,10 @@
 2005-11-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (gtk_selection_data_set_uris): Don't
+	leak result.  (#321441, Tommi Komulainen)
+
+2005-11-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_get_icon_sizes):
 	Don't crash if there is no builtin icon.
 

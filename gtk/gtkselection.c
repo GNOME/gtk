@@ -1477,6 +1477,8 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
 				  text_uri_list_atom,
 				  8, (guchar *)result, length);
 	  
+	  g_free (result);
+
 	  return TRUE;
 	}
     }
