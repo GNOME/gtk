@@ -1,3 +1,14 @@
+2005-11-16  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkevents-x11.c (_gdk_events_uninit): new internal
+	function which destroys the display's event source. Also removes
+	the source from the global display_sources list and unrefs it.
+
+	* gdk/x11/gdkprivate-x11.h: declare the function.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_dispose): call it
+	instead of half-destroying the source here.
+
 2005-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_move): Fix a memory

@@ -230,6 +230,20 @@ _gdk_events_init (GdkDisplay *display)
 					 NULL);
 }
 
+void
+_gdk_events_uninit (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (display_x11->event_source)
+    {
+      display_sources = g_list_remove (display_sources,
+                                       display_x11->event_source);
+      g_source_destroy (display_x11->event_source);
+      g_source_unref (display_x11->event_source);
+      display_x11->event_source = NULL;
+    }
+}
 
 /**
  * gdk_events_pending:

@@ -726,11 +726,7 @@ gdk_display_x11_dispose (GObject *object)
   for (i = 0; i < n_screens; i++)
     _gdk_screen_close (display_x11->screens[i]);
 
-  if (display_x11->event_source)
-    {
-      g_source_destroy (display_x11->event_source);
-      display_x11->event_source = NULL;
-    }
+  _gdk_events_uninit (GDK_DISPLAY_OBJECT (object));
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
