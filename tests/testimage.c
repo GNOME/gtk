@@ -68,6 +68,30 @@ drag_data_received (GtkWidget        *widget,
   gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 }
 
+static gboolean
+idle_func (gpointer data)
+{
+  g_print ("keep me busy\n");
+
+  return TRUE;
+}
+
+static gboolean
+anim_image_expose (GtkWidget      *widget,
+                   GdkEventExpose *eevent,
+                   gpointer        data)
+{
+  g_print ("start busyness\n");
+
+  g_signal_handlers_disconnect_by_func (widget, anim_image_expose, data);
+
+  /* produce high load */
+  g_idle_add_full (G_PRIORITY_DEFAULT,
+                   idle_func, NULL, NULL);
+
+  return FALSE;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -78,14 +102,18 @@ main (int argc, char **argv)
   GtkIconSet *iconset;
   GtkIconSource *iconsource;
   gchar *icon_name = "gnome-terminal";
-  
+  gchar *anim_filename = NULL;
+
   gtk_init (&argc, &argv);
 
   if (argc > 1)
     icon_name = argv[1];
 
+  if (argc > 2)
+    anim_filename = argv[2];
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  table = gtk_table_new (4, 3, FALSE);
+  table = gtk_table_new (6, 3, FALSE);
   gtk_container_add (GTK_CONTAINER (window), table);
 
   label = gtk_label_new ("symbolic size");
@@ -144,7 +172,21 @@ main (int argc, char **argv)
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 4, 5);
-		   
+
+  if (anim_filename)
+    {
+      label = gtk_label_new ("GTK_IMAGE_ANIMATION (from file)");
+      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+      image = gtk_image_new_from_file (anim_filename);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
+      gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 5, 6);
+
+      /* produce high load */
+      g_signal_connect_after (image, "expose-event",
+                              G_CALLBACK (anim_image_expose),
+                              NULL);
+    }
+
   gtk_widget_show_all (window);
 
   gtk_main ();

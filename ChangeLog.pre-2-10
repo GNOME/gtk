@@ -1,5 +1,19 @@
 2005-11-16  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkimage.c (animation_timeout): call
+	gtk_window_process_updates() so the animation keeps running even
+	if the main loop is busy with sources that eat a lot of cpu with
+	high priority. Fixes bug #321444.
+
+	(gtk_image_new_from_animation): document the fact that the
+	animation will stop running if the main loop is busy with sources
+	that have priorities higher than G_PRIORITY_DEFAULT.
+
+	* tests/testimage.c: added test case that shows an animation even
+	though a cpu-eating idle function is running.
+
+2005-11-16  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/x11/gdkevents-x11.c (_gdk_events_uninit): new internal
 	function which destroys the display's event source. Also removes
 	the source from the global display_sources list and unrefs it.

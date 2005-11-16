@@ -671,7 +671,12 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
  * The #GtkImage does not assume a reference to the
  * animation; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
- * 
+ *
+ * Note that the animation frames are shown using a timeout with
+ * #G_PRIORITY_DEFAULT. When using animations to indicate busyness,
+ * keep in mind that the animation will only be shown if the main loop
+ * is not busy with something that has a higher priority.
+ *
  * Return value: a new #GtkImage widget
  **/
 GtkWidget*
@@ -1396,8 +1401,11 @@ animation_timeout (gpointer data)
       g_timeout_add (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
                      animation_timeout,
                      image);
-  
+
   gtk_widget_queue_draw (GTK_WIDGET (image));
+
+  if (GTK_WIDGET_DRAWABLE (image))
+    gdk_window_process_updates (GTK_WIDGET (image)->window, TRUE);
 
   GDK_THREADS_LEAVE ();
 
