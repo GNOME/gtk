@@ -7,7 +7,7 @@ struct row_data {
   char *text2;
 };
 
-static struct row_data row_data[] = {
+static const struct row_data row_data[] = {
   { GTK_STOCK_NEW,		"First",		"Here bygynneth the Book of the tales of Caunterbury." },
   { GTK_STOCK_OPEN,		"Second",		"Whan that Aprille, with hise shoures soote," },
   { GTK_STOCK_ABOUT, 		"Third",		"The droghte of March hath perced to the roote" },

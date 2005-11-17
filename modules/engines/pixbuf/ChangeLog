@@ -1,3 +1,8 @@
+2005-11-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixbuf-rc-style.c: const correctness fixes
+	found by Arjan van de Ven and gcc.
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===

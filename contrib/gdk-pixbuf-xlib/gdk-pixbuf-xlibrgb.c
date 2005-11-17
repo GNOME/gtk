@@ -516,7 +516,7 @@ static guint32
 xlib_rgb_score_visual (XVisualInfo *visual)
 {
   guint32 quality, speed, pseudo, sys;
-  static const char* visual_names[] =
+  static const char * const visual_names[] =
   {
     "static gray",
     "grayscale",
