@@ -1,5 +1,7 @@
 2005-11-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Add a note about range arrow sensitivity.
+
 	* perf/treeview.c: const correctness fixes
 	found by Arjan van de Ven and gcc.
 

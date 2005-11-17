@@ -36,6 +36,12 @@ Release notes for 2.10
   in third-party widgets which forget to call gtk_style_attach() in their
   realize functions.
 
+* Range widgets like GtkScrollbar now render their arrows insensitive
+  when the slider is at the end. Applications which react to arrow
+  clicks even if the slider is at the end may want to use the new
+  gtk_range_set_[upper/lower]_stepper_sensitivity() functions to
+  prevent the arrows from being rendered insensitive.
+
 Release notes
 =============
 
