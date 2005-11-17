@@ -41,7 +41,7 @@
 
 
 
-static guint32 mask_table[] = {
+static const guint32 mask_table[] = {
 	0x00000000, 0x00000001, 0x00000003, 0x00000007,
 	0x0000000f, 0x0000001f, 0x0000003f, 0x0000007f,
 	0x000000ff, 0x000001ff, 0x000003ff, 0x000007ff,
@@ -1058,7 +1058,7 @@ convert_real_slow (XImage *image, guchar *pixels, int rowstride, xlib_colormap *
 
 typedef void (* cfunc) (XImage *image, guchar *pixels, int rowstride, xlib_colormap *cmap);
 
-static cfunc convert_map[] = {
+static const cfunc convert_map[] = {
 	rgb1,rgb1,rgb1a,rgb1a,
 	rgb8,rgb8,rgb8a,rgb8a,
 	rgb555lsb,rgb555msb,rgb555alsb,rgb555amsb,
