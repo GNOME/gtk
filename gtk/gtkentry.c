@@ -3969,9 +3969,37 @@ gtk_entry_set_visibility (GtkEntry *entry,
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  entry->visible = visible ? TRUE : FALSE;
-  g_object_notify (G_OBJECT (entry), "visibility");
-  gtk_entry_recompute (entry);
+  visible = visible != FALSE;
+
+  if (entry->visible != visible)
+    {
+      if (GTK_WIDGET_HAS_FOCUS (entry) && !visible)
+	gtk_im_context_focus_out (entry->im_context);
+
+      g_object_unref (entry->im_context);
+
+      if (visible)
+        entry->im_context = gtk_im_multicontext_new ();
+      else
+        entry->im_context = gtk_im_context_simple_new ();
+      
+      g_signal_connect (entry->im_context, "commit",
+			G_CALLBACK (gtk_entry_commit_cb), entry);
+      g_signal_connect (entry->im_context, "preedit_changed",
+			G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
+      g_signal_connect (entry->im_context, "retrieve_surrounding",
+			G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
+      g_signal_connect (entry->im_context, "delete_surrounding",
+			G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
+
+      if (GTK_WIDGET_HAS_FOCUS (entry) && visible)
+	gtk_im_context_focus_in (entry->im_context); 
+
+      entry->visible = visible;
+
+      g_object_notify (G_OBJECT (entry), "visibility");
+      gtk_entry_recompute (entry);
+    }
 }
 
 /**
@@ -4601,7 +4629,10 @@ popup_targets_received (GtkClipboard     *clipboard,
                     "gtk-show-input-method-menu", &show_input_method_menu,
                     "gtk-show-unicode-menu", &show_unicode_menu,
                     NULL);
-      
+
+      if (!entry->visible)
+        show_input_method_menu = FALSE;
+
       if (show_input_method_menu || show_unicode_menu)
         {
           menuitem = gtk_separator_menu_item_new ();
