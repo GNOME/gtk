@@ -1,5 +1,9 @@
 2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (disconnect_proxy): Disconnect the
+	sync callback for the visibility property.  (#321761,
+	Philip Langdale)
+
 	Turn off input methods in invisible entries, since
 	they are confusing.  (#317002, James Su)
 	

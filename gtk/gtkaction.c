@@ -1001,6 +1001,9 @@ disconnect_proxy (GtkAction *action,
 					G_CALLBACK (gtk_action_sync_sensitivity),
 					proxy);
   g_signal_handlers_disconnect_by_func (action,
+					G_CALLBACK (gtk_action_sync_visible),
+					proxy);
+  g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_property),
 					proxy);
 
