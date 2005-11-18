@@ -1,5 +1,8 @@
 2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c (button_clicked_cb): Fix a C99ism.
+	(#321777, Jens Granseuer)
+
 	* gtk/gtkaction.c (disconnect_proxy): Disconnect the
 	sync callback for the visibility property.  (#321761,
 	Philip Langdale)
