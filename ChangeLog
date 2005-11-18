@@ -1,3 +1,13 @@
+2005-11-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Turn off input methods in invisible entries, since
+	they are confusing.  (#317002, James Su)
+	
+	* gtk/gtkentry.c (gtk_entry_set_visibility): Toggle input
+	methods if visibility changes.
+	(popup_targets_received): Don't show the input method
+	menu if the entry is invisible.  
+
 2005-11-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* perf/treeview.c: const correctness fixes
