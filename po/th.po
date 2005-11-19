@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-15 12:00-0500\n"
-"PO-Revision-Date: 2005-11-06 21:08+0700\n"
+"PO-Revision-Date: 2005-11-19 12:33+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1860,7 +1860,7 @@ msgstr "เกิดข้อผิดพลาดขณะเรียกข้
 #: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
-msgstr "ไดรฟ์เครือข่าย (%s)"
+msgstr "ไดรว์เครือข่าย (%s)"
 
 #: gtk/gtkfilesystemwin32.c:639
 #, c-format
