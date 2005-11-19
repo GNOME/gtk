@@ -1,5 +1,18 @@
 2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix crashes in connection with pathbar scrolling (#321560,
+	Bogdan Nicula)
+	
+	* gtk/gtkpathbar.c (gtk_path_bar_update_slider_buttons): 
+	Stop scrolling when desensitising slider buttons.
+	(gtk_path_bar_scroll_timeout, gtk_path_bar_slider_button_press): 
+	And use it here.  
+
+	* gtk/gtkpathbar.h (struct _GtkPathBar): Add a separate
+	scrolling_down flag.
+
+2005-11-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpathbar.c (button_clicked_cb): Fix a C99ism.
 	(#321777, Jens Granseuer)
 
