@@ -734,7 +734,7 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
     {
       if (path_bar->scrolling_up)
 	gtk_path_bar_scroll_up (path_bar->up_slider_button, path_bar);
-      else 
+      else if (path_bar->scrolling_down)
 	gtk_path_bar_scroll_down (path_bar->down_slider_button, path_bar);
 
       if (path_bar->need_timer) 
@@ -779,12 +779,14 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 
   if (widget == path_bar->up_slider_button)
     {
+      path_bar->scrolling_down = FALSE;
       path_bar->scrolling_up = TRUE;
       gtk_path_bar_scroll_up (path_bar->up_slider_button, path_bar);
     }
   else if (widget == path_bar->down_slider_button)
     {
       path_bar->scrolling_up = FALSE;
+      path_bar->scrolling_down = TRUE;
       gtk_path_bar_scroll_down (path_bar->down_slider_button, path_bar);
     }
 

@@ -61,9 +61,10 @@ struct _GtkPathBar
   gint16 button_offset;
   guint timer;
   guint slider_visible : 1;
-  guint need_timer : 1;
-  guint ignore_click : 1;
-  guint scrolling_up : 1;
+  guint need_timer     : 1;
+  guint ignore_click   : 1;
+  guint scrolling_up   : 1;
+  guint scrolling_down : 1;
 };
 
 struct _GtkPathBarClass
