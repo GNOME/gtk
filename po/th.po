@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-06 22:47+0700\n"
-"PO-Revision-Date: 2005-11-19 12:40+0700\n"
+"PO-Revision-Date: 2005-11-20 15:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1280,11 +1280,11 @@ msgstr "เลือกสี"
 
 #: gtk/gtkentry.c:4614 gtk/gtktextview.c:7139
 msgid "Input _Methods"
-msgstr "Input _Methods"
+msgstr "_วิธีป้อนข้อความ"
 
 #: gtk/gtkentry.c:4628 gtk/gtktextview.c:7153
 msgid "_Insert Unicode Control Character"
-msgstr "แ_ทรกตัวอักษรควบคุมของยูนิโค้ด"
+msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
 #: gtk/gtkfilechooser.c:1685 gtk/gtkfilechooser.c:1729
 #: gtk/gtkfilechooser.c:1804 gtk/gtkfilechooser.c:1848
