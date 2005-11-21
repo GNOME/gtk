@@ -1,5 +1,7 @@
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksocket.c: Convert GtkSocket to g_type_class_add_private.
+
 	* gtk/gtkmenu.c: Convert GtkMenu to g_type_class_add_private.
 
 	* gtk/gtk.symbols:

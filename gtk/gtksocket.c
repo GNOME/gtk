@@ -99,26 +99,9 @@ static GtkWidgetClass *parent_class = NULL;
 GtkSocketPrivate *
 _gtk_socket_get_private (GtkSocket *socket)
 {
-  GtkSocketPrivate *private;
-  static GQuark private_quark = 0;
-
-  if (!private_quark)
-    private_quark = g_quark_from_static_string ("gtk-socket-private");
-
-  private = g_object_get_qdata (G_OBJECT (socket), private_quark);
-
-  if (!private)
-    {
-      private = g_new0 (GtkSocketPrivate, 1);
-      private->resize_count = 0;
-      
-      g_object_set_qdata_full (G_OBJECT (socket), private_quark,
-			       private, (GDestroyNotify) g_free);
-    }
-
-  return private;
+  return G_TYPE_INSTANCE_GET_PRIVATE (socket, GTK_TYPE_SOCKET, GtkSocketPrivate);
 }
-
+  
 GType
 gtk_socket_get_type (void)
 {
@@ -208,6 +191,8 @@ gtk_socket_class_init (GtkSocketClass *class)
                   _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkSocketPrivate));
 }
 
 static void
