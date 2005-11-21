@@ -162,9 +162,9 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-bottom.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-first-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-first-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last_ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last_rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto_top.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-top.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-go-back-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-go-back-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-go-down.png		\
@@ -220,7 +220,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undo-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undo-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-yes.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom_100.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-100.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-fit.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-in.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-out.png		\

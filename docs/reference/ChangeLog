@@ -1,3 +1,7 @@
+2005-11-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am (HTML_IMAGES): Fix some _ vs - confusion. 
+
 2005-11-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkstock.sgml: 
