@@ -93,6 +93,8 @@ struct _GtkMenuPrivate
   gboolean have_layout;
   gint n_rows;
   gint n_columns;
+
+  gchar *title;
 };
 
 typedef struct
@@ -241,37 +243,10 @@ static const gchar	  attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 
-static void
-gtk_menu_free_private (gpointer data)
-{
-  GtkMenuPrivate *priv = (GtkMenuPrivate *)data;
-
-  g_free (priv->heights);
-
-  g_free (priv);
-}
-
 static GtkMenuPrivate *
 gtk_menu_get_private (GtkMenu *menu)
 {
-  GtkMenuPrivate *private;
-  static GQuark private_quark = 0;
-
-  if (!private_quark)
-    private_quark = g_quark_from_static_string ("gtk-menu-private");
-
-  private = g_object_get_qdata (G_OBJECT (menu), private_quark);
-
-  if (!private)
-    {
-      private = g_new0 (GtkMenuPrivate, 1);
-      private->have_position = FALSE;
-      
-      g_object_set_qdata_full (G_OBJECT (menu), private_quark,
-			       private, gtk_menu_free_private);
-    }
-
-  return private;
+  return G_TYPE_INSTANCE_GET_PRIVATE (menu, GTK_TYPE_MENU, GtkMenuPrivate);
 }
 
 GType
@@ -712,7 +687,8 @@ gtk_menu_class_init (GtkMenuClass *class)
 						   G_MAXINT,
 						   DEFAULT_POPDOWN_DELAY,
 						   GTK_PARAM_READWRITE));
-						   
+
+  g_type_class_add_private (gobject_class, sizeof (GtkMenuPrivate));
 }
 
 
@@ -932,6 +908,7 @@ gtk_menu_destroy (GtkObject *object)
 {
   GtkMenu *menu;
   GtkMenuAttachData *data;
+  GtkMenuPrivate *priv; 
 
   g_return_if_fail (GTK_IS_MENU (object));
 
@@ -966,8 +943,23 @@ gtk_menu_destroy (GtkObject *object)
 
   if (menu->toplevel)
     gtk_widget_destroy (menu->toplevel);
+
   if (menu->tearoff_window)
     gtk_widget_destroy (menu->tearoff_window);
+
+  priv = gtk_menu_get_private (menu);
+
+  if (priv->heights)
+    {
+      g_free (priv->heights);
+      priv->heights = NULL;
+    }
+
+  if (priv->title)
+    {
+      g_free (priv->title);
+      priv->title = NULL;
+    }
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -1927,16 +1919,20 @@ void
 gtk_menu_set_title (GtkMenu     *menu,
 		    const gchar *title)
 {
+  GtkMenuPrivate *priv;
+
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  if (title)
-    g_object_set_data_full (G_OBJECT (menu), I_("gtk-menu-title"),
-			    g_strdup (title), (GtkDestroyNotify) g_free);
-  else
-    g_object_set_data (G_OBJECT (menu), I_("gtk-menu-title"), NULL);
-    
-  gtk_menu_update_title (menu);
-  g_object_notify (G_OBJECT (menu), "tearoff-title");
+  priv = gtk_menu_get_private (menu);
+
+  if (strcmp (title ? title : "", priv->title ? priv->title : "") != 0)
+    {
+      g_free (priv->title);
+      priv->title = g_strdup (title);
+       
+      gtk_menu_update_title (menu);
+      g_object_notify (G_OBJECT (menu), "tearoff-title");
+    }
 }
 
 /**
@@ -1952,9 +1948,13 @@ gtk_menu_set_title (GtkMenu     *menu,
 G_CONST_RETURN gchar *
 gtk_menu_get_title (GtkMenu *menu)
 {
+  GtkMenuPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
-  return g_object_get_data (G_OBJECT (menu), "gtk-menu-title");
+  priv = gtk_menu_get_private (menu);
+
+  return priv->title;
 }
 
 void

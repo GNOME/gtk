@@ -1,5 +1,7 @@
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c: Convert GtkMenu to g_type_class_add_private.
+
 	* gtk/gtk.symbols:
 	* gtk/gtkcombobox.[hc]: Add a tearoff-title property,
 	with getter and setter.  (#316482, Olexiy Avramchenko)
