@@ -1,3 +1,7 @@
+2005-11-21  Pablo Saratxaga  <pablo@walon.org>
+
+	* wa.po: Updated Walloon file
+
 2005-11-20  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* th.po: Adjusted wording.
@@ -1248,7 +1252,7 @@
 
 	* ang.po: Updated Old English translation
 
-2004-08-04  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-08-04  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* br.po,wa.po: Updated Breton and Walloon files
 
@@ -1338,7 +1342,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* tk.po: Added Turkmen translation by
 	Gurban Mühemmet Tewekgeli <gmtavakkoli@yahoo.com>.
 
-2004-05-03  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-05-03  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 
@@ -1527,7 +1531,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* en_GB.po: Updated British English translation
 
-2004-04-10  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-04-10  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* {af,br,eu,gu,hr,mi,ml,mr,ne,pa,uz*}.po: corrected the
 	"default:LTR" entries.
@@ -1595,7 +1599,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* sv.po: Updated Swedish translation.
 
-2004-04-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-04-06  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 	* ja.po: defined pluralform
@@ -1623,7 +1627,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* en_CA.po: Updated Canadian English translation.
 
-2004-03-30  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-03-30  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 	* eu.po: Updated Basque file (Hizkuntza Politikarako Sailburuordetza)
@@ -2397,7 +2401,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* no.po: Updated Norwegian translation.
 
-2004-02-02  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-02-02  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* uz*.po: changed default for Uzbek; now just "uz"
 	is in cyrillic and "uz@Latn" for latin; "uz@Cyrl" has been removed
@@ -2595,7 +2599,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* pl.po: Updated Polish translation by GNOME PL Team.
 
-2004-01-19  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-01-19  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 
@@ -2634,7 +2638,7 @@ Sat Jan 17 23:12:45 2004  Matthias Clasen  <maclas@gmx.de>
 	the property blurbs and nicks are now collected in
 	a separate domain, see ../po-properties.
 
-2004-01-17  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-01-17  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 	* br.po: Added Britton file
@@ -3170,7 +3174,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 	* sq.po: Updated Albanian translation by
 	Besnik Bleta <besnikbleta@hotmail.com>
 
-2003-09-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2003-09-07  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* uz*.po: Added Uzbek files
 
@@ -3223,7 +3227,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* POTFILES.in: Add gtkcolorbutton.c and gtkfontbutton.c.
 
-2003-07-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2003-07-07  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 
@@ -3235,7 +3239,7 @@ Wed Jul  2 18:00:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* id.po: Updated Indonesian translation
 
-2003-06-29  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2003-06-29  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 	* az.po: corrected syntax error
@@ -3409,7 +3413,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* fa.po: Updated Persian translation.
 
-2003-02-17  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2003-02-17  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* ta.po,vi.po: fixed "default:LTR" entry
 
@@ -3481,7 +3485,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
         * es.po: Updated a couple of strings in Spanish translation.
 
-2003-01-15  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2003-01-15  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* vi.po: Updated Vietnamese file
 	* el.po,hi.po,ru.po: fixed syntax errors
@@ -3828,7 +3832,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
         * pt.po: Updated Portuguese translation.
 
-2002-05-04  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2002-05-04  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* ca.po: Updated Catalan file
 
@@ -3865,7 +3869,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 	* el.po: Updated Greek translation.
 
-2002-04-16  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2002-04-16  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* vi.po: Updated Vietnamese file
 
@@ -4109,7 +4113,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 	* da.po: Updated Danish translation.
 
-2002-02-23  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2002-02-23  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* cy.po: Added Welsh translation
 
@@ -4419,7 +4423,7 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* Makefile.in.in (install-data-yes): Take DESTDIR into account
 
-2001-09-05  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-09-05  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* es.po: Updated Spanish file
 
@@ -4466,7 +4470,7 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
 	
-2001-07-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-07-28  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* az.po: Updated Azeri file
 
@@ -4484,7 +4488,7 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 	* sv.po: Updated Swedish translation.
 	* .cvsignore: Added gtk+.pot to the list of files.
 
-2001-07-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-07-06  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* az.po: Updated Azeri file
 
@@ -4492,11 +4496,11 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* no.po: Updated Norwegian translation.
 	
-2001-06-21  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-06-21  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* az.po: Updated Azeri file
 
-2001-06-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-06-07  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* az.po: Updated Azeri file
 	* wa.po: Updated Walloon file
@@ -4544,7 +4548,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tr.po: Small update and utf-8'ification.
 
-2001-03-15  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2001-03-15  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* az.po: Updated Azeri file
 	* ja.po: corrected default:LTR tag
@@ -4597,11 +4601,11 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 	* makefile.mingw: Simplify, now that the .po files are already in
 	UTF-8.
 
-2000-12-08  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-12-08  Pablo Saratxaga <pablo@mandriva.com>
 
 	* az.po: Added Azeri language file
 
-2000-12-06  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-12-06  Pablo Saratxaga <pablo@mandriva.com>
 
 	* he.po,nl.po,pl.po: corrected syntax errors and completed the
 	headers so msgfmt -c oputput is useful
@@ -4773,7 +4777,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* hu.po: updated it.
 
-2000-04-29  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-04-29  Pablo Saratxaga <pablo@mandriva.com>
         
         * wa.po: small fixes
 
@@ -4797,7 +4801,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* ro.po: Added Romanian translation.
 
-2000-03-20  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-03-20  Pablo Saratxaga <pablo@mandriva.com>
 	* lt.po: Updated Lithuanian file
 
 2000-03-14  Tor Lillqvist  <tml@iki.fi>
@@ -4805,7 +4809,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 	* makefile.cygwin: Fix typo: Italian uses ISO-8859-1, not -2. Add
 	en_GB.
 
-2000-03-13  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-03-13  Pablo Saratxaga <pablo@mandriva.com>
 	* lt.po: Updated Lithuanian file
 
 2000-02-26  Christopher R. Gabriel  <cgabriel@firenze.linux.it>
@@ -4824,7 +4828,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
         * zh_CN.GB2312.po: Added po file from TurboLinux Chinese Develop Team.
 
-2000-01-28  Pablo Saratxaga <pablo@mandrakesoft.com>
+2000-01-28  Pablo Saratxaga <pablo@mandriva.com>
 	* lt.po: added Lithuanian file from Kestutis Kruzikas
 
 2000-01-04  Jesus Bravo Alvarez  <jba@pobox.com>
@@ -4858,23 +4862,23 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 1999-10-05  Sergey panov  <sipan@mit.edu>
 
-        * ru.po: Updated translation.
+	* ru.po: Updated translation.
 
 1999-10-05  Kjartan Maraas  <kmaraas@online.no>
 
 	* uk.po: Added Ukrainian translation from Yuri
 	Syrota <yuri@renome.rovno.ua>.
 	
-1999-09-20  Pablo Saratxaga <pablo@mandrakesoft.com>
-        
-        * pt_BR.po: added Portuguese Brazilian file from
-        Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>
+1999-09-20  Pablo Saratxaga <pablo@mandriva.com>
+
+	* pt_BR.po: added Portuguese Brazilian file from
+	Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>
 
 1999-09-17  Kjartan Maraas  <kmaraas@online.no>
 
 	* no.po: Updated translation.
 	
-1999-09-10  Pablo Saratxaga <pablo@mandrakesoft.com>
+1999-09-10  Pablo Saratxaga <pablo@mandriva.com>
 
 	* et.po: Added Estonian language file from
 	 Lauris Kaplinski <lauris@ariman.ee>
