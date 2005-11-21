@@ -1,5 +1,7 @@
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_combo_box_[sg]et_title
+
 	* gtk/Makefile.am (HTML_IMAGES): Fix some _ vs - confusion. 
 
 2005-11-14  Matthias Clasen  <mclasen@redhat.com>

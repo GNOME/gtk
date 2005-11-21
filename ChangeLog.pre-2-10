@@ -1,5 +1,11 @@
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkcombobox.[hc]: Add a tearoff-title property,
+	with getter and setter.  (#316482, Olexiy Avramchenko)
+
+	* tests/testcombo.c (main): Test gtk_combo_box_set_title
+
 	* gtk/gtkpathbar.c: Merge remaining fixes from the 2.8 branch,
 	pointed out by Michael Natterer.
 

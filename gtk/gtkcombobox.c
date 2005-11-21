@@ -121,6 +121,8 @@ struct _GtkComboBoxPrivate
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
   GtkDestroyNotify            row_separator_destroy;
+
+  gchar *tearoff_title;
 };
 
 /* While debugging this evil code, I have learned that
@@ -196,6 +198,7 @@ enum {
   PROP_COLUMN_SPAN_COLUMN,
   PROP_ACTIVE,
   PROP_ADD_TEAROFFS,
+  PROP_TEAROFF_TITLE,
   PROP_HAS_FRAME,
   PROP_FOCUS_ON_CLICK
 };
@@ -353,6 +356,7 @@ static void     gtk_combo_box_menu_fill            (GtkComboBox      *combo_box)
 static void     gtk_combo_box_menu_fill_level      (GtkComboBox      *combo_box,
 						    GtkWidget        *menu,
 						    GtkTreeIter      *iter);
+static void     gtk_combo_box_update_title         (GtkComboBox      *combo_box);
 static void     gtk_combo_box_menu_destroy         (GtkComboBox      *combo_box);
 
 static void     gtk_combo_box_relayout_item        (GtkComboBox      *combo_box,
@@ -550,7 +554,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     g_signal_new ("popup-show",
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_LAST,
-                  NULL,
+                  0,
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
@@ -559,7 +563,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     g_signal_new ("popup-hide",
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_LAST,
-                  NULL,
+                  0,
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
@@ -709,6 +713,23 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkComboBox:tearoff-title:
+   *
+   * A title that may be displayed by the window manager 
+   * when the popup is torn-off.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEAROFF_TITLE,
+                                   g_param_spec_string ("tearoff-title",
+                                                        P_("Tearoff Title"),
+                                                        P_("A title that may be displayed by the window manager when the popup is torn-off"),
+                                                        "",
+                                                        GTK_PARAM_READWRITE));
+
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -805,6 +826,10 @@ gtk_combo_box_set_property (GObject      *object,
 					  g_value_get_boolean (value));
         break;
 
+      case PROP_TEAROFF_TITLE:
+	gtk_combo_box_set_title (combo_box, g_value_get_string (value));
+        break;
+
       default:
         break;
     }
@@ -850,6 +875,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_FOCUS_ON_CLICK:
         g_value_set_boolean (value, combo_box->priv->focus_on_click);
+        break;
+
+      case PROP_TEAROFF_TITLE:
+        g_value_set_string (value, gtk_combo_box_get_title (combo_box));
         break;
 
       default:
@@ -2510,6 +2539,8 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   gtk_object_sink (GTK_OBJECT (combo_box->priv->column));
   gtk_combo_box_sync_cells (combo_box, 
 			    GTK_CELL_LAYOUT (combo_box->priv->column));
+
+  gtk_combo_box_update_title (combo_box);
 }
 
 static void
@@ -5114,6 +5145,64 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
       gtk_combo_box_check_appearance (combo_box);
       gtk_combo_box_relayout (combo_box);
       g_object_notify (G_OBJECT (combo_box), "add-tearoffs");
+    }
+}
+
+/**
+ * gtk_combo_box_get_title:
+ * @combo_box: a #GtkComboBox
+ *
+ * Gets the current title of the menu in tearoff mode. See
+ * gtk_combo_box_set_add_tearoffs().
+ *
+ * Returns: the menu's title in tearoff mode. This is an internal copy of the
+ * string which must not be freed.
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar*
+gtk_combo_box_get_title (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+  
+  return combo_box->priv->tearoff_title;
+}
+
+static void
+gtk_combo_box_update_title (GtkComboBox *combo_box)
+{
+  gtk_combo_box_check_appearance (combo_box);
+  
+  if (combo_box->priv->popup_widget && 
+      GTK_IS_MENU (combo_box->priv->popup_widget))
+    gtk_menu_set_title (GTK_MENU (combo_box->priv->popup_widget), 
+			combo_box->priv->tearoff_title);
+}
+
+/**
+ * gtk_combo_box_set_title:
+ * @combo_box: a #GtkComboBox 
+ * @title: a title for the menu in tearoff mode.
+ *  
+ * Sets the menu's title in tearoff mode.
+ *
+ * Since: 2.10
+ */
+void
+gtk_combo_box_set_title (GtkComboBox *combo_box,
+			 const gchar *title)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (strcmp (title ? title : "", 
+	      combo_box->priv->tearoff_title ? combo_box->priv->tearoff_title : "") != 0)
+    {
+      g_free (combo_box->priv->tearoff_title);
+      combo_box->priv->tearoff_title = g_strdup (title);
+
+      gtk_combo_box_update_title (combo_box);
+
+      g_object_notify (G_OBJECT (combo_box), "tearoff-title");
     }
 }
 

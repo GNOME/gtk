@@ -81,6 +81,11 @@ void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
 gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
 void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
 						    gboolean     add_tearoffs);
+
+G_CONST_RETURN gchar *gtk_combo_box_get_title      (GtkComboBox *combo_box);
+void                  gtk_combo_box_set_title      (GtkComboBox *combo_box,
+					            const gchar *title);
+
 gboolean      gtk_combo_box_get_focus_on_click     (GtkComboBox *combo);
 void          gtk_combo_box_set_focus_on_click     (GtkComboBox *combo,
 						    gboolean     focus_on_click);
