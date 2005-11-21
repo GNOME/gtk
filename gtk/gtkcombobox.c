@@ -2127,8 +2127,7 @@ gtk_combo_box_child_show (GtkWidget *widget,
 			  gpointer   user_data) 
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-
-  g_signal_emit_by_name (combo_box, "popup-show", NULL, NULL);    
+  g_signal_emit (combo_box, combo_box_signals[POPUP_SHOW], 0);
 }
 
 static void 
@@ -2136,8 +2135,7 @@ gtk_combo_box_child_hide (GtkWidget *widget,
 			  gpointer   user_data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);  
-
-  g_signal_emit_by_name (combo_box, "popup-hide", NULL, NULL);
+  g_signal_emit (combo_box, combo_box_signals[POPUP_HIDE], 0);
 }
 
 static gboolean
@@ -4526,7 +4524,8 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
 					 path);
     }
 
-  g_signal_emit_by_name (combo_box, "changed", NULL, NULL);
+  g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (combo_box), "active");
 }
 
 
