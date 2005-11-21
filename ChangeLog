@@ -1,5 +1,8 @@
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c: Merge remaining fixes from the 2.8 branch,
+	pointed out by Michael Natterer.
+
 	Fix for bug #321542, Benedikt Meurer:
 	
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_internal):

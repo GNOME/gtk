@@ -125,7 +125,7 @@ get_slider_button (GtkPathBar  *path_bar,
   gtk_widget_push_composite_child ();
 
   button = gtk_button_new ();
-  gtk_button_set_focus_on_click (button, FALSE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
   gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (arrow_type, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
   gtk_widget_show_all (button);
@@ -307,13 +307,19 @@ gtk_path_bar_update_slider_buttons (GtkPathBar *path_bar)
 
       button = BUTTON_DATA (path_bar->button_list->data)->button;
       if (gtk_widget_get_child_visible (button))
-	gtk_widget_set_sensitive (path_bar->down_slider_button, FALSE);
+	{
+	  gtk_path_bar_stop_scrolling (path_bar);
+	  gtk_widget_set_sensitive (path_bar->down_slider_button, FALSE);
+	}
       else
 	gtk_widget_set_sensitive (path_bar->down_slider_button, TRUE);
 
       button = BUTTON_DATA (g_list_last (path_bar->button_list)->data)->button;
       if (gtk_widget_get_child_visible (button))
-	gtk_widget_set_sensitive (path_bar->up_slider_button, FALSE);
+	{
+	  gtk_path_bar_stop_scrolling (path_bar);
+	  gtk_widget_set_sensitive (path_bar->up_slider_button, FALSE);
+	}
       else
 	gtk_widget_set_sensitive (path_bar->up_slider_button, TRUE);
     }
@@ -1134,7 +1140,7 @@ button_drag_data_get_cb (GtkWidget          *widget,
   gtk_selection_data_set (selection_data,
 			  selection_data->target,
 			  8,
-			  uri_list,
+			  (guchar *)uri_list,
 			  strlen (uri_list));
   g_free (uri_list);
 }
@@ -1160,7 +1166,7 @@ make_directory_button (GtkPathBar  *path_bar,
 
   button_data->type = find_button_type (path_bar, path);
   button_data->button = gtk_toggle_button_new ();
-  gtk_button_set_focus_on_click (button_data->button, FALSE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (button_data->button), FALSE);
 
   switch (button_data->type)
     {
