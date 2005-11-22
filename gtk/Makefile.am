@@ -675,20 +675,23 @@ gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk
 libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
+libgtk_quartz_2_0_la_SOURCES = $(gtk_c_sources)
 
 libgtk_x11_2_0_la_LDFLAGS = $(libtool_opts)
 libgtk_linux_fb_2_0_la_LDFLAGS = $(libtool_opts)
 libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
+libgtk_quartz_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
 libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
+libgtk_quartz_2_0_la_LIBADD = $(libadd)
 
 if USE_WIN32
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-linux-fb-2.0.la libgtk-win32-2.0.la
+EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-linux-fb-2.0.la libgtk-win32-2.0.la libgtk-quartz-2.0.la
 
 install-exec-hook: 
 if DISABLE_EXPLICIT_DEPS

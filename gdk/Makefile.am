@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
 SUBDIRS = $(gdktarget)
-DIST_SUBDIRS = linux-fb win32 x11
+DIST_SUBDIRS = linux-fb win32 x11 quartz
 
 EXTRA_DIST =			\
 	keynames.txt		\
@@ -144,6 +144,11 @@ libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 libgdk_linux_fb_2_0_la_LDFLAGS = $(LDADD)
 
+libgdk_quartz_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS) \
+  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_quartz_2_0_la_LDFLAGS = $(LDADD)
+
 libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
 libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
@@ -198,7 +203,7 @@ endif
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la
+EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la libgdk-quartz-2.0.la
 
 MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h gdkenumtypes.c \
   gdkmarshalers.h gdkmarshalers.c

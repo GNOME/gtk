@@ -17,7 +17,7 @@ LDADDS = 								\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(GTK_DEP_LIBS)
 
-if OS_UNIX
+if USE_X11
 noinst_PROGRAMS = 		\
 	doc-shooter
 endif

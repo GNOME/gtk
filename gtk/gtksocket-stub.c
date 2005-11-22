@@ -25,6 +25,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gtksocket.h"
 #include "gtksocketprivate.h"
 
 GdkNativeWindow

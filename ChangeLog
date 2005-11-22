@@ -38,7 +38,6 @@
 	(gtk_combo_box_child_show, gtk_combo_box_child_hide): Use
 	g_signal_emit, not g_signal_emit_by_name.
 
->>>>>>> 1.7265
 2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix crashes in connection with pathbar scrolling (#321560,
