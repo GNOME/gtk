@@ -37,9 +37,8 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
-#define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
-#define SCROLL_LATER_DELAY   100  /* ... it starts repeating at this rate  */
-#define UPDATE_DELAY         300  /* Delay for queued update */
+#define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
+#define UPDATE_DELAY        300  /* Delay for queued update */
 
 enum {
   PROP_0,
@@ -2693,14 +2692,18 @@ second_timeout (gpointer data)
 static gboolean
 initial_timeout (gpointer data)
 {
-  GtkRange *range;
+  GtkRange    *range;
+  GtkSettings *settings;
+  guint        timeout;
 
   GDK_THREADS_ENTER ();
+  settings = gtk_widget_get_settings (GTK_WIDGET (data));
+  g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
+
   range = GTK_RANGE (data);
-  range->timer->timeout_id = 
-    g_timeout_add (SCROLL_LATER_DELAY,
-                   second_timeout,
-                   range);
+  range->timer->timeout_id = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
+                                            second_timeout,
+                                            range);
   GDK_THREADS_LEAVE ();
 
   /* remove self */
@@ -2711,15 +2714,20 @@ static void
 gtk_range_add_step_timer (GtkRange      *range,
                           GtkScrollType  step)
 {
+  GtkSettings *settings;
+  guint        timeout;
+
   g_return_if_fail (range->timer == NULL);
   g_return_if_fail (step != GTK_SCROLL_NONE);
-  
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (range));
+  g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
+
   range->timer = g_new (GtkRangeStepTimer, 1);
 
-  range->timer->timeout_id =
-    g_timeout_add (SCROLL_INITIAL_DELAY,
-                   initial_timeout,
-                   range);
+  range->timer->timeout_id = g_timeout_add (timeout,
+                                            initial_timeout,
+                                            range);
   range->timer->step = step;
 
   gtk_range_scroll (range, range->timer->step);

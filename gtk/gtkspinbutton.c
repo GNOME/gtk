@@ -43,13 +43,11 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define MIN_SPIN_BUTTON_WIDTH              30
-#define SPIN_BUTTON_INITIAL_TIMER_DELAY    200
-#define SPIN_BUTTON_TIMER_DELAY            20
-#define MAX_TIMER_CALLS                    5
-#define EPSILON                            1e-10
-#define	MAX_DIGITS			   20
-#define MIN_ARROW_WIDTH			   6
+#define MIN_SPIN_BUTTON_WIDTH 30
+#define MAX_TIMER_CALLS       5
+#define EPSILON               1e-10
+#define	MAX_DIGITS            20
+#define MIN_ARROW_WIDTH       6
 
 enum {
   PROP_0,
@@ -1050,10 +1048,15 @@ start_spinning (GtkSpinButton *spin,
   
   if (!spin->timer)
     {
+      GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (spin));
+      guint        timeout;
+
+      g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
+
       spin->timer_step = step;
       spin->need_timer = TRUE;
-      spin->timer = g_timeout_add (SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-				   (GSourceFunc) gtk_spin_button_timer, 
+      spin->timer = g_timeout_add (timeout,
+				   (GSourceFunc) gtk_spin_button_timer,
 				   (gpointer) spin);
     }
   gtk_spin_button_real_spin (spin, click_child == GTK_ARROW_UP ? step : -step);
@@ -1203,8 +1206,13 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 
       if (spin_button->need_timer)
 	{
+          GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (spin_button));
+          guint        timeout;
+
+          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
+
 	  spin_button->need_timer = FALSE;
-	  spin_button->timer = g_timeout_add (SPIN_BUTTON_TIMER_DELAY, 
+	  spin_button->timer = g_timeout_add (timeout,
 					      (GSourceFunc) gtk_spin_button_timer, 
 					      (gpointer) spin_button);
 	}

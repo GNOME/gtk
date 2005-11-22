@@ -39,12 +39,11 @@
 #include "gtkalias.h"
 
 
-#define TAB_OVERLAP    2
-#define TAB_CURVATURE  1
-#define ARROW_SIZE     12
-#define ARROW_SPACING  0
-#define NOTEBOOK_INIT_SCROLL_DELAY (200)
-#define NOTEBOOK_SCROLL_DELAY      (100)
+#define TAB_OVERLAP         2
+#define TAB_CURVATURE       1
+#define ARROW_SIZE          12
+#define ARROW_SPACING       0
+#define SCROLL_DELAY_FACTOR 5
 
 
 enum {
@@ -1715,8 +1714,13 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
       
       if (!notebook->timer)
 	{
-	  notebook->timer = g_timeout_add (NOTEBOOK_INIT_SCROLL_DELAY, 
-					   (GSourceFunc) gtk_notebook_timer, 
+          GtkSettings *settings = gtk_widget_get_settings (widget);
+          guint        timeout;
+
+          g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
+
+	  notebook->timer = g_timeout_add (timeout,
+					   (GSourceFunc) gtk_notebook_timer,
 					   (gpointer) notebook);
 	  notebook->need_timer = TRUE;
 	}
@@ -2584,11 +2588,17 @@ gtk_notebook_timer (GtkNotebook *notebook)
     {
       gtk_notebook_do_arrow (notebook, notebook->click_child);
 
-      if (notebook->need_timer) 
+      if (notebook->need_timer)
 	{
+          GtkSettings *settings;
+          guint        timeout;
+
+          settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
+          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
+
 	  notebook->need_timer = FALSE;
-	  notebook->timer = g_timeout_add (NOTEBOOK_SCROLL_DELAY,
-					   (GSourceFunc) gtk_notebook_timer, 
+	  notebook->timer = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
+					   (GSourceFunc) gtk_notebook_timer,
 					   (gpointer) notebook);
 	}
       else

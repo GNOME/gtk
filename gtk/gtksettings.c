@@ -32,6 +32,9 @@
 #include "x11/gdkx.h"
 #endif
 
+#define DEFAULT_TIMEOUT_INITIAL 200
+#define DEFAULT_TIMEOUT_REPEAT   20
+
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
 typedef enum
@@ -79,7 +82,9 @@ enum {
 #endif
   PROP_ALTERNATIVE_BUTTON_ORDER,
   PROP_SHOW_INPUT_METHOD_MENU,
-  PROP_SHOW_UNICODE_MENU
+  PROP_SHOW_UNICODE_MENU,
+  PROP_TIMEOUT_INITIAL,
+  PROP_TIMEOUT_REPEAT
 };
 
 
@@ -406,6 +411,25 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     NULL);
   g_assert (result == PROP_SHOW_UNICODE_MENU);
 
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-timeout-initial",
+ 							       P_("Start timeout"),
+ 							       P_("Starting value for timeouts, when button is pressed"),
+ 							       0, G_MAXINT, DEFAULT_TIMEOUT_INITIAL,
+ 							       G_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TIMEOUT_INITIAL);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-timeout-repeat",
+ 							       P_("Repeat timeout"),
+ 							       P_("Repeat value for timeouts, when button is pressed"),
+ 							       0, G_MAXINT, DEFAULT_TIMEOUT_REPEAT,
+ 							       G_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TIMEOUT_REPEAT);
 }
 
 static void

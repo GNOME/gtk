@@ -1,3 +1,22 @@
+2005-11-22  Michael Natterer  <mitch@imendio.com>
+
+	Made button-press timeouts which work like key repeat timeouts
+	configurable. Addresses bug #142582:
+
+	* gtk/gtksettings.c: added properties "gtk-timeout-initial" and
+	"gtk-timeout-repeat" which defalt to 200/20 (ms).
+
+	Use the values from GtkSettings instead of hardcoding them
+	(the repeat value is either taken as-is for fast repeat or
+	multiplied by 5 for slow repeat). Changed all places to use these
+	two standard initial/repeat timings:
+
+	* gtk/gtkcalendar.c (unchanged 200/20)
+	* gtk/gtknotebook.c (unchanged 200/100)
+	* gtk/gtkpathbar.c (changed from 300/150 to 200/100)
+	* gtk/gtkrange.c (changed from 250/100 to 200/100)
+	* gtk/gtkspinbutton.c (unchanged 200/20)
+
 2005-11-21  Anders Carlsson  <andersca@imendio.com>
 
         * configure.in:

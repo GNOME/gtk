@@ -2286,9 +2286,6 @@ gtk_calendar_expose (GtkWidget	    *widget,
  *           Mouse handling             *
  ****************************************/
 
-#define CALENDAR_INITIAL_TIMER_DELAY    200
-#define CALENDAR_TIMER_DELAY            20
-
 static void
 calendar_arrow_action (GtkCalendar *calendar,
 		       guint        arrow)
@@ -2327,10 +2324,16 @@ calendar_timer (gpointer data)
 
       if (priv->need_timer)
 	{
+          GtkSettings *settings;
+          guint        timeout;
+
+          settings = gtk_widget_get_settings (GTK_WIDGET (calendar));
+          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
+
 	  priv->need_timer = FALSE;
-	  priv->timer = g_timeout_add (CALENDAR_TIMER_DELAY, 
-					       (GSourceFunc) calendar_timer, 
-					       (gpointer) calendar);
+	  priv->timer = g_timeout_add (timeout,
+                                       (GSourceFunc) calendar_timer,
+                                       (gpointer) calendar);
 	}
       else 
 	retval = TRUE;
@@ -2351,8 +2354,14 @@ calendar_start_spinning (GtkCalendar *calendar,
   
   if (!priv->timer)
     {
+      GtkSettings *settings;
+      guint        timeout;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (calendar));
+      g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
+
       priv->need_timer = TRUE;
-      priv->timer = g_timeout_add (CALENDAR_INITIAL_TIMER_DELAY, 
+      priv->timer = g_timeout_add (timeout,
 				   calendar_timer,
 				   calendar);
     }
