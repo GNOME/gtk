@@ -1,3 +1,20 @@
+2005-11-21  Anders Carlsson  <andersca@imendio.com>
+
+        * configure.in:
+        * gtk/Makefile.am:
+        * gdk/Makefile.am:
+	* gdk/quartz/*:
+	Add quartz backend.
+	
+        * docs/tools/Makefile.am:
+	Only build docshooter when the X11 backend is used.
+	
+        * gtk/gtkplug-stub.c:
+	Include gtkplug.h here.
+	
+        * gtk/gtksocket-stub.c:
+	Include gtksocket.h here.
+	
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksocket.c: Convert GtkSocket to g_type_class_add_private.
@@ -21,6 +38,7 @@
 	(gtk_combo_box_child_show, gtk_combo_box_child_hide): Use
 	g_signal_emit, not g_signal_emit_by_name.
 
+>>>>>>> 1.7265
 2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix crashes in connection with pathbar scrolling (#321560,
