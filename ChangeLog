@@ -1,3 +1,34 @@
+2005-11-23  Michael Natterer  <mitch@imendio.com>
+
+	Added symbolic themable colors. Patch is a merged version of
+	proposals from Matthias and maemo-gtk. Fixes bug #114355.
+
+	* configure.in: require glib >= 2.9.1 for refcountable hashtables.
+
+	* gtk/gtksettings.c: added property "color-scheme" which is a
+	string defining colors like "foreground:black\nbackground:grey".
+	Automatically provide a name->GdkColor hash table mapping for the
+	color scheme.
+
+	* gtk/gtkrc.[ch]: added list of color hashes that works like the
+	list of icon factories. Append the color scheme hash from
+	GtkSettings if it exists. Extended gtkrc syntax to allow defining
+	and referencing of logical colors. Also allow to modulate colors
+	in gtkrc by using arbitrary expressions of mix(), shade(),
+	lighter() and darker(). Added internal function
+	_gtk_rc_style_get_color_hashes().
+
+	* gtk/gtkstyle.[ch]: keep a private list of color hashes around.
+	Get the list from _gtk_rc_style_get_color_hashes(). Export
+	internal function _gtk_style_shade() (used by above color
+	expressions). Added public API gtk_style_lookup_color() which
+	looks up a logical color by name.
+
+	* gtk/gtk.symbols: add gtk_style_lookup_color
+
+	* tests/testgtkrc: use symbolic colors for making
+	the scrollbars red.
+
 2005-11-22  Michael Natterer  <mitch@imendio.com>
 
 	Made button-press timeouts which work like key repeat timeouts

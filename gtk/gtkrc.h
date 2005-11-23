@@ -209,6 +209,7 @@ typedef enum {
   GTK_RC_TOKEN_STOCK,
   GTK_RC_TOKEN_LTR,
   GTK_RC_TOKEN_RTL,
+  GTK_RC_TOKEN_COLOR,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 
@@ -236,6 +237,8 @@ struct _GtkRcProperty
 const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 						       GQuark      type_name,
 						       GQuark      property_name);
+
+GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
 
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
 

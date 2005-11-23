@@ -84,7 +84,8 @@ enum {
   PROP_SHOW_INPUT_METHOD_MENU,
   PROP_SHOW_UNICODE_MENU,
   PROP_TIMEOUT_INITIAL,
-  PROP_TIMEOUT_REPEAT
+  PROP_TIMEOUT_REPEAT,
+  PROP_COLOR_SCHEME
 };
 
 
@@ -107,6 +108,7 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GtkRcPropertyParser    parser);
 static void    settings_update_double_click      (GtkSettings           *settings);
 static void    settings_update_modules           (GtkSettings           *settings);
+static void    settings_update_color_scheme      (GtkSettings           *settings);
 
 #ifdef GDK_WINDOWING_X11
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
@@ -416,7 +418,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       P_("Start timeout"),
  							       P_("Starting value for timeouts, when button is pressed"),
  							       0, G_MAXINT, DEFAULT_TIMEOUT_INITIAL,
- 							       G_PARAM_READWRITE),
+ 							       GTK_PARAM_READWRITE),
 					     NULL);
 
   g_assert (result == PROP_TIMEOUT_INITIAL);
@@ -426,10 +428,20 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       P_("Repeat timeout"),
  							       P_("Repeat value for timeouts, when button is pressed"),
  							       0, G_MAXINT, DEFAULT_TIMEOUT_REPEAT,
- 							       G_PARAM_READWRITE),
+ 							       GTK_PARAM_READWRITE),
 					     NULL);
 
   g_assert (result == PROP_TIMEOUT_REPEAT);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_string ("gtk-color-scheme",
+ 								  P_("Color scheme"),
+ 								  P_("A palette of named colors for use in themes"),
+ 								  "foreground:black\nbackground:gray",
+ 								  GTK_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_COLOR_SCHEME);
 }
 
 static void
@@ -601,6 +613,9 @@ gtk_settings_notify (GObject    *object,
     {
     case PROP_MODULES:
       settings_update_modules (settings);
+      break;
+    case PROP_COLOR_SCHEME:
+      settings_update_color_scheme (settings);
       break;
     case PROP_DOUBLE_CLICK_TIME:
     case PROP_DOUBLE_CLICK_DISTANCE:
@@ -1510,6 +1525,82 @@ settings_update_resolution (GtkSettings *settings)
   gdk_screen_set_resolution (settings->screen, dpi);
 }
 #endif
+
+static GHashTable *
+gtk_color_table_from_string (const gchar *str)
+{
+  gchar *copy, *s, *p, *name;
+  GdkColor color;
+  GHashTable *colors;
+
+  colors = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                  (GDestroyNotify) gdk_color_free);
+
+  copy = g_strdup (str);
+
+  s = copy;
+  while (s && *s)
+    {
+      name = s;
+      p = strchr (s, ':');
+      if (p)
+        {
+          *p = '\0';
+          p++;
+        }
+      else
+        {
+          g_hash_table_destroy (colors);
+          colors = NULL;
+
+          break;
+        }
+
+      while (*p == ' ')
+        p++;
+
+      s = strchr (p, '\n');
+      if (s)
+        {
+          *s = '\0';
+          s++;
+        }
+
+      if (!gdk_color_parse (p, &color))
+        {
+          g_hash_table_destroy (colors);
+          colors = NULL;
+
+          break;
+        }
+
+      g_hash_table_insert (colors,
+                           g_strdup (name),
+                           gdk_color_copy (&color));
+    }
+
+  g_free (copy);
+
+  return colors;
+}
+
+static void
+settings_update_color_scheme (GtkSettings *settings)
+{
+  gchar *colors;
+  GHashTable *color_hash;
+
+  g_object_get (settings,
+                "gtk-color-scheme", &colors,
+                NULL);
+
+  color_hash = gtk_color_table_from_string (colors);
+
+  g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
+                          color_hash, (GDestroyNotify) g_hash_table_unref);
+
+  g_free (colors);
+}
 
 #define __GTK_SETTINGS_C__
 #include "gtkaliasdef.c"

@@ -50,6 +50,14 @@ typedef struct {
   GValue      value;
 } PropertyValue;
 
+#define GTK_STYLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_STYLE, GtkStylePrivate))
+
+typedef struct _GtkStylePrivate GtkStylePrivate;
+
+struct _GtkStylePrivate {
+  GSList *color_hashes;
+};
+
 /* --- prototypes --- */
 static void	 gtk_style_init			(GtkStyle	*style);
 static void	 gtk_style_class_init		(GtkStyleClass	*klass);
@@ -305,9 +313,6 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            width,
                                           gint            height);
 
-static void gtk_style_shade		(GdkColor	 *a,
-					 GdkColor	 *b,
-					 gdouble	  k);
 static void rgb_to_hls			(gdouble	 *r,
 					 gdouble	 *g,
 					 gdouble	 *b);
@@ -534,7 +539,8 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_layout = gtk_default_draw_layout;
   klass->draw_resize_grip = gtk_default_draw_resize_grip;
 
-  
+  g_type_class_add_private (object_class, sizeof (GtkStylePrivate));
+
   /**
    * GtkStyle::realize:
    * @style: the object which received the signal
@@ -596,6 +602,7 @@ static void
 gtk_style_finalize (GObject *object)
 {
   GtkStyle *style = GTK_STYLE (object);
+  GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
 
   g_return_if_fail (style->attach_count == 0);
 
@@ -625,18 +632,11 @@ gtk_style_finalize (GObject *object)
         }
     }
 
-  if (style->icon_factories)
-    {
-      GSList *tmp_list = style->icon_factories;
+  g_slist_foreach (style->icon_factories, (GFunc) g_object_unref, NULL);
+  g_slist_free (style->icon_factories);
 
-      while (tmp_list)
-	{
-	  g_object_unref (tmp_list->data);
-	  tmp_list = tmp_list->next;
-	}
-
-      g_slist_free (style->icon_factories);
-    }
+  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
+  g_slist_free (priv->color_hashes);
 
   pango_font_description_free (style->font_desc);
   
@@ -893,6 +893,53 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
     }
 
   return gtk_icon_factory_lookup_default (stock_id);
+}
+
+/**
+ * gtk_style_lookup_color:
+ * @style: a #GtkStyle
+ * @color_name: the name of the logical color to look up
+ * @color: the #GdkColor to fill in
+ *
+ * Looks up @color_name in the style's logical color mappings,
+ * filling in @color and returning %TRUE if found, otherwise
+ * returning %FALSE. Do not cache the found mapping, because
+ * it depends on the #GtkStyle and might change when a theme
+ * switch occurs.
+ *
+ * Return value: %TRUE if the mapping was found.
+ *
+ * Since: 2.10
+ **/
+gboolean
+gtk_style_lookup_color (GtkStyle   *style,
+                        const char *color_name,
+                        GdkColor   *color)
+{
+  GtkStylePrivate *priv;
+  GSList *iter;
+
+  g_return_val_if_fail (GTK_IS_STYLE (style), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
+  g_return_val_if_fail (color != NULL, FALSE);
+
+  priv = GTK_STYLE_GET_PRIVATE (style);
+
+  for (iter = priv->color_hashes; iter != NULL; iter = iter->next)
+    {
+      GHashTable *hash    = iter->data;
+      GdkColor   *mapping = g_hash_table_lookup (hash, color_name);
+
+      if (mapping)
+        {
+          color->red = mapping->red;
+          color->green = mapping->green;
+          color->blue = mapping->blue;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 /**
@@ -1613,6 +1660,7 @@ static void
 gtk_style_real_init_from_rc (GtkStyle   *style,
 			     GtkRcStyle *rc_style)
 {
+  GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
   gint i;
 
   /* cache _should_ be still empty */
@@ -1638,19 +1686,11 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   if (rc_style->ythickness >= 0)
     style->ythickness = rc_style->ythickness;
 
-  if (rc_style->icon_factories)
-    {
-      GSList *iter;
+  style->icon_factories = g_slist_copy (rc_style->icon_factories);
+  g_slist_foreach (style->icon_factories, (GFunc) g_object_ref, NULL);
 
-      style->icon_factories = g_slist_copy (rc_style->icon_factories);
-      
-      iter = style->icon_factories;
-      while (iter != NULL)
-        {
-          g_object_ref (iter->data);
-          iter = g_slist_next (iter);
-        }
-    }
+  priv->color_hashes = g_slist_copy (_gtk_rc_style_get_color_hashes (rc_style));
+  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_ref, NULL);
 }
 
 static gint
@@ -1773,9 +1813,9 @@ gtk_style_real_realize (GtkStyle *style)
 
   for (i = 0; i < 5; i++)
     {
-      gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
-      gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
-      
+      _gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
+      _gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
+
       style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
       style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
       style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
@@ -3396,7 +3436,7 @@ get_darkened_gc (GdkWindow *window,
 
   while (darken_count)
     {
-      gtk_style_shade (&src, &shaded, 0.93);
+      _gtk_style_shade (&src, &shaded, 0.93);
       src = shaded;
       --darken_count;
     }
@@ -4705,9 +4745,9 @@ gtk_default_draw_handle (GtkStyle      *style,
       if (state_type == GTK_STATE_SELECTED && widget && !GTK_WIDGET_HAS_FOCUS (widget))
 	{
 	  GdkColor unfocused_light;
-      
-	  gtk_style_shade (&style->base[GTK_STATE_ACTIVE], &unfocused_light,
-			   LIGHTNESS_MULT);
+
+	  _gtk_style_shade (&style->base[GTK_STATE_ACTIVE], &unfocused_light,
+                            LIGHTNESS_MULT);
 
 	  light_gc = free_me = gdk_gc_new (window);
 	  gdk_gc_set_rgb_fg_color (light_gc, &unfocused_light);
@@ -5417,10 +5457,10 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
     }
 }
 
-static void
-gtk_style_shade (GdkColor *a,
-                 GdkColor *b,
-                 gdouble   k)
+void
+_gtk_style_shade (GdkColor *a,
+                  GdkColor *b,
+                  gdouble   k)
 {
   gdouble red;
   gdouble green;

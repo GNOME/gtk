@@ -109,9 +109,17 @@ style "curve"
   fg[NORMAL] = { 58000, 0, 0 }                  # red
 }
 
-style "red-bar"
+style "red-bar-parent"
 {
-  bg[PRELIGHT] = { 0.95, .55, 0.55 }
+  color["my-red"] = "red"
+  color["my-other-red"] = { 0.95, .55, 0.55 }
+}
+
+style "red-bar" = "red-bar-parent"
+{
+  color["my-light-red"] = lighter (lighter (@my-red))
+
+  bg[PRELIGHT] = @my-light-red
 }
 
 # override testgtk2, introduce the green color in the button list

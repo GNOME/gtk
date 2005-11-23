@@ -452,8 +452,12 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 					      gint	    width, 
 					      gint	    height);
 
-GtkIconSet* gtk_style_lookup_icon_set (GtkStyle            *style,
-                                       const gchar         *stock_id);
+GtkIconSet* gtk_style_lookup_icon_set        (GtkStyle     *style,
+                                              const gchar  *stock_id);
+gboolean    gtk_style_lookup_color           (GtkStyle     *style,
+                                              const gchar  *color_name,
+                                              GdkColor     *color);
+
 GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        const GtkIconSource *source,
                                        GtkTextDirection     direction,
@@ -461,6 +465,7 @@ GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        GtkIconSize          size,
                                        GtkWidget           *widget,
                                        const gchar         *detail);
+
 #ifndef GTK_DISABLE_DEPRECATED
 void gtk_draw_hline      (GtkStyle        *style,
 			  GdkWindow       *window,
@@ -852,7 +857,7 @@ void gtk_paint_resize_grip (GtkStyle		*style,
 
 GType      gtk_border_get_type (void) G_GNUC_CONST;
 GtkBorder *gtk_border_copy     (const GtkBorder *border_);
-void       gtk_border_free (   GtkBorder       *border_);
+void       gtk_border_free     (GtkBorder       *border_);
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
@@ -860,8 +865,12 @@ const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
 					      GParamSpec         *pspec,
 					      GtkRcPropertyParser parser);
 
-void _gtk_style_init_for_settings (GtkStyle    *style,
-				   GtkSettings *settings);
+void          _gtk_style_init_for_settings   (GtkStyle           *style,
+                                              GtkSettings        *settings);
+
+void          _gtk_style_shade               (GdkColor           *a,
+                                              GdkColor           *b,
+                                              gdouble             k);
 
 /* deprecated */
 #ifndef GTK_DISABLE_DEPRECATED
