@@ -1,3 +1,10 @@
+2005-11-23  Behdad Esfahbod  <behdad@gnome.org>
+
+	* configure.in (enable_explicit_deps): Fix typo when checking
+	libtool config deplibs_check_method. Moreover, enable explicit
+	deps if we get anything other than pass_all from libtool. (part of
+	#318750)
+
 2005-11-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/updateiconcache.c (write_csource): Don't create a big
