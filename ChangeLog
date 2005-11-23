@@ -1,3 +1,8 @@
+2005-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Include gtkimcontextsimple.h  (#322235,
+	Kazuki IWAMOTO)
+
 2005-11-23  Michael Natterer  <mitch@imendio.com>
 
 	Merged from HEAD:

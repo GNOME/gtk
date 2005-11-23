@@ -37,6 +37,7 @@
 #include "gtkdnd.h"
 #include "gtkentry.h"
 #include "gtkimagemenuitem.h"
+#include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
