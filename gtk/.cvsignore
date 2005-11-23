@@ -26,4 +26,5 @@ gtk-query-immodules-2.0
 .saved
 gtkalias.h
 gtkaliasdef.c
+gtkbuiltincache.h
 gtk-update-icon-cache
