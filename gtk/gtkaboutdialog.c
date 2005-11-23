@@ -1979,7 +1979,7 @@ add_credits_page (GtkAboutDialog *about,
 	    {
 	      GtkTextIter end;
 	      gchar *link;
-	      gchar *link_type;
+	      const gchar *link_type;
 	      GtkTextTag *tag;
 	      
 	      gtk_text_buffer_insert_at_cursor (buffer, q0, q1 - q0);
@@ -2283,8 +2283,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
     {
       dialog = gtk_about_dialog_new ();
 
-      g_object_ref (dialog);
-      gtk_object_sink (GTK_OBJECT (dialog));
+      g_object_ref_sink (dialog);
 
       g_signal_connect (dialog, "delete_event", G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 

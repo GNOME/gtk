@@ -877,8 +877,7 @@ gtk_text_set_adjustments (GtkText       *text,
   if (text->hadj != hadj)
     {
       text->hadj = hadj;
-      gtk_object_ref (GTK_OBJECT (text->hadj));
-      gtk_object_sink (GTK_OBJECT (text->hadj));
+      g_object_ref_sink (text->hadj);
       
       gtk_signal_connect (GTK_OBJECT (text->hadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
@@ -897,8 +896,7 @@ gtk_text_set_adjustments (GtkText       *text,
   if (text->vadj != vadj)
     {
       text->vadj = vadj;
-      gtk_object_ref (GTK_OBJECT (text->vadj));
-      gtk_object_sink (GTK_OBJECT (text->vadj));
+      g_object_ref_sink (text->vadj);
       
       gtk_signal_connect (GTK_OBJECT (text->vadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,

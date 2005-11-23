@@ -696,8 +696,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->style = DEFAULT_TOOLBAR_STYLE;
   toolbar->icon_size = DEFAULT_ICON_SIZE;
   toolbar->tooltips = gtk_tooltips_new ();
-  g_object_ref (toolbar->tooltips);
-  gtk_object_sink (GTK_OBJECT (toolbar->tooltips));
+  g_object_ref_sink (toolbar->tooltips);
   
   priv->arrow_button = gtk_toggle_button_new ();
   g_signal_connect (priv->arrow_button, "button_press_event",
@@ -2286,8 +2285,7 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       if (priv->highlight_tool_item)
 	g_object_unref (priv->highlight_tool_item);
       
-      g_object_ref (tool_item);
-      gtk_object_sink (GTK_OBJECT (tool_item));
+      g_object_ref_sink (tool_item);
       
       priv->highlight_tool_item = tool_item;
       

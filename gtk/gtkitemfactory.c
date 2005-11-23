@@ -453,8 +453,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
   ifactory->widget = g_object_connect (gtk_widget_new (container_type, NULL),
 				       "signal::destroy", gtk_widget_destroyed, &ifactory->widget,
 				       NULL);
-  g_object_ref (ifactory);
-  gtk_object_sink (GTK_OBJECT (ifactory));
+  g_object_ref_sink (ifactory);
 
   gtk_item_factory_add_item (ifactory,
 			     "", NULL,
@@ -525,8 +524,7 @@ gtk_item_factory_destroy (GtkObject *object)
 
       dobj = GTK_OBJECT (ifactory->widget);
 
-      g_object_ref (dobj);
-      gtk_object_sink (dobj);
+      g_object_ref_sink (dobj);
       gtk_object_destroy (dobj);
       g_object_unref (dobj);
 

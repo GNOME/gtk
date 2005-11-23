@@ -590,8 +590,7 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
-  g_object_ref (renderer);
-  gtk_object_sink (GTK_OBJECT (renderer));
+  g_object_ref_sink (renderer);
 
   info = g_new0 (GtkCellViewCellInfo, 1);
   info->cell = renderer;
@@ -613,8 +612,7 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
-  g_object_ref (renderer);
-  gtk_object_sink (GTK_OBJECT (renderer));
+  g_object_ref_sink (renderer);
 
   info = g_new0 (GtkCellViewCellInfo, 1);
   info->cell = renderer;

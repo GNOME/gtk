@@ -6437,8 +6437,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
   if (text_view->hadjustment != hadj)
     {
       text_view->hadjustment = hadj;
-      g_object_ref (text_view->hadjustment);
-      gtk_object_sink (GTK_OBJECT (text_view->hadjustment));
+      g_object_ref_sink (text_view->hadjustment);
       
       g_signal_connect (text_view->hadjustment, "value_changed",
                         G_CALLBACK (gtk_text_view_value_changed),
@@ -6449,8 +6448,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
   if (text_view->vadjustment != vadj)
     {
       text_view->vadjustment = vadj;
-      g_object_ref (text_view->vadjustment);
-      gtk_object_sink (GTK_OBJECT (text_view->vadjustment));
+      g_object_ref_sink (text_view->vadjustment);
       
       g_signal_connect (text_view->vadjustment, "value_changed",
                         G_CALLBACK (gtk_text_view_value_changed),

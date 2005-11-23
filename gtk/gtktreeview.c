@@ -6988,8 +6988,7 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
   if (tree_view->priv->hadjustment != hadj)
     {
       tree_view->priv->hadjustment = hadj;
-      g_object_ref (tree_view->priv->hadjustment);
-      gtk_object_sink (GTK_OBJECT (tree_view->priv->hadjustment));
+      g_object_ref_sink (tree_view->priv->hadjustment);
 
       g_signal_connect (tree_view->priv->hadjustment, "value_changed",
 			G_CALLBACK (gtk_tree_view_adjustment_changed),
@@ -7000,8 +6999,7 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
   if (tree_view->priv->vadjustment != vadj)
     {
       tree_view->priv->vadjustment = vadj;
-      g_object_ref (tree_view->priv->vadjustment);
-      gtk_object_sink (GTK_OBJECT (tree_view->priv->vadjustment));
+      g_object_ref_sink (tree_view->priv->vadjustment);
 
       g_signal_connect (tree_view->priv->vadjustment, "value_changed",
 			G_CALLBACK (gtk_tree_view_adjustment_changed),
@@ -9987,8 +9985,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
     g_return_val_if_fail (gtk_tree_view_column_get_sizing (column)
                           == GTK_TREE_VIEW_COLUMN_FIXED, -1);
 
-  g_object_ref (column);
-  gtk_object_sink (GTK_OBJECT (column));
+  g_object_ref_sink (column);
 
   if (tree_view->priv->n_columns == 0 &&
       GTK_WIDGET_REALIZED (tree_view) &&

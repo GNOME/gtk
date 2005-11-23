@@ -248,8 +248,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
     gtk_container_add (GTK_CONTAINER (eventbox), pixmapwid);
   gtk_widget_show (pixmapwid);
   tree_item->plus_pix_widget = pixmapwid;
-  gtk_widget_ref (tree_item->plus_pix_widget);
-  gtk_object_sink (GTK_OBJECT (tree_item->plus_pix_widget));
+  g_object_ref_sink (tree_item->plus_pix_widget);
   
   /* create pixmap for button '-' */
   pixmapwid = gtk_type_new (gtk_pixmap_get_type ());
@@ -257,8 +256,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
     gtk_container_add (GTK_CONTAINER (eventbox), pixmapwid);
   gtk_widget_show (pixmapwid);
   tree_item->minus_pix_widget = pixmapwid;
-  gtk_widget_ref (tree_item->minus_pix_widget);
-  gtk_object_sink (GTK_OBJECT (tree_item->minus_pix_widget));
+  g_object_ref_sink (tree_item->minus_pix_widget);
   
   gtk_widget_set_parent (eventbox, GTK_WIDGET (tree_item));
 }

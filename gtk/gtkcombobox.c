@@ -2535,8 +2535,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
   /* the column is needed in tree_column_row_is_sensitive() */
   combo_box->priv->column = gtk_tree_view_column_new ();
-  g_object_ref (combo_box->priv->column);
-  gtk_object_sink (GTK_OBJECT (combo_box->priv->column));
+  g_object_ref_sink (combo_box->priv->column);
   gtk_combo_box_sync_cells (combo_box, 
 			    GTK_CELL_LAYOUT (combo_box->priv->column));
 
@@ -3837,8 +3836,7 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
 
   combo_box = GTK_COMBO_BOX (layout);
 
-  g_object_ref (cell);
-  gtk_object_sink (GTK_OBJECT (cell));
+  g_object_ref_sink (cell);
 
   info = g_new0 (ComboCellInfo, 1);
   info->cell = cell;
@@ -3894,8 +3892,7 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
 
   combo_box = GTK_COMBO_BOX (layout);
 
-  g_object_ref (cell);
-  gtk_object_sink (GTK_OBJECT (cell));
+  g_object_ref_sink (cell);
 
   info = g_new0 (ComboCellInfo, 1);
   info->cell = cell;

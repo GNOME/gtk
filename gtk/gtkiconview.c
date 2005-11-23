@@ -2220,8 +2220,7 @@ gtk_icon_view_set_adjustments (GtkIconView   *icon_view,
   if (icon_view->priv->hadjustment != hadj)
     {
       icon_view->priv->hadjustment = hadj;
-      g_object_ref (icon_view->priv->hadjustment);
-      gtk_object_sink (GTK_OBJECT (icon_view->priv->hadjustment));
+      g_object_ref_sink (icon_view->priv->hadjustment);
 
       g_signal_connect (icon_view->priv->hadjustment, "value_changed",
 			G_CALLBACK (gtk_icon_view_adjustment_changed),
@@ -2232,8 +2231,7 @@ gtk_icon_view_set_adjustments (GtkIconView   *icon_view,
   if (icon_view->priv->vadjustment != vadj)
     {
       icon_view->priv->vadjustment = vadj;
-      g_object_ref (icon_view->priv->vadjustment);
-      gtk_object_sink (GTK_OBJECT (icon_view->priv->vadjustment));
+      g_object_ref_sink (icon_view->priv->vadjustment);
 
       g_signal_connect (icon_view->priv->vadjustment, "value_changed",
 			G_CALLBACK (gtk_icon_view_adjustment_changed),
@@ -4166,8 +4164,7 @@ gtk_icon_view_cell_layout_pack_start (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_icon_view_get_cell_info (icon_view, renderer));
 
-  g_object_ref (renderer);
-  gtk_object_sink (GTK_OBJECT (renderer));
+  g_object_ref_sink (renderer);
 
   info = g_new0 (GtkIconViewCellInfo, 1);
   info->cell = renderer;
@@ -4190,8 +4187,7 @@ gtk_icon_view_cell_layout_pack_end (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_icon_view_get_cell_info (icon_view, renderer));
 
-  g_object_ref (renderer);
-  gtk_object_sink (GTK_OBJECT (renderer));
+  g_object_ref_sink (renderer);
 
   info = g_new0 (GtkIconViewCellInfo, 1);
   info->cell = renderer;

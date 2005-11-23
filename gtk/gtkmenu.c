@@ -877,7 +877,7 @@ gtk_menu_init (GtkMenu *menu)
   /* Refloat the menu, so that reference counting for the menu isn't
    * affected by it being a child of the toplevel
    */
-  GTK_WIDGET_SET_FLAGS (menu, GTK_FLOATING);
+  g_object_force_floating (G_OBJECT (menu));
   menu->needs_destruction_ref_count = TRUE;
 
   menu->view_window = NULL;
@@ -1031,8 +1031,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
      return;
     }
   
-  g_object_ref (menu);
-  gtk_object_sink (GTK_OBJECT (menu));
+  g_object_ref_sink (menu);
   
   data = g_new (GtkMenuAttachData, 1);
   data->attach_widget = attach_widget;
@@ -3904,10 +3903,9 @@ gtk_menu_reparent (GtkMenu      *menu,
 {
   GtkObject *object = GTK_OBJECT (menu);
   GtkWidget *widget = GTK_WIDGET (menu);
-  gboolean was_floating = GTK_OBJECT_FLOATING (object);
+  gboolean was_floating = g_object_is_floating (object);
 
-  g_object_ref (object);
-  gtk_object_sink (object);
+  g_object_ref_sink (object);
 
   if (unrealize)
     {
@@ -3920,7 +3918,7 @@ gtk_menu_reparent (GtkMenu      *menu,
     gtk_widget_reparent (GTK_WIDGET (menu), new_parent);
   
   if (was_floating)
-    GTK_OBJECT_SET_FLAGS (object, GTK_FLOATING);
+    g_object_force_floating (G_OBJECT (object));
   else
     g_object_unref (object);
 }

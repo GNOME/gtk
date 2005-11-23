@@ -1,3 +1,45 @@
+Wed Nov 23 18:55:47 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkobject.[hc]: deprecated floating/sink API and implemented it
+	in terms of the GObject floating/sink API.
+
+	* gtk/gtkaboutdialog.c:
+	* gtk/gtkaction.c:
+	* gtk/gtkcellview.c:
+	* gtk/gtkclist.c:
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkcombobox.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkiconview.c:
+	* gtk/gtkinvisible.c:
+	* gtk/gtkitemfactory.c:
+	* gtk/gtklayout.c:
+	* gtk/gtkmenu.c:
+	* gtk/gtkmenutoolbutton.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkprogress.c:
+	* gtk/gtkrange.c:
+	* gtk/gtkspinbutton.c:
+	* gtk/gtkstatusicon.c:
+	* gtk/gtktext.c:
+	* gtk/gtktextview.c:
+	* gtk/gtktoolbar.c:
+	* gtk/gtktoolbutton.c:
+	* gtk/gtktoolitem.c:
+	* gtk/gtktreeitem.c:
+	* gtk/gtktreeview.c:
+	* gtk/gtktreeviewcolumn.c:
+	* gtk/gtkuimanager.c:
+	* gtk/gtkviewport.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkwindow.c:
+	ported to use GObject's g_object_ref_sink().
+
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkaboutdialog.c:
+	fixed compiler warnings.
+
 2005-11-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_class_init): Add some docs

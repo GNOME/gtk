@@ -228,8 +228,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
   if (layout->hadjustment != hadj)
     {
       layout->hadjustment = hadj;
-      g_object_ref (layout->hadjustment);
-      gtk_object_sink (GTK_OBJECT (layout->hadjustment));
+      g_object_ref_sink (layout->hadjustment);
       gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width, FALSE);
       
       g_signal_connect (layout->hadjustment, "value_changed",
@@ -241,8 +240,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
   if (layout->vadjustment != vadj)
     {
       layout->vadjustment = vadj;
-      g_object_ref (layout->vadjustment);
-      gtk_object_sink (GTK_OBJECT (layout->vadjustment));
+      g_object_ref_sink (layout->vadjustment);
       gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
       
       g_signal_connect (layout->vadjustment, "value_changed",

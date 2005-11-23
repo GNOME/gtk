@@ -348,7 +348,6 @@ static void
 gtk_object_init (GtkObject      *object,
 		 GtkObjectClass *klass)
 {
-  GTK_OBJECT_FLAGS (object) = GTK_FLOATING;
 }
 
 /********************************************
@@ -396,13 +395,12 @@ gtk_object_finalize (GObject *gobject)
 {
   GtkObject *object = GTK_OBJECT (gobject);
 
-  if (GTK_OBJECT_FLOATING (object))
+  if (g_object_is_floating (object))
     {
       g_warning ("A floating object was finalized. This means that someone\n"
 		 "called g_object_unref() on an object that had only a floating\n"
 		 "reference; the initial floating reference is not owned by anyone\n"
-		 "and must be removed with gtk_object_sink() after a normal\n"
-		 "reference is obtained with g_object_ref().");
+		 "and must be removed with g_object_ref_sink().");
     }
   
   gtk_object_notify_weaks (object);
@@ -449,24 +447,12 @@ gtk_object_get_property (GObject     *object,
     }
 }
 
-/*****************************************
- * gtk_object_sink:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 void
 gtk_object_sink (GtkObject *object)
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
-
-  if (GTK_OBJECT_FLOATING (object))
-    {
-      GTK_OBJECT_UNSET_FLAGS (object, GTK_FLOATING);
-      g_object_unref (object);
-    }
+  g_object_ref_sink (object);
+  g_object_unref (object);
 }
 
 /*****************************************

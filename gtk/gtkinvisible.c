@@ -128,8 +128,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
-  g_object_ref (invisible);
-  gtk_object_sink (GTK_OBJECT (invisible));
+  g_object_ref_sink (invisible);
 
   invisible->has_user_ref_count = TRUE;
   invisible->screen = gdk_screen_get_default ();

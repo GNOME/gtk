@@ -4489,8 +4489,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */
 
-  g_object_ref (widget);
-  gtk_object_sink (GTK_OBJECT (widget));
+  g_object_ref_sink (widget);
   widget->parent = parent;
 
   if (GTK_WIDGET_STATE (parent) != GTK_STATE_NORMAL)
@@ -7131,8 +7130,7 @@ gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
       return;
     }
 
-  g_param_spec_ref (pspec);
-  g_param_spec_sink (pspec);
+  g_param_spec_ref_sink (pspec);
   g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
   g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (klass));
 }

@@ -1289,7 +1289,7 @@ mouse_release (GtkWidget      *invisible,
 	       GdkEventButton *event,
 	       gpointer        data)
 {
-  GtkColorSelection *colorsel = data;
+  /* GtkColorSelection *colorsel = data; */
 
   if (event->button != 1)
     return FALSE;
@@ -1391,7 +1391,7 @@ mouse_press (GtkWidget      *invisible,
 	     GdkEventButton *event,
 	     gpointer        data)
 {
-  GtkColorSelection *colorsel = data;
+  /* GtkColorSelection *colorsel = data; */
   
   if (event->type == GDK_BUTTON_PRESS &&
       event->button == 1)
@@ -1931,8 +1931,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_alpha_set = FALSE;
   
   priv->tooltips = gtk_tooltips_new ();
-  g_object_ref (priv->tooltips);
-  gtk_object_sink (GTK_OBJECT (priv->tooltips));
+  g_object_ref_sink (priv->tooltips);
   
   gtk_box_set_spacing (GTK_BOX (colorsel), 4);
   top_hbox = gtk_hbox_new (FALSE, 8);

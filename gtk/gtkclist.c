@@ -1187,8 +1187,7 @@ gtk_clist_set_hadjustment (GtkCList      *clist,
 
   if (clist->hadjustment)
     {
-      gtk_object_ref (GTK_OBJECT (clist->hadjustment));
-      gtk_object_sink (GTK_OBJECT (clist->hadjustment));
+      g_object_ref_sink (clist->hadjustment);
 
       gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "changed",
 			  (GtkSignalFunc) hadjustment_changed,
@@ -1235,8 +1234,7 @@ gtk_clist_set_vadjustment (GtkCList      *clist,
 
   if (clist->vadjustment)
     {
-      gtk_object_ref (GTK_OBJECT (clist->vadjustment));
-      gtk_object_sink (GTK_OBJECT (clist->vadjustment));
+      g_object_ref_sink (clist->vadjustment);
 
       gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "changed",
 			  (GtkSignalFunc) vadjustment_changed,

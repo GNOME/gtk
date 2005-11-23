@@ -58,7 +58,9 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
+#ifndef GTK_DISABLE_DEPRECATED
   GTK_FLOATING		= 1 << 1,
+#endif
   GTK_RESERVED_1	= 1 << 2,
   GTK_RESERVED_2	= 1 << 3
 } GtkObjectFlags;
@@ -66,7 +68,9 @@ typedef enum
 /* Macros for extracting the object_flags from GtkObject.
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
+#ifndef GTK_DISABLE_DEPRECATED
 #define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
+#endif
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
  */
@@ -117,7 +121,9 @@ struct _GtkObjectClass
 
 GtkType	gtk_object_get_type		(void) G_GNUC_CONST;
 
+#ifndef GTK_DISABLE_DEPRECATED
 void gtk_object_sink	  (GtkObject *object);
+#endif
 void gtk_object_destroy	  (GtkObject *object);
 
 /****************************************************************/

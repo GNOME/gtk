@@ -467,8 +467,7 @@ viewport_set_adjustment (GtkViewport    *viewport,
   if (*adjustmentp)
     g_object_unref (*adjustmentp);
   *adjustmentp = adjustment;
-  g_object_ref (adjustment);
-  gtk_object_sink (GTK_OBJECT (adjustment));
+  g_object_ref_sink (adjustment);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     viewport_set_hadjustment_values (viewport, &value_changed);

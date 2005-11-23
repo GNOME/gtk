@@ -2306,10 +2306,10 @@ gtk_object_set_data_by_id
 gtk_object_set_data_by_id_full
 gtk_object_set_data_full
 gtk_object_set_user_data
+gtk_object_sink
 #endif
 gtk_object_destroy
 gtk_object_get_type G_GNUC_CONST
-gtk_object_sink
 #endif
 #endif
 

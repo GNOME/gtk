@@ -779,8 +779,7 @@ gtk_action_create_menu_proxy (GtkToolItem *tool_item,
     {
       menu_item = gtk_action_create_menu_item (action);
 
-      g_object_ref (menu_item);
-      gtk_object_sink (GTK_OBJECT (menu_item));
+      g_object_ref_sink (menu_item);
       
       gtk_tool_item_set_proxy_menu_item (tool_item, 
 					 "gtk-action-menu-item", menu_item);

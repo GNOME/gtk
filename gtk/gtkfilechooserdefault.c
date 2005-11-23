@@ -676,8 +676,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
   impl->tooltips = gtk_tooltips_new ();
-  g_object_ref (impl->tooltips);
-  gtk_object_sink (GTK_OBJECT (impl->tooltips));
+  g_object_ref_sink (impl->tooltips);
 
   profile_end ("end", NULL);
 }
@@ -5775,8 +5774,7 @@ gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
       return;
     }
 
-  g_object_ref (filter);
-  gtk_object_sink (GTK_OBJECT (filter));
+  g_object_ref_sink (filter);
   impl->filters = g_slist_append (impl->filters, filter);
 
   name = gtk_file_filter_get_name (filter);
@@ -6583,8 +6581,7 @@ set_current_filter (GtkFileChooserDefault *impl,
       impl->current_filter = filter;
       if (impl->current_filter)
 	{
-	  g_object_ref (impl->current_filter);
-	  gtk_object_sink (GTK_OBJECT (filter));
+	  g_object_ref_sink (impl->current_filter);
 	}
 
       if (impl->filters)
@@ -6920,7 +6917,7 @@ path_bar_clicked (GtkPathBar            *path_bar,
    */
   if (child_path != NULL)
     {
-      gtk_file_chooser_default_select_path (impl, child_path, NULL);
+      gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (impl), child_path, NULL);
       browse_files_center_selected_row (impl);
     }
 }
@@ -7075,7 +7072,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 {
   GtkFileChooserDefault *impl;
   const GtkFileInfo *info;
-  GtkFileTime time_mtime, time_now;
+  GtkFileTime time_mtime;
   GDate mtime, now;
   int days_diff;
   char buf[256];
@@ -7099,10 +7096,10 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
     strcpy (buf, _("Unknown"));
   else
     {
-      g_date_set_time (&mtime, (GTime) time_mtime);
-
-      time_now = (GTime ) time (NULL);
-      g_date_set_time (&now, (GTime) time_now);
+      time_t time_now;
+      g_date_set_time_t (&mtime, time_mtime);
+      time_now = time (NULL);
+      g_date_set_time_t (&now, time_now);
 
       days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
 

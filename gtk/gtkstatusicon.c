@@ -407,8 +407,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   gtk_widget_show (status_icon->priv->tray_icon);
 
   status_icon->priv->tooltips = gtk_tooltips_new ();
-  g_object_ref (status_icon->priv->tooltips);
-  gtk_object_sink (GTK_OBJECT (status_icon->priv->tooltips));
+  g_object_ref_sink (status_icon->priv->tooltips);
 #endif
 
 #ifdef GDK_WINDOWING_WIN32

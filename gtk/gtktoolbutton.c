@@ -925,8 +925,7 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
       
       if (icon_widget)
 	{
-	  g_object_ref (icon_widget);
-	  gtk_object_sink (GTK_OBJECT (icon_widget));
+	  g_object_ref_sink (icon_widget);
 	}
 
       button->priv->icon_widget = icon_widget;
@@ -972,8 +971,7 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
       
       if (label_widget)
 	{
-	  g_object_ref (label_widget);
-	  gtk_object_sink (GTK_OBJECT (label_widget));
+	  g_object_ref_sink (label_widget);
 	}
 
       button->priv->label_widget = label_widget;

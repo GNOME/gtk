@@ -642,8 +642,7 @@ gtk_tree_view_column_cell_layout_pack_start (GtkCellLayout   *cell_layout,
   column = GTK_TREE_VIEW_COLUMN (cell_layout);
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (column, cell));
 
-  g_object_ref (cell);
-  gtk_object_sink (GTK_OBJECT (cell));
+  g_object_ref_sink (cell);
 
   cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
@@ -667,8 +666,7 @@ gtk_tree_view_column_cell_layout_pack_end (GtkCellLayout   *cell_layout,
   column = GTK_TREE_VIEW_COLUMN (cell_layout);
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (column, cell));
 
-  g_object_ref (cell);
-  gtk_object_sink (GTK_OBJECT (cell));
+  g_object_ref_sink (cell);
 
   cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
@@ -2218,10 +2216,7 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
   if (widget)
-    {
-      g_object_ref (widget);
-      gtk_object_sink (GTK_OBJECT (widget));
-    }
+    g_object_ref_sink (widget);
 
   if (tree_column->child)      
     g_object_unref (tree_column->child);

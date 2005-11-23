@@ -573,8 +573,7 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
       if (priv->menu)
         {
-          g_object_ref (priv->menu);
-          gtk_object_sink (GTK_OBJECT (priv->menu));
+          g_object_ref_sink (priv->menu);
 
           gtk_widget_set_sensitive (priv->arrow_button, TRUE);
 

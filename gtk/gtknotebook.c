@@ -4355,8 +4355,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
     page->default_menu = TRUE;
   else  
     {
-      g_object_ref (page->menu_label);
-      gtk_object_sink (GTK_OBJECT (page->menu_label));
+      g_object_ref_sink (page->menu_label);
     }
 
   if (notebook->menu)
@@ -5207,8 +5206,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
   if (menu_label)
     {
       page->menu_label = menu_label;
-      g_object_ref (page->menu_label);
-      gtk_object_sink (GTK_OBJECT(page->menu_label));
+      g_object_ref_sink (page->menu_label);
       page->default_menu = FALSE;
     }
   else

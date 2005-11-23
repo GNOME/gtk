@@ -810,8 +810,7 @@ gtk_window_init (GtkWindow *window)
   if (colormap)
     gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
   
-  g_object_ref (window);
-  gtk_object_sink (GTK_OBJECT (window));
+  g_object_ref_sink (window);
   window->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
 

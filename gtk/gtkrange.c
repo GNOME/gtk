@@ -619,8 +619,7 @@ gtk_range_set_adjustment (GtkRange      *range,
 	}
 
       range->adjustment = adjustment;
-      g_object_ref (adjustment);
-      gtk_object_sink (GTK_OBJECT (adjustment));
+      g_object_ref_sink (adjustment);
       
       g_signal_connect (adjustment, "changed",
 			G_CALLBACK (gtk_range_adjustment_changed),

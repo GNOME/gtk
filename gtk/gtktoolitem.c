@@ -1109,8 +1109,7 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
       
       if (menu_item)
 	{
-	  g_object_ref (menu_item);
-	  gtk_object_sink (GTK_OBJECT (menu_item));
+	  g_object_ref_sink (menu_item);
 
 	  gtk_widget_set_sensitive (menu_item,
 				    GTK_WIDGET_SENSITIVE (tool_item));
