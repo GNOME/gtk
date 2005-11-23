@@ -1,5 +1,11 @@
 2005-11-23  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkrc.c (gtk_rc_reset_widgets): don't leak all toplevel
+	windows on other screens (correctly remove all temporary
+	references).
+
+2005-11-23  Michael Natterer  <mitch@imendio.com>
+
 	Added symbolic themable colors. Patch is a merged version of
 	proposals from Matthias and maemo-gtk. Fixes bug #114355.
 
