@@ -1,5 +1,9 @@
 2005-11-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c (write_csource): Don't create a big
+	string, since Visual C++ doesn't like strings longer than 64k. 
+	(#322238, Kazuki IWAMOTO
+
 	* gtk/gtkentry.c: Include gtkimcontextsimple.h  (#322235,
 	Kazuki IWAMOTO)
 

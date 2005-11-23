@@ -1247,9 +1247,7 @@ write_csource (const gchar *path)
 {
   gchar *cache_path;
   gchar *data;
-  guint8 d;
   gsize len;
-  gint pos;
   gint i;
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
@@ -1265,40 +1263,18 @@ write_csource (const gchar *path)
   g_printf ("#else\n");
   g_printf ("static const guint8 %s[] = \n", var_name);
   g_printf ("#endif\n");
-  g_printf ("{ ""\n  \"");
-  
-  pos = 3;
-  for (i = 0; i < len; i++)
+
+  g_printf ("{\n");
+  for (i = 0; i < len - 1; i++)
     {
-      d = data[i];
-      if (pos > 70)
-	{
-	  g_printf ("\"\n  \"");
-	  pos = 3;
-	}
-      if (d < 33 || d > 126 || d == '?')
-	{
-	  g_printf ("\\%.3o", d);
-	  pos += 4;
-	  continue;
-	}
-      if (d == '\\')
-	{
-	  g_printf ("\\\\");
-	  pos += 2;
-	}
-      else if (d == '"')
-	{
-	  g_printf ("\\\"");
-	  pos += 2;
-	}
-      else 
-	{
-	  g_printf ("%c", d);
-	  pos += 1;
-	}
+      if (i %12 == 0)
+	g_printf ("  ");
+      g_printf ("0x%02x, ", (guint8)data[i]);
+      if (i % 12 == 11)
+        g_printf ("\n");
     }
-  g_printf ("\"};\n");
+  
+  g_printf ("0x%02x\n};\n", (guint8)data[i]);
 }
 
 static GOptionEntry args[] = {
