@@ -1,3 +1,7 @@
+2005-11-23  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk-sections.txt: add gtk_style_lookup_color
+
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_combo_box_[sg]et_title

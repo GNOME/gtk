@@ -5007,6 +5007,7 @@ gtk_style_unref
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_apply_default_pixmap
+gtk_style_lookup_color
 gtk_style_lookup_icon_set
 gtk_style_render_icon
 gtk_style_get_font
