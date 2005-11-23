@@ -1,3 +1,8 @@
+2005-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Include gtkimcontextsimple.h  (#322235,
+	Kazuki IWAMOTO)
+
 2005-11-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c (gtk_rc_reset_widgets): don't leak all toplevel
@@ -72,6 +77,9 @@
 	Include gtksocket.h here.
 	
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkinputdialog.c: Convert GtkInputDialog to 
+	g_type_class_add_private.
 
 	* gtk/gtksocket.c: Convert GtkSocket to g_type_class_add_private.
 
