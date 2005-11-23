@@ -1,3 +1,8 @@
+2005-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Add some docs
+	about gtk-color-scheme.
+
 2005-11-23  Behdad Esfahbod  <behdad@gnome.org>
 
 	* configure.in (enable_explicit_deps): Fix typo when checking

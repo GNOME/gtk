@@ -1,3 +1,8 @@
+2005-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkrc.sgml: Document symbolic colors and
+	color expressions.
+
 2005-11-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk-sections.txt: add gtk_style_lookup_color

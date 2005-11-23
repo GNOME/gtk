@@ -433,6 +433,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_TIMEOUT_REPEAT);
 
+  /**
+   * GtkSettings:gtk-color-scheme:
+   *
+   * A palette of named colors for use in themes. The format of the string is
+   * <programlisting>
+   * name1: color1
+   * name2: color2
+   * ...
+   * </programlisting>
+   * Color names must be acceptable as identifiers in the 
+   * <link linkend="gtk-Resource-Files">gtkrc</link> syntax, and
+   * color specifications must be in the format accepted by
+   * gdk_color_parse().
+   * 
+   * Since: 2.10
+   */
   result = settings_install_property_parser (class,
 					     g_param_spec_string ("gtk-color-scheme",
  								  P_("Color scheme"),

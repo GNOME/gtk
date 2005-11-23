@@ -441,6 +441,15 @@ elements are:
      </listitem>
   </varlistentry>
   <varlistentry>
+    <term><literal>color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable></literal></term>
+     <listitem>
+       <para>
+        Since 2.10, this element can be used to defines symbolic colors. See below for
+        the syntax of color specifications. 
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
     <term><literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
 settings</replaceable> }</literal></term>
      <listitem>
@@ -520,8 +529,7 @@ state of the widget. The states are:
 
 <para><anchor id="color-format"/>
 Colors can be specified as a string containing a color name (GTK+ knows
-all names from the X color database 
-<filename>/usr/lib/X11/rgb.txt</filename>),  
+all names from the X color database <filename>/usr/lib/X11/rgb.txt</filename>),  
 in one of the hexadecimal forms <literal>&num;rrrrggggbbbb</literal>,
 <literal>&num;rrrgggbbb</literal>, <literal>&num;rrggbb</literal>,
 or <literal>&num;rgb</literal>, where <literal>r</literal>,
@@ -531,6 +539,56 @@ hex digits, or they can be specified as a triplet
 <replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
 <literal>g</literal> and <literal>b</literal> are either integers in 
 the range 0-65535 or floats in the range 0.0-1.0.
+</para>
+<para>
+Since 2.10, colors can also be specified by refering to a symbolic color, as
+follows: <literal>@<!-- -->color-name</literal>, or by using expressions to combine
+colors. The following expressions are currently supported:
+  <variablelist>
+    <varlistentry>
+      <term>mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)</term>
+      <listitem><para>
+        Computes a new color by mixing <replaceable>color1</replaceable> and 
+        <replaceable>color2</replaceable>. The <replaceable>factor</replaceable> 
+        determines how close the new color is to <replaceable>color1</replaceable>. 
+        A factor of 1.0 gives pure <replaceable>color1</replaceable>, a factor of 
+        0.0 gives pure <replaceable>color2</replaceable>.  
+      </para></listitem>        
+    </varlistentry>
+
+    <varlistentry>
+      <term>shade (<replaceable>factor</replaceable>, <replaceable>color</replaceable>)</term>
+      <listitem><para>
+        Computes a lighter or darker variant of <replaceable>color</replaceable>. 
+        A <replaceable>factor</replaceable> of 1.0 leaves the color unchanged, smaller 
+        factors yield darker colors, larger factors yield lighter colors.
+      </para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>lighter (<replaceable>color</replaceable>)</term>
+      <listitem><para>
+        This is an abbreviation for 
+        <literal>shade (1.3, <replaceable>color</replaceable>)</literal>.
+      </para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>darker (<replaceable>color</replaceable>)</term>
+      <listitem><para>
+        This is an abbreviation for 
+        <literal>shade (0.7, <replaceable>color</replaceable>)</literal>.
+      </para></listitem>
+    </varlistentry>
+  </variablelist>      
+</para>
+<para>
+Here are some examples of color expressions:
+<informalexample><programlisting>  
+ mix (0.5, "red", "blue")
+ shade (1.5, mix (0.3, "&num;0abbc0", { 0.3, 0.5, 0.9 }))
+ lighter (@<!-- -->foreground)
+</programlisting></informalexample>
 </para>
 
 <para>
@@ -744,6 +802,7 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_STOCK: 
 @GTK_RC_TOKEN_LTR: 
 @GTK_RC_TOKEN_RTL: 
+@GTK_RC_TOKEN_COLOR: 
 @GTK_RC_TOKEN_LAST: 
 
 <!-- ##### FUNCTION gtk_rc_scanner_new ##### -->
