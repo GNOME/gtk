@@ -1,3 +1,11 @@
+2005-11-23  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkrc.c (gtk_rc_reset_widgets): don't leak all toplevel
+	windows on other screens (correctly remove all temporary
+	references).
+
 2005-11-21  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix for bug #321542, Benedikt Meurer:
