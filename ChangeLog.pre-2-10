@@ -1,3 +1,13 @@
+2005-11-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktoolbar.h (struct _GtkToolbar): changed two private guint
+	that used to hold signal handler IDs to two guint of padding.
+
+	* gtk/gtktoolbar.c (struct _GtkToolbarPrivate): added them as
+	gulong here.
+
+	(gtk_toolbar_screen_changed): changed accordingly.
+
 Wed Nov 23 18:55:47 2005  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkobject.[hc]: deprecated floating/sink API and implemented it
