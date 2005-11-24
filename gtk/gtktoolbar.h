@@ -104,10 +104,10 @@ struct _GtkToolbar
   /*< private >*/
   gint             button_maxw;		/* maximum width of homogeneous children */
   gint             button_maxh;		/* maximum height of homogeneous children */
-  
-  guint            style_set_connection;
-  guint            icon_size_connection;
-  
+
+  guint            _gtk_reserved1;
+  guint            _gtk_reserved2;
+
   guint            style_set : 1;
   guint            icon_size_set : 1;
 };

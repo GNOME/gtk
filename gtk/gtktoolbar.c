@@ -140,7 +140,10 @@ struct _GtkToolbarPrivate
   gint		max_homogeneous_pixels;
   
   GTimer *	timer;
-  
+
+  gulong        style_set_connection;
+  gulong        icon_size_connection;
+
   guint		show_arrow : 1;
   guint		need_sync : 1;
   guint		is_sliding : 1;
@@ -1981,20 +1984,20 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   
   if (old_settings)
     {
-      g_signal_handler_disconnect (old_settings, toolbar->style_set_connection);
-      g_signal_handler_disconnect (old_settings, toolbar->icon_size_connection);
-      
+      g_signal_handler_disconnect (old_settings, priv->style_set_connection);
+      g_signal_handler_disconnect (old_settings, priv->icon_size_connection);
+
       g_object_unref (old_settings);
     }
   
   if (settings)
     {
-      toolbar->style_set_connection =
+      priv->style_set_connection =
 	g_signal_connect_swapped (settings,
 				  "notify::gtk-toolbar-style",
 				  G_CALLBACK (style_change_notify),
 				  toolbar);
-      toolbar->icon_size_connection =
+      priv->icon_size_connection =
 	g_signal_connect_swapped (settings,
 				  "notify::gtk-toolbar-icon-size",
 				  G_CALLBACK (icon_size_change_notify),

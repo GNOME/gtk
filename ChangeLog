@@ -1,3 +1,15 @@
+2005-11-24  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gtk/gtktoolbar.h (struct _GtkToolbar): changed two private guint
+	that used to hold signal handler IDs to two guint of padding.
+
+	* gtk/gtktoolbar.c (struct _GtkToolbarPrivate): added them as
+	gulong here.
+
+	(gtk_toolbar_screen_changed): changed accordingly.
+
 2005-11-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Include gtkimcontextsimple.h  (#322235,
