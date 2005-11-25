@@ -1,3 +1,9 @@
+2005-11-25  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/*.[ch]: Merge with gtk-wimp's CVS.
+	Includes improved menu icon spacing, [+]/[-] expander drawing,
+	status-bar gippie drawing, and notebook tab drawing.
+	
 2005-11-24  Michael Natterer  <mitch@imendio.com>
 
 	Merged from HEAD:

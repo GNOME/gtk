@@ -23,9 +23,10 @@
 /*
  * Useful resources:
  *
- *  http://lxr.mozilla.org/mozilla/source/gfx/src/windows/nsNativeThemeWin.cpp
+ *  http://lxr.mozilla.org/seamonkey/source/widget/src/windows/nsNativeThemeWin.cpp
  *  http://lxr.mozilla.org/seamonkey/source/widget/src/windows/nsLookAndFeel.cpp
  *  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/userex/functions/drawthemebackground.asp
+ *  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/pantdraw_4b3g.asp
  */
 
 #include "msw_style.h"
@@ -290,9 +291,9 @@ get_family_name (LOGFONT * lfp, HDC pango_win32_hdc)
 
     size_t i, l, nbytes;
 
-    /* If lfFaceName is ASCII, assume it is the common (English) name for the 
+    /* If lfFaceName is ASCII, assume it is the common (English) name for the
        font. Is this valid? Do some TrueType fonts have different names in
-       French, German, etc, and does the system return these if the locale is 
+       French, German, etc, and does the system return these if the locale is
        set to use French, German, etc? */
     l = strlen (lfp->lfFaceName);
     for (i = 0; i < l; i++)
@@ -329,7 +330,7 @@ get_family_name (LOGFONT * lfp, HDC pango_win32_hdc)
 	    if (record.platform_id == APPLE_UNICODE_PLATFORM_ID ||
 		record.platform_id == ISO_PLATFORM_ID)
 		unicode_ix = i;
-	    else if (record.platform_id == MACINTOSH_PLATFORM_ID && record.encoding_id == 0 &&	/* Roman 
+	    else if (record.platform_id == MACINTOSH_PLATFORM_ID && record.encoding_id == 0 &&	/* Roman
 												 */
 		     record.language_id == 0)	/* English */
 		mac_ix = i;
@@ -560,7 +561,7 @@ msw_style_setup_system_settings (void)
 
     setup_menu_settings (settings);
 
-    /* 
+    /*
        http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
        http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/systemparametersinfo.asp
        http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getsystemmetrics.asp */
@@ -661,6 +662,7 @@ setup_msw_rc_style (void)
 				font_buf, sizeof (font_buf));
     g_snprintf (buf, sizeof (buf),
 		"style \"msw-menu\" = \"msw-default\"\n" "{\n"
+		"GtkMenuItem::toggle-spacing = 8\n"
 		"fg[PRELIGHT] = { %d, %d, %d }\n"
 		"bg[PRELIGHT] = { %d, %d, %d }\n"
 		"text[PRELIGHT] = { %d, %d, %d }\n"
@@ -1057,7 +1059,7 @@ draw_expander (GtkStyle * style,
 
 	    gdk_draw_line
 		(window, style->fg_gc[state], x + 2, y + expander_semi_size,
-		 x + expander_size - 2, y + expander_semi_size);
+		 x + expander_size - 3, y + expander_semi_size);
 
 	    switch (expander_style)
 		{
@@ -1066,7 +1068,7 @@ draw_expander (GtkStyle * style,
 		    gdk_draw_line
 			(window, style->fg_gc[state], x + expander_semi_size,
 			 y + 2, x + expander_semi_size,
-			 y + expander_size - 2);
+			 y + expander_size - 3);
 		    break;
 
 		default:
@@ -1440,6 +1442,46 @@ is_toolbar_child (GtkWidget * wid)
     return FALSE;
 }
 
+static HDC get_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type, gint x, gint y, gint width, gint height, RECT *rect)
+{
+	int xoff, yoff;
+	GdkDrawable *drawable;
+
+	if (!GDK_IS_WINDOW (window))
+		{
+		    xoff = 0;
+		    yoff = 0;
+		    drawable = window;
+		}
+	else
+		{
+		    gdk_window_get_internal_paint_info (window, &drawable, &xoff, &yoff);
+		}
+
+	rect->left = x - xoff;
+	rect->top = y - yoff;
+	rect->right = rect->left + width;
+    rect->bottom = rect->top + height;
+
+	return gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
+}
+
+static void release_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type)
+{
+	GdkDrawable *drawable;
+
+	if (!GDK_IS_WINDOW (window))
+		{
+		    drawable = window;
+		}
+	else
+		{
+		    gdk_window_get_internal_paint_info (window, &drawable, NULL, NULL);
+		}
+
+	gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
+}
+
 static void
 draw_box (GtkStyle * style,
 	  GdkWindow * window,
@@ -1505,7 +1547,7 @@ draw_box (GtkStyle * style,
 		    GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
 		    gboolean is_v = GTK_IS_VSCROLLBAR (widget);
 
-		    if (xp_theme_draw (window,
+			if (xp_theme_draw (window,
 				       is_v
 				       ? XP_THEME_ELEMENT_SCROLLBAR_V
 				       : XP_THEME_ELEMENT_SCROLLBAR_H,
@@ -1517,7 +1559,7 @@ draw_box (GtkStyle * style,
 				 XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H);
 
 			    /* Do not display grippers on tiny scroll bars,
-			       the limit imposed is rather arbitrary, perhaps 
+			       the limit imposed is rather arbitrary, perhaps
 			       we can fetch the gripper geometry from
 			       somewhere and use that... */
 			    if ((gripper ==
@@ -1699,14 +1741,6 @@ draw_box (GtkStyle * style,
 	     && (strcmp (detail, "vscrollbar") == 0
 		 || strcmp (detail, "hscrollbar") == 0))
 	{
-	    GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
-
-	    if (shadow_type == GTK_SHADOW_IN)
-		shadow_type = GTK_SHADOW_ETCHED_IN;
-	    if (scrollbar->range.adjustment->page_size >=
-		(scrollbar->range.adjustment->upper -
-		 scrollbar->range.adjustment->lower))
-		shadow_type = GTK_SHADOW_OUT;
 	}
     else if (detail
 	     && (strcmp (detail, "handlebox_bin") == 0
@@ -1737,38 +1771,19 @@ draw_box (GtkStyle * style,
 		    else
 			{
 			    HBRUSH brush;
-			    gint xoff, yoff;
-			    GdkDrawable *drawable;
 			    RECT rect;
 			    HDC hdc;
 
-			    if (!GDK_IS_WINDOW (window))
-				{
-				    xoff = 0;
-				    yoff = 0;
-				    drawable = window;
-				}
-			    else
-				{
-				    gdk_window_get_internal_paint_info
-					(window, &drawable, &xoff, &yoff);
-				}
+				hdc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
 
-			    rect.left = x - xoff;
-			    rect.top = y - yoff;
-			    rect.right = rect.left + width;
-			    rect.bottom = rect.top + height;
-
-			    hdc =
-				gdk_win32_hdc_get (window,
-						   style->dark_gc[state_type],
-						   0);
 			    brush = GetSysColorBrush (COLOR_3DDKSHADOW);
 			    if (brush)
 				FrameRect (hdc, &rect, brush);
 			    InflateRect (&rect, -1, -1);
 			    FillRect (hdc, &rect,
 				      (HBRUSH) (COLOR_INFOBK + 1));
+
+				release_window_dc (style, window, state_type);
 
 			    return;
 			}
@@ -1851,9 +1866,95 @@ draw_tab (GtkStyle * style,
 		 x, y, indicator_size.width, arrow_height);
 }
 
-/* this is an undefined magic value that, according to the mozilla folks,
-   worked for all the various themes that they tried */
-#define XP_EDGE_SIZE 2
+/* Draw classic Windows tab - thanks Mozilla!
+  (no system API for this, but DrawEdge can draw all the parts of a tab) */
+static void DrawTab(HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
+                     gboolean aDrawLeft, gboolean aDrawRight)
+ {
+   gint32 leftFlag, topFlag, rightFlag, lightFlag, shadeFlag;
+   RECT topRect, sideRect, bottomRect, lightRect, shadeRect;
+   gint32 selectedOffset, lOffset, rOffset;
+
+   selectedOffset = aSelected ? 1 : 0;
+   lOffset = aDrawLeft ? 2 : 0;
+   rOffset = aDrawRight ? 2 : 0;
+
+   /* Get info for tab orientation/position (Left, Top, Right, Bottom) */
+   switch (aPosition) {
+     case BF_LEFT:
+       leftFlag = BF_TOP; topFlag = BF_LEFT;
+       rightFlag = BF_BOTTOM;
+       lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
+       shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
+
+      SetRect(&topRect, R.left, R.top+lOffset, R.right, R.bottom-rOffset);
+      SetRect(&sideRect, R.left+2, R.top, R.right-2+selectedOffset, R.bottom);
+      SetRect(&bottomRect, R.right-2, R.top, R.right, R.bottom);
+      SetRect(&lightRect, R.left, R.top, R.left+3, R.top+3);
+      SetRect(&shadeRect, R.left+1, R.bottom-2, R.left+2, R.bottom-1);
+      break;
+    case BF_TOP:
+       leftFlag = BF_LEFT; topFlag = BF_TOP;
+       rightFlag = BF_RIGHT;
+       lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
+       shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
+
+       SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
+       SetRect(&sideRect, R.left, R.top+2, R.right, R.bottom-1+selectedOffset);
+       SetRect(&bottomRect, R.left, R.bottom-1, R.right, R.bottom);
+       SetRect(&lightRect, R.left, R.top, R.left+3, R.top+3);
+       SetRect(&shadeRect, R.right-2, R.top+1, R.right-1, R.top+2);
+       break;
+     case BF_RIGHT:
+       leftFlag = BF_TOP; topFlag = BF_RIGHT;
+       rightFlag = BF_BOTTOM;
+       lightFlag = BF_DIAGONAL_ENDTOPLEFT;
+       shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
+
+       SetRect(&topRect, R.left, R.top+lOffset, R.right, R.bottom-rOffset);
+       SetRect(&sideRect, R.left+2-selectedOffset, R.top, R.right-2, R.bottom);
+       SetRect(&bottomRect, R.left, R.top, R.left+2, R.bottom);
+       SetRect(&lightRect, R.right-3, R.top, R.right-1, R.top+2);
+       SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
+       break;
+     case BF_BOTTOM:
+       leftFlag = BF_LEFT; topFlag = BF_BOTTOM;
+       rightFlag = BF_RIGHT;
+       lightFlag = BF_DIAGONAL_ENDTOPLEFT;
+       shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
+
+       SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
+       SetRect(&sideRect, R.left, R.top+2-selectedOffset, R.right, R.bottom-2);
+       SetRect(&bottomRect, R.left, R.top, R.right, R.top+2);
+       SetRect(&lightRect, R.left, R.bottom-3, R.left+2, R.bottom-1);
+       SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
+       break;
+   }
+
+   /* Background */
+   FillRect(hdc, &R, (HBRUSH) (COLOR_3DFACE+1) );
+
+   /* Tab "Top" */
+   DrawEdge(hdc, &topRect, EDGE_RAISED, BF_SOFT | topFlag);
+
+   /* Tab "Bottom" */
+   if (!aSelected)
+     DrawEdge(hdc, &bottomRect, EDGE_RAISED, BF_SOFT | topFlag);
+
+   /* Tab "Sides" */
+   if (!aDrawLeft)
+     leftFlag = 0;
+   if (!aDrawRight)
+     rightFlag = 0;
+   DrawEdge(hdc, &sideRect, EDGE_RAISED, BF_SOFT | leftFlag | rightFlag);
+
+   /* Tab Diagonal Corners */
+   if (aDrawLeft)
+     DrawEdge(hdc, &lightRect, EDGE_RAISED, BF_SOFT | lightFlag);
+
+   if (aDrawRight)
+     DrawEdge(hdc, &shadeRect, EDGE_RAISED, BF_SOFT | shadeFlag);
+ }
 
 static void
 draw_extension (GtkStyle * style,
@@ -1866,43 +1967,47 @@ draw_extension (GtkStyle * style,
 		gint x,
 		gint y, gint width, gint height, GtkPositionType gap_side)
 {
-    if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
+    if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
 	{
 	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 	    gint x2, y2, w2, h2;
+	    int tab_part = XP_THEME_ELEMENT_TAB_ITEM;
+		int real_gap_side = gtk_notebook_get_tab_pos (notebook);
 
+		/* why this differs from the above gap_side, i have no idea... */
 	    x2 = x;
 	    y2 = y;
 	    w2 = width;
 	    h2 = height;
-	    if (gap_side == GTK_POS_TOP && state_type == GTK_STATE_NORMAL)
-		{
-		    /* h2 += XP_EDGE_SIZE; */
-		}
-	    else if (gap_side == GTK_POS_BOTTOM
-		     && state_type == GTK_STATE_NORMAL)
-		{
-		    /* h2 += XP_EDGE_SIZE; */
-		}
-	    else if (gap_side == GTK_POS_LEFT
-		     && state_type == GTK_STATE_NORMAL)
-		{
-		    x2 += 1;
-		    w2 -= XP_EDGE_SIZE;
-		}
-	    else if (gap_side == GTK_POS_RIGHT
-		     && state_type == GTK_STATE_NORMAL)
-		{
-		    w2 -= (XP_EDGE_SIZE + 1);
-		}
 
-	    if (xp_theme_draw
-		(window, gtk_notebook_get_current_page (notebook) == 0
-		 ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
-		 : XP_THEME_ELEMENT_TAB_ITEM,
-		 style, x2, y2, w2, h2, state_type, area))
+	    if (xp_theme_draw (window, tab_part,
+			 style, x2, y2, w2, h2, (real_gap_side == GTK_POS_TOP ? state_type : GTK_STATE_SELECTED), area))
 		{
-		    return;
+			return;
+		} else if (real_gap_side == GTK_POS_TOP || real_gap_side == GTK_POS_BOTTOM) {
+			/* experimental tab-drawing code from mozilla */
+		    RECT rect;
+    		HDC dc;
+			gint32 aPosition;
+
+    		dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
+
+			if (real_gap_side == GTK_POS_TOP)
+				aPosition = BF_TOP;
+			else if (real_gap_side == GTK_POS_BOTTOM)
+				aPosition = BF_BOTTOM;
+			else if (real_gap_side == GTK_POS_LEFT)
+				aPosition = BF_LEFT;
+			else
+				aPosition = BF_RIGHT;
+
+			if (area)
+				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+			DrawTab (dc, rect, aPosition, state_type != GTK_STATE_PRELIGHT, (real_gap_side != GTK_POS_LEFT), (real_gap_side != GTK_POS_RIGHT));
+			if (area)
+				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+
+			release_window_dc (style, window, state_type);
 		}
 	}
     parent_class->draw_extension
@@ -1919,9 +2024,7 @@ draw_box_gap (GtkStyle * style, GdkWindow * window, GtkStateType state_type,
 {
     if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "notebook"))
 	{
-	    /* FIXME: pos != TOP to be implemented */
-	    if (gap_side == GTK_POS_TOP
-		&& xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style, x,
+	    if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style, x,
 				  y, width, height, state_type, area))
 		{
 		    return;
@@ -2203,7 +2306,19 @@ draw_resize_grip (GtkStyle * style,
 	    if (xp_theme_draw
 		(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
 		 height, state_type, area))
-		return;
+			return;
+		else {
+			RECT rect;
+			HDC dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
+
+			if (area)
+				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+			DrawFrameControl(dc, &rect, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
+			release_window_dc(style, window, state_type);
+			if (area)
+				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+			return;
+		}
 	}
 
     parent_class->draw_resize_grip (style, window, state_type, area,
