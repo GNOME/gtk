@@ -34,12 +34,7 @@
 /* #include "gdk/gdkwin32.h" */
 #include "gdk/win32/gdkwin32.h"
 
-#ifdef HAVE_UXTHEME_H
-#include <uxtheme.h>
-#include <tmschema.h>
-#else
 #include "xp_theme_defs.h"
-#endif
 
 #ifndef TMT_CAPTIONFONT
 
@@ -86,7 +81,7 @@ static const LPCWSTR class_descriptors[] = {
     L"Button",			/* XP_THEME_CLASS_BUTTON */
     L"Header",			/* XP_THEME_CLASS_HEADER */
     L"ComboBox",		/* XP_THEME_CLASS_COMBOBOX */
-    L"Tab",			/* XP_THEME_CLASS_TAB */
+    L"Tab",			    /* XP_THEME_CLASS_TAB */
     L"Edit",			/* XP_THEME_CLASS_EDIT */
     L"TreeView",		/* XP_THEME_CLASS_TREEVIEW */
     L"Spin",			/* XP_THEME_CLASS_SPIN */
@@ -110,6 +105,7 @@ static const short element_part_map[] = {
     TABP_BODY,
     TABP_TABITEM,
     TABP_TABITEMLEFTEDGE,
+   	TABP_TABITEMRIGHTEDGE,
     TABP_PANE,
     SBP_THUMBBTNHORZ,
     SBP_THUMBBTNVERT,
@@ -365,6 +361,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
 	case XP_THEME_ELEMENT_BODY:
 	case XP_THEME_ELEMENT_TAB_ITEM:
 	case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
+	case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
 	case XP_THEME_ELEMENT_TAB_PANE:
 	    klazz = XP_THEME_CLASS_TAB;
 	    break;
@@ -486,6 +483,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 	    break;
 
 	case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
+	case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
 	case XP_THEME_ELEMENT_TAB_ITEM:
 	    switch (state)
 		{
