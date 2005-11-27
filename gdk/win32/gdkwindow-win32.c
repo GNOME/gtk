@@ -1561,6 +1561,89 @@ gdk_window_set_urgency_hint (GdkWindow *window,
   FlashWindowEx (&flashwinfo);
 }
 
+static void
+decorate_based_on_hints (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+  GdkWMDecoration decoration;
+
+  impl = (GdkWindowImplWin32 *)((GdkWindowObject *)window)->impl;
+
+  if (((GdkWindowObject *) window)->window_type != GDK_WINDOW_TOPLEVEL &&
+      ((GdkWindowObject *) window)->window_type != GDK_WINDOW_DIALOG)
+    return;
+
+  if ((impl->hint_flags & GDK_HINT_MIN_SIZE) &&
+      (impl->hint_flags & GDK_HINT_MAX_SIZE) &&
+      impl->hints.min_width == impl->hints.max_width &&
+      impl->hints.min_height == impl->hints.max_height)
+    {
+      decoration = GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MAXIMIZE;
+      if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
+	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
+	decoration |= GDK_DECOR_MINIMIZE;
+      else if (impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
+	decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
+
+      gdk_window_set_decorations (window, decoration);
+    }
+  else if (impl->hint_flags & GDK_HINT_MAX_SIZE)
+    {
+      decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
+      if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
+	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
+	decoration |= GDK_DECOR_MINIMIZE;
+      gdk_window_set_decorations (window, decoration);
+    }
+  else
+    {
+      switch (impl->type_hint)
+	{
+	case GDK_WINDOW_TYPE_HINT_DIALOG:
+	  gdk_window_set_decorations (window,
+				      GDK_DECOR_ALL |
+				      GDK_DECOR_MINIMIZE |
+				      GDK_DECOR_MAXIMIZE);
+	  break;
+	case GDK_WINDOW_TYPE_HINT_MENU:
+	  gdk_window_set_decorations (window,
+				      GDK_DECOR_ALL |
+				      GDK_DECOR_RESIZEH |
+				      GDK_DECOR_MINIMIZE |
+				      GDK_DECOR_MAXIMIZE);
+	  break;
+	case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+	  gdk_window_set_decorations (window,
+				      GDK_DECOR_ALL |
+				      GDK_DECOR_MINIMIZE |
+				      GDK_DECOR_MAXIMIZE);
+	  gdk_window_set_skip_taskbar_hint (window, TRUE);
+	  break;
+	case GDK_WINDOW_TYPE_HINT_UTILITY:
+	  break;
+	case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+	  gdk_window_set_decorations (window,
+				      GDK_DECOR_ALL |
+				      GDK_DECOR_RESIZEH |
+				      GDK_DECOR_MENU |
+				      GDK_DECOR_MINIMIZE |
+				      GDK_DECOR_MAXIMIZE);
+	  break;
+	case GDK_WINDOW_TYPE_HINT_DOCK:
+	  break;
+	case GDK_WINDOW_TYPE_HINT_DESKTOP:
+	  break;
+	default:
+	  /* Fall thru */
+	case GDK_WINDOW_TYPE_HINT_NORMAL:
+	  gdk_window_set_decorations (window, GDK_DECOR_ALL);
+	  break;
+	}
+    }
+}
+
 void 
 gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkGeometry    *geometry,
@@ -1596,23 +1679,6 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 			       geometry->max_width, geometry->max_height));
     }
 
-  if ((geom_mask & GDK_HINT_MIN_SIZE) &&
-      (geom_mask & GDK_HINT_MAX_SIZE) &&
-      geometry->min_width == geometry->max_width &&
-      geometry->min_height == geometry->max_height)
-    gdk_window_set_decorations (window,
-				GDK_DECOR_ALL |
-				GDK_DECOR_RESIZEH |
-				GDK_DECOR_MAXIMIZE);
-  else if (geom_mask & GDK_HINT_MAX_SIZE)
-    {
-      gdk_window_set_decorations (window,
-				  GDK_DECOR_ALL |
-				  GDK_DECOR_MAXIMIZE);
-    }
-  else
-    gdk_window_set_decorations (window, GDK_DECOR_ALL);
-
   if (geom_mask & GDK_HINT_BASE_SIZE)
     {
       GDK_NOTE (MISC, g_print ("... BASE_SIZE: %dx%d\n",
@@ -1635,6 +1701,8 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
     {
       GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));
     }
+
+  decorate_based_on_hints (window);
 }
 
 void
@@ -3132,40 +3200,10 @@ gdk_window_set_type_hint (GdkWindow        *window,
 
   GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint: %p: %d\n",
 			   GDK_WINDOW_HWND (window), hint));
-  switch (hint)
-    {
-    case GDK_WINDOW_TYPE_HINT_DIALOG:
-      break;
-    case GDK_WINDOW_TYPE_HINT_MENU:
-      gdk_window_set_decorations (window,
-				  GDK_DECOR_ALL |
-				  GDK_DECOR_RESIZEH |
-				  GDK_DECOR_MINIMIZE |
-				  GDK_DECOR_MAXIMIZE);
-      break;
-    case GDK_WINDOW_TYPE_HINT_TOOLBAR:
-      gdk_window_set_skip_taskbar_hint (window, TRUE);
-      break;
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
-      break;
-    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
-      gdk_window_set_decorations (window,
-				  GDK_DECOR_ALL |
-				  GDK_DECOR_RESIZEH |
-				  GDK_DECOR_MENU |
-				  GDK_DECOR_MINIMIZE |
-				  GDK_DECOR_MAXIMIZE);
-      break;
-    case GDK_WINDOW_TYPE_HINT_DOCK:
-      break;
-    case GDK_WINDOW_TYPE_HINT_DESKTOP:
-      break;
-    default:
-      g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
-      /* Fall thru */
-    case GDK_WINDOW_TYPE_HINT_NORMAL:
-      break;
-    }
+
+  ((GdkWindowImplWin32 *)((GdkWindowObject *)window)->impl)->type_hint = hint;
+
+  decorate_based_on_hints (window);
 }
 
 void

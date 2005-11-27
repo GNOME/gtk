@@ -84,6 +84,8 @@ struct _GdkWindowImplWin32
   GdkGeometry hints;
 
   gboolean extension_events_selected;
+
+  GdkWindowTypeHint type_hint;
 };
  
 struct _GdkWindowImplWin32Class 
