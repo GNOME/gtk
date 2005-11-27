@@ -472,7 +472,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
- *                                   GTK_BUTTON_CLOSE,
+ *                                   GTK_BUTTONS_CLOSE,
  *                                   NULL);
  *  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
  *                                 markup);
