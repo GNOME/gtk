@@ -567,6 +567,8 @@ gtk_color_button_init (GtkColorButton *color_button)
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (color_button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
+  g_object_unref (layout);
+
   gtk_widget_set_size_request (color_button->priv->draw_area, rect.width - 2, rect.height - 2);
   g_signal_connect (color_button->priv->draw_area, "expose-event",
                     G_CALLBACK (expose_event), color_button);

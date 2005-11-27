@@ -1,3 +1,8 @@
+2005-11-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcolorbutton.c (gtk_color_button_init): Don't leak a 
+	PangoLayout here.  (#322505, Paolo Borelli)
+
 2005-11-27  Tor Lillqvist  <tml@novell.com>
 
 	Once again rework Win32 window decoration code. Doesn'tbreak
