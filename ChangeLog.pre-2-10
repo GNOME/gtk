@@ -1,5 +1,14 @@
 2005-11-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix two memory handling problems in GtkTreeView: (#322350, 
+	Søren Sandmann)
+	
+	* gtk/gtktreeview.c (gtk_tree_view_destroy) 
+	(gtk_tree_view_set_model): Remove all references to nodes in
+	the old model.
+	(gtk_tree_view_real_collapse_row): Unmark expanded_collapsed_node
+	before removing the children.
+
 	* gtk/gtkcolorbutton.c (gtk_color_button_init): Don't leak a 
 	PangoLayout here.  (#322505, Paolo Borelli)
 

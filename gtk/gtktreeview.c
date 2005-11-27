@@ -1315,6 +1315,20 @@ gtk_tree_view_finalize (GObject *object)
  */
 
 static void
+gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
+{
+  _gtk_rbtree_free (tree_view->priv->tree);
+  
+  tree_view->priv->tree = NULL;
+  tree_view->priv->button_pressed_node = NULL;
+  tree_view->priv->button_pressed_tree = NULL;
+  tree_view->priv->prelight_tree = NULL;
+  tree_view->priv->prelight_node = NULL;
+  tree_view->priv->expanded_collapsed_node = NULL;
+  tree_view->priv->expanded_collapsed_tree = NULL;
+}
+
+static void
 gtk_tree_view_destroy (GtkObject *object)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (object);
@@ -1338,8 +1352,8 @@ gtk_tree_view_destroy (GtkObject *object)
   if (tree_view->priv->tree != NULL)
     {
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
-      _gtk_rbtree_free (tree_view->priv->tree);
-      tree_view->priv->tree = NULL;
+
+      gtk_tree_view_free_rbtree (tree_view);
     }
 
   if (tree_view->priv->selection != NULL)
@@ -9483,15 +9497,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 					   tree_view->priv->model);
 
       if (tree_view->priv->tree)
-	{
-	  _gtk_rbtree_free (tree_view->priv->tree);
-	  tree_view->priv->tree = NULL;
-	}
-
-      tree_view->priv->prelight_node = NULL;
-      tree_view->priv->prelight_tree = NULL;
-      tree_view->priv->button_pressed_node = NULL;
-      tree_view->priv->button_pressed_tree = NULL;
+	gtk_tree_view_free_rbtree (tree_view);
 
       gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
       tree_view->priv->drag_dest_row = NULL;
@@ -10980,6 +10986,14 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (lsc);
     }
 
+  if (tree_view->priv->expanded_collapsed_node != NULL)
+    {
+      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
+      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+      
+      tree_view->priv->expanded_collapsed_node = NULL;
+    }
+
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {
       _gtk_rbtree_remove (node->children);
@@ -10994,14 +11008,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       tree_view->priv->expand_collapse_timeout = 0;
     }
   
-  if (tree_view->priv->expanded_collapsed_node != NULL)
-    {
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
-      
-      tree_view->priv->expanded_collapsed_node = NULL;
-    }
-
   if (animate)
     {
       tree_view->priv->expand_collapse_timeout = g_timeout_add (50, expand_collapse_timeout, tree_view);
