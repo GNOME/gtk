@@ -1638,13 +1638,9 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       gdk_window_set_decorations (window,
 				  GDK_DECOR_ALL |
 				  GDK_DECOR_MAXIMIZE);
-      gdk_window_set_decorations (window,
-				  GDK_DECOR_RESIZEH);
     }
   else
-    gdk_window_set_decorations (window,
-				GDK_DECOR_RESIZEH |
-				GDK_DECOR_MAXIMIZE);
+    gdk_window_set_decorations (window, GDK_DECOR_ALL);
 
   if (geom_mask & GDK_HINT_BASE_SIZE)
     {
@@ -2501,6 +2497,7 @@ set_or_clear_style_bits (GdkWindow *window,
 {
   LONG style, exstyle;
   RECT rect, before, after;
+  const LONG settable_bits = WS_BORDER|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_MAXIMIZEBOX;
 
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
@@ -2510,9 +2507,9 @@ set_or_clear_style_bits (GdkWindow *window,
   AdjustWindowRectEx (&before, style, FALSE, exstyle);
 
   if (clear_bits)
-    style &= ~bits;
+    style |= settable_bits, style &= ~bits;
   else
-    style |= bits;
+    style &= ~settable_bits, style |= bits;
 
   SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
 
