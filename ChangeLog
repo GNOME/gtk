@@ -1,7 +1,7 @@
 2005-11-27  Tor Lillqvist  <tml@novell.com>
 
-	Once again rework window decoration code. Should fix #322516 and
-	not break #104514. The dialogs in gtk-demo now have the same
+	Once again rework Win32 window decoration code. Should fix #322516
+	and not break #104514. The dialogs in gtk-demo now have the same
 	decorations and behaviour as on X11.
 	    
 	* gdk/win32/gdkwindow-win32.h (struct _GdkWindowImplWin32): Keep
