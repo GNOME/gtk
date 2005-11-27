@@ -1,8 +1,23 @@
 2005-11-27  Tor Lillqvist  <tml@novell.com>
 
+	Once again rework Win32 window decoration code. Doesn't break
+	#104514. The dialogs in gtk-demo now have the same decorations and
+	behaviour as on X11. Tried to fix #322516 but it seems very hard
+	to make the trivial sample program there behave as expected. OTOH,
+	simply moving the gtk_window_decorate() call in the #322516 sample
+	program after the call to gtk_widget_show() helps...
+	    
 	* gdk/win32/gdkwindow-win32.c (set_or_clear_style_bits): Revert to
-	the correct semantics. (#322516)
-	(gdk_window_set_geometry_hints): Adjust call correspondingly.
+	the correct semantics. Each call to gdk_window_set_decorations()
+	which calls this function is supposed to affect all decorations.
+
+	(decorate_based_on_hints): New function, looks at both geometry
+	hints and type hint and sets window decorations based on
+	that. Consolidate code from gdk_window_set_geometry_hints() and
+	gdk_window_set_type_hint() here.
+
+	(gdk_window_set_geometry_hints, gdk_window_set_type_hint): Call
+	decorate_based_on_hints().
 
 2005-11-25  Dom Lachowicz <cinamod@hotmail.com>
 
