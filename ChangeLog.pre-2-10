@@ -1,3 +1,9 @@
+2005-11-27  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (set_or_clear_style_bits): Revert to
+	the correct semantics. (#322516)
+	(gdk_window_set_geometry_hints): Adjust call correspondingly.
+
 2005-11-25  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/*.[ch]: Merge with gtk-wimp's CVS.
