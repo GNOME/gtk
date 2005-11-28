@@ -1,3 +1,9 @@
+2005-11-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_key_press_event_cb): Make
+	F2 work for renaming bookmarks.  (#320822, Jaap A. Haitsma, patch
+	by Paolo Borelli)
+
 2005-11-28  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_urgency_hint):
