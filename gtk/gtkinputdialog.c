@@ -153,22 +153,9 @@ gtk_input_dialog_get_type (void)
 static GtkInputDialogPrivate *
 gtk_input_dialog_get_private (GtkInputDialog *input_dialog)
 {
-  GtkInputDialogPrivate *private;
-  static GQuark private_quark = 0;
-
-  if (!private_quark)
-    private_quark = g_quark_from_static_string ("gtk-input-dialog-private");
-
-  private = g_object_get_qdata (G_OBJECT (input_dialog), private_quark);
-
-  if (!private)
-    {
-      private = g_new0 (GtkInputDialogPrivate, 1);
-      g_object_set_qdata_full (G_OBJECT (input_dialog), private_quark,
-			       private, g_free);
-    }
-
-  return private;
+  return G_TYPE_INSTANCE_GET_PRIVATE (input_dialog, 
+				      GTK_TYPE_INPUT_DIALOG, 
+				      GtkInputDialogPrivate);
 }
 
 static GtkInputDialog *
@@ -189,6 +176,7 @@ input_dialog_from_widget (GtkWidget *widget)
 static void
 gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 {
+  GObjectClass *object_class = (GObjectClass *) klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
   
   parent_class = g_type_class_peek_parent (klass);
@@ -217,6 +205,8 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_DEVICE);
+
+  g_type_class_add_private (object_class, sizeof (GtkInputDialogPrivate));
 }
 
 static void
