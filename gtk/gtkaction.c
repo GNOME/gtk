@@ -745,7 +745,7 @@ gtk_action_sync_button_stock_id (GtkAction  *action,
 				 GtkWidget  *proxy)
 {
   g_object_set (G_OBJECT (proxy),
-                "stock-id",
+                "label",
                 action->private_data->stock_id,
                 NULL);
 }
@@ -948,7 +948,7 @@ connect_proxy (GtkAction     *action,
 	{
 	  /* synchronise stock-id */
 	  g_object_set (proxy,
-			"stock-id", action->private_data->stock_id,
+			"label", action->private_data->stock_id,
 			NULL);
 	  g_signal_connect_object (action, "notify::stock-id",
 				   G_CALLBACK (gtk_action_sync_button_stock_id),
