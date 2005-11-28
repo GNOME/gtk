@@ -1,5 +1,14 @@
 2005-11-28  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_urgency_hint):
+	Implement the conditional use of FlashWindowEx() properly for MSVC
+	compilations. The code was confusingly assuming that if compiled
+	with a "new" compiler, it will only be run on "new" Windows
+	versions. We want it to run on "old" versions, too, even if
+	compiled with a "new" compiler. There are two orthogonal issues:
+	whether the compiler defines the necessary API in its headers, and
+	whether it is present at run-time. (#318077)
+
 	* gtk/gtkcalendar.c (gtk_calendar_init): Use GetLocaleInfo() on
 	Windows to get the localized weekday and month names. strftime()
 	in the Microsoft C library returns strings in the default codepage
