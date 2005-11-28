@@ -481,6 +481,8 @@ gtk_tooltips_timeout (gpointer data)
       GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     gtk_tooltips_draw_tips (tooltips);
 
+  tooltips->timer_tag = 0;
+
   GDK_THREADS_LEAVE ();
 
   return FALSE;

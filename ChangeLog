@@ -1,5 +1,10 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltips.c (gtk_tooltips_timeout): Set timer_tag to 0 when
+	the timeout is done.  (#322291, Jean-Yves Lefort)
+
+2005-11-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_key_press_event_cb): Make
 	F2 work for renaming bookmarks.  (#320822, Jaap A. Haitsma, patch
 	by Paolo Borelli)
