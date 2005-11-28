@@ -646,8 +646,8 @@ _gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", scale->digits,
-                            value);
+    /* insert a LRM, to prevent -20 to come out as 20- in RTL locales */
+    return g_strdup_printf ("\342\200\216%0.*f", scale->digits, value);
 }
 
 static void

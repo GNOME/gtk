@@ -1,5 +1,8 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscale.c (_gtk_scale_format_value): Insert an LRM, to prevent
+	-20 to come out as 20- in RTL locales.  (#322571, Tze'ela Hebron)
+
 	* gtk/gtkaction.c (gtk_action_sync_button_stock_id) 
 	(connect_proxy): Buttons use the label property for stock ids.  (#322565,
 	Milosz Derezynski)
