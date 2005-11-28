@@ -4719,10 +4719,13 @@ update_text_cell (GtkIconView *icon_view)
     {
       if (icon_view->priv->text_cell != -1)
 	{
+	  if (icon_view->priv->pixbuf_cell > icon_view->priv->text_cell)
+	    icon_view->priv->pixbuf_cell--;
+
 	  info = g_list_nth_data (icon_view->priv->cell_list, 
 				  icon_view->priv->text_cell);
 	  
-	  g_list_remove (icon_view->priv->cell_list, info);
+	  icon_view->priv->cell_list = g_list_remove (icon_view->priv->cell_list, info);
 	  
 	  free_cell_info (info);
 	  
@@ -4789,10 +4792,13 @@ update_pixbuf_cell (GtkIconView *icon_view)
     {
       if (icon_view->priv->pixbuf_cell != -1)
 	{
+	  if (icon_view->priv->text_cell > icon_view->priv->pixbuf_cell)
+	    icon_view->priv->text_cell--;
+
 	  info = g_list_nth_data (icon_view->priv->cell_list, 
 				  icon_view->priv->pixbuf_cell);
 	  
-	  g_list_remove (icon_view->priv->cell_list, info);
+	  icon_view->priv->cell_list = g_list_remove (icon_view->priv->cell_list, info);
 	  
 	  free_cell_info (info);
 	  

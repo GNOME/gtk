@@ -1,5 +1,8 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (update_text_cell, update_pixbuf_cell): Correctly
+	handle the cell list and indices into it.  (#321856)
+
 	* gtk/gtktooltips.c (gtk_tooltips_timeout): Set timer_tag to 0 when
 	the timeout is done.  (#322291, Jean-Yves Lefort)
 
