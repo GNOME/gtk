@@ -5044,85 +5044,57 @@ browse_files_center_selected_row (GtkFileChooserDefault *impl)
 static gboolean
 show_and_select_paths (GtkFileChooserDefault *impl,
 		       const GtkFilePath     *parent_path,
-		       const GtkFilePath     *only_one_path,
 		       GSList                *paths,
-		       GError               **error)
+		       GError                **error)
 {
   GtkFileFolder *folder;
-  gboolean success;
   gboolean have_hidden;
   gboolean have_filtered;
+  GSList *l;
 
   profile_start ("start", NULL);
 
-  if (!only_one_path && !paths)
+  if (!paths)
     {
       profile_end ("end", NULL);
       return TRUE;
     }
 
-  folder = gtk_file_system_get_folder (impl->file_system, parent_path, GTK_FILE_INFO_IS_HIDDEN, error);
+  folder = gtk_file_system_get_folder (impl->file_system, parent_path, GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_IS_HIDDEN, error);
   if (!folder)
     {
       profile_end ("end", NULL);
       return FALSE;
     }
 
-  success = FALSE;
   have_hidden = FALSE;
   have_filtered = FALSE;
 
-  if (only_one_path)
+  for (l = paths; l; l = l->next)
     {
+      const GtkFilePath *path;
       GtkFileInfo *info;
 
-      info = gtk_file_folder_get_info (folder, only_one_path, error);
+      path = l->data;
+
+      /* NULL GError */
+      info = gtk_file_folder_get_info (folder, path, NULL);
       if (info)
 	{
-	  success = TRUE;
-	  have_hidden = gtk_file_info_get_is_hidden (info);
-	  have_filtered = get_is_file_filtered (impl, only_one_path, info);
+	  if (!have_hidden)
+	    have_hidden = gtk_file_info_get_is_hidden (info);
+
+	  if (!have_filtered)
+	    have_filtered = !gtk_file_info_get_is_folder (info) && get_is_file_filtered (impl, path, info);
+
 	  gtk_file_info_free (info);
+
+	  if (have_hidden && have_filtered)
+	    break; /* we now have all the information we need */
 	}
-    }
-  else
-    {
-      GSList *l;
-
-      for (l = paths; l; l = l->next)
-	{
-	  const GtkFilePath *path;
-	  GtkFileInfo *info;
-
-	  path = l->data;
-
-	  /* NULL GError */
-	  info = gtk_file_folder_get_info (folder, path, NULL);
-	  if (info)
-	    {
-	      if (!have_hidden)
-		have_hidden = gtk_file_info_get_is_hidden (info);
-
-	      if (!have_filtered)
-		have_filtered = get_is_file_filtered (impl, path, info);
-
-	      gtk_file_info_free (info);
-
-	      if (have_hidden && have_filtered)
-		break; /* we now have all the information we need */
-	    }
-	}
-
-      success = TRUE;
     }
 
   g_object_unref (folder);
-
-  if (!success)
-    {
-      profile_end ("end", NULL);
-      return FALSE;
-    }
 
   if (have_hidden)
     g_object_set (impl, "show-hidden", TRUE, NULL);
@@ -5130,19 +5102,12 @@ show_and_select_paths (GtkFileChooserDefault *impl,
   if (have_filtered)
     set_current_filter (impl, NULL);
 
-  if (only_one_path)
-    _gtk_file_system_model_path_do (impl->browse_files_model, only_one_path, select_func, impl);
-  else
+  for (l = paths; l; l = l->next)
     {
-      GSList *l;
+      const GtkFilePath *path;
 
-      for (l = paths; l; l = l->next)
-	{
-	  const GtkFilePath *path;
-
-	  path = l->data;
-	  _gtk_file_system_model_path_do (impl->browse_files_model, path, select_func, impl);
-	}
+      path = l->data;
+      _gtk_file_system_model_path_do (impl->browse_files_model, path, select_func, impl);
     }
 
   profile_end ("end", NULL);
@@ -5160,7 +5125,7 @@ pending_select_paths_process (GtkFileChooserDefault *impl)
   if (impl->pending_select_paths)
     {
       /* NULL GError */
-      show_and_select_paths (impl, impl->current_folder, NULL, impl->pending_select_paths, NULL);
+      show_and_select_paths (impl, impl->current_folder, impl->pending_select_paths, NULL);
       pending_select_paths_free (impl);
       browse_files_center_selected_row (impl);
     }
@@ -5492,8 +5457,12 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
   if (same_path && impl->load_state == LOAD_FINISHED)
     {
       gboolean result;
+      GSList paths;
 
-      result = show_and_select_paths (impl, parent_path, path, NULL, error);
+      paths.data = (gpointer) path;
+      paths.next = NULL;
+
+      result = show_and_select_paths (impl, parent_path, &paths, error);
       gtk_file_path_free (parent_path);
       return result;
     }
@@ -6913,6 +6882,9 @@ path_bar_clicked (GtkPathBar            *path_bar,
 		  gboolean               child_is_hidden,
 		  GtkFileChooserDefault *impl)
 {
+  if (child_path)
+    pending_select_paths_add (impl, child_path);
+
   if (!change_folder_and_display_error (impl, file_path))
     return;
 
@@ -6922,18 +6894,6 @@ path_bar_clicked (GtkPathBar            *path_bar,
    */
   if (child_is_hidden)
     g_object_set (impl, "show-hidden", TRUE, NULL);
-
-  /* Say we have "/foo/bar/baz" and the user clicks on "bar". We should then
-   * focus the "baz" entry in the files list - the reason for this is that
-   * if user furst changed to /foo/bar/baz from /foo/bar unintentionally 
-   * instead of /foo/bar/baz1, it will take quite some time to scroll to baz1 
-   * in the file list, especially if this directory contains lots of folders
-   */
-  if (child_path != NULL)
-    {
-      gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (impl), child_path, NULL);
-      browse_files_center_selected_row (impl);
-    }
 }
 
 static const GtkFileInfo *
@@ -7407,7 +7367,6 @@ location_popup_handler (GtkFileChooserDefault *impl,
 static void
 up_folder_handler (GtkFileChooserDefault *impl)
 {
-  pending_select_paths_add (impl, impl->current_folder);
   _gtk_path_bar_up (GTK_PATH_BAR (impl->browse_path_bar));
 }
 

@@ -568,6 +568,106 @@ test_button_folder_states (void)
   return passed;
 }
 
+static gboolean
+sleep_timeout_cb (gpointer data)
+{
+  gtk_main_quit ();
+  return FALSE;
+}
+
+static void
+sleep_in_main_loop (int milliseconds)
+{
+  g_timeout_add (milliseconds, sleep_timeout_cb, NULL);
+  gtk_main ();
+}
+
+static gboolean
+test_folder_switch_and_filters (void)
+{
+  gboolean passed;
+  char *cwd;
+  char *base_dir;
+  GtkFilePath *cwd_path;
+  GtkFilePath *base_dir_path;
+  GtkWidget *dialog;
+  GtkFileFilter *all_filter;
+  GtkFileFilter *txt_filter;
+  GtkFileChooserDefault *impl;
+
+  passed = TRUE;
+
+  cwd = g_get_current_dir ();
+  base_dir = g_build_filename (cwd, "file-chooser-test-dir", NULL);
+
+  dialog = gtk_file_chooser_dialog_new ("Test", NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					NULL);
+  impl = get_impl_from_dialog (dialog);
+
+  cwd_path = gtk_file_system_filename_to_path (impl->file_system, cwd);
+  base_dir_path = gtk_file_system_filename_to_path (impl->file_system, base_dir);
+
+  passed = passed && gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), base_dir);
+  if (!passed)
+    goto out;
+
+  /* All files filter */
+
+  all_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, "All files");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+
+  /* *.txt filter */
+
+  txt_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, "*.txt");
+  gtk_file_filter_add_pattern (txt_filter, "*.txt");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), txt_filter);
+
+  /* Test filter set */
+
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+  passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == all_filter);
+
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), txt_filter);
+  passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
+
+  log_test (passed, "test_folder_switch_and_filters(): set and get filter");
+
+  gtk_widget_show (dialog);
+
+  /* Test that filter is unchanged when we switch folders */
+
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
+  sleep_in_main_loop (1000);
+  passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
+
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), base_dir);
+  sleep_in_main_loop (500);
+
+  g_signal_emit_by_name (impl->browse_path_bar, "path-clicked",
+			 (GtkFilePath *) cwd_path,
+			 (GtkFilePath *) base_dir_path,
+			 FALSE);
+  sleep_in_main_loop (500);
+  passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
+
+  log_test (passed, "test_folder_switch_and_filters(): filter after changing folder");
+
+ out:
+  g_free (cwd);
+  g_free (base_dir);
+  gtk_file_path_free (cwd_path);
+  gtk_file_path_free (base_dir_path);
+
+  gtk_widget_destroy (dialog);
+
+  log_test (passed, "test_folder_switch_and_filters(): all filter tests");
+  return passed;
+}
+
 static GLogFunc default_log_handler;
 static int num_warnings;
 static int num_errors;
@@ -605,10 +705,10 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   /* Start tests */
-
   passed = passed && test_action_widgets ();
   passed = passed && test_reload ();
   passed = passed && test_button_folder_states ();
+  passed = passed && test_folder_switch_and_filters ();
   log_test (passed, "main(): main tests");
 
   /* Warnings and errors */

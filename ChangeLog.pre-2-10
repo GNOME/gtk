@@ -1,3 +1,19 @@
+2005-11-28  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix bug #321560, based on a patch by Bogdan Nicula (bogdanni@hotmail.com):
+
+	* gtk/gtkfilechooserdefault.c (up_folder_handler): Don't add the
+	current_folder to the pending select paths here; the path bar will
+	give it to us now.
+	(path_bar_clicked): Add the child_path to the pending select paths
+	here.
+	(show_and_select_paths): Don't filter out folders.
+	(show_and_select_paths): Don't take separate arguments for
+	only_one_path and multiple paths.
+
+	* tests/autotestfilechooser.c (test_folder_switch_and_filters):
+	New test about preserving the filters when we change folders.
+
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscale.c (_gtk_scale_format_value): Insert an LRM, to prevent
