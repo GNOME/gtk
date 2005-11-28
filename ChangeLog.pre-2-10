@@ -1,3 +1,12 @@
+2005-11-28  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Use GetLocaleInfo() on
+	Windows to get the localized weekday and month names. strftime()
+	in the Microsoft C library returns strings in the default codepage
+	for the locale of the process, not the system codepage. Thus
+	g_locale_to_utf8() isn't useable on the return value from
+	strftime(). (#322603)
+
 2005-11-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_new_with_markup): 

@@ -40,6 +40,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
+#include <glib.h>
+
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
+
 #include <glib/gprintf.h>
 
 #undef GTK_DISABLE_DEPRECATED
@@ -562,7 +569,11 @@ gtk_calendar_init (GtkCalendar *calendar)
   struct tm *tm;
   gint i;
   char buffer[255];
+#ifdef G_OS_WIN32
+  wchar_t wbuffer[100];
+#else
   time_t tmp_time;
+#endif
   GtkCalendarPrivate *priv;
   gchar *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
@@ -583,17 +594,57 @@ gtk_calendar_init (GtkCalendar *calendar)
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
       {
+#ifndef G_OS_WIN32
 	tmp_time= (i+3)*86400;
 	strftime ( buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
 	default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+#else
+	if (G_WIN32_HAVE_WIDECHAR_API ())
+	  {
+	    if (!GetLocaleInfoW (GetThreadLocale (), LOCALE_SABBREVDAYNAME1 + (i+6)%7,
+				 wbuffer, G_N_ELEMENTS (wbuffer)))
+	      default_abbreviated_dayname[i] = g_strdup_printf ("(%d)", i);
+	    else
+	      default_abbreviated_dayname[i] = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
+	  }
+	else
+	  {
+	    if (!GetLocaleInfoA (GetThreadLocale (),
+				 (LOCALE_SABBREVDAYNAME1 + (i+6)%7) | LOCALE_USE_CP_ACP,
+				 buffer, G_N_ELEMENTS (buffer)))
+	      default_abbreviated_dayname[i] = g_strdup_printf ("(%d)", i);
+	    else
+	      default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+	  }
+#endif
       }
   
   if (!default_monthname[0])
     for (i=0; i<12; i++)
       {
+#ifndef G_OS_WIN32
 	tmp_time=i*2764800;
 	strftime ( buffer, sizeof (buffer), "%B", gmtime (&tmp_time));
 	default_monthname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+#else
+	if (G_WIN32_HAVE_WIDECHAR_API ())
+	  {
+	    if (!GetLocaleInfoW (GetThreadLocale (), LOCALE_SMONTHNAME1 + i,
+				 wbuffer, G_N_ELEMENTS (wbuffer)))
+	      default_monthname[i] = g_strdup_printf ("(%d)", i);
+	    else
+	      default_monthname[i] = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
+	  }
+	else
+	  {
+	    if (!GetLocaleInfoA (GetThreadLocale (),
+				 (LOCALE_SMONTHNAME1 + i) | LOCALE_USE_CP_ACP,
+				 buffer, G_N_ELEMENTS (buffer)))
+	      default_monthname[i] = g_strdup_printf ("(%d)", i);
+	    else
+	      default_monthname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+	  }
+#endif
       }
   
   /* Set defaults */
