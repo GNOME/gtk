@@ -29,14 +29,32 @@
 #include <config.h>
 #include <stdlib.h>
 
+#ifndef _MSC_VER
 #define _WIN32_WINNT 0x0500
 #define WINVER _WIN32_WINNT
+#endif
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
 #if defined(_MSC_VER) && (WINVER < 0x0500)
+
+typedef struct
+{
+  UINT cbSize;
+  HWND hwnd;
+  DWORD dwFlags;
+  UINT uCount;
+  DWORD dwTimeout;
+} FLASHWINFO;
+
+#define FLASHW_STOP 0
+#define FLASHW_CAPTION 1
+#define FLASHW_TRAY 2
+#define FLASHW_ALL (FLASHW_CAPTION|FLASHW_TRAY)
+#define FLASHW_TIMER 4
+
 #define GetAncestor(hwnd,what) _gdk_win32_get_ancestor_parent (hwnd)
 
 static HWND
@@ -131,6 +149,7 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
+  impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->extension_events_selected = FALSE;
 }
 
@@ -1542,6 +1561,8 @@ gdk_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {
   FLASHWINFO flashwinfo;
+  typedef BOOL (*PFN_FlashWindowEx) (FLASHWINFO*);
+  PFN_FlashWindowEx flashWindowEx = NULL;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
@@ -1549,16 +1570,25 @@ gdk_window_set_urgency_hint (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  flashwinfo.cbSize = sizeof (flashwinfo);
-  flashwinfo.hwnd = GDK_WINDOW_HWND (window);
-  if (urgent)
-    flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
-  else
-    flashwinfo.dwFlags = FLASHW_STOP;
-  flashwinfo.uCount = 0;
-  flashwinfo.dwTimeout = 0;
+  flashWindowEx = (PFN_FlashWindowEx) GetProcAddress (GetModuleHandle ("user32.dll"), "FlashWindowEx");
 
-  FlashWindowEx (&flashwinfo);
+  if (flashWindowEx)
+    {
+      flashwinfo.cbSize = sizeof (flashwinfo);
+      flashwinfo.hwnd = GDK_WINDOW_HWND (window);
+      if (urgent)
+	flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
+      else
+	flashwinfo.dwFlags = FLASHW_STOP;
+      flashwinfo.uCount = 0;
+      flashwinfo.dwTimeout = 0;
+      
+      flashWindowEx (&flashwinfo);
+    }
+  else
+    {
+      FlashWindow (GDK_WINDOW_HWND (window), urgent);
+    }
 }
 
 static void

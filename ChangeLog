@@ -1,5 +1,10 @@
 2005-11-28  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_urgency_hint): Look
+	up FlashWindowEx() at run-time from user32.dll. If not found, fall
+	back to FlashWindow(). Makes it work on NT4, too. (#318077) Make
+	sure it compiles with older MSVC compilers, too.
+
 	* gtk/gtkcalendar.c (gtk_calendar_init): Use GetLocaleInfo() on
 	Windows to get the localized weekday and month names. strftime()
 	in the Microsoft C library returns strings in the default codepage
