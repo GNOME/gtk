@@ -1,3 +1,7 @@
+2005-11-28  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/tmpl/gtkobject.sgml: Update docs on floating references
+
 2005-11-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Document symbolic colors and

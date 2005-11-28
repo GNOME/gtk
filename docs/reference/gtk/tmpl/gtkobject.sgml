@@ -14,26 +14,22 @@ non-widget objects such as #GtkAdjustment. #GtkObject predates
 #GObject do so for backward compatibility reasons.
 </para>
 <para>
-The most interesting difference between #GtkObject and #GObject is the
-"floating" reference count. A #GObject is created with a reference count of 1,
-owned by the creator of the #GObject. (The owner of a reference is the code
-section that has the right to call g_object_unref() in order to remove that
-reference.)  A #GtkObject is created with a reference count of 1 also, but it
-isn't owned by anyone; calling g_object_unref() on the newly-created #GtkObject
-is incorrect. Instead, the initial reference count of a #GtkObject is "floating". 
-The floating reference can be removed by anyone at any time, by calling
-gtk_object_sink(). gtk_object_sink() does nothing if an object is already 
-sunk (has no floating reference).
+#GtkObject<!-- -->s are created with a "floating" reference count.
+This means that the initial reference is not owned by anyone. Calling
+g_object_unref() on a newly-created #GtkObject is incorrect, the floating
+reference has to be removed first. This can be done by anyone at any time, 
+by calling g_object_ref_sink() to convert the floating reference into a
+regular reference. g_object_ref_sink() returns a new reference if an object 
+is already sunk (has no floating reference). 
 </para>
 <para>
 When you add a widget to its parent container, the parent container
 will do this:
 <informalexample><programlisting>
-  g_object_ref (G_OBJECT (child_widget));
-  gtk_object_sink (GTK_OBJECT (child_widget));
+  g_object_ref_sink (G_OBJECT (child_widget));
 </programlisting></informalexample>
-This means that the container now owns a reference to the child widget (since 
-it called g_object_ref()), and the child widget has no floating reference.
+This means that the container now owns a reference to the child widget
+and the child widget has no floating reference.
 </para>
 <para>
 The purpose of the floating reference is to keep the child widget alive 
@@ -139,8 +135,9 @@ Tells about the state of the object.
 @GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used 
   internally by GTK+ to prevent reinvokations during destruction.
 @GTK_FLOATING: the object is orphaned.  Objects that take strong hold of an 
-  object may gtk_object_sink() it, after obtaining their own references, if 
-  they believe they are nearly primary ownership of the object.
+  object may call g_object_ref_sink(), to convert the floating reference into
+  a regular one, if they believe they are nearly primary ownership of the 
+  object.
 GTK_CONNECTED: signals are connected to this object.
 @GTK_RESERVED_1: reserved for future use
 @GTK_RESERVED_2: reserved for future use
@@ -204,6 +201,7 @@ the top of the page.
 </para>
 
 @object: the object to sink.
+@Deprecated: Use g_object_ref_sink() instead
 
 
 <!-- ##### FUNCTION gtk_object_ref ##### -->
