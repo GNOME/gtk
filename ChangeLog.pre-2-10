@@ -1,5 +1,8 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltips.c (gtk_tooltips_timeout): Set timer_tag to 0 when
+	the timeout is done.  (#322291, Jean-Yves Lefort)
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_key_press_event_cb): Make
 	F2 work for renaming bookmarks.  (#320822, Jaap A. Haitsma, patch
 	by Paolo Borelli)
@@ -95,7 +98,7 @@
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_internal): 
 	Emit notify::active.
 
-2005-11-18  Matthias Clasen  <mclasen@redhat.com>
+2005-11-18  Matthias Clasen  <Jean-Yves Lefortmclasen@redhat.com>
 
 	Fix crashes in connection with pathbar scrolling (#321560,
 	Bogdan Nicula)
@@ -104,7 +107,7 @@
 	Stop scrolling when desensitising slider buttons.
 	(gtk_path_bar_scroll_timeout, gtk_path_bar_slider_button_press): 
 	And use it here.  
-
+Jean-Yves Lefort
 	* gtk/gtkpathbar.h (struct _GtkPathBar): Add a separate
 	scrolling_down flag.
 
