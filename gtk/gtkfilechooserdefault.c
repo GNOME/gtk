@@ -3064,9 +3064,9 @@ remove_shortcut_cb (GtkMenuItem           *item,
   remove_selected_bookmarks (impl);
 }
 
+/* Rename the selected bookmark */
 static void
-rename_shortcut_cb (GtkMenuItem           *item,
-		    GtkFileChooserDefault *impl)
+rename_selected_bookmark (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
@@ -3086,6 +3086,13 @@ rename_shortcut_cb (GtkMenuItem           *item,
 					path, column, cell, TRUE);
       gtk_tree_path_free (path);
     }
+}
+
+static void
+rename_shortcut_cb (GtkMenuItem           *item,
+		    GtkFileChooserDefault *impl)
+{
+  rename_selected_bookmark (impl);
 }
 
 /* Constructs the popup menu for the file list if needed */
@@ -6826,6 +6833,13 @@ shortcuts_key_press_event_cb (GtkWidget             *widget,
       && (event->state & modifiers) == 0)
     {
       remove_selected_bookmarks (impl);
+      return TRUE;
+    }
+
+  if ((event->keyval == GDK_F2)
+      && (event->state & modifiers) == 0)
+    {
+      rename_selected_bookmark (impl);
       return TRUE;
     }
 
