@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.8.7 to GTK+ 2.8.8
+=================================================
+* GtkFileChooser
+ - Make F2 work for renaming bookmarks [Jaap A. Haitsma, 
+   Paolo Borelli]
+* GtkEntry
+ - Turn off input methods in password entries [James Su]
+* Win32 changes
+ - Various visual improvements to the ms-windows
+   theme [Dom Lachowicz]
+ - Rework window decoration handling [Tor Lillqvist]
+ - Fix localized weekday and month names in GtkCalendar [Tor]
+ - Make urgency hint work on NT4 [Tor]
+* Other fixes [Arjan van de Ven, Philip Langdale, Jens
+  Granseuer, Bogdan Nicula, Benedikt Meurer, Michael
+  Natterer, Kazuki Iwamoto, Paolo Borelli, Søren Sandmann,
+  Jean-Yves Lefort, Milosz Derezynski, Tze'ela Hebron]
+* Documentation improvements [Elie De Brauwer]
+* Updated translations (be,hu,sk,th,wa)
+
 Overview of Changes from GTK+ 2.8.6 to GTK+ 2.8.7
 =================================================
 * GtkFileChooser

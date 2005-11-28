@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 12:00-0500\n"
+"POT-Creation-Date: 2005-11-28 12:03-0500\n"
 "PO-Revision-Date: 2005-09-06 14:19+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -635,7 +635,7 @@ msgstr "Разредка"
 msgid "The amount of space between children"
 msgstr "Разстоянието между дъщерни елементи"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:558
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Еднакво големи"
 
@@ -643,7 +643,7 @@ msgstr "Еднакво големи"
 msgid "Whether the children should all be the same size"
 msgstr "Дали дъщерните елементи да имат еднакъв размер"
 
-#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:550
+#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:553
 #: gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "Разширяване"
@@ -820,62 +820,62 @@ msgstr "Показване образите на бутоните"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Дали вградените икони да се показват в бутоните"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:426
 msgid "Year"
 msgstr "Година"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:427
 msgid "The selected year"
 msgstr "Избраната година"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:433
 msgid "Month"
 msgstr "Месец"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:434
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Избраният месец (число от 0 до 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:440
 msgid "Day"
 msgstr "Ден"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:441
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 "Избраният ден (число от 1 до 31, или 0, за да се махне избора на текущ ден)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:455
 msgid "Show Heading"
 msgstr "Заглавна част"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:456
 msgid "If TRUE, a heading is displayed"
 msgstr "Ако е TRUE, се показва заглавна част"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:470
 msgid "Show Day Names"
 msgstr "Показване на имената на дните"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:471
 msgid "If TRUE, day names are displayed"
 msgstr "Ако е TRUE, се показва имената на дните"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:484
 msgid "No Month Change"
 msgstr "Месецът не се променя"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:485
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Ако е TRUE, избраният месец не може да се променя"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:499
 msgid "Show Week Numbers"
 msgstr "Показване на номерата на седмиците"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:500
 msgid "If TRUE, week numbers are displayed"
 msgstr "Ако е TRUE, се показват номерата на седмиците"
 
@@ -1080,7 +1080,7 @@ msgid "Value of the progress bar"
 msgstr "Стойност на лентата за прогрес"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:578 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Текст"
 
@@ -1149,7 +1149,7 @@ msgstr "Цвят на преден план"
 msgid "Foreground color as a GdkColor"
 msgstr "Цвят на преден план като GdkColor"
 
-#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:509 gtk/gtktexttag.c:279
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:510 gtk/gtktexttag.c:279
 #: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Редактируем"
@@ -1649,7 +1649,7 @@ msgstr "Откъсване на менютата"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Дали менютата да имат елемент за откъсване"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:534
+#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "С рамка"
 
@@ -1766,64 +1766,64 @@ msgstr "Граница на пространството за действие"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Широчина на рамката около мястото с бутони долу в диалога"
 
-#: gtk/gtkentry.c:489 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:490 gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr "Позиция на показалеца"
 
-#: gtk/gtkentry.c:490 gtk/gtklabel.c:401
+#: gtk/gtkentry.c:491 gtk/gtklabel.c:401
 msgid "The current position of the insertion cursor in chars"
 msgstr "Текущата позиция на вмъкващия показалец в символи"
 
-#: gtk/gtkentry.c:499 gtk/gtklabel.c:410
+#: gtk/gtkentry.c:500 gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr "Свързана към избора"
 
-#: gtk/gtkentry.c:500 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:501 gtk/gtklabel.c:411
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Позицията на противоположния край от избраното от показалеца в символи"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:511
 msgid "Whether the entry contents can be edited"
 msgstr "Дали съдържанието на записите да бъде редактирано"
 
-#: gtk/gtkentry.c:517
+#: gtk/gtkentry.c:518
 msgid "Maximum length"
 msgstr "Максимална дължина"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:519
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Максимален брой символи за този запис. 0, ако няма максимална стойност"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:527
 msgid "Visibility"
 msgstr "Видимост"
 
-#: gtk/gtkentry.c:527
+#: gtk/gtkentry.c:528
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSE показва „заместващи символи“ вместо истинския текст (режим на парола)"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:536
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE премахва външното вдаване от полето"
 
-#: gtk/gtkentry.c:542
+#: gtk/gtkentry.c:543
 msgid "Invisible character"
 msgstr "Заместващ символ"
 
-#: gtk/gtkentry.c:543
+#: gtk/gtkentry.c:544
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символите използвани за скриване съдържанието на записи (в „режим на парола“)"
 
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:551
 msgid "Activates default"
 msgstr "Активиране на подразбиращ се елемент"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1831,31 +1831,31 @@ msgstr ""
 "Дали да се активира елементът по подразбиране (като бутон по подразбиране в "
 "диалог) когато е натиснат „Enter“"
 
-#: gtk/gtkentry.c:557
+#: gtk/gtkentry.c:558
 msgid "Width in chars"
 msgstr "Широчина в символи"
 
-#: gtk/gtkentry.c:558
+#: gtk/gtkentry.c:559
 msgid "Number of characters to leave space for in the entry"
 msgstr "Брой символи, за които е оставено място в записа"
 
-#: gtk/gtkentry.c:567
+#: gtk/gtkentry.c:568
 msgid "Scroll offset"
 msgstr "Отместване на придвижването"
 
-#: gtk/gtkentry.c:568
+#: gtk/gtkentry.c:569
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Брой пиксели от полето придвижени извън екрана вляво"
 
-#: gtk/gtkentry.c:578
+#: gtk/gtkentry.c:579
 msgid "The contents of the entry"
 msgstr "Съдържание на записа"
 
-#: gtk/gtkentry.c:593 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:594 gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "Подравняване по X "
 
-#: gtk/gtkentry.c:594 gtk/gtkmisc.c:102
+#: gtk/gtkentry.c:595 gtk/gtkmisc.c:102
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -1863,11 +1863,11 @@ msgstr ""
 "Хоризонталното подравняване, от 0 (отляво) до 1 (отдясно). Обърнато за "
 "подредби отдясно-наляво (RTL)"
 
-#: gtk/gtkentry.c:832
+#: gtk/gtkentry.c:833
 msgid "Select on focus"
 msgstr "Избор на фокус"
 
-#: gtk/gtkentry.c:833
+#: gtk/gtkentry.c:834
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Дали да се избере съдържанието на записа, когато той се фокусира"
 
@@ -2260,7 +2260,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Елемент, показан на мястото на обикновеният етикет за рамка"
 
 #: gtk/gtkhandlebox.c:208 gtk/gtkmenubar.c:227 gtk/gtkstatusbar.c:205
-#: gtk/gtktoolbar.c:599 gtk/gtkviewport.c:153
+#: gtk/gtktoolbar.c:602 gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "Тип сянка"
 
@@ -2381,7 +2381,7 @@ msgstr "Поле"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Пространството, което се вмъква по ръбовете на изгледа с икони"
 
-#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
+#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:511
 msgid "Orientation"
 msgstr "Ориентация"
 
@@ -2777,7 +2777,7 @@ msgstr "Посока на пакетирането на дъщерните ел�
 msgid "Style of bevel around the menubar"
 msgstr "Стил на вдаване около лентата с менюта"
 
-#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:575
+#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:578
 msgid "Internal padding"
 msgstr "Вътрешно пространство"
 
@@ -4309,89 +4309,89 @@ msgstr "Изчертаване на индикатор"
 msgid "If the toggle part of the button is displayed"
 msgstr "Дали частта за превключване на бутона е видима"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:512
 msgid "The orientation of the toolbar"
 msgstr "Ориентация на лентата с инструменти"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:520
 msgid "Toolbar Style"
 msgstr "Стил на лентата с инструменти"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:521
 msgid "How to draw the toolbar"
 msgstr "Как да се изчертава лентата с инструменти"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:528
 msgid "Show Arrow"
 msgstr "Показване на стрелка"
 
-#: gtk/gtktoolbar.c:526
+#: gtk/gtktoolbar.c:529
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Дали да се показва стрелка, ако лентата с инструменти е много голяма"
 
-#: gtk/gtktoolbar.c:541
+#: gtk/gtktoolbar.c:544
 msgid "Tooltips"
 msgstr "Подсказки"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:545
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr "Дали подсказките да бъдат включени или не"
 
-#: gtk/gtktoolbar.c:551
+#: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Дали елементът да получава допълнително пространство, когато лентата расте"
 
-#: gtk/gtktoolbar.c:559
+#: gtk/gtktoolbar.c:562
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Дали елементът да е със същия размер като аналогичните елементи"
 
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:569
 msgid "Spacer size"
 msgstr "Размер на разделителите"
 
-#: gtk/gtktoolbar.c:567
+#: gtk/gtktoolbar.c:570
 msgid "Size of spacers"
 msgstr "Размерът на разделителите"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:579
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Размерът на рамката между сянката на лентата с инструменти и бутоните"
 
-#: gtk/gtktoolbar.c:584
+#: gtk/gtktoolbar.c:587
 msgid "Space style"
 msgstr "Стил на разделители"
 
-#: gtk/gtktoolbar.c:585
+#: gtk/gtktoolbar.c:588
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Дали разделителите са вертикални линии или са празни пространства"
 
-#: gtk/gtktoolbar.c:592
+#: gtk/gtktoolbar.c:595
 msgid "Button relief"
 msgstr "Вдаване на бутон"
 
-#: gtk/gtktoolbar.c:593
+#: gtk/gtktoolbar.c:596
 msgid "Type of bevel around toolbar buttons"
 msgstr "Тип на вдаването на бутоните"
 
-#: gtk/gtktoolbar.c:600
+#: gtk/gtktoolbar.c:603
 msgid "Style of bevel around the toolbar"
 msgstr "Стилът на вдаването на лентата с инструменти"
 
-#: gtk/gtktoolbar.c:606
+#: gtk/gtktoolbar.c:609
 msgid "Toolbar style"
 msgstr "Стил на лентата с инструменти"
 
-#: gtk/gtktoolbar.c:607
+#: gtk/gtktoolbar.c:610
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "Дали лентата ще има само текст, текст и икони или само икони, и т.н."
 
-#: gtk/gtktoolbar.c:613
+#: gtk/gtktoolbar.c:616
 msgid "Toolbar icon size"
 msgstr "Размер на иконите в лентите с инструменти"
 
-#: gtk/gtktoolbar.c:614
+#: gtk/gtktoolbar.c:617
 msgid "Size of icons in default toolbars"
 msgstr "Размерът на иконите в стандартните ленти с инструменти"
 

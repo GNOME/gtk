@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 12:00-0500\n"
+"POT-Creation-Date: 2005-11-28 12:03-0500\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -732,7 +732,7 @@ msgid "The amount of space between children"
 msgstr "उपरचनेमधील मोकळ्या जागेचे प्रमाण"
 
 # gtk/gtkbox.c:135 gtk/gtknotebook.c:434
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:558
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "एकसारखे"
 
@@ -743,7 +743,7 @@ msgid "Whether the children should all be the same size"
 msgstr "उपरचना समान आकाराच्या असण्याबाबत."
 
 # gtk/gtkpreview.c:129
-#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:550
+#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:553
 #: gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "विस्तार करा"
@@ -942,71 +942,71 @@ msgid "Whether stock icons should be shown in buttons"
 msgstr "टॅब दाखवायचे आहेत की नाहीत"
 
 # gtk/gtkinputdialog.c:667
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:426
 #, fuzzy
 msgid "Year"
 msgstr "रिक्त"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:427
 #, fuzzy
 msgid "The selected year"
 msgstr "सध्या निवडलेल्या फाइलचे नाव"
 
 # gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 # gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:433
 #, fuzzy
 msgid "Month"
 msgstr "फोन्ट(अक्षर रचना)"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:434
 msgid "The selected month (as a number between 0 and 11)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:440
 msgid "Day"
 msgstr ""
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:441
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 
 # gtk/gtktable.c:174
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:455
 #, fuzzy
 msgid "Show Heading"
 msgstr "ओळीमधील रिकामी जागा"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:456
 msgid "If TRUE, a heading is displayed"
 msgstr ""
 
 # gtk/gtknotebook.c:406
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:470
 #, fuzzy
 msgid "Show Day Names"
 msgstr "टॅब दाखवा"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:471
 msgid "If TRUE, day names are displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:484
 msgid "No Month Change"
 msgstr ""
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:485
 msgid "If TRUE, the selected month cannot be changed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:499
 msgid "Show Week Numbers"
 msgstr ""
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:500
 msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
@@ -1279,7 +1279,7 @@ msgstr "gtk प्रगती सूचकपट्टी मध्ये द�
 
 # gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:578 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "लिखाण"
 
@@ -1365,7 +1365,7 @@ msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
-#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:509 gtk/gtktexttag.c:279
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:510 gtk/gtktexttag.c:279
 #: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "संपादनयोग्य"
@@ -1980,7 +1980,7 @@ msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "सर्व टॅबचा आकार एकसारखा असावा का"
 
 # gtk/gtkentry.c:480
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:534
+#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "चौकट आहे"
 
@@ -2128,51 +2128,51 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ह्या मजकुराच्या तळभागातील बटणाभोवती असणाऱ्या जागेची रुंदी"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#: gtk/gtkentry.c:489 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:490 gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr "कर्सरचे स्थान"
 
 # gtk/gtkentry.c:436 gtk/gtklabel.c:359
-#: gtk/gtkentry.c:490 gtk/gtklabel.c:401
+#: gtk/gtkentry.c:491 gtk/gtklabel.c:401
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "अक्षरामध्ये असणारी कर्सरची वर्तमान स्थिती."
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkentry.c:499 gtk/gtklabel.c:410
+#: gtk/gtkentry.c:500 gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
-#: gtk/gtkentry.c:500 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:501 gtk/gtklabel.c:411
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "कर्सरद्वारे निवडलेल्या अक्षरांची दूसऱ्या बाजुची स्थिती."
 
 # gtk/gtkentry.c:456
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:511
 msgid "Whether the entry contents can be edited"
 msgstr "मजकुरातील नोंदी संपादित किंवा सुधारणा करता येतील का"
 
 # gtk/gtkentry.c:463
-#: gtk/gtkentry.c:517
+#: gtk/gtkentry.c:518
 msgid "Maximum length"
 msgstr "कमाल लांबी"
 
 # gtk/gtkentry.c:464
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:519
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "ह्या नोंदीकरीता कमाल अक्षरसंख्या, कमाल नसेल तर शुन्य"
 
 # gtk/gtkentry.c:472
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:527
 msgid "Visibility"
 msgstr "दर्शनियता"
 
 # gtk/gtkentry.c:473
-#: gtk/gtkentry.c:527
+#: gtk/gtkentry.c:528
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2181,28 +2181,28 @@ msgstr ""
 "प्रदर्शित होते "
 
 # gtk/gtkentry.c:481
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:536
 #, fuzzy
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE चा प्रयोग केल्यावर हे नोंदणीपासूनचा बाहेरील उठाव हटवतो."
 
 # gtk/gtkentry.c:488
-#: gtk/gtkentry.c:542
+#: gtk/gtkentry.c:543
 msgid "Invisible character"
 msgstr "अद्रुश्य अक्षर"
 
 # gtk/gtkentry.c:489
-#: gtk/gtkentry.c:543
+#: gtk/gtkentry.c:544
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "मजकुर झाकण्यासाठी वापरण्याचे अक्षर (\"पासवर्ड मोड\")"
 
 # gtk/gtkentry.c:496
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:551
 msgid "Activates default"
 msgstr "सर्वसाधारण हा भाग कार्यान्वित होतो"
 
 # gtk/gtkentry.c:497
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 #, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -2210,38 +2210,38 @@ msgid ""
 msgstr "Enter बटण दाबून सर्वसाधारण विडगेट कार्यान्वित करायचे का"
 
 # gtk/gtkentry.c:503
-#: gtk/gtkentry.c:557
+#: gtk/gtkentry.c:558
 msgid "Width in chars"
 msgstr "अक्षरमालेची लांबी"
 
 # gtk/gtkentry.c:504
-#: gtk/gtkentry.c:558
+#: gtk/gtkentry.c:559
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "ह्या नोंदीमधील किती अक्षरांसाठी रिकामी जागा सोडायला हवी"
 
 # gtk/gtkentry.c:513
-#: gtk/gtkentry.c:567
+#: gtk/gtkentry.c:568
 msgid "Scroll offset"
 msgstr "स्क्रोल ओफसेट"
 
 # gtk/gtkentry.c:514
-#: gtk/gtkentry.c:568
+#: gtk/gtkentry.c:569
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "ह्या नोंदी मध्ये किती  पिक्सल्स पडद्याच्या डावीकडे स्क्रोल करतो "
 
 # gtk/gtkentry.c:524
-#: gtk/gtkentry.c:578
+#: gtk/gtkentry.c:579
 msgid "The contents of the entry"
 msgstr "नोंदीचा मजकूर"
 
 # gtk/gtkmisc.c:97
-#: gtk/gtkentry.c:593 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:594 gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "Xची दिशा"
 
 # gtk/gtkmisc.c:98
-#: gtk/gtkentry.c:594 gtk/gtkmisc.c:102
+#: gtk/gtkentry.c:595 gtk/gtkmisc.c:102
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
@@ -2249,12 +2249,12 @@ msgid ""
 msgstr "क्षितिज ओळींची दिशा ० (डावीकडून) १ (उजवीकडे)"
 
 # gtk/gtkentry.c:728
-#: gtk/gtkentry.c:832
+#: gtk/gtkentry.c:833
 msgid "Select on focus"
 msgstr "दृश्यमान करा"
 
 # gtk/gtkentry.c:729
-#: gtk/gtkentry.c:833
+#: gtk/gtkentry.c:834
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "मजकुरातील एखादी द्रुश्यमान झालेली नोंद तुम्हाला निवडायची आहे काय."
@@ -2742,7 +2742,7 @@ msgstr "सामान्य फ्रेम लेबलच्या  स्�
 # gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 # gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 #: gtk/gtkhandlebox.c:208 gtk/gtkmenubar.c:227 gtk/gtkstatusbar.c:205
-#: gtk/gtktoolbar.c:599 gtk/gtkviewport.c:153
+#: gtk/gtktoolbar.c:602 gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "छाये प्रमाणे"
 
@@ -2891,7 +2891,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
+#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:511
 msgid "Orientation"
 msgstr "कल"
 
@@ -3370,7 +3370,7 @@ msgid "Style of bevel around the menubar"
 msgstr "मेनूबार परिसरातील जवळील उठावाची शैली"
 
 # gtk/gtkmenubar.c:159 gtk/gtktoolbar.c:251
-#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:575
+#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:578
 msgid "Internal padding"
 msgstr "अंतर्गत भरणी"
 
@@ -5198,108 +5198,108 @@ msgid "If the toggle part of the button is displayed"
 msgstr "बटणाचा टॉगल भाग प्रदर्शित केला असेल तर"
 
 # gtk/gtktoolbar.c:225
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:512
 msgid "The orientation of the toolbar"
 msgstr "टूलबारची  दिशा"
 
 # gtk/gtktoolbar.c:233
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:520
 msgid "Toolbar Style"
 msgstr "टूलबारची शैली "
 
 # gtk/gtktoolbar.c:234
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:521
 msgid "How to draw the toolbar"
 msgstr "टूलबार कसे बनवायचे आहेत"
 
 # gtk/gtknotebook.c:413
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:528
 #, fuzzy
 msgid "Show Arrow"
 msgstr "सीमा दाखवा"
 
-#: gtk/gtktoolbar.c:526
+#: gtk/gtktoolbar.c:529
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:541
+#: gtk/gtktoolbar.c:544
 msgid "Tooltips"
 msgstr ""
 
 # gtk/gtktogglebutton.c:131
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:545
 #, fuzzy
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr "टॉगल बटण दाबायचे आहे की नाहीं"
 
-#: gtk/gtktoolbar.c:551
+#: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 
 # gtk/gtknotebook.c:435
-#: gtk/gtktoolbar.c:559
+#: gtk/gtktoolbar.c:562
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "सर्व टॅबचा आकार एकसारखा असावा का"
 
 # gtk/gtktoolbar.c:242
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:569
 msgid "Spacer size"
 msgstr "स्पेसरचा आकार"
 
 # gtk/gtktoolbar.c:243
-#: gtk/gtktoolbar.c:567
+#: gtk/gtktoolbar.c:570
 msgid "Size of spacers"
 msgstr "स्पेसरचे आकार"
 
 # gtk/gtktoolbar.c:252
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:579
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "टूलबारची छाया आणि बटणांमधील सीमेची मोकळी जागा"
 
 # gtk/gtktoolbar.c:260
-#: gtk/gtktoolbar.c:584
+#: gtk/gtktoolbar.c:587
 msgid "Space style"
 msgstr "रिक्त स्थानाची शैली"
 
 # gtk/gtktoolbar.c:261
-#: gtk/gtktoolbar.c:585
+#: gtk/gtktoolbar.c:588
 msgid "Whether spacers are vertical lines or just blank"
 msgstr " काय स्पेसर उभ्या रेषांच्या रूपात असावेत की केवळ रिकाम्या असाव्यात"
 
 # gtk/gtktoolbar.c:269
-#: gtk/gtktoolbar.c:592
+#: gtk/gtktoolbar.c:595
 msgid "Button relief"
 msgstr "दाबून ठेवलेले बटण मोकळे करा"
 
 # gtk/gtktoolbar.c:270
-#: gtk/gtktoolbar.c:593
+#: gtk/gtktoolbar.c:596
 msgid "Type of bevel around toolbar buttons"
 msgstr "टूलबार मधील बटणांच्या भोवतालचा उठाव प्रकार"
 
 # gtk/gtktoolbar.c:278
-#: gtk/gtktoolbar.c:600
+#: gtk/gtktoolbar.c:603
 msgid "Style of bevel around the toolbar"
 msgstr "टूलबार सभोवतालचा  उठाव प्रकार"
 
 # gtk/gtktoolbar.c:284
-#: gtk/gtktoolbar.c:606
+#: gtk/gtktoolbar.c:609
 msgid "Toolbar style"
 msgstr "टूलबारची शैली "
 
 # gtk/gtktoolbar.c:285
-#: gtk/gtktoolbar.c:607
+#: gtk/gtktoolbar.c:610
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "सर्वसाधारण टूलबार मध्ये केवळ मजकुर, मजकुर आणि आइकान्स,आइकान्स अाहेत का"
 
 # gtk/gtktoolbar.c:291
-#: gtk/gtktoolbar.c:613
+#: gtk/gtktoolbar.c:616
 msgid "Toolbar icon size"
 msgstr "टूलबारमधील आइकानचा आकार"
 
 # gtk/gtktoolbar.c:292
-#: gtk/gtktoolbar.c:614
+#: gtk/gtktoolbar.c:617
 msgid "Size of icons in default toolbars"
 msgstr "सर्वसाधारण टूलबारमधील आइकानचा आकार"
 

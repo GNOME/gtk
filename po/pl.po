@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 12:00-0500\n"
+"POT-Creation-Date: 2005-11-28 12:03-0500\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1198,7 +1198,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:652
+#: gtk/gtkcalendar.c:703
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1206,7 +1206,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:676
+#: gtk/gtkcalendar.c:727
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1218,7 +1218,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1566
+#: gtk/gtkcalendar.c:1617
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1233,7 +1233,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1843
+#: gtk/gtkcalendar.c:1894
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1243,7 +1243,7 @@ msgstr "%Y"
 msgid "progress bar label|%d %%"
 msgstr "progress bar label|%d %%"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:576
+#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
 msgid "Pick a Color"
 msgstr "Wybór koloru"
 
@@ -1378,15 +1378,15 @@ msgstr "Koło kolorów"
 msgid "Color Selection"
 msgstr "Wybór koloru"
 
-#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
 msgid "Select _All"
 msgstr "Zaznacz w_szystko"
 
-#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
 msgid "Input _Methods"
 msgstr "_Metody wejściowe"
 
-#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unicode"
 
@@ -1480,118 +1480,118 @@ msgstr ""
 "Nie można dodać zakładki dla \"%s\" ponieważ jest to niepoprawna nazwa "
 "ścieżki."
 
-#: gtk/gtkfilechooserdefault.c:3105
+#: gtk/gtkfilechooserdefault.c:3112
 msgid "Remove"
 msgstr "Usuń"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3121
 msgid "Rename..."
 msgstr "Zmień nazwę..."
 
-#: gtk/gtkfilechooserdefault.c:3237
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Shortcuts"
 msgstr "Skróty"
 
-#: gtk/gtkfilechooserdefault.c:3291
+#: gtk/gtkfilechooserdefault.c:3298
 msgid "Folder"
 msgstr "Folder"
 
-#: gtk/gtkfilechooserdefault.c:3347 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3354 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:3354
+#: gtk/gtkfilechooserdefault.c:3361
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaje wybrany folder do zakładek"
 
-#: gtk/gtkfilechooserdefault.c:3359 gtk/gtkstock.c:400
+#: gtk/gtkfilechooserdefault.c:3366 gtk/gtkstock.c:400
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: gtk/gtkfilechooserdefault.c:3366
+#: gtk/gtkfilechooserdefault.c:3373
 msgid "Remove the selected bookmark"
 msgstr "Usuwa wybraną zakładkę"
 
-#: gtk/gtkfilechooserdefault.c:3466
+#: gtk/gtkfilechooserdefault.c:3473
 msgid "Could not select file"
 msgstr "Nie można wybrać pliku"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3529
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Nie można wybrać pliku \"%s\" ponieważ jest to niepoprawna nazwa ścieżki."
 
-#: gtk/gtkfilechooserdefault.c:3594
+#: gtk/gtkfilechooserdefault.c:3601
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj do zakładek"
 
-#: gtk/gtkfilechooserdefault.c:3604
+#: gtk/gtkfilechooserdefault.c:3611
 msgid "Open _Location"
 msgstr "O_twórz położenie"
 
-#: gtk/gtkfilechooserdefault.c:3616
+#: gtk/gtkfilechooserdefault.c:3623
 msgid "Show _Hidden Files"
 msgstr "Wyświetl u_kryte pliki"
 
-#: gtk/gtkfilechooserdefault.c:3740 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3747 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Pliki"
 
-#: gtk/gtkfilechooserdefault.c:3785
+#: gtk/gtkfilechooserdefault.c:3792
 msgid "Name"
 msgstr "Nazwa"
 
-#: gtk/gtkfilechooserdefault.c:3810
+#: gtk/gtkfilechooserdefault.c:3817
 msgid "Size"
 msgstr "Rozmiar"
 
-#: gtk/gtkfilechooserdefault.c:3823
+#: gtk/gtkfilechooserdefault.c:3830
 msgid "Modified"
 msgstr "Zmodyfikowany"
 
-#: gtk/gtkfilechooserdefault.c:3855
+#: gtk/gtkfilechooserdefault.c:3862
 msgid "Select which types of files are shown"
 msgstr "Wybiera jakie rodzaje plików są wyświetlane"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Create Fo_lder"
 msgstr "Utwórz fo_lder"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:4016
+#: gtk/gtkfilechooserdefault.c:4023
 msgid "_Name:"
 msgstr "_Nazwa:"
 
-#: gtk/gtkfilechooserdefault.c:4056
+#: gtk/gtkfilechooserdefault.c:4063
 msgid "_Browse for other folders"
 msgstr "_Przeglądaj inne foldery"
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Save in _folder:"
 msgstr "Zapis w f_olderze:"
 
-#: gtk/gtkfilechooserdefault.c:4327
+#: gtk/gtkfilechooserdefault.c:4334
 msgid "Create in _folder:"
 msgstr "Utwórz w fold_erze:"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5407
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Nie można przejść do folderu, ponieważ nie jest on lokalny"
 
-#: gtk/gtkfilechooserdefault.c:5980
+#: gtk/gtkfilechooserdefault.c:5987
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skrót %s nie istnieje"
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6242
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Plik o nazwie \"%s\" już istnieje. Czy chcesz go zastąpić?"
 
-#: gtk/gtkfilechooserdefault.c:6238
+#: gtk/gtkfilechooserdefault.c:6245
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1599,20 +1599,20 @@ msgstr ""
 "Plik już istnieje w \"%s\". Zastąpienie go spowoduje nadpisanie jego "
 "zawartości."
 
-#: gtk/gtkfilechooserdefault.c:6243
+#: gtk/gtkfilechooserdefault.c:6250
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: gtk/gtkfilechooserdefault.c:6734
+#: gtk/gtkfilechooserdefault.c:6741
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nie można zamontować %s"
 
-#: gtk/gtkfilechooserdefault.c:7042
+#: gtk/gtkfilechooserdefault.c:7056
 msgid "Type name of new folder"
 msgstr "Podaj nazwę nowego folderu"
 
-#: gtk/gtkfilechooserdefault.c:7084
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1620,59 +1620,59 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtów"
 
-#: gtk/gtkfilechooserdefault.c:7086
+#: gtk/gtkfilechooserdefault.c:7100
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7088
+#: gtk/gtkfilechooserdefault.c:7102
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7090
+#: gtk/gtkfilechooserdefault.c:7104
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7136 gtk/gtkfilechooserdefault.c:7160
+#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: gtk/gtkfilechooserdefault.c:7147
+#: gtk/gtkfilechooserdefault.c:7161
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: gtk/gtkfilechooserdefault.c:7149
+#: gtk/gtkfilechooserdefault.c:7163
 msgid "Yesterday"
 msgstr "Wczoraj"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7245
 msgid "Cannot change folder"
 msgstr "Nie można zmienić folderu"
 
-#: gtk/gtkfilechooserdefault.c:7232
+#: gtk/gtkfilechooserdefault.c:7246
 msgid "The folder you specified is an invalid path."
 msgstr "Podany folder jest niepoprawną ścieżką."
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7285
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nie można utworzyć nazwy pliku z \"%s\" i \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:7307
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Could not select item"
 msgstr "Nie można zaznaczyć elementu"
 
-#: gtk/gtkfilechooserdefault.c:7347
+#: gtk/gtkfilechooserdefault.c:7361
 msgid "Open Location"
 msgstr "Otwarcie położenia"
 
-#: gtk/gtkfilechooserdefault.c:7354
+#: gtk/gtkfilechooserdefault.c:7368
 msgid "Save in Location"
 msgstr "Zapis w położeniu"
 
-#: gtk/gtkfilechooserdefault.c:7381
+#: gtk/gtkfilechooserdefault.c:7395
 msgid "_Location:"
 msgstr "Położ_enie:"
 
@@ -2142,17 +2142,17 @@ msgstr "Grupa"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Grupa, do której należy ten przycisk narzędzia radiowego."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2401
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nie można odnaleźć dołączanego pliku: \"%s\""
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3043 gtk/gtkrc.c:3046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\""
 
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3481
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element ścieżki piksmapy: \"%s\" musi być bezwzględne, %s, wiersz %d"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 12:00-0500\n"
+"POT-Creation-Date: 2005-11-28 12:03-0500\n"
 "PO-Revision-Date: 2005-09-03 20:59+0200\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1217,7 +1217,7 @@ msgstr "Obrnuta kosa crta"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:652
+#: gtk/gtkcalendar.c:703
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1225,7 +1225,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:676
+#: gtk/gtkcalendar.c:727
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1237,7 +1237,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1566
+#: gtk/gtkcalendar.c:1617
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1252,7 +1252,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1843
+#: gtk/gtkcalendar.c:1894
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1262,7 +1262,7 @@ msgstr "%Y"
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:576
+#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
 msgid "Pick a Color"
 msgstr "Izaberite boju"
 
@@ -1399,15 +1399,15 @@ msgstr "Točak boja"
 msgid "Color Selection"
 msgstr "Izbor boje"
 
-#: gtk/gtkentry.c:4572 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
-#: gtk/gtkentry.c:4582 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
 msgid "Input _Methods"
 msgstr "_Načini unosa"
 
-#: gtk/gtkentry.c:4593 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni Unikod znak"
 
@@ -1502,139 +1502,139 @@ msgstr ""
 "Ne mogu da dodam obeleživač za „%s“ zato što predstavlja neispravno ime "
 "putanje."
 
-#: gtk/gtkfilechooserdefault.c:3105
+#: gtk/gtkfilechooserdefault.c:3112
 msgid "Remove"
 msgstr "Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3121
 msgid "Rename..."
 msgstr "Preimenuj..."
 
-#: gtk/gtkfilechooserdefault.c:3237
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Shortcuts"
 msgstr "Prečice"
 
-#: gtk/gtkfilechooserdefault.c:3291
+#: gtk/gtkfilechooserdefault.c:3298
 msgid "Folder"
 msgstr "Fascikla"
 
-#: gtk/gtkfilechooserdefault.c:3347 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3354 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:3354
+#: gtk/gtkfilechooserdefault.c:3361
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaj izabranu fasciklu u obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:3359 gtk/gtkstock.c:400
+#: gtk/gtkfilechooserdefault.c:3366 gtk/gtkstock.c:400
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:3366
+#: gtk/gtkfilechooserdefault.c:3373
 msgid "Remove the selected bookmark"
 msgstr "Ukloni izabrani obeleživač"
 
-#: gtk/gtkfilechooserdefault.c:3466
+#: gtk/gtkfilechooserdefault.c:3473
 msgid "Could not select file"
 msgstr "Ne mogu da izaberem datoteku"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3529
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Ne mogu da izaberem datoteku „%s“ zato što predstavlja neispravno ime "
 "putanje."
 
-#: gtk/gtkfilechooserdefault.c:3594
+#: gtk/gtkfilechooserdefault.c:3601
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj među obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:3604
+#: gtk/gtkfilechooserdefault.c:3611
 msgid "Open _Location"
 msgstr "Otvori _putanju"
 
-#: gtk/gtkfilechooserdefault.c:3616
+#: gtk/gtkfilechooserdefault.c:3623
 msgid "Show _Hidden Files"
 msgstr "Prikaži sa_krivene datoteke"
 
-#: gtk/gtkfilechooserdefault.c:3740 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3747 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilechooserdefault.c:3785
+#: gtk/gtkfilechooserdefault.c:3792
 msgid "Name"
 msgstr "Ime:"
 
-#: gtk/gtkfilechooserdefault.c:3810
+#: gtk/gtkfilechooserdefault.c:3817
 msgid "Size"
 msgstr "Veličina"
 
-#: gtk/gtkfilechooserdefault.c:3823
+#: gtk/gtkfilechooserdefault.c:3830
 msgid "Modified"
 msgstr "Izmenjena"
 
-#: gtk/gtkfilechooserdefault.c:3855
+#: gtk/gtkfilechooserdefault.c:3862
 msgid "Select which types of files are shown"
 msgstr "Izaberi koje vrsta datoteka se prikazuju"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Create Fo_lder"
 msgstr "Napravi _fasciklu"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:4016
+#: gtk/gtkfilechooserdefault.c:4023
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:4056
+#: gtk/gtkfilechooserdefault.c:4063
 msgid "_Browse for other folders"
 msgstr "_Razgledaj ostale fascikle"
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Save in _folder:"
 msgstr "Sačuvaj u _fascikli:"
 
-#: gtk/gtkfilechooserdefault.c:4327
+#: gtk/gtkfilechooserdefault.c:4334
 msgid "Create in _folder:"
 msgstr "Napravi u _fascikli:"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5407
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Ne mogu da uđem u fasciklu zato što nije lokalna"
 
-#: gtk/gtkfilechooserdefault.c:5980
+#: gtk/gtkfilechooserdefault.c:5987
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Prečica %s ne postoji"
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6242
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Datoteka nazvana „%s“ već postoji.  Želite li da je zamenite?"
 
-#: gtk/gtkfilechooserdefault.c:6238
+#: gtk/gtkfilechooserdefault.c:6245
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Datoteka već postoji u „%s“.  Njenom zamenom ćete presnimiti njen sadržaj."
 
-#: gtk/gtkfilechooserdefault.c:6243
+#: gtk/gtkfilechooserdefault.c:6250
 msgid "_Replace"
 msgstr "_Zameni"
 
-#: gtk/gtkfilechooserdefault.c:6734
+#: gtk/gtkfilechooserdefault.c:6741
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ne mogu da priključim %s"
 
-#: gtk/gtkfilechooserdefault.c:7042
+#: gtk/gtkfilechooserdefault.c:7056
 msgid "Type name of new folder"
 msgstr "Unesite ime nove fascikle"
 
-#: gtk/gtkfilechooserdefault.c:7084
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1642,59 +1642,59 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:7086
+#: gtk/gtkfilechooserdefault.c:7100
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7088
+#: gtk/gtkfilechooserdefault.c:7102
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7090
+#: gtk/gtkfilechooserdefault.c:7104
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7136 gtk/gtkfilechooserdefault.c:7160
+#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:7147
+#: gtk/gtkfilechooserdefault.c:7161
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:7149
+#: gtk/gtkfilechooserdefault.c:7163
 msgid "Yesterday"
 msgstr "Juče"
 
-#: gtk/gtkfilechooserdefault.c:7231
+#: gtk/gtkfilechooserdefault.c:7245
 msgid "Cannot change folder"
 msgstr "Ne mogu da promenim fasciklu"
 
-#: gtk/gtkfilechooserdefault.c:7232
+#: gtk/gtkfilechooserdefault.c:7246
 msgid "The folder you specified is an invalid path."
 msgstr "Fascikla koju ste naveli predstavlja neispravnu putanju."
 
-#: gtk/gtkfilechooserdefault.c:7271
+#: gtk/gtkfilechooserdefault.c:7285
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Ne mogu da sastavim ime datoteke iz „%s“ i „%s“"
 
-#: gtk/gtkfilechooserdefault.c:7307
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Could not select item"
 msgstr "Ne mogu da izaberem stavku"
 
-#: gtk/gtkfilechooserdefault.c:7347
+#: gtk/gtkfilechooserdefault.c:7361
 msgid "Open Location"
 msgstr "Otvori putanju"
 
-#: gtk/gtkfilechooserdefault.c:7354
+#: gtk/gtkfilechooserdefault.c:7368
 msgid "Save in Location"
 msgstr "Sačuvaj na putanji"
 
-#: gtk/gtkfilechooserdefault.c:7381
+#: gtk/gtkfilechooserdefault.c:7395
 msgid "_Location:"
 msgstr "_Putanja: "
 
@@ -2159,18 +2159,18 @@ msgstr "Grupa"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Dugme radio alatke čijoj grupi ovo dugme pripada."
 
-#: gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2401
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ne mogu pronaći datoteku za uključivanje: „%s“"
 
-#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3043 gtk/gtkrc.c:3046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne mogu pronaći datoteku sa slikom u pixmap_path: „%s“"
 
 # bug: first colon seems unnecessary
-#: gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3481
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Deo putanje za slike: „%s“ mora biti apsolutna putanja, %s, %d. red"

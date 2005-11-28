@@ -1,5 +1,9 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* ===  Released 2.8.8 ===
+
+	* NEWS: Updates
+
 	* gtk/gtkscale.c (_gtk_scale_format_value): Insert an LRM, to prevent
 	-20 to come out as 20- in RTL locales.  (#322571, Tze'ela Hebron)
 
@@ -50,7 +54,7 @@
 
 2005-11-27  Tor Lillqvist  <tml@novell.com>
 
-	Once again rework Win32 window decoration code. Doesn'tbreak
+	Once again rework Win32 window decoration code. Doesn't break
 	#104514. The dialogs in gtk-demo now have the same decorations and
 	behaviour as on X11. Tried to fix #322516 but it seems very hard
 	to make the trivial sample program there behave as expected.
@@ -108,7 +112,7 @@
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_internal): 
 	Emit notify::active.
 
-2005-11-18  Matthias Clasen  <Jean-Yves Lefortmclasen@redhat.com>
+2005-11-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix crashes in connection with pathbar scrolling (#321560,
 	Bogdan Nicula)
@@ -117,7 +121,7 @@
 	Stop scrolling when desensitising slider buttons.
 	(gtk_path_bar_scroll_timeout, gtk_path_bar_slider_button_press): 
 	And use it here.  
-Jean-Yves Lefort
+
 	* gtk/gtkpathbar.h (struct _GtkPathBar): Add a separate
 	scrolling_down flag.
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 12:00-0500\n"
+"POT-Creation-Date: 2005-11-28 12:03-0500\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -635,7 +635,7 @@ msgstr "Go dira sekgoba"
 msgid "The amount of space between children"
 msgstr "Tekanyo ya sekgoba magareng ga bana"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:558
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Mohuta o swanago"
 
@@ -643,7 +643,7 @@ msgstr "Mohuta o swanago"
 msgid "Whether the children should all be the same size"
 msgstr "Ge e ba bana ka moka ba swanetše go ba bogolo bjo swanago"
 
-#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:550
+#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:553
 #: gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "Katološa"
@@ -827,27 +827,27 @@ msgstr "Bontšha diswantšho tša konope"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Ge eba maswao a setoko a swanetše go bontšhwa ka dikonopeng"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:426
 msgid "Year"
 msgstr "Ngwaga"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:427
 msgid "The selected year"
 msgstr "Ngwaga o kgethilwego"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:433
 msgid "Month"
 msgstr "Kgwedi"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:434
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Kgwedi e kgethilwego (bjalo ka nomoro magareng ga 0 le 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:440
 msgid "Day"
 msgstr "Letšatši"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:441
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -855,36 +855,36 @@ msgstr ""
 "Letšatši le kgethilwego (bjalo ka nomoro magareng ga 1 le 31, goba 0 go "
 "kgetholla letšatši leo le kgethilwego gona bjale)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:455
 msgid "Show Heading"
 msgstr "Bontšha Sehlogo"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:456
 msgid "If TRUE, a heading is displayed"
 msgstr "Ge eba e le THEREŠO, sehlogo se a bonagatšwa"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:470
 msgid "Show Day Names"
 msgstr "Bontšha Maina a Letšatši"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:471
 msgid "If TRUE, day names are displayed"
 msgstr "Ge eba e le THEREŠO, maina a letšatši a bonagatšwa"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:484
 msgid "No Month Change"
 msgstr "Ga go na Phetogo ya Kgwedi"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:485
 #, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Ge eba e le THEREŠO, kgwedi e kgethilwego e ka se fetolwe"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:499
 msgid "Show Week Numbers"
 msgstr "Bontšha Dinomoro tša Beke"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:500
 msgid "If TRUE, week numbers are displayed"
 msgstr "Ge eba e le THEREŠO, dinomoro tša beke di a bonagatšwa"
 
@@ -1100,7 +1100,7 @@ msgid "Value of the progress bar"
 msgstr "Sengwalwa seo se swanetšego go bontšhwa bareng ya tšwelopele"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:578 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Sengwalwa"
 
@@ -1172,7 +1172,7 @@ msgstr "Mmala o bonagalago ka pele"
 msgid "Foreground color as a GdkColor"
 msgstr "Mmala o bonagalago ka pele bjalo ka Mmala wa Gdk"
 
-#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:509 gtk/gtktexttag.c:279
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:510 gtk/gtktexttag.c:279
 #: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Lokišegago"
@@ -1680,7 +1680,7 @@ msgstr "Oketša tše kgeitšwego lelokelelong la dikagare"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ge eba di-tab di swanetše go ba le bogolo bja mohuta o swanago"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:534
+#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "E na le foreime"
 
@@ -1804,44 +1804,44 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Bophara bja mollwane go dikologa lefelo la konope ka tlase ga poledišano"
 
-#: gtk/gtkentry.c:489 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:490 gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr "Boemo bja Leswao leo le šupago mo o lego"
 
-#: gtk/gtkentry.c:490 gtk/gtklabel.c:401
+#: gtk/gtkentry.c:491 gtk/gtklabel.c:401
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 "Boemo bja gona bjale bja tsenyo ya leswao leo le šupago mo o lego lešaleng"
 
-#: gtk/gtkentry.c:499 gtk/gtklabel.c:410
+#: gtk/gtkentry.c:500 gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr "Mmotwana wa Kgetho"
 
-#: gtk/gtkentry.c:500 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:501 gtk/gtklabel.c:411
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "Boemo bja mafelelo a fapanego a kgetho go tšwa leswaong leo le šupago mo o "
 "lego lešaleng"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:511
 msgid "Whether the entry contents can be edited"
 msgstr "Ge eba dikagare tša tseno di ka lokišwa"
 
-#: gtk/gtkentry.c:517
+#: gtk/gtkentry.c:518
 msgid "Maximum length"
 msgstr "Botelele bjo bogolo"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:519
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Palo e kgolo ya tlhaka bakeng sa tseno ye. Lefeela ge eba go se na bogolo"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:527
 msgid "Visibility"
 msgstr "Ponagalo"
 
-#: gtk/gtkentry.c:527
+#: gtk/gtkentry.c:528
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1849,25 +1849,25 @@ msgstr ""
 "MAAKA a bonagatša \"lešala le sa bonagalego\" go e na le gore e bontšhe "
 "sengwalwa sa kgonthe (mokgwa wa lentšu-phetišo)"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:536
 msgid "FALSE removes outside bevel from entry"
 msgstr "MAAKA a tloša sethadi sa diswantšho sa ka ntle tsenong"
 
-#: gtk/gtkentry.c:542
+#: gtk/gtkentry.c:543
 msgid "Invisible character"
 msgstr "Tlhaka e sa bonagalego"
 
-#: gtk/gtkentry.c:543
+#: gtk/gtkentry.c:544
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Tlhaka e ka dirišetšwago go šira dikagare tša tseno (go \"mokgwa wa lentšu-"
 "phetišo\")"
 
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:551
 msgid "Activates default"
 msgstr "E diragatša tlhaelelo"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1875,33 +1875,33 @@ msgstr ""
 "Ge eba o swanetše go diragatša sedirišwa sa tlhaelelo (bjalo ka konope ya "
 "tlhaelelo poledišanong) ge go kgotlwa Tsena"
 
-#: gtk/gtkentry.c:557
+#: gtk/gtkentry.c:558
 msgid "Width in chars"
 msgstr "Bophara mašaleng"
 
-#: gtk/gtkentry.c:558
+#: gtk/gtkentry.c:559
 msgid "Number of characters to leave space for in the entry"
 msgstr "Palo ya ditlhaka tšeo di swanetšego go bulelwa sekgoba tsenong"
 
-#: gtk/gtkentry.c:567
+#: gtk/gtkentry.c:568
 msgid "Scroll offset"
 msgstr "Eya mathomong"
 
-#: gtk/gtkentry.c:568
+#: gtk/gtkentry.c:569
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Palo ya dikarolwana tše bopago seswantšho tša tseno e ntšhitšwego sekirining "
 "go ya go lanngele"
 
-#: gtk/gtkentry.c:578
+#: gtk/gtkentry.c:579
 msgid "The contents of the entry"
 msgstr "Dikagare tša tseno"
 
-#: gtk/gtkentry.c:593 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:594 gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "Teka-tekanyo ya X"
 
-#: gtk/gtkentry.c:594 gtk/gtkmisc.c:102
+#: gtk/gtkentry.c:595 gtk/gtkmisc.c:102
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
@@ -1910,11 +1910,11 @@ msgstr ""
 "Teka-tekanyo e rapamego, go tloga go 0 (lanngele) go ya go 1 (lagoja). "
 "Bušeditšwe morago bakeng sa go bea ga RTL"
 
-#: gtk/gtkentry.c:832
+#: gtk/gtkentry.c:833
 msgid "Select on focus"
 msgstr "Kgetha go lebiša hlokomelo"
 
-#: gtk/gtkentry.c:833
+#: gtk/gtkentry.c:834
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Ge eba o swanetše go kgetha dikagare tša tseno ge e lebišitše hlokomelo"
@@ -2324,7 +2324,7 @@ msgstr ""
 "foreime"
 
 #: gtk/gtkhandlebox.c:208 gtk/gtkmenubar.c:227 gtk/gtkstatusbar.c:205
-#: gtk/gtktoolbar.c:599 gtk/gtkviewport.c:153
+#: gtk/gtktoolbar.c:602 gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "Mohuta wa moriti"
 
@@ -2456,7 +2456,7 @@ msgstr "Morumo wa Lanngele"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
+#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:511
 msgid "Orientation"
 msgstr "Thulaganyo"
 
@@ -2884,7 +2884,7 @@ msgid "Style of bevel around the menubar"
 msgstr ""
 "Setaele sa sethadi sa diswantšho go dikologa bara ya lelokelelo la dikagare"
 
-#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:575
+#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:578
 msgid "Internal padding"
 msgstr "Go aletša ga ka gare"
 
@@ -4523,103 +4523,103 @@ msgstr "Selaetši sa go Thala"
 msgid "If the toggle part of the button is displayed"
 msgstr "Ge eba karolo ya konope ya go thumaša le go tima e bontšhitšwe"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:512
 msgid "The orientation of the toolbar"
 msgstr "Thulaganyo ya bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:520
 msgid "Toolbar Style"
 msgstr "Setaele sa Bara ya Sedirišwa"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:521
 msgid "How to draw the toolbar"
 msgstr "Kamoo o ka thalago bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:528
 msgid "Show Arrow"
 msgstr "Bontšha Lerungwana"
 
-#: gtk/gtktoolbar.c:526
+#: gtk/gtktoolbar.c:529
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Ge eba lerungwana le swanetše go bontšhwa ge eba bara ya sedirišwa e sa "
 "lekane"
 
-#: gtk/gtktoolbar.c:541
+#: gtk/gtktoolbar.c:544
 #, fuzzy
 msgid "Tooltips"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:545
 #, fuzzy
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr ""
 "Ge eba konope ya go thumaša le go tima e swanetše go gatelelwa goba aowa"
 
-#: gtk/gtktoolbar.c:551
+#: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Ge eba selo se swanetše go amogela sekgoba se oketšegilego ge bara ya "
 "sedirišwa e gola"
 
-#: gtk/gtktoolbar.c:559
+#: gtk/gtktoolbar.c:562
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Ge e ba selo se swanetše go ba bogolo bjo swanago le dilo tše dingwe tša "
 "mohuta o swanago"
 
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:569
 msgid "Spacer size"
 msgstr "Bogolo bja sediri sa sekgoba"
 
-#: gtk/gtktoolbar.c:567
+#: gtk/gtktoolbar.c:570
 msgid "Size of spacers"
 msgstr "Bogolo bja sediri sa sekgoba"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:579
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Tekanyo ya sekgoba sa mollwane magareng ga moriti wa bara ya sedirišwa le "
 "dikonope"
 
-#: gtk/gtktoolbar.c:584
+#: gtk/gtktoolbar.c:587
 msgid "Space style"
 msgstr "Setaele sa sekgoba"
 
-#: gtk/gtktoolbar.c:585
+#: gtk/gtktoolbar.c:588
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Ge eba sediri sa sekgoba ke mothaladi o tsepamego goba feela ga o na selo"
 
-#: gtk/gtktoolbar.c:592
+#: gtk/gtktoolbar.c:595
 msgid "Button relief"
 msgstr "Kimollo ya konope"
 
-#: gtk/gtktoolbar.c:593
+#: gtk/gtktoolbar.c:596
 msgid "Type of bevel around toolbar buttons"
 msgstr ""
 "Mohuta wa sethadi sa diswantšho go dikologa dikonope tša bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:600
+#: gtk/gtktoolbar.c:603
 msgid "Style of bevel around the toolbar"
 msgstr "Setaele sa sethadi sa diswantšho go dikologa bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:606
+#: gtk/gtktoolbar.c:609
 msgid "Toolbar style"
 msgstr "Setaele sa bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:607
+#: gtk/gtktoolbar.c:610
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Ge eba dibara tša didirišwa tša tlhaelelo di na le sengwalwa feela, "
 "sengwalwa le maswao, maswao feela, bj.bj."
 
-#: gtk/gtktoolbar.c:613
+#: gtk/gtktoolbar.c:616
 msgid "Toolbar icon size"
 msgstr "Bogolo bja leswao la bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:614
+#: gtk/gtktoolbar.c:617
 msgid "Size of icons in default toolbars"
 msgstr "Bogolo bja maswao ao a lego dibareng tša didirišwa tša tlhaelelo"
 
