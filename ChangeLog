@@ -1,5 +1,9 @@
 2005-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (gtk_action_sync_button_stock_id) 
+	(connect_proxy): Buttons use the label property for stock ids.  (#322565,
+	Milosz Derezynski)
+
 	* gtk/gtkiconview.c (update_text_cell, update_pixbuf_cell): Correctly
 	handle the cell list and indices into it.  (#321856)
 
