@@ -1,3 +1,19 @@
+2005-11-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Properly handle model changes in GtkTreeSelection: (#322569,
+	Milosz Derezynski)
+	
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): 
+	Get a reference to the model, and stop the iteration if the model
+	of the treeview is changed on the way.
+
+	* gtk/gtktreeprivate.h: 
+	* gtk/gtktreeselection.c (_gtk_tree_selection_emit_changed): New 
+	private function to emit the GtkTreeSelection::changed signal.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): Call 
+	_gtk_tree_selection_emit_changed() when the model changes.
+
 2005-11-28  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:

@@ -9526,7 +9526,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
   tree_view->priv->model = model;
 
-
   if (tree_view->priv->model)
     {
       gint i;
@@ -9589,6 +9588,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
     }
 
   g_object_notify (G_OBJECT (tree_view), "model");
+
+  if (tree_view->priv->selection)
+  _gtk_tree_selection_emit_changed (tree_view->priv->selection);
 
   if (GTK_WIDGET_REALIZED (tree_view))
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));

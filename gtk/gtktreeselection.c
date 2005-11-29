@@ -618,8 +618,9 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   GtkRBTree *tree;
   GtkRBNode *node;
   GtkTreeIter iter;
+  GtkTreeModel *model;
 
-  guint inserted_id, deleted_id, reordered_id;
+  gulong inserted_id, deleted_id, reordered_id, changed_id;
   gboolean stop = FALSE;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
@@ -649,19 +650,22 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   while (node->left != tree->nil)
     node = node->left;
 
+  model = selection->tree_view->priv->model;
+  g_object_ref (model);
+
   /* connect to signals to monitor changes in treemodel */
-  inserted_id = g_signal_connect_swapped (selection->tree_view->priv->model,
-                                          "row_inserted",
+  inserted_id = g_signal_connect_swapped (model, "row_inserted",
 					  G_CALLBACK (model_changed),
 				          &stop);
-  deleted_id = g_signal_connect_swapped (selection->tree_view->priv->model,
-                                         "row_deleted",
+  deleted_id = g_signal_connect_swapped (model, "row_deleted",
 					 G_CALLBACK (model_changed),
 				         &stop);
-  reordered_id = g_signal_connect_swapped (selection->tree_view->priv->model,
-                                           "rows_reordered",
+  reordered_id = g_signal_connect_swapped (model, "rows_reordered",
 					   G_CALLBACK (model_changed),
 				           &stop);
+  changed_id = g_signal_connect_swapped (selection->tree_view, "notify::model",
+					 G_CALLBACK (model_changed), 
+					 &stop);
 
   /* find the node internally */
   path = gtk_tree_path_new_first ();
@@ -670,9 +674,8 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
     {
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
         {
-          gtk_tree_model_get_iter (selection->tree_view->priv->model,
-                                   &iter, path);
-	  (* func) (selection->tree_view->priv->model, path, &iter, data);
+          gtk_tree_model_get_iter (model, &iter, path);
+	  (* func) (model, path, &iter, data);
         }
 
       if (stop)
@@ -725,20 +728,18 @@ out:
   if (path)
     gtk_tree_path_free (path);
 
-  g_signal_handler_disconnect (selection->tree_view->priv->model,
-                               inserted_id);
-  g_signal_handler_disconnect (selection->tree_view->priv->model,
-                               deleted_id);
-  g_signal_handler_disconnect (selection->tree_view->priv->model,
-                               reordered_id);
+  g_signal_handler_disconnect (model, inserted_id);
+  g_signal_handler_disconnect (model, deleted_id);
+  g_signal_handler_disconnect (model, reordered_id);
+  g_signal_handler_disconnect (selection->tree_view, changed_id);
+  g_object_unref (model);
 
   /* check if we have to spew a scary message */
   if (stop)
-    g_warning
-      ("The model has been modified from within gtk_tree_selection_selected_foreach.\n"
-       "This function is for observing the selections of the tree only.  If\n"
-       "you are trying to get all selected items from the tree, try using\n"
-       "gtk_tree_selection_get_selected_rows instead.\n");
+    g_warning ("The model has been modified from within gtk_tree_selection_selected_foreach.\n"
+	       "This function is for observing the selections of the tree only.  If\n"
+	       "you are trying to get all selected items from the tree, try using\n"
+	       "gtk_tree_selection_get_selected_rows instead.\n");
 }
 
 /**
@@ -1486,7 +1487,14 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     gtk_tree_path_free (anchor_path);
 
   if (dirty)
-    g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
+    g_signal_emit (selection, tree_selection_signals[CHANGED], 0);  
+}
+
+
+void 
+_gtk_tree_selection_emit_changed (GtkTreeSelection *selection)
+{
+  g_signal_emit (selection, tree_selection_signals[CHANGED], 0);  
 }
 
 /* NOTE: Any {un,}selection ever done _MUST_ be done through this function!
