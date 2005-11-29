@@ -2,6 +2,19 @@
 
 	Merged from HEAD:
 
+	Fixes the critical warnings from bug #317999, thus fixing the bug
+	completely:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_paths): In SELECT_FOLDER mode,
+	use _gtk_file_chooser_get_current_folder_path() instead of fetching the
+	impl->current_folder directly.  The latter may be null if we are
+	in RELOAD_NONE state.
+
+2005-11-28  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
 	Fix bug #321560, based on a patch by Bogdan Nicula (bogdanni@hotmail.com):
 
 	* gtk/gtkfilechooserdefault.c (up_folder_handler): Don't add the
