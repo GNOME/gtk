@@ -5701,7 +5701,7 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
       info.result == NULL)
     {
-      info.result = g_slist_prepend (info.result, gtk_file_path_copy (impl->current_folder));
+      info.result = g_slist_prepend (info.result, _gtk_file_chooser_get_current_folder_path (chooser));
     }
 
   return g_slist_reverse (info.result);
