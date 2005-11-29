@@ -312,6 +312,7 @@ void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *select
 						       GtkTreePath       *path,
                                                        GtkTreeSelectMode  mode,
 						       gboolean           override_browse_mode);
+void         _gtk_tree_selection_emit_changed         (GtkTreeSelection  *selection);
 gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_view,
 						       GtkTreePath       *path,
 						       GtkRBTree        **tree,
