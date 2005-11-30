@@ -1,5 +1,8 @@
 2005-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoggleaction.c (gtk_toggle_action_class_init): Add 
+	an active property.  (#322673, Jorn Baayen)
+
 	Properly handle model changes in GtkTreeSelection: (#322569,
 	Milosz Derezynski)
 	
