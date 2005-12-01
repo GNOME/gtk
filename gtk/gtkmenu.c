@@ -474,7 +474,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->hide_all = gtk_menu_hide_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
-  widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->style_set = gtk_menu_style_set;
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
