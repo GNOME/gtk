@@ -241,8 +241,39 @@ _xdg_glob_hash_insert_text (XdgGlobHashNode *glob_hash_node,
   text = _xdg_utf8_next_char (text);
   if (*text == '\000')
     {
-      free ((void *) node->mime_type);
-      node->mime_type = mime_type;
+      if (node->mime_type)
+	{
+	  if (strcmp (node->mime_type, mime_type))
+	    {
+	      XdgGlobHashNode *child;
+	      int found_node = FALSE;
+	      
+	      child = node->child;
+	      while (child && child->character == '\0')
+		{
+		  if (strcmp (child->mime_type, mime_type) == 0)
+		    {
+		      found_node = TRUE;
+		      break;
+		    }
+		  child = child->next;
+		}
+
+	      if (!found_node)
+		{
+		  child = _xdg_glob_hash_node_new ();
+		  child->character = '\000';
+		  child->mime_type = mime_type;
+		  child->child = NULL;
+		  child->next = node->child;
+		  node->child = child;
+		}
+	    }
+	}
+      else
+	{
+	  node->mime_type = mime_type;
+	}
     }
   else
     {
@@ -251,16 +282,19 @@ _xdg_glob_hash_insert_text (XdgGlobHashNode *glob_hash_node,
   return glob_hash_node;
 }
 
-static const char *
+static int
 _xdg_glob_hash_node_lookup_file_name (XdgGlobHashNode *glob_hash_node,
 				      const char      *file_name,
-				      int              ignore_case)
+				      int              ignore_case,
+				      const char      *mime_types[],
+				      int              n_mime_types)
 {
+  int n;
   XdgGlobHashNode *node;
   xdg_unichar_t character;
 
   if (glob_hash_node == NULL)
-    return NULL;
+    return 0;
 
   character = _xdg_utf8_to_ucs4 (file_name);
   if (ignore_case)
@@ -272,34 +306,55 @@ _xdg_glob_hash_node_lookup_file_name (XdgGlobHashNode *glob_hash_node,
 	{
 	  file_name = _xdg_utf8_next_char (file_name);
 	  if (*file_name == '\000')
-	    return node->mime_type;
+	    {
+	      n = 0;
+	      mime_types[n++] = node->mime_type;
+	      node = node->child;
+	      while (n < n_mime_types && node && node->character == 0)
+		{
+		  mime_types[n++] = node->mime_type;
+		  node = node->next;
+		}
+	    }
 	  else
-	    return _xdg_glob_hash_node_lookup_file_name (node->child,
-							 file_name,
-							 ignore_case);
+	    {
+	      n = _xdg_glob_hash_node_lookup_file_name (node->child,
+							file_name,
+							ignore_case,
+							mime_types,
+							n_mime_types);
+	    }
+	  return n;
 	}
     }
-  return NULL;
+
+  return 0;
 }
 
-const char *
+int
 _xdg_glob_hash_lookup_file_name (XdgGlobHash *glob_hash,
-				 const char  *file_name)
+				 const char  *file_name,
+				 const char  *mime_types[],
+				 int          n_mime_types)
 {
   XdgGlobList *list;
-  const char *mime_type;
   const char *ptr;
   char stopchars[128];
-  int i;
+  int i, n;
   XdgGlobHashNode *node;
 
   /* First, check the literals */
 
-  assert (file_name != NULL);
+  assert (file_name != NULL && n_mime_types > 0);
 
   for (list = glob_hash->literal_list; list; list = list->next)
-    if (strcmp ((const char *)list->data, file_name) == 0)
-      return list->mime_type;
+    {
+      if (strcmp ((const char *)list->data, file_name) == 0)
+	{
+	  mime_types[0] = list->mime_type;
+	  return 1;
+	}
+    }
 
   i = 0;
   for (node = glob_hash->simple_node; node; node = node->next)
@@ -312,23 +367,28 @@ _xdg_glob_hash_lookup_file_name (XdgGlobHash *glob_hash,
   ptr = strpbrk (file_name, stopchars);
   while (ptr)
     {
-      mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, FALSE));
-      if (mime_type != NULL)
-        return mime_type;
+      n = _xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, FALSE,
+						mime_types, n_mime_types);
+      if (n > 0)
+	return n;
       
-      mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, TRUE));
-      if (mime_type != NULL)
-        return mime_type;
+      n = _xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, TRUE,
+						mime_types, n_mime_types);
+      if (n > 0)
+	return n;
       
       ptr = strpbrk (ptr + 1, stopchars);
     }
 
   /* FIXME: Not UTF-8 safe */
-  for (list = glob_hash->full_list; list; list = list->next)
-    if (fnmatch ((const char *)list->data, file_name, 0) == 0)
-      return list->mime_type;
+  n = 0;
+  for (list = glob_hash->full_list; list && n < n_mime_types; list = list->next)
+    {
+      if (fnmatch ((const char *)list->data, file_name, 0) == 0)
+	mime_types[n++] = list->mime_type;
+    }
 
-  return NULL;
+  return n;
 }
 
 

@@ -1,3 +1,25 @@
+/* 
+ * Copyright (C) 2003,2004  Red Hat, Inc.
+ * Copyright (C) 2003,2004  Jonathan Blandford <jrb@alum.mit.edu>
+ *
+ * Licensed under the Academic Free License version 2.0
+ * Or under the following terms:
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 #include "xdgmime.h"
 #include "xdgmimeglob.h"
 #include <string.h>
@@ -108,7 +130,7 @@ main (int argc, char *argv[])
   for (i = 1; i < argc; i++)
     {
       file_name = argv[i];
-      result = xdg_mime_get_mime_type_for_file (file_name);
+      result = xdg_mime_get_mime_type_for_file (file_name, NULL);
       printf ("File \"%s\" has a mime-type of %s\n", file_name, result);
     }
 
