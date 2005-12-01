@@ -85,7 +85,8 @@ enum {
   PROP_SHOW_UNICODE_MENU,
   PROP_TIMEOUT_INITIAL,
   PROP_TIMEOUT_REPEAT,
-  PROP_COLOR_SCHEME
+  PROP_COLOR_SCHEME,
+  PROP_ENABLE_ANIMATIONS
 };
 
 
@@ -458,6 +459,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     NULL);
 
   g_assert (result == PROP_COLOR_SCHEME);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-animations",
+                                                                   P_("Enable Animations"),
+                                                                   P_("Whether to enable toolkit-wide animations."),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_ENABLE_ANIMATIONS);
 }
 
 static void

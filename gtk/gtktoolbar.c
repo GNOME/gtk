@@ -67,6 +67,7 @@ typedef struct _ToolbarContent ToolbarContent;
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 #define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
+#define DEFAULT_ANIMATION_STATE TRUE
 
 #define MAX_HOMOGENEOUS_N_CHARS 13 /* Items that are wider than this do not participate
 				    * in the homogeneous game. In units of
@@ -143,13 +144,13 @@ struct _GtkToolbarPrivate
   
   GTimer *	timer;
 
-  gulong        style_set_connection;
-  gulong        icon_size_connection;
+  gulong        settings_connection;
 
-  guint		show_arrow : 1;
-  guint		need_sync : 1;
-  guint		is_sliding : 1;
-  guint		need_rebuild : 1;	/* whether the overflow menu should be regenerated */
+  guint         show_arrow : 1;
+  guint         need_sync : 1;
+  guint         is_sliding : 1;
+  guint         need_rebuild : 1;  /* whether the overflow menu should be regenerated */
+  guint         animation : 1;
 };
 
 static void       gtk_toolbar_init                 (GtkToolbar          *toolbar);
@@ -658,7 +659,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                     GTK_TYPE_ICON_SIZE,
                                                     DEFAULT_ICON_SIZE,
                                                     GTK_PARAM_READWRITE));  
-  
+
   binding_set = gtk_binding_set_by_class (klass);
   
   add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
@@ -698,6 +699,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->orientation = GTK_ORIENTATION_HORIZONTAL;
   toolbar->style = DEFAULT_TOOLBAR_STYLE;
   toolbar->icon_size = DEFAULT_ICON_SIZE;
+  priv->animation = DEFAULT_ANIMATION_STATE;
   toolbar->tooltips = gtk_tooltips_new ();
   g_object_ref_sink (toolbar->tooltips);
   
@@ -1040,9 +1042,15 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 }
 
 static gint
-position (gint from, gint to, gdouble elapsed)
+position (GtkToolbar *toolbar,
+          gint        from,
+          gint        to,
+          gdouble     elapsed)
 {
   gint n_pixels;
+
+  if (! GTK_TOOLBAR_GET_PRIVATE (toolbar)->animation)
+    return to;
 
   if (elapsed <= ACCEL_THRESHOLD)
     {
@@ -1058,7 +1066,7 @@ position (gint from, gint to, gdouble elapsed)
       n_pixels = (SLIDE_SPEED / ACCEL_THRESHOLD) * elapsed * elapsed -
 	SLIDE_SPEED * elapsed + SLIDE_SPEED * ACCEL_THRESHOLD;
     }
-  
+
   if (to > from)
     return MIN (from + n_pixels, to);
   else
@@ -1073,13 +1081,15 @@ compute_intermediate_allocation (GtkToolbar          *toolbar,
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   gdouble elapsed = g_timer_elapsed (priv->timer, NULL);
-  
-  intermediate->x = position (start->x, goal->x, elapsed);
-  intermediate->y = position (start->y, goal->y, elapsed);
-  intermediate->width =
-    position (start->x + start->width, goal->x + goal->width, elapsed) - intermediate->x;
-  intermediate->height =
-    position (start->y + start->height, goal->y + goal->height, elapsed) - intermediate->y;
+
+  intermediate->x      = position (toolbar, start->x, goal->x, elapsed);
+  intermediate->y      = position (toolbar, start->y, goal->y, elapsed);
+  intermediate->width  = position (toolbar, start->x + start->width,
+                                   goal->x + goal->width,
+                                   elapsed) - intermediate->x;
+  intermediate->height = position (toolbar, start->y + start->height,
+                                   goal->y + goal->height,
+                                   elapsed) - intermediate->y;
 }
 
 static void
@@ -1990,33 +2000,63 @@ gtk_toolbar_focus (GtkWidget        *widget,
   return result;
 }
 
+static GtkSettings *
+toolbar_get_settings (GtkToolbar *toolbar)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  return priv->settings;
+}
+
 static void
 style_change_notify (GtkToolbar *toolbar)
 {
   if (!toolbar->style_set)
     {
       /* pretend it was set, then unset, thus reverting to new default */
-      toolbar->style_set = TRUE; 
+      toolbar->style_set = TRUE;
       gtk_toolbar_unset_style (toolbar);
     }
 }
 
 static void
 icon_size_change_notify (GtkToolbar *toolbar)
-{ 
+{
   if (!toolbar->icon_size_set)
     {
       /* pretend it was set, then unset, thus reverting to new default */
-      toolbar->icon_size_set = TRUE; 
+      toolbar->icon_size_set = TRUE;
       gtk_toolbar_unset_icon_size (toolbar);
     }
 }
 
-static GtkSettings *
-toolbar_get_settings (GtkToolbar *toolbar)
+static void
+animation_change_notify (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  return priv->settings;
+  GtkSettings *settings = toolbar_get_settings (toolbar);
+  gboolean animation;
+
+  if (settings)
+    g_object_get (settings,
+                  "gtk-enable-animations", &animation,
+                  NULL);
+  else
+    animation = DEFAULT_ANIMATION_STATE;
+
+  priv->animation = animation;
+}
+
+static void
+settings_change_notify (GtkSettings      *settings,
+                        const GParamSpec *pspec,
+                        GtkToolbar       *toolbar)
+{
+  if (! strcmp (pspec->name, "gtk-toolbar-style"))
+    style_change_notify (toolbar);
+  else if (! strcmp (pspec->name, "gtk-toolbar-icon-size"))
+    icon_size_change_notify (toolbar);
+  else if (! strcmp (pspec->name, "gtk-enable-animations"))
+    animation_change_notify (toolbar);
 }
 
 static void
@@ -2038,33 +2078,26 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   
   if (old_settings)
     {
-      g_signal_handler_disconnect (old_settings, priv->style_set_connection);
-      g_signal_handler_disconnect (old_settings, priv->icon_size_connection);
+      g_signal_handler_disconnect (old_settings, priv->settings_connection);
 
       g_object_unref (old_settings);
     }
-  
+
   if (settings)
     {
-      priv->style_set_connection =
-	g_signal_connect_swapped (settings,
-				  "notify::gtk-toolbar-style",
-				  G_CALLBACK (style_change_notify),
-				  toolbar);
-      priv->icon_size_connection =
-	g_signal_connect_swapped (settings,
-				  "notify::gtk-toolbar-icon-size",
-				  G_CALLBACK (icon_size_change_notify),
-				  toolbar);
-      
-      g_object_ref (settings);
-      priv->settings = settings;
+      priv->settings_connection =
+	g_signal_connect (settings, "notify",
+                          G_CALLBACK (settings_change_notify),
+                          toolbar);
+
+      priv->settings = g_object_ref (settings);
     }
   else
     priv->settings = NULL;
-  
+
   style_change_notify (toolbar);
   icon_size_change_notify (toolbar);
+  animation_change_notify (toolbar);
 }
 
 static int

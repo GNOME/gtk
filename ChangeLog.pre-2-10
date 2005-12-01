@@ -1,5 +1,18 @@
 2005-12-01  Michael Natterer  <mitch@imendio.com>
 
+	Merged modified patch from maemo-gtk that allows to disable
+	toolbar animations. Addresses bug #142582.
+
+	* gtk/gtksettings.c: added boolean property "gtk-enable-animations".
+	(patch from Christian Neumair)
+
+	* gtk/gtktoolbar.c: don't animate toolbar changes if the settings
+	property is FALSE. Replaced the individual "notify::foo"
+	connections to GtkSettings by a single "notify" callback and
+	dispatch internally.
+
+2005-12-01  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmenu.c (gtk_menu_class_init): removed redundant
 	assignment of widget_class->motion_notify_event.
 
