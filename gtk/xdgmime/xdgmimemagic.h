@@ -49,6 +49,8 @@ void          _xdg_mime_magic_free               (XdgMimeMagic *mime_magic);
 int           _xdg_mime_magic_get_buffer_extents (XdgMimeMagic *mime_magic);
 const char   *_xdg_mime_magic_lookup_data        (XdgMimeMagic *mime_magic,
 						  const void   *data,
-						  size_t        len);
+						  size_t        len,
+						  const char   *mime_types[],
+						  int           n_mime_types);
 
 #endif /* __XDG_MIME_MAGIC_H__ */

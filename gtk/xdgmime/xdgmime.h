@@ -62,7 +62,6 @@ typedef void (*XdgMimeDestroy)  (void *user_data);
 #define xdg_mime_register_reload_callback     XDG_ENTRY(register_reload_callback)
 #define xdg_mime_remove_callback              XDG_ENTRY(remove_callback)
 #define xdg_mime_type_unknown                 XDG_ENTRY(type_unknown)
-#define xdg_mime_dump                         XDG_ENTRY(dump)
 #endif
 
 extern const char *xdg_mime_type_unknown;
