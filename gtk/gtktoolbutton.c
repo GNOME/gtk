@@ -548,12 +548,16 @@ clone_image_menu_size (GtkImage *image, GtkSettings *settings)
 					     &width, &height))
 	{
 	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
+	  GtkWidget *image;
 
 	  src_pixbuf = gtk_image_get_pixbuf (image);
 	  dest_pixbuf = gdk_pixbuf_scale_simple (src_pixbuf, width, height,
 						 GDK_INTERP_BILINEAR);
 
-	  return gtk_image_new_from_pixbuf (dest_pixbuf);
+	  image = gtk_image_new_from_pixbuf (dest_pixbuf);
+	  g_object_unref (dest_pixbuf);
+
+	  return image;
 	}
     }
 

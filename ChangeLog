@@ -1,5 +1,10 @@
 2005-12-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (clone_image_menu_size): Don't leak
+	a pixbuf.  (#323024, Paolo Borelli)
+
+2005-12-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesystemunix.c (get_icon_for_mime_type): Don't crash
 	if mime_type is NULL.  (#322998, Sadrul Habib Chowdhury)
 
