@@ -1284,6 +1284,9 @@ get_icon_for_mime_type (GtkWidget  *widget,
   GString *icon_name;
   GdkPixbuf *pixbuf;
 
+  if (!mime_type)
+    return NULL;
+
   separator = strchr (mime_type, '/');
   if (!separator)
     return NULL; /* maybe we should return a GError with "invalid MIME-type" */

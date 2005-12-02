@@ -1,3 +1,8 @@
+2005-12-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c (get_icon_for_mime_type): Don't crash
+	if mime_type is NULL.  (#322998, Sadrul Habib Chowdhury)
+
 2005-12-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c: applied modified patch from maemo-gtk which
