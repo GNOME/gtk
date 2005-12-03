@@ -1,3 +1,8 @@
+2005-12-04  Takeshi AIHANA <aihana@gnome.gr.jp>
+
+	* ja.po: Fixed translation for "Widget" and "Index" reported by
+		kano@na.rim.or.jp.
+
 2005-11-13  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
 	* es.po: Updated Spanish translation.
