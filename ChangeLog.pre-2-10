@@ -1,5 +1,8 @@
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Free new_event
+	after sending it to the search entry.  (#323209, Crispin Flowerday)
+
 	* README.in: Add a note about GTK_FLOATING.
 
 	* gtk/gtkobject.h (GTK_OBJECT_FLOATING): Use g_object_is_floating.
