@@ -65,7 +65,7 @@ struct _GtkStatusbarClass
 {
   GtkHBoxClass parent_class;
 
-  GMemChunk *messages_mem_chunk;
+  gpointer reserved;
 
   void	(*text_pushed)	(GtkStatusbar	*statusbar,
 			 guint		 context_id,
