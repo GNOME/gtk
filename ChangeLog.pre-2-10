@@ -1,3 +1,9 @@
+2005-12-05  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkevents-x11.c: map the new GtkSettings properties
+	"timeout-initial", "timeout-repeat", "color-scheme" and
+	"enable-enimations" to X settings.
+
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkevents.c: 
