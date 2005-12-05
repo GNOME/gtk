@@ -1,5 +1,8 @@
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkevents.c: 
+	* gdk/gdkcolor.c: Use g_slice instead of mem chunks.
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Free new_event
 	after sending it to the search entry.  (#323209, Crispin Flowerday)
 

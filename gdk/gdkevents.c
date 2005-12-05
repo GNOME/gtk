@@ -255,7 +255,6 @@ gdk_event_put (GdkEvent *event)
   gdk_display_put_event (display, event);
 }
 
-static GMemChunk *event_chunk = NULL;
 static GHashTable *event_hash = NULL;
 
 /**
@@ -275,17 +274,7 @@ gdk_event_new (GdkEventType type)
   GdkEventPrivate *new_private;
   GdkEvent *new_event;
   
-  if (event_chunk == NULL)
-    {
-      event_chunk = g_mem_chunk_new ("events",
-				     sizeof (GdkEventPrivate),
-				     4096,
-				     G_ALLOC_AND_FREE);
-      event_hash = g_hash_table_new (g_direct_hash, NULL);
-    }
-  
-  new_private = g_chunk_new (GdkEventPrivate, event_chunk);
-  memset (new_private, 0, sizeof (GdkEventPrivate));
+  new_private = g_slice_new0 (GdkEventPrivate);
   
   new_private->flags = 0;
   new_private->screen = NULL;
@@ -446,8 +435,6 @@ gdk_event_free (GdkEvent *event)
 {
   g_return_if_fail (event != NULL);
 
-  g_assert (event_chunk != NULL); /* paranoid */
-  
   if (event->any.window)
     g_object_unref (event->any.window);
   
@@ -498,7 +485,7 @@ gdk_event_free (GdkEvent *event)
     }
 
   g_hash_table_remove (event_hash, event);
-  g_mem_chunk_free (event_chunk, event);
+  g_slice_free (GdkEventPrivate, event);
 }
 
 /**
