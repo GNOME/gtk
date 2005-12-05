@@ -1,3 +1,7 @@
+2005-12-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkobject.h (GTK_OBJECT_FLOATING): Use g_object_is_floating.
+
 2005-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbutton.c (clone_image_menu_size): Don't leak

@@ -69,7 +69,7 @@ typedef enum
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
 #ifndef GTK_DISABLE_DEPRECATED
-#define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
+#define GTK_OBJECT_FLOATING(obj)	  (g_object_is_floating (obj))
 #endif
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
