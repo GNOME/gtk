@@ -1,3 +1,8 @@
+2005-12-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Free new_event
+	after sending it to the search entry.  (#323209, Crispin Flowerday)
+
 2005-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbutton.c (clone_image_menu_size): Don't leak
