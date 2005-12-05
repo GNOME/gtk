@@ -1,3 +1,16 @@
+2005-12-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: 
+	* gtk/gtkuimanager.c: 
+	* gtk/gtktreedatalist.c: 
+	* gtk/gtktext.c: 
+	* gtk/gtkmain.c: 
+	* gtk/gtkitemfactory.c: 
+	* gtk/gtkseparator.[hc]:
+	* gtk/gtkclist.[hc]: 
+	* gtk/gtkctree.c:
+	* gtk/gtkgc.c: Use g_slice instead of mem chunks.
+
 2005-12-05  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/x11/gdkevents-x11.c: map the new GtkSettings properties

@@ -24,8 +24,6 @@
 #include "gtktreedatalist.h"
 #include "gtkalias.h"
 #include <string.h>
-static GMemChunk *tree_chunk = NULL;
-#define TREE_CHUNK_PREALLOCS 64
 
 /* node allocation
  */
@@ -34,14 +32,7 @@ _gtk_tree_data_list_alloc (void)
 {
   GtkTreeDataList *list;
 
-  if (tree_chunk == NULL)
-    tree_chunk = g_mem_chunk_new ("treedatalist mem chunk",
-				  sizeof (GtkTreeDataList),
-				  sizeof (GtkTreeDataList) * TREE_CHUNK_PREALLOCS,
-				  G_ALLOC_AND_FREE);
-
-  list = g_chunk_new (GtkTreeDataList, tree_chunk);
-  memset (list, 0, sizeof (GtkTreeDataList));
+  list = g_slice_new0 (GtkTreeDataList);
 
   return list;
 }
@@ -65,7 +56,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
 
-      g_mem_chunk_free (tree_chunk, tmp);
+      g_slice_free (GtkTreeDataList, tmp);
       i++;
       tmp = next;
     }

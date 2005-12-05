@@ -46,9 +46,6 @@
 /* length of button_actions array */
 #define MAX_BUTTON 5
 
-/* the number rows memchunk expands at a time */
-#define CLIST_OPTIMUM_SIZE 64
-
 /* the width of the column resize windows */
 #define DRAG_WIDTH  6
 
@@ -1014,9 +1011,6 @@ gtk_clist_init (GtkCList *clist)
   GTK_CLIST_SET_FLAG (clist, CLIST_DRAW_DRAG_LINE);
   GTK_CLIST_SET_FLAG (clist, CLIST_USE_DRAG_ICONS);
 
-  clist->row_mem_chunk = NULL;
-  clist->cell_mem_chunk = NULL;
-
   clist->freeze_count = 0;
 
   clist->rows = 0;
@@ -1091,23 +1085,6 @@ gtk_clist_constructor (GType                  type,
 								n_construct_properties,
 								construct_properties);
   GtkCList *clist = GTK_CLIST (object);
-  
-  /* initalize memory chunks, if this has not been done by any
-   * possibly derived widget
-   */
-  if (!clist->row_mem_chunk)
-    clist->row_mem_chunk = g_mem_chunk_new ("clist row mem chunk",
-					    sizeof (GtkCListRow),
-					    sizeof (GtkCListRow) *
-					    CLIST_OPTIMUM_SIZE, 
-					    G_ALLOC_AND_FREE);
-  
-  if (!clist->cell_mem_chunk)
-    clist->cell_mem_chunk = g_mem_chunk_new ("clist cell mem chunk",
-					     sizeof (GtkCell) * clist->columns,
-					     sizeof (GtkCell) * clist->columns *
-					     CLIST_OPTIMUM_SIZE, 
-					     G_ALLOC_AND_FREE);
   
   /* allocate memory for columns */
   clist->column = columns_new (clist);
@@ -4438,9 +4415,6 @@ gtk_clist_finalize (GObject *object)
 
   columns_delete (clist);
 
-  g_mem_chunk_destroy (clist->cell_mem_chunk);
-  g_mem_chunk_destroy (clist->row_mem_chunk);
-
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -6374,8 +6348,8 @@ row_new (GtkCList *clist)
   int i;
   GtkCListRow *clist_row;
 
-  clist_row = g_chunk_new (GtkCListRow, clist->row_mem_chunk);
-  clist_row->cell = g_chunk_new (GtkCell, clist->cell_mem_chunk);
+  clist_row = g_slice_new (GtkCListRow);
+  clist_row->cell = g_slice_new (GtkCell);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -6424,8 +6398,8 @@ row_delete (GtkCList    *clist,
   if (clist_row->destroy)
     clist_row->destroy (clist_row->data);
 
-  g_mem_chunk_free (clist->cell_mem_chunk, clist_row->cell);
-  g_mem_chunk_free (clist->row_mem_chunk, clist_row);
+  g_slice_free (GtkCell, clist_row->cell);
+  g_slice_free (GtkCListRow, clist_row);
 }
 
 /* FOCUS FUNCTIONS

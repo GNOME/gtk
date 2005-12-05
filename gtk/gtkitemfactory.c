@@ -84,8 +84,6 @@ static void	gtk_item_factory_finalize		(GObject	      *object);
 static GtkItemFactoryClass *gtk_item_factory_class = NULL;
 static gpointer          parent_class = NULL;
 static const gchar	 item_factory_string[] = "Gtk-<ItemFactory>";
-static GMemChunk	*ifactory_item_chunks = NULL;
-static GMemChunk	*ifactory_cb_data_chunks = NULL;
 static GQuark		 quark_popup_data = 0;
 static GQuark		 quark_if_menu_pos = 0;
 static GQuark		 quark_item_factory = 0;
@@ -148,16 +146,6 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   object_class->destroy = gtk_item_factory_destroy;
 
   class->item_ht = g_hash_table_new (g_str_hash, g_str_equal);
-  ifactory_item_chunks =
-    g_mem_chunk_new ("GtkItemFactoryItem",
-		     sizeof (GtkItemFactoryItem),
-		     sizeof (GtkItemFactoryItem) * ITEM_BLOCK_SIZE,
-		     G_ALLOC_ONLY);
-  ifactory_cb_data_chunks =
-    g_mem_chunk_new ("GtkIFCBData",
-		     sizeof (GtkIFCBData),
-		     sizeof (GtkIFCBData) * ITEM_BLOCK_SIZE,
-		     G_ALLOC_AND_FREE);
 
   quark_popup_data		= g_quark_from_static_string ("GtkItemFactory-popup-data");
   quark_if_menu_pos		= g_quark_from_static_string ("GtkItemFactory-menu-position");
@@ -289,7 +277,7 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
   item = g_hash_table_lookup (class->item_ht, full_path);
   if (!item)
     {
-      item = g_chunk_new (GtkItemFactoryItem, ifactory_item_chunks);
+      item = g_slice_new (GtkItemFactoryItem);
 
       item->path = g_strdup (full_path);
       item->widgets = NULL;
@@ -333,7 +321,7 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 static void
 ifactory_cb_data_free (gpointer mem)
 {
-  g_mem_chunk_free (ifactory_cb_data_chunks, mem);
+  g_slice_free (GtkIFCBData, mem);
 }
 
 static void
@@ -369,7 +357,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
     {
       GtkIFCBData *data;
 
-      data = g_chunk_new (GtkIFCBData, ifactory_cb_data_chunks);
+      data = g_slice_new (GtkIFCBData);
       data->func = callback;
       data->callback_type = callback_type;
       data->func_data = callback_data;

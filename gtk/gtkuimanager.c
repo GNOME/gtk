@@ -166,8 +166,6 @@ enum
 static GObjectClass *parent_class = NULL;
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
-static GMemChunk *merge_node_chunk = NULL;
-
 GType
 gtk_ui_manager_get_type (void)
 {
@@ -204,10 +202,6 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   gobject_class = G_OBJECT_CLASS (klass);
-
-  if (!merge_node_chunk)
-    merge_node_chunk = g_mem_chunk_create (Node, 64,
-					   G_ALLOC_AND_FREE);
 
   gobject_class->finalize = gtk_ui_manager_finalize;
   gobject_class->set_property = gtk_ui_manager_set_property;
@@ -893,7 +887,7 @@ get_child_node (GtkUIManager *self,
 	{
 	  Node *mnode;
 	  
-	  mnode = g_chunk_new0 (Node, merge_node_chunk);
+	  mnode = g_slice_new0 (Node);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 
@@ -933,7 +927,7 @@ get_child_node (GtkUIManager *self,
 	{
 	  Node *mnode;
 
-	  mnode = g_chunk_new0 (Node, merge_node_chunk);
+	  mnode = g_slice_new0 (Node);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
@@ -1001,7 +995,7 @@ free_node (GNode *node)
   if (info->extra)
     g_object_unref (info->extra);
   g_free (info->name);
-  g_chunk_free (info, merge_node_chunk);
+  g_slice_free (Node, info);
 
   return FALSE;
 }

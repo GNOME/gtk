@@ -236,7 +236,6 @@ static void gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 /* --- variables --- */
 static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
-static GMemChunk       *aux_info_mem_chunk = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
 static guint            composite_child_stack = 0;
@@ -6942,11 +6941,7 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
   aux_info = g_object_get_qdata (G_OBJECT (widget), quark_aux_info);
   if (!aux_info && create)
     {
-      if (!aux_info_mem_chunk)
-	aux_info_mem_chunk = g_mem_chunk_new ("widget aux info mem chunk",
-					      sizeof (GtkWidgetAuxInfo),
-					      1024, G_ALLOC_AND_FREE);
-      aux_info = g_chunk_new (GtkWidgetAuxInfo, aux_info_mem_chunk);
+      aux_info = g_slice_new (GtkWidgetAuxInfo);
 
       aux_info->width = -1;
       aux_info->height = -1;
@@ -6971,7 +6966,7 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
 static void
 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
 {
-  g_mem_chunk_free (aux_info_mem_chunk, aux_info);
+  g_slice_free (GtkWidgetAuxInfo, aux_info);
 }
 
 static void
