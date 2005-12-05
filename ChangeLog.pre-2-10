@@ -1,5 +1,7 @@
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Add a note about GTK_FLOATING.
+
 	* gtk/gtkobject.h (GTK_OBJECT_FLOATING): Use g_object_is_floating.
 
 2005-12-02  Matthias Clasen  <mclasen@redhat.com>
