@@ -65,8 +65,6 @@ static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
 static gint initialize = TRUE;
 static GCache *gc_cache = NULL;
 
-static GMemChunk *key_mem_chunk = NULL;
-
 
 GdkGC*
 gtk_gc_get (gint             depth,
@@ -143,11 +141,7 @@ gtk_gc_key_dup (GtkGCKey *key)
 {
   GtkGCKey *new_key;
 
-  if (!key_mem_chunk)
-    key_mem_chunk = g_mem_chunk_new ("key mem chunk", sizeof (GtkGCKey),
-				     1024, G_ALLOC_AND_FREE);
-
-  new_key = g_chunk_new (GtkGCKey, key_mem_chunk);
+  new_key = g_slice_new (GtkGCKey);
 
   *new_key = *key;
 
@@ -157,7 +151,7 @@ gtk_gc_key_dup (GtkGCKey *key)
 static void
 gtk_gc_key_destroy (GtkGCKey *key)
 {
-  g_mem_chunk_free (key_mem_chunk, key);
+  g_slice_free (GtkGCKey, key);
 }
 
 static gpointer

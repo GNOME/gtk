@@ -103,8 +103,6 @@ gdk_colors_store (GdkColormap   *colormap,
   gdk_colormap_change (colormap, ncolors);
 }
 
-static GMemChunk *color_chunk;
-
 /**
  * gdk_color_copy:
  * @color: a #GdkColor.
@@ -121,13 +119,7 @@ gdk_color_copy (const GdkColor *color)
   
   g_return_val_if_fail (color != NULL, NULL);
 
-  if (color_chunk == NULL)
-    color_chunk = g_mem_chunk_new ("colors",
-				   sizeof (GdkColor),
-				   4096,
-				   G_ALLOC_AND_FREE);
-
-  new_color = g_chunk_new (GdkColor, color_chunk);
+  new_color = g_slice_new (GdkColor);
   *new_color = *color;
   return new_color;
 }
@@ -142,10 +134,9 @@ gdk_color_copy (const GdkColor *color)
 void
 gdk_color_free (GdkColor *color)
 {
-  g_assert (color_chunk != NULL);
   g_return_if_fail (color != NULL);
 
-  g_mem_chunk_free (color_chunk, color);
+  g_slice_free (GdkColor, color);
 }
 
 /**

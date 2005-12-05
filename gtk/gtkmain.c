@@ -144,8 +144,6 @@ static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
 static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
-static GMemChunk *quit_mem_chunk = NULL;
-
 static GSList *key_snoopers = NULL;
 
 guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
@@ -1693,11 +1691,7 @@ gtk_quit_add_full (guint		main_level,
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
 
-  if (!quit_mem_chunk)
-    quit_mem_chunk = g_mem_chunk_new ("quit mem chunk", sizeof (GtkQuitFunction),
-				      512, G_ALLOC_AND_FREE);
-  
-  quitf = g_chunk_new (GtkQuitFunction, quit_mem_chunk);
+  quitf = g_slice_new (GtkQuitFunction);
   
   quitf->id = quit_id++;
   quitf->main_level = main_level;
@@ -1716,7 +1710,7 @@ gtk_quit_destroy (GtkQuitFunction *quitf)
 {
   if (quitf->destroy)
     quitf->destroy (quitf->data);
-  g_mem_chunk_free (quit_mem_chunk, quitf);
+  g_slice_free (GtkQuitFunction, quitf);
 }
 
 static gint

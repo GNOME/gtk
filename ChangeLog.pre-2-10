@@ -1,5 +1,27 @@
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkuimanager.c: 
+	* gtk/gtktreedatalist.c: 
+	* gtk/gtktext.c: 
+	* gtk/gtkmain.c: 
+	* gtk/gtkitemfactory.c: 
+	* gtk/gtkseparator.[hc]:
+	* gtk/gtkclist.[hc]: 
+	* gtk/gtkctree.c:
+	* gtk/gtkgc.c: Use g_slice instead of mem chunks.
+
+2005-12-05  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkevents-x11.c: map the new GtkSettings properties
+	"timeout-initial", "timeout-repeat", "color-scheme" and
+	"enable-enimations" to X settings.
+
+2005-12-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkevents.c: 
+	* gdk/gdkcolor.c: Use g_slice instead of mem chunks.
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Free new_event
 	after sending it to the search entry.  (#323209, Crispin Flowerday)
 

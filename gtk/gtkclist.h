@@ -151,9 +151,8 @@ struct _GtkCList
   
   guint16 flags;
   
-  /* mem chunks */
-  GMemChunk *row_mem_chunk;
-  GMemChunk *cell_mem_chunk;
+  gpointer reserved1;
+  gpointer reserved2;
 
   guint freeze_count;
   

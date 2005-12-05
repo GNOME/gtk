@@ -567,24 +567,12 @@ gtk_ctree_set_arg (GtkObject      *object,
   switch (arg_id)
     {
     case ARG_N_COLUMNS: /* construct-only arg, only set at construction time */
-      g_return_if_fail (clist->row_mem_chunk == NULL);
       clist->columns = MAX (1, GTK_VALUE_UINT (*arg));
-      clist->row_mem_chunk = g_mem_chunk_new ("ctree row mem chunk",
-					      sizeof (GtkCTreeRow),
-					      sizeof (GtkCTreeRow)
-					      * CLIST_OPTIMUM_SIZE,
-					      G_ALLOC_AND_FREE);
-      clist->cell_mem_chunk = g_mem_chunk_new ("ctree cell mem chunk",
-					       sizeof (GtkCell) * clist->columns,
-					       sizeof (GtkCell) * clist->columns
-					       * CLIST_OPTIMUM_SIZE,
-					       G_ALLOC_AND_FREE);
       ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
       break;
     case ARG_TREE_COLUMN: /* construct-only arg, only set at construction time */
       ctree->tree_column = GTK_VALUE_UINT (*arg);
-      if (clist->row_mem_chunk)
-	ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
+      ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
       break;
     case ARG_INDENT:
       gtk_ctree_set_indent (ctree, GTK_VALUE_UINT (*arg));
@@ -3207,8 +3195,8 @@ row_new (GtkCTree *ctree)
   int i;
 
   clist = GTK_CLIST (ctree);
-  ctree_row = g_chunk_new (GtkCTreeRow, clist->row_mem_chunk);
-  ctree_row->row.cell = g_chunk_new (GtkCell, clist->cell_mem_chunk);
+  ctree_row = g_slice_new (GtkCTreeRow);
+  ctree_row->row.cell = g_slice_new (GtkCell);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -3294,8 +3282,8 @@ row_delete (GtkCTree    *ctree,
       dnotify (ddata);
     }
 
-  g_mem_chunk_free (clist->cell_mem_chunk, ctree_row->row.cell);
-  g_mem_chunk_free (clist->row_mem_chunk, ctree_row);
+  g_slice_free (GtkCell, ctree_row->row.cell);
+  g_slice_free (GtkCListRow, ctree_row);
 }
 
 static void

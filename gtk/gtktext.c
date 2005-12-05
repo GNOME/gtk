@@ -442,10 +442,6 @@ static void gtk_text_show_props (GtkText* test,
 #define TEXT_SHOW_ADJ(text,adj,msg)
 #endif
 
-/* Memory Management. */
-static GMemChunk  *params_mem_chunk    = NULL;
-static GMemChunk  *text_property_chunk = NULL;
-
 static GtkWidgetClass *parent_class = NULL;
 
 
@@ -734,12 +730,6 @@ gtk_text_init (GtkText *text)
   text->scratch_buffer_len = 0;
  
   text->freeze_count = 0;
-  
-  if (!params_mem_chunk)
-    params_mem_chunk = g_mem_chunk_new ("LineParams",
-					sizeof (LineParams),
-					256 * sizeof (LineParams),
-					G_ALLOC_AND_FREE);
   
   text->default_tab_width = 4;
   text->tab_stops = NULL;
@@ -2293,7 +2283,7 @@ line_params_iterate (GtkText* text,
   for (;;)
     {
       if (alloc)
-	lp = g_chunk_new (LineParams, params_mem_chunk);
+	lp = g_slice_new (LineParams);
       else
 	lp = &lpbuf;
       
@@ -2977,15 +2967,7 @@ new_text_property (GtkText *text, GdkFont *font, const GdkColor* fore,
 {
   TextProperty *prop;
   
-  if (text_property_chunk == NULL)
-    {
-      text_property_chunk = g_mem_chunk_new ("text property mem chunk",
-					     sizeof(TextProperty),
-					     1024*sizeof(TextProperty),
-					     G_ALLOC_AND_FREE);
-    }
-  
-  prop = g_chunk_new(TextProperty, text_property_chunk);
+  prop = g_slice_new (TextProperty);
 
   prop->flags = 0;
   if (font)
@@ -3022,7 +3004,7 @@ destroy_text_property (TextProperty *prop)
   if (prop->font)
     text_font_unref (prop->font);
   
-  g_mem_chunk_free (text_property_chunk, prop);
+  g_slice_free (TextProperty, prop);
 }
 
 /* Flop the memory between the point and the gap around like a
@@ -3778,7 +3760,7 @@ free_cache (GtkText* text)
     }
   
   for (; cache; cache = cache->next)
-    g_mem_chunk_free (params_mem_chunk, cache->data);
+    g_slice_free (LineParams, cache->data);
   
   g_list_free (text->line_start_cache);
   
@@ -3804,7 +3786,7 @@ remove_cache_line (GtkText* text, GList* member)
   
   list = member->next;
   
-  g_mem_chunk_free (params_mem_chunk, member->data);
+  g_slice_free (LineParams, member->data);
   g_list_free_1 (member);
   
   return list;
