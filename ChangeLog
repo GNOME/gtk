@@ -1,5 +1,17 @@
 2005-12-06  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c (dnd_select_folder_get_info_cb),
+	(gtk_file_chooser_button_drag_data_received): make asynchronous,
+	(update_label_and_image): remove unused variable.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_update_current_folder): split in two
+	functions, so we can have the is_folder check back.
+	* gtk/gtkfilechooserprivate.h: add update_current_folder_handle
+	field.
+
+2005-12-06  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c (show_and_select_paths): fixed a typo.
 
 2005-12-05  Federico Mena Quintero  <federico@ximian.com>

@@ -228,6 +228,8 @@ struct _GtkFileChooserDefault
   gulong toplevel_set_focus_id;
   GtkWidget *toplevel_last_focus_widget;
 
+  GtkFileSystemHandle *update_current_folder_handle;
+
 #if 0
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;

@@ -5459,52 +5459,45 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   return gtk_file_chooser_default_update_current_folder (chooser, path, FALSE, error);
 }
 
-static gboolean
-gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
-						const GtkFilePath *path,
-						gboolean           keep_trail,
-						GError           **error)
+
+struct UpdateCurrentFolderData
 {
-  GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  gboolean result;
+  GtkFileChooserDefault *impl;
+  GtkFilePath *path;
+  gboolean keep_trail;
+};
 
-  profile_start ("start", (char *) path);
+static void
+update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
+				   GtkFileInfo         *info,
+				   GError              *error,
+				   gpointer             user_data)
+{
+  struct UpdateCurrentFolderData *data = user_data;
+  GtkFileChooserDefault *impl = data->impl;
 
-  g_assert (path != NULL);
+  impl->update_current_folder_handle = NULL;
 
-  if (impl->local_only &&
-      !gtk_file_system_path_is_local (impl->file_system, path))
+  if (error)
     {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Cannot change to folder because it is not local"));
-
-      profile_end ("end - not local", (char *) path);
-      return FALSE;
+      error_changing_folder_dialog (impl, data->path, g_error_copy (error));
+      return;
     }
 
-#if 0
-  /* Test validity of path here.  */
-  if (!check_is_folder (impl->file_system, path, error))
+  if (!gtk_file_info_get_is_folder (info))
     {
-      profile_end ("end - not a folder", (char *) path);
-      return FALSE;
-    }
-#endif
-
-  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, keep_trail, error))
-    {
-      profile_end ("end - could not set path bar", (char *) path);
-      return FALSE;
+      return;
     }
 
-  if (impl->current_folder != path)
+  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), data->path, data->keep_trail, NULL))
+    return;
+
+  if (impl->current_folder != data->path)
     {
       if (impl->current_folder)
 	gtk_file_path_free (impl->current_folder);
 
-      impl->current_folder = gtk_file_path_copy (path);
+      impl->current_folder = gtk_file_path_copy (data->path);
 
       impl->reload_state = RELOAD_HAS_FOLDER;
     }
@@ -5530,7 +5523,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
    * but perform more actions rather than returning immediately even if it
    * generates an error.
    */
-  result = set_list_model (impl, error);
+  set_list_model (impl, NULL);
 
   /* Refresh controls */
 
@@ -5542,9 +5535,46 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
   bookmarks_check_add_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
+}
+
+static gboolean
+gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
+						const GtkFilePath *path,
+						gboolean           keep_trail,
+						GError           **error)
+{
+  GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+  struct UpdateCurrentFolderData *data;
+
+  profile_start ("start", (char *) path);
+
+  g_assert (path != NULL);
+
+  if (impl->local_only &&
+      !gtk_file_system_path_is_local (impl->file_system, path))
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   _("Cannot change to folder because it is not local"));
+
+      profile_end ("end - not local", (char *) path);
+      return FALSE;
+    }
+
+  if (impl->update_current_folder_handle)
+    gtk_file_system_cancel_operation (impl->update_current_folder_handle);
+
+  /* Test validity of path here.  */
+  data = g_new0 (struct UpdateCurrentFolderData, 1);
+  data->impl = impl;
+  data->path = gtk_file_path_copy (path);
+  data->keep_trail = keep_trail;
+
+  impl->update_current_folder_handle = gtk_file_system_get_info (impl->file_system, path, GTK_FILE_INFO_IS_FOLDER, update_current_folder_get_info_cb, data);
 
   profile_end ("end", NULL);
-  return result;
+  return TRUE;
 }
 
 static GtkFilePath *

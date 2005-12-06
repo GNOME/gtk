@@ -907,6 +907,55 @@ gtk_file_chooser_button_destroy (GtkObject *object)
  *  GtkWidget Functions  *
  * ********************* */
 
+struct DndSelectFolderData
+{
+  GtkFileChooserButton *button;
+  GtkFileChooserAction action;
+  GtkFilePath *path;
+  gchar **uris;
+  guint i;
+  gboolean selected;
+};
+
+static void
+dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
+			       GtkFileInfo         *info,
+			       GError              *error,
+			       gpointer             user_data)
+{
+  struct DndSelectFolderData *data = user_data;
+
+  if (!error && info != NULL)
+    {
+      data->selected = 
+	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
+	   gtk_file_info_get_is_folder (info)) ||
+	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN &&
+	   !gtk_file_info_get_is_folder (info))) &&
+	 _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (data->button->priv->dialog),
+					data->path, NULL));
+    }
+  else
+    data->selected = FALSE;
+
+  if (data->selected || data->uris[++data->i] == NULL)
+    {
+      gtk_file_path_free (data->path);
+      g_strfreev (data->uris);
+      g_free (data);
+      return;
+    }
+
+  if (data->path)
+    gtk_file_path_free (data->path);
+
+  data->path = gtk_file_system_uri_to_path (handle->file_system,
+					    data->uris[data->i]);
+  gtk_file_system_get_info (handle->file_system, data->path,
+			    GTK_FILE_INFO_IS_FOLDER,
+			    dnd_select_folder_get_info_cb, user_data);
+}
+
 static void
 gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 					    GdkDragContext   *context,
@@ -936,63 +985,24 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
     case TEXT_URI_LIST:
       {
 	gchar **uris;
-	GtkFilePath *base_path;
-	guint i;
-	gboolean selected;
+	struct DndSelectFolderData *info;
 
 	uris = gtk_selection_data_get_uris (data);
 	
 	if (uris == NULL)
 	  break;
 
-	selected = FALSE;
-	for (i = 0; !selected && uris[i] != NULL; i++)
-	  {
-	    path = gtk_file_system_uri_to_path (priv->fs, uris[i]);
+	info = g_new0 (struct DndSelectFolderData, 1);
+	info->button = button;
+	info->i = 0;
+	info->uris = uris;
+	info->selected = FALSE;
+	g_object_get (priv->dialog, "action", &info->action, NULL);
 
-	    base_path = NULL;
-	    if (path != NULL &&
-		gtk_file_system_get_parent (priv->fs, path, &base_path, NULL))
-	      {
-		GtkFileFolder *folder;
-		GtkFileInfo *info = NULL;
-
-		/* FIXME: make async */
-#if 0
-
-		folder = gtk_file_system_get_folder (priv->fs, base_path,
-						     GTK_FILE_INFO_IS_FOLDER,
-						     NULL);
-
-		info = gtk_file_folder_get_info (folder, path, NULL);
-#endif
-
-		if (info != NULL)
-		  {
-		    GtkFileChooserAction action;
-
-		    g_object_get (priv->dialog, "action", &action, NULL);
-
-		    selected = 
-		      (((action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
-			 gtk_file_info_get_is_folder (info)) ||
-			(action == GTK_FILE_CHOOSER_ACTION_OPEN &&
-			 !gtk_file_info_get_is_folder (info))) &&
-			_gtk_file_chooser_select_path (GTK_FILE_CHOOSER (priv->dialog),
-						       path, NULL));
-
-		    gtk_file_info_free (info);
-		  }
-		else
-		  selected = FALSE;
-
-		gtk_file_path_free (base_path);
-	      }
-
-	    gtk_file_path_free (path);
-	  }
-
-	g_strfreev (uris);
+	info->path = gtk_file_system_uri_to_path (priv->fs,
+						  info->uris[info->i]);
+	gtk_file_system_get_info (priv->fs, info->path, GTK_FILE_INFO_IS_FOLDER,
+				  dnd_select_folder_get_info_cb, info);
       }
       break;
 
@@ -1847,7 +1857,6 @@ update_label_and_image (GtkFileChooserButton *button)
     {
       GtkFilePath *path;
       GtkFileSystemVolume *volume = NULL;
-      GtkFileFolder *folder = NULL;
     
       path = paths->data;
 
