@@ -1,5 +1,8 @@
 2005-12-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Fix refcounting
+	issues with new_event and its window.
+
 	* gtk/gtkmenu.c (gtk_menu_attach_to_widget): Accept NULL
 	as a detach func.  (#323386, Jorn Baayen)
 

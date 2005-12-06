@@ -4447,7 +4447,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       /* Make a copy of the current text */
       old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry)));
       new_event = gdk_event_copy ((GdkEvent *) event);
-      ((GdkEventKey *) new_event)->window = tree_view->priv->search_entry->window;
+      g_object_unref (((GdkEventKey *) new_event)->window);
+      ((GdkEventKey *) new_event)->window = g_object_ref (tree_view->priv->search_entry->window);
       gtk_widget_realize (tree_view->priv->search_window);
 
       popup_menu_id = g_signal_connect (tree_view->priv->search_entry, 
