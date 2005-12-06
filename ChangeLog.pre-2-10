@@ -1,3 +1,11 @@
+2005-12-05  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): "event->state &
+	modifiers", not "event->state && modifiers".  Patch by Sadrul
+	Habib Chowdhury <imadil@gmail.com>.  Fixes bug #323073.
+
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Free new_event
