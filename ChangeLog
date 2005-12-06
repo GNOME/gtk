@@ -1,3 +1,9 @@
+2005-12-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): "event->state &
+	modifiers", not "event->state && modifiers".  Patch by Sadrul
+	Habib Chowdhury <imadil@gmail.com>.  Fixes bug #323073.
+
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c: 
