@@ -345,7 +345,7 @@ be invoked when the menu calls gtk_menu_detach() during its destruction.
 @menu: a #GtkMenu.
 @attach_widget: the #GtkWidget that the menu will be attached to.
 @detacher: the user supplied callback function that will be called when 
-the menu calls gtk_menu_detach().
+the menu calls gtk_menu_detach(), or %NULL
 
 
 <!-- ##### FUNCTION gtk_menu_detach ##### -->
