@@ -5271,7 +5271,7 @@ show_and_select_paths (GtkFileChooserDefault *impl,
       return TRUE;
     }
 
-  info = g_new (struct ShowAndSelectPathsData, 0);
+  info = g_new (struct ShowAndSelectPathsData, 1);
   info->impl = impl;
   info->paths = gtk_file_paths_copy (paths);
 
