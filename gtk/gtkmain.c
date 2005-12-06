@@ -673,6 +673,7 @@ gtk_parse_args (int    *argc,
 {
   GOptionContext *option_context;
   GOptionGroup *gtk_group;
+  GError *error = NULL;
   
   if (gtk_initialized)
     return TRUE;
@@ -687,7 +688,12 @@ gtk_parse_args (int    *argc,
   g_option_context_set_help_enabled (option_context, FALSE);
   gtk_group = gtk_get_option_group (FALSE);
   g_option_context_set_main_group (option_context, gtk_group);
-  g_option_context_parse (option_context, argc, argv, NULL);
+  if (!g_option_context_parse (option_context, argc, argv, &error))
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
+
   g_option_context_free (option_context);
 
   return TRUE;

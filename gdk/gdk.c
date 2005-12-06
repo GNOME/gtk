@@ -201,6 +201,7 @@ gdk_parse_args (int    *argc,
 {
   GOptionContext *option_context;
   GOptionGroup *option_group;
+  GError *error = NULL;
 
   if (gdk_initialized)
     return;
@@ -216,7 +217,11 @@ gdk_parse_args (int    *argc,
   g_option_group_add_entries (option_group, gdk_args);
   g_option_group_add_entries (option_group, _gdk_windowing_args);
 
-  g_option_context_parse (option_context, argc, argv, NULL);
+  if (g_option_context_parse (option_context, argc, argv, &error))
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
   g_option_context_free (option_context);
   
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
