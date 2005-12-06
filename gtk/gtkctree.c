@@ -3205,8 +3205,8 @@ row_new (GtkCTree *ctree)
   int i;
 
   clist = GTK_CLIST (ctree);
-  ctree_row = g_chunk_new (GtkCTreeRow, clist->row_mem_chunk);
-  ctree_row->row.cell = g_chunk_new (GtkCell, clist->cell_mem_chunk);
+  ctree_row = g_chunk_new (GtkCTreeRow, (GMemChunk *)clist->row_mem_chunk);
+  ctree_row->row.cell = g_chunk_new (GtkCell, (GMemChunk *)clist->cell_mem_chunk);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -3292,8 +3292,8 @@ row_delete (GtkCTree    *ctree,
       dnotify (ddata);
     }
 
-  g_mem_chunk_free (clist->cell_mem_chunk, ctree_row->row.cell);
-  g_mem_chunk_free (clist->row_mem_chunk, ctree_row);
+  g_mem_chunk_free ((GMemChunk *)clist->cell_mem_chunk, ctree_row->row.cell);
+  g_mem_chunk_free ((GMemChunk *)clist->row_mem_chunk, ctree_row);
 }
 
 static void

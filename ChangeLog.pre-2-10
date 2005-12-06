@@ -1,3 +1,15 @@
+2005-12-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Make it compile against GLib 2.9:
+	
+	* gtk/gtkclist.h:
+	* gtk/gtkstatusbar.h: Replace uses of GMemChunk* in public 
+	headers by gpointer.
+
+	* gtk/gtkclist.c:
+	* gtk/gtkctree.c:
+	* gtk/gtkstatusbar.c: Add GMemChunk* casts as necessary.
+	
 2005-12-05  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:

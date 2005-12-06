@@ -302,7 +302,7 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   g_return_val_if_fail (text != NULL, 0);
 
   class = GTK_STATUSBAR_GET_CLASS (statusbar);
-  msg = g_chunk_new (GtkStatusbarMsg, class->messages_mem_chunk);
+  msg = g_chunk_new (GtkStatusbarMsg, (GMemChunk *)class->messages_mem_chunk);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
   msg->message_id = statusbar->seq_message_id++;
@@ -343,7 +343,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 	      statusbar->messages = g_slist_remove_link (statusbar->messages,
 							 list);
 	      g_free (msg->text);
-	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+	      g_mem_chunk_free ((GMemChunk *)class->messages_mem_chunk, msg);
 	      g_slist_free_1 (list);
 	      break;
 	    }
@@ -394,7 +394,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 	      class = GTK_STATUSBAR_GET_CLASS (statusbar);
 	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      g_free (msg->text);
-	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+	      g_mem_chunk_free ((GMemChunk *)class->messages_mem_chunk, msg);
 	      g_slist_free_1 (list);
 	      
 	      break;
@@ -459,7 +459,7 @@ gtk_statusbar_destroy (GtkObject *object)
 
       msg = list->data;
       g_free (msg->text);
-      g_mem_chunk_free (class->messages_mem_chunk, msg);
+      g_mem_chunk_free ((GMemChunk *)class->messages_mem_chunk, msg);
     }
   g_slist_free (statusbar->messages);
   statusbar->messages = NULL;

@@ -4439,8 +4439,8 @@ gtk_clist_finalize (GObject *object)
 
   columns_delete (clist);
 
-  g_mem_chunk_destroy (clist->cell_mem_chunk);
-  g_mem_chunk_destroy (clist->row_mem_chunk);
+  g_mem_chunk_destroy ((GMemChunk *)clist->cell_mem_chunk);
+  g_mem_chunk_destroy ((GMemChunk *)clist->row_mem_chunk);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -6375,8 +6375,8 @@ row_new (GtkCList *clist)
   int i;
   GtkCListRow *clist_row;
 
-  clist_row = g_chunk_new (GtkCListRow, clist->row_mem_chunk);
-  clist_row->cell = g_chunk_new (GtkCell, clist->cell_mem_chunk);
+  clist_row = g_chunk_new (GtkCListRow, (GMemChunk *)clist->row_mem_chunk);
+  clist_row->cell = g_chunk_new (GtkCell, (GMemChunk *)clist->cell_mem_chunk);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -6425,8 +6425,8 @@ row_delete (GtkCList    *clist,
   if (clist_row->destroy)
     clist_row->destroy (clist_row->data);
 
-  g_mem_chunk_free (clist->cell_mem_chunk, clist_row->cell);
-  g_mem_chunk_free (clist->row_mem_chunk, clist_row);
+  g_mem_chunk_free ((GMemChunk *)clist->cell_mem_chunk, clist_row->cell);
+  g_mem_chunk_free ((GMemChunk *)clist->row_mem_chunk, clist_row);
 }
 
 /* FOCUS FUNCTIONS
