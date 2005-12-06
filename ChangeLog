@@ -1,5 +1,9 @@
 2005-12-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk.c (gdk_parse_args): 
+	* gtk/gtkmain.c (gtk_parse_args): Don't ignore errors
+	from g_option_context_parse(). 
+
 	Make it compile against GLib 2.9:
 	
 	* gtk/gtkclist.h:
