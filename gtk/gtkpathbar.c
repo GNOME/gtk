@@ -1341,6 +1341,12 @@ gtk_path_bar_set_path_finish (struct SetPathInfo *info,
 
       g_list_free (info->new_buttons);
     }
+
+  if (info->path)
+    gtk_file_path_free (info->path);
+  if (info->parent_path)
+    gtk_file_path_free (info->parent_path);
+  g_free (info);
 }
 
 static void

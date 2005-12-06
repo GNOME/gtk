@@ -755,6 +755,7 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
 
   info = create_file_info (NULL, filename, basename, types, &statbuf,
                            mime_type);
+  g_free (basename);
   queue_get_info_callback (callback, handle, info, NULL, data);
 
   return handle;

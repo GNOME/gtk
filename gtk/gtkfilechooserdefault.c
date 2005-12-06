@@ -1227,7 +1227,7 @@ get_file_info_finished (GtkFileSystemHandle *handle,
   struct ShortcutsInsertRequest *request = data;
 
   if (!info)
-    return;
+    goto out;
   
   label_copy = g_strdup (gtk_file_info_get_display_name (info));
   pixbuf = gtk_file_system_render_icon (request->impl->file_system,
@@ -1263,6 +1263,12 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 
   if (pixbuf)
     g_object_unref (pixbuf);
+
+out:
+  gtk_file_path_free (request->parent_path);
+  gtk_file_path_free (request->path);
+  gtk_tree_row_reference_free (request->row_ref);
+  g_free (request);
 }
 
 static void
@@ -5481,16 +5487,14 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
   if (error)
     {
       error_changing_folder_dialog (impl, data->path, g_error_copy (error));
-      return;
+      goto out;
     }
 
   if (!gtk_file_info_get_is_folder (info))
-    {
-      return;
-    }
+    goto out;
 
   if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), data->path, data->keep_trail, NULL))
-    return;
+    goto out;
 
   if (impl->current_folder != data->path)
     {
@@ -5535,6 +5539,10 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
   bookmarks_check_add_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
+
+out:
+  gtk_file_path_free (data->path);
+  g_free (data);
 }
 
 static gboolean
