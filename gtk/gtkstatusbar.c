@@ -155,11 +155,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   widget_class->direction_changed = gtk_statusbar_direction_changed;
   
-  class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusbar messages mem chunk",
-					       sizeof (GtkStatusbarMsg),
-					       sizeof (GtkStatusbarMsg) * 64,
-					       G_ALLOC_AND_FREE);
-
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
   
@@ -300,7 +295,7 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   g_return_val_if_fail (text != NULL, 0);
 
   class = GTK_STATUSBAR_GET_CLASS (statusbar);
-  msg = g_chunk_new (GtkStatusbarMsg, class->messages_mem_chunk);
+  msg = g_slice_new (GtkStatusbarMsg);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
   msg->message_id = statusbar->seq_message_id++;
@@ -341,7 +336,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 	      statusbar->messages = g_slist_remove_link (statusbar->messages,
 							 list);
 	      g_free (msg->text);
-	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+              g_slice_free (GtkStatusbarMsg, msg);
 	      g_slist_free_1 (list);
 	      break;
 	    }
@@ -392,7 +387,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 	      class = GTK_STATUSBAR_GET_CLASS (statusbar);
 	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      g_free (msg->text);
-	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+              g_slice_free (GtkStatusbarMsg, msg);
 	      g_slist_free_1 (list);
 	      
 	      break;
@@ -457,7 +452,7 @@ gtk_statusbar_destroy (GtkObject *object)
 
       msg = list->data;
       g_free (msg->text);
-      g_mem_chunk_free (class->messages_mem_chunk, msg);
+      g_slice_free (GtkStatusbarMsg, msg);
     }
   g_slist_free (statusbar->messages);
   statusbar->messages = NULL;

@@ -1,3 +1,8 @@
+Tue Dec  6 10:32:17 2005  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkstatusbar.c: ported memchunk uses to g_slice, so the code
+	compiles again.
+
 2005-12-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (trap_activate_cb): "event->state &
