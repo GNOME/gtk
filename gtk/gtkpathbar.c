@@ -957,7 +957,11 @@ button_clicked_cb (GtkWidget *button,
   button_list = g_list_find (path_bar->button_list, button_data);
   g_assert (button_list != NULL);
 
+  g_signal_handlers_block_by_func (button,
+				   G_CALLBACK (button_clicked_cb), data);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  g_signal_handlers_unblock_by_func (button,
+				     G_CALLBACK (button_clicked_cb), data);
 
   if (button_list->prev)
     {
@@ -1294,17 +1298,115 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
   return FALSE;
 }
 
+
+struct SetPathInfo
+{
+  GtkFilePath *path;
+  GtkFilePath *parent_path;
+  GtkPathBar *path_bar;
+  GList *new_buttons;
+  GList *fake_root;
+  gboolean first_directory;
+};
+
+static void
+gtk_path_bar_set_path_finish (struct SetPathInfo *info,
+                              gboolean result)
+{
+  if (result)
+    {
+      GList *l;
+
+      gtk_path_bar_clear_buttons (info->path_bar);
+      info->path_bar->button_list = g_list_reverse (info->new_buttons);
+      info->path_bar->fake_root = info->fake_root;
+
+      for (l = info->path_bar->button_list; l; l = l->next)
+	{
+	  GtkWidget *button = BUTTON_DATA (l->data)->button;
+	  gtk_container_add (GTK_CONTAINER (info->path_bar), button);
+	}
+    }
+  else
+    {
+      GList *l;
+
+      for (l = info->new_buttons; l; l = l->next)
+	{
+	  ButtonData *button_data;
+
+	  button_data = BUTTON_DATA (l->data);
+	  gtk_widget_destroy (button_data->button);
+	}
+
+      g_list_free (info->new_buttons);
+    }
+}
+
+static void
+gtk_path_bar_get_info_callback (GtkFileSystemHandle *handle,
+			        GtkFileInfo         *file_info,
+			        GError              *error,
+			        gpointer             data)
+{
+  struct SetPathInfo *path_info = data;
+
+  ButtonData *button_data;
+  const gchar *display_name;
+  gboolean is_hidden;
+  gboolean valid;
+
+  if (!file_info)
+    {
+      gtk_path_bar_set_path_finish (path_info, FALSE);
+      return;
+    }
+
+  display_name = gtk_file_info_get_display_name (file_info);
+  is_hidden = gtk_file_info_get_is_hidden (file_info);
+
+  gtk_widget_push_composite_child ();
+  button_data = make_directory_button (path_info->path_bar, display_name,
+                                       path_info->path,
+				       path_info->first_directory, is_hidden);
+  gtk_widget_pop_composite_child ();
+  gtk_file_path_free (path_info->path);
+
+  path_info->new_buttons = g_list_prepend (path_info->new_buttons, button_data);
+
+  if (BUTTON_IS_FAKE_ROOT (button_data))
+    path_info->fake_root = path_info->new_buttons;
+
+  path_info->path = path_info->parent_path;
+  path_info->first_directory = FALSE;
+
+  if (!path_info->path)
+    {
+      gtk_path_bar_set_path_finish (path_info, TRUE);
+      return;
+    }
+
+  valid = gtk_file_system_get_parent (path_info->path_bar->file_system,
+				      path_info->path,
+				      &path_info->parent_path,
+				      NULL);
+  if (!valid)
+    {
+      gtk_path_bar_set_path_finish (path_info, FALSE);
+      return;
+    }
+
+  gtk_file_system_get_info (handle->file_system, path_info->path, GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN, gtk_path_bar_get_info_callback, path_info);
+}
+
 gboolean
 _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 			const GtkFilePath  *file_path,
 			const gboolean      keep_trail,     
 			GError            **error)
 {
-  GtkFilePath *path;
-  gboolean first_directory = TRUE;
+  struct SetPathInfo *info;
   gboolean result;
-  GList *new_buttons = NULL;
-  GList *fake_root = NULL;
 
   g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
   g_return_val_if_fail (file_path != NULL, FALSE);
@@ -1318,102 +1420,23 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       gtk_path_bar_check_parent_path (path_bar, file_path, path_bar->file_system))
     return TRUE;
 
-  path = gtk_file_path_copy (file_path);
+  info = g_new0 (struct SetPathInfo, 1);
+  info->path = gtk_file_path_copy (file_path);
+  info->path_bar = path_bar;
+  info->first_directory = TRUE;
 
-  gtk_widget_push_composite_child ();
-
-  while (path != NULL)
+  result = gtk_file_system_get_parent (path_bar->file_system,
+				       info->path, &info->parent_path, error);
+  if (!result)
     {
-      GtkFilePath *parent_path = NULL;
-      ButtonData *button_data;
-      const gchar *display_name;
-      gboolean is_hidden;
-      GtkFileFolder *file_folder;
-      GtkFileInfo *file_info;
-      gboolean valid;
-
-      valid = gtk_file_system_get_parent (path_bar->file_system,
-					  path,
-					  &parent_path,
-					  error);
-      if (!valid)
-	{
-	  result = FALSE;
-	  gtk_file_path_free (path);
-	  break;
-	}
-
-      file_folder = gtk_file_system_get_folder (path_bar->file_system,
-						parent_path ? parent_path : path,
-						GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN,
-						NULL);
-      if (!file_folder)
-	{
-	  result = FALSE;
-	  gtk_file_path_free (parent_path);
-	  gtk_file_path_free (path);
-	  break;
-	}
-
-      file_info = gtk_file_folder_get_info (file_folder, parent_path ? path : NULL, error);
-      g_object_unref (file_folder);
-
-      if (!file_info)
-	{
-	  result = FALSE;
-	  gtk_file_path_free (parent_path);
-	  gtk_file_path_free (path);
-	  break;
-	}
-
-      display_name = gtk_file_info_get_display_name (file_info);
-      is_hidden = gtk_file_info_get_is_hidden (file_info);
-
-      button_data = make_directory_button (path_bar, display_name, path, first_directory, is_hidden);
-      gtk_file_info_free (file_info);
-      gtk_file_path_free (path);
-
-      new_buttons = g_list_prepend (new_buttons, button_data);
-
-      if (BUTTON_IS_FAKE_ROOT (button_data))
-	fake_root = new_buttons;
-
-      path = parent_path;
-      first_directory = FALSE;
+      gtk_file_path_free (info->path);
+      g_free (info);
+      return result;
     }
 
-  if (result)
-    {
-      GList *l;
+  gtk_file_system_get_info (path_bar->file_system, info->path, GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN, gtk_path_bar_get_info_callback, info);
 
-      gtk_path_bar_clear_buttons (path_bar);
-      path_bar->button_list = g_list_reverse (new_buttons);
-      path_bar->fake_root = fake_root;
-
-      for (l = path_bar->button_list; l; l = l->next)
-	{
-	  GtkWidget *button = BUTTON_DATA (l->data)->button;
-	  gtk_container_add (GTK_CONTAINER (path_bar), button);
-	}
-    }
-  else
-    {
-      GList *l;
-
-      for (l = new_buttons; l; l = l->next)
-	{
-	  ButtonData *button_data;
-
-	  button_data = BUTTON_DATA (l->data);
-	  gtk_widget_destroy (button_data->button);
-	}
-
-      g_list_free (new_buttons);
-    }
-
-  gtk_widget_pop_composite_child ();
-
-  return result;
+  return TRUE;
 }
 
 /* FIXME: This should be a construct-only property */

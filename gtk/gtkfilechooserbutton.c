@@ -94,6 +94,7 @@ enum
   DISPLAY_NAME_COLUMN,
   TYPE_COLUMN,
   DATA_COLUMN,
+  IS_FOLDER_COLUMN,
   NUM_COLUMNS
 };
 
@@ -227,8 +228,9 @@ static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *wi
 
 /* Utility Functions */
 static GtkIconTheme *get_icon_theme               (GtkWidget            *widget);
-static gchar        *get_display_name_for_path    (GtkFileSystem     *fs,
-						   const GtkFilePath *path);
+static void          set_info_for_path_at_iter         (GtkFileChooserButton *fs,
+							const GtkFilePath    *path,
+							GtkTreeIter          *iter);
 
 static gint          model_get_type_position      (GtkFileChooserButton *button,
 						   RowType               row_type);
@@ -449,7 +451,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 					GDK_TYPE_PIXBUF, /* Icon */
 					G_TYPE_STRING,	 /* Display Name */
 					G_TYPE_CHAR,	 /* Row Type */
-					G_TYPE_POINTER	 /* Volume || Path */));
+					G_TYPE_POINTER	 /* Volume || Path */,
+					G_TYPE_BOOLEAN   /* Is Folder? */));
 
   priv->combo_box = gtk_combo_box_new ();
   priv->combo_box_changed_id =
@@ -518,7 +521,6 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
       GtkTreeIter iter;
       gint pos;
       GdkPixbuf *pixbuf;
-      gchar *display_name;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
       pos += priv->n_shortcuts;
@@ -526,20 +528,20 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
       pixbuf = gtk_file_system_render_icon (priv->fs, path,
 					    GTK_WIDGET (chooser),
 					    priv->icon_size, NULL);
-      display_name = get_display_name_for_path (priv->fs, path);
 
       gtk_list_store_insert (GTK_LIST_STORE (priv->model), &iter, pos);
       gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
 			  ICON_COLUMN, pixbuf,
-			  DISPLAY_NAME_COLUMN, display_name,
+			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_SHORTCUT,
 			  DATA_COLUMN, gtk_file_path_copy (path),
+			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
+      set_info_for_path_at_iter (button, path, &iter);
       priv->n_shortcuts++;
 
       if (pixbuf)
 	g_object_unref (pixbuf);
-      g_free (display_name);
 
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
     }
@@ -953,13 +955,17 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 		gtk_file_system_get_parent (priv->fs, path, &base_path, NULL))
 	      {
 		GtkFileFolder *folder;
-		GtkFileInfo *info;
+		GtkFileInfo *info = NULL;
+
+		/* FIXME: make async */
+#if 0
 
 		folder = gtk_file_system_get_folder (priv->fs, base_path,
 						     GTK_FILE_INFO_IS_FOLDER,
 						     NULL);
 
 		info = gtk_file_folder_get_info (folder, path, NULL);
+#endif
 
 		if (info != NULL)
 		  {
@@ -1206,43 +1212,50 @@ get_icon_theme (GtkWidget *widget)
   return gtk_icon_theme_get_default ();
 }
 
-static gchar *
-get_display_name_for_path (GtkFileSystem     *fs,
-			   const GtkFilePath *path)
+
+struct SetDisplayNameData
 {
-  GtkFilePath *parent_path;
-  GtkFileFolder *folder;
-  gchar *retval;
+  GtkFileChooserButton *button;
+  GtkTreeIter iter;
+};
 
-  parent_path = NULL;
-  retval = NULL;
+static void
+set_info_get_info_cb (GtkFileSystemHandle *handle,
+		      GtkFileInfo         *info,
+		      GError              *error,
+		      gpointer             callback_data)
+{
+  struct SetDisplayNameData *data = callback_data;
 
-  gtk_file_system_get_parent (fs, path, &parent_path, NULL);
-
-  folder = gtk_file_system_get_folder (fs, parent_path ? parent_path : path,
-				       GTK_FILE_INFO_DISPLAY_NAME, NULL);
-
-  if (folder)
+  if (error)
     {
-      GtkFileInfo *info;
-
-      info = gtk_file_folder_get_info (folder, path, NULL);
-      g_object_unref (folder);
-
-      if (info)
-	{
-	  retval = g_strdup (gtk_file_info_get_display_name (info));
-	  gtk_file_info_free (info);
-	}
+      /* There was an error, leave the fallback name in there */
+      g_free (data);
+      return;
     }
 
-  if (parent_path)
-    gtk_file_path_free (parent_path);
+  gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &data->iter,
+		      DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
+		      IS_FOLDER_COLUMN, gtk_file_info_get_is_folder (info),
+		      -1);
 
-  if (!retval)
-    retval = g_strdup (_(FALLBACK_DISPLAY_NAME));
+  g_free (data);
+}
 
-  return retval;
+static void
+set_info_for_path_at_iter (GtkFileChooserButton *button,
+			   const GtkFilePath    *path,
+			   GtkTreeIter          *iter)
+{
+  struct SetDisplayNameData *data;
+
+  data = g_new0 (struct SetDisplayNameData, 1);
+  data->button = button;
+  data->iter = *iter;
+
+  gtk_file_system_get_info (button->priv->fs, path,
+			    GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			    set_info_get_info_cb, data);
 }
 
 /* Shortcuts Model */
@@ -1356,6 +1369,7 @@ model_add_special (GtkFileChooserButton *button)
 			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
 			  DATA_COLUMN, path,
+			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
       if (pixbuf)
@@ -1385,6 +1399,7 @@ model_add_special (GtkFileChooserButton *button)
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
 			  DATA_COLUMN, path,
+			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
       if (pixbuf)
@@ -1426,6 +1441,7 @@ model_add_volumes (GtkFileChooserButton *button,
 			  DISPLAY_NAME_COLUMN, display_name,
 			  TYPE_COLUMN, ROW_TYPE_VOLUME,
 			  DATA_COLUMN, volumes->data,
+			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
       if (pixbuf)
@@ -1461,6 +1477,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 			  DISPLAY_NAME_COLUMN, NULL,
 			  TYPE_COLUMN, ROW_TYPE_BOOKMARK_SEPARATOR,
 			  DATA_COLUMN, NULL,
+			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
       button->priv->has_bookmark_separator = TRUE;
     }
@@ -1468,25 +1485,24 @@ model_add_bookmarks (GtkFileChooserButton *button,
   do
     {
       GdkPixbuf *pixbuf;
-      gchar *display_name;
 
       pos++;
       pixbuf = gtk_file_system_render_icon (button->priv->fs, bookmarks->data,
 					    GTK_WIDGET (button),
 					    button->priv->icon_size, NULL);
-      display_name = get_display_name_for_path (button->priv->fs,
-						bookmarks->data);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
-			  DISPLAY_NAME_COLUMN, display_name,
+			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_BOOKMARK,
 			  DATA_COLUMN, gtk_file_path_copy (bookmarks->data),
+			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
+      set_info_for_path_at_iter (button, bookmarks->data, &iter);
+
       if (pixbuf)
 	g_object_unref (pixbuf);
-      g_free (display_name);
 
       button->priv->n_bookmarks++;
       bookmarks = bookmarks->next;
@@ -1502,7 +1518,6 @@ model_update_current_folder (GtkFileChooserButton *button,
   GtkTreeIter iter;
   gint pos;
   GdkPixbuf *pixbuf;
-  gchar *display_name;
 
   if (!path) 
     return;
@@ -1518,6 +1533,7 @@ model_update_current_folder (GtkFileChooserButton *button,
 			  DISPLAY_NAME_COLUMN, NULL,
 			  TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER_SEPARATOR,
 			  DATA_COLUMN, NULL,
+			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
       button->priv->has_current_folder_separator = TRUE;
     }
@@ -1537,16 +1553,17 @@ model_update_current_folder (GtkFileChooserButton *button,
   pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
 					GTK_WIDGET (button),
 					button->priv->icon_size, NULL);
-  display_name = get_display_name_for_path (button->priv->fs, path);
   gtk_list_store_set (store, &iter,
 		      ICON_COLUMN, pixbuf,
-		      DISPLAY_NAME_COLUMN, display_name,
+		      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 		      TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
 		      DATA_COLUMN, gtk_file_path_copy (path),
+		      IS_FOLDER_COLUMN, FALSE,
 		      -1);
+  set_info_for_path_at_iter (button, path, &iter);
+
   if (pixbuf)
     g_object_unref (pixbuf);
-  g_free (display_name);
 }
 
 static inline void
@@ -1565,6 +1582,7 @@ model_add_other (GtkFileChooserButton *button)
 		      DISPLAY_NAME_COLUMN, NULL,
 		      TYPE_COLUMN, ROW_TYPE_OTHER_SEPARATOR,
 		      DATA_COLUMN, NULL,
+		      IS_FOLDER_COLUMN, FALSE,
 		      -1);
   button->priv->has_other_separator = TRUE;
   pos++;
@@ -1575,6 +1593,7 @@ model_add_other (GtkFileChooserButton *button)
 		      DISPLAY_NAME_COLUMN, _("Other..."),
 		      TYPE_COLUMN, ROW_TYPE_OTHER,
 		      DATA_COLUMN, NULL,
+		      IS_FOLDER_COLUMN, FALSE,
 		      -1);
 }
 
@@ -1608,42 +1627,17 @@ model_remove_rows (GtkFileChooserButton *button,
 static inline gboolean
 test_if_path_is_visible (GtkFileSystem     *fs,
 			 const GtkFilePath *path,
-			 gboolean           local_only)
+			 gboolean           local_only,
+			 gboolean           is_folder)
 {
-  GtkFilePath *parent_path;
-  GtkFileFolder *folder;
-  GtkFileInfo *info;
-
   if (!path)
     return FALSE;
 
   if (local_only && !gtk_file_system_path_is_local (fs, path))
     return FALSE;
 
-  parent_path = NULL;
-  gtk_file_system_get_parent (fs, path, &parent_path, NULL);
-
-  folder = gtk_file_system_get_folder (fs, parent_path ? parent_path : path,
-				       GTK_FILE_INFO_IS_FOLDER, NULL);
-  gtk_file_path_free (parent_path);
-
-  if (folder)
-    {
-      info = gtk_file_folder_get_info (folder, path, NULL);
-      g_object_unref (folder);
-    }
-  else
-    info = NULL;
-
-  if (!info)
+  if (!is_folder)
     return FALSE;
-  else if (!gtk_file_info_get_is_folder (info))
-    {
-      gtk_file_info_free (info);
-      return FALSE;
-    }
-
-  gtk_file_info_free (info);
 
   return TRUE;
 }
@@ -1657,7 +1651,7 @@ filter_model_visible_func (GtkTreeModel *model,
   GtkFileChooserButtonPrivate *priv = button->priv;
   gchar type;
   gpointer data;
-  gboolean local_only, retval;
+  gboolean local_only, retval, is_folder;
 
   type = ROW_TYPE_INVALID;
   data = NULL;
@@ -1666,6 +1660,7 @@ filter_model_visible_func (GtkTreeModel *model,
   gtk_tree_model_get (model, iter,
 		      TYPE_COLUMN, &type,
 		      DATA_COLUMN, &data,
+		      IS_FOLDER_COLUMN, &is_folder,
 		      -1);
 
   switch (type)
@@ -1676,7 +1671,7 @@ filter_model_visible_func (GtkTreeModel *model,
     case ROW_TYPE_SPECIAL:
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
-      retval = test_if_path_is_visible (priv->fs, data, local_only);
+      retval = test_if_path_is_visible (priv->fs, data, local_only, is_folder);
       break;
     case ROW_TYPE_VOLUME:
       {
@@ -1825,6 +1820,18 @@ update_combo_box (GtkFileChooserButton *button)
 
 /* Button */
 static void
+update_label_get_info_cb (GtkFileSystemHandle *handle,
+			  GtkFileInfo         *info,
+			  GError              *error,
+			  gpointer             data)
+{
+  if (error)
+    return;
+
+  gtk_label_set_text (GTK_LABEL (data), gtk_file_info_get_display_name (info));
+}
+
+static void
 update_label_and_image (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
@@ -1836,11 +1843,11 @@ update_label_and_image (GtkFileChooserButton *button)
   label_text = NULL;
   pixbuf = NULL;
 
-  if (paths)
+  if (paths && paths->data)
     {
-      GtkFilePath *path, *parent_path;
-      GtkFileSystemVolume *volume;
-      GtkFileFolder *folder;
+      GtkFilePath *path;
+      GtkFileSystemVolume *volume = NULL;
+      GtkFileFolder *folder = NULL;
     
       path = paths->data;
 
@@ -1874,27 +1881,8 @@ update_label_and_image (GtkFileChooserButton *button)
 					      GTK_WIDGET (button),
 					      priv->icon_size, NULL);
 
-      parent_path = NULL;
-      gtk_file_system_get_parent (priv->fs, path, &parent_path, NULL);
-
-      folder = gtk_file_system_get_folder (priv->fs,
-					   parent_path ? parent_path : path,
-					   GTK_FILE_INFO_DISPLAY_NAME, NULL);
-      gtk_file_path_free (parent_path);
-
-      if (folder)
-	{
-	  GtkFileInfo *info;
-
-	  info = gtk_file_folder_get_info (folder, path, NULL);
-	  g_object_unref (folder);
-
-	  if (info)
-	    {
-	      label_text = g_strdup (gtk_file_info_get_display_name (info));
-	      gtk_file_info_free (info);
-	    }
-	}
+      gtk_file_system_get_info (priv->fs, path, GTK_FILE_INFO_DISPLAY_NAME,
+				update_label_get_info_cb, priv->label);
 
      out:
       gtk_file_paths_free (paths);

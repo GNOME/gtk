@@ -251,6 +251,55 @@ gtk_file_info_set_size (GtkFileInfo *info,
   info->size = size;
 }
 
+/*****************************************
+ *          GtkFileSystemHandle          *
+ *****************************************/
+
+static void gtk_file_system_handle_init (GtkFileSystemHandle *handle);
+
+
+GType
+gtk_file_system_handle_get_type (void)
+{
+  static GType file_system_handle_type = 0;
+
+  if (!file_system_handle_type)
+    {
+      static const GTypeInfo file_system_handle_info =
+      {
+	sizeof (GtkFileSystemHandleClass),
+	NULL,
+	NULL,
+	NULL, /* class init */
+	NULL,
+	NULL,
+	sizeof (GtkFileSystemHandle),
+	0,
+	(GInstanceInitFunc) gtk_file_system_handle_init,
+      };
+
+      file_system_handle_type = g_type_register_static (G_TYPE_OBJECT,
+							I_("GtkFileSystemHandle"),
+							&file_system_handle_info, 0);
+    }
+
+  return file_system_handle_type;
+}
+
+#if 0
+GtkFileSystemHandle *
+gtk_file_system_handle_new (void)
+{
+  return g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
+}
+#endif
+
+static void
+gtk_file_system_handle_init (GtkFileSystemHandle *handle)
+{
+  handle->file_system = NULL;
+  handle->cancelled = FALSE;
+}
 
 /*****************************************
  *             GtkFileSystem             *
@@ -315,29 +364,53 @@ gtk_file_system_list_volumes (GtkFileSystem  *file_system)
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_volumes (file_system);
 }
 
-GtkFileFolder *
-gtk_file_system_get_folder (GtkFileSystem     *file_system,
-			    const GtkFilePath *path,
-			    GtkFileInfoType    types,
-			    GError           **error)
+GtkFileSystemHandle *
+gtk_file_system_get_folder (GtkFileSystem                  *file_system,
+			    const GtkFilePath              *path,
+			    GtkFileInfoType                 types,
+			    GtkFileSystemGetFolderCallback  callback,
+			    gpointer                        data)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, path, types, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, path, types, callback, data);
 }
 
-gboolean
-gtk_file_system_create_folder(GtkFileSystem     *file_system,
-			      const GtkFilePath *path,
-			      GError           **error)
+GtkFileSystemHandle *
+gtk_file_system_get_info (GtkFileSystem *file_system,
+			  const GtkFilePath *path,
+			  GtkFileInfoType types,
+			  GtkFileSystemGetInfoCallback callback,
+			  gpointer data)
 {
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_info (file_system, path, types, callback, data);
+}
+
+GtkFileSystemHandle *
+gtk_file_system_create_folder (GtkFileSystem                     *file_system,
+			       const GtkFilePath                 *path,
+			       GtkFileSystemCreateFolderCallback  callback,
+			       gpointer                           data)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, callback, data);
+}
+
+void
+gtk_file_system_cancel_operation (GtkFileSystemHandle *handle)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_HANDLE (handle));
+
+  return GTK_FILE_SYSTEM_GET_IFACE (handle->file_system)->cancel_operation (handle);
 }
 
 /**
@@ -433,16 +506,18 @@ gtk_file_system_volume_get_is_mounted (GtkFileSystem       *file_system,
  * 
  * Return value: TRUE if the @volume was mounted successfully, FALSE otherwise.
  **/
-gboolean
-gtk_file_system_volume_mount (GtkFileSystem        *file_system, 
-			      GtkFileSystemVolume  *volume,
-			      GError              **error)
+/* FIXME XXX: update documentation above */
+GtkFileSystemHandle *
+gtk_file_system_volume_mount (GtkFileSystem                    *file_system,
+			      GtkFileSystemVolume              *volume,
+			      GtkFileSystemVolumeMountCallback  callback,
+			      gpointer                          data)
 {
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (volume != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_mount (file_system, volume, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_mount (file_system, volume, callback, data);
 }
 
 /**

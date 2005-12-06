@@ -1,3 +1,45 @@
+2005-12-05  Federico Mena Quintero  <federico@ximian.com>
+
+	(merge from HEAD)
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): "event->state &
+	modifiers", not "event->state && modifiers".  Patch by Sadrul
+	Habib Chowdhury <imadil@gmail.com>.  Fixes bug #323073.
+
+2005-12-06  Kristian Rietveld  <kris@imendio.com>
+
+	Beginnings of an asynchronous file chooser.
+
+	* gtk/gtkfilechooserbutton.c: display name and the is folder property
+	are now asynchronously set using set_info_for_at_path_iter(), the
+	is folder property is now also stored in the tree model.
+
+	* gtk/gtkfilechooserdefault.c: lots of changes to the shortcuts
+	model code to make it operate asynchronously, check_is_folder() has
+	been "disabled" for now, all other synchronous calls were
+	replaced with asychronous ones.
+
+	* gtk/gtkfilechooserentry.c: update call to 
+	gtk_file_system_get_folder().
+
+	* gtk/gtkfilechooserprivate.h: added two fields.
+
+	* gtk/gtkfilesystem.[ch]: for about 85% changed to the changes
+	outlined in the proposal discussed on gtk-devel-list.
+
+	* gtk/gtkfilesystemmodel.[ch]: updated all asynchronous calls,
+	_gtk_file_system_model_path_do() basically had to be rewritten
+	(and I still need to finish that).
+
+	* gtk/gtkfilesystemunix.c: changed to be compatible with the new
+	GtkFileSystem interface.
+
+	* gtk/gtkpathbar.c (button_clicked_cb): block/unblock the
+	button_clicked_cb callback around the call to
+	gtk_toggle_button_set_active(), avoids button_clicked_cb getting
+	called twice.
+	(_gtk_path_bar_set_path): refactored to be asynchronous.
+
 Tue Dec  6 10:32:17 2005  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkstatusbar.c: ported memchunk uses to g_slice, so the code

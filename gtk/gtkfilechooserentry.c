@@ -599,6 +599,32 @@ files_deleted_cb (GtkFileSystem       *file_system,
   /* FIXME: gravy... */
 }
 
+static void
+load_directory_get_folder_callback (GtkFileSystemHandle *handle,
+				    GtkFileFolder       *folder,
+				    GError              *error,
+				    gpointer             data)
+{
+  GtkFileChooserEntry *chooser_entry = data;
+
+  if (error)
+    /* There is no folder by that name */
+    return;
+
+  chooser_entry->current_folder = folder;
+  g_signal_connect (chooser_entry->current_folder, "files-added",
+		    G_CALLBACK (files_added_cb), chooser_entry);
+  g_signal_connect (chooser_entry->current_folder, "files-removed",
+		    G_CALLBACK (files_deleted_cb), chooser_entry);
+  
+  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
+							G_TYPE_STRING,
+							GTK_TYPE_FILE_PATH);
+
+  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
+				  GTK_TREE_MODEL (chooser_entry->completion_store));
+}
+
 static gboolean
 load_directory_callback (GtkFileChooserEntry *chooser_entry)
 {
@@ -621,38 +647,11 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->completion_store == NULL);
 
   /* Load the folder */
-  chooser_entry->current_folder = gtk_file_system_get_folder (chooser_entry->file_system,
-							      chooser_entry->current_folder_path,
-							      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
-							      NULL); /* NULL-GError */
-
-  /* There is no folder by that name */
-  if (!chooser_entry->current_folder)
-    goto done;
-  g_signal_connect (chooser_entry->current_folder, "files-added",
-		    G_CALLBACK (files_added_cb), chooser_entry);
-  g_signal_connect (chooser_entry->current_folder, "files-removed",
-		    G_CALLBACK (files_deleted_cb), chooser_entry);
-  
-  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
-							G_TYPE_STRING,
-							GTK_TYPE_FILE_PATH);
-
-  if (chooser_entry->file_part_pos != -1)
-    {
-      gtk_file_folder_list_children (chooser_entry->current_folder,
-				     &child_paths,
-				     NULL); /* NULL-GError */
-      if (child_paths)
-	{
-	  update_current_folder_files (chooser_entry, child_paths);
-	  add_completion_idle (chooser_entry);
-	  gtk_file_paths_free (child_paths);
-	}
-    }
-
-  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  GTK_TREE_MODEL (chooser_entry->completion_store));
+  gtk_file_system_get_folder (chooser_entry->file_system,
+			      chooser_entry->current_folder_path,
+			      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			      load_directory_get_folder_callback,
+			      chooser_entry);
 
  done:
   
