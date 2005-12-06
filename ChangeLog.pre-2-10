@@ -1,5 +1,14 @@
 2005-12-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_reset): Don't
+	commit from reset, it upstets GtkTextView.
+
+	* gtk/gtktextview.c (gtk_text_view_check_cursor_blink): Be more
+	careful when turning blinking on and off.
+	(gtk_text_view_focus_out_event): Make the cursor really invisible
+	when the focus goes away.  (#323087, Sadrul Habib Chowdhury)
+	(cursor_blinks): Check the gtk-cursor-blink setting first.
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Fix refcounting
 	issues with new_event and its window.
 
