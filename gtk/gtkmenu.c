@@ -1026,7 +1026,6 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_WIDGET (attach_widget));
-  g_return_if_fail (detacher != NULL);
   
   /* keep this function in sync with gtk_widget_set_parent()
    */
@@ -1103,7 +1102,8 @@ gtk_menu_detach (GtkMenu *menu)
 					(gpointer) attach_widget_screen_changed,
 					menu);
 
-  data->detacher (data->attach_widget, menu);
+  if (data->detacher)
+    data->detacher (data->attach_widget, menu);
   list = g_object_steal_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS);
   list = g_list_remove (list, menu);
   if (list)
