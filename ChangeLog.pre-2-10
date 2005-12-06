@@ -1,5 +1,8 @@
 2005-12-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c: Avoid conflict with win32 headers in
+	the libdate routines.  (#323045, Kazuki Iwamoto)
+
 	* gdk/gdk.c (gdk_parse_args): 
 	* gtk/gtkmain.c (gtk_parse_args): Don't ignore errors
 	from g_option_context_parse(). 

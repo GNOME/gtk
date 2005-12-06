@@ -63,46 +63,39 @@
 #include "gtkalias.h"
 
 /***************************************************************************/
-/* The following date routines are taken from the lib_date package.  Keep
- * them separate in case we want to update them if a newer lib_date comes
- * out with fixes.  */
+/* The following date routines are taken from the lib_date package. 
+ * They have been minimally edited to avoid conflict with types defined
+ * in win32 headers.
+ */
 
-typedef	 unsigned   int	    N_int;
-typedef	 unsigned   long    N_long;
-typedef	 signed	    long    Z_long;
-typedef enum { false = FALSE , true = TRUE } boolean;
-
-#define and	    &&	    /* logical (boolean) operators: lower case */
-#define or	    ||
-
-static const N_int month_length[2][13] =
+static const guint month_length[2][13] =
 {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
   { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
-static const N_int days_in_months[2][14] =
+static const guint days_in_months[2][14] =
 {
   { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 },
   { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
 };
 
-static Z_long  calc_days(N_int year, N_int mm, N_int dd);
-static N_int   day_of_week(N_int year, N_int mm, N_int dd);
-static Z_long  dates_difference(N_int year1, N_int mm1, N_int dd1,
-				N_int year2, N_int mm2, N_int dd2);
-static N_int   weeks_in_year(N_int year);
+static glong  calc_days(guint year, guint mm, guint dd);
+static guint  day_of_week(guint year, guint mm, guint dd);
+static glong  dates_difference(guint year1, guint mm1, guint dd1,
+			       guint year2, guint mm2, guint dd2);
+static guint  weeks_in_year(guint year);
 
-static boolean 
-leap(N_int year)
+static gboolean 
+leap (guint year)
 {
-  return((((year % 4) == 0) and ((year % 100) != 0)) or ((year % 400) == 0));
+  return((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0));
 }
 
-static N_int 
-day_of_week(N_int year, N_int mm, N_int dd)
+static guint 
+day_of_week (guint year, guint mm, guint dd)
 {
-  Z_long  days;
+  glong  days;
   
   days = calc_days(year, mm, dd);
   if (days > 0L)
@@ -111,53 +104,53 @@ day_of_week(N_int year, N_int mm, N_int dd)
       days %= 7L;
       days++;
     }
-  return( (N_int) days );
+  return( (guint) days );
 }
 
-static N_int weeks_in_year(N_int year)
+static guint weeks_in_year(guint year)
 {
-  return(52 + ((day_of_week(year,1,1)==4) or (day_of_week(year,12,31)==4)));
+  return(52 + ((day_of_week(year,1,1)==4) || (day_of_week(year,12,31)==4)));
 }
 
-static boolean 
-check_date(N_int year, N_int mm, N_int dd)
+static gboolean 
+check_date(guint year, guint mm, guint dd)
 {
-  if (year < 1) return(false);
-  if ((mm < 1) or (mm > 12)) return(false);
-  if ((dd < 1) or (dd > month_length[leap(year)][mm])) return(false);
-  return(true);
+  if (year < 1) return FALSE;
+  if ((mm < 1) || (mm > 12)) return FALSE;
+  if ((dd < 1) || (dd > month_length[leap(year)][mm])) return FALSE;
+  return TRUE;
 }
 
-static N_int 
-week_number(N_int year, N_int mm, N_int dd)
+static guint 
+week_number(guint year, guint mm, guint dd)
 {
-  N_int first;
+  guint first;
   
   first = day_of_week(year,1,1) - 1;
-  return( (N_int) ( (dates_difference(year,1,1, year,mm,dd) + first) / 7L ) +
+  return( (guint) ( (dates_difference(year,1,1, year,mm,dd) + first) / 7L ) +
 	  (first < 4) );
 }
 
-static Z_long 
-year_to_days(N_int year)
+static glong 
+year_to_days(guint year)
 {
   return( year * 365L + (year / 4) - (year / 100) + (year / 400) );
 }
 
 
-static Z_long 
-calc_days(N_int year, N_int mm, N_int dd)
+static glong 
+calc_days(guint year, guint mm, guint dd)
 {
-  boolean lp;
+  gboolean lp;
   
   if (year < 1) return(0L);
-  if ((mm < 1) or (mm > 12)) return(0L);
-  if ((dd < 1) or (dd > month_length[(lp = leap(year))][mm])) return(0L);
+  if ((mm < 1) || (mm > 12)) return(0L);
+  if ((dd < 1) || (dd > month_length[(lp = leap(year))][mm])) return(0L);
   return( year_to_days(--year) + days_in_months[lp][mm] + dd );
 }
 
-static boolean 
-week_of_year(N_int *week, N_int *year, N_int mm, N_int dd)
+static gboolean 
+week_of_year(guint *week, guint *year, guint mm, guint dd)
 {
   if (check_date(*year,mm,dd))
     {
@@ -169,14 +162,14 @@ week_of_year(N_int *week, N_int *year, N_int mm, N_int dd)
 	  *week = 1;
 	  (*year)++;
 	}
-      return(true);
+      return TRUE;
     }
-  return(false);
+  return FALSE;
 }
 
-static Z_long 
-dates_difference(N_int year1, N_int mm1, N_int dd1,
-		 N_int year2, N_int mm2, N_int dd2)
+static glong 
+dates_difference(guint year1, guint mm1, guint dd1,
+		 guint year2, guint mm2, guint dd2)
 {
   return( calc_days(year2, mm2, dd2) - calc_days(year1, mm1, dd1) );
 }
