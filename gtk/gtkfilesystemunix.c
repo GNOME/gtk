@@ -2154,16 +2154,16 @@ cb_fill_in_mime_type (gpointer key, gpointer value, gpointer user_data)
   GtkFileFolderUnix *folder_unix = user_data;
   char *fullname = g_build_filename (folder_unix->filename, basename, NULL);
   struct stat *statbuf = NULL;
+  const char *mime_type;
 
   if (folder_unix->have_stat)
     statbuf = &entry->statbuf;
 
-  /* FIXME: Should not need to re-stat.  */
-  const char *mime_type = xdg_mime_get_mime_type_for_file (fullname, statbuf);
+  mime_type = xdg_mime_get_mime_type_for_file (fullname, statbuf);
   entry->mime_type = g_strdup (mime_type);
 
   g_free (fullname);
-  /* FIXME: free on NULL?  */
+
   return FALSE;
 }
 
