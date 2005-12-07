@@ -410,7 +410,9 @@ Indicates the direction a sub-menu will appear.
 <para>
 Used to customize the appearance of a #GtkToolbar. Note that 
 setting the toolbar style overrides the user's preferences
-for the default toolbar style.
+for the default toolbar style.  Note that if the button has only
+a label set and GTK_TOOLBAR_ICONS is used, the label will be
+visible, and vice versa.
 </para>
 
 @GTK_TOOLBAR_ICONS: Buttons display only icons in the toolbar.

@@ -1,3 +1,10 @@
+2005-12-07  Ross Burton  <ross@burtonini.com>
+
+	* docs/reference/gtk/tmpl/gtkenums.sgml:
+	* gtk/gtktoolbutton.c:
+	If the toolbar mode is ICONS and there is no icon set then show
+	the label, and vice versa (#322019)
+
 2005-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Use the correct

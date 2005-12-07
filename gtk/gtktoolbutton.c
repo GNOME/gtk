@@ -317,6 +317,22 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
     {
       need_label = TRUE;
     }
+  
+  if (style == GTK_TOOLBAR_ICONS && button->priv->icon_widget == NULL &&
+      button->priv->stock_id == NULL && button->priv->icon_name == NULL)
+    {
+      need_label = TRUE;
+      need_icon = FALSE;
+      style = GTK_TOOLBAR_TEXT;
+    }
+
+  if (style == GTK_TOOLBAR_TEXT && button->priv->label_widget == NULL &&
+      button->priv->stock_id == NULL && button->priv->label_text == NULL)
+    {
+      need_label = FALSE;
+      need_icon = TRUE;
+      style = GTK_TOOLBAR_ICONS;
+    }
 
   if (need_label)
     {
