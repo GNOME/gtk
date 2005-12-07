@@ -1,3 +1,12 @@
+2005-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Use the correct
+	window when synthesizing the key event.  (#323077,
+	Sadrul Habib Chowdhury)
+	
+	(gtk_tree_view_search_key_press_event): Also listen for
+	GDK_ISO_Left_Tab.  (#323077, Sadrul Habib Chowdhury)
+
 2005-12-07  Ross Burton  <ross@burtonini.com>
 
 	* docs/reference/gtk/tmpl/gtkenums.sgml:

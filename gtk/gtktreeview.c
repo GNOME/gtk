@@ -4457,7 +4457,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry)));
       new_event = gdk_event_copy ((GdkEvent *) event);
       g_object_unref (((GdkEventKey *) new_event)->window);
-      ((GdkEventKey *) new_event)->window = g_object_ref (tree_view->priv->search_entry->window);
+      ((GdkEventKey *) new_event)->window = g_object_ref (tree_view->priv->search_window->window);
       gtk_widget_realize (tree_view->priv->search_window);
 
       popup_menu_id = g_signal_connect (tree_view->priv->search_entry, 
@@ -4473,7 +4473,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       /* Send the event to the window.  If the preedit_changed signal is emitted
        * during this event, we will set priv->imcontext_changed  */
       tree_view->priv->imcontext_changed = FALSE;
-      retval = gtk_widget_event (tree_view->priv->search_entry, new_event);
+      retval = gtk_widget_event (tree_view->priv->search_window, new_event);
       gdk_event_free (new_event);
       gtk_widget_hide (tree_view->priv->search_window);
 
@@ -12734,7 +12734,9 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 
   /* close window and cancel the search */
   if (event->keyval == GDK_Escape ||
-      event->keyval == GDK_Tab)
+      event->keyval == GDK_Tab ||
+	  event->keyval == GDK_KP_Tab ||
+	  event->keyval == GDK_ISO_Left_Tab)
     {
       gtk_tree_view_search_dialog_hide (widget, tree_view);
       return TRUE;
