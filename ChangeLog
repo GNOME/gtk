@@ -1,5 +1,8 @@
 2005-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_preedit_changed_handler): 
+	Only scroll if we have focus.  (#316310, Paolo Borelli)
+
 	* gtk/gtkfilesystemunix.c (cb_fill_in_mime_type): Fix a
 	C99ism, spotted by Crispin Flowerday.
 
