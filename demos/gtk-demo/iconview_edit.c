@@ -64,6 +64,8 @@ set_cell_color (GtkCellLayout   *cell_layout,
       (color.green >> 8) << 16 |
       (color.blue  >> 8) << 8;
 
+  g_free (text);
+
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 24, 24);
   gdk_pixbuf_fill (pixbuf, pixel);
 
