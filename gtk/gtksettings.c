@@ -1404,6 +1404,10 @@ settings_update_font_options (GtkSettings *settings)
 
   options = cairo_font_options_create ();
   
+  /* hint_metrics = FALSE should never be set for user interface code.
+   */
+  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
+
   if (hinting >= 0 && !hinting)
     {
       hint_style = CAIRO_HINT_STYLE_NONE;
