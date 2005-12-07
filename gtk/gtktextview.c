@@ -6745,9 +6745,10 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
   pango_attr_list_unref (attrs);
   g_free (str);
 
-  gtk_text_view_scroll_mark_onscreen (text_view,
-                                      gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                "insert"));
+  if (GTK_WIDGET_HAS_FOCUS (text_view))
+    gtk_text_view_scroll_mark_onscreen (text_view,
+					gtk_text_buffer_get_mark (get_buffer (text_view),
+								  "insert"));
 }
 
 static gboolean
