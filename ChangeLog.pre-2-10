@@ -1,5 +1,8 @@
 2005-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (clone_image_menu_size): Fix a 
+	variable name clash.  (#323475, Ross Burton)
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Use the correct
 	window when synthesizing the key event.  (#323077,
 	Sadrul Habib Chowdhury)
