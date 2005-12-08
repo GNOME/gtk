@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.8.8 to GTK+ 2.8.9
+=================================================
+* Bugs fixed:
+ 321560 File chooser filter behaves weird [Bogdan Nicula,
+        Federico Mena Quintero]
+ 317999 2.8.4 to 2.8.6: sound-juicer crash, fileselector 
+        assertions [Sebastian Bacher]
+ 322569 On unsetting the Model, GtkTreeView does not clear 
+        it's associated TreeSelection [Milosz Derezynski] 
+ 322998 Crash on selecting a file of null mime-type [Sadrul 
+        Habib Chowdhury]
+ 323024 gtktoolbutton leaks a pixbuf [Paolo Borelli]
+ 323209 GdkEvent leaked in gtktreeview.c / 
+        gtk_tree_view_key_press [Crispin Flowerday]
+ 323073 Typo in trap_activate_cb() [Sadrul Habib Chowdhury]
+ 323045 gtkcalendar.c: The identifier is already declared. 
+        [Kazuki Iwamoto]
+ 323386 gtk_menu_attach_to_widget() does not take NULL 
+        detacher [Jorn Baayen]
+ 307196 Unhinted fonts are measured incorrectly and drawing 
+        problems occur as a result [Alex Jones, Behdad Esfahbod]
+ 316310 unwanted scrolling in recent gtk [Paolo Borelli]
+ 322019 Toolbars without icons are invisible in icon-only 
+        mode [Ross Burton]
+ 323077 Search-entry in the TreeView not working properly 
+        [Sadrul Habib Chowdhury]
+ 323475 gtktoolbutton.c:562: warning: 'image' is used 
+        uninitialized in this function [Ross Burton]
+
+* Other changes
+ - Remove GMemChunk from public header files to
+   support building against GLib 2.10 [Matthias Clasen]
+ - Report errors in option parsing [Matthias]
+ - Merge upstream xdgmime changes to handle duplicate
+   glob patterns [Matthias]
+
 Overview of Changes from GTK+ 2.8.7 to GTK+ 2.8.8
 =================================================
 * GtkFileChooser
