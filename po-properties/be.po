@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-11-18 10:15+0200\n"
 "Last-Translator: Vital Khilko <v.khilko@sam-solutions.net>\n"
 "Language-Team: belarusian <i18n@mova.org>\n"
@@ -813,62 +813,62 @@ msgstr "Паказваць відарысы кнопак"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Ці будуць адлюстроўвацца убудаваныя значкі на кнопках"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Год"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Выбраны год"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Месяц"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Выбраны месяц (значэньне ў межах ад 0 да 11)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Дзень"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 "Выбраны дзень (нумар у межах ад 1 да 31, ці 0 для скіданьня вылучанай даты)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Паказваць загаловак"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Калі ІСЬЦІНА, загаловак адлюстроўваецца"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Паказваць назвы дзён"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Калі ІСЬЦІНА, назвы дзён адлюстроўваюцца"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Месяц не зьмяняецца"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Калі ІСЬЦІНА, выбраны месяц нельга зьмяніць"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Паказваць нумары тыдняў"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Калі ІСЬЦІНА, нумары тыдняў адлюстроўваюцца"
 

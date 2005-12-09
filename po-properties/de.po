@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-07-26 22:19+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -827,27 +827,27 @@ msgstr "Knopfbilder anzeigen"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Sollen in Knöpfen Repertoire-Symbole angezeigt werden?"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Jahr"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Das gewählte Jahr"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Monat"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Der gewählte Monat (als Zahl zwischen 0 und 11)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Tag"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -855,35 +855,35 @@ msgstr ""
 "Der gewählte Tag (als Zahl zwischen 1 und 31, oder 0, um den momentan "
 "gewählten Tag abzuwählen)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Kopfzeile anzeigen"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Soll eine Kopfzeile angezeigt werden?"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Wochentagsnamen anzeigen"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Sollen die Namen der Wochentage angezeigt werden?"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Kein Monatswechsel"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Soll der gewählte Monat unveränderlich sein?"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Wochennummern anzeigen"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Sollen Wochennummern angezeigt werden?"
 

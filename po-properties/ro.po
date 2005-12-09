@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-08-14 22:12+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -808,27 +808,27 @@ msgstr "Arată imaginea butonului"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Specifică dacă iconiţele standard ar trebui afişate în butoane"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "An"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Anul selectat."
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Lună"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Luna selectată (ca număr între 0 şi 11)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Zi"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -836,35 +836,35 @@ msgstr ""
 "Ziua selectată (ca număr între 1 şi 31, ori 0 pentru a deselecta ziua "
 "selectată curent)."
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Arată antetul"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Dacă e TRUE, antetul e afişat"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Arată numele zilelor"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Dacă e TRUE, numele zilelor sunt afişate"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Fără schimbarea lunii"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Dacă e TRUE, luna selectată nu poate fi schimbată"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Arată numerele săptămânilor"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Dacă e TRUE, numerele săptămânilor sunt afişate"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-09-09 16:18+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -809,27 +809,27 @@ msgstr "Hiện ảnh nút"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Có nên hiển thị biểu tượng chuẩn trên nút hay không."
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Năm"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Năm được chọn."
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Tháng"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Tháng được chọn (theo số từ 0 đến 11)."
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Ngày"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -837,35 +837,35 @@ msgstr ""
 "Ngày được chọn (theo số từ 1 đến 31, hoặc giá trị 0 để bỏ chọn ngày được "
 "chọn hiện thời)."
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Hiện tiêu đề"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Nếu ĐÚNG thì hiển thị tiêu đề."
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Hiện tên ngày"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Nếu ĐÚNG thì hiển thị tên ngày."
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Đừng đổi tháng"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Nếu ĐÚNG thì không thể thay đổi tháng được chọn."
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Hiện số tuần"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Nếu ĐÚNG thì hiển thị số thứ tự tuần trong năm."
 

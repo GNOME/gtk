@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2004-03-21 09:20+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -1192,7 +1192,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:703
+#: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1200,7 +1200,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:727
+#: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1212,7 +1212,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1617
+#: gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1227,7 +1227,7 @@ msgstr ""
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1894
+#: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1373,15 +1373,15 @@ msgstr "Kotačić"
 msgid "Color Selection"
 msgstr "Odabir boja"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Označi _sve"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Ulazne metode"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaciti Unicode kontrolni znak"
 
@@ -1589,44 +1589,44 @@ msgstr "Spremi u _mapu:"
 msgid "Create in _folder:"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5372
 #, fuzzy, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Nisam se mogao postaviti u mapu, jer je nije na računalu."
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:5956
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Ne postoji kratica %s"
 
-#: gtk/gtkfilechooserdefault.c:6242
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6245
+#: gtk/gtkfilechooserdefault.c:6214
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6250
+#: gtk/gtkfilechooserdefault.c:6219
 #, fuzzy
 msgid "_Replace"
 msgstr "_Promijeni ime"
 
-#: gtk/gtkfilechooserdefault.c:6741
+#: gtk/gtkfilechooserdefault.c:6710
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7056
+#: gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
 msgstr "Upišite ime nove mape"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7058
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1634,69 +1634,69 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:7100
+#: gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7102
+#: gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7104
+#: gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
+#: gtk/gtkfilechooserdefault.c:7110 gtk/gtkfilechooserdefault.c:7134
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:7163
+#: gtk/gtkfilechooserdefault.c:7123
 msgid "Yesterday"
 msgstr "Jučer"
 
-#: gtk/gtkfilechooserdefault.c:7245
+#: gtk/gtkfilechooserdefault.c:7205
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:7246
+#: gtk/gtkfilechooserdefault.c:7206
 #, fuzzy
 msgid "The folder you specified is an invalid path."
 msgstr ""
 "Nisam se mogao postaviti u mapu koju ste odredili, jer je to neispravna "
 "putanja."
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7245
 #, fuzzy, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 "Nisam mogao stvoriti ime datoteke iz '%s' i '%s':\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7321
+#: gtk/gtkfilechooserdefault.c:7281
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:7361
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Open Location"
 msgstr "Otvori mjesto"
 
-#: gtk/gtkfilechooserdefault.c:7368
+#: gtk/gtkfilechooserdefault.c:7328
 #, fuzzy
 msgid "Save in Location"
 msgstr "Otvori mjesto"
 
-#: gtk/gtkfilechooserdefault.c:7395
+#: gtk/gtkfilechooserdefault.c:7355
 msgid "_Location:"
 msgstr "_Mjesto:"
 
@@ -1881,7 +1881,7 @@ msgid "(Empty)"
 msgstr "(Prazno)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1914,22 +1914,22 @@ msgid ""
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
-#: gtk/gtkfilesystemunix.c:1518
+#: gtk/gtkfilesystemunix.c:1521
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1590
+#: gtk/gtkfilesystemunix.c:1593
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1818
+#: gtk/gtkfilesystemunix.c:1821
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Greška kod dohvaćanja informacje za '%s': %s"

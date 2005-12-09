@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -804,27 +804,27 @@ msgstr ""
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Samada tab patut dipapar atau sebaliknya"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Tahun"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Bulan"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Bulan dipilih (sebagai nombor antara 0 hingga 11)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Hari"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -832,36 +832,36 @@ msgstr ""
 "Hari dipilih (sebagai nombor diantara 1 dgn 31, atau 0 untuk nyahpilih hari "
 "yg kini dipilih)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Papar Pengepala"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Jika BENAR, pengepala yang dipaparkan"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Papar Nama Hari"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Jika TRUE, nama hari dipaparkan"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Tiada Perubahan Bulan"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 #, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "jika TRUE, ulan dipilih tak boleh diubah"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Papar Bilangan Minggu"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "jika TRUE, bilangan minggu dipaparkan"
 

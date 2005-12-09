@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-08-22 23:04+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1179,7 +1179,7 @@ msgstr "백슬래시"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:703
+#: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1187,7 +1187,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:727
+#: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1199,7 +1199,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1617
+#: gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1214,7 +1214,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1894
+#: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1358,15 +1358,15 @@ msgstr "색상환"
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -1553,100 +1553,100 @@ msgstr "폴더에 저장(_F):"
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5372
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:5956
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6242
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserdefault.c:6245
+#: gtk/gtkfilechooserdefault.c:6214
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserdefault.c:6250
+#: gtk/gtkfilechooserdefault.c:6219
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:6741
+#: gtk/gtkfilechooserdefault.c:6710
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7056
+#: gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7058
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:7100
+#: gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7102
+#: gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7104
+#: gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
+#: gtk/gtkfilechooserdefault.c:7110 gtk/gtkfilechooserdefault.c:7134
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:7163
+#: gtk/gtkfilechooserdefault.c:7123
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserdefault.c:7245
+#: gtk/gtkfilechooserdefault.c:7205
 msgid "Cannot change folder"
 msgstr "폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7246
+#: gtk/gtkfilechooserdefault.c:7206
 msgid "The folder you specified is an invalid path."
 msgstr "지정한 폴더의 경로가 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7245
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s' 및 '%s'에서 파일 이름을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7321
+#: gtk/gtkfilechooserdefault.c:7281
 msgid "Could not select item"
 msgstr "항목을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7361
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Open Location"
 msgstr "위치 열기"
 
-#: gtk/gtkfilechooserdefault.c:7368
+#: gtk/gtkfilechooserdefault.c:7328
 msgid "Save in Location"
 msgstr "위치에 저장"
 
-#: gtk/gtkfilechooserdefault.c:7395
+#: gtk/gtkfilechooserdefault.c:7355
 msgid "_Location:"
 msgstr "위치(_L):"
 
@@ -1832,7 +1832,7 @@ msgid "(Empty)"
 msgstr "(빈 파일)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1866,22 +1866,22 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1518
+#: gtk/gtkfilesystemunix.c:1521
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:1590
+#: gtk/gtkfilesystemunix.c:1593
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
 
-#: gtk/gtkfilesystemunix.c:1818
+#: gtk/gtkfilesystemunix.c:1821
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'/'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"

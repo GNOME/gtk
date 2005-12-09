@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-09-04 21:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -800,27 +800,27 @@ msgstr "বাটনের ছবি প্রদর্শন করো"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "বাটনে স্টক (Stock) আইকন প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "বছর"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "বাছাইকৃত বছর"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "মাস"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "বাছাইকৃত মাস (০-১১ এই সীমার মধ্যে)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "দিন"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -828,36 +828,36 @@ msgstr ""
 "বাছাইকৃত দিন (১-৩১ এই সীমার মধ্যে, অথবা বর্তমানে বাছাইকৃত দিনটিকে বাতিল করার জন্য "
 "০)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "শিরোনাম প্রদর্শন করো"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "এর মান সত্য (TRUE) হলে একটি শিরোনাম প্রদর্হন করা হবে"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "দিনের নাম প্রদর্শন করো"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "এর মান সত্য (TRUE) হলে, দিনের নাম প্রদর্শন করা হবে"
 
 # FIXME
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "মাস পরিবর্তন করা যাবে না"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "এর মান সত্য (TRUE) হলে, বাছাইকৃত মাস পরিবর্তন করা যাবে না"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "সপ্তাহের নম্বর প্রদর্শন করো"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "এর মান সত্য (TRUE) হলে, সপ্তাহের নম্বর প্রদর্শন করা হবে"
 

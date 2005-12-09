@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2004-03-24 05:39+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -815,27 +815,27 @@ msgstr "Prikaži slike na gumbima"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Trebaju li se prikazivati sličice u gumbima"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Godina"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Odabrana godina"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Mjesec"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Odabrani mjesec (broj između 0 i 11)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Dan"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -843,36 +843,36 @@ msgstr ""
 "Odabrani dan (broj između 1 i 31 ili 0 da se makne oznaka trenutno odabranog "
 "dana)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Prikaži zaglavlje"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Ukoliko je postavljeno, prikazuje se zaglavlje"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Prikaži imena dana"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Ukoliko je postavljeno, prikazuju se imena dana"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Nema izmjene mjeseca"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 #, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Ukoliko je postavljeno, ne može se promijeniti odabrani mjesec"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Prikaži broj tjedana"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Ukoliko je postavljeno, prikazuju se brojevi tjedna"
 

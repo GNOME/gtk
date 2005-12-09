@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -1164,7 +1164,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:703
+#: gtk/gtkcalendar.c:696
 #, fuzzy
 msgid "calendar:MY"
 msgstr "ሰርዝ"
@@ -1173,7 +1173,7 @@ msgstr "ሰርዝ"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:727
+#: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr ""
 
@@ -1185,7 +1185,7 @@ msgstr ""
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1617
+#: gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1200,7 +1200,7 @@ msgstr ""
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1894
+#: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1333,16 +1333,16 @@ msgstr "የፊደል ቅርጽ ምርጫ"
 msgid "Color Selection"
 msgstr "የፊደል ቅርጽ ምርጫ"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
 #, fuzzy
 msgid "Select _All"
 msgstr "ሁሉንም ምረጡ"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "ዘገባ የማስትገባት ዘዴዎች (_M)"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1542,106 +1542,106 @@ msgstr "አዲስ ዶሴ"
 msgid "Create in _folder:"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5372
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:5956
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6242
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6245
+#: gtk/gtkfilechooserdefault.c:6214
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6250
+#: gtk/gtkfilechooserdefault.c:6219
 #, fuzzy
 msgid "_Replace"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:6741
+#: gtk/gtkfilechooserdefault.c:6710
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:7056
+#: gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7058
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:7100
+#: gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7102
+#: gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7104
+#: gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
+#: gtk/gtkfilechooserdefault.c:7110 gtk/gtkfilechooserdefault.c:7134
 #, fuzzy
 msgid "Unknown"
 msgstr "(ያልታወቀ)"
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7121
 #, fuzzy
 msgid "Today"
 msgstr "አዛምድ"
 
-#: gtk/gtkfilechooserdefault.c:7163
+#: gtk/gtkfilechooserdefault.c:7123
 msgid "Yesterday"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7245
+#: gtk/gtkfilechooserdefault.c:7205
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:7246
+#: gtk/gtkfilechooserdefault.c:7206
 msgid "The folder you specified is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7245
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7321
+#: gtk/gtkfilechooserdefault.c:7281
 #, fuzzy
 msgid "Could not select item"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:7361
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7368
+#: gtk/gtkfilechooserdefault.c:7328
 #, fuzzy
 msgid "Save in Location"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkfilechooserdefault.c:7395
+#: gtk/gtkfilechooserdefault.c:7355
 #, fuzzy
 msgid "_Location:"
 msgstr "_ምርጫ፦ "
@@ -1813,7 +1813,7 @@ msgid "(Empty)"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1846,22 +1846,22 @@ msgid ""
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1518
+#: gtk/gtkfilesystemunix.c:1521
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1590
+#: gtk/gtkfilesystemunix.c:1593
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1818
+#: gtk/gtkfilesystemunix.c:1821
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "የአሁኑን ቀለም"

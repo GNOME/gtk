@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -777,27 +777,27 @@ msgstr "चित्रहरुको बटन देखाऊ"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "जहाँ संग्रहित छविचित्रहरु बटनमा देखाउनु पर्छ"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "वर्ष"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "छानिएको वर्ष"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "महिना"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "छानिएको महिना(० र ११ को बीचको संख्या जस्तै)"
 
-#: gtk/gtkcalendar.c:440
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "दिन"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -805,35 +805,35 @@ msgstr ""
 "छानिएको दिन (१ र ३१ को बीचको संख्या जस्तै अथवा ० देखि नछानिएको विद्यमान छानिएका "
 "दिनहरु)"
 
-#: gtk/gtkcalendar.c:455
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "शीर्षक देखाऊ"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "यदि सत्य हो भने शीर्षक देखाइन्छ"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "दिनका नामहरु देखाऊ"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "यदि सत्य हो भने दिनका नामहरु देखाइन्छन"
 
-#: gtk/gtkcalendar.c:484
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "महिना परिवर्तन छैन"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "यदि सत्य हो भने छानिएका महिनाहरु परिवर्तित हुन सक्दैनन्"
 
-#: gtk/gtkcalendar.c:499
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "सप्ताहका संख्याहरु देखाऊ"
 
-#: gtk/gtkcalendar.c:500
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "यदि सत्य हो भने सप्ताहका संख्याहरु देखाइन्छन"
 

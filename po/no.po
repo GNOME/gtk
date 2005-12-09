@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-2.8.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-11-15 12:26+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -1189,7 +1189,7 @@ msgstr "Omvendt skråstrek"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:703
+#: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1197,7 +1197,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:727
+#: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1209,7 +1209,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1617
+#: gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1224,7 +1224,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1894
+#: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1369,15 +1369,15 @@ msgstr "Fargehjul"
 msgid "Color Selection"
 msgstr "Fargevalg"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -1566,22 +1566,22 @@ msgstr "Lagre i _mappe:"
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5372
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:5956
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:6242
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: gtk/gtkfilechooserdefault.c:6245
+#: gtk/gtkfilechooserdefault.c:6214
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1589,79 +1589,79 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: gtk/gtkfilechooserdefault.c:6250
+#: gtk/gtkfilechooserdefault.c:6219
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: gtk/gtkfilechooserdefault.c:6741
+#: gtk/gtkfilechooserdefault.c:6710
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
-#: gtk/gtkfilechooserdefault.c:7056
+#: gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7058
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:7100
+#: gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7102
+#: gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7104
+#: gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
+#: gtk/gtkfilechooserdefault.c:7110 gtk/gtkfilechooserdefault.c:7134
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:7163
+#: gtk/gtkfilechooserdefault.c:7123
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:7245
+#: gtk/gtkfilechooserdefault.c:7205
 msgid "Cannot change folder"
 msgstr "Kan ikke bytte mappe"
 
-#: gtk/gtkfilechooserdefault.c:7246
+#: gtk/gtkfilechooserdefault.c:7206
 msgid "The folder you specified is an invalid path."
 msgstr "Mappen du oppga er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7245
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kunne ikke bygge filnavn fra «%s» og «%s»"
 
-#: gtk/gtkfilechooserdefault.c:7321
+#: gtk/gtkfilechooserdefault.c:7281
 msgid "Could not select item"
 msgstr "Kunne ikke velge oppføring"
 
-#: gtk/gtkfilechooserdefault.c:7361
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Open Location"
 msgstr "Åpne lokasjon"
 
-#: gtk/gtkfilechooserdefault.c:7368
+#: gtk/gtkfilechooserdefault.c:7328
 msgid "Save in Location"
 msgstr "Lagre på lokasjon"
 
-#: gtk/gtkfilechooserdefault.c:7395
+#: gtk/gtkfilechooserdefault.c:7355
 msgid "_Location:"
 msgstr "_Lokasjon: "
 
@@ -1844,7 +1844,7 @@ msgid "(Empty)"
 msgstr "(Tom)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1878,22 +1878,22 @@ msgstr ""
 "Navnet «%s» er ikke gyldig fordi det inneholder tegnet «%s». Vennligst bruk "
 "et annet navn."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Lagring av bokmerke feilet: %s"
 
-#: gtk/gtkfilesystemunix.c:1518
+#: gtk/gtkfilesystemunix.c:1521
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "«%s» finnes allerede i bokmerkelisten"
 
-#: gtk/gtkfilesystemunix.c:1590
+#: gtk/gtkfilesystemunix.c:1593
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "«%s» finnes ikke i bokmerkelisten"
 
-#: gtk/gtkfilesystemunix.c:1818
+#: gtk/gtkfilesystemunix.c:1821
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Feil under henting av informasjon for «/»: %s"

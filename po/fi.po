@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 12:03-0500\n"
+"POT-Creation-Date: 2005-12-09 13:30-0500\n"
 "PO-Revision-Date: 2005-10-23 09:14+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -1190,7 +1190,7 @@ msgstr "Takakeno"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:703
+#: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1198,7 +1198,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:727
+#: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1210,7 +1210,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1617
+#: gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1225,7 +1225,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1894
+#: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1370,15 +1370,15 @@ msgstr "Väriympyrä"
 msgid "Color Selection"
 msgstr "Värin valinta"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7118
+#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7128
+#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7139
+#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Lisää Unicode-säätömerkki"
 
@@ -1567,101 +1567,101 @@ msgstr "Tallenna _kansioon:"
 msgid "Create in _folder:"
 msgstr "Luo _kansioon:"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5372
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Kansioon ei voi siirtyä, koska se ei ole paikallinen"
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:5956
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Pikavalintaa %s ei ole olemassa"
 
-#: gtk/gtkfilechooserdefault.c:6242
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Tiedosto \"%s\" on jo olemassa. Haluatko korvata sen?"
 
-#: gtk/gtkfilechooserdefault.c:6245
+#: gtk/gtkfilechooserdefault.c:6214
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Tiedosto \"%s\" on jo olemassa. Tiedoston korvaus ylikirjoittaa sen sisällön."
 
-#: gtk/gtkfilechooserdefault.c:6250
+#: gtk/gtkfilechooserdefault.c:6219
 msgid "_Replace"
 msgstr "_Korvaa"
 
-#: gtk/gtkfilechooserdefault.c:6741
+#: gtk/gtkfilechooserdefault.c:6710
 #, c-format
 msgid "Could not mount %s"
 msgstr "Taltion %s liittäminen ei onnistunut"
 
-#: gtk/gtkfilechooserdefault.c:7056
+#: gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
 msgstr "Kirjoita uuden kansion nimi"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7058
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d tavu"
 msgstr[1] "%d tavua"
 
-#: gtk/gtkfilechooserdefault.c:7100
+#: gtk/gtkfilechooserdefault.c:7060
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kt"
 
-#: gtk/gtkfilechooserdefault.c:7102
+#: gtk/gtkfilechooserdefault.c:7062
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mt"
 
-#: gtk/gtkfilechooserdefault.c:7104
+#: gtk/gtkfilechooserdefault.c:7064
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gt"
 
-#: gtk/gtkfilechooserdefault.c:7150 gtk/gtkfilechooserdefault.c:7174
+#: gtk/gtkfilechooserdefault.c:7110 gtk/gtkfilechooserdefault.c:7134
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/gtkfilechooserdefault.c:7161
+#: gtk/gtkfilechooserdefault.c:7121
 msgid "Today"
 msgstr "Tänään"
 
-#: gtk/gtkfilechooserdefault.c:7163
+#: gtk/gtkfilechooserdefault.c:7123
 msgid "Yesterday"
 msgstr "Eilen"
 
-#: gtk/gtkfilechooserdefault.c:7245
+#: gtk/gtkfilechooserdefault.c:7205
 msgid "Cannot change folder"
 msgstr "Kansion vaihtaminen epäonnistui"
 
-#: gtk/gtkfilechooserdefault.c:7246
+#: gtk/gtkfilechooserdefault.c:7206
 msgid "The folder you specified is an invalid path."
 msgstr "Annetun kansion polku on virheellinen."
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7245
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Tiedostonimen muodostus osista \"%s\" ja \"%s\" ei onnistunut"
 
-#: gtk/gtkfilechooserdefault.c:7321
+#: gtk/gtkfilechooserdefault.c:7281
 msgid "Could not select item"
 msgstr "Kohteen valitseminen ei onnistunut"
 
-#: gtk/gtkfilechooserdefault.c:7361
+#: gtk/gtkfilechooserdefault.c:7321
 msgid "Open Location"
 msgstr "Avaa sijainti"
 
-#: gtk/gtkfilechooserdefault.c:7368
+#: gtk/gtkfilechooserdefault.c:7328
 msgid "Save in Location"
 msgstr "Tallenna sijaintiin"
 
-#: gtk/gtkfilechooserdefault.c:7395
+#: gtk/gtkfilechooserdefault.c:7355
 msgid "_Location:"
 msgstr "Si_jainti:"
 
@@ -1847,7 +1847,7 @@ msgid "(Empty)"
 msgstr "(Tyhjä)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1880,22 +1880,22 @@ msgid ""
 msgstr ""
 "Nimi \"%s\" ei kelpaa, koska se sisältää merkin \"%s\". Käytä eri nimeä."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Kirjanmerkkien tallentaminen epäonnistui: %s"
 
-#: gtk/gtkfilesystemunix.c:1518
+#: gtk/gtkfilesystemunix.c:1521
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" on jo kirjanmerkkiluettelossa"
 
-#: gtk/gtkfilesystemunix.c:1590
+#: gtk/gtkfilesystemunix.c:1593
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" ei ole kirjanmerkkiluettelossa"
 
-#: gtk/gtkfilesystemunix.c:1818
+#: gtk/gtkfilesystemunix.c:1821
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Virhe kohteen \"/\" tietojen hakemisessa: %s"
