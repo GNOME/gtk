@@ -26,6 +26,10 @@ Overview of Changes from GTK+ 2.8.8 to GTK+ 2.8.9
         [Sadrul Habib Chowdhury]
  323475 gtktoolbutton.c:562: warning: 'image' is used 
         uninitialized in this function [Ross Burton]
+ 323577 reference count of textbuffer increases with each 
+        paste 
+ 323629 gtk_selection_data_get_uris leaks memory
+        [Markku Vire]
 
 * Other changes
  - Remove GMemChunk from public header files to

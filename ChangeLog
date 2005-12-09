@@ -1,5 +1,7 @@
 2005-12-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkselection.c (gtk_selection_data_get_uris): Don't
 	leak list[0].  (#323629, Markku Vire)
 
