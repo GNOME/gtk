@@ -1,5 +1,8 @@
 2005-12-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (gtk_selection_data_get_uris): Don't
+	leak list[0].  (#323629, Markku Vire)
+
 	* gtk/gtktextbuffer.c (paste_from_buffer): Unref the buffer
 	when freeing the RequestData.  (#323577)
 

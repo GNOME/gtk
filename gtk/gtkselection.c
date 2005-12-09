@@ -1519,9 +1519,7 @@ gtk_selection_data_get_uris (GtkSelectionData *selection_data)
       if (count > 0)
 	result = g_uri_list_extract_uris (list[0]);
       
-      for (i = 1; i < count; i++)
-	g_free (list[i]);
-      g_free (list);
+      g_strfreev (list);
     }
 
   return result;
