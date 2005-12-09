@@ -2994,7 +2994,7 @@ post_paste_cleanup (ClipboardRequest *request_data)
 }
 
 static void
-free_clipboard_request (ClipBoardRequest *request_data)
+free_clipboard_request (ClipboardRequest *request_data)
 {
   g_object_unref (request_data->buffer);
   g_free (request_data);
