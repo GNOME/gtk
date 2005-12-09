@@ -1,5 +1,11 @@
 2005-12-09  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystem.c (icon_cache_element_free), (icon_theme_changed),
+	(get_cached_icon), (gtk_file_info_render_icon): implement pixbuf
+	caching as found in the file system backends.
+
+2005-12-09  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtk.symbols: updated.
 
 	* gtk/gtkfilesystem.[ch] (struct GtkFileInfo): added icon_name field,

@@ -265,6 +265,79 @@ gtk_file_info_set_icon_name (GtkFileInfo *info,
   info->icon_name = g_strdup (icon_name);
 }
 
+
+typedef struct
+{
+  gint size;
+  GdkPixbuf *pixbuf;
+} IconCacheElement;
+
+static void
+icon_cache_element_free (IconCacheElement *element)
+{
+  if (element->pixbuf)
+    g_object_unref (element->pixbuf);
+  g_free (element);
+}
+
+static void
+icon_theme_changed (GtkIconTheme *icon_theme)
+{
+  GHashTable *cache;
+
+  /* Difference from the initial creation is that we don't
+   * reconnect the signal
+   */
+  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				 (GDestroyNotify)g_free,
+				 (GDestroyNotify)icon_cache_element_free);
+  g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
+			  cache, (GDestroyNotify)g_hash_table_destroy);
+}
+
+static GdkPixbuf *
+get_cached_icon (GtkWidget    *widget,
+		 const gchar  *name,
+		 gint          pixel_size)
+{
+  GtkIconTheme *icon_theme;
+  GHashTable *cache;
+  IconCacheElement *element;
+
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
+
+  if (!cache)
+    {
+      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				     (GDestroyNotify)g_free,
+				     (GDestroyNotify)icon_cache_element_free);
+
+      g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
+			      cache, (GDestroyNotify)g_hash_table_destroy);
+      g_signal_connect (icon_theme, "changed",
+			G_CALLBACK (icon_theme_changed), NULL);
+    }
+
+  element = g_hash_table_lookup (cache, name);
+  if (!element)
+    {
+      element = g_new0 (IconCacheElement, 1);
+      g_hash_table_insert (cache, g_strdup (name), element);
+    }
+
+  if (element->size != pixel_size)
+    {
+      if (element->pixbuf)
+	g_object_unref (element->pixbuf);
+      element->size = pixel_size;
+      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
+						  pixel_size, 0, NULL);
+    }
+
+  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
+}
+
 GdkPixbuf *
 gtk_file_info_render_icon (const GtkFileInfo  *info,
 			   GtkWidget          *widget,
@@ -272,16 +345,12 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
 			   GError            **error)
 {
   GdkPixbuf *pixbuf = NULL;
-  GtkIconTheme *icon_theme;
 
   g_return_val_if_fail (info != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-
   if (info->icon_name)
-    pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name, pixel_size,
-				       0, NULL);
+    pixbuf = get_cached_icon (widget, info->icon_name, pixel_size);
 
   if (!pixbuf)
     {
