@@ -1,5 +1,12 @@
 2005-12-09  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (file_list_drag_data_received),
+	(gtk_file_chooser_default_add_shortcut_folder),
+	(shortcuts_activate_get_info_cb): replace synchronous check_is_folder
+	calls with an async gtk_file_system_get_info() solution.
+
+2005-12-09  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystem.c (icon_cache_element_free), (icon_theme_changed),
 	(get_cached_icon), (gtk_file_info_render_icon): implement pixbuf
 	caching as found in the file system backends.
