@@ -1088,6 +1088,48 @@ set_preview_widget (GtkFileChooserDefault *impl,
 }
 
 /* Re-reads all the icons for the shortcuts, used when the theme changes */
+struct ReloadIconsData
+{
+  GtkFileChooserDefault *impl;
+  GtkTreeRowReference *row_ref;
+};
+
+static void
+shortcuts_reload_icons_get_info_cb (GtkFileSystemHandle *handle,
+				    GtkFileInfo         *info,
+				    GError              *error,
+				    gpointer             user_data)
+{
+  GdkPixbuf *pixbuf;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  struct ReloadIconsData *data = user_data;
+
+  if (error)
+    {
+      gtk_tree_row_reference_free (data->row_ref);
+      g_free (data);
+      return;
+    }
+
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->impl),
+				      data->impl->icon_size, NULL);
+
+  path = gtk_tree_row_reference_get_path (data->row_ref);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
+  gtk_list_store_set (data->impl->shortcuts_model, &iter,
+		      SHORTCUTS_COL_PIXBUF, pixbuf,
+		      -1);
+  gtk_tree_path_free (path);
+
+  if (pixbuf)
+    g_object_unref (pixbuf);
+
+  gtk_tree_row_reference_free (data->row_ref);
+  g_free (data);
+}
+
+
 static void
 shortcuts_reload_icons (GtkFileChooserDefault *impl)
 {
@@ -1098,44 +1140,58 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
   if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
     goto out;
 
-  do {
-    gpointer data;
-    gboolean is_volume;
-    gboolean pixbuf_visible;
-    GdkPixbuf *pixbuf;
+  do
+    {
+      gpointer data;
+      gboolean is_volume;
+      gboolean pixbuf_visible;
+      GdkPixbuf *pixbuf;
 
-    gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
-			SHORTCUTS_COL_DATA, &data,
-			SHORTCUTS_COL_IS_VOLUME, &is_volume,
-			SHORTCUTS_COL_PIXBUF_VISIBLE, &pixbuf_visible,
-			-1);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+			  SHORTCUTS_COL_DATA, &data,
+			  SHORTCUTS_COL_IS_VOLUME, &is_volume,
+			  SHORTCUTS_COL_PIXBUF_VISIBLE, &pixbuf_visible,
+			  -1);
 
-    if (pixbuf_visible && data)
-      {
-	if (is_volume)
-	  {
-	    GtkFileSystemVolume *volume;
+      if (pixbuf_visible && data)
+        {
+	  if (is_volume)
+	    {
+	      GtkFileSystemVolume *volume;
 
-	    volume = data;
-	    pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
-							 impl->icon_size, NULL);
-	  }
-	else
-	  {
-	    const GtkFilePath *path;
+	      volume = data;
+	      pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
+							   impl->icon_size, NULL);
 
-	    path = data;
-	    pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
-						  impl->icon_size, NULL);
-	  }
+	      gtk_list_store_set (impl->shortcuts_model, &iter,
+				  SHORTCUTS_COL_PIXBUF, pixbuf,
+				  -1);
 
-	gtk_list_store_set (impl->shortcuts_model, &iter,
-			    SHORTCUTS_COL_PIXBUF, pixbuf,
-			    -1);
-	if (pixbuf)
-	  g_object_unref (pixbuf);
-      }
-  } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
+	      if (pixbuf)
+		g_object_unref (pixbuf);
+	    }
+	  else
+	    {
+	      const GtkFilePath *path;
+	      struct ReloadIconsData *info;
+	      GtkTreePath *tree_path;
+
+	      path = data;
+
+	      info = g_new0 (struct ReloadIconsData, 1);
+	      info->impl = impl;
+	      tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
+	      info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), tree_path);
+	      gtk_tree_path_free (tree_path);
+
+	      gtk_file_system_get_info (impl->file_system, path,
+				        GTK_FILE_INFO_ICON,
+				        shortcuts_reload_icons_get_info_cb,
+					info);
+	    }
+	}
+    }
+  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
 
  out:
 
@@ -1206,6 +1262,7 @@ struct ShortcutsInsertRequest
   GtkFilePath *parent_path;
   GtkFilePath *path;
   int pos;
+  char *label_copy;
   GtkTreeRowReference *row_ref;
   ShortcutsIndex type;
   gboolean name_only;
@@ -1218,7 +1275,6 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 		        GError              *error,
 		        gpointer             data)
 {
-  char *label_copy;
   gpointer item_data;
   gboolean is_volume = FALSE;
   GdkPixbuf *pixbuf;
@@ -1229,11 +1285,10 @@ get_file_info_finished (GtkFileSystemHandle *handle,
   if (!info)
     goto out;
   
-  label_copy = g_strdup (gtk_file_info_get_display_name (info));
-  pixbuf = gtk_file_system_render_icon (request->impl->file_system,
-					request->path,
-					GTK_WIDGET (request->impl),
-					request->impl->icon_size, NULL);
+  if (!request->label_copy)
+    request->label_copy = g_strdup (gtk_file_info_get_display_name (info));
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
+				      request->impl->icon_size, NULL);
 
   item_data = gtk_file_path_copy (request->path);
 
@@ -1245,13 +1300,11 @@ get_file_info_finished (GtkFileSystemHandle *handle,
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
 		      SHORTCUTS_COL_PIXBUF_VISIBLE, TRUE,
-		      SHORTCUTS_COL_NAME, label_copy,
+		      SHORTCUTS_COL_NAME, request->label_copy,
 		      SHORTCUTS_COL_DATA, item_data,
 		      SHORTCUTS_COL_IS_VOLUME, is_volume,
 		      SHORTCUTS_COL_REMOVABLE, request->removable,
 		      -1);
-
-  g_free (label_copy);
 
   if (request->type == SHORTCUTS_BOOKMARKS)
     request->impl->loading_bookmarks = g_slist_remove (request->impl->loading_bookmarks, handle);
@@ -1268,6 +1321,7 @@ out:
   gtk_file_path_free (request->parent_path);
   gtk_file_path_free (request->path);
   gtk_tree_row_reference_free (request->row_ref);
+  g_free (request->label_copy);
   g_free (request);
 }
 
@@ -1327,7 +1381,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		       GError               **error)
 {
   char *label_copy;
-  GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf = NULL;
   gpointer data;
   GtkTreeIter iter;
 
@@ -1342,44 +1396,39 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
+      struct ShortcutsInsertRequest *request;
+      GtkFileSystemHandle *handle;
+      GtkTreePath *p;
+
+      request = g_new0 (struct ShortcutsInsertRequest, 1);
+      request->impl = impl;
+      request->path = gtk_file_path_copy (path);
+      request->name_only = TRUE;
+      request->removable = removable;
+      request->pos = pos;
+      request->type = type;
       if (label)
-	label_copy = g_strdup (label);
+	request->label_copy = g_strdup (label);
+
+      if (pos == -1)
+	gtk_list_store_append (impl->shortcuts_model, &iter);
       else
-	{
-	  struct ShortcutsInsertRequest *request;
-	  GtkFileSystemHandle *handle;
-	  GtkTreePath *p;
+	gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
 
-	  request = g_new0 (struct ShortcutsInsertRequest, 1);
-	  request->impl = impl;
-	  request->path = gtk_file_path_copy (path);
-	  request->name_only = TRUE;
-	  request->removable = removable;
-	  request->pos = pos;
-	  request->type = type;
+      p = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
+      request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), p);
+      gtk_tree_path_free (p);
 
-	  if (pos == -1)
-	    gtk_list_store_append (impl->shortcuts_model, &iter);
-	  else
-	    gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
+      handle = gtk_file_system_get_info (request->impl->file_system, request->path,
+					 GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN | GTK_FILE_INFO_ICON,
+					 get_file_info_finished, request);
 
-	  p = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
-	  request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), p);
-	  gtk_tree_path_free (p);
+      shortcuts_update_count (impl, type, handle);
 
-	  handle = gtk_file_system_get_info (request->impl->file_system, request->path,
-				             GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN,
-				             get_file_info_finished, request);
-
-	  shortcuts_update_count (impl, type, handle);
-
-	  return TRUE;
-	}
-
-      data = gtk_file_path_copy (path);
-      pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
-					    impl->icon_size, NULL);
+      return TRUE;
     }
+
+  data = gtk_file_path_copy (path);
 
   if (pos == -1)
     gtk_list_store_append (impl->shortcuts_model, &iter);
@@ -7164,9 +7213,14 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 
   if (path)
     {
-      /* FIXME: NULL GError */
-      pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
-					    impl->icon_size, NULL);
+      pixbuf = NULL;
+
+      if (info)
+        {
+          /* FIXME: NULL GError */
+	  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (impl),
+					      impl->icon_size, NULL);
+	}
     }
   else
     {

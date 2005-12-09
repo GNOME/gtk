@@ -1,3 +1,22 @@
+2005-12-09  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols: updated.
+
+	* gtk/gtkfilesystem.[ch] (struct GtkFileInfo): added icon_name field,
+	(enum GtkFileInfoType): added GTK_FILE_INFO_ICON,
+	(gtk_file_info_set_icon_name): new function,
+	(gtk_file_info_render_icon): new function,
+	(gtk_file_system_render_icon): removed.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_render_icon): removed,
+	(create_file_info): fill icon_name field if required,
+	(get_*_icon): modified to suit create_file_info() better.
+
+	* gtk/gtkfilechooserbutton.c: modified to use
+	gtk_file_info_render_icon() instead of gtk_file_system_render_icon().
+
+	* gtk/gtkfilechooserdefault.c: likewise.
+
 2005-12-06  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (get_file_info_finished),

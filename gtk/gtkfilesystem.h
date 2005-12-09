@@ -55,7 +55,8 @@ typedef enum {
   GTK_FILE_INFO_MIME_TYPE         = 1 << 3,
   GTK_FILE_INFO_MODIFICATION_TIME = 1 << 4,
   GTK_FILE_INFO_SIZE              = 1 << 5,
-  GTK_FILE_INFO_ALL               = (1 << 6) - 1
+  GTK_FILE_INFO_ICON              = 1 << 6,
+  GTK_FILE_INFO_ALL               = (1 << 7) - 1
 } GtkFileInfoType;
 
 /* GError enumeration for GtkFileSystem
@@ -105,6 +106,13 @@ void                  gtk_file_info_set_modification_time (GtkFileInfo       *in
 gint64                gtk_file_info_get_size              (const GtkFileInfo *info);
 void                  gtk_file_info_set_size              (GtkFileInfo       *info,
 							   gint64             size);
+
+void                  gtk_file_info_set_icon_name         (GtkFileInfo       *info,
+							   const gchar       *con_name);
+GdkPixbuf            *gtk_file_info_render_icon           (const GtkFileInfo *info,
+							   GtkWidget         *widget,
+							   gint               pixel_size,
+							   GError           **error);
 
 /* GtkFileSystemHandle
  */
@@ -237,14 +245,6 @@ struct _GtkFileSystemIface
   GtkFilePath *(*filename_to_path) (GtkFileSystem      *file_system,
 				    const gchar        *path);
 
-  /* Icons 
-   */
-  GdkPixbuf *  (*render_icon)    (GtkFileSystem     *file_system,
-				  const GtkFilePath *path,
-				  GtkWidget         *widget,
-				  gint               pixel_size,
-				  GError           **error);
-
   /* Bookmarks 
    */
   gboolean       (*insert_bookmark)        (GtkFileSystem     *file_system,
@@ -336,12 +336,6 @@ GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
 
 gboolean     gtk_file_system_path_is_local    (GtkFileSystem     *filesystem,
 					       const GtkFilePath *path);
-
-GdkPixbuf   *gtk_file_system_render_icon   (GtkFileSystem      *file_system,
-					    const GtkFilePath  *path,
-					    GtkWidget          *widget,
-					    gint                pixel_size,
-					    GError            **error);
 
 gboolean gtk_file_system_insert_bookmark (GtkFileSystem     *file_system,
 					  const GtkFilePath *path,

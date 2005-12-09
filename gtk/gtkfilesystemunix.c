@@ -199,11 +199,6 @@ static GtkFilePath *gtk_file_system_unix_uri_to_path      (GtkFileSystem     *fi
 static GtkFilePath *gtk_file_system_unix_filename_to_path (GtkFileSystem     *file_system,
 							   const gchar       *filename);
 
-static GdkPixbuf *gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
-						    const GtkFilePath *path,
-						    GtkWidget         *widget,
-						    gint               pixel_size,
-						    GError           **error);
 
 static gboolean gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
 						      const GtkFilePath *path,
@@ -349,7 +344,6 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->path_to_filename = gtk_file_system_unix_path_to_filename;
   iface->uri_to_path = gtk_file_system_unix_uri_to_path;
   iface->filename_to_path = gtk_file_system_unix_filename_to_path;
-  iface->render_icon = gtk_file_system_unix_render_icon;
   iface->insert_bookmark = gtk_file_system_unix_insert_bookmark;
   iface->remove_bookmark = gtk_file_system_unix_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_unix_list_bookmarks;
@@ -1190,13 +1184,10 @@ get_cached_icon (GtkWidget   *widget,
 }
 
 /* Renders a fallback icon from the stock system */
-static GdkPixbuf *
-get_fallback_icon (GtkWidget *widget,
-		   IconType   icon_type,
-		   GError   **error)
+static gchar *
+get_fallback_icon_name (IconType icon_type)
 {
   const char *stock_name;
-  GdkPixbuf *pixbuf;
 
   switch (icon_type)
     {
@@ -1217,13 +1208,29 @@ get_fallback_icon (GtkWidget *widget,
       break;
     }
 
-  pixbuf = gtk_widget_render_icon (widget, stock_name, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+  return g_strdup (stock_name);
+
+}
+
+static GdkPixbuf *
+get_fallback_icon (GtkWidget *widget,
+		   IconType   icon_type,
+		   GError   **error)
+{
+  char *name;
+  GdkPixbuf *pixbuf;
+
+  name = get_fallback_icon_name (icon_type);
+
+  pixbuf = gtk_widget_render_icon (widget, name, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
   if (!pixbuf)
     g_set_error (error,
 		 GTK_FILE_SYSTEM_ERROR,
 		 GTK_FILE_SYSTEM_ERROR_FAILED,
 		 _("Could not get a stock icon for %s"),
-		 stock_name);
+		 name);
+
+  g_free (name);
 
   return pixbuf;
 }
@@ -1584,42 +1591,36 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
 /* Returns the name of the icon to be used for a path which is known to be a
  * directory.  This can vary for Home, Desktop, etc.
  */
-static const char *
+static char *
 get_icon_name_for_directory (const char *path)
 {
   static char *desktop_path = NULL;
 
   if (!g_get_home_dir ())
-    return "gnome-fs-directory";
+    return g_strdup ("gnome-fs-directory");
 
   if (!desktop_path)
       desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
 
   if (strcmp (g_get_home_dir (), path) == 0)
-    return "gnome-fs-home";
+    return g_strdup ("gnome-fs-home");
   else if (strcmp (desktop_path, path) == 0)
-    return "gnome-fs-desktop";
+    return g_strdup ("gnome-fs-desktop");
   else
-    return "gnome-fs-directory";
+    return g_strdup ("gnome-fs-directory");
+
+  return NULL;
 }
 
 /* Computes our internal icon type based on a path name; also returns the MIME
  * type in case we come up with ICON_REGULAR.
  */
 static IconType
-get_icon_type_from_path (GtkFileSystemUnix *system_unix,
-			 const GtkFilePath *path,
+get_icon_type_from_path (GtkFileFolderUnix *folder_unix,
+			 const char        *filename,
 			 const char       **mime_type)
 {
-  const char *filename;
-  char *dirname;
-  GtkFileFolderUnix *folder_unix;
   IconType icon_type;
-
-  filename = gtk_file_path_get_string (path);
-  dirname = g_path_get_dirname (filename);
-  folder_unix = g_hash_table_lookup (system_unix->folder_hash, dirname);
-  g_free (dirname);
 
   *mime_type = NULL;
 
@@ -1659,11 +1660,9 @@ get_icon_type_from_path (GtkFileSystemUnix *system_unix,
 }
 
 /* Renders an icon for a non-ICON_REGULAR file */
-static GdkPixbuf *
-get_special_icon (IconType           icon_type,
-		  const GtkFilePath *path,
-		  GtkWidget         *widget,
-		  gint               pixel_size)
+static gchar *
+get_special_icon_name (IconType           icon_type,
+		       const gchar       *filename)
 {
   const char *name;
 
@@ -1681,9 +1680,6 @@ get_special_icon (IconType           icon_type,
       name = "gnome-fs-chardev";
       break;
     case ICON_DIRECTORY: {
-      const char *filename;
-
-      filename = gtk_file_path_get_string (path);
       name = get_icon_name_for_directory (filename);
       break;
       }
@@ -1701,17 +1697,15 @@ get_special_icon (IconType           icon_type,
       return NULL;
     }
 
-  return get_cached_icon (widget, name, pixel_size);
+  return g_strdup (name);
 }
 
-static GdkPixbuf *
-get_icon_for_mime_type (GtkWidget  *widget,
-			const char *mime_type,
-			gint        pixel_size)
+static gchar *
+get_icon_name_for_mime_type (const char *mime_type)
 {
+  char *name;
   const char *separator;
   GString *icon_name;
-  GdkPixbuf *pixbuf;
 
   if (!mime_type)
     return NULL;
@@ -1724,8 +1718,13 @@ get_icon_for_mime_type (GtkWidget  *widget,
   g_string_append_len (icon_name, mime_type, separator - mime_type);
   g_string_append_c (icon_name, '-');
   g_string_append (icon_name, separator + 1);
-  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
-  g_string_free (icon_name, TRUE);
+  name = icon_name->str;
+  g_string_free (icon_name, FALSE);
+
+  return name;
+
+  /* FIXME: how are we going to implement a second attempt? */
+#if 0
   if (pixbuf)
     return pixbuf;
 
@@ -1735,50 +1734,7 @@ get_icon_for_mime_type (GtkWidget  *widget,
   g_string_free (icon_name, TRUE);
 
   return pixbuf;
-}
-
-static GdkPixbuf *
-gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
-				  const GtkFilePath *path,
-				  GtkWidget         *widget,
-				  gint               pixel_size,
-				  GError           **error)
-{
-  GtkFileSystemUnix *system_unix;
-  IconType icon_type;
-  const char *mime_type;
-  GdkPixbuf *pixbuf;
-
-  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
-
-  icon_type = get_icon_type_from_path (system_unix, path, &mime_type);
-
-  switch (icon_type) {
-  case ICON_NONE:
-    goto fallback;
-
-  case ICON_REGULAR:
-    pixbuf = get_icon_for_mime_type (widget, mime_type, pixel_size);
-    break;
-
-  default:
-    pixbuf = get_special_icon (icon_type, path, widget, pixel_size);
-  }
-
-  if (pixbuf)
-    goto out;
-
- fallback:
-
-  pixbuf = get_cached_icon (widget, "gnome-fs-regular", pixel_size);
-  if (pixbuf)
-    goto out;
-
-  pixbuf = get_fallback_icon (widget, icon_type, error);
-
- out:
-
-  return pixbuf;
+#endif
 }
 
 static void
@@ -2342,6 +2298,33 @@ create_file_info (GtkFileFolderUnix *folder_unix,
 
   if (types & GTK_FILE_INFO_SIZE)
     gtk_file_info_set_size (info, (gint64) statbuf->st_size);
+
+  if (types & GTK_FILE_INFO_ICON)
+    {
+      IconType icon_type;
+      char *icon_name;
+      const char *mime_type;
+
+      icon_type = get_icon_type_from_path (folder_unix, filename, &mime_type);
+
+      switch (icon_type)
+        {
+          case ICON_NONE:
+	    icon_name = get_fallback_icon_name (icon_type);
+	    break;
+
+          case ICON_REGULAR:
+	    icon_name = get_icon_name_for_mime_type (mime_type);
+            break;
+
+          default:
+	    icon_name = get_special_icon_name (icon_type, filename);
+	    break;
+        }
+
+      gtk_file_info_set_icon_name (info, icon_name);
+      g_free (icon_name);
+    }
 
   return info;
 }

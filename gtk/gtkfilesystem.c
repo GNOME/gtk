@@ -25,6 +25,7 @@
 #include "gtkmodules.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+#include "gtkstock.h"
 
 #include <string.h>
 
@@ -35,6 +36,7 @@ struct _GtkFileInfo
   gchar *display_name;
   gchar *display_key;
   gchar *mime_type;
+  gchar *icon_name;
   guint is_folder : 1;
   guint is_hidden : 1;
 };
@@ -249,6 +251,51 @@ gtk_file_info_set_size (GtkFileInfo *info,
   g_return_if_fail (size >= 0);
   
   info->size = size;
+}
+
+void
+gtk_file_info_set_icon_name (GtkFileInfo *info,
+			     const gchar *icon_name)
+{
+  g_return_if_fail (info != NULL);
+  
+  if (info->icon_name)
+    g_free (info->icon_name);
+
+  info->icon_name = g_strdup (icon_name);
+}
+
+GdkPixbuf *
+gtk_file_info_render_icon (const GtkFileInfo  *info,
+			   GtkWidget          *widget,
+			   gint                pixel_size,
+			   GError            **error)
+{
+  GdkPixbuf *pixbuf = NULL;
+  GtkIconTheme *icon_theme;
+
+  g_return_val_if_fail (info != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+
+  if (info->icon_name)
+    pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name, pixel_size,
+				       0, NULL);
+
+  if (!pixbuf)
+    {
+      /* load a fallback icon */
+      pixbuf = gtk_widget_render_icon (widget, GTK_STOCK_FILE, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+      if (!pixbuf && error)
+        g_set_error (error,
+		     GTK_FILE_SYSTEM_ERROR,
+		     GTK_FILE_SYSTEM_ERROR_FAILED,
+		     _("Could not get a stock icon for %s\n"),
+		     info->icon_name);
+    }
+
+  return pixbuf;
 }
 
 /*****************************************
@@ -756,21 +803,6 @@ gtk_file_system_path_is_local (GtkFileSystem     *file_system,
   g_free (filename);
 
   return result;
-}
-
-GdkPixbuf *
-gtk_file_system_render_icon (GtkFileSystem      *file_system,
-			     const GtkFilePath  *path,
-			     GtkWidget          *widget,
-			     gint                pixel_size,
-			     GError            **error)
-{
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (pixel_size > 0, NULL);
-
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->render_icon (file_system, path, widget, pixel_size, error);
 }
 
 /**

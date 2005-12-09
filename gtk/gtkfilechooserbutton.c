@@ -525,13 +525,9 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
       pos += priv->n_shortcuts;
 
-      pixbuf = gtk_file_system_render_icon (priv->fs, path,
-					    GTK_WIDGET (chooser),
-					    priv->icon_size, NULL);
-
       gtk_list_store_insert (GTK_LIST_STORE (priv->model), &iter, pos);
       gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
-			  ICON_COLUMN, pixbuf,
+			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_SHORTCUT,
 			  DATA_COLUMN, gtk_file_path_copy (path),
@@ -539,9 +535,6 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
 			  -1);
       set_info_for_path_at_iter (button, path, &iter);
       priv->n_shortcuts++;
-
-      if (pixbuf)
-	g_object_unref (pixbuf);
 
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
     }
@@ -1103,6 +1096,57 @@ gtk_file_chooser_button_mnemonic_activate (GtkWidget *widget,
 }
 
 /* Changes the icons wherever it is needed */
+struct ChangeIconThemeData
+{
+  GtkFileChooserButton *button;
+  GtkTreeRowReference *row_ref;
+};
+
+static void
+change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
+			       GtkFileInfo         *info,
+			       GError              *error,
+			       gpointer             user_data)
+{
+  GdkPixbuf *pixbuf;
+  struct ChangeIconThemeData *data = user_data;
+
+  if (error)
+    {
+      gtk_tree_row_reference_free (data->row_ref);
+      g_free (data);
+      return;
+    }
+
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
+				      data->button->priv->icon_size, NULL);
+
+  if (pixbuf)
+    {
+      gint width = 0;
+      GtkTreeIter iter;
+      GtkTreePath *path;
+
+      width = MAX (width, gdk_pixbuf_get_width (pixbuf));
+
+      path = gtk_tree_row_reference_get_path (data->row_ref);
+      gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
+      gtk_tree_path_free (path);
+
+      gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
+			  ICON_COLUMN, pixbuf,
+			  -1);
+      g_object_unref (pixbuf);
+
+      g_object_set (data->button->priv->icon_cell,
+		    "width", width,
+		    NULL);
+    }
+  
+  gtk_tree_row_reference_free (data->row_ref);
+  g_free (data);
+}
+
 static void
 change_icon_theme (GtkFileChooserButton *button)
 {
@@ -1110,7 +1154,7 @@ change_icon_theme (GtkFileChooserButton *button)
   GtkSettings *settings;
   GtkIconTheme *theme;
   GtkTreeIter iter;
-  gint width, height;
+  gint width = 0, height = 0;
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
@@ -1145,9 +1189,21 @@ change_icon_theme (GtkFileChooserButton *button)
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
 	  if (data)
-	    pixbuf = gtk_file_system_render_icon (priv->fs, data,
-						  GTK_WIDGET (button),
-						  priv->icon_size, NULL);
+	    {
+	      GtkTreePath *path;
+	      struct ChangeIconThemeData *info;
+
+	      info = g_new0 (struct ChangeIconThemeData, 1);
+	      info->button = button;
+	      path = gtk_tree_model_get_path (priv->model, &iter);
+	      info->row_ref = gtk_tree_row_reference_new (priv->model, path);
+	      gtk_tree_path_free (path);
+
+	      gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
+					change_icon_theme_get_info_cb,
+					info);
+	      pixbuf = NULL;
+	    }
 	  else
 	    pixbuf = gtk_icon_theme_load_icon (theme, FALLBACK_ICON_NAME,
 					       priv->icon_size, 0, NULL);
@@ -1235,6 +1291,7 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
 		      GError              *error,
 		      gpointer             callback_data)
 {
+  GdkPixbuf *pixbuf;
   struct SetDisplayNameData *data = callback_data;
 
   if (error)
@@ -1244,10 +1301,17 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
       return;
     }
 
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
+				      data->button->priv->icon_size, NULL);
+
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &data->iter,
+		      ICON_COLUMN, pixbuf,
 		      DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
 		      IS_FOLDER_COLUMN, gtk_file_info_get_is_folder (info),
 		      -1);
+
+  if (pixbuf)
+    g_object_unref (pixbuf);
 
   g_free (data);
 }
@@ -1264,7 +1328,7 @@ set_info_for_path_at_iter (GtkFileChooserButton *button,
   data->iter = *iter;
 
   gtk_file_system_get_info (button->priv->fs, path,
-			    GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			    GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON,
 			    set_info_get_info_cb, data);
 }
 
@@ -1350,6 +1414,44 @@ model_free_row_data (GtkFileChooserButton *button,
     }
 }
 
+static void
+model_add_special_get_info_cb (GtkFileSystemHandle *handle,
+			       GtkFileInfo         *info,
+			       GError              *error,
+			       gpointer             user_data)
+{
+  GdkPixbuf *pixbuf;
+  struct ChangeIconThemeData *data = user_data;
+
+  if (error)
+    {
+      gtk_tree_row_reference_free (data->row_ref);
+      g_free (data);
+      return;
+    }
+
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
+				      data->button->priv->icon_size, NULL);
+
+  if (pixbuf)
+    {
+      GtkTreeIter iter;
+      GtkTreePath *path;
+
+      path = gtk_tree_row_reference_get_path (data->row_ref);
+      gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
+      gtk_tree_path_free (path);
+
+      gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
+			  ICON_COLUMN, pixbuf,
+			  -1);
+      g_object_unref (pixbuf);
+    }
+  
+  gtk_tree_row_reference_free (data->row_ref);
+  g_free (data);
+}
+
 static inline void
 model_add_special (GtkFileChooserButton *button)
 {
@@ -1368,22 +1470,31 @@ model_add_special (GtkFileChooserButton *button)
 
   if (homedir)
     {
+      GtkTreePath *tree_path;
+      struct ChangeIconThemeData *info;
+
       path = gtk_file_system_filename_to_path (button->priv->fs, homedir);
-      pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
-					    GTK_WIDGET (button),
-					    button->priv->icon_size, NULL);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
       gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, pixbuf,
+			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
 			  DATA_COLUMN, path,
 			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
-      if (pixbuf)
-	g_object_unref (pixbuf);
+      info = g_new0 (struct ChangeIconThemeData, 1);
+      info->button = button;
+      tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
+      info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store),
+						  tree_path);
+      gtk_tree_path_free (tree_path);
+
+      gtk_file_system_get_info (button->priv->fs, path,
+				GTK_FILE_INFO_ICON,
+				model_add_special_get_info_cb, info);
+
       button->priv->n_special++;
 
 #ifndef G_OS_WIN32
@@ -1397,23 +1508,32 @@ model_add_special (GtkFileChooserButton *button)
 
   if (desktopdir)
     {
+      GtkTreePath *tree_path;
+      struct ChangeIconThemeData *info;
+
       path = gtk_file_system_filename_to_path (button->priv->fs, desktopdir);
       g_free (desktopdir);
-      pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
-					    GTK_WIDGET (button),
-					    button->priv->icon_size, NULL);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
       gtk_list_store_set (store, &iter,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
-			  ICON_COLUMN, pixbuf,
+			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
 			  DATA_COLUMN, path,
 			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
-      if (pixbuf)
-	g_object_unref (pixbuf);
+      info = g_new0 (struct ChangeIconThemeData, 1);
+      info->button = button;
+      tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
+      info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store),
+						  tree_path);
+      gtk_tree_path_free (tree_path);
+
+      gtk_file_system_get_info (button->priv->fs, path,
+				GTK_FILE_INFO_ICON,
+				model_add_special_get_info_cb, info);
+
       button->priv->n_special++;
     }
 }
@@ -1494,25 +1614,17 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
   do
     {
-      GdkPixbuf *pixbuf;
-
       pos++;
-      pixbuf = gtk_file_system_render_icon (button->priv->fs, bookmarks->data,
-					    GTK_WIDGET (button),
-					    button->priv->icon_size, NULL);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, pixbuf,
+			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_BOOKMARK,
 			  DATA_COLUMN, gtk_file_path_copy (bookmarks->data),
 			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
       set_info_for_path_at_iter (button, bookmarks->data, &iter);
-
-      if (pixbuf)
-	g_object_unref (pixbuf);
 
       button->priv->n_bookmarks++;
       bookmarks = bookmarks->next;
@@ -1560,20 +1672,14 @@ model_update_current_folder (GtkFileChooserButton *button,
       model_free_row_data (button, &iter);
     }
 
-  pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
-					GTK_WIDGET (button),
-					button->priv->icon_size, NULL);
   gtk_list_store_set (store, &iter,
-		      ICON_COLUMN, pixbuf,
+		      ICON_COLUMN, NULL,
 		      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 		      TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
 		      DATA_COLUMN, gtk_file_path_copy (path),
 		      IS_FOLDER_COLUMN, FALSE,
 		      -1);
   set_info_for_path_at_iter (button, path, &iter);
-
-  if (pixbuf)
-    g_object_unref (pixbuf);
 }
 
 static inline void
@@ -1835,10 +1941,24 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
 			  GError              *error,
 			  gpointer             data)
 {
+  GdkPixbuf *pixbuf;
+  GtkFileChooserButtonPrivate *priv = data;
+
   if (error)
     return;
 
-  gtk_label_set_text (GTK_LABEL (data), gtk_file_info_get_display_name (info));
+  gtk_label_set_text (GTK_LABEL (priv->label), gtk_file_info_get_display_name (info));
+
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (priv->image),
+				      priv->icon_size, NULL);
+  if (!pixbuf)
+    pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
+				       FALLBACK_ICON_NAME,
+				       priv->icon_size, 0, NULL);
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
+  if (pixbuf)
+    g_object_unref (pixbuf);
 }
 
 static void
@@ -1885,13 +2005,9 @@ update_label_and_image (GtkFileChooserButton *button)
 	    goto out;
 	}
 
-      if (!pixbuf)
-	pixbuf = gtk_file_system_render_icon (priv->fs, path,
-					      GTK_WIDGET (button),
-					      priv->icon_size, NULL);
-
-      gtk_file_system_get_info (priv->fs, path, GTK_FILE_INFO_DISPLAY_NAME,
-				update_label_get_info_cb, priv->label);
+      gtk_file_system_get_info (priv->fs, path,
+				GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+				update_label_get_info_cb, priv);
 
      out:
       gtk_file_paths_free (paths);
@@ -1904,15 +2020,6 @@ update_label_and_image (GtkFileChooserButton *button)
     }
   else
     gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
-  
-  if (!pixbuf)
-    pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (button)),
-				       FALLBACK_ICON_NAME,
-				       priv->icon_size, 0, NULL);
-
-  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
-  if (pixbuf)
-    g_object_unref (pixbuf);
 }
 
 
