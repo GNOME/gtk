@@ -2934,6 +2934,13 @@ post_paste_cleanup (ClipboardRequest *request_data)
     }
 }
 
+static void
+free_clipboard_request (ClipBoardRequest *request_data)
+{
+  g_object_unref (request_data->buffer);
+  g_free (request_data);
+}
+
 /* Called when we request a paste and receive the text data
  */
 static void
@@ -2966,8 +2973,7 @@ clipboard_text_received (GtkClipboard *clipboard,
 	gtk_text_buffer_end_user_action (buffer);
     }
 
-  g_object_unref (buffer);
-  g_free (request_data);
+  free_clipboard_request (request_data);
 }
 
 static GtkTextBuffer*
@@ -3069,7 +3075,8 @@ paste_from_buffer (ClipboardRequest    *request_data,
     gtk_text_buffer_end_user_action (buffer);
 
   g_object_unref (src_buffer);
-  g_free (request_data);
+
+  free_clipboard_request (request_data);
 }
 
 static void
@@ -3290,8 +3297,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
                                  "gtk_paste_point_override",
                                  override_location, FALSE);
 
-  data->buffer = buffer;
-  g_object_ref (buffer);
+  data->buffer = g_object_ref (buffer);
   data->interactive = TRUE;
   data->default_editable = default_editable;
 
