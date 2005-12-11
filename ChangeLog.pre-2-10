@@ -1,3 +1,8 @@
+2005-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.c (gdk_parse_args): Warn if parsing fails,
+	not if it succeeds. 
+
 2005-12-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_data_get_uris): Don't
