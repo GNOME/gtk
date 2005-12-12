@@ -1,5 +1,9 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (ensure_valid_themes): Only broadcast
+	_GTK_LOAD_ICONTHEMES if we detect a real theme change, not
+	upon initial theme load.  (#323876, Peter Lund)
+
 	* gtk/gtkstatusicon.c (gtk_status_icon_class_init): Register
 	the size-changed signal correctly.  (#323848, Murray Cumming)
 
