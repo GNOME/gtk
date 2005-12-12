@@ -2386,23 +2386,25 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
       g_assert (real->segment->char_count > 0);
       g_assert (real->segment->type == &gtk_text_char_type);
 
-      real->segment_char_offset -= count;
-      g_assert (real->segment_char_offset >= 0);
-
       if (real->line_byte_offset >= 0)
         {
           const char *p;
           gint new_byte_offset;
-          gint i;
 
-          p = g_utf8_offset_to_pointer (real->segment->body.chars,
-                                        real->segment_char_offset);
+          /* if in the last fourth of the segment walk backwards */
+          if (count < real->segment_char_offset / 4)
+            p = g_utf8_offset_to_pointer (real->segment->body.chars + real->segment_byte_offset, 
+                                          -count);
+          else
+            p = g_utf8_offset_to_pointer (real->segment->body.chars,
+                                          real->segment_char_offset - count);
 
           new_byte_offset = p - real->segment->body.chars;
           real->line_byte_offset -= (real->segment_byte_offset - new_byte_offset);
           real->segment_byte_offset = new_byte_offset;
         }
 
+      real->segment_char_offset -= count;
       real->line_char_offset -= count;
 
       adjust_char_index (real, 0 - count);

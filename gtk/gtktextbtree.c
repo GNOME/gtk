@@ -4146,7 +4146,12 @@ _gtk_text_line_char_to_byte_offsets (GtkTextLine *line,
     {
       const char *p;
 
-      p = g_utf8_offset_to_pointer (seg->body.chars, offset);
+      /* if in the last fourth of the segment walk backwards */
+      if (seg->char_count - offset < seg->char_count / 4)
+        p = g_utf8_offset_to_pointer (seg->body.chars + seg->byte_count, 
+                                      offset - seg->char_count);
+      else
+        p = g_utf8_offset_to_pointer (seg->body.chars, offset);
 
       *seg_byte_offset = p - seg->body.chars;
 

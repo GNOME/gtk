@@ -1,5 +1,9 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbtree.c (_gtk_text_line_char_to_byte_offsets): 
+	* gtk/gtktextiter.c (gtk_text_iter_backward_chars): Speed up
+	stepping backwards.  (#320638, Larry Ewing, Paolo Borelli)
+	
 	* gtk/gtkicontheme.c (ensure_valid_themes): Only broadcast
 	_GTK_LOAD_ICONTHEMES if we detect a real theme change, not
 	upon initial theme load.  (#323876, Peter Lund)
