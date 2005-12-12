@@ -1,5 +1,9 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextiter.c (gtk_text_iter_set_visible_line_index): 
+	Speed this function up, using the fact that visibility is 
+	constant across segments. (#321548, Paolo Borelli)
+
 	* gtk/gtkicontheme.c (ensure_valid_themes): Only broadcast
 	_GTK_LOAD_ICONTHEMES if we detect a real theme change, not
 	upon initial theme load.  (#323876, Peter Lund)

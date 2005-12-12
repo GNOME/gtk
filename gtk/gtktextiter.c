@@ -3891,12 +3891,6 @@ gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
     gtk_text_iter_forward_line (iter);
 }
 
-static gint
-bytes_in_char (GtkTextIter *iter)
-{
-  return g_unichar_to_utf8 (gtk_text_iter_get_char (iter), NULL);
-}
-
 /**
  * gtk_text_iter_set_visible_line_index:
  * @iter: a #GtkTextIter
@@ -3907,40 +3901,54 @@ bytes_in_char (GtkTextIter *iter)
  * in the index.
  **/
 void
-gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
-                                       gint         byte_on_line)
+gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
+                                      gint         byte_on_line)
 {
-  gint bytes_seen = 0;
-  gint skipped = 0;
+  GtkTextRealIter *real;
+  gint bytes_in_line = 0;
+  gint offset = 0;
   GtkTextIter pos;
-
-  g_return_if_fail (iter != NULL);
+  GtkTextLineSegment *seg;
   
+  g_return_if_fail (iter != NULL);
+
   gtk_text_iter_set_line_offset (iter, 0);
+
+  bytes_in_line = gtk_text_iter_get_bytes_in_line (iter);
 
   pos = *iter;
 
-  /* For now we use a ludicrously slow implementation */
-  while (bytes_seen < byte_on_line)
+  real = gtk_text_iter_make_real (&pos);
+
+  if (real == NULL)
+    return;
+
+  ensure_byte_offsets (real);
+
+  check_invariants (&pos);
+
+  seg = _gtk_text_iter_get_indexable_segment (&pos);
+
+  while (seg != NULL && byte_on_line > 0)
     {
       if (!_gtk_text_btree_char_is_invisible (&pos))
-        bytes_seen += bytes_in_char (&pos);
-      else skipped++;
+        {
+          if (byte_on_line < seg->byte_count)
+            {
+              iter_set_from_byte_offset (real, real->line, offset + byte_on_line);
+              byte_on_line = 0;
+              break;
+            }
+          else
+            byte_on_line -= seg->byte_count;
+        }
 
-      if (!gtk_text_iter_forward_char (&pos))
-        break;
-
-      if (bytes_seen >= byte_on_line)
-        break;
+      offset += seg->byte_count;
+      _gtk_text_iter_forward_indexable_segment (&pos);
+      seg = _gtk_text_iter_get_indexable_segment (&pos);
     }
 
-  if (bytes_seen > byte_on_line)
-    g_warning ("%s: Incorrect visible byte index %d falls in the middle of a UTF-8 "
-               "character; this will crash the text buffer. "
-               "Byte indexes must refer to the start of a character.",
-               G_STRLOC, byte_on_line);
-  
-  if (_gtk_text_iter_get_text_line (&pos) == _gtk_text_iter_get_text_line (iter))
+  if (byte_on_line == 0)
     *iter = pos;
   else
     gtk_text_iter_forward_line (iter);
