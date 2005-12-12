@@ -1,3 +1,15 @@
+2005-12-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Make the gtk-color-scheme setting work.
+	
+	* gtk/gtksettings.h: 
+	* gtk/gtksettings.c (_gtk_settings_get_color_hash): Add a getter
+	that takes care of initializing the color hash if it is not 
+	already there.  
+
+	* gtk/gtkrc.c (gtk_rc_color_scheme_changed, gtk_rc_context_get): 
+	And use it here.	
+
 2005-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk.c (gdk_parse_args): Warn if parsing fails,

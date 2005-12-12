@@ -1590,12 +1590,17 @@ gtk_color_table_from_string (const gchar *str)
       while (*p == ' ')
         p++;
 
-      s = strchr (p, '\n');
-      if (s)
-        {
-          *s = '\0';
-          s++;
-        }
+      s = p;
+      while (*s) 
+	{
+	  if (*s == '\n')
+	    {
+	      *s = '\0';
+	      s++;
+	      break;
+	    }
+	  s++;
+	}
 
       if (!gdk_color_parse (p, &color))
         {
@@ -1632,6 +1637,18 @@ settings_update_color_scheme (GtkSettings *settings)
 
   g_free (colors);
 }
+
+GHashTable *
+_gtk_settings_get_color_hash (GtkSettings *settings)
+{
+  if (g_object_get_data (G_OBJECT (settings),
+			 "gtk-color-scheme") == NULL)
+    settings_update_color_scheme (settings);
+
+  return (GHashTable *) g_object_get_data (G_OBJECT (settings),
+					   "gtk-color-scheme");
+}
+
 
 #define __GTK_SETTINGS_C__
 #include "gtkaliasdef.c"

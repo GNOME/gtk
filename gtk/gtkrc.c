@@ -596,8 +596,7 @@ gtk_rc_color_scheme_changed (GtkSettings  *settings,
       if (context->color_hash)
         g_hash_table_unref (context->color_hash);
 
-      context->color_hash = g_object_get_data (G_OBJECT (settings),
-                                               "gtk-color-scheme");
+      context->color_hash = _gtk_settings_get_color_hash (settings);
       if (context->color_hash)
         g_hash_table_ref (context->color_hash);
 
@@ -629,8 +628,7 @@ gtk_rc_context_get (GtkSettings *settings)
 		    "gtk-color-scheme", &context->colors,
 		    NULL);
 
-      context->color_hash = g_object_get_data (G_OBJECT (settings),
-                                               "gtk-color-scheme");
+      context->color_hash = _gtk_settings_get_color_hash (settings);
       if (context->color_hash)
         g_hash_table_ref (context->color_hash);
 
