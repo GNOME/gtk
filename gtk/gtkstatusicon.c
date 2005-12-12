@@ -275,7 +275,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 		  G_STRUCT_OFFSET (GtkStatusIconClass, size_changed),
 		  NULL,
 		  NULL,
-		  g_cclosure_marshal_VOID__INT,
+		  g_cclosure_marshal_BOOLEAN__INT,
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_INT);

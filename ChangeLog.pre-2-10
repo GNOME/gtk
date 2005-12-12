@@ -1,5 +1,10 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c (gtk_status_icon_class_init): Register
+	the size-changed signal correctly.  (#323848, Murray Cumming)
+
+	* gtk/gtkmarshalers.list: Add necessary marshaller.
+
 	* gtk/gtktextview.c (gtk_text_view_get_border_window_size): Don't
 	fall thru to the wrong window types.  (#323843)
 
