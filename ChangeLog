@@ -1,5 +1,8 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_get_border_window_size): Don't
+	fall thru to the wrong window types.  (#323843)
+
 	Make the gtk-color-scheme setting work.
 	
 	* gtk/gtksettings.h: 
