@@ -8036,18 +8036,22 @@ gtk_text_view_get_border_window_size (GtkTextView       *text_view,
     case GTK_TEXT_WINDOW_LEFT:
       if (text_view->left_window)
         return text_view->left_window->requisition.width;
+      break;
       
     case GTK_TEXT_WINDOW_RIGHT:
       if (text_view->right_window)
         return text_view->right_window->requisition.width;
+      break;
       
     case GTK_TEXT_WINDOW_TOP:
       if (text_view->top_window)
         return text_view->top_window->requisition.height;
+      break;
 
     case GTK_TEXT_WINDOW_BOTTOM:
       if (text_view->bottom_window)
         return text_view->bottom_window->requisition.height;
+      break;
       
     default:
       g_warning ("Can only get size of left/right/top/bottom border windows with gtk_text_view_get_border_window_size()");
