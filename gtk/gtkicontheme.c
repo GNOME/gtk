@@ -1130,6 +1130,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
   GTimeVal tv;
+  gboolean was_valid = priv->themes_valid;
 
   if (priv->themes_valid)
     {
@@ -1143,7 +1144,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
     {
       load_themes (icon_theme);
       
-      if (!priv->check_reload && priv->screen)
+      if (!priv->check_reload && was_valid && priv->screen)
 	{	  
 	  static GdkAtom atom_iconthemes = GDK_NONE;
 	  GdkEvent *event = gdk_event_new (GDK_CLIENT_EVENT);

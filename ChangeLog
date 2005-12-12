@@ -1,5 +1,9 @@
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (ensure_valid_themes): Only broadcast
+	_GTK_LOAD_ICONTHEMES if we detect a real theme change, not
+	upon initial theme load.  (#323876, Peter Lund)
+
 	* gtk/gtktextview.c (gtk_text_view_get_border_window_size): Don't
 	fall thru to the wrong window types.  (#323843)
 
