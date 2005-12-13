@@ -1,5 +1,10 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): don't overwrite
+	data if it's already set (for example by the "is volume" case).
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserbutton.c (set_info_get_info_cb),
 	(set_info_for_path_at_iter): store a row reference in the temporary
 	data structure and not an iter,

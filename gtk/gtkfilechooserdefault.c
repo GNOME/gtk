@@ -1382,7 +1382,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 {
   char *label_copy;
   GdkPixbuf *pixbuf = NULL;
-  gpointer data;
+  gpointer data = NULL;
   GtkTreeIter iter;
 
   profile_start ("start", is_volume ? "volume" : (char *) path);
@@ -1433,7 +1433,8 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       return TRUE;
     }
 
-  data = gtk_file_path_copy (path);
+  if (!data)
+    data = gtk_file_path_copy (path);
 
   if (pos == -1)
     gtk_list_store_append (impl->shortcuts_model, &iter);
