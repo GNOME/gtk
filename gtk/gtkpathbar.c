@@ -981,22 +981,74 @@ button_clicked_cb (GtkWidget *button,
 		 button_data->path, child_path, child_is_hidden);
 }
 
-static GdkPixbuf *
-get_button_image (GtkPathBar *path_bar,
-		  ButtonType  button_type)
+struct SetButtonImageData
+{
+  GtkPathBar *path_bar;
+  ButtonData *button_data;
+};
+
+static void
+set_button_image_get_info_cb (GtkFileSystemHandle *handle,
+			      GtkFileInfo         *info,
+			      GError              *error,
+			      gpointer             user_data)
+{
+  GdkPixbuf *pixbuf;
+  struct SetButtonImageData *data = user_data;
+
+  if (error)
+    {
+      g_free (data);
+      return;
+    }
+
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
+				      data->path_bar->icon_size, NULL);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (data->button_data->image), pixbuf);
+
+  switch (data->button_data->type)
+    {
+      case HOME_BUTTON:
+	if (data->path_bar->home_icon)
+	  g_object_unref (pixbuf);
+	else
+	  data->path_bar->home_icon = pixbuf;
+	break;
+
+      case DESKTOP_BUTTON:
+	if (data->path_bar->desktop_icon)
+	  g_object_unref (pixbuf);
+	else
+	  data->path_bar->desktop_icon = pixbuf;
+	break;
+
+      default:
+	break;
+    };
+
+  g_free (data);
+}
+
+static void
+set_button_image (GtkPathBar *path_bar,
+		  ButtonData *button_data)
 {
   GtkFileSystemVolume *volume;
+  struct SetButtonImageData *data;
 
-  switch (button_type)
+  switch (button_data->type)
     {
     case ROOT_BUTTON:
 
       if (path_bar->root_icon != NULL)
-	return path_bar->root_icon;
+        {
+          gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->root_icon);
+	  break;
+	}
       
       volume = gtk_file_system_get_volume_for_path (path_bar->file_system, path_bar->root_path);
       if (volume == NULL)
-	return NULL;
+	return;
 
       path_bar->root_icon = gtk_file_system_volume_render_icon (path_bar->file_system,
 								volume,
@@ -1005,32 +1057,47 @@ get_button_image (GtkPathBar *path_bar,
 								NULL);
       gtk_file_system_volume_free (path_bar->file_system, volume);
 
-      return path_bar->root_icon;
+      gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->root_icon);
+      break;
+
     case HOME_BUTTON:
       if (path_bar->home_icon != NULL)
-	return path_bar->home_icon;
+        {
+	  gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->home_icon);
+	  break;
+	}
 
-      path_bar->home_icon = gtk_file_system_render_icon (path_bar->file_system,
-							 path_bar->home_path,
-							 GTK_WIDGET (path_bar),
-							 path_bar->icon_size,
-							 NULL);
-      return path_bar->home_icon;
+      data = g_new0 (struct SetButtonImageData, 1);
+      data->path_bar = path_bar;
+      data->button_data = button_data;
+
+      gtk_file_system_get_info (path_bar->file_system,
+				path_bar->home_path,
+				GTK_FILE_INFO_ICON,
+				set_button_image_get_info_cb,
+				data);
+      break;
+
     case DESKTOP_BUTTON:
       if (path_bar->desktop_icon != NULL)
-	return path_bar->desktop_icon;
+        {
+	  gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->desktop_icon);
+	  break;
+	}
 
-      path_bar->desktop_icon = gtk_file_system_render_icon (path_bar->file_system,
-							    path_bar->desktop_path,
-							    GTK_WIDGET (path_bar),
-							    path_bar->icon_size,
-							    NULL);
-      return path_bar->desktop_icon;
+      data = g_new0 (struct SetButtonImageData, 1);
+      data->path_bar = path_bar;
+      data->button_data = button_data;
+
+      gtk_file_system_get_info (path_bar->file_system,
+				path_bar->desktop_path,
+				GTK_FILE_INFO_ICON,
+				set_button_image_get_info_cb,
+				data);
+      break;
     default:
-      return NULL;
+      break;
     }
-  
-  return NULL;
 }
 
 static void
@@ -1098,9 +1165,7 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 
   if (button_data->image != NULL)
     {
-      GdkPixbuf *pixbuf;
-      pixbuf = get_button_image (path_bar, button_data->type);
-      gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), pixbuf);
+      set_button_image (path_bar, button_data);
     }
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button)) != current_dir)
