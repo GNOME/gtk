@@ -1,3 +1,8 @@
+Tue Dec 13 09:47:20 2005  Tim Janik  <timj@gtk.org>
+
+	* README.in: added a link to the fgloating reference docs in the
+	2.10 release NEWS section.
+
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_set_visible_line_index): 

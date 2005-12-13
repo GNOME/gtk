@@ -45,8 +45,9 @@ Release notes for 2.10
 * GtkObject now uses the "floating reference" support in GObject. 
   GTK_OBJECT_IS_FLOATING() will still work, but direct checking
   of the GTK_FLOATING flag will no longer detect the floating 
-  reference.
- 
+  reference. Details about floating references can be found in the docs:
+  http://developer.gnome.org/doc/API/2.0/gobject/gobject-The-Base-Object-Type.html#floating-ref
+
 Release notes
 =============
 
