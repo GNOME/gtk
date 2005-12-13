@@ -55,6 +55,7 @@ struct _GtkFileChooserEntry
   GSource *load_directory_idle;
 
   GtkFileFolder *current_folder;
+  GtkFileSystemHandle *load_folder_handle;
 
   GtkListStore *completion_store;
 
@@ -211,6 +212,12 @@ gtk_file_chooser_entry_finalize (GObject *object)
 
   if (chooser_entry->completion_store)
     g_object_unref (chooser_entry->completion_store);
+
+  if (chooser_entry->load_folder_handle)
+    {
+      gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
+      chooser_entry->load_folder_handle = NULL;
+    }
 
   if (chooser_entry->current_folder)
     {
@@ -607,6 +614,8 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 {
   GtkFileChooserEntry *chooser_entry = data;
 
+  chooser_entry->load_folder_handle = NULL;
+
   if (error)
     /* There is no folder by that name */
     return;
@@ -647,11 +656,15 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->completion_store == NULL);
 
   /* Load the folder */
-  gtk_file_system_get_folder (chooser_entry->file_system,
-			      chooser_entry->current_folder_path,
-			      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
-			      load_directory_get_folder_callback,
-			      chooser_entry);
+  if (chooser_entry->load_folder_handle)
+    gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
+
+  chooser_entry->load_folder_handle =
+    gtk_file_system_get_folder (chooser_entry->file_system,
+			        chooser_entry->current_folder_path,
+			        GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			        load_directory_get_folder_callback,
+			        chooser_entry);
 
  done:
   

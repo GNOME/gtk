@@ -1,5 +1,14 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_finalize): if
+	there's a folder loading, cancel the operation,
+	(load_directory_get_folder_callback): set the loading folder handle
+	to NULL,
+	(load_directory_callback): cancel any currently loading folders
+	before starting a new get folder operation.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): don't overwrite
 	data if it's already set (for example by the "is volume" case).
 
