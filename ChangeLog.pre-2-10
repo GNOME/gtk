@@ -1,5 +1,14 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c (set_info_get_info_cb),
+	(set_info_for_path_at_iter): store a row reference in the temporary
+	data structure and not an iter,
+	(model_add_special), (model_update_current_folder),
+	(gtk_file_chooser_button_add_shorcut_folder): remove unused pixbuf
+	variable.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c (get_file_info_finished),
 	(shortcuts_insert_path): replace gtk_file_system_render_icon() call
 	with gtk_file_system_get_file_info(),
