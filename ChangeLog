@@ -1,5 +1,9 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystem.c: make the cancelled field an GObject property.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystem.h: make the GError argument in the callbacks
 	const.
 

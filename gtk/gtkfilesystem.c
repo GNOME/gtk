@@ -371,8 +371,14 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
  *          GtkFileSystemHandle          *
  *****************************************/
 
-static void gtk_file_system_handle_init (GtkFileSystemHandle *handle);
+static void gtk_file_system_handle_init       (GtkFileSystemHandle      *handle);
+static void gtk_file_system_handle_class_init (GtkFileSystemHandleClass *klass);
 
+enum
+{
+  PROP_0,
+  PROP_CANCELLED
+};
 
 GType
 gtk_file_system_handle_get_type (void)
@@ -386,7 +392,7 @@ gtk_file_system_handle_get_type (void)
 	sizeof (GtkFileSystemHandleClass),
 	NULL,
 	NULL,
-	NULL, /* class init */
+	(GClassInitFunc) gtk_file_system_handle_class_init,
 	NULL,
 	NULL,
 	sizeof (GtkFileSystemHandle),
@@ -415,6 +421,53 @@ gtk_file_system_handle_init (GtkFileSystemHandle *handle)
 {
   handle->file_system = NULL;
   handle->cancelled = FALSE;
+}
+
+static void
+gtk_file_system_handle_set_property (GObject      *object,
+				     guint         prop_id,
+				     const GValue *value,
+				     GParamSpec   *pspec)
+{
+  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+}
+
+static void
+gtk_file_system_handle_get_property (GObject    *object,
+				     guint       prop_id,
+				     GValue     *value,
+				     GParamSpec *pspec)
+{
+  GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (object);
+
+  switch (prop_id)
+    {
+      case PROP_CANCELLED:
+	g_value_set_boolean (value, handle->cancelled);
+	break;
+
+      default:
+	G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	break;
+    }
+}
+
+static void
+gtk_file_system_handle_class_init (GtkFileSystemHandleClass *klass)
+{
+  GObjectClass *o_class;
+
+  o_class = (GObjectClass *)klass;
+  o_class->set_property = gtk_file_system_handle_set_property;
+  o_class->get_property = gtk_file_system_handle_get_property;
+
+  g_object_class_install_property (o_class,
+				   PROP_CANCELLED,
+				   g_param_spec_boolean ("cancelled",
+							 P_("Cancelled"),
+							 P_("Whether or not the operation has been successfully cancelled"),
+							 FALSE,
+							 G_PARAM_READABLE));
 }
 
 /*****************************************
