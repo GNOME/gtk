@@ -1,5 +1,22 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (get_file_info_finished),
+	(shortcuts_insert_path): replace gtk_file_system_render_icon() call
+	with gtk_file_system_get_file_info(),
+	(gtk_file_chooser_default_add_shortcut_folder),
+	(gtk_file_chooser_default_remove_shortcut_folder): handle shortcuts
+	which are still loading.
+
+	* gtk/gtkfilechooserprivate.h: add shortcuts_loading field to
+	struct _GtkFileChooserDefault.
+
+	* gtk/gtkfilechooserbutton.c (set_info_get_info_cb),
+	(set_info_for_path_at_iter), (model_free_row_data): keep handle
+	and path together; now supports adding/removing shortcuts
+	which are still loading.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystem.c: make the cancelled field an GObject property.
 
 2005-12-13  Kristian Rietveld  <kris@imendio.com>

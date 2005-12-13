@@ -187,6 +187,7 @@ struct _GtkFileChooserDefault
 
   GSList *loading_volumes;
   GSList *loading_bookmarks;
+  GSList *loading_shortcuts;
 
   GtkTreeModelSort *sort_model;
 

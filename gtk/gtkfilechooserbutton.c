@@ -95,6 +95,7 @@ enum
   TYPE_COLUMN,
   DATA_COLUMN,
   IS_FOLDER_COLUMN,
+  HANDLE_COLUMN,
   NUM_COLUMNS
 };
 
@@ -452,7 +453,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 					G_TYPE_STRING,	 /* Display Name */
 					G_TYPE_CHAR,	 /* Row Type */
 					G_TYPE_POINTER	 /* Volume || Path */,
-					G_TYPE_BOOLEAN   /* Is Folder? */));
+					G_TYPE_BOOLEAN   /* Is Folder? */,
+					G_TYPE_OBJECT	 /* handle */));
 
   priv->combo_box = gtk_combo_box_new ();
   priv->combo_box_changed_id =
@@ -1294,6 +1296,10 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   struct SetDisplayNameData *data = callback_data;
 
+  gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &data->iter,
+		      HANDLE_COLUMN, NULL,
+		      -1);
+
   if (error)
     {
       /* There was an error, leave the fallback name in there */
@@ -1322,14 +1328,19 @@ set_info_for_path_at_iter (GtkFileChooserButton *button,
 			   GtkTreeIter          *iter)
 {
   struct SetDisplayNameData *data;
+  GtkFileSystemHandle *handle;
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = button;
   data->iter = *iter;
 
-  gtk_file_system_get_info (button->priv->fs, path,
-			    GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON,
-			    set_info_get_info_cb, data);
+  handle = gtk_file_system_get_info (button->priv->fs, path,
+				     GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON,
+				     set_info_get_info_cb, data);
+
+  gtk_list_store_set (GTK_LIST_STORE (button->priv->model), &data->iter,
+		      HANDLE_COLUMN, handle,
+		      -1);
 }
 
 /* Shortcuts Model */
@@ -1392,11 +1403,16 @@ model_free_row_data (GtkFileChooserButton *button,
 {
   gchar type;
   gpointer data;
+  GtkFileSystemHandle *handle;
 
   gtk_tree_model_get (button->priv->model, iter,
 		      TYPE_COLUMN, &type,
 		      DATA_COLUMN, &data,
+		      HANDLE_COLUMN, &handle,
 		      -1);
+
+  if (handle)
+    gtk_file_system_cancel_operation (handle);
 
   switch (type)
     {
