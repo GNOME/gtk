@@ -145,6 +145,10 @@ struct _GtkFileChooserButtonPrivate
   gulong fs_volumes_changed_id;
   gulong fs_bookmarks_changed_id;
 
+  GtkFileSystemHandle *dnd_select_folder_handle;
+  GtkFileSystemHandle *update_button_handle;
+  GSList *change_icon_theme_handles;
+
   gint icon_size;
 
   guint8 n_special;
@@ -856,6 +860,7 @@ gtk_file_chooser_button_finalize (GObject *object)
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
   GtkTreeIter iter;
+  GSList *l;
 
   if (priv->old_path)
     gtk_file_path_free (priv->old_path);
@@ -867,6 +872,19 @@ gtk_file_chooser_button_finalize (GObject *object)
       model_free_row_data (button, &iter);
     }
   while (gtk_tree_model_iter_next (priv->model, &iter));
+
+  if (priv->dnd_select_folder_handle)
+    gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
+
+  if (priv->update_button_handle)
+    gtk_file_system_cancel_operation (priv->update_button_handle);
+
+  for (l = priv->change_icon_theme_handles; l; l = l->next)
+    {
+      GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
+      gtk_file_system_cancel_operation (handle);
+    }
+  g_slist_free (priv->change_icon_theme_handles);
 
   g_object_unref (priv->model);
   g_object_unref (priv->filter_model);
@@ -919,6 +937,8 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
 {
   struct DndSelectFolderData *data = user_data;
 
+  data->button->priv->dnd_select_folder_handle = NULL;
+
   if (!error && info != NULL)
     {
       data->selected = 
@@ -945,9 +965,11 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
 
   data->path = gtk_file_system_uri_to_path (handle->file_system,
 					    data->uris[data->i]);
-  gtk_file_system_get_info (handle->file_system, data->path,
-			    GTK_FILE_INFO_IS_FOLDER,
-			    dnd_select_folder_get_info_cb, user_data);
+
+  data->button->priv->dnd_select_folder_handle =
+    gtk_file_system_get_info (handle->file_system, data->path,
+			      GTK_FILE_INFO_IS_FOLDER,
+			      dnd_select_folder_get_info_cb, user_data);
 }
 
 static void
@@ -995,8 +1017,14 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 
 	info->path = gtk_file_system_uri_to_path (priv->fs,
 						  info->uris[info->i]);
-	gtk_file_system_get_info (priv->fs, info->path, GTK_FILE_INFO_IS_FOLDER,
-				  dnd_select_folder_get_info_cb, info);
+
+	if (priv->dnd_select_folder_handle)
+	  gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
+
+	priv->dnd_select_folder_handle =
+	  gtk_file_system_get_info (priv->fs, info->path,
+				    GTK_FILE_INFO_IS_FOLDER,
+				    dnd_select_folder_get_info_cb, info);
       }
       break;
 
@@ -1112,6 +1140,9 @@ change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   struct ChangeIconThemeData *data = user_data;
 
+  data->button->priv->change_icon_theme_handles =
+    g_slist_remove (data->button->priv->change_icon_theme_handles, handle);
+
   if (error)
     {
       gtk_tree_row_reference_free (data->row_ref);
@@ -1155,7 +1186,16 @@ change_icon_theme (GtkFileChooserButton *button)
   GtkSettings *settings;
   GtkIconTheme *theme;
   GtkTreeIter iter;
+  GSList *l;
   gint width = 0, height = 0;
+
+  for (l = button->priv->change_icon_theme_handles; l; l = l->next)
+    {
+      GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
+      gtk_file_system_cancel_operation (handle);
+    }
+  g_slist_free (button->priv->change_icon_theme_handles);
+  button->priv->change_icon_theme_handles = NULL;
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
@@ -1192,6 +1232,7 @@ change_icon_theme (GtkFileChooserButton *button)
 	  if (data)
 	    {
 	      GtkTreePath *path;
+	      GtkFileSystemHandle *handle;
 	      struct ChangeIconThemeData *info;
 
 	      info = g_new0 (struct ChangeIconThemeData, 1);
@@ -1200,9 +1241,12 @@ change_icon_theme (GtkFileChooserButton *button)
 	      info->row_ref = gtk_tree_row_reference_new (priv->model, path);
 	      gtk_tree_path_free (path);
 
-	      gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
-					change_icon_theme_get_info_cb,
-					info);
+	      handle =
+	        gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
+					  change_icon_theme_get_info_cb,
+					  info);
+	      button->priv->change_icon_theme_handles =
+		g_slist_append (button->priv->change_icon_theme_handles, handle);
 	      pixbuf = NULL;
 	    }
 	  else
@@ -1446,8 +1490,18 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 			       const GError        *error,
 			       gpointer             user_data)
 {
+  GtkTreeIter iter;
+  GtkTreePath *path;
   GdkPixbuf *pixbuf;
   struct ChangeIconThemeData *data = user_data;
+
+  path = gtk_tree_row_reference_get_path (data->row_ref);
+  gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
+  gtk_tree_path_free (path);
+
+  gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
+		      HANDLE_COLUMN, NULL,
+		      -1);
 
   if (error)
     {
@@ -1461,13 +1515,6 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 
   if (pixbuf)
     {
-      GtkTreeIter iter;
-      GtkTreePath *path;
-
-      path = gtk_tree_row_reference_get_path (data->row_ref);
-      gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
-      gtk_tree_path_free (path);
-
       gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 			  ICON_COLUMN, pixbuf,
 			  -1);
@@ -1496,18 +1543,12 @@ model_add_special (GtkFileChooserButton *button)
   if (homedir)
     {
       GtkTreePath *tree_path;
+      GtkFileSystemHandle *handle;
       struct ChangeIconThemeData *info;
 
       path = gtk_file_system_filename_to_path (button->priv->fs, homedir);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
-      gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, NULL,
-			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
-			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
-			  DATA_COLUMN, path,
-			  IS_FOLDER_COLUMN, TRUE,
-			  -1);
 
       info = g_new0 (struct ChangeIconThemeData, 1);
       info->button = button;
@@ -1516,9 +1557,18 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      gtk_file_system_get_info (button->priv->fs, path,
-				GTK_FILE_INFO_ICON,
-				model_add_special_get_info_cb, info);
+      handle = gtk_file_system_get_info (button->priv->fs, path,
+					 GTK_FILE_INFO_ICON,
+					 model_add_special_get_info_cb, info);
+
+      gtk_list_store_set (store, &iter,
+			  ICON_COLUMN, NULL,
+			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
+			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
+			  DATA_COLUMN, path,
+			  IS_FOLDER_COLUMN, TRUE,
+			  HANDLE_COLUMN, handle,
+			  -1);
 
       button->priv->n_special++;
 
@@ -1534,19 +1584,13 @@ model_add_special (GtkFileChooserButton *button)
   if (desktopdir)
     {
       GtkTreePath *tree_path;
+      GtkFileSystemHandle *handle;
       struct ChangeIconThemeData *info;
 
       path = gtk_file_system_filename_to_path (button->priv->fs, desktopdir);
       g_free (desktopdir);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
-      gtk_list_store_set (store, &iter,
-			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
-			  ICON_COLUMN, NULL,
-			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
-			  DATA_COLUMN, path,
-			  IS_FOLDER_COLUMN, TRUE,
-			  -1);
 
       info = g_new0 (struct ChangeIconThemeData, 1);
       info->button = button;
@@ -1555,9 +1599,17 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      gtk_file_system_get_info (button->priv->fs, path,
-				GTK_FILE_INFO_ICON,
-				model_add_special_get_info_cb, info);
+      handle = gtk_file_system_get_info (button->priv->fs, path,
+					 GTK_FILE_INFO_ICON,
+					 model_add_special_get_info_cb, info);
+
+      gtk_list_store_set (store, &iter,
+			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
+			  ICON_COLUMN, NULL,
+			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
+			  DATA_COLUMN, path,
+			  IS_FOLDER_COLUMN, TRUE,
+			  -1);
 
       button->priv->n_special++;
     }
@@ -1968,6 +2020,8 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   GtkFileChooserButtonPrivate *priv = data;
 
+  priv->update_button_handle = NULL;
+
   if (error)
     return;
 
@@ -2029,9 +2083,13 @@ update_label_and_image (GtkFileChooserButton *button)
 	    goto out;
 	}
 
-      gtk_file_system_get_info (priv->fs, path,
-				GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-				update_label_get_info_cb, priv);
+      if (priv->update_button_handle)
+	gtk_file_system_cancel_operation (priv->update_button_handle);
+
+      priv->update_button_handle =
+        gtk_file_system_get_info (priv->fs, path,
+				  GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+				  update_label_get_info_cb, priv);
 
      out:
       gtk_file_paths_free (paths);

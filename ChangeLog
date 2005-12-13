@@ -1,5 +1,15 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_finalize),
+	(dnd_select_folder_get_info_cb), (gtk_file_chooser_drag_data_received),
+	(change_icon_theme_get_info_cb), (change_icon_theme),
+	(model_add_special_get_info_cb), (model_add_special),
+	(update_label_get_info_cb), (update_label_and_image): cancel existing
+	operations, if any; added apprioriate fields to
+	GtkFileChooserButtonPrivate.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_finalize): if
 	there's a folder loading, cancel the operation,
 	(load_directory_get_folder_callback): set the loading folder handle
