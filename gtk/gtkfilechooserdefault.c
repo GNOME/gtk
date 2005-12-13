@@ -2003,10 +2003,10 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
 {
   GtkFileChooserDefault *impl = data;
 
-  if (error)
+  if (!error)
     change_folder_and_display_error (impl, path);
   else
-    error_creating_folder_dialog (impl, path, g_error_copy (error));
+    error_creating_folder_dialog (impl, path, error);
 }
 
 /* Idle handler for creating a new folder after editing its name cell, or for

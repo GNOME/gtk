@@ -1,5 +1,15 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (edited_idle_create_folder_cb): fix
+	thinko.
+
+	* gtk/gtkfilesystemunix.c (dispatch_create_folder_callback),
+	(queue_create_folder_callback): need to copy/free the path,
+	(gtk_file_system_unix_create_folder): put the "reget folder" hack
+	back in, though it's working different now.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_finalize),
 	(dnd_select_folder_get_info_cb), (gtk_file_chooser_drag_data_received),
 	(change_icon_theme_get_info_cb), (change_icon_theme),
