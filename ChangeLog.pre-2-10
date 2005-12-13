@@ -1,5 +1,22 @@
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystem.h: make the GError argument in the callbacks
+	const.
+
+	* gtk/gtkfilechooserbutton.c: update callbacks,
+	* gtk/gtkfilechooserentry.c: likewise,
+	* gtk/gtkfilechooserdefault.c: likewise,
+	* gtk/gtkfilesystemmodel.c: likewise,
+	* gtk/gtkpathbar.c: likewise.
+
+	* gtk/gtkfilechooserdefault.c (edited_idle_create_folder_cb): copy
+	the error which will be passed to error_creating_folder_dialog(),
+	(action_create_folder_cb): likewise,
+	(file_list_drag_data_received_get_info_cb): add forgotten GError
+	declaration.
+
+2005-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkpathbar.c (get_button_image), (set_button_image),
 	(set_button_image_get_info_cb),
 	(gtk_path_bar_update_button_appearance): update to new icon

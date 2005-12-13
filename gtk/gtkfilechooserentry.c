@@ -602,7 +602,7 @@ files_deleted_cb (GtkFileSystem       *file_system,
 static void
 load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 				    GtkFileFolder       *folder,
-				    GError              *error,
+				    const GError        *error,
 				    gpointer             data)
 {
   GtkFileChooserEntry *chooser_entry = data;

@@ -155,19 +155,19 @@ GType gtk_file_system_handle_get_type (void);
 
 typedef void (* GtkFileSystemGetInfoCallback) (GtkFileSystemHandle *handle,
 					       GtkFileInfo         *file_info,
-					       GError              *error,
+					       const GError        *error,
 					       gpointer             data);
 typedef void (* GtkFileSystemGetFolderCallback) (GtkFileSystemHandle *handle,
 						 GtkFileFolder       *folder,
-						 GError              *error,
+						 const GError        *error,
 						 gpointer             data);
 typedef void (* GtkFileSystemCreateFolderCallback) (GtkFileSystemHandle *handle,
 						    const GtkFilePath   *path,
-						    GError              *error,
+						    const GError        *error,
 						    gpointer             data);
 typedef void (* GtkFileSystemVolumeMountCallback) (GtkFileSystemHandle *handle,
 						   GtkFileSystemVolume *volume,
-						   GError              *error,
+						   const GError        *error,
 						   gpointer             data);
 
 /*

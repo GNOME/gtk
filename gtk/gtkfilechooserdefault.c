@@ -1097,7 +1097,7 @@ struct ReloadIconsData
 static void
 shortcuts_reload_icons_get_info_cb (GtkFileSystemHandle *handle,
 				    GtkFileInfo         *info,
-				    GError              *error,
+				    const GError        *error,
 				    gpointer             user_data)
 {
   GdkPixbuf *pixbuf;
@@ -1272,7 +1272,7 @@ struct ShortcutsInsertRequest
 static void
 get_file_info_finished (GtkFileSystemHandle *handle,
 		        GtkFileInfo         *info,
-		        GError              *error,
+		        const GError        *error,
 		        gpointer             data)
 {
   gpointer item_data;
@@ -1992,7 +1992,7 @@ new_folder_button_clicked (GtkButton             *button,
 static void
 edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
 			      const GtkFilePath   *path,
-			      GError              *error,
+			      const GError        *error,
 			      gpointer             data)
 {
   GtkFileChooserDefault *impl = data;
@@ -2000,7 +2000,7 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
   if (error)
     change_folder_and_display_error (impl, path);
   else
-    error_creating_folder_dialog (impl, path, error);
+    error_creating_folder_dialog (impl, path, g_error_copy (error));
 }
 
 /* Idle handler for creating a new folder after editing its name cell, or for
@@ -3568,7 +3568,7 @@ struct FileListDragData
 static void
 file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
 					  GtkFileInfo         *info,
-					  GError              *error,
+					  const GError        *error,
 					  gpointer             user_data)
 {
   gint i;
@@ -3599,6 +3599,7 @@ file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
   if (data->impl->select_multiple)
     {
       GtkFilePath *path;
+      GError *error = NULL;
 
       for (i = 1; data->uris[i]; i++)
         {
@@ -5354,7 +5355,7 @@ show_and_select_paths_finished_loading (GtkFileFolder *folder,
 static void
 show_and_select_paths_get_folder_cb (GtkFileSystemHandle   *handle,
 				     GtkFileFolder         *folder,
-				     GError                *error,
+				     const GError          *error,
 				     gpointer               user_data)
 {
   if (error)
@@ -5586,7 +5587,7 @@ struct UpdateCurrentFolderData
 static void
 update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
 				   GtkFileInfo         *info,
-				   GError              *error,
+				   const GError        *error,
 				   gpointer             user_data)
 {
   struct UpdateCurrentFolderData *data = user_data;
@@ -6145,7 +6146,7 @@ struct AddShortcutData
 static void
 add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
 			  GtkFileInfo         *info,
-			  GError              *error,
+			  const GError        *error,
 			  gpointer             user_data)
 {
   int pos;
@@ -6624,13 +6625,13 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
 static void
 action_create_folder_cb (GtkFileSystemHandle *handle,
 			 const GtkFilePath   *path,
-			 GError              *error,
+			 const GError        *error,
 			 gpointer             data)
 {
   GtkFileChooserDefault *impl = data;
 
   if (error)
-    error_creating_folder_dialog (impl, path, error);
+    error_creating_folder_dialog (impl, path, g_error_copy (error));
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
@@ -6990,7 +6991,7 @@ check_preview_change (GtkFileChooserDefault *impl)
 static void
 shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
 				    GtkFileSystemVolume *volume,
-				    GError              *error,
+				    const GError        *error,
 				    gpointer             data)
 {
   GtkFilePath *path;
@@ -7063,7 +7064,7 @@ struct ShortcutsActivateData
 static void
 shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
 			        GtkFileInfo         *info,
-			        GError              *error,
+			        const GError        *error,
 			        gpointer             user_data)
 {
   struct ShortcutsActivateData *data = user_data;
@@ -7553,7 +7554,7 @@ struct UpdateFromEntryData
 static void
 update_from_entry_get_info_cb (GtkFileSystemHandle *handle,
 			       GtkFileInfo         *file_info,
-			       GError              *error,
+			       const GError        *error,
 			       gpointer             data)
 {
   struct UpdateFromEntryData *update_data = data;

@@ -662,7 +662,7 @@ queue_finished_loading (GtkFileSystemModel *model)
 static void
 got_root_folder_cb (GtkFileSystemHandle *handle,
 		    GtkFileFolder       *folder,
-		    GError              *error,
+		    const GError        *error,
 		    gpointer             data)
 {
   GSList *roots = NULL;
@@ -1041,7 +1041,7 @@ struct RefPathData
 static void
 ref_path_cb (GtkFileSystemHandle *handle,
 	     GtkFileFolder       *folder,
-	     GError              *error,
+	     const GError        *error,
 	     gpointer             data)
 {
   struct RefPathData *info = data;
@@ -1477,7 +1477,7 @@ struct GetChildrenData
 static void
 get_children_get_folder_cb (GtkFileSystemHandle *handle,
 			    GtkFileFolder       *folder,
-			    GError              *error,
+			    const GError        *error,
 			    gpointer             callback_data)
 {
   GSList *child_paths, *tmp_list;
