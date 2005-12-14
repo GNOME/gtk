@@ -1,5 +1,8 @@
 2005-12-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_set_icon_name): Warn if the icon
+	cannot be loaded.  (#323504, Kjartan Maraas)
+	
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Add docs 
 	for the row-activated signal.  (#324044, Davyd Madeley)
 

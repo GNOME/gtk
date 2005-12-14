@@ -3050,7 +3050,10 @@ gtk_drag_set_icon_name (GdkDragContext *context,
 
   pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name,
 		  		     icon_size, 0, NULL);
-  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y, FALSE);
+  if (pixbuf)
+    set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y, FALSE);
+  else
+    g_warning ("Cannot load drag icon from icon name %s", icon_name);
 }
 
 /**
