@@ -808,6 +808,10 @@ gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 {
   GdkPixbuf *pixbuf;
 
+  pixbuf = get_cached_icon (widget, "drive-harddisk", pixel_size);
+  if (pixbuf)
+    return pixbuf;
+
   pixbuf = get_cached_icon (widget, "gnome-dev-harddisk", pixel_size);
   if (pixbuf)
     return pixbuf;
@@ -1290,6 +1294,23 @@ get_icon_for_mime_type (GtkWidget  *widget,
   separator = strchr (mime_type, '/');
   if (!separator)
     return NULL; /* maybe we should return a GError with "invalid MIME-type" */
+
+  icon_name = g_string_new ("");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+
+  icon_name = g_string_new ("");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append (icon_name, "-x-generic");
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
 
   icon_name = g_string_new ("gnome-mime-");
   g_string_append_len (icon_name, mime_type, separator - mime_type);
