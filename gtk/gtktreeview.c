@@ -778,6 +778,21 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_ADJUSTMENT,
 		  GTK_TYPE_ADJUSTMENT);
 
+  /**
+   * GtkTreeView::row-activated:
+   * @tree_view: the object on which the signal is emitted
+   * @path: the #GtkTreePath for the activated row
+   * @column: the #GtkTreeViewColumn in which the activation occurred
+   *
+   * The "row-activated" signal is emitted when the method
+   * gtk_tree_view_row_activated() is called or the user double clicks 
+   * a treeview row. It is also emitted when a non-editable row is 
+   * selected and one of the keys: Space, Shift+Space, Return or 
+   * Enter is pressed.
+   * 
+   * For selection handling refer to the <link linkend="TreeWidget">tree 
+   * widget conceptual overview</link> as well as #GtkTreeSelection.
+   */
   tree_view_signals[ROW_ACTIVATED] =
     g_signal_new (I_("row_activated"),
 		  G_TYPE_FROM_CLASS (o_class),

@@ -1,10 +1,15 @@
+2005-12-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Add docs 
+	for the row-activated signal.  (#324044, Davyd Madeley)
+
 2005-12-14  Michael Natterer  <mitch@imendio.com>
 
 	* tests/test-images/valid_jpeg_progressive_test: new test image.
 
 Tue Dec 13 09:47:20 2005  Tim Janik  <timj@gtk.org>
 
-	* README.in: added a link to the fgloating reference docs in the
+	* README.in: added a link to the floating reference docs in the
 	2.10 release NEWS section.
 
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
