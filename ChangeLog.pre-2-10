@@ -1,3 +1,12 @@
+2005-12-14  Michael Natterer  <mitch@imendio.com>
+
+	* gdk-pixbuf/io-jpeg.c: applied patch from maemo-gtk which avoids
+	the allocation of an intermediate buffer for non-progressive
+	jpegs. Fixed bug #305894.
+
+	* tests/test-images/valid_jpeg_progressive_test: new test image so
+	we can test both loading code paths in io-jpeg.c
+
 Tue Dec 13 09:47:20 2005  Tim Janik  <timj@gtk.org>
 
 	* README.in: added a link to the fgloating reference docs in the
