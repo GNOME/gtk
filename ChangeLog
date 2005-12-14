@@ -1,3 +1,8 @@
+2005-12-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcontainer.c (_gtk_container_focus_sort): Skip unrealized
+	children when doing focus sorting.  (#323995, Dan Winship)
+
 2005-12-14  Rodney Dawes  <dobey@novell.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_volume_render_icon):

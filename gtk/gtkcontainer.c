@@ -1710,10 +1710,8 @@ up_down_compare (gconstpointer a,
   CompareInfo *compare = data;
   gint y1, y2;
 
-  if (!get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1))
-    return 0;
-  if (!get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2))
-    return 0;
+  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
+  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
 
   y1 = allocation1.y + allocation1.height / 2;
   y2 = allocation2.y + allocation2.height / 2;
@@ -1839,10 +1837,8 @@ left_right_compare (gconstpointer a,
   CompareInfo *compare = data;
   gint x1, x2;
 
-  if (!get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1))
-    return 0;
-  if (!get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2))
-    return 0;
+  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
+  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
 
   x1 = allocation1.x + allocation1.width / 2;
   x2 = allocation2.x + allocation2.width / 2;
@@ -1983,19 +1979,26 @@ _gtk_container_focus_sort (GtkContainer     *container,
 			   GtkDirectionType  direction,
 			   GtkWidget        *old_focus)
 {
-  children = g_list_copy (children);
+  GList *visible_children = NULL;
+
+  while (children)
+    {
+      if (GTK_WIDGET_REALIZED (children->data))
+	visible_children = g_list_prepend (visible_children, children->data);
+      children = children->next;
+    }
   
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
     case GTK_DIR_TAB_BACKWARD:
-      return gtk_container_focus_sort_tab (container, children, direction, old_focus);
+      return gtk_container_focus_sort_tab (container, visible_children, direction, old_focus);
     case GTK_DIR_UP:
     case GTK_DIR_DOWN:
-      return gtk_container_focus_sort_up_down (container, children, direction, old_focus);
+      return gtk_container_focus_sort_up_down (container, visible_children, direction, old_focus);
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
-      return gtk_container_focus_sort_left_right (container, children, direction, old_focus);
+      return gtk_container_focus_sort_left_right (container, visible_children, direction, old_focus);
     }
 
   g_assert_not_reached ();
