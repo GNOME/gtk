@@ -1,17 +1,6 @@
 2005-12-14  Michael Natterer  <mitch@imendio.com>
 
-	* gdk-pixbuf/io-jpeg.c (gdk_pixbuf__jpeg_image_load_lines): new
-	utility function which factors out massive code duplication from
-	the commit below.
-
-2005-12-14  Michael Natterer  <mitch@imendio.com>
-
-	* gdk-pixbuf/io-jpeg.c: applied patch from maemo-gtk which avoids
-	the allocation of an intermediate buffer for non-progressive
-	jpegs. Fixed bug #305894.
-
-	* tests/test-images/valid_jpeg_progressive_test: new test image so
-	we can test both loading code paths in io-jpeg.c
+	* tests/test-images/valid_jpeg_progressive_test: new test image.
 
 Tue Dec 13 09:47:20 2005  Tim Janik  <timj@gtk.org>
 

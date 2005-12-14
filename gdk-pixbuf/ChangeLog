@@ -1,3 +1,15 @@
+2005-12-14  Michael Natterer  <mitch@imendio.com>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_load_lines): new utility
+	function which factors out massive code duplication from the
+	commit below.
+
+2005-12-14  Michael Natterer  <mitch@imendio.com>
+
+	* io-jpeg.c: applied patch from maemo-gtk which avoids the
+	allocation of an intermediate buffer for non-progressive
+	jpegs. Fixed bug #305894.
+
 2005-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-xpm.c: Fix several integer overflows which have been
