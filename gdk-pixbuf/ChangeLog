@@ -1,3 +1,11 @@
+2005-12-14  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* io-jpeg.c: applied patch from maemo-gtk which avoids the
+	allocation of an intermediate buffer for non-progressive
+	jpegs. Fixed bug #305894.
+
 2005-12-09  Matthias Clasen  <mclasen@redhat.com>
 	
 	* === Released 2.8.9 ===
