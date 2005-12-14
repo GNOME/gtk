@@ -1,3 +1,14 @@
+2005-12-14  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gdk-pixbuf/io-jpeg.c: applied patch from maemo-gtk which avoids
+	the allocation of an intermediate buffer for non-progressive
+	jpegs. Fixed bug #305894.
+
+	* tests/test-images/valid_jpeg_progressive_test: new test image so
+	we can test both loading code paths in io-jpeg.c
+
 2005-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_set_visible_line_index): 
