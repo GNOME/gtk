@@ -1,3 +1,13 @@
+2005-12-14  Rodney Dawes  <dobey@novell.com>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_volume_render_icon):
+	Default to "drive-harddisk" and then fall back to gnome-dev-harddisk
+	(get_icon_for_mime_type): Look up the mime type icons according to the
+	Icon Naming Specification and then fall back to the gnome-mime- prefix
+	for the mime type icons
+
+	Fixes #323655
+	
 2005-12-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_set_icon_name): Warn if the icon
