@@ -170,6 +170,7 @@ enum {
   SHORTCUTS_COL_IS_VOLUME,
   SHORTCUTS_COL_REMOVABLE,
   SHORTCUTS_COL_PIXBUF_VISIBLE,
+  SHORTCUTS_COL_HANDLE,
   SHORTCUTS_COL_NUM_COLUMNS
 };
 
@@ -688,11 +689,17 @@ shortcuts_free_row_data (GtkFileChooserDefault *impl,
 {
   gpointer col_data;
   gboolean is_volume;
+  GtkFileSystemHandle *handle;
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), iter,
 		      SHORTCUTS_COL_DATA, &col_data,
 		      SHORTCUTS_COL_IS_VOLUME, &is_volume,
+		      SHORTCUTS_COL_HANDLE, &handle,
 		      -1);
+
+  if (handle)
+    gtk_file_system_cancel_operation (handle);
+
   if (!col_data)
     return;
 
@@ -1275,24 +1282,43 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 		        const GError        *error,
 		        gpointer             data)
 {
+  gboolean cancelled = handle->cancelled;
   gboolean is_volume = FALSE;
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
   GtkTreeIter iter;
+  GtkFileSystemHandle *model_handle;
   struct ShortcutsInsertRequest *request = data;
 
-  if (!info)
+  path = gtk_tree_row_reference_get_path (request->row_ref);
+  if (!path)
+    /* Handle doesn't exist anymore in the model */
+    goto out;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
+			   &iter, path);
+  gtk_tree_path_free (path);
+
+  /* validate handle, else goto out */
+  gtk_tree_model_get (GTK_TREE_MODEL (request->impl->shortcuts_model), &iter,
+		      SHORTCUTS_COL_HANDLE, &model_handle,
+		      -1);
+  if (handle != model_handle)
+    goto out;
+
+  /* unref the handle, set to NULL */
+  g_object_unref (handle);
+  gtk_list_store_set (request->impl->shortcuts_model, &iter,
+		      SHORTCUTS_COL_HANDLE, NULL,
+		      -1);
+
+  if (cancelled || !info)
     goto out;
   
   if (!request->label_copy)
     request->label_copy = g_strdup (gtk_file_info_get_display_name (info));
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
 				      request->impl->icon_size, NULL);
-
-  path = gtk_tree_row_reference_get_path (request->row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
-			   &iter, path);
-  gtk_tree_path_free (path);
 
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1302,13 +1328,6 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 		      SHORTCUTS_COL_REMOVABLE, request->removable,
 		      -1);
 
-  if (request->type == SHORTCUTS_BOOKMARKS)
-    request->impl->loading_bookmarks = g_slist_remove (request->impl->loading_bookmarks, handle);
-  else if (request->type == SHORTCUTS_VOLUMES)
-    request->impl->loading_volumes = g_slist_remove (request->impl->loading_volumes, handle);
-  else if (request->type == SHORTCUTS_SHORTCUTS)
-    request->impl->loading_shortcuts = g_slist_remove (request->impl->loading_shortcuts, handle);
-
   if (request->impl->shortcuts_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (request->impl->shortcuts_filter_model));
 
@@ -1316,6 +1335,7 @@ get_file_info_finished (GtkFileSystemHandle *handle,
     g_object_unref (pixbuf);
 
 out:
+  g_object_unref (request->impl);
   gtk_file_path_free (request->parent_path);
   gtk_file_path_free (request->path);
   gtk_tree_row_reference_free (request->row_ref);
@@ -1325,8 +1345,7 @@ out:
 
 static void
 shortcuts_update_count (GtkFileChooserDefault *impl,
-			ShortcutsIndex         type,
-			GtkFileSystemHandle   *handle)
+			ShortcutsIndex         type)
 {
   switch (type)
     {
@@ -1340,20 +1359,14 @@ shortcuts_update_count (GtkFileChooserDefault *impl,
 
       case SHORTCUTS_VOLUMES:
 	impl->num_volumes++;
-	if (handle)
-	  impl->loading_volumes = g_slist_append (impl->loading_volumes, handle);
 	break;
 
       case SHORTCUTS_SHORTCUTS:
 	impl->num_shortcuts++;
-	if (handle)
-	  impl->loading_shortcuts = g_slist_append (impl->loading_shortcuts, handle);
 	break;
 
       case SHORTCUTS_BOOKMARKS:
 	impl->num_bookmarks++;
-	if (handle)
-	  impl->loading_bookmarks = g_slist_append (impl->loading_bookmarks, handle);
 	break;
 
       case SHORTCUTS_CURRENT_FOLDER:
@@ -1401,7 +1414,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       GtkTreePath *p;
 
       request = g_new0 (struct ShortcutsInsertRequest, 1);
-      request->impl = impl;
+      request->impl = g_object_ref (impl);
       request->path = gtk_file_path_copy (path);
       request->name_only = TRUE;
       request->removable = removable;
@@ -1415,11 +1428,6 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       else
 	gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
 
-      gtk_list_store_set (impl->shortcuts_model, &iter,
-			  SHORTCUTS_COL_DATA, gtk_file_path_copy (path),
-			  SHORTCUTS_COL_IS_VOLUME, is_volume,
-			  -1);
-
       p = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
       request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), p);
       gtk_tree_path_free (p);
@@ -1428,7 +1436,13 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 					 GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN | GTK_FILE_INFO_ICON,
 					 get_file_info_finished, request);
 
-      shortcuts_update_count (impl, type, handle);
+      gtk_list_store_set (impl->shortcuts_model, &iter,
+			  SHORTCUTS_COL_DATA, gtk_file_path_copy (path),
+			  SHORTCUTS_COL_IS_VOLUME, is_volume,
+			  SHORTCUTS_COL_HANDLE, handle,
+			  -1);
+
+      shortcuts_update_count (impl, type);
 
       return TRUE;
     }
@@ -1441,7 +1455,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   else
     gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
 
-  shortcuts_update_count (impl, type, NULL);
+  shortcuts_update_count (impl, type);
 
   gtk_list_store_set (impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1450,6 +1464,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		      SHORTCUTS_COL_DATA, data,
 		      SHORTCUTS_COL_IS_VOLUME, is_volume,
 		      SHORTCUTS_COL_REMOVABLE, removable,
+		      SHORTCUTS_COL_HANDLE, NULL,
 		      -1);
 
   g_free (label_copy);
@@ -1657,16 +1672,6 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
   profile_start ("start", NULL);
 
-  if (g_slist_length (impl->loading_volumes) > 0)
-    {
-      for (l = impl->loading_volumes; l; l = l->next)
-	if (l->data)
-	  gtk_file_system_cancel_operation (GTK_FILE_SYSTEM_HANDLE (l->data));
-
-      g_slist_free (impl->loading_volumes);
-      impl->loading_volumes = NULL;
-    }
-
   old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
 
@@ -1755,18 +1760,6 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 
   profile_start ("start", NULL);
         
-
-  if (g_slist_length (impl->loading_bookmarks) > 0)
-    {
-      GSList *l;
-
-      for (l = impl->loading_bookmarks; l; l = l->next)
-	if (l->data)
-	  gtk_file_system_cancel_operation (GTK_FILE_SYSTEM_HANDLE (l->data));
-
-      g_slist_free (impl->loading_bookmarks);
-      impl->loading_bookmarks = NULL;
-    }
 
   old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
@@ -1946,7 +1939,8 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					      G_TYPE_POINTER,	/* path or volume */
 					      G_TYPE_BOOLEAN,   /* is the previous column a volume? */
 					      G_TYPE_BOOLEAN,   /* removable */
-					      G_TYPE_BOOLEAN);  /* pixbuf cell visibility */
+					      G_TYPE_BOOLEAN,   /* pixbuf cell visibility */
+					      G_TYPE_OBJECT);   /* GtkFileSystemHandle */
 
   if (impl->file_system)
     {
@@ -2006,7 +2000,7 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
   if (!error)
     change_folder_and_display_error (impl, path);
   else
-    error_creating_folder_dialog (impl, path, error);
+    error_creating_folder_dialog (impl, path, g_error_copy (error));
 }
 
 /* Idle handler for creating a new folder after editing its name cell, or for
@@ -6156,11 +6150,16 @@ add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
 			  gpointer             user_data)
 {
   int pos;
+  gboolean cancelled = handle->cancelled;
   struct AddShortcutData *data = user_data;
 
-  data->impl->loading_shortcuts = g_slist_remove (data->impl->loading_shortcuts, handle);
+  if (!g_slist_find (data->impl->loading_shortcuts, handle))
+    goto out;
 
-  if (error || !gtk_file_info_get_is_folder (info))
+  data->impl->loading_shortcuts = g_slist_remove (data->impl->loading_shortcuts, handle);
+  g_object_unref (handle);
+
+  if (cancelled || error || !gtk_file_info_get_is_folder (info))
     goto out;
 
   pos = shortcuts_get_pos_for_shortcut_folder (data->impl, data->impl->num_shortcuts);
@@ -6168,6 +6167,7 @@ add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
   shortcuts_insert_path (data->impl, pos, FALSE, NULL, data->path, NULL, FALSE, SHORTCUTS_SHORTCUTS, NULL);
 
 out:
+  g_object_unref (data->impl);
   gtk_file_path_free (data->path);
   g_free (data);
 }
@@ -6223,7 +6223,7 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
     }
 
   data = g_new0 (struct AddShortcutData, 1);
-  data->impl = impl;
+  data->impl = g_object_ref (impl);
   data->path = gtk_file_path_copy (path);
 
   handle = gtk_file_system_get_info (impl->file_system, path,

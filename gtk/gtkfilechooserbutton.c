@@ -935,11 +935,22 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
 			       const GError        *error,
 			       gpointer             user_data)
 {
+  gboolean cancelled = handle->cancelled;
   struct DndSelectFolderData *data = user_data;
 
+  if (handle != data->button->priv->dnd_select_folder_handle)
+    {
+      g_object_unref (data->button);
+      gtk_file_path_free (data->path);
+      g_strfreev (data->uris);
+      g_free (data);
+      return;
+    }
+
+  g_object_unref (handle);
   data->button->priv->dnd_select_folder_handle = NULL;
 
-  if (!error && info != NULL)
+  if (!cancelled && !error && info != NULL)
     {
       data->selected = 
 	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
@@ -954,6 +965,7 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
 
   if (data->selected || data->uris[++data->i] == NULL)
     {
+      g_object_unref (data->button);
       gtk_file_path_free (data->path);
       g_strfreev (data->uris);
       g_free (data);
@@ -1009,7 +1021,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	  break;
 
 	info = g_new0 (struct DndSelectFolderData, 1);
-	info->button = button;
+	info->button = g_object_ref (button);
 	info->i = 0;
 	info->uris = uris;
 	info->selected = FALSE;
@@ -1137,18 +1149,19 @@ change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
 			       const GError        *error,
 			       gpointer             user_data)
 {
+  gboolean cancelled = handle->cancelled;
   GdkPixbuf *pixbuf;
   struct ChangeIconThemeData *data = user_data;
 
+  if (!g_slist_find (data->button->priv->change_icon_theme_handles, handle))
+    goto out;
+
   data->button->priv->change_icon_theme_handles =
     g_slist_remove (data->button->priv->change_icon_theme_handles, handle);
+  g_object_unref (handle);
 
-  if (error)
-    {
-      gtk_tree_row_reference_free (data->row_ref);
-      g_free (data);
-      return;
-    }
+  if (cancelled || error)
+    goto out;
 
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
 				      data->button->priv->icon_size, NULL);
@@ -1174,7 +1187,9 @@ change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
 		    "width", width,
 		    NULL);
     }
-  
+
+out:
+  g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 }
@@ -1236,7 +1251,7 @@ change_icon_theme (GtkFileChooserButton *button)
 	      struct ChangeIconThemeData *info;
 
 	      info = g_new0 (struct ChangeIconThemeData, 1);
-	      info->button = button;
+	      info->button = g_object_ref (button);
 	      path = gtk_tree_model_get_path (priv->model, &iter);
 	      info->row_ref = gtk_tree_row_reference_new (priv->model, path);
 	      gtk_tree_path_free (path);
@@ -1336,25 +1351,36 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
 		      const GError        *error,
 		      gpointer             callback_data)
 {
+  gboolean cancelled = handle->cancelled;
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
   GtkTreeIter iter;
+  GtkFileSystemHandle *model_handle;
   struct SetDisplayNameData *data = callback_data;
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
+  if (!path)
+    /* Handle doesn't exist anymore in the model */
+    goto out;
+
   gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
   gtk_tree_path_free (path);
+
+  /* Validate the handle */
+  gtk_tree_model_get (data->button->priv->model, &iter,
+		      HANDLE_COLUMN, &model_handle,
+		      -1);
+  if (handle != model_handle)
+    goto out;
+
+  g_object_unref (handle);
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      HANDLE_COLUMN, NULL,
 		      -1);
 
-  if (error)
-    {
-      /* There was an error, leave the fallback name in there */
-      gtk_tree_row_reference_free (data->row_ref);
-      g_free (data);
-      return;
-    }
+  if (cancelled || error)
+    /* There was an error, leave the fallback name in there */
+    goto out;
 
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
 				      data->button->priv->icon_size, NULL);
@@ -1368,6 +1394,8 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
   if (pixbuf)
     g_object_unref (pixbuf);
 
+out:
+  g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 }
@@ -1382,7 +1410,7 @@ set_info_for_path_at_iter (GtkFileChooserButton *button,
   GtkFileSystemHandle *handle;
 
   data = g_new0 (struct SetDisplayNameData, 1);
-  data->button = button;
+  data->button = g_object_ref (button);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
   data->row_ref = gtk_tree_row_reference_new (button->priv->model, tree_path);
@@ -1490,25 +1518,34 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 			       const GError        *error,
 			       gpointer             user_data)
 {
+  gboolean cancelled = handle->cancelled;
   GtkTreeIter iter;
   GtkTreePath *path;
   GdkPixbuf *pixbuf;
+  GtkFileSystemHandle *model_handle;
   struct ChangeIconThemeData *data = user_data;
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
+  if (!path)
+    /* Handle doesn't exist anymore in the model */
+    goto out;
+
   gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
+  gtk_tree_model_get (data->button->priv->model, &iter,
+		      HANDLE_COLUMN, &model_handle,
+		      -1);
+  if (handle != model_handle)
+    goto out;
+
+  g_object_unref (handle);
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      HANDLE_COLUMN, NULL,
 		      -1);
 
-  if (error)
-    {
-      gtk_tree_row_reference_free (data->row_ref);
-      g_free (data);
-      return;
-    }
+  if (cancelled || error)
+    goto out;
 
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
 				      data->button->priv->icon_size, NULL);
@@ -1520,7 +1557,8 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 			  -1);
       g_object_unref (pixbuf);
     }
-  
+
+out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 }
@@ -1551,7 +1589,7 @@ model_add_special (GtkFileChooserButton *button)
       pos++;
 
       info = g_new0 (struct ChangeIconThemeData, 1);
-      info->button = button;
+      info->button = g_object_ref (button);
       tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
       info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store),
 						  tree_path);
@@ -1593,7 +1631,7 @@ model_add_special (GtkFileChooserButton *button)
       pos++;
 
       info = g_new0 (struct ChangeIconThemeData, 1);
-      info->button = button;
+      info->button = g_object_ref (button);
       tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
       info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (store),
 						  tree_path);
@@ -2017,13 +2055,19 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
 			  const GError        *error,
 			  gpointer             data)
 {
+  gboolean cancelled = handle->cancelled;
   GdkPixbuf *pixbuf;
-  GtkFileChooserButtonPrivate *priv = data;
+  GtkFileChooserButton *button = data;
+  GtkFileChooserButtonPrivate *priv = button->priv;
 
+  if (handle != priv->update_button_handle)
+    goto out;
+
+  g_object_unref (handle);
   priv->update_button_handle = NULL;
 
-  if (error)
-    return;
+  if (cancelled || error)
+    goto out;
 
   gtk_label_set_text (GTK_LABEL (priv->label), gtk_file_info_get_display_name (info));
 
@@ -2037,6 +2081,9 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
   gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
   if (pixbuf)
     g_object_unref (pixbuf);
+
+out:
+  g_object_unref (button);
 }
 
 static void
@@ -2089,7 +2136,8 @@ update_label_and_image (GtkFileChooserButton *button)
       priv->update_button_handle =
         gtk_file_system_get_info (priv->fs, path,
 				  GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-				  update_label_get_info_cb, priv);
+				  update_label_get_info_cb,
+				  g_object_ref (button));
 
      out:
       gtk_file_paths_free (paths);

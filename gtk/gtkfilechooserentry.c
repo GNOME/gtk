@@ -612,13 +612,17 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 				    const GError        *error,
 				    gpointer             data)
 {
+  gboolean cancelled = handle->cancelled;
   GtkFileChooserEntry *chooser_entry = data;
 
+  if (handle != chooser_entry->load_folder_handle)
+    goto out;
+
+  g_object_unref (handle);
   chooser_entry->load_folder_handle = NULL;
 
-  if (error)
-    /* There is no folder by that name */
-    return;
+  if (cancelled || error)
+    goto out;
 
   chooser_entry->current_folder = folder;
   g_signal_connect (chooser_entry->current_folder, "files-added",
@@ -632,6 +636,9 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  GTK_TREE_MODEL (chooser_entry->completion_store));
+
+out:
+  g_object_unref (chooser_entry);
 }
 
 static gboolean
@@ -664,7 +671,7 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
 			        chooser_entry->current_folder_path,
 			        GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
 			        load_directory_get_folder_callback,
-			        chooser_entry);
+			        g_object_ref (chooser_entry));
 
  done:
   

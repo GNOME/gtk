@@ -1,3 +1,29 @@
+2005-12-16  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkfilesystemunix.c: always call the callback, even when
+	cancelled; ref handles passed to the callback queue functions;
+	don't set cancelled to TRUE in _cancel_operation(), since operations
+	in this backend are always completed,
+	(get_special_icon_name): don't strdup the value of
+	get_icon_name_for_directory() again.
+
+	* gtk/gtkfilechooserbutton.c: adapt to new cancellation policy;
+	reference all objects which are passed as callback arguments; in the
+	callback check if the handles match.
+
+	* gtk/gtkfilechooserentry.c: likewise.
+
+	* gtk/gtkfilechooserdefault.c: likewise.  Also changed the shortcut
+	loading code to be more like the code in GtkFileChooserButton, where
+	we store all handles in the model and have model_row_free_data
+	cancel any pending operations,
+	(shortcuts_model_create): copy the error.
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault): remove
+	loading_volumes and loading_bookmarks fields.
+
+	* gtk/gtkfilesystem.c (gtk_file_info_free): free icon_name here...
+
 2005-12-13  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (edited_idle_create_folder_cb): fix

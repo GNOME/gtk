@@ -445,14 +445,15 @@ struct get_info_callback
 static inline void
 dispatch_get_info_callback (struct get_info_callback *info)
 {
-  if (!info->handle->cancelled)
-    (* info->callback) (info->handle, info->file_info, info->error, info->data);
+  (* info->callback) (info->handle, info->file_info, info->error, info->data);
 
   if (info->file_info)
     gtk_file_info_free (info->file_info);
 
   if (info->error)
     g_error_free (info->error);
+
+  g_object_unref (info->handle);
 
   g_free (info);
 }
@@ -489,11 +490,12 @@ struct get_folder_callback
 static inline void
 dispatch_get_folder_callback (struct get_folder_callback *info)
 {
-  if (!info->handle->cancelled)
-    (* info->callback) (info->handle, info->folder, info->error, info->data);
+  (* info->callback) (info->handle, info->folder, info->error, info->data);
 
   if (info->error)
     g_error_free (info->error);
+
+  g_object_unref (info->handle);
 
   g_free (info);
 }
@@ -530,14 +532,15 @@ struct create_folder_callback
 static inline void
 dispatch_create_folder_callback (struct create_folder_callback *info)
 {
-  if (!info->handle->cancelled)
-    (* info->callback) (info->handle, info->path, info->error, info->data);
+  (* info->callback) (info->handle, info->path, info->error, info->data);
 
   if (info->error)
     g_error_free (info->error);
 
   if (info->path)
     gtk_file_path_free (info->path);
+
+  g_object_unref (info->handle);
 
   g_free (info);
 }
@@ -574,11 +577,12 @@ struct volume_mount_callback
 static inline void
 dispatch_volume_mount_callback (struct volume_mount_callback *info)
 {
-  if (!info->handle->cancelled)
-    (* info->callback) (info->handle, info->volume, info->error, info->data);
+  (* info->callback) (info->handle, info->volume, info->error, info->data);
 
   if (info->error)
     g_error_free (info->error);
+
+  g_object_unref (info->handle);
 
   g_free (info);
 }
@@ -733,6 +737,7 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
     {
       info = file_info_for_root_with_error ("/", &error);
 
+      g_object_ref (handle);
       queue_get_info_callback (callback, handle, info, error, data);
 
       return handle;
@@ -748,6 +753,8 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
   if (!stat_with_error (filename, &statbuf, &error))
     {
       g_free (basename);
+
+      g_object_ref (handle);
       queue_get_info_callback (callback, handle, NULL, error, data);
       return handle;
     }
@@ -760,6 +767,7 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
   info = create_file_info (NULL, filename, basename, types, &statbuf,
                            mime_type);
   g_free (basename);
+  g_object_ref (handle);
   queue_get_info_callback (callback, handle, info, NULL, data);
 
   return handle;
@@ -875,6 +883,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
 		       display_name,
 		       g_strerror (my_errno));
 
+	  g_object_ref (handle);
 	  queue_get_folder_callback (callback, handle, NULL, error, data);
 
 	  g_free (display_name);
@@ -910,6 +919,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   if (set_asof)
     folder_unix->asof = time (NULL);
 
+  g_object_ref (handle);
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_unix), NULL, data);
 
   /* load folder contents in an idle */
@@ -959,6 +969,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
 		   display_name,
 		   g_strerror (save_errno));
       
+      g_object_ref (handle);
       queue_create_folder_callback (callback, handle, path, error, data);
 
       g_free (display_name);
@@ -971,6 +982,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
       return NULL; /* hmmm, but with no notification */
     }
 
+  g_object_ref (handle);
   queue_create_folder_callback (callback, handle, path, NULL, data);
 
   parent = get_parent_dir (filename);
@@ -1039,8 +1051,11 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
 static void
 gtk_file_system_unix_cancel_operation (GtkFileSystemHandle *handle)
 {
-  /* We can't really cancel operations. */
-  handle->cancelled = TRUE;
+  /* We don't set "cancelled" to TRUE here, since the actual operation
+   * is executed in the function itself and not in a callback.  So
+   * the operations can never be cancelled (since they will be already
+   * completed at this point.
+   */
 }
 
 static void
@@ -1081,6 +1096,7 @@ gtk_file_system_unix_volume_mount (GtkFileSystem                    *file_system
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
 	       _("This file system does not support mounting"));
 
+  g_object_ref (handle);
   queue_volume_mount_callback (callback, handle, volume, error, data);
 
   return handle;
@@ -1710,10 +1726,9 @@ get_special_icon_name (IconType           icon_type,
     case ICON_CHARACTER_DEVICE:
       name = "gnome-fs-chardev";
       break;
-    case ICON_DIRECTORY: {
-      name = get_icon_name_for_directory (filename);
-      break;
-      }
+    case ICON_DIRECTORY:
+      /* get_icon_name_for_directory() returns a dupped string */
+      return get_icon_name_for_directory (filename);
     case ICON_EXECUTABLE:
       name ="gnome-fs-executable";
       break;
