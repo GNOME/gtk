@@ -126,7 +126,6 @@ gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,
 						       const GValue       *src_value,
 						       GParamSpec         *pspec,
 						       GValue	          *dest_value);
-GHashTable*         _gtk_settings_get_color_hash      (GtkSettings *settings);
 
 
 G_END_DECLS

@@ -105,7 +105,6 @@ struct _GtkRcContext
   gint default_priority;
   GtkStyle *default_style;
 
-  gchar *colors;
   GHashTable *color_hash;
 };
 
@@ -574,36 +573,19 @@ gtk_rc_font_name_changed (GtkSettings  *settings,
 }
 
 static void
-gtk_rc_color_scheme_changed (GtkSettings  *settings,
-                             GParamSpec   *pspec,
-                             GtkRcContext *context)
+gtk_rc_color_hash_changed (GtkSettings  *settings,
+			   GParamSpec   *pspec,
+			   GtkRcContext *context)
 {
-  gchar *colors;
+  if (context->color_hash)
+    g_hash_table_unref (context->color_hash);
+  
+  g_object_get (settings, "color-hash", &context->color_hash, NULL);
 
-  g_object_get (settings,
-		"gtk-color-scheme", &colors,
-		NULL);
-
-  if (!colors && !context->colors)
-    return;
-
-  if (!colors || !context->colors ||
-      strcmp (colors, context->colors) != 0)
-    {
-      g_free (context->colors);
-      context->colors = g_strdup (colors);
-
-      if (context->color_hash)
-        g_hash_table_unref (context->color_hash);
-
-      context->color_hash = _gtk_settings_get_color_hash (settings);
-      if (context->color_hash)
-        g_hash_table_ref (context->color_hash);
-
-      gtk_rc_reparse_all_for_settings (settings, TRUE);
-    }
-
-  g_free (colors);
+  if (context->color_hash)
+    g_hash_table_ref (context->color_hash);
+  
+  gtk_rc_reparse_all_for_settings (settings, TRUE);
 }
 
 static GtkRcContext *
@@ -625,10 +607,9 @@ gtk_rc_context_get (GtkSettings *settings)
 		    "gtk-theme-name", &context->theme_name,
 		    "gtk-key-theme-name", &context->key_theme_name,
 		    "gtk-font-name", &context->font_name,
-		    "gtk-color-scheme", &context->colors,
+		    "color-hash", &context->color_hash,
 		    NULL);
 
-      context->color_hash = _gtk_settings_get_color_hash (settings);
       if (context->color_hash)
         g_hash_table_ref (context->color_hash);
 
@@ -645,8 +626,8 @@ gtk_rc_context_get (GtkSettings *settings)
 			G_CALLBACK (gtk_rc_font_name_changed),
 			context);
       g_signal_connect (settings,
-			"notify::gtk-color-scheme",
-			G_CALLBACK (gtk_rc_color_scheme_changed),
+			"notify::color-hash",
+			G_CALLBACK (gtk_rc_color_hash_changed),
 			context);
 
       context->pixmap_path[0] = NULL;

@@ -1,3 +1,16 @@
+2005-12-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.[hc]: Rework the way the color scheme setting
+	is inherited. Now the overriding is done on a per-color basis,
+	rather than for the setting as a whole. This has the effect
+	that themes can declare defaults for all the symbolic colors they
+	use by specifying a value for the gtk-color-scheme setting in 
+	their rc file, while still allowing the XSetting to override
+	"standard" symbolic colors. The hash table is now available
+	through the color-hash property.
+	
+	* gtk/gtkrc.c: Use the new color-hash property.
+	
 2005-12-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcontainer.c (_gtk_container_focus_sort): Skip unrealized

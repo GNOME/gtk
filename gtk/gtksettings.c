@@ -41,6 +41,7 @@ typedef enum
 {
   GTK_SETTINGS_SOURCE_DEFAULT,
   GTK_SETTINGS_SOURCE_RC_FILE,
+  GTK_SETTINGS_SOURCE_XSETTING,
   GTK_SETTINGS_SOURCE_APPLICATION
 } GtkSettingsSource;
 
@@ -86,7 +87,8 @@ enum {
   PROP_TIMEOUT_INITIAL,
   PROP_TIMEOUT_REPEAT,
   PROP_COLOR_SCHEME,
-  PROP_ENABLE_ANIMATIONS
+  PROP_ENABLE_ANIMATIONS,
+  PROP_COLOR_HASH
 };
 
 
@@ -109,14 +111,19 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GtkRcPropertyParser    parser);
 static void    settings_update_double_click      (GtkSettings           *settings);
 static void    settings_update_modules           (GtkSettings           *settings);
-static void    settings_update_color_scheme      (GtkSettings           *settings);
 
 #ifdef GDK_WINDOWING_X11
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
 #endif
+static void    settings_update_color_scheme      (GtkSettings *settings);
 
+static void    merge_color_scheme                (GtkSettings           *settings, 
+						  GValue                *value, 
+						  GtkSettingsSource      source);
+static gchar  *get_color_scheme                  (GtkSettings           *settings);
+static GHashTable *get_color_hash                (GtkSettings           *settings);
 
 
 /* --- variables --- */
@@ -448,6 +455,10 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * color specifications must be in the format accepted by
    * gdk_color_parse().
    * 
+   * Note that due to the way the color tables from different sources are
+   * merged, color specifications will be converted to hexadecimal form
+   * when getting this property.
+   *
    * Since: 2.10
    */
   result = settings_install_property_parser (class,
@@ -469,6 +480,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
 
   g_assert (result == PROP_ENABLE_ANIMATIONS);
+
+  /**
+   * GtkSettings:color-hash:
+   *
+   * Holds a hash table representation of the gtk-color-scheme setting,
+   * mapping color names to #GdkColor<!-- -->s. 
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_COLOR_HASH,
+				   g_param_spec_boxed ("color-hash",
+						       P_("Color Hash"),
+						       P_("A hash table resentation of the color scheme."),
+						       G_TYPE_HASH_TABLE,
+						       GTK_PARAM_READABLE));
 }
 
 static void
@@ -519,6 +546,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings_update_resolution (settings);
       settings_update_font_options (settings);
 #endif
+      settings_update_color_scheme (settings);
     }
   
   return settings;
@@ -566,6 +594,12 @@ gtk_settings_get_property (GObject     *object,
   GType value_type = G_VALUE_TYPE (value);
   GType fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
 
+  if (property_id == PROP_COLOR_HASH)
+    {
+      g_value_set_boxed (value, get_color_hash (settings));
+      return;
+    }
+
   /* For enums and strings, we need to get the value as a string,
    * not as an int, since we support using names/nicks as the setting
    * value.
@@ -578,8 +612,16 @@ gtk_settings_get_property (GObject     *object,
       if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
 	  !gdk_screen_get_setting (settings->screen, pspec->name, value))
         g_value_copy (&settings->property_values[property_id - 1].value, value);
-      else
-        g_param_value_validate (pspec, value);
+      else 
+	{
+	  if (pspec->param_id == PROP_COLOR_SCHEME)
+	    {
+	      merge_color_scheme (settings, value, GTK_SETTINGS_SOURCE_XSETTING);
+	      g_value_set_string (value, get_color_scheme (settings));
+	    }
+	  
+	  g_param_value_validate (pspec, value);
+	}
     }
   else
     {
@@ -601,7 +643,6 @@ gtk_settings_get_property (GObject     *object,
           GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
           
           g_value_init (&gstring_value, G_TYPE_GSTRING);
-
           g_value_take_boxed (&gstring_value,
                               g_string_new (g_value_get_string (&val)));
 
@@ -641,12 +682,12 @@ gtk_settings_notify (GObject    *object,
     case PROP_MODULES:
       settings_update_modules (settings);
       break;
-    case PROP_COLOR_SCHEME:
-      settings_update_color_scheme (settings);
-      break;
     case PROP_DOUBLE_CLICK_TIME:
     case PROP_DOUBLE_CLICK_DISTANCE:
       settings_update_double_click (settings);
+      break;
+    case PROP_COLOR_SCHEME:
+      settings_update_color_scheme (settings);
       break;
 #ifdef GDK_WINDOWING_X11
     case PROP_XFT_DPI:
@@ -751,7 +792,14 @@ apply_queued_setting (GtkSettings             *data,
   if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
     {
-      if (data->property_values[pspec->param_id - 1].source <= qvalue->source)
+      if (pspec->param_id == PROP_COLOR_SCHEME) 
+	{
+	  merge_color_scheme (data, &tmp_value, qvalue->source);
+	  g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
+	  data->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
+	}      
+      
+      else if (data->property_values[pspec->param_id - 1].source <= qvalue->source)
 	{
 	  g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
 	  data->property_values[pspec->param_id - 1].source = qvalue->source;
@@ -1557,15 +1605,45 @@ settings_update_resolution (GtkSettings *settings)
 }
 #endif
 
-static GHashTable *
-gtk_color_table_from_string (const gchar *str)
+static void
+settings_update_color_scheme (GtkSettings *settings)
+{
+  gchar *dummy;
+
+  g_object_get (settings, "gtk-color-scheme", &dummy, NULL);
+
+  /* nothing to do here, the color hash is updated as a
+   * side effect of getting the color scheme
+   */
+
+  g_free (dummy);  
+}
+
+
+typedef struct {
+  GHashTable *color_hash;
+  gchar *tables[GTK_SETTINGS_SOURCE_APPLICATION + 1];
+} ColorSchemeData;
+
+
+static gboolean
+update_color_hash (ColorSchemeData   *data,
+		   const gchar       *str, 
+		   GtkSettingsSource  source)
 {
   gchar *copy, *s, *p, *name;
   GdkColor color;
-  GHashTable *colors;
+  gboolean changed = FALSE;
 
-  colors = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                  (GDestroyNotify) gdk_color_free);
+  if (data->tables[source] == NULL && str == NULL)
+    return FALSE;
+
+  if (data->tables[source] != NULL && str != NULL &&
+      strcmp (data->tables[source], str) == 0)
+    return FALSE;
+
+  g_free (data->tables[source]);
+  data->tables[source] = g_strdup (str);
 
   copy = g_strdup (str);
 
@@ -1580,12 +1658,7 @@ gtk_color_table_from_string (const gchar *str)
           p++;
         }
       else
-        {
-          g_hash_table_destroy (colors);
-          colors = NULL;
-
-          break;
-        }
+	break;
 
       while (*p == ' ')
         p++;
@@ -1602,51 +1675,110 @@ gtk_color_table_from_string (const gchar *str)
 	  s++;
 	}
 
-      if (!gdk_color_parse (p, &color))
-        {
-          g_hash_table_destroy (colors);
-          colors = NULL;
+      if (gdk_color_parse (p, &color))
+	{
+	  GdkColor *old;
 
-          break;
-        }
-
-      g_hash_table_insert (colors,
-                           g_strdup (name),
-                           gdk_color_copy (&color));
+	  old = g_hash_table_lookup (data->color_hash, name);
+	  if (!old || 
+	      (old->pixel <= source && !gdk_color_equal (old, &color)))
+	    {
+	      GdkColor *new;
+	      
+	      new = gdk_color_copy (&color);
+	      new->pixel = source;
+  
+	      g_hash_table_insert (data->color_hash, g_strdup (name), new);
+ 
+	      changed = TRUE;
+	    }
+	}
     }
 
   g_free (copy);
 
-  return colors;
+  return changed;
 }
 
 static void
-settings_update_color_scheme (GtkSettings *settings)
+color_scheme_data_free (ColorSchemeData *data)
 {
-  gchar *colors;
-  GHashTable *color_hash;
+  gint i;
 
-  g_object_get (settings,
-                "gtk-color-scheme", &colors,
-                NULL);
+  g_hash_table_unref (data->color_hash);
 
-  color_hash = gtk_color_table_from_string (colors);
+  for (i = 0; i <= GTK_SETTINGS_SOURCE_APPLICATION; i++)
+    g_free (data->tables[i]);
 
-  g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
-                          color_hash, (GDestroyNotify) g_hash_table_unref);
-
-  g_free (colors);
+  g_free (data);
 }
 
-GHashTable *
-_gtk_settings_get_color_hash (GtkSettings *settings)
+static void
+merge_color_scheme (GtkSettings       *settings, 
+		    GValue            *value, 
+		    GtkSettingsSource  source)
 {
-  if (g_object_get_data (G_OBJECT (settings),
-			 "gtk-color-scheme") == NULL)
-    settings_update_color_scheme (settings);
+  ColorSchemeData *data;
+  const gchar *colors;
 
-  return (GHashTable *) g_object_get_data (G_OBJECT (settings),
-					   "gtk-color-scheme");
+  colors = g_value_get_string (value);
+
+  data = (ColorSchemeData *) g_object_get_data (G_OBJECT (settings),
+						 "gtk-color-scheme");
+  if (!data)
+    {
+      data = g_new0 (ColorSchemeData, 1);
+      data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+						(GDestroyNotify) gdk_color_free);
+      g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
+			      data, (GDestroyNotify) color_scheme_data_free);
+    }
+  
+  if (update_color_hash (data, colors, source))
+    g_object_notify (G_OBJECT (settings), "color-hash");
+}
+
+static GHashTable *
+get_color_hash (GtkSettings *settings)
+{
+  ColorSchemeData *data;
+
+  if (!g_object_get_data (G_OBJECT (settings), "gtk-color-scheme"))
+    settings_update_color_scheme (settings);
+  
+  data = (ColorSchemeData *)g_object_get_data (G_OBJECT (settings), 
+					       "gtk-color-scheme");
+
+  return data->color_hash;
+}
+
+static void 
+append_color_scheme (gpointer key,
+		     gpointer value,
+		     gpointer data)
+{
+  gchar *name = (gchar *)key;
+  GdkColor *color = (GdkColor *)value;
+  GString *string = (GString *)data;
+
+  g_string_append_printf (string, "%s: #%04x%04x%04x\n",
+			  name, color->red, color->green, color->blue);
+}
+
+static gchar *
+get_color_scheme (GtkSettings *settings)
+{
+  ColorSchemeData *data;
+  GString *string;
+  
+  data = (ColorSchemeData *) g_object_get_data (G_OBJECT (settings),
+						"gtk-color-scheme");
+
+  string = g_string_new ("");
+
+  g_hash_table_foreach (data->color_hash, append_color_scheme, string);
+
+  return g_string_free (string, FALSE);
 }
 
 
