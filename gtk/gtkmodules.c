@@ -236,7 +236,7 @@ find_module (const gchar *name)
       module_name = g_module_build_path (NULL, name);
     }
 
-  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
+  module = g_module_open (module_name, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
   g_free(module_name);
 
   return module;

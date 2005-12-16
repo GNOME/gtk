@@ -454,7 +454,7 @@ _gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
         g_return_val_if_fail (image_module->module == NULL, FALSE);
 
 	path = image_module->module_path;
-	module = g_module_open (path, G_MODULE_BIND_LAZY);
+	module = g_module_open (path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
 
         if (!module) {
                 g_set_error (error,

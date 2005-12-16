@@ -1,5 +1,11 @@
 2005-12-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c (gtk_file_system_module_load): 
+	* gtk/gtkimmodule.c (gtk_im_module_load): 
+	* gtk/gtkthemes.c (gtk_theme_engine_load): 
+	* gtk/gtkmodules.c (find_module): Use G_MODULE_BIND_LAZY when
+	opening modules.
+
 	* gtk/gtksettings.[hc]: Rework the way the color scheme setting
 	is inherited. Now the overriding is done on a per-color basis,
 	rather than for the setting as a whole. This has the effect
