@@ -1,5 +1,19 @@
 2005-12-19  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_update_count): modify
+	in such a way that it can also negatively update the count on
+	failures,
+	(get_file_info_finished): handle failures, update save folder
+	combo box on success,
+	(shortcuts_insert_path): change the boolean return value into a
+	void one, also refilter the model and update the save folder combo
+	box for the non-asynchronous case,
+	(shortcuts_append_home), (shortcuts_append_desktop),
+	(shortcuts_add_volumes), (shortcuts_add_current_folder),
+	(add_shortcuts_get_info_cb): adapt to shortcuts_insert_path() updates.
+
+2005-12-19  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkpathbar.[ch]: add handle fields to ButtonData and
 	GtkPathBar; do correct handle bookkeeping.
 

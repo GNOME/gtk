@@ -380,6 +380,8 @@ static void add_bookmark_button_clicked_cb    (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
 static void remove_bookmark_button_clicked_cb (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
+static void save_folder_combo_changed_cb      (GtkComboBox           *combo,
+					       GtkFileChooserDefault *impl);
 
 static void list_icon_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
@@ -1263,6 +1265,76 @@ check_is_folder (GtkFileSystem      *file_system,
 #endif
 }
 
+/* Removes the specified number of rows from the shortcuts list */
+static void
+shortcuts_remove_rows (GtkFileChooserDefault *impl,
+		       int                    start_row,
+		       int                    n_rows)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (start_row, -1);
+
+  for (; n_rows; n_rows--)
+    {
+      GtkTreeIter iter;
+
+      if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
+	g_assert_not_reached ();
+
+      shortcuts_free_row_data (impl, &iter);
+      gtk_list_store_remove (impl->shortcuts_model, &iter);
+    }
+
+  gtk_tree_path_free (path);
+}
+
+static void
+shortcuts_update_count (GtkFileChooserDefault *impl,
+			ShortcutsIndex         type,
+			gint                   value)
+{
+  switch (type)
+    {
+      case SHORTCUTS_HOME:
+	if (value < 0)
+	  impl->has_home = FALSE;
+	else
+	  impl->has_home = TRUE;
+	break;
+
+      case SHORTCUTS_DESKTOP:
+	if (value < 0)
+	  impl->has_desktop = FALSE;
+	else
+	  impl->has_desktop = TRUE;
+	break;
+
+      case SHORTCUTS_VOLUMES:
+	impl->num_volumes += value;
+	break;
+
+      case SHORTCUTS_SHORTCUTS:
+	impl->num_shortcuts += value;
+	break;
+
+      case SHORTCUTS_BOOKMARKS:
+	impl->num_bookmarks += value;
+	break;
+
+      case SHORTCUTS_CURRENT_FOLDER:
+	if (value < 0)
+	  impl->shortcuts_current_folder_active = FALSE;
+	else
+	  impl->shortcuts_current_folder_active = TRUE;
+	break;
+
+      default:
+	/* nothing */
+	break;
+    }
+}
+
 struct ShortcutsInsertRequest
 {
   GtkFileChooserDefault *impl;
@@ -1282,6 +1354,7 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 		        const GError        *error,
 		        gpointer             data)
 {
+  gint pos = -1;
   gboolean cancelled = handle->cancelled;
   gboolean is_volume = FALSE;
   GdkPixbuf *pixbuf;
@@ -1295,6 +1368,7 @@ get_file_info_finished (GtkFileSystemHandle *handle,
     /* Handle doesn't exist anymore in the model */
     goto out;
 
+  pos = gtk_tree_path_get_indices (path)[0];
   gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
 			   &iter, path);
   gtk_tree_path_free (path);
@@ -1312,8 +1386,32 @@ get_file_info_finished (GtkFileSystemHandle *handle,
 		      SHORTCUTS_COL_HANDLE, NULL,
 		      -1);
 
-  if (cancelled || !info)
+  if (cancelled)
     goto out;
+
+  if (!info)
+    {
+      gtk_list_store_remove (request->impl->shortcuts_model, &iter);
+      shortcuts_update_count (request->impl, request->type, -1);
+
+      if (request->type == SHORTCUTS_HOME)
+        {
+	  const char *home = g_get_home_dir ();
+	  GtkFilePath *home_path;
+
+	  home_path = gtk_file_system_filename_to_path (request->impl->file_system, home);
+	  error_getting_info_dialog (request->impl, home_path, g_error_copy (error));
+	  gtk_file_path_free (home_path);
+	}
+      else if (request->type == SHORTCUTS_CURRENT_FOLDER)
+        {
+	  /* Remove the current folder separator */
+	  gint separator_pos = shortcuts_get_index (request->impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
+	  shortcuts_remove_rows (request->impl, separator_pos, 1);
+        }
+
+      goto out;
+    }
   
   if (!request->label_copy)
     request->label_copy = g_strdup (gtk_file_info_get_display_name (info));
@@ -1331,6 +1429,22 @@ get_file_info_finished (GtkFileSystemHandle *handle,
   if (request->impl->shortcuts_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (request->impl->shortcuts_filter_model));
 
+  if (request->type == SHORTCUTS_CURRENT_FOLDER
+      && request->impl->save_folder_combo != NULL)
+    {
+      /* The current folder is updated via _activate_iter(), don't
+       * have save_folder_combo_changed_cb() call _activate_iter()
+       * again.
+       */
+      g_signal_handlers_block_by_func (request->impl->save_folder_combo,
+				       G_CALLBACK (save_folder_combo_changed_cb),
+				       request->impl);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (request->impl->save_folder_combo), pos);
+      g_signal_handlers_unblock_by_func (request->impl->save_folder_combo,
+				         G_CALLBACK (save_folder_combo_changed_cb),
+				         request->impl);
+    }
+
   if (pixbuf)
     g_object_unref (pixbuf);
 
@@ -1343,46 +1457,10 @@ out:
   g_free (request);
 }
 
-static void
-shortcuts_update_count (GtkFileChooserDefault *impl,
-			ShortcutsIndex         type)
-{
-  switch (type)
-    {
-      case SHORTCUTS_HOME:
-	impl->has_home = TRUE;
-	break;
-
-      case SHORTCUTS_DESKTOP:
-	impl->has_desktop = TRUE;
-	break;
-
-      case SHORTCUTS_VOLUMES:
-	impl->num_volumes++;
-	break;
-
-      case SHORTCUTS_SHORTCUTS:
-	impl->num_shortcuts++;
-	break;
-
-      case SHORTCUTS_BOOKMARKS:
-	impl->num_bookmarks++;
-	break;
-
-      case SHORTCUTS_CURRENT_FOLDER:
-	impl->shortcuts_current_folder_active = TRUE;
-	break;
-
-      default:
-	/* nothing */
-	break;
-    }
-}
-
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
  * inserts a volume.  A position of -1 indicates the end of the tree.
  */
-static gboolean
+static void
 shortcuts_insert_path (GtkFileChooserDefault *impl,
 		       int                    pos,
 		       gboolean               is_volume,
@@ -1390,8 +1468,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		       const GtkFilePath     *path,
 		       const char            *label,
 		       gboolean               removable,
-		       ShortcutsIndex         type,
-		       GError               **error)
+		       ShortcutsIndex         type)
 {
   char *label_copy;
   GdkPixbuf *pixbuf = NULL;
@@ -1442,9 +1519,9 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 			  SHORTCUTS_COL_HANDLE, handle,
 			  -1);
 
-      shortcuts_update_count (impl, type);
+      shortcuts_update_count (impl, type, 1);
 
-      return TRUE;
+      return;
     }
 
   if (!data)
@@ -1455,7 +1532,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   else
     gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
 
-  shortcuts_update_count (impl, type);
+  shortcuts_update_count (impl, type, 1);
 
   gtk_list_store_set (impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1467,14 +1544,31 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		      SHORTCUTS_COL_HANDLE, NULL,
 		      -1);
 
+  if (impl->shortcuts_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
+
+  if (type == SHORTCUTS_CURRENT_FOLDER && impl->save_folder_combo != NULL)
+    {
+      /* The current folder is updated via _activate_iter(), don't
+       * have save_folder_combo_changed_cb() call _activate_iter()
+       * again.
+       */
+      gint combo_pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
+      g_signal_handlers_block_by_func (impl->save_folder_combo,
+				       G_CALLBACK (save_folder_combo_changed_cb),
+				       impl);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), combo_pos);
+      g_signal_handlers_unblock_by_func (impl->save_folder_combo,
+				         G_CALLBACK (save_folder_combo_changed_cb),
+				         impl);
+    }
+
   g_free (label_copy);
 
   if (pixbuf)
     g_object_unref (pixbuf);
 
   profile_end ("end", NULL);
-
-  return TRUE;
 }
 
 /* Appends an item for the user's home directory to the shortcuts model */
@@ -1483,7 +1577,6 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 {
   const char *home;
   GtkFilePath *home_path;
-  GError *error;
 
   profile_start ("start", NULL);
 
@@ -1496,10 +1589,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
-  error = NULL;
-  shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, NULL, FALSE, SHORTCUTS_HOME, &error);
-  if (!impl->has_home)
-    error_getting_info_dialog (impl, home_path, error);
+  shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, NULL, FALSE, SHORTCUTS_HOME);
 
   gtk_file_path_free (home_path);
 
@@ -1532,7 +1622,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
-  shortcuts_insert_path (impl, -1, FALSE, NULL, path, _("Desktop"), FALSE, SHORTCUTS_DESKTOP, NULL);
+  shortcuts_insert_path (impl, -1, FALSE, NULL, path, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
   /* We do not actually pop up an error dialog if there is no desktop directory
    * because some people may really not want to have one.
    */
@@ -1571,7 +1661,7 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
       label = gtk_file_system_get_bookmark_label (impl->file_system, path);
 
       /* NULL GError, but we don't really want to show error boxes here */
-      shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, label, TRUE, SHORTCUTS_BOOKMARKS, NULL);
+      shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, label, TRUE, SHORTCUTS_BOOKMARKS);
       num_inserted++;
 
       g_free (label);
@@ -1637,30 +1727,6 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
   return n;
 }
 
-/* Removes the specified number of rows from the shortcuts list */
-static void
-shortcuts_remove_rows (GtkFileChooserDefault *impl,
-		       int                    start_row,
-		       int                    n_rows)
-{
-  GtkTreePath *path;
-
-  path = gtk_tree_path_new_from_indices (start_row, -1);
-
-  for (; n_rows; n_rows--)
-    {
-      GtkTreeIter iter;
-
-      if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
-	g_assert_not_reached ();
-
-      shortcuts_free_row_data (impl, &iter);
-      gtk_list_store_remove (impl->shortcuts_model, &iter);
-    }
-
-  gtk_tree_path_free (path);
-}
-
 /* Adds all the file system volumes to the shortcuts model */
 static void
 shortcuts_add_volumes (GtkFileChooserDefault *impl)
@@ -1710,10 +1776,8 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	    }
 	}
 
-      if (shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, SHORTCUTS_VOLUMES, NULL))
-	n++;
-      else
-	gtk_file_system_volume_free (impl->file_system, volume);
+      shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, SHORTCUTS_VOLUMES);
+      n++;
     }
 
   impl->num_volumes = n;
@@ -1865,27 +1929,15 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
       if (base_path &&
 	  strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
 	{
-	  success = shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER, NULL);
-	  if (success)
-	    volume = NULL;
+	  shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
 	}
       else
-	success = shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER, NULL);
-
-      if (volume)
-	gtk_file_system_volume_free (impl->file_system, volume);
+	shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
 
       if (base_path)
 	gtk_file_path_free (base_path);
-
-      if (!success)
-	shortcuts_remove_rows (impl, pos - 1, 1); /* remove the separator */
-
-      impl->shortcuts_current_folder_active = success;
     }
-
-  /* FIXME */
-  if (success && impl->save_folder_combo != NULL)
+  else if (impl->save_folder_combo != NULL)
     gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
 }
 
@@ -6172,7 +6224,7 @@ add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
 
   pos = shortcuts_get_pos_for_shortcut_folder (data->impl, data->impl->num_shortcuts);
 
-  shortcuts_insert_path (data->impl, pos, FALSE, NULL, data->path, NULL, FALSE, SHORTCUTS_SHORTCUTS, NULL);
+  shortcuts_insert_path (data->impl, pos, FALSE, NULL, data->path, NULL, FALSE, SHORTCUTS_SHORTCUTS);
 
 out:
   g_object_unref (data->impl);
