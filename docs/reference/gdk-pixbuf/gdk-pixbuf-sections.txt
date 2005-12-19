@@ -146,7 +146,6 @@ GDK_PIXBUF_SIMPLE_ANIM_CLASS
 GDK_IS_PIXBUF_SIMPLE_ANIM_CLASS
 GDK_TYPE_PIXBUF_SIMPLE_ANIM
 GDK_PIXBUF_SIMPLE_ANIM
-GdkPixbufSimpleAnimClass
 
 <SUBSECTION Private>
 gdk_pixbuf_non_anim_new
@@ -156,6 +155,7 @@ gdk_pixbuf_animation_iter_get_type
 
 gdk_pixbuf_simple_anim_get_type
 gdk_pixbuf_simple_anim_iter_get_type
+GdkPixbufSimpleAnimClass
 </SECTION>
 
 <SECTION>
