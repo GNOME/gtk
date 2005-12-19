@@ -58,34 +58,14 @@ of this enumeration correspond to the @readfds,
 @writefds, and @exceptfds arguments to the 
 <function>select</function> system call.
 
-<informaltable pgwide="1" frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>GDK_INPUT_READ</entry>
-<entry>the file descriptor has become available for reading.
+@GDK_INPUT_READ: the file descriptor has become available for reading.
 (Or, as is standard in Unix, a socket or pipe was closed
 at the other end; this is the case if a subsequent read
-on the file descriptor returns a count of zero.)</entry>
-</row>
+on the file descriptor returns a count of zero.)
 
-<row>
-<entry>GDK_INPUT_WRITE</entry>
-<entry>the file descriptor has become available for writing.</entry>
-</row>
+@GDK_INPUT_WRITE: the file descriptor has become available for writing.
 
-<row>
-<entry>GDK_INPUT_EXCEPTION</entry>
-<entry>an exception was raised on the file descriptor.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GDK_INPUT_READ: 
-@GDK_INPUT_WRITE: 
-@GDK_INPUT_EXCEPTION: 
+@GDK_INPUT_EXCEPTION: an exception was raised on the file descriptor.
 
 <!-- ##### USER_FUNCTION GdkInputFunction ##### -->
 <para>

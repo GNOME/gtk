@@ -1,5 +1,14 @@
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/tmpl/input.sgml: 
+	* gdk/tmpl/rgb.sgml: 
+	* gdk/tmpl/x_interaction.sgml: 
+	* gdk/tmpl/windows.sgml: Small additions/fixes
+
+	* gdk/Makefile.am (IGNORE_HFILES): Add quartz
+
+	* gdk/gdk-sections.txt: Add gdk_window_get_type_hint
+
 	* gtk/gtk-sections.txt: Add GtkStatusIcon so it gets
 	an object hierarchy.
 

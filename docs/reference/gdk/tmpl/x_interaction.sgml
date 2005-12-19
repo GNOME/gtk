@@ -360,7 +360,7 @@ Obtains the #GdkFont for the given Xlib font ID, or %NULL if no #GdkFont has
 been created for @xid.
 </para>
 
-@xid: 
+@xid: an Xlib font ID
 
 
 <!-- ##### MACRO gdk_font_lookup_for_display ##### -->

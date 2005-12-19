@@ -141,8 +141,7 @@ ratio.
 </para>
 
 @min_width: minimum width of window (or -1 to use requisition, with #GtkWindow only)
-@min_height minimum height of window (or -1 to use requisition, with #GtkWindow only)
-@min_height: 
+@min_height: minimum height of window (or -1 to use requisition, with #GtkWindow only)
 @max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
 @max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
 @base_width: allowed window widths are @base_width + @width_inc * N where N is any integer (-1 allowed with #GtkWindow)
@@ -1032,6 +1031,15 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @hint: 
+
+
+<!-- ##### FUNCTION gdk_window_get_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_set_skip_taskbar_hint ##### -->

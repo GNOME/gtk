@@ -278,40 +278,18 @@ start of the next.
 <!-- ##### ENUM GdkRgbDither ##### -->
 <para>
 Selects whether or not GdkRGB applies dithering
-to the image on display. There are three values:
+to the image on display. 
 </para>
-
-<itemizedlist>
-
-<listitem>
-<para>
-%GDK_RGB_DITHER_NONE: Never use dithering.
-</para>
-</listitem>
-
-<listitem>
-<para>
-%GDK_RGB_DITHER_NORMAL: Use dithering in 8 bits per pixel (and below)
-only.
-</para>
-</listitem>
-
-<listitem>
-<para>
-%GDK_RGB_DITHER_MAX: Use dithering in 16 bits per pixel and below.
-</para>
-</listitem>
-
-</itemizedlist>
 
 <para>
 Since GdkRGB currently only handles images with 8 bits per component,
 dithering on 24 bit per pixel displays is a moot point.
 </para>
 
-@GDK_RGB_DITHER_NONE: 
-@GDK_RGB_DITHER_NORMAL: 
-@GDK_RGB_DITHER_MAX: 
+@GDK_RGB_DITHER_NONE: Never use dithering.
+@GDK_RGB_DITHER_NORMAL: Use dithering in 8 bits per pixel (and below)
+only.
+@GDK_RGB_DITHER_MAX: Use dithering in 16 bits per pixel and below.
 
 <!-- ##### FUNCTION gdk_rgb_cmap_new ##### -->
 <para>
