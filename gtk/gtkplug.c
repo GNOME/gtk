@@ -231,23 +231,23 @@ gtk_plug_get_id (GtkPlug *plug)
  **/
 void
 _gtk_plug_add_to_socket (GtkPlug   *plug,
-			 GtkSocket *socket)
+			 GtkSocket *socket_)
 {
   GtkWidget *widget;
   gint w, h;
   
   g_return_if_fail (GTK_IS_PLUG (plug));
-  g_return_if_fail (GTK_IS_SOCKET (socket));
-  g_return_if_fail (GTK_WIDGET_REALIZED (socket));
+  g_return_if_fail (GTK_IS_SOCKET (socket_));
+  g_return_if_fail (GTK_WIDGET_REALIZED (socket_));
 
   widget = GTK_WIDGET (plug);
 
   gtk_plug_set_is_child (plug, TRUE);
   plug->same_app = TRUE;
-  socket->same_app = TRUE;
-  socket->plug_widget = widget;
+  socket_->same_app = TRUE;
+  socket_->plug_widget = widget;
 
-  plug->socket_window = GTK_WIDGET (socket)->window;
+  plug->socket_window = GTK_WIDGET (socket_)->window;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -255,14 +255,14 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
       gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
     }
 
-  gtk_widget_set_parent (widget, GTK_WIDGET (socket));
+  gtk_widget_set_parent (widget, GTK_WIDGET (socket_));
 
   g_signal_emit_by_name (socket, "plug_added");
 }
 
 /**
  * _gtk_plug_send_delete_event:
- * widget: a #GtkWidget
+ * @widget: a #GtkWidget
  *
  * Send a GDK_DELETE event to the @widget and destroy it if
  * necessary. Internal GTK function, called from this file or the
@@ -289,20 +289,20 @@ _gtk_plug_send_delete_event (GtkWidget *widget)
 /**
  * _gtk_plug_remove_from_socket:
  * @plug: a #GtkPlug
- * @socket: a #GtkSocket
+ * @socket_: a #GtkSocket
  * 
  * Removes a plug from a socket within the same application.
  **/
 void
 _gtk_plug_remove_from_socket (GtkPlug   *plug,
-			      GtkSocket *socket)
+			      GtkSocket *socket_)
 {
   GtkWidget *widget;
   gboolean result;
   gboolean widget_was_visible;
 
   g_return_if_fail (GTK_IS_PLUG (plug));
-  g_return_if_fail (GTK_IS_SOCKET (socket));
+  g_return_if_fail (GTK_IS_SOCKET (socket_));
   g_return_if_fail (GTK_WIDGET_REALIZED (plug));
 
   widget = GTK_WIDGET (plug);
@@ -311,7 +311,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
     return;
 
   g_object_ref (plug);
-  g_object_ref (socket);
+  g_object_ref (socket_);
 
   widget_was_visible = GTK_WIDGET_VISIBLE (plug);
   
@@ -323,33 +323,33 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   gtk_widget_unparent (GTK_WIDGET (plug));
   GTK_PRIVATE_UNSET_FLAG (plug, GTK_IN_REPARENT);
   
-  socket->plug_widget = NULL;
-  if (socket->plug_window != NULL)
+  socket_->plug_widget = NULL;
+  if (socket_->plug_window != NULL)
     {
-      g_object_unref (socket->plug_window);
-      socket->plug_window = NULL;
+      g_object_unref (socket_->plug_window);
+      socket_->plug_window = NULL;
     }
   
-  socket->same_app = FALSE;
+  socket_->same_app = FALSE;
 
   plug->same_app = FALSE;
   plug->socket_window = NULL;
 
   gtk_plug_set_is_child (plug, FALSE);
 		    
-  g_signal_emit_by_name (socket, "plug_removed", &result);
+  g_signal_emit_by_name (socket_, "plug_removed", &result);
   if (!result)
-    gtk_widget_destroy (GTK_WIDGET (socket));
+    gtk_widget_destroy (GTK_WIDGET (socket_));
 
   if (widget->window)
     _gtk_plug_send_delete_event (widget);
 
   g_object_unref (plug);
 
-  if (widget_was_visible && GTK_WIDGET_VISIBLE (socket))
-    gtk_widget_queue_resize (GTK_WIDGET (socket));
+  if (widget_was_visible && GTK_WIDGET_VISIBLE (socket_))
+    gtk_widget_queue_resize (GTK_WIDGET (socket_));
 
-  g_object_unref (socket);
+  g_object_unref (socket_);
 }
 
 /**

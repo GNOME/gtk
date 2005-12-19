@@ -2467,6 +2467,7 @@ gtk_window_get_decorated (GtkWindow *window)
 }
 
 /**
+ * gtk_window_set_deletable:
  * @window: a #GtkWindow
  * @setting: %TRUE to decorate the window as deletable
  *

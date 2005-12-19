@@ -1,3 +1,8 @@
+2005-12-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkplug.c: 
+	* gtk/gtkwindow.c: Documentation fixes.
+
 2005-12-19  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentry.c: implement boolean property "truncate-multiline"
