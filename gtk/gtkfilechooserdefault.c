@@ -5590,10 +5590,18 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
 				   const GError        *error,
 				   gpointer             user_data)
 {
+  gboolean cancelled = handle->cancelled;
   struct UpdateCurrentFolderData *data = user_data;
   GtkFileChooserDefault *impl = data->impl;
 
+  if (handle != impl->update_current_folder_handle)
+    goto out;
+
+  g_object_unref (handle);
   impl->update_current_folder_handle = NULL;
+
+  if (cancelled)
+    goto out;
 
   if (error)
     {

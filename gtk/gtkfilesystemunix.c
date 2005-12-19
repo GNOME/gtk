@@ -115,6 +115,7 @@ struct _GtkFileFolderUnix
   guint have_mime_type : 1;
   guint is_network_dir : 1;
   guint have_hidden : 1;
+  guint is_finished_loading : 1;
   time_t asof;
 };
 
@@ -787,6 +788,7 @@ load_folder (gpointer data)
 
   if (gtk_file_folder_unix_list_children (GTK_FILE_FOLDER (folder_unix), &children, NULL))
     {
+      folder_unix->is_finished_loading = TRUE;
       g_signal_emit_by_name (folder_unix, "files-added", children);
       gtk_file_paths_free (children);
     }
@@ -899,6 +901,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
       folder_unix->have_mime_type = FALSE;
       folder_unix->have_stat = FALSE;
       folder_unix->have_hidden = FALSE;
+      folder_unix->is_finished_loading = FALSE;
       set_asof = TRUE;
 	  
       if ((system_unix->have_afs &&
@@ -2524,8 +2527,7 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 static gboolean
 gtk_file_folder_unix_is_finished_loading (GtkFileFolder *folder)
 {
-  /* Since we don't do asynchronous loads, we are always finished loading */
-  return TRUE;
+  return GTK_FILE_FOLDER_UNIX (folder)->is_finished_loading;
 }
 
 static void

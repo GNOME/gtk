@@ -1,5 +1,23 @@
 2005-12-19  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkpathbar.[ch]: add handle fields to ButtonData and
+	GtkPathBar; do correct handle bookkeeping.
+
+	* gtk/gtkfilesystemunix.c (load_folder),
+	(gtk_file_system_unix_get_folder),
+	(gtk_file_folder_unix_is_finished_loading): add is_finished_loading
+	field to GtkFileFolderUnix, which is set to true once we are
+	really finished with loading (previous assumption that we are
+	always finshed loading is not true anymore).
+
+	* gtk/gtkfilesystemmodel.c (got_root_folder_cb): if the folder is
+	finished loading, list the children and update the root level.
+
+	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
+	handle cancellation.
+
+2005-12-19  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c: small fix to make it actually work in this
 	branch.
 

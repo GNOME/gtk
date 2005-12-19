@@ -672,18 +672,13 @@ got_root_folder_cb (GtkFileSystemHandle *handle,
   if (!folder)
     return;
 
-#if 0
-  if (!gtk_file_folder_list_children (root_folder, &roots, error))
-    {
-      g_object_unref (folder);
-      return;
-    }
-#endif
-
   model->root_folder = folder;
 
   if (gtk_file_folder_is_finished_loading (model->root_folder))
-    queue_finished_loading (model); /* done in an idle because we are being created */
+    {
+      queue_finished_loading (model); /* done in an idle because we are being created */
+      gtk_file_folder_list_children (model->root_folder, &roots, NULL);
+    }
   else
     g_signal_connect_object (model->root_folder, "finished-loading",
 			     G_CALLBACK (root_folder_finished_loading_cb), model, 0);

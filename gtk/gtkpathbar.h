@@ -45,6 +45,8 @@ struct _GtkPathBar
   GtkFilePath *home_path;
   GtkFilePath *desktop_path;
 
+  GtkFileSystemHandle *set_path_handle;
+
   GdkPixbuf *root_icon;
   GdkPixbuf *home_icon;
   GdkPixbuf *desktop_icon;

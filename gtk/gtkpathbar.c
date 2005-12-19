@@ -65,6 +65,7 @@ struct _ButtonData
   GtkFilePath *path;
   GtkWidget *image;
   GtkWidget *label;
+  GtkFileSystemHandle *handle;
   guint ignore_changes : 1;
   guint file_is_hidden : 1;
 };
@@ -140,6 +141,8 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   GTK_WIDGET_SET_FLAGS (path_bar, GTK_NO_WINDOW);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
+  path_bar->set_path_handle = NULL;
+
   path_bar->spacing = 3;
   path_bar->up_slider_button = get_slider_button (path_bar, GTK_ARROW_LEFT);
   path_bar->down_slider_button = get_slider_button (path_bar, GTK_ARROW_RIGHT);
@@ -206,6 +209,10 @@ gtk_path_bar_finalize (GObject *object)
   path_bar = GTK_PATH_BAR (object);
 
   gtk_path_bar_stop_scrolling (path_bar);
+
+  if (path_bar->set_path_handle)
+    gtk_file_system_cancel_operation (path_bar->set_path_handle);
+  path_bar->set_path_handle = NULL;
 
   g_list_free (path_bar->button_list);
   if (path_bar->root_path)
@@ -993,14 +1000,18 @@ set_button_image_get_info_cb (GtkFileSystemHandle *handle,
 			      const GError        *error,
 			      gpointer             user_data)
 {
+  gboolean cancelled = handle->cancelled;
   GdkPixbuf *pixbuf;
   struct SetButtonImageData *data = user_data;
 
-  if (error)
-    {
-      g_free (data);
-      return;
-    }
+  if (handle != data->button_data->handle)
+    goto out;
+
+  g_object_unref (handle);
+  data->button_data->handle = NULL;
+
+  if (cancelled || error)
+    goto out;
 
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
 				      data->path_bar->icon_size, NULL);
@@ -1026,6 +1037,7 @@ set_button_image_get_info_cb (GtkFileSystemHandle *handle,
 	break;
     };
 
+out:
   g_free (data);
 }
 
@@ -1071,11 +1083,15 @@ set_button_image (GtkPathBar *path_bar,
       data->path_bar = path_bar;
       data->button_data = button_data;
 
-      gtk_file_system_get_info (path_bar->file_system,
-				path_bar->home_path,
-				GTK_FILE_INFO_ICON,
-				set_button_image_get_info_cb,
-				data);
+      if (button_data->handle)
+	gtk_file_system_cancel_operation (button_data->handle);
+
+      button_data->handle =
+        gtk_file_system_get_info (path_bar->file_system,
+				  path_bar->home_path,
+				  GTK_FILE_INFO_ICON,
+				  set_button_image_get_info_cb,
+				  data);
       break;
 
     case DESKTOP_BUTTON:
@@ -1089,11 +1105,15 @@ set_button_image (GtkPathBar *path_bar,
       data->path_bar = path_bar;
       data->button_data = button_data;
 
-      gtk_file_system_get_info (path_bar->file_system,
-				path_bar->desktop_path,
-				GTK_FILE_INFO_ICON,
-				set_button_image_get_info_cb,
-				data);
+      if (button_data->handle)
+	gtk_file_system_cancel_operation (button_data->handle);
+
+      button_data->handle =
+        gtk_file_system_get_info (path_bar->file_system,
+				  path_bar->desktop_path,
+				  GTK_FILE_INFO_ICON,
+				  set_button_image_get_info_cb,
+				  data);
       break;
     default:
       break;
@@ -1103,6 +1123,9 @@ set_button_image (GtkPathBar *path_bar,
 static void
 button_data_free (ButtonData *button_data)
 {
+  if (button_data->handle)
+    gtk_file_system_cancel_operation (button_data->handle);
+
   gtk_file_path_free (button_data->path);
   g_free (button_data->dir_name);
   g_free (button_data);
@@ -1420,14 +1443,23 @@ gtk_path_bar_get_info_callback (GtkFileSystemHandle *handle,
 			        const GError        *error,
 			        gpointer             data)
 {
+  gboolean cancelled = handle->cancelled;
   struct SetPathInfo *path_info = data;
-
   ButtonData *button_data;
   const gchar *display_name;
   gboolean is_hidden;
   gboolean valid;
 
-  if (!file_info)
+  if (handle != path_info->path_bar->set_path_handle)
+    {
+      gtk_path_bar_set_path_finish (path_info, FALSE);
+      return;
+    }
+
+  g_object_unref (handle);
+  path_info->path_bar->set_path_handle = NULL;
+
+  if (cancelled || !file_info)
     {
       gtk_path_bar_set_path_finish (path_info, FALSE);
       return;
@@ -1467,7 +1499,12 @@ gtk_path_bar_get_info_callback (GtkFileSystemHandle *handle,
       return;
     }
 
-  gtk_file_system_get_info (handle->file_system, path_info->path, GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN, gtk_path_bar_get_info_callback, path_info);
+  path_info->path_bar->set_path_handle =
+    gtk_file_system_get_info (handle->file_system,
+			      path_info->path,
+			      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN,
+			      gtk_path_bar_get_info_callback,
+			      path_info);
 }
 
 gboolean
@@ -1505,7 +1542,15 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       return result;
     }
 
-  gtk_file_system_get_info (path_bar->file_system, info->path, GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN, gtk_path_bar_get_info_callback, info);
+  if (path_bar->set_path_handle)
+    gtk_file_system_cancel_operation (path_bar->set_path_handle);
+
+  path_bar->set_path_handle =
+    gtk_file_system_get_info (path_bar->file_system,
+			      info->path,
+			      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN,
+			      gtk_path_bar_get_info_callback,
+			      info);
 
   return TRUE;
 }
