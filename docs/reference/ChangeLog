@@ -1,5 +1,7 @@
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkbutton.sgml: Remove inlined documentation
+
 	* gtk/tmpl/gtkstatusicon.sgml: Explicitly document GtkStatusIcon
 	as a non-widget.  (#324181, Maciej Katafiasz)
 

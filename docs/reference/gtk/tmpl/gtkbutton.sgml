@@ -39,41 +39,38 @@ This should not be accessed directly.  Use the accessor functions below.
 
 <!-- ##### SIGNAL GtkButton::clicked ##### -->
 <para>
-Emitted when a button clicked on by the mouse and the cursor stays on the
-button.  If the cursor is not on the button when the mouse button is released,
-the signal is not emitted.
+
 </para>
 
-@button: the object which received the signal.
+@button: 
 
 <!-- ##### SIGNAL GtkButton::enter ##### -->
 <para>
-Emitted when the mouse cursor enters the region of the button.
+
 </para>
 
-@button: the object which received the signal.
+@button: 
 
 <!-- ##### SIGNAL GtkButton::leave ##### -->
 <para>
-Emitted when the mouse cursor leaves the region of the button.
+
 </para>
 
-@button: the object which received the signal.
+@button: 
 
 <!-- ##### SIGNAL GtkButton::pressed ##### -->
 <para>
-Emitted when the button is initially pressed.
+
 </para>
 
-@button: the object which received the signal.
+@button: 
 
 <!-- ##### SIGNAL GtkButton::released ##### -->
 <para>
-Emitted when a button which is pressed is released, no matter where the
-mouse cursor is.
+
 </para>
 
-@button: the object which received the signal.
+@button:
 
 <!-- ##### ARG GtkButton:focus-on-click ##### -->
 <para>
