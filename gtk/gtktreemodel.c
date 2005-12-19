@@ -1536,9 +1536,9 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
  * @func: A function to be called on each row
  * @user_data: User data to passed to func.
  * 
- * Calls func on each node in model in a depth-first fashion.  If func returns
- * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach() 
- * returns.
+ * Calls func on each node in model in a depth-first fashion.  
+ * If @func returns %TRUE, then the tree ceases to be walked, and 
+ * gtk_tree_model_foreach() returns.
  **/
 void
 gtk_tree_model_foreach (GtkTreeModel            *model,

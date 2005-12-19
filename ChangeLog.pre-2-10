@@ -1,5 +1,6 @@
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodel.c: 
 	* gtk/gtkplug.c: 
 	* gtk/gtkwindow.c: Documentation fixes.
 
