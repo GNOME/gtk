@@ -1,3 +1,12 @@
+2005-12-19  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkentry.c: implement boolean property "truncate-multiline"
+	which, when enabled, truncates multi-line pastes or drops to their
+	first line. Fixes bug #322252.
+
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_init): enable
+	truncate-multiline here.
+
 2005-12-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c (get_color_hash): Don't crash if
@@ -194,7 +203,7 @@ Tue Dec  6 10:32:17 2005  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkevents-x11.c: map the new GtkSettings properties
 	"timeout-initial", "timeout-repeat", "color-scheme" and
-	"enable-enimations" to X settings.
+	"enable-animations" to X settings.
 
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 

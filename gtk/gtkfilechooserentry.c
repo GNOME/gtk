@@ -177,6 +177,8 @@ gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
 
+  g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
+
   comp = gtk_entry_completion_new ();
   gtk_entry_completion_set_popup_single_match (comp, FALSE);
 

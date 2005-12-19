@@ -78,6 +78,7 @@ struct _GtkEntryPrivate
 {
   gfloat xalign;
   gint insert_pos;
+  gboolean truncate_multiline; /* when pasting multiline text */
 };
 
 enum {
@@ -107,7 +108,8 @@ enum {
   PROP_WIDTH_CHARS,
   PROP_SCROLL_OFFSET,
   PROP_TEXT,
-  PROP_XALIGN
+  PROP_XALIGN,
+  PROP_TRUNCATE_MULTILINE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -597,7 +599,22 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       1.0,
 						       0.0,
 						       GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkEntry:truncate-multiline:
+   *
+   * When %TRUE, pasted multi-line text is truncated to the first line.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TRUNCATE_MULTILINE,
+                                   g_param_spec_boolean ("truncate-multiline",
+                                                         P_("Truncate multiline"),
+                                                         P_("Whether to truncate multiline pastes to one line."),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate_popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -887,6 +904,7 @@ gtk_entry_set_property (GObject         *object,
                         GParamSpec      *pspec)
 {
   GtkEntry *entry = GTK_ENTRY (object);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   switch (prop_id)
     {
@@ -948,6 +966,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_alignment (entry, g_value_get_float (value));
       break;
 
+    case PROP_TRUNCATE_MULTILINE:
+      priv->truncate_multiline = g_value_get_boolean (value);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -963,6 +985,7 @@ gtk_entry_get_property (GObject         *object,
                         GParamSpec      *pspec)
 {
   GtkEntry *entry = GTK_ENTRY (object);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   switch (prop_id)
     {
@@ -1002,7 +1025,10 @@ gtk_entry_get_property (GObject         *object,
     case PROP_XALIGN:
       g_value_set_float (value, gtk_entry_get_alignment (entry));
       break;
-      
+    case PROP_TRUNCATE_MULTILINE:
+      g_value_set_boolean (value, priv->truncate_multiline);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1029,6 +1055,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
   priv->xalign = 0.0;
+  priv->truncate_multiline = FALSE;
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
@@ -3740,6 +3767,18 @@ gtk_entry_get_public_chars (GtkEntry *entry,
     }
 }
 
+static gint
+truncate_multiline (const gchar *text)
+{
+  gint length;
+
+  for (length = 0;
+       text[length] && text[length] != '\n' && text[length] != '\r';
+       length++);
+
+  return length;
+}
+
 static void
 paste_received (GtkClipboard *clipboard,
 		const gchar  *text,
@@ -3761,7 +3800,11 @@ paste_received (GtkClipboard *clipboard,
   if (text)
     {
       gint pos, start, end;
+      gint length = -1;
       GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+      if (priv->truncate_multiline)
+        length = truncate_multiline (text);
 
       if (completion)
 	{
@@ -3774,7 +3817,7 @@ paste_received (GtkClipboard *clipboard,
         gtk_editable_delete_text (editable, start, end);
 
       pos = entry->current_pos;
-      gtk_editable_insert_text (editable, text, -1, &pos);
+      gtk_editable_insert_text (editable, text, length, &pos);
       gtk_editable_set_position (editable, pos);
 
       if (completion)
@@ -4833,6 +4876,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 			      guint             time)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   GtkEditable *editable = GTK_EDITABLE (widget);
   gchar *str;
 
@@ -4842,19 +4886,23 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
     {
       gint new_position;
       gint sel1, sel2;
+      gint length = -1;
+
+      if (priv->truncate_multiline)
+        length = truncate_multiline (str);
 
       new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
 
       if (!gtk_editable_get_selection_bounds (editable, &sel1, &sel2) ||
 	  new_position < sel1 || new_position > sel2)
 	{
-	  gtk_editable_insert_text (editable, str, -1, &new_position);
+	  gtk_editable_insert_text (editable, str, length, &new_position);
 	}
       else
 	{
 	  /* Replacing selection */
 	  gtk_editable_delete_text (editable, sel1, sel2);
-	  gtk_editable_insert_text (editable, str, -1, &sel1);
+	  gtk_editable_insert_text (editable, str, length, &sel1);
 	}
       
       g_free (str);
