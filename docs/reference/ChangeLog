@@ -1,5 +1,8 @@
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add GtkStatusIcon so it gets
+	an object hierarchy.
+
 	* gtk/tmpl/gtkbutton.sgml: Remove inlined documentation
 
 	* gtk/tmpl/gtkstatusicon.sgml: Explicitly document GtkStatusIcon
