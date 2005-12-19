@@ -1749,6 +1749,9 @@ get_color_hash (GtkSettings *settings)
   data = (ColorSchemeData *)g_object_get_data (G_OBJECT (settings), 
 					       "gtk-color-scheme");
 
+  if (!data)
+    return NULL;
+
   return data->color_hash;
 }
 

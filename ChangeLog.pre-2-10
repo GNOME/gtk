@@ -1,3 +1,8 @@
+2005-12-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (get_color_hash): Don't crash if
+	there is no color scheme.  (#324429, Diego Gonzalez)
+
 2005-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_system_module_load): 
