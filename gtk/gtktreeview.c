@@ -4464,7 +4464,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
        * during this event, we will set priv->imcontext_changed  */
       tree_view->priv->imcontext_changed = FALSE;
       retval = gtk_widget_event (tree_view->priv->search_entry, new_event);
-      gdk_event_free (new_event);
+      /*gdk_event_free (new_event);*/
       gtk_widget_hide (tree_view->priv->search_window);
 
       g_signal_handler_disconnect (tree_view->priv->search_entry, 

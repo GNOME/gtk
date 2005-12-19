@@ -1,3 +1,10 @@
+2005-12-19  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c: small fix to make it actually work in this
+	branch.
+
+	* gdk/gdkevents.c: same.
+
 2005-12-16  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilesystemunix.c: always call the callback, even when

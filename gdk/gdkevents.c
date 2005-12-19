@@ -273,6 +273,9 @@ gdk_event_new (GdkEventType type)
 {
   GdkEventPrivate *new_private;
   GdkEvent *new_event;
+
+  if (!event_hash)
+    event_hash = g_hash_table_new (g_direct_hash, NULL);
   
   new_private = g_slice_new0 (GdkEventPrivate);
   
@@ -485,7 +488,7 @@ gdk_event_free (GdkEvent *event)
     }
 
   g_hash_table_remove (event_hash, event);
-  g_slice_free (GdkEventPrivate, event);
+  g_slice_free (GdkEventPrivate, (GdkEventPrivate *) event);
 }
 
 /**
