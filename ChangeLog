@@ -1,5 +1,6 @@
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c: 
 	* gtk/gtkcalendar.c: 
 	* gtk/gtkitemfactory.c: 
 	* gdk/gtkcombo.c: 

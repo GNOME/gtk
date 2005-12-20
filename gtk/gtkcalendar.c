@@ -3120,7 +3120,7 @@ gtk_calendar_new (void)
  *
  * Sets display options (whether to display the heading and the month headings).
  * 
- * Deprecated: Use gtk_calendar_set_display_options() instead
+ * Deprecated: 2.4: Use gtk_calendar_set_display_options() instead
  **/
 void
 gtk_calendar_display_options (GtkCalendar	       *calendar,
