@@ -57,14 +57,13 @@ an input callback will be triggered. The three members
 of this enumeration correspond to the @readfds, 
 @writefds, and @exceptfds arguments to the 
 <function>select</function> system call.
+</para>
 
 @GDK_INPUT_READ: the file descriptor has become available for reading.
 (Or, as is standard in Unix, a socket or pipe was closed
 at the other end; this is the case if a subsequent read
 on the file descriptor returns a count of zero.)
-
 @GDK_INPUT_WRITE: the file descriptor has become available for writing.
-
 @GDK_INPUT_EXCEPTION: an exception was raised on the file descriptor.
 
 <!-- ##### USER_FUNCTION GdkInputFunction ##### -->
