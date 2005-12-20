@@ -1961,6 +1961,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	}
 
       icon_view->priv->last_single_clicked = NULL;
+      icon_view->priv->pressed_button = -1;
     }
   
   if (dirty)
