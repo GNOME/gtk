@@ -5419,9 +5419,12 @@ show_and_select_paths_get_folder_cb (GtkFileSystemHandle   *handle,
       return;
     }
 
-  g_signal_connect (folder, "finished-loading",
-		    G_CALLBACK (show_and_select_paths_finished_loading),
-		    user_data);
+  if (gtk_file_folder_is_finished_loading (folder))
+    show_and_select_paths_finished_loading (folder, user_data);
+  else
+    g_signal_connect (folder, "finished-loading",
+		      G_CALLBACK (show_and_select_paths_finished_loading),
+		      user_data);
 }
 
 static gboolean
