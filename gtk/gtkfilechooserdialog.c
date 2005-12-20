@@ -129,6 +129,7 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv->default_height = -1;
   dialog->priv->resize_horizontally = TRUE;
   dialog->priv->resize_vertically = TRUE;
+  dialog->priv->response_requested = FALSE;
 
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 
@@ -355,6 +356,39 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   else
     file_chooser_widget_default_unrealized_size_changed (widget, dialog);
 }
+
+static void
+file_chooser_widget_response_requested (GtkWidget            *widget,
+					GtkFileChooserDialog *dialog)
+{
+  GList *children, *l;
+
+  /* There probably isn't a default widget, so make things easier for the
+   * programmer by looking for a reasonable button on our own.
+   */
+
+  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area));
+
+  for (l = children; l; l = l->next)
+    {
+      GtkWidget *widget;
+      int response_id;
+
+      widget = GTK_WIDGET (l->data);
+      response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      if (response_id == GTK_RESPONSE_ACCEPT
+	  || response_id == GTK_RESPONSE_OK
+	  || response_id == GTK_RESPONSE_YES
+	  || response_id == GTK_RESPONSE_APPLY)
+	{
+	  dialog->priv->response_requested = TRUE;
+	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
+	  break;
+	}
+    }
+
+  g_list_free (children);
+}
   
 static GObject*
 gtk_file_chooser_dialog_constructor (GType                  type,
@@ -382,6 +416,8 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 		    G_CALLBACK (file_chooser_widget_file_activated), object);
   g_signal_connect (priv->widget, "default-size-changed",
 		    G_CALLBACK (file_chooser_widget_default_size_changed), object);
+  g_signal_connect (priv->widget, "response-requested",
+		    G_CALLBACK (file_chooser_widget_response_requested), object);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
 
@@ -550,7 +586,7 @@ response_cb (GtkDialog *dialog,
 	|| response_id == GTK_RESPONSE_APPLY))
     return;
 
-  if (!_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+  if (!priv->response_requested && !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     g_signal_stop_emission_by_name (dialog, "response");
 }
 

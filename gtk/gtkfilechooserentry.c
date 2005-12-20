@@ -1058,5 +1058,27 @@ _gtk_file_chooser_entry_get_action (GtkFileChooserEntry *chooser_entry)
   return chooser_entry->action;
 }
 
+gboolean
+_gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
+				       const GtkFilePath   *path)
+{
+  gboolean retval = FALSE;
+
+  if (chooser_entry->current_folder)
+    {
+      GtkFileInfo *file_info;
+
+      file_info = gtk_file_folder_get_info (chooser_entry->current_folder,
+					    path, NULL);
+      if (file_info)
+        {
+	  retval = gtk_file_info_get_is_folder (file_info);
+	  gtk_file_info_free (file_info);
+	}
+    }
+
+  return retval;
+}
+
 #define __GTK_FILE_CHOOSER_ENTRY_C__
 #include "gtkaliasdef.c"

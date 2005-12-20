@@ -1,5 +1,34 @@
 2005-12-20  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (check_is_folder): fully removed!
+	woo!,
+	(check_save_entry): add is_folder argument,
+	(gtk_file_chooser_default_get_paths): update check_save_entry() call,
+	(get_display_name_for_folder): removed,
+	(confirmation_confirm_get_info_cb): new function which will
+	handle the confirmation dialog now we have all information for it,
+	(should_respond_after_confirm_overwrite): replace the call to
+	get_display_name_for_folder() with an asynchronous solution,
+	(action_create_folder_cb): request dialog response on successfull
+	folder creation,
+	(gtk_file_chooser_default_should_respond): update call to
+	check_save_entry(); replace the check is folder call for "path"
+	by just using the is_folder return value from check_save_entry();
+	replaced the check is folder call for "parent_path" with an
+	asynchronous setup, remainder of that work is now done in
+	save_entry_get_info_cb(),
+	(save_entry_get_info_cb): new function.
+
+	* gtk/gtkfilechoosermebed.[ch]: add response-requested signal.
+
+	* gtk/gtkfilechooserdialog.c, gtk/gtkfilechooserprivate.h: handle
+	response_requested signal.
+
+	* gtk/gtkfilechooserentry.[ch]
+	(_gtk_file_chooser_entry_get_is_folder): new function.
+
+2005-12-20  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c (ref_path_cb): when called with
 	!folder, check if node is the node we are looking for (can be
 	triggered when we call ref_path_cb ourselves after a find_child_node),

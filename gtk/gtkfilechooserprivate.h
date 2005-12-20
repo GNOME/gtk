@@ -113,6 +113,7 @@ struct _GtkFileChooserDialogPrivate
   gint default_height;
   gboolean resize_horizontally;
   gboolean resize_vertically;
+  gboolean response_requested;
 };
 
 

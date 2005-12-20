@@ -1237,34 +1237,6 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
   shortcuts_find_folder (impl, impl->current_folder);
 }
 
-
-/* Returns whether a path is a folder */
-static gboolean
-check_is_folder (GtkFileSystem      *file_system, 
-		 const GtkFilePath  *path, 
-		 GError            **error)
-{
-  GtkFileFolder *folder;
-
-  /* FIXME: we need to make this work with a callback or get rid of it */
-  return TRUE;
-#if 0
-  profile_start ("start", (char *) path);
-
-  folder = gtk_file_system_get_folder (file_system, path, 0, error);
-  if (!folder)
-    {
-      profile_end ("end - is not folder", (char *) path);
-      return FALSE;
-    }
-
-  g_object_unref (folder);
-
-  profile_end ("end", (char *) path);
-  return TRUE;
-#endif
-}
-
 /* Removes the specified number of rows from the shortcuts list */
 static void
 shortcuts_remove_rows (GtkFileChooserDefault *impl,
@@ -5951,7 +5923,8 @@ check_save_entry (GtkFileChooserDefault *impl,
 		  GtkFilePath          **path_ret,
 		  gboolean              *is_well_formed_ret,
 		  gboolean              *is_empty_ret,
-		  gboolean              *is_file_part_empty_ret)
+		  gboolean              *is_file_part_empty_ret,
+		  gboolean              *is_folder)
 {
   GtkFileChooserEntry *chooser_entry;
   const GtkFilePath *current_folder;
@@ -5970,6 +5943,7 @@ check_save_entry (GtkFileChooserDefault *impl,
       *is_well_formed_ret = TRUE;
       *is_empty_ret = TRUE;
       *is_file_part_empty_ret = TRUE;
+      *is_folder = FALSE;
 
       return;
     }
@@ -5984,6 +5958,7 @@ check_save_entry (GtkFileChooserDefault *impl,
       *path_ret = gtk_file_path_copy (current_folder);
       *is_well_formed_ret = TRUE;
       *is_file_part_empty_ret = TRUE;
+      *is_folder = TRUE;
 
       return;
     }
@@ -5998,12 +5973,14 @@ check_save_entry (GtkFileChooserDefault *impl,
       error_building_filename_dialog (impl, current_folder, file_part, error);
       *path_ret = NULL;
       *is_well_formed_ret = FALSE;
+      *is_folder = FALSE;
 
       return;
     }
 
   *path_ret = path;
   *is_well_formed_ret = TRUE;
+  *is_folder = _gtk_file_chooser_entry_get_is_folder (chooser_entry, path);
 }
 
 struct get_paths_closure {
@@ -6049,9 +6026,9 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
       || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      gboolean is_well_formed, is_empty, is_file_part_empty;
+      gboolean is_well_formed, is_empty, is_file_part_empty, is_folder;
 
-      check_save_entry (impl, &info.path_from_entry, &is_well_formed, &is_empty, &is_file_part_empty);
+      check_save_entry (impl, &info.path_from_entry, &is_well_formed, &is_empty, &is_file_part_empty, &is_folder);
 
       if (!is_well_formed)
 	return NULL;
@@ -6642,53 +6619,34 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
   return (response == GTK_RESPONSE_ACCEPT);
 }
 
-static char *
-get_display_name_for_folder (GtkFileChooserDefault *impl,
-			     const GtkFilePath     *path)
+struct GetDisplayNameData
 {
-  char *display_name;
-  GtkFilePath *parent_path;
-  GtkFileFolder *parent_folder;
-  GtkFileInfo *info;
+  GtkFileChooserDefault *impl;
+  gchar *file_part;
+};
 
-  /* FIXME: can only work with a callback */
+static void
+confirmation_confirm_get_info_cb (GtkFileSystemHandle *handle,
+				  GtkFileInfo         *info,
+				  const GError        *error,
+				  gpointer             user_data)
+{
+  gboolean should_respond = FALSE;
+  struct GetDisplayNameData *data = user_data;
 
-#if 0
-  display_name = NULL;
-  parent_path = NULL;
-  parent_folder = NULL;
-  info = NULL;
+  if (error)
+    /* Huh?  Did the folder disappear?  Let the caller deal with it */
+    should_respond = TRUE;
+  else
+    should_respond = confirm_dialog_should_accept_filename (data->impl, data->file_part, gtk_file_info_get_display_name (info));
 
-  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, NULL))
-    goto out;
+  set_busy_cursor (data->impl, FALSE);
+  if (should_respond)
+    g_signal_emit_by_name (data->impl, "response-requested");
 
-  parent_folder = gtk_file_system_get_folder (impl->file_system,
-					      parent_path ? parent_path : path,
-					      GTK_FILE_INFO_DISPLAY_NAME,
-					      NULL);
-  if (!parent_folder)
-    goto out;
-
-  info = gtk_file_folder_get_info (parent_folder, parent_path ? path : NULL, NULL);
-  if (!info)
-    goto out;
-
-  display_name = g_strdup (gtk_file_info_get_display_name (info));
-
- out:
-
-  if (parent_path)
-    gtk_file_path_free (parent_path);
-
-  if (parent_folder)
-    g_object_unref (parent_folder);
-
-  if (info)
-    gtk_file_info_free (info);
-
-  return display_name;
-#endif
-  return "foobar";
+  g_object_unref (data->impl);
+  g_free (data->file_part);
+  g_free (data);
 }
 
 /* Does overwrite confirmation if appropriate, and returns whether the dialog
@@ -6712,18 +6670,20 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
     {
     case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
       {
-	char *parent_display_name;
-	gboolean retval;
+	struct GetDisplayNameData *data;
 
 	g_assert (file_part != NULL);
 
-	parent_display_name = get_display_name_for_folder (impl, parent_path);
-	if (!parent_display_name)
-	  return TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
+	data = g_new0 (struct GetDisplayNameData, 1);
+	data->impl = g_object_ref (impl);
+	data->file_part = g_strdup (file_part);
 
-	retval = confirm_dialog_should_accept_filename (impl, file_part, parent_display_name);
-	g_free (parent_display_name);
-	return retval;
+	gtk_file_system_get_info (impl->file_system, parent_path,
+				  GTK_FILE_INFO_DISPLAY_NAME,
+				  confirmation_confirm_get_info_cb,
+				  data);
+	set_busy_cursor (data->impl, TRUE);
+	return FALSE;
       }
 
     case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
@@ -6742,12 +6702,79 @@ static void
 action_create_folder_cb (GtkFileSystemHandle *handle,
 			 const GtkFilePath   *path,
 			 const GError        *error,
-			 gpointer             data)
+			 gpointer             user_data)
 {
-  GtkFileChooserDefault *impl = data;
+  GtkFileChooserDefault *impl = user_data;
+
+  set_busy_cursor (impl, FALSE);
 
   if (error)
     error_creating_folder_dialog (impl, path, g_error_copy (error));
+  else
+    g_signal_emit_by_name (impl, "response-requested");
+}
+
+struct SaveEntryData
+{
+  GtkFileChooserDefault *impl;
+  gboolean file_exists_and_is_not_folder;
+  GtkFilePath *parent_path;
+  GtkFilePath *path;
+};
+
+static void
+save_entry_get_info_cb (GtkFileSystemHandle *handle,
+			GtkFileInfo         *info,
+			const GError        *error,
+			gpointer             user_data)
+{
+  gboolean parent_is_folder;
+  struct SaveEntryData *data = user_data;
+
+  set_busy_cursor (data->impl, FALSE);
+
+  if (!info)
+    parent_is_folder = FALSE;
+  else
+    parent_is_folder = gtk_file_info_get_is_folder (info);
+
+  if (parent_is_folder)
+    {
+      if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+        {
+          if (data->file_exists_and_is_not_folder)
+	    {
+	      gboolean retval;
+	      const char *file_part;
+
+	      file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (data->impl->save_file_name_entry));
+	      retval = should_respond_after_confirm_overwrite (data->impl, file_part, data->parent_path);
+
+	      if (retval)
+		g_signal_emit_by_name (data->impl, "response-requested");
+	    }
+	  else
+	    g_signal_emit_by_name (data->impl, "response-requested");
+	}
+      else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
+        {
+	  g_object_ref (data->impl);
+	  gtk_file_system_create_folder (data->impl->file_system, data->path,
+					 action_create_folder_cb,
+					 data->impl);
+	  set_busy_cursor (data->impl, TRUE);
+        }
+    }
+  else
+    {
+      /* This will display an error, which is what we want */
+      change_folder_and_display_error (data->impl, data->parent_path);
+    }
+
+  g_object_unref (data->impl);
+  gtk_file_path_free (data->path);
+  gtk_file_path_free (data->parent_path);
+  g_free (data);
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
@@ -6856,7 +6883,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
       entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
-      check_save_entry (impl, &path, &is_well_formed, &is_empty, &is_file_part_empty);
+      check_save_entry (impl, &path, &is_well_formed, &is_empty, &is_file_part_empty, &is_folder);
 
       if (is_empty || !is_well_formed)
 	return FALSE;
@@ -6864,8 +6891,6 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       g_assert (path != NULL);
 
       error = NULL;
-      /* FIXME */
-      is_folder = check_is_folder (impl->file_system, path, &error);
       if (is_folder)
 	{
 	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
@@ -6898,43 +6923,25 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  else
 	    {
 	      GtkFilePath *parent_path;
-	      gboolean parent_is_folder;
+	      struct SaveEntryData *data;
 
 	      /* check that everything up to the last component exists */
 
 	      parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
-	      /* FIXME */
-	      parent_is_folder = check_is_folder (impl->file_system, parent_path, NULL);
-	      if (parent_is_folder)
-		{
-		  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-		    {
-		      if (file_exists_and_is_not_folder)
-			{
-			  const char *file_part;
 
-			  file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry));
-			  retval = should_respond_after_confirm_overwrite (impl, file_part, parent_path);
-			}
-		      else
-			retval = TRUE;
-		    }
-		  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
-		    {
-		      gtk_file_system_create_folder (impl->file_system, path,
-						     action_create_folder_cb,
-						     impl);
-		      retval = TRUE;
-		    }
-		}
-	      else
-		{
-		  /* This will display an error, which is what we want */
-		  change_folder_and_display_error (impl, parent_path);
-		  retval = FALSE;
-		}
+	      data = g_new0 (struct SaveEntryData, 1);
+	      data->impl = g_object_ref (impl);
+	      data->file_exists_and_is_not_folder = file_exists_and_is_not_folder;
+	      data->parent_path = parent_path; /* Takes ownership */
+	      data->path = gtk_file_path_copy (path);
 
-	      gtk_file_path_free (parent_path);
+	      gtk_file_system_get_info (impl->file_system, parent_path,
+					GTK_FILE_INFO_IS_FOLDER,
+					save_entry_get_info_cb,
+					data);
+	      set_busy_cursor (impl, TRUE);
+
+	      retval = FALSE;
 	    }
 
 	  if (error != NULL)
