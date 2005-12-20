@@ -1,5 +1,16 @@
 2005-12-20  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (ref_path_cb): when called with
+	!folder, check if node is the node we are looking for (can be
+	triggered when we call ref_path_cb ourselves after a find_child_node),
+	(_gtk_file_system_model_path_do): introduce parent_node field;
+	after finding a child node in a loaded parent node, don't forget
+	to call ref_path_cb,
+	(get_children_get_folder_cb): don't forget to set data->node->folder
+	to the newly acquired folder.
+
+2005-12-20  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c (show_and_select_paths_get_folder_cb):
 	handle case where the folder we get already finished loading.
 
