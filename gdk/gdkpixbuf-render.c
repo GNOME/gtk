@@ -163,7 +163,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * for consistent visual results.  If you do not have any of these cases, the
  * dither offsets can be both zero.
  *
- * Deprecated: This function is obsolete. Use gdk_draw_pixbuf() instead.
+ * Deprecated: 2.4: This function is obsolete. Use gdk_draw_pixbuf() instead.
  **/
 void
 gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
