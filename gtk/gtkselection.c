@@ -1813,7 +1813,7 @@ gtk_selection_init (void)
  * 
  * Since: 2.2
  *
- * Deprecated: Instead of calling this function, chain up from
+ * Deprecated: 2.4: Instead of calling this function, chain up from
  * your selection_clear_event handler. Calling this function
  * from any other context is illegal. 
  **/

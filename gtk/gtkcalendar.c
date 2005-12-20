@@ -3466,6 +3466,8 @@ gtk_calendar_get_date (GtkCalendar *calendar,
  * 
  * Does nothing. Previously locked the display of the calendar until
  * it was thawed with gtk_calendar_thaw().
+ *
+ * Deprecated: 2.8: 
  **/
 void
 gtk_calendar_freeze (GtkCalendar *calendar)
@@ -3479,6 +3481,8 @@ gtk_calendar_freeze (GtkCalendar *calendar)
  * 
  * Does nothing. Previously defrosted a calendar; all the changes made
  * since the last gtk_calendar_freeze() were displayed.
+ *
+ * Deprecated: 2.8: 
  **/
 void
 gtk_calendar_thaw (GtkCalendar *calendar)

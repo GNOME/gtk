@@ -758,7 +758,7 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  * changes were not committed.
  *
  * Since: 2.4
- * Deprecated: Use gtk_cell_renderer_stop_editing() instead
+ * Deprecated: 2.6: Use gtk_cell_renderer_stop_editing() instead
  **/
 void
 gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell)
