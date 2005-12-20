@@ -99,6 +99,11 @@ Emitted when the user or a function changes the current page.
 
 </para>
 
+<!-- ##### ARG GtkNotebook:reorderable ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkNotebook:scrollable ##### -->
 <para>
 

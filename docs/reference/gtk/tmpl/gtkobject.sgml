@@ -134,12 +134,6 @@ Tells about the state of the object.
 
 @GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used 
   internally by GTK+ to prevent reinvokations during destruction.
-@GTK_FLOATING: the object is orphaned.  Objects that take strong hold of an 
-  object may call g_object_ref_sink(), to convert the floating reference into
-  a regular one, if they believe they are nearly primary ownership of the 
-  object.
-GTK_CONNECTED: signals are connected to this object.
-@GTK_RESERVED_1: reserved for future use
 @GTK_RESERVED_2: reserved for future use
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
@@ -163,7 +157,6 @@ See the overview documentation for #GtkObject.
 <!-- ##### ENUM GtkArgFlags ##### -->
 <para>
 Possible flags indicating how an argument should be treated.
-Deprecated in favor of #GParamSpec features.
 </para>
 
 @GTK_ARG_READABLE: the argument is readable. (i.e. can be queried)
@@ -175,6 +168,7 @@ set.  Hence this flag is not allowed with #GTK_ARG_WRITABLE,
 and is redundant with #GTK_ARG_CONSTRUCT.
 @GTK_ARG_CHILD_ARG: an argument type that applies to (and may be different for)
 each child.  Used by #GtkContainer.
+@Deprecated: Use corresponding #GParamSpec features instead
 
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
@@ -201,7 +195,7 @@ the top of the page.
 </para>
 
 @object: the object to sink.
-@Deprecated: Use g_object_ref_sink() instead
+@Deprecated: 2.10: Use g_object_ref_sink() instead
 
 
 <!-- ##### FUNCTION gtk_object_ref ##### -->

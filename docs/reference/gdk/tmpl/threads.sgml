@@ -290,9 +290,11 @@ Leaves a critical region begun with gdk_threads_enter().
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->
 <para>
 The #GMutex used to implement the critical region for
-gdk_threads_enter()/gdk_threads_leave(). This variable should not be
-used directly &mdash; consider it private.
+gdk_threads_enter()/gdk_threads_leave(). 
 </para>
+
+@Deprecated: 2.4: This variable should not be used directly 
+  &mdash; consider it private.
 
 
 <!-- ##### FUNCTION gdk_threads_set_lock_functions ##### -->

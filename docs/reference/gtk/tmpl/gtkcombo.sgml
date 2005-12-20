@@ -95,7 +95,7 @@ an application.)
 
 @entry: the text entry field.
 @list: the list shown in the drop-down window.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 <!-- ##### ARG GtkCombo:allow-empty ##### -->
 <para>
@@ -128,7 +128,7 @@ Creates a new #GtkCombo.
 </para>
 
 @Returns: a new #GtkCombo.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_popdown_strings ##### -->
@@ -139,7 +139,7 @@ Convenience function to set all of the items in the popup list.
 
 @combo: a #GtkCombo.
 @strings: a list of strings, or %NULL to clear the popup list
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_value_in_list ##### -->
@@ -155,7 +155,7 @@ If an empty field is acceptable, the @ok_if_empty parameter should be %TRUE.
 @combo: a #GtkCombo.
 @val: %TRUE if the value entered must match one of the values in the list.
 @ok_if_empty: %TRUE if an empty value is considered valid.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows ##### -->
@@ -167,7 +167,7 @@ the list. This is on by default.
 @combo: a #GtkCombo.
 @val: %TRUE if the arrow keys can be used to step through the items in 
      the list.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
@@ -177,7 +177,7 @@ Obsolete function, does nothing.
 
 @combo: a #GtkCombo.
 @val: unused
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->
@@ -193,7 +193,7 @@ worried about differences in case.
 
 @combo: a #GtkCombo.
 @val: %TRUE if the text in the list items is case sensitive.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_item_string ##### -->
@@ -205,7 +205,7 @@ selected. This is needed if the list item is not a simple label.
 @combo: a #GtkCombo.
 @item: a #GtkItem.
 @item_value: the string to place in the #GtkEntry when @item is selected.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_disable_activate ##### -->
@@ -217,6 +217,6 @@ instead.
 </para>
 
 @combo: a #GtkCombo.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 

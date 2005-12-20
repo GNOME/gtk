@@ -32,6 +32,11 @@ private members and should not be accessed directly.
 
 @toggleaction: the object which received the signal.
 
+<!-- ##### ARG GtkToggleAction:active ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkToggleAction:draw-as-radio ##### -->
 <para>
 

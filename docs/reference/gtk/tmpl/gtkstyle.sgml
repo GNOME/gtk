@@ -162,6 +162,17 @@ Deprecated alias for gtk_style_apply_default_background().
 @h: 
 
 
+<!-- ##### FUNCTION gtk_style_lookup_color ##### -->
+<para>
+
+</para>
+
+@style: 
+@color_name: 
+@color: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_style_lookup_icon_set ##### -->
 <para>
 

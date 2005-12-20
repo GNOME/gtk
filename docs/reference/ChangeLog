@@ -1,5 +1,9 @@
-2005-12-19  Matthias Clasen  <mclasen@redhat.com>
+2005-12-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkcombo.sgml: Small additions
+
+2005-12-19  Matthias Clasen  <mclasen@redhat.com>
+	
 	* gdk-pixbuf/tmpl/module_interface.sgml: 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: 
 	* gdk-pixbuf/tmpl/animation.sgml: Small additions/fixes.

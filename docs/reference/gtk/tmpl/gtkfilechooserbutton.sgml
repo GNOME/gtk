@@ -62,6 +62,11 @@ This should not be accessed directly.  Use the accessor functions below.
 
 </para>
 
+<!-- ##### ARG GtkFileChooserButton:focus-on-click ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkFileChooserButton:title ##### -->
 <para>
 
@@ -136,5 +141,23 @@ This should not be accessed directly.  Use the accessor functions below.
 
 @button: 
 @n_chars: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@focus_on_click: 
 
 

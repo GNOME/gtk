@@ -450,6 +450,15 @@ has some similarity to strcmp() returning 0 for equal strings.
 @tree_view: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_headers_clickable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_set_headers_clickable ##### -->
 <para>
 

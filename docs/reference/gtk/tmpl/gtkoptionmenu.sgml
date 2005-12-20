@@ -38,7 +38,7 @@ The #GtkOptionMenu-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 <!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
 <para>
@@ -68,7 +68,7 @@ Creates a new #GtkOptionMenu.
 </para>
 
 @Returns: a new #GtkOptionMenu.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_option_menu_get_menu ##### -->
@@ -78,7 +78,7 @@ Returns the #GtkMenu associated with the #GtkOptionMenu.
 
 @option_menu: a #GtkOptionMenu.
 @Returns: the #GtkMenu associated with the #GtkOptionMenu.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_option_menu_set_menu ##### -->
@@ -90,7 +90,7 @@ use of tearoff menu items, submenus, and accelerators.
 
 @option_menu: a #GtkOptionMenu.
 @menu: the #GtkMenu to associate with the #GtkOptionMenu.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_option_menu_remove_menu ##### -->
@@ -99,7 +99,7 @@ Removes the menu from the option menu.
 </para>
 
 @option_menu: a #GtkOptionMenu.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_option_menu_set_history ##### -->
@@ -110,7 +110,7 @@ selected value for the option menu.
 
 @option_menu: a #GtkOptionMenu.
 @index_: the index of the menu item to select.  Index values are from 0 to n-1.
-@Deprecated: Use #GtkComboBox instead.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_option_menu_get_history ##### -->

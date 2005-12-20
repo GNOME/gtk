@@ -773,6 +773,7 @@ gtk_widget_destroy (chooser);
 
 @GTK_FILE_CHOOSER_ERROR_NONEXISTENT: Indicates that a file does not exist.
 @GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: Indicates a malformed filename.
+@GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS: 
 
 <!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
 <para>

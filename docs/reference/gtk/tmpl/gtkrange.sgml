@@ -69,7 +69,17 @@ Emitted when the range value changes.
 
 </para>
 
+<!-- ##### ARG GtkRange:lower-stepper-sensitivity ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:update-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:upper-stepper-sensitivity ##### -->
 <para>
 
 </para>

@@ -42,6 +42,76 @@ on Win32 doesn't allow to embed arbitrary widgets.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### STRUCT GtkStatusIcon ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkStatusIcon::activate ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+
+<!-- ##### SIGNAL GtkStatusIcon::popup-menu ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkStatusIcon::size-changed ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkStatusIcon:blinking ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:file ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:storage-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:visible ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_status_icon_new ##### -->
 <para>
 

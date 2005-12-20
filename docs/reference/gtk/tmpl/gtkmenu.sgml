@@ -129,6 +129,11 @@ should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkMenu:horizontal-padding ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:vertical-offset ##### -->
 <para>
 

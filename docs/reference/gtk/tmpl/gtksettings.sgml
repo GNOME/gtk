@@ -23,6 +23,11 @@ Sharing settings between applications
 </para>
 
 
+<!-- ##### ARG GtkSettings:color-hash ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-alternative-button-order ##### -->
 <para>
 
@@ -39,6 +44,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-color-scheme ##### -->
 <para>
 
 </para>
@@ -74,6 +84,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-animations ##### -->
 <para>
 
 </para>
@@ -133,12 +148,32 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-show-input-method-menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-show-unicode-menu ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-timeout-initial ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-timeout-repeat ##### -->
 <para>
 
 </para>
