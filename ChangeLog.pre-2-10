@@ -1,3 +1,10 @@
+2005-12-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_button_press): Reset 
+	pressed_button to -1 after handling a double click, so that
+	motion events occurring between here and the release event
+	don't trigger DND.  (#324588, Dave Andreoli)
+
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderer.c: 
