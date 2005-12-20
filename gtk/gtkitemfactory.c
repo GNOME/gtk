@@ -191,6 +191,8 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * Creates a new #GtkItemFactory.
  *
  * Beware that the returned object does not have a floating reference.
+ *
+ * Deprecated: 2.4:	
  */
 GtkItemFactory*
 gtk_item_factory_new (GType	     container_type,
@@ -252,7 +254,7 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
  * gtk_accel_map_load(), even if they haven't been created by an item
  * factory. 
  *
- * Deprecated: The recommended API for this purpose are the functions 
+ * Deprecated: 2.4: The recommended API for this purpose are the functions 
  * gtk_menu_item_set_accel_path() and gtk_widget_set_accel_path(); don't 
  * use gtk_item_factory_add_foreign() in new code, since it is likely to
  * be removed in the future.
@@ -406,6 +408,8 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
  *    menu items will be added, or %NULL to create a new one
  * 
  * Initializes an item factory.
+ *
+ * Deprecated: 2.4:
  */  
 void
 gtk_item_factory_construct (GtkItemFactory	*ifactory,
@@ -459,6 +463,8 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
  * Finds an item factory which has been constructed using the 
  * <literal>"&lt;name&gt;"</literal> prefix of @path as the @path argument 
  * for gtk_item_factory_new().
+ *
+ * Deprecated: 2.4:
  */
 GtkItemFactory*
 gtk_item_factory_from_path (const gchar      *path)
@@ -559,6 +565,8 @@ gtk_item_factory_finalize (GObject *object)
  * @returns: the item factory from which @widget was created, or %NULL
  *
  * Obtains the item factory from which a widget was created.
+ *
+ * Deprecated: 2.4
  */
 GtkItemFactory*
 gtk_item_factory_from_widget (GtkWidget	       *widget)
@@ -590,6 +598,8 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
  * to it. (The full path of a widget is the concatenation of the factory 
  * path specified in gtk_item_factory_new() with the path specified in the 
  * #GtkItemFactoryEntry from which the widget was created.)
+ *
+ * Deprecated: 2.4:
  */
 G_CONST_RETURN gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
@@ -619,6 +629,8 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
  * @callback_data: data passed to the callback functions of all entries
  *
  * Creates the menu items from the @entries.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
@@ -639,6 +651,8 @@ gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
  *    #GtkItemFactoryCallback1, 2 if they are of type #GtkItemFactoryCallback2 
  *
  * Creates the menu items from the @entries.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
@@ -673,6 +687,8 @@ gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
  * If the widget corresponding to @path is a menu item which opens a 
  * submenu, then the submenu is returned. If you are interested in the menu 
  * item, use gtk_item_factory_get_item() instead.
+ *
+ * Deprecated: 2.4:
  */
 GtkWidget*
 gtk_item_factory_get_widget (GtkItemFactory *ifactory,
@@ -724,6 +740,8 @@ gtk_item_factory_get_widget (GtkItemFactory *ifactory,
  *
  * If there are multiple items with the same action, the result is 
  * undefined.
+ *
+ * Deprecated: 2.4:
  */
 GtkWidget*
 gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
@@ -759,6 +777,8 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
  * If the widget corresponding to @path is a menu item which opens a 
  * submenu, then the item is returned. If you are interested in the submenu, 
  * use gtk_item_factory_get_widget() instead.
+ *
+ * Deprecated: 2.4:
  */
 GtkWidget*
 gtk_item_factory_get_item (GtkItemFactory *ifactory,
@@ -788,6 +808,8 @@ gtk_item_factory_get_item (GtkItemFactory *ifactory,
  *
  * Obtains the menu item which was constructed from the first 
  * #GtkItemFactoryEntry with the given @action.
+ *
+ * Deprecated: 2.4:
  */
 GtkWidget*
 gtk_item_factory_get_item_by_action (GtkItemFactory *ifactory,
@@ -924,6 +946,8 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
  *    #GtkItemFactoryCallback1, 2 if it is of type #GtkItemFactoryCallback2 
  *
  * Creates an item for @entry.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
@@ -1156,6 +1180,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
  * @entries: an array of #GtkMenuEntry<!-- -->s 
  *
  * Creates the menu items from the @entries.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_create_menu_entries (guint              n_entries,
@@ -1240,6 +1266,8 @@ gtk_item_factory_create_menu_entries (guint              n_entries,
  * @path: a path 
  * 
  * Deletes all widgets constructed from the specified path.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factories_path_delete (const gchar *ifactory_path,
@@ -1299,6 +1327,8 @@ gtk_item_factories_path_delete (const gchar *ifactory_path,
  *
  * Deletes the menu item which was created for @path by the given
  * item factory.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
@@ -1327,6 +1357,8 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
  *
  * Deletes the menu item which was created from @entry by the given
  * item factory.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
@@ -1360,6 +1392,8 @@ gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
  *
  * Deletes the menu items which were created from the @entries by the given
  * item factory.
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_delete_entries (GtkItemFactory         *ifactory,
@@ -1405,6 +1439,8 @@ gtk_item_factory_menu_pos (GtkMenu  *menu,
  * Obtains the @popup_data which was passed to 
  * gtk_item_factory_popup_with_data(). This data is available until the menu
  * is popped down again.
+ *
+ * Deprecated: 2.4:
  */
 gpointer
 gtk_item_factory_popup_data_from_widget (GtkWidget *widget)
@@ -1428,6 +1464,8 @@ gtk_item_factory_popup_data_from_widget (GtkWidget *widget)
  * Obtains the @popup_data which was passed to 
  * gtk_item_factory_popup_with_data(). This data is available until the menu
  * is popped down again.
+ *
+ * Deprecated: 2.4:
  */
 gpointer
 gtk_item_factory_popup_data (GtkItemFactory *ifactory)
@@ -1468,6 +1506,8 @@ ifactory_delete_popup_data (GtkObject	   *object,
  *
  * The operation of the @mouse_button and the @time_ parameter is the same
  * as the @button and @activation_time parameters for gtk_menu_popup().
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_popup (GtkItemFactory		*ifactory,
@@ -1505,6 +1545,8 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
  *
  * The operation of the @mouse_button and the @time_ parameters is the same
  * as the @button and @activation_time parameters for gtk_menu_popup().
+ *
+ * Deprecated: 2.4:
  */
 void
 gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
@@ -1562,6 +1604,8 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
  * 
  * Sets a function to be used for translating the path elements before they
  * are displayed. 
+ *
+ * Deprecated: 2.4:
  */ 
 void
 gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,

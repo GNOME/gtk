@@ -206,7 +206,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * On older X servers, rendering pixbufs with an alpha channel involves round trips
  * to the X server, and may be somewhat slow.
  *
- * Deprecated: This function is obsolete. Use gdk_draw_pixbuf() instead.
+ * Deprecated: 2.4: This function is obsolete. Use gdk_draw_pixbuf() instead.
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
