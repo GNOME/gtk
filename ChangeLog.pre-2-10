@@ -1,3 +1,14 @@
+2005-12-21  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): remove
+	the FIXME since it doesn't make sense, when we return a cached
+	folder we won't emit finished-loading either,
+	(gtk_file_system_unix_create_folder): remove unused variable,
+	(gtk_file_folder_unix_list_children): remove unused code,
+	(get_is_hidden_for_file): new function,
+	(create_file_info): also handle getting is_hidden when called
+	without a folder unix (from _system_get_info() for example).
+
 2005-12-20  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (check_is_folder): fully removed!

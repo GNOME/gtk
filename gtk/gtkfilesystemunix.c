@@ -234,6 +234,8 @@ static GtkFilePath *filename_to_path   (const gchar       *filename);
 
 static gboolean     filename_is_root  (const char       *filename);
 
+static gboolean get_is_hidden_for_file (const char *filename,
+					const char *basename);
 static gboolean file_is_hidden (GtkFileFolderUnix *folder_unix,
 				const char        *basename);
 
@@ -925,11 +927,8 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   g_object_ref (handle);
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_unix), NULL, data);
 
-  /* load folder contents in an idle */
-  /* FIXME: need to make sure this finishes *after* the callback
-   * was called.
-   */
-  g_idle_add ((GSourceFunc) load_folder, folder_unix);
+  /* Start loading the folder contents in an idle */
+  g_idle_add ((GSourceFunc) load_folder, info->folder);
 
   return handle;
 }
@@ -996,9 +995,8 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
       folder_unix = g_hash_table_lookup (system_unix->folder_hash, parent);
       if (folder_unix)
 	{
-	  GtkFileInfoType types;
-	  GtkFilePath *parent_path;
 	  GSList *paths;
+	  GtkFilePath *parent_path;
 	  GtkFileFolderUnix *folder;
 
 	  /* This is sort of a hack.  We re-get the folder, to ensure that the
@@ -2332,7 +2330,8 @@ create_file_info (GtkFileFolderUnix *folder_unix,
 	}
       else
         {
-	  /* FIXME */
+	  if (get_is_hidden_for_file (filename, basename))
+	    gtk_file_info_set_is_hidden (info, TRUE);
         }
     }
 
@@ -2498,14 +2497,6 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 {
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
   GSList *l;
-
-  /* FIXME: _get_folder() will start a directory load now, might want
-   * to add a force_reload flag here.
-   */
-#if 0
-  if (!fill_in_names (folder_unix, error))
-    return FALSE;
-#endif
 
   *children = NULL;
 
@@ -2711,6 +2702,43 @@ filename_is_root (const char *filename)
   after_root = g_path_skip_root (filename);
 
   return (after_root != NULL && *after_root == '\0');
+}
+
+static gboolean
+get_is_hidden_for_file (const char *filename,
+			const char *basename)
+{
+  gchar *dirname;
+  gchar *hidden_file;
+  gchar *contents;
+  gboolean hidden = FALSE;
+
+  dirname = g_path_get_dirname (filename);
+  hidden_file = g_build_filename (dirname, HIDDEN_FILENAME, NULL);
+  g_free (dirname);
+
+  if (g_file_get_contents (hidden_file, &contents, NULL, NULL))
+    {
+      gchar **lines; 
+      int i;
+      
+      lines = g_strsplit (contents, "\n", -1);
+      for (i = 0; lines[i]; i++)
+	{
+	  if (lines[i][0] && strcmp (lines[i], basename) == 0)
+	    {
+	      hidden = TRUE;
+	      break;
+	    }
+	}
+      
+      g_strfreev (lines);
+      g_free (contents);
+    }
+
+  g_free (hidden_file);
+
+  return hidden;
 }
 
 static gboolean
