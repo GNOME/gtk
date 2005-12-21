@@ -2578,8 +2578,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
   GtkIconViewCellInfo *pixbuf_info;
   gint pixbuf_width, wrap_width;
       
-  if (icon_view->priv->item_width < 0 &&
-      icon_view->priv->text_cell != -1 &&
+  if (icon_view->priv->text_cell != -1 &&
       icon_view->priv->pixbuf_cell != -1)
     {
       text_info = g_list_nth_data (icon_view->priv->cell_list,

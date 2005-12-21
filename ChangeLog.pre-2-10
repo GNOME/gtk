@@ -1,3 +1,9 @@
+2005-12-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (adjust_wrap_width): Adjust the 
+	wrap-width also if an explicit item width is set.  
+	(#322475, Alex Graveley)
+
 2005-12-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_button_press): Reset 
