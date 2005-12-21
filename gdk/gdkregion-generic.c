@@ -112,7 +112,7 @@ gdk_region_new ()
 {
   GdkRegion *temp;
 
-  temp = g_new (GdkRegion, 1);
+  temp = g_slice_new (GdkRegion);
   temp->rects = g_new (GdkRegionBox, 1);
 
   temp->numRects = 0;
@@ -143,7 +143,7 @@ gdk_region_rectangle (GdkRectangle *rectangle)
   if (rectangle->width <= 0 || rectangle->height <= 0)
     return gdk_region_new();
 
-  temp = g_new (GdkRegion, 1);
+  temp = g_slice_new (GdkRegion);
   temp->rects = g_new (GdkRegionBox, 1);
 
   temp->numRects = 1;
@@ -171,7 +171,7 @@ gdk_region_copy (GdkRegion *region)
 
   g_return_val_if_fail (region != NULL, NULL);
 
-  temp = g_new (GdkRegion, 1);
+  temp = g_slice_new (GdkRegion);
   temp->rects = g_new (GdkRegionBox, region->numRects);
 
   temp->numRects = region->numRects;
@@ -330,7 +330,7 @@ gdk_region_destroy (GdkRegion *r)
   g_return_if_fail (r != NULL);
   
   g_free (r->rects);
-  g_free (r);
+  g_slice_free (GdkRegion, r);
 }
 
 

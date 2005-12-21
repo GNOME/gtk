@@ -1,5 +1,9 @@
 2005-12-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkregion-generic.c: Use the slice allocator
+	for regions. Still todo: avoid extra allocations for
+	the single-rectangle case.
+
 	* gtk/gtksettings.c (gtk_settings_class_init): Update
 	class_n_properties after installing color-hash, since
 	other classes install settings, too.
