@@ -1,5 +1,13 @@
 2005-12-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (gtk_settings_class_init): Update
+	class_n_properties after installing color-hash, since
+	other classes install settings, too.
+
+	* gtk/gtkctree.c: 
+	* gtk/gtkclist.c: Fix some mistakes in the conversion
+	from mem chunks to slice allocator.
+
 	* gtk/gtkiconview.c (adjust_wrap_width): Adjust the 
 	wrap-width also if an explicit item width is set.  
 	(#322475, Alex Graveley)

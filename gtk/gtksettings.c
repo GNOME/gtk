@@ -211,7 +211,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->notify = gtk_settings_notify;
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
-
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-time",
                                                                P_("Double Click Time"),
@@ -481,6 +480,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_ENABLE_ANIMATIONS);
 
+
   /**
    * GtkSettings:color-hash:
    *
@@ -496,6 +496,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
 						       P_("A hash table resentation of the color scheme."),
 						       G_TYPE_HASH_TABLE,
 						       GTK_PARAM_READABLE));
+
+  class_n_properties++;
+  
 }
 
 static void

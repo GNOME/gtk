@@ -3196,7 +3196,7 @@ row_new (GtkCTree *ctree)
 
   clist = GTK_CLIST (ctree);
   ctree_row = g_slice_new (GtkCTreeRow);
-  ctree_row->row.cell = g_slice_new (GtkCell);
+  ctree_row->row.cell = g_slice_alloc (sizeof (GtkCell) * clist->columns);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -3282,7 +3282,7 @@ row_delete (GtkCTree    *ctree,
       dnotify (ddata);
     }
 
-  g_slice_free (GtkCell, ctree_row->row.cell);
+  g_slice_free1 (sizeof (GtkCell) * clist->columns, ctree_row->row.cell);
   g_slice_free (GtkCListRow, ctree_row);
 }
 

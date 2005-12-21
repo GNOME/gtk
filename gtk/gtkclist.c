@@ -6349,7 +6349,7 @@ row_new (GtkCList *clist)
   GtkCListRow *clist_row;
 
   clist_row = g_slice_new (GtkCListRow);
-  clist_row->cell = g_slice_new (GtkCell);
+  clist_row->cell = g_slice_alloc (sizeof (GtkCell) * clist->columns);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -6398,7 +6398,7 @@ row_delete (GtkCList    *clist,
   if (clist_row->destroy)
     clist_row->destroy (clist_row->data);
 
-  g_slice_free (GtkCell, clist_row->cell);
+  g_slice_free1 (sizeof (GtkCell) * clist->columns, clist_row->cell);
   g_slice_free (GtkCListRow, clist_row);
 }
 
