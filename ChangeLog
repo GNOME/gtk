@@ -1,3 +1,13 @@
+Thu Dec 22 16:01:27 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkobject.c: derive GtkObject from GUnowned,
+	so it initially has a floating reference count.
+	gtk_object_class_init(): installa floating flag handler with
+	libgobject, so for GtkObjects the flag is stored as GTK_FLOATING
+	in the ->flags member.
+
+	* tests/floatingtest.c: test floating flag uses.
+
 2005-12-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkregion-generic.c: Use the slice allocator

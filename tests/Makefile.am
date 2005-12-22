@@ -25,9 +25,11 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
+TESTS = floatingtest
 
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
+	floatingtest			\
 	simple				\
 	testaccel			\
 	testcairo			\
@@ -77,6 +79,7 @@ noinst_PROGRAMS =			\
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
+floatingtest_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
@@ -118,7 +121,7 @@ testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
-simple_LDADD = $(LDADDS)
+floatingtest_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)

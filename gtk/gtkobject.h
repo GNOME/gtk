@@ -58,7 +58,7 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
   GTK_FLOATING		= 1 << 1,
 #endif
   GTK_RESERVED_1	= 1 << 2,

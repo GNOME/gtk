@@ -96,7 +96,7 @@ gtk_object_get_type (void)
 	NULL,		/* value_table */
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkObject"), 
+      object_type = g_type_register_static (G_TYPE_UNOWNED, I_("GtkObject"), 
 					    &object_info, G_TYPE_FLAG_ABSTRACT);
     }
 
@@ -314,12 +314,37 @@ gtk_object_add_arg_type (const gchar *arg_name,
   g_object_class_install_property (oclass, arg_id, pspec);
 }
 
+static guint
+gtk_object_floating_flag_handler (GtkObject *object,
+                                  gint       job)
+{
+  /* FIXME: remove this whole thing once GTK+ breaks ABI */
+  switch (job)
+    {
+      guint32 oldvalue;
+    case +1:    /* force floating if possible */
+      do
+        oldvalue = g_atomic_int_get (&object->flags);
+      while (!g_atomic_int_compare_and_exchange (&object->flags, oldvalue, oldvalue | GTK_FLOATING));
+      return oldvalue & GTK_FLOATING;
+    case -1:    /* sink if possible */
+      do
+        oldvalue = g_atomic_int_get (&object->flags);
+      while (!g_atomic_int_compare_and_exchange (&object->flags, oldvalue, oldvalue & ~(guint32) GTK_FLOATING));
+      return oldvalue & GTK_FLOATING;
+    default:    /* check floating */
+      return 0 != (g_atomic_int_get (&object->flags) & GTK_FLOATING);
+    }
+}
+
 static void
 gtk_object_class_init (GtkObjectClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
   parent_class = g_type_class_ref (G_TYPE_OBJECT);
+
+  g_object_compat_control (2, gtk_object_floating_flag_handler);
 
   gobject_class->set_property = gtk_object_set_property;
   gobject_class->get_property = gtk_object_get_property;
