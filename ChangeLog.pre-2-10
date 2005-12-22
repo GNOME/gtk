@@ -1,3 +1,7 @@
+Thu Dec 22 18:53:14 2005  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkobject.[hc]: renamed GUnowned to GInitiallyUnowned.
+
 Thu Dec 22 17:55:11 2005  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.h: parent type fixups in structure declarations.

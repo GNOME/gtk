@@ -82,7 +82,7 @@ typedef struct _GtkObjectClass	GtkObjectClass;
 
 struct _GtkObject
 {
-  GUnowned parent_instance;
+  GInitiallyUnowned parent_instance;
   
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
@@ -94,7 +94,7 @@ struct _GtkObject
 
 struct _GtkObjectClass
 {
-  GUnownedClass parent_class;
+  GInitiallyUnownedClass parent_class;
   
   /* Non overridable class methods to set and get per class arguments */
   void (*set_arg) (GtkObject *object,
