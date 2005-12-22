@@ -1,3 +1,12 @@
+Thu Dec 22 17:30:59 2005  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkobject.c: derive GtkObject from GUnowned if possible.
+	gtk_object_class_init(): install a floating flag handler with
+	libgobject, so for GtkObjects the flag is stored as GTK_FLOATING
+	in the ->flags member.
+
+	* configure.in: depend on GLib-2.8.5.
+
 2005-12-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (adjust_wrap_width): Adjust the 
