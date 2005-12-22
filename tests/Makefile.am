@@ -121,6 +121,7 @@ testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
+simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
