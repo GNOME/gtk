@@ -1,3 +1,7 @@
+Thu Dec 22 17:55:11 2005  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h: parent type fixups in structure declarations.
+
 Thu Dec 22 16:01:27 2005  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkobject.c: derive GtkObject from GUnowned,
