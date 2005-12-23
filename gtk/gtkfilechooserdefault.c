@@ -5765,6 +5765,8 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
   g_object_unref (handle);
   impl->update_current_folder_handle = NULL;
 
+  set_busy_cursor (impl, FALSE);
+
   if (cancelled)
     goto out;
 
@@ -5867,6 +5869,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
     gtk_file_system_get_info (impl->file_system, path, GTK_FILE_INFO_IS_FOLDER,
 			      update_current_folder_get_info_cb,
 			      data);
+
+  set_busy_cursor (impl, TRUE);
 
   profile_end ("end", NULL);
   return TRUE;
