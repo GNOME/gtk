@@ -186,9 +186,18 @@ struct _GtkFileChooserDefault
   GtkListStore *shortcuts_model;
   GtkTreeModel *shortcuts_filter_model;
 
-  GSList *loading_shortcuts;
-
   GtkTreeModelSort *sort_model;
+
+  /* Handles */
+  GSList *loading_shortcuts;
+  GSList *reload_icon_handles;
+  GtkFileSystemHandle *file_list_drag_data_received_handle;
+  GtkFileSystemHandle *update_current_folder_handle;
+  GtkFileSystemHandle *show_and_select_paths_handle;
+  GtkFileSystemHandle *should_respond_get_info_handle;
+  GtkFileSystemHandle *update_from_entry_handle;
+  GtkFileSystemHandle *shortcuts_activate_iter_handle;
+  GSList *pending_handles;
 
   LoadState load_state;
   ReloadState reload_state;
@@ -227,8 +236,6 @@ struct _GtkFileChooserDefault
 
   gulong toplevel_set_focus_id;
   GtkWidget *toplevel_last_focus_widget;
-
-  GtkFileSystemHandle *update_current_folder_handle;
 
 #if 0
   GdkDragContext *shortcuts_drag_context;

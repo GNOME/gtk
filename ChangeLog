@@ -1,5 +1,10 @@
 2005-12-23  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c, gtk/gtkfilechooserprivate.h: keep track
+	of handles, cancel all pending operations on dispose.
+
+2005-12-23  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserprivate.h (struct _GtkFileSystemModel): add
 	pending_handles field,
 	(struct _FileModelNode): add load_pending flag.
