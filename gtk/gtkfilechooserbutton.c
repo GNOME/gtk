@@ -957,7 +957,7 @@ struct DndSelectFolderData
 
 static void
 dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
-			       GtkFileInfo         *info,
+			       const GtkFileInfo   *info,
 			       const GError        *error,
 			       gpointer             user_data)
 {
@@ -1171,7 +1171,7 @@ struct ChangeIconThemeData
 
 static void
 change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
-			       GtkFileInfo         *info,
+			       const GtkFileInfo   *info,
 			       const GError        *error,
 			       gpointer             user_data)
 {
@@ -1373,7 +1373,7 @@ struct SetDisplayNameData
 
 static void
 set_info_get_info_cb (GtkFileSystemHandle *handle,
-		      GtkFileInfo         *info,
+		      const GtkFileInfo   *info,
 		      const GError        *error,
 		      gpointer             callback_data)
 {
@@ -1540,7 +1540,7 @@ model_free_row_data (GtkFileChooserButton *button,
 
 static void
 model_add_special_get_info_cb (GtkFileSystemHandle *handle,
-			       GtkFileInfo         *info,
+			       const GtkFileInfo   *info,
 			       const GError        *error,
 			       gpointer             user_data)
 {
@@ -2077,7 +2077,7 @@ update_combo_box (GtkFileChooserButton *button)
 /* Button */
 static void
 update_label_get_info_cb (GtkFileSystemHandle *handle,
-			  GtkFileInfo         *info,
+			  const GtkFileInfo   *info,
 			  const GError        *error,
 			  gpointer             data)
 {

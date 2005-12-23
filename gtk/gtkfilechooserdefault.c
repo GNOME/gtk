@@ -1099,7 +1099,7 @@ struct ReloadIconsData
 
 static void
 shortcuts_reload_icons_get_info_cb (GtkFileSystemHandle *handle,
-				    GtkFileInfo         *info,
+				    const GtkFileInfo   *info,
 				    const GError        *error,
 				    gpointer             user_data)
 {
@@ -1330,7 +1330,7 @@ struct ShortcutsInsertRequest
 
 static void
 get_file_info_finished (GtkFileSystemHandle *handle,
-		        GtkFileInfo         *info,
+		        const GtkFileInfo   *info,
 		        const GError        *error,
 		        gpointer             data)
 {
@@ -3616,7 +3616,7 @@ struct FileListDragData
 
 static void
 file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
-					  GtkFileInfo         *info,
+					  const GtkFileInfo   *info,
 					  const GError        *error,
 					  gpointer             user_data)
 {
@@ -5751,7 +5751,7 @@ struct UpdateCurrentFolderData
 
 static void
 update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
-				   GtkFileInfo         *info,
+				   const GtkFileInfo   *info,
 				   const GError        *error,
 				   gpointer             user_data)
 {
@@ -6326,7 +6326,7 @@ struct AddShortcutData
 
 static void
 add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
-			  GtkFileInfo         *info,
+			  const GtkFileInfo   *info,
 			  const GError        *error,
 			  gpointer             user_data)
 {
@@ -6768,7 +6768,7 @@ struct GetDisplayNameData
 
 static void
 confirmation_confirm_get_info_cb (GtkFileSystemHandle *handle,
-				  GtkFileInfo         *info,
+				  const GtkFileInfo   *info,
 				  const GError        *error,
 				  gpointer             user_data)
 {
@@ -6893,7 +6893,7 @@ struct SaveEntryData
 
 static void
 save_entry_get_info_cb (GtkFileSystemHandle *handle,
-			GtkFileInfo         *info,
+			const GtkFileInfo   *info,
 			const GError        *error,
 			gpointer             user_data)
 {
@@ -7388,7 +7388,7 @@ struct ShortcutsActivateData
 
 static void
 shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
-			        GtkFileInfo         *info,
+			        const GtkFileInfo   *info,
 			        const GError        *error,
 			        gpointer             user_data)
 {
@@ -7897,7 +7897,7 @@ struct UpdateFromEntryData
 
 static void
 update_from_entry_get_info_cb (GtkFileSystemHandle *handle,
-			       GtkFileInfo         *file_info,
+			       const GtkFileInfo   *file_info,
 			       const GError        *error,
 			       gpointer             user_data)
 {

@@ -997,7 +997,7 @@ struct SetButtonImageData
 
 static void
 set_button_image_get_info_cb (GtkFileSystemHandle *handle,
-			      GtkFileInfo         *info,
+			      const GtkFileInfo   *info,
 			      const GError        *error,
 			      gpointer             user_data)
 {
@@ -1440,7 +1440,7 @@ gtk_path_bar_set_path_finish (struct SetPathInfo *info,
 
 static void
 gtk_path_bar_get_info_callback (GtkFileSystemHandle *handle,
-			        GtkFileInfo         *file_info,
+			        const GtkFileInfo   *file_info,
 			        const GError        *error,
 			        gpointer             data)
 {

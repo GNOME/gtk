@@ -1,5 +1,13 @@
 2005-12-23  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystem.h: change the GtkFileInfo argument of the
+	GetInfoCallback to be const.
+
+	* gtk/gtkfilechooserbutton.c, gtk/gtkfilechooserdefault.c,
+	gtk/gtkpathbar.c: changes functions to reflect the above change.
+
+2005-12-23  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c, gtk/gtkfilechooserprivate.h: keep track
 	of handles, cancel all pending operations on dispose.
 
