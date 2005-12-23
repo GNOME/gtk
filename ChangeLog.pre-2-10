@@ -1,5 +1,19 @@
 2005-12-23  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_finalize),
+	(gtk_file_chooser_button_destroy): move all handle cancellations
+	and object unrefs to destroy.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_finalize), (gtk_path_bar_dispose):
+	likewise.
+
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_class_init): 
+	add dispose,
+	(gtk_file_chooser_entry_dispose): cancel handles and unrefs
+	objects here instead of finalize.
+
+2005-12-23  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystem.c (get_cached_icon): check if "name" is an
 	absolute path, if so load the icon from that file.
 

@@ -76,6 +76,7 @@ static void gtk_file_chooser_entry_iface_init (GtkEditableClass         *iface);
 static void gtk_file_chooser_entry_init       (GtkFileChooserEntry      *chooser_entry);
 
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
+static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static gboolean gtk_file_chooser_entry_focus          (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
@@ -157,6 +158,7 @@ gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_chooser_entry_finalize;
+  gobject_class->dispose = gtk_file_chooser_entry_dispose;
 
   widget_class->focus = gtk_file_chooser_entry_focus;
 
@@ -210,8 +212,23 @@ gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
+  gtk_file_path_free (chooser_entry->base_folder);
+  gtk_file_path_free (chooser_entry->current_folder_path);
+  g_free (chooser_entry->file_part);
+
+  parent_class->finalize (object);
+}
+
+static void
+gtk_file_chooser_entry_dispose (GObject *object)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
+
   if (chooser_entry->completion_store)
-    g_object_unref (chooser_entry->completion_store);
+    {
+      g_object_unref (chooser_entry->completion_store);
+      chooser_entry->completion_store = NULL;
+    }
 
   if (chooser_entry->load_folder_handle)
     {
@@ -226,16 +243,16 @@ gtk_file_chooser_entry_finalize (GObject *object)
       g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
 					    G_CALLBACK (files_deleted_cb), chooser_entry);
       g_object_unref (chooser_entry->current_folder);
+      chooser_entry->current_folder = NULL;
     }
 
   if (chooser_entry->file_system)
-    g_object_unref (chooser_entry->file_system);
+    {
+      g_object_unref (chooser_entry->file_system);
+      chooser_entry->file_system = NULL;
+    }
 
-  gtk_file_path_free (chooser_entry->base_folder);
-  gtk_file_path_free (chooser_entry->current_folder_path);
-  g_free (chooser_entry->file_part);
-
-  parent_class->finalize (object);
+  parent_class->dispose (object);
 }
 
 /* Match functions for the GtkEntryCompletion */

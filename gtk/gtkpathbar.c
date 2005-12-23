@@ -210,10 +210,6 @@ gtk_path_bar_finalize (GObject *object)
 
   gtk_path_bar_stop_scrolling (path_bar);
 
-  if (path_bar->set_path_handle)
-    gtk_file_system_cancel_operation (path_bar->set_path_handle);
-  path_bar->set_path_handle = NULL;
-
   g_list_free (path_bar->button_list);
   if (path_bar->root_path)
     gtk_file_path_free (path_bar->root_path);
@@ -254,8 +250,13 @@ remove_settings_signal (GtkPathBar *path_bar,
 static void
 gtk_path_bar_dispose (GObject *object)
 {
-  remove_settings_signal (GTK_PATH_BAR (object),
-			  gtk_widget_get_screen (GTK_WIDGET (object)));
+  GtkPathBar *path_bar = GTK_PATH_BAR (object);
+
+  remove_settings_signal (path_bar, gtk_widget_get_screen (GTK_WIDGET (object)));
+
+  if (path_bar->set_path_handle)
+    gtk_file_system_cancel_operation (path_bar->set_path_handle);
+  path_bar->set_path_handle = NULL;
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }

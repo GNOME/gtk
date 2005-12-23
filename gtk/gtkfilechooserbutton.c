@@ -859,39 +859,9 @@ gtk_file_chooser_button_finalize (GObject *object)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkTreeIter iter;
-  GSList *l;
 
   if (priv->old_path)
     gtk_file_path_free (priv->old_path);
-
-  g_assert (gtk_tree_model_get_iter_first (priv->model, &iter));
-
-  do
-    {
-      model_free_row_data (button, &iter);
-    }
-  while (gtk_tree_model_iter_next (priv->model, &iter));
-
-  if (priv->dnd_select_folder_handle)
-    gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
-
-  if (priv->update_button_handle)
-    gtk_file_system_cancel_operation (priv->update_button_handle);
-
-  for (l = priv->change_icon_theme_handles; l; l = l->next)
-    {
-      GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
-      gtk_file_system_cancel_operation (handle);
-    }
-  g_slist_free (priv->change_icon_theme_handles);
-
-  g_object_unref (priv->model);
-  g_object_unref (priv->filter_model);
-
-  g_signal_handler_disconnect (priv->fs, priv->fs_volumes_changed_id);
-  g_signal_handler_disconnect (priv->fs, priv->fs_bookmarks_changed_id);
-  g_object_unref (priv->fs);
 
   if (G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize != NULL)
     (*G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize) (object);
@@ -906,9 +876,65 @@ gtk_file_chooser_button_destroy (GtkObject *object)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkTreeIter iter;
+  GSList *l;
 
   if (priv->dialog != NULL)
-    gtk_widget_destroy (priv->dialog);
+    {
+      gtk_widget_destroy (priv->dialog);
+      priv->dialog = NULL;
+    }
+
+  g_assert (gtk_tree_model_get_iter_first (priv->model, &iter));
+
+  do
+    {
+      model_free_row_data (button, &iter);
+    }
+  while (gtk_tree_model_iter_next (priv->model, &iter));
+
+  if (priv->dnd_select_folder_handle)
+    {
+      gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
+      priv->dnd_select_folder_handle = NULL;
+    }
+
+  if (priv->update_button_handle)
+    {
+      gtk_file_system_cancel_operation (priv->update_button_handle);
+      priv->update_button_handle = NULL;
+    }
+
+  if (priv->change_icon_theme_handles)
+    {
+      for (l = priv->change_icon_theme_handles; l; l = l->next)
+        {
+          GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
+          gtk_file_system_cancel_operation (handle);
+        }
+      g_slist_free (priv->change_icon_theme_handles);
+      priv->change_icon_theme_handles = NULL;
+    }
+
+  if (priv->model)
+    {
+      g_object_unref (priv->model);
+      priv->model = NULL;
+    }
+
+  if (priv->filter_model)
+    {
+      g_object_unref (priv->filter_model);
+      priv->filter_model = NULL;
+    }
+
+  if (priv->fs)
+    {
+      g_signal_handler_disconnect (priv->fs, priv->fs_volumes_changed_id);
+      g_signal_handler_disconnect (priv->fs, priv->fs_bookmarks_changed_id);
+      g_object_unref (priv->fs);
+      priv->fs = NULL;
+    }
 
   if (GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy != NULL)
     (*GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy) (object);
