@@ -333,8 +333,12 @@ get_cached_icon (GtkWidget    *widget,
       if (element->pixbuf)
 	g_object_unref (element->pixbuf);
       element->size = pixel_size;
-      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
-						  pixel_size, 0, NULL);
+
+      if (g_path_is_absolute (name))
+	element->pixbuf = gdk_pixbuf_new_from_file_at_size (name, pixel_size, pixel_size, NULL);
+      else
+        element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
+						    pixel_size, 0, NULL);
     }
 
   return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;

@@ -928,7 +928,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_unix), NULL, data);
 
   /* Start loading the folder contents in an idle */
-  g_idle_add ((GSourceFunc) load_folder, info->folder);
+  g_idle_add ((GSourceFunc) load_folder, folder_unix);
 
   return handle;
 }

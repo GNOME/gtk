@@ -1,3 +1,11 @@
+2005-12-23  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkfilesystem.c (get_cached_icon): check if "name" is an
+	absolute path, if so load the icon from that file.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): fix
+	the build.
+
 2005-12-21  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): remove
