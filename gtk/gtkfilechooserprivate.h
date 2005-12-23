@@ -275,6 +275,8 @@ struct _GtkFileSystemModel
   GSource *idle_finished_loading_source;
 
   gushort max_depth;
+
+  GSList *pending_handles;
   
   guint show_hidden : 1;
   guint show_folders : 1;
@@ -305,6 +307,7 @@ struct _FileModelNode
   guint is_visible : 1;
   guint loaded : 1;
   guint idle_clear : 1;
+  guint load_pending : 1;
 };
 
 

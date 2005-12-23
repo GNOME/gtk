@@ -1,5 +1,17 @@
 2005-12-23  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileSystemModel): add
+	pending_handles field,
+	(struct _FileModelNode): add load_pending flag.
+
+	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_dispose): introduce, 
+	cancel all pending operations here,
+	(got_root_folder_cb), (_gtk_file_system_model_new), (ref_path_cb),
+	(_gtk_file_system_model_path_do): keep track of all pending
+	operations, handle cancelled operations.
+
+2005-12-23  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_finalize),
 	(gtk_file_chooser_button_destroy): move all handle cancellations
 	and object unrefs to destroy.
