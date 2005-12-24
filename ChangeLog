@@ -1,6 +1,10 @@
 2005-12-24  Matthias Clasen  <mclasen@redhat.com>
 
-	* gdk/gdkrectangle.c: Inline docs.
+	* gdk/gdkregion-generic.c: 
+	* gdk/gdkpolyreg-generic.c: 
+	* gdk/gdkregion.h: 
+	* gdk/gdkrectangle.c: Inline docs, use g_assert(), avoid 
+	extra allocation for rectangular regions.
 
 Thu Dec 22 18:53:14 2005  Tim Janik  <timj@gtk.org>
 

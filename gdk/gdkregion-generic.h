@@ -83,13 +83,22 @@ struct _GdkRegion
               (idRect)->extents.y2 = (r)->y2;\
         }
 
+#define GROWREGION(reg, nRects){  					         \
+	  if ((reg)->rects == &(reg)->extents) {                                 \
+            (reg)->rects = g_new (GdkRegionBox, (nRects));		         \
+            (reg)->rects[0] = reg->extents;                                      \
+          }                                                                      \
+          else                                                                   \
+            (reg)->rects = g_renew (GdkRegionBox, (reg)->rects, (nRects));       \
+	  (reg)->size = (nRects);                                                \
+       }				 
+
 /*
  *   Check to see if there is enough memory in the present region.
  */
 #define MEMCHECK(reg, rect, firstrect){					  	 \
         if ((reg)->numRects >= ((reg)->size - 1)) {			 	 \
-          (firstrect) = g_renew (GdkRegionBox, (firstrect), 2 * (reg)->size);    \
-          (reg)->size *= 2;							 \
+          GROWREGION(reg,2*(reg)->size);                                         \
           (rect) = &(firstrect)[(reg)->numRects];				 \
          }									 \
        }

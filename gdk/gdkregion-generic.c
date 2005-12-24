@@ -75,14 +75,6 @@ SOFTWARE.
 #include "gdkregion-generic.h"
 #include "gdkalias.h"
 
-#ifdef DEBUG
-#include <stdio.h>
-#define assert(expr) {if (!(expr)) fprintf(stderr,\
-"Assertion failed file %s, line %d: expr\n", __FILE__, __LINE__); }
-#else
-#define assert(expr)
-#endif
-
 typedef void (*overlapFunc) (GdkRegion    *pReg,
 			     GdkRegionBox *r1,
 			     GdkRegionBox *r1End,
@@ -105,17 +97,22 @@ static void miRegionOp   (GdkRegion      *newReg,
 			  nonOverlapFunc  nonOverlap1Fn,
 			  nonOverlapFunc  nonOverlap2Fn);
 
-/*	Create a new empty region	*/
-
+/**
+ * gdk_region_new:
+ *
+ * Creates a new empty #GdkRegion.
+ *
+ * Returns: a new empty #GdkRegion
+ */
 GdkRegion *
 gdk_region_new ()
 {
   GdkRegion *temp;
 
   temp = g_slice_new (GdkRegion);
-  temp->rects = g_new (GdkRegionBox, 1);
 
   temp->numRects = 0;
+  temp->rects = &temp->extents;
   temp->extents.x1 = 0;
   temp->extents.y1 = 0;
   temp->extents.x2 = 0;
@@ -144,13 +141,13 @@ gdk_region_rectangle (GdkRectangle *rectangle)
     return gdk_region_new();
 
   temp = g_slice_new (GdkRegion);
-  temp->rects = g_new (GdkRegionBox, 1);
 
   temp->numRects = 1;
-  temp->extents.x1 = temp->rects[0].x1 = rectangle->x;
-  temp->extents.y1 = temp->rects[0].y1 = rectangle->y;
-  temp->extents.x2 = temp->rects[0].x2 = rectangle->x + rectangle->width;
-  temp->extents.y2 = temp->rects[0].y2 = rectangle->y + rectangle->height;
+  temp->rects = &temp->extents;
+  temp->extents.x1 = rectangle->x;
+  temp->extents.y1 = rectangle->y;
+  temp->extents.x2 = rectangle->x + rectangle->width;
+  temp->extents.y2 = rectangle->y + rectangle->height;
   temp->size = 1;
   
   return temp;
@@ -172,27 +169,40 @@ gdk_region_copy (GdkRegion *region)
   g_return_val_if_fail (region != NULL, NULL);
 
   temp = g_slice_new (GdkRegion);
-  temp->rects = g_new (GdkRegionBox, region->numRects);
 
   temp->numRects = region->numRects;
   temp->extents = region->extents;
   temp->size = region->numRects;
-  
-  memcpy (temp->rects, region->rects, region->numRects * sizeof (GdkRegionBox));
+
+  if (region->numRects == 1)
+    temp->rects = &temp->extents;
+  else
+    {
+      temp->rects = g_new (GdkRegionBox, region->numRects);
+      memcpy (temp->rects, region->rects, region->numRects * sizeof (GdkRegionBox));
+    }
 
   return temp;
 }
 
+/**
+ * gdk_region_get_clipbox:
+ * @region: a #GdkRegion
+ * @rectangle: return location for the clipbox
+ *
+ * Returns the smallest rectangle which includes the entire #GdkRegion.
+ */
 void
-gdk_region_get_clipbox (GdkRegion *r, GdkRectangle *rect)
+gdk_region_get_clipbox (GdkRegion    *region, 
+			GdkRectangle *rectangle)
 {
-  g_return_if_fail (r != NULL);
-  g_return_if_fail (rect != NULL);
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (rectangle != NULL);
   
-  rect->x = r->extents.x1;
-  rect->y = r->extents.y1;
-  rect->width = r->extents.x2 - r->extents.x1;
-  rect->height = r->extents.y2 - r->extents.y1;
+  rectangle->x = region->extents.x1;
+  rectangle->y = region->extents.y1;
+  rectangle->width = region->extents.x2 - region->extents.x1;
+  rectangle->height = region->extents.y2 - region->extents.y1;
 }
 
 
@@ -204,7 +214,6 @@ gdk_region_get_clipbox (GdkRegion *r, GdkRectangle *rect)
  *
  * Obtains the area covered by the region as a list of rectangles.
  * The array returned in @rectangles must be freed with g_free().
- * 
  **/
 void
 gdk_region_get_rectangles (GdkRegion     *region,
@@ -291,7 +300,7 @@ miSetExtents (GdkRegion *pReg)
       pReg->extents.y2 = 0;
       return;
     }
-
+  
   pExtents = &pReg->extents;
   pBox = pReg->rects;
   pBoxEnd = &pBox[pReg->numRects - 1];
@@ -308,7 +317,7 @@ miSetExtents (GdkRegion *pReg)
   pExtents->x2 = pBoxEnd->x2;
   pExtents->y2 = pBoxEnd->y2;
 
-  assert(pExtents->y1 < pExtents->y2);
+  g_assert(pExtents->y1 < pExtents->y2);
   while (pBox <= pBoxEnd)
     {
       if (pBox->x1 < pExtents->x1)
@@ -321,24 +330,34 @@ miSetExtents (GdkRegion *pReg)
 	}
       pBox++;
     }
-  assert(pExtents->x1 < pExtents->x2);
+  g_assert(pExtents->x1 < pExtents->x2);
 }
 
+/**
+ * gdk_region_destroy:
+ * @region: a #GdkRegion
+ *
+ * Destroys a #GdkRegion.
+ */
 void
-gdk_region_destroy (GdkRegion *r)
+gdk_region_destroy (GdkRegion *region)
 {
-  g_return_if_fail (r != NULL);
-  
-  g_free (r->rects);
-  g_slice_free (GdkRegion, r);
+  g_return_if_fail (region != NULL);
+
+  if (region->rects != &region->extents)
+    g_free (region->rects);
+  g_slice_free (GdkRegion, region);
 }
 
 
-/* TranslateRegion(pRegion, x, y)
-   translates in place
-   added by raymond
-*/
-
+/**
+ * gdk_region_offset:
+ * @region: a #GdkRegion
+ * @dx: the distance to move the region horizontally
+ * @dy: the distance to move the region vertically
+ *
+ * Moves a region the specified distance.
+ */
 void
 gdk_region_offset (GdkRegion *region,
 		   gint       x,
@@ -360,10 +379,13 @@ gdk_region_offset (GdkRegion *region,
       pbox->y2 += y;
       pbox++;
     }
-  region->extents.x1 += x;
-  region->extents.x2 += x;
-  region->extents.y1 += y;
-  region->extents.y2 += y;
+  if (region->rects != &region->extents)
+    {
+      region->extents.x1 += x;
+      region->extents.x2 += x;
+      region->extents.y1 += y;
+      region->extents.y2 += y;
+    }
 }
 
 /* 
@@ -422,15 +444,24 @@ Compress(GdkRegion *r,
 #undef ZShiftRegion
 #undef ZCopyRegion
 
+/**
+ * gdk_region_shrink:
+ * @region: a #GdkRegion
+ * @dx: the number of pixels to shrink the region horizontally
+ * @dy: the number of pixels to shrink the region vertically
+ *
+ * Resizes a region by the specified amount.
+ * Positive values shrink the region. Negative values expand it.
+ */
 void
-gdk_region_shrink (GdkRegion *r,
+gdk_region_shrink (GdkRegion *region,
 		   int        dx,
 		   int        dy)
 {
   GdkRegion *s, *t;
   int grow;
 
-  g_return_if_fail (r != NULL);
+  g_return_if_fail (region != NULL);
 
   if (!dx && !dy)
     return;
@@ -442,15 +473,15 @@ gdk_region_shrink (GdkRegion *r,
   if (grow)
     dx = -dx;
   if (dx)
-     Compress(r, s, t, (unsigned) 2*dx, TRUE, grow);
+     Compress(region, s, t, (unsigned) 2*dx, TRUE, grow);
      
   grow = (dy < 0);
   if (grow)
     dy = -dy;
   if (dy)
-     Compress(r, s, t, (unsigned) 2*dy, FALSE, grow);
+     Compress(region, s, t, (unsigned) 2*dy, FALSE, grow);
   
-  gdk_region_offset (r, dx, dy);
+  gdk_region_offset (region, dx, dy);
   gdk_region_destroy (s);
   gdk_region_destroy (t);
 }
@@ -502,7 +533,7 @@ miIntersectO (GdkRegion    *pReg,
        */
       if (x1 < x2)
 	{
-	  assert (y1<y2);
+	  g_assert (y1<y2);
 
 	  MEMCHECK (pReg, pNextRect, pReg->rects);
 	  pNextRect->x1 = x1;
@@ -511,7 +542,7 @@ miIntersectO (GdkRegion    *pReg,
 	  pNextRect->y2 = y2;
 	  pReg->numRects += 1;
 	  pNextRect++;
-	  assert (pReg->numRects <= pReg->size);
+	  g_assert (pReg->numRects <= pReg->size);
 	}
 
       /*
@@ -545,27 +576,27 @@ miIntersectO (GdkRegion    *pReg,
  * both @source1 and @source2.
  **/
 void
-gdk_region_intersect (GdkRegion *region,
-		      GdkRegion *other)
+gdk_region_intersect (GdkRegion *source1,
+		      GdkRegion *source2)
 {
-  g_return_if_fail (region != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_if_fail (source1 != NULL);
+  g_return_if_fail (source2 != NULL);
   
   /* check for trivial reject */
-  if ((!(region->numRects)) || (!(other->numRects))  ||
-      (!EXTENTCHECK(&region->extents, &other->extents)))
-    region->numRects = 0;
+  if ((!(source1->numRects)) || (!(source2->numRects))  ||
+      (!EXTENTCHECK(&source1->extents, &source2->extents)))
+    source1->numRects = 0;
   else
-    miRegionOp (region, region, other, 
+    miRegionOp (source1, source1, source2, 
     		miIntersectO, (nonOverlapFunc) NULL, (nonOverlapFunc) NULL);
     
   /*
-   * Can't alter region's extents before miRegionOp depends on the
+   * Can't alter source1's extents before miRegionOp depends on the
    * extents of the regions being unchanged. Besides, this way there's
    * no checking against rectangles that will be nuked due to
    * coalescing, so we have to examine fewer rectangles.
    */
-  miSetExtents(region);
+  miSetExtents(source1);
 }
 
 static void
@@ -579,10 +610,7 @@ miRegionCopy(GdkRegion *dstrgn, GdkRegion *rgn)
 	  dstrgn->size = rgn->numRects;
 	}
       dstrgn->numRects = rgn->numRects;
-      dstrgn->extents.x1 = rgn->extents.x1;
-      dstrgn->extents.y1 = rgn->extents.y1;
-      dstrgn->extents.x2 = rgn->extents.x2;
-      dstrgn->extents.y2 = rgn->extents.y2;
+      dstrgn->extents = rgn->extents;
 
       memcpy (dstrgn->rects, rgn->rects, rgn->numRects * sizeof (GdkRegionBox));
     }
@@ -1015,10 +1043,12 @@ miRegionOp(GdkRegion *newReg,
 	     */
 	    newReg->size = 1;
 	    g_free (newReg->rects);
-	    newReg->rects = g_new (GdkRegionBox, 1);
+	    newReg->rects = &newReg->extents;
 	  }
       }
-    g_free (oldRects);
+
+    if (oldRects != &newReg->extents)
+      g_free (oldRects);
 }
 
 
@@ -1053,11 +1083,11 @@ miUnionNonO (GdkRegion    *pReg,
 
   pNextRect = &pReg->rects[pReg->numRects];
 
-  assert(y1 < y2);
+  g_assert(y1 < y2);
 
   while (r != rEnd)
     {
-      assert(r->x1 < r->x2);
+      g_assert(r->x1 < r->x2);
       MEMCHECK(pReg, pNextRect, pReg->rects);
       pNextRect->x1 = r->x1;
       pNextRect->y1 = y1;
@@ -1066,7 +1096,7 @@ miUnionNonO (GdkRegion    *pReg,
       pReg->numRects += 1;
       pNextRect++;
 
-      assert(pReg->numRects<=pReg->size);
+      g_assert(pReg->numRects<=pReg->size);
       r++;
     }
 }
@@ -1111,7 +1141,7 @@ miUnionO (GdkRegion *pReg,
 	if (pNextRect[-1].x2 < r->x2)  			\
 	  {  						\
 	    pNextRect[-1].x2 = r->x2;  			\
-	    assert(pNextRect[-1].x1<pNextRect[-1].x2); 	\
+	    g_assert(pNextRect[-1].x1<pNextRect[-1].x2); 	\
 	  }  						\
       }  						\
     else  						\
@@ -1124,10 +1154,10 @@ miUnionO (GdkRegion *pReg,
 	pReg->numRects += 1;  				\
         pNextRect += 1;  				\
       }  						\
-    assert(pReg->numRects<=pReg->size);			\
+    g_assert(pReg->numRects<=pReg->size);			\
     r++;
     
-    assert (y1<y2);
+    g_assert (y1<y2);
     while ((r1 != r1End) && (r2 != r2End))
     {
 	if (r1->x1 < r2->x1)
@@ -1163,59 +1193,59 @@ miUnionO (GdkRegion *pReg,
  * either @source1 or @source2.
  **/
 void
-gdk_region_union (GdkRegion *region,
-		  GdkRegion *other)
+gdk_region_union (GdkRegion *source1,
+		  GdkRegion *source2)
 {
-  g_return_if_fail (region != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_if_fail (source1 != NULL);
+  g_return_if_fail (source2 != NULL);
   
   /*  checks all the simple cases */
 
-    /*
-     * region and other are the same or other is empty
-     */
-  if ((region == other) || (!(other->numRects)))
+  /*
+   * source1 and source2 are the same or source2 is empty
+   */
+  if ((source1 == source2) || (!(source2->numRects)))
     return;
 
-    /* 
-     * region is empty
-     */
-  if (!(region->numRects))
+  /* 
+   * source1 is empty
+   */
+  if (!(source1->numRects))
     {
-      miRegionCopy (region, other);
+      miRegionCopy (source1, source2);
+      return;
+    }
+  
+  /*
+   * source1 completely subsumes source2
+   */
+  if ((source1->numRects == 1) && 
+      (source1->extents.x1 <= source2->extents.x1) &&
+      (source1->extents.y1 <= source2->extents.y1) &&
+      (source1->extents.x2 >= source2->extents.x2) &&
+      (source1->extents.y2 >= source2->extents.y2))
+    return;
+
+  /*
+   * source2 completely subsumes source1
+   */
+  if ((source2->numRects == 1) && 
+      (source2->extents.x1 <= source1->extents.x1) &&
+      (source2->extents.y1 <= source1->extents.y1) &&
+      (source2->extents.x2 >= source1->extents.x2) &&
+      (source2->extents.y2 >= source1->extents.y2))
+    {
+      miRegionCopy(source1, source2);
       return;
     }
 
-  /*
-     * region completely subsumes otehr
-     */
-  if ((region->numRects == 1) && 
-      (region->extents.x1 <= other->extents.x1) &&
-      (region->extents.y1 <= other->extents.y1) &&
-      (region->extents.x2 >= other->extents.x2) &&
-      (region->extents.y2 >= other->extents.y2))
-    return;
-
-  /*
-     * other completely subsumes region
-     */
-  if ((other->numRects == 1) && 
-      (other->extents.x1 <= region->extents.x1) &&
-      (other->extents.y1 <= region->extents.y1) &&
-      (other->extents.x2 >= region->extents.x2) &&
-      (other->extents.y2 >= region->extents.y2))
-    {
-      miRegionCopy(region, other);
-      return;
-    }
-
-  miRegionOp (region, region, other, miUnionO, 
+  miRegionOp (source1, source1, source2, miUnionO, 
 	      miUnionNonO, miUnionNonO);
 
-  region->extents.x1 = MIN (region->extents.x1, other->extents.x1);
-  region->extents.y1 = MIN (region->extents.y1, other->extents.y1);
-  region->extents.x2 = MAX (region->extents.x2, other->extents.x2);
-  region->extents.y2 = MAX (region->extents.y2, other->extents.y2);
+  source1->extents.x1 = MIN (source1->extents.x1, source2->extents.x1);
+  source1->extents.y1 = MIN (source1->extents.y1, source2->extents.y1);
+  source1->extents.x2 = MAX (source1->extents.x2, source2->extents.x2);
+  source1->extents.y2 = MAX (source1->extents.y2, source2->extents.y2);
 }
 
 
@@ -1249,11 +1279,11 @@ miSubtractNonO1 (GdkRegion    *pReg,
 	
   pNextRect = &pReg->rects[pReg->numRects];
 	
-  assert(y1<y2);
+  g_assert(y1<y2);
 
   while (r != rEnd)
     {
-      assert (r->x1<r->x2);
+      g_assert (r->x1<r->x2);
       MEMCHECK (pReg, pNextRect, pReg->rects);
       pNextRect->x1 = r->x1;
       pNextRect->y1 = y1;
@@ -1262,7 +1292,7 @@ miSubtractNonO1 (GdkRegion    *pReg,
       pReg->numRects += 1;
       pNextRect++;
 
-      assert (pReg->numRects <= pReg->size);
+      g_assert (pReg->numRects <= pReg->size);
 
       r++;
     }
@@ -1297,7 +1327,7 @@ miSubtractO (GdkRegion    *pReg,
     
   x1 = r1->x1;
     
-  assert(y1<y2);
+  g_assert(y1<y2);
   pNextRect = &pReg->rects[pReg->numRects];
 
   while ((r1 != r1End) && (r2 != r2End))
@@ -1340,7 +1370,7 @@ miSubtractO (GdkRegion    *pReg,
 	   * Left part of subtrahend covers part of minuend: add uncovered
 	   * part of minuend to region and skip to next subtrahend.
 	   */
-	  assert(x1<r2->x1);
+	  g_assert(x1<r2->x1);
 	  MEMCHECK(pReg, pNextRect, pReg->rects);
 	  pNextRect->x1 = x1;
 	  pNextRect->y1 = y1;
@@ -1349,7 +1379,7 @@ miSubtractO (GdkRegion    *pReg,
 	  pReg->numRects += 1;
 	  pNextRect++;
 
-	  assert(pReg->numRects<=pReg->size);
+	  g_assert(pReg->numRects<=pReg->size);
 
 	  x1 = r2->x2;
 	  if (x1 >= r1->x2)
@@ -1383,7 +1413,7 @@ miSubtractO (GdkRegion    *pReg,
 	      pNextRect->y2 = y2;
 	      pReg->numRects += 1;
 	      pNextRect++;
-	      assert(pReg->numRects<=pReg->size);
+	      g_assert(pReg->numRects<=pReg->size);
 	    }
 	  r1++;
 	  if (r1 != r1End)
@@ -1396,7 +1426,7 @@ miSubtractO (GdkRegion    *pReg,
      */
   while (r1 != r1End)
     {
-      assert(x1<r1->x2);
+      g_assert(x1<r1->x2);
       MEMCHECK(pReg, pNextRect, pReg->rects);
       pNextRect->x1 = x1;
       pNextRect->y1 = y1;
@@ -1405,7 +1435,7 @@ miSubtractO (GdkRegion    *pReg,
       pReg->numRects += 1;
       pNextRect++;
 
-      assert(pReg->numRects<=pReg->size);
+      g_assert(pReg->numRects<=pReg->size);
 
       r1++;
       if (r1 != r1End)
@@ -1424,27 +1454,27 @@ miSubtractO (GdkRegion    *pReg,
  * area is the set of pixels contained in @source1 but not in @source2.
  **/
 void
-gdk_region_subtract (GdkRegion *region,
-		     GdkRegion *other)
+gdk_region_subtract (GdkRegion *source1,
+		     GdkRegion *source2)
 {
-  g_return_if_fail (region != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_if_fail (source1 != NULL);
+  g_return_if_fail (source2 != NULL);
   
   /* check for trivial reject */
-  if ((!(region->numRects)) || (!(other->numRects)) ||
-      (!EXTENTCHECK(&region->extents, &other->extents)))
+  if ((!(source1->numRects)) || (!(source2->numRects)) ||
+      (!EXTENTCHECK(&source1->extents, &source2->extents)))
     return;
  
-  miRegionOp (region, region, other, miSubtractO,
+  miRegionOp (source1, source1, source2, miSubtractO,
 	      miSubtractNonO1, (nonOverlapFunc) NULL);
 
   /*
-   * Can't alter region's extents before we call miRegionOp because miRegionOp
+   * Can't alter source1's extents before we call miRegionOp because miRegionOp
    * depends on the extents of those regions being the unaltered. Besides, this
    * way there's no checking against rectangles that will be nuked
    * due to coalescing, so we have to examine fewer rectangles.
    */
-  miSetExtents (region);
+  miSetExtents (source1);
 }
 
 /**
@@ -1457,68 +1487,88 @@ gdk_region_subtract (GdkRegion *region,
  * or the other of the two sources but not in both.
  **/
 void
-gdk_region_xor (GdkRegion *sra,
-		GdkRegion *srb)
+gdk_region_xor (GdkRegion *source1,
+		GdkRegion *source2)
 {
   GdkRegion *trb;
 
-  g_return_if_fail (sra != NULL);
-  g_return_if_fail (srb != NULL);
+  g_return_if_fail (source1 != NULL);
+  g_return_if_fail (source2 != NULL);
 
-  trb = gdk_region_copy (srb);
+  trb = gdk_region_copy (source2);
 
-  gdk_region_subtract (trb, sra);
-  gdk_region_subtract (sra, srb);
+  gdk_region_subtract (trb, source1);
+  gdk_region_subtract (source1, source2);
 
-  gdk_region_union (sra,trb);
+  gdk_region_union (source1, trb);
   
   gdk_region_destroy (trb);
 }
 
-/*
- * Check to see if the region is empty.  Assumes a region is passed 
- * as a parameter
+/**
+ * gdk_region_empty: 
+ * @region: a #GdkRegion
+ *
+ * Returns %TRUE if the #GdkRegion is empty.
+ *
+ * Returns: %TRUE if @region is empty.
  */
 gboolean
-gdk_region_empty (GdkRegion *r)
+gdk_region_empty (GdkRegion *region)
 {
-  g_return_val_if_fail (r != NULL, FALSE);
+  g_return_val_if_fail (region != NULL, FALSE);
   
-  if (r->numRects == 0)
+  if (region->numRects == 0)
     return TRUE;
   else
     return FALSE;
 }
 
-/*
- *	Check to see if two regions are equal	
+/**
+ * gdk_region_equal:
+ * @region1: a #GdkRegion
+ * @region2: a #GdkRegion
+ *
+ * Returns %TRUE if the two regions are the same.
+ *
+ * Returns: %TRUE if @region1 and @region2 are equal.
  */
 gboolean
-gdk_region_equal (GdkRegion *r1,
-		  GdkRegion *r2)
+gdk_region_equal (GdkRegion *region1,
+		  GdkRegion *region2)
 {
   int i;
 
-  g_return_val_if_fail (r1 != NULL, FALSE);
-  g_return_val_if_fail (r2 != NULL, FALSE);
+  g_return_val_if_fail (region1 != NULL, FALSE);
+  g_return_val_if_fail (region2 != NULL, FALSE);
 
-  if (r1->numRects != r2->numRects) return FALSE;
-  else if (r1->numRects == 0) return TRUE;
-  else if (r1->extents.x1 != r2->extents.x1) return FALSE;
-  else if (r1->extents.x2 != r2->extents.x2) return FALSE;
-  else if (r1->extents.y1 != r2->extents.y1) return FALSE;
-  else if (r1->extents.y2 != r2->extents.y2) return FALSE;
+  if (region1->numRects != region2->numRects) return FALSE;
+  else if (region1->numRects == 0) return TRUE;
+  else if (region1->extents.x1 != region2->extents.x1) return FALSE;
+  else if (region1->extents.x2 != region2->extents.x2) return FALSE;
+  else if (region1->extents.y1 != region2->extents.y1) return FALSE;
+  else if (region1->extents.y2 != region2->extents.y2) return FALSE;
   else
-    for(i=0; i < r1->numRects; i++ )
+    for(i = 0; i < region1->numRects; i++ )
       {
-	if (r1->rects[i].x1 != r2->rects[i].x1) return FALSE;
-	else if (r1->rects[i].x2 != r2->rects[i].x2) return FALSE;
-	else if (r1->rects[i].y1 != r2->rects[i].y1) return FALSE;
-	else if (r1->rects[i].y2 != r2->rects[i].y2) return FALSE;
+	if (region1->rects[i].x1 != region2->rects[i].x1) return FALSE;
+	else if (region1->rects[i].x2 != region2->rects[i].x2) return FALSE;
+	else if (region1->rects[i].y1 != region2->rects[i].y1) return FALSE;
+	else if (region1->rects[i].y2 != region2->rects[i].y2) return FALSE;
       }
   return TRUE;
 }
 
+/**
+ * gdk_region_point_in:
+ * @region: a #GdkRegion
+ * @x: the x coordinate of a point
+ * @y: the y coordinate of a point
+ *
+ * Returns %TRUE if a point is in a region.
+ *
+ * Returns: %TRUE if the point is in @region.
+ */
 gboolean
 gdk_region_point_in (GdkRegion *region,
 		     int        x,
@@ -1532,7 +1582,7 @@ gdk_region_point_in (GdkRegion *region,
     return FALSE;
   if (!INBOX(region->extents, x, y))
     return FALSE;
-  for (i=0; i<region->numRects; i++)
+  for (i = 0; i < region->numRects; i++)
     {
       if (INBOX (region->rects[i], x, y))
 	return TRUE;
@@ -1540,6 +1590,17 @@ gdk_region_point_in (GdkRegion *region,
   return FALSE;
 }
 
+/**
+ * gdk_region_rect_in: 
+ * @region: a #GdkRegion.
+ * @rectangle: a #GdkRectangle.
+ *
+ * Tests whether a rectangle is within a region.
+ *
+ * Returns: %GDK_OVERLAP_RECTANGLE_IN, %GDK_OVERLAP_RECTANGLE_OUT, or
+ *   %GDK_OVERLAP_RECTANGLE_PART, depending on whether the rectangle is inside,
+ *   outside, or partly inside the #GdkRegion, respectively.
+ */
 GdkOverlapType
 gdk_region_rect_in (GdkRegion    *region,
 		    GdkRectangle *rectangle)
@@ -1684,7 +1745,17 @@ gdk_region_unsorted_spans_intersect_foreach (GdkRegion *region,
     }
 }
 
-
+/**
+ * gdk_region_spans_intersect_foreach:
+ * @region: a #GdkRegion
+ * @spans: an array of #GdkSpans
+ * @n_spans: the length of @spans
+ * @sorted: %TRUE if @spans is sorted wrt. the y coordinate
+ * @function: function to call on each span in the intersection
+ * @data: data to pass to @function
+ *
+ * Calls a function on each span in the intersection of @region and @spans.
+ */
 void
 gdk_region_spans_intersect_foreach (GdkRegion  *region,
 				    GdkSpan    *spans,

@@ -56,54 +56,47 @@ Defines the position and size of a rectangle.
 
 <!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
 <para>
-Calculates the intersection of two rectangles.
+
 </para>
 
-@src1: a #GdkRectangle.
-@src2: a #GdkRectangle.
-@dest: the intersection of @src1 and @src2.
-@Returns: %TRUE if the rectangles intersect.
+@src1: 
+@src2: 
+@dest: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_rectangle_union ##### -->
 <para>
-Calculates the union of two rectangles.
-The union of rectangles @src1 and @src2 is the smallest rectangle which
-includes both @src1 and @src2 within it.
+
 </para>
 
-@src1: a #GdkRectangle.
-@src2: a #GdkRectangle.
-@dest: the union of @src1 and @src2.
+@src1:
+@src2:
+@dest:
 
 
 <!-- ##### STRUCT GdkRegion ##### -->
 <para>
 A GdkRegion represents a set of pixels on the screen.
-The only user-visible field of the structure is the user_data member, which
-can be used to attach arbitrary data to the #GdkRegion.
 </para>
 
 
 <!-- ##### FUNCTION gdk_region_new ##### -->
 <para>
-Creates a new empty #GdkRegion.
+
 </para>
 
-@Returns: a new empty #GdkRegion.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_region_polygon ##### -->
 <para>
-Creates a new #GdkRegion using the polygon defined by a number of points.
 
 </para>
 
-@points: an array of #GdkPoint structs.
-@npoints: the number of elements in the @points array.
-@fill_rule: specifies which pixels are included in the region when the polygon
-overlaps itself.
-@Returns: a new #GdkRegion based on the given polygon.
+@points: 
+@npoints: 
+@fill_rule: 
 
 
 <!-- ##### ENUM GdkFillRule ##### -->
@@ -137,19 +130,19 @@ included in the region, while areas overlapped an even number of times are not.
 
 <!-- ##### FUNCTION gdk_region_destroy ##### -->
 <para>
-Destroys a #GdkRegion.
+
 </para>
 
-@region: a #GdkRegion.
+@region: 
 
 
 <!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
 <para>
-Returns the smallest rectangle which includes the entire #GdkRegion.
+
 </para>
 
-@region: a #GdkRegion.
-@rectangle: returns the smallest rectangle which includes all of @region.
+@region:
+@rectangle:
 
 
 <!-- ##### FUNCTION gdk_region_get_rectangles ##### -->
@@ -164,44 +157,38 @@ Returns the smallest rectangle which includes the entire #GdkRegion.
 
 <!-- ##### FUNCTION gdk_region_empty ##### -->
 <para>
-Returns %TRUE if the #GdkRegion is empty.
+
 </para>
 
-@region: a #GdkRegion.
-@Returns: %TRUE if @region is empty.
+@region: 
 
 
 <!-- ##### FUNCTION gdk_region_equal ##### -->
 <para>
-Returns %TRUE if the two regions are the same.
+
 </para>
 
-@region1: a #GdkRegion.
-@region2: a #GdkRegion.
-@Returns: %TRUE if @region1 and @region2 are equal.
+@region1: 
+@region2: 
 
 
 <!-- ##### FUNCTION gdk_region_point_in ##### -->
 <para>
-Returns %TRUE if a point is in a region.
+
 </para>
 
-@region: a #GdkRegion.
-@x: the x coordinate of a point.
-@y: the y coordinate of a point.
-@Returns: %TRUE if the point is in @region.
+@region:
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gdk_region_rect_in ##### -->
 <para>
-Tests whether a rectangle is within a region.
+
 </para>
 
-@region: a #GdkRegion.
-@rect: a #GdkRectangle.
-@Returns: %GDK_OVERLAP_RECTANGLE_IN, %GDK_OVERLAP_RECTANGLE_OUT, or
-%GDK_OVERLAP_RECTANGLE_PART, depending on whether the rectangle is inside,
-outside, or partly inside the #GdkRegion, respectively.
+@region: 
+@rectangle: 
 
 
 <!-- ##### ENUM GdkOverlapType ##### -->
@@ -215,23 +202,22 @@ Specifies the possible values returned by gdk_region_rect_in().
 
 <!-- ##### FUNCTION gdk_region_offset ##### -->
 <para>
-Moves a region the specified distance.
+
 </para>
 
-@region: a #GdkRegion.
-@dx: the distance to move the region horizontally.
-@dy: the distance to move the region vertically.
+@region: 
+@dx: 
+@dy: 
 
 
 <!-- ##### FUNCTION gdk_region_shrink ##### -->
 <para>
-Resizes a region by the specified amount.
-Positive values shrink the region. Negative values expand it.
+
 </para>
 
-@region: a #GdkRegion.
-@dx: the number of pixels to shrink the region horizontally.
-@dy: the number of pixels to shrink the region vertically.
+@region: 
+@dx: 
+@dy: 
 
 
 <!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
@@ -298,15 +284,14 @@ gdk_region_spans_intersect_foreach().
 
 <!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
 <para>
-Calls a function on each span in the intersection of @region and
-@spans.
+
 </para>
 
-@region: a #GdkRegion.
-@spans: an array of #GdkSpans.
-@n_spans: the length of @spans.
-@sorted: %TRUE if @spans is sorted wrt. the y coordinate.
-@function: function to call on each span in the intersection.
-@data: data to pass to @function.
+@region: 
+@spans:
+@n_spans:
+@sorted: 
+@function:
+@data: 
 
 

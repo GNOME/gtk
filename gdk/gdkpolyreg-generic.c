@@ -403,9 +403,8 @@ static int PtsToRegion(numFullPtBlocks, iCurPtBlock, FirstPtBlock, reg)
  
     numRects = ((numFullPtBlocks * NUMPTSTOBUFFER) + iCurPtBlock) >> 1;
  
-    reg->rects = g_renew (GdkRegionBox, reg->rects, numRects);
- 
-    reg->size = numRects;
+    GROWREGION(reg, numRects);
+
     CurPtBlock = FirstPtBlock;
     rects = reg->rects - 1;
     numRects = 0;
@@ -452,12 +451,17 @@ static int PtsToRegion(numFullPtBlocks, iCurPtBlock, FirstPtBlock, reg)
     return(TRUE);
 }
 
-/*
- *     polytoregion
+/**
+ * gdk_region_polygon:
+ * @points: an array of #GdkPoint structs
+ * @npoints: the number of elements in the @points array
+ * @fill_rule: specifies which pixels are included in the region when the 
+ *     polygon overlaps itself.
+ * 
+ * Creates a new #GdkRegion using the polygon defined by a 
+ * number of points.
  *
- *     Scan converts a polygon by returning a run-length
- *     encoding of the resultant bitmap -- the run-length
- *     encoding is in the form of an array of rectangles.
+ * Returns: a new #GdkRegion based on the given polygon
  */
 GdkRegion *
 gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
