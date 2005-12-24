@@ -28,6 +28,16 @@
 #include <gdk/gdk.h>
 #include "gdkalias.h"
 
+/**
+ * gdk_rectangle_union:
+ * @src1: a #GdkRectangle
+ * @src2: a #GdkRectangle
+ * @dest: return location for the union of @src1 and @src2
+ *
+ * Calculates the union of two rectangles.
+ * The union of rectangles @src1 and @src2 is the smallest rectangle which
+ * includes both @src1 and @src2 within it.
+ */
 void
 gdk_rectangle_union (GdkRectangle *src1,
 		     GdkRectangle *src2,
@@ -47,6 +57,16 @@ gdk_rectangle_union (GdkRectangle *src1,
   dest->y = dest_y;
 }
 
+/**
+ * gdk_rectangle_intersect:
+ * @src1: a #GdkRectangle
+ * @src2: a #GdkRectangle
+ * @dest: return location for the intersection of @src1 and @src2
+ *
+ * Calculates the intersection of two rectangles.
+ *
+ * Returns: %TRUE if the rectangles intersect.
+ */
 gboolean
 gdk_rectangle_intersect (GdkRectangle *src1,
 			 GdkRectangle *src2,
