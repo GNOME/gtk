@@ -6128,7 +6128,7 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
  * where the user can see it.
  *
  * If you are calling this function in response to a user interaction,
- * it is preferable to use gdk_window_present_with_time().
+ * it is preferable to use gtk_window_present_with_time().
  * 
  **/
 void
@@ -7693,12 +7693,11 @@ _gtk_window_set_has_toplevel_focus (GtkWindow *window,
  * gtk_window_set_auto_startup_notification:
  * @setting: %TRUE to automatically do startup notification
  *
- * By default, after showing the first #GtkWindow for each #GdkScreen,
- * GTK+ calls gdk_screen_notify_startup_complete().  Call this
- * function to disable the automatic startup notification. You might
- * do this if your first window is a splash screen, and you want to
- * delay notification until after your real main window has been
- * shown, for example.
+ * By default, after showing the first #GtkWindow, GTK+ calls 
+ * gdk_notify_startup_complete().  Call this function to disable 
+ * the automatic startup notification. You might do this if your 
+ * first window is a splash screen, and you want to delay notification 
+ * until after your real main window has been shown, for example.
  *
  * In that example, you would disable startup notification
  * temporarily, show your splash screen, then re-enable it so that
