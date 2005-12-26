@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-25 01:37-0500\n"
+"POT-Creation-Date: 2005-12-26 17:25-0500\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -266,7 +266,7 @@ msgid "A unique name for the action."
 msgstr "A unique name for the action."
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:226 ../gtk/gtkexpander.c:206
-#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:322 ../gtk/gtktoolbutton.c:185
+#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:325 ../gtk/gtktoolbutton.c:185
 msgid "Label"
 msgstr "Label"
 
@@ -705,12 +705,12 @@ msgstr ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 
-#: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:343
+#: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:346
 #: ../gtk/gtktoolbutton.c:192
 msgid "Use underline"
 msgstr "Use underline"
 
-#: ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:215 ../gtk/gtklabel.c:344
+#: ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:215 ../gtk/gtklabel.c:347
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1139,7 +1139,7 @@ msgstr "Markup"
 msgid "Marked up text to render"
 msgstr "Marked up text to render"
 
-#: ../gtk/gtkcellrenderertext.c:235 ../gtk/gtklabel.c:329
+#: ../gtk/gtkcellrenderertext.c:235 ../gtk/gtklabel.c:332
 msgid "Attributes"
 msgstr "Attributes"
 
@@ -1302,7 +1302,7 @@ msgstr ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 
-#: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:435
+#: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:438
 #: ../gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
 msgstr "Ellipsize"
@@ -1316,11 +1316,11 @@ msgstr ""
 "have enough room to display the entire string"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:391
-#: ../gtk/gtklabel.c:455
+#: ../gtk/gtklabel.c:458
 msgid "Width In Characters"
 msgstr "Width In Characters"
 
-#: ../gtk/gtkcellrenderertext.c:456 ../gtk/gtklabel.c:456
+#: ../gtk/gtkcellrenderertext.c:456 ../gtk/gtklabel.c:459
 msgid "The desired width of the label, in characters"
 msgstr "The desired width of the label, in characters"
 
@@ -1818,19 +1818,19 @@ msgstr "Action area border"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialogue"
 
-#: ../gtk/gtkentry.c:492 ../gtk/gtklabel.c:400
+#: ../gtk/gtkentry.c:492 ../gtk/gtklabel.c:403
 msgid "Cursor Position"
 msgstr "Cursor Position"
 
-#: ../gtk/gtkentry.c:493 ../gtk/gtklabel.c:401
+#: ../gtk/gtkentry.c:493 ../gtk/gtklabel.c:404
 msgid "The current position of the insertion cursor in chars"
 msgstr "The current position of the insertion cursor in chars"
 
-#: ../gtk/gtkentry.c:502 ../gtk/gtklabel.c:410
+#: ../gtk/gtkentry.c:502 ../gtk/gtklabel.c:413
 msgid "Selection Bound"
 msgstr "Selection Bound"
 
-#: ../gtk/gtkentry.c:503 ../gtk/gtklabel.c:411
+#: ../gtk/gtkentry.c:503 ../gtk/gtklabel.c:414
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -1925,7 +1925,7 @@ msgstr "Truncate multiline"
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Whether to truncate multiline pastes to one line."
 
-#: ../gtk/gtkentry.c:872
+#: ../gtk/gtkentry.c:872 ../gtk/gtklabel.c:634
 msgid "Select on focus"
 msgstr "Select on focus"
 
@@ -2025,11 +2025,11 @@ msgstr "Whether the expander has been opened to reveal the child widget"
 msgid "Text of the expander's label"
 msgstr "Text of the expander's label"
 
-#: ../gtk/gtkexpander.c:222 ../gtk/gtklabel.c:336
+#: ../gtk/gtkexpander.c:222 ../gtk/gtklabel.c:339
 msgid "Use markup"
 msgstr "Use markup"
 
-#: ../gtk/gtkexpander.c:223 ../gtk/gtklabel.c:337
+#: ../gtk/gtkexpander.c:223 ../gtk/gtklabel.c:340
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "The text of the label includes XML markup. See pango_parse_markup()"
 
@@ -2560,19 +2560,19 @@ msgstr "Whether images should be shown in menus"
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
-#: ../gtk/gtklabel.c:323
+#: ../gtk/gtklabel.c:326
 msgid "The text of the label"
 msgstr "The text of the label"
 
-#: ../gtk/gtklabel.c:330
+#: ../gtk/gtklabel.c:333
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: ../gtk/gtklabel.c:351 ../gtk/gtktexttag.c:380 ../gtk/gtktextview.c:595
+#: ../gtk/gtklabel.c:354 ../gtk/gtktexttag.c:380 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justification"
 
-#: ../gtk/gtklabel.c:352
+#: ../gtk/gtklabel.c:355
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2582,11 +2582,11 @@ msgstr ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 
-#: ../gtk/gtklabel.c:360
+#: ../gtk/gtklabel.c:363
 msgid "Pattern"
 msgstr "Pattern"
 
-#: ../gtk/gtklabel.c:361
+#: ../gtk/gtklabel.c:364
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2594,39 +2594,39 @@ msgstr ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 
-#: ../gtk/gtklabel.c:368
+#: ../gtk/gtklabel.c:371
 msgid "Line wrap"
 msgstr "Line wrap"
 
-#: ../gtk/gtklabel.c:369
+#: ../gtk/gtklabel.c:372
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "If set, wrap lines if the text becomes too wide"
 
-#: ../gtk/gtklabel.c:375
+#: ../gtk/gtklabel.c:378
 msgid "Selectable"
 msgstr "Selectable"
 
-#: ../gtk/gtklabel.c:376
+#: ../gtk/gtklabel.c:379
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Whether the label text can be selected with the mouse"
 
-#: ../gtk/gtklabel.c:382
+#: ../gtk/gtklabel.c:385
 msgid "Mnemonic key"
 msgstr "Mnemonic key"
 
-#: ../gtk/gtklabel.c:383
+#: ../gtk/gtklabel.c:386
 msgid "The mnemonic accelerator key for this label"
 msgstr "The mnemonic accelerator key for this label"
 
-#: ../gtk/gtklabel.c:391
+#: ../gtk/gtklabel.c:394
 msgid "Mnemonic widget"
 msgstr "Mnemonic widget"
 
-#: ../gtk/gtklabel.c:392
+#: ../gtk/gtklabel.c:395
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "The widget to be activated when the label's mnemonic key is pressed"
 
-#: ../gtk/gtklabel.c:436
+#: ../gtk/gtklabel.c:439
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -2634,29 +2634,33 @@ msgstr ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 
-#: ../gtk/gtklabel.c:476
+#: ../gtk/gtklabel.c:479
 msgid "Single Line Mode"
 msgstr "Single Line Mode"
 
-#: ../gtk/gtklabel.c:477
+#: ../gtk/gtklabel.c:480
 msgid "Whether the label is in single line mode"
 msgstr "Whether the label is in single line mode"
 
-#: ../gtk/gtklabel.c:494
+#: ../gtk/gtklabel.c:497
 msgid "Angle"
 msgstr "Angle"
 
-#: ../gtk/gtklabel.c:495
+#: ../gtk/gtklabel.c:498
 msgid "Angle at which the label is rotated"
 msgstr "Angle to which the label is rotated"
 
-#: ../gtk/gtklabel.c:515
+#: ../gtk/gtklabel.c:518
 msgid "Maximum Width In Characters"
 msgstr "Maximum Width In Characters"
 
-#: ../gtk/gtklabel.c:516
+#: ../gtk/gtklabel.c:519
 msgid "The desired maximum width of the label, in characters"
 msgstr "The desired maximum width of the label, in characters"
+
+#: ../gtk/gtklabel.c:635
+msgid "Whether to select the contents of a selectable label when it is focused"
+msgstr "Whether to select the contents of a selectable label when it is focused"
 
 #: ../gtk/gtklayout.c:633 ../gtk/gtkviewport.c:137
 msgid "Horizontal adjustment"
