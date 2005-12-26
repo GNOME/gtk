@@ -1,3 +1,15 @@
+2005-12-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_class_init): Add a gtk-label-select-on-focus
+	setting.
+	(gtk_label_grab_focus): And use it here to select the contents of
+	the label when appropriate.
+	(gtk_label_class_init): Use the same keybindings for select all/
+	unselect all as GtkEntry and GtkTextView.
+
+	* gtk/gtkdialog.c (gtk_dialog_map): When looking for the initial
+	focus, avoid leaving a selection in a label.
+
 2005-12-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c: Documentation fixes.  (#324815, 

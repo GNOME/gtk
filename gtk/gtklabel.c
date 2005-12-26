@@ -52,7 +52,8 @@ typedef struct
   gint width_chars;
   gint max_width_chars;
   guint single_line_mode : 1;
-  guint have_transform : 1;
+  guint have_transform   : 1;
+  guint in_click         : 1;
   gdouble angle;
 }
 GtkLabelPrivate;
@@ -136,6 +137,7 @@ static gboolean gtk_label_button_release    (GtkWidget        *widget,
 					     GdkEventButton   *event);
 static gboolean gtk_label_motion            (GtkWidget        *widget,
 					     GdkEventMotion   *event);
+static void     gtk_label_grab_focus        (GtkWidget        *widget);
 
 
 static void gtk_label_set_text_internal          (GtkLabel      *label,
@@ -281,6 +283,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
+  widget_class->grab_focus = gtk_label_grab_focus;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -554,12 +557,44 @@ gtk_label_class_init (GtkLabelClass *class)
 
   add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
-  
-  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
+  /* select all */
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
+
+  /* unselect all */
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, 0,
+				G_TYPE_BOOLEAN, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
+				G_TYPE_INT, 0,
+				G_TYPE_BOOLEAN, FALSE);
 
   add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
@@ -594,6 +629,13 @@ gtk_label_class_init (GtkLabelClass *class)
   /* copy */
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
 				"copy_clipboard", 0);
+
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
+						       P_("Select on focus"),
+						       P_("Whether to select the contents of a selectable label when it is focused"),
+						       TRUE,
+						       GTK_PARAM_READWRITE));
+
 				
   g_type_class_add_private (class, sizeof (GtkLabelPrivate));
 }
@@ -2712,11 +2754,37 @@ gtk_label_select_word (GtkLabel *label)
   gtk_label_select_region_index (label, min, max);
 }
 
+static void
+gtk_label_grab_focus (GtkWidget *widget)
+{
+  GtkLabel *label;
+  GtkLabelPrivate *priv;
+  gboolean select_on_focus;
+  
+  label = GTK_LABEL (widget);
+
+  if (label->select_info == NULL)
+    return FALSE;
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+
+  g_object_get (gtk_widget_get_settings (widget),
+		"gtk-label-select-on-focus",
+		&select_on_focus,
+		NULL);
+  
+  if (select_on_focus && !priv->in_click)
+    gtk_label_select_region (label, 0, -1);
+}
+ 
 static gboolean
 gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
   GtkLabel *label;
+  GtkLabelPrivate *priv;
   gint index = 0;
   gint min, max;  
   
@@ -2728,8 +2796,14 @@ gtk_label_button_press (GtkWidget      *widget,
   label->select_info->in_drag = FALSE;
   if (event->button == 1)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_widget_grab_focus (widget);
+      if (!GTK_WIDGET_HAS_FOCUS (widget)) 
+	{
+	  priv = GTK_LABEL_GET_PRIVATE (label);
+
+	  priv->in_click = TRUE;
+	  gtk_widget_grab_focus (widget);
+	  priv->in_click = FALSE;
+	}
 
       if (event->type == GDK_3BUTTON_PRESS)
 	{

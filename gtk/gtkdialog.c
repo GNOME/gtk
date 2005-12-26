@@ -353,8 +353,13 @@ gtk_dialog_map (GtkWidget *widget)
 	    first_focus = window->focus_widget;
 	  else if (first_focus == window->focus_widget)
 	    break;
+
+	  if (!GTK_IS_LABEL (window->focus_widget))
+	    break;
+	  else
+	    gtk_label_select_region (GTK_LABEL (window->focus_widget), 0, 0);
 	}
-      while (GTK_IS_LABEL (window->focus_widget));
+      while (TRUE);
 
       tmp_list = children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
       
