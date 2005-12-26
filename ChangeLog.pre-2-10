@@ -1,3 +1,7 @@
+2005-12-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require GLib 2.9.2
+
 2005-12-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkregion-generic.c: 
