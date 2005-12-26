@@ -4900,11 +4900,10 @@ _gtk_toolbar_elide_underscores (const gchar *original)
 
   if (s > 4)
     {
-      if (original[s - 5] == ' ' && 
-	  original[s - 4] == '(' && 
+      if (original[s - 4] == '(' && 
 	  original[s - 3] == '_' && 
 	  original[s - 1] == ')')
-	q[-4] = '\0';
+	q[-3] = '\0';
     }
 
   

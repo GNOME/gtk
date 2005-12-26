@@ -3,7 +3,7 @@
 	* README.in: Mention the stripping of (_F) suffixes.
 
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): Strip a suffix of 
-	the form " (_<single character>)", since this is the preferred way
+	the form "(_<single character>)", since this is the preferred way
 	for some languages to indicate accelerators.  (#323956, Yang Hong)
 
 	* gtk/gtklabel.c (gtk_label_class_init): Add a gtk-label-select-on-focus
