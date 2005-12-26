@@ -48,6 +48,10 @@ Release notes for 2.10
   reference. Details about floating references can be found in the docs:
   http://developer.gnome.org/doc/API/2.0/gobject/gobject-The-Base-Object-Type.html#floating-ref
 
+* Suffixes like (_F) are now stripped from labels when they are displayed
+  in toolbars. If this is not wanted, the feature can be suppressed by 
+  inserting a Unicode control character, e.g ZWNJ.
+
 Release notes
 =============
 

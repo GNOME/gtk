@@ -4876,11 +4876,13 @@ _gtk_toolbar_elide_underscores (const gchar *original)
   gchar *q, *result;
   const gchar *p;
   gboolean last_underscore;
+  gint s;
   
   if (!original)
     return NULL;
 
-  q = result = g_malloc (strlen (original) + 1);
+  s = strlen (original);
+  q = result = g_malloc (s + 1);
   last_underscore = FALSE;
   
   for (p = original; *p; p++)
@@ -4893,8 +4895,18 @@ _gtk_toolbar_elide_underscores (const gchar *original)
 	  *q++ = *p;
 	}
     }
-  
+
   *q = '\0';
+
+  if (s > 4)
+    {
+      if (original[s - 5] == ' ' && 
+	  original[s - 4] == '(' && 
+	  original[s - 3] == '_' && 
+	  original[s - 1] == ')')
+	q[-4] = '\0';
+    }
+
   
   return result;
 }
