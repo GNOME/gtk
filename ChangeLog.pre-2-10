@@ -1,5 +1,8 @@
 2005-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Precache atoms
+	before calling gdk_window_new().
+
 	* gtk/gtktextbtree.c: Use the slice allocator for some other small
 	auxiliary structures as well.
 

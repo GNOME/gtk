@@ -199,6 +199,8 @@ gdk_display_open (const gchar *display_name)
   attr.height = 10;
   attr.event_mask = 0;
 
+  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
+
   display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
   (_gdk_x11_window_get_toplevel (display_x11->leader_gdk_window))->is_leader = TRUE;
@@ -227,8 +229,6 @@ gdk_display_open (const gchar *display_name)
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
   
-  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
-
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
   
