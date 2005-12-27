@@ -297,11 +297,11 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
  * @context: a #GtkIMContext
  * @event: the key event
  * 
- * Allow an input method to internally handle a key press event.
- * If this function returns %TRUE, then no further processing
- * should be done for this keystroke.
+ * Allow an input method to internally handle key press and release 
+ * events. If this function returns %TRUE, then no further processing
+ * should be done for this key event.
  * 
- * Return value: %TRUE if the input method handled the keystroke.
+ * Return value: %TRUE if the input method handled the key event.
  *
  **/
 gboolean

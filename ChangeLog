@@ -1,3 +1,13 @@
+2005-12-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimcontext.c (gtk_im_context_filter_keypress): Clarify
+	docs.  (#324996)
+
+2005-12-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c: Documentation fixes.  (#324815,
+	Ross Burton)
+
 Thu Dec 22 17:30:59 2005  Tim Janik  <timj@gtk.org>
 
         * gtk/gtkobject.c: derive GtkObject from GUnowned if possible.
