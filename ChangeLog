@@ -1,5 +1,8 @@
 2005-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkproperty-x11.c: Avoid relocations for the list
+	of standard atoms.
+
 	* gtk/gtkbindings.c (gtk_binding_set_new): Avoid copying
 	the set_name by interning it.
 

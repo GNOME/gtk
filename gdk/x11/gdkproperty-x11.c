@@ -42,81 +42,90 @@
 static GPtrArray *virtual_atom_array;
 static GHashTable *virtual_atom_hash;
 
-static const gchar *const XAtomsStrings[] = {
+static const gchar xatoms_string[] = 
   /* These are all the standard predefined X atoms */
-  "NONE",
-  "PRIMARY",
-  "SECONDARY",
-  "ARC",
-  "ATOM",
-  "BITMAP",
-  "CARDINAL",
-  "COLORMAP",
-  "CURSOR",
-  "CUT_BUFFER0",
-  "CUT_BUFFER1",
-  "CUT_BUFFER2",
-  "CUT_BUFFER3",
-  "CUT_BUFFER4",
-  "CUT_BUFFER5",
-  "CUT_BUFFER6",
-  "CUT_BUFFER7",
-  "DRAWABLE",
-  "FONT",
-  "INTEGER",
-  "PIXMAP",
-  "POINT",
-  "RECTANGLE",
-  "RESOURCE_MANAGER",
-  "RGB_COLOR_MAP",
-  "RGB_BEST_MAP",
-  "RGB_BLUE_MAP",
-  "RGB_DEFAULT_MAP",
-  "RGB_GRAY_MAP",
-  "RGB_GREEN_MAP",
-  "RGB_RED_MAP",
-  "STRING",
-  "VISUALID",
-  "WINDOW",
-  "WM_COMMAND",
-  "WM_HINTS",
-  "WM_CLIENT_MACHINE",
-  "WM_ICON_NAME",
-  "WM_ICON_SIZE",
-  "WM_NAME",
-  "WM_NORMAL_HINTS",
-  "WM_SIZE_HINTS",
-  "WM_ZOOM_HINTS",
-  "MIN_SPACE",
-  "NORM_SPACE",
-  "MAX_SPACE",
-  "END_SPACE",
-  "SUPERSCRIPT_X",
-  "SUPERSCRIPT_Y",
-  "SUBSCRIPT_X",
-  "SUBSCRIPT_Y",
-  "UNDERLINE_POSITION",
-  "UNDERLINE_THICKNESS",
-  "STRIKEOUT_ASCENT",
-  "STRIKEOUT_DESCENT",
-  "ITALIC_ANGLE",
-  "X_HEIGHT",
-  "QUAD_WIDTH",
-  "WEIGHT",
-  "POINT_SIZE",
-  "RESOLUTION",
-  "COPYRIGHT",
-  "NOTICE",
-  "FONT_NAME",
-  "FAMILY_NAME",
-  "FULL_NAME",
-  "CAP_HEIGHT",
-  "WM_CLASS",
-  "WM_TRANSIENT_FOR",
+  "NONE\0"
+  "PRIMARY\0"
+  "SECONDARY\0"
+  "ARC\0"
+  "ATOM\0"
+  "BITMAP\0"
+  "CARDINAL\0"
+  "COLORMAP\0"
+  "CURSOR\0"
+  "CUT_BUFFER0\0"
+  "CUT_BUFFER1\0"
+  "CUT_BUFFER2\0"
+  "CUT_BUFFER3\0"
+  "CUT_BUFFER4\0"
+  "CUT_BUFFER5\0"
+  "CUT_BUFFER6\0"
+  "CUT_BUFFER7\0"
+  "DRAWABLE\0"
+  "FONT\0"
+  "INTEGER\0"
+  "PIXMAP\0"
+  "POINT\0"
+  "RECTANGLE\0"
+  "RESOURCE_MANAGER\0"
+  "RGB_COLOR_MAP\0"
+  "RGB_BEST_MAP\0"
+  "RGB_BLUE_MAP\0"
+  "RGB_DEFAULT_MAP\0"
+  "RGB_GRAY_MAP\0"
+  "RGB_GREEN_MAP\0"
+  "RGB_RED_MAP\0"
+  "STRING\0"
+  "VISUALID\0"
+  "WINDOW\0"
+  "WM_COMMAND\0"
+  "WM_HINTS\0"
+  "WM_CLIENT_MACHINE\0"
+  "WM_ICON_NAME\0"
+  "WM_ICON_SIZE\0"
+  "WM_NAME\0"
+  "WM_NORMAL_HINTS\0"
+  "WM_SIZE_HINTS\0"
+  "WM_ZOOM_HINTS\0"
+  "MIN_SPACE\0"
+  "NORM_SPACE\0"
+  "MAX_SPACE\0"
+  "END_SPACE\0"
+  "SUPERSCRIPT_X\0"
+  "SUPERSCRIPT_Y\0"
+  "SUBSCRIPT_X\0"
+  "SUBSCRIPT_Y\0"
+  "UNDERLINE_POSITION\0"
+  "UNDERLINE_THICKNESS\0"
+  "STRIKEOUT_ASCENT\0"
+  "STRIKEOUT_DESCENT\0"
+  "ITALIC_ANGLE\0"
+  "X_HEIGHT\0"
+  "QUAD_WIDTH\0"
+  "WEIGHT\0"
+  "POINT_SIZE\0"
+  "RESOLUTION\0"
+  "COPYRIGHT\0"
+  "NOTICE\0"
+  "FONT_NAME\0"
+  "FAMILY_NAME\0"
+  "FULL_NAME\0"
+  "CAP_HEIGHT\0"
+  "WM_CLASS\0"
+  "WM_TRANSIENT_FOR\0"
   /* Below here, these are our additions. Increment N_CUSTOM_PREDEFINED
    * if you add any.
    */
-  "CLIPBOARD"			/* = 69 */
+  "CLIPBOARD\0"			/* = 69 */
+;
+
+static const gint xatoms_offset[] = {
+    0,   5,  13,  23,  27,  32,  39,  48,  57,  64,  76,  88, 
+  100, 112, 124, 136, 148, 160, 169, 174, 182, 189, 195, 205, 
+  222, 236, 249, 262, 278, 291, 305, 317, 324, 333, 340, 351, 
+  360, 378, 391, 404, 412, 428, 442, 456, 466, 477, 487, 497, 
+  511, 525, 537, 549, 568, 588, 605, 623, 636, 645, 656, 663, 
+  674, 685, 695, 702, 712, 724, 734, 745, 754, 771
 };
 
 #define N_CUSTOM_PREDEFINED 1
@@ -151,7 +160,7 @@ lookup_cached_xatom (GdkDisplay *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
-  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
+  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
     return ATOM_TO_INDEX (atom);
   
   if (display_x11->atom_from_virtual)
@@ -289,7 +298,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 
   display_x11 = GDK_DISPLAY_X11 (display);
   
-  if (xatom < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
+  if (xatom < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
     return INDEX_TO_ATOM (xatom);
   
   if (display_x11->atom_to_virtual)
@@ -345,10 +354,10 @@ virtual_atom_check_init (void)
       virtual_atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
       virtual_atom_array = g_ptr_array_new ();
       
-      for (i = 0; i < G_N_ELEMENTS (XAtomsStrings); i++)
+      for (i = 0; i < G_N_ELEMENTS (xatoms_offset); i++)
 	{
-	  g_ptr_array_add (virtual_atom_array, (gchar *) XAtomsStrings[i]);
-	  g_hash_table_insert (virtual_atom_hash, (gchar *) XAtomsStrings[i],
+	  g_ptr_array_add (virtual_atom_array, (gchar *)(xatoms_string + xatoms_offset[i]));
+	  g_hash_table_insert (virtual_atom_hash, (gchar *)(xatoms_string + xatoms_offset[i]),
 			       GUINT_TO_POINTER (i));
 	}
     }
@@ -367,7 +376,7 @@ intern_atom (const gchar *atom_name,
     {
       result = INDEX_TO_ATOM (virtual_atom_array->len);
       
-      g_ptr_array_add (virtual_atom_array, dup ? g_strdup (atom_name) : atom_name);
+      g_ptr_array_add (virtual_atom_array, dup ? g_strdup (atom_name) : (gchar *)atom_name);
       g_hash_table_insert (virtual_atom_hash, 
 			   g_ptr_array_index (virtual_atom_array,
 					      ATOM_TO_INDEX (result)),
