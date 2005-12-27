@@ -5967,7 +5967,7 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
     {
       /* didn't find it, create. */
 
-      info = g_new (GtkTextTagInfo, 1);
+      info = g_slice_new (GtkTextTagInfo);
 
       info->tag = tag;
       g_object_ref (tag);
@@ -6020,7 +6020,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
 
           g_object_unref (info->tag);
 
-          g_free (info);
+          g_slice_free (GtkTextTagInfo, info);
           return;
         }
 
