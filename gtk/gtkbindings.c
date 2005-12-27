@@ -558,7 +558,7 @@ gtk_binding_set_new (const gchar    *set_name)
   g_return_val_if_fail (set_name != NULL, NULL);
   
   binding_set = g_new (GtkBindingSet, 1);
-  binding_set->set_name = g_strdup (set_name);
+  binding_set->set_name = g_intern_string (set_name);
   binding_set->widget_path_pspecs = NULL;
   binding_set->widget_class_pspecs = NULL;
   binding_set->class_branch_pspecs = NULL;
@@ -1442,7 +1442,6 @@ binding_set_delete (GtkBindingSet *binding_set)
   free_pattern_specs (binding_set->widget_class_pspecs);
   free_pattern_specs (binding_set->class_branch_pspecs);
 
-  g_free (binding_set->set_name);
   g_free (binding_set);
 }
 
