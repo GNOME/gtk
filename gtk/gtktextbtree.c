@@ -4758,7 +4758,7 @@ node_data_new (gpointer view_id)
 {
   NodeData *nd;
   
-  nd = g_new (NodeData, 1);
+  nd = g_slice_new (NodeData);
 
   nd->view_id = view_id;
   nd->next = NULL;
@@ -4772,26 +4772,18 @@ node_data_new (gpointer view_id)
 static void
 node_data_destroy (NodeData *nd)
 {
-  g_free (nd);
+  g_slice_free (NodeData, nd);
 }
 
 static void
 node_data_list_destroy (NodeData *nd)
 {
-  NodeData *iter;
-  NodeData *next;
-
-  iter = nd;
-  while (iter != NULL)
-    {
-      next = iter->next;
-      node_data_destroy (iter);
-      iter = next;
-    }
+  g_slice_free_chain (NodeData, nd, next);
 }
 
 static NodeData*
-node_data_find (NodeData *nd, gpointer view_id)
+node_data_find (NodeData *nd, 
+		gpointer  view_id)
 {
   while (nd != NULL)
     {
