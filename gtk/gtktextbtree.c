@@ -1668,20 +1668,22 @@ iter_stack_new (void)
 }
 
 static void
-iter_stack_push (IterStack *stack, const GtkTextIter *iter)
+iter_stack_push (IterStack         *stack, 
+		 const GtkTextIter *iter)
 {
   stack->count += 1;
   if (stack->count > stack->alloced)
     {
       stack->alloced = stack->count*2;
       stack->iters = g_realloc (stack->iters,
-                                stack->alloced*sizeof (GtkTextIter));
+                                stack->alloced * sizeof (GtkTextIter));
     }
   stack->iters[stack->count-1] = *iter;
 }
 
 static gboolean
-iter_stack_pop (IterStack *stack, GtkTextIter *iter)
+iter_stack_pop (IterStack   *stack, 
+		GtkTextIter *iter)
 {
   if (stack->count == 0)
     return FALSE;
@@ -4631,13 +4633,7 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
 static void
 summary_list_destroy (Summary *summary)
 {
-  Summary *next;
-  while (summary != NULL)
-    {
-      next = summary->next;
-      summary_destroy (summary);
-      summary = next;
-    }
+  g_slice_free_chain (Summary, summary, next);
 }
 
 static GtkTextLine*
@@ -4813,7 +4809,7 @@ summary_destroy (Summary *summary)
   summary->info = (void*)0x1;
   summary->toggle_count = 567;
   summary->next = (void*)0x1;
-  g_free (summary);
+  g_slice_free (Summary, summary);
 }
 
 static GtkTextBTreeNode*
@@ -4851,7 +4847,7 @@ gtk_text_btree_node_adjust_toggle_count (GtkTextBTreeNode  *node,
     {
       /* didn't find a summary for our tag. */
       g_return_if_fail (adjust > 0);
-      summary = g_new (Summary, 1);
+      summary = g_slice_new (Summary);
       summary->info = info;
       summary->toggle_count = adjust;
       summary->next = node->summary;
@@ -6320,7 +6316,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
                */
 
               GtkTextBTreeNode *rootnode = info->tag_root;
-              summary = (Summary *) g_malloc (sizeof (Summary));
+              summary = g_slice_new (Summary);
               summary->info = info;
               summary->toggle_count = info->toggle_count - delta;
               summary->next = rootnode->summary;
@@ -6329,7 +6325,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
               rootLevel = rootnode->level;
               info->tag_root = rootnode;
             }
-          summary = (Summary *) g_malloc (sizeof (Summary));
+          summary = g_slice_new (Summary);
           summary->info = info;
           summary->toggle_count = delta;
           summary->next = node->summary;
