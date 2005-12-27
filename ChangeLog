@@ -1,5 +1,12 @@
 2005-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontext.c (gtk_im_context_filter_keypress): Clarify
+	docs.  (#324996)
+
+	* gtk/gtktextbtree.c (gtk_text_btree_get_tag_info) 
+	(gtk_text_btree_remove_tag_info): Use the slice allocator for 
+	tag info.
+
 	* README.in: Mention the stripping of (_F) suffixes.
 
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): Strip a suffix of 
