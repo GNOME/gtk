@@ -1,3 +1,11 @@
+2005-12-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilefilter.c (gtk_file_filter_filter): In the case for
+	FILTER_RULE_PIXBUF_FORMATS, check that filter_info->mime_type is
+	not NULL.  Fixes bug #317687.
+
 2005-12-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimcontext.c (gtk_im_context_filter_keypress): Clarify
