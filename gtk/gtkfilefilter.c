@@ -426,6 +426,9 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	  {
 	    GSList *list;
 
+	    if (!filter_info->mime_type)
+	      break;
+
 	    for (list = rule->u.pixbuf_formats; list; list = list->next)
 	      {
 		int i;

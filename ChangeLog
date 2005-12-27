@@ -1,3 +1,9 @@
+2005-12-27  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilefilter.c (gtk_file_filter_filter): In the case for
+	FILTER_RULE_PIXBUF_FORMATS, check that filter_info->mime_type is
+	not NULL.  Fixes bug #317687.
+
 2005-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (check_transform): Fix a typo.

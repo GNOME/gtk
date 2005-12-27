@@ -190,6 +190,7 @@
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
 <!ENTITY gtk-migrating-checklist SYSTEM "xml/migrating-checklist.sgml">
+<!ENTITY gtk-migrating-Cairo SYSTEM "xml/migrating-Cairo.sgml">
 <!ENTITY gtk-migrating-GtkFileChooser SYSTEM "xml/migrating-GtkFileChooser.sgml">
 <!ENTITY gtk-migrating-GtkAction SYSTEM "xml/migrating-GtkAction.sgml">
 <!ENTITY gtk-migrating-GtkComboBox SYSTEM "xml/migrating-GtkComboBox.sgml">
