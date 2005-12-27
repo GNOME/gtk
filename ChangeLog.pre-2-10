@@ -1,5 +1,7 @@
 2005-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkevents-x11.c (check_transform): Fix a typo.
+	
 	* gdk/x11/gdkproperty-x11.c: Avoid relocations for the list
 	of standard atoms.
 

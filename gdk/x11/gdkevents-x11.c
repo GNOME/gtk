@@ -2887,7 +2887,7 @@ check_transform (const gchar *xsettings_name,
 {
   if (!g_value_type_transformable (src_type, dest_type))
     {
-      g_warning ("Cannot tranform xsetting %s of type %s to type %s\n",
+      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
 		 xsettings_name,
 		 g_type_name (src_type),
 		 g_type_name (dest_type));
