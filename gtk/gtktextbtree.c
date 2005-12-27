@@ -1660,7 +1660,7 @@ static IterStack*
 iter_stack_new (void)
 {
   IterStack *stack;
-  stack = g_new (IterStack, 1);
+  stack = g_slice_new (IterStack);
   stack->iters = NULL;
   stack->count = 0;
   stack->alloced = 0;
@@ -1697,7 +1697,7 @@ static void
 iter_stack_free (IterStack *stack)
 {
   g_free (stack->iters);
-  g_free (stack);
+  g_slice_free (IterStack, stack);
 }
 
 static void
