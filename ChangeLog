@@ -1,3 +1,8 @@
+Wed Dec 28 00:45:46 2005  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkctree.c (row_delete): delete GtkCTreeRow as GtkCTreeRow, not
+	clist rows which crashes in gslice later on.
+
 2005-12-27  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilefilter.c (gtk_file_filter_filter): In the case for

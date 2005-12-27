@@ -3283,7 +3283,7 @@ row_delete (GtkCTree    *ctree,
     }
 
   g_slice_free1 (sizeof (GtkCell) * clist->columns, ctree_row->row.cell);
-  g_slice_free (GtkCListRow, ctree_row);
+  g_slice_free (GtkCTreeRow, ctree_row);
 }
 
 static void
