@@ -2794,45 +2794,81 @@ gdk_net_wm_supports (GdkAtom property)
   return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
 }
 
+static const char settings_names[] = 
+  "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
+  "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
+  "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
+  "Net/CursorBlink\0"         "gtk-cursor-blink\0"
+  "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
+  "Net/ThemeName\0"           "gtk-theme-name\0"
+  "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
+  "Gtk/CanChangeAccels\0"     "gtk-can-change-accels\0"
+  "Gtk/ColorPalette\0"        "gtk-color-palette\0"
+  "Gtk/FontName\0"            "gtk-font-name\0"
+  "Gtk/IconSizes\0"           "gtk-icon-sizes\0"
+  "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
+  "Gtk/ToolbarStyle\0"        "gtk-toolbar-style\0"
+  "Gtk/ToolbarIconSize\0"     "gtk-toolbar-icon-size\0"
+  "Gtk/IMPreeditStyle\0"      "gtk-im-preedit-style\0"
+  "Gtk/IMStatusStyle\0"       "gtk-im-status-style\0"
+  "Gtk/Modules\0"             "gtk-modules\0"
+  "Gtk/FileChooserBackend\0"  "gtk-file-chooser-backend\0"
+  "Gtk/ButtonImages\0"        "gtk-button-images\0"
+  "Gtk/MenuImages\0"          "gtk-menu-images\0"
+  "Gtk/MenuBarAccel\0"        "gtk-menu-bar-accel\0"
+  "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
+  "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
+  "Gtk/ShowInputMethodMenu\0" "gtk-show-input-method-menu\0"
+  "Gtk/ShowUnicodeMenu\0"     "gtk-show-unicode-menu\0"
+  "Gtk/TimeoutInitial\0"      "gtk-timeout-initial\0"
+  "Gtk/TimeoutRepeat\0"       "gtk-timeout-repeat\0"
+  "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
+  "Gtk/EnableAnimations\0"    "gtk-enable-animations\0"
+  "Xft/Antialias\0"           "gtk-xft-antialias\0"
+  "Xft/Hinting\0"             "gtk-xft-hinting\0"
+  "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
+  "Xft/RGBA\0"                "gtk-xft-rgba\0"
+  "Xft/DPI\0"                 "gtk-xft-dpi\0";
+
 static const struct
 {
-  const char *xsettings_name;
-  const char *gdk_name;
+  gint xsettings_offset;
+  gint gdk_offset;
 } settings_map[] = {
-  { "Net/DoubleClickTime", "gtk-double-click-time" },
-  { "Net/DoubleClickDistance", "gtk-double-click-distance" },
-  { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
-  { "Net/CursorBlink", "gtk-cursor-blink" },
-  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" },
-  { "Net/IconThemeName", "gtk-icon-theme-name" },
-  { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
-  { "Gtk/ColorPalette", "gtk-color-palette" },
-  { "Gtk/FontName", "gtk-font-name" },
-  { "Gtk/IconSizes", "gtk-icon-sizes" },
-  { "Gtk/KeyThemeName", "gtk-key-theme-name" },
-  { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
-  { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
-  { "Gtk/IMPreeditStyle", "gtk-im-preedit-style" },
-  { "Gtk/IMStatusStyle", "gtk-im-status-style" },
-  { "Gtk/Modules", "gtk-modules" },
-  { "Gtk/FileChooserBackend", "gtk-file-chooser-backend" },
-  { "Gtk/ButtonImages", "gtk-button-images" },
-  { "Gtk/MenuImages", "gtk-menu-images" },
-  { "Gtk/MenuBarAccel", "gtk-menu-bar-accel" },
-  { "Gtk/CursorThemeName", "gtk-cursor-theme-name" },
-  { "Gtk/CursorThemeSize", "gtk-cursor-theme-size" },
-  { "Gtk/ShowInputMethodMenu", "gtk-show-input-method-menu" },
-  { "Gtk/ShowUnicodeMenu", "gtk-show-unicode-menu" },
-  { "Gtk/TimeoutInitial", "gtk-timeout-initial" },
-  { "Gtk/TimeoutRepeat", "gtk-timeout-repeat" },
-  { "Gtk/ColorScheme", "gtk-color-scheme" },
-  { "Gtk/EnableAnimations", "gtk-enable-animations" },
-  { "Xft/Antialias", "gtk-xft-antialias" },
-  { "Xft/Hinting", "gtk-xft-hinting" },
-  { "Xft/HintStyle", "gtk-xft-hintstyle" },
-  { "Xft/RGBA", "gtk-xft-rgba" },
-  { "Xft/DPI", "gtk-xft-dpi" },
+  {    0,   20 },
+  {   42,   66 },
+  {   92,  113 },
+  {  136,  152 },
+  {  169,  189 },
+  {  211,  225 },
+  {  240,  258 },
+  {  278,  298 },
+  {  320,  337 },
+  {  355,  368 },
+  {  382,  396 },
+  {  411,  428 },
+  {  447,  464 },
+  {  482,  502 },
+  {  524,  543 },
+  {  564,  582 },
+  {  602,  614 },
+  {  626,  649 },
+  {  674,  691 },
+  {  709,  724 },
+  {  740,  757 },
+  {  776,  796 },
+  {  818,  838 },
+  {  860,  884 },
+  {  911,  931 },
+  {  953,  972 },
+  {  992, 1010 },
+  { 1029, 1045 },
+  { 1062, 1083 },
+  { 1105, 1119 },
+  { 1137, 1149 },
+  { 1165, 1179 },
+  { 1197, 1206 },
+  { 1219, 1227 }
 };
 
 static void
@@ -2855,9 +2891,9 @@ gdk_xsettings_notify_cb (const char       *name,
   new_event.setting.name = NULL;
 
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
-    if (strcmp (settings_map[i].xsettings_name, name) == 0)
+    if (strcmp (settings_names + settings_map[i].xsettings_offset, name) == 0)
       {
-	new_event.setting.name = (char *)settings_map[i].gdk_name;
+	new_event.setting.name = (char *)settings_names + settings_map[i].gdk_offset;
 	break;
       }
   
@@ -2933,9 +2969,9 @@ gdk_screen_get_setting (GdkScreen   *screen,
   screen_x11 = GDK_SCREEN_X11 (screen);
 
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
-    if (strcmp (settings_map[i].gdk_name, name) == 0)
+    if (strcmp (settings_names + settings_map[i].gdk_offset, name) == 0)
       {
-	xsettings_name = settings_map[i].xsettings_name;
+	xsettings_name = settings_names + settings_map[i].xsettings_offset;
 	break;
       }
 
