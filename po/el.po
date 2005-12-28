@@ -28,14 +28,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-21 16:35+0200\n"
+"POT-Creation-Date: 2005-12-29 01:38+0200\n"
 "PO-Revision-Date: 2005-12-21 16:37+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:153 ../gdk-pixbuf/gdk-pixbuf-io.c:856
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1107 ../tests/testfilechooser.c:218
@@ -859,35 +859,35 @@ msgstr "Gdk debugging flags to unset"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "ετικέτα πληκτρολογίου|BackSpace"
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "keyboard label|Tab"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "keyboard label|Return"
+msgstr "Return"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "keyboard label|Pause"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "keyboard label|Scroll_Lock"
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "keyboard label|Sys_Req"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "keyboard label|Escape"
+msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "keyboard label|Multi_key"
+msgstr "Multi_key"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
@@ -907,11 +907,11 @@ msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "keyboard label|Begin"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "keyboard label|Print"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
@@ -919,75 +919,75 @@ msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "keyboard label|Num_Lock"
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "keyboard label|KP_Space"
+msgstr "KP_Space"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr "keyboard label|KP_Tab"
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "keyboard label|KP_Enter"
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "keyboard label|KP_Home"
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "keyboard label|KP_Left"
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "keyboard label|KP_Up"
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "keyboard label|KP_Right"
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "keyboard label|KP_Down"
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "keyboard label|KP_Page_Up"
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "keyboard label|KP_Prior"
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "keyboard label|KP_Page_Down"
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "keyboard label|KP_Next"
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "keyboard label|KP_End"
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "keyboard label|KP_Begin"
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "keyboard label|KP_Insert"
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "keyboard label|KP_Delete"
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "keyboard label|Delete"
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1126,7 +1126,7 @@ msgstr "calendar:MY"
 #.
 #: ../gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:0"
+msgstr "calendar:week_start:1"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1153,7 +1153,7 @@ msgstr "2000"
 #.
 #: ../gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
-msgstr "μορφή έτους ημερολογίου|%Y"
+msgstr "%Y"
 
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
@@ -1622,11 +1622,11 @@ msgstr "_Νέος φάκελος"
 
 #: ../gtk/gtkfilesel.c:1125
 msgid "De_lete File"
-msgstr "Δια_γραφή Αρχείου"
+msgstr "Δια_γραφή αρχείου"
 
 #: ../gtk/gtkfilesel.c:1136
 msgid "_Rename File"
-msgstr "_Μετονομασία Αρχείου"
+msgstr "_Μετονομασία αρχείου"
 
 #: ../gtk/gtkfilesel.c:1438
 #, c-format
@@ -1642,7 +1642,7 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Σφάλμα δημιουργίας φακέλου \"%s\": %s\n"
+"Σφάλμα δημιουργίας φακέλου  \"%s\": %s\n"
 "\"\"%s"
 
 #: ../gtk/gtkfilesel.c:1441 ../gtk/gtkfilesel.c:1677
@@ -1653,11 +1653,11 @@ msgstr ""
 #: ../gtk/gtkfilesel.c:1449
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Σφάλμα δημιουργίας φακέλου \"%s\": %s\n"
+msgstr "Σφάλμα δημιουργίας φακέλου  \"%s\": %s\n"
 
 #: ../gtk/gtkfilesel.c:1483
 msgid "New Folder"
-msgstr "Νέος Φάκελος"
+msgstr "Νέος φάκελος"
 
 #: ../gtk/gtkfilesel.c:1498
 msgid "_Folder name:"
@@ -1699,7 +1699,7 @@ msgstr "Είστε σίγουροι για τη διαγραφή του αρχε
 
 #: ../gtk/gtkfilesel.c:1627
 msgid "Delete File"
-msgstr "Διαγραφή Αρχείου"
+msgstr "Διαγραφή αρχείου"
 
 #: ../gtk/gtkfilesel.c:1673 ../gtk/gtkfilesel.c:1687
 #, c-format
@@ -1815,12 +1815,12 @@ msgstr "Η αποθήκευση σελιδοδείκτη απέτυχε: %s"
 #: ../gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
-msgstr "Ο '%s' υπάρχει ήδη στην λίστα σελιδοδεικτών"
+msgstr "Ο '%s' υπάρχει ήδη στη λίστα σελιδοδεικτών"
 
 #: ../gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr "Ο '%s' δεν υπάρχει στην λίστα σελιδοδεικτών"
+msgstr "Ο '%s' δεν υπάρχει στη λίστα σελιδοδεικτών"
 
 #: ../gtk/gtkfilesystemunix.c:1842
 #, c-format
@@ -1996,7 +1996,7 @@ msgstr "εκκαθάριση"
 
 #: ../gtk/gtklabel.c:3985
 msgid "Select All"
-msgstr "Επιλογή Όλων"
+msgstr "Επιλογή όλων"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:409
@@ -2366,7 +2366,7 @@ msgstr "_Αποθήκευση"
 
 #: ../gtk/gtkstock.c:403
 msgid "Save _As"
-msgstr "Αποθήκευση _Ως"
+msgstr "Αποθήκευση _ως"
 
 #: ../gtk/gtkstock.c:404
 msgid "_Color"
@@ -2386,7 +2386,7 @@ msgstr "_Φθίνουσα"
 
 #: ../gtk/gtkstock.c:408
 msgid "_Spell Check"
-msgstr "_Ορθογραφικός Έλεγχος"
+msgstr "_Ορθογραφικός έλεγχος"
 
 #: ../gtk/gtkstock.c:409
 msgid "_Stop"
@@ -2480,17 +2480,17 @@ msgstr "--- Χωρίς συμβουλή ---"
 #: ../gtk/gtkuimanager.c:1154
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "Άγνωστο γνώρισμα '%s'  στην γραμμή %d  χαρακ %d"
+msgstr "Άγνωστο γνώρισμα  '%s' στη  γραμμή %d  χαρακ  %d"
 
 #: ../gtk/gtkuimanager.c:1371
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Απρόσμενη tag εκκίνησης '%s' στην γραμμή %d  χαρακ %d"
+msgstr "Απρόσμενη tag εκκίνησης  '%s' στη  γραμμή  %d χαρακ  %d"
 
 #: ../gtk/gtkuimanager.c:1461
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Απρόσμενα δεδομένα χαρακτήρα στην γραμμή %d  χαρακ %d"
+msgstr "Απρόσμενα δεδομένα χαρακτήρα  στη  γραμμή  %d χαρακ  %d"
 
 #: ../gtk/gtkuimanager.c:2272
 msgid "Empty"
@@ -2549,5 +2549,4 @@ msgstr "Μέθοδος Eισαγωγής Χ"
 #: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Αδυναμία λήψης πληροφοριών για το αρχείο '%s': %s"
-
+msgstr "Αδυναμία λήψης πληροφοριών για το αρχείο  '%s': %s"
