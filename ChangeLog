@@ -1,3 +1,10 @@
+2005-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbindings.h (GtkBindingSignal): 
+	* gtk/gtkbindings.c (binding_signal_new): Make the
+	args a flexible array inside the struct, and allocate them
+	together.
+
 Wed Dec 28 00:45:46 2005  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkctree.c (row_delete): delete GtkCTreeRow as GtkCTreeRow, not

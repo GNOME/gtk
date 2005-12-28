@@ -74,14 +74,6 @@ struct _GtkBindingEntry
   GtkBindingSignal	*signals;
 };
 
-struct _GtkBindingSignal
-{
-  GtkBindingSignal	*next;
-  gchar			*signal_name;
-  guint			 n_args;
-  GtkBindingArg		*args;
-};
-
 struct _GtkBindingArg
 {
   GType		 arg_type;
@@ -92,6 +84,13 @@ struct _GtkBindingArg
   } d;
 };
 
+struct _GtkBindingSignal
+{
+  GtkBindingSignal	*next;
+  gchar 		*signal_name;
+  guint			 n_args;
+  GtkBindingArg		 args[1]; /* flexible array */
+};
 
 /* Application-level methods */
 
