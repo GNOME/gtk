@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
-"PO-Revision-Date: 2005-08-28 30:04+0000\n"
-"Last-Translator: Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
+"POT-Creation-Date: 2005-12-29 18:49-0300\n"
+"PO-Revision-Date: 2005-12-15 13:54-0300\n"
+"Last-Translator: Claudio André <claudio.andre@correios.net.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -378,18 +378,18 @@ msgstr ""
 "Memória insuficiente para carregar a imagem, tente sair de alguns "
 "aplicativos para liberar memória"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espaço de cores JPEG não suportado (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Impossível alocar memória para carregar o arquivo JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -398,7 +398,7 @@ msgstr ""
 "A qualidade do JPEG deve ser um valor entre 0 e 100; não foi possível "
 "interpretar o valor '%s'."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -406,7 +406,7 @@ msgstr ""
 "A qualidade do JPEG deve ser um valor entre 0 e 100; o valor '%d' não é "
 "permitido."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Formato de imagem JPEG"
 
@@ -1866,7 +1866,7 @@ msgid "(Empty)"
 msgstr "(Vazio)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1891,7 +1891,7 @@ msgstr "Sistema de Arquivos"
 msgid "Could not get a stock icon for %s"
 msgstr "Impossível obter um ícone para %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1900,22 +1900,22 @@ msgstr ""
 "O nome \"%s\" não é valido porque contém o caractere \"%s\". Por favor, "
 "utilize um nome diferente."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Falha ao salvar o marcador: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' já existe na lista de marcadores"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' não existe na lista de marcadores"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Erro ao obter informações para '/': %s"
@@ -1986,7 +1986,7 @@ msgstr "Valor _Gamma"
 msgid "Error loading icon: %s"
 msgstr "Erro ao carregar o ícone: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1293
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1999,7 +1999,7 @@ msgstr ""
 "Você pode obter uma cópia a partir de:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1366
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "O ícone '%s' não está presente no tema"
@@ -2210,9 +2210,8 @@ msgid "_Close"
 msgstr "_Fechar"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "C_onnect"
-msgstr "_Converter"
+msgstr "C_onectar"
 
 #: gtk/gtkstock.c:325
 msgid "_Convert"
@@ -2232,7 +2231,7 @@ msgstr "Ex_cluir"
 
 #: gtk/gtkstock.c:329
 msgid "_Disconnect"
-msgstr ""
+msgstr "_Desconectar"
 
 #: gtk/gtkstock.c:330
 msgid "_Execute"
