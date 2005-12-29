@@ -76,6 +76,10 @@ GList *                _gtk_tree_data_list_header_new  (gint          n_columns,
 void                   _gtk_tree_data_list_header_free (GList        *header_list);
 GtkTreeDataSortHeader *_gtk_tree_data_list_get_header  (GList        *header_list,
 							gint          sort_column_id);
-
+GList                 *_gtk_tree_data_list_set_header  (GList                  *header_list,
+							gint                    sort_column_id,
+							GtkTreeIterCompareFunc  func,
+							gpointer                data,
+							GtkDestroyNotify        destroy);
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

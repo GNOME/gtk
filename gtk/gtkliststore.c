@@ -1801,7 +1801,8 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 	{
 	  GtkTreeDataSortHeader *header = NULL;
 
-	  header = _gtk_tree_data_list_get_header (list_store->sort_list, sort_column_id);
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list, 
+						   sort_column_id);
 
 	  /* We want to make sure that we have a function */
 	  g_return_if_fail (header != NULL);
@@ -1836,36 +1837,9 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
   g_return_if_fail (func != NULL);
 
-  for (list = list_store->sort_list; list; list = list->next)
-    {
-      GtkTreeDataSortHeader *list_header;
-
-      list_header = (GtkTreeDataSortHeader*) list->data;
-      if (list_header->sort_column_id == sort_column_id)
-	{
-	  header = list_header;
-	  break;
-	}
-    }
-
-  if (header == NULL)
-    {
-      header = g_new0 (GtkTreeDataSortHeader, 1);
-      header->sort_column_id = sort_column_id;
-      list_store->sort_list = g_list_append (list_store->sort_list, header);
-    }
-
-  if (header->destroy)
-    {
-      GtkDestroyNotify d = header->destroy;
-
-      header->destroy = NULL;
-      d (header->data);
-    }
-
-  header->func = func;
-  header->data = data;
-  header->destroy = destroy;
+  list_store->sort_list = _gtk_tree_data_list_set_header (list_store->sort_list, 
+							  sort_column_id, 
+							  func, data, destroy);
 
   if (list_store->sort_column_id == sort_column_id)
     gtk_list_store_sort (list_store);

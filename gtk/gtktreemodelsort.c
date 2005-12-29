@@ -1389,43 +1389,13 @@ gtk_tree_model_sort_set_sort_func (GtkTreeSortable        *sortable,
 				   GtkDestroyNotify        destroy)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) sortable;
-  GtkTreeDataSortHeader *header = NULL;
-  GList *list;
 
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (sortable));
   g_return_if_fail (func != NULL);
 
-  for (list = tree_model_sort->sort_list; list; list = list->next)
-    {
-      GtkTreeDataSortHeader *list_header;
-
-      list_header = (GtkTreeDataSortHeader*) list->data;
-      if (list_header->sort_column_id == sort_column_id)
-	{
-	  header = list_header;
-	  break;
-	}
-    }
-
-  if (header == NULL)
-    {
-      header = g_new0 (GtkTreeDataSortHeader, 1);
-      header->sort_column_id = sort_column_id;
-      tree_model_sort->sort_list = g_list_append (tree_model_sort->sort_list,
-						  header);
-    }
-
-  if (header->destroy)
-    {
-      GtkDestroyNotify d = header->destroy;
-
-      header->destroy = NULL;
-      d (header->data);
-    }
-
-  header->func = func;
-  header->data = data;
-  header->destroy = destroy;
+  tree_model_sort->sort_list = _gtk_tree_data_list_set_header (tree_model_sort->sort_list,
+							       sort_column_id,
+							       func, data, destroy);
 
   if (tree_model_sort->sort_column_id == sort_column_id)
     gtk_tree_model_sort_sort (tree_model_sort);

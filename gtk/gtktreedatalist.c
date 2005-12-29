@@ -462,7 +462,7 @@ _gtk_tree_data_list_header_new (gint   n_columns,
     {
       GtkTreeDataSortHeader *header;
 
-      header = g_new (GtkTreeDataSortHeader, 1);
+      header = g_slice_new (GtkTreeDataSortHeader);
 
       retval = g_list_prepend (retval, header);
       header->sort_column_id = i;
@@ -490,14 +490,14 @@ _gtk_tree_data_list_header_free (GList *list)
 	  d (header->data);
 	}
 
-      g_free (header);
+      g_slice_free (GtkTreeDataSortHeader, header);
     }
   g_list_free (list);
 }
 
 GtkTreeDataSortHeader *
-_gtk_tree_data_list_get_header (GList *header_list,
-				gint   sort_column_id)
+_gtk_tree_data_list_get_header (GList   *header_list,
+				gint     sort_column_id)
 {
   GtkTreeDataSortHeader *header = NULL;
 
@@ -508,4 +508,51 @@ _gtk_tree_data_list_get_header (GList *header_list,
 	return header;
     }
   return NULL;
+}
+
+
+GList *
+_gtk_tree_data_list_set_header (GList                  *header_list,
+				gint                    sort_column_id,
+				GtkTreeIterCompareFunc  func,
+				gpointer                data,
+				GtkDestroyNotify        destroy)
+{
+  GList *list = header_list;
+  GtkTreeDataSortHeader *header = NULL;
+
+  for (; list; list = list->next)
+    {
+      header = (GtkTreeDataSortHeader*) list->data;
+      if (header->sort_column_id == sort_column_id)
+	break;
+      header = NULL;
+
+      if (list->next == NULL)
+	break;
+    }
+  
+  if (header == NULL)
+    {
+      header = g_slice_new0 (GtkTreeDataSortHeader);
+      header->sort_column_id = sort_column_id;
+      if (list)
+	g_list_append (list, header);
+      else
+	header_list = g_list_append (header_list, header);
+    }
+
+  if (header->destroy)
+    {
+      GtkDestroyNotify d = header->destroy;
+      
+      header->destroy = NULL;
+      d (header->data);
+    }
+  
+  header->func = func;
+  header->data = data;
+  header->destroy = destroy;
+
+  return header_list;
 }
