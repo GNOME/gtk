@@ -1,5 +1,6 @@
 2005-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelsort.c: 
 	* gtk/gtkliststore.c: 
 	* gtk/gtktreestore.c: Remove excessive g_return_if_fail() checks
 	in static functions.
