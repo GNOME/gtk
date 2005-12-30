@@ -170,8 +170,8 @@ for GTK+.
 </para>
 
 @error_code: Return value to pass to the caller. This is dependend on the
-target system but at least on Unix systems %0 means 
-success.
+target system but at least on Unix systems %0 means success.
+@Deprecated: Use the standard exit() function instead.
 
 
 <!-- ##### FUNCTION gtk_events_pending ##### -->
