@@ -224,5 +224,32 @@ gdk_cairo_set_source_pixbuf (cairo_t   *cr,
   cairo_surface_destroy (surface);
 }
 
+/**
+ * gdk_cairo_set_source_pixmap:
+ * @cr: a #Cairo context
+ * @pixmap: a #GdkPixmap
+ * @pixmap_x: X coordinate of location to place upper left corner of @pixmap
+ * @pixmap_y: Y coordinate of location to place upper left corner of @pixmap
+ * 
+ * Sets the given pixmap as the source pattern for the Cairo context.
+ * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
+ * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y
+ *
+ * Since: 2.10
+ **/
+void
+gdk_cairo_set_source_pixmap (cairo_t   *cr,
+			     GdkPixmap *pixmap,
+			     double     pixmap_x,
+			     double     pixmap_y)
+{
+  cairo_surface_t *surface;
+  
+  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (pixmap));
+  cairo_set_source_surface (cr, surface, pixmap_x, pixmap_y);
+  cairo_surface_destroy (surface);
+}
+
+
 #define __GDK_CAIRO_C__
 #include "gdkaliasdef.c"

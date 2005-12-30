@@ -294,6 +294,7 @@ gdk_fontset_load_for_display
 gdk_cairo_create
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
+gdk_cairo_set_source_pixmap
 gdk_cairo_rectangle
 gdk_cairo_region
 #endif

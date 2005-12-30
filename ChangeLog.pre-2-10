@@ -1,5 +1,10 @@
 2005-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk.symbols: 
+	* gdk/gdkcairo.h: 
+	* gdk/gdkcairo.c: Add gdk_cairo_set_source_pixmap.  (#318805,
+	Alexander Larsson)
+
 	* gdk/gdkdisplaymanager.c (gdk_display_manager_set_property): Call
 	gdk_display_manager_set_default_display() to change the default
 	display.  (#153623, Stefan Kost)

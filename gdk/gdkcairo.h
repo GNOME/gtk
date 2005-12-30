@@ -34,6 +34,10 @@ void gdk_cairo_set_source_pixbuf (cairo_t      *cr,
 				  GdkPixbuf    *pixbuf,
 				  double        pixbuf_x,
 				  double        pixbuf_y);
+void gdk_cairo_set_source_pixmap (cairo_t   *cr,
+				  GdkPixmap *pixmap,
+				  double     pixmap_x,
+				  double     pixmap_y);
 
 void gdk_cairo_rectangle (cairo_t      *cr,
 			  GdkRectangle *rectangle);
