@@ -2201,10 +2201,10 @@ gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
  * gdk_pixbuf_format_get_license:
  * @format: a #GdkPixbufFormat
  *
- * Returns information about the license of the image loader
- * for the format. The returned string should be a shorthand for 
- * a wellknown license, e.g. "LGPL", "GPL", "QPL", "GPL/QPL",
- * or "other" to indicate some other license.  
+ * Returns information about the license of the image loader for the format. The
+ * returned string should be a shorthand for a wellknown license, e.g. "LGPL",
+ * "GPL", "QPL", "GPL/QPL", or "other" to indicate some other license.  This
+ * string should be freed with g_free() when it's no longer needed.
  *
  * Returns: a string describing the license of @format. 
  *
