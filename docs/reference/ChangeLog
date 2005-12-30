@@ -1,3 +1,8 @@
+2005-12-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkmain.sgml: Add deprecation note to
+	gtk_exit()  (#325199, Ævar Arnfjörð Bjarmason)
+
 2005-12-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkcombo.sgml: Small additions
