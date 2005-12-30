@@ -172,6 +172,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  gtk_window_set_title (GTK_WINDOW (dialog), "");
+  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
@@ -306,12 +308,8 @@ setup_type (GtkMessageDialog *dialog,
     stock_id = GTK_STOCK_DIALOG_INFO;
 
   if (gtk_stock_lookup (stock_id, &item))
-    {
-      gtk_image_set_from_stock (GTK_IMAGE (dialog->image), stock_id,
-                                GTK_ICON_SIZE_DIALOG);
-      
-      gtk_window_set_title (GTK_WINDOW (dialog), item.label);
-    }
+    gtk_image_set_from_stock (GTK_IMAGE (dialog->image), stock_id,
+                              GTK_ICON_SIZE_DIALOG);
   else
     g_warning ("Stock dialog ID doesn't exist?");  
 }
