@@ -142,7 +142,8 @@ gdk_display_manager_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DEFAULT_DISPLAY:
-      default_display = g_value_get_object (value);
+      gdk_display_manager_set_default_display (GDK_DISPLAY_MANAGER (object),
+					       g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
