@@ -745,7 +745,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
     {
       GtkTreePath *path;
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+      path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
       gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
       gtk_tree_path_free (path);
     }
@@ -857,7 +857,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
     {
       GtkTreePath *path;
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+      path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
       gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
       gtk_tree_path_free (path);
     }
@@ -1165,7 +1165,7 @@ gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
 {
   GtkTreeIter iter;
 
-  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source),
+  if (gtk_list_store_get_iter (GTK_TREE_MODEL (drag_source),
                                &iter,
                                path))
     {
@@ -1224,7 +1224,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
       GtkTreeIter dest_iter;
       GtkTreePath *prev;
 
-      if (!gtk_tree_model_get_iter (src_model,
+      if (!gtk_list_store_get_iter (src_model,
                                     &src_iter,
                                     src_path))
         {
@@ -1245,7 +1245,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
         }
       else
         {
-          if (gtk_tree_model_get_iter (tree_model, &dest_iter, prev))
+          if (gtk_list_store_get_iter (tree_model, &dest_iter, prev))
             {
               GtkTreeIter tmp_iter = dest_iter;
 
@@ -1698,7 +1698,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
   gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 

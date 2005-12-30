@@ -1,11 +1,17 @@
 2005-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c: 
+	* gtk/gtktreestore.c: Always call the get_path and get_iter
+	implementations directly, rather than the current mixture whith
+	some calls going through the GtkTreeModel interface.
+
 	* gtk/gtktreemodelsort.c: 
 	* gtk/gtkliststore.c: 
 	* gtk/gtktreestore.c: Remove excessive g_return_if_fail() checks
 	in static functions.
-
-	* gtk/gtktreedatalist.c: Use the slice allocater for GtkTreeDataSortHeader.
+	
+	* gtk/gtktreedatalist.c: Use the slice allocater for 
+	GtkTreeDataSortHeader.
 
 	* gtk/gtktreedatalist.h: 
 	* gtk/gtktreedatalist.c (_gtk_tree_data_list_set_header): New function.
