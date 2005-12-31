@@ -1,3 +1,9 @@
+2005-12-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c: 
+	* gtk/gtkentry.c: Connect to notify instead of multiple
+	detailed signals.
+
 2005-12-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk.symbols: 

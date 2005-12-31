@@ -5390,9 +5390,13 @@ static void
 clear_completion_callback (GtkEntry   *entry,
 			   GParamSpec *pspec)
 {
-  GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
-
-  completion->priv->has_completion = FALSE;
+  if (pspec->name == I_("cursor-position") ||
+      pspec->name == I_("selection-bound"))
+    {
+      GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+      
+      completion->priv->has_completion = FALSE;
+    }
 }
 
 static gboolean
@@ -5433,8 +5437,12 @@ completion_changed (GtkEntryCompletion *completion,
 {
   GtkEntry *entry = GTK_ENTRY (data);
 
-  disconnect_completion_signals (entry, completion);
-  connect_completion_signals (entry, completion);
+  if (pspec->name == I_("popup-completion") ||
+      pspec->name == I_("inline-completion"))
+    {
+      disconnect_completion_signals (entry, completion);
+      connect_completion_signals (entry, completion);
+    }
 }
 
 static void
@@ -5477,18 +5485,14 @@ connect_completion_signals (GtkEntry           *entry,
       completion->priv->insert_text_id =
 	g_signal_connect (entry, "insert_text",
 			  G_CALLBACK (completion_insert_text_callback), completion);
-      g_signal_connect (entry, "notify::cursor-position",
-			G_CALLBACK (clear_completion_callback), completion);
-      g_signal_connect (entry, "notify::selection-bound",
+      g_signal_connect (entry, "notify",
 			G_CALLBACK (clear_completion_callback), completion);
       g_signal_connect (entry, "activate",
 			G_CALLBACK (accept_completion_callback), completion);
       g_signal_connect (entry, "focus_out_event",
 			G_CALLBACK (accept_completion_callback), completion);
     }
-  g_signal_connect (completion, "notify::popup-completion",
-		    G_CALLBACK (completion_changed), entry);
-  g_signal_connect (completion, "notify::inline-completion",
+  g_signal_connect (completion, "notify",
 		    G_CALLBACK (completion_changed), entry);
 }
 

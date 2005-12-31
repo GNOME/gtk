@@ -768,7 +768,6 @@ gtk_action_sync_tooltip (GtkAction  *action,
     }
 }
 
-
 static gboolean
 gtk_action_create_menu_proxy (GtkToolItem *tool_item, 
 			      GtkAction   *action)
@@ -792,6 +791,52 @@ gtk_action_create_menu_proxy (GtkToolItem *tool_item,
   return TRUE;
 }
 
+static void 
+gtk_action_handle_notify (GtkAction  *action, 
+			  GParamSpec *pspec, 
+			  GtkWidget  *proxy)
+{
+  if (pspec->name == I_("sensitive"))
+    gtk_action_sync_sensitivity (action, pspec, proxy);
+  else if (pspec->name == I_("visible"))
+    gtk_action_sync_visible (action, pspec, proxy);
+  else if (GTK_IS_MENU_ITEM (proxy) && pspec->name == I_("label"))
+    gtk_action_sync_label (action, pspec, proxy);
+  else if (GTK_IS_IMAGE_MENU_ITEM (proxy) && pspec->name == I_("stock-id"))
+    gtk_action_sync_stock_id (action, pspec, proxy);
+  else if (GTK_IS_TOOL_ITEM (proxy))
+    {
+      if (pspec->name == I_("visible-horizontal") ||
+	  pspec->name == I_("visible-vertical") ||
+	  pspec->name == I_("is-important"))
+	gtk_action_sync_property (action, pspec, proxy);
+      else if (pspec->name == I_("tooltip"))
+	gtk_action_sync_tooltip (action, pspec, proxy);
+
+      if (GTK_IS_TOOL_BUTTON (proxy))
+	{
+	  if (pspec->name == I_("short-label"))
+	    gtk_action_sync_short_label (action, pspec, proxy);
+	  if (pspec->name == I_("stock-id"))
+	    gtk_action_sync_property (action, pspec, proxy);
+	}
+    }
+  else if (GTK_IS_BUTTON (proxy))
+    {
+      if (gtk_button_get_use_stock (GTK_BUTTON (proxy)))
+	{
+	  if (pspec->name == I_("stock-id"))
+	    gtk_action_sync_button_stock_id (action, pspec, proxy);
+	}
+      else if (GTK_BIN (proxy)->child == NULL || 
+	       GTK_IS_LABEL (GTK_BIN (proxy)->child))
+	{
+	  if (pspec->name == I_("short-label"))
+	    gtk_action_sync_short_label (action, pspec, proxy);
+	}
+    }
+}
+
 static void
 connect_proxy (GtkAction     *action, 
 	       GtkWidget     *proxy)
@@ -805,12 +850,10 @@ connect_proxy (GtkAction     *action,
   g_signal_connect (proxy, "destroy",
 		    G_CALLBACK (remove_proxy), action);
 
-  g_signal_connect_object (action, "notify::sensitive",
-			   G_CALLBACK (gtk_action_sync_sensitivity), proxy, 0);
-  gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
+  g_signal_connect_object (action, "notify",
+			   G_CALLBACK (gtk_action_handle_notify), proxy, 0);
 
-  g_signal_connect_object (action, "notify::visible",
-			   G_CALLBACK (gtk_action_sync_visible), proxy, 0);
+  gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
   if (gtk_action_is_visible (action))
     gtk_widget_show (proxy);
   else
@@ -852,8 +895,6 @@ connect_proxy (GtkAction     *action,
 		      NULL);
 
       gtk_label_set_label (GTK_LABEL (label), action->private_data->label);
-      g_signal_connect_object (action, "notify::label",
-			       G_CALLBACK (gtk_action_sync_label), proxy, 0);
 
       if (GTK_IS_IMAGE_MENU_ITEM (proxy))
 	{
@@ -875,9 +916,6 @@ connect_proxy (GtkAction     *action,
 	    }
 	  gtk_image_set_from_stock (GTK_IMAGE (image),
 				    action->private_data->stock_id, GTK_ICON_SIZE_MENU);
-	  g_signal_connect_object (action, "notify::stock-id",
-				   G_CALLBACK (gtk_action_sync_stock_id),
-				   proxy, 0);
 	}
 
       if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy)) == NULL)
@@ -902,19 +940,6 @@ connect_proxy (GtkAction     *action,
                                             "tooltip");
       gtk_action_sync_tooltip (action, pspec, proxy);
 
-      g_signal_connect_object (action, "notify::visible-horizontal",
-			       G_CALLBACK (gtk_action_sync_property), 
-			       proxy, 0);
-      g_signal_connect_object (action, "notify::visible-vertical",
-			       G_CALLBACK (gtk_action_sync_property), 
-			       proxy, 0);
-      g_signal_connect_object (action, "notify::is-important",
-			       G_CALLBACK (gtk_action_sync_property), 
-			       proxy, 0);
-      g_signal_connect_object (action, "notify::tooltip",
-			       G_CALLBACK (gtk_action_sync_tooltip), 
-			       proxy, 0);
-
       g_signal_connect_object (proxy, "create_menu_proxy",
 			       G_CALLBACK (gtk_action_create_menu_proxy),
 			       action, 0);
@@ -930,12 +955,6 @@ connect_proxy (GtkAction     *action,
 			"stock_id", action->private_data->stock_id,
 			NULL);
 
-	  g_signal_connect_object (action, "notify::short-label",
-				   G_CALLBACK (gtk_action_sync_short_label),
-				   proxy, 0);      
-	  g_signal_connect_object (action, "notify::stock-id",
-				   G_CALLBACK (gtk_action_sync_property), 
-				   proxy, 0);
 	  g_signal_connect_object (proxy, "clicked",
 				   G_CALLBACK (gtk_action_activate), action,
 				   G_CONNECT_SWAPPED);
@@ -950,9 +969,6 @@ connect_proxy (GtkAction     *action,
 	  g_object_set (proxy,
 			"label", action->private_data->stock_id,
 			NULL);
-	  g_signal_connect_object (action, "notify::stock-id",
-				   G_CALLBACK (gtk_action_sync_button_stock_id),
-				   proxy, 0);
 	}
       else if (GTK_BIN (proxy)->child == NULL || 
 	       GTK_IS_LABEL (GTK_BIN (proxy)->child))
@@ -962,10 +978,6 @@ connect_proxy (GtkAction     *action,
 			"label", action->private_data->short_label,
 			"use_underline", TRUE,
 			NULL);
-	  g_signal_connect_object (action, "notify::short-label",
-				   G_CALLBACK (gtk_action_sync_short_label),
-				   proxy, 0);
-	  
 	}
       
       /* we leave the button alone if there is a custom child */
