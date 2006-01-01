@@ -1,3 +1,7 @@
+2006-01-01  Clytie Siddall <clytie@riverland.net.au>
+
+	* vi.po: Updated Vietnamese translation.
+
 2005-12-29  Gustavo Noronha Silva  <kov@debian.org>
 
 	* pt_BR.po: Brazilian Portuguese translation update
@@ -901,7 +905,7 @@
 2005-01-30  David Lodge <dave@cirt.net>
                                                                                 
         * en_GB.po: Updated British translation.
-                                                                                
+
 2005-01-23  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Updated Swedish translation.
@@ -4970,7 +4974,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 1999-10-05  Sergey panov  <sipan@mit.edu>
 
-        * ru.po: Updated translation.
+	* ru.po: Updated translation.
 
 1999-10-05  Kjartan Maraas  <kmaraas@online.no>
 
