@@ -282,7 +282,6 @@ gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (drawable);
   GdkRectangle result_rect;
-  HDC hdc;
 
   result_rect.x = 0;
   result_rect.y = 0;
@@ -290,25 +289,6 @@ gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
   result_rect.height = impl->height;
 
   gdk_rectangle_intersect (&result_rect, &impl->position_info.clip_rect, &result_rect);
-
-  /* take this win32 specific part into account (smaller when obscured) */
-  hdc = GetDC (GDK_DRAWABLE_IMPL_WIN32_HANDLE (impl));
-  if (hdc)
-    {
-      RECT r;
-      if (SIMPLEREGION == GetClipBox (hdc, &r))
-        {
-          GdkRectangle gr;
-
-          gr.x = r.left + impl->position_info.x_offset;
-          gr.y = r.top + impl->position_info.y_offset;
-          gr.width = r.right - r.left;
-          gr.height = r.bottom - r.top;
-
-          gdk_rectangle_intersect (&result_rect, &gr, &result_rect);
-        }
-      ReleaseDC (GDK_DRAWABLE_IMPL_WIN32_HANDLE (drawable), hdc);
-    }
 
   return gdk_region_rectangle (&result_rect);
 }
