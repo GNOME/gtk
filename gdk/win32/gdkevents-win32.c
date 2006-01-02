@@ -3069,43 +3069,6 @@ gdk_event_translate (MSG  *msg,
       KillTimer (NULL, resize_timer);
       break;
 
-#ifdef G_ENABLE_DEBUG
-    case WM_NCCALCSIZE:
-      if (msg->wParam)
-	{
-	  NCCALCSIZE_PARAMS *nccsp = (NCCALCSIZE_PARAMS *) msg->lParam;
-	  GDK_NOTE (EVENTS, g_print (" TRUE %s %s %s %s",
-				     _gdk_win32_rect_to_string (&nccsp->rgrc[0]),
-				     _gdk_win32_rect_to_string (&nccsp->rgrc[1]),
-				     _gdk_win32_rect_to_string (&nccsp->rgrc[2]),
-				     _gdk_win32_windowpos_to_string (nccsp->lppos)));
-	}
-      else
-	GDK_NOTE (EVENTS, g_print (" FALSE %s",
-				   _gdk_win32_rect_to_string ((RECT *) msg->lParam)));
-      return_val = TRUE;
-      GDK_NOTE (EVENTS, g_print (" DefWindowProc"));
-      *ret_valp = DefWindowProc (msg->hwnd, msg->message, msg->wParam, msg->lParam);
-      if (msg->wParam)
-	{
-	  NCCALCSIZE_PARAMS *nccsp = (NCCALCSIZE_PARAMS *) msg->lParam;
-	  GDK_NOTE (EVENTS,
-		    (g_print ("%s%s%s%s%s%s%s",
-			      (*ret_valp & WVR_ALIGNTOP) ? "ALIGNTOP " : "",
-			      (*ret_valp & WVR_ALIGNLEFT) ? "ALIGNLEFT " : "",
-			      (*ret_valp & WVR_ALIGNBOTTOM) ? "ALIGNBOTTOM " : "",
-			      (*ret_valp & WVR_ALIGNRIGHT) ? "ALIGNRIGHT " : "",
-			      (*ret_valp & WVR_HREDRAW) ? "HREDRAW " : "",
-			      (*ret_valp & WVR_VREDRAW) ? "VREDRAW " : "",
-			      (*ret_valp & WVR_VALIDRECTS) ? "VALIDRECTS " : ""),
-		     ((*ret_valp & WVR_VALIDRECTS) ?
-		      g_print (" %s %s",
-			       _gdk_win32_rect_to_string (&nccsp->rgrc[1]),
-			       _gdk_win32_rect_to_string (&nccsp->rgrc[2])) : 0)));
-	}
-      break;
-#endif
-
     case WM_WINDOWPOSCHANGED :
       /* Once we've entered the moving or sizing modal loop, we won't
        * return to the main loop until we're done sizing or moving.
@@ -3320,9 +3283,7 @@ gdk_event_translate (MSG  *msg,
 	  rect.right = impl->hints.min_width;
 	  rect.bottom = impl->hints.min_height;
 
-	  GDK_NOTE (EVENTS, g_print (" (have MIN_SIZE: %dx%d)", impl->hints.min_width, impl->hints.min_height));
 	  _gdk_win32_adjust_client_rect (window, &rect);
-	  GDK_NOTE (EVENTS, g_print (" (after AdjustWindowRectEx: %dx%d)", rect.right - rect.left, rect.bottom - rect.top));
 
 	  mmi->ptMinTrackSize.x = rect.right - rect.left;
 	  mmi->ptMinTrackSize.y = rect.bottom - rect.top;
@@ -3336,9 +3297,7 @@ gdk_event_translate (MSG  *msg,
 	  rect.right = impl->hints.max_width;
 	  rect.bottom = impl->hints.max_height;
 
-	  GDK_NOTE (EVENTS, g_print (" (have MAX_SIZE: %dx%d)", impl->hints.max_width, impl->hints.max_height));
 	  _gdk_win32_adjust_client_rect (window, &rect);
-	  GDK_NOTE (EVENTS, g_print (" (after AdjustWindowRectEx: %dx%d)", rect.right - rect.left, rect.bottom - rect.top));
 
 	  /* at least on win9x we have the 16 bit trouble */
 	  maxw = rect.right - rect.left;
