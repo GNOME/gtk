@@ -1,3 +1,13 @@
+2006-01-02  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): Get the
+	invalidated region from ScrollWindowEx() instead of an incorrect
+	attempt to calculate it ourselves. Fix by John Ehresman. (#323666)
+
+	* gdkevents-win32.c: Make _gdk_win32_hrgn_to_region() non-static.
+
+	* gdkprivate-win32.h: Declare it.
+
 2005-12-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c: 
