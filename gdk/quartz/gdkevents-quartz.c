@@ -252,7 +252,6 @@ pointer_grab_internal (GdkWindow    *window,
   pointer_grab_event_mask = event_mask;
   pointer_grab_implicit = implicit;
 
-  /* FIXME: Implement */
   return GDK_GRAB_SUCCESS;
 }
 
@@ -366,14 +365,14 @@ find_child_window_by_point_helper (GdkWindow *window, int x, int y, int x_offset
       if (x >= temp_x && y >= temp_y &&
 	  x < temp_x + impl->width && y < temp_y + impl->height) 
 	{
-	  *x_ret = x - private->x;
-	  *y_ret = y - private->y;
-
+	  *x_ret = x - x_offset - private->x;
+	  *y_ret = y - y_offset - private->y;
+	  
 	  /* Look for child windows */
 	  return find_child_window_by_point_helper (GDK_WINDOW (children->data), x, y, temp_x, temp_y, x_ret, y_ret);
 	}
     }
-
+  
   return window;
 }
 
@@ -852,19 +851,19 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	GdkEventMask event_mask;
 	GdkWindow *real_window;
 
-	
 	if (pointer_grab_window)
 	  {
 	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent)) 
 	      {
 		int tempx, tempy;
 		GdkWindowObject *w = GDK_WINDOW_OBJECT (pointer_grab_window);
+		GdkWindowObject *grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (pointer_grab_window));
 
 		tempx = point.x;
-		tempy = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl)->height -
+		tempy = GDK_WINDOW_IMPL_QUARTZ (grab_toplevel->impl)->height -
 		  point.y;
 
-		while (w != GDK_WINDOW_OBJECT (toplevel))
+		while (w != grab_toplevel)
 		  {
 		    tempx -= w->x;
 		    tempy -= w->y;
@@ -1145,8 +1144,6 @@ gdk_event_translate (NSEvent *nsevent)
 
       append_event (event);
       
-      _gdk_event_button_generate (_gdk_display, event);
-
       /* Ungrab implicit grab */
       if (pointer_grab_window &&
 	  pointer_grab_implicit)

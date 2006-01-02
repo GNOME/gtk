@@ -120,8 +120,8 @@ _gdk_gc_quartz_get_type (void)
 
 GdkGC *
 _gdk_quartz_gc_new (GdkDrawable      *drawable,
-		   GdkGCValues      *values,
-		   GdkGCValuesMask   values_mask)
+		    GdkGCValues      *values,
+		    GdkGCValuesMask   values_mask)
 {
   GdkGC *gc;
 

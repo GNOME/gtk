@@ -296,6 +296,7 @@ gdk_window_new (GdkWindow     *parent,
       private->depth = 0;
       private->input_only = TRUE;
       draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
+      g_object_ref (draw_impl->colormap);
     }
 
   if (private->parent)
@@ -315,18 +316,26 @@ gdk_window_new (GdkWindow     *parent,
 					  _gdk_quartz_get_inverted_screen_y (private->y) - impl->height,
 					  impl->width, impl->height);
 	const char *title;
-	int style_mask = NSTitledWindowMask|
-	  NSClosableWindowMask|
-	  NSMiniaturizableWindowMask|
-	  NSResizableWindowMask;
+	int style_mask;
+
+	switch (attributes->window_type) {
+	case GDK_WINDOW_TEMP:
+	  style_mask = NSBorderlessWindowMask;
+	  break;
+	default:
+	  style_mask = NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask;
+	} 
 
 	impl->toplevel = [[GdkQuartzWindow alloc] initWithContentRect:content_rect 
-			                                   styleMask:style_mask
-			                                     backing:NSBackingStoreBuffered defer:NO];
+			                                    styleMask:style_mask
+			                                      backing:NSBackingStoreBuffered defer:NO];
 	if (attributes_mask & GDK_WA_TITLE)
 	  title = attributes->title;
 	else
 	  title = get_default_title ();
+
+	if (attributes->window_type == GDK_WINDOW_TEMP)
+	  [impl->toplevel setLevel:NSPopUpMenuWindowLevel];
 
 	gdk_window_set_title (window, title);
 
@@ -488,12 +497,15 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
-	   /* FIXME: Support hiding toplevel windows */
+      [impl->toplevel orderOut:nil];
     }
   else if (impl->view)
     {
       [impl->view setHidden:YES];
     }
+
+  gdk_pointer_ungrab (0);
+
 }
 
 void
@@ -724,10 +736,48 @@ gdk_window_get_origin (GdkWindow *window,
 		       gint      *x,
 		       gint      *y)
 {
+  GdkWindowObject *private;
+  int tmp_x = 0, tmp_y = 0;
+  GdkWindow *toplevel;
+  NSRect content_rect;
+  GdkWindowImplQuartz *impl;
+
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  /* FIXME: Implement */
-  return FALSE;
+  if (GDK_WINDOW_DESTROYED (window)) 
+    {
+      if (x) 
+	*x = 0;
+      if (y) 
+	*y = 0;
+      
+      return FALSE;
+    }
+  
+  private = GDK_WINDOW_OBJECT (window);
+
+  toplevel = gdk_window_get_toplevel (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+
+  content_rect = [impl->toplevel contentRectForFrameRect:[impl->toplevel frame]];
+
+  tmp_x = content_rect.origin.x;
+  tmp_y = _gdk_quartz_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
+
+  while (private != GDK_WINDOW_OBJECT (toplevel))
+    {
+      tmp_x += private->x;
+      tmp_y += private->y;
+
+      private = private->parent;
+    }
+
+  if (x)
+    *x = tmp_x;
+  if (y)
+    *y = tmp_y;
+
+  return TRUE;
 }
 
 gboolean

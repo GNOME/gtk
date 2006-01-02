@@ -1,3 +1,37 @@
+2006-01-02  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/GdkQuartzWindow.c:
+        (-[GdkQuartzWindow canBecomeMainWindow]):
+        (-[GdkQuartzWindow canBecomeKeyWindow]):
+        Have these return TRUE
+        
+        * gdk/quartz/gdkevents-quartz.c:
+        (pointer_grab_internal):
+        Remove FIXME
+        
+        (find_child_window_by_point_helper):
+        Fix bug in offset calculation
+        
+        (find_window_for_event):
+        Use grab window toplevel when a grab is in effect
+        
+        (gdk_event_translate):
+        Don't call _gdk_event_button_generate on mouse up
+        
+        * gdk/quartz/gdkgc-quartz.c:
+        (_gdk_quartz_gc_new):
+        Fix indentation
+        
+        * gdk/quartz/gdkwindow-quartz.c:
+        (gdk_window_new):
+        Make TEMP windows borderless
+        
+        (gdk_window_hide):
+        Hide window
+        
+        (gdk_window_get_origin):
+        Implement
+        
 2006-01-02  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c
