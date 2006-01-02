@@ -1,5 +1,9 @@
 2006-01-02  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkwindow-win32.c
+	(gdk_window_impl_win32_get_visible_region): Make identical to the
+	X11 implementation. (#322264, John Ehresman)
+
 	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): Get the
 	invalidated region from ScrollWindowEx() instead of an incorrect
 	attempt to calculate it ourselves. Fix by John Ehresman. (#323666)
