@@ -108,9 +108,9 @@ gdk_window_scroll (GdkWindow *window,
   GdkRegion *invalidate_region;
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
-  GdkRectangle dest_rect;
   GList *tmp_list;
   GdkWindowParentPos parent_pos;
+  HRGN native_invalidate_region;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -130,22 +130,6 @@ gdk_window_scroll (GdkWindow *window,
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
   
-  invalidate_region = gdk_region_rectangle (&impl->position_info.clip_rect);
-  
-  dest_rect = impl->position_info.clip_rect;
-  dest_rect.x += dx;
-  dest_rect.y += dy;
-  gdk_rectangle_intersect (&dest_rect, &impl->position_info.clip_rect, &dest_rect);
-
-  if (dest_rect.width > 0 && dest_rect.height > 0)
-    {
-      GdkRegion *tmp_region;
-
-      tmp_region = gdk_region_rectangle (&dest_rect);
-      gdk_region_subtract (invalidate_region, tmp_region);
-      gdk_region_destroy (tmp_region);
-    }
-  
   gdk_window_compute_parent_pos (impl, &parent_pos);
 
   parent_pos.x += obj->x;
@@ -156,10 +140,13 @@ gdk_window_scroll (GdkWindow *window,
 
   gdk_window_tmp_unset_bg (window);
 
-  if (!ScrollWindowEx (GDK_WINDOW_HWND (window),
-		       dx, dy, NULL, NULL,
-		       NULL, NULL, SW_SCROLLCHILDREN))
-    WIN32_API_FAILED ("ScrollWindowEx");
+  native_invalidate_region = CreateRectRgn (0, 0, 0, 0);
+  if (native_invalidate_region == NULL)
+    WIN32_API_FAILED ("CreateRectRgn");
+
+  API_CALL (ScrollWindowEx, (GDK_WINDOW_HWND (window),
+			     dx, dy, NULL, NULL,
+			     native_invalidate_region, NULL, SW_SCROLLCHILDREN));
 
   if (impl->position_info.no_bg)
     gdk_window_tmp_reset_bg (window);
@@ -173,8 +160,15 @@ gdk_window_scroll (GdkWindow *window,
       tmp_list = tmp_list->next;
     }
 
-  gdk_window_invalidate_region (window, invalidate_region, TRUE);
-  gdk_region_destroy (invalidate_region);
+  if (native_invalidate_region != NULL)
+    {
+      invalidate_region = _gdk_win32_hrgn_to_region (native_invalidate_region);
+      gdk_region_offset (invalidate_region, impl->position_info.x_offset,
+                         impl->position_info.y_offset);
+      gdk_window_invalidate_region (window, invalidate_region, TRUE);
+      gdk_region_destroy (invalidate_region);
+      GDI_CALL (DeleteObject, (native_invalidate_region));
+    }
 }
 
 void

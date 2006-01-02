@@ -353,6 +353,8 @@ HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
 					 gint         x_origin,
 					 gint         y_origin);
 
+GdkRegion *_gdk_win32_hrgn_to_region    (HRGN hrgn);
+
 void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 					 RECT      *RECT);
 
