@@ -1,4 +1,6 @@
 2006-01-03  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkdnd.c: Make it compile
 
 	* gtk/gtkdnd.c (gtk_drag_begin_internal): Call gtk_drag_update
 	for non-motion events.  (#325443, Peter Harvey)
