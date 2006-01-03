@@ -2528,26 +2528,26 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
       if (count < 0)
 	{
 	  /* Move to end of current word, or if not on a word, end of previous word */
-	  end_pos = gtk_entry_move_backward_word (entry, end_pos, TRUE);
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos, TRUE);
+	  end_pos = gtk_entry_move_backward_word (entry, end_pos, FALSE);
+	  end_pos = gtk_entry_move_forward_word (entry, end_pos, FALSE);
 	}
       else if (count > 0)
 	{
 	  /* Move to beginning of current word, or if not on a word, begining of next word */
-	  start_pos = gtk_entry_move_forward_word (entry, start_pos, TRUE);
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos, TRUE);
+	  start_pos = gtk_entry_move_forward_word (entry, start_pos, FALSE);
+	  start_pos = gtk_entry_move_backward_word (entry, start_pos, FALSE);
 	}
 	
       /* Fall through */
     case GTK_DELETE_WORD_ENDS:
       while (count < 0)
 	{
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos, TRUE);
+	  start_pos = gtk_entry_move_backward_word (entry, start_pos, FALSE);
 	  count++;
 	}
       while (count > 0)
 	{
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos, TRUE);
+	  end_pos = gtk_entry_move_forward_word (entry, end_pos, FALSE);
 	  count--;
 	}
       gtk_editable_delete_text (editable, start_pos, end_pos);
