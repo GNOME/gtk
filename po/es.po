@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-18 22:46+0100\n"
-"PO-Revision-Date: 2005-12-18 22:52+0100\n"
+"POT-Creation-Date: 2006-01-03 23:03+0100\n"
+"PO-Revision-Date: 2006-01-03 23:04+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1522,7 +1522,7 @@ msgstr "No se pudo montar %s"
 
 #: ../gtk/gtkfilechooserdefault.c:7016
 msgid "Type name of new folder"
-msgstr "Nombre del tipo de la carpeta nueva"
+msgstr "Teclee el nombre de la carpeta nueva"
 
 #: ../gtk/gtkfilechooserdefault.c:7058
 #, c-format
