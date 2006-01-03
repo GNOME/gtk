@@ -2220,6 +2220,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
     
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
+  else
+    gtk_drag_update (info, info->screen, info->cur_x, info->cur_y, (GdkEvent *)event);
 
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
@@ -3746,8 +3748,12 @@ gtk_drag_update (GtkDragSourceInfo *info,
   info->cur_x = x_root;
   info->cur_y = y_root;
   if (info->last_event)
-    gdk_event_free ((GdkEvent *)info->last_event);
-  info->last_event = gdk_event_copy ((GdkEvent *)event);
+    {
+      gdk_event_free ((GdkEvent *)info->last_event);
+      info->last_event = NULL;
+    }
+  if (event)
+    info->last_event = gdk_event_copy ((GdkEvent *)event);
 
   gtk_drag_add_update_idle (info);
 }
