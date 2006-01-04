@@ -24,7 +24,8 @@ zip $ZIP share/themes/Default/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/Emacs/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/MS-Windows/gtk-2.0/gtkrc
 
-zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
+zip $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
+zip $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
 
 rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
