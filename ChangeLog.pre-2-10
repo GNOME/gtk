@@ -1,3 +1,11 @@
+2006-01-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenutoolbutton.c
+	(gtk_menu_tool_button_set_menu)
+	(gtk_menu_tool_button_destroy): use gtk_menu_attach_to_widget()
+	and gtk_menu_detach() instead of reffing/unreffing the menu
+	manually. Also fixes brokenness on screen change (bug #85715).
+
 2006-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelmap.c: 

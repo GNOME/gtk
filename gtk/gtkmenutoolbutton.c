@@ -450,8 +450,7 @@ gtk_menu_tool_button_destroy (GtkObject *object)
       g_signal_handlers_disconnect_by_func (button->priv->menu, 
 					    menu_deactivate_cb, 
 					    button);
-      g_object_unref (button->priv->menu);
-      button->priv->menu = NULL;
+      gtk_menu_detach (button->priv->menu);
 
       g_signal_handlers_disconnect_by_func (button->priv->arrow_button,
 					    arrow_button_toggled_cb, 
@@ -535,6 +534,17 @@ menu_deactivate_cb (GtkMenuShell      *menu_shell,
   return TRUE;
 }
 
+static void
+menu_detacher (GtkWidget *widget,
+               GtkMenu   *menu)
+{
+  GtkMenuToolButtonPrivate *priv = GTK_MENU_TOOL_BUTTON (widget)->priv;
+
+  g_return_if_fail (priv->menu == menu);
+
+  priv->menu = NULL;
+}
+
 /**
  * gtk_menu_tool_button_set_menu:
  * @button: a #GtkMenuToolButton
@@ -566,18 +576,19 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
           g_signal_handlers_disconnect_by_func (priv->menu, 
 						menu_deactivate_cb, 
 						button);
-	  g_object_unref (priv->menu);
+	  gtk_menu_detach (priv->menu);
 	}
 
       priv->menu = GTK_MENU (menu);
 
       if (priv->menu)
         {
-          g_object_ref_sink (priv->menu);
+          gtk_menu_attach_to_widget (priv->menu, GTK_WIDGET (button),
+                                     menu_detacher);
 
           gtk_widget_set_sensitive (priv->arrow_button, TRUE);
 
-          g_signal_connect (button->priv->menu, "deactivate",
+          g_signal_connect (priv->menu, "deactivate",
                             G_CALLBACK (menu_deactivate_cb), button);
         }
       else
