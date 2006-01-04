@@ -2221,7 +2221,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
   else 
-    gtk_drag_update (info, info->screen, info->cur_x, info->cur_y, event);
+    gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, event);
 
 
   info->start_x = info->cur_x;
