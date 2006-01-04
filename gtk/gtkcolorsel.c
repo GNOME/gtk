@@ -108,6 +108,7 @@ struct _ColorSelectionPrivate
   guint changing : 1;
   guint default_set : 1;
   guint default_alpha_set : 1;
+  guint has_grab : 1;
   
   gdouble color[COLORSEL_NUM_CHANNELS];
   gdouble old_color[COLORSEL_NUM_CHANNELS];
@@ -140,7 +141,6 @@ struct _ColorSelectionPrivate
   /* Window for grabbing on */
   GtkWidget *dropper_grab_widget;
   guint32    grab_time;
-  gboolean   has_grab;
 
   /* Connection to settings */
   gulong settings_connection;
@@ -1907,6 +1907,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                       P_("Palette to use in the color selector"),
                                                       default_colors,
                                                       GTK_PARAM_READWRITE));
+
+   g_type_class_add_private (gobject_class, sizeof (ColorSelectionPrivate));
 }
 
 /* widget functions */
@@ -1925,7 +1927,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   
   gtk_widget_push_composite_child ();
 
-  priv = colorsel->private_data = g_new0 (ColorSelectionPrivate, 1);
+  priv = colorsel->private_data = G_TYPE_INSTANCE_GET_PRIVATE (colorsel, GTK_TYPE_COLOR_SELECTION, ColorSelectionPrivate);
   priv->changing = FALSE;
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
@@ -2118,14 +2120,6 @@ gtk_color_selection_destroy (GtkObject *object)
 static void
 gtk_color_selection_finalize (GObject *object)
 {
-  GtkColorSelection *cselection = GTK_COLOR_SELECTION (object);
-  
-  if (cselection->private_data)
-    {
-      g_free (cselection->private_data);
-      cselection->private_data = NULL;
-    }
-  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

@@ -57,8 +57,8 @@ typedef struct {
   guint        accel_mods;
   guint	       std_accel_key;
   guint	       std_accel_mods;
-  guint        changed : 1;
-  guint        lock_count;
+  guint        changed    :  1;
+  guint        lock_count : 15;
   GSList      *groups;
 } AccelEntry;
 
@@ -179,8 +179,8 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
     }
   else
     {
-      entry = g_new0 (AccelEntry, 1);
-      entry->accel_path = g_quark_to_string (g_quark_from_string (accel_path));
+      entry = g_slice_new0 (AccelEntry);
+      entry->accel_path = g_intern_string (accel_path);
       entry->std_accel_key = accel_key;
       entry->std_accel_mods = accel_mods;
       entry->accel_key = accel_key;

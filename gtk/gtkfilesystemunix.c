@@ -702,7 +702,7 @@ icon_cache_element_free (IconCacheElement *element)
 {
   if (element->pixbuf)
     g_object_unref (element->pixbuf);
-  g_free (element);
+  g_slice_free (IconCacheElement, element);
 }
 
 static void
@@ -744,7 +744,7 @@ get_cached_icon (GtkWidget   *widget,
   element = g_hash_table_lookup (cache, name);
   if (!element)
     {
-      element = g_new0 (IconCacheElement, 1);
+      element = g_slice_new0 (IconCacheElement);
       g_hash_table_insert (cache, g_strdup (name), element);
     }
 

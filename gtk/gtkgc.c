@@ -64,7 +64,7 @@ static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
 
 static gint initialize = TRUE;
 static GCache *gc_cache = NULL;
-
+static GQuark quark_gtk_gc_drawable_ht = 0;
 
 GdkGC*
 gtk_gc_get (gint             depth,
@@ -102,21 +102,21 @@ free_gc_drawable (gpointer data)
 {
   GtkGCDrawable *drawable = data;
   g_object_unref (drawable->drawable);
-  g_free (drawable);
+  g_slice_free (GtkGCDrawable, drawable);
 }
 
 static GHashTable*
 gtk_gc_get_drawable_ht (GdkScreen *screen)
 {
-  GHashTable *ht = g_object_get_data (G_OBJECT (screen), "gtk-gc-drawable-ht");
+  GHashTable *ht = g_object_get_qdata (G_OBJECT (screen), quark_gtk_gc_drawable_ht);
   if (!ht)
     {
       ht = g_hash_table_new_full ((GHashFunc) gtk_gc_drawable_hash,
 				  (GEqualFunc) gtk_gc_drawable_equal,
 				  NULL, free_gc_drawable);
-      g_object_set_data_full (G_OBJECT (screen), 
-			      I_("gtk-gc-drawable-ht"), ht, 
-			      (GDestroyNotify)g_hash_table_destroy);
+      g_object_set_qdata_full (G_OBJECT (screen), 
+			       quark_gtk_gc_drawable_ht, ht, 
+			       (GDestroyNotify)g_hash_table_destroy);
     }
   
   return ht;
@@ -126,6 +126,8 @@ static void
 gtk_gc_init (void)
 {
   initialize = FALSE;
+
+  quark_gtk_gc_drawable_ht = g_quark_from_static_string ("gtk-gc-drawable-ht");
 
   gc_cache = g_cache_new ((GCacheNewFunc) gtk_gc_new,
 			  (GCacheDestroyFunc) gtk_gc_destroy,
@@ -170,7 +172,7 @@ gtk_gc_new (gpointer key)
   drawable = g_hash_table_lookup (ht, &keyval->depth);
   if (!drawable)
     {
-      drawable = g_new (GtkGCDrawable, 1);
+      drawable = g_slice_new (GtkGCDrawable);
       drawable->depth = keyval->depth;
       drawable->drawable = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
 					   1, 1, drawable->depth);

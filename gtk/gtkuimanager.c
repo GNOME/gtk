@@ -980,12 +980,18 @@ get_node (GtkUIManager *self,
   return node;
 }
 
+static void
+node_ui_reference_free (gpointer data)
+{
+  g_slice_free (NodeUIReference, data);
+}
+
 static gboolean
 free_node (GNode *node)
 {
   Node *info = NODE_INFO (node);
   
-  g_list_foreach (info->uifiles, (GFunc) g_free, NULL);
+  g_list_foreach (info->uifiles, (GFunc) node_ui_reference_free, NULL);
   g_list_free (info->uifiles);
 
   if (info->action)
@@ -1032,7 +1038,7 @@ node_prepend_ui_reference (GNode  *gnode,
     reference = node->uifiles->data;
   else
     {
-      reference = g_new (NodeUIReference, 1);
+      reference = g_slice_new (NodeUIReference);
       node->uifiles = g_list_prepend (node->uifiles, reference);
     }
 
@@ -1058,7 +1064,7 @@ node_remove_ui_reference (GNode  *gnode,
 	  if (p == node->uifiles)
 	    mark_node_dirty (gnode);
 	  node->uifiles = g_list_delete_link (node->uifiles, p);
-	  g_free (reference);
+	  g_slice_free (NodeUIReference, reference);
 
 	  break;
 	}

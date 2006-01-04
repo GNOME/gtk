@@ -1323,7 +1323,7 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
   if (appearance->fg_stipple)
     g_object_unref (appearance->fg_stipple);
 
-  g_free (attr);
+  g_slice_free (GtkTextAttrAppearance, attr);
 }
 
 static gboolean
@@ -1369,7 +1369,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
     klass.type = gtk_text_attr_appearance_type =
       pango_attr_type_register ("GtkTextAttrAppearance");
 
-  result = g_new (GtkTextAttrAppearance, 1);
+  result = g_slice_new (GtkTextAttrAppearance);
   result->attr.klass = &klass;
 
   result->appearance = *appearance;

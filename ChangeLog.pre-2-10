@@ -1,3 +1,26 @@
+2006-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaccelmap.c: 
+	* gtk/gtkactiongroup.c: 
+	* gtk/gtkdialog.c: 
+	* gtk/gtkfilesystemunix.c: 
+	* gtk/gtkgc.c: 
+	* gtk/gtkkeyhash.c: 
+	* gtk/gtkplug.c: 
+	* gtk/gtktextiter.c: 
+	* gtk/gtktextlayout.c: 
+	* gtk/gtkuimanager.c: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkwindow.c: 
+	* gtk/gtkxembed.c: Use the slice allocator for many small 
+	allocations.
+
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtktreeview.c: Use IPN.
+
+	* gtk/gtkwidget.c: Remove an unused field from the AccelPath 
+	struct.
+
 2006-01-04  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Include also the gtk20-properties message catalogs.

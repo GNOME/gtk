@@ -147,7 +147,7 @@ key_hash_free_entry (GtkKeyHash      *key_hash,
     (*key_hash->destroy_notify) (entry->value);
   
   g_free (entry->keys);
-  g_free (entry);
+  g_slice_free (GtkKeyHashEntry, entry);
 }
 
 static void
@@ -202,7 +202,7 @@ _gtk_key_hash_add_entry (GtkKeyHash      *key_hash,
 			 GdkModifierType  modifiers,
 			 gpointer         value)
 {
-  GtkKeyHashEntry *entry = g_new (GtkKeyHashEntry, 1);
+  GtkKeyHashEntry *entry = g_slice_new (GtkKeyHashEntry);
 
   entry->value = value;
   entry->keyval = keyval;

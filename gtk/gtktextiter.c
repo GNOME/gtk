@@ -441,7 +441,7 @@ gtk_text_iter_copy (const GtkTextIter *iter)
 
   g_return_val_if_fail (iter != NULL, NULL);
 
-  new_iter = g_new (GtkTextIter, 1);
+  new_iter = g_slice_new (GtkTextIter);
 
   *new_iter = *iter;
 
@@ -462,7 +462,7 @@ gtk_text_iter_free (GtkTextIter *iter)
 {
   g_return_if_fail (iter != NULL);
 
-  g_free (iter);
+  g_slice_free (GtkTextIter, iter);
 }
 
 GType

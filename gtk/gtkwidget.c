@@ -3340,7 +3340,6 @@ gtk_widget_list_accel_closures (GtkWidget *widget)
 
 typedef struct {
   GQuark         path_quark;
-  GtkWidget     *widget;
   GtkAccelGroup *accel_group;
   GClosure      *closure;
 } AccelPath;
@@ -3355,7 +3354,7 @@ destroy_accel_path (gpointer data)
   /* closures_destroy takes care of unrefing the closure */
   g_object_unref (apath->accel_group);
   
-  g_free (apath);
+  g_slice_free (AccelPath, apath);
 }
 
 
@@ -3399,11 +3398,10 @@ gtk_widget_set_accel_path (GtkWidget     *widget,
       g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
 
       gtk_accel_map_add_entry (accel_path, 0, 0);
-      apath = g_new (AccelPath, 1);
-      apath->widget = widget;
+      apath = g_slice_new (AccelPath);
       apath->accel_group = g_object_ref (accel_group);
       apath->path_quark = g_quark_from_string (accel_path);
-      apath->closure = widget_new_accel_closure (apath->widget, GTK_WIDGET_GET_CLASS (apath->widget)->activate_signal);
+      apath->closure = widget_new_accel_closure (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal);
     }
   else
     apath = NULL;
@@ -5920,14 +5918,14 @@ gtk_widget_set_events (GtkWidget *widget,
   if (events)
     {
       if (!eventp)
-	eventp = g_new (gint, 1);
+	eventp = g_slice_new (gint);
       
       *eventp = events;
       g_object_set_qdata (G_OBJECT (widget), quark_event_mask, eventp);
     }
   else if (eventp)
     {
-      g_free (eventp);
+      g_slice_free (gint, eventp);
       g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
     }
 
@@ -5983,7 +5981,7 @@ gtk_widget_add_events (GtkWidget *widget,
     {
       if (!eventp)
 	{
-	  eventp = g_new (gint, 1);
+	  eventp = g_slice_new (gint);
 	  *eventp = 0;
 	}
       
@@ -5992,7 +5990,7 @@ gtk_widget_add_events (GtkWidget *widget,
     }
   else if (eventp)
     {
-      g_free (eventp);
+      g_slice_free (gint, eventp);
       g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
     }
 
@@ -6033,7 +6031,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
   
   if (!modep)
-    modep = g_new (GdkExtensionMode, 1);
+    modep = g_slice_new (GdkExtensionMode);
   
   *modep = mode;
   g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode, modep);
@@ -6695,11 +6693,11 @@ gtk_widget_finalize (GObject *object)
   
   events = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
   if (events)
-    g_free (events);
+    g_slice_free (gint, events);
   
   mode = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
   if (mode)
-    g_free (mode);
+    g_slice_free (GdkExtensionMode, mode);
 
   accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
@@ -6973,7 +6971,7 @@ static void
 gtk_widget_shape_info_destroy (GtkWidgetShapeInfo *info)
 {
   g_object_unref (info->shape_mask);
-  g_free (info);
+  g_slice_free (GtkWidgetShapeInfo, info);
 }
 
 /**
@@ -7012,7 +7010,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_HAS_SHAPE_MASK);
       
-      shape_info = g_new (GtkWidgetShapeInfo, 1);
+      shape_info = g_slice_new (GtkWidgetShapeInfo);
       g_object_set_qdata_full (G_OBJECT (widget), quark_shape_info, shape_info,
 			       (GDestroyNotify) gtk_widget_shape_info_destroy);
       

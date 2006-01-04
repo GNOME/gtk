@@ -170,6 +170,7 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
   GtkTreeSortableIface *iface;
 
   g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
+  g_return_if_fail (sort_func != NULL);
 
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
 

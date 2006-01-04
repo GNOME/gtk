@@ -1151,12 +1151,15 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "start_interactive_search", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_F, GDK_CONTROL_MASK, "start_interactive_search", 0);
+
+  g_type_class_add_private (o_class, sizeof (GtkTreeViewPrivate));
 }
 
 static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
-  tree_view->priv = g_new0 (GtkTreeViewPrivate, 1);
+  tree_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (tree_view, GTK_TYPE_TREE_VIEW, GtkTreeViewPrivate);
+
   GTK_WIDGET_SET_FLAGS (tree_view, GTK_CAN_FOCUS);
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
@@ -1316,10 +1319,6 @@ gtk_tree_view_get_property (GObject    *object,
 static void
 gtk_tree_view_finalize (GObject *object)
 {
-  GtkTreeView *tree_view = (GtkTreeView *) object;
-
-  g_free (tree_view->priv);
-
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 

@@ -802,7 +802,7 @@ keys_foreach (GtkWindow      *window,
 	      gpointer        data)
 {
   GHashTable *new_grabbed_keys = data;
-  GrabbedKey *key = g_new (GrabbedKey, 1);
+  GrabbedKey *key = g_slice_new (GrabbedKey);
 
   key->accelerator_key = keyval;
   key->accelerator_mods = modifiers;
@@ -811,12 +811,18 @@ keys_foreach (GtkWindow      *window,
 }
 
 static void
+grabbed_key_free (gpointer data)
+{
+  g_slice_free (GrabbedKey, data);
+}
+
+static void
 gtk_plug_keys_changed (GtkWindow *window)
 {
   GHashTable *new_grabbed_keys, *old_grabbed_keys;
   GtkPlug *plug = GTK_PLUG (window);
 
-  new_grabbed_keys = g_hash_table_new_full (grabbed_key_hash, grabbed_key_equal, (GDestroyNotify)g_free, NULL);
+  new_grabbed_keys = g_hash_table_new_full (grabbed_key_hash, grabbed_key_equal, (GDestroyNotify)grabbed_key_free, NULL);
   _gtk_window_keys_foreach (window, keys_foreach, new_grabbed_keys);
 
   if (plug->socket_window)

@@ -532,6 +532,12 @@ gtk_dialog_new_with_buttons (const gchar    *title,
   return GTK_WIDGET (dialog);
 }
 
+static void 
+response_data_free (gpointer data)
+{
+  g_slice_free (ResponseData, data);
+}
+
 static ResponseData*
 get_response_data (GtkWidget *widget,
 		   gboolean   create)
@@ -541,12 +547,12 @@ get_response_data (GtkWidget *widget,
 
   if (ad == NULL && create)
     {
-      ad = g_new (ResponseData, 1);
+      ad = g_slice_new (ResponseData);
       
       g_object_set_data_full (G_OBJECT (widget),
                               I_("gtk-dialog-response-data"),
                               ad,
-                              g_free);
+			      response_data_free);
     }
 
   return ad;

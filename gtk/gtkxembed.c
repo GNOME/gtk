@@ -47,7 +47,7 @@ static GSList *current_messages;
 void
 _gtk_xembed_push_message (XEvent *xevent)
 {
-  GtkXEmbedMessage *message = g_new (GtkXEmbedMessage, 1);
+  GtkXEmbedMessage *message = g_slice_new (GtkXEmbedMessage);
   
   message->time = xevent->xclient.data.l[0];
   message->message = xevent->xclient.data.l[1];
@@ -68,8 +68,7 @@ _gtk_xembed_pop_message (void)
 {
   GtkXEmbedMessage *message = current_messages->data;
   current_messages = g_slist_delete_link (current_messages, current_messages);
-
-  g_free (message);
+  g_slice_free (GtkXEmbedMessage, message);
 }
 
 /**

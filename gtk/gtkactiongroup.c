@@ -714,7 +714,7 @@ shared_data_unref (gpointer data)
       if (shared_data->destroy) 
 	(*shared_data->destroy) (shared_data->data);
       
-      g_free (shared_data);
+      g_slice_free (SharedData, shared_data);
     }
 }
 
@@ -748,7 +748,7 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  shared_data = g_new0 (SharedData, 1);
+  shared_data = g_slice_new0 (SharedData);
   shared_data->ref_count = 1;
   shared_data->data = user_data;
   shared_data->destroy = destroy;
@@ -844,7 +844,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  shared_data = g_new0 (SharedData, 1);
+  shared_data = g_slice_new0 (SharedData);
   shared_data->ref_count = 1;
   shared_data->data = user_data;
   shared_data->destroy = destroy;
