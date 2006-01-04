@@ -1,3 +1,8 @@
+2006-01-04  Rodrigo Moya <rodrigo@novell.com>
+
+	* gtk/gtkbindings.c (binding_signal_new): guard against multiplying
+	by -1 (when n_args is 0).
+
 2006-01-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenutoolbutton.c
