@@ -1,3 +1,8 @@
+2006-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): Don't return
+	a list of NULLs.  (#325723, Steve Chaplin)
+
 2006-01-04  Rodrigo Moya <rodrigo@novell.com>
 
 	* gtk/gtkbindings.c (binding_signal_new): guard against multiplying

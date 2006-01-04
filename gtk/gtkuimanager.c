@@ -755,30 +755,36 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
   return GTK_UI_MANAGER_GET_CLASS (self)->get_widget (self, path);
 }
 
+typedef struct {
+  GtkUIManagerItemType types;
+  GSList *list;
+} ToplevelData;
+
 static void
 collect_toplevels (GNode   *node, 
 		   gpointer user_data)
 {
-  struct {
-    GtkUIManagerItemType types;
-    GSList *list;
-  } *data = user_data;
+  ToplevelData *data = user_data;
 
-  switch (NODE_INFO (node)->type) {
-  case NODE_TYPE_MENUBAR:
-    if (data->types & GTK_UI_MANAGER_MENUBAR)
-      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
-    break;
-  case NODE_TYPE_TOOLBAR:
-    if (data->types & GTK_UI_MANAGER_TOOLBAR)
-      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
-    break;
-  case NODE_TYPE_POPUP:
-    if (data->types & GTK_UI_MANAGER_POPUP)
-      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
-    break;
-  default: ;
-  }
+  if (NODE_INFO (node)->proxy)
+    {
+      switch (NODE_INFO (node)->type) 
+	{
+	case NODE_TYPE_MENUBAR:
+	  if (data->types & GTK_UI_MANAGER_MENUBAR)
+	data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+	  break;
+	case NODE_TYPE_TOOLBAR:
+      if (data->types & GTK_UI_MANAGER_TOOLBAR)
+	data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+      break;
+	case NODE_TYPE_POPUP:
+	  if (data->types & GTK_UI_MANAGER_POPUP)
+	    data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+	  break;
+	default: ;
+	}
+    }
 }
 
 /**
@@ -799,10 +805,7 @@ GSList *
 gtk_ui_manager_get_toplevels (GtkUIManager         *self,
 			      GtkUIManagerItemType  types)
 {
-  struct {
-    GtkUIManagerItemType types;
-    GSList *list;
-  } data;
+  ToplevelData data;
 
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
   g_return_val_if_fail ((~(GTK_UI_MANAGER_MENUBAR | 
