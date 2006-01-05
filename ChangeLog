@@ -1,5 +1,8 @@
 2006-01-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (connect_proxy): Use a weak reference rather
+	than the destroy signal to track proxies going away.
+
 	* gtk/gtkbindings.c (binding_signal_new): Revert the last change.
 
 	* gtk/gtkaction.c (gtk_action_sync_property): Removed.

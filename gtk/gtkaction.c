@@ -107,8 +107,10 @@ enum
 static void gtk_action_init       (GtkAction *action);
 static void gtk_action_class_init (GtkActionClass *class);
 
-static GQuark       accel_path_id  = 0;
+static GQuark      accel_path_id  = 0;
+static GQuark      quark_gtk_action_proxy  = 0;
 static const gchar accel_path_key[] = "GtkAction::accel_path";
+static const gchar gtk_action_proxy_key[] = "gtk-action-proxy";
 
 GType
 gtk_action_get_type (void)
@@ -189,6 +191,7 @@ gtk_action_class_init (GtkActionClass *klass)
   GObjectClass *gobject_class;
 
   accel_path_id = g_quark_from_static_string (accel_path_key);
+  quark_gtk_action_proxy = g_quark_from_static_string (gtk_action_proxy_key);
 
   parent_class = g_type_class_peek_parent (klass);
   gobject_class = G_OBJECT_CLASS (klass);
@@ -564,12 +567,12 @@ create_tool_item (GtkAction *action)
 }
 
 static void
-remove_proxy (GtkWidget *proxy, 
-	      GtkAction *action)
+remove_proxy (GtkAction *action,
+	      GtkWidget *proxy)
 {
   if (GTK_IS_MENU_ITEM (proxy))
     gtk_action_disconnect_accelerator (action);
-
+  
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
 }
 
@@ -602,7 +605,7 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
   
   if (action == NULL)
-    action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
+    action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
 
   visible = gtk_action_is_visible (action);
   hide_if_empty = action->private_data->hide_if_empty;
@@ -660,14 +663,13 @@ connect_proxy (GtkAction     *action,
 	       GtkWidget     *proxy)
 {
   g_object_ref (action);
-  g_object_set_data_full (G_OBJECT (proxy), I_("gtk-action"), action,
-			  g_object_unref);
+  g_object_set_qdata_full (G_OBJECT (proxy), quark_gtk_action_proxy, action,
+			   g_object_unref);
 
   /* add this widget to the list of proxies */
   action->private_data->proxies = g_slist_prepend (action->private_data->proxies, proxy);
-  g_signal_connect (proxy, "destroy",
-		    G_CALLBACK (remove_proxy), action);
-
+  g_object_weak_ref (G_OBJECT (proxy), (GWeakNotify)remove_proxy, action);
+  
   gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
   if (gtk_action_is_visible (action))
     gtk_widget_show (proxy);
@@ -805,13 +807,9 @@ static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  g_object_set_data (G_OBJECT (proxy), I_("gtk-action"), NULL);
+  g_object_set_qdata (G_OBJECT (proxy), quark_gtk_action_proxy, NULL);
 
-  /* remove proxy from list of proxies */
-  g_signal_handlers_disconnect_by_func (proxy,
-					G_CALLBACK (remove_proxy),
-					action);
-  remove_proxy (proxy, action);
+  remove_proxy (action, proxy);
 
   /* disconnect the activate handler */
   g_signal_handlers_disconnect_by_func (proxy,
@@ -966,7 +964,7 @@ gtk_action_connect_proxy (GtkAction *action,
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
 
-  prev_action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
+  prev_action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
 
   if (prev_action)
     (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (prev_action, proxy);  
@@ -991,7 +989,7 @@ gtk_action_disconnect_proxy (GtkAction *action,
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
 
-  g_return_if_fail (g_object_get_data (G_OBJECT (proxy), "gtk-action") == action);
+  g_return_if_fail (g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy) == action);
 
   (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (action, proxy);  
 }
