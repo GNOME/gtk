@@ -1,3 +1,8 @@
+2006-01-05  Rodrigo Moya <rodrigo@novell.com>
+
+	* gtk/gtkbindings.c (binding_signal_new): allocate correct amount for
+	signal and arguments.
+
 2006-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_grab_focus): Don't return a value from

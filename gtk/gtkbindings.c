@@ -64,8 +64,8 @@ binding_signal_new (const gchar *signal_name,
 		    guint	 n_args)
 {
   GtkBindingSignal *signal;
-  
-  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg));
+
+  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg) - sizeof (GtkBindingArg));
   signal->next = NULL;
   signal->signal_name = (gchar *)g_intern_string (signal_name);
   signal->n_args = n_args;
