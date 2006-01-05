@@ -618,23 +618,6 @@ _gtk_action_sync_menu_visible (GtkAction *action,
 
 gboolean _gtk_menu_is_empty (GtkWidget *menu);
 
-static void
-gtk_action_sync_stock_id (GtkAction  *action, 
-			  GParamSpec *pspec,
-			  GtkWidget  *proxy)
-{
-  GtkWidget *image = NULL;
-
-  if (GTK_IS_IMAGE_MENU_ITEM (proxy))
-    {
-      image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (proxy));
-
-      if (GTK_IS_IMAGE (image))
-	gtk_image_set_from_stock (GTK_IMAGE (image),
-				  action->private_data->stock_id, GTK_ICON_SIZE_MENU);
-    }
-}
-
 static gboolean
 gtk_action_create_menu_proxy (GtkToolItem *tool_item, 
 			      GtkAction   *action)
@@ -809,15 +792,13 @@ disconnect_proxy (GtkAction *action,
 {
   g_object_set_qdata (G_OBJECT (proxy), quark_gtk_action_proxy, NULL);
 
+  g_object_weak_unref (G_OBJECT (proxy), (GWeakNotify)remove_proxy, action);
   remove_proxy (action, proxy);
 
   /* disconnect the activate handler */
   g_signal_handlers_disconnect_by_func (proxy,
 					G_CALLBACK (gtk_action_activate),
 					action);
-
-  g_signal_handlers_disconnect_by_func (action,
-				G_CALLBACK (gtk_action_sync_stock_id), proxy);
 
   /* toolbar button specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (proxy,
