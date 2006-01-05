@@ -1,5 +1,11 @@
 2006-01-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbindings.h (struct _GtkBindingSignal): Revert questionable
+	changes.
+	
+	* gtk/gtkbindings.c: Use the slice allocator and allocate signal
+	and arguments in one block.
+
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): Don't return
 	a list of NULLs.  (#325723, Steve Chaplin)
 

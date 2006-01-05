@@ -65,10 +65,11 @@ binding_signal_new (const gchar *signal_name,
 {
   GtkBindingSignal *signal;
   
-  signal = (GtkBindingSignal *) g_malloc0 (sizeof (GtkBindingSignal) + (n_args > 0 ? n_args - 1 : 0) * sizeof (GtkBindingArg));
+  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg));
   signal->next = NULL;
   signal->signal_name = (gchar *)g_intern_string (signal_name);
   signal->n_args = n_args;
+  signal->args = (GtkBindingArg *)(signal + 1);
   
   return signal;
 }
@@ -83,7 +84,7 @@ binding_signal_free (GtkBindingSignal *sig)
       if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
 	g_free (sig->args[i].d.string_data);
     }
-  g_free (sig);
+  g_slice_free1 (sizeof (GtkBindingSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
 }
 
 static guint
@@ -769,7 +770,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
     {
       GtkBindingArg *arg;
 
-      arg = g_new0 (GtkBindingArg, 1);
+      arg = g_slice_new0 (GtkBindingArg);
       slist = g_slist_prepend (slist, arg);
 
       arg->arg_type = va_arg (args, GtkType);
@@ -828,7 +829,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   free_slist = slist;
   while (slist)
     {
-      g_free (slist->data);
+      g_slice_free (GtkBindingArg, slist->data);
       slist = slist->next;
     }
   g_slist_free (free_slist);

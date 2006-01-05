@@ -89,7 +89,7 @@ struct _GtkBindingSignal
   GtkBindingSignal	*next;
   gchar 		*signal_name;
   guint			 n_args;
-  GtkBindingArg		 args[1]; /* flexible array */
+  GtkBindingArg		*args;
 };
 
 /* Application-level methods */
