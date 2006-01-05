@@ -1,3 +1,8 @@
+2006-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_grab_focus): Don't return a value from
+	a void function.
+
 2006-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbindings.h (struct _GtkBindingSignal): Revert questionable

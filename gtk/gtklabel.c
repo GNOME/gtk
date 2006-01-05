@@ -2764,7 +2764,7 @@ gtk_label_grab_focus (GtkWidget *widget)
   label = GTK_LABEL (widget);
 
   if (label->select_info == NULL)
-    return FALSE;
+    return;
 
   priv = GTK_LABEL_GET_PRIVATE (label);
 
