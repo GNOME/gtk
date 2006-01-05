@@ -1,5 +1,8 @@
 2006-01-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c: Only connect to the event if we have
+	a frame, since the handler is only relevant in that case.
+
 	* gtk/gtkaction.c (connect_proxy, disconnect_proxy): 
 	Use a weak reference rather than the destroy signal to track 
 	proxies going away.

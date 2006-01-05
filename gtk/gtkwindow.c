@@ -826,10 +826,6 @@ gtk_window_init (GtkWindow *window)
 
   gtk_decorated_window_init (window);
 
-  g_signal_connect (window,
-		    "event",
-		    G_CALLBACK (gtk_window_event),
-		    NULL);
 }
 
 static void
@@ -4261,6 +4257,11 @@ gtk_window_realize (GtkWidget *widget)
       attributes_mask = GDK_WA_X | GDK_WA_Y;
 
       parent_window = window->frame;
+
+      g_signal_connect (window,
+			"event",
+			G_CALLBACK (gtk_window_event),
+			NULL);
     }
   else
     {
@@ -6033,7 +6034,7 @@ gtk_window_expose (GtkWidget      *widget,
  * frame_event you can receive all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
- * windows, but it could concievably be used by X-programs that
+ * windows, but it could conceivably be used by X-programs that
  * want to do their own window decorations.
  *
  **/
