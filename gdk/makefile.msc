@@ -178,6 +178,9 @@ testgdk.exe : libgdk-win32-$(GTK_VER)-0.dll testgdk.obj
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
 clean::
+	cd win32
+	nmake -f makefile.msc clean
+	cd ..
 	del gdkmarshalers.c
 	del gdkmarshalers.h
 	del *.dll

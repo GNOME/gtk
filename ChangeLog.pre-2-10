@@ -1,3 +1,9 @@
+2006-01-05  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc : also recurse into win32 for ::clean
+	* gtk/makefile.msc.in : create gtkbuiltincache.h (most code
+	to simulate links) and file renames
+
 2006-01-05  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkprogressbar.c: Set minimum for activity-step property to 0

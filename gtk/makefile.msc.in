@@ -41,15 +41,37 @@ DEFINES = \
 
 TOUCH = copy makefile.msc+nul
 
-gtk-stocks-icons :
-	cd stock-icons
-	nmake -nologo -f makefile.msc
-	cd ..
+gtkbuiltincache.h: gtk-update-icon-cache.exe
+	cd stock-icons\16
+	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
+	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
+	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
+	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
+	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
+	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
+	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
+	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
+	copy gtk-floppy.png gtk-save.png
+	cd ..\24
+	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
+	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
+	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
+	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
+	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
+	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
+	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
+	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
+	copy gtk-floppy.png gtk-save.png
+	cd ..\..
+	del gtkicontheme.obj
+	gtk-update-icon-cache --force --ignore-theme-index 	\
+	   --source builtin_icons stock-icons > gtkbuiltincache.h
 
 all :						\
 	..\config.h				\
 	generated				\
-	gtk-stocks-icons			\
+	gtk-update-icon-cache.exe		\
+	gtkbuiltincache.h			\
 	libgtk-win32-$(GTK_VER)-0.dll		\
 	gtk-query-immodules-$(GTK_VER).exe \
 #	gtk-win32-$(GTK_VER)s.lib \
@@ -77,6 +99,7 @@ gtk_OBJECTS = 					\
 	gtkcelleditable.obj			\
 	gtkcelllayout.obj			\
 	gtkcellrenderer.obj			\
+	gtkcellrendereraccel.obj \
 	gtkcellrenderercombo.obj \
 	gtkcellrenderertext.obj			\
 	gtkcellrenderertoggle.obj		\
@@ -279,8 +302,8 @@ gtk_public_h_sources =		\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
+	gtkcellrendereraccel.h	\
 	gtkcellrendererpixbuf.h	\
-	gtkcellrendererkeys.h	\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h \
@@ -526,12 +549,15 @@ gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
 gtk-query-immodules-$(GTK_VER).exe : queryimmodules.obj
 	$(CC) $(CFLAGS) -Fe$@ queryimmodules.obj $(GTK_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
 
+gtk-update-icon-cache.exe : updateiconcache.obj
+	$(CC) $(CFLAGS) -Fe$@ updateiconcache.obj $(GDK_PIXBUF_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
+
 gtk-x11-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 	$(CC) $(CFLAGS) -LD -Fm -Fegtk-x11-$(GTK_VER).dll $(gtk_OBJECTS) ../gdk/gdk-x11-$(GTK_VER).lib $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :
-	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
+	$(CC) $(CFLAGS) -Gf -Zm400 -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
 
 $(EXAMPLE).obj : ..\examples\$(EXAMPLE)\$(EXAMPLE).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(EXAMPLE)\" ..\examples\$(EXAMPLE)\$(EXAMPLE).c
