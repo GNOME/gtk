@@ -1,3 +1,8 @@
+2006-01-05  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkprogressbar.c: Set minimum for activity-step property to 0
+	instead of -G_MAXUINT.
+				
 2006-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): Don't return
