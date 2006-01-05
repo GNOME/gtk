@@ -573,23 +573,6 @@ remove_proxy (GtkWidget *proxy,
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
 }
 
-static void
-gtk_action_sync_property (GtkAction  *action, 
-			  GParamSpec *pspec,
-			  GtkWidget  *proxy)
-{
-  const gchar *property;
-  GValue value = { 0, };
-
-  property = g_param_spec_get_name (pspec);
-
-  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  g_object_get_property (G_OBJECT (action), property, &value);
-
-  g_object_set_property (G_OBJECT (proxy), property, &value);
-  g_value_unset (&value);
-}
-
 /**
  * _gtk_action_sync_menu_visible:
  * @action: a #GtkAction, or %NULL to determine the action from @proxy
@@ -834,11 +817,6 @@ disconnect_proxy (GtkAction *action,
   g_signal_handlers_disconnect_by_func (proxy,
 					G_CALLBACK (gtk_action_activate),
 					action);
-
-  /* disconnect handlers for notify::* signals */
-  g_signal_handlers_disconnect_by_func (action,
-					G_CALLBACK (gtk_action_sync_property),
-					proxy);
 
   g_signal_handlers_disconnect_by_func (action,
 				G_CALLBACK (gtk_action_sync_stock_id), proxy);

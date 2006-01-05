@@ -1,3 +1,7 @@
+2006-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c: (gtk_action_sync_property): Removed.
+
 2006-01-05  Rodrigo Moya <rodrigo@novell.com>
 
 	* gtk/gtkbindings.c (binding_signal_new): allocate correct amount for
