@@ -170,7 +170,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    g_param_spec_uint ("activity-step",
 						      P_("Activity Step"),
 						      P_("The increment used for each iteration in activity mode (Deprecated)"),
-						      -G_MAXUINT,
+						      0,
 						      G_MAXUINT,
 						      3,
 						      GTK_PARAM_READWRITE));
