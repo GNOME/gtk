@@ -1,3 +1,49 @@
+Overview of Changes from GTK+ 2.8.9 to GTK+ 2.8.10
+==================================================
+* Derive GtkObject from GInitiallyUnowned instead of
+  GObject, if possible. Note that this change is known
+  to break the Perl bindings.
+
+* Updated translations (es,el,fr,it,pt_BR,vi)
+
+* Bugs fixed:
+ 323843 Garbage in gtk_text_view_get_border_window_size()
+ 323876 Broadcasting _GTK_LOAD_ICONTHEMES is a performance 
+        bug [Peter Lund]
+ 321548 speed up gtk_text_iter_set_visible_line_index [Paolo 
+        Borelli]
+ 324044 Documentation entry for GtkTreeView::row-activated 
+        [Davyd Madeley]
+ 323504 Gtk-CRITICAL when dragging a launcher from the menu 
+        to the top panel [Kjartan Maraas]
+ 323655 Improved support for Icon Naming Spec in unix filesystem 
+        backend [Rodney Dawes]
+ 323995 hidden widgets distort the left/right/up/down focus 
+        order [Dan Winship]
+ 324588 icon_view auto dnd and the item-activated signal 
+        [Dave Andreoli]
+ 322475 icon view's horizontal layout doesn't respect 
+        item_width [Alex Graveley]
+ 324815 Typo in gtkwindow.c [Ross Burton]
+ 324996 Description about gtk_im_context_filter_keypress on API 
+        reference
+ 317687 gnome-panel crash by clicking on settings
+ 323666 gdk_window_scroll doesn't invalidate if another top-level 
+        is above window [John Ehresman]
+ 322264 gdk_drawable_get_visible_region win32 / x11 inconsistency 
+        [John Ehresman]
+ 325358 word erase in text fields considers space as a separate 
+        word [Akkana Peck]
+ 325443 gtk_drag_begin doesn't work unless given a motion event 
+        [Peter Harvey]
+ 325723 gtk_ui_manager_get_toplevels does not return an empty 
+        list [Steve Chaplin]
+ 305894 excessive memory use in gdk_pixbuf_new_from_file_XXX 
+        functions [Denis Vlasenko, Michael Natterer]
+ 325199 The API reference for gtk_exit() states that it's 
+        deprecated but doesn't state the replacement function, 
+        if any [Ævar Arnfjörð Bjarmason]
+
 Overview of Changes from GTK+ 2.8.8 to GTK+ 2.8.9
 =================================================
 * Bugs fixed:
