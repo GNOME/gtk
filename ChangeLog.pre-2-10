@@ -1,5 +1,11 @@
 2006-01-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttag.c (gtk_text_attributes_new): Initialize editable 
+	to TRUE. 
+	(gtk_text_tag_class_init): The default value for the direction 
+	property is GTK_TEXT_DIR_NONE. Add notes about the initial values 
+	of the font and language properties.
+
 	* gtk/gtktoolbutton.c (gtk_tool_button_class_init): Make clicked
 	an action signal.  (#325782, Martyn Russell)
 
