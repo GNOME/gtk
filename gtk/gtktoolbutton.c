@@ -244,7 +244,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   toolbutton_signals[CLICKED] =
     g_signal_new ("clicked",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_FIRST,
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkToolButtonClass, clicked),
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
