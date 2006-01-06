@@ -130,7 +130,7 @@ create_list_store (void)
 
       p = cell_params + i;
 
-      snprintf (buf, sizeof (buf), "%d", i);
+      g_snprintf (buf, sizeof (buf), "%d", i);
 
       gtk_list_store_append (list_store, &iter);
       gtk_list_store_set (list_store, &iter,
