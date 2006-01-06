@@ -1,5 +1,8 @@
 2006-01-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (model_add_special): Just use the
+	directory name for the home dir.  (#325817, Federico Mena Quintero)
+	
 	* gtk/gtktexttag.c (gtk_text_attributes_new): Initialize editable 
 	to TRUE. 
 	(gtk_text_tag_class_init): The default value for the direction 

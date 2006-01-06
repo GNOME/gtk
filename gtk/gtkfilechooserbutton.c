@@ -65,7 +65,6 @@
 #define GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_FILE_CHOOSER_BUTTON, GtkFileChooserButtonPrivate))
 
 #define DEFAULT_TITLE		N_("Select A File")
-#define HOME_DISPLAY_NAME	N_("Home")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)")
 #define FALLBACK_ICON_NAME	"stock_unknown"
@@ -1331,6 +1330,7 @@ static inline void
 model_add_special (GtkFileChooserButton *button)
 {
   const gchar *homedir;
+  const gchar *display_name;
   gchar *desktopdir = NULL;
   GtkListStore *store;
   GtkTreeIter iter;
@@ -1346,6 +1346,7 @@ model_add_special (GtkFileChooserButton *button)
   if (homedir)
     {
       path = gtk_file_system_filename_to_path (button->priv->fs, homedir);
+      display_name = get_display_name_for_path (button->priv->fs, path);
       pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
 					    GTK_WIDGET (button),
 					    button->priv->icon_size, NULL);
@@ -1353,7 +1354,7 @@ model_add_special (GtkFileChooserButton *button)
       pos++;
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
-			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
+			  DISPLAY_NAME_COLUMN, display_name,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
 			  DATA_COLUMN, path,
 			  -1);
