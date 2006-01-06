@@ -270,7 +270,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       P_("Text direction"),
                                                       P_("Text direction, e.g. right-to-left or left-to-right"),
                                                       GTK_TYPE_TEXT_DIRECTION,
-                                                      GTK_TEXT_DIR_LTR,
+                                                      GTK_TEXT_DIR_NONE,
                                                       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -281,6 +281,14 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:font:
+   *
+   * Font description as string, e.g. \"Sans Italic 12\". 
+   *
+   * Note that the initial value of this property depends on
+   * the internals of #PangoFontDescription.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FONT,
                                    g_param_spec_string ("font",
@@ -296,7 +304,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        P_("Font description as a PangoFontDescription struct"),
                                                        PANGO_TYPE_FONT_DESCRIPTION,
                                                        GTK_PARAM_READWRITE));
-
   
   g_object_class_install_property (object_class,
                                    PROP_FAMILY,
@@ -382,7 +389,17 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       GTK_TYPE_JUSTIFICATION,
                                                       GTK_JUSTIFY_LEFT,
                                                       GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:language:
+   *
+   * The language this text is in, as an ISO code. Pango can use this as a 
+   * hint when rendering the text. If not set, an appropriate default will be 
+   * used.
+   *
+   * Note that the initial value of this property depends on the current
+   * locale, see also gtk_get_default_language().
+   */
   g_object_class_install_property (object_class,
                                    PROP_LANGUAGE,
                                    g_param_spec_string ("language",
@@ -681,9 +698,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 static void
 gtk_text_tag_init (GtkTextTag *text_tag)
 {
-  /* 0 is basically a fine way to initialize everything in the
-     entire struct */
-  
   text_tag->values = gtk_text_attributes_new ();
 }
 
@@ -1942,7 +1956,9 @@ gtk_text_attributes_new (void)
   values->language = gtk_get_default_language ();
 
   values->font_scale = 1.0;
-  
+
+  values->editable = TRUE;
+      
   return values;
 }
 
