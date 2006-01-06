@@ -1361,6 +1361,7 @@ model_add_special (GtkFileChooserButton *button)
 
       if (pixbuf)
 	g_object_unref (pixbuf);
+      g_free (display_name);
       button->priv->n_special++;
 
 #ifndef G_OS_WIN32
