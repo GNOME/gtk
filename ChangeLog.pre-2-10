@@ -1,5 +1,11 @@
 2006-01-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_set_sensitive) 
+	(gtk_action_group_set_visible): Add missing property change
+	notification.
+
+2006-01-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.c (model_add_special): Just use the
 	directory name for the home dir.  (#325817, Federico Mena Quintero)
 	

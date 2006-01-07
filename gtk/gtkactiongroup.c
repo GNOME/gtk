@@ -251,7 +251,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 static void 
 remove_action (GtkAction *action) 
 {
-  g_object_set (action, "action-group", NULL, NULL);
+  g_object_set (action, I_("action-group"), NULL, NULL);
   g_object_unref (action);
 }
 
@@ -417,7 +417,8 @@ gtk_action_group_get_sensitive (GtkActionGroup *action_group)
 }
 
 static void
-cb_set_action_sensitivity (const gchar *name, GtkAction *action)
+cb_set_action_sensitivity (const gchar *name, 
+			   GtkAction   *action)
 {
   /* Minor optimization, the action_groups state only affects actions that are
    * themselves sensitive */
@@ -435,15 +436,20 @@ cb_set_action_sensitivity (const gchar *name, GtkAction *action)
  * Since: 2.4
  */
 void
-gtk_action_group_set_sensitive (GtkActionGroup *action_group, gboolean sensitive)
+gtk_action_group_set_sensitive (GtkActionGroup *action_group, 
+				gboolean        sensitive)
 {
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  if (action_group->private_data->sensitive ^ sensitive)
+  sensitive = sensitive != FALSE;
+
+  if (action_group->private_data->sensitive != sensitive)
     {
       action_group->private_data->sensitive = sensitive;
       g_hash_table_foreach (action_group->private_data->actions, 
 			    (GHFunc) cb_set_action_sensitivity, NULL);
+
+      g_object_notify (G_OBJECT (action_group), "sensitive");
     }
 }
 
@@ -469,7 +475,8 @@ gtk_action_group_get_visible (GtkActionGroup *action_group)
 }
 
 static void
-cb_set_action_visiblity (const gchar *name, GtkAction *action)
+cb_set_action_visiblity (const gchar *name, 
+			 GtkAction   *action)
 {
   /* Minor optimization, the action_groups state only affects actions that are
    * themselves sensitive */
@@ -487,15 +494,20 @@ cb_set_action_visiblity (const gchar *name, GtkAction *action)
  * Since: 2.4
  */
 void
-gtk_action_group_set_visible (GtkActionGroup *action_group, gboolean visible)
+gtk_action_group_set_visible (GtkActionGroup *action_group, 
+			      gboolean        visible)
 {
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  if (action_group->private_data->visible ^ visible)
+  visible = visible != FALSE;
+
+  if (action_group->private_data->visible != visible)
     {
       action_group->private_data->visible = visible;
       g_hash_table_foreach (action_group->private_data->actions, 
 			    (GHFunc) cb_set_action_visiblity, NULL);
+
+      g_object_notify (G_OBJECT (action_group), "visible");
     }
 }
 
@@ -546,7 +558,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   g_hash_table_insert (action_group->private_data->actions, 
 		       g_strdup (gtk_action_get_name (action)),
                        g_object_ref (action));
-  g_object_set (action, "action-group", action_group, NULL);
+  g_object_set (action, I_("action-group"), action_group, NULL);
 }
 
 /**
@@ -569,8 +581,8 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  */
 void
 gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
-					GtkAction *action,
-					const gchar *accelerator)
+					GtkAction      *action,
+					const gchar    *accelerator)
 {
   gchar *accel_path;
   guint  accel_key = 0;
@@ -1006,10 +1018,10 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
  * Since: 2.4 
  **/
 void
-gtk_action_group_set_translate_func (GtkActionGroup      *action_group,
-				     GtkTranslateFunc     func,
-				     gpointer             data,
-				     GtkDestroyNotify     notify)
+gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
+				     GtkTranslateFunc  func,
+				     gpointer          data,
+				     GtkDestroyNotify  notify)
 {
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   
@@ -1116,7 +1128,7 @@ _gtk_action_group_emit_pre_activate  (GtkActionGroup *action_group,
 
 void
 _gtk_action_group_emit_post_activate (GtkActionGroup *action_group,
-				      GtkAction *action)
+				      GtkAction      *action)
 {
   g_signal_emit (action_group, action_group_signals[POST_ACTIVATE], 0, action);
 }
