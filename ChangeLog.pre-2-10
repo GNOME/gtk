@@ -1,3 +1,15 @@
+2006-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix actiongroup-action interaction that relied on 
+	actions connecting to notify on themselves:
+	
+	* gtk/gtkaction.[hc]: Factor out the code updating the
+	visibility/sensitivity of proxies into _gtk_action_sync_visible()
+	and _gtk_action_sync_sensible().
+
+	* gtk/gtkactiongroup.c: Call the new functions when the
+	group visibility/sensitivity changes. 
+
 2006-01-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_set_sensitive) 

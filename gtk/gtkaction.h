@@ -121,7 +121,11 @@ void         gtk_action_set_accel_path         (GtkAction     *action,
 						const gchar   *accel_path);
 void         gtk_action_set_accel_group        (GtkAction     *action,
 						GtkAccelGroup *accel_group);
-
+void         _gtk_action_sync_sensitive        (GtkAction     *action);
+void         _gtk_action_sync_visible          (GtkAction     *action);
+void         _gtk_action_sync_menu_visible     (GtkAction     *action,
+						GtkWidget     *proxy,
+						gboolean       empty);
 
 G_END_DECLS
 

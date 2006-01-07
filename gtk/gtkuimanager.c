@@ -2008,10 +2008,6 @@ enum {
   SEPARATOR_MODE_HIDDEN
 };
 
-void _gtk_action_sync_menu_visible (GtkAction *action,
-				    GtkWidget *proxy,
-				    gboolean   empty);
-
 static void
 update_smart_separators (GtkWidget *proxy)
 {

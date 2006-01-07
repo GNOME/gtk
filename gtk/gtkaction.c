@@ -603,7 +603,7 @@ _gtk_action_sync_menu_visible (GtkAction *action,
 
   g_return_if_fail (GTK_IS_MENU_ITEM (proxy));
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
-  
+
   if (action == NULL)
     action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
 
@@ -1057,6 +1057,22 @@ gtk_action_get_sensitive (GtkAction *action)
   return action->private_data->sensitive;
 }
 
+void
+_gtk_action_sync_sensitive (GtkAction *action)
+{
+  GSList *p;
+  GtkWidget *proxy;
+  gboolean sensitive;
+
+  sensitive = gtk_action_is_sensitive (action);
+
+  for (p = action->private_data->proxies; p; p = p->next)
+    {
+      proxy = (GtkWidget *)p->data;
+      gtk_widget_set_sensitive (proxy, sensitive);
+    }      
+}
+
 /**
  * gtk_action_set_sensitive:
  * @action: the action object
@@ -1073,9 +1089,6 @@ void
 gtk_action_set_sensitive (GtkAction *action,
 			  gboolean   sensitive)
 {
-  GSList *p;
-  GtkWidget *proxy;
-
   g_return_if_fail (GTK_IS_ACTION (action));
 
   sensitive = sensitive != FALSE;
@@ -1084,12 +1097,8 @@ gtk_action_set_sensitive (GtkAction *action,
     {
       action->private_data->sensitive = sensitive;
 
-      for (p = action->private_data->proxies; p; p = p->next)
-	{
-	  proxy = (GtkWidget *)p->data;
-	  gtk_widget_set_sensitive (proxy, sensitive);
-	}
-      
+      _gtk_action_sync_sensitive (action);
+
       g_object_notify (G_OBJECT (action), "sensitive");
     }
 }
@@ -1137,6 +1146,36 @@ gtk_action_get_visible (GtkAction *action)
   return action->private_data->visible;
 }
 
+void
+_gtk_action_sync_visible (GtkAction *action)
+{
+  GSList *p;
+  GtkWidget *proxy;
+  GtkWidget *menu;
+  gboolean visible;
+
+  visible = gtk_action_is_visible (action);
+    
+  for (p = action->private_data->proxies; p; p = p->next)
+    {
+      proxy = (GtkWidget *)p->data;
+
+      if (GTK_IS_MENU_ITEM (proxy))
+	{
+	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
+	  
+	  _gtk_action_sync_menu_visible (action, proxy, _gtk_menu_is_empty (menu));
+	}
+      else
+	{
+	  if (visible)
+	    gtk_widget_show (proxy);
+	  else
+	    gtk_widget_hide (proxy);
+	}
+    } 
+}
+
 /**
  * gtk_action_set_visible:
  * @action: the action object
@@ -1153,9 +1192,6 @@ void
 gtk_action_set_visible (GtkAction *action,
 			gboolean   visible)
 {
-  GSList *p;
-  GtkWidget *proxy;
-
   g_return_if_fail (GTK_IS_ACTION (action));
 
   visible = visible != FALSE;
@@ -1164,25 +1200,8 @@ gtk_action_set_visible (GtkAction *action,
     {
       action->private_data->visible = visible;
 
-      for (p = action->private_data->proxies; p; p = p->next)
-	{
-	  proxy = (GtkWidget *)p->data;
+      _gtk_action_sync_visible (action);
 
-	  if (GTK_IS_MENU_ITEM (proxy))
-	    {
-	      GtkWidget *menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
-	      
-	      _gtk_action_sync_menu_visible (action, proxy, _gtk_menu_is_empty (menu));
-	    }
-	  else
-	    {
-	      if (visible)
-		gtk_widget_show (proxy);
-	      else
-		gtk_widget_hide (proxy);
-	    }
-	}
-      
       g_object_notify (G_OBJECT (action), "visible");
     }
 }
