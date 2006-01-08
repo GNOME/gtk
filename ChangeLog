@@ -1,5 +1,10 @@
 2006-01-08  Matthias Clasen  <mclasen@redhat.com>
 
+        * gtk/gtkactiongroup.c (dgettext_swapped): Don't translate
+        empty strings.  (#326200, Christian Stimming)
+
+2006-01-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklabel.c (get_layout_location): Fix label alignment 
 	when width-chars is set.  (#326098, Benjamin Otte)
 
