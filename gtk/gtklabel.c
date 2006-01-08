@@ -2191,19 +2191,21 @@ get_layout_location (GtkLabel  *label,
                      gint      *yp)
 {
   GtkMisc *misc;
-  GtkWidget *widget;
+  GtkWidget *widget; 
+  GtkLabelPrivate *priv;
   gfloat xalign;
   gint req_width, x, y;
   
   misc = GTK_MISC (label);
   widget = GTK_WIDGET (label);
-  
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     xalign = misc->xalign;
   else
     xalign = 1.0 - misc->xalign;
 
-  if (label->ellipsize)
+  if (label->ellipsize || priv->width_chars > 0)
     {
       PangoRectangle ink_rect;
 
