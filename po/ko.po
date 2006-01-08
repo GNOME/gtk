@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-09 13:30-0500\n"
-"PO-Revision-Date: 2005-08-22 23:04+0900\n"
+"PO-Revision-Date: 2006-01-08 22:29+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -2178,9 +2178,8 @@ msgid "_Close"
 msgstr "닫기(_C)"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "C_onnect"
-msgstr "변환(_C)"
+msgstr "연결(_O)"
 
 #: gtk/gtkstock.c:325
 msgid "_Convert"
@@ -2200,7 +2199,7 @@ msgstr "지우기(_D)"
 
 #: gtk/gtkstock.c:329
 msgid "_Disconnect"
-msgstr ""
+msgstr "연결 끊기(_D)"
 
 #: gtk/gtkstock.c:330
 msgid "_Execute"
