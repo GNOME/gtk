@@ -1,3 +1,9 @@
+2006-01-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkregion-generic.c (miRegionCopy): Fix this for the 
+	single-rectangle case.  (#326127, Benjamin Berg)
+	(gdk_region_copy): Use miRegionCopy() here.
+
 2006-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix actiongroup-action interaction that relied on 

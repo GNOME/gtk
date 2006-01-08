@@ -168,19 +168,9 @@ gdk_region_copy (GdkRegion *region)
 
   g_return_val_if_fail (region != NULL, NULL);
 
-  temp = g_slice_new (GdkRegion);
+  temp = gdk_region_new ();
 
-  temp->numRects = region->numRects;
-  temp->extents = region->extents;
-  temp->size = region->numRects;
-
-  if (region->numRects == 1)
-    temp->rects = &temp->extents;
-  else
-    {
-      temp->rects = g_new (GdkRegionBox, region->numRects);
-      memcpy (temp->rects, region->rects, region->numRects * sizeof (GdkRegionBox));
-    }
+  miRegionCopy (temp, region);
 
   return temp;
 }
@@ -600,15 +590,20 @@ gdk_region_intersect (GdkRegion *source1,
 }
 
 static void
-miRegionCopy(GdkRegion *dstrgn, GdkRegion *rgn)
+miRegionCopy (GdkRegion *dstrgn, 
+	      GdkRegion *rgn)
 {
   if (dstrgn != rgn) /*  don't want to copy to itself */
     {  
       if (dstrgn->size < rgn->numRects)
         {
-	  dstrgn->rects = g_renew (GdkRegionBox, dstrgn->rects, rgn->numRects);
+	  if (dstrgn->rects != &dstrgn->extents)
+	    g_free (dstrgn->rects);
+
+	  dstrgn->rects = g_new (GdkRegionBox, rgn->numRects);
 	  dstrgn->size = rgn->numRects;
 	}
+
       dstrgn->numRects = rgn->numRects;
       dstrgn->extents = rgn->extents;
 
