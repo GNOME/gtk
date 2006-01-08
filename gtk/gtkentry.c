@@ -78,7 +78,6 @@ struct _GtkEntryPrivate
 {
   gfloat xalign;
   gint insert_pos;
-  gboolean truncate_multiline; /* when pasting multiline text */
 };
 
 enum {
@@ -904,7 +903,6 @@ gtk_entry_set_property (GObject         *object,
                         GParamSpec      *pspec)
 {
   GtkEntry *entry = GTK_ENTRY (object);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   switch (prop_id)
     {
@@ -967,7 +965,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_TRUNCATE_MULTILINE:
-      priv->truncate_multiline = g_value_get_boolean (value);
+      entry->truncate_multiline = g_value_get_boolean (value);
       break;
 
     case PROP_SCROLL_OFFSET:
@@ -985,7 +983,6 @@ gtk_entry_get_property (GObject         *object,
                         GParamSpec      *pspec)
 {
   GtkEntry *entry = GTK_ENTRY (object);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   switch (prop_id)
     {
@@ -1026,7 +1023,7 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_float (value, gtk_entry_get_alignment (entry));
       break;
     case PROP_TRUNCATE_MULTILINE:
-      g_value_set_boolean (value, priv->truncate_multiline);
+      g_value_set_boolean (value, entry->truncate_multiline);
       break;
 
     default:
@@ -1054,8 +1051,8 @@ gtk_entry_init (GtkEntry *entry)
   entry->is_cell_renderer = FALSE;
   entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
+  entry->truncate_multiline = FALSE;
   priv->xalign = 0.0;
-  priv->truncate_multiline = FALSE;
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
@@ -3803,7 +3800,7 @@ paste_received (GtkClipboard *clipboard,
       gint length = -1;
       GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
 
-      if (priv->truncate_multiline)
+      if (entry->truncate_multiline)
         length = truncate_multiline (text);
 
       if (completion)
@@ -4888,7 +4885,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
       gint sel1, sel2;
       gint length = -1;
 
-      if (priv->truncate_multiline)
+      if (entry->truncate_multiline)
         length = truncate_multiline (str);
 
       new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);

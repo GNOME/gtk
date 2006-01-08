@@ -53,11 +53,14 @@ struct _GtkLabel
 
   /*< private >*/
   gchar  *label;
-  guint   jtype : 2;
-  guint   wrap : 1;
-  guint   use_underline : 1;
-  guint   use_markup : 1;
-  guint   ellipsize : 3;
+  guint   jtype            : 2;
+  guint   wrap             : 1;
+  guint   use_underline    : 1;
+  guint   use_markup       : 1;
+  guint   ellipsize        : 3;
+  guint   single_line_mode : 1;
+  guint   have_transform   : 1;
+  guint   in_click         : 1;
 
   guint   mnemonic_keyval;
   

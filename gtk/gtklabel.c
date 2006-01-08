@@ -51,10 +51,6 @@ typedef struct
 {
   gint width_chars;
   gint max_width_chars;
-  guint single_line_mode : 1;
-  guint have_transform   : 1;
-  guint in_click         : 1;
-  gdouble angle;
 }
 GtkLabelPrivate;
 
@@ -198,7 +194,7 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 					  gint             start);
 
 static GtkMiscClass *parent_class = NULL;
-
+static GQuark quark_angle = 0;
 
 GType
 gtk_label_get_type (void)
@@ -259,7 +255,9 @@ gtk_label_class_init (GtkLabelClass *class)
   GtkBindingSet *binding_set;
 
   parent_class = g_type_class_peek_parent (class);
-  
+
+  quark_angle = g_quark_from_static_string ("angle");
+
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
   gobject_class->finalize = gtk_label_finalize;
@@ -790,7 +788,6 @@ gtk_label_init (GtkLabel *label)
 
   priv = GTK_LABEL_GET_PRIVATE (label);
   priv->width_chars = -1;
-  priv->angle = 0.0;
   priv->max_width_chars = -1;
   label->label = NULL;
 
@@ -1778,7 +1775,7 @@ label_wrap_width_free (gpointer data)
 {
   LabelWrapWidth *wrap_width = data;
   pango_font_description_free (wrap_width->font_desc);
-  g_free (wrap_width);
+  g_slice_free (LabelWrapWidth, wrap_width);
 }
 
 static gint
@@ -1786,16 +1783,21 @@ get_label_wrap_width (GtkLabel *label)
 {
   PangoLayout *layout;
   GtkStyle *style = GTK_WIDGET (label)->style;
+  static GQuark quark_label_wrap_width = 0;
 
-  LabelWrapWidth *wrap_width = g_object_get_data (G_OBJECT (style), "gtk-label-wrap-width");
+  if (quark_label_wrap_width == 0)
+    quark_label_wrap_width = g_quark_from_static_string ("gtk-label-wrap-width");
+
+  LabelWrapWidth *wrap_width = g_object_get_qdata (G_OBJECT (style), quark_label_wrap_width);
   if (!wrap_width)
     {
-      wrap_width = g_new0 (LabelWrapWidth, 1);
-      g_object_set_data_full (G_OBJECT (style), I_("gtk-label-wrap-width"),
-			      wrap_width, label_wrap_width_free);
+      wrap_width = g_slice_new0 (LabelWrapWidth);
+      g_object_set_qdata_full (G_OBJECT (style), quark_label_wrap_width,
+			       wrap_width, label_wrap_width_free);
     }
 
-  if (wrap_width->font_desc && pango_font_description_equal (wrap_width->font_desc, style->font_desc))
+  if (wrap_width->font_desc && 
+      pango_font_description_equal (wrap_width->font_desc, style->font_desc))
     return wrap_width->width;
 
   if (wrap_width->font_desc)
@@ -1825,9 +1827,9 @@ gtk_label_ensure_layout (GtkLabel *label)
   if (!label->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-      GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
+      gdouble angle = gtk_label_get_angle (label);
 
-      if (priv->angle != 0.0 && !label->wrap && !label->ellipsize && !label->select_info)
+      if (angle != 0.0 && !label->wrap && !label->ellipsize && !label->select_info)
 	{
 	  /* We rotate the standard singleton PangoContext for the widget,
 	   * depending on the fact that it's meant pretty much exclusively
@@ -1835,18 +1837,18 @@ gtk_label_ensure_layout (GtkLabel *label)
 	   */
 	  PangoMatrix matrix = PANGO_MATRIX_INIT;
 	  
-	  pango_matrix_rotate (&matrix, priv->angle);
+	  pango_matrix_rotate (&matrix, angle);
 
 	  pango_context_set_matrix (gtk_widget_get_pango_context (widget), &matrix);
 	  
-	  priv->have_transform = TRUE;
+	  label->have_transform = TRUE;
 	}
       else 
 	{
-	  if (priv->have_transform)
+	  if (label->have_transform)
 	    pango_context_set_matrix (gtk_widget_get_pango_context (widget), NULL);
 
-	  priv->have_transform = FALSE;
+	  label->have_transform = FALSE;
 	}
 
       label->layout = gtk_widget_create_pango_layout (widget, label->text);
@@ -1876,7 +1878,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       pango_layout_set_alignment (label->layout, align);
       pango_layout_set_ellipsize (label->layout, label->ellipsize);
-      pango_layout_set_single_paragraph_mode (label->layout, priv->single_line_mode);
+      pango_layout_set_single_paragraph_mode (label->layout, label->single_line_mode);
 
       if (label->ellipsize)
 	pango_layout_set_width (label->layout, 
@@ -2041,7 +2043,7 @@ gtk_label_size_request (GtkWidget      *widget,
 
   aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 
-  if (priv->have_transform)
+  if (label->have_transform)
     {
       GdkRectangle rect;
 
@@ -2095,7 +2097,7 @@ gtk_label_size_request (GtkWidget      *widget,
   else
     width += PANGO_PIXELS (logical_rect.width);
 
-  if (priv->single_line_mode)
+  if (label->single_line_mode)
     {
       PangoContext *context;
       PangoFontMetrics *metrics;
@@ -2760,15 +2762,12 @@ static void
 gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label;
-  GtkLabelPrivate *priv;
   gboolean select_on_focus;
   
   label = GTK_LABEL (widget);
 
   if (label->select_info == NULL)
     return;
-
-  priv = GTK_LABEL_GET_PRIVATE (label);
 
   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
 
@@ -2777,7 +2776,7 @@ gtk_label_grab_focus (GtkWidget *widget)
 		&select_on_focus,
 		NULL);
   
-  if (select_on_focus && !priv->in_click)
+  if (select_on_focus && !label->in_click)
     gtk_label_select_region (label, 0, -1);
 }
  
@@ -2786,7 +2785,6 @@ gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
   GtkLabel *label;
-  GtkLabelPrivate *priv;
   gint index = 0;
   gint min, max;  
   
@@ -2800,11 +2798,9 @@ gtk_label_button_press (GtkWidget      *widget,
     {
       if (!GTK_WIDGET_HAS_FOCUS (widget)) 
 	{
-	  priv = GTK_LABEL_GET_PRIVATE (label);
-
-	  priv->in_click = TRUE;
+	  label->in_click = TRUE;
 	  gtk_widget_grab_focus (widget);
-	  priv->in_click = FALSE;
+	  label->in_click = FALSE;
 	}
 
       if (event->type == GDK_3BUTTON_PRESS)
@@ -3140,6 +3136,12 @@ gtk_label_get_selectable (GtkLabel *label)
   return label->select_info != NULL;
 }
 
+static void
+free_angle (gpointer angle)
+{
+  g_slice_free (gdouble, angle);
+}
+
 /**
  * gtk_label_set_angle:
  * @label: a #GtkLabel
@@ -3157,12 +3159,20 @@ void
 gtk_label_set_angle (GtkLabel *label,
 		     gdouble   angle)
 {
-  GtkLabelPrivate *priv;
+  gdouble *label_angle;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  label_angle = (gdouble *)g_object_get_qdata (G_OBJECT (label), quark_angle);
 
+  if (!label_angle)
+    {
+      label_angle = g_slice_new (gdouble);
+      *label_angle = 0.0;
+      g_object_set_qdata_full (G_OBJECT (label), quark_angle, 
+			       label_angle, free_angle);
+    }
+  
   /* Canonicalize to [0,360]. We don't canonicalize 360 to 0, because
    * double property ranges are inclusive, and changing 360 to 0 would
    * make a property editor behave strangely.
@@ -3170,9 +3180,9 @@ gtk_label_set_angle (GtkLabel *label,
   if (angle < 0 || angle > 360.0)
     angle = angle - 360. * floor (angle / 360.);
 
-  if (angle != priv->angle)
+  if (*label_angle != angle)
     {
-      priv->angle = angle;
+      *label_angle = angle;
       
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -3195,13 +3205,16 @@ gtk_label_set_angle (GtkLabel *label,
 gdouble
 gtk_label_get_angle  (GtkLabel *label)
 {
-  GtkLabelPrivate *priv;
+  gdouble *angle;
 
   g_return_val_if_fail (GTK_IS_LABEL (label), 0.0);
+  
+  angle = (gdouble *)g_object_get_qdata (G_OBJECT (label), quark_angle);
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
-
-  return priv->angle;
+  if (angle)
+    return *angle;
+  else
+    return 0.0;
 }
 
 static void
@@ -3558,16 +3571,13 @@ void
 gtk_label_set_single_line_mode (GtkLabel *label,
                                 gboolean single_line_mode)
 {
-  GtkLabelPrivate *priv;
-
   g_return_if_fail (GTK_IS_LABEL (label));
 
   single_line_mode = single_line_mode != FALSE;
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
-  if (priv->single_line_mode != single_line_mode)
+  if (label->single_line_mode != single_line_mode)
     {
-      priv->single_line_mode = single_line_mode;
+      label->single_line_mode = single_line_mode;
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -3589,13 +3599,9 @@ gtk_label_set_single_line_mode (GtkLabel *label,
 gboolean
 gtk_label_get_single_line_mode  (GtkLabel *label)
 {
-  GtkLabelPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
-
-  return priv->single_line_mode;
+  return label->single_line_mode;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important

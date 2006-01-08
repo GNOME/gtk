@@ -71,26 +71,21 @@ struct _GtkEntry
   gint         selection_bound;
   
   PangoLayout *cached_layout;
+
   guint        cache_includes_preedit : 1;
+  guint        need_im_reset          : 1;
+  guint        has_frame              : 1;
+  guint        activates_default      : 1;
+  guint        cursor_visible         : 1;
+  guint        in_click               : 1;	/* Flag so we don't select all when clicking in entry to focus in */
+  guint        is_cell_renderer       : 1;
+  guint        editing_canceled       : 1; /* Only used by GtkCellRendererText */
+  guint        mouse_cursor_obscured  : 1;
+  guint        select_words           : 1;
+  guint        select_lines           : 1;
+  guint        resolved_dir           : 4; /* PangoDirection */
+  guint        truncate_multiline     : 1;
 
-  guint        need_im_reset : 1;
-
-  guint        has_frame : 1;
-
-  guint        activates_default : 1;
-
-  guint        cursor_visible : 1;
-
-  guint        in_click : 1;	/* Flag so we don't select all when clicking in entry to focus in */
-
-  guint        is_cell_renderer : 1;
-  guint        editing_canceled : 1; /* Only used by GtkCellRendererText */
-
-  guint        mouse_cursor_obscured : 1;
-  
-  guint        select_words : 1;
-  guint        select_lines : 1;
-  guint        resolved_dir : 4; /* PangoDirection */
   guint   button;
   guint   blink_timeout;
   guint   recompute_idle;
