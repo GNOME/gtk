@@ -110,7 +110,7 @@ static void gtk_action_class_init (GtkActionClass *class);
 static GQuark      accel_path_id  = 0;
 static GQuark      quark_gtk_action_proxy  = 0;
 static const gchar accel_path_key[] = "GtkAction::accel_path";
-static const gchar gtk_action_proxy_key[] = "gtk-action-proxy";
+static const gchar gtk_action_proxy_key[] = "gtk-action";
 
 GType
 gtk_action_get_type (void)

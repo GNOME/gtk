@@ -1,3 +1,8 @@
+2006-01-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c: Go back to the old key for attaching the
+	action to the proxy.  (#326288, Diego González)
+
 2006-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkactiongroup.c (dgettext_swapped): Don't translate
