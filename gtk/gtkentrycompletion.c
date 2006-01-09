@@ -1447,6 +1447,12 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
     gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
 				 GTK_WINDOW (completion->priv->popup_window));
 
+  /* prevent the first row being focused */
+  gtk_widget_grab_focus (completion->priv->tree_view);
+
+  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
+  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
+
   gtk_widget_show (completion->priv->popup_window);
     
   gtk_grab_add (completion->priv->popup_window);
