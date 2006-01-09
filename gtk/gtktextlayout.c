@@ -297,6 +297,19 @@ gtk_text_layout_finalize (GObject *object)
       gtk_text_layout_free_line_display (layout, tmp_display);
     }
 
+  if (layout->preedit_string)
+    {
+      g_free (layout->preedit_string);
+      layout->preedit_string = NULL;
+    }
+
+  if (layout->preedit_attrs)
+    {
+      pango_attr_list_unref (layout->preedit_attrs);
+      layout->preedit_attrs = NULL;
+    }
+
+
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 

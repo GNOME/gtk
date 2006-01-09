@@ -1,5 +1,9 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_finalize): Don't
+	leak preedit_string and preedit_attrs.  (#322332, Paolo
+	Borelli)
+
 	* gtk/gtk.symbols:
 	* gtk/gtkaction.h: 
 	* gtk/gtkaction.c (gtk_widget_get_action): New function to
