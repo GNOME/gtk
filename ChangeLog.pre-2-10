@@ -1,3 +1,9 @@
+2006-01-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): 
+	Prevent the first row being focused on map.  (#137351,
+	Niklas Knutsson)
+
 2006-01-09  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk.symbols:
