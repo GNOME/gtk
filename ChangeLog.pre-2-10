@@ -1,5 +1,10 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkaction.h: 
+	* gtk/gtkaction.c (gtk_widget_get_action): New function to
+	get the action for a proxy.  (#326288)
+
 	* gtk/gtkaction.c: Go back to the old key for attaching the
 	action to the proxy.  (#326288, Diego González)
 

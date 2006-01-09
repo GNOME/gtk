@@ -980,9 +980,10 @@ gtk_action_disconnect_proxy (GtkAction *action,
  * @action: the action object
  * 
  * Returns the proxy widgets for an action.
+ * See also gtk_widget_get_action().
  * 
- * Return value: a #GSList of proxy widgets. The list is owned by the action and
- * must not be modified.
+ * Return value: a #GSList of proxy widgets. The list is owned by GTK+
+ * and must not be modified.
  *
  * Since: 2.4
  **/
@@ -992,6 +993,27 @@ gtk_action_get_proxies (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
   return action->private_data->proxies;
+}
+
+
+/**
+ * gtk_widget_get_action:
+ * @widget: a #GtkWidget
+ *
+ * Returns the #GtkAction that @widget is a proxy for. 
+ * See also gtk_action_get_proxies().
+ *
+ * Returns: the action that a widget is a proxy for, or
+ *  %NULL, if it is not attached to an action.
+ *
+ * Since: 2.10
+ */
+GtkAction*
+gtk_widget_get_action (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (action), NULL);
+  
+  return g_object_get_qdata (G_OBJECT (widget), quark_gtk_action_proxy);
 }
 
 

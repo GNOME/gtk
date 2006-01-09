@@ -4728,6 +4728,7 @@ gtk_widget_get_no_show_all
 gtk_widget_list_mnemonic_labels
 gtk_widget_add_mnemonic_label
 gtk_widget_remove_mnemonic_label
+gtk_widget_get_action
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free

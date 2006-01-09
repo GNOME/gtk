@@ -146,6 +146,7 @@ gtk_action_get_accel_closure
 gtk_action_get_accel_path
 gtk_action_get_name
 gtk_action_get_proxies
+gtk_widget_get_action
 gtk_action_get_sensitive
 gtk_action_get_type G_GNUC_CONST
 gtk_action_get_visible

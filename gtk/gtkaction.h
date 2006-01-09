@@ -104,6 +104,7 @@ void         gtk_action_connect_proxy          (GtkAction     *action,
 void         gtk_action_disconnect_proxy       (GtkAction     *action,
 						GtkWidget     *proxy);
 GSList*      gtk_action_get_proxies            (GtkAction     *action);
+GtkAction   *gtk_widget_get_action             (GtkWidget     *widget);
 void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
 G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
