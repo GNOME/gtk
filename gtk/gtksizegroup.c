@@ -560,6 +560,23 @@ gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
   g_object_unref (size_group);
 }
 
+/**
+ * gtk_size_group_get_widgets:
+ * @size_group: a #GtkSizeGrup
+ * 
+ * Returns the list of widgets associated with @size_group.
+ *
+ * Return value: a #GSList of widgets. The list is owned by GTK+ 
+ *   and should not be modified.
+ *
+ * Since: 2.10
+ **/
+GSList *
+gtk_size_group_get_widgets (GtkSizeGroup *size_group)
+{
+     return size_group->widgets;
+}
+
 static gint
 get_base_dimension (GtkWidget        *widget,
 		    GtkSizeGroupMode  mode)

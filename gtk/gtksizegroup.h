@@ -40,6 +40,7 @@ struct _GtkSizeGroup
 {
   GObject parent_instance;
 
+  /* <private> */
   GSList *widgets;
 
   guint8 mode;
@@ -92,6 +93,7 @@ void             gtk_size_group_add_widget    (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);
 void             gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);
+GSList *         gtk_size_group_get_widgets   (GtkSizeGroup     *size_group);
 
 
 void _gtk_size_group_get_child_requisition (GtkWidget      *widget,

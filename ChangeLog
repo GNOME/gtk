@@ -1,3 +1,14 @@
+2006-01-09  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkeditable.h:
+	* gtk/gtksizegroup.c: (gtk_size_group_get_widgets):
+	* gtk/gtksizegroup.h:
+	(struct _GtkSizeGroup): 
+
+	Add gtk_size_group_get_widgets, fixes #326324.
+	Also mark all fields of GtkSizeGroup as private
+
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_finalize): Don't
