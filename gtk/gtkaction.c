@@ -1011,7 +1011,7 @@ gtk_action_get_proxies (GtkAction *action)
 GtkAction*
 gtk_widget_get_action (GtkWidget *widget)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (action), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   return g_object_get_qdata (G_OBJECT (widget), quark_gtk_action_proxy);
 }
