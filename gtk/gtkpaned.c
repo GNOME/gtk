@@ -138,8 +138,8 @@ static GtkContainerClass *parent_class = NULL;
 struct _GtkPanedPrivate
 {
   GtkWidget *saved_focus;
-  GtkPaned *first_paned;
-  guint32 grab_time;
+  GtkPaned  *first_paned;
+  guint32    grab_time;
 };
 
 GType
@@ -467,6 +467,8 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KP_Home, 0, GTK_SCROLL_START);
   add_move_binding (binding_set, GDK_End, 0, GTK_SCROLL_END);
   add_move_binding (binding_set, GDK_KP_End, 0, GTK_SCROLL_END);
+
+  g_type_class_add_private (object_class, sizeof (GtkPanedPrivate));  
 }
 
 static GType
@@ -495,7 +497,7 @@ gtk_paned_init (GtkPaned *paned)
   paned->last_allocation = -1;
   paned->in_drag = FALSE;
 
-  paned->priv = g_new0 (GtkPanedPrivate, 1);
+  paned->priv = G_TYPE_INSTANCE_GET_PRIVATE (paned, GTK_TYPE_PANED, GtkPanedPrivate);
   paned->last_child1_focus = NULL;
   paned->last_child2_focus = NULL;
   paned->in_recursion = FALSE;
@@ -645,8 +647,6 @@ gtk_paned_finalize (GObject *object)
   
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
-
-  g_free (paned->priv);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

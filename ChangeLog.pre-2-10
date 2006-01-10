@@ -1,3 +1,7 @@
+2006-01-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpaned.c: Convert to use instance private data.
+
 2006-01-10  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkpango.c (on_renderer_display_closed): disconnect from the
