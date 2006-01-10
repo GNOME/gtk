@@ -3962,6 +3962,7 @@ gtk_window_get_focus
 gtk_window_get_focus_on_map
 gtk_window_get_frame_dimensions
 gtk_window_get_gravity
+gtk_window_get_group
 gtk_window_get_has_frame
 gtk_window_get_icon
 gtk_window_get_icon_list

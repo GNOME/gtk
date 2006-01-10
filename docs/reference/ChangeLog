@@ -1,6 +1,7 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtk-sections.txt: Add gtk_widget_get_action
+	* gtk/gtk-sections.txt: Add gtk_widget_get_action,
+	gtk_window_get_group
 
 2005-12-30  Matthias Clasen  <mclasen@redhat.com>
 

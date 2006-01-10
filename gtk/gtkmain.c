@@ -1477,9 +1477,9 @@ gtk_main_get_window_group (GtkWidget   *widget)
     toplevel = gtk_widget_get_toplevel (widget);
 
   if (toplevel && GTK_IS_WINDOW (toplevel))
-    return _gtk_window_get_group (GTK_WINDOW (toplevel));
+    return gtk_window_get_group (GTK_WINDOW (toplevel));
   else
-    return _gtk_window_get_group (NULL);
+    return gtk_window_get_group (NULL);
 }
 
 typedef struct
@@ -1550,7 +1550,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
-      if (group == _gtk_window_get_group (toplevel))
+      if (group == gtk_window_get_group (toplevel))
 	gtk_container_foreach (GTK_CONTAINER (toplevel), gtk_grab_notify_foreach, &info);
       g_object_unref (toplevel);
     }

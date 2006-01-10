@@ -1,5 +1,16 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkwindow.h:
+	* gtk/gtkwindow.c (gtk_window_get_group): Make this function
+	public API.  (#307099, Todd Berman)
+
+	* gtk/gtkmenu.c: 
+	* gtk/gtkmain.c: 
+	* gtk/gtkentrycompletion.c: 
+	* gtk/gtkcombo.c: 
+	* gtk/gtkcombobox.c: Update all callers.
+
 	* gtk/gtkentry.c (paste_received):  Make GtkEntryCompletion
 	complete on pastes at the end.  (#165714, Christian Neumair)
 

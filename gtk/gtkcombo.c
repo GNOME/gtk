@@ -562,7 +562,7 @@ gtk_combo_popup_list (GtkCombo *combo)
 
   if (GTK_IS_WINDOW (toplevel))
     {
-      gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+      gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
                                    GTK_WINDOW (combo->popwin));
     }
 
@@ -594,7 +594,7 @@ gtk_combo_popdown_list (GtkCombo *combo)
   
   gtk_widget_hide (combo->popwin);
 
-  gtk_window_group_add_window (_gtk_window_get_group (NULL), GTK_WINDOW (combo->popwin));
+  gtk_window_group_add_window (gtk_window_get_group (NULL), GTK_WINDOW (combo->popwin));
 }
 
 static gboolean

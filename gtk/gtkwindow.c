@@ -7030,7 +7030,7 @@ gtk_window_group_add_window (GtkWindowGroup *window_group,
       if (window->group)
 	gtk_window_group_remove_window (window->group, window);
       else
-	window_group_cleanup_grabs (_gtk_window_get_group (NULL), window);
+	window_group_cleanup_grabs (gtk_window_get_group (NULL), window);
 
       window->group = window_group;
 
@@ -7062,10 +7062,20 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
   g_object_unref (window);
 }
 
-/* Return the group for the window or the default group
+/**
+ * gtk_window_get_group:
+ * @window: a #GtkWindow, or %NULL
+ *
+ * Returns the group for @window or the default group, if
+ * @window is %NULL or if @window does not have an explicit
+ * window group. 
+ *
+ * Returns: the #GtkWindowGroup for a window or the default group
+ *
+ * Since: 2.10
  */
 GtkWindowGroup *
-_gtk_window_get_group (GtkWindow *window)
+gtk_window_get_group (GtkWindow *window)
 {
   if (window && window->group)
     return window->group;

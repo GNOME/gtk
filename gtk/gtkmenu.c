@@ -1397,7 +1397,7 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       toplevel = gtk_widget_get_toplevel (parent_menu_shell);
       if (GTK_IS_WINDOW (toplevel))
-	gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
 				     GTK_WINDOW (menu->toplevel));
     }
   
@@ -1479,7 +1479,7 @@ gtk_menu_popdown (GtkMenu *menu)
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
   gtk_widget_hide (menu->toplevel);
-  gtk_window_group_add_window (_gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
+  gtk_window_group_add_window (gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
 
   if (menu->torn_off)
     {
@@ -4424,7 +4424,7 @@ gtk_menu_grab_notify (GtkWidget *widget,
   GtkWidget *grab;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  group = _gtk_window_get_group (GTK_WINDOW (toplevel));
+  group = gtk_window_get_group (GTK_WINDOW (toplevel));
   grab = _gtk_window_group_get_current_grab (group); 
 
   if (!was_grabbed)

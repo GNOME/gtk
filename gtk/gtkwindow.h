@@ -364,6 +364,7 @@ void     gtk_window_get_position     (GtkWindow   *window,
                                       gint        *root_y);
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
+GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
 
 /* Ignore this unless you are writing a GUI builder */
 void     gtk_window_reshow_with_initial_size (GtkWindow *window);
@@ -393,7 +394,6 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint       height,
 						gint      *new_width,
 						gint      *new_height);
-GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
 GtkWidget      *_gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,

@@ -1444,7 +1444,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   toplevel = gtk_widget_get_toplevel (completion->priv->entry);
   if (GTK_IS_WINDOW (toplevel))
-    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
 				 GTK_WINDOW (completion->priv->popup_window));
 
   /* prevent the first row being focused */
