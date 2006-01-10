@@ -1,3 +1,9 @@
+2006-01-10  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkpango.c (on_renderer_display_closed): disconnect from the
+	right object ("closed" is emitted by the display, not the screen).
+	(bug #85715)
+
 2006-01-10  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkproperty-quartz.c:

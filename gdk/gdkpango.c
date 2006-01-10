@@ -544,10 +544,10 @@ on_renderer_display_closed (GdkDisplay       *display,
                             gboolean          is_error,
 			    GdkPangoRenderer *renderer)
 {
-  g_signal_handlers_disconnect_by_func (renderer->priv->screen,
-					(gpointer)on_renderer_display_closed,
+  g_signal_handlers_disconnect_by_func (display,
+					on_renderer_display_closed,
 					renderer);
-  g_object_set_data (G_OBJECT (renderer->priv->screen), 
+  g_object_set_data (G_OBJECT (renderer->priv->screen),
                      g_intern_static_string ("gdk-pango-renderer"), NULL);
 }
 
