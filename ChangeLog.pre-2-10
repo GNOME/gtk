@@ -1,5 +1,8 @@
 2006-01-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.h: Remove duplicate include.  (#326429, 
+	Benoît Carpentier)
+
 	* gtk/gtkpaned.c: Convert to use instance private data.
 
 2006-01-10  Michael Natterer  <mitch@imendio.com>
