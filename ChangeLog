@@ -1,5 +1,8 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (paste_received):  Make GtkEntryCompletion
+	complete on pastes at the end.  (#165714, Christian Neumair)
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): 
 	Prevent the first row being focused on map.  (#137351,
 	Niklas Knutsson)
