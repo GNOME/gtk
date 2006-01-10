@@ -1085,7 +1085,7 @@ gc_get_foreground (GdkGC    *gc,
   if (gc->colormap)
     gdk_colormap_query_color (gc->colormap, priv->fg_pixel, color);
   else
-    g_warning ("No colormap in gc_get_background");
+    g_warning ("No colormap in gc_get_foreground");
 }
 
 static void

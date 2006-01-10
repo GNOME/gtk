@@ -1,5 +1,8 @@
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkgc.c (gc_get_foreground): Correct a warning.
+	(#326341, Benoît Carpentier)
+
 	* gtk/gtk.symbols:
 	* gtk/gtkwindow.h:
 	* gtk/gtkwindow.c (gtk_window_get_group): Make this function
