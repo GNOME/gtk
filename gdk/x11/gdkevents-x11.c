@@ -2807,6 +2807,7 @@ static const struct
   { "Xft/HintStyle", "gtk-xft-hintstyle" },
   { "Xft/RGBA", "gtk-xft-rgba" },
   { "Xft/DPI", "gtk-xft-dpi" },
+  { "Net/FallbackIconTheme", "gtk-fallback-icon-theme" }
 };
 
 static void

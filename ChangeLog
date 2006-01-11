@@ -1,3 +1,15 @@
+2006-01-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Allow falling back to another icon theme before 
+	hicolor.   (#325546, Rodney Dawes)
+	
+	* gtk/gtksettings.c: Add a gtk-fallback-icon-theme setting.
+
+	* gdk/x11/gdkevents-x11.c: Map it to the XSetting Net/FallbackIconTheme.
+	
+	* gtk/gtkicontheme.c: Consult the fallback icon theme before
+	looking in hicolor. 
+
 2006-01-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_focus_out): Queue a draw
