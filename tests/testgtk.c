@@ -5129,6 +5129,46 @@ create_entry (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+static void
+create_expander (GtkWidget *widget)
+{
+  GtkWidget *box1;
+  GtkWidget *expander;
+  GtkWidget *hidden;
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));
+      
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&window);
+      
+      gtk_window_set_title (GTK_WINDOW (window), "expander");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+      
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      
+      expander = gtk_expander_new ("The Hidden");
+      
+      gtk_box_pack_start (GTK_BOX (box1), expander, TRUE, TRUE, 0);
+      
+      hidden = gtk_label_new ("Revealed!");
+      
+      gtk_container_add (GTK_CONTAINER (expander), hidden);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /* GtkEventBox */
 
 
@@ -13192,6 +13232,7 @@ struct {
   { "entry", create_entry },
   { "event box", create_event_box },
   { "event watcher", create_event_watcher },
+  { "expander", create_expander },
   { "file selection", create_file_selection },
   { "flipping", create_flipping },
   { "focus", create_focus },
