@@ -138,6 +138,8 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->get_surrounding = gtk_im_multicontext_get_surrounding;
 
   gobject_class->finalize = gtk_im_multicontext_finalize;
+
+  g_type_class_add_private (gobject_class, sizeof (GtkIMMulticontextPrivate));   
 }
 
 static void
@@ -145,7 +147,7 @@ gtk_im_multicontext_init (GtkIMMulticontext *multicontext)
 {
   multicontext->slave = NULL;
   
-  multicontext->priv = g_new0 (GtkIMMulticontextPrivate, 1);
+  multicontext->priv = G_TYPE_INSTANCE_GET_PRIVATE (multicontext, GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontextPrivate);
   multicontext->priv->use_preedit = TRUE;
   multicontext->priv->have_cursor_location = FALSE;
   multicontext->priv->focus_in = FALSE;
@@ -170,7 +172,6 @@ gtk_im_multicontext_finalize (GObject *object)
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (object);
   
   gtk_im_multicontext_set_slave (multicontext, NULL, TRUE);
-  g_free (multicontext->priv);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

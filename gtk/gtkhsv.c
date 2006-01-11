@@ -156,11 +156,13 @@ gtk_hsv_get_type (void)
 static void
 gtk_hsv_class_init (GtkHSVClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkHSVClass    *hsv_class;
   GtkBindingSet  *binding_set;
   
+  gobject_class = (GObjectClass *) class;
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   hsv_class = GTK_HSV_CLASS (class);
@@ -233,6 +235,8 @@ gtk_hsv_class_init (GtkHSVClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
+
+  g_type_class_add_private (gobject_class, sizeof (HSVPrivate));   
 }
 
 /* Object initialization function for the HSV color selector */
@@ -240,10 +244,11 @@ static void
 gtk_hsv_init (GtkHSV *hsv)
 {
   HSVPrivate *priv;
+
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (hsv, GTK_TYPE_HSV, HSVPrivate);
   
-  priv = g_new0 (HSVPrivate, 1);
   hsv->priv = priv;
-  
+
   GTK_WIDGET_SET_FLAGS (hsv, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (hsv, GTK_CAN_FOCUS);
   
@@ -259,18 +264,6 @@ gtk_hsv_init (GtkHSV *hsv)
 static void
 gtk_hsv_destroy (GtkObject *object)
 {
-  GtkHSV *hsv;
-  
-  g_return_if_fail (GTK_IS_HSV (object));
-  
-  hsv = GTK_HSV (object);
-
-  if (hsv->priv)
-    {
-      g_free (hsv->priv);
-      hsv->priv = NULL;
-    }
-
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -1431,7 +1424,6 @@ gtk_hsv_set_color (GtkHSV *hsv,
 {
   HSVPrivate *priv;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   g_return_if_fail (h >= 0.0 && h <= 1.0);
   g_return_if_fail (s >= 0.0 && s <= 1.0);

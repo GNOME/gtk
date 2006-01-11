@@ -274,27 +274,14 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkHandleBoxPrivate));    
 }
 
 static GtkHandleBoxPrivate *
 gtk_handle_box_get_private (GtkHandleBox *hb)
 {
-  GtkHandleBoxPrivate *private;
-  static GQuark private_quark = 0;
-
-  if (!private_quark)
-    private_quark = g_quark_from_static_string ("gtk-handle-box-private");
-
-  private = g_object_get_qdata (G_OBJECT (hb), private_quark);
-
-  if (!private)
-    {
-      private = g_new0 (GtkHandleBoxPrivate, 1);
-      g_object_set_qdata_full (G_OBJECT (hb), private_quark,
-			       private, g_free);
-    }
-
-  return private;
+  return G_TYPE_INSTANCE_GET_PRIVATE (hb, GTK_TYPE_HANDLE_BOX, GtkHandleBoxPrivate);
 }
 
 static void
