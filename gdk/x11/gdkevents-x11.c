@@ -2802,6 +2802,7 @@ static const char settings_names[] =
   "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
   "Net/ThemeName\0"           "gtk-theme-name\0"
   "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
+  "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
   "Gtk/CanChangeAccels\0"     "gtk-can-change-accels\0"
   "Gtk/ColorPalette\0"        "gtk-color-palette\0"
   "Gtk/FontName\0"            "gtk-font-name\0"

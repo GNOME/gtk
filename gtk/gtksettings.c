@@ -66,6 +66,7 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_ICON_THEME_NAME,
+  PROP_FALLBACK_ICON_THEME,
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
   PROP_DND_DRAG_THRESHOLD,
@@ -259,6 +260,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
+
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-theme-name",
 								  P_("Icon Theme Name"),
@@ -267,6 +269,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-fallback-icon-theme",
+								  P_("Fallback Icon Theme Name"),
+								  P_("Name of a icon theme to fall back to"),
+								  NULL,
+								  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_FALLBACK_ICON_THEME);
   
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
