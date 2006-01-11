@@ -1,5 +1,8 @@
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c: Add some notify batching, always
+	emit notify after setting the new value.
+
 	* gtk/gtkmessagedialog.c: Add properties.  (#311254,
 	Johan Dahlin)
 	(gtk_message_dialog_new): Remove some redundant code, pointed

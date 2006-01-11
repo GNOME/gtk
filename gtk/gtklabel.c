@@ -1098,8 +1098,9 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_markup != val)
     {
-      g_object_notify (G_OBJECT (label), "use-markup");
       label->use_markup = val;
+
+      g_object_notify (G_OBJECT (label), "use-markup");
     }
 }
 
@@ -1110,8 +1111,9 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_underline != val)
     {
-      g_object_notify (G_OBJECT (label), "use-underline");
       label->use_underline = val;
+
+      g_object_notify (G_OBJECT (label), "use-underline");
     }
 }
 
@@ -1353,11 +1355,15 @@ gtk_label_set_markup (GtkLabel    *label,
 {  
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, FALSE);
   
   gtk_label_recalculate (label);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
@@ -1380,6 +1386,8 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
   guint last_keyval;
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   last_keyval = label->mnemonic_keyval;
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
@@ -1387,6 +1395,8 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
   
   gtk_label_recalculate (label);
   gtk_label_setup_mnemonic (label, last_keyval);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
