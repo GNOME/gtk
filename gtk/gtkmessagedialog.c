@@ -73,7 +73,11 @@ static void gtk_message_dialog_font_size_change (GtkWidget *widget,
 enum {
   PROP_0,
   PROP_MESSAGE_TYPE,
-  PROP_BUTTONS
+  PROP_BUTTONS,
+  PROP_TEXT,
+  PROP_USE_MARKUP,
+  PROP_SECONDARY_TEXT,
+  PROP_SECONDARY_USE_MARKUP
 };
 
 static gpointer parent_class;
@@ -159,6 +163,70 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
                                                       GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkMessageDialog:text:
+   * 
+   * The primary text of the message dialog. If the dialog has 
+   * a secondary text, this will appear as the title.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT,
+                                   g_param_spec_string ("text",
+                                                        P_("Text"),
+                                                        P_("The primary text of the message dialog"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMessageDialog:use-markup:
+   * 
+   * %TRUE if the primary text of the dialog includes Pango markup. 
+   * See pango_parse_markup(). 
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_USE_MARKUP,
+				   g_param_spec_boolean ("use-markup",
+							 P_("Use Markup"),
+							 P_("The primary text of the title includes Pango markup."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+  
+  /**
+   * GtkMessageDialog:secondary-text:
+   * 
+   * The secondary text of the message dialog. 
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SECONDARY_TEXT,
+                                   g_param_spec_string ("secondary-text",
+                                                        P_("Secondary Text"),
+                                                        P_("The secondary text of the message dialog"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMessageDialog:secondary-use-markup:
+   * 
+   * %TRUE if the secondary text of the dialog includes Pango markup. 
+   * See pango_parse_markup(). 
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_SECONDARY_USE_MARKUP,
+				   g_param_spec_boolean ("secondary-use-markup",
+							 P_("Use Markup in secondary"),
+							 P_("The secondary text includes Pango markup."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
   g_type_class_add_private (gobject_class,
 			    sizeof (GtkMessageDialogPrivate));
 }
@@ -257,13 +325,10 @@ setup_primary_label_font (GtkMessageDialog *dialog)
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 
-  if (priv->has_primary_markup)
-    return;
-
   /* unset the font settings */
   gtk_widget_modify_font (dialog->label, NULL);
 
-  if (priv->has_secondary_text)
+  if (priv->has_secondary_text && !priv->has_primary_markup)
     {
       size = pango_font_description_get_size (dialog->label->style->font_desc);
       font_desc = pango_font_description_new ();
@@ -321,8 +386,10 @@ gtk_message_dialog_set_property (GObject      *object,
 				 GParamSpec   *pspec)
 {
   GtkMessageDialog *dialog;
-  
+  GtkMessageDialogPrivate *priv;
+
   dialog = GTK_MESSAGE_DIALOG (object);
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
   
   switch (prop_id)
     {
@@ -332,6 +399,47 @@ gtk_message_dialog_set_property (GObject      *object,
     case PROP_BUTTONS:
       gtk_message_dialog_add_buttons (dialog, g_value_get_enum (value));
       break;
+    case PROP_TEXT:
+      if (priv->has_primary_markup)
+	gtk_label_set_markup (GTK_LABEL (dialog->label), 
+			      g_value_get_string (value));
+      else
+	gtk_label_set_text (GTK_LABEL (dialog->label), 
+			    g_value_get_string (value));
+      break;
+    case PROP_USE_MARKUP:
+      priv->has_primary_markup = g_value_get_boolean (value);
+      gtk_label_set_use_markup (GTK_LABEL (dialog->label), 
+				priv->has_primary_markup);
+      setup_primary_label_font (dialog);
+      break;
+    case PROP_SECONDARY_TEXT:
+      {
+	const gchar *txt = g_value_get_string (value);
+	
+	if (gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)))
+	  gtk_label_set_markup (GTK_LABEL (priv->secondary_label), txt);
+	else
+	  gtk_label_set_text (GTK_LABEL (priv->secondary_label), txt);
+
+	if (txt)
+	  {
+	    priv->has_secondary_text = TRUE;
+	    gtk_widget_show (priv->secondary_label);
+	  }
+	else
+	  {
+	    priv->has_secondary_text = FALSE;
+	    gtk_widget_hide (priv->secondary_label);
+	  }
+	setup_primary_label_font (dialog);
+      }
+      break;
+    case PROP_SECONDARY_USE_MARKUP:
+      gtk_label_set_use_markup (GTK_LABEL (priv->secondary_label), 
+				g_value_get_boolean (value));
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -345,13 +453,35 @@ gtk_message_dialog_get_property (GObject     *object,
 				 GParamSpec  *pspec)
 {
   GtkMessageDialog *dialog;
-  
+  GtkMessageDialogPrivate *priv;
+
   dialog = GTK_MESSAGE_DIALOG (object);
-  
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+    
   switch (prop_id)
     {
     case PROP_MESSAGE_TYPE:
       g_value_set_enum (value, gtk_message_dialog_get_message_type (dialog));
+      break;
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_label_get_label (GTK_LABEL (dialog->label)));
+      break;
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, priv->has_primary_markup);
+      break;
+    case PROP_SECONDARY_TEXT:
+      if (priv->has_secondary_text)
+      g_value_set_string (value, 
+			  gtk_label_get_label (GTK_LABEL (priv->secondary_label)));
+      else
+	g_value_set_string (value, NULL);
+      break;
+    case PROP_SECONDARY_USE_MARKUP:
+      if (priv->has_secondary_text)
+	g_value_set_boolean (value, 
+			     gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)));
+      else
+	g_value_set_boolean (value, FALSE);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -433,9 +563,6 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
   if (flags & GTK_DIALOG_DESTROY_WITH_PARENT)
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-
-  if (flags & GTK_DIALOG_NO_SEPARATOR)
-    gtk_dialog_set_has_separator (dialog, FALSE);
 
   return widget;
 }
