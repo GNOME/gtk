@@ -1,5 +1,9 @@
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.10 ===
+	
+	* NEWS: Updates.
+
 	* gtk/gtklabel.c: Add some notify batching, always
 	emit notify after setting the new value.
 

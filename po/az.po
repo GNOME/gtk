@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-04-17 22:41+0300\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani <translation-team-az@lists.sourceforge.net>\n"
@@ -373,18 +373,18 @@ msgstr ""
 "Rəsm yükləmə üçün yaddaş çatmır, bə'zi proqramlardan yaddaş açmaq üçün "
 "çıxmağa çalışın"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Dəstəklənməyən JPEG rəng sahəsi (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG faylını yükləmə üçün yaddaş ayrıla bilmir"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -393,7 +393,7 @@ msgstr ""
 "JPEG keyfiyyət qiyməti 0 ilə 100 arasında olmalıdır; '%s' qiyməti alına "
 "bilməz."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -401,7 +401,7 @@ msgstr ""
 "JPEG keyfiyyət qiyməti 0 ilə 100 arasında olmalıdır; '%d' qiyməti qəbl "
 "edilməz."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG rəsm formatı"
 
@@ -1375,15 +1375,15 @@ msgstr "Rəng Çərxi"
 msgid "Color Selection"
 msgstr "Rəng Seçkisi"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "_Hamısını Seç"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Giriş _Metodları"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Yunikod İdarə Hərfi Daxil Et"
 
@@ -1398,20 +1398,16 @@ msgstr "Hökmsüz fayl adı: %s"
 msgid "Select A File"
 msgstr "Faylı Sil"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Ev"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Masa Üstü"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 #, fuzzy
 msgid "(None)"
 msgstr "heç biri"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr ""
 
@@ -1874,7 +1870,7 @@ msgid "(Empty)"
 msgstr "(Boş)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1900,7 +1896,7 @@ msgstr "Fayl Sistemi"
 msgid "Could not get a stock icon for %s"
 msgstr "'%s' faylının mə'lumatı alına bilmədi: %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1909,22 +1905,22 @@ msgstr ""
 "\"%s\" adı \"%s\" hərfini daxil etdiyi üçün hökmsüzdür. Xahiş edirik başqa "
 "ad seçin."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Nişanlara qeyd bacarılmadı (%s)"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'%s' mə'lumatı alınma xətası: %s"
@@ -1995,7 +1991,7 @@ msgstr "_Qamma qiyməti"
 msgid "Error loading icon: %s"
 msgstr "Timsal yükləmə xətası: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2008,7 +2004,7 @@ msgstr ""
 "Örtüyü bu ünvandan tə'min edə bilərsiniz:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Örtükdə '%s' timsalı mövcud deyil"
@@ -2096,7 +2092,7 @@ msgstr "(namə'lum)"
 msgid "clear"
 msgstr "təmizlə"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Hamısını Seç"
 
@@ -2589,22 +2585,22 @@ msgstr "Örtük mühərrikini \"module_path\"da tapa bilmirəm: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Qeyd Yoxdur ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "'%s' atributu %d sətirində %d hərfində namə'lumdur"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "'%s' taqı %d sətiri %d hərfində gözlənilmir"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d sətiri %d hərfində gözlənilməyən hərf"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Boş"
 
@@ -2663,6 +2659,9 @@ msgstr "X Giriş Yöntəmi"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' faylının mə'lumatı alına bilmədi: %s"
+
+#~ msgid "Home"
+#~ msgstr "Ev"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

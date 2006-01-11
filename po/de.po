@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-08-09 23:50+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -384,18 +384,18 @@ msgstr ""
 "Nicht genug Speicher, um das Bild zu laden. Versuchen Sie, einige "
 "Anwendungen zu beenden, um Speicher frei zu machen"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nicht unterstützter JPEG-Farbraum (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Speicher zum Laden von JPEG-Datei konnte nicht bereit gestellt werden"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -404,7 +404,7 @@ msgstr ""
 "JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert »%s« konnte nicht "
 "verarbeitet werden."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -412,7 +412,7 @@ msgstr ""
 "JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert »%d« ist nicht "
 "erlaubt."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Das JPEG-Bildformat"
 
@@ -1397,15 +1397,15 @@ msgstr "Farbrad"
 msgid "Color Selection"
 msgstr "Schriftwahl"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "A_lles markieren"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
@@ -1419,19 +1419,15 @@ msgstr "Ungültiger Dateiname: %s"
 msgid "Select A File"
 msgstr "Datei auswählen"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Persönlicher Ordner"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(keine)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Andere..."
 
@@ -1887,7 +1883,7 @@ msgid "(Empty)"
 msgstr "(Leer)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1912,7 +1908,7 @@ msgstr "Dateisystem"
 msgid "Could not get a stock icon for %s"
 msgstr "Aus dem Repertoire konnte kein Symbol für »%s« aufgerufen werden"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1921,22 +1917,22 @@ msgstr ""
 "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte verwenden "
 "Sie einen anderen Namen."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Speichern des Lesezeichens gescheitert: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "»%s« existiert bereits in der Lesezeichenliste"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "»%s« existiert noch nicht in der Lesezeichenliste"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Fehler beim Abrufen der Informationen zu »/«: %s"
@@ -2007,7 +2003,7 @@ msgstr "_Gamma-Wert"
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Symbols: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2020,7 +2016,7 @@ msgstr ""
 "Sie können sich eine Kopie herunterladen unter:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Symbol »%s« nicht im Thema vorhanden"
@@ -2109,7 +2105,7 @@ msgstr "(unbekannt)"
 msgid "clear"
 msgstr "leeren"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Alles markieren"
 
@@ -2599,22 +2595,22 @@ msgstr "Im Modulpfad »%s« konnte keine Themen-Engine gefunden werden,"
 msgid "--- No Tip ---"
 msgstr "--- Kein Tipp ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Unbekanntes Attribut »%s« in Zeile %d, Zeichen %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Unerwarteter, öffnender Tag »%s« in Zeile %d, Zeichen %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unerwartete Zeichendaten in Zeile %d, Zeichen %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Leer"
 
@@ -2673,3 +2669,6 @@ msgstr "X-Eingabemethode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Es konnten keine Informationen zur Datei »%s« abgerufen werden: %s"
+
+#~ msgid "Home"
+#~ msgstr "Persönlicher Ordner"

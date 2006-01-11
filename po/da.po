@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-10-17 12:19+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -399,18 +399,18 @@ msgstr ""
 "Ikke tilstrækkelig hukommelse til at indlæse billede, prøv at afslutte nogle "
 "programmer for at frigøre hukommelse."
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ikke-understøttet JPEG-farverum (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kunne ikke tildele hukommelse til indlæsning af JPEG-fil"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -419,7 +419,7 @@ msgstr ""
 "JPEG-kvalitet skal være en værdi mellem 0 og 100; værdien '%s' kunne ikke "
 "fortolkes."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -427,7 +427,7 @@ msgstr ""
 "JPEG-kvalitet skal være en værdi mellem 0 og 100; værdien '%d' er ikke "
 "tilladt."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG-billedformatet"
 
@@ -1397,15 +1397,15 @@ msgstr "Farvehjul"
 msgid "Color Selection"
 msgstr "Farvevælger"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -1419,19 +1419,15 @@ msgstr "Ugyldigt filnavn: %s"
 msgid "Select A File"
 msgstr "Vælg en fil"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Hjem"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ingen)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Anden..."
 
@@ -1872,7 +1868,7 @@ msgid "(Empty)"
 msgstr "(tom)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1897,7 +1893,7 @@ msgstr "Filsystem"
 msgid "Could not get a stock icon for %s"
 msgstr "Kunne ikke indhente et lagerikon for %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1906,22 +1902,22 @@ msgstr ""
 "Navnet \"%s\" er ikke gyldigt fordi det indeholder tegnet \"%s\". Vælg "
 "venligst et andet navn."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Gemning af bogmærke mislykkedes: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" findes allerede i bogmærkelisten"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" findes ikke i bogmærkelisten"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Fejl ved indhentning af oplysninger om \"/\": %s"
@@ -1993,7 +1989,7 @@ msgstr "_Gammaværdi"
 msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2006,7 +2002,7 @@ msgstr ""
 "installere det. Du kan få en kopi fra:\n"
 "           %s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonet \"%s\" er ikke tilgængeligt i tema"
@@ -2094,7 +2090,7 @@ msgstr "(ukendt)"
 msgid "clear"
 msgstr "ryd"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Markér alt"
 
@@ -2578,22 +2574,22 @@ msgstr "Kunne ikke finde temamotor i module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Ukendt egenskab \"%s\" på linje %d tegn %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Uventet startmærke \"%s\" på linje %d tegn %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Uventede tegndata på linje %d tegn %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Tom"
 
@@ -2651,6 +2647,9 @@ msgstr "X-indtastningsmetode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke indhente oplysninger om filen \"%s\": %s"
+
+#~ msgid "Home"
+#~ msgstr "Hjem"
 
 #~ msgid "keyboard label|Super"
 #~ msgstr "Super"

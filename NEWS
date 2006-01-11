@@ -2,16 +2,26 @@ Overview of Changes from GTK+ 2.8.9 to GTK+ 2.8.10
 ==================================================
 * Derive GtkObject from GInitiallyUnowned instead of
   GObject, if possible. Note that this change is known
-  to break the Perl bindings.
+  to break versions of the GTK+ Perl bindings older
+  than GTK+ Perl 2.13.4. [Tim Janik]
 
-* Updated translations (es,el,fr,it,pt_BR,vi)
+* Add a setting to allow falling back to another icon
+  theme before trying hicolor. [Rodney Dawes]
+
+* Require GLib 2.8.5
+
+* Updated translations (ca,el,es,fr,hi,it,ko,pt_BR,vi)
 
 * Bugs fixed:
+ 137351 GtkEntryCompletion sometimes selects first completion item
+        [Niklas Knutsson]
+ 165714 GtkEntryCompletion doesn't complete on paste [Christian Neumair]
+ 317687 gnome-panel crash by clicking on settings
+ 321548 speed up gtk_text_iter_set_visible_line_index [Paolo 
+        Borelli]
  323843 Garbage in gtk_text_view_get_border_window_size()
  323876 Broadcasting _GTK_LOAD_ICONTHEMES is a performance 
         bug [Peter Lund]
- 321548 speed up gtk_text_iter_set_visible_line_index [Paolo 
-        Borelli]
  324044 Documentation entry for GtkTreeView::row-activated 
         [Davyd Madeley]
  323504 Gtk-CRITICAL when dragging a launcher from the menu 
@@ -27,7 +37,6 @@ Overview of Changes from GTK+ 2.8.9 to GTK+ 2.8.10
  324815 Typo in gtkwindow.c [Ross Burton]
  324996 Description about gtk_im_context_filter_keypress on API 
         reference
- 317687 gnome-panel crash by clicking on settings
  323666 gdk_window_scroll doesn't invalidate if another top-level 
         is above window [John Ehresman]
  322264 gdk_drawable_get_visible_region win32 / x11 inconsistency 
@@ -43,6 +52,18 @@ Overview of Changes from GTK+ 2.8.9 to GTK+ 2.8.10
  325199 The API reference for gtk_exit() states that it's 
         deprecated but doesn't state the replacement function, 
         if any [Ævar Arnfjörð Bjarmason]
+ 325869 GtkViewPort not releasing signal handlers on destruction
+        [Jorn Baayen]
+ 325782 GtkToolButton ::clicked signal should set G_SIGNAL_ACTION 
+        [Martyn Russell]
+ 325817 FileChooserButton uses "Home" instead of directory name 
+        [Federico Mena Quintero]
+ 326098 label alignment is wrong when width-chars is set [Benjamin Otte]
+ 326200 translations in GtkActionGroup erroneously translated 
+        [Christian Stimming]
+ 326429 in gtk.h, twice the same lines [Benoît Carpentier]
+ 326064 Artifacts on some widgets [Andrew Conkling]
+
 
 Overview of Changes from GTK+ 2.8.8 to GTK+ 2.8.9
 =================================================

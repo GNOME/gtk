@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.bs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-07-31 01:30+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -378,18 +378,18 @@ msgstr ""
 "Nedovoljno memorije za učitavanje slike, probajte zatvoriti neke aplikacije "
 "da bi oslobodili memoriju"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG color space nije podržano (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nisam mogao dodijeliti memoriju za učitavanje JPEG datoteke"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -398,7 +398,7 @@ msgstr ""
 "JPEG kvalitet mora biti vrijednost između 0 i 100; vrijednost '%s' nije "
 "mogla biti protumačena."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -406,7 +406,7 @@ msgstr ""
 "JPEG kvaliteta mora imati vrijednost između 0 i 100; vrijednost '%d' nije "
 "dopuštena."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG oblik slike"
 
@@ -1381,15 +1381,15 @@ msgstr "Točak sa bojama"
 msgid "Color Selection"
 msgstr "Izbor boje"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Metode unosa"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni unicode znak"
 
@@ -1404,20 +1404,16 @@ msgstr "Nevažeće ime datoteke: %s"
 msgid "Select A File"
 msgstr "Izbriši datoteku"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Početak"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 #, fuzzy
 msgid "(None)"
 msgstr "ništa"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr ""
 
@@ -1885,7 +1881,7 @@ msgid "(Empty)"
 msgstr "(Prazno)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1911,7 +1907,7 @@ msgstr "Datotečni sistem"
 msgid "Could not get a stock icon for %s"
 msgstr "Nisam mogao dobaviti standardnu ikonu za %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1920,22 +1916,22 @@ msgstr ""
 "Ime \"%s\" nije važeće zato što sadrži znak \"%s\". Molim koristite drugo "
 "ime."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Neuspješno snimanje zabilješke (%s)"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "greška tokom dobavljanja informacija za '%s': %s"
@@ -2006,7 +2002,7 @@ msgstr "_Gama vrijednost"
 msgid "Error loading icon: %s"
 msgstr "Greška tokom učitavanja ikone: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2019,7 +2015,7 @@ msgstr ""
 "Možete dobaviti kopiju sa:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Nema ikone '%s' u temi"
@@ -2107,7 +2103,7 @@ msgstr "(nepoznato)"
 msgid "clear"
 msgstr "očisti"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Izaberi sve"
 
@@ -2601,22 +2597,22 @@ msgstr "Ne mogu locirati motor za teme u module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Nema savjeta ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Nepoznat atribut '%s' na liniji %d znak %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekivana početna oznaka '%s' na liniji %d znak %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekivani znakovi na liniji %d znak %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Prazno"
 
@@ -2675,6 +2671,9 @@ msgstr "X ulazna metoda"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nisam mogao dobaviti informacije za datoteku '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Početak"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

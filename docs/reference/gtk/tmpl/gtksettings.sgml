@@ -83,6 +83,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-fallback-icon-theme ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-font-name ##### -->
 <para>
 

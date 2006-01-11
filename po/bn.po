@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-09-05 22:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -372,18 +372,18 @@ msgstr ""
 "ছবি লোড করার মত পর্যাপ্ত মেমরি নেই , কিছু আ্যপ্লিকেশন বন্ধ করার মাধ্যমে মেমরি ফাঁকা "
 "করে পুনরায় চেষ্টা করে দেখুন"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "অসমর্থিত জেপেগ কালার স্পেস (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "জেপেগ ফাইলের জন্য পর্যাপ্ত মেমরি বরাদ্দ করা যায় নি"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -392,14 +392,14 @@ msgstr ""
 "জেপেগ-এর উত্‍কৃষ্টতার মান ০ থেকে ১০০ এই সীমার মধ্যে হতে হবে; '%s' মানটি পার্স "
 "(Parse) করা যায় নি।"
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "জেপেগ-এর উত্‍কৃষ্টতার মান ০ থেকে ১০০ এই সীমার মধ্যে হতে হবে; '%d' মানটি বৈধ নয়।"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "জেপেগ ফরম্যাটের ছবি"
 
@@ -1379,15 +1379,15 @@ msgstr "রঙের চাকা"
 msgid "Color Selection"
 msgstr "রং নির্বাচন"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "সব কিছু চিহ্নিত করো (_ন)"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_প)"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোড কন্ট্রোল ক্যারেকটার ঢোকাও (_ঢ)"
 
@@ -1401,19 +1401,15 @@ msgstr "ফাইলের নাম বেঠিক: %s"
 msgid "Select A File"
 msgstr "একটি ফাইল বেছে নিন"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "ব্যক্তিগত ফোল্ডার"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "ডেস্কটপ"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(একটিও নয়)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -1856,7 +1852,7 @@ msgid "(Empty)"
 msgstr "(ফাঁকা)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1882,7 +1878,7 @@ msgstr "ফাইল-সিস্টেম"
 msgid "Could not get a stock icon for %s"
 msgstr "%s-এর জন্য নির্ধারিত কোন আইকন পাওয়া যায় নি"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1891,22 +1887,22 @@ msgstr ""
 "\"%s\" নামটিতে \"%s\" অক্ষরটি রয়েছে বলে এটি কোন বৈধ নাম নয়।  অনুগ্রহপূর্বক ভিন্ন "
 "একটি নাম লিখুন।"
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "বুকমার্ক সংরক্ষণ করার প্রচেষ্টা ব্যর্থ হয়েছে: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' ইতিমধ্যেই বুকমার্ক তালিকায় রয়েছে"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "%s বুকমার্ক তালিকায় নেই"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'/' সংক্রান্ত তথ্য পেতে সমস্যা হয়েছে: %s"
@@ -1977,7 +1973,7 @@ msgstr "গামার মান (_গ)"
 msgid "Error loading icon: %s"
 msgstr "আইকন লোড করার সময় সমস্যা হয়েছে: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1990,7 +1986,7 @@ msgstr ""
 "থিমের একটি কপি পাবেন এখানে:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "থিমের মধ্যে আইকন '%s' নেই"
@@ -2080,7 +2076,7 @@ msgstr "(অজ্ঞাত)"
 msgid "clear"
 msgstr "পরিষ্কার"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "সব কিছু চিহ্নিত করো"
 
@@ -2567,23 +2563,23 @@ msgstr "থিম ইঞ্জিনকে এই মডিউল পাথে (
 msgid "--- No Tip ---"
 msgstr "--- কোন ইঙ্গিত নেই ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "%2$d'তম লাইনের %3$d'তম অক্ষরে অজ্ঞাত বৈশিষ্ট্য '%1$s' রয়েছে"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "%2$d'তম লাইনের %3$d'তম অক্ষরে অপ্রত্যাশিত আরম্ভসূচক ট্যাগ '%1$s' রয়েছে"
 
 # FIXME
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d'তম লাইনের %d'তম অক্ষরে অপ্রত্যাশিত আক্ষরিক তথ্য রয়েছে"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "ফাঁকা"
 
@@ -2643,3 +2639,6 @@ msgstr "এক্স ইনপুট পদ্ধতি"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ফাইল সম্পর্কে তথ্য এই পাওয়া যায় নি: %s"
+
+#~ msgid "Home"
+#~ msgstr "ব্যক্তিগত ফোল্ডার"
