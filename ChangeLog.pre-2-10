@@ -1,5 +1,12 @@
 2006-01-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_focus_out): Queue a draw
+	when losing the focus.  (#326064, Andrew Conkling)
+
+	* gtk/gtkimmulticontext.c: 
+	* gtk/gtkhsv.c: 
+	* gtk/gtkhandlebox.c: Convert to use instance private data.
+
 	* gtk/gtk.h: Remove duplicate include.  (#326429, 
 	Benoît Carpentier)
 
