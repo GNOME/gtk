@@ -1,5 +1,7 @@
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkevents-x11.c: Fix string offsets.
+
 	Allow falling back to another icon theme before 
 	hicolor.   (#325546, Rodney Dawes)
 	
