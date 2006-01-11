@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -1175,7 +1175,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan endrast av brukaren"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "Skrifttype"
 
@@ -1183,52 +1183,52 @@ msgstr "Skrifttype"
 msgid "Font description as a string"
 msgstr "Skildring av skrifttypen, som ein streng"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Skildring av skrifttypen, som ein PangoFontDescription-struktur"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "Skriftfamilie"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Namn på skriftfamilien, t.d. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "Skriftstil"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "Skriftvariant"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "Skriftvekt"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "Strekking av skrifttypen"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "Skriftstorleik"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "Skrift punkt"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "Storleiken på skrifta, i punkt"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "Skalering på skrifttype"
 
@@ -1236,7 +1236,7 @@ msgstr "Skalering på skrifttype"
 msgid "Font scaling factor"
 msgstr "Skaleringsfaktor for skrifttypen"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "Hev"
 
@@ -1247,23 +1247,23 @@ msgstr ""
 "Kor mykje teksten skal løftast over grunnlinja (negative verdiar er under "
 "grunnlinja)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "Gjennomstreking"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "Om teksten skal strekast gjennom"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "Understreking"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "Stil for understreking av denne teksten"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "Språk"
 
@@ -1287,7 +1287,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 #, fuzzy
 msgid "Width In Characters"
@@ -1297,7 +1297,7 @@ msgstr "Breidde i teikn"
 msgid "The desired width of the label, in characters"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "Tekstbrytingsmåte"
 
@@ -1316,115 +1316,115 @@ msgstr "Brytingsbreidde"
 msgid "The width at which the text is wrapped"
 msgstr "Kor verdistrengen skal visast"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "Bakgrunnen satt"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "Om denne merkinga påvirkar bakgrunnsfargen"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "Framgrunn satt"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "Om denne merkinga påvirkar framgrunnsfargen"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "Er redigerbar satt"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "Om denne merkinga påverkar om teksten kan redigerast eller ikkje"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "Skriftfamilie satt"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "Om denne merkinga påvirkar skriftfamilien"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "Stil på skrifttype"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "Om denne merkinga påvirkar skriftstilen"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "Skrifttypevariant satt"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "Om denne merkinga påvirkar skrifttypevarianten"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "Skrifttyngd satt"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "Om denne merkinga påvirkar skriftvekta"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "Skriftstrekk satt"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "Om denne merkinga påvirkar skriftstrekkinga"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "Skriftstorleik satt"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "Om denne merkinga påvirkar skriftstorleiken"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "Skriftskalering satt"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Om denne merkinga skalerar skriftstorleiken med ein gitt faktor"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "Stilt til å hevast"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "Om denne merkinga påvirkar hevinga"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "Gjennomstreking satt"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "Om denne merkinga påvirkar gjennomstrekinga"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "Understreking satt"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "Om denne merkinga påvirkar understrekinga"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "Språk satt"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Om denne merkinga påvirkar språket teksten skal teiknast i"
 
@@ -1520,7 +1520,7 @@ msgstr "Bruk alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Om fargen skal få ein alfa-verdi"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Tittel"
@@ -2118,20 +2118,20 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Tittelen på skrifttypeveljardialogen"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2559,7 +2559,7 @@ msgstr "Tekst på merkelappen"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Ei liste med stilattributtar som teksten i merkelappen skal påførast"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justering"
 
@@ -3533,11 +3533,11 @@ msgstr "Teikna"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Om mellomromma er teikna opp eller berre blanke"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "Tid for dobbeltklikk"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3545,11 +3545,11 @@ msgstr ""
 "Største tid (i millisekund) mellom to klikk for at det skal reknast som eit "
 "dobbeltklikk "
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Double Click Distance"
 msgstr "Avstand ved dobbeltklikk"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3557,27 +3557,27 @@ msgstr ""
 "Største avstand (i pikslar) mellom to klikk for at det skal reknast som eit "
 "dobbeltklikk"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "Markørblinking"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "Om markøren skal blinka"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "Markørblinking tid"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Kor lenge kvart blink varar, i millisekund"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "Delt markør"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3585,138 +3585,148 @@ msgstr ""
 "Om det skal visast to markørar i blanda venstre-til-høgre-tekst og høgre-til-"
 "venstre-tekst"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "Namn på drakt"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "Namn på RC-fil som skal lastast"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Namn på ikondrakt"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Namn på ikondrakta som skal brukast"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "Namn på ikondrakt"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "Namn på ikondrakta som skal brukast"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "Namn på nøkkeltema"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "Namn på nøkkeltemaet si RC-fil som skal lastast"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "Snøggtast for menylinje"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr "Snøggtast som går til menylinja"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "Grense for draing"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Kor mange pikslar markøren skal flytta seg før det vert rekna som å dra"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "Skriftnamn"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "Namn på standardskrift"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "Ikonstorleik"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 #, fuzzy
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Liste over ikonstorleikar (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr ""
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr ""
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr ""
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr ""
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr ""
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 #, fuzzy
 msgid "Cursor theme name"
 msgstr "Namn på ikondrakt"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 #, fuzzy
 msgid "Name of the cursor theme to use"
 msgstr "Namn på ikondrakta som skal brukast"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 #, fuzzy
 msgid "Cursor theme size"
 msgstr "Skrivemerke synleg"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 #, fuzzy
 msgid "Size to use for cursors"
 msgstr "Fargen som skal brukast på oddetalsrader"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Om arkfaner skal visast eller ikkje"
@@ -4011,19 +4021,19 @@ msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr ""
 "Retninga teksten går. Frå høgre til venstre, eller frå venstre til høgre."
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Skildring av skrifttypen som ein streng, t.d. «Sans Italic 12»"
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Skriftstil som ein PangoStyle, t.d. PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "Skriftvariant som ein PangoVariant, t.d. PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -4031,15 +4041,15 @@ msgstr ""
 "Skriftvekt som eit heiltal. Sjå førehandsdefinerte verdiar i PangoWeight, t."
 "d. PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "Skriftstrekking som ein PangoStretch, t.d. PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "Skriftstorleik, i Pango-einingar"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -4049,11 +4059,11 @@ msgstr ""
 "Dette er den tilrådde måten, sidan det tilpassar seg endringar i drakt o.a. "
 "Pango omdefinerer somme skaleringar slik som PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Venstre-, høgre- eller senterjustering"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 #, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -4063,31 +4073,31 @@ msgstr ""
 "hint når teksten vert teikna. Dersom du ikkje skjønar denne parameteren, "
 "treng du han truleg ikkje"
 
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "Venstremarg"
 
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Breidda på venstremargen, i pikslar"
 
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "Høgremarg"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Breidda på høgremargen, i pikslar"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Innrykk"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kor mykje avsnittet skal rykkast inn, i pikslar"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 #, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
@@ -4096,179 +4106,179 @@ msgstr ""
 "Kor mykje over grunnlinja teksten skal stå, i pikslar (teksten kjem under "
 "grunnlinja dersom denne er negativ)"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "Pikslar over linjer"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pikslar med tomrom over avsnitt"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "Pikslar under linjer"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pikslar med tomrom under avsnitt"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "Pikslar inni bryting"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pikslar med tomrom mellom brotne linjer i eit avsnitt"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Om linjer skal brytast aldri, mellom ord, eller mellom teikn."
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabulatorar"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Eigendefinerte tabulatorar for denne teksten"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "Usynleg"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 #, fuzzy
 msgid "Whether this text is hidden."
 msgstr "Om denne merkinga påvirkar hevinga"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 #, fuzzy
 msgid "Paragraph background color name"
 msgstr "Namn på bakgrunnsfargen til cella"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 #, fuzzy
 msgid "Paragraph background color as a string"
 msgstr "Bakgrunnsfarge, som ein streng"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 #, fuzzy
 msgid "Paragraph background color"
 msgstr "Bakgrunnsfargen til cella"
 
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "Bakgrunnsfarge som ein GdkColor (treng ikkje vera allokert)"
 
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "Full høgde for bakgrunnen er satt"
 
 # TRN: Er dette rett omsetjing av "tag"?
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "Om denne merkinga påvirkar bakgrunnshøgda"
 
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr ""
 
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr ""
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr ""
 
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr ""
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "Plassering satt"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "Om denne merkinga påvirkar plassering av avsnitt"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "Venstre marg satt"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "Om denne merkinga påvirkar venstremargen"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "Innrykk satt"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "Om denne merkinga påvirkar innrykk"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "Pikslar over linjer satt"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Om denne merkinga påvirkar talet på pikslar over linjene"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "Pikslar under linjene"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "Pikslar innanfor brytingssettet"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "Om denne merkinga påvirkar talet på pikslar mellom brotne linjer"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "Høgre marg satt"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "Om denne merkinga påvirkar høgremargen"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "Brytingsmåte satt"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "Om denne merkinga påvirkar måten linjer vert brotne på"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "Arkfaner satt"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "Om denne merkinga påvirkar arkfaner"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "Usynleg satt"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "Om denne merkinga påvirkar om tekst er synleg eller ikkje"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 #, fuzzy
 msgid "Paragraph background set"
 msgstr "Bakgrunnsfargen til cella er satt"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 #, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Om denne merkinga påvirkar bakgrunnsfargen"

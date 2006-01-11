@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-09-03 20:59+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -383,18 +383,18 @@ msgstr ""
 "меморију"
 
 # графички дизајнери, како се ово преводи?
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподржан JPEG простор боја (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -403,7 +403,7 @@ msgstr ""
 "Квалитет JPEG-а мора бити вредност између 0 и 100; не могу да разумем "
 "вредност „%s“."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -411,7 +411,7 @@ msgstr ""
 "Квалитет JPEG-а мора бити вредност између 0 и 100; није дозвољена вредност „%"
 "d“."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG запис слике"
 
@@ -1396,15 +1396,15 @@ msgstr "Точак боја"
 msgid "Color Selection"
 msgstr "Избор боје"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Изабери _све"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Начини уноса"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Убаци контролни Уникод знак"
 
@@ -1418,20 +1418,15 @@ msgstr "Неисправно име датотеке: %s"
 msgid "Select A File"
 msgstr "Изабери датотеку"
 
-# ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Лично"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Радна површ"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ништа)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Нека друга..."
 
@@ -1875,7 +1870,7 @@ msgid "(Empty)"
 msgstr "(Празно)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1900,7 +1895,7 @@ msgstr "Систем датотека"
 msgid "Could not get a stock icon for %s"
 msgstr "Не могу да учитам препоручену икону за %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1908,22 +1903,22 @@ msgid ""
 msgstr ""
 "Име „%s“ није исправно зато што садржи знак „%s“. Користите неко друго име."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Неуспешно снимање обележивача: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "„%s“ је већ међу обележивачима"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "„%s“ није међу обележивачима"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Грешка при добављању података за „/“: %s"
@@ -1994,7 +1989,7 @@ msgstr "_Гама вредност"
 msgid "Error loading icon: %s"
 msgstr "Грешка при учитавању иконе: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2007,7 +2002,7 @@ msgstr ""
 "Можете набавити примерак са:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Икона „%s“ није присутна у теми"
@@ -2095,7 +2090,7 @@ msgstr "(непознато)"
 msgid "clear"
 msgstr "очистити"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Изабери све"
 
@@ -2584,22 +2579,22 @@ msgstr "Не могу да пронађем мотор теме у путањи 
 msgid "--- No Tip ---"
 msgstr "—— Нема савета ——"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Непознат атрибут „%s“ у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Неочекивана почетна ознака „%s“ у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Празно"
 
@@ -2657,6 +2652,10 @@ msgstr "Иксов начин уноса (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не могу да сазнам податке о датотеци „%s“: %s"
+
+# ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
+#~ msgid "Home"
+#~ msgstr "Лично"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"

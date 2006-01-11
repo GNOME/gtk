@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-12-04 01:46+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -1135,7 +1135,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "ユーザがテキストを変更できるかどうかです"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "フォント"
 
@@ -1143,52 +1143,52 @@ msgstr "フォント"
 msgid "Font description as a string"
 msgstr "フォント記述の文字表現"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr "PangoFontDescription 構造体によるフォント記述"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "フォント・ファミリ"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "フォント・ファミリの名前 (例: Sans, Helvetica, Times, Monospace)"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "フォント・スタイル"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "フォント・バリアント"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "フォント・ウェイト"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "フォント・ストレッチ"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "フォント・サイズ"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "フォント・ポイント"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "ポイント単位でのフォントの大きさ"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "フォント・スケール"
 
@@ -1196,7 +1196,7 @@ msgstr "フォント・スケール"
 msgid "Font scaling factor"
 msgstr "フォントのスケール (率)"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "ライズ"
 
@@ -1205,23 +1205,23 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "テキストの基準線から上のオフセット (基準線から下の場合には負)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "打ち消し"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "テキストに打ち消し線を引くかどうか"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "下線"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "このテキストの下線のスタイル"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "言語"
 
@@ -1247,7 +1247,7 @@ msgstr ""
 "セル・レンダラが文字列全体を表示できる区画を持たない場合、文字列を Ellipsize "
 "する場所です"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "ボタンの幅"
@@ -1256,7 +1256,7 @@ msgstr "ボタンの幅"
 msgid "The desired width of the label, in characters"
 msgstr "ラベルの幅 (文字単位)"
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "ラップ・モード"
 
@@ -1276,115 +1276,115 @@ msgstr "折り返し幅"
 msgid "The width at which the text is wrapped"
 msgstr "ラベルをラップする際の幅です"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "背景色の設定"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "このタグが背景色に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "前景色の設定"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "このタグが前景色に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "編集可否の設定"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "このタグがテキストの編集可能に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "フォント・ファミリの設定"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "このタグがフォント・ファミリに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "フォント・スタイルの設定"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "このタグがフォント・スタイルに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "フォント・バリアント設定"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "このタグがフォント・バリアントに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "フォントの太さの設定"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "このタグがフォントの太さに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "フォントの展張の設定"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "このタグがフォントの展張に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "フォント・サイズの設定"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "このタグがフォント・サイズに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "フォント・スケールのセット"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "このタグが倍率でフォント・サイズを変更するかどうか"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "ライズの設定"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "このタグがライズに影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "打ち消し線の設定"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "このタグが打ち消し線に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "下線の設定"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "このタグが下線に影響するかどうか"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "言語の設定"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "このタグが描画するテキストの言語に影響するかどうか"
 
@@ -1476,7 +1476,7 @@ msgstr "アルファ値を使う"
 msgid "Whether or not to give the color an alpha value"
 msgstr "色にアルファ値を設定するかどうか"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "タイトル"
@@ -2068,19 +2068,19 @@ msgstr ""
 "GTK_FILE_CHOOSER_ACTION_SAVE のファイル選択で上書きするかどうかの確認ダイアロ"
 "グを表示します"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr "ダイアログ"
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr "使用するファイル選択ダイアログ"
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 msgid "The title of the file chooser dialog."
 msgstr "フォント選択ダイアログのタイトル"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr "ボタン・ウィジェットの幅 (文字単位)"
 
@@ -2488,7 +2488,7 @@ msgstr "ラベルのテキスト"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "ラベルのテキストに適用するスタイル属性の一覧"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "中央揃え"
 
@@ -3422,22 +3422,22 @@ msgstr "描画"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "セパレータを描画するか、空白にするかを指定します"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "ダブル・クリックの時間"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 "ダブル・クリックとして認識するために二回クリックする間の最大時間 (ミリ秒)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Double Click Distance"
 msgstr "ダブル・クリックの距離"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3445,27 +3445,27 @@ msgstr ""
 "ダブル・クリックとして認識するために二回クリックする間の最大距離 (ピクセル単"
 "位) です"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "カーソルの点滅"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "カーソルを点滅させるかどうかです"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "カーソルの点滅間隔"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "カーソルを点滅させる周期の長さ (ミリ秒) です"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "カーソルの分離"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3473,135 +3473,145 @@ msgstr ""
 "左→右方向と右→左方向へ記述する混成テキストに対して二つのカーソルを表示するか"
 "どうか"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "テーマ名"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "読み込むテーマのリソース・ファイルの名前"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "アイコン・テーマ名"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "使用するアイコンのテーマ名"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "アイコン・テーマ名"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "使用するアイコンのテーマ名"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "キーのテーマ名"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "読み込むキー・テーマのリソース・ファイルの名前"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "メニューバーのアクセラレータ"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr "メニューバーを有効にするキーバインディング"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "ドラッグ時のしきい値"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "ドラッグを開始するまでのカーソル移動量 (ピクセル単位)"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "フォント名"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "使用するデフォルトのフォント名"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "アイコンのサイズ"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "アイコンの大きさを示す並び (gtk-menu=16,16;gtk-button=20,20...)"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr "GTK のモジュール"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr "現在、利用可能な GTK モジュールの一覧です"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr "Xft アンチエイリアス"
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Xft フォントをアンチエイリアス表示するかどうかです; 0=しない、1=する、-1=デ"
 "フォルト"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr "Xft ヒンティング"
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Xft フォントをヒンティングするかどうかです; 0=しない、1=する、-1=デフォルト"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr "Xft ヒント・スタイル"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "使用するヒンティングの角度です; なし、細く、中ぐらい、完全"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "サブピクセルのアンチエイリアス化の種類です; なし、rgb、bgr、vrgb、vbgr"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft の解像度 (1024 x ドット/インチ) です; -1=デフォルト値"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 msgid "Cursor theme name"
 msgstr "カーソルのテーマ名"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 msgid "Name of the cursor theme to use"
 msgstr "使用するカーソルのテーマ名です"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 msgid "Cursor theme size"
 msgstr "カーソルのサイズ"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 msgid "Size to use for cursors"
 msgstr "使用するカーソルの大きさです"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr "ボタンの並び"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "ダイアログにあるボタンの並びを別のものにするか"
 
@@ -3888,19 +3898,19 @@ msgstr "テキストの向き"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "テキストを描画する向き (例: 右→左、または左→右)"
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "文字列によるフォント記述 (例: \"Sans Italic 12\")"
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "PangoStyle によるフォント記述 (例: PANGO_STYLE_ITALIC)"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "PangoVariant によるフォントの縦横比 (例: PANGO_VARIANT_SMALL_CAPS)"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -3908,15 +3918,15 @@ msgstr ""
 "フォントの太さ (整数値) で、PangoWeight で定義した事前定義値を参照のこと "
 "(例: PANGO_WEIGHT_BOLD)"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "PangoStretch によるフォントの伸び縮み (例: PANGO_STRETCH_CONDENSED)"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "Pango 単位によるフォントのサイズ"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3926,11 +3936,11 @@ msgstr ""
 "す。これはテーマの変更などに正しく対応します。よって推奨になります。Pango で"
 "は PANGO_SCALE_X_LARGE などのようないくつかの大きさを予め定義されています。"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "左、右、または中央揃え"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -3939,31 +3949,31 @@ msgstr ""
 "にこの情報をヒントとして利用します (セットしない場合は、適切なデフォルト値を"
 "使用します)"
 
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "左マージン"
 
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "左マージンの幅 (ピクセル単位)"
 
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "右マージン"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "右マージンの幅 (ピクセル単位)"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "インデント"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落のインデント量 (ピクセル単位)"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -3971,172 +3981,172 @@ msgstr ""
 "ベースラインより上 (負の方向にライズしている場合はベースラインより下) にある"
 "テキストのオフセット (ピクセル単位)"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "ラインより上のピクセル数"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落の上にある空白のピクセル数"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "ラインより下のピクセル数"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落の下にある空白のピクセル数"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "ラップ内部のピクセル数"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落でラップした行間との間にある空白のピクセル数"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "単語単位で行ラップしない、または文字単位で行ラップしないかどうか"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "タブ"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "このテキストのカスタム・タブ"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "不可視"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 msgid "Whether this text is hidden."
 msgstr "このテキストが非表示かどうか"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 msgid "Paragraph background color name"
 msgstr "段落の背景色"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 msgid "Paragraph background color as a string"
 msgstr "段落の背景色を示す文字列です"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 msgid "Paragraph background color"
 msgstr "段落の背景色"
 
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "段落の背景色を示す GdkColor 形式の文字列です (おそらく未確保)"
 
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "背景の完全な高さの設定"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "このタグが背景の高さに影響するかどうか"
 
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr "背景の点式の設定"
 
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr "このタグが背景の点式描画に影響するかどうか"
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr "前景の点式の設定"
 
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr "このタグが前景の点式描画に影響するかどうか"
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "均等割付けの設定"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "このタグが段落の均等割付けに影響するかどうか"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "左マージンの設定"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "このタグが左マージンに影響するかどうか"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "インデントの設定"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "このタグがインデントに影響するかどうか"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "ラインより上のピクセル数の設定"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "このタグがラインより上のピクセル数に影響するかどうか"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "ラインより下のピクセル数の設定"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "内部ラップのピクセル数の設定"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "このタグがラップした行間のピクセル数に影響するかどうか"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "右マージンの設定"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "このタグが右マージンに影響するかどうか"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "ラップ・モードの設定"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "このタグが行ラップ・モードに影響するかどうか"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "タブの設定"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "このタグがタブに影響するかどうか"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "隠蔽の設定"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "このタグがテキストの隠蔽に影響するかどうか"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 msgid "Paragraph background set"
 msgstr "段落の背景色設定"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 msgid "Whether this tag affects the paragraph background color"
 msgstr "このタグが段落の背景色に影響するかどうか"
 

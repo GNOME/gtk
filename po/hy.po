@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -373,31 +373,31 @@ msgstr ""
 "Հիշողությունը բավական չէ պատկերը բեռնելու համար. փորձեք ազատել "
 "հիշողությունը, փակելով որոշ ծրագրեր"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Չապահովվող JPEG գունային երանգ (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Չի հաջողվել հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%s' արժեքը անվերլուծելի է"
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%d' արժեքը անթույլատրելի է"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Պատկերի JPEG ֆորմատ"
 
@@ -1374,15 +1374,15 @@ msgstr "Գունային Անիվ"
 msgid "Color Selection"
 msgstr "Գույնի ընտրություն"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Ընտրել _Ամբողջը"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Ներմուծման _Ձևեր"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "_Ներմուծել Unicode Control Նիշ"
@@ -1397,19 +1397,15 @@ msgstr "Ֆայլի սխալ անվանում: %s"
 msgid "Select A File"
 msgstr "Ընտրեք Ֆայլը"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Տուն"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Աշխատանքային սեղան"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Ոչ մեկը)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Այլ..."
 
@@ -1862,7 +1858,7 @@ msgid "(Empty)"
 msgstr "(Դատարկ)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1888,7 +1884,7 @@ msgstr "Ֆայլային համակարգ"
 msgid "Could not get a stock icon for %s"
 msgstr "Չհաջողվեց ստանալ պահուստային պատկերակ %s–ի համար"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1897,22 +1893,22 @@ msgstr ""
 "\"%s\" անվանումը սխալ է, քանի որ այն պարունակում է \"%s\" նիշը։ Խնդրում ենք "
 "օգտագործել մեկ այլ անվանում։"
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Չհաջողվեց պահպանել էջանշանը %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' արդեն էջանշանների ցանկում է"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' էջանշանների ցանկում չկա"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'/': %s–ի համար ինֆորմացիա ստանալիս սխալ է տեղի ունեցել "
@@ -1984,7 +1980,7 @@ msgstr "_Գամմա արժեք"
 msgid "Error loading icon: %s"
 msgstr "Սխալ է տեղի ունեցել: %s պատկերակը բեռնելիս"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1997,7 +1993,7 @@ msgstr ""
 "Դրա օրինակը կարող եք ձեռք բերել այստեղից.\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' պատկերակը թեմայում չկա"
@@ -2086,7 +2082,7 @@ msgstr "(անհայտ)"
 msgid "clear"
 msgstr "մաքրել"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Ընտրել Ամբողջը"
 
@@ -2588,23 +2584,23 @@ msgstr "Չի հաջողվում գտնել թեմաների շարժիչը modul
 msgid "--- No Tip ---"
 msgstr "--- Հուշում չկա ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Անհայտ '%s' հատկանիշ %d տողի %d նիշում"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "Անսպասելի սկզբնային '%s' տվյալների տեսակը որոշող հատկանիշ %d տողի %d նիշում"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Անսպասելի նիշային տվյալներ %d տողի %d նիշում"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Դատարկ"
 
@@ -2665,6 +2661,9 @@ msgstr ""
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Չհաջողվեց ստանալ '%s' ֆայլի մասին տեղեկատվություն՝ %s"
+
+#~ msgid "Home"
+#~ msgstr "Տուն"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"

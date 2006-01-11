@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-11-20 15:34+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
@@ -360,31 +360,31 @@ msgid ""
 "memory"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป โปรดลองปิดโปรแกรมอื่นๆ เพื่อปล่อยความจำที่ถูกใช้อยู่"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "คุณภาพของรูป JPEG ต้องอยู่ระหว่าง 0 และ 100  ค่า '%s' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "คุณภาพของรูป JPEG ต้องอยู่ระหว่าง 0 และ 100  ค่า '%d' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "แฟ้มรูปชนิด JPEG"
 
@@ -1335,15 +1335,15 @@ msgstr "วงสี"
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
@@ -1357,19 +1357,15 @@ msgstr "ชื่อแฟ้มใช้ไม่ได้: %s"
 msgid "Select A File"
 msgstr "เลือกแฟ้ม"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "บ้าน"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "พื้นโต๊ะ"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ไม่มี)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "อื่นๆ ..."
 
@@ -1805,7 +1801,7 @@ msgid "(Empty)"
 msgstr "(ว่าง)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1830,29 +1826,29 @@ msgstr "ระบบแฟ้ม"
 msgid "Could not get a stock icon for %s"
 msgstr "ไม่สามารถอ่านไอคอนสำเร็จรูปสำหรับ %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr "ชื่อ \"%s\" ใช้ไม่ได้ เพราะมีอักขระ \"%s\" อยู่  กรุณาใช้ชื่ออื่น"
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ไม่สามารถบันทึกข้อมูลที่คั่นหน้า: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' มีในรายการที่คั่นหน้าอยู่แล้ว"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' ไม่มีอยู่ในรายการที่คั่นหน้า"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '/': %s"
@@ -1923,7 +1919,7 @@ msgstr "ค่าแ_กมมา"
 msgid "Error loading icon: %s"
 msgstr "ไม่สามารถโหลดไอคอน: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1935,7 +1931,7 @@ msgstr ""
 "คุณอาจจะต้องติดตั้งมัน คุณสามารถคัดลอกมันมาจาก\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ชุดตกแต่งไม่มีไอคอน '%s'"
@@ -2023,7 +2019,7 @@ msgstr "(ไม่รู้จัก)"
 msgid "clear"
 msgstr "ล้างออก"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "เลือกทั้งหมด"
 
@@ -2507,22 +2503,22 @@ msgstr "ไม่เจอเครื่องจัดการชุดตก
 msgid "--- No Tip ---"
 msgstr "--- ไม่มีข้อแนะนำ ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "ไม่รู้จักแอตทริบิวต์ '%s' บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ไม่ควรจะเจอแท็กเริ่มต้น '%s' บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ไม่ควรจะเจอข้อมูลตัวอักษร บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "ว่าง"
 
@@ -2580,6 +2576,9 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "บ้าน"
 
 #~ msgid "Writing %s failed: %s"
 #~ msgstr "บันทึก %s ไม่สำเร็จ: %s"

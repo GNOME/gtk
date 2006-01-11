@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-07-22 23:30+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -374,18 +374,18 @@ msgstr ""
 "Memória insuficiente para ler imagem, tente terminar algumas aplicações para "
 "libertar memória"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espaço de cor JPEG não suportado (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Incapaz de alocar memória para ler ficheiro JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -394,14 +394,14 @@ msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; incapaz de parsear valor '%"
 "s'."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; valor '%d' não é permitido."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "O formato de imagem JPEG"
 
@@ -1376,15 +1376,15 @@ msgstr "Roda de Cores"
 msgid "Color Selection"
 msgstr "Selecção de Fonte"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Seleccionar _Tudo"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Métodos de Introdução"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir Caracter de Controlo Unicode"
 
@@ -1398,19 +1398,15 @@ msgstr "Nome de ficheiro inválido: %s"
 msgid "Select A File"
 msgstr "Seleccionar Um Ficheiro"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Pasta Pessoal"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Ambiente de Trabalho"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Nenhum)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Outro..."
 
@@ -1858,7 +1854,7 @@ msgid "(Empty)"
 msgstr "(Vazio)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1883,7 +1879,7 @@ msgstr "Sistema de Ficheiros"
 msgid "Could not get a stock icon for %s"
 msgstr "Incapaz de obter um ícone base para %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1891,22 +1887,22 @@ msgid ""
 msgstr ""
 "O nome \"%s\" não é válido pois contém o caracter \"%s\". Utilize outro nome."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Falha ao gravar marcador: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' já existe na lista de marcadores"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' não existe na lista de marcadores"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Erro ao obter informação de '/': %s"
@@ -1977,7 +1973,7 @@ msgstr "Valor _Gama"
 msgid "Error loading icon: %s"
 msgstr "Erro ao ler o ícone: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1990,7 +1986,7 @@ msgstr ""
 "Poderá obter uma cópia em:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ícone '%s' não existe no tema"
@@ -2078,7 +2074,7 @@ msgstr "(desconhecido)"
 msgid "clear"
 msgstr "limpar"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
@@ -2562,22 +2558,22 @@ msgstr "Incapaz de localizar motor de temas na module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Sem Dica ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Atributo desconhecido '%s' na linha %d caracter %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Início de etiqueta '%s' inesperado na linha %d caracter %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dados de caracter inesperados na linha %d caracter %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Vazio"
 
@@ -2635,6 +2631,9 @@ msgstr "Método de Introdução X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Incapaz de obter informação para o ficheiro '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Pasta Pessoal"
 
 #~ msgid "_Credits"
 #~ msgstr "_Créditos"

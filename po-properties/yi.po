@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -1179,7 +1179,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "צי דער ניצער מעג ענדערן דעם טעקסט"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "שריפֿט"
 
@@ -1187,52 +1187,52 @@ msgstr "שריפֿט"
 msgid "Font description as a string"
 msgstr "שריפֿט באַשרײַבונג װי אַן אות־פֿאָדעם"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr "שריפֿט באַשרײַבונג װי אַ PangoFontDescription סטרוקטור"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "נאָמען פֿון שריפֿט משפּחה, װי למשל Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "שריפֿט סטיל"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "שריפֿט װאַריאַנט"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "שריפֿט װאָג"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "שריפֿט סקאַלירונג"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "שריפֿט פּונקטן"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "שריפֿט גרײס אין פּונקטן"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "שריפֿט מאָס"
 
@@ -1240,7 +1240,7 @@ msgstr "שריפֿט מאָס"
 msgid "Font scaling factor"
 msgstr "שריפֿט סקאַליר־פֿאַקטאָר"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "הײב"
 
@@ -1251,23 +1251,23 @@ msgstr ""
 "צולײג פֿון טעקסט איבער דעם אונטערגרונט (אונטער דעם אונטערגרונט אױב דער הײב "
 "איז נעגאַטיװ)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "צי מען זאָל דורכשטריכן דעם טעקסט"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "סטיל פֿון אונטערשטריך אין דעם טעקסט"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "שפּראַך"
 
@@ -1291,7 +1291,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 #, fuzzy
 msgid "Width In Characters"
@@ -1301,7 +1301,7 @@ msgstr "ברײט אין שריפֿטצײכנס"
 msgid "The desired width of the label, in characters"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "שאַר מאָדע"
 
@@ -1321,115 +1321,115 @@ msgstr "ברײט"
 msgid "The width at which the text is wrapped"
 msgstr "די פּאָזיציע װוּ דער איצטיקער באַטרעף װײַזט זיך"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "באַשטעטיק די הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "צי דאָס הענטל איז משפּיע די הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "באַשטעטיק די פֿאַר־פֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "צי דאָס הענטל איז משפּיע די פֿאַר־פֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "באַשטעטיק די רעדאַגירעװדיקײט"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "צי דאָס הענטל איז משפּיע די טעקסט־רעדאַגירעװדיקײט"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "באַשטעטיק די שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "באַשטעטיק דעם שריפֿט סטיל"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט סטיל"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "באַשטעטיק דעם שריפֿט װאַריאַנט"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט װאַריאַנט"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "באַשטעטיק די שריפֿט װאָג"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט װאָג"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "באַשטעטיק די שריפֿט סקאַלירונג"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט סקאַלירונג"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "באַשטעטיק די שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "באַשטעטיק די שריפֿט מאָס"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט מאָס"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "באַשטעטיק דעם הײב"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "צי דאָס הענטל איז משפּיע דעם הײב"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "באַשטעטיק דעם דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "צי דאָס הענטל איז משפּיע דעם דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "באַשטעטיק דעם אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "צי דאָס הענטל איז משפּיע דעם אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "באַשטעטיק שפּראַך"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער שפּראַך װי דער טעקסט פֿאָרמירט זיך"
 
@@ -1525,7 +1525,7 @@ msgstr "ניץ פֿאַרצײַכענונג"
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "טיטל"
@@ -2144,20 +2144,20 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2593,7 +2593,7 @@ msgstr "דער טעקסט פֿון דער עטיקעט"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "אַ רשימה פֿון סטיל־אַטריבוטן צו אַפּליקירן צום טעקסט פֿון דער עטיקעט"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "אױסגלײַכונג"
 
@@ -3569,11 +3569,11 @@ msgstr ""
 msgid "Whether the separator is drawn, or just blank"
 msgstr "אױב אָפּרוקערס װײַזן זיך װי װערטיקאַלישע ליניעס אָדער לײדיק אָרט"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "טאָפּל־קליק צײַט"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3581,12 +3581,12 @@ msgstr ""
 "גרעסטע צײַט צװישן צװײ קליקס, מען זאָל זײ אָננעמען װי אַ טאָפּל־קליק (אין "
 "מיליסעקונדען)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 #, fuzzy
 msgid "Double Click Distance"
 msgstr "טאָפּל־קליק צײַט"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 #, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
@@ -3595,165 +3595,175 @@ msgstr ""
 "גרעסטע צײַט צװישן צװײ קליקס, מען זאָל זײ אָננעמען װי אַ טאָפּל־קליק (אין "
 "מיליסעקונדען)"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "לױפֿער בליצלען"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "אױב דער לױפֿער זאָל בליצלען"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "לױפֿער־בליצלען צײַט"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "די לענג פֿון אַ לױפֿער־בליצלען ציקל, אין מיליסעקונדען"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "צעשפּאַלטענער לױפֿער"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "אױב צװײ לױפֿערס זאָלן זיך װײַזן אין פֿאַלן פֿון בײד־ריכטונגדיקן טעקסט"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "נאָמען פֿון טעמע RC טעקע אַרײַנצושטעלן"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 #, fuzzy
 msgid "Icon Theme Name"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 #, fuzzy
 msgid "Name of icon theme to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "טעמע נאָמען"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "שליסל־טעמע נאָמען"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "נאָמען פֿון שליסל־טעמע RC טעקע אַרײַנצושטעלן"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "מעניו־װירע פֿאַרגיכערער"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr "קלאַװיש־צובינד צו אַקטיװירן די מעניו־װירע"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "שלעפּ שװעל"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "מיט װיפֿל בילדצעלן דער לױפֿער קען זיך איבעררוקן אײדער ער הײבט אָן שלעפּן"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "שריפֿט נאָמען"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "בילדל גרײסן"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 #, fuzzy
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "רשימה פֿון בילדל גרײסן (gtk-menu=16,16;gtk-button=20,20...)"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr ""
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr ""
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr ""
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr ""
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr ""
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 #, fuzzy
 msgid "Cursor theme name"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 #, fuzzy
 msgid "Name of the cursor theme to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 #, fuzzy
 msgid "Cursor theme size"
 msgstr "זעעװדיקער לױפֿער"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 #, fuzzy
 msgid "Size to use for cursors"
 msgstr "פֿאַרב צו ניצן אין אומציפֿער־שורות"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
@@ -4052,19 +4062,19 @@ msgstr "טעקסט ריכטונג"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "טעקסט ריכטונג, דאָס הײסט, אָדער רעכטס־ביז־לינקס אָדער לינקס־ביז־רעכטס"
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "שריפֿט באַשרײַבונג װי אַן אות־פֿאָדעם, װי למשל \"Sans Italic 12\""
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "שריפֿט־סטיל װי אַ PangoStyle, װי למשל PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "שריפֿט־װאַריאַנט װי אַ PangoVariant, װי למשל PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -4072,15 +4082,15 @@ msgstr ""
 "שריפֿט־װאָג װי אַ גאַנצער נומער; זע די פֿאָרױס־דעפֿינירטע באַטרעפֿן אין PangoWeight, "
 "װי למשל PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "שריפֿט־שטרעק װי אַ PangoStretch, װי למשל PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "שריפֿט גרײס אין Pango אײנסן"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -4090,11 +4100,11 @@ msgstr ""
 "גרײס אַדאַפּטירט צו טעמע־ענדערונגען, און איז רעקאָמענדירט.  Pango דעפֿינירט פֿאָרױס "
 "עטלעכע מאָסן װי למשל PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "לינקע, רעכטע, אָדער צענטראַלע אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 #, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -4104,31 +4114,31 @@ msgstr ""
 "פֿאָרמירט דעם טעקסט.  אױב דו פֿאַרשטײסט ניט דעם פּאַראַמעטער, איז מסתּמא דאַרפֿסטו אים "
 "אױף כּפּרות."
 
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "לינקער זאַפּאַס"
 
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "ברײט פֿונעם לינקן זאַפּאַס, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "רעכטער זאַפּאַס"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "ברײט פֿונעם רעכטן זאַפּאַס, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "װיפֿל אײַנצוצײנדלען דעם פּאַראַגראַף, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 #, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
@@ -4137,178 +4147,178 @@ msgstr ""
 "צולײג פֿון טעקסט איבער דעם אונטערגרונט (אונטער דעם אונטערגרונט אױב דער הײב "
 "איז נעגאַטיװ)"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "בילדצעלן איבער די שורות"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "בילדצעלן פֿון לײדיקן אָרט איבער די פּאַראַגראַפֿן"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "בילדצעלן אונטער די שורות"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "בילדצעלן פֿון לײדיקן אָרט אונטער די פּאַראַגראַפֿן"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "בילדצעלן אינערלעכער שאַר"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "בילדצעלן פֿון לײדיקן אָרט צװישן געשאַרטע שורות אין אַ פּאַראַגראַף"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "אױב שורות שאַרן זיך קײן מאָל, בײַ װאָרט־ראַנדן, אָדער בײַ שריפֿטצײכן־ראַנדן"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "טאַבוליר גרענעצן"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "פֿאַראײגנטע טאַבוליר־גרענעצן פֿאַר דעם־אָ טעקסט"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "אומזעעװדיק"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 #, fuzzy
 msgid "Whether this text is hidden."
 msgstr "צי דאָס הענטל איז משפּיע דעם הײב"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 #, fuzzy
 msgid "Paragraph background color name"
 msgstr "צעל הינטערפֿאַרב נאָמען"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 #, fuzzy
 msgid "Paragraph background color as a string"
 msgstr "הינטערפֿאַרב װי אַן אות־פֿאָדעם"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 #, fuzzy
 msgid "Paragraph background color"
 msgstr "צעל הינטערפֿאַרב"
 
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "הינטער־פֿאַרב װי אַ Gdk פֿאַרב (אפֿשר אַ ניט־אױסגעטײלטע)"
 
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "באַשטעטיק הינטערגרונט פֿולע הײך"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער הינטערגרונט־הײך"
 
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr "באַשטעטיק הינטערגרונט פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער הינטערגרונט־פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr "פֿאַרגרונט הינטערגרונט פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער פֿאַרגרונט־פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "באַשטעטיק אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער פּאַראַגראַף־אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "באַשטעטיק לינקן זאַפּאַס"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דעם לינקן זאַפּאַס"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "באַשטעטיק אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "באַשטעטיק בילדצעלן איבער שורות"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער צאָל בילדצעלן איבער די שורות"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "באַשטעטיק בילדצעלן אונטער שורות"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "באַשטעטיק בילדצעלן אינערלעכן שאַר"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער צאָל בילדצעלן צװישן געשאַרטע שורות"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "באַשטעטיק רעכטן זאַפּאַס"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דעם רעכטן זאַפּאַס"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "באַשטעטיק שאַר־מאָדע"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער שאַר־מאָדע"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "באַשטעטיק טאַבוליר־גרענעצן"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער די טאַבוליר־גרענעצן"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "באַשטעטיק אומזעעװדיקײט"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער אומזעעװדיקײט"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 #, fuzzy
 msgid "Paragraph background set"
 msgstr "צעל באַשטעטיק די הינטערפֿאַרב"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 #, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "צי דאָס הענטל איז משפּיע די הינטערפֿאַרב"

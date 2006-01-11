@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -367,31 +367,31 @@ msgid ""
 "memory"
 msgstr "Ububiko Kuri Ibirimo Ishusho Porogaramu Kuri Kigenga Ububiko"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, fuzzy, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ibara Umwanya"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, fuzzy, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ububiko kugirango Itangira... IDOSIYE"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, fuzzy, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, fuzzy, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 #, fuzzy
 msgid "The JPEG image format"
 msgstr "Ishusho Imiterere"
@@ -1417,16 +1417,16 @@ msgstr "gutoranya ibara"
 # padmin/source\padialog.src:RID_FONTIMPORT_DIALOG.RID_FIMP_BTN_SELECTALL.text
 # #-#-#-#-#  padmin.pot (Gnome 2.12)  #-#-#-#-#
 # padmin/source\padialog.src:RID_ADDP_PAGE_OLDPRINTERS.RID_ADDP_OLD_BTN_SELECTALL.text
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 #, fuzzy
 msgid "Select _All"
 msgstr "Hitamo byose"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1441,21 +1441,17 @@ msgstr "Izina ry'idosiye:"
 msgid "Select A File"
 msgstr "Hitamo Byose"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "home"
-
 # sfx2/source\explorer\explorer.src:STR_SFX_DESKTOP.text
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Ibiro"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ntacyo)"
 
 # sw/source\ui\ribbar\workctrl.src:RID_INSERT_FIELD_CTRL.FN_INSERT_FIELD.text
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Ikindi..."
 
@@ -1949,7 +1945,7 @@ msgid "(Empty)"
 msgstr "(ubusa)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1975,29 +1971,29 @@ msgstr "imiterere ya dosiye"
 msgid "Could not get a stock icon for %s"
 msgstr "OYA Kubona a Agashushondanga kugirango"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, fuzzy, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr "Izina: ni OYA Byemewe Kirimo Inyuguti Gukoresha a Izina:"
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Mu kubika Byanze"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, fuzzy, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s'in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, fuzzy, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s'OYA in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Ibisobanuro kugirango"
@@ -2077,7 +2073,7 @@ msgstr "Agaciro"
 msgid "Error loading icon: %s"
 msgstr "Itangira... Agashushondanga"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, fuzzy, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2088,7 +2084,7 @@ msgstr ""
 "OYA Gushaka Agashushondanga OYA Byabonetse Kuri Kwinjiza porogaramu Kubona a "
 "Gukoporora Bivuye"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, fuzzy, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "OYA in"
@@ -2197,7 +2193,7 @@ msgstr "(Itazwi>"
 msgid "clear"
 msgstr "bigaragara,kigaragara"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Hitamo Byose"
 
@@ -2864,22 +2860,22 @@ msgstr "Kuri in"
 msgid "--- No Tip ---"
 msgstr "---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, fuzzy, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Ikiranga ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, fuzzy, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Gutangira Itagi: ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, fuzzy, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Inyuguti Ibyatanzwe ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "kirimo ubusa"
 
@@ -2937,6 +2933,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "OYA Kubona Ibisobanuro kugirango IDOSIYE"
+
+#~ msgid "Home"
+#~ msgstr "home"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

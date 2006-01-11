@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-05-18 22:28+0300\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -370,18 +370,18 @@ msgstr ""
 "Tidak cukup memori untuk membuka gambar, cobalah untuk menutup aplikasi "
 "lainnya untuk mengosongkan memori"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ruang warna JPEG tidak bisa ditampilkan (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -389,13 +389,13 @@ msgid ""
 msgstr ""
 "Kualitas JPEG harus bernilai antara 0 dan 100; Nilai '%s' tidak bisa di baca."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "Kualitas JPEG harus bernilai antara 0 dan 100; Nilai '%d' tidak boleh."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Format gambar JPEG"
 
@@ -1369,15 +1369,15 @@ msgstr "Roda Warna"
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
@@ -1391,19 +1391,15 @@ msgstr "Nama berkas ini salah: %s"
 msgid "Select A File"
 msgstr "Pilih Berkas"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Rumah"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Tidak ada)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Lainnya..."
 
@@ -1843,7 +1839,7 @@ msgid "(Empty)"
 msgstr "(Kosong)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1868,7 +1864,7 @@ msgstr "Sistem Berkas"
 msgid "Could not get a stock icon for %s"
 msgstr "Ikon stok %s tidak dapat dibuka"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1877,22 +1873,22 @@ msgstr ""
 "Jangan pakai nama \"%s\" karena ada karakter \"%s\" yang tidak sah. Silakan "
 "ganti dengan nama lain."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Gagal menyimpan buku alamat: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' sudah ada dalam daftar buku alamat"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' tidak ada dalam daftar buku alamat"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Informasi tentang '/' tidak tersedia': %s"
@@ -1963,7 +1959,7 @@ msgstr "Nilai _gamma"
 msgid "Error loading icon: %s"
 msgstr "Error saat membuka ikon: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1976,7 +1972,7 @@ msgstr ""
 "Anda bisa mendapatkannya dari:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tidak ada pada tema"
@@ -2064,7 +2060,7 @@ msgstr "(tidak diketahui)"
 msgid "clear"
 msgstr "kosongkan"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Pilih Semua"
 
@@ -2548,22 +2544,22 @@ msgstr "Tidak bisa menemukan mesin tematik pada module_path '%s',"
 msgid "--- No Tip ---"
 msgstr "--- Tidak ada tip ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Atribut '%s' pada baris %d kolom %d tidak dikenal"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tag awal '%s' pada baris %d kolom %d seharusnya tidak ada"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Data karakter pada baris %d kolom %d seharusnya tidak ada"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Kosong"
 
@@ -2621,3 +2617,6 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Gagal mengambil informasi mengenai berkas '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Rumah"

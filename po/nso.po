@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -378,18 +378,18 @@ msgstr ""
 "Ga go na kgopolo e lekanego go laiša seswantšho, leka go ntšha ditirišo tše "
 "itšego bakeng sa go bula kgopolo"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Sekgoba sa mmala sa JPEG seo se sa thekgwego (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "E ka se kgone go bea kgopolo bakeng sa go laiša faele ya JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -398,7 +398,7 @@ msgstr ""
 "Khwaliti ya JPEG e swanetše go ba boleng magareng ga 0 le 100; boleng bja '%"
 "s' bo ka se arolwe."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -406,7 +406,7 @@ msgstr ""
 "Khwaliti ya JPEG e swanetše go ba boleng magareng ga 0 le 100; boleng bja '%"
 "d' ga bo a dumelelwa."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Sebopego sa seswantšho sa JPEG"
 
@@ -1397,15 +1397,15 @@ msgstr "Leotwana la mmala"
 msgid "Color Selection"
 msgstr "Kgetho ya Mmala"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Kgetha _ka Moka"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Mekgwa _ya Tsebišo"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Tsenya Tlhaka ya Taolo ya Unicode"
 
@@ -1420,19 +1420,15 @@ msgstr "Leina la faele leo e sego la kgonthe: %s"
 msgid "Select A File"
 msgstr "Phumola Faele"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Gae"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Teseke"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Ga e gona)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr ""
 
@@ -1908,7 +1904,7 @@ msgid "(Empty)"
 msgstr "(Ga e na selo)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1934,7 +1930,7 @@ msgstr "Tshepedišo ya faele"
 msgid "Could not get a stock icon for %s"
 msgstr "E be e ka se hwetše leswao la setoko bakeng sa %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1943,22 +1939,22 @@ msgstr ""
 "Leina le la \"%s\" ga se la kgonthe ka gobane le na le tlhaka ya \"%s\". Hle "
 "diriša leina le fapanego."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Go boloka puku-tshwayo go padile (%s)"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "phošo ya go hwetša tshedimošo bakeng sa '%s': %s"
@@ -2029,7 +2025,7 @@ msgstr "_Boleng bja Gamma"
 msgid "Error loading icon: %s"
 msgstr "Phošo ya go laiša leswao: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2042,7 +2038,7 @@ msgstr ""
 "O ka hwetša kopi go:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Leswao la '%s' ga le gona sehlogong"
@@ -2130,7 +2126,7 @@ msgstr "(e sa tsebjwego)"
 msgid "clear"
 msgstr "phumola"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Kgetha ka Moka"
 
@@ -2624,24 +2620,24 @@ msgstr "Ga e kgone go hwetša entšene ya sehlogo tsejaneng ya_karolo: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ga go na keletšo ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Pharologanyo e sa tsebjwego ya '%s' mothalading wa %d wa tlhaka ya %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "Kgokaganyo ya go thoma yeo e sa letelwago la '%s' mothalading wa %d wa "
 "tlhaka ya %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Tsebišo yeo e sa letelwago ya tlhaka mothalading wa %d wa tlhaka ya %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Ga e na selo"
 
@@ -2701,6 +2697,9 @@ msgstr "Mokgwa wa Tsebišo wa X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E be e ka se hwetše tshedimošo bakeng sa faele ya '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Gae"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

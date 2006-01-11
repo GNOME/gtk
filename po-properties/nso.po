@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -1182,7 +1182,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Ge eba sengwalwa se ka mpshafatšwa ke modiriši"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "Fonto"
 
@@ -1190,53 +1190,53 @@ msgstr "Fonto"
 msgid "Font description as a string"
 msgstr "Tlhaloso ya fonto bjalo ka mothaladi"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Tlhaloso ya fonto bjalo ka sebopego sa Tlhaloso ya Fonto ya Pango"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "Lelapa la fonto"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 "Leina la lelapa la fonto, ka mohlala, Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "Setaele sa fonto"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "Go fapana ga fonto"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "Boima bja fonto"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "Go atologa ga fonto"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "Bogolo bja fonto"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "Dintlha tša fonto"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "Bogolo bja fonto dintlheng"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "Sekala sa fonto"
 
@@ -1244,7 +1244,7 @@ msgstr "Sekala sa fonto"
 msgid "Font scaling factor"
 msgstr "Lebaka la go kala fonto"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "Gola"
 
@@ -1255,23 +1255,23 @@ msgstr ""
 "Go leka-lekanywa ga sengwalwa ka godimo ga mothaladi wa motheo (ka tlase ga "
 "mothaladi wa motheo ge kgolo e le e sa ratwego)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "Kgabaganya"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "Ge eba o swanetše go kgabaganya sengwalwa"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "Thalela"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "Setaele sa go thalela bakeng sa sengwalwa se"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "Leleme"
 
@@ -1295,7 +1295,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 #, fuzzy
 msgid "Width In Characters"
@@ -1305,7 +1305,7 @@ msgstr "Bophara mašaleng"
 msgid "The desired width of the label, in characters"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "Mokgwa wa go phuthela"
 
@@ -1324,115 +1324,115 @@ msgstr "Phuthela bophara"
 msgid "The width at which the text is wrapped"
 msgstr "Boemo bjo boleng bja gona bjale bo bontšhitšwego go bjona"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "Peakanyo ya ka morago"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "Ge eba kgokaganyo ye e ama mmala o bonagalago ka morago"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "Peakanyo ya ka pele"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "Ge eba kgokaganyo ye e kgoma mmala o bonagalago ka pele"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "Peakanyo ya go lokišega"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "Ge eba kgokaganyo ye e kgoma go lokišega ga sengwalwa"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "Peakanyo ya lelapa la fonto"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "Ge eba kgokaganyo ye e kgoma lapa la fonto"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "Peakanyo ya setaele sa fonto"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "Ge eba kgokaganyo ye e kgoma setaele sa fonto"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "Peakanyo ya go fapana ga fonto"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "Ge eba kgokaganyo ye e kgoma go fapana ga fonto"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "Peakanyo ya boima bja fonto"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "Ge eba kgokaganyo ye e kgoma boima bja fonto"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "Peakanyo ya go atologa ga fonto"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "Ge eba kgokaganyo ye e kgoma go atologa ga fonto"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "Peakanyo ya bogolo bja fonto"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "Ge eba kgokaganyo ye e kgoma bogolo bja fonto"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "Peakanyo ya sekala sa fonto"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Ge eba kgokaganyo ye e kala bogolo bja fonto ka lebaka"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "Peakanyo ya go Gola"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "Ge eba kgokaganyo e kgoma go gola"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "Peakanyo ya go kgabaganya"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "Ge eba kgokaganyo ye e kgoma go kgabaganya"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "Peakanyo ya go thalela"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "Ge eba kgokaganyo ye e kgoma go thalela"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "Peakanyo ya leleme"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Ge eba kgokaganyo ye e kgoma leleme leo sengwalwa se newago ka lona"
 
@@ -1528,7 +1528,7 @@ msgstr "Diriša alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Ge eba o swanetše go nea mmala boleng bja alfa goba aowa"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Sehlogo"
@@ -2157,20 +2157,20 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Sehlogo sa poledišano ka kgetho ya fonto"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2610,7 +2610,7 @@ msgstr ""
 "Lelokelelo la dipharologanyo tša setaele tšeo di tla dirišwago sengwalweng "
 "sa leswao"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Tokafatšo"
 
@@ -3631,11 +3631,11 @@ msgstr "Thala"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Ge eba searodi se thadilwe, goba ga go na selo"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "Kgotla Nako Gabedi"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3643,11 +3643,11 @@ msgstr ""
 "Nako e kgolo e dumeletšwego magareng ga go kgotla gabedi gore go tšewe gore "
 "di kgotlilwe gabedi (go metsotswana e ka tlase ga motsotswana)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Double Click Distance"
 msgstr "Kgotla Monabo Gabedi"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3655,29 +3655,29 @@ msgstr ""
 "Monabo o mogolo o dumeletšwego magareng ga go kgotla gabedi bakeng sa gore "
 "go tšewe gore go kgotlilwe gabedi (dikarolwaneng tša go bopa diswantšho)"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "Go Ponya ga Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "Ge eba leswao la go šupa mo o lego le swanetše go ponya"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "Nako ya go Ponya ga Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr ""
 "Botelele bja modikologo wa go ponya ga leswao leo le bontšhago mo o lego, ka "
 "metsotswana yeo e lego ka tlase ga motsotswana"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "Arola Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3686,99 +3686,109 @@ msgstr ""
 "bakeng sa sengwalwa se tswakilwego sa lanngele go ya go lagoja le lagoja go "
 "ya go lanngele"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "Leina la Sehlogo"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "Leina la faele ya sehlogo sa RC yeo e swanetšego go laišwa"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "Leina la Sehlogo sa Leswao"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "Leina la Sehlogo sa Bohlokwa"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "Leina la faele ya sehlogo sa bohlokwa sa RC yeo e swanetšego go laišwa"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "Seakgofiši sa bara ya lelokelelo la dikagare"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 "Go kopanywa ga senotlelo bakeng sa go diragatša bara ya lelokelelo la "
 "dikagare"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "Goga mojako"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Palo ya dikarolwana tše bopago seswantšho tšeo leswao leo le bontšhago mo go "
 "lego le ka di šuthišago pele ga go goga"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "Leina la Fonto"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "Leina la fonto ya tlhaelelo yeo e swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "Bogolo bja Leswao"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 #, fuzzy
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lelokelelo la bogolo bja leswao (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr "Selwantšhi sa leina le lengwe sa Xft"
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Ge eba go swanetše go lwantšhwe leina le lengwe la difonto tša Xft; 0=aowa, "
 "1=ee, -1=tlhaelelo"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr "Go eletša ga Xft"
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Ge eba go swanetše go eletšwe difonto tša Xft; 0=aowa, 1=ee, -1=tlhaelelo"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr "Setaele sa Keletšo ya Xft"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 #, fuzzy
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
@@ -3786,51 +3796,51 @@ msgstr ""
 "Ke bokgoleng bofe bja go eletša bjo bo swanetšego go dirišwa; ga bo gona, "
 "ganyenyane, magareng, goba ka mo go tletšego"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr "RGBA ya Xft"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Mohuta wa seka-dikarolwana tše bopago seswantšho tše lwantšhago leina le "
 "lengwe: ga e gona, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr "DPI ya Xft"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Tiišetšo bakeng sa Xft, go 1024 * dikhutlo/noko. -1 go diriša boleng bja "
 "tlhaelelo"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 #, fuzzy
 msgid "Cursor theme name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 #, fuzzy
 msgid "Name of the cursor theme to use"
 msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 #, fuzzy
 msgid "Cursor theme size"
 msgstr "Go Bonagala ga Leswao leo le bontšhago mo o lego"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 #, fuzzy
 msgid "Size to use for cursors"
 msgstr "Mmala wo o swanetšego go dirišetšwa methalo e sa lekanelago"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Ge eba maswao a setoko a swanetše go bontšhwa ka dikonopeng"
@@ -4149,22 +4159,22 @@ msgstr ""
 "Mo sengwalwa se lebilego gona, ka mohlala, lagoja go ya go lanngele goba "
 "lanngele go ya go lagoja"
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr ""
 "Tlhaloso ya fonto bjalo ka mothaladi, ka mohlala. \"Sans e Sekamego 12\""
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Setaele sa fonto bjalo ka PangoStyle, ka mohlala, PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr ""
 "Go fapana ga fonto bjalo ka go PangoVariant, ka mohlala, "
 "PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -4172,17 +4182,17 @@ msgstr ""
 "Boima bja fonto bjalo ka palotlalo, bona dika tšeo di hlalositšwego e sa le "
 "pele go PangoWeight, ka mohlala, PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
 "Go otlologa ga fonto bjalo ka go PangoStretch, ka mohlala, "
 "PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "Bogolo bja fonto dikarolong tša Pango"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -4193,11 +4203,11 @@ msgstr ""
 "bj.bj, ka gona se a eletšwa. Pango e hlalosa e sa le pele dikala tše dingwe "
 "tše bjalo ka PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Tokafatšo ya lanngele, lagoja, goba ya magareng"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 #, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -4207,33 +4217,33 @@ msgstr ""
 "diriša se bjalo ka keletšo ge e fana ka sengwalwa. Ge e ba o sa kwešiše "
 "tekanyo ye, mohlomongwe ga o e hloke"
 
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "Morumo wa lanngele"
 
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Bophara bja morumo wa lanngele dikarolwaneng tše bopago seswantšho"
 
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "Morumo wa lagoja"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Bophara bja morumo wa lagoja dikarolwaneng tše bopago seswantšho"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Ngwala magareng ga mela"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 "Tekanyo ya go ngwala magareng ga mela ya serapa, dikarolwaneng tše bopago "
 "seswantšho"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 #, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
@@ -4243,191 +4253,191 @@ msgstr ""
 "mothaladi wa motheo ge eba go gola e se mo go botse) dikarolwaneng tše "
 "bopago seswantšho"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "Dikarolwana tše bopago seswantšho ka godimo ga methaladi"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 "Dikarolwana tše bopago seswantšho tša sekgoba seo se se nago selo ka godimo "
 "ga dirapa"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "Dikarolwana tše bopago seswantšho ka tlase ga methaladi"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 "Dikarolwana tše bopago seswantšho tša sekgoba seo se se nago selo ka tlase "
 "ga dirapa"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "Dikarolwana tše bopago seswantšho ka gare ga sephuthedi"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Dikarolwana tše bopago seswantšho tša sekgoba seo se senago selo magareng ga "
 "methaladi e phuthetšwego serapeng"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Ge eba go swanetše go phuthelwa methaladi le gatee, mellwaneng ya lentšu, "
 "goba mellwaneng ya tlhaka"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Di-tab"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Di-tab tše tlwaetšwego bakeng sa sengwalwa se"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "E sa bonagalego"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 #, fuzzy
 msgid "Whether this text is hidden."
 msgstr "Ge eba kgokaganyo e kgoma go gola"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 #, fuzzy
 msgid "Paragraph background color name"
 msgstr "Leina la mmala wa bokamorago bja sele"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 #, fuzzy
 msgid "Paragraph background color as a string"
 msgstr "Mmala o bonagalago ka morago bjalo ka mothaladi"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 #, fuzzy
 msgid "Paragraph background color"
 msgstr "Mmala o bonagalago ka morago wa sele"
 
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr ""
 "Mmala o bonagalago ka morago bjalo ka (mohlomongwe o sa abjwago) GdkColor"
 
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "Peakanyo ya bophagamo bjo tletšego bjo bo lego ka morago"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "Ge eba leswao le le kgoma bophagamo bjo bo lego ka morago"
 
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr "Peakanyo ya go fsifatša ka pele"
 
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr "Ge eba leswao le le kgoma go fsifatšwa mo go lego ka morago"
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr "Peakanyo ya go fsifatša ka pele"
 
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr "Ge eba leswao le le kgoma go fsifatšwa ga ka pele"
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "Peakanyo ya tokafatšo"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "Ge eba leswao le le kgoma tokafatšo ya serapa"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "Peakanyo ya morumo wa lanngele"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "Ge eba leswao le le kgoma morumo wa lanngele"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "Peakanyo ya go ngwala magareng ga methaladi"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "Ge eba leswao le le kgoma go ngwala magareng ga methaladi"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "Peakanyo ya dikarolwana tše bopago seswantšho ka godimo ga methaladi"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr ""
 "Ge eba leswao le le kgoma palo ya dikarolwana tše bopago seswantšho ka "
 "godimo ga methaladi"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "Peakanyo ya dikarolwana tše bopago seswantšho ka tlase ga methaladi"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "Peakanyo ya dikarolwana tše bopago seswantšho ka gare ga sephuthedi"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 "Ge eba leswao le le kgoma palo ya dikarolwana tše bopago seswantšho magareng "
 "ga methaladi e phuthetšwego"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "Peakanyo ya morumo wa lagoja"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "Ge eba leswao le le kgoma morumo wa lagoja"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "Peakanyo ya mokgwa wa go phuthela"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "Ge eba leswao le le kgoma mokgwa wa go phuthela mothaladi"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "Peakanyo ya di-tab"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "Ge eba leswao le le kgoma di-tab"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "Peakanyo ya go se bonagale"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "Ge eba leswao le le kgoma go bonagala ga sengwalwa"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 #, fuzzy
 msgid "Paragraph background set"
 msgstr "Peakanyo ya bokamorago bja sele"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 #, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ge eba kgokaganyo ye e ama mmala o bonagalago ka morago"

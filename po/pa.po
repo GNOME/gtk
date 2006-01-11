@@ -76,7 +76,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-11-01 08:08+0530\n"
 "Last-Translator: Amanpreet Singh Alam <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -435,31 +435,31 @@ msgid ""
 "memory"
 msgstr "ਚਿੱਤਰ ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ, ਕੁਝ ਕਾਰਜਾਂ ਨੂੰ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ ਖਾਲੀ ਕਰੋ"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG ਰੰਗ ਸਪੇਸ (%s) ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਹੀ"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%s' ਨੂੰ ਪਾਰਸ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%d' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ।"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG ਚਿੱਤਰ ਫਾਰਮਿਟ"
 
@@ -1419,15 +1419,15 @@ msgstr "ਰੰਗ ਚੱਕਰ"
 msgid "Color Selection"
 msgstr "ਰੰਗ ਚੋਣ"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "ਸਭ ਚੁਣੋ(_A)"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "ਇੰਪੁੱਟ ਢੰਗ(_M)"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "ਯੂਨੀਕੋਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
 
@@ -1441,19 +1441,15 @@ msgstr "ਗਲਤ ਫਾਇਲ ਨਾਂ: %s"
 msgid "Select A File"
 msgstr "ਇੱਕ ਫਾਇਲ ਚੁਣੋ"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "ਘਰ"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "ਵੇਹੜਾ"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "ਹੋਰ..."
 
@@ -1890,7 +1886,7 @@ msgid "(Empty)"
 msgstr "(ਖਾਲੀ)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1915,7 +1911,7 @@ msgstr "ਫਾਇਲ ਸਿਸਟਮ"
 msgid "Could not get a stock icon for %s"
 msgstr "'%s' ਸਟਾਕ ਆਈਕਾਨ ਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1923,22 +1919,22 @@ msgid ""
 msgstr ""
 "ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ਬੁੱਕਮਾਰਕ ਸੰਭਾਲਣ 'ਚ ਅਸਫਲ: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' ਪਹਿਲਾਂ ਹੀ ਬੁੱਕਮਾਰਕ ਸੂਚੀ ਵਿੱਚ ਮੌਜੂਦ ਹੈ"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' ਬੁੱਕਮਾਰਕ ਸੂਚੀ ਵਿੱਚ ਮੌਜੂਦ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'/' ਲਈ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s"
@@ -2009,7 +2005,7 @@ msgstr "ਗਾਮਾ ਮੁੱਲ(_G)"
 msgid "Error loading icon: %s"
 msgstr "ਆਈਕਾਨ ਲੋਡ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2022,7 +2018,7 @@ msgstr ""
 "ਤੁਸੀ ਇਸ ਦੀ ਨਕਲ ਇਥੋਂ ਪਰਾਪਤ ਕਰ ਸਕਦੇ ਹੋ:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ਸਰੂਪ ਵਿੱਚ ਆਈਕਾਨ '%s' ਮੌਜੂਦ ਨਹੀ ਹੈ"
@@ -2110,7 +2106,7 @@ msgstr "(ਅਣਜਾਣ)"
 msgid "clear"
 msgstr "ਸਾਫ਼"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "ਸਭ ਚੁਣੋ"
 
@@ -2593,22 +2589,22 @@ msgstr "ਮੈਡੀਊਲ ਮਾਰਗ ਵਿੱਚ ਸਰੂਪ ਇੰਜਣ �
 msgid "--- No Tip ---"
 msgstr "--- ਸੰਕੇਤ ਨਹੀ ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "ਅਣਜਾਣ ਵਿਸ਼ੇਸਤਾ '%s' ਸਤਰ %d 'ਤੇ ਅੱਖਰ %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ਬੇ-ਲੋਡ਼ੀਦਾ ਸ਼ੁਰੂਆਤੀ ਟੈਗ '%s' ਸਤਰ %d 'ਤੇ ਅੱਖਰ %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ਬੇ-ਲੋਡ਼ੀਦਾ ਅੱਖਰ ਡਾਟਾ ਸਤਰ %d 'ਤੇ ਅੱਖਰ %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "ਖਾਲੀ"
 
@@ -2666,3 +2662,6 @@ msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
+
+#~ msgid "Home"
+#~ msgstr "ਘਰ"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-08-09 22:45+0100\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -1145,7 +1145,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "A chaiff y defnyddiwr olygu'r testun"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "Ffont"
 
@@ -1153,52 +1153,52 @@ msgstr "Ffont"
 msgid "Font description as a string"
 msgstr "Disgrifiad ffont fel llinyn"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Disgrifiad ffont fel strwythur PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "Teulu'r ffont"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Enw teulu'r ffont"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "Arddull y ffont"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "Amrywiad y ffont"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "Pwysau'r ffont"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "Ymestyniad y ffont"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "Maint y ffont"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "Pwyntiau'r ffont"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "Maint y ffont mewn pwyntiau"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "Graddfa'r ffont"
 
@@ -1206,7 +1206,7 @@ msgstr "Graddfa'r ffont"
 msgid "Font scaling factor"
 msgstr "Ffactor graddio'r  ffont"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "Esgyniad"
 
@@ -1217,23 +1217,23 @@ msgstr ""
 "Atred y testun uwchben y llinell sail (islaw'r llinell sail os yw'r esgyniad "
 "yn negyddol)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "Taro drwyddo"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "A ddylid croesi drwy'r testun"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "Tanlinelli"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "Arddull tanlinellu'r testun"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "Iaith"
 
@@ -1260,7 +1260,7 @@ msgstr ""
 "Y man dewisol i roi marc colli geiriau (...) yn y llinyn, os nad oes gan y "
 "llunydd cellau ddigon o le i ddangos y llinyn yn gyfan, neu o gwbl"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Lled Mewn Nodau"
@@ -1269,7 +1269,7 @@ msgstr "Lled Mewn Nodau"
 msgid "The desired width of the label, in characters"
 msgstr "Lled ddewisol y label, mewn nodau"
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "Modd amlapio"
 
@@ -1289,116 +1289,116 @@ msgstr "Lled amlapio"
 msgid "The width at which the text is wrapped"
 msgstr "At ba led i amlapio'r testun"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "Gosod cefndir"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "A ydy'r tag hwn yn effeithio ar liw'r cefndir"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "Gosod blaendir"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "A ydy'r tag hwn yn effeithio ar liw'r blaendir"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "Gosod a yw'n olygadwy"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "A ydy'r tag hwn yn effeithio ar olygadwyedd y testun"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "Gosodir teulu ffont"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "A ydy'r tag hwn yn gosod teulu'r ffont"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "Gosod Arddull Ffont"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "A ydy'r tag hwn yn effeithio ar arddull y ffont"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "Gosod amrywiant ffont"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "A ydy'r tag hwn yn effeithio amrywiant y ffont"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "Gosod pwysau ffont"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "A ydy'r tag hwn yn effeithio pwysau'r ffont"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "Gosod estyniad ffont"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "A ydy'r tag hwn yn effeithio ar estyniad y ffont"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "Gosod maint ffont"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "A ydy'r tag hwn yn effeithio ar faint y ffont"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "Gosod graddfa ffont"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "A ydy'r tag hwn yn graddio'r ffont"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "Gosod esgyniad"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "A ydy'r tag hwn yn effeithio'r esgyniad"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "Gosod croesi"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "A ydy'r tag hwn yn effeithio ar groesi"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "Gosod Tanlinelli"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "A ydy'r tag hwn yn effeithio ar danlinelli"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "Gosod iaith"
 
 # EFALLAI
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "A ydy'r tag hwn yn effeithio'r iaith y llunnir y testun yma ynddi"
 
@@ -1491,7 +1491,7 @@ msgstr "Defnyddio alffa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "A ddylid rhoi gwerth alffa i'r lliw ai peidio"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Teitl"
@@ -2081,19 +2081,19 @@ msgstr ""
 "A fydd dewisydd ffeil yn GTK_FILE_CHOOSER_ACTION_SAVE yn rhoi deialog "
 "cadarnhad trosysgrifo os yw'r defnyddiwr yn dewis ffeil sy'n bodoli eisoes."
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr "Deialog"
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr "Pa ddeialog dewisydd ffeiliau i'w ddefnyddio."
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 msgid "The title of the file chooser dialog."
 msgstr "Teitl y deialog dewis ffeil"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr "Lled ddewisol y teclyn botwm, mewn nodau."
 
@@ -2510,7 +2510,7 @@ msgstr "Testun y label"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Rhestr o briodweddau arddull i'w cymhwyso at destun y label"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Unioni"
 
@@ -3472,11 +3472,11 @@ msgstr "Arlunio"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "A arlunnir y gwahanydd, neu le wag"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "Amser Clic Dwbl"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3484,39 +3484,39 @@ msgstr ""
 "Yr amser hiraf rhwng dau glic er mwyn eu trin yn glic dwbl (mewn milfedau "
 "eiliadau)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Double Click Distance"
 msgstr "Pellter Clic Dwbl"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
 "Y pellter hiraf rhwng dau glic er mwyn eu trin yn glic dwbl (mewn picseli)"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "Chwincio'r Cyrchydd"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "A ddylai'r cyrchydd chwincio"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "Amser Chwincio'r Cyrchydd"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Hyd cylchdro chwincio'r cyrchydd, mewn milfedau eiliad"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "Cyrchydd Hollt"
 
 # EFALLAI
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3524,137 +3524,147 @@ msgstr ""
 "A ddylid dangos dau gyrchydd ar gyfer testun cymysg chwith-i-dde a de-i-"
 "chwith"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "Enw Thema"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "Enw'r ffeil RC thema i'w lwytho"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "Enw Thema Eicon"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "Enw'r thema eicon i'w ddefnyddio"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "Enw Thema Eicon"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "Enw'r thema eicon i'w ddefnyddio"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "Enw'r Thema Allweddol"
 
 # EFALLAI
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "Enw ffeil RC thema allweddol i'w lwytho"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "Cyflymydd bar dewislen"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr "Bysellrwymiad er mwyn gweithredu'r bar dewislen"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "Trothwy llusgo"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Y nifer o bicseli gall y cyrchydd symud cyn llusgo"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "Enw Ffont"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "Enw'r ffont rhagosodedig i'w ddefnyddio"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "Meintiau Eiconau"
 
 # TRWSIO
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Rhestr meintiau eiconau (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr "Modylau GTK"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr "Rhestr o'r modylau GTK sy'n weithredol ar hyn o bryd"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr "Datamgennu Xft"
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "a ddylid datamgennu ffontiau Xft; 0=na, 1=ie, -1=rhagosodiad"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr "Awgrymu Xft"
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "A ddylid defnyddio awgrymiadau ffontiau Xft; 0=na, 1=ie, -1=rhagosodiad"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr "Arddull Awgrymiad Xft"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "Pa radd o awgrymu i'w ddefnyddio; dim, ychydig, canolig, llawn"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr "RGBA Xft"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Y math o ddatamgennu isbicsel; dim, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr "Dot y Fodfedd Xft"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Y cydraniad ar gyfer Xft, mewn 1024 * dotiau/modfedd. -1 er mwyn defnyddio'r "
 "rhagosodiad"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 msgid "Cursor theme name"
 msgstr "Enw Thema Cyrchwr"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 msgid "Name of the cursor theme to use"
 msgstr "Enw'r thema cyrchwr i'w defnyddio"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 msgid "Cursor theme size"
 msgstr "Maint thema cyrchwr"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 msgid "Size to use for cursors"
 msgstr "Y maint i'w ddefnyddio ar gyfer cyrchwyr"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr "Trefn fotymau arall"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "A ddylai botymau mewn deialogau ddefnyddio'r dewis arall ar gyfer y drefn "
@@ -3958,19 +3968,19 @@ msgstr "Cyfeiriad y testun"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Cyfeiriad y testun, h.y. dde-i'r-chwith neu chwith-i'r-dde"
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Disgrifiad ffont fel llinyn, e.e. \"Sans Italic 12\""
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Arddull ffont fel PangoStyle, e.e. PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "Amrywiad ffont fel PangoVariant, e.e. PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -3978,15 +3988,15 @@ msgstr ""
 "Pwysau'r ffont fel cyfanrif, gweler gwerthoedd yn PangoWeight; e.e. "
 "PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "Ymestyniad y ffont fel PangoStretch, e.e. PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "Maint y ffont mewn unedau Pango"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3996,11 +4006,11 @@ msgstr ""
 "Mae hyn yn addasu'n gywir i newidiadau mewn thema a.y.b., felly argymhellir "
 "hyn. Mae Pango yn diffinio rhai graddfeydd megis PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Unioni i'r chwith, i'r dde, neu yn y canol"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -4010,34 +4020,34 @@ msgstr ""
 "rhagosodedig sy'n addas."
 
 # EFALLAI
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "Ymyl chwith"
 
 # EFALLAI
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Lled yr ymyl chwith mewn picseli"
 
 # EFALLAI
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "Ymyl dde"
 
 # EFALLAI
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Lled yr ymyl dde mewn picseli"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Mewnoli"
 
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Faint i fewnoli'r paragraff, mewn picseli"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -4045,181 +4055,181 @@ msgstr ""
 "Atred y testun uwchben y llinell sail (islaw'r llinell sail os yw'r esgyniad "
 "yn negyddol) mewn unedau Pango"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "Picseli uwchben llinellau"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Picseli o le gwag uwchben paragraffau"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "Picseli islaw llinellau"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Picseli o le gwag islaw paragraffau"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "Picseli o fewn amlap"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Picseli o le gwag rhwng llinellau wedi eu hamlapio o fewn paragraff"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "A ddylid amlapio llinellau: fyth, ger ffiniau geiriau, neu ger ffiniau nodau"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabiau"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Tabiau addasedig ar gyfer y testun yma"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "Anweladwy"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 msgid "Whether this text is hidden."
 msgstr "A yw'r testun wedi'i guddio."
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 msgid "Paragraph background color name"
 msgstr "Enw lliw cefndir paragraff"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 msgid "Paragraph background color as a string"
 msgstr "Lliw cefndir paragraff mewn llinyn"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 msgid "Paragraph background color"
 msgstr "Lliw cefndir paragraff"
 
 # EFALLAI (neilltuo?)
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "Lliw cefndir paragraff fel lliw GdkColor (efallai heb ei neilltuo)"
 
 # EFALLAI
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "Gosod holl uchder y cefndir"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "A ydy'r tag hwn yn effeithio ar uchder y cefndir"
 
 # EFALLAI
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr "Gosod dotwaith y cefndir"
 
 # EFALLAI
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr "A ydy'r tag hwn yn effeithio ar ddotwaith y cefndir"
 
 # EFALLAI
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr "Gosod dotwaith y blaendir"
 
 # EFALLAI
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr "A ydy'r tag hwn yn effeithio ar ddotwaith y cefndir"
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "Gosod unioniad"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "A ydy'r tag hwn yn effeithio unioniad paragraffau"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "Gosod ymyl chwith"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "A ydy'r tag yma yn effeithio ar yr ymyl chwith"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "Gosod mewnleoliad"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "A ydy'r tag hwn yn effeithio ar fewnoliad"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "Gosod picseli uwchben llinellau"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "A ydy'r tag hwn yn effeithio ar y nifer o bicseli uwchben llinellau"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "Gosod picseli islaw llinellau"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "Gosod picseli o fewn amlap"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 "A ydy'r tag hwn yn effeithio ar y nifer o bicseli rhwng llinellau wedi'i "
 "amlapio"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "Gosod ymyl dde"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "A ydy'r tag hwn yn effeithio ar yr ymyl dde"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "Gosod modd amlapio"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "A ydy'r tag hwn yn effeithio ar y modd amlapio llinellau"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "Gosod tabiau"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "A ydy'r tag yma'n effeithio tabiau"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "Gosod gwelededd"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "A ydy'r tag hwn yn effeithio ar welededd y testun"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 msgid "Paragraph background set"
 msgstr "Gosod cefndir paragraff"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 msgid "Whether this tag affects the paragraph background color"
 msgstr "A ydy'r tag hwn yn effeithio ar liw cefndir paragraff"
 

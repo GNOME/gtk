@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-09-04 21:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -1141,7 +1141,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "ব্যবহারকারি এই টেক্সকে বদলাতে পারবেন কিনা"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
-#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:295 gtk/gtktexttag.c:303
 msgid "Font"
 msgstr "ফন্ট"
 
@@ -1149,53 +1149,53 @@ msgstr "ফন্ট"
 msgid "Font description as a string"
 msgstr "ফন্টের সংক্ষিপ্ত বর্ণনা"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:304
 msgid "Font description as a PangoFontDescription struct"
 msgstr ""
 "PangoFontDescription স্ট্রাকচার (বিশেষ প্রকৃতির তথ্যমালা) হিসেবে ফন্টের বর্ণনা"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:311
 msgid "Font family"
 msgstr "ফন্ট বর্গ"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:312
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "ফন্টের বর্গের নাম, যেমন সান্স, হেলভেটিকা, টাইম্‌স, মোনোস্পেস"
 
 #: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
-#: gtk/gtktexttag.c:312
+#: gtk/gtktexttag.c:319
 msgid "Font style"
 msgstr "ফন্টের ধরন"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
-#: gtk/gtktexttag.c:321
+#: gtk/gtktexttag.c:328
 msgid "Font variant"
 msgstr "ফন্টের রূপভেদ"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
-#: gtk/gtktexttag.c:330
+#: gtk/gtktexttag.c:337
 msgid "Font weight"
 msgstr "ফন্টের আকৃতি"
 
 #: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
-#: gtk/gtktexttag.c:341
+#: gtk/gtktexttag.c:348
 msgid "Font stretch"
 msgstr "ফন্ট প্রসারন"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
-#: gtk/gtktexttag.c:350
+#: gtk/gtktexttag.c:357
 msgid "Font size"
 msgstr "ফন্টের আকার"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:377
 msgid "Font points"
 msgstr "ফন্ট বিন্দু"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:378
 msgid "Font size in points"
 msgstr "বিন্দু-মাপে ফন্টের আয়তন"
 
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:367
 msgid "Font scale"
 msgstr "ফন্ট"
 
@@ -1203,7 +1203,7 @@ msgstr "ফন্ট"
 msgid "Font scaling factor"
 msgstr "ফন্ট"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:446
 msgid "Rise"
 msgstr "উত্থিত"
 
@@ -1212,23 +1212,23 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "ভিত্তিভূমির ওপর টেক্সটের উচ্চতা (Offset) (উচ্চতা ঋনাত্মক হলে ভিত্তিভূমির নিচে)"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:486
 msgid "Strikethrough"
 msgstr "মাঝ বরাবর রেখাংকন"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:487
 msgid "Whether to strike through the text"
 msgstr "লেখার মাঝ বরাবর রেখাংকন করা হবে কিনা"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:494
 msgid "Underline"
 msgstr "নিচ দিয়ে রেখাংকন করা"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:495
 msgid "Style of underline for this text"
 msgstr "লেখার নিচ দিয়ে রেখাংকন করার ধরন"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:406
 msgid "Language"
 msgstr "ভাষা"
 
@@ -1255,7 +1255,7 @@ msgstr ""
 "পঙ্‌ক্তি প্রদর্শনের জন্য পর্যাপ্ত স্থান না থাকলে, উপবৃত্তকরণের মাধ্যমে যেখানে পঙ্‌ক্তিকে "
 "প্রদর্শন করা হবে।"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "অক্ষর হিসেবে প্রস্থ"
@@ -1264,7 +1264,7 @@ msgstr "অক্ষর হিসেবে প্রস্থ"
 msgid "The desired width of the label, in characters"
 msgstr "অক্ষর হিসেবে লেবেলের আকাঙ্খিত প্রস্থ"
 
-#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:503
 msgid "Wrap mode"
 msgstr "গুটিয়ে নেওয়ার মোড (Mode)"
 
@@ -1285,116 +1285,116 @@ msgstr "গুটিয়ে যাওয়ার দৈর্ঘ্য"
 msgid "The width at which the text is wrapped"
 msgstr "যে দৈর্ঘ্য অতিক্রমের পর টেক্সটকে গুটিয়ে নেওয়া হবে"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:573
 msgid "Background set"
 msgstr "পটভূমির সেট"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the background color"
 msgstr "এই ট্যাগটি পটভূমির রঙকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:585
 msgid "Foreground set"
 msgstr "পুরোভূমির সেট"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the foreground color"
 msgstr "এই ট্যাগটি পুরোভূমির রঙকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:593
 msgid "Editability set"
 msgstr "সম্পাদনযোগ্য সেট"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:594
 msgid "Whether this tag affects text editability"
 msgstr "এই ট্যাগটি টেক্সটের সম্পাদনযোগ্যতা প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:597
 msgid "Font family set"
 msgstr "বিভিন্ন ফন্ট বর্গের সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:598
 msgid "Whether this tag affects the font family"
 msgstr "এই ট্যাগ (tag) ফন্ট বর্গকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:601
 msgid "Font style set"
 msgstr "ফন্ট কায়দার (ধরন) সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the font style"
 msgstr "এই ট্যাগ (tag) ফন্ট কায়দাকে (ধরনকে) প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:605
 msgid "Font variant set"
 msgstr "ফন্ট রূপভেদের সেট"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:606
 msgid "Whether this tag affects the font variant"
 msgstr "এই ট্যাগ (tag) ফন্ট রূপভেদকে  প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:609
 msgid "Font weight set"
 msgstr "বিভিন্ন ফন্ট আকৃতির (Weight) সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:610
 msgid "Whether this tag affects the font weight"
 msgstr "এই ট্যাগ (tag) ফন্ট আকৃতিকে (Weight) প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:613
 msgid "Font stretch set"
 msgstr "ফন্ট প্রসারণ সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the font stretch"
 msgstr "এই ট্যাগ (tag) ফন্ট প্রসারণ প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:617
 msgid "Font size set"
 msgstr "ফন্ট আকারের সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:618
 msgid "Whether this tag affects the font size"
 msgstr "এই ট্যাগ (tag) ফন্ট আকারকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:621
 msgid "Font scale set"
 msgstr "ফন্ট স্কেল সেট"
 
 # FIXME
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:622
 msgid "Whether this tag scales the font size by a factor"
 msgstr "এই ট্যাগটি ফন্টের আকারকে কয়েক গুণ পরিবর্তন করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:641
 msgid "Rise set"
 msgstr "উত্থিত"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:642
 msgid "Whether this tag affects the rise"
 msgstr "এটি উত্থান (Rise) প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:657
 msgid "Strikethrough set"
 msgstr "মাঝ বরাবর রেখাংকন করা সেট"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:658
 msgid "Whether this tag affects strikethrough"
 msgstr "এই ট্যাগ (tag) মাঝ বরাবর রেখাংকন করা অবস্থাকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:665
 msgid "Underline set"
 msgstr "নিচ বরাবর রেখাংকন করা সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:666
 msgid "Whether this tag affects underlining"
 msgstr "এই ট্যাগ (tag) নিচ বরাবর রেখাংকন করাকে প্রভাবিত করে কিনা"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:629
 msgid "Language set"
 msgstr "ভাষা সমষ্টি"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:630
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "যে ভাষায় টেক্সট লেখা হচ্ছে, এই ট্যাগটি তাকে প্রভাবিত করে কিনা"
 
@@ -1488,7 +1488,7 @@ msgstr "আলফা ব্যবহার করো"
 msgid "Whether or not to give the color an alpha value"
 msgstr "রংটিকে একটি আলফা মান দেওয়া হবে কিনা"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "শিরোনাম"
@@ -2080,19 +2080,19 @@ msgstr ""
 "GTK_FILE_CHOOSER_ACTION_SAVE এর অধীনস্ত ফাইল নির্বাচক কোন ডায়ালগ উপস্থাপন করবে "
 "কিনা "
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:342
 msgid "Dialog"
 msgstr "ডায়ালগ"
 
-#: gtk/gtkfilechooserbutton.c:344
+#: gtk/gtkfilechooserbutton.c:343
 msgid "The file chooser dialog to use."
 msgstr "যে ফাইল নির্বাচক ডায়ালগটি ব্যবহার করা হবে।"
 
-#: gtk/gtkfilechooserbutton.c:359
+#: gtk/gtkfilechooserbutton.c:358
 msgid "The title of the file chooser dialog."
 msgstr "ফাইল নির্বাচক ডায়ালগের শিরোনাম।"
 
-#: gtk/gtkfilechooserbutton.c:373
+#: gtk/gtkfilechooserbutton.c:372
 msgid "The desired width of the button widget, in characters."
 msgstr "অক্ষর হিসেবে বাটন উইজেটের আকাঙ্খিত প্রস্থ।"
 
@@ -2506,7 +2506,7 @@ msgstr "লেবেলের টেক্সট"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "লেবেলের টেক্সটে প্রয়োগ করার মত কিছু বৈশিষ্ট্যের একটি তালিকা"
 
-#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "জাস্টিফিকেশন"
 
@@ -3456,11 +3456,11 @@ msgstr "অঙ্কন"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "বিভাজকটি আঁকা হয়েছে নাকি ফাঁকা"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Double Click Time"
 msgstr "জোড়া ক্লিকের সময় সীমা"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3468,11 +3468,11 @@ msgstr ""
 "সর্বোচ্চ যে সময়ের ভেতর পরপর দুইবার ক্লিক করলে তা জোড়া ক্লিক হিসেবে গণ্য হবে "
 "(মিলিসেকেন্ডে)"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Double Click Distance"
 msgstr "জোড়া ক্লিকের সময়ের ব্যবধান"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:210
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3480,27 +3480,27 @@ msgstr ""
 "সর্বোচ্চ যে সময়ের ভেতর পরপর দুইবার ক্লিক করলে তা জোড়া ক্লিক হিসেবে গণ্য হবে "
 "(পিক্সেল হিসেবে)"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Cursor Blink"
 msgstr "কার্সার জ্বলছে নিভছে"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Whether the cursor should blink"
 msgstr "কার্সার জ্বলা নেভা করবে কিনা"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Cursor Blink Time"
 msgstr "কার্সার জ্বলা নেভা করার সময়"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "মিলিসেকেন্ডে কার্সার জ্বলা-নেভা চক্রের দৈর্ঘ্য"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid "Split Cursor"
 msgstr "বিভক্ত কার্সার"
 
-#: gtk/gtksettings.c:233
+#: gtk/gtksettings.c:234
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3508,133 +3508,143 @@ msgstr ""
 "বাম-থেকে-ডান এবং ডান-থেকে-বাম এধরনের টেক্সটের মিশ্রণ প্রদর্শনের সময় দুটি কার্সার "
 "ব্যবহার করা হবে কিনা"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Theme Name"
 msgstr "থিমের নাম"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:242
 msgid "Name of theme RC file to load"
 msgstr "যে থিম আরসি (RC) ফাইলটি পড়া হবে"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:250
 msgid "Icon Theme Name"
 msgstr "আইকন থিমের নাম"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:251
 msgid "Name of icon theme to use"
 msgstr "যে আইকন থিম ব্যবহার করা হবে তার নাম"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:259
+#, fuzzy
+msgid "Fallback Icon Theme Name"
+msgstr "আইকন থিমের নাম"
+
+#: gtk/gtksettings.c:260
+#, fuzzy
+msgid "Name of a icon theme to fall back to"
+msgstr "যে আইকন থিম ব্যবহার করা হবে তার নাম"
+
+#: gtk/gtksettings.c:268
 msgid "Key Theme Name"
 msgstr "মূল (Key) থিমের নাম"
 
-#: gtk/gtksettings.c:258
+#: gtk/gtksettings.c:269
 msgid "Name of key theme RC file to load"
 msgstr "যে মূল থিম আরসি ফাইল লোড করা হবে তার নাম"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:277
 msgid "Menu bar accelerator"
 msgstr "মেনু বারের চটপট কী (Key)"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:278
 msgid "Keybinding to activate the menu bar"
 msgstr "যে সকল কী (Key) সমষ্টি মেনুবারকে সক্রিয় করে"
 
 # FIXME
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:286
 msgid "Drag threshold"
 msgstr "টেনে আনার সর্বোচ্চ সীমা"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "টেনে নেওয়ার পূর্বে কার্সারটি যে সংখ্যক পিক্সেল নড়তে পারে"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:295
 msgid "Font Name"
 msgstr "ফন্টের নাম"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:296
 msgid "Name of default font to use"
 msgstr "যে ডিফল্ট ফন্টটি ব্যবহার করা হবে তার নাম"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:304
 msgid "Icon Sizes"
 msgstr "আইকনের আয়তন"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "আইকনের আকারের তালিকা (gtk-menu= ১৬, ১৬:gtk-button=২০,২০..."
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "GTK Modules"
 msgstr "জি.টি.কে. মডিউল"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid "List of currently active GTK modules"
 msgstr "বর্তমানে সক্রিয় জি.টি.কে. মডিউলের তালিকা"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:323
 msgid "Xft Antialias"
 msgstr "Xft এন্টিএলিয়াসিং"
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:324
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Xft ফন্টের ওপর এন্টিএলিয়াস প্রযোজ্য হবে কিনা; ০=না, ১=হ্যাঁ, -১=ডিফল্ট"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:333
 msgid "Xft Hinting"
 msgstr "Xft হিন্টিং"
 
-#: gtk/gtksettings.c:323
+#: gtk/gtksettings.c:334
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Xft ফন্টের ওপর হিন্ট প্রযোজ্য হবে কিনা; ০=না, ১=হ্যাঁ, -১=ডিফল্ট"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:343
 msgid "Xft Hint Style"
 msgstr "Xft হিন্টের ধরন"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:344
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "যে মাত্রার হিন্টিং ব্যবহার করা হবে; কিছুই না, স্বল্প, মধ্যম, বা সম্পূর্ণ"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:353
 msgid "Xft RGBA"
 msgstr "Xft আরজিবিএ"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "সাবপিক্সেল এন্টিএলিয়াসিং-এর ধরন;  কিছুই না, স্বল্প, মধ্যম, বা সম্পূর্ণ"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:363
 msgid "Xft DPI"
 msgstr "Xft ডিপিএএই"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:364
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "১০২৪ * ডট/ইঞ্চি হিসেবে Xft-এর রেজলুশন।  -১ হলে ডিফল্ট মান ব্যবহার করা হবে"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:373
 msgid "Cursor theme name"
 msgstr "কার্সার থিমের নাম"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 msgid "Name of the cursor theme to use"
 msgstr "যে কার্সার থিম ব্যবহার করা হবে তার নাম"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:382
 msgid "Cursor theme size"
 msgstr "কার্সার থিমের আকার"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 msgid "Size to use for cursors"
 msgstr "যে আকারের কার্সার ব্যবহার করা হবে"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Alternative button order"
 msgstr "বিকল্প বাটন-বিন্যাস"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "ডায়ালগের বাটনসমূহ বিকল্প বাটন-বিন্যাস ব্যবহার করবে কিনা"
 
@@ -3922,19 +3932,19 @@ msgstr "টেক্সট লেখার দিক"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "টেক্সট লেখার দিক, যেমন ডান থেকে বাঁ, অথবা বাঁ থেকে ডান"
 
-#: gtk/gtktexttag.c:288
+#: gtk/gtktexttag.c:296
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "শব্দগুচ্ছ হিসাবে ফন্টের বর্ণনা, যেমন \"সান্স আইটালিক ১২\" "
 
-#: gtk/gtktexttag.c:313
+#: gtk/gtktexttag.c:320
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "PangoStyle হিসাবে ফন্টের ধরন, যেমন PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:322
+#: gtk/gtktexttag.c:329
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "PangoVariant হিসাবে ফন্টের রূপভেদ, যেমন PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:331
+#: gtk/gtktexttag.c:338
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -3942,15 +3952,15 @@ msgstr ""
 "পূর্ণ সংখ্যায় ফন্টের ওজন (Font Weight), PangoWeight-এ পূর্বনির্দিষ্ট মান দেখুন; যেমন, "
 "PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:342
+#: gtk/gtktexttag.c:349
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "PangoStretch হিসাবে ফন্টের প্রসারন, যেমন PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:351
+#: gtk/gtktexttag.c:358
 msgid "Font size in Pango units"
 msgstr "প্যানগো এককে ফন্টের আকার"
 
-#: gtk/gtktexttag.c:361
+#: gtk/gtktexttag.c:368
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3960,11 +3970,11 @@ msgstr ""
 "খাপখাইয়ে নেয় বিধায় এটি ব্যবহারের পরামর্শ দেওয়া গেল।  প্যানগো কিছু গুণিতক, যেমন "
 "PANGO_SCALE_X_LARGE-এর মান পূর্ব থেকে নির্ধারণ করে থাকে।"
 
-#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:388 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "বাম, ডান অথবা কেন্দ্রীয় জাস্টিফিকেশন (Justification)"
 
-#: gtk/gtktexttag.c:390
+#: gtk/gtktexttag.c:407
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -3973,32 +3983,32 @@ msgstr ""
 "ব্যবহার করতে পারে।  কোন কোড নির্ধারণ করা না হলে ডিফল্ট হিসেবে একটি উপযুক্ত কোড "
 "ব্যবহার করা হবে।"
 
-#: gtk/gtktexttag.c:397
+#: gtk/gtktexttag.c:414
 msgid "Left margin"
 msgstr "বাঁ দিকের মার্জিন"
 
-#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "বাঁ দিকের মার্জিনের প্রস্থ (পিক্সেলে)"
 
-#: gtk/gtktexttag.c:407
+#: gtk/gtktexttag.c:424
 msgid "Right margin"
 msgstr "ডান দিকের মার্জিন"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:425 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "ডান দিকের মার্জিনের প্রস্থ (পিক্সেলে)"
 
-#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "অবচ্ছেদ"
 
 # msgstr "ছাড়"
-#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:436 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "অনুচ্ছেদটিকে মার্জিন থেকে যত পিক্সেল ছাড় দেয়া হবে"
 
-#: gtk/gtktexttag.c:430
+#: gtk/gtktexttag.c:447
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -4006,178 +4016,178 @@ msgstr ""
 "বেস-লাইনের উপর অবস্থিত টেক্সটের অফসেট (উত্থান ঋণাত্মক হলে এটি বেস-লাইনের নিচের "
 "দিকে প্রযোজ্য)"
 
-#: gtk/gtktexttag.c:439
+#: gtk/gtktexttag.c:456
 msgid "Pixels above lines"
 msgstr "লাইনের উপরে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "অনুচ্ছেদের ওপর যত পিক্সেল ফাঁকা স্থান থাকবে"
 
-#: gtk/gtktexttag.c:449
+#: gtk/gtktexttag.c:466
 msgid "Pixels below lines"
 msgstr "লাইনের নিচে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:467 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "অনুচ্ছেদের নিচে যত পিক্সেল ফাঁকা স্থান থাকবে"
 
-#: gtk/gtktexttag.c:459
+#: gtk/gtktexttag.c:476
 msgid "Pixels inside wrap"
 msgstr "গুটিয়ে নেয়ার ক্ষেত্রে পিক্সেল সংখ্যা"
 
-#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:477 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "কোন অনুচ্ছেদের গুটিয়ে যাওয়া দুটি লাইনের মাঝে যত পিক্সেল ফাঁক থাকবে"
 
-#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
+#: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "লাইন কখনোই গুটিয়ে নেয়া হবে না, শব্দ শেষ হলে গুটিয়ে নেয়া হবে নাকি অক্ষর শেষ হলে "
 "গুটিয়ে নেয়া হবে"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "ট্যাব"
 
-#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
+#: gtk/gtktexttag.c:514 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "এই টেক্সটের জন্য ইচ্ছামাফিক আকারের ট্যাব"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:532
 msgid "Invisible"
 msgstr "অদৃশ্য"
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:533
 msgid "Whether this text is hidden."
 msgstr "এই টেক্সট লুকানো থাকবে কিনা।"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:547
 msgid "Paragraph background color name"
 msgstr "অনুচ্ছেদের পটভূমির রঙের নাম"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:548
 msgid "Paragraph background color as a string"
 msgstr "পঙ্‌ক্তি হিসেবে অনুচ্ছেদের পটভূমির রং "
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:563
 msgid "Paragraph background color"
 msgstr "অনুচ্ছেদের পটভূমির রং"
 
 # FIXME: Possibly == সম্ভবত ?
-#: gtk/gtktexttag.c:547
+#: gtk/gtktexttag.c:564
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "GdkColor হিসেবে অনুচ্ছেদের পটভূমির রং (সম্ভবত অবরাদ্দকৃত)"
 
-#: gtk/gtktexttag.c:560
+#: gtk/gtktexttag.c:577
 msgid "Background full height set"
 msgstr "পটভূমির পূর্ণ উচ্চতার সেট"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:578
 msgid "Whether this tag affects background height"
 msgstr "এই ট্যাগটি পটভূমির উচ্চতাকে প্রভাবিত করে কিনা"
 
 # FIXME: এইটা নিয়ে সমস্যা আছে
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:581
 msgid "Background stipple set"
 msgstr "পটভূমি আঁকায় ব্যবহৃত বিন্দুর সেট"
 
-#: gtk/gtktexttag.c:565
+#: gtk/gtktexttag.c:582
 msgid "Whether this tag affects the background stipple"
 msgstr "এই ট্যাগটি পটভূমি আঁকায় ব্যবহৃত বিন্দুর সেটকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:589
 msgid "Foreground stipple set"
 msgstr "পুরোভূমি আঁকায় ব্যবহৃত বিন্দুর সেট"
 
-#: gtk/gtktexttag.c:573
+#: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the foreground stipple"
 msgstr "এই ট্যাগটি পুরোভূমি আঁকায় ব্যবহৃত বিন্দুর সেটকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:625
 msgid "Justification set"
 msgstr "জাস্টিফিকেশন সেট"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects paragraph justification"
 msgstr "এই ট্যাগটি অনুচ্ছেদের জাস্টিফিকেশনে সাহায্য করে কিনা"
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:633
 msgid "Left margin set"
 msgstr "বাম দিকের মার্জিন সেট"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the left margin"
 msgstr "এই ট্যাগটি বাম দিকের মার্জিনকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:620
+#: gtk/gtktexttag.c:637
 msgid "Indent set"
 msgstr "অবচ্ছেদ সেট"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:638
 msgid "Whether this tag affects indentation"
 msgstr "এই ট্যাগটি অবচ্ছেদনকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:628
+#: gtk/gtktexttag.c:645
 msgid "Pixels above lines set"
 msgstr "লাইন সেটের ওপরে পিক্সেল"
 
-#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:646 gtk/gtktexttag.c:650
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "এই ট্যাগটি লাইন সেটের ওপর পিক্সেলের সংখ্যা প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:632
+#: gtk/gtktexttag.c:649
 msgid "Pixels below lines set"
 msgstr "লাইন সেটের নিচে পিক্সেল"
 
 # FIXME: বাজে অনুবাদ ;-(
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:653
 msgid "Pixels inside wrap set"
 msgstr "গুটিয়ে যাওয়ার সেটের মধ্যে পিক্সেল"
 
-#: gtk/gtktexttag.c:637
+#: gtk/gtktexttag.c:654
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 "এই ট্যাগটি গুটিয়ে যাওয়া লাইনসমূহের মাঝে অবস্থিত পিক্সেলের সংখ্যাকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:644
+#: gtk/gtktexttag.c:661
 msgid "Right margin set"
 msgstr "ডান দিকের মার্জিন সেট"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:662
 msgid "Whether this tag affects the right margin"
 msgstr "এই ট্যাগটি ডান দিকের মার্জিনকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:652
+#: gtk/gtktexttag.c:669
 msgid "Wrap mode set"
 msgstr "গুটিয়ে যাওয়ার মোড সেট"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:670
 msgid "Whether this tag affects line wrap mode"
 msgstr "এই ট্যাগটি লাইন গুটিয়ে যাওয়ার সেটকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:673
 msgid "Tabs set"
 msgstr "ট্যাব সেট"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:674
 msgid "Whether this tag affects tabs"
 msgstr "এই ট্যাগটি ট্যাবকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:660
+#: gtk/gtktexttag.c:677
 msgid "Invisible set"
 msgstr "অদৃশ্য সেট"
 
-#: gtk/gtktexttag.c:661
+#: gtk/gtktexttag.c:678
 msgid "Whether this tag affects text visibility"
 msgstr "এই ট্যাগটি টেক্সটের দৃষ্টিগ্রাহ্যতা প্রভাবিত করে কিনা"
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:681
 msgid "Paragraph background set"
 msgstr "অনুচ্ছেদের পটভূমির সেট"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:682
 msgid "Whether this tag affects the paragraph background color"
 msgstr "এই ট্যাগটি অনুচ্ছেদের পটভূমির রঙকে প্রভাবিত করে কিনা"
 

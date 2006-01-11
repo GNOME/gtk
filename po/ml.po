@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2003-07-05 10:29+0530\n"
 "Last-Translator: FSF-India <locale@gnu.org.in>\n"
 "Language-Team: Malayalam <locale@gnu.org.in>\n"
@@ -358,31 +358,31 @@ msgid ""
 msgstr ""
 "ഛായാശേഖരചിത്രം നിറയ്‌ക്കാന്‌ ആവശ്യമായ സ്ഥലമില്ല നിലവിലുള്ള ചില അനുപ്രയോഗങ്ങള്‌ മതിയാക്കുക"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "പിന്തുണണയ്‌ക്കപ്പെടാത്ത JPEG വര്‌ണരാജി (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ശേഖരം നിറയ‌ക്കുന്നതിനുവേണ്ട സ്ഥലം അനുവദിക്കാന് കഴിഞ്ഞില്ല‌"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG  ഛായാരീതി"
 
@@ -1339,16 +1339,16 @@ msgstr "ചക്രം"
 msgid "Color Selection"
 msgstr "അക്ഷരരൂപം തെരഞ്ഞെടുക്കല്"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 #, fuzzy
 msgid "Select _All"
 msgstr "എല്ലാം തെരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "നിവേശക രീതി"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1363,21 +1363,16 @@ msgstr "അസാധുവായ XBM ശേഖരം"
 msgid "Select A File"
 msgstr "രചന നീക്കംചെയ്യ‍ുക"
 
-#: gtk/gtkfilechooserbutton.c:68
-#, fuzzy
-msgid "Home"
-msgstr "ആസ്ഥാനം"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 #, fuzzy
 msgid "(None)"
 msgstr "ഒന്നും"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr ""
 
@@ -1834,7 +1829,7 @@ msgid "(Empty)"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1860,29 +1855,29 @@ msgstr "രചനകള്"
 msgid "Could not get a stock icon for %s"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
@@ -1953,7 +1948,7 @@ msgstr "ഗാമാ മൂല്യം"
 msgid "Error loading icon: %s"
 msgstr "സൂചകം നിറയ‌്ക്കുന്നതില്‌ പരാജയം : %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1962,7 +1957,7 @@ msgid ""
 "\t%s"
 msgstr ""
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr ""
@@ -2051,7 +2046,7 @@ msgstr "(അറിയാത്ത)"
 msgid "clear"
 msgstr "വൃത്തിയാക്കല്"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "എല്ലാം തെരഞ്ഞെടുക്കുക"
 
@@ -2546,22 +2541,22 @@ msgstr "%s ചിത്രം ലഭിക്കുന്നതില്‌ പ�
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr ""
 
@@ -2620,6 +2615,10 @@ msgstr "X നിവേശക രീതി"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി %s"
+
+#, fuzzy
+#~ msgid "Home"
+#~ msgstr "ആസ്ഥാനം"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

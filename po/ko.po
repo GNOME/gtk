@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2006-01-08 22:29+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -366,18 +366,18 @@ msgstr ""
 "그림을 읽어들이기에 메모리가 부족합니다.  메모리를 확보하려면 실행중인 프로그"
 "램을 끝내보십시오"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -385,14 +385,14 @@ msgid ""
 msgstr ""
 "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니다."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%d' 값은 쓸 수 없습니다."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG 그림 형식"
 
@@ -1358,15 +1358,15 @@ msgstr "색상환"
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -1380,19 +1380,15 @@ msgstr "잘못된 파일 이름: %s"
 msgid "Select A File"
 msgstr "파일을 선택하십시오"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "홈"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "바탕 화면"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(없음)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "기타..."
 
@@ -1832,7 +1828,7 @@ msgid "(Empty)"
 msgstr "(빈 파일)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1857,7 +1853,7 @@ msgstr "파일시스템"
 msgid "Could not get a stock icon for %s"
 msgstr "%s의 스톡 아이콘을 가져올 수 없습니다"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1866,22 +1862,22 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "'/'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
@@ -1953,7 +1949,7 @@ msgstr "감마 값(_G)"
 msgid "Error loading icon: %s"
 msgstr "아이콘 읽는 중 오류: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1966,7 +1962,7 @@ msgstr ""
 "다음에서 테마를 구할 수 있습니다:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "테마에 '%s' 아이콘이 없습니다"
@@ -2054,7 +2050,7 @@ msgstr "(모름)"
 msgid "clear"
 msgstr "지움"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "모두 선택"
 
@@ -2538,22 +2534,22 @@ msgstr "모듈을 module_path에서 찾을 수 없습니다: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- 팁 없음 ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "알 수 없는 속성 '%s' (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "갑작스런 시작 태그 '%s' (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "갑작스런 문자 데이터 (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "비었음"
 
@@ -2611,3 +2607,6 @@ msgstr "X 입력기"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
+
+#~ msgid "Home"
+#~ msgstr "홈"

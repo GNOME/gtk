@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-10-28 17:27+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -374,18 +374,18 @@ msgstr ""
 "Kujtesë e pamjaftueshme për të ngarkuar figurën, provoni të mbyllni disa "
 "programe që të lironi pak kujtesë"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ngjyrë hapësire JPEG (%s) e pasuportuar"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "E pamundur përgatitja e kujtesës për të ngarkuar file JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -394,14 +394,14 @@ msgstr ""
 "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%s' nuk mund të "
 "analizohet."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Formati JPEG"
 
@@ -1379,15 +1379,15 @@ msgstr "Rrethi i ngjyrave"
 msgid "Color Selection"
 msgstr "Zgjedhja e ngjyrës"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Zgjidh _gjithçka"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Metodat e Dhënies"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Shkruaj simbolin Unicode të kontrollit"
 
@@ -1401,19 +1401,15 @@ msgstr "Emër file jo korrekt: %s"
 msgid "Select A File"
 msgstr "Zgjidh një file"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Shtëpia"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Hapësira e punës"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Asnjë)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Tjetër..."
 
@@ -1855,7 +1851,7 @@ msgid "(Empty)"
 msgstr "(Bosh)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1880,7 +1876,7 @@ msgstr "File i sistemit"
 msgid "Could not get a stock icon for %s"
 msgstr "E pamundur marrja e ikonës paraqitëse për %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1889,22 +1885,22 @@ msgstr ""
 "Emri \"%s\" është i pavlefshëm pasi përmban simbolin \"%s\". Ju lutem "
 "përdorni një emër tjetër."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Ruajtja e libërshënuesit dështoi: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' ekziston tek lista e libërshënuesve"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' nuk ekziston tek lista e libërshënuesve"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Gabim gjatë marrjes së informacioneve për '/': %s"
@@ -1975,7 +1971,7 @@ msgstr "Vlera _gamma"
 msgid "Error loading icon: %s"
 msgstr "Gabim gjatë ngarkimit të ikonës: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1988,7 +1984,7 @@ msgstr ""
 "Mund të merrni një kopje nga:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonë '%s' jo e pranishme në temë"
@@ -2076,7 +2072,7 @@ msgstr "(nuk njihet)"
 msgid "clear"
 msgstr "pastro"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Zgjidh gjithçka"
 
@@ -2560,22 +2556,22 @@ msgstr "E pamundur gjetja e motorrit të temës tek module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "-- Asnjë Këshillë --"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Vlerë e panjohur '%s' në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tag hapës i papritur '%s' në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "E dhënë e papritur në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Bosh"
 
@@ -2633,3 +2629,6 @@ msgstr "Metodë Futjeje për X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Shtëpia"

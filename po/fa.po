@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -372,31 +372,31 @@ msgstr ""
 "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی "
 "برنامه‌ها را امتحان کنید"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "فضای رنگ JPEG پشتیبانی نمی‌شود (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "نمی‌توان برای بار کردن پرونده‌ی JPEG حافظه تخصیص داد"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "قالب تصویر JPEG"
 
@@ -1360,15 +1360,15 @@ msgstr "چرخ رنگ"
 msgid "Color Selection"
 msgstr "انتخاب رنگ"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "روش‌های ورودی"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
@@ -1382,20 +1382,16 @@ msgstr "نام پرونده‌ی نامعتبر: %s"
 msgid "Select A File"
 msgstr "یک پرونده انتخاب کنید"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "آغازه"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "رومیزی"
 
 # farmaan
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(هیچ‌کدام)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "غیره..."
 
@@ -1836,7 +1832,7 @@ msgid "(Empty)"
 msgstr "(خالی)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1862,7 +1858,7 @@ msgstr "سیستم پرونده‌ها"
 msgid "Could not get a stock icon for %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1870,22 +1866,22 @@ msgid ""
 msgstr ""
 "نام «%s» معتبر نیست چون شامل نویسه‌ی «%s» است. لطفاً از نام دیگری استفاده کنید."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ذخیره‌ی چوب‌الف شکست خورد: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "‏«%s» از قبل در فهرست چوب‌الفها موجود است"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "‏«%s» در فهرست چوب‌الفها موجود نیست"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "خطا در گرفتن اطلاعات برای «/»: %s"
@@ -1956,7 +1952,7 @@ msgstr "مقدار _گاما"
 msgid "Error loading icon: %s"
 msgstr "خطا در بار کردن شمایل: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1969,7 +1965,7 @@ msgstr ""
 "می‌توانید یک نسخه از نشانی زیر بگیرید:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "شمایل «%s» در تم وجود ندارد"
@@ -2057,7 +2053,7 @@ msgstr "(نامعلوم)"
 msgid "clear"
 msgstr "پاک شود"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "انتخاب همه"
 
@@ -2552,22 +2548,22 @@ msgstr "نمی‌توان موتور تم را در module_path یافت: «%s»
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "مشخصه‌ی نامعلوم «%s» در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "برچسب شروع غیرمنتظره «%s» در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "داده‌ی نویسه‌ای غیرمنتظره در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "خالی"
 
@@ -2625,6 +2621,9 @@ msgstr "شیوه‌ی ورودی X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "نمی‌توان برای پرونده‌ی «%s» اطلاعات گرفت: %s"
+
+#~ msgid "Home"
+#~ msgstr "آغازه"
 
 #, fuzzy
 #~ msgid "Writing %s failed: %s"

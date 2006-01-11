@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-08-15 14:03+0300\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -375,18 +375,18 @@ msgstr ""
 "Недостатньо пам'яті для завантаження зображення, спробуйте закрити деякі "
 "програми, щоб звільнити пам'ять"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Простір кольорів (%s) формату JPEG не підтримується"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не вдається виділити пам'ять для завантаження файлу JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -395,7 +395,7 @@ msgstr ""
 "Якість формату JPEG має бути в діапазоні від 0 до 100; значення \"%s\" не "
 "вдається опрацювати."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -403,7 +403,7 @@ msgstr ""
 "Якість формату JPEG має бути в діапазоні від 0 до 100; значення \"%d\" "
 "недопустиме."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Формат зображень JPEG"
 
@@ -1384,15 +1384,15 @@ msgstr "Колірний круг"
 msgid "Color Selection"
 msgstr "Вибір кольору"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "М_етоди вводу"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "Вс_тавити керівний символ Юнікоду"
 
@@ -1406,19 +1406,15 @@ msgstr "Неправильна назва файлу: %s"
 msgid "Select A File"
 msgstr "Виберіть файл"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Домашній каталог"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Немає)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Інший..."
 
@@ -1865,7 +1861,7 @@ msgid "(Empty)"
 msgstr "(Пусто)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1890,7 +1886,7 @@ msgstr "Файлова система"
 msgid "Could not get a stock icon for %s"
 msgstr "Не вдається отримати вбудований значок '%s'"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1899,22 +1895,22 @@ msgstr ""
 "Назва \"%s\" неправильна, бо вона містить символ \"%s\". Будь ласка, "
 "виберіть іншу назву."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Помилка збереження закладки: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' вже існує у списку закладок"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' не існує у списку закладок"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Помилка при отриманні інформації про '/': %s"
@@ -1985,7 +1981,7 @@ msgstr "_Гама-значення"
 msgid "Error loading icon: %s"
 msgstr "Помилка завантаження значка: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1998,7 +1994,7 @@ msgstr ""
 "Завантажити тему можна з:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значок \"%s\" відсутній у темі"
@@ -2086,7 +2082,7 @@ msgstr "(невідомо)"
 msgid "clear"
 msgstr "очистити"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Виділити все"
 
@@ -2570,22 +2566,22 @@ msgstr "Не вдається віднайти механізм роботи з 
 msgid "--- No Tip ---"
 msgstr "--- Немає підказки ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Невідомий атрибут \"%s\" (рядок %d, символ %d)"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Несподіваний початковий тег \"%s\" (рядок %d, символ %d)"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Несподівані символьні дані (рядок %d, символ %d)"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Пусто"
 
@@ -2643,3 +2639,6 @@ msgstr "Метод XInput"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не вдається отримати інформацію про файл '%s': %s"
+
+#~ msgid "Home"
+#~ msgstr "Домашній каталог"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2004-10-17 12:50+0100\n"
 "Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Language-Team: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
@@ -368,31 +368,31 @@ msgid ""
 "memory"
 msgstr "ప్రతిబింబమును నింపుటకు జ్ఞాపకశక్తి చాలదు. కొన్ని కార్యక్షేత్రములను తొలగించి మరలా ప్రయత్నించండి"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr " సహకారం లేనిJPEG వర్ణప్రదేశం   (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG నాణ్యత 0కు100 మధ్య విలువఅయివుండవలెను'%s' విలువను పదానుబంధీకరణ చేయలేము."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG నాణ్యత 0కు100కు మధ్య విలువ అయివుండవలెను '%d విలువ ఆమోదింపబడదు"
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "JPEG ప్రతిబింబరూప లావణ్యం"
 
@@ -1351,15 +1351,15 @@ msgstr "వర్ణచట్రం"
 msgid "Color Selection"
 msgstr "వర్ణెంపిక"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "అన్నిటినీ ఎంచుకొను"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "ఎగుబడి _విధానములు"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము"
 
@@ -1374,19 +1374,15 @@ msgstr "%sదస్త్రనామము చెల్లదు"
 msgid "Select A File"
 msgstr "దస్త్రమును ఎన్నుకో"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "నివాసం"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "రంగస్థలం"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(ఏమీలేదు)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "ఇతరములు"
 
@@ -1852,7 +1848,7 @@ msgid "(Empty)"
 msgstr "(ఖాళీ)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
@@ -1878,7 +1874,7 @@ msgstr "దస్త్ర వ్యవస్థ"
 msgid "Could not get a stock icon for %s"
 msgstr " %sకు స్టాకు ప్రతిమను గ్రహించలేకపోపోయాము."
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1887,22 +1883,22 @@ msgstr ""
 " \"%s\" నామము చెల్లదు. ఎందుకంటే అది  \"%s\"అక్షరాన్ని కలిగివుంది.. దయచేసి మరొక నామాన్ని "
 "ఉపయోగించండి.."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "గుర్తింపు దాచుట విఫలమైంది. (%s)"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr " '%s':కు సమాచారం తెచ్చుటలో దోషం %s"
@@ -1973,7 +1969,7 @@ msgstr "_గామా విలువ"
 msgid "Error loading icon: %s"
 msgstr "n: ప్రతిమలు నింపుటలో దోషం%s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1984,7 +1980,7 @@ msgstr ""
 "'%s' ప్రతిమను కనుగొనలేకపోయాము. '%s' వైవిద్యాంశం కూడా దొరకలేదు.బహుశా మీకు దాన్ని ప్రతిష్టాపించుకోవాలి."
 "మీరు దాన్ని   '%s' నుంచి నకలు తీసుకొనవచ్చు."
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ప్రతిమ '%s' వైద్యాంశంలో లేదు"
@@ -2072,7 +2068,7 @@ msgstr "(అపరిచిత)"
 msgid "clear"
 msgstr "శుభ్రం చేయు"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "అన్నిటినీ ఎన్నుకో"
 
@@ -2567,22 +2563,22 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "ఖాళీ"
 
@@ -2640,6 +2636,9 @@ msgstr ""
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr ""
+
+#~ msgid "Home"
+#~ msgstr "నివాసం"
 
 #~ msgid "_Credits"
 #~ msgstr "_పరపతులు"

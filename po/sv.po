@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2005-09-25 00:40+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -378,18 +378,18 @@ msgstr ""
 "Inte tillräckligt med minne för att läsa in bild, försök att avsluta några "
 "program för att frigöra minne"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG-färgrymden stöds inte (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kunde inte allokera minne för inläsning av JPEG-fil"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -398,7 +398,7 @@ msgstr ""
 "JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" kunde "
 "inte tolkas."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -406,7 +406,7 @@ msgstr ""
 "JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%d\" är inte "
 "tillåtet."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Bildformatet JPEG"
 
@@ -1377,15 +1377,15 @@ msgstr "Färghjul"
 msgid "Color Selection"
 msgstr "Färgval"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -1399,19 +1399,15 @@ msgstr "Ogiltigt filnamn: %s"
 msgid "Select A File"
 msgstr "Välj en fil"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Hem"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Skrivbord"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Annan..."
 
@@ -1853,7 +1849,7 @@ msgid "(Empty)"
 msgstr "(Tom)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1878,7 +1874,7 @@ msgstr "Filsystem"
 msgid "Could not get a stock icon for %s"
 msgstr "Kunde inte hämta en standardikon för %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1887,22 +1883,22 @@ msgstr ""
 "Namnet \"%s\" är inte giltigt eftersom det innehåller tecknet \"%s\". Använd "
 "ett annat namn."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Bokmärkessparande misslyckades: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" finns redan i bokmärkeslistan"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" finns inte i bokmärkeslistan"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Fel vid hämtning av information för \"/\": %s"
@@ -1973,7 +1969,7 @@ msgstr "_Gammavärde"
 msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1986,7 +1982,7 @@ msgstr ""
 "Du kan få tag i en kopia från:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonen \"%s\" finns inte i temat"
@@ -2076,7 +2072,7 @@ msgstr "(okänd)"
 msgid "clear"
 msgstr "töm"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Markera allt"
 
@@ -2559,22 +2555,22 @@ msgstr "Kan inte hitta temamotorn i \"module_path\": \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Inget tips ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Okänt attribut \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Tom"
 
@@ -2632,6 +2628,9 @@ msgstr "X-inmatningsmetod"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information för filen \"%s\": %s"
+
+#~ msgid "Home"
+#~ msgstr "Hem"
 
 #~ msgid "keyboard label|Super"
 #~ msgstr "Super"

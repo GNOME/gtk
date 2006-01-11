@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-09 13:30-0500\n"
+"POT-Creation-Date: 2006-01-11 14:45-0500\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -379,18 +379,18 @@ msgstr ""
 "Brak pamięci na odczytanie pliku, spróbuj zamknąć pewne aplikacje aby "
 "zwolnić pamięć"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nieobsługiwana przestrzeń kolorów w pliku JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:681 gdk-pixbuf/io-jpeg.c:946
-#: gdk-pixbuf/io-jpeg.c:955
+#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:740 gdk-pixbuf/io-jpeg.c:973
+#: gdk-pixbuf/io-jpeg.c:982
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Brak pamięci na odczytanie pliku JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:897
+#: gdk-pixbuf/io-jpeg.c:924
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -399,7 +399,7 @@ msgstr ""
 "Jakość obrazu JPEG musi być wartością od 0 do 100; wartość \"%s\" nie jest "
 "poprawna."
 
-#: gdk-pixbuf/io-jpeg.c:912
+#: gdk-pixbuf/io-jpeg.c:939
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -407,7 +407,7 @@ msgstr ""
 "Jakość obrazu JPEG musi być wartością od 0 do 100; wartość \"%d\" nie jest "
 "dozwolona."
 
-#: gdk-pixbuf/io-jpeg.c:1074
+#: gdk-pixbuf/io-jpeg.c:1101
 msgid "The JPEG image format"
 msgstr "Format obrazu JPEG"
 
@@ -1378,15 +1378,15 @@ msgstr "Koło kolorów"
 msgid "Color Selection"
 msgstr "Wybór koloru"
 
-#: gtk/gtkentry.c:4601 gtk/gtktextview.c:7119
+#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7119
 msgid "Select _All"
 msgstr "Zaznacz w_szystko"
 
-#: gtk/gtkentry.c:4613 gtk/gtktextview.c:7129
+#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7129
 msgid "Input _Methods"
 msgstr "_Metody wejściowe"
 
-#: gtk/gtkentry.c:4625 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7140
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unicode"
 
@@ -1400,19 +1400,15 @@ msgstr "Niepoprawna nazwa pliku: %s"
 msgid "Select A File"
 msgstr "Wybór pliku"
 
-#: gtk/gtkfilechooserbutton.c:68
-msgid "Home"
-msgstr "Domowy"
-
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1469
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1469
 msgid "Desktop"
 msgstr "Biurko"
 
-#: gtk/gtkfilechooserbutton.c:70
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(brak)"
 
-#: gtk/gtkfilechooserbutton.c:1566
+#: gtk/gtkfilechooserbutton.c:1568
 msgid "Other..."
 msgstr "Inne..."
 
@@ -1861,7 +1857,7 @@ msgid "(Empty)"
 msgstr "(Pusty)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1861 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemunix.c:1882 gtk/gtkfilesystemwin32.c:471
 #: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1886,7 +1882,7 @@ msgstr "System plików"
 msgid "Could not get a stock icon for %s"
 msgstr "Nie można pobrać typowej ikony dla %s"
 
-#: gtk/gtkfilesystemunix.c:891
+#: gtk/gtkfilesystemunix.c:895
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1895,22 +1891,22 @@ msgstr ""
 "Nazwa \"%s\" nie jest poprawna, ponieważ zawiera znak \"%s\". Użyj innej "
 "nazwy."
 
-#: gtk/gtkfilesystemunix.c:1466 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1487 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Zapisanie zakładki nie powiodło się: %s"
 
-#: gtk/gtkfilesystemunix.c:1521
+#: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" już istnieje na liście zakładek"
 
-#: gtk/gtkfilesystemunix.c:1593
+#: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" nie istnieje na liście zakładek"
 
-#: gtk/gtkfilesystemunix.c:1821
+#: gtk/gtkfilesystemunix.c:1842
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Błąd przy pobieraniu informacji dla \"/\": %s"
@@ -1981,7 +1977,7 @@ msgstr "Wartość g_amma"
 msgid "Error loading icon: %s"
 msgstr "Błąd przy odczytywaniu ikony: %s"
 
-#: gtk/gtkicontheme.c:1292
+#: gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1994,7 +1990,7 @@ msgstr ""
 "Ich kopię można pobrać z:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1365
+#: gtk/gtkicontheme.c:1391
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona \"%s\" jest nieobecna w motywie"
@@ -2082,7 +2078,7 @@ msgstr "(nieznane)"
 msgid "clear"
 msgstr "wyczyść"
 
-#: gtk/gtklabel.c:3985
+#: gtk/gtklabel.c:3997
 msgid "Select All"
 msgstr "Zaznacz wszystko"
 
@@ -2567,22 +2563,22 @@ msgstr "Nie można odnaleźć modułu obsługującego motyw w module_path: \"%s\
 msgid "--- No Tip ---"
 msgstr "--- Brak podpowiedzi ---"
 
-#: gtk/gtkuimanager.c:1154
+#: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Nieznany atrybut \"%s\" w wierszu %d znak %d"
 
-#: gtk/gtkuimanager.c:1371
+#: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Nieoczekiwany znacznik początku \"%s\" w wierszu %d znak %d"
 
-#: gtk/gtkuimanager.c:1461
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Nieoczekiwane dane znakowe w wierszu %d znak %d"
 
-#: gtk/gtkuimanager.c:2272
+#: gtk/gtkuimanager.c:2275
 msgid "Empty"
 msgstr "Pusty"
 
@@ -2640,6 +2636,9 @@ msgstr "Metoda wejściowa X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nie można pobrać informacji dla pliku \"%s\": %s"
+
+#~ msgid "Home"
+#~ msgstr "Domowy"
 
 #~ msgid "_Credits"
 #~ msgstr "_Zasługi"
