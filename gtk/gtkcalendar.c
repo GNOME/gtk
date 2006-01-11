@@ -2907,6 +2907,8 @@ gtk_calendar_focus_out (GtkWidget     *widget,
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
 
+  gtk_widget_queue_draw (widget);
+
   calendar_stop_spinning (GTK_CALENDAR (widget));
   
   priv->in_drag = 0; 

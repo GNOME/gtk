@@ -1,5 +1,8 @@
 2006-01-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_focus_out): Queue a draw
+	when losing the focus.  (#326064, Andrew Conkling)
+
 	* gtk/gtk.h: Remove duplicate include.  (#326429, 
 	Benoît Carpentier)
 
