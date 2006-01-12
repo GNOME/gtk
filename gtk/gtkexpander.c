@@ -1307,13 +1307,18 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   if (priv->expanded != expanded)
     {
+      GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (expander));
+      gboolean     enable_animations;
+
       priv->expanded = expanded;
 
-      if (GTK_WIDGET_REALIZED (expander))
+      g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
+
+      if (enable_animations && GTK_WIDGET_REALIZED (expander))
 	{
 	  gtk_expander_start_animation (expander);
 	}
-      else 
+      else
 	{
 	  priv->expander_style = expanded ? GTK_EXPANDER_EXPANDED :
 					    GTK_EXPANDER_COLLAPSED;

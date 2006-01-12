@@ -1,3 +1,9 @@
+2006-01-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkexpander.c (gtk_expander_set_expanded): skip the
+	animation if the gtk-enable-animations setting is FALSE
+	(bug #142582).
+
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c: Fix a C99ism (#326658, Kazuki Iwamoto)
