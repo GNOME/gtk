@@ -1,5 +1,11 @@
 2006-01-12  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkimage.c (scratch_image_info_for_depth): connect to the
+	display's "closed" signal and free the cached scratch images upon
+	display closing (bug #85715).
+
+2006-01-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkexpander.c (gtk_expander_set_expanded): skip the
 	animation if the gtk-enable-animations setting is FALSE
 	(bug #142582).

@@ -226,6 +226,25 @@ allocate_scratch_images (GdkScratchImageInfo *info,
   return TRUE;
 }
 
+static void
+scratch_image_info_display_closed (GdkDisplay          *display,
+                                   gboolean             is_error,
+                                   GdkScratchImageInfo *image_info)
+{
+  gint i;
+
+  g_signal_handlers_disconnect_by_func (display,
+                                        scratch_image_info_display_closed,
+                                        image_info);
+
+  scratch_image_infos = g_slist_remove (scratch_image_infos, image_info);
+
+  for (i = 0; i < image_info->n_images; i++)
+    g_object_unref (image_info->static_image[i]);
+
+  g_free (image_info);
+}
+
 static GdkScratchImageInfo *
 scratch_image_info_for_depth (GdkScreen *screen,
 			      gint       depth)
@@ -248,6 +267,10 @@ scratch_image_info_for_depth (GdkScreen *screen,
 
   image_info->depth = depth;
   image_info->screen = screen;
+
+  g_signal_connect (gdk_screen_get_display (screen), "closed",
+                    G_CALLBACK (scratch_image_info_display_closed),
+                    image_info);
 
   /* Try to allocate as few possible shared images */
   for (i=0; i < G_N_ELEMENTS (possible_n_images); i++)
