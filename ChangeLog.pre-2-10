@@ -1,5 +1,9 @@
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c: Fix a C99ism (#326658, Kazuki Iwamoto)
+
+2006-01-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklabel.c: Add some notify batching, always
 	emit notify after setting the new value.
 

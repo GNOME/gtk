@@ -1794,11 +1794,12 @@ get_label_wrap_width (GtkLabel *label)
   PangoLayout *layout;
   GtkStyle *style = GTK_WIDGET (label)->style;
   static GQuark quark_label_wrap_width = 0;
+  LabelWrapWidth *wrap_width;
 
   if (quark_label_wrap_width == 0)
     quark_label_wrap_width = g_quark_from_static_string ("gtk-label-wrap-width");
 
-  LabelWrapWidth *wrap_width = g_object_get_qdata (G_OBJECT (style), quark_label_wrap_width);
+  wrap_width = g_object_get_qdata (G_OBJECT (style), quark_label_wrap_width);
   if (!wrap_width)
     {
       wrap_width = g_slice_new0 (LabelWrapWidth);
