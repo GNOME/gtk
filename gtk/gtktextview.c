@@ -5214,6 +5214,7 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
         }
 
       gtk_text_buffer_end_user_action (get_buffer (text_view));
+      gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
 
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
@@ -5241,6 +5242,7 @@ gtk_text_view_backspace (GtkTextView *text_view)
   if (gtk_text_buffer_backspace (get_buffer (text_view), &insert,
 				 TRUE, text_view->editable))
     {
+      gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
 					  gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
@@ -6726,6 +6728,7 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
 
   gtk_text_buffer_end_user_action (get_buffer (text_view));
 
+  gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),

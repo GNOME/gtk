@@ -1,5 +1,9 @@
 2006-01-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_commit_text) 
+	(gtk_text_view_delete_from_cursor, gtk_text_view_backspace): 
+	Reset the virtual cursor position.  (#326003, Evert Verhellen)
+
 	* gtk/gtkwidget.c (gtk_widget_set_app_paintable): Add some docs
 	about RGBA windows. (#326486, Benjamin Otte)
 
