@@ -159,14 +159,14 @@ gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
  * @saturation: saturation factor
  * @pixelate: whether to pixelate
  *
- * Modifies saturation and optionally pixelates @src, placing the
- * result in @dest. @src and @dest may be the same pixbuf with no ill
- * effects.  If @saturation is 1.0 then saturation is not changed. If
- * it's less than 1.0, saturation is reduced (the image is darkened);
- * if greater than 1.0, saturation is increased (the image is
- * brightened). If @pixelate is %TRUE, then pixels are faded in a
- * checkerboard pattern to create a pixelated image. @src and @dest
- * must have the same image format, size, and rowstride.
+ * Modifies saturation and optionally pixelates @src, placing the result in
+ * @dest. @src and @dest may be the same pixbuf with no ill effects.  If
+ * @saturation is 1.0 then saturation is not changed. If it's less than 1.0,
+ * saturation is reduced (the image turns toward grayscale); if greater than
+ * 1.0, saturation is increased (the image gets more vivid colors). If @pixelate
+ * is %TRUE, then pixels are faded in a checkerboard pattern to create a
+ * pixelated image. @src and @dest must have the same image format, size, and
+ * rowstride.
  * 
  **/
 void
