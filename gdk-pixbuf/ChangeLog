@@ -1,3 +1,10 @@
+2006-01-12  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gdk-pixbuf-util.c (gdk_pixbuf_saturate_and_pixelate): Clarify
+	the docs ("darkened/brightened" is not "saturation").
+
 2006-01-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.10 ===
