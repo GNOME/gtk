@@ -1,5 +1,8 @@
 2006-01-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c: Replace hardcoded values for tab-overlap and
+	tab-curvature with style properties.  (#325282, Alexander Nedotsukov)
+
 	* gtk/gtktextview.c (gtk_text_view_commit_text) 
 	(gtk_text_view_delete_from_cursor, gtk_text_view_backspace): 
 	Reset the virtual cursor position.  (#326003, Evert Verhellen)
