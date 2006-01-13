@@ -1,5 +1,10 @@
 2006-01-13  Kristian Rietveld  <kris@imendio.com>
 
+	* tests/testtreefocus.c (set_indicator_size), (main): add a little
+	test for the newly introduced indicator-size property.
+
+2006-01-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_init):
 	initialize the inconsistent field in the private structure,
 	(gtk_cell_renderer_toggle_class_init),

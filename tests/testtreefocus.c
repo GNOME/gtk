@@ -319,6 +319,23 @@ dave_toggled (GtkCellRendererToggle *cell,
   gtk_tree_path_free (path);
 }
 
+static void
+set_indicator_size (GtkTreeViewColumn *column,
+		    GtkCellRenderer *cell,
+		    GtkTreeModel *model,
+		    GtkTreeIter *iter,
+		    gpointer data)
+{
+  gint size;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (model, iter);
+  size = gtk_tree_path_get_indices (path)[0]  * 2 + 10;
+  gtk_tree_path_free (path);
+
+  g_object_set (cell, "indicator_size", size, NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -435,6 +452,7 @@ main (int argc, char *argv[])
 					       "visible", VISIBLE_COLUMN,
 					       NULL);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, set_indicator_size, NULL, NULL);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
