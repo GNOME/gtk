@@ -10740,6 +10740,11 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   GtkTreeIter temp;
   gboolean expand;
 
+  if (animate)
+    g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
+                  "gtk-enable-animations", &animate,
+                  NULL);
+
   remove_auto_expand_timeout (tree_view);
 
   if (node->children && !open_all)
@@ -10884,6 +10889,11 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gint x, y;
   GList *list;
   GdkWindow *child, *parent;
+
+  if (animate)
+    g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
+                  "gtk-enable-animations", &animate,
+                  NULL);
 
   remove_auto_expand_timeout (tree_view);
 

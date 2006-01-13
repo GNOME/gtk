@@ -1,3 +1,9 @@
+2006-01-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row)
+	(gtk_tree_view_real_collapse_row): don't animate the expander
+	arrows if gtk-enable-animations is FALSE (bug #142582).
+
 2006-01-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c: Replace hardcoded values for tab-overlap and
