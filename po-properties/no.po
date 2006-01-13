@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.8.3\n"
+"Project-Id-Version: gtk+ 2.8.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-11 14:45-0500\n"
-"PO-Revision-Date: 2005-08-31 10:06+0200\n"
+"PO-Revision-Date: 2006-01-13 11:13+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -3502,14 +3502,12 @@ msgid "Name of icon theme to use"
 msgstr "Navn på ikontema som skal brukes"
 
 #: gtk/gtksettings.c:259
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Navn på ikontema"
+msgstr "Navn på reserveikontema"
 
 #: gtk/gtksettings.c:260
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Navn på ikontema som skal brukes"
+msgstr "Navn på ikontema som skal brukes som reserve"
 
 #: gtk/gtksettings.c:268
 msgid "Key Theme Name"
