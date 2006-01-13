@@ -69,7 +69,8 @@ enum {
   PROP_ACTIVATABLE,
   PROP_ACTIVE,
   PROP_RADIO,
-  PROP_INCONSISTENT
+  PROP_INCONSISTENT,
+  PROP_INDICATOR_SIZE
 };
 
 #define TOGGLE_WIDTH 12
@@ -81,6 +82,8 @@ static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 typedef struct _GtkCellRendererTogglePrivate GtkCellRendererTogglePrivate;
 struct _GtkCellRendererTogglePrivate
 {
+  gint indicator_size;
+
   guint inconsistent : 1;
 };
 
@@ -116,12 +119,20 @@ gtk_cell_renderer_toggle_get_type (void)
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
+  GtkCellRendererTogglePrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (celltoggle);
+
   celltoggle->activatable = TRUE;
   celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
+
   GTK_CELL_RENDERER (celltoggle)->mode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
   GTK_CELL_RENDERER (celltoggle)->xpad = 2;
   GTK_CELL_RENDERER (celltoggle)->ypad = 2;
+
+  priv->indicator_size = 12;
+  priv->inconsistent = FALSE;
 }
 
 static void
@@ -168,6 +179,16 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Draw the toggle button as a radio button"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+				   PROP_INDICATOR_SIZE,
+				   g_param_spec_int ("indicator-size",
+						     P_("Indicator size"),
+						     P_("Size of check or radio indicator"),
+						     0,
+						     G_MAXINT,
+						     TOGGLE_WIDTH,
+						     GTK_PARAM_READWRITE));
 
   
   /**
@@ -216,6 +237,9 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
     case PROP_RADIO:
       g_value_set_boolean (value, celltoggle->radio);
       break;
+    case PROP_INDICATOR_SIZE:
+      g_value_set_int (value, priv->indicator_size);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -247,6 +271,9 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
+      break;
+    case PROP_INDICATOR_SIZE:
+      priv->indicator_size = g_value_get_int (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -284,9 +311,12 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 {
   gint calc_width;
   gint calc_height;
+  GtkCellRendererTogglePrivate *priv;
 
-  calc_width = (gint) cell->xpad * 2 + TOGGLE_WIDTH;
-  calc_height = (gint) cell->ypad * 2 + TOGGLE_WIDTH;
+  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
+
+  calc_width = (gint) cell->xpad * 2 + priv->indicator_size;
+  calc_height = (gint) cell->ypad * 2 + priv->indicator_size;
 
   if (width)
     *width = calc_width;

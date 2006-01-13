@@ -1,3 +1,12 @@
+2006-01-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_init):
+	initialize the inconsistent field in the private structure,
+	(gtk_cell_renderer_toggle_class_init),
+	(gtk_cell_renderer_toggle_{set,get}_property),
+	(gtk_cell_renderer_toggle_get_size): introduce a indicator-size
+	property.
+
 2006-01-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row)
