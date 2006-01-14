@@ -1,3 +1,7 @@
+2006-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* */abicheck.sh: Make this work on more platforms.
+
 2006-01-13  Kristian Rietveld  <kris@imendio.com>
 
 	* tests/testtreefocus.c (set_indicator_size), (main): add a little
