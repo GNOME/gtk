@@ -1,3 +1,10 @@
+2006-01-14  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate),
+	(validate_visible_area): fixup adjustments and top_row if the
+	current dy + page_size exceeds the new tree view height. (Fixes
+	#316689, reported by Chris Lord).
+
 2006-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* */abicheck.sh: Make this work on more platforms.
