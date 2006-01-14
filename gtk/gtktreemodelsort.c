@@ -1095,7 +1095,7 @@ gtk_tree_model_sort_iter_children (GtkTreeModel *tree_model,
   iter->stamp = 0;
   g_return_val_if_fail (tree_model_sort->child_model != NULL, FALSE);
   if (parent) 
-    g_return_val_if_fail (VALID_ITER (iter, tree_model_sort), FALSE);
+    g_return_val_if_fail (VALID_ITER (parent, tree_model_sort), FALSE);
 
   if (parent == NULL)
     {
