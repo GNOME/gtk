@@ -1,3 +1,7 @@
+2006-01-14  Clytie Siddall <clytie@riverland.net.au>
+
+	* vi.po: Updated Vietnamese translation.
+
 2006-01-14  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
 	* es.po: Updated Spanish translation.
@@ -150,6 +154,177 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.3 ===
+
+2005-08-27  Jordi Mallach  <jordi@sindominio.net>
+
+	* ca.po: Updated Catalan translation by
+	Xavier Conde <xavi.conde@gmail.com>.
+
+=======
+2006-01-11  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
+2005-12-26  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
+2005-12-25  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
+2005-12-14  Christophe Merlet  <redfox@redfoxcenter.org>
+
+	* fr.po: Updated French translation from
+	Xavier Claessens <x_claessens@skynet.be>.
+
+2005-12-14  Sunil Mohan Adapa  <sunil@atc.tcs.co.in>
+
+	* te.po: Updated Telugu translation done by
+	Prajasakti Localisation Team 
+	<localisation@prajasakti.com>.
+
+2005-12-04  Takeshi AIHANA <aihana@gnome.gr.jp>
+
+	* ja.po: Fixed translation for "Widget" and "Index" reported by
+		kano@na.rim.or.jp.
+
+2005-11-13  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
+
+	* es.po: Updated Spanish translation.
+
+2005-11-10  Simos Xenitellis  <simos@gnome.org>
+
+	* tt.po: Added Tatar translation by Albert Fazlí.
+
+2005-11-01  Vincent van Adrighem  <adrighem@gnome.org>
+
+	* nl.po: Translation updated by Tino Meinen.
+
+2005-10-31  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* gl.po: Updated Galician Translation.
+
+2005-10-31  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
+2005-10-29  Erdal Ronahi  <erdal.ronahi@gmail.com>
+
+	* ku.po: Updated Kurdish translations
+
+2005-10-29  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
+
+	* es.po: Updated Spanish translation.
+
+2005-10-28  Erdal Ronahi  <erdal.ronahi@gmail.com>
+
+	* ku.po: Added Kurdish translations and replaced empty file
+
+2005-10-26  Takeshi AIHANA <aihana@gnome.gr.jp>
+
+	* ja.po: Fixed typos reported by 
+		kano@na.rim.or.jp.
+
+2005-10-25  Funda Wang  <fundawang@linux.net.cn>
+
+	* zh_CN.po: Updated Simplified Chinese translation.
+
+2005-10-22  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
+
+	* es.po: Updated Spanish translation.
+
+2005-10-20  Runa Bhattacharjee  <runa@bengalinux.org>
+
+	* bn.po: Updated Bengali (bn) Translation
+	by Progga <progga@BengaLinux.Org>
+
+
+2005-10-20  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* gl.po: Updated Galician Translation.
+
+2005-10-17  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* da.po: Updated Danish translation.
+
+2005-10-17  Priit Laes  <plaes@cvs.gnome.org>
+
+	* et.po: Translation updated by Ivar Smolin.
+
+2005-10-17 Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>
+
+	* zh_TW.po: Updated Traditional Chinese translation.
+
+2005-10-15  Vincent van Adrighem  <adrighem@gnome.org>
+
+	* nl.po: Translation updated.
+
+2005-10-14  Adam Weinberger  <adamw@gnome.org>
+
+	* POTFILES.in: Add a bunch of missing files.
+	* en_CA.po: Updated Canadian English translation.
+
+2005-10-13  Priit Laes  <plaes@cvs.gnome.org>
+
+	* et.po: Translation updated by Ivar Smolin.
+
+2005-09-30  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
+2005-09-25  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+
+2005-09-08  Clytie Siddall <clytie@riverland.net.au>
+
+        * vi.po: Updated Vietnamese translation.
+
+2005-09-06  Alexander Shopov  <ash@contact.bg>
+
+	* bg.po: Updated Bulgarian translation by
+	Alexander Shopov <ash@contact.bg>
+
+2005-09-05  Iñaki Larrañaga  <dooteo@euskalgnu.org>
+
+	* eu.po: Updated Basque translation.
+
+2005-09-04  Raphael Higino  <raphaelh@cvs.gnome.org>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation.
+
+2005-09-03  Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>
+
+	* zh_TW.po: Updated Traditional Chinese translation.
+
+2005-09-02  Jordi Mallach  <jordi@sindominio.net>
+
+	* ku.po: Added empty file to fix GTK+ build.
+
+2005-08-29  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
+2005-08-29  Telsa Gwynne  <hobbit@aloss.ukuu.org.uk>
+
+	* cy.po: Updated Welsh translation.
+	
+2005-08-28  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
+
+	* es.po: Updated Spanish translation.
+
+2005-08-28  Maxim Dziumanenko <mvd@mylinux.ua>
+
+	* uk.po: Updated Ukrainian translation
+
+2005-08-28  Josep Puigdemont  <josep.puigdemont@gmail.com>
+
+	* ca.po: Updated Catalan translation.
+
+2005-08-28  Ankit Patel  <ankit644@yahoo.com>
+
+	* gu.po: Updated Gujarati Translation.
 
 2005-08-27  Jordi Mallach  <jordi@sindominio.net>
 
