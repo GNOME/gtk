@@ -1,5 +1,8 @@
 2006-01-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_drag_data_received): Remove 
+	an unused variable.
+
 	* gtk/gtkiconfactory.c (get_default_icons): Register RTL 
 	versions of the indent and unindent icons.  (#326857,
 	Itai Bar-Haim)

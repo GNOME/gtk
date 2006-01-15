@@ -1,3 +1,9 @@
+2006-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am (HTML_IMAGES): 
+	* gtk/tmpl/gtkstock.sgml: Add rtl variants of indent
+	and unindent icons.
+
 2006-01-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_widget_get_action,

@@ -176,8 +176,10 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-help.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-home.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-index.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-indent.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-unindent.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-indent-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-indent-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-unindent-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-unindent-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-italic.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-jump-to-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-jump-to-rtl.png		\

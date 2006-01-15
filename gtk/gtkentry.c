@@ -4873,7 +4873,6 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 			      guint             time)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   GtkEditable *editable = GTK_EDITABLE (widget);
   gchar *str;
 
