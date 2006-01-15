@@ -1,3 +1,14 @@
+2006-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix a crash with combo boxes in RESIZE_IMMEDIATE
+	containers.  (#326806, Sebastian Bacher)
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate) 
+	(gtk_combo_box_size_request): Don't call 
+	gtk_combo_box_check_appearance() from here, as that 
+	can lead to recursion. 
+	(gtk_combo_box_init): Instead, call it here.
+
 2006-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* */abicheck.sh: Make this work on more platforms.
