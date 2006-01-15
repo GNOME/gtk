@@ -23,6 +23,7 @@
 #include <string.h>
 
 GtkTreeStore *base_model;
+static gint node_count = 0;
 
 static void
 selection_changed (GtkTreeSelection *selection,
@@ -37,11 +38,10 @@ selection_changed (GtkTreeSelection *selection,
 static void
 node_set (GtkTreeIter *iter)
 {
-  static gint i = 0;
   gint n;
   gchar *str;
 
-  str = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", i++);
+  str = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);
   gtk_tree_store_set (base_model, iter, 0, str, -1);
   g_free (str);
 
@@ -119,6 +119,46 @@ iter_change (GtkWidget *button, GtkTreeView *tree_view)
 			  gtk_entry_get_text (GTK_ENTRY (entry)),
 			  -1);
     }
+}
+
+static void
+iter_insert_with_values (GtkWidget *button, GtkTreeView *tree_view)
+{
+  GtkWidget *entry;
+  GtkTreeIter iter;
+  GtkTreeIter selected;
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+  gchar *str1, *str2;
+
+  entry = g_object_get_data (G_OBJECT (button), "user_data");
+  str1 = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);
+  str2 = g_strdup_printf ("%d", atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
+				       &selected))
+    {
+      gtk_tree_store_insert_with_values (GTK_TREE_STORE (model),
+					 &iter,
+					 &selected,
+					 -1,
+					 0, str1,
+					 1, str2,
+					 -1);
+    }
+  else
+    {
+      gtk_tree_store_insert_with_values (GTK_TREE_STORE (model),
+					 &iter,
+					 NULL,
+					 -1,
+					 0, str1,
+					 1, str2,
+					 -1);
+    }
+
+  g_free (str1);
+  g_free (str2);
 }
 
 static void
@@ -330,6 +370,17 @@ make_window (gint view_type)
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (iter_change),
+		    tree_view);
+
+  button = gtk_button_new_with_label ("gtk_tree_store_insert_with_values");
+  hbox = gtk_hbox_new (FALSE, 8);
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+  g_object_set_data (G_OBJECT (button), "user_data", entry);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (iter_insert_with_values),
 		    tree_view);
   
   button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
