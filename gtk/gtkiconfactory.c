@@ -482,8 +482,14 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_ITALIC);
   register_stock_icon (factory, GTK_STOCK_STRIKETHROUGH);
   register_stock_icon (factory, GTK_STOCK_UNDERLINE);
-  register_stock_icon (factory, GTK_STOCK_INDENT);
-  register_stock_icon (factory, GTK_STOCK_UNINDENT);
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_INDENT,
+			    GTK_STOCK_INDENT "-ltr",
+			    GTK_STOCK_INDENT "-rtl");
+  register_bidi_stock_icon (factory, 
+			    GTK_STOCK_UNINDENT,
+			    GTK_STOCK_UNINDENT "-ltr",
+			    GTK_STOCK_UNINDENT "-rtl");
   register_stock_icon (factory, GTK_STOCK_GOTO_TOP);
   register_stock_icon (factory, GTK_STOCK_DELETE);
   register_bidi_stock_icon (factory, 

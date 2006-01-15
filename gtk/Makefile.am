@@ -778,7 +778,8 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-harddisk.png       		\
 	stock-icons/16/gtk-help.png   			\
 	stock-icons/16/gtk-home.png   			\
-	stock-icons/16/gtk-indent.png 			\
+	stock-icons/16/gtk-indent-ltr.png		\
+	stock-icons/16/gtk-indent-rtl.png		\
 	stock-icons/16/gtk-index.png  			\
 	stock-icons/16/gtk-info.png   			\
 	stock-icons/16/gtk-jump-to-ltr.png    		\
@@ -827,7 +828,8 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-underline.png      		\
 	stock-icons/16/gtk-undo-ltr.png       		\
 	stock-icons/16/gtk-undo-rtl.png       		\
-	stock-icons/16/gtk-unindent.png       		\
+	stock-icons/16/gtk-unindent-ltr.png    		\
+	stock-icons/16/gtk-unindent-rtl.png    		\
 	stock-icons/16/gtk-zoom-100.png       		\
 	stock-icons/16/gtk-zoom-fit.png       		\
 	stock-icons/16/gtk-zoom-in.png        		\
@@ -870,7 +872,8 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-harddisk.png       		\
 	stock-icons/24/gtk-help.png   			\
 	stock-icons/24/gtk-home.png   			\
-	stock-icons/24/gtk-indent.png 			\
+	stock-icons/24/gtk-indent-ltr.png 		\
+	stock-icons/24/gtk-indent-rtl.png 		\
 	stock-icons/24/gtk-index.png  			\
 	stock-icons/24/gtk-info.png   			\
 	stock-icons/24/gtk-italic.png 			\
@@ -922,7 +925,8 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-underline.png      		\
 	stock-icons/24/gtk-undo-ltr.png       		\
 	stock-icons/24/gtk-undo-rtl.png       		\
-	stock-icons/24/gtk-unindent.png       		\
+	stock-icons/24/gtk-unindent-ltr.png    		\
+	stock-icons/24/gtk-unindent-rtl.png    		\
 	stock-icons/24/gtk-zoom-100.png       		\
 	stock-icons/24/gtk-zoom-fit.png       		\
 	stock-icons/24/gtk-zoom-in.png        		\

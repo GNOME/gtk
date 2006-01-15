@@ -1,5 +1,11 @@
 2006-01-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconfactory.c (get_default_icons): Register RTL 
+	versions of the indent and unindent icons.  (#326857,
+	Itai Bar-Haim)
+
+	* gtk/Makefile.am (STOCK_ICONS): And add them here.
+
 	Fix a crash with combo boxes in RESIZE_IMMEDIATE
 	containers.  (#326806, Sebastian Bacher)
 	
