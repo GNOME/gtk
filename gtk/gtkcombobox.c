@@ -781,6 +781,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv->editing_canceled = FALSE;
   combo_box->priv->auto_scroll = FALSE;
   combo_box->priv->focus_on_click = TRUE;
+
+  gtk_combo_box_check_appearance (combo_box);
 }
 
 static void
@@ -1841,9 +1843,7 @@ gtk_combo_box_size_request (GtkWidget      *widget,
   GtkRequisition bin_req;
 
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-
-  gtk_combo_box_check_appearance (combo_box);
-
+ 
   /* common */
   gtk_widget_size_request (GTK_BIN (widget)->child, &bin_req);
   gtk_combo_box_remeasure (combo_box);
@@ -1935,8 +1935,6 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   GtkAllocation child;
   GtkRequisition req;
   gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-
-  gtk_combo_box_check_appearance (combo_box);
 
   widget->allocation = *allocation;
 
