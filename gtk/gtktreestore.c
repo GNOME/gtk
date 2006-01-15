@@ -98,7 +98,8 @@ static gboolean gtk_tree_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 static void     gtk_tree_store_sort                    (GtkTreeStore           *tree_store);
 static void     gtk_tree_store_sort_iter_changed       (GtkTreeStore           *tree_store,
 							GtkTreeIter            *iter,
-							gint                    column);
+							gint                    column,
+							gboolean                emit_signal);
 static gboolean gtk_tree_store_get_sort_column_id      (GtkTreeSortable        *sortable,
 							gint                   *sort_column_id,
 							GtkSortType            *order);
@@ -828,7 +829,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 	  if (converted)
 	    g_value_unset (&real_value);
           if (sort && GTK_TREE_STORE_IS_SORTED (tree_store))
-            gtk_tree_store_sort_iter_changed (tree_store, iter, old_column);
+            gtk_tree_store_sort_iter_changed (tree_store, iter, old_column, TRUE);
 	  return retval;
 	}
 
@@ -866,7 +867,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
     g_value_unset (&real_value);
 
   if (sort && GTK_TREE_STORE_IS_SORTED (tree_store))
-    gtk_tree_store_sort_iter_changed (tree_store, iter, old_column);
+    gtk_tree_store_sort_iter_changed (tree_store, iter, old_column, TRUE);
 
   return retval;
 }
@@ -904,28 +905,15 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
     }
 }
 
-/**
- * gtk_tree_store_set_valist:
- * @tree_store: A #GtkTreeStore
- * @iter: A valid #GtkTreeIter for the row being modified
- * @var_args: <type>va_list</type> of column/value pairs
- *
- * See gtk_tree_store_set(); this version takes a <type>va_list</type> for
- * use by language bindings.
- *
- **/
-void
-gtk_tree_store_set_valist (GtkTreeStore *tree_store,
-                           GtkTreeIter  *iter,
-                           va_list	var_args)
+static void
+gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
+                                    GtkTreeIter  *iter,
+                                    gboolean     *emit_signal,
+                                    gboolean     *maybe_need_sort,
+                                    va_list       var_args)
 {
   gint column;
-  gboolean emit_signal = FALSE;
-  gboolean maybe_need_sort = FALSE;
   GtkTreeIterCompareFunc func = NULL;
-
-  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-  g_return_if_fail (VALID_ITER (iter, tree_store));
 
   column = va_arg (var_args, gint);
 
@@ -947,7 +935,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
     }
 
   if (func != _gtk_tree_data_list_compare_func)
-    maybe_need_sort = TRUE;
+    *maybe_need_sort = TRUE;
 
   while (column != -1)
     {
@@ -973,23 +961,50 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 	  break;
 	}
 
-      emit_signal = gtk_tree_store_real_set_value (tree_store,
-						   iter,
-						   column,
-						   &value,
-						   FALSE) || emit_signal;
+      *emit_signal = gtk_tree_store_real_set_value (tree_store,
+						    iter,
+						    column,
+						    &value,
+						    FALSE) || *emit_signal;
 
       if (func == _gtk_tree_data_list_compare_func &&
 	  column == tree_store->sort_column_id)
-	maybe_need_sort = TRUE;
+	*maybe_need_sort = TRUE;
 
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
     }
+}
+
+/**
+ * gtk_tree_store_set_valist:
+ * @tree_store: A #GtkTreeStore
+ * @iter: A valid #GtkTreeIter for the row being modified
+ * @var_args: <type>va_list</type> of column/value pairs
+ *
+ * See gtk_tree_store_set(); this version takes a <type>va_list</type> for
+ * use by language bindings.
+ *
+ **/
+void
+gtk_tree_store_set_valist (GtkTreeStore *tree_store,
+                           GtkTreeIter  *iter,
+                           va_list       var_args)
+{
+  gboolean emit_signal = FALSE;
+  gboolean maybe_need_sort = FALSE;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+  g_return_if_fail (VALID_ITER (iter, tree_store));
+
+  gtk_tree_store_set_valist_internal (tree_store, iter,
+				      &emit_signal,
+				      &maybe_need_sort,
+				      var_args);
 
   if (maybe_need_sort && GTK_TREE_STORE_IS_SORTED (tree_store))
-    gtk_tree_store_sort_iter_changed (tree_store, iter, tree_store->sort_column_id);
+    gtk_tree_store_sort_iter_changed (tree_store, iter, tree_store->sort_column_id, TRUE);
 
   if (emit_signal)
     {
@@ -1313,6 +1328,195 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
   gtk_tree_path_free (path);
 
   validate_tree (tree_store);
+}
+
+/**
+ * gtk_tree_store_insert_with_values:
+ * @tree_store: A #GtkTreeStore
+ * @iter: An unset #GtkTreeIter to set the new row
+ * @parent: A valid #GtkTreeIter, or %NULL
+ * @position: position to insert the new row
+ * @Varargs: pairs of column number and value, terminated with -1
+ *
+ * Creates a new row at @position.  @iter will be changed to point to this
+ * new row.  If @position is larger than the number of rows on the list, then
+ * the new row will be appended to the list.  The row will be filled with
+ * the values given to this function.
+ *
+ * Calling
+ * <literal>gtk_tree_store_insert_with_values (tree_store, iter, position, ...)</literal>
+ * has the same effect as calling
+ * <informalexample><programlisting>
+ * gtk_tree_store_insert (tree_store, iter, position);
+ * gtk_tree_store_set (tree_store, iter, ...);
+ * </programlisting></informalexample>
+ * with the different that the former will only emit a row_inserted signal,
+ * while the latter will emit row_inserted, row_changed and if the tree store
+ * is sorted, rows_reordered.  Since emitting the rows_reordered signal
+ * repeatedly can affect the performance of the program,
+ * gtk_tree_store_insert_with_values() should generally be preferred when
+ * inserting rows in a sorted tree store.
+ *
+ * Since: 2.10
+ */
+void
+gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
+				   GtkTreeIter  *iter,
+				   GtkTreeIter  *parent,
+				   gint          position,
+				   ...)
+{
+  GtkTreePath *path;
+  GNode *parent_node;
+  GNode *new_node;
+  va_list var_args;
+  gboolean changed = FALSE;
+  gboolean maybe_need_sort = FALSE;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+  g_return_if_fail (iter != NULL);
+  if (parent)
+    g_return_if_fail (VALID_ITER (parent, tree_store));
+
+  if (parent)
+    parent_node = parent->user_data;
+  else
+    parent_node = tree_store->root;
+
+  tree_store->columns_dirty = TRUE;
+
+  new_node = g_node_new (NULL);
+
+  iter->stamp = tree_store->stamp;
+  iter->user_data = new_node;
+  g_node_insert (parent_node, position, new_node);
+
+  va_start (var_args, position);
+  gtk_tree_store_set_valist_internal (tree_store, iter,
+				      &changed, &maybe_need_sort,
+				      var_args);
+  va_end (var_args);
+
+  if (maybe_need_sort && GTK_TREE_STORE_IS_SORTED (tree_store))
+    gtk_tree_store_sort_iter_changed (tree_store, iter, tree_store->sort_column_id, FALSE);
+
+  path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (tree_store), path, iter);
+
+  if (parent_node != tree_store->root)
+    {
+      if (new_node->prev == NULL && new_node->next == NULL)
+        {
+	  gtk_tree_path_up (path);
+	  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (tree_store), path, parent);
+	}
+    }
+
+  gtk_tree_path_free (path);
+
+  validate_tree ((GtkTreeStore *)tree_store);
+}
+
+/**
+ * gtk_tree_store_insert_with_valuesv:
+ * @tree_store: A #GtkTreeStore
+ * @iter: An unset #GtkTreeIter to set the new row
+ * @parent: A valid #GtkTreeIter, or %NULL
+ * @position: position to insert the new row
+ * @columns: an array of column numbers
+ * @values: an array of GValues
+ * @n_values: the length of the @columns and @values arrays
+ *
+ * A variant of gtk_tree_store_insert_with_values() which takes
+ * the columns and values as two arrays, instead of varargs.  This
+ * function is mainly intended for language bindings.
+ *
+ * Since: 2.10
+ */
+void
+gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
+				    GtkTreeIter  *iter,
+				    GtkTreeIter  *parent,
+				    gint          position,
+				    gint         *columns,
+				    GValue       *values,
+				    gint          n_values)
+{
+  GtkTreePath *path;
+  GNode *parent_node;
+  GNode *new_node;
+  gboolean changed = FALSE;
+  gboolean maybe_need_sort = FALSE;
+  GtkTreeIterCompareFunc func = NULL;
+  gint i;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+  g_return_if_fail (iter != NULL);
+  if (parent)
+    g_return_if_fail (VALID_ITER (parent, tree_store));
+
+  if (parent)
+    parent_node = parent->user_data;
+  else
+    parent_node = tree_store->root;
+
+  tree_store->columns_dirty = TRUE;
+
+  new_node = g_node_new (NULL);
+
+  iter->stamp = tree_store->stamp;
+  iter->user_data = new_node;
+  g_node_insert (parent_node, position, new_node);
+
+  if (GTK_TREE_STORE_IS_SORTED (tree_store))
+    {
+      if (tree_store->sort_column_id != -1)
+        {
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+						   tree_store->sort_column_id);
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	  func = header->func;
+	}
+      else
+        {
+	  func = tree_store->default_sort_func;
+        }
+    }
+
+  if (func != _gtk_tree_data_list_compare_func)
+    maybe_need_sort = TRUE;
+
+  for (i = 0; i < n_values; i++)
+    {
+      changed = gtk_tree_store_real_set_value (tree_store, iter,
+					       columns[i], &values[i],
+					       FALSE) || changed;
+
+      if (func == _gtk_tree_data_list_compare_func &&
+	  columns[i] == tree_store->sort_column_id)
+	maybe_need_sort = TRUE;
+    }
+
+  if (maybe_need_sort && GTK_TREE_STORE_IS_SORTED (tree_store))
+    gtk_tree_store_sort_iter_changed (tree_store, iter, tree_store->sort_column_id, FALSE);
+
+  path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (tree_store), path, iter);
+
+  if (parent_node != tree_store->root)
+    {
+      if (new_node->prev == NULL && new_node->next == NULL)
+        {
+	  gtk_tree_path_up (path);
+	  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (tree_store), path, parent);
+	}
+    }
+
+  gtk_tree_path_free (path);
+
+  validate_tree ((GtkTreeStore *)tree_store);
 }
 
 /**
@@ -2660,7 +2864,8 @@ gtk_tree_store_sort (GtkTreeStore *tree_store)
 static void
 gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
 				  GtkTreeIter  *iter,
-				  gint          column)
+				  gint          column,
+				  gboolean      emit_signal)
 {
   GNode *prev = NULL;
   GNode *next = NULL;
@@ -2806,6 +3011,9 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
       G_NODE (iter->user_data)->next->prev = G_NODE (iter->user_data);
       G_NODE (iter->user_data)->parent->children = G_NODE (iter->user_data);
     }
+
+  if (!emit_signal)
+    return;
 
   /* Emit the reordered signal. */
   length = g_node_n_children (node->parent);

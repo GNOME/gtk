@@ -3538,6 +3538,8 @@ gtk_tree_store_get_type G_GNUC_CONST
 gtk_tree_store_insert
 gtk_tree_store_insert_after
 gtk_tree_store_insert_before
+gtk_tree_store_insert_with_values
+gtk_tree_store_insert_with_valuesv
 gtk_tree_store_is_ancestor
 gtk_tree_store_iter_depth
 gtk_tree_store_iter_is_valid

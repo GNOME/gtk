@@ -103,6 +103,18 @@ void          gtk_tree_store_insert_after     (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       GtkTreeIter  *parent,
 					       GtkTreeIter  *sibling);
+void          gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent,
+						 gint          position,
+						 ...);
+void          gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
+						  GtkTreeIter  *iter,
+						  GtkTreeIter  *parent,
+						  gint          position,
+						  gint         *columns,
+						  GValue       *values,
+						  gint          n_values);
 void          gtk_tree_store_prepend          (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       GtkTreeIter  *parent);

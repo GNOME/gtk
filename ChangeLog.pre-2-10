@@ -1,3 +1,19 @@
+2006-01-15  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #324099, Tommi Komulainen.
+
+	* gtk/gtktreestore.[ch] (gtk_tree_store_insert_with_values),
+	(gtk_tree_store_insert_with_valuesv): new functions, analog to
+	those found in GtkListStore.
+
+	* gtk/gtktreestore.c (gtk_tree_store_real_set_value),
+	(gtk_tree_store_set_valist), (gtk_tree_store_set_valist_internal),
+	(gtk_tree_store_sort_iter_changed): refactored.
+
+	* gtk/gtk.symbols: updated.
+
+	* tests/treestoretest.c: added a test for this new functionality.
+
 2006-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_drag_data_received): Remove 
