@@ -1,21 +1,28 @@
-2006-01-16  Anders Carlsson  <andersca@mac.com>
-
-        Reviewed by NOBODY (OOPS!).
+2006-01-16  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkdisplay-quartz.c:
         * gdk/quartz/gdkevents-quartz.c:
         (gdk_keyboard_grab):
         (gdk_display_keyboard_ungrab):
         (gdk_keyboard_grab_info_libgtk_only):
-        (_gdk_quartz_send_map_events):
         (find_window_for_event):
+        Implement keyboard grabs.
+        
+        (_gdk_quartz_send_map_events):
         * gdk/quartz/gdkmain-quartz.c:
         * gdk/quartz/gdkprivate-quartz.h:
+        New function that synthesizes map events.
+        
         * gdk/quartz/gdkwindow-quartz.c:
         (_gdk_windowing_window_init):
+        The root window is always visible.
+        
         (all_parents_shown):
         (show_window_internal):
+        Send map events.
+        
         (gdk_window_hide):
+        Ungrab keyboard and pointer
 
 2006-01-15  Kristian Rietveld  <kris@gtk.org>
 
