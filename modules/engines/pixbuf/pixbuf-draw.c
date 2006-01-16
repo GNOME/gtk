@@ -76,6 +76,14 @@ match_theme_image (GtkStyle       *style,
 	  match_data->gap_side != image->match_data.gap_side)
 	continue;
 
+      if ((flags & THEME_MATCH_EXPANDER_STYLE) &&
+	  match_data->expander_style != image->match_data.expander_style)
+	continue;
+
+      if ((flags & THEME_MATCH_WINDOW_EDGE) &&
+	  match_data->window_edge != image->match_data.window_edge)
+	continue;
+
       if (image->match_data.detail &&
 	  (!match_data->detail ||
 	   strcmp (match_data->detail, image->match_data.detail) != 0))
@@ -983,6 +991,83 @@ draw_handle (GtkStyle      *style,
 			       x, y, width, height, orientation);
 }
 
+static void
+draw_expander (GtkStyle      *style,
+	       GdkWindow     *window,
+	       GtkStateType   state,
+	       GdkRectangle  *area,
+	       GtkWidget     *widget,
+	       const gchar   *detail,
+	       gint           x,
+	       gint           y,
+	       GtkExpanderStyle expander_style)
+{
+#define DEFAULT_EXPANDER_SIZE 12
+
+  ThemeMatchData match_data;
+  gint expander_size;
+  gint radius;
+  
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
+
+  if (widget &&
+      gtk_widget_class_find_style_property (GTK_WIDGET_GET_CLASS (widget),
+                                            "expander-size"))
+    {
+      gtk_widget_style_get (widget,
+			    "expander-size", &expander_size,
+			    NULL);
+    }
+  else
+    expander_size = DEFAULT_EXPANDER_SIZE;
+
+  radius = expander_size/2;
+
+  match_data.function = TOKEN_D_EXPANDER;
+  match_data.detail = (gchar *)detail;
+  match_data.flags = (THEME_MATCH_STATE | 
+		      THEME_MATCH_EXPANDER_STYLE);
+  match_data.state = state;
+  match_data.expander_style = expander_style;
+
+  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+			  x - radius, y - radius, expander_size, expander_size))
+    parent_class->draw_expander (style, window, state, area, widget, detail,
+				 x, y, expander_style);
+}
+
+static void
+draw_resize_grip (GtkStyle      *style,
+		     GdkWindow     *window,
+		     GtkStateType   state,
+		     GdkRectangle  *area,
+		     GtkWidget     *widget,
+		     const gchar   *detail,
+		     GdkWindowEdge  edge,
+		     gint           x,
+		     gint           y,
+		     gint           width,
+		     gint           height)
+{
+  ThemeMatchData match_data;
+  
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
+
+  match_data.function = TOKEN_D_RESIZE_GRIP;
+  match_data.detail = (gchar *)detail;
+  match_data.flags = (THEME_MATCH_STATE | 
+		      THEME_MATCH_WINDOW_EDGE);
+  match_data.state = state;
+  match_data.window_edge = edge;
+
+  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+			  x, y, width, height))
+    parent_class->draw_resize_grip (style, window, state, area, widget, detail,
+				    edge, x, y, width, height);
+}
+
 GType pixbuf_type_style = 0;
 
 void
@@ -1036,4 +1121,6 @@ pixbuf_style_class_init (PixbufStyleClass *klass)
   style_class->draw_focus = draw_focus;
   style_class->draw_slider = draw_slider;
   style_class->draw_handle = draw_handle;
+  style_class->draw_expander = draw_expander;
+  style_class->draw_resize_grip = draw_resize_grip;
 }

@@ -1,5 +1,11 @@
 2006-01-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* pixbuf-draw.c:
+	* pixbuf-rc-style.c:
+	* pixbuf.h: Apply a patch by Alexander Nedotsukov to
+	support customized drawing of expanders and resize 
+	grips. (#325289). 
+
 	* pixbuf-draw.c (draw_gap_image): Silence the 
 	compiler.
 

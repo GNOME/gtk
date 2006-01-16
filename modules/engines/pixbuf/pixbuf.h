@@ -52,6 +52,8 @@ enum
   TOKEN_OVERLAY_BORDER,
   TOKEN_OVERLAY_STRETCH,
   TOKEN_ARROW_DIRECTION,
+  TOKEN_EXPANDER_STYLE,
+  TOKEN_WINDOW_EDGE,
   TOKEN_D_HLINE,
   TOKEN_D_VLINE,
   TOKEN_D_SHADOW,
@@ -75,6 +77,8 @@ enum
   TOKEN_D_ENTRY,
   TOKEN_D_HANDLE,
   TOKEN_D_STEPPER,
+  TOKEN_D_EXPANDER,
+  TOKEN_D_RESIZE_GRIP,
   TOKEN_TRUE,
   TOKEN_FALSE,
   TOKEN_TOP,
@@ -95,7 +99,19 @@ enum
   TOKEN_ETCHED_OUT,
   TOKEN_ORIENTATION,
   TOKEN_HORIZONTAL,
-  TOKEN_VERTICAL
+  TOKEN_VERTICAL,
+  TOKEN_COLLAPSED,
+  TOKEN_SEMI_COLLAPSED,
+  TOKEN_SEMI_EXPANDED,
+  TOKEN_EXPANDED,
+  TOKEN_NORTH_WEST,
+  TOKEN_NORTH,
+  TOKEN_NORTH_EAST,
+  TOKEN_WEST,
+  TOKEN_EAST,
+  TOKEN_SOUTH_WEST,
+  TOKEN_SOUTH,
+  TOKEN_SOUTH_EAST
 };
 
 typedef enum
@@ -117,7 +133,9 @@ typedef enum {
   THEME_MATCH_ORIENTATION     = 1 << 1,
   THEME_MATCH_STATE           = 1 << 2,
   THEME_MATCH_SHADOW          = 1 << 3,
-  THEME_MATCH_ARROW_DIRECTION = 1 << 4
+  THEME_MATCH_ARROW_DIRECTION = 1 << 4,
+  THEME_MATCH_EXPANDER_STYLE  = 1 << 5,
+  THEME_MATCH_WINDOW_EDGE     = 1 << 6
 } ThemeMatchFlags;
 
 typedef enum {
@@ -140,16 +158,18 @@ struct _ThemePixbuf
 
 struct _ThemeMatchData
 {
-  guint           function;	/* Mandatory */
-  gchar          *detail;
+  guint            function;	/* Mandatory */
+  gchar           *detail;
 
-  ThemeMatchFlags flags;
+  ThemeMatchFlags  flags;
 
-  GtkPositionType gap_side;
-  GtkOrientation  orientation;
-  GtkStateType    state;
-  GtkShadowType   shadow;
-  GtkArrowType    arrow_direction;
+  GtkPositionType  gap_side;
+  GtkOrientation   orientation;
+  GtkStateType     state;
+  GtkShadowType    shadow;
+  GtkArrowType     arrow_direction;
+  GtkExpanderStyle expander_style;
+  GdkWindowEdge    window_edge;
 };
 
 struct _ThemeImage

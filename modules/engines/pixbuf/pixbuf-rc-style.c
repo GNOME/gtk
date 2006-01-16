@@ -64,6 +64,8 @@ theme_symbols[] =
   { "overlay_stretch", 	TOKEN_OVERLAY_STRETCH },
   { "arrow_direction", 	TOKEN_ARROW_DIRECTION },
   { "orientation", 	TOKEN_ORIENTATION },
+  { "expander_style",	TOKEN_EXPANDER_STYLE },
+  { "window_edge",	TOKEN_WINDOW_EDGE },
 
   { "HLINE", 		TOKEN_D_HLINE },
   { "VLINE",		TOKEN_D_VLINE },
@@ -88,6 +90,8 @@ theme_symbols[] =
   { "ENTRY",		TOKEN_D_ENTRY },
   { "HANDLE",		TOKEN_D_HANDLE },
   { "STEPPER",		TOKEN_D_STEPPER },
+  { "EXPANDER",		TOKEN_D_EXPANDER },
+  { "RESIZE_GRIP",	TOKEN_D_RESIZE_GRIP },
 
   { "TRUE",		TOKEN_TRUE },
   { "FALSE",		TOKEN_FALSE },
@@ -110,8 +114,23 @@ theme_symbols[] =
   { "OUT",		TOKEN_OUT },
   { "ETCHED_IN",	TOKEN_ETCHED_IN },
   { "ETCHED_OUT",	TOKEN_ETCHED_OUT },
+
   { "HORIZONTAL",	TOKEN_HORIZONTAL },
   { "VERTICAL",		TOKEN_VERTICAL },
+
+  { "COLLAPSED",	TOKEN_COLLAPSED },
+  { "SEMI_COLLAPSED",	TOKEN_SEMI_COLLAPSED },
+  { "SEMI_EXPANDED",	TOKEN_SEMI_EXPANDED },
+  { "EXPANDED",		TOKEN_EXPANDED },
+
+  { "NORTH_WEST",	TOKEN_NORTH_WEST },
+  { "NORTH",		TOKEN_NORTH },
+  { "NORTH_EAST",	TOKEN_NORTH_EAST },
+  { "WEST",		TOKEN_WEST },
+  { "EAST",		TOKEN_EAST },
+  { "SOUTH_WEST",	TOKEN_SOUTH_WEST },
+  { "SOUTH",		TOKEN_SOUTH },
+  { "SOUTH_EAST",	TOKEN_SOUTH_EAST }
 };
 
 static GtkRcStyleClass *parent_class;
@@ -332,7 +351,7 @@ theme_parse_function(GScanner * scanner,
     return G_TOKEN_EQUAL_SIGN;
 
   token = g_scanner_get_next_token(scanner);
-  if ((token >= TOKEN_D_HLINE) && (token <= TOKEN_D_STEPPER))
+  if ((token >= TOKEN_D_HLINE) && (token <= TOKEN_D_RESIZE_GRIP))
     data->match_data.function = token;
 
   return G_TOKEN_NONE;
@@ -521,6 +540,76 @@ theme_parse_orientation(GScanner * scanner,
   return G_TOKEN_NONE;
 }
 
+static guint
+theme_parse_expander_style(GScanner * scanner,
+			   ThemeImage * data)
+{
+  guint               token;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != TOKEN_EXPANDER_STYLE)
+    return TOKEN_EXPANDER_STYLE;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token == TOKEN_COLLAPSED)
+    data->match_data.expander_style = GTK_EXPANDER_COLLAPSED;
+  else if (token == TOKEN_SEMI_COLLAPSED)
+    data->match_data.expander_style = GTK_EXPANDER_SEMI_COLLAPSED;
+  else if (token == TOKEN_SEMI_EXPANDED)
+    data->match_data.expander_style = GTK_EXPANDER_SEMI_EXPANDED;
+  else if (token == TOKEN_EXPANDED)
+    data->match_data.expander_style = GTK_EXPANDER_EXPANDED;
+  else
+    return TOKEN_COLLAPSED;
+
+  data->match_data.flags |= THEME_MATCH_EXPANDER_STYLE;
+
+  return G_TOKEN_NONE;
+}
+
+static guint
+theme_parse_window_edge(GScanner * scanner,
+			ThemeImage * data)
+{
+  guint               token;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != TOKEN_WINDOW_EDGE)
+    return TOKEN_WINDOW_EDGE;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token == TOKEN_NORTH_WEST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_NORTH_WEST;
+  else if (token == TOKEN_NORTH)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_NORTH;
+  else if (token == TOKEN_NORTH_EAST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_NORTH_EAST;
+  else if (token == TOKEN_WEST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_WEST;
+  else if (token == TOKEN_EAST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_EAST;
+  else if (token == TOKEN_SOUTH_WEST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_SOUTH_WEST;
+  else if (token == TOKEN_SOUTH)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_SOUTH;
+  else if (token == TOKEN_SOUTH_EAST)
+    data->match_data.window_edge = GDK_WINDOW_EDGE_SOUTH_EAST;
+  else
+    return TOKEN_NORTH_WEST;
+
+  data->match_data.flags |= THEME_MATCH_WINDOW_EDGE;
+
+  return G_TOKEN_NONE;
+}
+
 static void
 theme_image_ref (ThemeImage *data)
 {
@@ -647,6 +736,12 @@ theme_parse_image(GtkSettings  *settings,
 	  break;
 	case TOKEN_OVERLAY_STRETCH:
 	  token = theme_parse_stretch(scanner, &data->overlay);
+	  break;
+	case TOKEN_EXPANDER_STYLE:
+	  token = theme_parse_expander_style(scanner, data);
+	  break;
+	case TOKEN_WINDOW_EDGE:
+	  token = theme_parse_window_edge(scanner, data);
 	  break;
 	default:
 	  g_scanner_get_next_token(scanner);
