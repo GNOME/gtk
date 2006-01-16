@@ -39,8 +39,6 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define CHILD_SPACING     1
-
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
 static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
 
@@ -461,13 +459,29 @@ gtk_button_class_init (GtkButtonClass *klass)
 						       FALSE,
 						       GTK_PARAM_READABLE));
 
+  /**
+   * GtkButton:child-spacing:
+   *
+   * Sets the spacing between the button edges and child.
+   *
+   * Since: 2.10
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child-spacing",
+							     _("Child spacing"),
+							     _("Spacing between button edges and child."),
+							     0,
+							     G_MAXINT,
+                                                             1,
+							     GTK_PARAM_READABLE));
+
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
 						       P_("Whether stock icons should be shown in buttons"),
 						       TRUE,
 						       GTK_PARAM_READWRITE));
-  
-  g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));  
+
+  g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
 }
 
 static void
@@ -996,16 +1010,18 @@ gtk_button_size_request (GtkWidget      *widget,
   GtkBorder default_border;
   gint focus_width;
   gint focus_pad;
+  gint child_spacing;
 
   gtk_button_get_props (button, &default_border, NULL, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
+                        "child-spacing", &child_spacing,
 			NULL);
  
-  requisition->width = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
+  requisition->width = (GTK_CONTAINER (widget)->border_width + child_spacing +
 			GTK_WIDGET (widget)->style->xthickness) * 2;
-  requisition->height = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
+  requisition->height = (GTK_CONTAINER (widget)->border_width + child_spacing +
 			 GTK_WIDGET (widget)->style->ythickness) * 2;
 
   if (GTK_WIDGET_CAN_DEFAULT (widget))
@@ -1041,11 +1057,13 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkBorder default_border;
   gint focus_width;
   gint focus_pad;
+  gint child_spacing;
 
   gtk_button_get_props (button, &default_border, NULL, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
+                        "child-spacing", &child_spacing,
 			NULL);
  
 			    
@@ -1060,12 +1078,12 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = widget->allocation.x + border_width + CHILD_SPACING + xthickness;
-      child_allocation.y = widget->allocation.y + border_width + CHILD_SPACING + ythickness;
+      child_allocation.x = widget->allocation.x + border_width + child_spacing + xthickness;
+      child_allocation.y = widget->allocation.y + border_width + child_spacing + ythickness;
       
-      child_allocation.width = MAX (1, widget->allocation.width - (CHILD_SPACING + xthickness) * 2 -
+      child_allocation.width = MAX (1, widget->allocation.width - (child_spacing + xthickness) * 2 -
 				    border_width * 2);
-      child_allocation.height = MAX (1, widget->allocation.height - (CHILD_SPACING + ythickness) * 2 -
+      child_allocation.height = MAX (1, widget->allocation.height - (child_spacing + ythickness) * 2 -
 				     border_width * 2);
 
       if (GTK_WIDGET_CAN_DEFAULT (button))
