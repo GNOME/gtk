@@ -296,6 +296,9 @@ draw_gap_image(GtkStyle       *style,
 	  r3.width  = thickness;
 	  r3.height = height - (gap_x + gap_width);
 	  break;
+
+	default:
+	  g_assert_not_reached ();
 	}
 
       if (image->background)
