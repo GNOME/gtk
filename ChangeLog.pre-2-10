@@ -1,5 +1,7 @@
 2006-01-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Mention new pixbuf engine features.
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkradioaction.[hc]: Add a current-value property and a
 	setter for it.  (#322735, Jorn Baayen)

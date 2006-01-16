@@ -52,6 +52,10 @@ Release notes for 2.10
   in toolbars. If this is not wanted, the feature can be suppressed by 
   inserting a Unicode control character, e.g ZWNJ.
 
+* The pixbuf theme engine can now customize expanders (in GtkTreeView
+  and GtkExpander) and resize grips, using the new EXPANDER and
+  RESIZE_GRIP function values.
+
 Release notes
 =============
 
