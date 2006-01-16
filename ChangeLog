@@ -1,3 +1,7 @@
+2006-01-16  Abel Cheung  <maddog@linuxhall.org>
+
+	* configure.in: Added "ang" "zh_HK" to ALL_LINGUAS.
+
 2006-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* README.in: Mention new pixbuf engine features.
