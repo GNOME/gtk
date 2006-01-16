@@ -110,4 +110,9 @@ GdkImage *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
 				     gint         width,
 				     gint         height);
 
+void _gdk_quartz_send_map_events (GdkWindow *window);
+
+extern GdkWindow *_gdk_quartz_keyboard_grab_window;
+extern GdkWindow *_gdk_quartz_pointer_grab_window;
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

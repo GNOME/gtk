@@ -92,13 +92,6 @@ gdk_display_get_default_screen (GdkDisplay *display)
 }
 
 void
-gdk_display_keyboard_ungrab (GdkDisplay *display,
-			     guint32     time)
-{
-  /* FIXME: Implement */
-}
-
-void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));

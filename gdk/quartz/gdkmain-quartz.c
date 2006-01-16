@@ -31,26 +31,6 @@ _gdk_windowing_init (void)
 {
 }
 
-GdkGrabStatus
-gdk_keyboard_grab (GdkWindow  *window,
-		   gint        owner_events,
-		   guint32     time)
-{
-  /* FIXME: Implement */
-
-  return GDK_GRAB_SUCCESS;
-}
-
-
-gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-				    GdkWindow **grab_window,
-				    gboolean   *owner_events)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
 void
 gdk_error_trap_push (void)
 {

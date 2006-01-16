@@ -392,8 +392,10 @@ _gdk_windowing_window_init (void)
   g_assert (_gdk_root == NULL);
 
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+
   private = (GdkWindowObject *)_gdk_root;
-  
+
+  private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = 24;
 }
@@ -426,6 +428,20 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
   /* FIXME: Implement */
 }
 
+static gboolean
+all_parents_shown (GdkWindowObject *private)
+{
+  while (GDK_WINDOW_IS_MAPPED (private))
+    {
+      if (private->parent)
+	private = (GdkWindowObject *)private->parent;
+      else
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 show_window_internal (GdkWindow *window, gboolean raise)
 {
@@ -441,7 +457,7 @@ show_window_internal (GdkWindow *window, gboolean raise)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  /* FIXME: We need to raise the window (move it to the top in the list)*/
+  /* FIXME: We need to raise the window (move it to the top in the list) */
 
   if (impl->toplevel)
     {
@@ -453,6 +469,9 @@ show_window_internal (GdkWindow *window, gboolean raise)
       [impl->view setHidden:NO];
       [impl->view setNeedsDisplay:YES];
     }
+
+  if (all_parents_shown (private->parent))
+    _gdk_quartz_send_map_events (window);
 
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_WITHDRAWN, 0);
 
@@ -504,8 +523,11 @@ gdk_window_hide (GdkWindow *window)
       [impl->view setHidden:YES];
     }
 
-  gdk_pointer_ungrab (0);
+  if (window == _gdk_quartz_pointer_grab_window)
+    gdk_pointer_ungrab (0);
 
+  if (window == _gdk_quartz_keyboard_grab_window)
+    gdk_keyboard_ungrab (0);
 }
 
 void

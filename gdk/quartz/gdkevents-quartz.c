@@ -37,10 +37,14 @@ static GdkWindow *current_mouse_window;
 static GdkWindow *current_keyboard_window;
 
 /* This is the pointer grab window */
-static GdkWindow *pointer_grab_window;
+GdkWindow *_gdk_quartz_pointer_grab_window;
 static gboolean pointer_grab_owner_events;
 static GdkEventMask pointer_grab_event_mask;
 static gboolean pointer_grab_implicit;
+
+/* This is the keyboard grab window */
+GdkWindow *_gdk_quartz_keyboard_grab_window;
+static gboolean keyboard_grab_owner_events;
 
 static gboolean
 gdk_event_prepare (GSource *source,
@@ -191,18 +195,62 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   return NULL;
 }
 
+GdkGrabStatus
+gdk_keyboard_grab (GdkWindow  *window,
+		   gint        owner_events,
+		   guint32     time)
+{
+  g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  if (_gdk_quartz_keyboard_grab_window)
+    gdk_keyboard_ungrab (time);
+
+  _gdk_quartz_keyboard_grab_window = g_object_ref (window);
+  keyboard_grab_owner_events = owner_events;
+
+  return GDK_GRAB_SUCCESS;
+}
+
+void
+gdk_display_keyboard_ungrab (GdkDisplay *display,
+			     guint32     time)
+{
+  if (_gdk_quartz_keyboard_grab_window)
+    g_object_unref (_gdk_quartz_keyboard_grab_window);
+  _gdk_quartz_keyboard_grab_window = NULL;
+}
+
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+				    GdkWindow **grab_window,
+				    gboolean   *owner_events)
+{
+  if (_gdk_quartz_keyboard_grab_window) 
+    {
+      if (grab_window)
+	*grab_window = _gdk_quartz_keyboard_grab_window;
+      if (owner_events)
+	*owner_events = keyboard_grab_owner_events;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 pointer_ungrab_internal (gboolean implicit)
 {
-  if (!pointer_grab_window)
+  if (!_gdk_quartz_pointer_grab_window)
     return;
 
   if (pointer_grab_implicit && !implicit)
     return;
 
-  g_object_unref (pointer_grab_window);
+  g_object_unref (_gdk_quartz_pointer_grab_window);
 
-  pointer_grab_window = NULL;
+  _gdk_quartz_pointer_grab_window = NULL;
   /* FIXME: Send crossing events */
 }
 
@@ -210,7 +258,7 @@ pointer_ungrab_internal (gboolean implicit)
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  return pointer_grab_window != NULL;
+  return _gdk_quartz_pointer_grab_window != NULL;
 }
 
 gboolean
@@ -218,11 +266,11 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
-  if (!pointer_grab_window)
+  if (!_gdk_quartz_pointer_grab_window)
     return FALSE;
 
   if (grab_window)
-    *grab_window = pointer_grab_window;
+    *grab_window = _gdk_quartz_pointer_grab_window;
 
   if (owner_events)
     *owner_events = pointer_grab_owner_events;
@@ -247,7 +295,7 @@ pointer_grab_internal (GdkWindow    *window,
 {
   /* FIXME: Send crossing events */
   
-  pointer_grab_window = g_object_ref (window);
+  _gdk_quartz_pointer_grab_window = g_object_ref (window);
   pointer_grab_owner_events = owner_events;
   pointer_grab_event_mask = event_mask;
   pointer_grab_implicit = implicit;
@@ -266,7 +314,7 @@ gdk_pointer_grab (GdkWindow    *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  if (pointer_grab_window)
+  if (_gdk_quartz_pointer_grab_window)
     {
       if (!pointer_grab_implicit)
 	return GDK_GRAB_ALREADY_GRABBED;
@@ -744,6 +792,29 @@ synthesize_crossing_events (GdkWindow      *window,
   _gdk_quartz_update_mouse_window (window);
 }
 
+
+void 
+_gdk_quartz_send_map_events (GdkWindow *window)
+{
+  GList *list;
+  GdkWindow *interested_window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  interested_window = find_window_interested_in_event_mask (window, 
+							    GDK_STRUCTURE_MASK,
+							    TRUE);
+  
+  if (interested_window)
+    {
+      GdkEvent *event = gdk_event_new (GDK_MAP);
+      event->any.window = interested_window;
+      append_event (event);
+    }
+
+  for (list = private->children; list != NULL; list = list->next)
+    _gdk_quartz_send_map_events ((GdkWindow *)list->data);
+}
+
 /* Get current mouse window */
 GdkWindow *
 _gdk_quartz_get_mouse_window (void)
@@ -815,7 +886,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
       if (!mouse_window)
 	mouse_window = _gdk_root;
 
-      if (pointer_grab_window)
+      if (_gdk_quartz_pointer_grab_window)
 	{
 	  if (mouse_window != current_mouse_window)
 	    synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
@@ -851,13 +922,13 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	GdkEventMask event_mask;
 	GdkWindow *real_window;
 
-	if (pointer_grab_window)
+	if (_gdk_quartz_pointer_grab_window)
 	  {
 	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent)) 
 	      {
 		int tempx, tempy;
-		GdkWindowObject *w = GDK_WINDOW_OBJECT (pointer_grab_window);
-		GdkWindowObject *grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (pointer_grab_window));
+		GdkWindowObject *w = GDK_WINDOW_OBJECT (_gdk_quartz_pointer_grab_window);
+		GdkWindowObject *grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window));
 
 		tempx = point.x;
 		tempy = GDK_WINDOW_IMPL_QUARTZ (grab_toplevel->impl)->height -
@@ -874,7 +945,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 		*x = tempx;
 		*y = tempy;
 
-		return pointer_grab_window;
+		return _gdk_quartz_pointer_grab_window;
 	      }
 	    else
 	      {
@@ -922,6 +993,9 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	GdkWindow *keyboard_window;
 	GdkEventMask event_mask;
 	GdkWindow *real_window;
+
+	if (_gdk_quartz_keyboard_grab_window && !keyboard_grab_owner_events)
+	  return _gdk_quartz_keyboard_grab_window;
 
 	keyboard_window = find_current_keyboard_window ();
 	event_mask = get_event_mask_from_ns_event (nsevent);
@@ -1125,7 +1199,7 @@ gdk_event_translate (NSEvent *nsevent)
     case NSRightMouseDown:
     case NSOtherMouseDown:
       /* Emulate implicit grab */
-      if (!pointer_grab_window)
+      if (!_gdk_quartz_pointer_grab_window)
 	{
 	  pointer_grab_internal (window, FALSE, GDK_WINDOW_OBJECT (window)->event_mask,
 				 NULL, NULL, TRUE);
@@ -1145,7 +1219,7 @@ gdk_event_translate (NSEvent *nsevent)
       append_event (event);
       
       /* Ungrab implicit grab */
-      if (pointer_grab_window &&
+      if (_gdk_quartz_pointer_grab_window &&
 	  pointer_grab_implicit)
 	pointer_ungrab_internal (TRUE);
       break;
