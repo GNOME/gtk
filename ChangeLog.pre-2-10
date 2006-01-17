@@ -1,3 +1,8 @@
+2006-01-17  Michael Natterer  <mitch@imendio.com>
+
+	* configure.in (ALL_LINGUAS): remove "ang" again until all po
+	files are there.
+
 2006-01-16  Abel Cheung  <maddog@linuxhall.org>
 
 	* configure.in: Added "ang" "zh_HK" to ALL_LINGUAS.
