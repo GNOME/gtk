@@ -1,3 +1,9 @@
+2006-01-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixbuf-render.c: If the src positions for gradients
+	are nonsensical, don't render anything, rather than 
+	read out of bounds.  
+	
 2006-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* pixbuf-draw.c:
