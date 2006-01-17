@@ -372,6 +372,13 @@ gtk_progress_create_pixmap (GtkProgress *progress)
 						   widget->allocation.width,
 						   widget->allocation.height,
 						   -1);
+
+      /* clear the pixmap for transparent themes */
+      gtk_paint_flat_box (widget->style,
+                          progress->offscreen_pixmap,
+                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                          NULL, widget, "trough", 0, 0, -1, -1);
+      
       GTK_PROGRESS_GET_CLASS (progress)->paint (progress);
     }
 }
