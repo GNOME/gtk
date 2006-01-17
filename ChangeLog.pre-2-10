@@ -1,5 +1,11 @@
 2006-01-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkbutton.c: remove the "child-spacing" style property again
+	and add "inner-border" instead. That's far more flexible and
+	"child-spacing" was a bad name anyway.
+
+2006-01-17  Michael Natterer  <mitch@imendio.com>
+
 	* configure.in (ALL_LINGUAS): remove "ang" again until all po
 	files are there.
 

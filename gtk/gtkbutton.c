@@ -41,6 +41,7 @@
 
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
 static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
+static const GtkBorder default_inner_border = { 1, 1, 1, 1 };
 
 /* Time out before giving up on getting a key release when animating
  * the close button.
@@ -460,20 +461,18 @@ gtk_button_class_init (GtkButtonClass *klass)
 						       GTK_PARAM_READABLE));
 
   /**
-   * GtkButton:child-spacing:
+   * GtkButton:inner-border:
    *
-   * Sets the spacing between the button edges and child.
+   * Sets the border between the button edges and child.
    *
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child-spacing",
-							     _("Child spacing"),
-							     _("Spacing between button edges and child."),
-							     0,
-							     G_MAXINT,
-                                                             1,
-							     GTK_PARAM_READABLE));
+					   g_param_spec_boxed ("inner-border",
+                                                               P_("Inner Border"),
+                                                               P_("Border between button edges and child."),
+                                                               GTK_TYPE_BORDER,
+                                                               GTK_PARAM_READABLE));
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
@@ -967,6 +966,7 @@ static void
 gtk_button_get_props (GtkButton *button,
 		      GtkBorder *default_border,
 		      GtkBorder *default_outside_border,
+                      GtkBorder *inner_border,
 		      gboolean  *interior_focus)
 {
   GtkWidget *widget =  GTK_WIDGET (button);
@@ -998,6 +998,19 @@ gtk_button_get_props (GtkButton *button,
 	*default_outside_border = default_default_outside_border;
     }
 
+  if (inner_border)
+    {
+      gtk_widget_style_get (widget, "inner-border", &tmp_border, NULL);
+
+      if (tmp_border)
+	{
+	  *inner_border = *tmp_border;
+	  g_free (tmp_border);
+	}
+      else
+	*inner_border = default_inner_border;
+    }
+
   if (interior_focus)
     gtk_widget_style_get (widget, "interior-focus", interior_focus, NULL);
 }
@@ -1008,21 +1021,22 @@ gtk_button_size_request (GtkWidget      *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkBorder default_border;
+  GtkBorder inner_border;
   gint focus_width;
   gint focus_pad;
-  gint child_spacing;
 
-  gtk_button_get_props (button, &default_border, NULL, NULL);
+  gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
-                        "child-spacing", &child_spacing,
 			NULL);
  
-  requisition->width = (GTK_CONTAINER (widget)->border_width + child_spacing +
-			GTK_WIDGET (widget)->style->xthickness) * 2;
-  requisition->height = (GTK_CONTAINER (widget)->border_width + child_spacing +
-			 GTK_WIDGET (widget)->style->ythickness) * 2;
+  requisition->width = ((GTK_CONTAINER (widget)->border_width +
+                         GTK_WIDGET (widget)->style->xthickness) * 2 +
+                        inner_border.left + inner_border.right);
+  requisition->height = ((GTK_CONTAINER (widget)->border_width +
+                          GTK_WIDGET (widget)->style->ythickness) * 2 +
+                         inner_border.top + inner_border.bottom);
 
   if (GTK_WIDGET_CAN_DEFAULT (widget))
     {
@@ -1055,15 +1069,14 @@ gtk_button_size_allocate (GtkWidget     *widget,
   gint xthickness = GTK_WIDGET (widget)->style->xthickness;
   gint ythickness = GTK_WIDGET (widget)->style->ythickness;
   GtkBorder default_border;
+  GtkBorder inner_border;
   gint focus_width;
   gint focus_pad;
-  gint child_spacing;
 
-  gtk_button_get_props (button, &default_border, NULL, NULL);
+  gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
-                        "child-spacing", &child_spacing,
 			NULL);
  
 			    
@@ -1078,12 +1091,18 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = widget->allocation.x + border_width + child_spacing + xthickness;
-      child_allocation.y = widget->allocation.y + border_width + child_spacing + ythickness;
+      child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
+      child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;
       
-      child_allocation.width = MAX (1, widget->allocation.width - (child_spacing + xthickness) * 2 -
+      child_allocation.width = MAX (1, widget->allocation.width -
+                                    xthickness * 2 -
+                                    inner_border.left -
+                                    inner_border.right -
 				    border_width * 2);
-      child_allocation.height = MAX (1, widget->allocation.height - (child_spacing + ythickness) * 2 -
+      child_allocation.height = MAX (1, widget->allocation.height -
+                                     ythickness * 2 -
+                                     inner_border.top -
+                                     inner_border.bottom -
 				     border_width * 2);
 
       if (GTK_WIDGET_CAN_DEFAULT (button))
@@ -1142,7 +1161,7 @@ _gtk_button_paint (GtkButton    *button,
       widget = GTK_WIDGET (button);
       border_width = GTK_CONTAINER (widget)->border_width;
 
-      gtk_button_get_props (button, &default_border, &default_outside_border, &interior_focus);
+      gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
       gtk_widget_style_get (GTK_WIDGET (widget),
 			    "focus-line-width", &focus_width,
 			    "focus-padding", &focus_pad,
