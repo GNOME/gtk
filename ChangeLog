@@ -1,3 +1,7 @@
+2006-01-16  Abel Cheung  <maddog@linuxhall.org>
+
+	* configure.in: Added "ang" "zh_HK" to ALL_LINGUAS.
+
 2006-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix a crash with combo boxes in RESIZE_IMMEDIATE
