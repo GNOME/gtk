@@ -286,11 +286,11 @@ msgstr "本指令的工具提示。"
 
 #: ../gtk/gtkaction.c:227
 msgid "Stock Icon"
-msgstr "內建圖示"
+msgstr "內置圖示"
 
 #: ../gtk/gtkaction.c:228
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "在視窗元件中代表此動作的內建圖示"
+msgstr "在視窗元件中代表此動作的內置圖示"
 
 #: ../gtk/gtkaction.c:235
 #: ../gtk/gtktoolitem.c:160
@@ -437,7 +437,7 @@ msgstr "水平對齊設定"
 #: ../gtk/gtkalignment.c:120
 #: ../gtk/gtkbutton.c:277
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
-msgstr "子元件在提供的空間裡的水平對齊方式。0.0 表示靠左對齊，1.0 表示靠右對齊"
+msgstr "子元件在提供的空間裏的水平對齊方式。0.0 表示靠左對齊，1.0 表示靠右對齊"
 
 #: ../gtk/gtkalignment.c:129
 msgid "Vertical alignment"
@@ -446,7 +446,7 @@ msgstr "垂直對齊設定"
 #: ../gtk/gtkalignment.c:130
 #: ../gtk/gtkbutton.c:296
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
-msgstr "子元件在提供的空間裡的垂直對齊方式。0.0 表示靠頂對齊，1.0 表示靠底對齊"
+msgstr "子元件在提供的空間裏的垂直對齊方式。0.0 表示靠頂對齊，1.0 表示靠底對齊"
 
 #: ../gtk/gtkalignment.c:138
 msgid "Horizontal scale"
@@ -542,7 +542,7 @@ msgstr "配合子元件"
 
 #: ../gtk/gtkaspectframe.c:133
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "強迫設定長寬比符合該框架裡的子元件的設定"
+msgstr "強迫設定長寬比符合該框架裏的子元件的設定"
 
 #: ../gtk/gtkbbox.c:121
 msgid "Minimum child width"
@@ -680,11 +680,11 @@ msgstr "若設置，在英數字母前加上底線(_)則該字母會自動被設
 
 #: ../gtk/gtkbutton.c:242
 msgid "Use stock"
-msgstr "使用內建"
+msgstr "使用內置"
 
 #: ../gtk/gtkbutton.c:243
 msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "若設置，該標籤內容用來指定內建圖示而不會被顯示"
+msgstr "若設置，該標籤內容用來指定內置圖示而不會被顯示"
 
 #: ../gtk/gtkbutton.c:250
 #: ../gtk/gtkcombobox.c:680
@@ -766,7 +766,7 @@ msgstr "顯示按鈕圖示"
 
 #: ../gtk/gtkbutton.c:466
 msgid "Whether stock icons should be shown in buttons"
-msgstr "內建圖示應否顯示於按鈕內"
+msgstr "內置圖示應否顯示於按鈕內"
 
 #: ../gtk/gtkcalendar.c:419
 msgid "Year"
@@ -810,7 +810,7 @@ msgstr "如設為定為‘TRUE’，星期名會被顯示"
 
 #: ../gtk/gtkcalendar.c:477
 msgid "No Month Change"
-msgstr "不變更月份"
+msgstr "不更改月份"
 
 #: ../gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
@@ -954,7 +954,7 @@ msgstr "捷徑鍵鍵碼"
 
 #: ../gtk/gtkcellrendereraccel.c:143
 msgid "The hardware keycode of the accelerator"
-msgstr "捷徑鍵的硬體鍵碼"
+msgstr "捷徑鍵的硬件鍵碼"
 
 #: ../gtk/gtkcellrendereraccel.c:162
 msgid "Accelerator Mode"
@@ -1018,11 +1018,11 @@ msgstr "用來關閉開展器的 Pixbuf"
 #: ../gtk/gtkimage.c:203
 #: ../gtk/gtkstatusicon.c:141
 msgid "Stock ID"
-msgstr "內建圖示代碼"
+msgstr "內置圖示代碼"
 
 #: ../gtk/gtkcellrendererpixbuf.c:170
 msgid "The stock ID of the stock icon to render"
-msgstr "準備顯示的內建圖示的代碼"
+msgstr "準備顯示的內置圖示的代碼"
 
 #: ../gtk/gtkcellrendererpixbuf.c:177
 #: ../gtk/gtkstatusicon.c:166
@@ -1060,7 +1060,7 @@ msgstr "跟隨態狀"
 
 #: ../gtk/gtkcellrendererpixbuf.c:222
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr "rendered pixbuf 是否跟隨狀狀著色"
+msgstr "rendered pixbuf 是否跟隨狀狀着色"
 
 #: ../gtk/gtkcellrendererprogress.c:117
 msgid "Value of the progress bar"
@@ -1274,7 +1274,7 @@ msgstr "語言"
 
 #: ../gtk/gtkcellrenderertext.c:415
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
-msgstr "該文字所用的語言，以 ISO 代碼表示。Pango 在描繪文字時會使用這個設定作為提示。如果您不明白這個參數的意義，即是表示不需要使用它了。"
+msgstr "該文字所用的語言，以 ISO 代碼表示。Pango 在描繪文字時會使用這個設定作為提示。如果你不明白這個參數的意義，即是表示不需要使用它了。"
 
 #: ../gtk/gtkcellrenderertext.c:435
 #: ../gtk/gtklabel.c:435
@@ -1866,7 +1866,7 @@ msgstr "隱形字元"
 
 #: ../gtk/gtkentry.c:543
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "用來遮蓋輸入內容的字元（在「密碼模式」裡）"
+msgstr "用來遮蓋輸入內容的字元（在「密碼模式」裏）"
 
 #: ../gtk/gtkentry.c:550
 msgid "Activates default"
@@ -2091,7 +2091,7 @@ msgstr "使用預覽文字"
 
 #: ../gtk/gtkfilechooser.c:241
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "是否與預覽的檔案名稱一起顯示內建圖示文字。"
+msgstr "是否與預覽的檔案名稱一起顯示內置圖示文字。"
 
 #: ../gtk/gtkfilechooser.c:246
 msgid "Extra widget"
@@ -2487,7 +2487,7 @@ msgstr "準備載入及顯示的檔案"
 #: ../gtk/gtkimage.c:204
 #: ../gtk/gtkstatusicon.c:142
 msgid "Stock ID for a stock image to display"
-msgstr "欲顯示的內建圖示名稱"
+msgstr "欲顯示的內置圖示名稱"
 
 #: ../gtk/gtkimage.c:211
 msgid "Icon set"
@@ -2504,7 +2504,7 @@ msgstr "圖示大小"
 
 #: ../gtk/gtkimage.c:220
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "內建圖示或圖示集或具名圖示的符號大小"
+msgstr "內置圖示或圖示集或具名圖示的符號大小"
 
 #: ../gtk/gtkimage.c:236
 msgid "Pixel size"
@@ -2677,7 +2677,7 @@ msgstr "分離狀態"
 
 #: ../gtk/gtkmenu.c:548
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "指出該選單是否分離的布林值"
+msgstr "指出該選單是否分離的邏輯值"
 
 #: ../gtk/gtkmenu.c:554
 msgid "Vertical Padding"
@@ -2743,7 +2743,7 @@ msgstr "可更改捷徑鍵"
 
 #: ../gtk/gtkmenu.c:696
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "是否可在選單項目上按鍵來變更快捷鍵"
+msgstr "是否可在選單項目上按鍵來更改快捷鍵"
 
 #: ../gtk/gtkmenu.c:701
 msgid "Delay before submenus appear"
@@ -2804,7 +2804,7 @@ msgstr "獲得焦點"
 
 #: ../gtk/gtkmenushell.c:378
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "決定選單是否取得鍵盤焦點的布林值"
+msgstr "決定選單是否取得鍵盤焦點的邏輯值"
 
 #: ../gtk/gtkmenutoolbutton.c:268
 #: ../gtk/gtkoptionmenu.c:194
@@ -4353,11 +4353,11 @@ msgstr "當作項目文字標籤的替代視窗元件"
 
 #: ../gtk/gtktoolbutton.c:206
 msgid "Stock Id"
-msgstr "內建圖示代碼"
+msgstr "內置圖示代碼"
 
 #: ../gtk/gtktoolbutton.c:207
 msgid "The stock icon displayed on the item"
-msgstr "項目中所顯示的內建圖示"
+msgstr "項目中所顯示的內置圖示"
 
 #: ../gtk/gtktoolbutton.c:223
 msgid "Icon name"
