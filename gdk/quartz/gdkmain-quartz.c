@@ -21,6 +21,7 @@
 #include <config.h>
 
 #include "gdk.h"
+#include <ApplicationServices/ApplicationServices.h>
 
 GOptionEntry _gdk_windowing_args[] = {
   { NULL }
@@ -29,6 +30,13 @@ GOptionEntry _gdk_windowing_args[] = {
 void
 _gdk_windowing_init (void)
 {
+  ProcessSerialNumber psn;
+
+  /* Make the current process a foreground application, i.e. an app
+   * with a user interface, in case we're not running from a .app bundle
+   */
+  GetCurrentProcess (&psn);
+  TransformProcessType (&psn, kProcessTransformToForegroundApplication);
 }
 
 void
