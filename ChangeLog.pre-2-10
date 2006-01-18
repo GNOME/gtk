@@ -1,3 +1,8 @@
+2006-01-18 Matthias Clasen <mclasen@redhat.com>
+
+	* configure.in: Remove "ang" again. Please add 
+	po-properties/ang.po too, before adding it again.
+
 2006-01-16  Abel Cheung  <maddog@linuxhall.org>
 
 	* configure.in: Added "ang" "zh_HK" to ALL_LINGUAS.
