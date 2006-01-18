@@ -1,9 +1,17 @@
 2006-01-18  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkdrawable-quartz.c:
+        (gdk_quartz_draw_polygon):
+        (gdk_quartz_draw_lines):
+	Implement these functions.
+	(#327226, Thomas Broyer)
+	
+2006-01-18  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/gdkkeys-quartz.c:
-        (maybe_update_keymap):
-	    Support non-MacRoman keyboard layouts.
-	    (#322585, Wolfgang Thaller)
+	(maybe_update_keymap):
+	Support non-MacRoman keyboard layouts.
+	(#322585, Wolfgang Thaller)
 	
 2006-01-18  Anders Carlsson  <andersca@imendio.com>
 

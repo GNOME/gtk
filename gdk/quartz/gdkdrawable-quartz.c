@@ -209,7 +209,33 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
 			 GdkPoint    *points,
 			 gint         npoints)
 {
-  /* FIXME: Implement */
+  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE, TRUE);
+  int i;
+
+  if (!context)
+    return;
+
+  _gdk_quartz_update_context_from_gc (context, gc);
+
+  if (filled)
+    _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+						   _gdk_gc_get_fg_pixel (gc));
+  else
+    _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+						     _gdk_gc_get_fg_pixel (gc));
+
+  CGContextMoveToPoint (context, points[0].x, points[0].y);
+  for (i = 1; i < npoints; i++)
+    CGContextAddLineToPoint (context, points[i].x, points[i].y);
+
+  CGContextClosePath (context);
+
+  if (filled)
+    CGContextFillPath (context);
+  else
+    CGContextStrokePath (context);
+
+  _gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -338,7 +364,25 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 		       GdkPoint    *points,
 		       gint         npoints)
 {
-  /* FIXME: Implement */
+  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE, TRUE);
+  int i;
+
+  if (!context)
+    return;
+
+  _gdk_quartz_update_context_from_gc (context, gc);
+  _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+						   _gdk_gc_get_fg_pixel (gc));
+  
+  for (i = 1; i < npoints; i++)
+    {
+      CGContextMoveToPoint (context, points[i - 1].x, points[i - 1].y);
+      CGContextAddLineToPoint (context, points[i].x, points[i].y);
+    }
+  
+  CGContextStrokePath (context);
+
+  _gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
