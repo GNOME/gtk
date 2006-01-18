@@ -1,3 +1,10 @@
+2006-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrbtree.c: 
+	* gtk/gtktreemodel.c: Fix several g_new() calls which
+	were using extra indirections or pointless casts.  
+	(#327423, Morten Welinder)
+
 Tue Jan 17 19:27:59 2006  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkprogress.c: fix adopted from maemo-gtk.

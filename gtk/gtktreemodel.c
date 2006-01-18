@@ -328,7 +328,7 @@ GtkTreePath *
 gtk_tree_path_new (void)
 {
   GtkTreePath *retval;
-  retval = (GtkTreePath *) g_new (GtkTreePath, 1);
+  retval = g_new (GtkTreePath, 1);
   retval->depth = 0;
   retval->indices = NULL;
 
@@ -441,7 +441,7 @@ gtk_tree_path_to_string (GtkTreePath *path)
   if (path->depth == 0)
     return NULL;
 
-  ptr = retval = (gchar *) g_new0 (char *, path->depth*8);
+  ptr = retval = g_new0 (gchar, path->depth*8);
   g_sprintf (retval, "%d", path->indices[0]);
   while (*ptr != '\000')
     ptr++;

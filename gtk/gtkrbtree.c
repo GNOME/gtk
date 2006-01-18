@@ -334,7 +334,7 @@ _gtk_rbtree_new (void)
 {
   GtkRBTree *retval;
 
-  retval = (GtkRBTree *) g_new (GtkRBTree, 1);
+  retval = g_new (GtkRBTree, 1);
   retval->parent_tree = NULL;
   retval->parent_node = NULL;
 

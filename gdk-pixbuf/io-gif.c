@@ -1576,7 +1576,7 @@ gdk_pixbuf__gif_image_load_increment (gpointer data,
 		/* prepare for the next image_load_increment */
 		if (context->buf == buf) {
 			g_assert (context->size == size);
-			context->buf = (guchar *)g_new (guchar, context->amount_needed + (context->size - context->ptr));
+			context->buf = g_new (guchar, context->amount_needed + (context->size - context->ptr));
 			memcpy (context->buf, buf + context->ptr, context->size - context->ptr);
 		} else {
 			/* copy the left overs to the begining of the buffer */
