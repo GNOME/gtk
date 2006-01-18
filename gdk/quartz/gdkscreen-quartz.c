@@ -132,22 +132,67 @@ gdk_screen_get_height (GdkScreen *screen)
   return height;
 }
 
+static gint
+get_mm_from_pixels (NSScreen *screen, int pixels)
+{
+  /* userSpaceScaleFactor is in "pixels per point", 
+   * 72 is the number of points per inch, 
+   * and 25.4 is the number of millimeters per inch.
+   */
+  return ((pixels / [screen userSpaceScaleFactor]) / 72) * 25.4;
+}
+
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
 {
+  int i;
+  gint width;
+  NSArray *array;
+  NSAutoreleasePool *pool;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  /* FIXME: Implement */
-  return 0;
+  pool = [[NSAutoreleasePool alloc] init];
+  array = [NSScreen screens];
+
+  width = 0;
+  for (i = 0; i < [array count]; i++)
+    {
+      NSScreen *screen = [array objectAtIndex:i];
+      NSRect rect = [screen frame];
+      width += get_mm_from_pixels (screen, rect.size.width);
+    }
+
+  [pool release];
+
+  return width;
 }
 
 gint
 gdk_screen_get_height_mm (GdkScreen *screen)
 {
+  int i;
+  gint height;
+  NSArray *array;
+  NSAutoreleasePool *pool;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  /* FIXME: Implement */
-  return 0;
+  pool = [[NSAutoreleasePool alloc] init];
+  array = [NSScreen screens];
+
+  height = 0;
+  for (i = 0; i < [array count]; i++)
+    {
+      NSScreen *screen = [array objectAtIndex:i];
+      NSRect rect = [screen frame];
+      gint h = get_mm_from_pixels (screen, rect.size.height);
+      height = MAX (height, h);
+    }
+
+  [pool release];
+
+  return height;
 }
 
 int

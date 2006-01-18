@@ -1,5 +1,14 @@
 2006-01-18  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkevents-quartz.c:
+        (get_mm_from_pixels):
+        (gdk_screen_get_width_mm):
+        (gdk_screen_get_height_mm):
+	Implement these functions.
+	(#327228, Thomas Broyer).
+
+2006-01-18  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/gdkdrawable-quartz.c:
         (gdk_quartz_draw_polygon):
         (gdk_quartz_draw_lines):
