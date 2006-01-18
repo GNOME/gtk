@@ -184,17 +184,15 @@ maybe_update_keymap (void)
       keyval_array = g_new0 (guint, NUM_KEYCODES * KEYVALS_PER_KEYCODE);
 
       /* Get the layout kind */
-      KLGetKeyboardLayoutProperty (new_layout, kKLKind, &layout_kind);
+      KLGetKeyboardLayoutProperty (new_layout, kKLKind, (const void **)&layout_kind);
 
-      /* FIXME: When we have UCHR support, I think that should be preffered
-       * if a keymap has both.
-       */
-      if (layout_kind == kKLKCHRuchrKind || layout_kind == kKLKCHRKind)
-	{
+      /* 8-bit-only keyabord layout */
+      if (layout_kind == kKLKCHRKind)
+	{ 
 	  const void *chr_data;
-
+	  
 	  /* Get chr data */
-	  KLGetKeyboardLayoutProperty (new_layout, kKLKCHRData, (void **)&chr_data);
+	  KLGetKeyboardLayoutProperty (new_layout, kKLKCHRData, (const void **)&chr_data);
 	  
 	  for (i = 0; i < NUM_KEYCODES; i++) 
 	    {
@@ -202,7 +200,7 @@ maybe_update_keymap (void)
 	      UInt32 modifiers[] = {0, shiftKey, optionKey, shiftKey|optionKey};
 
 	      p = keyval_array + i * KEYVALS_PER_KEYCODE;
-
+	      
 	      for (j = 0; j < KEYVALS_PER_KEYCODE; j++)
 		{
 		  UInt32 c, state = 0;
@@ -220,10 +218,15 @@ maybe_update_keymap (void)
 
 		  if (c != 0 && c != 0x10)
 		    {
-		      guint keyval;
 		      int k;
 		      gboolean found = FALSE;
 
+		      /* FIXME: some keyboard layouts (e.g. Russian) use
+                       * a different 8-bit character set. We should
+                       * check for this. Not a serious problem, because
+		       * most (all?) of these layouts also have a
+		       * uchr version. 
+		       */
 		      uc = macroman2ucs (c);
 		      
 		      for (k = 0; k < G_N_ELEMENTS (special_ucs_table); k++) 
@@ -240,7 +243,76 @@ maybe_update_keymap (void)
 			p[j] = gdk_unicode_to_keyval (uc);
 		    }
 		}
+	      
+	      if (p[3] == p[2])
+		p[3] = 0;
+	      if (p[2] == p[1])
+		p[2] = 0;
+	      if (p[1] == p[0])
+		p[1] = 0;
+	      if (p[0] == p[2] && 
+		  p[1] == p[3])
+		p[2] = p[3] = 0;
+	    }
+	}
+      /* unicode keyboard layout */
+      else if (layout_kind == kKLKCHRuchrKind || layout_kind == kKLuchrKind)
+	{ 
+	  const void *chr_data;
+	  
+	  /* Get chr data */
+	  KLGetKeyboardLayoutProperty (new_layout, kKLuchrData, (const void **)&chr_data);
+	  
+	  for (i = 0; i < NUM_KEYCODES; i++) 
+	    {
+	      int j;
+	      UInt32 modifiers[] = {0, shiftKey, optionKey, shiftKey|optionKey};
+              UniChar chars[4];
+              UniCharCount nChars;
 
+	      p = keyval_array + i * KEYVALS_PER_KEYCODE;
+
+	      for (j = 0; j < KEYVALS_PER_KEYCODE; j++)
+		{
+		  UInt32 state = 0;
+		  OSStatus err;
+		  UInt16 key_code;
+		  UniChar uc;
+		  
+		  key_code = modifiers[j]|i;
+		  err = UCKeyTranslate (chr_data, i, kUCKeyActionDown,
+		                        (modifiers[j] >> 8) & 0xFF,
+		                        LMGetKbdType(),
+		                        kUCKeyTranslateNoDeadKeysMask,
+		                        &state, 4, &nChars, chars);
+
+
+                  /* FIXME: Theoretically, we can get multiple UTF-16 values;
+		   * we should convert them to proper unicode and figure
+		   * out whether there are really keyboard layouts that
+		   * give us more than one character for one keypress. */
+		  if (err == noErr && nChars == 1)
+		    {
+		      int k;
+		      gboolean found = FALSE;
+		      
+		      uc = chars[0];
+		      
+		      for (k = 0; k < G_N_ELEMENTS (special_ucs_table); k++) 
+			{
+			  if (special_ucs_table[k].ucs_value == uc)
+			    {
+			      p[j] = special_ucs_table[k].keyval;
+			      found = TRUE;
+			      break;
+			    }
+			}
+		      
+		      if (!found)
+			p[j] = gdk_unicode_to_keyval (uc);
+		    }
+		}
+	      
 	      if (p[3] == p[2])
 		p[3] = 0;
 	      if (p[2] == p[1])
@@ -254,7 +326,8 @@ maybe_update_keymap (void)
 	}
       else
 	{
-	  g_error ("uchr type layouts aren't supported right now");
+	  g_error ("unknown type of keyboard layout (neither KCHR nor uchr)"
+	           " - not supported right now");
 	}
 
       for (i = 0; i < G_N_ELEMENTS (known_keys); i++)

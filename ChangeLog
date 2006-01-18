@@ -1,5 +1,12 @@
 2006-01-18  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkkeys-quartz.c:
+        (maybe_update_keymap):
+	    Support non-MacRoman keyboard layouts.
+	    (#322585, Wolfgang Thaller)
+	
+2006-01-18  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/gdkmain-quartz.c:
         (_gdk_windowing_init):
         Make the process a foreground application.
