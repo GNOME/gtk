@@ -40,6 +40,7 @@
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
+#include <gtk/gtkassistant.h>
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkbindings.h>

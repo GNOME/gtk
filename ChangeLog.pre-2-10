@@ -1,3 +1,13 @@
+2006-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkassistant.[hc]: Add GtkAssistant, a widget to
+	construct multi-step wizards.  (#115348, Martyn Russell, 
+	Matthias Clasen, Carlos Garnacho Parro)
+
+	* gtk/gtk.symbols:
+	* gtk/Makefile.am: 
+	* gtk/gtk.h: Necessary glue.
+
 2006-01-18  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkevents-quartz.c:

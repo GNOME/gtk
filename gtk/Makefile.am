@@ -122,6 +122,7 @@ gtk_public_h_sources =          \
 	gtkalignment.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
+	gtkassistant.h		\
 	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
@@ -337,6 +338,7 @@ gtk_c_sources =                 \
 	gtkalignment.c		\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
+	gtkassistant.c		\
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\

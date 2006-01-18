@@ -284,6 +284,46 @@ GtkAlignmentPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkassistant</FILE>
+<TITLE>GtkAssistant</TITLE>
+GtkAssistant
+gtk_assistant_new
+gtk_assistant_get_current_page
+gtk_assistant_set_current_page
+gtk_assistant_get_n_pages
+gtk_assistant_get_nth_page
+gtk_assistant_prepend_page
+gtk_assistant_append_page
+gtk_assistant_insert_page
+GtkAssistantPageFunc
+gtk_assistant_set_forward_page_func
+GtkAssistantPageType
+gtk_assistant_set_page_type
+gtk_assistant_get_page_type
+gtk_assistant_set_page_title
+gtk_assistant_get_page_title
+gtk_assistant_set_page_header_image
+gtk_assistant_get_page_header_image
+gtk_assistant_set_page_side_image
+gtk_assistant_get_page_side_image
+gtk_assistant_set_page_complete
+gtk_assistant_get_page_complete
+gtk_assistant_add_action_widget
+gtk_assistant_remove_action_widget
+
+<SUBSECTION Standard>
+GtkAssistantClass
+GTK_TYPE_ASSISTANT
+GTK_ASSISTANT
+GTK_ASSISTANT_CLASS
+GTK_IS_ASSISTANT
+GTK_IS_ASSISTANT_CLASS
+GTK_ASSISTANT_GET_CLASS
+<SUBSECTION Private>
+gtk_assistant_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkarrow</FILE>
 <TITLE>GtkArrow</TITLE>
 GtkArrow

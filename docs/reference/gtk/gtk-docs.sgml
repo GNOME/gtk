@@ -9,6 +9,7 @@
 <!ENTITY GtkAlignment SYSTEM "xml/gtkalignment.xml">
 <!ENTITY GtkArrow SYSTEM "xml/gtkarrow.xml">
 <!ENTITY GtkAspectFrame SYSTEM "xml/gtkaspectframe.xml">
+<!ENTITY GtkAssistant SYSTEM "xml/gtkassistant.xml">
 <!ENTITY GtkButtonBox SYSTEM "xml/gtkbbox.xml">
 <!ENTITY GtkBin SYSTEM "xml/gtkbin.xml">
 <!ENTITY GtkBox SYSTEM "xml/gtkbox.xml">
@@ -348,6 +349,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkWindow;
         &GtkWindowGroup;
         &GtkAboutDialog;
+        &GtkAssistant;
     </chapter>
 
     <chapter id="DisplayWidgets">
