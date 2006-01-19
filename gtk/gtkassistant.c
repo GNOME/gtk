@@ -56,8 +56,6 @@ struct _GtkAssistantPage
   GdkPixbuf *sidebar_image;
 };
 
-typedef struct _GtkAssistantPrivate GtkAssistantPrivate;
-
 struct _GtkAssistantPrivate
 {
   GtkWidget *header_image;
@@ -361,7 +359,7 @@ default_forward_function (gint current_page, gpointer data)
   GList *page_node;
 
   assistant = GTK_ASSISTANT (data);
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   page_node = g_list_nth (priv->pages, ++current_page);
 
@@ -383,11 +381,9 @@ default_forward_function (gint current_page, gpointer data)
 static void
 compute_last_button_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
   gint count, page_num, n_pages;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   count = 0;
   page_num = gtk_assistant_get_current_page (assistant);
@@ -412,9 +408,7 @@ compute_last_button_state (GtkAssistant *assistant)
 static void
 _set_assistant_header_image (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (priv->header_image),
 			     priv->current_page->header_image);
@@ -423,9 +417,7 @@ _set_assistant_header_image (GtkAssistant *assistant)
 static void
 _set_assistant_sidebar_image (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (priv->sidebar_image),
 			     priv->current_page->sidebar_image);
@@ -439,9 +431,7 @@ _set_assistant_sidebar_image (GtkAssistant *assistant)
 static void
 _set_assistant_buttons_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   switch (priv->current_page->type)
     {
@@ -511,10 +501,8 @@ static void
 _set_current_page (GtkAssistant     *assistant,
 		   GtkAssistantPage *page)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *old_page;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   if (priv->current_page &&
       GTK_WIDGET_DRAWABLE (priv->current_page->page))
@@ -548,11 +536,9 @@ _set_current_page (GtkAssistant     *assistant,
 static gint
 compute_next_step (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
   gint current_page, n_pages, next_page;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   current_page = gtk_assistant_get_current_page (assistant);
   page_info = priv->current_page;
@@ -575,19 +561,15 @@ compute_next_step (GtkAssistant *assistant)
 static void
 on_assistant_close (GtkWidget *widget, GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
   g_signal_emit (assistant, signals [CLOSE], 0, NULL);
 }
 
 static void
 on_assistant_apply (GtkWidget *widget, GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   gboolean success;
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
   success = compute_next_step (assistant);
 
   g_signal_emit (assistant, signals [APPLY], 0, priv->current_page->page);
@@ -610,11 +592,9 @@ on_assistant_forward (GtkWidget *widget, GtkAssistant *assistant)
 static void
 on_assistant_back (GtkWidget *widget, GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
   GSList *page_node;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   /* skip the progress pages when going back */
   do
@@ -636,18 +616,13 @@ on_assistant_back (GtkWidget *widget, GtkAssistant *assistant)
 static void
 on_assistant_cancel (GtkWidget *widget, GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
   g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 }
 
 static void
 on_assistant_last (GtkWidget *widget, GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   while (priv->current_page->type == GTK_ASSISTANT_PAGE_CONTENT &&
 	 priv->current_page->complete)
@@ -675,7 +650,7 @@ gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   gtk_widget_push_composite_child ();
 
@@ -832,10 +807,9 @@ static void
 remove_page (GtkAssistant *assistant, 
 	     GList        *element)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
   page_info = element->data;
 
   /* If we are mapped and visible, we want to deal with changing the page. */
@@ -861,12 +835,8 @@ remove_page (GtkAssistant *assistant,
 static void
 gtk_assistant_destroy (GtkObject *object)
 {
-  GtkAssistantPrivate *priv;
-
-  /* remember, destroy can be run multiple times! */
-  g_return_if_fail (GTK_IS_ASSISTANT (object));
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (object);
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   if (priv->header_image)
     {
@@ -923,7 +893,7 @@ static GList*
 find_page (GtkAssistant  *assistant,
 	   GtkWidget     *page)
 {
-  GtkAssistantPrivate *priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  GtkAssistantPrivate *priv = assistant->priv;
   GList *child = priv->pages;
   
   while (child)
@@ -973,10 +943,10 @@ static void
 gtk_assistant_style_set (GtkWidget *widget,
 			 GtkStyle  *old_style)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   GList *list;
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
   list = priv->pages;
 
   while (list)
@@ -994,13 +964,12 @@ static void
 gtk_assistant_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkRequisition child_requisition;
   gint header_padding, content_padding;
   gint width, height, header_width, header_height;
   GList *list;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
 
   gtk_widget_style_get (widget,
 			"header-padding", &header_padding,
@@ -1059,14 +1028,14 @@ static void
 gtk_assistant_size_allocate (GtkWidget      *widget,
 			     GtkAllocation  *allocation)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkRequisition header_requisition;
   GtkAllocation child_allocation, header_allocation;
   gint header_padding, content_padding;
   gboolean rtl;
   GList *pages;
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (widget);
   rtl   = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   pages = priv->pages;
 
@@ -1140,10 +1109,9 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
 static void
 gtk_assistant_map (GtkWidget *widget)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   GList *page_node;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -1185,9 +1153,8 @@ gtk_assistant_map (GtkWidget *widget)
 static void
 gtk_assistant_unmap (GtkWidget *widget)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
@@ -1212,9 +1179,8 @@ static gboolean
 gtk_assistant_delete_event (GtkWidget   *widget,
 			    GdkEventAny *event)
 {
-  GtkAssistantPrivate *priv;
-
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
 
   /* Do not allow cancelling in the middle of a progress page */
   if (priv->current_page &&
@@ -1228,13 +1194,13 @@ gtk_assistant_delete_event (GtkWidget   *widget,
 static void
 assistant_paint_colored_box (GtkWidget *widget)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   gint header_padding, content_padding;
   cairo_t *cr;
   gint content_x, content_width;
   gboolean rtl;
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (widget);
   cr   = gdk_cairo_create (widget->window);
   rtl  = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
@@ -1279,12 +1245,12 @@ static gboolean
 gtk_assistant_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistantPrivate *priv = assistant->priv;
   GtkContainer *container;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      priv = GTK_ASSISTANT_GET_PRIVATE (widget);
       container = GTK_CONTAINER (widget);
 
       assistant_paint_colored_box (widget);
@@ -1336,12 +1302,9 @@ gtk_assistant_forall (GtkContainer *container,
 		      GtkCallback   callback,
 		      gpointer      callback_data)
 {
-  GtkAssistantPrivate *priv;
-  GtkAssistant *assistant;
+  GtkAssistant *assistant = (GtkAssistant*) container;
+  GtkAssistantPrivate *priv = assistant->priv;
   GList *pages;
-
-  assistant = GTK_ASSISTANT (container);
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   if (include_internals)
     {
@@ -1402,7 +1365,7 @@ gtk_assistant_get_current_page (GtkAssistant *assistant)
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), -1);
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   if (!priv->pages || !priv->current_page)
     return -1;
@@ -1433,7 +1396,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
 
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   if (page_num >= 0)
     page = (GtkAssistantPage *) g_list_nth_data (priv->pages, page_num);
@@ -1473,7 +1436,7 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   return g_list_length (priv->pages);
 }
@@ -1499,7 +1462,7 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   elem = g_list_nth (priv->pages, page_num);
 
@@ -1580,7 +1543,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   g_return_val_if_fail (page->parent == NULL, 0);
   g_return_val_if_fail (!GTK_WIDGET_TOPLEVEL (page), 0);
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   page_info = g_new0 (GtkAssistantPage, 1);
   page_info->page  = page;
@@ -1637,7 +1600,7 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
 
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   if (priv->forward_data_destroy &&
       priv->forward_function_data)
@@ -1675,7 +1638,7 @@ gtk_assistant_add_action_widget (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   if (GTK_IS_BUTTON (child))
     gtk_size_group_add_widget (priv->size_group, child);
@@ -1701,7 +1664,7 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
 
   if (GTK_IS_BUTTON (child))
     gtk_size_group_remove_widget (priv->size_group, child);
@@ -1732,7 +1695,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_if_fail (child != NULL);
@@ -1766,7 +1729,7 @@ gtk_assistant_get_page_title (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (page), NULL);
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_val_if_fail (child != NULL, NULL);
@@ -1799,7 +1762,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_if_fail (child != NULL);
@@ -1841,7 +1804,7 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), GTK_ASSISTANT_PAGE_CONTENT);
   g_return_val_if_fail (GTK_IS_WIDGET (page), GTK_ASSISTANT_PAGE_CONTENT);
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_val_if_fail (child != NULL, GTK_ASSISTANT_PAGE_CONTENT);
@@ -1875,7 +1838,7 @@ gtk_assistant_set_page_header_image (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_if_fail (child != NULL);
@@ -1923,7 +1886,7 @@ gtk_assistant_get_page_header_image (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (page), NULL);
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_val_if_fail (child != NULL, NULL);
@@ -1957,7 +1920,7 @@ gtk_assistant_set_page_side_image (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_if_fail (child != NULL);
@@ -2005,7 +1968,7 @@ gtk_assistant_get_page_side_image (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (page), NULL);
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_val_if_fail (child != NULL, NULL);
@@ -2038,7 +2001,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_if_fail (child != NULL);
@@ -2084,7 +2047,7 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (page), FALSE);
 
-  priv  = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  priv = assistant->priv;
   child = find_page (assistant, page);
 
   g_return_val_if_fail (child != NULL, FALSE);
