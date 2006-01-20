@@ -1,3 +1,11 @@
+2006-01-20  Dan Winship  <danw@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_class_init,
+	tree_view_keybinding_cb, trap_activate_cb): On "unix", pop up the
+	"Open Location" window on "~" as well as "/". #153213
+	(location_entry_create): Fix this so autocompletion still works
+	correctly in that case.
+
 2006-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Explicitly link against Xrender.  
