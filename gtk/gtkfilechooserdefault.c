@@ -577,6 +577,13 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				"location-popup",
 				1, G_TYPE_STRING, "/");
 
+#ifdef G_OS_UNIX
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_asciitilde, 0,
+				"location-popup",
+				1, G_TYPE_STRING, "~");
+#endif
+
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Up, GDK_MOD1_MASK,
 				"up-folder",
@@ -2930,10 +2937,13 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
 			 GdkEventKey           *event,
 			 GtkFileChooserDefault *impl)
 {
-  if (event->keyval == GDK_slash &&
-      ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
+  if ((event->keyval == GDK_slash
+#ifdef G_OS_UNIX
+       || event->keyval == GDK_asciitilde
+#endif
+       ) && ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
     {
-      location_popup_handler (impl, "/");
+      location_popup_handler (impl, event->string);
       return TRUE;
     }
   
@@ -3292,10 +3302,13 @@ trap_activate_cb (GtkWidget   *widget,
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
   
-  if (event->keyval == GDK_slash &&
-      ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
+  if ((event->keyval == GDK_slash
+#ifdef G_OS_UNIX
+       || event->keyval == GDK_asciitilde
+#endif
+       ) && ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
     {
-      location_popup_handler (impl, "/");
+      location_popup_handler (impl, event->string);
       return TRUE;
     }
 
@@ -7125,15 +7138,11 @@ location_entry_create (GtkFileChooserDefault *impl,
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (entry), impl->file_system);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (entry), impl->action);
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);
   if (path[0])
-    {
-      _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), 
-					       gtk_file_path_new_steal ((gchar *)path));
-      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), path);
-    }
+    gtk_entry_set_text (GTK_ENTRY (entry), path);
   else
     {
-      _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);
       if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
 	  || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");
