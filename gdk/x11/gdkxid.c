@@ -123,7 +123,7 @@ static gboolean
 gdk_xid_equal (XID *a,
 	       XID *b)
 {
-  return (*a == *b);
+  return ((*a & ~XID_FONT_BIT) == (*b & ~XID_FONT_BIT));
 }
 
 #define __GDK_XID_C__

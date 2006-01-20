@@ -50,6 +50,7 @@ struct _GdkFontPrivateX
   GdkDisplay *display;
 
   GSList *names;
+  XID xid;
 };
 
 static GHashTable *
@@ -214,13 +215,14 @@ gdk_font_load_for_display (GdkDisplay  *display,
       private->xfont = xfont;
       private->base.ref_count = 1;
       private->names = NULL;
+      private->xid = xfont->fid | XID_FONT_BIT;
  
       font = (GdkFont*) private;
       font->type = GDK_FONT_FONT;
       font->ascent =  xfont->ascent;
       font->descent = xfont->descent;
       
-      _gdk_xid_table_insert (display, &xfont->fid, font);
+      _gdk_xid_table_insert (display, &private->xid, font);
     }
 
   gdk_font_hash_insert (GDK_FONT_FONT, font, font_name);
