@@ -36,6 +36,11 @@ static gboolean  gdk_xid_equal (XID *a,
 				XID *b);
 
 
+/* The 3 high bits of XIDs are unused. We use one to mark fonts, 
+ * since we must be able to skip fonts when iterating over all XIDs.
+ */
+#define XID_FONT_BIT (1<<31)
+
 void
 _gdk_xid_table_insert (GdkDisplay *display,
 		       XID	  *xid,
@@ -123,7 +128,7 @@ static gboolean
 gdk_xid_equal (XID *a,
 	       XID *b)
 {
-  return (*a == *b);
+  return ((*a & ~XID_FONT_BIT) == (*b & ~XID_FONT_BIT));
 }
 
 #define __GDK_XID_C__

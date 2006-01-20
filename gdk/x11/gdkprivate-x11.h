@@ -86,6 +86,8 @@ struct _GdkVisualPrivate
   GdkScreen *screen;
 };
 
+#define XID_FONT_BIT (1<<31)
+
 void _gdk_xid_table_insert (GdkDisplay *display,
 			    XID        *xid,
 			    gpointer    data);

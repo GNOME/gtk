@@ -430,7 +430,11 @@ update_cursor (gpointer key,
 	       gpointer value,
 	       gpointer data)
 {
+  XID *xid = key;
   GdkCursor *cursor;
+
+  if (*xid & XID_FONT_BIT)
+    return;
 
   if (!GDK_IS_WINDOW (value))
     return;
