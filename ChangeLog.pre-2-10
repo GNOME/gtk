@@ -1,5 +1,8 @@
 2006-01-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Explicitly link against Xrender.  
+	(#327538, Christophe Belle)
+	
 	* gdk/x11/gdkprivate-x11.h (XID_FONT_BIT): 
 	* gdk/x11/gdkfont-x11.c: 
 	* gdk/x11/gdkxid.c: Use an unused high bit in the
