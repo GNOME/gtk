@@ -8,7 +8,7 @@
 	* gdk/x11/gdkcursor-x11.c (update_cursor): Skip fonts
 	when iterating over the xid hash table, since calling
 	GDK_IS_WINDOW () on an GdkFont can cause a segfault.
-	(#327751, Ryan Lortie)
+	(#327751, Ryan Lovett)
 
 2006-01-19  Matthias Clasen  <mclasen@redhat.com>
 	
