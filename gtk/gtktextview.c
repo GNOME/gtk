@@ -6870,9 +6870,12 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
 {
   GdkRectangle pos;
 
+  if (!text_view->layout)
+    return;
+
   if (x == -1 || y == -1)
     gtk_text_view_get_cursor_location (text_view, &pos);
-
+      
   text_view->virtual_cursor_x = (x == -1) ? pos.x : x;
   text_view->virtual_cursor_y = (y == -1) ? pos.y + pos.height / 2 : y;
 }
