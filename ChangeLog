@@ -1,3 +1,8 @@
+2006-01-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_virtual_cursor_pos): Don't
+	crash if layout is NULL.  (#327934, Christian Kirbach)
+
 2006-01-20  Dan Winship  <danw@novell.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_class_init,
