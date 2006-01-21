@@ -167,7 +167,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant::cancel:
    * @assistant: the #GtkAssistant
-   * @page: the current page
    *
    * The ::cancel signal is emitted when then the cancel button is clicked.
    *
@@ -205,7 +204,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant::apply:
    * @assistant: the @GtkAssistant
-   * @page: the current page
    *
    * The ::apply signal is emitted when the apply button is clicked. The default
    * behavior of the #GtkAssistant is to switch to the page after the current page,
@@ -232,7 +230,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant::close:
    * @assistant: the #GtkAssistant
-   * @page: the current page
    *
    * The ::close signal is emitted when the close button is clicked.
    *
