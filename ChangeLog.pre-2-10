@@ -1,3 +1,9 @@
+2006-01-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testassistant.c: Add some tests for GtkAssistant
+
+	* tests/Makefile.am: Glue
+
 2006-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkassistant.c: Fix the docs to reflect the actual signal

@@ -32,6 +32,7 @@ noinst_PROGRAMS =			\
 	floatingtest			\
 	simple				\
 	testaccel			\
+	testassistant			\
 	testcairo			\
 	testcalendar			\
 	testcombo			\
@@ -83,6 +84,7 @@ floatingtest_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
+testassistant_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
@@ -124,6 +126,7 @@ autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
+testassistant_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
