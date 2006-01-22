@@ -1,3 +1,10 @@
+2006-01-22  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Remove second call
+	to gtk_tree_view_column_cell_set_cell_data, since we also set the
+	cell data before iterating over the columns for exposure. (Fixes
+	#322471, Duncan Coutts).
+
 2006-01-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testassistant.c: Add some tests for GtkAssistant
