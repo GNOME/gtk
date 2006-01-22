@@ -1,5 +1,10 @@
 2006-01-22  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Revert previous
+	commit after more searching in the bugzilla archives (see #309221).
+
+2006-01-22  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Remove second call
 	to gtk_tree_view_column_cell_set_cell_data, since we also set the
 	cell data before iterating over the columns for exposure. (Fixes
