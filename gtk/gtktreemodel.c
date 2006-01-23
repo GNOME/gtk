@@ -137,12 +137,12 @@ gtk_tree_model_base_init (gpointer g_class)
       GType row_deleted_params[1];
       GType rows_reordered_params[3];
 
-      row_inserted_params[0] = GTK_TYPE_TREE_PATH;
+      row_inserted_params[0] = GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE;
       row_inserted_params[1] = GTK_TYPE_TREE_ITER;
 
-      row_deleted_params[0] = GTK_TYPE_TREE_PATH;
+      row_deleted_params[0] = GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE;
 
-      rows_reordered_params[0] = GTK_TYPE_TREE_PATH;
+      rows_reordered_params[0] = GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE;
       rows_reordered_params[1] = GTK_TYPE_TREE_ITER;
       rows_reordered_params[2] = G_TYPE_POINTER;
 
@@ -154,7 +154,7 @@ gtk_tree_model_base_init (gpointer g_class)
                       NULL, NULL,
                       _gtk_marshal_VOID__BOXED_BOXED,
                       G_TYPE_NONE, 2,
-                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE,
                       GTK_TYPE_TREE_ITER);
 
       /* We need to get notification about structure changes
@@ -189,7 +189,7 @@ gtk_tree_model_base_init (gpointer g_class)
                       NULL, NULL,
                       _gtk_marshal_VOID__BOXED_BOXED,
                       G_TYPE_NONE, 2,
-                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE,
                       GTK_TYPE_TREE_ITER);
 
       closure = g_closure_new_simple (sizeof (GClosure), NULL);

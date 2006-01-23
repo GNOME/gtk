@@ -1,3 +1,8 @@
+2006-01-23  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_base_init): don't copy
+	tree paths when emitting signals. (#325041, Matthias Clasen).
+
 2006-01-23  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtklabel.c (get_layout_location): Fix misalignment of RTL
