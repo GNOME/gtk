@@ -1,3 +1,9 @@
+2006-01-23  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcolorbutton.c: move destruction of the private GdkGC
+	from finalize() to unrealize(). Fixes BadMatch on display change
+	(bug #85715).
+
 2006-01-22  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Revert previous

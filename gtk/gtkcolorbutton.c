@@ -103,6 +103,7 @@ static void gtk_color_button_get_property  (GObject        *object,
 
 /* gtkwidget signals */
 static void gtk_color_button_realize       (GtkWidget *widget);
+static void gtk_color_button_unrealize     (GtkWidget *widget);
 static void gtk_color_button_state_changed (GtkWidget           *widget, 
 					    GtkStateType         previous_state);
 static void gtk_color_button_style_set     (GtkWidget *widget, 
@@ -184,6 +185,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class->finalize = gtk_color_button_finalize;
   widget_class->state_changed = gtk_color_button_state_changed;
   widget_class->realize = gtk_color_button_realize;
+  widget_class->unrealize = gtk_color_button_unrealize;
   widget_class->style_set = gtk_color_button_style_set;
   button_class->clicked = gtk_color_button_clicked;
   klass->color_set = NULL;
@@ -413,6 +415,18 @@ gtk_color_button_realize (GtkWidget *widget)
 }
 
 static void
+gtk_color_button_unrealize (GtkWidget *widget)
+{
+  GtkColorButton *color_button = GTK_COLOR_BUTTON (widget);
+
+  if (color_button->priv->gc)
+    g_object_unref (color_button->priv->gc);
+  color_button->priv->gc = NULL;
+
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+static void
 gtk_color_button_style_set (GtkWidget *widget, 
 			    GtkStyle  *previous_style)
 {
@@ -613,10 +627,6 @@ static void
 gtk_color_button_finalize (GObject *object)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (object);
-
-  if (color_button->priv->gc != NULL)
-    g_object_unref (color_button->priv->gc);
-  color_button->priv->gc = NULL;
 
   if (color_button->priv->cs_dialog != NULL)
     gtk_widget_destroy (color_button->priv->cs_dialog);
