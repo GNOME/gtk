@@ -29,6 +29,7 @@
 
 #include "gtkbutton.h"
 #include "gtkhbox.h"
+#include "gtkhbbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtksizegroup.h"
@@ -387,16 +388,24 @@ compute_last_button_state (GtkAssistant *assistant)
   n_pages  = gtk_assistant_get_n_pages (assistant);
   page_info = g_list_nth_data (priv->pages, page_num);
 
-  while ((page_num > 0 && page_num < n_pages) &&
+  while (page_num >= 0 && page_num < n_pages &&
 	 (page_info->type == GTK_ASSISTANT_PAGE_CONTENT) &&
-	 (page_info->complete))
+	 page_info->complete && count < n_pages)
     {
-      page_num  = (priv->forward_function) (page_num, priv->forward_function_data);
+      page_num = (priv->forward_function) (page_num, priv->forward_function_data);
       page_info = g_list_nth_data (priv->pages, page_num);
+
       count++;
+
+      g_assert (page_info);
     }
 
-  if (count > 1)
+  /* make the last button visible if we can skip multiple
+   * pages and end on a confirmation or summary page 
+   */
+  if (count > 1 && 
+      (page_info->type == GTK_ASSISTANT_PAGE_CONFIRM ||
+       page_info->type == GTK_ASSISTANT_PAGE_SUMMARY))
     gtk_widget_show (assistant->last);
   else
     gtk_widget_hide (assistant->last);
@@ -663,9 +672,10 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_widget_set_parent (priv->sidebar_image, GTK_WIDGET (assistant));
   gtk_widget_show (priv->sidebar_image);
 
-  /* Action area */
-  priv->action_area  = gtk_hbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area), 6);
+  /* Action area  */
+  priv->action_area  = gtk_hbox_new (FALSE, 6);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area), 12);
+  
   assistant->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   assistant->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
   assistant->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
@@ -683,21 +693,21 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   if (!alternative_button_order (assistant))
     {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->close, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->apply, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->last, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->forward, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->back, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->cancel, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->last, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->close, FALSE, FALSE, 0);
     }
   else
     {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->cancel, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->close, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->apply, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->forward, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->cancel, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->back, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->forward, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->last, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->apply, FALSE, FALSE, 0);
     }
 
   gtk_widget_set_parent (priv->action_area, GTK_WIDGET (assistant));

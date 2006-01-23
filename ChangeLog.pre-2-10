@@ -1,5 +1,10 @@
 2006-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkassistant.c (compute_last_button_state): Only show the
+	last button if we can jump to the end. 
+	(gtk_assistant_init): Make the spacing and button order more
+	HIG compliant.
+
 	Fix drawing issues in progress bars.  (#328081, Christian Persch)
 	
 	* gtk/gtkprogressbar.c (gtk_progress_bar_size_request): Always
