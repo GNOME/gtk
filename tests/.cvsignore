@@ -14,8 +14,10 @@ pixbuf-read
 pixbuf-threads
 simple
 stresstest-toolbar
+floatingtest
 testactions
 testaccel
+testassistang
 testcairo
 testcalendar
 testcellrenderertext
