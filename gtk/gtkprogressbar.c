@@ -543,29 +543,13 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
       pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     {
-      if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
-	{
-	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH, width);
-	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT, height);
-	}
-      else
-	{
-	  requisition->width = MIN_HORIZONTAL_BAR_WIDTH;
-	  requisition->height = MIN_HORIZONTAL_BAR_HEIGHT;
-	}
+      requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH, width);
+      requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT, height);
     }
   else
     {
-      if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
-	{	  
-	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH, width);
-	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT, height);
-	}
-      else
-	{
-	  requisition->width = MIN_VERTICAL_BAR_WIDTH;
-	  requisition->height = MIN_VERTICAL_BAR_HEIGHT;
-	}
+      requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH, width);
+      requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT, height);
     }
 }
 
@@ -629,24 +613,24 @@ gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
 {
   GtkWidget *widget = GTK_WIDGET (pbar);
   GtkProgress *progress = GTK_PROGRESS (pbar);
-  gint x, y, w, h;
+  GdkRectangle area;
 
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
-      x = pbar->activity_pos;
-      y = widget->style->ythickness;
-      w = MAX (2, widget->allocation.width / pbar->activity_blocks);
-      h = widget->allocation.height - 2 * widget->style->ythickness;
+      area.x = pbar->activity_pos;
+      area.y = widget->style->ythickness;
+      area.width = MAX (2, widget->allocation.width / pbar->activity_blocks);
+      area.height = widget->allocation.height - 2 * widget->style->ythickness;
       break;
 
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
-      x = widget->style->xthickness;
-      y = pbar->activity_pos;
-      w = widget->allocation.width - 2 * widget->style->xthickness;
-      h = MAX (2, widget->allocation.height / pbar->activity_blocks);
+      area.x = widget->style->xthickness;
+      area.y = pbar->activity_pos;
+      area.width = widget->allocation.width - 2 * widget->style->xthickness;
+      area.height = MAX (2, widget->allocation.height / pbar->activity_blocks);
       break;
 
     default:
@@ -657,8 +641,8 @@ gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
   gtk_paint_box (widget->style,
 		 progress->offscreen_pixmap,
 		 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-		 NULL, widget, "bar",
-		 x, y, w, h);
+		 &area, widget, "bar",
+		 area.x, area.y, area.width, area.height);
 }
 
 static void
@@ -666,8 +650,8 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
 				   gint                       amount,
 				   GtkProgressBarOrientation  orientation)
 {
+  GdkRectangle area;
   GtkWidget *widget = GTK_WIDGET (pbar);
-  gint x, y, w, h;
 
   if (amount <= 0)
     return;
@@ -676,24 +660,24 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
-      w = amount;
-      h = widget->allocation.height - widget->style->ythickness * 2;
-      y = widget->style->ythickness;
+      area.width = amount;
+      area.height = widget->allocation.height - widget->style->ythickness * 2;
+      area.y = widget->style->ythickness;
       
-      x = widget->style->xthickness;
+      area.x = widget->style->xthickness;
       if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-	x = widget->allocation.width - amount - x;
+	area.x = widget->allocation.width - amount - area.x;
       break;
       
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
-      w = widget->allocation.width - widget->style->xthickness * 2;
-      h = amount;
-      x = widget->style->xthickness;
+      area.width = widget->allocation.width - widget->style->xthickness * 2;
+      area.height = amount;
+      area.x = widget->style->xthickness;
       
-      y = widget->style->ythickness;
+      area.y = widget->style->ythickness;
       if (orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
-	y = widget->allocation.height - amount - y;
+	area.y = widget->allocation.height - amount - area.y;
       break;
       
     default:
@@ -704,8 +688,8 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
   gtk_paint_box (widget->style,
 		 GTK_PROGRESS (pbar)->offscreen_pixmap,
 		 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-		 NULL, widget, "bar",
-		 x, y, w, h);
+		 &area, widget, "bar",
+		 area.x, area.y, area.width, area.height);
 }
 
 static void
@@ -717,7 +701,8 @@ gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
 
   for (i = 0; i <= pbar->in_block; i++)
     {
-      gint x, y, w, h, space;
+      GdkRectangle area;
+      gint space;
 
       switch (orientation)
 	{
@@ -725,26 +710,26 @@ gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
 	case GTK_PROGRESS_RIGHT_TO_LEFT:
 	  space = widget->allocation.width - 2 * widget->style->xthickness;
 	  
-	  x = widget->style->xthickness + (i * space) / pbar->blocks;
-	  y = widget->style->ythickness;
-	  w = widget->style->xthickness + ((i + 1) * space) / pbar->blocks - x;
-	  h = widget->allocation.height - 2 * widget->style->ythickness;
+	  area.x = widget->style->xthickness + (i * space) / pbar->blocks;
+	  area.y = widget->style->ythickness;
+	  area.width = widget->style->xthickness + ((i + 1) * space) / pbar->blocks - area.x;
+	  area.height = widget->allocation.height - 2 * widget->style->ythickness;
 
 	  if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-	    x = widget->allocation.width - w - x;
+	    area.x = widget->allocation.width - area.width - area.x;
 	  break;
 	  
 	case GTK_PROGRESS_TOP_TO_BOTTOM:
 	case GTK_PROGRESS_BOTTOM_TO_TOP:
 	  space = widget->allocation.height - 2 * widget->style->ythickness;
 	  
-	  x = widget->style->xthickness;
-	  y = widget->style->ythickness + (i * space) / pbar->blocks;
-	  w = widget->allocation.width - 2 * widget->style->xthickness;
-	  h = widget->style->ythickness + ((i + 1) * space) / pbar->blocks - y;
+	  area.x = widget->style->xthickness;
+	  area.y = widget->style->ythickness + (i * space) / pbar->blocks;
+	  area.width = widget->allocation.width - 2 * widget->style->xthickness;
+	  area.height = widget->style->ythickness + ((i + 1) * space) / pbar->blocks - area.y;
 	  
 	  if (orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
-	    y = widget->allocation.height - h - y;
+	    area.y = widget->allocation.height - area.height - area.y;
 	  break;
 
 	default:
@@ -755,8 +740,8 @@ gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
       gtk_paint_box (widget->style,
 		     GTK_PROGRESS (pbar)->offscreen_pixmap,
 		     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-		     NULL, widget, "bar",
-		     x, y, w, h);
+		     &area, widget, "bar",
+		     area.x, area.y, area.width, area.height);
     }
 }
 

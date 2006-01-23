@@ -1,3 +1,13 @@
+2006-01-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix drawing issues in progress bars.  (#328081, Christian Persch)
+	
+	* gtk/gtkprogressbar.c (gtk_progress_bar_size_request): Always
+	request enough space. 
+	(gtk_progress_bar_paint_activity) 
+	(gtk_progress_bar_paint_continuous) 
+	(gtk_progress_bar_paint_discrete): Clip when drawing the bar.
+
 2006-01-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcolorbutton.c: move destruction of the private GdkGC
