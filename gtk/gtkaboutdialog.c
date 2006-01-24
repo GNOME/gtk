@@ -54,6 +54,9 @@
 
 #include <string.h>
 
+static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
+static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
+
 typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
 struct _GtkAboutDialogPrivate 
 {
@@ -83,8 +86,11 @@ struct _GtkAboutDialogPrivate
   
   GdkCursor *hand_cursor;
   GdkCursor *regular_cursor;
-  gboolean hovering_over_link;
-  gboolean wrap_license;
+  
+  GSList *visited_links;
+
+  guint hovering_over_link : 1;
+  guint wrap_license : 1;
 };
 
 #define GTK_ABOUT_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogPrivate))
@@ -136,6 +142,7 @@ static GtkWidget *          create_link_button              (GtkWidget          
 							     GCallback           callback,
 							     gpointer            data);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
+							     GtkTextView        *text_view,
 							     GtkTextIter        *iter);
 static void                 set_cursor_if_appropriate       (GtkAboutDialog     *about,
 							     GtkTextView        *text_view,
@@ -421,13 +428,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
-  /* Style properties */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boxed ("link-color",
-                                                               P_("Link Color"),
-                                                               P_("Color of hyperlinks"),
-                                                               GDK_TYPE_COLOR,
-                                                               GTK_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkAboutDialogPrivate));
 }
@@ -556,8 +556,11 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->documenters);
   g_strfreev (priv->artists);
 
+  g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
+  g_slist_free (priv->visited_links);
+
   gdk_cursor_unref (priv->hand_cursor);
-  gdk_cursor_unref (priv->regular_cursor);
+  gdk_cursor_unref (priv->regular_cursor);  
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -1643,10 +1646,10 @@ set_link_button_text (GtkWidget *about,
   GtkWidget *label;
   gchar *link;
   GdkColor *style_link_color;
-  GdkColor link_color = { 0, 0, 0, 0xffff };
+  GdkColor link_color = { 0, 0, 0, 0xeeee };
 
   gtk_widget_ensure_style (about);
-  gtk_widget_style_get (about, "link_color", &style_link_color, NULL);
+  gtk_widget_style_get (about, "link-color", &style_link_color, NULL);
   if (style_link_color)
     {
       link_color = *style_link_color;
@@ -1711,28 +1714,53 @@ create_link_button (GtkWidget *about,
 
 static void
 follow_if_link (GtkAboutDialog *about,
+		GtkTextView    *text_view,
 		GtkTextIter    *iter)
 {
   GSList *tags = NULL, *tagp = NULL;
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
+  gchar *url = NULL;
 
   tags = gtk_text_iter_get_tags (iter);
-  for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
+  for (tagp = tags; tagp != NULL && !url; tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
-      gchar *email = g_object_get_data (G_OBJECT (tag), "email");
-      gchar *url = g_object_get_data (G_OBJECT (tag), "url");
 
-      if (email != NULL && activate_email_hook != NULL)
+      if (activate_email_hook != NULL)
         {
-	  (* activate_email_hook) (about, email, activate_email_hook_data);
-	  break;
+	  url = g_object_get_data (G_OBJECT (tag), "email");
+	  if (url) 
+	    (* activate_email_hook) (about, url, activate_email_hook_data);
         }
 
-      if (url != NULL && activate_url_hook != NULL)
+      if (!url && activate_url_hook != NULL)
         {
-	  (* activate_url_hook) (about, url, activate_url_hook_data);
-	  break;
+	  url = g_object_get_data (G_OBJECT (tag), "url");
+	  if (url) 
+	    (* activate_url_hook) (about, url, activate_url_hook_data);
         }
+
+      if (url && !g_slist_find_custom (priv->visited_links, url, (GCompareFunc)strcmp))
+	{
+	  GdkColor *style_visited_link_color;
+	  GdkColor color;
+	  
+	  gtk_widget_ensure_style (GTK_WIDGET (about));
+	  gtk_widget_style_get (GTK_WIDGET (about), 
+				"visited-link-color", &style_visited_link_color, 
+				NULL);
+	  if (style_visited_link_color)
+	    {
+	      color = *style_visited_link_color;
+	      gdk_color_free (style_visited_link_color);
+	    }
+	  else
+	    color = default_visited_link_color;
+	  
+	  g_object_set (G_OBJECT (tag), "foreground-gdk", &color, NULL);
+
+	  priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (url));
+	}
     }
 
   if (tags) 
@@ -1754,7 +1782,7 @@ credits_key_press_event (GtkWidget      *text_view,
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
         gtk_text_buffer_get_iter_at_mark (buffer, &iter, 
                                           gtk_text_buffer_get_insert (buffer));
-        follow_if_link (about, &iter);
+        follow_if_link (about, GTK_TEXT_VIEW (text_view), &iter);
         break;
 
       default:
@@ -1795,7 +1823,7 @@ credits_event_after (GtkWidget      *text_view,
 
   gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y);
 
-  follow_if_link (about, &iter);
+  follow_if_link (about, GTK_TEXT_VIEW (text_view), &iter);
 
   return FALSE;
 }
@@ -1882,7 +1910,9 @@ credits_visibility_notify_event (GtkWidget          *text_view,
 }
 
 static void
-text_view_style_set (GtkWidget *widget, GtkStyle *prev_style, GtkWidget *text_view)
+text_view_style_set (GtkWidget *widget, 
+		     GtkStyle  *prev_style, 
+		     GtkWidget *text_view)
 {
   gtk_widget_modify_base (text_view, GTK_STATE_NORMAL,
 			  &widget->style->bg[GTK_STATE_NORMAL]);
@@ -1900,18 +1930,35 @@ add_credits_page (GtkAboutDialog *about,
   GtkTextBuffer *buffer;
   gboolean linkify_email, linkify_urls;
   GdkColor *style_link_color;
-  GdkColor link_color = { 0, 0, 0, 0xffff };
-
+  GdkColor *style_visited_link_color;
+  GdkColor color;
+  GdkColor link_color;
+  GdkColor visited_link_color;
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
+  
   linkify_email = (activate_email_hook != NULL);
   linkify_urls = (activate_url_hook != NULL);
 
   gtk_widget_ensure_style (GTK_WIDGET (about));
-  gtk_widget_style_get (GTK_WIDGET (about), "link_color", &style_link_color, NULL);
+  gtk_widget_style_get (GTK_WIDGET (about), 
+			"link-color", &style_link_color, 
+			"visited-link-color", &style_visited_link_color, 
+			NULL);
   if (style_link_color)
     {
       link_color = *style_link_color;
       gdk_color_free (style_link_color);
     }
+  else
+    link_color = default_link_color;
+
+  if (style_visited_link_color)
+    {
+      visited_link_color = *style_visited_link_color;
+      gdk_color_free (style_visited_link_color);
+    }
+  else
+    visited_link_color = default_visited_link_color;
 
   view = gtk_text_view_new ();
   g_signal_connect_object (about, "style_set",
@@ -1997,13 +2044,19 @@ add_credits_page (GtkAboutDialog *about,
 		link_type = I_("url");
 	      
 	      link = g_strndup (q1, q2 - q1);
+
+	      if (g_slist_find_custom (priv->visited_links, link, (GCompareFunc)strcmp))
+		color = visited_link_color;
+	      else
+		color = link_color;
+	      
 	      tag = gtk_text_buffer_create_tag (buffer, NULL, 
-						"foreground_gdk", &link_color, 
+						"foreground-gdk", &color, 
 						"underline", PANGO_UNDERLINE_SINGLE, 
 						NULL);
 	      g_object_set_data_full (G_OBJECT (tag), link_type, g_strdup (link), g_free);
 	      gtk_text_buffer_insert_with_tags (buffer, &end, link, -1, tag, NULL);
-
+	      
 	      g_free (link);
 	    }
 	  else

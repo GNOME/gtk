@@ -1,3 +1,11 @@
+2006-01-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Add link-color and visited-link-color style
+	properties.  (#113649, Leena Gunda)
+
+	* gtk/gtkaboutdialog.c: Use the new style properties here instead
+	of the about dialogs own link-color property. 
+
 2006-01-23  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_base_init): don't copy

@@ -1492,6 +1492,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       P_("Size of areas outside the widget's allocation to draw"),
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("link-color",
+							       P_("Unvisited Link Color"),
+							       P_("Color of unvisited links"),
+							       GDK_TYPE_COLOR,
+							       GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("visited-link-color",
+							       P_("Visited Link Color"),
+							       P_("Color of visited links"),
+							       GDK_TYPE_COLOR,
+							       GTK_PARAM_READABLE));							       
 }
 
 static void
