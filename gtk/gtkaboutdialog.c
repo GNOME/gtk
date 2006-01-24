@@ -39,6 +39,7 @@
 #include "gtkhbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
+#include "gtklinkbutton.h"
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
 #include "gtkscrolledwindow.h"
@@ -132,14 +133,6 @@ static void                 dialog_style_set                (GtkWidget          
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
 static void                 activate_url                    (GtkWidget          *widget,
-							     gpointer            data);
-static void                 set_link_button_text            (GtkWidget          *about,
-							     GtkWidget          *button,
-							     gchar              *text);
-static GtkWidget *          create_link_button              (GtkWidget          *about,
-							     gchar              *text,
-							     gchar              *url,
-							     GCallback           callback,
 							     gpointer            data);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
 							     GtkTextView        *text_view,
@@ -486,8 +479,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_label_set_justify (GTK_LABEL (priv->copyright_label), GTK_JUSTIFY_CENTER);
   gtk_box_pack_start (GTK_BOX (vbox), priv->copyright_label, FALSE, FALSE, 0);
 
-  button = create_link_button (GTK_WIDGET (about), "", "", 
-			       G_CALLBACK (activate_url), about);
+  button = gtk_link_button_new (""); 
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (activate_url), about);
 
   hbox = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
@@ -1141,9 +1135,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
       priv->website = g_strdup (website);
       if (activate_url_hook != NULL)
 	{
-	  g_object_set_data_full (G_OBJECT (priv->website_button), 
-				  I_("url"), 
-				  g_strdup (website), g_free);  
+	  gtk_link_button_set_uri (GTK_LINK_BUTTON (priv->website_button), website);  
 	  if (priv->website_label == NULL) 
 	    gtk_about_dialog_set_website_label (about, website);
 	}
@@ -1160,8 +1152,6 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
   else 
     {
       priv->website = NULL;
-      g_object_set_data (G_OBJECT (priv->website_button), 
-			 I_("url"), NULL);
       gtk_widget_hide (priv->website_button);
     }
   g_free (tmp);
@@ -1219,8 +1209,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
       if (website_label != NULL) 
 	{
 	  priv->website_label = g_strdup (website_label);
-	  set_link_button_text (GTK_WIDGET (about),
-				priv->website_button, 
+	  gtk_button_set_label (GTK_BUTTON (priv->website_button),
 				priv->website_label);
 	  gtk_widget_show (priv->website_button);
 	}
@@ -1632,84 +1621,10 @@ activate_url (GtkWidget *widget,
 	      gpointer   data)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (data);
-  gchar *url = g_object_get_data (G_OBJECT (widget), "url");
+  gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
   
   if (activate_url_hook != NULL)
     (* activate_url_hook) (about, url, activate_url_hook_data);
-}
-
-static void
-set_link_button_text (GtkWidget *about,
-		      GtkWidget *button, 
-		      gchar     *text)
-{
-  GtkWidget *label;
-  gchar *link;
-  GdkColor *style_link_color;
-  GdkColor link_color = { 0, 0, 0, 0xeeee };
-
-  gtk_widget_ensure_style (about);
-  gtk_widget_style_get (about, "link-color", &style_link_color, NULL);
-  if (style_link_color)
-    {
-      link_color = *style_link_color;
-      gdk_color_free (style_link_color);
-    }
-
-  link = g_markup_printf_escaped ("<span foreground=\"#%04x%04x%04x\" underline=\"single\">%s</span>", 
-				  link_color.red, link_color.green, link_color.blue, text);
-
-  label = gtk_bin_get_child (GTK_BIN (button));  
-  gtk_label_set_markup (GTK_LABEL (label), link);
-  g_free (link);
-}
-
-static gboolean
-link_button_enter (GtkWidget        *widget,
-		   GdkEventCrossing *event,
-		   GtkAboutDialog   *about)
-{
-  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
-  gdk_window_set_cursor (widget->window, priv->hand_cursor);
-
-  return FALSE;
-}
-
-static gboolean
-link_button_leave (GtkWidget        *widget,
-		   GdkEventCrossing *event,
-		   GtkAboutDialog   *about)
-{
-  gdk_window_set_cursor (widget->window, NULL);
-
-  return FALSE;
-}
-
-static GtkWidget *
-create_link_button (GtkWidget *about,
-		    gchar     *text,
-		    gchar     *url, 
-		    GCallback  callback, 
-		    gpointer   data)
-{
-  GtkWidget *button;
-
-  button = gtk_button_new_with_label ("");
-  GTK_WIDGET_UNSET_FLAGS (button, GTK_RECEIVES_DEFAULT);
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-
-  g_object_set_data_full (G_OBJECT (button), 
-			  I_("url"), 
-                          g_strdup (url), g_free);
-  set_link_button_text (about, button, text);
-  
-  g_signal_connect (button, "clicked", callback, data);
-  g_signal_connect (button, "enter_notify_event",
-		    G_CALLBACK (link_button_enter), data);
-  g_signal_connect (button, "leave_notify_event",
-		    G_CALLBACK (link_button_leave), data);
-
-  return button;
 }
 
 static void

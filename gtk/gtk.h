@@ -110,6 +110,7 @@
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
+#include <gtk/gtklinkbutton.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtkliststore.h>

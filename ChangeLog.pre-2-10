@@ -1,5 +1,16 @@
 2006-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Add GtkLinkButton, a port of GnomeHRef.  (#314808, Emmanuele Bassi)
+	
+	* gtk/gtklinkbutton.h: 
+	* gtk/gtklinkbutton.c: New files.
+
+	* gtk/gtk.h:
+	* gtk/gtk.symbols: 
+	* gtk/Makefile.am: Glue.
+
+	* gtk/gtkaboutdialog.c: Use GtkLinkButton.
+	
 	* gtk/gtkwidget.c: Add link-color and visited-link-color style
 	properties.  (#113649, Leena Gunda)
 

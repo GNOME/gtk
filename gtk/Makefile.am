@@ -198,6 +198,7 @@ gtk_public_h_sources =          \
 	gtkitemfactory.h	\
 	gtklabel.h		\
 	gtklayout.h             \
+	gtklinkbutton.h		\
 	gtklist.h		\
 	gtklistitem.h		\
 	gtkliststore.h		\
@@ -423,6 +424,7 @@ gtk_c_sources =                 \
 	gtkkeyhash.h		\
 	gtklabel.c		\
 	gtklayout.c		\
+	gtklinkbutton.c		\
 	gtklist.c		\
 	gtklistitem.c		\
 	gtkliststore.c		\

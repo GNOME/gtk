@@ -1994,6 +1994,16 @@ gtk_layout_thaw
 #endif
 #endif
 
+#if IN_HEADER(__GTK_LINK_BUTTON_H__)
+#if IN_FILE(__GTK_LINK_BUTTON_C__)
+gtk_link_button_get_type G_GNUC_CONST
+gtk_link_button_new
+gtk_link_button_new_with_label
+gtk_link_button_get_uri
+gtk_link_button_set_uri
+#endif
+#endif
+
 #if IN_HEADER(__GTK_LIST_H__)
 #if IN_FILE(__GTK_LIST_C__)
 gtk_list_append_items
