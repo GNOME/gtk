@@ -81,6 +81,7 @@ gtk_item_factory_get_type
 gtk_item_get_type
 gtk_label_get_type
 gtk_layout_get_type
+gtk_link_button_get_type
 gtk_list_get_type
 gtk_list_item_get_type
 gtk_list_store_get_type

@@ -67,6 +67,7 @@
 <!ENTITY GtkItemFactory SYSTEM "xml/gtkitemfactory.xml">
 <!ENTITY GtkLabel SYSTEM "xml/gtklabel.xml">
 <!ENTITY GtkLayout SYSTEM "xml/gtklayout.xml">
+<!ENTITY GtkLinkButton SYSTEM "xml/gtklinkbutton.xml">
 <!ENTITY GtkList SYSTEM "xml/gtklist.xml">
 <!ENTITY GtkListItem SYSTEM "xml/gtklistitem.xml">
 <!ENTITY GtkMenu SYSTEM "xml/gtkmenu.xml">
@@ -368,6 +369,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkCheckButton;
         &GtkRadioButton;
         &GtkToggleButton;
+        &GtkLinkButton;
     </chapter>
 
     <chapter id="NumericEntry">

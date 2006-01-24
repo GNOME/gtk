@@ -2070,6 +2070,27 @@ gtk_layout_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtklinkbutton</FILE>
+<TITLE>GtkLinkButton</TITLE>
+GtkLinkButton
+gtk_link_button_new
+gtk_link_button_new_with_label
+gtk_link_button_get_uri
+gtk_link_button_set_uri
+
+<SUBSECTION Standard>
+GTK_TYPE_LINK_BUTTON
+GTK_LINK_BUTTON
+GTK_IS_LINK_BUTTON
+GTK_LINK_BUTTON_CLASS
+GTK_IS_LINK_BUTTON_CLASS
+GTK_LINK_BUTTON_GET_CLASS
+GtkLinkButtonClass
+<SUBSECTION Private>
+gtk_link_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklist</FILE>
 <TITLE>GtkList</TITLE>
 GtkList
