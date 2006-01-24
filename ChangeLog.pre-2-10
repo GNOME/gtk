@@ -1,3 +1,22 @@
+2006-01-24  Kristian Rietveld  <kris@gtk.org>
+
+	#322591, Jonathan Blandford.
+
+	* gtk/gtktreeview.[ch] (gtk_tree_view_get_search_entry),
+	(gtk_tree_view_set_search_entry),
+	(gtk_tree_view_get_search_position_func),
+	(gtk_tree_view_set_search_position_func): New functions,
+	and small adaptions to the tree view code to allow for setting
+	the entry and search position function.
+
+	* gtk/gtktreeprivate.h: Removed GtkTreeViewSearchDialogPositionFunc
+	typedef, which is now in gtktreeview.h as
+	GtkTreeViewSearchPositionFunc.  Add/update fields.
+
+	* gtk/gtk.symbols: Add new functions.
+
+	* tests/testtreesort.c: Add a little test for _set_search_entry().
+
 2006-01-23  Matthias Clasen  <mclasen@redhat.com>
 
 	Add GtkLinkButton, a port of GnomeHRef.  (#314808, Emmanuele Bassi)

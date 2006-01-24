@@ -70,9 +70,6 @@ enum
   */
 #define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*TREE_VIEW_HEADER_HEIGHT(tree_view))
 
-typedef void (*GtkTreeViewSearchDialogPositionFunc) (GtkTreeView *tree_view,
-						     GtkWidget   *search_dialog);
-
 typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
 struct _GtkTreeViewColumnReorder
 {
@@ -207,6 +204,7 @@ struct _GtkTreeViewPrivate
   /* interactive search */
   guint enable_search : 1;
   guint disable_popdown : 1;
+  guint search_custom_entry_set : 1;
   
   guint hover_selection : 1;
   guint hover_expand : 1;
@@ -217,10 +215,12 @@ struct _GtkTreeViewPrivate
 
   gint selected_iter;
   gint search_column;
-  GtkTreeViewSearchDialogPositionFunc search_dialog_position_func;
+  GtkTreeViewSearchPositionFunc search_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
   gpointer search_user_data;
   GtkDestroyNotify search_destroy;
+  gpointer search_position_user_data;
+  GDestroyNotify search_position_destroy;
   GtkWidget *search_window;
   GtkWidget *search_entry;
   guint search_entry_changed_id;

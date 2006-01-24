@@ -24,6 +24,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkdnd.h>
+#include <gtk/gtkentry.h>
 
 
 G_BEGIN_DECLS
@@ -127,6 +128,9 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 typedef gboolean (*GtkTreeViewRowSeparatorFunc) (GtkTreeModel      *model,
 						 GtkTreeIter       *iter,
 						 gpointer           data);
+typedef void     (*GtkTreeViewSearchPositionFunc) (GtkTreeView  *tree_view,
+						   GtkWidget    *search_dialog,
+						   gpointer      user_data);
 
 
 /* Creators */
@@ -308,6 +312,15 @@ void                       gtk_tree_view_set_search_equal_func (GtkTreeView     
 								GtkTreeViewSearchEqualFunc  search_equal_func,
 								gpointer                    search_user_data,
 								GtkDestroyNotify            search_destroy);
+
+GtkEntry                     *gtk_tree_view_get_search_entry         (GtkTreeView                   *tree_view);
+void                          gtk_tree_view_set_search_entry         (GtkTreeView                   *tree_view,
+								      GtkEntry                      *entry);
+GtkTreeViewSearchPositionFunc gtk_tree_view_get_search_position_func (GtkTreeView                   *tree_view);
+void                          gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view,
+								      GtkTreeViewSearchPositionFunc  func,
+								      gpointer                       data,
+								      GDestroyNotify                 destroy);
 
 /* This function should really never be used.  It is just for use by ATK.
  */

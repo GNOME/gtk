@@ -84,6 +84,19 @@ select_func (GtkTreeSelection  *selection,
   return FALSE;
 }
 
+static void
+switch_search_method (GtkWidget *button,
+		      gpointer   tree_view)
+{
+  if (!gtk_tree_view_get_search_entry (GTK_TREE_VIEW (tree_view)))
+    {
+      gpointer data = g_object_get_data (tree_view, "my-search-entry");
+      gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_ENTRY (data));
+    }
+  else
+    gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -99,6 +112,7 @@ main (int argc, char *argv[])
   GtkTreeIter iter;
   gint i;
 
+  GtkWidget *entry, *button;
   GtkWidget *window2, *vbox2, *scrolled_window2, *tree_view2;
   GtkWidget *window3, *vbox3, *scrolled_window3, *tree_view3;
 
@@ -116,6 +130,12 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Switch search method");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -128,7 +148,14 @@ main (int argc, char *argv[])
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
 */
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-  gtk_tree_selection_set_select_function (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)), select_func, NULL, NULL);
+
+  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_ENTRY (entry));
+  g_object_set_data (G_OBJECT (tree_view), "my-search-entry", entry);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (switch_search_method), tree_view);
+
+ /* gtk_tree_selection_set_select_function (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)), select_func, NULL, NULL);*/
+
   /* 12 iters now, 12 later... */
   for (i = 0; data[i].word_1 != NULL; i++)
     {

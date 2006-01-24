@@ -385,7 +385,8 @@ static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_vi
 static void     gtk_tree_view_search_dialog_hide     (GtkWidget        *search_dialog,
 							 GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
-							 GtkWidget        *search_dialog);
+							 GtkWidget        *search_dialog,
+							 gpointer          user_data);
 static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry,
 							 GtkMenu          *menu,
 							 gpointer          data);
@@ -1188,8 +1189,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   tree_view->priv->enable_search = TRUE;
   tree_view->priv->search_column = -1;
-  tree_view->priv->search_dialog_position_func = gtk_tree_view_search_position_func;
+  tree_view->priv->search_position_func = gtk_tree_view_search_position_func;
   tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
+  tree_view->priv->search_custom_entry_set = FALSE;
   tree_view->priv->typeselect_flush_timeout = 0;
   tree_view->priv->init_hadjust_value = TRUE;    
   tree_view->priv->width = 0;
@@ -1443,6 +1445,12 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
       tree_view->priv->search_user_data = NULL;
+    }
+
+  if (tree_view->priv->search_position_destroy && tree_view->priv->search_position_user_data)
+    {
+      (* tree_view->priv->search_position_destroy) (tree_view->priv->search_position_user_data);
+      tree_view->priv->search_position_user_data = NULL;
     }
 
   if (tree_view->priv->row_separator_destroy && tree_view->priv->row_separator_data)
@@ -2733,7 +2741,7 @@ gtk_tree_view_configure (GtkWidget *widget,
   GtkTreeView *tree_view;
 
   tree_view = GTK_TREE_VIEW (widget);
-  tree_view->priv->search_dialog_position_func (tree_view, tree_view->priv->search_window);
+  tree_view->priv->search_position_func (tree_view, tree_view->priv->search_window);
 
   return FALSE;
 }
@@ -4449,7 +4457,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 							    
   /* We pass the event to the search_entry.  If its text changes, then we start
    * the typeahead find capabilities. */
-  if (tree_view->priv->enable_search)
+  if (tree_view->priv->enable_search
+      && !tree_view->priv->search_custom_entry_set)
     {
       GdkEvent *new_event;
       char *old_text;
@@ -9049,6 +9058,7 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
   return TRUE;
 }
+
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
@@ -9092,6 +9102,9 @@ static void
 gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 {
   GtkWidget *frame, *vbox, *toplevel;
+
+  if (tree_view->priv->search_custom_entry_set)
+    return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
 
@@ -9173,6 +9186,9 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   if (!tree_view->priv->enable_search && !keybinding)
     return FALSE;
 
+  if (tree_view->priv->search_custom_entry_set)
+    return FALSE;
+
   if (tree_view->priv->search_window != NULL &&
       GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
     return TRUE;
@@ -9207,7 +9223,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
 
   /* done, show it */
-  tree_view->priv->search_dialog_position_func (tree_view, tree_view->priv->search_window);
+  tree_view->priv->search_position_func (tree_view, tree_view->priv->search_window, tree_view->priv->search_position_user_data);
   gtk_widget_show (tree_view->priv->search_window);
   if (tree_view->priv->search_entry_changed_id == 0)
     {
@@ -9242,6 +9258,7 @@ gtk_tree_view_start_interactive_search (GtkTreeView *tree_view)
 {
   return gtk_tree_view_real_start_interactive_search (tree_view, TRUE);
 }
+
 /* this function returns the new width of the column being resized given
  * the column and x position of the cursor; the x cursor position is passed
  * in as a pointer and automagicly corrected if it's beyond min/max limits
@@ -12547,6 +12564,146 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
     tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
 }
 
+/**
+ * gtk_tree_view_get_search_entry:
+ * @tree_view: A #GtkTreeView
+ *
+ * Returns the GtkEntry which is currently in use as interactive search
+ * entry for @tree_view.  In case the built-in entry is being used, %NULL
+ * will be returned.
+ *
+ * Return value: the entry currently in use as search entry.
+ *
+ * Since: 2.10
+ */
+GtkEntry *
+gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+
+  if (tree_view->priv->search_custom_entry_set)
+    return tree_view->priv->search_entry;
+
+  return NULL;
+}
+
+/**
+ * gtk_tree_view_set_search_entry:
+ * @tree_view: A #GtkTreeView
+ * @entry: the entry the interactive search code of @tree_view should use or %NULL
+ *
+ * Sets the entry which the interactive search code will use for this
+ * @tree_view.  This is useful when you want to provide a search entry
+ * in our interface at all time at a fixed position.  Passing %NULL for
+ * @entry will make the interactive search code use the built-in popup
+ * entry again.
+ *
+ * Since: 2.10
+ */
+void
+gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
+				GtkEntry    *entry)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  if (entry != NULL)
+    g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (tree_view->priv->search_custom_entry_set)
+    {
+      if (tree_view->priv->search_entry_changed_id)
+        {
+	  g_signal_handler_disconnect (tree_view->priv->search_entry,
+				       tree_view->priv->search_entry_changed_id);
+	  tree_view->priv->search_entry_changed_id = 0;
+	}
+      g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
+					    G_CALLBACK (gtk_tree_view_search_key_press_event),
+					    tree_view);
+
+      g_object_unref (tree_view->priv->search_entry);
+    }
+  else if (tree_view->priv->search_window)
+    {
+      gtk_widget_destroy (tree_view->priv->search_window);
+
+      tree_view->priv->search_window = NULL;
+    }
+
+  if (entry)
+    {
+      tree_view->priv->search_entry = g_object_ref (entry);
+      tree_view->priv->search_custom_entry_set = TRUE;
+
+      if (tree_view->priv->search_entry_changed_id == 0)
+        {
+          tree_view->priv->search_entry_changed_id =
+	    g_signal_connect (tree_view->priv->search_entry, "changed",
+			      G_CALLBACK (gtk_tree_view_search_init),
+			      tree_view);
+	}
+      
+        g_signal_connect (tree_view->priv->search_entry, "key_press_event",
+		          G_CALLBACK (gtk_tree_view_search_key_press_event),
+		          tree_view);
+
+	gtk_tree_view_search_init (tree_view->priv->search_entry, tree_view);
+    }
+  else
+    {
+      tree_view->priv->search_entry = NULL;
+      tree_view->priv->search_custom_entry_set = FALSE;
+    }
+}
+
+/**
+ * gtk_tree_view_set_search_position_func:
+ * @tree_view: A #GtkTreeView
+ * @search_position_func: the function to use to position the search dialog
+ * @ser_data: user data to pass to @search_position_func, or %NULL
+ * @destroy: Destroy notifier for @search_position_data, or %NULL
+ *
+ * Sets the function to use when positioning the seach dialog.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view,
+				        GtkTreeViewSearchPositionFunc  func,
+				        gpointer                       user_data,
+				        GDestroyNotify                 destroy)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (func !=NULL);
+
+  if (tree_view->priv->search_position_destroy)
+    (* tree_view->priv->search_position_destroy) (tree_view->priv->search_position_user_data);
+
+  tree_view->priv->search_position_func = func;
+  tree_view->priv->search_position_user_data = user_data;
+  tree_view->priv->search_position_destroy = destroy;
+  if (tree_view->priv->search_position_func == NULL)
+    tree_view->priv->search_position_func = gtk_tree_view_search_position_func;
+}
+
+/**
+ * gtk_tree_view_get_search_position_func:
+ * @tree_view: A #GtkTreeView
+ *
+ * Returns the positioning function currently in use.
+ *
+ * Return value: the currently used function for positioning the search dialog.
+ *
+ * Since: 2.10
+ */
+GtkTreeViewSearchPositionFunc
+gtk_tree_view_get_search_position_func (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+
+  return tree_view->priv->search_position_func;
+}
+
+
 static void
 gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
 				  GtkTreeView *tree_view)
@@ -12574,7 +12731,8 @@ gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
 
 static void
 gtk_tree_view_search_position_func (GtkTreeView *tree_view,
-				    GtkWidget   *search_dialog)
+				    GtkWidget   *search_dialog,
+				    gpointer     user_data)
 {
   gint x, y;
   gint tree_x, tree_y;
@@ -12750,10 +12908,11 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
   /* close window and cancel the search */
-  if (event->keyval == GDK_Escape ||
-      event->keyval == GDK_Tab ||
-	  event->keyval == GDK_KP_Tab ||
-	  event->keyval == GDK_ISO_Left_Tab)
+  if (!tree_view->priv->search_custom_entry_set
+      && (event->keyval == GDK_Escape ||
+          event->keyval == GDK_Tab ||
+	    event->keyval == GDK_KP_Tab ||
+	    event->keyval == GDK_ISO_Left_Tab))
     {
       gtk_tree_view_search_dialog_hide (widget, tree_view);
       return TRUE;
@@ -12788,7 +12947,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   /* renew the flush timeout */
-  if (retval && tree_view->priv->typeselect_flush_timeout)
+  if (retval && tree_view->priv->typeselect_flush_timeout
+      && !tree_view->priv->search_custom_entry_set)
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
@@ -13038,7 +13198,8 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
-  if (tree_view->priv->typeselect_flush_timeout)
+  if (tree_view->priv->typeselect_flush_timeout
+      && tree_view->priv->search_custom_entry_set)
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
