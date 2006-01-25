@@ -1,12 +1,7 @@
 2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkcalendar.c (calendar_paint_week_numbers, calendar_paint_day):
-	Oops.  s/_(/Q_(/ in the patch.
-
-2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
-
-	* gtk/gtkcalendar.c (calendar_paint_week_numbers, calendar_paint_day):
-	Use translated strings calendar:week:digits|%d and
+	Use contexed translated strings calendar:week:digits|%d and
 	calendar:day:digits|%d to let translators choose localized digits for
 	week and day numbers. (bug #317171, Hamed Malek)
 
