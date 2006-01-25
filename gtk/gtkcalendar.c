@@ -689,7 +689,7 @@ gtk_calendar_init (GtkCalendar *calendar)
    * Do *not* translate it to anything else, if it
    * it isn't calendar:YM or calendar:MY it will not work.
    *
-   * Note that this flipping is in top the text direction flipping,
+   * Note that this flipping is in top of the text direction flipping,
    * so if you have a default text direction of RTL and YM, then
    * the year will appear on the right.
    */
@@ -2072,7 +2072,17 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
 			      + calendar->month) % 12 + 1, calendar->day[row][6]);
       g_return_if_fail (result);
 
-      g_snprintf (buffer, sizeof (buffer), "%d", week);
+      /* Translators: this defines whether the week numbers should use
+       * localized digits or the ones used in Latin (0123...).
+       *
+       * Translate to "calendar:week:digits|%Id" if you want to use localized
+       * digits.  Leave it alone to whatever it is otherwise.
+       *
+       * Note that translating this doesn't guarantee that you get localized
+       * digits.  That needs support from your system and locale definition
+       * too.
+       */
+      g_snprintf (buffer, sizeof (buffer), _("calendar:week:digits|%d"), week);
       pango_layout_set_text (layout, buffer, -1);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -2187,7 +2197,17 @@ calendar_paint_day (GtkCalendar *calendar,
 	text_color = NORMAL_DAY_COLOR (widget);
     }
 
-  g_snprintf (buffer, sizeof (buffer), "%d", day);
+  /* Translators: this defines whether the day numbers should use
+   * localized digits or the ones used in Latin (0123...).
+   *
+   * Translate to "calendar:day:digits|%Id" if you want to use localized
+   * digits.  Leave it alone to whatever it is otherwise.
+   *
+   * Note that translating this doesn't guarantee that you get localized
+   * digits.  That needs support from your system and locale definition
+   * too.
+   */
+  g_snprintf (buffer, sizeof (buffer), _("calendar:day:digits|%d"), day);
   layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   

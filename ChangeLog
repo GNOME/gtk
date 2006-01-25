@@ -1,5 +1,12 @@
 2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gtk/gtkcalendar.c (calendar_paint_week_numbers, calendar_paint_day):
+	Use translated strings calendar:week:digits|%d and
+	calendar:day:digits|%d to let translators choose localized digits for
+	week and day numbers. (bug #317171, Hamed Malek)
+
+2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
+
 	* gtk/gtklabel.c (get_layout_location): Use logical extents of the
 	layout instead of ink extents.  According to Pango docs, that's what
 	should be used for placement.  Moreover, simply use
