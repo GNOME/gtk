@@ -2082,7 +2082,7 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
        * digits.  That needs support from your system and locale definition
        * too.
        */
-      g_snprintf (buffer, sizeof (buffer), _("calendar:week:digits|%d"), week);
+      g_snprintf (buffer, sizeof (buffer), Q_("calendar:week:digits|%d"), week);
       pango_layout_set_text (layout, buffer, -1);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -2207,7 +2207,7 @@ calendar_paint_day (GtkCalendar *calendar,
    * digits.  That needs support from your system and locale definition
    * too.
    */
-  g_snprintf (buffer, sizeof (buffer), _("calendar:day:digits|%d"), day);
+  g_snprintf (buffer, sizeof (buffer), Q_("calendar:day:digits|%d"), day);
   layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
