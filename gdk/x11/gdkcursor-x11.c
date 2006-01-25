@@ -451,8 +451,8 @@ update_cursor (gpointer key,
  * gdk_x11_display_set_cursor_theme:
  * @display: a #GdkDisplay
  * @theme: the name of the cursor theme to use, or %NULL to unset
- *         a previously set value
- * @size: the cursor size to use
+ *         a previously set value 
+ * @size: the cursor size to use, or 0 to keep the previous size
  *
  * Sets the cursor theme from which the images for cursor
  * should be taken. 
@@ -494,7 +494,8 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
   theme_serial++;
 
   XcursorSetTheme (xdisplay, theme);
-  XcursorSetDefaultSize (xdisplay, size);
+  if (size > 0)
+    XcursorSetDefaultSize (xdisplay, size);
     
   g_hash_table_foreach (display_x11->xid_ht, update_cursor, NULL);
 }

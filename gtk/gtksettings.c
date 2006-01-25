@@ -387,7 +387,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-cursor-theme-name",
 								  P_("Cursor theme name"),
-								  P_("Name of the cursor theme to use"),
+								  P_("Name of the cursor theme to use, or NULL to use the default theme"),
 								  NULL,
 								  GTK_PARAM_READWRITE),
                                              NULL);
@@ -396,8 +396,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-cursor-theme-size",
  							       P_("Cursor theme size"),
- 							       P_("Size to use for cursors"),
- 							       0, 128, 24,
+ 							       P_("Size to use for cursors, or 0 to use the default size"),
+ 							       0, 128, 0,
  							       GTK_PARAM_READWRITE),
 					     NULL);
   

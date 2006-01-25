@@ -1,3 +1,11 @@
+2006-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_x11_display_set_cursor_theme): Only
+	set the cursor size if it is != 0.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Change the default value
+	of gtk-cursor-theme-size to 0, meaning "use default".
+
 2006-01-24  Kristian Rietveld  <kris@gtk.org>
 
 	#322591, Jonathan Blandford.
