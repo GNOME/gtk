@@ -3907,7 +3907,7 @@ gtk_entry_set_text (GtkEntry    *entry,
     return;
 
   completion = gtk_entry_get_completion (entry);
-  if (completion)
+  if (completion && completion->priv->changed_id > 0)  
     g_signal_handler_block (entry, completion->priv->changed_id);
 
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
@@ -3915,7 +3915,7 @@ gtk_entry_set_text (GtkEntry    *entry,
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
 
-  if (completion)
+  if (completion && completion->priv->changed_id > 0)
     g_signal_handler_unblock (entry, completion->priv->changed_id);
 }
 
@@ -5229,12 +5229,14 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           if (!gtk_tree_selection_get_selected (sel, &model, &iter))
             return FALSE;
 
-	  g_signal_handler_block (completion->priv->entry,
-				  completion->priv->changed_id);
+          if (completion->priv->changed_id > 0)
+            g_signal_handler_block (completion->priv->entry,
+                                    completion->priv->changed_id);
           g_signal_emit_by_name (completion, "match_selected",
                                  model, &iter, &entry_set);
-	  g_signal_handler_unblock (completion->priv->entry,
-				    completion->priv->changed_id);
+          if (completion->priv->changed_id > 0)
+            g_signal_handler_unblock (completion->priv->entry,
+                                      completion->priv->changed_id);
 
           if (!entry_set)
             {
@@ -5244,9 +5246,11 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
                                   completion->priv->text_column, &str,
                                   -1);
 
-              g_signal_handler_block (widget, completion->priv->changed_id);
+              if (completion->priv->changed_id > 0)
+                g_signal_handler_block (widget, completion->priv->changed_id);
               gtk_entry_set_text (GTK_ENTRY (widget), str);
-              g_signal_handler_unblock (widget, completion->priv->changed_id);
+              if (completion->priv->changed_id > 0)
+                g_signal_handler_unblock (widget, completion->priv->changed_id);
 
               /* move the cursor to the end */
               gtk_editable_set_position (GTK_EDITABLE (widget), -1);
@@ -5304,10 +5308,14 @@ gtk_entry_completion_changed (GtkWidget *entry,
 static gboolean
 check_completion_callback (GtkEntryCompletion *completion)
 {
+  GDK_THREADS_ENTER ();
+
   completion->priv->check_completion_idle = NULL;
   
   gtk_entry_completion_complete (completion);
   gtk_entry_completion_insert_prefix (completion);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -5372,17 +5380,24 @@ disconnect_completion_signals (GtkEntry           *entry,
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (entry, completion->priv->changed_id))
     g_signal_handler_disconnect (entry, completion->priv->changed_id);
+ 
+  completion->priv->changed_id = 0;
+
   g_signal_handlers_disconnect_by_func (entry, 
 					G_CALLBACK (gtk_entry_completion_key_press), completion);
   if (completion->priv->insert_text_id > 0 &&
       g_signal_handler_is_connected (entry, completion->priv->insert_text_id))
     g_signal_handler_disconnect (entry, completion->priv->insert_text_id);
+
+  completion->priv->insert_text_id = 0;
+
   g_signal_handlers_disconnect_by_func (entry, 
 					G_CALLBACK (completion_insert_text_callback), completion);
   g_signal_handlers_disconnect_by_func (entry, 
 					G_CALLBACK (clear_completion_callback), completion);
   g_signal_handlers_disconnect_by_func (entry, 
 					G_CALLBACK (accept_completion_callback), completion);
+
 }
 
 static void

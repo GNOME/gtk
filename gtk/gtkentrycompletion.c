@@ -1593,8 +1593,9 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
   gboolean done;
   gchar *prefix;
 
-  g_signal_handler_block (completion->priv->entry,
-			  completion->priv->insert_text_id);
+  if (completion->priv->insert_text_id > 0)
+    g_signal_handler_block (completion->priv->entry,
+			    completion->priv->insert_text_id);
   prefix = gtk_entry_completion_compute_prefix (completion);
   if (prefix)
     {
@@ -1602,8 +1603,9 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
 		     0, prefix, &done);
       g_free (prefix);
     }
-  g_signal_handler_unblock (completion->priv->entry,
-			    completion->priv->insert_text_id);
+  if (completion->priv->insert_text_id > 0)
+    g_signal_handler_unblock (completion->priv->entry,
+			      completion->priv->insert_text_id);
 }
 
 /**
