@@ -1,3 +1,11 @@
+2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): Use translated format
+	strings for L10n in size calculation too.
+
+	* gtk/gtkcalendar.c (calendar_paint_week_numbers): Expand buffer to
+	accomodate localized digits.
+
 2006-01-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/prop-editor.c: Introspect child properties. too.

@@ -1563,7 +1563,6 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 
   gint height;
   gint i;
-  gchar buffer[255];
   gint calendar_margin = CALENDAR_MARGIN;
   gint header_width, main_width;
   gint max_header_height = 0;
@@ -1628,26 +1627,29 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   /* Mainwindow labels width */
   
   priv->max_day_char_width = 0;
+  priv->max_day_char_ascent = 0;
+  priv->max_day_char_descent = 0;
   priv->min_day_width = 0;
-  priv->max_label_char_ascent = 0;
-  priv->max_label_char_descent = 0;
 
   for (i = 0; i < 9; i++)
     {
-      g_snprintf (buffer, sizeof (buffer), "%d%d", i, i);
+      gchar buffer[32];
+      g_snprintf (buffer, sizeof (buffer), Q_("calendar:day:digits|%d"), i * 11);
       pango_layout_set_text (layout, buffer, -1);	  
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       priv->min_day_width = MAX (priv->min_day_width,
 					 logical_rect.width);
 
-      priv->max_day_char_ascent = MAX (priv->max_label_char_ascent,
+      priv->max_day_char_ascent = MAX (priv->max_day_char_ascent,
 					       PANGO_ASCENT (logical_rect));
-      priv->max_day_char_descent = MAX (priv->max_label_char_descent, 
+      priv->max_day_char_descent = MAX (priv->max_day_char_descent, 
 						PANGO_DESCENT (logical_rect));
     }
   /* We add one to max_day_char_width to be able to make the marked day "bold" */
   priv->max_day_char_width = priv->min_day_width / 2 + 1;
   
+  priv->max_label_char_ascent = 0;
+  priv->max_label_char_descent = 0;
   if (calendar->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
     for (i = 0; i < 7; i++)
       {
@@ -1665,11 +1667,12 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     for (i = 0; i < 9; i++)
       {
-	g_snprintf (buffer, sizeof (buffer), "%d%d", i, i);
+	gchar buffer[32];
+	g_snprintf (buffer, sizeof (buffer), Q_("calendar:week:digits|%d"), i * 11);
 	pango_layout_set_text (layout, buffer, -1);	  
 	pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	priv->max_week_char_width = MAX (priv->max_week_char_width,
-						 logical_rect.width / 2);
+					   logical_rect.width / 2);
       }
   
   main_width = (7 * (priv->min_day_width + (focus_padding + focus_width) * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
@@ -2018,7 +2021,7 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
   cairo_t *cr;
   gint row, week = 0, year;
   gint x_loc;
-  char buffer[3];
+  char buffer[32];
   gint y_loc, day_height;
   PangoLayout *layout;
   PangoRectangle logical_rect;
@@ -2148,7 +2151,7 @@ calendar_paint_day (GtkCalendar *calendar,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   cairo_t *cr;
   GdkColor *text_color;
-  gchar buffer[255];
+  gchar buffer[32];
   gint day;
   gint x_loc, y_loc;
   GdkRectangle day_rect;
