@@ -1,3 +1,7 @@
+2006-01-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/prop-editor.c: Introspect child properties. too.
+
 2006-01-25  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkcalendar.c (calendar_paint_week_numbers, calendar_paint_day):
@@ -14,6 +18,9 @@
 	dividing ourselves.
 
 2006-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c: 
+	* gtk/gtkentry.c: Be more careful when blocking signals. 
 
 	* gdk/x11/gdkcursor-x11.c (gdk_x11_display_set_cursor_theme): Only
 	set the cursor size if it is != 0.
