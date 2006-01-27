@@ -2180,11 +2180,13 @@ get_layout_location (GtkLabel  *label,
 
   if (label->ellipsize || priv->width_chars > 0)
     {
-      PangoRectangle ink_rect;
+      int width;
 
-      pango_layout_get_extents (label->layout, &ink_rect, NULL);
-
-      req_width = PANGO_PIXELS (ink_rect.width);
+      width = pango_layout_get_width (label->layout);
+      if (width == -1)
+	pango_layout_get_pixel_size (label->layout, &req_width, NULL);
+      else
+	req_width = PANGO_PIXELS (width);
     }
   else
     req_width = widget->requisition.width;

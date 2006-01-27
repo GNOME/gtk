@@ -1,3 +1,9 @@
+2006-01-27  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtklabel.c (get_layout_location): Fix misalignment of RTL
+	text in ellipsized GtkLabel: use layout width if set, otherwise
+	fallback to logical extents width. (#322042, merged from HEAD)
+
 2006-01-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
