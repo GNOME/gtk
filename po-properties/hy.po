@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 14:45-0500\n"
+"POT-Creation-Date: 2006-01-27 11:13-0500\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: Norayr Chilingaryan\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -2044,11 +2044,11 @@ msgstr ""
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:718
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:712
+#: gtk/gtkfilechooserdefault.c:719
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 

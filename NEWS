@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.8.10 to GTK+ 2.8.11
+===================================================
+
+* Avoid memory overruns in the pixbuf theme engine
+  with nonsensical gradient specifications.  [Matthias]
+
+* Bugs fixed:
+ 326003 Cursor doesn't move as expected [Evert Verhellen]
+ 326806 Segfault from combination of gtk_container_set_resize_mode() 
+        and GtkComboBox [Sebastien Bacher]
+ 327751 segfault in update_cursor on amd64 [Ryan Lovett]
+ 327538 eog crashes at launch under AIX [Christophe Belle]
+ 153213 "~" should bring up the location dialog [Dan Winship]
+ 327934 gtk_text_layout_get_cursor_locations() chokes on 
+        layout=0x0 [Christian Kirbach]
+
+* Documentation improvements [Federico Mena Quintero]
+
+* Translation updates (es,pt_BR,zh_HK,zh_TW)
+
 Overview of Changes from GTK+ 2.8.9 to GTK+ 2.8.10
 ==================================================
 * Derive GtkObject from GInitiallyUnowned instead of

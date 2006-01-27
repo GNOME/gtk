@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 14:45-0500\n"
+"POT-Creation-Date: 2006-01-27 11:13-0500\n"
 "PO-Revision-Date: 2005-08-07 23:38+0300\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -2137,11 +2137,11 @@ msgstr "Judul dialog pemilih berkas."
 msgid "The desired width of the button widget, in characters."
 msgstr "Lebar widget tombol dalam karakter"
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:718
 msgid "Default file chooser backend"
 msgstr "Sistem pemilih berkas utama"
 
-#: gtk/gtkfilechooserdefault.c:712
+#: gtk/gtkfilechooserdefault.c:719
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nama sistem GtkFileChooser yang digunakan sebagai standar"
 

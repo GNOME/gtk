@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 14:45-0500\n"
+"POT-Creation-Date: 2006-01-27 11:13-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -2367,12 +2367,12 @@ msgstr "Бичиг сонгогч цонхны гарчиг"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:718
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:712
+#: gtk/gtkfilechooserdefault.c:719
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 

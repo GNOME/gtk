@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 14:45-0500\n"
+"POT-Creation-Date: 2006-01-27 11:13-0500\n"
 "PO-Revision-Date: 2005-11-18 10:15+0200\n"
 "Last-Translator: Vital Khilko <v.khilko@sam-solutions.net>\n"
 "Language-Team: belarusian <i18n@mova.org>\n"
@@ -2107,11 +2107,11 @@ msgstr "Загаловак акна выбару файла."
 msgid "The desired width of the button widget, in characters."
 msgstr "Пажаданая шырыня віджэту кнопкі, у знаках."
 
-#: gtk/gtkfilechooserdefault.c:711
+#: gtk/gtkfilechooserdefault.c:718
 msgid "Default file chooser backend"
 msgstr "Прадвызначаны мэханізм выбару файлаў"
 
-#: gtk/gtkfilechooserdefault.c:712
+#: gtk/gtkfilechooserdefault.c:719
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Назва прадвызначанага мэханізму віджэта GtkFileChooser"
 
