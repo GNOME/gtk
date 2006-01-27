@@ -209,8 +209,14 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 	      <row>
 		<entry>location-popup</entry>
 		<entry>
-		  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>;
-		  <keycap>/</keycap>
+		  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo> (empty path);
+		  <keycap>/</keycap> (path of "/")<footnote>
+		    <para>
+		      Both the individual <keycap>/</keycap> key and the
+		      numeric keypad's "divide" key are supported.
+		    </para>
+		  </footnote>;
+		  <keycap>~</keycap> (path of "~")
 		</entry>
 	      </row>
 	      <row>
@@ -287,10 +293,12 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	  put in the text entry for the file name.  By default this is bound to
 	  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
 	  with a <parameter>path</parameter> string of "" (the empty
-	  string); it is also bound to <keycap>/</keycap> with a
+	  string).  It is also bound to <keycap>/</keycap> with a
 	  <parameter>path</parameter> string of "<literal>/</literal>"
 	  (a slash):  this lets you type <keycap>/</keycap> and
-	  immediately type a path name.
+	  immediately type a path name.  On Unix systems, this is bound to
+	  <keycap>~</keycap> (tilde) with a <parameter>path</parameter> string
+	  of "~" itself for access to home directories.
 	</para>
 
 	<variablelist role="params">
