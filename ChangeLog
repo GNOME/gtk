@@ -1,3 +1,15 @@
+2006-01-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	Fixes bug #328820:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_class_init): Make GDK_KP_Divide pop up
+	the location dialog populated to "/".
+	(tree_view_keybinding_cb): Likewise.
+	(trap_activate_cb): Likewise.
+
 2006-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.11 ===

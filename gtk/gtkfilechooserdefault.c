@@ -673,6 +673,10 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_slash, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "/");
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Divide, 0,
+				"location-popup",
+				1, G_TYPE_STRING, "/");
 
 #ifdef G_OS_UNIX
   gtk_binding_entry_add_signal (binding_set,
@@ -3040,6 +3044,7 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
 			 GtkFileChooserDefault *impl)
 {
   if ((event->keyval == GDK_slash
+       || event->keyval == GDK_KP_Divide
 #ifdef G_OS_UNIX
        || event->keyval == GDK_asciitilde
 #endif
@@ -3402,6 +3407,7 @@ trap_activate_cb (GtkWidget   *widget,
   modifiers = gtk_accelerator_get_default_mod_mask ();
   
   if ((event->keyval == GDK_slash
+       || event->keyval == GDK_KP_Divide
 #ifdef G_OS_UNIX
        || event->keyval == GDK_asciitilde
 #endif
