@@ -1,5 +1,9 @@
 2006-01-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.11 ===
+
+	* NEWS: Updates
+
 	* gtk/gtkentrycompletion.c: 
 	* gtk/gtkentry.c: Be more careful when blocking signals. 
 
@@ -43,7 +47,7 @@
 2006-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix a crash with combo boxes in RESIZE_IMMEDIATE
-	containers.  (#326806, Sebastian Bacher)
+	containers.  (#326806, Sebastien Bacher)
 	
 	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate) 
 	(gtk_combo_box_size_request): Don't call 
