@@ -1124,19 +1124,19 @@ msgstr "Công trạng"
 
 #: gtk/gtkaboutdialog.c:2059
 msgid "Written by"
-msgstr "Tác giả:"
+msgstr "Tác giả"
 
 #: gtk/gtkaboutdialog.c:2062
 msgid "Documented by"
-msgstr "Tài liệu:"
+msgstr "Tài liệu"
 
 #: gtk/gtkaboutdialog.c:2074
 msgid "Translated by"
-msgstr "Bản dịch:"
+msgstr "Bản dịch"
 
 #: gtk/gtkaboutdialog.c:2078
 msgid "Artwork by"
-msgstr "Đồ họa:"
+msgstr "Đồ họa"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
