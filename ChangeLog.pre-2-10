@@ -1,3 +1,13 @@
+2006-01-28  Matthias Clasen  <mclasen@redhat.com>
+
+	More work on GtkAssistant by Carlos Garnacho:
+	
+	* demos/gtk-demo/Makefile.am: 
+	* demos/gtk-demo/assistant.c: Add a  GtkAssistant demo.
+
+	* gtk/gtkassistant.c: Handle focus, several small fixes to the
+	flow computations.
+
 2006-01-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes bug #328820:

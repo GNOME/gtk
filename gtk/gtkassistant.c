@@ -92,6 +92,8 @@ static gboolean gtk_assistant_delete_event       (GtkWidget         *widget,
 						  GdkEventAny       *event);
 static gboolean gtk_assistant_expose             (GtkWidget         *widget,
 						  GdkEventExpose    *event);
+static gboolean gtk_assistant_focus              (GtkWidget         *widget,
+						  GtkDirectionType   direction);
 static void     gtk_assistant_add                (GtkContainer      *container,
 						  GtkWidget         *page);
 static void     gtk_assistant_remove             (GtkContainer      *container,
@@ -158,6 +160,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class->unmap = gtk_assistant_unmap;
   widget_class->delete_event = gtk_assistant_delete_event;
   widget_class->expose_event = gtk_assistant_expose;
+  widget_class->focus = gtk_assistant_focus;
 
   container_class->add = gtk_assistant_add;
   container_class->remove = gtk_assistant_remove;
@@ -212,10 +215,9 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * A handler for the ::apply signal should carry out the actions for which the
    * wizard has collected data. If the action takes a long time to complete, you
-   * might consider to put a page displaying the progress of the operation after the
-   * confirmation page with the apply button.
-   *
-   * Return value: %TRUE to suppress the default behavior
+   * might consider to put a page of type GTK_ASSISTANT_PAGE_PROGRESS after the
+   * confirmation page and handle this operation within the "prepare" signal of
+   * the progress page.
    *
    * Since: 2.10
    */
@@ -232,7 +234,9 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * GtkAssistant::close:
    * @assistant: the #GtkAssistant
    *
-   * The ::close signal is emitted when the close button is clicked.
+   * The ::close signal is emitted either when the close button of
+   * a summary page is clicked, or when the apply button in the last
+   * page in the flow (of type GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
    *
    * Since: 2.10
    */
@@ -366,11 +370,13 @@ default_forward_function (gint current_page, gpointer data)
 
   page_info = (GtkAssistantPage *) page_node->data;
 
-  while (!GTK_WIDGET_VISIBLE (page_info->page))
+  while (page_node && !GTK_WIDGET_VISIBLE (page_info->page))
     {
       page_node = page_node->next;
-      page_info = (GtkAssistantPage *) page_node->data;
       current_page++;
+
+      if (page_node)
+	page_info = (GtkAssistantPage *) page_node->data;
     }
 
   return current_page;
@@ -380,17 +386,18 @@ static void
 compute_last_button_state (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
-  GtkAssistantPage *page_info;
+  GtkAssistantPage *page_info, *current_page_info;
   gint count, page_num, n_pages;
 
   count = 0;
   page_num = gtk_assistant_get_current_page (assistant);
   n_pages  = gtk_assistant_get_n_pages (assistant);
-  page_info = g_list_nth_data (priv->pages, page_num);
+  current_page_info = page_info = g_list_nth_data (priv->pages, page_num);
 
   while (page_num >= 0 && page_num < n_pages &&
-	 (page_info->type == GTK_ASSISTANT_PAGE_CONTENT) &&
-	 page_info->complete && count < n_pages)
+	 page_info->type == GTK_ASSISTANT_PAGE_CONTENT &&
+	 (count == 0 || page_info->complete) &&
+	 count < n_pages)
     {
       page_num = (priv->forward_function) (page_num, priv->forward_function_data);
       page_info = g_list_nth_data (priv->pages, page_num);
@@ -406,7 +413,11 @@ compute_last_button_state (GtkAssistant *assistant)
   if (count > 1 && 
       (page_info->type == GTK_ASSISTANT_PAGE_CONFIRM ||
        page_info->type == GTK_ASSISTANT_PAGE_SUMMARY))
-    gtk_widget_show (assistant->last);
+    {
+      gtk_widget_show (assistant->last);
+      gtk_widget_set_sensitive (assistant->last,
+				current_page_info->complete);
+    }
   else
     gtk_widget_hide (assistant->last);
 }
@@ -1134,7 +1145,7 @@ gtk_assistant_map (GtkWidget *widget)
     {
       page_node = priv->pages;
 
-      while (!GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
+      while (page_node && !GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
 	page_node = page_node->next;
 
       if (page_node)
@@ -1274,6 +1285,43 @@ gtk_assistant_expose (GtkWidget      *widget,
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_assistant_focus (GtkWidget        *widget,
+		     GtkDirectionType  direction)
+{
+  GtkAssistantPrivate *priv;
+  GtkContainer *container;
+
+  container = GTK_CONTAINER (widget);
+  priv = GTK_ASSISTANT (widget)->priv;
+
+  /* we only have to care about 2 widgets, action area and the current page */
+  if (container->focus_child == priv->action_area)
+    {
+      if (!gtk_widget_child_focus (priv->action_area, direction) &&
+	  !gtk_widget_child_focus (priv->current_page->page, direction))
+	{
+	  /* if we're leaving the action area and the current page hasn't
+	     any focusable widget, clear focus and go back to the action area */
+	  gtk_container_set_focus_child (GTK_CONTAINER (priv->action_area), NULL);
+	  gtk_widget_child_focus (priv->action_area, direction);
+	}
+    }
+  else
+    {
+      if (!gtk_widget_child_focus (priv->current_page->page, direction) &&
+	  !gtk_widget_child_focus (priv->action_area, direction))
+	{
+	  /* if we're leaving the current page and there isn't nothing focusable
+	     in the action area, try to clear focus and go back to the page */
+	  gtk_window_set_focus (GTK_WINDOW (widget), NULL);
+	  gtk_widget_child_focus (priv->current_page->page, direction);
+	}
+    }
+
+  return TRUE;
 }
 
 static void
@@ -1625,11 +1673,16 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
       priv->forward_function_data = assistant;
       priv->forward_data_destroy = NULL;
     }
+
+  /* Page flow has possibly changed, so the
+     buttons state might need to change too */
+  if (priv->current_page)
+    _set_assistant_buttons_state (assistant);
 }
 
 /**
  * gtk_assistant_add_action_widget:
- * @dialog: a #GtkAssistant
+ * @assistant: a #GtkAssistant
  * @child: a #GtkWidget
  * 
  * Adds a widget to the action area of a #GtkAssistant.
@@ -1655,7 +1708,7 @@ gtk_assistant_add_action_widget (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_remove_action_widget:
- * @dialog: a #GtkAssistant
+ * @assistant: a #GtkAssistant
  * @child: a #GtkWidget
  *
  * Removes a widget from the action area of a #GtkAssistant.
@@ -1989,7 +2042,7 @@ gtk_assistant_get_page_side_image (GtkAssistant *assistant,
  * gtk_assistant_set_page_complete:
  * @assistant: a #GtkAssistant
  * @page: a page of @assitant
- * @pixbuf: the new header image @page
+ * @complete: the completeness status of the page
  * 
  * Sets whether @page contents are complete. This will make
  * @assistant update the buttons state to be able to continue the task.
@@ -2022,11 +2075,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
       if (priv->current_page)
-	{
-	  /* Always set buttons state, a change in a future page
-	     might change current page buttons */
-	  _set_assistant_buttons_state (assistant);
-	}
+	_set_assistant_buttons_state (assistant);
 
       gtk_widget_child_notify (page, "complete");
     }

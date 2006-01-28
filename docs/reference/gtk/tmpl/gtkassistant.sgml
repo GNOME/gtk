@@ -1,0 +1,315 @@
+<!-- ##### SECTION Title ##### -->
+GtkAssistant
+
+<!-- ##### SECTION Short_Description ##### -->
+guiding users through multi-step operations
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAssistant ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkAssistant::apply ##### -->
+<para>
+
+</para>
+
+@assistant: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAssistant::cancel ##### -->
+<para>
+
+</para>
+
+@assistant: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAssistant::close ##### -->
+<para>
+
+</para>
+
+@assistant: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAssistant::prepare ##### -->
+<para>
+
+</para>
+
+@assistant: the object which received the signal.
+@widget: 
+
+<!-- ##### ARG GtkAssistant:complete ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:header-image ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:page-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:sidebar-image ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:content-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAssistant:header-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_assistant_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_current_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_current_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page_num: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_n_pages ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_nth_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_prepend_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_append_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_insert_page ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@position: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkAssistantPageFunc ##### -->
+<para>
+
+</para>
+
+@current_page: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_forward_page_func ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page_func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### ENUM GtkAssistantPageType ##### -->
+<para>
+
+</para>
+
+@GTK_ASSISTANT_PAGE_CONTENT: 
+@GTK_ASSISTANT_PAGE_INTRO: 
+@GTK_ASSISTANT_PAGE_CONFIRM: 
+@GTK_ASSISTANT_PAGE_SUMMARY: 
+@GTK_ASSISTANT_PAGE_PROGRESS: 
+
+<!-- ##### FUNCTION gtk_assistant_set_page_type ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_page_type ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_page_title ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_page_title ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_page_header_image ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_page_header_image ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_page_side_image ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_page_side_image ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_set_page_complete ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@complete: 
+
+
+<!-- ##### FUNCTION gtk_assistant_get_page_complete ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@page: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_assistant_add_action_widget ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@child: 
+
+
+<!-- ##### FUNCTION gtk_assistant_remove_action_widget ##### -->
+<para>
+
+</para>
+
+@assistant: 
+@child: 
+
+

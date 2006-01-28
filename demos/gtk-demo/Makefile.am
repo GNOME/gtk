@@ -6,6 +6,7 @@ democodedir=$(datadir)/gtk-2.0/demo
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
 	appwindow.c				\
+	assistant.c				\
 	button_box.c				\
 	changedisplay.c				\
 	clipboard.c				\
