@@ -26,14 +26,14 @@ msgstr "Lỗi mở tập tin « %s »': %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:166 gdk-pixbuf/gdk-pixbuf-io.c:868
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào."
+msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:905
 #: gdk-pixbuf/gdk-pixbuf-io.c:1148 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập tin ảnh bị hỏng."
+msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập tin ảnh bị hỏng"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -42,7 +42,7 @@ msgid ""
 "animation file"
 msgstr ""
 "Lỗi tải tập tin hoạt cảnh « %s »: không biết sao, có lẽ tập tin hoạt cảnh bị "
-"hỏng."
+"hỏng"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:462
 #, c-format
@@ -61,17 +61,17 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:646 gdk-pixbuf/gdk-pixbuf-io.c:698
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Không hỗ trợ kiểu ảnh « %s »."
+msgstr "Không hỗ trợ kiểu ảnh « %s »"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:738
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »."
+msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Unrecognized image file format"
-msgstr "Không nhận ra dạng thức tập tin ảnh."
+msgstr "Không nhận ra dạng thức tập tin ảnh"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:914
 #, c-format
@@ -91,7 +91,7 @@ msgstr "Bản xây dụng gdk-pixbuf này không hỗ trợ lưu dạng thức �
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
 #, c-format
 msgid "Insufficient memory to save image to callback"
-msgstr "Không đủ bộ nhớ để lưu tập tin ảnh vào khả năng gọi lại."
+msgstr "Không đủ bộ nhớ để lưu tập tin ảnh vào khả năng gọi lại"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1467
 #, c-format
@@ -123,7 +123,7 @@ msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
 #: gdk-pixbuf/gdk-pixbuf-loader.c:383
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »."
+msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:411 gdk-pixbuf/gdk-pixbuf-loader.c:513
 #, c-format
@@ -132,17 +132,17 @@ msgid ""
 "but didn't give a reason for the failure"
 msgstr ""
 "Lỗi nội tại: mô-đun tải ảnh « %s » đã không bắt đầu tải một ảnh nào đó, "
-"nhưng không đưa ra một nguyên do."
+"nhưng không đưa ra một nguyên do"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 #, c-format
 msgid "Image header corrupt"
-msgstr "Phần đầu của ảnh bị hỏng."
+msgstr "Phần đầu của ảnh bị hỏng"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
 #, c-format
 msgid "Image format unknown"
-msgstr "Không biết dạng thức ảnh."
+msgstr "Không biết dạng thức ảnh"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 #, c-format
@@ -281,7 +281,7 @@ msgstr "Tập tin này có vẻ không phải là tập tin dạng GIF"
 #: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "Không hỗ trợ phiên bản %s của dạng thức tập tin GIF."
+msgstr "Không hỗ trợ phiên bản %s của dạng thức tập tin GIF"
 
 #: gdk-pixbuf/io-gif.c:1287
 #, c-format
@@ -368,7 +368,7 @@ msgid ""
 "memory"
 msgstr ""
 "Không đủ bộ nhớ để tải ảnh, hãy thử thoát một vài ứng dụng để giải phóng bộ "
-"nhớ."
+"nhớ"
 
 #: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
@@ -425,22 +425,22 @@ msgstr "Không hỗ trợ bpp trong ảnh này"
 #: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr "Không hỗ trợ số mặt phẳng %d-bit trong ảnh này."
+msgstr "Không hỗ trợ số mặt phẳng %d-bit trong ảnh này"
 
 #: gdk-pixbuf/io-pcx.c:648
 #, c-format
 msgid "Couldn't create new pixbuf"
-msgstr "Không thể tạo bộ đệm điểm ảnh mới."
+msgstr "Không thể tạo bộ đệm điểm ảnh mới"
 
 #: gdk-pixbuf/io-pcx.c:656
 #, c-format
 msgid "Couldn't allocate memory for line data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng."
+msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng"
 
 #: gdk-pixbuf/io-pcx.c:663
 #, c-format
 msgid "Couldn't allocate memory for paletted data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu trong bảng chọn."
+msgstr "Không thể cấp phát bộ nhớ cho dữ liệu trong bảng chọn"
 
 #: gdk-pixbuf/io-pcx.c:710
 #, c-format
@@ -450,7 +450,7 @@ msgstr "Chưa lấy mọi dòng của ảnh dạng PCX"
 #: gdk-pixbuf/io-pcx.c:717
 #, c-format
 msgid "No palette found at end of PCX data"
-msgstr "Không tìm thấy bảng chọn ở cuối dữ liệu PCX."
+msgstr "Không tìm thấy bảng chọn ở cuối dữ liệu PCX"
 
 #: gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
@@ -499,7 +499,7 @@ msgid ""
 "applications to reduce memory usage"
 msgstr ""
 "Không đủ bộ nhớ để lưu một ảnh có kích thước %ld vào %ld; hãy thử thoát một "
-"vài ứng dụng để giảm số lượng bộ nhớ được dùng."
+"vài ứng dụng để giảm số lượng bộ nhớ được dùng"
 
 #: gdk-pixbuf/io-png.c:669
 #, c-format
@@ -553,68 +553,68 @@ msgstr "Dạng thức ảnh PNG"
 #: gdk-pixbuf/io-pnm.c:252
 #, c-format
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Bộ tải ảnh PNM ngờ tìm một số nguyên, nhưng không tìm thấy."
+msgstr "Bộ tải ảnh PNM ngờ tìm một số nguyên, nhưng không tìm thấy"
 
 #: gdk-pixbuf/io-pnm.c:284
 #, c-format
 msgid "PNM file has an incorrect initial byte"
-msgstr "Tập tin PNM có byte khởi đầu không đúng."
+msgstr "Tập tin PNM có byte khởi đầu không đúng"
 
 #: gdk-pixbuf/io-pnm.c:314
 #, c-format
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Tập tin PNM không phải là dạng thức con PNM được công nhận."
+msgstr "Tập tin PNM không phải là dạng thức con PNM được công nhận"
 
 #: gdk-pixbuf/io-pnm.c:339
 #, c-format
 msgid "PNM file has an image width of 0"
-msgstr "Tập tin PNM chứa ảnh có chiều rộng bằng không."
+msgstr "Tập tin PNM chứa ảnh có chiều rộng bằng không"
 
 #: gdk-pixbuf/io-pnm.c:360
 #, c-format
 msgid "PNM file has an image height of 0"
-msgstr "Tập tin PNM chứa ảnh có chiều cao bằng không."
+msgstr "Tập tin PNM chứa ảnh có chiều cao bằng không"
 
 #: gdk-pixbuf/io-pnm.c:383
 #, c-format
 msgid "Maximum color value in PNM file is 0"
-msgstr "Giá trị màu tối đa trong tập tin PNM bằng không."
+msgstr "Giá trị màu tối đa trong tập tin PNM bằng không"
 
 #: gdk-pixbuf/io-pnm.c:391
 #, c-format
 msgid "Maximum color value in PNM file is too large"
-msgstr "Giá trị màu tối đa trong tập tin PNM quá lớn."
+msgstr "Giá trị màu tối đa trong tập tin PNM quá lớn"
 
 #: gdk-pixbuf/io-pnm.c:399
 #, c-format
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "Không thể xử lý các tập tin PNM với giá trị màu tối đa lớn hơn 255."
+msgstr "Không thể xử lý các tập tin PNM với giá trị màu tối đa lớn hơn 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 #, c-format
 msgid "Raw PNM image type is invalid"
-msgstr "Kiểu ảnh PNM thô không hợp lệ."
+msgstr "Kiểu ảnh PNM thô không hợp lệ"
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 #, c-format
 msgid "PNM image format is invalid"
-msgstr "Dạng thức ảnh PNM không hợp lệ."
+msgstr "Dạng thức ảnh PNM không hợp lệ"
 
 #: gdk-pixbuf/io-pnm.c:663
 #, c-format
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM."
+msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM"
 
 #: gdk-pixbuf/io-pnm.c:718
 #, c-format
 msgid "Premature end-of-file encountered"
-msgstr "Gặp kết thức tập tin quá sớm."
+msgstr "Gặp kết thức tập tin quá sớm"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
-"Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu."
+"Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
 
 #: gdk-pixbuf/io-pnm.c:777
 #, c-format
@@ -723,7 +723,7 @@ msgstr "Không hỗ trợ kiểu ảnh TGA"
 #: gdk-pixbuf/io-tga.c:858
 #, c-format
 msgid "Cannot allocate memory for TGA context struct"
-msgstr "Không thể cấp phát bộ nhớ cho cấu trúc ngữ cảnh TGA."
+msgstr "Không thể cấp phát bộ nhớ cho cấu trúc ngữ cảnh TGA"
 
 #: gdk-pixbuf/io-tga.c:923
 #, c-format
@@ -1701,7 +1701,7 @@ msgstr "Đổ_i tên tập tin"
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Tên thư mục « %s » chứa một số ký tự không cho phép."
+msgstr "Tên thư mục « %s » chứa một số ký tự không cho phép"
 
 #: gtk/gtkfilesel.c:1440
 #, c-format
@@ -1736,7 +1736,7 @@ msgstr "_Tạo"
 #: gtk/gtkfilesel.c:1565
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin."
+msgstr "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin"
 
 #: gtk/gtkfilesel.c:1568
 #, c-format
@@ -1768,7 +1768,7 @@ msgstr "Xóa tập tin"
 #: gtk/gtkfilesel.c:1673 gtk/gtkfilesel.c:1687
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin."
+msgstr "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin"
 
 #: gtk/gtkfilesel.c:1675
 #, c-format
@@ -1817,7 +1817,7 @@ msgid ""
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy thử "
-"đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): %s."
+"đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): %s"
 
 #: gtk/gtkfilesel.c:3150
 msgid "Invalid UTF-8"
@@ -1859,7 +1859,7 @@ msgstr "Hệ tập tin"
 #: gtk/gtkfilesystemunix.c:796
 #, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Không thể lấy biểu tượng chuẩn cho %s."
+msgstr "Không thể lấy biểu tượng chuẩn cho %s"
 
 #: gtk/gtkfilesystemunix.c:895
 #, c-format
@@ -1876,12 +1876,12 @@ msgstr "Lưu đánh dấu thất bại: %s"
 #: gtk/gtkfilesystemunix.c:1542
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
-msgstr "« %s » đã có trong danh sách Đánh dấu."
+msgstr "« %s » đã có trong danh sách Đánh dấu"
 
 #: gtk/gtkfilesystemunix.c:1614
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr "Không có « %s » trong danh sách Đánh dấu."
+msgstr "Không có « %s » trong danh sách Đánh dấu"
 
 #: gtk/gtkfilesystemunix.c:1842
 #, c-format
@@ -1982,7 +1982,7 @@ msgstr "Nhập"
 
 #: gtk/gtkinputdialog.c:244
 msgid "No extended input devices"
-msgstr "Không có thiết bị nhập mở rộng nào."
+msgstr "Không có thiết bị nhập mở rộng nào"
 
 #: gtk/gtkinputdialog.c:256
 msgid "_Device:"
@@ -2117,7 +2117,7 @@ msgstr "Nút công cụ chọn một có trong cùng một nhóm với nút này
 #: gtk/gtkrc.c:2401
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Không thể tìm thấy tập tin gồm « %s »."
+msgstr "Không thể tìm thấy tập tin gồm « %s »"
 
 #: gtk/gtkrc.c:3043 gtk/gtkrc.c:3046
 #, c-format
@@ -2129,7 +2129,7 @@ msgstr "Không thể định vị tập tin ảnh trong « pixmap_path: « %s »
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 "Phần tử đường dẫn bản đồ điểm ảnh (pixmap): « %s » phải là tuyệt đối, %s, "
-"dòng %d."
+"dòng %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:308
@@ -2165,7 +2165,7 @@ msgstr "Đậ_m"
 
 #: gtk/gtkstock.c:320
 msgid "_Cancel"
-msgstr "Hủy _bỏ"
+msgstr "_Thôi"
 
 #: gtk/gtkstock.c:321
 msgid "_CD-Rom"
@@ -2197,7 +2197,7 @@ msgstr "Cắ_t"
 
 #: gtk/gtkstock.c:328
 msgid "_Delete"
-msgstr "_Xóa bỏ"
+msgstr "_Xóa"
 
 #: gtk/gtkstock.c:329
 msgid "_Disconnect"
@@ -2229,7 +2229,7 @@ msgstr "_Toàn màn hình"
 
 #: gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
-msgstr "_Ngưng Toàn màn hình"
+msgstr "_Thoát Toàn màn hình"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
@@ -2277,7 +2277,7 @@ msgstr "Đĩa _cứng"
 
 #: gtk/gtkstock.c:354
 msgid "_Help"
-msgstr "Trợ _giúp"
+msgstr "T_rợ giúp"
 
 #: gtk/gtkstock.c:355
 msgid "_Home"
@@ -2301,7 +2301,7 @@ msgstr "Thông t_in"
 
 #: gtk/gtkstock.c:360
 msgid "_Italic"
-msgstr "Nghi_êng"
+msgstr "Ngh_iêng"
 
 #: gtk/gtkstock.c:361
 msgid "_Jump to"
@@ -2369,7 +2369,7 @@ msgstr "_Dừng"
 
 #: gtk/gtkstock.c:387
 msgid "_Network"
-msgstr "_mạng"
+msgstr "_Mạng"
 
 #: gtk/gtkstock.c:388
 msgid "_New"
@@ -2429,7 +2429,7 @@ msgstr "_Lưu"
 
 #: gtk/gtkstock.c:403
 msgid "Save _As"
-msgstr "Lư_u là"
+msgstr "Lư_u tên khác"
 
 #: gtk/gtkstock.c:404
 msgid "_Color"
@@ -2545,17 +2545,17 @@ msgstr "--- Không có Mẹo ---"
 #: gtk/gtkuimanager.c:1157
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "Gặp thuộc tính lạ « %s » trên dòng %d ký tự %d."
+msgstr "Gặp thuộc tính lạ « %s » trên dòng %d ký tự %d"
 
 #: gtk/gtkuimanager.c:1374
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Gặp thẻ đầu bất ngờ « %s » trên dòng %d ký tự %d."
+msgstr "Gặp thẻ đầu bất ngờ « %s » trên dòng %d ký tự %d"
 
 #: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Gặp dữ liệu ký tự bất ngờ trên dòng %d ký tự %d."
+msgstr "Gặp dữ liệu ký tự bất ngờ trên dòng %d ký tự %d"
 
 #: gtk/gtkuimanager.c:2275
 msgid "Empty"
