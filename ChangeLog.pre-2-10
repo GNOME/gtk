@@ -1,5 +1,10 @@
 2006-01-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtklinkbutton.h: 
+	* gtk/gtklinkbutton.c: Allow to set a global hook function
+	thats called whenever a link button is clicked.
+
 	More work on GtkAssistant by Carlos Garnacho:
 	
 	* demos/gtk-demo/Makefile.am: 

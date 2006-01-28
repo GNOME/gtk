@@ -2077,6 +2077,7 @@ gtk_link_button_new
 gtk_link_button_new_with_label
 gtk_link_button_get_uri
 gtk_link_button_set_uri
+gtk_link_button_set_uri_hook
 
 <SUBSECTION Standard>
 GTK_TYPE_LINK_BUTTON

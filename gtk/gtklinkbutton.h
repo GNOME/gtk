@@ -41,6 +41,10 @@ typedef struct _GtkLinkButton		GtkLinkButton;
 typedef struct _GtkLinkButtonClass	GtkLinkButtonClass;
 typedef struct _GtkLinkButtonPrivate	GtkLinkButtonPrivate;
 
+typedef void (*GtkLinkButtonUriFunc) (GtkLinkButton *button,
+				      const gchar   *link,
+				      gpointer       user_data);
+
 struct _GtkLinkButton
 {
   GtkButton parent_instance;
@@ -67,6 +71,10 @@ GtkWidget *           gtk_link_button_new_with_label    (const gchar   *uri,
 G_CONST_RETURN gchar *gtk_link_button_get_uri           (GtkLinkButton *link_button);
 void                  gtk_link_button_set_uri           (GtkLinkButton *link_button,
 						         const gchar   *uri);
+
+GtkLinkButtonUriFunc  gtk_link_button_set_uri_hook      (GtkLinkButtonUriFunc func,
+							 gpointer             data,
+							 GDestroyNotify       destroy);
 
 G_END_DECLS
 

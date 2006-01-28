@@ -1,5 +1,7 @@
 2006-01-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_link_button_set_uri_hook
+
 	* gtk/gtk-docs.sgml: 
 	* gtk/migrating-GtkAssistant.sgml: Add a migration guide
 	GnomeDruid --> GtkAssistant.  (Carlos Garnacho)

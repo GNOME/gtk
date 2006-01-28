@@ -102,6 +102,10 @@ static const GtkTargetEntry link_drop_types[] = {
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
+static GtkLinkButtonUriFunc uri_func = NULL;
+static gpointer uri_func_data = NULL;
+static GDestroyNotify uri_func_destroy = NULL;
+
 G_DEFINE_TYPE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON);
 
 static void
@@ -436,6 +440,9 @@ gtk_link_button_clicked (GtkButton *button)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (button);
 
+  if (uri_func)
+    (* uri_func) (button, link_button->priv->uri, uri_func_data);
+
   link_button->priv->visited = TRUE;
 
   set_link_color (link_button);
@@ -613,6 +620,39 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), NULL);
   
   return link_button->priv->uri;
+}
+
+/**
+ * gtk_link_button_set_uri_hook:
+ * @func: a function called each time a #GtkLinkButton is clicked, or %NULL
+ * @data: user data to be passed to @func, or %NULL
+ * @destroy: a #GDestroyNotify that gets called when @data is no longer needed, or %NULL
+ *
+ * Sets @func as the function that should be invoked every time a user clicks
+ * a #GtkLinkButton. This function is called before every callback registered
+ * for the "clicked" signal.
+ *
+ * Return value: the previously set hook function.
+ *
+ * Since: 2.10
+ */
+GtkLinkButtonUriFunc
+gtk_link_button_set_uri_hook (GtkLinkButtonUriFunc func,
+			      gpointer             data,
+			      GDestroyNotify       destroy)
+{
+  GtkLinkButtonUriFunc old_uri_func;
+
+  if (uri_func_destroy)
+    (* uri_func_destroy) (uri_func_data);
+
+  old_uri_func = uri_func;
+
+  uri_func = func;
+  uri_func_data = data;
+  uri_func_destroy = destroy;
+
+  return old_uri_func;
 }
 
 #define __GTK_LINK_BUTTON_C__
