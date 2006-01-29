@@ -1,3 +1,10 @@
+2006-01-28  Behdad Esfahbod  <behdad@gnome.org>
+
+	* configure.in: If major.minor of required and available glib versions
+	are the same, add -DG_DISABLE_DEPRECATED to GLIB_CFLAGS. (bug #328617)
+
+	* */Makefile.am: Remove hardcoded -DG_DISABLE_DEPRECATED.
+
 2006-01-28  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw-style.c: Re-sync with gtk-wimp
