@@ -922,6 +922,91 @@ map_gtk_progress_bar_to_xp (GtkProgressBar * progress_bar, gboolean trough)
     return ret;
 }
 
+static gboolean
+is_combo_box_child (GtkWidget* w)
+{
+    GtkWidget* tmp;
+    
+    if (w == NULL)
+	return FALSE;
+
+    for (tmp = w->parent; tmp; tmp = tmp->parent)
+	{
+	    if (GTK_IS_COMBO_BOX(tmp))
+		return TRUE;
+	}
+
+    return FALSE;
+}
+
+static gboolean
+combo_box_draw_arrow (GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state,
+	    GdkRectangle * area,
+	    GtkWidget * widget)
+{
+    if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
+		       style, widget->allocation.x, widget->allocation.y, 
+		       widget->allocation.width, widget->allocation.height,
+		       state, area))
+	{
+	    return TRUE;
+	}
+
+    return FALSE;
+}
+
+/* This is ugly because no box drawing function is invoked for the combo
+   box as a whole, so we draw part of the entire box in every subwidget.
+   We do this by finding the allocation of the combo box in the given
+   window's coordinates and drawing.  The xp drawing routines take care
+   of the clipping. */
+static gboolean
+combo_box_draw_box (GtkStyle * style,
+	  GdkWindow * window,
+	  GtkStateType state_type,
+	  GtkShadowType shadow_type,
+	  GdkRectangle * area,
+	  GtkWidget * widget,
+	  const gchar * detail, gint x, gint y, gint width, gint height)
+{
+    GtkWidget* combo_box;
+    GdkRectangle combo_alloc;
+    
+    if (!widget)
+	return FALSE;
+    for (combo_box = widget->parent; combo_box; combo_box = combo_box->parent)
+	{
+	    if (GTK_IS_COMBO_BOX(combo_box))
+		break;
+	}
+    if (!combo_box)
+	return FALSE;
+
+    combo_alloc = combo_box->allocation;
+    if (window != combo_box->window) 
+	{
+	    GtkWidget* tmp;
+	    for (tmp = widget; tmp && tmp != combo_box; tmp = widget->parent) 
+		{
+		    if (tmp->parent && tmp->window != tmp->parent->window)
+			{
+			    combo_alloc.x -= tmp->allocation.x;
+			    combo_alloc.y -= tmp->allocation.y;
+			}
+		}
+	}
+	
+    if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
+		       style, combo_alloc.x, combo_alloc.y,
+                       combo_alloc.width, combo_alloc.height, 
+		       state_type, area))
+	return TRUE;
+
+    return FALSE;
+}
+
 static void
 draw_part (GdkDrawable * drawable,
 	   GdkGC * gc, GdkRectangle * area, gint x, gint y, Part part)
@@ -1294,6 +1379,14 @@ draw_arrow (GtkStyle * style,
 
     sanitize_size (window, &width, &height);
 
+    if (GTK_IS_ARROW(widget) && is_combo_box_child(widget))
+        {
+	    if (combo_box_draw_arrow (style, window, state, area, widget))
+		{
+		    return;
+		}
+        }
+
     if (detail && strcmp (detail, "spinbutton") == 0)
 	{
 	    if (xp_theme_is_drawable (XP_THEME_ELEMENT_SPIN_BUTTON_UP))
@@ -1491,7 +1584,13 @@ draw_box (GtkStyle * style,
 	  GtkWidget * widget,
 	  const gchar * detail, gint x, gint y, gint width, gint height)
 {
-    if (detail &&
+    if (is_combo_box_child (widget) 
+	&& combo_box_draw_box (style, window, state_type, shadow_type,
+	                       area, widget, detail, x, y, width, height))
+	{
+	    return;
+	}
+    else if (detail &&
 	(!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
 	{
 	    if (GTK_IS_TREE_VIEW (widget->parent)
@@ -1736,7 +1835,7 @@ draw_box (GtkStyle * style,
 		{
 		    return;
 		}
-	}
+	}	
     else if (detail
 	     && (strcmp (detail, "vscrollbar") == 0
 		 || strcmp (detail, "hscrollbar") == 0))
@@ -2064,6 +2163,12 @@ draw_shadow (GtkStyle * style,
 {
     gboolean is_handlebox_grippie = (detail && !strcmp (detail, "handlebox"));
 
+    if (is_combo_box_child (widget) 
+	&& combo_box_draw_box (style, window, state_type, shadow_type,
+	                       area, widget, detail, x, y, width, height))
+        {
+	    return;
+	}
     if (detail && !strcmp (detail, "entry"))
 	{
 	    if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
