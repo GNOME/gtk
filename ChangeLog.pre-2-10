@@ -1,5 +1,9 @@
 2006-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Make sure the tree view is realized, since we grab the
+	focus to it.  (#329144, Wouter Bolsterlee)
+
 	* gtk/gtkspinbutton.h: 
 	* gtk/gtkspinbutton.c: Add a wrapped signal.  (#322933,
 	Carlos Garnacho Parro)
