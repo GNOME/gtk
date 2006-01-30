@@ -179,7 +179,8 @@ gtk_toggle_tool_button_set_property (GObject      *object,
   switch (prop_id)
     {
       case PROP_ACTIVE:
-	button->priv->active = g_value_get_boolean (value);
+	gtk_toggle_tool_button_set_active (button, 
+					   g_value_get_boolean (value));
         break;
 
       default:
