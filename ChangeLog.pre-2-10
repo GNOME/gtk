@@ -1,3 +1,14 @@
+2006-01-29  Matthias Clasen  <mclasen@redhat.com>
+
+	More GtkAssistant work, by Carlos Garnacho.
+	
+	* tests/testassistant.c: Additions.
+
+	* gtk/gtkassistant.c: Handle page visibility, other 
+	small fixes.
+
+	* docs/tools/widgets.c: Add GtkAssistant.
+
 2006-01-28  Behdad Esfahbod  <behdad@gnome.org>
 
 	* configure.in: If major.minor of required and available glib versions

@@ -537,12 +537,14 @@ _set_current_page (GtkAssistant     *assistant,
 
   if (GTK_WIDGET_VISIBLE (priv->current_page->page) && GTK_WIDGET_MAPPED (assistant))
     {
+      gtk_widget_set_child_visible (priv->current_page->page, TRUE);
       gtk_widget_map (priv->current_page->page);
       gtk_widget_map (priv->current_page->title);
     }
   
   if (old_page && GTK_WIDGET_MAPPED (old_page->page))
     {
+      gtk_widget_set_child_visible (old_page->page, FALSE);
       gtk_widget_unmap (old_page->page);
       gtk_widget_unmap (old_page->title);
     }
@@ -1161,6 +1163,7 @@ gtk_assistant_map (GtkWidget *widget)
       _set_assistant_sidebar_image ((GtkAssistant*) widget);
 
       g_signal_emit (widget, signals [PREPARE], 0, priv->current_page->page);
+      gtk_widget_set_child_visible (priv->current_page->page, TRUE);
       gtk_widget_map (priv->current_page->page);
       gtk_widget_map (priv->current_page->title);
     }
@@ -1214,13 +1217,14 @@ assistant_paint_colored_box (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
-  gint header_padding, content_padding;
+  gint border_width, header_padding, content_padding;
   cairo_t *cr;
   gint content_x, content_width;
   gboolean rtl;
 
   cr   = gdk_cairo_create (widget->window);
   rtl  = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   gtk_widget_style_get (widget,
 			"header-padding",  &header_padding,
@@ -1230,14 +1234,15 @@ assistant_paint_colored_box (GtkWidget *widget)
   /* colored box */
   gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_SELECTED]);
   cairo_rectangle (cr,
-		   0, 0,
-		   widget->allocation.width,
-		   widget->allocation.height - priv->action_area->allocation.height);
+		   border_width,
+		   border_width,
+		   widget->allocation.width - 2 * border_width,
+		   widget->allocation.height - priv->action_area->allocation.height - 2 * border_width);
   cairo_fill (cr);
 
   /* content box */
-  content_x = content_padding;
-  content_width = widget->allocation.width - 2 * content_padding;
+  content_x = content_padding + border_width;
+  content_width = widget->allocation.width - 2 * content_padding - 2 * border_width;
 
   if (GTK_WIDGET_VISIBLE (priv->sidebar_image))
     {
@@ -1250,9 +1255,9 @@ assistant_paint_colored_box (GtkWidget *widget)
 
   cairo_rectangle (cr,
 		   content_x,
-		   priv->header_image->allocation.height + content_padding + 2 * header_padding,
+		   priv->header_image->allocation.height + content_padding + 2 * header_padding + border_width,
 		   content_width,
-		   widget->allocation.height - priv->action_area->allocation.height -
+		   widget->allocation.height - 2 * border_width - priv->action_area->allocation.height -
 		   priv->header_image->allocation.height - 2 * content_padding - 2 * header_padding);
   cairo_fill (cr);
 
@@ -1616,6 +1621,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   priv->pages = g_list_insert (priv->pages, page_info, position);
 
+  gtk_widget_set_child_visible (page_info->page, FALSE);
   gtk_widget_set_parent (page_info->page,  GTK_WIDGET (assistant));
   gtk_widget_set_parent (page_info->title, GTK_WIDGET (assistant));
 

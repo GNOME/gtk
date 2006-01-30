@@ -1,3 +1,13 @@
+2006-01-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/visual_index.xml: Add GtkAssistant
+
+	* gtk/images/assistant.png: New image.
+
+	* gtk/tmpl/gtkassistant.sgml: More docs, by Carlos Garnacho.
+
+	* gtk/Makefile.am: Add new files.
+
 2006-01-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_link_button_set_uri_hook

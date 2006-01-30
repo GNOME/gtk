@@ -31,6 +31,59 @@ get_test_page (const gchar *text)
   return gtk_label_new (text);
 }
 
+typedef struct {
+  GtkAssistant *assistant;
+  GtkWidget    *page;
+} PageData;
+
+static void
+complete_cb (GtkWidget *check, 
+	     gpointer   data)
+{
+  PageData *pdata = data;
+  gboolean complete;
+
+  complete = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+
+  gtk_assistant_set_page_complete (pdata->assistant,
+				   pdata->page,
+				   complete);
+}
+
+	     
+static void
+add_completion_test_page (GtkWidget   *assistant,
+			  const gchar *text, 
+			  gboolean     visible,
+			  gboolean     complete)
+{
+  GtkWidget *page;
+  GtkWidget *check;
+  PageData *pdata;
+
+  page = gtk_vbox_new (0, FALSE);
+  check = gtk_check_button_new_with_label ("Complete");
+
+  gtk_container_add (GTK_CONTAINER (page), gtk_label_new (text));
+  gtk_container_add (GTK_CONTAINER (page), check);
+  
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), complete);
+
+  pdata = g_new (PageData, 1);
+  pdata->assistant = GTK_ASSISTANT (assistant);
+  pdata->page = page;
+  g_signal_connect (G_OBJECT (check), "toggled", 
+		    G_CALLBACK (complete_cb), pdata);
+
+
+  if (visible)
+    gtk_widget_show_all (page);
+
+  gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, text);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, complete);
+}
+
 static void
 cancel_callback (GtkWidget *widget)
 {
@@ -167,18 +220,10 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_INTRO);
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-      page = get_test_page ("Content");
-      gtk_widget_show (page);
-      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Content");
-      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+      add_completion_test_page (assistant, "Content", TRUE, FALSE);
+      add_completion_test_page (assistant, "More Content", TRUE, TRUE);
+      add_completion_test_page (assistant, "Even More Content", TRUE, TRUE);
 
-      page = get_test_page ("More content");
-      gtk_widget_show (page);
-      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "More content");
-      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
-      
       page = get_test_page ("Confirmation");
       gtk_widget_show (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
@@ -404,15 +449,80 @@ create_looping_assistant (GtkWidget *widget)
     }
 }
 
+static void
+create_full_featured_assistant (GtkWidget *widget)
+{
+  static GtkWidget *assistant = NULL;
+
+  if (!assistant)
+    {
+      GtkWidget *page, *button;
+	 GdkPixbuf *pixbuf;
+
+      assistant = gtk_assistant_new ();
+      gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
+
+	 button = gtk_button_new_from_stock (GTK_STOCK_STOP);
+	 gtk_widget_show (button);
+	 gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
+
+      g_signal_connect (G_OBJECT (assistant), "cancel",
+			G_CALLBACK (cancel_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "close",
+			G_CALLBACK (close_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "apply",
+			G_CALLBACK (apply_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "prepare",
+			G_CALLBACK (prepare_callback), NULL);
+
+      page = get_test_page ("Page 1");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 1");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+	 /* set a side image */
+	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG, NULL);
+	 gtk_assistant_set_page_side_image (GTK_ASSISTANT (assistant), page, pixbuf);
+
+	 /* set a header image */
+	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
+
+      page = get_test_page ("Invisible page");
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+
+      page = get_test_page ("Page 3");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 3");
+      gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_CONFIRM);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+	 /* set a header image */
+	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (assistant))
+    gtk_widget_show (assistant);
+  else
+    {
+      gtk_widget_destroy (assistant);
+      assistant = NULL;
+    }
+}
+
 struct {
   gchar *text;
   void  (*func) (GtkWidget *widget);
 } buttons[] =
   {
-    { "simple assistant",    create_simple_assistant },
-    { "generous assistant",  create_generous_assistant },
-    { "nonlinear assistant", create_nonlinear_assistant },
-    { "looping assistant",   create_looping_assistant },
+    { "simple assistant",        create_simple_assistant },
+    { "generous assistant",      create_generous_assistant },
+    { "nonlinear assistant",     create_nonlinear_assistant },
+    { "looping assistant",       create_looping_assistant },
+    { "full featured assistant", create_full_featured_assistant },
   };
 
 int

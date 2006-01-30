@@ -106,6 +106,7 @@ content_files =					\
 	migrating-GtkIconView.sgml		\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkColorButton.sgml		\
+	migrating-GtkAssistant.sgml		\
 	objects_grouped.sgml			\
 	question_index.sgml			\
 	resources.sgml				\
@@ -126,6 +127,7 @@ expand_content_files = 				\
 	migrating-GtkIconView.sgml		\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkColorButton.sgml		\
+	migrating-GtkAssistant.sgml		\
 	tree_widget.sgml			\
 	text_widget.sgml			\
 	question_index.sgml
@@ -243,6 +245,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-leave-fullscreen.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-info.png			\
 	$(srcdir)/images/accel-label.png				\
+	$(srcdir)/images/assistant.png					\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\

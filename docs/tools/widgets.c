@@ -839,6 +839,34 @@ create_image (void)
   return new_widget_info ("image", vbox, SMALL);
 }
 
+static WidgetInfo *
+create_assistant (void)
+{
+  GtkWidget *widget;
+  GtkWidget *page1, *page2;
+  WidgetInfo *info;
+
+  widget = gtk_assistant_new ();
+  gtk_window_set_title (GTK_WINDOW (widget), "Assistant");
+
+  page1 = gtk_label_new ("Assistant");
+  gtk_widget_show (page1);
+  gtk_widget_set_size_request (page1, 300, 140);
+  gtk_assistant_prepend_page (GTK_ASSISTANT (widget), page1);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (widget), page1, "Assistant page");
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page1, TRUE);
+
+  page2 = gtk_label_new (NULL);
+  gtk_widget_show (page2);
+  gtk_assistant_append_page (GTK_ASSISTANT (widget), page2);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (widget), page2, GTK_ASSISTANT_PAGE_CONFIRM);
+
+  info = new_widget_info ("assistant", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -876,6 +904,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_colorsel ());
   retval = g_list_prepend (retval, create_filesel ());
   retval = g_list_prepend (retval, create_fontsel ());
+  retval = g_list_prepend (retval, create_assistant ());
 
   return retval;
 }

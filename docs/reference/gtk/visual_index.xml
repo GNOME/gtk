@@ -86,6 +86,9 @@
   <link linkend="GtkMessageDialog">
     <inlinegraphic fileref="messagedialog.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkAssistant">
+    <inlinegraphic fileref="assistant.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkFontSelectionDialog">
     <inlinegraphic fileref="fontsel.png" format="PNG"></inlinegraphic>
   </link>
