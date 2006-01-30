@@ -1,5 +1,8 @@
 2006-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkassistant.c: More generous spacing. (#328082,
+	Christian Persch, patch by Carlos Garnacho)
+	
 	* gtk/gtktoggletoolbutton.c (gtk_toggle_tool_button_set_property): 
 	Use the setter for active.  (#329208, Guillaume Cottenceau)
 

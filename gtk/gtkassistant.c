@@ -43,6 +43,7 @@
 #define GTK_ASSISTANT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ASSISTANT, GtkAssistantPrivate))
 
 #define HEADER_SPACING 12
+#define ACTION_AREA_SPACING 12
 
 typedef struct _GtkAssistantPage GtkAssistantPage;
 
@@ -687,7 +688,6 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   /* Action area  */
   priv->action_area  = gtk_hbox_new (FALSE, 6);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area), 12);
   
   assistant->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   assistant->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
@@ -1035,7 +1035,7 @@ gtk_assistant_size_request (GtkWidget      *widget,
 
   gtk_widget_size_request (priv->action_area, &child_requisition);
   width   = MAX (width, child_requisition.width);
-  height += child_requisition.height;
+  height += child_requisition.height + ACTION_AREA_SPACING;
 
   width += GTK_CONTAINER (widget)->border_width * 2 + content_padding * 2;
   height += GTK_CONTAINER (widget)->border_width * 2 + content_padding * 2;
@@ -1106,7 +1106,7 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
     priv->header_image->allocation.height + 2 * header_padding + content_padding;
   child_allocation.width  = allocation->width - 2 * GTK_CONTAINER (widget)->border_width - 2 * content_padding;
   child_allocation.height = allocation->height - 2 * GTK_CONTAINER (widget)->border_width -
-    priv->header_image->allocation.height - 2 * header_padding - priv->action_area->allocation.height - 2 * content_padding;
+    priv->header_image->allocation.height - 2 * header_padding - ACTION_AREA_SPACING - priv->action_area->allocation.height - 2 * content_padding;
 
   if (GTK_WIDGET_VISIBLE (priv->sidebar_image))
     {
@@ -1237,7 +1237,7 @@ assistant_paint_colored_box (GtkWidget *widget)
 		   border_width,
 		   border_width,
 		   widget->allocation.width - 2 * border_width,
-		   widget->allocation.height - priv->action_area->allocation.height - 2 * border_width);
+		   widget->allocation.height - priv->action_area->allocation.height - 2 * border_width - ACTION_AREA_SPACING);
   cairo_fill (cr);
 
   /* content box */
@@ -1258,7 +1258,7 @@ assistant_paint_colored_box (GtkWidget *widget)
 		   priv->header_image->allocation.height + content_padding + 2 * header_padding + border_width,
 		   content_width,
 		   widget->allocation.height - 2 * border_width - priv->action_area->allocation.height -
-		   priv->header_image->allocation.height - 2 * content_padding - 2 * header_padding);
+		   priv->header_image->allocation.height - 2 * content_padding - 2 * header_padding - ACTION_AREA_SPACING);
   cairo_fill (cr);
 
   cairo_destroy (cr);
@@ -1402,8 +1402,9 @@ gtk_assistant_new (void)
 {
   GtkWidget *assistant;
 
-  assistant = g_object_new (GTK_TYPE_ASSISTANT, NULL);
-
+  assistant = g_object_new (GTK_TYPE_ASSISTANT,
+			    "border-width", 12,
+			    NULL);
   return assistant;
 }
 
