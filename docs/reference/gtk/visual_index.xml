@@ -38,6 +38,9 @@
   <link linkend="GtkLabel">
     <inlinegraphic fileref="label.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkLinkButton">
+    <inlinegraphic fileref="link-button.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkMenuBar">
     <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>
   </link>

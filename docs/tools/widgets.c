@@ -184,6 +184,19 @@ create_check_button (void)
 }
 
 static WidgetInfo *
+create_link_button (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  widget = gtk_link_button_new_with_label ("http://www.gtk.org", "Link Button");
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("link-button", align, SMALL);
+}
+
+static WidgetInfo *
 create_entry (void)
 {
   GtkWidget *widget;
@@ -885,6 +898,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_icon_view ());
   retval = g_list_prepend (retval, create_image ());
   retval = g_list_prepend (retval, create_label ());
+  retval = g_list_prepend (retval, create_link_button ());
   retval = g_list_prepend (retval, create_menubar ());
   retval = g_list_prepend (retval, create_message_dialog ());
   retval = g_list_prepend (retval, create_notebook ());
