@@ -1,5 +1,9 @@
 2006-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c: Add a wrapped signal.  (#322933,
+	Carlos Garnacho Parro)
+
 	* gtk/gtkassistant.c: More generous spacing. (#328082,
 	Christian Persch, patch by Carlos Garnacho)
 	

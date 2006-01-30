@@ -68,6 +68,7 @@ enum
   OUTPUT,
   VALUE_CHANGED,
   CHANGE_VALUE,
+  WRAPPED,
   LAST_SIGNAL
 };
 
@@ -338,6 +339,24 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSpinButtonClass, value_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkSpinButton::wrapped:
+   * @spinbutton: the object which received the signal
+   *
+   * The wrapped signal is emitted right after the spinbutton wraps
+   * from its maximum to minimum value or vice-versa.
+   *
+   * Since: 2.10
+   */
+  spinbutton_signals[WRAPPED] =
+    g_signal_new (I_("wrapped"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkSpinButtonClass, wrapped),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
@@ -1480,6 +1499,7 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 {
   GtkAdjustment *adj;
   gdouble new_value = 0.0;
+  gboolean wrapped = FALSE;
   
   adj = spin_button->adjustment;
 
@@ -1490,7 +1510,10 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
       if (spin_button->wrap)
 	{
 	  if (fabs (adj->value - adj->upper) < EPSILON)
-	    new_value = adj->lower;
+	    {
+	      new_value = adj->lower;
+	      wrapped = TRUE;
+	    }
 	  else if (new_value > adj->upper)
 	    new_value = adj->upper;
 	}
@@ -1502,7 +1525,10 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
       if (spin_button->wrap)
 	{
 	  if (fabs (adj->value - adj->lower) < EPSILON)
-	    new_value = adj->upper;
+	    {
+	      new_value = adj->upper;
+	      wrapped = TRUE;
+	    }
 	  else if (new_value < adj->lower)
 	    new_value = adj->lower;
 	}
@@ -1512,6 +1538,9 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 
   if (fabs (new_value - adj->value) > EPSILON)
     gtk_adjustment_set_value (adj, new_value);
+
+  if (wrapped)
+    g_signal_emit (spin_button, spinbutton_signals[WRAPPED], 0);
 
   spin_button_redraw (spin_button);
 }
