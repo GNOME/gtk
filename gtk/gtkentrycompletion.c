@@ -1348,6 +1348,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   height += vertical_separator;
 
+  gtk_widget_realize (completion->priv->tree_view);
+
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
   else

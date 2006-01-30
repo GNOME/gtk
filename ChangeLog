@@ -1,5 +1,9 @@
 2006-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Make sure the tree view is realized, since we grab the
+	focus to it.  (#329144, Wouter Bolsterlee)
+
 	* gtk/gtktoggletoolbutton.c (gtk_toggle_tool_button_set_property): 
 	Use the setter for active.  (#329208, Guillaume Cottenceau)
 
