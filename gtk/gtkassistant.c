@@ -424,7 +424,7 @@ compute_last_button_state (GtkAssistant *assistant)
 }
 
 static void
-_set_assistant_header_image (GtkAssistant *assistant)
+set_assistant_header_image (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
 
@@ -433,7 +433,7 @@ _set_assistant_header_image (GtkAssistant *assistant)
 }
 
 static void
-_set_assistant_sidebar_image (GtkAssistant *assistant)
+set_assistant_sidebar_image (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
 
@@ -447,7 +447,7 @@ _set_assistant_sidebar_image (GtkAssistant *assistant)
 }
 
 static void
-_set_assistant_buttons_state (GtkAssistant *assistant)
+set_assistant_buttons_state (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
 
@@ -516,8 +516,8 @@ _set_assistant_buttons_state (GtkAssistant *assistant)
 }
 
 static void
-_set_current_page (GtkAssistant     *assistant,
-		   GtkAssistantPage *page)
+set_current_page (GtkAssistant     *assistant,
+		  GtkAssistantPage *page)
 {
   GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *old_page;
@@ -530,9 +530,9 @@ _set_current_page (GtkAssistant     *assistant,
 
   priv->current_page = page;
 
-  _set_assistant_buttons_state (assistant);
-  _set_assistant_header_image (assistant);
-  _set_assistant_sidebar_image (assistant);
+  set_assistant_buttons_state (assistant);
+  set_assistant_header_image (assistant);
+  set_assistant_sidebar_image (assistant);
 
   g_signal_emit (assistant, signals [PREPARE], 0, priv->current_page->page);
 
@@ -570,7 +570,7 @@ compute_next_step (GtkAssistant *assistant)
   if (next_page >= 0 && next_page < n_pages)
     {
       priv->visited_pages = g_slist_prepend (priv->visited_pages, page_info);
-      _set_current_page (assistant, g_list_nth_data (priv->pages, next_page));
+      set_current_page (assistant, g_list_nth_data (priv->pages, next_page));
 
       return TRUE;
     }
@@ -630,7 +630,7 @@ on_assistant_back (GtkWidget *widget, GtkAssistant *assistant)
   while (page_info->type == GTK_ASSISTANT_PAGE_PROGRESS ||
 	 !GTK_WIDGET_VISIBLE (page_info->page));
 
-  _set_current_page (assistant, page_info);
+  set_current_page (assistant, page_info);
 }
 
 static void
@@ -824,6 +824,18 @@ gtk_assistant_get_child_property (GtkContainer *container,
 }
 
 static void
+on_page_notify_visibility (GtkWidget  *widget,
+			   GParamSpec *arg,
+			   gpointer    data)
+{
+  GtkAssistant *assistant = GTK_ASSISTANT (data);
+
+  /* update buttons state, flow may have changed */
+  if (GTK_WIDGET_MAPPED (assistant))
+    set_assistant_buttons_state (assistant);
+}
+
+static void
 remove_page (GtkAssistant *assistant, 
 	     GList        *element)
 {
@@ -837,8 +849,9 @@ remove_page (GtkAssistant *assistant,
     compute_next_step (assistant);
 
   priv->pages = g_list_remove_link (priv->pages, element);
-
   priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
+
+  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify_visibility, assistant);
   gtk_widget_unparent (page_info->page);
 
   if (page_info->header_image)
@@ -1158,9 +1171,9 @@ gtk_assistant_map (GtkWidget *widget)
       GTK_WIDGET_VISIBLE (priv->current_page->page) &&
       !GTK_WIDGET_MAPPED (priv->current_page->page))
     {
-      _set_assistant_buttons_state ((GtkAssistant *) widget);
-      _set_assistant_header_image ((GtkAssistant*) widget);
-      _set_assistant_sidebar_image ((GtkAssistant*) widget);
+      set_assistant_buttons_state ((GtkAssistant *) widget);
+      set_assistant_header_image ((GtkAssistant*) widget);
+      set_assistant_sidebar_image ((GtkAssistant*) widget);
 
       g_signal_emit (widget, signals [PREPARE], 0, priv->current_page->page);
       gtk_widget_set_child_visible (priv->current_page->page, TRUE);
@@ -1477,7 +1490,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
   if (GTK_WIDGET_MAPPED (assistant))
     priv->visited_pages = g_slist_prepend (priv->visited_pages, page);
 
-  _set_current_page (assistant, page);
+  set_current_page (assistant, page);
 }
 
 /**
@@ -1610,6 +1623,9 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->page  = page;
   page_info->title = gtk_label_new (NULL);
 
+  g_signal_connect (G_OBJECT (page), "notify::visible",
+		    G_CALLBACK (on_page_notify_visibility), assistant);
+
   gtk_misc_set_alignment (GTK_MISC (page_info->title), 0.,0.5);
   set_title_colors (GTK_WIDGET (assistant), page_info->title);
   set_title_font   (GTK_WIDGET (assistant), page_info->title);
@@ -1684,7 +1700,7 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
   /* Page flow has possibly changed, so the
      buttons state might need to change too */
   if (priv->current_page)
-    _set_assistant_buttons_state (assistant);
+    set_assistant_buttons_state (assistant);
 }
 
 /**
@@ -1843,7 +1859,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
       if (priv->current_page)
-	_set_assistant_buttons_state (assistant);
+	set_assistant_buttons_state (assistant);
 
       gtk_widget_child_notify (page, "page-type");
     }
@@ -1924,7 +1940,7 @@ gtk_assistant_set_page_header_image (GtkAssistant *assistant,
 	page_info->header_image = g_object_ref (pixbuf);
 
       if (page_info == priv->current_page)
-	_set_assistant_header_image (assistant);
+	set_assistant_header_image (assistant);
 
       gtk_widget_child_notify (page, "header-image");
     }
@@ -2006,7 +2022,7 @@ gtk_assistant_set_page_side_image (GtkAssistant *assistant,
 	page_info->sidebar_image = g_object_ref (pixbuf);
 
       if (page_info == priv->current_page)
-	_set_assistant_sidebar_image (assistant);
+	set_assistant_sidebar_image (assistant);
 
       gtk_widget_child_notify (page, "sidebar-image");
     }
@@ -2082,7 +2098,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
       if (priv->current_page)
-	_set_assistant_buttons_state (assistant);
+	set_assistant_buttons_state (assistant);
 
       gtk_widget_child_notify (page, "complete");
     }
@@ -2118,6 +2134,30 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
   page_info = (GtkAssistantPage*) child->data;
 
   return page_info->complete;
+}
+
+/**
+ * gtk_assistant_update_buttons_state:
+ * @assistant: a #GtkAssistant
+ * 
+ * Forces @assistant to recompute the buttons state.
+ * 
+ * GTK+ automatically takes care of this in most situations, 
+ * e.g. when the user goes to a different page, or when the
+ * visibility or completeness of a page changes.
+ *
+ * One situation where it can be necessary to call this
+ * function is when changing a value on the current page
+ * affects the future page flow of the assistant.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_assistant_update_buttons_state (GtkAssistant *assistant)
+{
+  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
+
+  set_assistant_buttons_state (assistant);
 }
 
 

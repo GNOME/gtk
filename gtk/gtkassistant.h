@@ -134,6 +134,8 @@ void                  gtk_assistant_add_action_widget     (GtkAssistant         
 void                  gtk_assistant_remove_action_widget  (GtkAssistant         *assistant,
 							   GtkWidget            *child);
 
+void                  gtk_assistant_update_buttons_state  (GtkAssistant *assistant);
+
 G_END_DECLS
 
 #endif /* __GTK_ASSISTANT_H__ */

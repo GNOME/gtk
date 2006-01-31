@@ -49,9 +49,8 @@ complete_cb (GtkWidget *check,
 				   pdata->page,
 				   complete);
 }
-
 	     
-static void
+static GtkWidget *
 add_completion_test_page (GtkWidget   *assistant,
 			  const gchar *text, 
 			  gboolean     visible,
@@ -82,6 +81,8 @@ add_completion_test_page (GtkWidget   *assistant,
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, text);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, complete);
+
+  return page;
 }
 
 static void
@@ -193,13 +194,25 @@ create_simple_assistant (GtkWidget *widget)
 }
 
 static void
+visible_cb (GtkWidget *check, 
+	    gpointer   data)
+{
+  GtkWidget *page = data;
+  gboolean visible;
+
+  visible = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+
+  g_object_set (G_OBJECT (page), "visible", visible, NULL);
+}
+
+static void
 create_generous_assistant (GtkWidget *widget)
 {
   static GtkWidget *assistant = NULL;
 
   if (!assistant)
     {
-      GtkWidget *page;
+      GtkWidget *page, *next, *check;
 
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
@@ -220,8 +233,16 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_INTRO);
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-      add_completion_test_page (assistant, "Content", TRUE, FALSE);
-      add_completion_test_page (assistant, "More Content", TRUE, TRUE);
+      page = add_completion_test_page (assistant, "Content", TRUE, FALSE);
+      next = add_completion_test_page (assistant, "More Content", TRUE, TRUE);
+
+      check = gtk_check_button_new_with_label ("Next page visible");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+      g_signal_connect (G_OBJECT (check), "toggled", 
+			G_CALLBACK (visible_cb), next);
+      gtk_widget_show (check);
+      gtk_container_add (GTK_CONTAINER (page), check);
+      
       add_completion_test_page (assistant, "Even More Content", TRUE, TRUE);
 
       page = get_test_page ("Confirmation");
