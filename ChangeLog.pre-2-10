@@ -1,5 +1,10 @@
 2006-01-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* autogen.sh: Touch README and INSTALL here to pacify 
+	automake.  (#329124, Kjartan Maraas, Tim Janik)
+
+2006-01-31  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkassistant.h: 
 	* gtk/gtkassistant.c: Actually implement visibility handling,
