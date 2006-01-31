@@ -1,3 +1,8 @@
+2006-01-31  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_flat_box): Add support for row
+	hinting for the selected state.
+
 2006-01-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
