@@ -988,9 +988,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @drag_context: the drag context
    * @time: the timestamp of the motion event
    *
-   * The ::drag-leave signal is emitted on the drop site when the cursor leaves the widget.
-   * A typical reason to connect to this signal is to undo things done in ::drag-motion, e.g.
-   * undo highlighting with gtk_drag_unhighlight()
+   * The ::drag-leave signal is emitted on the drop site when the cursor 
+   * leaves the widget. A typical reason to connect to this signal is to 
+   * undo things done in ::drag-motion, e.g. undo highlighting with 
+   * gtk_drag_unhighlight()
    */
   widget_signals[DRAG_LEAVE] =
     g_signal_new (I_("drag_leave"),
@@ -1045,10 +1046,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @drag_context: the drag context
    *
-   * The ::drag-data-delete signal is emitted on the drag source when a drag with the action
-   * %GDK_ACTION_MOVE is successfully completed. The signal handler is responsible for deleting
-   * the data that has been dropped. What "delete" means, depends on the context of the drag
-   * operation. 
+   * The ::drag-data-delete signal is emitted on the drag source when a drag 
+   * with the action %GDK_ACTION_MOVE is successfully completed. The signal 
+   * handler is responsible for deleting the data that has been dropped. What 
+   * "delete" means, depends on the context of the drag operation. 
    */
   widget_signals[DRAG_DATA_DELETE] =
     g_signal_new (I_("drag_data_delete"),
@@ -1069,20 +1070,23 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @time: the timestamp of the motion event
    * @returns: whether the cursor position is in a drop zone
    *
-   * The ::drag-motion signal is emitted on the drop site when the user moves the cursor over
-   * the widget during a drag. The signal handler must determine whether the cursor position is in 
-   * a drop zone or not. If it is not in a drop zone, it returns %FALSE and no further processing is
-   * necessary. Otherwise, the handler returns %TRUE. In this case, the handler is responsible for
-   * providing the necessary information for displaying feedback to the user, by calling
-   * gdk_drag_status(). If the decision whether the drop will be accepted or rejected can't be made
-   * based solely on the cursor position and the type of the data, the handler may inspect the dragged 
-   * data by calling gtk_drag_get_data() and defer the gdk_drag_status() call to the ::drag-data-received 
-   * handler. 
+   * The ::drag-motion signal is emitted on the drop site when the user 
+   * moves the cursor over the widget during a drag. The signal handler 
+   * must determine whether the cursor position is in a drop zone or not. 
+   * If it is not in a drop zone, it returns %FALSE and no further processing 
+   * is necessary. Otherwise, the handler returns %TRUE. In this case, the 
+   * handler is responsible for providing the necessary information for 
+   * displaying feedback to the user, by calling gdk_drag_status(). If the 
+   * decision whether the drop will be accepted or rejected can't be made
+   * based solely on the cursor position and the type of the data, the handler 
+   * may inspect the dragged data by calling gtk_drag_get_data() and defer the 
+   * gdk_drag_status() call to the ::drag-data-received handler. 
    *
-   * Note that there is no ::drag-enter signal. The drag receiver has to keep track of whether
-   * he has received any ::drag-motion signals since the last ::drag-leave and if not, treat the
-   * ::drag-motion signal as an "enter" signal. Upon an "enter", the handler will typically highlight 
-   * the drop site with gtk_drag_highlight().
+   * Note that there is no ::drag-enter signal. The drag receiver has to keep 
+   * track of whether he has received any ::drag-motion signals since the last 
+   * ::drag-leave and if not, treat the ::drag-motion signal as an "enter" signal. 
+   * Upon an "enter", the handler will typically highlight the drop site with 
+   * gtk_drag_highlight().
    *
    * <informalexample><programlisting> 
    * static void
@@ -1131,7 +1135,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *      
    *     /<!-- -->* We are getting this data due to a request in drag_motion,
    *      * rather than due to a request in drag_drop, so we are just
-   *      * supposed to call gdk_drag_status(<!-- -->), not actually paste in the data.
+   *      * supposed to call gdk_drag_status(<!-- -->), not actually paste in 
+   *      * the data.
    *      *<!-- -->/
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str)) 
@@ -1168,14 +1173,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @time: the timestamp of the motion event
    * @returns: whether the cursor position is in a drop zone
    *
-   * The ::drag-drop signal is emitted on the drop site when the user drops the data
-   * onto the widget. The signal handler must determine whether the cursor position is in 
-   * a drop zone or not. If it is not in a drop zone, it returns %FALSE and no further 
-   * processing is necessary. Otherwise, the handler returns %TRUE. In this case, the handler 
-   * must ensure that gtk_drag_finish() is called to let the source know that the drop is done.
-   * The call to gtk_drag_finish() can be done either directly or in a ::drag-data-received handler
-   * which gets triggered by calling gtk_drop_get_data() to receive the data for one or more of the 
-   * supported targets.
+   * The ::drag-drop signal is emitted on the drop site when the user drops the 
+   * data onto the widget. The signal handler must determine whether the cursor 
+   * position is in a drop zone or not. If it is not in a drop zone, it returns 
+   * %FALSE and no further processing is necessary. Otherwise, the handler returns 
+   * %TRUE. In this case, the handler must ensure that gtk_drag_finish() is called 
+   * to let the source know that the drop is done. The call to gtk_drag_finish() 
+   * can be done either directly or in a ::drag-data-received handler which gets 
+   * triggered by calling gtk_drop_get_data() to receive the data for one or more 
+   * of the supported targets.
    */
   widget_signals[DRAG_DROP] =
     g_signal_new (I_("drag_drop"),
@@ -1198,10 +1204,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @info: the info that has been registered with the target in the #GtkTargetList.
    * @time: the timestamp at which the data was requested
    *
-   * The ::drag-data-get signal is emitted on the drag source when the drop site requests
-   * the data which is dragged. It is the responsibility of the signal handler to fill @data
-   * with the data in the format which is indicated by @info. See gtk_selection_data_set() and 
-   * gtk_selection_data_set_text().
+   * The ::drag-data-get signal is emitted on the drag source when the drop site 
+   * requests the data which is dragged. It is the responsibility of the signal 
+   * handler to fill @data with the data in the format which is indicated by @info. 
+   * See gtk_selection_data_set() and gtk_selection_data_set_text().
    */
   widget_signals[DRAG_DATA_GET] =
     g_signal_new (I_("drag_data_get"),
@@ -1226,16 +1232,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * @info: the info that has been registered with the target in the #GtkTargetList.
  * @time: the timestamp at which the data was received
  *
- * The ::drag-data-received signal is emitted on the drop site when the dragged data has been 
- * received. If the data was received in order to determine whether the drop will be accepted, 
- * the handler is expected to call gdk_drag_status() and <emphasis>not</emphasis> finish the drag. 
- * If the data was received in response to a ::drag-drop signal (and this is the last target to be 
- * received), the handler for this signal is expected to process the received data and then call 
- * gtk_drag_finish(), setting the @success parameter depending on whether the data was processed 
- * successfully. 
+ * The ::drag-data-received signal is emitted on the drop site when the dragged 
+ * data has been received. If the data was received in order to determine whether 
+ * the drop will be accepted, the handler is expected to call gdk_drag_status() 
+ * and <emphasis>not</emphasis> finish the drag. If the data was received in 
+ * response to a ::drag-drop signal (and this is the last target to be received), 
+ * the handler for this signal is expected to process the received data and then 
+ * call gtk_drag_finish(), setting the @success parameter depending on whether 
+ * the data was processed successfully. 
  * 
- * The handler may inspect and modify @drag_context->action before calling gtk_drag_finish(), 
- * e.g. to implement %GDK_ACTION_ASK as shown in the following example:
+ * The handler may inspect and modify @drag_context->action before calling 
+ * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as shown in the following 
+ * example:
  * <informalexample><programlisting>
  * void  
  * drag_data_received (GtkWidget          *widget,

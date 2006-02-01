@@ -1,3 +1,8 @@
+2006-02-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Wrap dnd signal
+	docs to 80 columns.
+
 2006-01-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* autogen.sh: Touch README and INSTALL here to pacify 
