@@ -1,3 +1,8 @@
+2006-02-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_protocol_for_display): 
+	Make drops on the root window work again.  (#145243, Andrew S. Dixon)
+
 2006-01-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* autogen.sh: Touch README and INSTALL here to pacify 
