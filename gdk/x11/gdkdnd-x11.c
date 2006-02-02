@@ -3035,7 +3035,13 @@ _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 	  GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", xid));
 	  return xid;
 	}
-      else
+      else if (_gdk_x11_display_is_root_window (display, (Window) xid))
+	{
+	  *protocol = GDK_DRAG_PROTO_ROOTWIN;
+	  GDK_NOTE (DND, g_message ("Entering root window\n"));
+	  return xid;
+	}
+	       
 	return None;
     }
   
@@ -3103,6 +3109,7 @@ _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 
       if (rootwin)
 	{
+	  GDK_NOTE (DND, g_message ("Entering root window\n"));
 	  *protocol = GDK_DRAG_PROTO_ROOTWIN;
 	  return xid;
 	}
