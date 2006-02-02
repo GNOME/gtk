@@ -1,26 +1,25 @@
-# translation of gtk+-properties to Russian
-# Copyright (C) 1999-2002, 2004, 2005 Free Software Foundation, Inc.
+# translation of ru.po to Russian
+# Copyright (C) 1999-2002, 2004, 2005, 2006 Free Software Foundation, Inc.
+#
 # Sergey Panov <sipan@mit.edu>, 1999.
 # Valek Filippov <frob@df.ru>, 2000- 2002.
 # Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2004.
 # Sun G11n <gnome_int_l10n@ireland.sun.com>, 2002.
 # Andrew W. Nosenko <awn@bcs.zp.ua>, 2003.
-# Leonid Kanter <leon@asplinux.ru>, 2004, 2005.
-#
+# Leonid Kanter <leon@asplinux.ru>, 2004, 2005, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties.gtk-2-8\n"
+"Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-27 11:13-0500\n"
-"PO-Revision-Date: 2005-09-01 13:14+0300\n"
+"PO-Revision-Date: 2006-02-02 18:34+0200\n"
 "Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
-"Language-Team:  <gnome-cyr@gnome.org>\n"
+"Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:110
 msgid "Number of Channels"
@@ -75,8 +74,7 @@ msgid "Rowstride"
 msgstr "Шаг строк"
 
 #: gdk-pixbuf/gdk-pixbuf.c:181
-msgid ""
-"The number of bytes between the start of a row and the start of the next row"
+msgid "The number of bytes between the start of a row and the start of the next row"
 msgstr "Число байтов между началом строки и началом следующей строки"
 
 #: gdk-pixbuf/gdk-pixbuf.c:190
@@ -188,10 +186,8 @@ msgid "Translator credits"
 msgstr "Переводчики"
 
 #: gtk/gtkaboutdialog.c:376
-msgid ""
-"Credits to the translators. This string should be marked as translatable"
-msgstr ""
-"Благодарности переводчикам. Эти строки должны быть помечены как переводимые"
+msgid "Credits to the translators. This string should be marked as translatable"
+msgstr "Благодарности переводчикам. Эти строки должны быть помечены как переводимые"
 
 #: gtk/gtkaboutdialog.c:391
 msgid "Logo"
@@ -288,8 +284,7 @@ msgstr "Встроенный значок"
 
 #: gtk/gtkaction.c:228
 msgid "The stock icon displayed in widgets representing this action."
-msgstr ""
-"Встроенный значок, отображаемый в виджетах, представляющих это действие."
+msgstr "Встроенный значок, отображаемый в виджетах, представляющих это действие."
 
 #: gtk/gtkaction.c:235 gtk/gtktoolitem.c:160
 msgid "Visible when horizontal"
@@ -729,8 +724,7 @@ msgid "Use stock"
 msgstr "Использовать встроенное"
 
 #: gtk/gtkbutton.c:243
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Если установлено, метка будет использована для выбора из встроенных кнопок "
 "вместо отображения"
@@ -792,20 +786,16 @@ msgid "Child X Displacement"
 msgstr "Перемещение дочернего элемента по горизонтали"
 
 #: gtk/gtkbutton.c:435
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
-msgstr ""
-"На сколько переместить дочерний элемент по горизонтали, если нажата кнопка"
+msgid "How far in the x direction to move the child when the button is depressed"
+msgstr "На сколько переместить дочерний элемент по горизонтали, если нажата кнопка"
 
 #: gtk/gtkbutton.c:442
 msgid "Child Y Displacement"
 msgstr "Перемещение дочернего элемента по вертикали"
 
 #: gtk/gtkbutton.c:443
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
-msgstr ""
-"На сколько переместить дочерний элемент по вертикали, если нажата кнопка"
+msgid "How far in the y direction to move the child when the button is depressed"
+msgstr "На сколько переместить дочерний элемент по вертикали, если нажата кнопка"
 
 #: gtk/gtkbutton.c:459
 msgid "Displace focus"
@@ -1015,8 +1005,7 @@ msgstr "Имеет запись"
 
 #: gtk/gtkcellrenderercombo.c:129
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Если не установлено, не позволять вводить строки, отличные от выбранных"
+msgstr "Если не установлено, не позволять вводить строки, отличные от выбранных"
 
 #: gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
@@ -1080,8 +1069,7 @@ msgstr "Отслеживать состояние"
 
 #: gtk/gtkcellrendererpixbuf.c:222
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr ""
-"Должен ли быть растеризованный pixbuf окрашен в соответствии с состоянием"
+msgstr "Должен ли быть растеризованный pixbuf окрашен в соответствии с состоянием"
 
 #: gtk/gtkcellrendererprogress.c:117
 msgid "Value of the progress bar"
@@ -1232,8 +1220,7 @@ msgid "Rise"
 msgstr "Смещение"
 
 #: gtk/gtkcellrenderertext.c:386
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Смещение текста над линией шрифта (под линию шрифта, для отрицательных "
 "значений)"
@@ -1696,8 +1683,7 @@ msgstr "Дочерний элемент"
 
 #: gtk/gtkcontainer.c:223
 msgid "Can be used to add a new child to the container"
-msgstr ""
-"Может быть использовано для добавления нового дочернего элемента в контейнер"
+msgstr "Может быть использовано для добавления нового дочернего элемента в контейнер"
 
 #: gtk/gtkcurve.c:124
 msgid "Curve type"
@@ -1705,8 +1691,7 @@ msgstr "Тип кривой"
 
 #: gtk/gtkcurve.c:125
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
-"Является ли эта кривая линейной, интерполированной сплайнами или свободной"
+msgstr "Является ли эта кривая линейной, интерполированной сплайнами или свободной"
 
 #: gtk/gtkcurve.c:132
 msgid "Minimum X"
@@ -1785,8 +1770,7 @@ msgid "Selection Bound"
 msgstr "Граница выделения"
 
 #: gtk/gtkentry.c:501 gtk/gtklabel.c:411
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
+msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Положение противоположного конца выделения от курсора в символах"
 
 #: gtk/gtkentry.c:511
@@ -1799,8 +1783,7 @@ msgstr "Максимальная длина"
 
 #: gtk/gtkentry.c:519
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
-"Максимальное число символов для этого поля ввода.  \"0\" -- без ограничений"
+msgstr "Максимальное число символов для этого поля ввода.  \"0\" -- без ограничений"
 
 #: gtk/gtkentry.c:527
 msgid "Visibility"
@@ -1880,8 +1863,7 @@ msgstr "Выделять при фокусировании"
 
 #: gtk/gtkentry.c:834
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-"Будет ли содержимое поля ввода выделяться когда поле ввода получает фокус"
+msgstr "Будет ли содержимое поля ввода выделяться когда поле ввода получает фокус"
 
 #: gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
@@ -1929,8 +1911,7 @@ msgstr "Ширина выпадающего набора"
 
 #: gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr ""
-"Если устанвлено, выпадающее окно будет иметь такой же размер, как и элемент"
+msgstr "Если устанвлено, выпадающее окно будет иметь такой же размер, как и элемент"
 
 #: gtk/gtkentrycompletion.c:369
 msgid "Popup single match"
@@ -2055,8 +2036,7 @@ msgid "Preview Widget Active"
 msgstr "Виджет образца активен"
 
 #: gtk/gtkfilechooser.c:235
-msgid ""
-"Whether the application supplied widget for custom previews should be shown."
+msgid "Whether the application supplied widget for custom previews should be shown."
 msgstr "Должен ли поддерживаемый приложением виджет образца быть показан."
 
 #: gtk/gtkfilechooser.c:240
@@ -2386,18 +2366,15 @@ msgstr "Граница"
 
 #: gtk/gtkiconview.c:677
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
-"Пространство, вставляемое между углами значков в режиме просмотра \"значки\""
+msgstr "Пространство, вставляемое между углами значков в режиме просмотра \"значки\""
 
 #: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:511
 msgid "Orientation"
 msgstr "Ориентация"
 
 #: gtk/gtkiconview.c:694
-msgid ""
-"How the text and icon of each item are positioned relative to each other"
-msgstr ""
-"Как текст и значки каждого элемента позиционируются относительно друг друга"
+msgid "How the text and icon of each item are positioned relative to each other"
+msgstr "Как текст и значки каждого элемента позиционируются относительно друг друга"
 
 #: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
@@ -2585,8 +2562,7 @@ msgstr "Мнемонический виджет"
 
 #: gtk/gtklabel.c:392
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr ""
-"Виджет, который будет активизирован при нажатии мнемонической клавиши метки"
+msgstr "Виджет, который будет активизирован при нажатии мнемонической клавиши метки"
 
 #: gtk/gtklabel.c:436
 msgid ""
@@ -2680,8 +2656,7 @@ msgstr "Вертикальный отступ"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr ""
-"Когда меню является подменю, оно располагается со смещением по вертикали"
+msgstr "Когда меню является подменю, оно располагается со смещением по вертикали"
 
 #: gtk/gtkmenu.c:572
 msgid "Horizontal Offset"
@@ -2691,8 +2666,7 @@ msgstr "Горизонтальный отступ"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr ""
-"Когда меню является подменю, оно располагается со смещением по горизонтали"
+msgstr "Когда меню является подменю, оно располагается со смещением по горизонтали"
 
 #: gtk/gtkmenu.c:583
 msgid "Left Attach"
@@ -2731,8 +2705,7 @@ msgid "Can change accelerators"
 msgstr "Можно изменять комбинации клавиш"
 
 #: gtk/gtkmenu.c:696
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Можно ли изменить клавишу-акселератор меню при нажатии клавиши на элементе "
 "меню"
@@ -2742,8 +2715,7 @@ msgid "Delay before submenus appear"
 msgstr "Задержка перед появлением подменю"
 
 #: gtk/gtkmenu.c:702
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Минимальное время, которое указатель мыши должен находиться над пунктом "
 "меню, чтобы было отбражено подменю"
@@ -2825,8 +2797,7 @@ msgid "Use separator"
 msgstr "Использовать разделитель"
 
 #: gtk/gtkmessagedialog.c:143
-msgid ""
-"Whether to put a separator between the message dialog's text and the buttons"
+msgid "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Помещать ли разделитель между текстом и кнопками диалога сообщений"
 
 #: gtk/gtkmessagedialog.c:149
@@ -2858,8 +2829,7 @@ msgid "X pad"
 msgstr "Заполнение по горизонтали"
 
 #: gtk/gtkmisc.c:122
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr "Пространство, добавляемое к виджету слева и справа, в пикселях"
 
 #: gtk/gtkmisc.c:131
@@ -2867,8 +2837,7 @@ msgid "Y pad"
 msgstr "Заполнение по вертикали"
 
 #: gtk/gtkmisc.c:132
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Пространство, добавляемое к виджету сверху и снизу, в пикселях"
 
 #: gtk/gtknotebook.c:405
@@ -2995,8 +2964,7 @@ msgid "Secondary backward stepper"
 msgstr "Дополнительная кнопка перемещения назад"
 
 #: gtk/gtknotebook.c:537
-msgid ""
-"Display a second backward arrow button on the opposite end of the tab area"
+msgid "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Отображать вторую кнопку со стрелкой назад на противоположной стороне полосы "
 "вкладок"
@@ -3006,8 +2974,7 @@ msgid "Secondary forward stepper"
 msgstr "Дополнительная кнопка перемещения вперед"
 
 #: gtk/gtknotebook.c:554
-msgid ""
-"Display a second forward arrow button on the opposite end of the tab area"
+msgid "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
 "полосы вкладок"
@@ -3041,8 +3008,7 @@ msgid "Spacing around indicator"
 msgstr "Интервал вокруг индикатора"
 
 #: gtk/gtkpaned.c:249
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Позиция разделителя в пикселях (0 означает все пространство до левого "
 "верхнего угла)"
@@ -3085,8 +3051,7 @@ msgstr "Изменяемый"
 
 #: gtk/gtkpaned.c:318
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
-"Если установлено, то дочерний элемент изменяет размеры вместе с родительским"
+msgstr "Если установлено, то дочерний элемент изменяет размеры вместе с родительским"
 
 #: gtk/gtkpaned.c:333
 msgid "Shrink"
@@ -3099,10 +3064,8 @@ msgstr ""
 "запрошенных размеров"
 
 #: gtk/gtkpreview.c:135
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
-"Будет ли виджет просмотра образца занимать всё отведенное ему пространство"
+msgid "Whether the preview widget should take up the entire space it is allocated"
+msgstr "Будет ли виджет просмотра образца занимать всё отведенное ему пространство"
 
 #: gtk/gtkprogress.c:132
 msgid "Activity mode"
@@ -3157,8 +3120,7 @@ msgstr "Подгонка"
 
 #: gtk/gtkprogressbar.c:146
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
-"Компонент GtkAdjustment, связанный с индикатором прогремма (Устаревший)"
+msgstr "Компонент GtkAdjustment, связанный с индикатором прогремма (Устаревший)"
 
 #: gtk/gtkprogressbar.c:154
 msgid "Orientation and growth direction of the progress bar"
@@ -3170,8 +3132,7 @@ msgstr "Стиль строки"
 
 #: gtk/gtkprogressbar.c:163
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr ""
-"Определяет вид индикатора в режиме процентного соотношения (Устаревший)"
+msgstr "Определяет вид индикатора в режиме процентного соотношения (Устаревший)"
 
 #: gtk/gtkprogressbar.c:171
 msgid "Activity Step"
@@ -3322,8 +3283,7 @@ msgid "Arrow X Displacement"
 msgstr "Горизонтальное смещение стрелки"
 
 #: gtk/gtkrange.c:386
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Насколько стрелка будет перемещаться в горизонтальном направлении при "
 "нажатии кнопки"
@@ -3333,8 +3293,7 @@ msgid "Arrow Y Displacement"
 msgstr "Вертикальное смещение стрелки"
 
 #: gtk/gtkrange.c:394
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Насколько стрелка будет перемещаться в вертикальном направлении при нажатии "
 "кнопки"
@@ -3413,8 +3372,7 @@ msgstr "Отступ значения"
 
 #: gtk/gtkscale.c:209
 msgid "Space between value text and the slider/trough area"
-msgstr ""
-"Расстояние между отображаемым значением и областью ползунка/направляющей"
+msgstr "Расстояние между отображаемым значением и областью ползунка/направляющей"
 
 #: gtk/gtkscrollbar.c:83
 msgid "Minimum Slider Length"
@@ -3433,15 +3391,13 @@ msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Не изменять размер ползунка, просто задать ему минимальный размер"
 
 #: gtk/gtkscrollbar.c:117
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Отображать вторую кнопку со стрелкой назад на противоположной стороне полосы "
 "прокрутки"
 
 #: gtk/gtkscrollbar.c:125
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
 "полосы прокрутки"
@@ -3492,8 +3448,7 @@ msgstr "Интервал полос прокрутки"
 
 #: gtk/gtkscrolledwindow.c:287
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr ""
-"Количество точек растра между полосами прокрутки и прокручиваемым окном"
+msgstr "Количество точек растра между полосами прокрутки и прокручиваемым окном"
 
 #: gtk/gtkseparatortoolitem.c:137
 msgid "Draw"
@@ -3572,14 +3527,12 @@ msgid "Name of icon theme to use"
 msgstr "Наименование испольуемой темы значков"
 
 #: gtk/gtksettings.c:259
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Наименование темы значков"
+msgstr "Имя темы значков для отката"
 
 #: gtk/gtksettings.c:260
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Наименование испольуемой темы значков"
+msgstr "Имя темы значков для отката в случае, если в используемой теме значок отсутствует"
 
 #: gtk/gtksettings.c:268
 msgid "Key Theme Name"
@@ -3603,8 +3556,7 @@ msgstr "Порог перетаскивания"
 
 #: gtk/gtksettings.c:287
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
-"Число точек растра, на которое может сместиться курсор до перетаскивания"
+msgstr "Число точек растра, на которое может сместиться курсор до перетаскивания"
 
 #: gtk/gtksettings.c:295
 msgid "Font Name"
@@ -3651,8 +3603,7 @@ msgid "Xft Hint Style"
 msgstr "Стиль хинтования"
 
 #: gtk/gtksettings.c:344
-msgid ""
-"What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
+msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Какой уровень хинтования использовать; никакого (hintnone), слабый "
 "(hintslight), средний (hintmedium) или полный (hintfull)"
@@ -3663,8 +3614,7 @@ msgstr "Субпиксельное сглаживание"
 
 #: gtk/gtksettings.c:354
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
-"Тип субпиксельного сглаживания; отсутствует (none), rgb, bgr, vrgb, vbgr"
+msgstr "Тип субпиксельного сглаживания; отсутствует (none), rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:363
 msgid "Xft DPI"
@@ -3715,8 +3665,7 @@ msgid "Ignore hidden"
 msgstr "Игнорировать скрытые"
 
 #: gtk/gtksizegroup.c:286
-msgid ""
-"If TRUE, hidden widgets are ignored when determining the size of the group"
+msgid "If TRUE, hidden widgets are ignored when determining the size of the group"
 msgstr ""
 "Если этот параметр установлен, скрытые виджеты игнорируются при определении "
 "размера группы"
@@ -3772,8 +3721,7 @@ msgid "Update Policy"
 msgstr "Политика обновления"
 
 #: gtk/gtkspinbutton.c:296
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
+msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Должен ли счетчик обновляться всегда или только если значение является "
 "допустимым"
@@ -3944,8 +3892,7 @@ msgstr "Имя ярлыка"
 
 #: gtk/gtktexttag.c:202
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
-"Имя, используемое для ссылки на текстовый ярлык. NULL для безымянных ярлыков"
+msgstr "Имя, используемое для ссылки на текстовый ярлык. NULL для безымянных ярлыков"
 
 #: gtk/gtktexttag.c:220
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -4106,10 +4053,8 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Пикселей в пространстве между перенесёнными строками в абзаце"
 
 #: gtk/gtktexttag.c:504 gtk/gtktextview.c:587
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
-"Никогда не переносить строки, переносить ли по границам слов или по символам"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgstr "Никогда не переносить строки, переносить ли по границам слов или по символам"
 
 #: gtk/gtktexttag.c:513 gtk/gtktextview.c:634
 msgid "Tabs"
@@ -4369,13 +4314,11 @@ msgstr "Должны ли быть активными подсказки пан�
 
 #: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr ""
-"Должны ли элементы расширяться при увеличении размера панели инструментов"
+msgstr "Должны ли элементы расширяться при увеличении размера панели инструментов"
 
 #: gtk/gtktoolbar.c:562
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr ""
-"Должны ли элементы иметь одинаковый размер, как другие гомогенные элементы"
+msgstr "Должны ли элементы иметь одинаковый размер, как другие гомогенные элементы"
 
 #: gtk/gtktoolbar.c:569
 msgid "Spacer size"
@@ -4414,8 +4357,7 @@ msgid "Toolbar style"
 msgstr "Стиль панели инструментов"
 
 #: gtk/gtktoolbar.c:610
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Будет ли на панели инструментов по умолчанию только текст, текст и значки, "
 "только значки и т. д."
@@ -4530,8 +4472,7 @@ msgstr "Подсказка для правил"
 
 #: gtk/gtktreeview.c:628
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
-"Задать подсказку для процессора тем для окрашивания строк в разные цвета"
+msgstr "Задать подсказку для процессора тем для окрашивания строк в разные цвета"
 
 #: gtk/gtktreeview.c:635
 msgid "Enable Search"
@@ -4574,10 +4515,8 @@ msgid "Hover Expand"
 msgstr "Следящее расширение"
 
 #: gtk/gtktreeview.c:706
-msgid ""
-"Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr ""
-"Должны ли строки расширяться/сжиматься при перемещении курсора над ними"
+msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
+msgstr "Должны ли строки расширяться/сжиматься при перемещении курсора над ними"
 
 #: gtk/gtktreeview.c:726
 msgid "Vertical Separator Width"
@@ -4779,8 +4718,7 @@ msgstr "Родительский виджет"
 
 #: gtk/gtkwidget.c:423
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr ""
-"Родительский виджет для этого виджета. Должен быть виджетом-контейнером"
+msgstr "Родительский виджет для этого виджета. Должен быть виджетом-контейнером"
 
 #: gtk/gtkwidget.c:430
 msgid "Width request"
@@ -4948,8 +4886,7 @@ msgstr "Отступ фокуса ввода"
 
 #: gtk/gtkwidget.c:1469
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr ""
-"Расстояние между индикатором фокуса ввода и 'рамкой' виджета, в пикселях"
+msgstr "Расстояние между индикатором фокуса ввода и 'рамкой' виджета, в пикселях"
 
 #: gtk/gtkwidget.c:1474
 msgid "Cursor color"
@@ -5062,18 +4999,15 @@ msgstr "Ширина по умолчанию"
 
 #: gtk/gtkwindow.c:490
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
-"Ширина окна по умолчанию, используется при первоначальном отображении окна"
+msgstr "Ширина окна по умолчанию, используется при первоначальном отображении окна"
 
 #: gtk/gtkwindow.c:499
 msgid "Default Height"
 msgstr "Высота по умолчанию"
 
 #: gtk/gtkwindow.c:500
-msgid ""
-"The default height of the window, used when initially showing the window"
-msgstr ""
-"Высота окна по умолчанию, используется при первоначальном отображении окна"
+msgid "The default height of the window, used when initially showing the window"
+msgstr "Высота окна по умолчанию, используется при первоначальном отображении окна"
 
 #: gtk/gtkwindow.c:509
 msgid "Destroy with Parent"
@@ -5137,8 +5071,7 @@ msgstr "Скрыть из переключателя рабочих мест"
 
 #: gtk/gtkwindow.c:583
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
-"\"Истина\", если окно не должно быть видимо в переключателе рабочих мест."
+msgstr "\"Истина\", если окно не должно быть видимо в переключателе рабочих мест."
 
 #: gtk/gtkwindow.c:590
 msgid "Urgent"
@@ -5195,3 +5128,4 @@ msgstr "Стиль строки состояния метода ввода"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Как рисовать строку состояния метода ввода"
+
