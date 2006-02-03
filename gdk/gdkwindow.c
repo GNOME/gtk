@@ -1725,43 +1725,86 @@ gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
   RESTORE_GC (gc);
 }
 
+typedef struct {
+  cairo_t *cr; /* if non-null, it means use this cairo context */
+  GdkGC *gc;   /* if non-null, it means use this GC instead */
+} BackingRectMethod;
+
 static void
-gdk_window_set_bg_pattern (GdkWindow      *window,
-			   cairo_t        *cr,
-			   int             x_offset,
-			   int             y_offset)
+setup_backing_rect_method (BackingRectMethod *method, GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
   if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
     {
-      x_offset += private->x;
-      y_offset += private->y;
-      gdk_window_set_bg_pattern (GDK_WINDOW (private->parent), cr,
-				 x_offset, y_offset);
+      GdkWindowPaint tmp_paint;
+
+      tmp_paint = *paint;
+      tmp_paint.x_offset += private->x;
+      tmp_paint.y_offset += private->y;
+
+      x_offset_cairo += private->x;
+      y_offset_cairo += private->y;
+
+      setup_backing_rect_method (method, GDK_WINDOW (private->parent), &tmp_paint, x_offset_cairo, y_offset_cairo);
     }
-  else if (private->bg_pixmap && 
-           private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
-           private->bg_pixmap != GDK_NO_BG)
+  else if (private->bg_pixmap &&
+	   private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+	   private->bg_pixmap != GDK_NO_BG)
     {
+/* This is a workaround for https://bugs.freedesktop.org/show_bug.cgi?id=4320.
+ * In it, using a pixmap as a repeating pattern in Cairo, and painting it to a
+ * pixmap destination surface, can be very slow (on the order of seconds for a
+ * whole-screen copy).  The workaround is to use pretty much the same code that
+ * we used in GTK+ 2.6 (pre-Cairo), which clears the double-buffer pixmap with
+ * a tiled GC XFillRectangle().
+ */
+
+/* Actually computing this flag is left as an exercise for the reader */
+#if defined (G_OS_UNIX)
+#  define GDK_CAIRO_REPEAT_IS_FAST 0
+#else
+#  define GDK_CAIRO_REPEAT_IS_FAST 1
+#endif
+
+#if GDK_CAIRO_REPEAT_IS_FAST
       cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
       cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
       cairo_surface_destroy (surface);
 
-      if (x_offset != 0 || y_offset != 0)
+      if (x_offset_cairo != 0 || y_offset_cairo != 0)
 	{
 	  cairo_matrix_t matrix;
-	  cairo_matrix_init_translate (&matrix, x_offset, y_offset);
+	  cairo_matrix_init_translate (&matrix, x_offset_cairo, y_offset_cairo);
 	  cairo_pattern_set_matrix (pattern, &matrix);
 	}
 
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-      cairo_set_source (cr, pattern);
+
+      method->cr = cairo_create (paint->surface);
+      method->gc = NULL;
+
+      cairo_set_source (method->cr, pattern);
       cairo_pattern_destroy (pattern);
+#else
+      guint gc_mask;
+      GdkGCValues gc_values;
+
+      gc_values.fill = GDK_TILED;
+      gc_values.tile = private->bg_pixmap;
+      gc_values.ts_x_origin = -x_offset_cairo;
+      gc_values.ts_y_origin = -y_offset_cairo;
+
+      gc_mask = GDK_GC_FILL | GDK_GC_TILE | GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN;
+
+      method->gc = gdk_gc_new_with_values (paint->pixmap, &gc_values, gc_mask);
+#endif
     }
   else
     {
-      gdk_cairo_set_source_color (cr, &private->bg_color);
+      method->cr = cairo_create (paint->surface);
+
+      gdk_cairo_set_source_color (method->cr, &private->bg_color);
     }
 }
 
@@ -1774,22 +1817,56 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint = private->paint_stack->data;
-  cairo_t *cr;
+  BackingRectMethod method;
+#if 0
+  GTimer *timer;
+  double elapsed;
+#endif
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  cr = cairo_create (paint->surface);
+#if 0
+  timer = g_timer_new ();
+#endif
 
-  gdk_window_set_bg_pattern (window, cr, 0, 0);
+  method.cr = NULL;
+  method.gc = NULL;
+  setup_backing_rect_method (&method, window, paint, 0, 0);
 
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_clip (cr);
+  if (method.cr)
+    {
+      g_assert (method.gc == NULL);
 
-  gdk_cairo_region (cr, paint->region);
-  cairo_fill (cr);
+      cairo_rectangle (method.cr, x, y, width, height);
+      cairo_clip (method.cr);
 
-  cairo_destroy (cr);
+      gdk_cairo_region (method.cr, paint->region);
+      cairo_fill (method.cr);
+
+      cairo_destroy (method.cr);
+#if 0
+      elapsed = g_timer_elapsed (timer, NULL);
+      g_print ("Draw the background with Cairo: %fs\n", elapsed);
+#endif
+    }
+  else
+    {
+      g_assert (method.gc != NULL);
+
+      gdk_gc_set_clip_region (method.gc, paint->region);
+      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
+      g_object_unref (method.gc);
+
+#if 0
+      elapsed = g_timer_elapsed (timer, NULL);
+      g_print ("Draw the background with GDK: %fs\n", elapsed);
+#endif
+    }
+
+#if 0
+  g_timer_destroy (timer);
+#endif
 }
 
 /**
