@@ -168,9 +168,7 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
-<!-- # Unused Parameters # -->
-@m: 
-@c: 
+@Deprecated: Use gtk_menu_shell_append() instead.
 
 
 <!-- ##### MACRO gtk_menu_prepend ##### -->
@@ -180,10 +178,7 @@ Adds a new #GtkMenuItem to the beginning of the menu's item list.
 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
-<!-- # Unused Parameters # -->
-@menu_child: 
-@m: 
-@c: 
+@Deprecated: Use gtk_menu_shell_prepend() instead.
 
 
 <!-- ##### MACRO gtk_menu_insert ##### -->
@@ -195,7 +190,8 @@ indicated by @position.
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 @pos: The position in the item list where @child is added.
-Positions are numbered from 0 to n-1.
+      Positions are numbered from 0 to n-1.
+@Deprecated: Use gtk_menu_shell_insert() instead.
 
 
 <!-- ##### FUNCTION gtk_menu_reorder_child ##### -->

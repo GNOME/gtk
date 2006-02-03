@@ -1,3 +1,8 @@
+2006-02-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkmenushell.sgml: 
+	* gtk/tmpl/gtkmenu.sgml: Add deprecation notes.
+
 2006-01-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new functions
