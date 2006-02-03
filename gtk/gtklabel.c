@@ -2237,9 +2237,7 @@ get_layout_location (GtkLabel  *label,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     x = MAX (x, widget->allocation.x + misc->xpad);
   else
-    x = MIN (x,
-	     widget->allocation.x + widget->allocation.width -
-	     req_width - misc->xpad);
+    x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
 
   y = floor (widget->allocation.y + (gint)misc->ypad 
              + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
