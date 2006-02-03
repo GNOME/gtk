@@ -1,3 +1,8 @@
+2006-02-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (get_layout_location): Fix handling
+	of padding in RTL.  (#329099, Hooman Mesgary)
+
 2006-02-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_protocol_for_display): 
