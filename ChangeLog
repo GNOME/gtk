@@ -1,3 +1,27 @@
+2006-02-03  Federico Mena Quintero  <federico@ximian.com>
+
+	Work around https://bugs.freedesktop.org/show_bug.cgi?id=4320,
+	which used to be our own
+	http://bugzilla.gnome.org/show_bug.cgi?id=314616.  If one uses a
+	pixmap for a pattern in Cairo, and sets the pattern to
+	CAIRO_EXTEND_REPEAT; and if the destination surface is also a
+	pixmap, Cairo does a slow copy instead of using XCopyArea().  So,
+	we use the same code that we used in GTK+ 2.6 (pre-cairo), by
+	filling the double-buffer pixmap with a tiled GC and
+	XFillRectangle().
+
+	* gdk/gdkwindow.c (BackingRectMethod): New structure with a
+	cairo_t and a GdkGC field.  Depending on which of these fields
+	gets filled in, we'll use Cairo or GDK to clear the double-buffer
+	pixmap when painting a window.
+	(setup_backing_rect_method): Fill a BackingRectMethod as
+	appropriate, depending on the window's configuration and our
+	knowledge of whether Cairo is fast or slow when doing repeating
+	patterns.
+	(gdk_window_clear_backing_rect): Call
+	setup_backing_rect_method().  Depending on what it returns, use
+	Cairo to clear the double-buffer pixmap, or plain GDK.
+
 2006-02-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (get_layout_location): Fix handling
