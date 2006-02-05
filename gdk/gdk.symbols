@@ -328,10 +328,10 @@ gdk_color_parse
 #if IN_FILE(__GDK_COLOR_X11_C__)
 gdk_colormap_new
 gdk_colormap_get_type G_GNUC_CONST
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_colormap_change
 gdk_colors_alloc
 gdk_colors_free
-#ifndef GDK_DISABLE_DEPRECATED
 gdk_colormap_get_system_size
 gdk_color_change
 #endif
@@ -532,6 +532,8 @@ gdk_drawable_set_data
 gdk_drawable_ref
 gdk_drawable_unref
 gdk_draw_string
+gdk_draw_text
+gdk_draw_text_wc
 #endif
 gdk_drawable_get_depth
 gdk_drawable_get_display
@@ -555,8 +557,6 @@ gdk_draw_points
 gdk_draw_polygon
 gdk_draw_rectangle
 gdk_draw_segments
-gdk_draw_text
-gdk_draw_text_wc
 gdk_draw_trapezoids
 #endif
 #endif
@@ -810,6 +810,19 @@ gdk_keymap_get_for_display
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keyval_convert_case
+gdk_keyval_from_name
+gdk_keyval_name G_GNUC_CONST
+#endif
+#endif
+
+#if IN_HEADER(__GDK_KEYS_H__)
+#if IN_FILE(__GDK_KEYS_DIRECTFB_C__)
+gdk_keymap_get_direction
+gdk_keymap_get_entries_for_keycode
+gdk_keymap_get_entries_for_keyval
+gdk_keymap_get_for_display
+gdk_keymap_lookup_key
+gdk_keymap_translate_keyboard_state
 gdk_keyval_from_name
 gdk_keyval_name G_GNUC_CONST
 #endif

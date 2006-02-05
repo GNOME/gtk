@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
 SUBDIRS = $(gdktarget)
-DIST_SUBDIRS = linux-fb win32 x11 quartz
+DIST_SUBDIRS = linux-fb win32 x11 quartz directfb
 
 EXTRA_DIST =			\
 	keynames.txt		\
@@ -133,6 +133,11 @@ common_sources =                \
 	gdkenumtypes.c		\
 	gdkmarshalers.h
 
+libgdk_directfb_2_0_la_SOURCES = $(common_sources) 
+libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS) \
+  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_directfb_2_0_la_LDFLAGS = $(LDADD)
+
 libgdk_x11_2_0_la_SOURCES = $(common_sources)
 libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
@@ -202,7 +207,7 @@ endif
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la libgdk-quartz-2.0.la
+EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la libgdk-quartz-2.0.la libgdk-directfb-2.0.la
 
 MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h gdkenumtypes.c \
   gdkmarshalers.h gdkmarshalers.c

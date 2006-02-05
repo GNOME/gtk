@@ -224,13 +224,13 @@ else
   gdktarget=x11
 fi
 
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32/quartz]] select non-default GDK target],
+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32/quartz/directfb]] select non-default GDK target],
 	gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)
 case $gdktarget in
-  x11|linux-fb|win32|quartz) ;;
-  *) AC_MSG_ERROR([Invalid target for GDK: use x11, linux-fb, quartz or win32.]);;
+  x11|linux-fb|win32|quartz|directfb) ;;
+  *) AC_MSG_ERROR([Invalid target for GDK: use x11, linux-fb, quartz, directfb or win32.]);;
 esac
 
 gdktargetlib=libgdk-$gdktarget-$GTK_API_VERSION.la
@@ -1369,6 +1369,27 @@ else
   AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
 fi
 
+if test "x$gdktarget" = "xdirectfb"; then
+  DIRECTFB_REQUIRED_VERSION=0.9.21
+  AC_MSG_CHECKING(for DirectFB)
+
+  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb ; then
+      AC_MSG_RESULT(found)
+      GDK_EXTRA_CFLAGS="`$PKG_CONFIG --cflags directfb` $GDK_EXTRA_CFLAGS"
+      GDK_EXTRA_LIBS="`$PKG_CONFIG --libs directfb` $GDK_EXTRA_LIBS"
+  else
+      AC_MSG_ERROR([
+*** DirectFB $DIRECTFB_REQUIRED_VERSION or newer is required. The latest
+*** version of DirectFB is always available from http://www.directfb.org/.
+  ])
+  fi
+
+  AM_CONDITIONAL(USE_DIRECTFB, true)
+else
+  AM_CONDITIONAL(USE_DIRECTFB, false)
+fi
+
+
 # Check for Pango flags
 
 if test "x$gdktarget" = "xwin32"; then
@@ -1589,6 +1610,9 @@ elif test "x$gdktarget" = "xlinux-fb" ; then
 elif test "x$gdktarget" = "xquartz" ; then
   gdk_windowing='
 #define GDK_WINDOWING_QUARTZ'
+elif test "x$gdktarget" = "xdirectfb" ; then
+  gdk_windowing='
+#define GDK_WINDOWING_DIRECTFB'
 fi
 
 if test x$gdk_wchar_h = xyes; then
@@ -1646,6 +1670,7 @@ gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/linux-fb/Makefile
 gdk/quartz/Makefile
+gdk/directfb/Makefile
 gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
