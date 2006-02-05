@@ -1,3 +1,8 @@
+2006-02-05  Dom Lachowicz <cinamod@hotmail.com>
+
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Bug #330022
+	Wrong pixel values are computed when color = 0xFF and alpha = 0xFF
+	
 2006-02-04  Michael Emmel  <mike.emmel@gmail.com>
 	Added new directfb backend located in gdk/directfb
 	plus patches to compile new backend
