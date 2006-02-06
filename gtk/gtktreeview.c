@@ -12582,7 +12582,7 @@ gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
   if (tree_view->priv->search_custom_entry_set)
-    return tree_view->priv->search_entry;
+    return GTK_ENTRY (tree_view->priv->search_entry);
 
   return NULL;
 }
