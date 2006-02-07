@@ -1,3 +1,7 @@
+2006-02-08  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Drop the timestamp from the zipfile names.
+
 2006-02-05  Dom Lachowicz <cinamod@hotmail.com>
 
 	Merged from HEAD:
