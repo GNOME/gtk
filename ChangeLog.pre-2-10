@@ -1,3 +1,7 @@
+2006-02-07  Sven Neumann  <sven@gimp.org>
+
+	* gdk/directfb/AUTHORS: updated mine and Dok's email address.
+
 2006-02-06  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_search_entry): fix compiler
