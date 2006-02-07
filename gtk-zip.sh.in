@@ -2,8 +2,8 @@
 
 # Build zipfiles for GTK on Win32
 
-ZIP=/tmp/gtk+-@GTK_VERSION@-`date +%Y%m%d`.zip
-DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@-`date +%Y%m%d`.zip
+ZIP=/tmp/gtk+-@GTK_VERSION@.zip
+DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@.zip
 cd @prefix@
 rm $ZIP
 
