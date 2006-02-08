@@ -86,6 +86,8 @@ gtk_file_info_copy (GtkFileInfo *info)
   new_info = g_memdup (info, sizeof (GtkFileInfo));
   if (new_info->display_name)
     new_info->display_name = g_strdup (new_info->display_name);
+  if (new_info->display_key)
+    new_info->display_key = g_strdup (new_info->display_key);
   if (new_info->mime_type)
     new_info->mime_type = g_strdup (new_info->mime_type);
 

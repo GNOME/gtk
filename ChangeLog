@@ -1,3 +1,8 @@
+2006-02-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystem.c (gtk_file_info_copy): Copy the display_key
+	as well.  (#330389, Markku Vire)
+
 2006-02-08  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Drop the timestamp from the zipfile names.
