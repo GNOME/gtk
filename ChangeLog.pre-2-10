@@ -1,3 +1,8 @@
+2006-02-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c: Don't put relevant callss
+	in g_assert().  (#329876, Kristian Rietveld)
+
 2006-02-08  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab)
