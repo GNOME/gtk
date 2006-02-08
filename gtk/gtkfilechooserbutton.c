@@ -568,7 +568,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser     *chooser,
       gchar type;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
-      g_assert (gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos));
+      gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
 
       do
 	{
@@ -863,7 +863,7 @@ gtk_file_chooser_button_finalize (GObject *object)
   if (priv->old_path)
     gtk_file_path_free (priv->old_path);
 
-  g_assert (gtk_tree_model_get_iter_first (priv->model, &iter));
+  gtk_tree_model_get_iter_first (priv->model, &iter);
 
   do
     {
@@ -1105,7 +1105,7 @@ change_icon_theme (GtkFileChooserButton *button)
 
   update_label_and_image (button);
 
-  g_assert (gtk_tree_model_get_iter_first (priv->model, &iter));
+  gtk_tree_model_get_iter_first (priv->model, &iter);
 
   theme = get_icon_theme (GTK_WIDGET (button));
 
@@ -1746,7 +1746,7 @@ update_combo_box (GtkFileChooserButton *button)
   GtkTreeIter iter;
   gboolean row_found;
 
-  g_assert (gtk_tree_model_get_iter_first (priv->filter_model, &iter));
+  gtk_tree_model_get_iter_first (priv->filter_model, &iter);
 
   paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
 
@@ -1812,7 +1812,7 @@ update_combo_box (GtkFileChooserButton *button)
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 
       pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
-      g_assert (gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos));
+      gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
 
       gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
 							&filter_iter, &iter);
@@ -2158,7 +2158,7 @@ dialog_notify_cb (GObject    *dialog,
 
 	  pos = model_get_type_position (user_data,
 					 ROW_TYPE_CURRENT_FOLDER);
-	  g_assert (gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos));
+	  gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
 
 	  data = NULL;
 	  gtk_tree_model_get (priv->model, &iter, DATA_COLUMN, &data, -1);
