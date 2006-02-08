@@ -585,7 +585,7 @@ gdk_pointer_grab (GdkWindow    *window,
       if (p_grab_window != NULL && p_grab_window != window)
 	generate_grab_broken_event (p_grab_window, FALSE, window);
       
-      p_grab_window = window;
+      assign_object (&p_grab_window, window);
 
       if (p_grab_cursor != NULL)
 	{
@@ -642,7 +642,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 
   /* FIXME: Generate GDK_CROSSING_UNGRAB events */
 
-  p_grab_window = NULL;
+  assign_object (&p_grab_window, NULL);
   if (p_grab_cursor != NULL)
     {
       if (GetCursor () == p_grab_cursor)
@@ -759,7 +759,7 @@ gdk_keyboard_grab (GdkWindow *window,
       if (k_grab_window != NULL && k_grab_window != window)
 	generate_grab_broken_event (k_grab_window, TRUE, window);
 
-      k_grab_window = window;
+      assign_object (&k_grab_window, window);
 
       if (!k_grab_owner_events)
 	{
@@ -824,7 +824,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
 	}
     }
 
-  k_grab_window = NULL;
+  assign_object (&k_grab_window, NULL);
 }
 
 gboolean
@@ -2749,7 +2749,22 @@ gdk_event_translate (MSG  *msg,
 	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
 
 	  if (real_window != current_window)
-	    synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
+	    {
+	      if (p_grab_owner_events)
+		{
+		  synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
+		}
+	      else if (current_window == p_grab_window)
+		{
+		  synthesize_leave_event (p_grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+		  assign_object (&current_window, _gdk_root);
+		}
+	      else if (real_window == p_grab_window)
+		{
+		  synthesize_enter_event (p_grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+		  assign_object (&current_window, p_grab_window);
+		}
+	    }
 	}
       else
 	{

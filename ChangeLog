@@ -1,3 +1,15 @@
+2006-02-08  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab)
+	(gdk_display_pointer_ungrab, gdk_keyboard_grab)
+	(gdk_display_keyboard_ungrab): Consistenly use assign_object()
+	when assigning GdkWindow pointers so that the ref counting doesn't
+	get off whack.
+
+	(gdk_event_translate) <WM_MOUSEMOVE>: When the pointer is grabbed
+	with owner_events FALSE, generate enter and leave events only for
+	the grab window. (#321054)
+
 2006-02-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_info_copy): Copy the display_key
