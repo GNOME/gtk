@@ -1,3 +1,14 @@
+2006-02-08  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_ref_path),
+	(gtk_tree_model_filter_unref_path): free temporary paths after
+	usage (patch from maemo-gtk),
+	(gtk_tree_model_filter_clear_cache): fix little typo in the docs
+	(patch from maemo-gtk).
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): remove
+	stale FIXME.
+
 2006-02-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_info_copy): Copy the display_key

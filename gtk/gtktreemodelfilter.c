@@ -2818,6 +2818,8 @@ gtk_tree_model_filter_ref_path (GtkTreeModelFilter *filter,
       gtk_tree_model_ref_node (GTK_TREE_MODEL (filter->priv->child_model), &iter);
       gtk_tree_path_up (p);
     }
+
+  gtk_tree_path_free (p);
 }
 
 static void
@@ -2837,6 +2839,8 @@ gtk_tree_model_filter_unref_path (GtkTreeModelFilter *filter,
       gtk_tree_model_unref_node (GTK_TREE_MODEL (filter->priv->child_model), &iter);
       gtk_tree_path_up (p);
     }
+
+  gtk_tree_path_free (p);
 }
 
 static void
@@ -3344,7 +3348,7 @@ gtk_tree_model_filter_refilter (GtkTreeModelFilter *filter)
  * gtk_tree_model_ref_node(). This might be useful if the child model
  * being filtered is static (and doesn't change often) and there has been
  * a lot of unreffed access to nodes. As a side effect of this function,
- * all unreffed itters will be invalid.
+ * all unreffed iters will be invalid.
  *
  * Since: 2.4
  */

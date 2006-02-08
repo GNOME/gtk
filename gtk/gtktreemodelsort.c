@@ -767,7 +767,6 @@ gtk_tree_model_sort_row_has_child_toggled (GtkTreeModel *s_model,
   gtk_tree_path_free (path);
 }
 
-/* FIXME: I still have doubts if this works */
 static void
 gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
 				 GtkTreePath  *s_path,
