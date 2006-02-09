@@ -2,6 +2,14 @@
 
 	Merged from HEAD:
 	
+	* gtk/gtkfontbutton.c:
+	Work out the font size in floating point, and display the font
+	size with %g instead of %d (#317590)
+
+2006-02-09  Ross Burton  <ross@burtonini.com>
+
+	Merged from HEAD:
+	
 	* gtk/gtkwindow.c: Documentation fixes (#324815).
 
 2006-02-09  Tor Lillqvist  <tml@novell.com>

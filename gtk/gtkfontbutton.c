@@ -920,8 +920,8 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
 
   if (font_button->priv->show_size) 
     {
-      gchar *size = g_strdup_printf ("%d", 
-                                     pango_font_description_get_size (desc) / PANGO_SCALE);
+      gchar *size = g_strdup_printf ("%g",
+                                     pango_font_description_get_size (desc) / (double)PANGO_SCALE);
       
       gtk_label_set_text (GTK_LABEL (font_button->priv->size_label), size);
       
