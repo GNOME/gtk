@@ -1,3 +1,9 @@
+2006-02-09  Ross Burton  <ross@burtonini.com>
+
+	Merged from HEAD:
+	
+	* gtk/gtkwindow.c: Documentation fixes (#324815).
+
 2006-02-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate)
