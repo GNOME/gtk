@@ -1072,7 +1072,14 @@ show_window_internal (GdkWindow *window,
 		      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
       else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||
 	       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
-        SetForegroundWindow (GDK_WINDOW_HWND (window));
+	{
+          if (focus_on_map && private->accept_focus)
+            SetForegroundWindow (GDK_WINDOW_HWND (window));
+	  else
+            SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP,
+	  	          0, 0, 0, 0,
+		          SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	}
       else
         BringWindowToTop (GDK_WINDOW_HWND (window));
     }
@@ -1471,7 +1478,16 @@ gdk_window_raise (GdkWindow *window)
       GDK_NOTE (MISC, g_print ("gdk_window_raise: %p\n",
 			       GDK_WINDOW_HWND (window)));
 
-      API_CALL (BringWindowToTop, (GDK_WINDOW_HWND (window)));
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOPMOST,
+	                         0, 0, 0, 0,
+				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
+      else if (((GdkWindowObject *)window)->accept_focus)
+        API_CALL (BringWindowToTop, (GDK_WINDOW_HWND (window)));
+      else
+        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
+  			         0, 0, 0, 0,
+			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
     }
 }
 

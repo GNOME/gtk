@@ -2921,7 +2921,8 @@ gdk_event_translate (MSG  *msg,
       break;
 
      case WM_MOUSEACTIVATE:
-       if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP) 
+       if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP 
+	   || !((GdkWindowObject *)window)->accept_focus)
 	 {
 	   *ret_valp = MA_NOACTIVATE;
 	   return_val = TRUE;
