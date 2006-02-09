@@ -101,6 +101,10 @@ static void gdk_window_impl_win32_finalize   (GObject                 *object);
 
 static gpointer parent_class = NULL;
 
+static void     update_style_bits         (GdkWindow *window);
+static gboolean _gdk_window_get_functions (GdkWindow     *window,
+                                           GdkWMFunction *functions);
+
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
@@ -1571,87 +1575,85 @@ gdk_window_set_urgency_hint (GdkWindow *window,
     }
 }
 
-static void
-decorate_based_on_hints (GdkWindow *window)
+static gboolean
+get_effective_window_decorations (GdkWindow       *window,
+                                  GdkWMDecoration *decoration)
 {
   GdkWindowImplWin32 *impl;
-  GdkWMDecoration decoration;
 
   impl = (GdkWindowImplWin32 *)((GdkWindowObject *)window)->impl;
 
+  if (gdk_window_get_decorations (window, decoration))
+    return TRUE;
+    
   if (((GdkWindowObject *) window)->window_type != GDK_WINDOW_TOPLEVEL &&
       ((GdkWindowObject *) window)->window_type != GDK_WINDOW_DIALOG)
-    return;
+    return FALSE;
 
   if ((impl->hint_flags & GDK_HINT_MIN_SIZE) &&
       (impl->hint_flags & GDK_HINT_MAX_SIZE) &&
       impl->hints.min_width == impl->hints.max_width &&
       impl->hints.min_height == impl->hints.max_height)
     {
-      decoration = GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MAXIMIZE;
+      *decoration = GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MAXIMIZE;
       if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
-	decoration |= GDK_DECOR_MINIMIZE;
+	*decoration |= GDK_DECOR_MINIMIZE;
       else if (impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
-	decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
+	*decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
 
-      gdk_window_set_decorations (window, decoration);
+      return TRUE;
     }
   else if (impl->hint_flags & GDK_HINT_MAX_SIZE)
     {
-      decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
+      *decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
       if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
-	decoration |= GDK_DECOR_MINIMIZE;
-      gdk_window_set_decorations (window, decoration);
+	*decoration |= GDK_DECOR_MINIMIZE;
+      return TRUE;
     }
   else
     {
       switch (impl->type_hint)
 	{
 	case GDK_WINDOW_TYPE_HINT_DIALOG:
-	  gdk_window_set_decorations (window,
-				      GDK_DECOR_ALL |
-				      GDK_DECOR_MINIMIZE |
-				      GDK_DECOR_MAXIMIZE);
-	  break;
+	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
+	  return TRUE;
+
 	case GDK_WINDOW_TYPE_HINT_MENU:
-	  gdk_window_set_decorations (window,
-				      GDK_DECOR_ALL |
-				      GDK_DECOR_RESIZEH |
-				      GDK_DECOR_MINIMIZE |
-				      GDK_DECOR_MAXIMIZE);
-	  break;
+	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
+	  return TRUE;
+
 	case GDK_WINDOW_TYPE_HINT_TOOLBAR:
-	  gdk_window_set_decorations (window,
-				      GDK_DECOR_ALL |
-				      GDK_DECOR_MINIMIZE |
-				      GDK_DECOR_MAXIMIZE);
 	  gdk_window_set_skip_taskbar_hint (window, TRUE);
-	  break;
+	  *decoration = GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE;
+	  return TRUE;
+
 	case GDK_WINDOW_TYPE_HINT_UTILITY:
-	  break;
+	  return FALSE;
+
 	case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
-	  gdk_window_set_decorations (window,
-				      GDK_DECOR_ALL |
-				      GDK_DECOR_RESIZEH |
-				      GDK_DECOR_MENU |
-				      GDK_DECOR_MINIMIZE |
-				      GDK_DECOR_MAXIMIZE);
-	  break;
+	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MENU
+                  | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
+	  return TRUE;
+	  
 	case GDK_WINDOW_TYPE_HINT_DOCK:
-	  break;
+	  return FALSE;
+	  
 	case GDK_WINDOW_TYPE_HINT_DESKTOP:
-	  break;
+	  return FALSE;
+
 	default:
 	  /* Fall thru */
 	case GDK_WINDOW_TYPE_HINT_NORMAL:
-	  gdk_window_set_decorations (window, GDK_DECOR_ALL);
-	  break;
+	  *decoration = GDK_DECOR_ALL;
+	  return TRUE;
 	}
     }
+    
+  return FALSE;
 }
 
 void 
@@ -1712,7 +1714,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));
     }
 
-  decorate_based_on_hints (window);
+  update_style_bits (window);
 }
 
 void
@@ -2540,13 +2542,28 @@ gdk_window_set_group (GdkWindow *window,
 }
 
 static void
-set_or_clear_style_bits (GdkWindow *window,
-			 gboolean   clear_bits,
-			 int        bits)
+update_single_bit (LONG *style,
+                   BOOL  all,
+		   int   gdk_bit,
+		   int   style_bit)
 {
+  /* all controls the interpretation of gdk_bit -- if all is true, gdk_bit
+     indicates whether style_bit is off; if all is false, gdk bit indicate whether
+     style_bit is on */
+  if ((!all && gdk_bit) || (all && !gdk_bit))
+    *style |= style_bit;
+  else
+    *style &= ~style_bit;
+}
+
+static void
+update_style_bits (GdkWindow *window)
+{
+  GdkWMDecoration decorations;
+  GdkWMFunction functions;
   LONG style, exstyle;
+  BOOL all;
   RECT rect, before, after;
-  const LONG settable_bits = WS_BORDER|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_MAXIMIZEBOX;
 
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
@@ -2555,11 +2572,29 @@ set_or_clear_style_bits (GdkWindow *window,
   after = before;
   AdjustWindowRectEx (&before, style, FALSE, exstyle);
 
-  if (clear_bits)
-    style |= settable_bits, style &= ~bits;
-  else
-    style &= ~settable_bits, style |= bits;
+  if (get_effective_window_decorations (window, &decorations))
+    {
+      all = (decorations & GDK_DECOR_ALL);
+      update_single_bit (&style, all, decorations & GDK_DECOR_BORDER, WS_BORDER);
+      update_single_bit (&style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
+      update_single_bit (&style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
+      update_single_bit (&style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
+      update_single_bit (&style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
+      update_single_bit (&style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+    }
 
+  /* XXX this is actually incorrect.  The menu entries should be added or removed
+     from the system menu without affecting the window style. */
+  if (_gdk_window_get_functions (window, &functions))
+    {
+      all = (functions & GDK_DECOR_ALL);
+      update_single_bit (&style, all, functions & GDK_FUNC_RESIZE, WS_THICKFRAME);
+      update_single_bit (&style, all, functions & GDK_FUNC_MOVE, WS_THICKFRAME | WS_SYSMENU);
+      update_single_bit (&style, all, functions & GDK_FUNC_MINIMIZE, WS_MINIMIZE);
+      update_single_bit (&style, all, functions & GDK_FUNC_MOVE, WS_MAXIMIZE);
+      update_single_bit (&style, all, functions & GDK_FUNC_CLOSE, WS_SYSMENU);
+    }
+    
   SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
 
   AdjustWindowRectEx (&after, style, FALSE, exstyle);
@@ -2577,12 +2612,23 @@ set_or_clear_style_bits (GdkWindow *window,
 		SWP_NOREPOSITION | SWP_NOZORDER);
 }
 
+static GQuark
+get_decorations_quark ()
+{
+  static GQuark quark = 0;
+  
+  if (!quark)
+    quark = g_quark_from_static_string ("gdk-window-decorations");
+  
+  return quark;
+}
+
 void
 gdk_window_set_decorations (GdkWindow      *window,
 			    GdkWMDecoration decorations)
 {
-  int bits;
-
+  GdkWMDecoration* decorations_copy;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_decorations: %p: %s %s%s%s%s%s%s\n",
@@ -2595,56 +2641,44 @@ gdk_window_set_decorations (GdkWindow      *window,
 			   (decorations & GDK_DECOR_MINIMIZE ? "MINIMIZE " : ""),
 			   (decorations & GDK_DECOR_MAXIMIZE ? "MAXIMIZE " : "")));
 
-  bits = 0;
+  decorations_copy = g_malloc (sizeof (GdkWMDecoration));
+  *decorations_copy = decorations;
+  g_object_set_qdata_full (G_OBJECT (window), get_decorations_quark (), decorations_copy, g_free);
 
-  if (decorations & GDK_DECOR_BORDER)
-    bits |= WS_BORDER;
-  if (decorations & GDK_DECOR_RESIZEH)
-    bits |= WS_THICKFRAME;
-  if (decorations & GDK_DECOR_TITLE)
-    bits |= WS_CAPTION;
-  if (decorations & GDK_DECOR_MENU)
-    bits |= WS_SYSMENU;
-  if (decorations & GDK_DECOR_MINIMIZE)
-    bits |= WS_MINIMIZEBOX;
-  if (decorations & GDK_DECOR_MAXIMIZE)
-    bits |= WS_MAXIMIZEBOX;
-
-  set_or_clear_style_bits (window, (decorations & GDK_DECOR_ALL), bits);
+  update_style_bits (window);
 }
 
 gboolean
 gdk_window_get_decorations (GdkWindow       *window,
 			    GdkWMDecoration *decorations)
 {
-  LONG style;
-
+  GdkWMDecoration* decorations_set;
+  
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-  *decorations = 0;
+  decorations_set = g_object_get_qdata (G_OBJECT (window), get_decorations_quark ());
+  if (decorations_set)
+    *decorations = *decorations_set;
 
-  if (style & WS_BORDER)
-    *decorations |= GDK_DECOR_BORDER;
-  if (style & WS_THICKFRAME)
-    *decorations |= GDK_DECOR_RESIZEH;
-  if (style & WS_CAPTION)
-    *decorations |= GDK_DECOR_TITLE;
-  if (style & WS_SYSMENU)
-    *decorations |= GDK_DECOR_MENU;
-  if (style & WS_MINIMIZEBOX)
-    *decorations |= GDK_DECOR_MINIMIZE;
-  if (style & WS_MAXIMIZEBOX)
-    *decorations |= GDK_DECOR_MAXIMIZE;
+  return (decorations_set != NULL);
+}
 
-  return *decorations != 0;
+static GQuark
+get_functions_quark ()
+{
+  static GQuark quark = 0;
+  
+  if (!quark)
+    quark = g_quark_from_static_string ("gdk-window-functions");
+  
+  return quark;
 }
 
 void
 gdk_window_set_functions (GdkWindow    *window,
 			  GdkWMFunction functions)
 {
-  int bits;
+  GdkWMFunction* functions_copy;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -2657,20 +2691,24 @@ gdk_window_set_functions (GdkWindow    *window,
 			   (functions & GDK_FUNC_MAXIMIZE ? "MAXIMIZE " : ""),
 			   (functions & GDK_FUNC_CLOSE ? "CLOSE " : "")));
 
-  bits = 0;
+  functions_copy = g_malloc (sizeof (GdkWMFunction));
+  *functions_copy = functions;
+  g_object_set_qdata_full (G_OBJECT (window), get_functions_quark (), functions_copy, g_free);
 
-  if (functions & GDK_FUNC_RESIZE)
-    bits |= WS_THICKFRAME;
-  if (functions & GDK_FUNC_MOVE)
-    bits |= (WS_THICKFRAME|WS_SYSMENU);
-  if (functions & GDK_FUNC_MINIMIZE)
-    bits |= WS_MINIMIZEBOX;
-  if (functions & GDK_FUNC_MAXIMIZE)
-    bits |= WS_MAXIMIZEBOX;
-  if (functions & GDK_FUNC_CLOSE)
-    bits |= WS_SYSMENU;
+  update_style_bits (window);
+}
+
+gboolean
+_gdk_window_get_functions (GdkWindow     *window,
+		           GdkWMFunction *functions)
+{
+  GdkWMDecoration* functions_set;
   
-  set_or_clear_style_bits (window, (functions & GDK_FUNC_ALL), bits);
+  functions_set = g_object_get_qdata (G_OBJECT (window), get_functions_quark ());
+  if (functions_set)
+    *functions = *functions_set;
+
+  return (functions_set != NULL);
 }
 
 static void
@@ -3213,7 +3251,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
 
   ((GdkWindowImplWin32 *)((GdkWindowObject *)window)->impl)->type_hint = hint;
 
-  decorate_based_on_hints (window);
+  update_style_bits (window);
 }
 
 void
