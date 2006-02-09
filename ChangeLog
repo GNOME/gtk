@@ -1,5 +1,14 @@
 2006-02-08  John Ehresman  <jpe@wingware.com>
 
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate)
+	<WM_MOUSEACTIVATE>
+	* gdk/win32/gdkwindow-win32.c (show_window_internal)
+	(gdk_window_raise): Call SetWindowPos() instead of
+	SetForegroundWindow() or BringWindowToTop() if the window
+	shouldn't accept focus. (#327375)
+	
+2006-02-08  John Ehresman  <jpe@wingware.com>
+
 	* gdk/win32/gdkwindow-win32.c: Let gdk_window_set_decorations()
 	take precedence over anything derived from hints. Restructure
 	related code and logic, add some new helper functions. (#327217)
