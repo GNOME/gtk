@@ -1,3 +1,9 @@
+2006-02-08  John Ehresman  <jpe@wingware.com>
+
+	* gdk/win32/gdkwindow-win32.c: Let gdk_window_set_decorations()
+	take precedence over anything derived from hints. Restructure
+	related code and logic, add some new helper functions. (#327217)
+
 2006-02-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c: Don't put relevant callss
