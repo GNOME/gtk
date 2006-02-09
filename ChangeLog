@@ -1,3 +1,9 @@
+2006-02-09  Ross Burton  <ross@burtonini.com>
+
+	* gtk/gtkfontbutton.c:
+	Work out the font size in floating point, and display the font
+	size with %g instead of %d (#317590)
+
 2006-02-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate)
