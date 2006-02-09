@@ -1,3 +1,11 @@
+2006-02-09  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate)
+	<WM_MOUSELEAVE>: If we don't know where we went, and have
+	generated a leave event, set current_window to the root
+	window. This assures we will generate proper enter and leave
+	events for popup windows. (#325521)
+
 2006-02-08  John Ehresman  <jpe@wingware.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate)

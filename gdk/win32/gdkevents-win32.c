@@ -2832,6 +2832,7 @@ gdk_event_translate (MSG  *msg,
 	  synthesize_enter_or_leave_event (current_window, msg, 
 					   GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, detail,
 					   current_x, current_y);
+	  assign_object (&current_window, _gdk_root);
 	}
       else
 	{
