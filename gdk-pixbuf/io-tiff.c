@@ -238,7 +238,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
         }
 
-	if (context)
+	if (context && context->prepare_func)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
 
 #if TIFFLIB_VERSION >= 20031226
@@ -324,7 +324,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 _TIFFfree (rast);
              }
 
-	if (context)
+	if (context && context->update_func)
 		(* context->update_func) (pixbuf, 0, 0, width, height, context->user_data);
         
         return pixbuf;

@@ -595,12 +595,13 @@ gdk_pixbuf__jpeg_image_load_lines (JpegProgContext  *context,
                 context->dptr += nlines * context->pixbuf->rowstride;
 
                 /* send updated signal */
-                (* context->updated_func) (context->pixbuf,
-                                           0,
-                                           cinfo->output_scanline - 1,
-                                           cinfo->image_width,
-                                           nlines,
-                                           context->user_data);
+		if (context->updated_func)
+			(* context->updated_func) (context->pixbuf,
+						   0,
+						   cinfo->output_scanline - 1,
+						   cinfo->image_width,
+						   nlines,
+						   context->user_data);
         }
 
         return TRUE;
@@ -745,9 +746,10 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			context->dptr = context->pixbuf->pixels;
 			
 			/* Notify the client that we are ready to go */
-			(* context->prepared_func) (context->pixbuf,
-                                                    NULL,
-						    context->user_data);
+			if (context->prepared_func)
+				(* context->prepared_func) (context->pixbuf,
+							    NULL,
+							    context->user_data);
 			
 		} else if (!context->did_prescan) {
 			int rc;			

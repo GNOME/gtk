@@ -738,10 +738,12 @@ gdk_pixbuf__xpm_image_stop_load (gpointer data,
                pixbuf = gdk_pixbuf__xpm_image_load (context->file, error);
 
                if (pixbuf != NULL) {
-                       (* context->prepare_func) (pixbuf,
-                                                  NULL,
-                                                  context->user_data);
-                       (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
+		       if (context->prepare_func)
+			       (* context->prepare_func) (pixbuf,
+							  NULL,
+							  context->user_data);
+		       if (context->update_func)
+			       (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
                        g_object_unref (pixbuf);
 
                        retval = TRUE;
