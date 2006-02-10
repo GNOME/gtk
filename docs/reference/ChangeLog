@@ -1,3 +1,8 @@
+2006-02-10  Matthias Clasen  <mclasen@redhat.com>
+
+        * gtk/tmpl/gtkliststore.sgml: Add a section about
+        atomicity of insertions. (#329831, Milosz Derezynski)
+
 2006-01-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
