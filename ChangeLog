@@ -1,5 +1,7 @@
 2006-02-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c: Add some docs. (#330073, Mart Rautsepp)
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_match_selected): 
 	Guard against NULL.  (#330177, Raphael Slinckx)
 
