@@ -70,7 +70,7 @@ struct _GtkAssistantClass
 {
   GtkWindowClass parent_class;
 
-  void (* prepare) (GtkAssistant *assistant);
+  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
   void (* apply)   (GtkAssistant *assistant);
   void (* close)   (GtkAssistant *assistant);
   void (* cancel)  (GtkAssistant *assistant);

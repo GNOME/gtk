@@ -1,3 +1,8 @@
+2006-02-10  Murray Cumming  <murrayc@murrayc.com
+
+	* gtk/gtkassistant.h: Correct the declaration of the prepare 
+	default signal handler to match its registration and use.
+
 2006-02-09  Ross Burton  <ross@burtonini.com>
 
 	* gtk/gtkfontbutton.c:
