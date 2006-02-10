@@ -525,10 +525,12 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * GtkComboBox::changed:
    * @widget: the object which received the signal
    * 
-   * The changed signal gets emitted when the active
+   * The changed signal is emitted when the active
    * item is changed. The can be due to the user selecting
    * a different item from the list, or due to a 
    * call to gtk_combo_box_set_active_iter().
+   * It will also be emitted while typing into a GtkComboBoxEntry, 
+   * as well as when selecting an item from the GtkComboBoxEntry's list.
    *
    * Since: 2.4
    */
