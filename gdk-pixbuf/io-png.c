@@ -517,7 +517,7 @@ gdk_pixbuf__png_image_load_increment(gpointer context,
                 lc->error = NULL;
                 return FALSE;
         } else {
-                if (lc->first_row_seen_in_chunk >= 0) {
+                if (lc->first_row_seen_in_chunk >= 0 && lc->update_func) {
                         /* We saw at least one row */
                         gint pass_diff = lc->last_pass_seen_in_chunk - lc->first_pass_seen_in_chunk;
                         

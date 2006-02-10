@@ -309,7 +309,7 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 	pixels = gdk_pixbuf_get_pixels (pixbuf);
 	row_stride = gdk_pixbuf_get_rowstride (pixbuf);
 
-	if (context)
+	if (context && context->prepare_func)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
 
 
@@ -338,7 +338,8 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 	g_free (data);
 
 	if (context) {
-		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
+		if (context->update_func)
+			(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
 		g_object_unref (pixbuf);
 		pixbuf = NULL;
 	}

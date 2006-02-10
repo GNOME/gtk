@@ -1,3 +1,13 @@
+2006-02-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-jpeg.c:
+	* io-png.c:
+	* io-pnm.c:
+	* io-tiff.c:
+	* io-xbm.c:
+	* io-xpm.c: Always check for NULL when using callbacks.
+	(#330563, Benjamin Otte)
+
 2006-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.11 ===

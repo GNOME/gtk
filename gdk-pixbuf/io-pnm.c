@@ -1015,9 +1015,10 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 			context->rowstride = context->pixbuf->rowstride;
 			
 			/* Notify the client that we are ready to go */
-			(* context->prepared_func) (context->pixbuf,
-						    NULL,
-						    context->user_data);
+			if (context->prepared_func)
+				(* context->prepared_func) (context->pixbuf,
+							    NULL,
+							    context->user_data);
 		}
 		
 		/* if we got here we're reading image data */
@@ -1028,7 +1029,7 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 				break;
 			} else if (retval == PNM_FATAL_ERR) {
 				return FALSE;
-			} else if (retval == PNM_OK) {	
+			} else if (retval == PNM_OK && context->updated_func) {	
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
 							   0, 
