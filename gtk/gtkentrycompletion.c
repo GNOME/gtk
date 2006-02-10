@@ -1488,7 +1488,7 @@ gtk_entry_completion_match_selected (GtkEntryCompletion *completion,
   gchar *str = NULL;
 
   gtk_tree_model_get (model, iter, completion->priv->text_column, &str, -1);
-  gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), str);
+  gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), str ? str : "");
   
   /* move cursor to the end */
   gtk_editable_set_position (GTK_EDITABLE (completion->priv->entry), -1);
