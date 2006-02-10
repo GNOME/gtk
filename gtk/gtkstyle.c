@@ -6260,6 +6260,25 @@ gtk_paint_focus (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, state_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_slider:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: a shadow
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
+ * @x: the x origin of the rectangle in which to draw a slider
+ * @y: the y origin of the rectangle in which to draw a slider
+ * @width: the width of the rectangle in which to draw a slider
+ * @height: the height of the rectangle in which to draw a slider
+ * @orientation: the orientation to be used
+ *
+ * Draws a slider in the given rectangle on @window using the
+ * given style and orientation.
+ **/
 void
 gtk_paint_slider (GtkStyle      *style,
                   GdkWindow     *window,
@@ -6364,11 +6383,28 @@ gtk_paint_expander (GtkStyle        *style,
                                               widget, detail, x, y, expander_style);
 }
 
+/**
+ * gtk_paint_layout:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @use_text: whether to use the text or foreground
+ *            graphics context of @style
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
+ * @x: x origin
+ * @y: y origin
+ * @layout: the layout to draw
+ * 
+ * Draws a layout on @window using the given parameters.
+ **/
 void
 gtk_paint_layout (GtkStyle        *style,
                   GdkWindow       *window,
                   GtkStateType     state_type,
-		  gboolean         use_text,
+                  gboolean         use_text,
                   GdkRectangle    *area,
                   GtkWidget       *widget,
                   const gchar     *detail,
