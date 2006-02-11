@@ -1,6 +1,9 @@
 2006-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Corrections
+
 	* NEWS: Actually commit the updates for 2.8.12
+
 	* configure.in: Bump version
 
 2006-02-11  Matthias Clasen  <mclasen@redhat.com>

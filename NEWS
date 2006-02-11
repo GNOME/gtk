@@ -1,7 +1,7 @@
 Overview of Changes from GTK+ 2.8.11 to GTK+ 2.8.12
 ===================================================
 
-* The font selection dialog can now select fractional
+* The font picker button can now display fractional
   font sizes [Ross Burton]
 
 * Updates for the windows theme [Dom Lachowicz]
