@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -712,7 +712,7 @@ msgstr ""
 "Jika ditetapkan, label digunakan untuk memilih item stok selain dari "
 "dipaparkan"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Fokus pada klik"
 
@@ -1284,7 +1284,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Lebar Balutan"
 
@@ -1592,70 +1592,70 @@ msgstr "Nilai pada senarai"
 msgid "Whether entered values must already be present in the list"
 msgstr "Samada nilai dimasukkan mesti tersedia ada pada senarai"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "modem ComboBbox"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Model pagi kekotak kombo"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Lebar balutan untuk menyusun item pada gird"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Kolum span baris"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Kolum TreeModel mengandungi nilan span baris"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Kolum span kolum"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Kolum TreeModel mengandungi nilai span kolum"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Item aktif"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Item yang yang kini aktif"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Tambah pengoyak kepada menu"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Samada tab patut mempunyai saiz sama"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Mempunyai Bingkai"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Samada kolum boleh diulangsusun sekeliling pengepala"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Samada teks label boleh dipilih dengan menggunakan tetikus."
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Samada memilih folder selain drpd fail"
@@ -2103,11 +2103,11 @@ msgstr "Tajuk bagi dialoh pemilihan font"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nama bagi tema ikon untuk digunakan"

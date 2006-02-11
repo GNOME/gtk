@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2006-01-18 00:13+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -711,7 +711,7 @@ msgstr ""
 "セットすると、ラベルはそれ自身が表示されるのではなく、ストック・アイテムから"
 "選択するための文字列として使用する"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "クリックでフォーカスを当てる"
 
@@ -1268,7 +1268,7 @@ msgstr ""
 "セル・レンダラが文字列全体を表示できるだけの充分な領域を持たない場合に文字列"
 "を複数行に分割する際の数です"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "折り返し幅"
 
@@ -1573,67 +1573,67 @@ msgstr "リストの値"
 msgid "Whether entered values must already be present in the list"
 msgstr "入力した値がリストの中に既に存在しているかどうか"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "ComboBox モデル"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "コンボ・ボックスに使用するモデル"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "グリッドに項目をレイアウトするための折り返し幅"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "行間隔を持つ列"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "行の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "列間隔を持つ列"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "列の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "有効な項目"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "現在アクティブな項目"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "ティアオフをメニューに追加"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ドロップダウンがティアオフ・メニューのアイテムを持つかどうか"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "フレーム有り"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr "コンボ・ボックスの子の周囲にフレームを描画するかどうか"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "マウスでクリックした時にコンボ・ボックスにフォーカスを当てるかどうか"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "リスト表示"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ドロップダウンをメニュー型式ではなくリスト型式で表示するかどうか"
 
@@ -2084,11 +2084,11 @@ msgstr "フォント選択ダイアログのタイトル"
 msgid "The desired width of the button widget, in characters."
 msgstr "ボタン・ウィジェットの幅 (文字単位)"
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "デフォルトのファイル選択バックエンド"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "デフォルトで使用する GtkFileChooser バックエンドの名前です"
 

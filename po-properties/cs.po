@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2005-07-23 18:29+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -712,7 +712,7 @@ msgstr ""
 "Je-li nastaveno, popis se použije pro výběr standardní položky místo jeho "
 "zobrazení"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Fokus při kliknutí"
 
@@ -1275,7 +1275,7 @@ msgstr ""
 "Jak rozdělit řetězec na více řádek, pokud vykreslovač buňky nemá dost místa "
 "na zobrazení celého řetězce"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Šířka zalamování"
 
@@ -1580,67 +1580,67 @@ msgstr "Hodnota v seznamu"
 msgid "Whether entered values must already be present in the list"
 msgstr "Jestli musí být zadaná hodnota již přítomna v seznamu"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Model ComboBoxu"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Model pro kombinované pole"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Šířka zalamování pro rozložení položek v mřížce"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Sloupec rozsahu řádků"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu řádků"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Sloupec rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Aktivní položka"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Položka, která je právě aktivní"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Přidat odtrhávátka do menu"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Jestli mají rozbalené comboboxy mít položku pro odtržení"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Má rám"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Jestli kombinované pole kreslí rám okolo potomka"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Jestli kombinované pole dostane fokus, když je na ně kliknuto myší"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Vypadá jako seznam"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Jestli mají rozbalené comboboxy vypadat jako seznamy a ne jako menu"
 
@@ -2080,11 +2080,11 @@ msgstr "Titulek dialogu výběru souborů."
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 

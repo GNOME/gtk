@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2005-07-26 22:19+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -732,7 +732,7 @@ msgstr ""
 "Falls aktiv, wird die Beschriftung nicht angezeigt, sondern verwendet, um "
 "ein Symbol aus dem Repertoire zu wählen"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Fokus beim Anklicken"
 
@@ -1308,7 +1308,7 @@ msgstr ""
 "Zellen-Renderer nicht genügend Platz hat, um die gesamte Zeichenkette in "
 "einer Zeile anzuzeigen"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Umbruchbreite"
 
@@ -1620,71 +1620,71 @@ msgstr "Wert in Liste"
 msgid "Whether entered values must already be present in the list"
 msgstr "Müssen eingetragene Werte bereits in der Liste vorhanden sein?"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "ComboBox-Modell"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Das Modell für das Kombinationsfeld"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Umbruchbreite zum Anordnen der Objekte in einem Gitter"
 
 # CHECK
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Spalte zur Zeilenüberbrückung"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-Spalte, die die Zeilenüberbrückungswerte enthält"
 
 # CHECK
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Spalte zur Spaltenüberbrückung"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-Spalte, die die Spaltenüberbrückungswerte enthält"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Aktives Objekt"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Das momentan aktive Objekt"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Abreiß-Einträge zu Menüs hinzufügen"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Sollen Herabklapper Abreiß-Einträge haben?"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Hat Rahmen"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Soll das Kombinationsfeld einen Rahmen um das Kind zeichnen?"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Soll das Kombinationsfeld den Fokus erhalten, sobald es mit der Maus "
 "angeklickt wurde?"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Als Liste anzeigen"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Sollen Herabklapper wie Listen statt wie Menüs aussehen?"
 
@@ -2144,11 +2144,11 @@ msgstr "Der Titel des Dateiwählers."
 msgid "The desired width of the button widget, in characters."
 msgstr "Die gewünschte Breite des Knopfes in Zeichen"
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Vorgabe-Backend des Dateiwählers"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Der Name des per Vorgabe zu verwendenden GtkFileChooser-Backends"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2006-01-14 14:38+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -718,7 +718,7 @@ msgid ""
 msgstr ""
 "Nếu bật, nhãn được dùng sẽ chọn một mục chuẩn thay vì hiển thị nhãn đó."
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Tiêu điểm theo nhắp"
 
@@ -1284,7 +1284,7 @@ msgstr ""
 "Cách ngắt toàn chuỗi ra nhiều dòng riêng, nếu bộ vẽ ô không có đủ chỗ để "
 "hiển thị toàn chuỗi."
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Độ rộng cuộn"
 
@@ -1591,67 +1591,67 @@ msgstr "Giá trị có sẵn"
 msgid "Whether entered values must already be present in the list"
 msgstr "Cho phép nhập giá trị đã có trong danh sách hay không."
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Mô hình Hộp Tổ hợp"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Mô hình cho hộp tổ hợp."
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Độ cuộn khi bố trí các mục trong lưới."
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Cột theo hàng"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Cột TreeModel (mô hình cây) chứa các giá trị ô theo hàng."
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Cột theo cột"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Cột TreeModel (mô hình cây) chứa các giá trị ô theo cột."
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Mục hoạt động"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Mục hiện thời hoạt động."
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Thêm tách rời vào trình đơn"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Nếu trình đơn thả xuống nên có mục trình đơn tách rời hay không."
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Có khung"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Hộp tổ hợp có vẽ khung ở quanh ô điều khiển con hay không."
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Hộp tổ hợp có nên lấy tiêu điểm khi được nhắp chuột hay không."
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Xuất hiện dạng danh sách"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Trình đơn thả xuống có nên hình như danh sách hơn trình đơn hay không."
 
@@ -2098,11 +2098,11 @@ msgstr "Tựa đề của hộp thoại bộ chọn tập tin."
 msgid "The desired width of the button widget, in characters."
 msgstr "Độ rộng đã muốn cho ô điều khiển cái nút, theo ký tự."
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Hậu phương bộ chọn tập tin mặc định"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 "Tên của hậu phương GtkFileChooser (Gtk bộ chọn tập tin) cần dùng theo mặc "

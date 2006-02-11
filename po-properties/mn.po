@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -788,7 +788,7 @@ msgstr ""
 "Хэрвээ идэвхитэй бол бичээс харагдахгүй харин стандарт эмблемийг хөтөлбөрөөс "
 "сонгоход хэрэглэгдэнэ."
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Товшиход хараалах"
 
@@ -1443,7 +1443,7 @@ msgid ""
 msgstr ""
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Өргөн таслах"
 
@@ -1797,76 +1797,76 @@ msgstr "Жагсаалт дахь утга"
 msgid "Whether entered values must already be present in the list"
 msgstr "Оруулсан утгыг жагсаалтанд гаргасан байх эсэх"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Комбобокс загвар"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Комбобоксын загвар"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Торонд объект байрлуулахад өргөн таслах"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Мөр дарах багана"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Мөр хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Багана дарах багана"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Багана хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Идэвхжүүлэх"
 
 # gtk/gtkfontsel.c:210
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Идэвхитэй байгаа элемент"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Цэс рүү тасалбар нэмэх"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Tab - уудын хэмжээ ижил байх эсэх"
 
 # gtk/gtkentry.c:480
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Кадртай"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Толгой нь дараалалгүй багана"
 
 # gtk/gtklabel.c:334
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Хулганаар товшиход товчинд харааг шилжүүлж чадах эсэх"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Жагсаалтаар харуулах"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "combobox dropdowns цэснээс илүү жагсаалт шиг харагдах эсэх"
@@ -2367,12 +2367,12 @@ msgstr "Бичиг сонгогч цонхны гарчиг"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 

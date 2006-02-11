@@ -1,6 +1,12 @@
+2006-02-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.8.12 === 
+
+	* NEWS: Updates
+
 2006-02-10  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkstyle.c: Add some docs. (#330073, Mart Rautsepp)
+	* gtk/gtkstyle.c: Add some docs. (#330073, Mart Raudsepp)
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_match_selected): 
 	Guard against NULL.  (#330177, Raphael Slinckx)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -733,7 +733,7 @@ msgstr ""
 "Ukuba ngaba imiselwe, ilebhile isetyenziselwa ukukhetha okuqulathwe kwi-"
 "stock endaweni yokubonakaliswa"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Gxila ekucofeni"
 
@@ -1312,7 +1312,7 @@ msgstr ""
 "i-cell yonikezelo ayinaso isithuba esaneleyo sokubonisa uluhlu lwamagama "
 "onke, ukuba inako phofu"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Ububanzi boqhubekeko-magama"
 
@@ -1632,73 +1632,73 @@ msgstr "Ixabiso eluhlwini"
 msgid "Whether entered values must already be present in the list"
 msgstr "Nokuba ngaba amaxabiso afakiweyo kufuneka esoloko ekhona na eluhlwini"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Imodeli yebhokisi enoludwe onokukhetha kulo"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Imodeli yebhokisi enoludwe onokukhetha kulo"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ububanzi boqhubekeko-magama xa kwendlalwa ulwazi kwigridi"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Umgama ophakathi komgca nekholam"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Ikholam i-TreeModel equlathe amaxabiso omgama ophakathi kwemigca"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Umgama ophakathi kwekholam nekholam"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Ikholam i-TreeModel equlathe amaxabiso omgama ophakathi kweekholam"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Into esebenza ngoku"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Into esebenzayo ngelo xesha"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Fakela okususwayo kwiimenyu"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 "Nokuba ngaba uluhlu oluneziqulatho ezehlayo kufanele lube nokukhethwayo "
 "okususwayo na"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Ine-Frame"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Nokuba ngaba ibhokisi enoludwe onokukhetha kulo iyayizoba i-frame ejikeleze "
 "inkqubo engumntwana"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Nokuba ngaba ibhokisi enoludwe onokukhetha kulo iyalubamba na ugxininiso xa "
 "icofwe nge-mouse"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Ivela njengoluhlu"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Nokuba ngaba uluhlu oluneziqulatho ezehlayo lumele lukhangeleke njengezintlu "
@@ -2160,11 +2160,11 @@ msgstr "Isihloko sonxibelelwano lokukhetha ifayili."
 msgid "The desired width of the button widget, in characters."
 msgstr "Ububanzi obufunekayo beqhosha lesixhobo, ngokweempawu."
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Icala elingemva lesikhethi esimiliselweyo sefayili"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 "Igama lecala elingemva le-GtkFileChooser elinokusetyenziswa "

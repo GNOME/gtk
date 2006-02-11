@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2005-11-18 10:15+0200\n"
 "Last-Translator: Vital Khilko <v.khilko@sam-solutions.net>\n"
 "Language-Team: belarusian <i18n@mova.org>\n"
@@ -721,7 +721,7 @@ msgstr ""
 "Калі ўключана, адмеціна будзе скарыстаная для выбару ўбудаваных кнопак "
 "замест адлюстраваньня."
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Захопліваць засяроджаньне па шчаўчку"
 
@@ -1286,7 +1286,7 @@ msgstr ""
 "Як разарваць радок на некалькі радкоў, калі мэханізму адлюстраваньня радка "
 "не хапае месца для адлюстраваньня ўсяго радка."
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Шырыня пераносу"
 
@@ -1597,69 +1597,69 @@ msgstr "Значэньне ў сьпісе"
 msgid "Whether entered values must already be present in the list"
 msgstr "Ці павінны уведзенае значэньні ўжо быць у сьпісе"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Мадэль ComboBox"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Модель для поля прагляду са спадальным сьпісам"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Шырыня пераносу для разьмеркаваньня ў табліцы"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Слупок запаўненьня радку"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Слупок структуры TreeModel, які ўтрымлівае значэньні запаўненьня радку"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Слупок запаўненьня слупка"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr ""
 "Слупок структуры TreeModel, які ўтрымлівае значэньні запаўненьня слупка"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Актыўны элемэнт"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Элемэнт які зараз актыўны"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Дадаць адрыў да мэню"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ці можа мець спадальнае мэню элемэнт рысы адрыву"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Мае рамку"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Ці мусіць спадальнае мэню мець рамку вакол элемэнту нашчадку"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Ці мусіць спадальнае мэню перахопліваць засяроджаньне пры націску мышшу"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Зьяўляецца як сьпіс"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Ці мусяць спадальныя элемэнты выглядаць як сьпісы, а не як мэню"
 
@@ -2107,11 +2107,11 @@ msgstr "Загаловак акна выбару файла."
 msgid "The desired width of the button widget, in characters."
 msgstr "Пажаданая шырыня віджэту кнопкі, у знаках."
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Прадвызначаны мэханізм выбару файлаў"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Назва прадвызначанага мэханізму віджэта GtkFileChooser"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -714,7 +714,7 @@ msgstr ""
 "Indien gestel, word die etiket gebruik om 'n stapelitem te kies in plaas "
 "daarvan om vertoon te word"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Fokus op kliek"
 
@@ -1286,7 +1286,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Vouwydte"
 
@@ -1601,70 +1601,70 @@ msgstr "Waarde in lys"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingetikte waardes reeds in die lys teenwoordig moet wees"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Kombinasiekas-model"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Die model van die kombinasiekas"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Vouwydte vir die uitlê van items op 'n rooster"
 
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Ryspankolom"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Boommodel-kolom wat die ryspanwaarde bevat"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Kolomspankolom"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Boommodel-kolom wat die kolomspanwaarde bevat"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Aktiewe item"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Die item wat tans aktief is"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Voeg afskeuritems by die kieslyste"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of oortjies eenvormige groottes moet hê"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Het raam"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Of die kolom rondom die koppe hersorteer kan word"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Of 'n knoppie die fokus gryp wanneer dit met die muis gekliek word"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Of die vouers in plaas van die lêers gekies moet word"
@@ -2120,11 +2120,11 @@ msgstr "Die titel van die fontkies-dialoog"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van die lêerstelsel-rugstelsel om te gebruik"

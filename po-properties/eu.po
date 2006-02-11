@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 11:13-0500\n"
+"POT-Creation-Date: 2006-02-11 11:32-0500\n"
 "PO-Revision-Date: 2005-04-13 20:22+0200\n"
 "Last-Translator: Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
 "Language-Team:  <itzulpena@euskalgnu.org>\n"
@@ -733,7 +733,7 @@ msgstr ""
 "Ezartzen bada, etiketa stock-eko elementu bat hautatzeko erabiltzen da, "
 "bistaratu ordez"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
 msgid "Focus on click"
 msgstr "Fokua klik egindakoan"
 
@@ -1323,7 +1323,7 @@ msgstr ""
 "toki kate osoa bistaratzeko."
 
 #
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
 msgid "Wrap width"
 msgstr "Doitze-zabalera"
 
@@ -1651,74 +1651,74 @@ msgstr "Zerrendako balioa"
 msgid "Whether entered values must already be present in the list"
 msgstr "Sartutako balioek zerrendan egon behar duten ala ez adierazten du"
 
-#: gtk/gtkcombobox.c:556
+#: gtk/gtkcombobox.c:558
 msgid "ComboBox model"
 msgstr "Konbinazio-koadroaren modeloa"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:559
 msgid "The model for the combo box"
 msgstr "Konbinazio-koadroa zein modelotakoa den"
 
-#: gtk/gtkcombobox.c:574
+#: gtk/gtkcombobox.c:576
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Sareta bateko elementuak diseinatzeko doitze-zabalera"
 
 #
-#: gtk/gtkcombobox.c:596
+#: gtk/gtkcombobox.c:598
 msgid "Row span column"
 msgstr "Errenkada-hedaduraren zutabea"
 
-#: gtk/gtkcombobox.c:597
+#: gtk/gtkcombobox.c:599
 msgid "TreeModel column containing the row span values"
 msgstr "Errenkada-hedaduraren balioak dituen TreeModel zutabea"
 
-#: gtk/gtkcombobox.c:618
+#: gtk/gtkcombobox.c:620
 msgid "Column span column"
 msgstr "Zutabe-hedaduraren zutabea"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:621
 msgid "TreeModel column containing the column span values"
 msgstr "Zutabe-hedaduraren balioak dituen TreeModel zutabea"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:641
 msgid "Active item"
 msgstr "Elementu aktiboa"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "The item which is currently active"
 msgstr "Unean aktibatuta dagoen elementua"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Gehitu askagarriak menuei"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:662
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 "Goitibeherako menuek askagarri bat eduki dezaketen menuko elementu gisa ala "
 "ez adierazten du"
 
-#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Markoa dauka"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:678
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Konbinazio-koadroko goitibeherako menuek umearen inguruan markoa marraztu "
 "behar duten ala ez adierazten du"
 
-#: gtk/gtkcombobox.c:684
+#: gtk/gtkcombobox.c:686
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Konbinazio-koadroko goitibeherako menuek fokoa hartzen duten (bertan "
 "saguarekin klik egitean) ala ez adierazten du"
 
-#: gtk/gtkcombobox.c:690
+#: gtk/gtkcombobox.c:692
 msgid "Appears as list"
 msgstr "Zerrenda gisa agertzen da"
 
-#: gtk/gtkcombobox.c:691
+#: gtk/gtkcombobox.c:693
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Konbinazio-koadroko goitibeherako menuek menu-itxura baino zerrenda-itxura "
@@ -2192,11 +2192,11 @@ msgstr ""
 msgid "The desired width of the button widget, in characters."
 msgstr "Botoi-trepetak edukiko duen zabalera, karaktereetan."
 
-#: gtk/gtkfilechooserdefault.c:718
+#: gtk/gtkfilechooserdefault.c:722
 msgid "Default file chooser backend"
 msgstr "Fitxategi-hautatzailearen motor lehenetsia"
 
-#: gtk/gtkfilechooserdefault.c:719
+#: gtk/gtkfilechooserdefault.c:723
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Lehenespenez erabili beharreko GtkFileChooser motorraren izena"
 
