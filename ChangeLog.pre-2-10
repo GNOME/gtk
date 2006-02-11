@@ -1,5 +1,10 @@
 2006-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+        * gtk/gtkiconview.c (gtk_icon_view_get_item_at_coords): Fix
+        row_spacing/column_spacing confusion.  (#330732, Donald Straney)
+
+2006-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Corrections
 
 	* NEWS: Actually commit the updates for 2.8.12

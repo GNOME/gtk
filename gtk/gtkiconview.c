@@ -3103,8 +3103,8 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
     {
       GtkIconViewItem *item = items->data;
 
-      if (x >= item->x - icon_view->priv->row_spacing/2 && x <= item->x + item->width + icon_view->priv->row_spacing/2 &&
-	  y >= item->y - icon_view->priv->column_spacing/2 && y <= item->y + item->height + icon_view->priv->column_spacing/2)
+      if (x >= item->x - icon_view->priv->column_spacing/2 && x <= item->x + item->width + icon_view->priv->column_spacing/2 &&
+	  y >= item->y - icon_view->priv->row_spacing/2 && y <= item->y + item->height + icon_view->priv->row_spacing/2)
 	{
 	  if (only_in_cell || cell_at_pos)
 	    {
