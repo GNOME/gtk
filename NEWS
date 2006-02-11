@@ -1,3 +1,45 @@
+Overview of Changes from GTK+ 2.8.11 to GTK+ 2.8.12
+===================================================
+
+* The font selection dialog can now select fractional
+  font sizes [Ross Burton]
+
+* Updates for the windows theme [Dom Lachowicz]
+
+* Workaround for cairo hitting a slow path in the
+  X server [Federico Mena Quintero]
+
+* Bugs fixed:
+ 145243 root window drag FROM testdnd not working [Andrew S. Dixon]
+ 321054 Pointer grabs misbehave on Win32 [Tor Lillqvist]
+ 322042 Buggy RTL support in ellipsized labels [Behdad Esfahbod] 
+ 325521 enter_notify_event are not received on popup 
+        window in Win32 [Tor Lillqvist]
+ 327217 set_decorations() is overridden by window type 
+        hint [John Ehresman]
+ 327375 accept_focus isn't respected [John Ehresman]
+ 328820 they keypad '/' key should open the "open location" 
+        dialog [Federico Mena Quintero]
+ 329144 critical in gtk_widget_event [Wouter Bolsterlee]
+ 329124 distclean removes README [Kjartan Maraas, Tim Janik]
+ 329208 unsetting the "active" property of GtkToggleToolButton 
+        doesn't work properly [Guillaume Cottenceau]
+ 329876 Crash in gtktreemodelfilter.c when using gtk-demo 
+        with file picker [Kristian Rietveld]
+ 329099 gtk_misc_set_padding fails with labels in RTL 
+        locales [Hooman Mesgary]
+ 330022 Wrong pixel values in rsvg_cairo_render_image [Dom Lachowicz]
+ 330177 gtk_entry_completion_match_selected generates a critical 
+        warning when completion model is empty [Raphael Slinckx]
+ 330389 gtk_file_info_copy corrupts memory [Markku Vire]
+ 330563 image loaders don't check callbacks for NULL [Benjamin Otte]
+
+* Documentation improvements [Ross Burton, Murray Cumming, 
+  Mart Raudsepp, Federico Mena Quintero, Milosz Derezynski]
+
+* Translation updates (cy,lt,nl,pt,ru,sr,sr@Latn,vi)
+
+
 Overview of Changes from GTK+ 2.8.10 to GTK+ 2.8.11
 ===================================================
 
