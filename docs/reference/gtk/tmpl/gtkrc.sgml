@@ -682,7 +682,11 @@ series of modifiers followed by the name of a key. The
 modifiers can be:
 <simplelist>
 <member><literal>&lt;alt&gt;</literal></member>
+<member><literal>&lt;ctl&gt;</literal></member>
 <member><literal>&lt;control&gt;</literal></member>
+<member><literal>&lt;meta&gt;</literal></member>
+<member><literal>&lt;hyper&gt;</literal></member>
+<member><literal>&lt;super&gt;</literal></member>
 <member><literal>&lt;mod1&gt;</literal></member>
 <member><literal>&lt;mod2&gt;</literal></member>
 <member><literal>&lt;mod3&gt;</literal></member>
@@ -693,7 +697,10 @@ modifiers can be:
 <member><literal>&lt;shift&gt;</literal></member>
 </simplelist>
 <literal>&lt;shft&gt;</literal> is an alias for 
-<literal>&lt;shift&gt;</literal> and 
+<literal>&lt;shift&gt;</literal>,
+<literal>&lt;ctl&gt;</literal> is an alias for 
+<literal>&lt;control&gt;</literal>,
+ and 
 <literal>&lt;alt&gt;</literal> is an alias for
 <literal>&lt;mod1&gt;</literal>.
 </para>

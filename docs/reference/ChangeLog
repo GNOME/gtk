@@ -1,3 +1,7 @@
+2006-02-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkrc.sgml: Updates
+
 2006-02-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkliststore.sgml: Add a section about
