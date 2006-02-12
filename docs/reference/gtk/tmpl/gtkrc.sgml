@@ -301,9 +301,9 @@ The possible toplevel declarations are:
   <varlistentry>
     <term><replaceable>setting</replaceable> = <replaceable>value</replaceable></term>
     <listitem>
-      <para>Specifies a value for a <link linkend="GtkSettings">setting</link>. Note that
-        settings in RC files are overwritten by system-wide settings which are managed by
-        an XSettings manager.</para>
+      <para>Specifies a value for a <link linkend="GtkSettings">setting</link>.
+        Note that settings in RC files are overwritten by system-wide settings 
+        (which are managed by an XSettings manager on X11).</para>
     </listitem>
   </varlistentry>
 </variablelist>
