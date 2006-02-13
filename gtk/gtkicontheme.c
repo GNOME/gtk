@@ -1562,8 +1562,8 @@ add_key_to_list (gpointer  key,
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
  * The set of values for the context string is system dependent,
- * but will typically include such values as 'apps' and
- * 'mimetypes'.
+ * but will typically include such values as "Applications" and
+ * "MimeTypes".
  * 
  * Return value: a #GList list holding the names of all the
  *  icons in the theme. You must first free each element
