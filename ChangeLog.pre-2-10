@@ -1,3 +1,8 @@
+2006-02-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_list_icons): Give working
+	examples in the docs.  (#330944, John Spray)
+
 2006-02-10  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkiconview.c (gtk_icon_view_get_item_at_coords): Fix
