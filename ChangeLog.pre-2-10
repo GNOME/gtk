@@ -1,5 +1,8 @@
 2006-02-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_send_expose): Remove redundant
+	check.  Pointed out by Bodo-Merle Sandor.
+
 	* gtk/gtkcolorbutton.c (gtk_color_button_[un]realize):
 	Remove unnecessary checks.  
 
