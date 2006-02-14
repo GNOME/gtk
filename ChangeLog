@@ -1,5 +1,8 @@
 2006-02-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_send_expose): Remove redundant
+	check.  Pointed out by Bodo-Merle Sandor.
+
 	* gtk/gtkcolorbutton.c (gtk_color_button_unrealize): Add this
 	to match realize. This fixes moving color buttons between
 	screens.  (#331097, Oana Serb)

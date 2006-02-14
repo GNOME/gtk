@@ -3566,9 +3566,6 @@ gtk_widget_send_expose (GtkWidget *widget,
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
-  if (event->type != GDK_EXPOSE)
-    return TRUE;
-  
   return gtk_widget_event_internal (widget, event);
 }
 
