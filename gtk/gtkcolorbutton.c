@@ -408,8 +408,7 @@ gtk_color_button_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
-  if (color_button->priv->gc == NULL)
-    color_button->priv->gc = gdk_gc_new (widget->window);
+  color_button->priv->gc = gdk_gc_new (widget->window);
 
   render (color_button);
 }
@@ -419,8 +418,7 @@ gtk_color_button_unrealize (GtkWidget *widget)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (widget);
 
-  if (color_button->priv->gc)
-    g_object_unref (color_button->priv->gc);
+  g_object_unref (color_button->priv->gc);
   color_button->priv->gc = NULL;
 
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
