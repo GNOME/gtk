@@ -488,9 +488,9 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   if (!GTK_WIDGET_MAPPED (priv->widget))
     gtk_widget_map (priv->widget);
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
-
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
 }
 
 /* GtkWidget::unmap handler */

@@ -1,3 +1,11 @@
+2006-02-16  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_map): Call
+	::initial_focus() on the child before calling ::map() on our
+	parent class.  This will prevent the shortcuts treeview from
+	highlighting its first row as a result of getting assigned focus
+	by gtk_dialog_map().
+
 2006-02-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_send_expose): Remove redundant
