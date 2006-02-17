@@ -3199,8 +3199,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 		info->cursor = cursor;
 	      }
 	    
-	    if (info->last_event)
-	      gtk_drag_add_update_idle (info);
+	    gtk_drag_add_update_idle (info);
 	  }
       }
       break;
@@ -3681,32 +3680,36 @@ gtk_drag_update_idle (gpointer data)
 
   info->update_idle = 0;
     
-  time = gtk_drag_get_event_time (info->last_event);
-  gtk_drag_get_event_actions (info->last_event,
-			      info->button, 
-			      info->possible_actions,
-			      &action, &possible_actions);
-  gtk_drag_update_icon (info);
-  gdk_drag_find_window_for_screen (info->context,
-				   info->icon_window ? info->icon_window->window : NULL,
-				   info->cur_screen, info->cur_x, info->cur_y,
-				   &dest_window, &protocol);
-  
-  if (!gdk_drag_motion (info->context, dest_window, protocol,
-			info->cur_x, info->cur_y, action, 
-			possible_actions,
-			time))
+  if (info->last_event)
     {
-      gdk_event_free ((GdkEvent *)info->last_event);
-      info->last_event = NULL;
-    }
+      time = gtk_drag_get_event_time (info->last_event);
+      gtk_drag_get_event_actions (info->last_event,
+				  info->button, 
+				  info->possible_actions,
+				  &action, &possible_actions);
+      gtk_drag_update_icon (info);
+      gdk_drag_find_window_for_screen (info->context,
+				       info->icon_window ? info->icon_window->window : NULL,
+				       info->cur_screen, info->cur_x, info->cur_y,
+				       &dest_window, &protocol);
+      
+      if (!gdk_drag_motion (info->context, dest_window, protocol,
+			    info->cur_x, info->cur_y, action, 
+			    possible_actions,
+			    time))
+	{
+	  gdk_event_free ((GdkEvent *)info->last_event);
+	  info->last_event = NULL;
+	}
   
-  if (dest_window)
-    g_object_unref (dest_window);
+      if (dest_window)
+	g_object_unref (dest_window);
+      
+      selection = gdk_drag_get_selection (info->context);
+      if (selection)
+	gtk_drag_source_check_selection (info, selection, time);
 
-  selection = gdk_drag_get_selection (info->context);
-  if (selection)
-    gtk_drag_source_check_selection (info, selection, time);
+    }
 
   GDK_THREADS_LEAVE ();
 
@@ -3886,6 +3889,9 @@ gtk_drag_motion_cb (GtkWidget      *widget,
  *   results:
  *************************************************************/
 
+#define BIG_STEP 20
+#define SMALL_STEP 1
+
 static gint 
 gtk_drag_key_cb (GtkWidget         *widget, 
 		 GdkEventKey       *event, 
@@ -3894,15 +3900,48 @@ gtk_drag_key_cb (GtkWidget         *widget,
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
   GdkModifierType state;
   GdkWindow *root_window;
-  
+  gint dx, dy;
+
+  dx = dy = 0;
+  state = event->state & gtk_accelerator_get_default_mod_mask ();
+
   if (event->type == GDK_KEY_PRESS)
     {
-      if (event->keyval == GDK_Escape)
+      switch (event->keyval)
 	{
+	case GDK_Escape:
 	  gtk_drag_cancel (info, event->time);
-
 	  return TRUE;
+
+	case GDK_space:
+	case GDK_Return:
+	case GDK_KP_Enter:
+	case GDK_KP_Space:
+	  gtk_drag_end (info, event->time);
+	  gtk_drag_drop (info, event->time);
+	  return TRUE;
+
+	case GDK_Up:
+	case GDK_KP_Up:
+	  dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+	  break;
+	  
+	case GDK_Down:
+	case GDK_KP_Down:
+	  dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+	  break;
+	  
+	case GDK_Left:
+	case GDK_KP_Left:
+	  dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+	  break;
+	  
+	case GDK_Right:
+	case GDK_KP_Right:
+	  dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+	  break;
 	}
+      
     }
 
   /* Now send a "motion" so that the modifier state is updated */
@@ -3913,8 +3952,17 @@ gtk_drag_key_cb (GtkWidget         *widget,
    */
   root_window = gtk_widget_get_root_window (widget);
   gdk_window_get_pointer (root_window, NULL, NULL, &state);
-
   event->state = state;
+
+  if (dx != 0 || dy != 0)
+    {
+      info->cur_x += dx;
+      info->cur_y += dy;
+      gdk_display_warp_pointer (gtk_widget_get_display (widget), 
+				gtk_widget_get_screen (widget), 
+				info->cur_x, info->cur_y);
+    }
+
   gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, (GdkEvent *)event);
 
   return TRUE;
