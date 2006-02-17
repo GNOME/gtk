@@ -249,7 +249,7 @@ gdk_region_union_with_rect (GdkRegion    *region,
   g_return_if_fail (region != NULL);
   g_return_if_fail (rect != NULL);
 
-  if (!rect->width || !rect->height)
+  if (rect->width <= 0 || rect->height <= 0)
     return;
     
   tmp_region.rects = &tmp_region.extents;
