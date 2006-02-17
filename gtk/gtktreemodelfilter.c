@@ -1940,8 +1940,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
       /* virtual root anchor reordering */
       if (filter->priv->virtual_root &&
-          gtk_tree_path_get_depth (c_path) <
-          gtk_tree_path_get_depth (filter->priv->virtual_root))
+	  gtk_tree_path_is_ancestor (c_path, filter->priv->virtual_root))
         {
           gint new_pos = -1;
           gint length;

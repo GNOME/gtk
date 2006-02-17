@@ -1,3 +1,9 @@
+2006-02-17  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):
+	Only update the virtual root if the child path is an ancestor
+	of the virtual root.  (Patch from Markku Vire).
+
 2006-02-16  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_map): Call
