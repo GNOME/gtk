@@ -1,5 +1,27 @@
 2006-02-19  Matthias Clasen  <mclasen@redhat.com>
 
+	Support input shapes:  (#331070)
+	
+	* gdk/gdk.symbols: 
+	* gdk/gdkdisplay.h: 
+	* gdk/gdkwindow.h: 
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_supports_shapes) 
+	(gdk_display_supports_input_shapes): Functions to determine
+	if a display supports shaped windows or input shapes.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_input_shape_combine_region): 
+	(gdk_window_input_shape_combine_mask): 
+	(gdk_window_set_child_input_shapes): 
+	(gdk_window_merge_child_input_shapes): Input shape versions
+	of the window shape API.
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c (gtk_widget_input_shape_combine_mask): 
+	New function to set an input shape on a widget.
+
+2006-02-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklinkbutton.c (gtk_link_button_class_init): Fix
 	a cast.
 

@@ -3970,6 +3970,7 @@ gtk_widget_set_size_request
 gtk_widget_set_state
 gtk_widget_set_style
 gtk_widget_shape_combine_mask
+gtk_widget_input_shape_combine_mask
 gtk_widget_show
 gtk_widget_show_all
 gtk_widget_show_now

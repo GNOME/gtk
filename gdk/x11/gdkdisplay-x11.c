@@ -50,6 +50,11 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
+#ifdef HAVE_SHAPE_EXT
+#include <X11/extensions/shape.h>
+#endif
+
+
 static void   gdk_display_x11_class_init         (GdkDisplayX11Class *class);
 static void   gdk_display_x11_dispose            (GObject            *object);
 static void   gdk_display_x11_finalize           (GObject            *object);
@@ -158,8 +163,9 @@ gdk_display_open (const gchar *display_name)
   XClassHint *class_hint;
   gulong pid;
   gint i;
-#ifdef HAVE_XFIXES
+#if defined(HAVE_XFIXES) || defined(HAVE_SHAPE_EXT)
   gint ignore;
+  gint maj, min;
 #endif
 
   xdisplay = XOpenDisplay (display_name);
@@ -224,7 +230,20 @@ gdk_display_open (const gchar *display_name)
     }
   else
 #endif
-  display_x11->have_xfixes = FALSE;
+    display_x11->have_xfixes = FALSE;
+
+  display_x11->have_shapes = FALSE;
+  display_x11->have_input_shapes = FALSE;
+#ifdef HAVE_SHAPE_EXT
+  if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &ignore, &ignore))
+    {
+      display_x11->have_shapes = TRUE;
+#ifdef ShapeInput	      
+      if (XShapeQueryVersion (GDK_DISPLAY_XDISPLAY (display), &maj, &min))
+	display_x11->have_input_shapes = (maj == 1 && min >= 1);
+#endif
+    }
+#endif
 
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
@@ -1236,6 +1255,41 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->user_time;
 }
+
+/**
+ * gdk_display_supports_shapes:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if gdk_window_shape_combine_mask() can
+ * be used to create shaped windows on @display.
+ *
+ * Returns: %TRUE if shaped windows are supported 
+ *
+ * Since: 2.10
+ */
+gboolean 
+gdk_display_supports_shapes (GdkDisplay *display)
+{
+  return GDK_DISPLAY_X11 (display)->have_shapes;
+}
+
+/**
+ * gdk_display_supports_input_shapes:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if gdk_window_input_shape_combine_mask() can
+ * be used to modify the input shape of windows on @display.
+ *
+ * Returns: %TRUE if windows with modified input shape are supported 
+ *
+ * Since: 2.10
+ */
+gboolean 
+gdk_display_supports_input_shapes (GdkDisplay *display)
+{
+  return GDK_DISPLAY_X11 (display)->have_input_shapes;
+}
+
 
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"

@@ -83,7 +83,6 @@ const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
 /* Forward declarations */
 static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 						   gboolean    on);
-static gboolean gdk_window_have_shape_ext         (GdkDisplay *display);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
 static void     gdk_window_add_colormap_windows   (GdkWindow  *window);
 static void     set_wm_name                       (GdkDisplay  *display,
@@ -3686,19 +3685,6 @@ gdk_window_add_colormap_windows (GdkWindow *window)
     XFree (old_windows);
 }
 
-static gboolean
-gdk_window_have_shape_ext (GdkDisplay *display)
-{
-#ifdef HAVE_SHAPE_EXT
-  int ignore;
-
-  return XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display),
-			       &ignore, &ignore);
-#else
-  return 0;
-#endif  
-}
-
 #define WARN_SHAPE_TOO_BIG() g_warning ("GdkWindow is too large to allow the use of shape masks or shape regions.")
 
 /*
@@ -3706,6 +3692,60 @@ gdk_window_have_shape_ext (GdkDisplay *display)
  * If not available, shaped windows will look
  * ugly, but programs still work.    Stefan Wille
  */
+static void
+do_shape_combine_mask (GdkWindow *window,
+		       GdkBitmap *mask,
+		       gint       x, 
+		       gint       y,
+		       gint       shape)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  Pixmap pixmap;
+  gint xoffset, yoffset;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+#ifdef HAVE_SHAPE_EXT
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+
+  if (xoffset != 0 || yoffset != 0)
+    {
+      WARN_SHAPE_TOO_BIG ();
+      return;
+    }
+  
+  if (shape == ShapeBounding
+      ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
+      : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
+    {
+      if (mask)
+	{
+	  pixmap = GDK_PIXMAP_XID (mask);
+	  
+	  private->shaped = (shape == ShapeBounding);
+	}
+      else
+	{
+	  x = 0;
+	  y = 0;
+	  pixmap = None;
+
+	  private->shaped = FALSE;
+	}
+      
+      XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
+			 GDK_WINDOW_XID (window),
+			 shape,
+			 x, y,
+			 pixmap,
+			 ShapeSet);
+    }
+#endif /* HAVE_SHAPE_EXT */
+}
+
 /**
  * gdk_window_shape_combine_mask:
  * @window: a #GdkWindow
@@ -3733,10 +3773,55 @@ gdk_window_have_shape_ext (GdkDisplay *display)
 void
 gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
-			       gint x, gint y)
+			       gint       x, 
+			       gint       y)
+{
+  do_shape_combine_mask (window, mask, x, y, ShapeBounding);
+}
+
+/**
+ * gdk_window_input_shape_combine_mask:
+ * @window: a #GdkWindow
+ * @mask: shape mask
+ * @x: X position of shape mask with respect to @window
+ * @y: Y position of shape mask with respect to @window
+ * 
+ * Like gdk_window_shape_combine_mask(), but the shape applies
+ * only to event handling. Mouse events which happen while
+ * the pointer position corresponds to an unset bit in the 
+ * mask will be passed on the window below @window.
+ *
+ * An input shape is typically used with RGBA windows.
+ * The alpha channel of the window defines which pixels are 
+ * invisible and allows for nicely antialiased borders,
+ * and the input shape controls where the window is
+ * "clickable".
+ *
+ * On the X11 platform, this requires version 1.1 of the
+ * shape extension.
+ *
+ * Since: 2.10
+ */
+void 
+gdk_window_input_shape_combine_mask (GdkWindow *window,
+				     GdkBitmap *mask,
+				     gint       x,
+				     gint       y)
+{
+#ifdef ShapeInput
+  do_shape_combine_mask (window, mask, x, y, ShapeInput);
+#endif
+}
+
+
+static void
+do_shape_combine_region (GdkWindow *window,
+			 GdkRegion *shape_region,
+			 gint       offset_x,
+			 gint       offset_y,
+			 gint       shape)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  Pixmap pixmap;
   gint xoffset, yoffset;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3753,29 +3838,35 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       return;
     }
   
-  if (gdk_window_have_shape_ext (GDK_WINDOW_DISPLAY (window)))
+  if (shape_region == NULL)
     {
-      if (mask)
-	{
-	  pixmap = GDK_PIXMAP_XID (mask);
-	  
-	  private->shaped = TRUE;
-	}
-      else
-	{
-	  x = 0;
-	  y = 0;
-	  pixmap = None;
+      /* Use NULL mask to unset the shape */
+      gdk_window_shape_combine_mask (window, NULL, 0, 0);
+      return;
+    }
+  
+  if (shape == ShapeBounding
+      ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
+      : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
+    {
+      gint n_rects = 0;
+      XRectangle *xrects = NULL;
 
-	  private->shaped = FALSE;
-	}
+      private->shaped = shape == ShapeBounding;
+
+      _gdk_region_get_xrectangles (shape_region,
+                                   0, 0,
+                                   &xrects, &n_rects);
       
-      XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XID (window),
-			 ShapeBounding,
-			 x, y,
-			 pixmap,
-			 ShapeSet);
+      XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
+                               GDK_WINDOW_XID (window),
+                               shape,
+                               offset_x, offset_y,
+                               xrects, n_rects,
+                               ShapeSet,
+                               YXBanded);
+
+      g_free (xrects);
     }
 #endif /* HAVE_SHAPE_EXT */
 }
@@ -3810,52 +3901,41 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  gint       offset_x,
                                  gint       offset_y)
 { 
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  gint xoffset, yoffset;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-#ifdef HAVE_SHAPE_EXT
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
+  do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeBounding);
+}
 
-  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-
-  if (xoffset != 0 || yoffset != 0)
-    {
-      WARN_SHAPE_TOO_BIG ();
-      return;
-    }
-  
-  if (shape_region == NULL)
-    {
-      /* Use NULL mask to unset the shape */
-      gdk_window_shape_combine_mask (window, NULL, 0, 0);
-      return;
-    }
-  
-  if (gdk_window_have_shape_ext (GDK_WINDOW_DISPLAY (window)))
-    {
-      gint n_rects = 0;
-      XRectangle *xrects = NULL;
-
-      private->shaped = TRUE;
-
-      _gdk_region_get_xrectangles (shape_region,
-                                   0, 0,
-                                   &xrects, &n_rects);
-      
-      XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
-                               GDK_WINDOW_XID (window),
-                               ShapeBounding,
-                               offset_x, offset_y,
-                               xrects, n_rects,
-                               ShapeSet,
-                               YXBanded);
-
-      g_free (xrects);
-    }
-#endif /* HAVE_SHAPE_EXT */
+/**
+ * gdk_window_input_shape_combine_region:
+ * @window: a #GdkWindow
+ * @shape_region: region of window to be non-transparent
+ * @offset_x: X position of @shape_region in @window coordinates
+ * @offset_y: Y position of @shape_region in @window coordinates
+ * 
+ * Like gdk_window_shape_combine_region(), but the shape applies
+ * only to event handling. Mouse events which happen while
+ * the pointer position corresponds to an unset bit in the 
+ * mask will be passed on the window below @window.
+ *
+ * An input shape is typically used with RGBA windows.
+ * The alpha channel of the window defines which pixels are 
+ * invisible and allows for nicely antialiased borders,
+ * and the input shape controls where the window is
+ * "clickable".
+ *
+ * On the X11 platform, this requires version 1.1 of the
+ * shape extension.
+ *
+ * Since: 2.10
+ */
+void 
+gdk_window_input_shape_combine_region (GdkWindow *window,
+				       GdkRegion *shape_region,
+				       gint       offset_x,
+				       gint       offset_y)
+{
+#ifdef ShapeInput
+  do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeInput);
+#endif
 }
 
 
@@ -5120,7 +5200,8 @@ gdk_add_rectangles (Display           *disp,
 static void
 gdk_propagate_shapes (Display *disp,
 		      Window   win,
-		      gboolean merge)
+		      gboolean merge,
+		      int      shape)
 {
   Window              rt, par, *list = NULL;
   gint                i, j, num = 0, num_rects = 0;
@@ -5225,7 +5306,7 @@ gdk_propagate_shapes (Display *disp,
       /* set the rects as the shape mask */
       if (rects)
 	{
-	  XShapeCombineRectangles (disp, win, ShapeBounding, 0, 0, rects, num_rects,
+	  XShapeCombineRectangles (disp, win, shape, 0, 0, rects, num_rects,
 				   ShapeSet, YXSorted);
 	  g_free (rects);
 	}
@@ -5261,11 +5342,12 @@ gdk_window_set_child_shapes (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   
+  
 #ifdef HAVE_SHAPE_EXT
   if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_window_have_shape_ext (GDK_WINDOW_DISPLAY (window)))
+      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window), FALSE);
+			  GDK_WINDOW_XID (window), FALSE, ShapeBounding);
 #endif   
 }
 
@@ -5281,7 +5363,6 @@ gdk_window_set_child_shapes (GdkWindow *window)
  * This function is distinct from gdk_window_set_child_shapes()
  * because it includes @window's shape mask in the set of shapes to
  * be merged.
- * 
  **/
 void
 gdk_window_merge_child_shapes (GdkWindow *window)
@@ -5290,11 +5371,68 @@ gdk_window_merge_child_shapes (GdkWindow *window)
   
 #ifdef HAVE_SHAPE_EXT
   if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_window_have_shape_ext (GDK_WINDOW_DISPLAY (window)))
+      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window), TRUE);
+			  GDK_WINDOW_XID (window), TRUE, ShapeBounding);
 #endif   
 }
+
+/**
+ * gdk_window_set_child_input_shapes:
+ * @window: a #GdkWindow
+ * 
+ * Sets the input shape mask of @window to the union of input shape masks
+ * for all children of @window, ignoring the input shape mask of @window
+ * itself. Contrast with gdk_window_merge_child_input_shapes() which includes
+ * the input shape mask of @window in the masks to be merged.
+ *
+ * Since: 2.10
+ **/
+void 
+gdk_window_set_child_input_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+#ifdef HAVE_SHAPE_EXT
+#ifdef ShapeInput
+  if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
+    gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
+			  GDK_WINDOW_XID (window), FALSE, ShapeInput);
+#endif
+#endif   
+}
+
+/**
+ * gdk_window_merge_child_input_shapes:
+ * @window: a #GdkWindow
+ * 
+ * Merges the input shape masks for any child windows into the
+ * input shape mask for @window. i.e. the union of all input masks
+ * for @window and its children will become the new input mask
+ * for @window. See gdk_window_input_shape_combine_mask().
+ *
+ * This function is distinct from gdk_window_set_child_input_shapes()
+ * because it includes @window's input shape mask in the set of 
+ * shapes to be merged.
+ *
+ * Since: 2.10
+ **/
+void 
+gdk_window_merge_child_input_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+#ifdef HAVE_SHAPE_EXT
+#ifdef ShapeInput
+  if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
+    gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
+			  GDK_WINDOW_XID (window), TRUE, ShapeInput);
+#endif
+#endif   
+}
+
 
 static void
 gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)

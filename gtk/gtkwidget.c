@@ -250,6 +250,7 @@ static GQuark		quark_event_mask = 0;
 static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
 static GQuark		quark_shape_info = 0;
+static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_colormap = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_rc_style = 0;
@@ -324,6 +325,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
+  quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_colormap = g_quark_from_static_string ("gtk-colormap");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_rc_style = g_quark_from_static_string ("gtk-rc-style");
@@ -2352,6 +2354,13 @@ gtk_widget_realize (GtkWidget *widget)
 					 shape_info->offset_y);
 	}
       
+      shape_info = g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info);
+      if (shape_info)
+	gdk_window_input_shape_combine_mask (widget->window,
+					     shape_info->shape_mask,
+					     shape_info->offset_x,
+					     shape_info->offset_y);
+
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	{
 	  mode = gtk_widget_get_extension_events (widget);
@@ -2380,7 +2389,10 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
-    gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
+    gtk_widget_shape_combine_mask (widget, NULL, 0, 0);
+
+  if (g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info))
+    gtk_widget_input_shape_combine_mask (widget, NULL, 0, 0);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -2792,8 +2804,6 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
   GdkRectangle rect;
   GdkRegion *region;
   
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   if (!GTK_WIDGET_REALIZED (widget))
     return;
 
@@ -3880,7 +3890,7 @@ static void
 gtk_widget_reparent_fixup_child (GtkWidget *widget,
 				 gpointer   client_data)
 {
-  g_return_if_fail (client_data != NULL);
+  g_assert (client_data != NULL);
   
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
@@ -4636,8 +4646,6 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
   GtkStyle *new_style = NULL;
   gboolean initial_emission;
   
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
@@ -5766,8 +5774,6 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
   GtkWidgetAuxInfo *aux_info;
   gboolean changed = FALSE;
   
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
   g_object_freeze_notify (G_OBJECT (widget));
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
@@ -5894,9 +5900,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
  * gtk_widget_set_size_request(). To get the size a widget will
  * actually use, call gtk_widget_size_request() instead of
  * this function.
- * 
  **/
- 
 void
 gtk_widget_get_size_request (GtkWidget *widget,
                              gint      *width,
@@ -5930,7 +5934,6 @@ gtk_widget_get_size_request (GtkWidget *widget,
  * mask. This function can't be used with #GTK_NO_WINDOW widgets;
  * to get events on those widgets, place them inside a #GtkEventBox
  * and receive events on the event box.
- * 
  **/
 void
 gtk_widget_set_events (GtkWidget *widget,
@@ -6745,7 +6748,7 @@ gtk_widget_finalize (GObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget) == TRUE);
+  g_assert (GTK_WIDGET_REALIZED (widget));
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -6787,7 +6790,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
 static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_WIDGET_NO_WINDOW (widget));
+  g_assert (GTK_WIDGET_NO_WINDOW (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   if (widget->parent)
@@ -7046,14 +7049,67 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
       shape_info->offset_x = offset_x;
       shape_info->offset_y = offset_y;
       
-      /* set shape if widget has a gdk window allready.
-       * otherwise the shape is scheduled to be set by gtk_widget_realize.
+      /* set shape if widget has a gdk window already.
+       * otherwise the shape is scheduled to be set by gtk_widget_realize().
        */
       if (widget->window)
 	gdk_window_shape_combine_mask (widget->window, shape_mask,
 				       offset_x, offset_y);
     }
 }
+
+/**
+ * gtk_widget_input_shape_combine_mask: 
+ * @widget: a #GtkWidget.
+ * @shape_mask: shape to be added, or %NULL to remove an existing shape. 
+ * @offset_x: X position of shape mask with respect to @window.
+ * @offset_y: Y position of shape mask with respect to @window.
+ * 
+ * Sets an input shape for this widget's GDK window. This allows for
+ * windows which react to mouse click in a nonrectangular region, see 
+ * gdk_window_input_shape_combine_mask() for more information.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_widget_input_shape_combine_mask (GtkWidget *widget,
+				     GdkBitmap *shape_mask,
+				     gint       offset_x,
+				     gint	offset_y)
+{
+  GtkWidgetShapeInfo* shape_info;
+  
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  /*  set_shape doesn't work on widgets without gdk window */
+  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
+
+  if (!shape_mask)
+    {
+      if (widget->window)
+	gdk_window_input_shape_combine_mask (widget->window, NULL, 0, 0);
+      
+      g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);
+    }
+  else
+    {
+      shape_info = g_slice_new (GtkWidgetShapeInfo);
+      g_object_set_qdata_full (G_OBJECT (widget), quark_input_shape_info, 
+			       shape_info,
+			       (GDestroyNotify) gtk_widget_shape_info_destroy);
+      
+      shape_info->shape_mask = g_object_ref (shape_mask);
+      shape_info->offset_x = offset_x;
+      shape_info->offset_y = offset_y;
+      
+      /* set shape if widget has a gdk window already.
+       * otherwise the shape is scheduled to be set by gtk_widget_realize().
+       */
+      if (widget->window)
+	gdk_window_input_shape_combine_mask (widget->window, shape_mask,
+					     offset_x, offset_y);
+    }
+}
+
 
 static void
 gtk_reset_shapes_recurse (GtkWidget *widget,

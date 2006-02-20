@@ -744,6 +744,10 @@ void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
 					    GdkBitmap *shape_mask,
 					    gint       offset_x,
 					    gint       offset_y);
+void	     gtk_widget_input_shape_combine_mask (GtkWidget *widget,
+						  GdkBitmap *shape_mask,
+						  gint       offset_x,
+						  gint       offset_y);
 
 /* internal function */
 void	     gtk_widget_reset_shapes	   (GtkWidget *widget);

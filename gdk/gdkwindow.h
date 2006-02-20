@@ -396,6 +396,18 @@ void gdk_window_set_child_shapes (GdkWindow *window);
  */
 void gdk_window_merge_child_shapes (GdkWindow *window);
 
+void gdk_window_input_shape_combine_mask   (GdkWindow *window,
+					    GdkBitmap *mask,
+					    gint       x,
+					    gint       y);
+void gdk_window_input_shape_combine_region (GdkWindow *window,
+                                            GdkRegion *shape_region,
+                                            gint       offset_x,
+                                            gint       offset_y);
+void gdk_window_set_child_input_shapes     (GdkWindow *window);
+void gdk_window_merge_child_input_shapes   (GdkWindow *window);
+
+
 /*
  * Check if a window has been shown, and whether all its
  * parents up to a toplevel have been shown, respectively.
