@@ -1,3 +1,15 @@
+2006-02-20  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (do_shape_combine_region): New
+	function. Factor out code from gdk_window_shape_combine_mask().
+	(gdk_window_shape_combine_region): Actually do something. Convert
+	region to a HRGN and call do_shape_combine_region().
+	(gdk_window_input_shape_combine_mask)
+	(gdk_window_input_shape_combine_region)
+	(gdk_window_set_child_input_shapes)
+	(gdk_window_merge_child_input_shapes): New functions, dummy
+	implementations.
+
 2006-02-20  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): adding boolean
