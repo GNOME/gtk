@@ -113,7 +113,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
   
   gobject_class->set_property = gtk_link_button_set_property;
