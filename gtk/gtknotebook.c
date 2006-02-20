@@ -115,7 +115,8 @@ struct _GtkNotebookPage
   GtkRequisition requisition;
   GtkAllocation allocation;
 
-  guint mnemonic_activate_signal;
+  gulong mnemonic_activate_signal;
+  gulong notify_visible_handler;
 };
 
 #ifdef G_DISABLE_CHECKS
@@ -2670,6 +2671,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   page = list->data;
   
+  g_signal_handler_disconnect (page->child, page->notify_visible_handler); 
+
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
@@ -4279,6 +4282,33 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
   return TRUE;
 }
 
+
+static void
+page_visible_cb (GtkWidget  *page,
+                 GParamSpec *arg,
+                 gpointer    data)
+{
+  GtkNotebook *notebook = (GtkNotebook *)data;
+  GList *list;
+  GList *next = NULL;
+
+  if (notebook->cur_page &&
+      notebook->cur_page->child == page &&
+      !GTK_WIDGET_VISIBLE (page))
+    {
+      list = g_list_find (notebook->children, notebook->cur_page);
+      if (list)
+        {
+          next = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
+          if (!next)
+            next = gtk_notebook_search_page (notebook, list, STEP_PREV, TRUE);
+        }
+
+      if (next)
+        gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next), -1);
+    }
+}
+
 /**
  * gtk_notebook_insert_page_menu:
  * @notebook: a #GtkNotebook
@@ -4385,6 +4415,8 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
       gtk_notebook_switch_page (notebook, page, 0);
       gtk_notebook_switch_focus_tab (notebook, NULL);
     }
+
+  page->notify_visible_handler = g_signal_connect (G_OBJECT (child), "notify::visible",                                            G_CALLBACK (page_visible_cb), notebook);
 
   gtk_notebook_update_tab_states (notebook);
 
