@@ -1,4 +1,18 @@
-2006-02-20  Anders Carlsson  <andersca@mac.com>
+2006-02-20  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/gdkdisplay-quartz.c:
+        (gdk_display_supports_shapes):
+        (gdk_display_supports_input_shapes):
+        * gdk/quartz/gdkwindow-quartz.c:
+        (gdk_display_warp_pointer):
+        (gdk_window_input_shape_combine_mask):
+        (gdk_window_input_shape_combine_region):
+        (gdk_window_set_child_input_shapes):
+        (gdk_window_set_accept_focus):
+        (gdk_window_merge_child_input_shapes):
+	Add stubs for input shape functions.
+
+2006-02-20  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkevents-quartz.c:
         (get_keyboard_modifiers_from_nsevent):

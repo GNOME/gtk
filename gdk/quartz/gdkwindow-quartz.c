@@ -873,6 +873,15 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   return NULL;
 }
 
+void
+gdk_display_warp_pointer (GdkDisplay *display,
+			  GdkScreen  *screen,
+			  gint        x,
+			  gint        y)
+{
+  CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
+}
+
 GdkWindow *
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,
@@ -973,9 +982,39 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   /* FIXME: Implement */
 }
 
+void 
+gdk_window_input_shape_combine_mask (GdkWindow *window,
+				     GdkBitmap *mask,
+				     gint       x,
+				     gint       y)
+{
+  /* FIXME: Implement */
+}
+
+void 
+gdk_window_input_shape_combine_region (GdkWindow *window,
+				       GdkRegion *shape_region,
+				       gint       offset_x,
+				       gint       offset_y)
+{
+  /* FIXME: Implement */
+}
+
+void 
+gdk_window_set_child_input_shapes (GdkWindow *window)
+{
+  /* FIXME: IMplement */
+}
+
 void
 gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
+{
+  /* FIXME: Implement */
+}
+
+void 
+gdk_window_merge_child_input_shapes (GdkWindow *window)
 {
   /* FIXME: Implement */
 }

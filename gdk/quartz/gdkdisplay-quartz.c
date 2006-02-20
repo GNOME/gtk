@@ -124,6 +124,20 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
   return FALSE;
 }
 
+gboolean 
+gdk_display_supports_shapes (GdkDisplay *display)
+{
+  /* FIXME: Implement */
+  return FALSE;
+}
+
+gboolean 
+gdk_display_supports_input_shapes (GdkDisplay *display)
+{
+  /* FIXME: Implement */
+  return FALSE;
+}
+
 void
 gdk_display_store_clipboard (GdkDisplay *display,
 			     GdkWindow  *clipboard_window,
