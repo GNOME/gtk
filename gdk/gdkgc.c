@@ -1112,6 +1112,8 @@ gc_get_background (GdkGC    *gc,
  *   stipple from the GC. If this is present and the fill mode
  *   of the GC isn't %GDK_STIPPLED or %GDK_OPAQUE_STIPPLED
  *   the fill mode will be forced to %GDK_STIPPLED
+ * @gc_changed: pass %FALSE if the @gc has not changed since the
+ *     last call to this function
  * 
  * Set the attributes of a cairo context to match those of a #GdkGC
  * as far as possible. Some aspects of a #GdkGC, such as clip masks
@@ -1121,7 +1123,8 @@ void
 _gdk_gc_update_context (GdkGC     *gc,
 			cairo_t   *cr,
 			GdkColor  *override_foreground,
-			GdkBitmap *override_stipple)
+			GdkBitmap *override_stipple,
+			gboolean   gc_changed)
 {
   GdkGCPrivate *priv;
   GdkFill fill;
@@ -1149,12 +1152,7 @@ _gdk_gc_update_context (GdkGC     *gc,
     }
 
   if (fill == GDK_OPAQUE_STIPPLED)
-    {
-      if (override_foreground)
-	foreground = *override_foreground;
-      else
-	gc_get_background (gc, &background);
-    }
+    gc_get_background (gc, &background);
 
   switch (fill)
     {
@@ -1226,6 +1224,9 @@ _gdk_gc_update_context (GdkGC     *gc,
       cairo_pattern_destroy (pattern);
     }
 
+  if (!gc_changed)
+    return;
+
   cairo_reset_clip (cr);
   if (priv->clip_region)
     {
@@ -1242,6 +1243,7 @@ _gdk_gc_update_context (GdkGC     *gc,
       cairo_clip (cr);
     }
 }
+
 
 #define __GDK_GC_C__
 #include "gdkaliasdef.c"

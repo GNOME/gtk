@@ -881,7 +881,7 @@ real_draw_glyphs (GdkDrawable      *drawable,
   cairo_t *cr;
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
 
   if (matrix)
     {
@@ -1005,7 +1005,7 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
   
   for (i = 0; i < n_trapezoids; i++)
     {

@@ -219,7 +219,8 @@ GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 void _gdk_gc_update_context (GdkGC     *gc,
 			     cairo_t   *cr,
 			     GdkColor  *override_foreground,
-			     GdkBitmap *override_stipple);
+			     GdkBitmap *override_stipple,
+			     gboolean   gc_changed);
 
 /*************************************
  * Interfaces used by windowing code *
