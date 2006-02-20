@@ -2325,6 +2325,30 @@ gdk_window_set_events (GdkWindow   *window,
   GDK_WINDOW_OBJECT (window)->event_mask = GDK_STRUCTURE_MASK | event_mask;
 }
 
+static void
+do_shape_combine_region (GdkWindow *window,
+			 HRGN	    hrgn,
+			 gint       x, gint y)
+{
+  RECT rect;
+
+  GetClientRect (GDK_WINDOW_HWND (window), &rect);
+  _gdk_win32_adjust_client_rect (window, &rect);
+
+  OffsetRgn (hrgn, -rect.left, -rect.top);
+  OffsetRgn (hrgn, x, y);
+
+  /* If this is a top-level window, add the title bar to the region */
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
+    {
+      HRGN tmp = CreateRectRgn (0, 0, rect.right - rect.left, -rect.top);
+      CombineRgn (hrgn, hrgn, tmp, RGN_OR);
+      DeleteObject (tmp);
+    }
+  
+  SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
+}
+
 void
 gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
@@ -2345,30 +2369,15 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   else
     {
       HRGN hrgn;
-      RECT rect;
-
-      /* Convert mask bitmap to region */
-      hrgn = _gdk_win32_bitmap_to_hrgn (mask);
 
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_mask: %p: %p\n",
 			       GDK_WINDOW_HWND (window),
 			       GDK_WINDOW_HWND (mask)));
 
-      GetClientRect (GDK_WINDOW_HWND (window), &rect);
-      _gdk_win32_adjust_client_rect (window, &rect);
+      /* Convert mask bitmap to region */
+      hrgn = _gdk_win32_bitmap_to_hrgn (mask);
 
-      OffsetRgn (hrgn, -rect.left, -rect.top);
-      OffsetRgn (hrgn, x, y);
-
-      /* If this is a top-level window, add the title bar to the region */
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
-	{
-	  HRGN tmp = CreateRectRgn (0, 0, rect.right - rect.left, -rect.top);
-	  CombineRgn (hrgn, hrgn, tmp, RGN_OR);
-	  DeleteObject (tmp);
-	}
-      
-      SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
+      do_shape_combine_region (window, hrgn, x, y);
 
       private->shaped = TRUE;
     }
@@ -3276,12 +3285,35 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  gint       offset_x,
                                  gint       offset_y)
 {
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* XXX: even on X implemented conditional ... */  
+  if (!shape_region)
+    {
+      GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_region: %p: none\n",
+			       GDK_WINDOW_HWND (window)));
+      SetWindowRgn (GDK_WINDOW_HWND (window), NULL, TRUE);
+
+      private->shaped = FALSE;
+    }
+  else
+    {
+      HRGN hrgn;
+
+      hrgn = _gdk_win32_gdkregion_to_hrgn (shape_region, 0, 0);
+      
+      GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_region: %p: %p\n",
+			       GDK_WINDOW_HWND (window),
+			       hrgn));
+
+      do_shape_combine_region (window, hrgn, offset_x, offset_y);
+
+      private->shaped = TRUE;
+    }
 }
 
 GdkWindow *
@@ -3295,9 +3327,11 @@ gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
 void
 gdk_window_enable_synchronized_configure (GdkWindow *window)
 {
+  g_return_if_fail (GDK_IS_WINDOW (window));
 }
 
 void
 gdk_window_configure_finished (GdkWindow *window)
 {
+  g_return_if_fail (GDK_IS_WINDOW (window));
 }

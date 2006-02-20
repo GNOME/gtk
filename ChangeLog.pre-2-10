@@ -1,3 +1,10 @@
+2006-02-20  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (do_shape_combine_region): New
+	function. Factor out code from gdk_window_shape_combine_mask().
+	(gdk_window_shape_combine_region): Actually do something. Convert
+	region to a HRGN and call do_shape_combine_region().
+
 2006-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkregion-generic.c (gdk_region_union_with_rect): 
