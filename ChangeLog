@@ -1,5 +1,9 @@
 2006-02-20  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_supports_shapes):
+	New function, return TRUE.
+	(gdk_display_supports_input_shapes): New function, return FALSE.
+
 	* gdk/win32/gdkwindow-win32.c (do_shape_combine_region): New
 	function. Factor out code from gdk_window_shape_combine_mask().
 	(gdk_window_shape_combine_region): Actually do something. Convert
