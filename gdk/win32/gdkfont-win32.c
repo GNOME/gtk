@@ -844,33 +844,33 @@ gdk_font_load_logfont (LOGFONT *lfp)
       /* If we fail, try some similar fonts often found on Windows. */
       if (tries == 0)
 	{
-	  if (g_strcasecmp (lfp->lfFaceName, "helvetica") == 0)
+	  if (g_ascii_strcasecmp (lfp->lfFaceName, "helvetica") == 0)
 	    strcpy (lfp->lfFaceName, "arial");
-	  else if (g_strcasecmp (lfp->lfFaceName, "new century schoolbook") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "new century schoolbook") == 0)
 	    strcpy (lfp->lfFaceName, "century schoolbook");
-	  else if (g_strcasecmp (lfp->lfFaceName, "courier") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "courier") == 0)
 	    strcpy (lfp->lfFaceName, "courier new");
-	  else if (g_strcasecmp (lfp->lfFaceName, "lucida") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "lucida") == 0)
 	    strcpy (lfp->lfFaceName, "lucida sans unicode");
-	  else if (g_strcasecmp (lfp->lfFaceName, "lucidatypewriter") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "lucidatypewriter") == 0)
 	    strcpy (lfp->lfFaceName, "lucida console");
-	  else if (g_strcasecmp (lfp->lfFaceName, "times") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "times") == 0)
 	    strcpy (lfp->lfFaceName, "times new roman");
 	}
       else if (tries == 1)
 	{
-	  if (g_strcasecmp (lfp->lfFaceName, "courier") == 0)
+	  if (g_ascii_strcasecmp (lfp->lfFaceName, "courier") == 0)
 	    {
 	      strcpy (lfp->lfFaceName, "");
 	      lfp->lfPitchAndFamily |= FF_MODERN;
 	    }
-	  else if (g_strcasecmp (lfp->lfFaceName, "times new roman") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "times new roman") == 0)
 	    {
 	      strcpy (lfp->lfFaceName, "");
 	      lfp->lfPitchAndFamily |= FF_ROMAN;
 	    }
-	  else if (g_strcasecmp (lfp->lfFaceName, "helvetica") == 0
-		   || g_strcasecmp (lfp->lfFaceName, "lucida") == 0)
+	  else if (g_ascii_strcasecmp (lfp->lfFaceName, "helvetica") == 0
+		   || g_ascii_strcasecmp (lfp->lfFaceName, "lucida") == 0)
 	    {
 	      strcpy (lfp->lfFaceName, "");
 	      lfp->lfPitchAndFamily |= FF_SWISS;
@@ -1024,11 +1024,11 @@ gdk_font_load_internal (const gchar *font_name)
       logfont.lfEscapement = 0;
       logfont.lfOrientation = 0;
 
-      if (g_strcasecmp (weight, "thin") == 0)
+      if (g_ascii_strcasecmp (weight, "thin") == 0)
 	logfont.lfWeight = FW_THIN;
-      else if (g_strcasecmp (weight, "extralight") == 0)
+      else if (g_ascii_strcasecmp (weight, "extralight") == 0)
 	logfont.lfWeight = FW_EXTRALIGHT;
-      else if (g_strcasecmp (weight, "ultralight") == 0)
+      else if (g_ascii_strcasecmp (weight, "ultralight") == 0)
 #ifdef FW_ULTRALIGHT
 	logfont.lfWeight = FW_ULTRALIGHT;
 #else
@@ -1036,35 +1036,35 @@ gdk_font_load_internal (const gchar *font_name)
 					   * defined as FW_EXTRALIGHT anyway.
 					   */
 #endif
-      else if (g_strcasecmp (weight, "light") == 0)
+      else if (g_ascii_strcasecmp (weight, "light") == 0)
 	logfont.lfWeight = FW_LIGHT;
-      else if (g_strcasecmp (weight, "normal") == 0)
+      else if (g_ascii_strcasecmp (weight, "normal") == 0)
 	logfont.lfWeight = FW_NORMAL;
-      else if (g_strcasecmp (weight, "regular") == 0)
+      else if (g_ascii_strcasecmp (weight, "regular") == 0)
 	logfont.lfWeight = FW_REGULAR;
-      else if (g_strcasecmp (weight, "medium") == 0)
+      else if (g_ascii_strcasecmp (weight, "medium") == 0)
 	logfont.lfWeight = FW_MEDIUM;
-      else if (g_strcasecmp (weight, "semibold") == 0)
+      else if (g_ascii_strcasecmp (weight, "semibold") == 0)
 	logfont.lfWeight = FW_SEMIBOLD;
-      else if (g_strcasecmp (weight, "demibold") == 0)
+      else if (g_ascii_strcasecmp (weight, "demibold") == 0)
 #ifdef FW_DEMIBOLD
 	logfont.lfWeight = FW_DEMIBOLD;
 #else
 	logfont.lfWeight = FW_SEMIBOLD;	/* As above */
 #endif
-      else if (g_strcasecmp (weight, "bold") == 0)
+      else if (g_ascii_strcasecmp (weight, "bold") == 0)
 	logfont.lfWeight = FW_BOLD;
-      else if (g_strcasecmp (weight, "extrabold") == 0)
+      else if (g_ascii_strcasecmp (weight, "extrabold") == 0)
 	logfont.lfWeight = FW_EXTRABOLD;
-      else if (g_strcasecmp (weight, "ultrabold") == 0)
+      else if (g_ascii_strcasecmp (weight, "ultrabold") == 0)
 #ifdef FW_ULTRABOLD
 	logfont.lfWeight = FW_ULTRABOLD;
 #else
 	logfont.lfWeight = FW_EXTRABOLD; /* As above */
 #endif
-      else if (g_strcasecmp (weight, "heavy") == 0)
+      else if (g_ascii_strcasecmp (weight, "heavy") == 0)
 	logfont.lfWeight = FW_HEAVY;
-      else if (g_strcasecmp (weight, "black") == 0)
+      else if (g_ascii_strcasecmp (weight, "black") == 0)
 #ifdef FW_BLACK
 	logfont.lfWeight = FW_BLACK;
 #else
@@ -1073,16 +1073,16 @@ gdk_font_load_internal (const gchar *font_name)
       else
 	logfont.lfWeight = FW_DONTCARE;
 
-      if (g_strcasecmp (slant, "italic") == 0
-	  || g_strcasecmp (slant, "oblique") == 0
-	  || g_strcasecmp (slant, "i") == 0
-	  || g_strcasecmp (slant, "o") == 0)
+      if (g_ascii_strcasecmp (slant, "italic") == 0
+	  || g_ascii_strcasecmp (slant, "oblique") == 0
+	  || g_ascii_strcasecmp (slant, "i") == 0
+	  || g_ascii_strcasecmp (slant, "o") == 0)
 	logfont.lfItalic = TRUE;
       else
 	logfont.lfItalic = FALSE;
       logfont.lfUnderline = FALSE;
       logfont.lfStrikeOut = FALSE;
-      if (g_strcasecmp (registry, "iso8859") == 0)
+      if (g_ascii_strcasecmp (registry, "iso8859") == 0)
 	if (strcmp (encoding, "1") == 0)
 	  logfont.lfCharSet = ANSI_CHARSET;
 	else if (strcmp (encoding, "2") == 0)
@@ -1095,45 +1095,45 @@ gdk_font_load_internal (const gchar *font_name)
 	  logfont.lfCharSet = TURKISH_CHARSET;
 	else
 	  logfont.lfCharSet = ANSI_CHARSET; /* XXX ??? */
-      else if (g_strcasecmp (registry, "jisx0208.1983") == 0)
+      else if (g_ascii_strcasecmp (registry, "jisx0208.1983") == 0)
 	logfont.lfCharSet = SHIFTJIS_CHARSET;
-      else if (g_strcasecmp (registry, "ksc5601.1987") == 0)
+      else if (g_ascii_strcasecmp (registry, "ksc5601.1987") == 0)
 	logfont.lfCharSet = HANGEUL_CHARSET;
-      else if (g_strcasecmp (registry, "gb2312.1980") == 0)
+      else if (g_ascii_strcasecmp (registry, "gb2312.1980") == 0)
 	logfont.lfCharSet = GB2312_CHARSET;
-      else if (g_strcasecmp (registry, "big5") == 0)
+      else if (g_ascii_strcasecmp (registry, "big5") == 0)
 	logfont.lfCharSet = CHINESEBIG5_CHARSET;
-      else if (g_strcasecmp (registry, "windows") == 0
-	       || g_strcasecmp (registry, "microsoft") == 0)
-	if (g_strcasecmp (encoding, "symbol") == 0)
+      else if (g_ascii_strcasecmp (registry, "windows") == 0
+	       || g_ascii_strcasecmp (registry, "microsoft") == 0)
+	if (g_ascii_strcasecmp (encoding, "symbol") == 0)
 	  logfont.lfCharSet = SYMBOL_CHARSET;
-	else if (g_strcasecmp (encoding, "shiftjis") == 0)
+	else if (g_ascii_strcasecmp (encoding, "shiftjis") == 0)
 	  logfont.lfCharSet = SHIFTJIS_CHARSET;
-	else if (g_strcasecmp (encoding, "gb2312") == 0)
+	else if (g_ascii_strcasecmp (encoding, "gb2312") == 0)
 	  logfont.lfCharSet = GB2312_CHARSET;
-	else if (g_strcasecmp (encoding, "hangeul") == 0)
+	else if (g_ascii_strcasecmp (encoding, "hangeul") == 0)
 	  logfont.lfCharSet = HANGEUL_CHARSET;
-	else if (g_strcasecmp (encoding, "big5") == 0)
+	else if (g_ascii_strcasecmp (encoding, "big5") == 0)
 	  logfont.lfCharSet = CHINESEBIG5_CHARSET;
-	else if (g_strcasecmp (encoding, "johab") == 0)
+	else if (g_ascii_strcasecmp (encoding, "johab") == 0)
 	  logfont.lfCharSet = JOHAB_CHARSET;
-	else if (g_strcasecmp (encoding, "hebrew") == 0)
+	else if (g_ascii_strcasecmp (encoding, "hebrew") == 0)
 	  logfont.lfCharSet = HEBREW_CHARSET;
-	else if (g_strcasecmp (encoding, "arabic") == 0)
+	else if (g_ascii_strcasecmp (encoding, "arabic") == 0)
 	  logfont.lfCharSet = ARABIC_CHARSET;
-	else if (g_strcasecmp (encoding, "greek") == 0)
+	else if (g_ascii_strcasecmp (encoding, "greek") == 0)
 	  logfont.lfCharSet = GREEK_CHARSET;
-	else if (g_strcasecmp (encoding, "turkish") == 0)
+	else if (g_ascii_strcasecmp (encoding, "turkish") == 0)
 	  logfont.lfCharSet = TURKISH_CHARSET;
-	else if (g_strcasecmp (encoding, "easteurope") == 0)
+	else if (g_ascii_strcasecmp (encoding, "easteurope") == 0)
 	  logfont.lfCharSet = EASTEUROPE_CHARSET;
-	else if (g_strcasecmp (encoding, "russian") == 0)
+	else if (g_ascii_strcasecmp (encoding, "russian") == 0)
 	  logfont.lfCharSet = RUSSIAN_CHARSET;
-	else if (g_strcasecmp (encoding, "mac") == 0)
+	else if (g_ascii_strcasecmp (encoding, "mac") == 0)
 	  logfont.lfCharSet = MAC_CHARSET;
-	else if (g_strcasecmp (encoding, "baltic") == 0)
+	else if (g_ascii_strcasecmp (encoding, "baltic") == 0)
 	  logfont.lfCharSet = BALTIC_CHARSET;
-	else if (g_strcasecmp (encoding, "cp1251") == 0)
+	else if (g_ascii_strcasecmp (encoding, "cp1251") == 0)
 	  logfont.lfCharSet = RUSSIAN_CHARSET;
 	else
 	  logfont.lfCharSet = ANSI_CHARSET; /* XXX ??? */
@@ -1142,9 +1142,9 @@ gdk_font_load_internal (const gchar *font_name)
       logfont.lfOutPrecision = OUT_TT_PRECIS;
       logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
       logfont.lfQuality = PROOF_QUALITY;
-      if (g_strcasecmp (spacing, "m") == 0)
+      if (g_ascii_strcasecmp (spacing, "m") == 0)
 	logfont.lfPitchAndFamily = FIXED_PITCH;
-      else if (g_strcasecmp (spacing, "p") == 0)
+      else if (g_ascii_strcasecmp (spacing, "p") == 0)
 	logfont.lfPitchAndFamily = VARIABLE_PITCH;
       else 
 	logfont.lfPitchAndFamily = DEFAULT_PITCH;

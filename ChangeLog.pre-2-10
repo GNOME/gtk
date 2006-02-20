@@ -1,3 +1,8 @@
+2006-02-20  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkfont-win32.c: Replace all calls to g_strcasecmp()
+	with g_ascii_strcasecmp().
+
 2006-02-19  Matthias Clasen  <mclasen@redhat.com>
 
 	Support input shapes:  (#331070)
