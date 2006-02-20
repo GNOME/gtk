@@ -1,3 +1,13 @@
+2006-02-20  Anders Carlsson  <andersca@mac.com>
+
+        * gdk/quartz/gdkevents-quartz.c:
+        (get_keyboard_modifiers_from_nsevent):
+	Fix typo so ctrl gets passed on to the gdk event.
+	
+        * gdk/quartz/gdkproperty-quartz.c:
+        (gdk_atom_name):
+	g_strdup the atom name.
+
 2006-02-20  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_supports_shapes):

@@ -612,7 +612,7 @@ get_keyboard_modifiers_from_nsevent (NSEvent *nsevent)
     modifiers |= GDK_SHIFT_MASK;
   if (nsflags & NSControlKeyMask)
     modifiers |= GDK_CONTROL_MASK;
-  if (nsflags & NSControlKeyMask)
+  if (nsflags & NSCommandKeyMask)
     modifiers |= GDK_MOD1_MASK;
   
   /* FIXME: Support GDK_BUTTON_MASK */
