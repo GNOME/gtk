@@ -1,3 +1,8 @@
+2006-02-20  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): adding boolean
+	have_shapes and have_input_shapes members fixes the build.
+
 2006-02-20  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkfont-win32.c: Replace all calls to g_strcasecmp()
