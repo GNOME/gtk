@@ -1152,12 +1152,8 @@ _gdk_gc_update_context (GdkGC     *gc,
     }
 
   if (fill == GDK_OPAQUE_STIPPLED)
-    {
-      if (override_foreground)
-	foreground = *override_foreground;
-      else
-	gc_get_background (gc, &background);
-    }
+    gc_get_background (gc, &background);
+
 
   switch (fill)
     {

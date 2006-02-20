@@ -1,3 +1,8 @@
+2006-02-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkgc.c (_gdk_gc_update_context): Obtain the
+	background color from the gc when it is needed.  (#331820)
+
 2006-02-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkgc.c (_gdk_gc_update_context): Add a gc_changed
