@@ -57,6 +57,8 @@ struct _GdkPangoRendererPrivate
   /* Current target */
   GdkDrawable *drawable;
   GdkGC *base_gc;
+
+  gboolean gc_changed;
 };
 
 static PangoAttrType gdk_pango_attr_stipple_type;
@@ -130,6 +132,21 @@ emboss_context (cairo_t *cr)
   cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
 }
 
+static inline gboolean
+color_equal (PangoColor *c1, PangoColor *c2)
+{
+  if (!c1 && !c2)
+    return TRUE;
+
+  if (c1 && c2 &&
+      c1->red == c2->red &&
+      c1->green == c2->green &&
+      c1->blue == c2->blue)
+    return TRUE;
+
+  return FALSE;
+}
+
 static cairo_t *
 get_cairo_context (GdkPangoRenderer *gdk_renderer,
 		   PangoRenderPart   part)
@@ -155,28 +172,46 @@ get_cairo_context (GdkPangoRenderer *gdk_renderer,
 	  cairo_set_matrix (priv->cr, &cairo_matrix);
 	}
     }
-  
-  priv->last_part = (PangoRenderPart)-1;
+
   if (part != priv->last_part)
     {
-      PangoColor *pango_color = pango_renderer_get_color (renderer,
-							  part);
-      GdkColor *color = NULL;
+      PangoColor *pango_color;
+      GdkColor *color;
       GdkColor tmp_color;
-      if (pango_color)
+      gboolean changed;
+
+      pango_color = pango_renderer_get_color (renderer, part);
+      
+      if (priv->last_part != -1)
+	changed = priv->gc_changed ||
+	  priv->stipple[priv->last_part] != priv->stipple[part] ||
+	  !color_equal (pango_color,
+			pango_renderer_get_color (renderer, priv->last_part));
+      else
+	changed = TRUE;
+      
+      if (changed)
 	{
-	  tmp_color.red = pango_color->red;
-	  tmp_color.green = pango_color->green;
-	  tmp_color.blue = pango_color->blue;
-	  
-	  color = &tmp_color;
+	  if (pango_color)
+	    {
+	      tmp_color.red = pango_color->red;
+	      tmp_color.green = pango_color->green;
+	      tmp_color.blue = pango_color->blue;
+	      
+	      color = &tmp_color;
+	    }
+	  else
+	    color = NULL;
+
+	  _gdk_gc_update_context (priv->base_gc,
+				  priv->cr,
+				  color,
+				  priv->stipple[part],
+				  priv->gc_changed);
 	}
 
-      _gdk_gc_update_context (priv->base_gc,
-			      priv->cr,
-			      color,
-			      priv->stipple[part]);
       priv->last_part = part;
+      priv->gc_changed = FALSE;
     }
 
   return priv->cr;
@@ -482,6 +517,7 @@ gdk_pango_renderer_init (GdkPangoRenderer *renderer)
 						GdkPangoRendererPrivate);
 
   renderer->priv->last_part = (PangoRenderPart)-1;
+  renderer->priv->gc_changed = TRUE;
 }
 
 static void
@@ -653,6 +689,8 @@ gdk_pango_renderer_set_gc (GdkPangoRenderer *gdk_renderer,
       priv->base_gc = gc;
       if (priv->base_gc)
 	g_object_ref (priv->base_gc);
+
+      priv->gc_changed = TRUE;
     }
 }
 

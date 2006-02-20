@@ -1,3 +1,14 @@
+2006-02-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkgc.c (_gdk_gc_update_context): Add a gc_changed
+	argument, and avoid setting the clip region if the gc
+	has not changed. 
+
+	* gdk/gdkgc.c: Update all callers.
+
+	* gdk/gdkpango.c (get_cairo_context): Avoid updating the
+	context if nothing changed.
+
 2006-02-20  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkdisplay-quartz.c:
@@ -75,6 +86,7 @@
 	* gtk/gtklinkbutton.c (gtk_link_button_class_init): Fix
 	a cast.
 
+>>>>>>> 1.7541
 2006-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	DND keynav support:
@@ -113,6 +125,7 @@
 	* gtk/gtkcolorbutton.c (gtk_color_button_[un]realize):
 	Remove unnecessary checks.  
 
+>>>>>>> 1.7533
 2006-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_list_icons): Give working
