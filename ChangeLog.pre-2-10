@@ -101,7 +101,6 @@
 	* gtk/gtklinkbutton.c (gtk_link_button_class_init): Fix
 	a cast.
 
->>>>>>> 1.7541
 2006-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	DND keynav support:
@@ -140,7 +139,6 @@
 	* gtk/gtkcolorbutton.c (gtk_color_button_[un]realize):
 	Remove unnecessary checks.  
 
->>>>>>> 1.7533
 2006-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_list_icons): Give working
