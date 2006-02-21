@@ -1,3 +1,10 @@
+2006-02-21  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/gdkselection-quartz.c:
+        (make_list):
+        (gdk_text_property_to_utf8_list_for_display):
+	Add these from the win32 backend.
+
 2006-02-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c: Properly update internal state
