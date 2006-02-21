@@ -1,3 +1,9 @@
+2006-02-21  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):
+	Make sure we always update the virtual root, also when ->priv->root
+	is still NULL.  (Markku Vire)
+
 2006-02-21  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkselection-quartz.c:

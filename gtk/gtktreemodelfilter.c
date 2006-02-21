@@ -1910,9 +1910,6 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
   if (c_path == NULL || gtk_tree_path_get_indices (c_path) == NULL)
     {
-      if (!filter->priv->root)
-        return;
-
       length = gtk_tree_model_iter_n_children (c_model, NULL);
 
       if (filter->priv->virtual_root)
@@ -2009,7 +2006,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
         }
     }
 
-  if (level->array->len < 1)
+  if (!level || level->array->len < 1)
     {
       gtk_tree_path_free (path);
       return;
