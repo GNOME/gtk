@@ -1,3 +1,8 @@
+2006-02-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c: Change Close buttons to GTK_RESPONSE_CANCEL
+	so Escape works. (#331940, Daniel Drake)
+
 2006-02-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtksettings.c: added boolean property gtk-touchscreen-mode,

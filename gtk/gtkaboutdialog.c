@@ -127,6 +127,7 @@ static void                 gtk_about_dialog_set_property   (GObject            
 							     GParamSpec         *pspec);
 static void                 gtk_about_dialog_style_set      (GtkWidget          *widget,
 			                                     GtkStyle           *previous_style);
+static void                 gtk_about_dialog_close          (GtkDialog          *dialog);
 static void                 dialog_style_set                (GtkWidget          *widget,
 		                                             GtkStyle           *previous_style,
 		                                             gpointer            data);
@@ -179,9 +180,11 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
+  GtkDialogClass *dialog_class;
 	
   object_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
+  dialog_class = (GtkDialogClass *)klass;
 	
   object_class->set_property = gtk_about_dialog_set_property;
   object_class->get_property = gtk_about_dialog_get_property;
@@ -189,6 +192,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->finalize = gtk_about_dialog_finalize;
 
   widget_class->style_set = gtk_about_dialog_style_set;
+
 
   /**
    * GtkAboutDialog:name:
@@ -494,8 +498,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_show (hbox);
 
   /* Add the OK button */
-  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
-  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CLOSE);
+  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
+  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   /* Add the credits button */
   button = gtk_button_new_with_mnemonic (_("C_redits"));
@@ -718,6 +722,24 @@ gtk_about_dialog_style_set (GtkWidget *widget,
 
   dialog_style_set (widget, previous_style, NULL);
 }
+
+static void
+gtk_about_dialog_close (GtkDialog *dialog)
+{
+  /* Synthesize delete_event to close dialog. */
+  
+  GtkWidget *widget = GTK_WIDGET (dialog);
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DELETE);
+  
+  event->any.window = g_object_ref (widget->window);
+  event->any.send_event = TRUE;
+  
+  gtk_main_do_event (event);
+  gdk_event_free (event);
+}
+
 
 /**
  * gtk_about_dialog_get_name:
@@ -2003,13 +2025,13 @@ display_credits_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("Credits"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   
   priv->credits_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -2075,12 +2097,12 @@ display_license_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("License"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   priv->license_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
