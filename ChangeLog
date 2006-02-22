@@ -1,5 +1,8 @@
 2006-02-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbtree.c: 
+	* gtk/gtktextiter.c: Minor optimizations.  (#332059, Arnaud Charlet)
+
 	* gtk/gtkradiobutton.c (gtk_radio_button_clicked): Emit notify::active
 	here, when changing the value of this property.  (#331651)
 
