@@ -89,6 +89,7 @@ enum {
   PROP_TIMEOUT_REPEAT,
   PROP_COLOR_SCHEME,
   PROP_ENABLE_ANIMATIONS,
+  PROP_TOUCHSCREEN_MODE,
   PROP_COLOR_HASH
 };
 
@@ -491,6 +492,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_ENABLE_ANIMATIONS);
 
+  /**
+   * GtkSettings:gtk-touchscreen-mode:
+   *
+   * When TRUE, there are no motion notify events delivered on this screen,
+   * and widgets can't use the pointer hovering them for any essential
+   * functionality.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-touchscreen-mode",
+                                                                   P_("Enable Touchscreen Mode"),
+                                                                   P_("When TRUE, there are no motion notify events delivered on this screen"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_TOUCHSCREEN_MODE);
 
   /**
    * GtkSettings:color-hash:
@@ -509,7 +528,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
 						       GTK_PARAM_READABLE));
 
   class_n_properties++;
-  
 }
 
 static void

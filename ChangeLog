@@ -1,3 +1,19 @@
+2006-02-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtksettings.c: added boolean property gtk-touchscreen-mode,
+	which essentially means "there are no motion notify events", so
+	widgets can't use the pointer hovering them for anything.
+
+	* gtk/gtkmenu.c: if gtk-touchscreen-mode is TRUE, scroll menus
+	when clicking the scroll arrows, since hovering goes undetected.
+	Fixes bug #323028.
+
+	Added boolean style property "double-arrows" which always makes
+	both scroll arrows visible when the menu is too long.
+	For pushed-in popup menus, both arrows are always shown
+	(regardless of double-arrows), in order to fix user confusion
+	about the blank area. Fixes bug #129463.
+
 2006-02-21  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):

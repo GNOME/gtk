@@ -95,6 +95,13 @@ struct _GtkMenuPrivate
   gint n_columns;
 
   gchar *title;
+
+  /* Arrow states */
+  GtkStateType lower_arrow_state;
+  GtkStateType upper_arrow_state;
+
+  gboolean ignore_button_release;
+  gboolean initially_pushed_in;
 };
 
 typedef struct
@@ -180,9 +187,11 @@ static void     gtk_menu_scroll_to         (GtkMenu          *menu,
 static void     gtk_menu_grab_notify       (GtkWidget        *widget,
 					    gboolean          was_grabbed);
 
-static void     gtk_menu_stop_scrolling        (GtkMenu  *menu);
-static void     gtk_menu_remove_scroll_timeout (GtkMenu  *menu);
-static gboolean gtk_menu_scroll_timeout        (gpointer  data);
+static void     gtk_menu_stop_scrolling         (GtkMenu  *menu);
+static void     gtk_menu_remove_scroll_timeout  (GtkMenu  *menu);
+static gboolean gtk_menu_scroll_timeout         (gpointer  data);
+static gboolean gtk_menu_scroll_timeout_initial (gpointer  data);
+static void     gtk_menu_start_scrolling        (GtkMenu  *menu);
 
 static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 					      GtkWidget       *menu_item);
@@ -196,7 +205,8 @@ static void     gtk_menu_scrollbar_changed (GtkAdjustment    *adjustment,
 static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
 					    gint	      event_x,
 					    gint	      event_y,
-					    gboolean          enter);
+					    gboolean          enter,
+                                            gboolean          motion);
 static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
 					    gint             width);
 static void     gtk_menu_style_set         (GtkWidget        *widget,
@@ -559,6 +569,13 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     -2,
 							     GTK_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("double-arrows",
+                                                                 P_("Double Arrows"),
+                                                                 P_("When scrolling, always show both arrows."),
+                                                                 TRUE,
+                                                                 GTK_PARAM_READABLE));
+
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,
@@ -907,6 +924,9 @@ gtk_menu_init (GtkMenu *menu)
   menu->lower_arrow_visible = FALSE;
   menu->upper_arrow_prelight = FALSE;
   menu->lower_arrow_prelight = FALSE;
+
+  priv->upper_arrow_state = GTK_STATE_NORMAL;
+  priv->lower_arrow_state = GTK_STATE_NORMAL;
 
   priv->have_layout = FALSE;
 }
@@ -2052,6 +2072,7 @@ gtk_menu_realize (GtkWidget *widget)
       attributes.y += MENU_SCROLL_ARROW_HEIGHT;
       attributes.height -= MENU_SCROLL_ARROW_HEIGHT;
     }
+
   if (menu->lower_arrow_visible)
     attributes.height -= MENU_SCROLL_ARROW_HEIGHT;
 
@@ -2301,16 +2322,16 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
   if (menu_shell->active)
     gtk_menu_scroll_to (menu, menu->scroll_offset);
-  
+
   if (menu->upper_arrow_visible && !menu->tearoff_active)
     {
       y += MENU_SCROLL_ARROW_HEIGHT;
       height -= MENU_SCROLL_ARROW_HEIGHT;
     }
-  
+
   if (menu->lower_arrow_visible && !menu->tearoff_active)
     height -= MENU_SCROLL_ARROW_HEIGHT;
-  
+
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_move_resize (widget->window,
@@ -2428,6 +2449,7 @@ gtk_menu_paint (GtkWidget      *widget,
 		GdkEventExpose *event)
 {
   GtkMenu *menu;
+  GtkMenuPrivate *priv;
   gint width, height;
   gint border_x, border_y;
   guint vertical_padding;
@@ -2436,6 +2458,7 @@ gtk_menu_paint (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
+  priv = gtk_menu_get_private (menu);
 
   gtk_widget_style_get (GTK_WIDGET (menu),
 			"vertical-padding", &vertical_padding,
@@ -2450,30 +2473,29 @@ gtk_menu_paint (GtkWidget      *widget,
     {
       gint arrow_space = MENU_SCROLL_ARROW_HEIGHT - 2 * widget->style->ythickness;
       gint arrow_size = 0.7 * arrow_space;
-	
+
       gtk_paint_box (widget->style,
 		     widget->window,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
 		     NULL, widget, "menu",
 		     0, 0, -1, -1);
+
       if (menu->upper_arrow_visible && !menu->tearoff_active)
 	{
 	  gtk_paint_box (widget->style,
 			 widget->window,
-			 menu->upper_arrow_prelight ?
-			 GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+			 priv->upper_arrow_state,
 			 GTK_SHADOW_OUT,
 			 NULL, widget, "menu",
 			 border_x,
 			 border_y,
 			 width - 2 * border_x,
 			 MENU_SCROLL_ARROW_HEIGHT);
-	  
+
 	  gtk_paint_arrow (widget->style,
 			   widget->window,
-			   menu->upper_arrow_prelight ?
-			   GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+			   priv->upper_arrow_state,
 			   GTK_SHADOW_OUT,
 			   NULL, widget, "menu_scroll_arrow_up",
 			   GTK_ARROW_UP,
@@ -2482,24 +2504,22 @@ gtk_menu_paint (GtkWidget      *widget,
 			   border_y + widget->style->ythickness + (arrow_space - arrow_size)/2,
 			   arrow_size, arrow_size);
 	}
-  
+
       if (menu->lower_arrow_visible && !menu->tearoff_active)
 	{
 	  gtk_paint_box (widget->style,
 			 widget->window,
-			 menu->lower_arrow_prelight ?
-			 GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+			 priv->lower_arrow_state,
 			 GTK_SHADOW_OUT,
 			 NULL, widget, "menu",
 			 border_x,
 			 height - border_y - MENU_SCROLL_ARROW_HEIGHT,
 			 width - 2*border_x,
 			 MENU_SCROLL_ARROW_HEIGHT);
-	  
+
 	  gtk_paint_arrow (widget->style,
 			   widget->window,
-			   menu->lower_arrow_prelight ?
-			   GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+			   priv->lower_arrow_state,
 			   GTK_SHADOW_OUT,
 			   NULL, widget, "menu_scroll_arrow_down",
 			   GTK_ARROW_DOWN,
@@ -2550,18 +2570,46 @@ gtk_menu_show (GtkWidget *widget)
 }
 
 static gboolean
-gtk_menu_button_press (GtkWidget      *widget,
-			 GdkEventButton *event)
+gtk_menu_button_scroll (GtkWidget      *widget,
+                        GdkEventButton *event)
 {
-  /* Don't pop down the menu for releases over scroll arrows
-   */
   if (GTK_IS_MENU (widget))
     {
       GtkMenu *menu = GTK_MENU (widget);
 
-      if (menu->upper_arrow_prelight ||  menu->lower_arrow_prelight)
-	return TRUE;
+      if (menu->upper_arrow_prelight || menu->lower_arrow_prelight)
+        {
+          GtkSettings *settings = gtk_widget_get_settings (widget);
+          gboolean     touchscreen_mode;
+
+          g_object_get (G_OBJECT (settings),
+                        "gtk-touchscreen-mode", &touchscreen_mode,
+                        NULL);
+
+          if (touchscreen_mode)
+            gtk_menu_handle_scrolling (menu,
+                                       event->x_root, event->y_root,
+                                       event->type == GDK_BUTTON_PRESS,
+                                       FALSE);
+
+          return TRUE;
+        }
     }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_menu_button_press (GtkWidget      *widget,
+                       GdkEventButton *event)
+{
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  /* Don't pop down the menu for presses over scroll arrows
+   */
+  if (gtk_menu_button_scroll (widget, event))
+    return TRUE;
 
   return GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
 }
@@ -2570,15 +2618,24 @@ static gboolean
 gtk_menu_button_release (GtkWidget      *widget,
 			 GdkEventButton *event)
 {
-  /* Don't pop down the menu for releases over scroll arrows
-   */
   if (GTK_IS_MENU (widget))
     {
-      GtkMenu *menu = GTK_MENU (widget);
+      GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
 
-      if (menu->upper_arrow_prelight ||  menu->lower_arrow_prelight)
-	return TRUE;
+      if (priv->ignore_button_release)
+        {
+          priv->ignore_button_release = FALSE;
+          return FALSE;
+        }
     }
+
+  if (event->type != GDK_BUTTON_RELEASE)
+    return FALSE;
+
+  /* Don't pop down the menu for releases over scroll arrows
+   */
+  if (gtk_menu_button_scroll (widget, event))
+    return TRUE;
 
   return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
 }
@@ -2797,7 +2854,15 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   gboolean need_enter;
 
   if (GTK_IS_MENU (widget))
-    gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root, TRUE);
+    {
+      GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
+
+      if (priv->ignore_button_release)
+        priv->ignore_button_release = FALSE;
+
+      gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root,
+                                 TRUE, TRUE);
+    }
 
   /* We received the event for one of two reasons:
    *
@@ -2809,7 +2874,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
    * which may be different from 'widget'.
    */
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
-  if (!menu_item || !GTK_IS_MENU_ITEM (menu_item) ||
+  if (!GTK_IS_MENU_ITEM (menu_item) ||
       !GTK_IS_MENU (menu_item->parent))
     return FALSE;
 
@@ -2875,6 +2940,20 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   return FALSE;
 }
 
+static gboolean
+get_double_arrows (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  gboolean        double_arrows;
+
+  gtk_widget_style_get (GTK_WIDGET (menu),
+                        "double-arrows", &double_arrows,
+                        NULL);
+
+  return double_arrows || (priv->initially_pushed_in &&
+                           menu->scroll_offset != 0);
+}
+
 static void
 gtk_menu_scroll_by (GtkMenu *menu, 
 		    gint     step)
@@ -2882,17 +2961,21 @@ gtk_menu_scroll_by (GtkMenu *menu,
   GtkWidget *widget;
   gint offset;
   gint view_width, view_height;
+  gboolean double_arrows;
 
   widget = GTK_WIDGET (menu);
   offset = menu->scroll_offset + step;
+
+  double_arrows = get_double_arrows (menu);
 
   /* If we scroll upward and the non-visible top part
    * is smaller than the scroll arrow it would be
    * pretty stupid to show the arrow and taking more
    * screen space than just scrolling to the top.
    */
-  if ((step < 0) && (offset < MENU_SCROLL_ARROW_HEIGHT))
-    offset = 0;
+  if (!double_arrows)
+    if ((step < 0) && (offset < MENU_SCROLL_ARROW_HEIGHT))
+      offset = 0;
 
   /* Don't scroll over the top if we weren't before: */
   if ((menu->scroll_offset >= 0) && (offset < 0))
@@ -2903,7 +2986,13 @@ gtk_menu_scroll_by (GtkMenu *menu,
   /* Don't scroll past the bottom if we weren't before: */
   if (menu->scroll_offset > 0)
     view_height -= MENU_SCROLL_ARROW_HEIGHT;
-  
+
+  /* When both arrows are always shown, reduce
+   * view height even more.
+   */
+  if (double_arrows)
+    view_height -= MENU_SCROLL_ARROW_HEIGHT;
+
   if ((menu->scroll_offset + view_height <= widget->requisition.height) &&
       (offset + view_height > widget->requisition.height))
     offset = widget->requisition.height - view_height;
@@ -2912,19 +3001,100 @@ gtk_menu_scroll_by (GtkMenu *menu,
     gtk_menu_scroll_to (menu, offset);
 }
 
+static void
+gtk_menu_do_timeout_scroll (GtkMenu  *menu,
+                            gboolean  touchscreen_mode)
+{
+  gboolean upper_visible;
+  gboolean lower_visible;
+
+  upper_visible = menu->upper_arrow_visible;
+  lower_visible = menu->lower_arrow_visible;
+
+  gtk_menu_scroll_by (menu, menu->scroll_step);
+
+  if (touchscreen_mode &&
+      (upper_visible != menu->upper_arrow_visible ||
+       lower_visible != menu->lower_arrow_visible))
+    {
+      /* We are about to hide a scroll arrow while the mouse is pressed,
+       * this would cause the uncovered menu item to be activated on button
+       * release. Therefore we need to ignore button release here
+       */
+      GTK_MENU_SHELL (menu)->ignore_enter = TRUE;
+      gtk_menu_get_private (menu)->ignore_button_release = TRUE;
+    }
+}
+
 static gboolean
 gtk_menu_scroll_timeout (gpointer  data)
 {
-  GtkMenu *menu;
+  GtkMenu     *menu;
+  GtkSettings *settings;
+  gboolean     touchscreen_mode;
 
   GDK_THREADS_ENTER ();
 
   menu = GTK_MENU (data);
-  gtk_menu_scroll_by (menu, menu->scroll_step);
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+  g_object_get (settings,
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
+
+  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
 
   GDK_THREADS_LEAVE ();
 
   return TRUE;
+}
+
+static gboolean
+gtk_menu_scroll_timeout_initial (gpointer data)
+{
+  GtkMenu     *menu;
+  GtkSettings *settings;
+  guint        timeout;
+  gboolean     touchscreen_mode;
+
+  GDK_THREADS_ENTER ();
+
+  menu = GTK_MENU (data);
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+  g_object_get (settings,
+                "gtk-timeout-repeat", &timeout,
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
+
+  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
+
+  gtk_menu_remove_scroll_timeout (menu);
+
+  menu->timeout_id = g_timeout_add (timeout, gtk_menu_scroll_timeout, menu);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+gtk_menu_start_scrolling (GtkMenu *menu)
+{
+  GtkSettings *settings;
+  guint        timeout;
+  gboolean     touchscreen_mode;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+  g_object_get (settings,
+                "gtk-timeout-repeat", &timeout,
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
+
+  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
+
+  menu->timeout_id = g_timeout_add (timeout, gtk_menu_scroll_timeout_initial,
+                                    menu);
 }
 
 static gboolean
@@ -2950,11 +3120,13 @@ gtk_menu_scroll (GtkWidget	*widget,
 
 static void
 gtk_menu_handle_scrolling (GtkMenu *menu,
-			   gint x,
-			   gint y,
-			   gboolean enter)
+			   gint     x,
+			   gint     y,
+			   gboolean enter,
+                           gboolean motion)
 {
   GtkMenuShell *menu_shell;
+  GtkMenuPrivate *priv;
   gint width, height;
   gint border;
   GdkRectangle rect;
@@ -2963,15 +3135,23 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   guint vertical_padding;
   gint top_x, top_y;
   gint win_x, win_y;
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+  gboolean touchscreen_mode;
+
+  priv = gtk_menu_get_private (menu);
 
   menu_shell = GTK_MENU_SHELL (menu);
 
   gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
+  g_object_get (G_OBJECT (settings),
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
+
   gtk_widget_style_get (GTK_WIDGET (menu),
 			"vertical-padding", &vertical_padding,
 			NULL);
-  
+
   border = GTK_CONTAINER (menu)->border_width +
     GTK_WIDGET (menu)->style->ythickness + vertical_padding;
 
@@ -2980,83 +3160,193 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   y -= top_y;
 
   gdk_window_get_position (GTK_WIDGET (menu)->window, &win_x, &win_y);
-  
-  if (menu->upper_arrow_visible && !menu->tearoff_active)
-    {
-      rect.x = win_x;
-      rect.y = win_y;
-      rect.width = width;
-      rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
-      
-      in_arrow = FALSE;
-      if ((x >= rect.x) && (x < rect.x + rect.width) &&
-	  (y >= rect.y) && (y < rect.y + rect.height))
-	{
-	  in_arrow = TRUE;
-	  scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
-	}
-	
-      if (enter && in_arrow &&
-	  (!menu->upper_arrow_prelight || menu->scroll_fast != scroll_fast))
-	{
-	  menu->upper_arrow_prelight = TRUE;
-	  menu->scroll_fast = scroll_fast;
-	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
-	  
-	  /* Deselect the active item so that any submenus are poped down */
-	  gtk_menu_shell_deselect (menu_shell);
 
-	  gtk_menu_remove_scroll_timeout (menu);
-	  menu->scroll_step = (scroll_fast) ? -MENU_SCROLL_STEP2 : -MENU_SCROLL_STEP1;
-	  menu->timeout_id = g_timeout_add ((scroll_fast) ? MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
-					    gtk_menu_scroll_timeout,
-					    menu);
-	}
-      else if (!enter && !in_arrow && menu->upper_arrow_prelight)
-	{
-	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
-	  
-	  gtk_menu_stop_scrolling (menu);
-	}
+  /*  upper arrow handling  */
+
+  rect.x = win_x;
+  rect.y = win_y;
+  rect.width = width;
+  rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
+
+  in_arrow = FALSE;
+  if (menu->upper_arrow_visible && !menu->tearoff_active &&
+      (x >= rect.x) && (x < rect.x + rect.width) &&
+      (y >= rect.y) && (y < rect.y + rect.height))
+    {
+      in_arrow = TRUE;
     }
-  
-  if (menu->lower_arrow_visible && !menu->tearoff_active)
+
+  if (touchscreen_mode)
+    menu->upper_arrow_prelight = in_arrow;
+
+  if (priv->upper_arrow_state != GTK_STATE_INSENSITIVE)
     {
-      rect.x = win_x;
-      rect.y = win_y + height - border - MENU_SCROLL_ARROW_HEIGHT;
-      rect.width = width;
-      rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
+      if (menu->upper_arrow_visible && !menu->tearoff_active)
+        {
+          if (touchscreen_mode)
+            {
+              if (enter && menu->upper_arrow_prelight &&
+                  menu->timeout_id == 0)
+                {
+                  /* Deselect the active item so that
+                   * any submenus are popped down
+                   */
+                  gtk_menu_shell_deselect (menu_shell);
 
-      in_arrow = FALSE;
-      if ((x >= rect.x) && (x < rect.x + rect.width) &&
-	  (y >= rect.y) && (y < rect.y + rect.height))
-	{
-	  in_arrow = TRUE;
-	  scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
-	}
+                  gtk_menu_remove_scroll_timeout (menu);
+                  menu->scroll_step = -MENU_SCROLL_STEP2; /* always fast */
 
-      if (enter && in_arrow &&
-	  (!menu->lower_arrow_prelight || menu->scroll_fast != scroll_fast))
-	{
-	  menu->lower_arrow_prelight = TRUE;
-	  menu->scroll_fast = scroll_fast;
-	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
+                  if (!motion)
+                    {
+                      /* Only do stuff on click. */
+                      gtk_menu_start_scrolling (menu);
+                      priv->upper_arrow_state = GTK_STATE_ACTIVE;
+                    }
 
-	  /* Deselect the active item so that any submenus are poped down */
-	  gtk_menu_shell_deselect (menu_shell);
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+                }
+              else if (!enter)
+                {
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
 
-	  gtk_menu_remove_scroll_timeout (menu);
-	  menu->scroll_step = (scroll_fast) ? MENU_SCROLL_STEP2 : MENU_SCROLL_STEP1;
-	  menu->timeout_id = g_timeout_add ((scroll_fast) ? MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
-					    gtk_menu_scroll_timeout,
-					    menu);
-	}
-      else if (!enter && !in_arrow && menu->lower_arrow_prelight)
-	{
-	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
-	  
-	  gtk_menu_stop_scrolling (menu);
-	}
+                  gtk_menu_stop_scrolling (menu);
+                }
+            }
+          else /* !touchscreen_mode */
+            {
+              scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
+
+              if (enter && in_arrow &&
+                  (!menu->upper_arrow_prelight ||
+                   menu->scroll_fast != scroll_fast))
+                {
+                  menu->upper_arrow_prelight = TRUE;
+                  menu->scroll_fast = scroll_fast;
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+
+                  /* Deselect the active item so that
+                   * any submenus are popped down
+                   */
+                  gtk_menu_shell_deselect (menu_shell);
+
+                  gtk_menu_remove_scroll_timeout (menu);
+                  menu->scroll_step = scroll_fast ?
+                    -MENU_SCROLL_STEP2 : -MENU_SCROLL_STEP1;
+
+                  menu->timeout_id =
+                    g_timeout_add (scroll_fast ?
+                                   MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
+                                   gtk_menu_scroll_timeout, menu);
+                }
+              else if (!enter && !in_arrow && menu->upper_arrow_prelight)
+                {
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+
+                  gtk_menu_stop_scrolling (menu);
+                }
+            }
+        }
+
+      priv->upper_arrow_state = menu->upper_arrow_prelight ?
+        GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
+    }
+
+  /*  lower arrow handling  */
+
+  rect.x = win_x;
+  rect.y = win_y + height - border - MENU_SCROLL_ARROW_HEIGHT;
+  rect.width = width;
+  rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
+
+  in_arrow = FALSE;
+  if (menu->lower_arrow_visible && !menu->tearoff_active &&
+      (x >= rect.x) && (x < rect.x + rect.width) &&
+      (y >= rect.y) && (y < rect.y + rect.height))
+    {
+      in_arrow = TRUE;
+    }
+
+  if (touchscreen_mode)
+    menu->lower_arrow_prelight = in_arrow;
+
+  if (priv->lower_arrow_state != GTK_STATE_INSENSITIVE)
+    {
+      if (menu->lower_arrow_visible && !menu->tearoff_active)
+        {
+          if (touchscreen_mode)
+            {
+              if (enter && menu->lower_arrow_prelight &&
+                  menu->timeout_id == 0)
+                {
+                  /* Deselect the active item so that
+                   * any submenus are popped down
+                   */
+                  gtk_menu_shell_deselect (menu_shell);
+
+                  gtk_menu_remove_scroll_timeout (menu);
+                  menu->scroll_step = MENU_SCROLL_STEP2; /* always fast */
+
+                  if (!motion)
+                    {
+                      /* Only do stuff on click. */
+                      gtk_menu_start_scrolling (menu);
+                      priv->lower_arrow_state = GTK_STATE_ACTIVE;
+                    }
+
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+                }
+              else if (!enter)
+                {
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+
+                  gtk_menu_stop_scrolling (menu);
+                }
+            }
+          else /* !touchscreen_mode */
+            {
+              scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
+
+              if (enter && in_arrow &&
+                  (!menu->lower_arrow_prelight ||
+                   menu->scroll_fast != scroll_fast))
+                {
+                  menu->lower_arrow_prelight = TRUE;
+                  menu->scroll_fast = scroll_fast;
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+
+                  /* Deselect the active item so that
+                   * any submenus are popped down
+                   */
+                  gtk_menu_shell_deselect (menu_shell);
+
+                  gtk_menu_remove_scroll_timeout (menu);
+                  menu->scroll_step = scroll_fast ?
+                    MENU_SCROLL_STEP2 : MENU_SCROLL_STEP1;
+
+                  menu->timeout_id =
+                    g_timeout_add (scroll_fast ?
+                                   MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
+                                   gtk_menu_scroll_timeout, menu);
+                }
+              else if (!enter && !in_arrow && menu->lower_arrow_prelight)
+                {
+                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                              &rect, FALSE);
+
+                  gtk_menu_stop_scrolling (menu);
+                }
+            }
+        }
+
+      priv->lower_arrow_state = menu->lower_arrow_prelight ?
+        GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
     }
 }
 
@@ -3064,22 +3354,29 @@ static gboolean
 gtk_menu_enter_notify (GtkWidget        *widget,
 		       GdkEventCrossing *event)
 {
+  GtkSettings *settings = gtk_widget_get_settings (widget);
   GtkWidget *menu_item;
+  gboolean touchscreen_mode;
+
+  g_object_get (G_OBJECT (settings),
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
 
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
-  if (widget && GTK_IS_MENU (widget))
+  if (GTK_IS_MENU (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
       if (!menu_shell->ignore_enter)
-	gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root, TRUE);
+	gtk_menu_handle_scrolling (GTK_MENU (widget),
+                                   event->x_root, event->y_root, TRUE, TRUE);
     }
 
-  if (menu_item && GTK_IS_MENU_ITEM (menu_item))
+  if (!touchscreen_mode && GTK_IS_MENU_ITEM (menu_item))
     {
       GtkWidget *menu = menu_item->parent;
       
-      if (menu && GTK_IS_MENU (menu))
+      if (GTK_IS_MENU (menu))
 	{
 	  GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (menu));
 	  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
@@ -3115,8 +3412,9 @@ gtk_menu_enter_notify (GtkWidget        *widget,
    * will not correspond to the event widget's parent.  Check to see
    * if we are in the parent's navigation region.
    */
-  if (menu_item && GTK_IS_MENU_ITEM (menu_item) && GTK_IS_MENU (menu_item->parent) &&
-      gtk_menu_navigating_submenu (GTK_MENU (menu_item->parent), event->x_root, event->y_root))
+  if (GTK_IS_MENU_ITEM (menu_item) && GTK_IS_MENU (menu_item->parent) &&
+      gtk_menu_navigating_submenu (GTK_MENU (menu_item->parent),
+                                   event->x_root, event->y_root))
     return TRUE;
 
   return GTK_WIDGET_CLASS (parent_class)->enter_notify_event (widget, event); 
@@ -3137,11 +3435,11 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
     return TRUE; 
 
-  gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE);
-  
+  gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
+
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
   
-  if (!event_widget || !GTK_IS_MENU_ITEM (event_widget))
+  if (!GTK_IS_MENU_ITEM (event_widget))
     return TRUE;
   
   menu_item = GTK_MENU_ITEM (event_widget); 
@@ -3429,7 +3727,6 @@ gtk_menu_position (GtkMenu *menu)
   gint x, y;
   gint scroll_offset;
   gint menu_height;
-  gboolean push_in;
   GdkScreen *screen;
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
@@ -3463,11 +3760,12 @@ gtk_menu_position (GtkMenu *menu)
   private = gtk_menu_get_private (menu);
   private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
-  push_in = FALSE;
+  private->initially_pushed_in = FALSE;
   
   if (menu->position_func)
     {
-      (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
+      (* menu->position_func) (menu, &x, &y, &private->initially_pushed_in,
+                               menu->position_func_data);
       if (private->monitor_num < 0) 
 	private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
@@ -3593,7 +3891,7 @@ gtk_menu_position (GtkMenu *menu)
 
   scroll_offset = 0;
 
-  if (push_in)
+  if (private->initially_pushed_in)
     {
       menu_height = GTK_WIDGET (menu)->requisition.height;
 
@@ -3658,10 +3956,20 @@ gtk_menu_remove_scroll_timeout (GtkMenu *menu)
 static void
 gtk_menu_stop_scrolling (GtkMenu *menu)
 {
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+  gboolean touchscreen_mode;
+
   gtk_menu_remove_scroll_timeout (menu);
 
-  menu->upper_arrow_prelight = FALSE;
-  menu->lower_arrow_prelight = FALSE;
+  g_object_get (G_OBJECT (settings),
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
+
+  if (!touchscreen_mode)
+    {
+      menu->upper_arrow_prelight = FALSE;
+      menu->lower_arrow_prelight = FALSE;
+    }
 }
 
 static void
@@ -3672,10 +3980,10 @@ gtk_menu_scroll_to (GtkMenu *menu,
   gint x, y;
   gint view_width, view_height;
   gint border_width;
-  gboolean last_visible;
   gint menu_height;
   guint vertical_padding;
   guint horizontal_padding;
+  gboolean double_arrows;
 
   widget = GTK_WIDGET (menu);
 
@@ -3694,32 +4002,103 @@ gtk_menu_scroll_to (GtkMenu *menu,
   view_height = widget->allocation.height;
 
   gtk_widget_style_get (GTK_WIDGET (menu),
- 			"vertical-padding", &vertical_padding,
+                        "vertical-padding", &vertical_padding,
                         "horizontal-padding", &horizontal_padding,
- 			NULL);
-  
+                        NULL);
+
+  double_arrows = get_double_arrows (menu);
+
   border_width = GTK_CONTAINER (menu)->border_width;
   view_width -= (border_width + widget->style->xthickness + horizontal_padding) * 2;
   view_height -= (border_width + widget->style->ythickness + vertical_padding) * 2;
   menu_height = widget->requisition.height -
-      (border_width + widget->style->ythickness + vertical_padding) * 2;
+    (border_width + widget->style->ythickness + vertical_padding) * 2;
 
   x = border_width + widget->style->xthickness + horizontal_padding;
   y = border_width + widget->style->ythickness + vertical_padding;
 
-  if (!menu->tearoff_active)
+  if (double_arrows && !menu->tearoff_active)
     {
+      if (view_height < menu_height               ||
+          (offset > 0 && menu->scroll_offset > 0) ||
+          (offset < 0 && menu->scroll_offset < 0))
+        {
+          GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+          GtkStateType    upper_arrow_previous_state = priv->upper_arrow_state;
+          GtkStateType    lower_arrow_previous_state = priv->lower_arrow_state;
+
+          if (!menu->upper_arrow_visible || !menu->lower_arrow_visible)
+            gtk_widget_queue_draw (GTK_WIDGET (menu));
+
+          view_height -= 2 * MENU_SCROLL_ARROW_HEIGHT;
+          y += MENU_SCROLL_ARROW_HEIGHT;
+
+          menu->upper_arrow_visible = menu->lower_arrow_visible = TRUE;
+
+          if (offset <= 0)
+            priv->upper_arrow_state = GTK_STATE_INSENSITIVE;
+          else
+            priv->upper_arrow_state = menu->upper_arrow_prelight ?
+              GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
+
+          if (offset >= menu_height - view_height)
+            priv->lower_arrow_state = GTK_STATE_INSENSITIVE;
+          else
+            priv->lower_arrow_state = menu->lower_arrow_prelight ?
+              GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
+
+          if ((priv->upper_arrow_state != upper_arrow_previous_state) ||
+              (priv->lower_arrow_state != lower_arrow_previous_state))
+            gtk_widget_queue_draw (GTK_WIDGET (menu));
+
+          if (upper_arrow_previous_state != GTK_STATE_INSENSITIVE &&
+              priv->upper_arrow_state == GTK_STATE_INSENSITIVE)
+            {
+              /* At the upper border, possibly remove timeout */
+              if (menu->scroll_step < 0)
+                {
+                  gtk_menu_stop_scrolling (menu);
+                  gtk_widget_queue_draw (GTK_WIDGET (menu));
+                }
+            }
+
+          if (lower_arrow_previous_state != GTK_STATE_INSENSITIVE &&
+              priv->lower_arrow_state == GTK_STATE_INSENSITIVE)
+            {
+              /* At the lower border, possibly remove timeout */
+              if (menu->scroll_step > 0)
+                {
+                  gtk_menu_stop_scrolling (menu);
+                  gtk_widget_queue_draw (GTK_WIDGET (menu));
+                }
+            }
+        }
+      else if (menu->upper_arrow_visible || menu->lower_arrow_visible)
+        {
+          offset = 0;
+
+          menu->upper_arrow_visible = menu->lower_arrow_visible = FALSE;
+          menu->upper_arrow_prelight = menu->lower_arrow_prelight = FALSE;
+
+          gtk_menu_stop_scrolling (menu);
+          gtk_widget_queue_draw (GTK_WIDGET (menu));
+        }
+    }
+  else if (!menu->tearoff_active)
+    {
+      gboolean last_visible;
+
       last_visible = menu->upper_arrow_visible;
       menu->upper_arrow_visible = offset > 0;
       
       if (menu->upper_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
       
-      if ( (last_visible != menu->upper_arrow_visible) &&
-	   !menu->upper_arrow_visible)
+      if ((last_visible != menu->upper_arrow_visible) &&
+          !menu->upper_arrow_visible)
 	{
-	  menu->upper_arrow_prelight = FALSE;
-	  
+          menu->upper_arrow_prelight = FALSE;
+
 	  /* If we hid the upper arrow, possibly remove timeout */
 	  if (menu->scroll_step < 0)
 	    {
@@ -3734,11 +4113,11 @@ gtk_menu_scroll_to (GtkMenu *menu,
       if (menu->lower_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
       
-      if ( (last_visible != menu->lower_arrow_visible) &&
+      if ((last_visible != menu->lower_arrow_visible) &&
 	   !menu->lower_arrow_visible)
 	{
-	  menu->lower_arrow_prelight = FALSE;
-	  
+          menu->lower_arrow_prelight = FALSE;
+
 	  /* If we hid the lower arrow, possibly remove timeout */
 	  if (menu->scroll_step > 0)
 	    {
@@ -3825,14 +4204,17 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 			    &child_offset, &child_height, &last_child))
     {
       guint vertical_padding;
-      
+      gboolean double_arrows;
+
       y = menu->scroll_offset;
       gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
       gtk_widget_style_get (GTK_WIDGET (menu),
 			    "vertical-padding", &vertical_padding,
-			    NULL);
-			    
+                            NULL);
+
+      double_arrows = get_double_arrows (menu);
+
       height -= 2*GTK_CONTAINER (menu)->border_width + 2*GTK_WIDGET (menu)->style->ythickness + 2*vertical_padding;
       
       if (child_offset < y)
@@ -3853,11 +4235,11 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 	  if (child_offset + child_height > y + height - arrow_height)
 	    {
 	      arrow_height = 0;
-	      if (!last_child && !menu->tearoff_active)
+	      if ((!last_child && !menu->tearoff_active) || double_arrows)
 		arrow_height += MENU_SCROLL_ARROW_HEIGHT;
-	      
+
 	      y = child_offset + child_height - height + arrow_height;
-	      if ((y > 0) && !menu->tearoff_active)
+	      if (((y > 0) && !menu->tearoff_active) || double_arrows)
 		{
 		  /* Need upper arrow */
 		  arrow_height += MENU_SCROLL_ARROW_HEIGHT;
