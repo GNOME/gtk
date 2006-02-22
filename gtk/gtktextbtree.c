@@ -2663,8 +2663,7 @@ ensure_not_off_end (GtkTextBTree *tree,
                     GtkTextLineSegment *mark,
                     GtkTextIter *iter)
 {
-  if (gtk_text_iter_get_line (iter) ==
-      _gtk_text_btree_line_count (tree))
+  if (gtk_text_iter_get_line (iter) == _gtk_text_btree_line_count (tree))
     gtk_text_iter_backward_char (iter);
 }
 
@@ -3343,13 +3342,8 @@ ensure_end_iter_line (GtkTextBTree *tree)
 {
   if (tree->end_iter_line_stamp != tree->chars_changed_stamp)
     {
-      int n_lines;
-      int real_line;
-
-      /* n_lines is without the magic line at the end */
-      n_lines = _gtk_text_btree_line_count (tree);
- 
-      g_assert (n_lines >= 1);
+       /* n_lines is without the magic line at the end */
+      g_assert (_gtk_text_btree_line_count (tree) >= 1);
 
       tree->end_iter_line = _gtk_text_btree_get_line_no_last (tree, -1, &real_line);
       
