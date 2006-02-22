@@ -168,6 +168,7 @@ static gint gtk_notebook_button_press        (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static gint gtk_notebook_button_release      (GtkWidget        *widget,
 					      GdkEventButton   *event);
+static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
 static gint gtk_notebook_enter_notify        (GtkWidget        *widget,
 					      GdkEventCrossing *event);
 static gint gtk_notebook_leave_notify        (GtkWidget        *widget,
@@ -375,6 +376,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->scroll_event = gtk_notebook_scroll;
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
+  widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
@@ -1010,6 +1012,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_scroll
  * gtk_notebook_button_press
  * gtk_notebook_button_release
+ * gtk_notebook_popup_menu
  * gtk_notebook_enter_notify
  * gtk_notebook_leave_notify
  * gtk_notebook_motion_notify
@@ -1864,6 +1867,59 @@ gtk_notebook_button_press (GtkWidget      *widget,
     }
   
   return TRUE;
+}
+
+static void
+popup_position_func (GtkMenu  *menu,
+                     gint     *x,
+                     gint     *y,
+                     gboolean *push_in,
+                     gpointer  data)
+{
+  GtkNotebook *notebook = data;
+  GtkWidget *w;
+  GtkRequisition requisition;
+
+  if (notebook->focus_tab)
+    {
+      GtkNotebookPage *page;
+
+      page = notebook->focus_tab->data;
+      w = page->tab_label;
+    }
+  else
+   {
+     w = GTK_WIDGET (notebook);
+   }
+
+  gdk_window_get_origin (w->window, x, y);
+  gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+
+  if (gtk_widget_get_direction (w) == GTK_TEXT_DIR_RTL)
+    *x += w->allocation.x + w->allocation.width - requisition.width;
+  else
+    *x += w->allocation.x;
+
+  *y += w->allocation.y + w->allocation.height;
+
+  *push_in = FALSE;
+}
+
+static gboolean
+gtk_notebook_popup_menu (GtkWidget *widget)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+  if (notebook->menu)
+    {
+      gtk_menu_popup (GTK_MENU (notebook->menu), NULL, NULL, 
+		      popup_position_func, notebook,
+		      0, gtk_get_current_event_time ());
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (notebook->menu), FALSE);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void 
