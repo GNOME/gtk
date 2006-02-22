@@ -1,7 +1,12 @@
+2006-02-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c: Change Close buttons to GTK_RESPONSE_CANCEL
+	so Escape works. (#331940, Daniel Drake)
+
 2006-02-20  Matthias Clasen  <mclasen@redhat.com>
 
-        * gtk/gtknotebook.c: Properly update internal state
-        when child visibility changes.  (#331785, Sebastien Bacher)
+	* gtk/gtknotebook.c: Properly update internal state
+	when child visibility changes.  (#331785, Sebastien Bacher)
 
 	* gdk/gdkgc.c (_gdk_gc_update_context): Obtain the
 	background color from the gc when it is needed.  (#331820)

@@ -502,8 +502,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_show (hbox);
 
   /* Add the OK button */
-  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
-  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CLOSE);
+  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
+  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   /* Add the credits button */
   button = gtk_button_new_with_mnemonic (_("C_redits"));
@@ -2033,13 +2033,13 @@ display_credits_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("Credits"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   
   priv->credits_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -2105,12 +2105,12 @@ display_license_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("License"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   priv->license_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
