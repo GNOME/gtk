@@ -395,7 +395,7 @@ check_invariants (const GtkTextIter *iter)
     _gtk_text_iter_check (iter);
 }
 #else
-#define check_invariants (x)
+#define check_invariants(x) 
 #endif
 
 /**
@@ -2396,7 +2396,6 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
         {
           const char *p;
           gint new_byte_offset;
-          gint i;
 
           p = g_utf8_offset_to_pointer (real->segment->body.chars,
                                         real->segment_char_offset);
