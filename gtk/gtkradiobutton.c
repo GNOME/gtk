@@ -654,7 +654,11 @@ gtk_radio_button_clicked (GtkButton *button)
     gtk_widget_set_state (GTK_WIDGET (button), new_state);
 
   if (toggled)
-    gtk_toggle_button_toggled (toggle_button);
+    {
+      gtk_toggle_button_toggled (toggle_button);
+
+      g_object_notify (G_OBJECT (toggle_button), "active");
+    }
 
   _gtk_button_set_depressed (button, depressed);
 
