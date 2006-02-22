@@ -3342,6 +3342,8 @@ ensure_end_iter_line (GtkTextBTree *tree)
 {
   if (tree->end_iter_line_stamp != tree->chars_changed_stamp)
     {
+      gint real_line;
+	
        /* n_lines is without the magic line at the end */
       g_assert (_gtk_text_btree_line_count (tree) >= 1);
 
