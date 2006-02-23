@@ -395,7 +395,7 @@ check_invariants (const GtkTextIter *iter)
     _gtk_text_iter_check (iter);
 }
 #else
-#define check_invariants (x)
+#define check_invariants(x)
 #endif
 
 /**

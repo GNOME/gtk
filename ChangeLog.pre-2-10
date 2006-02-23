@@ -1,3 +1,9 @@
+2006-02-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextiter.c: Fix macro declaration
+
+	* gtk/gtkaboutdialog.c: Remove an accidentally included function.
+
 2006-02-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbtree.c: 
