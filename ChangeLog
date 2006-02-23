@@ -1,5 +1,8 @@
 2006-02-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/Makefile.am: 
+	* tests/testnotebookdnd.c: Add notebook DND tests.
+
 	* gtk/gtknotebook.h: Add a reorder_tab keynav signal and an
 	insert_page vfunc to GtkNotebook.
 
