@@ -1,5 +1,17 @@
 2006-02-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.h: Add a reorder_tab keynav signal and an
+	insert_page vfunc to GtkNotebook.
+
+	* gtk/gtk.symbols:
+	* gtk/gtknotebook.c: Support notebook DND. New API includes
+	gtk_notebook_set_window_creation_hook, 
+	gtk_notebook_[gs]et_group_id,
+	gtk_notebook_[gs]et_tab_reorderable, 
+	gtk_notebook_[gs]et_tab_detachable (#73240, Carlos Garnacho)
+
+2006-02-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextiter.c: Fix macro declaration
 
 	* gtk/gtkaboutdialog.c: Remove an accidentally included function.

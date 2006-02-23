@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -104,13 +105,26 @@ struct _GtkNotebookClass
                                 gint               offset);
   void (* move_focus_out)      (GtkNotebook       *notebook,
 				GtkDirectionType   direction);
+  void (* reorder_tab)         (GtkNotebook       *notebook,
+				GtkDirectionType   direction,
+				gboolean           move_to_last);
 
-  /* Padding for future expansion */
+  /* More vfuncs */
+  gint (* insert_page)         (GtkNotebook       *notebook,
+			        GtkWidget         *child,
+				GtkWidget         *tab_label,
+				GtkWidget         *menu_label,
+				gint               position);
+
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
+
+typedef GtkNotebook* (*GtkNotebookWindowCreationFunc) (GtkNotebook *source,
+                                                       GtkWidget   *page,
+                                                       gint         x,
+                                                       gint         y,
+                                                       gpointer     data);
 
 /***********************************************************
  *           Creation, insertion, deletion                 *
@@ -143,6 +157,16 @@ gint gtk_notebook_insert_page_menu  (GtkNotebook *notebook,
 				     gint         position);
 void gtk_notebook_remove_page       (GtkNotebook *notebook,
 				     gint         page_num);
+
+/***********************************************************
+ *           Tabs drag and drop                            *
+ ***********************************************************/
+
+void gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
+					    gpointer                       data);
+void gtk_notebook_set_group_id             (GtkNotebook *notebook,
+					    gint         group_id);
+gint gtk_notebook_get_group_id             (GtkNotebook *notebook);
 
 /***********************************************************
  *            query, set current NoteebookPage             *
@@ -232,6 +256,16 @@ void gtk_notebook_set_tab_label_packing   (GtkNotebook *notebook,
 void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gint         position);
+gboolean gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
+					   GtkWidget   *child);
+void gtk_notebook_set_tab_reorderable     (GtkNotebook *notebook,
+					   GtkWidget   *child,
+					   gboolean     reorderable);
+gboolean gtk_notebook_get_tab_detachable  (GtkNotebook *notebook,
+					   GtkWidget   *child);
+void gtk_notebook_set_tab_detachable      (GtkNotebook *notebook,
+					   GtkWidget   *child,
+					   gboolean     reorderable);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
