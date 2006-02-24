@@ -1,3 +1,10 @@
+Fri Feb 17 14:20:29 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtktreemodel.h: 
+	* gtk/gtktextbtree.h: added G_GNUC_WARN_UNUSED_RESULT warnings for
+	iterator functions, to avoid invalid iterators go unnoticed,
+	suggested by Markku Vire <markku.vire@movial.fi>.
+
 2006-02-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/Makefile.am: 

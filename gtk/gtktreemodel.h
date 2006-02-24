@@ -136,8 +136,8 @@ GType        gtk_tree_path_get_type         (void) G_GNUC_CONST;
 gint         gtk_tree_path_compare          (const GtkTreePath *a,
 					     const GtkTreePath *b);
 void         gtk_tree_path_next             (GtkTreePath       *path);
-gboolean     gtk_tree_path_prev             (GtkTreePath       *path);
-gboolean     gtk_tree_path_up               (GtkTreePath       *path);
+gboolean     gtk_tree_path_prev             (GtkTreePath       *path) G_GNUC_WARN_UNUSED_RESULT;
+gboolean     gtk_tree_path_up               (GtkTreePath       *path) G_GNUC_WARN_UNUSED_RESULT;
 void         gtk_tree_path_down             (GtkTreePath       *path);
 
 gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
@@ -191,14 +191,14 @@ GType             gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 /* Iterator movement */
 gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
-						  GtkTreePath  *path);
+						  GtkTreePath  *path) G_GNUC_WARN_UNUSED_RESULT;
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
-						       const gchar  *path_string);
+						       const gchar  *path_string) G_GNUC_WARN_UNUSED_RESULT;
 gchar *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                                        GtkTreeIter  *iter);
 gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
-						  GtkTreeIter  *iter);
+						  GtkTreeIter  *iter) G_GNUC_WARN_UNUSED_RESULT;
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,
@@ -206,10 +206,10 @@ void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,
 						  gint          column,
 						  GValue       *value);
 gboolean          gtk_tree_model_iter_next       (GtkTreeModel *tree_model,
-						  GtkTreeIter  *iter);
+						  GtkTreeIter  *iter) G_GNUC_WARN_UNUSED_RESULT;
 gboolean          gtk_tree_model_iter_children   (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
-						  GtkTreeIter  *parent);
+						  GtkTreeIter  *parent) G_GNUC_WARN_UNUSED_RESULT;
 gboolean          gtk_tree_model_iter_has_child  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 gint              gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
@@ -217,10 +217,10 @@ gint              gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_iter_nth_child  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreeIter  *parent,
-						  gint          n);
+						  gint          n) G_GNUC_WARN_UNUSED_RESULT;
 gboolean          gtk_tree_model_iter_parent     (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
-						  GtkTreeIter  *child);
+						  GtkTreeIter  *child) G_GNUC_WARN_UNUSED_RESULT;
 void              gtk_tree_model_ref_node        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 void              gtk_tree_model_unref_node      (GtkTreeModel *tree_model,
