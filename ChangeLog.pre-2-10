@@ -1,3 +1,9 @@
+Thu Feb 23 13:28:21 2006  Tim Janik  <timj@imendio.com>
+
+	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale): remove unconditional
+	warnings about missing X locale support. Gdk properly handles this
+	situation anyway.
+
 Fri Feb 17 14:20:29 2006  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtktreemodel.h: 
