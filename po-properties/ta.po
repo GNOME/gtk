@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2004-02-21 18:21-0600\n"
 "Last-Translator: Dinesh Nadarajah <dinesh_list@sbcglobal.net>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"
@@ -89,11 +89,11 @@ msgstr "கொடா நிலை காட்சி(திரை)"
 msgid "The default display for GDK"
 msgstr ""
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "திரை"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "மரக்-காட்சியின் படிமம்"
@@ -631,7 +631,7 @@ msgstr "இடைவெளி"
 msgid "The amount of space between children"
 msgstr "The amount of space between children."
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
@@ -672,18 +672,18 @@ msgstr ""
 msgid "Pack type"
 msgstr "அடுக்கும் வகை"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "இடம்"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 #, fuzzy
 msgid "The index of the child in the parent"
 msgstr "தற்போதைய பக்கத்தின் சுட்டு"
@@ -1508,39 +1508,39 @@ msgstr ""
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "பட்டி உருப்படி தேர்வுசெய்யப்பட்டுள்ளதா"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 #, fuzzy
 msgid "Use alpha"
 msgstr "Use markup"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "தலைப்பு"
 
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 #, fuzzy
 msgid "The title of the color selection dialog"
 msgstr "சாளரத்தின் தலைப்பு"
 
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr "தற்போதைய வண்ணம்"
 
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 #, fuzzy
 msgid "The selected color"
 msgstr "தற்போதைய வண்ணம்"
 
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr "தற்போதைய Alpha"
 
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 #, fuzzy
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "தற்போதைய ஒளிப் புகாமை மதிப்பு (0 fully transparent, 65535 fully opaque)"
@@ -2942,76 +2942,76 @@ msgid ""
 msgstr ""
 "பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "பக்கம்"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 msgid "The index of the current page"
 msgstr "தற்போதைய பக்கத்தின் சுட்டு"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr "தத்தல் இடம்"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 msgid "Which side of the notebook holds the tabs"
 msgstr "தத்தல் இருக்குமிடம் புத்தகத்தின் எப்பக்கத்தில்"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr "தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 msgid "Width of the border around the tab labels"
 msgstr "தத்தல் அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr "கிடை தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 msgid "Width of the horizontal border of tab labels"
 msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள கிடை எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr "நெடு தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 msgid "Width of the vertical border of tab labels"
 msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள நெடு எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr "தத்தல்களைக் காண்பி"
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 msgid "Whether tabs should be shown or not"
 msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr "எல்லைக் காண்பி"
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 msgid "Whether the border should be shown or not"
 msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr "திரை உருளலக்கூடியது"
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 #, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "மெய்யானால், கூடிய தத்தல்கள் இருந்தால் உருளல் அம்புகள் காண்பிக்கப்படும்"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr "Enable Popup"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3019,86 +3019,86 @@ msgstr ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Whether tabs should have homogeneous sizes"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 msgid "Tab label"
 msgstr ""
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "முன்னேற்றப் பட்டையில் காண்பிக்கப்ட வேண்டிய உரை"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 msgid "Menu label"
 msgstr "பட்டி அடையாளம்"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "முன்னேற்றப் பட்டையில் காண்பிக்கப்ட வேண்டிய உரை"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 #, fuzzy
 msgid "Tab expand"
 msgstr "The xpad."
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 msgid "Tab fill"
 msgstr ""
 
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "செந்தரமான முன்புற-அம்பு-பொத்தான் காண்பி"
 

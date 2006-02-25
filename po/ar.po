@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2004-08-30 19:23+0300\n"
 "Last-Translator: Ayman Hourieh <aymanh@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -1230,11 +1230,11 @@ msgstr ""
 msgid "progress bar label|%d %%"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
+#: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
 msgstr "إختر لوناً"
 
-#: gtk/gtkcolorbutton.c:467
+#: gtk/gtkcolorbutton.c:480
 msgid "Received invalid color data\n"
 msgstr "تلقيت بيانات لون غير سليمة\n"
 
@@ -2125,7 +2125,7 @@ msgstr ""
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5062
+#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
 #, c-format
 msgid "Page %u"
 msgstr "الصفحة %u"

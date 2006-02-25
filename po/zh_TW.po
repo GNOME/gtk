@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2006-01-17 07:43+0800\n"
 "Last-Translator: Abel Cheung <abel@oaka.org>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -1220,11 +1220,11 @@ msgstr "%Y"
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
+#: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
 msgstr "選取顏色"
 
-#: gtk/gtkcolorbutton.c:467
+#: gtk/gtkcolorbutton.c:480
 msgid "Received invalid color data\n"
 msgstr "收到了無效的顏色資料\n"
 
@@ -2078,7 +2078,7 @@ msgstr "GTK+ 選項"
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
-#: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5062
+#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"

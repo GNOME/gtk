@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -1237,11 +1237,11 @@ msgstr ""
 msgid "progress bar label|%d %%"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
+#: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
 msgstr "Ընտրե՛ք գույնը"
 
-#: gtk/gtkcolorbutton.c:467
+#: gtk/gtkcolorbutton.c:480
 #, fuzzy
 msgid "Received invalid color data\n"
 msgstr "Ստացվել են սխալ գունային տվյալներ\n"
@@ -2128,7 +2128,7 @@ msgstr "GTK+ Ընտրության տարբերակներ"
 msgid "Show GTK+ Options"
 msgstr "Ցուցադրել GTK+ Ընտրության տարբերակները"
 
-#: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5062
+#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
 #, c-format
 msgid "Page %u"
 msgstr "Էջ %u"

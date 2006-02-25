@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2005-10-21 11:18+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1255,11 +1255,11 @@ msgstr "%Y"
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
+#: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
 msgstr "Избор на цвят"
 
-#: gtk/gtkcolorbutton.c:467
+#: gtk/gtkcolorbutton.c:480
 msgid "Received invalid color data\n"
 msgstr "Получени са невалидни данни за цвета\n"
 
@@ -2131,7 +2131,7 @@ msgstr "Настройки на GTK+"
 msgid "Show GTK+ Options"
 msgstr "Показване на настройките на GTK+"
 
-#: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5062
+#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"

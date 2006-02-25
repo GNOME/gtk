@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2006-01-16 06:14+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -93,11 +93,11 @@ msgstr "ਮੂਲ ਦਰਿਸ਼"
 msgid "The default display for GDK"
 msgstr "ਜੀਡੀਕੇ(GDK) ਲਈ ਮੂਲ ਦਰਿਸ਼"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "ਸਕਰੀਨ"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 msgid "the GdkScreen for the renderer"
 msgstr "ਪੇਸ਼ਕਾਰੀ ਲਈ GdkScreen"
 
@@ -607,7 +607,7 @@ msgstr "ਖਾਲੀ ਥਾਂ"
 msgid "The amount of space between children"
 msgstr "ਚੈਲਡਰਨ ਵਿੱਚ ਕਿੰਨੀ ਥਾਂ ਹੈ"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "ਸਮਰੂਪ"
 
@@ -646,18 +646,18 @@ msgstr "ਵਾਧੂ ਥਾਂ, ਚਾਇਲਡ ਅਤੇ ਗੁਆਢੀ ਵਿ
 msgid "Pack type"
 msgstr "ਪੈਕ ਕਿਸਮ"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "ਇਹ GtkPackType ਵੇਖਾ ਰਿਹਾ ਹੈ ਕਿ ਚਲਾਇਡ ਨੂੰ ਪੇਰੈਟ ਦੇ ਸ਼ੁਰੂ ਜ਼ਾਂ ਅਖੀਰ ਵਿੱਚ ਪੈਕ ਕੀਤਾ ਜਾਏ"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "ਟਿਕਾਣਾ"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 msgid "The index of the child in the parent"
 msgstr "ਪੇਰੈਟ ਵਿੱਚ ਚਾਇਲਡ ਦੀ ਸਥਿਤੀ ਦਾ ਤਤਕਰਾ"
 
@@ -1442,36 +1442,36 @@ msgstr "ਰੇਡੀਓ ਸੂਚੀ ਚੀਜ਼ ਬਣਾਉ"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "ਕੀ ਮੇਨੂ-ਸੂਚੀ-ਚੀਜ਼ ਇੱਕ ਰੇਡੀਓ ਮੇਨੂ-ਸੂਚੀ ਚੀਜ਼ ਵਾਂਗ ਲੱਗੇ"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 msgid "Use alpha"
 msgstr "ਐਲਫਾ ਵਰਤੋ"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 msgid "Whether or not to give the color an alpha value"
 msgstr "ਕੀ ਰੰਗ ਨੂੰ ਐਲਫਾ ਮੁੱਲ ਦਿੱਤਾ ਜਾਵੇ ਜਾਂ ਨਾ"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "ਸਿਰਲੇਖ"
 
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 msgid "The title of the color selection dialog"
 msgstr "ਰੰਗ ਚੁਣਨ ਵਾਲੀ ਤਖਤੀ ਦਾ ਸਿਰਲੇਖ"
 
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr "ਮੌਜੂਦਾ ਰੰਗ"
 
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 msgid "The selected color"
 msgstr "ਚੁਣਿਆ ਰੰਗ"
 
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr "ਮੌਜੂਦਾ ਐਲਫਾ"
 
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "ਚੁਣਿਆ ਧੁੰਦਲਾਪਨ (0 ਪੂਰੀ ਤਰਾਂ ਪਾਰਦਰਸ਼ੀ , 65535 ਪੂਰੀ ਤਰਾਂ ਧੁੰਦਲਾ)"
 
@@ -2762,75 +2762,75 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ਵਿਦਗਿਟ ਦੇ ਉਪੱਰ ਤੇ ਹੇਠਾਂ ਜੋਡ਼ਨ ਲਈ ਖਾਲ਼ੀ ਥਾਂ (ਪਿਕਸਿਲ ਵਿੱਚ)"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "ਸਫ਼ਾ"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 msgid "The index of the current page"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ੇ ਦਾ ਤਤਕਰਾ"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr "ਟੈਬ ਸਥਿਤੀ"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 msgid "Which side of the notebook holds the tabs"
 msgstr "ਟਿੱਪਣੀ-ਖਾਨੇ ਦੇ ਕਿਹਡ਼ੇ ਪਾਸੇ ਟੈਬਾਂ ਨੂੰ ਸੰਭਾਲਿਆ ਜਾਵੇ"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr "ਟੈਬ ਹਾਸ਼ੀਆ"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 msgid "Width of the border around the tab labels"
 msgstr "ਟੈਬ ਲੇਬਲਾਂ ਦੁਆਲੇ ਹਾਸ਼ੀਏ ਦੀ ਚੌਡ਼ਾਈ"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr "ਲੇਟਵਾਂ ਟੈਬ ਹਾਸ਼ੀਆ"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 msgid "Width of the horizontal border of tab labels"
 msgstr "ਟੈਬ ਲੇਬਲ ਦਾ ਲੇਟਵੇ ਹਾਸ਼ੀਏ ਦੀ ਚੌਡ਼ਾਈ"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr "ਲੰਬਕਾਰੀ ਟੈਬ ਹਾਸ਼ੀਆਂ"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 msgid "Width of the vertical border of tab labels"
 msgstr "ਟੈਬ ਲੇਬਲ ਦਾ ਲੰਬਕਾਰੀ ਹਾਸ਼ੀਏ ਦੀ ਚੌਡ਼ਾਈ"
 
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr "ਟੈਬਾਂ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 msgid "Whether tabs should be shown or not"
 msgstr "ਕੀ ਟੈਬਾਂ ਵੇਖਾਉਣੀਆਂ ਹਨ ਜਾਂ ਨਹੀ"
 
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr "ਹਾਸ਼ੀਆ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 msgid "Whether the border should be shown or not"
 msgstr "ਕੀ ਹਾਸ਼ੀਆਂ ਵੇਖਾਉਣਾ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr "ਸਕਰੋਲ-ਬਲ"
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "ਜੇਕਰ ਸੱਚ ਹੈ ਤਾਂ, ਸਕਰੋਲ ਤੀਰ ਜੋਡ਼ੇ ਜਾਣਗੇ ਜੇਕਰ ਜਿਆਦਾ ਟੈਬਾਂ ਆ ਗਈਆਂ"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr "ਪੋਪਅੱਪ ਯੋਗ"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2838,77 +2838,77 @@ msgstr ""
 "ਜੇਕਰ ਸੱਚ ਹੈ ਤਾਂ, ਨੋਟ-ਬੁੱਕ ਤੇ ਮਾਊਸ ਦਾ ਸੱਜਾ ਬਟਨ ਦਬਾਉਣ ਨਾਲ ਮੇਨੂ-ਸੂਚੀ ਆ ਜਾਵੇਗੀ, ਜੋ ਕਿ ਤੁਸੀ ਸਫੇ ਤੇ "
 "ਜਾਣ ਲਈ ਵਰਤ ਸਕਦੇ ਹੋ"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "ਕੀ ਟੈਬਾਂ ਇਕੋ ਅਕਾਰ ਦੀਆਂ ਹੋਣ"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 msgid "Tab label"
 msgstr "ਟੈਬ ਲੇਬਲ"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 msgid "The string displayed on the child's tab label"
 msgstr "ਚਾਈਲਡ ਦੇ ਟੈਬ ਲੇਬਲ ਉੱਤੇ ਸਤਰ ਵਿਖਾਈ ਜਾਵੇ"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 msgid "Menu label"
 msgstr "ਮੇਨੂ-ਸੂਚੀ ਲੇਬਲ"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 msgid "The string displayed in the child's menu entry"
 msgstr "ਚਾਈਲਡ ਦੀ ਮੇਨੂ ਇੰਦਰਾਜ਼ ਵਿੱਚ ਸਤਰ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 msgid "Tab expand"
 msgstr "ਟੈਬ ਫੈਲਾਓ"
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 msgid "Whether to expand the child's tab or not"
 msgstr "ਕੀ ਚਲਾਇਡ ਟੈਬ ਨੂੰ ਫੈਲਾਉਣਾ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 msgid "Tab fill"
 msgstr "ਟੈਬ ਭਰੋ"
 
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "ਕੀ ਚਾਈਲਡ ਦੀ ਟੈਬ ਨੂੰ ਦਿੱਤੇ ਖੇਤਰ ਨੂੰ ਭਰਨ ਲਈ ਵਰਤਿਆ ਜਾਵੇ ਜਾਂ ਨਾ"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 msgid "Tab pack type"
 msgstr "ਟੈਬ ਪੈਕ ਕਿਸਮ"
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "ਸੈਕੰਡਰੀ ਪਿੱਛੇਵੱਲ ਜਾਣਵਾਲਾ"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "ਟੈਬ ਖੇਤਰ ਦੇ ਵਿਰੋਧੀ ਸਿਰੇ ਤੇ ਦੂਜਾ ਪਿੱਛੇ ਜਾਣ ਵਾਲਾ ਤੀਰ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "ਸੈਕੰਡਰੀ ਅੱਗੇਵੱਲ ਜਾਣਵਾਲਾ"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "ਟੈਬ ਖੇਤਰ ਦੇ ਵਿਰੋਧੀ ਸਿਰੇ ਤੇ ਦੂਜਾ ਅੱਗੇ ਜਾਣ ਵਾਲਾ ਤੀਰ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "ਪਿੱਛੇ ਵੱਲ ਜਾਣਵਾਲਾ"
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "ਮਿਆਰੀ ਪਿੱਛੇ ਜਾਣ ਵਾਲਾ ਤੀਰ ਵੇਖਾਓ"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "ਅੱਗੇਵੱਲ ਜਾਣਵਾਲਾ"
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "ਮਿਆਰੀ ਅੱਗੇ ਜਾਣ ਵਾਲਾ ਤੀਰ ਵੇਖਾਓ"
 

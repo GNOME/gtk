@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2006-01-28 12:55+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -91,11 +91,11 @@ msgstr "Ecrã por Omissão"
 msgid "The default display for GDK"
 msgstr "O ecrã por omissão do GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Ecrã"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 msgid "the GdkScreen for the renderer"
 msgstr "O GdkScreen para o renderizador"
 
@@ -628,7 +628,7 @@ msgstr "Espaçamento"
 msgid "The amount of space between children"
 msgstr "A quantidade de espaço entre filhos"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
@@ -669,7 +669,7 @@ msgstr "Espaço extra para colocar entre o filho e os seus vizinhos, em pixels"
 msgid "Pack type"
 msgstr "Tipo de arrumação"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -677,12 +677,12 @@ msgstr ""
 "Um GtkPackType indicando se o filho é arrumado com referência ao início ou "
 "fim do pai"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Posição"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 msgid "The index of the child in the parent"
 msgstr "O índice do filho no pai"
 
@@ -1485,36 +1485,36 @@ msgstr "Desenhar como um item de menu exclusivo"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Se o item de menu se assemelha ou não com um item de menu exclusivo"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 msgid "Use alpha"
 msgstr "Utilizar alfa"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 msgid "Whether or not to give the color an alpha value"
 msgstr "Se atribuir ou não à cor um valor alfa"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Título"
 
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 msgid "The title of the color selection dialog"
 msgstr "O título do diálogo de selecção de cor"
 
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr "Cor Actual"
 
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 msgid "The selected color"
 msgstr "A cor actual"
 
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr "Alfa Actual"
 
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "O valor de opacidade seleccionado (0 completamente transaparente, 65535 "
@@ -2856,77 +2856,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "A quantidade de espaço a adicionar acima e abaixo do widget, em pixels"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "Página"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 msgid "The index of the current page"
 msgstr "O índice da página actual"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr "Posição do Separador"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 msgid "Which side of the notebook holds the tabs"
 msgstr "Que lado do livro de notas contém os separadores"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr "Margem do Separador"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 msgid "Width of the border around the tab labels"
 msgstr "Largura da margem em torno das etiquetas dos separadores"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr "Margem Horizontal do Separador"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 msgid "Width of the horizontal border of tab labels"
 msgstr "Largura da margem horizontal em torno das etiquetas dos separadores"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr "Margem Vertical do Separador"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 msgid "Width of the vertical border of tab labels"
 msgstr "Largura da margem vertical em torno das etiquetas dos separadores"
 
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr "Mostrar Separadores"
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 msgid "Whether tabs should be shown or not"
 msgstr "Se os separadores deverão ou não ser mostrados"
 
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr "Mostrar Margem"
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 msgid "Whether the border should be shown or not"
 msgstr "Se a margem deverá ou não ser mostrada"
 
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr "Rolável"
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Se VERDADEIRO, são adicionadas setas de rolamento caso existam mais "
 "separadores do que os visíveis"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr "Activar Menu de Contexto"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2934,81 +2934,81 @@ msgstr ""
 "Se VERDADEIRO, primir o botão direito do rato no livro de notas faz surgir "
 "um menu de contexto que pode utilizar para ir para uma página"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Se os separadores deverão ou não ter um tamanho homogéneo"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 msgid "Tab label"
 msgstr "Etiqueta de separador"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 msgid "The string displayed on the child's tab label"
 msgstr "A expressão apresentada na etiqueta de separador do filho"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 msgid "Menu label"
 msgstr "Etiqueta de menu"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 msgid "The string displayed in the child's menu entry"
 msgstr "A etiqueta apresentada na entrada de menu do filho"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 msgid "Tab expand"
 msgstr "Expansão de separador"
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 msgid "Whether to expand the child's tab or not"
 msgstr "Se expandir ou não o separador do filho"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 msgid "Tab fill"
 msgstr "Separador preenche"
 
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Se os separadores do filho deverão ou não preencher a área alocada"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 msgid "Tab pack type"
 msgstr "Tipo de arrumação de separadores"
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Passo atrás secundário"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Mostrar um segundo botão de seta de retrocesso no extremo oposto da área de "
 "separadores"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Passo de avanço secundário"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Mostrar um segundo botão de seta de avanço no extremo oposto da área de "
 "separadores"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Passo atrás"
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Mostrar o botão de seta de retrocesso padrão"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Passo de avanço"
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "Mostrar o botão de seta de avanço padrão"
 

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -106,11 +106,11 @@ msgid "The default display for GDK"
 msgstr "GDK дэд системийн анхдагч дисплей"
 
 # gtk/gtkinputdialog.c:246
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Дэлгэц"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "Модоор харуулах загвар"
@@ -692,7 +692,7 @@ msgid "The amount of space between children"
 msgstr "Хүүхдүүдийн хоорондох зайн нийлбэр"
 
 # gtk/gtkbox.c:135 gtk/gtknotebook.c:434
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Нэг төрлийн"
 
@@ -734,7 +734,7 @@ msgstr "Хүү ба түүний хөршийн хооронд тусгай за
 msgid "Pack type"
 msgstr "Багц төрөл "
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -743,13 +743,13 @@ msgstr ""
 "мэдээлэлтэйгээ багцлагдсан гэдгийг заана."
 
 # gtk/gtkpaned.c:208 gtk/gtkruler.c:138
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Байрлал"
 
 # gtk/gtknotebook.c:363
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 msgid "The index of the child in the parent"
 msgstr "Эцэг дэх хүүгийн индекс"
 
@@ -1671,42 +1671,42 @@ msgid "Whether the menu item looks like a radio menu item"
 msgstr "Цэсний элемент радио цэсний элемэнт шиг харагдах эсэх"
 
 # gtk/gtklabel.c:294
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 msgid "Use alpha"
 msgstr "Альпа хэрэглэх"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 msgid "Whether or not to give the color an alpha value"
 msgstr "Өнгө альпа утгаар өгөгдөх эсэх"
 
 # gtk/gtktreeviewcolumn.c:238
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Гарчиг"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 msgid "The title of the color selection dialog"
 msgstr "Өнгө сонгогч диалогийн гарчиг"
 
 # gtk/gtkcolorsel.c:1718
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr "Идэвхитэй өнгө "
 
 # gtk/gtkcolorsel.c:1719
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 msgid "The selected color"
 msgstr "Сонгогдсон өнгө "
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr "Харгалзах альфа-суваг "
 
 # gtk/gtkcolorsel.c:1726
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Одоогын бүрэлтийн хүч (\"0\" бол тунгалаг, \"65535\" үл харагдахуйц) "
 
@@ -3213,87 +3213,87 @@ msgid ""
 msgstr "Удирдах элементийн дээд ба доод талд нэмэгдэх зайн хэмжээ (цэгээр)"
 
 # gtk/gtknotebook.c:362
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "Хуудас"
 
 # gtk/gtknotebook.c:363
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 msgid "The index of the current page"
 msgstr "Одоогийн хуудасны индекс"
 
 # gtk/gtknotebook.c:371
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr "Tab-ийн байрлал"
 
 # gtk/gtknotebook.c:372
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 msgid "Which side of the notebook holds the tabs"
 msgstr "Тэмдэглэлийн аль талд tab байх"
 
 # gtk/gtknotebook.c:379
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr "Tab хүрээ"
 
 # gtk/gtknotebook.c:380
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 msgid "Width of the border around the tab labels"
 msgstr "tab бичээсийн орчим дахь хүрээний өргөн"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr "Хэвтээ Tab хүрээ"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 msgid "Width of the horizontal border of tab labels"
 msgstr "tab бичээсийн хэвтээ хүрээний өргөн"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr "Босоо Tab хүрээ"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 msgid "Width of the vertical border of tab labels"
 msgstr "tab бичээсийн босоо хүрээний өргөн"
 
 # gtk/gtknotebook.c:406
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr "Tab-г үзүүлэх"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 msgid "Whether tabs should be shown or not"
 msgstr "Tab-ыг харуулах эсэх"
 
 # gtk/gtknotebook.c:413
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr "Хүрээг харуулах"
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 msgid "Whether the border should be shown or not"
 msgstr "Хүрээ харагдах эсэх"
 
 # gtk/gtknotebook.c:420
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr "Гүйлгэж болох"
 
 # gtk/gtknotebook.c:421
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Хэрвээ үнэн бол, гүйдэг сум нэмэгдэнэ, хэрвээ үгүй бол бүх ТАВууд байраа олж "
 "чадахгүй"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr "popup цэсийг зөвшөөрөх"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3301,83 +3301,83 @@ msgstr ""
 "Хэрэв үнэн бол тэмдэглэл дээр хулганын баруун товч дарах үед хуудас руу "
 "үсрэх цэс гарч ирнэ."
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Tab - уудын хэмжээ ижил байх эсэх"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 msgid "Tab label"
 msgstr "ТАВ -н бичээс"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Дэд tab бичээс дээр дүрслэгдсэн мөр"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 msgid "Menu label"
 msgstr "Цэсийн гарчиг"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Дэд цэс дотор дүрслэгдсэн мөр"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 msgid "Tab expand"
 msgstr "Хэвтээгээр дүүргэлт."
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Дэд Tab -уудыг өргөтгөх эсэх"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 msgid "Tab fill"
 msgstr "Tab дүүргэх"
 
 # gtk/gtkbox.c:136
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Бүх дэд tab ууд ижил хэмжээтэй байх эсэх"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 msgid "Tab pack type"
 msgstr "Tab багцын төрөл"
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Гэдрэг шилжих нэмэлт товч"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "ТАВ-ын эсрэг талын төгсгөлд гэдрэг шилжих сумтай хоёр дох товчийг дүрслэх"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Урагш шилжих нэмэлт товч"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "ТАВ-н эсрэг талд урагш шилжих сумтай хоёр дох товчийг дүрслэх"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Гэдрэг шилжих товч"
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Стандарт гэдрэг шилжих сумтай товчийг харуулах"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Урагш шилжих товч"
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "Стандарт урагш шилжих сумтай товчийг харуулах"
 

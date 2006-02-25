@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2004-02-21 18:51-0600\n"
 "Last-Translator: Dinesh Nadarajah <dinesh_list@sbcglobal.net>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"
@@ -1223,11 +1223,11 @@ msgstr ""
 msgid "progress bar label|%d %%"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:578
+#: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
 msgstr "ஒரு வண்ணத்தை தேர்ந்தெடுக்கவும்"
 
-#: gtk/gtkcolorbutton.c:467
+#: gtk/gtkcolorbutton.c:480
 msgid "Received invalid color data\n"
 msgstr ""
 
@@ -2103,7 +2103,7 @@ msgstr ""
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5062
+#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
 #, c-format
 msgid "Page %u"
 msgstr "பக்கம் %u"

@@ -1,3 +1,25 @@
+Overview of Changes from GTK+ 2.8.12 to GTK+ 2.8.13
+===================================================
+
+* Bugs fixed:
+ 330732 Can't select some items in GtkIconView [Donald Straney]
+ 330944 gtk_icon_theme_list_icons: example contexts don't work
+        [John Spray]
+ 331097 gnopernicus crashes on changing display screen source 
+        for magnifier [Oana Serb]
+ 331467 evince crashes in gdk_region_union_with_rect [Benjamin Berg]
+ 331820 Small error in _gdk_gc_update_context [Matthias]
+ 331785 gtk.Notebook.get_current_page() returns incorrect page 
+        number when pages hidden [Sebastien Bacher]
+ 331940 GtkAboutDialog not responsive to Escape key [Daniel Drake]
+ 331440 GtkNotebook popup menu not keynavigatable [Paolo Borelli]
+ 331651 GtkRadioButton does not issue notify::active
+ 332059 Make more use of G_DISABLE_ASSERT in TextView code 
+        [Arnaud Charlet]
+
+* Updated translations (eu,ka,uk)
+
+
 Overview of Changes from GTK+ 2.8.11 to GTK+ 2.8.12
 ===================================================
 

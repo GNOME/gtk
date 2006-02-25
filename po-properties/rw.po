@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -107,11 +107,11 @@ msgstr ""
 msgid "The default display for GDK"
 msgstr "Mburabuzi Kugaragaza kugirango"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Ikirahuri"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "i kugirango i"
@@ -711,7 +711,7 @@ msgstr "itandukanya "
 msgid "The amount of space between children"
 msgstr "Igiteranyo Bya Umwanya hagati"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr ""
 
@@ -756,19 +756,19 @@ msgstr "Umwanya Kuri Gushyira hagati i Na in Pigiseli"
 msgid "Pack type"
 msgstr "Ubwoko"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 #, fuzzy
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "A i ni Na: Indango Kuri i Gutangira Cyangwa Impera Bya i"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "umwanya"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 #, fuzzy
 msgid "The index of the child in the parent"
 msgstr "Umubarendanga Bya i in i"
@@ -1697,40 +1697,40 @@ msgstr "Nka Ibikubiyemo Ikintu"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "i Ibikubiyemo Ikintu nka a Ibikubiyemo Ikintu"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 #, fuzzy
 msgid "Use alpha"
 msgstr "Alufa"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 #, fuzzy
 msgid "Whether or not to give the color an alpha value"
 msgstr "Cyangwa OYA Kuri i Ibara Alufa Agaciro"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "umutwe"
 
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 #, fuzzy
 msgid "The title of the color selection dialog"
 msgstr "Umutwe Bya i Ibara Ihitamo Ikiganiro"
 
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 #, fuzzy
 msgid "The selected color"
 msgstr "Byahiswemo Ibara"
 
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 #, fuzzy
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Byahiswemo Agaciro 0 Bibonerana Kijimye"
@@ -3278,83 +3278,83 @@ msgid ""
 msgstr ""
 "Igiteranyo Bya Umwanya Kuri Kongeramo ku i Hejuru: Na Hasi: Bya i in Pigiseli"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "urupapuro/ipaje"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 #, fuzzy
 msgid "The index of the current page"
 msgstr "Umubarendanga Bya i KIGEZWEHO Ipaji"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr ""
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 #, fuzzy
 msgid "Which side of the notebook holds the tabs"
 msgstr "Bya i i Amasimbuka"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 #, fuzzy
 msgid "Width of the border around the tab labels"
 msgstr "Bya i Imbibi i Isunika Uturango..."
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 #, fuzzy
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bya i Gitambitse Imbibi Bya Isunika Uturango..."
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 #, fuzzy
 msgid "Width of the vertical border of tab labels"
 msgstr "Bya i Bihagaritse Imbibi Bya Isunika Uturango..."
 
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 #, fuzzy
 msgid "Whether tabs should be shown or not"
 msgstr "Amasimbuka Cyangwa OYA"
 
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 #, fuzzy
 msgid "Whether the border should be shown or not"
 msgstr "i Imbibi Cyangwa OYA"
 
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr ""
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 #, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Utwambi Kyongewe NIBA Amasimbuka Kuri"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr ""
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 #, fuzzy
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
@@ -3363,93 +3363,93 @@ msgstr ""
 "i Iburyo: Imbeba Akabuto ku i Hejuru a Ibikubiyemo Gukoresha Kuri Gyayo Kuri "
 "a Ipaji"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 #, fuzzy
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Amasimbuka"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 #, fuzzy
 msgid "Tab label"
 msgstr "Akarango"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Ikurikiranyanyuguti ku i Isunika Akarango"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 #, fuzzy
 msgid "Menu label"
 msgstr "Akarango"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Ikurikiranyanyuguti in i Ibikubiyemo Icyinjijwe"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 #, fuzzy
 msgid "Tab expand"
 msgstr "Kwagura"
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Kuri Kwagura i Isunika Cyangwa OYA"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 #, fuzzy
 msgid "Tab fill"
 msgstr "Kuzuza"
 
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "i Isunika Kuzuza i Ubuso Cyangwa OYA"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 #, fuzzy
 msgid "Tab pack type"
 msgstr "Ipaki Ubwoko"
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 #, fuzzy
 msgid "Secondary backward stepper"
 msgstr "subira inyuma"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "a ISEGONDA subira inyuma Akambi Akabuto ku i Impera Bya i Isunika Ubuso"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 #, fuzzy
 msgid "Secondary forward stepper"
 msgstr "Imbere"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "a ISEGONDA Imbere Akambi Akabuto ku i Impera Bya i Isunika Ubuso"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr ""
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 #, fuzzy
 msgid "Display the standard backward arrow button"
 msgstr "i Bisanzwe subira inyuma Akambi Akabuto"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr ""
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 #, fuzzy
 msgid "Display the standard forward arrow button"
 msgstr "i Bisanzwe Imbere Akambi Akabuto"

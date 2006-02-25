@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 11:32-0500\n"
+"POT-Creation-Date: 2006-02-24 22:38-0500\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -94,11 +94,11 @@ msgstr "Sjtanderd display"
 msgid "The default display for GDK"
 msgstr "'t sjtanderd display veur GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
+#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:541
 msgid "Screen"
 msgstr "Sjirm"
 
-#: gdk/gdkpango.c:511
+#: gdk/gdkpango.c:547
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "'t model van de TreeView"
@@ -648,7 +648,7 @@ msgstr "Sjpasiëring"
 msgid "The amount of space between children"
 msgstr "De wieväölheid ruumde tösje dochters"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -689,7 +689,7 @@ msgstr "Ekstra ruumde tösje de dochter en haor naobers, in pixels"
 msgid "Pack type"
 msgstr "Verpakkingssjtiel"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -697,12 +697,12 @@ msgstr ""
 "Ein GtkPackType waat aangeuf of de dochter verpak is mit d'n aanvang of mit "
 "'t ènj van de auwer"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Posisie"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
 msgid "The index of the child in the parent"
 msgstr "De indeks van de dochter in de auwer"
 
@@ -1526,39 +1526,39 @@ msgstr ""
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Of 't menu-item aangevink is"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:206
 #, fuzzy
 msgid "Use alpha"
 msgstr "Opmaak gebroeke"
 
-#: gtk/gtkcolorbutton.c:205
+#: gtk/gtkcolorbutton.c:207
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Tittel"
 
-#: gtk/gtkcolorbutton.c:220
+#: gtk/gtkcolorbutton.c:222
 #, fuzzy
 msgid "The title of the color selection dialog"
 msgstr "De tittel van 't vinster"
 
-#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorbutton.c:236 gtk/gtkcolorsel.c:1888
 msgid "Current Color"
 msgstr "Hujige Kleur"
 
-#: gtk/gtkcolorbutton.c:235
+#: gtk/gtkcolorbutton.c:237
 #, fuzzy
 msgid "The selected color"
 msgstr "De hujige kleur"
 
-#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorbutton.c:251 gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
 msgstr "Hujig Alpha"
 
-#: gtk/gtkcolorbutton.c:250
+#: gtk/gtkcolorbutton.c:252
 #, fuzzy
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
@@ -2974,77 +2974,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "De toe te veuge ruumde baove en ónger ein widget, in pixels"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:408
 msgid "Page"
 msgstr "Pagina"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:409
 msgid "The index of the current page"
 msgstr "De indeks van de hujige pagina"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:417
 msgid "Tab Position"
 msgstr "Tab-posisie"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:418
 msgid "Which side of the notebook holds the tabs"
 msgstr "Aan welke kantj de tabblajer kómme te zitte"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:425
 msgid "Tab Border"
 msgstr "Tab-kader"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:426
 msgid "Width of the border around the tab labels"
 msgstr "Breide van 't kader róntelóm de tab-labels"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:434
 msgid "Horizontal Tab Border"
 msgstr "Horizontaal tab-kader"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:435
 msgid "Width of the horizontal border of tab labels"
 msgstr "Breide van 't horizontale kader van tab-labels"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:443
 msgid "Vertical Tab Border"
 msgstr "Vertikaal tab-kader"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:444
 msgid "Width of the vertical border of tab labels"
 msgstr "Breide van 't vertikale kader van tab-labels"
 
-#: gtk/gtknotebook.c:449
+#: gtk/gtknotebook.c:452
 msgid "Show Tabs"
 msgstr "Tabs tuine"
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:453
 msgid "Whether tabs should be shown or not"
 msgstr "Of tabs getuind waere of neet"
 
-#: gtk/gtknotebook.c:456
+#: gtk/gtknotebook.c:459
 msgid "Show Border"
 msgstr "Kader tuine"
 
-#: gtk/gtknotebook.c:457
+#: gtk/gtknotebook.c:460
 msgid "Whether the border should be shown or not"
 msgstr "Of 't kader getuind weurt of neet"
 
-#: gtk/gtknotebook.c:463
+#: gtk/gtknotebook.c:466
 msgid "Scrollable"
 msgstr "Sjuufbaar"
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:467
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ingeval van WAOR (TRUE), waere sjuufpiele getuind wen 't mie tabs geuf es "
 "dao veur plaats is"
 
-#: gtk/gtknotebook.c:470
+#: gtk/gtknotebook.c:473
 msgid "Enable Popup"
 msgstr "Zèt Popup aan"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:474
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3052,55 +3052,55 @@ msgstr ""
 "Ingeval van WAOR (TRUE), weurt mit ein rechter moesklik op 't klaadblok ein "
 "menu getuind woemits doe direk nao ein pagina kèns gaon"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:481
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelieke aafmaetinge mote höbbe"
 
-#: gtk/gtknotebook.c:485
+#: gtk/gtknotebook.c:488
 msgid "Tab label"
 msgstr "Tab-label"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:489
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "De getuinde teks op 't tab-label van de dochter"
 
-#: gtk/gtknotebook.c:492
+#: gtk/gtknotebook.c:495
 msgid "Menu label"
 msgstr "Menu-label"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:496
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "De getuinde teks op 't menu-item van de dochter"
 
-#: gtk/gtknotebook.c:506
+#: gtk/gtknotebook.c:509
 msgid "Tab expand"
 msgstr "Tab-verlenging"
 
-#: gtk/gtknotebook.c:507
+#: gtk/gtknotebook.c:510
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Of de tab van de dochter verlengd weurt of neet"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:516
 msgid "Tab fill"
 msgstr "Tab-opvölling"
 
-#: gtk/gtknotebook.c:514
+#: gtk/gtknotebook.c:517
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Of de tab van de dochter de besjikbare ruumde moot opvölle of neet"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:523
 msgid "Tab pack type"
 msgstr "Tab-verpakkingssjtiel"
 
-#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Sekundaere achterwartse sjtapper"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:540
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
@@ -3108,11 +3108,11 @@ msgstr ""
 "Tuin ein twiede achterwartse pielknóp op de euversjtaonde kantj van de "
 "sjuufbalk"
 
-#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Sekundaere veurwartse sjtapper"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:557
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
@@ -3120,19 +3120,19 @@ msgstr ""
 "Tuin ein twiede veurwartse pielknop aan de euversjtaonde kantj van de "
 "sjuufbalk"
 
-#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Achterwartse sjtapper"
 
-#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Tuin de sjtanderd achterwartse pielknóp"
 
-#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Veurwartse sjtapper"
 
-#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "Tuin de sjtanderd veurwartse pielknóp"
 
