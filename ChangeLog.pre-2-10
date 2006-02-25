@@ -1,3 +1,7 @@
+2006-02-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version 
+
 2006-02-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbtree.c: 
@@ -65,7 +69,6 @@
 	to match realize. This fixes moving color buttons between
 	screens.  (#331097, Oana Serb)
 
->>>>>>> 1.7533
 2006-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_list_icons): Give working
@@ -73,8 +76,8 @@
 
 2006-02-11  Matthias Clasen  <mclasen@redhat.com>
 
-        * gtk/gtkiconview.c (gtk_icon_view_get_item_at_coords): Fix
-        row_spacing/column_spacing confusion.  (#330732, Donald Straney)
+	* gtk/gtkiconview.c (gtk_icon_view_get_item_at_coords): Fix
+	row_spacing/column_spacing confusion.  (#330732, Donald Straney)
 
 2006-02-11  Matthias Clasen  <mclasen@redhat.com>
 
