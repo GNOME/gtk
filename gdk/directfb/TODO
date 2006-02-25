@@ -52,3 +52,7 @@ gdkwindow-directfb.c
 gdkwindowid.c
 glyphsurfacecache.c
 
+
+NOTES:
+event filter callbacks missing see the x11 impl
+

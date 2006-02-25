@@ -260,22 +260,24 @@ gdk_display_store_clipboard (GdkDisplay *display,
 
 }
 
-/**
- * gdk_display_get_default_group:
- * @display: a #GdkDisplay
- *
- * Returns the default group leader window for all toplevel windows
- * on @display. This window is implicitly created by GDK.
- * See gdk_window_set_group().
- *
- * Return value: The default group leader window for @display
- *
- * Since: 2.4
- **/
+
+gboolean
+gdk_display_supports_shapes (GdkDisplay *display)
+{
+       return FALSE;
+}
+
+
+gboolean
+gdk_display_supports_input_shapes (GdkDisplay *display)
+{
+       return FALSE;
+}
+
+
 GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_warning(" gdk_display_get_default_group unimplemented \n");
   return  _gdk_parent_root;
 }
 

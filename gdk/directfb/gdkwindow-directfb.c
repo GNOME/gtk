@@ -1901,13 +1901,14 @@ gdk_window_shape_combine_mask (GdkWindow *window,
                                gint       x,
                                gint       y)
 {
-  static gboolean first_call = TRUE;
+}
 
-  if (first_call)
-    {
-      g_message ("unimplemented %s", G_GNUC_FUNCTION);
-      first_call = FALSE;
-    }
+void
+gdk_window_input_shape_combine_mask (GdkWindow *window,
+                                    GdkBitmap *mask,
+                                    gint       x,
+                                    gint       y)
+{
 }
 
 void
@@ -1916,13 +1917,14 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  gint       offset_x,
                                  gint       offset_y)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+}
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+void
+gdk_window_input_shape_combine_region (GdkWindow *window,
+                                      GdkRegion *shape_region,
+                                      gint       offset_x,
+                                      gint       offset_y)
+{
 }
 
 void
@@ -2240,25 +2242,21 @@ gdk_window_set_functions (GdkWindow     *window,
 void
 gdk_window_set_child_shapes (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
 }
 
 void
 gdk_window_merge_child_shapes (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+}
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
+void
+gdk_window_set_child_input_shapes (GdkWindow *window)
+{
+}
 
-  /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+void
+gdk_window_merge_child_input_shapes (GdkWindow *window)
+{
 }
 
 gboolean
