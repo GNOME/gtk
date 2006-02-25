@@ -1,3 +1,14 @@
+2006-02-24  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_list_create): Make the
+	column header visible, and make it be "_Places".  Changed the
+	accessible object name to Places as well.  Fixes bug #331306.
+	(file_pane_create): Do not create the path bar and "create folder"
+	button here...
+	(browse_widgets_create): ... but create them here instead.  This
+	moves the path bar to be above both the hpaned, giving it the full
+	width of the dialog.  Fixes bug #327733.
+
 Thu Feb 23 13:28:21 2006  Tim Janik  <timj@imendio.com>
 
 	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale): remove unconditional

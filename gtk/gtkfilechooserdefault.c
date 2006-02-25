@@ -2020,7 +2020,11 @@ shortcut_find_position (GtkFileChooserDefault *impl,
 	    }
 	}
 
-      gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
+      if (i < current_folder_separator_idx - 1)
+	{
+	  if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
+	    g_assert_not_reached ();
+	}
     }
 
   return -1;
@@ -3111,7 +3115,9 @@ shortcuts_edited (GtkCellRenderer       *cell,
   g_object_set (cell, "editable", FALSE, NULL);
 
   path = gtk_tree_path_new_from_string (path_string);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path);
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
+    g_assert_not_reached ();
+
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
 		      SHORTCUTS_COL_DATA, &shortcut,
 		      -1);
@@ -3157,8 +3163,8 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 		    G_CALLBACK (shortcuts_popup_menu_cb), impl);
   g_signal_connect (impl->browse_shortcuts_tree_view, "button-press-event",
 		    G_CALLBACK (shortcuts_button_press_event_cb), impl);
-  atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Shortcuts"));
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
+  /* Accessible object name for the file chooser's shortcuts pane */
+  atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Places"));
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), impl->shortcuts_filter_model);
 
@@ -3211,7 +3217,8 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   /* Column */
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("Folder"));
+  /* Column header for the file chooser's shortcuts pane */
+  gtk_tree_view_column_set_title (column, _("_Places"));
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
@@ -3809,21 +3816,6 @@ file_pane_create (GtkFileChooserDefault *impl,
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_widget_show (vbox);
 
-  /* The path bar and 'Create Folder' button */
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox);
-  impl->browse_path_bar = create_path_bar (impl);
-  g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
-  gtk_widget_show_all (impl->browse_path_bar);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
-
-  /* Create Folder */
-  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
-  g_signal_connect (impl->browse_new_folder_button, "clicked",
-		    G_CALLBACK (new_folder_button_clicked), impl);
-  gtk_box_pack_end (GTK_BOX (hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
   /* Box for lists and preview */
 
   hbox = gtk_hbox_new (FALSE, PREVIEW_HBOX_SPACING);
@@ -4016,6 +4008,7 @@ static GtkWidget *
 browse_widgets_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *vbox;
+  GtkWidget *hbox;
   GtkWidget *hpaned;
   GtkWidget *widget;
   GtkSizeGroup *size_group;
@@ -4023,6 +4016,22 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   /* size group is used by the [+][-] buttons and the filter combo */
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
   vbox = gtk_vbox_new (FALSE, 12);
+
+  /* The path bar and 'Create Folder' button */
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (hbox);
+
+  impl->browse_path_bar = create_path_bar (impl);
+  g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
+  gtk_widget_show_all (impl->browse_path_bar);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+
+  /* Create Folder */
+  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
+  g_signal_connect (impl->browse_new_folder_button, "clicked",
+		    G_CALLBACK (new_folder_button_clicked), impl);
+  gtk_box_pack_end (GTK_BOX (hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
 
   /* Paned widget */
   hpaned = gtk_hpaned_new ();
@@ -5813,7 +5822,9 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
 
   /* Remove row from the combo box */
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (impl->filter_combo));
-  gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index);
+  if (!gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index))
+    g_assert_not_reached ();
+
   gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 
   g_object_unref (filter);
@@ -6613,7 +6624,9 @@ check_preview_change (GtkFileChooserDefault *impl)
       GtkTreeIter iter;
       GtkTreeIter child_iter;
 
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, cursor_path);
+      if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, cursor_path))
+	g_assert_not_reached ();
+
       gtk_tree_path_free (cursor_path);
 
       gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
