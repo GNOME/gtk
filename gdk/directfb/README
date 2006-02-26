@@ -1,9 +1,7 @@
 README for GDK-DirectFB
 ------------------------
 
-This is a developers snapshot of a GDK backend based on DirectFB.
-It requires GTK+ version 2.0 (see http://www.gtk.org/) and DirectFB 
-(see http://www.directfb.org/).
+This is the GDK backend that allows GTK to work on top of DirectFB.
 
 Important:
 The current code does not pass through directfb passed on the gtk
@@ -12,64 +10,10 @@ DFBARGS.
 Example:
 export DFBARGS=system=sdl
 
-
-
-
 DirectFB is a hardware abstraction layer on top of the Linux
 frame buffer that provides drawing functions, a window stack and
 support for input devices. The code you find here is a backend for
 GDK, the drawing kit used by GTK+.
-
-To give it a try, you first need DirectFB (at least version 0.9.17)
-available from http://www.directfb.org/. Then you need to get your
-hands on a recent version of GTK+-2.0. The latest release (gtk+-2.8.10)
-should work.  
-
-Here are urls for the current for all the source needed to build the current latest gtk release
-
-ftp://ftp.gtk.org/pub/gtk/v2.8/atk-1.10.3.tar.gz 
-ftp://ftp.gtk.org/pub/gtk/v2.8/glib-2.8.5.tar.gz
-ftp://ftp.gtk.org/pub/gtk/v2.8/pango-1.10.2.tar.gz
-ftp://ftp.gtk.org/pub/gtk/v2.8/gtk+-2.8.10.tar.gz
-
-If you don't have tiff i.e stock debian is a the url. 
-ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.8.0.tar.gz
-The default build will fail without it.
-
-You also need the latest version of cairo from CVS it contains
-support for a DirectFB backend and should be avialable in the next 
-cairo release.
-
-
-cvs -d :pserver:anoncvs@cvs.freedesktop.org:/cvs/cairo co cairo
-
-
-
-Alternatively checkout GTK+ from CVS. Place this
-directory into the gdk subdirectory of your GTK+ tree and rename it
-to directfb. Then change to the toplevel GTK+ directory and apply
-gtk-directfb.patch there is now a mkpatch shell script which should
-correctly automate creating the directfb target via:
-
-  ./mkpatch apply
-  cd ../../; make && make install
-
-If this fails the older instructions are still available. Note that several
-file must be regenerated with the auto tools.
-
- 
-
-  patch -p0 < gdk/directfb/gtk-directfb.patch
-
-Regenerate the configure script and the Makefiles by calling automake
-and autoconf. Then rebuild GTK+ using the '--with-gdktarget=directfb'
-configure option.
-
-
-Alternatively you can download a version of GTK+ that includes the
-DirectFB GDK backend and has the patches already applied, see
-
-  http://www.directfb.org/download/GTK+-DirectFB/
 
 
 As DirectFB provides drawing functions, a windowing stack and manages
@@ -149,9 +93,14 @@ the  correct compiler and linker flags for GTK+-DirectFB:
 
 See the file TODO for a list of unimplemented features.
 
+
+Detailed and up-to-date instructions on how to build a complete
+set of GTK-DFB libraries is avalable in the WIKI of the DirectFB project
+at the address
+http://www.directfb.org/wiki/index.php/Projects:GTK_on_DirectFB
+
+
 This library is free software; you can redistribute it and/or modify it 
 under the terms of the GNU Lesser General Public License as published 
 by the Free Software Foundation; either version 2 of the License, or 
 (at your option) any later version.
-
-For more information check out http://www.directfb.org/.
