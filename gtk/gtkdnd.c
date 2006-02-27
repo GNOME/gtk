@@ -592,10 +592,8 @@ gtk_drag_get_cursor (GdkDisplay        *display,
       gint icon_width, icon_height;
       gint width, height;
       GdkPixbuf *cursor_pixbuf, *pixbuf;
-      GtkAnchorType icon_anchor;
-      gint hot_x = 0, hot_y = 0;
+      gint hot_x, hot_y;
       gint icon_x, icon_y, ref_x, ref_y;
-      gboolean found;
 
       if (info->drag_cursors[i] != NULL)
         {
@@ -606,13 +604,12 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	  info->drag_cursors[i] = NULL;
         }
 
+      hot_x = hot_y = 0;
+      icon_x = info->hot_x;
+      icon_y = info->hot_y;
       cursor_pixbuf = gdk_cursor_get_image (drag_cursors[i].cursor);
       if (!cursor_pixbuf)
-	{
-	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
-	  icon_anchor = GTK_ANCHOR_NORTH_WEST;
-	  icon_x = icon_y = -2;
-	}
+	cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
       else
 	{
 	  if (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"))
@@ -621,12 +618,31 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	  if (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"))
 	    hot_y = atoi (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"));
 
-	  found = FALSE;
+#if 0	  
+	  /* The code below is an attempt to let cursor themes
+	   * determine the attachment of the icon to enable things
+	   * like the following:
+	   *
+	   *    +-----+
+           *    |     |
+           *    |     ||
+           *    +-----+|
+           *        ---+
+           * 
+           * It does not work since Xcursor doesn't allow to attach
+           * any additional information to cursors in a retrievable
+           * way  (there are comments, but no way to get at them
+           * short of searching for the actual cursor file).
+           * If this code ever gets used, the icon_window placement
+           * must be changed to recognize these placement options
+           * as well. Note that this code ignores info->hot_x/y.
+           */ 
 	  for (j = 0; j < 10; j++)
 	    {
 	      const gchar *opt;
 	      gchar key[32];
 	      gchar **toks;
+	      GtkAnchorType icon_anchor;
 
 	      g_snprintf (key, 32, "comment%d", j);
 	      opt = gdk_pixbuf_get_option (cursor_pixbuf, key);
@@ -641,54 +657,48 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 		  icon_anchor = atoi (toks[0]);
 		  icon_x = atoi (toks[1]);
 		  icon_y = atoi (toks[2]);
+		  
+		  switch (icon_anchor)
+		    {
+		    case GTK_ANCHOR_NORTH:
+		    case GTK_ANCHOR_CENTER:
+		    case GTK_ANCHOR_SOUTH:
+		      icon_x += icon_width / 2;
+		      break;
+		    case GTK_ANCHOR_NORTH_EAST:
+		    case GTK_ANCHOR_EAST:
+		    case GTK_ANCHOR_SOUTH_EAST:
+		      icon_x += icon_width;
+		      break;
+		    default: ;
+		    }
+		  
+		  switch (icon_anchor)
+		    {
+		    case GTK_ANCHOR_WEST:
+		    case GTK_ANCHOR_CENTER:
+		    case GTK_ANCHOR_EAST:
+		      icon_y += icon_height / 2;
+		      break;
+		    case GTK_ANCHOR_SOUTH_WEST:
+		    case GTK_ANCHOR_SOUTH:
+		    case GTK_ANCHOR_SOUTH_EAST:
+		      icon_x += icon_height;
+		      break;
+		    default: ;
+		    }
 
 		  g_strfreev (toks);
-		  found = TRUE;
 		  break;
 		}
 	    }
-	  if (!found)
-	    {
-	      icon_anchor = GTK_ANCHOR_NORTH_WEST;
-	      icon_x = (gint) -2 * gdk_pixbuf_get_width (cursor_pixbuf) / 16.0; 
-	      icon_y = (gint) -2 * gdk_pixbuf_get_height (cursor_pixbuf) / 16.0; 
-	    }
+#endif
 	}
       
       icon_width = gdk_pixbuf_get_width (info->icon_pixbuf);
       icon_height = gdk_pixbuf_get_height (info->icon_pixbuf);
       cursor_width = gdk_pixbuf_get_width (cursor_pixbuf);
       cursor_height = gdk_pixbuf_get_height (cursor_pixbuf);
-
-      switch (icon_anchor)
-	{
-	case GTK_ANCHOR_NORTH:
-	case GTK_ANCHOR_CENTER:
-	case GTK_ANCHOR_SOUTH:
-	  icon_x += icon_width / 2;
-	  break;
-	case GTK_ANCHOR_NORTH_EAST:
-	case GTK_ANCHOR_EAST:
-	case GTK_ANCHOR_SOUTH_EAST:
-	  icon_x += icon_width;
-	  break;
-	default: ;
-	}
-
-      switch (icon_anchor)
-	{
-	case GTK_ANCHOR_WEST:
-	case GTK_ANCHOR_CENTER:
-	case GTK_ANCHOR_EAST:
-	  icon_y += icon_height / 2;
-	  break;
-	case GTK_ANCHOR_SOUTH_WEST:
-	case GTK_ANCHOR_SOUTH:
-	case GTK_ANCHOR_SOUTH_EAST:
-	  icon_x += icon_height;
-	  break;
-	default: ;
-	}
 
       ref_x = MAX (hot_x, icon_x);
       ref_y = MAX (hot_y, icon_y);
@@ -697,6 +707,9 @@ gtk_drag_get_cursor (GdkDisplay        *display,
          
       if (gtk_drag_can_use_rgba_cursor (display, width, height))
 	{
+	  /* Composite cursor and icon so that both hotspots
+	   * end up at (ref_x, ref_y)
+	   */
 	  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
 				   width, height); 
 	  
@@ -717,7 +730,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 				GDK_INTERP_BILINEAR, 255);
 	  
 	  info->drag_cursors[i] = 
-	    gdk_cursor_new_from_pixbuf (display, pixbuf, 0, 0);
+	    gdk_cursor_new_from_pixbuf (display, pixbuf, ref_x, ref_y);
 	  
 	  g_object_unref (pixbuf);
 	}

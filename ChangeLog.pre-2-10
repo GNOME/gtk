@@ -1,9 +1,16 @@
+2006-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): Comment out some unused
+	code, and fix the reference point of composited drag cursors.
+	(#320132, Christian Neumair)
 
 Sun Feb 26 10:24:10 PST 2006  Michael Emmel  <mike.emmel@gmail.com>
+	
 	*gdk/directfb/README
 	Updated README to remove old build instructions
 
 Sat Feb 25 10:35:23 PST 2006  Michael Emmel  <mike.emmel@gmail.com>
+	
 	*gdk/directfb/gdkdisplay-directfb.c
 	*gdk/directfb/gdkwindow-directfb.c
 	Added stubs for shape window functions to fix compile problems
