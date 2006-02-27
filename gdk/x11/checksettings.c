@@ -16,13 +16,17 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
+#include <string.h>
 #include <glib.h>
 #include "gdksettings.c"
+
 int
 main (int   argc,
       char *argv[])
 {
   guint i, accu = 0;
+
   for (i = 0; i < GDK_SETTINGS_N_ELEMENTS(); i++)
     {
       if (gdk_settings_map[i].xsettings_offset != accu)
@@ -33,6 +37,8 @@ main (int   argc,
       accu += strlen (gdk_settings_names + accu) + 1;
       // g_print ("%u) ok.\n", i);
     }
+
   g_print ("checksettings: all ok.\n");
+
   return 0;
 }

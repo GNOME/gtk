@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 
@@ -29,13 +29,13 @@
 #define GDK_SETTINGS_X_NAME(nth)        (gdk_settings_names + gdk_settings_map[nth].xsettings_offset)
 #define GDK_SETTINGS_GDK_NAME(nth)      (gdk_settings_names + gdk_settings_map[nth].gdk_offset)
 
-static const char gdk_settings_names[] = 
+static const char gdk_settings_names[] =
   "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
   "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
   "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
   "Net/CursorBlink\0"         "gtk-cursor-blink\0"
   "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
-  "Net/ThemeName\0"           "gtk-theme-name\0" 
+  "Net/ThemeName\0"           "gtk-theme-name\0"
   "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
   "Gtk/CanChangeAccels\0"     "gtk-can-change-accels\0"
   "Gtk/ColorPalette\0"        "gtk-color-palette\0"
@@ -64,7 +64,8 @@ static const char gdk_settings_names[] =
   "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
   "Xft/RGBA\0"                "gtk-xft-rgba\0"
   "Xft/DPI\0"                 "gtk-xft-dpi\0"
-  "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0";
+  "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
+  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0";
 
 static const struct
 {
@@ -105,5 +106,6 @@ static const struct
   { 1165, 1179 },
   { 1197, 1206 },
   { 1219, 1227 },
-  { 1239, 1261 }
+  { 1239, 1261 },
+  { 1285, 1305 }
 };

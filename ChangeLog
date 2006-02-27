@@ -1,3 +1,12 @@
+2006-02-27  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdksettings.c: map "gtk-touchscreen-mode" to the
+	"Gtk/TouchscreenMode" XSettings property, remove trailing
+	whitespace.
+
+	* gdk/x11/checksettings.c: #include <string.h> and sprinkled some
+	newlines.
+
 Mon Feb 27 14:52:50 2006  Tim Janik  <timj@imendio.com>
 
 	* gdkevents-x11.c:
