@@ -604,9 +604,12 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	  info->drag_cursors[i] = NULL;
         }
 
-      hot_x = hot_y = 0;
       icon_x = info->hot_x;
       icon_y = info->hot_y;
+      icon_width = gdk_pixbuf_get_width (info->icon_pixbuf);
+      icon_height = gdk_pixbuf_get_height (info->icon_pixbuf);
+
+      hot_x = hot_y = 0;
       cursor_pixbuf = gdk_cursor_get_image (drag_cursors[i].cursor);
       if (!cursor_pixbuf)
 	cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
@@ -694,12 +697,10 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	    }
 #endif
 	}
-      
-      icon_width = gdk_pixbuf_get_width (info->icon_pixbuf);
-      icon_height = gdk_pixbuf_get_height (info->icon_pixbuf);
+
       cursor_width = gdk_pixbuf_get_width (cursor_pixbuf);
       cursor_height = gdk_pixbuf_get_height (cursor_pixbuf);
-
+      
       ref_x = MAX (hot_x, icon_x);
       ref_y = MAX (hot_y, icon_y);
       width = ref_x + MAX (cursor_width - hot_x, icon_width - icon_x);
