@@ -16,8 +16,7 @@ To set the font which is initially selected, use
 gtk_font_selection_set_font_name().
 </para>
 <para>
-To get the selected font use gtk_font_selection_get_font()
-or gtk_font_selection_get_font_name().
+To get the selected font use gtk_font_selection_get_font_name().
 </para>
 <para>
 To change the text which is shown in the preview area, use
@@ -80,24 +79,19 @@ Gets the currently-selected font.
 
 <!-- ##### FUNCTION gtk_font_selection_get_font_name ##### -->
 <para>
-Gets the currently-selected font name.
 </para>
 
-@fontsel: a #GtkFontSelection.
-@Returns: the name of the currently selected font, or %NULL if
-    no font is selected.  You should g_free() the returned font name
-    after you are done with it.
-A newly allocated string with the currently-se
+@fontsel: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_set_font_name ##### -->
 <para>
-Sets the currently-selected font.
 </para>
 
-@fontsel: a #GtkFontSelection.
-@fontname: a fontname.
-@Returns: %TRUE if the font was found.
+@fontsel:
+@fontname:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_get_preview_text ##### -->

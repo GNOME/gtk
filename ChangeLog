@@ -1,3 +1,16 @@
+2006-02-27  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Check that
+	the fontsel has a screen assigned before doing anything.  This
+	will at least warn the caller of what is wrong, since we only
+	populate the family_list until we get a screen.  Also, put the
+	reference docs here.  Fixes bug #332756.
+	(gtk_font_selection_dialog_get_font_name): Document this here.
+	(gtk_font_selection_get_font_name): Document this here; mention
+	that the font names get normalized, so the result of this function
+	may not be the same as what you set with
+	gtk_font_selection_set_font_name().
+
 2006-02-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

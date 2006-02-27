@@ -13,8 +13,7 @@ To set the font which is initially selected, use
 gtk_font_selection_dialog_set_font_name().
 </para>
 <para>
-To get the selected font use gtk_font_selection_dialog_get_font()
-or gtk_font_selection_dialog_get_font_name().
+To get the selected font use gtk_font_selection_dialog_get_font_name().
 </para>
 <para>
 To change the text which is shown in the preview area, use
@@ -67,11 +66,10 @@ Gets the currently-selected font.
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font_name ##### -->
 <para>
-Gets the currently-selected font name.
 </para>
 
-@fsd: a #GtkFontSelectionDialog.
-@Returns: the currently-selected font name, or %NULL if no font is selected.
+@fsd: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_font_name ##### -->

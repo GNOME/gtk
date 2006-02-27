@@ -1167,6 +1167,20 @@ gtk_font_selection_get_font (GtkFontSelection *fontsel)
   return gtk_font_selection_get_font_internal (fontsel);
 }
 
+/**
+ * gtk_font_selection_get_font_name:
+ * @fontsel: a #GtkFontSelection
+ * 
+ * Gets the currently-selected font name.  Note that this can be a different
+ * string than what you set with gtk_font_selection_set_font_name(), as
+ * the font selection widget may normalize font names and thus return a string
+ * with a different structure.  For example, "Helvetica Italic Bold 12" could be
+ * normalized to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
+ * if you want to compare two font descriptions.
+ * 
+ * Return value: A string with the name of the current font, or #NULL if no font
+ * is selected.  You must free this string with g_free().
+ **/
 gchar *
 gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 {
@@ -1185,6 +1199,20 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
    - i.e. the name in the main list. If we can't find that, then just return.
    Next we try to set each of the properties according to the fontname.
    Finally we select the font family & style in the lists. */
+
+/**
+ * gtk_font_selection_set_font_name:
+ * @fontsel: a #GtkFontSelection
+ * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
+ * 
+ * Sets the currently-selected font.  Note that the @fontsel needs to know the
+ * screen in which it will appear for this to work; this can be guaranteed by
+ * simply making sure that the @fontsel is inserted in a toplevel window before
+ * you call this function.
+ * 
+ * Return value: #TRUE if the font could be set successfully; #FALSE if no such
+ * font exists or if the @fontsel doesn't belong to a particular screen yet.
+ **/
 gboolean
 gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 				  const gchar      *fontname)
@@ -1200,6 +1228,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   const gchar *new_family_name;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
+  g_return_val_if_fail (gtk_widget_has_screen (GTK_WIDGET (fontsel)), FALSE);
   
   new_desc = pango_font_description_from_string (fontname);
   new_family_name = pango_font_description_get_family (new_desc);
@@ -1404,6 +1433,20 @@ gtk_font_selection_dialog_new (const gchar *title)
   return GTK_WIDGET (fontseldiag);
 }
 
+/**
+ * gtk_font_selection_dialog_get_font_name:
+ * @fsd: a #GtkFontSelectionDialog
+ * 
+ * Gets the currently-selected font name.  Note that this can be a different
+ * string than what you set with gtk_font_selection_dialog_set_font_name(), as
+ * the font selection widget may normalize font names and thus return a string
+ * with a different structure.  For example, "Helvetica Italic Bold 12" could be
+ * normalized to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
+ * if you want to compare two font descriptions.
+ * 
+ * Return value: A string with the name of the current font, or #NULL if no font
+ * is selected.  You must free this string with g_free().
+ **/
 gchar*
 gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
 {
