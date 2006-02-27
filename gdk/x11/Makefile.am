@@ -68,6 +68,12 @@ endif
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
+
+noinst_PROGRAMS = checksettings
+checksettings_LDADD = libgdk-x11.la $(GLIB_LIBS) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 
+
+TESTS = checksettings
+
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST = 			\
