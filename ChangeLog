@@ -1,3 +1,9 @@
+2006-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): Comment out some unused
+	code, and fix the reference point of composited drag cursors.
+	(#320132, Christian Neumair)
+
 2006-02-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* Bump version
