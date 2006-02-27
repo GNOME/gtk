@@ -247,12 +247,14 @@ gtk_notebook_tab_get_type G_GNUC_CONST
 gtk_anchor_type_get_type G_GNUC_CONST
 gtk_arg_flags_get_type G_GNUC_CONST
 gtk_arrow_type_get_type G_GNUC_CONST
+gtk_assistant_page_type_get_type G_GNUC_CONST
 gtk_attach_options_get_type G_GNUC_CONST
 gtk_button_action_get_type G_GNUC_CONST
 gtk_buttons_type_get_type G_GNUC_CONST
 gtk_calendar_display_options_get_type G_GNUC_CONST
 gtk_cell_renderer_mode_get_type G_GNUC_CONST
 gtk_cell_renderer_state_get_type G_GNUC_CONST
+gtk_cell_renderer_accel_mode_get_type
 gtk_corner_type_get_type G_GNUC_CONST
 gtk_debug_flag_get_type G_GNUC_CONST
 gtk_delete_type_get_type G_GNUC_CONST
@@ -265,6 +267,7 @@ gtk_file_chooser_action_get_type G_GNUC_CONST
 gtk_file_chooser_confirmation_get_type G_GNUC_CONST
 gtk_file_filter_flags_get_type G_GNUC_CONST
 gtk_icon_view_drop_position_get_type G_GNUC_CONST
+gtk_sensitivity_type_get_type G_GNUC_CONST
 gtk_window_type_get_type G_GNUC_CONST
 gtk_wrap_mode_get_type G_GNUC_CONST
 gtk_widget_flags_get_type G_GNUC_CONST
@@ -3393,6 +3396,12 @@ gtk_tooltips_new
 gtk_tooltips_set_delay
 #endif
 gtk_tooltips_set_tip
+#endif
+#endif
+
+#if IN_HEADER(__GTK_TRAY_ICON_H__)
+#if IN_FILE(__GTK_TRAY_ICON_X11_C__)
+gtk_tray_icon_get_type G_GNUC_CONST
 #endif
 #endif
 

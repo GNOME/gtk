@@ -1,3 +1,7 @@
+2006-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmime.h (xdg_mime_dump): Don't export xdg_mime_dump.
+
 2005-12-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* Merge upstream changes to handle duplicate glob

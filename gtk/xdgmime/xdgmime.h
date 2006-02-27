@@ -59,6 +59,7 @@ typedef void (*XdgMimeDestroy)  (void *user_data);
 #define xdg_mime_unalias_mime_type            XDG_ENTRY(unalias_mime_type)
 #define xdg_mime_get_max_buffer_extents       XDG_ENTRY(get_max_buffer_extents)
 #define xdg_mime_shutdown                     XDG_ENTRY(shutdown)
+#define xdg_mime_dump                         XDG_ENTRY(dump)
 #define xdg_mime_register_reload_callback     XDG_ENTRY(register_reload_callback)
 #define xdg_mime_remove_callback              XDG_ENTRY(remove_callback)
 #define xdg_mime_type_unknown                 XDG_ENTRY(type_unknown)

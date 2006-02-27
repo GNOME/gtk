@@ -501,3 +501,7 @@ _gtk_tray_icon_get_orientation (GtkTrayIcon *icon)
   return icon->priv->orientation;
 }
 
+
+#define __GTK_TRAY_ICON_X11_C__
+#include "gtkaliasdef.c"
+

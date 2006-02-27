@@ -1,3 +1,8 @@
+2006-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktrayicon-x11.c: Fix symbol lists for make check.
+
 2006-02-27  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/x11/gdksettings.c: map "gtk-touchscreen-mode" to the
