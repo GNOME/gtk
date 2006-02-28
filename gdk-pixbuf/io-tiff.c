@@ -405,7 +405,7 @@ gdk_pixbuf__tiff_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 }
 
 static tsize_t
-tiff_read (thandle_t handle, tdata_t buf, tsize_t size)
+tiff_load_read (thandle_t handle, tdata_t buf, tsize_t size)
 {
         TiffContext *context = (TiffContext *)handle;
         
@@ -418,13 +418,13 @@ tiff_read (thandle_t handle, tdata_t buf, tsize_t size)
 }
 
 static tsize_t
-tiff_write (thandle_t handle, tdata_t buf, tsize_t size)
+tiff_load_write (thandle_t handle, tdata_t buf, tsize_t size)
 {
         return -1;
 }
 
 static toff_t
-tiff_seek (thandle_t handle, toff_t offset, int whence)
+tiff_load_seek (thandle_t handle, toff_t offset, int whence)
 {
         TiffContext *context = (TiffContext *)handle;
         
@@ -452,13 +452,13 @@ tiff_seek (thandle_t handle, toff_t offset, int whence)
 }
 
 static int
-tiff_close (thandle_t context)
+tiff_load_close (thandle_t context)
 {
         return 0;
 }
 
 static toff_t
-tiff_size (thandle_t handle)
+tiff_load_size (thandle_t handle)
 {
         TiffContext *context = (TiffContext *)handle;
         
@@ -466,7 +466,7 @@ tiff_size (thandle_t handle)
 }
 
 static int
-tiff_map_file (thandle_t handle, tdata_t *buf, toff_t *size)
+tiff_load_map_file (thandle_t handle, tdata_t *buf, toff_t *size)
 {
         TiffContext *context = (TiffContext *)handle;
         
@@ -477,7 +477,7 @@ tiff_map_file (thandle_t handle, tdata_t *buf, toff_t *size)
 }
 
 static void
-tiff_unmap_file (thandle_t handle, tdata_t data, toff_t offset)
+tiff_load_unmap_file (thandle_t handle, tdata_t data, toff_t offset)
 {
 }
 
@@ -494,10 +494,10 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
         tiff_push_handlers ();
         
         tiff = TIFFClientOpen ("libtiff-pixbuf", "r", data, 
-                               tiff_read, tiff_write, 
-                               tiff_seek, tiff_close, 
-                               tiff_size, 
-                               tiff_map_file, tiff_unmap_file);
+                               tiff_load_read, tiff_load_write, 
+                               tiff_load_seek, tiff_load_close, 
+                               tiff_load_size, 
+                               tiff_load_map_file, tiff_load_unmap_file);
         if (!tiff || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
@@ -578,6 +578,238 @@ gdk_pixbuf__tiff_image_load_increment (gpointer data, const guchar *buf,
 	return TRUE;
 }
 
+typedef struct {
+        gchar *buffer;
+        guint allocated;
+        guint used;
+        guint pos;
+} TiffSaveContext;
+
+static tsize_t
+tiff_save_read (thandle_t handle, tdata_t buf, tsize_t size)
+{
+        return -1;
+}
+
+static tsize_t
+tiff_save_write (thandle_t handle, tdata_t buf, tsize_t size)
+{
+        TiffSaveContext *context = (TiffSaveContext *)handle;
+
+        /* Modify buffer length */
+        if (context->pos + size > context->used)
+                context->used = context->pos + size;
+
+        /* Realloc */
+        if (context->used > context->allocated) {
+                context->buffer = g_realloc (context->buffer, context->pos + size);
+                context->allocated = context->used;
+        }
+
+        /* Now copy the data */
+        memcpy (context->buffer + context->pos, buf, size);
+
+        /* Update pos */
+        context->pos += size;
+
+        return size;
+}
+
+static toff_t
+tiff_save_seek (thandle_t handle, toff_t offset, int whence)
+{
+        TiffSaveContext *context = (TiffSaveContext *)handle;
+
+        switch (whence) {
+        case SEEK_SET:
+                if (offset < 0)
+                        return -1;
+                context->pos = offset;
+                break;
+        case SEEK_CUR:
+                context->pos += offset;
+                break;
+        case SEEK_END:
+                context->pos = context->used + offset;
+                break;
+        default:
+                return -1;
+                break;
+        }
+        return context->pos;
+}
+
+static int
+tiff_save_close (thandle_t context)
+{
+        return 0;
+}
+
+static toff_t
+tiff_save_size (thandle_t handle)
+{
+        return -1;
+}
+
+static TiffSaveContext *
+create_save_context (void)
+{
+        TiffSaveContext *context;
+
+        context = g_new (TiffSaveContext, 1);
+        context->buffer = NULL;
+        context->allocated = 0;
+        context->used = 0;
+        context->pos = 0;
+
+        return context;
+}
+
+static void
+free_save_context (TiffSaveContext *context)
+{
+        g_free (context->buffer);
+        g_free (context);
+}
+
+static gboolean
+gdk_pixbuf__tiff_image_save_to_callback (GdkPixbufSaveFunc   save_func,
+                                         gpointer            user_data,
+                                         GdkPixbuf          *pixbuf, 
+                                         gchar             **keys,
+                                         gchar             **values,
+                                         GError            **error)
+{
+        TIFF *tiff;
+        gint width, height, rowstride;
+        guchar *pixels;
+        gboolean has_alpha;
+        gushort alpha_samples[1] = { EXTRASAMPLE_UNASSALPHA };
+        int y;
+        TiffSaveContext *context;
+        gboolean retval;
+
+        tiff_push_handlers ();
+
+        context = create_save_context ();
+        tiff = TIFFClientOpen ("libtiff-pixbuf", "w", context,  
+                               tiff_save_read, tiff_save_write, 
+                               tiff_save_seek, tiff_save_close, 
+                               tiff_save_size, 
+                               NULL, NULL);
+
+        if (!tiff || global_error) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("Failed to save TIFF image"));
+
+                tiff_pop_handlers ();
+
+                free_save_context (context);
+                return FALSE;
+        }
+
+        rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+        pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+        has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
+
+        height = gdk_pixbuf_get_height (pixbuf);
+        width = gdk_pixbuf_get_width (pixbuf);
+
+        TIFFSetField (tiff, TIFFTAG_IMAGEWIDTH, width);
+        TIFFSetField (tiff, TIFFTAG_IMAGELENGTH, height);
+        TIFFSetField (tiff, TIFFTAG_BITSPERSAMPLE, 8);
+        TIFFSetField (tiff, TIFFTAG_SAMPLESPERPIXEL, has_alpha ? 4 : 3);
+        TIFFSetField (tiff, TIFFTAG_ROWSPERSTRIP, height);
+
+        if (has_alpha)
+                TIFFSetField (tiff, TIFFTAG_EXTRASAMPLES, 1, alpha_samples);
+
+        TIFFSetField (tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        TIFFSetField (tiff, TIFFTAG_FILLORDER, FILLORDER_MSB2LSB);        
+        TIFFSetField (tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+
+        for (y = 0; y < height; y++) {
+                if (TIFFWriteScanline (tiff, pixels + y * rowstride, y, 0) == -1 ||
+                    global_error)
+                        break;
+        }
+
+        if (global_error) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("Failed to write TIFF data"));
+
+                TIFFClose (tiff);
+
+                free_save_context (context);               
+                tiff_pop_handlers ();
+                
+                return FALSE;
+        }
+
+        TIFFClose (tiff);
+        if (global_error) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("TIFFClose operation failed"));
+
+                free_save_context (context);               
+                tiff_pop_handlers ();
+                
+                return FALSE;
+        }
+
+        tiff_pop_handlers ();
+
+        /* Now call the callback */
+        retval = save_func (context->buffer, context->used, error, user_data);
+
+        free_save_context (context);               
+        
+        return retval;
+}
+
+static gboolean
+save_to_file_cb (const gchar *buf,
+		 gsize count,
+		 GError **error,
+		 gpointer data)
+{
+	gint bytes;
+	
+	while (count > 0) {
+		bytes = fwrite (buf, sizeof (gchar), count, (FILE *) data);
+		if (bytes <= 0)
+			break;
+		count -= bytes;
+		buf += bytes;
+	}
+
+	if (count) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_FAILED,
+			     _("Couldn't write to TIFF file"));
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
+static gboolean
+gdk_pixbuf__tiff_image_save (FILE          *f, 
+                             GdkPixbuf     *pixbuf, 
+                             gchar        **keys,
+                             gchar        **values,
+                             GError       **error)
+{
+	return gdk_pixbuf__tiff_image_save_to_callback (save_to_file_cb,
+                                                        f, pixbuf, keys,
+                                                        values, error);
+}
+
 void
 MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
 {
@@ -585,6 +817,8 @@ MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
         module->begin_load = gdk_pixbuf__tiff_image_begin_load;
         module->stop_load = gdk_pixbuf__tiff_image_stop_load;
         module->load_increment = gdk_pixbuf__tiff_image_load_increment;
+        module->save = gdk_pixbuf__tiff_image_save;
+        module->save_to_callback = gdk_pixbuf__tiff_image_save_to_callback;
 }
 
 void
@@ -611,6 +845,6 @@ MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
 	info->mime_types = mime_types;
 	info->extensions = extensions;
         /* not threadsafe, due to the error handler handling */
-	info->flags = 0;
+	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
 	info->license = "LGPL";
 }

@@ -1,3 +1,42 @@
+2006-02-28  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk-pixbuf-io.c:
+	Update documentation now that tiff supports saving.
+	
+        * io-tiff.c:
+        (tiff_load_read):
+        (tiff_load_write):
+        (tiff_load_seek):
+        (tiff_load_close):
+        (tiff_load_size):
+        (tiff_load_map_file):
+        (tiff_load_unmap_file):
+        (gdk_pixbuf__tiff_image_stop_load):
+	Rename callback functions that are used during loading.
+	
+        (tiff_save_read):
+        (tiff_save_write):
+        (tiff_save_seek):
+        (tiff_save_close):
+        (tiff_save_size):
+        (create_save_context):
+        (free_save_context):
+	New callback functions which operate on a memory buffer.
+	
+        (gdk_pixbuf__tiff_image_save_to_callback):
+	Implement saving of pixbufs to tiffs.
+	
+        (save_to_file_cb):
+        (gdk_pixbuf__tiff_image_save):
+	New function that saves a pixbuf to a FILE handle. Uses
+	save_to_callback.
+	
+        (fill_vtable):
+	Add new functions.
+	
+        (fill_info):
+	Change flags since this module supports writing now.
+	
 2006-02-10  Matthias Clasen  <mclasen@redhat.com>
 
         * io-jpeg.c:
