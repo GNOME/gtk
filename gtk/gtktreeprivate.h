@@ -366,6 +366,9 @@ GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
 void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
                                                           GtkTreeView      *tree_view);
+gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *selection,
+							  GtkRBNode        *node,
+							  GtkTreePath      *path);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn *tree_column,
 							  GdkWindow         *window,

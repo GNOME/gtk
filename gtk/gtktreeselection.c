@@ -1294,10 +1294,10 @@ tree_column_is_sensitive (GtkTreeViewColumn *column,
   return sensitive;
 }
 
-static gboolean
-row_is_selectable (GtkTreeSelection *selection,
-		   GtkRBNode        *node,
-		   GtkTreePath      *path)
+gboolean
+_gtk_tree_selection_row_is_selectable (GtkTreeSelection *selection,
+				       GtkRBNode        *node,
+				       GtkTreePath      *path)
 {
   GList *list;
   GtkTreeIter iter;
@@ -1386,7 +1386,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	    {
 	      /* We only want to select the new node if we can unselect the old one,
 	       * and we can select the new one. */
-	      dirty = row_is_selectable (selection, node, path);
+	      dirty = _gtk_tree_selection_row_is_selectable (selection, node, path);
 
 	      /* if dirty is FALSE, we weren't able to select the new one, otherwise, we try to
 	       * unselect the new one
@@ -1502,7 +1502,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 				     GtkRBNode        *node,
 				     gboolean          select)
 {
-  gboolean selected = FALSE;
+  gboolean toggle = FALSE;
   GtkTreePath *path = NULL;
 
   select = !! select;
@@ -1510,11 +1510,14 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {
       path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
-      selected = row_is_selectable (selection, node, path);
+      if (!select)
+	toggle = TRUE;
+      else
+	toggle = _gtk_tree_selection_row_is_selectable (selection, node, path);
       gtk_tree_path_free (path);
     }
 
-  if (selected == TRUE)
+  if (toggle)
     {
       node->flags ^= GTK_RBNODE_IS_SELECTED;
 

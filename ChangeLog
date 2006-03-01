@@ -1,3 +1,16 @@
+2006-03-01  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeselection.c (row_is_selectable): rename to
+	_gtk_tree_selection_row_is_selectable and export internally,
+	(gtk_tree_selection_real_select_node): changed so it is always
+	possible to unselect insensitive nodes, changed the logic a bit to
+	be more clear.
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_selection_row_is_selectable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): Unselect a row if
+	it became insensitive.
+
 2006-02-27  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Check that

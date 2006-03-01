@@ -7238,6 +7238,11 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   if (tree == NULL)
     goto done;
 
+  /* Check if the node became insensitive, and if so, unselect it */
+  if (!_gtk_tree_selection_row_is_selectable (tree_view->priv->selection,
+					      node, path))
+    gtk_tree_selection_unselect_path (tree_view->priv->selection, path);
+
   if (tree_view->priv->fixed_height_mode
       && tree_view->priv->fixed_height >= 0)
     {
