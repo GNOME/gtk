@@ -1,3 +1,18 @@
+2006-02-27  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/tmpl/gtkfontsel.sgml: Don't put the docs for
+	gtk_font_selection_{set,get}_font_name() here; put them in the code
+	instead.
+	Don't recommend the deprecated gtk_font_selection_get_font() as
+	the way to get the font back.
+
+	* gtk/tmpl/gtkfontseldlg.sgml: Don't put the docs for
+	gtk_font_selection_dialog_get_font_name() here; put them in the
+	code instead.
+	Don't recommend the deprecated
+	gtk_font_selection_dialog_get_font() as the way to get the font
+	back.
+
 2006-02-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt:
