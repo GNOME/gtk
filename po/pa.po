@@ -1,81 +1,23 @@
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
-# translation of gtk+.HEAD.po to Punjabi
 # translation of pa.po to Punjabi
 # Copyright (C) 2004 THE gtk+.HEAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk+.HEAD package.
+#
 # Amanpreet Singh Alam <amanlinux@netscape.net>, 2004.
 # Amanpreet Singh Alam <aalam@redhat.com>, 2004.
 # Amanpreet Singh Brar <amanpreetalam@yahoo.com>, 2005.
-#
+# Amanpreet Singh Alam <apbrar@gmail.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-24 13:34-0400\n"
-"PO-Revision-Date: 2005-08-22 12:58+0530\n"
-"Last-Translator: Amanpreet Singh Brar <amanpreetalam@yahoo.com>\n"
+"PO-Revision-Date: 2006-03-01 09:04+0530\n"
+"Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.1\n"
 "Plural-Forms: nplurals=2; plural=0;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:856
@@ -92,8 +34,7 @@ msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ �
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:905
 #: gdk-pixbuf/gdk-pixbuf-io.c:1148 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਚਿੱਤਰ ਫਾਇਲ "
 "ਨਿਕਾਰਾ ਹੈ"
@@ -110,14 +51,14 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:462
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s: %s"
+msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੋਡੀਊਲ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:477
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ GTK ਵਰਜਨ ਤੋਂ ਹੋਵੇ?"
+msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੋਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ GTK ਵਰਜਨ ਤੋਂ ਹੋਵੇ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:646 gdk-pixbuf/gdk-pixbuf-io.c:698
 #, c-format
@@ -127,11 +68,11 @@ msgstr "ਚਿੱਤਰ ਕਿਸਮ '%s' ਸਹਾਇਤਾ-ਪ੍ਰਾਪਤ 
 #: gdk-pixbuf/gdk-pixbuf-io.c:738
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ਫਾਇਲ '%s' ਲਈ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮਿਟ ਦੀ ਪਛਾਣ ਨਾ ਕੀਤੀ ਜਾ ਸਕੀ"
+msgstr "ਫਾਇਲ '%s' ਲਈ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮੈਟ ਦੀ ਪਛਾਣ ਨਾ ਕੀਤੀ ਜਾ ਸਕੀ ਹੈ।"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:746
 msgid "Unrecognized image file format"
-msgstr "ਅਣਜਾਣ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮਿਟ"
+msgstr "ਅਣਜਾਣ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:914
 #, c-format
@@ -187,8 +128,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s'  ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ "
-"ਕਾਰਨ ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ"
+"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ "
+"ਕਾਰਨ ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ।"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -196,7 +137,7 @@ msgstr "ਚਿੱਤਰ ਸਿਰਲੇਖ ਨਿਕਾਰਾ"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
-msgstr "ਚਿੱਤਰ ਫਾਰਮਿਟ ਅਣਜਾਣ"
+msgstr "ਚਿੱਤਰ ਫਾਰਮੈਟ ਅਣਜਾਣ"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
@@ -232,7 +173,7 @@ msgstr "ਸਜੀਵਤਾ ਵਿੱਚ ਨਿਕਾਰਾ ਭਾਗ"
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr "ANI ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "ANI ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
@@ -261,7 +202,7 @@ msgstr "BMP ਫਾਇਲ ਨੂੰ ਲਿਖਿਆ ਨਹੀਂ ਜਾ ਸਕਿ
 
 #: gdk-pixbuf/io-bmp.c:1293
 msgid "The BMP image format"
-msgstr "BMP ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "BMP ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
@@ -313,14 +254,13 @@ msgstr "ਫਾਇਲ ਇੱਕ GIF ਫਾਇਲ ਲੱਗ ਨਹੀ ਰਹੀ �
 #: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ਫਾਇਲ ਫਾਰਮਿਟ ਦਾ ਵਰਜਨ %s ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਹੀ ਹੈ"
+msgstr "GIF ਫਾਇਲ ਫਾਰਮੈਟ ਦਾ ਵਰਜਨ %s ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਸਥਾਨਕ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
+msgstr "GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਲੋਕਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
@@ -328,7 +268,7 @@ msgstr "GIF ਚਿੱਤਰ ਦੀ ਕੱਟ-ਵੱਢ ਕੀਤੀ ਗਈ ਹ�
 
 #: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
-msgstr "GIF ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "GIF ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
 #: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
@@ -374,12 +314,12 @@ msgstr "ICO ਚਿੱਤਰ ਲਈ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪ�
 
 #: gdk-pixbuf/io-ico.c:1218
 msgid "The ICO image format"
-msgstr "ICO ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "ICO ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG ਚਿੱਤਰ ਫਾਇਲ(%s) ਦੀ ਪੇਸ਼ਕਾਰੀ ਵਿੱਚ ਗਲਤੀ"
+msgstr "JPEG ਚਿੱਤਰ ਫਾਇਲ (%s) ਦੀ ਪੇਸ਼ਕਾਰੀ ਵਿੱਚ ਗਲਤੀ"
 
 #: gdk-pixbuf/io-jpeg.c:352
 msgid ""
@@ -406,13 +346,12 @@ msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰ�
 
 #: gdk-pixbuf/io-jpeg.c:912
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%d' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-jpeg.c:1074
 msgid "The JPEG image format"
-msgstr "JPEG ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "JPEG ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
@@ -457,7 +396,7 @@ msgstr "PCX ਡਾਟਾ ਦੇ ਅਖੀਰ ਤੇ ਕੋਈ ਪਲੇਟਸ �
 
 #: gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
-msgstr "PCX ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "PCX ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -507,8 +446,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
 #: gdk-pixbuf/io-png.c:810
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
 
 #: gdk-pixbuf/io-png.c:818
@@ -538,7 +476,7 @@ msgstr "PNG ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋ�
 
 #: gdk-pixbuf/io-png.c:1026
 msgid "The PNG image format"
-msgstr "PNG ਫਾਇਲ ਫਾਰਮਿਟ"
+msgstr "PNG ਫਾਇਲ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
@@ -578,11 +516,11 @@ msgstr "ਅਣਘਡ਼-PNM ਚਿੱਤਰ ਕਿਸਮ ਠੀਕ ਨਹੀ ਹ
 
 #: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
-msgstr "PNM ਚਿੱਤਰ ਫਾਰਮਿਟ ਠੀਕ ਨਹੀ ਹੈ"
+msgstr "PNM ਚਿੱਤਰ ਫਾਰਮੈਟ ਠੀਕ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ਚਿੱਤਰ ਲੋਡਰ, ਇਸ PNM ਸਬ-ਫਾਰਮਿਟ ਸਹਾਇਤਾ ਨਹੀ ਦੇ ਰਿਹਾ ਹੈ"
+msgstr "PNM ਚਿੱਤਰ ਲੋਡਰ, ਇਸ PNM ਸਬ-ਫਾਰਮੈਟ ਸਹਾਇਤਾ ਨਹੀ ਦੇ ਰਿਹਾ ਹੈ"
 
 #: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
@@ -590,7 +528,7 @@ msgstr "ਫਾਇਲ ਦਾ ਅਪੂਰਨ ਅੰਤ ਆ ਗਿਆ"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "ਅਨਘਡ਼ PNM ਫਾਰਮਿਟ ਲਈ ਇੱਕ ਨਮੂਨਾ ਡਾਟਾ ਤੋ ਪਹਿਲਾਂ ਇੱਕ ਸਫੈਦ ਥਾਂ ਲੋੜੀਦੀ ਹੈ"
+msgstr "ਅਨਘਡ਼ PNM ਫਾਰਮੈਟ ਲਈ ਇੱਕ ਨਮੂਨਾ ਡਾਟਾ ਤੋ ਪਹਿਲਾਂ ਇੱਕ ਸਫੈਦ ਥਾਂ ਲੋੜੀਦੀ ਹੈ"
 
 #: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
@@ -610,7 +548,7 @@ msgstr "PNM ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮ
 
 #: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ਇੱਕ ਚਿੱਤਰ ਫਾਰਮਿਟ ਸਮੂਹ ਹੈ"
+msgstr "PNM/PBM/PGM/PPM ਇੱਕ ਚਿੱਤਰ ਫਾਰਮੈਟ ਸਮੂਹ ਹੈ"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
@@ -630,7 +568,7 @@ msgstr "RAS ਚਿੱਤਰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈ
 
 #: gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
-msgstr "ਸਨ ਪੇਸ਼ਕਾਰੀ ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "ਸਨ ਪੇਸ਼ਕਾਰੀ ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
@@ -687,7 +625,7 @@ msgstr "ਫਾਇਲ ਵਿੱਚ ਡਾਟਾ ਜਿਆਦਾ ਹੈ"
 
 #: gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
-msgstr "ਟਾਰਗ ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "ਟਾਰਗ ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
@@ -728,7 +666,7 @@ msgstr "TIFF ਚਿੱਤਰ ਲੋਡ ਅਸਫਲ"
 
 #: gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
-msgstr "TIFF ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "TIFF ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -736,7 +674,7 @@ msgstr "ਚਿੱਤਰ ਦੀ ਚੌੜਾਈ ਸਿਫ਼ਰ"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr "ਚਿੱਤਰ ਦੀ ਉਚਾਈ ਸਿਫ਼ਰ "
+msgstr "ਚਿੱਤਰ ਦੀ ਉਚਾਈ ਸਿਫ਼ਰ"
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
@@ -748,7 +686,7 @@ msgstr "ਬਾਕੀ ਨੂੰ ਸੰਭਾਲ ਨਹੀ ਸਕਿਆ"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr "WBMP ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "WBMP ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
@@ -764,7 +702,7 @@ msgstr "XBM ਚਿੱਤਰ ਲੋਡਿੰਗ ਦੌਰਾਨ ਆਰਜ਼ੀ �
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
-msgstr "XBM ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "XBM ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #: gdk-pixbuf/io-xpm.c:467
 msgid "No XPM header found"
@@ -804,7 +742,7 @@ msgstr "XPM ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਦੌਰਾਨ ਆਰਜ�
 
 #: gdk-pixbuf/io-xpm.c:806
 msgid "The XPM image format"
-msgstr "XPM ਚਿੱਤਰ ਫਾਰਮਿਟ"
+msgstr "XPM ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
@@ -839,12 +777,12 @@ msgstr "ਝਾਤੀ"
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr "ਇਸਤੇਮਾਲ ਕਰਨ ਲਈ X ਪਰਦਾ"
+msgstr "ਇਸਤੇਮਾਲ ਕਰਨ ਲਈ X ਸਕਰੀਨ"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr "ਪਰਦਾ"
+msgstr "ਸਕਰੀਨ"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
@@ -866,135 +804,135 @@ msgstr "ਨਾ-ਨਿਰਧਾਰਿਤ ਕਰਨ ਲਈ Gdk ਨਿਸ਼ਾਨ"
 
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "keyboard label|BackSpace"
+msgstr "BackSpace"
 
 #: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "keyboard label|Tab"
+msgstr "Tab"
 
 #: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "keyboard label|Return"
+msgstr "Return"
 
 #: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "keyboard label|Pause"
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "keyboard label|Scroll_Lock"
+msgstr "Scroll_Lock"
 
 #: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "keyboard label|Sys_Req"
+msgstr "Sys_Req"
 
 #: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "keyboard label|Escape"
+msgstr "Escape"
 
 #: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "keyboard label|Multi_key"
+msgstr "Multi_key"
 
 #: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "keyboard label|Home"
+msgstr "Home"
 
 #: gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr "keyboard label|Page_Up"
+msgstr "Page_Up"
 
 #: gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr "keyboard label|Page_Down"
+msgstr "Page_Down"
 
 #: gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr "keyboard label|End"
+msgstr "End"
 
 #: gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "keyboard label|Begin"
+msgstr "Begin"
 
 #: gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "keyboard label|Print"
+msgstr "Print"
 
 #: gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr "keyboard label|Insert"
+msgstr "Insert"
 
 #: gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "keyboard label|Num_Lock"
+msgstr "Num_Lock"
 
 #: gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "keyboard label|KP_Space"
+msgstr "KP_Space"
 
 #: gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr "keyboard label|KP_Tab"
+msgstr "KP_Tab"
 
 #: gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "keyboard label|KP_Enter"
+msgstr "KP_Enter"
 
 #: gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "keyboard label|KP_Home"
+msgstr "KP_Home"
 
 #: gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "keyboard label|KP_Left"
+msgstr "KP_Left"
 
 #: gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "keyboard label|KP_Up"
+msgstr "KP_Up"
 
 #: gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "keyboard label|KP_Right"
+msgstr "KP_Right"
 
 #: gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "keyboard label|KP_Down"
+msgstr "KP_Down"
 
 #: gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "keyboard label|KP_Page_Up"
+msgstr "KP_Page_Up"
 
 #: gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "keyboard label|KP_Prior"
+msgstr "KP_Prior"
 
 #: gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "keyboard label|KP_Page_Down"
+msgstr "KP_Page_Down"
 
 #: gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "keyboard label|KP_Next"
+msgstr "KP_Next"
 
 #: gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "keyboard label|KP_End"
+msgstr "KP_End"
 
 #: gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "keyboard label|KP_Begin"
+msgstr "KP_Begin"
 
 #: gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "keyboard label|KP_Insert"
+msgstr "KP_Insert"
 
 #: gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "keyboard label|KP_Delete"
+msgstr "KP_Delete"
 
 #: gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "keyboard label|Delete"
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
@@ -1082,7 +1020,7 @@ msgstr "ਕਲਾਕਾਰੀ"
 #.
 #: gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr "keyboard label|Shift"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1092,7 +1030,7 @@ msgstr "keyboard label|Shift"
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr "keyboard label|Ctrl"
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1102,17 +1040,17 @@ msgstr "keyboard label|Ctrl"
 #.
 #: gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr "keyboard label|Alt"
+msgstr "Alt"
 
 #. do not translate the part before the |
 #: gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr "keyboard label|Space"
+msgstr "Space"
 
 #. do not translate the part before the |
 #: gtk/gtkaccellabel.c:581
 msgid "keyboard label|Backslash"
-msgstr "keyboard label|Backslash"
+msgstr "Backslash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1145,7 +1083,7 @@ msgstr "calendar:week_start:0"
 #.
 #: gtk/gtkcalendar.c:1549
 msgid "year measurement template|2000"
-msgstr "year measurement template|2000"
+msgstr "2000"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1160,13 +1098,13 @@ msgstr "year measurement template|2000"
 #.
 #: gtk/gtkcalendar.c:1826
 msgid "calendar year format|%Y"
-msgstr "calendar year format|%Y"
+msgstr "%Y"
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:576
 msgid "Pick a Color"
@@ -1195,7 +1133,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:961
 msgid "_Save color here"
-msgstr "ਰੰਗ ਨੂੰ ਏਥੇ ਸੰਭਾਲੋ(_S)"
+msgstr "ਰੰਗ ਨੂੰ ਇੱਥੇ ਸੰਭਾਲੋ(_S)"
 
 #: gtk/gtkcolorsel.c:1166
 msgid ""
@@ -1211,7 +1149,7 @@ msgid ""
 "lightness of that color using the inner triangle."
 msgstr ""
 "ਬਾਹਰੀ ਚੱਕਰ ਵਿੱਚ ਰੰਗ, ਜੋ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋ ਨੂੰ ਚੁਣੋ। ਅੰਦਰੂਨੀ ਤਿਕੋਣ ਨਾਲ ਰੰਗ ਦਾ ਗੂੜਾਪਨ ਜਾਂ ਫਿੱਕਾਪਨ "
-"ਨਿਰਧਾਰਿਤ ਕਰੋ।"
+"ਦਿਓ।"
 
 #: gtk/gtkcolorsel.c:1978
 msgid ""
@@ -1229,7 +1167,7 @@ msgstr "ਰੰਗ ਚੱਕਰ 'ਤੇ ਟਿਕਾਣਾ ਹੈ।"
 
 #: gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
-msgstr "ਸੰਤਰਿਪਤ(_S):"
+msgstr "ਸੰਤ੍ਰਿਪਤ(_S):"
 
 #: gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
@@ -1309,7 +1247,7 @@ msgstr "ਇੰਪੁੱਟ ਢੰਗ(_M)"
 
 #: gtk/gtkentry.c:4581 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
-msgstr "ਯੂਨੀਕੋਰਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
+msgstr "ਯੂਨੀਕੋਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
 
 #: gtk/gtkfilechooser.c:1672 gtk/gtkfilechooser.c:1716
 #: gtk/gtkfilechooser.c:1791 gtk/gtkfilechooser.c:1835
@@ -1329,7 +1267,7 @@ msgstr "ਘਰ"
 #: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1458
 #: gtk/gtkpathbar.c:1022
 msgid "Desktop"
-msgstr "ਵਿਹੜਾ"
+msgstr "ਵੇਹੜਾ"
 
 #: gtk/gtkfilechooserbutton.c:70
 msgid "(None)"
@@ -1374,7 +1312,7 @@ msgstr "ਫੋਲਡਰ ਦੇ ਭਾਗ ਵੇਖਾਏ ਨਹੀਂ ਜਾ ਸ
 #: gtk/gtkfilechooserdefault.c:1289
 #, c-format
 msgid "Could not get information about '%s': %s"
-msgstr "'%s' ਬਾਰੇ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਨਹੀਂ ਹੋ ਸਕੀ ਹੈ: %s"
+msgstr "'%s' ਬਾਰੇ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੋ ਸਕੀ ਹੈ: %s"
 
 #: gtk/gtkfilechooserdefault.c:2353
 #, c-format
@@ -1446,7 +1384,7 @@ msgstr "ਬੁੱਕਮਾਰਕ ਸ਼ਾਮਲ(_A)"
 
 #: gtk/gtkfilechooserdefault.c:3581
 msgid "Open _Location"
-msgstr "ਟਿਕਾਣਾ ਖੋਲੋ(_L)"
+msgstr "ਟਿਕਾਣਾ ਖੋਲ੍ਹੋ(_L)"
 
 #: gtk/gtkfilechooserdefault.c:3593
 msgid "Show _Hidden Files"
@@ -1496,7 +1434,7 @@ msgstr "ਫੋਲਡਰ ਵਿੱਚ ਬਣਾਓ(_f):"
 
 #: gtk/gtkfilechooserdefault.c:5318
 msgid "Cannot change to folder because it is not local"
-msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ ਨਹੀ ਕਰ ਸਕਿਆ ਕਿਉਕਿ ਇਹ ਸਥਾਨਕ ਨਹੀ ਹੈ"
+msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ ਨਹੀ ਕਰ ਸਕਿਆ, ਕਿਉਂਕਿ ਇਹ ਲੋਕਲ ਨਹੀਂ ਹੈ"
 
 #: gtk/gtkfilechooserdefault.c:5880
 #, c-format
@@ -1510,10 +1448,8 @@ msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ \"%s\" ਪਹਿਲਾਂ ਹੀ ਮੌ
 
 #: gtk/gtkfilechooserdefault.c:6138
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
 #: gtk/gtkfilechooserdefault.c:6143
 msgid "_Replace"
@@ -1560,7 +1496,7 @@ msgstr "ਅੱਜ"
 
 #: gtk/gtkfilechooserdefault.c:7033
 msgid "Yesterday"
-msgstr "ਕੱਲ"
+msgstr "ਕੱਲ੍ਹ"
 
 #: gtk/gtkfilechooserdefault.c:7115
 msgid "Cannot change folder"
@@ -1581,11 +1517,11 @@ msgstr "ਇਕਾਈ ਚੁਣੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
 #: gtk/gtkfilechooserdefault.c:7231
 msgid "Open Location"
-msgstr "ਟਿਕਾਣਾ ਖੋਲੋ"
+msgstr "ਟਿਕਾਣਾ ਖੋਲ੍ਹੋ"
 
 #: gtk/gtkfilechooserdefault.c:7238
 msgid "Save in Location"
-msgstr "ਟਿਕਾਣੇ ਵਿੱਚ ਸੰਭਾਲੋ"
+msgstr "ਟਿਕਾਣੇ ਉੱਤੇ ਸੰਭਾਲੋ"
 
 #: gtk/gtkfilechooserdefault.c:7265
 msgid "_Location:"
@@ -1632,8 +1568,7 @@ msgstr "ਫਾਇਲ ਨਾਂ-ਤਬਦੀਲ(_R)"
 
 #: gtk/gtkfilesel.c:1438
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ-ਨਾਂ ਵਿੱਚ ਨਹੀ ਹੋਣੇ ਚਾਹੀਦੇ"
 
 #: gtk/gtkfilesel.c:1440
@@ -1692,7 +1627,7 @@ msgstr "ਫਾਇਲ \"%s\" ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 #: gtk/gtkfilesel.c:1622
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "ਕੀ ਯਕੀਨਨ ਹੀ ਫਾਇਲ\"%s\" ਨੂੰ ਹਟਾਉਣਾ ਹੈ?"
+msgstr "ਕੀ ਫਾਇਲ\"%s\" ਹਟਾਉਣੀ ਹੈ?"
 
 #: gtk/gtkfilesel.c:1627
 msgid "Delete File"
@@ -1798,8 +1733,7 @@ msgstr "'%s' ਸਟਾਕ ਆਈਕਾਨ ਲਿਆ ਨਹੀਂ ਜਾ ਸਕ�
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
+msgstr "ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
 #: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
 #, c-format
@@ -1824,7 +1758,7 @@ msgstr "'/' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱ�
 #: gtk/gtkfilesystemwin32.c:611
 #, c-format
 msgid "Network Drive (%s)"
-msgstr "ਨੈਟਵਰਕ ਡਰਾਇਵ (%s)"
+msgstr "ਨੈੱਟਵਰਕ ਡਰਾਇਵ (%s)"
 
 #: gtk/gtkfilesystemwin32.c:650
 #, c-format
@@ -1897,7 +1831,7 @@ msgid ""
 msgstr ""
 "ਆਈਕਾਨ '%s' ਨਹੀ ਲੱਭਿਆ. ਜਾਂ ਸਰੂਪ '%s'\n"
 "ਹੀ ਲੱਭਿਆ, ਜਾਂ ਸ਼ਾਇਦ ਤੁਹਾਂ ਨੂੰ ਇਸ ਨੂੰ ਇੰਸਟਾਲ ਕਰਨਾ ਪਵੇ\n"
-"ਤੁਸੀ ਇਸ ਦੀ ਨਕਲ ਇਥੋਂ ਪਰਾਪਤ ਕਰ ਸਕਦੇ ਹੋ:\n"
+"ਤੁਸੀ ਇਸ ਦੀ ਨਕਲ ਇਥੋਂ ਪ੍ਰਾਪਤ ਕਰ ਸਕਦੇ ਹੋ:\n"
 "\t%s"
 
 #: gtk/gtkicontheme.c:1365
@@ -2157,42 +2091,42 @@ msgstr "ਪੂਰਾ ਪਰਦਾ ਛੱਡੋ(_L)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
 msgid "Navigation|_Bottom"
-msgstr "Navigation|ਹੇਠਾਂ(_B)"
+msgstr "ਹੇਠਾਂ(_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr "Navigation|ਪਹਿਲਾਂ(_F)"
+msgstr "ਪਹਿਲਾਂ(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr "Navigation|ਆਖਰੀ(_L)"
+msgstr "ਆਖਰੀ(_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr "Navigation|ਉੱਪਰ(_T)"
+msgstr "ਉੱਪਰ(_T)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr "Navigation|ਪਿੱਛੇ(_B)"
+msgstr "ਪਿੱਛੇ(_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr "Navigation|ਹੇਠਾਂ(_D)"
+msgstr "ਹੇਠਾਂ(_D)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr "Navigation|ਅੱਗੇ(_F)"
+msgstr "ਅੱਗੇ(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr "Navigation|ਉੱਪਰ(_U)"
+msgstr "ਉੱਪਰ(_U)"
 
 #: gtk/gtkstock.c:351
 msgid "_Harddisk"
@@ -2233,62 +2167,62 @@ msgstr "ਜਾਓ(_J)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
 msgid "Justify|_Center"
-msgstr "Justify|ਕੇਂਦਰ(_C)"
+msgstr "ਕੇਂਦਰ(_C)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr "Justify|ਭਰੋ(_F)"
+msgstr "ਭਰੋ(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr "Justify|ਖੱਬੇ(_L)"
+msgstr "ਖੱਬੇ(_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Justify|_Right"
-msgstr "Justify|ਸੱਜੇ(_R)"
+msgstr "ਸੱਜੇ(_R)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Media|ਅੱਗੇ(_F)"
+msgstr "ਅੱਗੇ(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Media|ਅੱਗੇ(_N)"
+msgstr "ਅੱਗੇ(_N)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Media|ਵਿਰਾਮ(_a)"
+msgstr "ਵਿਰਾਮ(_a)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 msgid "Media|_Play"
-msgstr "Media|ਚਲਾਓ(_P)"
+msgstr "ਚਲਾਓ(_P)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Media|ਪਿੱਛੇ(_v)"
+msgstr "ਪਿੱਛੇ(_v)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
 msgid "Media|_Record"
-msgstr "Media|ਰਿਕਾਰਡ(_R)"
+msgstr "ਰਿਕਾਰਡ(_R)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Media|ਪਿੱਛੇ ਜਾਓ(_e)"
+msgstr "ਪਿੱਛੇ ਜਾਓ(_e)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 msgid "Media|_Stop"
-msgstr "Media|ਰੋਕੋ(_S)"
+msgstr "ਰੋਕੋ(_S)"
 
 #: gtk/gtkstock.c:385
 msgid "_Network"
@@ -2308,7 +2242,7 @@ msgstr "ਠੀਕ ਹੈ(_O)"
 
 #: gtk/gtkstock.c:389
 msgid "_Open"
-msgstr "ਖੋਲੋ(_O)"
+msgstr "ਖੋਲ੍ਹੋ(_O)"
 
 #: gtk/gtkstock.c:390
 msgid "_Paste"
@@ -2352,7 +2286,7 @@ msgstr "ਸੰਭਾਲੋ(_S)"
 
 #: gtk/gtkstock.c:401
 msgid "Save _As"
-msgstr "ਏਦਾਂ ਸੰਭਾਲੋ(_A)"
+msgstr "ਇੰਜ ਸੰਭਾਲੋ(_A)"
 
 #: gtk/gtkstock.c:402
 msgid "_Color"
@@ -2364,11 +2298,11 @@ msgstr "ਫੋਂਟ(_F)"
 
 #: gtk/gtkstock.c:404
 msgid "_Ascending"
-msgstr "ਵਧਦਾ ਕਰਮ(_A)"
+msgstr "ਵਧਦਾ ਕ੍ਰਮ(_A)"
 
 #: gtk/gtkstock.c:405
 msgid "_Descending"
-msgstr "ਘੱਟਦਾ ਕਰਮ(_D)"
+msgstr "ਘੱਟਦਾ ਕ੍ਰਮ(_D)"
 
 #: gtk/gtkstock.c:406
 msgid "_Spell Check"
@@ -2440,7 +2374,7 @@ msgstr "RLO ਸੱਜੇ ਤੋ ਖੱਬਾ ਉਪੱਰ(_v)"
 
 #: gtk/gtktextutil.c:59
 msgid "PDF _Pop directional formatting"
-msgstr "_PDF ਪਾਪ ਦਿਸ਼ਾ ਫਾਰਮਿਟਿੰਗ"
+msgstr "_PDF ਪਾਪ ਦਿਸ਼ਾ ਫਾਰਮੈਟਿੰਗ"
 
 #: gtk/gtktextutil.c:60
 msgid "ZWS _Zero width space"
@@ -2485,7 +2419,7 @@ msgstr "ਖਾਲੀ"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr "ਅਮਹਰਿਕ(EZ+)"
+msgstr "ਅਮਹਰਿਕ (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:91
@@ -2495,12 +2429,12 @@ msgstr "ਕਾਦੀਲਾ"
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "ਸਰਲਿਕ(ਤਬਦੀਲ)"
+msgstr "ਸਰਲਿਕ (ਲਿੱਪੀ ਤਬਦੀਲ)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "ਇਨੂਕੀਟੂ (ਤਬਦੀਲ)"
+msgstr "ਇਨੂਕੀਟੂ (ਲਿੱਪੀ ਤਬਦੀਲ)"
 
 #. ID
 #: modules/input/imipa.c:145
@@ -2536,3 +2470,4 @@ msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
+
