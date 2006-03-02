@@ -1,3 +1,8 @@
+2006-03-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcolorbutton.c (render): Use GTK_WIDGET_IS_SENSITIVE,
+	not GTK_WIDGET_SENSITIVE.  (#333133, Christian Persch)
+
 2006-02-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_get_cursor): Comment out some unused
