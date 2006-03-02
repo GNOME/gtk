@@ -610,6 +610,21 @@ stop_keyboard_mode (GtkWidget *widget)
     }
 }
 
+static gboolean
+tooltips_enabled (GtkTooltips *tooltips, GtkWidget *w)
+{
+  GtkSettings *settings;
+  gboolean touchscreen;
+
+  if (!tooltips->enabled)
+    return FALSE;
+
+  settings = gtk_widget_get_settings (w);
+  g_object_get (settings, "gtk-touchscreen-mode", &touchscreen, NULL);
+  
+  return !touchscreen;
+}
+
 static void
 gtk_tooltips_start_delay (GtkTooltips *tooltips,
 			  GtkWidget   *widget)
@@ -617,7 +632,7 @@ gtk_tooltips_start_delay (GtkTooltips *tooltips,
   GtkTooltipsData *old_tips_data;
   
   old_tips_data = tooltips->active_tips_data;
-  if (tooltips->enabled &&
+  if (tooltips_enabled (tooltips, widget) &&
       (!old_tips_data || old_tips_data->widget != widget))
     {
       guint delay;

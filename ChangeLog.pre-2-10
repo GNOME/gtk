@@ -1,3 +1,8 @@
+2006-03-02  Ross Burton  <ross@openedhand.com>
+
+	* gtk/gtktooltips.c:
+	Disable tooltips if gtk-touchscreen-mode is activated (#315112).
+
 2006-03-01  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeselection.c (row_is_selectable): rename to
