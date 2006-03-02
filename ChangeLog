@@ -1,5 +1,10 @@
 2006-03-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_layout) 
+	(gtk_icon_view_row_inserted, gtk_icon_view_scroll_to_path): 
+	Make scroll_to_path work for newly inserted items, by delaying
+	the scroll until layout is done.  (#332923, Cory Dodt)
+
 	* gtk/gtkcolorbutton.c (render): Use GTK_WIDGET_IS_SENSITIVE,
 	not GTK_WIDGET_SENSITIVE.  (#333133, Christian Persch)
 

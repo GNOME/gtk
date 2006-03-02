@@ -2475,6 +2475,12 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gint row;
   gint item_width;
 
+  if (icon_view->priv->layout_idle_id != 0)
+    {
+      g_source_remove (icon_view->priv->layout_idle_id);
+      icon_view->priv->layout_idle_id = 0;
+    }
+  
   if (icon_view->priv->model == NULL)
     return;
 
@@ -2506,32 +2512,38 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   while (icons != NULL);
 
   if (maximum_width != icon_view->priv->width)
-    {
-      icon_view->priv->width = maximum_width;
-    }
+    icon_view->priv->width = maximum_width;
+
   y += icon_view->priv->margin;
   
   if (y != icon_view->priv->height)
-    {
-      icon_view->priv->height = y;
-    }
+    icon_view->priv->height = y;
 
-  gtk_icon_view_set_adjustment_upper (icon_view->priv->hadjustment, icon_view->priv->width);
-  gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, icon_view->priv->height);
+  gtk_icon_view_set_adjustment_upper (icon_view->priv->hadjustment, 
+				      icon_view->priv->width);
+  gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
+				      icon_view->priv->height);
 
   if (GTK_WIDGET_REALIZED (icon_view))
-    {
-      gdk_window_resize (icon_view->priv->bin_window,
-			 MAX (icon_view->priv->width, widget->allocation.width),
-			 MAX (icon_view->priv->height, widget->allocation.height));
-    }
+    gdk_window_resize (icon_view->priv->bin_window,
+		       MAX (icon_view->priv->width, widget->allocation.width),
+		       MAX (icon_view->priv->height, widget->allocation.height));
 
-  if (icon_view->priv->layout_idle_id != 0)
+  if (icon_view->priv->scroll_to_path)
     {
-      g_source_remove (icon_view->priv->layout_idle_id);
-      icon_view->priv->layout_idle_id = 0;
-    }
+      GtkTreePath *path;
 
+      path = gtk_tree_row_reference_get_path (icon_view->priv->scroll_to_path);
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+      
+      gtk_icon_view_scroll_to_path (icon_view, path,
+				    icon_view->priv->scroll_to_use_align,
+				    icon_view->priv->scroll_to_row_align,
+				    icon_view->priv->scroll_to_col_align);
+      gtk_tree_path_free (path);
+    }
+  
   gtk_widget_queue_draw (GTK_WIDGET (icon_view));
 }
 
@@ -3274,6 +3286,8 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
     }
     
   verify_items (icon_view);
+
+  gtk_icon_view_queue_layout (icon_view);
 }
 
 static void
@@ -3316,10 +3330,10 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   
   icon_view->priv->items = g_list_delete_link (icon_view->priv->items, list);
 
-  gtk_icon_view_queue_layout (icon_view);
-
   verify_items (icon_view);  
   
+  gtk_icon_view_queue_layout (icon_view);
+
   if (emit)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 }
@@ -3962,7 +3976,11 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
   g_return_if_fail (row_align >= 0.0 && row_align <= 1.0);
   g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
 
-  if (! GTK_WIDGET_REALIZED (icon_view))
+  if (gtk_tree_path_get_depth (path) > 0)
+    item = g_list_nth_data (icon_view->priv->items,
+			    gtk_tree_path_get_indices(path)[0]);
+  
+  if (!GTK_WIDGET_REALIZED (icon_view) || !item || item->width < 0)
     {
       if (icon_view->priv->scroll_to_path)
 	gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
@@ -3978,13 +3996,6 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
       return;
     }
-
-  if (gtk_tree_path_get_depth (path) > 0)
-    item = g_list_nth_data (icon_view->priv->items,
-			    gtk_tree_path_get_indices(path)[0]);
-  
-  if (!item)
-    return;
 
   if (use_align)
     {
@@ -4034,7 +4045,7 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
   gdk_drawable_get_size (GDK_DRAWABLE (icon_view->priv->bin_window), 
 			 &width, &height);
   gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
-
+  
   if (y + item->y - focus_width < 0)
     gtk_adjustment_set_value (icon_view->priv->vadjustment, 
 			      icon_view->priv->vadjustment->value + y + item->y - focus_width);
