@@ -804,6 +804,23 @@ setup_msw_rc_style (void)
 		"}widget_class \"*CheckButton*\" style \"msw-checkbutton\"\n"
 		"widget_class \"*RadioButton*\" style \"msw-checkbutton\"\n");
     gtk_rc_parse_string (buf);
+
+	if(xp_theme_is_active()) {
+		g_snprintf (buf, sizeof(buf),
+		"style \"msw-combobox-toggle\" = \"msw-default\"\n"
+		"{\n"
+  		"xthickness = 0\n"
+  		"ythickness = 0\n"
+  		"GtkButton::default-border = { 0, 0, 0, 0 }\n"
+  		"GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
+  		"GtkButton::child-displacement-x = 0\n"
+  		"GtkButton::child-displacement-y = 0\n"
+  		"GtkWidget::focus-padding = 0\n"
+  		"GtkWidget::focus-line-width = 0\n"
+		"}\n"
+		"widget_class \"*ComboBox*ToggleButton*\" style \"msw-combobox-toggle\"\n");
+    	gtk_rc_parse_string (buf);
+	}
 }
 
 static void
@@ -926,7 +943,7 @@ static gboolean
 is_combo_box_child (GtkWidget* w)
 {
     GtkWidget* tmp;
-    
+
     if (w == NULL)
 	return FALSE;
 
@@ -947,7 +964,7 @@ combo_box_draw_arrow (GtkStyle * style,
 	    GtkWidget * widget)
 {
     if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
-		       style, widget->allocation.x, widget->allocation.y, 
+		       style, widget->allocation.x, widget->allocation.y,
 		       widget->allocation.width, widget->allocation.height,
 		       state, area))
 	{
@@ -973,7 +990,7 @@ combo_box_draw_box (GtkStyle * style,
 {
     GtkWidget* combo_box;
     GdkRectangle combo_alloc;
-    
+
     if (!widget)
 	return FALSE;
     for (combo_box = widget->parent; combo_box; combo_box = combo_box->parent)
@@ -985,10 +1002,10 @@ combo_box_draw_box (GtkStyle * style,
 	return FALSE;
 
     combo_alloc = combo_box->allocation;
-    if (window != combo_box->window) 
+    if (window != combo_box->window)
 	{
 	    GtkWidget* tmp;
-	    for (tmp = widget; tmp && tmp != combo_box; tmp = widget->parent) 
+	    for (tmp = widget; tmp && tmp != combo_box; tmp = widget->parent)
 		{
 		    if (tmp->parent && tmp->window != tmp->parent->window)
 			{
@@ -997,10 +1014,10 @@ combo_box_draw_box (GtkStyle * style,
 			}
 		}
 	}
-	
+
     if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
 		       style, combo_alloc.x, combo_alloc.y,
-                       combo_alloc.width, combo_alloc.height, 
+                       combo_alloc.width, combo_alloc.height,
 		       state_type, area))
 	return TRUE;
 
@@ -1584,7 +1601,7 @@ draw_box (GtkStyle * style,
 	  GtkWidget * widget,
 	  const gchar * detail, gint x, gint y, gint width, gint height)
 {
-    if (is_combo_box_child (widget) 
+    if (is_combo_box_child (widget)
 	&& combo_box_draw_box (style, window, state_type, shadow_type,
 	                       area, widget, detail, x, y, width, height))
 	{
@@ -1835,7 +1852,7 @@ draw_box (GtkStyle * style,
 		{
 		    return;
 		}
-	}	
+	}
     else if (detail
 	     && (strcmp (detail, "vscrollbar") == 0
 		 || strcmp (detail, "hscrollbar") == 0))
@@ -2163,7 +2180,7 @@ draw_shadow (GtkStyle * style,
 {
     gboolean is_handlebox_grippie = (detail && !strcmp (detail, "handlebox"));
 
-    if (is_combo_box_child (widget) 
+    if (is_combo_box_child (widget)
 	&& combo_box_draw_box (style, window, state_type, shadow_type,
 	                       area, widget, detail, x, y, width, height))
         {
