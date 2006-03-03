@@ -392,13 +392,6 @@ pnm_read_header (PnmLoaderContext *context)
 				return PNM_FATAL_ERR;
 			}
 
-			if (context->maxval > 255) {
-				g_set_error (context->error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
- 					     _("Cannot handle PNM files with maximum color values greater than 255"));
-				return PNM_FATAL_ERR;
-			}
 		}
 		break;
 	default:
@@ -438,6 +431,8 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 			     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
+	if(context->maxval>255) 
+		numpix/=2;
 	
 	numpix = MIN (numpix, context->width - context->output_col);
 	
@@ -466,6 +461,8 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 			     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
+	if(context->maxval>255) 
+		numbytes*=2;				
 	
 	switch (context->type) {
 	case PNM_FORMAT_PBM_RAW:
@@ -479,6 +476,17 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		if (context->maxval == 255) {
 			/* special-case optimization */
 			memcpy (dest, inbuf->byte, numbytes);
+		} else if(context->maxval == 65535) {
+			/* optimized version of the next case */
+			for(i=0; i < numbytes ; i+=2) {
+				*dest++=inbuf->byte[i];
+			}
+		} else if(context->maxval > 255) {
+			/* scale down to 256 colors */
+			for(i=0; i < numbytes ; i+=2) {
+				guint v=inbuf->byte[i]*256+inbuf->byte[i+1];
+				*dest++=v*255/context->maxval;
+			}
 		} else {
 			for (i = 0; i < numbytes; i++) {
 				guchar *byte = inbuf->byte + i;
@@ -591,7 +599,7 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 				break;
 			case PNM_FORMAT_PGM:
 			case PNM_FORMAT_PPM:
-				/* scale the color to an 8-bit color depth */
+				/* scale the color up or down to an 8-bit color depth */
 				if (value > context->maxval)
 					*dptr++ = 255;
 				else

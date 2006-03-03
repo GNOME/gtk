@@ -1,5 +1,10 @@
 2006-03-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* io-pnm.c: Support pnm files with maxval > 255.
+	(#327560, Matthijs Douze)
+
+2006-03-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* io-pcx.c (pcx_load_palette_8): Fix incremental loading
 	of 8-bit pcx files.  (#148518, Magnus Bergmann)
 
