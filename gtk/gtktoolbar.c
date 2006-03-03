@@ -4852,21 +4852,55 @@ _gtk_toolbar_paint_space_line (GtkWidget       *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_paint_vline (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), area, widget,
-		       "toolbar",
-		       allocation->y + allocation->height * start_fraction,
-		       allocation->y + allocation->height * end_fraction,
-		       allocation->x + (allocation->width - widget->style->xthickness) / 2);
+      gboolean wide_separators;
+      gint     separator_width;
+
+      gtk_widget_style_get (widget,
+                            "wide-separators", &wide_separators,
+                            "separator-width", &separator_width,
+                            NULL);
+
+      if (wide_separators)
+        gtk_paint_box (widget->style, widget->window,
+                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       area, widget, "vseparator",
+                       allocation->x + (allocation->width - separator_width) / 2,
+                       allocation->y + allocation->height * start_fraction,
+                       separator_width,
+                       allocation->height * (end_fraction - start_fraction));
+      else
+        gtk_paint_vline (widget->style, widget->window,
+                         GTK_WIDGET_STATE (widget), area, widget,
+                         "toolbar",
+                         allocation->y + allocation->height * start_fraction,
+                         allocation->y + allocation->height * end_fraction,
+                         allocation->x + (allocation->width - widget->style->xthickness) / 2);
     }
   else
     {
-      gtk_paint_hline (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), area, widget,
-		       "toolbar",
-		       allocation->x + allocation->width * start_fraction,
-		       allocation->x + allocation->width * end_fraction,
-		       allocation->y + (allocation->height - widget->style->ythickness) / 2);
+      gboolean wide_separators;
+      gint     separator_height;
+
+      gtk_widget_style_get (widget,
+                            "wide-separators",  &wide_separators,
+                            "separator-height", &separator_height,
+                            NULL);
+
+      if (wide_separators)
+        gtk_paint_box (widget->style, widget->window,
+                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       area, widget, "hseparator",
+                       allocation->x + allocation->width * start_fraction,
+                       allocation->y + (allocation->height - separator_height) / 2,
+                       allocation->width * (end_fraction - start_fraction),
+                       separator_height);
+      else
+        gtk_paint_hline (widget->style, widget->window,
+                         GTK_WIDGET_STATE (widget), area, widget,
+                         "toolbar",
+                         allocation->x + allocation->width * start_fraction,
+                         allocation->x + allocation->width * end_fraction,
+                         allocation->y + (allocation->height - widget->style->ythickness) / 2);
     }
 }
 

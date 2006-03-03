@@ -1515,7 +1515,28 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       P_("Visited Link Color"),
 							       P_("Color of visited links"),
 							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));							       
+							       GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_boolean ("wide-separators",
+                                                                 P_("Wide Separators"),
+                                                                 P_("Whether separators have configurable width and should be drawn using a box instead of a line"),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("separator-width",
+                                                             P_("Separator Width"),
+                                                             P_("The width of separators if wide-separators is TRUE"),
+                                                             0, 64, 0,
+                                                             GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("separator-height",
+                                                             P_("Separator Height"),
+                                                             P_("The height of separators if wide-separators is TRUE"),
+                                                             0, 64, 0,
+                                                             GTK_PARAM_READABLE));
 }
 
 static void

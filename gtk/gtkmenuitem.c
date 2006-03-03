@@ -559,10 +559,20 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 	  requisition->width = MAX (requisition->width, get_minimum_width (widget));
 	}
     }
-  else
+  else /* separator item */
     {
-      /* separator item */
-      requisition->height += 4;
+      gboolean wide_separators;
+      gint     separator_height;
+
+      gtk_widget_style_get (widget,
+                            "wide-separators",  &wide_separators,
+                            "separator-height", &separator_height,
+                            NULL);
+
+      if (wide_separators)
+        requisition->height += separator_height + widget->style->ythickness;
+      else
+        requisition->height += widget->style->ythickness * 2;
     }
 
   accel_width = 0;
@@ -824,18 +834,34 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	}
       else if (!GTK_BIN (menu_item)->child)
 	{
-	  guint horizontal_padding;
+          gboolean wide_separators;
+          gint     separator_height;
+	  guint    horizontal_padding;
 
 	  gtk_widget_style_get (widget,
-				"horizontal-padding", &horizontal_padding,
-				NULL);
-	  
-	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
-			   area, widget, "menuitem",
-			   widget->allocation.x + horizontal_padding + widget->style->xthickness,
-			   widget->allocation.x + widget->allocation.width - horizontal_padding - widget->style->xthickness - 1,
-			   widget->allocation.y + (widget->allocation.height -
-						   widget->style->ythickness) / 2);
+                                "wide-separators",    &wide_separators,
+                                "separator-height",   &separator_height,
+                                "horizontal-padding", &horizontal_padding,
+                                NULL);
+
+          if (wide_separators)
+            gtk_paint_box (widget->style, widget->window,
+                           GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
+                           area, widget, "hseparator",
+                           widget->allocation.x + horizontal_padding + widget->style->xthickness,
+                           widget->allocation.y + (widget->allocation.height -
+                                                   separator_height -
+                                                   widget->style->ythickness) / 2,
+                           widget->allocation.width -
+                           2 * (horizontal_padding + widget->style->xthickness),
+                           separator_height);
+          else
+            gtk_paint_hline (widget->style, widget->window,
+                             GTK_STATE_NORMAL, area, widget, "menuitem",
+                             widget->allocation.x + horizontal_padding + widget->style->xthickness,
+                             widget->allocation.x + widget->allocation.width - horizontal_padding - widget->style->xthickness - 1,
+                             widget->allocation.y + (widget->allocation.height -
+                                                     widget->style->ythickness) / 2);
 	}
     }
 }

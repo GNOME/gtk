@@ -30,10 +30,12 @@
 #include "gtkalias.h"
 
 
-static void gtk_vseparator_class_init (GtkVSeparatorClass *klass);
-static void gtk_vseparator_init       (GtkVSeparator      *vseparator);
-static gint gtk_vseparator_expose     (GtkWidget          *widget,
-				       GdkEventExpose     *event);
+static void gtk_vseparator_class_init   (GtkVSeparatorClass *klass);
+static void gtk_vseparator_init         (GtkVSeparator      *vseparator);
+static void gtk_vseparator_size_request (GtkWidget          *widget,
+                                         GtkRequisition     *requisition);
+static gint gtk_vseparator_expose       (GtkWidget          *widget,
+                                         GdkEventExpose     *event);
 
 
 GType
@@ -71,6 +73,7 @@ gtk_vseparator_class_init (GtkVSeparatorClass *klass)
 
   widget_class = (GtkWidgetClass*) klass;
 
+  widget_class->size_request = gtk_vseparator_size_request;
   widget_class->expose_event = gtk_vseparator_expose;
 }
 
@@ -87,18 +90,56 @@ gtk_vseparator_new (void)
   return g_object_new (GTK_TYPE_VSEPARATOR, NULL);
 }
 
+static void
+gtk_vseparator_size_request (GtkWidget      *widget,
+                             GtkRequisition *requisition)
+{
+  gboolean wide_separators;
+  gint     separator_width;
+
+  gtk_widget_style_get (widget,
+                        "wide-separators", &wide_separators,
+                        "separator-width", &separator_width,
+                        NULL);
+
+  if (wide_separators)
+    requisition->height = separator_width;
+  else
+    requisition->height = widget->style->xthickness;
+}
 
 static gint
 gtk_vseparator_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_paint_vline (widget->style, widget->window, GTK_WIDGET_STATE (widget),
-		     &event->area, widget, "vseparator",
-		     widget->allocation.y,
-		     widget->allocation.y + widget->allocation.height - 1,
-		     widget->allocation.x + (widget->allocation.width -
-					     widget->style->xthickness) / 2);
+    {
+      gboolean wide_separators;
+      gint     separator_width;
+
+      gtk_widget_style_get (widget,
+                            "wide-separators", &wide_separators,
+                            "separator-width", &separator_width,
+                            NULL);
+
+      if (wide_separators)
+        gtk_paint_box (widget->style, widget->window,
+                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       &event->area, widget, "vseparator",
+                       widget->allocation.x + (widget->allocation.width -
+                                               separator_width) / 2,
+                       widget->allocation.y,
+                       separator_width,
+                       widget->allocation.height);
+      else
+        gtk_paint_vline (widget->style, widget->window,
+                         GTK_WIDGET_STATE (widget),
+                         &event->area, widget, "vseparator",
+                         widget->allocation.y,
+                         widget->allocation.y + widget->allocation.height - 1,
+                         widget->allocation.x + (widget->allocation.width -
+                                                 widget->style->xthickness) / 2);
+    }
 
   return FALSE;
 }

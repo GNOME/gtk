@@ -1,3 +1,17 @@
+2006-03-03  Michael Natterer  <mitch@imendio.com>
+
+	Applied modified patch from maemo-gtk which makes separators more
+	themeable. Fixes bug #332022.
+
+	* gtk/gtkwidget.c: added style properties "wide-separators",
+	"separator-width" and "separator-height".
+
+	* gtk/gtkhseparator.c
+	* gtk/gtkvseparator.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtktoolbar.c: honor the new settings and paint separators
+	using gtk_paint_box() if wide-separators is true.
+
 2006-03-02  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw_style.c: Fix combobox theming
