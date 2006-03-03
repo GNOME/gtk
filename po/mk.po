@@ -5,20 +5,21 @@
 # Ivan Stojmirov <stojmir@linux.net.mk>, 2002.
 # Tomislav Markovski <herrera@users.sourceforge.net>, 2004.
 # Арангел Ангов <ufo@linux.net.mk>, 2005.
+# Arangel Angov <ufo@linux.net.mk>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-02-24 22:38-0500\n"
-"PO-Revision-Date: 2005-08-11 17:56+0200\n"
-"Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
+"PO-Revision-Date: 2006-03-03 19:43+0100\n"
+"Last-Translator: Arangel Angov <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural= n==1 || n%10==1 ? 0 : 1\n"
-"X-Generator: KBabel 1.10\n"
+"X-Generator: KBabel 1.10.2\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:856
 #: gdk-pixbuf/gdk-pixbuf-io.c:1107 tests/testfilechooser.c:218
@@ -34,8 +35,7 @@ msgstr "Датотеката слика '%s' не содржи податоци"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:905
 #: gdk-pixbuf/gdk-pixbuf-io.c:1148 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Не успеав да ја вчитам сликата '%s': причината не е позната, најверојатно се "
 "работи за расипана слика"
@@ -91,8 +91,7 @@ msgstr "Грешка при снимање на сликата: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1421 gdk-pixbuf/gdk-pixbuf-io.c:1550
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Градењето на gdk-pixbuf не поддржува зачувување на форматот на сликата: %s"
+msgstr "Градењето на gdk-pixbuf не поддржува зачувување на форматот на сликата: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1455
 #, c-format
@@ -238,8 +237,7 @@ msgstr "Грешка при читањето на GIF-от: %s"
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"На GIF датотеката и недостасуваа податоци (можеби била скратена некако ?)"
+msgstr "На GIF датотеката и недостасуваа податоци (можеби била скратена некако ?)"
 
 #: gdk-pixbuf/io-gif.c:501
 #, c-format
@@ -399,8 +397,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:941
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Квалитетот на JPEG сликата мора да биде помеѓу 0 и 100; вредноста '%d' не е "
 "дозволена."
@@ -486,8 +483,7 @@ msgstr "Трансформирана PNG а не RGB или RGBA."
 #: gdk-pixbuf/io-png.c:162
 #, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Трансформираната PNG содржи неподдржани канали, мораат да биде 3 или 4."
+msgstr "Трансформираната PNG содржи неподдржани канали, мораат да биде 3 или 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -520,10 +516,8 @@ msgstr "Фатлна грешка при читањето на PNG сликат�
 
 #: gdk-pixbuf/io-png.c:810
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Копчињата за текстот на PNG мора да бидат помеѓу 1 и 70 букви или броеви."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "Копчињата за текстот на PNG мора да бидат помеѓу 1 и 70 букви или броеви."
 
 #: gdk-pixbuf/io-png.c:818
 #, c-format
@@ -825,8 +819,7 @@ msgstr "Нема доволно меморија за вчитување на XB
 #: gdk-pixbuf/io-xbm.c:442
 #, c-format
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Не успеав да запишам во привремената датотека при вчитување на XBM сликата"
+msgstr "Не успеав да запишам во привремената датотека при вчитување на XBM сликата"
 
 #: gdk-pixbuf/io-xbm.c:477
 msgid "The XBM image format"
@@ -875,8 +868,7 @@ msgstr "Не можам да ја вчитам бојата на XPM"
 #: gdk-pixbuf/io-xpm.c:776
 #, c-format
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Не успеав да запишам во привремената датотека при вчитување на XPM сликата"
+msgstr "Не успеав да запишам во привремената датотека при вчитување на XPM сликата"
 
 #: gdk-pixbuf/io-xpm.c:811
 msgid "The XPM image format"
@@ -1473,8 +1465,7 @@ msgstr "Отстрани го обележувачот: '%s'"
 #: gtk/gtkfilechooserdefault.c:2896
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
-"Не можам да додадам обележувач за '%s' бидејќи името на патеката е невалидно."
+msgstr "Не можам да додадам обележувач за '%s' бидејќи името на патеката е невалидно."
 
 #: gtk/gtkfilechooserdefault.c:3127
 msgid "Remove"
@@ -1515,8 +1506,7 @@ msgstr "Не можам да ја одберам датотеката"
 #: gtk/gtkfilechooserdefault.c:3548
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr ""
-"Не можам да ја изберам датотеката '%s' бидејќи се наоѓа на невалидна патека."
+msgstr "Не можам да ја изберам датотеката '%s' бидејќи се наоѓа на невалидна патека."
 
 #: gtk/gtkfilechooserdefault.c:3620
 msgid "_Add to Bookmarks"
@@ -1589,8 +1579,7 @@ msgstr "Датотека со името \"%s\" веќе постои.  Дали
 
 #: gtk/gtkfilechooserdefault.c:6233
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Датотеката веќе постои во \"%s\".  Ако ја замените ќе ја замените нејзината "
 "содржина."
@@ -1714,8 +1703,7 @@ msgstr "_Реименувај датотека"
 
 #: gtk/gtkfilesel.c:1438
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Името на папката \"%s\" содржи симболи што не се дозволени во имиња на "
 "датотеки"
@@ -1755,8 +1743,7 @@ msgstr "С_оздади"
 #: gtk/gtkfilesel.c:1565
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Датотеката \"%s\" содржи симболи кои што не се дозволени во име на датотека"
+msgstr "Датотеката \"%s\" содржи симболи кои што не се дозволени во име на датотека"
 
 #: gtk/gtkfilesel.c:1568
 #, c-format
@@ -1769,8 +1756,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1570 gtk/gtkfilesel.c:1691
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
-"Најверојатно содржи симболи кои што не се содржат во имиња на датотеки."
+msgstr "Најверојатно содржи симболи кои што не се содржат во имиња на датотеки."
 
 #: gtk/gtkfilesel.c:1579
 #, c-format
@@ -2203,9 +2189,8 @@ msgid "_Close"
 msgstr "_Затвори"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "C_onnect"
-msgstr "_Конвертирај"
+msgstr "В_рзи се"
 
 #: gtk/gtkstock.c:325
 msgid "_Convert"
@@ -2225,7 +2210,7 @@ msgstr "_Избриши"
 
 #: gtk/gtkstock.c:329
 msgid "_Disconnect"
-msgstr ""
+msgstr "_Одврзи се"
 
 #: gtk/gtkstock.c:330
 msgid "_Execute"
@@ -2558,8 +2543,7 @@ msgstr "ZWNJ Zero width _non-joiner"
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr ""
-"Не успеав да ја лоцирам темата за машината во патеката за модулот: \"%s\","
+msgstr "Не успеав да ја лоцирам темата за машината во патеката за модулот: \"%s\","
 
 #: gtk/gtktipsquery.c:186
 msgid "--- No Tip ---"
@@ -2639,5 +2623,3 @@ msgstr "Метод на запис за X"
 msgid "Could not get information for file '%s': %s"
 msgstr "Не можам да добијам информација за датотеката '%s': %s"
 
-#~ msgid "Home"
-#~ msgstr "Дома"
