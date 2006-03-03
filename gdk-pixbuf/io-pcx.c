@@ -353,7 +353,7 @@ pcx_increment_load_data_1(struct pcx_context *context)
 		}
 
 		if(context->updated_func)
-			context->updated_func(context->pixbuf, 0, 0, context->width, context->height, context->user_data);
+			context->updated_func(context->pixbuf, 0, context->current_line, context->width, 1, context->user_data);
 
 		context->current_line++;
 
@@ -493,7 +493,7 @@ pcx_load_palette_8(struct pcx_context *context)
 				}
 
 				if(context->updated_func)
-					context->updated_func(context->pixbuf, 0, context->current_line, context->width, 1, context->user_data);
+					context->updated_func(context->pixbuf, 0, i, context->width, 1, context->user_data);
 			}
 
 #ifdef PCX_DEBUG
