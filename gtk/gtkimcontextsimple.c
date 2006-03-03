@@ -1032,10 +1032,13 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
+  if (context_simple->tentative_match || context_simple->in_hex_sequence)
+    {
+      context_simple->tentative_match = 0;
+      context_simple->tentative_match_len = 0;
+      g_signal_emit_by_name (context_simple, "preedit_changed");
+    }
   context_simple->in_hex_sequence = FALSE;  
-  context_simple->tentative_match = 0;
-  context_simple->tentative_match_len = 0;
-  g_signal_emit_by_name (context_simple, "preedit_changed");
 
   g_signal_emit_by_name (context, "commit", &buf);
 }
@@ -1519,11 +1522,13 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   context_simple->compose_buffer[0] = 0;
 
+  if (context_simple->tentative_match || context_simple->in_hex_sequence)
+    {
+      context_simple->tentative_match = 0;
+      context_simple->tentative_match_len = 0;
+      g_signal_emit_by_name (context_simple, "preedit_changed");
+    }
   context_simple->in_hex_sequence = FALSE;
-  context_simple->tentative_match = 0;
-  context_simple->tentative_match_len = 0;
-  
-  g_signal_emit_by_name (context_simple, "preedit_changed");
 }
 
 static void     
