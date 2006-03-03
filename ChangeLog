@@ -1,3 +1,9 @@
+2006-03-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Fix combobox theming
+	regression noted in bug 321301
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Ditto
+	
 2006-03-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_layout) 
