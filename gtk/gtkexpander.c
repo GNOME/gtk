@@ -817,12 +817,6 @@ gtk_expander_paint_focus (GtkExpander  *expander,
 
   ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
   
-  x = widget->allocation.x + border_width;
-  y = widget->allocation.y + border_width;
-
-  if (ltr && interior_focus)
-    x += expander_spacing * 2 + expander_size;
-
   width = height = 0;
 
   if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
@@ -833,15 +827,29 @@ gtk_expander_paint_focus (GtkExpander  *expander,
       height = label_allocation.height;
     }
 
+  width  += 2 * focus_pad + 2 * focus_width;
+  height += 2 * focus_pad + 2 * focus_width;
+
+  x = widget->allocation.x + border_width;
+  y = widget->allocation.y + border_width;
+
+  if (ltr)
+    {
+      if (interior_focus)
+	x += expander_spacing * 2 + expander_size;
+    }
+  else
+    {
+      x += widget->allocation.width - 2 * border_width
+	- expander_spacing * 2 - expander_size - width;
+    }
+
   if (!interior_focus)
     {
       width += expander_size + 2 * expander_spacing;
       height = MAX (height, expander_size + 2 * expander_spacing);
     }
       
-  width  += 2 * focus_pad + 2 * focus_width;
-  height += 2 * focus_pad + 2 * focus_width;
-
   gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 		   area, widget, "expander",
 		   x, y, width, height);
