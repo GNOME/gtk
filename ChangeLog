@@ -1,5 +1,10 @@
 2006-03-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkinput-x11 (gdk_input_translate_coordinates):
+	Adjust the handling of min values for the x and y axes of 
+	extended input devices  (#324562, #142536, Denis Auroux and 
+	Robert Ögren)
+
 	* gtk/gtkexpander.c (gtk_expander_paint_focus): Position
 	the focus rectangle correctly in RTL mode.  (#333291,
 	Benjamin Berg)

@@ -511,12 +511,14 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
       switch (gdkdev->info.axes[i].use)
 	{
 	case GDK_AXIS_X:
-	  axis_out[i] = x_offset + x_scale * axis_data[x_axis];
+	  axis_out[i] = x_offset + x_scale * (axis_data[x_axis] - 
+	    gdkdev->axes[x_axis].min_value);
 	  if (x_out)
 	    *x_out = axis_out[i];
 	  break;
 	case GDK_AXIS_Y:
-	  axis_out[i] = y_offset + y_scale * axis_data[y_axis];
+	  axis_out[i] = y_offset + y_scale * (axis_data[y_axis] - 
+	    gdkdev->axes[y_axis].min_value);
 	  if (y_out)
 	    *y_out = axis_out[i];
 	  break;
