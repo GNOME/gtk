@@ -1,3 +1,7 @@
+2006-03-05  Dafydd Harries  <daf@muse.19inch.net>
+
+	* cy.po: Remove progress bar label translation before "|".
+
 2006-03-03  Artur Flinta  <aflinta@cvs.gnome.org>
 
 	* pl.po: Updated Polish translation by GNOME PL Team.
