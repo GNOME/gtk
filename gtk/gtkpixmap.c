@@ -131,6 +131,7 @@ gtk_pixmap_set (GtkPixmap *pixmap,
   gint oldheight;
 
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
+  g_return_if_fail (gdk_colormap_get_visual (gtk_widget_get_colormap (GTK_WIDGET (pixmap)))->depth == gdk_drawable_get_depth (GDK_DRAWABLE (val)));
 
   if (pixmap->pixmap != val)
     {

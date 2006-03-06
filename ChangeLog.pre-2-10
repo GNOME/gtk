@@ -1,3 +1,8 @@
+2006-03-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpixmap.c (gtk_pixmap_set): Check that the pixmap
+	has the right depth.  (#333363, Ed Catmur)
+
 2006-03-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (adjust_wrap_width): Apply some
