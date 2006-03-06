@@ -548,13 +548,23 @@ post_parse_hook (GOptionContext *context,
 {
   OptionGroupInfo *info = data;
 
-  
   do_post_parse_initialization (NULL, NULL);
   
   if (info->open_default_display)
-    return gdk_display_open_default_libgtk_only () != NULL;
-  else
-    return TRUE;
+    {
+      if (gdk_display_open_default_libgtk_only () == NULL)
+	{
+	  g_set_error (error, 
+		       G_OPTION_ERROR, 
+		       G_OPTION_ERROR_FAILED,
+		       "cannot open display: %s",
+		       gdk_get_display_arg_name ());
+	  
+	  return FALSE;
+	}
+    }
+
+  return TRUE;
 }
 
 
