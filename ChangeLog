@@ -1,3 +1,12 @@
+2006-03-05  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix handling of image-only buttons.  (#332985, Kalle 
+	Vahlmann, #333555)
+	
+	* gtk/gtkbutton.c (gtk_button_construct_child): Don't
+	return early if there an image to show.
+	(show_image): Always return TRUE if there is no text.
+
 2006-03-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkinput-x11 (gdk_input_translate_coordinates):
