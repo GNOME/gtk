@@ -2605,7 +2605,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
 				  NULL);
 	  
       if (item->width == -1)
-	wrap_width = pixbuf_width;
+	wrap_width = MAX (2 * pixbuf_width, 50);
       else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	wrap_width = item->width;
       else

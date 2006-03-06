@@ -1,5 +1,11 @@
 2006-03-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (adjust_wrap_width): Apply some
+	arbitrary lower limit for the guessed wrap width. (#332466,
+	Donald Straney)
+
+2006-03-05  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix handling of image-only buttons.  (#332985, Kalle 
 	Vahlmann, #333555)
 	
