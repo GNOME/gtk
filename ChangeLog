@@ -1,5 +1,8 @@
 2006-03-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c (post_parse_hook): Set error when returning
+	FALSE.  (#333268, Paolo Maggi, Christian Persch)
+	
 	* gtk/gtkpixmap.c (gtk_pixmap_set): Check that the pixmap
 	has the right depth.  (#333363, Ed Catmur)
 
