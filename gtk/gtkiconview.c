@@ -2607,7 +2607,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
 				  NULL);
 	  
       if (item->width == -1)
-	wrap_width = pixbuf_width;
+	wrap_width = MAX (2 * pixbuf_width, 50);
       else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	wrap_width = item->width;
       else
@@ -2657,7 +2657,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 				  NULL, NULL, NULL,
 				  &item->box[info->position].width, 
 				  &item->box[info->position].height);
-      
+
       if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  item->width += item->box[info->position].width 
@@ -2710,45 +2710,45 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	  continue;
 
 	if (!info->cell->visible)
-        continue;
+	  continue;
 
-      if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  cell_area.width = item->box[info->position].width;
-	  cell_area.height = item->height;
-	}
-      else
-	{
-	  cell_area.width = item->width;
-	  cell_area.height = max_height[i];
-	}
-
-      gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
-				  &cell_area,
-				  &item->box[info->position].x, &item->box[info->position].y,
-				  &item->box[info->position].width, &item->box[info->position].height);
-
-      item->box[info->position].x += cell_area.x;
-      item->box[info->position].y += cell_area.y;
-      if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  item->before[info->position] = item->box[info->position].x - cell_area.x;
-	  item->after[info->position] = cell_area.width - item->box[info->position].width - item->before[info->position];
-	  cell_area.x += cell_area.width + spacing;
-	}
-      else
-	{
-	  if (item->box[info->position].width > item->width)
-	    {
-	      item->width = item->box[info->position].width;
-	      cell_area.width = item->width;
-	    }
-	  item->before[info->position] = item->box[info->position].y - cell_area.y;
-	  item->after[info->position] = cell_area.height - item->box[info->position].height - item->before[info->position];
-	  cell_area.y += cell_area.height + spacing;
-	}
-    }
-
+	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	  {
+	    cell_area.width = item->box[info->position].width;
+	    cell_area.height = item->height;
+	  }
+	else
+	  {
+	    cell_area.width = item->width;
+	    cell_area.height = max_height[i];
+	  }
+	
+	gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
+				    &cell_area,
+				    &item->box[info->position].x, &item->box[info->position].y,
+				    &item->box[info->position].width, &item->box[info->position].height);
+	
+	item->box[info->position].x += cell_area.x;
+	item->box[info->position].y += cell_area.y;
+	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	  {
+	    item->before[info->position] = item->box[info->position].x - cell_area.x;
+	    item->after[info->position] = cell_area.width - item->box[info->position].width - item->before[info->position];
+	    cell_area.x += cell_area.width + spacing;
+	  }
+	else
+	  {
+	    if (item->box[info->position].width > item->width)
+	      {
+		item->width = item->box[info->position].width;
+		cell_area.width = item->width;
+	      }
+	    item->before[info->position] = item->box[info->position].y - cell_area.y;
+	    item->after[info->position] = cell_area.height - item->box[info->position].height - item->before[info->position];
+	    cell_area.y += cell_area.height + spacing;
+	  }
+      }
+  
   if (rtl && icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       for (i = 0; i < icon_view->priv->n_cells; i++)
