@@ -677,10 +677,17 @@ gtk_button_new (void)
 static gboolean
 show_image (GtkButton *button)
 {
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (button));  
   gboolean show;
+  
+  if (button->label_text)
+    {
+      GtkSettings *settings;
 
-  g_object_get (settings, "gtk-button-images", &show, NULL);
+      settings = gtk_widget_get_settings (GTK_WIDGET (button));        
+      g_object_get (settings, "gtk-button-images", &show, NULL);
+    }
+  else
+    show = TRUE;
 
   return show;
 }
@@ -698,26 +705,25 @@ gtk_button_construct_child (GtkButton *button)
   
   if (!button->constructed)
     return;
-  
-  if (button->label_text == NULL)
+ 
+  if (!button->label_text && !priv->image)
     return;
-
-  if (GTK_BIN (button)->child)
-    {
-      if (priv->image && !priv->image_is_stock)
-	{
-	  image = g_object_ref (priv->image);
-	  if (image->parent)
-	    gtk_container_remove (GTK_CONTAINER (image->parent), image);
-	}
-
-      gtk_container_remove (GTK_CONTAINER (button),
-  			    GTK_BIN (button)->child);
   
+  if (priv->image && !priv->image_is_stock)
+    {
+      image = g_object_ref (priv->image);
+      if (image->parent)
+	gtk_container_remove (GTK_CONTAINER (image->parent), image);
+      
       priv->image = NULL;
     }
   
+  if (GTK_BIN (button)->child)
+    gtk_container_remove (GTK_CONTAINER (button),
+			  GTK_BIN (button)->child);
+  
   if (button->use_stock &&
+      button->label_text &&
       gtk_stock_lookup (button->label_text, &item))
     {
       if (!image)
@@ -730,9 +736,6 @@ gtk_button_construct_child (GtkButton *button)
 
   if (image)
     {
-      label = gtk_label_new_with_mnemonic (label_text);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
-      
       priv->image = image;
 
       g_object_set (priv->image, 
@@ -747,7 +750,15 @@ gtk_button_construct_child (GtkButton *button)
 	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
 	
       gtk_box_pack_start (GTK_BOX (hbox), priv->image, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+      if (label_text)
+	{
+	  label = gtk_label_new_with_mnemonic (label_text);
+	  gtk_label_set_mnemonic_widget (GTK_LABEL (label), 
+					 GTK_WIDGET (button));
+
+	  gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	}
       
       gtk_container_add (GTK_CONTAINER (button), align);
       gtk_container_add (GTK_CONTAINER (align), hbox);
@@ -758,7 +769,7 @@ gtk_button_construct_child (GtkButton *button)
       return;
     }
   
- if (button->use_underline)
+  if (button->use_underline)
     {
       label = gtk_label_new_with_mnemonic (button->label_text);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
@@ -768,7 +779,7 @@ gtk_button_construct_child (GtkButton *button)
   
   if (priv->align_set)
     gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
-
+  
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
 }
