@@ -1,3 +1,47 @@
+2006-03-07  Michael Natterer  <mitch@imendio.com>
+
+	Add infrastructure for copy/paste and DND of rich text for
+	GtkTextBuffer. Fixes bug #324177.
+
+	* gtk/gtktextbufferrichtext.[ch]: new files implementing a
+	per-buffer registry of rich text formats.
+
+	* gtk/gtk.h: #include gtktextbufferrichtext.h
+
+	* gtk/gtktextbufferserialize.[ch]: new files implementing an
+	internal serialization format that can handle all of a text
+	buffer's tags and pixbufs. It's not useful for anything except
+	tranfer between instances of GtkTextBuffer (Anders Carlsson).
+
+	* gtk/Makefile.am: build the new files.
+
+	* gtk/gtkclipboard.[ch]: added convenience APIs for rich text,
+	just as they exist for plain text and pixbufs.
+
+	* gtk/gtkselection.[ch]: added rich text convenience APIs here
+	too.  Return the target list from gtk_target_list_ref(). Register
+	GtkTargetList as boxed type. Added
+	gtk_target_table_new_from_list() and gtk_target_table_free(),
+	which make converting between GtkTargetList and arrays of
+	GtkTargetEntry considerably easier.
+
+	* gtk/gtktextutil.[ch]: added _gtk_text_util_create_rich_drag_icon()
+	which creates a fancy rich text icon (Matthias Clasen).
+
+	* gtk/gtktextbuffer.[ch]: use all the new stuff above and
+	implement copy and paste of rich text. Added APIs for getting the
+	target lists used for copy and paste. Added public enum
+	GtkTextBufferTargetInfo which contains the "info" IDs associated
+	with the entries of the target lists.
+
+	* gtk/gtktextview.c: use the new rich text APIs and
+	GtkTextBuffer's new target list API to enable DND of rich text
+	chunks.
+
+	* gtk/gtk.symbols: export all the new symbols added.
+
+	* tests/testtext.c: added rich text testing stuff.
+
 2006-03-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (text_window_invalidate_cursors): Take

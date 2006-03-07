@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * gtktextbuffer.c Copyright (C) 2000 Red Hat, Inc.
+ *                 Copyright (C) 2004 Nokia Corporation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,22 +25,38 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-
 #include <config.h>
 #include <string.h>
 #include <stdarg.h>
 
-
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkclipboard.h"
+#include "gtkdnd.h"
 #include "gtkinvisible.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
+#include "gtktextbufferrichtext.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+
+
+#define GTK_TEXT_BUFFER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBufferPrivate))
+
+typedef struct _GtkTextBufferPrivate GtkTextBufferPrivate;
+
+struct _GtkTextBufferPrivate
+{
+  GtkTargetList  *copy_target_list;
+  GtkTargetEntry *copy_target_entries;
+  gint            n_copy_target_entries;
+
+  GtkTargetList  *paste_target_list;
+  GtkTargetEntry *paste_target_entries;
+  gint            n_paste_target_entries;
+};
 
 
 typedef struct _ClipboardRequest ClipboardRequest;
@@ -74,24 +91,17 @@ enum {
 
   /* Construct */
   PROP_TAG_TABLE,
-  
+
   /* Normal */
   PROP_TEXT,
-  PROP_HAS_SELECTION
-};
-
-enum {
-  TARGET_STRING,
-  TARGET_TEXT,
-  TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING,
-  TARGET_TEXT_BUFFER_CONTENTS
+  PROP_HAS_SELECTION,
+  PROP_COPY_TARGET_LIST,
+  PROP_PASTE_TARGET_LIST
 };
 
 static void gtk_text_buffer_init       (GtkTextBuffer      *tkxt_buffer);
 static void gtk_text_buffer_class_init (GtkTextBufferClass *klass);
 static void gtk_text_buffer_finalize   (GObject            *object);
-
 
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
@@ -127,6 +137,8 @@ static void update_selection_clipboards           (GtkTextBuffer *buffer);
 
 static GtkTextBuffer *create_clipboard_contents_buffer (GtkTextBuffer *buffer);
 
+static void gtk_text_buffer_free_target_lists     (GtkTextBuffer *buffer);
+
 static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -138,6 +150,8 @@ static void gtk_text_buffer_get_property (GObject         *object,
 				          guint            prop_id,
 				          GValue          *value,
 				          GParamSpec      *pspec);
+static void gtk_text_buffer_notify       (GObject         *object,
+                                          GParamSpec      *pspec);
 
 
 GType
@@ -177,6 +191,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   object_class->finalize = gtk_text_buffer_finalize;
   object_class->set_property = gtk_text_buffer_set_property;
   object_class->get_property = gtk_text_buffer_get_property;
+  object_class->notify       = gtk_text_buffer_notify;
  
   klass->insert_text = gtk_text_buffer_real_insert_text;
   klass->insert_pixbuf = gtk_text_buffer_real_insert_pixbuf;
@@ -227,7 +242,39 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                          P_("Has selection"),
                                                          P_("Whether the buffer has some text currently selected"),
                                                          FALSE,
-                                                         G_PARAM_READABLE));
+                                                         GTK_PARAM_READABLE));
+
+  /**
+   * GtkTextBuffer:copy-target-list:
+   *
+   * The list of targets this buffer supports for clipboard copying
+   * and as DND source.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_COPY_TARGET_LIST,
+                                   g_param_spec_boxed ("copy-target-list",
+                                                       P_("Copy target list"),
+                                                       P_("The list of targets this buffer supports for clipboard copying and DND source"),
+                                                       GTK_TYPE_TARGET_LIST,
+                                                       GTK_PARAM_READABLE));
+
+  /**
+   * GtkTextBuffer:paste-target-list:
+   *
+   * The list of targets this buffer supports for clipboard pasting
+   * and as DND destination.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PASTE_TARGET_LIST,
+                                   g_param_spec_boxed ("paste-target-list",
+                                                       P_("Paste target list"),
+                                                       P_("The list of targets this buffer supports for clipboard pasting and DND destination"),
+                                                       GTK_TYPE_TARGET_LIST,
+                                                       GTK_PARAM_READABLE));
 
   signals[INSERT_TEXT] =
     g_signal_new (I_("insert_text"),
@@ -378,7 +425,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
-                  0);  
+                  0);
+
+  g_type_class_add_private (object_class, sizeof (GtkTextBufferPrivate));
 }
 
 static void
@@ -386,6 +435,9 @@ gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents_buffers = NULL;
   buffer->tag_table = NULL;
+
+  /* allow copying of arbiatray stuff in the internal rich text format */
+  gtk_text_buffer_register_serialize_tagset (buffer, NULL);
 }
 
 static void
@@ -428,9 +480,9 @@ gtk_text_buffer_set_property (GObject         *object,
     case PROP_TAG_TABLE:
       set_table (text_buffer, g_value_get_object (value));
       break;
-      
+
     case PROP_TEXT:
-      gtk_text_buffer_set_text (text_buffer, 
+      gtk_text_buffer_set_text (text_buffer,
 				g_value_get_string (value), -1);
       break;
 
@@ -454,25 +506,45 @@ gtk_text_buffer_get_property (GObject         *object,
     case PROP_TAG_TABLE:
       g_value_set_object (value, get_table (text_buffer));
       break;
-      
+
     case PROP_TEXT:
-    {
-      GtkTextIter start, end;
-      
-      gtk_text_buffer_get_start_iter (text_buffer, &start);
-      gtk_text_buffer_get_end_iter (text_buffer, &end);
-	    
-      g_value_set_string (value,
-			  gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE));
-      break;
-    }
+      {
+        GtkTextIter start, end;
+
+        gtk_text_buffer_get_start_iter (text_buffer, &start);
+        gtk_text_buffer_get_end_iter (text_buffer, &end);
+
+        g_value_set_string (value,
+                            gtk_text_buffer_get_text (text_buffer,
+                                                      &start, &end, FALSE));
+        break;
+      }
 
     case PROP_HAS_SELECTION:
       g_value_set_boolean (value, text_buffer->has_selection);
       break;
 
+    case PROP_COPY_TARGET_LIST:
+      g_value_set_boxed (value, gtk_text_buffer_get_copy_target_list (text_buffer));
+      break;
+
+    case PROP_PASTE_TARGET_LIST:
+      g_value_set_boxed (value, gtk_text_buffer_get_paste_target_list (text_buffer));
+      break;
+
     default:
       break;
+    }
+}
+
+static void
+gtk_text_buffer_notify (GObject    *object,
+                        GParamSpec *pspec)
+{
+  if (!strcmp (pspec->name, "copy-target-list") ||
+      !strcmp (pspec->name, "paste-target-list"))
+    {
+      gtk_text_buffer_free_target_lists (GTK_TEXT_BUFFER (object));
     }
 }
 
@@ -498,10 +570,13 @@ static void
 gtk_text_buffer_finalize (GObject *object)
 {
   GtkTextBuffer *buffer;
+  GtkTextBufferPrivate *priv;
 
   buffer = GTK_TEXT_BUFFER (object);
 
   remove_all_selection_clipboards (buffer);
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
 
   if (buffer->tag_table)
     {
@@ -520,7 +595,9 @@ gtk_text_buffer_finalize (GObject *object)
     free_log_attr_cache (buffer->log_attr_cache);
 
   buffer->log_attr_cache = NULL;
-  
+
+  gtk_text_buffer_free_target_lists (buffer);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -2840,22 +2917,36 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
-      if (selection_data->target ==
-          gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+      if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
         {
           /* Provide the address of the buffer; this will only be
            * used within-process
            */
           gtk_selection_data_set (selection_data,
-                                  gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
+                                  selection_data->target,
                                   8, /* bytes */
                                   (void*)&buffer,
                                   sizeof (buffer));
         }
+      else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+        {
+          guint8 *str;
+          gsize   len;
+
+          str = gtk_text_buffer_serialize (buffer, buffer,
+                                           selection_data->target,
+                                           &start, &end, &len);
+
+          gtk_selection_data_set (selection_data,
+                                  selection_data->target,
+                                  8, /* bytes */
+                                  str, len);
+          g_free (str);
+        }
       else
         {
           gchar *str;
-          
+
           str = gtk_text_iter_get_visible_text (&start, &end);
           gtk_selection_data_set_text (selection_data, str, -1);
           g_free (str);
@@ -2870,8 +2961,11 @@ create_clipboard_contents_buffer (GtkTextBuffer *buffer)
 
   contents = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
 
-  g_object_set_data (G_OBJECT (contents), I_("gtk-text-buffer-clipboard"), GINT_TO_POINTER (1));
-  
+  g_object_set_data (G_OBJECT (contents), I_("gtk-text-buffer-clipboard-source"),
+                     buffer);
+  g_object_set_data (G_OBJECT (contents), I_("gtk-text-buffer-clipboard"),
+                     GINT_TO_POINTER (1));
+
   return contents;
 }
 
@@ -2882,31 +2976,50 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
                            guint             info,
                            gpointer          data)
 {
-  GtkTextBuffer *contents;
+  GtkTextBuffer *contents = GTK_TEXT_BUFFER (data);
 
-  contents = GTK_TEXT_BUFFER (data);
-  
   g_assert (contents); /* This should never be called unless we own the clipboard */
 
-  if (selection_data->target ==
-      gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
     {
       /* Provide the address of the clipboard buffer; this will only
        * be used within-process. OK to supply a NULL value for contents.
        */
       gtk_selection_data_set (selection_data,
-                              gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
+                              selection_data->target,
                               8, /* bytes */
                               (void*)&contents,
                               sizeof (contents));
+    }
+  else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+    {
+      GtkTextBuffer *clipboard_source_buffer;
+      GtkTextIter start, end;
+      guint8 *str;
+      gsize   len;
+
+      clipboard_source_buffer = g_object_get_data (G_OBJECT (contents),
+                                                   "gtk-text-buffer-clipboard-source");
+
+      gtk_text_buffer_get_bounds (contents, &start, &end);
+
+      str = gtk_text_buffer_serialize (clipboard_source_buffer, contents,
+                                       selection_data->target,
+                                       &start, &end, &len);
+
+      gtk_selection_data_set (selection_data,
+			      selection_data->target,
+			      8, /* bytes */
+			      str, len);
+      g_free (str);
     }
   else
     {
       gchar *str;
       GtkTextIter start, end;
-      
+
       gtk_text_buffer_get_bounds (contents, &start, &end);
-      
+
       str = gtk_text_iter_get_visible_text (&start, &end);
       gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
@@ -3052,7 +3165,8 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   if (gdk_window_get_window_type (owner) == GDK_WINDOW_FOREIGN)
     return NULL;
  
-  if (selection_data->type != gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (selection_data->type !=
+      gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     return NULL;
 
   if (selection_data->length != sizeof (src_buffer))
@@ -3100,6 +3214,62 @@ restore_iter (const GtkTextIter *iter,
 #endif
 
 static void
+clipboard_rich_text_received (GtkClipboard *clipboard,
+                              GdkAtom       format,
+                              const guint8 *text,
+                              gsize         length,
+                              gpointer      data)
+{
+  ClipboardRequest *request_data = data;
+  GtkTextIter insert_point;
+  gboolean retval = TRUE;
+  GError *error = NULL;
+  GtkTextBufferPrivate *priv;
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (request_data->buffer);
+
+  if (text != NULL && length > 0)
+    {
+      pre_paste_prep (request_data, &insert_point);
+
+      if (request_data->interactive)
+        gtk_text_buffer_begin_user_action (request_data->buffer);
+
+      if (!request_data->interactive ||
+          gtk_text_iter_can_insert (&insert_point,
+                                    request_data->default_editable))
+        {
+          retval = gtk_text_buffer_deserialize (request_data->buffer,
+                                                request_data->buffer,
+                                                format,
+                                                &insert_point,
+                                                text, length,
+                                                &error);
+        }
+
+      if (!retval)
+        {
+          g_warning ("error pasting: %s\n", error->message);
+          g_clear_error (&error);
+        }
+
+      if (request_data->interactive)
+        gtk_text_buffer_end_user_action (request_data->buffer);
+
+      if (retval)
+        {
+          post_paste_cleanup (request_data);
+          return;
+        }
+    }
+
+  /* Request the text selection instead */
+  gtk_clipboard_request_text (clipboard,
+                              clipboard_text_received,
+                              data);
+}
+
+static void
 paste_from_buffer (ClipboardRequest    *request_data,
                    GtkTextBuffer       *src_buffer,
                    const GtkTextIter   *start,
@@ -3145,7 +3315,8 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
 {
   ClipboardRequest *request_data = data;
   GtkTextBuffer *src_buffer;
-  
+  GtkTextBufferPrivate *priv;
+
   src_buffer = selection_data_get_buffer (selection_data, request_data); 
 
   if (src_buffer)
@@ -3155,7 +3326,7 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
       if (g_object_get_data (G_OBJECT (src_buffer), "gtk-text-buffer-clipboard"))
 	{
 	  gtk_text_buffer_get_bounds (src_buffer, &start, &end);
-      
+
 	  paste_from_buffer (request_data, src_buffer,
 			     &start, &end);
 	}
@@ -3168,20 +3339,26 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
     }
   else
     {
-      /* Request the text selection instead */
-      gtk_clipboard_request_text (clipboard,
-                                  clipboard_text_received,
-                                  data);
+      priv = GTK_TEXT_BUFFER_GET_PRIVATE (request_data->buffer);
+
+      if (gtk_clipboard_wait_is_rich_text_available (clipboard,
+                                                     request_data->buffer))
+        {
+          /* Request rich text */
+          gtk_clipboard_request_rich_text (clipboard,
+                                           request_data->buffer,
+                                           clipboard_rich_text_received,
+                                           data);
+        }
+      else
+        {
+          /* Request the text selection instead */
+          gtk_clipboard_request_text (clipboard,
+                                      clipboard_text_received,
+                                      data);
+        }
     }
 }
-
-static const GtkTargetEntry targets[] = {
-  { "STRING", 0, TARGET_STRING },
-  { "TEXT",   0, TARGET_TEXT },
-  { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-  { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-  { "GTK_TEXT_BUFFER_CONTENTS", 0, TARGET_TEXT_BUFFER_CONTENTS }
-};
 
 typedef struct
 {
@@ -3192,7 +3369,13 @@ typedef struct
 static void
 update_selection_clipboards (GtkTextBuffer *buffer)
 {
-  GSList *tmp_list = buffer->selection_clipboards;
+  GtkTextBufferPrivate *priv;
+  GSList               *tmp_list = buffer->selection_clipboards;
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  gtk_text_buffer_get_copy_target_list (buffer);
+
   while (tmp_list)
     {
       GtkTextIter start;
@@ -3214,7 +3397,9 @@ update_selection_clipboards (GtkTextBuffer *buffer)
 	  /* Even if we already have the selection, we need to update our
 	   * timestamp.
 	   */
-	  if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
+	  if (!gtk_clipboard_set_with_owner (clipboard,
+                                             priv->copy_target_entries,
+                                             priv->n_copy_target_entries,
 					     clipboard_get_selection_cb,
 					     clipboard_clear_selection_cb,
 					     G_OBJECT (buffer)))
@@ -3525,6 +3710,8 @@ cut_or_copy (GtkTextBuffer *buffer,
              gboolean       interactive,
              gboolean       default_editable)
 {
+  GtkTextBufferPrivate *priv;
+
   /* We prefer to cut the selected region between selection_bound and
    * insertion point. If that region is empty, then we cut the region
    * between the "anchor" and the insertion point (this is for
@@ -3534,7 +3721,11 @@ cut_or_copy (GtkTextBuffer *buffer,
    */
   GtkTextIter start;
   GtkTextIter end;
-  
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  gtk_text_buffer_get_copy_target_list (buffer);
+
   if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
       /* Let's try the anchor thing */
@@ -3560,14 +3751,18 @@ cut_or_copy (GtkTextBuffer *buffer,
       
       gtk_text_buffer_insert_range (contents, &ins, &start, &end);
                                     
-      if (!gtk_clipboard_set_with_data (clipboard, targets, G_N_ELEMENTS (targets),
+      if (!gtk_clipboard_set_with_data (clipboard,
+                                        priv->copy_target_entries,
+                                        priv->n_copy_target_entries,
 					clipboard_get_contents_cb,
 					clipboard_clear_contents_cb,
 					contents))
 	g_object_unref (contents);
       else
-	gtk_clipboard_set_can_store (clipboard, (GtkTargetEntry *)targets, G_N_ELEMENTS (targets) -1);
-				     
+	gtk_clipboard_set_can_store (clipboard,
+                                     priv->copy_target_entries + 1,
+                                     priv->n_copy_target_entries - 1);
+
       if (delete_region_after)
         {
           if (interactive)
@@ -3697,6 +3892,126 @@ gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
       /* Ended the outermost-nested user action end, so emit the signal */
       g_signal_emit (buffer, signals[END_USER_ACTION], 0);
     }
+}
+
+static void
+gtk_text_buffer_free_target_lists (GtkTextBuffer *buffer)
+{
+  GtkTextBufferPrivate *priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  if (priv->copy_target_list)
+    {
+      gtk_target_list_unref (priv->copy_target_list);
+      priv->copy_target_list = NULL;
+
+      gtk_target_table_free (priv->copy_target_entries,
+                             priv->n_copy_target_entries);
+      priv->copy_target_entries = NULL;
+      priv->n_copy_target_entries = 0;
+    }
+
+  if (priv->paste_target_list)
+    {
+      gtk_target_list_unref (priv->paste_target_list);
+      priv->paste_target_list = NULL;
+
+      gtk_target_table_free (priv->paste_target_entries,
+                             priv->n_paste_target_entries);
+      priv->paste_target_entries = NULL;
+      priv->n_paste_target_entries = 0;
+    }
+}
+
+static GtkTargetList *
+gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
+                                 gboolean         deserializable,
+                                 GtkTargetEntry **entries,
+                                 gint            *n_entries)
+{
+  GtkTargetList *target_list;
+
+  target_list = gtk_target_list_new (NULL, 0);
+
+  gtk_target_list_add (target_list,
+                       gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
+                       GTK_TARGET_SAME_APP,
+                       GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS);
+
+  gtk_target_list_add_rich_text_targets (target_list,
+                                         GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
+                                         deserializable,
+                                         buffer);
+
+  gtk_target_list_add_text_targets (target_list,
+                                    GTK_TEXT_BUFFER_TARGET_INFO_TEXT);
+
+  *entries = gtk_target_table_new_from_list (target_list, n_entries);
+
+  return target_list;
+}
+
+/**
+ * gtk_text_buffer_get_copy_target_list:
+ * @buffer: a #GtkTextBuffer
+ *
+ * This function returns the list of targets this text buffer can
+ * provide for copying and as DND source. The targets in the list are
+ * added with %info values from the #GtkTextBufferTargetInfo enum,
+ * using gtk_target_list_add_rich_text_targets() and
+ * gtk_target_list_add_text_targets()
+ *
+ * Return value: the #GtkTargetList
+ *
+ * Since: 2.10
+ **/
+GtkTargetList *
+gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
+{
+  GtkTextBufferPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  if (! priv->copy_target_list)
+    priv->copy_target_list =
+      gtk_text_buffer_get_target_list (buffer, FALSE,
+                                       &priv->copy_target_entries,
+                                       &priv->n_copy_target_entries);
+
+  return priv->copy_target_list;
+}
+
+/**
+ * gtk_text_buffer_get_paste_target_list:
+ * @buffer: a #GtkTextBuffer
+ *
+ * This function returns the list of targets this text buffer supports
+ * for pasting and as DND destination. The targets in the list are
+ * added with %info values from the #GtkTextBufferTargetInfo enum,
+ * using gtk_target_list_add_rich_text_targets() and
+ * gtk_target_list_add_text_targets()
+ *
+ * Return value: the #GtkTargetList
+ *
+ * Since: 2.10
+ **/
+GtkTargetList *
+gtk_text_buffer_get_paste_target_list (GtkTextBuffer *buffer)
+{
+  GtkTextBufferPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+
+  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  if (! priv->paste_target_list)
+    priv->paste_target_list =
+      gtk_text_buffer_get_target_list (buffer, TRUE,
+                                       &priv->paste_target_entries,
+                                       &priv->n_paste_target_entries);
+
+  return priv->paste_target_list;
 }
 
 /*

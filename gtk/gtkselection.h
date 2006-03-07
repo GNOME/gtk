@@ -31,6 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtktextiter.h>
 
 G_BEGIN_DECLS
 
@@ -38,6 +39,7 @@ typedef struct _GtkTargetList    GtkTargetList;
 typedef struct _GtkTargetEntry   GtkTargetEntry;
 
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
+#define GTK_TYPE_TARGET_LIST    (gtk_target_list_get_type ())
 
 /* The contents of a selection are returned in a GtkSelectionData
  * structure. selection/target identify the request.  type specifies
@@ -87,19 +89,23 @@ struct _GtkTargetPair {
 
 GtkTargetList *gtk_target_list_new       (const GtkTargetEntry *targets,
 					  guint                 ntargets);
-void           gtk_target_list_ref       (GtkTargetList  *list);
+GtkTargetList *gtk_target_list_ref       (GtkTargetList  *list);
 void           gtk_target_list_unref     (GtkTargetList  *list);
 void           gtk_target_list_add       (GtkTargetList  *list,
 				  	  GdkAtom         target,
 					  guint           flags,
 					  guint           info);
-void           gtk_target_list_add_text_targets  (GtkTargetList  *list,
-						  guint           info);
-void           gtk_target_list_add_image_targets (GtkTargetList  *list,
-						  guint           info,
-						  gboolean        writable);
-void           gtk_target_list_add_uri_targets   (GtkTargetList  *list,
-						  guint           info);
+void           gtk_target_list_add_text_targets      (GtkTargetList  *list,
+                                                      guint           info);
+void           gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
+                                                      guint           info,
+                                                      gboolean        deserializable,
+                                                      GtkTextBuffer  *buffer);
+void           gtk_target_list_add_image_targets     (GtkTargetList  *list,
+                                                      guint           info,
+                                                      gboolean        writable);
+void           gtk_target_list_add_uri_targets       (GtkTargetList  *list,
+                                                      guint           info);
 void           gtk_target_list_add_table (GtkTargetList        *list,
 					  const GtkTargetEntry *targets,
 					  guint                 ntargets);
@@ -108,6 +114,11 @@ void           gtk_target_list_remove    (GtkTargetList  *list,
 gboolean       gtk_target_list_find      (GtkTargetList  *list,
 					  GdkAtom         target,
 					  guint          *info);
+
+GtkTargetEntry * gtk_target_table_new_from_list (GtkTargetList  *list,
+                                                 gint           *n_targets);
+void             gtk_target_table_free          (GtkTargetEntry *targets,
+                                                 gint            n_targets);
 
 /* Public interface */
 
@@ -153,16 +164,21 @@ gboolean gtk_selection_data_get_targets          (GtkSelectionData  *selection_d
 						  GdkAtom          **targets,
 						  gint              *n_atoms);
 gboolean gtk_selection_data_targets_include_text (GtkSelectionData  *selection_data);
+gboolean gtk_selection_data_targets_include_rich_text (GtkSelectionData *selection_data,
+                                                       GtkTextBuffer    *buffer);
 gboolean gtk_selection_data_targets_include_image (GtkSelectionData  *selection_data,
 						   gboolean           writable);
 gboolean gtk_selection_data_targets_include_uri  (GtkSelectionData  *selection_data);
-gboolean gtk_targets_include_text                (GdkAtom *targets,
-						  gint     n_targets);
-gboolean gtk_targets_include_image               (GdkAtom *targets,
-						  gint     n_targets,
-						  gboolean writable);
-gboolean gtk_targets_include_uri                 (GdkAtom *targets,
-						  gint     n_targets);
+gboolean gtk_targets_include_text                (GdkAtom       *targets,
+						  gint           n_targets);
+gboolean gtk_targets_include_rich_text           (GdkAtom       *targets,
+						  gint           n_targets,
+                                                  GtkTextBuffer *buffer);
+gboolean gtk_targets_include_image               (GdkAtom       *targets,
+						  gint           n_targets,
+						  gboolean       writable);
+gboolean gtk_targets_include_uri                 (GdkAtom       *targets,
+						  gint           n_targets);
 
 /* Called when a widget is destroyed */
 
@@ -186,6 +202,7 @@ GType             gtk_selection_data_get_type (void) G_GNUC_CONST;
 GtkSelectionData *gtk_selection_data_copy     (GtkSelectionData *data);
 void		  gtk_selection_data_free     (GtkSelectionData *data);
 
+GType             gtk_target_list_get_type    (void) G_GNUC_CONST;
 
 G_END_DECLS
 

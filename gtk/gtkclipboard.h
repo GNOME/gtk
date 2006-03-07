@@ -30,19 +30,24 @@ G_BEGIN_DECLS
 #define GTK_CLIPBOARD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIPBOARD, GtkClipboard))
 #define GTK_IS_CLIPBOARD(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIPBOARD))
 
-typedef void (* GtkClipboardReceivedFunc)        (GtkClipboard     *clipboard,
-					          GtkSelectionData *selection_data,
-					          gpointer          data);
-typedef void (* GtkClipboardTextReceivedFunc)    (GtkClipboard     *clipboard,
-					          const gchar      *text,
-					          gpointer          data);
-typedef void (* GtkClipboardImageReceivedFunc)   (GtkClipboard     *clipboard,
-						  GdkPixbuf        *pixbuf,
-						  gpointer          data);
-typedef void (* GtkClipboardTargetsReceivedFunc) (GtkClipboard     *clipboard,
-					          GdkAtom          *atoms,
-						  gint              n_atoms,
-					          gpointer          data);
+typedef void (* GtkClipboardReceivedFunc)         (GtkClipboard     *clipboard,
+					           GtkSelectionData *selection_data,
+					           gpointer          data);
+typedef void (* GtkClipboardTextReceivedFunc)     (GtkClipboard     *clipboard,
+					           const gchar      *text,
+					           gpointer          data);
+typedef void (* GtkClipboardRichTextReceivedFunc) (GtkClipboard     *clipboard,
+                                                   GdkAtom           format,
+					           const guint8     *text,
+                                                   gsize             length,
+					           gpointer          data);
+typedef void (* GtkClipboardImageReceivedFunc)    (GtkClipboard     *clipboard,
+						   GdkPixbuf        *pixbuf,
+						   gpointer          data);
+typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
+					           GdkAtom          *atoms,
+						   gint              n_atoms,
+					           gpointer          data);
 
 /* Should these functions have GtkClipboard *clipboard as the first argument?
  * right now for ClearFunc, you may have trouble determining _which_ clipboard
@@ -86,32 +91,42 @@ void     gtk_clipboard_set_text       (GtkClipboard          *clipboard,
 void     gtk_clipboard_set_image      (GtkClipboard          *clipboard,
 				       GdkPixbuf             *pixbuf);
 
-void gtk_clipboard_request_contents (GtkClipboard                    *clipboard,
-				     GdkAtom                          target,
-				     GtkClipboardReceivedFunc         callback,
-				     gpointer                         user_data);
-void gtk_clipboard_request_text     (GtkClipboard                    *clipboard,
-				     GtkClipboardTextReceivedFunc     callback,
-				     gpointer                         user_data);
-void gtk_clipboard_request_image    (GtkClipboard                    *clipboard,
-				     GtkClipboardImageReceivedFunc    callback,
-				     gpointer                         user_data);
-void gtk_clipboard_request_targets  (GtkClipboard                    *clipboard,
-				     GtkClipboardTargetsReceivedFunc  callback,
-				     gpointer                         user_data);
+void gtk_clipboard_request_contents  (GtkClipboard                     *clipboard,
+                                      GdkAtom                           target,
+                                      GtkClipboardReceivedFunc          callback,
+                                      gpointer                          user_data);
+void gtk_clipboard_request_text      (GtkClipboard                     *clipboard,
+                                      GtkClipboardTextReceivedFunc      callback,
+                                      gpointer                          user_data);
+void gtk_clipboard_request_rich_text (GtkClipboard                     *clipboard,
+                                      GtkTextBuffer                    *buffer,
+                                      GtkClipboardRichTextReceivedFunc  callback,
+                                      gpointer                          user_data);
+void gtk_clipboard_request_image     (GtkClipboard                     *clipboard,
+                                      GtkClipboardImageReceivedFunc     callback,
+                                      gpointer                          user_data);
+void gtk_clipboard_request_targets   (GtkClipboard                     *clipboard,
+                                      GtkClipboardTargetsReceivedFunc   callback,
+                                      gpointer                          user_data);
 
-GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard  *clipboard,
-						   GdkAtom        target);
-gchar *           gtk_clipboard_wait_for_text     (GtkClipboard  *clipboard);
-GdkPixbuf *       gtk_clipboard_wait_for_image    (GtkClipboard  *clipboard);
-gboolean          gtk_clipboard_wait_for_targets  (GtkClipboard  *clipboard,
-						   GdkAtom      **targets,
-						   gint          *n_targets);
+GtkSelectionData *gtk_clipboard_wait_for_contents  (GtkClipboard  *clipboard,
+                                                    GdkAtom        target);
+gchar *           gtk_clipboard_wait_for_text      (GtkClipboard  *clipboard);
+guint8 *          gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
+                                                    GtkTextBuffer *buffer,
+                                                    GdkAtom       *format,
+                                                    gsize         *size);
+GdkPixbuf *       gtk_clipboard_wait_for_image     (GtkClipboard  *clipboard);
+gboolean          gtk_clipboard_wait_for_targets   (GtkClipboard  *clipboard,
+                                                    GdkAtom      **targets,
+                                                    gint          *n_targets);
 
-gboolean gtk_clipboard_wait_is_text_available   (GtkClipboard *clipboard);
-gboolean gtk_clipboard_wait_is_image_available  (GtkClipboard *clipboard);
-gboolean gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
-						 GdkAtom       target);
+gboolean gtk_clipboard_wait_is_text_available      (GtkClipboard  *clipboard);
+gboolean gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
+                                                    GtkTextBuffer *buffer);
+gboolean gtk_clipboard_wait_is_image_available     (GtkClipboard  *clipboard);
+gboolean gtk_clipboard_wait_is_target_available    (GtkClipboard  *clipboard,
+                                                    GdkAtom        target);
 
 
 void gtk_clipboard_set_can_store (GtkClipboard         *clipboard,

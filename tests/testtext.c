@@ -1282,6 +1282,267 @@ do_properties (gpointer callback_data,
   create_prop_editor (G_OBJECT (view->text_view), 0);
 }
 
+static void
+rich_text_store_populate (GtkListStore  *store,
+                          GtkTextBuffer *buffer,
+                          gboolean       deserialize)
+{
+  GdkAtom *formats;
+  gint     n_formats;
+  gint     i;
+
+  gtk_list_store_clear (store);
+
+  if (deserialize)
+    formats = gtk_text_buffer_get_deserialize_formats (buffer, &n_formats);
+  else
+    formats = gtk_text_buffer_get_serialize_formats (buffer, &n_formats);
+
+  for (i = 0; i < n_formats; i++)
+    {
+      GtkTreeIter  iter;
+      gchar       *mime_type;
+      gboolean     can_create_tags = FALSE;
+
+      mime_type = gdk_atom_name (formats[i]);
+
+      if (deserialize)
+        can_create_tags =
+          gtk_text_buffer_deserialize_get_can_create_tags (buffer, formats[i]);
+
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+                          0, formats[i],
+                          1, mime_type,
+                          2, can_create_tags,
+                          -1);
+
+      g_free (mime_type);
+    }
+
+  g_free (formats);
+}
+
+static void
+rich_text_paste_target_list_notify (GtkTextBuffer    *buffer,
+                                    const GParamSpec *pspec,
+                                    GtkListStore     *store)
+{
+  rich_text_store_populate (store, buffer, TRUE);
+}
+
+static void
+rich_text_copy_target_list_notify (GtkTextBuffer    *buffer,
+                                   const GParamSpec *pspec,
+                                   GtkListStore     *store)
+{
+  rich_text_store_populate (store, buffer, FALSE);
+}
+
+static void
+rich_text_can_create_tags_toggled (GtkCellRendererToggle *toggle,
+                                   const gchar           *path,
+                                   GtkTreeModel          *model)
+{
+  GtkTreeIter iter;
+
+  if (gtk_tree_model_get_iter_from_string (model, &iter, path))
+    {
+      GtkTextBuffer *buffer;
+      GdkAtom        format;
+      gboolean       can_create_tags;
+
+      buffer = g_object_get_data (G_OBJECT (model), "buffer");
+
+      gtk_tree_model_get (model, &iter,
+                          0, &format,
+                          2, &can_create_tags,
+                          -1);
+
+      gtk_text_buffer_deserialize_set_can_create_tags (buffer, format,
+                                                       !can_create_tags);
+
+      gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                          2, !can_create_tags,
+                          -1);
+    }
+}
+
+static void
+rich_text_unregister_clicked (GtkWidget   *button,
+                              GtkTreeView *tv)
+{
+  GtkTreeSelection *sel = gtk_tree_view_get_selection (tv);
+  GtkTreeModel     *model;
+  GtkTreeIter       iter;
+
+  if (gtk_tree_selection_get_selected (sel, &model, &iter))
+    {
+      GtkTextBuffer *buffer;
+      gboolean       deserialize;
+      GdkAtom        format;
+
+      buffer = g_object_get_data (G_OBJECT (model), "buffer");
+      deserialize = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (model),
+                                                        "deserialize"));
+
+      gtk_tree_model_get (model, &iter,
+                          0, &format,
+                          -1);
+
+      if (deserialize)
+        gtk_text_buffer_unregister_deserialize_format (buffer, format);
+      else
+        gtk_text_buffer_unregister_serialize_format (buffer, format);
+    }
+}
+
+static void
+rich_text_register_clicked (GtkWidget   *button,
+                            GtkTreeView *tv)
+{
+  GtkWidget *dialog;
+  GtkWidget *label;
+  GtkWidget *entry;
+
+  dialog = gtk_dialog_new_with_buttons ("Register new Tagset",
+                                        GTK_WINDOW (gtk_widget_get_toplevel (button)),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OK,     GTK_RESPONSE_OK,
+                                        NULL);
+  label = gtk_label_new ("Enter tagset name or leave blank for "
+                         "unrestricted internal format:");
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label,
+                      FALSE, FALSE, 0);
+
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), entry,
+                      FALSE, FALSE, 0);
+
+  gtk_widget_show_all (dialog);
+
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+    {
+      GtkTreeModel  *model  = gtk_tree_view_get_model (tv);
+      GtkTextBuffer *buffer = g_object_get_data (G_OBJECT (model), "buffer");
+      const gchar   *tagset = gtk_entry_get_text (GTK_ENTRY (entry));
+      gboolean       deserialize;
+
+      deserialize = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (model),
+                                                        "deserialize"));
+
+      if (tagset && ! strlen (tagset))
+        tagset = NULL;
+
+      if (deserialize)
+        gtk_text_buffer_register_deserialize_tagset (buffer, tagset);
+      else
+        gtk_text_buffer_register_serialize_tagset (buffer, tagset);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+do_rich_text (gpointer callback_data,
+              guint deserialize,
+              GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextBuffer *buffer;
+  GtkWidget *dialog;
+  GtkWidget *tv;
+  GtkWidget *sw;
+  GtkWidget *hbox;
+  GtkWidget *button;
+  GtkListStore *store;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view->text_view));
+
+  dialog = gtk_dialog_new_with_buttons (deserialize ?
+                                        "Rich Text Paste & Drop" :
+                                        "Rich Text Copy & Drag",
+                                        GTK_WINDOW (view->window),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_CLOSE, 0,
+                                        NULL);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+
+  store = gtk_list_store_new (3,
+                              G_TYPE_POINTER,
+                              G_TYPE_STRING,
+                              G_TYPE_BOOLEAN);
+
+  g_object_set_data (G_OBJECT (store), "buffer", buffer);
+  g_object_set_data (G_OBJECT (store), "deserialize",
+                     GUINT_TO_POINTER (deserialize));
+
+  tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  g_object_unref (store);
+
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tv),
+                                               0, "Rich Text Format",
+                                               gtk_cell_renderer_text_new (),
+                                               "text", 1,
+                                               NULL);
+
+  if (deserialize)
+    {
+      GtkCellRenderer *renderer = gtk_cell_renderer_toggle_new ();
+
+      gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tv),
+                                                   1, "Can Create Tags",
+                                                   renderer,
+                                                   "active", 2,
+                                                   NULL);
+
+      g_signal_connect (renderer, "toggled",
+                        G_CALLBACK (rich_text_can_create_tags_toggled),
+                        store);
+    }
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_size_request (sw, 300, 100);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), sw);
+
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), tv);
+
+  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+                      FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Unregister Selected Format");
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (rich_text_unregister_clicked),
+                    tv);
+
+  button = gtk_button_new_with_label ("Register New Tagset\n"
+                                      "for the Internal Format");
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (rich_text_register_clicked),
+                    tv);
+
+  if (deserialize)
+    g_signal_connect_object (buffer, "notify::paste-target-list",
+                             G_CALLBACK (rich_text_paste_target_list_notify),
+                             G_OBJECT (store), 0);
+  else
+    g_signal_connect_object (buffer, "notify::copy-target-list",
+                             G_CALLBACK (rich_text_copy_target_list_notify),
+                             G_OBJECT (store), 0);
+
+  rich_text_store_populate (store, buffer, deserialize);
+
+  gtk_widget_show_all (dialog);
+}
+
 enum
 {
   RESPONSE_FORWARD,
@@ -1695,8 +1956,10 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
   { "/Attributes/Color cycles",   	  NULL,         do_apply_colors, TRUE, NULL },
   { "/Attributes/No colors",   	          NULL,         do_apply_colors, FALSE, NULL },
-  { "/Attributes/Remove all tags",       NULL, do_remove_tags, 0, NULL },
-  { "/Attributes/Properties",       NULL, do_properties, 0, NULL },
+  { "/Attributes/Remove all tags",        NULL, do_remove_tags, 0, NULL },
+  { "/Attributes/Properties",             NULL, do_properties, 0, NULL },
+  { "/Attributes/Rich Text copy & drag",  NULL, do_rich_text, 0, NULL },
+  { "/Attributes/Rich Text paste & drop", NULL, do_rich_text, 1, NULL },
   { "/_Test",   	 NULL,         NULL,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
   { "/Test/_Insert and scroll", NULL,         do_insert_and_scroll,  0, NULL },

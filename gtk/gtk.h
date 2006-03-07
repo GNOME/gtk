@@ -160,6 +160,7 @@
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktoggleaction.h>

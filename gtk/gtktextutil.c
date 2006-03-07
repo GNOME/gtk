@@ -26,12 +26,19 @@
 
 #include <config.h>
 #include "gtktextutil.h"
-#include "gtkintl.h"
+#include "gtktextview.h"
+
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+
+#include "gtktextdisplay.h"
+#include "gtktextbuffer.h"
 #include "gtkmenuitem.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
-#define DRAG_ICON_LAYOUT_BORDER 2
+#define DRAG_ICON_MAX_HEIGHT 250
+#define DRAG_ICON_LAYOUT_BORDER 5
 #define DRAG_ICON_MAX_LINES 7
 #define ELLIPSIS_CHARACTER "\xe2\x80\xa6"
 
@@ -177,7 +184,7 @@ limit_layout_lines (PangoLayout *layout)
  *
  * Creates a drag and drop icon from @text.
  **/
-GdkPixmap*
+GdkPixmap *
 _gtk_text_util_create_drag_icon (GtkWidget *widget, 
                                  gchar     *text,
                                  gsize      len)
@@ -237,4 +244,125 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   g_object_unref (layout);
 
   return drawable;
+}
+
+static void
+gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
+                                         GtkTextAttributes  *values,
+                                         GtkStyle           *style)
+{
+  values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
+  values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
+
+  if (values->font)
+    pango_font_description_free (values->font);
+
+  values->font = pango_font_description_copy (style->font_desc);
+}
+
+GdkPixmap *
+_gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
+                                      GtkTextBuffer *buffer,
+                                      GtkTextIter   *start,
+                                      GtkTextIter   *end)
+{
+  GdkDrawable       *drawable = NULL;
+  gint               pixmap_height, pixmap_width;
+  gint               layout_width, layout_height;
+  GtkTextBuffer     *new_buffer;
+  GtkTextLayout     *layout;
+  GtkTextAttributes *style;
+  PangoContext      *ltr_context, *rtl_context;
+  GtkTextIter        iter;
+
+   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+   g_return_val_if_fail (start != NULL, NULL);
+   g_return_val_if_fail (end != NULL, NULL);
+
+   new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
+   gtk_text_buffer_get_start_iter (new_buffer, &iter);
+
+   gtk_text_buffer_insert_range (new_buffer, &iter, start, end);
+
+   gtk_text_buffer_get_start_iter (new_buffer, &iter);
+
+   layout = gtk_text_layout_new ();
+
+   ltr_context = gtk_widget_create_pango_context (widget);
+   pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
+   rtl_context = gtk_widget_create_pango_context (widget);
+   pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
+
+   gtk_text_layout_set_contexts (layout, ltr_context, rtl_context);
+
+   g_object_unref (ltr_context);
+   g_object_unref (rtl_context);
+
+   style = gtk_text_attributes_new ();
+
+   layout_width = widget->allocation.width;
+
+   if (GTK_IS_TEXT_VIEW (widget))
+     {
+       gtk_widget_ensure_style (widget);
+       gtk_text_view_set_attributes_from_style (GTK_TEXT_VIEW (widget),
+                                                style, widget->style);
+
+       layout_width = layout_width
+         - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
+         - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
+     }
+
+   style->direction = gtk_widget_get_direction (widget);
+   style->wrap_mode = PANGO_WRAP_WORD_CHAR;
+
+   gtk_text_layout_set_default_style (layout, style);
+   gtk_text_attributes_unref (style);
+
+   gtk_text_layout_set_buffer (layout, new_buffer);
+   gtk_text_layout_set_cursor_visible (layout, FALSE);
+   gtk_text_layout_set_screen_width (layout, layout_width);
+
+   gtk_text_layout_validate (layout, DRAG_ICON_MAX_HEIGHT);
+   gtk_text_layout_get_size (layout, &layout_width, &layout_height);
+
+   g_print ("%s: layout size %d %d\n", G_STRFUNC, layout_width, layout_height);
+
+   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
+   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
+
+   pixmap_width  = layout_width + DRAG_ICON_LAYOUT_BORDER * 2;
+   pixmap_height = layout_height + DRAG_ICON_LAYOUT_BORDER * 2;
+
+   g_print ("%s: pixmap size %d %d\n", G_STRFUNC, pixmap_width, pixmap_height);
+
+   drawable = gdk_pixmap_new (widget->window,
+                              pixmap_width  + 2, pixmap_height + 2, -1);
+
+   gdk_draw_rectangle (drawable,
+                       widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+                       TRUE,
+                       0, 0,
+                       pixmap_width + 1,
+                       pixmap_height + 1);
+
+   gtk_text_layout_draw (layout, widget, drawable,
+                         widget->style->text_gc [GTK_WIDGET_STATE (widget)],
+                         - (1 + DRAG_ICON_LAYOUT_BORDER),
+                         - (1 + DRAG_ICON_LAYOUT_BORDER),
+                         0, 0,
+                         pixmap_width, pixmap_height, NULL);
+
+   gdk_draw_rectangle (drawable,
+                       widget->style->black_gc,
+                       FALSE,
+                       0, 0,
+                       pixmap_width + 1,
+                       pixmap_height + 1);
+
+   g_object_unref (layout);
+   g_object_unref (new_buffer);
+
+   return drawable;
 }

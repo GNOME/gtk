@@ -39,6 +39,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkstock.h"
+#include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
@@ -314,6 +315,9 @@ static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
                                                   const GtkTextIter *location,
                                                   GtkTextMark       *mark,
                                                   gpointer           data);
+static void gtk_text_view_target_list_notify     (GtkTextBuffer     *buffer,
+                                                  const GParamSpec  *pspec,
+                                                  gpointer           data);
 static void gtk_text_view_get_cursor_location    (GtkTextView       *text_view,
 						  GdkRectangle      *pos);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
@@ -413,10 +417,6 @@ static void           text_window_invalidate_cursors (GtkTextWindow  *win);
 static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
 
-
-static const GtkTargetEntry target_table[] = {
-  { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP, 0 },
-};
 
 static GtkContainerClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1062,11 +1062,8 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->tabs = NULL;
   text_view->editable = TRUE;
 
-  gtk_drag_dest_set (widget,
-		     0,
-                     target_table, G_N_ELEMENTS (target_table),
+  gtk_drag_dest_set (widget, 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_dest_add_text_targets (widget);
 
   text_view->virtual_cursor_x = -1;
   text_view->virtual_cursor_y = -1;
@@ -1190,6 +1187,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (text_view->buffer,
 					    gtk_text_view_mark_set_handler,
 					    text_view);
+      g_signal_handlers_disconnect_by_func (text_view->buffer,
+                                            gtk_text_view_target_list_notify,
+                                            text_view);
       g_object_unref (text_view->buffer);
       text_view->dnd_mark = NULL;
 
@@ -1225,7 +1225,13 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       text_view->first_para_pixels = 0;
 
       g_signal_connect (text_view->buffer, "mark_set",
-			G_CALLBACK (gtk_text_view_mark_set_handler), text_view);
+			G_CALLBACK (gtk_text_view_mark_set_handler),
+                        text_view);
+      g_signal_connect (text_view->buffer, "notify::paste-target-list",
+			G_CALLBACK (gtk_text_view_target_list_notify),
+                        text_view);
+
+      gtk_text_view_target_list_notify (text_view->buffer, NULL, text_view);
 
       if (GTK_WIDGET_REALIZED (text_view))
 	{
@@ -5984,21 +5990,6 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
     }
 }
 
-static gchar*
-_gtk_text_view_get_selected_text (GtkTextView *text_view)
-{
-  GtkTextBuffer *buffer;
-  GtkTextIter    start, end;
-  gchar         *text = NULL;
-
-  buffer = gtk_text_view_get_buffer (text_view);
-
-  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-    text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-
-  return text;
-}
-
 /*
  * DND feature
  */
@@ -6008,29 +5999,30 @@ drag_begin_cb (GtkWidget      *widget,
                GdkDragContext *context,
                gpointer        data)
 {
-  GtkTextView *text_view;
-  gchar *text;
-  GdkPixmap *pixmap = NULL;
+  GtkTextView   *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+  GtkTextIter    start;
+  GtkTextIter    end;
+  GdkPixmap     *pixmap = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
-  text_view = GTK_TEXT_VIEW (widget);
-
-  text   = _gtk_text_view_get_selected_text (text_view);
-  pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
+  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+    pixmap = _gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
 
   if (pixmap)
-    gtk_drag_set_icon_pixmap (context,
-                              gdk_drawable_get_colormap (pixmap),
-                              pixmap,
-                              NULL,
-                              -2, -2);
+    {
+      gtk_drag_set_icon_pixmap (context,
+                                gdk_drawable_get_colormap (pixmap),
+                                pixmap,
+                                NULL,
+                                -2, -2);
+      g_object_unref (pixmap);
+    }
   else
-    gtk_drag_set_icon_default (context);
-  
-  if (pixmap)
-    g_object_unref (pixmap);
-  g_free (text);
+    {
+      gtk_drag_set_icon_default (context);
+    }
 }
 
 static void
@@ -6038,23 +6030,19 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
                                    GdkEventMotion    *event)
 {
-  GtkTargetList  *target_list;
+  GtkTargetList *target_list;
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
   text_view->pending_place_cursor_button = 0;
-  
-  target_list = gtk_target_list_new (target_table,
-                                     G_N_ELEMENTS (target_table));
-  gtk_target_list_add_text_targets (target_list, 0);
 
-  g_signal_connect (text_view, "drag-begin", 
+  target_list = gtk_text_buffer_get_copy_target_list (get_buffer (text_view));
+
+  g_signal_connect (text_view, "drag-begin",
                     G_CALLBACK (drag_begin_cb), NULL);
   gtk_drag_begin (GTK_WIDGET (text_view), target_list,
 		  GDK_ACTION_COPY | GDK_ACTION_MOVE,
 		  1, (GdkEvent*)event);
-
-  gtk_target_list_unref (target_list);
 }
 
 static void
@@ -6077,30 +6065,49 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
                              guint             info,
                              guint             time)
 {
-  GtkTextView *text_view;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
-  text_view = GTK_TEXT_VIEW (widget);
-
-  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
     {
-      GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
-
       gtk_selection_data_set (selection_data,
                               gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
                               8, /* bytes */
                               (void*)&buffer,
                               sizeof (buffer));
     }
-  else
+  else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
     {
-      gchar *str;
       GtkTextIter start;
       GtkTextIter end;
+      guint8 *str = NULL;
+      gsize len;
 
-      str = NULL;
+      if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+        {
+          /* Extract the selected text */
+          str = gtk_text_buffer_serialize (buffer, buffer,
+                                           selection_data->target,
+                                           &start, &end,
+                                           &len);
+        }
 
-      if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                &start, &end))
+      if (str)
+        {
+          gtk_selection_data_set (selection_data,
+                                  selection_data->target,
+                                  8, /* bytes */
+                                  (guchar *) str, len);
+          g_free (str);
+        }
+    }
+  else
+    {
+      GtkTextIter start;
+      GtkTextIter end;
+      gchar *str = NULL;
+
+      if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
         {
           /* Extract the selected text */
           str = gtk_text_iter_get_visible_text (&start, &end);
@@ -6179,7 +6186,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       /* can't accept any of the offered targets */
     }                                 
   else if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                            &start, &end) &&
+                                                 &start, &end) &&
            gtk_text_iter_compare (&newplace, &start) >= 0 &&
            gtk_text_iter_compare (&newplace, &end) <= 0)
     {
@@ -6284,14 +6291,14 @@ insert_text_data (GtkTextView      *text_view,
                   GtkTextIter      *drop_point,
                   GtkSelectionData *selection_data)
 {
-  gchar *str;
+  guchar *str;
 
   str = gtk_selection_data_get_text (selection_data);
 
   if (str)
     {
       gtk_text_buffer_insert_interactive (get_buffer (text_view),
-                                          drop_point, str, -1,
+                                          drop_point, (gchar *) str, -1,
                                           text_view->editable);
       g_free (str);
     }
@@ -6329,7 +6336,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
     {
       GtkTextBuffer *src_buffer = NULL;
       GtkTextIter start, end;
@@ -6347,7 +6354,38 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
       if (gtk_text_buffer_get_tag_table (src_buffer) !=
           gtk_text_buffer_get_tag_table (buffer))
-        copy_tags = FALSE;
+        {
+          /*  try to find a suitable rich text target instead  */
+          GdkAtom *atoms;
+          gint     n_atoms;
+          GList   *list;
+          GdkAtom  target = GDK_NONE;
+
+          copy_tags = FALSE;
+
+          atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
+
+          for (list = context->targets; list; list = g_list_next (list))
+            {
+              gint i;
+
+              for (i = 0; i < n_atoms; i++)
+                if (GUINT_TO_POINTER (atoms[i]) == list->data)
+                  {
+                    target = atoms[i];
+                    break;
+                  }
+            }
+
+          g_free (atoms);
+
+          if (target != GDK_NONE)
+            {
+              gtk_drag_get_data (widget, context, target, time);
+              gtk_text_buffer_end_user_action (buffer);
+              return;
+            }
+        }
 
       if (gtk_text_buffer_get_selection_bounds (src_buffer,
                                                 &start,
@@ -6371,9 +6409,28 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
             }
         }
     }
+  else if (selection_data->length > 0 &&
+           info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+    {
+      gboolean retval;
+      GError *error = NULL;
+
+      retval = gtk_text_buffer_deserialize (buffer, buffer,
+                                            selection_data->target,
+                                            &drop_point,
+                                            (guint8 *) selection_data->data,
+                                            selection_data->length,
+                                            &error);
+
+      if (!retval)
+        {
+          g_warning ("error pasting: %s\n", error->message);
+          g_clear_error (&error);
+        }
+    }
   else
     insert_text_data (text_view, &drop_point, selection_data);
- 
+
  done:
   gtk_drag_finish (context, success,
 		   success && context->action == GDK_ACTION_MOVE,
@@ -6823,6 +6880,14 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 
   if (need_reset)
     gtk_text_view_reset_im_context (text_view);
+}
+
+static void
+gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
+                                  const GParamSpec *pspec,
+                                  gpointer          data)
+{
+  gtk_drag_dest_set_target_list (data, gtk_text_buffer_get_paste_target_list (buffer));
 }
 
 static void

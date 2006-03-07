@@ -41,6 +41,16 @@ G_BEGIN_DECLS
  * GtkTextBTree is the PRIVATE internal representation of it.
  */
 
+/* these values are used as "info" for the targets contained in the
+ * lists returned by gtk_text_buffer_get_copy,paste_target_list()
+ */
+typedef enum
+{
+  GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS,
+  GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
+  GTK_TEXT_BUFFER_TARGET_INFO_TEXT
+} GtkTextBufferTargetInfo;
+
 typedef struct _GtkTextBTree GtkTextBTree;
 
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
@@ -366,6 +376,9 @@ gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
 /* Called to specify atomic user actions, used to implement undo */
 void            gtk_text_buffer_begin_user_action       (GtkTextBuffer *buffer);
 void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
+
+GtkTargetList * gtk_text_buffer_get_copy_target_list    (GtkTextBuffer *buffer);
+GtkTargetList * gtk_text_buffer_get_paste_target_list   (GtkTextBuffer *buffer);
 
 /* INTERNAL private stuff */
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);

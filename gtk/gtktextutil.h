@@ -31,6 +31,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtktextbuffer.h>
 
 
 G_BEGIN_DECLS
@@ -47,8 +48,12 @@ void _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *me
 
 G_END_DECLS
 
-GdkPixmap* _gtk_text_util_create_drag_icon  (GtkWidget *widget, 
-					     gchar     *text,
-					     gsize      len);
+GdkPixmap* _gtk_text_util_create_drag_icon      (GtkWidget     *widget,
+                                                 gchar         *text,
+                                                 gsize          len);
+GdkPixmap* _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
+                                                 GtkTextBuffer *buffer,
+                                                 GtkTextIter   *start,
+                                                 GtkTextIter   *end);
 
 #endif /* __GTK_TEXT_UTIL_H__ */
