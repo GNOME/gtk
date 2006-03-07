@@ -7462,6 +7462,8 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   stem_width = strong.height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
 
+  strong.width = stem_width;
+
   /* round up to the next even number */
   if (stem_width & 1)
     stem_width++;
@@ -7481,6 +7483,8 @@ text_window_invalidate_cursors (GtkTextWindow *win)
     {
       stem_width = weak.height * cursor_aspect_ratio + 1;
       arrow_width = stem_width + 1;
+
+      weak.width = stem_width;
 
       /* round up to the next even number */
       if (stem_width & 1)

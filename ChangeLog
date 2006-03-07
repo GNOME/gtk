@@ -1,5 +1,9 @@
 2006-03-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (text_window_invalidate_cursors): Take
+	cursor width into account when calculating the area to 
+	be invalidated.  (#333377, #323401 Steve Frécinaux)
+
 	* gtk/gtkmain.c (post_parse_hook): Set error when returning
 	FALSE.  (#333268, Paolo Maggi, Christian Persch)
 	
