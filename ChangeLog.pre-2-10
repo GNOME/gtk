@@ -1,3 +1,10 @@
+Tue Mar  7 17:16:34 2006  Tim Janik  <timj@gtk.org>
+
+	* configure.in: depend on glib-2.10.1.
+
+	* gtk/gtkobject.c: fixed up messing with non-GtkObject floating flags.
+	this requires glib-2.10.1.
+
 2006-03-07  Michael Natterer  <mitch@imendio.com>
 
 	Add infrastructure for copy/paste and DND of rich text for

@@ -314,11 +314,15 @@ gtk_object_add_arg_type (const gchar *arg_name,
   g_object_class_install_property (oclass, arg_id, pspec);
 }
 
+static guint (*gobject_floating_flag_handler) (GtkObject*,gint) = NULL;
+
 static guint
 gtk_object_floating_flag_handler (GtkObject *object,
                                   gint       job)
 {
   /* FIXME: remove this whole thing once GTK+ breaks ABI */
+  if (!GTK_IS_OBJECT (object))
+    return gobject_floating_flag_handler (object, job);
   switch (job)
     {
       guint32 oldvalue;
@@ -341,9 +345,13 @@ static void
 gtk_object_class_init (GtkObjectClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  gboolean is_glib_2_10_1;
 
   parent_class = g_type_class_ref (G_TYPE_OBJECT);
 
+  is_glib_2_10_1 = g_object_compat_control (3, &gobject_floating_flag_handler);
+  if (!is_glib_2_10_1)
+    g_error ("this version of Gtk+ requires GLib-2.10.1");
   g_object_compat_control (2, gtk_object_floating_flag_handler);
 
   gobject_class->set_property = gtk_object_set_property;
