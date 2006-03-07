@@ -7479,9 +7479,11 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   gtk_widget_style_get (win->widget,
                         "cursor-aspect-ratio", &cursor_aspect_ratio,
                         NULL);
-
+  
   stem_width = strong.height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
+
+  strong.width = stem_width;
 
   /* round up to the next even number */
   if (stem_width & 1)
@@ -7502,6 +7504,8 @@ text_window_invalidate_cursors (GtkTextWindow *win)
     {
       stem_width = weak.height * cursor_aspect_ratio + 1;
       arrow_width = stem_width + 1;
+
+      weak.width = stem_width;
 
       /* round up to the next even number */
       if (stem_width & 1)
