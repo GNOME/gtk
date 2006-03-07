@@ -3095,7 +3095,20 @@ shortcuts_button_press_event_cb (GtkWidget             *widget,
 				 GdkEventButton        *event,
 				 GtkFileChooserDefault *impl)
 {
+  static gboolean in_press = FALSE;
+  gboolean handled;
+
+  if (in_press)
+    return FALSE;
+
   if (event->button != 3)
+    return FALSE;
+
+  in_press = TRUE;
+  handled = gtk_widget_event (impl->browse_shortcuts_tree_view, (GdkEvent *) event);
+  in_press = FALSE;
+
+  if (!handled)
     return FALSE;
 
   shortcuts_popup_menu (impl, event);
@@ -3643,8 +3656,18 @@ list_button_press_event_cb (GtkWidget             *widget,
 			    GdkEventButton        *event,
 			    GtkFileChooserDefault *impl)
 {
+  static gboolean in_press = FALSE;
+  gboolean handled;
+
+  if (in_press)
+    return FALSE;
+
   if (event->button != 3)
     return FALSE;
+
+  in_press = TRUE;
+  handled = gtk_widget_event (impl->browse_files_tree_view, (GdkEvent *) event);
+  in_press = FALSE;
 
   file_list_popup_menu (impl, event);
   return TRUE;

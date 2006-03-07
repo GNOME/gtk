@@ -1,3 +1,30 @@
+2006-03-07  Federico Mena Quintero  <federico@novell.com>
+
+	Cancel drags when the grabs get broken.  Fixes bug #333056:
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): The time argument is
+	a guint, not guint32.
+	(gtk_drag_source_event_cb): Return gboolean, not gint.
+	(gtk_drag_anim_timeout): Likewise.
+	(gtk_drag_motion_cb): Likewise.
+	(gtk_drag_key_cb): Likewise.
+	(gtk_drag_button_release_cb): Likewise.
+	(gtk_drag_abort_timeout): Likewise.
+	(gtk_drag_begin_internal): Connect to "grab-broken-event" on the
+	ipc_widget.
+	(gtk_drag_source_info_destroy): Disconnect from the
+	"grab-broken-event" callback.
+	(gtk_drag_end): Likewise.
+	(gtk_drag_grab_broken_event_cb): New callback.  We cancel the drag
+	if the grab was broken and not regrabbed by the DnD code.
+
+2006-03-07  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_button_press_event_cb):
+	Hack to let the treeview's button-press-event handler run before
+	ours.  This lets the selection be updated before we pop up a
+	context menu.
+
 Tue Mar  7 17:16:34 2006  Tim Janik  <timj@gtk.org>
 
 	* configure.in: depend on glib-2.10.1.

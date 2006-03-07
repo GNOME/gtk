@@ -210,7 +210,7 @@ static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
 
 static void     gtk_drag_selection_received     (GtkWidget        *widget,
 						 GtkSelectionData *selection_data,
-						 guint32           time,
+						 guint             time,
 						 gpointer          data);
 static void     gtk_drag_find_widget            (GtkWidget        *widget,
 						 GtkDragFindData  *data);
@@ -254,7 +254,7 @@ static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
 static void gtk_drag_cancel                    (GtkDragSourceInfo *info,
 						guint32            time);
 
-static gint gtk_drag_source_event_cb           (GtkWidget         *widget,
+static gboolean gtk_drag_source_event_cb       (GtkWidget         *widget,
 						GdkEvent          *event,
 						gpointer           data);
 static void gtk_drag_source_site_destroy       (gpointer           data);
@@ -263,7 +263,7 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
 						guint              sel_info,
 						guint32            time,
 						gpointer           data);
-static gint gtk_drag_anim_timeout              (gpointer           data);
+static gboolean gtk_drag_anim_timeout          (gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
@@ -273,16 +273,19 @@ static void gtk_drag_update                    (GtkDragSourceInfo *info,
 						gint               x_root,
 						gint               y_root,
 						GdkEvent          *event);
-static gint gtk_drag_motion_cb                 (GtkWidget         *widget, 
+static gboolean gtk_drag_motion_cb             (GtkWidget         *widget, 
 					        GdkEventMotion    *event, 
 					        gpointer           data);
-static gint gtk_drag_key_cb                    (GtkWidget         *widget, 
+static gboolean gtk_drag_key_cb                (GtkWidget         *widget, 
 					        GdkEventKey       *event, 
 					        gpointer           data);
-static gint gtk_drag_button_release_cb         (GtkWidget         *widget, 
+static gboolean gtk_drag_grab_broken_event_cb  (GtkWidget          *widget,
+						GdkEventGrabBroken *event,
+						gpointer            data);
+static gboolean gtk_drag_button_release_cb     (GtkWidget         *widget, 
 					        GdkEventButton    *event, 
 					        gpointer           data);
-static gint gtk_drag_abort_timeout             (gpointer           data);
+static gboolean gtk_drag_abort_timeout         (gpointer           data);
 
 /************************
  * Cursor and Icon data *
@@ -1444,7 +1447,7 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 static void
 gtk_drag_selection_received (GtkWidget        *widget,
 			     GtkSelectionData *selection_data,
-			     guint32           time,
+			     guint             time,
 			     gpointer          data)
 {
   GdkDragContext *context;
@@ -2240,6 +2243,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
 
+  g_signal_connect (info->ipc_widget, "grab-broken-event",
+		    G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
   g_signal_connect (info->ipc_widget, "button_release_event",
 		    G_CALLBACK (gtk_drag_button_release_cb), info);
   g_signal_connect (info->ipc_widget, "motion_notify_event",
@@ -3427,7 +3432,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
  * Source side callbacks.
  */
 
-static gint
+static gboolean
 gtk_drag_source_event_cb (GtkWidget      *widget,
 			  GdkEvent       *event,
 			  gpointer        data)
@@ -3559,7 +3564,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
     }
 }
 
-static gint
+static gboolean
 gtk_drag_anim_timeout (gpointer data)
 {
   GtkDragAnim *anim = data;
@@ -3649,6 +3654,9 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
     g_object_unref (info->widget);
 
 
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_grab_broken_event_cb,
+					info);
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_button_release_cb,
 					info);
@@ -3811,6 +3819,9 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   gtk_grab_remove (info->ipc_widget);
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_grab_broken_event_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_button_release_cb,
 					info);
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
@@ -3870,7 +3881,7 @@ gtk_drag_cancel (GtkDragSourceInfo *info, guint32 time)
  *   results:
  *************************************************************/
 
-static gint
+static gboolean
 gtk_drag_motion_cb (GtkWidget      *widget, 
 		    GdkEventMotion *event, 
 		    gpointer        data)
@@ -3906,7 +3917,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 #define BIG_STEP 20
 #define SMALL_STEP 1
 
-static gint 
+static gboolean
 gtk_drag_key_cb (GtkWidget         *widget, 
 		 GdkEventKey       *event, 
 		 gpointer           data)
@@ -3982,6 +3993,26 @@ gtk_drag_key_cb (GtkWidget         *widget,
   return TRUE;
 }
 
+static gboolean
+gtk_drag_grab_broken_event_cb (GtkWidget          *widget,
+			       GdkEventGrabBroken *event,
+			       gpointer            data)
+{
+  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
+
+  /* Don't cancel if we break the implicit grab from the initial button_press.
+   * Also, don't cancel if we re-grab on the widget or on our IPC window, for
+   * example, when changing the drag cursor.
+   */
+  if (event->implicit
+      || event->grab_window == info->widget->window
+      || event->grab_window == info->ipc_widget->window)
+    return FALSE;
+
+  gtk_drag_cancel (info, gtk_get_current_event_time ());
+  return TRUE;
+}
+
 /*************************************************************
  * gtk_drag_button_release_cb:
  *     "button_release_event" callback during drag.
@@ -3990,7 +4021,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
  *   results:
  *************************************************************/
 
-static gint
+static gboolean
 gtk_drag_button_release_cb (GtkWidget      *widget, 
 			    GdkEventButton *event, 
 			    gpointer        data)
@@ -4013,7 +4044,7 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_drag_abort_timeout (gpointer data)
 {
   GtkDragSourceInfo *info = data;
