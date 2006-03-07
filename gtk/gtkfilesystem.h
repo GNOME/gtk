@@ -154,7 +154,7 @@ GType gtk_file_system_handle_get_type (void);
  */
 
 typedef void (* GtkFileSystemGetInfoCallback) (GtkFileSystemHandle *handle,
-					       GtkFileInfo         *file_info,
+					       const GtkFileInfo   *file_info,
 					       const GError        *error,
 					       gpointer             data);
 typedef void (* GtkFileSystemGetFolderCallback) (GtkFileSystemHandle *handle,
