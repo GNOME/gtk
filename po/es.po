@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-07 22:38+0100\n"
-"PO-Revision-Date: 2006-03-07 22:43+0100\n"
+"PO-Revision-Date: 2006-03-08 23:30+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -993,7 +993,7 @@ msgstr "No poner en lotes las solicitudes GDI"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr "No usar el API Wintab para el soporte de tablas"
+msgstr "No usar el API Wintab para el soporte de tablas digitalizadoras"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:64
