@@ -3420,6 +3420,8 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   
   gdk_drawable_get_size (entry->text_area, &text_area_width, NULL);
   text_area_width -= 2 * INNER_BORDER;
+  if (text_area_width < 0)
+    text_area_width = 0;
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines (layout)->data;
