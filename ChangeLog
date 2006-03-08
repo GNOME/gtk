@@ -1,3 +1,8 @@
+2006-03-08  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkentry.c (gtk_entry_adjust_scroll): make sure that the
+	text_area_width is always >= 0. Fixes bug #316712 (Dan Winship).
+
 2006-03-07  Federico Mena Quintero  <federico@novell.com>
 
 	Cancel drags when the grabs get broken.  Fixes bug #333056:
