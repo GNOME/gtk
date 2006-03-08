@@ -1,3 +1,7 @@
+2006-03-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2006-01-14  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate),

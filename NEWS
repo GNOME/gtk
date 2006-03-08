@@ -1,5 +1,36 @@
+Overview of Changes from GTK+ 2.8.13 to GTK+ 2.8.14
+===================================================
+
 * Fixed invalid memory access in g_object_sink() from GLib-2.10.0 (in
   combination with GLib-2.10, at least GLib-2.10.1 is required now).
+
+* Bugs fixed: 
+ 320132 Drag cursor position not identical with the drag hotspot
+        [Christian Neumair]
+ 333133 wrong appearance for colour button [Christian Persch]
+ 321301 ms-windows-engine differences from native GUI - combo boxes
+        [Jernej Simončič, Dom Lachowicz]
+ 333291 Focus line of GtkExpander at the wrong place in RTL mode
+        [Benjamin Berg]
+ 324562 XInput events are at incorrect xy-coordinates [Denis Auroux]
+ 142536 Wacom pointer offset when using TopY other than 0 [Robert Ögren]
+ 332985 GtkButton doesn't allow image-only buttons via "image" 
+        property [Kalle Vahlmann]
+ 333555 When changing icon of button, icon does not change
+ 332466 Strange row spacing in GtkIconView when item width is set
+        [Donald Straney]
+ 333363 build_insensitive_pixmap does not check return value 
+        from gdk_pixbuf_get_from_drawable [Ed Catmur]
+ 333268 Crash in gnome-program when running a program with an wrong display
+        [Paolo Maggi, Christian Persch]
+ 333377 Cursor does not appear everytime when clicking on the widget
+        [Steve Frécinaux]
+ 323401 blink_cb optimization is not working
+ 316689 GtkTreeView does not resize correctly [Chris Lord]
+ 148518 Fix incremental loading of 8-bit pcx files [Magnus Bergmann]
+
+* Updated translations (cy,de,es,nn,pl)
+
 
 Overview of Changes from GTK+ 2.8.12 to GTK+ 2.8.13
 ===================================================
