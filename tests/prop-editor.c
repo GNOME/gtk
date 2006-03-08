@@ -486,7 +486,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkEntry *entry = GTK_ENTRY (data);
   gunichar new_val;
   gunichar old_val = unichar_get_value (entry);
-  GValue val;
+  GValue val = { 0, };
   gchar buf[7];
   gint len;
   
