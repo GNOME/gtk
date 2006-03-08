@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 22:38-0500\n"
+"POT-Creation-Date: 2006-03-08 11:18-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -1360,15 +1360,15 @@ msgstr "چرخ رنگ"
 msgid "Color Selection"
 msgstr "انتخاب رنگ"
 
-#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "روش‌های ورودی"
 
-#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
@@ -2091,11 +2091,11 @@ msgstr "پرچمهای اشکال‌زدایی GTK+ که باید صفر شون�
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "گزینه‌های GTK+"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "نشان دادن گزینه‌های GTK+"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 22:38-0500\n"
+"POT-Creation-Date: 2006-03-08 11:18-0500\n"
 "PO-Revision-Date: 2006-02-08 20:46+0200\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -1376,15 +1376,15 @@ msgstr "Spalvų ratas"
 msgid "Color Selection"
 msgstr "Spalvos pasirinkimas"
 
-#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpt_i Unicode valdymo simbolį"
 
@@ -2109,11 +2109,11 @@ msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "GTK+ parinktys"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 

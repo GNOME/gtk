@@ -1,5 +1,12 @@
-Wed Mar  8 15:17:21 2006  Tim Janik  <timj@imendio.com>
+2006-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.14 ===
+
+	* Makefile.am: Add ChangeLog.pre-2.8 to EXTRA_DIST.
+	(#333907, Tommi Komulainen)
+
+Wed Mar  8 15:17:21 2006  Tim Janik  <timj@imendio.com>
+	
 	* gtk/gtkentry.c (gtk_entry_adjust_scroll): constrain text area to 
 	positive values (#316712).
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 22:38-0500\n"
+"POT-Creation-Date: 2006-03-08 11:18-0500\n"
 "PO-Revision-Date: 2005-07-30 21:59+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -1371,15 +1371,15 @@ msgstr "色ホイール"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "全て選択(_A)"
 
-#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -2096,11 +2096,11 @@ msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "GTK+ のオプション"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 

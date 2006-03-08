@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 22:38-0500\n"
+"POT-Creation-Date: 2006-03-08 11:18-0500\n"
 "PO-Revision-Date: 2006-01-01 15:08+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -1367,15 +1367,15 @@ msgstr "Vòng màu"
 msgid "Color Selection"
 msgstr "Chọn màu"
 
-#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "Chọn Tất _cả"
 
-#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "Cách _gõ"
 
-#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "_Chèn ký tự điều khiển Unicode"
 
@@ -2093,11 +2093,11 @@ msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "Tùy chọn GTK+"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 

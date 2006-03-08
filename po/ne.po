@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 22:38-0500\n"
+"POT-Creation-Date: 2006-03-08 11:18-0500\n"
 "PO-Revision-Date: 2005-05-20 11:33+0545\n"
 "Last-Translator: Jyotshna Shrestha <shresthajyo@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1345,15 +1345,15 @@ msgstr "रङ्गको चक्र"
 msgid "Color Selection"
 msgstr "रङ्ग छनोट"
 
-#: gtk/gtkentry.c:4610 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "सबै छान्नुस्"
 
-#: gtk/gtkentry.c:4622 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "निवेश गर्ने _तरिका"
 
-#: gtk/gtkentry.c:4634 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "युनीकोड नियन्त्रण वर्ण _घुसाउ"
 
@@ -2071,11 +2071,11 @@ msgstr "जि टि के + ले झण्डा हटाउन त्र�
 msgid "default:LTR"
 msgstr "पूर्वनिर्धारित:एल टि आर "
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "जिटिके+ विकल्पहरु"
 
-#: gtk/gtkmain.c:585
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "जिटिके+ विकल्पहरु देखाउ"
 
