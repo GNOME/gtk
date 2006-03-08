@@ -1,5 +1,7 @@
 2006-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* Bump version
+
 	* === Released 2.8.14 ===
 
 	* Makefile.am: Add ChangeLog.pre-2.8 to EXTRA_DIST.
