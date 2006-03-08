@@ -1,3 +1,6 @@
+* Fixed invalid memory access in g_object_sink() from GLib-2.10.0 (in
+  combination with GLib-2.10, at least GLib-2.10.1 is required now).
+
 Overview of Changes from GTK+ 2.8.12 to GTK+ 2.8.13
 ===================================================
 

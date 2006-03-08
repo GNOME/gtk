@@ -1,3 +1,10 @@
+Wed Mar  8 14:22:59 2006  Tim Janik  <timj@imendio.com>
+
+        * NEWS: announce change and glib-2.10.1 requirement.
+
+        * gtk/gtkobject.c: fixed up messing with non-GtkObject floating flags.
+        this requires glib-2.10.1.
+
 2006-03-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (text_window_invalidate_cursors): Take
