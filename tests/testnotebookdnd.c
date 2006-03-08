@@ -89,9 +89,9 @@ window_creation_function (GtkNotebook *source_notebook,
 }
 
 static void
-on_tab_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpointer data)
+on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpointer data)
 {
-  g_print ("tab %d reordered\n", page_num);
+  g_print ("page %d reordered\n", page_num);
 }
 
 static GtkWidget*
@@ -129,8 +129,8 @@ create_notebook (gchar           **labels,
       labels++;
     }
 
-  g_signal_connect (GTK_NOTEBOOK (notebook), "tab-reordered",
-		    G_CALLBACK (on_tab_reordered), NULL);
+  g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
+		    G_CALLBACK (on_page_reordered), NULL);
 
   return notebook;
 }

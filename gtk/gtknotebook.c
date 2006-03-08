@@ -54,9 +54,9 @@ enum {
   CHANGE_CURRENT_PAGE,
   MOVE_FOCUS_OUT,
   REORDER_TAB,
-  TAB_REORDERED,
-  TAB_REMOVED,
-  TAB_ADDED,
+  PAGE_REORDERED,
+  PAGE_REMOVED,
+  PAGE_ADDED,
   LAST_SIGNAL
 };
 
@@ -822,64 +822,64 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   GTK_TYPE_DIRECTION_TYPE,
 		  G_TYPE_BOOLEAN);
   /**
-   * GtkNotebook::tab-reordered:
+   * GtkNotebook::page-reordered:
    * @notebook: the #GtkNotebook
    * @child: the child #GtkWidget affected
    * @page_num: the new page number for @child
    *
-   * the ::tab-reordered signal is emitted in the notebook
-   * right after a tab has been reordered by the user.
+   * the ::page-reordered signal is emitted in the notebook
+   * right after a page has been reordered.
    *
    * Since: 2.10
    **/
-  notebook_signals[TAB_REORDERED] =
-    g_signal_new (I_("tab_reordered"),
+  notebook_signals[PAGE_REORDERED] =
+    g_signal_new (I_("page_reordered"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_UINT,
+		  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  G_TYPE_POINTER,
+		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
   /**
-   * GtkNotebook::tab-removed:
+   * GtkNotebook::page-removed:
    * @notebook: the #GtkNotebook
    * @child: the child #GtkWidget affected
    * @page_num: the @child page number
    *
-   * the ::tab-removed signal is emitted in the notebook
-   * right before a tab is removed from the notebook.
+   * the ::page-removed signal is emitted in the notebook
+   * right before a page is removed from the notebook.
    *
    * Since: 2.10
    **/
-  notebook_signals[TAB_REMOVED] =
-    g_signal_new (I_("tab_removed"),
+  notebook_signals[PAGE_REMOVED] =
+    g_signal_new (I_("page_removed"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_UINT,
+		  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  G_TYPE_POINTER,
+		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
   /**
-   * GtkNotebook::tab-attached:
+   * GtkNotebook::page-attached:
    * @notebook: the #GtkNotebook
    * @child: the child #GtkWidget affected
    * @page_num: the new page number for @child
    *
-   * the ::tab-added signal is emitted in the notebook
-   * right after a tab is added to the notebook.
+   * the ::page-added signal is emitted in the notebook
+   * right after a page is added to the notebook.
    *
    * Since: 2.10
    **/
-  notebook_signals[TAB_ADDED] =
-    g_signal_new (I_("tab_added"),
+  notebook_signals[PAGE_ADDED] =
+    g_signal_new (I_("page_added"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_UINT,
+		  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  G_TYPE_POINTER,
+		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
 
   binding_set = gtk_binding_set_by_class (class);
@@ -1228,7 +1228,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
       gtk_notebook_pages_allocate (notebook, DRAG_OPERATION_NONE);
 
       g_signal_emit (notebook,
-		     notebook_signals[TAB_REORDERED],
+		     notebook_signals[PAGE_REORDERED],
 		     0,
 		     ((GtkNotebookPage *) notebook->focus_tab->data)->child,
 		     page_num);
@@ -2440,7 +2440,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
 	  if (priv->has_scrolled ||
 	      old_page_num != page_num)
 	    g_signal_emit (notebook,
-			   notebook_signals[TAB_REORDERED], 0,
+			   notebook_signals[PAGE_REORDERED], 0,
 			   ((GtkNotebookPage *) notebook->focus_tab->data)->child,
 			   page_num);
 
@@ -3178,7 +3178,7 @@ gtk_notebook_remove (GtkContainer *container,
     }
 
   g_signal_emit (notebook,
-		 notebook_signals[TAB_REMOVED],
+		 notebook_signals[PAGE_REMOVED],
 		 0,
 		 widget,
 		 page_num);
@@ -3563,7 +3563,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gtk_widget_thaw_child_notify (child);
 
   g_signal_emit (notebook,
-		 notebook_signals[TAB_ADDED],
+		 notebook_signals[PAGE_ADDED],
 		 0,
 		 child,
 		 position);
@@ -6761,6 +6761,12 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
     gtk_notebook_pages_allocate (notebook, DRAG_OPERATION_NONE);
 
   gtk_widget_thaw_child_notify (child);
+
+  g_signal_emit (notebook,
+		 notebook_signals[PAGE_REORDERED],
+		 0,
+		 child,
+		 position);
 }
 
 /**

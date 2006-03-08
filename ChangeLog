@@ -1,3 +1,22 @@
+2006-03-08  Carlos Garnacho  <carlosg@gnome.org>
+
+	Rename ::tab-added and ::tab-removed signals to ::page-added and
+	::page-removed for not conflicting with other tab reordering
+	implementations. Fixes bug #333743.
+
+	Also rename ::tab-reordered to ::page-reordered, and emit it in
+	gtk_notebook_reorder_child () to make it behave consistently with the
+	other two signals.
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): rename signals.
+	(gtk_notebook_reorder_tab)
+	(gtk_notebook_button_release)
+	(gtk_notebook_remove)
+	(gtk_notebook_real_insert_page): emit respectively renamed signals
+	(gtk_notebook_reorder_child): also emit ::page-reordered here
+
+	* tests/testnotebookdnd.c: use renamed signals
+
 2006-03-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkscreen.h
