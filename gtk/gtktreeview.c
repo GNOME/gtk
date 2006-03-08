@@ -2138,6 +2138,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   /* now the adjustments and window sizes are in sync, we can sync toprow/dy again */
   if (tree_view->priv->height <= tree_view->priv->vadjustment->page_size)
     gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment), 0);
+  else if (tree_view->priv->vadjustment->value + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
+    gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment),
+                              tree_view->priv->height - tree_view->priv->vadjustment->page_size);
   else if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
     gtk_tree_view_top_row_to_dy (tree_view);
   else
