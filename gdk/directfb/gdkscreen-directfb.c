@@ -196,6 +196,21 @@ gdk_screen_get_rgba_colormap (GdkScreen *screen)
   return rgba_colormap;
 }
 
+GdkWindow *
+gdk_screen_get_active_window (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
+
+GList *
+gdk_screen_get_window_stack (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
 
 
 #define __GDK_SCREEN_X11_C__

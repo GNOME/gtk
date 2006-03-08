@@ -791,5 +791,149 @@ gdk_screen_make_display_name (GdkScreen *screen)
 						  gdk_screen_get_number (screen));
 }
 
+/**
+ * gdk_screen_get_active_window
+ * @screen: a #GdkScreen
+ *
+ * Returns the screen's currently active window.
+ *
+ * On X11, this is done by inspecting the _NET_ACTIVE_WINDOW property
+ * on the root window, as described in the <ulink
+ * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window
+ * Manager Hints</ulink>. If there is no currently currently active
+ * window, or the window manager does not support the
+ * _NET_ACTIVE_WINDOW hint, this function returns %NULL.
+ *
+ * On other platforms, this function may return %NULL, depending on whether
+ * it is implementable on that platform.
+ *
+ * The returned window should be unrefed using g_object_unref() when
+ * no longer needed.
+ *
+ * Return value: the currently active window, or %NULL.
+ *
+ * Since: 2.10
+ **/
+GdkWindow *
+gdk_screen_get_active_window (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+  GdkWindow *ret = NULL;
+  Atom type_return;
+  gint format_return;
+  gulong nitems_return;
+  gulong bytes_after_return;
+  guchar *data = NULL;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_ACTIVE_WINDOW")))
+    return NULL;
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (XGetWindowProperty (screen_x11->xdisplay, screen_x11->xroot_window,
+	                  gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+			                                         "_NET_ACTIVE_WINDOW"),
+		          0, 1, False, XA_WINDOW, &type_return,
+		          &format_return, &nitems_return,
+                          &bytes_after_return, &data)
+      == Success)
+    {
+      if ((type_return == XA_WINDOW) && (format_return == 32) && (data))
+        {
+          GdkNativeWindow window = *(GdkNativeWindow *) data;
+
+          if (window != None)
+            {
+              ret = gdk_window_foreign_new_for_display (screen_x11->display,
+                                                        *(GdkNativeWindow *) data);
+            }
+        }
+    }
+
+  if (data)
+    XFree (data);
+
+  return ret;
+}
+
+/**
+ * gdk_screen_get_window_stack
+ * @screen: a #GdkScreen
+ *
+ * Returns a #GList of #GdkWindow<!-- -->s representing the current
+ * window stack.
+ *
+ * On X11, this is done by inspecting the _NET_CLIENT_LIST_STACKING
+ * property on the root window, as described in the <ulink
+ * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window
+ * Manager Hints</ulink>. If the window manager does not support the
+ * _NET_CLIENT_LIST_STACKING hint, this function returns %NULL.
+ *
+ * On other platforms, this function may return %NULL, depending on whether
+ * it is implementable on that platform.
+ *
+ * The returned list is newly allocated and owns references to the
+ * windows it contains, so it should be freed using g_list_free() and
+ * its windows unrefed using g_object_unref() when no longer needed.
+ *
+ * Return value: a list of #GdkWindow<!-- -->s for the current window stack,
+ *               or %NULL.
+ *
+ * Since: 2.10
+ **/
+GList *
+gdk_screen_get_window_stack (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+  GList *ret = NULL;
+  Atom type_return;
+  gint format_return;
+  gulong nitems_return;
+  gulong bytes_after_return;
+  guchar *data = NULL;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_CLIENT_LIST_STACKING")))
+    return NULL;
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (XGetWindowProperty (screen_x11->xdisplay, screen_x11->xroot_window,
+	                  gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+			                                         "_NET_CLIENT_LIST_STACKING"),
+		          0, G_MAXLONG, False, XA_WINDOW, &type_return,
+		          &format_return, &nitems_return,
+                          &bytes_after_return, &data)
+      == Success)
+    {
+      if ((type_return == XA_WINDOW) && (format_return == 32) &&
+          (data) && (nitems_return > 0))
+        {
+          GdkNativeWindow *stack = (GdkNativeWindow *) data;
+          GdkWindow *win;
+          int i;
+
+          for (i = 0; i < nitems_return; i++)
+            {
+              win = gdk_window_foreign_new_for_display (screen_x11->display,
+                                                        stack[i]);
+
+              if (win != NULL)
+                ret = g_list_append (ret, win);
+            }
+        }
+    }
+
+  if (data)
+    XFree (data);
+
+  return ret;
+}
+
 #define __GDK_SCREEN_X11_C__
 #include "gdkaliasdef.c"

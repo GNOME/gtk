@@ -239,3 +239,19 @@ gdk_screen_make_display_name (GdkScreen *screen)
 {
   return g_strdup (gdk_display_get_name (_gdk_display));
 }
+
+GdkWindow *
+gdk_screen_get_active_window (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
+
+GList *
+gdk_screen_get_window_stack (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
