@@ -1,3 +1,8 @@
+2006-03-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdk-sections.txt: added gdk_screen_get_active_window()
+	and gdk_screen_get_window_stack()
+
 2006-02-27  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/tmpl/gtkfontsel.sgml: Don't put the docs for

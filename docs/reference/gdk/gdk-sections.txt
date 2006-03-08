@@ -221,6 +221,8 @@ gdk_screen_get_font_options
 gdk_screen_set_font_options
 gdk_screen_get_resolution
 gdk_screen_set_resolution
+gdk_screen_get_active_window
+gdk_screen_get_window_stack
 <SUBSECTION Spawning>
 gdk_spawn_on_screen
 gdk_spawn_on_screen_with_pipes
