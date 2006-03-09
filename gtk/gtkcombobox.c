@@ -110,6 +110,7 @@ struct _GtkComboBoxPrivate
   GSList *cells;
 
   guint popup_in_progress : 1;
+  guint popup_shown : 1;
   guint destroying : 1;
   guint add_tearoffs : 1;
   guint has_frame : 1;
@@ -185,8 +186,6 @@ struct _GtkComboBoxPrivate
 
 enum {
   CHANGED,
-  POPUP_SHOW,
-  POPUP_HIDE,
   LAST_SIGNAL
 };
 
@@ -200,7 +199,8 @@ enum {
   PROP_ADD_TEAROFFS,
   PROP_TEAROFF_TITLE,
   PROP_HAS_FRAME,
-  PROP_FOCUS_ON_CLICK
+  PROP_FOCUS_ON_CLICK,
+  PROP_POPUP_SHOWN
 };
 
 static GtkBinClass *parent_class = NULL;
@@ -429,9 +429,9 @@ static void     combo_cell_data_func                         (GtkCellLayout   *c
 							      GtkTreeIter     *iter,
 							      gpointer         data);
 static void     gtk_combo_box_child_show                     (GtkWidget       *widget,
-							      gpointer         user_data);
+							      GtkComboBox     *combo_box);
 static void     gtk_combo_box_child_hide                     (GtkWidget       *widget,
-							      gpointer         user_data);
+							      GtkComboBox     *combo_box);
 
 
 /* GtkCellEditable method implementations */
@@ -551,25 +551,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  combo_box_signals[POPUP_SHOW] =
-    g_signal_new ("popup-show",
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
-  combo_box_signals[POPUP_HIDE] =
-    g_signal_new ("popup-hide",
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
 
   /* properties */
   /**
@@ -732,6 +713,23 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                         GTK_PARAM_READWRITE));
 
 
+  /**
+   * GtkComboBox:popup-shown:
+   *
+   * Whether the combo boxes dropdown is popped up. 
+   * Note that this property is mainly useful, because
+   * it allows you to connect to notify::popup-shown.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_POPUP_SHOWN,
+                                   g_param_spec_boolean ("popup-shown",
+                                                         P_("Popup shown"),
+                                                         P_("Whether the combo's dropdown is shown"),
+                                                         FALSE,
+                                                         GTK_PARAM_READABLE));
+  
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -777,6 +775,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv->col_column = -1;
   combo_box->priv->row_column = -1;
 
+  combo_box->priv->popup_shown = FALSE;
   combo_box->priv->add_tearoffs = FALSE;
   combo_box->priv->has_frame = TRUE;
   combo_box->priv->is_cell_renderer = FALSE;
@@ -834,6 +833,17 @@ gtk_combo_box_set_property (GObject      *object,
 	gtk_combo_box_set_title (combo_box, g_value_get_string (value));
         break;
 
+      case PROP_POPUP_SHOWN:
+        if (g_value_get_boolean (value))
+          {
+            gtk_combo_box_popup (combo_box);
+          }
+        else
+          {
+            gtk_combo_box_popdown (combo_box);
+          }
+        break;
+
       default:
         break;
     }
@@ -883,6 +893,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_TEAROFF_TITLE:
         g_value_set_string (value, gtk_combo_box_get_title (combo_box));
+        break;
+
+      case PROP_POPUP_SHOWN:
+        g_value_set_boolean (value, combo_box->priv->popup_shown);
         break;
 
       default:
@@ -2153,18 +2167,22 @@ gtk_combo_box_forall (GtkContainer *container,
 
 static void 
 gtk_combo_box_child_show (GtkWidget *widget,
-			  gpointer   user_data) 
+                          GtkComboBox *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-  g_signal_emit (combo_box, combo_box_signals[POPUP_SHOW], 0);
+  GtkComboBoxPrivate *priv = combo_box->priv;
+
+  priv->popup_shown = TRUE;
+  g_object_notify (G_OBJECT (combo_box), "popup-shown");
 }
 
 static void 
 gtk_combo_box_child_hide (GtkWidget *widget,
-			  gpointer   user_data)
+                          GtkComboBox *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);  
-  g_signal_emit (combo_box, combo_box_signals[POPUP_HIDE], 0);
+  GtkComboBoxPrivate *priv = combo_box->priv;
+
+  priv->popup_shown = FALSE;
+  g_object_notify (G_OBJECT (combo_box), "popup-shown");
 }
 
 static gboolean

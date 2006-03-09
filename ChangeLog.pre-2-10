@@ -1,3 +1,9 @@
+2006-03-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Replace the
+	popup-show and popup-hide signals with a readonle popup-shown
+	property.  (#162531, Christian Persch)
+
 2006-03-09  Ross Burton  <ross@openedhand.com>
 
 	* gtk/gtkwidget.c:
