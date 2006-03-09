@@ -16,6 +16,7 @@ EXTRA_DIST =			\
 	ChangeLog.pre-2-2	\
 	ChangeLog.pre-2-4	\
 	ChangeLog.pre-2-6	\
+	ChangeLog.pre-2-8	\
 	README.cvs-commits	\
 	README.win32		\
 	config.h.win32		\
