@@ -1,3 +1,7 @@
+2006-03-09  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtk.symbols: No gtk_tray_icon_get_type on Win32.
+
 2006-03-08  Carlos Garnacho  <carlosg@gnome.org>
 
 	Rename ::tab-added and ::tab-removed signals to ::page-added and

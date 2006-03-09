@@ -3429,7 +3429,9 @@ gtk_tooltips_set_tip
 
 #if IN_HEADER(__GTK_TRAY_ICON_H__)
 #if IN_FILE(__GTK_TRAY_ICON_X11_C__)
+#ifndef G_OS_WIN32
 gtk_tray_icon_get_type G_GNUC_CONST
+#endif
 #endif
 #endif
 
