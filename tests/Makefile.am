@@ -25,8 +25,10 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
+TESTS = floatingtest
 
 noinst_PROGRAMS =			\
+	$(TESTS)			\
 	simple				\
 	testcairo			\
 	testcalendar			\
@@ -71,6 +73,7 @@ noinst_PROGRAMS =			\
 	testmerge			\
 	testactions
 
+floatingtest_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
@@ -109,6 +112,7 @@ testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 
+floatingtest_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -153,6 +157,8 @@ pixbuf_random_LDADD = $(LDADDS)
 pixbuf_threads_LDADD = $(LDADDS) $(GLIB_LIBS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
+
+floatingtest_SOURCES = floatingtest.c
 
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\

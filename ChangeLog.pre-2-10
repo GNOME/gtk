@@ -1,3 +1,9 @@
+Thu Mar  9 14:49:35 2006  Tim Janik  <timj@imendio.com>
+
+        * gtk/gtkobject.c (gtk_object_init): clean up the GInitiallyUnowned
+	floating flag when setting GTK_FLOATING.
+	added tests/floatingcheck (a weakened variant of what gtk+-2.10 has).
+
 2006-03-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* Bump version

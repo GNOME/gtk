@@ -382,6 +382,11 @@ static void
 gtk_object_init (GtkObject      *object,
 		 GtkObjectClass *klass)
 {
+  if (gobject_floating_flag_handler)
+    {
+      /* sink the GInitiallyUnowned floating flag */
+      gobject_floating_flag_handler (object, -1);
+    }
   GTK_OBJECT_FLAGS (object) = GTK_FLOATING;
 }
 
