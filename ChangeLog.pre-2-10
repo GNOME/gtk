@@ -1,3 +1,16 @@
+2006-03-10  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from HEAD:
+
+	Make Shift-P and Shift-N activate typeahead in GtkTreeView
+	(i.e. they are just normal capital letters).  Fixes bug #334098.
+
+	* gtk/gtktreeview.c (gtk_tree_view_add_move_binding): Add an
+	"add_shifted_binding" argument which determines whether we'll add
+	the same binding with GDK_SHIFT_MASK.
+	(gtk_tree_view_class_init): Use add_shifted_binding=FALSE for GDK_p
+	and GDK_n; use TRUE for all the rest.
+
 Thu Mar  9 14:49:35 2006  Tim Janik  <timj@imendio.com>
 
         * gtk/gtkobject.c (gtk_object_init): clean up the GInitiallyUnowned
