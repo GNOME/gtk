@@ -1,3 +1,7 @@
+2006-03-10  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk-sections.txt: add gtk_entry_get,set_inner_border()
+
 2006-03-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdk-sections.txt: added gdk_screen_get_active_window()
