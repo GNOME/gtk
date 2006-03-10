@@ -863,9 +863,6 @@ static void
 gtk_style_realize (GtkStyle    *style,
                    GdkColormap *colormap)
 {
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  
   style->colormap = g_object_ref (colormap);
   style->depth = gdk_colormap_get_visual (colormap)->depth;
 
@@ -2210,9 +2207,6 @@ gtk_default_draw_hline (GtkStyle     *style,
   gint thickness_dark;
   gint i;
   
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   thickness_light = style->ythickness / 2;
   thickness_dark = style->ythickness - thickness_light;
   
@@ -2266,9 +2260,6 @@ gtk_default_draw_vline (GtkStyle     *style,
   gint thickness_light;
   gint thickness_dark;
   gint i;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   thickness_light = style->xthickness / 2;
   thickness_dark = style->xthickness - thickness_light;
@@ -2495,9 +2486,6 @@ gtk_default_draw_shadow (GtkStyle      *style,
   gint thickness_dark;
   gint i;
   
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-
   if (shadow_type == GTK_SHADOW_IN)
     {
       if (detail && (strcmp (detail, "buttondefault") == 0))
@@ -2833,10 +2821,6 @@ gtk_default_draw_polygon (GtkStyle      *style,
   gint yadjust;
   gint i;
   
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (points != NULL);
-  
   switch (shadow_type)
     {
     case GTK_SHADOW_IN:
@@ -3120,9 +3104,6 @@ gtk_default_draw_diamond (GtkStyle      *style,
   GdkGC *inner_sw = NULL;
   GdkGC *inner_se = NULL;
   
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   sanitize_size (window, &width, &height);
   
   half_width = width / 2;
@@ -3240,9 +3221,6 @@ gtk_default_draw_string (GtkStyle      *style,
                          gint           y,
                          const gchar   *string)
 {
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->white_gc, area);
@@ -3310,9 +3288,6 @@ gtk_default_draw_box (GtkStyle      *style,
 		      gint           height)
 {
   gboolean is_spinbutton_box = FALSE;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   sanitize_size (window, &width, &height);
 
@@ -3461,9 +3436,6 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 {
   GdkGC *gc1;
   GdkGC *freeme = NULL;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   sanitize_size (window, &width, &height);
   
@@ -3965,9 +3937,6 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
   GdkGC *gc3 = NULL;
   GdkGC *gc4 = NULL;
   
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   sanitize_size (window, &width, &height);
   
   switch (shadow_type)
@@ -4180,9 +4149,6 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   GdkGC *gc2 = NULL;
   GdkGC *gc3 = NULL;
   GdkGC *gc4 = NULL;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   gtk_style_apply_default_background (style, window,
                                       widget && !GTK_WIDGET_NO_WINDOW (widget),
@@ -4399,9 +4365,6 @@ gtk_default_draw_extension (GtkStyle       *style,
   GdkGC *gc2 = NULL;
   GdkGC *gc3 = NULL;
   GdkGC *gc4 = NULL;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   gtk_style_apply_default_background (style, window,
                                       widget && !GTK_WIDGET_NO_WINDOW (widget),
@@ -4664,9 +4627,6 @@ gtk_default_draw_slider (GtkStyle      *style,
                          gint           height,
                          GtkOrientation orientation)
 {
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   sanitize_size (window, &width, &height);
   
   gtk_paint_box (style, window, state_type, shadow_type,
@@ -4695,7 +4655,6 @@ draw_dot (GdkWindow    *window,
 	  gint          y,
 	  gushort       size)
 {
-  
   size = CLAMP (size, 2, 3);
 
   if (size == 2)
@@ -4735,9 +4694,6 @@ gtk_default_draw_handle (GtkStyle      *style,
   GdkRectangle rect;
   GdkRectangle dest;
   gint intersect;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
   
   sanitize_size (window, &width, &height);
   
@@ -5118,9 +5074,6 @@ gtk_default_draw_layout (GtkStyle        *style,
                          PangoLayout     *layout)
 {
   GdkGC *gc;
-  
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
 
   gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
   
@@ -5162,9 +5115,6 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
   GdkPoint points[4];
   gint i, j, skip;
 
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-  
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
@@ -6733,8 +6683,6 @@ draw_insertion_cursor (GtkWidget        *widget,
   gfloat cursor_aspect_ratio;
   gint offset;
   
-  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
-
   /* When changing the shape or size of the cursor here,
    * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
    */
