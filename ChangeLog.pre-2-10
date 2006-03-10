@@ -1,5 +1,8 @@
 2006-03-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): Avoid a mnemonic
+	conflict.  (#163850, Dennis Cranston)
+
 	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Make the behaviour
 	of the about dialog consistent with other dialogs in gtk. If the
 	dialog is constructed with gtk_about_dialog_new(), the creator

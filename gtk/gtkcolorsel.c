@@ -1996,7 +1996,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                          _("Amount of blue light in the color."));
   gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new (), 0, 8, 3, 4); 
 
-  priv->opacity_label = gtk_label_new_with_mnemonic (_("_Opacity:")); 
+  priv->opacity_label = gtk_label_new_with_mnemonic (_("Op_acity:")); 
   gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 0.0, 0.5); 
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5); 
   adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
