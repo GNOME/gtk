@@ -61,7 +61,6 @@
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
-#define INNER_BORDER     2
 #define COMPLETION_TIMEOUT 300
 
 /* Initial size of buffer, in bytes */
@@ -69,6 +68,9 @@
 
 /* Maximum size of text buffer, in bytes */
 #define MAX_SIZE G_MAXUSHORT
+
+static const GtkBorder default_inner_border = { 2, 2, 2, 2 };
+static GQuark          quark_inner_border   = 0;
 
 typedef struct _GtkEntryPrivate GtkEntryPrivate;
 
@@ -102,6 +104,7 @@ enum {
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
   PROP_HAS_FRAME,
+  PROP_INNER_BORDER,
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
@@ -124,14 +127,14 @@ static void   gtk_entry_class_init           (GtkEntryClass        *klass);
 static void   gtk_entry_editable_init        (GtkEditableClass     *iface);
 static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
 static void   gtk_entry_init                 (GtkEntry         *entry);
-static void   gtk_entry_set_property (GObject         *object,
-				      guint            prop_id,
-				      const GValue    *value,
-				      GParamSpec      *pspec);
-static void   gtk_entry_get_property (GObject         *object,
-				      guint            prop_id,
-				      GValue          *value,
-				      GParamSpec      *pspec);
+static void   gtk_entry_set_property         (GObject          *object,
+                                              guint             prop_id,
+                                              const GValue     *value,
+                                              GParamSpec       *pspec);
+static void   gtk_entry_get_property         (GObject          *object,
+                                              guint             prop_id,
+                                              GValue           *value,
+                                              GParamSpec       *pspec);
 static void   gtk_entry_finalize             (GObject          *object);
 static void   gtk_entry_destroy              (GtkObject        *object);
 
@@ -330,6 +333,8 @@ static void         get_widget_window_size             (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
+static void         get_inner_border                   (GtkEntry       *entry,
+                                                        GtkBorder      *border);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -485,6 +490,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
   class->activate = gtk_entry_real_activate;
   
+  quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
+
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
                                    g_param_spec_int ("cursor-position",
@@ -537,6 +544,14 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("FALSE removes outside bevel from entry"),
                                                          TRUE,
 							 GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_INNER_BORDER,
+                                   g_param_spec_boxed ("inner-border",
+                                                       P_("Inner Border"),
+                                                       P_("Border between text and frame. Overrides the inner-border style propety"),
+                                                       GTK_TYPE_BORDER,
+                                                       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
@@ -867,7 +882,21 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
 				"toggle_overwrite", 0);
 
-  gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
+  /**
+   * GtkEntry:inner-border:
+   *
+   * Sets the text area's border between the text and the frame
+   *
+   * Since: 2.10
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("inner-border",
+                                                               P_("Inner Border"),
+                                                               P_("Border between text and frame."),
+                                                               GTK_TYPE_BORDER,
+                                                               GTK_PARAM_READABLE));
+
+   gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
 						       P_("Select on focus"),
 						       P_("Whether to select the contents of an entry when it is focused"),
 						       TRUE,
@@ -944,6 +973,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_has_frame (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_INNER_BORDER:
+      gtk_entry_set_inner_border (entry, g_value_get_boxed (value));
+      break;
+
     case PROP_INVISIBLE_CHAR:
       gtk_entry_set_invisible_char (entry, g_value_get_uint (value));
       break;
@@ -1003,6 +1036,9 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_HAS_FRAME:
       g_value_set_boolean (value, entry->has_frame);
+      break;
+    case PROP_INNER_BORDER:
+      g_value_set_boxed (value, gtk_entry_get_inner_border (entry));
       break;
     case PROP_INVISIBLE_CHAR:
       g_value_set_uint (value, entry->invisible_char);
@@ -1273,6 +1309,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   PangoFontMetrics *metrics;
   gint xborder, yborder;
+  GtkBorder inner_border;
   PangoContext *context;
   
   gtk_widget_ensure_style (widget);
@@ -1285,22 +1322,20 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry->descent = pango_font_metrics_get_descent (metrics);
   
   _gtk_entry_get_borders (entry, &xborder, &yborder);
-  
-  xborder += INNER_BORDER;
-  yborder += INNER_BORDER;
-  
+  get_inner_border (entry, &inner_border);
+
   if (entry->width_chars < 0)
-    requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
+    requisition->width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
       gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
       
-      requisition->width = char_pixels * entry->width_chars + xborder * 2;
+      requisition->width = char_pixels * entry->width_chars + xborder * 2 + inner_border.left + inner_border.right;
     }
     
-  requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2;
+  requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2 + inner_border.top + inner_border.bottom;
 
   pango_font_metrics_unref (metrics);
 }
@@ -1366,6 +1401,32 @@ get_widget_window_size (GtkEntry *entry,
       else
 	*height = requisition.height;
     }
+}
+
+static void
+get_inner_border (GtkEntry  *entry,
+                  GtkBorder *border)
+{
+  GtkBorder *tmp_border;
+
+  tmp_border = g_object_get_qdata (G_OBJECT (entry), quark_inner_border);
+
+  if (tmp_border)
+    {
+      *border = *tmp_border;
+      return;
+    }
+
+  gtk_widget_style_get (GTK_WIDGET (entry), "inner-border", &tmp_border, NULL);
+
+  if (tmp_border)
+    {
+      *border = *tmp_border;
+      g_free (tmp_border);
+      return;
+    }
+
+  *border = default_inner_border;
 }
 
 static void
@@ -3151,15 +3212,17 @@ get_layout_position (GtkEntry *entry,
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint area_width, area_height;
+  GtkBorder inner_border;
   gint y_pos;
   PangoLayoutLine *line;
   
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
-  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);      
-      
-  area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
-  
+  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
+  get_inner_border (entry, &inner_border);
+
+  area_height = PANGO_SCALE * (area_height - inner_border.top - inner_border.bottom);
+
   line = pango_layout_get_lines (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
   
@@ -3175,10 +3238,10 @@ get_layout_position (GtkEntry *entry,
   else if (y_pos + logical_rect.height > area_height)
     y_pos = area_height - logical_rect.height;
   
-  y_pos = INNER_BORDER + y_pos / PANGO_SCALE;
+  y_pos = inner_border.top + y_pos / PANGO_SCALE;
 
   if (x)
-    *x = INNER_BORDER - entry->scroll_offset;
+    *x = inner_border.left - entry->scroll_offset;
 
   if (y)
     *y = y_pos;
@@ -3215,6 +3278,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint n_ranges, i;
           PangoRectangle logical_rect;
 	  GdkColor *selection_color, *text_color;
+          GtkBorder inner_border;
 
 	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
@@ -3230,9 +3294,11 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      text_color = &widget->style->text [GTK_STATE_ACTIVE];
 	    }
 
+          get_inner_border (entry, &inner_border);
+
 	  for (i = 0; i < n_ranges; ++i)
 	    cairo_rectangle (cr,
-			     INNER_BORDER - entry->scroll_offset + ranges[2 * i],
+			     inner_border.left - entry->scroll_offset + ranges[2 * i],
 			     y,
 			     ranges[2 * i + 1],
 			     logical_rect.height);
@@ -3286,13 +3352,18 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       GdkRectangle cursor_location;
       gboolean split_cursor;
 
-      gint xoffset = INNER_BORDER - entry->scroll_offset;
+      GtkBorder inner_border;
+      gint xoffset;
       gint strong_x, weak_x;
       gint text_area_height;
       PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
       PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
       gint x1 = 0;
       gint x2 = 0;
+
+      get_inner_border (entry, &inner_border);
+
+      xoffset = inner_border.left - entry->scroll_offset;
 
       gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
       
@@ -3323,9 +3394,9 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 	}
 
       cursor_location.x = xoffset + x1;
-      cursor_location.y = INNER_BORDER;
+      cursor_location.y = inner_border.top;
       cursor_location.width = 0;
-      cursor_location.height = text_area_height - 2 * INNER_BORDER ;
+      cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
 
       draw_insertion_cursor (entry,
 			     &cursor_location, TRUE, dir1,
@@ -3451,6 +3522,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint min_offset, max_offset;
   gint text_area_width, text_width;
+  GtkBorder inner_border;
   gint strong_x, weak_x;
   gint strong_xoffset, weak_xoffset;
   gfloat xalign;
@@ -3460,9 +3532,11 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   if (!GTK_WIDGET_REALIZED (entry))
     return;
-  
+
+  get_inner_border (entry, &inner_border);
+
   gdk_drawable_get_size (entry->text_area, &text_area_width, NULL);
-  text_area_width -= 2 * INNER_BORDER;
+  text_area_width -= inner_border.left + inner_border.right;
   if (text_area_width < 0)
     text_area_width = 0;
 
@@ -4315,6 +4389,58 @@ gtk_entry_get_has_frame (GtkEntry *entry)
   return entry->has_frame;
 }
 
+/**
+ * gtk_entry_set_inner_border:
+ * @entry: a #GtkEntry
+ * @border: a #GtkBorder, or %NULL
+ *
+ * Sets %entry's inner-border property to %border, or clears it if %NULL
+ * is passed. The inner-border is the area around the entry's text, but
+ * inside its frame.
+ *
+ * If set, this property overrides the inner-border style property.
+ * Overriding the style-provided border is useful when you want to do
+ * in-place editing of some text in a canvas or list widget, where
+ * pixel-exact positioning of the entry is important.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_entry_set_inner_border (GtkEntry        *entry,
+                            const GtkBorder *border)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
+
+  if (border)
+    g_object_set_qdata_full (G_OBJECT (entry), quark_inner_border,
+                             gtk_border_copy (border),
+                             (GDestroyNotify) gtk_border_free);
+  else
+    g_object_set_qdata (G_OBJECT (entry), quark_inner_border, NULL);
+
+  g_object_notify (G_OBJECT (entry), "inner-border");
+}
+
+/**
+ * gtk_entry_get_inner_border:
+ * @entry: a #GtkEntry
+ *
+ * This function returns the entry's inner-border property. See
+ * gtk_entry_set_inner_border() for more information.
+ *
+ * Return value: the entry's #GtkBorder, or %NULL if none was set.
+ *
+ * Since: 2.10
+ **/
+G_CONST_RETURN GtkBorder *
+gtk_entry_get_inner_border (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  return g_object_get_qdata (G_OBJECT (entry), quark_inner_border);
+}
 
 /**
  * gtk_entry_get_layout:
@@ -4878,7 +5004,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   GtkEditable *editable = GTK_EDITABLE (widget);
   gchar *str;
 
-  str = gtk_selection_data_get_text (selection_data);
+  str = (gchar *) gtk_selection_data_get_text (selection_data);
 
   if (str && entry->editable)
     {

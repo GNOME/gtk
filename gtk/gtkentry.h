@@ -152,6 +152,9 @@ gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
+void       gtk_entry_set_inner_border                (GtkEntry        *entry,
+                                                      const GtkBorder *border);
+G_CONST_RETURN GtkBorder* gtk_entry_get_inner_border (GtkEntry        *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);

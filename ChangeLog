@@ -1,3 +1,14 @@
+2006-03-10  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkentry.[ch]: applied refactored patch from maemo-gtk that
+	replaces the INNER_BORDER define by an "inner-border" style
+	property of type GtkBorder. Additionally, add an "inner-border"
+	object property plus API which allows to override any theme
+	border, to allow pixel-perfect positioning of entries for inline
+	editing. Fixes bug #333922.
+
+	* gtk/gtk.symbols: add the new public functions.
+
 2006-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Replace the
