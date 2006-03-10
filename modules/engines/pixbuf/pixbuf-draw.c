@@ -873,15 +873,9 @@ draw_extension (GtkStyle       *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
 
-  /* Why? */
-  if (width >=0)
-    width++;
-  if (height >=0)
-    height++;
-  
   match_data.function = TOKEN_D_EXTENSION;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE | THEME_MATCH_GAP_SIDE;
@@ -909,8 +903,8 @@ draw_focus (GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
 
   match_data.function = TOKEN_D_FOCUS;
   match_data.detail = (gchar *)detail;
