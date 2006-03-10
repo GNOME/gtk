@@ -303,6 +303,7 @@ static gboolean gtk_tree_view_is_expander_column             (GtkTreeView       
 static void     gtk_tree_view_add_move_binding               (GtkBindingSet     *binding_set,
 							      guint              keyval,
 							      guint              modmask,
+							      gboolean           add_shifted_binding,
 							      GtkMovementStep    step,
 							      gint               count);
 static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView       *tree_view,
@@ -946,40 +947,40 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   /* Key bindings */
-  gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Up, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-
-  gtk_tree_view_add_move_binding (binding_set, GDK_Down, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Down, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-
-  gtk_tree_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Up, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
+  gtk_tree_view_add_move_binding (binding_set, GDK_Down, 0, TRUE,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Down, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Home, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK, FALSE,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK, FALSE,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Home, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Home, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Home, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_End, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_End, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_End, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_End, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Up, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Up, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Up, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Up, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Down, 0,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Down, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, 1);
 
 
@@ -8084,6 +8085,7 @@ static void
 gtk_tree_view_add_move_binding (GtkBindingSet  *binding_set,
 				guint           keyval,
 				guint           modmask,
+				gboolean        add_shifted_binding,
 				GtkMovementStep step,
 				gint            count)
 {
@@ -8093,10 +8095,11 @@ gtk_tree_view_add_move_binding (GtkBindingSet  *binding_set,
                                 G_TYPE_ENUM, step,
                                 G_TYPE_INT, count);
 
-  gtk_binding_entry_add_signal (binding_set, keyval, GDK_SHIFT_MASK,
-                                "move_cursor", 2,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count);
+  if (add_shifted_binding)
+    gtk_binding_entry_add_signal (binding_set, keyval, GDK_SHIFT_MASK,
+				  "move_cursor", 2,
+				  G_TYPE_ENUM, step,
+				  G_TYPE_INT, count);
 
   if ((modmask & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
    return;
