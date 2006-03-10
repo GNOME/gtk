@@ -1,4 +1,4 @@
-2006-03-10  Michael Natterer  <mitch@gimp.org>
+2006-03-10  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentry.[ch]: applied refactored patch from maemo-gtk that
 	replaces the INNER_BORDER define by an "inner-border" style
