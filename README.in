@@ -56,6 +56,10 @@ Release notes for 2.10
   and GtkExpander) and resize grips, using the new EXPANDER and
   RESIZE_GRIP function values.
 
+* Dialogs created by gtk_about_dialog_new no longer hide automatically
+  when the user clicks close. It is the applications responsibility to
+  hide or destroy the dialog.
+
 Release notes
 =============
 

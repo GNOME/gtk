@@ -1,5 +1,16 @@
 2006-03-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Make the behaviour
+	of the about dialog consistent with other dialogs in gtk. If the
+	dialog is constructed with gtk_about_dialog_new(), the creator
+	is reponsible for handling the response by hiding or closing the
+	dialog. gtk_show_about_dialog() handles it by hiding the dialog.
+	(#333360, Daniel Drake)
+
+	* README.in: Mention this change.
+
+2006-03-10  Matthias Clasen  <mclasen@redhat.com>
+
 	Apply a patch from Dennis Cranston to make dialogs more
 	consistent  (#163850)
 	

@@ -529,9 +529,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   /* force defaults */
   gtk_about_dialog_set_name (about, NULL);
   gtk_about_dialog_set_logo (about, NULL);
-
-  /* Close dialog on user response */
-  g_signal_connect (about, "response", G_CALLBACK (close_cb), NULL);
 }
 
 static void
@@ -2122,27 +2119,6 @@ display_license_dialog (GtkWidget *button,
   gtk_widget_show_all (dialog);
 }
 
-static void 
-close_cb (GtkAboutDialog *about)
-{
-  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
-
-  if (priv->license_dialog != NULL)
-    {
-      gtk_widget_destroy (priv->license_dialog);
-      priv->license_dialog = NULL;
-    }
-
-  if (priv->credits_dialog != NULL)
-    {
-      gtk_widget_destroy (priv->credits_dialog);
-      priv->credits_dialog = NULL;
-    }
-
-  gtk_widget_hide (GTK_WIDGET (about));
-  
-}
-
 /**
  * gtk_about_dialog_new:
  *
@@ -2224,6 +2200,27 @@ gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func,
   return old;
 }
 
+static void 
+close_cb (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  if (priv->license_dialog != NULL)
+    {
+      gtk_widget_destroy (priv->license_dialog);
+      priv->license_dialog = NULL;
+    }
+
+  if (priv->credits_dialog != NULL)
+    {
+      gtk_widget_destroy (priv->credits_dialog);
+      priv->credits_dialog = NULL;
+    }
+
+  gtk_widget_hide (GTK_WIDGET (about));
+  
+}
+
 /**
  * gtk_show_about_dialog:
  * @parent: transient parent, or %NULL for none
@@ -2257,6 +2254,9 @@ gtk_show_about_dialog (GtkWindow   *parent,
       g_object_ref_sink (dialog);
 
       g_signal_connect (dialog, "delete_event", G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+
+      /* Close dialog on user response */
+      g_signal_connect (dialog, "response", G_CALLBACK (close_cb), NULL);
 
       va_start (var_args, first_property_name);
       g_object_set_valist (G_OBJECT (dialog), first_property_name, var_args);
