@@ -1651,7 +1651,7 @@ make_label_spinbutton (GtkColorSelection *colorsel,
   label = gtk_label_new_with_mnemonic (text);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), *spinbutton);
 
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_table_attach_defaults (GTK_TABLE (table), label, i, i+1, j, j+1);
   gtk_table_attach_defaults (GTK_TABLE (table), *spinbutton, i+1, i+2, j, j+1);
 }
@@ -1924,6 +1924,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gint i, j;
   ColorSelectionPrivate *priv;
   AtkObject *atk_obj;
+  GList *focus_chain = NULL;
   
   gtk_widget_push_composite_child ();
 
@@ -1935,11 +1936,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->tooltips = gtk_tooltips_new ();
   g_object_ref_sink (priv->tooltips);
   
-  gtk_box_set_spacing (GTK_BOX (colorsel), 4);
-  top_hbox = gtk_hbox_new (FALSE, 8);
+  top_hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE, 0);
   
-  vbox = gtk_vbox_new (FALSE, 4);
+  vbox = gtk_vbox_new (FALSE, 6);
   priv->triangle_colorsel = gtk_hsv_new ();
   g_signal_connect (priv->triangle_colorsel, "changed",
                     G_CALLBACK (hsv_changed), colorsel);
@@ -1949,7 +1949,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_tooltips_set_tip (priv->tooltips, priv->triangle_colorsel,
                         _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."), NULL);
   
-  hbox = gtk_hbox_new (FALSE, 4);
+  hbox = gtk_hbox_new (FALSE, 6);
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   
   frame = gtk_frame_new (NULL);
@@ -1974,12 +1974,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                         button,
                         _("Click the eyedropper, then click a color anywhere on your screen to select that color."), NULL);
   
-  top_right_vbox = gtk_vbox_new (FALSE, 4);
+  top_right_vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
   table = gtk_table_new (8, 6, FALSE);
   gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 4);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 4);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   
   make_label_spinbutton (colorsel, &priv->hue_spinbutton, _("_Hue:"), table, 0, 0, COLORSEL_HUE,
                          _("Position on the color wheel."));
@@ -1995,9 +1995,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   make_label_spinbutton (colorsel, &priv->blue_spinbutton, _("_Blue:"), table, 6, 2, COLORSEL_BLUE,
                          _("Amount of blue light in the color."));
   gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new (), 0, 8, 3, 4); 
-  
+
   priv->opacity_label = gtk_label_new_with_mnemonic (_("_Opacity:")); 
-  gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 1.0, 0.5); 
+  gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 0.0, 0.5); 
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5); 
   adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel); 
@@ -2022,9 +2022,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                     G_CALLBACK (opacity_entry_changed), colorsel);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_entry, 7, 8, 4, 5);
   
-  label = gtk_label_new_with_mnemonic (_("Color _Name:"));
+  label = gtk_label_new_with_mnemonic (_("Color _name:"));
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   priv->hex_entry = gtk_entry_new ();
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->hex_entry);
@@ -2040,9 +2040,20 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                         _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."), NULL);
   
   gtk_entry_set_width_chars (GTK_ENTRY (priv->hex_entry), 7);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
-  
+
+  focus_chain = g_list_append (focus_chain, priv->hue_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->sat_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->val_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->red_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->green_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->blue_spinbutton);
+  focus_chain = g_list_append (focus_chain, priv->opacity_slider);
+  focus_chain = g_list_append (focus_chain, priv->opacity_entry);
+  focus_chain = g_list_append (focus_chain, priv->hex_entry);
+  gtk_container_set_focus_chain (GTK_CONTAINER (table), focus_chain);
+  g_list_free (focus_chain);
+
   /* Set up the palette */
   table = gtk_table_new (GTK_CUSTOM_PALETTE_HEIGHT, GTK_CUSTOM_PALETTE_WIDTH, TRUE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 1);
@@ -2055,19 +2066,16 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 	}
     }
   set_selected_palette (colorsel, 0, 0);
-  priv->palette_frame = gtk_frame_new (NULL);
+  priv->palette_frame = gtk_vbox_new (FALSE, 6);
   label = gtk_label_new_with_mnemonic (_("_Palette"));
-  gtk_frame_set_label_widget (GTK_FRAME (priv->palette_frame), label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                  priv->custom_palette[0][0]);
   
   gtk_box_pack_end (GTK_BOX (top_right_vbox), priv->palette_frame, FALSE, FALSE, 0);
-  vbox = gtk_vbox_new (FALSE, 4);
-  gtk_container_add (GTK_CONTAINER (priv->palette_frame), vbox);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
-
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
+  gtk_box_pack_start (GTK_BOX (priv->palette_frame), table, FALSE, FALSE, 0);
   
   gtk_widget_show_all (top_hbox);
 

@@ -315,6 +315,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   GtkWidget *text_box;
   GtkWidget *table, *label;
   GtkWidget *font_label, *style_label;
+  GtkWidget *vbox;
   GtkListStore *model;
   GtkTreeViewColumn *column;
   GList *focus_chain = NULL;
@@ -322,12 +323,14 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   gtk_widget_push_composite_child ();
 
+  gtk_box_set_spacing (GTK_BOX (fontsel), 12);
   fontsel->size = 12 * PANGO_SCALE;
   
   /* Create the table of font, style & size. */
   table = gtk_table_new (3, 3, FALSE);
   gtk_widget_show (table);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 8);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE, 0);
 
 #ifdef INCLUDE_FONT_ENTRIES
@@ -545,23 +548,19 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
     }    
       
 
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_widget_show (vbox);
+  gtk_box_pack_start (GTK_BOX (fontsel), vbox, FALSE, TRUE, 0);
+  
   /* create the text entry widget */
   label = gtk_label_new_with_mnemonic (_("_Preview:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
   
-  text_frame = gtk_frame_new (NULL);
-  gtk_frame_set_label_widget (GTK_FRAME (text_frame), label);
-  
-  gtk_widget_show (text_frame);
-  gtk_frame_set_shadow_type (GTK_FRAME (text_frame), GTK_SHADOW_ETCHED_IN);
-  gtk_box_pack_start (GTK_BOX (fontsel), text_frame,
-		      FALSE, TRUE, 0);
-  
-  /* This is just used to get a 4-pixel space around the preview entry. */
   text_box = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (text_box);
-  gtk_container_add (GTK_CONTAINER (text_frame), text_box);
-  gtk_container_set_border_width (GTK_CONTAINER (text_box), 4);
+  gtk_box_pack_start (GTK_BOX (vbox), text_box, FALSE, TRUE, 0);
   
   fontsel->preview_entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fontsel->preview_entry);
@@ -1371,19 +1370,22 @@ gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
 static void
 gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 {
-  GtkDialog *dialog;
+  GtkDialog *dialog = GTK_DIALOG (fontseldiag);
+  
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
   gtk_widget_push_composite_child ();
 
-  dialog = GTK_DIALOG (fontseldiag);
-  
-  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag), 4);
   gtk_window_set_resizable (GTK_WINDOW (fontseldiag), TRUE);
   
   fontseldiag->main_vbox = dialog->vbox;
   
   fontseldiag->fontsel = gtk_font_selection_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 4);
+  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 5);
   gtk_widget_show (fontseldiag->fontsel);
   gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
 		      fontseldiag->fontsel, TRUE, TRUE, 0);
@@ -1411,13 +1413,12 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 					   GTK_RESPONSE_CANCEL,
 					   -1);
 
-
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
 
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-  
   gtk_widget_pop_composite_child ();
+
+  _gtk_dialog_set_ignore_separator (dialog, TRUE);
 }
 
 GtkWidget*

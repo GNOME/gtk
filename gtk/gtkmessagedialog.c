@@ -66,10 +66,6 @@ static void gtk_message_dialog_get_property (GObject          *object,
 static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
 					     GtkButtonsType    buttons);
 
-static void gtk_message_dialog_font_size_change (GtkWidget *widget,
-						 GtkStyle  *prev_style,
-						 gpointer   data);
-
 enum {
   PROP_0,
   PROP_MESSAGE_TYPE,
@@ -279,12 +275,15 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
                       hbox,
                       FALSE, FALSE, 0);
 
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14); /* 14 + 2 * 5 = 24 */
+  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+
   gtk_widget_show_all (hbox);
 
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (dialog), TRUE);
-
-  g_signal_connect (G_OBJECT (dialog), "style-set",
-		    G_CALLBACK (gtk_message_dialog_font_size_change), NULL);
 }
 
 static GtkMessageType
@@ -488,15 +487,6 @@ gtk_message_dialog_get_property (GObject     *object,
       break;
     }
 }
-
-static void
-gtk_message_dialog_font_size_change (GtkWidget *widget,
-				     GtkStyle  *prev_style,
-				     gpointer   data)
-{
-  setup_primary_label_font (GTK_MESSAGE_DIALOG (widget));
-}
-
 
 /**
  * gtk_message_dialog_new:
@@ -842,9 +832,10 @@ static void
 gtk_message_dialog_style_set (GtkWidget *widget,
                               GtkStyle  *prev_style)
 {
-  GtkWidget *parent;
-  gint border_width = 0;
+  GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (widget);
   gboolean use_separator;
+  GtkWidget *parent;
+  gint border_width;
 
   parent = GTK_WIDGET (GTK_MESSAGE_DIALOG (widget)->image->parent);
 
@@ -854,15 +845,18 @@ gtk_message_dialog_style_set (GtkWidget *widget,
                             &border_width, NULL);
       
       gtk_container_set_border_width (GTK_CONTAINER (parent),
-                                      border_width);
+                                      MAX (0, border_width - 7));
     }
 
   gtk_widget_style_get (widget,
 			"use-separator", &use_separator,
 			NULL);
+
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), FALSE);
   gtk_dialog_set_has_separator (GTK_DIALOG (widget), use_separator);
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), TRUE);
+
+  setup_primary_label_font (dialog);
 
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     (GTK_WIDGET_CLASS (parent_class)->style_set) (widget, prev_style);

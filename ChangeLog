@@ -1,5 +1,24 @@
 2006-03-10  Matthias Clasen  <mclasen@redhat.com>
 
+	Apply a patch from Dennis Cranston to make dialogs more
+	consistent  (#163850)
+	
+	* gtk/gtkcolorsel.c (make_label_spinbutton): Left-align labels.
+	
+	* gtk/gtkfontsel.c (gtk_font_selection_init): 
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): 
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): 
+	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): 
+	* gtk/gtkinputdialog.c (gtk_input_dialog_init): Update the layout
+	of the dialog to follow HIG recommendations. Also update labels.
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): HIG-compatible 
+	spacing.
+	(gtk_message_dialog_font_size_change): Merged into 
+	 gtk_message_dialog_style_set.
+
+2006-03-10  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstyle.c: Remove g_return_if_fail() checks
 	from static functions.
 

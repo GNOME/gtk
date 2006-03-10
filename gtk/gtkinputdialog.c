@@ -213,25 +213,32 @@ static void
 gtk_input_dialog_init (GtkInputDialog *inputd)
 {
   GtkInputDialogPrivate *private = gtk_input_dialog_get_private (inputd);
+  GtkDialog *dialog = GTK_DIALOG (inputd);
   GtkWidget *util_box;
   GtkWidget *label;
   GtkWidget *mapping_menu;
   GtkWidget *menuitem;
-  GtkWidget *separator;
   GtkWidget *notebook;
 
   gtk_widget_push_composite_child ();
 
   gtk_window_set_title (GTK_WINDOW (inputd), _("Input"));
 
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+
   /* main vbox */
 
-  private->main_vbox = gtk_vbox_new (FALSE, 4);
+  private->main_vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), 5);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox), private->main_vbox,
 		      TRUE, TRUE, 0);
 
   private->no_devices_label = gtk_label_new (_("No extended input devices"));
+  gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), 5);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox),
 		      private->no_devices_label,
 		      TRUE, TRUE, 0);
@@ -240,15 +247,15 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   private->device_menu = gtk_menu_new ();
 
-  util_box = gtk_hbox_new (FALSE, 2);
+  util_box = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (private->main_vbox), util_box, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic (_("_Device:"));
-  gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
+  gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 0);
 
   private->device_optionmenu = gtk_option_menu_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), private->device_optionmenu);
-  gtk_box_pack_start (GTK_BOX (util_box), private->device_optionmenu, TRUE, TRUE, 2);
+  gtk_box_pack_start (GTK_BOX (util_box), private->device_optionmenu, TRUE, TRUE, 0);
   gtk_widget_show (private->device_optionmenu);
   gtk_option_menu_set_menu (GTK_OPTION_MENU (private->device_optionmenu), private->device_menu);
 
@@ -281,28 +288,18 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 		    G_CALLBACK (gtk_input_dialog_set_mapping_mode),
 		    GINT_TO_POINTER (GDK_MODE_WINDOW));
 
-  label = gtk_label_new_with_mnemonic (_("_Mode: "));
-  gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
+  label = gtk_label_new_with_mnemonic (_("_Mode:"));
+  gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 0);
   
   inputd->mode_optionmenu = gtk_option_menu_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), inputd->mode_optionmenu);
-  gtk_box_pack_start (GTK_BOX (util_box), inputd->mode_optionmenu, FALSE, FALSE, 2);
+  gtk_box_pack_start (GTK_BOX (util_box), inputd->mode_optionmenu, FALSE, FALSE, 0);
   gtk_widget_show (inputd->mode_optionmenu);
   gtk_option_menu_set_menu (GTK_OPTION_MENU (inputd->mode_optionmenu), mapping_menu);
 
   gtk_widget_show(label);
 
   gtk_widget_show (util_box);
-
-  util_box = gtk_hbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(private->main_vbox), util_box, FALSE, FALSE, 0);
-
-  gtk_widget_show (label);
-  gtk_widget_show (util_box);
-
-  separator = gtk_hseparator_new();
-  gtk_box_pack_start (GTK_BOX (private->main_vbox), separator, FALSE, TRUE, 0);
-  gtk_widget_show (separator);
 
   /* Notebook */
 
@@ -312,9 +309,10 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       
   /*  The axis listbox  */
 
-  label = gtk_label_new_with_mnemonic (_("_Axes"));
+  label = gtk_label_new (_("Axes"));
 
   inputd->axis_listbox = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (inputd->axis_listbox), 12);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->axis_listbox),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
       
@@ -329,9 +327,10 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   /* Keys listbox */
 
-  label = gtk_label_new_with_mnemonic (_("_Keys"));
+  label = gtk_label_new (_("Keys"));
 
   inputd->keys_listbox = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (inputd->keys_listbox), 12);
   gtk_widget_set_size_request (inputd->keys_listbox,
 			       KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (inputd->keys_listbox),
@@ -360,6 +359,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   gtk_widget_pop_composite_child ();
 
   gtk_input_dialog_screen_changed (GTK_WIDGET (inputd), NULL);
+
+  _gtk_dialog_set_ignore_separator (dialog, TRUE);
 }
 
 static void
@@ -549,18 +550,19 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
   static const char *const axis_use_strings[GDK_AXIS_LAST] =
   {
     "",
-    N_("X"),
-    N_("Y"),
-    N_("Pressure"),
-    N_("X Tilt"),
-    N_("Y Tilt"),
-    N_("Wheel")
+    N_("_X:"),
+    N_("_Y:"),
+    N_("_Pressure:"),
+    N_("X _tilt:"),
+    N_("Y t_ilt:"),
+    N_("_Wheel:")
   };
 
   int i,j;
   GtkWidget *menu;
   GtkWidget *option_menu;
   GtkWidget *label;
+  GtkWidget *viewport;
 
   /* remove all the old items */
   if (inputd->axis_list)
@@ -569,8 +571,14 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
       gtk_widget_destroy (inputd->axis_list);
     }
   inputd->axis_list = gtk_table_new (GDK_AXIS_LAST, 2, 0);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (inputd->axis_listbox), 
-					 inputd->axis_list);
+  gtk_table_set_row_spacings (GTK_TABLE (inputd->axis_list), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (inputd->axis_list), 12);
+  
+  viewport = gtk_viewport_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (inputd->axis_listbox), viewport);
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
+  gtk_widget_show (viewport);
+  gtk_container_add (GTK_CONTAINER (viewport), inputd->axis_list);
   gtk_widget_show (inputd->axis_list);
 
   gtk_widget_realize (inputd->axis_list);
@@ -581,9 +589,10 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
     {
       /* create the label */
 
-      label = gtk_label_new (_(axis_use_strings[i]));
+      label = gtk_label_new_with_mnemonic (_(axis_use_strings[i]));
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_table_attach (GTK_TABLE (inputd->axis_list), label, 0, 1, i, i+1, 
-			0, 0, 2, 2);
+                        GTK_FILL, 0, 2, 2);
 
       /* and the use option menu */
       menu = gtk_menu_new();
@@ -608,8 +617,9 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 	}
 
       inputd->axis_items[i] = option_menu = gtk_option_menu_new ();
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
       gtk_table_attach (GTK_TABLE (inputd->axis_list), option_menu, 
-			1, 2, i, i+1, 0, 0, 2, 2);
+			1, 2, i, i+1, GTK_EXPAND | GTK_FILL, 0, 2, 2);
 
       gtk_widget_show (option_menu);
       gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
@@ -699,6 +709,8 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
   int i;
   GtkWidget *label;
   GtkWidget *button;
+  GtkWidget *hbox;
+  GtkWidget *viewport;
 
   char buffer[32];
   
@@ -709,9 +721,15 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
       gtk_widget_destroy (inputd->keys_list);
     }
 
-  inputd->keys_list = gtk_table_new (info->num_keys, 3, FALSE);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (inputd->keys_listbox), 
-					 inputd->keys_list);
+  inputd->keys_list = gtk_table_new (info->num_keys, 2, FALSE);
+  gtk_table_set_row_spacings (GTK_TABLE (inputd->keys_list), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (inputd->keys_list), 12);
+  
+  viewport = gtk_viewport_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (inputd->keys_listbox), viewport);
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
+  gtk_widget_show (viewport);
+  gtk_container_add (GTK_CONTAINER (viewport), inputd->keys_list);
   gtk_widget_show (inputd->keys_list);
 
   gtk_widget_realize (inputd->keys_list);
@@ -726,17 +744,22 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 
       /* create the label */
 
-      g_snprintf (buffer, sizeof (buffer), "%d", i+1);
-      label = gtk_label_new (buffer);
+      g_snprintf (buffer, sizeof (buffer), "_%d:", i+1);
+      label = gtk_label_new_with_mnemonic (buffer);
       gtk_table_attach (GTK_TABLE (inputd->keys_list), label, 0, 1, i, i+1, 
-			0, 0, 2, 2);
+			GTK_FILL, 0, 2, 2);
       gtk_widget_show (label);
 
       /* the entry */
 
+      hbox = gtk_hbox_new (FALSE, 6);
+      gtk_table_attach (GTK_TABLE (inputd->keys_list), hbox, 1, 2, i, i+1, 
+                        GTK_EXPAND | GTK_FILL, 0, 2, 2);
+      gtk_widget_show (hbox);
+
       key->entry = gtk_entry_new ();
-      gtk_table_attach (GTK_TABLE (inputd->keys_list), key->entry, 1, 2, i, i+1, 
-			GTK_EXPAND | GTK_FILL , 0, 2, 2);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), key->entry);
+      gtk_box_pack_start (GTK_BOX (hbox), key->entry, TRUE, TRUE, 0);
       gtk_widget_show (key->entry);
 
       g_signal_connect (key->entry, "key_press_event",
@@ -746,9 +769,8 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
       
       /* and clear button */
 
-      button = gtk_button_new_with_label (_("clear"));
-      gtk_table_attach (GTK_TABLE (inputd->keys_list), button, 2, 3, i, i+1, 
-			0, 0, 2, 2);
+      button = gtk_button_new_with_mnemonic (_("Cl_ear"));
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
       gtk_widget_show (button);
 
       g_signal_connect (button, "clicked",
