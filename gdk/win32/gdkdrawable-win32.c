@@ -994,7 +994,7 @@ draw_polygon (GdkGCWin32 *gcwin32,
 {
   gboolean filled;
   POINT *pts;
-  HPEN old_pen;
+  HGDIOBJ old_pen_or_brush;
   gint npoints;
   gint i;
 
@@ -1010,16 +1010,14 @@ draw_polygon (GdkGCWin32 *gcwin32,
       }
 
   if (filled)
-    {
-      old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
-      if (old_pen == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-      GDI_CALL (Polygon, (hdc, pts, npoints));
-      if (old_pen != NULL)
-	GDI_CALL (SelectObject, (hdc, old_pen));
-    }
+    old_pen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
   else
-    GDI_CALL (Polyline, (hdc, pts, npoints));
+    old_pen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
+  if (old_pen_or_brush == NULL)
+    WIN32_GDI_FAILED ("SelectObject");
+  GDI_CALL (Polygon, (hdc, pts, npoints));
+  if (old_pen_or_brush != NULL)
+    GDI_CALL (SelectObject, (hdc, old_pen_or_brush));
 }
 
 static void
@@ -1046,7 +1044,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   bounds.width = 0;
   bounds.height = 0;
 
-  pts = g_new (POINT, npoints+1);
+  pts = g_new (POINT, npoints);
 
   for (i = 0; i < npoints; i++)
     {
@@ -1062,14 +1060,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
       bounds.height = MAX (bounds.height, points[i].y - bounds.y);
     }
 
-  if (points[0].x != points[npoints-1].x ||
-      points[0].y != points[npoints-1].y) 
-    {
-      pts[npoints].x = points[0].x;
-      pts[npoints].y = points[0].y;
-      npoints++;
-    }
-      
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
   generic_draw (drawable, gc,
