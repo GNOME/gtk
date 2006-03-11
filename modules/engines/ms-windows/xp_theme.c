@@ -153,6 +153,7 @@ static const short element_part_map[] = {
 
 static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
+static gboolean use_xp_theme = FALSE;
 
 typedef HRESULT (FAR PASCAL * GetThemeSysFontFunc)
     (HTHEME hTheme, int iFontID, OUT LOGFONT * plf);
@@ -254,12 +255,26 @@ xp_theme_init (void)
 		(DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll,
 								"DrawThemeParentBackground");
 	}
+
+    if (is_app_themed_func && is_theme_active_func) {
+        use_xp_theme = (is_app_themed_func () && is_theme_active_func ());
+    }
+    else {
+        use_xp_theme = FALSE;
+    }
 }
 
 void
 xp_theme_reset (void)
 {
     xp_theme_close_open_handles ();
+
+    if (is_app_themed_func && is_theme_active_func) {
+        use_xp_theme = (is_app_themed_func () && is_theme_active_func ());
+    }
+    else {
+        use_xp_theme = FALSE;
+    }
 }
 
 void
@@ -272,6 +287,7 @@ xp_theme_exit (void)
 
     FreeLibrary (uxtheme_dll);
     uxtheme_dll = NULL;
+	use_xp_theme = FALSE;
 
     is_app_themed_func = NULL;
     is_theme_active_func = NULL;
@@ -838,19 +854,7 @@ xp_theme_draw (GdkWindow * win, XpThemeElement element, GtkStyle * style,
 gboolean
 xp_theme_is_active (void)
 {
-    gboolean active = FALSE;
-
-    if (is_app_themed_func)
-	{
-	    active = (*is_app_themed_func) ();
-
-	    if (active && is_theme_active_func)
-		{
-		    active = (*is_theme_active_func) ();
-		}
-	}
-
-    return active;
+	return use_xp_theme;
 }
 
 gboolean

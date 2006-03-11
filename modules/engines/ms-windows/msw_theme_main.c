@@ -36,6 +36,28 @@
 
 static GModule *this_module = NULL;
 static void (*msw_rc_reset_styles) (GtkSettings * settings) = NULL;
+static GdkWindow* hidden_msg_window = NULL;
+
+static GdkWindow*
+create_hidden_msg_window (void)
+{
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  attributes.x = -100;
+  attributes.y = -100;
+  attributes.width = 10;
+  attributes.height = 10;
+  attributes.window_type = GDK_WINDOW_TEMP;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.override_redirect = TRUE;
+  attributes.event_mask = 0;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+
+  return gdk_window_new (gdk_get_default_root_window (),
+			 &attributes, attributes_mask);
+}
 
 static GdkFilterReturn
 global_filter_func (void *xevent, GdkEvent * event, gpointer data)
@@ -88,13 +110,16 @@ theme_init (GTypeModule * module)
 	}
 
     msw_style_init ();
-    gdk_window_add_filter (NULL, global_filter_func, NULL);
+    hidden_msg_window = create_hidden_msg_window ();
+    gdk_window_add_filter (hidden_msg_window, global_filter_func, NULL);
 }
 
 G_MODULE_EXPORT void
 theme_exit (void)
 {
-    gdk_window_remove_filter (NULL, global_filter_func, NULL);
+    gdk_window_remove_filter (hidden_msg_window, global_filter_func, NULL);
+    gdk_window_destroy (hidden_msg_window);
+    hidden_msg_window = NULL;
 
     if (this_module)
 	{

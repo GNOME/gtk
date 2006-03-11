@@ -39,8 +39,8 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtk.h"
-/* #include <gdk/gdkwin32.h> */
 
+/* #include <gdk/gdkwin32.h> */
 #include "gdk/win32/gdkwin32.h"
 
 
@@ -464,8 +464,10 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
 		pt_size = 10;
 
 	    font = get_family_name (&lf, hDC);
-	    g_snprintf (buf, bufsiz, "%s %s %s %d", font, style, weight,
-			pt_size);
+	    if(!(font && *font))
+	    	return NULL;
+
+	    g_snprintf (buf, bufsiz, "%s %s %s %d", font, style, weight, pt_size);
 	    g_free (font);
 
 	    return buf;
