@@ -28,6 +28,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <math.h>
+#include <gdk/gdkkeysyms.h>
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -186,6 +187,8 @@ static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
                                                          gdouble        value);
 static void          gtk_range_update_value             (GtkRange      *range);
+static gboolean      gtk_range_key_press                (GtkWidget     *range,
+							 GdkEventKey   *event);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -255,6 +258,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->grab_notify = gtk_range_grab_notify;
   widget_class->state_changed = gtk_range_state_changed;
   widget_class->style_set = gtk_range_style_set;
+  widget_class->key_press_event = gtk_range_key_press;
 
   class->move_slider = gtk_range_move_slider;
   class->change_value = gtk_range_real_change_value;
@@ -1408,6 +1412,26 @@ coord_to_value (GtkRange *range,
     frac * (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size);
 
   return value;
+}
+
+static gboolean
+gtk_range_key_press (GtkWidget   *widget,
+		     GdkEventKey *event)
+{
+  GtkRange *range = (GtkRange *)widget;
+
+  if (event->keyval == GDK_Escape)
+    {
+      stop_scrolling (range);
+
+      update_slider_position (range, 
+			      range->slide_initial_coordinate,
+			      range->slide_initial_coordinate);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gint
