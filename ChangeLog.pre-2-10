@@ -1,3 +1,12 @@
+2006-03-11  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (draw_polygon): Use Polygon() for
+	outlined polygons, too. Same idea as in draw_rectangle(): Set pen
+	to NULL_PEN if drawing a filled polygon, set brush to HOLLOW_BRUSH
+	if drawing a polygon outline. (#332662)
+	(gdk_win32_draw_polygon): Corresponding simplification: no need to
+	add an extra final copy of the starting point.
+
 2006-03-11  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows: Speed up the Windows theme
