@@ -1,3 +1,9 @@
+2006-03-11  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows: Speed up the Windows theme
+	considerably (#163724, John Ehresman)
+	Be more careful about setting Pango font descriptions (#333372)
+	
 2006-03-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_key_press): Allow to cancel 
