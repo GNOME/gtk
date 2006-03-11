@@ -25,7 +25,7 @@
 typedef struct _PixbufStyle PixbufStyle;
 typedef struct _PixbufStyleClass PixbufStyleClass;
 
-extern GType pixbuf_type_style;
+extern GType pixbuf_type_style G_GNUC_INTERNAL;
 
 #define PIXBUF_TYPE_STYLE              pixbuf_type_style
 #define PIXBUF_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PIXBUF_TYPE_STYLE, PixbufStyle))
@@ -44,6 +44,6 @@ struct _PixbufStyleClass
   GtkStyleClass parent_class;
 };
 
-void pixbuf_style_register_type (GTypeModule *module);
+void pixbuf_style_register_type (GTypeModule *module) G_GNUC_INTERNAL;
 
 

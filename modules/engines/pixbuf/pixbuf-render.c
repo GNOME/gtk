@@ -658,7 +658,7 @@ theme_pixbuf_set_stretch (ThemePixbuf *theme_pb,
     theme_pixbuf_compute_hints (theme_pb);
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 pixbuf_cache_value_new (gchar *filename)
 {
   GError *err = NULL;
