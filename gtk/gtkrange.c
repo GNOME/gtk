@@ -419,6 +419,13 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MAXINT,
 							     0,
 							     GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boolean ("activate_slider",
+                                                                 P_("Draw slider ACTIVE during drag"),
+							         P_("With this option set to TRUE, sliders will be drawn ACTIVE and with shadow IN while they are dragged"),
+							         FALSE,
+							         G_PARAM_READABLE));
 }
 
 static void
@@ -1149,11 +1156,13 @@ gtk_range_expose (GtkWidget      *widget,
   GtkRange *range;
   gboolean sensitive;
   GtkStateType state;
+  GtkShadowType shadow_type;
   GdkRectangle expose_area;	/* Relative to widget->allocation */
   GdkRectangle area;
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
+  gboolean activate_slider;
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
@@ -1211,12 +1220,25 @@ gtk_range_expose (GtkWidget      *widget,
                          range->range_rect.height);
     }
 
+  shadow_type = GTK_SHADOW_OUT;
+
   if (!sensitive)
     state = GTK_STATE_INSENSITIVE;
   else if (!touchscreen && range->layout->mouse_location == MOUSE_SLIDER)
     state = GTK_STATE_PRELIGHT;
   else
     state = GTK_STATE_NORMAL;
+
+  if (range->layout->grab_location == MOUSE_SLIDER)
+    {
+      gtk_widget_style_get (widget, "activate_slider", &activate_slider, NULL);
+      
+      if (activate_slider)
+        {
+          state = GTK_STATE_ACTIVE;
+          shadow_type = GTK_SHADOW_IN;
+        }
+    }
 
   if (gdk_rectangle_intersect (&expose_area,
                                &range->layout->slider,
@@ -1228,7 +1250,7 @@ gtk_range_expose (GtkWidget      *widget,
       gtk_paint_slider (widget->style,
                         widget->window,
                         state,
-                        GTK_SHADOW_OUT,
+                        shadow_type,
                         &area,
                         widget,
                         GTK_RANGE_GET_CLASS (range)->slider_detail,
@@ -1456,6 +1478,7 @@ gtk_range_button_press (GtkWidget      *widget,
            range->layout->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
+      gboolean activate_slider;
 
       /* Any button can be used to drag the slider, but you can start
        * dragging the slider with a trough click using button 2;
@@ -1502,11 +1525,17 @@ gtk_range_button_press (GtkWidget      *widget,
           range->slide_initial_coordinate = event->x;
         }
 
+      range_grab_add (range, MOUSE_SLIDER, event->button);
+      
+      gtk_widget_style_get (widget, "activate_slider", &activate_slider, NULL);
+      
+      /* force a redraw, if the active slider is drawn differently to the prelight one */
+      if (activate_slider)
+        gtk_widget_queue_draw (widget);
+      
       if (need_value_update)
         update_slider_position (range, event->x, event->y);
 
-      range_grab_add (range, MOUSE_SLIDER, event->button);
-      
       return TRUE;
     }
   

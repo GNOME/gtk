@@ -2067,7 +2067,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     }
   set_selected_palette (colorsel, 0, 0);
   priv->palette_frame = gtk_vbox_new (FALSE, 6);
-  label = gtk_label_new_with_mnemonic (_("_Palette"));
+  label = gtk_label_new_with_mnemonic (_("_Palette:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);
 
