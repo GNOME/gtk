@@ -200,7 +200,8 @@ gtk_action_group_add_actions() to construct actions.
 </para>
 
 @name: The name of the action.
-@stock_id: The stock id for the action.
+@stock_id: The stock id for the action, or the name of an icon from the icon 
+    theme.
 @label: The label for the action. This field should typically be marked for 
     translation, see gtk_action_group_set_translation_domain().
 @accelerator: The accelerator for the action, in the format understood by 
@@ -239,7 +240,8 @@ gtk_action_group_add_toggle_actions() to construct toggle actions.
 </para>
 
 @name: The name of the action.
-@stock_id: The stock id for the action.
+@stock_id: The stock id for the action, or the name of an icon from the icon 
+    theme.
 @label: The label for the action. This field should typically be marked for 
     translation, see gtk_action_group_set_translation_domain().
 @accelerator: The accelerator for the action, in the format understood by 
@@ -279,7 +281,8 @@ gtk_action_group_add_radio_actions() to construct groups of radio actions.
 </para>
 
 @name: The name of the action.
-@stock_id: The stock id for the action.
+@stock_id: The stock id for the action, or the name of an icon from the icon 
+    theme.
 @label: The label for the action. This field should typically be marked for 
     translation, see gtk_action_group_set_translation_domain().
 @accelerator: The accelerator for the action, in the format understood by 

@@ -56,7 +56,8 @@ struct _GtkActionPrivate
   gchar *label;
   gchar *short_label;
   gchar *tooltip;
-  gchar *stock_id; /* icon */
+  gchar *stock_id; /* stock icon */
+  gchar *icon_name; /* themed icon */
 
   guint sensitive          : 1;
   guint visible            : 1;
@@ -94,6 +95,7 @@ enum
   PROP_SHORT_LABEL,
   PROP_TOOLTIP,
   PROP_STOCK_ID,
+  PROP_ICON_NAME,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
   PROP_VISIBLE_OVERFLOWN,
@@ -165,6 +167,8 @@ static void gtk_action_set_tooltip      (GtkAction	*action,
 					 const gchar    *tooltip);
 static void gtk_action_set_stock_id     (GtkAction	*action,
 					 const gchar    *stock_id);
+static void gtk_action_set_icon_name     (GtkAction	*action,
+					 const gchar    *icon_name);
 static void gtk_action_sync_tooltip     (GtkAction      *action,
 					 GtkWidget      *proxy);
 
@@ -248,6 +252,23 @@ gtk_action_class_init (GtkActionClass *klass)
 							   "this action."),
 							NULL,
 							GTK_PARAM_READWRITE));
+  /**
+   * GtkAction::icon-name:
+   *
+   * The name of the icon from the icon theme. 
+   * Note that the stock icon is preferred, if
+   * the ::stock-id property holds the id of an
+   * existing stock icon.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ICON_NAME,
+				   g_param_spec_string ("icon-name",
+							P_("Icon Name"),
+							P_("The name of the icon from the icon theme"),
+							NULL,
+ 							GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible-horizontal",
@@ -348,6 +369,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->short_label = NULL;
   action->private_data->tooltip = NULL;
   action->private_data->stock_id = NULL;
+  action->private_data->icon_name = NULL;
   action->private_data->visible_horizontal = TRUE;
   action->private_data->visible_vertical   = TRUE;
   action->private_data->visible_overflown  = TRUE;
@@ -421,6 +443,7 @@ gtk_action_finalize (GObject *object)
   g_free (action->private_data->short_label);
   g_free (action->private_data->tooltip);
   g_free (action->private_data->stock_id);
+  g_free (action->private_data->icon_name);
 
   g_closure_unref (action->private_data->accel_closure);
   if (action->private_data->accel_group)
@@ -458,6 +481,9 @@ gtk_action_set_property (GObject         *object,
       break;
     case PROP_STOCK_ID:
       gtk_action_set_stock_id (action, g_value_get_string (value));
+      break;
+    case PROP_ICON_NAME:
+      gtk_action_set_icon_name (action, g_value_get_string (value));
       break;
     case PROP_VISIBLE_HORIZONTAL:
       gtk_action_set_visible_horizontal (action, g_value_get_boolean (value));
@@ -515,6 +541,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, action->private_data->stock_id);
+      break;
+    case PROP_ICON_NAME:
+      g_value_set_string (value, action->private_data->icon_name);
       break;
     case PROP_VISIBLE_HORIZONTAL:
       g_value_set_boolean (value, action->private_data->visible_horizontal);
@@ -708,16 +737,19 @@ connect_proxy (GtkAction     *action,
 	    }
 	  if (!image)
 	    {
-	      image = gtk_image_new_from_stock (NULL,
-						GTK_ICON_SIZE_MENU);
+	      image = gtk_image_new ();
 	      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (proxy),
 					     image);
 	      gtk_widget_show (image);
 	    }
-	  gtk_image_set_from_stock (GTK_IMAGE (image),
-				    action->private_data->stock_id, GTK_ICON_SIZE_MENU);
+	  if (action->private_data->stock_id)
+	    gtk_image_set_from_stock (GTK_IMAGE (image),
+				      action->private_data->stock_id, GTK_ICON_SIZE_MENU);
+	  else if (action->private_data->icon_name)
+	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
+					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
 	}
-
+      
       if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy)) == NULL)
 	g_signal_connect_object (proxy, "activate",
 				 G_CALLBACK (gtk_action_activate), action,
@@ -747,8 +779,9 @@ connect_proxy (GtkAction     *action,
 	{
 	  g_object_set (proxy,
 			"label", action->private_data->short_label,
-			"use_underline", TRUE,
-			"stock_id", action->private_data->stock_id,
+			"use-underline", TRUE,
+			"stock-id", action->private_data->stock_id,
+			"icon-name", action->private_data->icon_name,
 			NULL);
 
 	  g_signal_connect_object (proxy, "clicked",
@@ -766,16 +799,22 @@ connect_proxy (GtkAction     *action,
 			"label", action->private_data->stock_id,
 			NULL);
 	}
-      else if (GTK_BIN (proxy)->child == NULL || 
-	       GTK_IS_LABEL (GTK_BIN (proxy)->child))
+      else 
 	{
-	  /* synchronise the label */
-	  g_object_set (proxy,
-			"label", action->private_data->short_label,
-			"use_underline", TRUE,
-			NULL);
+	  GtkWidget *image;
+
+	  image = gtk_button_get_image (GTK_BUTTON (proxy));
+
+	  if (GTK_BIN (proxy)->child == NULL || 
+	      GTK_IS_LABEL (GTK_BIN (proxy)->child))
+	    {
+	      /* synchronise the label */
+	      g_object_set (proxy,
+			    "label", action->private_data->short_label,
+			    "use_underline", TRUE,
+			    NULL);
+	    }
 	}
-      
       /* we leave the button alone if there is a custom child */
       g_signal_connect_object (proxy, "clicked",
 			       G_CALLBACK (gtk_action_activate), action,
@@ -869,6 +908,8 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
 
   if (action->private_data->stock_id)
     return gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
+  else if (action->private_data->icon_name)
+    return gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
   else
     return NULL;
 }
@@ -1469,13 +1510,63 @@ gtk_action_set_stock_id (GtkAction   *action,
     {
       GtkStockItem stock_item;
       
-      if (gtk_stock_lookup (action->private_data->stock_id, &stock_item))
+      if (action->private_data->stock_id &&
+	  gtk_stock_lookup (action->private_data->stock_id, &stock_item))
 	gtk_action_set_label (action, stock_item.label);
       else 
 	gtk_action_set_label (action, NULL);
       
       action->private_data->label_set = FALSE;
     }
+}
+
+static void 
+gtk_action_set_icon_name (GtkAction   *action,
+			  const gchar *icon_name)
+{
+  GSList *p;
+  GtkWidget *proxy, *image;
+  gchar *tmp;
+  
+  tmp = action->private_data->icon_name;
+  action->private_data->icon_name = g_strdup (icon_name);
+  g_free (tmp);
+
+  for (p = action->private_data->proxies; p; p = p->next)
+    {
+      proxy = (GtkWidget *)p->data;
+      
+      if (GTK_IS_IMAGE_MENU_ITEM (proxy))
+	{
+	  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (proxy));
+	  
+	  if (GTK_IS_IMAGE (image) &&
+	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
+					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
+	} 
+      else if (GTK_IS_TOOL_BUTTON (proxy))
+	{
+	  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (proxy),
+					 action->private_data->icon_name);
+	}
+      else if (GTK_IS_BUTTON (proxy) &&
+	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
+	{
+	  GtkWidget *image;
+
+	  image = gtk_button_get_image (GTK_BUTTON (proxy));
+	  
+	  if (GTK_IS_IMAGE (image) &&
+	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
+					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
+	}
+    }
+  
+  g_object_notify (G_OBJECT (action), "icon-name");
 }
 
 

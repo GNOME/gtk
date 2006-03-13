@@ -777,8 +777,18 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
       action = gtk_action_new (entries[i].name,
 			       label,
 			       tooltip,
-			       entries[i].stock_id);
+			       NULL);
 
+      if (entries[i].stock_id) 
+	{
+	  GtkStockItem item;
+
+	  if (gtk_stock_lookup (entries[i].stock_id, &item))
+	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
+	  else
+	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
+	}
+	  
       if (entries[i].callback)
 	{
 	  GClosure *closure;
@@ -873,7 +883,17 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
       action = gtk_toggle_action_new (entries[i].name,
 				      label,
 				      tooltip,
-				      entries[i].stock_id);
+				      NULL);
+
+      if (entries[i].stock_id) 
+	{
+	  GtkStockItem item;
+
+	  if (gtk_stock_lookup (entries[i].stock_id, &item))
+	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
+	  else
+	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
+	}
 
       gtk_toggle_action_set_active (action, entries[i].is_active);
 
@@ -977,8 +997,18 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
       action = gtk_radio_action_new (entries[i].name,
 				     label,
 				     tooltip,
-				     entries[i].stock_id,
+				     NULL,
 				     entries[i].value);
+
+      if (entries[i].stock_id) 
+	{
+	  GtkStockItem item;
+
+	  if (gtk_stock_lookup (entries[i].stock_id, &item))
+	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
+	  else
+	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
+	}
 
       if (i == 0) 
 	first_action = action;

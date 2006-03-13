@@ -1,3 +1,14 @@
+2006-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Make actions work with named icons.  (#323484, Jorn Baayen)
+	
+	* gtk/gtkactiongroup.c: If the stock-id field of a GtkActionEntry
+	does not contain a registered stock id, interpret it as an
+	icon name.
+
+	* gtk/gtkaction.c: Add an icon-name property to actions and
+	use it for icons if a stock-id is not specified.
+
 2006-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_compute_configure_request): Don't
