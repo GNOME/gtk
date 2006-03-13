@@ -1,3 +1,12 @@
+2006-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_iter_has_child):
+	(gtk_tree_model_filter_iter_n_children): Add a workaround for
+	a crash when using a11y tools with filtered models.  (#326362,
+	Kjartan Maraas)
+
 2006-03-11  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_polygon): Use Polygon() for

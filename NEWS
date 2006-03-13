@@ -1,3 +1,18 @@
+Overview of Changes from GTK+ 2.8.14 to GTK+ 2.8.15
+===================================================
+
+* Bugs fixed:
+ 334098 Keys P and N in "open file" dialog have special meaning
+        [Torben Putkonen]
+ 333372 MS-Windows theme (GTK-Wimp) shows all funky characters
+        [Dom Lachowicz]
+ 163724 Optimize gdk on win32 [John Ehresman]
+ 332662 Hollow polygons have wrong linecaps [Tor Lillqvist]
+ 326362 panel crash with a11y enabled [Kjartan Maraas]
+
+* Updated translations (bg,bn,cs,eu,ro)
+
+
 Overview of Changes from GTK+ 2.8.13 to GTK+ 2.8.14
 ===================================================
 
