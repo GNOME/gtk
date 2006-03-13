@@ -1,3 +1,8 @@
+2006-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_compute_configure_request): Don't
+	for the creation of geometry info here.  (#114533)
+
 2006-03-11  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_polygon): Use Polygon() for

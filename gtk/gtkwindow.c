@@ -5260,12 +5260,21 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   parent_widget = (GtkWidget*) window->transient_parent;
   
   pos = get_effective_position (window);
-  info = gtk_window_get_geometry_info (window, TRUE);
-
-  /* by default, don't change position requested */
-  x = info->last.configure_request.x;
-  y = info->last.configure_request.y;
+  info = gtk_window_get_geometry_info (window, FALSE);
   
+  /* by default, don't change position requested */
+  if (info)
+    {
+      x = info->last.configure_request.x;
+      y = info->last.configure_request.y;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
+    }
+
+
   if (window->need_default_position)
     {
 
@@ -5358,7 +5367,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         }
     } /* if (window->need_default_position) */
 
-  if (window->need_default_position &&
+  if (window->need_default_position && info &&
       info->initial_pos_set)
     {
       x = info->initial_x;
