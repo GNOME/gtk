@@ -94,7 +94,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2006-01-19 11:50+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
@@ -2015,11 +2015,11 @@ msgstr "લેબલ વિજેટ"
 msgid "A widget to display in place of the usual expander label"
 msgstr "ચોકઠાના સામાન્ય લેબલની જગ્યાએ વિજેટ દર્શાવો"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "વિસ્તારકનું માપ"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 msgid "Size of the expander arrow"
 msgstr "વિસ્તારક તીરનું માપ"
 
@@ -2408,11 +2408,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "કેવી રીતે દરેક વસ્તુનું લખાણ અને ચિહ્ન એકબીજાને અનુલક્ષીને ગોઠવાય છે"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "ફરીથી ગોઠવી શકાય તેવું"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "ફરીથી ગોઠવી શકાય એ રીતે જુઓ"
 
@@ -3403,11 +3403,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "ખસેડવાની પટ્ટીના બીજા છેડા પર આગળ જવા માટેનુ બીજુ બટન દર્શાવો"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "આડી વ્યવસ્થિત ગોઠવણી"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "ઊભી વ્યવસ્થિત ગોઠવણી"
 
@@ -4404,140 +4404,140 @@ msgstr "TreeModelSort મોડલ"
 msgid "The model for the TreeModelSort to sort"
 msgstr "ક્રમમાં ગોઠવવા માટે TreeModelSort મોડલ"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "TreeView મોડલ"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "ટ્રીના રૂપમાં દર્શન કરવા માટેનું મોડલ"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "વિજેટ માટે વ્યવસ્થિત આડી ગોઠવણી"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "વિજેટ માટે વ્યવસ્થિત ઊભી ગોઠવણી"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Headers Visible"
 msgstr "હેડરો દૃશ્યમાન છે"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "સ્તંભ હેડર માટેના બટન બતાવો"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "હેડરો ક્લિક કરી શકાય તેવા છે"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "સ્તંભ હેડર ક્લિકની ઘટના સામે પ્રતિક્રીયા આપે છે"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "વિસ્તારકનો સ્તંભ"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "વિસ્તારક સ્તંભ માટે એક સ્તંભની ગોઠવણ કરો"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "નિયમો માટેના સંકેત"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "હરોળને એકપછીએક રંગમાં દર્શાવવા માટે થીમયંત્રમાં સંકેતની ગોઠવણી કરો"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "શોધવાનું સક્રિય બનાવો"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr "આ દેખાવ વપરાશકર્તાને સ્તંભમાં પારસ્પરિક રીતે શોધવાની પરવાનગી આપે છે"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "સ્તંભમાં શોધો"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "જ્યારે કોડમાં શોધતા હોઈએ ત્યારે શોધવા માટેનું મોડલ સ્તંભ"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Fixed Height Mode"
 msgstr "ચોક્કસ ઊંચાઈ"
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "GtkTreeView ને બધી હરોળોની ઊંચાઈ સરખી છે એમ ધારીને ઝડપી બનાવે છે"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Hover Selection"
 msgstr "ઉપરથી પસંદગી"
 
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 msgid "Whether the selection should follow the pointer"
 msgstr "શું પસંદ કરનારે રંગ અપારદર્શકતાની ગોઠવણી માટે પરવાનગી આપવી જોઇએ છે"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid "Hover Expand"
 msgstr "ઉપરથી વિસ્તારો"
 
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "શું હરોળો જ્યારે નિર્દેશક તેમના ઉપર ખસે ત્યારે વિસ્તૃત થવી જોઈએ/સંકોચાવી જોઈએ"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "ઊભા વિભાજકની પહોળાઈ"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "કોષની વચ્ચેની ઊભી જગ્યા. બેકી સંખ્યામાં હોવી જોઈએ"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "આડા વિભાજકની પહોળાઈ"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "કોષની વચ્ચેની ઊભી જગ્યા. બેકી સંખ્યામાં હોવી જોઈએ કોષ"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr "નિયમોની પરવાનગી આપો"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 msgid "Allow drawing of alternating color rows"
 msgstr "એક પછી એક રંગની હરોળને દોરવાની પરવાનગી"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Indent Expanders"
 msgstr "વિસ્તારકો વચ્ચે અંતર લાવો"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 msgid "Make the expanders indented"
 msgstr "વિસ્તારકો વચ્ચે અંતર લાવો"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr "બેકી હોય તેવી હરોળનો રંગ"
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr "બેકી હોય તેવી આડી હરોળ માટે ઉપયોગમાં લેવાતો રંગ"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr "એકી હોય તેવી હરોળનો રંગ "
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr "એકી હોય તેવી આડી હરોળ માટે ઉપયોગમાં લેવાતો રંગ "
 

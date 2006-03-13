@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2004-02-21 18:21-0600\n"
 "Last-Translator: Dinesh Nadarajah <dinesh_list@sbcglobal.net>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"
@@ -2016,11 +2016,11 @@ msgstr "விட்செட் அடையாளம்"
 msgid "A widget to display in place of the usual expander label"
 msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்க ஓர் விட்செட்."
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "Expander Size"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 msgid "Size of the expander arrow"
 msgstr "Size of the expander arrow"
 
@@ -2448,11 +2448,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "மறுவரிசையாக்கக்கூடியது"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
@@ -3509,11 +3509,11 @@ msgid ""
 msgstr ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "கிடைதிசை ஒழிங்குபடுத்தல்"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "நெடுதிசை ஒழிங்குபடுத்தல்"
 
@@ -4564,148 +4564,148 @@ msgstr "TreeView படிமம்"
 msgid "The model for the TreeModelSort to sort"
 msgstr "மரக்-காட்சியின் படிமம்"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "TreeView படிமம்"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "மரக்-காட்சியின் படிமம்"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "விட்செட்டுக்கான கிடைதிசை ஒழிங்குபடுத்தல்"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "விட்செட்டுக்கான நெடுதிசை ஒழிங்குபடுத்தல்"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 #, fuzzy
 msgid "Headers Visible"
 msgstr "தலைப்புகளை அமுக்க முடியும்"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "பத்திகளின் தலைப்பு பொத்தான்களை காண்பி"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "தலைப்புகளை அமுக்க முடியும்"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "Column headers respond to click events"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "Expander Column"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "Set the column for the expander column"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "Rules Hint"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Set a hint to the theme engine to draw rows in alternating colors"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "தேடல் இயலுமைப்படுத்து"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr "View allows user to search through columns interactively"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "தேடுதல் பத்தி"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "Model column to search through when searching through code"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "மாற்றமுடியாத உயரம்"
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "வண்ணத் தேரிவு ஒளிப் புகாமை அமைதைதலுக்கு அநுமதி கொடுக்கவேண்டுமா"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 #, fuzzy
 msgid "Hover Expand"
 msgstr "விரிக்கவும்"
 
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "நெடு-பிரிப்பியின் அகலம்"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 #, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertical space between cells"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "Horizontal Separator Width"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 #, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontal space between cells"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 msgid "Allow drawing of alternating color rows"
 msgstr ""
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 #, fuzzy
 msgid "Indent Expanders"
 msgstr "Is Expander"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 msgid "Make the expanders indented"
 msgstr ""
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr ""
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr ""
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr ""
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr ""
 

@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2006-01-15 17:09+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -2036,11 +2036,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "Een widget dat weergegeven wordt in plaats van het gebruikelijke uiklap-label"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "Uitklapper-grootte"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 msgid "Size of the expander arrow"
 msgstr "Grootte van de uitklappijl"
 
@@ -2445,12 +2445,12 @@ msgstr ""
 "Hoe de tekst en pictogram van elk item ten opzichte van elkaar zijn geplaatst"
 
 # herschikbaar/Volgorde te veranderen/wijzigbare volgorde
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Herschikbaar"
 
 # beeld is herschikbaar
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "Of de items in het beeld van volgorde te veranderen zijn"
 
@@ -3498,11 +3498,11 @@ msgstr ""
 "Geef een tweede voorwaardse pijlknop weer aan de overstaande kant van de "
 "schuifbalk"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "Verticale aanpassing"
 
@@ -4555,145 +4555,145 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Het model om te sorteren voor de TreeModelSort"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "Het model van de TreeView"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "Verticale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Headers Visible"
 msgstr "Koppen zichtbaar"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "Kolomkop-knoppen tonen"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "Koppen klikbaar"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "Of kolomkoppen op een muisklik reageren"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "Uitklapper kolom"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "Zet de kolom voor de uitklapper-kolom"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "Regels verduidelijken"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Geef het thema opdracht om rijen alternerend te kleuren"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "Zoeken gebruiken"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr "Weergave biedt mogelijkheid kolommen interactief te doorzoeken"
 
 # kolom zoeken?
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "Zoek kolom"
 
 # kolom modelleren?
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "Modelkolom om te doorzoeken als er computercode doorzocht wordt"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Fixed Height Mode"
 msgstr "Vaste hoogte modus"
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Versnelt GtkTreeView door aan te nemen dat alle rijen dezelfde hoogte hebben"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Hover Selection"
 msgstr "Zwevend selecteren"
 
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 msgid "Whether the selection should follow the pointer"
 msgstr "Of de selectie de muisaanwijzer volgt"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid "Hover Expand"
 msgstr "Al zwevend uitklappen"
 
 # engels taalfout: collaped
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Of rijen worden uitgeklapt/ingeklapt wanneer de muisaanwijzer erover beweegt"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "Breedte verticale scheiding"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Verticale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "Breedte horizontale scheiding"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr "Regels toestaan"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 msgid "Allow drawing of alternating color rows"
 msgstr "Alternerende rijkleuren mogelijk maken"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Indent Expanders"
 msgstr "Uitklappers inspringen"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 msgid "Make the expanders indented"
 msgstr "De uitklappers laten inspringen"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr "Even rijkleur"
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr "De kleur van de even rijen"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr "Oneven rijkleur"
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr "De kleur van de oneven rijen"
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2004-03-24 05:39+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -1996,11 +1996,11 @@ msgstr "Element oznake"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Element koji se prikazuje umjesto uobičajene oznake graničnika"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "Veličina graničnika"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 msgid "Size of the expander arrow"
 msgstr "Veličina strelice graničnika"
 
@@ -2404,11 +2404,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Promjenljiv poredak"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "Pogled omogućava izmjenu redosljeda"
 
@@ -3448,11 +3448,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Prikaži drugu strelicu unaprijed na suprotnoj strani klizača"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna prilagodba"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "Uspravna popravka"
 
@@ -4495,147 +4495,147 @@ msgstr "TreeModelSort model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Način na koji TreeModelSort uređuje"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "Model TreeView-a"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "Model za razgranati pregled"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodoravna prilagodba za element"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "Uspravna popravka za element"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 #, fuzzy
 msgid "Headers Visible"
 msgstr "Zaglavlja se mogu kliknuti"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "Prikaži gumbe od zaglavlja stupaca"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "Zaglavlja se mogu kliknuti"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "Zaglavlja stupaca odgovaraju na pritiske miša"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "Stupac graničnika"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "Postavite stupac u kojoj se vrši grananje"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "Savjet za pravila"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Postavite savjet za mehanizam teme radi iscrtavanja redova u izmjeničnim "
 "bojama"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "Omogući pretragu"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr "Pregled dozvoljava korisniku interaktivno traženje kroz stupce"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "Stupac za pretragu"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "Kolona kroz koju se pretražuje kada se pretražuje pomoću koda"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Fixed Height Mode"
 msgstr "Metoda nepromjenjive visine"
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Ubrzava GtkTreeView pretpostavljajući da svi redovi imaju istu visinu"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 #, fuzzy
 msgid "Hover Selection"
 msgstr "Odabir boje"
 
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "Može li izbornik boje dozvoliti postavljanje prozirnosti"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 #, fuzzy
 msgid "Hover Expand"
 msgstr "Proširi"
 
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Može li prozor biti ukrašen od strane upravitelja prozora"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "Širina uspravnih razdjelnika"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Okomiti razmak između polja. Mora biti paran broj"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "Širina vodoravnih razdjelnika"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Vodoravni razmak između ćelija. Mora biti parni broj"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr "Dopusti vodilice"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 msgid "Allow drawing of alternating color rows"
 msgstr "Dozvoli iscrtavanje redova u izmjeničnim bojama"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Indent Expanders"
 msgstr "Uvlačenje proširenja"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 msgid "Make the expanders indented"
 msgstr "Postaviti da grananje bude uvučeno"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr "Boja parnog reda"
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr "Boja za parne redove"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr "Boja neparnog reda"
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr "Boja za neparne redove"
 

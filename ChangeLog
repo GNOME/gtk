@@ -1,5 +1,7 @@
 2006-03-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* ==== Released 2.8.15 ===
+
 	* NEWS: Updates
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_iter_has_child):

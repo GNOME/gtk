@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -2028,11 +2028,11 @@ msgstr "Ilebhile esisixhobo"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Isixhobo emasibonakaliswe endaweni yelebhile eqhelekileyo yesandiso"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "Ubungakanani Besandisi"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 msgid "Size of the expander arrow"
 msgstr "Ubungakanani besalathisi sesandisi"
 
@@ -2447,11 +2447,11 @@ msgstr ""
 "Indlela omiswe ngayo umbhalo kunye nomfanekiso ongumqondiso wento nganye "
 "ekhethwayo ngokunxulumene nenye"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Inokuphindwa i-odolwe"
 
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "Imbonakalo inokuphinda i-odolwe"
 
@@ -3517,11 +3517,11 @@ msgstr ""
 "Bonisa iqhosha lesalathisi esijonge ngaphambili esikudidi lwesibinikwelinye "
 "icala lomgca wokwehlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "Uhlenga-hlengiso Oluthe Tyaba"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "Uhlenga-hlengiso Oluthe Nkqo"
 
@@ -4609,149 +4609,149 @@ msgstr "Imodeli eyi-TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Imodeli ye-TreeModelSort yokuhlela"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "Imodeli Ye-TreeView"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "Imodeli yembonakalo ebumthi"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "Uhlenga-hlengiso Oluthe Tyaba lwesixhobo"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "Uhlenga-hlengiso Oluthe Nkqo lwesixhobo"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 #, fuzzy
 msgid "Headers Visible"
 msgstr "Okubhalwe Emantla Ephepha Kuyacofeka"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "Bonisa amaqhosha okubhalwe emantla ephepha kwikholam"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "Okubhalwe Emantla Ephepha Kuyacofeka"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "Okubhalwe emantla ephepha kwiikholam kuyaluva ucofeko"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "Ikholam Yokwandisa"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "Ukumisela ikholam njengekholam eyandisekayo"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "Icebiso Ngemithetho"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Milisela icebiso kwinjini yomxholo ukuzoba izalathisi ngemibala "
 "etshintshiselanayo"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "Yenza uKhangela asebenze"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Imbonakalo yenza ukuba umsebenzisi akwazi ukukhetha kwiikholam "
 "ngokusebenzisanayo"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "Ikholam Yokukhetha"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "Ikholam eyimodeli ekukhethwa kuyo xa kukhangelwa kwikhodi"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Fixed Height Mode"
 msgstr "Imo Yomphakamo Esisigxina"
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Ikhawuleziza imbonakalo ye-GtkTreeView ngokuqikelela ukuba yonke imigca "
 "inomphakamo ofanayo"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 msgid "Hover Selection"
 msgstr "Ukukhetha I-hover"
 
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 msgid "Whether the selection should follow the pointer"
 msgstr "Nokuba ngaba okukhethiweyo kumele ukulandela isikhombisi na"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 msgid "Hover Expand"
 msgstr "Ukwandiswa Kwe-Hover"
 
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Nokuba ngaba imigca inokwandiswa/ifinyezwe xa isikhombisi sidlula phezu kwayo"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "Ububanzi Besahluli Ngokuthe Nkqo"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 msgid "Vertical space between cells.  Must be an even number"
 msgstr ""
 "Isithuba esithe nkqo esiphakathi kwee-cell. Masibe linani elingunombini"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "Ububanzi Besahluli Ngokuthe Tyaba"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Isithuba esithe tyaba phakathi kwee-cell. Mayibe linani elingunombini"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr "Vumela Imithetho"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 msgid "Allow drawing of alternating color rows"
 msgstr "Vumela ukuzotywa kwemigca enemibala etshiselanayo"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Indent Expanders"
 msgstr "Qalisa Izandiso Nganeno"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 msgid "Make the expanders indented"
 msgstr "Yenza ukuba izandisi ziqale nganeno"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr "Umbala Wemigca Engoonombini"
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr "Umbala omawusetyenziswe kwimigca engoonombini"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr "Umbala wemigca emnqakathi"
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr "Umbala omawusetyenziswe kwimigca emnqakathi"
 

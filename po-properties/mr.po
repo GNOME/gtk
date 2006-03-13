@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 11:19-0500\n"
+"POT-Creation-Date: 2006-03-13 11:01-0500\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -2396,12 +2396,12 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "सामान्य फ्रेम लेबलच्या  स्थानावर  एक विडगेट  प्रदर्शित करा."
 
 # gtk/gtktreeview.c:600
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:717
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:718
 msgid "Expander Size"
 msgstr "विस्तारकाचा आकार"
 
 # gtk/gtktreeview.c:601
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:718
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:719
 #, fuzzy
 msgid "Size of the expander arrow"
 msgstr "विस्तारक बाणाचा आकार"
@@ -2901,12 +2901,12 @@ msgid ""
 msgstr ""
 
 # gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:619 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:620 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "पुनः सूचना करण्यासाठी योग्य"
 
 # gtk/gtktreeview.c:563
-#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:620
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:621
 msgid "View is reorderable"
 msgstr "हे दृश्य पुनः पाहण्यासाठी योग्य"
 
@@ -4148,12 +4148,12 @@ msgid ""
 msgstr "स्क्रोलबारच्या विरुध्द टोकाकडील एक पायरी पुढे जाणारे बाणदर्शक बटण दाखवा"
 
 # gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:579
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:580
 msgid "Horizontal Adjustment"
 msgstr "क्षितिजपातळीवरील जुळणी"
 
 # gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:587
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:588
 msgid "Vertical Adjustment"
 msgstr "उभ्या दिशेने जुळणी"
 
@@ -5388,180 +5388,180 @@ msgid "The model for the TreeModelSort to sort"
 msgstr "माहिती क्रमबध्द करण्यासाठी ट्रीमॉडेलसॉर्टचे स्वरुप"
 
 # gtk/gtktreeview.c:514
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "TreeView Model"
 msgstr "ट्रीमॉडेलच्या(बहुस्तरीय) स्वरुपात पहा"
 
 # gtk/gtktreeview.c:515
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "The model for the tree view"
 msgstr "ट्रीमॉडेलचे (बहुस्तरीय) स्वरुप"
 
 # gtk/gtktreeview.c:523
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:581
 msgid "Horizontal Adjustment for the widget"
 msgstr "विडगेटकरीता क्षिितजपातळीवरील जुळणी(समायोजन)"
 
 # gtk/gtktreeview.c:531
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:589
 msgid "Vertical Adjustment for the widget"
 msgstr "विडगेटकरीता वरच्यादिशेकडील जुळणी(समायोजन)"
 
 # gtk/gtktreeview.c:546
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 #, fuzzy
 msgid "Headers Visible"
 msgstr "शीर्षक क्लिक करण्यास योग्य"
 
 # gtk/gtktreeview.c:539
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:597
 msgid "Show the column header buttons"
 msgstr "स्तंभावरील शीर्षकांची बटणे दाखवा"
 
 # gtk/gtktreeview.c:546
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Headers Clickable"
 msgstr "शीर्षक क्लिक करण्यास योग्य"
 
 # gtk/gtktreeview.c:547
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Column headers respond to click events"
 msgstr "क्लिक होणाऱ्या घटनांना प्रतिसाद देणारी स्तंभ शिर्षके"
 
 # gtk/gtktreeview.c:554
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Expander Column"
 msgstr "स्तंभ विस्तारक"
 
 # gtk/gtktreeview.c:555
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Set the column for the expander column"
 msgstr "स्तंभ विस्ताराकरीता स्तंभाची रचना करा"
 
 # gtk/gtktreeview.c:570
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Rules Hint"
 msgstr "नियम"
 
 # gtk/gtktreeview.c:571
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "एक सोडून एक येतील अशा पर्यायी रंगामध्ये ओळी बनविण्यासाठी थीमइंजिनला कळतील अशा सूचना "
 "द्या"
 
 # gtk/gtktreeview.c:578
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Enable Search"
 msgstr "शोधकाम क्रियाशील करा"
 
 # gtk/gtktreeview.c:579
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:637
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "माहितीच्या अशा स्वरुपामुळे युजरला (कॉम्प्युटर वापरणाऱ्या व्यक्तीला) अनेक स्तंभातून सहजपणे हवे "
 "ते शोधकार्य करता येते"
 
 # gtk/gtktreeview.c:586
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:644
 msgid "Search Column"
 msgstr "स्तंभामधून शोधा"
 
 # gtk/gtktreeview.c:587
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:645
 msgid "Model column to search through when searching through code"
 msgstr "शोधकार्य करताना उपयुक्त ठरेल असा स्तंभ"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:665
 msgid "Fixed Height Mode"
 msgstr ""
 
-#: gtk/gtktreeview.c:665
+#: gtk/gtktreeview.c:666
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
 # gtk/gtkfontsel.c:1253
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:686
 #, fuzzy
 msgid "Hover Selection"
 msgstr "फोन्ट निवडणे"
 
 # gtk/gtkcolorsel.c:1705
-#: gtk/gtktreeview.c:686
+#: gtk/gtktreeview.c:687
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "रंगनिवडकाने अपारदर्शकाचे नियंत्रण करावे काय"
 
 # gtk/gtkpreview.c:129
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:706
 #, fuzzy
 msgid "Hover Expand"
 msgstr "विस्तार करा"
 
 # gtk/gtkwidget.c:466
-#: gtk/gtktreeview.c:706
+#: gtk/gtktreeview.c:707
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "हा विडगेट सर्वसाधारण विडगेट आहे का"
 
 # gtk/gtktreeview.c:609
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
 msgstr "उभ्या विभाजकाची रुंदी"
 
 # gtk/gtktreeview.c:610
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:728
 #, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "खणांमधील उभी जागा, ही सम संख्या असावी"
 
 # gtk/gtktreeview.c:618
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:736
 msgid "Horizontal Separator Width"
 msgstr "क्षितिजपातळीवरील विभाजकाची रुंदी"
 
 # gtk/gtktreeview.c:619
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:737
 #, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "खणांमधील आडवी जागा, ही सम संख्या असावी"
 
 # gtk/gtktreeview.c:627
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:745
 msgid "Allow Rules"
 msgstr "नियमांचे पालन करण्याची सूचना द्या"
 
 # gtk/gtktreeview.c:628
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:746
 #, fuzzy
 msgid "Allow drawing of alternating color rows"
 msgstr "एका नंतर एक येतील अशा रंगाची ओळ बनविण्यास अनुमती द्या"
 
 # gtk/gtktreeview.c:634
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:752
 msgid "Indent Expanders"
 msgstr "परिच्छेद जागेसाठी विस्तारक"
 
 # gtk/gtktreeview.c:635
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:753
 #, fuzzy
 msgid "Make the expanders indented"
 msgstr "परिच्छेद जागेसाठी विस्तारक बनवा"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:759
 msgid "Even Row Color"
 msgstr ""
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:760
 msgid "Color to use for even rows"
 msgstr ""
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Odd Row Color"
 msgstr ""
 
-#: gtk/gtktreeview.c:766
+#: gtk/gtktreeview.c:767
 msgid "Color to use for odd rows"
 msgstr ""
 
