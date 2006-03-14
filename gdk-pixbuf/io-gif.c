@@ -117,6 +117,7 @@ struct _GifContext
         unsigned int global_bit_pixel;
 	unsigned int global_color_resolution;
         unsigned int background_index;
+        gboolean stop_after_first_frame;
 
         gboolean frame_cmap_active;
         CMap frame_color_map;
@@ -1088,6 +1089,9 @@ gif_get_lzw (GifContext *context)
                  */
 		context->frame = NULL;
                 context->frame_cmap_active = FALSE;
+
+                if (context->stop_after_first_frame)
+                        context->state =  GIF_DONE;
 	}
 	
 	return v;
@@ -1415,7 +1419,7 @@ new_context (void)
 
         memset (context, 0, sizeof (GifContext));
         
-        context->animation = g_object_new (GDK_TYPE_PIXBUF_GIF_ANIM, NULL);        
+        context->animation = g_object_new (GDK_TYPE_PIXBUF_GIF_ANIM, NULL);
 	context->frame = NULL;
 	context->file = NULL;
 	context->state = GIF_START;
@@ -1430,6 +1434,7 @@ new_context (void)
 	context->gif89.disposal = -1;
         context->animation->loop = 1;
         context->in_loop_extension = FALSE;
+        context->stop_after_first_frame = FALSE;
 
 	return context;
 }
@@ -1454,7 +1459,8 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
         
 	context->file = file;
         context->error = error;
-        
+        context->stop_after_first_frame = TRUE;
+
 	if (gif_main_loop (context) == -1 || context->animation->frames == NULL) {
                 if (context->error && *(context->error) == NULL)
                         g_set_error (context->error,

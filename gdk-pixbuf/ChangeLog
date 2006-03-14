@@ -1,3 +1,9 @@
+2006-03-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-gif.c (gdk_pixbuf__gif_image_load): Add a shortcut
+	to stop the gif mainloop after the first frame, if that
+	is all we are interested in.  (#334538)
+
 2006-03-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-pnm.c: Support pnm files with maxval > 255.
