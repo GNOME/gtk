@@ -1,5 +1,15 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	More suggestions from Federico.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_create_folder):
+	remove check for filename_is_root(), since we never hit that code
+	and else mkdir will fail anyway,
+	(gtk_file_system_unix_create_folder): fixup parent folder refresh
+	code.
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystemunix.c (read_hidden_file), (fill_in_hidden),
 	(get_is_hidden_for_file): factor out g_file_get_contents() code
 	in read_hidden_file().  (Federico Mena Quintero).

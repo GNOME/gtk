@@ -974,12 +974,6 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
       return handle;
     }
 
-  if (filename_is_root (filename))
-    {
-      g_object_unref (handle);
-      return NULL; /* hmmm, but with no notification */
-    }
-
   g_object_ref (handle);
   queue_create_folder_callback (callback, handle, path, NULL, data);
 
@@ -992,51 +986,35 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
       if (folder_unix)
 	{
 	  GSList *paths;
-	  GtkFilePath *parent_path;
-	  GtkFileFolderUnix *folder;
+	  char *basename;
+	  struct stat_info_entry *entry;
 
-	  /* This is sort of a hack.  We re-get the folder, to ensure that the
-	   * newly-created directory gets read into the folder's info hash table.
-	   */
-
-	  parent_path = gtk_file_path_new_dup (parent);
-	  folder = g_hash_table_lookup (system_unix->folder_hash, parent_path);
-	  gtk_file_path_free (parent_path);
-
-	  if (folder)
+	  /* Make sure the new folder exists in the parent's folder */
+	  entry = g_new0 (struct stat_info_entry, 1);
+	  if (folder_unix->is_network_dir)
 	    {
-	      char *basename;
-	      struct stat_info_entry *entry;
-
-	      entry = g_new0 (struct stat_info_entry, 1);
-	      if (folder->is_network_dir)
-		{
-		  entry->statbuf.st_mode = S_IFDIR;
-		  entry->mime_type = g_strdup ("x-directory/normal");
-		}
-
-	      basename = g_path_get_basename (filename);
-	      g_hash_table_insert (folder->stat_info,
-				   basename,
-				   entry);
-
-	      if (folder->have_stat)
-	        {
-	          /* Cheating */
-		  if ((folder->types & STAT_NEEDED_MASK) != 0)
-	            cb_fill_in_stats (basename, entry, folder);
-
-		  if ((folder->types & GTK_FILE_INFO_MIME_TYPE) != 0)
-		    cb_fill_in_mime_type (basename, entry, folder);
-		}
+	      entry->statbuf.st_mode = S_IFDIR;
+	      entry->mime_type = g_strdup ("x-directory/normal");
 	    }
 
-	  if (folder)
+	  basename = g_path_get_basename (filename);
+	  g_hash_table_insert (folder_unix->stat_info,
+			       basename,
+			       entry);
+
+	  if (folder_unix->have_stat)
 	    {
-	      paths = g_slist_append (NULL, (GtkFilePath *) path);
-	      g_signal_emit_by_name (folder, "files-added", paths);
-	      g_slist_free (paths);
+	      /* Cheating */
+	      if ((folder_unix->types & STAT_NEEDED_MASK) != 0)
+		cb_fill_in_stats (basename, entry, folder_unix);
+
+	      if ((folder_unix->types & GTK_FILE_INFO_MIME_TYPE) != 0)
+		cb_fill_in_mime_type (basename, entry, folder_unix);
 	    }
+
+	  paths = g_slist_append (NULL, (GtkFilePath *) path);
+	  g_signal_emit_by_name (folder_unix, "files-added", paths);
+	  g_slist_free (paths);
 	}
 
       g_free (parent);
