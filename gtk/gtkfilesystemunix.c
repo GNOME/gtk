@@ -939,7 +939,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
 				    GtkFileSystemCreateFolderCallback  callback,
 				    gpointer                           data)
 {
-  GError *error;
+  GError *error = NULL;
   GtkFileSystemUnix *system_unix;
   GtkFileSystemHandle *handle;
   const char *filename;
@@ -2501,7 +2501,8 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
   *children = NULL;
 
   /* Get the list of basenames.  */
-  g_hash_table_foreach (folder_unix->stat_info, cb_list_children, children);
+  if (folder_unix->stat_info)
+    g_hash_table_foreach (folder_unix->stat_info, cb_list_children, children);
 
   /* Turn basenames into GFilePaths.  */
   for (l = *children; l; l = l->next)

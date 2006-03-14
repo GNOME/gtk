@@ -91,6 +91,10 @@ gtk_file_info_copy (GtkFileInfo *info)
     new_info->display_name = g_strdup (new_info->display_name);
   if (new_info->mime_type)
     new_info->mime_type = g_strdup (new_info->mime_type);
+  if (new_info->icon_name)
+    new_info->icon_name = g_strdup (new_info->icon_name);
+  if (new_info->display_key)
+    new_info->display_key = g_strdup (new_info->display_key);
 
   return new_info;
 }
