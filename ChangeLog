@@ -1,5 +1,12 @@
 2006-03-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testcellrenderertext.c: Add test cases for alignment.
+
+	* gtk/gtkcellrenderertext.c: Add an alignment property,
+	and fix some cases where ellipsize_set was being used to
+	mean "we're ellipsizing" even when ellipsize was set to NONE.  
+	(#318761, Ross Burton)
+
 	* gtk/gtkimcontextsimple.c: Make return and release work again
 	to commit a hex sequence. Additionally, make escape reset the
 	im context when in a hex sequence.  (#334423, Behdad Esfahbod)

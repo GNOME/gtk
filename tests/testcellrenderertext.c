@@ -23,9 +23,9 @@
 
 #include <gtk/gtk.h>
 
-#define COL_BACKGROUND 14
-#define COL_LINE_NUM   15
-#define NUM_COLS       16 /* change this when adding columns */
+#define COL_BACKGROUND 15
+#define COL_LINE_NUM   16
+#define NUM_COLS       17 /* change this when adding columns */
 
 struct cell_params {
   char *description;			/* 0 */
@@ -42,8 +42,9 @@ struct cell_params {
   PangoWrapMode wrap_mode;		/* 11 */
   gboolean single_paragraph_mode;	/* 12 */
   PangoEllipsizeMode ellipsize;		/* 13 */
-  /* COL_BACKGROUND	 */		/* 14 */
-  /* COL_LINE_NUM */			/* 15 */
+  PangoAlignment alignment;			/* 14 */
+  /* COL_BACKGROUND	 */		/* 15 */
+  /* COL_LINE_NUM */			/* 16 */
 };
 
 #define WO PANGO_WRAP_WORD
@@ -55,6 +56,9 @@ struct cell_params {
 #define MI PANGO_ELLIPSIZE_MIDDLE
 #define EN PANGO_ELLIPSIZE_END
 
+#define AL PANGO_ALIGN_LEFT
+#define AC PANGO_ALIGN_CENTER
+#define AR PANGO_ALIGN_RIGHT
 
 #define TESTL "LEFT JUSTIFIED This is really truly verily some very long text\n\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205"
 
@@ -73,29 +77,32 @@ static const struct cell_params cell_params[] = {
 
   /* Test alignment */
 
-  { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 1 */
-  { "0  0  .5 0  T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 2 */
-  { "0  0  1  0  T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 3 */
-  { "0  0  0  .5 T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 4 */
-  { "0  0  .5 .5 T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 5 */
-  { "0  0  1  .5 T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 6 */
-  { "0  0  0  1  T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 7 */
-  { "0  0  .5 1  T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 8 */
-  { "0  0  1  1  T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 9 */
+  { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 1 */
+  { "0  0  .5 0  T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 2 */
+  { "0  0  1  0  T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 3 */
+  { "0  0  0  .5 T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 4 */
+  { "0  0  .5 .5 T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 5 */
+  { "0  0  1  .5 T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 6 */
+  { "0  0  0  1  T  -1 -1 -1 -1 CH F  NO", TESTL,  0,  0, 0.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 7 */
+  { "0  0  .5 1  T  -1 -1 -1 -1 CH F  NO", TESTC,  0,  0, 0.5, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 8 */
+  { "0  0  1  1  T  -1 -1 -1 -1 CH F  NO", TESTR,  0,  0, 1.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 9 */
 
   /* Test padding */
 
-  { "10 10 0  0  T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 10 */
-  { "10 10 .5 0  T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 11 */
-  { "10 10 1  0  T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 12 */
-  { "10 10 0  .5 T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 13 */
-  { "10 10 .5 .5 T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 14 */
-  { "10 10 1  .5 T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 15 */
-  { "10 10 0  1  T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 16 */
-  { "10 10 .5 1  T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 17 */
-  { "10 10 1  1  T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO }, /* 18 */
+  { "10 10 0  0  T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 10 */
+  { "10 10 .5 0  T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 11 */
+  { "10 10 1  0  T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 0.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 12 */
+  { "10 10 0  .5 T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 13 */
+  { "10 10 .5 .5 T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 14 */
+  { "10 10 1  .5 T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 0.5, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 15 */
+  { "10 10 0  1  T  -1 -1 -1 -1 CH F  NO", TESTL, 10, 10, 0.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 16 */
+  { "10 10 .5 1  T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 17 */
+  { "10 10 1  1  T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 18 */
 
-
+  /* Test Pango alignment (not xalign) */
+  { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AL", TESTL,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AL }, /* 19 */
+  { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AC", TESTC,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AC }, /* 20 */
+  { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AR", TESTR,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AR }, /* 21 */
 };
 
 static GtkListStore *
@@ -119,8 +126,9 @@ create_list_store (void)
 				   PANGO_TYPE_WRAP_MODE,	/* 11 */
 				   G_TYPE_BOOLEAN,		/* 12 */
 				   PANGO_TYPE_ELLIPSIZE_MODE,	/* 13 */
-				   G_TYPE_STRING,		/* 14 */
-				   G_TYPE_STRING);		/* 15 */
+				   PANGO_TYPE_ALIGNMENT,	/* 14 */
+				   G_TYPE_STRING,		/* 15 */
+				   G_TYPE_STRING);		/* 16 */
 
   for (i = 0; i < G_N_ELEMENTS (cell_params); i++)
     {
@@ -148,8 +156,9 @@ create_list_store (void)
 			  11, p->wrap_mode,
 			  12, p->single_paragraph_mode,
 			  13, p->ellipsize,
-			  14, (i % 2 == 0) ? "gray50" : "gray80",
-			  15, buf,
+			  14, p->alignment,
+			  15, (i % 2 == 0) ? "gray50" : "gray80",
+			  16, buf,
 			  -1);
     }
 
@@ -215,7 +224,8 @@ create_tree (gboolean rtl)
 						     "wrap_mode", 11,
 						     "single_paragraph_mode", 12,
 						     "ellipsize", 13,
-						     "cell_background", 14,
+						     "alignment", 14,
+						     "cell_background", 15,
 						     NULL);
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);

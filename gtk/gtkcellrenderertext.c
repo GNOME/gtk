@@ -77,6 +77,7 @@ enum {
   PROP_SINGLE_PARAGRAPH_MODE,
   PROP_WIDTH_CHARS,
   PROP_WRAP_WIDTH,
+  PROP_ALIGN,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -138,6 +139,7 @@ struct _GtkCellRendererTextPrivate
   PangoLanguage *language;
   PangoEllipsizeMode ellipsize;
   PangoWrapMode wrap_mode;
+  PangoAlignment align;
   
   gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
@@ -194,6 +196,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
 
   priv->width_chars = -1;
   priv->wrap_width = -1;
+  priv->align = PANGO_ALIGN_LEFT;
 }
 
 static void
@@ -498,6 +501,21 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						     -1,
 						     GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererText:alignment:
+   *
+   * Specifies how to align the lines of text.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_ALIGN,
+                                   g_param_spec_enum ("alignment",
+						      P_("Alignment"),
+						      P_("How to align the lines"),
+						      PANGO_TYPE_ALIGNMENT,
+						      PANGO_ALIGN_LEFT,
+						      GTK_PARAM_READWRITE));
   
   /* Style props are set or not */
 
@@ -749,6 +767,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_int (value, priv->wrap_width);
       break;
       
+    case PROP_ALIGN:
+      g_value_set_enum (value, priv->align);
+      break;
+
     case PROP_BACKGROUND_SET:
       g_value_set_boolean (value, celltext->background_set);
       break;
@@ -1249,6 +1271,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       priv->width_chars = g_value_get_int (value);
       break;  
 
+    case PROP_ALIGN:
+      priv->align = g_value_get_enum (value);
+      break;
+
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
       break;
@@ -1446,6 +1472,8 @@ get_layout (GtkCellRendererText *celltext,
       pango_layout_set_wrap (layout, PANGO_WRAP_CHAR);
     }
 
+  pango_layout_set_alignment (layout, priv->align);
+
   pango_layout_set_attributes (layout, attr_list);
 
   pango_attr_list_unref (attr_list);
@@ -1550,7 +1578,7 @@ get_size (GtkCellRenderer *cell,
 	  else 
 	    *x_offset = cell->xalign * (cell_area->width - (rect.x + rect.width + (2 * cell->xpad)));
 
-	  if (priv->ellipsize_set || priv->wrap_width != -1)
+	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
 	}
       if (y_offset)
@@ -1644,7 +1672,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       cairo_destroy (cr);
     }
 
-  if (priv->ellipsize_set)
+  if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
     pango_layout_set_width (layout, 
 			    (cell_area->width - x_offset - 2 * cell->xpad) * PANGO_SCALE);
   else if (priv->wrap_width == -1)
