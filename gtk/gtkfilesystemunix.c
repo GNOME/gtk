@@ -111,6 +111,7 @@ struct _GtkFileFolderUnix
   GtkFileInfoType types;
   gchar *filename;
   GHashTable *stat_info;
+  guint load_folder_id;
   guint have_stat : 1;
   guint have_mime_type : 1;
   guint is_network_dir : 1;
@@ -782,6 +783,8 @@ load_folder (gpointer data)
   GtkFileFolderUnix *folder_unix = data;
   GSList *children;
 
+  GDK_THREADS_ENTER ();
+
   if ((folder_unix->types & STAT_NEEDED_MASK) != 0)
     fill_in_stats (folder_unix);
 
@@ -795,7 +798,11 @@ load_folder (gpointer data)
       gtk_file_paths_free (children);
     }
 
+  folder_unix->load_folder_id = 0;
+
   g_signal_emit_by_name (folder_unix, "finished-loading", 0);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -900,6 +907,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
       folder_unix->filename = filename_copy;
       folder_unix->types = types;
       folder_unix->stat_info = NULL;
+      folder_unix->load_folder_id = 0;
       folder_unix->have_mime_type = FALSE;
       folder_unix->have_stat = FALSE;
       folder_unix->have_hidden = FALSE;
@@ -928,7 +936,8 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_unix), NULL, data);
 
   /* Start loading the folder contents in an idle */
-  g_idle_add ((GSourceFunc) load_folder, folder_unix);
+  folder_unix->load_folder_id =
+    g_idle_add ((GSourceFunc) load_folder, folder_unix);
 
   return handle;
 }
@@ -2218,6 +2227,12 @@ static void
 gtk_file_folder_unix_finalize (GObject *object)
 {
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (object);
+
+  if (folder_unix->load_folder_id)
+    {
+      g_source_remove (folder_unix->load_folder_id);
+      folder_unix->load_folder_id = 0;
+    }
 
   g_hash_table_remove (folder_unix->system_unix->folder_hash, folder_unix->filename);
 

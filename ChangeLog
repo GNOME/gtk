@@ -1,5 +1,16 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystemunix.c (struct _GtkFileFolderUnix): add
+	load_folder_id field,
+	(load_folder): add thread enter/leave construct, set load_folder_id
+	to zero since we have the idle removed when we return,
+	(gtk_file_system_unix_get_folder): initialize load_folder_id to 0
+	and store the source id of the load_folder idle,
+	(gtk_file_folder_unix_finalize): remove the load_folder idle
+	if necessary.  (Federico Mena Quintero).
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder): return
 	NULL if there is no current folder path.
 
