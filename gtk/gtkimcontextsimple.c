@@ -1034,11 +1034,11 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
 
   if (context_simple->tentative_match || context_simple->in_hex_sequence)
     {
+      context_simple->in_hex_sequence = FALSE;  
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit_changed");
     }
-  context_simple->in_hex_sequence = FALSE;  
 
   g_signal_emit_by_name (context, "commit", &buf);
 }
@@ -1320,8 +1320,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int n_compose = 0;
   gboolean have_hex_mods;
   gboolean is_hex_start;
-  gboolean is_space;
+  gboolean is_hex_end;
   gboolean is_backspace;
+  gboolean is_escape;
   guint hex_keyval;
   int i;
 
@@ -1373,8 +1374,13 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else
     have_hex_mods = (event->state & (HEX_MOD_MASK)) == HEX_MOD_MASK;
   is_hex_start = event->keyval == GDK_U;
-  is_space = event->keyval == GDK_space || event->keyval == GDK_KP_Space;
+  is_hex_end = (event->keyval == GDK_space || 
+		event->keyval == GDK_KP_Space ||
+		event->keyval == GDK_Return || 
+		event->keyval == GDK_ISO_Enter ||
+		event->keyval == GDK_KP_Enter);
   is_backspace = event->keyval == GDK_BackSpace;
+  is_escape = event->keyval == GDK_Escape;
   hex_keyval = canonical_hex_keyval (event);
 
   /* If we are already in a non-hex sequence, or
@@ -1385,14 +1391,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (n_compose > 0 && !context_simple->in_hex_sequence) || 
       (n_compose == 0 && !context_simple->in_hex_sequence && !is_hex_start) ||
       (context_simple->in_hex_sequence && !hex_keyval && 
-       !is_hex_start && !is_space && !is_backspace))
+       !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
       if (event->state & (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK) ||
 	  (context_simple->in_hex_sequence && context_simple->modifiers_dropped &&
 	   (event->keyval == GDK_Return || 
 	    event->keyval == GDK_ISO_Enter ||
 	    event->keyval == GDK_KP_Enter)))
-	return FALSE;
+	{
+	  return FALSE;
+	}
     }
   
   /* Handle backspace */
@@ -1414,6 +1422,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
 
+  /* Check for hex sequence restart */
   if (context_simple->in_hex_sequence && have_hex_mods && is_hex_start)
     {
       if (context_simple->tentative_match &&
@@ -1433,7 +1442,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  context_simple->compose_buffer[0] = 0;
 	}
     }
-
+  
   /* Check for hex sequence start */
   if (!context_simple->in_hex_sequence && have_hex_mods && is_hex_start)
     {
@@ -1452,7 +1461,13 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       if (hex_keyval)
 	context_simple->compose_buffer[n_compose++] = hex_keyval;
-      else if (!is_space)
+      else if (is_escape)
+	{
+	  gtk_im_context_simple_reset (context);
+	  
+	  return TRUE;
+	}
+      else if (!is_hex_end)
 	{
 	  /* non-hex character in hex sequence */
 	  gdk_display_beep (gdk_drawable_get_display (event->window));
@@ -1470,8 +1485,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       /* If the modifiers are still held down, consider the sequence again */
       if (have_hex_mods)
         {
-          /* space ends the sequence, and we eat the space */
-          if (n_compose > 0 && is_space)
+          /* space or return ends the sequence, and we eat the key */
+          if (n_compose > 0 && is_hex_end)
             {
 	      if (context_simple->tentative_match &&
 		  g_unichar_validate (context_simple->tentative_match))
@@ -1524,11 +1539,11 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   if (context_simple->tentative_match || context_simple->in_hex_sequence)
     {
+      context_simple->in_hex_sequence = FALSE;
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit_changed");
     }
-  context_simple->in_hex_sequence = FALSE;
 }
 
 static void     

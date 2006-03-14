@@ -1,3 +1,9 @@
+2006-03-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimcontextsimple.c: Make return and release work again
+	to commit a hex sequence. Additionally, make escape reset the
+	im context when in a hex sequence.  (#334423, Behdad Esfahbod)
+
 2006-03-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Make actions work with named icons.  (#323484, Jorn Baayen)
