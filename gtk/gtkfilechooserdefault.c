@@ -5116,11 +5116,12 @@ gtk_file_chooser_default_map (GtkWidget *widget)
       break;
 
     case RELOAD_WAS_UNMAPPED:
-      /* Just reload the current folder */
-      g_assert (impl->current_folder != NULL);
-
-      pending_select_paths_store_selection (impl);
-      change_folder_and_display_error (impl, impl->current_folder);
+      /* Just reload the current folder; else continue the pending load. */
+      if (impl->current_folder)
+        {
+          pending_select_paths_store_selection (impl);
+          change_folder_and_display_error (impl, impl->current_folder);
+	}
       break;
 
     default:

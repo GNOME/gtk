@@ -1,5 +1,14 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder): return
+	NULL if there is no current folder path.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_map): we
+	reload the current folder if there is one, else we continue the
+	still pending load.
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	Merge from HEAD to get rid of some warnings (simplifies debugging).
 
 	Thu Feb 23 13:28:21 2006  Tim Janik  <timj@imendio.com>
