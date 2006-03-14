@@ -129,7 +129,8 @@ struct stat_info_entry {
 
 static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_MODIFICATION_TIME |
-						 GTK_FILE_INFO_SIZE);
+						 GTK_FILE_INFO_SIZE |
+						 GTK_FILE_INFO_ICON);
 
 static GObjectClass *system_parent_class;
 static GObjectClass *folder_parent_class;
@@ -1227,7 +1228,7 @@ get_cached_icon (GtkWidget   *widget,
 }
 
 /* Renders a fallback icon from the stock system */
-static gchar *
+static const gchar *
 get_fallback_icon_name (IconType icon_type)
 {
   const char *stock_name;
@@ -1251,8 +1252,7 @@ get_fallback_icon_name (IconType icon_type)
       break;
     }
 
-  return g_strdup (stock_name);
-
+  return stock_name;
 }
 
 static GdkPixbuf *
@@ -1260,7 +1260,7 @@ get_fallback_icon (GtkWidget *widget,
 		   IconType   icon_type,
 		   GError   **error)
 {
-  char *name;
+  const char *name;
   GdkPixbuf *pixbuf;
 
   name = get_fallback_icon_name (icon_type);
@@ -1272,8 +1272,6 @@ get_fallback_icon (GtkWidget *widget,
 		 GTK_FILE_SYSTEM_ERROR_FAILED,
 		 _("Could not get a stock icon for %s"),
 		 name);
-
-  g_free (name);
 
   return pixbuf;
 }
@@ -1634,23 +1632,23 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
 /* Returns the name of the icon to be used for a path which is known to be a
  * directory.  This can vary for Home, Desktop, etc.
  */
-static char *
+static const char *
 get_icon_name_for_directory (const char *path)
 {
   static char *desktop_path = NULL;
 
   if (!g_get_home_dir ())
-    return g_strdup ("gnome-fs-directory");
+    return "gnome-fs-directory";
 
   if (!desktop_path)
       desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
 
   if (strcmp (g_get_home_dir (), path) == 0)
-    return g_strdup ("gnome-fs-home");
+    return "gnome-fs-home";
   else if (strcmp (desktop_path, path) == 0)
-    return g_strdup ("gnome-fs-desktop");
+    return "gnome-fs-desktop";
   else
-    return g_strdup ("gnome-fs-directory");
+    return "gnome-fs-directory";
 
   return NULL;
 }
@@ -1660,6 +1658,7 @@ get_icon_name_for_directory (const char *path)
  */
 static IconType
 get_icon_type_from_path (GtkFileFolderUnix *folder_unix,
+			 struct stat       *statbuf,
 			 const char        *filename,
 			 const char       **mime_type)
 {
@@ -1695,6 +1694,9 @@ get_icon_type_from_path (GtkFileFolderUnix *folder_unix,
 	}
     }
 
+  if (statbuf)
+    return get_icon_type_from_stat (statbuf);
+
   icon_type = get_icon_type (filename, NULL);
   if (icon_type == ICON_REGULAR)
     *mime_type = xdg_mime_get_mime_type_for_file (filename, NULL);
@@ -1703,7 +1705,7 @@ get_icon_type_from_path (GtkFileFolderUnix *folder_unix,
 }
 
 /* Renders an icon for a non-ICON_REGULAR file */
-static gchar *
+static const gchar *
 get_special_icon_name (IconType           icon_type,
 		       const gchar       *filename)
 {
@@ -1739,7 +1741,7 @@ get_special_icon_name (IconType           icon_type,
       return NULL;
     }
 
-  return g_strdup (name);
+  return name;
 }
 
 static gchar *
@@ -2351,10 +2353,11 @@ create_file_info (GtkFileFolderUnix *folder_unix,
   if (types & GTK_FILE_INFO_ICON)
     {
       IconType icon_type;
-      char *icon_name;
-      const char *mime_type;
+      gboolean free_icon_name = FALSE;
+      const char *icon_name;
+      const char *icon_mime_type;
 
-      icon_type = get_icon_type_from_path (folder_unix, filename, &mime_type);
+      icon_type = get_icon_type_from_path (folder_unix, statbuf, filename, &icon_mime_type);
 
       switch (icon_type)
         {
@@ -2363,7 +2366,11 @@ create_file_info (GtkFileFolderUnix *folder_unix,
 	    break;
 
           case ICON_REGULAR:
-	    icon_name = get_icon_name_for_mime_type (mime_type);
+	    free_icon_name = TRUE;
+	    if (icon_mime_type)
+	      icon_name = get_icon_name_for_mime_type (icon_mime_type);
+	    else
+	      icon_name = get_icon_name_for_mime_type (mime_type);
             break;
 
           default:
@@ -2372,7 +2379,9 @@ create_file_info (GtkFileFolderUnix *folder_unix,
         }
 
       gtk_file_info_set_icon_name (info, icon_name);
-      g_free (icon_name);
+
+      if (free_icon_name)
+	g_free ((char *) icon_name);
     }
 
   return info;

@@ -1,5 +1,18 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	Icon name code suggestions by Federico Mena Quintero.
+
+	* gtk/gtkfilesystemunix.c: add GTK_FILE_INFO_ICON to
+	STAT_NEEDED_MASK,
+	(get_fallback_icon_name), (get_fallback_icon),
+	(get_icon_name_for_directory), (get_special_icon_name): get rid
+	of strdups,
+	(get_icon_type_from_path): add a statbuf argument and use the
+	statbuf when folder_unix is NULL,
+	(create_file_info): adapt to work with above changes.
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_info): path
 	is NULL is an error here (gtk_file_system_get_info() already guards
 	path = NULL),
