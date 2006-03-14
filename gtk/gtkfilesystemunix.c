@@ -2659,23 +2659,40 @@ fill_in_mime_type (GtkFileFolderUnix *folder_unix)
   folder_unix->have_mime_type = TRUE;
 }
 
+static gchar **
+read_hidden_file (const char *dirname)
+{
+  gchar **lines = NULL;
+  gchar *contents;
+  gchar *hidden_file;
+
+  hidden_file = g_build_filename (dirname, HIDDEN_FILENAME, NULL);
+
+  if (g_file_get_contents (hidden_file, &contents, NULL, NULL))
+    {
+      lines = g_strsplit (contents, "\n", -1);
+      g_free (contents);
+    }
+
+  g_free (hidden_file);
+
+  return lines;
+}
+
 static void
 fill_in_hidden (GtkFileFolderUnix *folder_unix)
 {
-  gchar *hidden_file;
-  gchar *contents;
+  gchar **lines;
   
   if (folder_unix->have_hidden)
     return;
 
-  hidden_file = g_build_filename (folder_unix->filename, HIDDEN_FILENAME, NULL);
+  lines = read_hidden_file (folder_unix->filename);
 
-  if (g_file_get_contents (hidden_file, &contents, NULL, NULL))
+  if (lines)
     {
-      gchar **lines; 
       int i;
       
-      lines = g_strsplit (contents, "\n", -1);
       for (i = 0; lines[i]; i++)
 	{
 	  if (lines[i][0])
@@ -2689,10 +2706,8 @@ fill_in_hidden (GtkFileFolderUnix *folder_unix)
 	}
       
       g_strfreev (lines);
-      g_free (contents);
     }
 
-  g_free (hidden_file);
   folder_unix->have_hidden = TRUE;
 }
 
@@ -2720,20 +2735,17 @@ get_is_hidden_for_file (const char *filename,
 			const char *basename)
 {
   gchar *dirname;
-  gchar *hidden_file;
-  gchar *contents;
+  gchar **lines;
   gboolean hidden = FALSE;
 
   dirname = g_path_get_dirname (filename);
-  hidden_file = g_build_filename (dirname, HIDDEN_FILENAME, NULL);
+  lines = read_hidden_file (dirname);
   g_free (dirname);
 
-  if (g_file_get_contents (hidden_file, &contents, NULL, NULL))
+  if (lines)
     {
-      gchar **lines; 
       int i;
       
-      lines = g_strsplit (contents, "\n", -1);
       for (i = 0; lines[i]; i++)
 	{
 	  if (lines[i][0] && strcmp (lines[i], basename) == 0)
@@ -2744,10 +2756,7 @@ get_is_hidden_for_file (const char *filename,
 	}
       
       g_strfreev (lines);
-      g_free (contents);
     }
-
-  g_free (hidden_file);
 
   return hidden;
 }

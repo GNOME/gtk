@@ -1,5 +1,11 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystemunix.c (read_hidden_file), (fill_in_hidden),
+	(get_is_hidden_for_file): factor out g_file_get_contents() code
+	in read_hidden_file().  (Federico Mena Quintero).
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	Icon name code suggestions by Federico Mena Quintero.
 
 	* gtk/gtkfilesystemunix.c: add GTK_FILE_INFO_ICON to
