@@ -5,17 +5,17 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Gtk+ 2.8\n"
+"Project-Id-Version: Gtk+ 2.8.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-13 11:01-0500\n"
-"PO-Revision-Date: 2006-01-01 15:08+1030\n"
+"PO-Revision-Date: 2006-03-14 15:50+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.5.1b\n"
+"X-Generator: LocFactoryEditor 1.6b36\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:856
 #: gdk-pixbuf/gdk-pixbuf-io.c:1107 tests/testfilechooser.c:218
@@ -2277,7 +2277,7 @@ msgstr "Đĩa _cứng"
 
 #: gtk/gtkstock.c:354
 msgid "_Help"
-msgstr "T_rợ giúp"
+msgstr "Trợ g_iúp"
 
 #: gtk/gtkstock.c:355
 msgid "_Home"
@@ -2615,6 +2615,3 @@ msgstr "Phương pháp gõ X (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
-
-#~ msgid "Home"
-#~ msgstr "Thư mục cá nhân"
