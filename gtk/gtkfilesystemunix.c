@@ -736,28 +736,12 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
   handle = create_handle (file_system);
 
-  /* Get info for "/" */
-  if (!path)
-    {
-      info = file_info_for_root_with_error ("/", &error);
-
-      g_object_ref (handle);
-      queue_get_info_callback (callback, handle, info, error, data);
-
-      return handle;
-    }
-
-  /* Get info for normal files */
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
-  basename = g_path_get_basename (filename);
-
   if (!stat_with_error (filename, &statbuf, &error))
     {
-      g_free (basename);
-
       g_object_ref (handle);
       queue_get_info_callback (callback, handle, NULL, error, data);
       return handle;
@@ -767,6 +751,8 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
     mime_type = xdg_mime_get_mime_type_for_file (filename, &statbuf);
   else
     mime_type = NULL;
+
+  basename = g_path_get_basename (filename);
 
   info = create_file_info (NULL, filename, basename, types, &statbuf,
                            mime_type);
