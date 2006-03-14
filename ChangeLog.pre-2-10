@@ -1,5 +1,15 @@
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
+	Merge from HEAD to get rid of some warnings (simplifies debugging).
+
+	Thu Feb 23 13:28:21 2006  Tim Janik  <timj@imendio.com>
+
+	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale): remove unconditional
+	warnings about missing X locale support. Gdk properly handles this
+	situation anyway.
+
+2006-03-14  Kristian Rietveld  <kris@imendio.com>
+
 	Couple of fixes from Markku Vire.
 
 	* gtk/gtkfilesystem.c (gtk_file_info_copy): also strdup icon_name

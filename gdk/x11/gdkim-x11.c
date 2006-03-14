@@ -62,11 +62,8 @@ _gdk_x11_initialize_locale (void)
   g_free (last_locale);
   last_locale = g_strdup (current_locale);
 
-  if (!XSupportsLocale ())
-    g_warning ("locale not supported by Xlib");
-  
-  if (!XSetLocaleModifiers (""))
-    g_warning ("cannot set locale modifiers");
+  if (XSupportsLocale ())
+    XSetLocaleModifiers ("");
 
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
     {
