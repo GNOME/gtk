@@ -13,6 +13,9 @@
 	shading to the GC colors, causing a mismatch with the Win32 native
 	colors. Problem found by (and suggested solution by) "Cosmic Integer"
 
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Make expander-size
+	a bit closer to Microsoft's values (bug 325699, Brad Taylor)	
+	
 2006-03-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

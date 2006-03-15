@@ -30,6 +30,8 @@ style "msw-default"
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander-size = 12
 
+  GtkExpander::expander-size = 12
+
   GtkScrolledWindow::scrollbar_spacing = 1
 
   engine "wimp" 
