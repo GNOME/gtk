@@ -1,3 +1,10 @@
+2006-03-15  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Override style->realize/
+	style->unrealize, so that GTK+ doesn't automatically attempt to apply
+	shading to the GC colors, causing a mismatch with the Win32 native
+	colors. Problem found by (and suggested solution by) "Cosmic Integer"
+
 2006-03-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

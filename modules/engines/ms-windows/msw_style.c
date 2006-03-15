@@ -39,8 +39,8 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtk.h"
-
 /* #include <gdk/gdkwin32.h> */
+
 #include "gdk/win32/gdkwin32.h"
 
 
@@ -2549,6 +2549,126 @@ msw_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
     parent_class->init_from_rc (style, rc_style);
 }
 
+static GdkPixmap *
+load_bg_image (GdkColormap *colormap,
+	       GdkColor    *bg_color,
+	       const gchar *filename)
+{
+  if (strcmp (filename, "<parent>") == 0)
+    return (GdkPixmap*) GDK_PARENT_RELATIVE;
+  else
+    {
+      return gdk_pixmap_colormap_create_from_xpm (NULL, colormap, NULL,
+						  bg_color,
+						  filename);
+    }
+}
+
+static void
+msw_style_realize (GtkStyle * style)
+{
+  GdkGCValues gc_values;
+  GdkGCValuesMask gc_values_mask;
+
+  gint i;
+
+  for (i = 0; i < 5; i++)
+    {
+      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
+      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
+      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
+
+      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
+      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
+      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
+    }
+
+  style->black.red = 0x0000;
+  style->black.green = 0x0000;
+  style->black.blue = 0x0000;
+  gdk_colormap_alloc_color (style->colormap, &style->black, FALSE, TRUE);
+
+  style->white.red = 0xffff;
+  style->white.green = 0xffff;
+  style->white.blue = 0xffff;
+  gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
+
+  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_BACKGROUND;
+
+  gc_values.foreground = style->black;
+  gc_values.background = style->white;
+  style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+  gc_values.foreground = style->white;
+  gc_values.background = style->black;
+  style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+  gc_values_mask = GDK_GC_FOREGROUND;
+
+  for (i = 0; i < 5; i++)
+    {
+      if (style->rc_style && style->rc_style->bg_pixmap_name[i])
+	style->bg_pixmap[i] = load_bg_image (style->colormap,
+					     &style->bg[i],
+					     style->rc_style->bg_pixmap_name[i]);
+
+      if (!gdk_colormap_alloc_color (style->colormap, &style->fg[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->fg[i].red, style->fg[i].green, style->fg[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->bg[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->bg[i].red, style->bg[i].green, style->bg[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->light[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->light[i].red, style->light[i].green, style->light[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->dark[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->dark[i].red, style->dark[i].green, style->dark[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->mid[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->mid[i].red, style->mid[i].green, style->mid[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->text[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->text[i].red, style->text[i].green, style->text[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->base[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->base[i].red, style->base[i].green, style->base[i].blue);
+      if (!gdk_colormap_alloc_color (style->colormap, &style->text_aa[i], FALSE, TRUE))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->text_aa[i].red, style->text_aa[i].green, style->text_aa[i].blue);
+
+      gc_values.foreground = style->fg[i];
+      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->bg[i];
+      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->light[i];
+      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->dark[i];
+      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->mid[i];
+      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->text[i];
+      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->base[i];
+      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+
+      gc_values.foreground = style->text_aa[i];
+      style->text_aa_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+    }
+}
+
+static void
+msw_style_unrealize (GtkStyle * style)
+{
+	parent_class->unrealize (style);
+}
+
 static void
 msw_style_class_init (MswStyleClass * klass)
 {
@@ -2572,6 +2692,9 @@ msw_style_class_init (MswStyleClass * klass)
     style_class->draw_handle = draw_handle;
     style_class->draw_resize_grip = draw_resize_grip;
     style_class->draw_slider = draw_slider;
+
+    style_class->realize = msw_style_realize;
+    style_class->unrealize = msw_style_unrealize;
 }
 
 GType msw_type_style = 0;
