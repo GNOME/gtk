@@ -3700,14 +3700,14 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
     GtkTreeIter iter;
     GtkTreeModel *model = NULL;
     
+    gtk_combo_box_popdown (combo_box);
+    
     if (combo_box->priv->model)
       {
 	GtkTreeSelection *sel;
 
 	sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
 
-	gtk_combo_box_popdown (combo_box);
-    
 	if (gtk_tree_selection_get_selected (sel, &model, &iter))
 	  gtk_combo_box_set_active_iter (combo_box, &iter);
       }
