@@ -3577,10 +3577,10 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
   gtk_tree_model_get_iter (combo_box->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
+  gtk_combo_box_popdown (combo_box);
+
   if (tree_column_row_is_sensitive (combo_box, &iter))
     gtk_combo_box_set_active_iter (combo_box, &iter);
-
-  gtk_combo_box_popdown (combo_box);
 
   return TRUE;
 }
@@ -3685,11 +3685,11 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
       ((event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && 
        state == GDK_MOD1_MASK))
     {
+      gtk_combo_box_popdown (combo_box);
+      
       /* reset active item -- this is incredibly lame and ugly */
       if (gtk_combo_box_get_active_iter (combo_box, &iter))
 	gtk_combo_box_set_active_iter (combo_box, &iter);
-      
-      gtk_combo_box_popdown (combo_box);
       
       return TRUE;
     }
@@ -3702,13 +3702,15 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
     
     if (combo_box->priv->model)
       {
-	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
+	GtkTreeSelection *sel;
+
+	sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
+
+	gtk_combo_box_popdown (combo_box);
     
 	if (gtk_tree_selection_get_selected (sel, &model, &iter))
 	  gtk_combo_box_set_active_iter (combo_box, &iter);
       }
-
-    gtk_combo_box_popdown (combo_box);
     
     return TRUE;
   }
