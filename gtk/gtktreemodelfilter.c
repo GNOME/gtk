@@ -2067,7 +2067,7 @@ gtk_tree_model_filter_iter_has_child (GtkTreeModel *model,
   /* FIXME: we should prolly count the visible nodes here, just like in
    * _iter_n_children.
    */
-  if (elt->children && elt->children->array->len > 0)
+  if (elt->children && elt->children->array && elt->children->array->len > 0)
     return TRUE;
 
   return FALSE;
@@ -2104,7 +2104,7 @@ gtk_tree_model_filter_iter_n_children (GtkTreeModel *model,
                                        FILTER_LEVEL (iter->user_data),
                                        elt);
 
-  if (elt->children && elt->children->array->len)
+  if (elt->children && elt->children->array && elt->children->array->len)
     {
       int i = 0;
       int count = 0;
