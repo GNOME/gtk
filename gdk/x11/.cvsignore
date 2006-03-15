@@ -6,3 +6,4 @@ _libs
 .libs
 libgdk-x11.la
 gxid
+checksettings
