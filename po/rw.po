@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 11:01-0500\n"
+"POT-Creation-Date: 2006-03-15 10:14-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -221,80 +221,80 @@ msgstr "Kuri IDOSIYE"
 msgid "The BMP image format"
 msgstr "Ishusho Imiterere"
 
-#: gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:221
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:493 gdk-pixbuf/io-gif.c:1469 gdk-pixbuf/io-gif.c:1630
 #, fuzzy, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "IDOSIYE Ibuze Ibyatanzwe"
 
-#: gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:502
 #, fuzzy, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Ikosa in"
 
-#: gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:576
 #, fuzzy, c-format
 msgid "Stack overflow"
 msgstr "Byarenze urugero"
 
-#: gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:636
 #, fuzzy, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "Ishusho iyi Ishusho"
 
-#: gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:665
 #, fuzzy, c-format
 msgid "Bad code encountered"
 msgstr "ITEGEKONGENGA"
 
-#: gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:675
 #, fuzzy, c-format
 msgid "Circular table entry in GIF file"
 msgstr "imbonerahamwe# Icyinjijwe in IDOSIYE"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
-#: gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:863 gdk-pixbuf/io-gif.c:1456 gdk-pixbuf/io-gif.c:1503
+#: gdk-pixbuf/io-gif.c:1618
 #, fuzzy, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Ububiko Kuri Ibirimo IDOSIYE"
 
-#: gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:948
 #, fuzzy, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Ububiko Kuri a Ikadiri in IDOSIYE"
 
-#: gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1120
 #, fuzzy, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Ishusho ni igabanyangano"
 
-#: gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1170
 #, fuzzy, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Idosiye OYA Kugaragara Kuri a IDOSIYE"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 #, fuzzy, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Bya IDOSIYE Imiterere ni OYA"
 
-#: gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1291
 #, fuzzy, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "Ishusho Oya Na a Ikadiri Mo Imbere Oya"
 
-#: gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1525
 #, fuzzy, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "Ishusho Cyangwa"
 
-#: gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1677
 #, fuzzy
 msgid "The GIF image format"
 msgstr "Ishusho Imiterere"

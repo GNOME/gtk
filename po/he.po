@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 11:01-0500\n"
+"POT-Creation-Date: 2006-03-15 10:14-0500\n"
 "PO-Revision-Date: 2005-07-08 19:10+0300\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -218,80 +218,80 @@ msgstr "לא ניתן לכתוב לקובץ ה BMP"
 msgid "The BMP image format"
 msgstr "פורמט תמונת BMP"
 
-#: gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:221
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "שגיאה בקריאת GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:493 gdk-pixbuf/io-gif.c:1469 gdk-pixbuf/io-gif.c:1630
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "לקובץ ה GIF חסר מידע (ייתכן ונקטע בדרך כלשהי?)"
 
-#: gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:502
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "שגיאה פנימית בטוען ה GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:576
 #, c-format
 msgid "Stack overflow"
 msgstr "גלישת מחסנית"
 
-#: gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:636
 #, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "טוען תמונת ה GIF לא יכול להבין את התמונה הזו."
 
-#: gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:665
 #, c-format
 msgid "Bad code encountered"
 msgstr "התקלות בקוד גרוע"
 
-#: gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:675
 #, c-format
 msgid "Circular table entry in GIF file"
 msgstr "רישום טבלה מעגלי בקובץ ה GIF"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
-#: gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:863 gdk-pixbuf/io-gif.c:1456 gdk-pixbuf/io-gif.c:1503
+#: gdk-pixbuf/io-gif.c:1618
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "אין מספיק זכרון לטעינת קובץ GIF"
 
-#: gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:948
 #, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "אין מספיק זכרון להרכיב מסגרת נוספת בקובץ ה GIF"
 
-#: gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1120
 #, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "תמונת ה GIF פגומה (כיווץ LZW שגוי)"
 
-#: gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1170
 #, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "הקובץ לא נראה כקובץ GIF"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "גירסה %s של פורמט קובץ ה GIF אינה נתמכת"
 
-#: gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1291
 #, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1525
 #, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "תמונת ה GIF הייתה קטועה או לא מושלמת."
 
-#: gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1677
 msgid "The GIF image format"
 msgstr "פורמט קובץ GIF"
 

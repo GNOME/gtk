@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 11:01-0500\n"
+"POT-Creation-Date: 2006-03-15 10:14-0500\n"
 "PO-Revision-Date: 2006-03-01 18:23+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -231,71 +231,71 @@ msgstr "BMP-Datei konnte nicht geschrieben werden"
 msgid "The BMP image format"
 msgstr "Das BMP-Bildformat"
 
-#: gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:221
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Fehler beim Lesen von GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:493 gdk-pixbuf/io-gif.c:1469 gdk-pixbuf/io-gif.c:1630
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Daten in der GIF-Datei unvollständig (vielleicht wurden sie irgendwie "
 "verstümmelt?)"
 
-#: gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:502
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interner Fehler im GIF-Lader (%s)"
 
-#: gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:576
 #, c-format
 msgid "Stack overflow"
 msgstr "Stack-Überlauf"
 
-#: gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:636
 #, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "Der GIF-Bildlader konnte dieses Bild nicht verstehen."
 
-#: gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:665
 #, c-format
 msgid "Bad code encountered"
 msgstr "Fehlerhafte Bilddaten festgestellt"
 
-#: gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:675
 #, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Ringschluss in Tabelleneinträgen in GIF-Datei"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
-#: gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:863 gdk-pixbuf/io-gif.c:1456 gdk-pixbuf/io-gif.c:1503
+#: gdk-pixbuf/io-gif.c:1618
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Nicht genug Speicher, um GIF-Bild zu laden"
 
-#: gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:948
 #, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Nicht genug Speicher, um ein Einzelbild in GIF-Datei einzufügen"
 
-#: gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1120
 #, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Das GIF-Bild ist defekt (fehlerhafte LZW-Kompression)"
 
-#: gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1170
 #, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Datei scheint keine GIF-Datei zu sein"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s des GIF-Dateiformats wird nicht unterstützt"
 
 # gdk-pixbuf/io-gi178
-#: gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1291
 #, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
@@ -304,12 +304,12 @@ msgstr ""
 "Das GIF-Bild hat keine globale Farbtabelle, und ein Einzelbild darin hat "
 "keine lokale Farbtabelle."
 
-#: gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1525
 #, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-Bild wurde verstümmelt oder ist unvollständig."
 
-#: gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1677
 msgid "The GIF image format"
 msgstr "Das GIF-Bildformat"
 

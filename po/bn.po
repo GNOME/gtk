@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ (GNOME 2.14)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 11:01-0500\n"
+"POT-Creation-Date: 2006-03-15 10:14-0500\n"
 "PO-Revision-Date: 2006-03-12 21:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -221,70 +221,70 @@ msgstr "বি.এম.পি. ফাইলে লেখা যায় নি"
 msgid "The BMP image format"
 msgstr " বি.এম.পি. ছবির ফরম্যাট"
 
-#: gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:221
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "জি.আই.এফ. পড়া যায় নি: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:493 gdk-pixbuf/io-gif.c:1469 gdk-pixbuf/io-gif.c:1630
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "জি.আই.এফ. ফাইলে কিছু তথ্য পাওয়া যায় নি - মনে হচ্ছে কোন ভাবে ফাইলটি কাটা পড়েছিল"
 
-#: gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:502
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr " জি.আই.এফ. লোডারের অভ্যন্তরীণ সমস্যা (%s)"
 
-#: gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:576
 #, c-format
 msgid "Stack overflow"
 msgstr "স্ট্যাক থেকে উথলে পড়ছে"
 
-#: gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:636
 #, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "জি.আই.এফ. লোডার এই ছবিটিকে বুঝতে পারছে না।"
 
-#: gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:665
 #, c-format
 msgid "Bad code encountered"
 msgstr "বাজে সংকেতের সম্মুখীন হয়েছি"
 
-#: gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:675
 #, c-format
 msgid "Circular table entry in GIF file"
 msgstr "জি.আই.এফ. ফাইলের চক্রাকার টেবিলের অন্তর্গত এন্ট্রি"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
-#: gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:863 gdk-pixbuf/io-gif.c:1456 gdk-pixbuf/io-gif.c:1503
+#: gdk-pixbuf/io-gif.c:1618
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "জি.আই.এফ. লোড করার জন্য পর্যাপ্ত মেমরি নেই"
 
 # FIXME: Composite
-#: gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:948
 #, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "জি.আই.এফ. ফাইলে ফ্রেম কম্পোজিট জন্য পর্যাপ্ত মেমরি নেই"
 
-#: gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1120
 #, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "ত্রুটিপূর্ণ  জি.আই.এফ. ফাইল (ভুল LZW কম্প্রেশন)"
 
-#: gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1170
 #, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "ফাইলটিকে দেখে জি.আই.এফ. ফাইল বলে মনে হচ্ছে না"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "জি.আই.এফ. ফাইল ফরম্যাটের %s সংস্করণ অসমর্থিত"
 
-#: gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1291
 #, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
@@ -293,12 +293,12 @@ msgstr ""
 "জি.আই.এফ. ছবিতে কোন গ্লোবাল কালারম্যাপ থাকে না এবং এ ধরনের ছবির অন্তর্গত ফ্রেমের "
 "জন্যও কোন স্থানীয় কালারম্যাপ থাকে না।"
 
-#: gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1525
 #, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "জি.আই.এফ. ছবিটিকে ছোট করে ফেলা হয়েছে অথবা ছবিটি অসম্পূর্ণ।"
 
-#: gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1677
 msgid "The GIF image format"
 msgstr "জি.আই.এফ. ফরম্যাটের ছবি"
 

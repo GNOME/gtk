@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 11:01-0500\n"
+"POT-Creation-Date: 2006-03-15 10:14-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -223,69 +223,69 @@ msgstr "نمی‌توان نام پرونده را تبدیل کرد"
 msgid "The BMP image format"
 msgstr "قالب تصویر BMP"
 
-#: gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:221
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "شکست در خواندن GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:493 gdk-pixbuf/io-gif.c:1469 gdk-pixbuf/io-gif.c:1630
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "بعضی از داده‌های پرونده‌ی GIF مفقود شده‌اند (شاید پرونده به شکلی قطع شده است؟)‏"
 
-#: gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:502
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "خطای داخلی در بارگذار GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:576
 #, c-format
 msgid "Stack overflow"
 msgstr "سرریز پشته"
 
-#: gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:636
 #, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "بارکننده‌ی تصویر GIF نمی‌تواند این تصویر را بفهمد."
 
-#: gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:665
 #, c-format
 msgid "Bad code encountered"
 msgstr "برخورد با کد بد"
 
-#: gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:675
 #, c-format
 msgid "Circular table entry in GIF file"
 msgstr "مدخل دوری جدول در پرونده‌ی GIF"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
-#: gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:863 gdk-pixbuf/io-gif.c:1456 gdk-pixbuf/io-gif.c:1503
+#: gdk-pixbuf/io-gif.c:1618
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "حافظه برای بار کردن پرونده‌ی GIF کافی نیست"
 
-#: gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:948
 #, fuzzy, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "حافظه برای بار کردن پرونده‌ی GIF کافی نیست"
 
-#: gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1120
 #, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "تصویر GIF خراب است (فشرده‌سازی LZW غلط)"
 
-#: gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1170
 #, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "پرونده به‌نظر یک پرونده‌ی GIF نمی‌رسد"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "نسخه‌ی %s از قالب پرونده‌ی GIF پشتیبانی نمی‌شود"
 
-#: gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1291
 #, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
@@ -294,12 +294,12 @@ msgstr ""
 "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی "
 "ندارد."
 
-#: gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1525
 #, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "تصویر GIF قطع شده یا ناقص است."
 
-#: gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1677
 msgid "The GIF image format"
 msgstr "قالب تصویر GIF"
 

@@ -1,5 +1,9 @@
 2006-03-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* ==== Released 2.8.16 ===
+
+2006-03-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreemodelfilter.c: Actually commit the workaround for
 	bug 326362.
 
