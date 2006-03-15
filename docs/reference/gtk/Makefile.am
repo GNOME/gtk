@@ -97,6 +97,7 @@ content_files =					\
 	changes-1.2.sgml			\
 	changes-2.0.sgml			\
 	compiling.sgml				\
+	directfb.sgml				\
 	framebuffer.sgml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
@@ -108,6 +109,7 @@ content_files =					\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
 	objects_grouped.sgml			\
+	osx.sgml				\
 	question_index.sgml			\
 	resources.sgml				\
 	text_widget.sgml			\

@@ -188,6 +188,8 @@
 <!ENTITY gtk-Windows SYSTEM "windows.sgml">
 <!ENTITY gtk-Framebuffer SYSTEM "framebuffer.sgml">
 <!ENTITY gtk-X11 SYSTEM "x11.sgml">
+<!ENTITY gtk-OSX SYSTEM "osx.sgml">
+<!ENTITY gtk-DirectFB SYSTEM "directfb.sgml">
 <!ENTITY gtk-Questions SYSTEM "xml/question_index.sgml">
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
@@ -300,9 +302,11 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-Building;
     &gtk-Compiling;
     &gtk-Running;
-    &gtk-Windows;
-    &gtk-Framebuffer;
     &gtk-X11;
+    &gtk-Windows;
+    &gtk-OSX;
+    &gtk-DirectFB;
+    &gtk-Framebuffer;
     &gtk-Resources;
     &gtk-Questions;
   </part>
