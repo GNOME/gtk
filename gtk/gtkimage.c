@@ -296,7 +296,7 @@ gtk_image_destroy (GtkObject *object)
 {
   GtkImage *image = GTK_IMAGE (object);
 
-  gtk_image_clear (image);
+  gtk_image_reset (image);
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -345,7 +345,7 @@ gtk_image_set_property (GObject      *object,
           if (mask)
             g_object_ref (mask);
           
-          gtk_image_reset (image);
+          gtk_image_clear (image);
 
           image->mask = mask;
         }
@@ -748,7 +748,7 @@ gtk_image_set_from_pixmap (GtkImage  *image,
   if (mask)
     g_object_ref (mask);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   image->mask = mask;
   
@@ -800,7 +800,7 @@ gtk_image_set_from_image  (GtkImage  *image,
   if (mask)
     g_object_ref (mask);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (gdk_image)
     {
@@ -843,7 +843,7 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   g_object_freeze_notify (G_OBJECT (image));
   
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (filename == NULL)
     {
@@ -902,7 +902,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   if (pixbuf)
     g_object_ref (pixbuf);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (pixbuf != NULL)
     {
@@ -943,7 +943,7 @@ gtk_image_set_from_stock  (GtkImage       *image,
   /* in case stock_id == image->data.stock.stock_id */
   new_id = g_strdup (stock_id);
   
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (new_id)
     {
@@ -985,7 +985,7 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
   if (icon_set)
     gtk_icon_set_ref (icon_set);
   
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (icon_set)
     {      
@@ -1026,7 +1026,7 @@ gtk_image_set_from_animation (GtkImage           *image,
   if (animation)
     g_object_ref (animation);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (animation != NULL)
     {
@@ -1070,7 +1070,7 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
   /* in case icon_name == image->data.name.icon_name */
   new_name = g_strdup (icon_name);
   
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (new_name)
     {
@@ -1842,20 +1842,10 @@ gtk_image_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-/**
- * gtk_image_clear:
- * @image: a #GtkImage
- *
- * Resets the image to be empty.
- *
- * Since: 2.8
- */
-void
-gtk_image_clear (GtkImage *image)
+static void
+gtk_image_reset (GtkImage *image)
 {
   GtkImagePrivate *priv;
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
 
   priv = GTK_IMAGE_GET_PRIVATE (image);
 
@@ -1968,10 +1958,18 @@ gtk_image_clear (GtkImage *image)
   g_object_thaw_notify (G_OBJECT (image));
 }
 
-static void
-gtk_image_reset (GtkImage *image)
+/**
+ * gtk_image_clear:
+ * @image: a #GtkImage
+ *
+ * Resets the image to be empty.
+ *
+ * Since: 2.8
+ */
+void
+gtk_image_clear (GtkImage *image)
 {
-  gtk_image_clear (image);
+  gtk_image_reset (image);
 
   gtk_image_update_size (image, 0, 0);
 }
