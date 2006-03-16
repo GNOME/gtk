@@ -1230,7 +1230,7 @@ if test "x$gdktarget" = "xx11"; then
 	      AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
 	          [AC_CHECK_HEADER(X11/extensions/Xinerama.h, 
 	              [GTK_ADD_LIB(x_extra_libs,Xinerama)
-		      have_xfree_xinerama=true], :
+		      have_xfree_xinerama=true], :,
                       [#include <X11/Xlib.h>])])
           fi
 
