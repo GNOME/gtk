@@ -1,3 +1,9 @@
+2006-03-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_clear): Update the size of the image, 
+	by swapping the implementations of gtk_image_clear and
+	gtk_image_reset.  (#334657)
+
 2006-03-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_button_released) 
