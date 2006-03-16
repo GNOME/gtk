@@ -60,6 +60,12 @@ Release notes for 2.10
   when the user clicks close. It is the applications responsibility to
   hide or destroy the dialog.
 
+* Several new signals have been added to GtkNotebook. Care has been taken
+  to choose signal names which do not collide with signals added by well-known
+  derived classes. The names which can no longer be used for signals in 
+  objects derived from GtkNotebook are page-reordered, page-removed and
+  page-added.
+
 Release notes
 =============
 
