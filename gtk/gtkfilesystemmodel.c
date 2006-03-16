@@ -260,9 +260,6 @@ gtk_file_system_model_finalize (GObject *object)
   if (model->file_system)
     g_object_unref (model->file_system);
 
-  if (model->idle_finished_loading_source)
-    g_source_destroy (model->idle_finished_loading_source);
-
   children = model->roots;
   while (children)
     {
@@ -651,35 +648,6 @@ root_folder_finished_loading_cb (GtkFileFolder      *folder,
   g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
 }
 
-/* Emits the "finished-loading" signal as an idle handler; see the comment in
- * _gtk_file_system_model_new()
- */
-static gboolean
-idle_finished_loading_cb (GtkFileSystemModel *model)
-{
-  GDK_THREADS_ENTER ();
-
-  g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
-
-  g_source_destroy (model->idle_finished_loading_source);
-  model->idle_finished_loading_source = NULL;
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-
-/* Queues an idle handler to emit the "finished-loading" signal */
-static void
-queue_finished_loading (GtkFileSystemModel *model)
-{
-  model->idle_finished_loading_source = g_idle_source_new ();
-  g_source_set_closure (model->idle_finished_loading_source,
-			g_cclosure_new_object (G_CALLBACK (idle_finished_loading_cb),
-					       G_OBJECT (model)));
-  g_source_attach (model->idle_finished_loading_source, NULL);
-}
-
 static void
 got_root_folder_cb (GtkFileSystemHandle *handle,
 		    GtkFileFolder       *folder,
@@ -691,13 +659,15 @@ got_root_folder_cb (GtkFileSystemHandle *handle,
   gboolean cancelled = handle->cancelled;
   GtkFileSystemModel *model = data;
 
-  if (!g_slist_find (model->pending_handles, handle))
+  tmp_list = g_slist_find (model->pending_handles, handle);
+  if (!tmp_list)
     {
       g_object_unref (model);
       return;
     }
 
-  model->pending_handles = g_slist_remove (model->pending_handles, handle);
+  model->pending_handles = g_slist_remove_link (model->pending_handles,
+ 						tmp_list);
   g_object_unref (handle);
 
   if (cancelled || !folder)
@@ -709,13 +679,12 @@ got_root_folder_cb (GtkFileSystemHandle *handle,
   model->root_folder = folder;
 
   if (gtk_file_folder_is_finished_loading (model->root_folder))
-    {
-      queue_finished_loading (model); /* done in an idle because we are being created */
-      gtk_file_folder_list_children (model->root_folder, &roots, NULL);
-    }
+    g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
   else
     g_signal_connect_object (model->root_folder, "finished-loading",
 			     G_CALLBACK (root_folder_finished_loading_cb), model, 0);
+
+  gtk_file_folder_list_children (model->root_folder, &roots, NULL);
 
   g_signal_connect_object (model->root_folder, "deleted",
 			   G_CALLBACK (root_deleted_callback), model, 0);
@@ -803,6 +772,22 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
   handle = gtk_file_system_get_folder (file_system, root_path, types,
 				       got_root_folder_cb,
 				       g_object_ref (model));
+  if (!handle)
+    {
+      /* In this case got_root_folder_cb() will never be called, so we
+       * need to unref model twice.
+       */
+      g_object_unref (model);
+      g_object_unref (model);
+
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		   _("Could not obtain root folder"));
+
+      return NULL;
+    }
+
   model->pending_handles = g_slist_append (model->pending_handles, handle);
 
   return model;
@@ -1238,7 +1223,6 @@ _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
   node = find_child_node (model, NULL, paths->data);
   if (!node)
     {
-      /* Shouldn't really happen */
       gtk_file_paths_free (paths);
       return;
     }
@@ -1287,7 +1271,7 @@ _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
           handle = gtk_file_system_get_folder (model->file_system,
 					       paths->data, model->types,
 					       ref_path_cb, info);
-	  model->pending_handles = g_slist_remove (model->pending_handles, handle);
+	  model->pending_handles = g_slist_append (model->pending_handles, handle);
         }
     }
 }
@@ -1579,15 +1563,27 @@ get_children_get_folder_cb (GtkFileSystemHandle *handle,
   gboolean cancelled = handle->cancelled;
   struct GetChildrenData *data = callback_data;
 
-  if (!g_slist_find (data->model->pending_handles, handle))
+  tmp_list = g_slist_find (data->model->pending_handles, handle);
+
+  if (!tmp_list)
     goto out;
 
-  data->model->pending_handles = g_slist_remove (data->model->pending_handles, handle);
+  data->model->pending_handles = g_slist_remove_link (data->model->pending_handles, tmp_list);
   g_object_unref (handle);
 
   if (cancelled || !folder)
-    /* error, no folder, remove dummy child? */
-    goto out;
+    {
+      /* error, no folder, remove dummy child */
+      if (data->node->parent && data->node->parent->has_dummy)
+        {
+          data->node->parent->children = NULL;
+          data->node->parent->has_dummy = FALSE;
+	}
+
+      file_model_node_free (data->node);
+
+      goto out;
+    }
 
   data->node->folder = folder;
   data->node->load_pending = FALSE;

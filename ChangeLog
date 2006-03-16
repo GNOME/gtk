@@ -1,3 +1,24 @@
+2006-03-16  Kristian Rietveld  <kris@imendio.com>
+
+	More review work.
+
+	* gtk/gtkfilechooserprivate.h: remove idle_finished_loading_source
+	from GtkFileSystemModel.
+
+	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_finalize): remove
+	idle_finished_loading_source,
+	(idle_finished_loading_cb), (queue_finished_loading): removed,
+	(got_root_folder_cb): save a list walk, immediately emit
+	finished-loading and don't queue it, since we are already in an
+	idle here, always list_children() so the children the folder already
+	has are returned, 
+	(_gtk_file_system_model_new): handle the case where NULL is
+	returned by _get_folder(),
+	(_gtk_file_system_model_path_do): remove comment, and append the
+	new handle to the list, don't try to remove,
+	(get_children_get_folder_cb): save a list walk, remove the dummy
+	child if the _get_folder() call fails or is cancelled.
+
 2006-03-14  Kristian Rietveld  <kris@imendio.com>
 
 	More suggestions from Federico.

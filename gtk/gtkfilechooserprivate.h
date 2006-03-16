@@ -279,7 +279,6 @@ struct _GtkFileSystemModel
 
   GSList *idle_clears;
   GSource *idle_clear_source;
-  GSource *idle_finished_loading_source;
 
   gushort max_depth;
 
