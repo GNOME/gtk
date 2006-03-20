@@ -1,5 +1,7 @@
 2006-03-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* MAINTAINERS: Add this, at the request of the GNOME sysadmin team.
+
 	* AUTHORS: Updates, typo fix
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Document that
