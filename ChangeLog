@@ -1,3 +1,8 @@
+2006-03-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_get_option_group): Make sure gettext
+	is initialized before using it.  (#335129, Christian Persch)
+
 2006-03-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Document that

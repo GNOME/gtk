@@ -589,6 +589,8 @@ gtk_get_option_group (gboolean open_default_display)
   GOptionGroup *group;
   OptionGroupInfo *info;
 
+  gettext_initialization ();
+
   info = g_new0 (OptionGroupInfo, 1);
   info->open_default_display = open_default_display;
   
