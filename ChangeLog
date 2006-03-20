@@ -1,3 +1,10 @@
+2006-03-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Document that
+	@cell must be one of the renderers of the icon view, warn if 
+	it is not, and ignore @start_editing if @cell is not set.
+	(#335001, Emmanuel Rodriguez)
+
 2006-03-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Add a missing comma.  (#334774, Peter Breitenlohner)

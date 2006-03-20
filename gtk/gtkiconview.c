@@ -1720,7 +1720,7 @@ gtk_icon_view_stop_editing (GtkIconView *icon_view,
  * gtk_icon_view_set_cursor:
  * @icon_view: A #GtkIconView
  * @path: A #GtkTreePath
- * @cell: A #GtkCellRenderer or %NULL
+ * @cell: One of the cell renderers of @icon_view, or %NULL
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
@@ -1758,29 +1758,27 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   
   if (!item)
     return;
-  
+
   cell_pos = -1;
   for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
     {
       info = l->data;
-
+      
       if (info->cell == cell)
 	{
 	  cell_pos = i;
 	  break;
 	}
-
+	  
       info = NULL;
     }
+  
+  g_return_if_fail (cell == NULL || info != NULL);
 
   gtk_icon_view_set_cursor_item (icon_view, item, cell_pos);
-  if (FALSE && GTK_WIDGET_REALIZED (icon_view))
-    gtk_icon_view_scroll_to_item (icon_view, item);
-  else
-    gtk_icon_view_scroll_to_path (icon_view, path,
-				  FALSE, 0.0, 0.0);
-
-  if (start_editing)
+  gtk_icon_view_scroll_to_path (icon_view, path, FALSE, 0.0, 0.0);
+  
+  if (info && start_editing)
     gtk_icon_view_start_editing (icon_view, item, info, NULL);
 }
 
@@ -3944,18 +3942,19 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
  * @col_align: The horizontal alignment of the item specified by @path.
  *
  * Moves the alignments of @icon_view to the position specified by @path.  
- * @row_align determines where the row is placed, and @col_align determines where 
- * @column is placed.  Both are expected to be between 0.0 and 1.0. 
- * 0.0 means left/top alignment, 1.0 means right/bottom alignment, 0.5 means center.
+ * @row_align determines where the row is placed, and @col_align determines 
+ * where @column is placed.  Both are expected to be between 0.0 and 1.0. 
+ * 0.0 means left/top alignment, 1.0 means right/bottom alignment, 0.5 means 
+ * center.
  *
  * If @use_align is %FALSE, then the alignment arguments are ignored, and the
  * tree does the minimum amount of work to scroll the item onto the screen.
  * This means that the item will be scrolled to the edge closest to its current
  * position.  If the item is currently visible on the screen, nothing is done.
  *
- * This function only works if the model is set, and @path is a valid row on the
- * model.  If the model changes before the @icon_view is realized, the centered
- * path will be modified to reflect this change.
+ * This function only works if the model is set, and @path is a valid row on 
+ * the model. If the model changes before the @icon_view is realized, the 
+ * centered path will be modified to reflect this change.
  *
  * Since: 2.8
  **/
