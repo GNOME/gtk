@@ -3947,18 +3947,19 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
  * @col_align: The horizontal alignment of the item specified by @path.
  *
  * Moves the alignments of @icon_view to the position specified by @path.  
- * @row_align determines where the row is placed, and @col_align determines where 
- * @column is placed.  Both are expected to be between 0.0 and 1.0. 
- * 0.0 means left/top alignment, 1.0 means right/bottom alignment, 0.5 means center.
+ * @row_align determines where the row is placed, and @col_align determines 
+ * where @column is placed. Both are expected to be between 0.0 and 1.0. 
+ * 0.0 means left/top alignment, 1.0 means right/bottom alignment, 0.5 means 
+ * center.
  *
  * If @use_align is %FALSE, then the alignment arguments are ignored, and the
  * tree does the minimum amount of work to scroll the item onto the screen.
  * This means that the item will be scrolled to the edge closest to its current
  * position.  If the item is currently visible on the screen, nothing is done.
  *
- * This function only works if the model is set, and @path is a valid row on the
- * model.  If the model changes before the @icon_view is realized, the centered
- * path will be modified to reflect this change.
+ * This function only works if the model is set, and @path is a valid row on 
+ * the model. If the model changes before the @icon_view is realized, the 
+ * centered path will be modified to reflect this change.
  *
  * Since: 2.8
  **/
