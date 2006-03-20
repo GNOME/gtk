@@ -1,5 +1,7 @@
 2006-03-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* AUTHORS: Updates, typo fix
+
 	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Document that
 	@cell must be one of the renderers of the icon view, warn if 
 	it is not, and ignore @start_editing if @cell is not set.
