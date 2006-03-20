@@ -115,6 +115,8 @@ void           gtk_scrolled_window_get_policy        (GtkScrolledWindow *scrolle
 						      GtkPolicyType     *vscrollbar_policy);
 void           gtk_scrolled_window_set_placement     (GtkScrolledWindow *scrolled_window,
 						      GtkCornerType      window_placement);
+void           gtk_scrolled_window_unset_placement   (GtkScrolledWindow *scrolled_window);
+
 GtkCornerType  gtk_scrolled_window_get_placement     (GtkScrolledWindow *scrolled_window);
 void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolled_window,
 						      GtkShadowType      type);

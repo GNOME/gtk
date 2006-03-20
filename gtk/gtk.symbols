@@ -2678,6 +2678,7 @@ gtk_scrolled_window_set_placement
 gtk_scrolled_window_set_policy
 gtk_scrolled_window_set_shadow_type
 gtk_scrolled_window_set_vadjustment
+gtk_scrolled_window_unset_placement
 #endif
 #endif
 

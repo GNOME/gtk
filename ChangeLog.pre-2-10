@@ -1,5 +1,13 @@
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkscrolledwindow.h: 
+	* gtk/gtkscrolledwindow.c: Add a window-placement-set property
+	and a gtk-scrolled-window-placement setting.  (#157025, Christian
+	Neumair)
+
+2006-03-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmain.c (gtk_get_option_group): Make sure gettext
 	is initialized before using it.  (#335129, Christian Persch)
 
@@ -2047,7 +2055,7 @@ Tue Dec  6 10:32:17 2005  Tim Janik  <timj@gtk.org>
 2005-12-01  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_class_init): removed redundant
-	assignment of widget_class->motion_notify_event.
+	assignment of widget_class->motion_notify_event
 
 2005-11-29  Matthias Clasen  <mclasen@redhat.com>
 
