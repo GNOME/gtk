@@ -214,11 +214,14 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 #endif
 		retval = (fread(buffer, len, 1, context->file) != 0);
 
-                if (!retval && ferror (context->file))
+                if (!retval && ferror (context->file)) {
+                        gint save_errno = errno;
                         g_set_error (context->error,
                                      G_FILE_ERROR,
-                                     g_file_error_from_errno (errno),
-                                     _("Failure reading GIF: %s"), strerror (errno));
+                                     g_file_error_from_errno (save_errno),
+                                     _("Failure reading GIF: %s"), 
+                                     strerror (save_errno));
+                }
                 
 #ifdef IO_GIFDEBUG
 		if (len < 100) {

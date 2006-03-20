@@ -851,12 +851,13 @@ gdk_pixbuf_new_from_file (const char *filename,
 
 	f = g_fopen (filename, "rb");
 	if (!f) {
+		gint save_errno = errno;
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (save_errno),
                              _("Failed to open file '%s': %s"),
                              display_name,
-                             g_strerror (errno));
+                             g_strerror (save_errno));
                 g_free (display_name);
 		return NULL;
         }
@@ -1101,13 +1102,14 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 
 	f = g_fopen (filename, "rb");
 	if (!f) {
+		gint save_errno = errno;
                 gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (save_errno),
                              _("Failed to open file '%s': %s"),
                              display_name,
-                             g_strerror (errno));
+                             g_strerror (save_errno));
                 g_free (display_name);
 		return NULL;
         }
@@ -1370,11 +1372,12 @@ save_to_file_callback (const gchar *buf,
 
 	n = fwrite (buf, 1, count, filehandle);
 	if (n != count) {
+		gint save_errno = errno;
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (save_errno),
                              _("Error writing to image file: %s"),
-                             g_strerror (errno));
+                             g_strerror (save_errno));
                 return FALSE;
 	}
 	return TRUE;
@@ -1462,9 +1465,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 		goto end;
 	f = fdopen (fd, "wb+");
 	if (f == NULL) {
+		gint save_errno = errno;
 		g_set_error (error,
 			     G_FILE_ERROR,
-			     g_file_error_from_errno (errno),
+			     g_file_error_from_errno (save_errno),
 			     _("Failed to open temporary file"));
 		goto end;
 	}
@@ -1487,9 +1491,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 			break;
 	}
 	if (ferror (f)) {
+		gint save_errno = errno;
 		g_set_error (error,
 			     G_FILE_ERROR,
-			     g_file_error_from_errno (errno),
+			     g_file_error_from_errno (save_errno),
 			     _("Failed to read from temporary file"));
 		goto end;
 	}
@@ -1720,13 +1725,14 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         f = g_fopen (filename, "wb");
         
         if (f == NULL) {
+		gint save_errno = errno;
                 gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (save_errno),
                              _("Failed to open '%s' for writing: %s"),
                              display_name,
-                             g_strerror (errno));
+                             g_strerror (save_errno));
                 g_free (display_name);
                 return FALSE;
         }
@@ -1744,13 +1750,14 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        }
 
        if (fclose (f) < 0) {
+	       gint save_errno = errno;
                gchar *display_name = g_filename_display_name (filename);
                g_set_error (error,
                             G_FILE_ERROR,
-                            g_file_error_from_errno (errno),
+                            g_file_error_from_errno (save_errno),
                             _("Failed to close '%s' while writing image, all data may not have been saved: %s"),
                             display_name,
-                            g_strerror (errno));
+                            g_strerror (save_errno));
                g_free (display_name);
                return FALSE;
        }

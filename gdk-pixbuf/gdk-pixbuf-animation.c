@@ -147,12 +147,13 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
         display_name = g_filename_display_name (filename);
 	f = g_fopen (filename, "rb");
 	if (!f) {
+                gint save_errno = errno;
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (save_errno),
                              _("Failed to open file '%s': %s"),
                              display_name,
-                             g_strerror (errno));
+                             g_strerror (save_errno));
                 g_free (display_name);
 		return NULL;
         }
