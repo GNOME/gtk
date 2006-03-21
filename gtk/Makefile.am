@@ -142,7 +142,6 @@ gtk_public_h_sources =          \
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
 	gtkclist.h		\
-	gtkclipboard.h		\
 	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
@@ -358,7 +357,6 @@ gtk_c_sources =                 \
 	gtkcellview.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
-	gtkclipboard.c		\
 	gtkclist.c		\
 	gtkcolorbutton.c	\
 	gtkcolorsel.c		\
@@ -370,7 +368,6 @@ gtk_c_sources =                 \
 	gtkctree.c		\
 	gtkcurve.c		\
 	gtkdialog.c		\
-	gtkdnd.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
 	gtkentry.c		\
@@ -533,7 +530,8 @@ gtk_c_sources =                 \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
-	xembed.h
+	xembed.h		\
+	$(gtk_clipboard_dnd_c_sources)
 
 if OS_UNIX
 gtk_private_h_sources += gtkfilesystemunix.h
@@ -559,6 +557,13 @@ gtk_c_sources +=         gtkplug-win32.c gtksocket-win32.c gtkwin32embed.c
 else
 gtk_c_sources +=         gtkplug-stub.c gtksocket-stub.c
 endif
+endif
+
+if USE_QUARTZ
+gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c gtkquartz.h
+gtk_clipboard_dnd_c_sources_CFLAGS = "-xobjective-c"
+else
+gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
 endif
 
 # we use our own built_sources variable rules to avoid automake's

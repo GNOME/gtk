@@ -1,3 +1,14 @@
+2006-03-21  Anders Carlsson  <andersca@imendio.com>
+
+        * gtk/Makefile.am:
+        Add new files.
+        
+        * gtk/gtkclipboard-quartz.c: Added.
+        * gtk/gtkdnd-quartz.c: Added.
+        * gtk/gtkquartz.c: Added.
+        * gtk/gtkquartz.h: Added.
+        Add dnd and clipboard implementations.
+
 2006-03-21  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/Makefile.am: removing trailing \ fixes the build.
