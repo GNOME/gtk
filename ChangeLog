@@ -1,5 +1,22 @@
 2006-03-21  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkdrawable-quartz.c:
+        (gdk_quartz_ref_cairo_surface):
+        (gdk_quartz_draw_rectangle):
+        (gdk_quartz_draw_arc):
+        (gdk_quartz_draw_polygon):
+        (gdk_quartz_draw_drawable):
+        (gdk_quartz_draw_segments):
+        (gdk_quartz_draw_lines):
+        (gdk_quartz_draw_pixbuf):
+        (gdk_quartz_draw_image):
+        (_gdk_quartz_drawable_get_context):
+        * gdk/quartz/gdkdrawable-quartz.h:
+        Offset coordinates by 0.5 pixels to get consistant results for both
+        image contexts and screen contexts.
+
+2006-03-21  Anders Carlsson  <andersca@imendio.com>
+
 	* gdk/quartz/GdkQuartzWindow.c 
 	([GdkQuartzWindow -windowDidMove:]): Synthesize GDK_CONFIGURE events
 	when the window position changes.
