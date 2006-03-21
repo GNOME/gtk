@@ -1,5 +1,7 @@
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): Remove an unused variable.
+
 	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): Don't leave
 	page->tab_label dangling.
 	(gtk_notebook_real_remove): Use GTK_IN_DESTRUCTION to determine

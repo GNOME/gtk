@@ -551,7 +551,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 		     GdkDragAction      action,
 		     GtkDragSourceInfo *info)
 {
-  gint i, j;
+  gint i;
 
   /* reconstruct the cursors for each new drag (thus !info),
    * to catch cursor theme changes 
