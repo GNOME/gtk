@@ -41,9 +41,12 @@
 #define GDK_IS_GC_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_QUARTZ))
 #define GDK_GC_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_QUARTZ, GdkGCQuartzClass))
 
+#define GDK_DRAG_CONTEXT_PRIVATE(context) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (context)->windowing_data)
+
 typedef struct _GdkCursorPrivate GdkCursorPrivate;
 typedef struct _GdkGCQuartz       GdkGCQuartz;
 typedef struct _GdkGCQuartzClass  GdkGCQuartzClass;
+typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 struct _GdkGCQuartz
 {
@@ -72,9 +75,16 @@ struct _GdkCursorPrivate
   NSCursor *nscursor;
 };
 
+struct _GdkDragContextPrivate
+{
+  id <NSDraggingInfo> dragging_info;
+};
+
 extern GdkDisplay *_gdk_display;
 extern GdkScreen *_gdk_screen;
 extern GdkWindow *_gdk_root;
+
+extern GdkDragContext *_gdk_quartz_drag_source_context;
 
 GType _gdk_gc_quartz_get_type (void);
 

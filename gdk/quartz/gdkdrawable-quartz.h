@@ -22,7 +22,6 @@
 #define __GDK_DRAWABLE_QUARTZ_H__
 
 #include <gdk/gdkdrawable.h>
-#include <gdk/quartz/gdkquartz.h>
 
 G_BEGIN_DECLS
 

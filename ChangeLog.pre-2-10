@@ -1,5 +1,36 @@
 2006-03-21  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/GdkQuartzWindow.c:
+        (drag_operation_to_drag_action):
+        (drag_action_to_drag_operation):
+        (update_context_from_dragging_info):
+        (-[GdkQuartzWindow draggingEntered:]):
+        (-[GdkQuartzWindow draggingEnded:]):
+        (-[GdkQuartzWindow draggingExited:]):
+        (-[GdkQuartzWindow draggingUpdated:]):
+        (-[GdkQuartzWindow performDragOperation:]):
+        (-[GdkQuartzWindow wantsPeriodicDraggingUpdates]):
+        (-[GdkQuartzWindow draggedImage:endedAt:operation:]):
+        * gdk/quartz/gdkdnd-quartz.c:
+        (gdk_drag_context_finalize):
+        (gdk_drag_context_init):
+        (gdk_drag_context_class_init):
+        (gdk_drag_begin):
+        (gdk_drag_status):
+        Add the GDK part of the DND implementation.
+
+        * gdk/quartz/Makefile.am:
+        Add some missing headers.
+        
+        * gdk/quartz/gdkdrawable-quartz.h:
+        * gdk/quartz/gdkprivate-quartz.h:
+        * gdk/quartz/gdkquartz.h:
+        * gdk/quartz/gdkwindow-quartz.c:
+        (gdk_quartz_window_get_nsview):
+        New function, for use by the GTK part of the DND implementation
+
+2006-03-21  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/gdkdrawable-quartz.c:
         (gdk_quartz_ref_cairo_surface):
         (gdk_quartz_draw_rectangle):

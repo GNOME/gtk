@@ -26,19 +26,23 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkdisplay-quartz.c	\
 	gdkdnd-quartz.c		\
 	gdkdrawable-quartz.c	\
+	gdkdrawable-quartz.h	\
 	gdkevents-quartz.c	\
-	gdkfont-quartz.c		\
+	gdkfont-quartz.c	\
 	gdkgc-quartz.c		\
 	gdkgeometry-quartz.c	\
 	gdkglobals-quartz.c	\
 	gdkim-quartz.c		\
 	gdkimage-quartz.c	\
 	gdkinput.c		\
-	gdkkeys-quartz.c		\
-	gdkmain-quartz.c		\
+	gdkkeys-quartz.c	\
+	gdkmain-quartz.c	\
 	gdkpixmap-quartz.c	\
+	gdkpixmap-quartz.h	\
 	gdkproperty-quartz.c	\
+	gdkquartz.h		\
 	gdkscreen-quartz.c	\
 	gdkselection-quartz.c	\
 	gdkvisual-quartz.c	\
-	gdkwindow-quartz.c
+	gdkwindow-quartz.c	\
+	gdkwindow-quartz.h	\

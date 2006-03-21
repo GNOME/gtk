@@ -19,17 +19,37 @@
  */
 
 #include "gdkdnd.h"
+#include "gdkprivate-quartz.h"
+
+static gpointer parent_class = NULL;
+
+static void
+gdk_drag_context_finalize (GObject *object)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDragContextPrivate *private = GDK_DRAG_CONTEXT_PRIVATE (context);
+ 
+  g_free (private);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
 
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
-  /* FIXME: Implement */
+  GdkDragContextPrivate *priv = g_new0 (GdkDragContextPrivate, 1);
+
+  dragcontext->windowing_data = priv;
 }
 
 static void
 gdk_drag_context_class_init (GdkDragContextClass *klass)
 {
-  /* FIXME: Implement */
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_drag_context_finalize;
 }
 
 GType
@@ -79,12 +99,19 @@ gdk_drag_context_unref (GdkDragContext *context)
   g_object_unref (context);
 }
 
+GdkDragContext *_gdk_quartz_drag_source_context = NULL;
+
 GdkDragContext * 
 gdk_drag_begin (GdkWindow     *window,
 		GList         *targets)
 {
-  /* FIXME: Implement */
-  return NULL;
+  g_assert (_gdk_quartz_drag_source_context == NULL);
+  
+  /* Create fake context */
+  _gdk_quartz_drag_source_context = gdk_drag_context_new ();
+  _gdk_quartz_drag_source_context->is_source = TRUE;
+  
+  return _gdk_quartz_drag_source_context;
 }
 
 gboolean        
@@ -143,7 +170,7 @@ gdk_drag_status (GdkDragContext   *context,
 		 GdkDragAction     action,
 		 guint32           time)
 {
-  /* FIXME: Implement */
+  context->action = action;
 }
 
 void 

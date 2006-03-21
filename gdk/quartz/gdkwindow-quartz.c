@@ -26,6 +26,14 @@
 
 static gpointer parent_class;
 
+NSView *
+gdk_quartz_window_get_nsview (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  return ((GdkWindowImplQuartz *)private->impl)->view;
+}
+
 static void
 gdk_window_impl_quartz_get_size (GdkDrawable *drawable,
 				gint        *width,
