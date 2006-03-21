@@ -1,3 +1,7 @@
+2006-03-21  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/Makefile.am: removing trailing \ fixes the build.
+
 2006-03-21  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkgeometry-quartz.c:

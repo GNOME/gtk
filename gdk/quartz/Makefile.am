@@ -45,4 +45,4 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkselection-quartz.c	\
 	gdkvisual-quartz.c	\
 	gdkwindow-quartz.c	\
-	gdkwindow-quartz.h	\
+	gdkwindow-quartz.h
