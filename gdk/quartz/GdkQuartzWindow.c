@@ -62,6 +62,28 @@
   _gdk_quartz_update_focus_window (window);
 }
 
+-(void)windowDidMove:(NSNotification *)aNotification
+{
+  NSRect content_rect = [self contentRectForFrameRect:[self frame]];
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkEvent *event;
+
+  private->x = content_rect.origin.x;
+  private->y = _gdk_quartz_get_inverted_screen_y (content_rect.origin.y) - impl->height;
+
+  /* Synthesize a configure event */
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.window = g_object_ref (window);
+  event->configure.x = private->x;
+  event->configure.y = private->y;
+  event->configure.width = impl->width;
+  event->configure.height = impl->height;
+
+  _gdk_event_queue_append (gdk_display_get_default (), event);
+}
+
 -(void)windowDidResize:(NSNotification *)aNotification
 {
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
