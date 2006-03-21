@@ -2,7 +2,9 @@
 
 	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): Don't leave
 	page->tab_label dangling.
-	(gtk_notebook_real_remove): Use GTK_IN_DESTRUCTION.
+	(gtk_notebook_real_remove): Use GTK_IN_DESTRUCTION to determine
+	if we are being called during destruction of the notebook, rather
+	than maintaining that information as a passed-in parameter.
 	(gtk_notebook_destroy): Leave the removal of the children
 	to the container destroy method.  (#319032, Yevgen Muntyan)
 
