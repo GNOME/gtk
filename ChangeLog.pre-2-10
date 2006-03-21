@@ -1,5 +1,11 @@
 2006-03-21  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkgeometry-quartz.c:
+        (gdk_window_scroll):
+        Implement gdk_window_scroll.
+
+2006-03-21  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/GdkQuartzWindow.c:
         (drag_operation_to_drag_action):
         (drag_action_to_drag_operation):
