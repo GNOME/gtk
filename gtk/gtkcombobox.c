@@ -110,7 +110,6 @@ struct _GtkComboBoxPrivate
   GSList *cells;
 
   guint popup_in_progress : 1;
-  guint destroying : 1;
   guint add_tearoffs : 1;
   guint has_frame : 1;
   guint is_cell_renderer : 1;
@@ -993,7 +992,7 @@ gtk_combo_box_remove (GtkContainer *container,
   gtk_widget_unparent (widget);
   GTK_BIN (container)->child = NULL;
 
-  if (combo_box->priv->destroying)
+  if (GTK_OBJECT_FLAGS (combo_box) & GTK_IN_DESTRUCTION)
     return;
 
   gtk_widget_queue_resize (GTK_WIDGET (container));
@@ -4846,12 +4845,8 @@ gtk_combo_box_destroy (GtkObject *object)
   combo_box->priv->row_separator_data = NULL;
   combo_box->priv->row_separator_destroy = NULL;
 
-  combo_box->priv->destroying = 1;
-
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
   combo_box->priv->cell_view = NULL;
-
-  combo_box->priv->destroying = 0;
 }
 
 static void
