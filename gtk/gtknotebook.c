@@ -304,8 +304,7 @@ static gint gtk_notebook_real_insert_page    (GtkNotebook      *notebook,
 static void gtk_notebook_redraw_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_redraw_arrows       (GtkNotebook      *notebook);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
-					      GList            *list,
-					      gboolean		destroying);
+					      GList            *list);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook);
 static gint gtk_notebook_timer               (GtkNotebook      *notebook);
 static gint gtk_notebook_page_compare        (gconstpointer     a,
@@ -1257,21 +1256,11 @@ gtk_notebook_new (void)
 static void
 gtk_notebook_destroy (GtkObject *object)
 {
-  GList *children;
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   
   if (notebook->menu)
     gtk_notebook_popup_disable (notebook);
-
-  children = notebook->children;
-  while (children)
-    {
-      GList *child = children;
-      children = child->next;
-      
-      gtk_notebook_real_remove (notebook, child, TRUE);
-    }
 
   if (priv->source_targets)
     {
@@ -3183,7 +3172,7 @@ gtk_notebook_remove (GtkContainer *container,
 		 widget,
 		 page_num);
 
-  gtk_notebook_real_remove (notebook, children, FALSE);
+  gtk_notebook_real_remove (notebook, children);
 }
 
 static gboolean
@@ -3735,18 +3724,22 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
 
       gtk_widget_set_state (page->tab_label, GTK_STATE_NORMAL);
       gtk_widget_unparent (page->tab_label);
+      page->tab_label = NULL;
     }
 }
 
 static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
-			  GList       *list,
-			  gboolean     destroying)
+			  GList       *list)
 {
   GtkNotebookPage *page;
   GList * next_list;
   gint need_resize = FALSE;
 
+  gboolean destroying;
+
+  destroying = GTK_OBJECT_FLAGS (notebook) & GTK_IN_DESTRUCTION;
+  
   next_list = gtk_notebook_search_page (notebook, list, STEP_PREV, TRUE);
   if (!next_list)
     next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);

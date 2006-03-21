@@ -1,5 +1,18 @@
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): Don't leave
+	page->tab_label dangling.
+	(gtk_notebook_real_remove): Use GTK_IN_DESTRUCTION.
+	(gtk_notebook_destroy): Leave the removal of the children
+	to the container destroy method.  (#319032, Yevgen Muntyan)
+
+2006-03-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_remove): Use the existing
+	GTK_IN_DESTRUCTION flag, rather than roll our own.
+
+2006-03-20  Matthias Clasen  <mclasen@redhat.com>
+	
 	* gtk/gtk.symbols: 
 	* gtk/gtkscrolledwindow.h: 
 	* gtk/gtkscrolledwindow.c: Add a window-placement-set property
