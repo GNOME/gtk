@@ -855,7 +855,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * @page_num: the @child page number
    *
    * the ::page-removed signal is emitted in the notebook
-   * right before a page is removed from the notebook.
+   * right after a page is removed from the notebook.
    *
    * Since: 2.10
    **/
@@ -869,7 +869,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
   /**
-   * GtkNotebook::page-attached:
+   * GtkNotebook::page-added:
    * @notebook: the #GtkNotebook
    * @child: the child #GtkWidget affected
    * @page_num: the new page number for @child
@@ -3299,13 +3299,17 @@ gtk_notebook_remove (GtkContainer *container,
       children = children->next;
     }
 
+  g_object_ref (widget);
+
+  gtk_notebook_real_remove (notebook, children);
+
   g_signal_emit (notebook,
 		 notebook_signals[PAGE_REMOVED],
 		 0,
 		 widget,
 		 page_num);
-
-  gtk_notebook_real_remove (notebook, children);
+  
+  g_object_unref (widget);
 }
 
 static gboolean
