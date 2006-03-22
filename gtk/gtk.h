@@ -53,6 +53,7 @@
 #include <gtk/gtkcellrenderercombo.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrendererprogress.h>
+#include <gtk/gtkcellrendererspin.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellview.h>

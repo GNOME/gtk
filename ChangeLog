@@ -1,3 +1,19 @@
+2006-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkcellrendererspin.h:
+	* gtk/gtkcellrendererspin.c: Add a cell renderer which 
+	uses a spinbutton to edit the value of a cell. (#156023,
+	Daniel Kasak, Lorenzo Gil Sanchez, Carlos Garnacho)
+
+	* gtk/gtk.h: 
+	* gtk/Makefile.am: Glue it in.
+
+2006-03-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testtreeview.c (drag_begin_cb): Test setting up
+	drag icons for tree dnd.
+
 2006-03-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentry.c: applied modified patch from maemo-gtk which
@@ -106,6 +122,7 @@
 	(gtk_notebook_destroy): Leave the removal of the children
 	to the container destroy method.  (#319032, Yevgen Muntyan)
 
+>>>>>>> 1.7625
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_remove): Use the existing

@@ -4368,6 +4368,22 @@ gtk_cell_renderer_combo_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcellrendererspin</FILE>
+<TITLE>GtkCellRendererSpin</TITLE>
+GtkCellRendererSpin
+gtk_cell_renderer_spin_new
+<SUBSECTION Standard>
+GTK_TYPE_CELL_RENDERER_SPIN
+GTK_CELL_RENDERER_SPIN
+GTK_CELL_RENDERER_SPIN_CLASS
+GTK_IS_CELL_RENDERER_SPIN
+GTK_IS_CELL_RENDERER_SPIN_CLASS
+GTK_CELL_RENDERER_SPIN_GET_CLASS
+<SUBSECTION Private>
+gtk_cell_renderer_spin_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcellrendererpixbuf</FILE>
 <TITLE>GtkCellRendererPixbuf</TITLE>
 GtkCellRendererPixbuf
