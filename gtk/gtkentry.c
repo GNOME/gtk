@@ -62,6 +62,7 @@
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
 #define COMPLETION_TIMEOUT 300
+#define LAST_CHAR_MAX 8
 
 /* Initial size of buffer, in bytes */
 #define MIN_SIZE 16
@@ -80,6 +81,11 @@ struct _GtkEntryPrivate
 {
   gfloat xalign;
   gint insert_pos;
+
+  gchar last_char[LAST_CHAR_MAX];
+  guint last_char_timeout_id;
+  gint  last_char_length;
+  gint  last_char_position;
 };
 
 enum {
@@ -902,6 +908,21 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       TRUE,
 						       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkSettings:gtk-entry-last-char-timeout:
+   *
+   * How long to show the last inputted character in hidden
+   * entries. This value is in milliseconds. 0 disables showing the
+   * last char. 600 is a good value for enabling it.
+   *
+   * Since: 2.10
+   */
+  gtk_settings_install_property (g_param_spec_uint ("gtk-entry-last-char-timeout",
+                                                    P_("Last Char Timeout"),
+                                                    P_("How long to show the last inputted character in hidden entries"),
+                                                    0, G_MAXUINT, 0,
+                                                    GTK_PARAM_READWRITE));
+
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
 }
 
@@ -1090,6 +1111,11 @@ gtk_entry_init (GtkEntry *entry)
   entry->truncate_multiline = FALSE;
   priv->xalign = 0.0;
 
+  memset (&priv->last_char, 0, LAST_CHAR_MAX);
+  priv->last_char_timeout_id = 0;
+  priv->last_char_length = 0;
+  priv->last_char_position = 0;
+
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
                      NULL, 0,
@@ -1157,6 +1183,7 @@ static void
 gtk_entry_finalize (GObject *object)
 {
   GtkEntry *entry = GTK_ENTRY (object);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   gtk_entry_set_completion (entry, NULL);
 
@@ -1170,6 +1197,9 @@ gtk_entry_finalize (GObject *object)
 
   if (entry->recompute_idle)
     g_source_remove (entry->recompute_idle);
+
+  if (priv->last_char_timeout_id)
+    g_source_remove (priv->last_char_timeout_id);
 
   entry->text_size = 0;
 
@@ -2332,10 +2362,11 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 			    gint         new_text_length,
 			    gint        *position)
 {
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv  = GTK_ENTRY_GET_PRIVATE (entry);
   gint index;
   gint n_chars;
-
-  GtkEntry *entry = GTK_ENTRY (editable);
+  guint last_char_timeout;
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
@@ -2404,6 +2435,19 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   
   if (entry->selection_bound > *position)
     entry->selection_bound += n_chars;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
+                "gtk-entry-last-char-timeout", &last_char_timeout,
+                NULL);
+
+  if (last_char_timeout > 0 && n_chars == 1 && !entry->visible &&
+      (new_text_length < LAST_CHAR_MAX))
+    {
+      memset (&priv->last_char, 0x0, LAST_CHAR_MAX);
+      priv->last_char_length = new_text_length;
+      memcpy (&priv->last_char, new_text, new_text_length);
+      priv->last_char_position = *position + n_chars;
+    }
 
   *position += n_chars;
 
@@ -3049,12 +3093,26 @@ append_char (GString *str,
       ++i;
     }
 }
-     
+
+static gboolean
+gtk_entry_remove_last_char (gpointer data)
+{
+  GDK_THREADS_ENTER();
+
+  /* Force the string to be redrawn, but now without a visible character */
+  gtk_entry_recompute (GTK_ENTRY (data));
+
+  GDK_THREADS_LEAVE();
+
+  return FALSE;
+}
+
 static PangoLayout *
 gtk_entry_create_layout (GtkEntry *entry,
 			 gboolean  include_preedit)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   PangoLayout *layout = gtk_widget_create_pango_layout (widget, NULL);
   PangoAttrList *tmp_attrs = pango_attr_list_new ();
   
@@ -3063,7 +3121,7 @@ gtk_entry_create_layout (GtkEntry *entry,
   PangoAttrList *preedit_attrs = NULL;
 
   pango_layout_set_single_paragraph_mode (layout, TRUE);
-  
+
   if (include_preedit)
     {
       gtk_im_context_get_preedit_string (entry->im_context,
@@ -3087,7 +3145,7 @@ gtk_entry_create_layout (GtkEntry *entry,
           gint ch_len;
           gint preedit_len_chars;
           gunichar invisible_char;
-          
+
           ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
           preedit_len_chars = g_utf8_strlen (preedit_string, -1);
           ch_len += preedit_len_chars;
@@ -3163,13 +3221,55 @@ gtk_entry_create_layout (GtkEntry *entry,
         {
           GString *str = g_string_new (NULL);
           gunichar invisible_char;
-          
+          guint last_char_timeout;
+
+          g_object_get (gtk_widget_get_settings (widget),
+                        "gtk-entry-last-char-timeout", &last_char_timeout,
+                        NULL);
+
           if (entry->invisible_char != 0)
             invisible_char = entry->invisible_char;
           else
             invisible_char = ' '; /* just pick a char */
-          
-          append_char (str, invisible_char, entry->text_length);
+
+          if (priv->last_char_timeout_id)
+            {
+              g_source_remove (priv->last_char_timeout_id);
+              priv->last_char_timeout_id = 0;
+            }
+
+          if (last_char_timeout == 0 || priv->last_char_length == 0)
+            {
+              append_char (str, invisible_char, entry->text_length);
+            }
+          else
+            {
+              /* Draw hidden characters upto the inserted position,
+               * then the real thing, pad up to full length
+               */
+              if (priv->last_char_position > 1)
+                append_char (str, invisible_char,
+                             priv->last_char_position - 1);
+
+              g_string_append_len (str, priv->last_char,
+                                   priv->last_char_length);
+
+              if (priv->last_char_position < entry->text_length)
+                append_char (str, invisible_char,
+                             entry->text_length - priv->last_char_position);
+
+              /* Now remove this last inputted character, don't need
+               * it anymore
+               */
+              memset (priv->last_char, 0, LAST_CHAR_MAX);
+              priv->last_char_length = 0;
+
+              priv->last_char_timeout_id =
+                g_timeout_add (last_char_timeout,
+                               (GSourceFunc) gtk_entry_remove_last_char,
+                               entry);
+            }
+
           pango_layout_set_text (layout, str->str, str->len);
           g_string_free (str, TRUE);
         }

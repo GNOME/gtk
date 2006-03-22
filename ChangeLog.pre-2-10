@@ -1,5 +1,11 @@
 2006-03-22  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkentry.c: applied modified patch from maemo-gtk which
+	allows the most recently entered character in a hidden entry to be
+	shown for a configurable period of time. Fixes bug #334560.
+
+2006-03-22  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktextbuffer.h (enum GtkTextBufferTargetInfo): count down
 	from G_MAXUINT to avoid clashes with application-added DND
 	targets.
