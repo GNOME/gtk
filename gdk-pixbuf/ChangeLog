@@ -1,3 +1,9 @@
+2006-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-loader.c: Add some documentation about
+	supported image formats, and how to find out about them.
+	(#335536, Murray Cumming)
+
 2006-03-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* ==== Released 2.8.16 ===
