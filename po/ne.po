@@ -2069,7 +2069,7 @@ msgstr "जि टि के + ले झण्डा हटाउन त्र�
 #.
 #: gtk/gtkmain.c:502
 msgid "default:LTR"
-msgstr "पूर्वनिर्धारित:एल टि आर "
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:595
 msgid "GTK+ Options"
