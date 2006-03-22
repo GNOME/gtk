@@ -40,7 +40,6 @@
 #include "gtkalias.h"
 #include "gtkdnd.h"
 
-
 #define ARROW_SIZE            12
 #define ARROW_SPACING         0
 #define SCROLL_DELAY_FACTOR   5
@@ -2847,33 +2846,36 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
 static void
 do_detach_tab (GtkNotebook     *from,
 	       GtkNotebook     *to,
-	       GtkNotebookPage *page_info,
+	       GtkWidget       *child,
 	       gint             x,
 	       gint             y)
 {
-  GtkWidget *child, *tab_label, *menu_label;
+  GtkWidget *tab_label, *menu_label;
   gboolean tab_expand, tab_fill, reorderable, detachable;
   GList *element;
   guint tab_pack;
   gint page_num;
 
-  menu_label = tab_label = child = NULL;
+  menu_label = gtk_notebook_get_menu_label (from, child);
 
-  if (page_info->menu_label)
-    menu_label = g_object_ref (page_info->menu_label);
+  if (menu_label)
+    g_object_ref (menu_label);
 
-  if (page_info->tab_label)
-    tab_label = g_object_ref (page_info->tab_label);
+  tab_label = gtk_notebook_get_tab_label (from, child);
+  
+  if (tab_label)
+    g_object_ref (tab_label);
 
-  if (page_info->child)
-    child = g_object_ref (page_info->child);
+  g_object_ref (child);
 
-  /* preserve properties */
-  tab_expand = page_info->expand;
-  tab_fill = page_info->fill;
-  tab_pack = page_info->pack;
-  reorderable = page_info->reorderable;
-  detachable = page_info->detachable;
+  gtk_container_child_get (GTK_CONTAINER (from),
+			   child,
+			   "tab-expand", &tab_expand,
+			   "tab-fill", &tab_fill,
+			   "tab-pack", &tab_pack,
+			   "reorderable", &reorderable,
+			   "detachable", &detachable,
+			   NULL);
 
   gtk_container_remove (GTK_CONTAINER (from), child);
 
@@ -2912,7 +2914,6 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 			    guint             time)
 {
   GtkNotebook *dest_notebook, *notebook;
-  gint page_num;
 
   if (data->target != gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB") &&
       (data->target != gdk_atom_intern_static_string ("application/x-rootwindow-drop") ||
@@ -2920,15 +2921,14 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
     return;
 
   notebook = GTK_NOTEBOOK (widget);
-  page_num = g_list_index (notebook->children, notebook->cur_page);
 
   if (data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       gtk_selection_data_set (data,
 			      data->target,
 			      8,
-			      (void*) notebook->cur_page,
-			      sizeof (GtkNotebookPage));
+			      (void*) &notebook->cur_page->child,
+			      sizeof (gpointer));
     }
   else
     {
@@ -2944,7 +2944,7 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 						window_creation_hook_data);
 
       if (dest_notebook)
-	do_detach_tab (notebook, dest_notebook, notebook->cur_page, 0, 0);
+	do_detach_tab (notebook, dest_notebook, notebook->cur_page->child, 0, 0);
     }
 }
 
@@ -2959,7 +2959,7 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
 {
   GtkNotebook *notebook;
   GtkWidget *source_widget;
-  GtkNotebookPage *page_info;
+  GtkWidget **child;
 
   notebook = GTK_NOTEBOOK (widget);
   source_widget = gtk_drag_get_source_widget (context);
@@ -2967,13 +2967,13 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
   if (source_widget &&
       data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
-      page_info = (void*) data->data;
+      child = (void*) data->data;
 
-      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, page_info, x, y);
+      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child, x, y);
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
-
-  gtk_drag_finish (context, FALSE, FALSE, time);
+  else
+    gtk_drag_finish (context, FALSE, FALSE, time);
 }
 
 /* Private GtkContainer Methods :
@@ -6920,10 +6920,43 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * @child: a child #GtkWidget
  * @detachable: whether the tab is detachable or not
  *
- * Sets whether the tab can be detached from @notebook to another notebook.
+ * Sets whether the tab can be detached from @notebook to another
+ * notebook or widget.
  *
  * Note that 2 notebooks must share a common group identificator
- * (see gtk_notebook_set_group_id ()) to allow tabs interchange between them.
+ * (see gtk_notebook_set_group_id ()) to allow automatic tabs
+ * interchange between them.
+ *
+ * If you want a widget to interact with a notebook through DnD
+ * (i.e.: accept dragged tabs from it) it must be set as a drop
+ * destination and accept the target "GTK_NOTEBOOK_TAB". The notebook
+ * will fill the selection with a GtkWidget** pointing to the child
+ * widget that corresponds to the dropped tab.
+ *
+ * <informalexample><programlisting>
+ *  static void
+ *  on_drop_zone_drag_data_received (GtkWidget        *widget,
+ *                                   GdkDragContext   *context,
+ *                                   gint              x,
+ *                                   gint              y,
+ *                                   GtkSelectionData *selection_data,
+ *                                   guint             info,
+ *                                   guint             time,
+ *                                   gpointer          user_data)
+ *  {
+ *    GtkWidget *notebook;
+ *    GtkWidget **child;
+ *
+ *    notebook = gtk_drag_get_source_widget (context);
+ *    child = (void*) selection_data->data;
+ *
+ *    process_widget (*child);
+ *    gtk_container_remove (GTK_CONTAINER (notebook), *child);
+ *  }
+ * </programlisting></informalexample>
+ *
+ * If you want a notebook to accept drags from other widgets,
+ * you will have to set your own DnD code to do it.
  *
  * Since: 2.10
  **/

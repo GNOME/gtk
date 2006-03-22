@@ -1,3 +1,10 @@
+2006-03-22  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c: send a GtkWidget** instead of a GtkNotebookPage*
+	when doing tabs DnD, this allows DnD interaction with other widgets,
+	added some docs for this too.
+	* tests/testnotebookdnd.c: add some code to test it.
+
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: 
