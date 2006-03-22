@@ -3498,6 +3498,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   GdkRectangle cell_area;
   guint flags;
   gint highlight_x;
+  gint expander_cell_width;
   gint bin_window_width;
   gint bin_window_height;
   GtkTreePath *cursor_path;
@@ -3519,11 +3520,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
+  _gtk_widget_get_focus_style (widget,
+			       NULL, &focus_line_width, NULL, NULL);
   gtk_widget_style_get (widget,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"allow-rules", &allow_rules,
-			"focus-line-width", &focus_line_width,
 			NULL);
 
   if (tree_view->priv->tree == NULL)
@@ -3627,6 +3629,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
       cell_offset = 0;
       highlight_x = 0; /* should match x coord of first cell */
+      expander_cell_width = 0;
 
       background_area.y = y_offset + event->area.y;
       background_area.height = max_height;
@@ -3783,6 +3786,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                * level of the tree we're dropping at.
                */
               highlight_x = cell_area.x;
+	      expander_cell_width = cell_area.width;
+
 	      if (is_separator)
 		gtk_paint_hline (widget->style,
 				 event->window,
@@ -3896,10 +3901,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           if (highlight_y >= 0)
             {
               gdk_draw_line (event->window,
-                             widget->style->black_gc,
-                             highlight_x,
+                             widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                             rtl ? highlight_x + expander_cell_width : highlight_x,
                              highlight_y,
-                             bin_window_width - highlight_x,
+                             rtl ? 0 : bin_window_width,
                              highlight_y);
             }
         }
@@ -4662,9 +4667,9 @@ validate_row (GtkTreeView *tree_view,
 							      tree_view->priv->row_separator_data);
     }
 
+  _gtk_widget_get_focus_style (GTK_WIDGET (tree_view),
+			       NULL, &focus_line_width, &focus_pad, NULL);
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"focus-padding", &focus_pad,
-			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			NULL);
