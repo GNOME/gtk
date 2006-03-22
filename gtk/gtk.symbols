@@ -996,6 +996,8 @@ gtk_drag_dest_get_target_list
 gtk_drag_dest_set
 gtk_drag_dest_set_proxy
 gtk_drag_dest_set_target_list
+gtk_drag_dest_set_track_motion
+gtk_drag_dest_get_track_motion
 gtk_drag_dest_unset
 gtk_drag_finish
 gtk_drag_get_data

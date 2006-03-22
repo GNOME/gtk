@@ -131,6 +131,7 @@ struct _GtkDragDestSite
   guint              do_proxy : 1;
   guint              proxy_coords : 1;
   guint              have_drag : 1;
+  guint              track_motion : 1;
 };
   
 struct _GtkDragDestInfo 
@@ -1026,6 +1027,8 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
       g_signal_handlers_disconnect_by_func (widget,
 					    gtk_drag_dest_hierarchy_changed,
 					    old_site);
+
+      site->track_motion = old_site->track_motion;
     }
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -1272,6 +1275,61 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
   gtk_target_list_unref (target_list);
 }
 
+/**
+ * gtk_drag_dest_set_track_motion:
+ * @widget: a #GtkWidget that's a drag destination
+ * @track_motion: whether to accept all targets
+ * 
+ * Tells the widget to emit ::drag-motion and ::drag-leave
+ * events regardless of the targets and the %GTK_DEST_DEFAULT_MOTION
+ * flag. 
+ *
+ * This may be used when a widget wants to do generic
+ * actions regardless of the targets that the source offers.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_drag_dest_set_track_motion (GtkWidget *widget,
+				gboolean   track_motion)
+{
+  GtkDragDestSite *site;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
+  
+  g_return_if_fail (site != NULL);
+
+  site->track_motion = track_motion != FALSE;
+}
+
+/**
+ * gtk_drag_dest_get_track_motion:
+ * @widget: a #GtkWidget that's a drag destination
+ * 
+ * Returns whether the widget has been configured to always
+ * emit ::drag-motion signals.
+ * 
+ * Return Value: %TRUE if the widget always emits ::drag-motion events
+ *
+ * Since: 2.10
+ **/
+gboolean
+gtk_drag_dest_get_track_motion (GtkWidget *widget)
+{
+  GtkDragDestSite *site;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
+
+  if (site)
+    return site->track_motion;
+
+  return FALSE;
+}
+
 /*************************************************************
  * _gtk_drag_dest_handle_event:
  *     Called from widget event handling code on Drag events
@@ -1352,7 +1410,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	data.callback = (event->type == GDK_DRAG_MOTION) ?
 	  gtk_drag_dest_motion : gtk_drag_dest_drop;
 	data.time = event->dnd.time;
-	
+
 	gtk_drag_find_widget (toplevel, &data);
 
 	if (info->widget && !data.found)
@@ -1856,9 +1914,9 @@ gtk_drag_dest_leave (GtkWidget      *widget,
       if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
 	gtk_drag_unhighlight (widget);
 
-      if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
-	g_signal_emit_by_name (widget, "drag_leave",
-			       context, time);
+      if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
+	  site->track_motion)
+	g_signal_emit_by_name (widget, "drag_leave", context, time);
       
       site->have_drag = FALSE;
     }
@@ -1935,7 +1993,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	{
 	  gint i;
 	  
-	  for (i=0; i<8; i++)
+	  for (i = 0; i < 8; i++)
 	    {
 	      if ((site->actions & (1 << i)) &&
 		  (context->actions & (1 << i)))
@@ -1945,7 +2003,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 		}
 	    }
 	}
-      
+
       if (action && gtk_drag_dest_find_target (widget, context, NULL))
 	{
 	  if (!site->have_drag)
@@ -1954,13 +2012,14 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	      if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
 		gtk_drag_highlight (widget);
 	    }
-	  
+
 	  gdk_drag_status (context, action, time);
 	}
       else
 	{
 	  gdk_drag_status (context, 0, time);
-	  return TRUE;
+	  if (!site->track_motion)
+	    return TRUE;
 	}
     }
 
@@ -2055,13 +2114,13 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
       if (site->flags & GTK_DEST_DEFAULT_DROP)
 	{
 	  GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
-      
+
 	  if (target == GDK_NONE)
 	    {
 	      gtk_drag_finish (context, FALSE, FALSE, time);
 	      return TRUE;
 	    }
-	  else
+	  else 
 	    gtk_drag_get_data (widget, context, target, time);
 	}
 

@@ -34,6 +34,7 @@
 
 #define DEFAULT_TIMEOUT_INITIAL 200
 #define DEFAULT_TIMEOUT_REPEAT   20
+#define DEFAULT_TIMEOUT_EXPAND  500
 
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
@@ -87,6 +88,7 @@ enum {
   PROP_SHOW_UNICODE_MENU,
   PROP_TIMEOUT_INITIAL,
   PROP_TIMEOUT_REPEAT,
+  PROP_TIMEOUT_EXPAND,
   PROP_COLOR_SCHEME,
   PROP_ENABLE_ANIMATIONS,
   PROP_TOUCHSCREEN_MODE,
@@ -451,6 +453,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     NULL);
 
   g_assert (result == PROP_TIMEOUT_REPEAT);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-timeout-expand",
+ 							       P_("Expand timeout"),
+ 							       P_("Expand value for timeouts, when a widget is expanding a new region"),
+ 							       0, G_MAXINT, DEFAULT_TIMEOUT_EXPAND,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TIMEOUT_EXPAND);
 
   /**
    * GtkSettings:gtk-color-scheme:

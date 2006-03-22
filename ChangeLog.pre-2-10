@@ -1,5 +1,21 @@
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
+	Improved DND support for GtkNotebook  (#332991, Carlos Garnacho)
+	
+	* gtk/gtk.symbols: 
+	* gtk/gtkdnd.h: 
+	* gtk/gtkdnd.c: Add a track_motion flag on GtkDragDest
+	with getter and setter, for cases where the drag destination
+	is interested in drag motion events independent of targets.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Add a setting
+	for the timeout used when expanding during DND.
+
+	* gtk/gtknotebook.c: Use the track_motion flag to switch
+	notebook tabs when hovering over tabs during DND.
+	
+2006-03-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Use fg_gc to
 	draw the inter-row drop highlight. Also draw the line all the 
 	way across, and flip it in RTL mode. (#334906, Ian McDonald)

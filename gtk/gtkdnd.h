@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -86,6 +87,10 @@ void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
 void           gtk_drag_dest_add_text_targets  (GtkWidget    *widget);
 void           gtk_drag_dest_add_image_targets (GtkWidget    *widget);
 void           gtk_drag_dest_add_uri_targets   (GtkWidget    *widget);
+
+void           gtk_drag_dest_set_track_motion  (GtkWidget *widget,
+						gboolean   track_motion);
+gboolean       gtk_drag_dest_get_track_motion  (GtkWidget *widget);
 
 /* Source side */
 
