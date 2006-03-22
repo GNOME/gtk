@@ -1,3 +1,7 @@
+2006-03-22  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkexpander.c: Make it to expand when hovering during DnD
+
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Improved DND support for GtkNotebook  (#332991, Carlos Garnacho)

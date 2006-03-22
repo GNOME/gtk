@@ -33,6 +33,7 @@
 #include "gtkprivate.h"
 #include <gdk/gdkkeysyms.h>
 #include "gtkalias.h"
+#include "gtkdnd.h"
 
 #define GTK_EXPANDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_EXPANDER, GtkExpanderPrivate))
 
@@ -58,6 +59,7 @@ struct _GtkExpanderPrivate
 
   GtkExpanderStyle  expander_style;
   guint             animation_timeout;
+  guint             expand_timer;
 
   guint             expanded : 1;
   guint             use_underline : 1;
@@ -104,6 +106,14 @@ static void     gtk_expander_grab_notify    (GtkWidget        *widget,
 					     gboolean          was_grabbed);
 static void     gtk_expander_state_changed  (GtkWidget        *widget,
 					     GtkStateType      previous_state);
+static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
+					     GdkDragContext   *context,
+					     gint              x,
+					     gint              y,
+					     guint             time);
+static void     gtk_expander_drag_leave     (GtkWidget        *widget,
+					     GdkDragContext   *context,
+					     guint             time);
 
 static void gtk_expander_add    (GtkContainer *container,
 				 GtkWidget    *widget);
@@ -183,6 +193,8 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->focus                = gtk_expander_focus;
   widget_class->grab_notify          = gtk_expander_grab_notify;
   widget_class->state_changed        = gtk_expander_state_changed;
+  widget_class->drag_motion          = gtk_expander_drag_motion;
+  widget_class->drag_leave           = gtk_expander_drag_leave;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
@@ -292,6 +304,10 @@ gtk_expander_init (GtkExpander *expander)
   priv->use_markup = FALSE;
   priv->button_down = FALSE;
   priv->prelight = FALSE;
+  priv->expand_timer = 0;
+
+  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
+  gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 }
 
 static void
@@ -978,6 +994,57 @@ gtk_expander_leave_notify (GtkWidget        *widget,
   return FALSE;
 }
 
+static gboolean
+expand_timeout (gpointer data)
+{
+  GtkExpander *expander = GTK_EXPANDER (data);
+  GtkExpanderPrivate *priv = expander->priv;
+
+  priv->expand_timer = 0;
+  gtk_expander_set_expanded (expander, TRUE);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_expander_drag_motion (GtkWidget        *widget,
+			  GdkDragContext   *context,
+			  gint              x,
+			  gint              y,
+			  guint             time)
+{
+  GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpanderPrivate *priv = expander->priv;
+
+  if (!priv->expanded && !priv->expand_timer)
+    {
+      GtkSettings *settings;
+      guint timeout;
+
+      settings = gtk_widget_get_settings (widget);
+      g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
+
+      priv->expand_timer = g_timeout_add (timeout, (GSourceFunc) expand_timeout, expander);
+    }
+
+  return TRUE;
+}
+
+static void
+gtk_expander_drag_leave (GtkWidget      *widget,
+			 GdkDragContext *context,
+			 guint           time)
+{
+  GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpanderPrivate *priv = expander->priv;
+
+  if (priv->expand_timer)
+    {
+      g_source_remove (priv->expand_timer);
+      priv->expand_timer = 0;
+    }
+}
+
 typedef enum
 {
   FOCUS_NONE,
@@ -1180,7 +1247,6 @@ gtk_expander_activate (GtkExpander *expander)
 {
   gtk_expander_set_expanded (expander, !expander->priv->expanded);
 }
-
 
 /**
  * gtk_expander_new:
