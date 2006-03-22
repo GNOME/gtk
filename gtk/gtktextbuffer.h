@@ -43,12 +43,15 @@ G_BEGIN_DECLS
 
 /* these values are used as "info" for the targets contained in the
  * lists returned by gtk_text_buffer_get_copy,paste_target_list()
+ *
+ * the enum counts down from G_MAXUINT to avoid clashes with application
+ * added drag destinations which usually start at 0.
  */
 typedef enum
 {
-  GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS,
-  GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
-  GTK_TEXT_BUFFER_TARGET_INFO_TEXT
+  GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS = G_MAXUINT - 0,
+  GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT       = G_MAXUINT - 1,
+  GTK_TEXT_BUFFER_TARGET_INFO_TEXT            = G_MAXUINT - 2
 } GtkTextBufferTargetInfo;
 
 typedef struct _GtkTextBTree GtkTextBTree;

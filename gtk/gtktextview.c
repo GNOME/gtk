@@ -1044,9 +1044,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 static void
 gtk_text_view_init (GtkTextView *text_view)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (text_view);
+  GtkWidget *widget = GTK_WIDGET (text_view);
+  GtkTargetList *target_list;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
@@ -1064,6 +1063,10 @@ gtk_text_view_init (GtkTextView *text_view)
 
   gtk_drag_dest_set (widget, 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
+
+  target_list = gtk_target_list_new (NULL, 0);
+  gtk_drag_dest_set_target_list (widget, target_list);
+  gtk_target_list_unref (target_list);
 
   text_view->virtual_cursor_x = -1;
   text_view->virtual_cursor_y = -1;
@@ -6159,6 +6162,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
+  GdkAtom target;
   GdkDragAction suggested_action = 0;
   
   text_view = GTK_TEXT_VIEW (widget);
@@ -6180,8 +6184,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                                      &newplace,
                                      bx, by);  
 
-  if (gtk_drag_dest_find_target (widget, context,
-                                 gtk_drag_dest_get_target_list (widget)) == GDK_NONE)
+  target = gtk_drag_dest_find_target (widget, context,
+                                      gtk_drag_dest_get_target_list (widget));
+
+  if (target == GDK_NONE)
     {
       /* can't accept any of the offered targets */
     }                                 
@@ -6887,7 +6893,45 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
                                   const GParamSpec *pspec,
                                   gpointer          data)
 {
-  gtk_drag_dest_set_target_list (data, gtk_text_buffer_get_paste_target_list (buffer));
+  GtkWidget     *widget = GTK_WIDGET (data);
+  GtkTargetList *view_list;
+  GtkTargetList *buffer_list;
+  GList         *list;
+
+  view_list = gtk_drag_dest_get_target_list (widget);
+  buffer_list = gtk_text_buffer_get_paste_target_list (buffer);
+
+  if (view_list)
+    gtk_target_list_ref (view_list);
+  else
+    view_list = gtk_target_list_new (NULL, 0);
+
+  list = view_list->list;
+  while (list)
+    {
+      GtkTargetPair *pair = list->data;
+      guint          info;
+
+      list = g_list_next (list); /* get next element before removing */
+
+      for (info = GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS;
+           info >= GTK_TEXT_BUFFER_TARGET_INFO_TEXT;
+           info--)
+        {
+          if (pair->info == info)
+            gtk_target_list_remove (view_list, pair->target);
+        }
+    }
+
+  for (list = buffer_list->list; list; list = g_list_next (list))
+    {
+      GtkTargetPair *pair = list->data;
+
+      gtk_target_list_add (view_list, pair->target, pair->flags, pair->info);
+    }
+
+  gtk_drag_dest_set_target_list (widget, view_list);
+  gtk_target_list_unref (view_list);
 }
 
 static void

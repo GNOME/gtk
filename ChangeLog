@@ -1,3 +1,18 @@
+2006-03-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextbuffer.h (enum GtkTextBufferTargetInfo): count down
+	from G_MAXUINT to avoid clashes with application-added DND
+	targets.
+
+	* gtk/gtktextview.c (gtk_text_view_init): set an empty
+	GtkTargetList on the drag_dest so it is not NULL when a derived
+	class' init() function is called.
+
+	(gtk_text_view_target_list_notify): copy the text buffer's paste
+	targets into the view's destinstion target list (preserving
+	application-added DND targets), instead of replacing the view's
+	target list. Fixes bug #334399.
+
 2006-03-21  Anders Carlsson  <andersca@imendio.com>
 
         * gtk/Makefile.am:
