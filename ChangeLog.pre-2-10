@@ -1,3 +1,9 @@
+2006-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/prop-editor.c: 
+	* tests/testtreeview.c: Remove pointless includes of config.h,
+	to make it easier compilable against system GTK+.
+
 2006-03-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentry.c: renamed last-char-timeout to
