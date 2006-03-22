@@ -1,3 +1,9 @@
+2006-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Use fg_gc to
+	draw the inter-row drop highlight. Also draw the line all the 
+	way across, and flip it in RTL mode. (#334906, Ian McDonald)
+
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): Don't leave
