@@ -3520,12 +3520,11 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  _gtk_widget_get_focus_style (widget,
-			       NULL, &focus_line_width, NULL, NULL);
   gtk_widget_style_get (widget,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"allow-rules", &allow_rules,
+			"focus-line-width", &focus_line_width,
 			NULL);
 
   if (tree_view->priv->tree == NULL)
@@ -4667,9 +4666,9 @@ validate_row (GtkTreeView *tree_view,
 							      tree_view->priv->row_separator_data);
     }
 
-  _gtk_widget_get_focus_style (GTK_WIDGET (tree_view),
-			       NULL, &focus_line_width, &focus_pad, NULL);
   gtk_widget_style_get (GTK_WIDGET (tree_view),
+			"focus-padding", &focus_pad,
+			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			NULL);
