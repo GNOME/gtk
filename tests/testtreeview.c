@@ -22,7 +22,7 @@
 #include <string.h>
 #include "prop-editor.h"
 #include <gtk/gtk.h>
-
+#include <stdlib.h>
 
 /* Don't copy this bad example; inline RGB data is always a better
  * idea than inline XPMs.
@@ -258,6 +258,66 @@ toggled_callback (GtkCellRendererToggle *celltoggle,
                g_type_name (G_TYPE_FROM_INSTANCE (model)));
 }
 
+static void
+edited_callback (GtkCellRendererText *renderer,
+		 const gchar   *path_string,
+		 const gchar   *new_text,
+		 GtkTreeView  *tree_view)
+{
+  GtkTreeModel *model = NULL;
+  GtkTreeModelSort *sort_model = NULL;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  guint value = atoi (new_text);
+  
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  model = gtk_tree_view_get_model (tree_view);
+  
+  if (GTK_IS_TREE_MODEL_SORT (model))
+    {
+      sort_model = GTK_TREE_MODEL_SORT (model);
+      model = gtk_tree_model_sort_get_model (sort_model);
+    }
+
+  if (model == NULL)
+    return;
+
+  if (sort_model)
+    {
+      g_warning ("FIXME implement conversion from TreeModelSort iter to child model iter");
+      return;
+    }
+      
+  path = gtk_tree_path_new_from_string (path_string);
+  if (!gtk_tree_model_get_iter (model,
+                                &iter, path))
+    {
+      g_warning ("%s: bad path?", G_STRLOC);
+      return;
+    }
+  gtk_tree_path_free (path);
+
+  if (GTK_IS_LIST_STORE (model))
+    {
+      gtk_list_store_set (GTK_LIST_STORE (model),
+                          &iter,
+                          4,
+                          value,
+                          -1);
+    }
+  else if (GTK_IS_TREE_STORE (model))
+    {
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+                          &iter,
+                          4,
+                          value,
+                          -1);
+    }
+  else
+    g_warning ("don't know how to actually toggle value for model type %s",
+               g_type_name (G_TYPE_FROM_INSTANCE (model)));
+}
 
 static ColumnsType current_column_type = COLUMNS_LOTS;
 
@@ -268,7 +328,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
   GtkCellRenderer *rend;
   GdkPixbuf *pixbuf;
   GtkWidget *image;
-  
+  GtkObject *adjustment;
+    
   current_column_type = type;
   
   col = gtk_tree_view_get_column (tree_view, 0);
@@ -358,19 +419,25 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
-      
-#if 0
 
-      rend = gtk_cell_renderer_text_new ();
-      
+      rend = gtk_cell_renderer_spin_new ();
+
+      adjustment = gtk_adjustment_new (0, 0, 10000, 100, 100, 100);
+      g_object_set (rend, "editable", TRUE, NULL);
+      g_object_set (rend, "adjustment", adjustment, NULL);
+
+      g_signal_connect (rend, "edited",
+			G_CALLBACK (edited_callback), tree_view);
+
       col = gtk_tree_view_column_new_with_attributes ("Column 5",
                                                       rend,
-                                                      "text", 3,
+                                                      "text", 4,
                                                       NULL);
 
       setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+#if 0
       
       rend = gtk_cell_renderer_text_new ();
       
@@ -669,7 +736,7 @@ main (int    argc,
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
+  gtk_window_set_default_size (GTK_WINDOW (window), 430, 400);
 
   table = gtk_table_new (3, 1, FALSE);
 

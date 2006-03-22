@@ -1,3 +1,8 @@
+2006-03-22  Johan Dahlin  <jdahlin@async.com.br>
+
+	* tests/testtreeview.c: Add a column that demonstrates how to use
+	the new spinbutton cellrenderer.
+
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/prop-editor.c: 
@@ -143,7 +148,6 @@
 	(gtk_notebook_destroy): Leave the removal of the children
 	to the container destroy method.  (#319032, Yevgen Muntyan)
 
->>>>>>> 1.7625
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_remove): Use the existing
