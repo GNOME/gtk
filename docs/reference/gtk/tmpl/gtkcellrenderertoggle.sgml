@@ -49,6 +49,11 @@ property. When activated, it emits the toggled signal.
 
 </para>
 
+<!-- ##### ARG GtkCellRendererToggle:indicator-size ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererToggle:radio ##### -->
 <para>
 

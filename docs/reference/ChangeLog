@@ -1,5 +1,10 @@
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkcellrendererspin.sgml: 
+	* gtk/tmpl/gtkcellrendererprogress.sgml: 
+	* gtk/tmpl/gtkcellrenderercombo.sgml: 
+	* gtk/tmpl/gtkcellrendereraccel.sgml: Updates.
+
 	* gtk/gtk-sections.txt: Additions
 
 2006-03-20  Matthias Clasen  <mclasen@redhat.com>

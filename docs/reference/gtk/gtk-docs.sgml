@@ -138,6 +138,7 @@
 <!ENTITY GtkCellRendererCombo SYSTEM "xml/gtkcellrenderercombo.xml">
 <!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
 <!ENTITY GtkCellRendererProgress SYSTEM "xml/gtkcellrendererprogress.xml">
+<!ENTITY GtkCellRendererSpin SYSTEM "xml/gtkcellrendererspin.xml">
 <!ENTITY GtkCellRendererText SYSTEM "xml/gtkcellrenderertext.xml">
 <!ENTITY GtkCellRendererToggle SYSTEM "xml/gtkcellrenderertoggle.xml">
 <!ENTITY GtkCellView SYSTEM "xml/gtkcellview.xml">
@@ -418,6 +419,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkCellRendererCombo;
         &GtkCellRendererPixbuf;
         &GtkCellRendererProgress;
+        &GtkCellRendererSpin;
         &GtkCellRendererText;
         &GtkCellRendererToggle;
         &GtkListStore;
