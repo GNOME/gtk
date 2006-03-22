@@ -1,3 +1,11 @@
+2006-03-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkentry.c: renamed last-char-timeout to
+	password-hint-timeout and store all its data in a struct attached
+	as QData.
+
+	* gtk/gtkcellrendererspin.c: fix typo in #include.
+
 2006-03-22  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c: send a GtkWidget** instead of a GtkNotebookPage*

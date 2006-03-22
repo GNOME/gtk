@@ -62,7 +62,7 @@
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
 #define COMPLETION_TIMEOUT 300
-#define LAST_CHAR_MAX 8
+#define PASSWORD_HINT_MAX 8
 
 /* Initial size of buffer, in bytes */
 #define MIN_SIZE 16
@@ -72,6 +72,7 @@
 
 static const GtkBorder default_inner_border = { 2, 2, 2, 2 };
 static GQuark          quark_inner_border   = 0;
+static GQuark          quark_password_hint  = 0;
 
 typedef struct _GtkEntryPrivate GtkEntryPrivate;
 
@@ -81,11 +82,16 @@ struct _GtkEntryPrivate
 {
   gfloat xalign;
   gint insert_pos;
+};
 
-  gchar last_char[LAST_CHAR_MAX];
-  guint last_char_timeout_id;
-  gint  last_char_length;
-  gint  last_char_position;
+typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
+
+struct _GtkEntryPasswordHint
+{
+  gchar password_hint[PASSWORD_HINT_MAX];
+  guint password_hint_timeout_id;
+  gint  password_hint_length;
+  gint  password_hint_position;
 };
 
 enum {
@@ -497,6 +503,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
+  quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
 
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
@@ -909,7 +916,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       GTK_PARAM_READWRITE));
 
   /**
-   * GtkSettings:gtk-entry-last-char-timeout:
+   * GtkSettings:gtk-entry-password-hint-timeout:
    *
    * How long to show the last inputted character in hidden
    * entries. This value is in milliseconds. 0 disables showing the
@@ -917,8 +924,8 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Since: 2.10
    */
-  gtk_settings_install_property (g_param_spec_uint ("gtk-entry-last-char-timeout",
-                                                    P_("Last Char Timeout"),
+  gtk_settings_install_property (g_param_spec_uint ("gtk-entry-password-hint-timeout",
+                                                    P_("Password Hint Timeout"),
                                                     P_("How long to show the last inputted character in hidden entries"),
                                                     0, G_MAXUINT, 0,
                                                     GTK_PARAM_READWRITE));
@@ -1111,11 +1118,6 @@ gtk_entry_init (GtkEntry *entry)
   entry->truncate_multiline = FALSE;
   priv->xalign = 0.0;
 
-  memset (&priv->last_char, 0, LAST_CHAR_MAX);
-  priv->last_char_timeout_id = 0;
-  priv->last_char_length = 0;
-  priv->last_char_position = 0;
-
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
                      NULL, 0,
@@ -1183,7 +1185,6 @@ static void
 gtk_entry_finalize (GObject *object)
 {
   GtkEntry *entry = GTK_ENTRY (object);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   gtk_entry_set_completion (entry, NULL);
 
@@ -1197,9 +1198,6 @@ gtk_entry_finalize (GObject *object)
 
   if (entry->recompute_idle)
     g_source_remove (entry->recompute_idle);
-
-  if (priv->last_char_timeout_id)
-    g_source_remove (priv->last_char_timeout_id);
 
   entry->text_size = 0;
 
@@ -2354,6 +2352,15 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
 		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
 }
 
+static void
+gtk_entry_password_hint_free (GtkEntryPasswordHint *password_hint)
+{
+  if (password_hint->password_hint_timeout_id)
+    g_source_remove (password_hint->password_hint_timeout_id);
+
+  g_free (password_hint);
+}
+
 /* Default signal handlers
  */
 static void
@@ -2363,10 +2370,9 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 			    gint        *position)
 {
   GtkEntry *entry = GTK_ENTRY (editable);
-  GtkEntryPrivate *priv  = GTK_ENTRY_GET_PRIVATE (entry);
   gint index;
   gint n_chars;
-  guint last_char_timeout;
+  guint password_hint_timeout;
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
@@ -2437,16 +2443,31 @@ gtk_entry_real_insert_text (GtkEditable *editable,
     entry->selection_bound += n_chars;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
-                "gtk-entry-last-char-timeout", &last_char_timeout,
+                "gtk-entry-password-hint-timeout", &password_hint_timeout,
                 NULL);
 
-  if (last_char_timeout > 0 && n_chars == 1 && !entry->visible &&
-      (new_text_length < LAST_CHAR_MAX))
+  if (password_hint_timeout > 0 && n_chars == 1 && !entry->visible &&
+      (new_text_length < PASSWORD_HINT_MAX))
     {
-      memset (&priv->last_char, 0x0, LAST_CHAR_MAX);
-      priv->last_char_length = new_text_length;
-      memcpy (&priv->last_char, new_text, new_text_length);
-      priv->last_char_position = *position + n_chars;
+      GtkEntryPasswordHint *password_hint = g_object_get_qdata (G_OBJECT (entry),
+                                                                quark_password_hint);
+
+      if (! password_hint)
+        {
+          password_hint = g_new0 (GtkEntryPasswordHint, 1);
+          g_object_set_qdata_full (G_OBJECT (entry), quark_password_hint,
+                                   password_hint,
+                                   (GDestroyNotify) gtk_entry_password_hint_free);
+        }
+
+      memset (&password_hint->password_hint, 0x0, PASSWORD_HINT_MAX);
+      password_hint->password_hint_length = new_text_length;
+      memcpy (&password_hint->password_hint, new_text, new_text_length);
+      password_hint->password_hint_position = *position + n_chars;
+    }
+  else
+    {
+      g_object_set_qdata (G_OBJECT (entry), quark_password_hint, NULL);
     }
 
   *position += n_chars;
@@ -3095,7 +3116,7 @@ append_char (GString *str,
 }
 
 static gboolean
-gtk_entry_remove_last_char (gpointer data)
+gtk_entry_remove_password_hint (gpointer data)
 {
   GDK_THREADS_ENTER();
 
@@ -3112,7 +3133,6 @@ gtk_entry_create_layout (GtkEntry *entry,
 			 gboolean  include_preedit)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   PangoLayout *layout = gtk_widget_create_pango_layout (widget, NULL);
   PangoAttrList *tmp_attrs = pango_attr_list_new ();
   
@@ -3221,10 +3241,11 @@ gtk_entry_create_layout (GtkEntry *entry,
         {
           GString *str = g_string_new (NULL);
           gunichar invisible_char;
-          guint last_char_timeout;
+          guint password_hint_timeout;
+          GtkEntryPasswordHint *password_hint;
 
           g_object_get (gtk_widget_get_settings (widget),
-                        "gtk-entry-last-char-timeout", &last_char_timeout,
+                        "gtk-entry-password-hint-timeout", &password_hint_timeout,
                         NULL);
 
           if (entry->invisible_char != 0)
@@ -3232,41 +3253,46 @@ gtk_entry_create_layout (GtkEntry *entry,
           else
             invisible_char = ' '; /* just pick a char */
 
-          if (priv->last_char_timeout_id)
+          password_hint = g_object_get_qdata (G_OBJECT (entry),
+                                              quark_password_hint);
+
+          if (password_hint && password_hint->password_hint_timeout_id)
             {
-              g_source_remove (priv->last_char_timeout_id);
-              priv->last_char_timeout_id = 0;
+              g_source_remove (password_hint->password_hint_timeout_id);
+              password_hint->password_hint_timeout_id = 0;
             }
 
-          if (last_char_timeout == 0 || priv->last_char_length == 0)
+          if (password_hint_timeout == 0 || password_hint == NULL ||
+              (password_hint && password_hint->password_hint_length == 0))
             {
               append_char (str, invisible_char, entry->text_length);
             }
-          else
+          else if (password_hint)
             {
               /* Draw hidden characters upto the inserted position,
                * then the real thing, pad up to full length
                */
-              if (priv->last_char_position > 1)
+              if (password_hint->password_hint_position > 1)
                 append_char (str, invisible_char,
-                             priv->last_char_position - 1);
+                             password_hint->password_hint_position - 1);
 
-              g_string_append_len (str, priv->last_char,
-                                   priv->last_char_length);
+              g_string_append_len (str, password_hint->password_hint,
+                                   password_hint->password_hint_length);
 
-              if (priv->last_char_position < entry->text_length)
+              if (password_hint->password_hint_position < entry->text_length)
                 append_char (str, invisible_char,
-                             entry->text_length - priv->last_char_position);
+                             entry->text_length -
+                             password_hint->password_hint_position);
 
               /* Now remove this last inputted character, don't need
                * it anymore
                */
-              memset (priv->last_char, 0, LAST_CHAR_MAX);
-              priv->last_char_length = 0;
+              memset (password_hint->password_hint, 0, PASSWORD_HINT_MAX);
+              password_hint->password_hint_length = 0;
 
-              priv->last_char_timeout_id =
-                g_timeout_add (last_char_timeout,
-                               (GSourceFunc) gtk_entry_remove_last_char,
+              password_hint->password_hint_timeout_id =
+                g_timeout_add (password_hint_timeout,
+                               (GSourceFunc) gtk_entry_remove_password_hint,
                                entry);
             }
 

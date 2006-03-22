@@ -23,7 +23,7 @@
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkintl.h"
-#inlcude "gtkprivate.h"
+#include "gtkprivate.h"
 #include "gtkspinbutton.h"
 #include "gtkcellrendererspin.h"
 #include "gtkalias.h"
