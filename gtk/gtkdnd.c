@@ -1985,7 +1985,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
       return TRUE;
     }
 
-  if (site->flags & GTK_DEST_DEFAULT_MOTION)
+  if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
     {
       if (context->suggested_action & site->actions)
 	action = context->suggested_action;

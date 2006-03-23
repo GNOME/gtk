@@ -1,3 +1,9 @@
+2006-03-23  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_motion): make sure that gdk_drag_event()
+	is called when track_motion is TRUE to receive drag_motion and
+	drag_leave events properly.
+
 2006-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_remove): Emit the ::page-removed
