@@ -56,48 +56,50 @@ of such a statement:
 widget "mywindow.*.GtkEntry" style "my-entry-class"
 </programlisting></informalexample>
 
-attaches the style <literal>"my-entry-class"</literal>
-to all widgets whose <firstterm>widget path</firstterm>
-matches the <firstterm>pattern</firstterm>
-<literal>"mywindow.*.GtkEntry"</literal>. That is, all
-#GtkEntry widgets which are part of a #GtkWindow named <literal>"mywindow"</literal>.
+attaches the style <literal>"my-entry-class"</literal> to all 
+widgets  whose <firstterm>widget path</firstterm> matches the 
+<firstterm>pattern</firstterm> <literal>"mywindow.*.GtkEntry"</literal>. 
+That is, all #GtkEntry widgets which are part of a #GtkWindow named 
+<literal>"mywindow"</literal>.
 </para>
 
 <para>
-The patterns here are given in the standard shell glob
-syntax. The <literal>"?"</literal> wildcard matches
-any character, while <literal>"*"</literal> matches
-zero or more of any character. The three types of
-matching are against the widget path, the
-<firstterm>class path</firstterm> and the class
-hierarchy. Both the widget path and the class path consist of a
-<literal>"."</literal> separated list of all the
-parents of the widget and the widget itself from
-outermost to innermost. The difference is that in
-the widget path, the name assigned by
-gtk_widget_set_name() is used
-if present, otherwise the class name of the widget, while
-for the class path, the class name is always used.
+The patterns here are given in the standard shell glob syntax. 
+The <literal>"?"</literal> wildcard matches any character, while 
+<literal>"*"</literal> matches zero or more of any character.  
+The three types of matching are against the widget path, the
+<firstterm>class path</firstterm> and the class hierarchy. Both the 
+widget path and the class path consist of a <literal>"."</literal> 
+separated list of all the parents of the widget and the widget itself 
+from outermost to innermost. The difference is that in the widget path, 
+the name assigned by gtk_widget_set_name() is used if present, otherwise 
+the class name of the widget, while for the class path, the class name is 
+always used.
 </para>
 <para>
-So, if you have a #GtkEntry named
-<literal>"myentry"</literal>, inside of a horizontal box in a window
-named <literal>"mywindow"</literal>, then the
+Since GTK+ 2.10,<literal>widget_class</literal> paths can also contain
+<literal>&lt:classname&gt;</literal> substrings, which are matching 
+the class with the given name and any derived classes. For instance,
+<informalexample><programlisting>
+widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
+</programlisting></informalexample>
+will match #GtkLabel widgets which are contained in any kind of menu item.
+</para>
+<para>
+So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a 
+horizontal box in a window named <literal>"mywindow"</literal>, then the
 widget path is: <literal>"mywindow.GtkHBox.myentry"</literal>
 while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
 </para>
 <para>
-Matching against class is a little different. The pattern
-match is done against all class names in the widgets
-class hierarchy (not the layout hierarchy) in sequence, so the
-pattern:
+Matching against class is a little different. The pattern match is done
+against all class names in the widgets class hierarchy (not the layout 
+hierarchy) in sequence, so the pattern:
 <informalexample><programlisting>
 class "GtkButton" style "my-style"
 </programlisting></informalexample>
-will match not just #GtkButton widgets,
-but also #GtkToggleButton and
-#GtkCheckButton widgets, since
-those classes derive from #GtkButton.
+will match not just #GtkButton widgets, but also #GtkToggleButton and
+#GtkCheckButton widgets, since those classes derive from #GtkButton.
 </para>
 <para>
 Additionally, a priority can be specified for each pattern, and styles 
@@ -133,10 +135,11 @@ in so far is composed.
 For this, every RC style is matched against the widgets class path,
 the widgets name path and widgets inheritance hierarchy.
 As a consequence, significant slowdown can be caused by utilization of many
-RC styles and by using RC sytle patterns that are slow or complicated to match
+RC styles and by using RC style patterns that are slow or complicated to match
 against a given widget.
-The following ordered list provides a number of advices (prioritized by effectiveness)
-to reduce the performance overhead associated with RC style matches:
+The following ordered list provides a number of advices (prioritized by 
+effectiveness) to reduce the performance overhead associated with RC style 
+matches:
 
 <orderedlist>
 
