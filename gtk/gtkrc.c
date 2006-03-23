@@ -66,21 +66,43 @@ typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
 typedef struct _GtkRcFile   GtkRcFile;
 
+enum 
+{
+  PATH_ELT_PSPEC,
+  PATH_ELT_UNRESOLVED,
+  PATH_ELT_TYPE
+};
+
+typedef struct
+{
+  gint type;
+  union 
+  {
+    GType         class_type;
+    gchar        *class_name;
+    GPatternSpec *pspec;
+  } elt;
+} PathElt;
+
 struct _GtkRcSet
 {
+  GtkPathType   type;
+
   GPatternSpec *pspec;
-  GtkRcStyle *rc_style;
-  gint priority;
+  GSList       *path;
+
+  GtkRcStyle   *rc_style;
+  gint          priority;
 };
 
 struct _GtkRcFile
 {
-  gboolean is_string;		/* If TRUE, name is a string to parse with gtk_rc_parse_string() */
   time_t mtime;
   gchar *name;
   gchar *canonical_name;
   gchar *directory;
-  guint reload;
+  guint  reload    : 1;
+  guint  is_string : 1;	/* If TRUE, name is a string to parse with gtk_rc_parse_string() */
 };
 
 #define GTK_RC_MAX_PIXMAP_PATHS 128
@@ -130,8 +152,8 @@ static GtkRcStyle* gtk_rc_style_find                 (GtkRcContext    *context,
 static GSList *    gtk_rc_styles_match               (GSList          *rc_styles,
                                                       GSList          *sets,
                                                       guint            path_length,
-                                                      const gchar     *path,
-                                                      const gchar     *path_reversed);
+                                                      gchar           *path,
+                                                      gchar           *path_reversed);
 static GtkStyle *  gtk_rc_style_to_style             (GtkRcContext    *context,
 						      GtkRcStyle      *rc_style);
 static GtkStyle*   gtk_rc_init_style                 (GtkRcContext    *context,
@@ -213,6 +235,7 @@ static GtkRcStyle* gtk_rc_style_real_create_rc_style (GtkRcStyle      *rc_style)
 static GtkStyle*   gtk_rc_style_real_create_style    (GtkRcStyle      *rc_style);
 static gint	   gtk_rc_properties_cmp	     (gconstpointer    bsearch_node1,
 						      gconstpointer    bsearch_node2);
+static void        gtk_rc_set_free                   (GtkRcSet        *rc_set);
 
 static gpointer parent_class = NULL;
 
@@ -737,19 +760,8 @@ _gtk_rc_init (void)
 		       "\n"
 		       "class \"GtkProgressBar\" style : gtk \"gtk-default-progress-bar-style\"\n"
 		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n"
-		       "class \"GtkMenuItem\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkAccelMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkRadioMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkCheckMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkImageMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkSeparatorMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*.GtkCellViewMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
-		       "widget_class \"*GtkMenuBar*GtkMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
-		       "widget_class \"*GtkMenuBar*GtkAccelMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
-		       "widget_class \"*GtkMenuBar*GtkRadioMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
-		       "widget_class \"*GtkMenuBar*GtkCheckMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
-		       "widget_class \"*GtkMenuBar*GtkImageMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+		       "widget_class \"*<GtkMenuItem>*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*<GtkMenuBar>*<GtkMenuItem>\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
       );
 }
   
@@ -1329,8 +1341,7 @@ gtk_rc_free_rc_sets (GSList *slist)
       GtkRcSet *rc_set;
 
       rc_set = slist->data;
-      g_pattern_spec_free (rc_set->pspec);
-      g_free (rc_set);
+      gtk_rc_set_free (rc_set);
 
       slist = slist->next;
     }
@@ -1623,8 +1634,8 @@ static GSList *
 gtk_rc_styles_match (GSList       *rc_styles,
 		     GSList	  *sets,
 		     guint         path_length,
-		     const gchar  *path,
-		     const gchar  *path_reversed)
+		     gchar        *path,
+		     gchar        *path_reversed)
 		     
 {
   GtkRcSet *rc_set;
@@ -1634,10 +1645,18 @@ gtk_rc_styles_match (GSList       *rc_styles,
       rc_set = sets->data;
       sets = sets->next;
 
-      if (g_pattern_match (rc_set->pspec, path_length, path, path_reversed))
-	rc_styles = g_slist_append (rc_styles, rc_set);
+      if (rc_set->type == GTK_PATH_WIDGET_CLASS)
+        {
+          if (_gtk_rc_match_widget_class (rc_set->path, path_length, path, path_reversed))
+	    rc_styles = g_slist_append (rc_styles, rc_set);
+        }
+      else
+        {
+          if (g_pattern_match (rc_set->pspec, path_length, path, path_reversed))
+	    rc_styles = g_slist_append (rc_styles, rc_set);
+	}
     }
-  
+
   return rc_styles;
 }
 
@@ -1746,16 +1765,17 @@ gtk_rc_get_style (GtkWidget *widget)
       type = G_TYPE_FROM_INSTANCE (widget);
       while (type)
 	{
-	  const gchar *path;
+	  gchar *path;
           gchar *path_reversed;
 	  guint path_length;
 
-	  path = g_type_name (type);
+	  path = g_strdup (g_type_name (type));
 	  path_length = strlen (path);
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
 	  
 	  rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_class, path_length, path, path_reversed);
+	  g_free (path);
 	  g_free (path_reversed);
       
 	  type = g_type_parent (type);
@@ -1832,27 +1852,33 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 
   if (widget_path && context->rc_sets_widget)
     {
+      gchar *path;
       gchar *path_reversed;
       guint path_length;
 
       path_length = strlen (widget_path);
+      path = g_strdup (widget_path);
       path_reversed = g_strdup (widget_path);
       g_strreverse (path_reversed);
 
-      rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_widget, path_length, widget_path, path_reversed);
+      rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_widget, path_length, path, path_reversed);
+      g_free (path);
       g_free (path_reversed);
     }
   
   if (class_path && context->rc_sets_widget_class)
     {
+      gchar *path;
       gchar *path_reversed;
       guint path_length;
 
+      path = g_strdup (class_path);
       path_length = strlen (class_path);
       path_reversed = g_strdup (class_path);
       g_strreverse (path_reversed);
 
-      rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_widget_class, path_length, class_path, path_reversed);
+      rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_widget_class, path_length, path, path_reversed);
+      g_free (path);
       g_free (path_reversed);
     }
 
@@ -1860,16 +1886,17 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
     {
       while (type)
 	{
-	  const gchar *path;
+	  gchar *path;
           gchar *path_reversed;
 	  guint path_length;
 
-	  path = g_type_name (type);
+	  path = g_strdup (g_type_name (type));
 	  path_length = strlen (path);
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
 	  
 	  rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_class, path_length, path, path_reversed);
+	  g_free (path);
 	  g_free (path_reversed);
       
 	  type = g_type_parent (type);
@@ -1887,7 +1914,8 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 static GSList *
 gtk_rc_add_rc_sets (GSList      *slist,
 		    GtkRcStyle  *rc_style,
-		    const gchar *pattern)
+		    const gchar *pattern,
+		    GtkPathType  path_type)
 {
   GtkRcStyle *new_style;
   GtkRcSet *rc_set;
@@ -1903,7 +1931,19 @@ gtk_rc_add_rc_sets (GSList      *slist,
     new_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
   
   rc_set = g_new (GtkRcSet, 1);
-  rc_set->pspec = g_pattern_spec_new (pattern);
+  rc_set->type = path_type;
+  
+  if (path_type == GTK_PATH_WIDGET_CLASS)
+    {
+      rc_set->pspec = NULL;
+      rc_set->path = _gtk_rc_parse_widget_class_path (pattern);
+    }
+  else
+    {
+      rc_set->pspec = g_pattern_spec_new (pattern);
+      rc_set->path = NULL;
+    }
+  
   rc_set->rc_style = rc_style;
   
   return g_slist_prepend (slist, rc_set);
@@ -1920,7 +1960,7 @@ gtk_rc_add_widget_name_style (GtkRcStyle  *rc_style,
 
   context = gtk_rc_context_get (gtk_settings_get_default ());
   
-  context->rc_sets_widget = gtk_rc_add_rc_sets (context->rc_sets_widget, rc_style, pattern);
+  context->rc_sets_widget = gtk_rc_add_rc_sets (context->rc_sets_widget, rc_style, pattern, GTK_PATH_WIDGET);
 }
 
 void
@@ -1934,7 +1974,7 @@ gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 
   context = gtk_rc_context_get (gtk_settings_get_default ());
   
-  context->rc_sets_widget_class = gtk_rc_add_rc_sets (context->rc_sets_widget_class, rc_style, pattern);
+  context->rc_sets_widget_class = gtk_rc_add_rc_sets (context->rc_sets_widget_class, rc_style, pattern, GTK_PATH_WIDGET_CLASS);
 }
 
 void
@@ -1948,7 +1988,7 @@ gtk_rc_add_class_style (GtkRcStyle  *rc_style,
 
   context = gtk_rc_context_get (gtk_settings_get_default ());
   
-  context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern);
+  context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern, GTK_PATH_CLASS);
 }
 
 GScanner*
@@ -3870,7 +3910,19 @@ gtk_rc_parse_path_pattern (GtkRcContext *context,
 	}
 
       rc_set = g_new (GtkRcSet, 1);
-      rc_set->pspec = g_pattern_spec_new (pattern);
+      rc_set->type = path_type;
+      
+      if (path_type == GTK_PATH_WIDGET_CLASS)
+        {
+          rc_set->pspec = NULL;
+          rc_set->path = _gtk_rc_parse_widget_class_path (pattern);
+        }
+      else
+        {
+          rc_set->pspec = g_pattern_spec_new (pattern);
+          rc_set->path = NULL;
+        }
+      
       rc_set->rc_style = rc_style;
       rc_set->priority = priority;
 
@@ -4213,6 +4265,286 @@ gtk_rc_parse_logical_color (GScanner   *scanner,
   g_hash_table_insert (hash, color_id, gdk_color_copy (&color));
 
   return G_TOKEN_NONE;
+}
+
+
+GSList *
+_gtk_rc_parse_widget_class_path (const gchar *pattern)
+{
+  GSList *result;
+  PathElt *path_elt;
+  const gchar *current;
+  const gchar *class_start;
+  const gchar *class_end;
+  const gchar *pattern_end;
+  const gchar *pattern_start;
+  gchar *sub_pattern;
+
+  result = NULL;
+  current = pattern;
+  while ((class_start = strchr (current, '<')) && 
+	 (class_end = strchr (class_start, '>')))
+    {
+      /* Add patterns, but ignore single dots */
+      if (!(class_start == current || 
+	    (class_start == current + 1 && current[0] == '.')))
+        {
+          pattern_end = class_start - 1;
+          pattern_start = current;
+          
+          path_elt = g_new (PathElt, 1);
+          
+          sub_pattern = g_strndup (pattern_start, pattern_end - pattern_start + 1);
+	  path_elt->type = PATH_ELT_PSPEC;
+          path_elt->elt.pspec = g_pattern_spec_new (sub_pattern);
+          g_free (sub_pattern);
+          
+          result = g_slist_prepend (result, path_elt);
+        }
+      
+      path_elt = g_new (PathElt, 1);
+      
+      /* The < > need to be removed from the string. */
+      sub_pattern = g_strndup (class_start + 1, class_end - class_start - 1);
+      
+      path_elt->type = PATH_ELT_UNRESOLVED;
+      path_elt->elt.class_name = sub_pattern;
+      
+      result = g_slist_prepend (result, path_elt);
+      
+      current = class_end + 1;
+    }
+  
+  /* Add the rest, if anything is left */
+  if (strlen (current) > 0)
+    {
+      path_elt = g_new (PathElt, 1);
+      path_elt->type = PATH_ELT_PSPEC;
+      path_elt->elt.pspec = g_pattern_spec_new (current);
+      
+      result = g_slist_prepend (result, path_elt);
+    }
+  
+  return g_slist_reverse (result);
+}
+
+static void
+free_path_elt (gpointer data, 
+	       gpointer user_data)
+{
+  PathElt *path_elt = data;
+
+  switch (path_elt->type)
+    {
+    case PATH_ELT_PSPEC:
+      g_pattern_spec_free (path_elt->elt.pspec);
+      break;
+    case PATH_ELT_UNRESOLVED:
+      g_free (path_elt->elt.class_name);
+      break;
+    case PATH_ELT_TYPE:
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_free (path_elt);
+}
+
+void
+_gtk_rc_free_widget_class_path (GSList *list)
+{
+  g_slist_foreach (list, free_path_elt, NULL);
+  g_slist_free (list);
+}
+
+static void
+gtk_rc_set_free (GtkRcSet *rc_set)
+{
+  if (rc_set->pspec)
+    g_pattern_spec_free (rc_set->pspec);
+
+  _gtk_rc_free_widget_class_path (rc_set->path);
+  
+  g_free (rc_set);
+}
+
+static gboolean
+match_class (PathElt *path_elt, 
+	     gchar   *type_name)
+{
+  GType type;
+  
+  if (path_elt->type == PATH_ELT_UNRESOLVED)
+    {
+      type = g_type_from_name (path_elt->elt.class_name);
+      if (type != G_TYPE_INVALID)
+        {
+          g_free (path_elt->elt.class_name);
+          path_elt->elt.class_type = type;
+	  path_elt->type = PATH_ELT_TYPE;
+        }
+      else
+	return g_str_equal (type_name, path_elt->elt.class_name);
+    }
+  
+  return g_type_is_a (g_type_from_name (type_name), path_elt->elt.class_type);
+}
+
+static gboolean
+match_widget_class_recursive (GSList *list, 
+			      guint   length, 
+			      gchar  *path, 
+			      gchar  *path_reversed)
+{
+  PathElt *path_elt;
+  
+  /* break out if we cannot match anymore. */
+  if (list == NULL)
+    {
+      if (length > 0)
+        return FALSE;
+      else
+        return TRUE;
+    }
+
+  /* there are two possibilities:
+   *  1. The next pattern should match the class.
+   *  2. First normal matching, and then maybe a class */
+  
+  path_elt = list->data;
+
+  if (path_elt->type != PATH_ELT_PSPEC)
+    {
+      gchar *class_start = path;
+      gchar *class_end;
+      
+      /* ignore leading dot */
+      if (class_start[0] == '.')
+        class_start++;
+      class_end = strchr (class_start, '.');
+
+      if (class_end == NULL)
+        {
+          if (!match_class (path_elt, class_start))
+            return FALSE;
+	  else
+	    return match_widget_class_recursive (list->next, 0, "", "");
+        }
+      else
+        {
+          class_end[0] = '\0';
+          if (!match_class (path_elt, class_start))
+            {
+              class_end[0] = '.';
+              return FALSE;
+            }
+          else
+            {
+              gboolean result;
+              gint new_length = length - (class_end - path);
+              gchar old_char = path_reversed[new_length];
+              
+              class_end[0] = '.';
+              
+              path_reversed[new_length] = '\0';
+              result = match_widget_class_recursive (list->next, new_length, class_end, path_reversed);
+              path_reversed[new_length] = old_char;
+              
+              return result;
+            }
+        }
+    }
+  else
+    {
+      PathElt *class_elt;
+      gchar *class_start;
+      gchar *class_end;
+      gboolean result = FALSE;
+      
+      /* If there is nothing after this (ie. no class match), 
+       * just compare the pspec. 
+       */
+      if (list->next == NULL)
+        return g_pattern_match (path_elt->elt.pspec, length, path, path_reversed);
+      
+      class_elt = (PathElt *)list->next->data;
+      g_assert (class_elt->type != PATH_ELT_PSPEC);
+      
+      class_start = path;
+      if (class_start[0] == '.')
+        class_start++;
+      
+      while (TRUE)
+        {
+	  class_end = strchr (class_start, '.');
+          
+          /* It should be cheaper to match the class first. (either the pattern
+           * is simple, and will match most of the times, or it may be complex
+           * and matching is slow) 
+	   */
+          if (class_end == NULL)
+	    {
+	      result = match_class (class_elt, class_start);
+	    }
+          else
+            {
+              class_end[0] = '\0';
+              result = match_class (class_elt, class_start);
+              class_end[0] = '.';
+            }
+          
+          if (result)
+            {
+              gchar old_char;
+              result = FALSE;
+              
+              /* terminate the string in front of the class. It does not matter
+               * that the class becomes unusable, because it is not needed 
+	       * inside the recursion 
+	       */
+              old_char = class_start[0];
+              class_start[0] = '\0';
+              
+              if (g_pattern_match (path_elt->elt.pspec, class_start - path, path, path_reversed + length - (class_start - path)))
+                {
+                  if (class_end != NULL)
+                    {
+                      gint new_length = length - (class_end - path);
+                      gchar path_reversed_char = path_reversed[new_length];
+                      
+                      path_reversed[new_length] = '\0';
+                      
+                      result = match_widget_class_recursive (list->next->next, new_length, class_end, path_reversed);
+                      
+                      path_reversed[new_length] = path_reversed_char;
+                    }
+                  else
+                    result = match_widget_class_recursive (list->next->next, 0, "", "");
+                }
+                
+              class_start[0] = old_char;
+            }
+          
+          if (result)
+            return TRUE;
+          
+          /* get next class in path, or break out */
+          if (class_end != NULL)
+            class_start = class_end + 1;
+          else
+            return FALSE;
+        }
+    }
+}
+
+gboolean
+_gtk_rc_match_widget_class (GSList  *list,
+                            gint     length,
+                            gchar   *path,
+                            gchar   *path_reversed)
+{
+  return match_widget_class_recursive (list, length, path, path_reversed);
 }
 
 #ifdef G_OS_WIN32

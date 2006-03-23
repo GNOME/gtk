@@ -44,9 +44,11 @@
 
 /* --- structures --- */
 typedef struct {
+  GtkPathType   type;
   GPatternSpec *pspec;
-  gpointer user_data;
-  guint seq_id;
+  GSList       *path;
+  gpointer      user_data;
+  guint         seq_id;
 } PatternSpec;
 
 
@@ -59,6 +61,15 @@ static GQuark		 key_id_class_binding_set = 0;
 
 
 /* --- functions --- */
+static void
+pattern_spec_free (PatternSpec *pspec)
+{
+  _gtk_rc_free_widget_class_path (pspec->path);
+  if (pspec->pspec)
+    g_pattern_spec_free (pspec->pspec);
+  g_free (pspec);
+}
+
 static GtkBindingSignal*
 binding_signal_new (const gchar *signal_name,
 		    guint	 n_args)
@@ -869,7 +880,18 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
     }
   
   pspec = g_new (PatternSpec, 1);
-  pspec->pspec = g_pattern_spec_new (path_pattern);
+  pspec->type = path_type;
+  if (path_type == GTK_PATH_WIDGET_CLASS)
+    {
+      pspec->pspec = NULL;
+      pspec->path = _gtk_rc_parse_widget_class_path (path_pattern);
+    }
+  else
+    {
+      pspec->pspec = g_pattern_spec_new (path_pattern);
+      pspec->path = NULL;
+    }
+    
   pspec->seq_id = priority << 28;
   pspec->user_data = binding_set;
   
@@ -885,8 +907,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
 	{
 	  GtkPathPriorityType lprio = tmp_pspec->seq_id >> 28;
 
-	  g_pattern_spec_free (pspec->pspec);
-	  g_free (pspec);
+	  pattern_spec_free (pspec);
 	  pspec = NULL;
 	  if (lprio < priority)
 	    {
@@ -907,25 +928,32 @@ static gboolean
 binding_match_activate (GSList          *pspec_list,
 			GtkObject	*object,
 			guint	         path_length,
-			const gchar     *path,
-			const gchar     *path_reversed)
+			gchar           *path,
+			gchar           *path_reversed)
 {
   GSList *slist;
 
   for (slist = pspec_list; slist; slist = slist->next)
     {
       PatternSpec *pspec;
+      GtkBindingSet *binding_set;
 
+      binding_set = NULL;
       pspec = slist->data;
-      if (g_pattern_match (pspec->pspec, path_length, path, path_reversed))
-	{
-	  GtkBindingSet *binding_set;
+      
+      if (pspec->type == GTK_PATH_WIDGET_CLASS)
+        {
+          if (_gtk_rc_match_widget_class (pspec->path, path_length, path, path_reversed))
+	    binding_set = pspec->user_data;
+        }
+      else
+        {
+          if (g_pattern_match (pspec->pspec, path_length, path, path_reversed))
+	    binding_set = pspec->user_data;
+        }
 
-	  binding_set = pspec->user_data;
-
-	  if (gtk_binding_entry_activate (binding_set->current, object))
-	    return TRUE;
-	}
+      if (binding_set && gtk_binding_entry_activate (binding_set->current, object))
+        return TRUE;
     }
 
   return FALSE;
@@ -1052,14 +1080,15 @@ gtk_bindings_activate_list (GtkObject *object,
       while (class_type && !handled)
 	{
 	  guint path_length;
-	  const gchar *path;
+	  gchar *path;
 	  gchar *path_reversed;
 	  
-	  path = g_type_name (class_type);
+	  path = g_strdup (g_type_name (class_type));
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
 	  path_length = strlen (path);
 	  handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
+	  g_free (path);
 	  g_free (path_reversed);
 
 	  class_type = g_type_parent (class_type);
@@ -1417,8 +1446,7 @@ free_pattern_specs (GSList *pattern_specs)
 
       pspec = slist->data;
 
-      g_pattern_spec_free (pspec->pspec);
-      g_free (pspec);
+      pattern_spec_free (pspec);
     }
 
   g_slist_free (pattern_specs);

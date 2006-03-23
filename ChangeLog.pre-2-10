@@ -1,3 +1,18 @@
+2006-03-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Support subclasses in RC files.  (#142417, Todd Berman, patch
+	based on a patch by Benjamin Berg)
+	
+	* gtk/gtkrc.h: 
+	* gtk/gtkrc.c: Support <classname> elements in widget_class paths 
+	in rc files which match any classes derived from named class.
+
+	(_gtk_rc_init): Use the new syntax in the default rc string.
+
+	* gtk/gtkbindings.c: Support the new syntax for bindings too.
+	
+	* tests/testrc.c: Tests for widget_class path matching
+
 2006-03-23  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_motion): make sure that gdk_drag_event()

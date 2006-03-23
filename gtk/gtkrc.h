@@ -126,7 +126,14 @@ struct _GtkRcStyleClass
 #define gtk_rc_parse gtk_rc_parse_utf8
 #endif
 
-void	  _gtk_rc_init			(void);
+void	  _gtk_rc_init			 (void);
+GSList*   _gtk_rc_parse_widget_class_path (const gchar *pattern);
+void      _gtk_rc_free_widget_class_path (GSList       *list);
+gboolean  _gtk_rc_match_widget_class     (GSList       *list,
+                                          gint          length,
+                                          gchar        *path,
+                                          gchar        *path_reversed);
+
 void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);
 gchar**   gtk_rc_get_default_files      (void);
