@@ -155,10 +155,10 @@ void     _gtk_text_btree_get_iter_at_line_byte    (GtkTextBTree       *tree,
                                                    gint                byte_index);
 gboolean _gtk_text_btree_get_iter_from_string     (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   const gchar        *string) G_GNUC_WARN_UNUSED_RESULT;
+                                                   const gchar        *string);
 gboolean _gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   const gchar        *mark_name) G_GNUC_WARN_UNUSED_RESULT;
+                                                   const gchar        *mark_name);
 void     _gtk_text_btree_get_iter_at_mark         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextMark        *mark);
@@ -170,10 +170,10 @@ void     _gtk_text_btree_get_iter_at_line         (GtkTextBTree       *tree,
                                                    gint                byte_offset);
 gboolean _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   GtkTextTag         *tag) G_GNUC_WARN_UNUSED_RESULT;
+                                                   GtkTextTag         *tag);
 gboolean _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   GtkTextTag         *tag) G_GNUC_WARN_UNUSED_RESULT;
+                                                   GtkTextTag         *tag);
 
 void     _gtk_text_btree_get_iter_at_child_anchor  (GtkTextBTree       *tree,
                                                     GtkTextIter        *iter,

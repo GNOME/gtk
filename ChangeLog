@@ -1,3 +1,9 @@
+Fri Mar 24 14:53:20 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtktreemodel.h: 
+	* gtk/gtktextbtree.h: back out G_GNUC_WARN_UNUSED_RESULT on iterator
+	functions which turned out to cause too much trouble.
+
 2006-03-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* AUTHORS: small update
