@@ -1,0 +1,288 @@
+/* GTK - The GIMP Toolkit
+ * gtkprintcontext.c: Print Context
+ * Copyright (C) 2006, Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include "gtkprintoperation-private.h"
+
+typedef struct _GtkPrintContextClass GtkPrintContextClass;
+
+#define GTK_IS_PRINT_CONTEXT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_CONTEXT))
+#define GTK_PRINT_CONTEXT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_CONTEXT, GtkPrintContextClass))
+#define GTK_PRINT_CONTEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_CONTEXT, GtkPrintContextClass))
+
+#define MM_PER_INCH 25.4
+#define POINTS_PER_INCH 72
+
+struct _GtkPrintContext
+{
+  GObject parent_instance;
+
+  GtkPrintOperation *op;
+  cairo_t *cr;
+  GtkPageSetup *page_setup;
+  PangoFontMap *fontmap;
+
+  double pixels_per_unit_x, pixels_per_unit_y;
+  
+};
+
+struct _GtkPrintContextClass
+{
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkPrintContext, gtk_print_context, G_TYPE_OBJECT)
+
+static void
+gtk_print_context_finalize (GObject *object)
+{
+  GtkPrintContext *context = GTK_PRINT_CONTEXT (object);
+
+  g_object_unref (context->fontmap);
+  if (context->page_setup)
+    g_object_unref (context->page_setup);
+
+  cairo_destroy (context->cr);
+
+  
+  G_OBJECT_CLASS (gtk_print_context_parent_class)->finalize (object);
+}
+
+static void
+gtk_print_context_init (GtkPrintContext *context)
+{
+}
+
+static void
+gtk_print_context_class_init (GtkPrintContextClass *class)
+{
+  GObjectClass *gobject_class = (GObjectClass *)class;
+
+  gobject_class->finalize = gtk_print_context_finalize;
+}
+
+
+GtkPrintContext *
+_gtk_print_context_new (GtkPrintOperation *op)
+{
+  GtkPrintContext *context;
+  
+  context = g_object_new (GTK_TYPE_PRINT_CONTEXT, NULL);
+
+  context->op = op;
+  context->cr = cairo_create (op->priv->surface);
+
+  switch (op->priv->unit)
+    {
+    default:
+    case GTK_UNIT_PIXEL:
+      /* Do nothing, this is the cairo default unit */
+      context->pixels_per_unit_x = 1.0;
+      context->pixels_per_unit_y = 1.0;
+      break;
+    case GTK_UNIT_POINTS:
+      context->pixels_per_unit_x = op->priv->dpi_x / POINTS_PER_INCH;
+      context->pixels_per_unit_y = op->priv->dpi_y / POINTS_PER_INCH;
+      break;
+    case GTK_UNIT_INCH:
+      context->pixels_per_unit_x = op->priv->dpi_x;
+      context->pixels_per_unit_y = op->priv->dpi_y;
+      break;
+    case GTK_UNIT_MM:
+      context->pixels_per_unit_x = op->priv->dpi_x / MM_PER_INCH;
+      context->pixels_per_unit_y = op->priv->dpi_y / MM_PER_INCH;
+      break;
+    }
+  cairo_scale (context->cr,
+	       context->pixels_per_unit_x,
+	       context->pixels_per_unit_y);
+    
+  context->fontmap = pango_cairo_font_map_new ();
+  /* We use the unit-scaled resolution, as we still want fonts given in points to work */
+  pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (context->fontmap),
+				       op->priv->dpi_y / context->pixels_per_unit_y);
+  
+  return context;
+}
+
+void
+_gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
+{
+  cairo_t *cr = context->cr;
+  cairo_matrix_t matrix;
+  GtkPaperSize *paper_size;
+  double width, height;
+
+  paper_size = gtk_page_setup_get_paper_size (context->page_setup);
+
+  width = gtk_paper_size_get_width (paper_size, GTK_UNIT_INCH);
+  width = width * context->op->priv->dpi_x / context->pixels_per_unit_x;
+  height = gtk_paper_size_get_height (paper_size, GTK_UNIT_INCH);
+  height = height * context->op->priv->dpi_y / context->pixels_per_unit_y;
+  
+  switch (gtk_page_setup_get_orientation (context->page_setup))
+    {
+    default:
+    case GTK_PAGE_ORIENTATION_PORTRAIT:
+      break;
+    case GTK_PAGE_ORIENTATION_LANDSCAPE:
+      cairo_translate (cr, width, 0);
+      cairo_matrix_init (&matrix,
+			  0,  1,
+			 -1,  0,
+			  0,  0);
+      cairo_transform (cr, &matrix);
+      break;
+    case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+      cairo_translate (cr, width, height);
+      cairo_matrix_init (&matrix,
+			 -1,  0,
+			  0, -1,
+			  0,  0);
+      cairo_transform (cr, &matrix);
+      break;
+    case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+      cairo_translate (cr, 0, height);
+      cairo_matrix_init (&matrix,
+			 0, -1,
+			 1,  0,
+			 0,  0);
+      cairo_transform (cr, &matrix);
+      break;
+    }
+}
+
+
+void
+_gtk_print_context_translate_into_margin (GtkPrintContext *context)
+{
+  double left, top;
+
+  g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
+
+  /* We do it this way to also handle GTK_UNIT_PIXELS */
+  
+  left = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
+  top = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
+
+  cairo_translate (context->cr,
+		   left * context->op->priv->dpi_x / context->pixels_per_unit_x,
+		   top * context->op->priv->dpi_y / context->pixels_per_unit_y);
+}
+
+void
+_gtk_print_context_set_page_setup (GtkPrintContext *context,
+				   GtkPageSetup *page_setup)
+{
+  g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
+  g_return_if_fail (page_setup == NULL ||
+		    GTK_IS_PAGE_SETUP (page_setup));
+  
+  g_object_ref (page_setup);
+
+  if (context->page_setup != NULL)
+    g_object_unref (context->page_setup);
+
+  context->page_setup = page_setup;
+}
+
+cairo_t *
+gtk_print_context_get_cairo (GtkPrintContext *context)
+{
+  return context->cr;
+}
+
+GtkPageSetup *
+gtk_print_context_get_page_setup (GtkPrintContext *context)
+{
+  return context->page_setup;
+}
+
+double
+gtk_print_context_get_width (GtkPrintContext *context)
+{
+  double width;
+  if (context->op->priv->use_full_page)
+    width = gtk_page_setup_get_paper_width (context->page_setup, GTK_UNIT_INCH);
+  else
+    width = gtk_page_setup_get_page_width (context->page_setup, GTK_UNIT_INCH);
+
+  /* Really dpi_x? What about landscape? what does dpi_x mean in that case? */
+  return width * context->op->priv->dpi_x / context->pixels_per_unit_x;
+}
+
+double
+gtk_print_context_get_height (GtkPrintContext *context)
+{
+  double height;
+  if (context->op->priv->use_full_page)
+    height = gtk_page_setup_get_paper_height (context->page_setup, GTK_UNIT_INCH);
+  else
+    height = gtk_page_setup_get_page_height (context->page_setup, GTK_UNIT_INCH);
+
+  /* Really dpi_x? What about landscape? what does dpi_x mean in that case? */
+  return height * context->op->priv->dpi_y / context->pixels_per_unit_y;
+}
+
+double
+gtk_print_context_get_dpi_x (GtkPrintContext *context)
+{
+  return context->op->priv->dpi_x;
+}
+
+double
+gtk_print_context_get_dpi_y (GtkPrintContext *context)
+{
+  return context->op->priv->dpi_y;
+}
+
+/* Fonts */
+PangoFontMap *
+gtk_print_context_get_fontmap (GtkPrintContext *context)
+{
+  return context->fontmap;
+}
+
+PangoContext *
+gtk_print_context_create_context (GtkPrintContext *context)
+{
+  PangoContext *pango_context;
+  
+  pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (context->fontmap));
+  
+  return pango_context;
+}
+
+PangoLayout *
+gtk_print_context_create_layout (GtkPrintContext *context)
+{
+  PangoContext *pango_context;
+  PangoLayout *layout;
+
+  g_return_val_if_fail (context != NULL, NULL);
+
+  pango_context = gtk_print_context_create_context (context);
+  layout = pango_layout_new (pango_context);
+
+  pango_cairo_update_context (context->cr, pango_context);
+  g_object_unref (pango_context);
+
+  return layout;
+}
+

@@ -1,3 +1,64 @@
+2006-03-24  Alexander Larsson  <alexl@redhat.com>
+
+        Import print-operation into gtk+
+	
+	* .cvsignore:
+	* Makefile.am:
+	* gtk+-unix-print-2.0.pc.in:
+	Add gtk+-unix-print-2.0.pc
+	
+	* configure.in:
+	Look for cups
+	Look for various _NL_* extensions
+	Output new makefiles and .pc.in
+	
+	* gtk/Makefile.am:
+	Add new files
+	
+	* gtk/gtk.h:
+	Include gtkprintoperation.h
+	
+	* gtk/gtkenums.h:
+	Add printing enums
+	
+	* gtk/gtkmarshalers.list:
+	Add required new marshallers
+	
+	* gtk/gtkpagesetup.[ch]:
+	* gtk/gtkpagesetupunixdialog.[ch]:
+	* gtk/gtkpagesetupunixdialog.h:
+	* gtk/gtkpapersize.[ch]:
+	* gtk/gtkprint-win32.[ch]:
+	* gtk/gtkprintbackend.[ch]:
+	* gtk/gtkprintcontext.[ch]:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	* gtk/gtkprinteroption.[ch]:
+	* gtk/gtkprinteroptionset.[ch]:
+	* gtk/gtkprinteroptionwidget.[ch]:
+	* gtk/gtkprintjob.[ch]:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation-win32.c:
+	* gtk/gtkprintoperation.[ch]:
+	* gtk/gtkprintsettings.[ch]:
+	* gtk/gtkprintunixdialog.[ch]:
+	* gtk/paper_names.c:
+	Generic printing support
+	
+	* modules/Makefile.am:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/cups/gtkcupsutils.[ch]:
+	* modules/printbackends/cups/gtkprintbackendcups.[ch]:
+	* modules/printbackends/cups/gtkprintercups.[ch]:
+	Cups backend
+	
+	* tests/.cvsignore:
+	* tests/Makefile.am:
+	* tests/print-editor.c:
+	Add printing test app
+
 2006-03-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* AUTHORS: small update
