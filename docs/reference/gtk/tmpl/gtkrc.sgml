@@ -78,7 +78,7 @@ always used.
 </para>
 <para>
 Since GTK+ 2.10,<literal>widget_class</literal> paths can also contain
-<literal>&lt:classname&gt;</literal> substrings, which are matching 
+<literal>&lt;classname&gt;</literal> substrings, which are matching 
 the class with the given name and any derived classes. For instance,
 <informalexample><programlisting>
 widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
