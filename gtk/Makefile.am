@@ -6,7 +6,7 @@ if OS_UNIX
 SUBDIRS += xdgmime
 endif
 
-DIST_SUBDIRS=stock-icons theme-bits xdgmime
+DIST_SUBDIRS=theme-bits xdgmime
 
 INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
@@ -657,6 +657,7 @@ MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files)
 EXTRA_HEADERS =
 EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
+EXTRA_DIST += $(STOCK_ICONS)
 
 #
 # rules to generate built sources

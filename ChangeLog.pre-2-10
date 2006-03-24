@@ -1,5 +1,7 @@
 2006-03-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (EXTRA_DIST): Add the stock icons here.
+
 	* gdk/directfb/Makefile.am (EXTRA_DIST): Remove ChangeLog,
 	to make make dist happier.
 
