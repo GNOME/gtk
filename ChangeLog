@@ -1,3 +1,9 @@
+2006-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_value_changed): Don't call
+	gdk_window_invalidate_rect() on unrealized widgets.  (#335717,
+	Nicolas Setton)
+
 Fri Mar 24 14:53:20 2006  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtktreemodel.h: 

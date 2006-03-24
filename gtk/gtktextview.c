@@ -6634,7 +6634,8 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
        */
       if (text_view->width_changed)
 	{
-	  gdk_window_invalidate_rect (text_view->text_window->bin_window, NULL, FALSE);
+	  if (GTK_WIDGET_REALIZED (text_view))
+	    gdk_window_invalidate_rect (text_view->text_window->bin_window, NULL, FALSE);
 	  
 	  text_view->width_changed = FALSE;
 	}
