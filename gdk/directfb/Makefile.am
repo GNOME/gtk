@@ -1,7 +1,6 @@
 ## Makefile.am for gtk+/gdk/gdk-directfb
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
-libgdkgdk_directfbincludedir = $(includedir)/gtk-2.0/gdk/gdk-directfb
 
 INCLUDES = 		\
 	-DG_LOG_DOMAIN=\"Gdk-DirectFB\"	\
@@ -23,8 +22,8 @@ libgdk_directfb_la_SOURCES =	\
 	gdkcolor-directfb.c	\
 	gdkcursor-directfb.c	\
 	gdkdnd-directfb.c	\
-    gdkdisplay-directfb.c   \
-    gdkdisplay-directfb.h   \
+	gdkdisplay-directfb.c   \
+	gdkdisplay-directfb.h   \
 	gdkdrawable-directfb.c	\
 	gdkevents-directfb.c	\
 	gdkfont-directfb.c	\
@@ -50,8 +49,8 @@ libgdk_directfb_la_SOURCES =	\
 	x-cursors.xbm
 
 libgdkinclude_HEADERS =		\
-	gdkdirectfb.h \
+	gdkdirectfb.h 		\
 	gdkprivate-directfb.h
 
 
-EXTRA_DIST = AUTHORS README TODO ChangeLog
+EXTRA_DIST = AUTHORS README TODO 

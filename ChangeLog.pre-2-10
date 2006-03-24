@@ -1,3 +1,8 @@
+2006-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/directfb/Makefile.am (EXTRA_DIST): Remove ChangeLog,
+	to make make dist happier.
+
 2006-03-24  Alexander Larsson  <alexl@redhat.com>
 
 	* configure.in:
