@@ -1,5 +1,9 @@
 2006-03-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* AUTHORS: small update
+
+2006-03-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Support subclasses in RC files.  (#142417, Todd Berman, patch
 	based on a patch by Benjamin Berg)
 	
