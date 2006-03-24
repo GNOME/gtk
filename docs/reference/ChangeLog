@@ -1,3 +1,7 @@
+2006-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/directfb.sgml: Fix syntax
+
 2006-03-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Document <classname> in paths.
