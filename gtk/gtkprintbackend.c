@@ -195,6 +195,7 @@ _gtk_print_backend_create (const char *backend_name)
 {
   GSList *l;
   char *module_path;
+  char *full_name;
   GtkPrintBackendModule *pb_module;
   GtkPrintBackend *pb;
 
@@ -210,7 +211,9 @@ _gtk_print_backend_create (const char *backend_name)
   pb = NULL;
   if (g_module_supported ())
     {
-      module_path = _gtk_find_module (backend_name, "printbackends");
+      full_name = g_strconcat ("printbackend-", backend_name, NULL);
+      module_path = _gtk_find_module (full_name, "printbackends");
+      g_free (full_name);
 
       if (module_path)
 	{

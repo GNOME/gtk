@@ -1,5 +1,19 @@
 2006-03-24  Alexander Larsson  <alexl@redhat.com>
 
+	* configure.in:
+	* gtk/gtkprintbackend.c:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/lpr/Makefile.am:
+	* modules/printbackends/lpr/gtkprintbackendlpr.[ch]:
+	* modules/printbackends/lpr/gtkprinterlpr.[ch]:
+	* modules/printbackends/pdf/Makefile.am:
+	* modules/printbackends/pdf/gtkprintbackendpdf.[ch]:
+	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
+	Import pdf and lpr backend
+
+2006-03-24  Alexander Larsson  <alexl@redhat.com>
+
         Import print-operation into gtk+
 	
 	* .cvsignore:

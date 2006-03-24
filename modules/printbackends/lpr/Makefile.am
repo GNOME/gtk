@@ -7,7 +7,6 @@ INCLUDES = \
 	-I$(top_srcdir)/gtk				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir)/gdk				\
-	$(CUPS_CFLAGS)					\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)
 
@@ -17,17 +16,15 @@ LDADDS = \
 
 backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends
 
-backend_LTLIBRARIES = libprintbackend-cups.la
+backend_LTLIBRARIES = libprintbackend-lpr.la
 
-libprintbackend_cups_la_SOURCES =	\
-	gtkprintbackendcups.c		\
-	gtkprintercups.c		\
-	gtkcupsutils.c
+libprintbackend_lpr_la_SOURCES =	\
+	gtkprintbackendlpr.c		\
+	gtkprinterlpr.c
 
 noinst_HEADERS =			\
-	gtkprintbackendcups.h		\
-	gtkprintercups.h		\
-	gtkcupsutils.h
+	gtkprintbackendlpr.h		\
+	gtkprinterlpr.h
 
-libprintbackend_cups_la_LDFLAGS =  -avoid-version -module $(no_undefined)
-libprintbackend_cups_la_LIBADD = $(LDADDS) $(CUPS_LIBS)
+libprintbackend_lpr_la_LDFLAGS =  -avoid-version -module $(no_undefined)
+libprintbackend_lpr_la_LIBADD = $(LDADDS)

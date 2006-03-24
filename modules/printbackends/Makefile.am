@@ -1,2 +1,1 @@
-SUBDIRS=cups
-# pdf lpr
+SUBDIRS=cups pdf lpr

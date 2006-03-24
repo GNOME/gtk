@@ -1737,6 +1737,8 @@ modules/engines/ms-windows/Theme/Makefile
 modules/engines/ms-windows/Theme/gtk-2.0/Makefile
 modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
+modules/printbackends/lpr/Makefile
+modules/printbackends/pdf/Makefile
 perf/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
