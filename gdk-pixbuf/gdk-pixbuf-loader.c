@@ -477,7 +477,6 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), FALSE);
   
         g_return_val_if_fail (buf != NULL, FALSE);
-        g_return_val_if_fail (count >= 0, FALSE);
         g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   
         priv = loader->priv;
