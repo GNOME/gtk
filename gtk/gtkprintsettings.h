@@ -41,7 +41,7 @@ typedef struct {
   int end;
 } GtkPageRange;
 
-GType             gtk_print_settings_get_type (void);
+GType             gtk_print_settings_get_type (void) G_GNUC_CONST;
 GtkPrintSettings *gtk_print_settings_new      (void);
 
 GtkPrintSettings *gtk_print_settings_copy                    (GtkPrintSettings     *other);

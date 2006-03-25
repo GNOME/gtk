@@ -1,5 +1,9 @@
 2006-03-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintcontext.h:
+	* gtk/gtkprintoperation.h:
+	* gtk/gtkprintsettings.h: Make get_type function const.
+
 	* modules/printbackends/pdf/gtkprintbackendpdf.c: Remove
 	C99ism.
 

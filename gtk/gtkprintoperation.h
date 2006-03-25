@@ -88,7 +88,7 @@ typedef enum
 
 GQuark gtk_print_error_quark (void);
 
-GType                   gtk_print_operation_get_type               (void);
+GType                   gtk_print_operation_get_type               (void) G_GNUC_CONST;
 GtkPrintOperation *     gtk_print_operation_new                    (void);
 void                    gtk_print_operation_set_default_page_setup (GtkPrintOperation  *op,
 								    GtkPageSetup       *default_page_setup);
