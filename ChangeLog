@@ -1,5 +1,8 @@
 2006-03-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: Remove
+	C99ism.
+
 	* modules/printbackends/cups/gtkcupsutils.c: Use unsigned
 	integers for bitfields.
 

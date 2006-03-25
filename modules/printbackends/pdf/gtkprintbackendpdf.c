@@ -325,8 +325,11 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
 
   error = NULL;
 
-  //gtk_print_settings_foreach (settings, add_pdf_options, request);
-  
+#if 0
+  /* FIXME */
+  gtk_print_settings_foreach (settings, add_pdf_options, request);
+#endif
+   
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
