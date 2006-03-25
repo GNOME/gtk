@@ -18,10 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkprintsettings.h"
+#include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <glib/gprintf.h>
+#include "gtkprintsettings.h"
+#include "gtkalias.h"
 
 #define MM_PER_INCH 25.4
 #define POINTS_PER_INCH 72
@@ -909,3 +911,6 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_BIN, output_bin);
 }
    
+
+#define __GTK_PRINT_SETTINGS_C__
+#include "gtkaliasdef.c"

@@ -18,6 +18,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+
 #include "gtkprintoperation-private.h"
 #include "gtkmarshal.h"
 
@@ -26,11 +34,7 @@
 #include "gtkprintbackend.h"
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
-
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
+#include "gtkalias.h"
 
 typedef struct {
   GtkPrintJob *job;         /* the job we are sending to the printer */
@@ -227,3 +231,6 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
   return new_page_setup;
 }
 
+
+#define __GTK_PRINT_OPERATION_UNIX_C__
+#include "gtkaliasdef.c"

@@ -18,9 +18,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
 #include <cairo-pdf.h>
+#include "gtkalias.h"
 
 #define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
 
@@ -508,3 +510,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 
   return GTK_PRINT_OPERATION_RESULT_APPLY;
 }
+
+
+#define __GTK_PRINT_OPERATION_C__
+#include "gtkaliasdef.c"

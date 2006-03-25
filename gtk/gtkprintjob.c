@@ -17,21 +17,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 
 #include "gtkintl.h"
-#include <gtk/gtk.h>
-#include <gtk/gtkprivate.h>
+/* TODO: include individual headers */
+#include "gtk.h"
+#include "gtkprivate.h"
 
 #include "gtkprintjob.h"
 #include "gtkprinter.h"
 #include "gtkprintbackend.h"
+#include "gtkalias.h"
 
 struct _GtkPrintJobPrivate
 {
@@ -343,3 +347,6 @@ gtk_print_job_send (GtkPrintJob *print_job,
   return TRUE;
 }
 
+
+#define __GTK_PRINT_JOB_C__
+#include "gtkaliasdef.c"

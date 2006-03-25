@@ -18,13 +18,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkprintoperation-private.h"
-#include "gtkprint-win32.h"
+#include "config.h"
+#include <stdlib.h>
 #include <cairo-win32.h>
 #include <glib.h>
-#include <stdlib.h>
-
-#define _(x) (x)
+#include "gtkprintoperation-private.h"
+#include "gtkprint-win32.h"
+#include "gtkintl.h"
+#include "gtkalias.h"
 
 #define MAX_PAGE_RANGES 20
 

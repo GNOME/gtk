@@ -17,19 +17,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
 #include "gtkintl.h"
-#include <gtk/gtk.h>
-#include <gtk/gtkprivate.h>
+/* TODO: include individual headers */
+#include "gtk.h"
+#include "gtkprivate.h"
 
 #include "gtkprinter.h"
 #include "gtkprinter-private.h"
 #include "gtkprintbackend.h"
 #include "gtkprintjob.h"
+#include "gtkalias.h"
 
 #define GTK_PRINTER_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER, GtkPrinterPrivate))
@@ -401,3 +403,5 @@ _gtk_printer_get_hard_margins          (GtkPrinter          *printer,
   backend_iface->printer_get_hard_margins (printer, top, bottom, left, right);
 }
 
+#define __GTK_PRINTER_C__
+#include "gtkaliasdef.c"

@@ -18,7 +18,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include "gtkprintoperation-private.h"
+#include "gtkalias.h"
 
 typedef struct _GtkPrintContextClass GtkPrintContextClass;
 
@@ -286,3 +288,5 @@ gtk_print_context_create_layout (GtkPrintContext *context)
   return layout;
 }
 
+#define __GTK_PRINT_CONTEXT_C__
+#include "gtkaliasdef.c"

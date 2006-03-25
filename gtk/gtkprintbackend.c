@@ -18,14 +18,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
+#include <string.h>
+
 #include <gmodule.h>
 
 #include "gtkintl.h"
-#include <gtk/gtkprivate.h>
+#include "gtkprivate.h"
 #include "gtkprintbackend.h"
+#include "gtkalias.h"
 
-#include <string.h>
 static void gtk_print_backend_base_init (gpointer g_class);
 
 GQuark
@@ -459,3 +461,5 @@ gtk_print_backend_print_stream (GtkPrintBackend *print_backend,
                                                                     user_data);
 }
 
+#define __GTK_PRINT_BACKEND_C__
+#include "gtkaliasdef.c"

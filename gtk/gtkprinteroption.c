@@ -18,11 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gmodule.h>
+#include "config.h"
 #include <string.h>
+#include <gmodule.h>
 
 #include "gtkprinteroption.h"
+#include "gtkalias.h"
 
 /*****************************************
  *            GtkPrinterOption           *
@@ -196,3 +197,6 @@ gtk_printer_option_choices_from_array (GtkPrinterOption   *option,
       option->choices_display[i] = g_strdup (choices_display[i]);
     }
 }
+
+#define __GTK_PRINTER_OPTION_C__
+#include "gtkaliasdef.c"

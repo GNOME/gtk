@@ -18,19 +18,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
 
 #include "gtkintl.h"
-#include <gtk/gtk.h>
-#include <gtk/gtkprivate.h>
+/* TODO include individual headers */
+#include "gtk.h"
+#include "gtkprivate.h"
 
 #include "gtkprintbackend.h"
 #include "gtkprintunixdialog.h"
 #include "gtkprinteroptionwidget.h"
+#include "gtkalias.h"
 
 #define EXAMPLE_PAGE_AREA_SIZE 140
 
@@ -2254,3 +2256,7 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   
   return settings;
 }
+
+
+#define __GTK_PRINT_UNIX_DIALOG_C__
+#include "gtkaliasdef.c"
