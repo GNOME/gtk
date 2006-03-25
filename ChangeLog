@@ -1,3 +1,8 @@
+2006-03-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkcupsutils.c: Use unsigned
+	integers for bitfields.
+
 2006-03-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c: Fix docs

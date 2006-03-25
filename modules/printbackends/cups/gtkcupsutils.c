@@ -46,8 +46,8 @@ struct _GtkCupsResult
   gchar *error_msg;
   ipp_t *ipp_response;
 
-  gint is_error : 1;
-  gint is_ipp_response : 1;
+  guint is_error : 1;
+  guint is_ipp_response : 1;
 };
 
 
