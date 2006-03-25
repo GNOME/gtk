@@ -1330,7 +1330,7 @@ static inline void
 model_add_special (GtkFileChooserButton *button)
 {
   const gchar *homedir;
-  const gchar *display_name;
+  gchar *display_name;
   gchar *desktopdir = NULL;
   GtkListStore *store;
   GtkTreeIter iter;

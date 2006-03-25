@@ -1,3 +1,25 @@
+2006-03-24  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Added fields location_mode_box, location_pathbar_radio,
+	location_filename_radio, location_widget_box, location_label,
+	location_entry.  The radio buttons will switch between the pathbar
+	and the location entry; the other boxes are for layout purposes.
+	(enum LocationMode): New enum.
+	(struct _GtkFileChooserDefault): Added a location_mode field.
+
+	* gtk/gtkfilechooserdefault.c (browse_widgets_create): Create the
+	location radio buttons to switch between the pathbar and the
+	location entry.  Pack the browse_path_bar in the new
+	location_widget_box instead of a generic hbox.
+	(location_buttons_create): New function.
+	(gtk_file_chooser_default_init): Initialize impl->location_mode.
+	(location_switch_to_path_bar): New function.
+	(location_switch_to_filename_entry): New function.
+
+	* gtk/gtkfilechooserbutton.c (model_add_special): The display_name
+	should not be const.
+
 2006-03-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_value_changed): Don't call

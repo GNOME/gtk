@@ -53,6 +53,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkpathbar.h"
 #include "gtkprivate.h"
+#include "gtkradiobutton.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
@@ -683,6 +684,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_paths = NULL;
+  impl->location_mode = LOCATION_MODE_PATH_BAR;
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
@@ -3770,7 +3772,7 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_set_title (column, _("Size"));
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
   gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_SIZE);
@@ -4026,6 +4028,238 @@ save_widgets_destroy (GtkFileChooserDefault *impl)
   impl->save_expander = NULL;
 }
 
+static void
+location_switch_to_path_bar (GtkFileChooserDefault *impl)
+{
+  g_assert (!GTK_WIDGET_VISIBLE (impl->browse_path_bar));
+  g_assert (impl->location_label != NULL);
+  g_assert (impl->location_entry != NULL);
+
+  gtk_widget_destroy (impl->location_label);
+  gtk_widget_destroy (impl->location_entry);
+  gtk_widget_show (impl->browse_path_bar);
+}
+
+static void location_button_toggled_cb (GtkToggleButton *toggle,
+					GtkFileChooserDefault *impl);
+
+static void
+location_entry_set_initial_text (GtkFileChooserDefault *impl)
+{
+  char *text;
+
+  if (gtk_file_system_path_is_local (impl->file_system, impl->current_folder))
+    {
+      char *filename;
+
+      filename = gtk_file_system_path_to_filename (impl->file_system, impl->current_folder);
+      if (filename)
+	{
+	  text = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  g_free (filename);
+	}
+      else
+	text = NULL;
+    }
+  else
+    text = gtk_file_system_path_to_uri (impl->file_system, impl->current_folder);
+
+  if (text)
+    {
+      gboolean need_slash;
+      int len;
+
+      len = strlen (text);
+      need_slash = (text[len - 1] != G_DIR_SEPARATOR);
+
+      if (need_slash)
+	{
+	  char *slash_text;
+
+	  slash_text = g_new (char, len + 2);
+	  strcpy (slash_text, text);
+	  slash_text[len] = G_DIR_SEPARATOR;
+	  slash_text[len + 1] = 0;
+
+	  g_free (text);
+	  text = slash_text;
+	}
+
+      gtk_entry_set_text (GTK_ENTRY (impl->location_entry), text);
+      g_free (text);
+    }
+}
+
+/* Switches from the path bar to the location entry */
+static void
+location_switch_to_filename_entry (GtkFileChooserDefault *impl)
+{
+  g_assert (GTK_WIDGET_VISIBLE (impl->browse_path_bar));
+
+  /* We hide the path bar, rather than destroying it, because we want to
+   * preserve its state.  We would get hysteresis otherwise.
+   */
+  gtk_widget_hide (impl->browse_path_bar);
+
+  /* FMQ: FIXME: don't create this in SAVE mode */
+
+  /* Label */
+
+  impl->location_label = gtk_label_new_with_mnemonic ("<b>_Location:</b>");
+  gtk_label_set_use_markup (GTK_LABEL (impl->location_label), TRUE);
+  gtk_widget_show (impl->location_label);
+  gtk_box_pack_start (GTK_BOX (impl->location_widget_box), impl->location_label, FALSE, FALSE, 0);
+
+  /* Entry */
+
+  impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
+  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+					   impl->file_system);
+  gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
+  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
+
+  gtk_box_pack_start (GTK_BOX (impl->location_widget_box), impl->location_entry, TRUE, TRUE, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (impl->location_label), impl->location_entry);
+
+  /* Configure the entry */
+
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
+  location_entry_set_initial_text (impl);
+
+  /* Done */
+
+  gtk_widget_show (impl->location_entry);
+  gtk_widget_grab_focus (impl->location_entry);
+}
+
+/* Sets a new location mode.  set_buttons determines whether the radio buttons
+ * for the mode will also be changed.
+ */
+static void
+location_mode_set (GtkFileChooserDefault *impl,
+		   LocationMode new_mode,
+		   gboolean set_buttons)
+{
+  GtkWidget *button_to_set;
+
+  switch (new_mode)
+    {
+    case LOCATION_MODE_PATH_BAR:
+      button_to_set = impl->location_pathbar_radio;
+      location_switch_to_path_bar (impl);
+      break;
+
+    case LOCATION_MODE_FILENAME_ENTRY:
+      button_to_set = impl->location_filename_radio;
+      location_switch_to_filename_entry (impl);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  if (set_buttons)
+    {
+      g_signal_handlers_block_by_func (impl->location_pathbar_radio,
+				       G_CALLBACK (location_button_toggled_cb), impl);
+      g_signal_handlers_block_by_func (impl->location_filename_radio,
+				       G_CALLBACK (location_button_toggled_cb), impl);
+
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_to_set), TRUE);
+
+      g_signal_handlers_unblock_by_func (impl->location_pathbar_radio,
+					 G_CALLBACK (location_button_toggled_cb), impl);
+      g_signal_handlers_unblock_by_func (impl->location_filename_radio,
+					 G_CALLBACK (location_button_toggled_cb), impl);
+    }
+
+  impl->location_mode = new_mode;
+}
+
+/* Callback used when one of the location mode buttons is toggled */
+static void
+location_button_toggled_cb (GtkToggleButton *toggle,
+			    GtkFileChooserDefault *impl)
+{
+  LocationMode new_mode;
+  gboolean is_active;
+
+  is_active = gtk_toggle_button_get_active (toggle);
+  if (!is_active)
+    return;
+
+  if (GTK_WIDGET (toggle) == impl->location_pathbar_radio)
+    {
+      g_assert (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY);
+      new_mode = LOCATION_MODE_PATH_BAR;
+    }
+  else if (GTK_WIDGET (toggle) == impl->location_filename_radio)
+    {
+      g_assert (impl->location_mode == LOCATION_MODE_PATH_BAR);
+      new_mode = LOCATION_MODE_FILENAME_ENTRY;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return;
+    }
+
+  location_mode_set (impl, new_mode, FALSE);
+}
+
+/* Creates a radio button for the location mode, and packs it on a box */
+static GtkWidget *
+location_button_new (GtkFileChooserDefault *impl,
+		     GtkWidget *radio_group,
+		     const char *stock_id,
+		     const char *accessible_name_and_tooltip,
+		     GtkWidget *box)
+{
+  GtkWidget *image;
+  GtkWidget *button;
+
+  image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image);
+
+  button = g_object_new (GTK_TYPE_RADIO_BUTTON,
+			 "image", image,
+			 "draw-indicator", FALSE,
+			 NULL);
+  if (radio_group)
+    gtk_radio_button_set_group (GTK_RADIO_BUTTON (button),
+				gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_group)));
+
+  g_signal_connect (button, "toggled",
+		    G_CALLBACK (location_button_toggled_cb), impl);
+  gtk_widget_show (button);
+
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  gtk_tooltips_set_tip (impl->tooltips, button, accessible_name_and_tooltip, NULL);
+  atk_object_set_name (gtk_widget_get_accessible (button), accessible_name_and_tooltip);
+
+  return button;
+}
+
+/* Creates toggle buttons that switch between the pathbar and the location entry. */
+static void
+location_buttons_create (GtkFileChooserDefault *impl)
+{
+  impl->location_mode_box = gtk_hbox_new (FALSE, 0);
+
+  impl->location_pathbar_radio = location_button_new (impl,
+						      NULL,
+						      GTK_STOCK_DIRECTORY,
+						      _("Show folders"),
+						      impl->location_mode_box);
+  impl->location_filename_radio = location_button_new (impl,
+						       impl->location_pathbar_radio,
+						       GTK_STOCK_EDIT,
+						       _("Type a file name"),
+						       impl->location_mode_box);
+}
+
 /* Creates the main hpaned with the widgets shared by Open and Save mode */
 static GtkWidget *
 browse_widgets_create (GtkFileChooserDefault *impl)
@@ -4040,15 +4274,25 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
   vbox = gtk_vbox_new (FALSE, 12);
 
-  /* The path bar and 'Create Folder' button */
+  /* Location widgets */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
+  location_buttons_create (impl);
+  gtk_widget_show (impl->location_mode_box);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->location_mode_box, FALSE, FALSE, 0);
+
+  impl->location_widget_box = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (impl->location_widget_box);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->location_widget_box, TRUE, TRUE, 0);
+
+  /* Path bar */
+
   impl->browse_path_bar = create_path_bar (impl);
   g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->browse_path_bar);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->location_widget_box), impl->browse_path_bar, TRUE, TRUE, 0);
 
   /* Create Folder */
   impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
@@ -7063,21 +7307,25 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 
   if (!info || gtk_file_info_get_is_folder (info)) 
     {
-      g_object_set (cell,"sensitive", sensitive, NULL);
+      g_object_set (cell,
+		    "text", NULL,
+		    "sensitive", sensitive,
+		    NULL);
       return;
     }
 
   size = gtk_file_info_get_size (info);
-
+#if 0
   if (size < (gint64)1024)
     str = g_strdup_printf (ngettext ("%d byte", "%d bytes", (gint)size), (gint)size);
   else if (size < (gint64)1024*1024)
-    str = g_strdup_printf (_("%.1f K"), size / (1024.));
+    str = g_strdup_printf (_("%.1f KB"), size / (1024.));
   else if (size < (gint64)1024*1024*1024)
-    str = g_strdup_printf (_("%.1f M"), size / (1024.*1024.));
+    str = g_strdup_printf (_("%.1f MB"), size / (1024.*1024.));
   else
-    str = g_strdup_printf (_("%.1f G"), size / (1024.*1024.*1024.));
-
+    str = g_strdup_printf (_("%.1f GB"), size / (1024.*1024.*1024.));
+#endif
+  str = g_strdup_printf ("%" G_GINT64_FORMAT, size);
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     sensitive = FALSE;
@@ -7085,6 +7333,7 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
   g_object_set (cell,
   		"text", str,
 		"sensitive", sensitive,
+		"alignment", PANGO_ALIGN_RIGHT,
 		NULL);
 
   g_free (str);
