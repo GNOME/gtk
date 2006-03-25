@@ -20,8 +20,8 @@
 
 #include "config.h"
 #include <string.h>
-#include <gmodule.h>
 #include <glib.h>
+#include <gmodule.h>
 
 #include "gtkprinteroptionset.h"
 #include "gtkalias.h"
@@ -36,6 +36,9 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+/* ugly side-effect of aliasing */
+#undef gtk_printer_option_set
 
 G_DEFINE_TYPE (GtkPrinterOptionSet, gtk_printer_option_set, G_TYPE_OBJECT)
 

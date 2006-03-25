@@ -1,5 +1,7 @@
 2006-03-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinteroptionset.c: Make it build again
+
 	* gtk/gtk.symbols: Add printing symbols
 	* gtk/gtkprint*.c: Add aliasing, #include cleanups.
 
