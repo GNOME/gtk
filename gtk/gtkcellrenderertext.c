@@ -689,14 +689,7 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       break;
 
     case PROP_FONT:
-      {
-        /* FIXME GValue imposes a totally gratuitous string copy
-         * here, we could just hand off string ownership
-         */
-        gchar *str = pango_font_description_to_string (celltext->font);
-        g_value_set_string (value, str);
-        g_free (str);
-      }
+        g_value_take_string (value, pango_font_description_to_string (celltext->font);
       break;
       
     case PROP_FONT_DESC:
