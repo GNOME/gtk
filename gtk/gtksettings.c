@@ -661,7 +661,7 @@ gtk_settings_get_property (GObject     *object,
 	  if (pspec->param_id == PROP_COLOR_SCHEME)
 	    {
 	      merge_color_scheme (settings, value, GTK_SETTINGS_SOURCE_XSETTING);
-	      g_value_set_string (value, get_color_scheme (settings));
+	      g_value_take_string (value, get_color_scheme (settings));
 	    }
 	  
 	  g_param_value_validate (pspec, value);
