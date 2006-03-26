@@ -1237,7 +1237,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   g_signal_connect (selection, "changed", G_CALLBACK (selected_printer_changed), dialog);
  
   renderer = gtk_cell_renderer_pixbuf_new ();
-  column = gtk_tree_view_column_new_with_attributes (_(""),
+  column = gtk_tree_view_column_new_with_attributes ("",
 						     renderer,
 						     "icon-name",
 						     PRINTER_LIST_COL_ICON,

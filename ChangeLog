@@ -1,5 +1,8 @@
 2006-03-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Don't use _(""). (#335898,
+	Christian Persch)
+
 	* modules/printbackends/*: Don't use G_DEFINE_TYPE
 	in modules.
 
