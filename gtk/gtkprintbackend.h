@@ -32,12 +32,13 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include <gtk/gtkprinter-private.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkprinteroption.h>
-#include <gtk/gtkprintjob.h>
+#include "gtkprinter-private.h"
+#include "gtkprintsettings.h"
+#include "gtkprinteroption.h"
+#include "gtkprintjob.h"
 
 G_BEGIN_DECLS
+
 typedef struct _GtkPrintBackendIface  GtkPrintBackendIface;
 
 #define GTK_PRINT_BACKEND_ERROR (gtk_print_backend_error_quark ())

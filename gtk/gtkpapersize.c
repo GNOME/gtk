@@ -18,13 +18,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <langinfo.h>
 
 #include "gtkpapersize.h"
+#include "gtkalias.h"
 
 #define MM_PER_INCH 25.4
 #define POINTS_PER_INCH 72
@@ -531,3 +532,7 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size, GtkUnit unit)
   margin = to_mm (0.25, GTK_UNIT_INCH);
   return from_mm (margin, unit);
 }
+
+
+#define __GTK_PAPER_SIZE_C__
+#include "gtkaliasdef.c"

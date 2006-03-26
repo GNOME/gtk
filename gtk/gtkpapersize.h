@@ -22,7 +22,7 @@
 #define __GTK_PAPER_SIZE_H__
 
 #include <glib-object.h>
-#include <gtk/gtkenums.h>
+#include "gtkenums.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +39,7 @@ typedef struct _GtkPaperSize GtkPaperSize;
 #define GTK_PAPER_NAME_EXECUTIVE "na_executive"
 #define GTK_PAPER_NAME_LEGAL "na_legal"
 
-GType gtk_paper_size_get_type (void);
+GType gtk_paper_size_get_type (void) G_GNUC_CONST;
 
 GtkPaperSize *gtk_paper_size_new          (const char   *name);
 GtkPaperSize *gtk_paper_size_new_from_ppd (const char   *ppd_name,
@@ -67,7 +67,10 @@ double   gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
 gboolean gtk_paper_size_is_custom        (GtkPaperSize *size);
 
 /* Only for custom sizes: */
-void gtk_paper_size_set_size (GtkPaperSize *size, double width, double height, GtkUnit unit);
+void gtk_paper_size_set_size             (GtkPaperSize *size, 
+                                          double        width, 
+                                          double        height, 
+                                          GtkUnit       unit);
 
 double gtk_paper_size_get_default_top_margin    (GtkPaperSize *size,
 						 GtkUnit       unit);

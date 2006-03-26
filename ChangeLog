@@ -1,8 +1,10 @@
 2006-03-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: Add printing symbols
-	* gtk/gtkpage*.c: 
-	* gtk/gtkprint*.c: Add aliasing, #include cleanups.
+
+	* gtk/gtkpapersize.[hc]: 
+	* gtk/gtkpage*.[hc]: 
+	* gtk/gtkprint*.[hc]: Add aliasing, #include cleanups.
 
 	* gtk/gtkprintcontext.h:
 	* gtk/gtkprintoperation.h:
