@@ -1,5 +1,6 @@
 2006-03-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttag.c (gtk_text_tag_get_property):
 	* gtk/gtkcellrenderertext.c (gtk_cell_render_text_get_property):
 	Avoid an unnecessary strdup.  (#336013)
 

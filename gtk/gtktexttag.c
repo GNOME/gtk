@@ -1503,16 +1503,12 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FONT:
         {
-          /* FIXME GValue imposes a totally gratuitous string copy
-           * here, we could just hand off string ownership
-           */
           gchar *str;
 
 	  gtk_text_tag_ensure_font (tag);
 	  
 	  str = pango_font_description_to_string (tag->values->font);
-          g_value_set_string (value, str);
-          g_free (str);
+          g_value_take_string (value, str);
         }
       break;
 
