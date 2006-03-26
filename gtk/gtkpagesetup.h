@@ -22,8 +22,8 @@
 #define __GTK_PAGE_SETUP_H__
 
 #include <glib-object.h>
-#include <gtk/gtkenums.h>
-#include <gtk/gtkpapersize.h>
+#include "gtkenums.h"
+#include "gtkpapersize.h"
 
 G_BEGIN_DECLS
 
@@ -33,7 +33,7 @@ typedef struct _GtkPageSetup GtkPageSetup;
 #define GTK_PAGE_SETUP(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PAGE_SETUP, GtkPageSetup))
 #define GTK_IS_PAGE_SETUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PAGE_SETUP))
 
-GType              gtk_page_setup_get_type          (void);
+GType              gtk_page_setup_get_type          (void) G_GNUC_CONST;
 GtkPageSetup *     gtk_page_setup_new               (void);
 GtkPageSetup *     gtk_page_setup_copy              (GtkPageSetup       *other);
 GtkPageOrientation gtk_page_setup_get_orientation   (GtkPageSetup       *setup);

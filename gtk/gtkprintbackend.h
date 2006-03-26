@@ -30,7 +30,6 @@
 #endif
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
 #include <cairo.h>
 
 #include <gtk/gtkprinter-private.h>

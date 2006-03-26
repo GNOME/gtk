@@ -18,7 +18,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
 #include "gtkpagesetup.h"
+#include "gtkalias.h"
 
 #define MM_PER_INCH 25.4
 #define POINTS_PER_INCH 72
@@ -279,3 +282,7 @@ gtk_page_setup_get_page_height (GtkPageSetup    *setup,
   
   return from_mm (height, unit);
 }
+
+
+#define __GTK_PAGE_SETUP_C__
+#include "gtkaliasdef.c"

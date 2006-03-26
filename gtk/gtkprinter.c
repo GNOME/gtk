@@ -23,8 +23,6 @@
 #include <stdio.h>
 
 #include "gtkintl.h"
-/* TODO: include individual headers */
-#include "gtk.h"
 #include "gtkprivate.h"
 
 #include "gtkprinter.h"

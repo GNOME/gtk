@@ -24,6 +24,7 @@
 #include <gmodule.h>
 
 #include "gtkintl.h"
+#include "gtkmodules.h"
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"
 #include "gtkalias.h"

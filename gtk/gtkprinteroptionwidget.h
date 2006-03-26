@@ -20,7 +20,7 @@
 #define __GTK_PRINTER_OPTION_WIDGET_H__
 
 #include "gtkprinteroption.h"
-#include <gtk/gtk.h>
+#include "gtkhbox.h"
 
 G_BEGIN_DECLS
 

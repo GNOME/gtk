@@ -23,11 +23,11 @@
 
 #include <glib-object.h>
 #include <cairo.h>
-#include <gtk/gtk.h>
-#include <gtk/gtkenums.h>
-#include <gtk/gtkpagesetup.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkprintcontext.h>
+#include "gtkenums.h"
+#include "gtkwindow.h"
+#include "gtkpagesetup.h"
+#include "gtkprintsettings.h"
+#include "gtkprintcontext.h"
 
 G_BEGIN_DECLS
 

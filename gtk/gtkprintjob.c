@@ -28,8 +28,6 @@
 #include <sys/stat.h>
 
 #include "gtkintl.h"
-/* TODO: include individual headers */
-#include "gtk.h"
 #include "gtkprivate.h"
 
 #include "gtkprintjob.h"

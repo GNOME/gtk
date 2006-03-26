@@ -23,8 +23,18 @@
 #include <stdio.h>
 
 #include "gtkintl.h"
-/* TODO: include individual headers */
-#include "gtk.h"
+#include "gtkalignment.h"
+#include "gtkcheckbutton.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
+#include "gtkcombobox.h"
+#include "gtkfilechooserbutton.h"
+#include "gtkimage.h"
+#include "gtklabel.h"
+#include "gtkliststore.h"
+#include "gtkstock.h"
+#include "gtktable.h"
+#include "gtktogglebutton.h"
 #include "gtkprivate.h"
 
 #include "gtkprinteroptionwidget.h"

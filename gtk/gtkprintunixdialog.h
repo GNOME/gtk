@@ -18,11 +18,11 @@
  */
 #ifndef __GTK_PRINT_UNIX_DIALOG_H__
 #define __GTK_PRINT_UNIX_DIALOG_H__
+
+#include "gtkdialog.h"
 #include "gtkprinter.h"
 #include "gtkprintsettings.h"
 #include "gtkpagesetup.h"
-
-#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

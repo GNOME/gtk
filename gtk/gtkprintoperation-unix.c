@@ -28,6 +28,7 @@
 
 #include "gtkprintoperation-private.h"
 #include "gtkmarshal.h"
+#include "gtkmessagedialog.h"
 
 #include "gtkprintunixdialog.h"
 #include "gtkpagesetupunixdialog.h"

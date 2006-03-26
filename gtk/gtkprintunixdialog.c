@@ -25,9 +25,25 @@
 #include <math.h>
 
 #include "gtkintl.h"
-/* TODO include individual headers */
-#include "gtk.h"
 #include "gtkprivate.h"
+
+#include "gtkspinbutton.h"
+#include "gtkcellrendererpixbuf.h"
+#include "gtkcellrenderertext.h"
+#include "gtkstock.h"
+#include "gtkimage.h"
+#include "gtktreeselection.h"
+#include "gtknotebook.h"
+#include "gtkscrolledwindow.h"
+#include "gtkcombobox.h"
+#include "gtktogglebutton.h"
+#include "gtkradiobutton.h"
+#include "gtkdrawingarea.h"
+#include "gtkvbox.h"
+#include "gtktable.h"
+#include "gtkframe.h"
+#include "gtkalignment.h"
+#include "gtklabel.h"
 
 #include "gtkprintbackend.h"
 #include "gtkprintunixdialog.h"

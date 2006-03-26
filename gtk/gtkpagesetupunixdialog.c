@@ -18,19 +18,41 @@
  */
 
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #include <locale.h>
 #include <langinfo.h>
 
 #include "gtkintl.h"
-#include <gtk/gtk.h>
-#include <gtk/gtkprivate.h>
+#include "gtkprivate.h"
+
+#include "gtkliststore.h"
+#include "gtkstock.h"
+#include "gtktreeviewcolumn.h"
+#include "gtktreeselection.h"
+#include "gtktreemodel.h"
+#include "gtkbutton.h"
+#include "gtkscrolledwindow.h"
+#include "gtkvbox.h"
+#include "gtkhbox.h"
+#include "gtkframe.h"
+#include "gtkeventbox.h"
+#include "gtkcombobox.h"
+#include "gtktogglebutton.h"
+#include "gtkradiobutton.h"
+#include "gtklabel.h"
+#include "gtktable.h"
+#include "gtktooltips.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
+#include "gtkalignment.h"
+#include "gtkspinbutton.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
 #include "gtkpapersize.h"
+#include "gtkalias.h"
 
 #define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 
@@ -1873,3 +1895,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
 
   save_custom_papers (dialog->priv->custom_paper_list);
 }
+
+
+#define __GTK_PAGE_SETUP_UNIX_DIALOG_C__
+#include "gtkaliasdef.c"
