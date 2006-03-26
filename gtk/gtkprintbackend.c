@@ -168,31 +168,6 @@ _gtk_print_backend_module_create (GtkPrintBackendModule *pb_module)
   return NULL;
 }
 
-/* Like g_module_path, but use .la as the suffix
- */
-static gchar*
-module_build_la_path (const gchar *directory,
-		      const gchar *module_name)
-{
-  gchar *filename;
-  gchar *result;
-	
-  if (strncmp (module_name, "lib", 3) == 0)
-    filename = (gchar *)module_name;
-  else
-    filename =  g_strconcat ("libgtkprintbackend", module_name, ".la", NULL);
-
-  if (directory && *directory)
-    result = g_build_filename (directory, filename, NULL);
-  else
-    result = g_strdup (filename);
-
-  if (filename != module_name)
-    g_free (filename);
-
-  return result;
-}
-
 GtkPrintBackend *
 _gtk_print_backend_create (const char *backend_name)
 {
