@@ -1003,7 +1003,7 @@ stamp-icons: $(STOCK_ICONS)
 
 gtkbuiltincache.h: @REBUILD@ gtk-update-icon-cache$(EXEEXT) stamp-icons
 	./gtk-update-icon-cache --force --ignore-theme-index 	\
-	   --source builtin_icons stock-icons > gtkbuiltincache.h
+	   --source builtin_icons $(srcdir)/stock-icons > gtkbuiltincache.h
 
 MAINTAINERCLEANFILES += stamp-icons
 
