@@ -514,7 +514,7 @@ gtk_text_buffer_get_property (GObject         *object,
         gtk_text_buffer_get_start_iter (text_buffer, &start);
         gtk_text_buffer_get_end_iter (text_buffer, &end);
 
-        g_value_set_string (value,
+        g_value_take_string (value,
                             gtk_text_buffer_get_text (text_buffer,
                                                       &start, &end, FALSE));
         break;

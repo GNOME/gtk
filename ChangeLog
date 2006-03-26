@@ -1,5 +1,6 @@
 2006-03-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.c (gtk_text_buffer_get_property):
 	* gtk/gtksettings.c (gtk_settings_get_property):
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_property): Fix leaks.
 
