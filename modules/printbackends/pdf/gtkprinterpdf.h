@@ -52,8 +52,9 @@ struct _GtkPrinterPdfClass
 
 };
 
-GType                    gtk_printer_pdf_get_type             (void) G_GNUC_CONST;
-GtkPrinterPdf          *gtk_printer_pdf_new                  (void);
+void           gtk_printer_pdf_register_type (GTypeModule *module);
+GType          gtk_printer_pdf_get_type      (void) G_GNUC_CONST;
+GtkPrinterPdf *gtk_printer_pdf_new           (void);
 
 G_END_DECLS
 

@@ -20,21 +20,49 @@
 #include "config.h"
 #include "gtkprintercups.h"
 
-#define GTK_PRINTER_CUPS_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER_CUPS, GtkPrinterCupsPrivate))
+static void gtk_printer_cups_init       (GtkPrinterCups      *printer);
+static void gtk_printer_cups_class_init (GtkPrinterCupsClass *class);
+static void gtk_printer_cups_finalize   (GObject             *object);
 
-static void gtk_printer_cups_finalize     (GObject *object);
+static GtkPrinterClass *gtk_printer_cups_parent_class;
+static GType gtk_printer_cups_type = 0;
 
-G_DEFINE_TYPE (GtkPrinterCups, gtk_printer_cups, GTK_TYPE_PRINTER);
+void 
+gtk_printer_cups_register_type (GTypeModule *module)
+{
+  static const GTypeInfo object_info =
+  {
+    sizeof (GtkPrinterCupsClass),
+    (GBaseInitFunc) NULL,
+    (GBaseFinalizeFunc) NULL,
+    (GClassInitFunc) gtk_printer_cups_class_init,
+    NULL,           /* class_finalize */
+    NULL,           /* class_data */
+    sizeof (GtkPrinterCups),
+    0,              /* n_preallocs */
+    (GInstanceInitFunc) gtk_printer_cups_init,
+  };
+
+ gtk_printer_cups_type = g_type_module_register_type (module,
+                                                      GTK_TYPE_PRINTER,
+                                                      "GtkPrinterCups",
+                                                      &object_info, 0);
+}
+
+GType
+gtk_printer_cups_get_type (void)
+{
+  return gtk_printer_cups_type;
+}
 
 static void
 gtk_printer_cups_class_init (GtkPrinterCupsClass *class)
 {
-  GObjectClass *object_class;
-  object_class = (GObjectClass *) class;
+  GObjectClass *object_class = (GObjectClass *) class;
+	
+  gtk_printer_cups_parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_printer_cups_finalize;
-
 }
 
 static void

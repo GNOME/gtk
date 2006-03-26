@@ -35,7 +35,9 @@
 #include <cairo-ps.h>
 
 #include <glib/gi18n-lib.h>
+#include <gmodule.h>
 
+#include <gtk/gtkprintoperation.h>
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprintbackend.h>
 #include <gtk/gtkprinter.h>
@@ -137,7 +139,7 @@ static void                 set_option_from_settings               (GtkPrinterOp
 								    GtkPrintSettings                  *setting);
 
 static void
-gtk_print_backend_register_type (GTypeModule *module)
+gtk_print_backend_cups_register_type (GTypeModule *module)
 {
   if (!print_backend_cups_type)
     {
@@ -151,7 +153,7 @@ gtk_print_backend_register_type (GTypeModule *module)
 	NULL,		/* class_data */
 	sizeof (GtkPrintBackendCups),
 	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_print_backend_cups_init,
+	(GInstanceInitFunc) gtk_print_backend_cups_init
       };
 
       static const GInterfaceInfo print_backend_info =
@@ -170,14 +172,13 @@ gtk_print_backend_register_type (GTypeModule *module)
 		 		   GTK_TYPE_PRINT_BACKEND,
 				   &print_backend_info);
     }
-
-
 }
 
 G_MODULE_EXPORT void 
-pb_module_init (GTypeModule    *module)
+pb_module_init (GTypeModule *module)
 {
-  gtk_print_backend_register_type (module);
+  gtk_print_backend_cups_register_type (module);
+  gtk_printer_cups_register_type (module);
 }
 
 G_MODULE_EXPORT void 

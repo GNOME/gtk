@@ -94,7 +94,7 @@ static void                 lpr_printer_request_details           (GtkPrinter   
 static GList *              lpr_printer_list_papers               (GtkPrinter              *printer);
 
 static void
-gtk_print_backend_register_type (GTypeModule *module)
+gtk_print_backend_lpr_register_type (GTypeModule *module)
 {
   if (!print_backend_lpr_type)
     {
@@ -132,9 +132,10 @@ gtk_print_backend_register_type (GTypeModule *module)
 }
 
 G_MODULE_EXPORT void 
-pb_module_init (GTypeModule    *module)
+pb_module_init (GTypeModule *module)
 {
-  gtk_print_backend_register_type (module);
+  gtk_print_backend_lpr_register_type (module);
+  gtk_printer_lpr_register_type (module);
 }
 
 G_MODULE_EXPORT void 

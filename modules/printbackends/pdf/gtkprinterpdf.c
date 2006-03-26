@@ -21,18 +21,49 @@
 #include "gtkprinterpdf.h"
 #include "gtkprinter-private.h"
 
-static void gtk_printer_pdf_finalize     (GObject *object);
+static void gtk_printer_pdf_init       (GtkPrinterPdf      *printer);
+static void gtk_printer_pdf_class_init (GtkPrinterPdfClass *class);
+static void gtk_printer_pdf_finalize   (GObject            *object);
 
-G_DEFINE_TYPE (GtkPrinterPdf, gtk_printer_pdf, GTK_TYPE_PRINTER);
+static GtkPrinterClass *gtk_printer_pdf_parent_class;
+static GType gtk_printer_pdf_type = 0;
+
+void
+gtk_printer_pdf_register_type (GTypeModule *module)
+{
+  static const GTypeInfo object_info =
+  {
+    sizeof (GtkPrinterPdfClass),
+    (GBaseInitFunc) NULL,
+    (GBaseFinalizeFunc) NULL,
+    (GClassInitFunc) gtk_printer_pdf_class_init,
+    NULL,           /* class_finalize */
+    NULL,           /* class_data */
+    sizeof (GtkPrinterPdf),
+    0,              /* n_preallocs */
+    (GInstanceInitFunc) gtk_printer_pdf_init,
+  };
+
+ gtk_printer_pdf_type = g_type_module_register_type (module,
+                                                     GTK_TYPE_PRINTER,
+                                                     "GtkPrinterPdf",
+                                                     &object_info, 0);
+}
+
+GType
+gtk_printer_pdf_get_type (void)
+{
+  return gtk_printer_pdf_type;
+}
 
 static void
 gtk_printer_pdf_class_init (GtkPrinterPdfClass *class)
 {
-  GObjectClass *object_class;
-  object_class = (GObjectClass *) class;
+  GObjectClass *object_class = (GObjectClass *) class;
+
+  gtk_printer_pdf_parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_printer_pdf_finalize;
-
 }
 
 static void

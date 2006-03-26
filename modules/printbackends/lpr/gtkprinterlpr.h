@@ -52,8 +52,9 @@ struct _GtkPrinterLprClass
 
 };
 
-GType                    gtk_printer_lpr_get_type             (void) G_GNUC_CONST;
-GtkPrinterLpr          *gtk_printer_lpr_new                  (void);
+void           gtk_printer_lpr_register_type (GTypeModule *module);         
+GType          gtk_printer_lpr_get_type      (void) G_GNUC_CONST;
+GtkPrinterLpr *gtk_printer_lpr_new           (void);
 
 G_END_DECLS
 

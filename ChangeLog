@@ -1,3 +1,8 @@
+2006-03-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/*: Don't use G_DEFINE_TYPE
+	in modules.
+
 2006-03-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: Add printing symbols
