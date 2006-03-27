@@ -61,7 +61,7 @@ unix_end_page (GtkPrintOperation *op,
 }
 
 static void
-_op_unix_free (GtkPrintOperationUnix *op_unix)
+op_unix_free (GtkPrintOperationUnix *op_unix)
 {
   if (op_unix->job)
     g_object_unref (G_OBJECT (op_unix->job));
@@ -81,7 +81,7 @@ unix_finish_send  (GtkPrintJob *job,
 
   parent = op_unix->parent;
 
-  _op_unix_free (op_unix);
+  op_unix_free (op_unix);
 
   if (error != NULL && *error != NULL)
     {
@@ -172,7 +172,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       if (error != NULL && *error != NULL)
         {
 	  *do_print = FALSE;
-	  _op_unix_free (op_unix);
+	  op_unix_free (op_unix);
 	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
 	  goto out;
 	}

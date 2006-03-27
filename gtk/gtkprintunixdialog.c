@@ -474,12 +474,12 @@ printer_removed_cb (GtkPrintBackend *backend,
 static void
 printer_status_cb (GtkPrintBackend *backend, 
 		   GtkPrinter *printer, 
-		   GtkPrintUnixDialog *impl)
+		   GtkPrintUnixDialog *dialog)
 {
   GtkTreeIter *iter;
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
 
-  gtk_list_store_set (GTK_LIST_STORE (impl->priv->printer_list), iter,
+  gtk_list_store_set (GTK_LIST_STORE (dialog->priv->printer_list), iter,
                       PRINTER_LIST_COL_ICON, gtk_printer_get_icon_name (printer),
                       PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
                       PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
@@ -537,7 +537,7 @@ printer_added_cb (GtkPrintBackend *backend,
 }
 
 static void
-printer_list_initialize (GtkPrintUnixDialog *impl,
+printer_list_initialize (GtkPrintUnixDialog *dialog,
                           GtkPrintBackend *print_backend)
 {
   GList *list;
@@ -549,24 +549,24 @@ printer_list_initialize (GtkPrintUnixDialog *impl,
   g_signal_connect (print_backend, 
                     "printer-added", 
 		    (GCallback) printer_added_cb, 
-		    impl);
+		    dialog);
 
   g_signal_connect (print_backend, 
                     "printer-removed", 
 		    (GCallback) printer_removed_cb, 
-		    impl);
+		    dialog);
 
   g_signal_connect (print_backend, 
                     "printer-status-changed", 
 		    (GCallback) printer_status_cb, 
-		    impl);
+		    dialog);
 
   list = gtk_print_backend_get_printer_list (print_backend);
 
   node = list;
   while (node != NULL)
     {
-      printer_added_cb (print_backend, node->data, impl);
+      printer_added_cb (print_backend, node->data, dialog);
       node = node->next;
     }
 
@@ -574,15 +574,15 @@ printer_list_initialize (GtkPrintUnixDialog *impl,
 }
 
 static void
-_load_print_backends (GtkPrintUnixDialog *impl)
+load_print_backends (GtkPrintUnixDialog *dialog)
 {
   GList *node;
 
   if (g_module_supported ())
-    impl->priv->print_backends = gtk_print_backend_load_modules ();
+    dialog->priv->print_backends = gtk_print_backend_load_modules ();
 
-  for (node = impl->priv->print_backends; node != NULL; node = node->next)
-    printer_list_initialize (impl, GTK_PRINT_BACKEND (node->data));
+  for (node = dialog->priv->print_backends; node != NULL; node = node->next)
+    printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
 }
 
 static void
@@ -690,7 +690,7 @@ default_printer_list_sort_func (GtkTreeModel *model,
 
 
 static void
-_create_printer_list_model (GtkPrintUnixDialog *dialog)
+create_printer_list_model (GtkPrintUnixDialog *dialog)
 {
   GtkListStore *model;
   GtkTreeSortable *sort;
@@ -2020,7 +2020,7 @@ populate_dialog (GtkPrintUnixDialog *dialog)
   
   priv = dialog->priv;
  
-  _create_printer_list_model (dialog);
+  create_printer_list_model (dialog);
 
   priv->notebook = gtk_notebook_new ();
 
@@ -2072,8 +2072,7 @@ populate_dialog (GtkPrintUnixDialog *dialog)
   
   gtk_widget_show (dialog->priv->notebook);
 
-  _load_print_backends (dialog);
-
+  load_print_backends (dialog);
 }
 
 /**

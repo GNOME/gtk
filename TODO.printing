@@ -1,0 +1,47 @@
+Temporary file with stuff left to do in the printing work:
+	
+Highlevel API:
+* Add a way to make the cairo printing callbacks (optionally) happen in a thread
+* Add API to EggPrintOperation to handle job status feedback while printing.
+  Needs something like "job_status_changed" and "job_finished" signals
+  Also during page generation. Should have progress bar?
+* Add API to allow the app to add a custom tab with gtk+ widgets to the
+  print dialog. We can hopefully implement this on osx & win32.
+* Want a print preview API.
+  full-preview (evince-style) or in-dialog preview, or both?
+
+Lowlevel API:
+* Figure out the best way to configure module loading (textfile, gtkrc or 
+  just frob the modules directory)
+
+PDF backend:
+* Change to using a GtkFileChooserEntry to get file names when we move to 
+  GTK.  It is a private object in GTK right now.
+
+Win32:
+* Use threads for the dialog, to allow repaints of other windows while they are up
+
+Cups/Unix print dialog:
+* page setup layout-for-printer isn't saved
+* Finish the various manual_* stuff
+* finish job page print-at-time support
+* Use themed icons - need icons
+* HIG spacing
+* Add custom translations for a lot of standard PPD options
+* Actually get default printer from somewhere
+
+* reorder printer columns? The status column is very wide
+* Don't select default for a short while, so that we can avoid flashing if the selected printer appears
+* Add nicer scaling to print dialog (scale to fit page size)
+
+General:
+* should base64 move to glib ?
+
+Page setting dialog:
+* land/port icons
+* HIG spacing
+* null in printer names
+* support printer delete
+
+* sort paper lists
+* nicer unit editor than spinbutton

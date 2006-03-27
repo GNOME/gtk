@@ -269,28 +269,28 @@ gtk_print_job_set_property (GObject      *object,
                             GParamSpec   *pspec)
 
 {
-  GtkPrintJob *impl = GTK_PRINT_JOB (object);
+  GtkPrintJob *job = GTK_PRINT_JOB (object);
 
   switch (prop_id)
     {
     case GTK_PRINT_JOB_PROP_TITLE:
-      impl->priv->title = g_value_dup_string (value);
+      job->priv->title = g_value_dup_string (value);
       break;
     
     case GTK_PRINT_JOB_PROP_PRINTER:
-      impl->priv->printer = GTK_PRINTER (g_value_dup_object (value));
-      impl->priv->printer_set = TRUE;
-      impl->priv->backend = g_object_ref (gtk_printer_get_backend (impl->priv->printer));
+      job->priv->printer = GTK_PRINTER (g_value_dup_object (value));
+      job->priv->printer_set = TRUE;
+      job->priv->backend = g_object_ref (gtk_printer_get_backend (job->priv->printer));
       break;
 
     case GTK_PRINT_JOB_PROP_PAGE_SETUP:
-      impl->priv->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
-      impl->priv->page_setup_set = TRUE;
+      job->priv->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
+      job->priv->page_setup_set = TRUE;
       break;
       
     case GTK_PRINT_JOB_PROP_SETTINGS:
-      impl->priv->settings = GTK_PRINT_SETTINGS (g_value_dup_object (value));
-      impl->priv->settings_set = TRUE;
+      job->priv->settings = GTK_PRINT_SETTINGS (g_value_dup_object (value));
+      job->priv->settings_set = TRUE;
       break;
 
     default:
@@ -305,18 +305,18 @@ gtk_print_job_get_property (GObject    *object,
 			    GValue     *value,
 			    GParamSpec *pspec)
 {
-  GtkPrintJob *impl = GTK_PRINT_JOB (object);
+  GtkPrintJob *job = GTK_PRINT_JOB (object);
 
   switch (prop_id)
     {
     case GTK_PRINT_JOB_PROP_PRINTER:
-      g_value_set_object (value, impl->priv->printer);
+      g_value_set_object (value, job->priv->printer);
       break;
     case GTK_PRINT_JOB_PROP_SETTINGS:
-      g_value_set_object (value, impl->priv->settings);
+      g_value_set_object (value, job->priv->settings);
       break;
     case GTK_PRINT_JOB_PROP_PAGE_SETUP:
-      g_value_set_object (value, impl->priv->page_setup);
+      g_value_set_object (value, job->priv->page_setup);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

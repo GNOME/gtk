@@ -1,3 +1,12 @@
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintjob.c:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintunixdialog.c:
+	s/impl/dialog/
+	Don't prefix static functions with _
+
 2006-03-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c: Don't use _(""). (#335898,

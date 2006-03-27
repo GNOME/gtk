@@ -433,9 +433,9 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
 }
 
 static void
-_printer_added_cb (GtkPrintBackend *backend, 
-                   GtkPrinter *printer, 
-		   GtkPageSetupUnixDialog *dialog)
+printer_added_cb (GtkPrintBackend *backend, 
+		  GtkPrinter *printer, 
+		  GtkPageSetupUnixDialog *dialog)
 {
   GtkTreeIter iter;
   char *str;
@@ -465,23 +465,23 @@ _printer_added_cb (GtkPrintBackend *backend,
 }
 
 static void
-_printer_removed_cb (GtkPrintBackend *backend, 
-                   GtkPrinter *printer, 
-		   GtkPageSetupUnixDialog *impl)
+printer_removed_cb (GtkPrintBackend *backend, 
+		    GtkPrinter *printer, 
+		    GtkPageSetupUnixDialog *dialog)
 {
 }
 
 
 static void
-_printer_status_cb (GtkPrintBackend *backend, 
+printer_status_cb (GtkPrintBackend *backend, 
                    GtkPrinter *printer, 
-		   GtkPageSetupUnixDialog *impl)
+		   GtkPageSetupUnixDialog *dialog)
 {
 }
 
 static void
-_printer_list_initialize (GtkPageSetupUnixDialog *impl,
-                          GtkPrintBackend *print_backend)
+printer_list_initialize (GtkPageSetupUnixDialog *dialog,
+			 GtkPrintBackend *print_backend)
 {
   GList *list, *node;
   
@@ -490,25 +490,25 @@ _printer_list_initialize (GtkPageSetupUnixDialog *impl,
   
   g_signal_connect (print_backend, 
                     "printer-added", 
-		    (GCallback) _printer_added_cb, 
-		    impl);
+		    (GCallback) printer_added_cb, 
+		    dialog);
 
   g_signal_connect (print_backend, 
                     "printer-removed", 
-		    (GCallback) _printer_removed_cb, 
-		    impl);
+		    (GCallback) printer_removed_cb, 
+		    dialog);
   
   g_signal_connect (print_backend, 
                     "printer-status-changed", 
-		    (GCallback) _printer_status_cb, 
-		    impl);
+		    (GCallback) printer_status_cb, 
+		    dialog);
 
   list = gtk_print_backend_get_printer_list (print_backend);
 
   node = list;
   while (node != NULL)
     {
-      _printer_added_cb (print_backend, node->data, impl);
+      printer_added_cb (print_backend, node->data, dialog);
       node = node->next;
     }
 
@@ -517,7 +517,7 @@ _printer_list_initialize (GtkPageSetupUnixDialog *impl,
 }
 
 static void
-_load_print_backends (GtkPageSetupUnixDialog *dialog)
+load_print_backends (GtkPageSetupUnixDialog *dialog)
 {
   GList *node;
 
@@ -525,7 +525,7 @@ _load_print_backends (GtkPageSetupUnixDialog *dialog)
     dialog->priv->print_backends = gtk_print_backend_load_modules ();
 
   for (node = dialog->priv->print_backends; node != NULL; node = node->next)
-    _printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
+    printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
 }
 
 static gboolean
@@ -1072,7 +1072,7 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
   g_signal_connect (dialog->priv->printer_combo, "changed", G_CALLBACK (printer_changed_callback), dialog);
   gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->priv->printer_combo), 0);
 
-  _load_print_backends (dialog);
+  load_print_backends (dialog);
 }
 
 GtkWidget *
