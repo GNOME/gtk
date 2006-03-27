@@ -38,10 +38,7 @@ General:
 * should base64 move to glib ?
 
 Page setting dialog:
-* land/port icons
 * HIG spacing
-* null in printer names
-* support printer delete
 
 * sort paper lists
 * nicer unit editor than spinbutton

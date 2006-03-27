@@ -438,19 +438,29 @@ printer_added_cb (GtkPrintBackend *backend,
 {
   GtkTreeIter iter;
   char *str;
+  const char *location;;
 
   if (gtk_printer_is_virtual (printer))
     return;
- 
+
+  location = gtk_printer_get_location (printer);
+  if (location == NULL)
+    location = "";
   str = g_strdup_printf ("<b>%s</b>\n%s",
 			 gtk_printer_get_name (printer),
-			 gtk_printer_get_location (printer));
+			 location);
   
   gtk_list_store_append (dialog->priv->printer_list, &iter);
   gtk_list_store_set (dialog->priv->printer_list, &iter,
                       PRINTER_LIST_COL_NAME, str,
                       PRINTER_LIST_COL_PRINTER, printer,
                       -1);
+
+  g_object_set_data_full (G_OBJECT (printer), 
+			  "gtk-print-tree-iter", 
+                          gtk_tree_iter_copy (&iter),
+                          (GDestroyNotify) gtk_tree_iter_free);
+  
   g_free (str);
 
   if (dialog->priv->waiting_for_printer != NULL &&
@@ -468,6 +478,9 @@ printer_removed_cb (GtkPrintBackend *backend,
 		    GtkPrinter *printer, 
 		    GtkPageSetupUnixDialog *dialog)
 {
+  GtkTreeIter *iter;
+  iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
+  gtk_list_store_remove (GTK_LIST_STORE (dialog->priv->printer_list), iter);
 }
 
 
@@ -476,6 +489,21 @@ printer_status_cb (GtkPrintBackend *backend,
                    GtkPrinter *printer, 
 		   GtkPageSetupUnixDialog *dialog)
 {
+  GtkTreeIter *iter;
+  char *str;
+  const char *location;;
+  
+  iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
+
+  location = gtk_printer_get_location (printer);
+  if (location == NULL)
+    location = "";
+  str = g_strdup_printf ("<b>%s</b>\n%s",
+			 gtk_printer_get_name (printer),
+			 location);
+  gtk_list_store_set (dialog->priv->printer_list, iter,
+                      PRINTER_LIST_COL_NAME, str,
+                      -1);
 }
 
 static void

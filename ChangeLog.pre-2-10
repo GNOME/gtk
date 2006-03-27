@@ -1,5 +1,11 @@
 2006-03-27  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c:
+	Handle removed printers and status-changed.
+	Handle NULL printer location.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/Makefile.am:
 	* gtk/stock-icons/24/gtk-orientation-landscape.png:
 	* gtk/stock-icons/24/gtk-orientation-portrait.png:
