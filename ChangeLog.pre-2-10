@@ -1,3 +1,11 @@
+2006-03-28  Sven Herzberg  <herzi@gnome-de.org>
+
+	reviewed by: Tim Janik
+
+	* gtk/gtkpixmap.c: (gtk_pixmap_set): only check for equal colormaps if
+	the new pixmap is not NULL; fixes a warning when gtk_pixmap_set is
+	called from gtk_pixmap_finalize (bug 336254)
+
 2006-03-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmnemonichash.c (_gtk_mnemonic_hash_activate): Check that 
