@@ -846,6 +846,25 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 }
 
 void
+gtk_drag_dest_set_track_motion (GtkWidget *widget,
+				gboolean   track_motion)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  /* FIXME: Implement */
+}
+
+gboolean
+gtk_drag_dest_get_track_motion (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  /* FIXME: Implement */
+
+  return FALSE;
+}
+
+void
 _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 			     GdkEvent  *event)
 {

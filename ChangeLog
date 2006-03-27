@@ -1,3 +1,15 @@
+2006-03-27  Anders Carlsson  <andersca@imendio.com>
+
+        * gtk/Makefile.am:
+        Add -xobjective-c to cflags.
+        (#335956, Lllian Angel)
+        
+        * gtk/gtkdnd-quartz.c:
+        (gtk_drag_dest_set_track_motion):
+        (gtk_drag_dest_get_track_motion):
+        Add stubs for new functions.
+        (#335955, Lillian Angel)
+        
 2006-03-27  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz: Add more stubs.

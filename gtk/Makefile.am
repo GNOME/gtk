@@ -27,7 +27,8 @@ INCLUDES =						\
 	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)				\
+	$(gtk_clipboard_dnd_c_sources_CFLAGS)
 
 gtarget=$(gdktarget)
 
@@ -566,6 +567,7 @@ gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c 
 gtk_clipboard_dnd_c_sources_CFLAGS = "-xobjective-c"
 else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
+gtk_clipboard_dnd_c_sources_CFLAGS = 
 endif
 
 # we use our own built_sources variable rules to avoid automake's
