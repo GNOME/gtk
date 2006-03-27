@@ -1,3 +1,18 @@
+2006-03-27  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/gdkevents-quartz.c:
+        (select_thread_func):
+        (got_fd_activity):
+        (poll_func):
+        (gdk_event_translate):
+        Make the poll func work with real file descriptors.
+        We do this by creating a thread which calls poll and then
+        signals the main thread using a run loop source.
+        
+        * gtk/gtkclipboard-quartz.c:        
+        (-[GtkClipboardOwner pasteboard:provideDataForType:]):
+        Remove debugging output
+
 2006-03-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmnemonichash.c (_gtk_mnemonic_hash_activate): Check that 

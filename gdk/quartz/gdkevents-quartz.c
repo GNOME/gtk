@@ -23,6 +23,8 @@
 #include <config.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "gdkscreen.h"
 #include "gdkprivate-quartz.h"
@@ -117,17 +119,114 @@ static GSourceFuncs event_funcs = {
 
 static GPollFunc old_poll_func;
 
+static pthread_t select_thread = 0;
+static int wakeup_pipe[2];
+static pthread_mutex_t pollfd_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t ready_cond = PTHREAD_COND_INITIALIZER;
+static GPollFD *pollfds;
+static GPollFD *pipe_pollfd;
+static guint n_pollfds;
+static CFRunLoopSourceRef select_main_thread_source;
+static CFRunLoopRef main_thread_run_loop;
+
+static void *
+select_thread_func (void *arg)
+{
+  int n_active_fds;
+
+  while (1)
+    {
+      pthread_mutex_lock (&pollfd_mutex);
+      pthread_cond_wait (&ready_cond, &pollfd_mutex);
+
+      n_active_fds = old_poll_func (pollfds, n_pollfds, -1);
+      if (pipe_pollfd->revents)
+	{
+	  char c;
+	  int n;
+
+	  n = read (pipe_pollfd->fd, &c, 1);
+
+	  g_assert (n == 1);
+	  g_assert (c == 'A');
+
+	  n_active_fds --;
+	}
+      pthread_mutex_unlock (&pollfd_mutex);
+
+      if (n_active_fds)
+	{
+	  /* We have active fds, signal the main thread */
+	  CFRunLoopSourceSignal (select_main_thread_source);
+	  if (CFRunLoopIsWaiting (main_thread_run_loop))
+	    CFRunLoopWakeUp (main_thread_run_loop);
+	}
+    }
+}
+
+static void 
+got_fd_activity (void *info)
+{
+  NSEvent *event;
+
+  /* Post a message so we'll break out of the message loop */
+  event = [NSEvent otherEventWithType: NSApplicationDefined
+	                     location: NSZeroPoint
+	                modifierFlags: 0
+	                    timestamp: 0
+	                 windowNumber: 0
+	                      context: nil
+	                      subtype: 0
+	                        data1: 0 
+	                        data2: 0];
+
+  [NSApp postEvent:event atStart:YES];
+}
+
 static gint
 poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 {
   NSEvent *event;
   NSDate *limit_date;
   int n_active = 0;
+  int i;
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  /* FIXME: Support more than one pollfd */
-  g_assert (nfds == 1);
+  if (nfds > 1)
+    {
+      if (!select_thread) {
+	/* Create source used for signalling the main thread */
+	main_thread_run_loop = CFRunLoopGetCurrent ();
+	CFRunLoopSourceContext source_context = {0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, got_fd_activity };
+	select_main_thread_source = CFRunLoopSourceCreate (NULL, 0, &source_context);
+	CFRunLoopAddSource (main_thread_run_loop, select_main_thread_source, kCFRunLoopDefaultMode);
+
+	pipe (wakeup_pipe);
+	pthread_create (&select_thread, NULL, select_thread_func, NULL);
+      }
+
+      pthread_mutex_lock (&pollfd_mutex);
+      n_pollfds = nfds;
+      g_free (pollfds);
+      pollfds = g_memdup (ufds, sizeof (GPollFD) * nfds);
+
+      /* We cheat and use the fake fd for our pipe */
+      for (i = 0; i < nfds; i++)
+	{
+	  if (pollfds[i].fd == -1)
+	    {
+	      pipe_pollfd = &pollfds[i];
+	      pollfds[i].fd = wakeup_pipe[0];
+	      pollfds[i].events = G_IO_IN;
+	    }
+	}
+      
+      pthread_mutex_unlock (&pollfd_mutex);
+
+      /* Start our thread */
+      pthread_cond_signal (&ready_cond);
+    }
 
   if (timeout_ == -1)
     limit_date = [NSDate distantFuture];
@@ -140,6 +239,45 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 	                     untilDate: limit_date
 	                        inMode: NSDefaultRunLoopMode
                                dequeue: YES];
+  
+  if (event)
+    {
+      if ([event type] == NSApplicationDefined)
+	{
+
+	  pthread_mutex_lock (&pollfd_mutex);
+
+	  for (i = 0; i < n_pollfds; i++)
+	    {
+	      if (ufds[i].fd == -1)
+		continue;
+
+	      g_assert (ufds[i].fd == pollfds[i].fd);
+	      g_assert (ufds[i].events == pollfds[i].events);
+	      
+	      if (pollfds[i].revents)
+		{
+		  ufds[i].revents = pollfds[i].revents;
+		  n_active ++;
+		}
+	    }
+
+	  pthread_mutex_unlock (&pollfd_mutex);
+
+	  event = [NSApp nextEventMatchingMask: NSAnyEventMask
+	                             untilDate: [NSDate distantPast]
+	                                inMode: NSDefaultRunLoopMode
+                                       dequeue: YES];
+
+	}
+    }
+
+  /* There were no active fds, break out of the other thread's poll() */
+  if (n_active == 0 && wakeup_pipe[1])
+    {
+      char c = 'A';
+      write (wakeup_pipe[1], &c, 1);
+    }
 
   if (event) 
     {
@@ -1163,7 +1301,6 @@ create_key_event (GdkWindow *window, NSEvent *nsevent)
 static gboolean
 gdk_event_translate (NSEvent *nsevent)
 {
-  NSWindow *nswindow = [nsevent window];
   GdkWindow *window;
   GdkFilterReturn result;
   GdkEvent *event;

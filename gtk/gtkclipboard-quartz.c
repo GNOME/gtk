@@ -106,8 +106,6 @@ struct _GtkClipboardClass
   _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard, &selection_data);
 
   g_free (selection_data.data);
-
-  NSLog(@"Provide data for %@", type);
 }
 
 - (void)pasteboardChangedOwner:(NSPasteboard *)sender
