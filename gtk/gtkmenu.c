@@ -2983,6 +2983,10 @@ gtk_menu_scroll_by (GtkMenu *menu,
 
   gdk_drawable_get_size (widget->window, &view_width, &view_height);
 
+  if (menu->scroll_offset == 0 &&
+      view_height >= widget->requisition.height)
+    return;
+
   /* Don't scroll past the bottom if we weren't before: */
   if (menu->scroll_offset > 0)
     view_height -= MENU_SCROLL_ARROW_HEIGHT;

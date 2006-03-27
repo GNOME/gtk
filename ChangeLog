@@ -1,3 +1,9 @@
+2006-03-27  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenu.c (gtk_menu_scroll_by): bail out if there is no need
+	for scrolling (more obvious than adding additional conditions to
+	the scroll offset calculation). Fixes bug #335912.
+
 2006-03-27  Anders Carlsson  <andersca@imendio.com>
 
         * gtk/Makefile.am:
