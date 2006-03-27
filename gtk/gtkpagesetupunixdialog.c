@@ -76,7 +76,6 @@ struct GtkPageSetupUnixDialogPrivate
 
   GtkWidget *portrait_radio;
   GtkWidget *landscape_radio;
-  GtkWidget *reverse_portrait_radio;
   GtkWidget *reverse_landscape_radio;
 
   guint request_details_tag;
@@ -956,14 +955,14 @@ static void
 populate_dialog (GtkPageSetupUnixDialog *dialog)
 {
   GtkPageSetupUnixDialogPrivate *priv;
-  GtkWidget *table, *label, *combo, *radio_button, *ebox;
+  GtkWidget *table, *label, *combo, *radio_button, *ebox, *image;
   GtkCellRenderer *cell;
   
   g_return_if_fail (GTK_IS_PAGE_SETUP_UNIX_DIALOG (dialog));
   
   priv = dialog->priv;
 
-  table = gtk_table_new (3, 5, FALSE);
+  table = gtk_table_new (4, 4, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 		      table, TRUE, TRUE, 6);
@@ -985,7 +984,7 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
                                   NULL);
 
   gtk_table_attach (GTK_TABLE (table), combo,
-		    1, 3, 0, 1,
+		    1, 4, 0, 1,
 		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
   gtk_widget_show (combo);
 
@@ -1006,7 +1005,7 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
 				      page_name_func, NULL, NULL);
 
   gtk_table_attach (GTK_TABLE (table), combo,
-		    1, 3, 1, 2,
+		    1, 4, 1, 2,
 		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
   gtk_widget_show (combo);
 
@@ -1016,7 +1015,7 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
   dialog->priv->paper_size_eventbox = ebox;
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
   gtk_table_attach (GTK_TABLE (table), ebox,
-		    1, 3, 2, 3,
+		    1, 4, 2, 3,
 		    GTK_FILL, 0, 0, 0);
   gtk_widget_show (ebox);
   
@@ -1033,37 +1032,39 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
 		    GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
 
-  radio_button = gtk_radio_button_new_with_label (NULL, "port");
+  radio_button = gtk_radio_button_new (NULL);
+  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_PORTRAIT,
+				    GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_container_add (GTK_CONTAINER (radio_button), image);
   dialog->priv->portrait_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
 		    1, 2, 3, 4,
-		    GTK_FILL, 0, 0, 0);
+		    0, 0, 0, 0);
   gtk_widget_show (radio_button);
 
-  radio_button = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)),
-						  "land");
+  radio_button = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)));
+  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_LANDSCAPE,
+				    GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_container_add (GTK_CONTAINER (radio_button), image);
   dialog->priv->landscape_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
 		    2, 3, 3, 4,
-		    GTK_FILL, 0, 0, 0);
+		    0, 0, 0, 0);
   gtk_widget_show (radio_button);
 
   gtk_table_set_row_spacing (GTK_TABLE (table), 3, 0);
   
-  radio_button = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)),
-						  "rport");
-  dialog->priv->reverse_portrait_radio = radio_button;
-  gtk_table_attach (GTK_TABLE (table), radio_button,
-		    1, 2, 4, 5,
-		    GTK_FILL, 0, 0, 0);
-  gtk_widget_show (radio_button);
-
-  radio_button = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)),
-						  "rland");
+  radio_button = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)));
+  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE,
+				    GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_container_add (GTK_CONTAINER (radio_button), image);
   dialog->priv->reverse_landscape_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
-		    2, 3, 4, 5,
-		    GTK_FILL, 0, 0, 0);
+		    3, 4, 3, 4,
+		    0, 0, 0, 0);
   gtk_widget_show (radio_button);
 
   dialog->priv->tooltips = gtk_tooltips_new ();
@@ -1107,8 +1108,6 @@ get_orientation (GtkPageSetupUnixDialog *dialog)
     return GTK_PAGE_ORIENTATION_PORTRAIT;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->landscape_radio)))
     return GTK_PAGE_ORIENTATION_LANDSCAPE;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_portrait_radio)))
-    return GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_landscape_radio)))
     return GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE;
   return GTK_PAGE_ORIENTATION_PORTRAIT;
@@ -1119,14 +1118,12 @@ set_orientation (GtkPageSetupUnixDialog *dialog, GtkPageOrientation orientation)
 {
   switch (orientation)
     {
+    case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
     case GTK_PAGE_ORIENTATION_PORTRAIT:
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_LANDSCAPE:
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->landscape_radio), TRUE);
-      break;
-    case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_landscape_radio), TRUE);

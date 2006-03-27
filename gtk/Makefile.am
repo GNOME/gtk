@@ -960,6 +960,9 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-network.png        		\
 	stock-icons/24/gtk-new.png    			\
 	stock-icons/24/gtk-open.png   			\
+	stock-icons/24/gtk-orientation-reverse-landscape.png \
+	stock-icons/24/gtk-orientation-landscape.png	\
+	stock-icons/24/gtk-orientation-portrait.png	\
 	stock-icons/24/gtk-paste.png  			\
 	stock-icons/24/gtk-preferences.png    		\
 	stock-icons/24/gtk-print.png  			\
