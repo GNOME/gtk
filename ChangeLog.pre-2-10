@@ -1,3 +1,8 @@
+2006-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmnemonichash.c (_gtk_mnemonic_hash_activate): Check that 
+	the widget is viewable.  (#336200, Bastian Nocera)
+
 2006-03-27  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_scroll_by): bail out if there is no need
