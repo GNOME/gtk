@@ -1,3 +1,9 @@
+2006-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintbackend.c: Simply the syntax
+	of the setting to "cups,pdf", and get rid
+	of the GScanner used to parse it.
+
 2006-03-27  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintunixdialog.c:

@@ -214,64 +214,6 @@ _gtk_print_backend_create (const char *backend_name)
   return NULL;
 }
 
-static GList * 
-property_parse_list (const gchar *string)
-{
-  GScanner *scanner;
-  gboolean success = FALSE;
-  gboolean need_closing_brace = FALSE;
-  GList *results = NULL;
-
-  scanner = gtk_rc_scanner_new ();
-  g_scanner_input_text (scanner, string, strlen (string));
-
-  g_scanner_get_next_token (scanner);
-
-  if (scanner->token == G_TOKEN_LEFT_CURLY)
-    {
-      need_closing_brace = TRUE;
-      g_scanner_get_next_token (scanner);
-    }
-
-  while (scanner->token != G_TOKEN_EOF && scanner->token != G_TOKEN_RIGHT_CURLY)
-    {
-      if (scanner->token == G_TOKEN_STRING)
-        {
-          results = g_list_append (results, g_strdup (scanner->value.v_string));
-        }
-      else if (scanner->token == G_TOKEN_IDENTIFIER)
-        {
-          results = g_list_append (results, g_strdup (scanner->value.v_identifier));
-        }
-      else if (scanner->token == G_TOKEN_COMMA)
-        {
-          /* noop */
-        }
-      else
-        goto err;
-         
-      g_scanner_get_next_token (scanner);
-    }
-
-  if (scanner->token == G_TOKEN_RIGHT_CURLY && need_closing_brace)
-    success = TRUE;
-
-  if (scanner->token == G_TOKEN_RIGHT_CURLY && !need_closing_brace)
-    success = TRUE;
-
- err:
-  if (!success)
-    if (results)
-      {
-        g_list_free (results);
-        results = NULL;
-      }
-
-  g_scanner_destroy (scanner);
-
-  return results;
-}
-
 static void
 gtk_print_backend_initialize (void)
 {
@@ -282,7 +224,7 @@ gtk_print_backend_initialize (void)
       gtk_settings_install_property (g_param_spec_string ("gtk-print-backends",
 							  P_("Default print backend"),
 							  P_("List of the GtkPrintBackend backends to use by default"),
-							  "{\"pdf\", \"cups\"}",
+							  "pdf,cups",
 							  GTK_PARAM_READWRITE));
 
       initialized = TRUE;
@@ -296,8 +238,9 @@ gtk_print_backend_load_modules ()
 {
   GList *result;
   GtkPrintBackend *backend;
-  gchar * s_backend_list;
-  GList *backend_list, *node;
+  gchar *setting;
+  gchar **backends;
+  gint i;
   GtkSettings *settings;
 
   result = NULL;
@@ -306,27 +249,20 @@ gtk_print_backend_load_modules ()
   
   settings = gtk_settings_get_default ();
 
-  g_object_get (settings, "gtk-print-backends", &s_backend_list, NULL);
+  g_object_get (settings, "gtk-print-backends", &setting, NULL);
 
-  backend_list = property_parse_list (s_backend_list);
+  backends = g_strsplit (setting, ",", -1);
 
-  node = backend_list;
-  while (node)
+  for (i = 0; backends[i]; i++)
     {
-      g_message ("node: %s", (char *)node->data);
-
-      backend = _gtk_print_backend_create ((char *)node->data);
+      backend = _gtk_print_backend_create (backends[i]);
       
       if (backend)
         result = g_list_append (result, backend);
-
-      node = node->next;
     }
 
-  g_free (s_backend_list);
-
-  if (backend_list)
-    g_list_free (backend_list);
+  g_strfreev (backends);
+  g_free (setting);
 
   return result;
 }
