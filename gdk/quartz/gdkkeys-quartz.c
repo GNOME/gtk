@@ -475,6 +475,20 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   return *n_entries > 0;
 }
 
+guint
+gdk_keymap_lookup_key (GdkKeymap          *keymap,
+                       const GdkKeymapKey *key)
+{
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
+  g_return_val_if_fail (key != NULL, 0);
+  g_return_val_if_fail (key->group < 4, 0);
+
+  /* FIXME: Implement */
+
+  return 0;
+}
+
+
 #define GET_KEYVAL(keycode, group, level) (keyval_array[(keycode * KEYVALS_PER_KEYCODE + group * 2 + level)])
 
 static guint

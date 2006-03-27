@@ -230,3 +230,42 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 
   return pixmap;
 }
+
+GdkPixmap*
+gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+			     const gchar    *data,
+			     gint            width,
+			     gint            height,
+			     gint            depth,
+			     const GdkColor *fg,
+			     const GdkColor *bg)
+{	
+  /* FIXME: Implement */
+  return NULL;
+}
+
+GdkPixmap *
+gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
+				    GdkNativeWindow  anid)
+{
+  return NULL;
+}
+
+GdkPixmap*
+gdk_pixmap_foreign_new (GdkNativeWindow anid)
+{
+   return NULL;
+}
+
+GdkPixmap*
+gdk_pixmap_lookup (GdkNativeWindow anid)
+{
+  return NULL;
+}
+
+GdkPixmap*
+gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  return NULL;
+}

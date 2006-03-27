@@ -164,8 +164,9 @@ gdk_atom_intern_static_string (const gchar *atom_name)
 gchar *
 gdk_atom_name (GdkAtom atom)
 {
-  if (!atoms_to_names)
-    return NULL;
+  ensure_atom_tables ();
+  //if (!atoms_to_names)
+  //  return NULL;
     
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;

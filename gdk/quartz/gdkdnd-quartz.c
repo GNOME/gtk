@@ -203,3 +203,10 @@ gdk_drag_get_selection (GdkDragContext *context)
   /* FIXME: Implement */
   return GDK_NONE;
 }
+
+gboolean 
+gdk_drag_drop_succeeded (GdkDragContext *context)
+{
+  /* FIXME: Implement */
+  return FALSE;
+}

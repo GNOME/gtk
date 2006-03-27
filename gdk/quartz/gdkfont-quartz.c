@@ -39,6 +39,19 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
   return NULL;
 }
 
+GdkFont *
+gdk_fontset_load_for_display (GdkDisplay  *display,
+			      const gchar *fontset_name)
+{
+  return NULL;
+}
+
+GdkFont*
+gdk_fontset_load (const gchar *fontset_name)
+{
+  return NULL;
+}
+
 gint
 gdk_text_width (GdkFont      *font,
 		const gchar  *text,
@@ -111,4 +124,11 @@ gdk_font_equal (const GdkFont *fonta,
 {
   /* FIXME: Implement */
   return FALSE;
+}
+
+GdkDisplay* 
+gdk_font_get_display (GdkFont* font)
+{
+  /* FIXME: Implement */ 
+  return NULL;
 }

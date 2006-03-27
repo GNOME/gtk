@@ -99,6 +99,13 @@ gdk_screen_get_rgba_colormap (GdkScreen *screen)
   return colormap;
 }
 
+gint
+gdk_colormap_get_system_size (void)
+{
+  /* FIXME: Implement */
+  return 0;
+}
+
 void
 gdk_colormap_change (GdkColormap *colormap,
 		     gint         ncolors)
@@ -191,5 +198,13 @@ _gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColorm
     alpha = 1.0;
 
   CGContextSetRGBStrokeColor (context, red, green, blue, 1.0);  
+}
+
+gboolean
+gdk_color_change (GdkColormap *colormap,
+		  GdkColor    *color)
+{
+  /* FIXME: Implement */
+  return FALSE;
 }
 

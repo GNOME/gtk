@@ -163,6 +163,12 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   /* FIXME: Implement */
 }
 
+GdkScreen *  
+gdk_gc_get_screen (GdkGC *gc)
+{
+  return NULL;
+}
+
 void
 _gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc)
 {

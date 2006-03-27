@@ -23,6 +23,16 @@
 #include "gdk.h"
 #include "gdkprivate-quartz.h"
 
+GdkWindow *
+gdk_display_get_default_group (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  /* FIXME: Implement */
+
+  return NULL;
+}
+
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
 {

@@ -1015,9 +1015,32 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
 }
 
 void
+gdk_window_set_override_redirect (GdkWindow *window,
+				  gboolean override_redirect)
+{
+  /* FIXME: Implement */
+}
+
+void
 gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
 {
+  /* FIXME: Implement */
+}
+
+void
+gdk_window_set_child_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  /* FIXME: Implement */
+}
+
+void
+gdk_window_merge_child_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   /* FIXME: Implement */
 }
 
@@ -1025,6 +1048,14 @@ void
 gdk_window_merge_child_input_shapes (GdkWindow *window)
 {
   /* FIXME: Implement */
+}
+
+gboolean 
+gdk_window_set_static_gravities (GdkWindow *window,
+				 gboolean   use_static)
+{
+  /* FIXME: Implement */
+  return FALSE;
 }
 
 void
@@ -1062,6 +1093,19 @@ gdk_window_focus (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  /* FIXME: Implement */
+}
+
+void
+gdk_window_set_hints (GdkWindow *window,
+		      gint       x,
+		      gint       y,
+		      gint       min_width,
+		      gint       min_height,
+		      gint       max_width,
+		      gint       max_height,
+		      gint       flags)
+{
   /* FIXME: Implement */
 }
 
@@ -1147,6 +1191,14 @@ gdk_window_set_decorations (GdkWindow      *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* FIXME: Implement */
+}
+
+gboolean
+gdk_window_get_decorations(GdkWindow       *window,
+			   GdkWMDecoration *decorations)
+{
+  /* FIXME: Implement */
+  return FALSE;
 }
 
 void
@@ -1271,6 +1323,24 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* FIXME: Implement */
+}
+
+GdkWindow *
+gdk_window_get_group (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
+
+  /* FIXME: Implement */
+
+  return NULL;
+}
+
+void          
+gdk_window_set_group (GdkWindow *window, 
+		      GdkWindow *leader)
+{
+  /* FIXME: Implement */	
 }
 
 GdkWindow*

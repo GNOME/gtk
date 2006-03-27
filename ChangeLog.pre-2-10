@@ -1,3 +1,7 @@
+2006-03-27  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz: Add more stubs.
+
 2006-03-27  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):
