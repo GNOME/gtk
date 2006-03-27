@@ -30,12 +30,12 @@ Cups/Unix print dialog:
 * Add custom translations for a lot of standard PPD options
 * Actually get default printer from somewhere
 
-* reorder printer columns? The status column is very wide
 * Don't select default for a short while, so that we can avoid flashing if the selected printer appears
 * Add nicer scaling to print dialog (scale to fit page size)
 
 General:
 * should base64 move to glib ?
+* Add API docs
 
 Page setting dialog:
 * HIG spacing

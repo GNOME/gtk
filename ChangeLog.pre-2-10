@@ -1,5 +1,11 @@
 2006-03-27  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintunixdialog.c:
+	Reorder print list so status is at the end.
+	Ellipsize the status column.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c:
 	Handle removed printers and status-changed.
 	Handle NULL printer location.

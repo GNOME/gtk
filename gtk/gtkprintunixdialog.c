@@ -1254,14 +1254,6 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
   
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Status"),
-						     renderer,
-						     "text",
-						     PRINTER_LIST_COL_STATE,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
-  
-  renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Location"),
 						     renderer,
 						     "text",
@@ -1269,6 +1261,15 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("Status"),
+						     renderer,
+						     "text",
+						     PRINTER_LIST_COL_STATE,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+  
   gtk_widget_show (treeview);
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
 
