@@ -1,3 +1,8 @@
+2006-03-27  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):
+	add missing ')'.
+
 2006-03-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Fix a srcdir != builddir build problem.
