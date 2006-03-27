@@ -1,8 +1,10 @@
 2006-03-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmnemonichash.c (_gtk_mnemonic_hash_activate): Check that 
+	the widget is viewable.  (#336200, Bastian Nocera)
+
 	* gtk/gtktextbuffer.c (gtk_text_buffer_get_property):
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_property): Fix leaks.
-
 
 2006-03-24  Matthias Clasen  <mclasen@redhat.com>
 
