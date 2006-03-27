@@ -470,7 +470,7 @@ gtk_ui_manager_get_property (GObject         *object,
       g_value_set_boolean (value, self->private_data->add_tearoffs);
       break;
     case PROP_UI:
-      g_value_set_string (value, gtk_ui_manager_get_ui (self));
+      g_value_take_string (value, gtk_ui_manager_get_ui (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
