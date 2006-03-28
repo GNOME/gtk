@@ -1,6 +1,12 @@
 2006-03-28  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c:
+	More HIGy layout.
+
+2006-03-28  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
 	HIG conformance of spacing and titles.
 	
 	* gtk/gtkprintunixdialog.c:

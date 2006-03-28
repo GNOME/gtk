@@ -41,9 +41,11 @@ General:
 * don't enforce paper size in portrait mode
 * use filechooserentry => J5
 * print DPI from settings object?
+* errors on alex laptop
 
 Page setting dialog:
 * HIG spacing
+* insensitive from-printer if list is empty
 
 * sort paper lists
 * nicer unit editor than spinbutton

@@ -1286,14 +1286,23 @@ gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog)
 static GtkWidget *
 wrap_in_frame (const char *label, GtkWidget *child)
 {
-  GtkWidget *frame, *alignment;
+  GtkWidget *frame, *alignment, *label_widget;
+  char *bold_text;
+
+  label_widget = gtk_label_new ("");
+  gtk_widget_show (label_widget);
   
-  frame = gtk_frame_new (label);
+  bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
+  gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
+  g_free (bold_text);
+  
+  frame = gtk_frame_new ("");
+  gtk_frame_set_label_widget (GTK_FRAME (frame), label_widget);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
   
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     0, 0, 12, 0);
+			     12, 0, 12, 0);
   gtk_container_add (GTK_CONTAINER (frame), alignment);
 
   gtk_container_add (GTK_CONTAINER (alignment), child);
@@ -1736,6 +1745,17 @@ custom_name_func (GtkTreeViewColumn *tree_column,
 }
 
 static void
+set_dialog_hig_spacing (GtkWidget *widget,
+			GtkStyle *previous_style,
+			GtkDialog *dialog)
+{
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+}
+
+static void
 run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
 {
   GtkWidget *custom_dialog, *image, *table, *label, *widget, *frame, *combo;
@@ -1753,15 +1773,17 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
 					       GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					       NULL);
 
+  g_signal_connect (custom_dialog, "style-set", G_CALLBACK (set_dialog_hig_spacing), custom_dialog);
+  
   data = g_new0 (CustomPaperDialog, 1);
   data->dialog = dialog;
   g_object_set_data_full (G_OBJECT (custom_dialog), "custom-dialog", data, custom_paper_dialog_free);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (custom_dialog)->vbox), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
   
@@ -1797,7 +1819,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
   gtk_widget_show (treeview);
 
-  button_box = gtk_hbox_new (FALSE, 0);
+  button_box = gtk_hbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (vbox), button_box, FALSE, FALSE, 0);
   gtk_widget_show (button_box);
 
@@ -1828,6 +1850,8 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   table = gtk_table_new (2, 2, FALSE);
   
   label = gtk_label_new (_("Width:"));
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, 0, 0, 0, 0);
@@ -1856,6 +1880,8 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   
 
   table = gtk_table_new (3, 5, FALSE);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 0);
 
   widget = new_unit_widget (data, user_units);
   data->top_widget = widget;
