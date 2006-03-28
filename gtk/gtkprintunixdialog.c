@@ -98,7 +98,6 @@ struct GtkPrintUnixDialogPrivate
 
   GtkPageSetup *page_setup;
 
-  GtkWidget *print_button;
   GtkWidget *all_pages_radio;
   GtkWidget *current_page_radio;
   GtkWidget *page_range_radio;
@@ -384,9 +383,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 		    (GCallback) gtk_print_unix_dialog_destroy, 
 		    NULL);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT);
-  dialog->priv->print_button = gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_PRINT, GTK_RESPONSE_ACCEPT);
-  gtk_widget_set_sensitive (dialog->priv->print_button, FALSE);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+			  GTK_STOCK_PRINT, GTK_RESPONSE_ACCEPT,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
 }
 
 static void
@@ -863,7 +866,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
        gtk_widget_hide (dialog->priv->image_quality_page);
        gtk_widget_hide (dialog->priv->finishing_page);
        gtk_widget_hide (dialog->priv->color_page);
-       gtk_widget_set_sensitive (dialog->priv->print_button, FALSE);
+       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
 
        return;
     }
@@ -1126,7 +1129,7 @@ selected_printer_changed (GtkTreeSelection *selection,
   
   if (printer != NULL && !_gtk_printer_has_details (printer))
     {
-      gtk_widget_set_sensitive (dialog->priv->print_button, FALSE);
+      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
       dialog->priv->request_details_tag =
 	g_signal_connect (printer, "details-acquired",
 			  G_CALLBACK (printer_details_acquired), dialog);
@@ -1154,7 +1157,7 @@ selected_printer_changed (GtkTreeSelection *selection,
       g_object_unref (dialog->priv->current_printer);
     }
 
-  gtk_widget_set_sensitive (dialog->priv->print_button, TRUE);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, TRUE);
   dialog->priv->current_printer = printer;
 
   if (printer != NULL)

@@ -105,11 +105,13 @@ G_DEFINE_TYPE (GtkPageSetupUnixDialog, gtk_page_setup_unix_dialog, GTK_TYPE_DIAL
 #define GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialogPrivate))
 
-static void gtk_page_setup_unix_dialog_finalize     (GObject                *object);
-static void populate_dialog                         (GtkPageSetupUnixDialog *dialog);
-static void fill_paper_sizes_from_printer           (GtkPageSetupUnixDialog *dialog,
-						     GtkPrinter             *printer);
-static void run_custom_paper_dialog                 (GtkPageSetupUnixDialog *dialog);
+static void gtk_page_setup_unix_dialog_finalize  (GObject                *object);
+static void populate_dialog                      (GtkPageSetupUnixDialog *dialog);
+static void fill_paper_sizes_from_printer        (GtkPageSetupUnixDialog *dialog,
+						  GtkPrinter             *printer);
+static void run_custom_paper_dialog              (GtkPageSetupUnixDialog *dialog);
+static void gtk_page_setup_unix_dialog_style_set (GtkWidget              *widget,
+						  GtkStyle               *previous_style);
 
 static const char * const common_paper_sizes[] = {
   "na_letter",
@@ -362,6 +364,8 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
 
   object_class->finalize = gtk_page_setup_unix_dialog_finalize;
 
+  widget_class->style_set = gtk_page_setup_unix_dialog_style_set;
+
   g_type_class_add_private (class, sizeof (GtkPageSetupUnixDialogPrivate));  
 }
 
@@ -369,6 +373,8 @@ static void
 gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
 {
   GtkTreeIter iter;
+
+  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   
   dialog->priv = GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE (dialog); 
   dialog->priv->print_backends = NULL;
@@ -391,6 +397,13 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   load_custom_papers (dialog->priv->custom_paper_list);
 
   populate_dialog (dialog);
+  
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
+                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          GTK_STOCK_APPLY, GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 }
 
 static void
@@ -430,6 +443,30 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
   if (G_OBJECT_CLASS (gtk_page_setup_unix_dialog_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_page_setup_unix_dialog_parent_class)->finalize (object);
 }
+
+static void
+gtk_page_setup_unix_dialog_style_set (GtkWidget *widget,
+				      GtkStyle  *previous_style)
+{
+  GtkDialog *dialog;
+
+  if (GTK_WIDGET_CLASS (gtk_page_setup_unix_dialog_parent_class)->style_set)
+    GTK_WIDGET_CLASS (gtk_page_setup_unix_dialog_parent_class)->style_set (widget, previous_style);
+
+  dialog = GTK_DIALOG (widget);
+
+  /* Override the style properties with HIG-compliant spacings.  Ugh.
+   * http://developer.gnome.org/projects/gup/hig/1.0/layout.html#layout-dialogs
+   * http://developer.gnome.org/projects/gup/hig/1.0/windows.html#alert-spacing
+   */
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+}
+
 
 static void
 printer_added_cb (GtkPrintBackend *backend, 
@@ -991,7 +1028,8 @@ populate_dialog (GtkPageSetupUnixDialog *dialog)
   priv = dialog->priv;
 
   table = gtk_table_new (4, 4, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 		      table, TRUE, TRUE, 6);
   gtk_widget_show (table);
@@ -1115,16 +1153,10 @@ gtk_page_setup_unix_dialog_new (const gchar *title,
   
   result = g_object_new (GTK_TYPE_PAGE_SETUP_UNIX_DIALOG,
                          "title", title,
-			 "has-separator", FALSE,
                          NULL);
 
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (result), parent);
-
-  gtk_dialog_add_buttons (GTK_DIALOG (result), 
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                          GTK_STOCK_OK, GTK_RESPONSE_OK,
-                          NULL);
 
   return result;
 }
@@ -1715,7 +1747,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   CustomPaperDialog *data;
   GtkUnit user_units;
   
-  custom_dialog = gtk_dialog_new_with_buttons (_("Custom Paper Sizes"),
+  custom_dialog = gtk_dialog_new_with_buttons (_("Manage Custom Sizes"),
 					       GTK_WINDOW (dialog),
 					       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
 					       GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
@@ -1795,7 +1827,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   
   table = gtk_table_new (2, 2, FALSE);
   
-  label = gtk_label_new (_("Width: "));
+  label = gtk_label_new (_("Width:"));
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, 0, 0, 0, 0);
@@ -1806,7 +1838,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
 		    1, 2, 0, 1, 0, 0, 0, 0);
   gtk_widget_show (widget);
   
-  label = gtk_label_new (_("Height: "));
+  label = gtk_label_new (_("Height:"));
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 1, 2, 0, 0, 0, 0);

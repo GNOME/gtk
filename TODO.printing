@@ -36,6 +36,11 @@ Cups/Unix print dialog:
 General:
 * should base64 move to glib ?
 * Add API docs
+* tutorial
+* update win32 port
+* don't enforce paper size in portrait mode
+* use filechooserentry => J5
+* print DPI from settings object?
 
 Page setting dialog:
 * HIG spacing
