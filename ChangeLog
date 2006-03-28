@@ -1,3 +1,13 @@
+2006-03-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_do_popup) 
+	(gtk_text_view_grab_notify): Move the call to 
+	gtk_text_view_end_selection_drag() from gtk_text_view_do_popup
+	to gtk_text_view_grab_notify, so that it works not only
+	for the text views own popup, but also for other ways in which
+	we might become grab-shadowed during a selection drag.
+	(#74620, Li Yuan)
+
 2006-03-28  Sven Herzberg  <herzi@gnome-de.org>
 
 	reviewed by: Tim Janik
