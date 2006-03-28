@@ -7,6 +7,7 @@ INCLUDES = \
 	-I$(top_srcdir)/gtk				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir)/gdk				\
+	-I$(top_builddir)/gdk				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)
 
