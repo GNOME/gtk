@@ -7,7 +7,7 @@ Renders a keyboard accelerator in a cell
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 #GtkCellRendererAccel displays a keyboard accelerator (i.e. a 
-key combination like <Control>-a). If the cell renderer is editable, the 
+key combination like &lt;Control&gt;-a). If the cell renderer is editable, the 
 accelerator can be changed by simply typing the new combination.
 </para>
 
@@ -19,7 +19,6 @@ The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
