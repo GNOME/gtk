@@ -339,8 +339,7 @@ static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
 static void gtk_notebook_pages_allocate      (GtkNotebook              *notebook,
 					      GtkNotebookDragOperation  operation);
 static void gtk_notebook_page_allocate       (GtkNotebook      *notebook,
-					      GtkNotebookPage  *page,
-					      GtkAllocation    *allocation);
+					      GtkNotebookPage  *page);
 static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
 			                      GList            *start,
 					      GList           **end,
@@ -2641,8 +2640,10 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   if (!notebook->cur_page)
     return FALSE;
 
-  priv->mouse_x = (gint) event->x;
-  priv->mouse_y = (gint) event->y;
+  gdk_window_get_pointer (notebook->event_window,
+			  &priv->mouse_x,
+			  &priv->mouse_y,
+			  NULL);
 
   if (notebook->cur_page->detachable &&
       check_threshold (notebook, priv->mouse_x, priv->mouse_y))
@@ -4775,9 +4776,6 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		      (notebook->cur_page->pack == GTK_PACK_END && left_x < anchor_x))
 		    {
 		      left_x = notebook->cur_page->allocation.x = anchor_x;
-		      gtk_notebook_page_allocate (notebook, notebook->cur_page,
-						  &notebook->cur_page->allocation);
-
 		      anchor_x += notebook->cur_page->allocation.width - tab_overlap;
 		    }
 		}
@@ -4787,11 +4785,7 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		      (notebook->cur_page->pack == GTK_PACK_END && right_x > anchor_x))
 		    {
 		      anchor_x -= notebook->cur_page->allocation.width;
-
 		      left_x = notebook->cur_page->allocation.x = anchor_x;
-		      gtk_notebook_page_allocate (notebook, notebook->cur_page,
-						  &notebook->cur_page->allocation);
-
 		      anchor_x += tab_overlap;
 		    }
 		}
@@ -4835,9 +4829,6 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		  (notebook->cur_page->pack == GTK_PACK_END && top_y < anchor_y))
 		{
 		  top_y = notebook->cur_page->allocation.y = anchor_y;
-		  gtk_notebook_page_allocate (notebook, notebook->cur_page,
-					      &notebook->cur_page->allocation);
-
 		  anchor_y += notebook->cur_page->allocation.height - tab_overlap;
 		}
  
@@ -4860,7 +4851,7 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 	  break;
 	}
 
-      gtk_notebook_page_allocate (notebook, page, &child_allocation);
+      page->allocation = child_allocation;
 
       switch (tab_pos)
 	{
@@ -4927,18 +4918,13 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		anchor_x -= notebook->cur_page->allocation.width;
 
 	      notebook->cur_page->allocation.x = anchor_x;
-	      gtk_notebook_page_allocate (notebook, notebook->cur_page,
-					  &notebook->cur_page->allocation);
 	    }
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
 	  if (PAGE_TOP_Y (notebook->cur_page) > anchor_y)
-	    {
-	      notebook->cur_page->allocation.y = anchor_y;
-	      gtk_notebook_page_allocate (notebook, notebook->cur_page,
-					  &notebook->cur_page->allocation);
-	    }
+	    notebook->cur_page->allocation.y = anchor_y;
+
 	  break;
 	}
     }
@@ -5035,7 +5021,7 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 	      break;
 	    }
 
-	  gtk_notebook_page_allocate (notebook, page, &child_allocation);
+	  page->allocation = child_allocation;
 
 	  switch (tab_pos)
 	    {
@@ -5102,8 +5088,6 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		    anchor_x -= notebook->cur_page->allocation.width;
 
 		  notebook->cur_page->allocation.x = anchor_x;
-		  gtk_notebook_page_allocate (notebook, notebook->cur_page,
-					      &notebook->cur_page->allocation);
 		}
 	      break;
 	    case GTK_POS_LEFT:
@@ -5112,8 +5096,6 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 		{
 		  anchor_y -= notebook->cur_page->allocation.height;
 		  notebook->cur_page->allocation.y = anchor_y;
-		  gtk_notebook_page_allocate (notebook, notebook->cur_page,
-					      &notebook->cur_page->allocation);
 		}
 	      break;
 	    }
@@ -5121,13 +5103,23 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
     }
 
  done:
+  children = notebook->children;
+
+  while (children)
+    {
+      page = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_DRAWABLE (page->tab_label))
+	gtk_notebook_page_allocate (notebook, page);
+    }
+
   gtk_notebook_redraw_tabs (notebook);  
 }
 
 static void
 gtk_notebook_page_allocate (GtkNotebook     *notebook,
-			    GtkNotebookPage *page,
-			    GtkAllocation   *allocation)
+			    GtkNotebookPage *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
   GtkAllocation child_allocation;
@@ -5147,7 +5139,6 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
 
-  page->allocation = *allocation;
   gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);
 
   if (notebook->cur_page != page)
@@ -7083,10 +7074,10 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *  {
  *    GtkWidget *notebook;
  *    GtkWidget **child;
- *
+ *    
  *    notebook = gtk_drag_get_source_widget (context);
  *    child = (void*) selection_data->data;
- *
+ *    
  *    process_widget (*child);
  *    gtk_container_remove (GTK_CONTAINER (notebook), *child);
  *  }

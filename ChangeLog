@@ -1,5 +1,8 @@
 2006-03-28  Matthias Clasen  <mclasen@redhat.com>	
 
+	* gtk/gtknotebook.c (gtk_notebook_set_tab_detachable): Fix
+	docs syntax.
+
 	* gtk/gtktextview.c (gtk_text_view_start_selection_drag): 
 	(selection_motion_event_handler): Fix drag-selection after
 	double-click.  (#323862, Benjamin Berg)
