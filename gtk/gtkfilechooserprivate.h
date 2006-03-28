@@ -157,7 +157,6 @@ struct _GtkFileChooserDefault
   /* Save mode widgets */
   GtkWidget *save_widgets;
 
-  GtkWidget *save_file_name_entry;
   GtkWidget *save_folder_label;
   GtkWidget *save_folder_combo;
   GtkWidget *save_expander;
@@ -187,10 +186,8 @@ struct _GtkFileChooserDefault
   GtkWidget *extra_align;
   GtkWidget *extra_widget;
 
-  GtkWidget *location_mode_box;
-  GtkWidget *location_pathbar_radio;
-  GtkWidget *location_filename_radio;
-  GtkWidget *location_widget_box;
+  GtkWidget *location_button;
+  GtkWidget *location_entry_box;
   GtkWidget *location_label;
   GtkWidget *location_entry;
   LocationMode location_mode;
@@ -254,6 +251,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint processing_pending_selections : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;

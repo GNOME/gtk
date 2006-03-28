@@ -147,7 +147,9 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
   if (has_action (open_actions, G_N_ELEMENTS (open_actions), impl->action))
     {
       passed = passed && (impl->save_widgets == NULL
-			  && impl->save_file_name_entry == NULL
+			  && (impl->location_mode == LOCATION_MODE_PATH_BAR
+			      ? impl->location_entry == NULL
+			      : impl->location_entry != NULL)
 			  && impl->save_folder_label == NULL
 			  && impl->save_folder_combo == NULL
 			  && impl->save_expander == NULL
@@ -157,10 +159,10 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
     {
       /* FIXME: we can't use GTK_IS_FILE_CHOOSER_ENTRY() because it uses
        * _gtk_file_chooser_entry_get_type(), which is a non-exported symbol.
-       * So, we just test impl->save_file_name_entry for being non-NULL
+       * So, we just test impl->location_entry for being non-NULL
        */
       passed = passed && (GTK_IS_CONTAINER (impl->save_widgets) && GTK_WIDGET_DRAWABLE (impl->save_widgets)
-			  && impl->save_file_name_entry != NULL && GTK_WIDGET_DRAWABLE (impl->save_file_name_entry)
+			  && impl->location_entry != NULL && GTK_WIDGET_DRAWABLE (impl->location_entry)
 			  && GTK_IS_LABEL (impl->save_folder_label) && GTK_WIDGET_DRAWABLE (impl->save_folder_label)
 			  && GTK_IS_COMBO_BOX (impl->save_folder_combo) && GTK_WIDGET_DRAWABLE (impl->save_folder_combo)
 			  && GTK_IS_EXPANDER (impl->save_expander) && GTK_WIDGET_DRAWABLE (impl->save_expander)

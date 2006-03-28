@@ -1,3 +1,57 @@
+2006-03-27  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Removed the save_file_name_entry.  We'll make this be the same as
+	the location_entry widget.
+	(struct _GtkFileChooserDefault): Leave only location_button,
+	location_entry_box, location_label, location_entry.  We'll use a
+	single toggle button for the location entry, which will appear
+	below the path bar.
+	(struct _GtkFileChooserDefault): Added a
+	processing_pending_selections flag.
+
+	* gtk/gtkfilechooserdefault.c (save_widgets_create): Destroy the
+	old location_entry if necessary, and hide the location toggle
+	widgets.
+	(update_chooser_entry): In multiple selection mode, just clear the
+	location_entry.
+	(check_save_entry): Allow running in OPEN or SELECT_FOLDER modes
+	if we are in LOCATION_MODE_FILENAME_ENTRY.
+	(gtk_file_chooser_default_should_respond): Switch to a folder if
+	the location_entry contains a folder name in OPEN and SAVE mode,
+	not just SAVE mode.  If the entry doesn't contain a folder name,
+	but is otherwise well-formed, and we are in OPEN mode, return that
+	we should respond with that filename.
+	(gtk_file_chooser_default_initial_focus): Focus the location_entry
+	if appropriate.
+	(browse_widgets_create): Create the location_entry_box and the
+	location_label here.
+	(update_appearance): Call location_mode_set() when switching back
+	to OPEN/SELECT_FOLDER mode.  Hide the location_button when
+	switching to SAVE/CREATE_FOLDER mode.
+	(pending_select_paths_process): Turn the
+	processing_pending_selections flag on and off around changes to
+	the current selection.  Don't special-case OPEN mode anymore,
+	since the new flag will take care of things in
+	update_chooser_entry().
+	(update_chooser_entry): Don't do anything if
+	processing_pending_selections is TRUE.  This keeps the entry from
+	being polluted when changing folders.
+	(location_popup_handler): In OPEN/SELECT_FOLDER modes, toggle
+	between the path bar and the entry.  In SAVE/CREATE_FOLDER modes, simply focus the
+	location_entry.
+	(update_from_entry): Removed.
+	(location_entry_create): Removed.
+	(open_location_cb): Removed.
+	(file_list_build_popup_menu): Don't add an "Open _Location" menu item.
+	(location_entry_set_initial_text): Don't do anything if
+	current_folder is NULL.
+
+	* gtk/gtkfilechooserentry.c
+	(_gtk_file_chooser_entry_set_file_part): Turn in_change on and off
+	around the call to gtk_entry_set_text().  This makes completion
+	not happen when the caller has explicitly set a name.
+
 2006-03-24  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
