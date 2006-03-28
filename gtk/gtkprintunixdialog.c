@@ -1229,7 +1229,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   
   priv = dialog->priv;
 
-  main_vbox = gtk_vbox_new (FALSE, 8);
+  main_vbox = gtk_vbox_new (FALSE, 6);
   gtk_widget_show (main_vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -1239,7 +1239,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
 				       GTK_SHADOW_IN);
   gtk_widget_show (scrolled);
-  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled, TRUE, TRUE, 0);
 
   treeview = gtk_tree_view_new_with_model ((GtkTreeModel *) priv->printer_list_filter);
   priv->printer_treeview = treeview;
@@ -1289,14 +1289,14 @@ create_main_page (GtkPrintUnixDialog *dialog)
 
   custom_input = gtk_hbox_new (FALSE, 8);
   gtk_widget_show (custom_input);
-  gtk_box_pack_start (GTK_BOX (main_vbox), custom_input, FALSE, FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (main_vbox), custom_input, FALSE, FALSE, 0);
   g_hash_table_insert (dialog->priv->extention_points, 
                        _EXTENTION_POINT_MAIN_PAGE_CUSTOM_INPUT,
                        custom_input);
 
   hbox = gtk_hbox_new (FALSE, 8);
   gtk_widget_show (hbox);
-  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
   table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
