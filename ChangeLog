@@ -1,3 +1,14 @@
+2006-03-28  Matthias Clasen  <mclasen@redhat.com>	
+
+	* gtk/gtktextview.c (gtk_text_view_start_selection_drag): 
+	(selection_motion_event_handler): Fix drag-selection after
+	double-click.  (#323862, Benjamin Berg)
+
+	* gtk/gtktextview.c (get_iter_at_pointer): Factor this out
+	into a function and use it in move_mark_to_pointer_and_scroll,
+	drag_scan_timeout and selection_motion_event_handler.
+	(Paolo Borelli)
+
 2006-03-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_do_popup) 
@@ -7,7 +18,7 @@
 	for the text views own popup, but also for other ways in which
 	we might become grab-shadowed during a selection drag.
 	(#74620, Li Yuan)
-	
+
 2006-03-28  Sven Herzberg  <herzi@gnome-de.org>
 
         reviewed by: Tim Janik
