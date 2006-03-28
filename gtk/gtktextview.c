@@ -5415,37 +5415,41 @@ gtk_text_view_unselect (GtkTextView *text_view)
 }
 
 static void
-move_mark_to_pointer_and_scroll (GtkTextView *text_view,
-                                 const gchar *mark_name)
+get_iter_at_pointer (GtkTextView *text_view,
+                     GtkTextIter *iter)
 {
   gint x, y;
   GdkModifierType state;
-  GtkTextIter newplace;
 
-  /*   DV(g_print (G_STRLOC": begin\n")); */
-  
   gdk_window_get_pointer (text_view->text_window->bin_window,
                           &x, &y, &state);
-
-  /*   DV(g_print (G_STRLOC": get iter at pixel\n"); */
+  
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
-                                     &newplace,
+                                     iter,
                                      x + text_view->xoffset,
                                      y + text_view->yoffset);
+}
 
-  {
-    GtkTextMark *mark =
-      gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
+static void
+move_mark_to_pointer_and_scroll (GtkTextView *text_view,
+                                 const gchar *mark_name)
+{
+  GtkTextIter newplace;
+  GtkTextMark *mark;
 
-    /* This may invalidate the layout */
-    DV(g_print (G_STRLOC": move mark\n"));
-    gtk_text_buffer_move_mark (get_buffer (text_view),
-                               mark,
-                               &newplace);
-
-    DV(g_print (G_STRLOC": scrolling onscreen\n"));
-    gtk_text_view_scroll_mark_onscreen (text_view, mark);
-  }
+  get_iter_at_pointer (text_view, &newplace);
+  
+  mark = gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
+  
+  /* This may invalidate the layout */
+  DV(g_print (G_STRLOC": move mark\n"));
+  
+  gtk_text_buffer_move_mark (get_buffer (text_view),
+			     mark,
+			     &newplace);
+  
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
+  gtk_text_view_scroll_mark_onscreen (text_view, mark);
 
   DV (g_print ("first validate idle leaving %s is %d\n",
                G_STRLOC, text_view->first_validate_idle));
@@ -5476,22 +5480,14 @@ static gint
 drag_scan_timeout (gpointer data)
 {
   GtkTextView *text_view;
-  gint x, y;
-  GdkModifierType state;
   GtkTextIter newplace;
 
   GDK_THREADS_ENTER ();
   
   text_view = GTK_TEXT_VIEW (data);
 
-  gdk_window_get_pointer (text_view->text_window->bin_window,
-                          &x, &y, &state);
-  
-  gtk_text_layout_get_iter_at_pixel (text_view->layout,
-                                     &newplace,
-                                     x + text_view->xoffset,
-                                     y + text_view->yoffset);
-  
+  get_iter_at_pointer (text_view, &newplace);
+
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              text_view->dnd_mark,
                              &newplace);
@@ -5623,42 +5619,25 @@ selection_motion_event_handler (GtkTextView    *text_view,
     {
       gint x, y;
       GdkModifierType state;
-      GtkTextIter start, end;
-      GtkTextIter ins, bound;    
+      GtkTextIter cursor, start, end;
+      GtkTextIter orig_start, orig_end;
       GtkTextBuffer *buffer;
-      gboolean extend;
       
       buffer = get_buffer (text_view);
 
-      gtk_text_buffer_get_iter_at_mark (buffer, &ins, data->orig_start);
-      gtk_text_buffer_get_iter_at_mark (buffer, &bound, data->orig_end);
+      gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
+      gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
 
-      gdk_window_get_pointer (text_view->text_window->bin_window,
-			      &x, &y, &state);
+      get_iter_at_pointer (text_view, &cursor);
       
-      gtk_text_layout_get_iter_at_pixel (text_view->layout,
-					 &start,
-					 event->x + text_view->xoffset,
-					 event->y + text_view->yoffset); 
-      
-      extend = !gtk_text_iter_in_range (&start, &ins, &bound);
-
+      start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
 
-      if (extend)
-        {
-          /* Extend selection */
-          gtk_text_iter_order (&ins, &start);
-          gtk_text_iter_order (&end, &bound);
-          gtk_text_buffer_select_range (buffer, &ins, &bound);
-        }
+      /* either the selection extends to the front, or end (or not) */
+      if (gtk_text_iter_compare (&cursor, &orig_start) < 0)
+        gtk_text_buffer_select_range (buffer, &start, &orig_end);
       else
-        {
-          /* Shrink selection */
-          gtk_text_iter_order (&ins, &start);
-          gtk_text_iter_order (&end, &bound);
-          gtk_text_buffer_select_range (buffer, &ins, &end);
-        }
+        gtk_text_buffer_select_range (buffer, &end, &orig_start);
 
       gtk_text_view_scroll_mark_onscreen (text_view, 
 					  gtk_text_buffer_get_insert (buffer));
@@ -5683,7 +5662,8 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
                                     const GtkTextIter *iter,
                                     GdkEventButton    *button)
 {
-  GtkTextIter start, end;
+  GtkTextIter cursor, ins, bound;
+  GtkTextIter orig_start, orig_end;
   GtkTextBuffer *buffer;
   SelectionData *data;
 
@@ -5702,31 +5682,52 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 
   buffer = get_buffer (text_view);
   
-  start = *iter;
+  cursor = *iter;
+  ins = cursor;
   
-  extend_selection (text_view, data->granularity, &start, &end);
+  extend_selection (text_view, data->granularity, &ins, &bound);
+  orig_start = ins;
+  orig_end = bound;
 
   if (button->state & GDK_SHIFT_MASK)
     {
       /* Extend selection */
+      GtkTextIter old_ins, old_bound;
       GtkTextIter old_start, old_end;
 
-      gtk_text_buffer_get_selection_bounds (buffer, &old_start, &old_end);
+      gtk_text_buffer_get_iter_at_mark (buffer, &old_ins, gtk_text_buffer_get_insert (buffer));
+      gtk_text_buffer_get_iter_at_mark (buffer, &old_bound, gtk_text_buffer_get_selection_bound (buffer));
+      old_start = old_ins;
+      old_end = old_bound;
+      gtk_text_iter_order (&old_start, &old_end);
       
-      gtk_text_iter_order (&start, &old_start);
-      gtk_text_iter_order (&old_end, &end);
-      
-      /* Now start is the first of the starts, and end is the
-       * last of the ends
-       */
+      /* move the front cursor, if the mouse is in front of the selection. Should the
+       * cursor however be inside the selection (this happens on tripple click) then we
+       * move the side which was last moved (current insert mark) */
+      if (gtk_text_iter_compare (&cursor, &old_start) <= 0 ||
+          (gtk_text_iter_compare (&cursor, &old_end) < 0 && 
+           gtk_text_iter_compare (&old_ins, &old_bound) <= 0))
+        {
+          bound = old_end;
+          orig_start = old_end;
+          orig_end = old_end;
+        }
+      else
+        {
+          ins = bound;
+          bound = old_start;
+          orig_end = bound;
+          orig_start = bound;
+        }
     }
 
-  gtk_text_buffer_select_range (buffer, &end, &start);
+  gtk_text_buffer_select_range (buffer, &ins, &bound);
 
+  gtk_text_iter_order (&orig_start, &orig_end);
   data->orig_start = gtk_text_buffer_create_mark (buffer, NULL,
-                                                  &start, TRUE);
+                                                  &orig_start, TRUE);
   data->orig_end = gtk_text_buffer_create_mark (buffer, NULL,
-                                                &end, TRUE);
+                                                &orig_end, TRUE);
 
   text_view->selection_drag_handler = g_signal_connect_data (text_view,
 							     "motion_notify_event",
