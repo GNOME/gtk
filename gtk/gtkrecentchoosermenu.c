@@ -24,6 +24,13 @@
 
 #include <gdk/gdkscreen.h>
 
+#include "gtkrecentmanager.h"
+#include "gtkrecentfilter.h"
+#include "gtkrecentchooser.h"
+#include "gtkrecentchooserutils.h"
+#include "gtkrecentchooserprivate.h"
+#include "gtkrecentchoosermenu.h"
+
 #include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtkiconfactory.h"
@@ -39,13 +46,6 @@
 #include "gtktooltips.h"
 #include "gtktypebuiltins.h"
 #include "gtkalias.h"
-
-#include "gtkrecentmanager.h"
-#include "gtkrecentfilter.h"
-#include "gtkrecentchooser.h"
-#include "gtkrecentchooserutils.h"
-#include "gtkrecentchooserprivate.h"
-#include "gtkrecentchoosermenu.h"
 
 struct _GtkRecentChooserMenuPrivate
 {

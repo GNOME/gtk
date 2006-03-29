@@ -1,5 +1,9 @@
 2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
+	* gtk/gtkrecentchoosermenu.c: Make gtkalias.h the last included file.
+
+2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
 	* gtk/gtk.symbols: Fix a typo that broke aliasing rules.
 
 2006-03-29  Richard Hult  <richard@imendio.com>
