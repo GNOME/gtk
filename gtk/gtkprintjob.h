@@ -49,6 +49,17 @@ struct _GtkPrintJob
   GObject parent_instance;
 
   GtkPrintJobPrivate *priv;
+
+  /* These are read-only, set by prepare */
+  GtkPrintPages print_pages;
+  GtkPageRange *page_ranges;
+  int num_page_ranges;
+  GtkPageSet page_set;
+  int num_copies;
+  gboolean collate;
+  gboolean reverse;
+  double scale;
+  gboolean rotate_to_orientation;
 };
 
 struct _GtkPrintJobClass
@@ -78,7 +89,7 @@ gboolean                 gtk_print_job_send         (GtkPrintJob              *p
 						     GtkPrintJobCompleteFunc   callback,
 						     gpointer                  user_data,
 						     GError                  **error);
-gboolean                 gtk_print_job_prep         (GtkPrintJob              *job,
+gboolean                 gtk_print_job_prepare      (GtkPrintJob              *job,
 						     GError                  **error);
 
 

@@ -398,6 +398,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   int uncollated_copies, collated_copies;
   int i, j;
   GtkPageRange *ranges;
+  GtkPageRange one_range;
   int num_ranges;
   GtkPrintOperationResult result;
   
@@ -407,13 +408,13 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   
   if (op->priv->manual_collation)
     {
-      uncollated_copies = 1;
-      collated_copies = op->priv->manual_num_copies;
+      uncollated_copies = op->priv->manual_num_copies;
+      collated_copies = 1;
     }
   else
     {
-      uncollated_copies = op->priv->manual_num_copies;
-      collated_copies = 1;
+      uncollated_copies = 1;
+      collated_copies = op->priv->manual_num_copies;
     }
 
   print_context = _gtk_print_context_new (op);
@@ -425,46 +426,53 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   
   g_return_val_if_fail (op->priv->nr_of_pages != -1, FALSE);
 
-  if (op->priv->print_settings == NULL)
+  if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
     {
-      ranges = g_new (GtkPageRange, 1);
+      ranges = op->priv->page_ranges;
+      num_ranges = op->priv->num_page_ranges;
+    }
+  else if (op->priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
+	   op->priv->current_page != -1)
+    {
+      ranges = &one_range;
       num_ranges = 1;
-      ranges[0].start = 0;
-      ranges[0].end = op->priv->nr_of_pages - 1;
+      ranges[0].start = op->priv->current_page;
+      ranges[0].end = op->priv->current_page;
     }
   else
     {
-      GtkPrintPages print_pages = gtk_print_settings_get_print_pages (op->priv->print_settings);
-      ranges = NULL;
-      if (print_pages == GTK_PRINT_PAGES_RANGES)
-	ranges = gtk_print_settings_get_page_ranges (op->priv->print_settings,
-						     &num_ranges);
-      if (ranges == NULL)
-	{
-	  ranges = g_new (GtkPageRange, 1);
-	  num_ranges = 1;
-	  if (print_pages == GTK_PRINT_PAGES_CURRENT &&
-	      op->priv->current_page != -1)
-	    {
-	      /* Current */
-	      ranges[0].start = op->priv->current_page;
-	      ranges[0].end = op->priv->current_page;
-	    }
-	  else
-	    {
-	      /* All */
-	      ranges[0].start = 0;
-	      ranges[0].end = op->priv->nr_of_pages - 1;
-	    }
-	}
+      ranges = &one_range;
+      num_ranges = 1;
+      ranges[0].start = 0;
+      ranges[0].end = op->priv->nr_of_pages - 1;
     }
   
   for (i = 0; i < uncollated_copies; i++)
     {
       for (range = 0; range < num_ranges; range ++)
 	{
-	  for (page = ranges[range].start; page <= ranges[range].end; page ++)
+	  int start, end, inc;
+	  int low = ranges[range].start;
+	  int high = ranges[range].end;
+	  
+	  if (op->priv->manual_reverse)
 	    {
+	      start = high;
+	      end = low - 1;
+	      inc = -1;
+	    }
+	  else
+	    {
+	      start = low;
+	      end = high + 1;
+	      inc = 1;
+	    }
+	  for (page = start; page != end; page += inc)
+	    {
+	      if ((op->priv->manual_page_set == GTK_PAGE_SET_EVEN && page % 2 == 0) ||
+		  (op->priv->manual_page_set == GTK_PAGE_SET_ODD && page % 2 == 1))
+		continue;
+	      
 	      for (j = 0; j < collated_copies; j++)
 		{
 		  page_setup = gtk_page_setup_copy (initial_page_setup);
@@ -478,8 +486,8 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 		  cairo_save (cr);
 		  if (op->priv->manual_scale != 100.0)
 		    cairo_scale (cr,
-				 op->priv->manual_scale / 100.0,
-				 op->priv->manual_scale / 100.0);
+				 op->priv->manual_scale,
+				 op->priv->manual_scale);
 		  
 		  if (op->priv->manual_orientation)
 		    _gtk_print_context_rotate_according_to_orientation (print_context);
@@ -495,6 +503,10 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 		  cairo_restore (cr);
 		  
 		  g_object_unref (page_setup);
+
+		  /* Iterate the mainloop so that we redraw windows */
+		  while (gtk_events_pending ())
+		    gtk_main_iteration ();
 		}
 	    }
 	}

@@ -58,6 +58,7 @@ void                 _gtk_printer_get_settings_from_options (GtkPrinter         
 							     GtkPrinterOptionSet *options,
 							     GtkPrintSettings    *settings);
 void                 _gtk_printer_prepare_for_print         (GtkPrinter          *printer,
+							     GtkPrintJob         *print_job,
 							     GtkPrintSettings    *settings,
 							     GtkPageSetup        *page_setup);
 cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter          *printer,

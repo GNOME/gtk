@@ -306,11 +306,11 @@ gtk_printer_is_virtual (GtkPrinter *printer)
 }
 
 GtkPrintJob *
-gtk_printer_prep_job (GtkPrinter *printer,
-		      GtkPrintSettings *settings,
-		      GtkPageSetup *page_setup,
-		      const gchar *title,
-	              GError **error)
+gtk_printer_prepare_job (GtkPrinter *printer,
+			 GtkPrintSettings *settings,
+			 GtkPageSetup *page_setup,
+			 const gchar *title,
+			 GError **error)
 {
   GtkPrintJob *job;
 
@@ -319,7 +319,7 @@ gtk_printer_prep_job (GtkPrinter *printer,
 			   page_setup,
                            printer);
 
-  if (!gtk_print_job_prep (job, error))
+  if (!gtk_print_job_prepare (job, error))
     {
       g_object_unref (G_OBJECT (job));
       job = NULL;
@@ -363,11 +363,12 @@ _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 
 void
 _gtk_printer_prepare_for_print (GtkPrinter *printer,
+				GtkPrintJob *print_job,
 				GtkPrintSettings *settings,
 				GtkPageSetup *page_setup)
 {
   GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_prepare_for_print (printer, settings, page_setup);
+  return backend_iface->printer_prepare_for_print (printer, print_job, settings, page_setup);
 }
 
 cairo_surface_t *

@@ -2558,7 +2558,7 @@ gtk_printer_get_icon_name
 gtk_printer_get_job_count
 gtk_printer_is_active
 gtk_printer_is_virtual
-gtk_printer_prep_job
+gtk_printer_prepare_job
 #endif
 #endif
 
@@ -2607,7 +2607,7 @@ gtk_print_job_get_settings
 gtk_print_job_get_printer
 gtk_print_job_get_surface
 gtk_print_job_send
-gtk_print_job_prep
+gtk_print_job_prepare
 #endif
 #endif
 

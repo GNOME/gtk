@@ -1,5 +1,36 @@
 2006-03-29  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtk.symbols:
+	gtk_printer_prep_job -> gtk_printer_prepare_job
+	gtk_print_job_prep -> gtk_print_job_prepare
+	
+	* gtk/gtkprintbackend.h:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	Add print_job argument to printer_prepare_for_print
+	gtk_printer_prep_job -> gtk_printer_prepare_job
+	
+	* gtk/gtkprintjob.[ch]:
+	Add manual rendering settings to GtkPrintJob.
+	gtk_print_job_prep -> gtk_print_job_prepare
+	
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.c:
+	Get more manual_* settings working.
+	Run mainloop after each printed page.
+
+	* gtk/gtkprintunixdialog.c:
+	Save page ranges.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Now put the manual_* settings inside the PrintJob in
+	prepare_for_print.
+
+2006-03-29  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkprintunixdialog.c:
 	Make sure we remember the format-for printer.
 	Also, use it as the default if set.

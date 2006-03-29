@@ -162,11 +162,11 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       g_object_unref (settings_copy);
 
       op_unix = g_new (GtkPrintOperationUnix, 1);
-      op_unix->job = gtk_printer_prep_job (printer,
-					   settings,
-					   page_setup,
-                                           "Title",
-					   error);
+      op_unix->job = gtk_printer_prepare_job (printer,
+					      settings,
+					      page_setup,
+					      "Title",
+					      error);
       g_object_unref (settings);
     
       if (error != NULL && *error != NULL)
@@ -186,15 +186,16 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
  
       op->priv->platform_data = op_unix;
 
-      /* TODO: hook up to dialog elements */
-      op->priv->manual_num_copies =
-	gtk_print_settings_get_int_with_default (settings, "manual-num-copies", 1);
-      op->priv->manual_collation =
-	gtk_print_settings_get_bool (settings, "manual-collate");
-      op->priv->manual_scale =
-	gtk_print_settings_get_double_with_default (settings, "manual-scale", 100.0);
-      op->priv->manual_orientation =
-	gtk_print_settings_get_bool (settings, "manual-orientation");
+      op->priv->print_pages = op_unix->job->print_pages;
+      op->priv->page_ranges = op_unix->job->page_ranges;
+      op->priv->num_page_ranges = op_unix->job->num_page_ranges;
+  
+      op->priv->manual_num_copies = op_unix->job->num_copies;
+      op->priv->manual_collation = op_unix->job->collate;
+      op->priv->manual_reverse = op_unix->job->reverse;
+      op->priv->manual_page_set = op_unix->job->page_set;
+      op->priv->manual_scale = op_unix->job->scale;
+      op->priv->manual_orientation = op_unix->job->rotate_to_orientation;
     } 
 
   op->priv->start_page = unix_start_page;

@@ -87,6 +87,7 @@ struct _GtkPrintBackendIface
 							      GtkPrinterOptionSet *options,
 							      GtkPrintSettings *settings);
   void                  (*printer_prepare_for_print)         (GtkPrinter *printer,
+							      GtkPrintJob *print_job,
 							      GtkPrintSettings *settings,
 							      GtkPageSetup *page_setup);
   GList  *              (*printer_list_papers)               (GtkPrinter *printer);

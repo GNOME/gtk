@@ -83,6 +83,7 @@ static GtkPrinterOptionSet *lpr_printer_get_options               (GtkPrinter   
 								   GtkPrintSettings        *settings,
 								   GtkPageSetup            *page_setup);
 static void                 lpr_printer_prepare_for_print         (GtkPrinter              *printer,
+								   GtkPrintJob             *print_job,
 								   GtkPrintSettings        *settings,
 								   GtkPageSetup            *page_setup);
 static void                 lpr_printer_get_hard_margins          (GtkPrinter              *printer,
@@ -516,35 +517,31 @@ lpr_printer_get_settings_from_options (GtkPrinter *printer,
 
 static void
 lpr_printer_prepare_for_print (GtkPrinter *printer,
+			       GtkPrintJob *print_job,
 			       GtkPrintSettings *settings,
 			       GtkPageSetup *page_setup)
 {
-  GtkPageSet page_set;
   double scale;
+
+  print_job->print_pages = gtk_print_settings_get_print_pages (settings);
+  print_job->page_ranges = NULL;
+  print_job->num_page_ranges = 0;
   
-  /* TODO: paper size & orientation */
-
-  if (gtk_print_settings_get_collate (settings))
-    gtk_print_settings_set (settings, "manual-Collate", "True");
-
-  if (gtk_print_settings_get_reverse (settings))
-    gtk_print_settings_set (settings, "manual-OutputOrder", "Reverse");
-
-  if (gtk_print_settings_get_num_copies (settings) > 1)
-    gtk_print_settings_set_int (settings, "manual-copies",
-				gtk_print_settings_get_num_copies (settings));
+  if (print_job->print_pages == GTK_PRINT_PAGES_RANGES)
+    print_job->page_ranges =
+      gtk_print_settings_get_page_ranges (settings,
+					  &print_job->num_page_ranges);
+  
+  print_job->collate = gtk_print_settings_get_collate (settings);
+  print_job->reverse = gtk_print_settings_get_reverse (settings);
+  print_job->num_copies = gtk_print_settings_get_num_copies (settings);
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)
-    gtk_print_settings_set_double (settings, "manual-scale", scale);
+    print_job->scale = scale/100.0;
 
-  page_set = gtk_print_settings_get_page_set (settings);
-  if (page_set == GTK_PAGE_SET_EVEN)
-    gtk_print_settings_set (settings, "manual-page-set", "even");
-  else if (page_set == GTK_PAGE_SET_ODD)
-    gtk_print_settings_set (settings, "manual-page-set", "odd");
-
-  gtk_print_settings_set_boolean (settings, "manual-orientation", TRUE);
+  print_job->page_set = gtk_print_settings_get_page_set (settings);
+  print_job->rotate_to_orientation = TRUE;
 }
 
 static void

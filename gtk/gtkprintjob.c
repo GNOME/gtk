@@ -140,6 +140,17 @@ gtk_print_job_init (GtkPrintJob *print_job)
   print_job->priv->printer_set = FALSE;
   print_job->priv->settings_set = FALSE;
   print_job->priv->page_setup_set = FALSE;
+
+
+  print_job->print_pages = GTK_PRINT_PAGES_ALL;
+  print_job->page_ranges = NULL;
+  print_job->num_page_ranges = 0;
+  print_job->collate = FALSE;
+  print_job->reverse = FALSE;
+  print_job->num_copies = 1;
+  print_job->scale = 1.0;
+  print_job->page_set = GTK_PAGE_SET_ALL;
+  print_job->rotate_to_orientation = FALSE;
 }
 
 static void
@@ -166,6 +177,9 @@ gtk_print_job_finalize (GObject *object)
   
   if (print_job->priv->page_setup)
     g_object_unref (print_job->priv->page_setup);
+
+  g_free (print_job->page_ranges);
+  print_job->page_ranges = NULL;
   
   if (G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize (object);
@@ -224,8 +238,8 @@ gtk_print_job_get_surface (GtkPrintJob *print_job)
 }
 
 gboolean 
-gtk_print_job_prep (GtkPrintJob *job, 
-                    GError **error)
+gtk_print_job_prepare (GtkPrintJob *job, 
+		       GError **error)
 {
   char *filename;
   double width, height;
@@ -256,6 +270,7 @@ gtk_print_job_prep (GtkPrintJob *job,
 							  job->priv->cache_fd);
 
   _gtk_printer_prepare_for_print (job->priv->printer,
+				  job,
 				  job->priv->settings,
 				  job->priv->page_setup);
   

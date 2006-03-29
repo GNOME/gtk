@@ -554,7 +554,6 @@ printer_list_initialize (GtkPrintUnixDialog *dialog,
   GList *list;
   GList *node;
 
-  /* TODO: allow for multiple backends */
   g_return_if_fail (print_backend != NULL);
 
   g_signal_connect (print_backend, 
@@ -1412,6 +1411,12 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
   
   text = gtk_entry_get_text (GTK_ENTRY (dialog->priv->page_range_entry));
 
+  if (*text == 0)
+    {
+      *n_ranges_out = 0;
+      return NULL;
+    }
+  
   n_ranges = 1;
   p = text;
   while (*p)
@@ -1445,8 +1450,8 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 	    }
 	}
 
-      ranges[i].start = start;
-      ranges[i].end = end;
+      ranges[i].start = start - 1;
+      ranges[i].end = end - 1;
       i++;
 
       /* Skip until end or separator */
@@ -1463,6 +1468,31 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
   return ranges;
 }
 
+static void
+dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
+			GtkPageRange *ranges,
+			int n_ranges)
+{
+  int i;
+  GString *s = g_string_new ("");
+
+  for (i = 0; i < n_ranges; i++)
+    {
+      g_string_append_printf (s, "%d", ranges[i].start + 1);
+      if (ranges[i].end > ranges[i].start)
+	g_string_append_printf (s, "-%d", ranges[i].end + 1);
+      
+      if (i != n_ranges - 1)
+	g_string_append (s, ",");
+    }
+
+  gtk_entry_set_text (GTK_ENTRY (dialog->priv->page_range_entry),
+		      s->str);
+  
+  g_string_free (s, TRUE);
+}
+
+
 static GtkPrintPages
 dialog_get_print_pages (GtkPrintUnixDialog *dialog)
 {
@@ -1474,6 +1504,19 @@ dialog_get_print_pages (GtkPrintUnixDialog *dialog)
     return GTK_PRINT_PAGES_CURRENT;
   else
     return GTK_PRINT_PAGES_RANGES;
+}
+
+static void
+dialog_set_print_pages (GtkPrintUnixDialog *dialog, GtkPrintPages pages)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+
+  if (pages == GTK_PRINT_PAGES_RANGES)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
+  else if (pages == GTK_PRINT_PAGES_CURRENT)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->current_page_radio), TRUE);
+  else
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->all_pages_radio), TRUE);
 }
 
 static double
@@ -2226,6 +2269,8 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 				    GtkPrintSettings   *settings)
 {
   const char *printer;
+  GtkPageRange *ranges;
+  int num_ranges;
   
   if (settings != NULL)
     {
@@ -2234,12 +2279,14 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
       dialog_set_n_copies (dialog, gtk_print_settings_get_num_copies (settings));
       dialog_set_scale (dialog, gtk_print_settings_get_scale (settings));
       dialog_set_page_set (dialog, gtk_print_settings_get_page_set (settings));
+      dialog_set_print_pages (dialog, gtk_print_settings_get_print_pages (settings));
+      ranges = gtk_print_settings_get_page_ranges (settings, &num_ranges);
+      if (ranges)
+	dialog_set_page_ranges (dialog, ranges, num_ranges);
 
       dialog->priv->format_for_printer =
 	g_strdup (gtk_print_settings_get (settings, "format-for-printer"));
     }
-  
-  /* TODO: page ranges */
 
   if (dialog->priv->initial_settings)
     g_object_unref (dialog->priv->initial_settings);
@@ -2265,6 +2312,8 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 {
   GtkPrintSettings *settings;
   GtkPrintPages print_pages;
+  GtkPageRange *ranges;
+  int n_ranges;
 
   settings = gtk_print_settings_new ();
 
@@ -2296,13 +2345,9 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   print_pages = dialog_get_print_pages (dialog);
   gtk_print_settings_set_print_pages (settings, print_pages);
 
-  if (print_pages == GTK_PRINT_PAGES_RANGES)
+  ranges = dialog_get_page_ranges (dialog, &n_ranges);
+  if (ranges)
     {
-      GtkPageRange *ranges;
-      int n_ranges;
-
-      ranges = dialog_get_page_ranges (dialog, &n_ranges);
-
       gtk_print_settings_set_page_ranges  (settings, ranges, n_ranges);
       g_free (ranges);
     }

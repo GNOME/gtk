@@ -41,10 +41,16 @@ struct _GtkPrintOperationPrivate
   cairo_surface_t *surface;
   double dpi_x, dpi_y;
 
+  GtkPrintPages print_pages;
+  GtkPageRange *page_ranges;
+  int num_page_ranges;
+  
   int manual_num_copies;
   gboolean manual_collation;
+  gboolean manual_reverse;
   gboolean manual_orientation;
   double manual_scale;
+  GtkPageSet manual_page_set;
  
   void *platform_data;
 

@@ -78,7 +78,7 @@ gint                     gtk_printer_get_job_count        (GtkPrinter *printer);
 gboolean                 gtk_printer_is_active            (GtkPrinter *printer);
 gboolean                 gtk_printer_is_virtual           (GtkPrinter *printer);
 
-GtkPrintJob             *gtk_printer_prep_job             (GtkPrinter *printer,
+GtkPrintJob             *gtk_printer_prepare_job          (GtkPrinter *printer,
 							   GtkPrintSettings *settings,
 							   GtkPageSetup *page_setup,
 		                                           const gchar *title,

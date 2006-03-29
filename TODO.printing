@@ -22,8 +22,6 @@ Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
 
 Cups/Unix print dialog:
-* page setup layout-for-printer isn't saved
-* Finish the various manual_* stuff
 * finish job page print-at-time support
 * Use themed icons for the collate/reverse?
 * Add custom translations for a lot of standard PPD options
@@ -39,8 +37,8 @@ General:
 * update win32 port
 * don't enforce paper size in portrait mode
 * use filechooserentry => J5
-* print DPI from settings object?
-* errors on alex laptop
+* get the right DPI from the printer into cairo
+* gets errors on alex laptop
 * general print to file (ps+pdf)
 
 Page setting dialog:
