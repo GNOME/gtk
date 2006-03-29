@@ -140,7 +140,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   GTK_WIDGET_SET_FLAGS (path_bar, GTK_NO_WINDOW);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
-  path_bar->spacing = 3;
+  path_bar->spacing = 0;
   path_bar->up_slider_button = get_slider_button (path_bar, GTK_ARROW_LEFT);
   path_bar->down_slider_button = get_slider_button (path_bar, GTK_ARROW_RIGHT);
   path_bar->icon_size = FALLBACK_ICON_SIZE;

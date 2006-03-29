@@ -1,5 +1,13 @@
 2006-03-29  Federico Mena Quintero  <federico@novell.com>
 
+	* gtk/gtkpathbar.c (gtk_path_bar_init): Reduce the inter-button
+	spacing to 0.
+
+	* gtk/gtkfilechooserdefault.c (browse_widgets_create): Make the
+	location label bold.
+
+2006-03-29  Federico Mena Quintero  <federico@novell.com>
+
 	* gtk/gtkfilechooserdefault.c (location_mode_set): Just change the
 	location_mode field if we are in SAVE/CREATE_FOLDER modes.
 	(gtk_file_chooser_default_get_paths): Get the path based on the

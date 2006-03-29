@@ -4283,7 +4283,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   impl->location_entry_box = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (vbox), impl->location_entry_box, FALSE, FALSE, 0);
 
-  impl->location_label = gtk_label_new_with_mnemonic ("_Location:");
+  impl->location_label = gtk_label_new_with_mnemonic ("<b>_Location:</b>");
   gtk_label_set_use_markup (GTK_LABEL (impl->location_label), TRUE);
   gtk_widget_show (impl->location_label);
   gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_label, FALSE, FALSE, 0);
