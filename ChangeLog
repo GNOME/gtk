@@ -1,3 +1,9 @@
+2006-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (queue_edited_idle): Handle
+	double queuing, rather than asserting that it does not 
+	happen.  (#330617)
+
 2006-03-28  Matthias Clasen  <mclasen@redhat.com>	
 
 	* gtk/gtknotebook.c (gtk_notebook_set_tab_detachable): Fix
