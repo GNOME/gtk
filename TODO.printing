@@ -25,8 +25,7 @@ Cups/Unix print dialog:
 * page setup layout-for-printer isn't saved
 * Finish the various manual_* stuff
 * finish job page print-at-time support
-* Use themed icons - need icons
-* HIG spacing
+* Use themed icons for the collate/reverse?
 * Add custom translations for a lot of standard PPD options
 * Actually get default printer from somewhere
 
@@ -42,10 +41,10 @@ General:
 * use filechooserentry => J5
 * print DPI from settings object?
 * errors on alex laptop
+* general print to file (ps+pdf)
 
 Page setting dialog:
-* HIG spacing
-* insensitive from-printer if list is empty
+* insensitive margins-from-printer if list is empty
 
 * sort paper lists
 * nicer unit editor than spinbutton

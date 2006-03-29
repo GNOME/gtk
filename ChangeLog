@@ -1,3 +1,9 @@
+2006-03-29  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	Make sure we remember the format-for printer.
+	Also, use it as the default if set.
+
 2006-03-28  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintunixdialog.c:

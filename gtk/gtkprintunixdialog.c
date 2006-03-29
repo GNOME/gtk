@@ -155,6 +155,8 @@ struct GtkPrintUnixDialogPrivate
   gulong options_changed_handler;
   gulong mark_conflicts_id;
 
+  char *format_for_printer;
+  
   gint current_page;
 };
 
@@ -342,8 +344,11 @@ static const char *nocollate_reverse_xpm[] = {
 
 
 static const char *
-get_default_printer (void)
+get_default_printer (GtkPrintUnixDialog *dialog)
 {
+  if (dialog->priv->format_for_printer)
+    return dialog->priv->format_for_printer;
+  
   /* TODO: use something better */
   return "printer";
 }
@@ -460,6 +465,9 @@ gtk_print_unix_dialog_finalize (GObject *object)
   g_free (dialog->priv->waiting_for_printer);
   dialog->priv->waiting_for_printer = NULL;
   
+  g_free (dialog->priv->format_for_printer);
+  dialog->priv->format_for_printer = NULL;
+  
   if (G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize (object);
 }
@@ -530,7 +538,7 @@ printer_added_cb (GtkPrintBackend *backend,
       g_free (dialog->priv->waiting_for_printer);
       dialog->priv->waiting_for_printer = NULL;
     }
-  else if (strcmp (gtk_printer_get_name (printer), get_default_printer ()) == 0 &&
+  else if (strcmp (gtk_printer_get_name (printer), get_default_printer (dialog)) == 0 &&
 	   gtk_tree_selection_count_selected_rows (selection) == 0)
     {
       dialog->priv->internal_printer_change = TRUE;
@@ -2226,11 +2234,12 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
       dialog_set_n_copies (dialog, gtk_print_settings_get_num_copies (settings));
       dialog_set_scale (dialog, gtk_print_settings_get_scale (settings));
       dialog_set_page_set (dialog, gtk_print_settings_get_page_set (settings));
+
+      dialog->priv->format_for_printer =
+	g_strdup (gtk_print_settings_get (settings, "format-for-printer"));
     }
   
   /* TODO: page ranges */
-
-  /* TODO: Handle printer choosen and printer-specific settings */
 
   if (dialog->priv->initial_settings)
     g_object_unref (dialog->priv->initial_settings);
@@ -2265,7 +2274,10 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   else
     gtk_print_settings_set_printer (settings, "default");
   
+  gtk_print_settings_set (settings, "format-for-printer",
+			  dialog->priv->format_for_printer);
 
+  
   gtk_print_settings_set_collate (settings,
 				  dialog_get_collate (dialog));
   
