@@ -293,6 +293,3 @@ delegate_item_activated (GtkRecentChooser *receiver,
 {
   _gtk_recent_chooser_item_activated (GTK_RECENT_CHOOSER (user_data));
 }
-
-#define __GTK_RECENT_CHOOSER_UTILS_H__
-#include "gtkaliasdef.c"

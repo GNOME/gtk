@@ -68,7 +68,6 @@
 #include "gtktooltips.h"
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
-#include "gtkalias.h"
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentfilter.h"
@@ -76,6 +75,8 @@
 #include "gtkrecentchooserprivate.h"
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentchooserdefault.h"
+
+#include "gtkalias.h"
 
 
 

@@ -45,6 +45,13 @@
 #include "gtkobject.h"
 #include "gtktooltips.h"
 #include "gtktypebuiltins.h"
+
+#include "gtkrecentmanager.h"
+#include "gtkrecentfilter.h"
+#include "gtkrecentchooser.h"
+#include "gtkrecentchooserutils.h"
+#include "gtkrecentchooserprivate.h"
+#include "gtkrecentchoosermenu.h"
 #include "gtkalias.h"
 
 struct _GtkRecentChooserMenuPrivate

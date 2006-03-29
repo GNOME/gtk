@@ -1,3 +1,8 @@
+2006-03-29  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkrecent*.c: Fix some symbol aliasing glitches.
+
 2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c: Make gtkalias.h the last included file.

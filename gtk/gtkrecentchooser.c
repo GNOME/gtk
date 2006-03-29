@@ -962,5 +962,5 @@ _gtk_recent_chooser_selection_changed (GtkRecentChooser *chooser)
   g_signal_emit (chooser, chooser_signals[SELECTION_CHANGED], 0);
 }
 
-#define __GTK_RECENT_CHOOSER_H__
+#define __GTK_RECENT_CHOOSER_C__
 #include "gtkaliasdef.c"
