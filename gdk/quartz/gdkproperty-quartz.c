@@ -96,7 +96,10 @@ static const gchar xatoms_string[] =
   "CAP_HEIGHT\0"
   "WM_CLASS\0"
   "WM_TRANSIENT_FOR\0"
-;
+ /* Below here, these are our additions. Increment N_CUSTOM_PREDEFINED
+   * if you add any.
+   */
+  "CLIPBOARD\0"			/* = 69 */;
 
 static const gint xatoms_offset[] = {
     0,   5,  13,  23,  27,  32,  39,  48,  57,  64,  76,  88, 
@@ -104,7 +107,7 @@ static const gint xatoms_offset[] = {
   222, 236, 249, 262, 278, 291, 305, 317, 324, 333, 340, 351, 
   360, 378, 391, 404, 412, 428, 442, 456, 466, 477, 487, 497, 
   511, 525, 537, 549, 568, 588, 605, 623, 636, 645, 656, 663, 
-  674, 685, 695, 702, 712, 724, 734, 745, 754
+  674, 685, 695, 702, 712, 724, 734, 745, 754, 771
 };
 
 #define N_CUSTOM_PREDEFINED 1
@@ -165,8 +168,6 @@ gchar *
 gdk_atom_name (GdkAtom atom)
 {
   ensure_atom_tables ();
-  //if (!atoms_to_names)
-  //  return NULL;
     
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;

@@ -1,3 +1,7 @@
+2006-03-29  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkproperty-quartz.c: Add missing CLIPBOARD atom.
+
 2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* docs/reference/gtk/migrating-GtkRecentChooser.sgml: Add a migration
