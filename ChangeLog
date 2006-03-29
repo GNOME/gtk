@@ -1,3 +1,21 @@
+2006-03-28  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechoosersettings.[ch]: New files with a simple
+	framework for saving/loading settings from the file chooser in
+	$XDG_CONFIG_HOME/gtk-2.0/gtkfilechooser.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_unmap):
+	Save the current settings.
+	(settings_save): New helper function.  We save the location_mode
+	and show_hidden flags.
+	(gtk_file_chooser_default_map): Load the settings.
+	(settings_load): New helper function.
+
+	* gtk/gtkfilechooserentry.c
+	(_gtk_file_chooser_entry_set_file_part): Oops, don't modify
+	in_change.  Our handlers are what set the file_part, so they
+	*must* be run when we modify the text.
+
 2006-03-27  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):

@@ -982,9 +982,7 @@ _gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
 
-  chooser_entry->in_change = TRUE;
   gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
-  chooser_entry->in_change = FALSE;
 }
 
 

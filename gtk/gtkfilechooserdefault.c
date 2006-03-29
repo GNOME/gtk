@@ -36,6 +36,7 @@
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
+#include "gtkfilechoosersettings.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
@@ -691,7 +692,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_paths = NULL;
-  impl->location_mode = LOCATION_MODE_FILENAME_ENTRY;
+  impl->location_mode = LOCATION_MODE_PATH_BAR;
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
@@ -4984,6 +4985,40 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
   return !result;
 }
 
+static void
+settings_load (GtkFileChooserDefault *impl)
+{
+  GtkFileChooserSettings *settings;
+  LocationMode location_mode;
+  gboolean show_hidden;
+
+  settings = _gtk_file_chooser_settings_new ();
+
+  location_mode = _gtk_file_chooser_settings_get_location_mode (settings);
+  show_hidden = _gtk_file_chooser_settings_get_show_hidden (settings);
+
+  g_object_unref (settings);
+
+  location_mode_set (impl, location_mode, TRUE);
+  gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
+}
+
+static void
+settings_save (GtkFileChooserDefault *impl)
+{
+  GtkFileChooserSettings *settings;
+
+  settings = _gtk_file_chooser_settings_new ();
+
+  _gtk_file_chooser_settings_set_location_mode (settings, impl->location_mode);
+  _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
+
+  /* NULL GError */
+  _gtk_file_chooser_settings_save (settings, NULL);
+
+  g_object_unref (settings);
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -5024,6 +5059,8 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   bookmarks_changed_cb (impl->file_system, impl);
 
+  settings_load (impl);
+
   profile_end ("end", NULL);
 }
 
@@ -5034,6 +5071,8 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   GtkFileChooserDefault *impl;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  settings_save (impl);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 
@@ -5996,11 +6035,7 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   info.result = NULL;
   info.path_from_entry = NULL;
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
-      || ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	   || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	  && impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
+  if (impl->location_entry)
     {
       gboolean is_well_formed, is_empty, is_file_part_empty;
 
