@@ -1,3 +1,8 @@
+2006-03-29  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (location_mode_set): Just change the
+	location_mode field if we are in SAVE/CREATE_FOLDER modes.
+
 2006-03-28  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechoosersettings.[ch]: New files with a simple

@@ -4138,58 +4138,59 @@ location_mode_set (GtkFileChooserDefault *impl,
 		   LocationMode new_mode,
 		   gboolean set_button)
 {
-  GtkWindow *toplevel;
-  GtkWidget *current_focus;
-  gboolean button_active;
-  gboolean switch_to_file_list;
-
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-  switch (new_mode)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-    case LOCATION_MODE_PATH_BAR:
-      button_active = FALSE;
+      GtkWindow *toplevel;
+      GtkWidget *current_focus;
+      gboolean button_active;
+      gboolean switch_to_file_list;
 
-      /* The location_entry will disappear when we switch to path bar mode.  So,
-       * we'll focus the file list in that case, to avoid having a window with
-       * no focused widget.
-       */
-      toplevel = get_toplevel (GTK_WIDGET (impl));
-      switch_to_file_list = FALSE;
-      if (toplevel)
+      switch (new_mode)
 	{
-	  current_focus = gtk_window_get_focus (toplevel);
-	  if (!current_focus || current_focus == impl->location_entry)
-	    switch_to_file_list = TRUE;
+	case LOCATION_MODE_PATH_BAR:
+	  button_active = FALSE;
+
+	  /* The location_entry will disappear when we switch to path bar mode.  So,
+	   * we'll focus the file list in that case, to avoid having a window with
+	   * no focused widget.
+	   */
+	  toplevel = get_toplevel (GTK_WIDGET (impl));
+	  switch_to_file_list = FALSE;
+	  if (toplevel)
+	    {
+	      current_focus = gtk_window_get_focus (toplevel);
+	      if (!current_focus || current_focus == impl->location_entry)
+		switch_to_file_list = TRUE;
+	    }
+
+	  location_switch_to_path_bar (impl);
+
+	  if (switch_to_file_list)
+	    gtk_widget_grab_focus (impl->browse_files_tree_view);
+
+	  break;
+
+	case LOCATION_MODE_FILENAME_ENTRY:
+	  button_active = TRUE;
+	  location_switch_to_filename_entry (impl);
+	  break;
+
+	default:
+	  g_assert_not_reached ();
+	  return;
 	}
 
-      location_switch_to_path_bar (impl);
+      if (set_button)
+	{
+	  g_signal_handlers_block_by_func (impl->location_button,
+					   G_CALLBACK (location_button_toggled_cb), impl);
 
-      if (switch_to_file_list)
-	gtk_widget_grab_focus (impl->browse_files_tree_view);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (impl->location_button), button_active);
 
-      break;
-
-    case LOCATION_MODE_FILENAME_ENTRY:
-      button_active = TRUE;
-      location_switch_to_filename_entry (impl);
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  if (set_button)
-    {
-      g_signal_handlers_block_by_func (impl->location_button,
-				       G_CALLBACK (location_button_toggled_cb), impl);
-
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (impl->location_button), button_active);
-
-      g_signal_handlers_unblock_by_func (impl->location_button,
-					 G_CALLBACK (location_button_toggled_cb), impl);
+	  g_signal_handlers_unblock_by_func (impl->location_button,
+					     G_CALLBACK (location_button_toggled_cb), impl);
+	}
     }
 
   impl->location_mode = new_mode;
