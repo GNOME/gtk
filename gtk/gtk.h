@@ -140,6 +140,12 @@
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrc.h>
+#include <gtk/gtkrecentchooser.h>
+#include <gtk/gtkrecentchooserdialog.h>
+#include <gtk/gtkrecentchoosermenu.h>
+#include <gtk/gtkrecentchooserwidget.h>
+#include <gtk/gtkrecentfilter.h>
+#include <gtk/gtkrecentmanager.h>
 #include <gtk/gtkruler.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscrollbar.h>

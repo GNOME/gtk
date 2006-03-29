@@ -228,6 +228,12 @@ gtk_public_h_sources =          \
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
+	gtkrecentchooser.h 	\
+	gtkrecentchooserdialog.h \
+	gtkrecentchoosermenu.h 	\
+	gtkrecentchooserwidget.h \
+	gtkrecentfilter.h 	\
+	gtkrecentmanager.h 	\
 	gtkruler.h		\
 	gtkscale.h		\
 	gtkscrollbar.h		\
@@ -310,6 +316,9 @@ gtk_private_h_sources =		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkrbtree.h		\
+	gtkrecentchooserdefault.h \
+	gtkrecentchooserprivate.h \
+	gtkrecentchooserutils.h \
 	gtksequence.h		\
 	gtksocketprivate.h	\
 	gtktextbtree.h		\
@@ -459,6 +468,14 @@ gtk_c_sources =                 \
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
+	gtkrecentchooserdefault.c \
+	gtkrecentchooserdialog.c \
+	gtkrecentchoosermenu.c 	\
+	gtkrecentchooserwidget.c \
+	gtkrecentchooserutils.c \
+	gtkrecentchooser.c 	\
+	gtkrecentfilter.c 	\
+	gtkrecentmanager.c 	\
 	gtkruler.c		\
 	gtkscale.c		\
 	gtkscrollbar.c		\
