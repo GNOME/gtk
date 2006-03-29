@@ -1985,17 +1985,17 @@ queue_edited_idle (GtkFileChooserDefault *impl,
    * just now.
    */
 
-  g_assert (!impl->edited_idle);
-  g_assert (!impl->edited_new_text);
+  if (!impl->edited_idle)
+    {
+      impl->edited_idle = g_idle_source_new ();
+      g_source_set_closure (impl->edited_idle,
+			    g_cclosure_new_object (G_CALLBACK (edited_idle_cb),
+						   G_OBJECT (impl)));
+      g_source_attach (impl->edited_idle, NULL);
+    }
 
-  impl->edited_idle = g_idle_source_new ();
-  g_source_set_closure (impl->edited_idle,
-			g_cclosure_new_object (G_CALLBACK (edited_idle_cb),
-					       G_OBJECT (impl)));
-  g_source_attach (impl->edited_idle, NULL);
-
-  if (new_text)
-    impl->edited_new_text = g_strdup (new_text);
+  g_free (impl->edited_new_text);
+  impl->edited_new_text = g_strdup (new_text);
 }
 
 /* Callback used from the text cell renderer when the new folder is named */

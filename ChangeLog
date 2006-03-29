@@ -1,3 +1,9 @@
+2006-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (queue_edited_idle): Handle
+	double queuing, rather than asserting that it does not 
+	happen.  (#330617)
+
 2006-03-28  Matthias Clasen  <mclasen@redhat.com>	
 
 	* gtk/gtktextview.c (gtk_text_view_start_selection_drag): 
@@ -28,6 +34,9 @@
 	called from gtk_pixmap_finalize (bug 336254)
 
 2006-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpixmap.c (gtk_pixmap_set): Handle the case of 
+	val being NULL.  (#336254, Sven Herzberg)
 
 	* gtk/gtkmnemonichash.c (_gtk_mnemonic_hash_activate): Check that 
 	the widget is viewable.  (#336200, Bastian Nocera)
