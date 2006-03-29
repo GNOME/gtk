@@ -1,3 +1,27 @@
+2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	Import GtkRecent* from libegg.
+
+	* gtk/gtkrecentmanager.[ch]: Add GtkRecentManager, an object
+	for managing a list of recently used resources.
+
+	* gtk/gtkrecentchooser.[ch]:
+	* gtk/gtkrecentchooserdefault.[ch]:
+	* gtk/gtkrecentchooserdialog.[ch]:
+	* gtk/gtkrecentchoosermenu.[ch]:
+	* gtk/gtkrecentchooserprivate.h:
+	* gtk/gtkrecentchooserutils.[ch]:
+	* gtk/gtkrecentchooserwidget.[ch]: Add GtkRecentChooser, a
+	GTypeInterface for widgets implementing viewers for recently
+	used resources.
+
+	* gtk/gtkrecentfilter.[ch]: GtkRecentFilter, a filter object
+	for GtkRecentChooser implementations.
+
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/Makefile.am: Build glue for GtkRecent*.
+
 2006-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_real_insert_page): Emit
