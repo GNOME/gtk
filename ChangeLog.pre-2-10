@@ -2,6 +2,13 @@
 
 	* gtk/gtkfilechooserdefault.c (location_mode_set): Just change the
 	location_mode field if we are in SAVE/CREATE_FOLDER modes.
+	(gtk_file_chooser_default_get_paths): Get the path based on the
+	currently focused widget, or the last-focused widget.  This is
+	what we should have been doing in the beginning, but it worked out
+	fine because we didn't have the possibility of a filename entry in
+	OPEN mode.
+	(gtk_file_chooser_default_should_respond): Handle the case where
+	the last focused widget is the location_entry.
 
 2006-03-28  Federico Mena Quintero  <federico@novell.com>
 

@@ -6031,14 +6031,33 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   struct get_paths_closure info;
+  GtkWindow *toplevel;
+  GtkWidget *current_focus;
 
   info.impl = impl;
   info.result = NULL;
   info.path_from_entry = NULL;
 
-  if (impl->location_entry)
+  toplevel = get_toplevel (GTK_WIDGET (impl));
+  if (toplevel)
+    current_focus = gtk_window_get_focus (toplevel);
+  else
+    current_focus = NULL;
+
+  if (current_focus == impl->browse_files_tree_view)
+    {
+      GtkTreeSelection *selection;
+
+    file_list:
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+      gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+    }
+  else if (impl->location_entry && current_focus == impl->location_entry)
     {
       gboolean is_well_formed, is_empty, is_file_part_empty;
+
+    file_entry:
 
       check_save_entry (impl, &info.path_from_entry, &is_well_formed, &is_empty, &is_file_part_empty);
 
@@ -6053,18 +6072,22 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 	      return NULL;
 	    }
 	}
-    }
 
-  if (!info.path_from_entry || impl->select_multiple)
+      info.result = g_slist_prepend (info.result, info.path_from_entry);
+    }
+  else if (impl->toplevel_last_focus_widget == impl->browse_files_tree_view)
+    goto file_list;
+  else if (impl->location_entry && impl->toplevel_last_focus_widget == impl->location_entry)
+    goto file_entry;
+  else
     {
-      GtkTreeSelection *selection;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-      gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+    /* The focus is on a dialog's action area button or something else */
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	  || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	goto file_entry;
+      else
+	goto file_list; 
     }
-
-  if (info.path_from_entry)
-    info.result = g_slist_prepend (info.result, info.path_from_entry);
 
   /* If there's no folder selected, and we're in SELECT_FOLDER mode, then we
    * fall back to the current directory */
@@ -6884,6 +6907,13 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
        * was focused immediately before it is the file list.  
        */
       goto file_list;
+    }
+  else if (impl->location_entry && impl->toplevel_last_focus_widget == impl->location_entry)
+    {
+      /* The focus is on a dialog's action area button, *and* the widget that
+       * was focused immediately before it is the location entry.
+       */
+      goto save_entry;
     }
   else
     /* The focus is on a dialog's action area button or something else */
