@@ -2622,7 +2622,7 @@ gtk_rc_style_unref
 #endif
 
 #if IN_HEADER(__GTK_RECENT_CHOOSER_H__)
-#if IN_FILE(__GTK_RECENT_CHOOSER_C__))
+#if IN_FILE(__GTK_RECENT_CHOOSER_C__)
 gtk_recent_chooser_set_show_private
 gtk_recent_chooser_get_show_private
 gtk_recent_chooser_set_show_not_found

@@ -1,3 +1,7 @@
+2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/gtk.symbols: Fix a typo that broke aliasing rules.
+
 2006-03-29  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkproperty-quartz.c: Add missing CLIPBOARD atom.
