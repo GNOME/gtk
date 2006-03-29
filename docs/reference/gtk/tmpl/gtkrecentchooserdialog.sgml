@@ -1,0 +1,50 @@
+<!-- ##### SECTION Title ##### -->
+GtkRecentChooserDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRecentChooserDialog ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_dialog_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@first_button_text: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_dialog_new_for_manager ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@manager: 
+@first_button_text: 
+@Varargs: 
+@Returns: 
+
+

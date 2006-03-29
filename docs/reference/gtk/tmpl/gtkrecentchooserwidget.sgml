@@ -1,0 +1,42 @@
+<!-- ##### SECTION Title ##### -->
+GtkRecentChooserWidget
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRecentChooserWidget ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_widget_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_widget_new_for_manager ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+

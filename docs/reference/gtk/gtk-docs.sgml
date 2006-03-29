@@ -91,6 +91,12 @@
 <!ENTITY GtkRadioMenuItem SYSTEM "xml/gtkradiomenuitem.xml">
 <!ENTITY GtkRadioToolButton SYSTEM "xml/gtkradiotoolbutton.xml">
 <!ENTITY GtkRange SYSTEM "xml/gtkrange.xml">
+<!ENTITY GtkRecentChooser SYSTEM "xml/gtkrecentchooser.xml">
+<!ENTITY GtkRecentChooserDialog SYSTEM "xml/gtkrecentchooserdialog.xml">
+<!ENTITY GtkRecentChooserMenu SYSTEM "xml/gtkrecentchoosermenu.xml">
+<!ENTITY GtkRecentChooserWidget SYSTEM "xml/gtkrecentchooserwidget.xml">
+<!ENTITY GtkRecentFilter SYSTEM "xml/gtkrecentfilter.xml">
+<!ENTITY GtkRecentManager SYSTEM "xml/gtkrecentmanager.xml">
 <!ENTITY GtkRuler SYSTEM "xml/gtkruler.xml">
 <!ENTITY GtkScale SYSTEM "xml/gtkscale.xml">
 <!ENTITY GtkScrollbar SYSTEM "xml/gtkscrollbar.xml">
@@ -203,6 +209,7 @@
 <!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "xml/migrating-GtkAboutDialog.sgml">
 <!ENTITY gtk-migrating-GtkColorButton SYSTEM "xml/migrating-GtkColorButton.sgml">
 <!ENTITY gtk-migrating-GtkAssistant SYSTEM "xml/migrating-GtkAssistant.sgml">
+<!ENTITY gtk-migrating-GtkRecentChooser SYSTEM "xml/migrating-GtkRecentChooser.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -554,6 +561,16 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkVRuler;
     </chapter>
 
+    <chapter id="RecentDocuments">
+      <title>Recently Used Documents</title>
+      &GtkRecentManager;
+      &GtkRecentChooser;
+      &GtkRecentChooserDialog;
+      &GtkRecentChooserMenu;
+      &GtkRecentChooserWidget;
+      &GtkRecentFilter;
+    </chapter>
+
     <chapter id="DeprecatedObjects">
       <title>Deprecated</title>
         &GtkCList;      
@@ -597,6 +614,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-migrating-GtkAboutDialog;
     &gtk-migrating-GtkColorButton;
     &gtk-migrating-GtkAssistant;
+    &gtk-migrating-GtkRecentChooser;
   </part>
 
   <part>

@@ -1,5 +1,24 @@
 2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
+	* docs/reference/gtk/migrating-GtkRecentChooser.sgml: Add a migration
+	guide for porting to the new GtkRecent stuff from the old EggRecent
+	code.
+
+	* docs/reference/gtk/tmpl/gtkrecentchooser.sgml:
+	* docs/reference/gtk/tmpl/gtkrecentchooserdialog.sgml:
+	* docs/reference/gtk/tmpl/gtkrecentchoosermenu.sgml:
+	* docs/reference/gtk/tmpl/gtkrecentchooserwidget.sgml:
+	* docs/reference/gtk/tmpl/gtkrecentfilter.sgml:
+	* docs/reference/gtk/tmpl/gtkrecentmanager.sgml: Add template files
+	for the reference guide.
+
+	* docs/reference/gtk/gtk-docs.sgml:
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/Makefile.am: Build glue for add GtkRecent to
+	the reference guide.
+
+2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
 	* tests/Makefile.am:
 	* tests/testrecentchooser.c: Add a test suite for GtkRecentChooser.
 

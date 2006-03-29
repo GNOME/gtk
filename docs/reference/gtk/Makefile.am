@@ -130,6 +130,7 @@ expand_content_files = 				\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
+	migrating-GtkRecentChooser.sgml 	\
 	tree_widget.sgml			\
 	text_widget.sgml			\
 	question_index.sgml

@@ -1,0 +1,170 @@
+<!-- ##### SECTION Title ##### -->
+GtkRecentFilter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRecentFilter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkRecentFilterInfo ##### -->
+<para>
+
+</para>
+
+@contains: 
+@uri: 
+@display_name: 
+@mime_type: 
+@applications: 
+@groups: 
+@age: 
+
+<!-- ##### ENUM GtkRecentFilterFlags ##### -->
+<para>
+
+</para>
+
+@GTK_RECENT_FILTER_URI: 
+@GTK_RECENT_FILTER_DISPLAY_NAME: 
+@GTK_RECENT_FILTER_MIME_TYPE: 
+@GTK_RECENT_FILTER_APPLICATION: 
+@GTK_RECENT_FILTER_GROUP: 
+@GTK_RECENT_FILTER_AGE: 
+
+<!-- ##### USER_FUNCTION GtkRecentFilterFunc ##### -->
+<para>
+
+</para>
+
+@filter_info: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_get_name ##### -->
+<para>
+
+</para>
+
+@filter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_set_name ##### -->
+<para>
+
+</para>
+
+@filter: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_mime_type ##### -->
+<para>
+
+</para>
+
+@filter: 
+@mime_type: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_pattern ##### -->
+<para>
+
+</para>
+
+@filter: 
+@pattern: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_pixbuf_formats ##### -->
+<para>
+
+</para>
+
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_application ##### -->
+<para>
+
+</para>
+
+@filter: 
+@application: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_group ##### -->
+<para>
+
+</para>
+
+@filter: 
+@group: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_age ##### -->
+<para>
+
+</para>
+
+@filter: 
+@days: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_add_custom ##### -->
+<para>
+
+</para>
+
+@filter: 
+@needed: 
+@func: 
+@data: 
+@data_destroy: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_get_needed ##### -->
+<para>
+
+</para>
+
+@filter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_filter_filter ##### -->
+<para>
+
+</para>
+
+@filter: 
+@filter_info: 
+@Returns: 
+
+
