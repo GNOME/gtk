@@ -1,5 +1,10 @@
 2006-03-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page): Emit
+	page-added before switch-page.  (#335691, Christian Persch)
+
+2006-03-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (queue_edited_idle): Handle
 	double queuing, rather than asserting that it does not 
 	happen.  (#330617)

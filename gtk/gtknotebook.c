@@ -3662,7 +3662,22 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 	gtk_widget_show (tab_label);
       else
 	gtk_widget_hide (tab_label);
+
+    page->mnemonic_activate_signal =
+      g_signal_connect (tab_label,
+			"mnemonic_activate",
+			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
+			notebook);
     }
+
+  page->notify_visible_handler = g_signal_connect (child, "notify::visible",
+						   G_CALLBACK (page_visible_cb), notebook);
+
+  g_signal_emit (notebook,
+		 notebook_signals[PAGE_ADDED],
+		 0,
+		 child,
+		 position);
 
   if (!notebook->cur_page)
     {
@@ -3670,16 +3685,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
       gtk_notebook_switch_focus_tab (notebook, NULL);
     }
 
-  page->notify_visible_handler = g_signal_connect (G_OBJECT (child), "notify::visible",
-						   G_CALLBACK (page_visible_cb), notebook);
   gtk_notebook_update_tab_states (notebook);
-
-  if (tab_label)
-    page->mnemonic_activate_signal =
-      g_signal_connect (tab_label,
-			"mnemonic_activate",
-			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
-			notebook);
 
   gtk_widget_child_notify (child, "tab-expand");
   gtk_widget_child_notify (child, "tab-fill");
@@ -3688,12 +3694,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "menu-label");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
-
-  g_signal_emit (notebook,
-		 notebook_signals[PAGE_ADDED],
-		 0,
-		 child,
-		 position);
 
   return position;
 }
