@@ -1,5 +1,10 @@
 2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
+	* tests/Makefile.am:
+	* tests/testrecentchooser.c: Add a test suite for GtkRecentChooser.
+
+2006-03-29  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
 	Import GtkRecent* from libegg.
 
 	* gtk/gtkrecentmanager.[ch]: Add GtkRecentManager, an object

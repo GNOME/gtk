@@ -53,6 +53,7 @@ noinst_PROGRAMS =			\
 	testmultiscreen			\
 	testnotebookdnd			\
 	testrgb				\
+	testrecentchooser 		\
 	testselection			\
 	$(testsocket_programs)		\
 	testspinbutton			\
@@ -103,6 +104,7 @@ testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
+testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
 testsocket_DEPENDENCIES = $(DEPS)
@@ -148,6 +150,7 @@ testmenubars_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
+testrecentchooser_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
@@ -235,6 +238,10 @@ testactions_SOURCES = 		\
 testiconview_SOURCES = 		\
 	testiconview.c		\
 	prop-editor.c
+
+testrecentchooser_SOURCES = 	\
+	prop-editor.c 		\
+	testrecentchooser.c
 
 EXTRA_DIST = 			\
 	prop-editor.h		\
