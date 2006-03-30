@@ -2078,8 +2078,9 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
       /* Translators: this defines whether the week numbers should use
        * localized digits or the ones used in English (0123...).
        *
-       * Translate to "calendar:week:digits|%Id" if you want to use localized
-       * digits.  Leave it alone to whatever it is otherwise.
+       * Translate to "%Id" if you want to use localized digits, or
+       * translate to "%d" otherwise.  Don't include the
+       * "calendar:week:digits|" part in the translation.
        *
        * Note that translating this doesn't guarantee that you get localized
        * digits.  That needs support from your system and locale definition
@@ -2203,8 +2204,9 @@ calendar_paint_day (GtkCalendar *calendar,
   /* Translators: this defines whether the day numbers should use
    * localized digits or the ones used in English (0123...).
    *
-   * Translate to "calendar:day:digits|%Id" if you want to use localized
-   * digits.  Leave it alone to whatever it is otherwise.
+   * Translate to "%Id" if you want to use localized digits, or
+   * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
+   * part in the translation.
    *
    * Note that translating this doesn't guarantee that you get localized
    * digits.  That needs support from your system and locale definition

@@ -1,3 +1,8 @@
+2006-03-30  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkcalendar.c: Fix translation comments for localizable
+	digit formats. (fixes bug #336650)
+
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrecentmanager.h (struct _GtkRecentData): Fix the doc
