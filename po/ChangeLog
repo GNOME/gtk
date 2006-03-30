@@ -1,3 +1,7 @@
+2006-03-30  Stanislav Brabec  <utx@penguin.cz>
+
+	* cs.po: Progress bar fix (#336645).
+
 2006-03-13  Mugurel Tudor  <mugurelu@gnome.ro>
 
 	* ro.po: Updated Romanian translation

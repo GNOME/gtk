@@ -1178,7 +1178,7 @@ msgstr "Nová klávesová zkratka..."
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
