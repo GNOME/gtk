@@ -1,3 +1,10 @@
+2006-03-30  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/gtkprintbackend.c:
+	Default to "pdf,cups" if we found cups, and
+	"pdf,lpr" otherwise.
+
 2006-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/Makefile.am: 

@@ -224,7 +224,7 @@ gtk_print_backend_initialize (void)
       gtk_settings_install_property (g_param_spec_string ("gtk-print-backends",
 							  P_("Default print backend"),
 							  P_("List of the GtkPrintBackend backends to use by default"),
-							  "pdf,cups",
+							  GTK_PRINT_BACKENDS,
 							  GTK_PARAM_READWRITE));
 
       initialized = TRUE;

@@ -8,6 +8,12 @@ endif
 
 DIST_SUBDIRS=theme-bits xdgmime
 
+if HAVE_CUPS
+GTK_PRINT_BACKENDS=pdf,cups
+else
+GTK_PRINT_BACKENDS=pdf,lpr
+endif
+
 INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
@@ -18,6 +24,7 @@ INCLUDES =						\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_HOST=\"$(host)\"				\
 	-DGTK_COMPILATION				\
+	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
