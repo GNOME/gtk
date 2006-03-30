@@ -1,5 +1,8 @@
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tools/widgets.c (get_all_widgets): Add 
+	GtkRecentChooserDialog.
+
 	* gtk/gtkdnd.c (gtk_drag_get_icon): Make sure to get an
 	icon window when constructing the fallback_icon. This
 	fixes a crash when dragging icons between screens in

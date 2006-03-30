@@ -56,6 +56,9 @@
   <link linkend="GtkRadioButton">
     <inlinegraphic fileref="radio-group.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkRecentChooserDialog">
+    <inlinegraphic fileref="recentchooserdialog.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkScale">
     <inlinegraphic fileref="scales.png" format="PNG"></inlinegraphic>
   </link>

@@ -276,6 +276,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/panes.png					\
 	$(srcdir)/images/progressbar.png				\
 	$(srcdir)/images/radio-group.png				\
+	$(srcdir)/images/recentchooserdialog.png			\
 	$(srcdir)/images/scales.png					\
 	$(srcdir)/images/scrolledwindow.png				\
 	$(srcdir)/images/separator.png					\

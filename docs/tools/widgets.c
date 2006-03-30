@@ -311,6 +311,25 @@ create_combo_box (void)
 }
 
 static WidgetInfo *
+create_recent_chooser_dialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_recent_chooser_dialog_new ("Recent Chooser Dialog",
+					  NULL,
+					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					  NULL); 
+  gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
+  
+  info = new_widget_info ("recentchooserdialog", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
 create_text_view (void)
 {
   GtkWidget *widget;
@@ -626,6 +645,7 @@ create_fontsel (void)
 
   return info;
 }
+
 static WidgetInfo *
 create_filesel (void)
 {
@@ -919,6 +939,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_filesel ());
   retval = g_list_prepend (retval, create_fontsel ());
   retval = g_list_prepend (retval, create_assistant ());
+  retval = g_list_prepend (retval, create_recent_chooser_dialog ());
 
   return retval;
 }
