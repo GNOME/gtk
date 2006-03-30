@@ -391,7 +391,7 @@ gtk_recent_filter_add_group (GtkRecentFilter *filter,
 }
 
 /**
- * gtk_recent_filter_add_mime_type:
+ * gtk_recent_filter_add_age:
  * @filter: a #GtkRecentFilter
  * @days: number of days
  *

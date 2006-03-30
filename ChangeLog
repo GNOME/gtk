@@ -1,5 +1,19 @@
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentmanager.h (struct _GtkRecentData): Fix the doc
+	comment format.
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_has_item) 
+	(gtk_recent_manager_purge_items, gtk_recent_manager_lookup_item) 
+	(gtk_recent_manager_get_limit, gtk_recent_manager_add_full) 
+	(gtk_recent_manager_get_items, gtk_recent_manager_remove_item): 
+
+	* gtk/gtkrecentfilter.c (gtk_recent_filter_add_age): 
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_set_show_numbers) 
+	(gtk_recent_chooser_set_sort_func): 
+	* gtk/gtknotebook.h (gtk_notebook_set_tab_detachable): Sync
+	parameter names between .c and .h files to help gtk-doc.
+
 	* gdk/gdkregion-generic.c (gdk_region_get_clipbox): Reword
 	docs to help gtk-doc.
 

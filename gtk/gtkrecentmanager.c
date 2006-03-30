@@ -743,7 +743,7 @@ gtk_recent_manager_set_screen (GtkRecentManager *manager,
 
 /**
  * gtk_recent_manager_set_limit:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @limit: the maximum number of items to return, or -1.
  *
  * Sets the maximum number of item that the gtk_recent_manager_get_items()
@@ -753,20 +753,20 @@ gtk_recent_manager_set_screen (GtkRecentManager *manager,
  * Since: 2.10
  */
 void
-gtk_recent_manager_set_limit (GtkRecentManager *recent_manager,
+gtk_recent_manager_set_limit (GtkRecentManager *manager,
 			      gint              limit)
 {
   GtkRecentManagerPrivate *priv;
   
-  g_return_if_fail (GTK_IS_RECENT_MANAGER (recent_manager));
+  g_return_if_fail (GTK_IS_RECENT_MANAGER (manager));
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
   priv->limit = limit;
 }
 
 /**
  * gtk_recent_manager_get_limit:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  *
  * Gets the maximum number of items that the gtk_recent_manager_get_items()
  * function should return.
@@ -776,19 +776,19 @@ gtk_recent_manager_set_limit (GtkRecentManager *recent_manager,
  * Since: 2.10
  */
 gint
-gtk_recent_manager_get_limit (GtkRecentManager *recent_manager)
+gtk_recent_manager_get_limit (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), DEFAULT_LIMIT);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), DEFAULT_LIMIT);
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
   return priv->limit;
 }
 
 /**
  * gtk_recent_manager_add_item:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @uri: a valid URI
  * @error: return location for a #GError, or %NULL
  *
@@ -808,7 +808,7 @@ gtk_recent_manager_get_limit (GtkRecentManager *recent_manager)
  * Since: 2.10
  */
 gboolean
-gtk_recent_manager_add_item (GtkRecentManager  *recent_manager,
+gtk_recent_manager_add_item (GtkRecentManager  *manager,
 			     const gchar       *uri,
 			     GError           **error)
 {
@@ -816,7 +816,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *recent_manager,
   GError *add_error;
   gboolean retval;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), FALSE);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
   recent_data = g_slice_new (GtkRecentData);
@@ -851,7 +851,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *recent_manager,
   recent_data->is_private = FALSE;
   
   add_error = NULL;
-  retval = gtk_recent_manager_add_full (recent_manager, uri, recent_data, &add_error);
+  retval = gtk_recent_manager_add_full (manager, uri, recent_data, &add_error);
   
   g_free (recent_data->mime_type);
   g_free (recent_data->app_name);
@@ -871,7 +871,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *recent_manager,
 
 /**
  * gtk_recent_manager_add_full:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @uri: a valid URI
  * @recent_data: metadata of the resource
  * @error: return location for a #GError, or %NULL
@@ -902,14 +902,14 @@ gtk_recent_manager_add_item (GtkRecentManager  *recent_manager,
  * Since: 2.10
  */
 gboolean
-gtk_recent_manager_add_full (GtkRecentManager     *recent_manager,
+gtk_recent_manager_add_full (GtkRecentManager     *manager,
 			     const gchar          *uri,
 			     const GtkRecentData  *data,
 			     GError              **error)
 {
   GtkRecentManagerPrivate *priv;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), FALSE);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
@@ -967,7 +967,7 @@ gtk_recent_manager_add_full (GtkRecentManager     *recent_manager,
       return FALSE;
     }
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
 
   if (!priv->recent_items)
     {
@@ -1007,14 +1007,14 @@ gtk_recent_manager_add_full (GtkRecentManager     *recent_manager,
    */
   priv->is_dirty = TRUE;
   
-  gtk_recent_manager_changed (recent_manager);
+  gtk_recent_manager_changed (manager);
   
   return TRUE;
 }
 
 /**
  * gtk_recent_manager_remove_item:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @uri: the URI of the item you wish to remove
  * @error: return location for a #GError, or %NULL
  *
@@ -1027,18 +1027,18 @@ gtk_recent_manager_add_full (GtkRecentManager     *recent_manager,
  * Since: 2.10
  */
 gboolean
-gtk_recent_manager_remove_item (GtkRecentManager  *recent_manager,
+gtk_recent_manager_remove_item (GtkRecentManager  *manager,
 				const gchar       *uri,
 				GError           **error)
 {
   GtkRecentManagerPrivate *priv;
   GError *remove_error = NULL;
 
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), FALSE);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
   
   if (!priv->recent_items)
     {
@@ -1063,14 +1063,14 @@ gtk_recent_manager_remove_item (GtkRecentManager  *recent_manager,
 
   priv->is_dirty = TRUE;
 
-  gtk_recent_manager_changed (recent_manager);
+  gtk_recent_manager_changed (manager);
   
   return TRUE;
 }
 
 /**
  * gtk_recent_manager_has_item:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @uri: a URI
  *
  * Checks whether there is a recently used resource registered
@@ -1081,15 +1081,15 @@ gtk_recent_manager_remove_item (GtkRecentManager  *recent_manager,
  * Since: 2.10
  */
 gboolean
-gtk_recent_manager_has_item (GtkRecentManager *recent_manager,
+gtk_recent_manager_has_item (GtkRecentManager *manager,
 			     const gchar      *uri)
 {
   GtkRecentManagerPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), FALSE);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  priv = recent_manager->priv;
+  priv = manager->priv;
   g_return_val_if_fail (priv->recent_items != NULL, FALSE);
 
   return g_bookmark_file_has_item (priv->recent_items, uri);
@@ -1161,7 +1161,7 @@ build_recent_info (GBookmarkFile  *bookmarks,
 
 /**
  * gtk_recent_manager_lookup_item:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @uri: a URI
  * @error: a return location for a #GError, or %NULL
  *
@@ -1175,7 +1175,7 @@ build_recent_info (GBookmarkFile  *bookmarks,
  *   gtk_recent_info_unref().
  **/
 GtkRecentInfo *
-gtk_recent_manager_lookup_item (GtkRecentManager  *recent_manager,
+gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
 				const gchar       *uri,
 				GError           **error)
 {
@@ -1183,11 +1183,11 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *recent_manager,
   GtkRecentInfo *info = NULL;
   gboolean res;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), NULL);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), NULL);
   g_return_val_if_fail (uri != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
   if (!priv->recent_items)
     {
       priv->recent_items = g_bookmark_file_new ();
@@ -1288,7 +1288,7 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
 
 /**
  * gtk_recent_manager_get_items:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  *
  * Gets the list of recently used resources.
  *
@@ -1299,16 +1299,16 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
  * Since: 2.10
  */
 GList *
-gtk_recent_manager_get_items (GtkRecentManager *recent_manager)
+gtk_recent_manager_get_items (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
   GList *retval = NULL;
   gchar **uris;
   gsize uris_len, i;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), NULL);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), NULL);
   
-  priv = recent_manager->priv;
+  priv = manager->priv;
   if (!priv->recent_items)
     return NULL;
   
@@ -1378,7 +1378,7 @@ purge_recent_items_list (GtkRecentManager  *manager,
 
 /**
  * gtk_recent_manager_purge_items:
- * @recent_manager: a #GtkRecentManager
+ * @manager: a #GtkRecentManager
  * @error: a return location for a #GError, or %NULL
  *
  * Purges every item from the recently used resources list.
@@ -1389,15 +1389,15 @@ purge_recent_items_list (GtkRecentManager  *manager,
  * Since: 2.10
  */
 gint
-gtk_recent_manager_purge_items (GtkRecentManager  *recent_manager,
+gtk_recent_manager_purge_items (GtkRecentManager  *manager,
 				GError           **error)
 {
   GtkRecentManagerPrivate *priv;
   gint count, purged;
   
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), -1);
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), -1);
 
-  priv = recent_manager->priv;
+  priv = manager->priv;
   if (!priv->recent_items)
     return 0;
   
@@ -1405,7 +1405,7 @@ gtk_recent_manager_purge_items (GtkRecentManager  *recent_manager,
   if (!count)
     return 0;
   
-  purge_recent_items_list (recent_manager, error);
+  purge_recent_items_list (manager, error);
   
   purged = count - g_bookmark_file_get_size (priv->recent_items);
 
@@ -2102,8 +2102,8 @@ gtk_recent_info_exists (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_match:
- * @a: a #GtkRecentInfo
- * @b: a #GtkRecentInfo
+ * @info_a: a #GtkRecentInfo
+ * @info_b: a #GtkRecentInfo
  *
  * Checks whether two #GtkRecentInfo structures point to the same
  * resource.
@@ -2114,18 +2114,19 @@ gtk_recent_info_exists (GtkRecentInfo *info)
  * Since: 2.10
  */
 gboolean
-gtk_recent_info_match (GtkRecentInfo *a,
-		       GtkRecentInfo *b)
+gtk_recent_info_match (GtkRecentInfo *info_a,
+		       GtkRecentInfo *info_b)
 {
-  g_return_val_if_fail (a != NULL, FALSE);
-  g_return_val_if_fail (b != NULL, FALSE);
+  g_return_val_if_fail (info_a != NULL, FALSE);
+  g_return_val_if_fail (info_b != NULL, FALSE);
   
-  return (0 == strcmp (a->uri, b->uri));
+  return (0 == strcmp (info_a->uri, info_b->uri));
 }
 
 /* taken from gnome-vfs-uri.c */
 static const gchar *
-get_method_string (const gchar *substring, gchar **method_string)
+get_method_string (const gchar  *substring, 
+		   gchar       **method_string)
 {
   const gchar *p;
   char *method;

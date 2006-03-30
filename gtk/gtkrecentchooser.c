@@ -502,7 +502,7 @@ gtk_recent_chooser_get_show_tips (GtkRecentChooser *chooser)
 /**
  * gtk_recent_chooser_set_show_numbers:
  * @chooser: a #GtkRecentChooser
- * @show_private: %TRUE to show numbers, %FALSE otherwise
+ * @show_numbers: %TRUE to show numbers, %FALSE otherwise
  *
  * Whether to show recently used resources prepended by a unique number.
  *
@@ -588,7 +588,7 @@ gtk_recent_chooser_get_sort_type (GtkRecentChooser *chooser)
  * @chooser: a #GtkRecentChooser
  * @sort_func: the comparison function
  * @sort_data: user data to pass to @sort_func, or %NULL
- * @destroy_data: destroy notifier for @sort_data, or %NULL
+ * @data_destroy: destroy notifier for @sort_data, or %NULL
  *
  * Sets the comparison function used when sorting to be @sort_func.  If
  * the @chooser has the sort type set to #GTK_RECENT_SORT_CUSTOM then

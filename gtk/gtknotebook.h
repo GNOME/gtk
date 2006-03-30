@@ -265,7 +265,7 @@ gboolean gtk_notebook_get_tab_detachable  (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_tab_detachable      (GtkNotebook *notebook,
 					   GtkWidget   *child,
-					   gboolean     reorderable);
+					   gboolean     detachable);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
