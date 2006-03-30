@@ -1,3 +1,8 @@
+2006-03-30  Michael Emmel  <mike.emmel@gmail.com>
+
+    * gdk/directfb/gdkpixmap-directfb.c implement
+	    (gdk_pixmap_foreign_new_for_screen)
+
 2006-03-30  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	Add documentation for the GtkLinkButton (#336592)

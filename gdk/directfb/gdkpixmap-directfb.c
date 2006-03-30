@@ -314,6 +314,18 @@ gdk_pixmap_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow anid)
 }
 
 GdkPixmap*
+gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
+                                   GdkNativeWindow  anid,
+                                   gint             width,
+                                   gint             height,
+                                   gint             depth)
+{
+  /*Use the root drawable for now since only one screen */
+  return gdk_pixmap_new(NULL,width,height,depth);
+}
+
+
+GdkPixmap*
 gdk_pixmap_lookup (GdkNativeWindow anid)
 {
   g_warning(" gdk_pixmap_lookup unsuporrted \n");
