@@ -446,6 +446,18 @@ gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
   return gdk_pixmap_foreign_new (anid);
 }
 
+GdkPixmap *
+gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
+				   GdkNativeWindow  anid,
+				   gint             width,
+				   gint             height,
+				   gint             depth)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return gdk_pixmap_foreign_new (anid);
+}
+
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {

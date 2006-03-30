@@ -1254,6 +1254,7 @@ gdkx_visual_get
 gdkx_colormap_get
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
+gdk_pixmap_foreign_new_for_screen
 gdk_window_foreign_new
 gdk_window_foreign_new_for_display
 gdk_xid_table_lookup

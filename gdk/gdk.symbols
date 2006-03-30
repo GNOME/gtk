@@ -917,6 +917,7 @@ gdk_pixmap_get_type G_GNUC_CONST
 gdk_pixmap_create_from_data
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
+gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
 gdk_pixmap_new

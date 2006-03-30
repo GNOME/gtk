@@ -108,6 +108,11 @@ GdkPixmap*    gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
 						  GdkNativeWindow  anid);
 GdkPixmap*    gdk_pixmap_lookup_for_display      (GdkDisplay      *display,
 						  GdkNativeWindow  anid);
+GdkPixmap*    gdk_pixmap_foreign_new_for_screen  (GdkScreen       *screen,
+						  GdkNativeWindow  anid,
+						  gint             width,
+                                                  gint             height,
+                                                  gint             depth);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_bitmap_ref                 gdk_drawable_ref

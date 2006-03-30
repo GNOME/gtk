@@ -1,5 +1,12 @@
 2006-03-29  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk/gdk.symbols:
+	* gdk/gdkpixmap.h:
+	* gdk/win32/gdkpixmap-win32.c:
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_foreign_new_for_screen):
+	New function to allow wrapping a native pixmap without
+	a server roundtrip.  (#334954, David Baron) 
+
 	* gtk/gtk.symbols:
 	* gtk/gtkrecent*.c: Fix some symbol aliasing glitches.
 
