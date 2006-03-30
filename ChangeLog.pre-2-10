@@ -1,6 +1,13 @@
+2006-03-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_get_icon): Make sure to get an
+	icon window when constructing the fallback_icon. This
+	fixes a crash when dragging icons between screens in
+	nautilus.  (#325751, Hylke van der Schaaf)
+
 2006-03-30  Michael Emmel  <mike.emmel@gmail.com>
 
-    * gdk/directfb/gdkpixmap-directfb.c implement
+	* gdk/directfb/gdkpixmap-directfb.c implement
 	    (gdk_pixmap_foreign_new_for_screen)
 
 2006-03-30  Emmanuele Bassi  <ebassi@cvs.gnome.org>

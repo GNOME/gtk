@@ -288,6 +288,13 @@ static gboolean gtk_drag_button_release_cb     (GtkWidget         *widget,
 					        gpointer           data);
 static gboolean gtk_drag_abort_timeout         (gpointer           data);
 
+static void     set_icon_stock_pixbuf          (GdkDragContext    *context,
+						const gchar       *stock_id,
+						GdkPixbuf         *pixbuf,
+						gint               hot_x,
+						gint               hot_y,
+						gboolean           force_window);
+
 /************************
  * Cursor and Icon data *
  ************************/
@@ -2764,7 +2771,16 @@ gtk_drag_get_icon (GtkDragSourceInfo *info,
 	  save_destroy_icon = info->destroy_icon;
 
 	  info->icon_window = NULL;
-	  gtk_drag_set_icon_default (info->context);
+	  if (!default_icon_pixmap)
+	    set_icon_stock_pixbuf (info->context, 
+				   GTK_STOCK_DND, NULL, -2, -2, TRUE);
+	  else
+	    gtk_drag_set_icon_pixmap (info->context, 
+				      default_icon_colormap, 
+				      default_icon_pixmap, 
+				      default_icon_mask,
+				      default_icon_hot_x,
+				      default_icon_hot_y);
 	  info->fallback_icon = info->icon_window;
 	  
 	  info->icon_window = save_icon_window;
@@ -3145,7 +3161,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
  * icon.
  **/
 void 
-gtk_drag_set_icon_default (GdkDragContext    *context)
+gtk_drag_set_icon_default (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (context->is_source);
