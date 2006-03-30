@@ -180,7 +180,8 @@ gdk_region_copy (GdkRegion *region)
  * @region: a #GdkRegion
  * @rectangle: return location for the clipbox
  *
- * Returns the smallest rectangle which includes the entire #GdkRegion.
+ * Obtains the smallest rectangle which includes the entire #GdkRegion.
+ *
  */
 void
 gdk_region_get_clipbox (GdkRegion    *region, 
