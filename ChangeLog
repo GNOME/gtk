@@ -1,5 +1,46 @@
 2006-03-30  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtk.symbols:
+	Update
+	
+	* gtk/gtkprintbackend.[ch]:
+	Add dnotify to gtk_print_backend_print_stream
+	
+	* gtk/gtkprinter-private.h:
+	Declare gtk_print_job_set_status
+	
+	* gtk/gtkprinter.[ch]:
+	Remove gtk_printer_prepare_job.
+	
+	* gtk/gtkprintjob.[ch]:
+	Now you create print job directly with gtk_print_job_new() and
+	they'll be prepared automatically.
+	Add status_changed signal and get_status.
+	Add gtk_print_job_set_source_file to allow sending a file.
+	
+	* gtk/gtkprintoperation-private.h:
+	Add destroy notify for platform_data.
+	Declare _gtk_print_operation_set_status.
+	
+	* gtk/gtkprintoperation-unix.c:
+	Hook up status change handling.
+	Use the new way to get a print job.
+
+	* gtk/gtkprintoperation.[ch]:
+	Add status_changed signal and get_status/is_finished.
+
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Update to use new APIs and set status on the job.
+	Cups polls for the status.
+	
+	* tests/print-editor.c:
+	Track the print operations in the status bar.
+
+2006-03-30  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/Makefile.am:
 	* gtk/gtkprintbackend.c:
 	Default to "pdf,cups" if we found cups, and

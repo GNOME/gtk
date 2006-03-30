@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 struct _GtkPrintOperationPrivate
 {
+  GtkPrintStatus status;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
   char *job_name;
@@ -60,6 +61,7 @@ struct _GtkPrintOperationPrivate
   void (*end_page) (GtkPrintOperation *operation,
 		    GtkPrintContext *print_context);
   void (*end_run) (GtkPrintOperation *operation);
+  GDestroyNotify free_platform_data;
 };
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *operation,
@@ -67,7 +69,8 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  gboolean *do_print,
 									  GError **error);
 
-
+void _gtk_print_operation_set_status (GtkPrintOperation *op,
+				      GtkPrintStatus status);
 
 /* GtkPrintContext private functions: */
 

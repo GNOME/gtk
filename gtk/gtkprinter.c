@@ -305,29 +305,6 @@ gtk_printer_is_virtual (GtkPrinter *printer)
   return printer->priv->is_virtual;
 }
 
-GtkPrintJob *
-gtk_printer_prepare_job (GtkPrinter *printer,
-			 GtkPrintSettings *settings,
-			 GtkPageSetup *page_setup,
-			 const gchar *title,
-			 GError **error)
-{
-  GtkPrintJob *job;
-
-  job = gtk_print_job_new (title,
-			   settings,
-			   page_setup,
-                           printer);
-
-  if (!gtk_print_job_prepare (job, error))
-    {
-      g_object_unref (G_OBJECT (job));
-      job = NULL;
-    }
-  
-  return job;
-}
-
 void
 _gtk_printer_request_details (GtkPrinter *printer)
 {

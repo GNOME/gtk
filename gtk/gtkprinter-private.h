@@ -23,7 +23,7 @@
 
 #include <glib.h>
 #include "gtkprinter.h"
-#include "gtkprintsettings.h"
+#include "gtkprintoperation.h"
 #include "gtkprinteroptionset.h"
 #include "gtkpagesetup.h"
 
@@ -72,6 +72,11 @@ void                 _gtk_printer_get_hard_margins          (GtkPrinter         
 							     double              *left,
 							     double              *right);
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
+
+
+/* GtkPrintJob private methods: */
+void gtk_print_job_set_status (GtkPrintJob   *job,
+			       GtkPrintStatus status);
 
 G_END_DECLS
 #endif /* __GTK_PRINT_OPERATION_PRIVATE_H__ */

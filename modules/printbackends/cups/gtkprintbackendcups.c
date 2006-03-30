@@ -138,6 +138,10 @@ static void                 cups_printer_get_hard_margins          (GtkPrinter  
 								    double                            *right);
 static void                 set_option_from_settings               (GtkPrinterOption                  *option,
 								    GtkPrintSettings                  *setting);
+static void                 cups_begin_polling_info                (GtkPrintBackendCups               *print_backend,
+								    GtkPrintJob                       *job,
+								    int                                job_id);
+static gboolean             cups_job_info_poll_timeout             (gpointer                           user_data);
 
 static void
 gtk_print_backend_cups_register_type (GTypeModule *module)
@@ -281,7 +285,17 @@ typedef struct {
   GtkPrintJobCompleteFunc callback;
   GtkPrintJob *job;
   gpointer user_data;
-} _PrintStreamData;
+  GDestroyNotify dnotify;
+} CupsPrintStreamData;
+
+static void
+cups_free_print_stream_data (CupsPrintStreamData *data)
+{
+  if (data->dnotify)
+    data->dnotify (data->user_data);
+  g_object_unref (data->job);
+  g_free (data);
+}
 
 static void
 cups_print_cb (GtkPrintBackendCups *print_backend,
@@ -289,8 +303,7 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
                gpointer user_data)
 {
   GError *error = NULL;
-
-  _PrintStreamData *ps = (_PrintStreamData *) user_data;
+  CupsPrintStreamData *ps = user_data;
 
   if (gtk_cups_result_is_error (result))
     error = g_error_new_literal (gtk_print_error_quark (),
@@ -298,9 +311,33 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
                                  gtk_cups_result_get_error_string (result));
 
   if (ps->callback)
-    ps->callback (ps->job, ps->user_data, &error);
+    ps->callback (ps->job, ps->user_data, error);
 
-  g_free (ps);
+  if (error == NULL)
+    {
+      int job_id = 0;
+      ipp_attribute_t *attr;		/* IPP job-id attribute */
+      ipp_t *response = gtk_cups_result_get_response (result);
+
+      if ((attr = ippFindAttribute(response, "job-id", IPP_TAG_INTEGER)) != NULL)
+	job_id = attr->values[0].integer;
+
+
+        if (job_id == 0)
+	  gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_FINISHED);
+	else
+	  {
+	    gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_PENDING);
+	    cups_begin_polling_info (print_backend, ps->job, job_id);
+	  }
+    }
+  else
+    gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_FINISHED_ABORTED);
+
+  
+  if (error)
+    g_error_free (error);
+  
 }
 
 static void
@@ -324,16 +361,17 @@ add_cups_options (const char *key,
 static void
 gtk_print_backend_cups_print_stream (GtkPrintBackend *print_backend,
                                      GtkPrintJob *job,
-				     const gchar *title,
 				     gint data_fd,
 				     GtkPrintJobCompleteFunc callback,
-				     gpointer user_data)
+				     gpointer user_data,
+				     GDestroyNotify dnotify)
 {
   GError *error;
   GtkPrinterCups *cups_printer;
-  _PrintStreamData *ps;
+  CupsPrintStreamData *ps;
   GtkCupsRequest *request;
   GtkPrintSettings *settings;
+  const gchar *title;
 
   cups_printer = GTK_PRINTER_CUPS (gtk_print_job_get_printer (job));
   settings = gtk_print_job_get_settings (job);
@@ -353,22 +391,24 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend *print_backend,
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME, "requesting-user-name",
                                    NULL, cupsUser());
 
+  title = gtk_print_job_get_title (job);
   if (title)
     gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME, "job-name", NULL,
                                      title);
 
   gtk_print_settings_foreach (settings, add_cups_options, request);
   
-  ps = g_new0 (_PrintStreamData, 1);
+  ps = g_new0 (CupsPrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
-  ps->job = job;
+  ps->dnotify = dnotify;
+  ps->job = g_object_ref (job);
 
   cups_request_execute (GTK_PRINT_BACKEND_CUPS (print_backend),
                         request,
                         (GtkPrintCupsResponseCallbackFunc) cups_print_cb,
                         ps,
-                        NULL,
+                        (GDestroyNotify)cups_free_print_stream_data,
                         &error);
 }
 
@@ -634,6 +674,9 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
   
   cups_printer->device_uri = g_strdup_printf ("/printers/%s", printer_name);
 
+  state_msg = "";
+  loc = "";
+  desc = "";
   for (attr = response->attrs; attr != NULL; attr = attr->next) 
     {
       if (!attr->name)
@@ -730,6 +773,167 @@ cups_request_printer_info (GtkPrintBackendCups *print_backend,
                         (GDestroyNotify) g_free,
                         &error);
  
+}
+
+
+typedef struct {
+  GtkPrintBackendCups *print_backend;
+  GtkPrintJob *job;
+  int job_id;
+  int counter;
+} CupsJobPollData;
+
+static void
+job_object_died	(gpointer user_data,
+		 GObject  *where_the_object_was)
+{
+  CupsJobPollData *data = user_data;
+  data->job = NULL;
+}
+
+static void
+cups_job_poll_data_free (CupsJobPollData *data)
+{
+  if (data->job)
+    g_object_weak_unref (G_OBJECT (data->job), job_object_died, data);
+    
+  g_free (data);
+}
+
+static void
+cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
+			  GtkCupsResult *result,
+			  gpointer user_data)
+{
+  CupsJobPollData *data = user_data;
+  ipp_attribute_t *attr;
+  ipp_t *response;
+  int state;
+  gboolean done;
+
+  if (data->job == NULL)
+    {
+      cups_job_poll_data_free (data);
+      return;
+    }
+
+  data->counter++;
+  
+  response = gtk_cups_result_get_response (result);
+
+  state = 0;
+  for (attr = response->attrs; attr != NULL; attr = attr->next) 
+    {
+      if (!attr->name)
+        continue;
+      
+      _CUPS_MAP_ATTR_INT (attr, state, "job-state");
+    }
+  
+  done = FALSE;
+  switch (state)
+    {
+    case IPP_JOB_PENDING:
+    case IPP_JOB_HELD:
+    case IPP_JOB_STOPPED:
+      gtk_print_job_set_status (data->job,
+				GTK_PRINT_STATUS_PENDING);
+      break;
+    case IPP_JOB_PROCESSING:
+      gtk_print_job_set_status (data->job,
+				GTK_PRINT_STATUS_PROCESSING);
+      break;
+    default:
+    case IPP_JOB_CANCELLED:
+    case IPP_JOB_ABORTED:
+      gtk_print_job_set_status (data->job,
+				GTK_PRINT_STATUS_FINISHED_ABORTED);
+      done = TRUE;
+      break;
+    case 0:
+    case IPP_JOB_COMPLETED:
+      gtk_print_job_set_status (data->job,
+				GTK_PRINT_STATUS_FINISHED);
+      done = TRUE;
+      break;
+    }
+
+  if (!done && data->job != NULL)
+    {
+      guint32 timeout;
+
+      if (data->counter < 5)
+	timeout = 100;
+      else if (data->counter < 10)
+	timeout = 500;
+      else
+	timeout = 1000;
+      
+      g_timeout_add (timeout, cups_job_info_poll_timeout, data);
+    }
+  else
+    cups_job_poll_data_free (data);    
+}
+
+static void
+cups_request_job_info (CupsJobPollData *data)
+{
+  GError *error;
+  GtkCupsRequest *request;
+  gchar *printer_uri;
+
+  
+  error = NULL;
+  request = gtk_cups_request_new (NULL,
+                                  GTK_CUPS_POST,
+                                  IPP_GET_JOB_ATTRIBUTES,
+				  0,
+				  NULL,
+				  NULL);
+
+  printer_uri = g_strdup_printf ("ipp://localhost/jobs/%d", data->job_id);
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI,
+                                   "job-uri", NULL, printer_uri);
+  g_free (printer_uri);
+
+  cups_request_execute (data->print_backend,
+                        request,
+                        (GtkPrintCupsResponseCallbackFunc) cups_request_job_info_cb,
+                        data,
+                        NULL,
+                        &error);
+}
+
+static gboolean
+cups_job_info_poll_timeout (gpointer user_data)
+{
+  CupsJobPollData *data = user_data;
+  
+  if (data->job == NULL)
+    cups_job_poll_data_free (data);
+  else
+    cups_request_job_info (data);
+  
+  return FALSE;
+}
+
+static void
+cups_begin_polling_info (GtkPrintBackendCups *print_backend,
+			 GtkPrintJob *job,
+			 int job_id)
+{
+  CupsJobPollData *data;
+
+  data = g_new0 (CupsJobPollData, 1);
+
+  data->print_backend = print_backend;
+  data->job = job;
+  data->job_id = job_id;
+  data->counter = 0;
+
+  g_object_weak_ref (G_OBJECT (job), job_object_died, data);
+
+  cups_request_job_info (data);
 }
 
 static gint

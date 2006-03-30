@@ -2,9 +2,8 @@ Temporary file with stuff left to do in the printing work:
 	
 Highlevel API:
 * Add a way to make the cairo printing callbacks (optionally) happen in a thread
-* Add API to EggPrintOperation to handle job status feedback while printing.
-  Needs something like "job_status_changed" and "job_finished" signals
-  Also during page generation. Should have progress bar?
+* Do we want a progress bar during page generation?
+  At least a signal tracking the page generation progress.
 * Add API to allow the app to add a custom tab with gtk+ widgets to the
   print dialog. We can hopefully implement this on osx & win32.
 * Want a print preview API.
@@ -13,6 +12,7 @@ Highlevel API:
 Lowlevel API:
 * Figure out the best way to configure module loading (textfile, gtkrc or 
   just frob the modules directory)
+* Maybe we want gtk_print_job_cancel?  
 
 PDF backend:
 * Change to using a GtkFileChooserEntry to get file names when we move to 
@@ -41,7 +41,7 @@ General:
 * use filechooserentry => J5
 * get the right DPI from the printer into cairo
 * gets errors on alex laptop
-* general print to file (ps+pdf)
+* general print to file module (ps+pdf)
 
 Page setting dialog:
 * insensitive margins-from-printer if list is empty

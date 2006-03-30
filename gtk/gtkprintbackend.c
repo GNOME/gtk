@@ -358,19 +358,19 @@ gtk_print_backend_find_printer (GtkPrintBackend *print_backend,
 void
 gtk_print_backend_print_stream (GtkPrintBackend *print_backend,
                                 GtkPrintJob *job,
-                                const gchar *title,
                                 gint data_fd,
                                 GtkPrintJobCompleteFunc callback,
-                                gpointer user_data)
+                                gpointer user_data,
+				GDestroyNotify dnotify)
 {
   g_return_if_fail (GTK_IS_PRINT_BACKEND (print_backend));
 
-  return GTK_PRINT_BACKEND_GET_IFACE (print_backend)->print_stream (print_backend,
-                                                                    job,
-                                                                    title,
-                                                                    data_fd,
-                                                                    callback,
-                                                                    user_data);
+  GTK_PRINT_BACKEND_GET_IFACE (print_backend)->print_stream (print_backend,
+							     job,
+							     data_fd,
+							     callback,
+							     user_data,
+							     dnotify);
 }
 
 #define __GTK_PRINT_BACKEND_C__

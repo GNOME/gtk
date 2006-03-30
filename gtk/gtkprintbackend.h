@@ -67,10 +67,10 @@ struct _GtkPrintBackendIface
                                 const gchar *printer_name);
   void         (*print_stream) (GtkPrintBackend *print_backend,
                                 GtkPrintJob *job,
-				const gchar *title,
 				gint data_fd,
 				GtkPrintJobCompleteFunc callback,
-				gpointer user_data);
+				gpointer user_data,
+				GDestroyNotify dnotify);
 
   /* Printer methods: */
   void                  (*printer_request_details)           (GtkPrinter *printer);
@@ -112,10 +112,10 @@ GtkPrinter *gtk_print_backend_find_printer     (GtkPrintBackend         *print_b
 						const gchar             *printer_name);
 void        gtk_print_backend_print_stream     (GtkPrintBackend         *print_backend,
 						GtkPrintJob             *job,
-						const gchar             *title,
 						gint                     data_fd,
 						GtkPrintJobCompleteFunc  callback,
-						gpointer                 user_data);
+						gpointer                 user_data,
+						GDestroyNotify           dnotify);
 GList *     gtk_print_backend_load_modules     (void);
 
 

@@ -31,6 +31,7 @@ enum {
   REQUEST_PAGE_SETUP,
   DRAW_PAGE,
   END_PRINT,
+  STATUS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -53,6 +54,13 @@ gtk_print_operation_finalize (GObject *object)
 {
   GtkPrintOperation *print_operation = GTK_PRINT_OPERATION (object);
 
+  if (print_operation->priv->free_platform_data &&
+      print_operation->priv->platform_data)
+    {
+      print_operation->priv->free_platform_data (print_operation->priv->platform_data);
+      print_operation->priv->free_platform_data = NULL;
+    }
+
   if (print_operation->priv->default_page_setup)
     g_object_unref (print_operation->priv->default_page_setup);
   
@@ -61,6 +69,7 @@ gtk_print_operation_finalize (GObject *object)
   
   g_free (print_operation->priv->pdf_target);
   g_free (print_operation->priv->job_name);
+
   G_OBJECT_CLASS (gtk_print_operation_parent_class)->finalize (object);
 }
 
@@ -71,6 +80,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
 
   operation->priv = GTK_PRINT_OPERATION_GET_PRIVATE (operation);
 
+  operation->priv->status = GTK_PRINT_STATUS_INITIAL;
   operation->priv->default_page_setup = NULL;
   operation->priv->print_settings = NULL;
   operation->priv->nr_of_pages = -1;
@@ -132,6 +142,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
+
+  signals[STATUS_CHANGED] =
+   g_signal_new ("status-changed",
+                 G_TYPE_FROM_CLASS (class),
+                 G_SIGNAL_RUN_LAST,
+                 G_STRUCT_OFFSET (GtkPrintOperationClass, status_changed),
+                 NULL, NULL,
+                 g_cclosure_marshal_VOID__VOID,
+                 G_TYPE_NONE, 0);
 }
 
 GtkPrintOperation *
@@ -237,6 +256,37 @@ gtk_print_operation_set_unit (GtkPrintOperation  *op,
 {
   op->priv->unit = unit;
 }
+
+void
+_gtk_print_operation_set_status (GtkPrintOperation *op,
+				 GtkPrintStatus status)
+{
+  if (op->priv->status == status)
+    return;
+
+  op->priv->status = status;
+  g_signal_emit (op, signals[STATUS_CHANGED], 0);
+}
+
+
+GtkPrintStatus
+gtk_print_operation_get_status (GtkPrintOperation  *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), GTK_PRINT_STATUS_FINISHED_ABORTED);
+
+  return op->priv->status;
+}
+
+gboolean
+gtk_print_operation_is_finished (GtkPrintOperation  *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), TRUE);
+
+  return
+    op->priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED ||
+    op->priv->status == GTK_PRINT_STATUS_FINISHED;
+}
+
 
 void
 gtk_print_operation_set_show_dialog (GtkPrintOperation  *op,
@@ -404,7 +454,10 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   
   result = run_print_dialog (op, parent, &do_print, error);
   if (!do_print)
-    return result;
+    {
+      _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED);
+      return result;
+    }
   
   if (op->priv->manual_collation)
     {
@@ -422,6 +475,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   initial_page_setup = create_page_setup (op);
   _gtk_print_context_set_page_setup (print_context, initial_page_setup);
 
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
   g_return_val_if_fail (op->priv->nr_of_pages != -1, FALSE);
@@ -447,6 +501,8 @@ gtk_print_operation_run (GtkPrintOperation  *op,
       ranges[0].end = op->priv->nr_of_pages - 1;
     }
   
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA);
+
   for (i = 0; i < uncollated_copies; i++)
     {
       for (range = 0; range < num_ranges; range ++)

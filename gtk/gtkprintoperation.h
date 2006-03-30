@@ -23,6 +23,7 @@
 
 #include <glib-object.h>
 #include <cairo.h>
+#include "gtkmain.h"
 #include "gtkenums.h"
 #include "gtkwindow.h"
 #include "gtkpagesetup.h"
@@ -38,6 +39,17 @@ G_BEGIN_DECLS
 typedef struct _GtkPrintOperationClass   GtkPrintOperationClass;
 typedef struct _GtkPrintOperationPrivate GtkPrintOperationPrivate;
 typedef struct _GtkPrintOperation        GtkPrintOperation;
+
+typedef enum {
+  GTK_PRINT_STATUS_INITIAL,
+  GTK_PRINT_STATUS_PREPARING,
+  GTK_PRINT_STATUS_GENERATING_DATA,
+  GTK_PRINT_STATUS_SENDING_DATA,
+  GTK_PRINT_STATUS_PENDING,
+  GTK_PRINT_STATUS_PROCESSING,
+  GTK_PRINT_STATUS_FINISHED,
+  GTK_PRINT_STATUS_FINISHED_ABORTED
+} GtkPrintStatus;
 
 struct _GtkPrintOperation
 {
@@ -61,6 +73,8 @@ struct _GtkPrintOperationClass
   void (*end_print) (GtkPrintOperation *operation,
 		     GtkPrintContext *context);
 
+  void (*status_changed) (GtkPrintOperation *operation);
+  
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -113,6 +127,8 @@ void                    gtk_print_operation_set_pdf_target         (GtkPrintOper
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);
+GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
+gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
 
 GtkPageSetup *gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 					       GtkPageSetup     *page_setup,

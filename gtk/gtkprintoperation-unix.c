@@ -39,6 +39,7 @@
 
 typedef struct {
   GtkPrintJob *job;         /* the job we are sending to the printer */
+  gulong job_status_changed_tag;
   GtkWindow *parent;        /* parent window just in case we need to throw error dialogs */
 } GtkPrintOperationUnix;
 
@@ -64,7 +65,11 @@ static void
 op_unix_free (GtkPrintOperationUnix *op_unix)
 {
   if (op_unix->job)
-    g_object_unref (G_OBJECT (op_unix->job));
+    {
+      g_signal_handler_disconnect (op_unix->job,
+				   op_unix->job_status_changed_tag);
+      g_object_unref (op_unix->job);
+    }
 
   g_free (op_unix);
 }
@@ -72,7 +77,7 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
 static void
 unix_finish_send  (GtkPrintJob *job,
                    void *user_data, 
-                   GError **error)
+                   GError *error)
 {
   GtkPrintOperationUnix *op_unix;
   GtkWindow *parent;
@@ -81,19 +86,15 @@ unix_finish_send  (GtkPrintJob *job,
 
   parent = op_unix->parent;
 
-  op_unix_free (op_unix);
-
-  if (error != NULL && *error != NULL)
+  if (error != NULL)
     {
       GtkWidget *edialog;
-      GError *err = *error;
-
       edialog = gtk_message_dialog_new (parent, 
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
                                         "Error printing: %s",
-                                        err->message);
+                                        error->message);
 
       gtk_dialog_run (GTK_DIALOG (edialog));
       gtk_widget_destroy (edialog);
@@ -106,11 +107,16 @@ unix_end_run (GtkPrintOperation *op)
   GtkPrintOperationUnix *op_unix = op->priv->platform_data;
  
   /* TODO: Check for error */
-  gtk_print_job_send (g_object_ref (op_unix->job),
+  gtk_print_job_send (op_unix->job,
                       unix_finish_send, 
-                      op_unix, NULL);
+                      op_unix, NULL,
+		      NULL);
+}
 
-  op->priv->platform_data = NULL;
+static void
+job_status_changed_cb (GtkPrintJob *job, GtkPrintOperation *op)
+{
+  _gtk_print_operation_set_status (op, gtk_print_job_get_status (job));
 }
 
 GtkPrintOperationResult
@@ -143,7 +149,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
     {
       GtkPrintOperationUnix *op_unix;
       GtkPrinter *printer;
-      GtkPrintSettings *settings, *settings_copy;
+      GtkPrintSettings *settings;
 
       result = GTK_PRINT_OPERATION_RESULT_APPLY;
       
@@ -154,22 +160,17 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       *do_print = TRUE;
 
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
+      gtk_print_operation_set_print_settings (op, settings);
 
-      /* We save a copy to return to the user to avoid exposing
-	 the extra settings preparint the printer job adds. */
-      settings_copy = gtk_print_settings_copy (settings);
-      gtk_print_operation_set_print_settings (op, settings_copy);
-      g_object_unref (settings_copy);
-
-      op_unix = g_new (GtkPrintOperationUnix, 1);
-      op_unix->job = gtk_printer_prepare_job (printer,
-					      settings,
-					      page_setup,
-					      "Title",
-					      error);
+      op_unix = g_new0 (GtkPrintOperationUnix, 1);
+      op_unix->job = gtk_print_job_new (op->priv->job_name,
+					printer,
+					settings,
+					page_setup);
       g_object_unref (settings);
-    
-      if (error != NULL && *error != NULL)
+
+      op->priv->surface = gtk_print_job_get_surface (op_unix->job, error);
+      if (op->priv->surface == NULL)
         {
 	  *do_print = FALSE;
 	  op_unix_free (op_unix);
@@ -177,14 +178,18 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 	  goto out;
 	}
 
+      _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job));
+      op_unix->job_status_changed_tag =
+	g_signal_connect (op_unix->job, "status_changed",
+			  G_CALLBACK (job_status_changed_cb), op);
+      
       op_unix->parent = parent;
-
-      op->priv->surface = gtk_print_job_get_surface (op_unix->job);
 
       op->priv->dpi_x = 72;
       op->priv->dpi_y = 72;
  
       op->priv->platform_data = op_unix;
+      op->priv->free_platform_data = (GDestroyNotify) op_unix_free;
 
       op->priv->print_pages = op_unix->job->print_pages;
       op->priv->page_ranges = op_unix->job->page_ranges;

@@ -21,8 +21,8 @@
 
 #include <glib-object.h>
 #include <cairo.h>
-#include "gtkprintsettings.h"
-#include "gtkpagesetup.h"
+#include <gtk/gtkprintsettings.h>
+#include <gtk/gtkpagesetup.h>
 
 G_BEGIN_DECLS
 
@@ -77,12 +77,6 @@ const gchar             *gtk_printer_get_icon_name        (GtkPrinter *printer);
 gint                     gtk_printer_get_job_count        (GtkPrinter *printer);
 gboolean                 gtk_printer_is_active            (GtkPrinter *printer);
 gboolean                 gtk_printer_is_virtual           (GtkPrinter *printer);
-
-GtkPrintJob             *gtk_printer_prepare_job          (GtkPrinter *printer,
-							   GtkPrintSettings *settings,
-							   GtkPageSetup *page_setup,
-		                                           const gchar *title,
-	                                                   GError **error);
 
 G_END_DECLS
 

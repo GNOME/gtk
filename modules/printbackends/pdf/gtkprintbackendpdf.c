@@ -242,11 +242,12 @@ typedef struct {
   GtkPrintJob *job;
   gint target_fd;
   gpointer user_data;
+  GDestroyNotify dnotify;
 } _PrintStreamData;
 
 static void
 pdf_print_cb (GtkPrintBackendPdf *print_backend,
-              GError **error,
+              GError *error,
               gpointer user_data)
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
@@ -257,6 +258,15 @@ pdf_print_cb (GtkPrintBackendPdf *print_backend,
   if (ps->callback)
     ps->callback (ps->job, ps->user_data, error);
 
+  if (ps->dnotify)
+    ps->dnotify (ps->user_data);
+
+  gtk_print_job_set_status (ps->job,
+			    (error != NULL)?GTK_PRINT_STATUS_FINISHED_ABORTED:GTK_PRINT_STATUS_FINISHED);
+
+  if (ps->job)
+    g_object_unref (ps->job);
+ 
   g_free (ps);
 }
 
@@ -299,7 +309,7 @@ pdf_write (GIOChannel *source,
 
   if (bytes_read == 0 || error != NULL)
     {
-      pdf_print_cb (GTK_PRINT_BACKEND_PDF (ps->backend), &error, user_data);
+      pdf_print_cb (GTK_PRINT_BACKEND_PDF (ps->backend), error, user_data);
 
       return FALSE;
     }
@@ -309,11 +319,11 @@ pdf_write (GIOChannel *source,
 
 static void
 gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
-                                     GtkPrintJob *job,
-				     const gchar *title,
-				     gint data_fd,
-				     GtkPrintJobCompleteFunc callback,
-				     gpointer user_data)
+				    GtkPrintJob *job,
+				    gint data_fd,
+				    GtkPrintJobCompleteFunc callback,
+				    gpointer user_data,
+				    GDestroyNotify dnotify)
 {
   GError *error;
   GtkPrinterPdf *pdf_printer;
@@ -335,7 +345,7 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
-  ps->job = job;
+  ps->job = g_object_ref (job);
 
   filename = pdf_printer->file_option->value;
   
@@ -349,7 +359,7 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
                            g_strerror (errno));
 
       pdf_print_cb (GTK_PRINT_BACKEND_PDF (print_backend),
-                    &error,
+                    error,
                     ps);
 
       return;

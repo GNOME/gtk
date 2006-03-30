@@ -9,6 +9,7 @@ static GtkPrintSettings *settings = NULL;
 static gboolean file_changed = FALSE;
 static GtkTextBuffer *buffer;
 static GtkWidget *statusbar;
+static int printing_count = 0;
 
 static void
 update_title (void)
@@ -44,8 +45,10 @@ update_statusbar (void)
   row = gtk_text_iter_get_line (&iter);
   col = gtk_text_iter_get_line_offset (&iter);
 
-  msg = g_strdup_printf ("%d, %d%s",
-                         row, col, file_changed?" - Modified":"");
+  msg = g_strdup_printf ("%d, %d%s%s",
+                         row, col,
+			 file_changed?" - Modified":"",
+			 (printing_count > 0)?" printing...":"");
 
   gtk_statusbar_push (GTK_STATUSBAR (statusbar), 0, msg);
 
@@ -368,6 +371,17 @@ do_page_setup (GtkAction *action)
   page_setup = new_page_setup;
 }
 
+static void
+status_changed_cb (GtkPrintOperation *op,
+		   gpointer user_data)
+{
+  if (gtk_print_operation_is_finished (op))
+    {
+      g_object_unref (op);
+      printing_count--;
+      update_statusbar ();
+    }
+}
 
 static void
 do_print (GtkAction *action)
@@ -382,6 +396,7 @@ do_print (GtkAction *action)
 
   print = gtk_print_operation_new ();
 
+  
   if (settings != NULL)
     gtk_print_operation_set_print_settings (print, settings);
 
@@ -412,6 +427,19 @@ do_print (GtkAction *action)
 	g_object_unref (settings);
       settings = g_object_ref (gtk_print_operation_get_print_settings (print));
     }
+
+  if (!gtk_print_operation_is_finished (print))
+    {
+      printing_count++;
+      update_statusbar ();
+      
+      /* This ref is unref:ed when we get the final state change */
+      g_object_ref (print);
+      g_signal_connect (print, "status_changed",
+			G_CALLBACK (status_changed_cb), NULL);
+    }
+  
+  g_object_unref (print);
 }
 
 static void
