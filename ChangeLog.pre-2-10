@@ -1,3 +1,10 @@
+2006-03-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_get_icon): Make sure to get an
+	icon window when constructing the fallback_icon. This
+	fixes a crash when dragging icons between screens in
+	nautilus.  (#325751, Hylke van der Schaaf)
+
 2006-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (queue_edited_idle): Handle
