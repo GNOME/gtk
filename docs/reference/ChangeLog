@@ -1,5 +1,7 @@
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-sections.txt: Additions
+
 	* gtk/Makefile.am (HTML_IMAGES): add
 	recentchooserdialog.png
 	

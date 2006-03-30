@@ -882,10 +882,10 @@ GdkPangoRendererPrivate
 <TITLE>Cairo Interaction</TITLE>
 <FILE>cairo_interaction</FILE>
 gdk_cairo_create
-gdk_cairo_set_source_colorg
+gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
-dk_cairo_rectangle
+gdk_cairo_rectangle
 gdk_cairo_region
 </SECTION>
 
