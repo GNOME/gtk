@@ -108,6 +108,8 @@ content_files =					\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
+	migrating-GtkRecentChooser.sgml 	\
+	migrating-GtkLinkButton.sgml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\
@@ -131,6 +133,7 @@ expand_content_files = 				\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
 	migrating-GtkRecentChooser.sgml 	\
+	migrating-GtkLinkButton.sgml		\
 	tree_widget.sgml			\
 	text_widget.sgml			\
 	question_index.sgml

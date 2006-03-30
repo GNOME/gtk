@@ -210,6 +210,7 @@
 <!ENTITY gtk-migrating-GtkColorButton SYSTEM "xml/migrating-GtkColorButton.sgml">
 <!ENTITY gtk-migrating-GtkAssistant SYSTEM "xml/migrating-GtkAssistant.sgml">
 <!ENTITY gtk-migrating-GtkRecentChooser SYSTEM "xml/migrating-GtkRecentChooser.sgml">
+<!ENTITY gtk-migrating-GtkLinkButton SYSTEM "xml/migrating-GtkLinkButton.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -615,6 +616,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-migrating-GtkColorButton;
     &gtk-migrating-GtkAssistant;
     &gtk-migrating-GtkRecentChooser;
+    &gtk-migrating-GtkLinkButton;
   </part>
 
   <part>

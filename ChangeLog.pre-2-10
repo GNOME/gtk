@@ -1,3 +1,17 @@
+2006-03-30  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	Add documentation for the GtkLinkButton (#336592)
+
+	* docs/reference/tmpl/gtklinkbutton.sgml: Add description
+	of the GtkLinkButton.
+
+	* docs/reference/gtk/migrating-GtkLinkButton.sgml: Guidelines
+	for migrating code from GnomeHRef to the GtkLinkButton.
+
+	* docs/reference/gtk/gtk-docs.sgml:
+	* docs/reference/gtk/Makefile.am: Build glue for the porting
+	guide.
+
 2006-03-29  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk/gdk.symbols:
