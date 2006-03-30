@@ -1,3 +1,7 @@
+2006-03-31  Guntupalli Karunakar  <karunakar@indlinux.org>
+
+        * configure.in: Added "dz" (Dzongkha) to ALL_LINGUAS.
+
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_get_icon): Make sure to get an
