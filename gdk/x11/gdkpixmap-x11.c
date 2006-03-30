@@ -426,7 +426,8 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
   
-  _gdk_xid_table_insert (display, &GDK_PIXMAP_XID (pixmap), pixmap);
+  _gdk_xid_table_insert (gdk_screen_get_display (screen), 
+			 &GDK_PIXMAP_XID (pixmap), pixmap);
 
   return pixmap;
 }
