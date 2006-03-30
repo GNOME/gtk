@@ -1,3 +1,7 @@
+2006-03-30  Stanislav Brabec  <utx@penguin.cz>
+
+	* cs.po: Progress bar fix (#336645).
+
 2006-03-31  Guntupalli Karunakar  <karunakar@indlinux.org>
 
         * dz.po: Added Dzongkha translation.
