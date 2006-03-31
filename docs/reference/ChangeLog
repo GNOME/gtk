@@ -1,3 +1,15 @@
+2006-03-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/gtk-sections.txt: First cut at adding printing
+	docs.
+
+2006-03-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcellrendereraccel.sgml: 
+	* gtk/tmpl/gtkrc.sgml: 
+	* gtk/directfb.sgml: Syntax fixes.
+
 2006-03-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/directfb.sgml: Fix syntax

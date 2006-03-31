@@ -48,6 +48,10 @@ IGNORE_HFILES=				\
 	gtkmnemonichash.h		\
 	gtkpathbar.h			\
 	gtkplugprivate.h		\
+	gtkprintbackend.h		\
+	gtkprinteroptionwidget.h	\
+	gtkprinter-private.h		\
+	gtkprintoperation-private.h	\
 	gtkprivate.h			\
 	gtkrbtree.h			\
 	gtksequence.h			\
