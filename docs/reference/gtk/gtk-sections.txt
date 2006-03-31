@@ -321,6 +321,7 @@ GTK_IS_ASSISTANT
 GTK_IS_ASSISTANT_CLASS
 GTK_ASSISTANT_GET_CLASS
 <SUBSECTION Private>
+GtkAssistantPrivate
 gtk_assistant_get_type
 </SECTION>
 
@@ -2080,6 +2081,7 @@ gtk_link_button_new
 gtk_link_button_new_with_label
 gtk_link_button_get_uri
 gtk_link_button_set_uri
+GtkLinkButtonUriFunc
 gtk_link_button_set_uri_hook
 
 <SUBSECTION Standard>
@@ -2091,6 +2093,7 @@ GTK_IS_LINK_BUTTON_CLASS
 GTK_LINK_BUTTON_GET_CLASS
 GtkLinkButtonClass
 <SUBSECTION Private>
+GtkLinkButtonPrivate
 gtk_link_button_get_type
 </SECTION>
 
@@ -2733,6 +2736,10 @@ gtk_range_get_value
 gtk_range_set_increments
 gtk_range_set_range
 gtk_range_set_value
+gtk_range_set_lower_stepper_sensitivity
+gtk_range_get_lower_stepper_sensitivity
+gtk_range_set_upper_stepper_sensitivity
+gtk_range_get_upper_stepper_sensitivity
 <SUBSECTION Standard>
 GTK_RANGE
 GTK_IS_RANGE
@@ -2769,8 +2776,10 @@ gtk_recent_chooser_set_show_tips
 gtk_recent_chooser_get_show_tips
 gtk_recent_chooser_set_show_numbers
 gtk_recent_chooser_get_show_numbers
+GtkRecentSortType
 gtk_recent_chooser_set_sort_type
 gtk_recent_chooser_get_sort_type
+GtkRecentSortFunc
 gtk_recent_chooser_set_sort_func
 gtk_recent_chooser_set_current_uri
 gtk_recent_chooser_get_current_uri
@@ -2791,7 +2800,7 @@ GTK_RECENT_CHOOSER
 GTK_IS_RECENT_CHOOSER
 GTK_TYPE_RECENT_CHOOSER
 GTK_RECENT_CHOOSER_GET_IFACE
-
+GtkRecentChooserDefault
 <SUBSECTION Private>
 gtk_recent_chooser_get_type
 gtk_recent_chooser_error_quark
@@ -2893,6 +2902,9 @@ GtkRecentData
 GTK_RECENT_MANAGER_ERROR
 GtkRecentManagerError
 gtk_recent_manager_new
+gtk_recent_manager_get_default
+gtk_recent_manager_get_for_screen
+gtk_recent_manager_set_screen
 gtk_recent_manager_add_item
 gtk_recent_manager_add_full
 gtk_recent_manager_remove_item
@@ -2919,6 +2931,7 @@ gtk_recent_info_get_applications
 gtk_recent_info_last_application
 gtk_recent_info_get_groups
 gtk_recent_info_has_group
+gtk_recent_info_has_application
 gtk_recent_info_get_icon
 gtk_recent_info_get_short_name
 gtk_recent_info_get_uri_display
@@ -3108,6 +3121,7 @@ gtk_size_group_set_ignore_hidden
 gtk_size_group_get_ignore_hidden
 gtk_size_group_add_widget
 gtk_size_group_remove_widget
+gtk_size_group_get_widgets
 <SUBSECTION Standard>
 GTK_SIZE_GROUP
 GTK_IS_SIZE_GROUP
@@ -3385,7 +3399,41 @@ gtk_text_buffer_begin_user_action
 gtk_text_buffer_end_user_action
 gtk_text_buffer_add_selection_clipboard
 gtk_text_buffer_remove_selection_clipboard
+
+<SUBSECTION Serialization>
+GtkTextBufferTargetInfo
+GtkTextBufferDeserializeFunc
+gtk_text_buffer_deserialize
+gtk_text_buffer_deserialize_get_can_create_tags
+gtk_text_buffer_deserialize_set_can_create_tags
+gtk_text_buffer_get_copy_target_list
+gtk_text_buffer_get_deserialize_formats
+gtk_text_buffer_get_paste_target_list
+gtk_text_buffer_get_serialize_formats
+gtk_text_buffer_register_deserialize_format
+gtk_text_buffer_register_deserialize_tagset
+gtk_text_buffer_register_serialize_format
+gtk_text_buffer_register_serialize_tagset
+GtkTextBufferSerializeFunc
+gtk_text_buffer_serialize
+gtk_text_buffer_unregister_deserialize_format
+gtk_text_buffer_unregister_serialize_format
+
 <SUBSECTION Standard>
+gtk_text_buffer_deserialize
+gtk_text_buffer_deserialize_get_can_create_tags
+gtk_text_buffer_deserialize_set_can_create_tags
+gtk_text_buffer_get_copy_target_list
+gtk_text_buffer_get_deserialize_formats
+gtk_text_buffer_get_paste_target_list
+gtk_text_buffer_get_serialize_formats
+gtk_text_buffer_register_deserialize_format
+gtk_text_buffer_register_deserialize_tagset
+gtk_text_buffer_register_serialize_format
+gtk_text_buffer_register_serialize_tagset
+gtk_text_buffer_serialize
+gtk_text_buffer_unregister_deserialize_format
+gtk_text_buffer_unregister_serialize_format
 GTK_TEXT_BUFFER
 GTK_IS_TEXT_BUFFER
 GTK_TYPE_TEXT_BUFFER
@@ -4269,6 +4317,8 @@ gtk_tree_store_remove
 gtk_tree_store_insert
 gtk_tree_store_insert_before
 gtk_tree_store_insert_after
+gtk_tree_store_insert_with_values
+gtk_tree_store_insert_with_valuesv
 gtk_tree_store_prepend
 gtk_tree_store_append
 gtk_tree_store_is_ancestor
@@ -4430,6 +4480,11 @@ gtk_tree_view_get_search_column
 gtk_tree_view_set_search_column
 gtk_tree_view_get_search_equal_func
 gtk_tree_view_set_search_equal_func
+gtk_tree_view_get_search_entry
+gtk_tree_view_set_search_entry
+GtkTreeViewSearchPositionFunc
+gtk_tree_view_get_search_position_func
+gtk_tree_view_set_search_position_func
 gtk_tree_view_get_fixed_height_mode
 gtk_tree_view_set_fixed_height_mode
 gtk_tree_view_get_hover_selection
@@ -4653,6 +4708,7 @@ GtkCellRendererProgressPrivate
 <FILE>gtkcellrendereraccel</FILE>
 <TITLE>GtkCellRendererAccel</TITLE>
 GtkCellRendererAccel
+GtkCellRendererAccelMode
 gtk_cell_renderer_accel_new
 
 <SUBSECTION Standard>
@@ -5444,8 +5500,11 @@ gtk_target_list_add_table
 gtk_target_list_add_text_targets
 gtk_target_list_add_image_targets
 gtk_target_list_add_uri_targets
+gtk_target_list_add_rich_text_targets
 gtk_target_list_remove
 gtk_target_list_find
+gtk_target_table_free
+gtk_target_table_new_from_list
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
 gtk_selection_add_target
@@ -5463,18 +5522,22 @@ gtk_selection_data_get_targets
 gtk_selection_data_targets_include_image
 gtk_selection_data_targets_include_text
 gtk_selection_data_targets_include_uri
+gtk_selection_data_targets_include_rich_text
 gtk_targets_include_image
 gtk_targets_include_text
 gtk_targets_include_uri
+gtk_targets_include_rich_text
 gtk_selection_remove_all
 gtk_selection_clear
 gtk_selection_data_copy
 gtk_selection_data_free
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
+GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
 gtk_selection_data_copy
 gtk_selection_data_get_type
+gtk_target_list_get_type
 </SECTION>
 
 <SECTION>
@@ -5485,6 +5548,7 @@ GtkClipboardReceivedFunc
 GtkClipboardTextReceivedFunc
 GtkClipboardImageReceivedFunc
 GtkClipboardTargetsReceivedFunc
+GtkClipboardRichTextReceivedFunc
 GtkClipboardGetFunc
 GtkClipboardClearFunc
 gtk_clipboard_get
@@ -5500,11 +5564,14 @@ gtk_clipboard_request_contents
 gtk_clipboard_request_text
 gtk_clipboard_request_image
 gtk_clipboard_request_targets
+gtk_clipboard_request_rich_text
 gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
 gtk_clipboard_wait_for_image
+gtk_clipboard_wait_for_rich_text
 gtk_clipboard_wait_is_text_available
 gtk_clipboard_wait_is_image_available
+gtk_clipboard_wait_is_rich_text_available
 gtk_clipboard_wait_for_targets
 gtk_clipboard_wait_is_target_available
 gtk_clipboard_set_can_store

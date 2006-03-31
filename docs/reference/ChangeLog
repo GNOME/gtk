@@ -1,5 +1,9 @@
 2006-03-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Updates
+
+	* gtk/Makefile.am (IGNORE_HFILES): Updates
+
 	* gtk/images/recentchooserdialog.png: Shrink it.
 
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>

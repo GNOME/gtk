@@ -50,6 +50,8 @@ IGNORE_HFILES=				\
 	gtkplugprivate.h		\
 	gtkprivate.h			\
 	gtkrbtree.h			\
+	gtkrecentchooserdefault.h	\
+	gtkrecentchooserprivate.h	\
 	gtksequence.h			\
 	gtksocketprivate.h		\
 	gtktreedatalist.h		\
@@ -64,6 +66,7 @@ IGNORE_HFILES=				\
 	gtktexttypes.h			\
 	gtktextutil.h			\
 	gtktoggleactionprivate.h	\
+	gtktrayicon.h			\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
