@@ -1,3 +1,7 @@
+2006-03-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/images/recentchooserdialog.png: Shrink it.
+
 2006-03-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Additions
