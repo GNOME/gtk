@@ -67,16 +67,17 @@ typedef enum
 
 struct _GtkIconThemePrivate
 {
-  guint custom_theme : 1;
+  guint custom_theme        : 1;
   guint is_screen_singleton : 1;
   guint pixbuf_supports_svg : 1;
+  guint themes_valid        : 1;
+  guint check_reload        : 1;
   
   char *current_theme;
   char *fallback_theme;
   char **search_path;
   int search_path_len;
 
-  gboolean themes_valid;
   /* A list of all the themes needed to look up icons.
    * In search order, without duplicates
    */
@@ -97,8 +98,6 @@ struct _GtkIconThemePrivate
   GList *dir_mtimes;
 
   gulong reset_styles_idle;
-
-  gboolean check_reload;
 };
 
 struct _GtkIconInfo
@@ -1019,7 +1018,7 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
     g_free (unthemed_icon->svg_filename);
   if (unthemed_icon->no_svg_filename)
     g_free (unthemed_icon->no_svg_filename);
-  g_free (unthemed_icon);
+  g_slice_free (UnthemedIcon, unthemed_icon);
 }
 
 static void
@@ -1064,9 +1063,9 @@ load_themes (GtkIconTheme *icon_theme)
 	dir_mtime->mtime = stat_buf.st_mtime;
       else
 	dir_mtime->mtime = 0;
-
+      
       priv->dir_mtimes = g_list_append (priv->dir_mtimes, dir_mtime);
-
+      
       if (dir_mtime->cache != NULL)
 	continue;
 
@@ -1074,21 +1073,21 @@ load_themes (GtkIconTheme *icon_theme)
 
       if (gdir == NULL)
 	continue;
-      
+
       while ((file = g_dir_read_name (gdir)))
 	{
 	  new_suffix = suffix_from_name (file);
-
+	  
 	  if (new_suffix != ICON_SUFFIX_NONE)
 	    {
 	      abs_file = g_build_filename (dir, file, NULL);
-
+	      
 	      base_name = g_strdup (file);
-		  
+	      
 	      dot = strrchr (base_name, '.');
 	      if (dot)
 		*dot = 0;
-
+	      
 	      if ((unthemed_icon = g_hash_table_lookup (priv->unthemed_icons,
 							base_name)))
 		{
@@ -1120,7 +1119,7 @@ load_themes (GtkIconTheme *icon_theme)
 		}
 	      else
 		{
-		  unthemed_icon = g_new0 (UnthemedIcon, 1);
+		  unthemed_icon = g_slice_new0 (UnthemedIcon);
 		  
 		  if (new_suffix == ICON_SUFFIX_SVG)
 		    unthemed_icon->svg_filename = abs_file;
@@ -2093,6 +2092,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
   if (error)
     {
       g_error_free (error);
+      g_key_file_free (icon_file);      
       return;
     }
   else
@@ -2101,7 +2101,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
       dot = strrchr (base_name, '.');
       *dot = 0;
       
-      data = g_new0 (GtkIconData, 1);
+      data = g_slice_new0 (GtkIconData);
       g_hash_table_replace (dir->icon_data, base_name, data);
       
       ivalues = g_key_file_get_integer_list (icon_file, 
@@ -2127,7 +2127,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
 	  split = g_strsplit (str, "|", -1);
 	  
 	  data->n_attach_points = g_strv_length (split);
-	  data->attach_points = g_malloc (sizeof (GdkPoint) * data->n_attach_points);
+	  data->attach_points = g_new (GdkPoint, data->n_attach_points);
 
 	  i = 0;
 	  while (split[i] != NULL && i < data->n_attach_points)
@@ -2333,7 +2333,7 @@ icon_data_free (GtkIconData *icon_data)
 {
   g_free (icon_data->attach_points);
   g_free (icon_data->display_name);
-  g_free (icon_data);
+  g_slice_free (GtkIconData, icon_data);
 }
 
 /*
@@ -2349,13 +2349,14 @@ gtk_icon_info_get_type (void)
 					     (GBoxedCopyFunc) gtk_icon_info_copy,
 					     (GBoxedFreeFunc) gtk_icon_info_free);
 
+
   return our_type;
 }
 
 static GtkIconInfo *
 icon_info_new (void)
 {
-  GtkIconInfo *icon_info = g_new0 (GtkIconInfo, 1);
+  GtkIconInfo *icon_info = g_slice_new0 (GtkIconInfo);
 
   icon_info->scale = -1.;
 
@@ -2392,7 +2393,7 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
   
   g_return_val_if_fail (icon_info != NULL, NULL);
 
-  copy = g_memdup (icon_info, sizeof (GtkIconInfo));
+  copy = memcpy (g_slice_new (GtkIconInfo), icon_info, sizeof (GtkIconInfo));
   if (copy->cache_pixbuf)
     g_object_ref (copy->cache_pixbuf);
   if (copy->pixbuf)
@@ -2433,7 +2434,7 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
   if (icon_info->cache_pixbuf)
     g_object_unref (icon_info->cache_pixbuf);
 
-  g_free (icon_info);
+  g_slice_free (GtkIconInfo, icon_info);
 }
 
 /**
@@ -2891,7 +2892,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  * Since: 2.4
  **/
 G_CONST_RETURN gchar *
-gtk_icon_info_get_display_name  (GtkIconInfo *icon_info)
+gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
 

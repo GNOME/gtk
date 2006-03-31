@@ -1,3 +1,13 @@
+2006-03-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (load_icon_data): Don't leak the keyfile 
+	parser in the error case. 
+	
+	* gtk/gtkicontheme.c (load_icon_data, free_unthemed_icon) 
+	(icon_data_free, load_themes):
+	* gtk/gtkiconcache.c (_gtk_icon_cache_get_icon_data): Use the slice
+	allocator for GtkIconData and UnthemedIcon structs.
+
 2006-03-30  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkcalendar.c: Fix translation comments for localizable

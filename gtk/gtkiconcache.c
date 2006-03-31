@@ -489,7 +489,7 @@ _gtk_icon_cache_get_icon_data  (GtkIconCache *cache,
   if (!meta_data_offset)
     return NULL;
 
-  data = g_new0 (GtkIconData, 1);
+  data = g_slice_new0 (GtkIconData);
 
   offset = GET_UINT32 (cache->buffer, meta_data_offset);
   if (offset)
