@@ -1,3 +1,8 @@
+2006-03-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (load_icon_data): Don't leak the
+	keyfile parser in the error case.
+
 2006-03-31  Guntupalli Karunakar  <karunakar@indlinux.org>
 
         * configure.in: Added "dz" (Dzongkha) to ALL_LINGUAS.

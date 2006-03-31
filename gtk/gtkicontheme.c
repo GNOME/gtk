@@ -2053,6 +2053,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
   g_key_file_load_from_file (icon_file, path, 0, &error);
   if (error)
     {
+      g_key_file_free (icon_file);
       g_error_free (error);
       return;
     }
