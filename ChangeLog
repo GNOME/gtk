@@ -1,5 +1,10 @@
 2006-03-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentmanager.c (gtk_recent_info_get_age): Don't
+	assert that the age is positive.  (#336773, Morten Welinder)
+
+2006-03-31  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkicontheme.c (load_icon_data): Don't leak the keyfile 
 	parser in the error case. 
 	

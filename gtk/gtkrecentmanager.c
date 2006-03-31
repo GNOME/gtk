@@ -2309,8 +2309,7 @@ gtk_recent_info_get_uri_display (GtkRecentInfo *info)
  * pointed by @info.
  *
  * Return value: a positive integer containing the number of days elapsed
- *   since the time this resource was last modified.  On failure, -1 is
- *   returned.
+ *   since the time this resource was last modified.  
  *
  * Since: 2.10
  */
@@ -2325,7 +2324,6 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
   now = time (NULL);
   
   delta = now - info->modified;
-  g_assert (delta >= 0);
   
   retval = (gint) (delta / (60 * 60 * 24));
   
