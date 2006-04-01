@@ -1,5 +1,8 @@
 2006-04-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: protect unix-only symbols by 
+	G_OS_UNIX (#336819, Yevgen Muntyan)
+
 	* gtk/gtkpapersize.c: Win32 fixes.  (#336806, Yevgen Muntyan)
 
 2006-03-30  Alexander Larsson  <alexl@redhat.com>

@@ -2488,12 +2488,14 @@ gtk_page_setup_get_page_height
 
 #if IN_HEADER(__GTK_PAGE_SETUP_UNIX_DIALOG_H__)
 #if IN_FILE(__GTK_PAGE_SETUP_UNIX_DIALOG_C__)
+#ifdef G_OS_UNIX
 gtk_page_setup_unix_dialog_get_type G_GNUC_CONST
 gtk_page_setup_unix_dialog_new
 gtk_page_setup_unix_dialog_set_page_setup
 gtk_page_setup_unix_dialog_get_page_setup
 gtk_page_setup_unix_dialog_set_print_settings
 gtk_page_setup_unix_dialog_get_print_settings
+#endif
 #endif
 #endif
 
@@ -2523,11 +2525,13 @@ gtk_paper_size_get_default
 
 #if IN_HEADER(__GTK_PRINT_BACKEND_H__)
 #if IN_FILE(__GTK_PRINT_BACKEND_C__)
+#ifdef G_OS_UNIX
 gtk_print_backend_get_type G_GNUC_CONST
 gtk_print_backend_get_printer_list  
 gtk_print_backend_find_printer
 gtk_print_backend_print_stream
 gtk_print_backend_load_modules
+#endif
 #endif
 #endif
 
@@ -2548,6 +2552,7 @@ gtk_print_context_create_layout
 
 #if IN_HEADER(__GTK_PRINTER_H__)
 #if IN_FILE(__GTK_PRINTER_C__)
+#ifdef G_OS_UNIX
 gtk_printer_get_type G_GNUC_CONST
 gtk_printer_new
 gtk_printer_get_backend
@@ -2560,9 +2565,11 @@ gtk_printer_is_active
 gtk_printer_is_virtual
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_PRINTER_OPTION_H__)
 #if IN_FILE(__GTK_PRINTER_OPTION_C__)
+#ifdef G_OS_UNIX
 gtk_printer_option_get_type
 gtk_printer_option_new
 gtk_printer_option_set
@@ -2573,9 +2580,11 @@ gtk_printer_option_allocate_choices
 gtk_printer_option_choices_from_array
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_PRINTER_OPTION_SET_H__)
 #if IN_FILE(__GTK_PRINTER_OPTION_SET_C__)
+#ifdef G_OS_UNIX
 gtk_printer_option_set_get_type G_GNUC_CONST
 gtk_printer_option_set_new
 gtk_printer_option_set_add
@@ -2586,9 +2595,11 @@ gtk_printer_option_set_get_groups
 gtk_printer_option_set_foreach_in_group
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_PRINTER_OPTION_WIDGET_H__)
 #if IN_FILE(__GTK_PRINTER_OPTION_WIDGET_C__)
+#ifdef G_OS_UNIX
 gtk_printer_option_widget_get_type G_GNUC_CONST
 gtk_printer_option_widget_new
 gtk_printer_option_widget_set_source
@@ -2597,9 +2608,11 @@ gtk_printer_option_widget_get_external_label
 gtk_printer_option_widget_get_value
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_PRINT_JOB_H__)
 #if IN_FILE(__GTK_PRINT_JOB_C__)
+#ifdef G_OS_UNIX
 gtk_print_job_get_type G_GNUC_CONST
 gtk_print_job_new
 gtk_print_job_get_settings
@@ -2609,6 +2622,7 @@ gtk_print_job_get_status
 gtk_print_job_set_source_file
 gtk_print_job_get_surface
 gtk_print_job_send
+#endif
 #endif
 #endif
 
@@ -2636,7 +2650,9 @@ gtk_print_operation_is_finished
 
 #if IN_HEADER(__GTK_PRINT_OPERATION_H__)
 #if IN_FILE(__GTK_PRINT_OPERATION_UNIX_C__)
+#ifdef G_OS_UNIX
 gtk_print_run_page_setup_dialog
+#endif
 #endif
 #endif
 
@@ -2710,6 +2726,7 @@ gtk_print_settings_set_output_bin
 
 #if IN_HEADER(__GTK_PRINT_UNIX_DIALOG_H__)
 #if IN_FILE(__GTK_PRINT_UNIX_DIALOG_C__)
+#ifdef G_OS_UNIX
 gtk_print_unix_dialog_get_type G_GNUC_CONST
 gtk_print_unix_dialog_new
 gtk_print_unix_dialog_set_page_setup
@@ -2719,13 +2736,16 @@ gtk_print_unix_dialog_get_settings
 gtk_print_unix_dialog_get_selected_printer
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_PRINT_WIN32_H__)
 #if IN_FILE(__GTK_PRINT_WIN32_C__)
+#ifdef G_OS_WIN32
 gtk_print_win32_devnames_free
 gtk_print_win32_devnames_from_win32
 gtk_print_win32_devnames_to_win32
 gtk_print_win32_devnames_from_printer_name
+#endif
 #endif
 #endif
 
