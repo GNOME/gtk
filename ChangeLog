@@ -1,5 +1,10 @@
 2006-03-31  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gtk/gtkrecentmanager.c: Convert filenames to UTF-8 before printing
+	them out in warning messages. (#336770, Morten Welinder)
+
+2006-03-31  Behdad Esfahbod  <behdad@gnome.org>
+
 	* gtk/gtkrecentmanager.c (gtk_recent_info_last_application): Update
 	last_stamp inside the look. (#336771, Morten Welinder)
 

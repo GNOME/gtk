@@ -152,6 +152,14 @@ static guint signal_changed = 0;
 
 G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT);
 
+void
+filename_warning (const char *format, const char *filename, const char *message)
+{
+  char *utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+  g_warning (format, utf8 ? utf8 : "(invalid filename)", message);
+  g_free (utf8);
+}
+
 GQuark
 gtk_recent_manager_error_quark (void)
 {
@@ -370,10 +378,10 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 			       &write_error);
       if (write_error)
         {
-          g_warning ("Attempting to store changes into `%s', "
-		     "but failed: %s",
-		     priv->filename,
-		     write_error->message);
+          filename_warning ("Attempting to store changes into `%s', "
+			    "but failed: %s",
+			    priv->filename,
+			    write_error->message);
 	  g_error_free (write_error);
 	}
 
@@ -383,10 +391,10 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
        */
       if (g_stat (priv->filename, &stat_buf) < 0)
 	{
-          g_warning ("Unable to stat() the recently used resources file "
-		     "at `%s': %s.",
-		     priv->filename,
-		     g_strerror (errno));
+          filename_warning ("Unable to stat() the recently used resources file "
+			    "at `%s': %s.",
+			    priv->filename,
+			    g_strerror (errno));
 
 	  priv->write_in_progress = FALSE;
 	  
@@ -434,10 +442,10 @@ gtk_recent_manager_poll_timeout (gpointer data)
       if (errno == ENOENT)
         return TRUE;
       
-      g_warning ("Unable to stat() the recently used resources file "
-		 "at `%s': %s.",
-		 priv->filename,
-		 g_strerror (errno));
+      filename_warning ("Unable to stat() the recently used resources file "
+			"at `%s': %s.",
+			priv->filename,
+			g_strerror (errno));
       
       return TRUE;
     }
@@ -516,10 +524,10 @@ build_recent_items_list (GtkRecentManager *manager)
         return;
       else
         {
-          g_warning ("Attempting to read the recently used resources file "
-                     "at `%s', but an error occurred: %s. Aborting.",
-                     priv->filename,
-                     g_strerror (errno));
+          filename_warning ("Attempting to read the recently used resources file "
+			    "at `%s', but an error occurred: %s. Aborting.",
+			    priv->filename,
+			    g_strerror (errno));
 
           return;
         }
@@ -539,10 +547,10 @@ build_recent_items_list (GtkRecentManager *manager)
 					&read_error);
   if (read_error)
     {
-      g_warning ("Attempting to read the recently used resources file "
-		 "at `%s', but the parser failed: %s.",
-		 priv->filename,
-		 read_error->message);
+      filename_warning ("Attempting to read the recently used resources file "
+			"at `%s', but the parser failed: %s.",
+			priv->filename,
+			read_error->message);
 
       g_bookmark_file_free (priv->recent_items);
       priv->recent_items = NULL;
