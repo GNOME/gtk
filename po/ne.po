@@ -1208,13 +1208,13 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:1887
 msgid "calendar year format|%Y"
-msgstr ""
+msgstr "%Y"
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "प्रगति बार तह|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
@@ -2186,7 +2186,7 @@ msgstr "_कार्यान्वयन गर्नुस्"
 
 #: gtk/gtkstock.c:331
 msgid "_Edit"
-msgstr "-सम्पादन गर"
+msgstr "सम्पादन गर"
 
 #: gtk/gtkstock.c:332
 msgid "_Find"
@@ -2211,42 +2211,42 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
-msgstr "नेभिगेसन|तल"
+msgstr "तल"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_First"
-msgstr "नेभिगेसन|पहिलो"
+msgstr "पहिलो"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Last"
-msgstr "नेभिगेसन|अन्तिम"
+msgstr "अन्तिम"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Top"
-msgstr "नेभिगेसन|माथि"
+msgstr "माथि"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Back"
-msgstr "नेभिगेसन|पछाडि"
+msgstr "पछाडि"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Down"
-msgstr "नेभिगेसन|तल"
+msgstr "तल"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
-msgstr "नेभिगेसन|अगाडि"
+msgstr "अगाडि"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "नेभिगेसन|माथी"
+msgstr "माथी"
 
 #: gtk/gtkstock.c:353
 msgid "_Harddisk"
@@ -2273,7 +2273,6 @@ msgid "_Index"
 msgstr "_सूची"
 
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgid "_Information"
 msgstr "सुचना"
 
@@ -2288,62 +2287,62 @@ msgstr "_मा उफ्र"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Justify|_Center"
-msgstr "समरेखन|बिच"
+msgstr "बिच"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Fill"
-msgstr "समरेखन|भर्नु"
+msgstr "भर्नु"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Justify|_Left"
-msgstr "समरेखन|देब्रे"
+msgstr "देब्रे"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:369
 msgid "Justify|_Right"
-msgstr "समरेखन|दाहिने"
+msgstr "दाहिने"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Forward"
-msgstr "मिडिया|अगाडि"
+msgstr "अगाडि"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|_Next"
-msgstr "मिडिया|अर्को"
+msgstr "अर्को"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 msgid "Media|P_ause"
-msgstr "मिडिया|रोक्नु"
+msgstr "रोक्नु"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|_Play"
-msgstr "मिडिया|बजाउ"
+msgstr "बजाउ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
 msgid "Media|Pre_vious"
-msgstr "मिडिया|पहिलेको"
+msgstr "पहिलेको"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|_Record"
-msgstr "मिडिया|रेकर्ड"
+msgstr "रेकर्ड"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 msgid "Media|R_ewind"
-msgstr "मिडिया|रिबाइन्ड"
+msgstr "रिबाइन्ड"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:386
 msgid "Media|_Stop"
-msgstr "मिडिया|बन्द"
+msgstr "बन्द"
 
 #: gtk/gtkstock.c:387
 msgid "_Network"
