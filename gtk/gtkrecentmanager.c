@@ -1887,7 +1887,10 @@ gtk_recent_info_last_application (GtkRecentInfo  *info)
       RecentAppInfo *ai = (RecentAppInfo *) l->data;
       
       if (ai->stamp > last_stamp)
-        name = ai->name;
+        {
+	  name = ai->name;
+	  last_stamp = ai->stamp;
+	}
     }
   
   return g_strdup (name);
