@@ -2373,8 +2373,22 @@ draw_hline (GtkStyle * style,
 	    GtkWidget * widget,
 	    const gchar * detail, gint x1, gint x2, gint y)
 {
+  if (xp_theme_is_active () && detail && !strcmp(detail, "menuitem")) {
+	if(xp_theme_draw (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, y, x2, 1, state_type, area))
+		return;
+	else {
+	    if (area)
+	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+
+	    gdk_draw_line (window, style->dark_gc[state_type], x1, y, x2, y);
+
+	    if (area)
+	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+	}
+  } else {
     parent_class->draw_hline (style, window, state_type, area, widget,
 			      detail, x1, x2, y);
+  }
 }
 
 static void
