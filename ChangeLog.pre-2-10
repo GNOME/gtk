@@ -1,3 +1,8 @@
+2006-04-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c (draw_hline): Emulate WinXP's
+	drawing of menu separators
+	
 2006-03-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (load_icon_data): Don't leak the
