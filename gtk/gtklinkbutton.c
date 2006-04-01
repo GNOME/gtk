@@ -563,7 +563,7 @@ gtk_link_button_new_with_label (const gchar *uri,
 {
   GtkWidget *retval;
   
-  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (uri != NULL, NULL);
   
   if (!label)
     return gtk_link_button_new (uri);

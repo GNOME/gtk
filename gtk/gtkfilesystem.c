@@ -793,7 +793,7 @@ gtk_file_system_get_bookmark_label (GtkFileSystem     *file_system,
   GtkFileSystemIface *iface;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, NULL);
 
   iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
   if (iface->get_bookmark_label)
