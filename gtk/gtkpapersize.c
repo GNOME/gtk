@@ -22,7 +22,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
+#ifdef HAVE_LANGINFO_H
 #include <langinfo.h>
+#endif
 
 #include "gtkpapersize.h"
 #include "gtkalias.h"
@@ -445,7 +447,8 @@ gtk_paper_size_set_size (GtkPaperSize *size, double width, double height, GtkUni
 G_CONST_RETURN char *
 gtk_paper_size_get_default (void)
 {
-  char *locale;
+  char *locale, *freeme = NULL;
+  const char *paper_size;
 
 #if defined(HAVE__NL_PAPER_HEIGHT) && defined(HAVE__NL_PAPER_WIDTH)
   {
@@ -460,19 +463,27 @@ gtk_paper_size_get_default (void)
   }
 #endif
 
-#ifdef LC_PAPER
+#ifdef G_OS_WIN32
+  freeme = locale = g_win32_getlocale ();
+#elif defined(LC_PAPER)
   locale = setlocale(LC_PAPER, NULL);
 #else
   locale = setlocale(LC_MESSAGES, NULL);
-#endif  
+#endif
+
+  if (!locale)
+    return GTK_PAPER_NAME_A4;
 
   if (g_str_has_prefix (locale, "en_CA") ||
       g_str_has_prefix (locale, "en_US") ||
       g_str_has_prefix (locale, "es_PR") ||
       g_str_has_prefix (locale, "es_US"))
-    return GTK_PAPER_NAME_LETTER;
+    paper_size = GTK_PAPER_NAME_LETTER;
+  else
+    paper_size = GTK_PAPER_NAME_A4;
 
-  return GTK_PAPER_NAME_A4;
+  g_free (freeme);
+  return paper_size;
 }
 
 /* These get the default margins used for the paper size. Its

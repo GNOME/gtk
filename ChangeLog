@@ -1,3 +1,7 @@
+2006-04-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpapersize.c: Win32 fixes.  (#336806, Yevgen Muntyan)
+
 2006-03-30  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols:
