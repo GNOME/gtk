@@ -1,3 +1,7 @@
+2006-04-01  Gora Mohanty  <gmohanty@cvs.gnome.org>
+
+        * configure.in: Added 'or' (Oriya) to ALL_LINGUAS.
+
 2006-04-01  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw_style.c (draw_hline): Emulate WinXP's
