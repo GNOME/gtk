@@ -1,3 +1,12 @@
+2006-04-01  Pawan Chitrakar  <pchitrakar@gmail.com>
+
+	* ne.po: Updated with context string removed
+
+2006-03-21  Pawan Chitrakar  <pchitrakar@gmail.com>
+
+	* ne.po: Updated nepali translation
+		LTR made default
+
 2006-04-01  Gora Mohanty  <gmohanty@cvs.gnome.org>
 
         * or.po: Added Oriya translation.
