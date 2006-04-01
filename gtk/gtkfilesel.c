@@ -1243,7 +1243,7 @@ G_CONST_RETURN gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static const gchar nothing[2] = "";
-  static gchar something[MAXPATHLEN*2+1];
+  static GString *something;
   char *sys_filename;
   const char *text;
 
@@ -1260,10 +1260,14 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
       g_free (fullname);
       if (!sys_filename)
 	return nothing;
+      if (!something)
+        something = g_string_new (sys_filename);
+      else
+        g_string_assign (something, sys_filename);
       strncpy (something, sys_filename, sizeof (something) - 1);
-      something[sizeof (something) - 1] = '\0';
       g_free (sys_filename);
-      return something;
+
+      return something->str;
     }
 
   return nothing;

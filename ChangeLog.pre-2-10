@@ -1,3 +1,8 @@
+2006-04-01  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_get_filename): Use a GString
+	instead of static buffer to reduce .bss by 8kb. (#336784)
+
 2006-04-01  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/msw_style.c (draw_hline): Emulate WinXP's
