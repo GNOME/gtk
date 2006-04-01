@@ -362,6 +362,7 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
       g_value_set_boolean (value, menu->priv->local_only);
+      break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
       g_value_set_enum (value, menu->priv->sort_type);
       break;

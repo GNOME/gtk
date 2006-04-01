@@ -1,5 +1,10 @@
 2006-03-31  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_get_property):
+	Add missing break. (#336769, Morten Welinder)
+
+2006-03-31  Behdad Esfahbod  <behdad@gnome.org>
+
 	* gtk/gtkfilesystem.c (gtk_file_system_get_bookmark_label):
 	* gtk/gtklinkbutton.c (gtk_link_button_new_with_label): Return NULL
 	instead of FALSE in g_return_val_if_fail in a pointer-returning
