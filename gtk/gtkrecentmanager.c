@@ -480,13 +480,13 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
       manager->priv->poll_timeout = 0;
     }
 
-  build_recent_items_list (manager);
-  
   priv->filename = g_strdup (filename);
   priv->poll_timeout = g_timeout_add (POLL_DELTA,
 		  		      gtk_recent_manager_poll_timeout,
 				      manager);
 
+  build_recent_items_list (manager);
+  
   priv->is_dirty = FALSE;
 }
 
@@ -685,7 +685,7 @@ display_closed (GdkDisplay       *display,
 
   if (was_screen_singleton)
     {
-      g_object_set_data (G_OBJECT (screen), I_("gtk-recent-manager-error-quark"), NULL);
+      g_object_set_data (G_OBJECT (screen), I_("gtk-recent-manager-default"), NULL);
       priv->is_screen_singleton = FALSE;
     }
 

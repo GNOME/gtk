@@ -1,3 +1,11 @@
+2006-04-02  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_set_filename): Build
+	the items list after setting the storage file.
+
+	* gtk/gtkrecentmanager.c (display_closed): Use the right string
+	for unsetting the default manager object from the screen.	
+
 2006-04-01  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_get_filename): Oops. (#336784)
