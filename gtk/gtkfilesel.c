@@ -1264,7 +1264,6 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
         something = g_string_new (sys_filename);
       else
         g_string_assign (something, sys_filename);
-      strncpy (something, sys_filename, sizeof (something) - 1);
       g_free (sys_filename);
 
       return something->str;
