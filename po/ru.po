@@ -1263,7 +1263,7 @@ msgstr "%Y"
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "ярлык индикатора хода процесса|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:223 gtk/gtkcolorbutton.c:591
 msgid "Pick a Color"
