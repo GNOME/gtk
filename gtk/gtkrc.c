@@ -279,48 +279,86 @@ static const GScannerConfig gtk_rc_scanner_config =
   TRUE			/* symbol_2_token */,
   FALSE			/* scope_0_fallback */,
 };
+ 
+static const gchar symbol_names[] = 
+  "include\0"
+  "NORMAL\0"
+  "ACTIVE\0"
+  "PRELIGHT\0"
+  "SELECTED\0"
+  "INSENSITIVE\0"
+  "fg\0"
+  "bg\0"
+  "text\0"
+  "base\0"
+  "xthickness\0"
+  "ythickness\0"
+  "font\0"
+  "fontset\0"
+  "font_name\0"
+  "bg_pixmap\0"
+  "pixmap_path\0"
+  "style\0"
+  "binding\0"
+  "bind\0"
+  "widget\0"
+  "widget_class\0"
+  "class\0"
+  "lowest\0"
+  "gtk\0"
+  "application\0"
+  "theme\0"
+  "rc\0"
+  "highest\0"
+  "engine\0"
+  "module_path\0"
+  "stock\0"
+  "im_module_file\0"
+  "LTR\0"
+  "RTL\0"
+  "color\0";
 
 static const struct
 {
-  gchar *name;
+  guint name_offset;
   guint token;
 } symbols[] = {
-  { "include", GTK_RC_TOKEN_INCLUDE },
-  { "NORMAL", GTK_RC_TOKEN_NORMAL },
-  { "ACTIVE", GTK_RC_TOKEN_ACTIVE },
-  { "PRELIGHT", GTK_RC_TOKEN_PRELIGHT },
-  { "SELECTED", GTK_RC_TOKEN_SELECTED },
-  { "INSENSITIVE", GTK_RC_TOKEN_INSENSITIVE },
-  { "fg", GTK_RC_TOKEN_FG },
-  { "bg", GTK_RC_TOKEN_BG },
-  { "text", GTK_RC_TOKEN_TEXT },
-  { "base", GTK_RC_TOKEN_BASE },
-  { "xthickness", GTK_RC_TOKEN_XTHICKNESS },
-  { "ythickness", GTK_RC_TOKEN_YTHICKNESS },
-  { "font", GTK_RC_TOKEN_FONT },
-  { "fontset", GTK_RC_TOKEN_FONTSET },
-  { "font_name", GTK_RC_TOKEN_FONT_NAME },
-  { "bg_pixmap", GTK_RC_TOKEN_BG_PIXMAP },
-  { "pixmap_path", GTK_RC_TOKEN_PIXMAP_PATH },
-  { "style", GTK_RC_TOKEN_STYLE },
-  { "binding", GTK_RC_TOKEN_BINDING },
-  { "bind", GTK_RC_TOKEN_BIND },
-  { "widget", GTK_RC_TOKEN_WIDGET },
-  { "widget_class", GTK_RC_TOKEN_WIDGET_CLASS },
-  { "class", GTK_RC_TOKEN_CLASS },
-  { "lowest", GTK_RC_TOKEN_LOWEST },
-  { "gtk", GTK_RC_TOKEN_GTK },
-  { "application", GTK_RC_TOKEN_APPLICATION },
-  { "theme", GTK_RC_TOKEN_THEME },
-  { "rc", GTK_RC_TOKEN_RC },
-  { "highest", GTK_RC_TOKEN_HIGHEST },
-  { "engine", GTK_RC_TOKEN_ENGINE },
-  { "module_path", GTK_RC_TOKEN_MODULE_PATH },
-  { "stock", GTK_RC_TOKEN_STOCK },
-  { "im_module_file", GTK_RC_TOKEN_IM_MODULE_FILE },
-  { "LTR", GTK_RC_TOKEN_LTR },
-  { "RTL", GTK_RC_TOKEN_RTL },
-  { "color", GTK_RC_TOKEN_COLOR }
+  {   0, GTK_RC_TOKEN_INCLUDE },
+  {   8, GTK_RC_TOKEN_NORMAL },
+  {  15, GTK_RC_TOKEN_ACTIVE },
+  {  22, GTK_RC_TOKEN_PRELIGHT },
+  {  31, GTK_RC_TOKEN_SELECTED },
+  {  40, GTK_RC_TOKEN_INSENSITIVE },
+  {  52, GTK_RC_TOKEN_FG },
+  {  55, GTK_RC_TOKEN_BG },
+  {  58, GTK_RC_TOKEN_TEXT },
+  {  63, GTK_RC_TOKEN_BASE },
+  {  68, GTK_RC_TOKEN_XTHICKNESS },
+  {  79, GTK_RC_TOKEN_YTHICKNESS },
+  {  90, GTK_RC_TOKEN_FONT },
+  {  95, GTK_RC_TOKEN_FONTSET },
+  { 103, GTK_RC_TOKEN_FONT_NAME },
+  { 113, GTK_RC_TOKEN_BG_PIXMAP },
+  { 123, GTK_RC_TOKEN_PIXMAP_PATH },
+  { 135, GTK_RC_TOKEN_STYLE },
+  { 141, GTK_RC_TOKEN_BINDING },
+  { 149, GTK_RC_TOKEN_BIND },
+  { 154, GTK_RC_TOKEN_WIDGET },
+  { 161, GTK_RC_TOKEN_WIDGET_CLASS },
+  { 174, GTK_RC_TOKEN_CLASS },
+  { 180, GTK_RC_TOKEN_LOWEST },
+  { 187, GTK_RC_TOKEN_GTK },
+  { 191, GTK_RC_TOKEN_APPLICATION },
+  { 203, GTK_RC_TOKEN_THEME },
+  { 209, GTK_RC_TOKEN_RC },
+  { 212, GTK_RC_TOKEN_HIGHEST },
+  { 220, GTK_RC_TOKEN_ENGINE },
+  { 227, GTK_RC_TOKEN_MODULE_PATH },
+  { 239, GTK_RC_TOKEN_STOCK },
+  { 245, GTK_RC_TOKEN_IM_MODULE_FILE },
+  { 260, GTK_RC_TOKEN_LTR },
+  { 264, GTK_RC_TOKEN_RTL },
+  { 268, GTK_RC_TOKEN_COLOR }
 };
 
 static GHashTable *realized_style_ht = NULL;
@@ -2024,8 +2062,7 @@ gtk_rc_parse_any (GtkRcContext *context,
   scanner->input_name = input_name;
 
   for (i = 0; i < G_N_ELEMENTS (symbols); i++)
-    g_scanner_scope_add_symbol (scanner, 0, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
-  
+    g_scanner_scope_add_symbol (scanner, 0, symbol_names + symbols[i].name_offset, GINT_TO_POINTER (symbols[i].token));
   done = FALSE;
   while (!done)
     {
@@ -2056,7 +2093,7 @@ gtk_rc_parse_any (GtkRcContext *context,
 		    {
 		      for (i = 0; i < G_N_ELEMENTS (symbols); i++)
 			if (symbols[i].token == expected_token)
-			  msg = symbols[i].name;
+			  msg = symbol_names + symbols[i].name_offset;
 		      if (msg)
 			msg = g_strconcat ("e.g. `", msg, "'", NULL);
 		    }
@@ -2066,7 +2103,7 @@ gtk_rc_parse_any (GtkRcContext *context,
 		      symbol_name = "???";
 		      for (i = 0; i < G_N_ELEMENTS (symbols); i++)
 			if (symbols[i].token == scanner->token)
-			  symbol_name = symbols[i].name;
+			  symbol_name = symbol_names + symbols[i].name_offset;
 		    }
 		}
 	      g_scanner_unexp_token (scanner,

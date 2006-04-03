@@ -1,5 +1,7 @@
 2006-04-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrc.c: Avoid relocations for the array of symbol names. 
+
 	* gtk/gtkruler.c: Remove unused strings from the ruler_metrics 
 	structs, to avoid relocations.  (#336917, Stephane Chauveau)
 
