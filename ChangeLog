@@ -1,3 +1,9 @@
+2006-04-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_add_initial_default_files) 
+	(gtk_rc_add_default_file): Allocate the gtk_rc_default_files array
+	dynamically.
+
 2006-04-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.c: Avoid relocations for the array of symbol names. 

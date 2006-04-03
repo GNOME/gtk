@@ -365,8 +365,8 @@ static GHashTable *realized_style_ht = NULL;
 
 static gchar *im_module_file = NULL;
 
-#define GTK_RC_MAX_DEFAULT_FILES 128
-static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
+static gint    max_default_files = 0;
+static gchar **gtk_rc_default_files = NULL;
 
 /* A stack of information of RC files we are parsing currently.
  * The directories for these files are implicitely added to the end of
@@ -493,7 +493,10 @@ gtk_rc_add_initial_default_files (void)
 
   if (init)
     return;
-  
+ 
+  gtk_rc_default_files = g_new (gchar*, 10);
+  max_default_files = 10;
+
   gtk_rc_default_files[0] = NULL;
   init = TRUE;
 
@@ -501,7 +504,7 @@ gtk_rc_add_initial_default_files (void)
 
   if (var)
     {
-      files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
+      files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, -1);
       i=0;
       while (files[i])
 	{
@@ -543,9 +546,17 @@ gtk_rc_add_default_file (const gchar *filename)
   
   gtk_rc_add_initial_default_files ();
 
-  for (n = 0; gtk_rc_default_files[n]; n++) ;
-  if (n >= GTK_RC_MAX_DEFAULT_FILES - 1)
-    return;
+  for (n = 0; n < max_default_files; n++) 
+    {
+      if (gtk_rc_default_files[n] == NULL)
+	break;
+    }
+
+  if (n == max_default_files)
+    {
+      max_default_files += 10;
+      gtk_rc_default_files = g_renew (gchar*, gtk_rc_default_files, max_default_files);
+    }
   
   gtk_rc_default_files[n++] = g_strdup (filename);
   gtk_rc_default_files[n] = NULL;
