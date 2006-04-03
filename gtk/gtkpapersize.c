@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
-#ifdef HAVE_LANGINFO_H
+#if defined(HAVE__NL_PAPER_HEIGHT) && defined(HAVE__NL_PAPER_WIDTH)
 #include <langinfo.h>
 #endif
 

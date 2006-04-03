@@ -1,3 +1,11 @@
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	Disable margin from printers if there are no printers.
+	
+	* gtk/gtkpapersize.c:
+	Fix build.
+
 2006-04-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: protect unix-only symbols by 

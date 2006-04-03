@@ -1418,6 +1418,24 @@ custom_paper_printer_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
+update_combo_sensitivity_from_printers (CustomPaperDialog *data)
+{
+  GtkTreeIter iter;
+  gboolean sensitive;
+  GtkTreeSelection *selection;
+
+  sensitive = FALSE;
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data->treeview));
+  if (gtk_tree_model_get_iter_first (data->dialog->priv->printer_list, &iter) &&
+      gtk_tree_model_iter_next (data->dialog->priv->printer_list, &iter) &&
+      gtk_tree_selection_get_selected (selection, NULL, &iter))
+    sensitive = TRUE;
+
+  g_print ("sensitive: %d\n", sensitive);
+  gtk_widget_set_sensitive (data->printer_combo, sensitive);
+}
+
+static void
 update_custom_widgets_from_list (CustomPaperDialog *data)
 {
   GtkTreeSelection *selection;
@@ -1452,7 +1470,6 @@ update_custom_widgets_from_list (CustomPaperDialog *data)
       unit_widget_set_sensitive (data->bottom_widget, TRUE);
       unit_widget_set_sensitive (data->left_widget, TRUE);
       unit_widget_set_sensitive (data->right_widget, TRUE);
-      gtk_widget_set_sensitive (data->printer_combo, TRUE);
     }
   else
     {
@@ -1462,8 +1479,9 @@ update_custom_widgets_from_list (CustomPaperDialog *data)
       unit_widget_set_sensitive (data->bottom_widget, FALSE);
       unit_widget_set_sensitive (data->left_widget, FALSE);
       unit_widget_set_sensitive (data->right_widget, FALSE);
-      gtk_widget_set_sensitive (data->printer_combo, FALSE);
     }
+
+  update_combo_sensitivity_from_printers (data);
   data->non_user_change = FALSE;
 }
 
@@ -1766,6 +1784,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   GtkTreeSelection *selection;
   CustomPaperDialog *data;
   GtkUnit user_units;
+  gulong printer_tag1, printer_tag2;
   
   custom_dialog = gtk_dialog_new_with_buttons (_("Manage Custom Sizes"),
 					       GTK_WINDOW (dialog),
@@ -1943,6 +1962,14 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (dialog->priv->printer_list));
   data->printer_combo = combo;
+
+  printer_tag1 =
+    g_signal_connect_swapped (dialog->priv->printer_list, "row_inserted",
+			      G_CALLBACK (update_combo_sensitivity_from_printers), data);
+  printer_tag2 =
+    g_signal_connect_swapped (dialog->priv->printer_list, "row_deleted",
+			      G_CALLBACK (update_combo_sensitivity_from_printers), data);
+  update_combo_sensitivity_from_printers (data);
   
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
@@ -1977,6 +2004,10 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *dialog)
   gtk_widget_destroy (custom_dialog);
 
   save_custom_papers (dialog->priv->custom_paper_list);
+
+  g_signal_handler_disconnect (dialog->priv->printer_list, printer_tag1);
+  g_signal_handler_disconnect (dialog->priv->printer_list, printer_tag2);
+  
 }
 
 
