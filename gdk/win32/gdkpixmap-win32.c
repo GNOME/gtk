@@ -32,6 +32,7 @@
 
 #include "gdkpixmap.h"
 #include "gdkdisplay.h"
+#include "gdkscreen.h"
 
 #include "gdkprivate-win32.h"
 
