@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktext.c (gtk_text_key_press): Avoid relocations.
+
 	* gtk/gtkrc.c (gtk_rc_add_initial_default_files) 
 	(gtk_rc_add_default_file): Allocate the gtk_rc_default_files array
 	dynamically.

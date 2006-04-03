@@ -444,68 +444,6 @@ static void gtk_text_show_props (GtkText* test,
 
 static GtkWidgetClass *parent_class = NULL;
 
-
-static const GtkTextFunction control_keys[26] =
-{
-  (GtkTextFunction)gtk_text_move_beginning_of_line,    /* a */
-  (GtkTextFunction)gtk_text_move_backward_character,   /* b */
-  (GtkTextFunction)gtk_editable_copy_clipboard,        /* c */
-  (GtkTextFunction)gtk_text_delete_forward_character,  /* d */
-  (GtkTextFunction)gtk_text_move_end_of_line,          /* e */
-  (GtkTextFunction)gtk_text_move_forward_character,    /* f */
-  NULL,                                                /* g */
-  (GtkTextFunction)gtk_text_delete_backward_character, /* h */
-  NULL,                                                /* i */
-  NULL,                                                /* j */
-  (GtkTextFunction)gtk_text_delete_to_line_end,        /* k */
-  NULL,                                                /* l */
-  NULL,                                                /* m */
-  (GtkTextFunction)gtk_text_move_next_line,            /* n */
-  NULL,                                                /* o */
-  (GtkTextFunction)gtk_text_move_previous_line,        /* p */
-  NULL,                                                /* q */
-  NULL,                                                /* r */
-  NULL,                                                /* s */
-  NULL,                                                /* t */
-  (GtkTextFunction)gtk_text_delete_line,               /* u */
-  (GtkTextFunction)gtk_editable_paste_clipboard,       /* v */
-  (GtkTextFunction)gtk_text_delete_backward_word,      /* w */
-  (GtkTextFunction)gtk_editable_cut_clipboard,         /* x */
-  NULL,                                                /* y */
-  NULL,                                                /* z */
-};
-
-static const GtkTextFunction alt_keys[26] =
-{
-  NULL,                                                /* a */
-  (GtkTextFunction)gtk_text_move_backward_word,        /* b */
-  NULL,                                                /* c */
-  (GtkTextFunction)gtk_text_delete_forward_word,       /* d */
-  NULL,                                           /* e */
-  (GtkTextFunction)gtk_text_move_forward_word,         /* f */
-  NULL,                                           /* g */
-  NULL,                                           /* h */
-  NULL,                                           /* i */
-  NULL,                                           /* j */
-  NULL,                                           /* k */
-  NULL,                                           /* l */
-  NULL,                                           /* m */
-  NULL,                                           /* n */
-  NULL,                                           /* o */
-  NULL,                                           /* p */
-  NULL,                                           /* q */
-  NULL,                                           /* r */
-  NULL,                                           /* s */
-  NULL,                                           /* t */
-  NULL,                                           /* u */
-  NULL,                                           /* v */
-  NULL,                                           /* w */
-  NULL,                                           /* x */
-  NULL,                                           /* y */
-  NULL,                                           /* z */
-};
-
-
 /**********************************************************************/
 /*			        Widget Crap                           */
 /**********************************************************************/
@@ -2116,26 +2054,79 @@ gtk_text_key_press (GtkWidget   *widget,
 	  
 	  if (event->state & GDK_CONTROL_MASK)
 	    {
+	      return_val = TRUE;
 	      if ((key >= 'A') && (key <= 'Z'))
 		key -= 'A' - 'a';
-	      
-	      if ((key >= 'a') && (key <= 'z') && control_keys[(int) (key - 'a')])
+
+	      switch (key)
 		{
-		  (* control_keys[(int) (key - 'a')]) (old_editable, event->time);
-		  return_val = TRUE;
+		case 'a':
+		  gtk_text_move_beginning_of_line (text);
+		  break;
+		case 'b':
+		  gtk_text_move_backward_character (text);
+		  break;
+		case 'c':
+		  gtk_editable_copy_clipboard (text);
+		  break;
+		case 'd':
+		  gtk_text_delete_forward_character (text);
+		  break;
+		case 'e':
+		  gtk_text_move_end_of_line (text);
+		  break;
+		case 'f':
+		  gtk_text_move_forward_character (text);
+		  break;
+		case 'h':
+		  gtk_text_delete_backward_character (text);
+		  break;
+		case 'k':
+		  gtk_text_delete_to_line_end (text);
+		  break;
+		case 'n':
+		  gtk_text_move_next_line (text);
+		  break;
+		case 'p':
+		  gtk_text_move_previous_line (text);
+		  break;
+		case 'u':
+		  gtk_text_delete_line (text);
+		  break;
+		case 'v':
+		  gtk_editable_paste_clipboard (text);
+		  break;
+		case 'w':
+		  gtk_text_delete_backward_word (text);
+		  break;
+		case 'x':
+		  gtk_editable_cut_clipboard (text);
+		  break;
+		default:
+		  return_val = FALSE;
 		}
-	      
+
 	      break;
 	    }
 	  else if (event->state & GDK_MOD1_MASK)
 	    {
+	      return_val = TRUE;
 	      if ((key >= 'A') && (key <= 'Z'))
 		key -= 'A' - 'a';
 	      
-	      if ((key >= 'a') && (key <= 'z') && alt_keys[(int) (key - 'a')])
+	      switch (key)
 		{
-		  (* alt_keys[(int) (key - 'a')]) (old_editable, event->time);
-		  return_val = TRUE;
+		case 'b':
+		  gtk_text_move_backward_word (text);
+		  break;
+		case 'd':
+		  gtk_text_delete_forward_word (text);
+		  break;
+		case 'f':
+		  gtk_text_move_forward_word (text);
+		  break;
+		default:
+		  return_val = FALSE;
 		}
 	      
 	      break;
