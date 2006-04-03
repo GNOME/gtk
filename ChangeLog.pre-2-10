@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklinkbutton.c: Make the default colors const.
+
 	* gtk/gtkuimanager.c: Avoid relocations. 
 
 	* gtk/gtkxembed.c (_gtk_xembed_message_name): Reduce size of static

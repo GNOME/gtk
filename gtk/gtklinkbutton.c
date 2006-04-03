@@ -99,8 +99,8 @@ static const GtkTargetEntry link_drop_types[] = {
   { "_NETSCAPE_URL", 0, 0 }
 };
 
-static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
-static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
+static const GdkColor default_link_color = { 0, 0, 0, 0xeeee };
+static const GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
 static GtkLinkButtonUriFunc uri_func = NULL;
 static gpointer uri_func_data = NULL;
