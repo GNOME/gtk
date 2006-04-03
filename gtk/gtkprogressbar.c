@@ -1018,7 +1018,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
 /**
  * gtk_progress_bar_set_text:
  * @pbar: a #GtkProgressBar
- * @text: a UTF-8 string
+ * @text: a UTF-8 string, or %NULL 
  * 
  * Causes the given @text to appear superimposed on the progress bar.
  **/
