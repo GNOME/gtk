@@ -161,9 +161,6 @@ static const GDebugKey gtk_debug_keys[] = {
   {"geometry", GTK_DEBUG_GEOMETRY},
   {"icontheme", GTK_DEBUG_ICONTHEME}
 };
-
-static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
-
 #endif /* G_ENABLE_DEBUG */
 
 /**
@@ -370,7 +367,7 @@ gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
   gtk_debug_flags |= g_parse_debug_string (value,
 					   gtk_debug_keys,
-					   gtk_ndebug_keys);
+					   G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -380,7 +377,7 @@ gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 {
   gtk_debug_flags &= ~g_parse_debug_string (value,
 					    gtk_debug_keys,
-					    gtk_ndebug_keys);
+					    G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -447,7 +444,7 @@ do_pre_parse_initialization (int    *argc,
     {
       gtk_debug_flags = g_parse_debug_string (env_string,
 					      gtk_debug_keys,
-					      gtk_ndebug_keys);
+					      G_N_ELEMENTS (gtk_debug_keys));
       env_string = NULL;
     }
 #endif	/* G_ENABLE_DEBUG */
