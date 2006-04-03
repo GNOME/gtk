@@ -1,5 +1,8 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkxembed.c (_gtk_xembed_message_name): Reduce size of static
+	buffer.
+
 	* gtk/gtktext.c (gtk_text_key_press): Avoid relocations.
 
 	* gtk/gtkrc.c (gtk_rc_add_initial_default_files) 

@@ -215,7 +215,7 @@ _gtk_xembed_send_focus_message (GdkWindow        *recipient,
 const char *
 _gtk_xembed_message_name (XEmbedMessageType message)
 {
-  static char unk[100];
+  static char unk[24];
   
   switch (message)
     {
@@ -236,7 +236,7 @@ _gtk_xembed_message_name (XEmbedMessageType message)
       CASE (GTK_UNGRAB_KEY);
 #undef CASE
     default:
-      sprintf (unk, "UNKNOWN(%d)", message);
+      snprintf (unk, 24, "UNKNOWN(%d)", message);
       return unk;
     }
 }
