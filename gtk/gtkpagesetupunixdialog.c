@@ -1423,11 +1423,13 @@ update_combo_sensitivity_from_printers (CustomPaperDialog *data)
   GtkTreeIter iter;
   gboolean sensitive;
   GtkTreeSelection *selection;
+  GtkTreeModel *model;
 
   sensitive = FALSE;
+  model = GTK_TREE_MODEL (data->dialog->priv->printer_list);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data->treeview));
-  if (gtk_tree_model_get_iter_first (data->dialog->priv->printer_list, &iter) &&
-      gtk_tree_model_iter_next (data->dialog->priv->printer_list, &iter) &&
+  if (gtk_tree_model_get_iter_first (model, &iter) &&
+      gtk_tree_model_iter_next (model, &iter) &&
       gtk_tree_selection_get_selected (selection, NULL, &iter))
     sensitive = TRUE;
 

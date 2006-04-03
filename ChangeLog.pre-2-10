@@ -1,5 +1,23 @@
 2006-04-03  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c:
+	Fix warnings
+	
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	Add gtk_printer_is_default.
+	
+	* gtk/gtkprintunixdialog.c:
+	Use gtk_printer_is_default.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Get default printer info
+	
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Fix warning.
+
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
 	* modules/printbackends/pdf/gtkprintbackendpdf.c:
 	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
 	Correctly read/write/use the output filename setting.

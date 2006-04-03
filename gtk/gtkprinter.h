@@ -77,6 +77,7 @@ const gchar             *gtk_printer_get_icon_name        (GtkPrinter *printer);
 gint                     gtk_printer_get_job_count        (GtkPrinter *printer);
 gboolean                 gtk_printer_is_active            (GtkPrinter *printer);
 gboolean                 gtk_printer_is_virtual           (GtkPrinter *printer);
+gboolean                 gtk_printer_is_default           (GtkPrinter *printer);
 
 G_END_DECLS
 

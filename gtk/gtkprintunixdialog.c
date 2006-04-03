@@ -343,14 +343,15 @@ static const char *nocollate_reverse_xpm[] = {
 "....................              ....................           "};
 
 
-static const char *
-get_default_printer (GtkPrintUnixDialog *dialog)
+static gboolean
+is_default_printer (GtkPrintUnixDialog *dialog,
+		    GtkPrinter *printer)
 {
   if (dialog->priv->format_for_printer)
-    return dialog->priv->format_for_printer;
-  
-  /* TODO: use something better */
-  return "printer";
+    return strcmp (dialog->priv->format_for_printer,
+		   gtk_printer_get_name (printer)) == 0;
+ else
+   return gtk_printer_is_default (printer);
 }
 
 static void
@@ -538,7 +539,7 @@ printer_added_cb (GtkPrintBackend *backend,
       g_free (dialog->priv->waiting_for_printer);
       dialog->priv->waiting_for_printer = NULL;
     }
-  else if (strcmp (gtk_printer_get_name (printer), get_default_printer (dialog)) == 0 &&
+  else if (is_default_printer (dialog, printer) &&
 	   gtk_tree_selection_count_selected_rows (selection) == 0)
     {
       dialog->priv->internal_printer_change = TRUE;

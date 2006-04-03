@@ -330,7 +330,7 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *save_channel;  
-  gchar *filename;
+  const char *filename;
 
   pdf_printer = GTK_PRINTER_PDF (gtk_print_job_get_printer (job));
   settings = gtk_print_job_get_settings (job);

@@ -305,6 +305,14 @@ gtk_printer_is_virtual (GtkPrinter *printer)
   return printer->priv->is_virtual;
 }
 
+gboolean
+gtk_printer_is_default (GtkPrinter *printer)
+{
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+  
+  return printer->priv->is_default;
+}
+
 void
 _gtk_printer_request_details (GtkPrinter *printer)
 {

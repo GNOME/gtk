@@ -99,8 +99,11 @@ struct _GtkPrintBackendCups
 
   GHashTable *printers;
 
-  gint list_printers_poll;
-  gint list_printers_pending : 1; 
+  char *default_printer;
+  
+  guint list_printers_poll;
+  guint list_printers_pending : 1;
+  guint got_default_printer : 1;
 };
 
 static GObjectClass *backend_parent_class;
@@ -130,6 +133,7 @@ static void                 cups_printer_prepare_for_print         (GtkPrinter  
 								    GtkPageSetup                      *page_setup);
 static GList *              cups_printer_list_papers               (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
+static void                 cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
 static void                 cups_request_ppd                       (GtkPrinter                        *printer);
 static void                 cups_printer_get_hard_margins          (GtkPrinter                        *printer,
 								    double                            *top,
@@ -439,6 +443,7 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
                                                  (GDestroyNotify) g_free,
                                                  (GDestroyNotify) g_object_unref);
 
+  cups_request_default_printer (backend_cups);
 }
 
 static void
@@ -454,6 +459,9 @@ gtk_print_backend_cups_finalize (GObject *object)
   if (backend_cups->printers)
     g_hash_table_unref (backend_cups->printers);
 
+  g_free (backend_cups->default_printer);
+  backend_cups->default_printer = NULL;
+  
   backend_parent_class->finalize (object);
 }
 
@@ -1066,6 +1074,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           printer->priv->name = g_strdup (attr->values[0].string.text);
           printer->priv->backend = GTK_PRINT_BACKEND (cups_backend);
 
+	  if (cups_backend->default_printer != NULL &&
+	      strcmp (cups_backend->default_printer, printer->priv->name) == 0)
+	    printer->priv->is_default = TRUE;
+
           g_hash_table_insert (cups_backend->printers,
                                g_strdup (printer->priv->name), 
                                cups_printer);
@@ -1115,7 +1127,8 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
   GError *error;
   GtkCupsRequest *request;
 
-  if (cups_backend->list_printers_pending)
+  if (cups_backend->list_printers_pending ||
+      !cups_backend->got_default_printer)
     return TRUE;
 
   cups_backend->list_printers_pending = TRUE;
@@ -1266,6 +1279,67 @@ cups_request_ppd (GtkPrinter      *printer)
                         (GDestroyNotify)get_ppd_data_free,
                         &error);
 }
+
+
+static void
+cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
+				 GtkCupsResult *result,
+				 gpointer user_data)
+{
+  ipp_t *response;
+  ipp_attribute_t *attr;
+
+  response = gtk_cups_result_get_response (result);
+  
+  if ((attr = ippFindAttribute(response, "printer-name", IPP_TAG_NAME)) != NULL)
+    print_backend->default_printer = g_strdup (attr->values[0].string.text);
+
+  print_backend->got_default_printer = TRUE;
+
+  /* Make sure to kick off get_printers if we are polling it, as we could
+     have blocked this reading the default printer */
+  if (print_backend->list_printers_poll != 0)
+    cups_request_printer_list (print_backend);
+}
+
+static void
+cups_request_default_printer (GtkPrintBackendCups *print_backend)
+{
+  GError *error;
+  GtkCupsRequest *request;
+  const char *str;
+
+  error = NULL;
+
+  if ((str = getenv("LPDEST")) != NULL)
+    {
+      print_backend->default_printer = g_strdup (str);
+      print_backend->got_default_printer = TRUE;
+      return;
+    }
+  else if ((str = getenv("PRINTER")) != NULL &&
+	   strcmp(str, "lp") != 0)
+    {
+      print_backend->default_printer = g_strdup (str);
+      print_backend->got_default_printer = TRUE;
+      return;
+    }
+  
+  request = gtk_cups_request_new (NULL,
+                                  GTK_CUPS_POST,
+                                  CUPS_GET_DEFAULT,
+				  0,
+				  NULL,
+				  NULL);
+  
+  cups_request_execute (print_backend,
+                        request,
+                        (GtkPrintCupsResponseCallbackFunc) cups_request_default_printer_cb,
+		        g_object_ref (print_backend),
+		        g_object_unref,
+                        &error);
+}
+
 
 static void
 cups_printer_request_details (GtkPrinter *printer)
