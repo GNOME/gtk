@@ -22,6 +22,11 @@ which protects all use of GTK+. That is, only one thread can use GTK+
 at any given time.
 </para>
 <para>
+Unfortunately the above holds with the X11 backend only. With the
+Win32 backend, GDK calls should not be attempted from multiple threads
+at all.
+</para>
+<para>
 You must call g_thread_init() and gdk_threads_init() before executing
 any other GTK+ or GDK functions in a threaded GTK+ program.
 </para>
