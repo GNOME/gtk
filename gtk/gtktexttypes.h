@@ -55,17 +55,17 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
 #endif
 
 /* In gtktextbtree.c */
-extern GtkTextLineSegmentClass gtk_text_char_type;
-extern GtkTextLineSegmentClass gtk_text_toggle_on_type;
-extern GtkTextLineSegmentClass gtk_text_toggle_off_type;
+extern const GtkTextLineSegmentClass gtk_text_char_type;
+extern const GtkTextLineSegmentClass gtk_text_toggle_on_type;
+extern const GtkTextLineSegmentClass gtk_text_toggle_off_type;
 
 /* In gtktextmark.c */
-extern GtkTextLineSegmentClass gtk_text_left_mark_type;
-extern GtkTextLineSegmentClass gtk_text_right_mark_type;
+extern const GtkTextLineSegmentClass gtk_text_left_mark_type;
+extern const GtkTextLineSegmentClass gtk_text_right_mark_type;
 
 /* In gtktextchild.c */
-extern GtkTextLineSegmentClass gtk_text_pixbuf_type;
-extern GtkTextLineSegmentClass gtk_text_child_type;
+extern const GtkTextLineSegmentClass gtk_text_pixbuf_type;
+extern const GtkTextLineSegmentClass gtk_text_child_type;
 
 /*
  * UTF 8 Stubs

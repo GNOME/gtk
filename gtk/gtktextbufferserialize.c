@@ -1798,8 +1798,7 @@ deserialize_text (GtkTextBuffer *buffer,
   ParseInfo info;
   gboolean retval = FALSE;
 
-
-  static GMarkupParser rich_text_parser = {
+  static const GMarkupParser rich_text_parser = {
     start_element_handler,
     end_element_handler,
     text_handler,

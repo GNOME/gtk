@@ -131,10 +131,10 @@ struct _GtkTextLineSegmentClass {
  */
 
 struct _GtkTextLineSegment {
-  GtkTextLineSegmentClass *type;                /* Pointer to record describing
-                                                 * segment's type. */
-  GtkTextLineSegment *next;                /* Next in list of segments for this
-                                            * line, or NULL for end of list. */
+  const GtkTextLineSegmentClass *type;  /* Pointer to record describing
+                                         * segment's type. */
+  GtkTextLineSegment *next;             /* Next in list of segments for this
+                                         * line, or NULL for end of list. */
 
   int char_count;                       /* # of chars of index space occupied */
 

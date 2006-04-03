@@ -196,7 +196,7 @@ _gtk_char_segment_new (const gchar *text, guint len)
   g_assert (gtk_text_byte_begins_utf8_char (text));
 
   seg = g_malloc (CSEG_SIZE (len));
-  seg->type = &gtk_text_char_type;
+  seg->type = (GtkTextLineSegmentClass *)&gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len;
   memcpy (seg->body.chars, text, len);
@@ -590,7 +590,7 @@ toggle_segment_line_change_func (segPtr, line)
  */
 
 
-GtkTextLineSegmentClass gtk_text_char_type = {
+const GtkTextLineSegmentClass gtk_text_char_type = {
   "character",                          /* name */
   0,                                            /* leftGravity */
   char_segment_split_func,                              /* splitFunc */
@@ -605,7 +605,7 @@ GtkTextLineSegmentClass gtk_text_char_type = {
  * range:
  */
 
-GtkTextLineSegmentClass gtk_text_toggle_on_type = {
+const GtkTextLineSegmentClass gtk_text_toggle_on_type = {
   "toggleOn",                                   /* name */
   0,                                            /* leftGravity */
   NULL,                 /* splitFunc */
@@ -620,7 +620,7 @@ GtkTextLineSegmentClass gtk_text_toggle_on_type = {
  * range:
  */
 
-GtkTextLineSegmentClass gtk_text_toggle_off_type = {
+const GtkTextLineSegmentClass gtk_text_toggle_off_type = {
   "toggleOff",                          /* name */
   1,                                            /* leftGravity */
   NULL,                 /* splitFunc */

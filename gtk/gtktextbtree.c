@@ -6923,7 +6923,7 @@ _gtk_text_btree_check (GtkTextBTree *tree)
             }
           else
             {
-              GtkTextLineSegmentClass * last = NULL;
+              const GtkTextLineSegmentClass *last = NULL;
 
               for (line = node->children.line ; line != NULL ;
                    line = line->next)

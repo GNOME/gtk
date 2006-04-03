@@ -108,7 +108,7 @@ pixbuf_segment_check_func (GtkTextLineSegment *seg,
 }
 
 
-GtkTextLineSegmentClass gtk_text_pixbuf_type = {
+const GtkTextLineSegmentClass gtk_text_pixbuf_type = {
   "pixbuf",                          /* name */
   FALSE,                                            /* leftGravity */
   NULL,                                          /* splitFunc */
@@ -206,7 +206,7 @@ child_segment_check_func (GtkTextLineSegment *seg,
     g_error ("child segment has char count of %d", seg->char_count);
 }
 
-GtkTextLineSegmentClass gtk_text_child_type = {
+const GtkTextLineSegmentClass gtk_text_child_type = {
   "child-widget",                                        /* name */
   FALSE,                                                 /* leftGravity */
   NULL,                                                  /* splitFunc */

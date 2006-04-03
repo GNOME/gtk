@@ -291,7 +291,7 @@ static void                mark_segment_check_func   (GtkTextLineSegment *segPtr
  * their gravity property.
  */
 
-GtkTextLineSegmentClass gtk_text_right_mark_type = {
+const GtkTextLineSegmentClass gtk_text_right_mark_type = {
   "mark",                                               /* name */
   FALSE,                                                /* leftGravity */
   NULL,                                         /* splitFunc */
@@ -301,7 +301,7 @@ GtkTextLineSegmentClass gtk_text_right_mark_type = {
   mark_segment_check_func                               /* checkFunc */
 };
 
-GtkTextLineSegmentClass gtk_text_left_mark_type = {
+const GtkTextLineSegmentClass gtk_text_left_mark_type = {
   "mark",                                               /* name */
   TRUE,                                         /* leftGravity */
   NULL,                                         /* splitFunc */

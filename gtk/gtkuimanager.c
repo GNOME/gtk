@@ -1467,7 +1467,7 @@ text_handler (GMarkupParseContext *context,
 }
 
 
-static GMarkupParser ui_parser = {
+static const GMarkupParser ui_parser = {
   start_element_handler,
   end_element_handler,
   text_handler,

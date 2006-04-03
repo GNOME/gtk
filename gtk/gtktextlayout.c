@@ -1293,7 +1293,6 @@ set_para_values (GtkTextLayout      *layout,
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       pango_layout_set_wrap (display->layout, PANGO_WRAP_CHAR);
       break;
-
     case GTK_WRAP_WORD:
       layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
@@ -1329,14 +1328,14 @@ gtk_text_attr_appearance_copy (const PangoAttribute *attr)
 static void
 gtk_text_attr_appearance_destroy (PangoAttribute *attr)
 {
-  GtkTextAppearance *appearance = &((GtkTextAttrAppearance *)attr)->appearance;
+  GtkTextAttrAppearance *appearance_attr = (GtkTextAttrAppearance *)attr;
 
-  if (appearance->bg_stipple)
-    g_object_unref (appearance->bg_stipple);
-  if (appearance->fg_stipple)
-    g_object_unref (appearance->fg_stipple);
+  if (appearance_attr->appearance.bg_stipple)
+    g_object_unref (appearance_attr->appearance.bg_stipple);
+  if (appearance_attr->appearance.fg_stipple)
+    g_object_unref (appearance_attr->appearance.fg_stipple);
 
-  g_slice_free (GtkTextAttrAppearance, attr);
+  g_slice_free (GtkTextAttrAppearance, appearance_attr);
 }
 
 static gboolean
