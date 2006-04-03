@@ -111,7 +111,7 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data, GError 
   return TRUE;
 }
 
-static GOptionEntry gdk_args[] = {
+static const GOptionEntry gdk_args[] = {
   { "class",        0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_class_cb,
     /* Description of --class=CLASS in --help output */        N_("Program class as used by the window manager"),
     /* Placeholder in --class=CLASS in --help output */        N_("CLASS") },
