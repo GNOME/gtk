@@ -1179,7 +1179,7 @@ msgstr "2000"
 #: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2213
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr "calendar:day:digits|%d"
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1194,7 +1194,7 @@ msgstr "calendar:day:digits|%d"
 #: ../gtk/gtkcalendar.c:1671 ../gtk/gtkcalendar.c:2088
 #, c-format
 msgid "calendar:week:digits|%d"
-msgstr "calendar:week:digits|%d"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.

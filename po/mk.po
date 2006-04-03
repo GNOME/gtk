@@ -1047,7 +1047,7 @@ msgstr "Дизајнирано од"
 #.
 #: ../gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr "|Shift"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1057,7 +1057,7 @@ msgstr "|Shift"
 #.
 #: ../gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr "|Ctrl"
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1067,17 +1067,17 @@ msgstr "|Ctrl"
 #.
 #: ../gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr "|Alt"
+msgstr "Alt"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr "|Space"
+msgstr "Space"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:581
 msgid "keyboard label|Backslash"
-msgstr "|Backslash"
+msgstr "Backslash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1110,7 +1110,7 @@ msgstr "calendar:week_start:0"
 #.
 #: ../gtk/gtkcalendar.c:1610
 msgid "year measurement template|2000"
-msgstr "year measurement template|2000"
+msgstr "2000"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.

@@ -2062,7 +2062,7 @@ msgstr "_Chom e skramm leun"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
 msgid "Navigation|_Bottom"
-msgstr "Furchal|_Traoñ"
+msgstr "_Traoñ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
@@ -2072,32 +2072,32 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr "Furchal|_Diwezhañ"
+msgstr "_Diwezhañ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr "Furchal|_Laez"
+msgstr "_Laez"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr "Furchal|_War-gil"
+msgstr "_War-gil"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr "Furchal|_Izel"
+msgstr "_Izel"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr "Furchal|War-_raok"
+msgstr "War-_raok"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr "Furchal|_Uhel"
+msgstr "_Uhel"
 
 #: gtk/gtkstock.c:351
 msgid "_Harddisk"
@@ -2160,27 +2160,27 @@ msgstr "_Dehoù"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Media|War-_raok"
+msgstr "War-_raok"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Media|A-_heul"
+msgstr "A-_heul"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Media|Eh_an"
+msgstr "Eh_an"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 msgid "Media|_Play"
-msgstr "Media|_Seniñ"
+msgstr "_Seniñ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Media|A-r_aok"
+msgstr "A-r_aok"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
@@ -2197,7 +2197,7 @@ msgstr "_Enklask"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
 msgid "Media|_Stop"
-msgstr "Media|_Harz"
+msgstr "_Harz"
 
 #: gtk/gtkstock.c:385
 msgid "_Network"

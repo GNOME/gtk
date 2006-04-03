@@ -834,135 +834,135 @@ msgstr "যে সকল জি.ডি.কে. ডিবাগিং ফ্ল�
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "কীবোর্ড লেবেল|ব্যাকস্পেস"
+msgstr "ব্যাকস্পেস"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "কীবোর্ড লেবেল|ট্যাব"
+msgstr "ট্যাব"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "কীবোর্ড লেবেল|রিটার্ন"
+msgstr "রিটার্ন"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "কীবোর্ড লেবেল|পস"
+msgstr "পস"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "কীবোর্ড লেবেল|স্ক্রল_লক"
+msgstr "স্ক্রল_লক"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "কীবোর্ড লেবেল|Sys_Req"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "কীবোর্ড লেবেল|এস্ক্যাপ"
+msgstr "এস্ক্যাপ"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "কীবোর্ড লেবেল|মাল্টি_কী"
+msgstr "মাল্টি_কী"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "কীবোর্ড লেবেল|হোম"
+msgstr "হোম"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr "কীবোর্ড লেবেল|পেজ_আপ"
+msgstr "পেজ_আপ"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr "কীবোর্ড লেবেল|পেজ_ডাউন"
+msgstr "পেজ_ডাউন"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr "কীবোর্ড লেবেল|এন্ড"
+msgstr "এন্ড"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "কীবোর্ড লেবেল|বিগেইন"
+msgstr "বিগেইন"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "কীবোর্ড লেবেল|প্রিন্ট"
+msgstr "প্রিন্ট"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr "কীবোর্ড লেবেল|ইন্সার্ট"
+msgstr "ইন্সার্ট"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "কীবোর্ড লেবেল|নাম্বার_লক"
+msgstr "নাম্বার_লক"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_স্পেস"
+msgstr "কীপ্যাড_স্পেস"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_ট্যাব"
+msgstr "কীপ্যাড_ট্যাব"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_এন্টার"
+msgstr "কীপ্যাড_এন্টার"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_হোম"
+msgstr "কীপ্যাড_হোম"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_লেফ্‌ট"
+msgstr "কীপ্যাড_লেফ্‌ট"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_আপ"
+msgstr "কীপ্যাড_আপ"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_রাইট"
+msgstr "কীপ্যাড_রাইট"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_ডাউন"
+msgstr "কীপ্যাড_ডাউন"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_পেজ_আপ"
+msgstr "কীপ্যাড_পেজ_আপ"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_প্রায়োর"
+msgstr "কীপ্যাড_প্রায়োর"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_পেজ_ডাউন"
+msgstr "কীপ্যাড_পেজ_ডাউন"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_নেক্সট"
+msgstr "কীপ্যাড_নেক্সট"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_এন্ড"
+msgstr "কীপ্যাড_এন্ড"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_বিগেইন"
+msgstr "কীপ্যাড_বিগেইন"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_ইন্সার্ট"
+msgstr "কীপ্যাড_ইন্সার্ট"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_ডিলিট"
+msgstr "কীপ্যাড_ডিলিট"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "কীবোর্ড লেবেল|ডিলিট"
+msgstr "ডিলিট"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1051,7 +1051,7 @@ msgstr "শিল্পী"
 #: ../gtk/gtkaccellabel.c:121
 #, fuzzy
 msgid "keyboard label|Shift"
-msgstr "কীবোর্ড লেবেল|প্রিন্ট"
+msgstr "প্রিন্ট"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1062,7 +1062,7 @@ msgstr "কীবোর্ড লেবেল|প্রিন্ট"
 #: ../gtk/gtkaccellabel.c:128
 #, fuzzy
 msgid "keyboard label|Ctrl"
-msgstr "কীবোর্ড লেবেল|রিটার্ন"
+msgstr "রিটার্ন"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1073,7 +1073,7 @@ msgstr "কীবোর্ড লেবেল|রিটার্ন"
 #: ../gtk/gtkaccellabel.c:135
 #, fuzzy
 msgid "keyboard label|Alt"
-msgstr "কীবোর্ড লেবেল|ডিলিট"
+msgstr "ডিলিট"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1084,7 +1084,7 @@ msgstr "কীবোর্ড লেবেল|ডিলিট"
 #: ../gtk/gtkaccellabel.c:609
 #, fuzzy
 msgid "keyboard label|Super"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_স্পেস"
+msgstr "কীপ্যাড_স্পেস"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1095,7 +1095,7 @@ msgstr "কীবোর্ড লেবেল|কীপ্যাড_স্পে
 #: ../gtk/gtkaccellabel.c:623
 #, fuzzy
 msgid "keyboard label|Hyper"
-msgstr "কীবোর্ড লেবেল|হোম"
+msgstr "হোম"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1106,19 +1106,19 @@ msgstr "কীবোর্ড লেবেল|হোম"
 #: ../gtk/gtkaccellabel.c:637
 #, fuzzy
 msgid "keyboard label|Meta"
-msgstr "কীবোর্ড লেবেল|ট্যাব"
+msgstr "ট্যাব"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:651
 #, fuzzy
 msgid "keyboard label|Space"
-msgstr "কীবোর্ড লেবেল|কীপ্যাড_স্পেস"
+msgstr "কীপ্যাড_স্পেস"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:655
 #, fuzzy
 msgid "keyboard label|Backslash"
-msgstr "কীবোর্ড লেবেল|ব্যাকস্পেস"
+msgstr "ব্যাকস্পেস"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1188,7 +1188,7 @@ msgstr ""
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "প্রগ্রেস বারের লেবেল|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
