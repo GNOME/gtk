@@ -337,18 +337,15 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
 
   error = NULL;
 
-#if 0
-  /* FIXME */
-  gtk_print_settings_foreach (settings, add_pdf_options, request);
-#endif
-   
+  filename = gtk_print_settings_get (settings, "pdf-filename");
+  if (filename == NULL)
+    filename = "output.pdf";
+  
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
   ps->job = g_object_ref (job);
 
-  filename = pdf_printer->file_option->value;
-  
   ps->target_fd = creat (filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
   ps->backend = print_backend;
 
@@ -371,7 +368,6 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
                   (GIOFunc) pdf_write,
                   ps);
-
 }
 
 
@@ -447,6 +443,7 @@ pdf_printer_get_options (GtkPrinter *printer,
   GtkPrinterPdf *pdf_printer;
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
+  const char *filename;
   char *n_up[] = {"1" };
 
   pdf_printer = GTK_PRINTER_PDF (printer);
@@ -460,16 +457,14 @@ pdf_printer_get_options (GtkPrinter *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
-  /* TODO: read initial value from settings if != NULL */
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), GTK_PRINTER_OPTION_TYPE_FILESAVE);
   gtk_printer_option_set (option, "output.pdf");
   option->group = g_strdup ("GtkPrintDialogExtention");
   gtk_printer_option_set_add (set, option);
-  
-  if (pdf_printer->file_option)
-    g_object_unref (pdf_printer->file_option);
 
-  pdf_printer->file_option = option;
+  if (settings != NULL &&
+      (filename = gtk_print_settings_get (settings, "pdf-filename"))!= NULL)
+    gtk_printer_option_set (option, filename);
 
   return set;
 }
@@ -487,7 +482,10 @@ pdf_printer_get_settings_from_options (GtkPrinter *printer,
 				       GtkPrinterOptionSet *options,
 				       GtkPrintSettings *settings)
 {
- 
+  GtkPrinterOption *option;
+
+  option = gtk_printer_option_set_lookup (options, "gtk-main-page-custom-input");
+  gtk_print_settings_set (settings, "pdf-filename", option->value);
 }
 
 static void

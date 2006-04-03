@@ -42,8 +42,6 @@ typedef struct _GtkPrinterPdfPrivate   GtkPrinterPdfPrivate;
 struct _GtkPrinterPdf
 {
   GtkPrinter parent_instance;
-
-  GtkPrinterOption *file_option;
 };
 
 struct _GtkPrinterPdfClass

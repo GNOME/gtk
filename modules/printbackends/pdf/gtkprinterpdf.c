@@ -73,8 +73,6 @@ gtk_printer_pdf_init (GtkPrinterPdf *printer)
 
   parent = GTK_PRINTER (printer);
 
-  printer->file_option = NULL;
-
   parent->priv->has_details = TRUE;
   parent->priv->is_virtual = TRUE;
   
@@ -86,9 +84,6 @@ gtk_printer_pdf_finalize (GObject *object)
   g_return_if_fail (object != NULL);
 
   GtkPrinterPdf *printer = GTK_PRINTER_PDF (object);
-
-  if (printer->file_option)
-    g_object_unref (printer->file_option);
 
   if (G_OBJECT_CLASS (gtk_printer_pdf_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_printer_pdf_parent_class)->finalize (object);

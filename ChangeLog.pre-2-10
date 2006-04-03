@@ -1,5 +1,11 @@
 2006-04-03  Alexander Larsson  <alexl@redhat.com>
 
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
+	Correctly read/write/use the output filename setting.
+
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c:
 	Disable margin from printers if there are no printers.
 	

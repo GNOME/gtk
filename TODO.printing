@@ -17,7 +17,6 @@ Lowlevel API:
 PDF backend:
 * Change to using a GtkFileChooserEntry to get file names when we move to 
   GTK.  It is a private object in GTK right now.
-* Reload old filename from settings when opening the dialog again.  
 
 Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
@@ -29,22 +28,20 @@ Cups/Unix print dialog:
 * Actually get default printer from somewhere
 * "Page Setup" used both as tab and dialog name
 
-* Don't select default for a short while, so that we can avoid flashing if the selected printer appears
-* Add nicer scaling to print dialog (scale to fit page size)
-
 General:
 * should base64 move to glib ?
 * Add API docs
 * tutorial
 * update win32 port
 * don't enforce paper size in portrait mode
-* use filechooserentry => J5
 * get the right DPI from the printer into cairo
 * gets errors on alex laptop
 * general print to file module (ps+pdf)
 
-Page setting dialog:
-* insensitive margins-from-printer if list is empty
+Print dialog wishlist:
+* Don't select default for a short while, so that we can avoid flashing if the selected printer appears
+* Add nicer scaling to print dialog (scale to fit page size)
 
+Page setting dialog wishlist:
 * sort paper lists
 * nicer unit editor than spinbutton
