@@ -1,6 +1,12 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
-	* gdk/win32/gdkpixmap-win32.c: Include gdksreen.h  (#337032,
+	* gdk/gdkinternals.h: 
+	* gdk/x11/gdkmain-x11.c: 
+	* gdk/win32/gdkmain-win32.c: 
+	* gdk/directfb/gdkdisplay-directfb.c: 
+	* gdk/quartz/gdkmain-quartz.c: Make _gdk_windowing_args const.
+
+	* gdk/win32/gdkpixmap-win32.c: Include gdkscreen.h  (#337032,
 	 Kazuki IWAMOTO)
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Mention

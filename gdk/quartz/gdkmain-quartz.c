@@ -23,7 +23,7 @@
 #include "gdk.h"
 #include <ApplicationServices/ApplicationServices.h>
 
-GOptionEntry _gdk_windowing_args[] = {
+const GOptionEntry _gdk_windowing_args[] = {
   { NULL }
 };
 

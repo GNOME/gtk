@@ -50,7 +50,7 @@ static gint       gdk_directfb_glyph_surface_cache = 8;
 static gchar 	 *directfb_args;
 
 
-GOptionEntry _gdk_windowing_args[] =
+const GOptionEntry _gdk_windowing_args[] =
 {
   { "dfb",0,0,G_OPTION_ARG_STRING,&directfb_args,N_("directfb arg"),N_("sdl|system")}, 
   { "dfb-help",0,0,G_OPTION_ARG_NONE, NULL,NULL},

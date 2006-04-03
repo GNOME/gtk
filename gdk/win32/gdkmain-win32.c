@@ -55,7 +55,7 @@ static gboolean gdk_synchronize = FALSE;
 
 static gboolean dummy;
 
-GOptionEntry _gdk_windowing_args[] = {
+const GOptionEntry _gdk_windowing_args[] = {
   { "sync", 0, 0, G_OPTION_ARG_NONE, &gdk_synchronize, 
     /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
   { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
