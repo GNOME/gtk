@@ -2742,35 +2742,43 @@ mark_node_dirty (GNode *node)
     NODE_INFO (p)->dirty = TRUE;  
 }
 
-static const gchar *const open_tag_format[] = {
-  "%*s<UNDECIDED",
-  "%*s<ui",
-  "%*s<menubar",
-  "%*s<menu",
-  "%*s<toolbar",
-  "%*s<placeholder",
-  "%*s<placeholder",
-  "%*s<popup",
-  "%*s<menuitem",
-  "%*s<toolitem",
-  "%*s<separator",
-  "%*s<accelerator"
-};
+static const gchar *
+open_tag_format (NodeType type)
+{
+  switch (type)
+    {
+    case NODE_TYPE_UNDECIDED: return "%*s<UNDECIDED"; 
+    case NODE_TYPE_ROOT: return "%*s<ui"; 
+    case NODE_TYPE_MENUBAR: return "%*s<menubar";
+    case NODE_TYPE_MENU: return "%*s<menu";
+    case NODE_TYPE_TOOLBAR: return "%*s<toolbar";
+    case NODE_TYPE_MENU_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER: return "%*s<placeholder";
+    case NODE_TYPE_POPUP: return "%*s<popup";
+    case NODE_TYPE_MENUITEM: return "%*s<menuitem";
+    case NODE_TYPE_TOOLITEM: return "%*s<toolitem";
+    case NODE_TYPE_SEPARATOR: return "%*s<separator";
+    case NODE_TYPE_ACCELERATOR: return "%*s<accelerator";
+    default: return NULL;
+    }
+}
 
-static const gchar *const close_tag_format[] = {
-  "%*s</UNDECIDED>\n",
-  "%*s</ui>\n",
-  "%*s</menubar>\n",
-  "%*s</menu>\n",
-  "%*s</toolbar>\n",
-  "%*s</placeholder>\n",
-  "%*s</placeholder>\n",
-  "%*s</popup>\n",
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
+static const gchar *
+close_tag_format (NodeType type)
+{
+  switch (type)
+    {
+    case NODE_TYPE_UNDECIDED: return "%*s</UNDECIDED>\n";
+    case NODE_TYPE_ROOT: return "%*s</ui>\n";
+    case NODE_TYPE_MENUBAR: return "%*s</menubar>\n";
+    case NODE_TYPE_MENU: return "%*s</menu>\n";
+    case NODE_TYPE_TOOLBAR: return "%*s</toolbar>\n";
+    case NODE_TYPE_MENU_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER: return "%*s</placeholder>\n";
+    case NODE_TYPE_POPUP: return "%*s</popup>\n";
+    default: return NULL;
+    }
+}
 
 static void
 print_node (GtkUIManager *self,
@@ -2780,11 +2788,15 @@ print_node (GtkUIManager *self,
 {
   Node  *mnode;
   GNode *child;
+  const gchar *open_fmt;
+  const gchar *close_fmt;
 
   mnode = node->data;
 
-  g_string_append_printf (buffer, open_tag_format[mnode->type],
-			  indent_level, "");
+  open_fmt = open_tag_format (mnode->type);
+  close_fmt = close_tag_format (mnode->type);
+
+  g_string_append_printf (buffer, open_fmt, indent_level, "");
 
   if (mnode->type != NODE_TYPE_ROOT)
     {
@@ -2796,15 +2808,13 @@ print_node (GtkUIManager *self,
 				g_quark_to_string (mnode->action_name));
     }
 
-  g_string_append (buffer,
-                   close_tag_format[mnode->type] ? ">\n" : "/>\n");
+  g_string_append (buffer, close_fmt ? ">\n" : "/>\n");
 
   for (child = node->children; child != NULL; child = child->next)
     print_node (self, child, indent_level + 2, buffer);
 
-  if (close_tag_format[mnode->type])
-    g_string_append_printf (buffer, close_tag_format[mnode->type],
-                            indent_level, "");
+  if (close_fmt)
+    g_string_append_printf (buffer, close_fmt, indent_level, "");
 }
 
 /**
