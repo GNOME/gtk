@@ -3203,7 +3203,7 @@ check_dir (gchar       *dir_name,
    */
 
   static struct {
-    const gchar *name;
+    const gchar name[5];
     gboolean present;
     struct stat statbuf;
   } no_stat_dirs[] = {

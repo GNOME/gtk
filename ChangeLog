@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesel.c (no_stat_dirs): Avoid relocation.
+
 	* gdk/gdk.c: Here too.
 
 	* gdk/gdkinternals.h: 
