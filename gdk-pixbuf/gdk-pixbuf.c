@@ -32,7 +32,6 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-alias.h"
 
-static void gdk_pixbuf_class_init   (GdkPixbufClass *klass);
 static void gdk_pixbuf_finalize     (GObject        *object);
 static void gdk_pixbuf_set_property (GObject        *object,
 				     guint           prop_id,
@@ -57,40 +56,17 @@ enum
   PROP_PIXELS
 };
 
-static gpointer parent_class;
+G_DEFINE_TYPE(GdkPixbuf, gdk_pixbuf, G_TYPE_OBJECT)
 
-GType
-gdk_pixbuf_get_type (void)
+static void 
+gdk_pixbuf_init (GdkPixbuf *pixbuf)
 {
-        static GType object_type = 0;
-
-        if (!object_type) {
-                static const GTypeInfo object_info = {
-                        sizeof (GdkPixbufClass),
-                        (GBaseInitFunc) NULL,
-                        (GBaseFinalizeFunc) NULL,
-                        (GClassInitFunc) gdk_pixbuf_class_init,
-                        NULL,           /* class_finalize */
-                        NULL,           /* class_data */
-                        sizeof (GdkPixbuf),
-                        0,              /* n_preallocs */
-                        (GInstanceInitFunc) NULL,
-                };
-                
-                object_type = g_type_register_static (G_TYPE_OBJECT,
-                                                      g_intern_static_string ("GdkPixbuf"),
-                                                      &object_info, 0);
-        }
-  
-        return object_type;
 }
 
 static void
 gdk_pixbuf_class_init (GdkPixbufClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-        
-        parent_class = g_type_class_peek_parent (klass);
         
         object_class->finalize = gdk_pixbuf_finalize;
         object_class->set_property = gdk_pixbuf_set_property;
@@ -200,7 +176,7 @@ gdk_pixbuf_finalize (GObject *object)
         if (pixbuf->destroy_fn)
                 (* pixbuf->destroy_fn) (pixbuf->pixels, pixbuf->destroy_fn_data);
         
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (gdk_pixbuf_parent_class)->finalize (object);
 }
 
 

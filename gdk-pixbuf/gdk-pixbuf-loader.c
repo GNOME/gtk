@@ -43,11 +43,8 @@ enum {
 };
 
 
-static void gdk_pixbuf_loader_class_init    (GdkPixbufLoaderClass   *klass);
-static void gdk_pixbuf_loader_init          (GdkPixbufLoader        *loader);
-static void gdk_pixbuf_loader_finalize      (GObject                *loader);
+static void gdk_pixbuf_loader_finalize (GObject *loader);
 
-static gpointer parent_class = NULL;
 static guint    pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
 /* Internal data */
@@ -69,42 +66,7 @@ typedef struct
         gboolean needs_scale;
 } GdkPixbufLoaderPrivate;
 
-
-/**
- * gdk_pixbuf_loader_get_type:
- *
- * Registers the #GdkPixbufLoader class if necessary, and returns the type ID
- * associated to it.
- *
- * Return value: The type ID of the #GdkPixbufLoader class.
- **/
-GType
-gdk_pixbuf_loader_get_type (void)
-{
-        static GType loader_type = 0;
-  
-        if (!loader_type)
-                {
-                        static const GTypeInfo loader_info = {
-                                sizeof (GdkPixbufLoaderClass),
-                                (GBaseInitFunc) NULL,
-                                (GBaseFinalizeFunc) NULL,
-                                (GClassInitFunc) gdk_pixbuf_loader_class_init,
-                                NULL,           /* class_finalize */
-                                NULL,           /* class_data */
-                                sizeof (GdkPixbufLoader),
-                                0,              /* n_preallocs */
-                                (GInstanceInitFunc) gdk_pixbuf_loader_init
-                        };
-      
-                        loader_type = g_type_register_static (G_TYPE_OBJECT,
-                                                              g_intern_static_string ("GdkPixbufLoader"),
-                                                              &loader_info,
-                                                              0);
-                }
-  
-        return loader_type;
-}
+G_DEFINE_TYPE(GdkPixbufLoader, gdk_pixbuf_loader, G_TYPE_OBJECT);
 
 static void
 gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
@@ -112,8 +74,6 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
         GObjectClass *object_class;
   
         object_class = (GObjectClass *) class;
-  
-        parent_class = g_type_class_peek_parent (class);
   
         object_class->finalize = gdk_pixbuf_loader_finalize;
 
@@ -236,7 +196,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
   
         g_free (priv);
   
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (gdk_pixbuf_loader_parent_class)->finalize (object);
 }
 
 /**
