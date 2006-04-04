@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkrgb.c: Get rid of a duplicate copy of the visual names.
+
 	* gtk/gtkmain.c: Make gtk_args const.
 
 	* gtk/gtkicontheme.c (pixbuf_supports_svg): Save one static.

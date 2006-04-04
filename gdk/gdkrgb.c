@@ -54,16 +54,6 @@ typedef void (*GdkRgbConvFunc) (GdkRgbInfo *image_info, GdkImage *image,
 				gint x_align, gint y_align,
 				GdkRgbCmap *cmap);
 
-static const gchar *const visual_names[] =
-{
-  "static gray",
-  "grayscale",
-  "static color",
-  "pseudo color",
-  "true color",
-  "direct color",
-};
-
 #define STAGE_ROWSTRIDE (GDK_SCRATCH_IMAGE_WIDTH * 3)
 
 /* Some of these fields should go, as they're not being used at all. (?)
@@ -445,8 +435,8 @@ gdk_rgb_score_visual (GdkVisual *visual)
   pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
   if (gdk_rgb_verbose)
-    g_print ("Visual type = %s, depth = %d, %x:%x:%x%s; score=%x\n",
-	     visual_names[visual->type],
+    g_print ("Visual type = %d, depth = %d, %x:%x:%x%s; score=%x\n",
+	     visual->type,
 	     visual->depth,
 	     visual->red_mask,
 	     visual->green_mask,
@@ -3066,8 +3056,8 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
 
   byte_order = image_info->visual->byte_order;
   if (gdk_rgb_verbose)
-    g_print ("Chose visual type=%s depth=%d, image bpp=%d, %s first\n",
-	     visual_names[image_info->visual->type], image_info->visual->depth,
+    g_print ("Chose visual type=%d depth=%d, image bpp=%d, %s first\n",
+	     image_info->visual->type, image_info->visual->depth,
 	     bpp, byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
 
 #if G_BYTE_ORDER == G_BIG_ENDIAN
@@ -3235,10 +3225,10 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
 
   if (!conv)
     {
-      g_warning ("Visual type=%s depth=%d, image bpp=%d, %s first\n"
+      g_warning ("Visual type=%d depth=%d, image bpp=%d, %s first\n"
 		 "is not supported by GdkRGB. Please submit a bug report\n"
 		 "with the above values to bugzilla.gnome.org",
-		 visual_names[vtype], depth, bpp,
+		 vtype, depth, bpp,
 		 byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
       exit (1);
     }

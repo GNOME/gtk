@@ -539,12 +539,12 @@ pixbuf_supports_svg (void)
 {
   GSList *formats = gdk_pixbuf_get_formats ();
   GSList *tmp_list;
-  static gboolean found_svg = FALSE;
-  static gboolean value_known = FALSE;
+  static gint found_svg = -1;
 
-  if (value_known)
+  if (found_svg != -1)
     return found_svg;
-  
+ 
+  found_svg = FALSE; 
   for (tmp_list = formats; tmp_list && !found_svg; tmp_list = tmp_list->next)
     {
       gchar **mime_types = gdk_pixbuf_format_get_mime_types (tmp_list->data);
@@ -560,7 +560,6 @@ pixbuf_supports_svg (void)
     }
 
   g_slist_free (formats);
-  value_known = TRUE;
   
   return found_svg;
 }

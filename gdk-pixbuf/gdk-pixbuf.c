@@ -542,11 +542,7 @@ GDK_PIXBUF_VAR const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
 GQuark
 gdk_pixbuf_error_quark (void)
 {
-  static GQuark q = 0;
-  if (q == 0)
-    q = g_quark_from_static_string ("gdk-pixbuf-error-quark");
-
-  return q;
+  return g_quark_from_static_string ("gdk-pixbuf-error-quark");
 }
 
 /**
