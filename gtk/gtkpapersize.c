@@ -271,7 +271,6 @@ gtk_paper_size_new (const char *name)
   return size;
 }
 
-
 GtkPaperSize *
 gtk_paper_size_new_from_ppd (const char *ppd_name,
 			     const char *ppd_display_name,
@@ -279,30 +278,53 @@ gtk_paper_size_new_from_ppd (const char *ppd_name,
 			     double height)
 {
   char *name;
+  const char *lookup_ppd_name;
+  char *freeme;
   GtkPaperSize *size;
   int i;
+
+  lookup_ppd_name = ppd_name;
+  
+  freeme = NULL;
+  /* Strip out Traverse suffix in matching. */
+  if (g_str_has_suffix (ppd_name, ".Transverse"))
+    {
+      lookup_ppd_name = freeme =
+	g_strndup (ppd_name, strlen (ppd_name) - strlen (".Transverse"));
+    }
   
   for (i = 0; i < G_N_ELEMENTS(standard_names); i++)
     {
       if (standard_names[i].ppd_name != NULL &&
-	  strcmp (standard_names[i].ppd_name, ppd_name) == 0)
-	return gtk_paper_size_new_from_info (&standard_names[i]);
+	  strcmp (standard_names[i].ppd_name, lookup_ppd_name) == 0)
+	{
+	  size = gtk_paper_size_new_from_info (&standard_names[i]);
+	  goto out;
+	}
     }
   
   for (i = 0; i < G_N_ELEMENTS(extra_ppd_names); i++)
     {
-      if (strcmp (extra_ppd_names[i].ppd_name, ppd_name) == 0)
+      if (strcmp (extra_ppd_names[i].ppd_name, lookup_ppd_name) == 0)
 	{
 	  size = gtk_paper_size_new (extra_ppd_names[i].standard_name);
-	  size->ppd_name = g_strdup (ppd_name);
-	  return size;
+	  goto out;
 	}
     }
 
   name = g_strdup_printf ("ppd_%s", ppd_name);
   size = gtk_paper_size_new_custom (name, ppd_display_name, width, height, GTK_UNIT_POINTS);
   g_free (name);
-  size->ppd_name = g_strdup (ppd_name);
+
+ out:
+
+  if (size->info == NULL ||
+      size->info->ppd_name == NULL ||
+      strcmp (size->info->ppd_name, ppd_name) != 0)
+    size->ppd_name = g_strdup (ppd_name);
+  
+  g_free (freeme);
+  
   return size;
 }
 
@@ -321,14 +343,6 @@ gtk_paper_size_new_custom (const char *name, const char *display_name,
   size->display_name = g_strdup (display_name);
   size->is_custom = TRUE;
   
-  /* Width is always the shorter one */
-  if (width > height)
-    {
-      double t = width;
-      width = height;
-      height = t;
-    }
-
   size->width = to_mm (width, unit);
   size->height = to_mm (height, unit);
   
@@ -428,14 +442,6 @@ gtk_paper_size_set_size (GtkPaperSize *size, double width, double height, GtkUni
 {
   g_return_if_fail (size != NULL);
   g_return_if_fail (size->is_custom);
-
-  /* Width is always the shorter one */
-  if (width > height)
-    {
-      double t = width;
-      width = height;
-      height = t;
-    }
 
   size->width = to_mm (width, unit);
   size->height = to_mm (height, unit);

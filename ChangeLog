@@ -1,3 +1,16 @@
+2006-04-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpapersize.c:
+	Handle ppd names with ".Transverse" suffix
+	Don't force width < height
+	
+	* gtk/gtkprinteroption.c:
+	Make sure that value is never NULL.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Add some HP whitelist names
+	Remove spew from ignored options.
+
 2006-04-03  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c:

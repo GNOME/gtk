@@ -62,6 +62,7 @@ gtk_printer_option_finalize (GObject *object)
 static void
 gtk_printer_option_init (GtkPrinterOption *option)
 {
+  option->value = g_strdup ("");
 }
 
 static void
@@ -106,10 +107,10 @@ void
 gtk_printer_option_set (GtkPrinterOption *option,
 			const char *value)
 {
+  if (value == NULL)
+    value = "";
   
-  if ((option->value == NULL && value == NULL) ||
-      (option->value != NULL && value != NULL &&
-       strcmp (option->value, value) == 0))
+  if (strcmp (option->value, value) == 0)
     return;
 
   if (option->type == GTK_PRINTER_OPTION_TYPE_PICKONE &&

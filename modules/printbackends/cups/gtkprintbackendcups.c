@@ -1465,6 +1465,7 @@ static const char *color_group_whitelist[] = {
   "FPColorWise3",
   "FPColorWise4",
   "FPColorWise5",
+  "HPColorOptionsPanel",
 };
   
 /* keep sorted when changing */
@@ -1530,6 +1531,7 @@ static const char *finishing_group_whitelist[] = {
   "FPFinishing3",
   "FPFinishing4",
   "FinishingPage",
+  "HPFinishingPanel",
 };
 
 /* keep sorted when changing */
@@ -1818,8 +1820,10 @@ create_pickone_option (ppd_file_t *ppd_file,
 	}
       gtk_printer_option_set (option, ppd_option->defchoice);
     }
+#ifdef PRINT_IGNORED_OPTIONS
   else
     g_warning ("Ignoring pickone %s\n", ppd_option->text);
+#endif
   g_free (available);
 
   return option;
@@ -1855,8 +1859,10 @@ create_boolean_option (ppd_file_t *ppd_file,
       
       gtk_printer_option_set (option, ppd_option->defchoice);
     }
+#ifdef PRINT_IGNORED_OPTIONS
   else
     g_warning ("Ignoring boolean %s\n", ppd_option->text);
+#endif
   g_free (available);
 
   return option;
@@ -2189,7 +2195,7 @@ map_settings_to_option (GtkPrinterOption *option,
   cups_value = gtk_print_settings_get (settings, name);
   g_free (name);
   
-  if (cups_value != 0) {
+  if (cups_value != NULL) {
     gtk_printer_option_set (option, cups_value);
     return;
   }

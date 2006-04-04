@@ -28,11 +28,10 @@ Cups/Unix print dialog:
 * "Page Setup" used both as tab and dialog name
 
 General:
-* should base64 move to glib ?
+* should base64 move to glib? (#337145)
 * Add API docs
 * tutorial
 * update win32 port
-* don't enforce paper size in portrait mode
 * get the right DPI from the printer into cairo
 * gets errors on alex laptop
 * general print to file module (ps+pdf)
