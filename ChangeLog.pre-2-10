@@ -1,5 +1,14 @@
 2006-04-04  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprinteroption.[ch]:
+	Add gtk_printer_option_has_choice.
+	
+	* gtk/gtkprintunixdialog.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Add support for "print at time".
+
+2006-04-04  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpapersize.c:
 	Handle ppd names with ".Transverse" suffix
 	Don't force width < height

@@ -110,6 +110,11 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *page_layout_preview;
   GtkWidget *scale_spin;
   GtkWidget *page_set_combo;
+  GtkWidget *print_now_radio;
+  GtkWidget *print_at_radio;
+  GtkWidget *print_at_entry;
+  GtkWidget *print_hold_radio;
+  gboolean updating_print_at;
   GtkPrinterOptionWidget *pages_per_sheet;
   GtkPrinterOptionWidget *duplex;
   GtkPrinterOptionWidget *paper_type;
@@ -866,6 +871,92 @@ setup_page_table (GtkPrinterOptionSet *options,
   else
     gtk_widget_show (page);
 }
+
+static void
+update_print_at_option (GtkPrintUnixDialog *dialog)
+{
+  GtkPrinterOption *option;
+  
+  option = gtk_printer_option_set_lookup (dialog->priv->options, "gtk-print-time");
+
+  if (option == NULL)
+    return;
+  
+  if (dialog->priv->updating_print_at)
+    return;
+  
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->print_at_radio)))
+    gtk_printer_option_set (option, "at");
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->print_hold_radio)))
+    gtk_printer_option_set (option, "on-hold");
+  else
+    gtk_printer_option_set (option, "now");
+  
+  option = gtk_printer_option_set_lookup (dialog->priv->options, "gtk-print-time-text");
+  if (option != NULL)
+    {
+      const char *text = gtk_entry_get_text (GTK_ENTRY (dialog->priv->print_at_entry));
+      gtk_printer_option_set (option,text);
+    }
+}
+
+
+static gboolean
+setup_print_at (GtkPrintUnixDialog *dialog)
+{
+  GtkPrinterOption *option;
+  
+  option = gtk_printer_option_set_lookup (dialog->priv->options, "gtk-print-time");
+ 
+  if (option == NULL)
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->print_now_radio),
+				    TRUE);
+      gtk_widget_set_sensitive (dialog->priv->print_at_radio, FALSE);
+      gtk_widget_set_sensitive (dialog->priv->print_at_entry, FALSE);
+      gtk_widget_set_sensitive (dialog->priv->print_hold_radio, FALSE);
+      gtk_entry_set_text (GTK_ENTRY (dialog->priv->print_at_entry), "");
+      return FALSE;
+    }
+
+  dialog->priv->updating_print_at = TRUE;
+  
+  if (gtk_printer_option_has_choice (option, "at"))
+    {
+      gtk_widget_set_sensitive (dialog->priv->print_at_radio, TRUE);
+      gtk_widget_set_sensitive (dialog->priv->print_at_entry, TRUE);
+    }
+  else
+    {
+      gtk_widget_set_sensitive (dialog->priv->print_at_radio, FALSE);
+      gtk_widget_set_sensitive (dialog->priv->print_at_entry, FALSE);
+    }
+  
+  gtk_widget_set_sensitive (dialog->priv->print_hold_radio,
+			    gtk_printer_option_has_choice (option, "on-hold"));
+
+  update_print_at_option (dialog);
+
+  if (strcmp (option->value, "at") == 0)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->print_at_radio),
+				  TRUE);
+  else if (strcmp (option->value, "on-hold") == 0)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->print_hold_radio),
+				  TRUE);
+  else
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->print_now_radio),
+				  TRUE);
+
+  option = gtk_printer_option_set_lookup (dialog->priv->options, "gtk-print-time-text");
+  if (option != NULL)
+    gtk_entry_set_text (GTK_ENTRY (dialog->priv->print_at_entry),
+			option->value);
+  
+
+  dialog->priv->updating_print_at = FALSE;
+
+  return TRUE;
+}
 	     
 static void
 update_dialog_from_settings (GtkPrintUnixDialog *dialog)
@@ -899,7 +990,8 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   has_job |= setup_option (dialog, "gtk-billing-info", dialog->priv->billing_info);
   has_job |= setup_option (dialog, "gtk-cover-before", dialog->priv->cover_before);
   has_job |= setup_option (dialog, "gtk-cover-after", dialog->priv->cover_after);
-
+  has_job |= setup_print_at (dialog);
+  
   if (has_job)
     gtk_widget_show (dialog->priv->job_page);
   else
@@ -1957,28 +2049,40 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (table);
 
   radio = gtk_radio_button_new_with_label (NULL, _("Now"));
+  priv->print_now_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 1, 0, 1,  GTK_FILL, 0,
 		    0, 0);
   radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					   _("At:"));
+  priv->print_at_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 1, 1, 2,  GTK_FILL, 0,
 		    0, 0);
   radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					   _("On Hold"));
+  priv->print_hold_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 1, 2, 3,  GTK_FILL, 0,
 		    0, 0);
   entry = gtk_entry_new ();
+  priv->print_at_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
- 
+
+  g_signal_connect_swapped (priv->print_now_radio, "toggled",
+			    G_CALLBACK (update_print_at_option), dialog);
+  g_signal_connect_swapped (priv->print_at_radio, "toggled",
+			    G_CALLBACK (update_print_at_option), dialog);
+  g_signal_connect_swapped (priv->print_at_entry, "changed",
+			    G_CALLBACK (update_print_at_option), dialog);
+  g_signal_connect_swapped (priv->print_hold_radio, "toggled",
+			    G_CALLBACK (update_print_at_option), dialog);
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);

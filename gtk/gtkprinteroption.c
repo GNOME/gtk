@@ -199,5 +199,21 @@ gtk_printer_option_choices_from_array (GtkPrinterOption   *option,
     }
 }
 
+gboolean
+gtk_printer_option_has_choice (GtkPrinterOption     *option,
+			       const char           *choice)
+{
+  int i;
+  
+  for (i = 0; i < option->num_choices; i++)
+    {
+      if (strcmp (option->choices[i], choice) == 0)
+	return TRUE;
+    }
+  
+  return FALSE;
+}
+
+
 #define __GTK_PRINTER_OPTION_C__
 #include "gtkaliasdef.c"

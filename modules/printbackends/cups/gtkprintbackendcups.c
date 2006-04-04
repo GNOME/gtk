@@ -1991,6 +1991,7 @@ cups_printer_get_options (GtkPrinter *printer,
   GtkPrinterOption *option;
   ppd_file_t *ppd_file;
   int i;
+  char *print_at[] = { "now", "at", "on-hold" };
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
   char *prio[] = {"100", "80", "50", "30" };
   char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
@@ -2042,6 +2043,20 @@ cups_printer_get_options (GtkPrinter *printer,
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (cover),
 					 cover, cover_display);
   gtk_printer_option_set (option, "none");
+  set_option_from_settings (option, settings);
+  gtk_printer_option_set_add (set, option);
+  g_object_unref (option);
+
+  option = gtk_printer_option_new ("gtk-print-time", "Print at", GTK_PRINTER_OPTION_TYPE_PICKONE);
+  gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (print_at),
+					 print_at, print_at);
+  gtk_printer_option_set (option, "now");
+  set_option_from_settings (option, settings);
+  gtk_printer_option_set_add (set, option);
+  g_object_unref (option);
+  
+  option = gtk_printer_option_new ("gtk-print-time-text", "Print at time", GTK_PRINTER_OPTION_TYPE_STRING);
+  gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
@@ -2386,6 +2401,18 @@ set_option_from_settings (GtkPrinterOption *option,
       if (cups_value)
 	gtk_printer_option_set (option, cups_value);
     } 
+  else if (strcmp (option->name, "gtk-print-time") == 0)
+    {
+      cups_value = gtk_print_settings_get (settings, "print-at");
+      if (cups_value)
+	gtk_printer_option_set (option, cups_value);
+    } 
+  else if (strcmp (option->name, "gtk-print-time-text") == 0)
+    {
+      cups_value = gtk_print_settings_get (settings, "print-at-time");
+      if (cups_value)
+	gtk_printer_option_set (option, cups_value);
+    } 
   else if (g_str_has_prefix (option->name, "cups-"))
     {
       cups_value = gtk_print_settings_get (settings, option->name);
@@ -2438,6 +2465,10 @@ foreach_option_get_settings (GtkPrinterOption  *option,
     gtk_print_settings_set (settings, "cover-before", value);
   else if (strcmp (option->name, "gtk-cover-after") == 0)
     gtk_print_settings_set (settings, "cover-after", value);
+  else if (strcmp (option->name, "gtk-print-time") == 0)
+    gtk_print_settings_set (settings, "print-at", value);
+  else if (strcmp (option->name, "gtk-print-time-text") == 0)
+    gtk_print_settings_set (settings, "print-at-time", value);
   else if (g_str_has_prefix (option->name, "cups-"))
     gtk_print_settings_set (settings, option->name, value);
 }
@@ -2448,6 +2479,7 @@ cups_printer_get_settings_from_options (GtkPrinter *printer,
 					GtkPrintSettings *settings)
 {
   struct OptionData data;
+  const char *print_at, *print_at_time;
 
   data.printer = printer;
   data.options = options;
@@ -2468,6 +2500,13 @@ cups_printer_get_settings_from_options (GtkPrinter *printer,
 	  gtk_print_settings_set (settings, "cups-job-sheets", value);
 	  g_free (value);
 	}
+
+      print_at = gtk_print_settings_get (settings, "print-at");
+      print_at_time = gtk_print_settings_get (settings, "print-at-time");
+      if (strcmp (print_at, "at") == 0)
+	gtk_print_settings_set (settings, "cups-job-hold-until", print_at_time);
+      else if (strcmp (print_at, "on-hold") == 0)
+	gtk_print_settings_set (settings, "cups-job-hold-until", "indefinite");
     }
 }
 

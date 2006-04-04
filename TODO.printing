@@ -22,20 +22,20 @@ Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
 
 Cups/Unix print dialog:
-* finish job page print-at-time support
 * Use themed icons for the collate/reverse?
 * Add custom translations for a lot of standard PPD options
 * "Page Setup" used both as tab and dialog name
 
 General:
-* should base64 move to glib? (#337145)
+* use base64 from glib
 * Add API docs
 * tutorial
-* update win32 port
+* update win32 port (patches in bz?)
 * get the right DPI from the printer into cairo
 * gets errors on alex laptop
 * general print to file module (ps+pdf)
 * look at lpr backend
+* don't access gtkprinter->private from subclass (#335996)
 
 Print dialog wishlist:
 * Don't select default for a short while, so that we can avoid flashing if the selected printer appears
