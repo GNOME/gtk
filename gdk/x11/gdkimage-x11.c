@@ -90,7 +90,7 @@ gdk_image_class_init (GdkImageClass *klass)
 
   object_class->finalize = gdk_image_finalize;
 
-  g_type_class_add (object_class, sizeof (GdkImagePrivateX11));
+  g_type_class_add_private (object_class, sizeof (GdkImagePrivateX11));
 }
 
 static void

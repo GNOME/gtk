@@ -1,3 +1,8 @@
+Tue Apr  4 12:25:36 2006  Søren Sandmann  <sandmann@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_class_init): Add "_private" to
+	make it build.
+
 2006-04-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkdisplay.c: 
