@@ -60,7 +60,7 @@ static XdgCallbackList *callback_list = NULL;
 XdgMimeCache **_caches = NULL;
 static int n_caches = 0;
 
-const char *xdg_mime_type_unknown = "application/octet-stream";
+const char xdg_mime_type_unknown[] = "application/octet-stream";
 
 
 enum
