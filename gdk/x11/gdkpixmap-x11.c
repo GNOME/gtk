@@ -60,41 +60,10 @@ static void gdk_pixmap_impl_x11_get_size   (GdkDrawable        *drawable,
                                         gint               *width,
                                         gint               *height);
 
-static void gdk_pixmap_impl_x11_init       (GdkPixmapImplX11      *pixmap);
-static void gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass);
 static void gdk_pixmap_impl_x11_dispose    (GObject            *object);
 static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
-static gpointer parent_class = NULL;
-
-GType
-gdk_pixmap_impl_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkPixmapImplX11Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_pixmap_impl_x11_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkPixmapImplX11),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_pixmap_impl_x11_init,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_X11,
-                                            g_intern_static_string ("GdkPixmapImplX11"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
+G_DEFINE_TYPE (GdkPixmapImplX11, gdk_pixmap_impl_x11, GDK_TYPE_DRAWABLE_IMPL_X11);
 
 GType
 _gdk_pixmap_impl_get_type (void)
@@ -115,8 +84,6 @@ gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->dispose  = gdk_pixmap_impl_x11_dispose;
   object_class->finalize = gdk_pixmap_impl_x11_finalize;
 
@@ -138,7 +105,7 @@ gdk_pixmap_impl_x11_dispose (GObject *object)
 
   _gdk_xid_table_remove (display, GDK_PIXMAP_XID (wrapper));
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_pixmap_impl_x11_parent_class)->dispose (object);
 }
 
 static void
@@ -155,7 +122,7 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
       _gdk_x11_drawable_finish (GDK_DRAWABLE (draw_impl));
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_pixmap_impl_x11_parent_class)->finalize (object);
 }
 
 static void

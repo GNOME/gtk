@@ -36,37 +36,9 @@ enum {
   LAST_SIGNAL
 };
 
-static void gdk_keymap_class_init (GdkKeymapClass *klass);
-
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GType
-gdk_keymap_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkKeymapClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_keymap_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkKeymap),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkKeymap"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT);
 
 static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
@@ -109,6 +81,11 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
+}
+
+static void
+gdk_keymap_init (GdkKeymap *keymap)
+{
 }
 
 /* Other key-handling stuff

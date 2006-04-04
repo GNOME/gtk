@@ -126,11 +126,8 @@ static void   xdnd_manage_source_filter (GdkDragContext *context,
 					 GdkWindow      *window,
 					 gboolean        add_filter);
 
-static void gdk_drag_context_init       (GdkDragContext      *dragcontext);
-static void gdk_drag_context_class_init (GdkDragContextClass *klass);
 static void gdk_drag_context_finalize   (GObject              *object);
 
-static gpointer parent_class = NULL;
 static GList *contexts;
 
 const static struct {
@@ -145,41 +142,17 @@ const static struct {
   { "XdndDrop",     xdnd_drop_filter },
 };
 	      
-GType
-gdk_drag_context_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDragContextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drag_context_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDragContext),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drag_context_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkDragContext"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT);
 
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
   GdkDragContextPrivateX11 *private;
 
-  private = g_new0 (GdkDragContextPrivateX11, 1);
-
+  private = G_TYPE_INSTANCE_GET_PRIVATE (dragcontext, 
+					 GDK_TYPE_DRAG_CONTEXT, 
+					 GdkDragContextPrivateX11);
+  
   dragcontext->windowing_data = private;
 
   contexts = g_list_prepend (contexts, dragcontext);
@@ -190,9 +163,9 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_drag_context_finalize;
+
+  g_type_class_add_private (object_class, sizeof (GdkDragContextPrivateX11));
 }
 
 static void
@@ -222,9 +195,7 @@ gdk_drag_context_finalize (GObject *object)
   
   contexts = g_list_remove (contexts, context);
 
-  g_free (private);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_drag_context_parent_class)->finalize (object);
 }
 
 /* Drag Contexts */
@@ -237,9 +208,9 @@ gdk_drag_context_finalize (GObject *object)
  * Return value: the newly created #GdkDragContext.
  **/
 GdkDragContext *
-gdk_drag_context_new        (void)
+gdk_drag_context_new (void)
 {
-  return g_object_new (gdk_drag_context_get_type (), NULL);
+  return g_object_new (GDK_TYPE_DRAG_CONTEXT, NULL);
 }
 
 /**

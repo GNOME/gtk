@@ -29,8 +29,6 @@
 #include "gdkintl.h"
 #include "gdkalias.h"
 
-static void gdk_screen_class_init   (GdkScreenClass *klass);
-static void gdk_screen_init         (GdkScreen      *screen);
 static void gdk_screen_dispose      (GObject        *object);
 static void gdk_screen_finalize     (GObject        *object);
 static void gdk_screen_set_property (GObject        *object,
@@ -57,42 +55,13 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static gpointer parent_class = NULL;
-
-GType
-gdk_screen_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-	{
-	  sizeof (GdkScreenClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gdk_screen_class_init,
-	  NULL,			/* class_finalize */
-	  NULL,			/* class_data */
-	  sizeof (GdkScreen),
-	  0,			/* n_preallocs */
-	  (GInstanceInitFunc) gdk_screen_init,
-	};
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-					    g_intern_static_string ("GdkScreen"), &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE(GdkScreen, gdk_screen, G_TYPE_OBJECT);
 
 static void
 gdk_screen_class_init (GdkScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-  
   object_class->dispose = gdk_screen_dispose;
   object_class->finalize = gdk_screen_finalize;
   object_class->set_property = gdk_screen_set_property;
@@ -164,7 +133,7 @@ gdk_screen_dispose (GObject *object)
         }
     }
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_screen_parent_class)->dispose (object);
 }
 
 static void
@@ -175,7 +144,7 @@ gdk_screen_finalize (GObject *object)
   if (screen->font_options)
       cairo_font_options_destroy (screen->font_options);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_screen_parent_class)->finalize (object);
 }
 
 void 

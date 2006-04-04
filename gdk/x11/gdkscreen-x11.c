@@ -47,7 +47,6 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
-static void         gdk_screen_x11_class_init  (GdkScreenX11Class *klass);
 static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_xinerama_support      (GdkScreen	  *screen);
@@ -59,44 +58,17 @@ enum
   LAST_SIGNAL
 };
 
-static gpointer parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GType
-_gdk_screen_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-	{
-	  sizeof (GdkScreenX11Class),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gdk_screen_x11_class_init,
-	  NULL,			/* class_finalize */
-	  NULL,			/* class_data */
-	  sizeof (GdkScreenX11),
-	  0,			/* n_preallocs */
-	  (GInstanceInitFunc) NULL,
-	};
-      object_type = g_type_register_static (GDK_TYPE_SCREEN,
-					    g_intern_static_string ("GdkScreenX11"),
-					    &object_info, 0);
-    }
-  return object_type;
-}
+G_DEFINE_TYPE (GdkScreenX11, _gdk_screen_x11, GDK_TYPE_SCREEN);
 
 static void
-gdk_screen_x11_class_init (GdkScreenX11Class *klass)
+_gdk_screen_x11_class_init (GdkScreenX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   object_class->dispose = gdk_screen_x11_dispose;
   object_class->finalize = gdk_screen_x11_finalize;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   signals[WINDOW_MANAGER_CHANGED] =
     g_signal_new (g_intern_static_string ("window_manager_changed"),
@@ -107,6 +79,11 @@ gdk_screen_x11_class_init (GdkScreenX11Class *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+}
+
+static void
+_gdk_screen_x11_init (GdkScreenX11 *screen)
+{
 }
 
 /**
@@ -309,7 +286,7 @@ gdk_screen_x11_dispose (GObject *object)
   if (screen_x11->root_window)
     _gdk_window_destroy (screen_x11->root_window, TRUE);
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->dispose (object);
 
   screen_x11->xdisplay = NULL;
   screen_x11->xscreen = NULL;
@@ -342,7 +319,7 @@ gdk_screen_x11_finalize (GObject *object)
 
   g_free (screen_x11->monitors);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->finalize (object);
 }
 
 /**

@@ -67,33 +67,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GdkDisplay *default_display = NULL;
 
-GType
-gdk_display_manager_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDisplayManagerClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_display_manager_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDisplayManager),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkDisplayManager"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT);
 
 static void
 gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
@@ -131,6 +105,11 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
 							GDK_TYPE_DISPLAY,
  							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
 							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
+}
+
+static void
+gdk_display_manager_init (GdkDisplayManager *manager)
+{
 }
 
 static void

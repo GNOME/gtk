@@ -139,49 +139,18 @@ static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
 static GdkScreen *  gdk_x11_get_screen	   (GdkDrawable    *drawable);
 static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
 
-static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
-
 static void gdk_drawable_impl_x11_finalize   (GObject *object);
 
-static gpointer parent_class = NULL;
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
-GType
-_gdk_drawable_impl_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDrawableImplX11Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_impl_x11_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDrawableImplX11),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            g_intern_static_string ("GdkDrawableImplX11"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE);
 
 static void
-gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
+_gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_drawable_impl_x11_finalize;
   
   drawable_class->create_gc = _gdk_x11_gc_new;
@@ -210,11 +179,16 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 }
 
 static void
+_gdk_drawable_impl_x11_init (GdkDrawableImplX11 *impl)
+{
+}
+
+static void
 gdk_drawable_impl_x11_finalize (GObject *object)
 {
   gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_drawable_impl_x11_parent_class)->finalize (object);
 }
 
 /**
@@ -1418,10 +1392,10 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
       gdk_x11_drawable_get_picture (drawable) == None)
     {
       GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
-      GDK_DRAWABLE_CLASS (parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
-						      src_x, src_y, dest_x, dest_y,
-						      width, height,
-						      dither, x_dither, y_dither);
+      GDK_DRAWABLE_CLASS (_gdk_drawable_impl_x11_parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
+									     src_x, src_y, dest_x, dest_y,
+									     width, height,
+									     dither, x_dither, y_dither);
       return;
     }
 

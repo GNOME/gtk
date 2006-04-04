@@ -183,8 +183,6 @@ static GdkRegion*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
-static void gdk_window_init       (GdkWindowObject      *window);
-static void gdk_window_class_init (GdkWindowObjectClass *klass);
 static void gdk_window_finalize   (GObject              *object);
 static void gdk_window_clear_backing_rect (GdkWindow *window,
 					   gint       x,
@@ -192,38 +190,10 @@ static void gdk_window_clear_backing_rect (GdkWindow *window,
 					   gint       width,
 					   gint       height);
 
-static gpointer parent_class = NULL;
-
-GType
-gdk_window_object_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkWindowObjectClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_window_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkWindowObject),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_window_init,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            g_intern_static_string ("GdkWindow"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkWindowObject, gdk_window_object, GDK_TYPE_DRAWABLE);
 
 static void
-gdk_window_init (GdkWindowObject *window)
+gdk_window_object_init (GdkWindowObject *window)
 {
   /* 0-initialization is good for all other fields. */
 
@@ -235,13 +205,11 @@ gdk_window_init (GdkWindowObject *window)
 }
 
 static void
-gdk_window_class_init (GdkWindowObjectClass *klass)
+gdk_window_object_class_init (GdkWindowObjectClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_window_finalize;
 
   drawable_class->create_gc = gdk_window_create_gc;
@@ -295,7 +263,7 @@ gdk_window_finalize (GObject *object)
   g_object_unref (obj->impl);
   obj->impl = NULL;
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_window_object_parent_class)->finalize (object);
 }
 
 static void

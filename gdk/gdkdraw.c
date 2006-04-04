@@ -62,36 +62,8 @@ static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *draw
 							      gint          x_dither,
 							      gint          y_dither);
      
-static void gdk_drawable_class_init (GdkDrawableClass *klass);
 
-GType
-gdk_drawable_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDrawableClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDrawable),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkDrawable"),
-                                            &object_info, 
-					    G_TYPE_FLAG_ABSTRACT);
-    }  
-
-  return object_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT);
 
 static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
@@ -102,6 +74,11 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
   klass->draw_pixbuf = gdk_drawable_real_draw_pixbuf;
+}
+
+static void
+gdk_drawable_init (GdkDrawable *drawable)
+{
 }
 
 /* Manipulation of drawables

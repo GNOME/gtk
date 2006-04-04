@@ -71,17 +71,17 @@ gdk_device_get_type (void)
   if (!object_type)
     {
       static const GTypeInfo object_info =
-      {
-        sizeof (GdkDeviceClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) NULL,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDevicePrivate),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
+	{
+	  sizeof (GdkDeviceClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) NULL,
+	  NULL,           /* class_finalize */
+	  NULL,           /* class_data */
+	  sizeof (GdkDevicePrivate),
+	  0,              /* n_preallocs */
+	  (GInstanceInitFunc) NULL,
+	};
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             g_intern_static_string ("GdkDevice"),

@@ -54,52 +54,26 @@ static void gdk_x11_gc_set_dashes (GdkGC           *gc,
 				   gint8            dash_list[],
 				   gint             n);
 
-static void gdk_gc_x11_class_init (GdkGCX11Class *klass);
-static void gdk_gc_x11_finalize   (GObject           *object);
+static void gdk_gc_x11_finalize   (GObject         *object);
 
-static gpointer parent_class = NULL;
-
-GType
-_gdk_gc_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkGCX11Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_gc_x11_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkGCX11),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_GC,
-                                            g_intern_static_string ("GdkGCX11"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkGCX11, _gdk_gc_x11, GDK_TYPE_GC);
 
 static void
-gdk_gc_x11_class_init (GdkGCX11Class *klass)
+_gdk_gc_x11_class_init (GdkGCX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkGCClass *gc_class = GDK_GC_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_gc_x11_finalize;
 
   gc_class->get_values = gdk_x11_gc_get_values;
   gc_class->set_values = gdk_x11_gc_set_values;
   gc_class->set_dashes = gdk_x11_gc_set_dashes;
+}
+
+static void
+_gdk_gc_x11_init (GdkGCX11 *gc)
+{
 }
 
 static void
@@ -109,7 +83,7 @@ gdk_gc_x11_finalize (GObject *object)
   
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_gc_x11_parent_class)->finalize (object);
 }
 
 

@@ -55,7 +55,6 @@
 #endif
 
 
-static void   gdk_display_x11_class_init         (GdkDisplayX11Class *class);
 static void   gdk_display_x11_dispose            (GObject            *object);
 static void   gdk_display_x11_finalize           (GObject            *object);
 
@@ -66,8 +65,6 @@ static void gdk_internal_connection_watch (Display  *display,
 					   gboolean  opening,
 					   XPointer *watch_data);
 #endif /* HAVE_X11R6 */
-
-static gpointer parent_class = NULL;
 
 /* Note that we never *directly* use WM_LOCALE_NAME, WM_PROTOCOLS,
  * but including them here has the side-effect of getting them
@@ -99,45 +96,21 @@ static const char *const precache_atoms[] = {
   "_NET_VIRTUAL_ROOTS"
 };
 
-GType
-_gdk_display_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-	{
-	  sizeof (GdkDisplayX11Class),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gdk_display_x11_class_init,
-	  NULL,			/* class_finalize */
-	  NULL,			/* class_data */
-	  sizeof (GdkDisplayX11),
-	  0,			/* n_preallocs */
-	  (GInstanceInitFunc) NULL,
-	};
-      
-      object_type = g_type_register_static (GDK_TYPE_DISPLAY,
-					    g_intern_static_string ("GdkDisplayX11"),
-					    &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY);
 
 static void
-gdk_display_x11_class_init (GdkDisplayX11Class * class)
+_gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   
   object_class->dispose = gdk_display_x11_dispose;
   object_class->finalize = gdk_display_x11_finalize;
-  
-  parent_class = g_type_class_peek_parent (class);
 }
 
+static void
+_gdk_display_x11_init (GdkDisplayX11 *display)
+{
+}
 
 /**
  * gdk_display_open:
@@ -747,7 +720,7 @@ gdk_display_x11_dispose (GObject *object)
 
   _gdk_events_uninit (GDK_DISPLAY_OBJECT (object));
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_display_x11_parent_class)->dispose (object);
 }
 
 static void
@@ -806,7 +779,7 @@ gdk_display_x11_finalize (GObject *object)
 
   XCloseDisplay (display_x11->xdisplay);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_display_x11_parent_class)->finalize (object);
 }
 
 /**

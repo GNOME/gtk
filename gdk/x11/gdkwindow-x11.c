@@ -96,11 +96,7 @@ static void         gdk_window_impl_x11_get_size    (GdkDrawable *drawable,
 						     gint *width,
 						     gint *height);
 static GdkRegion*  gdk_window_impl_x11_get_visible_region (GdkDrawable *drawable);
-static void gdk_window_impl_x11_init       (GdkWindowImplX11      *window);
-static void gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass);
 static void gdk_window_impl_x11_finalize   (GObject            *object);
-
-static gpointer parent_class = NULL;
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
@@ -114,33 +110,7 @@ static gpointer parent_class = NULL;
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
   )
 
-GType
-gdk_window_impl_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkWindowImplX11Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_window_impl_x11_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkWindowImplX11),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_window_impl_x11_init,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_X11,
-                                            g_intern_static_string ("GdkWindowImplX11"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE(GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_DRAWABLE_IMPL_X11);
 
 GType
 _gdk_window_impl_get_type (void)
@@ -182,8 +152,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_window_impl_x11_finalize;
 
   drawable_class->set_colormap = gdk_window_impl_x11_set_colormap;
@@ -226,7 +194,7 @@ gdk_window_impl_x11_finalize (GObject *object)
   if (window_impl->cursor)
     gdk_cursor_unref (window_impl->cursor);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_window_impl_x11_parent_class)->finalize (object);
 }
 
 static void
@@ -395,7 +363,7 @@ gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
     return;
 
   /* chain up */
-  GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
+  GDK_DRAWABLE_CLASS (gdk_window_impl_x11_parent_class)->set_colormap (drawable, cmap);
 
   if (cmap)
     {

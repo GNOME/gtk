@@ -153,39 +153,9 @@ static void         gdk_pixmap_real_set_colormap (GdkDrawable *drawable,
 static GdkColormap* gdk_pixmap_real_get_colormap (GdkDrawable *drawable);
 static GdkScreen*   gdk_pixmap_real_get_screen   (GdkDrawable *drawable);
 
-static void gdk_pixmap_init       (GdkPixmapObject      *pixmap);
-static void gdk_pixmap_class_init (GdkPixmapObjectClass *klass);
 static void gdk_pixmap_finalize   (GObject              *object);
 
-static gpointer parent_class = NULL;
-
-GType
-gdk_pixmap_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkPixmapObjectClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_pixmap_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkPixmapObject),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_pixmap_init,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            g_intern_static_string ("GdkPixmap"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkPixmapObject, gdk_pixmap, GDK_TYPE_DRAWABLE);
 
 static void
 gdk_pixmap_init (GdkPixmapObject *pixmap)
@@ -200,8 +170,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_pixmap_finalize;
 
   drawable_class->create_gc = gdk_pixmap_create_gc;
@@ -237,7 +205,7 @@ gdk_pixmap_finalize (GObject *object)
   g_object_unref (obj->impl);
   obj->impl = NULL;
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_pixmap_parent_class)->finalize (object);
 }
 
 static GdkGC *

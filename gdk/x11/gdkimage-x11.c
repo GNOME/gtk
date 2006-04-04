@@ -67,47 +67,20 @@ struct _GdkImagePrivateX11
 };
 
 static GList *image_list = NULL;
-static gpointer parent_class = NULL;
 
 static void gdk_x11_image_destroy (GdkImage      *image);
-static void gdk_image_init        (GdkImage      *image);
-static void gdk_image_class_init  (GdkImageClass *klass);
 static void gdk_image_finalize    (GObject       *object);
 
 #define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
 
-GType
-gdk_image_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkImageClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_image_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkImage),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_image_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkImage"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE(GdkImage, gdk_image, G_TYPE_OBJECT);
 
 static void
 gdk_image_init (GdkImage *image)
 {
-  image->windowing_data = g_new0 (GdkImagePrivateX11, 1);
+  image->windowing_data = G_TYPE_INSTANCE_GET_PRIVATE (image, 
+						       GDK_TYPE_IMAGE, 
+						       GdkImagePrivateX11);
 }
 
 static void
@@ -115,9 +88,9 @@ gdk_image_class_init (GdkImageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_image_finalize;
+
+  g_type_class_add (object_class, sizeof (GdkImagePrivateX11));
 }
 
 static void
@@ -127,7 +100,7 @@ gdk_image_finalize (GObject *object)
 
   gdk_x11_image_destroy (image);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_image_parent_class)->finalize (object);
 }
 
 
@@ -158,7 +131,10 @@ _gdk_image_exit (void)
  * Return value: a new #GdkImage.
  **/
 GdkImage *
-gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint width, gint height)
+gdk_image_new_bitmap (GdkVisual *visual, 
+		      gpointer   data, 
+		      gint       width, 
+		      gint       height)
 {
   Visual *xvisual;
   GdkImage *image;
@@ -726,12 +702,6 @@ gdk_x11_image_destroy (GdkImage *image)
 
   private = PRIVATE_DATA (image);
 
-  if (private == NULL) /* This means that _gdk_image_exit() destroyed the
-                        * image already, and now we're called a second
-                        * time from _finalize()
-                        */
-    return;
-
   if (private->ximage)		/* Deal with failure of creation */
     {
       switch (image->type)
@@ -770,10 +740,9 @@ gdk_x11_image_destroy (GdkImage *image)
 	case GDK_IMAGE_FASTEST:
 	  g_assert_not_reached ();
 	}
+      
+      private->ximage = NULL;
     }
-
-  g_free (private);
-  image->windowing_data = NULL;
 }
 
 /**

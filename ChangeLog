@@ -1,3 +1,27 @@
+2006-04-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkdisplay.c: 
+	* gdk/gdkdisplaymanager.c:
+	* gdk/gdkdraw.c:
+	* gdk/gdkkeys.c:
+	* gdk/gdkpixmap.c:
+	* gdk/gdkscreen.c:
+	* gdk/gdkwindow.c:
+	* gdk/x11/gdkcolor-x11.c:
+	* gdk/x11/gdkdisplay-x11.c:
+	* gdk/x11/gdkdnd-x11.c:
+	* gdk/x11/gdkdrawable-x11.c:
+	* gdk/x11/gdkgc-x11.c:
+	* gdk/x11/gdkimage-x11.c:
+	* gdk/x11/gdkinput.c:
+	* gdk/x11/gdkpixmap-x11.c:
+	* gdk/x11/gdkscreen-x11.c:
+	* gdk/x11/gdkwindow-x11.c: Use G_DEFINE_TYPE.
+
+	* gdk/x11/gdkcolor-x11.c: 
+	* gdk/x11/gdkdnd-x11.c:
+	* gdk/x11/gdkimage-x11.c: Use instance private data.
+
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkrgb.c: Get rid of a duplicate copy of the visual names.
