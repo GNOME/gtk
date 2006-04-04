@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c: Make gtk_args const.
+
 	* gtk/gtkicontheme.c (pixbuf_supports_svg): Save one static.
 
 	* gtk/gtkrecentchooser.c (gtk_recent_chooser_error_quark):

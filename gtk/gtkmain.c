@@ -399,7 +399,7 @@ gtk_arg_module_cb (const char *key, const char *value, gpointer user_data)
   return TRUE;
 }
 
-static GOptionEntry gtk_args[] = {
+static const GOptionEntry gtk_args[] = {
   { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   
     /* Description of --gtk-module=MODULES in --help output */ N_("Load additional GTK+ modules"), 
     /* Placeholder in --gtk-module=MODULES in --help output */ N_("MODULES") },
