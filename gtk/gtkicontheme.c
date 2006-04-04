@@ -1342,11 +1342,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 GQuark
 gtk_icon_theme_error_quark (void)
 {
-  static GQuark q = 0;
-  if (q == 0)
-    q = g_quark_from_static_string ("gtk-icon-theme-error-quark");
-
-  return q;
+  return g_quark_from_static_string ("gtk-icon-theme-error-quark");
 }
 
 /**

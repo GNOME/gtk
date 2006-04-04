@@ -163,10 +163,7 @@ filename_warning (const char *format, const char *filename, const char *message)
 GQuark
 gtk_recent_manager_error_quark (void)
 {
-  static GQuark quark = 0;
-  if (quark == 0)
-    quark = g_quark_from_static_string ("gtk-recent-manager-error-quark");
-  return quark;
+  return g_quark_from_static_string ("gtk-recent-manager-error-quark");
 }
 
 

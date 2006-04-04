@@ -181,10 +181,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
 GQuark
 gtk_recent_chooser_error_quark (void)
 {
-  static GQuark error_quark = 0;
-  if (!error_quark)
-    error_quark = g_quark_from_static_string ("gtk-recent-chooser-error-quark");
-  return error_quark;
+  return g_quark_from_static_string ("gtk-recent-chooser-error-quark");
 }
 
 /**

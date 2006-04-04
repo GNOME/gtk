@@ -292,10 +292,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
 GQuark
 gtk_file_chooser_error_quark (void)
 {
-  static GQuark quark = 0;
-  if (quark == 0)
-    quark = g_quark_from_static_string ("gtk-file-chooser-error-quark");
-  return quark;
+  return g_quark_from_static_string ("gtk-file-chooser-error-quark");
 }
 
 /**

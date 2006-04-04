@@ -45,10 +45,7 @@ static void gtk_file_folder_base_init (gpointer g_class);
 GQuark
 gtk_file_system_error_quark (void)
 {
-  static GQuark quark = 0;
-  if (quark == 0)
-    quark = g_quark_from_static_string ("gtk-file-system-error-quark");
-  return quark;
+  return g_quark_from_static_string ("gtk-file-system-error-quark");
 }
 
 /*****************************************

@@ -1,5 +1,12 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_error_quark):
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_error_quark):
+	* gtk/gtkfilechooser.c (gtk_file_chooser_error_quark):
+	* gtk/gtkfilesystem.c (gtk_file_system_error_quark):
+	* gtk/gtkicontheme.c (gtk_icon_theme_error_quark): No point
+	in making the error path fast by caching quarks. 
+
 	* gtk/gtkfilesel.c (no_stat_dirs): Avoid relocation.
 
 	* gdk/gdk.c: Here too.
