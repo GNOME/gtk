@@ -1,5 +1,7 @@
 2006-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (pixbuf_supports_svg): Save one static.
+
 	* gtk/gtkrecentchooser.c (gtk_recent_chooser_error_quark):
 	* gtk/gtkrecentmanager.c (gtk_recent_manager_error_quark):
 	* gtk/gtkfilechooser.c (gtk_file_chooser_error_quark):
