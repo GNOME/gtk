@@ -960,6 +960,34 @@ test_line_separation (const char* str,
   g_object_unref (buffer);
 }
 
+/* there are cases where \r and \n should not be treated like \r\n,
+ * originally bug #337022. */
+static void
+split_r_n_separators_test (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_set_text (buffer, "foo\ra\nbar\n", -1);
+
+  /* delete 'a' so that we have
+
+     1 foo\r
+     2 \n
+     3 bar\n
+
+   * and both \r and \n are line separators */
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 5);
+  gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+
+  g_assert (gtk_text_iter_ends_line (&iter));
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 3);
+  g_assert (gtk_text_iter_ends_line (&iter));
+}
 
 static void
 line_separator_tests (void)
@@ -988,6 +1016,8 @@ line_separator_tests (void)
   str = g_strdup_printf ("line%sqw", buf);
   test_line_separation (str, TRUE, FALSE, 2, 4, 5);
   g_free (str);
+
+  split_r_n_separators_test ();
 
   g_print ("Line separator tests passed\n");
 }
