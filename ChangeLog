@@ -1,5 +1,10 @@
 2006-04-05  Alexander Larsson  <alexl@redhat.com>
 
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	Don't hardcode lpr command, expose full commandline.
+
+2006-04-05  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c:
 	* gtk/gtkprintunixdialog.c:
 	Don't check for printer changes after dialog is dead.

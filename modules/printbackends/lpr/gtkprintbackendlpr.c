@@ -320,7 +320,7 @@ lpr_write (GIOChannel *source,
   return TRUE;
 }
 
-#define LPR_COMMAND "/usr/bin/lpr"
+#define LPR_COMMAND "lpr"
 
 static void
 gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
@@ -337,17 +337,16 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
   GIOChannel *send_channel;
   gint argc;  
   gchar **argv;
-  gchar *cmd_line;
-  const char *cmd_line_options;
+  const char *cmd_line;
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   error = NULL;
 
-  cmd_line_options = gtk_print_settings_get (settings, "lpr-commandline");
-  if (cmd_line_options == NULL)
-    cmd_line_options = "";
+  cmd_line = gtk_print_settings_get (settings, "lpr-commandline");
+  if (cmd_line == NULL)
+    cmd_line = LPR_COMMAND;
   
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
@@ -359,10 +358,6 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
   ps->err = 0;
 
  /* spawn lpr with pipes and pipe ps file to lpr */
-  cmd_line = g_strdup_printf ("%s %s", 
-                              LPR_COMMAND, 
-                              cmd_line_options);
-
   if (!g_shell_parse_argv (cmd_line,
                            &argc,
                            &argv,
@@ -370,17 +365,13 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
     {
       lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
                     error, ps);
-
-      g_free (cmd_line);
       return;
     }
-
-  g_free (cmd_line);
 
   if (!g_spawn_async_with_pipes (NULL,
                                  argv,
                                  NULL,
-                                 0,
+                                 G_SPAWN_SEARCH_PATH,
                                  NULL,
                                  NULL,
                                  NULL,
@@ -493,12 +484,13 @@ lpr_printer_get_options (GtkPrinter *printer,
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("Command Line Options"), GTK_PRINTER_OPTION_TYPE_STRING);
   option->group = g_strdup ("GtkPrintDialogExtention");
-  gtk_printer_option_set_add (set, option);
-
   if (settings != NULL &&
       (command = gtk_print_settings_get (settings, "lpr-commandline"))!= NULL)
     gtk_printer_option_set (option, command);
-  
+  else
+    gtk_printer_option_set (option, LPR_COMMAND);
+  gtk_printer_option_set_add (set, option);
+    
   return set;
 }
 
