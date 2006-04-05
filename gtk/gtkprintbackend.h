@@ -119,6 +119,34 @@ void        gtk_print_backend_print_stream     (GtkPrintBackend         *print_b
 GList *     gtk_print_backend_load_modules     (void);
 
 
+/* Backend-only functions for GtkPrinter */
+
+GtkPrinter *gtk_printer_new               (const char      *name,
+					   GtkPrintBackend *backend,
+					   gboolean         is_virtual);
+gboolean    gtk_printer_is_new            (GtkPrinter      *printer);
+void        gtk_printer_set_is_new        (GtkPrinter      *printer,
+					   gboolean         val);
+void        gtk_printer_set_is_active     (GtkPrinter      *printer,
+					   gboolean         val);
+void        gtk_printer_set_has_details   (GtkPrinter      *printer,
+					   gboolean         val);
+void        gtk_printer_set_is_default    (GtkPrinter      *printer,
+					   gboolean         val);
+void        gtk_printer_set_icon_name     (GtkPrinter      *printer,
+					   const char      *icon);
+gboolean    gtk_printer_set_job_count     (GtkPrinter      *printer,
+					   int              count);
+gboolean    gtk_printer_set_location      (GtkPrinter      *printer,
+					   const char      *location);
+gboolean    gtk_printer_set_description   (GtkPrinter      *printer,
+					   const char      *description);
+gboolean    gtk_printer_set_state_message (GtkPrinter      *printer,
+					   const char      *message);
+void        gtk_printer_set_is_active     (GtkPrinter      *printer,
+					   gboolean         active);
+
+
 G_END_DECLS
 
 #endif /* __GTK_PRINT_BACKEND_H__ */

@@ -28,25 +28,6 @@
 #include "gtkpagesetup.h"
 
 G_BEGIN_DECLS
-struct _GtkPrinterPrivate
-{
-  gchar *name;
-  gchar *location;
-  gchar *description;
-  gchar *icon_name;
-
-  guint is_active: 1;
-  guint is_new: 1;
-  guint is_virtual : 1;
-  guint is_default : 1;
-  guint has_details: 1;
-
-  gchar *state_message;  
-  gint job_count;
-
-  GtkPrintBackend *backend;
-};
-
 
 gboolean             _gtk_printer_has_details               (GtkPrinter          *printer);
 void                 _gtk_printer_request_details           (GtkPrinter          *printer);

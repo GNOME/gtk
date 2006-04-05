@@ -36,6 +36,25 @@
 
 static void gtk_printer_finalize     (GObject *object);
 
+struct _GtkPrinterPrivate
+{
+  gchar *name;
+  gchar *location;
+  gchar *description;
+  gchar *icon_name;
+
+  guint is_active: 1;
+  guint is_new: 1;
+  guint is_virtual : 1;
+  guint is_default : 1;
+  guint has_details: 1;
+
+  gchar *state_message;  
+  gint job_count;
+
+  GtkPrintBackend *backend;
+};
+
 enum {
   DETAILS_ACQUIRED,
   LAST_SIGNAL
@@ -44,6 +63,8 @@ enum {
 enum {
   PROP_0,
   PROP_NAME,
+  PROP_BACKEND,
+  PROP_IS_VIRTUAL,
   PROP_STATE_MESSAGE,
   PROP_LOCATION,
   PROP_ICON_NAME,
@@ -63,6 +84,18 @@ static void gtk_printer_get_property (GObject      *object,
 
 G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT);
 
+static int
+safe_strcmp (const char *a, const char *b)
+{
+  if (a == b)
+    return 0;
+  if (a == NULL)
+    return -1;
+  if (b == NULL)
+    return 1;
+  return strcmp (a, b);
+}
+
 static void
 gtk_printer_class_init (GtkPrinterClass *class)
 {
@@ -80,9 +113,23 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_NAME,
                                    g_param_spec_string ("name",
 						        P_("Name"),
-						        P_("Name of the printer job"),
+						        P_("Name of the printer"),
 						        NULL,
-							GTK_PARAM_READABLE));
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (G_OBJECT_CLASS (class),
+                                   PROP_BACKEND,
+                                   g_param_spec_object ("backend",
+						        P_("Backend"),
+						        P_("Backend for the printer"),
+						        GTK_TYPE_PRINT_BACKEND,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (G_OBJECT_CLASS (class),
+                                   PROP_IS_VIRTUAL,
+                                   g_param_spec_boolean ("is-virtual",
+							 P_("Is Virtual"),
+							 P_("False if this represents a real hardware printer"),
+							 FALSE,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_STATE_MESSAGE,
                                    g_param_spec_string ("state-message",
@@ -156,6 +203,9 @@ gtk_printer_finalize (GObject *object)
   g_free (printer->priv->state_message);
   g_free (printer->priv->icon_name);
 
+  if (printer->priv->backend)
+    g_object_unref (printer->priv->backend);
+
   if (G_OBJECT_CLASS (gtk_printer_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_printer_parent_class)->finalize (object);
 }
@@ -166,7 +216,26 @@ gtk_printer_set_property (GObject         *object,
 			  const GValue    *value,
 			  GParamSpec      *pspec)
 {
-  /* No writable properties */
+  GtkPrinter *printer = GTK_PRINTER (object);
+  
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      printer->priv->name = g_value_dup_string (value);
+      break;
+    
+    case PROP_BACKEND:
+      printer->priv->backend = GTK_PRINT_BACKEND (g_value_dup_object (value));
+      break;
+
+    case PROP_IS_VIRTUAL:
+      printer->priv->is_virtual = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -184,6 +253,9 @@ gtk_printer_get_property (GObject    *object,
 	g_value_set_string (value, printer->priv->name);
       else
 	g_value_set_string (value, "");
+      break;
+    case PROP_BACKEND:
+      g_value_set_object (value, printer->priv->backend);
       break;
     case PROP_STATE_MESSAGE:
       if (printer->priv->state_message)
@@ -222,11 +294,16 @@ gtk_printer_get_property (GObject    *object,
  * Since: 2.8
  **/
 GtkPrinter *
-gtk_printer_new (void)
+gtk_printer_new (const char      *name,
+		 GtkPrintBackend *backend,
+		 gboolean         virtual)
 {
   GObject *result;
   
   result = g_object_new (GTK_TYPE_PRINTER,
+			 "name", name,
+			 "backend", backend,
+			 "is-virtual", virtual,
                          NULL);
 
   return (GtkPrinter *) result;
@@ -240,12 +317,43 @@ gtk_printer_get_backend (GtkPrinter *printer)
   return printer->priv->backend;
 }
 
+void
+gtk_printer_set_backend (GtkPrinter      *printer,
+			 GtkPrintBackend *backend)
+{
+  if (printer->priv->backend)
+    g_object_unref (printer->priv->backend);
+  
+  printer->priv->backend = g_object_ref (backend);
+}
+
 const gchar *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
   return printer->priv->name;
+}
+
+const gchar *
+gtk_printer_get_description (GtkPrinter *printer)
+{
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
+  
+  return printer->priv->description;
+}
+
+gboolean
+gtk_printer_set_description (GtkPrinter *printer,
+			     const char *description)
+{
+  if (safe_strcmp (printer->priv->description, description) == 0)
+    return FALSE;
+
+  g_free (printer->priv->description);
+  printer->priv->description = g_strdup (description);
+  
+  return TRUE;
 }
 
 const gchar *
@@ -256,6 +364,20 @@ gtk_printer_get_state_message (GtkPrinter *printer)
   return printer->priv->state_message;
 }
 
+gboolean
+gtk_printer_set_state_message (GtkPrinter *printer,
+			       const char *message)
+{
+  if (safe_strcmp (printer->priv->state_message, message) == 0)
+    return FALSE;
+
+  g_free (printer->priv->state_message);
+  printer->priv->state_message = g_strdup (message);
+  g_object_notify (G_OBJECT (printer), "state-message");
+
+  return TRUE;
+}
+
 const gchar *
 gtk_printer_get_location (GtkPrinter *printer)
 {
@@ -264,12 +386,35 @@ gtk_printer_get_location (GtkPrinter *printer)
   return printer->priv->location;
 }
 
+gboolean
+gtk_printer_set_location (GtkPrinter *printer,
+			  const char *location)
+{
+  if (safe_strcmp (printer->priv->location, location) == 0)
+    return FALSE;
+
+  g_free (printer->priv->location);
+  printer->priv->location = g_strdup (location);
+  g_object_notify (G_OBJECT (printer), "location");
+  
+  return TRUE;
+}
+
 const gchar * 
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
   return printer->priv->icon_name;
+}
+
+void
+gtk_printer_set_icon_name (GtkPrinter *printer,
+			   const char *icon)
+{
+  g_free (printer->priv->icon_name);
+  printer->priv->icon_name = g_strdup (icon);
+  g_object_notify (G_OBJECT (printer), "icon-name");
 }
 
 gint 
@@ -281,11 +426,32 @@ gtk_printer_get_job_count (GtkPrinter *printer)
 }
 
 gboolean
+gtk_printer_set_job_count (GtkPrinter *printer,
+			   int count)
+{
+  if (printer->priv->job_count == count)
+    return FALSE;
+
+  printer->priv->job_count = count;
+  
+  g_object_notify (G_OBJECT (printer), "job-count");
+  
+  return TRUE;
+}
+
+gboolean
 _gtk_printer_has_details (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
   return printer->priv->has_details;
+}
+
+void
+gtk_printer_set_has_details (GtkPrinter *printer,
+			     gboolean val)
+{
+  printer->priv->has_details = val;
 }
 
 gboolean
@@ -294,6 +460,13 @@ gtk_printer_is_active (GtkPrinter *printer)
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
   return printer->priv->is_active;
+}
+
+void
+gtk_printer_set_is_active (GtkPrinter *printer,
+			   gboolean val)
+{
+  printer->priv->is_active = val;
 }
 
 
@@ -306,11 +479,34 @@ gtk_printer_is_virtual (GtkPrinter *printer)
 }
 
 gboolean
+gtk_printer_is_new (GtkPrinter *printer)
+{
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+  
+  return printer->priv->is_new;
+}
+
+void
+gtk_printer_set_is_new (GtkPrinter *printer,
+			gboolean val)
+{
+  printer->priv->is_new = val;
+}
+
+
+gboolean
 gtk_printer_is_default (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
   
   return printer->priv->is_default;
+}
+
+void
+gtk_printer_set_is_default (GtkPrinter *printer,
+			    gboolean val)
+{
+  printer->priv->is_default = TRUE;
 }
 
 void

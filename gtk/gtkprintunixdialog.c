@@ -562,20 +562,20 @@ printer_list_initialize (GtkPrintUnixDialog *dialog,
 
   g_return_if_fail (print_backend != NULL);
 
-  g_signal_connect (print_backend, 
-                    "printer-added", 
-		    (GCallback) printer_added_cb, 
-		    dialog);
+  g_signal_connect_object (print_backend, 
+			   "printer-added", 
+			   (GCallback) printer_added_cb, 
+			   G_OBJECT (dialog), 0);
 
-  g_signal_connect (print_backend, 
-                    "printer-removed", 
-		    (GCallback) printer_removed_cb, 
-		    dialog);
+  g_signal_connect_object (print_backend, 
+			   "printer-removed", 
+			   (GCallback) printer_removed_cb, 
+			   G_OBJECT (dialog), 0);
 
-  g_signal_connect (print_backend, 
-                    "printer-status-changed", 
-		    (GCallback) printer_status_cb, 
-		    dialog);
+  g_signal_connect_object (print_backend, 
+			   "printer-status-changed", 
+			   (GCallback) printer_status_cb, 
+			   G_OBJECT (dialog), 0);
 
   list = gtk_print_backend_get_printer_list (print_backend);
 

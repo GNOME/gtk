@@ -20,12 +20,10 @@ backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends
 backend_LTLIBRARIES = libprintbackend-pdf.la
 
 libprintbackend_pdf_la_SOURCES =	\
-	gtkprintbackendpdf.c		\
-	gtkprinterpdf.c
+	gtkprintbackendpdf.c
 
 noinst_HEADERS =			\
-	gtkprintbackendpdf.h		\
-	gtkprinterpdf.h
+	gtkprintbackendpdf.h
 
 libprintbackend_pdf_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libprintbackend_pdf_la_LIBADD = $(LDADDS)

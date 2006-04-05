@@ -104,11 +104,15 @@ gtk_printer_cups_finalize (GObject *object)
  * Since: 2.10
  **/
 GtkPrinterCups *
-gtk_printer_cups_new (void)
+gtk_printer_cups_new (const char      *name,
+		      GtkPrintBackend *backend)
 {
   GObject *result;
   
   result = g_object_new (GTK_TYPE_PRINTER_CUPS,
+			 "name", name,
+			 "backend", backend,
+			 "is-virtual", FALSE,
                          NULL);
 
   return (GtkPrinterCups *) result;

@@ -35,13 +35,9 @@
 
 #include "gtkprintoperation.h"
 
-#include "gtkprintbackend.h"
 #include "gtkprintbackendlpr.h"
 
 #include "gtkprinter.h"
-#include "gtkprinter-private.h"
-
-#include "gtkprinterlpr.h"
 
 typedef struct _GtkPrintBackendLprClass GtkPrintBackendLprClass;
 
@@ -62,7 +58,7 @@ struct _GtkPrintBackendLpr
 {
   GObject parent_instance;
 
-  GtkPrinterLpr *printer;
+  GtkPrinter *printer;
 
   GHashTable *printers;
 };
@@ -136,7 +132,6 @@ G_MODULE_EXPORT void
 pb_module_init (GTypeModule *module)
 {
   gtk_print_backend_lpr_register_type (module);
-  gtk_printer_lpr_register_type (module);
 }
 
 G_MODULE_EXPORT void 
@@ -225,15 +220,15 @@ gtk_print_backend_lpr_find_printer (GtkPrintBackend *print_backend,
                                      const gchar *printer_name)
 {
   GtkPrintBackendLpr *lpr_print_backend;
-  GtkPrinterLpr *printer;
+  GtkPrinter *printer;
 
   lpr_print_backend = GTK_PRINT_BACKEND_LPR (print_backend);
   
   printer = NULL;
-  if (strcmp (GTK_PRINTER (lpr_print_backend->printer)->priv->name, printer_name) == 0)
+  if (strcmp (gtk_printer_get_name (lpr_print_backend->printer), printer_name) == 0)
     printer = lpr_print_backend->printer;
 
-  return (GtkPrinter *) printer; 
+  return printer; 
 }
 
 typedef struct {
@@ -336,21 +331,24 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
 				    GDestroyNotify dnotify)
 {
   GError *error;
-  GtkPrinterLpr *lpr_printer;
+  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *send_channel;
   gint argc;  
   gchar **argv;
   gchar *cmd_line;
+  const char *cmd_line_options;
 
-  lpr_printer = GTK_PRINTER_LPR (gtk_print_job_get_printer (job));
+  printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   error = NULL;
 
-  //gtk_print_settings_foreach (settings, add_lpr_options, request);
-
+  cmd_line_options = gtk_print_settings_get (settings, "lpr-commandline");
+  if (cmd_line_options == NULL)
+    cmd_line_options = "";
+  
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
@@ -363,7 +361,7 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
  /* spawn lpr with pipes and pipe ps file to lpr */
   cmd_line = g_strdup_printf ("%s %s", 
                               LPR_COMMAND, 
-                              lpr_printer->options->value);
+                              cmd_line_options);
 
   if (!g_shell_parse_argv (cmd_line,
                            &argc,
@@ -446,15 +444,15 @@ static void
 gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend_lpr)
 {
   GtkPrinter *printer;
+
+  printer = gtk_printer_new (_("Print to LPR"),
+			     GTK_PRINT_BACKEND (backend_lpr),
+			     TRUE); 
+  gtk_printer_set_has_details (printer, TRUE);
+  gtk_printer_set_icon_name (printer, "printer");
+  gtk_printer_set_is_active (printer, TRUE);
   
-  backend_lpr->printer = gtk_printer_lpr_new (); 
-
-  printer = GTK_PRINTER (backend_lpr->printer);
-
-  printer->priv->name = g_strdup ("Print to LPR");
-  printer->priv->icon_name = g_strdup ("printer");
-  printer->priv->is_active = TRUE;
-  printer->priv->backend = GTK_PRINT_BACKEND (backend_lpr);
+  backend_lpr->printer = printer;
 }
 
 static void
@@ -476,16 +474,14 @@ lpr_printer_request_details (GtkPrinter *printer)
 
 static GtkPrinterOptionSet *
 lpr_printer_get_options (GtkPrinter *printer,
-			 GtkPrintSettings  *settings,
+			 GtkPrintSettings *settings,
 			 GtkPageSetup *page_setup)
 {
-  GtkPrinterLpr *lpr_printer;
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
+  const char *command;
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
 
-  lpr_printer = GTK_PRINTER_LPR (printer);
-  
   set = gtk_printer_option_set_new ();
 
   option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
@@ -495,16 +491,14 @@ lpr_printer_get_options (GtkPrinter *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
-  /* TODO: read initial value from settings if != NULL */
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("Command Line Options"), GTK_PRINTER_OPTION_TYPE_STRING);
   option->group = g_strdup ("GtkPrintDialogExtention");
   gtk_printer_option_set_add (set, option);
+
+  if (settings != NULL &&
+      (command = gtk_print_settings_get (settings, "lpr-commandline"))!= NULL)
+    gtk_printer_option_set (option, command);
   
-  if (lpr_printer->options)
-    g_object_unref (lpr_printer->options);
-
-  lpr_printer->options = option;
-
   return set;
 }
 
@@ -521,7 +515,10 @@ lpr_printer_get_settings_from_options (GtkPrinter *printer,
 				       GtkPrinterOptionSet *options,
 				       GtkPrintSettings *settings)
 {
- 
+  GtkPrinterOption *option;
+
+  option = gtk_printer_option_set_lookup (options, "gtk-main-page-custom-input");
+  gtk_print_settings_set (settings, "lpr-commandline", option->value);
 }
 
 static void

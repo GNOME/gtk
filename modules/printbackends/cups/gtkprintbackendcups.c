@@ -41,7 +41,6 @@
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprintbackend.h>
 #include <gtk/gtkprinter.h>
-#include <gtk/gtkprinter-private.h>
 
 #include "gtkprintbackendcups.h"
 #include "gtkprintercups.h"
@@ -602,27 +601,6 @@ cups_request_execute (GtkPrintBackendCups *print_backend,
   g_source_attach ((GSource *) dispatch, NULL);
 }
 
-static gboolean
-swap_str_if_changed (gchar **target, 
-                     gchar  *source)
-{
-  gboolean changed = FALSE;
-  
-  if (*target)
-    {
-      if (!(source && strcmp (source, *target) == 0))
-        changed = TRUE;
-
-      g_free (*target);
-    }
-  else if (source != NULL)
-    changed = TRUE;
-
-  *target = source;
-
-  return changed;
-}
-
 static void
 cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
                               GtkCupsResult *result,
@@ -638,6 +616,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
   gchar *loc;
   gchar *desc;
   gchar *state_msg;
+  int job_count;
 
   char uri[HTTP_MAX_URI],	/* Printer URI */
        method[HTTP_MAX_URI],	/* Method/scheme name */
@@ -662,7 +641,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
   
   if (gtk_cups_result_is_error (result))
     {
-      if (printer->priv->is_new)
+      if (gtk_printer_is_new (printer))
 	{
 	  g_hash_table_remove (print_backend->printers,
 			       printer_name);
@@ -675,16 +654,14 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
   response = gtk_cups_result_get_response (result);
 
   /* TODO: determine printer type and use correct icon */
-  if (printer->priv->icon_name)
-    g_free (printer->priv->icon_name);
-
-  printer->priv->icon_name = g_strdup ("printer");
+  gtk_printer_set_icon_name (printer, "printer");
   
   cups_printer->device_uri = g_strdup_printf ("/printers/%s", printer_name);
 
   state_msg = "";
   loc = "";
   desc = "";
+  job_count = 0;
   for (attr = response->attrs; attr != NULL; attr = attr->next) 
     {
       if (!attr->name)
@@ -696,8 +673,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
       _CUPS_MAP_ATTR_STR (attr, printer_uri, "printer-uri-supported");
       _CUPS_MAP_ATTR_STR (attr, member_printer_uri, "member-uris");
       _CUPS_MAP_ATTR_INT (attr, cups_printer->state, "printer-state");
-      _CUPS_MAP_ATTR_INT (attr, printer->priv->job_count, "queued-job-count");
-
+      _CUPS_MAP_ATTR_INT (attr, job_count, "queued-job-count");
     }
 
   /* if we got a member_printer_uri then this printer is part of a class
@@ -714,9 +690,11 @@ cups_request_printer_info_cb (GtkPrintBackendCups *print_backend,
   else
     cups_printer->printer_uri = printer_uri;
 
-  status_changed = swap_str_if_changed (&printer->priv->location, loc);
-  status_changed = status_changed | swap_str_if_changed (&printer->priv->description, desc);
-  status_changed = status_changed | swap_str_if_changed (&printer->priv->state_message, state_msg);
+  status_changed = gtk_printer_set_job_count (printer, job_count);
+  
+  status_changed |= gtk_printer_set_location (printer, loc);
+  status_changed |= gtk_printer_set_description (printer, desc);
+  status_changed |= gtk_printer_set_state_message (printer, state_msg);
 
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri, 
@@ -947,16 +925,19 @@ cups_begin_polling_info (GtkPrintBackendCups *print_backend,
 static gint
 printer_cmp (GtkPrinter *a, GtkPrinter *b)
 {
+  const char *name_a, *name_b;
   g_assert (GTK_IS_PRINTER (a) && GTK_IS_PRINTER (b));
 
-  if (a->priv->name == NULL  && b->priv->name == NULL)
+  name_a = gtk_printer_get_name (a);
+  name_b = gtk_printer_get_name (b);
+  if (name_a == NULL  && name_b == NULL)
     return 0;
-  else if (a->priv->name == NULL)
+  else if (name_a == NULL)
     return G_MAXINT;
-  else if (b->priv->name == NULL)
+  else if (name_b == NULL)
     return G_MININT;
   else
-    return g_ascii_strcasecmp (a->priv->name, b->priv->name);
+    return g_ascii_strcasecmp (name_a, name_b);
 }
 
 static void
@@ -968,10 +949,10 @@ printer_hash_to_sorted_active_list (const gchar *key,
 
   printer = GTK_PRINTER (value);
 
-  if (printer->priv->name == NULL)
+  if (gtk_printer_get_name (printer) == NULL)
     return;
 
-  if (!printer->priv->is_active)
+  if (!gtk_printer_is_active (printer))
     return;
 
   *out_list = g_list_insert_sorted (*out_list, value, (GCompareFunc) printer_cmp);
@@ -986,14 +967,17 @@ printer_hash_to_sorted_active_name_list (const gchar *key,
 
   printer = GTK_PRINTER (value);
 
-  if (printer->priv->name == NULL)
+
+  if (gtk_printer_get_name (printer) == NULL)
     return;
 
-  if (!printer->priv->is_active)
+  if (!gtk_printer_is_active (printer))
     return;
 
-  if (printer->priv->is_active)
-    *out_list = g_list_insert_sorted (*out_list, printer->priv->name, g_str_equal);
+  if (gtk_printer_is_active (printer))
+    *out_list = g_list_insert_sorted (*out_list,
+				      (char *)gtk_printer_get_name (printer),
+				      g_str_equal);
 }
 
 static void
@@ -1011,7 +995,7 @@ mark_printer_inactive (const gchar *printer_name,
   if (printer == NULL)
     return;
 
-  printer->priv->is_active = FALSE;
+  gtk_printer_set_is_active (printer, FALSE);
 
   g_signal_emit_by_name (GTK_PRINT_BACKEND (cups_backend), "printer-removed", printer);
 }
@@ -1069,34 +1053,33 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       if (!cups_printer)
         {
           list_has_changed = TRUE;
-	  cups_printer = gtk_printer_cups_new ();
+	  cups_printer = gtk_printer_cups_new (attr->values[0].string.text,
+					       GTK_PRINT_BACKEND (cups_backend));
 	  printer = GTK_PRINTER (cups_printer);
-          printer->priv->name = g_strdup (attr->values[0].string.text);
-          printer->priv->backend = GTK_PRINT_BACKEND (cups_backend);
 
 	  if (cups_backend->default_printer != NULL &&
-	      strcmp (cups_backend->default_printer, printer->priv->name) == 0)
-	    printer->priv->is_default = TRUE;
+	      strcmp (cups_backend->default_printer, gtk_printer_get_name (printer)) == 0)
+	    gtk_printer_set_is_default (printer, TRUE);
 
           g_hash_table_insert (cups_backend->printers,
-                               g_strdup (printer->priv->name), 
+                               g_strdup (gtk_printer_get_name (printer)), 
                                cups_printer);
         }
     
-      if (!printer->priv->is_active)
+      if (!gtk_printer_is_active (printer))
         {
-          printer->priv->is_active = TRUE;
-          printer->priv->is_new = TRUE;
+	  gtk_printer_set_is_active (printer, TRUE);
+	  gtk_printer_set_is_new (printer, TRUE);
           list_has_changed = TRUE;
         }
 
-      if (printer->priv->is_new)
+      if (gtk_printer_is_new (printer))
         {
            g_signal_emit_by_name (GTK_PRINT_BACKEND (cups_backend), 
                                   "printer-added",
                                   printer);
 
-          printer->priv->is_new = FALSE;
+	  gtk_printer_set_is_new (printer, FALSE);
         }
 
       cups_request_printer_info (cups_backend, gtk_printer_get_name (printer));
@@ -1214,7 +1197,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   response = gtk_cups_result_get_response (result);
 
   data->printer->ppd_file = ppdOpenFile (data->ppd_filename);
-  printer->priv->has_details = TRUE;
+  gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", printer, TRUE);
 }
 
@@ -1258,7 +1241,7 @@ cups_request_ppd (GtkPrinter      *printer)
 
   data->printer = g_object_ref (printer);
 
-  resource = g_strdup_printf ("/printers/%s.ppd", printer->priv->name);
+  resource = g_strdup_printf ("/printers/%s.ppd", gtk_printer_get_name (printer));
   request = gtk_cups_request_new (http,
                                   GTK_CUPS_GET,
 				  0,

@@ -39,9 +39,6 @@
 #include "gtkprintbackendpdf.h"
 
 #include "gtkprinter.h"
-#include "gtkprinter-private.h"
-
-#include "gtkprinterpdf.h"
 
 typedef struct _GtkPrintBackendPdfClass GtkPrintBackendPdfClass;
 
@@ -62,7 +59,7 @@ struct _GtkPrintBackendPdf
 {
   GObject parent_instance;
 
-  GtkPrinterPdf *printer;
+  GtkPrinter *printer;
 
   GHashTable *printers;
 };
@@ -136,7 +133,6 @@ G_MODULE_EXPORT void
 pb_module_init (GTypeModule *module)
 {
   gtk_print_backend_pdf_register_type (module);
-  gtk_printer_pdf_register_type (module);
 }
 
 G_MODULE_EXPORT void 
@@ -225,15 +221,15 @@ gtk_print_backend_pdf_find_printer (GtkPrintBackend *print_backend,
                                      const gchar *printer_name)
 {
   GtkPrintBackendPdf *pdf_print_backend;
-  GtkPrinterPdf *printer;
+  GtkPrinter *printer;
 
   pdf_print_backend = GTK_PRINT_BACKEND_PDF (print_backend);
   
   printer = NULL;
-  if (strcmp (GTK_PRINTER (pdf_print_backend->printer)->priv->name, printer_name) == 0)
+  if (strcmp (gtk_printer_get_name (pdf_print_backend->printer), printer_name) == 0)
     printer = pdf_print_backend->printer;
 
-  return (GtkPrinter *) printer; 
+  return printer; 
 }
 
 typedef struct {
@@ -326,13 +322,13 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
 				    GDestroyNotify dnotify)
 {
   GError *error;
-  GtkPrinterPdf *pdf_printer;
+  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *save_channel;  
   const char *filename;
 
-  pdf_printer = GTK_PRINTER_PDF (gtk_print_job_get_printer (job));
+  printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   error = NULL;
@@ -408,14 +404,14 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend_pdf)
 {
   GtkPrinter *printer;
   
-  backend_pdf->printer = gtk_printer_pdf_new (); 
+  backend_pdf->printer = gtk_printer_new (_("Print to PDF"),
+					  GTK_PRINT_BACKEND (backend_pdf),
+					  TRUE); 
 
-  printer = GTK_PRINTER (backend_pdf->printer);
-
-  printer->priv->name = g_strdup ("Print to PDF");
-  printer->priv->icon_name = g_strdup ("floppy");
-  printer->priv->is_active = TRUE;
-  printer->priv->backend = GTK_PRINT_BACKEND (backend_pdf);
+  printer = backend_pdf->printer;
+  gtk_printer_set_has_details (printer, TRUE);
+  gtk_printer_set_icon_name (printer, "floppy");
+  gtk_printer_set_is_active (printer, TRUE);
 }
 
 static void
@@ -440,14 +436,11 @@ pdf_printer_get_options (GtkPrinter *printer,
 			 GtkPrintSettings *settings,
 			 GtkPageSetup *page_setup)
 {
-  GtkPrinterPdf *pdf_printer;
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
   const char *filename;
   char *n_up[] = {"1" };
 
-  pdf_printer = GTK_PRINTER_PDF (printer);
-  
   set = gtk_printer_option_set_new ();
 
   option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
