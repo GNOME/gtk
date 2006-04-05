@@ -482,7 +482,7 @@ lpr_printer_get_options (GtkPrinter *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
-  option = gtk_printer_option_new ("gtk-main-page-custom-input", _("Command Line Options"), GTK_PRINTER_OPTION_TYPE_STRING);
+  option = gtk_printer_option_new ("gtk-main-page-custom-input", _("Command Line"), GTK_PRINTER_OPTION_TYPE_STRING);
   option->group = g_strdup ("GtkPrintDialogExtention");
   if (settings != NULL &&
       (command = gtk_print_settings_get (settings, "lpr-commandline"))!= NULL)
