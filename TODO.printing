@@ -34,7 +34,6 @@ General:
 * get the right DPI from the printer into cairo
 * gets errors on alex laptop
 * general print to file module (ps+pdf)
-* don't access gtkprinter->private from subclass (#335996)
 * use real gtk+ stock icon for print to pdf icon
 
 Print dialog wishlist:
