@@ -1,3 +1,9 @@
+2006-04-05  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_ends_line): handle the case of \r
+	and \n split across lines. Bug #337022.
+	* tests/testtextbuffer.c: add unit test.
+
 Tue Apr  4 12:25:36 2006  Søren Sandmann  <sandmann@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (gdk_image_class_init): Add "_private" to

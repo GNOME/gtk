@@ -1564,10 +1564,23 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
     return TRUE;
   else if (wc == '\n')
     {
-      /* need to determine if a \r precedes the \n, in which case
-       * we aren't the end of the line
-       */
       GtkTextIter tmp = *iter;
+
+      /* need to determine if a \r precedes the \n, in which case
+       * we aren't the end of the line.
+       * Note however that if \r and \n are on different lines, they
+       * both are terminators. This for instance may happen after
+       * deleting some text:
+
+          1 some text\r    delete 'a'    1 some text\r
+          2 a\n            --------->    2 \n
+          3 ...                          3 ...
+
+       */
+
+      if (gtk_text_iter_get_line_offset (&tmp) == 0)
+        return TRUE;
+
       if (!gtk_text_iter_backward_char (&tmp))
         return TRUE;
 
