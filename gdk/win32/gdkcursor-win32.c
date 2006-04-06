@@ -575,7 +575,8 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
  */
 
 static HBITMAP
-create_alpha_bitmap (gint width, gint height, guchar **outdata)
+create_alpha_bitmap (gint     size,
+		     guchar **outdata)
 {
   BITMAPV5HEADER bi;
   HDC hdc;
@@ -583,8 +584,7 @@ create_alpha_bitmap (gint width, gint height, guchar **outdata)
 
   ZeroMemory (&bi, sizeof (BITMAPV5HEADER));
   bi.bV5Size = sizeof (BITMAPV5HEADER);
-  bi.bV5Width = width;
-  bi.bV5Height = height;
+  bi.bV5Height = bi.bV5Width = size;
   bi.bV5Planes = 1;
   bi.bV5BitCount = 32;
   bi.bV5Compression = BI_BITFIELDS;
@@ -613,8 +613,7 @@ create_alpha_bitmap (gint width, gint height, guchar **outdata)
 }
 
 static HBITMAP
-create_color_bitmap (gint     width,
-		     gint     height,
+create_color_bitmap (gint     size,
 		     guchar **outdata,
 		     gint     bits)
 {
@@ -627,8 +626,7 @@ create_color_bitmap (gint     width,
 
   ZeroMemory (&bmi, sizeof (bmi));
   bmi.bmiHeader.bV4Size = sizeof (BITMAPV4HEADER);
-  bmi.bmiHeader.bV4Width = width;
-  bmi.bmiHeader.bV4Height = height;
+  bmi.bmiHeader.bV4Height = bmi.bmiHeader.bV4Width = size;
   bmi.bmiHeader.bV4Planes = 1;
   bmi.bmiHeader.bV4BitCount = bits;
   bmi.bmiHeader.bV4V4Compression = BI_RGB;
@@ -666,16 +664,19 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
   HBITMAP hColorBitmap, hMaskBitmap;
   guchar *indata, *inrow;
   guchar *colordata, *colorrow, *maskdata, *maskbyte;
-  gint width, height, i, j, rowstride;
+  gint width, height, size, i, i_offset, j, j_offset, rowstride;
   guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
 
-  hColorBitmap = create_alpha_bitmap (width, height, &colordata);
+  /* The bitmaps are created square */
+  size = MAX (width, height);
+
+  hColorBitmap = create_alpha_bitmap (size, &colordata);
   if (!hColorBitmap)
     return FALSE;
-  hMaskBitmap = create_color_bitmap (width, height, &maskdata, 1);
+  hMaskBitmap = create_color_bitmap (size, &maskdata, 1);
   if (!hMaskBitmap)
     {
       DeleteObject (hColorBitmap);
@@ -683,17 +684,29 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
     }
 
   /* MSDN says mask rows are aligned to "LONG" boundaries */
-  maskstride = (((width + 31) & ~31) >> 3);
+  maskstride = (((size + 31) & ~31) >> 3);
 
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  for (j=0; j<height; j++)
+
+  if (width > height)
     {
-      colorrow = colordata + 4*j*width;
-      maskbyte = maskdata + j*maskstride;
-      mask_bit = 0x80;
-      inrow = indata  + (height-j-1)*rowstride;
-      for (i=0; i<width; i++)
+      i_offset = 0;
+      j_offset = (width - height) / 2;
+    }
+  else
+    {
+      i_offset = (height - width) / 2;
+      j_offset = 0;
+    }
+
+  for (j = 0; j < height; j++)
+    {
+      colorrow = colordata + 4*(j+j_offset)*size + 4*i_offset;
+      maskbyte = maskdata + (j+j_offset)*maskstride + i_offset/8;
+      mask_bit = (0x80 >> (i_offset % 8));
+      inrow = indata + (height-j-1)*rowstride;
+      for (i = 0; i < width; i++)
 	{
 	  colorrow[4*i+0] = inrow[4*i+2];
 	  colorrow[4*i+1] = inrow[4*i+1];
@@ -729,17 +742,20 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
   HBITMAP hColorBitmap, hMaskBitmap;
   guchar *indata, *inrow;
   guchar *colordata, *colorrow, *maskdata, *maskbyte;
-  gint width, height, i, j, rowstride, nc, bmstride;
+  gint width, height, size, i, i_offset, j, j_offset, rowstride, nc, bmstride;
   gboolean has_alpha;
   guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
 
-  hColorBitmap = create_color_bitmap (width, height, &colordata, 24);
+  /* The bitmaps are created square */
+  size = MAX (width, height);
+
+  hColorBitmap = create_color_bitmap (size, &colordata, 24);
   if (!hColorBitmap)
     return FALSE;
-  hMaskBitmap = create_color_bitmap (width, height, &maskdata, 1);
+  hMaskBitmap = create_color_bitmap (size, &maskdata, 1);
   if (!hMaskBitmap)
     {
       DeleteObject (hColorBitmap);
@@ -747,25 +763,36 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
     }
 
   /* rows are always aligned on 4-byte boundarys */
-  bmstride = width * 3;
+  bmstride = size * 3;
   if (bmstride % 4 != 0)
     bmstride += 4 - (bmstride % 4);
 
   /* MSDN says mask rows are aligned to "LONG" boundaries */
-  maskstride = (((width + 31) & ~31) >> 3);
+  maskstride = (((size + 31) & ~31) >> 3);
 
   indata = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   nc = gdk_pixbuf_get_n_channels (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
-  for (j=0; j<height; j++)
+  if (width > height)
     {
-      colorrow = colordata + j*bmstride;
-      maskbyte = maskdata + j*maskstride;
-      mask_bit = 0x80;
-      inrow = indata  + (height-j-1)*rowstride;
-      for (i=0; i<width; i++)
+      i_offset = 0;
+      j_offset = (width - height) / 2;
+    }
+  else
+    {
+      i_offset = (height - width) / 2;
+      j_offset = 0;
+    }
+
+  for (j = 0; j < height; j++)
+    {
+      colorrow = colordata + (j+j_offset)*bmstride + 3*i_offset;
+      maskbyte = maskdata + (j+j_offset)*maskstride + i_offset/8;
+      mask_bit = (0x80 >> (i_offset % 8));
+      inrow = indata + (height-j-1)*rowstride;
+      for (i = 0; i < width; i++)
 	{
 	  if (has_alpha && inrow[nc*i+3] < 128)
 	    {
