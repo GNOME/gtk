@@ -121,7 +121,6 @@ enum {
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
   GRAB_BROKEN,
-  DAMAGE_EVENT,
   LAST_SIGNAL
 };
 
@@ -402,7 +401,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->screen_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->grab_broken_event = NULL;
-  klass->damage_event = NULL;
 
   klass->show_help = gtk_widget_real_show_help;
   
@@ -1367,29 +1365,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, grab_broken_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  /**
-   * GtkWidget::damage-event:
-   * @widget: the object which received the signal
-   * @event: the #GdkEventExpose event
-   *
-   * Emitted when a redirected window belonging to @widget gets drawn into.
-   * The region/area members of the event shows what area of the redirected
-   * drawable was drawn into.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event. 
-   *   %FALSE to propagate the event further.
-   *
-   * Since: 2.10
-   */
-  widget_signals[DAMAGE_EVENT] =
-    g_signal_new ("damage_event",
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, damage_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -3607,6 +3582,9 @@ gtk_widget_send_expose (GtkWidget *widget,
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
+  if (event->type != GDK_EXPOSE)
+    return TRUE;
+  
   return gtk_widget_event_internal (widget, event);
 }
 
@@ -3763,9 +3741,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN;
-	  break;
-	case GDK_DAMAGE:
-	  signal_num = DAMAGE_EVENT;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
