@@ -1395,6 +1395,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_VISIBILITY_NOTIFY:
     case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
+    case GDK_DAMAGE:
       gtk_widget_event (event_widget, event);
       break;
 
@@ -1496,17 +1497,9 @@ typedef struct
 {
   GtkWidget *old_grab_widget;
   GtkWidget *new_grab_widget;
+  gboolean   was_grabbed;
+  gboolean   is_grabbed;
 } GrabNotifyInfo;
-
-static gboolean
-check_is_grabbed (GtkWidget *widget,
-		  GtkWidget *grab_widget)
-{
-  if (grab_widget)
-    return !(widget == grab_widget || gtk_widget_is_ancestor (widget, grab_widget));
-  else
-    return FALSE;
-}
 
 static void
 gtk_grab_notify_foreach (GtkWidget *child,
@@ -1514,43 +1507,47 @@ gtk_grab_notify_foreach (GtkWidget *child,
                         
 {
   GrabNotifyInfo *info = data;
-  gboolean was_grabbed = check_is_grabbed (child, info->old_grab_widget);
-  gboolean is_grabbed = check_is_grabbed (child, info->new_grab_widget);
+ 
+  gboolean was_grabbed, is_grabbed, was_shadowed, is_shadowed;
 
-  if (was_grabbed != is_grabbed)
-    {
-      g_object_ref (child);
+  was_grabbed = info->was_grabbed;
+  is_grabbed = info->is_grabbed;
 
-      _gtk_widget_grab_notify (child, was_grabbed);
+  info->was_grabbed = info->was_grabbed || (child == info->old_grab_widget);
+  info->is_grabbed = info->is_grabbed || (child == info->new_grab_widget);
+
+  was_shadowed = info->old_grab_widget && !info->was_grabbed;
+  is_shadowed = info->new_grab_widget && !info->is_grabbed;
+
+  g_object_ref (child);
+  
+  if (was_shadowed != is_shadowed)
+    _gtk_widget_grab_notify (child, was_shadowed);
+  
+  if (GTK_IS_CONTAINER (child))
+    gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
       
-      if (GTK_IS_CONTAINER (child))
-	gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
-      
-      g_object_unref (child);
-    }
+  g_object_unref (child);
+  
+  info->was_grabbed = was_grabbed;
+  info->is_grabbed = is_grabbed;
 }
 
 static void
 gtk_grab_notify (GtkWindowGroup *group,
-		 GtkWidget      *grab_widget,
-		 gboolean        was_grabbed)
+		 GtkWidget      *old_grab_widget,
+		 GtkWidget      *new_grab_widget)
 {
   GList *toplevels;
   GrabNotifyInfo info;
 
-  if (was_grabbed)
-    {
-      info.old_grab_widget = grab_widget;
-      info.new_grab_widget = group->grabs ? group->grabs->data : NULL;
-    }
-  else
-    {
-      info.old_grab_widget = (group->grabs && group->grabs->next) ? group->grabs->next->data : NULL;
-      info.new_grab_widget = grab_widget;
-    }
+  if (old_grab_widget == new_grab_widget)
+    return;
+
+  info.old_grab_widget = old_grab_widget;
+  info.new_grab_widget = new_grab_widget;
 
   g_object_ref (group);
-  g_object_ref (grab_widget);
 
   toplevels = gtk_window_list_toplevels ();
   g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
@@ -1560,19 +1557,23 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
+      info.was_grabbed = FALSE;
+      info.is_grabbed = FALSE;
+
       if (group == gtk_window_get_group (toplevel))
-	gtk_container_foreach (GTK_CONTAINER (toplevel), gtk_grab_notify_foreach, &info);
+	gtk_container_foreach (GTK_CONTAINER (toplevel), 
+			       gtk_grab_notify_foreach, &info);
       g_object_unref (toplevel);
     }
 
   g_object_unref (group);
-  g_object_unref (grab_widget);
 }
 
 void
 gtk_grab_add (GtkWidget *widget)
 {
   GtkWindowGroup *group;
+  GtkWidget *old_grab_widget;
   
   g_return_if_fail (widget != NULL);
   
@@ -1582,10 +1583,15 @@ gtk_grab_add (GtkWidget *widget)
       
       group = gtk_main_get_window_group (widget);
 
+      if (group->grabs)
+	old_grab_widget = (GtkWidget *)group->grabs->data;
+      else
+	old_grab_widget = NULL;
+
       g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      gtk_grab_notify (group, widget, FALSE);
+      gtk_grab_notify (group, old_grab_widget, widget);
     }
 }
 
@@ -1605,6 +1611,7 @@ void
 gtk_grab_remove (GtkWidget *widget)
 {
   GtkWindowGroup *group;
+  GtkWidget *new_grab_widget;
   
   g_return_if_fail (widget != NULL);
   
@@ -1615,9 +1622,14 @@ gtk_grab_remove (GtkWidget *widget)
       group = gtk_main_get_window_group (widget);
       group->grabs = g_slist_remove (group->grabs, widget);
       
-      g_object_unref (widget);
+      if (group->grabs)
+	new_grab_widget = (GtkWidget *)group->grabs->data;
+      else
+	new_grab_widget = NULL;
 
-      gtk_grab_notify (group, widget, TRUE);
+      gtk_grab_notify (group, widget, new_grab_widget);
+      
+      g_object_unref (widget);
     }
 }
 
