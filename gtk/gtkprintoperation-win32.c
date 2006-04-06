@@ -18,6 +18,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef _MSC_VER
+#define _WIN32_WINNT 0x0500
+#define WINVER _WIN32_WINNT
+#endif
+
 #include "config.h"
 #include <stdlib.h>
 #include <cairo-win32.h>
@@ -25,6 +30,7 @@
 #include "gtkprintoperation-private.h"
 #include "gtkprint-win32.h"
 #include "gtkintl.h"
+#include "gtkinvisible.h"
 #include "gtkalias.h"
 
 #define MAX_PAGE_RANGES 20
@@ -697,7 +703,7 @@ dialog_to_print_settings (GtkPrintOperation *op,
 	    }
 	  else
 	    {
-	      GtkPaperSize *paper_size = gtk_paper_size_new_custom ("dialog",
+	      GtkPaperSize *paper_size = gtk_paper_size_new_custom ("dialog", _("Custom paper"),
 								    devmode->dmPaperWidth * 10.0,
 								    devmode->dmPaperLength * 10.0,
 								    GTK_UNIT_MM);
@@ -1297,3 +1303,10 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   return result;
 }
 
+GtkPageSetup *
+gtk_print_run_page_setup_dialog (GtkWindow        *parent,
+				 GtkPageSetup     *page_setup,
+				 GtkPrintSettings *settings)
+{
+  return NULL;
+}

@@ -2656,6 +2656,14 @@ gtk_print_run_page_setup_dialog
 #endif
 #endif
 
+#if IN_HEADER(__GTK_PRINT_OPERATION_H__)
+#if IN_FILE(__GTK_PRINT_OPERATION_WIN32_C__)
+#ifdef G_OS_WIN32
+gtk_print_run_page_setup_dialog
+#endif
+#endif
+#endif
+
 #if IN_HEADER(__GTK_PRINT_SETTINGS_H__)
 #if IN_FILE(__GTK_PRINT_SETTINGS_C__)
 gtk_print_settings_get_type G_GNUC_CONST

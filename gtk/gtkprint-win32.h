@@ -21,12 +21,7 @@
 #ifndef __GTK_PRINT_WIN32_H__
 #define __GTK_PRINT_WIN32_H__
 
-#ifndef _MSC_VER
-#define _WIN32_WINNT 0x0500
-#define WINVER _WIN32_WINNT
-#endif
-
-#include <gdk/gdkwin32.h>
+#include "win32/gdkwin32.h"
 
 G_BEGIN_DECLS
 
