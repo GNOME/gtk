@@ -1,3 +1,14 @@
+2006-04-06  Tor Lillqvist  <tml@novell.com>
+
+	Correct the appearance of non-square icons and cursors: pad them
+	to square so that Windows won't stretch them.
+
+	* gdk/win32/gdkcursor-win32.c (create_alpha_bitmap)
+	(create_color_bitmap): Always create square bitmaps, take only
+	side length as argument.
+	(pixbuf_to_hbitmaps_alpha_winxp, pixbuf_to_hbitmaps_normal):
+	Corresponding changes.
+
 2006-04-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (text_window_realize): Lower the window, to
