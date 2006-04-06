@@ -1594,7 +1594,7 @@ gtk_grab_add (GtkWidget *widget)
       g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      gtk_grab_notify (group, old_grab_widget);
+      gtk_grab_notify (group, old_grab_widget, widget);
     }
 }
 
