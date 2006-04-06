@@ -145,7 +145,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), page_setup);
   
   *do_print = FALSE; 
-  if (gtk_dialog_run (GTK_DIALOG (pd)) == GTK_RESPONSE_ACCEPT)
+  if (gtk_dialog_run (GTK_DIALOG (pd)) == GTK_RESPONSE_OK)
     {
       GtkPrintOperationUnix *op_unix;
       GtkPrinter *printer;

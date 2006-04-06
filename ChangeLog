@@ -1,3 +1,11 @@
+2006-04-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	* gtk/gtkprintoperation-unix.c: Use GTK_RESPONSE_CANCEL/OK
+	instead of GTK_RESPONSE_REJECT/ACCEPT, to make Esc close
+	the dialog, and to not use values which are documented
+	as reserved for apps.
+
 2006-04-05  Alexander Larsson  <alexl@redhat.com>
 
 	* modules/printbackends/lpr/gtkprintbackendlpr.c:

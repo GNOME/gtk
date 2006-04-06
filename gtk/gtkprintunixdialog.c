@@ -395,12 +395,12 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 		    NULL);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
-			  GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-			  GTK_STOCK_PRINT, GTK_RESPONSE_ACCEPT,
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			  GTK_STOCK_PRINT, GTK_RESPONSE_OK,
                           NULL);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 }
 
 static void
@@ -974,7 +974,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
        gtk_widget_hide (dialog->priv->image_quality_page);
        gtk_widget_hide (dialog->priv->finishing_page);
        gtk_widget_hide (dialog->priv->color_page);
-       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
+       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 
        return;
     }
@@ -1240,7 +1240,7 @@ selected_printer_changed (GtkTreeSelection *selection,
   
   if (printer != NULL && !_gtk_printer_has_details (printer))
     {
-      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
+      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
       dialog->priv->request_details_tag =
 	g_signal_connect (printer, "details-acquired",
 			  G_CALLBACK (printer_details_acquired), dialog);
@@ -1268,7 +1268,7 @@ selected_printer_changed (GtkTreeSelection *selection,
       g_object_unref (dialog->priv->current_printer);
     }
 
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, TRUE);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
   dialog->priv->current_printer = printer;
 
   if (printer != NULL)
