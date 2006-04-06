@@ -40,277 +40,6 @@ typedef struct {
   HGLOBAL devmode;
 } GtkPrintOperationWin32;
 
-/* Base64 utils (straight from camel-mime-utils.c) */
-static char *base64_alphabet =
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-/*
- * performs an 'encode step', only encodes blocks of 3 characters to the
- * output at a time, saves left-over state in state and save (initialise to
- * 0 on first invocation).
- */
-static int
-base64_encode_step (const guchar  *in, 
-		    int            len, 
-		    gboolean       break_lines, 
-		    guchar        *out, 
-		    int           *state, 
-		    int           *save)
-{
-  register guchar *outptr;
-  register const guchar *inptr;
-  
-  if (len <= 0)
-    return 0;
-  
-  inptr = in;
-  outptr = out;
-  
-  if (len + ((char *) save) [0] > 2)
-    {
-      const guchar *inend = in+len-2;
-      register int c1, c2, c3;
-      register int already;
-      
-      already = *state;
-      
-      switch (((char *) save) [0])
-	{
-	case 1:	c1 = ((unsigned char *) save) [1]; goto skip1;
-	case 2:	c1 = ((unsigned char *) save) [1];
-	  c2 = ((unsigned char *) save) [2]; goto skip2;
-	}
-      
-      /* 
-       * yes, we jump into the loop, no i'm not going to change it, 
-       * it's beautiful! 
-       */
-      while (inptr < inend)
-	{
-	  c1 = *inptr++;
-	skip1:
-	  c2 = *inptr++;
-	skip2:
-	  c3 = *inptr++;
-	  *outptr++ = base64_alphabet [ c1 >> 2 ];
-	  *outptr++ = base64_alphabet [ c2 >> 4 | 
-					((c1&0x3) << 4) ];
-	  *outptr++ = base64_alphabet [ ((c2 &0x0f) << 2) | 
-					(c3 >> 6) ];
-	  *outptr++ = base64_alphabet [ c3 & 0x3f ];
-	  /* this is a bit ugly ... */
-	  if (break_lines && (++already)>=19)
-	    {
-	      *outptr++='\n';
-	      already = 0;
-	    }
-	}
-      
-      ((char *)save)[0] = 0;
-      len = 2-(inptr-inend);
-      *state = already;
-    }
-  
-  if (len>0)
-    {
-      register char *saveout;
-      
-      /* points to the slot for the next char to save */
-      saveout = & (((char *)save)[1]) + ((char *)save)[0];
-      
-      /* len can only be 0 1 or 2 */
-      switch(len)
-	{
-	case 2:	*saveout++ = *inptr++;
-	case 1:	*saveout++ = *inptr++;
-	}
-      ((char *)save)[0]+=len;
-    }
-  
-  return outptr-out;
-}
-
-/* 
- * call this when finished encoding everything, to
- * flush off the last little bit 
- */
-static int
-base64_encode_close (const guchar  *in, 
-		     int            inlen, 
-		     gboolean       break_lines, 
-		     guchar        *out, 
-		     int           *state, 
-		     int           *save)
-{
-  int c1, c2;
-  unsigned char *outptr = out;
-
-  if (inlen > 0)
-    outptr += base64_encode_step (in, 
-				  inlen, 
-				  break_lines, 
-				  outptr, 
-				  state, 
-				  save);
-  
-  c1 = ((unsigned char *) save) [1];
-  c2 = ((unsigned char *) save) [2];
-  
-  switch (((char *) save) [0])
-    {
-    case 2:
-      outptr [2] = base64_alphabet[ ( (c2 &0x0f) << 2 ) ];
-      g_assert (outptr [2] != 0);
-      goto skip;
-    case 1:
-      outptr[2] = '=';
-    skip:
-      outptr [0] = base64_alphabet [ c1 >> 2 ];
-      outptr [1] = base64_alphabet [ c2 >> 4 | ( (c1&0x3) << 4 )];
-      outptr [3] = '=';
-      outptr += 4;
-      break;
-    }
-  if (break_lines)
-    *outptr++ = '\n';
-  
-  *save = 0;
-  *state = 0;
-  
-  return outptr-out;
-}
-
-/**
- * base64_encode:
- * @text: the binary data to encode.
- * @len: the length of @text.
- *
- * Encode a sequence of binary data into it's Base-64 stringified
- * representation.
- *
- * Return value: The Base-64 encoded string representing @text.
- */
-static char *
-base64_encode (const char *text, int len)
-{
-  unsigned char *out;
-  int state = 0, outlen;
-  unsigned int save = 0;
-  
-  out = g_malloc (len * 4 / 3 + 5);
-  outlen = base64_encode_close (text, 
-				len, 
-				FALSE,
-				out, 
-				&state, 
-				&save);
-  out[outlen] = '\0';
-  return (char *) out;
-}
-
-static unsigned char mime_base64_rank[256] = {
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255, 62,255,255,255, 63,
-   52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255,
-  255,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255,
-  255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-};
-
-/**
- * base64_decode_step: decode a chunk of base64 encoded data
- * @in: input stream
- * @len: max length of data to decode
- * @out: output stream
- * @state: holds the number of bits that are stored in @save
- * @save: leftover bits that have not yet been decoded
- *
- * Decodes a chunk of base64 encoded data
- **/
-static int
-base64_decode_step (const guchar  *in, 
-		    int            len, 
-		    guchar        *out, 
-		    int           *state, 
-		    guint         *save)
-{
-  register const guchar *inptr;
-  register guchar *outptr;
-  const guchar *inend;
-  guchar c;
-  register unsigned int v;
-  int i;
-  
-  inend = in+len;
-  outptr = out;
-  
-  /* convert 4 base64 bytes to 3 normal bytes */
-  v=*save;
-  i=*state;
-  inptr = in;
-  while (inptr < inend)
-    {
-      c = mime_base64_rank [*inptr++];
-      if (c != 0xff)
-	{
-	  v = (v<<6) | c;
-	  i++;
-	  if (i==4)
-	    {
-	      *outptr++ = v>>16;
-	      *outptr++ = v>>8;
-	      *outptr++ = v;
-	      i=0;
-	    }
-	}
-    }
-  
-  *save = v;
-  *state = i;
-  
-  /* quick scan back for '=' on the end somewhere */
-  /* fortunately we can drop 1 output char for each trailing = (upto 2) */
-  i=2;
-  while (inptr > in && i)
-    {
-      inptr--;
-      if (mime_base64_rank [*inptr] != 0xff)
-	{
-	  if (*inptr == '=')
-	    outptr--;
-	  i--;
-	}
-    }
-
-  /* if i!= 0 then there is a truncation error! */
-  return outptr - out;
-}
-
-static char *
-base64_decode (const char   *text,
-	       int          *out_len)
-{
-  char *ret;
-  int inlen, state = 0, save = 0;
-  
-  inlen = strlen (text);
-  ret = g_malloc0 (inlen);
-  
-  *out_len = base64_decode_step (text, inlen, ret, &state, &save);
-  
-  return ret; 
-}
-
 static GtkPageOrientation
 orientation_from_win32 (short orientation)
 {
@@ -322,7 +51,8 @@ orientation_from_win32 (short orientation)
 static short
 orientation_to_win32 (GtkPageOrientation orientation)
 {
-  if (orientation == GTK_PAGE_ORIENTATION_LANDSCAPE)
+  if (orientation == GTK_PAGE_ORIENTATION_LANDSCAPE ||
+      orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE)
     return DMORIENT_LANDSCAPE;
   return DMORIENT_PORTRAIT;
 }
@@ -680,8 +410,8 @@ dialog_to_print_settings (GtkPrintOperation *op,
 				  devmode->dmDriverVersion);
       if (devmode->dmDriverExtra != 0)
 	{
-	  char *extra = base64_encode (((char *)devmode) + sizeof (DEVMODEW),
-				       devmode->dmDriverExtra);
+	  char *extra = g_base64_encode (((char *)devmode) + sizeof (DEVMODEW),
+					 devmode->dmDriverExtra);
 	  gtk_print_settings_set (settings,
 				  GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA,
 				  extra);
@@ -932,7 +662,7 @@ dialog_from_print_settings (GtkPrintOperation *op,
   extras_len = 0;
   extras_base64 = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA);
   if (extras_base64)
-    extras = base64_decode (extras_base64, &extras_len);
+    extras = g_base64_decode (extras_base64, &extras_len);
 
   printdlgex->hDevMode = GlobalAlloc (GMEM_MOVEABLE, 
 				      sizeof (DEVMODEW) + extras_len);
@@ -1275,9 +1005,18 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       op->priv->platform_data = op_win32;
       op_win32->hdc = printdlgex->hDC;
       op_win32->devmode = printdlgex->hDevMode;
-      
+
+      op->priv->print_pages = gtk_print_settings_get_print_pages (op->priv->print_settings);
+      op->priv->num_page_ranges = 0;
+      if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
+	op->priv->page_ranges = gtk_print_settings_get_page_ranges (op->priv->print_settings,
+								    &op->priv->num_page_ranges);
       op->priv->manual_num_copies = printdlgex->nCopies;
       op->priv->manual_collation = (printdlgex->Flags & PD_COLLATE) != 0;
+      op->priv->manual_reverse = FALSE;
+      op->priv->manual_orientation = FALSE;
+      op->priv->manual_scale = 1.0;
+      op->priv->manual_page_set = GTK_PAGE_SET_ALL;
     }
 
   op->priv->start_page = win32_start_page;

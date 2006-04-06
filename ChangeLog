@@ -1,5 +1,11 @@
 2006-04-06  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintoperation-win32.c: 
+	Use glib base64 code.
+	Set up manual_* vars fully.
+
+2006-04-06  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/Makefile.am:
 	Add -lcomdlg32 on win32
 	

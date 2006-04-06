@@ -20,14 +20,19 @@ PDF backend:
 
 Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
+* Implement page setup dialog
+* save win32-specific settings when the generic one loses data
+* emit job status updates
 
 Cups/Unix print dialog:
 * Use themed icons for the collate/reverse?
 * Add custom translations for a lot of standard PPD options
 * "Page Setup" used both as tab and dialog name
+* Change page size on a per-page basis
+* odd/even pages => odd/even sheets
+* tooltips on orientation radio buttons
 
 General:
-* use base64 from glib
 * Add API docs
 * tutorial
 * update win32 port (patches in bz?)
