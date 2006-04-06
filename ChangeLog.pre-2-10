@@ -1,3 +1,12 @@
+2006-04-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_grab_add, gtk_grab_remove, gtk_grab_notify) 
+	(gtk_grab_notify_foreach): Rework the code which emits ::grab-notify
+	signals to ensure that we emit enough signals. Also optimize the
+	code to not do unnecessary tree walking.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Document ::grab-notify.
+
 2006-04-05  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_ends_line): handle the case of \r
