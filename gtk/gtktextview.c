@@ -7283,6 +7283,7 @@ text_window_realize (GtkTextWindow *win,
   
   gdk_window_show (win->window);
   gdk_window_set_user_data (win->window, win->widget);
+  gdk_window_lower (win->window);
 
   attributes.x = 0;
   attributes.y = 0;

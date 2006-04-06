@@ -1,5 +1,9 @@
 2006-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (text_window_realize): Lower the window, to
+	prevent late-constructed text windows from covering child 
+	widgets.  (#336796, Yevgen Muntyan)
+
 	* gtk/gtkmain.c (gtk_grab_add, gtk_grab_remove, gtk_grab_notify) 
 	(gtk_grab_notify_foreach): Rework the code which emits ::grab-notify
 	signals to ensure that we emit enough signals. Also optimize the
