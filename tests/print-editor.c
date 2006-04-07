@@ -9,7 +9,7 @@ static GtkPrintSettings *settings = NULL;
 static gboolean file_changed = FALSE;
 static GtkTextBuffer *buffer;
 static GtkWidget *statusbar;
-static int printing_count = 0;
+static GList *active_prints = NULL;
 
 static void
 update_title (void)
@@ -35,6 +35,7 @@ update_statusbar (void)
   gchar *msg;
   gint row, col;
   GtkTextIter iter;
+  const char *print_str;
 
   gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 0);
   
@@ -45,10 +46,17 @@ update_statusbar (void)
   row = gtk_text_iter_get_line (&iter);
   col = gtk_text_iter_get_line_offset (&iter);
 
-  msg = g_strdup_printf ("%d, %d%s%s",
+  print_str = "";
+  if (active_prints)
+    {
+      GtkPrintOperation *op = active_prints->data;
+      print_str = gtk_print_operation_get_status_string (op);
+    }
+  
+  msg = g_strdup_printf ("%d, %d%s %s",
                          row, col,
 			 file_changed?" - Modified":"",
-			 (printing_count > 0)?" printing...":"");
+			 print_str);
 
   gtk_statusbar_push (GTK_STATUSBAR (statusbar), 0, msg);
 
@@ -377,10 +385,10 @@ status_changed_cb (GtkPrintOperation *op,
 {
   if (gtk_print_operation_is_finished (op))
     {
+      active_prints = g_list_remove (active_prints, op);
       g_object_unref (op);
-      printing_count--;
-      update_statusbar ();
     }
+  update_statusbar ();
 }
 
 static void
@@ -430,11 +438,11 @@ do_print (GtkAction *action)
 
   if (!gtk_print_operation_is_finished (print))
     {
-      printing_count++;
+      g_object_ref (print);
+      active_prints = g_list_append (active_prints, print);
       update_statusbar ();
       
       /* This ref is unref:ed when we get the final state change */
-      g_object_ref (print);
       g_signal_connect (print, "status_changed",
 			G_CALLBACK (status_changed_cb), NULL);
     }

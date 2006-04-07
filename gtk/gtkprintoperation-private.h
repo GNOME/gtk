@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 struct _GtkPrintOperationPrivate
 {
   GtkPrintStatus status;
+  char *status_string;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
   char *job_name;
@@ -70,7 +71,8 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  GError **error);
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
-				      GtkPrintStatus status);
+				      GtkPrintStatus status,
+				      const char *string);
 
 /* GtkPrintContext private functions: */
 

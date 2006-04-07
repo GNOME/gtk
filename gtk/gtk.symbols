@@ -2644,6 +2644,7 @@ gtk_print_operation_set_show_dialog
 gtk_print_operation_set_pdf_target
 gtk_print_operation_run
 gtk_print_operation_get_status
+gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
 #endif
 #endif

@@ -34,11 +34,27 @@
 #include "gtkalias.h"
 
 #define MAX_PAGE_RANGES 20
+#define STATUS_POLLING_TIME 2000
+
+#ifndef JOB_STATUS_RESTART
+#define JOB_STATUS_RESTART 0x800
+#endif
+
+#ifndef JOB_STATUS_COMPLETE
+#define JOB_STATUS_COMPLETE 0x1000
+#endif
 
 typedef struct {
   HDC hdc;
   HGLOBAL devmode;
+  HGLOBAL devnames;
+  HANDLE printerHandle;
+  int job_id;
+  guint timeout_id;
 } GtkPrintOperationWin32;
+
+static void win32_poll_status (GtkPrintOperation *op);
+
 
 static GtkPageOrientation
 orientation_from_win32 (short orientation)
@@ -303,7 +319,7 @@ win32_start_page (GtkPrintOperation *op,
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
   LPDEVMODEW devmode;
   GtkPaperSize *paper_size;
-  
+
   devmode = GlobalLock (op_win32->devmode);
   
   devmode->dmFields |= DM_ORIENTATION;
@@ -336,19 +352,141 @@ win32_end_page (GtkPrintOperation *op,
   EndPage (op_win32->hdc);
 }
 
+static gboolean
+win32_poll_status_timeout (GtkPrintOperation *op)
+{
+  GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
+  
+  op_win32->timeout_id = 0;
+  /* We need to ref this, as setting the status to finished
+     might unref the object */
+  g_object_ref (op);
+  win32_poll_status (op);
+
+  if (!gtk_print_operation_is_finished (op))
+    op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
+					  (GSourceFunc)win32_poll_status_timeout,
+					  op);
+  g_object_unref (op);
+  return FALSE;
+}
+
+
 static void
 win32_end_run (GtkPrintOperation *op)
 {
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
-
+  LPDEVNAMES devnames;
+  HANDLE printerHandle = 0;
+  
   EndDoc (op_win32->hdc);
+  devnames = GlobalLock (op_win32->devnames);
+  if (!OpenPrinterW (((gunichar2 *)devnames) + devnames->wDeviceOffset,
+		     &printerHandle, NULL))
+    printerHandle = 0;
+  GlobalUnlock (op_win32->devnames);
+  
   GlobalFree(op_win32->devmode);
+  GlobalFree(op_win32->devnames);
 
   cairo_surface_destroy (op->priv->surface);
   op->priv->surface = NULL;
 
   DeleteDC(op_win32->hdc);
   
+  if (printerHandle != 0)
+    {
+      op_win32->printerHandle = printerHandle;
+      win32_poll_status (op);
+      op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
+					    (GSourceFunc)win32_poll_status_timeout,
+					    op);
+    }
+  else
+    /* Dunno what happened, pretend its finished */
+    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED, NULL);
+}
+
+static void
+win32_poll_status (GtkPrintOperation *op)
+{
+  GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
+  guchar *data;
+  DWORD needed;
+  JOB_INFO_1W *job_info;
+  GtkPrintStatus status;
+  char *status_str;
+  BOOL ret;
+
+  GetJobW (op_win32->printerHandle, op_win32->job_id,
+	   1,(LPBYTE)NULL, 0, &needed);
+  data = g_malloc (needed);
+  ret = GetJobW (op_win32->printerHandle, op_win32->job_id,
+		 1, (LPBYTE)data, needed, &needed);
+
+  status_str = NULL;
+  if (ret)
+    {
+      job_info = (JOB_INFO_1W *)data;
+      DWORD win32_status = job_info->Status;
+
+      if (job_info->pStatus)
+	status_str = g_utf16_to_utf8 (job_info->pStatus, 
+				      -1, NULL, NULL, NULL);
+     
+      if (win32_status &
+	  (JOB_STATUS_COMPLETE | JOB_STATUS_PRINTED))
+	status = GTK_PRINT_STATUS_FINISHED;
+      else if (win32_status &
+	       (JOB_STATUS_OFFLINE |
+		JOB_STATUS_PAPEROUT |
+		JOB_STATUS_PAUSED |
+		JOB_STATUS_USER_INTERVENTION))
+	{
+	  status = GTK_PRINT_STATUS_PENDING_ISSUE;
+	  if (status_str == NULL)
+	    {
+	      if (win32_status & JOB_STATUS_OFFLINE)
+		status_str = g_strdup (_("Printer offline"));
+	      else if (win32_status & JOB_STATUS_PAPEROUT)
+		status_str = g_strdup (_("Out of paper"));
+	      else if (win32_status & JOB_STATUS_PAUSED)
+		status_str = g_strdup (_("Paused"));
+	      else if (win32_status & JOB_STATUS_USER_INTERVENTION)
+		status_str = g_strdup (_("Need user intervention"));
+	    }
+	}
+      else if (win32_status &
+	       (JOB_STATUS_BLOCKED_DEVQ |
+		JOB_STATUS_DELETED |
+		JOB_STATUS_ERROR))
+	status = GTK_PRINT_STATUS_FINISHED_ABORTED;
+      else if (win32_status &
+	       (JOB_STATUS_SPOOLING |
+		JOB_STATUS_DELETING))
+	status = GTK_PRINT_STATUS_PENDING;
+      else if (win32_status & JOB_STATUS_PRINTING)
+	status = GTK_PRINT_STATUS_PRINTING;
+      else
+	status = GTK_PRINT_STATUS_FINISHED;
+    }
+  else
+    status = GTK_PRINT_STATUS_FINISHED;
+
+  g_free (data);
+
+  _gtk_print_operation_set_status (op, status, status_str);
+ 
+  g_free (status_str);
+}
+
+static void
+op_win32_free (GtkPrintOperationWin32 *op_win32)
+{
+  if (op_win32->printerHandle)
+    ClosePrinter (op_win32->printerHandle);
+  if (op_win32->timeout_id != 0)
+    g_source_remove (op_win32->timeout_id);
   g_free (op_win32);
 }
 
@@ -527,7 +665,7 @@ dialog_to_print_settings (GtkPrintOperation *op,
       if (devmode->dmFields & DM_DUPLEX)
 	{
 	  GtkPrintDuplex duplex;
-	  switch (duplex)
+	  switch (devmode->dmDuplex)
 	    {
 	    default:
 	    case DMDUP_SIMPLEX:
@@ -846,7 +984,6 @@ dialog_from_print_settings (GtkPrintOperation *op,
     }
   
   GlobalUnlock (printdlgex->hDevMode);
-
 }
 
 GtkPrintOperationResult
@@ -884,6 +1021,17 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       goto out;
     }      
 
+  printdlgex->lStructSize = sizeof(PRINTDLGEX);
+  printdlgex->hwndOwner = parentHWnd;
+  printdlgex->hDevMode = NULL;
+  printdlgex->hDevNames = NULL;
+  printdlgex->hDC = NULL;
+  printdlgex->Flags = PD_RETURNDC | PD_NOSELECTION;
+  if (op->priv->current_page == -1)
+    printdlgex->Flags |= PD_NOCURRENTPAGE;
+  printdlgex->Flags2 = 0;
+  printdlgex->ExclusionFlags = 0;
+
   page_ranges = (LPPRINTPAGERANGE) GlobalAlloc (GPTR, 
 						MAX_PAGE_RANGES * sizeof (PRINTPAGERANGE));
   if (!page_ranges) 
@@ -896,16 +1044,6 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       goto out;
     }
 
-  printdlgex->lStructSize = sizeof(PRINTDLGEX);
-  printdlgex->hwndOwner = parentHWnd;
-  printdlgex->hDevMode = NULL;
-  printdlgex->hDevNames = NULL;
-  printdlgex->hDC = NULL;
-  printdlgex->Flags = PD_RETURNDC | PD_NOSELECTION;
-  if (op->priv->current_page == -1)
-    printdlgex->Flags |= PD_NOCURRENTPAGE;
-  printdlgex->Flags2 = 0;
-  printdlgex->ExclusionFlags = 0;
   printdlgex->nPageRanges = 0;
   printdlgex->nMaxPageRanges = MAX_PAGE_RANGES;
   printdlgex->lpPageRanges = page_ranges;
@@ -1000,12 +1138,15 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 	  op->priv->surface = NULL;
 	  goto out; 
 	} 
-
+      
       op_win32 = g_new (GtkPrintOperationWin32, 1);
       op->priv->platform_data = op_win32;
+      op->priv->free_platform_data = (GDestroyNotify) op_win32_free;
       op_win32->hdc = printdlgex->hDC;
       op_win32->devmode = printdlgex->hDevMode;
-
+      op_win32->devnames = printdlgex->hDevNames;
+      op_win32->job_id = job_id;
+      
       op->priv->print_pages = gtk_print_settings_get_print_pages (op->priv->print_settings);
       op->priv->num_page_ranges = 0;
       if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
@@ -1024,10 +1165,10 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   op->priv->end_run = win32_end_run;
   
   out:
-  if (!result && printdlgex && printdlgex->hDevMode != NULL) 
+  if (!*do_print && printdlgex && printdlgex->hDevMode != NULL) 
     GlobalFree(printdlgex->hDevMode); 
 
-  if (printdlgex && printdlgex->hDevNames != NULL) 
+  if (!*do_print && printdlgex && printdlgex->hDevNames != NULL) 
     GlobalFree(printdlgex->hDevNames); 
 
   if (page_ranges)

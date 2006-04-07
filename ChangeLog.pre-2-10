@@ -1,3 +1,25 @@
+2006-04-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	Link to winspool
+	
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.[ch]: 
+	Add gtk_print_operation_get_status_string() and status
+	string to _gtk_print_operation_set_status.
+	Rename GTK_PRINT_STATUS_PROCESSING to GTK_PRINT_STATUS_PRINTING.
+	
+	* gtk/gtkprintoperation-win32.c:
+	Poll for status updates
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Rename GTK_PRINT_STATUS_PROCESSING to GTK_PRINT_STATUS_PRINTING.
+	
+	* tests/print-editor.c:
+	Show print status string
+
 2006-04-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/paper_names_offsets.c: 

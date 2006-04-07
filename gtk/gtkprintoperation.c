@@ -19,9 +19,11 @@
  */
 
 #include "config.h"
+#include "string.h"
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
 #include <cairo-pdf.h>
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
@@ -81,6 +83,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   operation->priv = GTK_PRINT_OPERATION_GET_PRIVATE (operation);
 
   operation->priv->status = GTK_PRINT_STATUS_INITIAL;
+  operation->priv->status_string = g_strdup ("");
   operation->priv->default_page_setup = NULL;
   operation->priv->print_settings = NULL;
   operation->priv->nr_of_pages = -1;
@@ -259,12 +262,33 @@ gtk_print_operation_set_unit (GtkPrintOperation  *op,
 
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,
-				 GtkPrintStatus status)
+				 GtkPrintStatus status,
+				 const char *string)
 {
-  if (op->priv->status == status)
+  const char *status_strs[] = {
+    N_("Initial state"),
+    N_("Preparing to print"),
+    N_("Generating data"),
+    N_("Sending data"),
+    N_("Waiting"),
+    N_("Blocking on issue"),
+    N_("Printing"),
+    N_("Finished"),
+    N_("Finished with error")
+  };
+
+  if (status < 0 || status > GTK_PRINT_STATUS_FINISHED_ABORTED)
+    status = GTK_PRINT_STATUS_FINISHED_ABORTED;
+  
+  if (string == NULL)
+    string = status_strs[status];
+  
+  if (op->priv->status == status &&
+      strcmp (string, op->priv->status_string) == 0)
     return;
 
   op->priv->status = status;
+  op->priv->status_string = g_strdup (string);
   g_signal_emit (op, signals[STATUS_CHANGED], 0);
 }
 
@@ -275,6 +299,14 @@ gtk_print_operation_get_status (GtkPrintOperation  *op)
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), GTK_PRINT_STATUS_FINISHED_ABORTED);
 
   return op->priv->status;
+}
+
+const char *
+gtk_print_operation_get_status_string (GtkPrintOperation  *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), "");
+
+  return op->priv->status_string;
 }
 
 gboolean
@@ -455,7 +487,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   result = run_print_dialog (op, parent, &do_print, error);
   if (!do_print)
     {
-      _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED);
+      _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
       return result;
     }
   
@@ -475,7 +507,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   initial_page_setup = create_page_setup (op);
   _gtk_print_context_set_page_setup (print_context, initial_page_setup);
 
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING);
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
   g_return_val_if_fail (op->priv->nr_of_pages != -1, FALSE);
@@ -501,7 +533,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
       ranges[0].end = op->priv->nr_of_pages - 1;
     }
   
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA);
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA, NULL);
 
   for (i = 0; i < uncollated_copies; i++)
     {

@@ -116,7 +116,7 @@ unix_end_run (GtkPrintOperation *op)
 static void
 job_status_changed_cb (GtkPrintJob *job, GtkPrintOperation *op)
 {
-  _gtk_print_operation_set_status (op, gtk_print_job_get_status (job));
+  _gtk_print_operation_set_status (op, gtk_print_job_get_status (job), NULL);
 }
 
 GtkPrintOperationResult
@@ -178,7 +178,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 	  goto out;
 	}
 
-      _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job));
+      _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job), NULL);
       op_unix->job_status_changed_tag =
 	g_signal_connect (op_unix->job, "status_changed",
 			  G_CALLBACK (job_status_changed_cb), op);

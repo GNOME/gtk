@@ -827,7 +827,7 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
       break;
     case IPP_JOB_PROCESSING:
       gtk_print_job_set_status (data->job,
-				GTK_PRINT_STATUS_PROCESSING);
+				GTK_PRINT_STATUS_PRINTING);
       break;
     default:
     case IPP_JOB_CANCELLED:

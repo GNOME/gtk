@@ -49,7 +49,8 @@ typedef enum {
   GTK_PRINT_STATUS_GENERATING_DATA,
   GTK_PRINT_STATUS_SENDING_DATA,
   GTK_PRINT_STATUS_PENDING,
-  GTK_PRINT_STATUS_PROCESSING,
+  GTK_PRINT_STATUS_PENDING_ISSUE,
+  GTK_PRINT_STATUS_PRINTING,
   GTK_PRINT_STATUS_FINISHED,
   GTK_PRINT_STATUS_FINISHED_ABORTED
 } GtkPrintStatus;
@@ -131,6 +132,7 @@ GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOper
 								    GtkWindow          *parent,
 								    GError            **error);
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
+const char *            gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
 
 GtkPageSetup *gtk_print_run_page_setup_dialog (GtkWindow        *parent,
