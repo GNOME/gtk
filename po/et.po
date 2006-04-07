@@ -1,20 +1,20 @@
 # GTK+ eesti keele tõlge.
 # Estonian translation of GTK+.
 #
-# Copyright (C) 1999-2005 Free Software Foundation, Inc.
+# Copyright (C) 1999-2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk package.
 #
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
 # Tõivo Leedjärv <toivo@linux.ee>, 2002-2004.
 # Priit Laes <amd@tt.ee>, 2004, 2005.
-# Ivar Smolin <okul@linux.ee>, 2005.
+# Ivar Smolin <okul@linux.ee>, 2005, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-14 05:34+0200\n"
-"PO-Revision-Date: 2005-10-15 10:51+0300\n"
+"PO-Revision-Date: 2006-04-07 00:38+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -407,7 +407,7 @@ msgstr "Paleti andmetele pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
-msgstr ""
+msgstr "PCX-pildi jaoks ei saadud kõiki ridu"
 
 #: ../gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
@@ -673,7 +673,7 @@ msgstr "TIFF-faili avamiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "TIFF-failist pole võimalik RGB andmeid lugeda "
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
@@ -828,135 +828,135 @@ msgstr "Gdk silumislipud, mida maha võtta"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr ""
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr ""
+msgstr "Return"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr ""
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr ""
+msgstr "Multi_key"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr ""
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr ""
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr ""
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr ""
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr ""
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr ""
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr ""
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr ""
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr ""
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr ""
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr ""
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1044,7 +1044,7 @@ msgstr "Kunst"
 #.
 #: ../gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1054,7 +1054,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1064,7 +1064,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1074,7 +1074,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:609
 msgid "keyboard label|Super"
-msgstr ""
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1084,7 +1084,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:623
 msgid "keyboard label|Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1094,17 +1094,17 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:637
 msgid "keyboard label|Meta"
-msgstr ""
+msgstr "Meta"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:651
 msgid "keyboard label|Space"
-msgstr ""
+msgstr "Tühik"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:655
 msgid "keyboard label|Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1350,6 +1350,9 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"Kataloogi pole võimalik luua kuna selle nimega fail on juba olemas. Proovi "
+"kataloogile määrata mõni muu nimi või nimeta fail enne kataloogi loomist "
+"ümber."
 
 #: ../gtk/gtkfilechooserdefault.c:984
 msgid "Invalid file name"
