@@ -1,3 +1,14 @@
+2006-04-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/paper_names_offsets.c: 
+	* gtk/gtkpapersize.c: Save 4K of .data by converting
+	the array of paper names to offsets. 
+
+	* gtk/gen-paper-names.c: Utility used to create
+	paper_names_offsets.c from paper_names.c.
+
+	* gtk/Makefile.am: Necessary glue.
+
 2006-04-06  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation-win32.c: 

@@ -32,13 +32,7 @@
 #define MM_PER_INCH 25.4
 #define POINTS_PER_INCH 72
 
-typedef struct
-{
-  const char *name;
-  const char *size;
-  const char *display_name;
-  const char *ppd_name;
-} PaperInfo;
+#include "paper_names_offsets.c"
 
 struct _GtkPaperSize
 {
@@ -53,8 +47,6 @@ struct _GtkPaperSize
   gboolean is_custom;
 };
 
-#include "paper_names.c"
-
 GType
 gtk_paper_size_get_type (void)
 {
@@ -67,26 +59,28 @@ gtk_paper_size_get_type (void)
   return our_type;
 }
 
-static int
-paper_info_compare (const void *_a, const void *_b)
-{
-  const PaperInfo *a = _a;
-  const PaperInfo *b = _b;
-
-  return strcmp (a->name, b->name);
-}
-
 static PaperInfo *
 lookup_paper_info (const char *name)
 {
-  PaperInfo key;
-  PaperInfo *info;
-  
-  key.name = name;
-  info = bsearch (&key, standard_names, G_N_ELEMENTS (standard_names),
-		  sizeof (PaperInfo), paper_info_compare);
-  
-  return info;
+  int lower = 0;
+  int upper = G_N_ELEMENTS (standard_names_offsets) - 1;
+  int mid;
+  int cmp;
+
+  do 
+    {
+       mid = (lower + upper) / 2; 
+       cmp = strcmp (name, paper_names + standard_names_offsets[mid].name);
+       if (cmp < 0)
+         upper = mid - 1;
+       else if (cmp > 0)
+         lower = mid + 1;
+       else
+         return &standard_names_offsets[mid];
+    }
+  while (lower <= upper);
+
+  return NULL;
 }
 
 static double
@@ -167,7 +161,6 @@ parse_media_size (const char *size,
   return TRUE;  
 }
 
-
 static gboolean
 parse_full_media_size_name (const char *full_name,
 			    char **name,
@@ -225,7 +218,8 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
   
   size = g_new0 (GtkPaperSize, 1);
   size->info = info;
-  parse_media_size (info->size, &size->width, &size->height);
+  size->width = info->width;
+  size->height = info->height;
   
   return size;
 }
@@ -293,21 +287,21 @@ gtk_paper_size_new_from_ppd (const char *ppd_name,
 	g_strndup (ppd_name, strlen (ppd_name) - strlen (".Transverse"));
     }
   
-  for (i = 0; i < G_N_ELEMENTS(standard_names); i++)
+  for (i = 0; i < G_N_ELEMENTS(standard_names_offsets); i++)
     {
-      if (standard_names[i].ppd_name != NULL &&
-	  strcmp (standard_names[i].ppd_name, lookup_ppd_name) == 0)
+      if (standard_names_offsets[i].ppd_name != -1 &&
+	  strcmp (paper_names + standard_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
 	{
-	  size = gtk_paper_size_new_from_info (&standard_names[i]);
+	  size = gtk_paper_size_new_from_info (&standard_names_offsets[i]);
 	  goto out;
 	}
     }
   
-  for (i = 0; i < G_N_ELEMENTS(extra_ppd_names); i++)
+  for (i = 0; i < G_N_ELEMENTS(extra_ppd_names_offsets); i++)
     {
-      if (strcmp (extra_ppd_names[i].ppd_name, lookup_ppd_name) == 0)
+      if (strcmp (paper_names + extra_ppd_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
 	{
-	  size = gtk_paper_size_new (extra_ppd_names[i].standard_name);
+	  size = gtk_paper_size_new (paper_names + extra_ppd_names_offsets[i].standard_name);
 	  goto out;
 	}
     }
@@ -319,8 +313,8 @@ gtk_paper_size_new_from_ppd (const char *ppd_name,
  out:
 
   if (size->info == NULL ||
-      size->info->ppd_name == NULL ||
-      strcmp (size->info->ppd_name, ppd_name) != 0)
+      size->info->ppd_name == -1 ||
+      strcmp (paper_names + size->info->ppd_name, ppd_name) != 0)
     size->ppd_name = g_strdup (ppd_name);
   
   g_free (freeme);
@@ -330,8 +324,11 @@ gtk_paper_size_new_from_ppd (const char *ppd_name,
 
 
 GtkPaperSize *
-gtk_paper_size_new_custom (const char *name, const char *display_name,
-			   double width, double height, GtkUnit unit)
+gtk_paper_size_new_custom (const char *name, 
+			   const char *display_name,
+			   double      width, 
+			   double      height, 
+			   GtkUnit     unit)
 {
   GtkPaperSize *size;
   g_return_val_if_fail (name != NULL, NULL);
@@ -397,7 +394,7 @@ gtk_paper_size_get_name (GtkPaperSize *size)
   if (size->name)
     return size->name;
   g_assert (size->info != NULL);
-  return size->info->name;
+  return paper_names + size->info->name;
 }
 
 G_CONST_RETURN char *
@@ -406,7 +403,7 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
   if (size->display_name)
     return size->display_name;
   g_assert (size->info != NULL);
-  return size->info->display_name;
+  return paper_names + size->info->display_name;
 }
 
 G_CONST_RETURN char *
@@ -415,7 +412,7 @@ gtk_paper_size_get_ppd_name (GtkPaperSize *size)
   if (size->ppd_name)
     return size->ppd_name;
   if (size->info)
-    return size->info->ppd_name;
+    return paper_names + size->info->ppd_name;
   return NULL;
 }
 
