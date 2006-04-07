@@ -49,7 +49,8 @@ TESTAPPS = \
 	testgtk \
 	testicontheme testiconview testimage testinput \
 	testmenus testmenubars testmerge testmultidisplay testmultiscreen \
-	testrgb \
+	testnotebookdnd \
+	testrecentchooser testrgb \
 	testselection testspinbutton \
 	testtext testtextbuffer testtoolbar \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
@@ -97,6 +98,10 @@ EXTRA_OBJETCS = testsocket_common.obj
 
 !IFDEF EXTRA_testsocket_child
 EXTRA_OBJETCS = testsocket_common.obj
+!ENDIF
+
+!IFDEF EXTRA_testrecentchooser
+EXTRA_OBJETCS = prop-editor.obj
 !ENDIF
 
 !IFDEF EXTRA_testtreeview
