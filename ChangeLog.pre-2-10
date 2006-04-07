@@ -1,5 +1,11 @@
 2006-04-07  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintoperation-win32.c:
+	Initial work on gtk_print_run_page_setup_dialog.
+	Not reading margins yet.
+
+2006-04-07  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/Makefile.am:
 	Link to winspool
 	

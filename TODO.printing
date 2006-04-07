@@ -22,7 +22,6 @@ Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
 * Implement page setup dialog
 * save win32-specific settings when the generic one loses data
-* emit job status updates
 
 Cups/Unix print dialog:
 * Use themed icons for the collate/reverse?
