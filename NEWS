@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.8.16 to GTK+ 2.8.17
+===================================================
+
+* Bugs fixed:
+ 325699 Expander disclosure button is too small           [Brad Taylor]
+ 334657 gtk_image_clear doesn't cause redraw
+ 334774 typo in configure.in yields suspicious 
+        warning                                   [Peter Breitenlohner]
+ 335001 gtk_icon_view_set_cursor causes 
+        Segmentation fault                         [Emmanuel Rodriguez]
+ 335129 garbage output of --help in non UTF-8 locale [Christian Persch]
+ 319032 GtkNotebook does not destroy its children 
+        on destroy()                                   [Yevgen Muntyan]
+ 334906 TreeView DnD between-row highlight color         [Ian McDonald]
+ 335717 Gtk-Criticals occur when scrolling a text_view 
+        that is not realized                           [Nicolas Setton]
+ 336200 Hidden menubar still activates submenus with kbd
+                                                       [Bastian Nocera]
+ 336254 GtkTreeItem broken                              [Sven Herzberg]
+ 74620  Clean up button press handling (use 
+        one-grab-op-at-a-time pattern)                        [Li Yuan]
+ 323862 broken scrolling when selecting                 [Benjamin Berg]
+ 330617 GTK+ File-chooser dialog crashes
+ 325751 Nautilus crashes when dragging icons to 
+        another screen                           [Hylke van der Schaaf]
+ 337022 mixed line separators confuse 
+        gtk_text_iter_ends_line                         [Paolo Borelli]
+ 336796 Textview child is covered by window border     [Yevgen Muntyan]
+ 335536 gdk_pixbuf_loader_new_with_type(): 
+        What image types are allowed?                  [Murray Cumming]
+ 336645 Missing progress bar label                   [Stanislav Brabec]
+        Fix a problem which caused grab-notify 
+        signal to be missed in some cases             [Matthias Clasen]
+
+
+* Updated translations (bn,cs,dz,et,ka,ne,or,ru,sk,sq,xh)
+
+
 Overview of Changes from GTK+ 2.8.14 to GTK+ 2.8.15
 ===================================================
 

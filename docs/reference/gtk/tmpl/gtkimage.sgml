@@ -437,7 +437,6 @@ functions), but they will all return %NULL values.
 
 @Returns: the #GtkImage
 <!-- # Unused Parameters # -->
-@val: 
 @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
 
 

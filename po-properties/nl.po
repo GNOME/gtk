@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:30-0400\n"
 "PO-Revision-Date: 2006-01-15 17:09+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -654,7 +654,7 @@ msgstr "Spatiëring"
 msgid "The amount of space between children"
 msgstr "De hoeveelheid ruimte tussen dochters"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:479 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -695,7 +695,7 @@ msgstr "Extra ruimte tussen de dochter en haar buren, in beeldpunten"
 msgid "Pack type"
 msgstr "Verpakkingsstijl"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:523
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -703,12 +703,12 @@ msgstr ""
 "Een GtkPackType welke aangeeft of de dochter verpakt is met het begin of met "
 "het einde van de moeder"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:501 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Positie"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:502
 msgid "The index of the child in the parent"
 msgstr "De index van de dochter in de moeder"
 
@@ -743,7 +743,7 @@ msgstr ""
 "Indien aangevinkt wordt het label gebruikt om een voorraad-item te kiezen in "
 "plaats van weergegeven te worden"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:684
 msgid "Focus on click"
 msgstr "Aandacht bij klikken"
 
@@ -1326,7 +1326,7 @@ msgstr ""
 "Hoe de tekenreeks in meerdere regels wordt gebroken wanneer de cel-renderer "
 "niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:574
 msgid "Wrap width"
 msgstr "Terugloopbreedte"
 
@@ -1635,41 +1635,41 @@ msgstr "Waarde in lijst"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegeven waardes altijd in de lijst aanwezig moeten zijn"
 
-#: gtk/gtkcombobox.c:558
+#: gtk/gtkcombobox.c:557
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:558
 msgid "The model for the combo box"
 msgstr "Het model voor de combo-box"
 
 # grid: netwerk, rooster, raster
 # layouting: indeling
-#: gtk/gtkcombobox.c:576
+#: gtk/gtkcombobox.c:575
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Breedte laten doorlopen om de items in te delen op een rooster"
 
-#: gtk/gtkcombobox.c:598
+#: gtk/gtkcombobox.c:597
 msgid "Row span column"
 msgstr "'Row span' kolom"
 
-#: gtk/gtkcombobox.c:599
+#: gtk/gtkcombobox.c:598
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
-#: gtk/gtkcombobox.c:620
+#: gtk/gtkcombobox.c:619
 msgid "Column span column"
 msgstr "'Column span' kolom"
 
-#: gtk/gtkcombobox.c:621
+#: gtk/gtkcombobox.c:620
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolom die de 'colomn span' waarden bevat"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:640
 msgid "Active item"
 msgstr "Actieve item"
 
-#: gtk/gtkcombobox.c:642
+#: gtk/gtkcombobox.c:641
 msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
@@ -1677,31 +1677,31 @@ msgstr "Het item dat momenteel actief is"
 # afscheurlijn/afscheurmogelijkheid
 # afscheurlijn aan menus toevoegen
 # Menus hebben afscheurlijn<
-#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:660 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Afscheurlijn aan menus toevoegen"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:661
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of dropdowns een afscheurlijn moeten hebben"
 
-#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:676 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Heeft kader"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:677
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Of de combobox een kader rond de dochter tekent"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:685
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Of de combobox de aandacht krijgt als het met de muis wordt aangeklikt"
 
-#: gtk/gtkcombobox.c:692
+#: gtk/gtkcombobox.c:691
 msgid "Appears as list"
 msgstr "Verschijnt als lijst"
 
-#: gtk/gtkcombobox.c:693
+#: gtk/gtkcombobox.c:692
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Of dropdowns als lijsten getoond worden in plaats van als menus"
 
@@ -2926,77 +2926,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "De toe te voegen ruimte boven en onder een widget, in beeldpunten"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:407
 msgid "Page"
 msgstr "Pagina"
 
-#: gtk/gtknotebook.c:409
+#: gtk/gtknotebook.c:408
 msgid "The index of the current page"
 msgstr "De index van de huidige pagina"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:416
 msgid "Tab Position"
 msgstr "Tab-positie"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:417
 msgid "Which side of the notebook holds the tabs"
 msgstr "Aan welke kant de tabbladen komen te zitten"
 
-#: gtk/gtknotebook.c:425
+#: gtk/gtknotebook.c:424
 msgid "Tab Border"
 msgstr "Tab-kader"
 
-#: gtk/gtknotebook.c:426
+#: gtk/gtknotebook.c:425
 msgid "Width of the border around the tab labels"
 msgstr "Breedte van het kader rondom de tab-labels"
 
-#: gtk/gtknotebook.c:434
+#: gtk/gtknotebook.c:433
 msgid "Horizontal Tab Border"
 msgstr "Horizontaal tab-kader"
 
-#: gtk/gtknotebook.c:435
+#: gtk/gtknotebook.c:434
 msgid "Width of the horizontal border of tab labels"
 msgstr "Breedte van het horizontale kader van tab-labels"
 
-#: gtk/gtknotebook.c:443
+#: gtk/gtknotebook.c:442
 msgid "Vertical Tab Border"
 msgstr "Vertikaal tab-kader"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:443
 msgid "Width of the vertical border of tab labels"
 msgstr "Breedte van het verticale kader van tab-labels"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:451
 msgid "Show Tabs"
 msgstr "Tabs weergeven"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:452
 msgid "Whether tabs should be shown or not"
 msgstr "Of tabs weergegeven worden of niet"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:458
 msgid "Show Border"
 msgstr "Kader weergeven"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:459
 msgid "Whether the border should be shown or not"
 msgstr "Of het kader weergegeven wordt of niet"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:465
 msgid "Scrollable"
 msgstr "Schuifbaar"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:466
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Indien WAAR (TRUE), worden schuifpijlen weergegeven als er meer tabs zijn "
 "dan er plaats is"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:472
 msgid "Enable Popup"
 msgstr "Zet Popup aan"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:473
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3004,81 +3004,81 @@ msgstr ""
 "Indien WAAR (TRUE), wordt met een rechter muisklik op het kladblok een menu "
 "weergegeven waarmee je direkt naar een pagina kunt gaan"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:480
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelijke afmetingen moeten hebben"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:487
 msgid "Tab label"
 msgstr "Tab-label"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:488
 msgid "The string displayed on the child's tab label"
 msgstr "De weergegeven tekenreeks op het tab-label van de dochter"
 
-#: gtk/gtknotebook.c:495
+#: gtk/gtknotebook.c:494
 msgid "Menu label"
 msgstr "Menu-label"
 
-#: gtk/gtknotebook.c:496
+#: gtk/gtknotebook.c:495
 msgid "The string displayed in the child's menu entry"
 msgstr "De weergegeven tekenreeks in het menu-item van de dochter"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:508
 msgid "Tab expand"
 msgstr "Tab-verlenging"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:509
 msgid "Whether to expand the child's tab or not"
 msgstr "Of de tab van de dochter verlengd wordt of niet"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:515
 msgid "Tab fill"
 msgstr "Tab-opvulling"
 
-#: gtk/gtknotebook.c:517
+#: gtk/gtknotebook.c:516
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Of de tab van de dochter de beschikbare ruimte moet opvullen of niet"
 
-#: gtk/gtknotebook.c:523
+#: gtk/gtknotebook.c:522
 msgid "Tab pack type"
 msgstr "Tab-verpakkingsstijl"
 
-#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:538 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Secundaire achterwaardse stapper"
 
-#: gtk/gtknotebook.c:540
+#: gtk/gtknotebook.c:539
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Geef een tweede achterwaardse pijlknop weer op de overstaande kant van het "
 "tab-gedeelte"
 
-#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:555 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Secundaire voorwaardse stapper"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:556
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Geef een tweede voorwaardse pijlknop weer aan de overstaande kant van het "
 "tab-gedeelte"
 
-#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:571 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Achterwaardse stapper"
 
-#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Geef de standaard achterwaardse pijlknop weer"
 
-#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:587 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Voorwaardse stapper"
 
-#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "Geef de standaard voorwaardse pijlknop weer"
 
@@ -4987,51 +4987,51 @@ msgstr "Geen 'alles tonen'"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Of gtk_widget_show_all() wel of geen invloed heeft op dit widget"
 
-#: gtk/gtkwidget.c:1448
+#: gtk/gtkwidget.c:1464
 msgid "Interior Focus"
 msgstr "Interne aandacht"
 
-#: gtk/gtkwidget.c:1449
+#: gtk/gtkwidget.c:1465
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Of de aandacht-indicator in widgets moet worden afgebeeld"
 
-#: gtk/gtkwidget.c:1455
+#: gtk/gtkwidget.c:1471
 msgid "Focus linewidth"
 msgstr "Aandacht-lijnbreedte"
 
-#: gtk/gtkwidget.c:1456
+#: gtk/gtkwidget.c:1472
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Breedte, in beeldpunten, van de aandacht-indicatorlijn"
 
-#: gtk/gtkwidget.c:1462
+#: gtk/gtkwidget.c:1478
 msgid "Focus line dash pattern"
 msgstr "Aandachtlijn-streeppatroon"
 
-#: gtk/gtkwidget.c:1463
+#: gtk/gtkwidget.c:1479
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Streeppatroon van de aandacht-indicator"
 
-#: gtk/gtkwidget.c:1468
+#: gtk/gtkwidget.c:1484
 msgid "Focus padding"
 msgstr "Aandacht-opvulling"
 
-#: gtk/gtkwidget.c:1469
+#: gtk/gtkwidget.c:1485
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Breedte, in beeldpunten, tussen de aandacht-indicator en de widget-box"
 
-#: gtk/gtkwidget.c:1474
+#: gtk/gtkwidget.c:1490
 msgid "Cursor color"
 msgstr "Cursorkleur"
 
-#: gtk/gtkwidget.c:1475
+#: gtk/gtkwidget.c:1491
 msgid "Color with which to draw insertion cursor"
 msgstr "Kleur van de invoegcursor"
 
-#: gtk/gtkwidget.c:1480
+#: gtk/gtkwidget.c:1496
 msgid "Secondary cursor color"
 msgstr "Secundaire cursorkleur"
 
-#: gtk/gtkwidget.c:1481
+#: gtk/gtkwidget.c:1497
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5039,19 +5039,19 @@ msgstr ""
 "Kleur van de secundaire invoegcursor bij het bewerken van gemengd rechts-"
 "naar-links en links-naar-rechts tekst"
 
-#: gtk/gtkwidget.c:1486
+#: gtk/gtkwidget.c:1502
 msgid "Cursor line aspect ratio"
 msgstr "Cursorlijnverhouding"
 
-#: gtk/gtkwidget.c:1487
+#: gtk/gtkwidget.c:1503
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Verhoudingen van de invoegcursor"
 
-#: gtk/gtkwidget.c:1492
+#: gtk/gtkwidget.c:1508
 msgid "Draw Border"
 msgstr "Kader tekenen"
 
-#: gtk/gtkwidget.c:1493
+#: gtk/gtkwidget.c:1509
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Grootte van gebieden rond het widget toegewezen gebied"
 

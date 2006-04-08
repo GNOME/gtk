@@ -214,8 +214,6 @@ Sharing settings between applications
 </para>
 
 @pspec: 
-<!-- # Unused Parameters # -->
-@settings: 
 
 
 <!-- ##### FUNCTION gtk_settings_install_property_parser ##### -->
@@ -225,8 +223,6 @@ Sharing settings between applications
 
 @pspec: 
 @parser: 
-<!-- # Unused Parameters # -->
-@settings: 
 
 
 <!-- ##### FUNCTION gtk_rc_property_parse_color ##### -->

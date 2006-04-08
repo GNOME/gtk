@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:30-0400\n"
 "PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -623,7 +623,7 @@ msgstr "فراغات"
 msgid "The amount of space between children"
 msgstr "مقدار الفراغ بين الأبناء."
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:479 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "متناسق"
 
@@ -662,18 +662,18 @@ msgstr "الفضاء الإضافي لوضعه بين الإبن و جيرانه
 msgid "Pack type"
 msgstr "نوع التحزيم"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:523
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "GtkPackType مؤشر لما إذا سيحزم الإبن بمرجع لبداية أو نهاية الأب"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:501 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "الموقع"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:502
 msgid "The index of the child in the parent"
 msgstr "فهرس الإبن عند الأب"
 
@@ -705,7 +705,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "إذا ضبط، فستستخدم العلامة لاختيار عنصر مخزن بدل عرضها"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:684
 msgid "Focus on click"
 msgstr "تركيز عند النقر"
 
@@ -1269,7 +1269,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:574
 msgid "Wrap width"
 msgstr "عرض اللف"
 
@@ -1577,70 +1577,70 @@ msgstr "القيمة في القائمة"
 msgid "Whether entered values must already be present in the list"
 msgstr "فيما إذا وجب على القيم المدخلة أن تكون موجودةً في القائمة"
 
-#: gtk/gtkcombobox.c:558
+#: gtk/gtkcombobox.c:557
 msgid "ComboBox model"
 msgstr "نموذج ComboBox"
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:558
 msgid "The model for the combo box"
 msgstr "نموذج لصندوق المجموعات"
 
-#: gtk/gtkcombobox.c:576
+#: gtk/gtkcombobox.c:575
 msgid "Wrap width for layouting the items in a grid"
 msgstr "عرض اللف عند تصميم العناصر في الشبكة"
 
-#: gtk/gtkcombobox.c:598
+#: gtk/gtkcombobox.c:597
 msgid "Row span column"
 msgstr "عمود إمتداد السطر"
 
-#: gtk/gtkcombobox.c:599
+#: gtk/gtkcombobox.c:598
 msgid "TreeModel column containing the row span values"
 msgstr "عمود نموذج الشجرة المحتوي على قيم إمتداد السطر"
 
-#: gtk/gtkcombobox.c:620
+#: gtk/gtkcombobox.c:619
 msgid "Column span column"
 msgstr "عمود إمتداد العمود"
 
-#: gtk/gtkcombobox.c:621
+#: gtk/gtkcombobox.c:620
 msgid "TreeModel column containing the column span values"
 msgstr "عمود TreeModel الحاوي لقيم مدى العمود"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:640
 msgid "Active item"
 msgstr "العنصر النشط"
 
-#: gtk/gtkcombobox.c:642
+#: gtk/gtkcombobox.c:641
 msgid "The item which is currently active"
 msgstr "العنصر النشط حاليا"
 
-#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:660 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "إضافة قاطفات للقوائم"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:661
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "فيما إذا وجب أن يكون للألسنة أحجام متناسقة"
 
-#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:676 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "له إطار"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:677
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "إذا ما كان من الممكن أن يعاد ترتيب العمود حول الترويسات"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:685
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "فيما إذا سيقبض الزر التركيز عند نقره بالفأرة"
 
-#: gtk/gtkcombobox.c:692
+#: gtk/gtkcombobox.c:691
 msgid "Appears as list"
 msgstr "يظهر كقائمة"
 
-#: gtk/gtkcombobox.c:693
+#: gtk/gtkcombobox.c:692
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
@@ -2840,75 +2840,75 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "المساحة التي تضاف لأعلى وأسفل القطعة، بالبكسل"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:407
 msgid "Page"
 msgstr "صفحة"
 
-#: gtk/gtknotebook.c:409
+#: gtk/gtknotebook.c:408
 msgid "The index of the current page"
 msgstr "دليل الصفحة الحالية"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:416
 msgid "Tab Position"
 msgstr "موقع اللسان"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:417
 msgid "Which side of the notebook holds the tabs"
 msgstr "أي جهة من الدفتر تحوي الألسنة"
 
-#: gtk/gtknotebook.c:425
+#: gtk/gtknotebook.c:424
 msgid "Tab Border"
 msgstr "حد اللسان"
 
-#: gtk/gtknotebook.c:426
+#: gtk/gtknotebook.c:425
 msgid "Width of the border around the tab labels"
 msgstr "عرض الحد حول شارات الألسنة"
 
-#: gtk/gtknotebook.c:434
+#: gtk/gtknotebook.c:433
 msgid "Horizontal Tab Border"
 msgstr "حد اللسان الأفقي"
 
-#: gtk/gtknotebook.c:435
+#: gtk/gtknotebook.c:434
 msgid "Width of the horizontal border of tab labels"
 msgstr "عرض الحد الأفقي لشارات الألسنة"
 
-#: gtk/gtknotebook.c:443
+#: gtk/gtknotebook.c:442
 msgid "Vertical Tab Border"
 msgstr "الحد العمودي للسان"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:443
 msgid "Width of the vertical border of tab labels"
 msgstr "عرض الحد العمودي لشارات اللسان"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:451
 msgid "Show Tabs"
 msgstr "عرض الألسنة"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:452
 msgid "Whether tabs should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:458
 msgid "Show Border"
 msgstr "عرض الحد"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:459
 msgid "Whether the border should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الحد أم لا"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:465
 msgid "Scrollable"
 msgstr "قابل للف"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:466
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "إذا كان TRUE، فستضاف أسهم لف إذا كانت هناك ألسنة كثيرة للملائمة"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:472
 msgid "Enable Popup"
 msgstr "تفعيل النوافذ البارزة"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:473
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2916,81 +2916,81 @@ msgstr ""
 "إذا كان TRUE، فإن كبس زر الفأرة الأيمن على الدفتر يبرز لك قائمة تمكنك من "
 "الذهاب لصفحة"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:480
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "فيما إذا وجب أن يكون للألسنة أحجام متناسقة"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:487
 msgid "Tab label"
 msgstr "شارة اللسان"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:488
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "السلسلة المعروضة على شارة ابن اللسان"
 
-#: gtk/gtknotebook.c:495
+#: gtk/gtknotebook.c:494
 msgid "Menu label"
 msgstr "شارة القائمة"
 
-#: gtk/gtknotebook.c:496
+#: gtk/gtknotebook.c:495
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "السلسلة المعروضة في خانة قائمة الابن"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:508
 msgid "Tab expand"
 msgstr "تمديد اللسان"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:509
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "فيما إذا وجب تمديد لسان الأبن أم لا"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:515
 msgid "Tab fill"
 msgstr "ملأ اللسان"
 
-#: gtk/gtknotebook.c:517
+#: gtk/gtknotebook.c:516
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "فيما إذا وجب للسان الإبن ملأ المساحة المخصصة"
 
-#: gtk/gtknotebook.c:523
+#: gtk/gtknotebook.c:522
 msgid "Tab pack type"
 msgstr "نوع حزم الألسنة"
 
-#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:538 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "متخطي التراجع الثانوي"
 
-#: gtk/gtknotebook.c:540
+#: gtk/gtknotebook.c:539
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "عرض زر سهم التراجع الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:555 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "متخطي التقدم الثانوي"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:556
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "عرض زر سهم التقدم الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:571 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "متخطي التراجع"
 
-#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "عرض زر سهم التراجع القياسي"
 
-#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:587 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "متخطي التقدم"
 
-#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "عرض زر سهم التقدم القياسي"
 
@@ -4818,51 +4818,51 @@ msgstr "لا عرض للكل"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "فيما إذا لن يؤثّر gtk_widget_show_all() هذه القطعة"
 
-#: gtk/gtkwidget.c:1448
+#: gtk/gtkwidget.c:1464
 msgid "Interior Focus"
 msgstr "بؤرة داخلية"
 
-#: gtk/gtkwidget.c:1449
+#: gtk/gtkwidget.c:1465
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ما إذا يرسم مؤشر التركيز داخل القطع"
 
-#: gtk/gtkwidget.c:1455
+#: gtk/gtkwidget.c:1471
 msgid "Focus linewidth"
 msgstr "عرض خط البؤرة"
 
-#: gtk/gtkwidget.c:1456
+#: gtk/gtkwidget.c:1472
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "العرض بالبكسلات لسطر مؤشر التركيز"
 
-#: gtk/gtkwidget.c:1462
+#: gtk/gtkwidget.c:1478
 msgid "Focus line dash pattern"
 msgstr "خط البؤرة بالنقش المتقطع"
 
-#: gtk/gtkwidget.c:1463
+#: gtk/gtkwidget.c:1479
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "نمط الخط الفاصل المستعمل لرسم مؤشر التكيز"
 
-#: gtk/gtkwidget.c:1468
+#: gtk/gtkwidget.c:1484
 msgid "Focus padding"
 msgstr "حشو البؤرة"
 
-#: gtk/gtkwidget.c:1469
+#: gtk/gtkwidget.c:1485
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "العرض بالبكسلات بين مؤشر التركيز و قطعة 'صندوق'"
 
-#: gtk/gtkwidget.c:1474
+#: gtk/gtkwidget.c:1490
 msgid "Cursor color"
 msgstr "لون المؤشر"
 
-#: gtk/gtkwidget.c:1475
+#: gtk/gtkwidget.c:1491
 msgid "Color with which to draw insertion cursor"
 msgstr "اللون الذي يتم به رسم مؤشر ا?دخال"
 
-#: gtk/gtkwidget.c:1480
+#: gtk/gtkwidget.c:1496
 msgid "Secondary cursor color"
 msgstr "مؤشر ا?دخال الثانوي"
 
-#: gtk/gtkwidget.c:1481
+#: gtk/gtkwidget.c:1497
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4870,20 +4870,20 @@ msgstr ""
 "اللون الذي سيرسم يه مؤشر الإدخال الثانوي عند تحرير نص مختلط من اليمين إلى "
 "اليسار و من اليسار إلى اليمين"
 
-#: gtk/gtkwidget.c:1486
+#: gtk/gtkwidget.c:1502
 msgid "Cursor line aspect ratio"
 msgstr "نسبة الطول للعرض لمؤشر السطر"
 
-#: gtk/gtkwidget.c:1487
+#: gtk/gtkwidget.c:1503
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "نسبة الطول للعرض التي سيرسم بها مؤشر إدخال."
 
-#: gtk/gtkwidget.c:1492
+#: gtk/gtkwidget.c:1508
 #, fuzzy
 msgid "Draw Border"
 msgstr "حد اللسان"
 
-#: gtk/gtkwidget.c:1493
+#: gtk/gtkwidget.c:1509
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 

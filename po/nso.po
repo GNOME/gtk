@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:29-0400\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -1397,15 +1397,15 @@ msgstr "Leotwana la mmala"
 msgid "Color Selection"
 msgstr "Kgetho ya Mmala"
 
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
 msgid "Select _All"
 msgstr "Kgetha _ka Moka"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
 msgid "Input _Methods"
 msgstr "Mekgwa _ya Tsebišo"
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
 msgid "_Insert Unicode Control Character"
 msgstr "_Tsenya Tlhaka ya Taolo ya Unicode"
 
@@ -2164,15 +2164,15 @@ msgstr ""
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
 #, c-format
 msgid "Page %u"
 msgstr "Letlakala %u"

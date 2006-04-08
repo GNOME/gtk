@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:30-0400\n"
 "PO-Revision-Date: 2006-03-06 22:05+0100\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -625,7 +625,7 @@ msgstr "Spaziatura"
 msgid "The amount of space between children"
 msgstr "Spazio tra due widget figli"
 
-#: gtk/gtkbox.c:141 gtk/gtknotebook.c:480 gtk/gtktoolbar.c:561
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:479 gtk/gtktoolbar.c:561
 msgid "Homogeneous"
 msgstr "Omogeneo"
 
@@ -670,7 +670,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Tipo inserimento"
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:524
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:523
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -678,12 +678,12 @@ msgstr ""
 "Un GtkPackType che indica se il widget è inserito all'inizio o alla fine del "
 "widget padre"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:502 gtk/gtkpaned.c:248
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:501 gtk/gtkpaned.c:248
 #: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Posizione"
 
-#: gtk/gtkbox.c:178 gtk/gtknotebook.c:503
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:502
 msgid "The index of the child in the parent"
 msgstr "Posizione del figlio nel widget padre"
 
@@ -717,7 +717,7 @@ msgstr ""
 "Se impostato, l'etichetta non sarà visualizzata, ma sarà usata per "
 "selezionare un oggetto nello stock"
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:685
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:684
 msgid "Focus on click"
 msgstr "Focus al clic"
 
@@ -1293,7 +1293,7 @@ msgstr ""
 "Indica come spezzare la stringa su più righe, se la cella di visualizzazione "
 "non ha spazio sufficiente per mostrare l'intera stringa"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:575
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:574
 msgid "Wrap width"
 msgstr "Adatta larghezza"
 
@@ -1606,71 +1606,71 @@ msgstr "Valore nella lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica se il valore inserito dev'essere già presente nella lista"
 
-#: gtk/gtkcombobox.c:558
+#: gtk/gtkcombobox.c:557
 msgid "ComboBox model"
 msgstr "Modello ComboBox"
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:558
 msgid "The model for the combo box"
 msgstr "Il modello per il combo box"
 
-#: gtk/gtkcombobox.c:576
+#: gtk/gtkcombobox.c:575
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 "Adatta la larghezza per la visualizzazione degli elementi su una griglia"
 
-#: gtk/gtkcombobox.c:598
+#: gtk/gtkcombobox.c:597
 msgid "Row span column"
 msgstr "Spaziatura riga-colonna"
 
-#: gtk/gtkcombobox.c:599
+#: gtk/gtkcombobox.c:598
 msgid "TreeModel column containing the row span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della riga"
 
-#: gtk/gtkcombobox.c:620
+#: gtk/gtkcombobox.c:619
 msgid "Column span column"
 msgstr "Spaziatura colonna-colonna"
 
-#: gtk/gtkcombobox.c:621
+#: gtk/gtkcombobox.c:620
 msgid "TreeModel column containing the column span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della colonna"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:640
 msgid "Active item"
 msgstr "Elemento attivo"
 
-#: gtk/gtkcombobox.c:642
+#: gtk/gtkcombobox.c:641
 msgid "The item which is currently active"
 msgstr "L'elemento attivo in questo momento"
 
-#: gtk/gtkcombobox.c:661 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:660 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Aggiunge gli elementi per staccare i menu"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:661
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 "Indica se i menu a discesa devono avere un elemento per il distaccamento del "
 "menu"
 
-#: gtk/gtkcombobox.c:677 gtk/gtkentry.c:535
+#: gtk/gtkcombobox.c:676 gtk/gtkentry.c:535
 msgid "Has Frame"
 msgstr "Con bordo"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:677
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indica se il combo box disegna una cornice attorno al figlio"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:685
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Indica se il combo box riceve il focus quando viene cliccato con il mouse"
 
-#: gtk/gtkcombobox.c:692
+#: gtk/gtkcombobox.c:691
 msgid "Appears as list"
 msgstr "Appare come una lista"
 
-#: gtk/gtkcombobox.c:693
+#: gtk/gtkcombobox.c:692
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Indica se i menu a discesa assomigliano a delle liste piuttosto che a dei "
@@ -2901,77 +2901,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Quantità di spazio, in pixel, da aggiungere sopra e sotto del widget"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:407
 msgid "Page"
 msgstr "Pagina"
 
-#: gtk/gtknotebook.c:409
+#: gtk/gtknotebook.c:408
 msgid "The index of the current page"
 msgstr "L'indice della pagina corrente"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:416
 msgid "Tab Position"
 msgstr "Posizione linguette"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:417
 msgid "Which side of the notebook holds the tabs"
 msgstr "In quale parte dello schedario vengono mostrate le linguette"
 
-#: gtk/gtknotebook.c:425
+#: gtk/gtknotebook.c:424
 msgid "Tab Border"
 msgstr "Bordo della linguetta"
 
-#: gtk/gtknotebook.c:426
+#: gtk/gtknotebook.c:425
 msgid "Width of the border around the tab labels"
 msgstr "Larghezza del bordo attorno alle etichette delle linguette"
 
-#: gtk/gtknotebook.c:434
+#: gtk/gtknotebook.c:433
 msgid "Horizontal Tab Border"
 msgstr "Bordo orizzontale della linguetta"
 
-#: gtk/gtknotebook.c:435
+#: gtk/gtknotebook.c:434
 msgid "Width of the horizontal border of tab labels"
 msgstr "Larghezza del bordo orizzontale nelle etichette delle linguette"
 
-#: gtk/gtknotebook.c:443
+#: gtk/gtknotebook.c:442
 msgid "Vertical Tab Border"
 msgstr "Bordo verticale della linguetta"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:443
 msgid "Width of the vertical border of tab labels"
 msgstr "Larghezza del bordo verticale nelle etichette delle linguette"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:451
 msgid "Show Tabs"
 msgstr "Mostra le linguette"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:452
 msgid "Whether tabs should be shown or not"
 msgstr "Indica se le linguette devono essere visualizzate"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:458
 msgid "Show Border"
 msgstr "Mostra bordo"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:459
 msgid "Whether the border should be shown or not"
 msgstr "Indica se il bordo deve essere visualizzato"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:465
 msgid "Scrollable"
 msgstr "Scorribile"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:466
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Se TRUE, verranno aggiunte delle freccie di scorrimento quando ci sono "
 "troppo linguette"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:472
 msgid "Enable Popup"
 msgstr "Abilita il menu popup"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:473
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2979,81 +2979,81 @@ msgstr ""
 "Se TRUE, premendo il pulsante destro del mouse sullo schedario verrà "
 "visualizzato un menu che potrà essere usato per muoversi tra le pagine"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:480
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Indica se le linguette devono avere tutte la stessa dimensione"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:487
 msgid "Tab label"
 msgstr "Etichetta della linguetta"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:488
 msgid "The string displayed on the child's tab label"
 msgstr "La stringa visualizzata nell'etichetta delle linguette figlie"
 
-#: gtk/gtknotebook.c:495
+#: gtk/gtknotebook.c:494
 msgid "Menu label"
 msgstr "Etichetta menu"
 
-#: gtk/gtknotebook.c:496
+#: gtk/gtknotebook.c:495
 msgid "The string displayed in the child's menu entry"
 msgstr "La stringa visualizzata nelle voci dei menu figli"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:508
 msgid "Tab expand"
 msgstr "Espandi linguetta"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:509
 msgid "Whether to expand the child's tab or not"
 msgstr "Indica se le linguette (figlie) devono essere espanse"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:515
 msgid "Tab fill"
 msgstr "Riempimento linguette"
 
-#: gtk/gtknotebook.c:517
+#: gtk/gtknotebook.c:516
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Indica se le linguette devono utilizzare tutta l'area disponibile"
 
-#: gtk/gtknotebook.c:523
+#: gtk/gtknotebook.c:522
 msgid "Tab pack type"
 msgstr "Tipo di inserimento linguette"
 
-#: gtk/gtknotebook.c:539 gtk/gtkscrollbar.c:116
+#: gtk/gtknotebook.c:538 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "Pulsante indietro secondario"
 
-#: gtk/gtknotebook.c:540
+#: gtk/gtknotebook.c:539
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Visualizza un secondo pulsante freccia indietro nella parte opposta "
 "dell'area delle linguette"
 
-#: gtk/gtknotebook.c:556 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:555 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "Pulsante avanti secondario"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:556
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Visualizza un secondo pulsante freccia avanti sulla parte opposta dell'area "
 "delle linguette"
 
-#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:571 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "Pulsante indietro"
 
-#: gtk/gtknotebook.c:573 gtk/gtkscrollbar.c:101
+#: gtk/gtknotebook.c:572 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "Visualizza il pulsante standard freccia indietro"
 
-#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:587 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "Pulsante avanti"
 
-#: gtk/gtknotebook.c:589 gtk/gtkscrollbar.c:109
+#: gtk/gtknotebook.c:588 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "Visualizza il pulsante standard freccia avanti"
 
@@ -4970,51 +4970,51 @@ msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 "Indica se gtk_widget_show_all() non deve avere effetto su questo widget"
 
-#: gtk/gtkwidget.c:1448
+#: gtk/gtkwidget.c:1464
 msgid "Interior Focus"
 msgstr "Focus interno"
 
-#: gtk/gtkwidget.c:1449
+#: gtk/gtkwidget.c:1465
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Indica se disegnare l'indicatore di focus all'interno dei widget"
 
-#: gtk/gtkwidget.c:1455
+#: gtk/gtkwidget.c:1471
 msgid "Focus linewidth"
 msgstr "Larghezza linea dell'indicatore di focus"
 
-#: gtk/gtkwidget.c:1456
+#: gtk/gtkwidget.c:1472
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Larghezza, in pixel, della linea per l'indicatore di focus"
 
-#: gtk/gtkwidget.c:1462
+#: gtk/gtkwidget.c:1478
 msgid "Focus line dash pattern"
 msgstr "Linea tratteggiata per l'indicatore del focus"
 
-#: gtk/gtkwidget.c:1463
+#: gtk/gtkwidget.c:1479
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Tipo di tratteggio impiegato per disegnare l'indicatore di focus"
 
-#: gtk/gtkwidget.c:1468
+#: gtk/gtkwidget.c:1484
 msgid "Focus padding"
 msgstr "Spaziatura per l'indicatore di focus"
 
-#: gtk/gtkwidget.c:1469
+#: gtk/gtkwidget.c:1485
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Larghezza, in pixel, tra l'indicatore di focus e il widget box"
 
-#: gtk/gtkwidget.c:1474
+#: gtk/gtkwidget.c:1490
 msgid "Cursor color"
 msgstr "Colore del cursore"
 
-#: gtk/gtkwidget.c:1475
+#: gtk/gtkwidget.c:1491
 msgid "Color with which to draw insertion cursor"
 msgstr "Colore con cui disegnare il cursore di inserimento"
 
-#: gtk/gtkwidget.c:1480
+#: gtk/gtkwidget.c:1496
 msgid "Secondary cursor color"
 msgstr "Colore del cursore secondario"
 
-#: gtk/gtkwidget.c:1481
+#: gtk/gtkwidget.c:1497
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5022,20 +5022,20 @@ msgstr ""
 "Colore con cui disegnare il cursore secondario quando si è in editing misto "
 "destra-sinistra e sinistra-destra"
 
-#: gtk/gtkwidget.c:1486
+#: gtk/gtkwidget.c:1502
 msgid "Cursor line aspect ratio"
 msgstr "Proporzioni del cursore di linea"
 
-#: gtk/gtkwidget.c:1487
+#: gtk/gtkwidget.c:1503
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proporzioni con le quali disegnare il cursore di inserimento"
 
-#: gtk/gtkwidget.c:1492
+#: gtk/gtkwidget.c:1508
 msgid "Draw Border"
 msgstr "Disegna bordo"
 
 # spazio di allocazione ? -Luca
-#: gtk/gtkwidget.c:1493
+#: gtk/gtkwidget.c:1509
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 "Dimensione delle aree all'esterno dell'allocazione del widget da disegnare"

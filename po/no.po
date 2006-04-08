@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-2.8.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:29-0400\n"
 "PO-Revision-Date: 2005-11-15 12:26+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -1369,15 +1369,15 @@ msgstr "Fargehjul"
 msgid "Color Selection"
 msgstr "Fargevalg"
 
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -2099,15 +2099,15 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
-#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"

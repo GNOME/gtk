@@ -220,8 +220,6 @@ looking up the icon to use for a given stock ID.
 @width: 
 @height: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@alias: 
 
 
 <!-- ##### FUNCTION gtk_icon_size_lookup_for_settings ##### -->
@@ -245,8 +243,6 @@ looking up the icon to use for a given stock ID.
 @width: 
 @height: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@alias: 
 
 
 <!-- ##### FUNCTION gtk_icon_size_register_alias ##### -->

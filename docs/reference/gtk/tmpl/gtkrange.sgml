@@ -50,7 +50,6 @@ Virtual function that moves the slider. Used for keybindings.
 @arg1: 
 <!-- # Unused Parameters # -->
 @step: how to move the slider
-@arg2: 
 
 <!-- ##### SIGNAL GtkRange::value-changed ##### -->
 <para>

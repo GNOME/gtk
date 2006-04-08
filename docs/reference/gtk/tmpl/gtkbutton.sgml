@@ -273,8 +273,6 @@ Returns the current relief style of the given #GtkButton.
 
 @button: 
 @use_stock: 
-<!-- # Unused Parameters # -->
-@value: 
 
 
 <!-- ##### FUNCTION gtk_button_get_use_underline ##### -->
@@ -293,8 +291,6 @@ Returns the current relief style of the given #GtkButton.
 
 @button: 
 @use_underline: 
-<!-- # Unused Parameters # -->
-@value: 
 
 
 <!-- ##### FUNCTION gtk_button_set_focus_on_click ##### -->

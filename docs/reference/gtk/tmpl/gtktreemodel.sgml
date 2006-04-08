@@ -827,9 +827,6 @@ versions of GTK+.
 @tree_model: 
 @path: 
 @iter: 
-<!-- # Unused Parameters # -->
-@start_path: 
-@start_iter: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_row_inserted ##### -->

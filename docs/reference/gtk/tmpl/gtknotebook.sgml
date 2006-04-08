@@ -46,8 +46,6 @@ will be a popup menu allowing the users to switch pages.
 
 @notebook: the object which received the signal.
 @arg1: 
-<!-- # Unused Parameters # -->
-@Returns: 
 
 <!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
 <para>

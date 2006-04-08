@@ -1,3 +1,13 @@
+2006-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.8.17 ===
+
+	* NEWS: Updates
+
+	* gtk/gtkcellrenderertext.c (get_layout): Set the alignment
+	of the layout according to the text direction.  (#157439,
+	Arafat Medini, patch by Hooman Mesgary)
+
 2006-04-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.c: Make it compile.

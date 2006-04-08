@@ -106,8 +106,6 @@ gtk_combo_box_get_active_text().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@model: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_new_with_model ##### -->
@@ -189,8 +187,6 @@ gtk_combo_box_get_active_text().
 
 @combo_box: 
 @index_: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_get_active_iter ##### -->

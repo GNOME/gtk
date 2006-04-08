@@ -94,9 +94,6 @@ Deprecated equivalent of g_object_unref().
 @accel_mods: 
 @accel_flags: 
 @closure: 
-<!-- # Unused Parameters # -->
-@accel_path_quark: 
-@path_quark: 
 
 
 <!-- ##### FUNCTION gtk_accel_group_connect_by_path ##### -->
@@ -141,9 +138,6 @@ Deprecated equivalent of g_object_unref().
 @accel_group: 
 @closure: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@accel_key: 
-@accel_mods: 
 
 
 <!-- ##### FUNCTION gtk_accel_group_disconnect_key ##### -->
@@ -216,8 +210,6 @@ Deprecated equivalent of g_object_unref().
 @accel_key: 
 @accel_mods: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@acceleratable: 
 
 
 <!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->

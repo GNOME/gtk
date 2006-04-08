@@ -849,9 +849,6 @@ types related to the text widget and how they work together.
 @match_end: 
 @limit: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@visible_only: 
-@slice: 
 
 
 <!-- ##### FUNCTION gtk_text_iter_backward_search ##### -->
@@ -866,9 +863,6 @@ types related to the text widget and how they work together.
 @match_end: 
 @limit: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@visible_only: 
-@slice: 
 
 
 <!-- ##### FUNCTION gtk_text_iter_equal ##### -->

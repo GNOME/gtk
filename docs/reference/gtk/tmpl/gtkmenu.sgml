@@ -163,9 +163,6 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
-<!-- # Unused Parameters # -->
-@m: 
-@c: 
 
 
 <!-- ##### MACRO gtk_menu_prepend ##### -->
@@ -175,10 +172,6 @@ Adds a new #GtkMenuItem to the beginning of the menu's item list.
 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
-<!-- # Unused Parameters # -->
-@menu_child: 
-@m: 
-@c: 
 
 
 <!-- ##### MACRO gtk_menu_insert ##### -->

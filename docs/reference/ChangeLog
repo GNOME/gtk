@@ -1,3 +1,7 @@
+2006-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.8.17 ===
+
 2006-04-04  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/tmpl/threads.sgml: Mention that the Win32 backend should not

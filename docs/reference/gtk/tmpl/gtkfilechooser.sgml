@@ -719,8 +719,6 @@ gtk_widget_destroy (chooser);
 
 @chooser: 
 @local_only: 
-<!-- # Unused Parameters # -->
-@files_only: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_local_only ##### -->
@@ -1004,8 +1002,6 @@ gtk_widget_destroy (chooser);
 
 @chooser: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@file_chooser: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_preview_uri ##### -->
@@ -1015,8 +1011,6 @@ gtk_widget_destroy (chooser);
 
 @chooser: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@file_chooser: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_set_extra_widget ##### -->
@@ -1122,8 +1116,6 @@ gtk_widget_destroy (chooser);
 @uri: 
 @error: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@folder: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_remove_shortcut_folder_uri ##### -->
@@ -1135,8 +1127,6 @@ gtk_widget_destroy (chooser);
 @uri: 
 @error: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@folder: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_list_shortcut_folder_uris ##### -->

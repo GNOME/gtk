@@ -139,10 +139,6 @@ This should not be accessed directly.  Use the accessor functions below.
 
 @child_model: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@func: 
-@sort_col: 
-@model: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_get_model ##### -->

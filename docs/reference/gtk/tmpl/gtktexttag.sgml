@@ -483,8 +483,6 @@ modified directly.
 
 @src: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@dest: 
 
 
 <!-- ##### FUNCTION gtk_text_attributes_copy_values ##### -->

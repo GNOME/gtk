@@ -114,7 +114,6 @@ Determines whether @type_object is a type of @otype.
 
 <!-- # Unused Parameters # -->
 @type_object: a #GtkTypeObject object
-@otype: 
 
 
 <!-- ##### MACRO GTK_CHECK_CLASS_TYPE ##### -->
@@ -124,7 +123,6 @@ Determines whether @type_class is a type of @otype.
 
 <!-- # Unused Parameters # -->
 @type_class: a #GtkTypeClass class.
-@otype: 
 
 
 <!-- ##### MACRO GTK_CHECK_GET_CLASS ##### -->
@@ -141,8 +139,6 @@ Gets the class of @tobj.
 Converts a GTK+ type into a fundamental type.
 </para>
 
-<!-- # Unused Parameters # -->
-@type: 
 
 
 <!-- ##### MACRO GTK_SIGNAL_FUNC ##### -->

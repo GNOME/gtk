@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:29-0400\n"
 "PO-Revision-Date: 2006-01-17 07:43+0800\n"
 "Last-Translator: Abel Cheung <abel@oaka.org>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -1349,15 +1349,15 @@ msgstr "色彩圓盤"
 msgid "Color Selection"
 msgstr "色彩選擇"
 
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
@@ -2070,15 +2070,15 @@ msgstr "準備去除的 GTK+ 偵錯旗標"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "GTK+ Options"
 msgstr "GTK+ 選項"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
-#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"

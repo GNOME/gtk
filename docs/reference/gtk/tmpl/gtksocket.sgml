@@ -154,8 +154,6 @@ reuse it you must add a signal handler that returns %TRUE.
 
 @socket_: 
 @window_id: 
-<!-- # Unused Parameters # -->
-@id: 
 
 
 <!-- ##### FUNCTION gtk_socket_get_id ##### -->

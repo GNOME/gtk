@@ -228,8 +228,6 @@ when GDK gets multihead support.
 @screen: 
 @monitor_num: 
 @dest: 
-<!-- # Unused Parameters # -->
-@Returns: 
 
 
 <!-- ##### FUNCTION gdk_screen_get_monitor_at_point ##### -->
@@ -251,8 +249,6 @@ when GDK gets multihead support.
 @screen: 
 @window: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@anid: 
 
 
 <!-- ##### FUNCTION gdk_screen_broadcast_client_message ##### -->

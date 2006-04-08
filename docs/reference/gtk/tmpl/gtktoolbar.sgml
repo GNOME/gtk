@@ -253,8 +253,6 @@ to a #GtkToolbar.
 @toolbar: 
 @tool_item: 
 @index_: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_set_show_arrow ##### -->

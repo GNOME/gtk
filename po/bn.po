@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ (GNOME 2.14)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:29-0400\n"
 "PO-Revision-Date: 2006-03-12 21:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -1374,15 +1374,15 @@ msgstr "রঙের চাকা"
 msgid "Color Selection"
 msgstr "রং নির্বাচন"
 
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
 msgid "Select _All"
 msgstr "সব কিছু চিহ্নিত করো (_ন)"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_প)"
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোড কন্ট্রোল ক্যারেকটার ঢোকাও (_ঢ)"
 
@@ -2109,15 +2109,15 @@ msgstr "যে সকল জি.টি.কে.+ ডিবাগিং ফ্ল�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "GTK+ Options"
 msgstr "জি.টি.কে.+ অপশন"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "Show GTK+ Options"
 msgstr "জি.টি.কে.+ অপশনগুলো দেখাও"
 
-#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা নং %u"

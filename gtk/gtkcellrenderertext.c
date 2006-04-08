@@ -1351,10 +1351,16 @@ get_layout (GtkCellRendererText *celltext,
   PangoLayout *layout;
   PangoUnderline uline;
   GtkCellRendererTextPrivate *priv;
+  gboolean rtl;
+  PangoAlignment align;
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (celltext);
   
   layout = gtk_widget_create_pango_layout (widget, celltext->text);
+  
+  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+  pango_layout_set_alignment (layout, align);  
 
   if (celltext->extra_attrs)
     attr_list = pango_attr_list_copy (celltext->extra_attrs);

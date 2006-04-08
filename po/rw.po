@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 10:14-0500\n"
+"POT-Creation-Date: 2006-04-07 15:29-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1417,16 +1417,16 @@ msgstr "gutoranya ibara"
 # padmin/source\padialog.src:RID_FONTIMPORT_DIALOG.RID_FIMP_BTN_SELECTALL.text
 # #-#-#-#-#  padmin.pot (Gnome 2.12)  #-#-#-#-#
 # padmin/source\padialog.src:RID_ADDP_PAGE_OLDPRINTERS.RID_ADDP_OLD_BTN_SELECTALL.text
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7125
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
 #, fuzzy
 msgid "Select _All"
 msgstr "Hitamo byose"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7135
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7146
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -2236,11 +2236,11 @@ msgstr "Amabendera Kuri"
 msgid "default:LTR"
 msgstr "Mburabuzi"
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:595
+#: gtk/gtkmain.c:597
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2248,7 +2248,7 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtknotebook.c:2777 gtk/gtknotebook.c:5150
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
 #, fuzzy, c-format
 msgid "Page %u"
 msgstr "Ipaji..."
