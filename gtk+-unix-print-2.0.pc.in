@@ -10,5 +10,5 @@ gtk_host=@host@
 Name: GTK+
 Description: GIMP Tool Kit Unix print support
 Version: @VERSION@
-Requires: gtk-${target}-2.0 @GTK_PACKAGES@
+Requires: gtk+-${target}-2.0 @GTK_PACKAGES@
 Cflags: -I${includedir}/gtk-unix-print-2.0
