@@ -1,3 +1,11 @@
+2006-04-10  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextbufferrichtext.c (gtk_text_buffer_deserialize):
+	pasted rich text should not be affected by tags that are active at
+	the insertion point. Therefore, remove and remember all active
+	tags, and re-apply them left and right of the inserted text after
+	pasting. Fixes bug #337653.
+
 2006-04-11  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/gdkinternals.h:

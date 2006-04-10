@@ -567,6 +567,78 @@ gtk_text_buffer_deserialize (GtkTextBuffer  *register_buffer,
         {
           GtkTextBufferDeserializeFunc function = fmt->function;
           gboolean                     success;
+          GSList                      *split_tags;
+          GSList                      *list;
+          GtkTextMark                 *left_end        = NULL;
+          GtkTextMark                 *right_start     = NULL;
+          GSList                      *left_start_list = NULL;
+          GSList                      *right_end_list  = NULL;
+
+          /*  We don't want the tags that are effective at the insertion
+           *  point to affect the pasted text, therefore we remove and
+           *  remember them, so they can be re-applied left and right of
+           *  the inserted text after pasting
+           */
+          split_tags = gtk_text_iter_get_tags (iter);
+
+          list = split_tags;
+          while (list)
+            {
+              GtkTextTag *tag = list->data;
+
+              list = g_slist_next (list);
+
+              /*  If a tag begins at the insertion point, ignore it
+               *  because it doesn't affect the pasted text
+               */
+              if (gtk_text_iter_begins_tag (iter, tag))
+                split_tags = g_slist_remove (split_tags, tag);
+            }
+
+          if (split_tags)
+            {
+              /*  Need to remember text marks, because text iters
+               *  don't survive pasting
+               */
+              left_end = gtk_text_buffer_create_mark (content_buffer,
+                                                      NULL, iter, TRUE);
+              right_start = gtk_text_buffer_create_mark (content_buffer,
+                                                         NULL, iter, FALSE);
+
+              for (list = split_tags; list; list = g_slist_next (list))
+                {
+                  GtkTextTag  *tag             = list->data;
+                  GtkTextIter *backward_toggle = gtk_text_iter_copy (iter);
+                  GtkTextIter *forward_toggle  = gtk_text_iter_copy (iter);
+                  GtkTextMark *left_start      = NULL;
+                  GtkTextMark *right_end       = NULL;
+
+                  gtk_text_iter_backward_to_tag_toggle (backward_toggle, tag);
+                  left_start = gtk_text_buffer_create_mark (content_buffer,
+                                                            NULL,
+                                                            backward_toggle,
+                                                            FALSE);
+
+                  gtk_text_iter_forward_to_tag_toggle (forward_toggle, tag);
+                  right_end = gtk_text_buffer_create_mark (content_buffer,
+                                                           NULL,
+                                                           forward_toggle,
+                                                           TRUE);
+
+                  left_start_list = g_slist_prepend (left_start_list, left_start);
+                  right_end_list = g_slist_prepend (right_end_list, right_end);
+
+                  gtk_text_buffer_remove_tag (content_buffer, tag,
+                                              backward_toggle,
+                                              forward_toggle);
+
+                  gtk_text_iter_free (forward_toggle);
+                  gtk_text_iter_free (backward_toggle);
+                }
+
+              left_start_list = g_slist_reverse (left_start_list);
+              right_end_list = g_slist_reverse (right_end_list);
+            }
 
           success = function (register_buffer, content_buffer,
                               iter, data, length,
@@ -578,6 +650,57 @@ gtk_text_buffer_deserialize (GtkTextBuffer  *register_buffer,
             g_set_error (error, 0, 0,
                          _("Unknown error when trying to deserialize %s"),
                          gdk_atom_name (format));
+
+          if (split_tags)
+            {
+              GSList      *left_list;
+              GSList      *right_list;
+              GtkTextIter  left_e;
+              GtkTextIter  right_s;
+
+              /*  Turn the remembered marks back into iters so they
+               *  can by used to re-apply the remembered tags
+               */
+              gtk_text_buffer_get_iter_at_mark (content_buffer,
+                                                &left_e, left_end);
+              gtk_text_buffer_get_iter_at_mark (content_buffer,
+                                                &right_s, right_start);
+
+              for (list = split_tags,
+                     left_list = left_start_list,
+                     right_list = right_end_list;
+                   list && left_list && right_list;
+                   list = g_slist_next (list),
+                     left_list = g_slist_next (left_list),
+                     right_list = g_slist_next (right_list))
+                {
+                  GtkTextTag  *tag        = list->data;
+                  GtkTextMark *left_start = left_list->data;
+                  GtkTextMark *right_end  = right_list->data;
+                  GtkTextIter  left_s;
+                  GtkTextIter  right_e;
+
+                  gtk_text_buffer_get_iter_at_mark (content_buffer,
+                                                    &left_s, left_start);
+                  gtk_text_buffer_get_iter_at_mark (content_buffer,
+                                                    &right_e, right_end);
+
+                  gtk_text_buffer_apply_tag (content_buffer, tag,
+                                             &left_s, &left_e);
+                  gtk_text_buffer_apply_tag (content_buffer, tag,
+                                             &right_s, &right_e);
+
+                  gtk_text_buffer_delete_mark (content_buffer, left_start);
+                  gtk_text_buffer_delete_mark (content_buffer, right_end);
+                }
+
+              gtk_text_buffer_delete_mark (content_buffer, left_end);
+              gtk_text_buffer_delete_mark (content_buffer, right_start);
+
+              g_slist_free (split_tags);
+              g_slist_free (left_start_list);
+              g_slist_free (right_end_list);
+            }
 
           return success;
         }
