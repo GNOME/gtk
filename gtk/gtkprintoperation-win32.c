@@ -1,4 +1,4 @@
-/* EGG - The GIMP Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintoperation-win32.c: Print Operation Details for Win32
  * Copyright (C) 2006, Red Hat, Inc.
  *
@@ -24,6 +24,7 @@
 #endif
 
 #include "config.h"
+#include <math.h>
 #include <stdlib.h>
 #include <cairo-win32.h>
 #include <glib.h>
@@ -751,7 +752,8 @@ dialog_to_print_settings (GtkPrintOperation *op,
 }
 
 static HANDLE
-devmode_from_settings (GtkPrintSettings *settings)
+devmode_from_settings (GtkPrintSettings *settings,
+		       GtkPageSetup *page_setup)
 {
   HANDLE hDevMode;
   LPDEVMODEW devmode;
@@ -788,14 +790,20 @@ devmode_from_settings (GtkPrintSettings *settings)
   if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
     devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
   
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_ORIENTATION))
+  if (page_setup ||
+      gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_ORIENTATION))
     {
+      GtkPageOrientation orientation = gtk_print_settings_get_orientation (settings);
+      if (page_setup)
+	orientation = gtk_page_setup_get_orientation (page_setup);
       devmode->dmFields |= DM_ORIENTATION;
-      devmode->dmOrientation =
-	orientation_to_win32 (gtk_print_settings_get_orientation (settings));
+      devmode->dmOrientation = orientation_to_win32 (orientation);
     }
 
-  paper_size = gtk_print_settings_get_paper_size (settings);
+  if (page_setup)
+    paper_size = gtk_paper_size_copy (gtk_page_setup_get_paper_size (page_setup));
+  else
+    paper_size = gtk_print_settings_get_paper_size (settings);
   if (paper_size)
     {
       devmode->dmFields |= DM_PAPERSIZE;
@@ -1004,7 +1012,8 @@ dialog_from_print_settings (GtkPrintOperation *op,
   if (printer)
     printdlgex->hDevNames = gtk_print_win32_devnames_from_printer_name (printer);
   
-  printdlgex->hDevMode = devmode_from_settings (settings);
+  printdlgex->hDevMode = devmode_from_settings (settings,
+						op->priv->default_page_setup);
 }
 
 GtkPrintOperationResult
@@ -1214,6 +1223,9 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
   gboolean free_settings;
   const char *printer;
   GtkPaperSize *paper_size;
+  DWORD measure_system;
+  GtkUnit unit;
+  double scale;
 
   pagesetupdlg = (LPPAGESETUPDLGW)GlobalAlloc (GPTR, sizeof (PAGESETUPDLGW));
   if (!pagesetupdlg)
@@ -1230,19 +1242,50 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 
   pagesetupdlg->lStructSize = sizeof(PAGESETUPDLGW);
 
-  /* TODO: set margins in pagegesetupdlg from page_setup */
-  
   if (parent != NULL)
     pagesetupdlg->hwndOwner = get_parent_hwnd (GTK_WIDGET (parent));
   else
     pagesetupdlg->hwndOwner = NULL;
-  
-  pagesetupdlg->hDevMode = devmode_from_settings (settings);
+
+  pagesetupdlg->Flags = PSD_DEFAULTMINMARGINS;
+  pagesetupdlg->hDevMode = devmode_from_settings (settings, page_setup);
   pagesetupdlg->hDevNames = NULL;
   printer = gtk_print_settings_get_printer (settings);
   if (printer)
     pagesetupdlg->hDevNames = gtk_print_win32_devnames_from_printer_name (printer);
-  pagesetupdlg->Flags = 0;
+
+  GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_IMEASURE|LOCALE_RETURN_NUMBER,
+		 (LPWSTR)&measure_system, sizeof (DWORD));
+
+  if (measure_system == 0)
+    {
+      pagesetupdlg->Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
+      unit = GTK_UNIT_MM;
+      scale = 100;
+    }
+  else
+    {
+      pagesetupdlg->Flags |= PSD_INTHOUSANDTHSOFINCHES;
+      unit = GTK_UNIT_INCH;
+      scale = 1000;
+    }
+
+  /* This is the object we return, we allocate it here so that
+   * we can use the default page margins */
+  if (page_setup)
+    page_setup = gtk_page_setup_copy (page_setup);
+  else
+    page_setup = gtk_page_setup_new ();
+  
+  pagesetupdlg->Flags |= PSD_MARGINS;
+  pagesetupdlg->rtMargin.left =
+    floor (gtk_page_setup_get_left_margin (page_setup, unit) * scale + 0.5);
+  pagesetupdlg->rtMargin.right =
+    floor (gtk_page_setup_get_right_margin (page_setup, unit) * scale + 0.5);
+  pagesetupdlg->rtMargin.top = 
+    floor (gtk_page_setup_get_top_margin (page_setup, unit) * scale + 0.5);
+  pagesetupdlg->rtMargin.bottom =
+    floor (gtk_page_setup_get_bottom_margin (page_setup, unit) * scale + 0.5);
   
   res = PageSetupDlgW (pagesetupdlg);
 
@@ -1258,14 +1301,41 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
   if (free_settings)
     g_object_unref (settings);
 
-  page_setup = gtk_page_setup_new ();
-  gtk_page_setup_set_orientation (page_setup, 
-				  gtk_print_settings_get_orientation (settings));
-  paper_size = gtk_print_settings_get_paper_size (settings);
-  gtk_page_setup_set_paper_size (page_setup, paper_size);
-  gtk_paper_size_free (paper_size);
+  if (res)
+    {
+      gtk_page_setup_set_orientation (page_setup, 
+				      gtk_print_settings_get_orientation (settings));
+      paper_size = gtk_print_settings_get_paper_size (settings);
+      if (paper_size)
+	{
+	  gtk_page_setup_set_paper_size (page_setup, paper_size);
+	  gtk_paper_size_free (paper_size);
+	}
 
-  /* TODO: set margins in page_setup */
+      if (pagesetupdlg->Flags & PSD_INHUNDREDTHSOFMILLIMETERS)
+	{
+	  unit = GTK_UNIT_MM;
+	  scale = 100;
+	}
+      else
+	{
+	  unit = GTK_UNIT_INCH;
+	  scale = 1000;
+	}
+
+      gtk_page_setup_set_left_margin (page_setup,
+				      pagesetupdlg->rtMargin.left / scale,
+				      unit);
+      gtk_page_setup_set_right_margin (page_setup,
+				       pagesetupdlg->rtMargin.right / scale,
+				       unit);
+      gtk_page_setup_set_top_margin (page_setup,
+				     pagesetupdlg->rtMargin.top / scale,
+				     unit);
+      gtk_page_setup_set_bottom_margin (page_setup,
+					pagesetupdlg->rtMargin.bottom / scale,
+					unit);
+    }
   
   return page_setup;
 }

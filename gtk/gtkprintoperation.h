@@ -1,4 +1,4 @@
-/* EGG - The GIMP Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintoperation.h: Print Operation
  * Copyright (C) 2006, Red Hat, Inc.
  *

@@ -1,4 +1,4 @@
-/* EGG - The GIMP Toolkit
+/* GTK - The GIMP Toolkit
  * gtkpapersize.h: Paper Size
  * Copyright (C) 2006, Red Hat, Inc.
  *

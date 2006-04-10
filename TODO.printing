@@ -20,7 +20,6 @@ PDF backend:
 
 Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
-* Implement page setup dialog
 * save win32-specific settings when the generic one loses data
 
 Cups/Unix print dialog:
@@ -40,7 +39,6 @@ General:
 * general print to file module (ps+pdf)
 * use real gtk+ stock icon for print to pdf icon
 * GtkPrinter shouldn't ref backend since the backend refs the printers
-* Some headers reference "EGG", instead of "GTK" 
 
 Print dialog wishlist:
 * Don't select default for a short while, so that we can avoid flashing if the selected printer appears

@@ -1,3 +1,19 @@
+2006-04-10  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c:
+	Finish implementing run_page_setup_dialog.
+
+	* gtk/gtkpagesetup.h:
+	* gtk/gtkpapersize.h:
+	* gtk/gtkprint-win32.h:
+	* gtk/gtkprintcontext.h:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.h:
+	* gtk/gtkprintsettings.h:
+	s/EGG/GTK/
+
 2006-04-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk+-unix-print-2.0.pc.in: Fix a typo  (#337698)
