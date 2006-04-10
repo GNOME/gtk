@@ -74,134 +74,189 @@ orientation_to_win32 (GtkPageOrientation orientation)
   return DMORIENT_PORTRAIT;
 }
 
-static const char *
-page_size_from_win32 (short size)
+static GtkPaperSize *
+paper_size_from_win32 (short size)
 {
+  const char *name;
+  
   switch (size)
     {
     case DMPAPER_LETTER_TRANSVERSE:
     case DMPAPER_LETTER:
     case DMPAPER_LETTERSMALL:
-      return "na_letter";
+      name = "na_letter";
+      break;
     case DMPAPER_TABLOID:
     case DMPAPER_LEDGER:
-      return "na_ledger";
+      name = "na_ledger";
+      break;
     case DMPAPER_LEGAL:
-      return "na_legal";
+      name = "na_legal";
+      break;
     case DMPAPER_STATEMENT:
-      return "na_invoice";
+      name = "na_invoice";
+      break;
     case DMPAPER_EXECUTIVE:
-      return "na_executive";
+      name = "na_executive";
+      break;
     case DMPAPER_A3:
     case DMPAPER_A3_TRANSVERSE:
-      return "iso_a3";
+      name = "iso_a3";
+      break;
     case DMPAPER_A4:
     case DMPAPER_A4SMALL:
     case DMPAPER_A4_TRANSVERSE:
-      return "iso_a4";
+      name = "iso_a4";
+      break;
     case DMPAPER_A5:
     case DMPAPER_A5_TRANSVERSE:
-      return "iso_a5";
+      name = "iso_a5";
+      break;
     case DMPAPER_B4:
-      return "iso_b4";
+      name = "jis_b4";
+      break;
     case DMPAPER_B5:
     case DMPAPER_B5_TRANSVERSE:
-      return "iso_b5";
+      name = "jis_b5";
+      break;
     case DMPAPER_QUARTO:
-      return "na_quarto";
+      name = "na_quarto";
+      break;
     case DMPAPER_10X14:
-      return "na_10x14";
+      name = "na_10x14";
+      break;
     case DMPAPER_11X17:
-      return "na_ledger";
+      name = "na_ledger";
+      break;
     case DMPAPER_NOTE:
-      return "na_letter";
+      name = "na_letter";
+      break;
     case DMPAPER_ENV_9:
-      return "na_number-9";
+      name = "na_number-9";
+      break;
     case DMPAPER_ENV_10:
-      return "na_number-10";
+      name = "na_number-10";
+      break;
     case DMPAPER_ENV_11:
-      return "na_number-11";
+      name = "na_number-11";
+      break;
     case DMPAPER_ENV_12:
-      return "na_number-12";
+      name = "na_number-12";
+      break;
     case DMPAPER_ENV_14:
-      return "na_number-14";
+      name = "na_number-14";
+      break;
     case DMPAPER_CSHEET:
-      return "na_c";
+      name = "na_c";
+      break;
     case DMPAPER_DSHEET:
-      return "na_d";
+      name = "na_d";
+      break;
     case DMPAPER_ESHEET:
-      return "na_e";
+      name = "na_e";
+      break;
     case DMPAPER_ENV_DL:
-      return "iso_dl";
+      name = "iso_dl";
+      break;
     case DMPAPER_ENV_C5:
-      return "iso_c5";
+      name = "iso_c5";
+      break;
     case DMPAPER_ENV_C3:
-      return "iso_c3";
+      name = "iso_c3";
+      break;
     case DMPAPER_ENV_C4:
-      return "iso_c4";
+      name = "iso_c4";
+      break;
     case DMPAPER_ENV_C6:
-      return "iso_c6";
+      name = "iso_c6";
+      break;
     case DMPAPER_ENV_C65:
-      return "iso_c6c5";
+      name = "iso_c6c5";
+      break;
     case DMPAPER_ENV_B4:
-      return "iso_b4";
+      name = "iso_b4";
+      break;
     case DMPAPER_ENV_B5:
-      return "iso_b5";
+      name = "iso_b5";
+      break;
     case DMPAPER_ENV_B6:
-      return "iso_b6";
+      name = "iso_b6";
+      break;
     case DMPAPER_ENV_ITALY:
-      return "om_italian";
+      name = "om_italian";
+      break;
     case DMPAPER_ENV_MONARCH:
-      return "na_monarch";
+      name = "na_monarch";
+      break;
     case DMPAPER_ENV_PERSONAL:
-      return "na_personal";
+      name = "na_personal";
+      break;
     case DMPAPER_FANFOLD_US:
-      return "na_fanfold-us";
+      name = "na_fanfold-us";
+      break;
     case DMPAPER_FANFOLD_STD_GERMAN:
-      return "na_fanfold-eur";
+      name = "na_fanfold-eur";
+      break;
     case DMPAPER_FANFOLD_LGL_GERMAN:
-      return "na_foolscap";
+      name = "na_foolscap";
+      break;
     case DMPAPER_ISO_B4:
-      return "iso_b4";
+      name = "iso_b4";
+      break;
     case DMPAPER_JAPANESE_POSTCARD:
-      return "jpn_hagaki";
+      name = "jpn_hagaki";
+      break;
     case DMPAPER_9X11:
-      return "na_9x11";
+      name = "na_9x11";
+      break;
     case DMPAPER_10X11:
-      return "na_10x11";
+      name = "na_10x11";
+      break;
     case DMPAPER_ENV_INVITE:
-      return "om_invite";
+      name = "om_invite";
+       break;
     case DMPAPER_LETTER_EXTRA:
     case DMPAPER_LETTER_EXTRA_TRANSVERSE:
-      return "na_letter-extra";
+      name = "na_letter-extra";
+      break;
     case DMPAPER_LEGAL_EXTRA:
-      return "na_legal-extra";
+      name = "na_legal-extra";
+      break;
     case DMPAPER_TABLOID_EXTRA:
-      return "na_arch";
+      name = "na_arch";
+      break;
     case DMPAPER_A4_EXTRA:
-      return "iso_a4-extra";
+      name = "iso_a4-extra";
+      break;
     case DMPAPER_B_PLUS:
-      return "na_b-plus";
+      name = "na_b-plus";
+      break;
     case DMPAPER_LETTER_PLUS:
-      return "na_letter-plus";
+      name = "na_letter-plus";
+      break;
     case DMPAPER_A3_EXTRA:
     case DMPAPER_A3_EXTRA_TRANSVERSE:
-      return "iso_a3-extra";
+      name = "iso_a3-extra";
+      break;
     case DMPAPER_A5_EXTRA:
-      return "iso_a5-extra";
+      name = "iso_a5-extra";
+      break;
     case DMPAPER_B5_EXTRA:
-      return "iso_b5-extra";
+      name = "iso_b5-extra";
+      break;
     case DMPAPER_A2:
-      return "iso_a2";
+      name = "iso_a2";
+      break;
       
     default:
-      /* Dunno what these are: */
-    case DMPAPER_A4_PLUS:
-    case DMPAPER_A_PLUS:
-    case DMPAPER_FOLIO:
-    case DMPAPER_15X11:
-      return "iso_a4";
+      name = NULL;
+      break;
     }
+
+  if (name)
+    return gtk_paper_size_new (name);
+  else 
+    return NULL;
 }
 
 static short
@@ -333,6 +388,7 @@ win32_start_page (GtkPrintOperation *op,
   devmode->dmPaperSize = paper_size_to_win32 (paper_size);
   if (devmode->dmPaperSize == 0)
     {
+      devmode->dmPaperSize = DMPAPER_USER;
       devmode->dmFields |= DM_PAPERWIDTH | DM_PAPERLENGTH;
       devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) * 10.0;
       devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) * 10.0;
@@ -513,7 +569,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 		     HANDLE hDevMode)
 {
   LPDEVMODEW devmode;
-  
+
   devmode = GlobalLock (hDevMode);
   
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION,
@@ -533,23 +589,36 @@ devmode_to_settings (GtkPrintSettings *settings,
 					orientation_from_win32 (devmode->dmOrientation));
   
   
-  if (devmode->dmFields & DM_PAPERSIZE)
+  if (devmode->dmFields & DM_PAPERSIZE &&
+      devmode->dmPaperSize != 0)
     {
-      if (devmode->dmPaperSize != 0)
+      GtkPaperSize *paper_size = paper_size_from_win32 (devmode->dmPaperSize);
+      if (paper_size)
 	{
-	  GtkPaperSize *paper_size = gtk_paper_size_new (page_size_from_win32 (devmode->dmPaperSize));
 	  gtk_print_settings_set_paper_size (settings, paper_size);
 	  gtk_paper_size_free (paper_size);
 	}
-      else
-	{
-	  GtkPaperSize *paper_size = gtk_paper_size_new_custom ("dialog", _("Custom paper"),
-								devmode->dmPaperWidth * 10.0,
-								devmode->dmPaperLength * 10.0,
-								GTK_UNIT_MM);
-	  gtk_print_settings_set_paper_size (settings, paper_size);
-	  gtk_paper_size_free (paper_size);
-	}
+      gtk_print_settings_set_int (settings, "win32-paper-size", (int)devmode->dmPaperSize);
+    }
+  else if ((devmode->dmFields & DM_PAPERSIZE &&
+	    devmode->dmPaperSize == 0) ||
+	   ((devmode->dmFields & DM_PAPERWIDTH) &&
+	    (devmode->dmFields & DM_PAPERLENGTH)))
+    {
+      GtkPaperSize *paper_size;
+      char *form_name = NULL;
+      if (devmode->dmFields & DM_FORMNAME)
+	form_name = g_utf16_to_utf8 (devmode->dmFormName, 
+				     -1, NULL, NULL, NULL);
+      if (form_name == NULL || form_name[0] == 0)
+	form_name = g_strdup (_("Custom size"));
+      paper_size = gtk_paper_size_new_custom (form_name,
+					      form_name,
+					      devmode->dmPaperWidth * 10.0,
+					      devmode->dmPaperLength * 10.0,
+					      GTK_UNIT_MM);
+      gtk_print_settings_set_paper_size (settings, paper_size);
+      gtk_paper_size_free (paper_size);
     }
   
   if (devmode->dmFields & DM_SCALE)
@@ -607,6 +676,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 	  break;
 	}
       gtk_print_settings_set_default_source (settings, source);
+      gtk_print_settings_set_int (settings, "win32-default-source", devmode->dmDefaultSource);
     }
   
   if (devmode->dmFields & DM_PRINTQUALITY)
@@ -629,6 +699,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 	  break;
 	}
       gtk_print_settings_set_quality (settings, quality);
+      gtk_print_settings_set_int (settings, "win32-print-quality", devmode->dmPrintQuality);
     }
   
   if (devmode->dmFields & DM_COLOR)
@@ -675,6 +746,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 	  break;
 	}
       gtk_print_settings_set_media_type (settings, media_type);
+      gtk_print_settings_set_int (settings, "win32-media-type", devmode->dmMediaType);
     }
   
   if (devmode->dmFields & DM_DITHERTYPE)
@@ -703,6 +775,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 	  break;
 	}
       gtk_print_settings_set_dither (settings, dither);
+      gtk_print_settings_set_int (settings, "win32-dither-type", devmode->dmDitherType);
     }
   
   GlobalUnlock (hDevMode);
@@ -765,7 +838,6 @@ devmode_from_settings (GtkPrintSettings *settings,
 
   extras = NULL;
   extras_len = 0;
-  g_print ("settings: %p\n", settings);
   extras_base64 = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA);
   if (extras_base64)
     extras = g_base64_decode (extras_base64, &extras_len);
@@ -803,16 +875,28 @@ devmode_from_settings (GtkPrintSettings *settings,
   if (page_setup)
     paper_size = gtk_paper_size_copy (gtk_page_setup_get_paper_size (page_setup));
   else
-    paper_size = gtk_print_settings_get_paper_size (settings);
+    {
+      int size;
+      if (gtk_print_settings_has_key (settings, "win32-paper-size") &&
+	  (size = gtk_print_settings_get_int (settings, "win32-paper-size")) != 0)
+	{
+	  devmode->dmFields |= DM_PAPERSIZE;
+	  devmode->dmPaperSize = size;
+	  paper_size = NULL;
+	}
+      else
+	paper_size = gtk_print_settings_get_paper_size (settings);
+    }
   if (paper_size)
     {
       devmode->dmFields |= DM_PAPERSIZE;
       devmode->dmPaperSize = paper_size_to_win32 (paper_size);
       if (devmode->dmPaperSize == 0)
 	{
+	  devmode->dmPaperSize = DMPAPER_USER;
 	  devmode->dmFields |= DM_PAPERWIDTH | DM_PAPERLENGTH;
-	  devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) * 10.0;
-	  devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) * 10.0;
+	  devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) / 10.0;
+	  devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) / 10.0;
 	}
       gtk_paper_size_free (paper_size);
     }
@@ -828,8 +912,13 @@ devmode_from_settings (GtkPrintSettings *settings,
       devmode->dmFields |= DM_COPIES;
       devmode->dmCopies = gtk_print_settings_get_num_copies (settings);
     }
-  
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE))
+
+  if (gtk_print_settings_has_key (settings, "win32-default-source"))
+    {
+      devmode->dmFields |= DM_DEFAULTSOURCE;
+      devmode->dmDefaultSource = gtk_print_settings_get_int (settings, "win32-default-source");
+    }
+  else if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE))
     {
       devmode->dmFields |= DM_DEFAULTSOURCE;
       devmode->dmDefaultSource = DMBIN_AUTO;
@@ -863,7 +952,12 @@ devmode_from_settings (GtkPrintSettings *settings,
 	devmode->dmDefaultSource = DMBIN_SMALLFMT;
     }
 
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_RESOLUTION))
+  if (gtk_print_settings_has_key (settings, "win32-print-quality"))
+    {
+      devmode->dmFields |= DM_PRINTQUALITY;
+      devmode->dmPrintQuality = gtk_print_settings_get_int (settings, "win32-print-quality");
+    }
+  else if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_RESOLUTION))
     {
       devmode->dmFields |= DM_PRINTQUALITY;
       devmode->dmPrintQuality = gtk_print_settings_get_resolution (settings);
@@ -925,7 +1019,12 @@ devmode_from_settings (GtkPrintSettings *settings,
 	devmode->dmCollate = DMCOLLATE_FALSE;
     }
 
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_MEDIA_TYPE))
+  if (gtk_print_settings_has_key (settings, "win32-media-type"))
+    {
+      devmode->dmFields |= DM_MEDIATYPE;
+      devmode->dmMediaType = gtk_print_settings_get_int (settings, "win32-media-type");
+    }
+  else if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_MEDIA_TYPE))
     {
       devmode->dmFields |= DM_MEDIATYPE;
       devmode->dmMediaType = DMMEDIA_STANDARD;
@@ -937,7 +1036,12 @@ devmode_from_settings (GtkPrintSettings *settings,
 	devmode->dmMediaType = DMMEDIA_GLOSSY;
     }
  
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_DITHER))
+  if (gtk_print_settings_has_key (settings, "win32-dither-type"))
+    {
+      devmode->dmFields |= DM_DITHERTYPE;
+      devmode->dmDitherType = gtk_print_settings_get_int (settings, "win32-dither-type");
+    }
+  else if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_DITHER))
     {
       devmode->dmFields |= DM_DITHERTYPE;
       devmode->dmDitherType = DMDITHER_FINE;

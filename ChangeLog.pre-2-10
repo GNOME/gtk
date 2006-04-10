@@ -1,5 +1,12 @@
 2006-04-10  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintoperation-win32.c: 
+	Better size handling.
+	Save win32-specific settings in additions to the generic ones
+	if the generic one is lossy.
+
+2006-04-10  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkprintoperation-win32.c:
 	Finish implementing run_page_setup_dialog.
 

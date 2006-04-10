@@ -20,7 +20,6 @@ PDF backend:
 
 Win32:
 * Use threads for the dialog, to allow repaints of other windows while they are up
-* save win32-specific settings when the generic one loses data
 
 Cups/Unix print dialog:
 * Use themed icons for the collate/reverse?
