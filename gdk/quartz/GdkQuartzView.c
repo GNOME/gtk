@@ -50,32 +50,36 @@
 {
   NSRect bounds = [self bounds];
   GdkRectangle gdk_rect;
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  /* Draw background */
-  if (GDK_WINDOW_OBJECT (gdk_window)->bg_pixmap == NULL)
-    {
-      CGContextRef context;
-
-      context = [[NSGraphicsContext currentContext] graphicsPort];
-      CGContextSaveGState (context);
-
-      _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (gdk_window),
-						    GDK_WINDOW_OBJECT (gdk_window)->bg_color.pixel);
-
-      CGContextFillRect (context, CGRectMake (bounds.origin.x, bounds.origin.y,
-					     bounds.size.width, bounds.size.height));
-      CGContextRestoreGState (context);
-    }
-
-  gdk_rect.x = bounds.origin.x;
-  gdk_rect.y = bounds.origin.y;
-  gdk_rect.width = bounds.size.width;
-  gdk_rect.height = bounds.size.height;
+  gdk_rect.x = rect.origin.x;
+  gdk_rect.y = rect.origin.y;
+  gdk_rect.width = rect.size.width;
+  gdk_rect.height = rect.size.height;
   
-  gdk_window_invalidate_rect (gdk_window, &gdk_rect, FALSE);
-  gdk_window_process_updates (gdk_window, FALSE);
+  if (private->event_mask & GDK_EXPOSURE_MASK)
+    {
+      GdkEvent event;
+      
+      event.expose.type = GDK_EXPOSE;
+      event.expose.window = g_object_ref (gdk_window);
+      event.expose.send_event = FALSE;
+      event.expose.count = 0;
+      event.expose.region = gdk_region_rectangle (&gdk_rect);
+      event.expose.area = gdk_rect;
+    
+      impl->in_paint_rect_count ++;
+
+      (*_gdk_event_func) (&event, _gdk_event_data);
+
+      impl->in_paint_rect_count --;
+
+      g_object_unref (gdk_window);
+      gdk_region_destroy (event.expose.region);
+    }
 
   GDK_QUARTZ_RELEASE_POOL;
 }

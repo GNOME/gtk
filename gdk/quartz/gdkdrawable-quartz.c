@@ -61,7 +61,7 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
 
   gdk_drawable_get_size (drawable, &width, &height);
 
-  surface = cairo_quartz_surface_create (context, TRUE, width, height);
+  surface = cairo_quartz_surface_create (context, width, height, TRUE);
 
   info = g_new (SurfaceInfo, 1);
   info->drawable = drawable;
@@ -586,6 +586,37 @@ _gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias)
       CGContextSaveGState (context);
       CGContextSetAllowsAntialiasing (context, antialias);
 
+      /* We'll emulate the clipping caused by double buffering here */
+      if (impl->begin_paint_count != 0)
+	{
+	  CGRect rect;
+	  CGRect *cg_rects;
+	  GdkRectangle *rects;
+	  gint n_rects, i;
+	  
+	  gdk_region_get_rectangles (impl->paint_clip_region,
+				     &rects, &n_rects);
+	  
+	  if (n_rects == 1)
+	    cg_rects = &rect;
+	  else
+	    cg_rects = g_new (CGRect, n_rects);
+	  
+	  for (i = 0; i < n_rects; i++)
+	    {
+	      cg_rects[i].origin.x = rects[i].x;
+	      cg_rects[i].origin.y = rects[i].y;
+	      cg_rects[i].size.width = rects[i].width;
+	      cg_rects[i].size.height = rects[i].height;
+	    }
+	  
+	  CGContextClipToRects (context, cg_rects, n_rects);
+	  
+	  g_free (rects);
+	  if (cg_rects != &rect)
+	    g_free (cg_rects);
+	}
+      
       return context;
     }
   else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
@@ -623,7 +654,9 @@ _gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef contex
       CGContextRestoreGState (context);
       CGContextSetAllowsAntialiasing (context, TRUE);
 
-      [[NSGraphicsContext currentContext] flushGraphics];
+      if (impl->in_paint_rect_count == 0)
+	CGContextFlush (context);
+
       [impl->view unlockFocus];
       [impl->pool release];
     }

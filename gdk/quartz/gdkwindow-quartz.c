@@ -105,6 +105,9 @@ gdk_window_impl_quartz_finalize (GObject *object)
   if (impl->nscursor)
     [impl->nscursor release];
 
+  if (impl->paint_clip_region)
+    gdk_region_destroy (impl->paint_clip_region);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -112,8 +115,11 @@ static void
 gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_window_impl_quartz_finalize;
 
   drawable_class->get_size = gdk_window_impl_quartz_get_size;
 
@@ -129,6 +135,89 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
   impl->width = 1;
   impl->height = 1;
 }
+
+static void
+gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
+					   GdkRegion    *region)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  CGContextRef context = _gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+  int i, n_rects;
+  GdkRectangle *rects;
+
+  if (impl->begin_paint_count == 0)
+    impl->paint_clip_region = gdk_region_copy (region);
+  else
+    gdk_region_union (impl->paint_clip_region, region);
+
+  impl->begin_paint_count ++;
+
+  gdk_region_get_rectangles (region, &rects, &n_rects);
+  for (i = 0; i < n_rects; i++) 
+    {
+      _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
+						     GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel);
+      
+      CGContextFillRect (context, CGRectMake (rects[i].x, rects[i].y, rects[i].width, rects[i].height));
+      
+    }
+  g_free (rects);
+
+  _gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
+}
+
+static void
+gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+
+  impl->begin_paint_count --;
+}
+
+static void
+gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable *paintable,
+						 GdkRegion    *region,
+						 gboolean    (*child_func) (GdkWindow *, gpointer),
+						 gpointer      user_data)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  int i, n_rects;
+  GdkRectangle *rects;
+
+  gdk_region_get_rectangles (region, &rects, &n_rects);
+
+  for (i = 0; i < n_rects; i++) 
+    {
+      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
+						    rects[i].width, rects[i].height)];
+    }
+
+  g_free (rects);
+
+  /* FIXME: Check if we need to traverse the children */
+}
+
+static void
+gdk_window_impl_quartz_process_updates (GdkPaintable *paintable,
+					gboolean      update_children)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+
+  [impl->view display];
+
+  /* FIXME: Check if display actually updates the children too */
+}
+
+static void
+gdk_window_impl_quartz_paintable_init (GdkPaintableIface *iface)
+{
+  iface->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
+  iface->end_paint = gdk_window_impl_quartz_end_paint;
+
+  iface->invalidate_maybe_recurse = gdk_window_impl_quartz_invalidate_maybe_recurse;
+  iface->process_updates = gdk_window_impl_quartz_process_updates;
+}
+
 
 GType
 _gdk_window_impl_quartz_get_type (void)
@@ -150,9 +239,19 @@ _gdk_window_impl_quartz_get_type (void)
         (GInstanceInitFunc) gdk_window_impl_quartz_init,
       };
       
+      static const GInterfaceInfo paintable_info = 
+      {
+	(GInterfaceInitFunc) gdk_window_impl_quartz_paintable_init,
+	NULL,
+	NULL
+      };
+
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_QUARTZ,
                                             "GdkWindowImplQuartz",
                                             &object_info, 0);
+      g_type_add_interface_static (object_type,
+				   GDK_TYPE_PAINTABLE,
+				   &paintable_info);
     }
   
   return object_type;

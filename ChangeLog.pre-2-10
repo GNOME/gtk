@@ -1,3 +1,23 @@
+2006-04-11  Anders Carlsson  <andersca@mac.imendio.com>
+
+        * gdk/quartz/GdkQuartzView.c:
+        (-[GdkQuartzView drawRect:]):
+        * gdk/quartz/gdkdrawable-quartz.c:
+        (gdk_quartz_ref_cairo_surface):
+        (_gdk_quartz_drawable_get_context):
+        (_gdk_quartz_drawable_release_context):
+        * gdk/quartz/gdkwindow-quartz.c:
+        (gdk_window_impl_quartz_finalize):
+        (gdk_window_impl_quartz_class_init):
+        (gdk_window_impl_quartz_begin_paint_region):
+        (gdk_window_impl_quartz_end_paint):
+        (gdk_window_impl_quartz_invalidate_maybe_recurse):
+        (gdk_window_impl_quartz_process_updates):
+        (gdk_window_impl_quartz_paintable_init):
+        (_gdk_window_impl_quartz_get_type):
+        * gdk/quartz/gdkwindow-quartz.h:
+        Have GdkWindowImplQuartz implement GdkPaintable.
+
 2006-04-10  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextbufferrichtext.c (gtk_text_buffer_deserialize):
