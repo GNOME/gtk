@@ -1,3 +1,15 @@
+2006-04-11  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/gdkinternals.h:
+        * gdk/gdkwindow.c:
+        (_gdk_paintable_get_type):
+        (gdk_window_begin_paint_region):
+        (gdk_window_end_paint):
+        (gdk_window_process_updates):
+        (gdk_window_invalidate_maybe_recurse):
+        Add new GdkPaintable interface which implementation objects can 
+        implement in order to override gdk painting functions.
+
 2006-04-10 Vladimer Sichinava  <vlsichinava@gmail.com>
 
         * configure.in: Added "ka" (Georgian) to ALL_LINGUAS

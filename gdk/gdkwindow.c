@@ -192,6 +192,30 @@ static void gdk_window_clear_backing_rect (GdkWindow *window,
 
 G_DEFINE_TYPE (GdkWindowObject, gdk_window_object, GDK_TYPE_DRAWABLE);
 
+GType
+_gdk_paintable_get_type (void)
+{
+  static GType paintable_type = 0;
+
+  if (!paintable_type)
+    {
+      static const GTypeInfo paintable_info =
+      {
+	sizeof (GdkPaintableIface),  /* class_size */
+	NULL,                        /* base_init */
+	NULL,                        /* base_finalize */
+      };
+
+      paintable_type = g_type_register_static (G_TYPE_INTERFACE,
+					       g_intern_static_string ("GdkPaintable"),
+					       &paintable_info, 0);
+
+      g_type_interface_add_prerequisite (paintable_type, G_TYPE_OBJECT);
+    }
+
+  return paintable_type;
+}
+
 static void
 gdk_window_object_init (GdkWindowObject *window)
 {
@@ -936,6 +960,13 @@ gdk_window_begin_paint_region (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (GDK_IS_PAINTABLE (private->impl) &&
+      GDK_PAINTABLE_GET_IFACE (private->impl)->begin_paint_region) 
+    {
+      GDK_PAINTABLE_GET_IFACE (private->impl)->begin_paint_region (GDK_PAINTABLE (private->impl), region);
+      return;
+    }
+
   gdk_region_get_clipbox (region, &clip_box);
 
   paint = g_new (GdkWindowPaint, 1);
@@ -996,6 +1027,13 @@ gdk_window_end_paint (GdkWindow *window)
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (GDK_IS_PAINTABLE (private->impl) &&
+      GDK_PAINTABLE_GET_IFACE (private->impl)->end_paint) 
+    {
+      GDK_PAINTABLE_GET_IFACE (private->impl)->end_paint (GDK_PAINTABLE (private->impl));
+      return;
+    }
 
   if (private->paint_stack == NULL)
     {
@@ -2287,6 +2325,16 @@ flush_all_displays (void)
   g_slist_free (displays);
 }
 
+/* Currently it is not possible to override
+ * gdk_window_process_all_updates in the same manner as
+ * gdk_window_process_updates and gdk_window_invalidate_maybe_recurse
+ * by implementing the GdkPaintable interface.  If in the future a
+ * backend would need this, the right solution would be to add a
+ * method to GdkDisplay that can be optionally
+ * NULL. gdk_window_process_all_updates can then walk the list of open
+ * displays and call the mehod.
+ */
+
 /**
  * gdk_window_process_all_updates:
  *
@@ -2349,6 +2397,13 @@ gdk_window_process_updates (GdkWindow *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_IS_PAINTABLE (private->impl) &&
+      GDK_PAINTABLE_GET_IFACE (private->impl)->process_updates)
+    {
+      GDK_PAINTABLE_GET_IFACE (private->impl)->process_updates (GDK_PAINTABLE (private->impl), update_children);
+      return;
+    }
   
   if (private->update_area && !private->update_freeze_count)
     {      
@@ -2478,6 +2533,14 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
   
   if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
+
+  if (GDK_IS_PAINTABLE (private->impl) &&
+      GDK_PAINTABLE_GET_IFACE (private->impl)->invalidate_maybe_recurse)
+    {
+      GDK_PAINTABLE_GET_IFACE (private->impl)->invalidate_maybe_recurse (GDK_PAINTABLE (private->impl), region,
+									 child_func, user_data);
+      return;
+    }
 
   visible_region = gdk_drawable_get_visible_region (window);
   gdk_region_intersect (visible_region, region);

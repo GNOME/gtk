@@ -337,6 +337,32 @@ void _gdk_windowing_window_destroy_foreign (GdkWindow *window);
 void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 					      const gchar *sm_client_id);
 
+#define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
+#define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))
+#define GDK_IS_PAINTABLE(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PAINTABLE))
+#define GDK_PAINTABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GDK_TYPE_PAINTABLE, GdkPaintableIface))
+
+typedef struct _GdkPaintable        GdkPaintable;
+typedef struct _GdkPaintableIface   GdkPaintableIface;
+
+struct _GdkPaintableIface
+{
+  GTypeInterface g_iface;
+  
+  void (* begin_paint_region) (GdkPaintable *paintable,
+			       GdkRegion    *region);
+  void (* end_paint)          (GdkPaintable *paintable);
+
+  void (* invalidate_maybe_recurse) (GdkPaintable *paintable,
+				     GdkRegion    *region,
+				     gboolean    (*child_func) (GdkWindow *, gpointer),
+				     gpointer      user_data);
+  void (* process_updates)          (GdkPaintable *paintable,
+				     gboolean      update_children);
+};
+
+GType _gdk_paintable_get_type (void) G_GNUC_CONST;
+
 /* Implementation types */
 GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
 GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
