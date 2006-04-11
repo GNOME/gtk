@@ -722,7 +722,8 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
                               gint     *x,
                               gint     *y)
 {
-  gint local_x, local_y;
+  gint local_x = 0; 
+  gint local_y = 0;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
