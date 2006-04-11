@@ -1,3 +1,11 @@
+2006-04-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkscale.c (gtk_scale_get_layout_offsets): Silence
+	compiler warnings.
+
+	* gtk/gtkinputdialog.c (gtk_input_dialog_set_mapping_mode): Don't
+	dereference info before checking it for NULL.  (Coverity)
+
 2006-04-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
