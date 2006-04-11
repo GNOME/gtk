@@ -272,6 +272,8 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->read_in_progress = FALSE;
 
   priv->screen = NULL;
+
+  build_recent_items_list (manager);
 }
 
 static void
@@ -482,14 +484,17 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
 		  		      gtk_recent_manager_poll_timeout,
 				      manager);
 
-  build_recent_items_list (manager);
-  
+  /* mark us clean, so that we can re-read the list
+   * of recently used resources
+   */
   priv->is_dirty = FALSE;
+  build_recent_items_list (manager);
 }
 
 /* reads the recently used resources file and builds the items list.
  * we keep the items list inside the parser object, and build the
  * RecentInfo object only on user's demand to avoid useless replication.
+ * this function resets the dirty bit of the manager.
  */
 static void
 build_recent_items_list (GtkRecentManager *manager)
@@ -564,6 +569,7 @@ build_recent_items_list (GtkRecentManager *manager)
     }
 
   priv->read_in_progress = FALSE;
+  priv->is_dirty = FALSE;
 }
 
 
@@ -591,20 +597,7 @@ build_recent_items_list (GtkRecentManager *manager)
 GtkRecentManager *
 gtk_recent_manager_new (void)
 {
-  GtkRecentManager *retval;
-  gchar *filename;
-
-  filename = g_build_filename (g_get_home_dir (),
-                               GTK_RECENTLY_USED_FILE,
-			       NULL);
-  
-  retval = g_object_new (GTK_TYPE_RECENT_MANAGER,
-                         "filename", filename,
-			 NULL);
-  
-  g_free (filename);
-
-  return retval;
+  return g_object_new (GTK_TYPE_RECENT_MANAGER, NULL);
 }
 
 /**

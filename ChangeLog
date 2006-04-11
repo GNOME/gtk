@@ -1,3 +1,11 @@
+2006-04-11  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_init)
+	(gtk_recent_manager_new): Remove the unneeded setting of the
+	storage file inside the constructor. (Murray Cumming)
+	(build_recent_items_list): Reset the dirty bit when done rebuilding
+	the list from the storage file.
+
 2006-04-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscale.c (gtk_scale_get_layout_offsets): Silence
