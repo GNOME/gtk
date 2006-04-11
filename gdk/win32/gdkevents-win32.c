@@ -144,6 +144,9 @@ static gint current_root_x, current_root_y;
 static UINT msh_mousewheel;
 static UINT client_message;
 
+static UINT got_gdk_events_message;
+static HWND modal_win32_dialog = NULL;
+
 #ifdef HAVE_DIMM_H
 static IActiveIMMApp *active_imm_app = NULL;
 static IActiveIMMMessagePumpOwner *active_imm_msgpump_owner = NULL;
@@ -281,6 +284,9 @@ inner_window_procedure (HWND   hwnd,
       /* If gdk_event_translate() returns TRUE, we return ret_val from
        * the window procedure.
        */
+      if (modal_win32_dialog)
+	PostMessage (modal_win32_dialog, got_gdk_events_message,
+		     (WPARAM) 1, 0);
       return ret_val;
     }
   else
@@ -379,6 +385,7 @@ _gdk_events_init (void)
   msh_mousewheel = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
 
   client_message = RegisterWindowMessage ("GDK_WIN32_CLIENT_MESSAGE");
+  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
 
 #if 0
   /* Check if we have some input locale identifier loaded that uses a
@@ -463,7 +470,8 @@ gdk_events_pending (void)
 {
   MSG msg;
   return (_gdk_event_queue_find_first (_gdk_display) ||
-	  PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
+	  (modal_win32_dialog == NULL &&
+	   PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
 }
 
 GdkEvent*
@@ -3516,6 +3524,9 @@ _gdk_events_queue (GdkDisplay *display)
 {
   MSG msg;
 
+  if (modal_win32_dialog != NULL)
+    return;
+  
   while (!_gdk_event_queue_find_first (display) &&
 	 PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -3536,7 +3547,8 @@ gdk_event_prepare (GSource *source,
   *timeout = -1;
 
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-	    PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
+	    (modal_win32_dialog == NULL &&
+	     PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
 
   GDK_THREADS_LEAVE ();
 
@@ -3553,7 +3565,8 @@ gdk_event_check (GSource *source)
 
   if (event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-	      PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
+	      (modal_win32_dialog == NULL &&
+	       PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
   else
     retval = FALSE;
 
@@ -3585,6 +3598,12 @@ gdk_event_dispatch (GSource     *source,
   GDK_THREADS_LEAVE ();
 
   return TRUE;
+}
+
+void
+gdk_win32_set_modal_dialog_libgtk_only (HWND window)
+{
+  modal_win32_dialog = window;
 }
 
 static void

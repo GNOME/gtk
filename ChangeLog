@@ -1,3 +1,16 @@
+2006-04-11  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/gdk.symbols:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkwin32.h:
+	Add gdk_win32_set_modal_dialog_libgtk_only that we
+	need for handling the mainloop in the print dialogs.
+
+	* gtk/gtkprintoperation-win32.c:
+	Pump the gtk+ mainloop when needed in the print dialogs.
+	This means gtk+ windows will redraw while the print dialogs
+	are up.
+
 2006-04-10  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation-win32.c: 

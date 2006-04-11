@@ -18,9 +18,6 @@ PDF backend:
 * Change to using a GtkFileChooserEntry to get file names when we move to 
   GTK.  It is a private object in GTK right now.
 
-Win32:
-* Use threads for the dialog, to allow repaints of other windows while they are up
-
 Cups/Unix print dialog:
 * Use themed icons for the collate/reverse?
 * Add custom translations for a lot of standard PPD options
@@ -38,6 +35,7 @@ General:
 * general print to file module (ps+pdf)
 * use real gtk+ stock icon for print to pdf icon
 * GtkPrinter shouldn't ref backend since the backend refs the printers
+* Keep ref on print operation during run()
 
 Print dialog wishlist:
 * Don't select default for a short while, so that we can avoid flashing if the selected printer appears

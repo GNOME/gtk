@@ -23,6 +23,7 @@
 #define WINVER _WIN32_WINNT
 #endif
 
+#define COBJMACROS
 #include "config.h"
 #include <math.h>
 #include <stdlib.h>
@@ -56,6 +57,39 @@ typedef struct {
 
 static void win32_poll_status (GtkPrintOperation *op);
 
+static const GUID myIID_IPrintDialogCallback  = {0x5852a2c3,0x6530,0x11d1,{0xb6,0xa3,0x0,0x0,0xf8,0x75,0x7b,0xf9}};
+
+#undef INTERFACE
+#define INTERFACE IPrintDialogCallback
+DECLARE_INTERFACE_ (IPrintDialogCallback, IUnknown)
+{
+    STDMETHOD (QueryInterface)(THIS_ REFIID,LPVOID*) PURE;
+    STDMETHOD_ (ULONG, AddRef)(THIS) PURE;
+    STDMETHOD_ (ULONG, Release)(THIS) PURE;
+    STDMETHOD (InitDone)(THIS) PURE;
+    STDMETHOD (SelectionChange)(THIS) PURE;
+    STDMETHOD (HandleMessage)(THIS_ HWND,UINT,WPARAM,LPARAM,LRESULT*) PURE;
+}; 
+
+static UINT got_gdk_events_message;
+
+UINT_PTR CALLBACK
+run_mainloop_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+{
+  if (uiMsg == WM_INITDIALOG)
+    {
+      gdk_win32_set_modal_dialog_libgtk_only (hdlg);
+      while (gtk_events_pending ())
+	gtk_main_iteration ();
+    }
+  else if (uiMsg == got_gdk_events_message)
+    {
+      while (gtk_events_pending ())
+	gtk_main_iteration ();
+      return 1;
+    }
+  return 0;
+}
 
 static GtkPageOrientation
 orientation_from_win32 (short orientation)
@@ -1120,6 +1154,114 @@ dialog_from_print_settings (GtkPrintOperation *op,
 						op->priv->default_page_setup);
 }
 
+typedef struct {
+  IPrintDialogCallback iPrintDialogCallback;
+  gboolean set_hwnd;
+  int ref_count;
+} PrintDialogCallback;
+
+
+static ULONG STDMETHODCALLTYPE
+iprintdialogcallback_addref (IPrintDialogCallback *This)
+{
+  PrintDialogCallback *callback = (PrintDialogCallback *)This;
+  return ++callback->ref_count;
+}
+
+static ULONG STDMETHODCALLTYPE
+iprintdialogcallback_release (IPrintDialogCallback *This)
+{
+  PrintDialogCallback *callback = (PrintDialogCallback *)This;
+  int ref_count = --callback->ref_count;
+
+  if (ref_count == 0)
+    g_free (This);
+
+  return ref_count;
+}
+
+static HRESULT STDMETHODCALLTYPE
+iprintdialogcallback_queryinterface (IPrintDialogCallback *This,
+				     REFIID       riid,
+				     LPVOID      *ppvObject)
+{
+   if (IsEqualIID (riid, &IID_IUnknown) ||
+       IsEqualIID (riid, &myIID_IPrintDialogCallback))
+     {
+       *ppvObject = This;
+       IUnknown_AddRef ((IUnknown *)This);
+       return NOERROR;
+     }
+   else
+     {
+       *ppvObject = NULL;
+       return E_NOINTERFACE;
+     }
+}
+
+static HRESULT STDMETHODCALLTYPE
+iprintdialogcallback_initdone (IPrintDialogCallback *This)
+{
+  return S_FALSE;
+}
+
+static HRESULT STDMETHODCALLTYPE
+iprintdialogcallback_selectionchange (IPrintDialogCallback *This)
+{
+  return S_FALSE;
+}
+
+static HRESULT STDMETHODCALLTYPE
+iprintdialogcallback_handlemessage (IPrintDialogCallback *This,
+				    HWND hDlg,
+				    UINT uMsg,
+				    WPARAM wParam,
+				    LPARAM lParam,
+				    LRESULT *pResult)
+{
+  PrintDialogCallback *callback = (PrintDialogCallback *)This;
+
+  if (!callback->set_hwnd)
+    {
+      gdk_win32_set_modal_dialog_libgtk_only (hDlg);
+      callback->set_hwnd = TRUE;
+      while (gtk_events_pending ())
+	gtk_main_iteration ();
+    }
+  else if (uMsg == got_gdk_events_message)
+    {
+      while (gtk_events_pending ())
+	gtk_main_iteration ();
+      *pResult = TRUE;
+      return S_OK;
+    }
+  
+  *pResult = 0;
+  return S_FALSE;
+}
+
+static IPrintDialogCallbackVtbl ipdc_vtbl = {
+  iprintdialogcallback_queryinterface,
+  iprintdialogcallback_addref,
+  iprintdialogcallback_release,
+  iprintdialogcallback_initdone,
+  iprintdialogcallback_selectionchange,
+  iprintdialogcallback_handlemessage
+};
+
+static IPrintDialogCallback *
+print_callback_new  (void)
+{
+  PrintDialogCallback *callback;
+
+  callback = g_new0 (PrintDialogCallback, 1);
+  callback->iPrintDialogCallback.lpVtbl = &ipdc_vtbl;
+  callback->ref_count = 1;
+  callback->set_hwnd = FALSE;
+
+  return &callback->iPrintDialogCallback;
+}
+
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 						  GtkWindow *parent,
@@ -1133,6 +1275,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   GtkWidget *invisible = NULL;
   GtkPrintOperationResult result;
   GtkPrintOperationWin32 *op_win32;
+  IPrintDialogCallback *callback;
   
   *do_print = FALSE;
 
@@ -1197,8 +1340,13 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 
   dialog_from_print_settings (op, printdlgex);
 
-  /* TODO: We should do this in a thread to avoid blocking the mainloop */
+  callback = print_callback_new ();
+  printdlgex->lpCallback = (IUnknown *)callback;
+  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
+  
   hResult = PrintDlgExW(printdlgex);
+  IUnknown_Release ((IUnknown *)callback);
+  gdk_win32_set_modal_dialog_libgtk_only (NULL);
 
   if (hResult != S_OK) 
     {
@@ -1390,8 +1538,13 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
     floor (gtk_page_setup_get_top_margin (page_setup, unit) * scale + 0.5);
   pagesetupdlg->rtMargin.bottom =
     floor (gtk_page_setup_get_bottom_margin (page_setup, unit) * scale + 0.5);
+
+  pagesetupdlg->Flags |= PSD_ENABLEPAGESETUPHOOK;
+  pagesetupdlg->lpfnPageSetupHook = run_mainloop_hook;
+  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
   
   res = PageSetupDlgW (pagesetupdlg);
+  gdk_win32_set_modal_dialog_libgtk_only (NULL);
 
   if (res)
     {  
