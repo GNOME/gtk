@@ -69,14 +69,14 @@ lookup_paper_info (const char *name)
 
   do 
     {
-       mid = (lower + upper) / 2; 
+       mid = (lower + upper) / 2;
        cmp = strcmp (name, paper_names + standard_names_offsets[mid].name);
        if (cmp < 0)
          upper = mid - 1;
        else if (cmp > 0)
          lower = mid + 1;
        else
-         return &standard_names_offsets[mid];
+	 return &standard_names_offsets[mid];
     }
   while (lower <= upper);
 
@@ -223,7 +223,6 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
   
   return size;
 }
-
 
 GtkPaperSize *
 gtk_paper_size_new (const char *name)
@@ -403,7 +402,7 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
   if (size->display_name)
     return size->display_name;
   g_assert (size->info != NULL);
-  return paper_names + size->info->display_name;
+  return gettext (paper_names + size->info->display_name);
 }
 
 G_CONST_RETURN char *
