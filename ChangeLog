@@ -1,5 +1,8 @@
 2006-04-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Handle info
+	being NULL better.  (Coverity)
+
 	* gtk/gtkscale.c (gtk_scale_get_layout_offsets): Silence
 	compiler warnings.
 

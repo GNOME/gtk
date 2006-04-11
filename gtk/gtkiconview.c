@@ -1766,6 +1766,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
       info = NULL;
     }
 
+  g_return_if_fail (cell == NULL || info != NULL);
+
   gtk_icon_view_set_cursor_item (icon_view, item, cell_pos);
   if (FALSE && GTK_WIDGET_REALIZED (icon_view))
     gtk_icon_view_scroll_to_item (icon_view, item);
@@ -1773,7 +1775,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
     gtk_icon_view_scroll_to_path (icon_view, path,
 				  FALSE, 0.0, 0.0);
 
-  if (start_editing)
+  if (info && start_editing)
     gtk_icon_view_start_editing (icon_view, item, info, NULL);
 }
 
