@@ -454,11 +454,13 @@ gtk_input_dialog_set_mapping_mode (GtkWidget *w,
 {
   GtkInputDialog *inputd = input_dialog_from_widget (w);
   GdkDevice *info = inputd->current_device;
-  GdkInputMode old_mode = info->mode;
+  GdkInputMode old_mode;
   GdkInputMode mode = GPOINTER_TO_INT (data);
 
   if (!info)
     return;
+  
+  old_mode = info->mode;
 
   if (mode != old_mode)
     {

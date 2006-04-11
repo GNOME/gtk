@@ -1,3 +1,8 @@
+2006-04-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkinputdialog.c (gtk_input_dialog_set_mapping_mode): Don't
+	dereference info before checking it for NULL.  (Coverity)
+
 2006-04-11  Anders Carlsson  <andersca@mac.imendio.com>
 
         * gdk/quartz/GdkQuartzView.c:
