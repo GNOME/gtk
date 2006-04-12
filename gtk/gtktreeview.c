@@ -12603,14 +12603,14 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 			 &tree_height);
   gtk_widget_size_request (search_dialog, &requisition);
 
-  if (tree_x + tree_width - requisition.width > gdk_screen_get_width (screen))
+  if (tree_x + tree_width> gdk_screen_get_width (screen))
     x = gdk_screen_get_width (screen) - requisition.width;
   else if (tree_x + tree_width - requisition.width < 0)
     x = 0;
   else
     x = tree_x + tree_width - requisition.width;
 
-  if (tree_y + tree_height > gdk_screen_get_height (screen))
+  if (tree_y + tree_height + requisition.height > gdk_screen_get_height (screen))
     y = gdk_screen_get_height (screen) - requisition.height;
   else if (tree_y + tree_height < 0) /* isn't really possible ... */
     y = 0;

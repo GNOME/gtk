@@ -1,5 +1,14 @@
 2006-04-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (selection_motion_event_handler): Remove
+	some unused variables.
+
+	* gtk/gtktreeview.c ((gtk_tree_view_search_position_func): Apply
+	a patch from David Trowbridge to improve the positioning of the
+	search popup.  (#338047)
+
+2006-04-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Handle info
 	being NULL better.  (Coverity)
 
