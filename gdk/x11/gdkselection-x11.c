@@ -536,10 +536,11 @@ make_list (const gchar  *text,
     }
 
   if (list)
-    *list = g_new (gchar *, n_strings + 1);
-
-  (*list)[n_strings] = NULL;
-  
+    {
+      *list = g_new (gchar *, n_strings + 1);
+      (*list)[n_strings] = NULL;
+    }
+     
   i = n_strings;
   tmp_list = strings;
   while (tmp_list)
@@ -548,10 +549,10 @@ make_list (const gchar  *text,
 	(*list)[--i] = tmp_list->data;
       else
 	g_free (tmp_list->data);
-
+      
       tmp_list = tmp_list->next;
     }
-
+  
   g_slist_free (strings);
 
   return n_strings;
