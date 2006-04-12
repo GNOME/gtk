@@ -1,5 +1,9 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+        * contrib/gdk-pixbuf-xlib/Makefile.am:
+        * modules/engines/pixbuf/Makefile.am
+        * gdk-pixbuf/Makefile.am: Build fixes for Cygwin.  (#338262)
+
 	* gdk/x11/gdkselection-x11.c (make_list): Make this work
 	for list == NULL.  (Coverity)
 

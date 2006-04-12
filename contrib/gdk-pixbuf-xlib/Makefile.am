@@ -1,3 +1,7 @@
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
 lib_LTLIBRARIES=libgdk_pixbuf_xlib-2.0.la
 
 INCLUDES = \
@@ -9,6 +13,7 @@ INCLUDES = \
 
 libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
 	-export-dynamic						\
+	$(no_undefined)						\
 	-version-info $(LT_VERSION_INFO)
 
 libgdk_pixbuf_xlib_2_0_la_LIBADD = \
