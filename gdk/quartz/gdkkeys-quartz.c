@@ -159,6 +159,8 @@ const static struct {
   { 0x0001, GDK_Home },
   { 0x0008, GDK_BackSpace },
   { 0x0009, GDK_Tab },
+  { 0x000b, GDK_Page_Up },
+  { 0x000c, GDK_Page_Down },
   { 0x000d, GDK_Return },
   { 0x001c, GDK_Left },
   { 0x001d, GDK_Right },

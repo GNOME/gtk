@@ -1,5 +1,10 @@
 2006-04-12  Anders Carlsson  <andersca@imendio.com>
 
+        * gdk/quartz/gdkkeys-quartz.c:
+        Handle page up and page down.
+
+2006-04-12  Anders Carlsson  <andersca@imendio.com>
+
         * gdk/quartz/gdkdrawable-quartz.c:
         (_gdk_quartz_drawable_release_context):
         Don't flush if we're inside a begin_paint/end_paint pair.
