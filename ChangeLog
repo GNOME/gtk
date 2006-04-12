@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+        * gtk/gtknotebook.c (gtk_notebook_page_allocate): Reorganize
+        to avoid a possible NULL dereference.  (Coverity)
+
 	* gdk/x11/gdkimage-x11.c (gdk_image_new_bitmap): Handle
 	closed displays correctly.  (Coverity)
 
