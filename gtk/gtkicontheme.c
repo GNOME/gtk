@@ -975,7 +975,13 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 
   dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "Directories", NULL, NULL);
   if (!dirs)
-    g_warning ("Theme file for %s has no directories\n", theme_name);
+    {
+      g_warning ("Theme file for %s has no directories\n", theme_name);
+      g_free (theme->display_name);
+      g_free (theme);
+      g_key_file_free (theme_file);
+      return;
+    }
   
   theme->comment = 
     g_key_file_get_locale_string (theme_file, 
@@ -987,12 +993,11 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 			   NULL);
 
   theme->dirs = NULL;
-  if (dirs)
-    {
-      for (i = 0; dirs[i] != NULL; i++)
-        theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
-      g_strfreev (dirs);
-    }
+  for (i = 0; dirs[i] != NULL; i++)
+    theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
+
+  g_strfreev (dirs);
+
   theme->dirs = g_list_reverse (theme->dirs);
 
   themes = g_key_file_get_string_list (theme_file,
