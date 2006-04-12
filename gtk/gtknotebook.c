@@ -3299,7 +3299,10 @@ gtk_notebook_remove (GtkContainer *container,
       page_num++;
       children = children->next;
     }
-
+ 
+  if (children == NULL)
+    return;
+  
   g_object_ref (widget);
 
   gtk_notebook_real_remove (notebook, children);
