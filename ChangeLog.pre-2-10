@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (start_element_handler): Don't pass
+	a negative value as string length to get_child_node().  (Coverity)
+
 	* gtk/gtkicontheme.c (insert_theme): Handle dirs == NULL
 	gracefully.  (Coverity)
 

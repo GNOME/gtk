@@ -1308,7 +1308,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (!strcmp (node_name, "separator"))
 	    {
 	      node_name = NULL;
-	      length = -1;
+	      length = 0;
 	    }
 	  else
 	    length = strlen (node_name);
@@ -1817,7 +1817,7 @@ get_action_by_name (GtkUIManager *merge,
   return NULL;
 }
 
-static gboolean
+static void
 find_menu_position (GNode      *node, 
 		    GtkWidget **menushell_p, 
 		    gint       *pos_p)
@@ -1825,13 +1825,12 @@ find_menu_position (GNode      *node,
   GtkWidget *menushell;
   gint pos;
 
-  g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == NODE_TYPE_MENU ||
-			NODE_INFO (node)->type == NODE_TYPE_POPUP ||
-			NODE_INFO (node)->type == NODE_TYPE_MENU_PLACEHOLDER ||
-			NODE_INFO (node)->type == NODE_TYPE_MENUITEM ||
-			NODE_INFO (node)->type == NODE_TYPE_SEPARATOR,
-			FALSE);
+  g_return_if_fail (node != NULL);
+  g_return_if_fail (NODE_INFO (node)->type == NODE_TYPE_MENU ||
+		    NODE_INFO (node)->type == NODE_TYPE_POPUP ||
+		    NODE_INFO (node)->type == NODE_TYPE_MENU_PLACEHOLDER ||
+		    NODE_INFO (node)->type == NODE_TYPE_MENUITEM ||
+		    NODE_INFO (node)->type == NODE_TYPE_SEPARATOR);
 
   /* first sibling -- look at parent */
   if (node->prev == NULL)
@@ -1867,7 +1866,7 @@ find_menu_position (GNode      *node,
 	default:
 	  g_warning("%s: bad parent node type %d", G_STRLOC,
 		    NODE_INFO (parent)->type);
-	  return FALSE;
+	  return;
 	}
     }
   else
@@ -1881,9 +1880,9 @@ find_menu_position (GNode      *node,
       else
 	prev_child = NODE_INFO (sibling)->proxy;
 
-      g_return_val_if_fail (GTK_IS_WIDGET (prev_child), FALSE);
+      g_return_if_fail (GTK_IS_WIDGET (prev_child));
       menushell = gtk_widget_get_parent (prev_child);
-      g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
+      g_return_if_fail (GTK_IS_MENU_SHELL (menushell));
 
       pos = g_list_index (GTK_MENU_SHELL (menushell)->children, prev_child) + 1;
     }
@@ -1892,11 +1891,9 @@ find_menu_position (GNode      *node,
     *menushell_p = menushell;
   if (pos_p)
     *pos_p = pos;
-
-  return TRUE;
 }
 
-static gboolean
+static void
 find_toolbar_position (GNode      *node, 
 		       GtkWidget **toolbar_p, 
 		       gint       *pos_p)
@@ -1904,13 +1901,12 @@ find_toolbar_position (GNode      *node,
   GtkWidget *toolbar;
   gint pos;
 
-  g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == NODE_TYPE_TOOLBAR ||
-			NODE_INFO (node)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER ||
-			NODE_INFO (node)->type == NODE_TYPE_TOOLITEM ||
-			NODE_INFO (node)->type == NODE_TYPE_SEPARATOR,
-			FALSE);
-
+  g_return_if_fail (node != NULL);
+  g_return_if_fail (NODE_INFO (node)->type == NODE_TYPE_TOOLBAR ||
+		    NODE_INFO (node)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER ||
+		    NODE_INFO (node)->type == NODE_TYPE_TOOLITEM ||
+		    NODE_INFO (node)->type == NODE_TYPE_SEPARATOR);
+  
   /* first sibling -- look at parent */
   if (node->prev == NULL)
     {
@@ -1925,14 +1921,14 @@ find_toolbar_position (GNode      *node,
 	  break;
 	case NODE_TYPE_TOOLBAR_PLACEHOLDER:
 	  toolbar = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
-	  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+	  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 	  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
 					    GTK_TOOL_ITEM (NODE_INFO (parent)->proxy)) + 1;
 	  break;
 	default:
 	  g_warning ("%s: bad parent node type %d", G_STRLOC,
 		     NODE_INFO (parent)->type);
-	  return FALSE;
+	  return;
 	}
     }
   else
@@ -1946,20 +1942,18 @@ find_toolbar_position (GNode      *node,
       else
 	prev_child = NODE_INFO (sibling)->proxy;
 
-      g_return_val_if_fail (GTK_IS_WIDGET (prev_child), FALSE);
+      g_return_if_fail (GTK_IS_WIDGET (prev_child));
       toolbar = gtk_widget_get_parent (prev_child);
-      g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+      g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 
       pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
 					GTK_TOOL_ITEM (prev_child)) + 1;
     }
-
+  
   if (toolbar_p)
     *toolbar_p = toolbar;
   if (pos_p)
     *pos_p = pos;
-
-  return TRUE;
 }
 
 /**
@@ -2253,6 +2247,7 @@ update_node (GtkUIManager *self,
 	    GtkWidget *menushell;
 	    gint pos;
 	    
+	    if (!
 	    if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM ||
 		find_menu_position (node, &menushell, &pos))
 	      {
