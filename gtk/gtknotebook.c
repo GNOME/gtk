@@ -3648,13 +3648,10 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gint focus_width;
   gint tab_pos = get_effective_tab_pos (notebook);
 
-  gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
-  
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
 
   page->allocation = *allocation;
-  gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);
 
   if (notebook->cur_page != page)
     {
@@ -3672,6 +3669,12 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	  break;
 	}
     }
+ 
+  if (!page->tab_label)
+    return;
+
+  gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
+  gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);
 
   switch (tab_pos)
     {
@@ -3724,8 +3727,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       break;
     }
 
-  if (page->tab_label)
-    gtk_widget_size_allocate (page->tab_label, &child_allocation);
+  gtk_widget_size_allocate (page->tab_label, &child_allocation);
 }
 
 static void 
