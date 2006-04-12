@@ -1,5 +1,9 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_validate_yrange): 
+	Handle _gtk_text_line_get_data() returning NULL in all
+	cases.  (Coverity)
+
 	* gtk/gtkuimanager.c (start_element_handler): Don't pass
 	a negative value as string length to get_child_node().  (Coverity)
 

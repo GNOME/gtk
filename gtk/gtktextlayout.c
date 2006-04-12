@@ -929,16 +929,20 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       GtkTextLineData *line_data = _gtk_text_line_get_data (line, layout);
       if (!line_data || !line_data->valid)
         {
-          gint old_height = line_data ? line_data->height : 0;
+          gint old_height, new_height;
+	  
+	  old_height = line_data ? line_data->height : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                          line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 
-          delta_height += line_data->height - old_height;
+	  new_height = line_data ? line_data->height : 0;
+
+          delta_height += new_height - old_height;
           
           first_line = line;
-          first_line_y = -seen - line_data->height;
+          first_line_y = -seen - new_height
           if (!last_line)
             {
               last_line = line;
@@ -946,7 +950,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
             }
         }
 
-      seen += line_data->height;
+      seen += line_data ? line_data->height : 0;
       line = _gtk_text_line_previous (line);
     }
 
@@ -958,13 +962,16 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       GtkTextLineData *line_data = _gtk_text_line_get_data (line, layout);
       if (!line_data || !line_data->valid)
         {
-          gint old_height = line_data ? line_data->height : 0;
+          gint old_height, new_height;
+	  
+	  old_height = line_data ? line_data->height : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                          line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
+	  new_height = line_data ? line_data->height : 0;
 
-          delta_height += line_data->height - old_height;
+          delta_height += new_height - old_height;
           
           if (!first_line)
             {
@@ -972,10 +979,10 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
               first_line_y = seen;
             }
           last_line = line;
-          last_line_y = seen + line_data->height;
+          last_line_y = seen + new_height;
         }
 
-      seen += line_data->height;
+      seen += line_data ? line_data->height : 0;
       line = _gtk_text_line_next_excluding_last (line);
     }
 
