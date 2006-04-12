@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (insert_theme): Handle dirs == NULL
+	gracefully.  (Coverity)
+
 	* gtk/gtknotebook.c (gtk_notebook_remove): Silently do nothing
 	if the widget is not a child.  (Coverity)
 

@@ -987,11 +987,12 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 			   NULL);
 
   theme->dirs = NULL;
-  for (i = 0; dirs[i] != NULL; i++)
-    theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
-  
-  g_strfreev (dirs);
-  
+  if (dirs)
+    {
+      for (i = 0; dirs[i] != NULL; i++)
+        theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
+      g_strfreev (dirs);
+    }
   theme->dirs = g_list_reverse (theme->dirs);
 
   themes = g_key_file_get_string_list (theme_file,

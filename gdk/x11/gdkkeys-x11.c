@@ -255,7 +255,10 @@ get_xkb (GdkKeymapX11 *keymap_x11)
     {
       keymap_x11->xkb_desc = XkbGetMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask | XkbModifierMapMask | XkbVirtualModsMask, XkbUseCoreKbd);
       if (keymap_x11->xkb_desc == NULL)
-	g_error ("Failed to get keymap");
+        {
+	  g_error ("Failed to get keymap");
+          return NULL;
+        }
 
       XkbGetNames (xdisplay, XkbGroupNamesMask | XkbVirtualModNamesMask, keymap_x11->xkb_desc);
 
