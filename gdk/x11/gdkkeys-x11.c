@@ -1015,36 +1015,20 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
           ++i;
         }
     }
+
+  *n_entries = 0;
+
+  if (keys)
+    {
+      *n_entries = key_array->len;
+      *keys = (GdkKeymapKey*) g_array_free (key_array, FALSE);
+    }
   
-  if ((key_array && key_array->len > 0) ||
-      (keyval_array && keyval_array->len > 0))
+  if (keyvals)
     {
-      if (keys)
-        *keys = (GdkKeymapKey*) key_array->data;
-
-      if (keyvals)
-        *keyvals = (guint*) keyval_array->data;
-
-      if (key_array)
-        *n_entries = key_array->len;
-      else
-        *n_entries = keyval_array->len;
+      *n_entries = keyval_array->len;
+      *keyvals = (guint*) g_array_free (keyval_array, FALSE);
     }
-  else
-    {
-      if (keys)
-        *keys = NULL;
-
-      if (keyvals)
-        *keyvals = NULL;
-      
-      *n_entries = 0;
-    }
-
-  if (key_array)
-    g_array_free (key_array, key_array->len > 0 ? FALSE : TRUE);
-  if (keyval_array)
-    g_array_free (keyval_array, keyval_array->len > 0 ? FALSE : TRUE);
 
   return *n_entries > 0;
 }
