@@ -160,17 +160,17 @@ gdk_image_new_bitmap (GdkVisual *visual,
       private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen),
 				      xvisual, 1, XYBitmap,
 				      0, NULL, width, height, 8, 0);
+      private->ximage->data = data;
+      private->ximage->bitmap_bit_order = MSBFirst;
+      private->ximage->byte_order = MSBFirst;
     }
   
-  private->ximage->data = data;
-  private->ximage->bitmap_bit_order = MSBFirst;
-  private->ximage->byte_order = MSBFirst;
   image->byte_order = MSBFirst;
   image->mem =  private->ximage->data;
   image->bpl = private->ximage->bytes_per_line;
   image->bpp = 1;
-  return(image);
-} /* gdk_image_new_bitmap() */
+  return image;
+} 
 
 void
 _gdk_windowing_image_init (GdkDisplay *display)
