@@ -1859,7 +1859,7 @@ find_menu_position (GNode      *node,
 	  break;
 	case NODE_TYPE_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
-	  g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
+	  g_return_if_fail (GTK_IS_MENU_SHELL (menushell));
 	  pos = g_list_index (GTK_MENU_SHELL (menushell)->children,
 			      NODE_INFO (parent)->proxy) + 1;
 	  break;
@@ -2244,47 +2244,43 @@ update_node (GtkUIManager *self,
 	/* create proxy if needed ... */
 	if (info->proxy == NULL)
 	  {
-	    GtkWidget *menushell;
-	    gint pos;
+	    GtkWidget *tearoff;
+	    GtkWidget *filler;
 	    
-	    if (!
-	    if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM ||
-		find_menu_position (node, &menushell, &pos))
+	    menu = gtk_menu_new ();
+	    gtk_widget_set_name (menu, info->name);
+	    tearoff = gtk_tearoff_menu_item_new ();
+	    gtk_widget_set_no_show_all (tearoff, TRUE);
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+	    filler = gtk_menu_item_new_with_label (_("Empty"));
+	    g_object_set_data (G_OBJECT (filler),
+			       I_("gtk-empty-menu-item"),
+			       GINT_TO_POINTER (TRUE));
+	    gtk_widget_set_sensitive (filler, FALSE);
+	    gtk_widget_set_no_show_all (filler, TRUE);
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
+	    
+	    if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
 	      {
-		GtkWidget *tearoff;
-		GtkWidget *filler;
+		info->proxy = menu;
+		g_object_ref_sink (info->proxy);
+		gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (NODE_INFO (node->parent)->proxy),
+					       menu);
+	      }
+	    else
+	      {
+		GtkWidget *menushell;
+		gint pos;
 		
-		menu = gtk_menu_new ();
-		gtk_widget_set_name (menu, info->name);
-		tearoff = gtk_tearoff_menu_item_new ();
-		gtk_widget_set_no_show_all (tearoff, TRUE);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
-		filler = gtk_menu_item_new_with_label (_("Empty"));
-		g_object_set_data (G_OBJECT (filler),
-				   I_("gtk-empty-menu-item"),
-				   GINT_TO_POINTER (TRUE));
-		gtk_widget_set_sensitive (filler, FALSE);
-		gtk_widget_set_no_show_all (filler, TRUE);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
-
-		if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
-		  {
-		    info->proxy = menu;
-		    g_object_ref_sink (info->proxy);
-		    gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (NODE_INFO (node->parent)->proxy),
-						   menu);
-		  }
-		else
-		  {
-		    info->proxy = gtk_action_create_menu_item (action);
-		    g_object_ref_sink (info->proxy);
-		    g_signal_connect (info->proxy, "notify::visible",
-				      G_CALLBACK (update_smart_separators), NULL);
-		    gtk_widget_set_name (info->proxy, info->name);
-		    
-		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
-		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
-		  }
+		find_menu_position (node, &menushell, &pos);
+		info->proxy = gtk_action_create_menu_item (action);
+		g_object_ref_sink (info->proxy);
+		g_signal_connect (info->proxy, "notify::visible",
+				  G_CALLBACK (update_smart_separators), NULL);
+		gtk_widget_set_name (info->proxy, info->name);
+		
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
+		gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
 	      }
 	  }
 	else
@@ -2352,26 +2348,24 @@ update_node (GtkUIManager *self,
 	  GtkWidget *menushell;
 	  gint pos;
 	  
-	  if (find_menu_position (node, &menushell, &pos))
-	    {
-	      info->proxy = gtk_separator_menu_item_new ();
-	      g_object_ref_sink (info->proxy);
-	      g_object_set_data (G_OBJECT (info->proxy),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-	      gtk_widget_set_no_show_all (info->proxy, TRUE);
-	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-				     NODE_INFO (node)->proxy, pos);
-	      
-	      info->extra = gtk_separator_menu_item_new ();
-	      g_object_ref_sink (info->extra);
-	      g_object_set_data (G_OBJECT (info->extra),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-	      gtk_widget_set_no_show_all (info->extra, TRUE);
-	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-				     NODE_INFO (node)->extra, pos+1);
-	    }
+	  find_menu_position (node, &menushell, &pos);
+	  info->proxy = gtk_separator_menu_item_new ();
+	  g_object_ref_sink (info->proxy);
+	  g_object_set_data (G_OBJECT (info->proxy),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	  gtk_widget_set_no_show_all (info->proxy, TRUE);
+	  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				 NODE_INFO (node)->proxy, pos);
+	  
+	  info->extra = gtk_separator_menu_item_new ();
+	  g_object_ref_sink (info->extra);
+	  g_object_set_data (G_OBJECT (info->extra),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	  gtk_widget_set_no_show_all (info->extra, TRUE);
+	  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				 NODE_INFO (node)->extra, pos+1);
 	}
       break;
     case NODE_TYPE_TOOLBAR_PLACEHOLDER:
@@ -2398,29 +2392,26 @@ update_node (GtkUIManager *self,
 	{
 	  GtkWidget *toolbar;
 	  gint pos;
+	  GtkToolItem *item;    
 	  
-	  if (find_toolbar_position (node, &toolbar, &pos))
-	    {
-	      GtkToolItem *item;
-	      
-	      item = gtk_separator_tool_item_new ();
-	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
-	      info->proxy = GTK_WIDGET (item);
-	      g_object_ref_sink (info->proxy);
-	      g_object_set_data (G_OBJECT (info->proxy),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-	      gtk_widget_set_no_show_all (info->proxy, TRUE);
-	      
-	      item = gtk_separator_tool_item_new ();
-	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos+1);
-	      info->extra = GTK_WIDGET (item);
-	      g_object_ref_sink (info->extra);
-	      g_object_set_data (G_OBJECT (info->extra),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-	      gtk_widget_set_no_show_all (info->extra, TRUE);
-	    }
+	  find_toolbar_position (node, &toolbar, &pos);
+	  item = gtk_separator_tool_item_new ();
+	  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
+	  info->proxy = GTK_WIDGET (item);
+	  g_object_ref_sink (info->proxy);
+	  g_object_set_data (G_OBJECT (info->proxy),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	  gtk_widget_set_no_show_all (info->proxy, TRUE);
+	  
+	  item = gtk_separator_tool_item_new ();
+	  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos+1);
+	  info->extra = GTK_WIDGET (item);
+	  g_object_ref_sink (info->extra);
+	  g_object_set_data (G_OBJECT (info->extra),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	  gtk_widget_set_no_show_all (info->extra, TRUE);
 	}
       break;
     case NODE_TYPE_MENUITEM:
@@ -2443,15 +2434,13 @@ update_node (GtkUIManager *self,
 	  GtkWidget *menushell;
 	  gint pos;
 	  
-	  if (find_menu_position (node, &menushell, &pos))
-	    {
-	      info->proxy = gtk_action_create_menu_item (action);
-	      g_object_ref_sink (info->proxy);
-	      gtk_widget_set_name (info->proxy, info->name);
-	      
-	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-				     info->proxy, pos);
-	    }
+	  find_menu_position (node, &menushell, &pos);
+	  info->proxy = gtk_action_create_menu_item (action);
+	  g_object_ref_sink (info->proxy);
+	  gtk_widget_set_name (info->proxy, info->name);
+	  
+	  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				 info->proxy, pos);
 	}
       else
 	{
@@ -2493,15 +2482,13 @@ update_node (GtkUIManager *self,
 	  GtkWidget *toolbar;
 	  gint pos;
 	  
-	  if (find_toolbar_position (node, &toolbar, &pos))
-	    {
-	      info->proxy = gtk_action_create_tool_item (action);
-	      g_object_ref_sink (info->proxy);
-	      gtk_widget_set_name (info->proxy, info->name);
-	      
-	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-				  GTK_TOOL_ITEM (info->proxy), pos);
-	    }
+	  find_toolbar_position (node, &toolbar, &pos);
+	  info->proxy = gtk_action_create_tool_item (action);
+	  g_object_ref_sink (info->proxy);
+	  gtk_widget_set_name (info->proxy, info->name);
+	  
+	  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
+			      GTK_TOOL_ITEM (info->proxy), pos);
 	}
       else
 	{
@@ -2527,7 +2514,8 @@ update_node (GtkUIManager *self,
 	  GtkWidget *toolbar;
 	  gint pos;
 	  gint separator_mode;
-	  
+	  GtkToolItem *item;
+
 	  if (GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy))
 	    {
 	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
@@ -2536,28 +2524,26 @@ update_node (GtkUIManager *self,
 	      info->proxy = NULL;
 	    }
 	  
-	  if (find_toolbar_position (node, &toolbar, &pos))
+	  find_toolbar_position (node, &toolbar, &pos);
+	  item  = gtk_separator_tool_item_new ();
+	  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
+	  info->proxy = GTK_WIDGET (item);
+	  g_object_ref_sink (info->proxy);
+	  gtk_widget_set_no_show_all (info->proxy, TRUE);
+	  if (info->expand)
 	    {
-	      GtkToolItem *item = gtk_separator_tool_item_new ();
-	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
-	      info->proxy = GTK_WIDGET (item);
-	      g_object_ref_sink (info->proxy);
-	      gtk_widget_set_no_show_all (info->proxy, TRUE);
-	      if (info->expand)
-		{
-		  gtk_tool_item_set_expand (GTK_TOOL_ITEM (item), TRUE);
-		  gtk_separator_tool_item_set_draw
-		    (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
-		  separator_mode = SEPARATOR_MODE_VISIBLE;
-		}
-		else
-		  separator_mode = SEPARATOR_MODE_SMART;
-
-	      g_object_set_data (G_OBJECT (info->proxy),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (separator_mode));
-	      gtk_widget_show (info->proxy);
+	      gtk_tool_item_set_expand (GTK_TOOL_ITEM (item), TRUE);
+	      gtk_separator_tool_item_set_draw
+		(GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
+	      separator_mode = SEPARATOR_MODE_VISIBLE;
 	    }
+	  else
+	    separator_mode = SEPARATOR_MODE_SMART;
+	  
+	  g_object_set_data (G_OBJECT (info->proxy),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (separator_mode));
+	  gtk_widget_show (info->proxy);
 	}
       else
 	{
@@ -2572,18 +2558,16 @@ update_node (GtkUIManager *self,
 	      info->proxy = NULL;
 	    }
 	  
-	  if (find_menu_position (node, &menushell, &pos))
-	    {
-	      info->proxy = gtk_separator_menu_item_new ();
-	      g_object_ref_sink (info->proxy);
-	      gtk_widget_set_no_show_all (info->proxy, TRUE);
-	      g_object_set_data (G_OBJECT (info->proxy),
-				 I_("gtk-separator-mode"),
-				 GINT_TO_POINTER (SEPARATOR_MODE_SMART));
-	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-				     info->proxy, pos);
-	      gtk_widget_show (info->proxy);
-	    }
+	  find_menu_position (node, &menushell, &pos);
+	  info->proxy = gtk_separator_menu_item_new ();
+	  g_object_ref_sink (info->proxy);
+	  gtk_widget_set_no_show_all (info->proxy, TRUE);
+	  g_object_set_data (G_OBJECT (info->proxy),
+			     I_("gtk-separator-mode"),
+			     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
+	  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				 info->proxy, pos);
+	  gtk_widget_show (info->proxy);
 	}
       break;
     case NODE_TYPE_ACCELERATOR:

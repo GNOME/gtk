@@ -1,3 +1,8 @@
+2006-04-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c: Make find_menu_position and
+	find_toolbar_position void.  (#338100)
+
 2006-04-12  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkkeys-quartz.c:
