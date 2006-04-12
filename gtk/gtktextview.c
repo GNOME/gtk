@@ -5637,8 +5637,6 @@ selection_motion_event_handler (GtkTextView    *text_view,
     }
   else 
     {
-      gint x, y;
-      GdkModifierType state;
       GtkTextIter cursor, start, end;
       GtkTextIter orig_start, orig_end;
       GtkTextBuffer *buffer;
