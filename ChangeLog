@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+        * gdk/x11/gdkimage-x11.c (gdk_image_new_bitmap): Handle
+        closed displays correctly.  (Coverity)
+
 	* contrib/gdk-pixbuf-xlib/Makefile.am:
 	* modules/engines/pixbuf/Makefile.am
 	* gdk-pixbuf/Makefile.am: Build fixes for Cygwin.  (#338262)
