@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkselection-x11.c (make_list): Make this work
+	for list == NULL.  (Coverity)
+
 	* gtk/gtktextlayout.c (gtk_text_layout_validate_yrange): 
 	Handle _gtk_text_line_get_data() returning NULL in all
 	cases.  (Coverity)
