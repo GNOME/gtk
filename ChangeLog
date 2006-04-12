@@ -1,3 +1,8 @@
+2006-04-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (start_element_handler): Don't pass
+	a negative value as string length to get_child_node().  (Coverity)
+
 2006-04-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (get_xkb): Return early in error 

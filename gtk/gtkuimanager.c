@@ -1308,7 +1308,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (!strcmp (node_name, "separator"))
 	    {
 	      node_name = NULL;
-	      length = -1;
+	      length = 0;
 	    }
 	  else
 	    length = strlen (node_name);
