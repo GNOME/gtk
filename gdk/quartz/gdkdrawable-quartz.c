@@ -654,7 +654,8 @@ _gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef contex
       CGContextRestoreGState (context);
       CGContextSetAllowsAntialiasing (context, TRUE);
 
-      if (impl->in_paint_rect_count == 0)
+      if (impl->in_paint_rect_count == 0 &&
+	  impl->begin_paint_count == 0)
 	CGContextFlush (context);
 
       [impl->view unlockFocus];

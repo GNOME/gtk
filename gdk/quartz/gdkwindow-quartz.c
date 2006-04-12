@@ -172,6 +172,12 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
 
   impl->begin_paint_count --;
+
+  if (impl->begin_paint_count == 0)
+    {
+      gdk_region_destroy (impl->paint_clip_region);
+      impl->paint_clip_region = NULL;
+    }
 }
 
 static void

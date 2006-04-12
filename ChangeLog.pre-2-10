@@ -1,3 +1,13 @@
+2006-04-12  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/gdkdrawable-quartz.c:
+        (_gdk_quartz_drawable_release_context):
+        Don't flush if we're inside a begin_paint/end_paint pair.
+        
+        * gdk/quartz/gdkwindow-quartz.c:
+        (gdk_window_impl_quartz_end_paint):
+        Free clip region here.
+
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (start_element_handler): Don't pass
