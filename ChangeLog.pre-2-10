@@ -1,5 +1,9 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_validate_yrange): 
+	Handle _gtk_text_line_get_data() returning NULL in all
+	cases.  (Coverity)
+
 	* gtk/gtkuimanager.c: Make find_menu_position and
 	find_toolbar_position void.  (#338100)
 
