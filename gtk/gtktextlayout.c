@@ -942,7 +942,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           delta_height += new_height - old_height;
           
           first_line = line;
-          first_line_y = -seen - new_height
+          first_line_y = -seen - new_height;
           if (!last_line)
             {
               last_line = line;
