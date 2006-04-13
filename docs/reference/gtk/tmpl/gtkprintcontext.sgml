@@ -2,13 +2,26 @@
 GtkPrintContext
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Encapsulates context for drawing pages
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A GtkPrintContext encapsulates context information that is required when
+drawing pages for printing, such as the cairo context and important 
+parameters like page size and resolution. It also lets you easily
+create #PangoLayout and #PangoContext objects that match the font metrics 
+of the cairo surface.
+</para>
+<para>
+GtkPrintContext objects gets passed to the ::begin-print, ::end-print, 
+::request-page-setup and ::draw-page signals on the #GtkPrintOperation.
 </para>
 
+<!-- TODO short example here -->
+
+<para>
+Printing support was added in GTK+ 2.10.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

@@ -1,5 +1,6 @@
 2006-04-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkprintsettings.sgml:
 	* gtk/tmpl/gtkprintcontext.sgml:
 	* gtk/tmpl/gtkprintoperation.sgml: Add some docs
 
