@@ -1,3 +1,8 @@
+2006-04-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_header_focus): Reorganize slightly
+	to avoid a possible NULL pointer dereference.  (Coverity)
+
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_arrow_xrange): Don't

@@ -6858,9 +6858,10 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
     {
       for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
 	if (GTK_TREE_VIEW_COLUMN (tmp_list->data)->button == focus_child)
-	  break;
-
-      tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+	  {
+	    tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+	    break;
+	  }
 
       /* If the following isn't true, then the view is smaller then the scrollpane.
        */
