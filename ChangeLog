@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_get_arrow_xrange): Don't
+	allow passing NULL for x1 or x2, adjust callers.
+
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_get_neighbor_sizes): 
 	Reorganize to avoid a possible NULL pointer dereference.  (Coverity)
 	
