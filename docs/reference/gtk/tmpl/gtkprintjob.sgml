@@ -1,0 +1,130 @@
+<!-- ##### SECTION Title ##### -->
+GtkPrintJob
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPrintJob ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+@priv: 
+@print_pages: 
+@page_ranges: 
+@num_page_ranges: 
+@page_set: 
+@num_copies: 
+@collate: 
+@reverse: 
+@scale: 
+@rotate_to_orientation: 
+
+<!-- ##### USER_FUNCTION GtkPrintJobCompleteFunc ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@user_data: 
+@error: 
+
+
+<!-- ##### FUNCTION gtk_print_job_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@printer: 
+@settings: 
+@page_setup: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_settings ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_printer ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_title ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_status ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_set_source_file ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_surface ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_send ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@callback: 
+@user_data: 
+@dnotify: 
+@error: 
+@Returns: 
+
+

@@ -1,3 +1,7 @@
+2006-04-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintoperation.sgml: Add some docs
+
 2006-03-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-docs.sgml: 

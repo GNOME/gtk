@@ -1,0 +1,109 @@
+<!-- ##### SECTION Title ##### -->
+GtkPrinter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPrinter ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+@priv: 
+
+<!-- ##### FUNCTION gtk_printer_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_backend ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_name ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_state_message ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_location ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_icon_name ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_job_count ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_is_active ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_is_virtual ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+

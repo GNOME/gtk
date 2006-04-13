@@ -1,0 +1,74 @@
+<!-- ##### SECTION Title ##### -->
+GtkPrintUnixDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPrintUnixDialog ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+@priv: 
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@page_setup: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_current_page ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@current_page: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_settings ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@settings: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_settings ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_selected_printer ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
