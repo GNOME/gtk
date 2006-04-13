@@ -1,5 +1,8 @@
 2006-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_get_neighbor_sizes): 
+	Reorganize to avoid a possible NULL pointer dereference.  (Coverity)
+	
 	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Reorganize
 	to avoid a possible NULL dereference.  (Coverity)
 

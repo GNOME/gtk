@@ -3559,68 +3559,43 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 					  gint              *right)
 {
   GList *list;
-  gint *rtl_left, *rtl_right;
+  GtkTreeViewColumnCellInfo *info;
+  gint l, r;
+  gboolean rtl;
 
-  if (gtk_widget_get_direction (GTK_WIDGET (column->tree_view)) == GTK_TEXT_DIR_RTL)
+  l = r = 0;
+
+  list = gtk_tree_view_column_cell_first (column);  
+
+  while (list)
     {
-      rtl_left = right;
-      rtl_right = left;
-    }
-  else
-    {
-      rtl_left = left;
-      rtl_right = right;
-    }
+      info = (GtkTreeViewColumnCellInfo *)list->data;
+      
+      list = gtk_tree_view_column_cell_next (column, list);
 
-  if (rtl_left)
-    {
-      *rtl_left = 0;
-      list = gtk_tree_view_column_cell_first (column);
-
-      for (; list; list = gtk_tree_view_column_cell_next (column, list))
-        {
-	  GtkTreeViewColumnCellInfo *info =
-	    (GtkTreeViewColumnCellInfo *)list->data;
-
-	  if (info->cell == cell)
-	    break;
-
-	  if (info->cell->visible)
-	    *rtl_left += info->real_width;
-	}
+      if (info->cell == cell)
+	break;
+      
+      if (info->cell->visible)
+	l += info->real_width;
     }
 
-  if (rtl_right)
+  while (list)
     {
-      GList *next;
+      info = (GtkTreeViewColumnCellInfo *)list->data;
+      
+      list = gtk_tree_view_column_cell_next (column, list);
 
-      *rtl_right = 0;
-      list = gtk_tree_view_column_cell_first (column);
-
-      for (; list; list = gtk_tree_view_column_cell_next (column, list))
-        {
-	  GtkTreeViewColumnCellInfo *info =
-	    (GtkTreeViewColumnCellInfo *)list->data;
-
-	  if (info->cell == cell)
-	    break;
-	}
-
-      /* skip cell */
-      next = gtk_tree_view_column_cell_next (column, list);
-      if (list && next)
-        {
-	  list = next;
-	  for ( ; list; list = gtk_tree_view_column_cell_next (column, list))
-	    {
-	      GtkTreeViewColumnCellInfo *info =
-	        (GtkTreeViewColumnCellInfo *)list->data;
-
-	      if (info->cell->visible)
-	        *rtl_right += info->real_width;
-	    }
-	}
+      if (info->cell->visible)
+	r += info->real_width;
     }
+
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (column->tree_view)) == GTK_TEXT_DIR_RTL);
+  if (left)
+    *left = rtl ? r : l;
+
+  if (right)
+    *right = rtl ? l : r;
 }
 
 /**
