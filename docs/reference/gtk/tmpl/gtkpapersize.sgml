@@ -1,0 +1,262 @@
+<!-- ##### SECTION Title ##### -->
+GtkPaperSize
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPaperSize ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkUnit ##### -->
+<para>
+
+</para>
+
+@GTK_UNIT_PIXEL: 
+@GTK_UNIT_POINTS: 
+@GTK_UNIT_INCH: 
+@GTK_UNIT_MM: 
+
+<!-- ##### MACRO GTK_PAPER_NAME_A3 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_A4 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_A5 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_B5 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_LETTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_EXECUTIVE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PAPER_NAME_LEGAL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_paper_size_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_new_from_ppd ##### -->
+<para>
+
+</para>
+
+@ppd_name: 
+@ppd_display_name: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_new_custom ##### -->
+<para>
+
+</para>
+
+@name: 
+@display_name: 
+@width: 
+@height: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_copy ##### -->
+<para>
+
+</para>
+
+@other: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_free ##### -->
+<para>
+
+</para>
+
+@size: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_is_equal ##### -->
+<para>
+
+</para>
+
+@size1: 
+@size2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_name ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_display_name ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_ppd_name ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_width ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_height ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_is_custom ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_set_size ##### -->
+<para>
+
+</para>
+
+@size: 
+@width: 
+@height: 
+@unit: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_default_top_margin ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_default_bottom_margin ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_default_left_margin ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_default_right_margin ##### -->
+<para>
+
+</para>
+
+@size: 
+@unit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
