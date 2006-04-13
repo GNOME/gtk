@@ -7731,23 +7731,14 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
       else
 	x_offset += tree_view->priv->expander_size * _gtk_rbtree_get_depth (tree);
     }
-  if (x1)
-    {
-      *x1 = x_offset;
-    }
 
+  *x1 = x_offset;
+  
   if (tmp_column && tmp_column->visible)
-    {
-      /* +1 because x2 isn't included in the range. */
-      if (x2)
-        *x2 = *x1 + tree_view->priv->expander_size + 1;
-    }
+    /* +1 because x2 isn't included in the range. */
+    *x2 = *x1 + tree_view->priv->expander_size + 1;
   else
-    {
-      /* return an empty range, the expander column is hidden */
-      if (x2)
-        *x2 = *x1;
-    }
+    *x2 = *x1;
 }
 
 static void
@@ -8479,6 +8470,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   GtkStateType state;
   GtkWidget *widget;
   gint x_offset = 0;
+  gint x2;
   gint vertical_separator;
   gint expander_size;
   GtkExpanderStyle expander_style;
@@ -8493,7 +8485,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
 
   widget = GTK_WIDGET (tree_view);
 
-  gtk_tree_view_get_arrow_xrange (tree_view, tree, &x_offset, NULL);
+  gtk_tree_view_get_arrow_xrange (tree_view, tree, &x_offset, &x2);
 
   area.x = x_offset;
   area.y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);
