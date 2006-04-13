@@ -798,6 +798,11 @@ synthesize_enter_event (GdkWindow      *window,
 {
   GdkEvent *event;
 
+  if (_gdk_quartz_pointer_grab_window != NULL && 
+      !pointer_grab_owner_events && 
+      !(pointer_grab_event_mask & GDK_ENTER_NOTIFY_MASK))
+    return;
+
   if (!(GDK_WINDOW_OBJECT (window)->event_mask & GDK_ENTER_NOTIFY_MASK))
     return;
 
@@ -828,6 +833,11 @@ synthesize_leave_event (GdkWindow      *window,
 			GdkNotifyType   detail)
 {
   GdkEvent *event;
+
+  if (_gdk_quartz_pointer_grab_window != NULL && 
+      !pointer_grab_owner_events && 
+      !(pointer_grab_event_mask & GDK_LEAVE_NOTIFY_MASK))
+    return;
 
   if (!(GDK_WINDOW_OBJECT (window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
     return;
@@ -926,7 +936,7 @@ synthesize_crossing_events (GdkWindow      *window,
       /* Dunno where we are coming from */
       synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_UNKNOWN);
     }
-
+  
   _gdk_quartz_update_mouse_window (window);
 }
 
@@ -1060,9 +1070,9 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	GdkEventMask event_mask;
 	GdkWindow *real_window;
 
-	if (_gdk_quartz_pointer_grab_window)
+	if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
 	  {
-	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent)) 
+	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
 		int tempx, tempy;
 		GdkWindowObject *w = GDK_WINDOW_OBJECT (_gdk_quartz_pointer_grab_window);

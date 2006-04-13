@@ -1,3 +1,14 @@
+2006-04-13  Anders Carlsson  <andersca@imendio.com>
+
+        * gdk/quartz/gdkevents-quartz.c:
+        (synthesize_enter_event):
+        (synthesize_leave_event):
+        (synthesize_crossing_events):
+        Take grabs into account.
+
+        (find_window_for_event):
+        Only return grabbed window when owner_events is FALSE.
+
 2006-04-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_header_focus): Reorganize slightly
