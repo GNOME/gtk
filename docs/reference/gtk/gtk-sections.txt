@@ -6092,3 +6092,28 @@ GTK_PRINT_JOB_GET_CLASS
 GtkPrintJobPrivate
 gtk_print_job_get_type
 </SECTION>
+
+
+<SECTION>
+<FILE>gtkpagesetupunixdialog</FILE>
+<TITLE>GtkPageSetupUnixDialog</TITLE>
+GtkPageSetupUnixDialog
+gtk_page_setup_unix_dialog_new
+gtk_page_setup_unix_dialog_set_page_setup
+gtk_page_setup_unix_dialog_get_page_setup
+gtk_page_setup_unix_dialog_set_print_settings
+gtk_page_setup_unix_dialog_get_print_settings
+
+<SUBSECTION Standard>
+GtkPageSetupUnixDialogClass
+GTK_TYPE_PAGE_SETUP_UNIX_DIALOG
+GTK_PAGE_SETUP_UNIX_DIALOG
+GTK_PAGE_SETUP_UNIX_DIALOG_CLASS
+GTK_IS_PAGE_SETUP_UNIX_DIALOG
+GTK_IS_PAGE_SETUP_UNIX_DIALOG_CLASS
+GTK_PAGE_SETUP_UNIX_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkPageSetupUnixDialogPrivate
+gtk_page_setup_unix_dialog_get_type
+</SECTION>

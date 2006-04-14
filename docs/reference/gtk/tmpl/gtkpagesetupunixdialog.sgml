@@ -1,0 +1,73 @@
+<!-- ##### SECTION Title ##### -->
+GtkPageSetupUnixDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPageSetupUnixDialog ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_page_setup_unix_dialog_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_page_setup_unix_dialog_set_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@page_setup: 
+
+
+<!-- ##### FUNCTION gtk_page_setup_unix_dialog_get_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_page_setup_unix_dialog_set_print_settings ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@print_settings: 
+
+
+<!-- ##### FUNCTION gtk_page_setup_unix_dialog_get_print_settings ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
