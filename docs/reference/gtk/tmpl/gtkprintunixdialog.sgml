@@ -2,19 +2,33 @@
 GtkPrintUnixDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A print dialog 
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+GtkPrintUnixDialog implements a print dialog for platforms
+which don't provide a native print dialog, like Unix. It can 
+be used very much like any other GTK+ dialog, at the cost of 
+the portability offered by the <link 
+linkend="gtk-High-level-Printing-API">high-level printing API</link>
+</para>
+<para>
+In order to print something with #GtkPrintUnixDialog, you need
+to use gtk_print_unix_dialog_get_selected_printer() to obtain
+a #GtkPrinter object and use it to construct a #GtkPrintJob using
+gtk_print_job_new().
 </para>
 
+<!-- FIXME example here -->
+
+<para>
+Printing support was added in GTK+ 2.10.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkPageSetupUnixDialog, #GtkPrinter, #GtkPrintJob
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -24,8 +38,6 @@ GtkPrintUnixDialog
 
 </para>
 
-@parent_instance: 
-@priv: 
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_page_setup ##### -->
 <para>

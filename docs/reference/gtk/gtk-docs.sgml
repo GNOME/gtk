@@ -521,9 +521,9 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
       &GtkPrintSettings;
       &GtkPageSetup;
       &GtkPaperSize;
+      &GtkPrintUnixDialog;
       &GtkPrinter;
       &GtkPrintJob; 
-      &GtkPrintUnixDialog;
       &GtkPageSetupUnixDialog;
     </chapter>
 

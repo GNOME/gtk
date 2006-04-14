@@ -5834,6 +5834,7 @@ GtkPrintOperationPrivate
 
 
 <SECTION>
+<INCLUDE>gtk/gtkprintunixdialog.h</INCLUDE>
 <FILE>gtkprintunixdialog</FILE>
 <TITLE>GtkPrintUnixDialog</TITLE>
 GtkPrintUnixDialog
@@ -5861,15 +5862,18 @@ gtk_print_unix_dialog_get_type
 <FILE>gtkprinter</FILE>
 <TITLE>GtkPrinter</TITLE>
 GtkPrinter
+GtkPrintBackend
 gtk_printer_new
 gtk_printer_get_backend
 gtk_printer_get_name
 gtk_printer_get_state_message
+gtk_printer_get_description
 gtk_printer_get_location
 gtk_printer_get_icon_name
 gtk_printer_get_job_count
 gtk_printer_is_active
 gtk_printer_is_virtual
+gtk_printer_is_default
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINTER
@@ -6095,6 +6099,7 @@ gtk_print_job_get_type
 
 
 <SECTION>
+<INCLUDE>gtk/gtkpagesetupunixdialog.h</INCLUDE>
 <FILE>gtkpagesetupunixdialog</FILE>
 <TITLE>GtkPageSetupUnixDialog</TITLE>
 GtkPageSetupUnixDialog
