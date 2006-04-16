@@ -1,5 +1,8 @@
 2006-04-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.c (set_initial_hints ): Avoid a
+	possible array overrun.  (Coverity)
+
 	* gtk/gtkcalendar.c (gtk_calendar_key_press): Avoid a 
 	possible array overrun.  (Coverity)
 
