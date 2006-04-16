@@ -152,12 +152,36 @@ static guint signal_changed = 0;
 
 G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT);
 
-void
-filename_warning (const char *format, const char *filename, const char *message)
+static void
+filename_warning (const gchar *format, 
+                  const gchar *filename, 
+                  const gchar *message)
 {
-  char *utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gchar *utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
   g_warning (format, utf8 ? utf8 : "(invalid filename)", message);
   g_free (utf8);
+}
+
+/* Test of haystack has the needle prefix, comparing case
+ * insensitive. haystack may be UTF-8, but needle must
+ * contain only lowercase ascii. */
+static gboolean
+has_case_prefix (const gchar *haystack, 
+                 const gchar *needle)
+{
+  const gchar *h, *n;
+
+  /* Eat one character at a time. */
+  h = haystack;
+  n = needle;
+
+  while (*n && *h && *n == g_ascii_tolower (*h))
+    {
+      n++;
+      h++;
+    }
+
+  return *n == '\0';
 }
 
 GQuark
@@ -823,7 +847,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
   recent_data->description = NULL;
   
 #ifdef G_OS_UNIX
-  if (g_str_has_prefix (uri, "file://"))
+  if (has_case_prefix (uri, "file:/"))
     {
       gchar *filename;
       const gchar *mime_type;
@@ -2062,7 +2086,7 @@ gtk_recent_info_is_local (GtkRecentInfo *info)
 {
   g_return_val_if_fail (info != NULL, FALSE);
   
-  return g_str_has_prefix (info->uri, "file://");
+  return has_case_prefix (info->uri, "file:/");
 }
 
 /**
@@ -2203,7 +2227,7 @@ get_uri_shortname_for_display (const gchar *uri)
   gchar *name = NULL;
   gboolean validated = FALSE;
 
-  if (g_str_has_prefix (uri, "file://"))
+  if (has_case_prefix (uri, "file:/"))
     {
       gchar *local_file;
       

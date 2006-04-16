@@ -1,3 +1,9 @@
+2006-04-15  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkrecentmanager.c: Make filename_warning() static,
+	and use caseless matching when looking for file:/.  
+	(#336772, Morten Welinder)
+
 2006-04-13  Anders Carlsson  <andersca@imendio.com>
 
         * gdk/quartz/gdkevents-quartz.c:
