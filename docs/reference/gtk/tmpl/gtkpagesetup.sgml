@@ -13,7 +13,7 @@ The benefit of splitting this out of the #GtkPrintSettings is that
 these affect the actual layout of the page, and thus need to be set 
 long before user prints. 
 </para>
-<para>
+<para id="print-margins">
 The margins specified in this object are the "print margins", i.e. the 
 parts of the page that the printer cannot print on. These are different
 from the layout margins that a word processor uses; they are typically
@@ -25,16 +25,35 @@ To obtain a #GtkPageSetup use gtk_print_operation_get_default_page_setup()
 to get the defaults, or use gtk_print_run_page_setup_dialog() to show 
 the page setup dialog and receive the resulting page setup.
 </para>
+<informalexample><programlisting>
+static GtkPrintSettings *settings = NULL;
+static GtkPageSetup *page_setup = NULL;
+
+static void
+do_page_setup (void)
+{
+  GtkPageSetup *new_page_setup;
+
+  if (settings == NULL)
+    settings = gtk_print_settings_new (<!-- -->);
+
+  new_page_setup = gtk_print_run_page_setup_dialog (GTK_WINDOW (main_window),
+                                                    page_setup, settings);
+
+  if (page_setup)
+    g_object_unref (page_setup);
+
+  page_setup = new_page_setup;
+}
+</programlisting></informalexample>
 <para>
 Printing support was added in GTK+ 2.10.
 </para>
-
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
