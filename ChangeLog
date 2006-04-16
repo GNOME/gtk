@@ -1,5 +1,8 @@
 2006-04-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_key_press): Avoid a 
+	possible array overrun.  (Coverity)
+
 	* gtk/gtktextbuffer.c (_gtk_text_buffer_remove_all_tags):
 	Avoid a NULL dereference.  (Coverity)
 
