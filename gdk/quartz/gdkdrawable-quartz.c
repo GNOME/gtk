@@ -20,7 +20,7 @@
 
 #include <config.h>
 
-#include <cairo/cairo-quartz.h>
+#include <cairo-quartz.h>
 #include "gdkprivate-quartz.h"
 
 static gpointer parent_class;
