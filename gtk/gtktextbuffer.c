@@ -2514,7 +2514,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
   GtkTextIter first, second, tmp;
   GSList *tags;
   GSList *tmp_list;
-  GSList *prev;
+  GSList *prev, *next;
   GtkTextTag *tag;
   
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
@@ -2569,14 +2569,15 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
       if (tag == tmp_list->data)
         {
           /* duplicate */
+          next = tmp_list->next;
           if (prev)
-            prev->next = tmp_list->next;
+            prev->next = next;
 
           tmp_list->next = NULL;
 
           g_slist_free (tmp_list);
 
-          tmp_list = prev->next;
+          tmp_list = next;
           /* prev is unchanged */
         }
       else

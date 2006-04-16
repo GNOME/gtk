@@ -1,3 +1,8 @@
+2006-04-16  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtktextbuffer.c (_gtk_text_buffer_remove_all_tags):
+	Avoid a NULL dereference.  (Coverity)
+
 2006-04-15  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkrecentmanager.c: Make filename_warning() static,
