@@ -1250,7 +1250,7 @@ set_initial_hints (GdkWindow *window)
   Window xwindow = GDK_WINDOW_XID (window);  
   GdkWindowObject *private;
   GdkToplevelX11 *toplevel;
-  Atom atoms[7];
+  Atom atoms[9];
   gint i;
 
   private = (GdkWindowObject*) window;
