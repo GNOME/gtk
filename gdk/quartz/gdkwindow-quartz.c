@@ -952,35 +952,30 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   gint            *y,
 				   GdkModifierType *mask)
 {
-  if (window == _gdk_root)
-    {
-      g_error ("FIXME: support get_pointer with root window");
-    }
-  else
-    {
-      GdkWindow *toplevel = gdk_window_get_toplevel (window);
-      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-      NSWindow *nswindow = impl->toplevel;
-      NSPoint point = [nswindow mouseLocationOutsideOfEventStream];
-      int x_tmp, y_tmp;
+  GdkWindow *toplevel = gdk_window_get_toplevel (window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  NSWindow *nswindow = impl->toplevel;
+  NSPoint point = [nswindow mouseLocationOutsideOfEventStream];
+  int x_tmp, y_tmp;
 
-      /* First flip the y coordinate */
-      x_tmp = point.x;
-      y_tmp = impl->height - point.y;
+  /* FIXME: Might need to special-case window being the root window. */
+  
+  /* First flip the y coordinate */
+  x_tmp = point.x;
+  y_tmp = impl->height - point.y;
       
-      while (private != GDK_WINDOW_OBJECT (toplevel)) {
-	x_tmp -= private->x;
-	y_tmp -= private->y;
+  while (private != GDK_WINDOW_OBJECT (toplevel)) {
+    x_tmp -= private->x;
+    y_tmp -= private->y;
+    
+    private = private->parent;
+  }
 
-	private = private->parent;
-      }
-
-      if (x)
-	*x = x_tmp;
-      if (y)
-	*y = y_tmp;
-    }
+  if (x)
+    *x = x_tmp;
+  if (y)
+    *y = y_tmp;
 
   /* FIXME: Implement return value */
   return NULL;

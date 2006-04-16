@@ -275,15 +275,20 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
 {
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);
-  GdkDrawableImplQuartz *impl;
   GdkDrawableImplQuartz *src_impl;
-  
-  impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
 
   if (GDK_IS_DRAWABLE_IMPL_QUARTZ (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (src);
-  else
+  else if (GDK_IS_PIXMAP (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (src)->impl);
+  else if (GDK_IS_WINDOW (src))
+    {
+      src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_WINDOW_OBJECT (src)->impl);
+      /* FIXME: Implement drawing a window. */
+      return;
+    }
+  else
+    g_assert_not_reached ();
   
   if (src_depth == 1)
     {

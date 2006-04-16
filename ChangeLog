@@ -1,5 +1,13 @@
 2006-04-16  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkdrawable-quartz.c: (gdk_quartz_draw_drawable): Add check 
+	for source being a window.
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_get_pointer):
+	Don't assert on window not being the root window.
+
+2006-04-16  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkdrawable-quartz.c: Remove leading cairo/ in include.
 
 2006-04-16  Matthias Clasen <mclasen@redhat.com>
