@@ -2832,12 +2832,12 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_space:
       row = calendar->focus_row;
       col = calendar->focus_col;
-      day = calendar->day[row][col];
       
       if (row > -1 && col > -1)
 	{
 	  return_val = TRUE;
 
+          day = calendar->day[row][col];
 	  if (calendar->day_month[row][col] == MONTH_PREV)
 	    calendar_set_month_prev (calendar);
 	  else if (calendar->day_month[row][col] == MONTH_NEXT)
