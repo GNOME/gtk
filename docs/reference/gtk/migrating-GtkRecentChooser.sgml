@@ -64,7 +64,7 @@
         GtkRecentManager *manager;
         GError *error = NULL;
 
-	manager = gtk_recent_manager_new ();
+	manager = gtk_recent_manager_new (<!-- -->);
 
 	gtk_recent_manager_add_item (manager, document_uri, &amp;error);
 	if (error)
@@ -87,7 +87,7 @@
         GtkRecentData *recent_data;
 	GError *error = NULL;
 
-	manager = gtk_recent_manager_new ();
+	manager = gtk_recent_manager_new (<!-- -->);
 	
 	recent_data = g_new0 (GtkRecentData, 1);
 	/* the user visible name of the document (maybe its title); should
@@ -100,16 +100,16 @@
 
 	/* the name of the application that is registering the document
 	 * (also mandatory); usually, the same name you used with
-	 * the g_set_application_name() function.
+	 * the g_set_application_name (<!-- -->) function.
 	 */
 	recent_data-&amp;app_name = APP_NAME;
 
 	/* the command to open a file; the %u string will be automagically
 	 * expanded to the document's URI when getting the application's
 	 * command line from the GtkRecentInfo object with
-	 * gtk_recent_info_get_application_info()
+	 * gtk_recent_info_get_application_info (<!-- -->)
 	 */
-	recent_data-&amp;app_exec = g_strjoin (" ", g_get_prgname (), "--open-file", "%u", NULL);
+	recent_data-&amp;app_exec = g_strjoin (" ", g_get_prgname (<!-- -->), "--open-file", "%u", NULL);
 
 	gtk_recent_manager_add_full (manager, document_uri, recent_data, &amp;error);
 	if (error)
@@ -281,7 +281,7 @@
       <informalexample><programlisting>
         GtkRecentFilter *filter;
 
-	filter = gtk_recent_filter_new ();
+	filter = gtk_recent_filter_new (<!-- -->);
 	
 	/* set the user visible name of the filter */
 	gtk_recent_filter_set_name (filter, "Since Last Month");
@@ -295,7 +295,7 @@
 	/* set the currently used filter */
 	gtk_recent_chooser_set_filter (GTK_RECENT_CHOOSER (chooser), filter);
 
-	filter = gtk_recent_filter_new ();
+	filter = gtk_recent_filter_new (<!-- -->);
 	gtk_recent_filter_set_name (filter, "Every text file");
 	gtk_recent_filter_set_mime_type (filter, "text/plain");
 
