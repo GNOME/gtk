@@ -2,11 +2,14 @@
 GtkRecentChooserMenu
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Displays recently used files in a menu
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
+</para>
+<para>
+Recently used files are supported since GTK+ 2.10.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

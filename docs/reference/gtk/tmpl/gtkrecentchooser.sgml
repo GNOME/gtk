@@ -2,11 +2,14 @@
 GtkRecentChooser
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Interface implemented by GtkRecentChooserWidget, GtkRecentChooserMenu and GtkRecentChooserDialog
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
+</para>
+<para>
+Recently used files are supported since GTK+ 2.10.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
