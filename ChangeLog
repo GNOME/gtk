@@ -1,3 +1,9 @@
+2006-04-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_class_init): 
+	* gtk/gtkentry.c (gtk_entry_class_init): Fix typos
+	in property blurbs.  (#338772, Clytie Siddall)
+
 2006-04-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c: (gdk_quartz_draw_drawable): Add check 

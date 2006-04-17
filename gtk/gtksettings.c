@@ -535,7 +535,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 				   PROP_COLOR_HASH,
 				   g_param_spec_boxed ("color-hash",
 						       P_("Color Hash"),
-						       P_("A hash table resentation of the color scheme."),
+						       P_("A hash table representation of the color scheme."),
 						       G_TYPE_HASH_TABLE,
 						       GTK_PARAM_READABLE));
 

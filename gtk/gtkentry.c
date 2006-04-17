@@ -562,7 +562,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_INNER_BORDER,
                                    g_param_spec_boxed ("inner-border",
                                                        P_("Inner Border"),
-                                                       P_("Border between text and frame. Overrides the inner-border style propety"),
+                                                       P_("Border between text and frame. Overrides the inner-border style property"),
                                                        GTK_TYPE_BORDER,
                                                        GTK_PARAM_READWRITE));
 
