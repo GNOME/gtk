@@ -274,6 +274,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/multiline-text.png				\
 	$(srcdir)/images/notebook.png					\
 	$(srcdir)/images/panes.png					\
+	$(srcdir)/images/pagesetupdialog.png				\
+	$(srcdir)/images/printdialog.png				\
 	$(srcdir)/images/progressbar.png				\
 	$(srcdir)/images/radio-group.png				\
 	$(srcdir)/images/scales.png					\
