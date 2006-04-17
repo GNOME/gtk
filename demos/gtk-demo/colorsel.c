@@ -15,7 +15,9 @@ static GtkWidget *frame;
 /* Expose callback for the drawing area
  */
 static gboolean
-expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+expose_event_callback (GtkWidget      *widget, 
+                       GdkEventExpose *event, 
+                       gpointer        data)
 {
   if (widget->window)
     {

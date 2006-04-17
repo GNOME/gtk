@@ -1,3 +1,8 @@
+2006-04-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/colorsel.c (expose_event_callback): Small formatting
+	fix.
+
 2006-04-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkdnd.c: (gtk_drag_dest_set), (gtk_drag_dest_set_proxy): Fix
