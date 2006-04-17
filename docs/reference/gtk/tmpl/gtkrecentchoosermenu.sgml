@@ -6,15 +6,22 @@ Displays recently used files in a menu
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkRecentChooserMenu is a widget suitable for displaying recently used files
+inside a menu.  It can be used to set a sub-menu of a #GtkMenuItem using
+gtk_menu_item_set_submenu(), or as the menu of a #GtkMenuToolButton.
 </para>
+
+<para>
+Note that #GtkRecentChooserMenu does not have any methods of its own.  Instead,
+you should use the functions that work on a #GtkRecentChooser.
+
 <para>
 Recently used files are supported since GTK+ 2.10.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkRecentChooser
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->

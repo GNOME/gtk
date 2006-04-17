@@ -6,8 +6,63 @@ Managing Recently Used Files
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkRecentManager provides a facility for adding, removing and
+looking up recently used files.  Each recently used file is
+identified by its URI, and has meta-data associated to it, like
+the names and command lines of the applications that have
+registered it, the number of time each application has registered
+the same file, the mime type of the file and whether the file
+should be displayed only by the applications that have
+registered it.
 </para>
+
+<para>
+The #GtkRecentManager acts like a database of all the recently
+used files.  You can create new #GtkRecentManager objects, but
+it is more efficient to use the standard recent manager for
+the #GdkScreen so that informations about the recently used
+files is shared with other people using them.  In case the
+default screen is being used, adding a new recently used
+file is as simple as:
+</para>
+
+<informalexample>
+  <programlisting>
+GtkRecentManager *manager;
+GError *error = NULL;
+
+manager = gtk_recent_manager_get_default ();
+gtk_recent_manager_add_item (manager, file_uri, &amp;error);
+if (error)
+  {
+    g_warning ("Could not add the file: &percnt;s", error-&gt;message);
+    g_error_free (error);
+  }
+  </programlisting>
+</informalexample>
+
+While looking up a recently used file is as simple as:
+
+<informalexample>
+  <programlisting>
+GtkRecentManager *manager;
+GtkRecentInfo *info;
+GError *error = NULL;
+
+manager = gtk_recent_manager_get_default ();
+info = gtk_recent_manager_lookup_item (manager, file_uri, &amp;error);
+if (error)
+  {
+    g_warning ("Could not find the file: &percnt;s", error-&gt;message);
+    g_error_free (error);
+  }
+else
+  {
+    /* Use the info object */
+    g_object_unref (info);
+  }
+  </programlisting>
+</informalexample>
 
 <para>
 Recently used files are supported since GTK+ 2.10.
@@ -23,28 +78,39 @@ Recently used files are supported since GTK+ 2.10.
 
 <!-- ##### STRUCT GtkRecentManager ##### -->
 <para>
-
-</para>
+Acts as a database of information about the list of recently
+used files.  Normally, you retrieve the recent manager for a
+particular screen using gtk_recent_manager_get_for_screen()
+and it will contain information about current recent manager
+for that screen.</para>
 
 
 <!-- ##### STRUCT GtkRecentInfo ##### -->
 <para>
-
+Contains informations found when looking up an entry of the
+recently used files list.
 </para>
 
 
 <!-- ##### STRUCT GtkRecentData ##### -->
 <para>
-
+Meta-data passed to gtk_recent_manager_add_full().  You should
+use #GtkRecentData if you want to control the meta-data associated
+to an entry of the recently used files list when you are adding
+a new file to it.
 </para>
 
-@display_name: 
-@description: 
-@mime_type: 
-@app_name: 
-@app_exec: 
-@groups: 
-@is_private: 
+@display_name: the string to be used when displaying the file
+  inside a #GtkRecentChooser
+@description: a user readable description of the file
+@mime_type: the mime type of the file
+@app_name: the name of the application that is registering
+  the file
+@app_exec: the command line that should be used when launching
+  the file
+@groups: the list of group names to which the file belongs to
+@is_private: whether the file should be displayed only by
+  the applications that have registered it
 
 <!-- ##### MACRO GTK_RECENT_MANAGER_ERROR ##### -->
 <para>

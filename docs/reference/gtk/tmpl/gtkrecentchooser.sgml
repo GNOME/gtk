@@ -6,15 +6,20 @@ Interface implemented by GtkRecentChooserWidget, GtkRecentChooserMenu and GtkRec
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkRecentChooser is an interface that can be implemented by widgets
+displaying the list of recently used files.  In GTK+, the main objects
+that implement this interface are #GtkRecentChooserWidget,
+#GtkRecentChooserDialog and #GtkRecentChooserMenu.
 </para>
+
 <para>
 Recently used files are supported since GTK+ 2.10.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkRecentManager, #GtkRecentChooserDialog, #GtkRecentChooserWidget,
+#GtkRecentChooserMenu
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
@@ -47,20 +52,38 @@ Recently used files are supported since GTK+ 2.10.
 @item_activated: 
 @selection_changed: 
 
-<!-- ##### MACRO GTK_RECENT_CHOOSER_ERROR ##### -->
+
+<!-- ##### SIGNAL GtkRecentChooser::item-activated ##### -->
 <para>
 
+</para>
+
+@recentchooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkRecentChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@recentchooser: the object which received the signal.
+
+
+
+<!-- ##### MACRO GTK_RECENT_CHOOSER_ERROR ##### -->
+<para>
+Used to get the #GError quark for #GtkRecentChooser errors.
 </para>
 
 
 
 <!-- ##### ENUM GtkRecentChooserError ##### -->
 <para>
-
+These identify the various errors that can occur while calling
+#GtkRecentChooser functions.
 </para>
 
-@GTK_RECENT_CHOOSER_ERROR_NOT_FOUND: 
-@GTK_RECENT_CHOOSER_ERROR_INVALID_URI: 
+@GTK_RECENT_CHOOSER_ERROR_NOT_FOUND: Indicates that a file does not exist
+@GTK_RECENT_CHOOSER_ERROR_INVALID_URI: Indicates a malformed URI
 
 <!-- ##### FUNCTION gtk_recent_chooser_set_show_private ##### -->
 <para>
