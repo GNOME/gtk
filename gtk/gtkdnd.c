@@ -1085,6 +1085,7 @@ gtk_drag_dest_set   (GtkWidget            *widget,
   site->actions = actions;
   site->do_proxy = FALSE;
   site->proxy_window = NULL;
+  site->track_motion = FALSE;
 
   gtk_drag_dest_set_internal (widget, site);
 }
@@ -1125,6 +1126,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   site->do_proxy = TRUE;
   site->proxy_protocol = protocol;
   site->proxy_coords = use_coordinates;
+  site->track_motion = FALSE;
 
   gtk_drag_dest_set_internal (widget, site);
 }
