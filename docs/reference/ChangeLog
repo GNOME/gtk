@@ -1,5 +1,7 @@
 2006-04-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkprintcontext.sgml: Add an example
+
 	* gtk/images/pagesetupdialog.png:
 	* gtk/images/printdialog.png: New images
 	

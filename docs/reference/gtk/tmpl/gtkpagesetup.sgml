@@ -25,7 +25,9 @@ To obtain a #GtkPageSetup use gtk_print_operation_get_default_page_setup()
 to get the defaults, or use gtk_print_run_page_setup_dialog() to show 
 the page setup dialog and receive the resulting page setup.
 </para>
-<informalexample><programlisting>
+<example>
+<title>A page setup dialog</title>
+<programlisting>
 static GtkPrintSettings *settings = NULL;
 static GtkPageSetup *page_setup = NULL;
 
@@ -45,7 +47,8 @@ do_page_setup (void)
 
   page_setup = new_page_setup;
 }
-</programlisting></informalexample>
+</programlisting>
+</example>
 <para>
 Printing support was added in GTK+ 2.10.
 </para>

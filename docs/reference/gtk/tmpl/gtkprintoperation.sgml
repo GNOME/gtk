@@ -29,7 +29,9 @@ When the user finished the dialog various signals will be emitted on the
 to catch and render the page on the provided #GtkPrintContext using Cairo.
 </para>
 
-<informalexample><programlisting>
+<example>
+<title>The high-level printing API</title>
+<programlisting>
 static GtkPrintSettings *settings = NULL;
 
 static void
@@ -58,7 +60,8 @@ do_print (void)
   g_object_unref (print);
 }
 
-</programlisting></informalexample>
+</programlisting>
+</example>
 
 <para>
 Printing support was added in GTK+ 2.10.
