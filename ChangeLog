@@ -1,3 +1,21 @@
+2006-04-17  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (pending_select_paths_process):
+	Oops, we *do* need to check that we are in OPEN mode before
+	selecting the first row in the file list.  See
+	https://bugzilla.novell.com/show_bug.cgi?id=166906
+	(gtk_file_chooser_default_get_paths): If we are in the case for
+	the file list, and the list has no selected rows, jump to the case
+	for the filename entry.  This is so that
+
+	       1. The user types a filename in the SAVE filename entry
+	          ("foo.txt").
+
+	       2. He then double-clicks on a folder ("bar") in the file
+		  list.
+
+	will yield the expected "bar/foo.txt" selection.
+
 2006-03-29  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_init): Reduce the inter-button

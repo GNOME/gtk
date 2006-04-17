@@ -5464,8 +5464,14 @@ pending_select_paths_process (GtkFileChooserDefault *impl)
        * but rather on behalf of something else like GtkFileChooserButton.  In
        * that case, the chooser's selection should be what the caller expects,
        * as the user can't see that something else got selected.  See bug #165264.
+       *
+       * Also, we don't select the first file if we are not in OPEN mode.  Doing
+       * so would change the contents of the filename entry for SAVE or
+       * CREATE_FOLDER, which is undesired; in SELECT_FOLDER, we don't want to
+       * select a *different* folder from the one into which the user just
+       * navigated.
        */
-      if (GTK_WIDGET_MAPPED (impl))
+      if (GTK_WIDGET_MAPPED (impl) && impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	browse_files_select_first_row (impl);
     }
 
@@ -6052,6 +6058,17 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
       gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+
+      /* If there is no selection in the file list, we probably have this situation:
+       *
+       * 1. The user typed a filename in the SAVE filename entry ("foo.txt").
+       * 2. He then double-clicked on a folder ("bar") in the file list
+       *
+       * So we want the selection to be "bar/foo.txt".  Jump to the case for the
+       * filename entry to see if that is the case.
+       */
+      if (info.result == NULL && impl->location_entry)
+	goto file_entry;
     }
   else if (impl->location_entry && current_focus == impl->location_entry)
     {
