@@ -84,8 +84,8 @@ pixbuf = gtk_icon_theme_load_icon (icon_theme,
                                    &amp;error);
 if (!pixbuf)
   {
-    g_warning ("Couldn't load icon: &percnt;s", error->message);
-    g_error_free (message);
+    g_warning ("Couldn't load icon: &percnt;s", error-&gt;message);
+    g_error_free (error);
   }
 else
   {

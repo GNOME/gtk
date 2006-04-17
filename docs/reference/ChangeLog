@@ -1,5 +1,9 @@
 2006-04-17  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
+	* gtk/tmp/gtkicontheme.sgml: Fix the code of the look up example.
+
+2006-04-17  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
 	* gtk/tmpl/gtkrecent*.sgml: Add long descriptions.
 
 2006-04-16  Matthias Clasen  <mclasen@redhat.com>
