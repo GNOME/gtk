@@ -1,3 +1,9 @@
+2006-04-17  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* configure.in: Remove obsolete entry for no_NO
+	* po-properties/no.po: And the translation
+	* po/no.po: And the translation.
+
 2006-04-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/colorsel.c (expose_event_callback): Small formatting
