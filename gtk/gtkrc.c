@@ -105,7 +105,6 @@ struct _GtkRcFile
   guint  is_string : 1;	/* If TRUE, name is a string to parse with gtk_rc_parse_string() */
 };
 
-#define GTK_RC_MAX_PIXMAP_PATHS 128
 
 struct _GtkRcContext
 {
@@ -122,7 +121,7 @@ struct _GtkRcContext
   gchar *key_theme_name;
   gchar *font_name;
   
-  gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
+  gchar **pixmap_path;
 
   gint default_priority;
   GtkStyle *default_style;
@@ -702,7 +701,7 @@ gtk_rc_context_get (GtkSettings *settings)
 			G_CALLBACK (gtk_rc_color_hash_changed),
 			context);
 
-      context->pixmap_path[0] = NULL;
+      context->pixmap_path = NULL;
 
       context->default_priority = GTK_PATH_PRIO_RC;
 
@@ -3208,13 +3207,14 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
 
   GtkRcContext *context = gtk_rc_context_get (settings);
     
-  for (i = 0; (i < GTK_RC_MAX_PIXMAP_PATHS) && (context->pixmap_path[i] != NULL); i++)
-    {
-      filename = gtk_rc_check_pixmap_dir (context->pixmap_path[i], pixmap_file);
-      if (filename)
- 	return filename;
-    }
- 
+  if (context->pixmap_path)
+    for (i = 0; context->pixmap_path[i] != NULL; i++)
+      {
+	filename = gtk_rc_check_pixmap_dir (context->pixmap_path[i], pixmap_file);
+	if (filename)
+	  return filename;
+      }
+  
   tmp_list = current_files_stack;
   while (tmp_list)
     {
@@ -3793,44 +3793,8 @@ gtk_rc_parse_pixmap_path_string (GtkRcContext *context,
 				 GScanner     *scanner,
 				 const gchar  *pix_path)
 {
-  gint end_offset;
-  gint start_offset = 0;
-  gint path_len;
-  gint path_num;
-  
-  /* free the old one, or just add to the old one ? */
-  for (path_num = 0; context->pixmap_path[path_num]; path_num++)
-    {
-      g_free (context->pixmap_path[path_num]);
-      context->pixmap_path[path_num] = NULL;
-    }
-  
-  path_num = 0;
-  
-  path_len = strlen (pix_path);
-  
-  for (end_offset = 0; end_offset <= path_len; end_offset++)
-    {
-      if ((pix_path[end_offset] == G_SEARCHPATH_SEPARATOR) ||
-	  (end_offset == path_len))
-	{
-	  gchar *path_element = g_strndup (pix_path + start_offset, end_offset - start_offset);
-	  if (g_path_is_absolute (path_element))
-	    {
-	      context->pixmap_path[path_num] = path_element;
-	      path_num++;
-	      context->pixmap_path[path_num] = NULL;
-	    }
-	  else
-	    {
-	      g_warning (_("Pixmap path element: \"%s\" must be absolute, %s, line %d"),
-			 path_element, scanner->input_name, scanner->line);
-	      g_free (path_element);
-	    }
-
-	  start_offset = end_offset + 1;
-	}
-    }
+  g_strfreev (context->pixmap_path);
+  context->pixmap_path = g_strsplit (pix_path, G_SEARCHPATH_SEPARATOR_S, -1);
 }
 
 static guint

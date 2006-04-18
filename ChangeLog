@@ -1,5 +1,8 @@
 2006-04-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrc.c: Allocate pixmap_path dynamically, rather than
+	using a fixed array of size 128.
+
 	* gtk/gtkiconcache.c: Apply a patch by Paolo Borelli to factor
 	out a strip_suffix() function and save some memory.  (#338307)
 
