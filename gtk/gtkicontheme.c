@@ -1026,15 +1026,27 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
   g_slice_free (UnthemedIcon, unthemed_icon);
 }
 
+static char *
+strip_suffix (const char *filename)
+{
+  const char *dot;
+
+  dot = strrchr (filename, '.');
+
+  if (dot == NULL)
+    return g_strdup (filename);
+
+  return g_strndup (filename, dot - filename);
+}
+
 static void
 load_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv;
   GDir *gdir;
   int base;
-  char *dir, *base_name, *dot;
+  char *dir;
   const char *file;
-  char *abs_file;
   UnthemedIcon *unthemed_icon;
   IconSuffix old_suffix, new_suffix;
   GTimeVal tv;
@@ -1085,14 +1097,12 @@ load_themes (GtkIconTheme *icon_theme)
 	  
 	  if (new_suffix != ICON_SUFFIX_NONE)
 	    {
+	      char *abs_file;
+	      char *base_name;
+
 	      abs_file = g_build_filename (dir, file, NULL);
-	      
-	      base_name = g_strdup (file);
-	      
-	      dot = strrchr (base_name, '.');
-	      if (dot)
-		*dot = 0;
-	      
+	      base_name = strip_suffix (file);
+
 	      if ((unthemed_icon = g_hash_table_lookup (priv->unthemed_icons,
 							base_name)))
 		{
@@ -2161,9 +2171,6 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 {
   GDir *gdir;
   const char *name;
-  char *base_name, *dot;
-  char *path;
-  IconSuffix suffix, hash_suffix;
 
   GTK_NOTE (ICONTHEME, 
 	    g_print ("scanning directory %s\n", full_dir));
@@ -2177,6 +2184,10 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 
   while ((name = g_dir_read_name (gdir)))
     {
+      char *path;
+      char *base_name;
+      IconSuffix suffix, hash_suffix;
+
       if (g_str_has_suffix (name, ".icon"))
 	{
 	  if (dir->icon_data == NULL)
@@ -2195,11 +2206,9 @@ scan_directory (GtkIconThemePrivate *icon_theme,
       suffix = suffix_from_name (name);
       if (suffix == ICON_SUFFIX_NONE)
 	continue;
-      
-      base_name = g_strdup (name);
-      dot = strrchr (base_name, '.');
-      *dot = 0;
-      
+
+      base_name = strip_suffix (name);
+
       hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
       g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix| suffix));
       g_hash_table_insert (icon_theme->all_icons, base_name, NULL);
