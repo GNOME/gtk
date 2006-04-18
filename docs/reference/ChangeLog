@@ -1,3 +1,12 @@
+2006-04-18  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/tmpl/gtkpagesetup.sgml:
+	gtk_print_operation_get_default_page_setup() doesn't get the default
+	like that.
+	
+	* gtk/tmpl/gtkprintjob.sgml:
+	Better description of the typical use of gtk_print_job_set_source_file
+
 2006-04-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkprintcontext.sgml: Add an example

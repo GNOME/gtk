@@ -21,7 +21,7 @@ used to determine the <emphasis>minimal</emphasis> size for the layout
 margins.
 </para>
 <para>
-To obtain a #GtkPageSetup use gtk_print_operation_get_default_page_setup()
+To obtain a #GtkPageSetup use gtk_page_setup_new()
 to get the defaults, or use gtk_print_run_page_setup_dialog() to show 
 the page setup dialog and receive the resulting page setup.
 </para>
