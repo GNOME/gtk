@@ -5110,11 +5110,8 @@ gtk_notebook_pages_allocate (GtkNotebook              *notebook,
 
   while (children)
     {
-      page = children->data;
+      gtk_notebook_page_allocate (notebook, GTK_NOTEBOOK_PAGE (children));
       children = children->next;
-
-      if (GTK_WIDGET_DRAWABLE (page->tab_label))
-	gtk_notebook_page_allocate (notebook, page);
     }
 
   gtk_notebook_redraw_tabs (notebook);  

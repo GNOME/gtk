@@ -1,3 +1,9 @@
+2006-04-18  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): removed wrong
+	condition check that caused tab labels not to be drawn under certain
+	circumstances. Bug #338734.
+
 2006-04-17  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* configure.in: Remove obsolete entry for no_NO
