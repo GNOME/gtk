@@ -234,6 +234,7 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation  *op,
  * gtk_print_operation_set_default_page_setup().
  *
  * Returns: the default page setup 
+ *
  * Since: 2.10
  */
 GtkPageSetup *
@@ -244,9 +245,21 @@ gtk_print_operation_get_default_page_setup (GtkPrintOperation  *op)
   return op->priv->default_page_setup;
 }
 
+
+/**
+ * gtk_print_operation_set_print_settings:
+ * @op: a #GtkPrintOperation
+ * @print_settings: #GtkPrintSettings, or %NULL
+ * 
+ * Sets the print settings for @op. This is typically used to
+ * re-establish print settings from a previous print operation,
+ * see gtk_print_operation_run().
+ *
+ * Since: 2.10
+ **/
 void
 gtk_print_operation_set_print_settings (GtkPrintOperation  *op,
-					GtkPrintSettings *print_settings)
+					GtkPrintSettings   *print_settings)
 {
   g_return_if_fail (op != NULL);
   g_return_if_fail (print_settings != NULL);
@@ -260,17 +273,41 @@ gtk_print_operation_set_print_settings (GtkPrintOperation  *op,
   op->priv->print_settings = print_settings;
 }
 
+/**
+ * gtk_print_operation_get_print_settings:
+ * @op: a #GtkPrintOperation
+ * 
+ * Returns the current print settings. 
+ *
+ * Note that the return value is %NULL until either 
+ * gtk_print_operation_set_print_settings() or 
+ * gtk_print_operation_run() have been called.
+ * 
+ * Return value: the current print settings of @op.
+ * 
+ * Since: 2.10
+ **/
 GtkPrintSettings *
-gtk_print_operation_get_print_settings (GtkPrintOperation  *op)
+gtk_print_operation_get_print_settings (GtkPrintOperation *op)
 {
   g_return_val_if_fail (op != NULL, NULL);
 
-  if (op->priv->print_settings)
-    return op->priv->print_settings;
-  
-  return NULL;
+  return op->priv->print_settings;
 }
 
+/**
+ * gtk_print_operation_set_job_name:
+ * @op: a #GtkPrintOperation
+ * @job_name: a string that identifies the print job
+ * 
+ * Sets the name of the print job. The name is used to identify 
+ * the job (e.g. in monitoring applications like eggcups). 
+ * 
+ * If you don't set a job name, GTK+ picks a default one by 
+ * numbering successive print jobs.
+ *
+ * Since: 2.10
+ **/
 void
 gtk_print_operation_set_job_name (GtkPrintOperation  *op,
 				  const char         *job_name)
@@ -281,6 +318,19 @@ gtk_print_operation_set_job_name (GtkPrintOperation  *op,
   op->priv->job_name = g_strdup (job_name);
 }
 
+/**
+ * gtk_print_operation_set_nr_of_pages:
+ * @op: a #GtkPrintOperation
+ * @n_pages: the number of pages
+ * 
+ * Sets the number of pages to be printed out. 
+ *
+ * This <emphasis>must</emphasis> be set to a positive number
+ * before the print dialog is shown. It may be set in a
+ * ::begin-print signal hander.
+ *
+ * Since: 2.10
+ **/
 void
 gtk_print_operation_set_nr_of_pages (GtkPrintOperation  *op,
 				     int                 n_pages)
