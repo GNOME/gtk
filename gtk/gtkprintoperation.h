@@ -66,18 +66,18 @@ struct _GtkPrintOperationClass
 {
   GObjectClass parent_class;
   
-  void (*begin_print) (GtkPrintOperation *operation, GtkPrintContext *context);
+  void (*begin_print)        (GtkPrintOperation *operation, 
+                              GtkPrintContext   *context);
   void (*request_page_setup) (GtkPrintOperation *operation,
-			      GtkPrintContext *context,
-			      int page_nr,
-			      GtkPageSetup *setup);
-  void (*draw_page) (GtkPrintOperation *operation,
-		     GtkPrintContext *context,
-		     int page_nr);
-  void (*end_print) (GtkPrintOperation *operation,
-		     GtkPrintContext *context);
-
-  void (*status_changed) (GtkPrintOperation *operation);
+			      GtkPrintContext   *context,
+			      int                page_nr,
+			      GtkPageSetup      *setup);
+  void (*draw_page)          (GtkPrintOperation *operation,
+		              GtkPrintContext   *context,
+		              int                page_nr);
+  void (*end_print)          (GtkPrintOperation *operation,
+		              GtkPrintContext   *context);
+  void (*status_changed)     (GtkPrintOperation *operation);
   
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

@@ -1,5 +1,7 @@
 2006-04-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.h: Small formatting fixes.
+
 	* gtk/gtkprintoperation.c: Add some documentation.
 
 2006-04-17  Matthias Clasen  <mclasen@redhat.com>
