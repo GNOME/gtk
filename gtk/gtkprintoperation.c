@@ -424,6 +424,17 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
 }
 
 
+/**
+ * gtk_print_operation_get_status:
+ * @op: a #GtkPrintOperation
+ * 
+ * Returns the status of the print operation. 
+ * Also see gtk_print_operation_get_status_string().
+ * 
+ * Return value: the status of the print operation
+ *
+ * Since: 2.10
+ **/
 GtkPrintStatus
 gtk_print_operation_get_status (GtkPrintOperation  *op)
 {
@@ -432,6 +443,22 @@ gtk_print_operation_get_status (GtkPrintOperation  *op)
   return op->priv->status;
 }
 
+/**
+ * gtk_print_operation_get_status_string:
+ * @op: a #GtkPrintOperation
+ * 
+ * Returns a string representation of the status of the 
+ * print operation. The string is translated and suitable
+ * for displaying the print status e.g. in a #GtkStatusbar.
+ *
+ * Use gtk_print_operation_get_status() to obtain a status
+ * value that is suitable for programmatic use. 
+ * 
+ * Return value: a string representation of the status
+ *    of the print operation
+ *
+ * Since: 2.10
+ **/
 const char *
 gtk_print_operation_get_status_string (GtkPrintOperation  *op)
 {
@@ -440,6 +467,18 @@ gtk_print_operation_get_status_string (GtkPrintOperation  *op)
   return op->priv->status_string;
 }
 
+/**
+ * gtk_print_operation_is_finished:
+ * @op: a #GtkPrintOperation
+ * 
+ * A convenience function to find out if the print operation
+ * is finished, either successfully (%GTK_PRINT_STATUS_FINISHED)
+ * or unsuccessfully (%GTK_PRINT_STATUS_FINISHED_ABORTED).
+ * 
+ * Return value: %TRUE, if the print operation is finished.
+ *
+ * Since: 2.10
+ **/
 gboolean
 gtk_print_operation_is_finished (GtkPrintOperation  *op)
 {
