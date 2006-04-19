@@ -1,3 +1,8 @@
+2006-04-19  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (handle_special): Map VK_NUMPAD[0-9]
+	to GDK_KP_[0-9]. (#337562)
+
 2006-04-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.c: Allocate pixmap_path dynamically, rather than

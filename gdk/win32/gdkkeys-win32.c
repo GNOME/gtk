@@ -156,6 +156,26 @@ handle_special (guint  vk,
       *ksymp = GDK_KP_Subtract; break;
     case VK_DIVIDE:
       *ksymp = GDK_KP_Divide; break;
+    case VK_NUMPAD0:
+      *ksymp = GDK_KP_0; break;
+    case VK_NUMPAD1:
+      *ksymp = GDK_KP_1; break;
+    case VK_NUMPAD2:
+      *ksymp = GDK_KP_2; break;
+    case VK_NUMPAD3:
+      *ksymp = GDK_KP_3; break;
+    case VK_NUMPAD4:
+      *ksymp = GDK_KP_4; break;
+    case VK_NUMPAD5:
+      *ksymp = GDK_KP_5; break;
+    case VK_NUMPAD6:
+      *ksymp = GDK_KP_6; break;
+    case VK_NUMPAD7:
+      *ksymp = GDK_KP_7; break;
+    case VK_NUMPAD8:
+      *ksymp = GDK_KP_8; break;
+    case VK_NUMPAD9:
+      *ksymp = GDK_KP_9; break;
     case VK_F1:
       *ksymp = GDK_F1; break;
     case VK_F2:
