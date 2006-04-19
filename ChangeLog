@@ -1,3 +1,7 @@
+2006-04-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.c: Add some documentation.
+
 2006-04-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* docs/tools/widgets.c (get_all_widgets): Add print dialog

@@ -42,6 +42,15 @@ static int job_nr = 1;
 
 G_DEFINE_TYPE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT)
 
+/**
+ * gtk_print_error_quark:
+ *
+ * Registers an error quark for #GtkPrintOperation if necessary.
+ * 
+ * Return value: The error quark used for #GtkPrintOperation errors.
+ *
+ * Since: 2.10
+ **/
 GQuark     
 gtk_print_error_quark (void)
 {
@@ -116,6 +125,20 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
+
+  /**
+   * GtkPrintOperation::request-page-setup:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @context: the #GtkPrintContext for the current operation
+   * @page_nr: the number of the currently printed page
+   * @setup: the #GtkPageSetup 
+   * 
+   * Gets emitted before printing the @page_nr's page, to give
+   * the application a chance to modify @setup. Any changes done to 
+   * @setup will be in force only for printing this page.
+   *
+   * Since: 2.10
+   */
   signals[REQUEST_PAGE_SETUP] =
     g_signal_new ("request_page_setup",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -156,6 +179,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
                  G_TYPE_NONE, 0);
 }
 
+/**
+ * gtk_print_operation_new:
+ *
+ * Creates a new #GtkPrintOperation. 
+ *
+ * Returns: a new #GtkPrintOperation
+ *
+ * Since: 2.10
+ */
 GtkPrintOperation *
 gtk_print_operation_new ()
 {
@@ -166,6 +198,19 @@ gtk_print_operation_new ()
   return print_operation;
 }
 
+/**
+ * gtk_print_operation_set_default_page_setup:
+ * @op: a #GtkPrintOperation
+ * @default_page_setup: a #GtkPageSetup, or %NULL
+ * 
+ * Makes @default_page_setup the default page setup for @op.
+ *
+ * This page setup will be used by gtk_print_operation_run(),
+ * but it can be overridden on a per-page basis by connecting
+ * to the ::request-page-setup signal.
+ *
+ * Since: 2.10
+ **/
 void
 gtk_print_operation_set_default_page_setup (GtkPrintOperation  *op,
 					    GtkPageSetup    *default_page_setup)
@@ -181,6 +226,16 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation  *op,
   op->priv->default_page_setup = default_page_setup;
 }
 
+/**
+ * gtk_print_operation_get_default_page_setup:
+ * @op: a #GtkPrintOperation
+ *
+ * Returns the default page setup, see 
+ * gtk_print_operation_set_default_page_setup().
+ *
+ * Returns: the default page setup 
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_print_operation_get_default_page_setup (GtkPrintOperation  *op)
 {
@@ -346,7 +401,7 @@ gtk_print_operation_set_pdf_target (GtkPrintOperation  *op,
  *
  * PrintSettings returned from the print dialog
  *  (initial dialog values are set from default_page_setup
-     if unset in app specified print_settings)
+ *   if unset in app specified print_settings)
  * default_page_setup
  * per-locale default setup
  */
