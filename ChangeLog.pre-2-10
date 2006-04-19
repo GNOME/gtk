@@ -1,5 +1,9 @@
 2006-04-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (_gtk_print_operation_set_status): 
+	Call gettext on the status string, and don't leak
+	status strings.
+
 	* gtk/gtkprintoperation.h: Small formatting fixes.
 
 	* gtk/gtkprintoperation.c: Add some documentation.

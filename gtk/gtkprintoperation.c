@@ -117,6 +117,20 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
 
+  /**
+   * GtkPrintOperation::begin-print:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @context: the #GtkPrintContext for the current operation
+   *
+   * Gets emitted after the user has finished changing print settings
+   * in the dialog, before the actual printing starts. 
+   *
+   * A typical use for this signal is to use the parameters from the
+   * #GtkPrintContext and paginate the document accordingly, and then
+   * set the number of pages with gtk_print_operation_set_nr_of_pages().
+   *
+   * Since: 2.10
+   */
   signals[BEGIN_PRINT] =
     g_signal_new ("begin_print",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -133,9 +147,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @page_nr: the number of the currently printed page
    * @setup: the #GtkPageSetup 
    * 
-   * Gets emitted before printing the @page_nr's page, to give
-   * the application a chance to modify @setup. Any changes done to 
-   * @setup will be in force only for printing this page.
+   * Gets emitted once for every page that is printed, to give
+   * the application a chance to modify the page setup. Any changes 
+   * done to @setup will be in force only for printing this page.
    *
    * Since: 2.10
    */
@@ -367,33 +381,45 @@ gtk_print_operation_set_unit (GtkPrintOperation  *op,
 
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,
-				 GtkPrintStatus status,
-				 const char *string)
+				 GtkPrintStatus     status,
+				 const char        *string)
 {
-  const char *status_strs[] = {
-    N_("Initial state"),
-    N_("Preparing to print"),
-    N_("Generating data"),
-    N_("Sending data"),
-    N_("Waiting"),
-    N_("Blocking on issue"),
-    N_("Printing"),
-    N_("Finished"),
-    N_("Finished with error")
+  const gchar *status_strs[] = {
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Initial state"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Preparing to print"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Generating data"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Sending data"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Waiting"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Blocking on issue"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Printing"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Finished"),
+    /* translators, strip the prefix up to and including the first | */
+    N_("print operation status|Finished with error")
   };
 
   if (status < 0 || status > GTK_PRINT_STATUS_FINISHED_ABORTED)
     status = GTK_PRINT_STATUS_FINISHED_ABORTED;
-  
+
   if (string == NULL)
-    string = status_strs[status];
+    string = g_strip_context (status_strs[status],
+			      gettext (status_strs[status]));
   
   if (op->priv->status == status &&
       strcmp (string, op->priv->status_string) == 0)
     return;
-
-  op->priv->status = status;
+  
+  g_free (op->priv->status_string);
   op->priv->status_string = g_strdup (string);
+  op->priv->status = status;
+
   g_signal_emit (op, signals[STATUS_CHANGED], 0);
 }
 
