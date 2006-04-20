@@ -62,12 +62,14 @@ struct _GtkPrintUnixDialogClass
 
 GType		 gtk_print_unix_dialog_get_type	   (void) G_GNUC_CONST;
 GtkWidget *      gtk_print_unix_dialog_new         (const gchar *title,
-                                                    GtkWindow *parent);
+                                                    GtkWindow   *parent);
 
 void              gtk_print_unix_dialog_set_page_setup       (GtkPrintUnixDialog *dialog,
 							      GtkPageSetup       *page_setup);
+GtkPageSetup *    gtk_print_unix_dialog_get_page_setup       (GtkPrintUnixDialog *dialog);
 void              gtk_print_unix_dialog_set_current_page     (GtkPrintUnixDialog *dialog,
-							      int                 current_page);
+							      gint                current_page);
+gint              gtk_print_unix_dialog_get_current_page     (GtkPrintUnixDialog *dialog);
 void              gtk_print_unix_dialog_set_settings         (GtkPrintUnixDialog *dialog,
 							      GtkPrintSettings   *settings);
 GtkPrintSettings *gtk_print_unix_dialog_get_settings         (GtkPrintUnixDialog *dialog);

@@ -1,5 +1,9 @@
 2006-04-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkprintunixdialog.[hc]: Add properties, and some
+	missing getters.
+
 	* gtk/gtkprintoperation.c: Add properties.
 
 	* gtk/gtkprintoperation.c (gtk_print_operation_run): don't
