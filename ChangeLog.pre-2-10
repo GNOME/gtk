@@ -1,3 +1,16 @@
+2006-04-19  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkfilechooserbutton.c: _GtkFileChooserButtonPrivate:
+	Added has_title flag so we can remember whether a title has 
+	been set.
+	(gtk_file_chooser_button_constructor): If no title has been
+	set then set it to the default title. This means that the 
+	default title will be used if the dialog was instantiated with 
+	g_object_new(), without using the gtk_file_chooser_button_new() 
+	convenience function. This helps language bindings.
+	(gtk_file_chooser_button_set_property): Set has_title when 
+	setting the title.
+
 2006-04-19  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkkeys-win32.c (handle_special): Map VK_NUMPAD[0-9]
