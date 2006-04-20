@@ -66,6 +66,7 @@ create_combo_box_grid_demo (void)
 {
         GtkWidget *combo;
         GtkTreeIter iter;
+        GdkPixbuf *pixbuf;
         GtkCellRenderer *cell = gtk_cell_renderer_pixbuf_new ();
         GtkListStore *store;
 
@@ -80,52 +81,70 @@ create_combo_box_grid_demo (void)
                                       3);
 
         /* first row */
+        pixbuf = create_color_pixbuf ("red");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("red"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("green");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("green"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("blue");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("blue"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
         /* second row */
+        pixbuf = create_color_pixbuf ("yellow");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("yellow"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("black");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("black"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("white");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("white"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
         /* third row */
+        pixbuf = create_color_pixbuf ("gray");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("gray"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("snow");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("snow"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
+        pixbuf = create_color_pixbuf ("magenta");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, create_color_pixbuf ("magenta"),
+                            0, pixbuf,
                             -1);
+        g_object_unref (pixbuf);
 
         g_object_unref (store);
 

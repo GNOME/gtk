@@ -5000,6 +5000,8 @@ gtk_combo_box_finalize (GObject *object)
     }
    g_slist_free (combo_box->priv->cells);
 
+   g_free (combo_box->priv->tearoff_title);
+
    G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
