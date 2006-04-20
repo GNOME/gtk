@@ -1,9 +1,14 @@
+2006-04-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.c: Unify the use of
+	g_return_if_fail(), add more docs.
+
 2006-04-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c (_gtk_print_operation_set_status): 
 	Call gettext on the status string, and don't leak
 	status strings.
-
+o
 	* gtk/gtkprintoperation.h: Small formatting fixes.
 
 	* gtk/gtkprintoperation.c: Add some documentation.
