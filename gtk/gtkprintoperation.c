@@ -793,7 +793,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
-  g_return_val_if_fail (op->priv->nr_of_pages > 0, FALSE);
+  g_return_val_if_fail (op->priv->nr_of_pages > 0, GTK_PRINT_OPERATION_RESULT_ERROR);
 
   if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
     {

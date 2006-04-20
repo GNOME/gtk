@@ -1,5 +1,8 @@
 2006-04-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (gtk_print_operation_run): don't
+	return FALSE from a non-boolean function.
+
 	* gtk/gtkprintoperation.[hc]: Use G_CONST_RETURN and g types
 	in the api, add more docs.
 	
