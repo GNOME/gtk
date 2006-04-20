@@ -71,7 +71,7 @@ draw_page (GtkPrintOperation *operation,
   
   g_object_unref (layout);
 }
-<programlisting>
+</programlisting>
 </example>
 
 <para>
