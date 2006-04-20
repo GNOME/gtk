@@ -38,7 +38,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static int job_nr = 1;
+static int job_nr = 0;
 
 G_DEFINE_TYPE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT)
 
@@ -105,7 +105,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
 
   appname = g_get_application_name ();
   operation->priv->job_name = g_strdup_printf ("%s job #%d",
-					       appname, job_nr++);
+					       appname, ++job_nr);
 }
 
 static void
@@ -319,7 +319,7 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (print_settings == NULL || 
-                    GTK_IS_PRINT_SETTINGs (print_settings));
+                    GTK_IS_PRINT_SETTINGS (print_settings));
 
   if (print_settings)
     g_object_ref (print_settings);
@@ -367,7 +367,7 @@ gtk_print_operation_get_print_settings (GtkPrintOperation *op)
  **/
 void
 gtk_print_operation_set_job_name (GtkPrintOperation *op,
-				  const char        *job_name)
+				  const gchar       *job_name)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (g_utf8_validate (job_name, -1, NULL));
@@ -381,28 +381,52 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  * @op: a #GtkPrintOperation
  * @n_pages: the number of pages
  * 
- * Sets the number of pages to be printed out. 
+ * Sets the number of pages in the document. 
  *
  * This <emphasis>must</emphasis> be set to a positive number
  * before the print dialog is shown. It may be set in a
  * ::begin-print signal hander.
  *
+ * Note that the page numbers passed to the ::request-page-setup 
+ * and ::draw-page signals are 0-based, i.e. if the user chooses
+ * to print all pages, the last ::draw-page signal will be
+ * for page @n_pages - 1.
+ *
  * Since: 2.10
  **/
 void
 gtk_print_operation_set_nr_of_pages (GtkPrintOperation *op,
-				     int                n_pages)
+				     gint               n_pages)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+  g_return_if_fail (n_pages > 0);
+  g_return_if_fail (op->priv->current_page == -1 || 
+		    op->priv->current_page < n_pages);
 
   op->priv->nr_of_pages = n_pages;
 }
 
+/**
+ * gtk_print_operation_set_current_page:
+ * @op: a #GtkPrintOperation
+ * @current_page: the current page, 0-based
+ *
+ * Sets the current page.
+ * If this is called before gtk_print_operation_run(), 
+ * the user will be able to select to print only the current page.
+ *
+ * Note that this only makes sense for pre-paginated documents.
+ * 
+ * Since: 2.10
+ **/
 void
 gtk_print_operation_set_current_page (GtkPrintOperation *op,
-				      int                current_page)
+				      gint               current_page)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+  g_return_if_fail (current_page >= 0);
+  g_return_if_fail (op->priv->nr_of_pages == -1 || 
+		    current_page < op->priv->nr_of_pages);
 
   op->priv->current_page = current_page;
 }
@@ -428,7 +452,7 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,
 				 GtkPrintStatus     status,
-				 const char        *string)
+				 const gchar       *string)
 {
   const gchar *status_strs[] = {
     /* translators, strip the prefix up to and including the first | */
@@ -506,7 +530,7 @@ gtk_print_operation_get_status (GtkPrintOperation *op)
  *
  * Since: 2.10
  **/
-const char *
+G_CONST_RETURN gchar *
 gtk_print_operation_get_status_string (GtkPrintOperation *op)
 {
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), "");
@@ -537,6 +561,16 @@ gtk_print_operation_is_finished (GtkPrintOperation *op)
 }
 
 
+/**
+ * gtk_print_operation_set_show_dialog:
+ * @op: a #GtkPrintOperation
+ * @show_dialog: %TRUE to show the print dialog
+ * 
+ * Sets whether calling gtk_print_operation_run() will present
+ * a print dialog to the user, or just print to the default printer.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
 				     gboolean           show_dialog)
@@ -548,7 +582,7 @@ gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
 
 void
 gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
-				    const char *       filename)
+				    const gchar *      filename)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
@@ -759,7 +793,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
-  g_return_val_if_fail (op->priv->nr_of_pages != -1, FALSE);
+  g_return_val_if_fail (op->priv->nr_of_pages > 0, FALSE);
 
   if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
     {

@@ -70,11 +70,11 @@ struct _GtkPrintOperationClass
                               GtkPrintContext   *context);
   void (*request_page_setup) (GtkPrintOperation *operation,
 			      GtkPrintContext   *context,
-			      int                page_nr,
+			      gint               page_nr,
 			      GtkPageSetup      *setup);
   void (*draw_page)          (GtkPrintOperation *operation,
 		              GtkPrintContext   *context,
-		              int                page_nr);
+		              gint               page_nr);
   void (*end_print)          (GtkPrintOperation *operation,
 		              GtkPrintContext   *context);
   void (*status_changed)     (GtkPrintOperation *operation);
@@ -115,11 +115,11 @@ void                    gtk_print_operation_set_print_settings     (GtkPrintOper
 								    GtkPrintSettings   *print_settings);
 GtkPrintSettings *      gtk_print_operation_get_print_settings     (GtkPrintOperation  *op);
 void                    gtk_print_operation_set_job_name           (GtkPrintOperation  *op,
-								    const char         *job_name);
+								    const gchar        *job_name);
 void                    gtk_print_operation_set_nr_of_pages        (GtkPrintOperation  *op,
-								    int                 n_pages);
+								    gint                n_pages);
 void                    gtk_print_operation_set_current_page       (GtkPrintOperation  *op,
-								    int                 current_page);
+								    gint                current_page);
 void                    gtk_print_operation_set_use_full_page      (GtkPrintOperation  *op,
 								    gboolean            full_page);
 void                    gtk_print_operation_set_unit               (GtkPrintOperation  *op,
@@ -127,17 +127,17 @@ void                    gtk_print_operation_set_unit               (GtkPrintOper
 void                    gtk_print_operation_set_show_dialog        (GtkPrintOperation  *op,
 								    gboolean            show_dialog);
 void                    gtk_print_operation_set_pdf_target         (GtkPrintOperation  *op,
-								    const char         *filename);
+								    const gchar        *filename);
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
-const char *            gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
+G_CONST_RETURN gchar *  gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
 
-GtkPageSetup *gtk_print_run_page_setup_dialog (GtkWindow        *parent,
-					       GtkPageSetup     *page_setup,
-					       GtkPrintSettings *settings);
+GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
+								    GtkPageSetup       *page_setup,
+								    GtkPrintSettings   *settings);
 
 G_END_DECLS
 

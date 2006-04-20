@@ -1,7 +1,10 @@
 2006-04-20  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkprintoperation.c: Unify the use of
-	g_return_if_fail(), add more docs.
+	* gtk/gtkprintoperation.[hc]: Use G_CONST_RETURN and g types
+	in the api, add more docs.
+	
+	* gtk/gtkprintoperation.c: Unify the use of g_return_if_fail(), 
+	add more docs.
 
 2006-04-19  Matthias Clasen  <mclasen@redhat.com>
 
