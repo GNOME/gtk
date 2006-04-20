@@ -24,6 +24,7 @@
 #include "gtkmarshalers.h"
 #include <cairo-pdf.h>
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
@@ -35,6 +36,21 @@ enum {
   END_PRINT,
   STATUS_CHANGED,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_DEFAULT_PAGE_SETUP,
+  PROP_PRINT_SETTINGS,
+  PROP_JOB_NAME,
+  PROP_NR_OF_PAGES,
+  PROP_CURRENT_PAGE,
+  PROP_USE_FULL_PAGE,
+  PROP_UNIT,
+  PROP_SHOW_DIALOG,
+  PROP_PDF_TARGET,
+  PROP_STATUS,
+  PROP_STATUS_STRING
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -109,10 +125,104 @@ gtk_print_operation_init (GtkPrintOperation *operation)
 }
 
 static void
+gtk_print_operation_set_property (GObject      *object,
+				  guint         prop_id,
+				  const GValue *value,
+				  GParamSpec   *pspec)
+{
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_DEFAULT_PAGE_SETUP:
+      gtk_print_operation_set_default_page_setup (op, g_value_get_object (value));
+      break;
+    case PROP_PRINT_SETTINGS:
+      gtk_print_operation_set_print_settings (op, g_value_get_object (value));
+      break;
+    case PROP_JOB_NAME:
+      gtk_print_operation_set_job_name (op, g_value_get_string (value));
+      break;
+    case PROP_NR_OF_PAGES:
+      gtk_print_operation_set_nr_of_pages (op, g_value_get_int (value));
+      break;
+    case PROP_CURRENT_PAGE:
+      gtk_print_operation_set_current_page (op, g_value_get_int (value));
+      break;
+    case PROP_USE_FULL_PAGE:
+      gtk_print_operation_set_use_full_page (op, g_value_get_boolean (value));
+      break;
+    case PROP_UNIT:
+      gtk_print_operation_set_unit (op, g_value_get_enum (value));
+      break;
+    case PROP_SHOW_DIALOG:
+      gtk_print_operation_set_show_dialog (op, g_value_get_boolean (value));
+      break;
+    case PROP_PDF_TARGET:
+      gtk_print_operation_set_pdf_target (op, g_value_get_string (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_print_operation_get_property (GObject    *object,
+				  guint       prop_id,
+				  GValue     *value,
+				  GParamSpec *pspec)
+{
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_DEFAULT_PAGE_SETUP:
+      g_value_set_object (value, op->priv->default_page_setup);
+      break;
+    case PROP_PRINT_SETTINGS:
+      g_value_set_object (value, op->priv->print_settings);
+      break;
+    case PROP_JOB_NAME:
+      g_value_set_string (value, op->priv->job_name);
+      break;
+    case PROP_NR_OF_PAGES:
+      g_value_set_int (value, op->priv->nr_of_pages);
+      break;
+    case PROP_CURRENT_PAGE:
+      g_value_set_int (value, op->priv->current_page);
+      break;      
+    case PROP_USE_FULL_PAGE:
+      g_value_set_boolean (value, op->priv->use_full_page);
+      break;
+    case PROP_UNIT:
+      g_value_set_enum (value, op->priv->unit);
+      break;
+    case PROP_SHOW_DIALOG:
+      g_value_set_boolean (value, op->priv->show_dialog);
+      break;
+    case PROP_PDF_TARGET:
+      g_value_set_string (value, op->priv->pdf_target);
+      break;
+    case PROP_STATUS:
+      g_value_set_enum (value, op->priv->status);
+      break;
+    case PROP_STATUS_STRING:
+      g_value_set_string (value, op->priv->status_string);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_print_operation_class_init (GtkPrintOperationClass *class)
 {
   GObjectClass *gobject_class = (GObjectClass *)class;
 
+  gobject_class->set_property = gtk_print_operation_set_property;
+  gobject_class->get_property = gtk_print_operation_get_property;
   gobject_class->finalize = gtk_print_operation_finalize;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
@@ -231,6 +341,104 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
                  NULL, NULL,
                  g_cclosure_marshal_VOID__VOID,
                  G_TYPE_NONE, 0);
+
+  g_object_class_install_property (gobject_class,
+				   PROP_DEFAULT_PAGE_SETUP,
+				   g_param_spec_object ("default-page-setup",
+							P_("Default Page Setup"),
+							P_("The GtkPageSetup used by default"),
+							GTK_TYPE_PAGE_SETUP,
+							GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_PRINT_SETTINGS,
+				   g_param_spec_object ("print-settings",
+							P_("Print Settings"),
+							P_("The GtkPrintSettings used for initializing the dialog"),
+							GTK_TYPE_PRINT_SETTINGS,
+							GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_JOB_NAME,
+				   g_param_spec_string ("job-name",
+							P_("Job Name"),
+							P_("A string used for identifying the print job."),
+							"",
+							GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_NR_OF_PAGES,
+				   g_param_spec_int ("number-of-pages",
+						     P_("Number of Pages"),
+						     P_("The number of pages in the document."),
+						     -1,
+						     G_MAXINT,
+						     -1,
+						     GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_CURRENT_PAGE,
+				   g_param_spec_int ("current-page",
+						     P_("Current Page"),
+						     P_("The current page in the document."),
+						     -1,
+						     G_MAXINT,
+						     -1,
+						     GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_USE_FULL_PAGE,
+				   g_param_spec_boolean ("use-full-page",
+							 P_("Use full page"),
+							 P_(""),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+  
+
+  g_object_class_install_property (gobject_class,
+				   PROP_UNIT,
+				   g_param_spec_enum ("unit",
+						      P_("Unit"),
+						      P_(""),
+						      GTK_TYPE_UNIT,
+						      GTK_UNIT_PIXEL,
+						      GTK_PARAM_READWRITE));
+  
+
+  g_object_class_install_property (gobject_class,
+				   PROP_SHOW_DIALOG,
+				   g_param_spec_boolean ("show-dialog",
+							 P_("Show Dialog"),
+							 P_("%TRUE if gtk_print_operation_run() should show the print dialog."),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_JOB_NAME,
+				   g_param_spec_string ("pdf-target",
+							P_("PDF target filename"),
+							P_(""),
+							NULL,
+							GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_STATUS,
+				   g_param_spec_enum ("status",
+						      P_("Status"),
+						      P_("The status of the print operation"),
+						      GTK_TYPE_PRINT_STATUS,
+						      GTK_PRINT_STATUS_INITIAL,
+						      GTK_PARAM_READABLE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_STATUS_STRING,
+				   g_param_spec_string ("status-string",
+							P_("Status String"),
+							P_("A human-readable description of the status"),
+							"",
+							GTK_PARAM_READABLE));
+  
+
 }
 
 /**
@@ -273,13 +481,18 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
   g_return_if_fail (default_page_setup == NULL || 
                     GTK_IS_PAGE_SETUP (default_page_setup));
 
-  if (default_page_setup)
-    g_object_ref (default_page_setup);
-
-  if (op->priv->default_page_setup)
-    g_object_unref (op->priv->default_page_setup);
-
-  op->priv->default_page_setup = default_page_setup;
+  if (default_page_setup != op->priv->default_page_setup)
+    {
+      if (default_page_setup)
+	g_object_ref (default_page_setup);
+      
+      if (op->priv->default_page_setup)
+	g_object_unref (op->priv->default_page_setup);
+      
+      op->priv->default_page_setup = default_page_setup;
+     
+      g_object_notify (G_OBJECT (op), "default-page-setup");
+    }
 }
 
 /**
@@ -321,13 +534,18 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
   g_return_if_fail (print_settings == NULL || 
                     GTK_IS_PRINT_SETTINGS (print_settings));
 
-  if (print_settings)
-    g_object_ref (print_settings);
+  if (print_settings != op->priv->print_settings)
+    {
+      if (print_settings)
+        g_object_ref (print_settings);
 
-  if (op->priv->print_settings)
-    g_object_unref (op->priv->print_settings);
+      if (op->priv->print_settings)
+        g_object_unref (op->priv->print_settings);
   
-  op->priv->print_settings = print_settings;
+      op->priv->print_settings = print_settings;
+
+      g_object_notify (G_OBJECT (op), "print-settings");
+    }
 }
 
 /**
@@ -374,6 +592,8 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
 
   g_free (op->priv->job_name);
   op->priv->job_name = g_strdup (job_name);
+
+  g_object_notify (G_OBJECT (op), "job-name");
 }
 
 /**
@@ -403,7 +623,12 @@ gtk_print_operation_set_nr_of_pages (GtkPrintOperation *op,
   g_return_if_fail (op->priv->current_page == -1 || 
 		    op->priv->current_page < n_pages);
 
-  op->priv->nr_of_pages = n_pages;
+  if (op->priv->nr_of_pages != n_pages)
+    {
+      op->priv->nr_of_pages = n_pages;
+
+      g_object_notify (G_OBJECT (op), "number-of-pages");
+    }
 }
 
 /**
@@ -427,8 +652,13 @@ gtk_print_operation_set_current_page (GtkPrintOperation *op,
   g_return_if_fail (current_page >= 0);
   g_return_if_fail (op->priv->nr_of_pages == -1 || 
 		    current_page < op->priv->nr_of_pages);
+ 
+  if (op->priv->current_page != current_page)
+    {
+      op->priv->current_page = current_page;
 
-  op->priv->current_page = current_page;
+      g_object_notify (G_OBJECT (op), "current-page");
+    }
 }
 
 void
@@ -437,7 +667,14 @@ gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
-  op->priv->use_full_page = full_page;
+  full_page = full_page != FALSE;
+  
+  if (op->priv->use_full_page != full_page)
+    {
+      op->priv->use_full_page = full_page;
+   
+      g_object_notify (G_OBJECT (op), "use-full-page");
+    }
 }
 
 void
@@ -446,7 +683,12 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
-  op->priv->unit = unit;
+  if (op->priv->unit != unit)
+    {
+      op->priv->unit = unit;
+
+      g_object_notify (G_OBJECT (op), "unit");
+    }
 }
 
 void
@@ -489,6 +731,9 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
   g_free (op->priv->status_string);
   op->priv->status_string = g_strdup (string);
   op->priv->status = status;
+
+  g_object_notify (G_OBJECT (op), "status");
+  g_object_notify (G_OBJECT (op), "status-string");
 
   g_signal_emit (op, signals[STATUS_CHANGED], 0);
 }
@@ -576,8 +821,15 @@ gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
 				     gboolean           show_dialog)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+  
+  show_dialog = show_dialog != FALSE;
 
-  op->priv->show_dialog = show_dialog;
+  if (op->priv->show_dialog != show_dialog)
+    {
+      op->priv->show_dialog = show_dialog;
+
+      g_object_notify (G_OBJECT (op), "show-dialog");
+    }
 }
 
 void
@@ -588,6 +840,8 @@ gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
 
   g_free (op->priv->pdf_target);
   op->priv->pdf_target = g_strdup (filename);
+
+  g_object_notify (G_OBJECT (op), "pdf-target");
 }
 
 /* Creates the initial page setup used for printing unless the
