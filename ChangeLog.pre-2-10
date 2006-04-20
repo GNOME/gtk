@@ -1,3 +1,6 @@
+2006-04-19  Michael Emmel  <mike.emmel@gmail.com>
+	*gdk/directfb/gdkdrawable-directfb.c fixed off by one error in
+	clip patch from (#330824)
 2006-04-19  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkfilechooserbutton.c: _GtkFileChooserButtonPrivate:

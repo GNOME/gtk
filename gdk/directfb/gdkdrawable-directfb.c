@@ -597,8 +597,8 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
   GdkRegion               *clip;
   GdkRectangle             dest_rect = { xdest,
                                          ydest,
-                xdest + width  - 1,
-                ydest + height - 1 };
+                xdest + width ,
+                ydest + height};
 
   DFBRectangle rect = { xsrc, ysrc, width, height };
   gint i;
