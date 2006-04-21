@@ -40,8 +40,8 @@ struct _GtkPrintContext
   GtkPageSetup *page_setup;
   PangoFontMap *fontmap;
 
-  double pixels_per_unit_x, pixels_per_unit_y;
-  
+  gdouble pixels_per_unit_x;
+  gdouble pixels_per_unit_y;
 };
 
 struct _GtkPrintContextClass
@@ -129,7 +129,7 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
   cairo_t *cr = context->cr;
   cairo_matrix_t matrix;
   GtkPaperSize *paper_size;
-  double width, height;
+  gdouble width, height;
 
   paper_size = gtk_page_setup_get_paper_size (context->page_setup);
 
@@ -170,11 +170,10 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
     }
 }
 
-
 void
 _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 {
-  double left, top;
+  gdouble left, top;
 
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
 
@@ -190,7 +189,7 @@ _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 
 void
 _gtk_print_context_set_page_setup (GtkPrintContext *context,
-				   GtkPageSetup *page_setup)
+				   GtkPageSetup    *page_setup)
 {
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
   g_return_if_fail (page_setup == NULL ||
@@ -204,22 +203,61 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
   context->page_setup = page_setup;
 }
 
+/**
+ * gtk_print_context_get_cairo:
+ * @context: a #GtkPrintContext
+ *
+ * Obtains the cairo context that is associated with the
+ * #GtkPrintContext.
+ *
+ * Return value: the cairo context of @context
+ *
+ * Since: 2.10
+ */
 cairo_t *
 gtk_print_context_get_cairo (GtkPrintContext *context)
 {
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
+
   return context->cr;
 }
 
+/**
+ * gtk_print_context_get_page_setup:
+ * @context: a #GtkPrintContext
+ *
+ * Obtains the #GtkPageSetup that determines the page
+ * dimensions of the #GtkPrintContext.
+ *
+ * Return value: the page setup of @context
+ *
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_print_context_get_page_setup (GtkPrintContext *context)
 {
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
+
   return context->page_setup;
 }
 
-double
+/**
+ * gtk_print_context_get_width:
+ * @context: a #GtkPrintContext
+ *
+ * Obtains the width of the #GtkPrintContext, in pixels.
+ *
+ * Return value: the width of @context
+ *
+ * Since: 2.10 
+ */
+gdouble
 gtk_print_context_get_width (GtkPrintContext *context)
 {
-  double width;
+  gdouble width;
+
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
+
   if (context->op->priv->use_full_page)
     width = gtk_page_setup_get_paper_width (context->page_setup, GTK_UNIT_INCH);
   else
@@ -229,10 +267,23 @@ gtk_print_context_get_width (GtkPrintContext *context)
   return width * context->op->priv->dpi_x / context->pixels_per_unit_x;
 }
 
-double
+/**
+ * gtk_print_context_get_height:
+ * @context: a #GtkPrintContext
+ * 
+ * Obtains the width of the #GtkPrintContext, in pixels.
+ *
+ * Return value: the height of @context
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_print_context_get_height (GtkPrintContext *context)
 {
-  double height;
+  gdouble height;
+
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
+
   if (context->op->priv->use_full_page)
     height = gtk_page_setup_get_paper_height (context->page_setup, GTK_UNIT_INCH);
   else
@@ -242,42 +293,104 @@ gtk_print_context_get_height (GtkPrintContext *context)
   return height * context->op->priv->dpi_y / context->pixels_per_unit_y;
 }
 
-double
+/**
+ * gtk_print_context_get_dpi_x:
+ * @context: a #GtkPrintContext
+ * 
+ * Obtains the horizontal resolution of the #GtkPrintContext,
+ * in dots per inch.
+ *
+ * Return value: the horizontal resolution of @context
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_print_context_get_dpi_x (GtkPrintContext *context)
 {
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
+
   return context->op->priv->dpi_x;
 }
 
-double
+/**
+ * gtk_print_context_get_dpi_y:
+ * @context: a #GtkPrintContext
+ * 
+ * Obtains the vertical resolution of the #GtkPrintContext,
+ * in dots per inch.
+ *
+ * Return value: the vertical resolution of @context
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_print_context_get_dpi_y (GtkPrintContext *context)
 {
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
+
   return context->op->priv->dpi_y;
 }
 
-/* Fonts */
+/**
+ * gtk_print_context_get_fontmap:
+ * @context: a #GtkPrintContext
+ *
+ * Returns a #PangoFontMap that is suitable for use 
+ * with the #GtkPrintContext.
+ *
+ * Return value: the font map of @context
+ *
+ * Since: 2.10
+ */
 PangoFontMap *
 gtk_print_context_get_fontmap (GtkPrintContext *context)
 {
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
+
   return context->fontmap;
 }
 
+/**
+ * gtk_print_context_create_context:
+ * @context: a #GtkPrintContext 
+ *
+ * Creates a new #PangoContext that can be used with the
+ * #GtkPrintContext.
+ *
+ * Return value: a new Pango context for @context
+ * 
+ * Since: 2.10
+ */
 PangoContext *
 gtk_print_context_create_context (GtkPrintContext *context)
 {
   PangoContext *pango_context;
+
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
   
   pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (context->fontmap));
   
   return pango_context;
 }
 
+/**
+ * gtk_print_context_create_layout:
+ * @context: a #GtkPrintContext
+ *
+ * Creates a new #PangoLayout that is suitable for use
+ * with the #GtkPrintContext.
+ * 
+ * Return value: a new Pango layout for @context
+ *
+ * Since: 2.10
+ */
 PangoLayout *
 gtk_print_context_create_layout (GtkPrintContext *context)
 {
   PangoContext *pango_context;
   PangoLayout *layout;
 
-  g_return_val_if_fail (context != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
   pango_context = gtk_print_context_create_context (context);
   layout = pango_layout_new (pango_context);
@@ -287,6 +400,7 @@ gtk_print_context_create_layout (GtkPrintContext *context)
 
   return layout;
 }
+
 
 #define __GTK_PRINT_CONTEXT_C__
 #include "gtkaliasdef.c"

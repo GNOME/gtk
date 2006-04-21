@@ -1,3 +1,7 @@
+2006-04-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintcontext.[hc]: Use g types, add documentation.
+
 2006-04-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
