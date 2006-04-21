@@ -586,6 +586,70 @@
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gk.hi.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
@@ -597,8 +661,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-19 06:36+0200\n"
-"PO-Revision-Date: 2006-04-19 13:00+0530\n"
+"POT-Creation-Date: 2006-04-21 06:39+0200\n"
+"PO-Revision-Date: 2006-04-21 11:36+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -606,6 +670,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1293,11 +1358,11 @@ msgstr ""
 "प्रदर्शित करने के स्थान पर"
 
 #: ../gtk/gtkbutton.c:249 ../gtk/gtkcombobox.c:693
-#: ../gtk/gtkfilechooserbutton.c:362
+#: ../gtk/gtkfilechooserbutton.c:365
 msgid "Focus on click"
 msgstr "क्लिक पर फोकस"
 
-#: ../gtk/gtkbutton.c:250 ../gtk/gtkfilechooserbutton.c:363
+#: ../gtk/gtkbutton.c:250 ../gtk/gtkfilechooserbutton.c:366
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "क्या बटन फोकस पाता है जब यह माउस से क्लिक किया जाता है"
 
@@ -1861,7 +1926,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: ../gtk/gtkcellrenderertext.c:458 ../gtk/gtkfilechooserbutton.c:390
+#: ../gtk/gtkcellrenderertext.c:458 ../gtk/gtkfilechooserbutton.c:393
 #: ../gtk/gtklabel.c:456
 msgid "Width In Characters"
 msgstr "संप्रतीक में चौड़ाई"
@@ -2106,7 +2171,7 @@ msgstr "अल्फा का प्रयोग करें"
 msgid "Whether or not to give the color an alpha value"
 msgstr "अल्फा मूल्य को रंग दिया जाना है या नहीं"
 
-#: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkfilechooserbutton.c:376
+#: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkfilechooserbutton.c:379
 #: ../gtk/gtkfontbutton.c:175 ../gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "शीर्षक"
@@ -2212,7 +2277,6 @@ msgid "The model for the combo box"
 msgstr "कोंबो बॉक्स के लिये मॉडल"
 
 #: ../gtk/gtkcombobox.c:584
-#, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "ग्रिड में मद के लेआउट के लिये रैप चौडाई"
 
@@ -2265,11 +2329,10 @@ msgid "Tearoff Title"
 msgstr "टीयरऑफ शीर्षक"
 
 #: ../gtk/gtkcombobox.c:710
-#, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
-msgstr "जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विंडो प्रबंधक द्वारा शीर्षक प्रदर्शित किया जाएगा"
+msgstr "जब पॉपअप अलग कर दिया जाता है एक शीर्षक जिसे विंडो प्रबंधक द्वारा दिखाया जा सकता है"
 
 #: ../gtk/gtkcombobox.c:727
 msgid "Popup shown"
@@ -2486,9 +2549,8 @@ msgid "Truncate multiline"
 msgstr "बहुपंक्ति को काटें"
 
 #: ../gtk/gtkentry.c:641
-#, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
-msgstr "क्या एक से अधिक फ़ाइलों के चयन की अनुमति देना है"
+msgstr "क्या बहु पंक्ति पेस्ट एक पंक्ति में काटना है"
 
 #: ../gtk/gtkentry.c:908
 msgid "Border between text and frame."
@@ -2720,19 +2782,19 @@ msgid ""
 "dialog if necessary."
 msgstr ""
 
-#: ../gtk/gtkfilechooserbutton.c:345
+#: ../gtk/gtkfilechooserbutton.c:348
 msgid "Dialog"
 msgstr "संवाद"
 
-#: ../gtk/gtkfilechooserbutton.c:346
+#: ../gtk/gtkfilechooserbutton.c:349
 msgid "The file chooser dialog to use."
 msgstr "प्रयोग के लिये फाइल चयनक संवाद"
 
-#: ../gtk/gtkfilechooserbutton.c:377
+#: ../gtk/gtkfilechooserbutton.c:380
 msgid "The title of the file chooser dialog."
 msgstr "फाइल चयनक संवाद का शीर्षक"
 
-#: ../gtk/gtkfilechooserbutton.c:391
+#: ../gtk/gtkfilechooserbutton.c:394
 msgid "The desired width of the button widget, in characters."
 msgstr "संप्रतीक में बटन विजेट की इच्छित चौडाई"
 
@@ -2982,7 +3044,6 @@ msgid "Column Spacing"
 msgstr "कालम के बीच की दूरी"
 
 #: ../gtk/gtkiconview.c:661
-#, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "ग्रिड कॉलम के बीच दिया गया स्थान"
 
@@ -3137,14 +3198,13 @@ msgid "Justification"
 msgstr "औचित्य"
 
 #: ../gtk/gtklabel.c:353
-#, fuzzy
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 msgstr ""
-"एक दूसरे के सापेक्ष, लेबल के पाठ की पंक्तियों की पंक्तिबद्धता. यह लेबल की पंक्तिबद्धता को उसके "
-"एलोकेशन के भीतर प्रभावित नहीं करता. देखें GtkMisc::xalign इस हेतु."
+"एक दूसरे के सापेक्ष, लेबल के पाठ की पंक्तियों की पंक्तिकरण. यह लेबल की पंक्तिबद्धता को उसके "
+"संभाजन के भीतर प्रभावित नहीं करता. देखें GtkMisc::xalign इस हेतु."
 
 #: ../gtk/gtklabel.c:361
 msgid "Pattern"
@@ -3219,9 +3279,8 @@ msgid "The desired maximum width of the label, in characters"
 msgstr "संप्रतीक में लेबल का इच्छित अधिकतम चौड़ाई"
 
 #: ../gtk/gtklabel.c:633
-#, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr "जब कोई प्रविष्टि फोकस हो तब क्या उसके Contents को चयनित किया जाना है?"
+msgstr "जब यह फोकस हो तब क्या उसकी सामग्री को चयनित किया जाना है?"
 
 #: ../gtk/gtklayout.c:633 ../gtk/gtkviewport.c:137
 msgid "Horizontal adjustment"
@@ -3274,9 +3333,8 @@ msgid "Horizontal Padding"
 msgstr "क्षैतिज पैडिंग"
 
 #: ../gtk/gtkmenu.c:548
-#, fuzzy
 msgid "Extra space at the left and right edges of the menu"
-msgstr "विज़ेट के ऊपर नीचे जोड़ी जाने वाले रिक्त स्थान की मात्रा पिक्सल में"
+msgstr "मेनू के बांयें व दांयें किनारे पर अतिरिक्त स्थान"
 
 #: ../gtk/gtkmenu.c:556
 msgid "Vertical Offset"
@@ -3405,9 +3463,8 @@ msgid "Take Focus"
 msgstr "फोकस लें"
 
 #: ../gtk/gtkmenushell.c:378
-#, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विंडो प्रबंधक द्वारा शीर्षक प्रदर्शित किया जाएगा"
+msgstr "एक बुलियन जो निश्चित करता है कि क्या मेनू कुंजीपटल फोकस पकड़ता है"
 
 #: ../gtk/gtkmenutoolbutton.c:268 ../gtk/gtkoptionmenu.c:194
 msgid "Menu"
@@ -3450,18 +3507,16 @@ msgid "The buttons shown in the message dialog"
 msgstr "संदेश संवाद में प्रदर्शित बटनें"
 
 #: ../gtk/gtkmessagedialog.c:175
-#, fuzzy
 msgid "The primary text of the message dialog"
-msgstr "संदेश संवाद में प्रदर्शित बटनें"
+msgstr "संदेश संवाद का प्राथमिक पाठ"
 
 #: ../gtk/gtkmessagedialog.c:190
 msgid "Use Markup"
 msgstr "मार्कअप का प्रयोग करें"
 
 #: ../gtk/gtkmessagedialog.c:191
-#, fuzzy
 msgid "The primary text of the title includes Pango markup."
-msgstr "लेबल के पाठ में XML मार्कअप संयुक्त है, Pango-Parse.markup() देखें"
+msgstr "शीर्षक का प्राथमिक पाठ पैंगो चिह्न शामिल करता है."
 
 #: ../gtk/gtkmessagedialog.c:205
 msgid "Secondary Text"
@@ -3604,9 +3659,8 @@ msgid "Menu label"
 msgstr "मेनू लेबल"
 
 #: ../gtk/gtknotebook.c:633
-#, fuzzy
 msgid "The string displayed in the child's menu entry"
-msgstr "वह फ़ाइलनाम जो फ़ाइल प्रविष्टि में प्रदर्शित होता है"
+msgstr "संतति मेनू प्रविष्टि में प्रदर्शित स्ट्रिंग"
 
 #: ../gtk/gtknotebook.c:646
 msgid "Tab expand"
@@ -3621,9 +3675,8 @@ msgid "Tab fill"
 msgstr "टैब भरे"
 
 #: ../gtk/gtknotebook.c:654
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "फ़ाइलनाम प्रथमाक्षर सभी अल्फाबेटिक होने चाहिएँ."
+msgstr "क्या संतति का टैब संभाजित क्षेत्र भरता है या नहीं"
 
 #: ../gtk/gtknotebook.c:660
 msgid "Tab pack type"
@@ -3634,9 +3687,8 @@ msgid "Tab reorderable"
 msgstr "पुनः क्रम से करने योग्य टैब"
 
 #: ../gtk/gtknotebook.c:668
-#, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
-msgstr "क्या बार्डर को दर्शाया जाना है या नहीं"
+msgstr "क्या टैब उपयोक्ता क्रिया के द्वारा फिर क्रम करने योग्य है या नहीं"
 
 #: ../gtk/gtknotebook.c:674
 msgid "Tab detachable"
@@ -3716,7 +3768,7 @@ msgstr "सूचक के चारों ओर का रिक्त स्
 
 #: ../gtk/gtkpaned.c:249
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
+msgstr "पैन विभाजक की पिक्सेल में स्थिति (0 का मतलब बांयें/शीर्ष में सब तरफ से)"
 
 #: ../gtk/gtkpaned.c:257
 msgid "Position Set"
@@ -3819,9 +3871,8 @@ msgid "Adjustment"
 msgstr "समायोजन"
 
 #: ../gtk/gtkprogressbar.c:146
-#, fuzzy
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "प्रगति बार की दिशा तथा वृधी"
+msgstr "प्रगति पट्टी से जुड़ा GtkAdjustment (पदावनत)"
 
 #: ../gtk/gtkprogressbar.c:154
 msgid "Orientation and growth direction of the progress bar"
@@ -3833,7 +3884,7 @@ msgstr "बार का प्रकार"
 
 #: ../gtk/gtkprogressbar.c:163
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr ""
+msgstr "प्रतिशत मोड में पट्टी के दृश्य शैली निर्दिष्ट करता है (पदावनत)"
 
 #: ../gtk/gtkprogressbar.c:171
 msgid "Activity Step"
@@ -3880,9 +3931,8 @@ msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 
 #: ../gtk/gtkprogressbar.c:222
-#, fuzzy
 msgid "Text to be displayed in the progress bar"
-msgstr "वह फ़ाइलनाम जो फ़ाइल प्रविष्टि में प्रदर्शित होता है"
+msgstr "प्रगति बार में दिखाया जाने वाला पाठ"
 
 #: ../gtk/gtkprogressbar.c:244
 msgid ""
@@ -3906,9 +3956,8 @@ msgid "Group"
 msgstr "समूह"
 
 #: ../gtk/gtkradioaction.c:159
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "रेडियो उपकरण बटन जिसका समूह इस बटन से सम्बन्धित है."
+msgstr "रेडियो क्रिया जिसका समूह इस क्रिया का अवयव है."
 
 #: ../gtk/gtkradioaction.c:174
 msgid "The current value"
@@ -3921,14 +3970,12 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkradiobutton.c:115
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "रेडियो उपकरण बटन जिसका समूह इस बटन से सम्बन्धित है."
+msgstr "रेडियो बटन जिसका समूह इस बटन से सम्बन्धित है."
 
 #: ../gtk/gtkradiomenuitem.c:375
-#, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "रेडियो उपकरण बटन जिसका समूह इस बटन से सम्बन्धित है."
+msgstr "रेडियो मेनू मद जिसका समूह इस विजेट से सम्बन्धित है."
 
 #: ../gtk/gtkrange.c:338
 msgid "Update policy"
@@ -3999,9 +4046,8 @@ msgid "Stepper Spacing"
 msgstr "स्टेपर दूरी"
 
 #: ../gtk/gtkrange.c:405
-#, fuzzy
 msgid "Spacing between step buttons and thumb"
-msgstr "उपकरण-पट्टी छाया तथा बटनों के बीच बार्डर स्पेस की मात्रा"
+msgstr "स्टेप बटन व थंब के बीच स्थान"
 
 #: ../gtk/gtkrange.c:412
 msgid "Arrow X Displacement"
@@ -4160,23 +4206,20 @@ msgid "Window Placement"
 msgstr "विंडो स्थान निर्धारण"
 
 #: ../gtk/gtkscrolledwindow.c:285
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "स्क्रोलबार के सापेक्ष विषयवस्तु को कहां रखा जाना है"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "विंडो स्थान निर्धारण"
+msgstr "विंडो स्थान निर्धारण सेट"
 
 #: ../gtk/gtkscrolledwindow.c:303
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "स्क्रोलबार के सापेक्ष विषयवस्तु को कहां रखा जाना है"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:309
 msgid "Shadow Type"
@@ -4195,16 +4238,14 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "इस प्रविष्टि में कितने पिक्सल्स स्क्रीन के बायीं ओर स्क्रोल करता है"
 
 #: ../gtk/gtkscrolledwindow.c:333
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "विंडो स्थान निर्धारण"
+msgstr "स्क्रॉल विंडो स्थान निर्धारण"
 
 #: ../gtk/gtkscrolledwindow.c:334
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "स्क्रोलबार के सापेक्ष विषयवस्तु को कहां रखा जाना है"
+msgstr ""
 
 #: ../gtk/gtkseparatortoolitem.c:137
 msgid "Draw"
@@ -4231,12 +4272,11 @@ msgid "Double Click Distance"
 msgstr "दोहरा क्लिक दूरी"
 
 #: ../gtk/gtksettings.c:229
-#, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"दो क्लिक के बीच की अधिकतम समय सीमा (मिलीसेकन्ड में) जिससे दो-बार क्लिक (डबल क्लिक) को "
+"दो क्लिक के बीच की अधिकतम समय सीमा  जिससे दो-बार क्लिक (पिक्सेल में) को "
 "निर्धारित किया जा सके"
 
 #: ../gtk/gtksettings.c:236
@@ -4282,12 +4322,10 @@ msgid "Name of icon theme to use"
 msgstr "आइकन का नाम जिसे उपयोग में लेना है"
 
 #: ../gtk/gtksettings.c:278
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "चिह्न प्रसंग नाम"
+msgstr "फॉलबैक प्रतीक चिह्न प्रसंग नाम"
 
 #: ../gtk/gtksettings.c:279
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
 msgstr "आइकन का नाम जिसे उपयोग में लेना है"
 
@@ -4360,9 +4398,8 @@ msgid "Xft Hint Style"
 msgstr "Xft संकेत शैली"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
-msgstr "हिंटिंग का कौन डिग्री प्रयोग किया जाना है; कोई नहीं, थोड़ा कम, मध्यम, या पूरा"
+msgstr "हिंटिंग का कौन डिग्री प्रयोग किया जाना है; hintnone, hintslight, hintmedium, या hintfull"
 
 #: ../gtk/gtksettings.c:372
 msgid "Xft RGBA"
@@ -4385,18 +4422,16 @@ msgid "Cursor theme name"
 msgstr "कर्सर थीम नाम"
 
 #: ../gtk/gtksettings.c:393
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "उपयोग के लिये कर्सर थीम"
+msgstr "उपयोग के लिये कर्सर थीम का नाम, या मूलभूत के उपयोग के लिये रिक्त"
 
 #: ../gtk/gtksettings.c:401
 msgid "Cursor theme size"
 msgstr "कर्सर थीम आकार"
 
 #: ../gtk/gtksettings.c:402
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "कर्सर के प्रयोग के लिये आकार"
+msgstr "कर्सर के प्रयोग के लिये आकार, या 0 जिसे मूलभूत आकार में प्रयोग किया जाना है"
 
 #: ../gtk/gtksettings.c:412
 msgid "Alternative button order"
@@ -4408,7 +4443,7 @@ msgstr "क्या संवाद में बटन वैकल्पि�
 
 #: ../gtk/gtksettings.c:421
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "'इनपुट विधि' मेनू दिखायें"
 
 #: ../gtk/gtksettings.c:422
 msgid ""
@@ -4455,9 +4490,8 @@ msgid "Color scheme"
 msgstr "रंग योजना"
 
 #: ../gtk/gtksettings.c:490
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "प्रतीक थीम से प्रतीक का नाम"
+msgstr "विषय में प्रयोग के लिये नामित रंग का पैलेट"
 
 #: ../gtk/gtksettings.c:499
 msgid "Enable Animations"
@@ -4488,7 +4522,6 @@ msgid "Mode"
 msgstr "मोड"
 
 #: ../gtk/gtksizegroup.c:268
-#, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -4585,9 +4618,8 @@ msgid "Whether or not the status icon is blinking"
 msgstr "क्या स्थिति प्रतीक टिमटिमा रहा है कि नहीं"
 
 #: ../gtk/gtkstatusicon.c:206
-#, fuzzy
 msgid "Whether or not the status icon is visible"
-msgstr "क्या यह क्रिया दृश्य है"
+msgstr "क्या प्रस्थिति चिह्न दिखायी देता है या नहीं"
 
 #: ../gtk/gtktable.c:161
 msgid "Rows"
@@ -4638,18 +4670,16 @@ msgid "Right attachment"
 msgstr "दायां संलग्नक"
 
 #: ../gtk/gtktable.c:213
-#, fuzzy
 msgid "The column number to attach the right side of a child widget to"
-msgstr "विज़ेट के बांयी तथा दांयी ओर जोड़ी जाने वाली रिक्त स्थान की मात्रा पिक्सल में"
+msgstr "कॉलम संख्या जिसमें संतति विजेट के दांये हिस्से जोड़ा जाना है"
 
 #: ../gtk/gtktable.c:219
 msgid "Top attachment"
 msgstr "शीर्ष संलग्नक"
 
 #: ../gtk/gtktable.c:220
-#, fuzzy
 msgid "The row number to attach the top of a child widget to"
-msgstr "मेनू पाठ के आगे प्रस्तुत होने वाला चाइल्ड विज़ेट"
+msgstr "पंक्ति संख्या जिसमें चाइल्ड विज़ेट के शीर्ष जोड़ा जाना है"
 
 #: ../gtk/gtktable.c:226
 msgid "Bottom attachment"
@@ -4660,18 +4690,16 @@ msgid "Horizontal options"
 msgstr "क्षैतिज विकल्प"
 
 #: ../gtk/gtktable.c:234
-#, fuzzy
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr "चाइल्ड प्रक्रिया \"%s\" (%s) कार्यान्वित करने में असफल"
+msgstr "संतति के क्षैतिज आचरण बताता विकल्प"
 
 #: ../gtk/gtktable.c:240
 msgid "Vertical options"
 msgstr "लंबनत विकल्प"
 
 #: ../gtk/gtktable.c:241
-#, fuzzy
 msgid "Options specifying the vertical behaviour of the child"
-msgstr "चाइल्ड प्रक्रिया \"%s\" (%s) कार्यान्वित करने में असफल"
+msgstr "संतति के लंबवत आचरण निर्दिष्ट करता विकल्प"
 
 #: ../gtk/gtktable.c:247
 msgid "Horizontal padding"
@@ -4688,11 +4716,10 @@ msgid "Vertical padding"
 msgstr "लंबवत पैडिंग"
 
 #: ../gtk/gtktable.c:255
-#, fuzzy
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr "विज़ेट के बांयी तथा दांयी ओर जोड़ी जाने वाली रिक्त स्थान की मात्रा पिक्सल में"
+msgstr "अतिरिक्त स्थान जिसे संतति और इसके ऊपर व नीचे के पड़ोस में दिया जाना है, पिक्सेल में"
 
 #: ../gtk/gtktext.c:542
 msgid "Horizontal adjustment for the text widget"
@@ -4735,9 +4762,8 @@ msgid "Has selection"
 msgstr "चयन रखता है"
 
 #: ../gtk/gtktextbuffer.c:243
-#, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "GdkFont जो मौजूदा रूप से चयनित है"
+msgstr "क्या बफर में कुछ पाठ चयनित हैं"
 
 #: ../gtk/gtktextbuffer.c:258
 msgid "Copy target list"
@@ -4927,9 +4953,8 @@ msgid "Invisible"
 msgstr "अदृश्य"
 
 #: ../gtk/gtktexttag.c:533
-#, fuzzy
 msgid "Whether this text is hidden."
-msgstr "क्या यह टैग ऊंचाई को प्रभावित करेगा"
+msgstr "क्या यह पाठ छिपा है"
 
 #: ../gtk/gtktexttag.c:547
 msgid "Paragraph background color name"
@@ -5052,7 +5077,6 @@ msgid "Paragraph background set"
 msgstr "पैराग्राफ पृष्ठभूमि सेट"
 
 #: ../gtk/gtktexttag.c:682
-#, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "क्या यह टैग पृष्ठ भूमि रंग को प्रभावित करेगा"
 
@@ -5101,41 +5125,36 @@ msgid "Overwrite mode"
 msgstr "अध्यालेखन मोड"
 
 #: ../gtk/gtktextview.c:659
-#, fuzzy
 msgid "Whether entered text overwrites existing contents"
-msgstr "यदि आप एक मौज़ूदा फ़ाइल को बदलते हैं तो इसके अवयव मिटाकर लिखे जाएँगे."
+msgstr "क्या दाखिल पाठ मौजूदा सामग्री पर लिख देगा"
 
 #: ../gtk/gtktextview.c:666
 msgid "Accepts tab"
 msgstr "टैब स्वीकारें"
 
 #: ../gtk/gtktextview.c:667
-#, fuzzy
 msgid "Whether Tab will result in a tab character being entered"
-msgstr "डाटा जो आपने भरा है उसका परिणाम नियमित चतुर्भुज नहीं होता."
+msgstr "क्या टैब उस रूप में परिणाम देगा टैब संप्रतीक दाखिल किये जाने को लेकर"
 
 #: ../gtk/gtktextview.c:676
 msgid "Error underline color"
 msgstr "त्रुटि रेखांकित रंग"
 
 #: ../gtk/gtktextview.c:677
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "प्रविष्टि संकेतक का रंग क्या हो"
+msgstr "रंग जिससे त्रुटि बताने वाली पंक्ति खींचा जाना है"
 
 #: ../gtk/gtktoggleaction.c:132
-#, fuzzy
 msgid "Create the same proxies as a radio action"
-msgstr "नया केएटीई दृश्य बनाएँ (एक नया विंडो उसी दस्तावेज़ सूची के साथ)"
+msgstr "रेडियो क्रिया के समान उसी तरह का प्रॉक्सी बनायें"
 
 #: ../gtk/gtktoggleaction.c:133
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
 
 #: ../gtk/gtktoggleaction.c:148
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "क्या टागल बटन दबाया है या नहीं"
+msgstr "क्या टॉगल क्रिया सक्रिय किया जाना है या नहीं"
 
 #: ../gtk/gtktogglebutton.c:136 ../gtk/gtktoggletoolbutton.c:132
 msgid "If the toggle button should be pressed in or not"
@@ -5170,32 +5189,28 @@ msgid "Show Arrow"
 msgstr "तीर दर्शाएँ"
 
 #: ../gtk/gtktoolbar.c:532
-#, fuzzy
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr "आप चुन सकते हैं कि कोडफोल्डिंग मार्क्स दिखाए जाएं या नहीं, यदि कोड फोल्डिंग संभव हो."
+msgstr "क्या तीर दिखाया जाना चाहिये अगर औजारपट्टी सटीक नहीं बैठता है"
 
 #: ../gtk/gtktoolbar.c:547
 msgid "Tooltips"
 msgstr "उपकरण-टिप"
 
 #: ../gtk/gtktoolbar.c:548
-#, fuzzy
 msgid "If the tooltips of the toolbar should be active or not"
-msgstr "क्या टागल बटन दबाया है या नहीं"
+msgstr "क्या औजारपट्टी का टूलटिप सक्रिय किया जाना है"
 
 #: ../gtk/gtktoolbar.c:570
-#, fuzzy
 msgid "Size of icons in this toolbar"
-msgstr "डिफ़ॉल्ट उपकरण-पट्टी में चिह्न का आकार"
+msgstr "इस उपकरण पट्टी में आइकन का आकार"
 
 #: ../gtk/gtktoolbar.c:585
 msgid "Icon size set"
 msgstr "प्रतीक आकार सेट"
 
 #: ../gtk/gtktoolbar.c:586
-#, fuzzy
 msgid "Whether the icon-size property has been set"
-msgstr "क्रिया समूह क्या सक्रिय है."
+msgstr "क्या आइकन आकार गुण सेट किया गया है"
 
 #: ../gtk/gtktoolbar.c:595
 msgid "Whether the item should receive extra space when the toolbar grows"
@@ -5280,9 +5295,8 @@ msgid "Icon name"
 msgstr "आइकन नाम"
 
 #: ../gtk/gtktoolbutton.c:224
-#, fuzzy
 msgid "The name of the themed icon displayed on the item"
-msgstr "डेस्कटॉप पर कम्प्यूटर का चिह्न दृष्टिगोच़र हो"
+msgstr "मद पर दिखायी गई थीम आइकन का नाम"
 
 #: ../gtk/gtktoolbutton.c:230
 msgid "Icon widget"
@@ -5387,18 +5401,16 @@ msgid "Hover Selection"
 msgstr "होवर चयन"
 
 #: ../gtk/gtktreeview.c:687
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr "फ़ाइलनाम प्रथमाक्षर सभी अल्फाबेटिक होने चाहिएँ."
+msgstr "क्या चयन को संकेतक का अनुसरण करना चाहिये"
 
 #: ../gtk/gtktreeview.c:706
 msgid "Hover Expand"
 msgstr "होवर विस्तार"
 
 #: ../gtk/gtktreeview.c:707
-#, fuzzy
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "क्या मेनू-पट्टी डिफ़ॉल्ट से दिखाई दे."
+msgstr "क्या पंक्ति विस्तारित/कॉलेप्स किया जाना चाहिये जब संकेतक उनपर जाता है"
 
 #: ../gtk/gtktreeview.c:727
 msgid "Vertical Separator Width"
@@ -5525,14 +5537,12 @@ msgid "Widget to put in column header button instead of column title"
 msgstr "विज़ेट द्वारा कालम शीर्षक के स्थान पर कालम हैडर बटन रखी गयी है"
 
 #: ../gtk/gtktreeviewcolumn.c:333
-#, fuzzy
 msgid "X Alignment of the column header text or widget"
-msgstr "विज़ेट द्वारा कालम शीर्षक के स्थान पर कालम हैडर बटन रखी गयी है"
+msgstr "कालम हेडर पाठ व विजेट का X पंक्तिकरण"
 
 #: ../gtk/gtktreeviewcolumn.c:343
-#, fuzzy
 msgid "Whether the column can be reordered around the headers"
-msgstr "क्या उपयोगकर्ता द्वारा पाठ परिवर्धित किया गया है"
+msgstr "क्या कॉलम हेडर के गिर्द फिर क्रम किया जा सकता है"
 
 #: ../gtk/gtktreeviewcolumn.c:350
 msgid "Sort indicator"
@@ -5551,9 +5561,8 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "अनुक्रम सूचक यह अवश्य बताए कि अनुक्रम दिशा क्या है?"
 
 #: ../gtk/gtkuimanager.c:227
-#, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "क्या यह मेनू विकल्प चिन्हित है"
+msgstr "क्या टीयरऑफ मेनू मद मेनू में जोड़े जाने चाहिये"
 
 #: ../gtk/gtkuimanager.c:234
 msgid "Merged UI definition"
@@ -5800,9 +5809,8 @@ msgid "Visited Link Color"
 msgstr "भ्रमण किये लिंक रंग"
 
 #: ../gtk/gtkwidget.c:1532
-#, fuzzy
 msgid "Color of visited links"
-msgstr "हाइपरलिंक का रंग"
+msgstr "खोले गये लिंक का रंग"
 
 #: ../gtk/gtkwidget.c:1538
 msgid "Wide Separators"
@@ -6018,9 +6026,8 @@ msgid "Deletable"
 msgstr "मिटाने योग्य"
 
 #: ../gtk/gtkwindow.c:663
-#, fuzzy
 msgid "Whether the window frame should have a close button"
-msgstr "क्या विंडो को विंडो मैनेजर के द्वारा सजाया जाना चाहिये"
+msgstr "क्या विंडो फ्रेम को बंद बटन रखना चाहिये"
 
 #: ../gtk/gtkwindow.c:679
 msgid "Gravity"
