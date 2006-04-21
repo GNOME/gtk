@@ -1,3 +1,5 @@
+#include <gtk/gtkprintunixdialog.h>
+#include <gtk/gtkpagesetupunixdialog.h>
 #include <gdk/gdkkeysyms.h>
 #include <X11/Xatom.h>
 #include <gdkx.h>
@@ -667,6 +669,43 @@ create_filesel (void)
 }
 
 static WidgetInfo *
+create_print_dialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_print_unix_dialog_new ("Print Dialog", NULL);   
+  gtk_widget_set_size_request (widget, 505, 350);
+  info = new_widget_info ("printdialog", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
+create_page_setup_dialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+  GtkPageSetup *page_setup;
+  GtkPrintSettings *settings;
+
+  page_setup = gtk_page_setup_new ();
+  settings = gtk_print_settings_new ();
+  widget = gtk_page_setup_unix_dialog_new ("Page Setup Dialog", NULL);   
+  gtk_page_setup_unix_dialog_set_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (widget),
+					     page_setup);
+  gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (widget),
+						 settings);
+
+  info = new_widget_info ("pagesetupdialog", widget, ASIS);
+  gtk_widget_set_app_paintable (info->window, FALSE);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
 create_toolbar (void)
 {
   GtkWidget *widget, *menu;
@@ -940,6 +979,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_fontsel ());
   retval = g_list_prepend (retval, create_assistant ());
   retval = g_list_prepend (retval, create_recent_chooser_dialog ());
+  retval = g_list_prepend (retval, create_page_setup_dialog ());
+  retval = g_list_prepend (retval, create_print_dialog ());
 
   return retval;
 }

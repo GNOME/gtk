@@ -1,3 +1,80 @@
+2006-04-21  Alexander Larsson  <alexl@redhat.com>
+
+        Merge the gtk-printing branch.
+	For more detailed ChangeLog entries, see the branch.
+	
+	* .cvsignore:
+	* Makefile.am:
+	* configure.in:
+	* docs/tools/widgets.c:
+	* gtk+-unix-print-2.0.pc.in:
+	* gtk/Makefile.am:
+	* gtk/gen-paper-names.c:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkenums.h:
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkmarshalers.list:
+	* gtk/gtkpagesetup.[ch]:
+	* gtk/gtkpagesetupunixdialog.[ch]:
+	* gtk/gtkpapersize.[ch]:
+	* gtk/gtkprint-win32.[ch]:
+	* gtk/gtkprintbackend.[ch]:
+	* gtk/gtkprintcontext.[ch]:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	* gtk/gtkprinteroption.[ch]:
+	* gtk/gtkprinteroptionset.[ch]:
+	* gtk/gtkprinteroptionwidget.[ch]:
+	* gtk/gtkprintjob.[ch]:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation-win32.c:
+	* gtk/gtkprintoperation.[ch]:
+	* gtk/gtkprintsettings.[ch]:
+	* gtk/gtkprintunixdialog.[ch]:
+	* gtk/paper_names.c:
+	* gtk/paper_names_offsets.c:
+	Platform independent printing API and implementations
+	for unix and windows.
+
+	* gtk/gtkstock.h:
+	* gtk/stock-icons/24/gtk-orientation-landscape.png:
+	* gtk/stock-icons/24/gtk-orientation-portrait.png:
+	* gtk/stock-icons/24/gtk-orientation-reverse-landscape.png:
+	Add stock icons for page orientation.
+	
+	* modules/Makefile.am:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/cups/gtkcupsutils.[ch]:
+	* modules/printbackends/cups/gtkprintbackendcups.[ch]:
+	* modules/printbackends/cups/gtkprintercups.[ch]:
+
+	Cups printing backend for unix.
+	
+	* modules/printbackends/lpr/Makefile.am:
+	* modules/printbackends/lpr/gtkprintbackendlpr.[ch]:
+	lpr printing backend for unix.
+	
+	* modules/printbackends/pdf/Makefile.am:
+	* modules/printbackends/pdf/gtkprintbackendpdf.[ch]:
+	print-to-pdf printing backend for unix.
+	
+	* tests/.cvsignore:
+	* tests/Makefile.am:
+	* tests/print-editor.c:
+	Test application for printing.
+
+	* gdk/gdk.symbols:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkwin32.h:
+	Add gdk_win32_set_modal_dialog_libgtk_only so that we can pump the
+	mainloop while displaying a win32 common dialog.
+
+	* gdk/directfb/Makefile.am:
+	Whitespace cleanup.
+	
 2006-04-20  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkcombobox.c: plug small leak (#339132)

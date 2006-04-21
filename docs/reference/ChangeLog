@@ -1,3 +1,23 @@
+2006-04-21  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/gtk-docs.sgml:
+	* gtk/gtk-sections.txt:
+	* gtk/gtk.types:
+	* gtk/images/pagesetupdialog.png:
+	* gtk/images/printdialog.png:
+	* gtk/tmpl/gtkpagesetup.sgml:
+	* gtk/tmpl/gtkpagesetupunixdialog.sgml:
+	* gtk/tmpl/gtkpapersize.sgml:
+	* gtk/tmpl/gtkprintcontext.sgml:
+	* gtk/tmpl/gtkprinter.sgml:
+	* gtk/tmpl/gtkprintjob.sgml:
+	* gtk/tmpl/gtkprintoperation.sgml:
+	* gtk/tmpl/gtkprintsettings.sgml:
+	* gtk/tmpl/gtkprintunixdialog.sgml:
+	* gtk/visual_index.xml:
+	Add docs for the printing support
+
 2006-04-17  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* gtk/tmp/gtkicontheme.sgml: Fix the code of the look up example.

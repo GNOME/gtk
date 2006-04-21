@@ -48,6 +48,10 @@ IGNORE_HFILES=				\
 	gtkmnemonichash.h		\
 	gtkpathbar.h			\
 	gtkplugprivate.h		\
+	gtkprintbackend.h		\
+	gtkprinteroptionwidget.h	\
+	gtkprinter-private.h		\
+	gtkprintoperation-private.h	\
 	gtkprivate.h			\
 	gtkrbtree.h			\
 	gtkrecentchooserdefault.h	\
@@ -277,6 +281,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/multiline-text.png				\
 	$(srcdir)/images/notebook.png					\
 	$(srcdir)/images/panes.png					\
+	$(srcdir)/images/pagesetupdialog.png				\
+	$(srcdir)/images/printdialog.png				\
 	$(srcdir)/images/progressbar.png				\
 	$(srcdir)/images/radio-group.png				\
 	$(srcdir)/images/recentchooserdialog.png			\

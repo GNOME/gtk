@@ -50,6 +50,12 @@
   <link linkend="GtkPaned">
     <inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic>
   </link> 
+  <link linkend="GtkPageSetupUnixDialog">
+    <inlinegraphic fileref="pagesetupdialog.png" format="PNG"></inlinegraphic>
+  </link> 
+  <link linkend="GtkPrintUnixDialog">
+    <inlinegraphic fileref="printdialog.png" format="PNG"></inlinegraphic>
+  </link> 
   <link linkend="GtkProgressBar">
     <inlinegraphic fileref="progressbar.png" format="PNG"></inlinegraphic>
   </link>

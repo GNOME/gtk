@@ -19,6 +19,7 @@ stamp-h.in
 gtk+.spec
 gtk+-2.0.pc
 gtk+-2.0-uninstalled.pc
+gtk+-unix-print-2.0.pc
 gtk+-linux-fb-2.0.pc
 gtk+-nanox-2.0.pc
 gtk+-x11-2.0.pc

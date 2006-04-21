@@ -132,6 +132,7 @@
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkplug.h>
 #include <gtk/gtkpreview.h>
+#include <gtk/gtkprintoperation.h>
 #include <gtk/gtkprogress.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradioaction.h>

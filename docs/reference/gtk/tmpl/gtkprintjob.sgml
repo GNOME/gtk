@@ -1,0 +1,159 @@
+<!-- ##### SECTION Title ##### -->
+GtkPrintJob
+
+<!-- ##### SECTION Short_Description ##### -->
+Represents a print job
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkPrintJob object represents a job that is sent to a
+printer. You only need to deal directly with print jobs if 
+you use the non-portable #GtkPrintUnixDialog API. 
+</para>
+<para>
+Use gtk_print_job_get_surface() to obtain the cairo surface
+onto which the pages must be drawn. Use gtk_print_job_send()
+to send the finished job to the printer. If you don't use cairo
+#GtkPrintJob also  supports printing of manually generated postscript,
+via gtk_print_job_set_source_file().
+<!-- FIXME more details needed here -->
+</para>
+<!-- FIXME examples ? -->
+
+<para>
+Printing support was added in GTK+ 2.10.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPrintJob ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkPrintJob::status-changed ##### -->
+<para>
+
+</para>
+
+@printjob: the object which received the signal.
+
+<!-- ##### ARG GtkPrintJob:page-setup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintJob:printer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintJob:settings ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintJob:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION GtkPrintJobCompleteFunc ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@user_data: 
+@error: 
+
+
+<!-- ##### FUNCTION gtk_print_job_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@printer: 
+@settings: 
+@page_setup: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_settings ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_printer ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_title ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_status ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_set_source_file ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_surface ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_job_send ##### -->
+<para>
+
+</para>
+
+@print_job: 
+@callback: 
+@user_data: 
+@dnotify: 
+@error: 
+@Returns: 
+
+

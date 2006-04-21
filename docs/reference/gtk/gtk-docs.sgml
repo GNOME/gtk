@@ -84,6 +84,15 @@
 <!ENTITY GtkPixmap SYSTEM "xml/gtkpixmap.xml">
 <!ENTITY GtkPlug SYSTEM "xml/gtkplug.xml">
 <!ENTITY GtkPreview SYSTEM "xml/gtkpreview.xml">
+<!ENTITY GtkPrintOperation SYSTEM "xml/gtkprintoperation.xml">
+<!ENTITY GtkPrintContext SYSTEM "xml/gtkprintcontext.xml">
+<!ENTITY GtkPrintSettings SYSTEM "xml/gtkprintsettings.xml">
+<!ENTITY GtkPageSetup SYSTEM "xml/gtkpagesetup.xml">
+<!ENTITY GtkPaperSize SYSTEM "xml/gtkpapersize.xml">
+<!ENTITY GtkPrinter SYSTEM "xml/gtkprinter.xml">
+<!ENTITY GtkPrintJob SYSTEM "xml/gtkprintjob.xml">
+<!ENTITY GtkPrintUnixDialog SYSTEM "xml/gtkprintunixdialog.xml">
+<!ENTITY GtkPageSetupUnixDialog SYSTEM "xml/gtkpagesetupunixdialog.xml">
 <!ENTITY GtkProgress SYSTEM "xml/gtkprogress.xml">
 <!ENTITY GtkProgressBar SYSTEM "xml/gtkprogressbar.xml">
 <!ENTITY GtkRadioAction SYSTEM "xml/gtkradioaction.xml">
@@ -511,6 +520,19 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkHScrollbar;
         &GtkVScrollbar;
         &GtkScrolledWindow;
+    </chapter>
+
+    <chapter id="Printing">
+      <title>Printing</title>
+      &GtkPrintOperation;
+      &GtkPrintContext;
+      &GtkPrintSettings;
+      &GtkPageSetup;
+      &GtkPaperSize;
+      &GtkPrintUnixDialog;
+      &GtkPrinter;
+      &GtkPrintJob; 
+      &GtkPageSetupUnixDialog;
     </chapter>
 
     <chapter id="MiscObjects">

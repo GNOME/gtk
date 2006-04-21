@@ -6,7 +6,13 @@ if OS_UNIX
 SUBDIRS += xdgmime
 endif
 
-DIST_SUBDIRS=stock-icons theme-bits xdgmime
+DIST_SUBDIRS=theme-bits xdgmime
+
+if HAVE_CUPS
+GTK_PRINT_BACKENDS=pdf,cups
+else
+GTK_PRINT_BACKENDS=pdf,lpr
+endif
 
 INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
@@ -18,6 +24,7 @@ INCLUDES =						\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_HOST=\"$(host)\"				\
 	-DGTK_COMPILATION				\
+	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
@@ -26,6 +33,7 @@ INCLUDES =						\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
+	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)				\
 	$(gtk_clipboard_dnd_c_sources_CFLAGS)
@@ -215,10 +223,15 @@ gtk_public_h_sources =          \
 	gtkobject.h		\
 	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
+	gtkpagesetup.h		\
 	gtkpaned.h		\
+	gtkpapersize.h		\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
+	gtkprintcontext.h	\
+	gtkprintoperation.h	\
+	gtkprintsettings.h	\
 	gtkprivate.h		\
 	gtkprogress.h		\
 	gtkprogressbar.h	\
@@ -295,6 +308,11 @@ gtk_public_h_sources =          \
 	gtkwidget.h		\
 	gtkwindow.h
 
+gtk_unix_print_public_h_sources =    \
+	gtkpagesetupunixdialog.h	\
+	gtkprinter.h			\
+	gtkprintunixdialog.h
+
 # Installed header files without compatibility guarantees
 # that are not include in gtk/gtk.h
 gtk_semi_private_h_sources =    \
@@ -305,16 +323,17 @@ gtk_semi_private_h_sources =    \
 gtk_private_h_sources =		\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
+	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
-	gtkfilechooserdefault.h	\
 	gtkfilechooserprivate.h	\
 	gtkfilechooserutils.h	\
-	gtkfilesystemunix.h	\
 	gtkfilesystemmodel.h	\
+	gtkfilesystemunix.h	\
 	gtkiconcache.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
+	gtkprintoperation-private.h\
 	gtkrbtree.h		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
@@ -323,17 +342,17 @@ gtk_private_h_sources =		\
 	gtksocketprivate.h	\
 	gtktextbtree.h		\
 	gtktextchildprivate.h	\
-	gtktextsegment.h	\
-	gtktexttypes.h		\
-	gtktextutil.h		\
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
+	gtktextsegment.h	\
 	gtktexttagprivate.h	\
+	gtktexttypes.h		\
+	gtktextutil.h		\
 	gtkthemes.h		\
+	gtktoggleactionprivate.h\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
-	gtkwindow-decorate.h	\
-	gtktoggleactionprivate.h
+	gtkwindow-decorate.h
 
 # GTK+ C sources to build the library from
 gtk_c_sources =                 \
@@ -388,10 +407,10 @@ gtk_c_sources =                 \
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
+	gtkfilechooserdefault.c	\
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
-	gtkfilechooserdefault.c	\
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\
@@ -414,8 +433,8 @@ gtk_c_sources =                 \
 	gtkhseparator.c		\
 	gtkhsv.c		\
 	gtkhsv.h		\
-	gtkiconfactory.c	\
 	gtkiconcache.c		\
+	gtkiconfactory.c	\
 	gtkicontheme.c		\
 	gtkiconview.c		\
 	gtkimage.c		\
@@ -454,11 +473,16 @@ gtk_c_sources =                 \
 	gtkobject.c		\
 	gtkoldeditable.c	\
 	gtkoptionmenu.c		\
+	gtkpagesetup.c		\
 	gtkpaned.c		\
+	gtkpapersize.c		\
 	gtkpathbar.c		\
 	gtkpixmap.c		\
 	gtkplug.c		\
 	gtkpreview.c		\
+	gtkprintcontext.c	\
+	gtkprintoperation.c	\
+	gtkprintsettings.c	\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
 	gtkradioaction.c	\
@@ -480,11 +504,11 @@ gtk_c_sources =                 \
 	gtkscale.c		\
 	gtkscrollbar.c		\
 	gtkscrolledwindow.c	\
-	gtksequence.c		\
 	gtkselection.c		\
 	gtkseparator.c		\
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
+	gtksequence.c		\
 	gtksettings.c		\
 	gtksignal.c		\
 	gtksizegroup.c		\
@@ -554,13 +578,37 @@ gtk_c_sources =                 \
 	$(gtk_clipboard_dnd_c_sources)
 
 if OS_UNIX
-gtk_private_h_sources += gtkfilesystemunix.h
-gtk_c_sources +=         gtkfilesystemunix.c
+gtk_private_h_sources += \
+	gtkfilesystemunix.h		\
+	gtkprintbackend.h		\
+	gtkprinter-private.h		\
+	gtkprinteroption.h		\
+	gtkprinteroptionset.h		\
+	gtkprinteroptionwidget.h	\
+	gtkprintjob.h
+
+gtk_c_sources += \
+	gtkfilesystemunix.c		\
+	gtkpagesetupunixdialog.c	\
+	gtkprinter.c			\
+	gtkprinteroption.c		\
+	gtkprinteroptionset.c		\
+	gtkprinteroptionwidget.c	\
+	gtkprintjob.c			\
+	gtkprintoperation-unix.c	\
+	gtkprintunixdialog.c		\
+        gtkprintbackend.c
 endif
 
 if OS_WIN32
-gtk_private_h_sources += gtkfilesystemwin32.h
-gtk_c_sources +=         gtkfilesystemwin32.c
+gtk_private_h_sources +=
+	gtkfilesystemwin32.h	\
+	gtkprint-win32.h
+
+gtk_c_sources += \
+	gtkfilesystemwin32.c		\
+	gtkprint-win32.c		\
+	gtkprintoperation-win32.c
 endif
 
 if USE_X11
@@ -622,6 +670,9 @@ stamp_files =					\
 # that don't serve as direct make target sources, i.e. they don't have
 # their own .lo rules and don't get publically installed
 gtk_extra_sources =				\
+	paper_names.c				\
+	paper_names_offsts.c			\
+	gen-paper-names.c			\
 	gtk.symbols				\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
@@ -634,6 +685,7 @@ MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files)
 EXTRA_HEADERS =
 EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
+EXTRA_DIST += $(STOCK_ICONS)
 
 #
 # rules to generate built sources
@@ -705,6 +757,9 @@ lib_LTLIBRARIES = $(gtktargetlib)
 gtkincludedir = $(includedir)/gtk-2.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
 
+gtkunixprintincludedir = $(includedir)/gtk-unix-print-2.0/gtk
+gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
+
 libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
@@ -719,7 +774,7 @@ libgtk_directfb_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32
+libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 libgtk_quartz_2_0_la_LIBADD = $(libadd)
 libgtk_directfb_2_0_la_LIBADD = $(libadd)
@@ -933,6 +988,9 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-network.png        		\
 	stock-icons/24/gtk-new.png    			\
 	stock-icons/24/gtk-open.png   			\
+	stock-icons/24/gtk-orientation-reverse-landscape.png \
+	stock-icons/24/gtk-orientation-landscape.png	\
+	stock-icons/24/gtk-orientation-portrait.png	\
 	stock-icons/24/gtk-paste.png  			\
 	stock-icons/24/gtk-preferences.png    		\
 	stock-icons/24/gtk-print.png  			\
