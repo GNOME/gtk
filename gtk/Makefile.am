@@ -601,9 +601,7 @@ gtk_c_sources += \
 endif
 
 if OS_WIN32
-gtk_private_h_sources +=
-	gtkfilesystemwin32.h	\
-	gtkprint-win32.h
+gtk_private_h_sources += gtkfilesystemwin32.h gtkprint-win32.h
 
 gtk_c_sources += \
 	gtkfilesystemwin32.c		\
