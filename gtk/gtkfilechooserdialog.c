@@ -587,7 +587,10 @@ response_cb (GtkDialog *dialog,
     return;
 
   if (!priv->response_requested && !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
-    g_signal_stop_emission_by_name (dialog, "response");
+    {
+      g_signal_stop_emission_by_name (dialog, "response");
+      priv->response_requested = FALSE;
+    }
 }
 
 static GtkWidget *

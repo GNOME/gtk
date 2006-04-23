@@ -1,3 +1,10 @@
+2006-04-23  Kristian Rietveld  <kris@imendio.com>
+
+	Review, continued.
+
+	* gtk/gtkfilechooserdialog.c (response_cb): set response_requested
+	to FALSE after stopping emission of the response signal.
+
 2006-03-16  Kristian Rietveld  <kris@imendio.com>
 
 	More review work.
