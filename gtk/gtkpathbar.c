@@ -1008,7 +1008,6 @@ set_button_image_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->button_data->handle)
     goto out;
 
-  g_object_unref (handle);
   data->button_data->handle = NULL;
 
   if (cancelled || error)
@@ -1040,6 +1039,7 @@ set_button_image_get_info_cb (GtkFileSystemHandle *handle,
 
 out:
   g_free (data);
+  g_object_unref (handle);
 }
 
 static void
@@ -1454,6 +1454,7 @@ gtk_path_bar_get_info_callback (GtkFileSystemHandle *handle,
   if (handle != path_info->path_bar->set_path_handle)
     {
       gtk_path_bar_set_path_finish (path_info, FALSE);
+      g_object_unref (handle);
       return;
     }
 

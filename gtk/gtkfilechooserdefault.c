@@ -1113,7 +1113,6 @@ shortcuts_reload_icons_get_info_cb (GtkFileSystemHandle *handle,
     goto out;
 
   data->impl->reload_icon_handles = g_slist_remove (data->impl->reload_icon_handles, handle);
-  g_object_unref (handle);
 
   if (cancelled || error)
     goto out;
@@ -1135,6 +1134,8 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_object_unref (data->impl);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -1361,8 +1362,7 @@ get_file_info_finished (GtkFileSystemHandle *handle,
   if (handle != model_handle)
     goto out;
 
-  /* unref the handle, set to NULL */
-  g_object_unref (handle);
+  /* set the handle to NULL in the model (we unref later on) */
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_HANDLE, NULL,
 		      -1);
@@ -1436,6 +1436,8 @@ out:
   gtk_tree_row_reference_free (request->row_ref);
   g_free (request->label_copy);
   g_free (request);
+
+  g_object_unref (handle);
 }
 
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
@@ -2035,7 +2037,6 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
     goto out;
 
   impl->pending_handles = g_slist_remove (impl->pending_handles, handle);
-  g_object_unref (handle);
 
   if (cancelled)
     goto out;
@@ -2047,6 +2048,7 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
 
  out:
   g_object_unref (impl);
+  g_object_unref (handle);
 }
 
 /* Idle handler for creating a new folder after editing its name cell, or for
@@ -3630,7 +3632,6 @@ file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->impl->file_list_drag_data_received_handle)
     goto out;
 
-  g_object_unref (handle);
   data->impl->file_list_drag_data_received_handle = NULL;
 
   if (cancelled || error)
@@ -3679,6 +3680,8 @@ out:
   g_strfreev (data->uris);
   gtk_file_path_free (data->path);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -5513,10 +5516,11 @@ show_and_select_paths_get_folder_cb (GtkFileSystemHandle   *handle,
     goto out;
 
   data->impl->show_and_select_paths_handle = NULL;
-  g_object_unref (handle);
 
   if (cancelled || error)
     goto out;
+
+  g_object_unref (handle);
 
   if (gtk_file_folder_is_finished_loading (folder))
     show_and_select_paths_finished_loading (folder, user_data);
@@ -5531,6 +5535,8 @@ out:
   g_object_unref (data->impl);
   gtk_file_paths_free (data->paths);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static gboolean
@@ -5764,7 +5770,6 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != impl->update_current_folder_handle)
     goto out;
 
-  g_object_unref (handle);
   impl->update_current_folder_handle = NULL;
 
   set_busy_cursor (impl, FALSE);
@@ -5831,6 +5836,8 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
 out:
   gtk_file_path_free (data->path);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static gboolean
@@ -6344,7 +6351,6 @@ add_shortcut_get_info_cb (GtkFileSystemHandle *handle,
     goto out;
 
   data->impl->loading_shortcuts = g_slist_remove (data->impl->loading_shortcuts, handle);
-  g_object_unref (handle);
 
   if (cancelled || error || !gtk_file_info_get_is_folder (info))
     goto out;
@@ -6357,6 +6363,8 @@ out:
   g_object_unref (data->impl);
   gtk_file_path_free (data->path);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static gboolean
@@ -6785,7 +6793,6 @@ confirmation_confirm_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->impl->should_respond_get_info_handle)
     goto out;
 
-  g_object_unref (handle);
   data->impl->should_respond_get_info_handle = NULL;
 
   if (cancelled)
@@ -6805,6 +6812,8 @@ out:
   g_object_unref (data->impl);
   g_free (data->file_part);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 /* Does overwrite confirmation if appropriate, and returns whether the dialog
@@ -6873,7 +6882,6 @@ action_create_folder_cb (GtkFileSystemHandle *handle,
     goto out;
 
   impl->pending_handles = g_slist_remove (impl->pending_handles, handle);
-  g_object_unref (handle);
 
   set_busy_cursor (impl, FALSE);
 
@@ -6887,6 +6895,7 @@ action_create_folder_cb (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (impl);
+  g_object_unref (handle);
 }
 
 struct SaveEntryData
@@ -6910,7 +6919,6 @@ save_entry_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->impl->should_respond_get_info_handle)
     goto out;
 
-  g_object_unref (handle);
   data->impl->should_respond_get_info_handle = NULL;
 
   set_busy_cursor (data->impl, FALSE);
@@ -6965,6 +6973,8 @@ out:
   gtk_file_path_free (data->path);
   gtk_file_path_free (data->parent_path);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
@@ -7318,7 +7328,6 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
   if (handle != impl->shortcuts_activate_iter_handle)
     goto out;
 
-  g_object_unref (handle);
   impl->shortcuts_activate_iter_handle = NULL;
 
   set_busy_cursor (impl, FALSE);
@@ -7334,7 +7343,8 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
 			     gtk_file_system_volume_get_display_name (impl->file_system, volume));
       error_message (impl, msg, error->message);
       g_free (msg);
-      return;
+
+      goto out;
     }
 
   path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
@@ -7346,6 +7356,7 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (impl);
+  g_object_unref (handle);
 }
 
 
@@ -7404,7 +7415,6 @@ shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->impl->shortcuts_activate_iter_handle)
     goto out;
 
-  g_object_unref (handle);
   data->impl->shortcuts_activate_iter_handle = NULL;
 
   if (cancelled)
@@ -7419,6 +7429,8 @@ out:
   g_object_unref (data->impl);
   gtk_file_path_free (data->path);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -7913,7 +7925,6 @@ update_from_entry_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != data->impl->update_from_entry_handle)
     goto out;
 
-  g_object_unref (handle);
   data->impl->update_from_entry_handle = NULL;
 
   if (cancelled)
@@ -7959,6 +7970,8 @@ out:
   gtk_file_path_free (data->folder_path);
   g_free (data->file_part);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static gboolean

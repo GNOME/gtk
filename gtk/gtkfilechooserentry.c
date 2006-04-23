@@ -635,7 +635,6 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   if (handle != chooser_entry->load_folder_handle)
     goto out;
 
-  g_object_unref (handle);
   chooser_entry->load_folder_handle = NULL;
 
   if (cancelled || error)
@@ -656,6 +655,7 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (chooser_entry);
+  g_object_unref (handle);
 }
 
 static gboolean

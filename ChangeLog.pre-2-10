@@ -1,5 +1,29 @@
 2006-04-23  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c (dnd_select_folder_get_info_cb): don't
+	leak handle,
+	(change_icon_theme_get_info_cb), (set_info_get_info_cb),
+	(model_add_special_get_info_cb), (update_label_get_info_cb): ditto.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons_get_info_cb):
+	don't leak the handle,
+	(get_file_info_finished), (edited_idle_create_folder_cb),
+	(file_list_drag_data_received_get_info_cb),
+	(show_and_select_paths_get_folder_cb),
+	(update_current_folder_get_info_cb), (add_shortcut_get_info_cb),
+	(confirmation_confirm_get_info_cb), (action_create_folder_cb),
+	(save_entry_get_info_cb), (shortcuts_activate_volume_mount_cb),
+	(shortcuts_activate_get_info_cb), (update_from_entry_get_info_cb):
+	ditto.
+
+	* gtk/gtkfilechooserentry.c (load_directory_get_folder_callback):
+	don't leak the handle.
+
+	* gtk/gtkpathbar.c (set_button_image_get_info_cb),
+	(gtk_path_bar_get_info_callback): don't leak the handle.
+
+2006-04-23  Kristian Rietveld  <kris@imendio.com>
+
 	Review.
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons_get_info_cb):

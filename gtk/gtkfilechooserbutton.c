@@ -970,10 +970,11 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
       gtk_file_path_free (data->path);
       g_strfreev (data->uris);
       g_free (data);
+
+      g_object_unref (handle);
       return;
     }
 
-  g_object_unref (handle);
   data->button->priv->dnd_select_folder_handle = NULL;
 
   if (!cancelled && !error && info != NULL)
@@ -995,6 +996,8 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
       gtk_file_path_free (data->path);
       g_strfreev (data->uris);
       g_free (data);
+
+      g_object_unref (handle);
       return;
     }
 
@@ -1008,6 +1011,8 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
     gtk_file_system_get_info (handle->file_system, data->path,
 			      GTK_FILE_INFO_IS_FOLDER,
 			      dnd_select_folder_get_info_cb, user_data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -1184,7 +1189,6 @@ change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
 
   data->button->priv->change_icon_theme_handles =
     g_slist_remove (data->button->priv->change_icon_theme_handles, handle);
-  g_object_unref (handle);
 
   if (cancelled || error)
     goto out;
@@ -1218,6 +1222,8 @@ out:
   g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -1399,7 +1405,6 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != model_handle)
     goto out;
 
-  g_object_unref (handle);
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      HANDLE_COLUMN, NULL,
 		      -1);
@@ -1424,6 +1429,8 @@ out:
   g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static void
@@ -1565,7 +1572,6 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != model_handle)
     goto out;
 
-  g_object_unref (handle);
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      HANDLE_COLUMN, NULL,
 		      -1);
@@ -1587,6 +1593,8 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
+
+  g_object_unref (handle);
 }
 
 static inline void
@@ -2089,7 +2097,6 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
   if (handle != priv->update_button_handle)
     goto out;
 
-  g_object_unref (handle);
   priv->update_button_handle = NULL;
 
   if (cancelled || error)
@@ -2110,6 +2117,7 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (button);
+  g_object_unref (handle);
 }
 
 static void
