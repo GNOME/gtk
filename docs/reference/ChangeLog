@@ -1,3 +1,8 @@
+2006-04-22  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/tmpl/gtkrecentchoosermenu.sgml:
+	* gtk/tmpl/gtkrecentchooserwidget.sgml: Fix unclosed para tags.
+
 2006-04-21  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/Makefile.am:

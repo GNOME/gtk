@@ -14,6 +14,7 @@ gtk_menu_item_set_submenu(), or as the menu of a #GtkMenuToolButton.
 <para>
 Note that #GtkRecentChooserMenu does not have any methods of its own.  Instead,
 you should use the functions that work on a #GtkRecentChooser.
+</para>
 
 <para>
 Recently used files are supported since GTK+ 2.10.

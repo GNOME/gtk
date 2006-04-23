@@ -15,6 +15,7 @@ applications will only need to use the latter; you can use
 <para>
 Note that #GtkRecentChooserWidget does not have any methods of its own.
 Instead, you should use the functions that work on a #GtkRecentChooser.
+</para>
 
 <para>
 Recently used files are supported since GTK+ 2.10.
