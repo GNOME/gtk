@@ -41,15 +41,15 @@ typedef struct _GtkPaperSize GtkPaperSize;
 
 GType gtk_paper_size_get_type (void) G_GNUC_CONST;
 
-GtkPaperSize *gtk_paper_size_new          (const char   *name);
-GtkPaperSize *gtk_paper_size_new_from_ppd (const char   *ppd_name,
-					   const char   *ppd_display_name,
-					   double        width,
-					   double        height);
-GtkPaperSize *gtk_paper_size_new_custom   (const char   *name,
-					   const char   *display_name,
-					   double        width,
-					   double        height,
+GtkPaperSize *gtk_paper_size_new          (const gchar  *name);
+GtkPaperSize *gtk_paper_size_new_from_ppd (const gchar  *ppd_name,
+					   const gchar  *ppd_display_name,
+					   gdouble       width,
+					   gdouble       height);
+GtkPaperSize *gtk_paper_size_new_custom   (const gchar  *name,
+					   const gchar  *display_name,
+					   gdouble       width,
+					   gdouble       height,
 					   GtkUnit       unit);
 GtkPaperSize *gtk_paper_size_copy         (GtkPaperSize *other);
 void          gtk_paper_size_free         (GtkPaperSize *size);
@@ -58,30 +58,30 @@ gboolean      gtk_paper_size_is_equal     (GtkPaperSize *size1,
 
 
 /* The width is always the shortest side, measure in mm */
-G_CONST_RETURN char *   gtk_paper_size_get_name         (GtkPaperSize *size);
-G_CONST_RETURN char *   gtk_paper_size_get_display_name (GtkPaperSize *size);
-G_CONST_RETURN char *   gtk_paper_size_get_ppd_name     (GtkPaperSize *size);
+G_CONST_RETURN gchar *gtk_paper_size_get_name         (GtkPaperSize *size);
+G_CONST_RETURN gchar *gtk_paper_size_get_display_name (GtkPaperSize *size);
+G_CONST_RETURN gchar *gtk_paper_size_get_ppd_name     (GtkPaperSize *size);
 
-double   gtk_paper_size_get_width        (GtkPaperSize *size, GtkUnit unit);
-double   gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
+gdouble  gtk_paper_size_get_width        (GtkPaperSize *size, GtkUnit unit);
+gdouble  gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
 gboolean gtk_paper_size_is_custom        (GtkPaperSize *size);
 
 /* Only for custom sizes: */
-void gtk_paper_size_set_size             (GtkPaperSize *size, 
-                                          double        width, 
-                                          double        height, 
-                                          GtkUnit       unit);
+void    gtk_paper_size_set_size                  (GtkPaperSize *size, 
+                                                  gdouble       width, 
+                                                  gdouble       height, 
+                                                  GtkUnit       unit);
 
-double gtk_paper_size_get_default_top_margin    (GtkPaperSize *size,
-						 GtkUnit       unit);
-double gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
-						 GtkUnit       unit);
-double gtk_paper_size_get_default_left_margin   (GtkPaperSize *size,
-						 GtkUnit       unit);
-double gtk_paper_size_get_default_right_margin  (GtkPaperSize *size,
-						 GtkUnit       unit);
+gdouble gtk_paper_size_get_default_top_margin    (GtkPaperSize *size,
+						  GtkUnit       unit);
+gdouble gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
+						  GtkUnit       unit);
+gdouble gtk_paper_size_get_default_left_margin   (GtkPaperSize *size,
+						  GtkUnit       unit);
+gdouble gtk_paper_size_get_default_right_margin  (GtkPaperSize *size,
+						  GtkUnit       unit);
 
-G_CONST_RETURN char * gtk_paper_size_get_default (void);
+G_CONST_RETURN gchar *gtk_paper_size_get_default (void);
 
 G_END_DECLS
 

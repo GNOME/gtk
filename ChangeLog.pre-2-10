@@ -1,5 +1,10 @@
 2006-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpapersize.[hc]: Use g types, add documentation.
+
+	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_get_settings): 
+	Use g_return_val_if_fail in non-void functions.
+
 	* gtk/Makefile.am: Add gtkprintutils.[hc]
 
 	* gtk/gtkprintutils.[hc]: New files, move the unit conversion
