@@ -1133,6 +1133,7 @@ shortcuts_reload_icons_get_info_cb (GtkFileSystemHandle *handle,
 
 out:
   gtk_tree_row_reference_free (data->row_ref);
+  g_object_unref (data->impl);
   g_free (data);
 }
 

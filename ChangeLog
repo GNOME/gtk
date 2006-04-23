@@ -1,5 +1,12 @@
 2006-04-23  Kristian Rietveld  <kris@imendio.com>
 
+	Review.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons_get_info_cb):
+	don't forget to unref data->impl at the end.
+
+2006-04-23  Kristian Rietveld  <kris@imendio.com>
+
 	Review, continued.
 
 	* gtk/gtkfilechooserdialog.c (response_cb): set response_requested
