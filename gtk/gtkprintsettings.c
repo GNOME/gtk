@@ -23,10 +23,9 @@
 #include <stdlib.h>
 #include <glib/gprintf.h>
 #include "gtkprintsettings.h"
+#include "gtkprintutils.h"
 #include "gtkalias.h"
 
-#define MM_PER_INCH 25.4
-#define POINTS_PER_INCH 72
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
 
@@ -47,44 +46,6 @@ struct _GtkPrintSettingsClass
 };
 
 G_DEFINE_TYPE (GtkPrintSettings, gtk_print_settings, G_TYPE_OBJECT)
-
-static gdouble
-to_mm (gdouble len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len * MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len * (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
-
-static gdouble
-from_mm (gdouble len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len / MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len / (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
 
 static void
 gtk_print_settings_finalize (GObject *object)
@@ -417,7 +378,7 @@ gtk_print_settings_get_length (GtkPrintSettings *settings,
 			       GtkUnit           unit)
 {
   gdouble length = gtk_print_settings_get_double (settings, key);
-  return from_mm (length, unit);
+  return _gtk_print_convert_from_mm (length, unit);
 }
 
 /**
@@ -438,7 +399,7 @@ gtk_print_settings_set_length (GtkPrintSettings *settings,
 			       GtkUnit           unit)
 {
   gtk_print_settings_set_double (settings, key,
-				 to_mm (length, unit));
+				 _gtk_print_convert_to_mm (length, unit));
 }
 
 /**

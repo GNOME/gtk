@@ -42,41 +42,41 @@ void               gtk_page_setup_set_orientation   (GtkPageSetup       *setup,
 GtkPaperSize *     gtk_page_setup_get_paper_size    (GtkPageSetup       *setup);
 void               gtk_page_setup_set_paper_size    (GtkPageSetup       *setup,
 						     GtkPaperSize       *size);
-double             gtk_page_setup_get_top_margin    (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_top_margin    (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 void               gtk_page_setup_set_top_margin    (GtkPageSetup       *setup,
-						     double              margin,
+						     gdouble             margin,
 						     GtkUnit             unit);
-double             gtk_page_setup_get_bottom_margin (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_bottom_margin (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 void               gtk_page_setup_set_bottom_margin (GtkPageSetup       *setup,
-						     double              margin,
+						     gdouble             margin,
 						     GtkUnit             unit);
-double             gtk_page_setup_get_left_margin   (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_left_margin   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 void               gtk_page_setup_set_left_margin   (GtkPageSetup       *setup,
-						     double              margin,
+						     gdouble             margin,
 						     GtkUnit             unit);
-double             gtk_page_setup_get_right_margin  (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_right_margin  (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 void               gtk_page_setup_set_right_margin  (GtkPageSetup       *setup,
-						     double              margin,
+						     gdouble             margin,
 						     GtkUnit             unit);
 
-void gtk_page_setup_set_paper_size_and_default_margins (GtkPageSetup *setup,
-							GtkPaperSize *size);
+void gtk_page_setup_set_paper_size_and_default_margins (GtkPageSetup    *setup,
+							GtkPaperSize    *size);
 
 /* These take orientation, but not margins into consideration */
-double             gtk_page_setup_get_paper_width   (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_paper_width   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
-double             gtk_page_setup_get_paper_height  (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_paper_height  (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 
 
 /* These take orientation, and margins into consideration */
-double             gtk_page_setup_get_page_width    (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_page_width    (GtkPageSetup       *setup,
 						     GtkUnit             unit);
-double             gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
+gdouble            gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 
 

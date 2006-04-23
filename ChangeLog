@@ -1,5 +1,18 @@
 2006-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Add gtkprintutils.[hc]
+
+	* gtk/gtkprintutils.[hc]: New files, move the unit conversion
+	functions here.
+
+	* gtk/gtkpagesetupunixdialog.c: 
+	* gtk/gtkprintsettings.c: 
+	* gtk/gtkpagesetup.c: 
+	* gtk/gtkpapersize.c: Replace all static copies of to_mm/from_mm
+	by the copies in gtkprintutils.c.
+
+	* gtk/gtkpagesetup.[hc]: Use g types, add documentation.
+
 	* gtk/gtkprintsettings.c: More documentation
 
 2006-04-22  Tor Lillqvist  <tml@novell.com>

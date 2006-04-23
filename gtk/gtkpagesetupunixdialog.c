@@ -52,12 +52,10 @@
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
 #include "gtkpapersize.h"
+#include "gtkprintutils.h"
 #include "gtkalias.h"
 
 #define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
-
-#define MM_PER_INCH 25.4
-#define POINTS_PER_INCH 72
 
 
 struct GtkPageSetupUnixDialogPrivate
@@ -127,44 +125,6 @@ static const char * const common_paper_sizes[] = {
   "na_ledger",
   "iso_a3",
 };
-
-static double
-to_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len * MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len * (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
-
-static double
-from_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len / MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len / (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
 
 static GtkUnit
 get_default_user_units (void)
@@ -1376,7 +1336,7 @@ static double
 unit_widget_get (GtkWidget *unit_widget)
 {
   UnitWidget *data = g_object_get_data (G_OBJECT (unit_widget), "unit-data");
-  return to_mm (gtk_spin_button_get_value (GTK_SPIN_BUTTON (data->spin_button)),
+  return _gtk_print_convert_to_mm (gtk_spin_button_get_value (GTK_SPIN_BUTTON (data->spin_button)),
 		data->display_unit);
 }
 
@@ -1385,7 +1345,7 @@ unit_widget_set (GtkWidget *unit_widget, double val)
 {
   UnitWidget *data = g_object_get_data (G_OBJECT (unit_widget), "unit-data");
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (data->spin_button),
-			     from_mm (val, data->display_unit));
+			     _gtk_print_convert_from_mm (val, data->display_unit));
 
 }
 
@@ -1639,10 +1599,10 @@ set_margins_from_printer (CustomPaperDialog *data,
   _gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right);
   
   data->non_user_change = TRUE;
-  unit_widget_set (data->top_widget, to_mm (top, GTK_UNIT_POINTS));
-  unit_widget_set (data->bottom_widget, to_mm (bottom, GTK_UNIT_POINTS));
-  unit_widget_set (data->left_widget, to_mm (left, GTK_UNIT_POINTS));
-  unit_widget_set (data->right_widget, to_mm (right, GTK_UNIT_POINTS));
+  unit_widget_set (data->top_widget, _gtk_print_convert_to_mm (top, GTK_UNIT_POINTS));
+  unit_widget_set (data->bottom_widget, _gtk_print_convert_to_mm (bottom, GTK_UNIT_POINTS));
+  unit_widget_set (data->left_widget, _gtk_print_convert_to_mm (left, GTK_UNIT_POINTS));
+  unit_widget_set (data->right_widget, _gtk_print_convert_to_mm (right, GTK_UNIT_POINTS));
   data->non_user_change = FALSE;
 
   /* Only send one change */

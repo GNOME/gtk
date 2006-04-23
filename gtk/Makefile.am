@@ -334,6 +334,7 @@ gtk_private_h_sources =		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkprintoperation-private.h\
+	gtkprintutils.h		\
 	gtkrbtree.h		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
@@ -483,6 +484,7 @@ gtk_c_sources =                 \
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintsettings.c	\
+	gtkprintutils.c		\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
 	gtkradioaction.c	\

@@ -27,10 +27,8 @@
 #endif
 
 #include "gtkpapersize.h"
+#include "gtkprintutils.h"
 #include "gtkalias.h"
-
-#define MM_PER_INCH 25.4
-#define POINTS_PER_INCH 72
 
 #include "paper_names_offsets.c"
 
@@ -83,47 +81,10 @@ lookup_paper_info (const char *name)
   return NULL;
 }
 
-static double
-to_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len * MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len * (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
-
-static double
-from_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len / MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len / (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
-
 static gboolean
 parse_media_size (const char *size,
-		  double *width_mm, double *height_mm)
+		  gdouble    *width_mm, 
+		  gdouble    *height_mm)
 {
   const char *p;
   char *e;
@@ -162,9 +123,10 @@ parse_media_size (const char *size,
 }
 
 static gboolean
-parse_full_media_size_name (const char *full_name,
-			    char **name,
-			    double *width_mm, double *height_mm)
+parse_full_media_size_name (const char  *full_name,
+			    char       **name,
+			    gdouble     *width_mm, 
+			    gdouble     *height_mm)
 {
   const char *p;
   const char *end_of_name;
@@ -267,8 +229,8 @@ gtk_paper_size_new (const char *name)
 GtkPaperSize *
 gtk_paper_size_new_from_ppd (const char *ppd_name,
 			     const char *ppd_display_name,
-			     double width,
-			     double height)
+			     gdouble     width,
+			     gdouble     height)
 {
   char *name;
   const char *lookup_ppd_name;
@@ -339,8 +301,8 @@ gtk_paper_size_new_custom (const char *name,
   size->display_name = g_strdup (display_name);
   size->is_custom = TRUE;
   
-  size->width = to_mm (width, unit);
-  size->height = to_mm (height, unit);
+  size->width = _gtk_print_convert_to_mm (width, unit);
+  size->height = _gtk_print_convert_to_mm (height, unit);
   
   return size;
 }
@@ -418,12 +380,12 @@ gtk_paper_size_get_ppd_name (GtkPaperSize *size)
 double
 gtk_paper_size_get_width (GtkPaperSize *size, GtkUnit unit)
 {
-  return from_mm (size->width, unit);
+  return _gtk_print_convert_from_mm (size->width, unit);
 }
 double
 gtk_paper_size_get_height (GtkPaperSize *size, GtkUnit unit)
 {
-  return from_mm (size->height, unit);
+  return _gtk_print_convert_from_mm (size->height, unit);
 }
 
 gboolean
@@ -439,8 +401,8 @@ gtk_paper_size_set_size (GtkPaperSize *size, double width, double height, GtkUni
   g_return_if_fail (size != NULL);
   g_return_if_fail (size->is_custom);
 
-  size->width = to_mm (width, unit);
-  size->height = to_mm (height, unit);
+  size->width = _gtk_print_convert_to_mm (width, unit);
+  size->height = _gtk_print_convert_to_mm (height, unit);
 }
 
 #define NL_PAPER_GET(x)         \
@@ -507,8 +469,8 @@ gtk_paper_size_get_default_top_margin (GtkPaperSize *size, GtkUnit unit)
 {
   double margin;
 
-  margin = to_mm (0.25, GTK_UNIT_INCH);
-  return from_mm (margin, unit);
+  margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
+  return _gtk_print_convert_from_mm (margin, unit);
 }
 
 double
@@ -517,15 +479,15 @@ gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size, GtkUnit unit)
   double margin;
   const char *name;
 
-  margin = to_mm (0.25, GTK_UNIT_INCH);
+  margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
 
   name = gtk_paper_size_get_name (size);
   if (strcmp (name, "na_letter") == 0 ||
       strcmp (name, "na_legal") == 0 ||
       strcmp (name, "iso_a4") == 0)
-    margin = to_mm (0.56, GTK_UNIT_INCH);
+    margin = _gtk_print_convert_to_mm (0.56, GTK_UNIT_INCH);
   
-  return from_mm (margin, unit);
+  return _gtk_print_convert_from_mm (margin, unit);
 }
 
 double
@@ -533,8 +495,8 @@ gtk_paper_size_get_default_left_margin (GtkPaperSize *size, GtkUnit unit)
 {
   double margin;
 
-  margin = to_mm (0.25, GTK_UNIT_INCH);
-  return from_mm (margin, unit);
+  margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
+  return _gtk_print_convert_from_mm (margin, unit);
 }
 
 double
@@ -542,8 +504,8 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size, GtkUnit unit)
 {
   double margin;
 
-  margin = to_mm (0.25, GTK_UNIT_INCH);
-  return from_mm (margin, unit);
+  margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
+  return _gtk_print_convert_from_mm (margin, unit);
 }
 
 

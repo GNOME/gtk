@@ -21,10 +21,9 @@
 #include "config.h"
 
 #include "gtkpagesetup.h"
+#include "gtkprintutils.h"
 #include "gtkalias.h"
 
-#define MM_PER_INCH 25.4
-#define POINTS_PER_INCH 72
 
 typedef struct _GtkPageSetupClass GtkPageSetupClass;
 
@@ -48,44 +47,6 @@ struct _GtkPageSetupClass
 };
 
 G_DEFINE_TYPE (GtkPageSetup, gtk_page_setup, G_TYPE_OBJECT)
-
-static double
-to_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len * MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len * (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
-
-static double
-from_mm (double len, GtkUnit unit)
-{
-  switch (unit)
-    {
-    case GTK_UNIT_MM:
-      return len;
-    case GTK_UNIT_INCH:
-      return len / MM_PER_INCH;
-    default:
-    case GTK_UNIT_PIXEL:
-      g_warning ("Unsupported unit");
-      /* Fall through */
-    case GTK_UNIT_POINTS:
-      return len / (MM_PER_INCH / POINTS_PER_INCH);
-      break;
-    }
-}
 
 static void
 gtk_page_setup_finalize (GObject *object)
@@ -115,13 +76,32 @@ gtk_page_setup_class_init (GtkPageSetupClass *class)
 
   gobject_class->finalize = gtk_page_setup_finalize;
 }
-  
+
+/**
+ * gtk_page_setup_new:
+ *
+ * Creates a new #GtkPageSetup. 
+ * 
+ * Return value: a new #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_page_setup_new (void)
 {
   return g_object_new (GTK_TYPE_PAGE_SETUP, NULL);
 }
 
+/**
+ * gtk_page_setup_copy:
+ * @other: the #GtkPageSetup to copy
+ * 
+ * Copies a #GtkPageSetup.
+ * 
+ * Return value: a copy of @other
+ *
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_page_setup_copy (GtkPageSetup *other)
 {
@@ -138,25 +118,65 @@ gtk_page_setup_copy (GtkPageSetup *other)
   return copy;
 }
 
+/**
+ * gtk_page_setup_get_orientation:
+ * @setup: a #GtkPageSetup
+ * 
+ * Gets the page orientation of the #GtkPageSetup.
+ * 
+ * Return value: the page orientation
+ *
+ * Since: 2.10
+ */
 GtkPageOrientation
 gtk_page_setup_get_orientation (GtkPageSetup *setup)
 {
   return setup->orientation;
 }
 
+/**
+ * gtk_page_setup_set_orientation:
+ * @setup: a #GtkPageSetup
+ * @orientation: a #GtkPageOrientation value
+ * 
+ * Sets the page orientation of the #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 void
-gtk_page_setup_set_orientation (GtkPageSetup *setup,
-				GtkPageOrientation orientation)
+gtk_page_setup_set_orientation (GtkPageSetup       *setup,
+				GtkPageOrientation  orientation)
 {
   setup->orientation = orientation;
 }
 
+/**
+ * gtk_page_setup_get_paper_size:
+ * @setup: a #GtkPageSetup
+ * 
+ * Gets the paper size of the #GtkPageSetup.
+ * 
+ * Return value: the paper size
+ *
+ * Since: 2.10
+ */
 GtkPaperSize *
 gtk_page_setup_get_paper_size (GtkPageSetup *setup)
 {
   return setup->paper_size;
 }
 
+/**
+ * gtk_page_setup_set_paper_size:
+ * @setup: a #GtkPageSetup
+ * @size: a #GtkPaperSize 
+ * 
+ * Sets the paper size of the #GtkPageSetup without
+ * changing the margins. See 
+ * gtk_page_setup_set_paper_size_and_default_margins().
+ *
+ * Since: 2.10
+ */
 void
 gtk_page_setup_set_paper_size (GtkPageSetup *setup,
 			       GtkPaperSize *size)
@@ -164,6 +184,16 @@ gtk_page_setup_set_paper_size (GtkPageSetup *setup,
   setup->paper_size = gtk_paper_size_copy (size);
 }
 
+/**
+ * gtk_page_setup_set_paper_size_and_default_margins:
+ * @setup: a #GtkPageSetup
+ * @size: a #GtkPaperSize 
+ * 
+ * Sets the paper size of the #GtkPageSetup and modifies
+ * the margins according to the new paper size.
+ *
+ * Since: 2.10
+ */
 void
 gtk_page_setup_set_paper_size_and_default_margins (GtkPageSetup *setup,
 						   GtkPaperSize *size)
@@ -175,68 +205,166 @@ gtk_page_setup_set_paper_size_and_default_margins (GtkPageSetup *setup,
   setup->right_margin = gtk_paper_size_get_default_right_margin (setup->paper_size, GTK_UNIT_MM);
 }
 
-double
+/**
+ * gtk_page_setup_get_top_margin:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Gets the top margin in units of @unit.
+ * 
+ * Return value: the top margin
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_page_setup_get_top_margin (GtkPageSetup *setup,
 			       GtkUnit       unit)
 {
-  return from_mm (setup->top_margin, unit);
+  return _gtk_print_convert_from_mm (setup->top_margin, unit);
 }
 
+/**
+ * gtk_page_setup_set_top_margin:
+ * @setup: a #GtkPageSetup
+ * @margin: the new top margin in units of @unit
+ * @unit: the units for @margin
+ * 
+ * Sets the top margin of the #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 void
 gtk_page_setup_set_top_margin (GtkPageSetup *setup,
-			       double        margin,
+			       gdouble       margin,
 			       GtkUnit       unit)
 {
-  setup->top_margin = to_mm (margin, unit);
+  setup->top_margin = _gtk_print_convert_to_mm (margin, unit);
 }
 
-double
+/**
+ * gtk_page_setup_get_bottom_margin:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Gets the bottom margin in units of @unit.
+ * 
+ * Return value: the bottom margin
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_page_setup_get_bottom_margin (GtkPageSetup *setup,
 				  GtkUnit       unit)
 {
-  return from_mm (setup->bottom_margin, unit);
+  return _gtk_print_convert_from_mm (setup->bottom_margin, unit);
 }
 
+/**
+ * gtk_page_setup_set_bottom_margin:
+ * @setup: a #GtkPageSetup
+ * @margin: the new bottom margin in units of @unit
+ * @unit: the units for @margin
+ * 
+ * Sets the bottom margin of the #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 void
 gtk_page_setup_set_bottom_margin (GtkPageSetup *setup,
-				  double        margin,
+				  gdouble       margin,
 				  GtkUnit       unit)
 {
-  setup->bottom_margin = to_mm (margin, unit);
+  setup->bottom_margin = _gtk_print_convert_to_mm (margin, unit);
 }
 
-double
-gtk_page_setup_get_left_margin (GtkPageSetup    *setup,
-				GtkUnit          unit)
+/**
+ * gtk_page_setup_get_left_margin:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Gets the left margin in units of @unit.
+ * 
+ * Return value: the left margin
+ *
+ * Since: 2.10
+ */
+gdouble
+gtk_page_setup_get_left_margin (GtkPageSetup *setup,
+				GtkUnit       unit)
 {
-  return from_mm (setup->left_margin, unit);
+  return _gtk_print_convert_from_mm (setup->left_margin, unit);
 }
 
+/**
+ * gtk_page_setup_set_left_margin:
+ * @setup: a #GtkPageSetup
+ * @margin: the new left margin in units of @unit
+ * @unit: the units for @margin
+ * 
+ * Sets the left margin of the #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 void
-gtk_page_setup_set_left_margin (GtkPageSetup    *setup,
-				double           margin,
-				GtkUnit          unit)
+gtk_page_setup_set_left_margin (GtkPageSetup *setup,
+				gdouble       margin,
+				GtkUnit       unit)
 {
-  setup->left_margin = to_mm (margin, unit);
+  setup->left_margin = _gtk_print_convert_to_mm (margin, unit);
 }
 
-double
-gtk_page_setup_get_right_margin (GtkPageSetup    *setup,
-				 GtkUnit          unit)
+/**
+ * gtk_page_setup_get_right_margin:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Gets the right margin in units of @unit.
+ * 
+ * Return value: the right margin
+ *
+ * Since: 2.10
+ */
+gdouble
+gtk_page_setup_get_right_margin (GtkPageSetup *setup,
+				 GtkUnit       unit)
 {
-  return from_mm (setup->right_margin, unit);
+  return _gtk_print_convert_from_mm (setup->right_margin, unit);
 }
 
+/**
+ * gtk_page_setup_set_right_margin:
+ * @setup: a #GtkPageSetup
+ * @margin: the new right margin in units of @unit
+ * @unit: the units for @margin
+ * 
+ * Sets the right margin of the #GtkPageSetup.
+ *
+ * Since: 2.10
+ */
 void
-gtk_page_setup_set_right_margin (GtkPageSetup    *setup,
-				 double           margin,
-				 GtkUnit          unit)
+gtk_page_setup_set_right_margin (GtkPageSetup *setup,
+				 gdouble       margin,
+				 GtkUnit       unit)
 {
-  setup->right_margin = to_mm (margin, unit);
+  setup->right_margin = _gtk_print_convert_to_mm (margin, unit);
 }
 
-/* These take orientation, but not margins into consideration */
-double
+/**
+ * gtk_page_setup_get_paper_width:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Returns the paper width in units of @unit.
+ * 
+ * Note that this function takes orientation, but 
+ * not margins into consideration. 
+ * See gtk_page_setup_get_page_width().
+ *
+ * Return value: the paper width.
+ *
+ * Since: 2.10
+ */
+gdouble
 gtk_page_setup_get_paper_width (GtkPageSetup *setup,
 				GtkUnit       unit)
 {
@@ -247,9 +375,24 @@ gtk_page_setup_get_paper_width (GtkPageSetup *setup,
     return gtk_paper_size_get_height (setup->paper_size, unit);
 }
 
-double
-gtk_page_setup_get_paper_height (GtkPageSetup  *setup,
-				 GtkUnit        unit)
+/**
+ * gtk_page_setup_get_paper_height:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Returns the paper height in units of @unit.
+ * 
+ * Note that this function takes orientation, but 
+ * not margins into consideration.
+ * See gtk_page_setup_get_page_height().
+ *
+ * Return value: the paper height.
+ *
+ * Since: 2.10
+ */
+gdouble
+gtk_page_setup_get_paper_height (GtkPageSetup *setup,
+				 GtkUnit       unit)
 {
   if (setup->orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
       setup->orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
@@ -258,29 +401,58 @@ gtk_page_setup_get_paper_height (GtkPageSetup  *setup,
     return gtk_paper_size_get_width (setup->paper_size, unit);
 }
 
-/* These take orientation, and margins into consideration */
-double
-gtk_page_setup_get_page_width (GtkPageSetup    *setup,
-			       GtkUnit          unit)
+/**
+ * gtk_page_setup_get_page_width:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Returns the page width in units of @unit.
+ * 
+ * Note that this function takes orientation and
+ * margins into consideration. 
+ * See gtk_page_setup_get_paper_width().
+ *
+ * Return value: the page width.
+ *
+ * Since: 2.10
+ */
+gdouble
+gtk_page_setup_get_page_width (GtkPageSetup *setup,
+			       GtkUnit       unit)
 {
-  double width;
+  gdouble width;
   
   width = gtk_page_setup_get_paper_width (setup, GTK_UNIT_MM);
   width -= setup->left_margin + setup->right_margin;
   
-  return from_mm (width, unit);
+  return _gtk_print_convert_from_mm (width, unit);
 }
 
-double
-gtk_page_setup_get_page_height (GtkPageSetup    *setup,
-				GtkUnit          unit)
+/**
+ * gtk_page_setup_get_page_height:
+ * @setup: a #GtkPageSetup
+ * @unit: the unit for the return value
+ * 
+ * Returns the page height in units of @unit.
+ * 
+ * Note that this function takes orientation and
+ * margins into consideration. 
+ * See gtk_page_setup_get_paper_height().
+ *
+ * Return value: the page height.
+ *
+ * Since: 2.10
+ */
+gdouble
+gtk_page_setup_get_page_height (GtkPageSetup *setup,
+				GtkUnit       unit)
 {
-  double height;
+  gdouble height;
   
   height = gtk_page_setup_get_paper_height (setup, GTK_UNIT_MM);
   height -= setup->top_margin + setup->bottom_margin;
   
-  return from_mm (height, unit);
+  return _gtk_print_convert_from_mm (height, unit);
 }
 
 
