@@ -1,3 +1,7 @@
+2006-04-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintsettings.c: More documentation
+
 2006-04-22  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am (gtk_private_h_sources): Small workaround for
