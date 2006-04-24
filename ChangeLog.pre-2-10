@@ -1,5 +1,10 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkregion-generic.c: Documentation fixes.
+
+	* gdk/directfb/gdkmain-directfb.c: Make the comment not look like
+	a doc comment.
+
 	* gtk/gtkprintunixdialog.c: Add docs.
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_get_visible): Typo fix.

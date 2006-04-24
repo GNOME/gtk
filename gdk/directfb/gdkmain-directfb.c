@@ -31,13 +31,13 @@
  *            Sven Neumann <sven@convergence.de>
  */
 
-/**
+/*
  Main entry point for 2.6 seems to be open_display so 
  most stuff in main is moved over to gdkdisplay-directfb.c
  I'll move stub functions here that make no sense for directfb
  and true globals
  Michael Emmel
-**/
+*/
 
 #include <config.h>
 #include <string.h> 

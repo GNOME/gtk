@@ -1505,7 +1505,7 @@ gdk_region_xor (GdkRegion *source1,
  * gdk_region_empty: 
  * @region: a #GdkRegion
  *
- * Returns %TRUE if the #GdkRegion is empty.
+ * Finds out if the #GdkRegion is empty.
  *
  * Returns: %TRUE if @region is empty.
  */
@@ -1525,7 +1525,7 @@ gdk_region_empty (GdkRegion *region)
  * @region1: a #GdkRegion
  * @region2: a #GdkRegion
  *
- * Returns %TRUE if the two regions are the same.
+ * Finds out if the two regions are the same.
  *
  * Returns: %TRUE if @region1 and @region2 are equal.
  */
@@ -1561,7 +1561,7 @@ gdk_region_equal (GdkRegion *region1,
  * @x: the x coordinate of a point
  * @y: the y coordinate of a point
  *
- * Returns %TRUE if a point is in a region.
+ * Finds out if a point is in a region.
  *
  * Returns: %TRUE if the point is in @region.
  */
