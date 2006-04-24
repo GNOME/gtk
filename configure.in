@@ -1549,7 +1549,22 @@ if test "x$CUPS_CONFIG" != "xno"; then
 fi
 AM_CONDITIONAL(HAVE_CUPS, test "x$CUPS_CONFIG" != "xno")
 
-	
+gtk_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"
+			  
+AC_CHECK_HEADER(cairo-pdf.h,,AC_MSG_ERROR([
+*** Can't find cairo-pdf.h. You must build Cairo with the pdf
+*** backend enabled.]))
+
+if test "$os_win32" != "yes"; then
+  AC_CHECK_HEADER(cairo-ps.h,,AC_MSG_ERROR([
+*** Can't find cairo-ps.h. You must build Cairo with the 
+*** postscript backend enabled.]))
+fi   
+
+CPPFLAGS="$gtk_save_cppflags"
+     
+			  	
 ################################################################
 # Strip -export-dynamic from the link lines of various libraries
 ################################################################

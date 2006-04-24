@@ -1,3 +1,9 @@
+2006-04-24  Alexander Larsson  <alexl@redhat.com>
+
+	* configure.in:
+	Check for cairo-pdf.h.
+	Check for cairo-ps.h on non-win32.
+
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkclipboard.h: 
