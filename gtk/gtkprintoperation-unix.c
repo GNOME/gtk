@@ -245,12 +245,18 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 					       page_setup);
   gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (dialog),
 						 settings);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-
-  new_page_setup = gtk_page_setup_unix_dialog_get_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (dialog));
-
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+    new_page_setup = gtk_page_setup_unix_dialog_get_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (dialog));
+  else 
+    {
+      if (page_setup)
+	new_page_setup = gtk_page_setup_copy (page_setup);
+      else
+	new_page_setup = gtk_page_setup_new ();
+    }
+      
   gtk_widget_destroy (dialog);
-
+  
   return new_page_setup;
 }
 
