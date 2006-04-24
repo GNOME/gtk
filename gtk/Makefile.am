@@ -310,8 +310,10 @@ gtk_public_h_sources =          \
 
 gtk_unix_print_public_h_sources =    \
 	gtkpagesetupunixdialog.h	\
+	gtkprintunixdialog.h		\
 	gtkprinter.h			\
-	gtkprintunixdialog.h
+	gtkprintjob.h
+
 
 # Installed header files without compatibility guarantees
 # that are not include in gtk/gtk.h
@@ -586,8 +588,7 @@ gtk_private_h_sources += \
 	gtkprinter-private.h		\
 	gtkprinteroption.h		\
 	gtkprinteroptionset.h		\
-	gtkprinteroptionwidget.h	\
-	gtkprintjob.h
+	gtkprinteroptionwidget.h
 
 gtk_c_sources += \
 	gtkfilesystemunix.c		\

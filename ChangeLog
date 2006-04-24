@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Install gtkprintjob.h as Unix-specific print API.
+
 	* gtk/gtkprintoperation-unix.c (gtk_print_run_page_setup_dialog): 
 	Return a copy of the original page setup if the dialog was canceled.
 
