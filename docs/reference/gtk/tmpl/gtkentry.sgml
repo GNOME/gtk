@@ -131,6 +131,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:inner-border ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:invisible-char ##### -->
 <para>
 
@@ -156,6 +161,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:truncate-multiline ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:visibility ##### -->
 <para>
 
@@ -171,7 +181,6 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<!-- ##### FUNCTION gtk_entry_new ##### -->
 <para>
 Creates a new #GtkEntry widget.
 </para>
@@ -323,6 +332,15 @@ use gtk_editable_set_editable() instead.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_inner_border ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_entry_get_width_chars ##### -->
 <para>
 
@@ -348,6 +366,15 @@ use gtk_editable_set_editable() instead.
 
 @entry: 
 @setting: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_inner_border ##### -->
+<para>
+
+</para>
+
+@entry: 
+@border: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_width_chars ##### -->

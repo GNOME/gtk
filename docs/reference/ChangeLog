@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkentry.sgml: Remove a duplicate entry.
+
 	* gtk/gtk-sections.txt: Fix a typo.
 
 	* gdk-pixbuf/gdk-pixbuf.sgml: No new symbols in 2.10.
