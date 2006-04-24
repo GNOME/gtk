@@ -28,7 +28,6 @@ Printing support has been added in GTK+ 2.10.
 #GtkPageSetup
 </para>
 
-
 <!-- ##### SECTION Stability_Level ##### -->
 
 
@@ -50,49 +49,49 @@ Printing support has been added in GTK+ 2.10.
 
 <!-- ##### MACRO GTK_PAPER_NAME_A3 ##### -->
 <para>
-
+Name for the A4 paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_A4 ##### -->
 <para>
-
+Name for the A4 paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_A5 ##### -->
 <para>
-
+Name for the A5 paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_B5 ##### -->
 <para>
-
+Name for the B5 paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_LETTER ##### -->
 <para>
-
+Name for the Letter paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_EXECUTIVE ##### -->
 <para>
-
+Name for the Executive paper size.
 </para>
 
 
 
 <!-- ##### MACRO GTK_PAPER_NAME_LEGAL ##### -->
 <para>
-
+Name for the Legal paper size.
 </para>
 
 

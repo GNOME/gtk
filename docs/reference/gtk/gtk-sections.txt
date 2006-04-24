@@ -3977,21 +3977,6 @@ gtk_radio_tool_button_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkrichtext</FILE>
-<TITLE>GtkRichtText</TITLE>
-GtkRichTextSerializeFunc
-GtkRichTextDeserializeFunc
-gtk_rich_text_register_serialize_format
-gtk_rich_text_register_deserialize_format
-gtk_rich_text_unregister_serialize_format
-gtk_rich_text_unregister_deserialize_format
-gtk_rich_text_get_serialize_formats
-gtk_rich_text_get_deserialize_formats
-gtk_rich_text_serialize
-gtk_rich_text_deserialize
-</SECTION>
-
-<SECTION>
 <FILE>gtktoggletoolbutton</FILE>
 <TITLE>GtkToggleToolButton</TITLE>
 GtkToggleToolButton
