@@ -1,5 +1,13 @@
 2006-04-24  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintjob.h:
+	Declare GtkPrintJob.
+	
+	* gtk/gtkprintunixdialog.c: (gtk_print_unix_dialog_get_settings):
+	Change g_return_if_fail to g_return_val_if_fail.
+
+2006-04-24  Alexander Larsson  <alexl@redhat.com>
+
 	* configure.in:
 	Check for cairo-pdf.h.
 	Check for cairo-ps.h on non-win32.

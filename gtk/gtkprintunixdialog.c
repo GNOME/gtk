@@ -2523,7 +2523,7 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   GtkPageRange *ranges;
   int n_ranges;
 
-  g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 
   settings = gtk_print_settings_new ();
 
