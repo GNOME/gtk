@@ -412,13 +412,11 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
  * @done_cb: a function to call when the user saves the modified page setup
  * @data: user data to pass to @done_cb
  * 
- * Runs a page setup dialog, letting the user modify the values from 
- * @page_setup. 
+ * Runs a page setup dialog, letting the user modify the values from @page_setup. 
  *
- * In contrast to gtk_print_run_page_setup_dialog(), this function
- * returns after showing the page setup dialog on platforms that support
- * this, and calls @done_cb from a signal handler for the ::response
- * signal of the dialog.
+ * In contrast to gtk_print_run_page_setup_dialog(), this function  returns after 
+ * showing the page setup dialog on platforms that support this, and calls @done_cb 
+ * from a signal handler for the ::response signal of the dialog.
  *
  * Since: 2.10
  */

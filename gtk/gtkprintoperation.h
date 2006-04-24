@@ -139,6 +139,17 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 								    GtkPageSetup       *page_setup,
 								    GtkPrintSettings   *settings);
 
+typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup, 
+					gpointer      data);
+
+void                    gtk_print_operation_run_async              (GtkPrintOperation    *op,
+								    GtkWindow            *parent);
+void                    gtk_print_run_page_setup_dialog_async      (GtkWindow            *parent,
+								    GtkPageSetup         *page_setup,
+								    GtkPrintSettings     *settings,
+                                                                    GtkPageSetupDoneFunc  done_cb,
+                                                                    gpointer              data);
+
 G_END_DECLS
 
 #endif /* __GTK_PRINT_OPERATION_H__ */
