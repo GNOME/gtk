@@ -212,6 +212,9 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/20/gtk-no.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-ok.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-open.png			\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-landscale.png	\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-portrait.png	\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-reverse-landscape.png \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-paste.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-preferences.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-print.png			\

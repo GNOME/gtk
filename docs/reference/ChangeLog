@@ -1,5 +1,9 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (HTML_IMAGES): Add new stock icons.
+
+	* gtk/tmpl/gtkstock.sgml: Document new stock icons
+
 	* gtk/gtk-docs.sgml: 
 	* gtk/gtk-sections.txt: Add a rich text section
 

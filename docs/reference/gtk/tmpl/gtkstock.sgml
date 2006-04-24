@@ -676,6 +676,33 @@ The "Open" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_ORIENTATION_LANDSCAPE ##### -->
+<para>
+The "Landscape Orientation" icon.
+<inlinegraphic fileref="gtk-orientation-landscape.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.10
+
+
+<!-- ##### MACRO GTK_STOCK_ORIENTATION_PORTRAIT ##### -->
+<para>
+The "Portrait Orientation" icon.
+<inlinegraphic fileref="gtk-orientation-portrait.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.10
+
+
+<!-- ##### MACRO GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE ##### -->
+<para>
+The "Reverse Landscape Orientation" icon.
+<inlinegraphic fileref="gtk-orientation-reverse-landscape.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.10
+
+
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
 The "Paste" item.
