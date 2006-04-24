@@ -1,3 +1,8 @@
+2006-04-24  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintunixdialog.c (create_page_setup_page):
+	Even/Odd Pages -> Even/Odd Sheets
+
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c: Cleanups.

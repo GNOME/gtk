@@ -1960,9 +1960,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
   /* In enum order */
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("All pages"));  
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Even pages"));  
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Odd pages"));  
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("All sheets"));  
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Even sheets"));  
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Odd sheets"));  
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   label = gtk_label_new (_("Scale:"));
