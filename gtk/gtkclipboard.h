@@ -115,7 +115,7 @@ gchar *           gtk_clipboard_wait_for_text      (GtkClipboard  *clipboard);
 guint8 *          gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
                                                     GtkTextBuffer *buffer,
                                                     GdkAtom       *format,
-                                                    gsize         *size);
+                                                    gsize         *length);
 GdkPixbuf *       gtk_clipboard_wait_for_image     (GtkClipboard  *clipboard);
 gboolean          gtk_clipboard_wait_for_targets   (GtkClipboard  *clipboard,
                                                     GdkAtom      **targets,

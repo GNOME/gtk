@@ -215,6 +215,22 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   return result;
 }
 
+/**
+ * gtk_print_run_page_setup_dialog:
+ * @parent: transient parent, or %NULL
+ * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @settings: a #GtkPrintSettings
+ * 
+ * Runs a page setup dialog, letting the user modify 
+ * the values from @page_setup. If the user cancels
+ * the dialog, the returned #GtkPageSetup is identical
+ * to the passed in @page_setup, otherwise it contains
+ * the modifications done in the dialog.
+ * 
+ * Return value: a new #GtkPageSetup
+ *
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 				 GtkPageSetup     *page_setup,

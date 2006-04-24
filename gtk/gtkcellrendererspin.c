@@ -323,6 +323,8 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
  *
  * Creates a new #GtkCellRendererSpin. 
  *
+ * Returns: a new #GtkCellRendererSpin
+ *
  * Since: 2.10
  */
 GtkCellRenderer *

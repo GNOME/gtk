@@ -1126,7 +1126,7 @@ gtk_status_icon_set_from_icon_name (GtkStatusIcon *status_icon,
 
 /**
  * gtk_status_icon_get_storage_type:
- * @status_icon: 
+ * @status_icon: a #GtkStatusIcon
  * 
  * Gets the type of representation being used by the #GtkStatusIcon
  * to store image data. If the #GtkStatusIcon has no image data,

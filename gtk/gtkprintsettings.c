@@ -385,7 +385,7 @@ gtk_print_settings_get_length (GtkPrintSettings *settings,
  * gtk_print_settings_set_length:
  * @settings: a #GtkPrintSettings
  * @key: a key
- * @length: a length
+ * @value: a length
  * @unit: the unit of @length
  * 
  * Associates a length in units of @unit with @key.
@@ -395,11 +395,11 @@ gtk_print_settings_get_length (GtkPrintSettings *settings,
 void
 gtk_print_settings_set_length (GtkPrintSettings *settings,
 			       const gchar      *key,
-			       gdouble           length, 
+			       gdouble           value, 
 			       GtkUnit           unit)
 {
   gtk_print_settings_set_double (settings, key,
-				 _gtk_print_convert_to_mm (length, unit));
+				 _gtk_print_convert_to_mm (value, unit));
 }
 
 /**
@@ -943,7 +943,7 @@ gtk_print_settings_get_quality (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_quality:
  * @settings: a #GtkPrintSettings
- * @duplex: a #GtkPrintQuality value
+ * @quality: a #GtkPrintQuality value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_QUALITY.
  * 
@@ -1088,7 +1088,7 @@ gtk_print_settings_get_number_up (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_number_up:
  * @settings: a #GtkPrintSettings
- * @num_copies: the number of pages per sheet 
+ * @number_up: the number of pages per sheet 
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP.
  * 
@@ -1156,7 +1156,7 @@ gtk_print_settings_get_scale (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_scale:
  * @settings: a #GtkPrintSettings
- * @resolution: the scale in percent
+ * @scale: the scale in percent
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_SCALE.
  * 
@@ -1237,7 +1237,7 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_print_pages:
  * @settings: a #GtkPrintSettings
- * @print_pages: a #GtkPrintPages value
+ * @pages: a #GtkPrintPages value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_PRINT_PAGES.
  * 
@@ -1245,11 +1245,11 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
-				    GtkPrintPages     print_pages)
+				    GtkPrintPages     pages)
 {
   const gchar *str;
 
-  switch (print_pages)
+  switch (pages)
     {
     default:
     case GTK_PRINT_PAGES_ALL:

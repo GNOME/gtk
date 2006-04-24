@@ -1,5 +1,20 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.h: 
+	* gtk/gtkprinter.c: 
+	* gtk/gtkprintsettings.h: 
+	* gtk/gtkprintsettings.c: Match parameter names with the headers.
+
+	* gtk/gtkprintoperation-unix.c (gtk_print_run_page_setup_dialog): 
+	Add docs.
+
+	* gtk/gtktextbufferrichtext.c (gtk_text_buffer_deserialize): 
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_storage_type): 
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_position_func): 
+	* gtk/gtktreeview.c (gtk_tree_view_get_headers_clickable): 
+	* gtk/gtkcellrendererspin.c (gtk_cell_renderer_spin_new): 
+	* gtk/gtkmenu.c (gtk_menu_get_for_attach_widget): Fix the docs.
+
 	* gtk/gtkprinter.h: Don't declare GtkPrintJob here.
 	* gtk/gtkprinter-private.h: Instead include gtkprintjob.h.
 

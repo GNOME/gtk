@@ -4783,7 +4783,8 @@ gtk_menu_set_monitor (GtkMenu *menu,
 /**
  * gtk_menu_get_for_attach_widget:
  * @widget: a #GtkWidget
- * * Returns a list of the menus which are attached to this widget.
+ *
+ * Returns a list of the menus which are attached to this widget.
  * This list is owned by GTK+ and must not be modified.
  *
  * Return value: the list of menus attached to his widget.

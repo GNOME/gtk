@@ -132,7 +132,7 @@ void               gtk_print_settings_set_paper_width    (GtkPrintSettings   *se
 gdouble            gtk_print_settings_get_paper_height   (GtkPrintSettings   *settings,
 							  GtkUnit             unit);
 void               gtk_print_settings_set_paper_height   (GtkPrintSettings   *settings,
-							  gdouble             width,
+							  gdouble             height,
 							  GtkUnit             unit);
 gboolean           gtk_print_settings_get_use_color      (GtkPrintSettings   *settings);
 void               gtk_print_settings_set_use_color      (GtkPrintSettings   *settings,

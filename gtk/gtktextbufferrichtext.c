@@ -516,7 +516,7 @@ gtk_text_buffer_serialize (GtkTextBuffer     *register_buffer,
 }
 
 /**
- * gtk_text_buffer_serialize:
+ * gtk_text_buffer_deserialize:
  * @register_buffer: the #GtkTextBuffer %format is registered with
  * @content_buffer: the #GtkTextBuffer to deserialize into
  * @format: the rich text format to use for deserializing

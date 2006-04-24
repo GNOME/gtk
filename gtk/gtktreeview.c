@@ -9853,6 +9853,8 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
  * gtk_tree_view_get_headers_clickable:
  * @tree_view: A #GtkTreeView.
  *
+ * Returns whether all header columns are clickable.
+ *
  * Return value: %TRUE if all header columns are clickable, otherwise %FALSE
  *
  * Since: 2.10
@@ -12663,9 +12665,9 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_set_search_position_func:
  * @tree_view: A #GtkTreeView
- * @search_position_func: the function to use to position the search dialog
- * @ser_data: user data to pass to @search_position_func, or %NULL
- * @destroy: Destroy notifier for @search_position_data, or %NULL
+ * @func: the function to use to position the search dialog
+ * @data: user data to pass to @func, or %NULL
+ * @destroy: Destroy notifier for @data, or %NULL
  *
  * Sets the function to use when positioning the seach dialog.
  *

@@ -298,7 +298,7 @@ gtk_printer_get_property (GObject    *object,
  * gtk_printer_new:
  * @name: the name of the printer
  * @backend: a #GtkPrintBackend
- * @gboolean: whether the printer is virtual
+ * @virtual: whether the printer is virtual
  *
  * Creates a new #GtkPrinter.
  *
