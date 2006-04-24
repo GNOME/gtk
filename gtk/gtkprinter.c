@@ -52,6 +52,7 @@ struct _GtkPrinterPrivate
   gchar *state_message;  
   gint job_count;
 
+  /* Not ref:ed, backend owns printer. */
   GtkPrintBackend *backend;
 };
 
@@ -213,9 +214,6 @@ gtk_printer_finalize (GObject *object)
   g_free (printer->priv->state_message);
   g_free (printer->priv->icon_name);
 
-  if (printer->priv->backend)
-    g_object_unref (printer->priv->backend);
-
   if (G_OBJECT_CLASS (gtk_printer_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_printer_parent_class)->finalize (object);
 }
@@ -235,7 +233,7 @@ gtk_printer_set_property (GObject         *object,
       break;
     
     case PROP_BACKEND:
-      printer->priv->backend = GTK_PRINT_BACKEND (g_value_dup_object (value));
+      printer->priv->backend = GTK_PRINT_BACKEND (g_value_get_object (value));
       break;
 
     case PROP_IS_VIRTUAL:
@@ -347,10 +345,7 @@ gtk_printer_set_backend (GtkPrinter      *printer,
   g_return_if_fail (GTK_IS_PRINTER (printer));
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
-  if (printer->priv->backend)
-    g_object_unref (printer->priv->backend);
-  
-  printer->priv->backend = g_object_ref (backend);
+  printer->priv->backend = backend;
 }
 
 /**

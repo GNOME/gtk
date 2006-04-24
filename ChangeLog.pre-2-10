@@ -1,5 +1,10 @@
 2006-04-24  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprinter.c:
+	Don't ref the backend since the backend owns the printer.
+
+2006-04-24  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c (update_combo_sensitivity_from_printers):
 	Remove spew.
 
