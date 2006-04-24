@@ -143,6 +143,15 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkPrintJob::status-changed:
+   * @job: the #GtkPrintJob object on which the signal was emitted
+   *
+   * Gets emitted when the status of a job changes. The signal handler
+   * can use gtk_print_job_get_status() to obtain the new status.
+   *
+   * Since: 2.10
+   */
   signals[STATUS_CHANGED] =
    g_signal_new ("status-changed",
                  G_TYPE_FROM_CLASS (class),
@@ -154,30 +163,30 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 }
 
 static void
-gtk_print_job_init (GtkPrintJob *print_job)
+gtk_print_job_init (GtkPrintJob *job)
 {
-  print_job->priv = GTK_PRINT_JOB_GET_PRIVATE (print_job); 
-  print_job->priv->spool_file_fd = -1;
+  job->priv = GTK_PRINT_JOB_GET_PRIVATE (job); 
+  job->priv->spool_file_fd = -1;
 
-  print_job->priv->title = g_strdup ("");
-  print_job->priv->surface = NULL;
-  print_job->priv->backend = NULL;
-  print_job->priv->printer = NULL;
+  job->priv->title = g_strdup ("");
+  job->priv->surface = NULL;
+  job->priv->backend = NULL;
+  job->priv->printer = NULL;
 
-  print_job->priv->printer_set = FALSE;
-  print_job->priv->settings_set = FALSE;
-  print_job->priv->page_setup_set = FALSE;
-  print_job->priv->status = GTK_PRINT_STATUS_INITIAL;
+  job->priv->printer_set = FALSE;
+  job->priv->settings_set = FALSE;
+  job->priv->page_setup_set = FALSE;
+  job->priv->status = GTK_PRINT_STATUS_INITIAL;
 
-  print_job->print_pages = GTK_PRINT_PAGES_ALL;
-  print_job->page_ranges = NULL;
-  print_job->num_page_ranges = 0;
-  print_job->collate = FALSE;
-  print_job->reverse = FALSE;
-  print_job->num_copies = 1;
-  print_job->scale = 1.0;
-  print_job->page_set = GTK_PAGE_SET_ALL;
-  print_job->rotate_to_orientation = FALSE;
+  job->print_pages = GTK_PRINT_PAGES_ALL;
+  job->page_ranges = NULL;
+  job->num_page_ranges = 0;
+  job->collate = FALSE;
+  job->reverse = FALSE;
+  job->num_copies = 1;
+  job->scale = 1.0;
+  job->page_set = GTK_PAGE_SET_ALL;
+  job->rotate_to_orientation = FALSE;
 }
 
 
@@ -212,38 +221,38 @@ gtk_print_job_constructor (GType                  type,
 static void
 gtk_print_job_finalize (GObject *object)
 {
-  GtkPrintJob *print_job;
+  GtkPrintJob *job;
   
   g_return_if_fail (object != NULL);
 
-  print_job = GTK_PRINT_JOB (object);
+  job = GTK_PRINT_JOB (object);
 
-  if (print_job->priv->spool_file_fd > 0)
+  if (job->priv->spool_file_fd > 0)
     {
-      close (print_job->priv->spool_file_fd);
-      print_job->priv->spool_file_fd = -1;
+      close (job->priv->spool_file_fd);
+      job->priv->spool_file_fd = -1;
     }
   
-  if (print_job->priv->backend)
-    g_object_unref (G_OBJECT (print_job->priv->backend));
+  if (job->priv->backend)
+    g_object_unref (G_OBJECT (job->priv->backend));
 
-  if (print_job->priv->printer)
-    g_object_unref (G_OBJECT (print_job->priv->printer));
+  if (job->priv->printer)
+    g_object_unref (G_OBJECT (job->priv->printer));
 
-  if (print_job->priv->surface)
-    cairo_surface_destroy (print_job->priv->surface);
+  if (job->priv->surface)
+    cairo_surface_destroy (job->priv->surface);
 
-  if (print_job->priv->settings)
-    g_object_unref (print_job->priv->settings);
+  if (job->priv->settings)
+    g_object_unref (job->priv->settings);
   
-  if (print_job->priv->page_setup)
-    g_object_unref (print_job->priv->page_setup);
+  if (job->priv->page_setup)
+    g_object_unref (job->priv->page_setup);
 
-  g_free (print_job->page_ranges);
-  print_job->page_ranges = NULL;
+  g_free (job->page_ranges);
+  job->page_ranges = NULL;
   
-  g_free (print_job->priv->title);
-  print_job->priv->title = NULL;
+  g_free (job->priv->title);
+  job->priv->title = NULL;
   
   if (G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize)
     G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize (object);
@@ -251,18 +260,22 @@ gtk_print_job_finalize (GObject *object)
 
 /**
  * gtk_print_job_new:
+ * @title: the job title
+ * @printer: a #GtkPrinter
+ * @settings: a #GtkPrintSettings
+ * @page_setup: a #GtkPageSetup
  *
  * Creates a new #GtkPrintJob.
  *
  * Return value: a new #GtkPrintJob
  *
- * Since: 2.8
+ * Since: 2.10
  **/
 GtkPrintJob *
-gtk_print_job_new (const gchar *title,
-		   GtkPrinter *printer,
+gtk_print_job_new (const gchar      *title,
+		   GtkPrinter       *printer,
 		   GtkPrintSettings *settings,
-		   GtkPageSetup *page_setup)
+		   GtkPageSetup     *page_setup)
 {
   GObject *result;
   result = g_object_new (GTK_TYPE_PRINT_JOB,
@@ -274,42 +287,84 @@ gtk_print_job_new (const gchar *title,
   return (GtkPrintJob *) result;
 }
 
+/**
+ * gtk_print_job_get_settings:
+ * @job: a #GtkPrintJob
+ * 
+ * Gets the #GtkPrintSettings of the print job.
+ * 
+ * Return value: the settings of @job
+ *
+ * Since: 2.10
+ */
 GtkPrintSettings *
-gtk_print_job_get_settings (GtkPrintJob *print_job)
+gtk_print_job_get_settings (GtkPrintJob *job)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (print_job), NULL);
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
   
-  return print_job->priv->settings;
+  return job->priv->settings;
 }
 
+/**
+ * gtk_print_job_get_printer:
+ * @job: a #GtkPrintJob
+ * 
+ * Gets the #GtkPrinter of the print job.
+ * 
+ * Return value: the printer of @job
+ *
+ * Since: 2.10
+ */
 GtkPrinter *
-gtk_print_job_get_printer (GtkPrintJob *print_job)
+gtk_print_job_get_printer (GtkPrintJob *job)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (print_job), NULL);
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
   
-  return print_job->priv->printer;
+  return job->priv->printer;
 }
 
-const char *
-gtk_print_job_get_title (GtkPrintJob *print_job)
+/**
+ * gtk_print_job_get_title:
+ * @job: a #GtkPrintJob
+ * 
+ * Gets the job title.
+ * 
+ * Return value: the title of @job
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar *
+gtk_print_job_get_title (GtkPrintJob *job)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (print_job), NULL);
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
   
-  return print_job->priv->title;
+  return job->priv->title;
 }
 
+/**
+ * gtk_print_job_get_status:
+ * @job: a #GtkPrintJob
+ * 
+ * Gets the status of the print job.
+ * 
+ * Return value: the status of @job
+ *
+ * Since: 2.10
+ */
 GtkPrintStatus
-gtk_print_job_get_status (GtkPrintJob *print_job)
+gtk_print_job_get_status (GtkPrintJob *job)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (print_job), GTK_PRINT_STATUS_FINISHED);
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), GTK_PRINT_STATUS_FINISHED);
   
-  return print_job->priv->status;
+  return job->priv->status;
 }
 
 void
 gtk_print_job_set_status (GtkPrintJob   *job,
 			  GtkPrintStatus status)
 {
+  g_return_if_fail (GTK_IS_PRINT_JOB (job));
+
   if (job->priv->status == status)
     return;
 
@@ -319,7 +374,7 @@ gtk_print_job_set_status (GtkPrintJob   *job,
 
 gboolean
 gtk_print_job_set_source_file (GtkPrintJob *job,
-			       const char  *filename,
+			       const gchar *filename,
 			       GError     **error)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
@@ -344,12 +399,24 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
     return TRUE;
 }
 
+/**
+ * gtk_print_job_get_surface:
+ * @job: a #GtkPrintJob
+ * @error: return location for errors, or %NULL
+ * 
+ * Gets a cairo surface onto which the pages of
+ * the print job should be rendered.
+ * 
+ * Return value: the cairo surface of @job
+ *
+ * Since: 2.10
+ **/
 cairo_surface_t *
-gtk_print_job_get_surface (GtkPrintJob *job,
-			   GError **error)
+gtk_print_job_get_surface (GtkPrintJob  *job,
+			   GError      **error)
 {
-  char *filename;
-  double width, height;
+  gchar *filename;
+  gdouble width, height;
   GtkPaperSize *paper_size;
   
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
@@ -358,8 +425,8 @@ gtk_print_job_get_surface (GtkPrintJob *job,
     return job->priv->surface;
   
   job->priv->spool_file_fd = g_file_open_tmp ("gtkprint_XXXXXX", 
-					      &filename, 
-					      error);
+						    &filename, 
+						    error);
   if (job->priv->spool_file_fd == -1)
     return NULL;
 
@@ -369,7 +436,7 @@ gtk_print_job_get_surface (GtkPrintJob *job,
   paper_size = gtk_page_setup_get_paper_size (job->priv->page_setup);
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
-
+  
   job->priv->surface = _gtk_printer_create_cairo_surface (job->priv->printer,
 							  width, height,
 							  job->priv->spool_file_fd);
@@ -446,21 +513,35 @@ gtk_print_job_get_property (GObject    *object,
     }
 }
 
+/**
+ * gtk_print_job_send:
+ * @job: a GtkPrintJob
+ * @callback: function to call when the job completes
+ * @user_data: user data that gets passed to @callback
+ * @dnotify: destroy notify for @user_data
+ * @error: return location for errors, or %NULL
+ * 
+ * Sends the print job off to the printer.  
+ * 
+ * Return value: %FALSE if an error occurred
+ *
+ * Since: 2.10
+ **/
 gboolean
-gtk_print_job_send (GtkPrintJob *print_job,
-                    GtkPrintJobCompleteFunc callback,
-                    gpointer user_data,
-		    GDestroyNotify dnotify,
-		    GError **error)
+gtk_print_job_send (GtkPrintJob             *job,
+                    GtkPrintJobCompleteFunc  callback,
+                    gpointer                 user_data,
+		    GDestroyNotify           dnotify,
+		    GError                 **error)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (print_job), FALSE);
-  g_return_val_if_fail (print_job->priv->spool_file_fd > 0, FALSE);
-
-  gtk_print_job_set_status (print_job, GTK_PRINT_STATUS_SENDING_DATA);
-  lseek (print_job->priv->spool_file_fd, 0, SEEK_SET);
-  gtk_print_backend_print_stream (print_job->priv->backend,
-                                  print_job,
-				  print_job->priv->spool_file_fd,
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
+  g_return_val_if_fail (job->priv->spool_file_fd > 0, FALSE);
+  
+  gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
+  lseek (job->priv->spool_file_fd, 0, SEEK_SET);
+  gtk_print_backend_print_stream (job->priv->backend,
+                                  job,
+				  job->priv->spool_file_fd,
                                   callback,
                                   user_data,
 				  dnotify);

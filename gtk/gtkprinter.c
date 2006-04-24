@@ -127,7 +127,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_IS_VIRTUAL,
                                    g_param_spec_boolean ("is-virtual",
 							 P_("Is Virtual"),
-							 P_("False if this represents a real hardware printer"),
+							 P_("FALSE if this represents a real hardware printer"),
 							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
@@ -161,7 +161,17 @@ gtk_printer_class_init (GtkPrinterClass *class)
  						     0,
  						     GTK_PARAM_READABLE));
 
-
+  /**
+   * GtkPrinter::details-acquired:
+   * @printer: the #GtkPrinter on which the signal is emitted
+   * @success: %TRUE if the details were successfully acquired
+   *
+   * Gets emitted in response to a request for detailed information
+   * about a printer from the print backend. The @success parameter
+   * indicates if the information was actually obtained.
+   *
+   * Since: 2.10
+   */
   signals[DETAILS_ACQUIRED] =
    g_signal_new ("details-acquired",
                  G_TYPE_FROM_CLASS (class),
@@ -286,15 +296,18 @@ gtk_printer_get_property (GObject    *object,
 
 /**
  * gtk_printer_new:
+ * @name: the name of the printer
+ * @backend: a #GtkPrintBackend
+ * @gboolean: whether the printer is virtual
  *
  * Creates a new #GtkPrinter.
  *
  * Return value: a new #GtkPrinter
  *
- * Since: 2.8
+ * Since: 2.10
  **/
 GtkPrinter *
-gtk_printer_new (const char      *name,
+gtk_printer_new (const gchar     *name,
 		 GtkPrintBackend *backend,
 		 gboolean         virtual)
 {
@@ -309,6 +322,16 @@ gtk_printer_new (const char      *name,
   return (GtkPrinter *) result;
 }
 
+/**
+ * gtk_printer_get_backend:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns the backend of the printer.
+ * 
+ * Return value: the backend of @printer
+ * 
+ * Since: 2.10
+ */
 GtkPrintBackend *
 gtk_printer_get_backend (GtkPrinter *printer)
 {
@@ -321,13 +344,26 @@ void
 gtk_printer_set_backend (GtkPrinter      *printer,
 			 GtkPrintBackend *backend)
 {
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
+
   if (printer->priv->backend)
     g_object_unref (printer->priv->backend);
   
   printer->priv->backend = g_object_ref (backend);
 }
 
-const gchar *
+/**
+ * gtk_printer_get_name:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns the name of the printer.
+ * 
+ * Return value: the name of @printer
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -335,7 +371,17 @@ gtk_printer_get_name (GtkPrinter *printer)
   return printer->priv->name;
 }
 
-const gchar *
+/**
+ * gtk_printer_get_description:
+ * @printer: a #GtkPrinter
+ * 
+ * Gets the description of the printer.
+ * 
+ * Return value: the description of @printer
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar *
 gtk_printer_get_description (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -344,9 +390,11 @@ gtk_printer_get_description (GtkPrinter *printer)
 }
 
 gboolean
-gtk_printer_set_description (GtkPrinter *printer,
-			     const char *description)
+gtk_printer_set_description (GtkPrinter  *printer,
+			     const gchar *description)
 {
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+
   if (safe_strcmp (printer->priv->description, description) == 0)
     return FALSE;
 
@@ -356,7 +404,18 @@ gtk_printer_set_description (GtkPrinter *printer,
   return TRUE;
 }
 
-const gchar *
+/**
+ * gtk_printer_get_state_message:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns the state message describing the current state
+ * of the printer.
+ * 
+ * Return value: the state message of @printer
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -365,9 +424,11 @@ gtk_printer_get_state_message (GtkPrinter *printer)
 }
 
 gboolean
-gtk_printer_set_state_message (GtkPrinter *printer,
-			       const char *message)
+gtk_printer_set_state_message (GtkPrinter  *printer,
+			       const gchar *message)
 {
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+
   if (safe_strcmp (printer->priv->state_message, message) == 0)
     return FALSE;
 
@@ -378,7 +439,17 @@ gtk_printer_set_state_message (GtkPrinter *printer,
   return TRUE;
 }
 
-const gchar *
+/**
+ * gtk_printer_get_location:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns a  description of the location of the printer.
+ * 
+ * Return value: the location of @printer
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar *
 gtk_printer_get_location (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -387,9 +458,11 @@ gtk_printer_get_location (GtkPrinter *printer)
 }
 
 gboolean
-gtk_printer_set_location (GtkPrinter *printer,
-			  const char *location)
+gtk_printer_set_location (GtkPrinter  *printer,
+			  const gchar *location)
 {
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+
   if (safe_strcmp (printer->priv->location, location) == 0)
     return FALSE;
 
@@ -400,7 +473,17 @@ gtk_printer_set_location (GtkPrinter *printer,
   return TRUE;
 }
 
-const gchar * 
+/**
+ * gtk_printer_get_icon_name:
+ * @printer: a #GtkPrinter
+ * 
+ * Gets the name of the icon to use for the printer.
+ * 
+ * Return value: the icon name for @printer
+ *
+ * Since: 2.10
+ */
+G_CONST_RETURN gchar * 
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -409,14 +492,26 @@ gtk_printer_get_icon_name (GtkPrinter *printer)
 }
 
 void
-gtk_printer_set_icon_name (GtkPrinter *printer,
-			   const char *icon)
+gtk_printer_set_icon_name (GtkPrinter  *printer,
+			   const gchar *icon)
 {
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
   g_free (printer->priv->icon_name);
   printer->priv->icon_name = g_strdup (icon);
   g_object_notify (G_OBJECT (printer), "icon-name");
 }
 
+/**
+ * gtk_printer_get_job_count:
+ * @printer: a #GtkPrinter
+ * 
+ * Gets the number of jobs currently queued on the printer.
+ * 
+ * Return value: the number of jobs on @printer
+ *
+ * Since: 2.10
+ */
 gint 
 gtk_printer_get_job_count (GtkPrinter *printer)
 {
@@ -427,8 +522,10 @@ gtk_printer_get_job_count (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_job_count (GtkPrinter *printer,
-			   int count)
+			   gint        count)
 {
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+
   if (printer->priv->job_count == count)
     return FALSE;
 
@@ -442,8 +539,6 @@ gtk_printer_set_job_count (GtkPrinter *printer,
 gboolean
 _gtk_printer_has_details (GtkPrinter *printer)
 {
-  g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
-  
   return printer->priv->has_details;
 }
 
@@ -454,6 +549,17 @@ gtk_printer_set_has_details (GtkPrinter *printer,
   printer->priv->has_details = val;
 }
 
+/**
+ * gtk_printer_is_active:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns whether the printer is currently active (i.e. 
+ * accepts new jobs).
+ * 
+ * Return value: %TRUE if @printer is active
+ *
+ * Since: 2.10
+ */
 gboolean
 gtk_printer_is_active (GtkPrinter *printer)
 {
@@ -466,10 +572,24 @@ void
 gtk_printer_set_is_active (GtkPrinter *printer,
 			   gboolean val)
 {
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
   printer->priv->is_active = val;
 }
 
 
+/**
+ * gtk_printer_is_virtual:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns whether the printer is virtual (i.e. does not
+ * represent actual printer hardware, but something like 
+ * a CUPS class).
+ * 
+ * Return value: %TRUE if @printer is virtual
+ *
+ * Since: 2.10
+ */
 gboolean
 gtk_printer_is_virtual (GtkPrinter *printer)
 {
@@ -490,10 +610,22 @@ void
 gtk_printer_set_is_new (GtkPrinter *printer,
 			gboolean val)
 {
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
   printer->priv->is_new = val;
 }
 
 
+/**
+ * gtk_printer_is_default:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns whether the printer is the default printer.
+ * 
+ * Return value: %TRUE if @printer is the default
+ *
+ * Since: 2.10
+ */
 gboolean
 gtk_printer_is_default (GtkPrinter *printer)
 {
@@ -504,8 +636,10 @@ gtk_printer_is_default (GtkPrinter *printer)
 
 void
 gtk_printer_set_is_default (GtkPrinter *printer,
-			    gboolean val)
+			    gboolean    val)
 {
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
   printer->priv->is_default = TRUE;
 }
 
@@ -517,9 +651,9 @@ _gtk_printer_request_details (GtkPrinter *printer)
 }
 
 GtkPrinterOptionSet *
-_gtk_printer_get_options (GtkPrinter *printer,
+_gtk_printer_get_options (GtkPrinter       *printer,
 			  GtkPrintSettings *settings,
-			  GtkPageSetup *page_setup)
+			  GtkPageSetup     *page_setup)
 {
   GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
   return backend_iface->printer_get_options (printer, settings, page_setup);
@@ -543,10 +677,10 @@ _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 }
 
 void
-_gtk_printer_prepare_for_print (GtkPrinter *printer,
-				GtkPrintJob *print_job,
+_gtk_printer_prepare_for_print (GtkPrinter       *printer,
+				GtkPrintJob      *print_job,
 				GtkPrintSettings *settings,
-				GtkPageSetup *page_setup)
+				GtkPageSetup     *page_setup)
 {
   GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
   return backend_iface->printer_prepare_for_print (printer, print_job, settings, page_setup);
@@ -554,9 +688,9 @@ _gtk_printer_prepare_for_print (GtkPrinter *printer,
 
 cairo_surface_t *
 _gtk_printer_create_cairo_surface (GtkPrinter *printer,
-				   gdouble width, 
-				   gdouble height,
-				   gint cache_fd)
+				   gdouble     width, 
+				   gdouble     height,
+				   gint        cache_fd)
 {
   GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
 
@@ -572,11 +706,11 @@ _gtk_printer_list_papers (GtkPrinter *printer)
 }
 
 void
-_gtk_printer_get_hard_margins          (GtkPrinter          *printer,
-					double              *top,
-					double              *bottom,
-					double              *left,
-					double              *right)
+_gtk_printer_get_hard_margins (GtkPrinter *printer,
+			       gdouble    *top,
+			       gdouble    *bottom,
+			       gdouble    *left,
+			       gdouble    *right)
 {
   GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
 

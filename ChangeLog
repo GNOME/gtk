@@ -1,5 +1,13 @@
 2006-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter-private.h: 
+	* gtk/gtkprintbackend.h: 
+	* gtk/gtkprinter.[hc]: 
+	* gtk/gtkprintjob.[hc]: Use g types, add documentation, and some
+	stylistic fixups.
+
+	* gtk/gtkaboutdialog.c (activate_url): Avoid a compiler warning.
+
 	* gtk/gtkpapersize.[hc]: Use g types, add documentation.
 
 	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_get_settings): 

@@ -1621,7 +1621,7 @@ activate_url (GtkWidget *widget,
 	      gpointer   data)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (data);
-  gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
+  const gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
   
   if (activate_url_hook != NULL)
     (* activate_url_hook) (about, url, activate_url_hook_data);

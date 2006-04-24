@@ -134,15 +134,15 @@ void        gtk_printer_set_has_details   (GtkPrinter      *printer,
 void        gtk_printer_set_is_default    (GtkPrinter      *printer,
 					   gboolean         val);
 void        gtk_printer_set_icon_name     (GtkPrinter      *printer,
-					   const char      *icon);
+					   const gchar     *icon);
 gboolean    gtk_printer_set_job_count     (GtkPrinter      *printer,
-					   int              count);
+					   gint             count);
 gboolean    gtk_printer_set_location      (GtkPrinter      *printer,
-					   const char      *location);
+					   const gchar     *location);
 gboolean    gtk_printer_set_description   (GtkPrinter      *printer,
-					   const char      *description);
+					   const gchar     *description);
 gboolean    gtk_printer_set_state_message (GtkPrinter      *printer,
-					   const char      *message);
+					   const gchar     *message);
 void        gtk_printer_set_is_active     (GtkPrinter      *printer,
 					   gboolean         active);
 

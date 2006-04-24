@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 gboolean             _gtk_printer_has_details               (GtkPrinter          *printer);
 void                 _gtk_printer_request_details           (GtkPrinter          *printer);
 GtkPrinterOptionSet *_gtk_printer_get_options               (GtkPrinter          *printer,
-							     GtkPrintSettings *settings,
+							     GtkPrintSettings    *settings,
 							     GtkPageSetup        *page_setup);
 gboolean             _gtk_printer_mark_conflicts            (GtkPrinter          *printer,
 							     GtkPrinterOptionSet *options);
@@ -49,10 +49,10 @@ cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter         
 							     gint                 cache_fd);
 GList  *             _gtk_printer_list_papers               (GtkPrinter          *printer);
 void                 _gtk_printer_get_hard_margins          (GtkPrinter          *printer,
-							     double              *top,
-							     double              *bottom,
-							     double              *left,
-							     double              *right);
+							     gdouble             *top,
+							     gdouble             *bottom,
+							     gdouble             *left,
+							     gdouble             *right);
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
 
 
