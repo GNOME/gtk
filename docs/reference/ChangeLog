@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf.sgml: No new symbols in 2.10.
+
 	* gdk/Makefile.am (IGNORE_HFILES): Add  directfb
 
 	* gtk/tmpl/gtkpapersize.sgml: Additions.
