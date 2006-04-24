@@ -49,12 +49,17 @@ IGNORE_HFILES=				\
 	gtkpathbar.h			\
 	gtkplugprivate.h		\
 	gtkprintbackend.h		\
+	gtkprinteroption.h		\
+	gtkprinteroptionset.h		\
 	gtkprinteroptionwidget.h	\
 	gtkprinter-private.h		\
+	gtkprint-win32.h		\
+	gtkprintutils.h			\
 	gtkprintoperation-private.h	\
 	gtkprivate.h			\
 	gtkrbtree.h			\
 	gtkrecentchooserdefault.h	\
+	gtkrecentchooserutils.h		\
 	gtkrecentchooserprivate.h	\
 	gtksequence.h			\
 	gtksocketprivate.h		\

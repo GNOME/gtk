@@ -114,7 +114,7 @@ a new file to it.
 
 <!-- ##### MACRO GTK_RECENT_MANAGER_ERROR ##### -->
 <para>
-
+The #GQuark used for #GtkRecentManagerError errors.
 </para>
 
 
@@ -140,6 +140,32 @@ a new file to it.
 </para>
 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_set_screen ##### -->
+<para>
+
+</para>
+
+@manager: 
+@screen: 
 
 
 <!-- ##### FUNCTION gtk_recent_manager_add_item ##### -->
@@ -384,6 +410,16 @@ a new file to it.
 
 @info: 
 @group_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_has_application ##### -->
+<para>
+
+</para>
+
+@info: 
+@app_name: 
 @Returns: 
 
 

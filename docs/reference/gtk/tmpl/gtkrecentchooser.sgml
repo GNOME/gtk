@@ -52,23 +52,6 @@ Recently used files are supported since GTK+ 2.10.
 @item_activated: 
 @selection_changed: 
 
-
-<!-- ##### SIGNAL GtkRecentChooser::item-activated ##### -->
-<para>
-
-</para>
-
-@recentchooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkRecentChooser::selection-changed ##### -->
-<para>
-
-</para>
-
-@recentchooser: the object which received the signal.
-
-
-
 <!-- ##### MACRO GTK_RECENT_CHOOSER_ERROR ##### -->
 <para>
 Used to get the #GError quark for #GtkRecentChooser errors.
@@ -229,6 +212,16 @@ These identify the various errors that can occur while calling
 @Returns: 
 
 
+<!-- ##### ENUM GtkRecentSortType ##### -->
+<para>
+
+</para>
+
+@GTK_RECENT_SORT_NONE: 
+@GTK_RECENT_SORT_MRU: 
+@GTK_RECENT_SORT_LRU: 
+@GTK_RECENT_SORT_CUSTOM: 
+
 <!-- ##### FUNCTION gtk_recent_chooser_set_sort_type ##### -->
 <para>
 
@@ -244,6 +237,17 @@ These identify the various errors that can occur while calling
 </para>
 
 @chooser: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkRecentSortFunc ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@user_data: 
 @Returns: 
 
 

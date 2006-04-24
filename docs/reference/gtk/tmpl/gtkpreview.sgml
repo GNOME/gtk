@@ -97,7 +97,7 @@ Create a new preview widget.
 
 @type: the type data contained by the widget. 
 (Grayscale or RGB)
-@Returns: 
+@Returns: a new #GtkPreview 
 
 
 <!-- ##### FUNCTION gtk_preview_size ##### -->

@@ -140,7 +140,7 @@ gtk_icon_theme_set_custom_theme().
 
 <!-- ##### MACRO GTK_ICON_THEME_ERROR ##### -->
 <para>
-
+The #GQuark used for #GtkIconThemeError errors.
 </para>
 
 

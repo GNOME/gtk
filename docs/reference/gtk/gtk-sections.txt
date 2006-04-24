@@ -1244,7 +1244,6 @@ GtkFileChooserAction
 GtkFileChooserConfirmation
 GTK_FILE_CHOOSER_ERROR
 GtkFileChooserError
-gtk_file_chooser_error_quark
 gtk_file_chooser_set_action
 gtk_file_chooser_get_action
 gtk_file_chooser_set_local_only
@@ -1298,6 +1297,7 @@ GTK_FILE_CHOOSER
 GTK_IS_FILE_CHOOSER
 GTK_TYPE_FILE_CHOOSER
 <SUBSECTION Private>
+gtk_file_chooser_error_quark
 gtk_file_chooser_get_type
 </SECTION>
 
@@ -2800,7 +2800,6 @@ GTK_RECENT_CHOOSER
 GTK_IS_RECENT_CHOOSER
 GTK_TYPE_RECENT_CHOOSER
 GTK_RECENT_CHOOSER_GET_IFACE
-GtkRecentChooserDefault
 <SUBSECTION Private>
 gtk_recent_chooser_get_type
 gtk_recent_chooser_error_quark
@@ -3249,6 +3248,7 @@ GTK_IS_STATUS_ICON
 GTK_IS_STATUS_ICON_CLASS
 GTK_STATUS_ICON_GET_CLASS
 <SUBSECTION Private>
+GtkStatusIconPrivate
 gtk_status_icon_get_type
 </SECTION>
 
@@ -3974,6 +3974,21 @@ GTK_RADIO_TOOL_BUTTON_GET_CLASS
 
 <SUBSECTION Private>
 gtk_radio_tool_button_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkrichtext</FILE>
+<TITLE>GtkRichtText</TITLE>
+GtkRichTextSerializeFunc
+GtkRichTextDeserializeFunc
+gtk_rich_text_register_serialize_format
+gtk_rich_text_register_deserialize_format
+gtk_rich_text_unregister_serialize_format
+gtk_rich_text_unregister_deserialize_format
+gtk_rich_text_get_serialize_formats
+gtk_rich_text_get_deserialize_formats
+gtk_rich_text_serialize
+gtk_rich_text_deserialize
 </SECTION>
 
 <SECTION>
@@ -5912,6 +5927,9 @@ GTK_STOCK_NEW
 GTK_STOCK_NO
 GTK_STOCK_OK
 GTK_STOCK_OPEN
+GTK_STOCK_ORIENTATION_LANDSCAPE
+GTK_STOCK_ORIENTATION_PORTRAIT
+GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE
 GTK_STOCK_PASTE
 GTK_STOCK_PREFERENCES
 GTK_STOCK_PRINT
@@ -6067,7 +6085,6 @@ GtkPrintStatus
 GtkPrintOperationResult
 GtkPrintError
 GTK_PRINT_ERROR
-gtk_print_error_quark
 gtk_print_operation_new
 gtk_print_operation_set_default_page_setup
 gtk_print_operation_get_default_page_setup
@@ -6082,6 +6099,7 @@ gtk_print_operation_set_show_dialog
 gtk_print_operation_set_pdf_target 
 gtk_print_operation_run
 gtk_print_operation_get_status
+gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
 gtk_print_run_page_setup_dialog
 
@@ -6089,8 +6107,12 @@ gtk_print_run_page_setup_dialog
 GTK_TYPE_PRINT_OPERATION
 GTK_PRINT_OPERATION
 GTK_IS_PRINT_OPERATION
+GTK_IS_PRINT_OPERATION_CLASS
+GTK_PRINT_OPERATION_CLASS
+GTK_PRINT_OPERATION_GET_CLASS
 
 <SUBSECTION Private>
+gtk_print_error_quark
 gtk_print_operation_get_type
 GtkPrintOperationPrivate
 </SECTION>
@@ -6101,6 +6123,7 @@ GtkPrintOperationPrivate
 <FILE>gtkprintunixdialog</FILE>
 <TITLE>GtkPrintUnixDialog</TITLE>
 GtkPrintUnixDialog
+gtk_print_unix_dialog_new
 gtk_print_unix_dialog_set_page_setup
 gtk_print_unix_dialog_get_page_setup
 gtk_print_unix_dialog_set_current_page
@@ -6176,58 +6199,83 @@ gtk_print_settings_set_length
 gtk_print_settings_get_int
 gtk_print_settings_get_int_with_default
 gtk_print_settings_set_int
+GTK_PRINT_SETTINGS_PRINTER
 gtk_print_settings_get_printer
 gtk_print_settings_set_printer
 GtkPageOrientation
+GTK_PRINT_SETTINGS_ORIENTATION
 gtk_print_settings_get_orientation
 gtk_print_settings_set_orientation
+GTK_PRINT_SETTINGS_PAPER_FORMAT
 gtk_print_settings_get_paper_size
 gtk_print_settings_set_paper_size
+GTK_PRINT_SETTINGS_PAPER_WIDTH
 gtk_print_settings_get_paper_width
 gtk_print_settings_set_paper_width
+GTK_PRINT_SETTINGS_PAPER_HEIGHT
 gtk_print_settings_get_paper_height
 gtk_print_settings_set_paper_height
+GTK_PRINT_SETTINGS_USE_COLOR
 gtk_print_settings_get_use_color
 gtk_print_settings_set_use_color
+GTK_PRINT_SETTINGS_COLLATE
 gtk_print_settings_get_collate
 gtk_print_settings_set_collate
+GTK_PRINT_SETTINGS_REVERSE
 gtk_print_settings_get_reverse
 gtk_print_settings_set_reverse
 GtkPrintDuplex
+GTK_PRINT_SETTINGS_DUPLEX
 gtk_print_settings_get_duplex
 gtk_print_settings_set_duplex
 GtkPrintQuality
+GTK_PRINT_SETTINGS_QUALITY
 gtk_print_settings_get_quality
 gtk_print_settings_set_quality
+GTK_PRINT_SETTINGS_NUM_COPIES
 gtk_print_settings_get_num_copies
 gtk_print_settings_set_num_copies
+GTK_PRINT_SETTINGS_NUMBER_UP
 gtk_print_settings_get_number_up
 gtk_print_settings_set_number_up
+GTK_PRINT_SETTINGS_RESOLUTION
 gtk_print_settings_get_resolution
 gtk_print_settings_set_resolution
+GTK_PRINT_SETTINGS_SCALE
 gtk_print_settings_get_scale
 gtk_print_settings_set_scale
+GTK_PRINT_SETTINGS_PRINT_TO_FILE
 gtk_print_settings_get_print_to_file
 gtk_print_settings_set_print_to_file
 GtkPrintPages
+GTK_PRINT_SETTINGS_PRINT_PAGES
 gtk_print_settings_get_print_pages
 gtk_print_settings_set_print_pages
 GtkPageRange
+GTK_PRINT_SETTINGS_PAGE_RANGES
 gtk_print_settings_get_page_ranges
 gtk_print_settings_set_page_ranges
 GtkPageSet
+GTK_PRINT_SETTINGS_PAGE_SET
 gtk_print_settings_get_page_set
 gtk_print_settings_set_page_set
+GTK_PRINT_SETTINGS_DEFAULT_SOURCE
 gtk_print_settings_get_default_source
 gtk_print_settings_set_default_source
+GTK_PRINT_SETTINGS_MEDIA_TYPE
 gtk_print_settings_get_media_type
 gtk_print_settings_set_media_type
+GTK_PRINT_SETTINGS_DITHER
 gtk_print_settings_get_dither
 gtk_print_settings_set_dither
+GTK_PRINT_SETTINGS_FINISHINGS
 gtk_print_settings_get_finishings
 gtk_print_settings_set_finishings
+GTK_PRINT_SETTINGS_OUTPUT_BIN
 gtk_print_settings_get_output_bin
 gtk_print_settings_set_output_bin
+GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA
+GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_SETTINGS

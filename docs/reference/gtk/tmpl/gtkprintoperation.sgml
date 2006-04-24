@@ -67,7 +67,6 @@ do_print (void)
 Printing support was added in GTK+ 2.10.
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkPrintContext, #GtkPrintUnixDialog
@@ -124,6 +123,61 @@ Printing support was added in GTK+ 2.10.
 
 @printoperation: the object which received the signal.
 
+<!-- ##### ARG GtkPrintOperation:current-page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:default-page-setup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:job-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:number-of-pages ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:pdf-target ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:print-settings ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:show-dialog ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:status ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:status-string ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:unit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:use-full-page ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkPrintStatus ##### -->
 <para>
 
@@ -159,17 +213,9 @@ Printing support was added in GTK+ 2.10.
 
 <!-- ##### MACRO GTK_PRINT_ERROR ##### -->
 <para>
-
+The #GQuark used for #GtkPrintError errors.
 </para>
 
-
-
-<!-- ##### FUNCTION gtk_print_error_quark ##### -->
-<para>
-
-</para>
-
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_new ##### -->
@@ -291,6 +337,15 @@ Printing support was added in GTK+ 2.10.
 
 
 <!-- ##### FUNCTION gtk_print_operation_get_status ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_status_string ##### -->
 <para>
 
 </para>
