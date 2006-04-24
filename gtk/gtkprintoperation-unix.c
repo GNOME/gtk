@@ -40,20 +40,20 @@
 typedef struct {
   GtkPrintJob *job;         /* the job we are sending to the printer */
   gulong job_status_changed_tag;
-  GtkWindow *parent;        /* parent window just in case we need to throw error dialogs */
+  GtkWindow *parent;        /* just in case we need to throw error dialogs */
 } GtkPrintOperationUnix;
 
 static void
 unix_start_page (GtkPrintOperation *op,
-		 GtkPrintContext *print_context,
-		 GtkPageSetup *page_setup)
+		 GtkPrintContext   *print_context,
+		 GtkPageSetup      *page_setup)
 {
 
 }
 
 static void
 unix_end_page (GtkPrintOperation *op,
-	       GtkPrintContext *print_context)
+	       GtkPrintContext   *print_context)
 {
   cairo_t *cr;
 
@@ -76,8 +76,8 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
 
 static void
 unix_finish_send  (GtkPrintJob *job,
-                   void *user_data, 
-                   GError *error)
+                   void        *user_data, 
+                   GError      *error)
 {
   GtkPrintOperationUnix *op_unix;
   GtkWindow *parent;
@@ -114,16 +114,17 @@ unix_end_run (GtkPrintOperation *op)
 }
 
 static void
-job_status_changed_cb (GtkPrintJob *job, GtkPrintOperation *op)
+job_status_changed_cb (GtkPrintJob       *job, 
+		       GtkPrintOperation *op)
 {
   _gtk_print_operation_set_status (op, gtk_print_job_get_status (job), NULL);
 }
 
 GtkPrintOperationResult
-_gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
-						  GtkWindow *parent,
-						  gboolean *do_print,
-						  GError **error)
+_gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
+						  GtkWindow          *parent,
+						  gboolean           *do_print,
+						  GError            **error)
 {
   GtkWidget *pd;
   GtkPrintOperationResult result;

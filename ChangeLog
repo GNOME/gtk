@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c: Cleanups.
+
 	* gtk/gtkpagesetupunixdialog.c (gtk_page_setup_unix_dialog_get_page_setup):
 	Remove redundant code.
 
