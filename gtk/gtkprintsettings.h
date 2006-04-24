@@ -35,11 +35,12 @@ typedef void  (*GtkPrintSettingsFunc)  (const gchar *key,
 					const gchar *value,
 					gpointer     user_data);
 
-typedef struct 
+typedef struct _GtkPageRange GtkPageRange;
+struct _GtkPageRange
 {
   gint start;
   gint end;
-} GtkPageRange;
+};
 
 GType             gtk_print_settings_get_type (void) G_GNUC_CONST;
 GtkPrintSettings *gtk_print_settings_new      (void);

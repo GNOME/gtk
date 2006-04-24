@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintsettings.h (GtkPageRange): Declare in a way grokked by gtk-doc.
+
 	* gdk/gdkregion-generic.c: Documentation fixes.
 
 	* gdk/directfb/gdkmain-directfb.c: Make the comment not look like
