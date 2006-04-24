@@ -32,6 +32,7 @@ IGNORE_HFILES=			\
 	linux-fb 		\
 	nanox 			\
 	win32 			\
+	directfb		\
 	x11			\
 	quartz
 
