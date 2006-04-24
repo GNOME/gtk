@@ -1168,8 +1168,6 @@ gtk_page_setup_unix_dialog_get_page_setup (GtkPageSetupUnixDialog *dialog)
   GtkPageSetup *page_setup;
   
   page_setup = get_current_page_setup (dialog);
-  if (page_setup == NULL)
-    page_setup = gtk_page_setup_new ();
 
   gtk_page_setup_set_orientation (page_setup, get_orientation (dialog));
 
