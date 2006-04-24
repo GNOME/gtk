@@ -2643,6 +2643,7 @@ gtk_print_operation_set_unit
 gtk_print_operation_set_show_dialog
 gtk_print_operation_set_pdf_target
 gtk_print_operation_run
+gtk_print_operation_run_async
 gtk_print_operation_get_status
 gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
@@ -2653,6 +2654,7 @@ gtk_print_operation_is_finished
 #if IN_FILE(__GTK_PRINT_OPERATION_UNIX_C__)
 #ifdef G_OS_UNIX
 gtk_print_run_page_setup_dialog
+gtk_print_run_page_setup_dialog_async
 #endif
 #endif
 #endif
@@ -2661,6 +2663,7 @@ gtk_print_run_page_setup_dialog
 #if IN_FILE(__GTK_PRINT_OPERATION_WIN32_C__)
 #ifdef G_OS_WIN32
 gtk_print_run_page_setup_dialog
+gtk_print_run_page_setup_dialog_async
 #endif
 #endif
 #endif

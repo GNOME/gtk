@@ -66,9 +66,15 @@ struct _GtkPrintOperationPrivate
 };
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *operation,
-									  GtkWindow *parent,
-									  gboolean *do_print,
-									  GError **error);
+									  GtkWindow         *parent,
+									  gboolean          *do_print,
+									  GError           **error);
+
+typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op);
+
+void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
+							     GtkWindow                  *parent,
+							     GtkPrintOperationPrintFunc  print_cb);
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
 				      GtkPrintStatus status,

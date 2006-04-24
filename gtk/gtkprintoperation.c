@@ -950,84 +950,19 @@ run_pdf (GtkPrintOperation  *op,
   return GTK_PRINT_OPERATION_RESULT_APPLY; 
 }
 
-static GtkPrintOperationResult
-run_print_dialog (GtkPrintOperation  *op,
-		  GtkWindow          *parent,
-		  gboolean           *do_print,
-		  GError            **error)
-{
-  if (op->priv->pdf_target != NULL)
-    return run_pdf (op, parent, do_print, error);
-
-  /* This does:
-   * Open print dialog 
-   * set print settings on dialog
-   * run dialog, if show_dialog set
-   * extract print settings from dialog
-   * create cairo surface and data for print job
-   * return correct result val
-   */
-  return _gtk_print_operation_platform_backend_run_dialog (op, 
-							   parent,
-							   do_print,
-							   error);
-}
-
-/**
- * gtk_print_operation_run:
- * @op: a #GtkPrintOperation
- * @parent: Transient parent of the dialog, or %NULL
- * @error: Return location for errors, or %NULL
- * 
- * Runs the print operation, by first letting the user modify
- * print settings in the print dialog, and then print the
- * document.
- *
- * Note that this function does not return until the rendering
- * of all pages is complete. You can connect to the ::status-changed
- * signal on @op to obtain some information about the progress
- * of the print operation.
- * 
- * <informalexample><programlisting>
- *  FIXME: need an example here
- * </programlisting></informalexample>
- *
- * Return value: the result of the print operation. A return value
- *   of %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing
- *   was completed successfully. In this case, it is a good idea
- *   to obtain the used print settings with 
- *   gtk_print_operation_get_print_settings() and store them for
- *   reuse with the next print operation.
- *
- * Since: 2.10
- **/
-GtkPrintOperationResult
-gtk_print_operation_run (GtkPrintOperation  *op,
-			 GtkWindow          *parent,
-			 GError            **error)
+static void
+print_pages (GtkPrintOperation *op)
 {
   int page, range;
   GtkPageSetup *initial_page_setup, *page_setup;
   GtkPrintContext *print_context;
   cairo_t *cr;
-  gboolean do_print;
   int uncollated_copies, collated_copies;
   int i, j;
   GtkPageRange *ranges;
   GtkPageRange one_range;
   int num_ranges;
-  GtkPrintOperationResult result;
-  
-  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
-                        GTK_PRINT_OPERATION_RESULT_ERROR);
 
-  result = run_print_dialog (op, parent, &do_print, error);
-  if (!do_print)
-    {
-      _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
-      return result;
-    }
-  
   if (op->priv->manual_collation)
     {
       uncollated_copies = op->priv->manual_num_copies;
@@ -1047,7 +982,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
-  g_return_val_if_fail (op->priv->nr_of_pages > 0, GTK_PRINT_OPERATION_RESULT_ERROR);
+  g_return_if_fail (op->priv->nr_of_pages > 0);
 
   if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
     {
@@ -1145,7 +1080,101 @@ gtk_print_operation_run (GtkPrintOperation  *op,
   cairo_surface_finish (op->priv->surface);
   op->priv->end_run (op);
 
-  return GTK_PRINT_OPERATION_RESULT_APPLY;
+}
+
+/**
+ * gtk_print_operation_run:
+ * @op: a #GtkPrintOperation
+ * @parent: Transient parent of the dialog, or %NULL
+ * @error: Return location for errors, or %NULL
+ * 
+ * Runs the print operation, by first letting the user modify
+ * print settings in the print dialog, and then print the
+ * document.
+ *
+ * Note that this function does not return until the rendering of all 
+ * pages is complete. You can connect to the ::status-changed signal on
+ * @op to obtain some information about the progress of the print operation. 
+ * Furthermore, it may use a recursive mainloop to show the print dialog.
+ * See gtk_print_operation_run_async() if this is a problem.
+ * 
+ * <informalexample><programlisting>
+ *  FIXME: need an example here
+ * </programlisting></informalexample>
+ *
+ * Return value: the result of the print operation. A return value of 
+ *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was 
+ *   completed successfully. In this case, it is a good idea to obtain 
+ *   the used print settings with gtk_print_operation_get_print_settings() 
+ *   and store them for reuse with the next print operation.
+ *
+ * Since: 2.10
+ **/
+GtkPrintOperationResult
+gtk_print_operation_run (GtkPrintOperation  *op,
+			 GtkWindow          *parent,
+			 GError            **error)
+{
+  GtkPrintOperationResult result;
+  gboolean do_print;
+  
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
+                        GTK_PRINT_OPERATION_RESULT_ERROR);
+
+  if (op->priv->pdf_target != NULL)
+    result = run_pdf (op, parent, &do_print, error);
+  else
+    result = _gtk_print_operation_platform_backend_run_dialog (op, 
+							       parent,
+							       &do_print,
+							       error);
+  if (do_print)
+    print_pages (op);
+  else 
+    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+
+  return result;
+}
+
+/**
+ * gtk_print_operation_run_async:
+ * @op: a #GtkPrintOperation
+ * @parent: Transient parent of the dialog, or %NULL
+ * 
+ * Runs the print operation, by first letting the user modify
+ * print settings in the print dialog, and then print the
+ * document.
+ *
+ * In contrast to gtk_print_operation_run(), this function returns after 
+ * showing the print dialog on platforms that support this, and handles 
+ * the printing by connecting a signal handler to the ::response signal 
+ * of the dialog. 
+ * 
+ * If you use this function, it is recommended that you store the modified
+ * #GtkPrintSettings in a ::begin-print or ::end-print signal handler.
+ * 
+ * Since: 2.10
+ **/
+void
+gtk_print_operation_run_async (GtkPrintOperation *op,
+			       GtkWindow         *parent)
+{
+  gboolean do_print;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op)); 
+
+  if (op->priv->pdf_target != NULL)
+    {
+      run_pdf (op, parent, &do_print, NULL);
+      if (do_print)
+	print_pages (op);
+      else 
+	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+    }
+  else
+    _gtk_print_operation_platform_backend_run_dialog_async (op, 
+							    parent,
+							    print_pages);
 }
 
 

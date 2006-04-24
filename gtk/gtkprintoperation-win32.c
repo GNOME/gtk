@@ -1465,6 +1465,20 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   return result;
 }
 
+void 
+_gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
+                                                        GtkWindow                  *parent,
+							GtkPrintOperationPrintFunc  print_cb)
+{
+  gboolean do_print;
+
+  _gtk_print_operation_platform_backend_run_dialog (op, parent, &do_print, NULL);
+  if (do_print)
+    print_cb (op);
+  else
+    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+}
+
 GtkPageSetup *
 gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 				 GtkPageSetup     *page_setup,
@@ -1595,4 +1609,18 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
     }
   
   return page_setup;
+}
+
+void
+gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
+				       GtkPageSetup         *page_setup,
+				       GtkPrintSettings     *settings,
+				       GtkPageSetupDoneFunc  done_cb,
+				       gpointer              data)
+{
+  GtkPageSetup *page_setup;
+
+  page_setup = gtk_print_run_page_setup_dialog (parent, page_setup, settings);
+  done_cb (page_setup, data);
+  g_object_unref (page_setup);
 }

@@ -15,6 +15,21 @@
 
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation.c (gtk_print_operation_run_async): Refactor the
+	gtk_print_operation_run() code and add an _async version.
+
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c
+	(_gtk_print_operation_platform_backend_run_dialog_async)
+	(gtk_print_run_page_setup_dialog_async): Variants of the run functions
+	which don't call gtk_dialog_run(), but only show the dialog and return,
+	and handle the response in a signal handler.
+
+	* gtk/gtkprintoperation-win32.c (gtk_print_run_page_setup_dialog_async) 
+	(_gtk_print_operation_platform_backend_run_dialog_async): Implement these 
+	by calling the sync versions.
+
 	* gtk/gtkprintoperation-unix.c: Cleanups.
 
 	* gtk/gtkpagesetupunixdialog.c (gtk_page_setup_unix_dialog_get_page_setup):

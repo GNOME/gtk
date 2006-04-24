@@ -120,47 +120,76 @@ job_status_changed_cb (GtkPrintJob       *job,
   _gtk_print_operation_set_status (op, gtk_print_job_get_status (job), NULL);
 }
 
-GtkPrintOperationResult
-_gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
-						  GtkWindow          *parent,
-						  gboolean           *do_print,
-						  GError            **error)
+
+static GtkWidget *
+get_print_dialog (GtkPrintOperation *op,
+                  GtkWindow         *parent)
 {
   GtkWidget *pd;
-  GtkPrintOperationResult result;
   GtkPageSetup *page_setup;
-  
-  result = GTK_PRINT_OPERATION_RESULT_CANCEL;
-
-  if (op->priv->default_page_setup)
-    page_setup = gtk_page_setup_copy (op->priv->default_page_setup);
-  else
-    page_setup = gtk_page_setup_new ();
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
   if (op->priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
 					op->priv->print_settings);
+  if (op->priv->default_page_setup)
+    page_setup = gtk_page_setup_copy (op->priv->default_page_setup);
+  else
+    page_setup = gtk_page_setup_new ();
 
-  gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), page_setup);
+  gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
+                                        page_setup);
+  g_object_unref (page_setup);
+
+  return pd;
+}
   
-  *do_print = FALSE; 
-  if (gtk_dialog_run (GTK_DIALOG (pd)) == GTK_RESPONSE_OK)
+typedef struct {
+  GtkPrintOperation           *op;
+  gboolean                     do_print;
+  GError                     **error;
+  GtkPrintOperationResult      result;
+  GtkPrintOperationPrintFunc   print_cb;
+  GDestroyNotify               destroy;
+} PrintResponseData;
+
+static void
+print_response_data_free (gpointer data)
+{
+  PrintResponseData *rdata = data;
+
+  g_object_unref (rdata->op);
+  g_free (rdata);
+}
+
+static void
+handle_print_response (GtkWidget *dialog,
+		       gint       response,
+		       gpointer   data)
+{
+  GtkPrintUnixDialog *pd = GTK_PRINT_UNIX_DIALOG (dialog);
+  PrintResponseData *rdata = data;
+  GtkPrintOperation *op = rdata->op;
+
+  if (response == GTK_RESPONSE_OK)
     {
       GtkPrintOperationUnix *op_unix;
       GtkPrinter *printer;
       GtkPrintSettings *settings;
+      GtkPageSetup *page_setup;
 
-      result = GTK_PRINT_OPERATION_RESULT_APPLY;
-      
+      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+
       printer = gtk_print_unix_dialog_get_selected_printer (GTK_PRINT_UNIX_DIALOG (pd));
       if (printer == NULL)
 	goto out;
       
-      *do_print = TRUE;
+      rdata->do_print = TRUE;
 
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
+      page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
+
       gtk_print_operation_set_print_settings (op, settings);
 
       op_unix = g_new0 (GtkPrintOperationUnix, 1);
@@ -169,13 +198,13 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
 					settings,
 					page_setup);
       g_object_unref (settings);
-
-      op->priv->surface = gtk_print_job_get_surface (op_unix->job, error);
+  
+      rdata->op->priv->surface = gtk_print_job_get_surface (op_unix->job, rdata->error);
       if (op->priv->surface == NULL)
         {
-	  *do_print = FALSE;
+	  rdata->do_print = FALSE;
 	  op_unix_free (op_unix);
-	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
+	  rdata->result = GTK_PRINT_OPERATION_RESULT_ERROR;
 	  goto out;
 	}
 
@@ -184,7 +213,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
 	g_signal_connect (op_unix->job, "status_changed",
 			  G_CALLBACK (job_status_changed_cb), op);
       
-      op_unix->parent = parent;
+      op_unix->parent = gtk_window_get_transient_for (GTK_WINDOW (pd));
 
       op->priv->dpi_x = 72;
       op->priv->dpi_y = 72;
@@ -208,12 +237,126 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
   op->priv->end_page = unix_end_page;
   op->priv->end_run = unix_end_run;
 
- out:
-  g_object_unref (page_setup); 
-  
-  gtk_widget_destroy (pd);
+ out:  
+  gtk_widget_destroy (GTK_WIDGET (pd));
 
-  return result;
+  if (rdata->print_cb)
+    {
+      if (rdata->do_print)
+        rdata->print_cb (op); 
+      else
+       _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL); 
+    }
+
+  if (rdata->destroy)
+    rdata->destroy (rdata);
+}
+
+void
+_gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
+                                                        GtkWindow                  *parent,
+							GtkPrintOperationPrintFunc  print_cb)
+{
+  GtkWidget *pd;
+  PrintResponseData *rdata;
+
+  rdata = g_new (PrintResponseData, 1);
+  rdata->op = g_object_ref (op);
+  rdata->do_print = FALSE;
+  rdata->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+  rdata->error = NULL;
+  rdata->print_cb = print_cb;
+  rdata->destroy = print_response_data_free;
+  
+  pd = get_print_dialog (op, parent);
+  gtk_window_set_modal (GTK_WINDOW (pd), TRUE);
+
+  g_signal_connect (pd, "response", 
+		    G_CALLBACK (handle_print_response), rdata);
+
+  gtk_window_present (GTK_WINDOW (pd));
+}
+
+GtkPrintOperationResult
+_gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
+						  GtkWindow         *parent,
+						  gboolean          *do_print,
+						  GError           **error)
+ {
+  GtkWidget *pd;
+  PrintResponseData rdata;
+  gint response;  
+   
+  rdata.op = op;
+  rdata.do_print = FALSE;
+  rdata.result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+  rdata.error = error;
+  rdata.print_cb = NULL;
+  rdata.destroy = NULL;
+
+  pd = get_print_dialog (op, parent);
+
+  response = gtk_dialog_run (GTK_DIALOG (pd));
+  handle_print_response (pd, response, &rdata);
+
+  *do_print = rdata.do_print;
+
+  return rdata.result;
+}
+
+
+typedef struct {
+  GtkPageSetup  *page_setup;
+  GFunc          done_cb;
+  gpointer       data;
+  GDestroyNotify destroy;
+} PageSetupResponseData;
+
+static void
+page_setup_data_free (gpointer data)
+{
+  PageSetupResponseData *rdata = data;
+
+  g_object_unref (rdata->page_setup);
+  g_free (rdata);
+}
+
+static void
+handle_page_setup_response (GtkWidget *dialog,
+			    gint       response,
+			    gpointer   data)
+{
+  GtkPageSetupUnixDialog *psd;
+  PageSetupResponseData *rdata = data;
+
+  psd = GTK_PAGE_SETUP_UNIX_DIALOG (dialog);
+  if (response == GTK_RESPONSE_OK)
+    rdata->page_setup = gtk_page_setup_unix_dialog_get_page_setup (psd);
+
+  gtk_widget_destroy (dialog);
+
+  if (rdata->done_cb)
+    rdata->done_cb (rdata->page_setup, rdata->data);
+
+  if (rdata->destroy)
+    rdata->destroy (rdata);
+}
+
+static GtkWidget *
+get_page_setup_dialog (GtkWindow        *parent,
+		       GtkPageSetup     *page_setup,
+		       GtkPrintSettings *settings)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_page_setup_unix_dialog_new (NULL, parent);
+  if (page_setup)
+    gtk_page_setup_unix_dialog_set_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (dialog),
+					       page_setup);
+  gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (dialog),
+						 settings);
+
+  return dialog;
 }
 
 /**
@@ -222,11 +365,14 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation  *op,
  * @page_setup: an existing #GtkPageSetup, or %NULL
  * @settings: a #GtkPrintSettings
  * 
- * Runs a page setup dialog, letting the user modify 
- * the values from @page_setup. If the user cancels
- * the dialog, the returned #GtkPageSetup is identical
- * to the passed in @page_setup, otherwise it contains
- * the modifications done in the dialog.
+ * Runs a page setup dialog, letting the user modify the values from 
+ * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup 
+ * is identical to the passed in @page_setup, otherwise it contains the 
+ * modifications done in the dialog.
+ *
+ * Note that this function may use a recursive mainloop to show the page
+ * setup dialog. See gtk_print_run_page_setup_dialog_async() if this is 
+ * a problem.
  * 
  * Return value: a new #GtkPageSetup
  *
@@ -238,28 +384,68 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 				 GtkPrintSettings *settings)
 {
   GtkWidget *dialog;
-  GtkPageSetup *new_page_setup;
+  gint response;
+  PageSetupResponseData rdata;  
   
-  dialog = gtk_page_setup_unix_dialog_new (NULL, parent);
-  if (page_setup)
-    gtk_page_setup_unix_dialog_set_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (dialog),
-					       page_setup);
-  gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (dialog),
-						 settings);
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
-    new_page_setup = gtk_page_setup_unix_dialog_get_page_setup (GTK_PAGE_SETUP_UNIX_DIALOG (dialog));
-  else 
-    {
-      if (page_setup)
-	new_page_setup = gtk_page_setup_copy (page_setup);
-      else
-	new_page_setup = gtk_page_setup_new ();
-    }
-      
-  gtk_widget_destroy (dialog);
-  
-  return new_page_setup;
+  rdata.page_setup = NULL;
+  rdata.done_cb = NULL;
+  rdata.data = NULL;
+  rdata.destroy = NULL;
+
+  dialog = get_page_setup_dialog (parent, page_setup, settings);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  handle_page_setup_response (dialog, response, &rdata);
+ 
+  if (rdata.page_setup)
+    return rdata.page_setup;
+  else if (page_setup)
+    return gtk_page_setup_copy (page_setup);
+  else
+    return gtk_page_setup_new ();
 }
+
+/**
+ * gtk_print_run_page_setup_dialog_async:
+ * @parent: transient parent, or %NULL
+ * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @settings: a #GtkPrintSettings
+ * @done_cb: a function to call when the user saves the modified page setup
+ * @data: user data to pass to @done_cb
+ * 
+ * Runs a page setup dialog, letting the user modify the values from 
+ * @page_setup. 
+ *
+ * In contrast to gtk_print_run_page_setup_dialog(), this function
+ * returns after showing the page setup dialog on platforms that support
+ * this, and calls @done_cb from a signal handler for the ::response
+ * signal of the dialog.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
+				       GtkPageSetup         *page_setup,
+				       GtkPrintSettings     *settings,
+				       GtkPageSetupDoneFunc  done_cb,
+				       gpointer              data)
+{
+  GtkWidget *dialog;
+  PageSetupResponseData *rdata;
+  
+  dialog = get_page_setup_dialog (parent, page_setup, settings);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  
+  rdata = g_new (PageSetupResponseData, 1);
+  rdata->page_setup = NULL;
+  rdata->done_cb = done_cb;
+  rdata->data = data;
+  rdata->destroy = page_setup_data_free;
+
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (handle_page_setup_response), rdata);
+ 
+  gtk_window_present (GTK_WINDOW (dialog));
+ }
 
 
 #define __GTK_PRINT_OPERATION_UNIX_C__
