@@ -26,6 +26,7 @@
 #include "gtkprintoperation.h"
 #include "gtkprinteroptionset.h"
 #include "gtkpagesetup.h"
+#include "gtkprintjob.h"
 
 G_BEGIN_DECLS
 

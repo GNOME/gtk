@@ -37,10 +37,8 @@ typedef struct _GtkPrinter          GtkPrinter;
 typedef struct _GtkPrinterClass     GtkPrinterClass;
 typedef struct _GtkPrinterPrivate   GtkPrinterPrivate;
 typedef struct _GtkPrintBackend     GtkPrintBackend;
-typedef struct _GtkPrintJob	     GtkPrintJob;
 
 struct _GtkPrintBackend;
-struct _GtkPrintJob;
 
 struct _GtkPrinter
 {
