@@ -19,9 +19,9 @@
 #ifndef __GTK_PAGE_SETUP_UNIX_DIALOG_H__
 #define __GTK_PAGE_SETUP_UNIX_DIALOG_H__
 
-#include "gtkdialog.h"
-#include "gtkpagesetup.h"
-#include "gtkprintsettings.h"
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkpagesetup.h>
+#include <gtk/gtkprintsettings.h>
 
 G_BEGIN_DECLS
 

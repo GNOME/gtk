@@ -19,10 +19,10 @@
 #ifndef __GTK_PRINT_UNIX_DIALOG_H__
 #define __GTK_PRINT_UNIX_DIALOG_H__
 
-#include "gtkdialog.h"
-#include "gtkprinter.h"
-#include "gtkprintsettings.h"
-#include "gtkpagesetup.h"
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkprinter.h>
+#include <gtk/gtkprintsettings.h>
+#include <gtk/gtkpagesetup.h>
 
 G_BEGIN_DECLS
 
@@ -60,9 +60,9 @@ struct _GtkPrintUnixDialogClass
   void (*_gtk_reserved7) (void);
 };
 
-GType		 gtk_print_unix_dialog_get_type	   (void) G_GNUC_CONST;
-GtkWidget *      gtk_print_unix_dialog_new         (const gchar *title,
-                                                    GtkWindow   *parent);
+GType		  gtk_print_unix_dialog_get_type	     (void) G_GNUC_CONST;
+GtkWidget *       gtk_print_unix_dialog_new                  (const gchar *title,
+                                                              GtkWindow   *parent);
 
 void              gtk_print_unix_dialog_set_page_setup       (GtkPrintUnixDialog *dialog,
 							      GtkPageSetup       *page_setup);

@@ -1,5 +1,8 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.h: 
+	* gtk/gtkpagesetupunixdialog.h: Fix includes (#338665)
+
 	* gtk/gtkprintsettings.h (GtkPageRange): Declare in a way grokked by gtk-doc.
 
 	* gdk/gdkregion-generic.c: Documentation fixes.
