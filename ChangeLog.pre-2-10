@@ -1,5 +1,10 @@
 2006-04-24  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c (update_combo_sensitivity_from_printers):
+	Remove spew.
+
+2006-04-24  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkprintunixdialog.c (create_page_setup_page):
 	Even/Odd Pages -> Even/Odd Sheets
 

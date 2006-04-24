@@ -1390,7 +1390,6 @@ update_combo_sensitivity_from_printers (CustomPaperDialog *data)
       gtk_tree_selection_get_selected (selection, NULL, &iter))
     sensitive = TRUE;
 
-  g_print ("sensitive: %d\n", sensitive);
   gtk_widget_set_sensitive (data->printer_combo, sensitive);
 }
 
