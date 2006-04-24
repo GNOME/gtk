@@ -2366,6 +2366,16 @@ gtk_print_unix_dialog_new (const gchar *title,
   return result;
 }
 
+/**
+ * gtk_print_unix_dialog_get_selected_printer:
+ * @dialog: a #GtkPrintUnixDialog
+ * 
+ * Gets the currently selected printer.
+ * 
+ * Returns: the currently selected printer
+ * 
+ * Since: 2.10
+ */
 GtkPrinter *
 gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
 {
@@ -2374,6 +2384,15 @@ gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
   return dialog->priv->current_printer;
 }
 
+/**
+ * gtk_print_unix_dialog_set_page_setup:
+ * @dialog: a #GtkPrintUnixDialog
+ * @page_setup: a #GtkPageSetup
+ * 
+ * Sets the page setup of the #GtkPrintUnixDialog.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
 				      GtkPageSetup       *page_setup)
@@ -2390,6 +2409,16 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
     }
 }
 
+/**
+ * gtk_print_unix_dialog_get_page_setup:
+ * @dialog: a #GtkPrintUnixDialog
+ * 
+ * Gets the page setup that is used by the #GtkPrintUnixDialog.
+ * 
+ * Returns: the page setup of @dialog.
+ *
+ * Since: 2.10
+ */
 GtkPageSetup *
 gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
 {
@@ -2398,6 +2427,16 @@ gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
   return dialog->priv->page_setup;
 }
 
+/**
+ * gtk_print_unix_dialog_set_current_page:
+ * @dialog: a #GtkPrintUnixDialog
+ * @current_page: the current page number.
+ * 
+ * Sets the current page number. If @current_page is not -1, this enables
+ * the current page choice for the range of pages to print.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
 					gint                current_page)
@@ -2415,6 +2454,16 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
     }
 }
 
+/**
+ * gtk_print_unix_dialog_get_current_page:
+ * @dialog: a #GtkPrintUnixDialog
+ * 
+ * Gets the current page of the #GtkPrintDialog.
+ * 
+ * Returns: the current page of @dialog
+ * 
+ * Since: 2.10
+ */
 gint
 gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
 {
@@ -2467,6 +2516,17 @@ set_active_printer (GtkPrintUnixDialog *dialog,
   return FALSE;
 }
 
+/**
+ * gtk_print_unix_dialog_set_settings:
+ * @dialog: a #GtkPrintUnixDialog
+ * @settings: a #GtkPrintSettings, or %NULL
+ * 
+ * Sets the #GtkPrintSettings for the #GtkPrintUnixDialog. Typically,
+ * this is used to restore saved print settings from a previous print
+ * operation before the print dialog is shown.
+ * 
+ * Since: 2.10
+ **/
 void
 gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 				    GtkPrintSettings   *settings)
@@ -2515,6 +2575,19 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
   g_object_notify (G_OBJECT (dialog), "print-settings");
 }
 
+/**
+ * gtk_print_unix_dialog_get_settings:
+ * @dialog: a #GtkPrintUnixDialog
+ * 
+ * Gets a new #GtkPrintSettings object that represents the
+ * current values in the print dialog. Note that this creates a
+ * <emphasis>new object</emphasis>, and you need to unref it
+ * if don't want to keep it.
+ * 
+ * Returns: a new #GtkPrintSettings object with the values from @dialog
+ *
+ * Since: 2.10
+ */
 GtkPrintSettings *
 gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 {

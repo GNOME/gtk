@@ -1366,7 +1366,7 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
  * gtk_status_icon_get_visible:
  * @status_icon: a #GtkStatusIcon
  * 
- * Returns wether the status icon is visible or not. 
+ * Returns whether the status icon is visible or not. 
  * Note that being visible does not guarantee that 
  * the user can actually see the icon, see also 
  * gtk_status_icon_is_embedded().
