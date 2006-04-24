@@ -1,5 +1,7 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: fix a typo.
+
 	* gtk/tmpl/gtkentry.sgml: Remove a duplicate entry.
 
 	* gtk/gtk-sections.txt: Fix a typo.
