@@ -134,11 +134,17 @@ gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
 gtk/gtkoptionmenu.c
+gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
 gtk/gtkpathbar.c
 gtk/gtkpixmap.c
 gtk/gtkplug.c
 gtk/gtkpreview.c
+gtk/gtkprinteroptionwidget.c
+gtk/gtkprintjob.c
+gtk/gtkprintoperation.c
+gtk/gtkprintoperation-win32.c
+gtk/gtkprintunixdialog.c
 gtk/gtkprogress.c
 gtk/gtkprogressbar.c
 gtk/gtkradioaction.c
@@ -208,6 +214,7 @@ gtk/gtkvseparator.c
 gtk/gtkwidget.c
 gtk/gtkwindow-decorate.c
 gtk/gtkwindow.c
+gtk/paper_names_offsets.c
 modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
 modules/input/imcedilla.c
@@ -219,4 +226,7 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
+modules/printbackends/cups/gtkprintbackendcups.c
+modules/printbackends/lpr/gtkprintbackendlpr.c
+modules/printbackends/pdf/gtkprintbackendpdf.c
 tests/testfilechooser.c

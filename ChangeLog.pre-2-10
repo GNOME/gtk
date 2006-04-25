@@ -1,5 +1,8 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* po/POTFILES.in:
+	* po-properties/POTFILES.in: Updates
+
 	* gtk/paper_names.c: Declare PaperInfo here.
 
 	* gtk/gen-paper-names.c: Add a prefix to gettext msgids.

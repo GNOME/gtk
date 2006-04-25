@@ -139,6 +139,12 @@ gtk/gtkpathbar.c
 gtk/gtkpixmap.c
 gtk/gtkplug.c
 gtk/gtkpreview.c
+gtk/gtkprintbackend.c
+gtk/gtkprinter.c
+gtk/gtkprinteroptionwidget.c
+gtk/gtkprintjob.c
+gtk/gtkprintoperation.c
+gtk/gtkprintunixdialog.c
 gtk/gtkprogress.c
 gtk/gtkprogressbar.c
 gtk/gtkradioaction.c
