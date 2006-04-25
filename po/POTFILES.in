@@ -153,6 +153,9 @@ gtk/gtkradiomenuitem.c
 gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
 gtk/gtkrc.c
+gtk/gtkrecentchooserdefault.c
+gtk/gtkrecentchoosermenu.c
+gtk/gtkrecentmanager.c
 gtk/gtkruler.c
 gtk/gtkscale.c
 gtk/gtkscrollbar.c
