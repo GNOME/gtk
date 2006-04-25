@@ -6,6 +6,13 @@
  * The PPD names come from the PPD specification.
  */
 
+typedef struct {
+  const gchar *name;
+  const gchar *size;
+  const gchar *display_name;
+  const gchar *ppd_name;
+} PaperInfo;
+
 static const PaperInfo standard_names[] = {
   /* sorted by name, remember to sort when changing */
   {"asme_f", "28x40in", N_("asme_f")}, /* f           5    e1 */

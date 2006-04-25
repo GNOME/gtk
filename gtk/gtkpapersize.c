@@ -462,10 +462,15 @@ gtk_paper_size_get_name (GtkPaperSize *size)
 G_CONST_RETURN gchar *
 gtk_paper_size_get_display_name (GtkPaperSize *size)
 {
+  const gchar *display_name;
+
   if (size->display_name)
     return size->display_name;
+
   g_assert (size->info != NULL);
-  return gettext (paper_names + size->info->display_name);
+
+  display_name = paper_names + size->info->display_name;
+  return g_strip_context (display_name, gettext (display_name));
 }
 
 /**

@@ -1,4 +1,15 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/paper_names.c: Declare PaperInfo here.
+
+	* gtk/gen-paper-names.c: Add a prefix to gettext msgids.
+
+	* gtk/paper_names_offsets.c: Regenerated.
+	
+	* gtk/gtkpapersize.c (gtk_paper_size_get_display_name):
+	Use g_strip_context() to strip the prefix.
+
+2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkfontbutton.c: Small doc fixes.
 
