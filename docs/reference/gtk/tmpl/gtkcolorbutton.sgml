@@ -6,8 +6,9 @@ A button to launch a color selection dialog
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkColorButton is a button which displays the currently selected color an allows to open a color 
-selection dialog to change the color. It is suitable widget for selecting a color in a preference dialog.
+The #GtkColorButton is a button which displays the currently selected color 
+an allows to open a color selection dialog to change the color. It is suitable 
+widget for selecting a color in a preference dialog.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -20,7 +21,8 @@ selection dialog to change the color. It is suitable widget for selecting a colo
 
 <!-- ##### STRUCT GtkColorButton ##### -->
 <para>
-
+The GtkColorButton struct has only private fields and 
+should not be used directly.
 </para>
 
 
