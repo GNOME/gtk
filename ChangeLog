@@ -1,5 +1,7 @@
 2006-04-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk.symbols: Add gdk_screen_is_composited
+
 	* gtk/gtkprintjob.c (gtk_print_job_set_source_file): Add docs.
 
 	* gtk/gtkprintoperation.c: Add docs.

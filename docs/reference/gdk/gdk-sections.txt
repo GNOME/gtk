@@ -201,6 +201,7 @@ gdk_screen_get_rgb_colormap
 gdk_screen_get_rgb_visual
 gdk_screen_get_rgba_colormap
 gdk_screen_get_rgba_visual
+gdk_screen_is_composited
 gdk_screen_get_root_window
 gdk_screen_get_display
 gdk_screen_get_number

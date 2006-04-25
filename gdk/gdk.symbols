@@ -1042,6 +1042,7 @@ gdk_screen_get_rgba_colormap
 gdk_screen_get_rgba_visual
 gdk_screen_get_active_window
 gdk_screen_get_window_stack
+gdk_screen_is_composited
 gdk_screen_make_display_name
 #endif
 #endif

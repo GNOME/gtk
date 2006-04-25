@@ -1,3 +1,7 @@
+2006-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add gdk_screen_is_composited
+
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: fix a typo.
