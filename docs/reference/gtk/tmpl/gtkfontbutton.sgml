@@ -20,7 +20,8 @@ dialog to change the font. It is suitable widget for selecting a font in a prefe
 
 <!-- ##### STRUCT GtkFontButton ##### -->
 <para>
-
+The GtkFontButton struct has only private members and should not be used
+directly.
 </para>
 
 

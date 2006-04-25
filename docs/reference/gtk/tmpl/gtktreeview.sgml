@@ -275,10 +275,10 @@ they work together.
 An enum for determining where a dropped row goes.
 </para>
 
-@GTK_TREE_VIEW_DROP_BEFORE: 
-@GTK_TREE_VIEW_DROP_AFTER: 
-@GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: 
-@GTK_TREE_VIEW_DROP_INTO_OR_AFTER: 
+@GTK_TREE_VIEW_DROP_BEFORE: dropped row is inserted before 
+@GTK_TREE_VIEW_DROP_AFTER: dropped row is inserted after
+@GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: dropped row becomes a child or is inserted before
+@GTK_TREE_VIEW_DROP_INTO_OR_AFTER: dropped row becomes a child or is inserted after
 
 <!-- ##### STRUCT GtkTreeViewPrivate ##### -->
 <para>
@@ -367,8 +367,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @model: 
-<!-- # Unused Parameters # -->
-@tree_model: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_selection ##### -->
@@ -387,8 +385,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@layout: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_set_hadjustment ##### -->
@@ -398,8 +394,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @adjustment: 
-<!-- # Unused Parameters # -->
-@layout: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_vadjustment ##### -->
@@ -409,8 +403,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@layout: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_set_vadjustment ##### -->
@@ -420,8 +412,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @adjustment: 
-<!-- # Unused Parameters # -->
-@layout: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_headers_visible ##### -->
@@ -466,8 +456,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @setting: 
-<!-- # Unused Parameters # -->
-@active: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_set_rules_hint ##### -->
@@ -768,8 +756,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 @cell_x: 
 @cell_y: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_cell_area ##### -->
@@ -936,8 +922,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 @tree_view: 
 @enable_search: 
-<!-- # Unused Parameters # -->
-@use_search: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_enable_search ##### -->
@@ -985,6 +969,54 @@ has some similarity to strcmp() returning 0 for equal strings.
 @search_equal_func: 
 @search_user_data: 
 @search_destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_entry ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_entry ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@entry: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewSearchPositionFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@search_dialog: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_position_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_position_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+@destroy: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_fixed_height_mode ##### -->
