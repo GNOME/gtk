@@ -1,3 +1,8 @@
+2006-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: 
+	Add some more translatable PPD option names.
+
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* po/POTFILES.in:

@@ -1393,6 +1393,9 @@ static const struct {
   const char *translation;
 } cups_option_translations[] = {
   { "Duplex", N_("Two Sided") },
+  { "MediaType", N_("Paper Type") },
+  { "InputSlot", N_("Paper Source") },
+  { "OutputBin", N_("Output Tray") },
 };
 
 
