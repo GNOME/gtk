@@ -1,4 +1,6 @@
 2006-04-24  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkfontbutton.c: Small doc fixes.
 
 	* gtk/gtkprintunixdialog.h: 
 	* gtk/gtkpagesetupunixdialog.h: Fix includes (#338665)

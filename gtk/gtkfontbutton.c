@@ -197,7 +197,8 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   /**
    * GtkFontButton:use-font:
    * 
-   * If this property is set to %TRUE, the label will be drawn in the selected font.
+   * If this property is set to %TRUE, the label will be drawn 
+   * in the selected font.
    *
    * Since: 2.4
    */
@@ -212,7 +213,8 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   /**
    * GtkFontButton:use-size:
    * 
-   * If this property is set to %TRUE, the label will be drawn with the selected font size.
+   * If this property is set to %TRUE, the label will be drawn 
+   * with the selected font size.
    *
    * Since: 2.4
    */
@@ -227,8 +229,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   /**
    * GtkFontButton:show-style:
    * 
-   * If this property is set to %TRUE, the name of the selected font style will be shown in the label. For
-   * a more WYSIWIG way to show the selected style, see the ::use-font property. 
+   * If this property is set to %TRUE, the name of the selected font style 
+   * will be shown in the label. For a more WYSIWYG way to show the selected 
+   * style, see the ::use-font property. 
    *
    * Since: 2.4
    */
@@ -242,8 +245,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   /**
    * GtkFontButton:show-size:
    * 
-   * If this property is set to %TRUE, the selected font size will be shown in the label. For
-   * a more WYSIWIG way to show the selected size, see the ::use-size property. 
+   * If this property is set to %TRUE, the selected font size will be shown 
+   * in the label. For a more WYSIWYG way to show the selected size, see the 
+   * ::use-size property. 
    *
    * Since: 2.4
    */
@@ -259,8 +263,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * GtkFontButton::font-set:
    * @widget: the object which received the signal.
    * 
-   * The ::font-set signal is emitted when the user selects a font. When handling this signal,
-   * use gtk_font_button_get_font_name() to find out which font was just selected.
+   * The ::font-set signal is emitted when the user selects a font. When 
+   * handling this signal, use gtk_font_button_get_font_name() to find out
+   * which font was just selected.
    *
    * Since: 2.4
    */
