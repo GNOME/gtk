@@ -50,6 +50,7 @@ enum
 enum
 {
   SIZE_CHANGED,
+  COMPOSITED_CHANGED,
   LAST_SIGNAL
 };
 
@@ -104,6 +105,25 @@ gdk_screen_class_init (GdkScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * GdkScreen::composited-changed:
+   * @screen: the object on which the signal is emitted
+   *
+   * The ::composited_changed signal is emitted when the composited
+   * status of the screen changes
+   *
+   * Since: 2.10
+   */
+  signals[COMPOSITED_CHANGED] =
+    g_signal_new (g_intern_static_string ("composited_changed"),
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkScreenClass, composited_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 }
 
 static void

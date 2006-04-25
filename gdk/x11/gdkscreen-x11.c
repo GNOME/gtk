@@ -47,6 +47,10 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
 static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_xinerama_support      (GdkScreen	  *screen);
@@ -460,6 +464,27 @@ gdk_x11_screen_get_screen_number (GdkScreen *screen)
   return GDK_SCREEN_X11 (screen)->screen_num;
 }
 
+static gboolean
+check_is_composited (GdkDisplay *display,
+		     GdkScreenX11 *screen_x11)
+{
+  Atom xselection = gdk_x11_atom_to_xatom_for_display (display, screen_x11->cm_selection_atom);
+  Window xwindow;
+  
+  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection);
+
+  return xwindow != None;
+}
+
+static GdkAtom
+make_cm_atom (int screen_number)
+{
+  gchar *name = g_strdup_printf ("_NET_WM_CM_S%d", screen_number);
+  GdkAtom atom = gdk_atom_intern (name, FALSE);
+  g_free (name);
+  return atom;
+}
+
 GdkScreen *
 _gdk_x11_screen_new (GdkDisplay *display,
 		     gint	 screen_number) 
@@ -479,14 +504,50 @@ _gdk_x11_screen_new (GdkDisplay *display,
   screen_x11->wmspec_check_window = None;
   /* we want this to be always non-null */
   screen_x11->window_manager_name = g_strdup ("unknown");
+  screen_x11->cm_selection_atom = make_cm_atom (screen_number);
+  screen_x11->is_composited = check_is_composited (display, screen_x11);
   
   init_xinerama_support (screen);
   init_randr_support (screen);
   
   _gdk_visual_init (screen);
   _gdk_windowing_window_init (screen);
-
+  
   return screen;
+}
+
+void
+_gdk_x11_screen_request_cm_notification (GdkScreenX11 *screen_x11)
+{
+  gdk_display_request_selection_notification (screen_x11->display, screen_x11->cm_selection_atom);
+}
+
+/**
+ * gdk_screen_is_composited:
+ * @screen: a #GdkScreen
+ * 
+ * Returns whether windows with an RGBA visual can reasonably
+ * be expected to have their alpha channel drawn correctly on
+ * the screen.
+ *
+ * On X11 this function returns whether a compositing manager is
+ * compositing @screen.
+ * 
+ * Return value: Whether windows with RGBA visuals can reasonably be
+ * expected to have their alpha channels drawn correctly on the screen.
+ * 
+ * Since: 2.10
+ **/
+gboolean
+gdk_screen_is_composited (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  return screen_x11->is_composited;
 }
 
 #ifdef HAVE_XINERAMA
@@ -703,6 +764,28 @@ void
 _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
 {
   g_signal_emit (screen, signals[WINDOW_MANAGER_CHANGED], 0);
+}
+
+void
+_gdk_x11_screen_process_owner_change (GdkScreen *screen,
+				      XEvent *event)
+{
+  XFixesSelectionNotifyEvent *selection_event = (XFixesSelectionNotifyEvent *)event;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  Atom xcm_selection_atom = gdk_x11_atom_to_xatom_for_display (screen_x11->display,
+							       screen_x11->cm_selection_atom);
+
+  if (selection_event->selection == xcm_selection_atom)
+    {
+      gboolean composited = selection_event->owner != None;
+
+      if (composited != screen_x11->is_composited)
+	{
+	  screen_x11->is_composited = composited;
+
+	  g_signal_emit_by_name (screen, "composited_changed");
+	}
+    }
 }
 
 /**

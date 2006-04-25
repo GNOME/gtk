@@ -564,6 +564,7 @@ gtk_combo_popup_list (GtkCombo *combo)
     {
       gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
                                    GTK_WINDOW (combo->popwin));
+      gtk_window_set_transient_for (combo->popwin, GTK_WINDOW (toplevel));
     }
 
   gtk_widget_set_size_request (combo->popwin, width, height);
@@ -941,6 +942,7 @@ gtk_combo_init (GtkCombo * combo)
 		    G_CALLBACK (gtk_combo_popup_button_leave), combo);
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_type_hint (GTK_WINDOW (combo->popwin), GDK_WINDOW_TYPE_HINT_COMBO);
   g_object_ref (combo->popwin);
   gtk_window_set_resizable (GTK_WINDOW (combo->popwin), FALSE);
 

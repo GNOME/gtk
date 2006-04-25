@@ -77,6 +77,7 @@ static const char *const precache_atoms[] = {
   "WM_LOCALE_NAME",
   "WM_PROTOCOLS",
   "WM_TAKE_FOCUS",
+  "_NET_WM_CM_S0",
   "_NET_WM_DESKTOP",
   "_NET_WM_ICON",
   "_NET_WM_ICON_NAME",
@@ -310,6 +311,9 @@ gdk_display_open (const gchar *display_name)
   _gdk_events_init (display);
   _gdk_input_init (display);
   _gdk_dnd_init (display);
+
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
+    _gdk_x11_screen_request_cm_notification (display_x11->screens[i]);
 
   g_signal_emit_by_name (gdk_display_manager_get(),
 			 "display_opened", display);
@@ -1102,8 +1106,9 @@ gdk_display_supports_selection_notification (GdkDisplay *display)
  *
  * Since: 2.6
  **/
-gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
-						      GdkAtom     selection)
+gboolean
+gdk_display_request_selection_notification  (GdkDisplay *display,
+					     GdkAtom     selection)
 
 {
 #ifdef HAVE_XFIXES

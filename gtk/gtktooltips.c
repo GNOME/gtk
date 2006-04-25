@@ -249,6 +249,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_type_hint (GTK_WINDOW (tooltips->tip_window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
       gtk_tooltips_update_screen (tooltips, TRUE);
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_resizable (GTK_WINDOW (tooltips->tip_window), FALSE);
@@ -405,6 +406,7 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   GdkScreen *pointer_screen;
   gint monitor_num, px, py;
   GdkRectangle monitor;
+  GtkWindow *toplevel;
 
   if (!tooltips->tip_window)
     gtk_tooltips_force_window (tooltips);
@@ -466,6 +468,10 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   else
     y = y + widget->allocation.height + 4;
 
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (toplevel && GTK_IS_WINDOW (toplevel))
+    gtk_window_set_transient_for (tooltips->tip_window, toplevel);
+  
   gtk_window_move (GTK_WINDOW (tooltips->tip_window), x, y);
   gtk_widget_show (tooltips->tip_window);
 }

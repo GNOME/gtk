@@ -1,3 +1,91 @@
+Tue Apr 25 10:25:28 2006  Søren Sandmann  <sandmann@redhat.com>
+
+	* tests/testgtk.c (create_alpha_window): Create 'composited' label.
+
+	* tests/testgtk.c (on_composited_changed): New function, change
+	the label to say whether the screen is composited or not.
+
+	* gtk/gtkwindow.c (gtk_window_on_composited_changed): When
+	composited status change, invalidate the window and propagate the signal;.
+
+	* gtk/gtkwindow.c (gtk_window_map): Set the appropriate type hint
+	if reset_type_hint is TRUE.
+
+	* gtk/gtkwindow.c (gtk_window_set_type_hint): If hint is one of
+	the old hints, store a shadow copy in the public window->type_hint
+	bitfield, otherwise set this field to normal. Set the private
+	field to the type hint.
+
+	* gtk/gtkwindow.c (gtk_window_init): Initialize priv->type_hint. 
+
+	* gtk/gtkwindow.c (struct _GtkWindowPrivate): New field
+	"reset_type_hint" indicating whether the type hint needs to be
+	reset. New field type_hint containing a GdkWindowTypeHint.
+
+	* gtk/gtkwidget.c (propagate_composited_changed): New function to
+	propagate changes in composited status.
+	(gtk_widget_class_init): Add composited_changed signal.
+	
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): New signal composited-changed.
+
+	* gtk/gtkwidget.c (gtk_widget_is_composited): New function.
+
+	* gtk/gtktooltips.c (gtk_tooltips_draw_tips): Set transient for.
+
+	* gtk/gtktooltips.c (gtk_tooltips_force_window): Set the type hint
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Compute whether
+	the item belongs to a menubar. Set the type_hint appropriately
+	depending on the outcome.
+
+	* gtk/gtkmenu.c (gtk_menu_position): Set the default type hint here.
+
+	* gtk/gtkmenu.c (gtk_menu_attach_to_widget): connect to hierarchy
+	changed on the attach widget.
+
+	* gtk/gtkmenu.c (attach_widget_hierarchy_changed): New function to
+	set the transient_for property for menus.
+
+	* gtk/gtkdnd.c (set_icon_stock_pixbuf): Set the appropriate type hint.
+
+	* gtk/gtkcombo.c (gtk_combo_popup_list): Make the popup window
+	transient for the toplevel.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Set
+	transient-for, for the popup window.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_type_hint): Support for
+	new window types.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_type_hint): Add support
+	for new window types.
+
+	* gdk/x11/gdkscreen-x11.c (_gdk_x11_screen_process_owner_change):
+	New function called whenever the compositing manager comes and goes.
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_is_composited): New function.
+
+	* gdk/x11/gdkscreen-x11.c
+	(_gdk_x11_screen_request_cm_notification, make_cm_atom,
+	check_is_composited): New functions
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Call
+	_gdk_x11_screen_process_owner_change when an
+	XFixesSelectionNotifyEvent is received.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Call
+	_gdk_x11_screen_request_cm_notification() on all screens.
+
+	* gdk/quartz/gdkscreen-quartz.c (gdk_screen_is_composited): Dummy
+	implementation. 
+
+	* gdk/gdkscreen.c (gdk_screen_class_init): New signal,
+	'composited-changed'.
+
+	* gdk/gdkwindow.h: Add new EWMH window types.
+
+	* gdk/win32/gdkscreen-win32.c (gdk_screen_is_composited) 
+
 2006-04-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: 
@@ -40,6 +128,7 @@
 	* gtk/gtkprinter.c:
 	Don't ref the backend since the backend owns the printer.
 
+>>>>>>> 1.7779
 2006-04-24  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c (update_combo_sensitivity_from_printers):

@@ -172,6 +172,9 @@ struct _GtkWindowPrivate
   guint accept_focus : 1;
   guint focus_on_map : 1;
   guint deletable : 1;
+
+  guint reset_type_hint : 1;
+  GdkWindowTypeHint type_hint;
 };
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
@@ -279,6 +282,8 @@ static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void        gtk_window_notify_keys_changed (GtkWindow   *window);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
+static void	   gtk_window_on_composited_changed (GdkScreen *screen,
+						     GtkWindow *window);
 
 static GSList      *toplevel_list = NULL;
 static GtkBinClass *parent_class = NULL;
@@ -815,6 +820,7 @@ gtk_window_init (GtkWindow *window)
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
+  priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -826,6 +832,8 @@ gtk_window_init (GtkWindow *window)
 
   gtk_decorated_window_init (window);
 
+  g_signal_connect (window->screen, "composited_changed",
+		    G_CALLBACK (gtk_window_on_composited_changed), window);
 }
 
 static void
@@ -937,9 +945,11 @@ gtk_window_get_property (GObject      *object,
 			 GParamSpec   *pspec)
 {
   GtkWindow  *window;
+  GtkWindowPrivate *priv;
 
   window = GTK_WINDOW (object);
-
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+  
   switch (prop_id)
     {
       GtkWindowGeometryInfo *info;
@@ -1000,8 +1010,7 @@ gtk_window_get_property (GObject      *object,
       g_value_set_boolean (value, window->has_toplevel_focus);
       break;
     case PROP_TYPE_HINT:
-      g_value_set_enum (value,
-                        window->type_hint);
+      g_value_set_enum (value, priv->type_hint);
       break;
     case PROP_SKIP_TASKBAR_HINT:
       g_value_set_boolean (value,
@@ -1980,9 +1989,20 @@ void
 gtk_window_set_type_hint (GtkWindow           *window, 
 			  GdkWindowTypeHint    hint)
 {
+  GtkWindowPrivate *priv;
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
-  window->type_hint = hint;
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (hint < GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU)
+    window->type_hint = hint;
+  else
+    window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+
+  priv->reset_type_hint = TRUE;
+  priv->type_hint = hint;
 }
 
 /**
@@ -1996,9 +2016,13 @@ gtk_window_set_type_hint (GtkWindow           *window,
 GdkWindowTypeHint
 gtk_window_get_type_hint (GtkWindow *window)
 {
+  GtkWindowPrivate *priv;
+  
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
-  return window->type_hint;
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+  
+  return priv->type_hint;
 }
 
 /**
@@ -3956,6 +3980,12 @@ gtk_window_finalize (GObject *object)
       window->keys_changed_handler = 0;
     }
 
+  if (window->screen)
+    {
+      g_signal_handlers_disconnect_by_func (window->screen,
+					    gtk_window_on_composited_changed, window);
+    }
+      
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -4101,6 +4131,17 @@ gtk_window_map (GtkWidget *widget)
   window->need_default_size = FALSE;
   window->need_default_position = FALSE;
   
+  if (priv->reset_type_hint)
+    {
+      /* We should only reset the type hint when the application
+       * used gtk_window_set_type_hint() to change the hint.
+       * Some applications use X directly to change the properties;
+       * in that case, we shouldn't overwrite what they did.
+       */
+      gdk_window_set_type_hint (widget->window, priv->type_hint);
+      priv->reset_type_hint = FALSE;
+    }
+
   gdk_window_show (widget->window);
 
   if (window->frame)
@@ -4312,8 +4353,8 @@ gtk_window_realize (GtkWidget *widget)
   if (!priv->deletable)
     gdk_window_set_functions (widget->window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
-  gdk_window_set_type_hint (widget->window, window->type_hint);
-
+  gdk_window_set_type_hint (widget->window, priv->type_hint);
+ 
   if (gtk_window_get_skip_pager_hint (window))
     gdk_window_set_skip_pager_hint (widget->window, TRUE);
 
@@ -6866,11 +6907,28 @@ gtk_window_set_screen (GtkWindow *window,
   window->screen = screen;
   gtk_widget_reset_rc_styles (widget);
   if (screen != previous_screen)
-    _gtk_widget_propagate_screen_changed (widget, previous_screen);
+    {
+      g_signal_handlers_disconnect_by_func (previous_screen,
+					    gtk_window_on_composited_changed, window);
+      g_signal_connect (screen, "composited_changed", 
+			G_CALLBACK (gtk_window_on_composited_changed), window);
+      
+      _gtk_widget_propagate_screen_changed (widget, previous_screen);
+      _gtk_widget_propagate_composited_changed (widget);
+    }
   g_object_notify (G_OBJECT (window), "screen");
 
   if (was_mapped)
     gtk_widget_map (widget);
+}
+
+static void
+gtk_window_on_composited_changed (GdkScreen *screen,
+				  GtkWindow *window)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (window));
+  
+  _gtk_widget_propagate_composited_changed (GTK_WIDGET (window));
 }
 
 static GdkScreen *

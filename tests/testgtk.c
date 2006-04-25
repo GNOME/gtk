@@ -170,7 +170,8 @@ on_alpha_window_expose (GtkWidget      *widget,
 					 widget->allocation.height / 2,
 					 radius * 1.33);
 
-  if (gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget)))
+  if (gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget)) &&
+      gtk_widget_is_composited (widget))
     cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
   else
     cairo_set_source_rgb (cr, 1.0, 1.0, 1.0); /* opaque white */
@@ -354,6 +355,18 @@ on_alpha_screen_changed (GtkWidget *widget,
   gtk_widget_set_colormap (widget, colormap);
 }
 
+static void
+on_composited_changed (GtkWidget *window,
+		      GtkLabel *label)
+{
+  gboolean is_composited = gtk_widget_is_composited (window);
+
+  if (is_composited)
+    gtk_label_set_text (label, "Composited");
+  else
+    gtk_label_set_text (label, "Not composited");
+}
+
 void
 create_alpha_window (GtkWidget *widget)
 {
@@ -379,22 +392,26 @@ create_alpha_window (GtkWidget *widget)
 			  TRUE, TRUE, 0);
 
       label = gtk_label_new (NULL);
-      
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_drawing (), TRUE, TRUE, 0);
-
       on_alpha_screen_changed (window, NULL, label);
       g_signal_connect (window, "screen-changed",
 			G_CALLBACK (on_alpha_screen_changed), label);
       
+      label = gtk_label_new (NULL);
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+      on_composited_changed (window, GTK_LABEL (label));
+      g_signal_connect (window, "composited_changed", G_CALLBACK (on_composited_changed), label);
+      
+      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_drawing (), TRUE, TRUE, 0);
+
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
       
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy),
-                        NULL);
+                        NULL); 
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

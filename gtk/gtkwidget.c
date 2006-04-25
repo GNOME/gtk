@@ -121,6 +121,7 @@ enum {
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
   GRAB_BROKEN,
+  COMPOSITED_CHANGED,
   LAST_SIGNAL
 };
 
@@ -787,6 +788,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+  widget_signals[COMPOSITED_CHANGED] =
+    g_signal_new (I_("composited_changed"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
 /**
  * GtkWidget::delete-event:
@@ -5155,6 +5164,49 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
 			  client_data);
   
   g_object_unref (widget);
+}
+
+/**
+ * gtk_widget_is_composited:
+ * @widget: 
+ * 
+ * Whether @widget can rely on having its alpha channel
+ * drawn correctly. On X11 this function returns whether a
+ * compositing manager is running for @widget's screen
+ * 
+ * Return value: #TRUE if the widget can rely on its alpha
+ * channel being drawn correctly.
+ * 
+ * Since: 2.10
+ **/
+gboolean
+gtk_widget_is_composited (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  
+  return gdk_screen_is_composited (screen);
+}
+
+static void
+propagate_composited_changed (GtkWidget *widget,
+			      gpointer dummy)
+{
+  if (GTK_IS_CONTAINER (widget))
+    {
+      gtk_container_forall (GTK_CONTAINER (widget),
+			    propagate_composited_changed,
+			    NULL);
+    }
+  
+  g_signal_emit (widget, widget_signals[COMPOSITED_CHANGED], 0);
+}
+
+void
+_gtk_widget_propagate_composited_changed (GtkWidget *widget)
+{
+  propagate_composited_changed (widget, NULL);
 }
 
 /**

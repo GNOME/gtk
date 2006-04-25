@@ -94,7 +94,9 @@ struct _GtkWindow
   guint maximize_initially : 1;
   guint decorated : 1;
   
-  guint type_hint : 3; /* GdkWindowTypeHint */ 
+  guint type_hint : 3; /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
+			* it contains GDK_WINDOW_TYPE_HINT_NORMAL
+			*/
   guint gravity : 5; /* GdkGravity */
 
   guint is_active : 1;

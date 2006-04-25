@@ -2077,6 +2077,9 @@ gdk_event_translate (GdkDisplay *display,
       if (xevent->type - display_x11->xfixes_event_base == XFixesSelectionNotify)
 	{
 	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
+
+	  _gdk_x11_screen_process_owner_change (screen, xevent);
+	  
 	  event->owner_change.type = GDK_OWNER_CHANGE;
 	  event->owner_change.window = window;
 	  event->owner_change.owner = selection_notify->owner;
@@ -2086,7 +2089,7 @@ gdk_event_translate (GdkDisplay *display,
 					       selection_notify->selection);
 	  event->owner_change.time = selection_notify->timestamp;
 	  event->owner_change.selection_time = selection_notify->selection_timestamp;
-
+	  
 	  return_val = TRUE;
 	}
       else

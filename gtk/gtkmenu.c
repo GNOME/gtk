@@ -1036,6 +1036,33 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
     }
 }
 
+static void
+attach_widget_hierarchy_changed (GtkWidget *attach_widget,
+				 GtkWidget *previous_toplevel,
+				 gpointer data)
+{
+  GtkMenu *menu = GTK_MENU (data);
+  GtkWidget *new_toplevel = gtk_widget_get_toplevel (attach_widget);
+
+  if (g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+    {
+      /* If there is an explicit screen set, then don't set WM_TRANSIENT_FOR.
+       * Because, what would happen if the attach widget moved to a different
+       * screen on a different display? The menu wouldn't move along with it,
+       * so we just make it the responsibility of whoever set the screen to
+       * also set WM_TRANSIENT_FOR.
+       */
+      return;
+    }
+  
+  if (menu->toplevel && !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen") &&
+      (!new_toplevel || GTK_IS_WINDOW (new_toplevel)))
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel),
+				    GTK_WINDOW (new_toplevel));
+    }
+}
+
 void
 gtk_menu_attach_to_widget (GtkMenu	       *menu,
 			   GtkWidget	       *attach_widget,
@@ -1066,6 +1093,10 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   g_signal_connect (attach_widget, "screen_changed",
 		    G_CALLBACK (attach_widget_screen_changed), menu);
   attach_widget_screen_changed (attach_widget, NULL, menu);
+  
+  g_signal_connect (attach_widget, "hierarchy_changed",
+		    G_CALLBACK (attach_widget_hierarchy_changed), menu);
+  attach_widget_hierarchy_changed (attach_widget, NULL, menu);
   
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), data);
@@ -1121,6 +1152,10 @@ gtk_menu_detach (GtkMenu *menu)
   g_signal_handlers_disconnect_by_func (data->attach_widget,
 					(gpointer) attach_widget_screen_changed,
 					menu);
+  g_signal_handlers_disconnect_by_func (data->attach_widget,
+					(gpointer) attach_widget_hierarchy_changed,
+					menu);
+  attach_widget_hierarchy_changed (data->attach_widget, NULL, menu);
 
   if (data->detacher)
     data->detacher (data->attach_widget, menu);
@@ -1836,7 +1871,6 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 						     "app-paintable", TRUE,
 						     NULL);
 
-	      
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
@@ -3765,6 +3799,10 @@ gtk_menu_position (GtkMenu *menu)
   private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
   private->initially_pushed_in = FALSE;
+
+  /* Set the type hint here to allow custom position functions to set a different hint */
+  if (!GTK_WIDGET_VISIBLE (menu->toplevel))
+    gtk_window_set_type_hint (GTK_WINDOW (menu->toplevel), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
   
   if (menu->position_func)
     {

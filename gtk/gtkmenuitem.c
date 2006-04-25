@@ -1122,7 +1122,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 {
   GtkMenuItem *menu_item;
   GtkWidget *widget;
-  GtkWidget *parent_menu_item;
+  GtkMenuItem *parent_menu_item;
   GdkScreen *screen;
   gint twidth, theight;
   gint tx, ty;
@@ -1164,6 +1164,22 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   ty += widget->allocation.y;
 
   get_offsets (menu, &horizontal_offset, &vertical_offset);
+
+  if (GTK_IS_MENU_BAR (widget->parent))
+    {
+      menu_item->from_menubar = TRUE;
+    }
+  else if (GTK_IS_MENU (widget->parent))
+    {
+      if (GTK_MENU (widget->parent)->parent_menu_item)
+	menu_item->from_menubar = GTK_MENU_ITEM (GTK_MENU (widget->parent)->parent_menu_item)->from_menubar;
+      else
+	menu_item->from_menubar = FALSE;
+    }
+  else
+    {
+      menu_item->from_menubar = FALSE;
+    }
   
   switch (menu_item->submenu_placement)
     {
@@ -1175,7 +1191,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	  menu_item->submenu_direction = GTK_DIRECTION_LEFT;
 	  tx += widget->allocation.width - twidth;
 	}
-
       if ((ty + widget->allocation.height + theight) <= monitor.y + monitor.height)
 	ty += widget->allocation.height;
       else if ((ty - theight) >= monitor.y)
@@ -1188,16 +1203,23 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
     case GTK_LEFT_RIGHT:
       if (GTK_IS_MENU (widget->parent))
-	parent_menu_item = GTK_MENU (widget->parent)->parent_menu_item;
+	parent_menu_item = GTK_MENU_ITEM (GTK_MENU (widget->parent)->parent_menu_item);
       else
 	parent_menu_item = NULL;
+      
       parent_xthickness = widget->parent->style->xthickness;
+
       if (parent_menu_item && !GTK_MENU (widget->parent)->torn_off)
-	menu_item->submenu_direction = GTK_MENU_ITEM (parent_menu_item)->submenu_direction;
-      else if (direction == GTK_TEXT_DIR_LTR)
-	menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
+	{
+	  menu_item->submenu_direction = parent_menu_item->submenu_direction;
+	}
       else
-	menu_item->submenu_direction = GTK_DIRECTION_LEFT;
+	{
+	  if (direction == GTK_TEXT_DIR_LTR)
+	    menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
+	  else
+	    menu_item->submenu_direction = GTK_DIRECTION_LEFT;
+	}
 
       switch (menu_item->submenu_direction)
 	{
@@ -1236,6 +1258,12 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   *y = ty;
 
   gtk_menu_set_monitor (menu, monitor_num);
+
+  if (!GTK_WIDGET_VISIBLE (menu->toplevel))
+    {
+      gtk_window_set_type_hint (GTK_WINDOW (menu->toplevel), menu_item->from_menubar?
+				GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU : GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+    }
 }
 
 /**

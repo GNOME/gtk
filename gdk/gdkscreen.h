@@ -57,6 +57,7 @@ struct _GdkScreenClass
   GObjectClass parent_class;
 
   void (*size_changed) (GdkScreen *screen);
+  void (*composited_changed) (GdkScreen *screen);
 };
 
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
@@ -69,7 +70,7 @@ GdkColormap *gdk_screen_get_rgb_colormap      (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgb_visual        (GdkScreen   *screen);
 GdkColormap *gdk_screen_get_rgba_colormap     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
-
+gboolean     gdk_screen_is_composited	      (GdkScreen   *screen);
 
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);

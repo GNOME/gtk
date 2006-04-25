@@ -407,8 +407,9 @@ struct _GtkWidgetClass
   gboolean (*grab_broken_event) (GtkWidget	     *widget,
                                  GdkEventGrabBroken  *event);
 
+  void         (* composited_changed) (GtkWidget *widget);
+	
   /* Padding for future expansion */
-  void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
@@ -738,6 +739,9 @@ GtkTextDirection gtk_widget_get_direction         (GtkWidget        *widget);
 void             gtk_widget_set_default_direction (GtkTextDirection  dir);
 GtkTextDirection gtk_widget_get_default_direction (void);
 
+/* Compositing manager functionality */
+gboolean gtk_widget_is_composited (GtkWidget *widget);
+
 /* Counterpart to gdk_window_shape_combine_mask.
  */
 void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
@@ -788,6 +792,7 @@ void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
 void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
 							   GdkScreen    *previous_screen);
+void		  _gtk_widget_propagate_composited_changed (GtkWidget    *widget);
 
 GdkColormap* _gtk_widget_peek_colormap (void);
 
