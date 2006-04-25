@@ -284,11 +284,16 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Gets emitted for every page that is printed. The signal handler
    * must render the @page_nr's page onto the cairo context obtained
    * from @context using gtk_print_context_get_cairo().
-   * 
+   *
    * <informalexample><programlisting>
    *  FIXME: need an example here
    * </programlisting></informalexample>
    *
+   * Use gtk_print_operation_set_use_full_page() and 
+   * gtk_print_operation_set_unit() before starting the print operation
+   * to set up the transformation of the cairo context according to your
+   * needs.
+   * 
    * Since: 2.10
    */
   signals[DRAW_PAGE] =
@@ -342,6 +347,17 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
                  g_cclosure_marshal_VOID__VOID,
                  G_TYPE_NONE, 0);
 
+  /**
+   * GtkPrintOperation:default-page-setup:
+   *
+   * The #GtkPageSetup used by default.
+   * 
+   * This page setup will be used by gtk_print_operation_run(),
+   * but it can be overridden on a per-page basis by connecting
+   * to the ::request-page-setup signal.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_DEFAULT_PAGE_SETUP,
 				   g_param_spec_object ("default-page-setup",
@@ -350,6 +366,16 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							GTK_TYPE_PAGE_SETUP,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkPrintOperation:print-settings:
+   *
+   * The #GtkPrintSettings used for initializing the dialog.
+   *
+   * Setting this property is typically used to re-establish print 
+   * settings from a previous print operation, see gtk_print_operation_run().
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_PRINT_SETTINGS,
 				   g_param_spec_object ("print-settings",
@@ -357,7 +383,17 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							P_("The GtkPrintSettings used for initializing the dialog"),
 							GTK_TYPE_PRINT_SETTINGS,
 							GTK_PARAM_READWRITE));
-
+  
+  /**
+   * GtkPrintOperation:job-name:
+   *
+   * A string used to identify the job (e.g. in monitoring applications like eggcups). 
+   * 
+   * If you don't set a job name, GTK+ picks a default one by numbering successive 
+   * print jobs.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_JOB_NAME,
 				   g_param_spec_string ("job-name",
@@ -365,7 +401,21 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							P_("A string used for identifying the print job."),
 							"",
 							GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkPrintOperation:number-of-pages:
+   *
+   * The number of pages in the document. 
+   *
+   * This <emphasis>must</emphasis> be set to a positive number
+   * before the rendering starts. It may be set in a ::begin-print signal hander.
+   *
+   * Note that the page numbers passed to the ::request-page-setup and ::draw-page 
+   * signals are 0-based, i.e. if the user chooses to print all pages, the last 
+   * ::draw-page signal will be for page @n_pages - 1.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_NR_OF_PAGES,
 				   g_param_spec_int ("number-of-pages",
@@ -375,7 +425,19 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     G_MAXINT,
 						     -1,
 						     GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkPrintOperation:current-page:
+   *
+   * The current page in the document.
+   *
+   * If this is set before gtk_print_operation_run(), 
+   * the user will be able to select to print only the current page.
+   *
+   * Note that this only makes sense for pre-paginated documents.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_CURRENT_PAGE,
 				   g_param_spec_int ("current-page",
@@ -386,25 +448,53 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     GTK_PARAM_READWRITE));
   
+  /**
+   * GtkPrintOperation:use-full-page:
+   *
+   * If %TRUE, the transformation for the cairo context obtained from 
+   * #GtkPrintContext puts the origin at the top left corner of the page 
+   * (which may not be the top left corner of the sheet, depending on page 
+   * orientation and the number of pages per sheet). Otherwise, the origin 
+   * is at the top left corner of the imageable area (i.e. inside the margins).
+   * 
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_USE_FULL_PAGE,
 				   g_param_spec_boolean ("use-full-page",
 							 P_("Use full page"),
-							 P_(""),
+							 P_("%TRUE if the the origin of the context should be at the corner of the page and not the corner of the imageable area"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   
 
+  /**
+   * GtkPrintOperation:unit:
+   *
+   * The transformation for the cairo context obtained from
+   * #GtkPrintContext is set up in such a way that distances are measured 
+   * in units of @unit.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_UNIT,
 				   g_param_spec_enum ("unit",
 						      P_("Unit"),
-						      P_(""),
+						      P_("The unit in which distances can be measured in the context"),
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_PIXEL,
 						      GTK_PARAM_READWRITE));
   
 
+  /**
+   * GtkPrintOperation:show-dialog:
+   *
+   * Determines whether calling gtk_print_operation_run() will present
+   * a print dialog to the user, or just print to the default printer.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_DIALOG,
 				   g_param_spec_boolean ("show-dialog",
@@ -413,6 +503,20 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   
+  /**
+   * GtkPrintOperation:pdf-target:
+   *
+   * The name of a PDF file to generate instead of showing the print dialog. 
+   *
+   * The indended use of this property is for implementing "Export to PDF" 
+   * actions.
+   *
+   * "Print to PDF" support is independent of this and is done
+   * by letting the user pick the "Print to PDF" item from the list
+   * of printers in the print dialog.
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_JOB_NAME,
 				   g_param_spec_string ("pdf-target",
@@ -421,6 +525,13 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							NULL,
 							GTK_PARAM_READWRITE));
   
+  /**
+   * GtkPrintOperation:status:
+   *
+   * The status of the print operation.
+   * 
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_STATUS,
 				   g_param_spec_enum ("status",
@@ -430,6 +541,18 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      GTK_PRINT_STATUS_INITIAL,
 						      GTK_PARAM_READABLE));
   
+  /**
+   * GtkPrintOperation:status-string:
+   *
+   * A string representation of the status of the print operation. 
+   * The string is translated and suitable for displaying the print 
+   * status e.g. in a #GtkStatusbar.
+   *
+   * See the ::status property for a status value that is suitable 
+   * for programmatic use. 
+   *
+   * Since: 2.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_STATUS_STRING,
 				   g_param_spec_string ("status-string",
@@ -604,8 +727,8 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  * Sets the number of pages in the document. 
  *
  * This <emphasis>must</emphasis> be set to a positive number
- * before the print dialog is shown. It may be set in a
- * ::begin-print signal hander.
+ * before the rendering starts. It may be set in a ::begin-print 
+ * signal hander.
  *
  * Note that the page numbers passed to the ::request-page-setup 
  * and ::draw-page signals are 0-based, i.e. if the user chooses
@@ -637,6 +760,7 @@ gtk_print_operation_set_nr_of_pages (GtkPrintOperation *op,
  * @current_page: the current page, 0-based
  *
  * Sets the current page.
+ *
  * If this is called before gtk_print_operation_run(), 
  * the user will be able to select to print only the current page.
  *
@@ -661,6 +785,20 @@ gtk_print_operation_set_current_page (GtkPrintOperation *op,
     }
 }
 
+/**
+ * gtk_print_operation_set_use_full_page:
+ * @op: a #GtkPrintOperation
+ * @full_page: %TRUE to set up the #GtkPrintContext for the full page
+ * 
+ * If @full_page is %TRUE, the transformation for the cairo context 
+ * obtained from #GtkPrintContext puts the origin at the top left 
+ * corner of the page (which may not be the top left corner of the 
+ * sheet, depending on page orientation and the number of pages per 
+ * sheet). Otherwise, the origin is at the top left corner of the
+ * imageable area (i.e. inside the margins).
+ * 
+ * Since: 2.10 
+ */
 void
 gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
 				       gboolean           full_page)
@@ -677,6 +815,17 @@ gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
     }
 }
 
+/**
+ * gtk_print_operation_set_unit:
+ * @op: a #GtkPrintOperation
+ * @unit: the unit to use
+ * 
+ * Sets up the transformation for the cairo context obtained from
+ * #GtkPrintContext in such a way that distances are measured in 
+ * units of @unit.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_operation_set_unit (GtkPrintOperation *op,
 			      GtkUnit            unit)
@@ -832,9 +981,24 @@ gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
     }
 }
 
+/**
+ * gtk_print_operation_set_pdf_target:
+ * @op: a #GtkPrintOperation
+ * @filename: the filename for the PDF file
+ * 
+ * Sets up the #GtkPrintOperation to generate a PDF file instead
+ * of showing the print dialog. The indended use of this function
+ * is for implementing "Export to PDF" actions.
+ *
+ * "Print to PDF" support is independent of this and is done
+ * by letting the user pick the "Print to PDF" item from the list
+ * of printers in the print dialog.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
-				    const gchar *      filename)
+				    const gchar       *filename)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 

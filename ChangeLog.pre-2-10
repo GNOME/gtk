@@ -1,3 +1,9 @@
+2006-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintjob.c (gtk_print_job_set_source_file): Add docs.
+
+	* gtk/gtkprintoperation.c: Add docs.
+
 Tue Apr 25 10:25:28 2006  Søren Sandmann  <sandmann@redhat.com>
 
 	* tests/testgtk.c (create_alpha_window): Create 'composited' label.
@@ -87,7 +93,7 @@ Tue Apr 25 10:25:28 2006  Søren Sandmann  <sandmann@redhat.com>
 	* gdk/win32/gdkscreen-win32.c (gdk_screen_is_composited) 
 
 2006-04-25  Matthias Clasen  <mclasen@redhat.com>
-
+	
 	* modules/printbackends/cups/gtkprintbackendcups.c: 
 	Add some more translatable PPD option names.
 

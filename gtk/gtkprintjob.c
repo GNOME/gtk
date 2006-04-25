@@ -372,6 +372,21 @@ gtk_print_job_set_status (GtkPrintJob   *job,
   g_signal_emit (job, signals[STATUS_CHANGED], 0);
 }
 
+/**
+ * gtk_print_job_set_source_file:
+ * @job: a #GtkPrintJob
+ * @filename: the file to be printed
+ * @error: return location for errors
+ * 
+ * Make the #GtkPrintJob send an existing document to the 
+ * printing system. The file can be in any format understood
+ * by the platforms printing system (typically PostScript,
+ * but on many platforms PDF may work too).
+ * 
+ * Returns: %FALSE if an error occurred
+ *
+ * Since: 2.10
+ **/
 gboolean
 gtk_print_job_set_source_file (GtkPrintJob *job,
 			       const gchar *filename,
