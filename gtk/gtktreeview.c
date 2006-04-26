@@ -4760,6 +4760,25 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
 			      GTK_RBNODE_GET_HEIGHT (node));
 }
 
+static gboolean
+node_is_visible (GtkTreeView *tree_view,
+		 GtkRBTree   *tree,
+		 GtkRBNode   *node)
+{
+  int y;
+  int height;
+
+  y = _gtk_rbtree_node_find_offset (tree, node);
+  height = ROW_HEIGHT (tree_view, GTK_RBNODE_GET_HEIGHT (node));
+
+  if (y >= tree_view->priv->vadjustment->value &&
+      y + height <= (tree_view->priv->vadjustment->value
+	             + tree_view->priv->vadjustment->page_size))
+    return TRUE;
+
+  return FALSE;
+}
+
 /* Returns TRUE if it updated the size
  */
 static gboolean
@@ -4897,7 +4916,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	      GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	    {
-	      need_redraw = TRUE;
+	      _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 	      if (validate_row (tree_view, tree, node, &iter, path))
 		size_changed = TRUE;
 	    }
@@ -5012,7 +5031,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
-	  need_redraw = TRUE;
+	  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 	  if (validate_row (tree_view, tree, node, &iter, path))
 	    size_changed = TRUE;
 	}
@@ -5050,7 +5069,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
           GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
         {
-          need_redraw = TRUE;
+	  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
           if (validate_row (tree_view, tree, node, &iter, path))
             size_changed = TRUE;
         }
@@ -5131,7 +5150,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	{
           gint old_height = new_height;
 
-	  need_redraw = TRUE;
+	  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 	  if (validate_row (tree_view, tree, node, &iter, path))
             {
               new_height = GTK_RBNODE_GET_HEIGHT (node);
@@ -5175,7 +5194,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	{
           gint old_height = new_height;
 
-	  need_redraw = TRUE;
+	  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 	  if (validate_row (tree_view, tree, node, &iter, above_path))
             {
               new_height = GTK_RBNODE_GET_HEIGHT (node);
@@ -5421,7 +5440,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
       gtk_adjustment_changed (tree_view->priv->vadjustment);
 
       if (queue_resize)
-        gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+        gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
     }
 
   if (path) gtk_tree_path_free (path);
@@ -7423,6 +7442,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   gint i = 0;
   gint height;
   gboolean free_path = FALSE;
+  gboolean node_visible = TRUE;
 
   g_return_if_fail (path != NULL || iter != NULL);
 
@@ -7456,6 +7476,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       if (tmptree == NULL)
 	{
 	  /* We aren't showing the node */
+	  node_visible = FALSE;
           goto done;
 	}
 
@@ -7487,7 +7508,10 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
     }
 
   if (tree == NULL)
-    goto done;
+    {
+      node_visible = FALSE;
+      goto done;
+    }
 
   /* ref the node */
   gtk_tree_model_ref_node (tree_view->priv->model, iter);
@@ -7507,7 +7531,11 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
     {
       if (tree)
         _gtk_rbtree_node_mark_valid (tree, tmpnode);
-      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+
+      if (node_visible && node_is_visible (tree_view, tree, tmpnode))
+	gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      else
+	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
     }
   else
     install_presize_handler (tree_view);

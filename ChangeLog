@@ -1,5 +1,18 @@
 2006-04-26  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeview.c (node_is_visible): new function,
+	(validate_visible_area): when a node is validated, only queue a
+	redraw for that node, not for the entire widget (a redraw for the
+	entire widget is only needed when the sizes change, and
+	_queue_resize() will take care of that),
+	(do_validate_rows): do not queue a redraw, redraws are only needed
+	for changes in the visible area and validate_visible_area() takes
+	care of that,
+	(gtk_tree_view_row_inserted): for fixed height mode, only queue
+	a resize and redraw if the node is visible, else no redraw is needed.
+
+2006-04-26  Kristian Rietveld  <kris@imendio.com>
+
 	If this new "row-ending-details" property is turned on, more
 	detailed "details" will be passed to the theme engine for drawing
 	the background, drop indicator and focus rectangle.  Requirement is
