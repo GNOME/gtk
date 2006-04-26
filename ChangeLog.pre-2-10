@@ -136,7 +136,6 @@ Tue Apr 25 10:25:28 2006  Søren Sandmann  <sandmann@redhat.com>
 	* gtk/gtkprinter.c:
 	Don't ref the backend since the backend owns the printer.
 
->>>>>>> 1.7779
 2006-04-24  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c (update_combo_sensitivity_from_printers):
