@@ -210,6 +210,7 @@ struct _GtkTreeViewPrivate
   guint hover_expand : 1;
   guint imcontext_changed : 1;
 
+
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
 
@@ -231,6 +232,8 @@ struct _GtkTreeViewPrivate
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer row_separator_data;
   GtkDestroyNotify row_separator_destroy;
+
+  gint level_indentation;
 };
 
 #ifdef __GNUC__
