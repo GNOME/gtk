@@ -1,3 +1,27 @@
+2006-04-26  Kristian Rietveld  <kris@imendio.com>
+
+	New "show-expanders" and "level-indentation" properties, which can
+	be used for customizing the tree view.  (For example to do
+	grouping as demonstrated in the test application).
+	Discussion in #80869.
+
+	* gtk/gtktreeprivate.h: add level_indentation field.
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init),
+	(gtk_tree_view_init), (gtk_tree_view_set_property),
+	(gtk_tree_view_get_property): add the properties to the object,
+	(gtk_tree_view_button_press), (do_prelight),
+	(gtk_tree_view_bin_expose), (validate_row),
+	(gtk_tree_view_discover_dirty_iter), (gtk_tree_view_get_cell_area),
+	(gtk_tree_view_create_row_drag_icon): take the new properties
+	into account,
+	(gtk_tree_view_start_editing): fix cell placement code.
+
+	* tests/testgrouping.c: new test application, showing how to
+	implement grouping.
+
+	* tests/Makefile.am: updated.
+
 2006-04-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk.symbols: Add gdk_screen_is_composited
