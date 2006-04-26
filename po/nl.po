@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-10 23:19+0200\n"
-"PO-Revision-Date: 2006-04-11 05:07+0200\n"
+"POT-Creation-Date: 2006-04-26 14:38+0200\n"
+"PO-Revision-Date: 2006-04-26 20:44+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../gtk/gtkprintjob.c:406
+#: ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Openen van bestand '%s' mislukt: %s"
@@ -1419,11 +1420,11 @@ msgstr "Kleurenwiel"
 msgid "Color Selection"
 msgstr "Kleurselectie"
 
-#: ../gtk/gtkentry.c:4940 ../gtk/gtktextview.c:7266
+#: ../gtk/gtkentry.c:4940 ../gtk/gtktextview.c:7264
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
-#: ../gtk/gtkentry.c:4954 ../gtk/gtktextview.c:7280
+#: ../gtk/gtkentry.c:4954 ../gtk/gtktextview.c:7278
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode controleteken invoegen "
 
@@ -1448,7 +1449,7 @@ msgstr "(Geen)"
 
 # dit is het label op de knop waarmee je naar andere mappen zoekt
 # (andere mappen dan de favoriete)
-#: ../gtk/gtkfilechooserbutton.c:1577
+#: ../gtk/gtkfilechooserbutton.c:1587
 msgid "Other..."
 msgstr "Andere..."
 
@@ -2002,16 +2003,16 @@ msgstr "Netwerkstation (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: ../gtk/gtkfontbutton.c:177 ../gtk/gtkfontbutton.c:290
+#: ../gtk/gtkfontbutton.c:177 ../gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
 msgstr "Kies een lettertype"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:284
+#: ../gtk/gtkfontbutton.c:289
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:802
+#: ../gtk/gtkfontbutton.c:807
 msgid "Font"
 msgstr "Lettertype"
 
@@ -2053,12 +2054,12 @@ msgstr "_Gammawaarde"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1398
+#: ../gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
 
-#: ../gtk/gtkicontheme.c:1328
+#: ../gtk/gtkicontheme.c:1344
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2071,7 +2072,7 @@ msgstr ""
 "U kunt een kopie verkrijgen bij:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1397
+#: ../gtk/gtkicontheme.c:1413
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Pictogram '%s' niet beschikbaar in dit thema"
@@ -2118,45 +2119,45 @@ msgstr "Assen"
 msgid "Keys"
 msgstr "Sleutels"
 
-#: ../gtk/gtkinputdialog.c:553
+#: ../gtk/gtkinputdialog.c:555
 msgid "_X:"
 msgstr "_X:"
 
-#: ../gtk/gtkinputdialog.c:554
+#: ../gtk/gtkinputdialog.c:556
 msgid "_Y:"
 msgstr "_Y:"
 
 # dit is ws voor een wacom-tablet
-#: ../gtk/gtkinputdialog.c:555
+#: ../gtk/gtkinputdialog.c:557
 msgid "_Pressure:"
 msgstr "_Druk:"
 
-#: ../gtk/gtkinputdialog.c:556
+#: ../gtk/gtkinputdialog.c:558
 msgid "X _tilt:"
 msgstr "X-_helling:"
 
-#: ../gtk/gtkinputdialog.c:557
+#: ../gtk/gtkinputdialog.c:559
 msgid "Y t_ilt:"
 msgstr "Y-h_elling:"
 
-#: ../gtk/gtkinputdialog.c:558
+#: ../gtk/gtkinputdialog.c:560
 msgid "_Wheel:"
 msgstr "_Wiel:"
 
-#: ../gtk/gtkinputdialog.c:606
+#: ../gtk/gtkinputdialog.c:608
 msgid "none"
 msgstr "geen"
 
-#: ../gtk/gtkinputdialog.c:643 ../gtk/gtkinputdialog.c:679
+#: ../gtk/gtkinputdialog.c:645 ../gtk/gtkinputdialog.c:681
 msgid "(disabled)"
 msgstr "(uitgeschakeld)"
 
-#: ../gtk/gtkinputdialog.c:672
+#: ../gtk/gtkinputdialog.c:674
 msgid "(unknown)"
 msgstr "(onbekend)"
 
 #. and clear button
-#: ../gtk/gtkinputdialog.c:772
+#: ../gtk/gtkinputdialog.c:774
 msgid "Cl_ear"
 msgstr "_Wissen"
 
@@ -2206,10 +2207,398 @@ msgstr "GTK+-opties"
 msgid "Show GTK+ Options"
 msgstr "GTK+-options tonen"
 
-#: ../gtk/gtknotebook.c:3946 ../gtk/gtknotebook.c:6508
+#: ../gtk/gtknotebook.c:3949 ../gtk/gtknotebook.c:6509
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
+
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: ../gtk/gtkpagesetupunixdialog.c:138
+msgid "default:mm"
+msgstr "default:mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:348
+msgid ""
+"<b>Any Printer</b>\n"
+"For portable documents"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:901
+msgid "mm"
+msgstr "mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:903
+msgid "inch"
+msgstr "inch"
+
+#: ../gtk/gtkpagesetupunixdialog.c:922
+#, c-format
+msgid ""
+"Margins:\n"
+" Left: %s %s\n"
+" Right: %s %s\n"
+" Top: %s %s\n"
+" Bottom: %s %s"
+msgstr ""
+"Marges:\n"
+" Links: %s %s\n"
+" Rechts: %s %s\n"
+" Boven: %s %s\n"
+" Onder: %s %s"
+
+#: ../gtk/gtkpagesetupunixdialog.c:973
+msgid "Manage Custom Sizes..."
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:996
+msgid "_Format for:"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1016
+msgid "_Paper size:"
+msgstr "_Papiergroote:"
+
+# ligging/orientatie
+#: ../gtk/gtkpagesetupunixdialog.c:1054
+msgid "_Orientation:"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1111 ../gtk/gtkprintunixdialog.c:2053
+msgid "Page Setup"
+msgstr "Paginainstellingen"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1321
+msgid " inch"
+msgstr " inch"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1323
+msgid " mm"
+msgstr " mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1371
+msgid "Margins from Printer..."
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1540
+#, c-format
+msgid "Custom Size %d"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1747
+msgid "Manage Custom Sizes"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1829
+msgid "Width:"
+msgstr "Breedte:"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1842
+msgid "Height:"
+msgstr "Hoogte:"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1853
+msgid "Paper Size"
+msgstr "Papiergrootte"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1869
+msgid "top"
+msgstr "boven"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1882
+msgid "bottom"
+msgstr "onder"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1895
+msgid "left"
+msgstr "links"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1908
+msgid "right"
+msgstr "rechts"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1945
+msgid "Paper Margins"
+msgstr "Papiermarges"
+
+# niet aanwezig/beschikbaar
+#: ../gtk/gtkprinteroptionwidget.c:452
+msgid "Not available"
+msgstr "Niet beschikbaar"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:850
+msgid "print operation status|Initial state"
+msgstr "Aanvankelijke toestand"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:852
+msgid "print operation status|Preparing to print"
+msgstr "Voorbereiden voor afdrukken"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:854
+msgid "print operation status|Generating data"
+msgstr "Data genereren"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:856
+msgid "print operation status|Sending data"
+msgstr "Data versturen"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:858
+msgid "print operation status|Waiting"
+msgstr "Wachten"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:860
+msgid "print operation status|Blocking on issue"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:862
+msgid "print operation status|Printing"
+msgstr "Afdrukken"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:864
+msgid "print operation status|Finished"
+msgstr "Voltooid"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:866
+msgid "print operation status|Finished with error"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:541
+msgid "Printer offline"
+msgstr "Printer is offline"
+
+#: ../gtk/gtkprintoperation-win32.c:543
+msgid "Out of paper"
+msgstr "Papier is op"
+
+#: ../gtk/gtkprintoperation-win32.c:545
+msgid "Paused"
+msgstr "Gepauzeerd"
+
+#: ../gtk/gtkprintoperation-win32.c:547
+msgid "Need user intervention"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:648
+msgid "Custom size"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1297 ../gtk/gtkprintoperation-win32.c:1320
+#: ../gtk/gtkprintoperation-win32.c:1358
+#, fuzzy
+msgid "Not enough free memory"
+msgstr "Onvoldoende geheugen om pictogram te laden"
+
+#: ../gtk/gtkprintoperation-win32.c:1363
+msgid "Invalid argument to PrintDlgEx"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1368
+msgid "Invalid pointer to PrintDlgEx"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1373
+#, fuzzy
+msgid "Invalid handle to PrintDlgEx"
+msgstr "Ongeldige header in pictogram"
+
+#: ../gtk/gtkprintoperation-win32.c:1378
+msgid "Unspecified error"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1417
+msgid "Error from StartDoc"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1428
+msgid "Printer"
+msgstr "Printer"
+
+#: ../gtk/gtkprintunixdialog.c:1436
+msgid "Location"
+msgstr "Locatie"
+
+#: ../gtk/gtkprintunixdialog.c:1445
+msgid "Status"
+msgstr "Status"
+
+# Dit is een kopie van een ander comment. controleren of het nog geldig is.
+# om te voorkomen dat _Voorkeuren en Afdruk_voorbeeld om de _v strijden
+# gebruiken we _Afdrukvoorbeeld. De _A zou in de toekomst misschien
+# kunnen worden gebruikt voor _Afsluiten, dan moet dit aangepast worden
+# gnomebugzilla: #310874 Gnumeric gebruikt 'Opslaan _als' en '_Afdrukvoorbeeld'
+# De meest veilige letter in Afdrukvoorbeeld is waarschijnlijk de b of de k.
+# Kies voorlopig de b (22-07-2005)
+#: ../gtk/gtkprintunixdialog.c:1469
+#, fuzzy
+msgid "Print Pages"
+msgstr "Afdrukvoor_beeld"
+
+# alle/alles
+#: ../gtk/gtkprintunixdialog.c:1473
+msgid "All"
+msgstr "Alles"
+
+#: ../gtk/gtkprintunixdialog.c:1480
+msgid "Current"
+msgstr "Huidige"
+
+#: ../gtk/gtkprintunixdialog.c:1489
+msgid "Range: "
+msgstr "Bereik:"
+
+#: ../gtk/gtkprintunixdialog.c:1505
+msgid "Copies"
+msgstr "Kopieën"
+
+#: ../gtk/gtkprintunixdialog.c:1509
+msgid "Copies:"
+msgstr "Kopieën:"
+
+#: ../gtk/gtkprintunixdialog.c:1522
+msgid "_Collate"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1529
+#, fuzzy
+msgid "_Reverse"
+msgstr "_Terugdraaien"
+
+#: ../gtk/gtkprintunixdialog.c:1546
+msgid "General"
+msgstr "Algemeen"
+
+#: ../gtk/gtkprintunixdialog.c:1916
+msgid "Layout"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1920
+msgid "Pages per sheet:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1935
+msgid "Two-sided:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1949
+msgid "Only Print:"
+msgstr ""
+
+# bladen/bladzijden
+#. In enum order
+#: ../gtk/gtkprintunixdialog.c:1963
+msgid "All sheets"
+msgstr "Alle bladen"
+
+#: ../gtk/gtkprintunixdialog.c:1964
+msgid "Even sheets"
+msgstr "Even bladen"
+
+#: ../gtk/gtkprintunixdialog.c:1965
+msgid "Odd sheets"
+msgstr "Oneven bladen"
+
+#: ../gtk/gtkprintunixdialog.c:1968
+#, fuzzy
+msgid "Scale:"
+msgstr "_Waarde:"
+
+#: ../gtk/gtkprintunixdialog.c:1995
+msgid "Paper"
+msgstr "Papier"
+
+#: ../gtk/gtkprintunixdialog.c:1999
+msgid "Paper Type:"
+msgstr "Papiersoort:"
+
+#: ../gtk/gtkprintunixdialog.c:2013
+msgid "Paper Source:"
+msgstr "Papierbron:"
+
+#: ../gtk/gtkprintunixdialog.c:2027
+msgid "Output Tray:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2077
+msgid "Job Details"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2083
+msgid "Priority:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2097
+msgid "Billing info:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2115
+msgid "Print Document"
+msgstr ""
+
+# nu meteen
+#: ../gtk/gtkprintunixdialog.c:2121
+msgid "Now"
+msgstr "Nu"
+
+#: ../gtk/gtkprintunixdialog.c:2128
+msgid "At:"
+msgstr "Op:"
+
+#: ../gtk/gtkprintunixdialog.c:2135
+msgid "On Hold"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2160
+msgid "Add Cover Page"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2166
+msgid "Before:"
+msgstr "Voor:"
+
+#: ../gtk/gtkprintunixdialog.c:2180
+msgid "After:"
+msgstr "Na:"
+
+#: ../gtk/gtkprintunixdialog.c:2194
+msgid "Job"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2264
+msgid "Advanced"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2293
+msgid "Image Quality"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2296
+msgid "Color"
+msgstr "Kleur"
+
+#: ../gtk/gtkprintunixdialog.c:2299
+msgid "Finishing"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2313
+msgid "Some of the settings in the dialog conflict"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2353
+msgid "Print"
+msgstr "Afdrukken"
 
 #: ../gtk/gtkradiotoolbutton.c:92
 msgid "Group"
@@ -2219,7 +2608,7 @@ msgstr "Groep"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "De radioknop aan wiens groep deze knop toebehoort."
 
-#: ../gtk/gtkrc.c:2543
+#: ../gtk/gtkrc.c:2542
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan invoegbestand \"%s\" niet vinden"
@@ -2229,10 +2618,110 @@ msgstr "Kan invoegbestand \"%s\" niet vinden"
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan afbeelding in pixmap_pad: \"%s\" niet vinden"
 
-#: ../gtk/gtkrc.c:3826
+# wordt/worden
+# kiezen welk soort bestanden getoond wordt
+#                             wordt weergegeven
+#                   bestand  
+#             type
+#: ../gtk/gtkrecentchooserdefault.c:460
+#, fuzzy
+msgid "Select which type of documents are shown"
+msgstr "Kiezen welke typen bestanden getoond worden"
+
+#: ../gtk/gtkrecentchooserdefault.c:1125 ../gtk/gtkrecentchooserdefault.c:1162
 #, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap pad-element: \"%s\" moet absoluut zijn, %s, lijn %d"
+msgid "No item for URI '%s' found"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:1770
+#, fuzzy
+msgid "Could not remove item"
+msgstr "Kon item niet selecteren"
+
+#: ../gtk/gtkrecentchooserdefault.c:1813
+#, fuzzy
+msgid "Could not clear list"
+msgstr "Kon item niet selecteren"
+
+#: ../gtk/gtkrecentchooserdefault.c:1897
+#, fuzzy
+msgid "Copy _Location"
+msgstr "_Locatie openen"
+
+#: ../gtk/gtkrecentchooserdefault.c:1910
+msgid "_Remove From List"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:1919
+#, fuzzy
+msgid "_Clear List"
+msgstr "_Wissen"
+
+#: ../gtk/gtkrecentchooserdefault.c:1933
+msgid "Show _Private Resources"
+msgstr ""
+
+#: ../gtk/gtkrecentchoosermenu.c:424 ../gtk/gtkrecentchoosermenu.c:485
+#, c-format
+msgid "No recently used resource found with URI `%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentchoosermenu.c:509 ../gtk/gtkrecentchoosermenu.c:674
+#: ../gtk/gtkrecentchoosermenu.c:683 ../gtk/gtkrecentchoosermenu.c:691
+#, c-format
+msgid "This function is not implemented for widgets of class '%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentchoosermenu.c:517
+#, c-format
+msgid "This function is not implemented for widgets of class '%s'."
+msgstr ""
+
+#: ../gtk/gtkrecentchoosermenu.c:833
+#, c-format
+msgid "Open '%s'"
+msgstr "'%s' openen"
+
+#: ../gtk/gtkrecentchoosermenu.c:864
+msgid "Unknown item"
+msgstr "Onbekend item"
+
+#: ../gtk/gtkrecentmanager.c:944
+msgid ""
+"The display name of the recently used resource must be a valid UTF-8 encoded "
+"string."
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:954
+msgid ""
+"The description of the recently used resource must by a valid UTF-8 encoded "
+"string."
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:964
+#, c-format
+msgid "You must specify the MIME type of the resource pointed by `%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:974
+#, c-format
+msgid ""
+"You must specify the name of the application that is registering the "
+"recently used resource pointed by `%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:985
+#, c-format
+msgid ""
+"You must specify a command line to be used when launching the resource "
+"pointed by `%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:1072 ../gtk/gtkrecentmanager.c:1220
+#: ../gtk/gtkrecentmanager.c:1230 ../gtk/gtkrecentmanager.c:1289
+#, fuzzy, c-format
+msgid "Unable to find an item with URI '%s'"
+msgstr "Kan invoegbestand \"%s\" niet vinden"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -2695,9 +3184,824 @@ msgid "Unexpected character data on line %d char %d"
 msgstr "Onverwacht teken bij regel %d teken %d"
 
 # Legen
-#: ../gtk/gtkuimanager.c:2267
+#: ../gtk/gtkuimanager.c:2255
 msgid "Empty"
 msgstr "Leeg"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:5
+msgid "paper size|asme_f"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:7
+msgid "paper size|A0x2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:9
+msgid "paper size|A0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:11
+msgid "paper size|A0x3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:13
+msgid "paper size|A1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:15
+msgid "paper size|A10"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:17
+msgid "paper size|A1x3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:19
+msgid "paper size|A1x4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:21
+msgid "paper size|A2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:23
+msgid "paper size|A2x3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:25
+msgid "paper size|A2x4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:27
+msgid "paper size|A2x5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:29
+msgid "paper size|A3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:31
+msgid "paper size|A3 Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:33
+msgid "paper size|A3x3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:35
+msgid "paper size|A3x4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:37
+msgid "paper size|A3x5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:39
+msgid "paper size|A3x6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:41
+msgid "paper size|A3x7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:43
+msgid "paper size|A4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:45
+msgid "paper size|A4 Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:47
+msgid "paper size|A4 Tab"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:49
+msgid "paper size|A4x3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:51
+msgid "paper size|A4x4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:53
+msgid "paper size|A4x5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:55
+msgid "paper size|A4x6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:57
+msgid "paper size|A4x7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:59
+msgid "paper size|A4x8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:61
+msgid "paper size|A4x9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:63
+msgid "paper size|A5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:65
+msgid "paper size|A5 Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:67
+msgid "paper size|A6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:69
+msgid "paper size|A7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:71
+msgid "paper size|A8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:73
+msgid "paper size|A9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:75
+msgid "paper size|B0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:77
+msgid "paper size|B1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:79
+msgid "paper size|B10"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:81
+msgid "paper size|B2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:83
+msgid "paper size|B3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:85
+msgid "paper size|B4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:87
+msgid "paper size|B5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:89
+msgid "paper size|B5 Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:91
+msgid "paper size|B6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:93
+msgid "paper size|B6/C4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:95
+msgid "paper size|B7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:97
+msgid "paper size|B8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:99
+msgid "paper size|B9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:101
+msgid "paper size|C0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:103
+msgid "paper size|C1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:105
+msgid "paper size|C10"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:107
+msgid "paper size|C2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:109
+msgid "paper size|C3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:111
+msgid "paper size|C4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:113
+msgid "paper size|C5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:115
+msgid "paper size|C6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:117
+msgid "paper size|C6/C5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:119
+msgid "paper size|C7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:121
+msgid "paper size|C7/C6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:123
+msgid "paper size|C8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:125
+msgid "paper size|C9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:127
+msgid "paper size|DL Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:129
+msgid "paper size|RA0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:131
+msgid "paper size|RA1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:133
+msgid "paper size|RA2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:135
+msgid "paper size|SRA0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:137
+msgid "paper size|SRA1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:139
+msgid "paper size|SRA2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:141
+msgid "paper size|JB0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:143
+msgid "paper size|JB1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:145
+msgid "paper size|JB10"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:147
+msgid "paper size|JB2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:149
+msgid "paper size|JB3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:151
+msgid "paper size|JB4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:153
+msgid "paper size|JB5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:155
+msgid "paper size|JB6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:157
+msgid "paper size|JB7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:159
+msgid "paper size|JB8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:161
+msgid "paper size|JB9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:163
+msgid "paper size|jis exec"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:165
+msgid "paper size|Choukei 2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:167
+msgid "paper size|Choukei 3 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:169
+msgid "paper size|Choukei 4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:171
+msgid "paper size|hagaki (postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:173
+msgid "paper size|kahu Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:175
+msgid "paper size|kaku2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:177
+msgid "paper size|oufuku (reply postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:179
+msgid "paper size|you4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:181
+msgid "paper size|10x11"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:183
+msgid "paper size|10x13"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:185
+msgid "paper size|10x14"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+msgid "paper size|10x15"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:191
+msgid "paper size|11x12"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:193
+msgid "paper size|11x15"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:195
+msgid "paper size|12x19"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:197
+msgid "paper size|5x7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:199
+msgid "paper size|6x9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:201
+msgid "paper size|7x9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:203
+msgid "paper size|9x11 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:205
+msgid "paper size|a2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:207
+msgid "paper size|Arch A"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:209
+msgid "paper size|Arch B"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:211
+msgid "paper size|Arch C"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:213
+msgid "paper size|Arch D"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:215
+msgid "paper size|Arch E"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:217
+msgid "paper size|b-plus"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:219
+msgid "paper size|c"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:221
+msgid "paper size|c5 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:223
+msgid "paper size|d"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:225
+msgid "paper size|e"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:227
+msgid "paper size|edp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:229
+msgid "paper size|European edp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:231
+msgid "paper size|Executive"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:233
+msgid "paper size|f"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:235
+msgid "paper size|FanFold European"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:237
+msgid "paper size|FanFold US"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:239
+msgid "paper size|FanFold German Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:241
+msgid "paper size|Government Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:243
+msgid "paper size|Government Letter"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:245
+msgid "paper size|Index 3x5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:247
+msgid "paper size|Index 4x6 (postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:249
+msgid "paper size|Index 4x6 ext"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:251
+msgid "paper size|Index 5x8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:253
+msgid "paper size|Invoice"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:255
+msgid "paper size|Tabloid"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:257
+msgid "paper size|US Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:259
+msgid "paper size|US Legal Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:261
+msgid "paper size|US Letter"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:263
+msgid "paper size|US Letter Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:265
+msgid "paper size|US Letter Plus"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:267
+msgid "paper size|Monarch Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:269
+msgid "paper size|#10 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:271
+msgid "paper size|#11 Eenvelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:273
+msgid "paper size|#12 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:275
+msgid "paper size|#14 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:277
+msgid "paper size|#9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:279
+msgid "paper size|Personal Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:281
+msgid "paper size|Quarto"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:283
+msgid "paper size|Super A"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:285
+msgid "paper size|Super B"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:287
+msgid "paper size|Wide Format"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:289
+msgid "paper size|Dai-pa-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:291
+msgid "paper size|Folio"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:293
+msgid "paper size|Folio sp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:295
+msgid "paper size|Invite Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:297
+msgid "paper size|Italian Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:299
+msgid "paper size|juuro-ku-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:301
+msgid "paper size|pa-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:303
+msgid "paper size|Postfix Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:305
+msgid "paper size|Small Photo"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:307
+msgid "paper size|prc1 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:309
+msgid "paper size|prc10 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:311
+msgid "paper size|prc 16k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:313
+msgid "paper size|prc2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:315
+msgid "paper size|prc3 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:317
+msgid "paper size|prc 32k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:319
+msgid "paper size|prc4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:321
+msgid "paper size|prc5 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:323
+msgid "paper size|prc6 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:325
+msgid "paper size|prc7 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:327
+msgid "paper size|prc8 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:329
+msgid "paper size|ROC 16k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:331
+msgid "paper size|ROC 8k"
+msgstr ""
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -2749,10 +4053,116 @@ msgstr "Viëtnamees (VIQR)"
 msgid "X Input Method"
 msgstr "X Invoer-Methode"
 
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1395
+msgid "Two Sided"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1396
+msgid "Paper Type"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1397
+msgid "Paper Source"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1398
+msgid "Output Tray"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1407
+msgid "One Sided"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1408
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1409
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1413
+#, fuzzy
+msgid "Auto Select"
+msgstr "Lettertypeselectie"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1410
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1411
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1412
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1799
+#, fuzzy
+msgid "Printer Default"
+msgstr "Standaard"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Urgent"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "High"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Medium"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Low"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "None"
+msgstr "Geen"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Classified"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Confidential"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+#, fuzzy
+msgid "Secret"
+msgstr "Scherm"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Standard"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Top Secret"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Unclassified"
+msgstr ""
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:439
+msgid "Print to LPR"
+msgstr ""
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:478
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:446
+#, fuzzy
+msgid "Pages Per Sheet"
+msgstr "Afbeelding heeft hoogte nul"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:485
+msgid "Command Line"
+msgstr ""
+
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:407
+msgid "Print to PDF"
+msgstr ""
+
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:453
+#, fuzzy
+msgid "File"
+msgstr "Bestanden"
+
 #: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
+
+#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+#~ msgstr "Pixmap pad-element: \"%s\" moet absoluut zijn, %s, lijn %d"
 
 # kan niet behandelen
 # kan niet aan
@@ -2789,14 +4199,8 @@ msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
 #~ msgid "Ctrl"
 #~ msgstr "Ctrl"
 
-#~ msgid "Alt"
-#~ msgstr "Alt"
-
 #~ msgid "_Credits"
 #~ msgstr "Met _dank aan"
-
-#~ msgid "_Bottom"
-#~ msgstr "_Onderste"
 
 #~ msgid "_First"
 #~ msgstr "_Eerste"
@@ -2819,9 +4223,6 @@ msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
 # vullen/uitvullen
 #~ msgid "_Fill"
 #~ msgstr "Uit_vullen"
-
-#~ msgid "_Left"
-#~ msgstr "_Links"
 
 #~ msgid "Error getting information for '%s'"
 #~ msgstr "Fout bij verkrijgen van informatie over '%s'"
