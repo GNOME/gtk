@@ -1,3 +1,9 @@
+2006-04-26  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_close): Don't make this conditional
+	on having a GTK_RESPONSE_CANCEL button -> end the idiocy.  Fixes
+	bug #101293.
+
 2006-04-26  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (node_is_visible): new function,

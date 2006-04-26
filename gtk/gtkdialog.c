@@ -423,9 +423,6 @@ gtk_dialog_close (GtkDialog *dialog)
   GtkWidget *widget = GTK_WIDGET (dialog);
   GdkEvent *event;
 
-  if (!dialog_find_button (dialog, GTK_RESPONSE_CANCEL))
-    return;
-
   event = gdk_event_new (GDK_DELETE);
   
   event->any.window = g_object_ref (widget->window);
