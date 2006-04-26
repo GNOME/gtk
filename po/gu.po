@@ -128,6 +128,52 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -136,8 +182,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-17 22:55+0200\n"
-"PO-Revision-Date: 2006-04-18 10:30+0530\n"
+"POT-Creation-Date: 2006-04-26 06:27+0200\n"
+"PO-Revision-Date: 2006-04-26 12:00+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -145,10 +191,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
 "\n"
+"\n"
 "X-Generator: KBabel 1.9.1\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../gtk/gtkprintjob.c:406
+#: ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' ફાઈલ લાવવામાં નિષ્ફળ: %s"
@@ -1488,7 +1536,7 @@ msgstr "ડેસ્કટોપ"
 msgid "(None)"
 msgstr "(કંઈ નહિ)"
 
-#: ../gtk/gtkfilechooserbutton.c:1577
+#: ../gtk/gtkfilechooserbutton.c:1587
 msgid "Other..."
 msgstr "અન્ય..."
 
@@ -1990,16 +2038,16 @@ msgstr "નેટવર્ક ડ્રાઈવ (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: ../gtk/gtkfontbutton.c:177 ../gtk/gtkfontbutton.c:290
+#: ../gtk/gtkfontbutton.c:177 ../gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
 msgstr "ફોન્ટ પસંદ કરો"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:284
+#: ../gtk/gtkfontbutton.c:289
 msgid "Sans 12"
 msgstr "સાન્સ ૧૨"
 
-#: ../gtk/gtkfontbutton.c:802
+#: ../gtk/gtkfontbutton.c:807
 msgid "Font"
 msgstr "ફોન્ટ"
 
@@ -2041,12 +2089,12 @@ msgstr "ગામાની કિંમત (_G)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1398
+#: ../gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ચિહ્ન લાવવામાં ભૂલ: %s"
 
-#: ../gtk/gtkicontheme.c:1334
+#: ../gtk/gtkicontheme.c:1344
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2059,7 +2107,7 @@ msgstr ""
 "તમે માંથી નકલ મેળવી શકો છો:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1403
+#: ../gtk/gtkicontheme.c:1413
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ચિહ્ન '%s' થીમમાં હાજર નથી"
@@ -2193,10 +2241,383 @@ msgstr "GTK+ વિકલ્પો"
 msgid "Show GTK+ Options"
 msgstr "GTK+ વિકલ્પો બતાવો"
 
-#: ../gtk/gtknotebook.c:3949 ../gtk/gtknotebook.c:6512
+#: ../gtk/gtknotebook.c:3949 ../gtk/gtknotebook.c:6509
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
+
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: ../gtk/gtkpagesetupunixdialog.c:138
+msgid "default:mm"
+msgstr "default:mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:348
+msgid ""
+"<b>Any Printer</b>\n"
+"For portable documents"
+msgstr ""
+"<b>કોઈપણ પ્રિન્ટર</b>\n"
+"પોર્ટેબલ દસ્તાવેજો માટે"
+
+#: ../gtk/gtkpagesetupunixdialog.c:901
+msgid "mm"
+msgstr "mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:903
+msgid "inch"
+msgstr "ઈંચ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:922
+#, c-format
+msgid ""
+"Margins:\n"
+" Left: %s %s\n"
+" Right: %s %s\n"
+" Top: %s %s\n"
+" Bottom: %s %s"
+msgstr ""
+"હાંસિયાઓ:\n"
+" ડાબો: %s %s\n"
+" જમણો: %s %s\n"
+" ટોચ: %s %s\n"
+" તળિયું: %s %s"
+
+#: ../gtk/gtkpagesetupunixdialog.c:973
+msgid "Manage Custom Sizes..."
+msgstr "વૈવિધ્યપૂર્ણ માપોની વ્યવસ્થા કરો..."
+
+#: ../gtk/gtkpagesetupunixdialog.c:996
+msgid "_Format for:"
+msgstr "માટેનું બંધારણ (_F):"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1016
+msgid "_Paper size:"
+msgstr "કાગળ માપ (_P):"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1054
+msgid "_Orientation:"
+msgstr "દિશા (_O):"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1111 ../gtk/gtkprintunixdialog.c:2053
+msgid "Page Setup"
+msgstr "પાનાં સુયોજન"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1321
+msgid " inch"
+msgstr " ઈંચ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1323
+msgid " mm"
+msgstr " mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1371
+msgid "Margins from Printer..."
+msgstr "પ્રિન્ટરમાંથી હાંસિયાઓ..."
+
+#: ../gtk/gtkpagesetupunixdialog.c:1540
+#, c-format
+msgid "Custom Size %d"
+msgstr "વૈવિધ્યપૂર્ણ માપ %d"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1747
+msgid "Manage Custom Sizes"
+msgstr "વૈવિધ્યપૂર્ણ માપોની વ્યવસ્થા કરો"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1829
+msgid "Width:"
+msgstr "પહોળાઈ:"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1842
+msgid "Height:"
+msgstr "ઊંચાઈ:"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1853
+msgid "Paper Size"
+msgstr "કાગળ માપ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1869
+msgid "top"
+msgstr "ટોચ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1882
+msgid "bottom"
+msgstr "તળિયું"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1895
+msgid "left"
+msgstr "ડાબું"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1908
+msgid "right"
+msgstr "જમણું"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1945
+msgid "Paper Margins"
+msgstr "કાગળ હાંસિયાઓ"
+
+#: ../gtk/gtkprinteroptionwidget.c:452
+msgid "Not available"
+msgstr "ઉપલબ્ધ નથી"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:850
+msgid "print operation status|Initial state"
+msgstr "આરંભિક સ્થિતિ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:852
+msgid "print operation status|Preparing to print"
+msgstr "છાપવા માટે તૈયારી કરી રહ્યા છીએ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:854
+msgid "print operation status|Generating data"
+msgstr "માહિતી પેદા કરી રહ્યા છીએ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:856
+msgid "print operation status|Sending data"
+msgstr "માહિતી મોકલી રહ્યા છીએ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:858
+msgid "print operation status|Waiting"
+msgstr "રાહ જોઈ રહ્યા છીએ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:860
+msgid "print operation status|Blocking on issue"
+msgstr "મુદ્દા પર અટકેલ છે"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:862
+msgid "print operation status|Printing"
+msgstr "છાપી રહ્યા છીએ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:864
+msgid "print operation status|Finished"
+msgstr "સમાપ્ત થયેલ"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:866
+msgid "print operation status|Finished with error"
+msgstr "ભૂલ સાથે સમાપ્ત થયેલ"
+
+#: ../gtk/gtkprintoperation-win32.c:541
+msgid "Printer offline"
+msgstr "પ્રિન્ટર ઓફલાઈન છે"
+
+#: ../gtk/gtkprintoperation-win32.c:543
+msgid "Out of paper"
+msgstr "કાગળ નથી"
+
+#: ../gtk/gtkprintoperation-win32.c:545
+msgid "Paused"
+msgstr "અટકાવાયેલ"
+
+#: ../gtk/gtkprintoperation-win32.c:547
+msgid "Need user intervention"
+msgstr "વપરાશકર્તાના સંપર્કની જરૂર છે"
+
+#: ../gtk/gtkprintoperation-win32.c:648
+msgid "Custom size"
+msgstr "વૈવિધ્યપૂર્ણ માપ"
+
+#: ../gtk/gtkprintoperation-win32.c:1297 ../gtk/gtkprintoperation-win32.c:1320
+#: ../gtk/gtkprintoperation-win32.c:1358
+msgid "Not enough free memory"
+msgstr "પૂરતી મુક્ત મેમરી નથી"
+
+#: ../gtk/gtkprintoperation-win32.c:1363
+msgid "Invalid argument to PrintDlgEx"
+msgstr "PrintDlgEx માટે અયોગ્ય દલીલ"
+
+#: ../gtk/gtkprintoperation-win32.c:1368
+msgid "Invalid pointer to PrintDlgEx"
+msgstr "PrintDlgEx નો અયોગ્ય નિર્દેશક"
+
+#: ../gtk/gtkprintoperation-win32.c:1373
+msgid "Invalid handle to PrintDlgEx"
+msgstr "PrintDlgEx નો અયોગ્ય નિયંત્રક"
+
+#: ../gtk/gtkprintoperation-win32.c:1378
+msgid "Unspecified error"
+msgstr "સ્પષ્ટ નહિં એવી ભૂલ"
+
+#: ../gtk/gtkprintoperation-win32.c:1417
+msgid "Error from StartDoc"
+msgstr "StartDoc માંથી ભૂલ"
+
+#: ../gtk/gtkprintunixdialog.c:1428
+msgid "Printer"
+msgstr "પ્રિન્ટર"
+
+#: ../gtk/gtkprintunixdialog.c:1436
+msgid "Location"
+msgstr "સ્થાન"
+
+#: ../gtk/gtkprintunixdialog.c:1445
+msgid "Status"
+msgstr "પરિસ્થિતિ"
+
+#: ../gtk/gtkprintunixdialog.c:1469
+msgid "Print Pages"
+msgstr "પાનાંઓ છાપો"
+
+#: ../gtk/gtkprintunixdialog.c:1473
+msgid "All"
+msgstr "બધા"
+
+#: ../gtk/gtkprintunixdialog.c:1480
+msgid "Current"
+msgstr "વર્તમાન"
+
+#: ../gtk/gtkprintunixdialog.c:1489
+msgid "Range: "
+msgstr "વિસ્તાર: "
+
+#: ../gtk/gtkprintunixdialog.c:1505
+msgid "Copies"
+msgstr "નકલો"
+
+#: ../gtk/gtkprintunixdialog.c:1509
+msgid "Copies:"
+msgstr "નકલો:"
+
+#: ../gtk/gtkprintunixdialog.c:1522
+msgid "_Collate"
+msgstr "ભેગું કરો (_C)"
+
+#: ../gtk/gtkprintunixdialog.c:1529
+msgid "_Reverse"
+msgstr "ઉલટાવો (_R)"
+
+#: ../gtk/gtkprintunixdialog.c:1546
+msgid "General"
+msgstr "સામાન્ય"
+
+#: ../gtk/gtkprintunixdialog.c:1916
+msgid "Layout"
+msgstr "દેખાવ"
+
+#: ../gtk/gtkprintunixdialog.c:1920
+msgid "Pages per sheet:"
+msgstr "શીટ પ્રતિ પાનાંઓ:"
+
+#: ../gtk/gtkprintunixdialog.c:1935
+msgid "Two-sided:"
+msgstr "બે-બાજુવાળું:"
+
+#: ../gtk/gtkprintunixdialog.c:1949
+msgid "Only Print:"
+msgstr "માત્ર છાપો:"
+
+#. In enum order
+#: ../gtk/gtkprintunixdialog.c:1963
+msgid "All sheets"
+msgstr "બધી શીટો"
+
+#: ../gtk/gtkprintunixdialog.c:1964
+msgid "Even sheets"
+msgstr "બેકી સંખ્યાની શીટો"
+
+#: ../gtk/gtkprintunixdialog.c:1965
+msgid "Odd sheets"
+msgstr "એકી સંખ્યાની શીટો"
+
+#: ../gtk/gtkprintunixdialog.c:1968
+msgid "Scale:"
+msgstr "માપદંડ:"
+
+#: ../gtk/gtkprintunixdialog.c:1995
+msgid "Paper"
+msgstr "કાગળ"
+
+#: ../gtk/gtkprintunixdialog.c:1999
+msgid "Paper Type:"
+msgstr "કાગળ પ્રકાર:"
+
+#: ../gtk/gtkprintunixdialog.c:2013
+msgid "Paper Source:"
+msgstr "કાગળ સ્રોત:"
+
+#: ../gtk/gtkprintunixdialog.c:2027
+msgid "Output Tray:"
+msgstr "આઉટપુટ ટ્રે:"
+
+#: ../gtk/gtkprintunixdialog.c:2077
+msgid "Job Details"
+msgstr "જોબ વિગતો"
+
+#: ../gtk/gtkprintunixdialog.c:2083
+msgid "Priority:"
+msgstr "પ્રાધાન્ય:"
+
+#: ../gtk/gtkprintunixdialog.c:2097
+msgid "Billing info:"
+msgstr "બીલ જાણકારી:"
+
+#: ../gtk/gtkprintunixdialog.c:2115
+msgid "Print Document"
+msgstr "દસ્તાવેજ છાપો"
+
+#: ../gtk/gtkprintunixdialog.c:2121
+msgid "Now"
+msgstr "હમણાં"
+
+#: ../gtk/gtkprintunixdialog.c:2128
+msgid "At:"
+msgstr "આગળ:"
+
+#: ../gtk/gtkprintunixdialog.c:2135
+msgid "On Hold"
+msgstr "અટકાવેલ"
+
+#: ../gtk/gtkprintunixdialog.c:2160
+msgid "Add Cover Page"
+msgstr "કવર પાનું ઉમેરો"
+
+#: ../gtk/gtkprintunixdialog.c:2166
+msgid "Before:"
+msgstr "પહેલાં:"
+
+#: ../gtk/gtkprintunixdialog.c:2180
+msgid "After:"
+msgstr "પછી:"
+
+#: ../gtk/gtkprintunixdialog.c:2194
+msgid "Job"
+msgstr "જોબ"
+
+#: ../gtk/gtkprintunixdialog.c:2264
+msgid "Advanced"
+msgstr "અદ્યતન"
+
+#: ../gtk/gtkprintunixdialog.c:2293
+msgid "Image Quality"
+msgstr "ચિત્ર ગુણવત્તા"
+
+#: ../gtk/gtkprintunixdialog.c:2296
+msgid "Color"
+msgstr "રંગ"
+
+#: ../gtk/gtkprintunixdialog.c:2299
+msgid "Finishing"
+msgstr "સમાપ્ત કરી રહ્યા છીએ"
+
+#: ../gtk/gtkprintunixdialog.c:2313
+msgid "Some of the settings in the dialog conflict"
+msgstr "સંવાદના અમુક સુયોજનોની તકરાર થાય છે"
+
+#: ../gtk/gtkprintunixdialog.c:2353
+msgid "Print"
+msgstr "છાપો"
 
 #: ../gtk/gtkradiotoolbutton.c:92
 msgid "Group"
@@ -2206,7 +2627,7 @@ msgstr "જૂથ"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "રેડિયો બટન કે જેના જૂથનો આ બટન ભાગ છે."
 
-#: ../gtk/gtkrc.c:2543
+#: ../gtk/gtkrc.c:2542
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "સમાવવા માટેની ફાઈલ ને શોધવામાં નિષ્ફળ: \"%s\""
@@ -2216,10 +2637,100 @@ msgstr "સમાવવા માટેની ફાઈલ ને શોધવ�
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path માં ચિત્ર ફાઈલ મેળવવામાં નિષ્ફળ: \"%s\""
 
-#: ../gtk/gtkrc.c:3826
+#: ../gtk/gtkrecentchooserdefault.c:460
+msgid "Select which type of documents are shown"
+msgstr "કયા પ્રકારના દસ્તાવેજો બતાવેલ છે તે પસંદ કરો"
+
+#: ../gtk/gtkrecentchooserdefault.c:1125 ../gtk/gtkrecentchooserdefault.c:1162
 #, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "ચિત્ર પથનો ભાગ: \"%s\" ચોક્કસ હોવો જોઈએ, %s, લીટી %d"
+msgid "No item for URI '%s' found"
+msgstr "URI '%s' માટે કોઈ વસ્તુ મળી નહિં"
+
+#: ../gtk/gtkrecentchooserdefault.c:1770
+msgid "Could not remove item"
+msgstr "વસ્તુ દૂર કરી શક્યા નહિં"
+
+#: ../gtk/gtkrecentchooserdefault.c:1813
+msgid "Could not clear list"
+msgstr "યાદી સાફ કરી શક્યા નહિં"
+
+#: ../gtk/gtkrecentchooserdefault.c:1897
+msgid "Copy _Location"
+msgstr "સ્થાનની નકલ કરો (_L)"
+
+#: ../gtk/gtkrecentchooserdefault.c:1910
+msgid "_Remove From List"
+msgstr "યાદીમાંથી દૂર કરો (_R)"
+
+#: ../gtk/gtkrecentchooserdefault.c:1919
+msgid "_Clear List"
+msgstr "યાદી સાફ કરો (_C)"
+
+#: ../gtk/gtkrecentchooserdefault.c:1933
+msgid "Show _Private Resources"
+msgstr "ખાનગી સ્રોતો બતાવો (_P)"
+
+#: ../gtk/gtkrecentchoosermenu.c:424 ../gtk/gtkrecentchoosermenu.c:485
+#, c-format
+msgid "No recently used resource found with URI `%s'"
+msgstr "કોઈ છેલ્લે વપરાયેલ સ્રોત URI `%s' સાથે મળ્યો નહિં"
+
+#: ../gtk/gtkrecentchoosermenu.c:509 ../gtk/gtkrecentchoosermenu.c:674
+#: ../gtk/gtkrecentchoosermenu.c:683 ../gtk/gtkrecentchoosermenu.c:691
+#, c-format
+msgid "This function is not implemented for widgets of class '%s'"
+msgstr "આ વિધેય ક્લાસ'%s' ના વિજેટો સાથે અમલમાં મૂકાયેલ નથી"
+
+#: ../gtk/gtkrecentchoosermenu.c:517
+#, c-format
+msgid "This function is not implemented for widgets of class '%s'."
+msgstr "આ વિધેય એ ક્લાસ '%s' ના વિજેટો માટે અમલમાં મૂકાયેલ નથી."
+
+#: ../gtk/gtkrecentchoosermenu.c:833
+#, c-format
+msgid "Open '%s'"
+msgstr "'%s' ખોલો"
+
+#: ../gtk/gtkrecentchoosermenu.c:864
+msgid "Unknown item"
+msgstr "અજ્ઞાત વસ્તુ"
+
+#: ../gtk/gtkrecentmanager.c:944
+msgid ""
+"The display name of the recently used resource must be a valid UTF-8 encoded "
+"string."
+msgstr "છેલ્લે વપરાયેલ સ્રોતના નામનું દૃશ્ય એ માન્ય UTF-8 એનકોડ થયેલ શબ્દમાળા હોવી જ જોઈએ."
+
+#: ../gtk/gtkrecentmanager.c:954
+msgid ""
+"The description of the recently used resource must by a valid UTF-8 encoded "
+"string."
+msgstr "છેલ્લે વપરાયેલ સ્રોતનું વર્ણન એ માન્ય UTF-8 એનકોડ થયેલ શબ્દમાળા હોવી જ જોઈએ."
+
+#: ../gtk/gtkrecentmanager.c:964
+#, c-format
+msgid "You must specify the MIME type of the resource pointed by `%s'"
+msgstr "તમારે `%s' દ્વારા નિર્દેશ થયેલ સ્રોતનો MIME પ્રકાર સ્પષ્ટ કરવો જ જોઈએ"
+
+#: ../gtk/gtkrecentmanager.c:974
+#, c-format
+msgid ""
+"You must specify the name of the application that is registering the "
+"recently used resource pointed by `%s'"
+msgstr "તમારે કાર્યક્રમનું નામ સ્પષ્ટ કરવું જ પડશે કે જે `%s' દ્વારા નિર્દેશ થયેલ છેલ્લે વપરાયેલ સ્રોતને રજીસ્ટર કરે છે"
+
+#: ../gtk/gtkrecentmanager.c:985
+#, c-format
+msgid ""
+"You must specify a command line to be used when launching the resource "
+"pointed by `%s'"
+msgstr "જ્યારે `%s' દ્વારા નિર્દેશ થયેલ સ્રોત લોન્ચ કરી રહ્યા હોય ત્યારે તમારે આદેશ વાક્ય સ્પષ્ટ કરવું જ પડશે"
+
+#: ../gtk/gtkrecentmanager.c:1072 ../gtk/gtkrecentmanager.c:1220
+#: ../gtk/gtkrecentmanager.c:1230 ../gtk/gtkrecentmanager.c:1289
+#, c-format
+msgid "Unable to find an item with URI '%s'"
+msgstr "URI '%s' સાથેની વસ્તુ શોધવામાં અસમર્થ"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -2653,6 +3164,821 @@ msgstr "%d લીટી  %d અક્ષર પર અણધાર્યા અ�
 msgid "Empty"
 msgstr "ખાલી"
 
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:5
+msgid "paper size|asme_f"
+msgstr "asme_f"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:7
+msgid "paper size|A0x2"
+msgstr "A0x2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:9
+msgid "paper size|A0"
+msgstr "A0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:11
+msgid "paper size|A0x3"
+msgstr "A0x3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:13
+msgid "paper size|A1"
+msgstr "A1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:15
+msgid "paper size|A10"
+msgstr "A10"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:17
+msgid "paper size|A1x3"
+msgstr "A1x3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:19
+msgid "paper size|A1x4"
+msgstr "A1x4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:21
+msgid "paper size|A2"
+msgstr "A2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:23
+msgid "paper size|A2x3"
+msgstr "A2x3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:25
+msgid "paper size|A2x4"
+msgstr "A2x4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:27
+msgid "paper size|A2x5"
+msgstr "A2x5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:29
+msgid "paper size|A3"
+msgstr "A3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:31
+msgid "paper size|A3 Extra"
+msgstr "A3 વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:33
+msgid "paper size|A3x3"
+msgstr "A3x3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:35
+msgid "paper size|A3x4"
+msgstr "A3x4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:37
+msgid "paper size|A3x5"
+msgstr "A3x5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:39
+msgid "paper size|A3x6"
+msgstr "A3x6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:41
+msgid "paper size|A3x7"
+msgstr "A3x7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:43
+msgid "paper size|A4"
+msgstr "A4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:45
+msgid "paper size|A4 Extra"
+msgstr "A4 વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:47
+msgid "paper size|A4 Tab"
+msgstr "A4 ટેબ"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:49
+msgid "paper size|A4x3"
+msgstr "A4x3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:51
+msgid "paper size|A4x4"
+msgstr "A4x4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:53
+msgid "paper size|A4x5"
+msgstr "A4x5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:55
+msgid "paper size|A4x6"
+msgstr "A4x6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:57
+msgid "paper size|A4x7"
+msgstr "A4x7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:59
+msgid "paper size|A4x8"
+msgstr "A4x8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:61
+msgid "paper size|A4x9"
+msgstr "A4x9"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:63
+msgid "paper size|A5"
+msgstr "A5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:65
+msgid "paper size|A5 Extra"
+msgstr "A5 વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:67
+msgid "paper size|A6"
+msgstr "A6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:69
+msgid "paper size|A7"
+msgstr "A7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:71
+msgid "paper size|A8"
+msgstr "A8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:73
+msgid "paper size|A9"
+msgstr "A9"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:75
+msgid "paper size|B0"
+msgstr "B0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:77
+msgid "paper size|B1"
+msgstr "B1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:79
+msgid "paper size|B10"
+msgstr "B10"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:81
+msgid "paper size|B2"
+msgstr "B2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:83
+msgid "paper size|B3"
+msgstr "B3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:85
+msgid "paper size|B4"
+msgstr "B4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:87
+msgid "paper size|B5"
+msgstr "B5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:89
+msgid "paper size|B5 Extra"
+msgstr "B5 વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:91
+msgid "paper size|B6"
+msgstr "B6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:93
+msgid "paper size|B6/C4"
+msgstr "B6/C4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:95
+msgid "paper size|B7"
+msgstr "B7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:97
+msgid "paper size|B8"
+msgstr "B8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:99
+msgid "paper size|B9"
+msgstr "B9"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:101
+msgid "paper size|C0"
+msgstr "C0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:103
+msgid "paper size|C1"
+msgstr "C1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:105
+msgid "paper size|C10"
+msgstr "C10"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:107
+msgid "paper size|C2"
+msgstr "C2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:109
+msgid "paper size|C3"
+msgstr "C3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:111
+msgid "paper size|C4"
+msgstr "C4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:113
+msgid "paper size|C5"
+msgstr "C5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:115
+msgid "paper size|C6"
+msgstr "C6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:117
+msgid "paper size|C6/C5"
+msgstr "C6/C5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:119
+msgid "paper size|C7"
+msgstr "C7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:121
+msgid "paper size|C7/C6"
+msgstr "C7/C6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:123
+msgid "paper size|C8"
+msgstr "C8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:125
+msgid "paper size|C9"
+msgstr "C9"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:127
+msgid "paper size|DL Envelope"
+msgstr "DL કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:129
+msgid "paper size|RA0"
+msgstr "RA0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:131
+msgid "paper size|RA1"
+msgstr "RA1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:133
+msgid "paper size|RA2"
+msgstr "RA2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:135
+msgid "paper size|SRA0"
+msgstr "SRA0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:137
+msgid "paper size|SRA1"
+msgstr "SRA1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:139
+msgid "paper size|SRA2"
+msgstr "SRA2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:141
+msgid "paper size|JB0"
+msgstr "JB0"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:143
+msgid "paper size|JB1"
+msgstr "JB1"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:145
+msgid "paper size|JB10"
+msgstr "JB10"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:147
+msgid "paper size|JB2"
+msgstr "JB2"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:149
+msgid "paper size|JB3"
+msgstr "JB3"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:151
+msgid "paper size|JB4"
+msgstr "JB4"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:153
+msgid "paper size|JB5"
+msgstr "JB5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:155
+msgid "paper size|JB6"
+msgstr "JB6"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:157
+msgid "paper size|JB7"
+msgstr "JB7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:159
+msgid "paper size|JB8"
+msgstr "JB8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:161
+msgid "paper size|JB9"
+msgstr "JB9"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:163
+msgid "paper size|jis exec"
+msgstr "jis exec"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:165
+msgid "paper size|Choukei 2 Envelope"
+msgstr "Choukei 2 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:167
+msgid "paper size|Choukei 3 Envelope"
+msgstr "Choukei 3 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:169
+msgid "paper size|Choukei 4 Envelope"
+msgstr "Choukei 4 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:171
+msgid "paper size|hagaki (postcard)"
+msgstr "hagaki (postcard)"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:173
+msgid "paper size|kahu Envelope"
+msgstr "kahu કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:175
+msgid "paper size|kaku2 Envelope"
+msgstr "kaku2 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:177
+msgid "paper size|oufuku (reply postcard)"
+msgstr "oufuku (reply postcard)"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:179
+msgid "paper size|you4 Envelope"
+msgstr "you4 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:181
+msgid "paper size|10x11"
+msgstr "10x11"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:183
+msgid "paper size|10x13"
+msgstr "10x13"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:185
+msgid "paper size|10x14"
+msgstr "10x14"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+msgid "paper size|10x15"
+msgstr "10x15"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:191
+msgid "paper size|11x12"
+msgstr "11x12"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:193
+msgid "paper size|11x15"
+msgstr "11x15"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:195
+msgid "paper size|12x19"
+msgstr "12x19"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:197
+msgid "paper size|5x7"
+msgstr "5x7"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:199
+msgid "paper size|6x9 Envelope"
+msgstr "6x9 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:201
+msgid "paper size|7x9 Envelope"
+msgstr "7x9 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:203
+msgid "paper size|9x11 Envelope"
+msgstr "9x11 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:205
+msgid "paper size|a2 Envelope"
+msgstr "a2 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:207
+msgid "paper size|Arch A"
+msgstr "Arch A"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:209
+msgid "paper size|Arch B"
+msgstr "Arch B"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:211
+msgid "paper size|Arch C"
+msgstr "Arch C"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:213
+msgid "paper size|Arch D"
+msgstr "Arch D"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:215
+msgid "paper size|Arch E"
+msgstr "Arch E"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:217
+msgid "paper size|b-plus"
+msgstr "b-plus"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:219
+msgid "paper size|c"
+msgstr "c"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:221
+msgid "paper size|c5 Envelope"
+msgstr "c5 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:223
+msgid "paper size|d"
+msgstr "d"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:225
+msgid "paper size|e"
+msgstr "e"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:227
+msgid "paper size|edp"
+msgstr "edp"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:229
+msgid "paper size|European edp"
+msgstr "યુરોપીય edp"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:231
+msgid "paper size|Executive"
+msgstr "એક્ઝેક્યુટીવ"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:233
+msgid "paper size|f"
+msgstr "f"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:235
+msgid "paper size|FanFold European"
+msgstr "FanFold યુરોપીય"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:237
+msgid "paper size|FanFold US"
+msgstr "FanFold US"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:239
+msgid "paper size|FanFold German Legal"
+msgstr "FanFold જર્મન કાયદાકીય"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:241
+msgid "paper size|Government Legal"
+msgstr "સરકારી કાયદાકીય"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:243
+msgid "paper size|Government Letter"
+msgstr "સરકારી પત્ર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:245
+msgid "paper size|Index 3x5"
+msgstr "Index 3x5"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:247
+msgid "paper size|Index 4x6 (postcard)"
+msgstr "Index 4x6 (postcard)"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:249
+msgid "paper size|Index 4x6 ext"
+msgstr "Index 4x6 ext"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:251
+msgid "paper size|Index 5x8"
+msgstr "Index 5x8"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:253
+msgid "paper size|Invoice"
+msgstr "Invoice"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:255
+msgid "paper size|Tabloid"
+msgstr "Tabloid"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:257
+msgid "paper size|US Legal"
+msgstr "US કાયદાકીય"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:259
+msgid "paper size|US Legal Extra"
+msgstr "US કાયદાકીય વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:261
+msgid "paper size|US Letter"
+msgstr "US પત્ર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:263
+msgid "paper size|US Letter Extra"
+msgstr "US પત્ર વધારાનું"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:265
+msgid "paper size|US Letter Plus"
+msgstr "US પત્ર વત્તા"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:267
+msgid "paper size|Monarch Envelope"
+msgstr "મોનાર્ક કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:269
+msgid "paper size|#10 Envelope"
+msgstr "#10 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:271
+msgid "paper size|#11 Eenvelope"
+msgstr "#11 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:273
+msgid "paper size|#12 Envelope"
+msgstr "#12 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:275
+msgid "paper size|#14 Envelope"
+msgstr "#14 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:277
+msgid "paper size|#9 Envelope"
+msgstr "#9 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:279
+msgid "paper size|Personal Envelope"
+msgstr "વ્યક્તિગત કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:281
+msgid "paper size|Quarto"
+msgstr "ક્વાર્ટો"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:283
+msgid "paper size|Super A"
+msgstr "Super A"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:285
+msgid "paper size|Super B"
+msgstr "Super B"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:287
+msgid "paper size|Wide Format"
+msgstr "પહોળું બંધારણ"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:289
+msgid "paper size|Dai-pa-kai"
+msgstr "Dai-pa-kai"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:291
+msgid "paper size|Folio"
+msgstr "ફોલિયો"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:293
+msgid "paper size|Folio sp"
+msgstr "ફોલ્યો sp"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:295
+msgid "paper size|Invite Envelope"
+msgstr "આમંત્રણ કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:297
+msgid "paper size|Italian Envelope"
+msgstr "ઈટાલિયન કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:299
+msgid "paper size|juuro-ku-kai"
+msgstr "juuro-ku-kai"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:301
+msgid "paper size|pa-kai"
+msgstr "pa-kai"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:303
+msgid "paper size|Postfix Envelope"
+msgstr "પોસ્ટફિક્સ કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:305
+msgid "paper size|Small Photo"
+msgstr "નાનો ફોટો"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:307
+msgid "paper size|prc1 Envelope"
+msgstr "prc1 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:309
+msgid "paper size|prc10 Envelope"
+msgstr "prc10 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:311
+msgid "paper size|prc 16k"
+msgstr "prc 16k"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:313
+msgid "paper size|prc2 Envelope"
+msgstr "prc2 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:315
+msgid "paper size|prc3 Envelope"
+msgstr "prc3 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:317
+msgid "paper size|prc 32k"
+msgstr "prc 32k"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:319
+msgid "paper size|prc4 Envelope"
+msgstr "prc4 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:321
+msgid "paper size|prc5 Envelope"
+msgstr "prc5 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:323
+msgid "paper size|prc6 Envelope"
+msgstr "prc6 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:325
+msgid "paper size|prc7 Envelope"
+msgstr "prc7 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:327
+msgid "paper size|prc8 Envelope"
+msgstr "prc8 કવર"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:329
+msgid "paper size|ROC 16k"
+msgstr "ROC 16k"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:331
+msgid "paper size|ROC 8k"
+msgstr "ROC 8k"
+
 #. ID
 #: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
@@ -2702,6 +4028,104 @@ msgstr "વિયેટનામી (VIQR)"
 #: ../modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "X ઈનપુટ પદ્ધતિ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1395
+msgid "Two Sided"
+msgstr "બે બાજુવાળું"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1396
+msgid "Paper Type"
+msgstr "કાગળ પ્રકાર"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1397
+msgid "Paper Source"
+msgstr "કાગળ સ્રોત"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1398
+msgid "Output Tray"
+msgstr "આઉટપુટ ટ્રે"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1407
+msgid "One Sided"
+msgstr "એક બાજુવાળું"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1408
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1409
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1413
+msgid "Auto Select"
+msgstr "આપોઆપ પસંદગી"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1410
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1411
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1412
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1799
+msgid "Printer Default"
+msgstr "પ્રિન્ટર મૂળભૂત"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Urgent"
+msgstr "તાત્કાલિક"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "High"
+msgstr "ઊંચુ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Medium"
+msgstr "મધ્યમ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1983
+msgid "Low"
+msgstr "નીચું"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "None"
+msgstr "કંઈ નંહિ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Classified"
+msgstr "વર્ગીકૃત"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Confidential"
+msgstr "ખાનગી"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Secret"
+msgstr "ખાનગી"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Standard"
+msgstr "પ્રમાણભૂત"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Top Secret"
+msgstr "ખૂબ ખાનગી"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1985
+msgid "Unclassified"
+msgstr "બિનવર્ગીકૃત"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:439
+msgid "Print to LPR"
+msgstr "LPR માં છાપો"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:478
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:446
+msgid "Pages Per Sheet"
+msgstr "શીટ પ્રતિ પાનાંઓ"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:485
+msgid "Command Line"
+msgstr "આદેશ વાક્ય"
+
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:407
+msgid "Print to PDF"
+msgstr "PDF માં છાપો"
+
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:453
+msgid "File"
+msgstr "ફાઈલ"
 
 #: ../tests/testfilechooser.c:205
 #, c-format
