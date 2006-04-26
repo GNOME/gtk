@@ -1,5 +1,19 @@
 2006-04-26  Kristian Rietveld  <kris@imendio.com>
 
+	If this new "row-ending-details" property is turned on, more
+	detailed "details" will be passed to the theme engine for drawing
+	the background, drop indicator and focus rectangle.  Requirement is
+	that the theme engine supports these details. (#333760).
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): add row-ending-details
+	style property,
+	(gtk_tree_view_bin_expose): pass more detailed detail to
+	gtk_paint_flat_box() if the property is turned on,
+	(gtk_tree_view_bin_expose): likewise for the drop indicator,
+	(gtk_tree_view_bin_expose): likewise for the focus rectangle.
+
+2006-04-26  Kristian Rietveld  <kris@imendio.com>
+
 	New "show-expanders" and "level-indentation" properties, which can
 	be used for customizing the tree view.  (For example to do
 	grouping as demonstrated in the test application).
