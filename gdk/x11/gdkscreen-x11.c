@@ -770,6 +770,7 @@ void
 _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 				      XEvent *event)
 {
+#ifdef HAVE_XFIXES
   XFixesSelectionNotifyEvent *selection_event = (XFixesSelectionNotifyEvent *)event;
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   Atom xcm_selection_atom = gdk_x11_atom_to_xatom_for_display (screen_x11->display,
@@ -786,6 +787,7 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 	  g_signal_emit_by_name (screen, "composited_changed");
 	}
     }
+#endif
 }
 
 /**
