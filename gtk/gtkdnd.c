@@ -2849,6 +2849,13 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   GtkDragSourceInfo *info;
 
   info = gtk_drag_get_source_info (context, FALSE);
+  if (info == NULL)
+    {
+      if (destroy_on_release)
+	gtk_widget_destroy (widget);
+      return;
+    }
+
   gtk_drag_remove_icon (info);
 
   if (widget)
