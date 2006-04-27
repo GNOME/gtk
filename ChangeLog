@@ -1,3 +1,9 @@
+2006-04-27  Matthias Clasen  <mclasen@redhat.com>
+
+        * gtk/gtkdnd.c (gtk_drag_set_icon_window): Handle the case
+        of being called after the drag is cancelled.  (#339224,
+        Benjamin Otte)
+
 2006-04-19  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkfilechooserbutton.c: _GtkFileChooserButtonPrivate:
