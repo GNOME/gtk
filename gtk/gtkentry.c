@@ -4828,30 +4828,43 @@ popup_position_func (GtkMenu   *menu,
 {
   GtkEntry *entry = GTK_ENTRY (user_data);
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkScreen *screen = gtk_widget_get_screen (widget);
-  GtkRequisition req;
-  gint monitor_num;
+  GdkScreen *screen;
+  GtkRequisition menu_req;
   GdkRectangle monitor;
-  
+  GtkBorder inner_border;
+  gint monitor_num, strong_x, height;
+ 
   g_return_if_fail (GTK_WIDGET_REALIZED (entry));
 
-  gdk_window_get_origin (widget->window, x, y); 
-     
-  gtk_widget_size_request (entry->popup_menu, &req);
-  
-  *x += widget->allocation.width / 2;
-  *y += widget->allocation.height;
+  gdk_window_get_origin (entry->text_area, x, y);
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
+  screen = gtk_widget_get_screen (widget);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, entry->text_area);
+  if (monitor_num < 0)
+    monitor_num = 0;
   gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
-  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gtk_widget_size_request (entry->popup_menu, &menu_req);
+  gdk_drawable_get_size (entry->text_area, NULL, &height);
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
+  get_inner_border (entry, &inner_border);
+
+  *x += inner_border.left + strong_x - entry->scroll_offset;
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    *x -= menu_req.width;
+
+  if ((*y + height + menu_req.height) <= monitor.y + monitor.height)
+    *y += height;
+  else if ((*y - menu_req.height) >= monitor.y)
+    *y -= menu_req.height;
+  else if (monitor.y + monitor.height - (*y + height) > *y)
+    *y += height;
+  else
+    *y -= menu_req.height;
 
   *push_in = FALSE;
 }
-
 
 static void
 unichar_chosen_func (const char *text,
