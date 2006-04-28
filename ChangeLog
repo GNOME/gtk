@@ -1,3 +1,8 @@
+2006-04-28  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_layout): Fix typo in
+	docs. (#340063)
+
 2006-04-27  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkpango.c (gdk_pango_renderer_draw_glyphs): Cast to double
