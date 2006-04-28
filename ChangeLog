@@ -1,3 +1,8 @@
+2006-04-27  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (gdk_pango_renderer_draw_glyphs): Cast to double
+	before dividing by PANGO_SCALE. (#334582)
+
 2006-04-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (popup_position_func): Improve positioning
