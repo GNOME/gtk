@@ -1,8 +1,13 @@
+2006-04-27  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (gdk_pango_renderer_draw_glyphs): Cast to double
+	before dividing by PANGO_SCALE. (#334582)
+
 2006-04-27  Matthias Clasen  <mclasen@redhat.com>
 
-        * gtk/gtkdnd.c (gtk_drag_set_icon_window): Handle the case
-        of being called after the drag is cancelled.  (#339224,
-        Benjamin Otte)
+	* gtk/gtkdnd.c (gtk_drag_set_icon_window): Handle the case
+	of being called after the drag is cancelled.  (#339224,
+	Benjamin Otte)
 
 2006-04-19  Murray Cumming  <murrayc@murrayc.com>
 

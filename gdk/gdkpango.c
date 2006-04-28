@@ -236,12 +236,12 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
     {
       cairo_save (cr);
       emboss_context (cr);
-      cairo_move_to (cr, x / PANGO_SCALE, y / PANGO_SCALE);
+      cairo_move_to (cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
       pango_cairo_show_glyph_string (cr, font, glyphs);
       cairo_restore (cr);
     }
   
-  cairo_move_to (cr, x / PANGO_SCALE, y / PANGO_SCALE);
+  cairo_move_to (cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
   pango_cairo_show_glyph_string (cr, font, glyphs);
 }
 
