@@ -1,3 +1,8 @@
+2006-04-28  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_layout): Fix typo in
+	docs. (#340063)
+
 2006-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_drag_begin): Don't force
