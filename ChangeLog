@@ -1,3 +1,9 @@
+2006-04-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_drag_begin): Don't force
+	the standard DND icon if the user has a custom DND source.  
+	(#339522, Joe Wreschnig)
+
 2006-04-28  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextbuffer.c (create_clipboard_contents_buffer): keep a

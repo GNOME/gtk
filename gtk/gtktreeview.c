@@ -6271,11 +6271,14 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
   GtkTreePath *path = NULL;
   gint cell_x, cell_y;
   GdkPixmap *row_pix;
+  TreeViewDragInfo *di;
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  /* if the user uses a custom DnD impl, we don't set the icon here */
-  if (!get_info (tree_view))
+  /* if the user uses a custom DND source impl, we don't set the icon here */
+  di = get_info (tree_view);
+
+  if (di == NULL || !di->source_set)
     return;
 
   gtk_tree_view_get_path_at_pos (tree_view,
