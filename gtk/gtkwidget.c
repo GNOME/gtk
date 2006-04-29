@@ -5182,9 +5182,11 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
 gboolean
 gtk_widget_is_composited (GtkWidget *widget)
 {
+  GdkScreen *screen;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
-  GdkScreen *screen = gtk_widget_get_screen (widget);
+  screen = gtk_widget_get_screen (widget);
   
   return gdk_screen_is_composited (screen);
 }

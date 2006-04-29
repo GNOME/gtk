@@ -1,3 +1,8 @@
+2006-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_is_composited): Fix a C99ism.  (#340055,
+	Kazuki Iwamoto)
+
 2006-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderertext.c (get_size): Use _static variants when
