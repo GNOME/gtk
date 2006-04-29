@@ -1,5 +1,11 @@
 2006-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkstatusicon.h: 
+	* gtk/gtkstatusicon.c (gtk_status_icon_position_menu): Add a menu
+	position function for use with popups on status icons.  (#334573, 
+	Christian Persch)
+
 	* gtk/gtkwidget.c (gtk_widget_is_composited): Fix a C99ism.  (#340055,
 	Kazuki Iwamoto)
 

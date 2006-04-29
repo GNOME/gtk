@@ -3240,6 +3240,7 @@ gtk_status_icon_get_visible
 gtk_status_icon_set_blinking
 gtk_status_icon_get_blinking
 gtk_status_icon_is_embedded
+gtk_status_icon_position_menu
 <SUBSECTION Standard>
 GTK_TYPE_STATUS_ICON
 GTK_STATUS_ICON

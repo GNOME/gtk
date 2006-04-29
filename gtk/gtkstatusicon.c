@@ -1469,5 +1469,113 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 #endif
 }
 
+/**
+ * gtk_status_icon_position_menu:
+ * @menu: the #GtkMenu
+ * @x: return location for the x position
+ * @y: return location for the y position
+ * @push_in: return location for whether the menu should be pushed in 
+ *     to be completely inside the screen instead of just clamped to the 
+ *     size to the screen.
+ * @user_data: the status icon to position the menu on
+ *
+ * Menu positioning function to use with gtk_menu_popup()
+ * to position @menu aligned to the status icon @user_data.
+ * 
+ * Since: 2.10
+ **/
+void
+gtk_status_icon_position_menu (GtkMenu  *menu,
+			       gint     *x,
+			       gint     *y,
+			       gboolean *push_in,
+			       gpointer  user_data)
+{
+#ifdef GDK_WINDOWING_X11
+  GtkStatusIcon *status_icon;
+  GtkStatusIconPrivate *priv;
+  GtkTrayIcon *tray_icon;
+  GtkWidget *widget;
+  GdkScreen *screen;
+  GtkTextDirection direction;
+  GtkRequisition menu_req;
+  GdkRectangle monitor;
+  gint monitor_num, height, width, xoffset, yoffset;
+  
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GTK_IS_STATUS_ICON (user_data));
+
+  status_icon = GTK_STATUS_ICON (user_data);
+  priv = status_icon->priv;
+  tray_icon = GTK_TRAY_ICON (priv->tray_icon);
+  widget = priv->tray_icon;
+
+  direction = gtk_widget_get_direction (widget);
+
+  screen = gtk_widget_get_screen (widget);
+  gtk_menu_set_screen (menu, screen);
+
+  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  if (monitor_num < 0)
+    monitor_num = 0;
+  gtk_menu_set_monitor (menu, monitor_num);
+
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  gdk_window_get_origin (widget->window, x, y);
+  
+  gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+
+  if (_gtk_tray_icon_get_orientation (tray_icon) == GTK_ORIENTATION_VERTICAL)
+    {
+      width = 0;
+      height = widget->allocation.height;
+      xoffset = widget->allocation.width;
+      yoffset = 0;
+    }
+  else
+    {
+      width = widget->allocation.width;
+      height = 0;
+      xoffset = 0;
+      yoffset = widget->allocation.height;
+    }
+
+  if (direction == GTK_TEXT_DIR_RTL)
+    {
+      if ((*x - (menu_req.width - width)) >= monitor.x)
+        *x -= menu_req.width - width;
+      else if ((*x + xoffset + menu_req.width) < (monitor.x + monitor.width))
+        *x += xoffset;
+      else if ((monitor.x + monitor.width - (*x + xoffset)) < *x)
+        *x -= menu_req.width - width;
+      else
+        *x += xoffset;
+    }
+  else
+    {
+      if ((*x + xoffset + menu_req.width) < (monitor.x + monitor.width))
+        *x += xoffset;
+      else if ((*x - (menu_req.width - width)) >= monitor.x)
+        *x -= menu_req.width - width;
+      else if ((monitor.x + monitor.width - (*x + xoffset)) > *x)
+        *x += xoffset;
+      else 
+        *x -= menu_req.width - width;
+    }
+
+  if ((*y + yoffset + menu_req.height) < (monitor.y + monitor.height))
+    *y += yoffset;
+  else if ((*y - (menu_req.height - height)) >= monitor.y)
+    *y -= menu_req.height - height;
+  else if (monitor.y + monitor.height - (*y + yoffset) > *y)
+    *y += yoffset;
+  else 
+    *y -= menu_req.height - height;
+
+  *push_in = FALSE;
+#endif /* GDK_WINDOWING_X11 */
+}
+
 #define __GTK_STATUS_ICON_C__
 #include "gtkaliasdef.c"

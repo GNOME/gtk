@@ -1,3 +1,7 @@
+2006-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_status_icon_position_menu
+
 2006-04-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_screen_is_composited

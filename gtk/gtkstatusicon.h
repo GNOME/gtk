@@ -25,6 +25,7 @@
 #define __GTK_STATUS_ICON_H__
 
 #include <gtk/gtkimage.h>
+#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 
@@ -102,6 +103,12 @@ void                  gtk_status_icon_set_blinking       (GtkStatusIcon      *st
 gboolean              gtk_status_icon_get_blinking       (GtkStatusIcon      *status_icon);
 
 gboolean              gtk_status_icon_is_embedded        (GtkStatusIcon      *status_icon);
+
+void                  gtk_status_icon_position_menu      (GtkMenu            *menu,
+							  gint               *x,
+							  gint               *y,
+							  gboolean           *push_in,
+							  gpointer            user_data);
 
 G_END_DECLS
 
