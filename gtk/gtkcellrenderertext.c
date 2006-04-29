@@ -1497,8 +1497,8 @@ get_size (GtkCellRenderer *cell,
       PangoFontDescription *font_desc;
       gint row_height;
 
-      font_desc = pango_font_description_copy (widget->style->font_desc);
-      pango_font_description_merge (font_desc, celltext->font, TRUE);
+      font_desc = pango_font_description_copy_static (widget->style->font_desc);
+      pango_font_description_merge_static (font_desc, celltext->font, TRUE);
 
       if (celltext->scale_set)
 	pango_font_description_set_size (font_desc,
