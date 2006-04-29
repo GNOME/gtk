@@ -5175,7 +5175,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * gtk_widget_get_pango_context:
  * @widget: a #GtkWidget
  * 
- * Gets a #PangoContext with the appropriate colormap, font description
+ * Gets a #PangoContext with the appropriate font map, font description,
  * and base direction for this widget. Unlike the context returned
  * by gtk_widget_create_pango_context(), this context is owned by
  * the widget (it can be used until the screen for the widget changes
@@ -5245,7 +5245,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
  * gtk_widget_create_pango_context:
  * @widget: a #GtkWidget
  * 
- * Creates a new #PangoContext with the appropriate colormap,
+ * Creates a new #PangoContext with the appropriate font map,
  * font description, and base direction for drawing text for
  * this widget. See also gtk_widget_get_pango_context().
  * 
@@ -5281,7 +5281,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @text:   text to set on the layout (can be %NULL)
  * 
- * Creates a new #PangoLayout with the appropriate colormap,
+ * Creates a new #PangoLayout with the appropriate font map,
  * font description, and base direction for drawing text for
  * this widget.
  *

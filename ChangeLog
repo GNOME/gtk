@@ -1,3 +1,9 @@
+2006-04-29  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_layout)
+	(gtk_widget_get/create_pango_context): Change colormap to font map in
+	docs. (#340093)
+
 2006-04-28  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkwidget.c (gtk_widget_create_pango_layout): Fix typo in
