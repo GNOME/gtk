@@ -1,3 +1,10 @@
+2006-04-30  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkfilechooserdefault.c (file_list_drag_data_select_uris),
+	(file_list_drag_data_received_get_info_cb),
+	(file_list_drag_data_received_cb): refactor code for selecting
+	multiple uris into file_list_drag_data_select_uris().
+
 2006-04-23  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilechooserbutton.c (dnd_select_folder_get_info_cb): don't

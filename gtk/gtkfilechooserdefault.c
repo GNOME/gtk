@@ -3609,6 +3609,33 @@ error_selecting_dragged_file_dialog (GtkFileChooserDefault *impl,
 		path, error);
 }
 
+static void
+file_list_drag_data_select_uris (GtkFileChooserDefault  *impl,
+				 gchar                 **uris)
+{
+  int i;
+  char *uri;
+  GtkFileChooser *chooser = GTK_FILE_CHOOSER (impl);
+
+  for (i = 1; uris[i]; i++)
+    {
+      GtkFilePath *path;
+
+      uri = uris[i];
+      path = gtk_file_system_uri_to_path (impl->file_system, uri);
+
+      if (path)
+        {
+	  GError *error = NULL;
+
+	  gtk_file_chooser_default_select_path (chooser, path, &error);
+	  if (error)
+	    error_selecting_dragged_file_dialog (impl, path, error);
+
+	  gtk_file_path_free (path);
+	}
+    }
+}
 
 struct FileListDragData
 {
@@ -3623,8 +3650,6 @@ file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
 					  const GError        *error,
 					  gpointer             user_data)
 {
-  gint i;
-  char *uri;
   gboolean cancelled = handle->cancelled;
   struct FileListDragData *data = user_data;
   GtkFileChooser *chooser = GTK_FILE_CHOOSER (data->impl);
@@ -3655,25 +3680,7 @@ file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
     }
 
   if (data->impl->select_multiple)
-    {
-      GtkFilePath *path;
-      GError *error = NULL;
-
-      for (i = 1; data->uris[i]; i++)
-        {
-          uri = data->uris[i];
-          path = gtk_file_system_uri_to_path (data->impl->file_system, uri);
-      
-          if (path)
-	    {
-	      gtk_file_chooser_default_select_path (chooser, path, &error);
-	      if (error)
-	        error_selecting_dragged_file_dialog (data->impl, path, error);
-
-	      gtk_file_path_free (path);
-	    }
-        }
-    }
+    file_list_drag_data_select_uris (data->impl, data->uris);
 
 out:
   g_object_unref (data->impl);
@@ -3743,22 +3750,7 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
 	}
 
       if (impl->select_multiple)
-	{
-	  for (i = 1; uris[i]; i++)
-	    {
-	      uri = uris[i];
-	      path = gtk_file_system_uri_to_path (impl->file_system, uri);
-	      
-	      if (path)
-		{
-		  gtk_file_chooser_default_select_path (chooser, path, &error);
-		  if (error)
-		    error_selecting_dragged_file_dialog (impl, path, error);
-
-		  gtk_file_path_free (path);
-		}
-	    }
-	}
+	file_list_drag_data_select_uris (impl, uris);
     }
 
   g_strfreev (uris);
