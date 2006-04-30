@@ -266,17 +266,20 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Gets emitted when the size available for the image
    * changes, e.g. because the notification area got resized.
    *
+   * Return value: %TRUE if the icon was updated for the new
+   * size. Otherwise, GTK+ will scale the icon as necessary.
+   *
    * Since: 2.10
    */
   status_icon_signals [SIZE_CHANGED_SIGNAL] =
     g_signal_new (I_("size-changed"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusIconClass, size_changed),
-		  NULL,
+		  g_signal_accumulator_true_handled,
 		  NULL,
 		  _gtk_marshal_BOOLEAN__INT,
-		  G_TYPE_NONE,
+		  G_TYPE_BOOLEAN,
 		  1,
 		  G_TYPE_INT);
 

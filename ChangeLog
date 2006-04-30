@@ -1,3 +1,9 @@
+2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_class_init): Fix the definition
+	of the ::size-changed signal, and improve its documentation.
+	(#340112, Christian Persch)
+
 2006-04-29  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkwidget.c (gtk_widget_create_pango_layout)
