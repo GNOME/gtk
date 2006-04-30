@@ -427,7 +427,7 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
           for (i = 0; i < clip->numRects; i++)
             {
               DFBRegion reg = { clip->rects[i].x1,     clip->rects[i].y1,
-                                clip->rects[i].x2 - 1, clip->rects[i].y2 - 1 };
+                                clip->rects[i].x2, clip->rects[i].y2 };
 
               impl->surface->SetClip (impl->surface, &reg);
               impl->surface->TileBlit (impl->surface, surface, NULL, x, y);
@@ -455,15 +455,16 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
     }
   else
     {
-      /* FIXME: clipping! */
 
-      DFBRegion region = { x, y, x + width, y + height };
+      DFBRegion region = { x, y, x + width+1, y + height+1 };
+      impl->surface->SetClip (impl->surface, &region);
 
       /*  DirectFB does not draw rectangles the X way. Using DirectFB,
           a filled Rectangle has the same size as a drawn one, while
           X draws the rectangle one pixel taller and wider.  */
       impl->surface->DrawRectangle (impl->surface,
                                     x, y, width + 1, height + 1);
+      impl->surface->SetClip (impl->surface, NULL);
 
       _gdk_directfb_update (impl, &region);
     }
@@ -516,7 +517,7 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
             for (i = 0; i < clip->numRects; i++)
               {
                                 DFBRegion reg = { clip->rects[i].x1,     clip->rects[i].y1, 
-                    clip->rects[i].x2 - 1, clip->rects[i].y2 - 1 };
+                    clip->rects[i].x2 , clip->rects[i].y2  };
 
                 impl->surface->SetClip (impl->surface, &reg);
                 impl->surface->FillTriangle (impl->surface,
@@ -622,7 +623,7 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
   for (i = 0; i < clip->numRects; i++)
     {
       DFBRegion reg = { clip->rects[i].x1,     clip->rects[i].y1,
-                        clip->rects[i].x2 - 1, clip->rects[i].y2 - 1 };
+                        clip->rects[i].x2 , clip->rects[i].y2 };
 
       impl->surface->SetClip (impl->surface, &reg);
       impl->surface->Blit (impl->surface, src_impl->surface, &rect,
@@ -706,7 +707,7 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
   for (i = 0; i < clip->numRects; i++)
     {
       DFBRegion reg = { clip->rects[i].x1,   clip->rects[i].y1,
-                        clip->rects[i].x2-1, clip->rects[i].y2-1 };
+                        clip->rects[i].x2, clip->rects[i].y2 };
 
       impl->surface->SetClip (impl->surface, &reg);
 
@@ -817,7 +818,7 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
   for (i = 0; i < clip->numRects; i++)
     {
       DFBRegion reg = { clip->rects[i].x1,   clip->rects[i].y1,
-                        clip->rects[i].x2-1, clip->rects[i].y2-1 };
+                        clip->rects[i].x2, clip->rects[i].y2 };
 
       impl->surface->SetClip (impl->surface, &reg);
       impl->surface->DrawLines (impl->surface, lines, npoints - 1);
@@ -869,7 +870,7 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
       for (i = 0; i < clip->numRects; i++)
         {
           DFBRegion reg = { clip->rects[i].x1,     clip->rects[i].y1,
-                            clip->rects[i].x2 - 1, clip->rects[i].y2 - 1 };
+                            clip->rects[i].x2 , clip->rects[i].y2  };
 
           impl->surface->SetClip (impl->surface, &reg);
           impl->surface->Blit (impl->surface,
@@ -1035,7 +1036,7 @@ gdk_directfb_update_region (GdkDrawableImplDirectFB *impl,
                             GdkRegion               *region)
 {
   DFBRegion reg = { region->extents.x1,     region->extents.y1,
-                    region->extents.x2 - 1, region->extents.y2 - 1 };
+                    region->extents.x2 , region->extents.y2  };
 
   _gdk_directfb_update (impl, &reg);
 }
