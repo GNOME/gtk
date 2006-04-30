@@ -142,7 +142,7 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *advanced_vbox;
   GtkWidget *advanced_page;
 
-  GHashTable *extention_points;  
+  GHashTable *extension_points;  
 
   /* These are set initially on selected printer (either default printer, printer
    * taken from set settings, or user-selected), but when any setting is changed
@@ -420,7 +420,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   dialog->priv->print_backends = NULL;
   dialog->priv->current_page = -1;
 
-  dialog->priv->extention_points = g_hash_table_new (g_str_hash,
+  dialog->priv->extension_points = g_hash_table_new (g_str_hash,
                                                      g_str_equal);
 
   dialog->priv->page_setup = gtk_page_setup_new ();
@@ -488,10 +488,10 @@ gtk_print_unix_dialog_finalize (GObject *object)
       dialog->priv->options = NULL;
     }
  
-  if (dialog->priv->extention_points)
+  if (dialog->priv->extension_points)
     {
-      g_hash_table_unref (dialog->priv->extention_points);
-      dialog->priv->extention_points = NULL;
+      g_hash_table_unref (dialog->priv->extension_points);
+      dialog->priv->extension_points = NULL;
     }
  
   if (dialog->priv->page_setup)
@@ -812,20 +812,20 @@ wrap_in_frame (const gchar *label,
   char *bold_text;
 
   label_widget = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
   gtk_widget_show (label_widget);
   
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
   gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
   g_free (bold_text);
   
-  frame = gtk_frame_new ("");
-  gtk_frame_set_label_widget (GTK_FRAME (frame), label_widget);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+  frame = gtk_vbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
   
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  alignment = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     12, 0, 12, 0);
-  gtk_container_add (GTK_CONTAINER (frame), alignment);
+			     0, 0, 12, 0);
+  gtk_box_pack_start (GTK_BOX (frame), alignment, FALSE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (alignment), child);
 
@@ -849,17 +849,15 @@ setup_option (GtkPrintUnixDialog     *dialog,
 }
 
 static void
-add_option_to_extention_point (GtkPrinterOption *option,
+add_option_to_extension_point (GtkPrinterOption *option,
 		               gpointer          user_data)
 {
-  GHashTable *extention_points = (GHashTable *) user_data;
+  GHashTable *extension_points = (GHashTable *) user_data;
+  GtkWidget *widget, *extension_hbox;
 
-  GtkWidget *widget;
-  GtkBox *extention_hbox;
+  extension_hbox = g_hash_table_lookup (extension_points, option->name);
 
-  extention_hbox = (GtkBox *) g_hash_table_lookup (extention_points, option->name);
-
-  if (extention_hbox)
+  if (extension_hbox)
     {
 
       widget = gtk_printer_option_widget_new (option);
@@ -867,21 +865,25 @@ add_option_to_extention_point (GtkPrinterOption *option,
    
       if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
         {
-          GtkWidget *label;
+          GtkWidget *label, *hbox;
 
           label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
           gtk_widget_show (label);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-          gtk_box_pack_start (extention_hbox, label, FALSE, FALSE, 6);
-          gtk_box_pack_start (extention_hbox, widget, FALSE, FALSE, 6);
+          hbox = gtk_hbox_new (FALSE, 12);
+          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+          gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+          gtk_widget_show (hbox);
 
+          gtk_box_pack_start (GTK_BOX (extension_hbox), hbox, FALSE, FALSE, 0);
         }
       else
-        gtk_box_pack_start (extention_hbox, widget, FALSE, FALSE, 6);
+        gtk_box_pack_start (GTK_BOX (extension_hbox), widget, FALSE, FALSE, 0);
     }
   else
-    g_warning ("Extention point %s requested but not found.", option->name);
+    g_warning ("Extension point %s requested but not found.", option->name);
 }
 
 static void
@@ -909,7 +911,8 @@ add_option_to_table (GtkPrinterOption *option,
       gtk_widget_show (label);
 
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-      
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
+
       gtk_table_attach (table, label,
 			0, 1, row - 1 , row,  GTK_FILL, 0, 0, 0);
       
@@ -1098,8 +1101,8 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
         {
           gtk_printer_option_set_foreach_in_group (dialog->priv->options,
 					           group,
-					           add_option_to_extention_point,
-					           dialog->priv->extention_points);
+					           add_option_to_extension_point,
+					           dialog->priv->extension_points);
           continue;
         }
 
@@ -1221,7 +1224,7 @@ remove_custom_widget (GtkWidget    *widget,
 }
 
 static void
-extention_point_clear_children (const gchar  *key,
+extension_point_clear_children (const gchar  *key,
                                 GtkContainer *container,
                                 gpointer      data)
 {
@@ -1248,8 +1251,8 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
   gtk_container_foreach (GTK_CONTAINER (dialog->priv->advanced_vbox),
 			 (GtkCallback)gtk_widget_destroy,
 			 NULL);
-  g_hash_table_foreach (dialog->priv->extention_points, 
-                        (GHFunc) extention_point_clear_children, 
+  g_hash_table_foreach (dialog->priv->extension_points, 
+                        (GHFunc) extension_point_clear_children, 
                         NULL);
 }
 
@@ -1382,8 +1385,8 @@ update_collate_icon (GtkToggleButton    *toggle_button,
 static void
 create_main_page (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
-  GtkWidget *main_vbox, *label, *hbox;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkWidget *main_vbox, *label, *vbox, *hbox;
   GtkWidget *scrolled, *treeview, *frame, *table;
   GtkWidget *entry, *spinbutton;
   GtkWidget *radio, *check, *image;
@@ -1391,11 +1394,14 @@ create_main_page (GtkPrintUnixDialog *dialog)
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
   GtkWidget *custom_input;
-  
-  priv = dialog->priv;
 
-  main_vbox = gtk_vbox_new (FALSE, 6);
+  main_vbox = gtk_vbox_new (FALSE, 18);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
   gtk_widget_show (main_vbox);
+
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (main_vbox), vbox, TRUE, TRUE, 0);
+  gtk_widget_show (vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
@@ -1404,7 +1410,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
 				       GTK_SHADOW_IN);
   gtk_widget_show (scrolled);
-  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
 
   treeview = gtk_tree_view_new_with_model ((GtkTreeModel *) priv->printer_list_filter);
   priv->printer_treeview = treeview;
@@ -1423,7 +1429,6 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 
- 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Printer"),
 						     renderer,
@@ -1452,14 +1457,14 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (treeview);
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
 
-  custom_input = gtk_hbox_new (FALSE, 8);
+  custom_input = gtk_hbox_new (FALSE, 18);
   gtk_widget_show (custom_input);
-  gtk_box_pack_start (GTK_BOX (main_vbox), custom_input, FALSE, FALSE, 0);
-  g_hash_table_insert (dialog->priv->extention_points, 
+  gtk_box_pack_start (GTK_BOX (vbox), custom_input, FALSE, FALSE, 0);
+  g_hash_table_insert (dialog->priv->extension_points, 
                        _EXTENTION_POINT_MAIN_PAGE_CUSTOM_INPUT,
                        custom_input);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_hbox_new (FALSE, 18);
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
@@ -1467,26 +1472,26 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Print Pages"), table);
-  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  radio = gtk_radio_button_new_with_label (NULL, _("All"));
+  radio = gtk_radio_button_new_with_mnemonic (NULL, _("_All"));
   priv->all_pages_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
-		    0, 1, 0, 1,  GTK_FILL, 0,
+		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
-  radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					   _("Current"));
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
+					      _("C_urrent"));
   if (dialog->priv->current_page == -1)
     gtk_widget_set_sensitive (radio, FALSE);    
   priv->current_page_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
-		    0, 1, 1, 2,  GTK_FILL, 0,
+		    0, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
-  radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					   _("Range: "));
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
+					      _("Ra_nge: "));
   priv->page_range_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
@@ -1503,10 +1508,11 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Copies"), table);
-  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  label = gtk_label_new (_("Copies:"));
+  /* FIXMEchpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns */
+  label = gtk_label_new_with_mnemonic (_("Copie_s:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1518,8 +1524,9 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), spinbutton,
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
 
-  check = gtk_check_button_new_with_mnemonic (_("_Collate"));
+  check = gtk_check_button_new_with_mnemonic (_("C_ollate"));
   priv->collate_check = check;
   g_signal_connect (check, "toggled", G_CALLBACK (update_collate_icon), dialog);
   gtk_widget_show (check);
@@ -1548,7 +1555,6 @@ create_main_page (GtkPrintUnixDialog *dialog)
   
   gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook),
 			    main_vbox, label);
-  
 }
 
 static gboolean
@@ -1791,7 +1797,7 @@ draw_page_cb (GtkWidget	         *widget,
   
   cr = gdk_cairo_create (widget->window);
   
-  ratio = 1.4142;
+  ratio = G_SQRT2;
 
   w = (EXAMPLE_PAGE_AREA_SIZE - 3) / ratio;
   h = w * ratio;
@@ -1895,29 +1901,27 @@ redraw_page_layout_preview (GtkPrintUnixDialog *dialog)
 static void
 create_page_setup_page (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_vbox, *label, *hbox, *hbox2;
   GtkWidget *frame, *table, *widget;
   GtkWidget *combo, *spinbutton, *draw;
-  
-  priv = dialog->priv;
 
-  main_vbox = gtk_vbox_new (FALSE, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 6);
+  main_vbox = gtk_vbox_new (FALSE, 18);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
   gtk_widget_show (main_vbox);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_hbox_new (FALSE, 18);
   gtk_widget_show (hbox);
-  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
   table = gtk_table_new (5, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Layout"), table);
-  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  label = gtk_label_new (_("Pages per sheet:"));
+  label = gtk_label_new_with_mnemonic (_("Pages per _sheet:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1931,8 +1935,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("Two-sided:"));
+  label = gtk_label_new_with_mnemonic (_("T_wo-sided:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1945,8 +1950,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("Only Print:"));
+  label = gtk_label_new_with_mnemonic (_("_Only Print:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1959,20 +1965,21 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), combo,
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
   /* In enum order */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("All sheets"));  
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Even sheets"));  
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Odd sheets"));  
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
-  label = gtk_label_new (_("Scale:"));
+  label = gtk_label_new_with_mnemonic (_("Sc_ale:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4,  GTK_FILL, 0,
 		    0, 0);
 
-  hbox2 = gtk_hbox_new (FALSE, 0);
+  hbox2 = gtk_hbox_new (FALSE, 6);
   gtk_widget_show (hbox2);
   gtk_table_attach (GTK_TABLE (table), hbox2,
 		    1, 2, 3, 4,  GTK_FILL, 0,
@@ -1982,12 +1989,12 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   priv->scale_spin = spinbutton;
   gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spinbutton), 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spinbutton), 100.0);
-  gtk_widget_show (spinbutton);
   gtk_box_pack_start (GTK_BOX (hbox2), spinbutton, FALSE, FALSE, 0);
-  label = gtk_label_new ("%");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
+  gtk_widget_show (spinbutton);
+  label = gtk_label_new ("%"); /* FIXMEchpe does there exist any language where % needs to be translated? */
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, FALSE, 0);
-
 
   table = gtk_table_new (4, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -1996,7 +2003,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
   gtk_widget_show (table);
 
-  label = gtk_label_new (_("Paper Type:"));
+  label = gtk_label_new_with_mnemonic (_("Paper _Type:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2009,8 +2016,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("Paper Source:"));
+  label = gtk_label_new_with_mnemonic (_("Paper _Source:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2023,8 +2031,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("Output Tray:"));
+  label = gtk_label_new_with_mnemonic (_("Output T_ray:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2037,10 +2046,12 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
+  /* Add the page layout preview */
   hbox2 = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (main_vbox), hbox2, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (main_vbox), hbox2, TRUE, TRUE, 0);
 
   draw = gtk_drawing_area_new ();
   dialog->priv->page_layout_preview = draw;
@@ -2048,39 +2059,38 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   g_signal_connect (draw, "expose_event", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
-  gtk_box_pack_start (GTK_BOX (hbox2), draw, TRUE, FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox2), draw, TRUE, FALSE, 0);
   
   label = gtk_label_new (_("Page Setup"));
   gtk_widget_show (label);
   
   gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook),
 			    main_vbox, label);
-  
 }
 
 static void
 create_job_page (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_table, *label;
   GtkWidget *frame, *table, *radio;
   GtkWidget *entry, *widget;
-  
-  priv = dialog->priv;
 
   main_table = gtk_table_new (2, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (main_table), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (main_table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (main_table), 18);
+  gtk_table_set_col_spacings (GTK_TABLE (main_table), 18);
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Job Details"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
-		    0, 1, 0, 1,  0, 0,
+		    0, 1, 0, 1,  GTK_FILL, 0,
 		    0, 0);
   gtk_widget_show (table);
 
-  label = gtk_label_new (_("Priority:"));
+  label = gtk_label_new_with_mnemonic (_("Pri_ority:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2093,8 +2103,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("Billing info:"));
+  label = gtk_label_new_with_mnemonic (_("_Billing info:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2107,42 +2118,44 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
-
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Print Document"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
-		    0, 1, 1, 2,  0, 0,
+		    0, 1, 1, 2,  GTK_FILL, 0,
 		    0, 0);
   gtk_widget_show (table);
 
-  radio = gtk_radio_button_new_with_label (NULL, _("Now"));
+  radio = gtk_radio_button_new_with_mnemonic (NULL, _("_Now"));
   priv->print_now_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
-		    0, 1, 0, 1,  GTK_FILL, 0,
+		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
-  radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					   _("At:"));
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
+					      _("A_t:"));
   priv->print_at_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 1, 1, 2,  GTK_FILL, 0,
 		    0, 0);
-  radio = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					   _("On Hold"));
-  priv->print_hold_radio = radio;
-  gtk_widget_show (radio);
-  gtk_table_attach (GTK_TABLE (table), radio,
-		    0, 1, 2, 3,  GTK_FILL, 0,
-		    0, 0);
+
   entry = gtk_entry_new ();
   priv->print_at_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 1, 2,  GTK_FILL, 0,
+		    0, 0);
+
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
+					      _("On _Hold"));
+  priv->print_hold_radio = radio;
+  gtk_widget_show (radio);
+  gtk_table_attach (GTK_TABLE (table), radio,
+		    0, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
 
   g_signal_connect_swapped (priv->print_now_radio, "toggled",
@@ -2159,11 +2172,11 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   frame = wrap_in_frame (_("Add Cover Page"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
-		    1, 2, 0, 1,  0, 0,
+		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
   gtk_widget_show (table);
 
-  label = gtk_label_new (_("Before:"));
+  label = gtk_label_new_with_mnemonic (_("Be_fore:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2176,8 +2189,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new (_("After:"));
+  label = gtk_label_new_with_mnemonic (_("_After:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2190,6 +2204,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), widget,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new (_("Job"));
   gtk_widget_show (label);
@@ -2205,10 +2220,8 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
 		      GtkWidget          **table_out,
 		      GtkWidget          **page_out)
 {
-  GtkPrintUnixDialogPrivate *priv;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *table, *label, *scrolled;
-  
-  priv = dialog->priv;
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
@@ -2218,7 +2231,7 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
   table = gtk_table_new (1, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
   gtk_widget_show (table);
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
@@ -2239,10 +2252,8 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
 static void
 create_advanced_page (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_vbox, *label, *scrolled;
-  
-  priv = dialog->priv;
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   priv->advanced_page = scrolled;
@@ -2250,8 +2261,8 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
 				  GTK_POLICY_NEVER,
 				  GTK_POLICY_AUTOMATIC);
 
-  main_vbox = gtk_vbox_new (FALSE, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 6);
+  main_vbox = gtk_vbox_new (FALSE, 18);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
   gtk_widget_show (main_vbox);
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
@@ -2270,41 +2281,41 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
 
 
 static void
-populate_dialog (GtkPrintUnixDialog *dialog)
+populate_dialog (GtkPrintUnixDialog *print_dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
+  GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
+  GtkDialog *dialog = GTK_DIALOG (print_dialog);
   GtkWidget *hbox, *conflict_hbox, *image, *label;
-  
-  g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
-  
-  priv = dialog->priv;
- 
-  create_printer_list_model (dialog);
+
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
   priv->notebook = gtk_notebook_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (priv->notebook), 5);
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), priv->notebook, TRUE, TRUE, 0);
 
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), 
-                      priv->notebook,
-                      TRUE, TRUE, 10);
+  create_printer_list_model (print_dialog);
 
-  create_main_page (dialog);
-  create_page_setup_page (dialog);
-  create_job_page (dialog);
-  create_optional_page (dialog, _("Image Quality"),
-			&dialog->priv->image_quality_table,
-			&dialog->priv->image_quality_page);
-  create_optional_page (dialog, _("Color"),
-			&dialog->priv->color_table,
-			&dialog->priv->color_page);
-  create_optional_page (dialog, _("Finishing"),
-			&dialog->priv->finishing_table,
-			&dialog->priv->finishing_page);
-  create_advanced_page (dialog);
+  create_main_page (print_dialog);
+  create_page_setup_page (print_dialog);
+  create_job_page (print_dialog);
+  create_optional_page (print_dialog, _("Image Quality"),
+			&priv->image_quality_table,
+			&priv->image_quality_page);
+  create_optional_page (print_dialog, _("Color"),
+			&priv->color_table,
+			&priv->color_page);
+  create_optional_page (print_dialog, _("Finishing"),
+			&priv->finishing_table,
+			&priv->finishing_page);
+  create_advanced_page (print_dialog);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (hbox);
-  gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-                    FALSE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (dialog->vbox), hbox, FALSE, TRUE, 0);
   
   conflict_hbox = gtk_hbox_new (FALSE, 0);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
@@ -2313,7 +2324,7 @@ populate_dialog (GtkPrintUnixDialog *dialog)
   label = gtk_label_new (_("Some of the settings in the dialog conflict"));
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (conflict_hbox), label, FALSE, TRUE, 0);
-  dialog->priv->conflicts_widget = conflict_hbox;
+  priv->conflicts_widget = conflict_hbox;
 
   gtk_box_pack_start (GTK_BOX (hbox), conflict_hbox,
 		      FALSE, FALSE, 0);
@@ -2322,16 +2333,16 @@ populate_dialog (GtkPrintUnixDialog *dialog)
    * conflict warning on the same row, but not make the buttons the same
    * width as the warning (which the buttonbox does).
    */
-  g_object_ref (GTK_DIALOG (dialog)->action_area);
-  gtk_container_remove (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
-			GTK_DIALOG (dialog)->action_area);
-  gtk_box_pack_end (GTK_BOX (hbox), GTK_DIALOG (dialog)->action_area,
+  g_object_ref (dialog->action_area);
+  gtk_container_remove (GTK_CONTAINER (dialog->vbox),
+			dialog->action_area);
+  gtk_box_pack_end (GTK_BOX (hbox), dialog->action_area,
 		    FALSE, FALSE, 0);
-  g_object_unref (GTK_DIALOG (dialog)->action_area);
+  g_object_unref (dialog->action_area);
   
-  gtk_widget_show (dialog->priv->notebook);
+  gtk_widget_show (priv->notebook);
 
-  load_print_backends (dialog);
+  load_print_backends (print_dialog);
 }
 
 /**

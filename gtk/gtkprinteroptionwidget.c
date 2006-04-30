@@ -84,6 +84,8 @@ static void gtk_printer_option_widget_get_property (GObject      *object,
 						    guint         prop_id,
 						    GValue       *value,
 						    GParamSpec   *pspec);
+static gboolean gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
+							      gboolean   group_cycling);
 
 static void
 gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
@@ -97,6 +99,8 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
   object_class->finalize = gtk_printer_option_widget_finalize;
   object_class->set_property = gtk_printer_option_widget_set_property;
   object_class->get_property = gtk_printer_option_widget_get_property;
+
+  widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
   g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));  
 
@@ -123,6 +127,8 @@ static void
 gtk_printer_option_widget_init (GtkPrinterOptionWidget *widget)
 {
   widget->priv = GTK_PRINTER_OPTION_WIDGET_GET_PRIVATE (widget); 
+
+  gtk_box_set_spacing (GTK_BOX (widget), 12);
 }
 
 static void
@@ -182,6 +188,23 @@ gtk_printer_option_widget_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static gboolean
+gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
+					     gboolean   group_cycling)
+{
+  GtkPrinterOptionWidget *powidget = GTK_PRINTER_OPTION_WIDGET (widget);
+  GtkPrinterOptionWidgetPrivate *priv = powidget->priv;
+
+  if (priv->check)
+    return gtk_widget_mnemonic_activate (priv->check, group_cycling);
+  if (priv->combo)
+    return gtk_widget_mnemonic_activate (priv->combo, group_cycling);
+  if (priv->entry)
+    return gtk_widget_mnemonic_activate (priv->entry, group_cycling);
+
+  return FALSE;
 }
 
 static void
@@ -473,7 +496,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_box_pack_start (GTK_BOX (widget), widget->priv->combo, TRUE, TRUE, 0);
       g_signal_connect (widget->priv->combo, "changed", G_CALLBACK (combo_changed_cb), widget);
 
-      text = g_strdup_printf ("%s: ", source->display_text);
+      text = g_strdup_printf ("%s:", source->display_text);
       widget->priv->label = gtk_label_new_with_mnemonic (text);
       g_free (text);
       gtk_widget_show (widget->priv->label);
@@ -484,7 +507,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_box_pack_start (GTK_BOX (widget), widget->priv->entry, TRUE, TRUE, 0);
       g_signal_connect (widget->priv->entry, "changed", G_CALLBACK (entry_changed_cb), widget);
 
-      text = g_strdup_printf ("%s: ", source->display_text);
+      text = g_strdup_printf ("%s:", source->display_text);
       widget->priv->label = gtk_label_new_with_mnemonic (text);
       g_free (text);
       gtk_widget_show (widget->priv->label);
@@ -494,20 +517,21 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
         GtkWidget *label;
-        GtkWidget *align;
         
         widget->priv->filechooser = gtk_table_new (2, 2, FALSE);
+        gtk_table_set_row_spacings (GTK_TABLE (widget->priv->filechooser), 6);
+        gtk_table_set_col_spacings (GTK_TABLE (widget->priv->filechooser), 12);
 
         /* TODO: make this a gtkfilechooserentry once we move to GTK */
         widget->priv->entry = gtk_entry_new ();
-        widget->priv->combo = gtk_file_chooser_button_new ("Print to PDF", 
+        widget->priv->combo = gtk_file_chooser_button_new (_("Print to PDF"),
                                                            GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-        
-        align = gtk_alignment_new (0, 0.5, 0, 0);
-        label = gtk_label_new ("Name:");
-        gtk_container_add (GTK_CONTAINER (align), label);
 
-        gtk_table_attach (GTK_TABLE (widget->priv->filechooser), align,
+        label = gtk_label_new_with_mnemonic (_("_Name:"));
+        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget->priv->entry);
+
+        gtk_table_attach (GTK_TABLE (widget->priv->filechooser), label,
                           0, 1, 0, 1, GTK_FILL, 0,
                           0, 0);
 
@@ -515,11 +539,11 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                           1, 2, 0, 1, GTK_FILL, 0,
                           0, 0);
 
-        align = gtk_alignment_new (0, 0.5, 0, 0);
-        label = gtk_label_new ("Save in folder:");
-        gtk_container_add (GTK_CONTAINER (align), label);
+        label = gtk_label_new_with_mnemonic (_("_Save in folder:"));
+        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget->priv->combo);
 
-        gtk_table_attach (GTK_TABLE (widget->priv->filechooser), align,
+        gtk_table_attach (GTK_TABLE (widget->priv->filechooser), label,
                           0, 1, 1, 2, GTK_FILL, 0,
                           0, 0);
 

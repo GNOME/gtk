@@ -128,7 +128,7 @@ gtk_printer_option_set (GtkPrinterOption *option,
 	}
 
       if (i == option->num_choices)
-	return; /* Not found in availible choices */
+	return; /* Not found in available choices */
     }
   
   g_free (option->value);
