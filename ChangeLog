@@ -1,5 +1,21 @@
 2006-04-30  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystem.[ch] (gtk_file_info_render_icon): remove the
+	caching code,
+	(gtk_file_info_get_icon_name): new function,
+	(gtk_file_system_volume_get_icon_name): new function,
+	(gtk_file_system_volume_render_icon): refactor to use
+	get_icon_name() and render the icon on the fly.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_volume_render_icon),
+	(gtk_file_system_unix_volume_get_icon_name): reflect updates in
+	file system interface,
+	(get_fallback_icon): remove, along with icon caching code.
+
+	* gtk/gtk.symbols: updated.
+
+2006-04-30  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilesystemmodel.c (got_root_folder_cb), (ref_path_cb),
 	(get_children_get_folder_cb): don't leak the handle,
 	(got_root_folder_cb), (get_children_get_folder_cb): emit

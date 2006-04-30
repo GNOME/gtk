@@ -109,6 +109,7 @@ void                  gtk_file_info_set_size              (GtkFileInfo       *in
 
 void                  gtk_file_info_set_icon_name         (GtkFileInfo       *info,
 							   const gchar       *con_name);
+G_CONST_RETURN gchar *gtk_file_info_get_icon_name         (const GtkFileInfo *info);
 GdkPixbuf            *gtk_file_info_render_icon           (const GtkFileInfo *info,
 							   GtkWidget         *widget,
 							   gint               pixel_size,
@@ -214,10 +215,8 @@ struct _GtkFileSystemIface
 					    gpointer                          data);
   char *        (*volume_get_display_name) (GtkFileSystem        *file_system,
 					    GtkFileSystemVolume  *volume);
-  GdkPixbuf *   (*volume_render_icon)      (GtkFileSystem        *file_system,
+  gchar *       (*volume_get_icon_name)    (GtkFileSystem        *file_system,
 					    GtkFileSystemVolume  *volume,
-					    GtkWidget            *widget,
-					    gint                  pixel_size,
 					    GError              **error);
 
   /* Path Manipulation
@@ -293,6 +292,9 @@ GdkPixbuf *       gtk_file_system_volume_render_icon      (GtkFileSystem        
 							   GtkFileSystemVolume  *volume,
 							   GtkWidget            *widget,
 							   gint                  pixel_size,
+							   GError              **error);
+gchar *           gtk_file_system_volume_get_icon_name    (GtkFileSystem        *file_system,
+							   GtkFileSystemVolume  *volume,
 							   GError              **error);
 
 gboolean          gtk_file_system_get_parent     (GtkFileSystem     *file_system,

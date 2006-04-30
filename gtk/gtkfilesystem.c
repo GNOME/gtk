@@ -271,81 +271,12 @@ gtk_file_info_set_icon_name (GtkFileInfo *info,
   info->icon_name = g_strdup (icon_name);
 }
 
-
-typedef struct
+G_CONST_RETURN gchar *
+gtk_file_info_get_icon_name (const GtkFileInfo *info)
 {
-  gint size;
-  GdkPixbuf *pixbuf;
-} IconCacheElement;
-
-static void
-icon_cache_element_free (IconCacheElement *element)
-{
-  if (element->pixbuf)
-    g_object_unref (element->pixbuf);
-  g_free (element);
-}
-
-static void
-icon_theme_changed (GtkIconTheme *icon_theme)
-{
-  GHashTable *cache;
-
-  /* Difference from the initial creation is that we don't
-   * reconnect the signal
-   */
-  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				 (GDestroyNotify)g_free,
-				 (GDestroyNotify)icon_cache_element_free);
-  g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
-			  cache, (GDestroyNotify)g_hash_table_destroy);
-}
-
-static GdkPixbuf *
-get_cached_icon (GtkWidget    *widget,
-		 const gchar  *name,
-		 gint          pixel_size)
-{
-  GtkIconTheme *icon_theme;
-  GHashTable *cache;
-  IconCacheElement *element;
-
-  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-  cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
-
-  if (!cache)
-    {
-      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				     (GDestroyNotify)g_free,
-				     (GDestroyNotify)icon_cache_element_free);
-
-      g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
-			      cache, (GDestroyNotify)g_hash_table_destroy);
-      g_signal_connect (icon_theme, "changed",
-			G_CALLBACK (icon_theme_changed), NULL);
-    }
-
-  element = g_hash_table_lookup (cache, name);
-  if (!element)
-    {
-      element = g_new0 (IconCacheElement, 1);
-      g_hash_table_insert (cache, g_strdup (name), element);
-    }
-
-  if (element->size != pixel_size)
-    {
-      if (element->pixbuf)
-	g_object_unref (element->pixbuf);
-      element->size = pixel_size;
-
-      if (g_path_is_absolute (name))
-	element->pixbuf = gdk_pixbuf_new_from_file_at_size (name, pixel_size, pixel_size, NULL);
-      else
-        element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
-						    pixel_size, 0, NULL);
-    }
-
-  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
+  g_return_val_if_fail (info != NULL, NULL);
+  
+  return info->icon_name;
 }
 
 GdkPixbuf *
@@ -360,7 +291,21 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (info->icon_name)
-    pixbuf = get_cached_icon (widget, info->icon_name, pixel_size);
+    {
+      if (g_path_is_absolute (info->icon_name))
+	pixbuf = gdk_pixbuf_new_from_file_at_size (info->icon_name,
+						   pixel_size,
+						   pixel_size,
+						   NULL);
+      else
+        {
+          GtkIconTheme *icon_theme;
+
+	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name,
+					     pixel_size, 0, NULL);
+	}
+    }
 
   if (!pixbuf)
     {
@@ -740,17 +685,53 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
 				    gint                  pixel_size,
 				    GError              **error)
 {
+  gchar *icon_name;
+  GdkPixbuf *pixbuf;
+
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (volume != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (pixel_size > 0, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_render_icon (file_system,
-								      volume,
-								      widget,
-								      pixel_size,
-								      error);
+  icon_name = gtk_file_system_volume_get_icon_name (file_system, volume,
+						    error);
+  if (!icon_name)
+    {
+      return NULL;
+    }
+
+  pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget)),
+				     icon_name, pixel_size, 0, NULL);
+  g_free (icon_name);
+
+  return pixbuf;
+}
+
+/**
+ * gtk_file_system_volume_get_icon_name:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * @error: location to store error, or %NULL
+ * 
+ * Gets an icon name suitable for a #GtkFileSystemVolume.
+ * 
+ * Return value: An icon name which can be used for rendering an icon for
+ * this volume, or %NULL if no icon name could be found.  In the latter
+ * case, the @error value will be set as appropriate.
+ **/
+gchar *
+gtk_file_system_volume_get_icon_name (GtkFileSystem        *file_system,
+				      GtkFileSystemVolume  *volume,
+				      GError              **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_get_icon_name (file_system,
+								        volume,
+								        error);
 }
 
 /**

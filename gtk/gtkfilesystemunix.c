@@ -172,10 +172,8 @@ static GtkFileSystemHandle *gtk_file_system_unix_volume_mount    (GtkFileSystem 
 								  gpointer data);
 static gchar *      gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
 								  GtkFileSystemVolume *volume);
-static GdkPixbuf *  gtk_file_system_unix_volume_render_icon      (GtkFileSystem        *file_system,
+static gchar *      gtk_file_system_unix_volume_get_icon_name    (GtkFileSystem        *file_system,
 								  GtkFileSystemVolume  *volume,
-								  GtkWidget            *widget,
-								  gint                  pixel_size,
 								  GError              **error);
 
 static gboolean       gtk_file_system_unix_get_parent    (GtkFileSystem      *file_system,
@@ -348,7 +346,7 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->volume_get_is_mounted = gtk_file_system_unix_volume_get_is_mounted;
   iface->volume_mount = gtk_file_system_unix_volume_mount;
   iface->volume_get_display_name = gtk_file_system_unix_volume_get_display_name;
-  iface->volume_render_icon = gtk_file_system_unix_volume_render_icon;
+  iface->volume_get_icon_name = gtk_file_system_unix_volume_get_icon_name;
   iface->get_parent = gtk_file_system_unix_get_parent;
   iface->make_path = gtk_file_system_unix_make_path;
   iface->parse = gtk_file_system_unix_parse;
@@ -1136,75 +1134,6 @@ get_icon_type (const char *filename,
   return get_icon_type_from_stat (&statbuf);
 }
 
-typedef struct
-{
-  gint size;
-  GdkPixbuf *pixbuf;
-} IconCacheElement;
-
-static void
-icon_cache_element_free (IconCacheElement *element)
-{
-  if (element->pixbuf)
-    g_object_unref (element->pixbuf);
-  g_free (element);
-}
-
-static void
-icon_theme_changed (GtkIconTheme *icon_theme)
-{
-  GHashTable *cache;
-
-  /* Difference from the initial creation is that we don't
-   * reconnect the signal
-   */
-  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				 (GDestroyNotify)g_free,
-				 (GDestroyNotify)icon_cache_element_free);
-  g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
-			  cache, (GDestroyNotify)g_hash_table_destroy);
-}
-
-static GdkPixbuf *
-get_cached_icon (GtkWidget   *widget,
-		 const gchar *name,
-		 gint         pixel_size)
-{
-  GtkIconTheme *icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-  GHashTable *cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
-  IconCacheElement *element;
-
-  if (!cache)
-    {
-      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				     (GDestroyNotify)g_free,
-				     (GDestroyNotify)icon_cache_element_free);
-
-      g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
-			      cache, (GDestroyNotify)g_hash_table_destroy);
-      g_signal_connect (icon_theme, "changed",
-			G_CALLBACK (icon_theme_changed), NULL);
-    }
-
-  element = g_hash_table_lookup (cache, name);
-  if (!element)
-    {
-      element = g_new0 (IconCacheElement, 1);
-      g_hash_table_insert (cache, g_strdup (name), element);
-    }
-
-  if (element->size != pixel_size)
-    {
-      if (element->pixbuf)
-	g_object_unref (element->pixbuf);
-      element->size = pixel_size;
-      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
-						  pixel_size, 0, NULL);
-    }
-
-  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
-}
-
 /* Renders a fallback icon from the stock system */
 static const gchar *
 get_fallback_icon_name (IconType icon_type)
@@ -1233,44 +1162,13 @@ get_fallback_icon_name (IconType icon_type)
   return stock_name;
 }
 
-static GdkPixbuf *
-get_fallback_icon (GtkWidget *widget,
-		   IconType   icon_type,
-		   GError   **error)
+static gchar *
+gtk_file_system_unix_volume_get_icon_name (GtkFileSystem        *file_system,
+					   GtkFileSystemVolume  *volume,
+					   GError              **error)
 {
-  const char *name;
-  GdkPixbuf *pixbuf;
-
-  name = get_fallback_icon_name (icon_type);
-
-  pixbuf = gtk_widget_render_icon (widget, name, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
-  if (!pixbuf)
-    g_set_error (error,
-		 GTK_FILE_SYSTEM_ERROR,
-		 GTK_FILE_SYSTEM_ERROR_FAILED,
-		 _("Could not get a stock icon for %s"),
-		 name);
-
-  return pixbuf;
-}
-
-static GdkPixbuf *
-gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
-					 GtkFileSystemVolume  *volume,
-					 GtkWidget            *widget,
-					 gint                  pixel_size,
-					 GError              **error)
-{
-  GdkPixbuf *pixbuf;
-
-  pixbuf = get_cached_icon (widget, "gnome-dev-harddisk", pixel_size);
-  if (pixbuf)
-    return pixbuf;
-
-  pixbuf = get_fallback_icon (widget, ICON_BLOCK_DEVICE, error);
-  g_assert (pixbuf != NULL);
-
-  return pixbuf;
+  /* FIXME: maybe we just always want to return GTK_STOCK_HARDDISK here */
+  return g_strdup ("gnome-dev-harddisk");
 }
 
 static char *
