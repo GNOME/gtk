@@ -1,3 +1,8 @@
+2006-04-30  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* POTFILES.in: Add a whole bunch of missing files.
+	* nb.po: Updated Norwegian bokmål translation.
+
 2006-04-26  Vincent van Adrighem  <adrighem@gnome.org>
 
 	* nl.po: Translation updated by Tino Meinen.
