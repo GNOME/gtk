@@ -11847,13 +11847,10 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
       if (column &&
 	  gtk_tree_view_is_expander_column (tree_view, column))
 	{
-	  gint depth = gtk_tree_path_get_depth (path) - 1;
+	  gint depth = gtk_tree_path_get_depth (path);
 
-	  if (depth > 0)
-	    {
-	      rect->x += (depth - 1) * tree_view->priv->level_indentation;
-	      rect->width -= (depth - 1) * tree_view->priv->level_indentation;
-	    }
+	  rect->x += (depth - 1) * tree_view->priv->level_indentation;
+	  rect->width -= (depth - 1) * tree_view->priv->level_indentation;
 
 	  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	    {
@@ -13473,20 +13470,6 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 			       cursor_path,
 			       tree_view->priv->focus_column,
 			       &cell_area);
-
-  if (gtk_tree_view_is_expander_column (tree_view, tree_view->priv->focus_column))
-    {
-      gint depth = gtk_tree_path_get_depth (cursor_path);
-
-      cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
-      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
-
-      if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
-        {
-	  cell_area.x += depth * tree_view->priv->expander_size;
-	  cell_area.width -= depth * tree_view->priv->expander_size;
-	}
-    }
 
   if (_gtk_tree_view_column_cell_event (tree_view->priv->focus_column,
 					&editable_widget,

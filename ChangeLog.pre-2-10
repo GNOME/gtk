@@ -1,3 +1,12 @@
+2006-04-30  Kristian Rietveld  <kris@imendio.com>
+
+	Fix for #340200, spotted by Torsten Schoenfeld.
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): fix up logic
+	calculating the level indentation,
+	(gtk_tree_view_start_editing): remove code calculating the
+	level indentation, since _get_cell_area() takes care of this for us.
+
 2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
 
 	Fix problems with setting symbolic colors from rc files.
