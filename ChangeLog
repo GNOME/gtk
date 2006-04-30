@@ -1,5 +1,18 @@
 2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
 
+	Fix problems with setting symbolic colors from rc files.
+	(#338345, Benjamin Berg)
+	
+	* gtk/gtkrc.c (gtk_rc_settings_changed, gtk_rc_font_name_changed) 
+	(gtk_rc_color_hash_changed, gtk_rc_reparse_all_for_settings): Don't
+	freeze notification for settings changes while parsing; instead
+	manually avoid recursion, and update the color hashes.
+
+2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Change the default
+	value of the gtk-color-scheme setting to "".
+
 	* gtk/gtkprinteroption.c: 
 	* gtk/gtkprinteroptionwidget.c: 
 	* gtk/gtkprintunixdialog.c: Improve the print dialog layout,

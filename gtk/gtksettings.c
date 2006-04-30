@@ -488,7 +488,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     g_param_spec_string ("gtk-color-scheme",
  								  P_("Color scheme"),
  								  P_("A palette of named colors for use in themes"),
- 								  "foreground:black\nbackground:gray",
+ 								  "",
  								  GTK_PARAM_READWRITE),
 					     NULL);
 

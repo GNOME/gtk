@@ -127,6 +127,8 @@ struct _GtkRcContext
   GtkStyle *default_style;
 
   GHashTable *color_hash;
+
+  guint reloading : 1;
 };
 
 #define GTK_RC_STYLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RC_STYLE, GtkRcStylePrivate))
@@ -618,6 +620,9 @@ gtk_rc_settings_changed (GtkSettings  *settings,
   gchar *new_theme_name;
   gchar *new_key_theme_name;
 
+  if (context->reloading)
+    return;
+
   g_object_get (settings,
 		"gtk-theme-name", &new_theme_name,
 		"gtk-key-theme-name", &new_key_theme_name,
@@ -640,7 +645,8 @@ gtk_rc_font_name_changed (GtkSettings  *settings,
                           GParamSpec   *pspec,
                           GtkRcContext *context)
 {
-  _gtk_rc_context_get_default_font_name (settings);
+  if (!context->reloading)
+    _gtk_rc_context_get_default_font_name (settings);
 }
 
 static void
@@ -655,8 +661,9 @@ gtk_rc_color_hash_changed (GtkSettings  *settings,
 
   if (context->color_hash)
     g_hash_table_ref (context->color_hash);
-  
-  gtk_rc_reparse_all_for_settings (settings, TRUE);
+
+  if (!context->reloading)
+    gtk_rc_reparse_all_for_settings (settings, TRUE);
 }
 
 static GtkRcContext *
@@ -1597,7 +1604,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
     {
       _gtk_binding_reset_parsed ();
       gtk_rc_clear_styles (context);
-      g_object_freeze_notify (G_OBJECT (context->settings));
+      context->reloading = TRUE;
 
       _gtk_settings_reset_rc_values (context->settings);
       tmp_list = context->rc_files;
@@ -1644,8 +1651,8 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 	gtk_rc_parse_named (context, context->theme_name, NULL);
       if (context->key_theme_name && context->key_theme_name[0])
 	gtk_rc_parse_named (context, context->key_theme_name, "key");
-      
-      g_object_thaw_notify (G_OBJECT (context->settings));
+
+      context->reloading = FALSE;
 
       gtk_rc_reset_widgets (context->settings);
     }
