@@ -273,7 +273,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    */
   status_icon_signals [SIZE_CHANGED_SIGNAL] =
     g_signal_new (I_("size-changed"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusIconClass, size_changed),
 		  g_signal_accumulator_true_handled,
