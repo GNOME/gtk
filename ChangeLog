@@ -1,3 +1,7 @@
+2006-05-01  Matthias Clasen  <mclasen@dhcp83-48.boston.redhat.com>
+
+	* NEWS: Updates
+
 2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_base_init): Document

@@ -1,3 +1,92 @@
+Overview of Changes from GTK+ 2.8.x to 2.9.0
+============================================
+
+* GtkStatusIcon, a cross-platform "tray icon" API
+
+* GtkAssistant, a widget for creating multi-step wizards
+
+* GtkLinkButton, a widget that displays a clickable hyperlink
+
+* GtkRecentChooser, widgets to display and select recently used files
+
+* GtkPrintOperation, cross-platform printing support
+
+* A framework for rich text copy and paste and DND
+
+* GtkCellRendererAccel, a cell renderer for key combinations
+
+* GtkCellRendererSpin, a cell renderer which edits numeric values 
+  using a spin button
+
+* GtkAction works with named icons in addition to stock icons
+
+* GtkNotebook supports DND, allowing to reorder tabs, move tabs
+  between notebooks and drop tabs on the desktop to open a new window
+
+* GtkTreeView changes:
+  - Enhanced customizability (e.g. grouping) with the
+    show-expanders and level-indentation properties
+  - Allow to embed the search popup
+  - Better search popup positioning
+
+* Reworked hex Unicode input now requires Ctrl-Shift-U
+
+* Animations can now be globally controlled by settings
+
+* The gtk-touchscreen-mode setting controls a number of changes
+  that make GTK+ work better on touchscreens
+
+* Password entries can optionally show the last entered character
+  for a short while, controlled by the password-hint-timeout setting
+
+* GTK+ can now consult an additional fallback icon theme before
+  falling back to hicolor
+
+* Improved themability:
+  - GTK+ supports symbolic colors, which can be set system-wide
+    using a setting, and can be modified and used in rc files
+    and theme engines
+  - GTK+ sets window type hints on override-redirect windows to 
+    help compositing managers apply proper bling
+  - Paths in rc files can now refer to all subclasses of a class 
+  - GtkRange steppers will appear insensitive when the slider
+    is at the end; applications which need to handle this case
+    (e.g. to extend the range) can opt out of this.
+  - GtkRange::activate-slider style property allows themes
+    to draw sliders differently while they are being dragged
+  - GtkNotebook::tab-overlap and GtkNotebook::curvature style
+    properties allow more flexible notebook theming
+  - The spacing of buttons around children can be themed with
+    the GtkButton::inner-border style property. Apps can override
+    this per-widget using the corresponding inner-border property 
+  - GtkMenu has aquired a horizontal-padding style property 
+  - There are style properties for the color of hyperlinks,
+    GtkWidget::link-color and GtkWidget::visited-link-color
+  - GtkTreeview row hinting now takes the selection into account
+  - Scrolling menus can be forced to always display both arrows,
+    using the GtkMenu::double-arrows style property
+  - Separators can be themed using the wide-separators, separator-width
+    and separator-height style properties
+  - GtkTreeView allows more flexible theming with the row-ending-details
+    property
+  - The pixbuf theme engines supports customized drawing of expanders
+    and resize grips
+
+* GDK changes:  
+  - OS X backend
+  - DirectFB backend 
+  - Closing displays works
+  - gdk_screen_is_composited to check for running compositing manager
+  - Support for Super, Hyper and Meta modifiers
+
+* gdk-pixbuf changes: 
+  - Supports saving tiff 
+  - Supports loading 16-bit pnm
+  - Doesn't load entire gif animation to get first frame
+
+* Bug fixes
+  - Too many to list them here
+
 Overview of Changes from GTK+ 2.8.1 to GTK+ 2.8.2
 =================================================
 * Fix a crash with custom icon themes, which affected
