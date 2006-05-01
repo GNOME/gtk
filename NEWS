@@ -23,12 +23,21 @@ Overview of Changes from GTK+ 2.8.x to 2.9.0
 * GtkNotebook supports DND, allowing to reorder tabs, move tabs
   between notebooks and drop tabs on the desktop to open a new window
 
-* GtkTreeView changes:
+* GtkTreeView:
   - Enhanced customizability (e.g. grouping) with the
     show-expanders and level-indentation properties
   - Allow to embed the search popup
   - Better search popup positioning
 
+* GtkFileChooser:
+  - Communication with backends is now asynchronous to avoid
+    blocking on filesystem operations. Due to the required interface
+    changes, the GTK+ ABI version has been bumped to 2.10.0. Third-party
+    filesystem backends have to be ported to the new interface, other
+    modules, such as theme engines, input method modules or pixbuf loaders 
+    have to be rebuilt so that they are installed in the right place
+    for GTK+ to find them.
+    
 * Reworked hex Unicode input now requires Ctrl-Shift-U
 
 * Animations can now be globally controlled by settings
