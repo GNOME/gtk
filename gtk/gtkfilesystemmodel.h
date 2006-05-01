@@ -71,7 +71,7 @@ typedef void (*GtkFileSystemModelPathFunc) (GtkFileSystemModel *model,
 					    GtkTreeIter        *iter,
 					    gpointer            user_data);
 
-gboolean _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
+void     _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
 					 const GtkFilePath         *path,
 					 GtkFileSystemModelPathFunc func,
 					 gpointer                   user_data);

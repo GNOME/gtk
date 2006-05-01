@@ -1,3 +1,29 @@
+2006-05-01  Kristian Rietveld  <kris@imendio.com>
+
+	Merge of the GTK+ asynchronous file chooser branch.  Please see
+	the kris-asynch-branch for more detailed ChangeLog entries.
+
+	* configure.in: increase binary version to 2.9.0.
+
+	* gtk.symbols:
+	* gtkfilechooser.c:
+	* gtkfilechooserbutton.c:
+	* gtkfilechooserdefault.c:
+	* gtkfilechooserdialog.c:
+	* gtkfilechooserembed.c:
+	* gtkfilechooserembed.h:
+	* gtkfilechooserentry.c:
+	* gtkfilechooserentry.h:
+	* gtkfilechooserprivate.h:
+	* gtkfilesystem.c:
+	* gtkfilesystem.h:
+	* gtkfilesystemmodel.c:
+	* gtkfilesystemmodel.h:
+	* gtkfilesystemunix.c:
+	* gtkpathbar.c:
+	* gtkpathbar.h:
+	Merge from kris-async-branch.
+
 2006-05-01  Matthias Clasen  <mclasen@dhcp83-48.boston.redhat.com>
 
 	* NEWS: Updates

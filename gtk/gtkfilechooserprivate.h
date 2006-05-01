@@ -113,6 +113,7 @@ struct _GtkFileChooserDialogPrivate
   gint default_height;
   gboolean resize_horizontally;
   gboolean resize_vertically;
+  gboolean response_requested;
 };
 
 
@@ -186,6 +187,17 @@ struct _GtkFileChooserDefault
   GtkTreeModel *shortcuts_filter_model;
 
   GtkTreeModelSort *sort_model;
+
+  /* Handles */
+  GSList *loading_shortcuts;
+  GSList *reload_icon_handles;
+  GtkFileSystemHandle *file_list_drag_data_received_handle;
+  GtkFileSystemHandle *update_current_folder_handle;
+  GtkFileSystemHandle *show_and_select_paths_handle;
+  GtkFileSystemHandle *should_respond_get_info_handle;
+  GtkFileSystemHandle *update_from_entry_handle;
+  GtkFileSystemHandle *shortcuts_activate_iter_handle;
+  GSList *pending_handles;
 
   LoadState load_state;
   ReloadState reload_state;
@@ -267,9 +279,10 @@ struct _GtkFileSystemModel
 
   GSList *idle_clears;
   GSource *idle_clear_source;
-  GSource *idle_finished_loading_source;
 
   gushort max_depth;
+
+  GSList *pending_handles;
   
   guint show_hidden : 1;
   guint show_folders : 1;
@@ -300,6 +313,7 @@ struct _FileModelNode
   guint is_visible : 1;
   guint loaded : 1;
   guint idle_clear : 1;
+  guint load_pending : 1;
 };
 
 

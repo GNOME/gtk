@@ -46,6 +46,8 @@ void               _gtk_file_chooser_entry_set_file_part      (GtkFileChooserEnt
 							       const gchar         *file_part);
 const GtkFilePath *_gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry);
 const gchar *      _gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
+gboolean           _gtk_file_chooser_entry_get_is_folder      (GtkFileChooserEntry *chooser_entry,
+							       const GtkFilePath   *path);
 
 G_END_DECLS
 

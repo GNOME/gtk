@@ -25,6 +25,7 @@
 #include "gtkmodules.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+#include "gtkstock.h"
 
 #include <string.h>
 
@@ -35,6 +36,7 @@ struct _GtkFileInfo
   gchar *display_name;
   gchar *display_key;
   gchar *mime_type;
+  gchar *icon_name;
   guint is_folder : 1;
   guint is_hidden : 1;
 };
@@ -88,6 +90,10 @@ gtk_file_info_copy (GtkFileInfo *info)
     new_info->display_key = g_strdup (new_info->display_key);
   if (new_info->mime_type)
     new_info->mime_type = g_strdup (new_info->mime_type);
+  if (new_info->icon_name)
+    new_info->icon_name = g_strdup (new_info->icon_name);
+  if (new_info->display_key)
+    new_info->display_key = g_strdup (new_info->display_key);
 
   return new_info;
 }
@@ -103,6 +109,8 @@ gtk_file_info_free (GtkFileInfo *info)
     g_free (info->mime_type);
   if (info->display_key)
     g_free (info->display_key);
+  if (info->icon_name)
+    g_free (info->icon_name);
 
   g_free (info);
 }
@@ -250,6 +258,171 @@ gtk_file_info_set_size (GtkFileInfo *info,
   info->size = size;
 }
 
+void
+gtk_file_info_set_icon_name (GtkFileInfo *info,
+			     const gchar *icon_name)
+{
+  g_return_if_fail (info != NULL);
+  
+  if (info->icon_name)
+    g_free (info->icon_name);
+
+  info->icon_name = g_strdup (icon_name);
+}
+
+G_CONST_RETURN gchar *
+gtk_file_info_get_icon_name (const GtkFileInfo *info)
+{
+  g_return_val_if_fail (info != NULL, NULL);
+  
+  return info->icon_name;
+}
+
+GdkPixbuf *
+gtk_file_info_render_icon (const GtkFileInfo  *info,
+			   GtkWidget          *widget,
+			   gint                pixel_size,
+			   GError            **error)
+{
+  GdkPixbuf *pixbuf = NULL;
+
+  g_return_val_if_fail (info != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (info->icon_name)
+    {
+      if (g_path_is_absolute (info->icon_name))
+	pixbuf = gdk_pixbuf_new_from_file_at_size (info->icon_name,
+						   pixel_size,
+						   pixel_size,
+						   NULL);
+      else
+        {
+          GtkIconTheme *icon_theme;
+
+	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name,
+					     pixel_size, 0, NULL);
+	}
+    }
+
+  if (!pixbuf)
+    {
+      /* load a fallback icon */
+      pixbuf = gtk_widget_render_icon (widget, GTK_STOCK_FILE, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+      if (!pixbuf && error)
+        g_set_error (error,
+		     GTK_FILE_SYSTEM_ERROR,
+		     GTK_FILE_SYSTEM_ERROR_FAILED,
+		     _("Could not get a stock icon for %s\n"),
+		     info->icon_name);
+    }
+
+  return pixbuf;
+}
+
+/*****************************************
+ *          GtkFileSystemHandle          *
+ *****************************************/
+
+static void gtk_file_system_handle_init       (GtkFileSystemHandle      *handle);
+static void gtk_file_system_handle_class_init (GtkFileSystemHandleClass *klass);
+
+enum
+{
+  PROP_0,
+  PROP_CANCELLED
+};
+
+GType
+gtk_file_system_handle_get_type (void)
+{
+  static GType file_system_handle_type = 0;
+
+  if (!file_system_handle_type)
+    {
+      static const GTypeInfo file_system_handle_info =
+      {
+	sizeof (GtkFileSystemHandleClass),
+	NULL,
+	NULL,
+	(GClassInitFunc) gtk_file_system_handle_class_init,
+	NULL,
+	NULL,
+	sizeof (GtkFileSystemHandle),
+	0,
+	(GInstanceInitFunc) gtk_file_system_handle_init,
+      };
+
+      file_system_handle_type = g_type_register_static (G_TYPE_OBJECT,
+							I_("GtkFileSystemHandle"),
+							&file_system_handle_info, 0);
+    }
+
+  return file_system_handle_type;
+}
+
+#if 0
+GtkFileSystemHandle *
+gtk_file_system_handle_new (void)
+{
+  return g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
+}
+#endif
+
+static void
+gtk_file_system_handle_init (GtkFileSystemHandle *handle)
+{
+  handle->file_system = NULL;
+  handle->cancelled = FALSE;
+}
+
+static void
+gtk_file_system_handle_set_property (GObject      *object,
+				     guint         prop_id,
+				     const GValue *value,
+				     GParamSpec   *pspec)
+{
+  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+}
+
+static void
+gtk_file_system_handle_get_property (GObject    *object,
+				     guint       prop_id,
+				     GValue     *value,
+				     GParamSpec *pspec)
+{
+  GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (object);
+
+  switch (prop_id)
+    {
+      case PROP_CANCELLED:
+	g_value_set_boolean (value, handle->cancelled);
+	break;
+
+      default:
+	G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	break;
+    }
+}
+
+static void
+gtk_file_system_handle_class_init (GtkFileSystemHandleClass *klass)
+{
+  GObjectClass *o_class;
+
+  o_class = (GObjectClass *)klass;
+  o_class->set_property = gtk_file_system_handle_set_property;
+  o_class->get_property = gtk_file_system_handle_get_property;
+
+  g_object_class_install_property (o_class,
+				   PROP_CANCELLED,
+				   g_param_spec_boolean ("cancelled",
+							 P_("Cancelled"),
+							 P_("Whether or not the operation has been successfully cancelled"),
+							 FALSE,
+							 G_PARAM_READABLE));
+}
 
 /*****************************************
  *             GtkFileSystem             *
@@ -314,29 +487,53 @@ gtk_file_system_list_volumes (GtkFileSystem  *file_system)
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_volumes (file_system);
 }
 
-GtkFileFolder *
-gtk_file_system_get_folder (GtkFileSystem     *file_system,
-			    const GtkFilePath *path,
-			    GtkFileInfoType    types,
-			    GError           **error)
+GtkFileSystemHandle *
+gtk_file_system_get_folder (GtkFileSystem                  *file_system,
+			    const GtkFilePath              *path,
+			    GtkFileInfoType                 types,
+			    GtkFileSystemGetFolderCallback  callback,
+			    gpointer                        data)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, path, types, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, path, types, callback, data);
 }
 
-gboolean
-gtk_file_system_create_folder(GtkFileSystem     *file_system,
-			      const GtkFilePath *path,
-			      GError           **error)
+GtkFileSystemHandle *
+gtk_file_system_get_info (GtkFileSystem *file_system,
+			  const GtkFilePath *path,
+			  GtkFileInfoType types,
+			  GtkFileSystemGetInfoCallback callback,
+			  gpointer data)
 {
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_info (file_system, path, types, callback, data);
+}
+
+GtkFileSystemHandle *
+gtk_file_system_create_folder (GtkFileSystem                     *file_system,
+			       const GtkFilePath                 *path,
+			       GtkFileSystemCreateFolderCallback  callback,
+			       gpointer                           data)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, callback, data);
+}
+
+void
+gtk_file_system_cancel_operation (GtkFileSystemHandle *handle)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_HANDLE (handle));
+
+  return GTK_FILE_SYSTEM_GET_IFACE (handle->file_system)->cancel_operation (handle);
 }
 
 /**
@@ -432,16 +629,18 @@ gtk_file_system_volume_get_is_mounted (GtkFileSystem       *file_system,
  * 
  * Return value: TRUE if the @volume was mounted successfully, FALSE otherwise.
  **/
-gboolean
-gtk_file_system_volume_mount (GtkFileSystem        *file_system, 
-			      GtkFileSystemVolume  *volume,
-			      GError              **error)
+/* FIXME XXX: update documentation above */
+GtkFileSystemHandle *
+gtk_file_system_volume_mount (GtkFileSystem                    *file_system,
+			      GtkFileSystemVolume              *volume,
+			      GtkFileSystemVolumeMountCallback  callback,
+			      gpointer                          data)
 {
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (volume != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+  g_return_val_if_fail (callback != NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_mount (file_system, volume, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_mount (file_system, volume, callback, data);
 }
 
 /**
@@ -485,17 +684,53 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
 				    gint                  pixel_size,
 				    GError              **error)
 {
+  gchar *icon_name;
+  GdkPixbuf *pixbuf;
+
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (volume != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (pixel_size > 0, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_render_icon (file_system,
-								      volume,
-								      widget,
-								      pixel_size,
-								      error);
+  icon_name = gtk_file_system_volume_get_icon_name (file_system, volume,
+						    error);
+  if (!icon_name)
+    {
+      return NULL;
+    }
+
+  pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget)),
+				     icon_name, pixel_size, 0, NULL);
+  g_free (icon_name);
+
+  return pixbuf;
+}
+
+/**
+ * gtk_file_system_volume_get_icon_name:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * @error: location to store error, or %NULL
+ * 
+ * Gets an icon name suitable for a #GtkFileSystemVolume.
+ * 
+ * Return value: An icon name which can be used for rendering an icon for
+ * this volume, or %NULL if no icon name could be found.  In the latter
+ * case, the @error value will be set as appropriate.
+ **/
+gchar *
+gtk_file_system_volume_get_icon_name (GtkFileSystem        *file_system,
+				      GtkFileSystemVolume  *volume,
+				      GError              **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_get_icon_name (file_system,
+								        volume,
+								        error);
 }
 
 /**
@@ -680,21 +915,6 @@ gtk_file_system_path_is_local (GtkFileSystem     *file_system,
   g_free (filename);
 
   return result;
-}
-
-GdkPixbuf *
-gtk_file_system_render_icon (GtkFileSystem      *file_system,
-			     const GtkFilePath  *path,
-			     GtkWidget          *widget,
-			     gint                pixel_size,
-			     GError            **error)
-{
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (pixel_size > 0, NULL);
-
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->render_icon (file_system, path, widget, pixel_size, error);
 }
 
 /**

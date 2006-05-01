@@ -50,6 +50,7 @@ static void gtk_file_system_model_class_init   (GtkFileSystemModelClass *class);
 static void gtk_file_system_model_iface_init   (GtkTreeModelIface       *iface);
 static void gtk_file_system_model_init         (GtkFileSystemModel      *model);
 static void gtk_file_system_model_finalize     (GObject                 *object);
+static void gtk_file_system_model_dispose      (GObject                 *object);
 
 static void drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
@@ -205,6 +206,7 @@ gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_system_model_finalize;
+  gobject_class->dispose = gtk_file_system_model_dispose;
 
   file_system_model_signals[FINISHED_LOADING] =
     g_signal_new (I_("finished-loading"),
@@ -258,9 +260,6 @@ gtk_file_system_model_finalize (GObject *object)
   if (model->file_system)
     g_object_unref (model->file_system);
 
-  if (model->idle_finished_loading_source)
-    g_source_destroy (model->idle_finished_loading_source);
-
   children = model->roots;
   while (children)
     {
@@ -270,6 +269,25 @@ gtk_file_system_model_finalize (GObject *object)
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+static void
+gtk_file_system_model_dispose (GObject *object)
+{
+  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
+
+  if (model->pending_handles)
+    {
+      GSList *l;
+
+      for (l = model->pending_handles; l; l = l->next)
+        gtk_file_system_cancel_operation (l->data);
+      g_slist_free (model->pending_handles);
+      model->pending_handles = NULL;
+    }
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
@@ -630,33 +648,75 @@ root_folder_finished_loading_cb (GtkFileFolder      *folder,
   g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
 }
 
-/* Emits the "finished-loading" signal as an idle handler; see the comment in
- * _gtk_file_system_model_new()
- */
-static gboolean
-idle_finished_loading_cb (GtkFileSystemModel *model)
-{
-  GDK_THREADS_ENTER ();
-
-  g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
-
-  g_source_destroy (model->idle_finished_loading_source);
-  model->idle_finished_loading_source = NULL;
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-
-/* Queues an idle handler to emit the "finished-loading" signal */
 static void
-queue_finished_loading (GtkFileSystemModel *model)
+got_root_folder_cb (GtkFileSystemHandle *handle,
+		    GtkFileFolder       *folder,
+		    const GError        *error,
+		    gpointer             data)
 {
-  model->idle_finished_loading_source = g_idle_source_new ();
-  g_source_set_closure (model->idle_finished_loading_source,
-			g_cclosure_new_object (G_CALLBACK (idle_finished_loading_cb),
-					       G_OBJECT (model)));
-  g_source_attach (model->idle_finished_loading_source, NULL);
+  GSList *roots = NULL;
+  GSList *tmp_list;
+  gboolean cancelled = handle->cancelled;
+  GtkFileSystemModel *model = data;
+
+  tmp_list = g_slist_find (model->pending_handles, handle);
+  if (!tmp_list)
+    goto out;
+
+  model->pending_handles = g_slist_remove_link (model->pending_handles,
+ 						tmp_list);
+
+  if (cancelled || !folder)
+    goto out;
+
+  model->root_folder = folder;
+
+  if (gtk_file_folder_is_finished_loading (model->root_folder))
+    g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
+  else
+    g_signal_connect_object (model->root_folder, "finished-loading",
+			     G_CALLBACK (root_folder_finished_loading_cb), model, 0);
+
+  gtk_file_folder_list_children (model->root_folder, &roots, NULL);
+
+  g_signal_connect_object (model->root_folder, "deleted",
+			   G_CALLBACK (root_deleted_callback), model, 0);
+  g_signal_connect_object (model->root_folder, "files-added",
+			   G_CALLBACK (root_files_added_callback), model, 0);
+  g_signal_connect_object (model->root_folder, "files-changed",
+			   G_CALLBACK (root_files_changed_callback), model, 0);
+  g_signal_connect_object (model->root_folder, "files-removed",
+			   G_CALLBACK (root_files_removed_callback), model, 0);
+
+  roots = gtk_file_paths_sort (roots);
+  
+  for (tmp_list = roots; tmp_list; tmp_list = tmp_list->next)
+    {
+      FileModelNode *node = file_model_node_new (model, tmp_list->data);
+      gtk_file_path_free (tmp_list->data);
+      node->is_visible = file_model_node_is_visible (model, node);
+      node->next = model->roots;
+      node->depth = 0;
+      model->roots = node;
+
+      if (node->is_visible)
+        {
+	  GtkTreeIter iter;
+	  GtkTreePath *path;
+
+	  iter.user_data = node;
+	  path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
+	  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+	  gtk_tree_path_free (path);
+	}
+    }
+  g_slist_free (roots);
+
+  model->roots = (FileModelNode *) g_slist_reverse ((GSList *)model->roots);
+
+out:
+  g_object_unref (model);
+  g_object_unref (handle);
 }
 
 /**
@@ -691,28 +751,15 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 			    GError           **error)
 {
   GtkFileSystemModel *model;
-  GtkFileFolder *root_folder;
-  GSList *roots;
-  GSList *tmp_list;
+  GtkFileSystemHandle *handle;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (root_path != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  /* First, try to load the folder */
+  /* First, start loading the root folder */
 
   types |= GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_IS_HIDDEN;
-  
-  root_folder = gtk_file_system_get_folder (file_system, root_path, types, error);
-
-  if (!root_folder)
-    return NULL;
-
-  if (!gtk_file_folder_list_children (root_folder, &roots, error))
-    {
-      g_object_unref (root_folder);
-      return NULL;
-    }
 
   /* Then, actually create the model and the root nodes */
 
@@ -724,39 +771,32 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
     model->max_depth = MIN (max_depth, G_MAXUSHORT);
 
   model->types = types;
-  model->root_folder = root_folder;
+  model->root_folder = NULL;
   model->root_path = gtk_file_path_copy (root_path);
 
-  if (gtk_file_folder_is_finished_loading (model->root_folder))
-    queue_finished_loading (model); /* done in an idle because we are being created */
-  else
-    g_signal_connect_object (model->root_folder, "finished-loading",
-			     G_CALLBACK (root_folder_finished_loading_cb), model, 0);
+  model->roots = NULL;
 
-  g_signal_connect_object (model->root_folder, "deleted",
-			   G_CALLBACK (root_deleted_callback), model, 0);
-  g_signal_connect_object (model->root_folder, "files-added",
-			   G_CALLBACK (root_files_added_callback), model, 0);
-  g_signal_connect_object (model->root_folder, "files-changed",
-			   G_CALLBACK (root_files_changed_callback), model, 0);
-  g_signal_connect_object (model->root_folder, "files-removed",
-			   G_CALLBACK (root_files_removed_callback), model, 0);
-
-  roots = gtk_file_paths_sort (roots);
-  
-  for (tmp_list = roots; tmp_list; tmp_list = tmp_list->next)
+  handle = gtk_file_system_get_folder (file_system, root_path, types,
+				       got_root_folder_cb,
+				       g_object_ref (model));
+  if (!handle)
     {
-      FileModelNode *node = file_model_node_new (model, tmp_list->data);
-      gtk_file_path_free (tmp_list->data);
-      node->is_visible = file_model_node_is_visible (model, node);
-      node->next = model->roots;
-      node->depth = 0;
-      model->roots = node;
-    }
-  g_slist_free (roots);
+      /* In this case got_root_folder_cb() will never be called, so we
+       * need to unref model twice.
+       */
+      g_object_unref (model);
+      g_object_unref (model);
 
-  model->roots = (FileModelNode *) g_slist_reverse ((GSList *)model->roots);
-  
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		   _("Could not obtain root folder"));
+
+      return NULL;
+    }
+
+  model->pending_handles = g_slist_append (model->pending_handles, handle);
+
   return model;
 }
 
@@ -988,58 +1028,6 @@ find_child_node (GtkFileSystemModel *model,
 
   return NULL;
 }
-		 
-
-static FileModelNode *
-find_and_ref_path (GtkFileSystemModel  *model,
-		   const GtkFilePath   *path,
-		   GSList             **cleanups)
-{
-  GtkFilePath *parent_path;
-  FileModelNode *parent_node;
-  FileModelNode *child_node;
-  GtkFileFolder *folder;
-
-  if (gtk_file_path_compare (path, model->root_path) == 0
-      || !gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL))
-    return NULL;
-
-  if (parent_path)
-    {
-      parent_node = find_and_ref_path (model, parent_path, cleanups);
-      gtk_file_path_free (parent_path);
-    }
-  else
-    parent_node = NULL;
-
-  child_node = find_child_node (model, parent_node, path);
-  if (child_node)
-    {
-      file_model_node_ref (child_node);
-      return child_node;
-    }
-
-  folder = gtk_file_system_get_folder (model->file_system,
-				       path,
-				       model->types,
-				       NULL);	/* NULL-GError */
-  if (folder)
-    {
-      *cleanups = g_slist_prepend (*cleanups, folder);
-
-      child_node = find_child_node (model, parent_node, path);
-      if (child_node)
-	{
-	  file_model_node_ref (child_node);
-	  return child_node;
-	}
-    }
-
-  if (parent_node)
-    unref_node_and_parents (model, parent_node);
-
-  return NULL;
-}
 
 /**
  * _gtk_file_system_model_set_filter:
@@ -1062,6 +1050,126 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
   model->filter_data = user_data;
 
   model_refilter_all (model);
+}
+
+
+struct RefPathData
+{
+  GtkFileSystemModel *model;
+  FileModelNode *node;
+  FileModelNode *parent_node;
+  GSList *paths;
+  GSList *cleanups;
+  GtkFileSystemModelPathFunc func;
+  gpointer user_data;
+};
+
+/* FIXME: maybe we have to wait on finished-loading? */
+static void
+ref_path_cb (GtkFileSystemHandle *handle,
+	     GtkFileFolder       *folder,
+	     const GError        *error,
+	     gpointer             data)
+{
+  struct RefPathData *info = data;
+  gboolean cancelled = handle->cancelled;
+
+  if (!g_slist_find (info->model->pending_handles, handle))
+    goto out;
+
+  info->model->pending_handles = g_slist_remove (info->model->pending_handles, handle);
+
+  /* Note that !folder means that the child node was already
+   * found, without using get_folder.
+   */
+  if (cancelled || error)
+    goto out;
+
+  if (folder)
+    info->cleanups = g_slist_prepend (info->cleanups, folder);
+  else if (g_slist_length (info->paths) == 1
+           && gtk_file_path_compare (info->node->path, info->paths->data) == 0)
+    {
+      /* Done, now call the function */
+      if (info->node)
+        {
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          iter.user_data = info->node;
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (info->model), &iter);
+
+          (* info->func) (info->model, path, &iter, info->user_data);
+
+          gtk_tree_path_free (path);
+        }
+
+      goto out;
+    }
+
+  info->node = find_child_node (info->model, info->parent_node, info->paths->data);
+  if (info->node)
+    file_model_node_ref (info->node);
+  else
+    {
+      goto out;
+    }
+
+  gtk_file_path_free (info->paths->data);
+  info->paths = g_slist_remove (info->paths, info->paths->data);
+
+  if (g_slist_length (info->paths) < 1)
+    {
+      /* Done, now call the function */
+      if (info->node)
+        {
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          iter.user_data = info->node;
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (info->model), &iter);
+
+          (* info->func) (info->model, path, &iter, info->user_data);
+
+          gtk_tree_path_free (path);
+        }
+
+      goto out;
+    }
+  else
+    {
+      info->parent_node = info->node;
+
+      if (info->parent_node->loaded)
+        {
+          info->node = find_child_node (info->model, info->parent_node, info->paths->data);
+          ref_path_cb (NULL, NULL, NULL, info);
+        }
+      else
+        {
+	  GtkFileSystemHandle *handle;
+
+          handle = gtk_file_system_get_folder (info->model->file_system,
+				               info->paths->data,
+					       info->model->types,
+				               ref_path_cb, data);
+	  info->model->pending_handles =
+	    g_slist_append (info->model->pending_handles, handle);
+        }
+
+      return;
+    }
+
+out:
+  if (info->node)
+    unref_node_and_parents (info->model, info->node);
+  gtk_file_paths_free (info->paths);
+  g_slist_foreach (info->cleanups, (GFunc)g_object_unref, NULL);
+  g_slist_free (info->cleanups);
+  g_object_unref (info->model);
+  g_free (info);
+
+  g_object_unref (handle);
 }
 
 /**
@@ -1090,33 +1198,90 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
  * Return value: %TRUE if the path was successfully
  *  found in @model and @func was called.
  **/
-gboolean
-_gtk_file_system_model_path_do (GtkFileSystemModel       *model,
-			       const GtkFilePath         *path,
-			       GtkFileSystemModelPathFunc func,
-			       gpointer                   user_data)
+void
+_gtk_file_system_model_path_do (GtkFileSystemModel        *model,
+			        const GtkFilePath         *path,
+			        GtkFileSystemModelPathFunc func,
+			        gpointer                   user_data)
 {
-  GSList *cleanups = NULL;
-  FileModelNode *node = find_and_ref_path (model, path, &cleanups);
+  GtkFilePath *parent_path;
+  GSList *paths = NULL;
+  FileModelNode *node;
+  struct RefPathData *info;
 
-  if (node)
+  if (gtk_file_path_compare (path, model->root_path) == 0
+      || !gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL))
+    return;
+
+  paths = g_slist_prepend (paths, gtk_file_path_copy (path));
+  while (gtk_file_path_compare (parent_path, model->root_path) != 0)
     {
-      GtkTreeIter iter;
-      GtkTreePath *path;
-
-      iter.user_data = node;
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
-
-      (*func) (model, path, &iter, user_data);
-
-      gtk_tree_path_free (path);
-      unref_node_and_parents (model, node);
+      paths = g_slist_prepend (paths, parent_path);
+      if (!gtk_file_system_get_parent (model->file_system, parent_path, &parent_path, NULL))
+        {
+	  gtk_file_paths_free (paths);
+	  return;
+	}
     }
 
-  g_slist_foreach (cleanups, (GFunc)g_object_unref, NULL);
-  g_slist_free (cleanups);
+  if (g_slist_length (paths) < 1)
+    return;
 
-  return node != NULL;
+  /* Now we have all paths, except the root path */
+  node = find_child_node (model, NULL, paths->data);
+  if (!node)
+    {
+      gtk_file_paths_free (paths);
+      return;
+    }
+
+  file_model_node_ref (node);
+
+  gtk_file_path_free (paths->data);
+  paths = g_slist_remove (paths, paths->data);
+
+  if (g_slist_length (paths) < 1)
+    {
+      /* Done, now call the function */
+      if (node)
+        {
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          iter.user_data = node;
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
+
+          (* func) (model, path, &iter, user_data);
+
+          gtk_tree_path_free (path);
+          unref_node_and_parents (model, node);
+        }
+    }
+  else
+    {
+      info = g_new0 (struct RefPathData, 1);
+      info->paths = paths;
+      info->model = g_object_ref (model);
+      info->func = func;
+      info->user_data = user_data;
+      info->node = node;
+
+      if (info->node->loaded)
+        {
+	  info->parent_node = info->node;
+          info->node = find_child_node (model, info->parent_node, info->paths->data);
+          ref_path_cb (NULL, NULL, NULL, info);
+        }
+      else
+        {
+	  GtkFileSystemHandle *handle;
+
+          handle = gtk_file_system_get_folder (model->file_system,
+					       paths->data, model->types,
+					       ref_path_cb, info);
+	  model->pending_handles = g_slist_append (model->pending_handles, handle);
+        }
+    }
 }
 
 /**
@@ -1389,6 +1554,114 @@ file_model_node_child_unref (FileModelNode *parent)
     file_model_node_idle_clear (parent);
 }
 
+struct GetChildrenData
+{
+  GtkFileSystemModel *model;
+  FileModelNode *node;
+};
+
+static void
+get_children_get_folder_cb (GtkFileSystemHandle *handle,
+			    GtkFileFolder       *folder,
+			    const GError        *error,
+			    gpointer             callback_data)
+{
+  GSList *child_paths, *tmp_list;
+  gboolean has_children = FALSE;
+  gboolean cancelled = handle->cancelled;
+  struct GetChildrenData *data = callback_data;
+
+  tmp_list = g_slist_find (data->model->pending_handles, handle);
+
+  if (!tmp_list)
+    goto out;
+
+  data->model->pending_handles = g_slist_remove_link (data->model->pending_handles, tmp_list);
+
+  if (cancelled || !folder)
+    {
+      /* error, no folder, remove dummy child */
+      if (data->node->parent && data->node->parent->has_dummy)
+        {
+          data->node->parent->children = NULL;
+          data->node->parent->has_dummy = FALSE;
+	}
+
+      file_model_node_free (data->node);
+
+      goto out;
+    }
+
+  data->node->folder = folder;
+  data->node->load_pending = FALSE;
+
+  if (gtk_file_folder_list_children (folder, &child_paths, NULL)) /* NULL-GError */
+    {
+      child_paths = gtk_file_paths_sort (child_paths);
+
+      for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
+	{
+	  FileModelNode *child_node = file_model_node_new (data->model, tmp_list->data);
+	  gtk_file_path_free (tmp_list->data);
+	  child_node->next = data->node->children;
+	  child_node->parent = data->node;
+	  child_node->depth = data->node->depth + 1;
+	  child_node->is_visible = file_model_node_is_visible (data->model, child_node);
+
+	  if (child_node->is_visible)
+	    {
+	      GtkTreeIter iter;
+	      GtkTreePath *path;
+
+	      has_children = TRUE;
+
+	      iter.user_data = child_node;
+	      path = gtk_tree_model_get_path (GTK_TREE_MODEL (data->model), &iter);
+	      gtk_tree_model_row_inserted (GTK_TREE_MODEL (data->model), path, &iter);
+	      gtk_tree_path_free (path);
+	    }
+
+	  data->node->children = child_node;
+	}
+      g_slist_free (child_paths);
+    }
+
+  data->node->children = (FileModelNode *)g_slist_reverse ((GSList *)data->node->children);
+
+  g_signal_connect (data->node->folder, "deleted",
+		    G_CALLBACK (deleted_callback), data->node);
+  g_signal_connect (data->node->folder, "files-added",
+		    G_CALLBACK (files_added_callback), data->node);
+  g_signal_connect (data->node->folder, "files-changed",
+		    G_CALLBACK (files_changed_callback), data->node);
+  g_signal_connect (data->node->folder, "files-removed",
+		    G_CALLBACK (files_removed_callback), data->node);
+
+  data->node->loaded = TRUE;
+
+  if (!has_children)
+    {
+      /* The hard case ... we claimed this folder had children, but actually
+       * it didn't. We have to add a dummy child, possibly to remove later.
+       */
+      FileModelNode *child_node = file_model_node_new (data->model, NULL);
+      child_node->is_visible = TRUE;
+      child_node->parent = data->node;
+      child_node->is_dummy = TRUE;
+
+      data->node->children = child_node;
+      data->node->has_dummy = TRUE;
+    }
+
+  g_object_set_data (G_OBJECT (data->node->folder), I_("model-node"), data->node);
+
+out:
+  g_object_unref (data->model);
+  g_free (data);
+
+  g_object_unref (handle);
+}
+
 static FileModelNode *
 file_model_node_get_children (GtkFileSystemModel *model,
 			      FileModelNode      *node)
@@ -1396,7 +1669,7 @@ file_model_node_get_children (GtkFileSystemModel *model,
   if (node->ref_count == 0)
     return NULL;
 
-  if (!node->loaded)
+  if (!node->loaded && !node->load_pending)
     {
       const GtkFileInfo *info = file_model_node_get_info (model, node);
       gboolean has_children = FALSE;
@@ -1405,48 +1678,25 @@ file_model_node_get_children (GtkFileSystemModel *model,
       file_model_node_idle_clear_cancel (node);
 
       if (is_folder)
-	node->folder = gtk_file_system_get_folder (model->file_system,
-						   node->path,
-						   model->types,
-						   NULL);	/* NULL-GError */
+        {
+	  struct GetChildrenData *data;
+	  GtkFileSystemHandle *handle;
 
-      if (node->folder)
-	{
-	  GSList *child_paths, *tmp_list;
-	  
-	  if (gtk_file_folder_list_children (node->folder, &child_paths, NULL)) /* NULL-GError */
-	    {
-	      child_paths = gtk_file_paths_sort (child_paths);
+	  data = g_new (struct GetChildrenData, 1);
+	  data->model = g_object_ref (model);
+	  data->node = node;
 
-	      for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
-		{
-		  FileModelNode *child_node = file_model_node_new (model, tmp_list->data);
-		  gtk_file_path_free (tmp_list->data);
-		  child_node->next = node->children;
-		  child_node->parent = node;
-		  child_node->depth = node->depth + 1;
-		  child_node->is_visible = file_model_node_is_visible (model, child_node);
-		  if (child_node->is_visible)
-		    has_children = TRUE;
-		  node->children = child_node;
-		}
-	      g_slist_free (child_paths);
-	    }
+	  handle =
+	    gtk_file_system_get_folder (model->file_system,
+				        node->path,
+				        model->types,
+				        get_children_get_folder_cb,
+				        data);
 
-	  node->children = (FileModelNode *)g_slist_reverse ((GSList *)node->children);
-
-	  g_signal_connect (node->folder, "deleted",
-			    G_CALLBACK (deleted_callback), node);
-	  g_signal_connect (node->folder, "files-added",
-			    G_CALLBACK (files_added_callback), node);
-	  g_signal_connect (node->folder, "files-changed",
-			    G_CALLBACK (files_changed_callback), node);
-	  g_signal_connect (node->folder, "files-removed",
-			    G_CALLBACK (files_removed_callback), node);
-
-	  g_object_set_data (G_OBJECT (node->folder), I_("model-node"), node);
+	  model->pending_handles = g_slist_append (model->pending_handles, handle);
+	  node->load_pending = TRUE;
 	}
-      
+
       if (is_folder && !has_children)
 	{
 	  /* The hard case ... we claimed this folder had children, but actually
@@ -1460,8 +1710,6 @@ file_model_node_get_children (GtkFileSystemModel *model,
 	  node->children = child_node;
 	  node->has_dummy = TRUE;
 	}
-
-      node->loaded = TRUE;
     }
 
   return node->children;
