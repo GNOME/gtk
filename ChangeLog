@@ -9,23 +9,23 @@
 
 	* configure.in: increase binary version to 2.9.0.
 
-	* gtk.symbols:
-	* gtkfilechooser.c:
-	* gtkfilechooserbutton.c:
-	* gtkfilechooserdefault.c:
-	* gtkfilechooserdialog.c:
-	* gtkfilechooserembed.c:
-	* gtkfilechooserembed.h:
-	* gtkfilechooserentry.c:
-	* gtkfilechooserentry.h:
-	* gtkfilechooserprivate.h:
-	* gtkfilesystem.c:
-	* gtkfilesystem.h:
-	* gtkfilesystemmodel.c:
-	* gtkfilesystemmodel.h:
-	* gtkfilesystemunix.c:
-	* gtkpathbar.c:
-	* gtkpathbar.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkfilechooser.c:
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserdialog.c:
+	* gtk/gtkfilechooserembed.c:
+	* gtk/gtkfilechooserembed.h:
+	* gtk/gtkfilechooserentry.c:
+	* gtk/gtkfilechooserentry.h:
+	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilesystem.c:
+	* gtk/gtkfilesystem.h:
+	* gtk/gtkfilesystemmodel.c:
+	* gtk/gtkfilesystemmodel.h:
+	* gtk/gtkfilesystemunix.c:
+	* gtk/gtkpathbar.c:
+	* gtk/gtkpathbar.h:
 	Merge from kris-async-branch.
 
 2006-05-01  Matthias Clasen  <mclasen@dhcp83-48.boston.redhat.com>
