@@ -1,3 +1,8 @@
+2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_base_init): Document
+	GtkTreeModel signals.
+
 2006-04-19  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkdrawable-directfb.c: removed all subtracting one on

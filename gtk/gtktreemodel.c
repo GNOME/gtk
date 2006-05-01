@@ -146,10 +146,18 @@ gtk_tree_model_base_init (gpointer g_class)
       rows_reordered_params[1] = GTK_TYPE_TREE_ITER;
       rows_reordered_params[2] = G_TYPE_POINTER;
 
+      /**
+       * GtkTreeModel::row-changed:
+       * @tree_model: the #GtkTreeModel on which the signal is emitted
+       * @path: a #GtkTreePath identifying the changed row
+       * @iter: a valid #GtkTreeIter pointing to the changed row
+       *
+       * Gets emitted when a row in the model has changed.
+       */
       tree_model_signals[ROW_CHANGED] =
         g_signal_new (I_("row_changed"),
                       GTK_TYPE_TREE_MODEL,
-                      G_SIGNAL_RUN_LAST,
+                      G_SIGNAL_RUN_LAST, 
                       G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
                       NULL, NULL,
                       _gtk_marshal_VOID__BOXED_BOXED,
@@ -169,6 +177,19 @@ gtk_tree_model_base_init (gpointer g_class)
        * is to keep proper ordering with respect to signal handlers
        * connected normally and after.
        */
+
+      /**
+       * GtkTreeModel::row-inserted:
+       * @tree_model: the #GtkTreeModel on which the signal is emitted
+       * @path: a #GtkTreePath identifying the new row
+       * @iter: a valid #GtkTreeIter pointing to the new row
+       *
+       * Gets emitted when a new row has been inserted in the model.
+       *
+       * Note that the row may still be empty at this point, since
+       * it is a common pattern to first insert an empty row, and 
+       * then fill it with the desired values.
+       */
       closure = g_closure_new_simple (sizeof (GClosure), NULL);
       g_closure_set_marshal (closure, row_inserted_marshal);
       tree_model_signals[ROW_INSERTED] =
@@ -181,6 +202,15 @@ gtk_tree_model_base_init (gpointer g_class)
                        G_TYPE_NONE, 2,
                        row_inserted_params);
 
+      /**
+       * GtkTreeModel::row-has-child-toggled:
+       * @tree_model: the #GtkTreeModel on which the signal is emitted
+       * @path: a #GtkTreePath identifying the row
+       * @iter: a valid #GtkTreeIter pointing to the row
+       *
+       * Gets emitted when a row has gotten the first child row or lost
+       * its last child row.
+       */
       tree_model_signals[ROW_HAS_CHILD_TOGGLED] =
         g_signal_new (I_("row_has_child_toggled"),
                       GTK_TYPE_TREE_MODEL,
@@ -192,6 +222,16 @@ gtk_tree_model_base_init (gpointer g_class)
                       GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE,
                       GTK_TYPE_TREE_ITER);
 
+      /**
+       * GtkTreeModel::row-deleted:
+       * @tree_model: the #GtkTreeModel on which the signal is emitted
+       * @path: a #GtkTreePath identifying the row
+       *
+       * Gets emitted when a row has been deleted.
+       *
+       * Note that no iterator is passed to the signal handler,
+       * since the row is already deleted.
+       */
       closure = g_closure_new_simple (sizeof (GClosure), NULL);
       g_closure_set_marshal (closure, row_deleted_marshal);
       tree_model_signals[ROW_DELETED] =
@@ -204,6 +244,20 @@ gtk_tree_model_base_init (gpointer g_class)
                        G_TYPE_NONE, 1,
                        row_deleted_params);
 
+      /**
+       * GtkTreeModel::rows-reordered:
+       * @tree_model: the #GtkTreeModel on which the signal is emitted
+       * @path: a #GtkTreePath identifying the tree node whose children
+       *        have been reordered
+       * @iter: a valid #GtkTreeIter pointing to the node whose 
+       *
+       * Gets emitted when the children of a node in the #GtkTreeModel
+       * have been reordered. 
+       *
+       * Note that this signal is <emphasis>not</emphasis> emitted
+       * when rows are reordered by DND, since this is implemented
+       * by removing and then reinserting the row.
+       */
       closure = g_closure_new_simple (sizeof (GClosure), NULL);
       g_closure_set_marshal (closure, rows_reordered_marshal);
       tree_model_signals[ROWS_REORDERED] =
