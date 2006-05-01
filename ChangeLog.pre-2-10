@@ -1,3 +1,7 @@
+2006-05-02  Kristian Rietveld  <kris@imendio.com>
+
+	* configure.in: Up ABI version to 2.10.0 (by Matthias' request).
+
 2006-05-01  Kristian Rietveld  <kris@imendio.com>
 
 	Merge of the GTK+ asynchronous file chooser branch.  Please see
