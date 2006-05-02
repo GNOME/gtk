@@ -80,22 +80,23 @@ static void
 gtk_print_operation_finalize (GObject *object)
 {
   GtkPrintOperation *print_operation = GTK_PRINT_OPERATION (object);
+  GtkPrintOperationPrivate *priv = print_operation->priv;
 
-  if (print_operation->priv->free_platform_data &&
-      print_operation->priv->platform_data)
+  if (priv->free_platform_data &&
+      priv->platform_data)
     {
-      print_operation->priv->free_platform_data (print_operation->priv->platform_data);
-      print_operation->priv->free_platform_data = NULL;
+      priv->free_platform_data (priv->platform_data);
+      priv->free_platform_data = NULL;
     }
 
-  if (print_operation->priv->default_page_setup)
-    g_object_unref (print_operation->priv->default_page_setup);
+  if (priv->default_page_setup)
+    g_object_unref (priv->default_page_setup);
   
-  if (print_operation->priv->print_settings)
-    g_object_unref (print_operation->priv->print_settings);
+  if (priv->print_settings)
+    g_object_unref (priv->print_settings);
   
-  g_free (print_operation->priv->pdf_target);
-  g_free (print_operation->priv->job_name);
+  g_free (priv->pdf_target);
+  g_free (priv->job_name);
 
   G_OBJECT_CLASS (gtk_print_operation_parent_class)->finalize (object);
 }
@@ -103,25 +104,25 @@ gtk_print_operation_finalize (GObject *object)
 static void
 gtk_print_operation_init (GtkPrintOperation *operation)
 {
+  GtkPrintOperationPrivate *priv;
   const char *appname;
 
-  operation->priv = GTK_PRINT_OPERATION_GET_PRIVATE (operation);
+  priv = operation->priv = GTK_PRINT_OPERATION_GET_PRIVATE (operation);
 
-  operation->priv->status = GTK_PRINT_STATUS_INITIAL;
-  operation->priv->status_string = g_strdup ("");
-  operation->priv->default_page_setup = NULL;
-  operation->priv->print_settings = NULL;
-  operation->priv->nr_of_pages = -1;
-  operation->priv->current_page = -1;
-  operation->priv->use_full_page = FALSE;
-  operation->priv->show_dialog = TRUE;
-  operation->priv->pdf_target = NULL;
+  priv->status = GTK_PRINT_STATUS_INITIAL;
+  priv->status_string = g_strdup ("");
+  priv->default_page_setup = NULL;
+  priv->print_settings = NULL;
+  priv->nr_of_pages = -1;
+  priv->current_page = -1;
+  priv->use_full_page = FALSE;
+  priv->show_dialog = TRUE;
+  priv->pdf_target = NULL;
 
-  operation->priv->unit = GTK_UNIT_PIXEL;
+  priv->unit = GTK_UNIT_PIXEL;
 
   appname = g_get_application_name ();
-  operation->priv->job_name = g_strdup_printf ("%s job #%d",
-					       appname, ++job_nr);
+  priv->job_name = g_strdup_printf ("%s job #%d", appname, ++job_nr);
 }
 
 static void
@@ -174,41 +175,42 @@ gtk_print_operation_get_property (GObject    *object,
 				  GParamSpec *pspec)
 {
   GtkPrintOperation *op = GTK_PRINT_OPERATION (object);
-  
+  GtkPrintOperationPrivate *priv = op->priv;
+
   switch (prop_id)
     {
     case PROP_DEFAULT_PAGE_SETUP:
-      g_value_set_object (value, op->priv->default_page_setup);
+      g_value_set_object (value, priv->default_page_setup);
       break;
     case PROP_PRINT_SETTINGS:
-      g_value_set_object (value, op->priv->print_settings);
+      g_value_set_object (value, priv->print_settings);
       break;
     case PROP_JOB_NAME:
-      g_value_set_string (value, op->priv->job_name);
+      g_value_set_string (value, priv->job_name);
       break;
     case PROP_NR_OF_PAGES:
-      g_value_set_int (value, op->priv->nr_of_pages);
+      g_value_set_int (value, priv->nr_of_pages);
       break;
     case PROP_CURRENT_PAGE:
-      g_value_set_int (value, op->priv->current_page);
+      g_value_set_int (value, priv->current_page);
       break;      
     case PROP_USE_FULL_PAGE:
-      g_value_set_boolean (value, op->priv->use_full_page);
+      g_value_set_boolean (value, priv->use_full_page);
       break;
     case PROP_UNIT:
-      g_value_set_enum (value, op->priv->unit);
+      g_value_set_enum (value, priv->unit);
       break;
     case PROP_SHOW_DIALOG:
-      g_value_set_boolean (value, op->priv->show_dialog);
+      g_value_set_boolean (value, priv->show_dialog);
       break;
     case PROP_PDF_TARGET:
-      g_value_set_string (value, op->priv->pdf_target);
+      g_value_set_string (value, priv->pdf_target);
       break;
     case PROP_STATUS:
-      g_value_set_enum (value, op->priv->status);
+      g_value_set_enum (value, priv->status);
       break;
     case PROP_STATUS_STRING:
-      g_value_set_string (value, op->priv->status_string);
+      g_value_set_string (value, priv->status_string);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -600,19 +602,23 @@ void
 gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
 					    GtkPageSetup      *default_page_setup)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (default_page_setup == NULL || 
                     GTK_IS_PAGE_SETUP (default_page_setup));
 
-  if (default_page_setup != op->priv->default_page_setup)
+  priv = op->priv;
+
+  if (default_page_setup != priv->default_page_setup)
     {
       if (default_page_setup)
 	g_object_ref (default_page_setup);
       
-      if (op->priv->default_page_setup)
-	g_object_unref (op->priv->default_page_setup);
+      if (priv->default_page_setup)
+	g_object_unref (priv->default_page_setup);
       
-      op->priv->default_page_setup = default_page_setup;
+      priv->default_page_setup = default_page_setup;
      
       g_object_notify (G_OBJECT (op), "default-page-setup");
     }
@@ -653,19 +659,23 @@ void
 gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 					GtkPrintSettings  *print_settings)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (print_settings == NULL || 
                     GTK_IS_PRINT_SETTINGS (print_settings));
 
-  if (print_settings != op->priv->print_settings)
+  priv = op->priv;
+
+  if (print_settings != priv->print_settings)
     {
       if (print_settings)
         g_object_ref (print_settings);
 
-      if (op->priv->print_settings)
-        g_object_unref (op->priv->print_settings);
+      if (priv->print_settings)
+        g_object_unref (priv->print_settings);
   
-      op->priv->print_settings = print_settings;
+      priv->print_settings = print_settings;
 
       g_object_notify (G_OBJECT (op), "print-settings");
     }
@@ -710,11 +720,15 @@ void
 gtk_print_operation_set_job_name (GtkPrintOperation *op,
 				  const gchar       *job_name)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (g_utf8_validate (job_name, -1, NULL));
 
-  g_free (op->priv->job_name);
-  op->priv->job_name = g_strdup (job_name);
+  priv = op->priv;
+
+  g_free (priv->job_name);
+  priv->job_name = g_strdup (job_name);
 
   g_object_notify (G_OBJECT (op), "job-name");
 }
@@ -741,14 +755,18 @@ void
 gtk_print_operation_set_nr_of_pages (GtkPrintOperation *op,
 				     gint               n_pages)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (n_pages > 0);
-  g_return_if_fail (op->priv->current_page == -1 || 
-		    op->priv->current_page < n_pages);
 
-  if (op->priv->nr_of_pages != n_pages)
+  priv = op->priv;
+  g_return_if_fail (priv->current_page == -1 || 
+		    priv->current_page < n_pages);
+
+  if (priv->nr_of_pages != n_pages)
     {
-      op->priv->nr_of_pages = n_pages;
+      priv->nr_of_pages = n_pages;
 
       g_object_notify (G_OBJECT (op), "number-of-pages");
     }
@@ -772,14 +790,18 @@ void
 gtk_print_operation_set_current_page (GtkPrintOperation *op,
 				      gint               current_page)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (current_page >= 0);
-  g_return_if_fail (op->priv->nr_of_pages == -1 || 
-		    current_page < op->priv->nr_of_pages);
- 
-  if (op->priv->current_page != current_page)
+
+  priv = op->priv;
+  g_return_if_fail (priv->nr_of_pages == -1 || 
+		    current_page < priv->nr_of_pages);
+
+  if (priv->current_page != current_page)
     {
-      op->priv->current_page = current_page;
+      priv->current_page = current_page;
 
       g_object_notify (G_OBJECT (op), "current-page");
     }
@@ -803,13 +825,17 @@ void
 gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
 				       gboolean           full_page)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
   full_page = full_page != FALSE;
-  
-  if (op->priv->use_full_page != full_page)
+ 
+  priv = op->priv;
+	
+  if (priv->use_full_page != full_page)
     {
-      op->priv->use_full_page = full_page;
+      priv->use_full_page = full_page;
    
       g_object_notify (G_OBJECT (op), "use-full-page");
     }
@@ -830,11 +856,15 @@ void
 gtk_print_operation_set_unit (GtkPrintOperation *op,
 			      GtkUnit            unit)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
-  if (op->priv->unit != unit)
+  priv = op->priv;
+
+  if (priv->unit != unit)
     {
-      op->priv->unit = unit;
+      priv->unit = unit;
 
       g_object_notify (G_OBJECT (op), "unit");
     }
@@ -845,7 +875,8 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
 				 GtkPrintStatus     status,
 				 const gchar       *string)
 {
-  const gchar *status_strs[] = {
+  GtkPrintOperationPrivate *priv = op->priv;
+  static const gchar *status_strs[] = {
     /* translators, strip the prefix up to and including the first | */
     N_("print operation status|Initial state"),
     /* translators, strip the prefix up to and including the first | */
@@ -873,13 +904,13 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
     string = g_strip_context (status_strs[status],
 			      gettext (status_strs[status]));
   
-  if (op->priv->status == status &&
-      strcmp (string, op->priv->status_string) == 0)
+  if (priv->status == status &&
+      strcmp (string, priv->status_string) == 0)
     return;
   
-  g_free (op->priv->status_string);
-  op->priv->status_string = g_strdup (string);
-  op->priv->status = status;
+  g_free (priv->status_string);
+  priv->status_string = g_strdup (string);
+  priv->status = status;
 
   g_object_notify (G_OBJECT (op), "status");
   g_object_notify (G_OBJECT (op), "status-string");
@@ -947,11 +978,14 @@ gtk_print_operation_get_status_string (GtkPrintOperation *op)
 gboolean
 gtk_print_operation_is_finished (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), TRUE);
 
+  priv = op->priv;
   return
-    op->priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED ||
-    op->priv->status == GTK_PRINT_STATUS_FINISHED;
+    priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED ||
+    priv->status == GTK_PRINT_STATUS_FINISHED;
 }
 
 
@@ -969,13 +1003,17 @@ void
 gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
 				     gboolean           show_dialog)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-  
+
+  priv = op->priv;
+
   show_dialog = show_dialog != FALSE;
 
-  if (op->priv->show_dialog != show_dialog)
+  if (priv->show_dialog != show_dialog)
     {
-      op->priv->show_dialog = show_dialog;
+      priv->show_dialog = show_dialog;
 
       g_object_notify (G_OBJECT (op), "show-dialog");
     }
@@ -1000,10 +1038,14 @@ void
 gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
 				    const gchar       *filename)
 {
+  GtkPrintOperationPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
-  g_free (op->priv->pdf_target);
-  op->priv->pdf_target = g_strdup (filename);
+  priv = op->priv;
+
+  g_free (priv->pdf_target);
+  priv->pdf_target = g_strdup (filename);
 
   g_object_notify (G_OBJECT (op), "pdf-target");
 }
@@ -1022,15 +1064,16 @@ gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
 static GtkPageSetup *
 create_page_setup (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = op->priv;
   GtkPageSetup *page_setup;
   GtkPrintSettings *settings;
   
-  if (op->priv->default_page_setup)
-    page_setup = gtk_page_setup_copy (op->priv->default_page_setup);
+  if (priv->default_page_setup)
+    page_setup = gtk_page_setup_copy (priv->default_page_setup);
   else
     page_setup = gtk_page_setup_new ();
 
-  settings = op->priv->print_settings;
+  settings = priv->print_settings;
   if (settings)
     {
       GtkPaperSize *paper_size;
@@ -1074,8 +1117,10 @@ pdf_end_page (GtkPrintOperation *op,
 static void
 pdf_end_run (GtkPrintOperation *op)
 {
-  cairo_surface_destroy (op->priv->surface);
-  op->priv->surface = NULL;
+  GtkPrintOperationPrivate *priv = op->priv;
+
+  cairo_surface_destroy (priv->surface);
+  priv->surface = NULL;
 }
 
 static GtkPrintOperationResult
@@ -1084,6 +1129,7 @@ run_pdf (GtkPrintOperation  *op,
 	 gboolean           *do_print,
 	 GError            **error)
 {
+  GtkPrintOperationPrivate *priv = op->priv;
   GtkPageSetup *page_setup;
   double width, height;
   /* This will be overwritten later by the non-default size, but
@@ -1094,22 +1140,22 @@ run_pdf (GtkPrintOperation  *op,
   height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   g_object_unref (page_setup);
   
-  op->priv->surface = cairo_pdf_surface_create (op->priv->pdf_target,
-						width, height);
+  priv->surface = cairo_pdf_surface_create (priv->pdf_target,
+					    width, height);
   /* TODO: DPI from settings object? */
-  cairo_pdf_surface_set_dpi (op->priv->surface, 300, 300);
+  cairo_pdf_surface_set_dpi (priv->surface, 300, 300);
   
-  op->priv->dpi_x = 72;
-  op->priv->dpi_y = 72;
+  priv->dpi_x = 72;
+  priv->dpi_y = 72;
 
-  op->priv->manual_num_copies = 1;
-  op->priv->manual_collation = FALSE;
+  priv->manual_num_copies = 1;
+  priv->manual_collation = FALSE;
   
   *do_print = TRUE;
   
-  op->priv->start_page = pdf_start_page;
-  op->priv->end_page = pdf_end_page;
-  op->priv->end_run = pdf_end_run;
+  priv->start_page = pdf_start_page;
+  priv->end_page = pdf_end_page;
+  priv->end_run = pdf_end_run;
   
   return GTK_PRINT_OPERATION_RESULT_APPLY; 
 }
@@ -1117,6 +1163,7 @@ run_pdf (GtkPrintOperation  *op,
 static void
 print_pages (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = op->priv;
   int page, range;
   GtkPageSetup *initial_page_setup, *page_setup;
   GtkPrintContext *print_context;
@@ -1127,15 +1174,15 @@ print_pages (GtkPrintOperation *op)
   GtkPageRange one_range;
   int num_ranges;
 
-  if (op->priv->manual_collation)
+  if (priv->manual_collation)
     {
-      uncollated_copies = op->priv->manual_num_copies;
+      uncollated_copies = priv->manual_num_copies;
       collated_copies = 1;
     }
   else
     {
       uncollated_copies = 1;
-      collated_copies = op->priv->manual_num_copies;
+      collated_copies = priv->manual_num_copies;
     }
 
   print_context = _gtk_print_context_new (op);
@@ -1146,27 +1193,27 @@ print_pages (GtkPrintOperation *op)
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
-  g_return_if_fail (op->priv->nr_of_pages > 0);
+  g_return_if_fail (priv->nr_of_pages > 0);
 
-  if (op->priv->print_pages == GTK_PRINT_PAGES_RANGES)
+  if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
     {
-      ranges = op->priv->page_ranges;
-      num_ranges = op->priv->num_page_ranges;
+      ranges = priv->page_ranges;
+      num_ranges = priv->num_page_ranges;
     }
-  else if (op->priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
-	   op->priv->current_page != -1)
+  else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
+	   priv->current_page != -1)
     {
       ranges = &one_range;
       num_ranges = 1;
-      ranges[0].start = op->priv->current_page;
-      ranges[0].end = op->priv->current_page;
+      ranges[0].start = priv->current_page;
+      ranges[0].end = priv->current_page;
     }
   else
     {
       ranges = &one_range;
       num_ranges = 1;
       ranges[0].start = 0;
-      ranges[0].end = op->priv->nr_of_pages - 1;
+      ranges[0].end = priv->nr_of_pages - 1;
     }
   
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA, NULL);
@@ -1179,7 +1226,7 @@ print_pages (GtkPrintOperation *op)
 	  int low = ranges[range].start;
 	  int high = ranges[range].end;
 	  
-	  if (op->priv->manual_reverse)
+	  if (priv->manual_reverse)
 	    {
 	      start = high;
 	      end = low - 1;
@@ -1193,8 +1240,8 @@ print_pages (GtkPrintOperation *op)
 	    }
 	  for (page = start; page != end; page += inc)
 	    {
-	      if ((op->priv->manual_page_set == GTK_PAGE_SET_EVEN && page % 2 == 0) ||
-		  (op->priv->manual_page_set == GTK_PAGE_SET_ODD && page % 2 == 1))
+	      if ((priv->manual_page_set == GTK_PAGE_SET_EVEN && page % 2 == 0) ||
+		  (priv->manual_page_set == GTK_PAGE_SET_ODD && page % 2 == 1))
 		continue;
 	      
 	      for (j = 0; j < collated_copies; j++)
@@ -1203,26 +1250,26 @@ print_pages (GtkPrintOperation *op)
 		  g_signal_emit (op, signals[REQUEST_PAGE_SETUP], 0, print_context, page, page_setup);
 		  
 		  _gtk_print_context_set_page_setup (print_context, page_setup);
-		  op->priv->start_page (op, print_context, page_setup);
+		  priv->start_page (op, print_context, page_setup);
 		  
 		  cr = gtk_print_context_get_cairo (print_context);
 
 		  cairo_save (cr);
-		  if (op->priv->manual_scale != 100.0)
+		  if (priv->manual_scale != 100.0)
 		    cairo_scale (cr,
-				 op->priv->manual_scale,
-				 op->priv->manual_scale);
+				 priv->manual_scale,
+				 priv->manual_scale);
 		  
-		  if (op->priv->manual_orientation)
+		  if (priv->manual_orientation)
 		    _gtk_print_context_rotate_according_to_orientation (print_context);
 
-		  if (!op->priv->use_full_page)
+		  if (!priv->use_full_page)
 		    _gtk_print_context_translate_into_margin (print_context);
 	  
 		  g_signal_emit (op, signals[DRAW_PAGE], 0, 
 				 print_context, page);
 		  
-		  op->priv->end_page (op, print_context);
+		  priv->end_page (op, print_context);
 		  
 		  cairo_restore (cr);
 		  
@@ -1241,8 +1288,8 @@ print_pages (GtkPrintOperation *op)
   g_object_unref (print_context);
   g_object_unref (initial_page_setup);
 
-  cairo_surface_finish (op->priv->surface);
-  op->priv->end_run (op);
+  cairo_surface_finish (priv->surface);
+  priv->end_run (op);
 
 }
 
@@ -1279,13 +1326,16 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 			 GtkWindow          *parent,
 			 GError            **error)
 {
+  GtkPrintOperationPrivate *priv;
   GtkPrintOperationResult result;
   gboolean do_print;
   
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
                         GTK_PRINT_OPERATION_RESULT_ERROR);
 
-  if (op->priv->pdf_target != NULL)
+  priv = op->priv;
+
+  if (priv->pdf_target != NULL)
     result = run_pdf (op, parent, &do_print, error);
   else
     result = _gtk_print_operation_platform_backend_run_dialog (op, 
@@ -1323,11 +1373,14 @@ void
 gtk_print_operation_run_async (GtkPrintOperation *op,
 			       GtkWindow         *parent)
 {
+  GtkPrintOperationPrivate *priv;
   gboolean do_print;
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op)); 
 
-  if (op->priv->pdf_target != NULL)
+  priv = op->priv;
+
+  if (priv->pdf_target != NULL)
     {
       run_pdf (op, parent, &do_print, NULL);
       if (do_print)

@@ -80,16 +80,13 @@ unix_finish_send  (GtkPrintJob *job,
                    GError      *error)
 {
   GtkPrintOperationUnix *op_unix;
-  GtkWindow *parent;
 
   op_unix = (GtkPrintOperationUnix *) user_data;
-
-  parent = op_unix->parent;
 
   if (error != NULL)
     {
       GtkWidget *edialog;
-      edialog = gtk_message_dialog_new (parent, 
+      edialog = gtk_message_dialog_new (op_unix->parent, 
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
@@ -125,16 +122,17 @@ static GtkWidget *
 get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
 {
+  GtkPrintOperationPrivate *priv = op->priv;
   GtkWidget *pd;
   GtkPageSetup *page_setup;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
-  if (op->priv->print_settings)
+  if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
-					op->priv->print_settings);
-  if (op->priv->default_page_setup)
-    page_setup = gtk_page_setup_copy (op->priv->default_page_setup);
+					priv->print_settings);
+  if (priv->default_page_setup)
+    page_setup = gtk_page_setup_copy (priv->default_page_setup);
   else
     page_setup = gtk_page_setup_new ();
 
@@ -171,6 +169,7 @@ handle_print_response (GtkWidget *dialog,
   GtkPrintUnixDialog *pd = GTK_PRINT_UNIX_DIALOG (dialog);
   PrintResponseData *rdata = data;
   GtkPrintOperation *op = rdata->op;
+  GtkPrintOperationPrivate *priv = op->priv;
 
   if (response == GTK_RESPONSE_OK)
     {
@@ -193,7 +192,7 @@ handle_print_response (GtkWidget *dialog,
       gtk_print_operation_set_print_settings (op, settings);
 
       op_unix = g_new0 (GtkPrintOperationUnix, 1);
-      op_unix->job = gtk_print_job_new (op->priv->job_name,
+      op_unix->job = gtk_print_job_new (priv->job_name,
 					printer,
 					settings,
 					page_setup);
@@ -215,27 +214,27 @@ handle_print_response (GtkWidget *dialog,
       
       op_unix->parent = gtk_window_get_transient_for (GTK_WINDOW (pd));
 
-      op->priv->dpi_x = 72;
-      op->priv->dpi_y = 72;
+      priv->dpi_x = 72;
+      priv->dpi_y = 72;
  
-      op->priv->platform_data = op_unix;
-      op->priv->free_platform_data = (GDestroyNotify) op_unix_free;
+      priv->platform_data = op_unix;
+      priv->free_platform_data = (GDestroyNotify) op_unix_free;
 
-      op->priv->print_pages = op_unix->job->print_pages;
-      op->priv->page_ranges = op_unix->job->page_ranges;
-      op->priv->num_page_ranges = op_unix->job->num_page_ranges;
+      priv->print_pages = op_unix->job->print_pages;
+      priv->page_ranges = op_unix->job->page_ranges;
+      priv->num_page_ranges = op_unix->job->num_page_ranges;
   
-      op->priv->manual_num_copies = op_unix->job->num_copies;
-      op->priv->manual_collation = op_unix->job->collate;
-      op->priv->manual_reverse = op_unix->job->reverse;
-      op->priv->manual_page_set = op_unix->job->page_set;
-      op->priv->manual_scale = op_unix->job->scale;
-      op->priv->manual_orientation = op_unix->job->rotate_to_orientation;
+      priv->manual_num_copies = op_unix->job->num_copies;
+      priv->manual_collation = op_unix->job->collate;
+      priv->manual_reverse = op_unix->job->reverse;
+      priv->manual_page_set = op_unix->job->page_set;
+      priv->manual_scale = op_unix->job->scale;
+      priv->manual_orientation = op_unix->job->rotate_to_orientation;
     } 
 
-  op->priv->start_page = unix_start_page;
-  op->priv->end_page = unix_end_page;
-  op->priv->end_run = unix_end_run;
+  priv->start_page = unix_start_page;
+  priv->end_page = unix_end_page;
+  priv->end_run = unix_end_run;
 
  out:  
   gtk_widget_destroy (GTK_WIDGET (pd));

@@ -165,18 +165,21 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 static void
 gtk_print_job_init (GtkPrintJob *job)
 {
-  job->priv = GTK_PRINT_JOB_GET_PRIVATE (job); 
-  job->priv->spool_file_fd = -1;
+  GtkPrintJobPrivate *priv;
 
-  job->priv->title = g_strdup ("");
-  job->priv->surface = NULL;
-  job->priv->backend = NULL;
-  job->priv->printer = NULL;
+  priv = job->priv = GTK_PRINT_JOB_GET_PRIVATE (job); 
 
-  job->priv->printer_set = FALSE;
-  job->priv->settings_set = FALSE;
-  job->priv->page_setup_set = FALSE;
-  job->priv->status = GTK_PRINT_STATUS_INITIAL;
+  priv->spool_file_fd = -1;
+
+  priv->title = g_strdup ("");
+  priv->surface = NULL;
+  priv->backend = NULL;
+  priv->printer = NULL;
+
+  priv->printer_set = FALSE;
+  priv->settings_set = FALSE;
+  priv->page_setup_set = FALSE;
+  priv->status = GTK_PRINT_STATUS_INITIAL;
 
   job->print_pages = GTK_PRINT_PAGES_ALL;
   job->page_ranges = NULL;
@@ -196,6 +199,7 @@ gtk_print_job_constructor (GType                  type,
 			   GObjectConstructParam *construct_params)
 {
   GtkPrintJob *job;
+  GtkPrintJobPrivate *priv;
   GObject *object;
 
   object =
@@ -204,15 +208,16 @@ gtk_print_job_constructor (GType                  type,
 							      construct_params);
 
   job = GTK_PRINT_JOB (object);
+
+  priv = job->priv;
+  g_assert (priv->printer_set &&
+	    priv->settings_set &&
+	    priv->page_setup_set);
   
-  g_assert (job->priv->printer_set &&
-	    job->priv->settings_set &&
-	    job->priv->page_setup_set);
-  
-  _gtk_printer_prepare_for_print (job->priv->printer,
+  _gtk_printer_prepare_for_print (priv->printer,
 				  job,
-				  job->priv->settings,
-				  job->priv->page_setup);
+				  priv->settings,
+				  priv->page_setup);
 
   return object;
 }
@@ -221,41 +226,37 @@ gtk_print_job_constructor (GType                  type,
 static void
 gtk_print_job_finalize (GObject *object)
 {
-  GtkPrintJob *job;
-  
-  g_return_if_fail (object != NULL);
+  GtkPrintJob *job = GTK_PRINT_JOB (object);
+  GtkPrintJobPrivate *priv = job->priv;
 
-  job = GTK_PRINT_JOB (object);
-
-  if (job->priv->spool_file_fd > 0)
+  if (priv->spool_file_fd >= 0)
     {
-      close (job->priv->spool_file_fd);
-      job->priv->spool_file_fd = -1;
+      close (priv->spool_file_fd);
+      priv->spool_file_fd = -1;
     }
   
-  if (job->priv->backend)
-    g_object_unref (G_OBJECT (job->priv->backend));
+  if (priv->backend)
+    g_object_unref (priv->backend);
 
-  if (job->priv->printer)
-    g_object_unref (G_OBJECT (job->priv->printer));
+  if (priv->printer)
+    g_object_unref (priv->printer);
 
-  if (job->priv->surface)
-    cairo_surface_destroy (job->priv->surface);
+  if (priv->surface)
+    cairo_surface_destroy (priv->surface);
 
-  if (job->priv->settings)
-    g_object_unref (job->priv->settings);
+  if (priv->settings)
+    g_object_unref (priv->settings);
   
-  if (job->priv->page_setup)
-    g_object_unref (job->priv->page_setup);
+  if (priv->page_setup)
+    g_object_unref (priv->page_setup);
 
   g_free (job->page_ranges);
   job->page_ranges = NULL;
   
-  g_free (job->priv->title);
-  job->priv->title = NULL;
-  
-  if (G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize)
-    G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize (object);
+  g_free (priv->title);
+  priv->title = NULL;
+
+  G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize (object);
 }
 
 /**
@@ -363,12 +364,16 @@ void
 gtk_print_job_set_status (GtkPrintJob   *job,
 			  GtkPrintStatus status)
 {
+  GtkPrintJobPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINT_JOB (job));
 
-  if (job->priv->status == status)
+  priv = job->priv;
+
+  if (priv->status == status)
     return;
 
-  job->priv->status = status;
+  priv->status = status;
   g_signal_emit (job, signals[STATUS_CHANGED], 0);
 }
 
@@ -392,10 +397,14 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
 			       const gchar *filename,
 			       GError     **error)
 {
+  GtkPrintJobPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
-  
-  job->priv->spool_file_fd = g_open (filename, O_RDONLY|O_BINARY);
-  if (job->priv->spool_file_fd < 0)
+
+  priv = job->priv;
+
+  priv->spool_file_fd = g_open (filename, O_RDONLY|O_BINARY);
+  if (priv->spool_file_fd < 0)
     {
       gchar *display_filename = g_filename_display_name (filename);
       int save_errno = errno;
@@ -430,33 +439,38 @@ cairo_surface_t *
 gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
+  GtkPrintJobPrivate *priv;
   gchar *filename;
   gdouble width, height;
   GtkPaperSize *paper_size;
   
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
 
-  if (job->priv->surface)
-    return job->priv->surface;
-  
-  job->priv->spool_file_fd = g_file_open_tmp ("gtkprint_XXXXXX", 
+  priv = job->priv;
+
+  if (priv->surface)
+    return priv->surface;
+ 
+  g_return_val_if_fail (priv->spool_file_fd == -1, NULL);
+ 
+  priv->spool_file_fd = g_file_open_tmp ("gtkprint_XXXXXX", 
 						    &filename, 
 						    error);
-  if (job->priv->spool_file_fd == -1)
+  if (priv->spool_file_fd == -1)
     return NULL;
 
-  fchmod (job->priv->spool_file_fd, S_IRUSR | S_IWUSR);
+  fchmod (priv->spool_file_fd, S_IRUSR | S_IWUSR);
   unlink (filename);
 
-  paper_size = gtk_page_setup_get_paper_size (job->priv->page_setup);
+  paper_size = gtk_page_setup_get_paper_size (priv->page_setup);
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
   
-  job->priv->surface = _gtk_printer_create_cairo_surface (job->priv->printer,
+  priv->surface = _gtk_printer_create_cairo_surface (priv->printer,
 							  width, height,
-							  job->priv->spool_file_fd);
+							  priv->spool_file_fd);
  
-  return job->priv->surface;
+  return priv->surface;
 }
 
 static void
@@ -467,31 +481,32 @@ gtk_print_job_set_property (GObject      *object,
 
 {
   GtkPrintJob *job = GTK_PRINT_JOB (object);
+  GtkPrintJobPrivate *priv = job->priv;
   GtkPrintSettings *settings;
 
   switch (prop_id)
     {
     case GTK_PRINT_JOB_PROP_TITLE:
-      job->priv->title = g_value_dup_string (value);
+      priv->title = g_value_dup_string (value);
       break;
     
     case GTK_PRINT_JOB_PROP_PRINTER:
-      job->priv->printer = GTK_PRINTER (g_value_dup_object (value));
-      job->priv->printer_set = TRUE;
-      job->priv->backend = g_object_ref (gtk_printer_get_backend (job->priv->printer));
+      priv->printer = GTK_PRINTER (g_value_dup_object (value));
+      priv->printer_set = TRUE;
+      priv->backend = g_object_ref (gtk_printer_get_backend (priv->printer));
       break;
 
     case GTK_PRINT_JOB_PROP_PAGE_SETUP:
-      job->priv->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
-      job->priv->page_setup_set = TRUE;
+      priv->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
+      priv->page_setup_set = TRUE;
       break;
       
     case GTK_PRINT_JOB_PROP_SETTINGS:
       /* We save a copy of the settings since we modify
        * if when preparing the printer job. */
       settings = GTK_PRINT_SETTINGS (g_value_get_object (value));
-      job->priv->settings = gtk_print_settings_copy (settings);
-      job->priv->settings_set = TRUE;
+      priv->settings = gtk_print_settings_copy (settings);
+      priv->settings_set = TRUE;
       break;
 
     default:
@@ -507,20 +522,21 @@ gtk_print_job_get_property (GObject    *object,
 			    GParamSpec *pspec)
 {
   GtkPrintJob *job = GTK_PRINT_JOB (object);
+  GtkPrintJobPrivate *priv = job->priv;
 
   switch (prop_id)
     {
     case GTK_PRINT_JOB_PROP_TITLE:
-      g_value_set_string (value, job->priv->title);
+      g_value_set_string (value, priv->title);
       break;
     case GTK_PRINT_JOB_PROP_PRINTER:
-      g_value_set_object (value, job->priv->printer);
+      g_value_set_object (value, priv->printer);
       break;
     case GTK_PRINT_JOB_PROP_SETTINGS:
-      g_value_set_object (value, job->priv->settings);
+      g_value_set_object (value, priv->settings);
       break;
     case GTK_PRINT_JOB_PROP_PAGE_SETUP:
-      g_value_set_object (value, job->priv->page_setup);
+      g_value_set_object (value, priv->page_setup);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -549,14 +565,18 @@ gtk_print_job_send (GtkPrintJob             *job,
 		    GDestroyNotify           dnotify,
 		    GError                 **error)
 {
+  GtkPrintJobPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
-  g_return_val_if_fail (job->priv->spool_file_fd > 0, FALSE);
+
+  priv = job->priv;
+  g_return_val_if_fail (priv->spool_file_fd > 0, FALSE);
   
   gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
-  lseek (job->priv->spool_file_fd, 0, SEEK_SET);
-  gtk_print_backend_print_stream (job->priv->backend,
+  lseek (priv->spool_file_fd, 0, SEEK_SET);
+  gtk_print_backend_print_stream (priv->backend,
                                   job,
-				  job->priv->spool_file_fd,
+				  priv->spool_file_fd,
                                   callback,
                                   user_data,
 				  dnotify);

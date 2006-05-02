@@ -1,3 +1,15 @@
+2006-05-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintcontext.c: 
+	* gtk/gtkprinter.c:
+	* gtk/gtkprinteroptionwidget.c:
+	* gtk/gtkprintjob.c:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.c:
+	* gtk/gtkprintunixdialog.c: Use a priv variable when accessing priv
+	  multiple times in the same function. Bug #340288.
+
 2006-05-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtklabel.c (gtk_label_set_line_wrap): added note about the

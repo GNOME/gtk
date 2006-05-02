@@ -186,36 +186,36 @@ gtk_printer_class_init (GtkPrinterClass *class)
 static void
 gtk_printer_init (GtkPrinter *printer)
 {
-  printer->priv = GTK_PRINTER_GET_PRIVATE (printer); 
+  GtkPrinterPrivate *priv;
 
-  printer->priv->name = NULL;
-  printer->priv->location = NULL;
-  printer->priv->description = NULL;
-  printer->priv->icon_name = NULL;
+  priv = printer->priv = GTK_PRINTER_GET_PRIVATE (printer); 
 
-  printer->priv->is_active = TRUE;
-  printer->priv->is_new = TRUE;
-  printer->priv->has_details = FALSE;
+  priv->name = NULL;
+  priv->location = NULL;
+  priv->description = NULL;
+  priv->icon_name = NULL;
 
-  printer->priv->state_message = NULL;  
-  printer->priv->job_count = 0;
+  priv->is_active = TRUE;
+  priv->is_new = TRUE;
+  priv->has_details = FALSE;
+
+  priv->state_message = NULL;  
+  priv->job_count = 0;
 }
 
 static void
 gtk_printer_finalize (GObject *object)
 {
-  g_return_if_fail (object != NULL);
-
   GtkPrinter *printer = GTK_PRINTER (object);
+  GtkPrinterPrivate *priv = printer->priv;
 
-  g_free (printer->priv->name);
-  g_free (printer->priv->location);
-  g_free (printer->priv->description);
-  g_free (printer->priv->state_message);
-  g_free (printer->priv->icon_name);
+  g_free (priv->name);
+  g_free (priv->location);
+  g_free (priv->description);
+  g_free (priv->state_message);
+  g_free (priv->icon_name);
 
-  if (G_OBJECT_CLASS (gtk_printer_parent_class)->finalize)
-    G_OBJECT_CLASS (gtk_printer_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_printer_parent_class)->finalize (object);
 }
 
 static void
@@ -225,19 +225,20 @@ gtk_printer_set_property (GObject         *object,
 			  GParamSpec      *pspec)
 {
   GtkPrinter *printer = GTK_PRINTER (object);
-  
+  GtkPrinterPrivate *priv = printer->priv;
+
   switch (prop_id)
     {
     case PROP_NAME:
-      printer->priv->name = g_value_dup_string (value);
+      priv->name = g_value_dup_string (value);
       break;
     
     case PROP_BACKEND:
-      printer->priv->backend = GTK_PRINT_BACKEND (g_value_get_object (value));
+      priv->backend = GTK_PRINT_BACKEND (g_value_get_object (value));
       break;
 
     case PROP_IS_VIRTUAL:
-      printer->priv->is_virtual = g_value_get_boolean (value);
+      priv->is_virtual = g_value_get_boolean (value);
       break;
 
     default:
@@ -253,38 +254,39 @@ gtk_printer_get_property (GObject    *object,
 			  GParamSpec *pspec)
 {
   GtkPrinter *printer = GTK_PRINTER (object);
+  GtkPrinterPrivate *priv = printer->priv;
 
   switch (prop_id)
     {
     case PROP_NAME:
-      if (printer->priv->name)
-	g_value_set_string (value, printer->priv->name);
+      if (priv->name)
+	g_value_set_string (value, priv->name);
       else
 	g_value_set_string (value, "");
       break;
     case PROP_BACKEND:
-      g_value_set_object (value, printer->priv->backend);
+      g_value_set_object (value, priv->backend);
       break;
     case PROP_STATE_MESSAGE:
-      if (printer->priv->state_message)
-	g_value_set_string (value, printer->priv->state_message);
+      if (priv->state_message)
+	g_value_set_string (value, priv->state_message);
       else
 	g_value_set_string (value, "");
       break;
     case PROP_LOCATION:
-      if (printer->priv->location)
-	g_value_set_string (value, printer->priv->location);
+      if (priv->location)
+	g_value_set_string (value, priv->location);
       else
 	g_value_set_string (value, "");
       break;
     case PROP_ICON_NAME:
-      if (printer->priv->icon_name)
-	g_value_set_string (value, printer->priv->icon_name);
+      if (priv->icon_name)
+	g_value_set_string (value, priv->icon_name);
       else
 	g_value_set_string (value, "");
       break;
     case PROP_JOB_COUNT:
-      g_value_set_int (value, printer->priv->job_count);
+      g_value_set_int (value, priv->job_count);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -388,13 +390,17 @@ gboolean
 gtk_printer_set_description (GtkPrinter  *printer,
 			     const gchar *description)
 {
+  GtkPrinterPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
 
-  if (safe_strcmp (printer->priv->description, description) == 0)
+  priv = printer->priv;
+
+  if (safe_strcmp (priv->description, description) == 0)
     return FALSE;
 
-  g_free (printer->priv->description);
-  printer->priv->description = g_strdup (description);
+  g_free (priv->description);
+  priv->description = g_strdup (description);
   
   return TRUE;
 }
@@ -422,13 +428,17 @@ gboolean
 gtk_printer_set_state_message (GtkPrinter  *printer,
 			       const gchar *message)
 {
+  GtkPrinterPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
 
-  if (safe_strcmp (printer->priv->state_message, message) == 0)
+  priv = printer->priv;
+
+  if (safe_strcmp (priv->state_message, message) == 0)
     return FALSE;
 
-  g_free (printer->priv->state_message);
-  printer->priv->state_message = g_strdup (message);
+  g_free (priv->state_message);
+  priv->state_message = g_strdup (message);
   g_object_notify (G_OBJECT (printer), "state-message");
 
   return TRUE;
@@ -456,13 +466,17 @@ gboolean
 gtk_printer_set_location (GtkPrinter  *printer,
 			  const gchar *location)
 {
+  GtkPrinterPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
 
-  if (safe_strcmp (printer->priv->location, location) == 0)
+  priv = printer->priv;
+
+  if (safe_strcmp (priv->location, location) == 0)
     return FALSE;
 
-  g_free (printer->priv->location);
-  printer->priv->location = g_strdup (location);
+  g_free (priv->location);
+  priv->location = g_strdup (location);
   g_object_notify (G_OBJECT (printer), "location");
   
   return TRUE;
@@ -490,10 +504,14 @@ void
 gtk_printer_set_icon_name (GtkPrinter  *printer,
 			   const gchar *icon)
 {
+  GtkPrinterPrivate *priv;
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  g_free (printer->priv->icon_name);
-  printer->priv->icon_name = g_strdup (icon);
+  priv = printer->priv;
+
+  g_free (priv->icon_name);
+  priv->icon_name = g_strdup (icon);
   g_object_notify (G_OBJECT (printer), "icon-name");
 }
 
@@ -519,12 +537,16 @@ gboolean
 gtk_printer_set_job_count (GtkPrinter *printer,
 			   gint        count)
 {
+  GtkPrinterPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
 
-  if (printer->priv->job_count == count)
+  priv = printer->priv;
+
+  if (priv->job_count == count)
     return FALSE;
 
-  printer->priv->job_count = count;
+  priv->job_count = count;
   
   g_object_notify (G_OBJECT (printer), "job-count");
   
