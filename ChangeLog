@@ -1,3 +1,9 @@
+2006-05-02  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): set tmpnode to
+	the return value of the _gtk_rbtree_insert* functions, since that
+	is the node we really want to check for visibilty.
+
 2006-05-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprinter.[hc]: Don't use virtual as a parameter name.

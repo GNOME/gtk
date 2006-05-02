@@ -7521,12 +7521,12 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   if (indices[depth - 1] == 0)
     {
       tmpnode = _gtk_rbtree_find_count (tree, 1);
-      _gtk_rbtree_insert_before (tree, tmpnode, height, FALSE);
+      tmpnode = _gtk_rbtree_insert_before (tree, tmpnode, height, FALSE);
     }
   else
     {
       tmpnode = _gtk_rbtree_find_count (tree, indices[depth - 1]);
-      _gtk_rbtree_insert_after (tree, tmpnode, height, FALSE);
+      tmpnode = _gtk_rbtree_insert_after (tree, tmpnode, height, FALSE);
     }
 
  done:
