@@ -1,3 +1,10 @@
+2006-05-02  Kristian Rietveld  <kris@imendio.com>
+
+	* ChangeLog.gtk-async-file-chooser: added ChangeLog entries from
+	the kris-async-branch.
+
+	* Makefile.am: updated EXTRA_DIST
+
 2006-05-02  Alexander Larsson  <alexl@redhat.com>
 
 	* ChangeLog.gtk-printing: 
