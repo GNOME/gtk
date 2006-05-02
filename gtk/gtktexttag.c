@@ -140,8 +140,6 @@ enum {
 
   LAST_ARG
 };
-static void gtk_text_tag_init         (GtkTextTag      *text_tag);
-static void gtk_text_tag_class_init   (GtkTextTagClass *klass);
 static void gtk_text_tag_finalize     (GObject         *object);
 static void gtk_text_tag_set_property (GObject         *object,
                                        guint            prop_id,
@@ -152,42 +150,14 @@ static void gtk_text_tag_get_property (GObject         *object,
                                        GValue          *value,
                                        GParamSpec      *pspec);
 
-static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_text_tag_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      static const GTypeInfo our_info =
-      {
-        sizeof (GtkTextTagClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_tag_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextTag),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_tag_init
-      };
-
-      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextTag"),
-                                         &our_info, 0);
-    }
-
-  return our_type;
-}
+G_DEFINE_TYPE (GtkTextTag, gtk_text_tag, G_TYPE_OBJECT);
 
 static void
 gtk_text_tag_class_init (GtkTextTagClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->set_property = gtk_text_tag_set_property;
   object_class->get_property = gtk_text_tag_get_property;
@@ -740,7 +710,7 @@ gtk_text_tag_finalize (GObject *object)
   g_free (text_tag->name);
   text_tag->name = NULL;
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_text_tag_parent_class)->finalize) (object);
 }
 
 static void

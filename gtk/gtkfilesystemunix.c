@@ -132,12 +132,7 @@ static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
 						 GTK_FILE_INFO_ICON);
 
-static GObjectClass *system_parent_class;
-static GObjectClass *folder_parent_class;
-
-static void gtk_file_system_unix_class_init   (GtkFileSystemUnixClass *class);
 static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
-static void gtk_file_system_unix_init         (GtkFileSystemUnix      *impl);
 static void gtk_file_system_unix_finalize     (GObject                *object);
 
 static GSList *             gtk_file_system_unix_list_volumes        (GtkFileSystem     *file_system);
@@ -215,10 +210,7 @@ static void     gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file
 							 const GtkFilePath *path,
 							 const gchar       *label);
 
-static GType gtk_file_folder_unix_get_type   (void);
-static void  gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class);
 static void  gtk_file_folder_unix_iface_init (GtkFileFolderIface     *iface);
-static void  gtk_file_folder_unix_init       (GtkFileFolderUnix      *impl);
 static void  gtk_file_folder_unix_finalize   (GObject                *object);
 
 static GtkFileInfo *gtk_file_folder_unix_get_info      (GtkFileFolder  *folder,
@@ -269,43 +261,17 @@ static char *       get_parent_dir    (const char       *filename);
 /*
  * GtkFileSystemUnix
  */
-GType
-gtk_file_system_unix_get_type (void)
-{
-  static GType file_system_unix_type = 0;
+G_DEFINE_TYPE_WITH_CODE (GtkFileSystemUnix, gtk_file_system_unix, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_SYSTEM,
+						gtk_file_system_unix_iface_init));
 
-  if (!file_system_unix_type)
-    {
-      static const GTypeInfo file_system_unix_info =
-      {
-	sizeof (GtkFileSystemUnixClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_system_unix_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileSystemUnix),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_system_unix_init,
-      };
+/*
+ * GtkFileFolderUnix
+ */
+G_DEFINE_TYPE_WITH_CODE (GtkFileFolderUnix, gtk_file_folder_unix, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_FOLDER,
+						gtk_file_folder_unix_iface_init));
 
-      static const GInterfaceInfo file_system_info =
-      {
-	(GInterfaceInitFunc) gtk_file_system_unix_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
-
-      file_system_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      I_("GtkFileSystemUnix"),
-						      &file_system_unix_info, 0);
-      g_type_add_interface_static (file_system_unix_type,
-				   GTK_TYPE_FILE_SYSTEM,
-				   &file_system_info);
-    }
-
-  return file_system_unix_type;
-}
 
 /**
  * gtk_file_system_unix_new:
@@ -326,8 +292,6 @@ static void
 gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  system_parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_system_unix_finalize;
 }
@@ -387,7 +351,7 @@ gtk_file_system_unix_finalize (GObject *object)
   /* FIXME: assert that the hash is empty? */
   g_hash_table_destroy (system_unix->folder_hash);
 
-  system_parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_file_system_unix_parent_class)->finalize (object);
 }
 
 /* Returns our single root volume */
@@ -2047,53 +2011,10 @@ gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file_system,
   g_free (uri);
 }
 
-/*
- * GtkFileFolderUnix
- */
-static GType
-gtk_file_folder_unix_get_type (void)
-{
-  static GType file_folder_unix_type = 0;
-
-  if (!file_folder_unix_type)
-    {
-      static const GTypeInfo file_folder_unix_info =
-      {
-	sizeof (GtkFileFolderUnixClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_folder_unix_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileFolderUnix),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_folder_unix_init,
-      };
-
-      static const GInterfaceInfo file_folder_info =
-      {
-	(GInterfaceInitFunc) gtk_file_folder_unix_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
-
-      file_folder_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      I_("GtkFileFolderUnix"),
-						      &file_folder_unix_info, 0);
-      g_type_add_interface_static (file_folder_unix_type,
-				   GTK_TYPE_FILE_FOLDER,
-				   &file_folder_info);
-    }
-
-  return file_folder_unix_type;
-}
-
 static void
 gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  folder_parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_folder_unix_finalize;
 }
@@ -2134,7 +2055,7 @@ gtk_file_folder_unix_finalize (GObject *object)
 
   g_free (folder_unix->filename);
 
-  folder_parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_file_folder_unix_parent_class)->finalize (object);
 }
 
 /* Creates a GtkFileInfo for "/" by stat()ing it */

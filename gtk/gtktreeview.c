@@ -138,9 +138,6 @@ enum {
   PROP_LEVEL_INDENTATION
 };
 
-static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
-static void     gtk_tree_view_init                 (GtkTreeView      *tree_view);
-
 /* object signals */
 static void     gtk_tree_view_finalize             (GObject          *object);
 static void     gtk_tree_view_set_property         (GObject         *object,
@@ -459,7 +456,6 @@ static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
 						      gint        *ty);
 
 
-static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
 
@@ -467,33 +463,7 @@ static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 /* GType Methods
  */
 
-GType
-gtk_tree_view_get_type (void)
-{
-  static GType tree_view_type = 0;
-
-  if (!tree_view_type)
-    {
-      static const GTypeInfo tree_view_info =
-      {
-        sizeof (GtkTreeViewClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_tree_view_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkTreeView),
-	0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_tree_view_init
-      };
-
-      tree_view_type =
-	g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkTreeView"),
-				&tree_view_info, 0);
-    }
-
-  return tree_view_type;
-}
+G_DEFINE_TYPE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER);
 
 static void
 gtk_tree_view_class_init (GtkTreeViewClass *class)
@@ -504,7 +474,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
 
-  parent_class = g_type_class_peek_parent (class);
   binding_set = gtk_binding_set_by_class (class);
 
   o_class = (GObjectClass *) class;
@@ -1366,7 +1335,7 @@ gtk_tree_view_get_property (GObject    *object,
 static void
 gtk_tree_view_finalize (GObject *object)
 {
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_tree_view_parent_class)->finalize) (object);
 }
 
 
@@ -1517,8 +1486,8 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->vadjustment = NULL;
     }
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy) (object);
 }
 
 
@@ -1758,8 +1727,8 @@ gtk_tree_view_unrealize (GtkWidget *widget)
     }
 
   /* GtkWidget::unrealize destroys children and widget->window */
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize) (widget);
 }
 
 /* GtkWidget::size_request helper */
@@ -4583,7 +4552,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
     }
 
   /* Chain up to the parent class.  It handles the keybindings. */
-  if ((* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event))
+  if ((* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event) (widget, event))
     return TRUE;
 							    
   /* We pass the event to the search_entry.  If its text changes, then we start
@@ -4657,7 +4626,7 @@ static gboolean
 gtk_tree_view_key_release (GtkWidget   *widget,
 			   GdkEventKey *event)
 {
-  return (* GTK_WIDGET_CLASS (parent_class)->key_release_event) (widget, event);
+  return (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event) (widget, event);
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -7095,7 +7064,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 static void
 gtk_tree_view_grab_focus (GtkWidget *widget)
 {
-  (* GTK_WIDGET_CLASS (parent_class)->grab_focus) (widget);
+  (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus) (widget);
 
   gtk_tree_view_focus_to_cursor (GTK_TREE_VIEW (widget));
 }
@@ -7152,7 +7121,7 @@ gtk_tree_view_set_focus_child (GtkContainer *container,
 	}
     }
 
-  (* parent_class->set_focus_child) (container, child);
+  GTK_CONTAINER_CLASS (gtk_tree_view_parent_class)->set_focus_child (container, child);
 }
 
 static void

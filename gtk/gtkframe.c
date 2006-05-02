@@ -45,9 +45,6 @@ enum {
   PROP_LABEL_WIDGET
 };
 
-
-static void gtk_frame_class_init    (GtkFrameClass  *klass);
-static void gtk_frame_init          (GtkFrame       *frame);
 static void gtk_frame_set_property (GObject      *object,
 				    guint         param_id,
 				    const GValue *value,
@@ -76,35 +73,7 @@ static void gtk_frame_compute_child_allocation      (GtkFrame      *frame,
 static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 						     GtkAllocation *child_allocation);
 
-static GtkBinClass *parent_class = NULL;
-
-
-GType
-gtk_frame_get_type (void)
-{
-  static GType frame_type = 0;
-
-  if (!frame_type)
-    {
-      static const GTypeInfo frame_info =
-      {
-	sizeof (GtkFrameClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_frame_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFrame),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_frame_init,
-      };
-
-      frame_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkFrame"),
-					   &frame_info, 0);
-    }
-
-  return frame_type;
-}
+G_DEFINE_TYPE (GtkFrame, gtk_frame, GTK_TYPE_BIN);
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)
@@ -116,8 +85,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   gobject_class = (GObjectClass*) class;
   widget_class = GTK_WIDGET_CLASS (class);
   container_class = GTK_CONTAINER_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_frame_set_property;
   gobject_class->get_property = gtk_frame_get_property;
@@ -287,7 +254,7 @@ gtk_frame_remove (GtkContainer *container,
   if (frame->label_widget == child)
     gtk_frame_set_label_widget (frame, NULL);
   else
-    GTK_CONTAINER_CLASS (parent_class)->remove (container, child);
+    GTK_CONTAINER_CLASS (gtk_frame_parent_class)->remove (container, child);
 }
 
 static void
@@ -587,7 +554,7 @@ gtk_frame_expose (GtkWidget      *widget,
     {
       gtk_frame_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_frame_parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

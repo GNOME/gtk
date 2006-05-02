@@ -74,15 +74,11 @@ struct _GtkIFCBData
 
 
 /* --- prototypes --- */
-static void	gtk_item_factory_class_init		(GtkItemFactoryClass  *klass);
-static void	gtk_item_factory_init			(GtkItemFactory	      *ifactory);
 static void	gtk_item_factory_destroy		(GtkObject	      *object);
 static void	gtk_item_factory_finalize		(GObject	      *object);
 
 
 /* --- static variables --- */
-static GtkItemFactoryClass *gtk_item_factory_class = NULL;
-static gpointer          parent_class = NULL;
 static const gchar	 item_factory_string[] = "Gtk-<ItemFactory>";
 static GQuark		 quark_popup_data = 0;
 static GQuark		 quark_if_menu_pos = 0;
@@ -102,44 +98,14 @@ static GQuark		 quark_type_separator_item = 0;
 static GQuark		 quark_type_branch = 0;
 static GQuark		 quark_type_last_branch = 0;
 
+G_DEFINE_TYPE (GtkItemFactory, gtk_item_factory, GTK_TYPE_OBJECT);
 
 /* --- functions --- */
-GType
-gtk_item_factory_get_type (void)
-{
-  static GType item_factory_type = 0;
-  
-  if (!item_factory_type)
-    {
-      static const GTypeInfo item_factory_info =
-      {
-	sizeof (GtkItemFactoryClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_item_factory_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkItemFactory),
-	0,
-	(GInstanceInitFunc) gtk_item_factory_init,
-      };
-      
-      item_factory_type =
-	g_type_register_static (GTK_TYPE_OBJECT, I_("GtkItemFactory"),
-				&item_factory_info, 0);
-    }
-  
-  return item_factory_type;
-}
-
 static void
 gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
-
-  gtk_item_factory_class = class;
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_item_factory_finalize;
 
@@ -537,7 +503,7 @@ gtk_item_factory_destroy (GtkObject *object)
   g_slist_free (ifactory->items);
   ifactory->items = NULL;
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_item_factory_parent_class)->destroy (object);
 }
 
 static void
@@ -556,7 +522,7 @@ gtk_item_factory_finalize (GObject *object)
   if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_item_factory_parent_class)->finalize (object);
 }
 
 /**

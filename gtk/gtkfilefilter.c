@@ -90,23 +90,11 @@ gtk_file_filter_get_type (void)
   static GType file_filter_type = 0;
 
   if (!file_filter_type)
-    {
-      static const GTypeInfo file_filter_info =
-      {
-	sizeof (GtkFileFilterClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_filter_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileFilter),
-	0,		/* n_preallocs */
-	NULL            /* init */
-      };
-      
-      file_filter_type = g_type_register_static (GTK_TYPE_OBJECT, I_("GtkFileFilter"),
-						 &file_filter_info, 0);
-    }
+    file_filter_type = g_type_register_static_simple (GTK_TYPE_OBJECT, I_("GtkFileFilter"),
+						      sizeof (GtkFileFilterClass),
+						      (GClassInitFunc)gtk_file_filter_class_init,
+						      sizeof (GtkFileFilter),
+						      NULL, 0);
 
   return file_filter_type;
 }

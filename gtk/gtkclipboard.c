@@ -158,23 +158,12 @@ gtk_clipboard_get_type (void)
   static GType clipboard_type = 0;
   
   if (!clipboard_type)
-    {
-      static const GTypeInfo clipboard_info =
-      {
-	sizeof (GtkClipboardClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_clipboard_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkClipboard),
-	0,              /* n_preallocs */
-	(GInstanceInitFunc) NULL,
-      };
-      
-      clipboard_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkClipboard"),
-					       &clipboard_info, 0);
-    }
+    clipboard_type = g_type_register_static_simple (G_TYPE_OBJECT, 
+						    I_("GtkClipboard"),
+						    sizeof (GtkClipboardClass),
+						    (GClassInitFunc)gtk_clipboard_class_init,
+						    sizeof (GtkClipboard),
+						    NULL, 0);
   
   return clipboard_type;
 }

@@ -84,8 +84,6 @@ struct _GtkButtonPrivate
   guint32      grab_time;
 };
 
-static void gtk_button_class_init     (GtkButtonClass     *klass);
-static void gtk_button_init           (GtkButton          *button);
 static void gtk_button_destroy        (GtkObject          *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
@@ -139,37 +137,9 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 
 
-
-static GtkBinClass *parent_class = NULL;
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_button_get_type (void)
-{
-  static GType button_type = 0;
-
-  if (!button_type)
-    {
-      static const GTypeInfo button_info =
-      {
-	sizeof (GtkButtonClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_button_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkButton),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_button_init,
-      };
-
-      button_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkButton"),
-					    &button_info, 0);
-    }
-
-  return button_type;
-}
+G_DEFINE_TYPE (GtkButton, gtk_button, GTK_TYPE_BIN);
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)
@@ -184,8 +154,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  parent_class = g_type_class_peek_parent (klass);
-
   gobject_class->constructor = gtk_button_constructor;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
@@ -520,7 +488,7 @@ gtk_button_destroy (GtkObject *object)
       button->label_text = NULL;
     }
   
-  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (gtk_button_parent_class)->destroy) (object);
 }
 
 static GObject*
@@ -531,9 +499,9 @@ gtk_button_constructor (GType                  type,
   GObject *object;
   GtkButton *button;
 
-  object = (* G_OBJECT_CLASS (parent_class)->constructor) (type,
-							   n_construct_properties,
-							   construct_params);
+  object = (* G_OBJECT_CLASS (gtk_button_parent_class)->constructor) (type,
+								      n_construct_properties,
+								      construct_params);
 
   button = GTK_BUTTON (object);
   button->constructed = TRUE;
@@ -583,7 +551,7 @@ gtk_button_add (GtkContainer *container,
 {
   maybe_set_alignment (GTK_BUTTON (container), widget);
 
-  GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
+  GTK_CONTAINER_CLASS (gtk_button_parent_class)->add (container, widget);
 }
 
 static void
@@ -948,7 +916,7 @@ gtk_button_unrealize (GtkWidget *widget)
       button->event_window = NULL;
     }
   
-  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->unrealize (widget);
 }
 
 static void
@@ -956,7 +924,7 @@ gtk_button_map (GtkWidget *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
   
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->map (widget);
 
   if (button->event_window)
     gdk_window_show (button->event_window);
@@ -970,7 +938,7 @@ gtk_button_unmap (GtkWidget *widget)
   if (button->event_window)
     gdk_window_hide (button->event_window);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
 }
 
 static void
@@ -1272,7 +1240,7 @@ gtk_button_expose (GtkWidget      *widget,
 			 button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
 			 "button", "buttondefault");
       
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_button_parent_class)->expose_event) (widget, event);
     }
   
   return FALSE;
@@ -1347,8 +1315,8 @@ gtk_button_key_release (GtkWidget   *widget,
       gtk_button_finish_activate (button, TRUE);
       return TRUE;
     }
-  else if (GTK_WIDGET_CLASS (parent_class)->key_release_event)
-    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+  else if (GTK_WIDGET_CLASS (gtk_button_parent_class)->key_release_event)
+    return GTK_WIDGET_CLASS (gtk_button_parent_class)->key_release_event (widget, event);
   else
     return FALSE;
 }

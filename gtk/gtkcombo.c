@@ -64,8 +64,6 @@ enum {
   PROP_VALUE_IN_LIST
 };
 
-static void         gtk_combo_class_init         (GtkComboClass    *klass);
-static void         gtk_combo_init               (GtkCombo         *combo);
 static void         gtk_combo_realize		 (GtkWidget	   *widget);
 static void         gtk_combo_unrealize		 (GtkWidget	   *widget);
 static void         gtk_combo_destroy            (GtkObject        *combo);
@@ -122,7 +120,8 @@ static void         gtk_combo_get_property       (GObject         *object,
 						  guint            prop_id,
 						  GValue          *value,
 						  GParamSpec      *pspec);
-static GtkHBoxClass *parent_class = NULL;
+
+G_DEFINE_TYPE (GtkCombo, gtk_combo, GTK_TYPE_HBOX);
 
 static void
 gtk_combo_class_init (GtkComboClass * klass)
@@ -134,8 +133,6 @@ gtk_combo_class_init (GtkComboClass * klass)
   gobject_class = (GObjectClass *) klass;
   oclass = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->set_property = gtk_combo_set_property; 
   gobject_class->get_property = gtk_combo_get_property; 
@@ -198,7 +195,7 @@ gtk_combo_destroy (GtkObject *object)
       combo->popwin = NULL;
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_combo_parent_class)->destroy (object);
 }
 
 static int
@@ -1010,7 +1007,7 @@ gtk_combo_realize (GtkWidget *widget)
   gtk_window_set_screen (GTK_WINDOW (combo->popwin), 
 			 gtk_widget_get_screen (widget));
   
-  GTK_WIDGET_CLASS( parent_class )->realize (widget);  
+  GTK_WIDGET_CLASS (gtk_combo_parent_class)->realize (widget);  
 }
 
 static void        
@@ -1021,34 +1018,7 @@ gtk_combo_unrealize (GtkWidget *widget)
   gtk_combo_popdown_list (combo);
   gtk_widget_unrealize (combo->popwin);
   
-  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
-}
-
-GType
-gtk_combo_get_type (void)
-{
-  static GType combo_type = 0;
-
-  if (!combo_type)
-    {
-      static const GTypeInfo combo_info =
-      {
-	sizeof (GtkComboClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_combo_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkCombo),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_combo_init,
-      };
-
-      combo_type = g_type_register_static (GTK_TYPE_HBOX, I_("GtkCombo"),
-					   &combo_info, 0);
-    }
-
-  return combo_type;
+  GTK_WIDGET_CLASS (gtk_combo_parent_class)->unrealize (widget);
 }
 
 GtkWidget*
@@ -1166,7 +1136,7 @@ gtk_combo_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_COMBO (widget));
   g_return_if_fail (allocation != NULL);
 
-  GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_combo_parent_class)->size_allocate (widget, allocation);
   
   combo = GTK_COMBO (widget);
 

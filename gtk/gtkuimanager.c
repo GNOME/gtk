@@ -107,8 +107,6 @@ struct _NodeUIReference
   GQuark action_quark;
 };
 
-static void        gtk_ui_manager_class_init      (GtkUIManagerClass *class);
-static void        gtk_ui_manager_init            (GtkUIManager      *self);
 static void        gtk_ui_manager_finalize        (GObject           *object);
 static void        gtk_ui_manager_set_property    (GObject           *object,
                                                    guint              prop_id,
@@ -163,43 +161,14 @@ enum
   PROP_UI
 };
 
-static GObjectClass *parent_class = NULL;
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_ui_manager_get_type (void)
-{
-  static GtkType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-      {
-        sizeof (GtkUIManagerClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_ui_manager_class_init,
-        (GClassFinalizeFunc) NULL,
-        NULL,
-        
-        sizeof (GtkUIManager),
-        0, /* n_preallocs */
-        (GInstanceInitFunc) gtk_ui_manager_init,
-      };
-
-      type = g_type_register_static (G_TYPE_OBJECT,
-				     I_("GtkUIManager"),
-				     &type_info, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GtkUIManager, gtk_ui_manager, G_TYPE_OBJECT);
 
 static void
 gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 {
   GObjectClass *gobject_class;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class = G_OBJECT_CLASS (klass);
 
@@ -428,7 +397,7 @@ gtk_ui_manager_finalize (GObject *object)
   g_object_unref (self->private_data->accel_group);
   self->private_data->accel_group = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_ui_manager_parent_class)->finalize (object);
 }
 
 static void

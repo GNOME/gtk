@@ -33,7 +33,7 @@
 #include "gtkalias.h"
 
 
-static void   gtk_editable_base_init             (gpointer g_class);
+static void gtk_editable_base_init (gpointer g_class);
 
 
 GType

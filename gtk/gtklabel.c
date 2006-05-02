@@ -97,8 +97,6 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_label_class_init        (GtkLabelClass    *klass);
-static void gtk_label_init              (GtkLabel         *label);
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
@@ -193,35 +191,9 @@ static gint gtk_label_move_forward_word  (GtkLabel        *label,
 static gint gtk_label_move_backward_word (GtkLabel        *label,
 					  gint             start);
 
-static GtkMiscClass *parent_class = NULL;
 static GQuark quark_angle = 0;
 
-GType
-gtk_label_get_type (void)
-{
-  static GType label_type = 0;
-  
-  if (!label_type)
-    {
-      static const GTypeInfo label_info =
-      {
-	sizeof (GtkLabelClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_label_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkLabel),
-	0,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_label_init,
-      };
-
-      label_type = g_type_register_static (GTK_TYPE_MISC, I_("GtkLabel"),
-					   &label_info, 0);
-    }
-  
-  return label_type;
-}
+G_DEFINE_TYPE (GtkLabel, gtk_label, GTK_TYPE_MISC);
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -253,8 +225,6 @@ gtk_label_class_init (GtkLabelClass *class)
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
-
-  parent_class = g_type_class_peek_parent (class);
 
   quark_angle = g_quark_from_static_string ("angle");
 
@@ -1740,7 +1710,7 @@ gtk_label_destroy (GtkObject *object)
 
   gtk_label_set_mnemonic_widget (label, NULL);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_label_parent_class)->destroy (object);
 }
 
 static void
@@ -1766,7 +1736,7 @@ gtk_label_finalize (GObject *object)
 
   g_free (label->select_info);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
 
 static void
@@ -2145,7 +2115,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   label = GTK_LABEL (widget);
 
-  (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
+  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate) (widget, allocation);
 
   if (label->ellipsize)
     {
@@ -2174,8 +2144,8 @@ gtk_label_state_changed (GtkWidget   *widget,
   if (label->select_info)
     gtk_label_select_region (label, 0, 0);
 
-  if (GTK_WIDGET_CLASS (parent_class)->state_changed)
-    GTK_WIDGET_CLASS (parent_class)->state_changed (widget, prev_state);
+  if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed)
+    GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed (widget, prev_state);
 }
 
 static void 
@@ -2201,7 +2171,7 @@ gtk_label_direction_changed (GtkWidget        *widget,
   if (label->layout)
     pango_layout_context_changed (label->layout);
 
-  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->direction_changed (widget, previous_dir);
 }
 
 static void
@@ -2622,7 +2592,7 @@ gtk_label_realize (GtkWidget *widget)
 
   label = GTK_LABEL (widget);
   
-  (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
+  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->realize) (widget);
 
   if (label->select_info)
     gtk_label_create_window (label);
@@ -2638,7 +2608,7 @@ gtk_label_unrealize (GtkWidget *widget)
   if (label->select_info)
     gtk_label_destroy_window (label);
   
-  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -2648,7 +2618,7 @@ gtk_label_map (GtkWidget *widget)
 
   label = GTK_LABEL (widget);
   
-  (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
+  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->map) (widget);
   
   if (label->select_info)
     gdk_window_show (label->select_info->window);
@@ -2664,7 +2634,7 @@ gtk_label_unmap (GtkWidget *widget)
   if (label->select_info)
     gdk_window_hide (label->select_info->window);
   
-  (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
+  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap) (widget);
 }
 
 static void
@@ -2786,7 +2756,7 @@ gtk_label_grab_focus (GtkWidget *widget)
   if (label->select_info == NULL)
     return;
 
-  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
 
   g_object_get (gtk_widget_get_settings (widget),
 		"gtk-label-select-on-focus",

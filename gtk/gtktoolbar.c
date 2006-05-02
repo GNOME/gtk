@@ -153,8 +153,6 @@ struct _GtkToolbarPrivate
   guint         animation : 1;
 };
 
-static void       gtk_toolbar_init                 (GtkToolbar          *toolbar);
-static void       gtk_toolbar_class_init           (GtkToolbarClass     *klass);
 static void       gtk_toolbar_set_property         (GObject             *object,
 						    guint                prop_id,
 						    const GValue        *value,
@@ -304,36 +302,9 @@ static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
 #define GTK_TOOLBAR_GET_PRIVATE(o)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
-static GtkContainerClass *	parent_class = NULL;
 static guint			toolbar_signals [LAST_SIGNAL] = { 0 };
 
-GType
-gtk_toolbar_get_type (void)
-{
-  static GtkType type = 0;
-  
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-	{
-	  sizeof (GtkToolbarClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gtk_toolbar_class_init,
-	  (GClassFinalizeFunc) NULL,
-	  NULL,
-	  sizeof (GtkToolbar),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_toolbar_init,
-	};
-      
-      type = g_type_register_static (GTK_TYPE_CONTAINER,
-				     I_("GtkToolbar"),
-				     &type_info, 0);
-    }
-  
-  return type;
-}
+G_DEFINE_TYPE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER);
 
 static void
 add_arrow_bindings (GtkBindingSet   *binding_set,
@@ -372,8 +343,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
-  
-  parent_class = g_type_class_peek_parent (klass);
   
   gobject_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
@@ -809,7 +778,7 @@ gtk_toolbar_map (GtkWidget *widget)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (widget);
   
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->map (widget);
   
   if (priv->event_window)
     gdk_window_show_unraised (priv->event_window);
@@ -823,7 +792,7 @@ gtk_toolbar_unmap (GtkWidget *widget)
   if (priv->event_window)
     gdk_window_hide (priv->event_window);
   
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unmap (widget);
 }
 
 static void
@@ -875,8 +844,8 @@ gtk_toolbar_unrealize (GtkWidget *widget)
       priv->event_window = NULL;
     }
   
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize) (widget);
 }
 
 static gint
@@ -3200,7 +3169,7 @@ gtk_toolbar_finalize (GObject *object)
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_toolbar_parent_class)->finalize (object);
 }
 
 /**

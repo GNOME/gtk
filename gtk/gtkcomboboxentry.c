@@ -38,9 +38,6 @@ struct _GtkComboBoxEntryPrivate
   gint text_column;
 };
 
-static void gtk_combo_box_entry_class_init       (GtkComboBoxEntryClass *klass);
-static void gtk_combo_box_entry_init             (GtkComboBoxEntry      *entry_box);
-
 static void gtk_combo_box_entry_set_property     (GObject               *object,
                                                   guint                  prop_id,
                                                   const GValue          *value,
@@ -68,35 +65,7 @@ enum
   PROP_TEXT_COLUMN
 };
 
-
-GType
-gtk_combo_box_entry_get_type (void)
-{
-  static GType combo_box_entry_type = 0;
-
-  if (!combo_box_entry_type)
-    {
-      static const GTypeInfo combo_box_entry_info =
-        {
-          sizeof (GtkComboBoxEntryClass),
-          NULL, /* base_init */
-          NULL, /* base_finalize */
-          (GClassInitFunc) gtk_combo_box_entry_class_init,
-          NULL, /* class_finalize */
-          NULL, /* class_data */
-          sizeof (GtkComboBoxEntry),
-          0,
-          (GInstanceInitFunc) gtk_combo_box_entry_init
-        };
-
-      combo_box_entry_type = g_type_register_static (GTK_TYPE_COMBO_BOX,
-                                                     I_("GtkComboBoxEntry"),
-                                                     &combo_box_entry_info,
-                                                     0);
-    }
-
-  return combo_box_entry_type;
-}
+G_DEFINE_TYPE (GtkComboBoxEntry, gtk_combo_box_entry, GTK_TYPE_COMBO_BOX);
 
 static void
 gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)

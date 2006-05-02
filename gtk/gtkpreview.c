@@ -51,8 +51,6 @@ enum {
 };
 
 
-static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
-static void   gtk_preview_init          (GtkPreview       *preview);
 static void   gtk_preview_set_property  (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
@@ -70,36 +68,11 @@ static gint   gtk_preview_expose        (GtkWidget        *widget,
 static void   gtk_preview_make_buffer   (GtkPreview       *preview);
 static void   gtk_fill_lookup_array     (guchar           *array);
 
-static GtkWidgetClass *parent_class = NULL;
 static GtkPreviewClass *preview_class = NULL;
 static gint install_cmap = FALSE;
 
 
-GtkType
-gtk_preview_get_type (void)
-{
-  static GtkType preview_type = 0;
-
-  if (!preview_type)
-    {
-      static const GtkTypeInfo preview_info =
-      {
-        "GtkPreview",
-        sizeof (GtkPreview),
-        sizeof (GtkPreviewClass),
-        (GtkClassInitFunc) gtk_preview_class_init,
-        (GtkObjectInitFunc) gtk_preview_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
-      };
-
-      I_("GtkPreview");
-      preview_type = gtk_type_unique (GTK_TYPE_WIDGET, &preview_info);
-    }
-
-  return preview_type;
-}
+G_DEFINE_TYPE (GtkPreview, gtk_preview, GTK_TYPE_WIDGET);
 
 static void
 gtk_preview_class_init (GtkPreviewClass *klass)
@@ -109,7 +82,6 @@ gtk_preview_class_init (GtkPreviewClass *klass)
 
   widget_class = (GtkWidgetClass*) klass;
 
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   preview_class = klass;
 
   gobject_class->finalize = gtk_preview_finalize;
@@ -448,7 +420,7 @@ gtk_preview_finalize (GObject *object)
     g_free (preview->buffer);
   preview->type = (GtkPreviewType) -1;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_preview_parent_class)->finalize (object);
 }
 
 static void

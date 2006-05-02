@@ -45,8 +45,6 @@ enum {
 };
 
 
-static void gtk_progress_class_init      (GtkProgressClass *klass);
-static void gtk_progress_init            (GtkProgress      *progress);
 static void gtk_progress_set_property    (GObject          *object,
 					  guint             prop_id,
 					  const GValue     *value,
@@ -68,36 +66,7 @@ static void gtk_progress_value_changed   (GtkAdjustment    *adjustment,
 static void gtk_progress_changed         (GtkAdjustment    *adjustment,
 					  GtkProgress      *progress);
 
-
-static GtkWidgetClass *parent_class = NULL;
-
-
-GType
-gtk_progress_get_type (void)
-{
-  static GType progress_type = 0;
-
-  if (!progress_type)
-    {
-      static const GTypeInfo progress_info =
-      {
-	sizeof (GtkProgressClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_progress_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkProgress),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_progress_init,
-      };
-
-      progress_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkProgress"),
-					      &progress_info, 0);
-    }
-
-  return progress_type;
-}
+G_DEFINE_TYPE (GtkProgress, gtk_progress, GTK_TYPE_WIDGET);
 
 static void
 gtk_progress_class_init (GtkProgressClass *class)
@@ -108,8 +77,6 @@ gtk_progress_class_init (GtkProgressClass *class)
 
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
-
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   gobject_class->finalize = gtk_progress_finalize;
 
@@ -295,7 +262,7 @@ gtk_progress_destroy (GtkObject *object)
       progress->adjustment = NULL;
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_progress_parent_class)->destroy (object);
 }
 
 static void
@@ -313,7 +280,7 @@ gtk_progress_finalize (GObject *object)
   if (progress->format)
     g_free (progress->format);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_progress_parent_class)->finalize (object);
 }
 
 static gint

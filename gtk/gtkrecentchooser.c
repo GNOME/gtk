@@ -50,18 +50,12 @@ gtk_recent_chooser_get_type (void)
   
   if (!chooser_type)
     {
-      static const GTypeInfo chooser_info =
-      {
-        sizeof (GtkRecentChooserIface),
-        NULL, /* base_init */
-        NULL, /* base_finalize */
-        (GClassInitFunc) gtk_recent_chooser_class_init,
-      };
+      chooser_type = g_type_register_static_simple (G_TYPE_INTERFACE,
+						    I_("GtkRecentChooser"),
+						    sizeof (GtkRecentChooserIface),
+						    (GClassInitFunc) gtk_recent_chooser_class_init,
+						    0, NULL, 0);
       
-      chooser_type = g_type_register_static (G_TYPE_INTERFACE,
-      					     I_("GtkRecentChooser"),
-      					     &chooser_info, 0);
-      					     
       g_type_interface_add_prerequisite (chooser_type, GTK_TYPE_OBJECT);
     }
   

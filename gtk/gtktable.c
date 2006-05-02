@@ -54,8 +54,6 @@ enum
 };
   
 
-static void gtk_table_class_init    (GtkTableClass  *klass);
-static void gtk_table_init	    (GtkTable	    *table);
 static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_size_request  (GtkWidget	    *widget,
 				     GtkRequisition *requisition);
@@ -100,35 +98,7 @@ static void gtk_table_size_allocate_pass1 (GtkTable *table);
 static void gtk_table_size_allocate_pass2 (GtkTable *table);
 
 
-static GtkContainerClass *parent_class = NULL;
-
-
-GType
-gtk_table_get_type (void)
-{
-  static GType table_type = 0;
-  
-  if (!table_type)
-    {
-      static const GTypeInfo table_info =
-      {
-	sizeof (GtkTableClass),
-	NULL,
-	NULL,
-	(GClassInitFunc) gtk_table_class_init,
-	NULL,
-	NULL,
-	sizeof (GtkTable),
-	0,
-	(GInstanceInitFunc) gtk_table_init,
-      };
-      
-      table_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkTable"),
-					   &table_info, 0);
-    }
-  
-  return table_type;
-}
+G_DEFINE_TYPE (GtkTable, gtk_table, GTK_TYPE_CONTAINER);
 
 static void
 gtk_table_class_init (GtkTableClass *class)
@@ -137,8 +107,6 @@ gtk_table_class_init (GtkTableClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   
-  parent_class = g_type_class_peek_parent (class);
-
   gobject_class->finalize = gtk_table_finalize;
 
   gobject_class->get_property = gtk_table_get_property;
@@ -839,7 +807,7 @@ gtk_table_finalize (GObject *object)
   g_free (table->rows);
   g_free (table->cols);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_table_parent_class)->finalize (object);
 }
 
 static void

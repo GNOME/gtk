@@ -46,9 +46,7 @@ struct _GtkFileSystemModelClass
 };
 
 
-static void gtk_file_system_model_class_init   (GtkFileSystemModelClass *class);
 static void gtk_file_system_model_iface_init   (GtkTreeModelIface       *iface);
-static void gtk_file_system_model_init         (GtkFileSystemModel      *model);
 static void gtk_file_system_model_finalize     (GObject                 *object);
 static void gtk_file_system_model_dispose      (GObject                 *object);
 
@@ -138,8 +136,6 @@ static void root_files_removed_callback (GtkFileFolder      *folder,
 					 GSList             *paths,
 					 GtkFileSystemModel *model);
 
-static GObjectClass *parent_class = NULL;
-
 /* Signal IDs */
 enum {
   FINISHED_LOADING,
@@ -150,60 +146,16 @@ static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
 
 
 
-GType
-_gtk_file_system_model_get_type (void)
-{
-  static GType file_system_model_type = 0;
-
-  if (!file_system_model_type)
-    {
-      static const GTypeInfo file_system_model_info =
-      {
-	sizeof (GtkFileSystemModelClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_system_model_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileSystemModel),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_system_model_init,
-      };
-      
-      static const GInterfaceInfo file_system_info =
-      {
-	(GInterfaceInitFunc) gtk_file_system_model_iface_init, /* interface_init */
-	NULL,			                               /* interface_finalize */
-	NULL			                               /* interface_data */
-      };
-
-      static const GInterfaceInfo drag_source_info =
-      {
-	(GInterfaceInitFunc) drag_source_iface_init,           /* interface_init */
-	NULL,			                               /* interface_finalize */
-	NULL			                               /* interface_data */
-      };
-
-      file_system_model_type = g_type_register_static (G_TYPE_OBJECT,
-						       I_("GtkFileSystemModel"),
-						      &file_system_model_info, 0);
-      g_type_add_interface_static (file_system_model_type,
-				   GTK_TYPE_TREE_MODEL,
-				   &file_system_info);
-      g_type_add_interface_static (file_system_model_type,
-				   GTK_TYPE_TREE_DRAG_SOURCE,
-				   &drag_source_info);
-    }
-
-  return file_system_model_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+						gtk_file_system_model_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+						drag_source_iface_init));
 
 static void
-gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
+_gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_system_model_finalize;
   gobject_class->dispose = gtk_file_system_model_dispose;
@@ -238,7 +190,7 @@ gtk_file_system_model_iface_init (GtkTreeModelIface *iface)
 }
 
 static void
-gtk_file_system_model_init (GtkFileSystemModel *model)
+_gtk_file_system_model_init (GtkFileSystemModel *model)
 {
   model->show_files = TRUE;
   model->show_folders = TRUE;
@@ -268,7 +220,7 @@ gtk_file_system_model_finalize (GObject *object)
       children = next;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->finalize (object);
 }
 
 
@@ -287,7 +239,7 @@ gtk_file_system_model_dispose (GObject *object)
       model->pending_handles = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->dispose (object);
 }
 
 static void

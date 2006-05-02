@@ -142,8 +142,6 @@ struct _GtkMenuShellPrivate
   gboolean take_focus;
 };
 
-static void gtk_menu_shell_class_init        (GtkMenuShellClass *klass);
-static void gtk_menu_shell_init              (GtkMenuShell      *menu_shell);
 static void gtk_menu_shell_set_property      (GObject           *object,
                                               guint              prop_id,
                                               const GValue      *value,
@@ -201,38 +199,9 @@ static void     gtk_menu_shell_reset_key_hash    (GtkMenuShell *menu_shell);
 static gboolean gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
 						  GdkEventKey  *event);
 
-static GtkContainerClass *parent_class = NULL;
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_menu_shell_get_type (void)
-{
-  static GType menu_shell_type = 0;
-
-  if (!menu_shell_type)
-    {
-      static const GTypeInfo menu_shell_info =
-      {
-	sizeof (GtkMenuShellClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_menu_shell_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkMenuShell),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_menu_shell_init,
-	NULL,		/* value_table */
-      };
-
-      menu_shell_type =
-	g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkMenuShell"),
-				&menu_shell_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return menu_shell_type;
-}
+G_DEFINE_TYPE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONTAINER);
 
 static void
 gtk_menu_shell_class_init (GtkMenuShellClass *klass)
@@ -246,8 +215,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   object_class = (GObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->set_property = gtk_menu_shell_set_property;
   object_class->get_property = gtk_menu_shell_get_property;
@@ -456,7 +423,7 @@ gtk_menu_shell_finalize (GObject *object)
   if (priv->key_hash)
     _gtk_key_hash_free (priv->key_hash);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_menu_shell_parent_class)->finalize (object);
 }
 
 

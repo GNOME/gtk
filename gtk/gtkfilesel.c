@@ -372,7 +372,6 @@ static gint compare_cmpl_dir(const void* a, const void* b);
 static void update_cmpl(PossibleCompletion* poss,
 			CompletionState* cmpl_state);
 
-static void gtk_file_selection_class_init    (GtkFileSelectionClass *klass);
 static void gtk_file_selection_set_property  (GObject         *object,
 					      guint            prop_id,
 					      const GValue    *value,
@@ -381,7 +380,6 @@ static void gtk_file_selection_get_property  (GObject         *object,
 					      guint            prop_id,
 					      GValue          *value,
 					      GParamSpec      *pspec);
-static void gtk_file_selection_init          (GtkFileSelection      *filesel);
 static void gtk_file_selection_finalize      (GObject               *object);
 static void gtk_file_selection_destroy       (GtkObject             *object);
 static void gtk_file_selection_map           (GtkWidget             *widget);
@@ -466,8 +464,6 @@ compare_sys_filenames (const gchar *a,
 
 #endif
 
-static GtkWindowClass *parent_class = NULL;
-
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
 
@@ -507,33 +503,7 @@ translate_win32_path (GtkFileSelection *filesel)
 }
 #endif
 
-GType
-gtk_file_selection_get_type (void)
-{
-  static GType file_selection_type = 0;
-
-  if (!file_selection_type)
-    {
-      static const GTypeInfo filesel_info =
-      {
-	sizeof (GtkFileSelectionClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_selection_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileSelection),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_selection_init,
-      };
-
-      file_selection_type =
-	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkFileSelection"),
-				&filesel_info, 0);
-    }
-
-  return file_selection_type;
-}
+G_DEFINE_TYPE (GtkFileSelection, gtk_file_selection, GTK_TYPE_DIALOG);
 
 static void
 gtk_file_selection_class_init (GtkFileSelectionClass *class)
@@ -545,8 +515,6 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
   gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_selection_finalize;
   gobject_class->set_property = gtk_file_selection_set_property;
@@ -1333,7 +1301,7 @@ gtk_file_selection_destroy (GtkObject *object)
       filesel->last_selected = NULL;
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_file_selection_parent_class)->destroy (object);
 }
 
 static void
@@ -1344,7 +1312,7 @@ gtk_file_selection_map (GtkWidget *widget)
   /* Refresh the contents */
   gtk_file_selection_populate (filesel, "", FALSE, FALSE);
   
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_file_selection_parent_class)->map (widget);
 }
 
 static void
@@ -1354,7 +1322,7 @@ gtk_file_selection_finalize (GObject *object)
 
   g_free (filesel->fileop_file);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_file_selection_parent_class)->finalize (object);
 }
 
 /* Begin file operations callbacks */

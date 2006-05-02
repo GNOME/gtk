@@ -40,8 +40,6 @@ struct _GtkIMMulticontextPrivate
   guint focus_in : 1;
 };
 
-static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
-static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);
 static void     gtk_im_multicontext_finalize           (GObject                 *object);
 
 static void     gtk_im_multicontext_set_slave          (GtkIMMulticontext       *multicontext,
@@ -86,37 +84,10 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     gint               offset,
 							     gint               n_chars,
 							     GtkIMMulticontext *multicontext);
-static GtkIMContextClass *parent_class;
 
 static const gchar *global_context_id = NULL;
 
-GType
-gtk_im_multicontext_get_type (void)
-{
-  static GType im_multicontext_type = 0;
- 
-  if (!im_multicontext_type)
-    {
-      static const GTypeInfo im_multicontext_info =
-      {
-        sizeof (GtkIMMulticontextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_im_multicontext_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkIMMulticontext),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_im_multicontext_init,
-      };
-      
-      im_multicontext_type =
-	g_type_register_static (GTK_TYPE_IM_CONTEXT, I_("GtkIMMulticontext"),
-				&im_multicontext_info, 0);
-    }
-
-  return im_multicontext_type;
-}
+G_DEFINE_TYPE (GtkIMMulticontext, gtk_im_multicontext, GTK_TYPE_IM_CONTEXT);
 
 static void
 gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
@@ -124,8 +95,6 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
   
-  parent_class = g_type_class_peek_parent (class);
-
   im_context_class->set_client_window = gtk_im_multicontext_set_client_window;
   im_context_class->get_preedit_string = gtk_im_multicontext_get_preedit_string;
   im_context_class->filter_keypress = gtk_im_multicontext_filter_keypress;
@@ -173,7 +142,7 @@ gtk_im_multicontext_finalize (GObject *object)
   
   gtk_im_multicontext_set_slave (multicontext, NULL, TRUE);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_im_multicontext_parent_class)->finalize (object);
 }
 
 static void

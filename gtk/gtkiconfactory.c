@@ -82,10 +82,7 @@ struct _GtkIconSource
 #endif
 };
 
-static gpointer parent_class = NULL;
 
-static void gtk_icon_factory_init       (GtkIconFactory      *icon_factory);
-static void gtk_icon_factory_class_init (GtkIconFactoryClass *klass);
 static void gtk_icon_factory_finalize   (GObject             *object);
 static void get_default_icons           (GtkIconFactory      *icon_factory);
 static void icon_source_clear           (GtkIconSource       *source);
@@ -99,33 +96,7 @@ static GtkIconSize icon_size_register_intern (const gchar *name,
    0, 0, 0,								\
    any_direction, any_state, any_size }
 
-GType
-gtk_icon_factory_get_type (void)
-{
-  static GType icon_factory_type = 0;
-
-  if (!icon_factory_type)
-    {
-      static const GTypeInfo icon_factory_info =
-      {
-        sizeof (GtkIconFactoryClass),
-        NULL,		/* base_init */
-        NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_icon_factory_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkIconFactory),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_icon_factory_init,
-      };
-      
-      icon_factory_type =
-	g_type_register_static (G_TYPE_OBJECT, I_("GtkIconFactory"),
-				&icon_factory_info, 0);
-    }
-  
-  return icon_factory_type;
-}
+G_DEFINE_TYPE (GtkIconFactory, gtk_icon_factory, G_TYPE_OBJECT);
 
 static void
 gtk_icon_factory_init (GtkIconFactory *factory)
@@ -139,8 +110,6 @@ gtk_icon_factory_class_init (GtkIconFactoryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gtk_icon_factory_finalize;
 }
 
@@ -162,7 +131,7 @@ gtk_icon_factory_finalize (GObject *object)
   
   g_hash_table_destroy (factory->icons);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_icon_factory_parent_class)->finalize (object);
 }
 
 /**

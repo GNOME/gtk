@@ -75,9 +75,7 @@ enum {
   TARGET_COMPOUND_TEXT
 };
 
-static void  gtk_old_editable_class_init           (GtkOldEditableClass *klass);
 static void  gtk_old_editable_editable_init        (GtkEditableClass    *iface);
-static void  gtk_old_editable_init                 (GtkOldEditable      *editable);
 static void  gtk_old_editable_set_arg              (GtkObject           *object,
 						    GtkArg              *arg,
 						    guint                arg_id);
@@ -128,46 +126,11 @@ static void     gtk_old_editable_set_position        (GtkEditable *editable,
 						      gint         position);
 static gint     gtk_old_editable_get_position        (GtkEditable *editable);
 
-static GtkWidgetClass *parent_class = NULL;
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 
-GtkType
-gtk_old_editable_get_type (void)
-{
-  static GtkType old_editable_type = 0;
-
-  if (!old_editable_type)
-    {
-      static const GTypeInfo old_editable_info =
-      {
-	sizeof (GtkOldEditableClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_old_editable_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkOldEditable),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_old_editable_init,
-	NULL,		/* value_table */
-      };
-
-      static const GInterfaceInfo editable_info =
-      {
-	(GInterfaceInitFunc) gtk_old_editable_editable_init,	 /* interface_init */
-	NULL,			                                 /* interface_finalize */
-	NULL			                                 /* interface_data */
-      };
-
-      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkOldEditable"),
-						  &old_editable_info, G_TYPE_FLAG_ABSTRACT);
-      g_type_add_interface_static (old_editable_type,
-				   GTK_TYPE_EDITABLE,
-				   &editable_info);
-    }
-
-  return old_editable_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkOldEditable, gtk_old_editable, GTK_TYPE_WIDGET,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+						gtk_old_editable_editable_init));
 
 static void
 gtk_old_editable_class_init (GtkOldEditableClass *class)
@@ -178,8 +141,6 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
-    
   object_class->set_arg = gtk_old_editable_set_arg;
   object_class->get_arg = gtk_old_editable_get_arg;
 
@@ -558,7 +519,7 @@ gtk_old_editable_selection_clear (GtkWidget         *widget,
   
   /* Let the selection handling code know that the selection
    * has been changed, since we've overriden the default handler */
-  if (!parent_class->selection_clear_event (widget, event))
+  if (!GTK_WIDGET_CLASS (gtk_old_editable_parent_class)->selection_clear_event (widget, event))
     return FALSE;
   
   if (old_editable->has_selection)

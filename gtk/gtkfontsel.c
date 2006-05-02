@@ -113,7 +113,6 @@ enum {
   SIZE_COLUMN
 };
 
-static void    gtk_font_selection_class_init	     (GtkFontSelectionClass *klass);
 static void    gtk_font_selection_set_property       (GObject         *object,
 						      guint            prop_id,
 						      const GValue    *value,
@@ -122,7 +121,6 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 						      guint            prop_id,
 						      GValue          *value,
 						      GParamSpec      *pspec);
-static void    gtk_font_selection_init		     (GtkFontSelection      *fontsel);
 static void    gtk_font_selection_finalize	     (GObject               *object);
 static void    gtk_font_selection_screen_changed     (GtkWidget		    *widget,
 						      GdkScreen             *previous_screen);
@@ -161,49 +159,13 @@ static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
 static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
 
-/* FontSelectionDialog */
-static void    gtk_font_selection_dialog_class_init  (GtkFontSelectionDialogClass *klass);
-static void    gtk_font_selection_dialog_init	     (GtkFontSelectionDialog *fontseldiag);
-
-static GtkVBoxClass *font_selection_parent_class = NULL;
-static GtkWindowClass *font_selection_dialog_parent_class = NULL;
-
-
-GType
-gtk_font_selection_get_type (void)
-{
-  static GType font_selection_type = 0;
-  
-  if (!font_selection_type)
-    {
-      static const GTypeInfo fontsel_type_info =
-      {
-	sizeof (GtkFontSelectionClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_font_selection_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFontSelection),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_font_selection_init,
-      };
-      
-      font_selection_type =
-	g_type_register_static (GTK_TYPE_VBOX, I_("GtkFontSelection"),
-				&fontsel_type_info, 0);
-    }
-  
-  return font_selection_type;
-}
+G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX);
 
 static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  
-  font_selection_parent_class = g_type_class_peek_parent (klass);
   
   gobject_class->set_property = gtk_font_selection_set_property;
   gobject_class->get_property = gtk_font_selection_get_property;
@@ -311,7 +273,6 @@ static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
 {
   GtkWidget *scrolled_win;
-  GtkWidget *text_frame;
   GtkWidget *text_box;
   GtkWidget *table, *label;
   GtkWidget *font_label, *style_label;
@@ -598,7 +559,7 @@ gtk_font_selection_finalize (GObject *object)
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
   
-  (* G_OBJECT_CLASS (font_selection_parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize) (object);
 }
 
 static void
@@ -1333,38 +1294,11 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
  * GtkFontSelectionDialog
  *****************************************************************************/
 
-GType
-gtk_font_selection_dialog_get_type (void)
-{
-  static GType font_selection_dialog_type = 0;
-  
-  if (!font_selection_dialog_type)
-    {
-      static const GTypeInfo fontsel_diag_info =
-      {
-	sizeof (GtkFontSelectionDialogClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_font_selection_dialog_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFontSelectionDialog),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_font_selection_dialog_init,
-      };
-      
-      font_selection_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkFontSelectionDialog"),
-				&fontsel_diag_info, 0);
-    }
-  
-  return font_selection_dialog_type;
-}
+G_DEFINE_TYPE (GtkFontSelectionDialog, gtk_font_selection_dialog, GTK_TYPE_DIALOG);
 
 static void
 gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
 {
-  font_selection_dialog_parent_class = g_type_class_peek_parent (klass);
 }
 
 static void

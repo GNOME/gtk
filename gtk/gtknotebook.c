@@ -184,9 +184,6 @@ static const GtkTargetEntry notebook_dest_targets[] = {
 #endif
  
 /*** GtkNotebook Methods ***/
-static void gtk_notebook_class_init          (GtkNotebookClass *klass);
-static void gtk_notebook_init                (GtkNotebook      *notebook);
-
 static gboolean gtk_notebook_select_page         (GtkNotebook      *notebook,
 						  gboolean          move_focus);
 static gboolean gtk_notebook_focus_tab           (GtkNotebook      *notebook,
@@ -395,35 +392,9 @@ static void stop_scrolling (GtkNotebook *notebook);
 static GtkNotebookWindowCreationFunc window_creation_hook = NULL;
 static gpointer window_creation_hook_data;
 
-static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_notebook_get_type (void)
-{
-  static GType notebook_type = 0;
-
-  if (!notebook_type)
-    {
-      static const GTypeInfo notebook_info =
-      {
-	sizeof (GtkNotebookClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_notebook_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkNotebook),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_notebook_init,
-      };
-
-      notebook_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkNotebook"),
-					      &notebook_info, 0);
-    }
-
-  return notebook_type;
-}
+G_DEFINE_TYPE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER);
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -480,8 +451,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkBindingSet *binding_set;
   
-  parent_class = g_type_class_peek_parent (class);
-
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
   object_class->destroy = gtk_notebook_destroy;
@@ -1284,7 +1253,7 @@ gtk_notebook_destroy (GtkObject *object)
       priv->switch_tab_timer = 0;
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_notebook_parent_class)->destroy (object);
 }
 
 static void
@@ -1526,7 +1495,7 @@ gtk_notebook_unmap (GtkWidget *widget)
 
   gdk_window_hide (GTK_NOTEBOOK (widget)->event_window);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unmap (widget);
 }
 
 static void
@@ -1580,8 +1549,8 @@ gtk_notebook_unrealize (GtkWidget *widget)
   gdk_window_destroy (notebook->event_window);
   notebook->event_window = NULL;
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -2780,7 +2749,7 @@ gtk_notebook_style_set  (GtkWidget *widget,
   notebook->has_after_previous = has_after_previous;
   notebook->has_after_next = has_after_next;
   
-  (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
+  (* GTK_WIDGET_CLASS (gtk_notebook_parent_class)->style_set) (widget, previous);
 }
 
 static void
@@ -3517,7 +3486,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 	}
     }
 
-  parent_class->set_focus_child (container, child);
+  GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->set_focus_child (container, child);
 }
 
 static void

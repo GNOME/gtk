@@ -43,8 +43,6 @@ struct _GtkMenuToolButtonPrivate
   GtkMenu   *menu;
 };
 
-static void gtk_menu_tool_button_init       (GtkMenuToolButton      *button);
-static void gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass);
 static void gtk_menu_tool_button_destroy    (GtkObject              *object);
 
 static int  menu_deactivate_cb              (GtkMenuShell           *menu_shell,
@@ -65,35 +63,7 @@ enum
 
 static gint signals[LAST_SIGNAL];
 
-static GObjectClass *parent_class = NULL;
-
-GType
-gtk_menu_tool_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (type == 0)
-    {
-      static const GTypeInfo info =
-	{
-	  sizeof (GtkMenuToolButtonClass),
-	  (GBaseInitFunc) 0,
-	  (GBaseFinalizeFunc) 0,
-	  (GClassInitFunc) gtk_menu_tool_button_class_init,
-	  (GClassFinalizeFunc) 0,
-	  NULL,
-	  sizeof (GtkMenuToolButton),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_menu_tool_button_init
-	};
-
-      type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
-                                     I_("GtkMenuToolButton"),
-                                     &info, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON);
 
 static gboolean
 gtk_menu_tool_button_set_tooltip (GtkToolItem *tool_item,
@@ -175,7 +145,7 @@ gtk_menu_tool_button_toolbar_reconfigured (GtkToolItem *toolitem)
   gtk_menu_tool_button_construct_contents (GTK_MENU_TOOL_BUTTON (toolitem));
 
   /* chain up */
-  GTK_TOOL_ITEM_CLASS (parent_class)->toolbar_reconfigured (toolitem);
+  GTK_TOOL_ITEM_CLASS (gtk_menu_tool_button_parent_class)->toolbar_reconfigured (toolitem);
 }
 
 static void
@@ -238,8 +208,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   GtkObjectClass *gtk_object_class;
   GtkWidgetClass *widget_class;
   GtkToolItemClass *toolitem_class;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class = (GObjectClass *)klass;
   gtk_object_class = (GtkObjectClass *)klass;
@@ -460,8 +428,8 @@ gtk_menu_tool_button_destroy (GtkObject *object)
 					    button);
     }
   
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy)
+    (*GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy) (object);
 }
 
 /**

@@ -34,8 +34,6 @@ static void gtk_cell_renderer_toggle_set_property  (GObject                    *
 						    guint                       param_id,
 						    const GValue               *value,
 						    GParamSpec                 *pspec);
-static void gtk_cell_renderer_toggle_init       (GtkCellRendererToggle      *celltext);
-static void gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class);
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
  						 GdkRectangle               *cell_area,
@@ -88,33 +86,7 @@ struct _GtkCellRendererTogglePrivate
 };
 
 
-GType
-gtk_cell_renderer_toggle_get_type (void)
-{
-  static GType cell_toggle_type = 0;
-
-  if (!cell_toggle_type)
-    {
-      static const GTypeInfo cell_toggle_info =
-      {
-	sizeof (GtkCellRendererToggleClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_cell_renderer_toggle_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkCellRendererToggle),
-	0,              /* n_preallocs */
-	(GInstanceInitFunc) gtk_cell_renderer_toggle_init,
-      };
-
-      cell_toggle_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, I_("GtkCellRendererToggle"),
-				&cell_toggle_info, 0);
-    }
-
-  return cell_toggle_type;
-}
+G_DEFINE_TYPE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER);
 
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)

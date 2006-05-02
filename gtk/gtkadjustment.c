@@ -49,9 +49,6 @@ enum {
 };
 
 
-static void gtk_adjustment_class_init (GtkAdjustmentClass *klass);
-static void gtk_adjustment_init       (GtkAdjustment      *adjustment);
-
 static void gtk_adjustment_get_property (GObject      *object,
                                          guint         prop_id,
                                          GValue       *value,
@@ -63,34 +60,7 @@ static void gtk_adjustment_set_property (GObject      *object,
 
 static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_adjustment_get_type (void)
-{
-  static GType adjustment_type = 0;
-
-  if (!adjustment_type)
-    {
-      static const GTypeInfo adjustment_info =
-      {
-	sizeof (GtkAdjustmentClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_adjustment_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkAdjustment),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_adjustment_init,
-      };
-
-      adjustment_type =
-	g_type_register_static (GTK_TYPE_OBJECT, I_("GtkAdjustment"),
-				&adjustment_info, 0);
-    }
-
-  return adjustment_type;
-}
+G_DEFINE_TYPE (GtkAdjustment, gtk_adjustment, GTK_TYPE_OBJECT);
 
 static void
 gtk_adjustment_class_init (GtkAdjustmentClass *class)

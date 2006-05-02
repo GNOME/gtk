@@ -41,8 +41,6 @@ enum {
   CHILD_PROP_SECONDARY
 };
 
-static void gtk_button_box_class_init         (GtkButtonBoxClass *klass);
-static void gtk_button_box_init               (GtkButtonBox      *box);
 static void gtk_button_box_set_property       (GObject           *object,
 					       guint              prop_id,
 					       const GValue      *value,
@@ -67,34 +65,7 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
-GType
-gtk_button_box_get_type (void)
-{
-  static GType button_box_type = 0;
-
-  if (!button_box_type)
-    {
-      static const GTypeInfo button_box_info =
-      {
-	sizeof (GtkButtonBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_button_box_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkButtonBox),
-	0,               /* n_preallocs */
-	(GInstanceInitFunc) gtk_button_box_init,
-	NULL,		/* value_table */
-      };
-
-      button_box_type =
-	g_type_register_static (GTK_TYPE_BOX, I_("GtkButtonBox"),
-				&button_box_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return button_box_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX);
 
 static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)

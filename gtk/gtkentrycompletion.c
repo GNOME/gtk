@@ -65,9 +65,7 @@ enum
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
 
-static void     gtk_entry_completion_class_init          (GtkEntryCompletionClass *klass);
 static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
-static void     gtk_entry_completion_init                (GtkEntryCompletion      *completion);
 static void     gtk_entry_completion_set_property        (GObject                 *object,
                                                           guint                    prop_id,
                                                           const GValue            *value,
@@ -139,55 +137,17 @@ static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *co
 static gboolean gtk_entry_completion_real_insert_prefix  (GtkEntryCompletion *completion,
 							  const gchar        *prefix);
 
-static GObjectClass *parent_class = NULL;
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_entry_completion_get_type (void)
-{
-  static GType entry_completion_type = 0;
-
-  if (!entry_completion_type)
-    {
-      static const GTypeInfo entry_completion_info =
-      {
-        sizeof (GtkEntryCompletionClass),
-        NULL,
-        NULL,
-        (GClassInitFunc) gtk_entry_completion_class_init,
-        NULL,
-        NULL,
-        sizeof (GtkEntryCompletion),
-        0,
-        (GInstanceInitFunc) gtk_entry_completion_init
-      };
-
-      static const GInterfaceInfo cell_layout_info =
-      {
-        (GInterfaceInitFunc) gtk_entry_completion_cell_layout_init,
-        NULL,
-        NULL
-      };
-
-      entry_completion_type =
-        g_type_register_static (G_TYPE_OBJECT, I_("GtkEntryCompletion"),
-                                &entry_completion_info, 0);
-
-      g_type_add_interface_static (entry_completion_type,
-                                   GTK_TYPE_CELL_LAYOUT,
-                                   &cell_layout_info);
-    }
-
-  return entry_completion_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkEntryCompletion, gtk_entry_completion, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
+						gtk_entry_completion_cell_layout_init));
 
 static void
 gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 {
   GObjectClass *object_class;
 
-  parent_class = g_type_class_peek_parent (klass);
   object_class = (GObjectClass *)klass;
 
   object_class->set_property = gtk_entry_completion_set_property;
@@ -612,7 +572,7 @@ gtk_entry_completion_finalize (GObject *object)
   if (completion->priv->popup_window)
     gtk_widget_destroy (completion->priv->popup_window);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_entry_completion_parent_class)->finalize (object);
 }
 
 /* implement cell layout interface */

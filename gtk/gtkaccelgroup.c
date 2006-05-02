@@ -39,13 +39,10 @@
 
 
 /* --- prototypes --- */
-static void gtk_accel_group_class_init	(GtkAccelGroupClass	*class);
-static void gtk_accel_group_init	(GtkAccelGroup		*accel_group);
 static void gtk_accel_group_finalize	(GObject		*object);
 
 
 /* --- variables --- */
-static GObjectClass     *parent_class = NULL;
 static guint		 signal_accel_activate = 0;
 static guint		 signal_accel_changed = 0;
 static guint		 quark_acceleratable_groups = 0;
@@ -57,43 +54,13 @@ static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 						   GDK_META_MASK);
 
 
+G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT);
+
 /* --- functions --- */
-/**
- * gtk_accel_group_get_type:
- * @returns: the type ID for accelerator groups.
- */
-GType
-gtk_accel_group_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info = {
-	sizeof (GtkAccelGroupClass),
-	(GBaseInitFunc) NULL,
-	(GBaseFinalizeFunc) NULL,
-	(GClassInitFunc) gtk_accel_group_class_init,
-	NULL,   /* class_finalize */
-	NULL,   /* class_data */
-	sizeof (GtkAccelGroup),
-	0,      /* n_preallocs */
-	(GInstanceInitFunc) gtk_accel_group_init,
-      };
-
-      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkAccelGroup"),
-					    &object_info, 0);
-    }
-
-  return object_type;
-}
-
 static void
 gtk_accel_group_class_init (GtkAccelGroupClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   quark_acceleratable_groups = g_quark_from_static_string ("gtk-acceleratable-accel-groups");
 
@@ -171,7 +138,7 @@ gtk_accel_group_finalize (GObject *object)
 
   g_free (accel_group->priv_accels);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_accel_group_parent_class)->finalize (object);
 }
 
 static void

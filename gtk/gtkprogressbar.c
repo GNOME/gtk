@@ -65,8 +65,6 @@ enum {
   PROP_DISCRETE_BLOCKS
 };
 
-static void gtk_progress_bar_class_init    (GtkProgressBarClass *klass);
-static void gtk_progress_bar_init          (GtkProgressBar      *pbar);
 static void gtk_progress_bar_set_property  (GObject             *object,
 					    guint                prop_id,
 					    const GValue        *value,
@@ -91,33 +89,7 @@ static void gtk_progress_bar_set_activity_blocks_internal (GtkProgressBar *pbar,
 							   guint           blocks);
 
 
-GType
-gtk_progress_bar_get_type (void)
-{
-  static GType progress_bar_type = 0;
-
-  if (!progress_bar_type)
-    {
-      static const GTypeInfo progress_bar_info =
-      {
-	sizeof (GtkProgressBarClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_progress_bar_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkProgressBar),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_progress_bar_init,
-      };
-
-      progress_bar_type =
-	g_type_register_static (GTK_TYPE_PROGRESS, I_("GtkProgressBar"),
-				&progress_bar_info, 0);
-    }
-
-  return progress_bar_type;
-}
+G_DEFINE_TYPE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_PROGRESS);
 
 static void
 gtk_progress_bar_class_init (GtkProgressBarClass *class)

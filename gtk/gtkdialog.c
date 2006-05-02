@@ -52,9 +52,6 @@ struct _ResponseData
   gint response_id;
 };
 
-static void gtk_dialog_class_init (GtkDialogClass *klass);
-static void gtk_dialog_init       (GtkDialog      *dialog);
-
 static void gtk_dialog_add_buttons_valist (GtkDialog   *dialog,
                                            const gchar *first_button_text,
                                            va_list      args);
@@ -91,35 +88,9 @@ enum {
   LAST_SIGNAL
 };
 
-static gpointer parent_class;
 static guint dialog_signals[LAST_SIGNAL];
 
-GType
-gtk_dialog_get_type (void)
-{
-  static GType dialog_type = 0;
-
-  if (!dialog_type)
-    {
-      static const GTypeInfo dialog_info =
-      {
-	sizeof (GtkDialogClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_dialog_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkDialog),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_dialog_init,
-      };
-
-      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, I_("GtkDialog"),
-					    &dialog_info, 0);
-    }
-
-  return dialog_type;
-}
+G_DEFINE_TYPE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW);
 
 static void
 gtk_dialog_class_init (GtkDialogClass *class)
@@ -131,8 +102,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
   
-  parent_class = g_type_class_peek_parent (class);
-
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
   
@@ -338,7 +307,7 @@ gtk_dialog_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
   
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
   if (!window->focus_widget)
     {

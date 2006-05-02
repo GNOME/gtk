@@ -50,8 +50,6 @@ struct _GtkMessageDialogPrivate
   gboolean   has_secondary_text;
 };
 
-static void gtk_message_dialog_class_init (GtkMessageDialogClass *klass);
-static void gtk_message_dialog_init       (GtkMessageDialog      *dialog);
 static void gtk_message_dialog_style_set  (GtkWidget             *widget,
                                            GtkStyle              *prev_style);
 
@@ -76,34 +74,7 @@ enum {
   PROP_SECONDARY_USE_MARKUP
 };
 
-static gpointer parent_class;
-
-GType
-gtk_message_dialog_get_type (void)
-{
-  static GType dialog_type = 0;
-
-  if (!dialog_type)
-    {
-      static const GTypeInfo dialog_info =
-      {
-	sizeof (GtkMessageDialogClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_message_dialog_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkMessageDialog),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_message_dialog_init,
-      };
-
-      dialog_type = g_type_register_static (GTK_TYPE_DIALOG, I_("GtkMessageDialog"),
-					    &dialog_info, 0);
-    }
-
-  return dialog_type;
-}
+G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG);
 
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
@@ -113,8 +84,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   widget_class = GTK_WIDGET_CLASS (class);
   gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
   
   widget_class->style_set = gtk_message_dialog_style_set;
 
@@ -858,8 +827,8 @@ gtk_message_dialog_style_set (GtkWidget *widget,
 
   setup_primary_label_font (dialog);
 
-  if (GTK_WIDGET_CLASS (parent_class)->style_set)
-    (GTK_WIDGET_CLASS (parent_class)->style_set) (widget, prev_style);
+  if (GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set)
+    (GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set) (widget, prev_style);
 }
 
 #define __GTK_MESSAGE_DIALOG_C__

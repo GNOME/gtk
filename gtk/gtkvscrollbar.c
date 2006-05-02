@@ -31,36 +31,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static void     gtk_vscrollbar_class_init       (GtkVScrollbarClass *klass);
-static void     gtk_vscrollbar_init             (GtkVScrollbar      *vscrollbar);
-
-GType
-gtk_vscrollbar_get_type (void)
-{
-  static GType vscrollbar_type = 0;
-  
-  if (!vscrollbar_type)
-    {
-      static const GTypeInfo vscrollbar_info =
-      {
-        sizeof (GtkVScrollbarClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_vscrollbar_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkVScrollbar),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_vscrollbar_init,
-      };
-      
-      vscrollbar_type =
-	g_type_register_static (GTK_TYPE_SCROLLBAR, I_("GtkVScrollbar"),
-				&vscrollbar_info, 0);
-    }
-  
-  return vscrollbar_type;
-}
+G_DEFINE_TYPE (GtkVScrollbar, gtk_vscrollbar, GTK_TYPE_SCROLLBAR);
 
 static void
 gtk_vscrollbar_class_init (GtkVScrollbarClass *class)

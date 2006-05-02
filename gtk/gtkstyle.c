@@ -59,8 +59,6 @@ struct _GtkStylePrivate {
 };
 
 /* --- prototypes --- */
-static void	 gtk_style_init			(GtkStyle	*style);
-static void	 gtk_style_class_init		(GtkStyleClass	*klass);
 static void	 gtk_style_finalize		(GObject	*object);
 static void	 gtk_style_realize		(GtkStyle	*style,
 						 GdkColormap	*colormap);
@@ -355,39 +353,13 @@ static const GdkColor gtk_default_insensitive_bg = { 0, GTK_GRAY };
 static const GdkColor gtk_default_selected_base =  { 0, GTK_BLUE };
 static const GdkColor gtk_default_active_base =    { 0, GTK_VERY_DARK_GRAY };
 
-static gpointer parent_class = NULL;
-
 /* --- signals --- */
 static guint realize_signal = 0;
 static guint unrealize_signal = 0;
 
+G_DEFINE_TYPE (GtkStyle, gtk_style, G_TYPE_OBJECT);
+
 /* --- functions --- */
-GType
-gtk_style_get_type (void)
-{
-  static GType style_type = 0;
-  
-  if (!style_type)
-    {
-      static const GTypeInfo style_info =
-      {
-        sizeof (GtkStyleClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_style_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkStyle),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_style_init,
-      };
-      
-      style_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkStyle"),
-					   &style_info, 0);
-    }
-  
-  return style_type;
-}
 
 /**
  * _gtk_style_init_for_settings:
@@ -505,8 +477,6 @@ gtk_style_class_init (GtkStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gtk_style_finalize;
 
   klass->clone = gtk_style_real_clone;
@@ -649,7 +619,7 @@ gtk_style_finalize (GObject *object)
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_style_parent_class)->finalize (object);
 }
 
 

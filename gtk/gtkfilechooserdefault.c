@@ -241,10 +241,8 @@ typedef enum {
 #define NUM_LINES 40
 #define NUM_CHARS 60
 
-static void gtk_file_chooser_default_class_init       (GtkFileChooserDefaultClass *class);
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
-static void gtk_file_chooser_default_init             (GtkFileChooserDefault      *impl);
 
 static GObject* gtk_file_chooser_default_constructor  (GType                  type,
 						       guint                  n_construct_properties,
@@ -412,7 +410,6 @@ static const GtkFileInfo *get_list_file_info (GtkFileChooserDefault *impl,
 static void load_remove_timer (GtkFileChooserDefault *impl);
 static void browse_files_center_selected_row (GtkFileChooserDefault *impl);
 
-static GObjectClass *parent_class;
 
 
 
@@ -445,56 +442,14 @@ static GtkTreeModel *shortcuts_model_filter_new (GtkFileChooserDefault *impl,
 
 
 
-GType
-_gtk_file_chooser_default_get_type (void)
-{
-  static GType file_chooser_default_type = 0;
-
-  if (!file_chooser_default_type)
-    {
-      static const GTypeInfo file_chooser_default_info =
-      {
-	sizeof (GtkFileChooserDefaultClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_chooser_default_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileChooserDefault),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_chooser_default_init,
-      };
-
-      static const GInterfaceInfo file_chooser_info =
-      {
-	(GInterfaceInitFunc) gtk_file_chooser_default_iface_init, /* interface_init */
-	NULL,			                                       /* interface_finalize */
-	NULL			                                       /* interface_data */
-      };
-
-      static const GInterfaceInfo file_chooser_embed_info =
-      {
-	(GInterfaceInitFunc) gtk_file_chooser_embed_default_iface_init, /* interface_init */
-	NULL,			                                       /* interface_finalize */
-	NULL			                                       /* interface_data */
-      };
-
-      file_chooser_default_type = g_type_register_static (GTK_TYPE_VBOX, I_("GtkFileChooserDefault"),
-							 &file_chooser_default_info, 0);
-
-      g_type_add_interface_static (file_chooser_default_type,
-				   GTK_TYPE_FILE_CHOOSER,
-				   &file_chooser_info);
-      g_type_add_interface_static (file_chooser_default_type,
-				   GTK_TYPE_FILE_CHOOSER_EMBED,
-				   &file_chooser_embed_info);
-    }
-
-  return file_chooser_default_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_VBOX,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
+						gtk_file_chooser_default_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
+						gtk_file_chooser_embed_default_iface_init));						
 
 static void
-gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
+_gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
     GDK_1, GDK_2, GDK_3, GDK_4, GDK_5, GDK_6, GDK_7, GDK_8, GDK_9, GDK_0
@@ -503,8 +458,6 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
   int i;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_chooser_default_finalize;
   gobject_class->constructor = gtk_file_chooser_default_constructor;
@@ -670,8 +623,9 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->should_respond = gtk_file_chooser_default_should_respond;
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
+
 static void
-gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
+_gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
 #ifdef PROFILE_FILE_CHOOSER
@@ -856,7 +810,7 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   g_object_unref (impl->tooltips);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_chooser_default_parent_class)->finalize (object);
 }
 
 /* Shows an error dialog set as transient for the specified window */
@@ -3746,7 +3700,6 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
   char *uri;
   GtkFilePath *path;
   GError *error = NULL;
-  gint i;
  
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
   chooser = GTK_FILE_CHOOSER (data);
@@ -4383,9 +4336,9 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   profile_start ("start", NULL);
 
-  object = parent_class->constructor (type,
-				      n_construct_properties,
-				      construct_params);
+  object = G_OBJECT_CLASS (_gtk_file_chooser_default_parent_class)->constructor (type,
+										n_construct_properties,
+										construct_params);
   impl = GTK_FILE_CHOOSER_DEFAULT (object);
 
   g_assert (impl->file_system);
@@ -4914,7 +4867,7 @@ gtk_file_chooser_default_dispose (GObject *object)
 
   remove_settings_signal (impl, gtk_widget_get_screen (GTK_WIDGET (impl)));
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gtk_file_chooser_default_parent_class)->dispose (object);
 }
 
 /* We override show-all since we have internal widgets that
@@ -5054,8 +5007,8 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   profile_msg ("    parent class style_set start", NULL);
-  if (GTK_WIDGET_CLASS (parent_class)->style_set)
-    GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+  if (GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set)
+    GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set (widget, previous_style);
   profile_msg ("    parent class style_set end", NULL);
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
@@ -5078,8 +5031,8 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, previous_screen);
+  if (GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->screen_changed (widget, previous_screen);
 
   remove_settings_signal (impl, previous_screen);
   check_icon_theme (impl);
@@ -5147,7 +5100,7 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->map (widget);
 
   switch (impl->reload_state)
     {
@@ -5188,7 +5141,7 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
 
   impl->reload_state = RELOAD_WAS_UNMAPPED;
 }

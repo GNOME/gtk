@@ -268,8 +268,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 						      P_("The directions in which the size group affects the requested sizes"
 							" of its component widgets"),
 						      GTK_TYPE_SIZE_GROUP_MODE,
-						      GTK_SIZE_GROUP_HORIZONTAL,
-						      GTK_PARAM_READWRITE));
+						      GTK_SIZE_GROUP_HORIZONTAL,						      GTK_PARAM_READWRITE));
 
   /**
    * GtkSizeGroup:ignore-hidden:
@@ -302,32 +301,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   size_group->ignore_hidden = 0;
 }
 
-GType
-gtk_size_group_get_type (void)
-{
-  static GType size_group_type = 0;
-
-  if (!size_group_type)
-    {
-      static const GTypeInfo size_group_info =
-      {
-	sizeof (GtkSizeGroupClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_size_group_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkSizeGroup),
-	16,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_size_group_init,
-      };
-
-      size_group_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkSizeGroup"),
-						&size_group_info, 0);
-    }
-
-  return size_group_type;
-}
+G_DEFINE_TYPE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT);
 
 static void
 gtk_size_group_set_property (GObject      *object,

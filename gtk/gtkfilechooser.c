@@ -39,18 +39,12 @@ gtk_file_chooser_get_type (void)
 
   if (!file_chooser_type)
     {
-      static const GTypeInfo file_chooser_info =
-      {
-	sizeof (GtkFileChooserIface),  /* class_size */
-	NULL,                          /* base_init */
-	NULL,			       /* base_finalize */
-	(GClassInitFunc)gtk_file_chooser_class_init, /* class_init */
-      };
-
-      file_chooser_type = g_type_register_static (G_TYPE_INTERFACE,
-						  I_("GtkFileChooser"),
-						  &file_chooser_info, 0);
-
+      file_chooser_type = g_type_register_static_simple (G_TYPE_INTERFACE,
+							 I_("GtkFileChooser"),
+							 sizeof (GtkFileChooserIface),
+							 gtk_file_chooser_class_init,
+							 0, NULL, 0);
+      
       g_type_interface_add_prerequisite (file_chooser_type, GTK_TYPE_WIDGET);
     }
 

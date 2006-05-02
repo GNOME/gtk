@@ -32,40 +32,13 @@ enum {
   PROP_GROUP
 };
 
-static void gtk_radio_tool_button_init         (GtkRadioToolButton      *button);
-static void gtk_radio_tool_button_class_init   (GtkRadioToolButtonClass *klass);
 static void gtk_radio_tool_button_set_property (GObject         *object,
 						guint            prop_id,
 						const GValue    *value,
 						GParamSpec      *pspec);
 
-GType
-gtk_radio_tool_button_get_type (void)
-{
-  static GType type = 0;
+G_DEFINE_TYPE (GtkRadioToolButton, gtk_radio_tool_button, GTK_TYPE_TOGGLE_TOOL_BUTTON);
 
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-	{
-	  sizeof (GtkRadioToolButtonClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gtk_radio_tool_button_class_init,
-	  (GClassFinalizeFunc) NULL,
-	  NULL,
-	  sizeof (GtkRadioToolButton),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_radio_tool_button_init
-	};
-
-      type = g_type_register_static (GTK_TYPE_TOGGLE_TOOL_BUTTON,
-				     I_("GtkRadioToolButton"), &type_info, 0);
-    }
-  return type;
-}
-
-     
 static void
 gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
 {

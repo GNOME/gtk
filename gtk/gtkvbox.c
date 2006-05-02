@@ -30,40 +30,12 @@
 #include "gtkalias.h"
 
 
-static void gtk_vbox_class_init    (GtkVBoxClass   *klass);
-static void gtk_vbox_init          (GtkVBox        *box);
 static void gtk_vbox_size_request  (GtkWidget      *widget,
 				    GtkRequisition *requisition);
 static void gtk_vbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
-
-GType
-gtk_vbox_get_type (void)
-{
-  static GType vbox_type = 0;
-
-  if (!vbox_type)
-    {
-      static const GTypeInfo vbox_info =
-      {
-	sizeof (GtkVBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_vbox_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkVBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_vbox_init,
-      };
-
-      vbox_type = g_type_register_static (GTK_TYPE_BOX, I_("GtkVBox"),
-					  &vbox_info, 0);
-    }
-
-  return vbox_type;
-}
+G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX);
 
 static void
 gtk_vbox_class_init (GtkVBoxClass *class)

@@ -45,8 +45,6 @@ enum {
   CHILD_PROP_POSITION
 };
 
-static void gtk_box_class_init (GtkBoxClass    *klass);
-static void gtk_box_init       (GtkBox         *box);
 static void gtk_box_set_property (GObject         *object,
 				  guint            prop_id,
 				  const GValue    *value,
@@ -76,44 +74,13 @@ static void gtk_box_get_child_property (GtkContainer    *container,
 static GType gtk_box_child_type (GtkContainer   *container);
      
 
-static GtkContainerClass *parent_class = NULL;
-
-
-GType
-gtk_box_get_type (void)
-{
-  static GType box_type = 0;
-
-  if (!box_type)
-    {
-      static const GTypeInfo box_info =
-      {
-	sizeof (GtkBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_box_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_box_init,
-	NULL,		/* value_table */
-      };
-
-      box_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkBox"), 
-					 &box_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return box_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GtkBox, gtk_box, GTK_TYPE_CONTAINER);
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_box_set_property;
   gobject_class->get_property = gtk_box_get_property;

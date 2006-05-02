@@ -31,8 +31,6 @@
 #define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->stamp == (iter)->stamp && !_gtk_sequence_ptr_is_end ((iter)->user_data) && _gtk_sequence_ptr_get_sequence ((iter)->user_data) == list_store->seq)
 
-static void         gtk_list_store_init            (GtkListStore      *list_store);
-static void         gtk_list_store_class_init      (GtkListStoreClass *class);
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
@@ -117,82 +115,21 @@ static void     gtk_list_store_set_default_sort_func (GtkTreeSortable        *so
 static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *sortable);
 
 
-static GObjectClass *parent_class = NULL;
-
-GType
-gtk_list_store_get_type (void)
-{
-  static GType list_store_type = 0;
-
-  if (!list_store_type)
-    {
-      static const GTypeInfo list_store_info =
-      {
-	sizeof (GtkListStoreClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_list_store_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkListStore),
-	0,
-        (GInstanceInitFunc) gtk_list_store_init,
-      };
-
-      static const GInterfaceInfo tree_model_info =
-      {
-	(GInterfaceInitFunc) gtk_list_store_tree_model_init,
-	NULL,
-	NULL
-      };
-
-      static const GInterfaceInfo drag_source_info =
-      {
-	(GInterfaceInitFunc) gtk_list_store_drag_source_init,
-	NULL,
-	NULL
-      };
-
-      static const GInterfaceInfo drag_dest_info =
-      {
-	(GInterfaceInitFunc) gtk_list_store_drag_dest_init,
-	NULL,
-	NULL
-      };
-
-      static const GInterfaceInfo sortable_info =
-      {
-	(GInterfaceInitFunc) gtk_list_store_sortable_init,
-	NULL,
-	NULL
-      };
-
-      list_store_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkListStore"),
-						&list_store_info, 0);
-
-      g_type_add_interface_static (list_store_type,
-				   GTK_TYPE_TREE_MODEL,
-				   &tree_model_info);
-      g_type_add_interface_static (list_store_type,
-				   GTK_TYPE_TREE_DRAG_SOURCE,
-				   &drag_source_info);
-      g_type_add_interface_static (list_store_type,
-				   GTK_TYPE_TREE_DRAG_DEST,
-				   &drag_dest_info);
-      g_type_add_interface_static (list_store_type,
-				   GTK_TYPE_TREE_SORTABLE,
-				   &sortable_info);
-    }
-
-  return list_store_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+						gtk_list_store_tree_model_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+						gtk_list_store_drag_source_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST,
+						gtk_list_store_drag_dest_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE,
+						gtk_list_store_sortable_init));
 
 static void
 gtk_list_store_class_init (GtkListStoreClass *class)
 {
   GObjectClass *object_class;
 
-  parent_class = g_type_class_peek_parent (class);
   object_class = (GObjectClass*) class;
 
   object_class->finalize = gtk_list_store_finalize;
@@ -438,7 +375,7 @@ gtk_list_store_finalize (GObject *object)
     }
 
   /* must chain up */
-  (* parent_class->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_list_store_parent_class)->finalize) (object);
 }
 
 /* Fulfill the GtkTreeModel requirements */

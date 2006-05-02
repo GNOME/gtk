@@ -94,8 +94,6 @@ enum
 
 /* Forward declarations */
 
-static void gtk_input_dialog_class_init       (GtkInputDialogClass *klass);
-static void gtk_input_dialog_init             (GtkInputDialog      *inputd);
 static void gtk_input_dialog_screen_changed   (GtkWidget           *widget,
 					       GdkScreen           *previous_screen);
 static void gtk_input_dialog_set_device       (GtkWidget           *widget,
@@ -119,36 +117,9 @@ static void gtk_input_dialog_destroy_key      (GtkWidget           *widget,
 static void gtk_input_dialog_fill_keys        (GtkInputDialog      *inputd,
 					       GdkDevice           *info);
 
-static GtkObjectClass *parent_class = NULL;
 static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_input_dialog_get_type (void)
-{
-  static GType input_dialog_type = 0;
-
-  if (!input_dialog_type)
-    {
-      static const GTypeInfo input_dialog_info =
-      {
-	sizeof (GtkInputDialogClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_input_dialog_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkInputDialog),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_input_dialog_init,
-      };
-
-      input_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkInputDialog"),
-				&input_dialog_info, 0);
-    }
-
-  return input_dialog_type;
-}
+G_DEFINE_TYPE (GtkInputDialog, gtk_input_dialog, GTK_TYPE_DIALOG);
 
 static GtkInputDialogPrivate *
 gtk_input_dialog_get_private (GtkInputDialog *input_dialog)
@@ -179,8 +150,6 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
   GObjectClass *object_class = (GObjectClass *) klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
   
-  parent_class = g_type_class_peek_parent (klass);
-
   widget_class->screen_changed = gtk_input_dialog_screen_changed;
   
   klass->enable_device = NULL;

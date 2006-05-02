@@ -36,9 +36,6 @@ enum {
   PROP_DRAW
 };
 
-static void     gtk_separator_tool_item_class_init        (GtkSeparatorToolItemClass *class);
-static void	gtk_separator_tool_item_init		  (GtkSeparatorToolItem      *separator_item,
-							   GtkSeparatorToolItemClass *class);
 static gboolean gtk_separator_tool_item_create_menu_proxy (GtkToolItem               *item);
 static void     gtk_separator_tool_item_set_property      (GObject                   *object,
 							   guint                      prop_id,
@@ -58,8 +55,6 @@ static gint     get_space_size                            (GtkToolItem          
 
 
 
-static GObjectClass *parent_class = NULL;
-
 #define GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemPrivate))
 
 struct _GtkSeparatorToolItemPrivate
@@ -67,31 +62,7 @@ struct _GtkSeparatorToolItemPrivate
   guint draw : 1;
 };
 
-GType
-gtk_separator_tool_item_get_type (void)
-{
-  static GType type = 0;
-  
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-	{
-	  sizeof (GtkSeparatorToolItemClass),
-	  (GBaseInitFunc) 0,
-	  (GBaseFinalizeFunc) 0,
-	  (GClassInitFunc) gtk_separator_tool_item_class_init,
-	  (GClassFinalizeFunc) 0,
-	  NULL,
-	  sizeof (GtkSeparatorToolItem),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_separator_tool_item_init,
-	};
-      
-      type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-				     I_("GtkSeparatorToolItem"), &type_info, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM);
 
 static gint
 get_space_size (GtkToolItem *tool_item)
@@ -117,7 +88,6 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   GtkToolItemClass *toolitem_class;
   GtkWidgetClass *widget_class;
   
-  parent_class = g_type_class_peek_parent (class);
   object_class = (GObjectClass *)class;
   container_class = (GtkContainerClass *)class;
   toolitem_class = (GtkToolItemClass *)class;
@@ -143,8 +113,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 }
 
 static void
-gtk_separator_tool_item_init (GtkSeparatorToolItem      *separator_item,
-			      GtkSeparatorToolItemClass *class)
+gtk_separator_tool_item_init (GtkSeparatorToolItem      *separator_item)
 {
   separator_item->priv = GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE (separator_item);
   separator_item->priv->draw = TRUE;

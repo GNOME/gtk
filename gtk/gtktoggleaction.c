@@ -51,36 +51,7 @@ enum {
   PROP_ACTIVE
 };
 
-static void gtk_toggle_action_init       (GtkToggleAction *action);
-static void gtk_toggle_action_class_init (GtkToggleActionClass *class);
-
-GType
-gtk_toggle_action_get_type (void)
-{
-  static GtkType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-      {
-        sizeof (GtkToggleActionClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_toggle_action_class_init,
-        (GClassFinalizeFunc) NULL,
-        NULL,
-        
-        sizeof (GtkToggleAction),
-        0, /* n_preallocs */
-        (GInstanceInitFunc) gtk_toggle_action_init,
-      };
-
-      type = g_type_register_static (GTK_TYPE_ACTION,
-                                     I_("GtkToggleAction"),
-                                     &type_info, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GtkToggleAction, gtk_toggle_action, GTK_TYPE_ACTION);
 
 static void gtk_toggle_action_activate     (GtkAction       *action);
 static void gtk_toggle_action_real_toggled (GtkToggleAction *action);

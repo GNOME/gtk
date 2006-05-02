@@ -45,8 +45,6 @@ enum {
 
 #define GTK_EVENT_BOX_GET_PRIVATE(obj)  G_TYPE_INSTANCE_GET_PRIVATE((obj), GTK_TYPE_EVENT_BOX, GtkEventBoxPrivate)
 
-static void gtk_event_box_class_init    (GtkEventBoxClass *klass);
-static void gtk_event_box_init          (GtkEventBox      *event_box);
 static void gtk_event_box_realize       (GtkWidget        *widget);
 static void gtk_event_box_unrealize     (GtkWidget        *widget);
 static void gtk_event_box_map           (GtkWidget        *widget);
@@ -68,42 +66,13 @@ static void gtk_event_box_get_property  (GObject          *object,
 					 GValue           *value,
 					 GParamSpec       *pspec);
 
-static GtkBinClass *parent_class = NULL;
-
-GType
-gtk_event_box_get_type (void)
-{
-  static GType event_box_type = 0;
-
-  if (!event_box_type)
-    {
-      static const GTypeInfo event_box_info =
-      {
-	sizeof (GtkEventBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_event_box_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkEventBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_event_box_init,
-      };
-
-      event_box_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkEventBox"),
-					       &event_box_info, 0);
-    }
-
-  return event_box_type;
-}
+G_DEFINE_TYPE (GtkEventBox, gtk_event_box, GTK_TYPE_BIN);
 
 static void
 gtk_event_box_class_init (GtkEventBoxClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_event_box_set_property;
   gobject_class->get_property = gtk_event_box_get_property;
@@ -479,8 +448,8 @@ gtk_event_box_unrealize (GtkWidget *widget)
       priv->event_window = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -493,7 +462,7 @@ gtk_event_box_map (GtkWidget *widget)
   if (priv->event_window != NULL && !priv->above_child)
     gdk_window_show (priv->event_window);
   
-  (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
+  (* GTK_WIDGET_CLASS (gtk_event_box_parent_class)->map) (widget);
 
   if (priv->event_window != NULL && priv->above_child)
     gdk_window_show (priv->event_window);
@@ -509,7 +478,7 @@ gtk_event_box_unmap (GtkWidget *widget)
   if (priv->event_window != NULL)
     gdk_window_hide (priv->event_window);
   
-  (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
+  (* GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unmap) (widget);
 }
 
 
@@ -601,7 +570,7 @@ gtk_event_box_expose (GtkWidget      *widget,
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	gtk_event_box_paint (widget, &event->area);
       
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_event_box_parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

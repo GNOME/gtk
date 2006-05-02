@@ -38,40 +38,12 @@
 #include "gtkalias.h"
 
 
-static void gtk_pixmap_class_init (GtkPixmapClass  *klass);
-static void gtk_pixmap_init       (GtkPixmap       *pixmap);
 static gint gtk_pixmap_expose     (GtkWidget       *widget,
 				   GdkEventExpose  *event);
 static void gtk_pixmap_finalize   (GObject         *object);
 static void build_insensitive_pixmap (GtkPixmap *gtkpixmap);
 
-static GtkWidgetClass *parent_class;
-
-GtkType
-gtk_pixmap_get_type (void)
-{
-  static GtkType pixmap_type = 0;
-
-  if (!pixmap_type)
-    {
-      static const GtkTypeInfo pixmap_info =
-      {
-	"GtkPixmap",
-	sizeof (GtkPixmap),
-	sizeof (GtkPixmapClass),
-	(GtkClassInitFunc) gtk_pixmap_class_init,
-	(GtkObjectInitFunc) gtk_pixmap_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
-      };
-
-      I_("GtkPixmap");
-      pixmap_type = gtk_type_unique (GTK_TYPE_MISC, &pixmap_info);
-    }
-
-  return pixmap_type;
-}
+G_DEFINE_TYPE (GtkPixmap, gtk_pixmap, GTK_TYPE_MISC);
 
 static void
 gtk_pixmap_class_init (GtkPixmapClass *class)
@@ -80,7 +52,6 @@ gtk_pixmap_class_init (GtkPixmapClass *class)
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
-  parent_class = gtk_type_class (gtk_misc_get_type ());
 
   gobject_class->finalize = gtk_pixmap_finalize;
 
@@ -117,7 +88,7 @@ gtk_pixmap_finalize (GObject *object)
 {
   gtk_pixmap_set (GTK_PIXMAP (object), NULL, NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_pixmap_parent_class)->finalize (object);
 }
 
 void

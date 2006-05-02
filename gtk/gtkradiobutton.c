@@ -39,8 +39,6 @@ enum {
 };
 
 
-static void     gtk_radio_button_class_init     (GtkRadioButtonClass *klass);
-static void     gtk_radio_button_init           (GtkRadioButton      *radio_button);
 static void     gtk_radio_button_destroy        (GtkObject           *object);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
@@ -56,37 +54,9 @@ static void     gtk_radio_button_get_property   (GObject             *object,
 						 GValue              *value,
 						 GParamSpec          *pspec);
 
-static GtkCheckButtonClass *parent_class = NULL;
+G_DEFINE_TYPE (GtkRadioButton, gtk_radio_button, GTK_TYPE_CHECK_BUTTON);
 
 static guint group_changed_signal = 0;
-
-GType
-gtk_radio_button_get_type (void)
-{
-  static GType radio_button_type = 0;
-
-  if (!radio_button_type)
-    {
-      static const GTypeInfo radio_button_info =
-      {
-	sizeof (GtkRadioButtonClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_radio_button_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkRadioButton),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_radio_button_init,
-      };
-
-      radio_button_type =
-	g_type_register_static (GTK_TYPE_CHECK_BUTTON, I_("GtkRadioButton"),
-				&radio_button_info, 0);
-    }
-
-  return radio_button_type;
-}
 
 static void
 gtk_radio_button_class_init (GtkRadioButtonClass *class)
@@ -102,8 +72,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
   check_button_class = (GtkCheckButtonClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_radio_button_set_property;
   gobject_class->get_property = gtk_radio_button_get_property;
@@ -414,8 +382,8 @@ gtk_radio_button_destroy (GtkObject *object)
   if (was_in_group)
     g_signal_emit (radio_button, group_changed_signal, 0);
   
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy) (object);
 }
 
 static void
@@ -473,7 +441,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
    * they look like buttons to the user.
    */
   if (!GTK_TOGGLE_BUTTON (widget)->draw_indicator)
-    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
   
   if (gtk_widget_is_focus (widget))
     {

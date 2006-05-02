@@ -39,8 +39,6 @@ enum {
 };
 
 
-static void gtk_radio_menu_item_class_init     (GtkRadioMenuItemClass *klass);
-static void gtk_radio_menu_item_init           (GtkRadioMenuItem      *radio_menu_item);
 static void gtk_radio_menu_item_destroy        (GtkObject             *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
 static void gtk_radio_menu_item_set_property   (GObject               *object,
@@ -52,37 +50,9 @@ static void gtk_radio_menu_item_get_property   (GObject               *object,
 						GValue                *value,
 						GParamSpec            *pspec);
 
-static GtkCheckMenuItemClass *parent_class = NULL;
-
 static guint group_changed_signal = 0;
 
-GType
-gtk_radio_menu_item_get_type (void)
-{
-  static GType radio_menu_item_type = 0;
-
-  if (!radio_menu_item_type)
-    {
-      static const GTypeInfo radio_menu_item_info =
-      {
-        sizeof (GtkRadioMenuItemClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_radio_menu_item_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkRadioMenuItem),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_radio_menu_item_init,
-      };
-
-      radio_menu_item_type =
-	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, I_("GtkRadioMenuItem"),
-				&radio_menu_item_info, 0);
-    }
-
-  return radio_menu_item_type;
-}
+G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM);
 
 GtkWidget*
 gtk_radio_menu_item_new (GSList *group)
@@ -356,8 +326,6 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
   object_class = GTK_OBJECT_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   gobject_class->set_property = gtk_radio_menu_item_set_property;
   gobject_class->get_property = gtk_radio_menu_item_get_property;
 
@@ -447,8 +415,8 @@ gtk_radio_menu_item_destroy (GtkObject *object)
   if (was_in_group)
     g_signal_emit (radio_menu_item, group_changed_signal, 0);
   
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_radio_menu_item_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (gtk_radio_menu_item_parent_class)->destroy) (object);
 }
 
 static void

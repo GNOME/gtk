@@ -99,8 +99,6 @@ enum {
   PROP_PASTE_TARGET_LIST
 };
 
-static void gtk_text_buffer_init       (GtkTextBuffer      *tkxt_buffer);
-static void gtk_text_buffer_class_init (GtkTextBufferClass *klass);
 static void gtk_text_buffer_finalize   (GObject            *object);
 
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
@@ -139,7 +137,6 @@ static GtkTextBuffer *create_clipboard_contents_buffer (GtkTextBuffer *buffer);
 
 static void gtk_text_buffer_free_target_lists     (GtkTextBuffer *buffer);
 
-static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_text_buffer_set_property (GObject         *object,
@@ -153,40 +150,12 @@ static void gtk_text_buffer_get_property (GObject         *object,
 static void gtk_text_buffer_notify       (GObject         *object,
                                           GParamSpec      *pspec);
 
-
-GType
-gtk_text_buffer_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      static const GTypeInfo our_info =
-      {
-        sizeof (GtkTextBufferClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_buffer_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextBuffer),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_buffer_init
-      };
-
-      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextBuffer"),
-                                         &our_info, 0);
-    }
-
-  return our_type;
-}
+G_DEFINE_TYPE (GtkTextBuffer, gtk_text_buffer, G_TYPE_OBJECT);
 
 static void
 gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_text_buffer_finalize;
   object_class->set_property = gtk_text_buffer_set_property;
@@ -598,7 +567,7 @@ gtk_text_buffer_finalize (GObject *object)
 
   gtk_text_buffer_free_target_lists (buffer);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_text_buffer_parent_class)->finalize (object);
 }
 
 static GtkTextBTree*

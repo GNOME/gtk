@@ -202,7 +202,6 @@ enum {
   PROP_POPUP_SHOWN
 };
 
-static GtkBinClass *parent_class = NULL;
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
 #define BONUS_PADDING 4
@@ -210,10 +209,8 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
 /* common */
 
-static void     gtk_combo_box_class_init           (GtkComboBoxClass *klass);
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
-static void     gtk_combo_box_init                 (GtkComboBox      *combo_box);
 static void     gtk_combo_box_finalize             (GObject          *object);
 static void     gtk_combo_box_destroy              (GtkObject        *object);
 
@@ -438,59 +435,11 @@ static void gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 					 GdkEvent        *event);
 
 
-GType
-gtk_combo_box_get_type (void)
-{
-  static GType combo_box_type = 0;
-
-  if (!combo_box_type)
-    {
-      static const GTypeInfo combo_box_info =
-        {
-          sizeof (GtkComboBoxClass),
-          NULL, /* base_init */
-          NULL, /* base_finalize */
-          (GClassInitFunc) gtk_combo_box_class_init,
-          NULL, /* class_finalize */
-          NULL, /* class_data */
-          sizeof (GtkComboBox),
-          0,
-          (GInstanceInitFunc) gtk_combo_box_init
-        };
-
-      static const GInterfaceInfo cell_layout_info =
-        {
-          (GInterfaceInitFunc) gtk_combo_box_cell_layout_init,
-          NULL,
-          NULL
-        };
-
-      static const GInterfaceInfo cell_editable_info =
-	{
-	  (GInterfaceInitFunc) gtk_combo_box_cell_editable_init,
-	  NULL,
-	  NULL
-       };
-
-      combo_box_type = g_type_register_static (GTK_TYPE_BIN,
-                                               I_("GtkComboBox"),
-                                               &combo_box_info,
-                                               0);
-
-      g_type_add_interface_static (combo_box_type,
-                                   GTK_TYPE_CELL_LAYOUT,
-                                   &cell_layout_info);
-
-
-      g_type_add_interface_static (combo_box_type,
-				   GTK_TYPE_CELL_EDITABLE,
-				   &cell_editable_info);
-      
-
-    }
-
-  return combo_box_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
+						gtk_combo_box_cell_layout_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
+						gtk_combo_box_cell_editable_init));
 
 /* common */
 static void
@@ -525,8 +474,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   object_class->finalize = gtk_combo_box_finalize;
   object_class->set_property = gtk_combo_box_set_property;
   object_class->get_property = gtk_combo_box_get_property;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   /* signals */
   /**
@@ -4962,7 +4909,7 @@ gtk_combo_box_destroy (GtkObject *object)
   combo_box->priv->row_separator_data = NULL;
   combo_box->priv->row_separator_destroy = NULL;
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_combo_box_parent_class)->destroy (object);
   combo_box->priv->cell_view = NULL;
 }
 
@@ -5009,7 +4956,7 @@ gtk_combo_box_finalize (GObject *object)
 
    g_free (combo_box->priv->tearoff_title);
 
-   G_OBJECT_CLASS (parent_class)->finalize (object);
+   G_OBJECT_CLASS (gtk_combo_box_parent_class)->finalize (object);
 }
 
 static gboolean

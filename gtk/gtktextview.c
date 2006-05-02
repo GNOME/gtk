@@ -149,8 +149,6 @@ enum
   LAST_PROP
 };
 
-static void gtk_text_view_init                 (GtkTextView      *text_view);
-static void gtk_text_view_class_init           (GtkTextViewClass *klass);
 static void gtk_text_view_destroy              (GtkObject        *object);
 static void gtk_text_view_finalize             (GObject          *object);
 static void gtk_text_view_set_property         (GObject         *object,
@@ -418,35 +416,9 @@ static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
-static GtkContainerClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_text_view_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      static const GTypeInfo our_info =
-      {
-	sizeof (GtkTextViewClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_text_view_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkTextView),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_text_view_init,
-      };
-
-      our_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkTextView"),
-					 &our_info, 0);
-    }
-
-  return our_type;
-}
+G_DEFINE_TYPE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER);
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -479,8 +451,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   /* Default handlers and virtual methods
    */
@@ -2569,7 +2539,7 @@ gtk_text_view_destroy (GtkObject *object)
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
 
-  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy) (object);
 }
 
 static void
@@ -2610,7 +2580,7 @@ gtk_text_view_finalize (GObject *object)
 
   g_object_unref (text_view->im_context);
   
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_text_view_parent_class)->finalize) (object);
 }
 
 static void
@@ -3579,7 +3549,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   gtk_text_view_destroy_layout (text_view);
   
-  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  (* GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize) (widget);
 }
 
 static void 
@@ -3880,8 +3850,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       retval = TRUE;
     }
   /* Binding set */
-  else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
- 	   GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+  else if (GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event &&
+ 	   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event (widget, event))
     retval = TRUE;
   /* use overall editability not can_insert, more predictable for users */
   else if (text_view->editable &&
@@ -3948,7 +3918,7 @@ gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
       return TRUE;
     }
   else
-    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+    return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
 }
 
 static gint
@@ -4355,7 +4325,7 @@ gtk_text_view_focus (GtkWidget        *widget,
        * children to get the focus
        */
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS); 
-      result = GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+      result = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->focus (widget, direction);
       GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS); 
 
       return result;

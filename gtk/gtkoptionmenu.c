@@ -62,8 +62,6 @@ static const GtkOptionMenuProps default_props = {
   0
 };
 
-static void gtk_option_menu_class_init      (GtkOptionMenuClass *klass);
-static void gtk_option_menu_init            (GtkOptionMenu      *option_menu);
 static void gtk_option_menu_destroy         (GtkObject          *object);
 static void gtk_option_menu_set_property    (GObject            *object,
 					     guint               prop_id,
@@ -116,37 +114,9 @@ enum
   LAST_PROP
 };
 
-static GtkButtonClass *parent_class = NULL;
 static guint           signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_option_menu_get_type (void)
-{
-  static GType option_menu_type = 0;
-
-  if (!option_menu_type)
-    {
-      static const GTypeInfo option_menu_info =
-      {
-	sizeof (GtkOptionMenuClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_option_menu_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkOptionMenu),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_option_menu_init,
-      };
-
-      option_menu_type =
-	g_type_register_static (GTK_TYPE_BUTTON, I_("GtkOptionMenu"),
-				&option_menu_info, 0);
-    }
-
-  return option_menu_type;
-}
+G_DEFINE_TYPE (GtkOptionMenu, gtk_option_menu, GTK_TYPE_BUTTON);
 
 static void
 gtk_option_menu_class_init (GtkOptionMenuClass *class)
@@ -160,8 +130,6 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -414,8 +382,8 @@ gtk_option_menu_destroy (GtkObject *object)
   if (option_menu->menu)
     gtk_widget_destroy (option_menu->menu);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_option_menu_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (gtk_option_menu_parent_class)->destroy) (object);
 }
 
 static void

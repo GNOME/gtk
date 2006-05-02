@@ -39,8 +39,6 @@ enum {
   PROP_METRIC
 };
 
-static void gtk_ruler_class_init    (GtkRulerClass  *klass);
-static void gtk_ruler_init          (GtkRuler       *ruler);
 static void gtk_ruler_realize       (GtkWidget      *widget);
 static void gtk_ruler_unrealize     (GtkWidget      *widget);
 static void gtk_ruler_size_allocate (GtkWidget      *widget,
@@ -57,8 +55,6 @@ static void gtk_ruler_get_property  (GObject        *object,
 				     GValue         *value,
 				     GParamSpec     *pspec);
 
-static GtkWidgetClass *parent_class;
-
 static const GtkRulerMetric ruler_metrics[] =
 {
   { NULL, NULL, 1.0, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
@@ -66,33 +62,7 @@ static const GtkRulerMetric ruler_metrics[] =
   { NULL, NULL, 28.35, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
 };
 
-
-GType
-gtk_ruler_get_type (void)
-{
-  static GType ruler_type = 0;
-
-  if (!ruler_type)
-    {
-      static const GTypeInfo ruler_info =
-      {
-	sizeof (GtkRulerClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_ruler_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkRuler),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_ruler_init,
-      };
-
-      ruler_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkRuler"),
-					   &ruler_info, 0);
-    }
-
-  return ruler_type;
-}
+G_DEFINE_TYPE (GtkRuler, gtk_ruler, GTK_TYPE_WIDGET);
 
 static void
 gtk_ruler_class_init (GtkRulerClass *class)
@@ -103,8 +73,6 @@ gtk_ruler_class_init (GtkRulerClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = g_type_class_peek_parent (class);
-  
   gobject_class->set_property = gtk_ruler_set_property;
   gobject_class->get_property = gtk_ruler_get_property;
 
@@ -422,8 +390,8 @@ gtk_ruler_unrealize (GtkWidget *widget)
   ruler->backing_store = NULL;
   ruler->non_gr_exp_gc = NULL;
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize) (widget);
 }
 
 static void

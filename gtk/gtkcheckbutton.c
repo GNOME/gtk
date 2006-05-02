@@ -36,8 +36,6 @@
 #define INDICATOR_SPACING  2
 
 
-static void gtk_check_button_class_init          (GtkCheckButtonClass *klass);
-static void gtk_check_button_init                (GtkCheckButton      *check_button);
 static void gtk_check_button_size_request        (GtkWidget           *widget,
 						  GtkRequisition      *requisition);
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
@@ -51,36 +49,7 @@ static void gtk_check_button_draw_indicator      (GtkCheckButton      *check_but
 static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_button,
 						  GdkRectangle        *area);
 
-static GtkToggleButtonClass *parent_class = NULL;
-
-
-GType
-gtk_check_button_get_type (void)
-{
-  static GType check_button_type = 0;
-  
-  if (!check_button_type)
-    {
-      static const GTypeInfo check_button_info =
-      {
-	sizeof (GtkCheckButtonClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_check_button_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkCheckButton),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_check_button_init,
-      };
-      
-      check_button_type =
-	g_type_register_static (GTK_TYPE_TOGGLE_BUTTON, I_("GtkCheckButton"),
-				&check_button_info, 0);
-    }
-  
-  return check_button_type;
-}
+G_DEFINE_TYPE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON);
 
 static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
@@ -88,7 +57,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   GtkWidgetClass *widget_class;
   
   widget_class = (GtkWidgetClass*) class;
-  parent_class = g_type_class_peek_parent (class);
   
   widget_class->size_request = gtk_check_button_size_request;
   widget_class->size_allocate = gtk_check_button_size_allocate;
@@ -258,7 +226,7 @@ gtk_check_button_size_request (GtkWidget      *widget,
       requisition->height = MAX (requisition->height, temp) + 2 * (focus_width + focus_pad);
     }
   else
-    (* GTK_WIDGET_CLASS (parent_class)->size_request) (widget, requisition);
+    (* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_request) (widget, requisition);
 }
 
 static void
@@ -323,7 +291,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	}
     }
   else
-    (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
+    (* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_allocate) (widget, allocation);
 }
 
 static gint
@@ -347,8 +315,8 @@ gtk_check_button_expose (GtkWidget      *widget,
 					    bin->child,
 					    event);
 	}
-      else if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      else if (GTK_WIDGET_CLASS (gtk_check_button_parent_class)->expose_event)
+	(* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->expose_event) (widget, event);
     }
   
   return FALSE;

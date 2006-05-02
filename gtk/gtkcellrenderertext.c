@@ -28,8 +28,6 @@
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
-static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
-static void gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class);
 static void gtk_cell_renderer_text_finalize   (GObject                  *object);
 
 static void gtk_cell_renderer_text_get_property  (GObject                  *object,
@@ -120,7 +118,6 @@ enum {
   PROP_ELLIPSIZE_SET
 };
 
-static gpointer parent_class;
 static guint text_cell_renderer_signals [LAST_SIGNAL];
 
 #define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
@@ -151,34 +148,7 @@ struct _GtkCellRendererTextPrivate
   GtkWidget *entry;
 };
 
-
-GType
-gtk_cell_renderer_text_get_type (void)
-{
-  static GType cell_text_type = 0;
-
-  if (!cell_text_type)
-    {
-      static const GTypeInfo cell_text_info =
-      {
-        sizeof (GtkCellRendererTextClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_cell_renderer_text_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkCellRendererText),
-	0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_cell_renderer_text_init,
-      };
-
-      cell_text_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, I_("GtkCellRendererText"),
-				&cell_text_info, 0);
-    }
-
-  return cell_text_type;
-}
+G_DEFINE_TYPE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER);
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -205,8 +175,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
-  
   object_class->finalize = gtk_cell_renderer_text_finalize;
   
   object_class->get_property = gtk_cell_renderer_text_get_property;
@@ -614,7 +582,7 @@ gtk_cell_renderer_text_finalize (GObject *object)
   if (priv->language)
     g_object_unref (priv->language);
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_cell_renderer_text_parent_class)->finalize) (object);
 }
 
 static PangoFontMask

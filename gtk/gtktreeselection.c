@@ -26,9 +26,6 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static void gtk_tree_selection_init              (GtkTreeSelection      *selection);
-static void gtk_tree_selection_class_init        (GtkTreeSelectionClass *class);
-
 static void gtk_tree_selection_finalize          (GObject               *object);
 static gint gtk_tree_selection_real_select_all   (GtkTreeSelection      *selection);
 static gint gtk_tree_selection_real_unselect_all (GtkTreeSelection      *selection);
@@ -43,36 +40,9 @@ enum
   LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
 static guint tree_selection_signals [LAST_SIGNAL] = { 0 };
 
-GType
-gtk_tree_selection_get_type (void)
-{
-  static GType selection_type = 0;
-
-  if (!selection_type)
-    {
-      static const GTypeInfo selection_info =
-      {
-        sizeof (GtkTreeSelectionClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_tree_selection_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkTreeSelection),
-	0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_tree_selection_init
-      };
-
-      selection_type =
-	g_type_register_static (G_TYPE_OBJECT, I_("GtkTreeSelection"),
-				&selection_info, 0);
-    }
-
-  return selection_type;
-}
+G_DEFINE_TYPE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT);
 
 static void
 gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
@@ -80,7 +50,6 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   GObjectClass *object_class;
 
   object_class = (GObjectClass*) class;
-  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_tree_selection_finalize;
   class->changed = NULL;
@@ -115,7 +84,7 @@ gtk_tree_selection_finalize (GObject *object)
     }
 
   /* chain parent_class' handler */
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_tree_selection_parent_class)->finalize (object);
 }
 
 /**

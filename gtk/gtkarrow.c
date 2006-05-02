@@ -43,8 +43,6 @@ enum {
 };
 
 
-static void gtk_arrow_class_init (GtkArrowClass  *klass);
-static void gtk_arrow_init       (GtkArrow       *arrow);
 static gint gtk_arrow_expose     (GtkWidget      *widget,
 				  GdkEventExpose *event);
 static void gtk_arrow_set_property (GObject         *object,
@@ -56,32 +54,9 @@ static void gtk_arrow_get_property (GObject         *object,
 				    GValue          *value,
 				    GParamSpec      *pspec);
 
-GType
-gtk_arrow_get_type (void)
-{
-  static GType arrow_type = 0;
 
-  if (!arrow_type)
-    {
-      static const GTypeInfo arrow_info =
-      {
-	sizeof (GtkArrowClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_arrow_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkArrow),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_arrow_init,
-      };
+G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC);
 
-      arrow_type = g_type_register_static (GTK_TYPE_MISC, I_("GtkArrow"),
-					   &arrow_info, 0);
-    }
-
-  return arrow_type;
-}
 
 static void
 gtk_arrow_class_init (GtkArrowClass *class)

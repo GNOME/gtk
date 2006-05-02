@@ -30,41 +30,12 @@
 #include "gtkalias.h"
 
 
-static void gtk_drawing_area_class_init    (GtkDrawingAreaClass *klass);
-static void gtk_drawing_area_init          (GtkDrawingArea      *darea);
 static void gtk_drawing_area_realize       (GtkWidget           *widget);
 static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 					    GtkAllocation       *allocation);
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
-
-GType
-gtk_drawing_area_get_type (void)
-{
-  static GType drawing_area_type = 0;
-
-  if (!drawing_area_type)
-    {
-      static const GTypeInfo drawing_area_info =
-      {
-	sizeof (GtkDrawingAreaClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_drawing_area_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkDrawingArea),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_drawing_area_init,
-      };
-
-      drawing_area_type =
-	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkDrawingArea"),
-				&drawing_area_info, 0);
-    }
-
-  return drawing_area_type;
-}
+G_DEFINE_TYPE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET);
 
 static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)

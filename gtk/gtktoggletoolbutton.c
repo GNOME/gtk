@@ -50,8 +50,6 @@ struct _GtkToggleToolButtonPrivate
   guint active : 1;
 };
   
-static void gtk_toggle_tool_button_init       (GtkToggleToolButton      *button);
-static void gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass);
 
 static void     gtk_toggle_tool_button_set_property        (GObject      *object,
 							    guint         prop_id,
@@ -69,35 +67,9 @@ static void button_toggled      (GtkWidget           *widget,
 static void menu_item_activated (GtkWidget           *widget,
 				 GtkToggleToolButton *button);
 
-static GObjectClass *parent_class = NULL;
 static guint         toggle_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_toggle_tool_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-	{
-	  sizeof (GtkToggleToolButtonClass),
-	  (GBaseInitFunc) 0,
-	  (GBaseFinalizeFunc) 0,
-	  (GClassInitFunc) gtk_toggle_tool_button_class_init,
-	  (GClassFinalizeFunc) 0,
-	  NULL,
-	  sizeof (GtkToggleToolButton),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_toggle_tool_button_init
-	};
-
-      type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
-				     I_("GtkToggleToolButton"), &type_info, 0);
-    }
-  return type;
-}
-
+G_DEFINE_TYPE (GtkToggleToolButton, gtk_toggle_tool_button, GTK_TYPE_TOOL_BUTTON);
 
 static void
 gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
@@ -105,8 +77,6 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
   GObjectClass *object_class;
   GtkToolItemClass *toolitem_class;
   GtkToolButtonClass *toolbutton_class;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class = (GObjectClass *)klass;
   toolitem_class = (GtkToolItemClass *)klass;

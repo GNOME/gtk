@@ -88,8 +88,6 @@ enum {
   LAST_SIGNAL
 };
 
-static void     gtk_hsv_class_init     (GtkHSVClass      *class);
-static void     gtk_hsv_init           (GtkHSV           *hsv);
 static void     gtk_hsv_destroy        (GtkObject        *object);
 static void     gtk_hsv_map            (GtkWidget        *widget);
 static void     gtk_hsv_unmap          (GtkWidget        *widget);
@@ -115,42 +113,8 @@ static void     gtk_hsv_move           (GtkHSV           *hsv,
 					GtkDirectionType  dir);
 
 static guint hsv_signals[LAST_SIGNAL];
-static GtkWidgetClass *parent_class;
 
-
-/**
- * gtk_hsv_get_type:
- * @void:
- *
- * Registers the &GtkHSV class if necessary, and returns the type ID associated
- * to it.
- *
- * Return value: The type ID of the &GtkHSV class.
- **/
-GType
-gtk_hsv_get_type (void)
-{
-  static GType hsv_type = 0;
-  
-  if (!hsv_type) {
-    static const GTypeInfo hsv_info = {
-      sizeof (GtkHSVClass),
-      NULL,		/* base_init */
-      NULL,		/* base_finalize */
-      (GClassInitFunc) gtk_hsv_class_init,
-      NULL,		/* class_finalize */
-      NULL,		/* class_data */
-      sizeof (GtkHSV),
-      0,		/* n_preallocs */
-      (GInstanceInitFunc) gtk_hsv_init,
-    };
-    
-    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkHSV"),
-				       &hsv_info, 0);
-  }
-  
-  return hsv_type;
-}
+G_DEFINE_TYPE (GtkHSV, gtk_hsv, GTK_TYPE_WIDGET);
 
 /* Class initialization function for the HSV color selector */
 static void
@@ -166,8 +130,6 @@ gtk_hsv_class_init (GtkHSVClass *class)
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   hsv_class = GTK_HSV_CLASS (class);
-  
-  parent_class = g_type_class_peek_parent (class);
   
   object_class->destroy = gtk_hsv_destroy;
   
@@ -264,7 +226,7 @@ gtk_hsv_init (GtkHSV *hsv)
 static void
 gtk_hsv_destroy (GtkObject *object)
 {
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_hsv_parent_class)->destroy (object);
 }
 
 /* Default signal handlers */
@@ -281,7 +243,7 @@ gtk_hsv_map (GtkWidget *widget)
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_hsv_parent_class)->map (widget);
 
   gdk_window_show (priv->window);
 }
@@ -299,7 +261,7 @@ gtk_hsv_unmap (GtkWidget *widget)
 
   gdk_window_hide (priv->window);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unmap (widget);
 }                                                                           
                                       
 /* Realize handler for the HSV color selector */
@@ -367,8 +329,8 @@ gtk_hsv_unrealize (GtkWidget *widget)
   g_object_unref (priv->gc);
   priv->gc = NULL;
   
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  if (GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize)
+    GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize (widget);
 }
 
 /* Size_request handler for the HSV color selector */

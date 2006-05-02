@@ -84,8 +84,6 @@ enum
 };
 
 /* Prototypes */
-static void gtk_font_button_init                   (GtkFontButton      *font_button);
-static void gtk_font_button_class_init             (GtkFontButtonClass *klass);
 static void gtk_font_button_finalize               (GObject            *object);
 static void gtk_font_button_get_property           (GObject            *object,
                                                     guint               param_id,
@@ -111,37 +109,9 @@ static GtkWidget *gtk_font_button_create_inside     (GtkFontButton     *gfs);
 static void gtk_font_button_label_use_font          (GtkFontButton     *gfs);
 static void gtk_font_button_update_font_info        (GtkFontButton     *gfs);
 
-static gpointer parent_class = NULL;
 static guint font_button_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_font_button_get_type (void)
-{
-  static GType font_button_type = 0;
-  
-  if (!font_button_type)
-    {
-      static const GTypeInfo font_button_info =
-      {
-        sizeof (GtkFontButtonClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_font_button_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkFontButton),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_font_button_init,
-      };
-      
-      font_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, I_("GtkFontButton"),
-                                &font_button_info, 0);
-    }
-  
-  return font_button_type;
-}
-
+G_DEFINE_TYPE (GtkFontButton, gtk_font_button, GTK_TYPE_BUTTON);
 
 static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
@@ -151,8 +121,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   
   gobject_class = (GObjectClass *) klass;
   button_class = (GtkButtonClass *) klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_font_button_finalize;
   gobject_class->set_property = gtk_font_button_set_property;
@@ -316,7 +284,7 @@ gtk_font_button_finalize (GObject *object)
   g_free (font_button->priv->title);
   font_button->priv->title = NULL;
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_font_button_parent_class)->finalize (object);
 }
 
 static void

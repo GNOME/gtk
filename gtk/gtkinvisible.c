@@ -37,8 +37,6 @@ enum {
   LAST_ARG
 };
 
-static void gtk_invisible_class_init    (GtkInvisibleClass *klass);
-static void gtk_invisible_init          (GtkInvisible      *invisible);
 static void gtk_invisible_destroy       (GtkObject         *object);
 static void gtk_invisible_realize       (GtkWidget         *widget);
 static void gtk_invisible_style_set     (GtkWidget         *widget,
@@ -59,34 +57,7 @@ static GObject *gtk_invisible_constructor (GType                  type,
 					   guint                  n_construct_properties,
 					   GObjectConstructParam *construct_params);
 
-static GObjectClass *parent_class;
-
-GType
-gtk_invisible_get_type (void)
-{
-  static GType invisible_type = 0;
-
-  if (!invisible_type)
-    {
-      static const GTypeInfo invisible_info =
-      {
-	sizeof (GtkInvisibleClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_invisible_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkInvisible),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_invisible_init,
-      };
-
-      invisible_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkInvisible"),
-					       &invisible_info, 0);
-    }
-
-  return invisible_type;
-}
+G_DEFINE_TYPE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET);
 
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
@@ -98,8 +69,6 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   widget_class = (GtkWidgetClass*) class;
   object_class = (GtkObjectClass*) class;
   gobject_class = (GObjectClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   widget_class->realize = gtk_invisible_realize;
   widget_class->style_set = gtk_invisible_style_set;
@@ -149,7 +118,7 @@ gtk_invisible_destroy (GtkObject *object)
       g_object_unref (invisible);
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);  
+  GTK_OBJECT_CLASS (gtk_invisible_parent_class)->destroy (object);  
 }
 
 /**
@@ -339,9 +308,9 @@ gtk_invisible_constructor (GType                  type,
 {
   GObject *object;
 
-  object = (* G_OBJECT_CLASS (parent_class)->constructor) (type,
-							   n_construct_properties,
-							   construct_params);
+  object = (* G_OBJECT_CLASS (gtk_invisible_parent_class)->constructor) (type,
+									 n_construct_properties,
+									 construct_params);
 
   gtk_widget_realize (GTK_WIDGET (object));
 

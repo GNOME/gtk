@@ -101,24 +101,13 @@ gtk_tool_button_get_type (void)
   static GtkType type = 0;
 
   if (!type)
-    {
-      static const GTypeInfo type_info =
-	{
-	  sizeof (GtkToolButtonClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gtk_tool_button_class_init,
-	  (GClassFinalizeFunc) NULL,
-	  NULL,
-	  sizeof (GtkToolButton),
-	  0, /* n_preallocs */
-	  (GInstanceInitFunc) gtk_tool_button_init,
-	};
-
-      type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-				     I_("GtkToolButton"),
-				     &type_info, 0);
-    }
+    type = g_type_register_static_simple (GTK_TYPE_TOOL_ITEM,
+					  I_("GtkToolButton"),
+					  sizeof (GtkToolButtonClass),
+					  (GClassInitFunc) gtk_tool_button_class_init,
+					  sizeof (GtkToolButton),
+					  (GInstanceInitFunc) gtk_tool_button_init,
+					  0);
   return type;
 }
 

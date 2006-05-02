@@ -40,8 +40,6 @@ enum {
   PROP_YPAD
 };
 
-static void gtk_misc_class_init   (GtkMiscClass *klass);
-static void gtk_misc_init         (GtkMisc      *misc);
 static void gtk_misc_realize      (GtkWidget    *widget);
 static void gtk_misc_set_property (GObject         *object,
 				   guint            prop_id,
@@ -53,33 +51,7 @@ static void gtk_misc_get_property (GObject         *object,
 				   GParamSpec      *pspec);
 
 
-GType
-gtk_misc_get_type (void)
-{
-  static GType misc_type = 0;
-
-  if (!misc_type)
-    {
-      static const GTypeInfo misc_info =
-      {
-	sizeof (GtkMiscClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_misc_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkMisc),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_misc_init,
-	NULL,		/* value_table */
-      };
-
-      misc_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkMisc"),
-					  &misc_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return misc_type;
-}
+G_DEFINE_TYPE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET);
 
 static void
 gtk_misc_class_init (GtkMiscClass *class)

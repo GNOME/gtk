@@ -44,8 +44,6 @@ enum {
   LAST_ARG
 };
 
-static void gtk_text_tag_table_init         (GtkTextTagTable      *table);
-static void gtk_text_tag_table_class_init   (GtkTextTagTableClass *klass);
 static void gtk_text_tag_table_finalize     (GObject              *object);
 static void gtk_text_tag_table_set_property (GObject              *object,
                                              guint                 prop_id,
@@ -56,42 +54,14 @@ static void gtk_text_tag_table_get_property (GObject              *object,
                                              GValue               *value,
                                              GParamSpec           *pspec);
 
-static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_text_tag_table_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      static const GTypeInfo our_info =
-      {
-        sizeof (GtkTextTagTableClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_tag_table_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextTagTable),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_tag_table_init
-      };
-
-      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextTagTable"),
-                                         &our_info, 0);
-    }
-
-  return our_type;
-}
+G_DEFINE_TYPE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT);
 
 static void
 gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->set_property = gtk_text_tag_table_set_property;
   object_class->get_property = gtk_text_tag_table_get_property;
@@ -193,7 +163,7 @@ gtk_text_tag_table_finalize (GObject *object)
 
   g_slist_free (table->buffers);
   
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_text_tag_table_parent_class)->finalize) (object);
 }
 static void
 gtk_text_tag_table_set_property (GObject      *object,

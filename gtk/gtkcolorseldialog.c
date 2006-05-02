@@ -34,48 +34,15 @@
 #include "gtkalias.h"
 
 
-static void gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass);
-static void gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag);
-
-static GtkWindowClass *color_selection_dialog_parent_class = NULL;
-
-
 /***************************/
 /* GtkColorSelectionDialog */
 /***************************/
 
-GType
-gtk_color_selection_dialog_get_type (void)
-{
-  static GType color_selection_dialog_type = 0;
-  
-  if (!color_selection_dialog_type)
-    {
-      static const GTypeInfo colorsel_diag_info =
-      {
-	sizeof (GtkColorSelectionDialogClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_color_selection_dialog_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkColorSelectionDialog),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_color_selection_dialog_init,
-      };
-      
-      color_selection_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkColorSelectionDialog"),
-				&colorsel_diag_info, 0);
-    }
-  
-  return color_selection_dialog_type;
-}
+G_DEFINE_TYPE (GtkColorSelectionDialog, gtk_color_selection_dialog, GTK_TYPE_DIALOG);
 
 static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 {
-  color_selection_dialog_parent_class = g_type_class_peek_parent (klass);
 }
 
 static void

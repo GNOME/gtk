@@ -35,8 +35,6 @@
 #define TEAR_LENGTH 5
 #define BORDER_SPACING  3
 
-static void gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass);
-static void gtk_tearoff_menu_item_init       (GtkTearoffMenuItem      *tearoff_menu_item);
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
 static gint gtk_tearoff_menu_item_expose     (GtkWidget             *widget,
@@ -45,33 +43,7 @@ static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
 static void gtk_tearoff_menu_item_parent_set (GtkWidget             *widget,
 					      GtkWidget             *previous);
 
-GType
-gtk_tearoff_menu_item_get_type (void)
-{
-  static GType tearoff_menu_item_type = 0;
-
-  if (!tearoff_menu_item_type)
-    {
-      static const GTypeInfo tearoff_menu_item_info =
-      {
-        sizeof (GtkTearoffMenuItemClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_tearoff_menu_item_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkTearoffMenuItem),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_tearoff_menu_item_init,
-      };
-
-      tearoff_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, I_("GtkTearoffMenuItem"),
-			        &tearoff_menu_item_info, 0);
-    }
-
-  return tearoff_menu_item_type;
-}
+G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM);
 
 GtkWidget*
 gtk_tearoff_menu_item_new (void)

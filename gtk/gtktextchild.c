@@ -304,38 +304,9 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
                      layout);  
 }
      
-static void gtk_text_child_anchor_init       (GtkTextChildAnchor      *child_anchor);
-static void gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass);
-static void gtk_text_child_anchor_finalize   (GObject                 *obj);
+static void gtk_text_child_anchor_finalize (GObject *obj);
 
-static gpointer parent_class = NULL;
-
-GType
-gtk_text_child_anchor_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GtkTextChildAnchorClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_child_anchor_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextChildAnchor),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_child_anchor_init,
-      };
-
-      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextChildAnchor"),
-                                            &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT);
 
 static void
 gtk_text_child_anchor_init (GtkTextChildAnchor *child_anchor)
@@ -347,8 +318,6 @@ static void
 gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_text_child_anchor_finalize;
 }
@@ -404,7 +373,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
 
   anchor->segment = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_text_child_anchor_parent_class)->finalize (obj);
 }
 
 /**

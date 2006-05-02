@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include "gtkfilechooserprivate.h"
+
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
@@ -30,8 +31,6 @@
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 
-static void gtk_file_chooser_widget_class_init   (GtkFileChooserWidgetClass *class);
-static void gtk_file_chooser_widget_init         (GtkFileChooserWidget      *chooser_widget);
 static void gtk_file_chooser_widget_finalize     (GObject                   *object);
 
 static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
@@ -46,62 +45,16 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-static GObjectClass *parent_class;
-
-GType
-gtk_file_chooser_widget_get_type (void)
-{
-  static GType file_chooser_widget_type = 0;
-
-  if (!file_chooser_widget_type)
-    {
-      static const GTypeInfo file_chooser_widget_info =
-      {
-	sizeof (GtkFileChooserWidgetClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_chooser_widget_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileChooserWidget),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_chooser_widget_init,
-      };
-      
-      static const GInterfaceInfo file_chooser_info =
-      {
-	(GInterfaceInitFunc) _gtk_file_chooser_delegate_iface_init, /* interface_init */
-	NULL,			                                    /* interface_finalize */
-	NULL			                                    /* interface_data */
-      };
-
-      static const GInterfaceInfo file_chooser_embed_info =
-      {
-	(GInterfaceInitFunc) _gtk_file_chooser_embed_delegate_iface_init, /* interface_init */
-	NULL,			                                          /* interface_finalize */
-	NULL			                                          /* interface_data */
-      };
-
-      file_chooser_widget_type = g_type_register_static (GTK_TYPE_VBOX, I_("GtkFileChooserWidget"),
-							 &file_chooser_widget_info, 0);
-
-      g_type_add_interface_static (file_chooser_widget_type,
-				   GTK_TYPE_FILE_CHOOSER,
-				   &file_chooser_info);
-      g_type_add_interface_static (file_chooser_widget_type,
-				   GTK_TYPE_FILE_CHOOSER_EMBED,
-				   &file_chooser_embed_info);
-    }
-
-  return file_chooser_widget_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_VBOX,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
+						_gtk_file_chooser_delegate_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
+						_gtk_file_chooser_embed_delegate_iface_init));
 
 static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->constructor = gtk_file_chooser_widget_constructor;
   gobject_class->set_property = gtk_file_chooser_widget_set_property;
@@ -129,7 +82,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
 
   g_free (chooser->priv->file_system);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->finalize (object);
 }
 
 static GObject*
@@ -140,9 +93,9 @@ gtk_file_chooser_widget_constructor (GType                  type,
   GtkFileChooserWidgetPrivate *priv;
   GObject *object;
   
-  object = parent_class->constructor (type,
-				      n_construct_properties,
-				      construct_params);
+  object = G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructor (type,
+									       n_construct_properties,
+									       construct_params);
   priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
 
   gtk_widget_push_composite_child ();

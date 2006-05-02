@@ -51,9 +51,6 @@ struct _GtkImagePrivate
 
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
-
-static void gtk_image_class_init   (GtkImageClass  *klass);
-static void gtk_image_init         (GtkImage       *image);
 static gint gtk_image_expose       (GtkWidget      *widget,
                                     GdkEventExpose *event);
 static void gtk_image_unmap        (GtkWidget      *widget);
@@ -83,8 +80,6 @@ static void gtk_image_get_property      (GObject          *object,
 
 static void icon_theme_changed          (GtkImage         *image);
 
-static gpointer parent_class;
-
 enum
 {
   PROP_0,
@@ -102,32 +97,7 @@ enum
   PROP_STORAGE_TYPE
 };
 
-GType
-gtk_image_get_type (void)
-{
-  static GType image_type = 0;
-
-  if (!image_type)
-    {
-      static const GTypeInfo image_info =
-      {
-	sizeof (GtkImageClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_image_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkImage),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_image_init,
-      };
-
-      image_type = g_type_register_static (GTK_TYPE_MISC, I_("GtkImage"),
-					   &image_info, 0);
-    }
-
-  return image_type;
-}
+G_DEFINE_TYPE (GtkImage, gtk_image, GTK_TYPE_MISC);
 
 static void
 gtk_image_class_init (GtkImageClass *class)
@@ -135,8 +105,6 @@ gtk_image_class_init (GtkImageClass *class)
   GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class = G_OBJECT_CLASS (class);
   
@@ -298,7 +266,7 @@ gtk_image_destroy (GtkObject *object)
 
   gtk_image_reset (image);
   
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_image_parent_class)->destroy (object);
 }
 
 static void 
@@ -1370,8 +1338,8 @@ gtk_image_unmap (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
-  if (GTK_WIDGET_CLASS (parent_class)->unmap)
-    GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap)
+    GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap (widget);
 }
 
 static void
@@ -1379,8 +1347,8 @@ gtk_image_unrealize (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize)
+    GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
 }
 
 static gint
@@ -2032,7 +2000,7 @@ gtk_image_size_request (GtkWidget      *widget,
   gtk_image_calc_size (image);
 
   /* Chain up to default that simply reads current requisition */
-  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->size_request (widget, requisition);
 }
 
 static void
@@ -2043,8 +2011,8 @@ gtk_image_style_set (GtkWidget      *widget,
 
   image = GTK_IMAGE (widget);
 
-  if (GTK_WIDGET_CLASS (parent_class)->style_set)
-    GTK_WIDGET_CLASS (parent_class)->style_set (widget, prev_style);
+  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set)
+    GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set (widget, prev_style);
   
   icon_theme_changed (image);
 }
@@ -2057,8 +2025,8 @@ gtk_image_screen_changed (GtkWidget *widget,
 
   image = GTK_IMAGE (widget);
 
-  if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, prev_screen);
+  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (gtk_image_parent_class)->screen_changed (widget, prev_screen);
 
   icon_theme_changed (image);
 }

@@ -43,8 +43,6 @@
 
 /* Forward declararations */
 
-static void     gtk_socket_class_init           (GtkSocketClass   *klass);
-static void     gtk_socket_init                 (GtkSocket        *socket);
 static void     gtk_socket_finalize             (GObject          *object);
 static void     gtk_socket_notify               (GObject          *object,
 						 GParamSpec       *pspec);
@@ -86,8 +84,6 @@ enum {
 
 static guint socket_signals[LAST_SIGNAL] = { 0 };
 
-static GtkWidgetClass *parent_class = NULL;
-
 /**
  * _gtk_socket_get_private:
  *
@@ -101,33 +97,8 @@ _gtk_socket_get_private (GtkSocket *socket)
 {
   return G_TYPE_INSTANCE_GET_PRIVATE (socket, GTK_TYPE_SOCKET, GtkSocketPrivate);
 }
-  
-GType
-gtk_socket_get_type (void)
-{
-  static GType socket_type = 0;
 
-  if (!socket_type)
-    {
-      static const GTypeInfo socket_info =
-      {
-	sizeof (GtkSocketClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_socket_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkSocket),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_socket_init,
-      };
-
-      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkSocket"),
-					    &socket_info, 0);
-    }
-
-  return socket_type;
-}
+G_DEFINE_TYPE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER);  
 
 static void
 gtk_socket_finalize (GObject *object)
@@ -137,7 +108,7 @@ gtk_socket_finalize (GObject *object)
   g_object_unref (socket->accel_group);
   socket->accel_group = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_socket_parent_class)->finalize (object);
 }
 
 static void
@@ -150,8 +121,6 @@ gtk_socket_class_init (GtkSocketClass *class)
   gobject_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_socket_finalize;
   gobject_class->notify = gtk_socket_notify;
@@ -406,8 +375,8 @@ gtk_socket_unrealize (GtkWidget *widget)
       _gtk_socket_end_embedding (socket);
     }
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize) (widget);
 }
   
 static void 

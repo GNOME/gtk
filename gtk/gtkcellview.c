@@ -57,7 +57,6 @@ struct _GtkCellViewPrivate
 };
 
 
-static void        gtk_cell_view_class_init               (GtkCellViewClass *klass);
 static void        gtk_cell_view_cell_layout_init         (GtkCellLayoutIface *iface);
 static void        gtk_cell_view_get_property             (GObject           *object,
                                                            guint             param_id,
@@ -67,7 +66,6 @@ static void        gtk_cell_view_set_property             (GObject          *obj
                                                            guint             param_id,
                                                            const GValue     *value,
                                                            GParamSpec       *pspec);
-static void        gtk_cell_view_init                     (GtkCellView      *cellview);
 static void        gtk_cell_view_finalize                 (GObject          *object);
 static void        gtk_cell_view_style_set                (GtkWidget        *widget,
                                                            GtkStyle         *previous_style);
@@ -119,53 +117,15 @@ enum
   PROP_BACKGROUND_SET
 };
 
-static GtkObjectClass *parent_class = NULL;
-
-
-GType
-gtk_cell_view_get_type (void)
-{
-  static GType cell_view_type = 0;
-
-  if (!cell_view_type)
-    {
-      static const GTypeInfo cell_view_info =
-        {
-          sizeof (GtkCellViewClass),
-          NULL, /* base_init */
-          NULL, /* base_finalize */
-          (GClassInitFunc) gtk_cell_view_class_init,
-          NULL, /* class_finalize */
-          NULL, /* class_data */
-          sizeof (GtkCellView),
-          0,
-          (GInstanceInitFunc) gtk_cell_view_init
-        };
-
-      static const GInterfaceInfo cell_layout_info =
-       {
-         (GInterfaceInitFunc) gtk_cell_view_cell_layout_init,
-         NULL,
-         NULL
-       };
-
-      cell_view_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkCellView"),
-                                               &cell_view_info, 0);
-
-      g_type_add_interface_static (cell_view_type, GTK_TYPE_CELL_LAYOUT,
-                                   &cell_layout_info);
-    }
-
-  return cell_view_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
+						gtk_cell_view_cell_layout_init));
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->get_property = gtk_cell_view_get_property;
   gobject_class->set_property = gtk_cell_view_set_property;
@@ -307,7 +267,7 @@ gtk_cell_view_finalize (GObject *object)
   if (cellview->priv->displayed_row)
      gtk_tree_row_reference_free (cellview->priv->displayed_row);
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_cell_view_parent_class)->finalize) (object);
 }
 
 static void

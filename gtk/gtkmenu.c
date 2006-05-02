@@ -25,7 +25,6 @@
  */
 
 #define GTK_MENU_INTERNALS
-
 #include <config.h>
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
@@ -135,8 +134,6 @@ enum {
   CHILD_PROP_BOTTOM_ATTACH
 };
 
-static void     gtk_menu_class_init        (GtkMenuClass     *klass);
-static void     gtk_menu_init              (GtkMenu          *menu);
 static void     gtk_menu_set_property      (GObject          *object,
 					    guint             prop_id,
 					    const GValue     *value,
@@ -248,7 +245,6 @@ static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
-static GtkMenuShellClass *parent_class = NULL;
 static const gchar	  attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
@@ -259,32 +255,7 @@ gtk_menu_get_private (GtkMenu *menu)
   return G_TYPE_INSTANCE_GET_PRIVATE (menu, GTK_TYPE_MENU, GtkMenuPrivate);
 }
 
-GType
-gtk_menu_get_type (void)
-{
-  static GType menu_type = 0;
-  
-  if (!menu_type)
-    {
-      static const GTypeInfo menu_info =
-      {
-	sizeof (GtkMenuClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_menu_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkMenu),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_menu_init,
-      };
-      
-      menu_type = g_type_register_static (GTK_TYPE_MENU_SHELL, I_("GtkMenu"),
-					  &menu_info, 0);
-    }
-  
-  return menu_type;
-}
+G_DEFINE_TYPE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL);
 
 static void
 menu_queue_resize (GtkMenu *menu)
@@ -460,8 +431,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
   GtkBindingSet *binding_set;
-  
-  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_menu_finalize;
   gobject_class->set_property = gtk_menu_set_property;
@@ -989,7 +958,7 @@ gtk_menu_destroy (GtkObject *object)
       priv->title = NULL;
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_menu_parent_class)->destroy (object);
 }
 
 static void
@@ -999,7 +968,7 @@ gtk_menu_finalize (GObject *object)
 
   g_free (menu->accel_path);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
 
 static void
@@ -1196,7 +1165,7 @@ gtk_menu_remove (GtkContainer *container,
       menu->old_active_menu_item = NULL;
     }
 
-  GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
+  GTK_CONTAINER_CLASS (gtk_menu_parent_class)->remove (container, widget);
   g_object_set_data (G_OBJECT (widget), I_(ATTACH_INFO_KEY), NULL);
 
   menu_queue_resize (menu);
@@ -1224,7 +1193,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   if (GTK_WIDGET_REALIZED (menu_shell))
     gtk_widget_set_parent_window (child, menu->bin_window);
 
-  GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
+  GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
 
   menu_queue_resize (menu);
 }
@@ -2218,7 +2187,7 @@ gtk_menu_unrealize (GtkWidget *widget)
   gdk_window_destroy (menu->bin_window);
   menu->bin_window = NULL;
 
-  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  (* GTK_WIDGET_CLASS (gtk_menu_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -2587,7 +2556,7 @@ gtk_menu_expose (GtkWidget	*widget,
     {
       gtk_menu_paint (widget, event);
       
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_menu_parent_class)->expose_event) (widget, event);
     }
   
   return FALSE;
@@ -2600,7 +2569,7 @@ gtk_menu_show (GtkWidget *widget)
 
   _gtk_menu_refresh_accel_paths (menu, FALSE);
 
-  GTK_WIDGET_CLASS (parent_class)->show (widget);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->show (widget);
 }
 
 static gboolean
@@ -2645,7 +2614,7 @@ gtk_menu_button_press (GtkWidget      *widget,
   if (gtk_menu_button_scroll (widget, event))
     return TRUE;
 
-  return GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
+  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_press_event (widget, event);
 }
 
 static gboolean
@@ -2671,7 +2640,7 @@ gtk_menu_button_release (GtkWidget      *widget,
   if (gtk_menu_button_scroll (widget, event))
     return TRUE;
 
-  return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
+  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_release_event (widget, event);
 }
 
 static const gchar *
@@ -2733,7 +2702,7 @@ gtk_menu_key_press (GtkWidget	*widget,
   
   gtk_menu_stop_navigating_submenu (menu);
 
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+  if (GTK_WIDGET_CLASS (gtk_menu_parent_class)->key_press_event (widget, event))
     return TRUE;
 
   display = gtk_widget_get_display (widget);
@@ -3455,7 +3424,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
                                    event->x_root, event->y_root))
     return TRUE;
 
-  return GTK_WIDGET_CLASS (parent_class)->enter_notify_event (widget, event); 
+  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->enter_notify_event (widget, event); 
 }
 
 static gboolean
@@ -3505,7 +3474,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
 	}
     }
   
-  return GTK_WIDGET_CLASS (parent_class)->leave_notify_event (widget, event); 
+  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->leave_notify_event (widget, event); 
 }
 
 static void 
@@ -3515,8 +3484,7 @@ gtk_menu_stop_navigating_submenu (GtkMenu *menu)
     {
       gdk_region_destroy (menu->navigation_region);
       menu->navigation_region = NULL;
-    }
-  
+    }  
   if (menu->navigation_timeout)
     {
       g_source_remove (menu->navigation_timeout);
@@ -3549,7 +3517,7 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 	  send_event->crossing.time = GDK_CURRENT_TIME; /* Bogus */
 	  send_event->crossing.send_event = TRUE;
 
-	  GTK_WIDGET_CLASS (parent_class)->enter_notify_event (GTK_WIDGET (menu), (GdkEventCrossing *)send_event);
+	  GTK_WIDGET_CLASS (gtk_menu_parent_class)->enter_notify_event (GTK_WIDGET (menu), (GdkEventCrossing *)send_event);
 
 	  gdk_event_free (send_event);
 	}
@@ -4306,7 +4274,7 @@ gtk_menu_select_item (GtkMenuShell  *menu_shell,
   if (GTK_WIDGET_REALIZED (GTK_WIDGET (menu)))
     gtk_menu_scroll_item_visible (menu_shell, menu_item);
 
-  GTK_MENU_SHELL_CLASS (parent_class)->select_item (menu_shell, menu_item);
+  GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);
 }
 
 
@@ -4628,7 +4596,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
         }
     }
 
-  GTK_MENU_SHELL_CLASS (parent_class)->move_current (menu_shell, direction);
+  GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->move_current (menu_shell, direction);
 }
 
 static gint

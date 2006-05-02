@@ -30,41 +30,12 @@
 #include "gtkalias.h"
 
 
-static void gtk_hseparator_class_init   (GtkHSeparatorClass *klass);
-static void gtk_hseparator_init         (GtkHSeparator      *hseparator);
 static void gtk_hseparator_size_request (GtkWidget          *widget,
                                          GtkRequisition     *requisition);
 static gint gtk_hseparator_expose       (GtkWidget          *widget,
                                          GdkEventExpose     *event);
 
-
-GType
-gtk_hseparator_get_type (void)
-{
-  static GType hseparator_type = 0;
-
-  if (!hseparator_type)
-    {
-      static const GTypeInfo hseparator_info =
-      {
-	sizeof (GtkHSeparatorClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_hseparator_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_init */
-	sizeof (GtkHSeparator),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_hseparator_init,
-      };
-
-      hseparator_type =
-	g_type_register_static (GTK_TYPE_SEPARATOR, I_("GtkHSeparator"),
-				&hseparator_info, 0);
-    }
-
-  return hseparator_type;
-}
+G_DEFINE_TYPE (GtkHSeparator, gtk_hseparator, GTK_TYPE_SEPARATOR);
 
 static void
 gtk_hseparator_class_init (GtkHSeparatorClass *class)

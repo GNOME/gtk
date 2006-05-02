@@ -30,8 +30,6 @@
 #include "gtkalias.h"
 
 
-static void gtk_hbutton_box_class_init    (GtkHButtonBoxClass   *klass);
-static void gtk_hbutton_box_init          (GtkHButtonBox        *box);
 static void gtk_hbutton_box_size_request  (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void gtk_hbutton_box_size_allocate (GtkWidget      *widget,
@@ -40,33 +38,7 @@ static void gtk_hbutton_box_size_allocate (GtkWidget      *widget,
 static gint default_spacing = 30;
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
-GType
-gtk_hbutton_box_get_type (void)
-{
-  static GType hbutton_box_type = 0;
-
-  if (!hbutton_box_type)
-    {
-      static const GTypeInfo hbutton_box_info =
-      {
-	sizeof (GtkHButtonBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_hbutton_box_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkHButtonBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_hbutton_box_init,
-      };
-
-      hbutton_box_type =
-	g_type_register_static (GTK_TYPE_BUTTON_BOX, I_("GtkHButtonBox"),
-				&hbutton_box_info, 0);
-    }
-
-  return hbutton_box_type;
-}
+G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX);
 
 static void
 gtk_hbutton_box_class_init (GtkHButtonBoxClass *class)
@@ -82,7 +54,7 @@ gtk_hbutton_box_class_init (GtkHButtonBoxClass *class)
 static void
 gtk_hbutton_box_init (GtkHButtonBox *hbutton_box)
 {
-	/* button_box_init has done everything allready */
+	/* button_box_init has done everything already */
 }
 
 GtkWidget*

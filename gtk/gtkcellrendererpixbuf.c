@@ -34,8 +34,6 @@ static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *
 						    guint                       param_id,
 						    const GValue               *value,
 						    GParamSpec                 *pspec);
-static void gtk_cell_renderer_pixbuf_init       (GtkCellRendererPixbuf      *celltext);
-static void gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class);
 static void gtk_cell_renderer_pixbuf_finalize   (GObject                    *object);
 static void gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 							  GtkWidget             *widget);
@@ -69,8 +67,6 @@ enum {
 	PROP_ICON_NAME
 };
 
-static gpointer parent_class;
-
 
 #define GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_PIXBUF, GtkCellRendererPixbufPrivate))
 
@@ -85,34 +81,7 @@ struct _GtkCellRendererPixbufPrivate
   gchar *icon_name;
 };
 
-
-GType
-gtk_cell_renderer_pixbuf_get_type (void)
-{
-  static GType cell_pixbuf_type = 0;
-
-  if (!cell_pixbuf_type)
-    {
-      static const GTypeInfo cell_pixbuf_info =
-      {
-	sizeof (GtkCellRendererPixbufClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_cell_renderer_pixbuf_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkCellRendererPixbuf),
-	0,              /* n_preallocs */
-	(GInstanceInitFunc) gtk_cell_renderer_pixbuf_init,
-      };
-
-      cell_pixbuf_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, I_("GtkCellRendererPixbuf"),
-			        &cell_pixbuf_info, 0);
-    }
-
-  return cell_pixbuf_type;
-}
+G_DEFINE_TYPE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK_TYPE_CELL_RENDERER);
 
 static void
 gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
@@ -128,8 +97,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_cell_renderer_pixbuf_finalize;
 
@@ -247,7 +214,7 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
   g_free (priv->stock_detail);
   g_free (priv->icon_name);
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize) (object);
 }
 
 static void

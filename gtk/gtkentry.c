@@ -135,10 +135,8 @@ typedef enum {
 
 /* GObject, GtkObject methods
  */
-static void   gtk_entry_class_init           (GtkEntryClass        *klass);
 static void   gtk_entry_editable_init        (GtkEditableClass     *iface);
 static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
-static void   gtk_entry_init                 (GtkEntry         *entry);
 static void   gtk_entry_set_property         (GObject          *object,
                                               guint             prop_id,
                                               const GValue     *value,
@@ -373,55 +371,11 @@ static void         connect_completion_signals         (GtkEntry           *entr
 							GtkEntryCompletion *completion);
 
 
-static GtkWidgetClass *parent_class = NULL;
-
-GType
-gtk_entry_get_type (void)
-{
-  static GType entry_type = 0;
-
-  if (!entry_type)
-    {
-      static const GTypeInfo entry_info =
-      {
-	sizeof (GtkEntryClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_entry_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkEntry),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_entry_init,
-      };
-      
-      static const GInterfaceInfo editable_info =
-      {
-	(GInterfaceInitFunc) gtk_entry_editable_init,	 /* interface_init */
-	NULL,			                         /* interface_finalize */
-	NULL			                         /* interface_data */
-      };
-
-      static const GInterfaceInfo cell_editable_info =
-      {
-	(GInterfaceInitFunc) gtk_entry_cell_editable_init,    /* interface_init */
-	NULL,                                                 /* interface_finalize */
-	NULL                                                  /* interface_data */
-      };
-      
-      entry_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkEntry"),
-					   &entry_info, 0);
-
-      g_type_add_interface_static (entry_type,
-				   GTK_TYPE_EDITABLE,
-				   &editable_info);
-      g_type_add_interface_static (entry_type,
-				   GTK_TYPE_CELL_EDITABLE,
-				   &cell_editable_info);
-    }
-
-  return entry_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+                                                gtk_entry_editable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
+                                                gtk_entry_cell_editable_init));
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -456,7 +410,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   widget_class = (GtkWidgetClass*) class;
   gtk_object_class = (GtkObjectClass *)class;
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_entry_finalize;
   gobject_class->set_property = gtk_entry_set_property;
@@ -1178,7 +1131,7 @@ gtk_entry_destroy (GtkObject *object)
       trash_area (entry->text, strlen (entry->text));
     }
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_entry_parent_class)->destroy (object);
 }
 
 static void
@@ -1209,7 +1162,7 @@ gtk_entry_finalize (GObject *object)
       entry->text = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
 
 static void
@@ -1294,8 +1247,8 @@ gtk_entry_unrealize (GtkWidget *widget)
       entry->popup_menu = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize) (widget);
 }
 
 void
@@ -2016,7 +1969,7 @@ gtk_entry_key_press (GtkWidget   *widget,
       gtk_entry_reset_im_context (entry);
     }
 
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, event))
     /* Activate key bindings
      */
     return TRUE;
@@ -2039,7 +1992,7 @@ gtk_entry_key_release (GtkWidget   *widget,
 	}
     }
 
-  return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+  return GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_release_event (widget, event);
 }
 
 static gint
@@ -2099,7 +2052,7 @@ gtk_entry_grab_focus (GtkWidget        *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   gboolean select_on_focus;
   
-  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (widget);
 
   g_object_get (gtk_widget_get_settings (widget),
 		"gtk-entry-select-on-focus",
@@ -2118,7 +2071,7 @@ gtk_entry_direction_changed (GtkWidget        *widget,
 
   gtk_entry_recompute (entry);
       
-  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->direction_changed (widget, previous_dir);
 }
 
 static void

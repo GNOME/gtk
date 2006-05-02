@@ -39,8 +39,6 @@ enum {
 };
 
 
-static void gtk_item_class_init (GtkItemClass     *klass);
-static void gtk_item_init       (GtkItem          *item);
 static void gtk_item_realize    (GtkWidget        *widget);
 static gint gtk_item_enter      (GtkWidget        *widget,
 				 GdkEventCrossing *event);
@@ -50,34 +48,7 @@ static gint gtk_item_leave      (GtkWidget        *widget,
 
 static guint item_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_item_get_type (void)
-{
-  static GType item_type = 0;
-
-  if (!item_type)
-    {
-      static const GTypeInfo item_info =
-      {
-	sizeof (GtkItemClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_item_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkItem),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_item_init,
-	NULL,		/* value_table */
-      };
-
-      item_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkItem"),
-					  &item_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return item_type;
-}
+G_DEFINE_TYPE (GtkItem, gtk_item, GTK_TYPE_BIN);
 
 static void
 gtk_item_class_init (GtkItemClass *class)

@@ -41,40 +41,12 @@
 #define ROUND(x) ((int) ((x) + 0.5))
 
 
-static void gtk_hruler_class_init    (GtkHRulerClass *klass);
-static void gtk_hruler_init          (GtkHRuler      *hruler);
 static gint gtk_hruler_motion_notify (GtkWidget      *widget,
 				      GdkEventMotion *event);
 static void gtk_hruler_draw_ticks    (GtkRuler       *ruler);
 static void gtk_hruler_draw_pos      (GtkRuler       *ruler);
 
-
-GType
-gtk_hruler_get_type (void)
-{
-  static GType hruler_type = 0;
-
-  if (!hruler_type)
-    {
-      static const GTypeInfo hruler_info =
-      {
-	sizeof (GtkHRulerClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_hruler_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkHRuler),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_hruler_init,
-      };
-
-      hruler_type = g_type_register_static (GTK_TYPE_RULER, I_("GtkHRuler"),
-					    &hruler_info, 0);
-    }
-
-  return hruler_type;
-}
+G_DEFINE_TYPE (GtkHRuler, gtk_hruler, GTK_TYPE_RULER);
 
 static void
 gtk_hruler_class_init (GtkHRulerClass *klass)

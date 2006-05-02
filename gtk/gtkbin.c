@@ -29,9 +29,6 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-
-static void gtk_bin_class_init  (GtkBinClass    *klass);
-static void gtk_bin_init        (GtkBin         *bin);
 static void gtk_bin_add         (GtkContainer   *container,
 			         GtkWidget      *widget);
 static void gtk_bin_remove      (GtkContainer   *container,
@@ -43,36 +40,7 @@ static void gtk_bin_forall      (GtkContainer   *container,
 static GType gtk_bin_child_type (GtkContainer   *container);
 
 
-static GtkContainerClass *parent_class = NULL;
-
-
-GType
-gtk_bin_get_type (void)
-{
-  static GType bin_type = 0;
-
-  if (!bin_type)
-    {
-      static const GTypeInfo bin_info =
-      {
-	sizeof (GtkBinClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_bin_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkBin),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_bin_init,
-	NULL,		/* value_table */
-      };
-
-      bin_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkBin"), 
-					 &bin_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return bin_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER);
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -80,8 +48,6 @@ gtk_bin_class_init (GtkBinClass *class)
   GtkContainerClass *container_class;
 
   container_class = (GtkContainerClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   container_class->add = gtk_bin_add;
   container_class->remove = gtk_bin_remove;

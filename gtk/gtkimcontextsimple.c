@@ -929,8 +929,6 @@ static const guint16 gtk_compose_ignore[] = {
   GDK_ISO_Level3_Shift
 };
 
-static void     gtk_im_context_simple_class_init         (GtkIMContextSimpleClass  *class);
-static void     gtk_im_context_simple_init               (GtkIMContextSimple       *im_context_simple);
 static void     gtk_im_context_simple_finalize           (GObject                  *obj);
 static gboolean gtk_im_context_simple_filter_keypress    (GtkIMContext             *context,
 							  GdkEventKey              *key);
@@ -940,43 +938,13 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
 
-static GObjectClass *parent_class;
-
-GType
-gtk_im_context_simple_get_type (void)
-{
-  static GType im_context_simple_type = 0;
-
-  if (!im_context_simple_type)
-    {
-      static const GTypeInfo im_context_simple_info =
-      {
-        sizeof (GtkIMContextSimpleClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_im_context_simple_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkIMContextSimple),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_im_context_simple_init,
-      };
-      
-      im_context_simple_type =
-	g_type_register_static (GTK_TYPE_IM_CONTEXT, I_("GtkIMContextSimple"),
-				&im_context_simple_info, 0);
-    }
-
-  return im_context_simple_type;
-}
+G_DEFINE_TYPE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT);
 
 static void
 gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
 {
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   im_context_class->filter_keypress = gtk_im_context_simple_filter_keypress;
   im_context_class->reset = gtk_im_context_simple_reset;
@@ -1002,7 +970,7 @@ gtk_im_context_simple_finalize (GObject *obj)
       context_simple->tables = NULL;
     }
 
-  parent_class->finalize (obj);
+  G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
 
 /** 

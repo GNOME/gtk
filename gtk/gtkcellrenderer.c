@@ -25,8 +25,6 @@
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
-static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
-static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
 static void gtk_cell_renderer_get_property  (GObject              *object,
 					     guint                 param_id,
 					     GValue               *value,
@@ -75,34 +73,7 @@ enum {
 
 static guint cell_renderer_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_cell_renderer_get_type (void)
-{
-  static GType cell_type = 0;
-
-  if (!cell_type)
-    {
-      static const GTypeInfo cell_info =
-      {
-        sizeof (GtkCellRendererClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_cell_renderer_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkCellRenderer),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_cell_renderer_init,
-	NULL,		/* value_table */
-      };
-
-      cell_type = g_type_register_static (GTK_TYPE_OBJECT, I_("GtkCellRenderer"), 
-					  &cell_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return cell_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GtkCellRenderer, gtk_cell_renderer, GTK_TYPE_OBJECT);
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)

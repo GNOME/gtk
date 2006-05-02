@@ -159,8 +159,6 @@ struct _GtkStateData
 
 
 /* --- prototypes --- */
-static void	gtk_widget_class_init		 (GtkWidgetClass    *klass);
-static void	gtk_widget_init			 (GtkWidget	    *widget);
 static void	gtk_widget_set_property		 (GObject           *object,
 						  guint              prop_id,
 						  const GValue      *value,
@@ -235,7 +233,6 @@ static void gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 
 
 /* --- variables --- */
-static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
@@ -261,44 +258,9 @@ GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
 /* --- functions --- */
-GType
-gtk_widget_get_type (void)
-{
-  static GType widget_type = 0;
-  
-  if (!widget_type)
-    {
-      static const GTypeInfo widget_info =
-      {
-	sizeof (GtkWidgetClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_widget_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_init */
-	sizeof (GtkWidget),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_widget_init,
-	NULL,		/* value_table */
-      };
-      
-      static const GInterfaceInfo accessibility_info =
-      {
-        (GInterfaceInitFunc) gtk_widget_accessible_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL /* interface data */
-      };
-
-      widget_type = g_type_register_static (GTK_TYPE_OBJECT, I_("GtkWidget"), 
-					    &widget_info, G_TYPE_FLAG_ABSTRACT);
-
-      g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
-                                   &accessibility_info) ;
-
-    }
-  
-  return widget_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkWidget, gtk_widget, GTK_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (ATK_TYPE_IMPLEMENTOR,
+						gtk_widget_accessible_interface_init));
 
 static void
 child_property_notify_dispatcher (GObject     *object,
@@ -316,8 +278,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
   
-  parent_class = g_type_class_peek_parent (klass);
-
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
@@ -6776,7 +6736,7 @@ gtk_widget_dispose (GObject *object)
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_unrealize (widget);
   
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
 static void
@@ -6798,7 +6758,7 @@ gtk_widget_real_destroy (GtkObject *object)
   widget->style = gtk_widget_get_default_style ();
   g_object_ref (widget->style);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_widget_parent_class)->destroy (object);
 }
 
 static void
@@ -6834,7 +6794,7 @@ gtk_widget_finalize (GObject *object)
   if (accessible)
     g_object_unref (accessible);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_widget_parent_class)->finalize (object);
 }
 
 /*****************************************

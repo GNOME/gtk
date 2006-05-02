@@ -56,8 +56,6 @@ struct _GtkAlignmentPrivate
   guint padding_right;
 };
 
-static void gtk_alignment_class_init    (GtkAlignmentClass *klass);
-static void gtk_alignment_init          (GtkAlignment      *alignment);
 static void gtk_alignment_size_request  (GtkWidget         *widget,
 					 GtkRequisition    *requisition);
 static void gtk_alignment_size_allocate (GtkWidget         *widget,
@@ -71,32 +69,7 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-GType
-gtk_alignment_get_type (void)
-{
-  static GType alignment_type = 0;
-
-  if (!alignment_type)
-    {
-      static const GTypeInfo alignment_info =
-      {
-	sizeof (GtkAlignmentClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_alignment_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkAlignment),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_alignment_init,
-      };
-
-      alignment_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkAlignment"),
-					       &alignment_info, 0);
-    }
-
-  return alignment_type;
-}
+G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN);
 
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)

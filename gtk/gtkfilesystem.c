@@ -325,42 +325,13 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
  *          GtkFileSystemHandle          *
  *****************************************/
 
-static void gtk_file_system_handle_init       (GtkFileSystemHandle      *handle);
-static void gtk_file_system_handle_class_init (GtkFileSystemHandleClass *klass);
-
 enum
 {
   PROP_0,
   PROP_CANCELLED
 };
 
-GType
-gtk_file_system_handle_get_type (void)
-{
-  static GType file_system_handle_type = 0;
-
-  if (!file_system_handle_type)
-    {
-      static const GTypeInfo file_system_handle_info =
-      {
-	sizeof (GtkFileSystemHandleClass),
-	NULL,
-	NULL,
-	(GClassInitFunc) gtk_file_system_handle_class_init,
-	NULL,
-	NULL,
-	sizeof (GtkFileSystemHandle),
-	0,
-	(GInstanceInitFunc) gtk_file_system_handle_init,
-      };
-
-      file_system_handle_type = g_type_register_static (G_TYPE_OBJECT,
-							I_("GtkFileSystemHandle"),
-							&file_system_handle_info, 0);
-    }
-
-  return file_system_handle_type;
-}
+G_DEFINE_TYPE (GtkFileSystemHandle, gtk_file_system_handle, G_TYPE_OBJECT);
 
 #if 0
 GtkFileSystemHandle *

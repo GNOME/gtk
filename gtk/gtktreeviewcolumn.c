@@ -77,8 +77,6 @@ struct _GtkTreeViewColumnCellInfo
 };
 
 /* Type methods */
-static void gtk_tree_view_column_init                          (GtkTreeViewColumn       *tree_column);
-static void gtk_tree_view_column_class_init                    (GtkTreeViewColumnClass  *klass);
 static void gtk_tree_view_column_cell_layout_init              (GtkCellLayoutIface      *iface);
 
 /* GObject methods */
@@ -153,48 +151,11 @@ static GList *gtk_tree_view_column_cell_prev                   (GtkTreeViewColum
 static void gtk_tree_view_column_clear_attributes_by_info      (GtkTreeViewColumn      *tree_column,
 					                        GtkTreeViewColumnCellInfo *info);
 
-static GtkObjectClass *parent_class = NULL;
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_tree_view_column_get_type (void)
-{
-  static GType tree_column_type = 0;
-
-  if (!tree_column_type)
-    {
-      static const GTypeInfo tree_column_info =
-      {
-	sizeof (GtkTreeViewColumnClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_tree_view_column_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkTreeViewColumn),
-	0,
-	(GInstanceInitFunc) gtk_tree_view_column_init
-      };
-
-      static const GInterfaceInfo cell_layout_info =
-      {
-        (GInterfaceInitFunc) gtk_tree_view_column_cell_layout_init,
-        NULL,
-        NULL
-      };
-
-      tree_column_type =
-	g_type_register_static (GTK_TYPE_OBJECT, I_("GtkTreeViewColumn"),
-				&tree_column_info, 0);
-
-      g_type_add_interface_static (tree_column_type,
-                                   GTK_TYPE_CELL_LAYOUT,
-                                   &cell_layout_info);
-    }
-
-  return tree_column_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
+						gtk_tree_view_column_cell_layout_init));
 
 static void
 gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
@@ -202,8 +163,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   GObjectClass *object_class;
 
   object_class = (GObjectClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   class->clicked = NULL;
 
@@ -433,7 +392,7 @@ gtk_tree_view_column_finalize (GObject *object)
   if (tree_column->child)
     g_object_unref (tree_column->child);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_tree_view_column_parent_class)->finalize (object);
 }
 
 static void

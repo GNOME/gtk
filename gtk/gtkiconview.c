@@ -222,7 +222,6 @@ enum
 };
 
 /* GObject vfuncs */
-static void             gtk_icon_view_class_init                (GtkIconViewClass   *klass);
 static void             gtk_icon_view_cell_layout_init          (GtkCellLayoutIface *iface);
 static void             gtk_icon_view_finalize                  (GObject            *object);
 static void             gtk_icon_view_set_property              (GObject            *object,

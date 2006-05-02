@@ -71,9 +71,7 @@ enum
   N_COLUMNS
 };
 
-static void gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class);
-static void gtk_file_chooser_entry_iface_init (GtkEditableClass         *iface);
-static void gtk_file_chooser_entry_init       (GtkFileChooserEntry      *chooser_entry);
+static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
 
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
@@ -106,56 +104,18 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 						GtkFilePath         *path,
 						gchar               *display_name);
 
-static GObjectClass *parent_class;
 static GtkEditableClass *parent_editable_iface;
 
-GType
-_gtk_file_chooser_entry_get_type (void)
-{
-  static GType file_chooser_entry_type = 0;
-
-  if (!file_chooser_entry_type)
-    {
-      static const GTypeInfo file_chooser_entry_info =
-      {
-	sizeof (GtkFileChooserEntryClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_chooser_entry_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileChooserEntry),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_chooser_entry_init,
-      };
-
-      static const GInterfaceInfo editable_info =
-      {
-	(GInterfaceInitFunc) gtk_file_chooser_entry_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
-
-
-      file_chooser_entry_type = g_type_register_static (GTK_TYPE_ENTRY, I_("GtkFileChooserEntry"),
-							&file_chooser_entry_info, 0);
-      g_type_add_interface_static (file_chooser_entry_type,
-				   GTK_TYPE_EDITABLE,
-				   &editable_info);
-    }
-
-
-  return file_chooser_entry_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+						gtk_file_chooser_entry_iface_init));
 
 static void
-gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
+_gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkEntryClass *entry_class = GTK_ENTRY_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_chooser_entry_finalize;
   gobject_class->dispose = gtk_file_chooser_entry_dispose;
@@ -175,7 +135,7 @@ gtk_file_chooser_entry_iface_init (GtkEditableClass *iface)
 }
 
 static void
-gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
+_gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
@@ -218,7 +178,7 @@ gtk_file_chooser_entry_finalize (GObject *object)
   gtk_file_path_free (chooser_entry->current_folder_path);
   g_free (chooser_entry->file_part);
 
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->finalize (object);
 }
 
 static void
@@ -254,7 +214,7 @@ gtk_file_chooser_entry_dispose (GObject *object)
       chooser_entry->file_system = NULL;
     }
 
-  parent_class->dispose (object);
+  G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
 }
 
 /* Match functions for the GtkEntryCompletion */
@@ -728,7 +688,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
   entry = GTK_ENTRY (widget);
 
   if (!chooser_entry->eat_tabs)
-    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus (widget, direction);
 
   control_pressed = FALSE;
 
@@ -760,7 +720,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
       return TRUE;
     }
   else
-    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus (widget, direction);
 }
 
 static void
@@ -774,7 +734,7 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
 				 entry->text_length);
     }
   
-  GTK_ENTRY_CLASS (parent_class)->activate (entry);
+  GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
 /* This will see if a path typed by the user is new, and installs the loading

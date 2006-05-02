@@ -106,41 +106,13 @@ enum
   PROP_ACTION_GROUP
 };
 
-static void gtk_action_init       (GtkAction *action);
-static void gtk_action_class_init (GtkActionClass *class);
 
 static GQuark      accel_path_id  = 0;
 static GQuark      quark_gtk_action_proxy  = 0;
 static const gchar accel_path_key[] = "GtkAction::accel_path";
 static const gchar gtk_action_proxy_key[] = "gtk-action";
 
-GType
-gtk_action_get_type (void)
-{
-  static GtkType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo type_info =
-      {
-        sizeof (GtkActionClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_action_class_init,
-        (GClassFinalizeFunc) NULL,
-        NULL,
-        
-        sizeof (GtkAction),
-        0, /* n_preallocs */
-        (GInstanceInitFunc) gtk_action_init,
-      };
-
-      type = g_type_register_static (G_TYPE_OBJECT,
-				     I_("GtkAction"),
-				     &type_info, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GtkAction, gtk_action, G_TYPE_OBJECT);
 
 static void gtk_action_finalize     (GObject *object);
 static void gtk_action_set_property (GObject         *object,
@@ -185,7 +157,6 @@ static void       closure_accel_activate (GClosure     *closure,
 					  gpointer      invocation_hint,
 					  gpointer      marshal_data);
 
-static GObjectClass *parent_class = NULL;
 static guint         action_signals[LAST_SIGNAL] = { 0 };
 
 
@@ -197,7 +168,6 @@ gtk_action_class_init (GtkActionClass *klass)
   accel_path_id = g_quark_from_static_string (accel_path_key);
   quark_gtk_action_proxy = g_quark_from_static_string (gtk_action_proxy_key);
 
-  parent_class = g_type_class_peek_parent (klass);
   gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize     = gtk_action_finalize;
@@ -449,7 +419,7 @@ gtk_action_finalize (GObject *object)
   if (action->private_data->accel_group)
     g_object_unref (action->private_data->accel_group);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);  
+  G_OBJECT_CLASS (gtk_action_parent_class)->finalize (object);  
 }
 
 static void

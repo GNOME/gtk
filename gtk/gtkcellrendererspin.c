@@ -37,8 +37,6 @@ struct _GtkCellRendererSpinPrivate
   guint   digits;
 };
 
-static void gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass);
-static void gtk_cell_renderer_spin_init       (GtkCellRendererSpin      *self);
 static void gtk_cell_renderer_spin_finalize   (GObject                  *object);
 
 static void gtk_cell_renderer_spin_get_property (GObject      *object,

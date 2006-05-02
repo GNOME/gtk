@@ -64,10 +64,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
-static GtkRangeClass *parent_class = NULL;
 
-static void gtk_scale_class_init       (GtkScaleClass *klass);
-static void gtk_scale_init             (GtkScale      *scale);
 static void gtk_scale_set_property     (GObject       *object,
                                         guint          prop_id,
                                         const GValue  *value,
@@ -84,33 +81,7 @@ static void gtk_scale_finalize         (GObject       *object);
 static void gtk_scale_screen_changed   (GtkWidget     *widget,
                                         GdkScreen     *old_screen);
 
-GType
-gtk_scale_get_type (void)
-{
-  static GType scale_type = 0;
-
-  if (!scale_type)
-    {
-      static const GTypeInfo scale_info =
-      {
-	sizeof (GtkScaleClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_scale_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkScale),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_scale_init,
-	NULL,		/* value_table */
-      };
-
-      scale_type = g_type_register_static (GTK_TYPE_RANGE, I_("GtkScale"),
-					   &scale_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return scale_type;
-}
+G_DEFINE_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE);
 
 static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
@@ -145,8 +116,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  
-  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
@@ -611,7 +580,7 @@ gtk_scale_style_set (GtkWidget *widget,
   
   _gtk_scale_clear_layout (GTK_SCALE (widget));
 
-  (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
+  (* GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_set) (widget, previous);
 }
 
 static void
@@ -661,7 +630,7 @@ gtk_scale_finalize (GObject *object)
 
   _gtk_scale_clear_layout (scale);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_scale_parent_class)->finalize (object);
 }
 
 /**

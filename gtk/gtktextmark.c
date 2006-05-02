@@ -53,39 +53,9 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static void gtk_text_mark_init       (GtkTextMark      *mark);
-static void gtk_text_mark_class_init (GtkTextMarkClass *klass);
-static void gtk_text_mark_finalize   (GObject          *obj);
+static void gtk_text_mark_finalize (GObject *obj);
 
-
-static gpointer parent_class = NULL;
-
-GType
-gtk_text_mark_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GtkTextMarkClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_mark_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextMark),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_mark_init,
-      };
-
-      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextMark"),
-                                            &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GtkTextMark, gtk_text_mark, G_TYPE_OBJECT);
 
 static void
 gtk_text_mark_init (GtkTextMark *mark)
@@ -97,8 +67,6 @@ static void
 gtk_text_mark_class_init (GtkTextMarkClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_text_mark_finalize;
 }
@@ -127,7 +95,7 @@ gtk_text_mark_finalize (GObject *obj)
     }
 
   /* chain parent_class' handler */
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_text_mark_parent_class)->finalize (obj);
 }
 
 /**

@@ -44,8 +44,6 @@ enum {
   PROP_DRAW_AS_RADIO
 };
 
-static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
-static void gtk_check_menu_item_init                 (GtkCheckMenuItem      *check_menu_item);
 static gint gtk_check_menu_item_expose               (GtkWidget             *widget,
 						      GdkEventExpose        *event);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
@@ -65,37 +63,9 @@ static void gtk_check_menu_item_get_property (GObject         *object,
 					      GParamSpec      *pspec);
 
 
-static GtkMenuItemClass *parent_class = NULL;
 static guint check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
-
-GType
-gtk_check_menu_item_get_type (void)
-{
-  static GType check_menu_item_type = 0;
-
-  if (!check_menu_item_type)
-    {
-      static const GTypeInfo check_menu_item_info =
-      {
-        sizeof (GtkCheckMenuItemClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_check_menu_item_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkCheckMenuItem),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_check_menu_item_init,
-      };
-
-      check_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, I_("GtkCheckMenuItem"),
-				&check_menu_item_info, 0);
-    }
-
-  return check_menu_item_type;
-}
+G_DEFINE_TYPE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_ITEM);
 
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
@@ -108,8 +78,6 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
   
-  parent_class = g_type_class_peek_parent (klass);
-
   gobject_class->set_property = gtk_check_menu_item_set_property;
   gobject_class->get_property = gtk_check_menu_item_get_property;
 
@@ -384,8 +352,8 @@ static gint
 gtk_check_menu_item_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)
 {
-  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event)
+    (* GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event) (widget, event);
 
   gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), &event->area);
 

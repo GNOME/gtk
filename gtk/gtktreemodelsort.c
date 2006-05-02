@@ -108,8 +108,6 @@ enum {
 #define VALID_ITER(iter, tree_model_sort) ((iter) != NULL && (iter)->user_data != NULL && (iter)->user_data2 != NULL && (tree_model_sort)->stamp == (iter)->stamp)
 
 /* general (object/interface init, etc) */
-static void gtk_tree_model_sort_init                  (GtkTreeModelSort      *tree_model_sort);
-static void gtk_tree_model_sort_class_init            (GtkTreeModelSortClass *tree_model_sort_class);
 static void gtk_tree_model_sort_tree_model_init       (GtkTreeModelIface     *iface);
 static void gtk_tree_model_sort_tree_sortable_init    (GtkTreeSortableIface  *iface);
 static void gtk_tree_model_sort_drag_source_init      (GtkTreeDragSourceIface*iface);
@@ -238,68 +236,14 @@ static GtkTreePath *gtk_real_tree_model_sort_convert_child_path_to_path (GtkTree
 									 GtkTreePath      *child_path,
 									 gboolean          build_levels);
 
-static GObjectClass *parent_class = NULL;
 
-GType
-gtk_tree_model_sort_get_type (void)
-{
-  static GType tree_model_sort_type = 0;
-
-  if (!tree_model_sort_type)
-    {
-      static const GTypeInfo tree_model_sort_info =
-      {
-        sizeof (GtkTreeModelSortClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_tree_model_sort_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTreeModelSort),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_tree_model_sort_init
-      };
-
-      static const GInterfaceInfo tree_model_info =
-      {
-        (GInterfaceInitFunc) gtk_tree_model_sort_tree_model_init,
-        NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo sortable_info =
-      {
-        (GInterfaceInitFunc) gtk_tree_model_sort_tree_sortable_init,
-        NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo drag_source_info =
-      {
-        (GInterfaceInitFunc) gtk_tree_model_sort_drag_source_init,
-        NULL,
-        NULL
-      };
-
-      tree_model_sort_type =
-	g_type_register_static (G_TYPE_OBJECT, I_("GtkTreeModelSort"),
-				&tree_model_sort_info, 0);
-
-      g_type_add_interface_static (tree_model_sort_type,
-                                   GTK_TYPE_TREE_MODEL,
-                                   &tree_model_info);
-
-      g_type_add_interface_static (tree_model_sort_type,
-                                   GTK_TYPE_TREE_SORTABLE,
-                                   &sortable_info);
-
-      g_type_add_interface_static (tree_model_sort_type,
-                                   GTK_TYPE_TREE_DRAG_SOURCE,
-                                   &drag_source_info);
-    }
-
-  return tree_model_sort_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkTreeModelSort, gtk_tree_model_sort, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+						gtk_tree_model_sort_tree_model_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE,
+						gtk_tree_model_sort_tree_sortable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+						gtk_tree_model_sort_drag_source_init));
 
 static void
 gtk_tree_model_sort_init (GtkTreeModelSort *tree_model_sort)
@@ -317,7 +261,6 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
   GObjectClass *object_class;
 
   object_class = (GObjectClass *) class;
-  parent_class = g_type_class_peek_parent (class);
 
   object_class->set_property = gtk_tree_model_sort_set_property;
   object_class->get_property = gtk_tree_model_sort_get_property;
@@ -411,7 +354,7 @@ gtk_tree_model_sort_finalize (GObject *object)
     }
 
   /* must chain up */
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_tree_model_sort_parent_class)->finalize (object);
 }
 
 static void

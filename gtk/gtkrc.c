@@ -227,8 +227,6 @@ static void        gtk_rc_clear_hash_node            (gpointer         key,
 static void        gtk_rc_clear_styles               (GtkRcContext    *context);
 static void        gtk_rc_add_initial_default_files  (void);
 
-static void        gtk_rc_style_init                 (GtkRcStyle      *style);
-static void        gtk_rc_style_class_init           (GtkRcStyleClass *klass);
 static void        gtk_rc_style_finalize             (GObject         *object);
 static void        gtk_rc_style_real_merge           (GtkRcStyle      *dest,
                                                       GtkRcStyle      *src);
@@ -238,7 +236,6 @@ static gint	   gtk_rc_properties_cmp	     (gconstpointer    bsearch_node1,
 						      gconstpointer    bsearch_node2);
 static void        gtk_rc_set_free                   (GtkRcSet        *rc_set);
 
-static gpointer parent_class = NULL;
 
 static const GScannerConfig gtk_rc_scanner_config =
 {
@@ -1034,32 +1031,7 @@ gtk_rc_parse (const gchar *filename)
 
 /* Handling of RC styles */
 
-GType
-gtk_rc_style_get_type (void)
-{
-  static GType rc_style_type = 0;
-
-  if (!rc_style_type)
-    {
-      static const GTypeInfo rc_style_info =
-      {
-        sizeof (GtkRcStyleClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_rc_style_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkRcStyle),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_rc_style_init,
-      };
-      
-      rc_style_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkRcStyle"),
-					      &rc_style_info, 0);
-    }
-  
-  return rc_style_type;
-}
+G_DEFINE_TYPE (GtkRcStyle, gtk_rc_style, G_TYPE_OBJECT);
 
 static void
 gtk_rc_style_init (GtkRcStyle *style)
@@ -1096,8 +1068,6 @@ gtk_rc_style_class_init (GtkRcStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gtk_rc_style_finalize;
 
   klass->parse = NULL;
@@ -1182,7 +1152,7 @@ gtk_rc_style_finalize (GObject *object)
   g_slist_foreach (rc_priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
   g_slist_free (rc_priv->color_hashes);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_rc_style_parent_class)->finalize (object);
 }
 
 GtkRcStyle *

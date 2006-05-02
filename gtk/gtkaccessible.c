@@ -26,7 +26,6 @@
 #include "gtkalias.h"
 
 static void gtk_accessible_class_init (GtkAccessibleClass *klass);
-
 static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
 
 GType
@@ -35,24 +34,12 @@ gtk_accessible_get_type (void)
   static GType accessible_type = 0;
 
   if (!accessible_type)
-    {
-      static const GTypeInfo accessible_info =
-      {
-	sizeof (GtkAccessibleClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_accessible_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkAccessible),
-	16,		/* n_preallocs */
-	(GInstanceInitFunc) NULL,
-      };
-
-      accessible_type =
-	g_type_register_static (ATK_TYPE_OBJECT, I_("GtkAccessible"),
-				&accessible_info, 0);
-    }
+    accessible_type = 
+      g_type_register_static_simple (ATK_TYPE_OBJECT, I_("GtkAccessible"),
+				     sizeof (GtkAccessibleClass),
+				     (GClassInitFunc)gtk_accessible_class_init,
+				     sizeof (GtkAccessible),
+				     NULL, 0);
 
   return accessible_type;
 }

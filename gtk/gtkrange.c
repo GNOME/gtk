@@ -98,8 +98,6 @@ struct _GtkRangeLayout
 };
 
 
-static void gtk_range_class_init     (GtkRangeClass    *klass);
-static void gtk_range_init           (GtkRange         *range);
 static void gtk_range_set_property   (GObject          *object,
                                       guint             prop_id,
                                       const GValue     *value,
@@ -191,37 +189,9 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
 
 
-static GtkWidgetClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL];
 
-
-GType
-gtk_range_get_type (void)
-{
-  static GType range_type = 0;
-
-  if (!range_type)
-    {
-      static const GTypeInfo range_info =
-      {
-	sizeof (GtkRangeClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_range_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkRange),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_range_init,
-	NULL,		/* value_table */
-      };
-
-      range_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkRange"),
-					   &range_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return range_type;
-}
+G_DEFINE_TYPE (GtkRange, gtk_range, GTK_TYPE_WIDGET);
 
 static void
 gtk_range_class_init (GtkRangeClass *class)
@@ -233,8 +203,6 @@ gtk_range_class_init (GtkRangeClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_range_set_property;
   gobject_class->get_property = gtk_range_get_property;
@@ -887,7 +855,7 @@ gtk_range_finalize (GObject *object)
 
   g_free (range->layout);
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_range_parent_class)->finalize) (object);
 }
 
 static void
@@ -910,7 +878,7 @@ gtk_range_destroy (GtkObject *object)
       range->adjustment = NULL;
     }
 
-  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (gtk_range_parent_class)->destroy) (object);
 }
 
 static void
@@ -1008,8 +976,8 @@ gtk_range_unrealize (GtkWidget *widget)
   gdk_window_destroy (range->event_window);
   range->event_window = NULL;
   
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -1019,7 +987,7 @@ gtk_range_map (GtkWidget *widget)
   
   gdk_window_show (range->event_window);
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->map (widget);
 }
 
 static void
@@ -1031,7 +999,7 @@ gtk_range_unmap (GtkWidget *widget)
 
   gdk_window_hide (range->event_window);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->unmap (widget);
 }
 
 static void
@@ -1873,7 +1841,7 @@ gtk_range_style_set (GtkWidget *widget,
 
   range->need_recalc = TRUE;
 
-  (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous_style);
+  (* GTK_WIDGET_CLASS (gtk_range_parent_class)->style_set) (widget, previous_style);
 }
 
 static void

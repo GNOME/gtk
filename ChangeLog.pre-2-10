@@ -1,3 +1,11 @@
+2006-05-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/*.c: Use G_DEFINE_TYPE and g_type_register_static_simple()
+	where applicable, for ~5000 lines of code reduction. This also
+	reduces the size of the data section by ~9k. The overall library
+	sizes shrinks a bit less, since the text section gets a bit
+	larger.
+
 2006-05-02  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): set tmpnode to

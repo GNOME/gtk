@@ -186,8 +186,6 @@ typedef struct
   GtkIconCache *cache;
 } IconThemeDirMtime;
 
-static void  gtk_icon_theme_class_init (GtkIconThemeClass    *klass);
-static void  gtk_icon_theme_init       (GtkIconTheme         *icon_theme);
 static void  gtk_icon_theme_finalize   (GObject              *object);
 static void  theme_dir_destroy         (IconThemeDir         *dir);
 
@@ -228,8 +226,6 @@ static BuiltinIcon *find_builtin_icon (const gchar *icon_name,
 				       gint        *min_difference_p,
 				       gboolean    *has_larger_p);
 
-static GObjectClass *parent_class = NULL;
-
 static guint signal_changed = 0;
 
 static GHashTable *icon_theme_builtin_icons;
@@ -238,32 +234,7 @@ static GHashTable *icon_theme_builtin_icons;
 GtkIconCache *_builtin_cache = NULL;
 static GList *builtin_dirs = NULL;
 
-
-GType
-gtk_icon_theme_get_type (void)
-{
-  static GType type = 0;
-
-  if (type == 0)
-    {
-      static const GTypeInfo info =
-	{
-	  sizeof (GtkIconThemeClass),
-	  NULL,           /* base_init */
-	  NULL,           /* base_finalize */
-	  (GClassInitFunc) gtk_icon_theme_class_init,
-	  NULL,           /* class_finalize */
-	  NULL,           /* class_data */
-	  sizeof (GtkIconTheme),
-	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) gtk_icon_theme_init,
-	};
-
-      type = g_type_register_static (G_TYPE_OBJECT, I_("GtkIconTheme"), &info, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT);
 
 /**
  * gtk_icon_theme_new:
@@ -352,8 +323,6 @@ static void
 gtk_icon_theme_class_init (GtkIconThemeClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_icon_theme_finalize;
 
@@ -702,7 +671,7 @@ gtk_icon_theme_finalize (GObject *object)
 
   blow_themes (icon_theme);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);  
+  G_OBJECT_CLASS (gtk_icon_theme_parent_class)->finalize (object);  
 }
 
 /**

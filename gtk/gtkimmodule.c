@@ -174,23 +174,12 @@ gtk_im_module_get_type (void)
   static GType im_module_type = 0;
 
   if (!im_module_type)
-    {
-      static const GTypeInfo im_module_info = {
-        sizeof (GtkIMModuleClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_im_module_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkIMModule),
-        0,              /* n_preallocs */
-        NULL,           /* instance_init */
-      };
-
-      im_module_type =
-	g_type_register_static (G_TYPE_TYPE_MODULE, I_("GtkIMModule"),
-				&im_module_info, 0);
-    }
+    im_module_type =
+      g_type_register_static_simple (G_TYPE_TYPE_MODULE, I_("GtkIMModule"),
+				     sizeof (GtkIMModuleClass),
+				     (GClassInitFunc)gtk_im_module_class_init,
+				     sizeof (GtkIMModule),
+				     NULL, 0);
   
   return im_module_type;
 }

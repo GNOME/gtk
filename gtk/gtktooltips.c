@@ -49,8 +49,6 @@
 				     * to normal
                                      */
 
-static void gtk_tooltips_class_init        (GtkTooltipsClass *klass);
-static void gtk_tooltips_init              (GtkTooltips      *tooltips);
 static void gtk_tooltips_destroy           (GtkObject        *object);
 
 static void gtk_tooltips_event_handler     (GtkWidget   *widget,
@@ -69,36 +67,10 @@ static void gtk_tooltips_unset_tip_window  (GtkTooltips *tooltips);
 
 static gboolean get_keyboard_mode          (GtkWidget   *widget);
 
-static GtkObjectClass *parent_class;
 static const gchar  tooltips_data_key[] = "_GtkTooltipsData";
 static const gchar  tooltips_info_key[] = "_GtkTooltipsInfo";
 
-GType
-gtk_tooltips_get_type (void)
-{
-  static GType tooltips_type = 0;
-
-  if (!tooltips_type)
-    {
-      static const GTypeInfo tooltips_info =
-      {
-	sizeof (GtkTooltipsClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_tooltips_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkTooltips),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_tooltips_init,
-      };
-
-      tooltips_type = g_type_register_static (GTK_TYPE_OBJECT, I_("GtkTooltips"),
-					      &tooltips_info, 0);
-    }
-
-  return tooltips_type;
-}
+G_DEFINE_TYPE (GtkTooltips, gtk_tooltips, GTK_TYPE_OBJECT);
 
 static void
 gtk_tooltips_class_init (GtkTooltipsClass *class)
@@ -106,8 +78,6 @@ gtk_tooltips_class_init (GtkTooltipsClass *class)
   GtkObjectClass *object_class;
 
   object_class = (GtkObjectClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   object_class->destroy = gtk_tooltips_destroy;
 }
@@ -210,7 +180,7 @@ gtk_tooltips_destroy (GtkObject *object)
 
   gtk_tooltips_unset_tip_window (tooltips);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_tooltips_parent_class)->destroy (object);
 }
 
 static void

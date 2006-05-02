@@ -87,9 +87,6 @@ enum
   LAST_SIGNAL
 };
 
-static void gtk_color_button_class_init    (GtkColorButtonClass *klass);
-static void gtk_color_button_init          (GtkColorButton      *color_button);
-
 /* gobject signals */
 static void gtk_color_button_finalize      (GObject             *object);
 static void gtk_color_button_set_property  (GObject        *object,
@@ -134,38 +131,11 @@ static void gtk_color_button_drag_data_received (GtkWidget        *widget,
 						 GtkColorButton   *color_button);
 
 
-static gpointer parent_class = NULL;
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
 static const GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
 
-GType
-gtk_color_button_get_type (void)
-{
-  static GType color_button_type = 0;
-  
-  if (!color_button_type)
-    {
-      static const GTypeInfo color_button_info =
-      {
-        sizeof (GtkColorButtonClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_color_button_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkColorButton),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_color_button_init,
-      };
-      
-      color_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, I_("GtkColorButton"),
-                                &color_button_info, 0);
-    }
-  
-  return color_button_type;
-}
+G_DEFINE_TYPE (GtkColorButton, gtk_color_button, GTK_TYPE_BUTTON);
 
 static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
@@ -177,8 +147,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   button_class = GTK_BUTTON_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->get_property = gtk_color_button_get_property;
   gobject_class->set_property = gtk_color_button_set_property;
@@ -406,7 +374,7 @@ gtk_color_button_realize (GtkWidget *widget)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (widget);
 
-  GTK_WIDGET_CLASS (parent_class)->realize (widget);
+  GTK_WIDGET_CLASS (gtk_color_button_parent_class)->realize (widget);
 
   color_button->priv->gc = gdk_gc_new (widget->window);
 
@@ -421,7 +389,7 @@ gtk_color_button_unrealize (GtkWidget *widget)
   g_object_unref (color_button->priv->gc);
   color_button->priv->gc = NULL;
 
-  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_color_button_parent_class)->unrealize (widget);
 }
 
 static void
@@ -430,7 +398,7 @@ gtk_color_button_style_set (GtkWidget *widget,
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (widget);
 
-  GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_color_button_parent_class)->style_set (widget, previous_style);
 
   if (GTK_WIDGET_REALIZED (widget)) 
     {
@@ -637,7 +605,7 @@ gtk_color_button_finalize (GObject *object)
   g_free (color_button->priv->title);
   color_button->priv->title = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_color_button_parent_class)->finalize (object);
 }
 
 

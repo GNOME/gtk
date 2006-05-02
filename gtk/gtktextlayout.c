@@ -155,50 +155,19 @@ enum {
 
 #define PIXEL_BOUND(d) (((d) + PANGO_SCALE - 1) / PANGO_SCALE)
 
-static void gtk_text_layout_init       (GtkTextLayout      *text_layout);
-static void gtk_text_layout_class_init (GtkTextLayoutClass *klass);
-static void gtk_text_layout_finalize   (GObject            *object);
+static void gtk_text_layout_finalize (GObject *object);
 
-
-static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
 PangoAttrType gtk_text_attr_appearance_type = 0;
 
-GType
-gtk_text_layout_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    {
-      static const GTypeInfo our_info =
-      {
-        sizeof (GtkTextLayoutClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_text_layout_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkTextLayout),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gtk_text_layout_init
-      };
-
-      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextLayout"),
-                                         &our_info, 0);
-    }
-
-  return our_type;
-}
+G_DEFINE_TYPE (GtkTextLayout, gtk_text_layout, G_TYPE_OBJECT);
 
 static void
 gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-  
   object_class->finalize = gtk_text_layout_finalize;
 
   klass->wrap = gtk_text_layout_real_wrap;
@@ -310,7 +279,7 @@ gtk_text_layout_finalize (GObject *object)
     }
 
 
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize) (object);
 }
 
 void

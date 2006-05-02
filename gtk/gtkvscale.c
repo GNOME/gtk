@@ -34,10 +34,6 @@
 
 #define VALUE_SPACING 2
 
-static gpointer parent_class;
-
-static void     gtk_vscale_class_init       (GtkVScaleClass *klass);
-static void     gtk_vscale_init             (GtkVScale      *vscale);
 static gboolean gtk_vscale_expose           (GtkWidget      *widget,
                                              GdkEventExpose *event);
 
@@ -45,32 +41,7 @@ static void	gtk_vscale_get_layout_offsets (GtkScale		*scale,
                                                gint		*x,
                                                gint		*y);
 
-GType
-gtk_vscale_get_type (void)
-{
-  static GType vscale_type = 0;
-  
-  if (!vscale_type)
-    {
-      static const GTypeInfo vscale_info =
-      {
-      	sizeof (GtkVScaleClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_vscale_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkVScale),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_vscale_init,
-      };
-      
-      vscale_type = g_type_register_static (GTK_TYPE_SCALE, I_("GtkVScale"),
-					    &vscale_info, 0);
-    }
-  
-  return vscale_type;
-}
+G_DEFINE_TYPE (GtkVScale, gtk_vscale, GTK_TYPE_SCALE);
 
 static void
 gtk_vscale_class_init (GtkVScaleClass *class)
@@ -82,8 +53,6 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   range_class = GTK_RANGE_CLASS (class); 
   scale_class = GTK_SCALE_CLASS (class); 
-
-  parent_class = g_type_class_peek_parent (class);
 
   range_class->slider_detail = "vscale";
   
@@ -168,8 +137,8 @@ gtk_vscale_expose (GtkWidget      *widget,
   /* We need to chain up _first_ so the various geometry members of
    * GtkRange struct are updated.
    */
-  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_vscale_parent_class)->expose_event)
+    GTK_WIDGET_CLASS (gtk_vscale_parent_class)->expose_event (widget, event);
 
   if (scale->draw_value)
     {

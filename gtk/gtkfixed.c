@@ -29,15 +29,12 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
-
 enum {
   CHILD_PROP_0,
   CHILD_PROP_X,
   CHILD_PROP_Y
 };
 
-static void gtk_fixed_class_init    (GtkFixedClass    *klass);
-static void gtk_fixed_init          (GtkFixed         *fixed);
 static void gtk_fixed_realize       (GtkWidget        *widget);
 static void gtk_fixed_size_request  (GtkWidget        *widget,
 				     GtkRequisition   *requisition);
@@ -64,35 +61,7 @@ static void gtk_fixed_get_child_property (GtkContainer *container,
                                           GValue       *value,
                                           GParamSpec   *pspec);
 
-static GtkContainerClass *parent_class = NULL;
-
-
-GType
-gtk_fixed_get_type (void)
-{
-  static GType fixed_type = 0;
-
-  if (!fixed_type)
-    {
-      static const GTypeInfo fixed_info =
-      {
-	sizeof (GtkFixedClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_fixed_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFixed),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_fixed_init,
-      };
-
-      fixed_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkFixed"),
-					   &fixed_info, 0);
-    }
-
-  return fixed_type;
-}
+G_DEFINE_TYPE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER);
 
 static void
 gtk_fixed_class_init (GtkFixedClass *class)
@@ -102,8 +71,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
 
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   widget_class->realize = gtk_fixed_realize;
   widget_class->size_request = gtk_fixed_size_request;
@@ -306,7 +273,7 @@ gtk_fixed_realize (GtkWidget *widget)
   gint attributes_mask;
 
   if (GTK_WIDGET_NO_WINDOW (widget))
-    GTK_WIDGET_CLASS (parent_class)->realize (widget);
+    GTK_WIDGET_CLASS (gtk_fixed_parent_class)->realize (widget);
   else
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);

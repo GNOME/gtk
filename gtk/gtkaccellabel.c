@@ -43,8 +43,6 @@ enum {
   PROP_ACCEL_WIDGET
 };
 
-static void         gtk_accel_label_class_init   (GtkAccelLabelClass *klass);
-static void         gtk_accel_label_init         (GtkAccelLabel      *accel_label);
 static void         gtk_accel_label_set_property (GObject            *object,
 						  guint               prop_id,
 						  const GValue       *value,
@@ -62,35 +60,7 @@ static gboolean     gtk_accel_label_expose_event (GtkWidget          *widget,
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
 
-static GtkLabelClass *parent_class = NULL;
-
-GType
-gtk_accel_label_get_type (void)
-{
-  static GType accel_label_type = 0;
-  
-  if (!accel_label_type)
-    {
-      static const GTypeInfo accel_label_info =
-      {
-	sizeof (GtkAccelLabelClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_accel_label_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkAccelLabel),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_accel_label_init,
-      };
-      
-      accel_label_type =
-	g_type_register_static (GTK_TYPE_LABEL, I_("GtkAccelLabel"),
-				&accel_label_info, 0);
-    }
-  
-  return accel_label_type;
-}
+G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL);
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -98,8 +68,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  
-  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_accel_label_finalize;
   gobject_class->set_property = gtk_accel_label_set_property;
@@ -233,7 +201,7 @@ gtk_accel_label_destroy (GtkObject *object)
   gtk_accel_label_set_accel_widget (accel_label, NULL);
   gtk_accel_label_set_accel_closure (accel_label, NULL);
   
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_accel_label_parent_class)->destroy (object);
 }
 
 static void
@@ -243,7 +211,7 @@ gtk_accel_label_finalize (GObject *object)
 
   g_free (accel_label->accel_string);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_accel_label_parent_class)->finalize (object);
 }
 
 /**
@@ -281,8 +249,8 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   PangoLayout *layout;
   gint width;
   
-  if (GTK_WIDGET_CLASS (parent_class)->size_request)
-    GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request)
+    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request (widget, requisition);
 
   layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
   pango_layout_get_pixel_size (layout, &width, NULL);
@@ -339,8 +307,8 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 				    pango_layout_get_width (label_layout) 
 				    - ac_width * PANGO_SCALE);
 	  
-	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-	    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event)
+	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event (widget, event);
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    widget->allocation.x -= ac_width;
 	  widget->allocation.width += ac_width;
@@ -374,8 +342,8 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	}
       else
 	{
-	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-	    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event)
+	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event (widget, event);
 	}
     }
   

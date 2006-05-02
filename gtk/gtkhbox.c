@@ -30,40 +30,13 @@
 #include "gtkalias.h"
 
 
-static void gtk_hbox_class_init    (GtkHBoxClass   *klass);
-static void gtk_hbox_init          (GtkHBox        *box);
 static void gtk_hbox_size_request  (GtkWidget      *widget,
 				    GtkRequisition *requisition);
 static void gtk_hbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
 
-GType
-gtk_hbox_get_type (void)
-{
-  static GType hbox_type = 0;
-
-  if (!hbox_type)
-    {
-      static const GTypeInfo hbox_info =
-      {
-	sizeof (GtkHBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_hbox_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkHBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_hbox_init,
-      };
-
-      hbox_type = g_type_register_static (GTK_TYPE_BOX, I_("GtkHBox"),
-					  &hbox_info, 0);
-    }
-
-  return hbox_type;
-}
+G_DEFINE_TYPE (GtkHBox, gtk_hbox, GTK_TYPE_BOX);
 
 static void
 gtk_hbox_class_init (GtkHBoxClass *class)

@@ -50,8 +50,6 @@ enum {
 };
 
 
-static void gtk_toggle_button_class_init    (GtkToggleButtonClass *klass);
-static void gtk_toggle_button_init          (GtkToggleButton      *toggle_button);
 static gint gtk_toggle_button_expose        (GtkWidget            *widget,
 					     GdkEventExpose       *event);
 static gboolean gtk_toggle_button_mnemonic_activate  (GtkWidget            *widget,
@@ -70,35 +68,8 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 static void gtk_toggle_button_update_state  (GtkButton            *button);
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
-static GtkContainerClass *parent_class = NULL;
 
-GType
-gtk_toggle_button_get_type (void)
-{
-  static GType toggle_button_type = 0;
-
-  if (!toggle_button_type)
-    {
-      static const GTypeInfo toggle_button_info =
-      {
-	sizeof (GtkToggleButtonClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_toggle_button_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkToggleButton),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_toggle_button_init,
-      };
-
-      toggle_button_type =
-	g_type_register_static (GTK_TYPE_BUTTON, I_("GtkToggleButton"),
-				&toggle_button_info, 0);
-    }
-
-  return toggle_button_type;
-}
+G_DEFINE_TYPE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON);
 
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
@@ -112,8 +83,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   button_class = (GtkButtonClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_toggle_button_set_property;
   gobject_class->get_property = gtk_toggle_button_get_property;

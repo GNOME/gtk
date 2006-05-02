@@ -97,8 +97,6 @@ enum {
 
 
 /* --- prototypes --- */
-static void	gtk_settings_init		 (GtkSettings		*settings);
-static void	gtk_settings_class_init		 (GtkSettingsClass	*class);
 static void	gtk_settings_finalize		 (GObject		*object);
 static void	gtk_settings_get_property	 (GObject		*object,
 						  guint			 property_id,
@@ -131,40 +129,14 @@ static GHashTable *get_color_hash                (GtkSettings           *setting
 
 
 /* --- variables --- */
-static gpointer		 parent_class = NULL;
 static GQuark		 quark_property_parser = 0;
 static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
 
 
-/* --- functions --- */
-GType
-gtk_settings_get_type (void)
-{
-  static GType settings_type = 0;
-  
-  if (!settings_type)
-    {
-      static const GTypeInfo settings_info =
-      {
-	sizeof (GtkSettingsClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_settings_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkSettings),
-	0,              /* n_preallocs */
-	(GInstanceInitFunc) gtk_settings_init,
-      };
-      
-      settings_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkSettings"),
-					      &settings_info, 0);
-    }
-  
-  return settings_type;
-}
+G_DEFINE_TYPE (GtkSettings, gtk_settings, G_TYPE_OBJECT);
 
+/* --- functions --- */
 static void
 gtk_settings_init (GtkSettings *settings)
 {
@@ -207,8 +179,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   guint result;
   
-  parent_class = g_type_class_peek_parent (class);
-
   gobject_class->finalize = gtk_settings_finalize;
   gobject_class->get_property = gtk_settings_get_property;
   gobject_class->set_property = gtk_settings_set_property;
@@ -556,7 +526,7 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&settings->queued_settings);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
 /**

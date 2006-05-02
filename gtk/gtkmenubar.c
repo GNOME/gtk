@@ -95,23 +95,12 @@ gtk_menu_bar_get_type (void)
   static GType menu_bar_type = 0;
 
   if (!menu_bar_type)
-    {
-      static const GTypeInfo menu_bar_info =
-      {
-	sizeof (GtkMenuBarClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_menu_bar_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkMenuBar),
-	0,		/* n_preallocs */
-	NULL,		/* instance_init */
-      };
-
-      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, I_("GtkMenuBar"),
-					      &menu_bar_info, 0);
-    }
+    menu_bar_type = g_type_register_static_simple (GTK_TYPE_MENU_SHELL, 
+						   I_("GtkMenuBar"),
+						   sizeof (GtkMenuBarClass),
+						   gtk_menu_bar_class_init,
+						   sizeof (GtkMenuBar),
+						   NULL, 0);
 
   return menu_bar_type;
 }

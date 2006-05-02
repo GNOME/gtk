@@ -30,8 +30,6 @@
 #include "gtkalias.h"
 
 
-static void gtk_vbutton_box_class_init    (GtkVButtonBoxClass   *klass);
-static void gtk_vbutton_box_init          (GtkVButtonBox        *box);
 static void gtk_vbutton_box_size_request  (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void gtk_vbutton_box_size_allocate (GtkWidget      *widget,
@@ -40,33 +38,7 @@ static void gtk_vbutton_box_size_allocate (GtkWidget      *widget,
 static gint default_spacing = 10;
 static GtkButtonBoxStyle default_layout_style = GTK_BUTTONBOX_EDGE;
 
-GType
-gtk_vbutton_box_get_type (void)
-{
-  static GType vbutton_box_type = 0;
-
-  if (!vbutton_box_type)
-    {
-      static const GTypeInfo vbutton_box_info =
-      {
-	sizeof (GtkVButtonBoxClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_vbutton_box_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkVButtonBox),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_vbutton_box_init,
-      };
-
-      vbutton_box_type =
-	g_type_register_static (GTK_TYPE_BUTTON_BOX, I_("GtkVButtonBox"),
-				&vbutton_box_info, 0);
-    }
-
-  return vbutton_box_type;
-}
+G_DEFINE_TYPE (GtkVButtonBox, gtk_vbutton_box, GTK_TYPE_BUTTON_BOX);
 
 static void
 gtk_vbutton_box_class_init (GtkVButtonBoxClass *class)

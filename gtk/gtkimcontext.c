@@ -37,9 +37,6 @@ enum {
 
 static guint im_context_signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_im_context_class_init (GtkIMContextClass *class);
-static void gtk_im_context_init (GtkIMContext *im_context);
-
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							gchar         **str,
 							PangoAttrList **attrs,
@@ -54,34 +51,7 @@ static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							gint            len,
 							gint            cursor_index);
 
-GType
-gtk_im_context_get_type (void)
-{
-  static GType im_context_type = 0;
-
-  if (!im_context_type)
-    {
-      static const GTypeInfo im_context_info =
-      {
-        sizeof (GtkIMContextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_im_context_class_init,
-        NULL,		/* class_finalize */
-        NULL,		/* class_data */
-        sizeof (GtkIMContext),
-        0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_im_context_init,
-        NULL,		/* value_table */
-      };
-      
-      im_context_type =
-	g_type_register_static (G_TYPE_OBJECT, I_("GtkIMContext"),
-				&im_context_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return im_context_type;
-}
+G_DEFINE_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT);
 
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)

@@ -177,8 +177,6 @@ struct _GtkWindowPrivate
   GdkWindowTypeHint type_hint;
 };
 
-static void gtk_window_class_init         (GtkWindowClass    *klass);
-static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
@@ -286,7 +284,6 @@ static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
 
 static GSList      *toplevel_list = NULL;
-static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
 static gchar       *default_icon_name = NULL;
@@ -309,32 +306,7 @@ static void gtk_window_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 
 
-GType
-gtk_window_get_type (void)
-{
-  static GType window_type = 0;
-
-  if (!window_type)
-    {
-      static const GTypeInfo window_info =
-      {
-	sizeof (GtkWindowClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_window_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkWindow),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_window_init,
-      };
-
-      window_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkWindow"),
-					    &window_info, 0);
-    }
-
-  return window_type;
-}
+G_DEFINE_TYPE (GtkWindow, gtk_window, GTK_TYPE_BIN);
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -384,8 +356,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  parent_class = g_type_class_peek_parent (klass);
-
   quark_gtk_embedded = g_quark_from_static_string ("gtk-embedded");
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_default_icon_pixmap = g_quark_from_static_string ("gtk-window-default-icon-pixmap");
@@ -1796,7 +1766,7 @@ gtk_window_dispose (GObject *object)
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
 }
 
 static void
@@ -3947,7 +3917,7 @@ gtk_window_destroy (GtkObject *object)
 
    gtk_window_free_key_hash (window);
 
-   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+   GTK_OBJECT_CLASS (gtk_window_parent_class)->destroy (object);
 }
 
 static void
@@ -3986,7 +3956,7 @@ gtk_window_finalize (GObject *object)
 					    gtk_window_on_composited_changed, window);
     }
       
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
 static void
@@ -4418,7 +4388,7 @@ gtk_window_unrealize (GtkWidget *widget)
   /* Icons */
   gtk_window_unrealize_icon (window);
   
-  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  (* GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -4698,7 +4668,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   /* Chain up, invokes binding set */
   if (!handled)
-    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+    handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_press_event (widget, event);
 
   return handled;
 }
@@ -4716,7 +4686,7 @@ gtk_window_key_release_event (GtkWidget   *widget,
 
   /* Chain up, invokes binding set */
   if (!handled)
-    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+    handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_press_event (widget, event);
 
   return handled;
 }
@@ -6062,8 +6032,8 @@ gtk_window_expose (GtkWidget      *widget,
   if (!GTK_WIDGET_APP_PAINTABLE (widget))
     gtk_window_paint (widget, &event->area);
   
-  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-    return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event)
+    return GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event (widget, event);
 
   return FALSE;
 }

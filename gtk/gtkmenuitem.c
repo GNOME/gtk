@@ -51,8 +51,6 @@ enum {
 };
 
 
-static void gtk_menu_item_class_init     (GtkMenuItemClass *klass);
-static void gtk_menu_item_init           (GtkMenuItem      *menu_item);
 static void gtk_menu_item_destroy        (GtkObject        *object);
 static void gtk_menu_item_finalize       (GObject          *object);
 static void gtk_menu_item_size_request   (GtkWidget        *widget,
@@ -97,35 +95,9 @@ static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
 						  guint      signal_id);
 
 
-static GtkItemClass *parent_class;
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_menu_item_get_type (void)
-{
-  static GType menu_item_type = 0;
-
-  if (!menu_item_type)
-    {
-      static const GTypeInfo menu_item_info =
-      {
-	sizeof (GtkMenuItemClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_menu_item_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkMenuItem),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_menu_item_init,
-      };
-
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, I_("GtkMenuItem"),
-					       &menu_item_info, 0);
-    }
-
-  return menu_item_type;
-}
+G_DEFINE_TYPE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM);
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -135,8 +107,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkItemClass *item_class = GTK_ITEM_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_menu_item_finalize;
 
@@ -326,7 +296,7 @@ gtk_menu_item_destroy (GtkObject *object)
   if (menu_item->submenu)
     gtk_widget_destroy (menu_item->submenu);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_menu_item_parent_class)->destroy (object);
 }
 
 static void
@@ -336,7 +306,7 @@ gtk_menu_item_finalize (GObject *object)
 
   g_free (menu_item->accel_path);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_menu_item_parent_class)->finalize (object);
 }
 
 static void
@@ -717,8 +687,8 @@ gtk_menu_item_unrealize (GtkWidget *widget)
   gdk_window_destroy (menu_item->event_window);
   menu_item->event_window = NULL;
   
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -726,7 +696,7 @@ gtk_menu_item_map (GtkWidget *widget)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->map (widget);
 
   gdk_window_show (menu_item->event_window);
 }
@@ -738,7 +708,7 @@ gtk_menu_item_unmap (GtkWidget *widget)
     
   gdk_window_hide (menu_item->event_window);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unmap (widget);
 }
 
 static void
@@ -877,7 +847,7 @@ gtk_menu_item_expose (GtkWidget      *widget,
     {
       gtk_menu_item_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;
@@ -1389,8 +1359,8 @@ gtk_menu_item_parent_set (GtkWidget *widget,
 				       menu->accel_group,
 				       TRUE);
 
-  if (GTK_WIDGET_CLASS (parent_class)->parent_set)
-    GTK_WIDGET_CLASS (parent_class)->parent_set (widget, previous_parent);
+  if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set)
+    GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set (widget, previous_parent);
 }
 
 void

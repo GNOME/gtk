@@ -60,8 +60,6 @@ enum {
   LAST_SIGNAL
 };
 
-static void     gtk_paned_class_init            (GtkPanedClass    *klass);
-static void     gtk_paned_init                  (GtkPaned         *paned);
 static void     gtk_paned_set_property          (GObject          *object,
 						 guint             prop_id,
 						 const GValue     *value,
@@ -133,8 +131,6 @@ static GType    gtk_paned_child_type            (GtkContainer     *container);
 static void     gtk_paned_grab_notify           (GtkWidget        *widget,
 		                                 gboolean          was_grabbed);
 
-static GtkContainerClass *parent_class = NULL;
-
 struct _GtkPanedPrivate
 {
   GtkWidget *saved_focus;
@@ -142,33 +138,7 @@ struct _GtkPanedPrivate
   guint32    grab_time;
 };
 
-GType
-gtk_paned_get_type (void)
-{
-  static GType paned_type = 0;
-  
-  if (!paned_type)
-    {
-      static const GTypeInfo paned_info =
-      {
-	sizeof (GtkPanedClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_paned_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkPaned),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_paned_init,
-	NULL,		/* value_table */
-      };
-
-      paned_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkPaned"),
-					   &paned_info, G_TYPE_FLAG_ABSTRACT);
-    }
-  
-  return paned_type;
-}
+G_DEFINE_TYPE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -206,8 +176,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
   paned_class = (GtkPanedClass *) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
@@ -648,7 +616,7 @@ gtk_paned_finalize (GObject *object)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_paned_parent_class)->finalize (object);
 }
 
 static void
@@ -716,8 +684,8 @@ gtk_paned_unrealize (GtkWidget *widget)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
   
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -727,7 +695,7 @@ gtk_paned_map (GtkWidget *widget)
 
   gdk_window_show (paned->handle);
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->map (widget);
 }
 
 static void
@@ -737,7 +705,7 @@ gtk_paned_unmap (GtkWidget *widget)
     
   gdk_window_hide (paned->handle);
 
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->unmap (widget);
 }
 
 static gboolean
@@ -768,7 +736,7 @@ gtk_paned_expose (GtkWidget      *widget,
     }
 
   /* Chain up to draw children */
-  GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->expose_event (widget, event);
   
   return FALSE;
 }
@@ -874,7 +842,7 @@ gtk_paned_focus (GtkWidget        *widget,
    */
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
-  retval = (* GTK_WIDGET_CLASS (parent_class)->focus) (widget, direction);
+  retval = (* GTK_WIDGET_CLASS (gtk_paned_parent_class)->focus) (widget, direction);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
   return retval;
@@ -1361,8 +1329,8 @@ gtk_paned_set_focus_child (GtkContainer *container,
 	}
     }
 
-  if (parent_class->set_focus_child)
-    (* parent_class->set_focus_child) (container, focus_child);
+  if (GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child)
+    (* GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child) (container, focus_child);
 }
 
 static void

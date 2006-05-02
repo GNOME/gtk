@@ -46,12 +46,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static GtkVBoxClass *parent_class = NULL;
-
-
 /* forward declarations: */
-static void gtk_gamma_curve_class_init (GtkGammaCurveClass *class);
-static void gtk_gamma_curve_init (GtkGammaCurve *curve);
 static void gtk_gamma_curve_destroy (GtkObject *object);
 
 static void curve_type_changed_callback (GtkWidget *w, gpointer data);
@@ -213,38 +208,12 @@ static const char *const xpm[][27] =
     }
   };
 
-GType
-gtk_gamma_curve_get_type (void)
-{
-  static GType gamma_curve_type = 0;
-  
-  if (!gamma_curve_type)
-    {
-      static const GTypeInfo gamma_curve_info =
-      {
-	sizeof (GtkGammaCurveClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_gamma_curve_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkGammaCurve),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_gamma_curve_init,
-      };
-      
-      gamma_curve_type = g_type_register_static (GTK_TYPE_VBOX, I_("GtkGammaCurve"),
-						 &gamma_curve_info, 0);
-    }
-  return gamma_curve_type;
-}
+G_DEFINE_TYPE (GtkGammaCurve, gtk_gamma_curve, GTK_TYPE_VBOX);
 
 static void
 gtk_gamma_curve_class_init (GtkGammaCurveClass *class)
 {
   GtkObjectClass *object_class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   object_class = (GtkObjectClass *) class;
   object_class->destroy = gtk_gamma_curve_destroy;
@@ -482,8 +451,8 @@ gtk_gamma_curve_destroy (GtkObject *object)
   if (c->gamma_dialog)
     gtk_widget_destroy (c->gamma_dialog);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (gtk_gamma_curve_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (gtk_gamma_curve_parent_class)->destroy) (object);
 }
 
 #define __GTK_GAMMA_CURVE_C__

@@ -129,8 +129,6 @@ enum
 #define FILTER_LEVEL(filter_level) ((FilterLevel *)filter_level)
 
 /* general code (object/interface init, properties, etc) */
-static void         gtk_tree_model_filter_init                            (GtkTreeModelFilter      *filter);
-static void         gtk_tree_model_filter_class_init                      (GtkTreeModelFilterClass *filter_class);
 static void         gtk_tree_model_filter_tree_model_init                 (GtkTreeModelIface       *iface);
 static void         gtk_tree_model_filter_drag_source_init                (GtkTreeDragSourceIface  *iface);
 static void         gtk_tree_model_filter_finalize                        (GObject                 *object);
@@ -276,57 +274,11 @@ static FilterElt   *bsearch_elt_with_offset                               (GArra
                                                                            gint                  *index);
 
 
-static GObjectClass *parent_class = NULL;
-
-GType
-gtk_tree_model_filter_get_type (void)
-{
-  static GType tree_model_filter_type = 0;
-
-  if (!tree_model_filter_type)
-    {
-      static const GTypeInfo tree_model_filter_info =
-        {
-          sizeof (GtkTreeModelFilterClass),
-          NULL, /* base_init */
-          NULL, /* base_finalize */
-          (GClassInitFunc) gtk_tree_model_filter_class_init,
-          NULL, /* class_finalize */
-          NULL, /* class_data */
-          sizeof (GtkTreeModelFilter),
-          0, /* n_preallocs */
-          (GInstanceInitFunc) gtk_tree_model_filter_init
-        };
-
-      static const GInterfaceInfo tree_model_info =
-        {
-          (GInterfaceInitFunc) gtk_tree_model_filter_tree_model_init,
-          NULL,
-          NULL
-        };
-
-      static const GInterfaceInfo drag_source_info =
-        {
-          (GInterfaceInitFunc) gtk_tree_model_filter_drag_source_init,
-          NULL,
-          NULL
-        };
-
-      tree_model_filter_type = g_type_register_static (G_TYPE_OBJECT,
-                                                       I_("GtkTreeModelFilter"),
-                                                       &tree_model_filter_info, 0);
-
-      g_type_add_interface_static (tree_model_filter_type,
-                                   GTK_TYPE_TREE_MODEL,
-                                   &tree_model_info);
-
-      g_type_add_interface_static (tree_model_filter_type,
-                                   GTK_TYPE_TREE_DRAG_SOURCE,
-                                   &drag_source_info);
-    }
-
-  return tree_model_filter_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+						gtk_tree_model_filter_tree_model_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+						gtk_tree_model_filter_drag_source_init));
 
 static void
 gtk_tree_model_filter_init (GtkTreeModelFilter *filter)
@@ -346,7 +298,6 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
   GObjectClass *object_class;
 
   object_class = (GObjectClass *) filter_class;
-  parent_class = g_type_class_peek_parent (filter_class);
 
   object_class->set_property = gtk_tree_model_filter_set_property;
   object_class->get_property = gtk_tree_model_filter_get_property;
@@ -423,7 +374,7 @@ gtk_tree_model_filter_finalize (GObject *object)
     g_free (filter->priv->modify_types);
 
   /* must chain up */
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_tree_model_filter_parent_class)->finalize (object);
 }
 
 static void

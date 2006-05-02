@@ -147,8 +147,6 @@ struct _ColorSelectionPrivate
 };
 
 
-static void gtk_color_selection_init		(GtkColorSelection	 *colorsel);
-static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
 static void gtk_color_selection_destroy		(GtkObject		 *object);
 static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
@@ -183,7 +181,6 @@ static void     make_control_relations                  (AtkObject         *atk_
 static void     make_all_relations                      (AtkObject         *atk_obj,
                                                          ColorSelectionPrivate *priv);
 
-static gpointer parent_class = NULL;
 static guint color_selection_signals[LAST_SIGNAL] = { 0 };
 
 static const gchar default_colors[] = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
@@ -1812,33 +1809,7 @@ default_change_palette_func (GdkScreen	    *screen,
   g_free (str);
 }
 
-GType
-gtk_color_selection_get_type (void)
-{
-  static GType color_selection_type = 0;
-  
-  if (!color_selection_type)
-    {
-      static const GTypeInfo color_selection_info =
-      {
-        sizeof (GtkColorSelectionClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_color_selection_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkColorSelection),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_color_selection_init,
-      };
-      
-      color_selection_type =
-	g_type_register_static (GTK_TYPE_VBOX, I_("GtkColorSelection"),
-				&color_selection_info, 0);
-    }
-  
-  return color_selection_type;
-}
+G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_VBOX);
 
 static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
@@ -1850,8 +1821,6 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   gobject_class = G_OBJECT_CLASS (klass);
   object_class = GTK_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
   
   object_class->destroy = gtk_color_selection_destroy;
   gobject_class->finalize = gtk_color_selection_finalize;
@@ -2122,13 +2091,13 @@ gtk_color_selection_destroy (GtkObject *object)
       priv->tooltips = NULL;
     }
   
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_OBJECT_CLASS (gtk_color_selection_parent_class)->destroy (object);
 }
 
 static void
 gtk_color_selection_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_color_selection_parent_class)->finalize (object);
 }
 
 static void
@@ -2144,7 +2113,7 @@ gtk_color_selection_realize (GtkWidget *widget)
 						 widget);
   update_palette (colorsel);
 
-  GTK_WIDGET_CLASS (parent_class)->realize (widget);
+  GTK_WIDGET_CLASS (gtk_color_selection_parent_class)->realize (widget);
 }
 
 static void
@@ -2156,7 +2125,7 @@ gtk_color_selection_unrealize (GtkWidget *widget)
 
   g_signal_handler_disconnect (settings, priv->settings_connection);
 
-  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_color_selection_parent_class)->unrealize (widget);
 }
 
 /* We override show-all since we have internal widgets that

@@ -59,7 +59,6 @@ enum {
   CHILD_PROP_Y
 };
 
-static void gtk_layout_class_init         (GtkLayoutClass *class);
 static void gtk_layout_get_property       (GObject        *object,
                                            guint           prop_id,
                                            GValue         *value,
@@ -71,7 +70,6 @@ static void gtk_layout_set_property       (GObject        *object,
 static GObject *gtk_layout_constructor    (GType                  type,
 					   guint                  n_properties,
 					   GObjectConstructParam *properties);
-static void gtk_layout_init               (GtkLayout      *layout);
 static void gtk_layout_finalize           (GObject        *object);
 static void gtk_layout_realize            (GtkWidget      *widget);
 static void gtk_layout_unrealize          (GtkWidget      *widget);
@@ -114,7 +112,7 @@ static void gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
 					     gdouble        upper,
 					     gboolean       always_emit_changed);
 
-static GtkWidgetClass *parent_class = NULL;
+G_DEFINE_TYPE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER);
 
 /* Public interface
  */
@@ -263,7 +261,7 @@ gtk_layout_finalize (GObject *object)
   g_object_unref (layout->hadjustment);
   g_object_unref (layout->vadjustment);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_layout_parent_class)->finalize (object);
 }
 
 /**
@@ -559,33 +557,6 @@ gtk_layout_thaw (GtkLayout *layout)
 
 /* Basic Object handling procedures
  */
-GType
-gtk_layout_get_type (void)
-{
-  static GType layout_type = 0;
-
-  if (!layout_type)
-    {
-      static const GTypeInfo layout_info =
-      {
-	sizeof (GtkLayoutClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_layout_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkLayout),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_layout_init,
-      };
-
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkLayout"),
-					    &layout_info, 0);
-    }
-
-  return layout_type;
-}
-
 static void
 gtk_layout_class_init (GtkLayoutClass *class)
 {
@@ -596,8 +567,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   gobject_class = (GObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_layout_set_property;
   gobject_class->get_property = gtk_layout_get_property;
@@ -828,9 +797,9 @@ gtk_layout_constructor (GType                  type,
   GObject *object;
   GtkAdjustment *hadj, *vadj;
   
-  object = G_OBJECT_CLASS (parent_class)->constructor (type,
-						       n_properties,
-						       properties);
+  object = G_OBJECT_CLASS (gtk_layout_parent_class)->constructor (type,
+								  n_properties,
+								  properties);
 
   layout = GTK_LAYOUT (object);
 
@@ -903,8 +872,8 @@ gtk_layout_realize (GtkWidget *widget)
 static void
 gtk_layout_style_set (GtkWidget *widget, GtkStyle *old_style)
 {
-  if (GTK_WIDGET_CLASS (parent_class)->style_set)
-    (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, old_style);
+  if (GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set)
+    (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set) (widget, old_style);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -954,8 +923,8 @@ gtk_layout_unrealize (GtkWidget *widget)
   gdk_window_destroy (layout->bin_window);
   layout->bin_window = NULL;
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  if (GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize) (widget);
 }
 
 static void     
@@ -1044,7 +1013,7 @@ gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
   if (event->window != layout->bin_window)
     return FALSE;
   
-  (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+  (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->expose_event) (widget, event);
 
   return FALSE;
 }
