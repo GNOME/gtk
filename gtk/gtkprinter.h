@@ -66,7 +66,7 @@ struct _GtkPrinterClass
 GType                    gtk_printer_get_type          (void) G_GNUC_CONST;
 GtkPrinter              *gtk_printer_new               (const gchar     *name,
 							GtkPrintBackend *backend,
-							gboolean         virtual);
+							gboolean         virtual_);
 GtkPrintBackend         *gtk_printer_get_backend       (GtkPrinter      *printer);
 G_CONST_RETURN gchar    *gtk_printer_get_name          (GtkPrinter      *printer);
 G_CONST_RETURN gchar    *gtk_printer_get_state_message (GtkPrinter      *printer);

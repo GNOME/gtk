@@ -298,7 +298,7 @@ gtk_printer_get_property (GObject    *object,
  * gtk_printer_new:
  * @name: the name of the printer
  * @backend: a #GtkPrintBackend
- * @virtual: whether the printer is virtual
+ * @virtual_: whether the printer is virtual
  *
  * Creates a new #GtkPrinter.
  *
@@ -309,14 +309,14 @@ gtk_printer_get_property (GObject    *object,
 GtkPrinter *
 gtk_printer_new (const gchar     *name,
 		 GtkPrintBackend *backend,
-		 gboolean         virtual)
+		 gboolean         virtual_)
 {
   GObject *result;
   
   result = g_object_new (GTK_TYPE_PRINTER,
 			 "name", name,
 			 "backend", backend,
-			 "is-virtual", virtual,
+			 "is-virtual", virtual_,
                          NULL);
 
   return (GtkPrinter *) result;
