@@ -1,3 +1,9 @@
+2006-05-02  Alexander Larsson  <alexl@redhat.com>
+
+	* ChangeLog.gtk-printing: 
+	* Makefile.am (EXTRA_DIST):
+	Add ChangeLog.gtk-printing
+
 2006-05-01  Matthias Clasen  <mclasen@localhost.localdomain>
 
 	* NEWS: Updates
@@ -443,7 +449,7 @@ Tue Apr 25 10:25:28 2006  Søren Sandmann  <sandmann@redhat.com>
 2006-04-21  Alexander Larsson  <alexl@redhat.com>
 
         Merge the gtk-printing branch.
-	For more detailed ChangeLog entries, see the branch.
+	For more detailed ChangeLog entries, see the ChangeLog.gtk-printing.
 	
 	* .cvsignore:
 	* Makefile.am:
