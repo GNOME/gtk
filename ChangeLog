@@ -1,3 +1,10 @@
+2006-05-02  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtklabel.c (gtk_label_set_line_wrap): added note about the
+	inablity to do height-for-width text layout and suggest to use
+	gtk_widget_set_size_request() for getting a label that wraps at
+	some specific position.
+
 2006-05-02  Kristian Rietveld  <kris@imendio.com>
 
 	* ChangeLog.gtk-async-file-chooser: added ChangeLog entries from

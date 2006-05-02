@@ -1683,6 +1683,12 @@ gtk_label_get_max_width_chars (GtkLabel *label)
  * Toggles line wrapping within the #GtkLabel widget.  %TRUE makes it break
  * lines if text exceeds the widget's size.  %FALSE lets the text get cut off
  * by the edge of the widget if it exceeds the widget size.
+ *
+ * Note that setting line wrapping to %TRUE does not make the label
+ * wrap at its parent container's width, because GTK+ widgets
+ * conceptually can't make their requisition depend on the parent
+ * container's size. For a label that wraps at a specific position,
+ * set the label's width using gtk_widget_set_size_request().
  **/
 void
 gtk_label_set_line_wrap (GtkLabel *label,
