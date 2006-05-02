@@ -1,3 +1,8 @@
+2006-05-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprinter.[hc]: Don't use virtual as a parameter name.
+	(#340394, Christian Persch)
+
 2006-05-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkpagesetupunixdialog.c:
@@ -36,6 +41,7 @@
 
 2006-05-02  Kristian Rietveld  <kris@imendio.com>
 
+
 	* configure.in: Up ABI version to 2.10.0 (by Matthias' request).
 
 2006-05-01  Kristian Rietveld  <kris@imendio.com>
@@ -64,11 +70,11 @@
 	* gtk/gtkpathbar.h:
 	Merge from kris-async-branch.
 
-2006-05-01  Matthias Clasen  <mclasen@dhcp83-48.boston.redhat.com>
+2006-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
 
-2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+2006-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_base_init): Document
 	GtkTreeModel signals.
@@ -87,7 +93,7 @@
 	(gtk_tree_view_start_editing): remove code calculating the
 	level indentation, since _get_cell_area() takes care of this for us.
 
-2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+2006-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix problems with setting symbolic colors from rc files.
 	(#338345, Benjamin Berg)
@@ -97,7 +103,7 @@
 	freeze notification for settings changes while parsing; instead
 	manually avoid recursion, and update the color hashes.
 
-2006-04-30  Matthias Clasen  <mclasen@localhost.localdomain>
+2006-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_class_init): Change the default
 	value of the gtk-color-scheme setting to "".
