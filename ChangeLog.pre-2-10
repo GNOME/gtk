@@ -1,5 +1,8 @@
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c: Beautify the custom
+	paper size dialog.  (#339590, patch by Christian Persch)
+	
 	* gtk/gtkaccessible.c:
 	* gtk/gtkclipboard.c:
 	* gtk/gtkfilefilter.c:
