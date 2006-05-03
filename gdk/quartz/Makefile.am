@@ -35,10 +35,12 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkim-quartz.c		\
 	gdkimage-quartz.c	\
 	gdkinput.c		\
+	gdkinputprivate.h	\
 	gdkkeys-quartz.c	\
 	gdkmain-quartz.c	\
 	gdkpixmap-quartz.c	\
 	gdkpixmap-quartz.h	\
+	gdkprivate-quartz.h	\
 	gdkproperty-quartz.c	\
 	gdkquartz.h		\
 	gdkscreen-quartz.c	\
