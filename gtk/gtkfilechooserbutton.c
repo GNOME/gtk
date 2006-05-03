@@ -637,7 +637,8 @@ gtk_file_chooser_button_constructor (GType                  type,
 
   /* Set the default title if necessary. We must wait until the dialog has been created to do this. */
   if (!priv->has_title)
-    gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
+    gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (object),
+				       _(DEFAULT_TITLE));
 
   current_folder = gtk_file_chooser_get_current_folder_uri (GTK_FILE_CHOOSER (priv->dialog));
   if (current_folder != NULL)
