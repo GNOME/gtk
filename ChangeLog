@@ -1,5 +1,8 @@
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (draw_page_cb): Don't leak the
+	cairo context here.  (#340522, Christian Persch)
+
 	* gtk/gtkprintoperation-unix.c (unix_finish_send): Don't
 	use gtk_dialog_run for the error dialog, and improve the
 	dialog in other ways.  (#340510, Christian Persch)

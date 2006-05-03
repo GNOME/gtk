@@ -1920,6 +1920,8 @@ draw_page_cb (GtkWidget	         *widget,
 	}
     }
     
+  cairo_destroy (cr);
+
   return TRUE;
 }
 
