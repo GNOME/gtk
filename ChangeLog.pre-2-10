@@ -1,5 +1,8 @@
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Replace the xpm collate icons
+	by cairo drawing that respects themes.
+
 	* gdk/quartz/Makefile.am (libgdk_quartz_la_SOURCES): Add
 	missing files.  (#340533, Ludovic Rousseau)
 
