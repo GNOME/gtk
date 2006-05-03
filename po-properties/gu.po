@@ -242,14 +242,16 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
-#: ../gtk/gtkprintoperation.c:524
+#: ../gtk/gtkprintoperation.c:526
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-27 06:29+0200\n"
-"PO-Revision-Date: 2006-04-27 10:58+0530\n"
+"POT-Creation-Date: 2006-05-02 23:05+0200\n"
+"PO-Revision-Date: 2006-05-03 10:09+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -257,6 +259,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -952,11 +955,11 @@ msgid "If set, the label is used to pick a stock item instead of being displayed
 msgstr "જો સુયોજિત હોય તો, દર્શાવવાની જગ્યાએ લેબલનો ઉપયોગ જથ્થાની વસ્તુને પસંદ કરવા માટે થાય છે"
 
 #: ../gtk/gtkbutton.c:249 ../gtk/gtkcombobox.c:693
-#: ../gtk/gtkfilechooserbutton.c:365
+#: ../gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "ક્લિક પર ફોકસ"
 
-#: ../gtk/gtkbutton.c:250 ../gtk/gtkfilechooserbutton.c:366
+#: ../gtk/gtkbutton.c:250 ../gtk/gtkfilechooserbutton.c:373
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "જ્યારે માઉસ વડે ક્લિક થાય ત્યારે શું બટન ફોક્સ મેળવે"
 
@@ -1525,7 +1528,7 @@ msgstr ""
 "શબ્દમાળા ઈલીપ્સાઈઝ કરવા માટેનું પ્રાધાન્યવાળું સ્થાન, જો ખાનું રેન્ડર કરનાર પાસે પૂરતી "
 "શબ્દમાળા દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
-#: ../gtk/gtkcellrenderertext.c:458 ../gtk/gtkfilechooserbutton.c:393
+#: ../gtk/gtkcellrenderertext.c:458 ../gtk/gtkfilechooserbutton.c:400
 #: ../gtk/gtklabel.c:456
 msgid "Width In Characters"
 msgstr "અક્ષરોમાં પહોળાઈ"
@@ -1772,7 +1775,7 @@ msgstr "આલ્ફા વાપરો"
 msgid "Whether or not to give the color an alpha value"
 msgstr "શું રંગને આલ્ફા કિંમત આપવી કે નહિં"
 
-#: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkfilechooserbutton.c:379
+#: ../gtk/gtkcolorbutton.c:219 ../gtk/gtkfilechooserbutton.c:386
 #: ../gtk/gtkfontbutton.c:175 ../gtk/gtkprintjob.c:113
 #: ../gtk/gtktreeviewcolumn.c:299
 msgid "Title"
@@ -2385,27 +2388,27 @@ msgstr ""
 "શું ફાઈલ પસંદગીકારક એ સંગ્રહો સ્થિતિમાં જો જરૂરી હોય ત્યારે ઉપર ફરીથી લખવા માટેની "
 "ખાતરીવાળો સંવાદ દર્શાવશે."
 
-#: ../gtk/gtkfilechooserbutton.c:348
+#: ../gtk/gtkfilechooserbutton.c:355
 msgid "Dialog"
 msgstr "સંવાદ"
 
-#: ../gtk/gtkfilechooserbutton.c:349
+#: ../gtk/gtkfilechooserbutton.c:356
 msgid "The file chooser dialog to use."
 msgstr "વાપરવા માટે ફાઈલ પસંદગીકારક સંવાદ."
 
-#: ../gtk/gtkfilechooserbutton.c:380
+#: ../gtk/gtkfilechooserbutton.c:387
 msgid "The title of the file chooser dialog."
 msgstr "ફાઈલ પસંદગીકારક સંવાદનું શીર્ષક."
 
-#: ../gtk/gtkfilechooserbutton.c:394
+#: ../gtk/gtkfilechooserbutton.c:401
 msgid "The desired width of the button widget, in characters."
 msgstr "બટન વિજેટની જરૂરી પહોળાઈ, અક્ષરોમાં."
 
-#: ../gtk/gtkfilechooserdefault.c:635
+#: ../gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "મૂળભુત ફાઈલ પસંદગીકારક પાશ્વ ભાગ"
 
-#: ../gtk/gtkfilechooserdefault.c:636
+#: ../gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "મૂળભુત રીતે વાપરવા માટેના GtkFileChooser પાશ્વભાગનું નામ"
 
@@ -2425,6 +2428,14 @@ msgstr "ફાઈલ પ્રક્રિયાઓ બતાવો"
 #: ../gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "શું ફાઈલને બનાવવા માટે/સંભાળવા માટેના બટન દર્શાવવા જોઈએ"
+
+#: ../gtk/gtkfilesystem.c:421
+msgid "Cancelled"
+msgstr "રદ કરાયેલ"
+
+#: ../gtk/gtkfilesystem.c:422
+msgid "Whether or not the operation has been successfully cancelled"
+msgstr "શું પ્રક્રિયા સફળતાપૂર્વક રદ થઈ ગયેલ છે કે નહિં"
 
 #: ../gtk/gtkfixed.c:123 ../gtk/gtklayout.c:613
 msgid "X position"
@@ -3484,11 +3495,11 @@ msgstr "જોબ ગણતરી"
 msgid "Number of jobs queued in the printer"
 msgstr "પ્રિન્ટરમાં કતાર થયેલ જોબની સંખ્યા"
 
-#: ../gtk/gtkprinteroptionwidget.c:115
+#: ../gtk/gtkprinteroptionwidget.c:119
 msgid "Source option"
 msgstr "સ્રોત વિકલ્પ"
 
-#: ../gtk/gtkprinteroptionwidget.c:116
+#: ../gtk/gtkprinteroptionwidget.c:120
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption આ વિજેટને બેક કરી રહ્યું છે"
 
@@ -3513,109 +3524,109 @@ msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
 #: ../gtk/gtkprintjob.c:140 ../gtk/gtkprintjob.c:141
-#: ../gtk/gtkprintunixdialog.c:382
+#: ../gtk/gtkprintunixdialog.c:384
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:364
+#: ../gtk/gtkprintoperation.c:366
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:365
+#: ../gtk/gtkprintoperation.c:367
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:382 ../gtk/gtkprintunixdialog.c:400
+#: ../gtk/gtkprintoperation.c:384 ../gtk/gtkprintunixdialog.c:402
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:383 ../gtk/gtkprintunixdialog.c:401
+#: ../gtk/gtkprintoperation.c:385 ../gtk/gtkprintunixdialog.c:403
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:400
+#: ../gtk/gtkprintoperation.c:402
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: ../gtk/gtkprintoperation.c:401
+#: ../gtk/gtkprintoperation.c:403
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: ../gtk/gtkprintoperation.c:422
+#: ../gtk/gtkprintoperation.c:424
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: ../gtk/gtkprintoperation.c:423
+#: ../gtk/gtkprintoperation.c:425
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:444 ../gtk/gtkprintunixdialog.c:390
+#: ../gtk/gtkprintoperation.c:446 ../gtk/gtkprintunixdialog.c:392
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:445
+#: ../gtk/gtkprintoperation.c:447
 msgid "The current page in the document."
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું."
 
-#: ../gtk/gtkprintoperation.c:465
+#: ../gtk/gtkprintoperation.c:467
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: ../gtk/gtkprintoperation.c:466
+#: ../gtk/gtkprintoperation.c:468
 msgid ""
 "%TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "%TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
 
-#: ../gtk/gtkprintoperation.c:483
+#: ../gtk/gtkprintoperation.c:485
 msgid "Unit"
 msgstr "એકમ"
 
-#: ../gtk/gtkprintoperation.c:484
+#: ../gtk/gtkprintoperation.c:486
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: ../gtk/gtkprintoperation.c:501
+#: ../gtk/gtkprintoperation.c:503
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: ../gtk/gtkprintoperation.c:502
+#: ../gtk/gtkprintoperation.c:504
 msgid "%TRUE if gtk_print_operation_run() should show the print dialog."
 msgstr "%TRUE જો gtk_print_operation_run() એ છાપન સંવાદ બતાવતું હોવું જોઈએ."
 
-#: ../gtk/gtkprintoperation.c:523
+#: ../gtk/gtkprintoperation.c:525
 msgid "PDF target filename"
 msgstr "PDF લક્ષ્ય ફાઈલનામ"
 
-#: ../gtk/gtkprintoperation.c:538
+#: ../gtk/gtkprintoperation.c:540
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:539
+#: ../gtk/gtkprintoperation.c:541
 msgid "The status of the print operation"
 msgstr "છાપન પ્રક્રિયાની પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:559
+#: ../gtk/gtkprintoperation.c:561
 msgid "Status String"
 msgstr "પરિસ્થિતિ શબ્દમાળા"
 
-#: ../gtk/gtkprintoperation.c:560
+#: ../gtk/gtkprintoperation.c:562
 msgid "A human-readable description of the status"
 msgstr "પરિસ્થિતિનું માનવીય-વાંચનીય વર્ણન"
 
-#: ../gtk/gtkprintunixdialog.c:383
+#: ../gtk/gtkprintunixdialog.c:385
 msgid "The GtkPageSetup to use"
 msgstr "વાપરવા માટેનું GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:391
+#: ../gtk/gtkprintunixdialog.c:393
 msgid "The current page in the document"
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું"
 
-#: ../gtk/gtkprintunixdialog.c:408
+#: ../gtk/gtkprintunixdialog.c:410
 msgid "Selected Printer"
 msgstr "પસંદ કરેલ પ્રિન્ટર"
 
-#: ../gtk/gtkprintunixdialog.c:409
+#: ../gtk/gtkprintunixdialog.c:411
 msgid "The GtkPrinter which which is selected"
 msgstr "GtkPrinter કે જે પસંદ થયેલ છે"
 
