@@ -1219,11 +1219,25 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	  }
 	else
 	  {
-	    const GtkFilePath *path;
+	    GtkFilePath *path;
 
 	    path = data;
-	    pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
-						  impl->icon_size, NULL);
+
+	    /* Hack to avoid filechooser hanging on network I/O. See bug 319532. */
+	    if (gtk_file_system_path_is_local (impl->file_system, path))
+	      {
+		pixbuf = gtk_file_system_render_icon (impl->file_system, path,
+						      GTK_WIDGET (impl), 
+						      impl->icon_size, NULL);
+	      }
+	    else
+	      {
+		path = gtk_file_system_filename_to_path (impl->file_system, "/");
+		pixbuf = gtk_file_system_render_icon (impl->file_system, path,
+						      GTK_WIDGET (impl), 
+						      impl->icon_size, NULL);
+		gtk_file_path_free (path);
+	      }
 	  }
 
 	gtk_list_store_set (impl->shortcuts_model, &iter,
@@ -1369,7 +1383,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
 						   impl->icon_size, NULL);
     }
-  else
+  else if (gtk_file_system_path_is_local (impl->file_system, path))
     {
       if (!check_is_folder (impl->file_system, path, error))
 	{
@@ -1396,6 +1410,34 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       data = gtk_file_path_copy (path);
       pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
 					    impl->icon_size, NULL);
+    }
+  else
+    {
+      /* Hack: If this is not a local file, just display a stock icon to avoid
+       * the file chooser hanging on network I/O. See bug 319532.
+       */
+      GtkFilePath *root;
+
+      if (label)
+        {
+	  label_copy = g_strdup (label);
+	}
+      else
+	{
+	  label_copy = g_filename_display_basename((char *)path);
+	  if (!label_copy)
+	    {
+	      profile_end ("end - could not determine label", NULL);
+	      return FALSE;
+	    }
+        }
+
+      root = gtk_file_system_filename_to_path (impl->file_system, "/");
+      pixbuf = gtk_file_system_render_icon (impl->file_system, root, GTK_WIDGET (impl),
+					    impl->icon_size, NULL);
+      gtk_file_path_free (root);
+
+      data = gtk_file_path_copy (path);
     }
 
   if (pos == -1)
