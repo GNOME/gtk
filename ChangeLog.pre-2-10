@@ -1,3 +1,140 @@
+2006-05-03  Federico Mena Quintero  <federico@novell.com>
+
+	Merged the federico-filename-entry branch, to fix bug #136541.
+	Combined ChangeLogs:
+
+	2006-04-17  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (pending_select_paths_process):
+	Oops, we *do* need to check that we are in OPEN mode before
+	selecting the first row in the file list.  See
+	https://bugzilla.novell.com/show_bug.cgi?id=166906
+	(gtk_file_chooser_default_get_paths): If we are in the case for
+	the file list, and the list has no selected rows, jump to the case
+	for the filename entry.  This is so that
+
+	       1. The user types a filename in the SAVE filename entry
+	          ("foo.txt").
+
+	       2. He then double-clicks on a folder ("bar") in the file
+		  list.
+
+	will yield the expected "bar/foo.txt" selection.
+
+	2006-03-29  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_init): Reduce the inter-button
+	spacing to 0.
+
+	* gtk/gtkfilechooserdefault.c (browse_widgets_create): Make the
+	location label bold.
+
+	2006-03-29  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (location_mode_set): Just change the
+	location_mode field if we are in SAVE/CREATE_FOLDER modes.
+	(gtk_file_chooser_default_get_paths): Get the path based on the
+	currently focused widget, or the last-focused widget.  This is
+	what we should have been doing in the beginning, but it worked out
+	fine because we didn't have the possibility of a filename entry in
+	OPEN mode.
+	(gtk_file_chooser_default_should_respond): Handle the case where
+	the last focused widget is the location_entry.
+
+	2006-03-28  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechoosersettings.[ch]: New files with a simple
+	framework for saving/loading settings from the file chooser in
+	$XDG_CONFIG_HOME/gtk-2.0/gtkfilechooser.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_unmap):
+	Save the current settings.
+	(settings_save): New helper function.  We save the location_mode
+	and show_hidden flags.
+	(gtk_file_chooser_default_map): Load the settings.
+	(settings_load): New helper function.
+
+	* gtk/gtkfilechooserentry.c
+	(_gtk_file_chooser_entry_set_file_part): Oops, don't modify
+	in_change.  Our handlers are what set the file_part, so they
+	*must* be run when we modify the text.
+
+	2006-03-27  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Removed the save_file_name_entry.  We'll make this be the same as
+	the location_entry widget.
+	(struct _GtkFileChooserDefault): Leave only location_button,
+	location_entry_box, location_label, location_entry.  We'll use a
+	single toggle button for the location entry, which will appear
+	below the path bar.
+	(struct _GtkFileChooserDefault): Added a
+	processing_pending_selections flag.
+
+	* gtk/gtkfilechooserdefault.c (save_widgets_create): Destroy the
+	old location_entry if necessary, and hide the location toggle
+	widgets.
+	(update_chooser_entry): In multiple selection mode, just clear the
+	location_entry.
+	(check_save_entry): Allow running in OPEN or SELECT_FOLDER modes
+	if we are in LOCATION_MODE_FILENAME_ENTRY.
+	(gtk_file_chooser_default_should_respond): Switch to a folder if
+	the location_entry contains a folder name in OPEN and SAVE mode,
+	not just SAVE mode.  If the entry doesn't contain a folder name,
+	but is otherwise well-formed, and we are in OPEN mode, return that
+	we should respond with that filename.
+	(gtk_file_chooser_default_initial_focus): Focus the location_entry
+	if appropriate.
+	(browse_widgets_create): Create the location_entry_box and the
+	location_label here.
+	(update_appearance): Call location_mode_set() when switching back
+	to OPEN/SELECT_FOLDER mode.  Hide the location_button when
+	switching to SAVE/CREATE_FOLDER mode.
+	(pending_select_paths_process): Turn the
+	processing_pending_selections flag on and off around changes to
+	the current selection.  Don't special-case OPEN mode anymore,
+	since the new flag will take care of things in
+	update_chooser_entry().
+	(update_chooser_entry): Don't do anything if
+	processing_pending_selections is TRUE.  This keeps the entry from
+	being polluted when changing folders.
+	(location_popup_handler): In OPEN/SELECT_FOLDER modes, toggle
+	between the path bar and the entry.  In SAVE/CREATE_FOLDER modes, simply focus the
+	location_entry.
+	(update_from_entry): Removed.
+	(location_entry_create): Removed.
+	(open_location_cb): Removed.
+	(file_list_build_popup_menu): Don't add an "Open _Location" menu item.
+	(location_entry_set_initial_text): Don't do anything if
+	current_folder is NULL.
+
+	* gtk/gtkfilechooserentry.c
+	(_gtk_file_chooser_entry_set_file_part): Turn in_change on and off
+	around the call to gtk_entry_set_text().  This makes completion
+	not happen when the caller has explicitly set a name.
+
+	2006-03-24  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Added fields location_mode_box, location_pathbar_radio,
+	location_filename_radio, location_widget_box, location_label,
+	location_entry.  The radio buttons will switch between the pathbar
+	and the location entry; the other boxes are for layout purposes.
+	(enum LocationMode): New enum.
+	(struct _GtkFileChooserDefault): Added a location_mode field.
+
+	* gtk/gtkfilechooserdefault.c (browse_widgets_create): Create the
+	location radio buttons to switch between the pathbar and the
+	location entry.  Pack the browse_path_bar in the new
+	location_widget_box instead of a generic hbox.
+	(location_buttons_create): New function.
+	(gtk_file_chooser_default_init): Initialize impl->location_mode.
+	(location_switch_to_path_bar): New function.
+	(location_switch_to_filename_entry): New function.
+
+	* gtk/gtkfilechooserbutton.c (model_add_special): The display_name
+	should not be const.
+
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c: Replace the xpm collate icons

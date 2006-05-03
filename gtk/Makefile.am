@@ -329,6 +329,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
+	gtkfilechoosersettings.h \
 	gtkfilechooserutils.h	\
 	gtkfilesystemmodel.h	\
 	gtkfilesystemunix.h	\
@@ -414,6 +415,7 @@ gtk_c_sources =                 \
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
+	gtkfilechoosersettings.c \
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\

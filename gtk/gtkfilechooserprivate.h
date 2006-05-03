@@ -142,6 +142,11 @@ typedef enum {
   RELOAD_WAS_UNMAPPED		/* We had a folder but got unmapped; reload is needed */
 } ReloadState;
 
+typedef enum {
+  LOCATION_MODE_PATH_BAR,
+  LOCATION_MODE_FILENAME_ENTRY
+} LocationMode;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -153,7 +158,6 @@ struct _GtkFileChooserDefault
   /* Save mode widgets */
   GtkWidget *save_widgets;
 
-  GtkWidget *save_file_name_entry;
   GtkWidget *save_folder_label;
   GtkWidget *save_folder_combo;
   GtkWidget *save_expander;
@@ -182,6 +186,12 @@ struct _GtkFileChooserDefault
   GtkWidget *preview_widget;
   GtkWidget *extra_align;
   GtkWidget *extra_widget;
+
+  GtkWidget *location_button;
+  GtkWidget *location_entry_box;
+  GtkWidget *location_label;
+  GtkWidget *location_entry;
+  LocationMode location_mode;
 
   GtkListStore *shortcuts_model;
   GtkTreeModel *shortcuts_filter_model;
@@ -253,6 +263,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint processing_pending_selections : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
