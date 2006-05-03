@@ -1,3 +1,7 @@
+2006-05-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Make GtkWidget abstract again.
+
 2006-05-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c: Use G_DEFINE_TYPE and g_type_register_static_simple()
