@@ -143,6 +143,7 @@ gtk/gtkpreview.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
 gtk/gtkprintoperation.c
+gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogress.c

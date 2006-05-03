@@ -1,5 +1,9 @@
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c (unix_finish_send): Don't
+	use gtk_dialog_run for the error dialog, and improve the
+	dialog in other ways.  (#340510, Christian Persch)
+
 	* gtk/gtkpagesetupunixdialog.c: Beautify the custom
 	paper size dialog.  (#339590, patch by Christian Persch)
 	

@@ -36,6 +36,7 @@
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
 #include "gtkalias.h"
+#include "gtkintl.h"
 
 typedef struct {
   GtkPrintJob *job;         /* the job we are sending to the printer */
@@ -90,11 +91,14 @@ unix_finish_send  (GtkPrintJob *job,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
-                                        "Error printing: %s",
-                                        error->message);
+                                        _("Error printing") /* FIXME better text */);
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
+                                                "%s", error->message);
+      gtk_window_set_modal (GTK_WINDOW (edialog), TRUE);
+      g_signal_connect (edialog, "response",
+                        G_CALLBACK (gtk_widget_destroy), NULL);
 
-      gtk_dialog_run (GTK_DIALOG (edialog));
-      gtk_widget_destroy (edialog);
+      gtk_window_present (GTK_WINDOW (edialog));
     }
 }
 
@@ -305,10 +309,10 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 
 
 typedef struct {
-  GtkPageSetup  *page_setup;
-  GFunc          done_cb;
-  gpointer       data;
-  GDestroyNotify destroy;
+  GtkPageSetup         *page_setup;
+  GtkPageSetupDoneFunc  done_cb;
+  gpointer              data;
+  GDestroyNotify        destroy;
 } PageSetupResponseData;
 
 static void
