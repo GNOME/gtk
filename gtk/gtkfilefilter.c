@@ -79,32 +79,20 @@ struct _FilterRule
   } u;
 };
 
-static void gtk_file_filter_class_init (GtkFileFilterClass *class);
 static void gtk_file_filter_finalize   (GObject            *object);
 
-static GObjectClass *parent_class;
 
-GType
-gtk_file_filter_get_type (void)
+G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, GTK_TYPE_OBJECT);
+
+static void
+gtk_file_filter_init (GtkFileFilter *object)
 {
-  static GType file_filter_type = 0;
-
-  if (!file_filter_type)
-    file_filter_type = g_type_register_static_simple (GTK_TYPE_OBJECT, I_("GtkFileFilter"),
-						      sizeof (GtkFileFilterClass),
-						      (GClassInitFunc)gtk_file_filter_class_init,
-						      sizeof (GtkFileFilter),
-						      NULL, 0);
-
-  return file_filter_type;
 }
 
 static void
 gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_filter_finalize;
 }
@@ -145,7 +133,7 @@ gtk_file_filter_finalize (GObject  *object)
   if (filter->name)
     g_free (filter->name);
 
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_file_filter_parent_class)->finalize (object);
 }
 
 /**

@@ -149,23 +149,13 @@ static GQuark request_contents_key_id = 0;
 static const gchar clipboards_owned_key[] = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
 
-static GObjectClass *parent_class;
 static guint         clipboard_signals[LAST_SIGNAL] = { 0 };
 
-GType
-gtk_clipboard_get_type (void)
+G_DEFINE_TYPE (GtkClipboard, gtk_clipboard, G_TYPE_OBJECT);
+
+static void
+gtk_clipboard_init (GtkClipboard *object)
 {
-  static GType clipboard_type = 0;
-  
-  if (!clipboard_type)
-    clipboard_type = g_type_register_static_simple (G_TYPE_OBJECT, 
-						    I_("GtkClipboard"),
-						    sizeof (GtkClipboardClass),
-						    (GClassInitFunc)gtk_clipboard_class_init,
-						    sizeof (GtkClipboard),
-						    NULL, 0);
-  
-  return clipboard_type;
 }
 
 static void
@@ -173,8 +163,6 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
-  
   gobject_class->finalize = gtk_clipboard_finalize;
 
   class->owner_change = gtk_clipboard_owner_change;
@@ -226,7 +214,7 @@ gtk_clipboard_finalize (GObject *object)
   
   g_free (clipboard->storable_targets);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_clipboard_parent_class)->finalize (object);
 }
 
 static void

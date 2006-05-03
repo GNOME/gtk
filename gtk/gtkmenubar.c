@@ -87,22 +87,11 @@ static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
 
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
-static GtkMenuShellClass *parent_class = NULL;
+G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL);
 
-GType
-gtk_menu_bar_get_type (void)
+static void
+gtk_menu_bar_init (GtkMenuBar *object)
 {
-  static GType menu_bar_type = 0;
-
-  if (!menu_bar_type)
-    menu_bar_type = g_type_register_static_simple (GTK_TYPE_MENU_SHELL, 
-						   I_("GtkMenuBar"),
-						   sizeof (GtkMenuBarClass),
-						   gtk_menu_bar_class_init,
-						   sizeof (GtkMenuBar),
-						   NULL, 0);
-
-  return menu_bar_type;
 }
 
 static void
@@ -114,8 +103,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   GtkBindingSet *binding_set;
 
-  parent_class = g_type_class_peek_parent (class);
-  
   gobject_class = (GObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
@@ -551,7 +538,7 @@ gtk_menu_bar_expose (GtkWidget      *widget,
     {
       gtk_menu_bar_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      (* GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;
@@ -839,7 +826,7 @@ gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
 	}
     }
   
-  GTK_MENU_SHELL_CLASS (parent_class)->move_current (menu_shell, direction);
+  GTK_MENU_SHELL_CLASS (gtk_menu_bar_parent_class)->move_current (menu_shell, direction);
 }
 
 /**

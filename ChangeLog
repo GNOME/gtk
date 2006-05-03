@@ -1,5 +1,11 @@
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccessible.c:
+	* gtk/gtkclipboard.c:
+	* gtk/gtkfilefilter.c:
+	* gtk/gtkimmodule.c:
+	* gtk/gtkmenubar.c: More G_DEFINE_TYPE conversion.
+
 	* gtk/gtkwidget.c: Make GtkWidget abstract again.
 
 2006-05-02  Matthias Clasen  <mclasen@redhat.com>
