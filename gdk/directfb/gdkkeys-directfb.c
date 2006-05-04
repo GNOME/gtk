@@ -1606,7 +1606,6 @@ gdk_directfb_translate_key (DFBInputDeviceKeyIdentifier key_id,
 					case DIKI_CONTROL_R:  keyval = GDK_Control_R;   break;
 					case DIKI_ALT_L:      keyval = GDK_Alt_L;       break;
 					case DIKI_ALT_R:      keyval = GDK_Alt_R;       break;
-					case DIKI_ALTGR:      keyval = GDK_Mode_switch; break;
 					case DIKI_META_L:     keyval = GDK_Meta_L;      break;
 					case DIKI_META_R:     keyval = GDK_Meta_R;      break;
 					case DIKI_SUPER_L:    keyval = GDK_Super_L;     break;
@@ -2007,18 +2006,6 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
 	g_warning("gdk_keymap_lookup_key unimplemented \n");	
 	return 0;
 }
-
-#if 0 
-void
-gdk_keyval_convert_case (guint symbol,
-                         guint *lower,
-                         guint *upper)
-{
-
-	g_warning("Unimplemented: gdk_keyval_convert_case\n");	
-}
-#endif
-
 
 
 #define __GDK_KEYS_DIRECTFB_C__
