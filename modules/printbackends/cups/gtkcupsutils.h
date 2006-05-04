@@ -109,6 +109,13 @@ void             gtk_cups_request_ipp_add_string  (GtkCupsRequest     *request,
 						   const char         *name,
 						   const char         *charset,
 						   const char         *value);
+void             gtk_cups_request_ipp_add_strings (GtkCupsRequest     *request,
+						   ipp_tag_t           group,
+						   ipp_tag_t           tag,
+						   const char         *name,
+						   int                 num_values,
+						   const char         *charset,
+						   const char * const *values);
 gboolean         gtk_cups_request_read_write      (GtkCupsRequest     *request);
 GtkCupsPollState gtk_cups_request_get_poll_state  (GtkCupsRequest     *request);
 void             gtk_cups_request_free            (GtkCupsRequest     *request);

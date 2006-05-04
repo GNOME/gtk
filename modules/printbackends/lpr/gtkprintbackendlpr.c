@@ -51,25 +51,18 @@ static GType print_backend_lpr_type = 0;
 
 struct _GtkPrintBackendLprClass
 {
-  GObjectClass parent_class;
+  GtkPrintBackendClass parent_class;
 };
 
 struct _GtkPrintBackendLpr
 {
-  GObject parent_instance;
-
-  GtkPrinter *printer;
-
-  GHashTable *printers;
+  GtkPrintBackend parent_instance;
 };
 
 static GObjectClass *backend_parent_class;
 
 static void                 gtk_print_backend_lpr_class_init      (GtkPrintBackendLprClass *class);
-static void                 gtk_print_backend_lpr_iface_init      (GtkPrintBackendIface    *iface);
 static void                 gtk_print_backend_lpr_init            (GtkPrintBackendLpr      *impl);
-static void                 gtk_print_backend_lpr_finalize        (GObject                 *object);
-static GList *              lpr_request_printer_list              (GtkPrintBackend         *print_backend);
 static void                 lpr_printer_get_settings_from_options (GtkPrinter              *printer,
 								   GtkPrinterOptionSet     *options,
 								   GtkPrintSettings        *settings);
@@ -89,6 +82,16 @@ static void                 lpr_printer_get_hard_margins          (GtkPrinter   
 								   double                  *right);
 static void                 lpr_printer_request_details           (GtkPrinter              *printer);
 static GList *              lpr_printer_list_papers               (GtkPrinter              *printer);
+static cairo_surface_t *    lpr_printer_create_cairo_surface      (GtkPrinter              *printer,
+								   gdouble                  width,
+								   gdouble                  height,
+								   gint                     cache_fd);
+static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBackend         *print_backend,
+								   GtkPrintJob             *job,
+								   gint                     data_fd,
+								   GtkPrintJobCompleteFunc  callback,
+								   gpointer                 user_data,
+								   GDestroyNotify           dnotify);
 
 static void
 gtk_print_backend_lpr_register_type (GTypeModule *module)
@@ -108,24 +111,11 @@ gtk_print_backend_lpr_register_type (GTypeModule *module)
 	(GInstanceInitFunc) gtk_print_backend_lpr_init,
       };
 
-      static const GInterfaceInfo print_backend_info =
-      {
-	(GInterfaceInitFunc) gtk_print_backend_lpr_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
-
       print_backend_lpr_type = g_type_module_register_type (module,
-                                                             G_TYPE_OBJECT,
-						             "GtkPrintBackendLpr",
-						             &print_backend_lpr_info, 0);
-      g_type_module_add_interface (module,
-                                   print_backend_lpr_type,
-		 		   GTK_TYPE_PRINT_BACKEND,
-				   &print_backend_info);
+							    GTK_TYPE_PRINT_BACKEND,
+							    "GtkPrintBackendLpr",
+							    &print_backend_lpr_info, 0);
     }
-
-
 }
 
 G_MODULE_EXPORT void 
@@ -173,11 +163,19 @@ gtk_print_backend_lpr_new (void)
 static void
 gtk_print_backend_lpr_class_init (GtkPrintBackendLprClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_CLASS (class);
+  
   backend_parent_class = g_type_class_peek_parent (class);
 
-  gobject_class->finalize = gtk_print_backend_lpr_finalize;
+  backend_class->print_stream = gtk_print_backend_lpr_print_stream;
+  backend_class->printer_request_details = lpr_printer_request_details;
+  backend_class->printer_create_cairo_surface = lpr_printer_create_cairo_surface;
+  backend_class->printer_get_options = lpr_printer_get_options;
+  backend_class->printer_mark_conflicts = lpr_printer_mark_conflicts;
+  backend_class->printer_get_settings_from_options = lpr_printer_get_settings_from_options;
+  backend_class->printer_prepare_for_print = lpr_printer_prepare_for_print;
+  backend_class->printer_list_papers = lpr_printer_list_papers;
+  backend_class->printer_get_hard_margins = lpr_printer_get_hard_margins;
 }
 
 static cairo_status_t
@@ -213,22 +211,6 @@ lpr_printer_create_cairo_surface (GtkPrinter *printer,
   cairo_ps_surface_set_dpi (surface, 300, 300);
 
   return surface;
-}
-
-static GtkPrinter *
-gtk_print_backend_lpr_find_printer (GtkPrintBackend *print_backend,
-                                     const gchar *printer_name)
-{
-  GtkPrintBackendLpr *lpr_print_backend;
-  GtkPrinter *printer;
-
-  lpr_print_backend = GTK_PRINT_BACKEND_LPR (print_backend);
-  
-  printer = NULL;
-  if (strcmp (gtk_printer_get_name (lpr_print_backend->printer), printer_name) == 0)
-    printer = lpr_print_backend->printer;
-
-  return printer; 
 }
 
 typedef struct {
@@ -398,64 +380,21 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
   g_strfreev (argv);
 }
 
-
 static void
-gtk_print_backend_lpr_iface_init (GtkPrintBackendIface *iface)
-{
-  iface->get_printer_list = lpr_request_printer_list;
-  iface->find_printer = gtk_print_backend_lpr_find_printer;
-  iface->print_stream = gtk_print_backend_lpr_print_stream;
-  iface->printer_request_details = lpr_printer_request_details;
-  iface->printer_create_cairo_surface = lpr_printer_create_cairo_surface;
-  iface->printer_get_options = lpr_printer_get_options;
-  iface->printer_mark_conflicts = lpr_printer_mark_conflicts;
-  iface->printer_get_settings_from_options = lpr_printer_get_settings_from_options;
-  iface->printer_prepare_for_print = lpr_printer_prepare_for_print;
-  iface->printer_list_papers = lpr_printer_list_papers;
-  iface->printer_get_hard_margins = lpr_printer_get_hard_margins;
-}
-
-static GList *
-lpr_request_printer_list (GtkPrintBackend *backend)
-{
-  GList *l;
-  GtkPrintBackendLpr *lpr_backend;
-
-  l = NULL;
-
-  lpr_backend = GTK_PRINT_BACKEND_LPR (backend);
-  
-  if (lpr_backend->printer)
-    l = g_list_append (l, lpr_backend->printer);
-
-  return l; 
-}
-
-static void
-gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend_lpr)
+gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 {
   GtkPrinter *printer;
 
   printer = gtk_printer_new (_("Print to LPR"),
-			     GTK_PRINT_BACKEND (backend_lpr),
+			     GTK_PRINT_BACKEND (backend),
 			     TRUE); 
   gtk_printer_set_has_details (printer, TRUE);
   gtk_printer_set_icon_name (printer, "printer");
   gtk_printer_set_is_active (printer, TRUE);
-  
-  backend_lpr->printer = printer;
-}
+  gtk_printer_set_is_default (printer, TRUE);
 
-static void
-gtk_print_backend_lpr_finalize (GObject *object)
-{
-  GtkPrintBackendLpr *backend_lpr;
-
-  backend_lpr = GTK_PRINT_BACKEND_LPR (object);
-
-  g_object_unref (backend_lpr->printer);
-
-  backend_parent_class->finalize (object);
+  gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
+  g_object_unref (printer);
 }
 
 static void

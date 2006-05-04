@@ -73,6 +73,15 @@ static void unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
 static void selected_printer_changed           (GtkTreeSelection   *selection,
 						GtkPrintUnixDialog *dialog);
 static void clear_per_printer_ui               (GtkPrintUnixDialog *dialog);
+static void printer_added_cb                   (GtkPrintBackend    *backend,
+						GtkPrinter         *printer,
+						GtkPrintUnixDialog *dialog);
+static void printer_removed_cb                 (GtkPrintBackend    *backend,
+						GtkPrinter         *printer,
+						GtkPrintUnixDialog *dialog);
+static void printer_status_cb                  (GtkPrintBackend    *backend,
+						GtkPrinter         *printer,
+						GtkPrintUnixDialog *dialog);
 
 enum {
   PROP_0,
@@ -281,6 +290,8 @@ gtk_print_unix_dialog_finalize (GObject *object)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkPrintBackend *backend;
+  GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
 
@@ -339,6 +350,21 @@ gtk_print_unix_dialog_finalize (GObject *object)
   g_free (priv->format_for_printer);
   priv->format_for_printer = NULL;
 
+  for (node = priv->print_backends; node != NULL; node = node->next)
+    {
+      backend = GTK_PRINT_BACKEND (node->data);
+
+      g_signal_handlers_disconnect_by_func (backend, printer_added_cb, dialog);
+      g_signal_handlers_disconnect_by_func (backend, printer_removed_cb, dialog);
+      g_signal_handlers_disconnect_by_func (backend, printer_status_cb, dialog);
+
+      gtk_print_backend_destroy (backend);
+      g_object_unref (backend);
+    }
+  
+  g_list_free (priv->print_backends);
+  priv->print_backends = NULL;
+  
   G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize (object);
 }
 
@@ -1164,6 +1190,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 	g_signal_connect (printer, "details-acquired",
 			  G_CALLBACK (printer_details_acquired), dialog);
       _gtk_printer_request_details (printer);
+      g_object_unref (printer);
       return;
     }
   

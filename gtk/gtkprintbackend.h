@@ -39,7 +39,8 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkPrintBackendIface  GtkPrintBackendIface;
+typedef struct _GtkPrintBackendClass    GtkPrintBackendClass;
+typedef struct _GtkPrintBackendPrivate  GtkPrintBackendPrivate;
 
 #define GTK_PRINT_BACKEND_ERROR (gtk_print_backend_error_quark ())
 
@@ -51,22 +52,28 @@ typedef enum
 
 GQuark     gtk_print_backend_error_quark      (void);
 
-#define GTK_TYPE_PRINT_BACKEND             (gtk_print_backend_get_type ())
-#define GTK_PRINT_BACKEND(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_BACKEND, GtkPrintBackend))
-#define GTK_IS_PRINT_BACKEND(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_BACKEND))
-#define GTK_PRINT_BACKEND_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendIface))
+#define GTK_TYPE_PRINT_BACKEND                  (gtk_print_backend_get_type ())
+#define GTK_PRINT_BACKEND(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_BACKEND, GtkPrintBackend))
+#define GTK_PRINT_BACKEND_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendClass))
+#define GTK_IS_PRINT_BACKEND(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_BACKEND))
+#define GTK_IS_PRINT_BACKEND_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_BACKEND))
+#define GTK_PRINT_BACKEND_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendClass))
 
-struct _GtkPrintBackendIface
+struct _GtkPrintBackend
 {
-  GTypeInterface base_iface;
+  GObject parent_instance;
+
+  GtkPrintBackendPrivate *priv;
+};
+
+struct _GtkPrintBackendClass
+{
+  GObjectClass parent_class;
 
   /* Global backend methods: */
-  GList      * (*get_printer_list) (GtkPrintBackend *printer_backend);
-
-  GtkPrinter * (*find_printer) (GtkPrintBackend *print_backend,
-                                const gchar *printer_name);
-  void         (*print_stream) (GtkPrintBackend *print_backend,
-                                GtkPrintJob *job,
+  void (*request_printer_list) (GtkPrintBackend *backend);
+  void (*print_stream)         (GtkPrintBackend *backend,
+				GtkPrintJob *job,
 				gint data_fd,
 				GtkPrintJobCompleteFunc callback,
 				gpointer user_data,
@@ -97,26 +104,49 @@ struct _GtkPrintBackendIface
 							      double     *left,
 							      double     *right);
 
-  /* Signals 
-   */
-  void (*printer_list_changed)   (void);
-  void (*printer_added)          (GtkPrinter *printer);
-  void (*printer_removed)        (GtkPrinter *printer);
-  void (*printer_status_changed) (GtkPrinter *printer);
+  /* Signals */
+  void (*printer_list_changed)   (GtkPrintBackend *backend);
+  void (*printer_list_done)      (GtkPrintBackend *backend);
+  void (*printer_added)          (GtkPrintBackend *backend,
+				  GtkPrinter      *printer);
+  void (*printer_removed)        (GtkPrintBackend *backend,
+				  GtkPrinter      *printer);
+  void (*printer_status_changed) (GtkPrintBackend *backend,
+				  GtkPrinter      *printer);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
 };
 
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
 
-GList      *gtk_print_backend_get_printer_list (GtkPrintBackend         *print_backend);
-GtkPrinter *gtk_print_backend_find_printer     (GtkPrintBackend         *print_backend,
-						const gchar             *printer_name);
-void        gtk_print_backend_print_stream     (GtkPrintBackend         *print_backend,
-						GtkPrintJob             *job,
-						gint                     data_fd,
-						GtkPrintJobCompleteFunc  callback,
-						gpointer                 user_data,
-						GDestroyNotify           dnotify);
-GList *     gtk_print_backend_load_modules     (void);
+GList      *gtk_print_backend_get_printer_list     (GtkPrintBackend         *print_backend);
+gboolean    gtk_print_backend_printer_list_is_done (GtkPrintBackend         *print_backend);
+GtkPrinter *gtk_print_backend_find_printer         (GtkPrintBackend         *print_backend,
+						    const gchar             *printer_name);
+void        gtk_print_backend_print_stream         (GtkPrintBackend         *print_backend,
+						    GtkPrintJob             *job,
+						    gint                     data_fd,
+						    GtkPrintJobCompleteFunc  callback,
+						    gpointer                 user_data,
+						    GDestroyNotify           dnotify);
+GList *     gtk_print_backend_load_modules         (void);
+void        gtk_print_backend_unref_at_idle        (GtkPrintBackend         *print_backend);
+void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
+
+/* Backend-only functions for GtkPrintBackend */
+
+void        gtk_print_backend_add_printer          (GtkPrintBackend         *print_backend,
+						    GtkPrinter              *printer);
+void        gtk_print_backend_remove_printer       (GtkPrintBackend         *print_backend,
+						    GtkPrinter              *printer);
+void        gtk_print_backend_set_list_done        (GtkPrintBackend         *backend);
 
 
 /* Backend-only functions for GtkPrinter */

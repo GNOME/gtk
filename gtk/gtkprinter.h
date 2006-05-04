@@ -78,6 +78,8 @@ gboolean                 gtk_printer_is_active         (GtkPrinter      *printer
 gboolean                 gtk_printer_is_virtual        (GtkPrinter      *printer);
 gboolean                 gtk_printer_is_default        (GtkPrinter      *printer);
 
+gint                     gtk_printer_compare           (GtkPrinter *a,
+							GtkPrinter *b);
 
 G_END_DECLS
 

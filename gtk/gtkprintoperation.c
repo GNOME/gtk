@@ -1115,7 +1115,8 @@ pdf_end_page (GtkPrintOperation *op,
 }
 
 static void
-pdf_end_run (GtkPrintOperation *op)
+pdf_end_run (GtkPrintOperation *op,
+	     gboolean wait)
 {
   GtkPrintOperationPrivate *priv = op->priv;
 
@@ -1161,7 +1162,8 @@ run_pdf (GtkPrintOperation  *op,
 }
 
 static void
-print_pages (GtkPrintOperation *op)
+print_pages (GtkPrintOperation *op,
+	     gboolean wait)
 {
   GtkPrintOperationPrivate *priv = op->priv;
   int page, range;
@@ -1289,8 +1291,7 @@ print_pages (GtkPrintOperation *op)
   g_object_unref (initial_page_setup);
 
   cairo_surface_finish (priv->surface);
-  priv->end_run (op);
-
+  priv->end_run (op, wait);
 }
 
 /**
@@ -1343,7 +1344,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 							       &do_print,
 							       error);
   if (do_print)
-    print_pages (op);
+    print_pages (op, TRUE);
   else 
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 
@@ -1384,7 +1385,7 @@ gtk_print_operation_run_async (GtkPrintOperation *op,
     {
       run_pdf (op, parent, &do_print, NULL);
       if (do_print)
-	print_pages (op);
+	print_pages (op, FALSE);
       else 
 	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
     }

@@ -53,6 +53,7 @@ noinst_PROGRAMS =			\
 	testmultidisplay		\
 	testmultiscreen			\
 	testnotebookdnd			\
+	testnouiprint			\
 	testrgb				\
 	testrecentchooser 		\
 	testselection			\
@@ -107,6 +108,7 @@ testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
+testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
@@ -155,6 +157,7 @@ testmenubars_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
+testnouiprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)

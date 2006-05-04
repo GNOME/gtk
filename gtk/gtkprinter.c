@@ -52,7 +52,6 @@ struct _GtkPrinterPrivate
   gchar *state_message;  
   gint job_count;
 
-  /* Not ref:ed, backend owns printer. */
   GtkPrintBackend *backend;
 };
 
@@ -215,6 +214,9 @@ gtk_printer_finalize (GObject *object)
   g_free (priv->state_message);
   g_free (priv->icon_name);
 
+  if (priv->backend)
+    g_object_unref (priv->backend);
+
   G_OBJECT_CLASS (gtk_printer_parent_class)->finalize (object);
 }
 
@@ -234,7 +236,7 @@ gtk_printer_set_property (GObject         *object,
       break;
     
     case PROP_BACKEND:
-      priv->backend = GTK_PRINT_BACKEND (g_value_get_object (value));
+      priv->backend = GTK_PRINT_BACKEND (g_value_dup_object (value));
       break;
 
     case PROP_IS_VIRTUAL:
@@ -338,16 +340,6 @@ gtk_printer_get_backend (GtkPrinter *printer)
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
   
   return printer->priv->backend;
-}
-
-void
-gtk_printer_set_backend (GtkPrinter      *printer,
-			 GtkPrintBackend *backend)
-{
-  g_return_if_fail (GTK_IS_PRINTER (printer));
-  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
-
-  printer->priv->backend = backend;
 }
 
 /**
@@ -663,8 +655,8 @@ gtk_printer_set_is_default (GtkPrinter *printer,
 void
 _gtk_printer_request_details (GtkPrinter *printer)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_request_details (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_request_details (printer);
 }
 
 GtkPrinterOptionSet *
@@ -672,16 +664,16 @@ _gtk_printer_get_options (GtkPrinter       *printer,
 			  GtkPrintSettings *settings,
 			  GtkPageSetup     *page_setup)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_get_options (printer, settings, page_setup);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_get_options (printer, settings, page_setup);
 }
 
 gboolean
 _gtk_printer_mark_conflicts (GtkPrinter          *printer,
 			     GtkPrinterOptionSet *options)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_mark_conflicts (printer, options);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_mark_conflicts (printer, options);
 }
   
 void
@@ -689,8 +681,8 @@ _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrinterOptionSet *options,
 					GtkPrintSettings    *settings)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_get_settings_from_options (printer, options, settings);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_get_settings_from_options (printer, options, settings);
 }
 
 void
@@ -699,8 +691,8 @@ _gtk_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPrintSettings *settings,
 				GtkPageSetup     *page_setup)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
-  return backend_iface->printer_prepare_for_print (printer, print_job, settings, page_setup);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_prepare_for_print (printer, print_job, settings, page_setup);
 }
 
 cairo_surface_t *
@@ -709,17 +701,17 @@ _gtk_printer_create_cairo_surface (GtkPrinter *printer,
 				   gdouble     height,
 				   gint        cache_fd)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
-  return backend_iface->printer_create_cairo_surface (printer, width, height, cache_fd);
+  return backend_class->printer_create_cairo_surface (printer, width, height, cache_fd);
 }
 
 GList  *
 _gtk_printer_list_papers (GtkPrinter *printer)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
-  return backend_iface->printer_list_papers (printer);
+  return backend_class->printer_list_papers (printer);
 }
 
 void
@@ -729,9 +721,28 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
 			       gdouble    *left,
 			       gdouble    *right)
 {
-  GtkPrintBackendIface *backend_iface = GTK_PRINT_BACKEND_GET_IFACE (printer->priv->backend);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
-  backend_iface->printer_get_hard_margins (printer, top, bottom, left, right);
+  backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
+}
+
+gint
+gtk_printer_compare (GtkPrinter *a, GtkPrinter *b)
+{
+  const char *name_a, *name_b;
+  
+  g_assert (GTK_IS_PRINTER (a) && GTK_IS_PRINTER (b));
+  
+  name_a = gtk_printer_get_name (a);
+  name_b = gtk_printer_get_name (b);
+  if (name_a == NULL  && name_b == NULL)
+    return 0;
+  else if (name_a == NULL)
+    return G_MAXINT;
+  else if (name_b == NULL)
+    return G_MININT;
+  else
+    return g_ascii_strcasecmp (name_a, name_b);
 }
 
 #define __GTK_PRINTER_C__

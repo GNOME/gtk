@@ -242,6 +242,26 @@ gtk_cups_request_ipp_add_string (GtkCupsRequest *request,
                 value);
 }
 
+void            
+gtk_cups_request_ipp_add_strings (GtkCupsRequest *request,
+				  ipp_tag_t group,
+				  ipp_tag_t tag,
+				  const char *name,
+				  int num_values,
+				  const char *charset,
+				  const char * const *values)
+{
+  ippAddStrings (request->ipp_request,
+		 group,
+		 tag,
+		 name,
+		 num_values,
+		 charset,
+		 values);
+}
+
+
+
 typedef struct
 {
   const char	*name;

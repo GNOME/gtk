@@ -110,6 +110,17 @@ static void populate_dialog                      (GtkPageSetupUnixDialog *dialog
 static void fill_paper_sizes_from_printer        (GtkPageSetupUnixDialog *dialog,
 						  GtkPrinter             *printer);
 static void run_custom_paper_dialog              (GtkPageSetupUnixDialog *dialog);
+static void printer_added_cb                     (GtkPrintBackend        *backend,
+						  GtkPrinter             *printer,
+						  GtkPageSetupUnixDialog *dialog);
+static void printer_removed_cb                   (GtkPrintBackend        *backend,
+						  GtkPrinter             *printer,
+						  GtkPageSetupUnixDialog *dialog);
+static void printer_status_cb                    (GtkPrintBackend        *backend,
+						  GtkPrinter             *printer,
+						  GtkPageSetupUnixDialog *dialog);
+
+
 
 static const char * const common_paper_sizes[] = {
   "na_letter",
@@ -369,7 +380,9 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
 {
   GtkPageSetupUnixDialog *dialog = GTK_PAGE_SETUP_UNIX_DIALOG (object);
   GtkPageSetupUnixDialogPrivate *priv = dialog->priv;
- 
+  GtkPrintBackend *backend;
+  GList *node;
+  
   if (priv->request_details_tag)
     {
       g_source_remove (priv->request_details_tag);
@@ -396,6 +409,21 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
 
   g_free (priv->waiting_for_printer);
   priv->waiting_for_printer = NULL;
+
+  for (node = priv->print_backends; node != NULL; node = node->next)
+    {
+      backend = GTK_PRINT_BACKEND (node->data);
+
+      g_signal_handlers_disconnect_by_func (backend, printer_added_cb, dialog);
+      g_signal_handlers_disconnect_by_func (backend, printer_removed_cb, dialog);
+      g_signal_handlers_disconnect_by_func (backend, printer_status_cb, dialog);
+
+      gtk_print_backend_destroy (backend);
+      g_object_unref (backend);
+    }
+  
+  g_list_free (priv->print_backends);
+  priv->print_backends = NULL;
 
   G_OBJECT_CLASS (gtk_page_setup_unix_dialog_parent_class)->finalize (object);
 }

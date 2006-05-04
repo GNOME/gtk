@@ -2550,9 +2550,11 @@ gtk_paper_size_get_default
 gtk_print_backend_error_quark
 gtk_print_backend_get_type G_GNUC_CONST
 gtk_print_backend_get_printer_list  
+gtk_print_backend_printer_list_is_done
 gtk_print_backend_find_printer
 gtk_print_backend_print_stream
 gtk_print_backend_load_modules
+gtk_print_backend_unref_at_idle
 #endif
 #endif
 #endif

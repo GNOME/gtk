@@ -90,8 +90,7 @@ gtk_printer_cups_finalize (GObject *object)
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
 
-  if (G_OBJECT_CLASS (gtk_printer_cups_parent_class)->finalize)
-    G_OBJECT_CLASS (gtk_printer_cups_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_printer_cups_parent_class)->finalize (object);
 }
 
 /**

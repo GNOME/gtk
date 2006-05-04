@@ -61,7 +61,8 @@ struct _GtkPrintOperationPrivate
 		      GtkPageSetup *page_setup);
   void (*end_page) (GtkPrintOperation *operation,
 		    GtkPrintContext *print_context);
-  void (*end_run) (GtkPrintOperation *operation);
+  void (*end_run) (GtkPrintOperation *operation,
+		   gboolean wait);
   GDestroyNotify free_platform_data;
 };
 
@@ -70,7 +71,8 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  gboolean          *do_print,
 									  GError           **error);
 
-typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op);
+typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
+					     gboolean wait);
 
 void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
 							     GtkWindow                  *parent,

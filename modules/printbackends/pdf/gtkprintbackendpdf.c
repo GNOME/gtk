@@ -52,25 +52,18 @@ static GType print_backend_pdf_type = 0;
 
 struct _GtkPrintBackendPdfClass
 {
-  GObjectClass parent_class;
+  GtkPrintBackendClass parent_class;
 };
 
 struct _GtkPrintBackendPdf
 {
-  GObject parent_instance;
-
-  GtkPrinter *printer;
-
-  GHashTable *printers;
+  GtkPrintBackend parent_instance;
 };
 
 static GObjectClass *backend_parent_class;
 
 static void                 gtk_print_backend_pdf_class_init      (GtkPrintBackendPdfClass *class);
-static void                 gtk_print_backend_pdf_iface_init      (GtkPrintBackendIface    *iface);
 static void                 gtk_print_backend_pdf_init            (GtkPrintBackendPdf      *impl);
-static void                 gtk_print_backend_pdf_finalize        (GObject                 *object);
-static GList *              pdf_request_printer_list              (GtkPrintBackend         *print_backend);
 static void                 pdf_printer_get_settings_from_options (GtkPrinter              *printer,
 								   GtkPrinterOptionSet     *options,
 								   GtkPrintSettings        *settings);
@@ -90,6 +83,16 @@ static void                 pdf_printer_get_hard_margins          (GtkPrinter   
 								   double                  *right);
 static void                 pdf_printer_request_details           (GtkPrinter              *printer);
 static GList *              pdf_printer_list_papers               (GtkPrinter              *printer);
+static void                 gtk_print_backend_pdf_print_stream    (GtkPrintBackend         *print_backend,
+								   GtkPrintJob             *job,
+								   gint                     data_fd,
+								   GtkPrintJobCompleteFunc  callback,
+								   gpointer                 user_data,
+								   GDestroyNotify           dnotify);
+static cairo_surface_t *    pdf_printer_create_cairo_surface      (GtkPrinter              *printer,
+								   gdouble                  width,
+								   gdouble                  height,
+								   gint                     cache_fd);
 
 static void
 gtk_print_backend_pdf_register_type (GTypeModule *module)
@@ -109,24 +112,11 @@ gtk_print_backend_pdf_register_type (GTypeModule *module)
 	(GInstanceInitFunc) gtk_print_backend_pdf_init,
       };
 
-      static const GInterfaceInfo print_backend_info =
-      {
-	(GInterfaceInitFunc) gtk_print_backend_pdf_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
-
       print_backend_pdf_type = g_type_module_register_type (module,
-                                                             G_TYPE_OBJECT,
-						             "GtkPrintBackendPdf",
-						             &print_backend_pdf_info, 0);
-      g_type_module_add_interface (module,
-                                   print_backend_pdf_type,
-		 		   GTK_TYPE_PRINT_BACKEND,
-				   &print_backend_info);
+							    GTK_TYPE_PRINT_BACKEND,
+							    "GtkPrintBackendPdf",
+							    &print_backend_pdf_info, 0);
     }
-
-
 }
 
 G_MODULE_EXPORT void 
@@ -174,11 +164,19 @@ gtk_print_backend_pdf_new (void)
 static void
 gtk_print_backend_pdf_class_init (GtkPrintBackendPdfClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_CLASS (class);
 
   backend_parent_class = g_type_class_peek_parent (class);
 
-  gobject_class->finalize = gtk_print_backend_pdf_finalize;
+  backend_class->print_stream = gtk_print_backend_pdf_print_stream;
+  backend_class->printer_request_details = pdf_printer_request_details;
+  backend_class->printer_create_cairo_surface = pdf_printer_create_cairo_surface;
+  backend_class->printer_get_options = pdf_printer_get_options;
+  backend_class->printer_mark_conflicts = pdf_printer_mark_conflicts;
+  backend_class->printer_get_settings_from_options = pdf_printer_get_settings_from_options;
+  backend_class->printer_prepare_for_print = pdf_printer_prepare_for_print;
+  backend_class->printer_list_papers = pdf_printer_list_papers;
+  backend_class->printer_get_hard_margins = pdf_printer_get_hard_margins;
 }
 
 static cairo_status_t
@@ -214,22 +212,6 @@ pdf_printer_create_cairo_surface (GtkPrinter *printer,
   cairo_pdf_surface_set_dpi (surface, 300, 300);
 
   return surface;
-}
-
-static GtkPrinter *
-gtk_print_backend_pdf_find_printer (GtkPrintBackend *print_backend,
-                                     const gchar *printer_name)
-{
-  GtkPrintBackendPdf *pdf_print_backend;
-  GtkPrinter *printer;
-
-  pdf_print_backend = GTK_PRINT_BACKEND_PDF (print_backend);
-  
-  printer = NULL;
-  if (strcmp (gtk_printer_get_name (pdf_print_backend->printer), printer_name) == 0)
-    printer = pdf_print_backend->printer;
-
-  return printer; 
 }
 
 typedef struct {
@@ -366,64 +348,23 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
                   ps);
 }
 
-
 static void
-gtk_print_backend_pdf_iface_init (GtkPrintBackendIface *iface)
-{
-  iface->get_printer_list = pdf_request_printer_list;
-  iface->find_printer = gtk_print_backend_pdf_find_printer;
-  iface->print_stream = gtk_print_backend_pdf_print_stream;
-  iface->printer_request_details = pdf_printer_request_details;
-  iface->printer_create_cairo_surface = pdf_printer_create_cairo_surface;
-  iface->printer_get_options = pdf_printer_get_options;
-  iface->printer_mark_conflicts = pdf_printer_mark_conflicts;
-  iface->printer_get_settings_from_options = pdf_printer_get_settings_from_options;
-  iface->printer_prepare_for_print = pdf_printer_prepare_for_print;
-  iface->printer_list_papers = pdf_printer_list_papers;
-  iface->printer_get_hard_margins = pdf_printer_get_hard_margins;
-}
-
-static GList *
-pdf_request_printer_list (GtkPrintBackend *backend)
-{
-  GList *l;
-  GtkPrintBackendPdf *pdf_backend;
-
-  l = NULL;
-
-  pdf_backend = GTK_PRINT_BACKEND_PDF (backend);
-  
-  if (pdf_backend->printer)
-    l = g_list_append (l, pdf_backend->printer);
-
-  return l; 
-}
-
-static void
-gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend_pdf)
+gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
 {
   GtkPrinter *printer;
   
-  backend_pdf->printer = gtk_printer_new (_("Print to PDF"),
-					  GTK_PRINT_BACKEND (backend_pdf),
-					  TRUE); 
+  printer = gtk_printer_new (_("Print to PDF"),
+			     GTK_PRINT_BACKEND (backend),
+			     TRUE); 
 
-  printer = backend_pdf->printer;
   gtk_printer_set_has_details (printer, TRUE);
   gtk_printer_set_icon_name (printer, "floppy");
   gtk_printer_set_is_active (printer, TRUE);
-}
 
-static void
-gtk_print_backend_pdf_finalize (GObject *object)
-{
-  GtkPrintBackendPdf *backend_pdf;
+  gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
+  g_object_unref (printer);
 
-  backend_pdf = GTK_PRINT_BACKEND_PDF (object);
-
-  g_object_unref (backend_pdf->printer);
-
-  backend_parent_class->finalize (object);
+  gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
 static void

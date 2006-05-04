@@ -29,7 +29,30 @@
 #include "gtkprintbackend.h"
 #include "gtkalias.h"
 
-static void gtk_print_backend_base_init (gpointer g_class);
+#define GTK_PRINT_BACKEND_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendPrivate))
+
+static void gtk_print_backend_dispose (GObject *object);
+
+struct _GtkPrintBackendPrivate
+{
+  GHashTable *printers;
+  guint printer_list_requested : 1;
+  guint printer_list_done : 1;
+};
+
+enum {
+  PRINTER_LIST_CHANGED,
+  PRINTER_LIST_DONE,
+  PRINTER_ADDED,
+  PRINTER_REMOVED,
+  PRINTER_STATUS_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
+static GObjectClass *backend_parent_class;
 
 GQuark
 gtk_print_backend_error_quark (void)
@@ -142,7 +165,7 @@ _gtk_print_backend_module_class_init (GtkPrintBackendModuleClass *class)
 {
   GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  
+
   module_class->load = gtk_print_backend_module_load;
   module_class->unload = gtk_print_backend_module_unload;
 
@@ -272,107 +295,255 @@ gtk_print_backend_load_modules ()
 /*****************************************
  *             GtkPrintBackend           *
  *****************************************/
-GType
-gtk_print_backend_get_type (void)
-{
-  static GType print_backend_type = 0;
 
-  if (!print_backend_type)
-    {
-      static const GTypeInfo print_backend_info =
-      {
-	sizeof (GtkPrintBackendIface),  /* class_size */
-	gtk_print_backend_base_init,    /* base_init */
-	NULL,                         /* base_finalize */
-      };
-
-      print_backend_type = g_type_register_static (G_TYPE_INTERFACE,
-						 "GtkPrintBackend",
-						 &print_backend_info, 0);
-
-      g_type_interface_add_prerequisite (print_backend_type, G_TYPE_OBJECT);
-    }
-
-  return print_backend_type;
-}
+G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT);
 
 static void
-gtk_print_backend_base_init (gpointer g_class)
+gtk_print_backend_class_init (GtkPrintBackendClass *class)
 {
-  static gboolean initialized = FALSE;
-  
-  if (!initialized)
-    {
-      GType iface_type = G_TYPE_FROM_INTERFACE (g_class);
+  GObjectClass *object_class;
+  object_class = (GObjectClass *) class;
 
-      g_signal_new ("printer-list-changed",
-		    iface_type,
+  backend_parent_class = g_type_class_peek_parent (class);
+  
+  object_class->dispose = gtk_print_backend_dispose;
+
+  g_type_class_add_private (class, sizeof (GtkPrintBackendPrivate));
+
+  
+  signals[PRINTER_LIST_CHANGED] =
+    g_signal_new ("printer-list-changed",
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+  signals[PRINTER_LIST_DONE] =
+      g_signal_new ("printer-list-done",
+		    G_TYPE_FROM_CLASS (class),
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintBackendIface, printer_list_changed),
+		    G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_done),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("printer-added",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintBackendIface, printer_added),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__OBJECT,
-		    G_TYPE_NONE, 1, G_TYPE_OBJECT);
-      g_signal_new ("printer-removed",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintBackendIface, printer_removed),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__OBJECT,
-		    G_TYPE_NONE, 1, G_TYPE_OBJECT);
-      g_signal_new ("printer-status-changed",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintBackendIface, printer_status_changed),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__OBJECT,
-		    G_TYPE_NONE, 1, G_TYPE_OBJECT);
+  signals[PRINTER_ADDED] =
+    g_signal_new ("printer-added",
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_added),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
+  signals[PRINTER_REMOVED] =
+    g_signal_new ("printer-removed",
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_removed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
+  signals[PRINTER_STATUS_CHANGED] =
+    g_signal_new ("printer-status-changed",
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_status_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
+}
 
-      initialized = TRUE;
+static void
+gtk_print_backend_init (GtkPrintBackend *backend)
+{
+  GtkPrintBackendPrivate *priv;
+
+  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+
+  priv->printers = g_hash_table_new_full (g_str_hash, g_str_equal, 
+					  (GDestroyNotify) g_free,
+					  (GDestroyNotify) g_object_unref);
+}
+
+static void
+gtk_print_backend_dispose (GObject *object)
+{
+  GtkPrintBackend *backend;
+  GtkPrintBackendPrivate *priv;
+
+  backend = GTK_PRINT_BACKEND (object);
+  priv = backend->priv;
+
+  /* We unref the printers in dispose, not in finalize so that
+     we can break refcount cycles with gtk_print_backend_destroy */
+  if (priv->printers)
+    {
+      g_hash_table_destroy (priv->printers);
+      priv->printers = NULL;
     }
+
+  backend_parent_class->dispose (object);
 }
 
-GList *
-gtk_print_backend_get_printer_list (GtkPrintBackend *print_backend)
+
+static void
+printer_hash_to_sorted_active_list (const gchar *key,
+                                    gpointer value,
+                                    GList **out_list)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (print_backend), NULL);
+  GtkPrinter *printer;
 
-  return GTK_PRINT_BACKEND_GET_IFACE (print_backend)->get_printer_list (print_backend);
+  printer = GTK_PRINTER (value);
 
+  if (gtk_printer_get_name (printer) == NULL)
+    return;
+
+  if (!gtk_printer_is_active (printer))
+    return;
+
+  *out_list = g_list_insert_sorted (*out_list, value, (GCompareFunc) gtk_printer_compare);
 }
 
-GtkPrinter *
-gtk_print_backend_find_printer (GtkPrintBackend *print_backend,
-                                const gchar *printer_name)
+
+void
+gtk_print_backend_add_printer (GtkPrintBackend *backend,
+			       GtkPrinter *printer)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (print_backend), NULL);
+  GtkPrintBackendPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
-  return GTK_PRINT_BACKEND_GET_IFACE (print_backend)->find_printer (print_backend, printer_name);
+  priv = backend->priv;
 
+  if (!priv->printers)
+    return;
+  
+  g_hash_table_insert (priv->printers,
+		       g_strdup (gtk_printer_get_name (printer)), 
+		       g_object_ref (printer));
 }
 
 void
-gtk_print_backend_print_stream (GtkPrintBackend *print_backend,
+gtk_print_backend_remove_printer (GtkPrintBackend *backend,
+				  GtkPrinter *printer)
+{
+  GtkPrintBackendPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
+  priv = backend->priv;
+
+  if (!priv->printers)
+    return;
+  
+  g_hash_table_remove (priv->printers,
+		       gtk_printer_get_name (printer));
+}
+
+void
+gtk_print_backend_set_list_done (GtkPrintBackend *backend)
+{
+  if (!backend->priv->printer_list_done)
+    {
+      backend->priv->printer_list_done = TRUE;
+      g_signal_emit (backend, signals[PRINTER_LIST_DONE], 0);
+    }
+}
+
+
+GList *
+gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
+{
+  GtkPrintBackendPrivate *priv;
+  GList *result;
+  
+  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), NULL);
+
+  priv = backend->priv;
+
+  result = NULL;
+  if (priv->printers != NULL)
+    g_hash_table_foreach (priv->printers,
+                          (GHFunc) printer_hash_to_sorted_active_list,
+                          &result);
+
+  if (!priv->printer_list_requested && priv->printers != NULL)
+    {
+      if (GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list)
+	GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list (backend);
+      priv->printer_list_requested = TRUE;
+    }
+  
+  return result;;
+}
+
+gboolean
+gtk_print_backend_printer_list_is_done (GtkPrintBackend *print_backend)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (print_backend), TRUE);
+
+  return print_backend->priv->printer_list_done;
+}
+
+GtkPrinter *
+gtk_print_backend_find_printer (GtkPrintBackend *backend,
+                                const gchar *printer_name)
+{
+  GtkPrintBackendPrivate *priv;
+  GtkPrinter *printer;
+  
+  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), NULL);
+
+  priv = backend->priv;
+
+  if (priv->printers)
+    printer = g_hash_table_lookup (priv->printers, printer_name);
+  else
+    printer = NULL;
+
+  return printer;  
+}
+
+void
+gtk_print_backend_print_stream (GtkPrintBackend *backend,
                                 GtkPrintJob *job,
                                 gint data_fd,
                                 GtkPrintJobCompleteFunc callback,
                                 gpointer user_data,
 				GDestroyNotify dnotify)
 {
-  g_return_if_fail (GTK_IS_PRINT_BACKEND (print_backend));
+  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
-  GTK_PRINT_BACKEND_GET_IFACE (print_backend)->print_stream (print_backend,
-							     job,
-							     data_fd,
-							     callback,
-							     user_data,
-							     dnotify);
+  GTK_PRINT_BACKEND_GET_CLASS (backend)->print_stream (backend,
+						       job,
+						       data_fd,
+						       callback,
+						       user_data,
+						       dnotify);
+}
+
+static gboolean
+unref_at_idle_cb (gpointer data)
+{
+  g_object_unref (data);
+  return FALSE;
+}
+
+void
+gtk_print_backend_unref_at_idle (GtkPrintBackend *print_backend)
+{
+  g_idle_add (unref_at_idle_cb, print_backend);
+}
+
+void
+gtk_print_backend_destroy (GtkPrintBackend *print_backend)
+{
+  /* The lifecycle of print backends and printers are tied, such that
+     the backend owns the printers, but the printers also ref the backend.
+     This is so that if the app has a reference to a printer its backend
+     will be around. However, this results in a cycle, which we break
+     with this call, which causes the print backend to release its printers.
+  */
+  g_object_run_dispose (G_OBJECT (print_backend));
 }
 
 #define __GTK_PRINT_BACKEND_C__

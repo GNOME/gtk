@@ -1,3 +1,58 @@
+2006-05-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	Added new symbols
+	
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c:
+	Destroy backends when finalizing dialogs.
+	Fix printer leak in selected_printer_changed.
+	
+	* gtk/gtkprintbackend.[ch]:
+	Convert from interface to baseclass.
+	Move printer hashtable here so that the baseclass can handle
+	the slightly complicated ownership model.
+	Add gtk_print_backend_destroy which runs the dispose method,
+	causing the ref-cycles between the backend and its printers
+	to be broken.
+	Add gtk_print_backend_unref_at_idle().
+	
+	* gtk/gtkprinter.[ch]:
+	GtkPrinter objects now ref their backend so that its always
+	availible, since its needed for the printer object to work.
+	This causes a reference-cycle that is broken using
+	gtk_print_backend_destroy.
+	Add gtk_printer_compare.
+	
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.c:
+	Implement !show_dialog for unix.
+	Make sure the print data is fully spooled before returning
+	from a sync run_dialog.
+	
+	
+	* modules/printbackends/cups/gtkcupsutils.[ch]:
+	Add gtk_cups_request_ipp_add_strings
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/cups/gtkprintercups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Convert backends to derive instead of implementing interface.
+	Move common code into baseclass.
+	CUPS:
+	  Remove the printer polling in dispose, not finalize.
+	  In the cups watch, remove the backend at idle instead of
+	  immediately, since the unref can cause the module to be unloaded.
+	  Limit the number of printer attributes requested
+	  Get printer uri in initial printer listing so that we can use
+	  the printer object immediately.
+	
+	* tests/Makefile.am:
+	* tests/testnouiprint.c:
+	Add testcase for !show_dialog.
+
 2006-05-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
