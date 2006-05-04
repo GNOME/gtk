@@ -152,7 +152,7 @@ gtk_tree_model_base_init (gpointer g_class)
        * @path: a #GtkTreePath identifying the changed row
        * @iter: a valid #GtkTreeIter pointing to the changed row
        *
-       * Gets emitted when a row in the model has changed.
+       * This signal is emitted when a row in the model has changed.
        */
       tree_model_signals[ROW_CHANGED] =
         g_signal_new (I_("row_changed"),
@@ -184,7 +184,7 @@ gtk_tree_model_base_init (gpointer g_class)
        * @path: a #GtkTreePath identifying the new row
        * @iter: a valid #GtkTreeIter pointing to the new row
        *
-       * Gets emitted when a new row has been inserted in the model.
+       * This signal is emitted when a new row has been inserted in the model.
        *
        * Note that the row may still be empty at this point, since
        * it is a common pattern to first insert an empty row, and 
@@ -208,7 +208,7 @@ gtk_tree_model_base_init (gpointer g_class)
        * @path: a #GtkTreePath identifying the row
        * @iter: a valid #GtkTreeIter pointing to the row
        *
-       * Gets emitted when a row has gotten the first child row or lost
+       * This signal is emitted when a row has gotten the first child row or lost
        * its last child row.
        */
       tree_model_signals[ROW_HAS_CHILD_TOGGLED] =
@@ -227,7 +227,7 @@ gtk_tree_model_base_init (gpointer g_class)
        * @tree_model: the #GtkTreeModel on which the signal is emitted
        * @path: a #GtkTreePath identifying the row
        *
-       * Gets emitted when a row has been deleted.
+       * This signal is emitted when a row has been deleted.
        *
        * Note that no iterator is passed to the signal handler,
        * since the row is already deleted.
@@ -251,7 +251,7 @@ gtk_tree_model_base_init (gpointer g_class)
        *        have been reordered
        * @iter: a valid #GtkTreeIter pointing to the node whose 
        *
-       * Gets emitted when the children of a node in the #GtkTreeModel
+       * This signal is emitted when the children of a node in the #GtkTreeModel
        * have been reordered. 
        *
        * Note that this signal is <emphasis>not</emphasis> emitted

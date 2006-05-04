@@ -1,3 +1,8 @@
+2006-05-04  Murray Cumming <murrayc@murrayc.com>
+
+	* gtk/gtktreemodel.c: (gtk_tree_model_base_init): Changed the 
+	language of the signals documentation slightly. Bug #340205.
+
 2006-05-03  Federico Mena Quintero  <federico@novell.com>
 
 	Merged the federico-filename-entry branch, to fix bug #136541.
