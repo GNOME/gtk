@@ -287,7 +287,7 @@ static void     recent_view_drag_data_get_cb      (GtkWidget        *widget,
 						   gpointer          data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
-			 gtk_recent_chooser_default,
+			 _gtk_recent_chooser_default,
 			 GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 				 		gtk_recent_chooser_iface_init));
@@ -313,7 +313,7 @@ gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
 }
 
 static void
-gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
+_gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -330,7 +330,7 @@ gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
 }
 
 static void
-gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
+_gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 {
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
@@ -373,7 +373,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
   GtkWidget *scrollw;
   GtkCellRenderer *renderer;
   
-  object = G_OBJECT_CLASS (gtk_recent_chooser_default_parent_class)->constructor (type, n_construct_prop, construct_params);
+  object = G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->constructor (type, n_construct_prop, construct_params);
 
   impl = GTK_RECENT_CHOOSER_DEFAULT (object);
   
@@ -642,7 +642,7 @@ gtk_recent_chooser_default_finalize (GObject *object)
   if (impl->tooltips)
     g_object_unref (impl->tooltips);
   
-  G_OBJECT_CLASS (gtk_recent_chooser_default_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->finalize (object);
 }
 
 /* override GtkWidget::show_all since we have internal widgets we wish to keep
@@ -943,8 +943,8 @@ gtk_recent_chooser_default_map (GtkWidget *widget)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (widget);
   
-  if (GTK_WIDGET_CLASS (gtk_recent_chooser_default_parent_class)->map)
-    GTK_WIDGET_CLASS (gtk_recent_chooser_default_parent_class)->map (widget);
+  if (GTK_WIDGET_CLASS (_gtk_recent_chooser_default_parent_class)->map)
+    GTK_WIDGET_CLASS (_gtk_recent_chooser_default_parent_class)->map (widget);
 
   /* reloads everything */
   reload_recent_items (impl);

@@ -331,7 +331,7 @@ N_("paper size|ROC 16k")
 N_("paper size|ROC 8k")
 #endif
 
-const char paper_names[] =
+static const char paper_names[] =
   "asme_f\0"
   "iso_2a0\0"
   "A0x2\0"
@@ -695,7 +695,7 @@ typedef struct {
   int ppd_name;
 } PaperInfo;
 
-const PaperInfo standard_names_offsets[] = {
+static const PaperInfo standard_names_offsets[] = {
   {    0, 711.2, 1016,    0,   -1 },
   {    7, 1189, 1682,   15,   -1 },
   {   20, 841, 1189,    1,    1 },
@@ -862,7 +862,7 @@ const PaperInfo standard_names_offsets[] = {
   { 3139, 273.05, 393.7, 3146,   -1 },
 };
 
-const struct {
+static const struct {
   int ppd_name;
   int standard_name;
 } extra_ppd_names_offsets[] = {

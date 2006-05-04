@@ -1,3 +1,21 @@
+2006-05-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkfilesystem.c:
+	* gtk/gtkfilesystemunix.c:
+	* gtk/gtkprintbackend.h:
+	* gtk/gtkrecentchooserdefault.c:
+	* gtk/gtkrecentchooserdefault.h:
+	* gtk/paper_names_offsets.c: Make symbol list mstch reality.
+	
+	* gtk/Makefile.am: Fix a typo.
+	
+	* gdk/x11/Makefile.am (EXTRA_DIST): Add gdksettings.c
+
+2006-05-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2006-05-04  Murray Cumming <murrayc@murrayc.com>
 
 	* gtk/gtktreemodel.c: (gtk_tree_model_base_init): Changed the 

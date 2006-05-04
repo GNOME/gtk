@@ -88,7 +88,7 @@ typedef enum {
 } IconType;
 
 
-#define GTK_TYPE_FILE_FOLDER_UNIX             (gtk_file_folder_unix_get_type ())
+#define GTK_TYPE_FILE_FOLDER_UNIX             (_gtk_file_folder_unix_get_type ())
 #define GTK_FILE_FOLDER_UNIX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnix))
 #define GTK_IS_FILE_FOLDER_UNIX(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_FOLDER_UNIX))
 #define GTK_FILE_FOLDER_UNIX_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnixClass))
@@ -268,7 +268,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileSystemUnix, gtk_file_system_unix, G_TYPE_OBJECT,
 /*
  * GtkFileFolderUnix
  */
-G_DEFINE_TYPE_WITH_CODE (GtkFileFolderUnix, gtk_file_folder_unix, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkFileFolderUnix, _gtk_file_folder_unix, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_FOLDER,
 						gtk_file_folder_unix_iface_init));
 
@@ -297,7 +297,7 @@ gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 }
 
 static void
-gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
+gtk_file_system_unix_iface_init (GtkFileSystemIface *iface)
 {
   iface->list_volumes = gtk_file_system_unix_list_volumes;
   iface->get_volume_for_path = gtk_file_system_unix_get_volume_for_path;
@@ -2012,7 +2012,7 @@ gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file_system,
 }
 
 static void
-gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class)
+_gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
@@ -2028,7 +2028,7 @@ gtk_file_folder_unix_iface_init (GtkFileFolderIface *iface)
 }
 
 static void
-gtk_file_folder_unix_init (GtkFileFolderUnix *impl)
+_gtk_file_folder_unix_init (GtkFileFolderUnix *impl)
 {
 }
 
@@ -2055,7 +2055,7 @@ gtk_file_folder_unix_finalize (GObject *object)
 
   g_free (folder_unix->filename);
 
-  G_OBJECT_CLASS (gtk_file_folder_unix_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_folder_unix_parent_class)->finalize (object);
 }
 
 /* Creates a GtkFileInfo for "/" by stat()ing it */

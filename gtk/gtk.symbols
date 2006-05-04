@@ -294,16 +294,29 @@ gtk_metric_type_get_type G_GNUC_CONST
 gtk_movement_step_get_type G_GNUC_CONST
 gtk_orientation_get_type G_GNUC_CONST
 gtk_pack_type_get_type G_GNUC_CONST
+gtk_page_orientation_get_type G_GNUC_CONST
+gtk_print_operation_result_get_type G_GNUC_CONST
+gtk_print_pages_get_type G_GNUC_CONST
+gtk_print_quality_get_type G_GNUC_CONST
+gtk_print_status_get_type G_GNUC_CONST
+gtk_page_set_get_type G_GNUC_CONST
 gtk_path_priority_type_get_type G_GNUC_CONST
 gtk_path_type_get_type G_GNUC_CONST
 gtk_policy_type_get_type G_GNUC_CONST
 gtk_position_type_get_type G_GNUC_CONST
 gtk_preview_type_get_type G_GNUC_CONST
+gtk_print_duplex_get_type G_GNUC_CONST
+gtk_print_error_get_type G_GNUC_CONST
+gtk_recent_filter_flags_get_type G_GNUC_CONST
 gtk_private_flags_get_type G_GNUC_CONST
 gtk_progress_bar_orientation_get_type G_GNUC_CONST
 gtk_progress_bar_style_get_type G_GNUC_CONST
 gtk_rc_flags_get_type G_GNUC_CONST
 gtk_rc_token_type_get_type G_GNUC_CONST
+gtk_recent_chooser_error_get_type G_GNUC_CONST
+gtk_recent_manager_error_get_type G_GNUC_CONST
+gtk_recent_sort_type_get_type G_GNUC_CONST
+gtk_unit_get_type G_GNUC_CONST
 gtk_relief_style_get_type G_GNUC_CONST
 gtk_resize_mode_get_type G_GNUC_CONST
 gtk_response_type_get_type G_GNUC_CONST
@@ -321,6 +334,7 @@ gtk_submenu_direction_get_type G_GNUC_CONST
 gtk_submenu_placement_get_type G_GNUC_CONST
 gtk_target_flags_get_type G_GNUC_CONST
 gtk_text_direction_get_type G_GNUC_CONST
+gtk_text_buffer_target_info_get_type G_GNUC_CONST
 gtk_text_search_flags_get_type G_GNUC_CONST
 gtk_text_window_type_get_type G_GNUC_CONST
 gtk_tree_model_flags_get_type G_GNUC_CONST
@@ -1421,6 +1435,7 @@ gtk_file_system_get_folder
 gtk_file_system_get_parent
 gtk_file_system_get_type G_GNUC_CONST
 gtk_file_system_get_volume_for_path
+gtk_file_system_handle_get_type G_GNUC_CONST
 gtk_file_system_insert_bookmark
 gtk_file_system_list_bookmarks
 gtk_file_system_list_volumes
@@ -2532,6 +2547,7 @@ gtk_paper_size_get_default
 #if IN_HEADER(__GTK_PRINT_BACKEND_H__)
 #if IN_FILE(__GTK_PRINT_BACKEND_C__)
 #ifdef G_OS_UNIX
+gtk_print_backend_error_quark
 gtk_print_backend_get_type G_GNUC_CONST
 gtk_print_backend_get_printer_list  
 gtk_print_backend_find_printer
@@ -2560,23 +2576,44 @@ gtk_print_context_create_layout
 #if IN_FILE(__GTK_PRINTER_C__)
 #ifdef G_OS_UNIX
 gtk_printer_get_type G_GNUC_CONST
-gtk_printer_new
 gtk_printer_get_backend
 gtk_printer_get_name
+gtk_printer_get_description
 gtk_printer_get_state_message
 gtk_printer_get_location
 gtk_printer_get_icon_name
 gtk_printer_get_job_count
-gtk_printer_is_active
 gtk_printer_is_virtual
 #endif
 #endif
+#endif
+
+#if IN_HEADER(__GTK_PRINT_BACKEND_H__)
+#if IN_FILE(__GTK_PRINTER_C__)
+#ifdef G_OS_UNIX
+gtk_printer_new
+gtk_printer_set_backend
+gtk_printer_set_description
+gtk_printer_set_has_details
+gtk_printer_set_icon_name
+gtk_printer_set_is_active
+gtk_printer_set_is_default
+gtk_printer_set_is_new
+gtk_printer_set_job_count
+gtk_printer_set_location
+gtk_printer_set_state_message
+gtk_printer_is_active
+gtk_printer_is_new
+gtk_printer_is_default
+#endif 
+#endif 
 #endif
 
 #if IN_HEADER(__GTK_PRINTER_OPTION_H__)
 #if IN_FILE(__GTK_PRINTER_OPTION_C__)
 #ifdef G_OS_UNIX
 gtk_printer_option_get_type
+gtk_printer_option_has_choice
 gtk_printer_option_new
 gtk_printer_option_set
 gtk_printer_option_set_has_conflict
@@ -2594,6 +2631,7 @@ gtk_printer_option_choices_from_array
 gtk_printer_option_set_get_type G_GNUC_CONST
 gtk_printer_option_set_new
 gtk_printer_option_set_add
+gtk_printer_option_set_lookup
 gtk_printer_option_set_remove
 gtk_printer_option_set_foreach
 gtk_printer_option_set_clear_conflicts
@@ -2625,6 +2663,7 @@ gtk_print_job_get_settings
 gtk_print_job_get_printer
 gtk_print_job_get_title
 gtk_print_job_get_status
+gtk_print_job_set_status
 gtk_print_job_set_source_file
 gtk_print_job_get_surface
 gtk_print_job_send
@@ -2693,6 +2732,7 @@ gtk_print_settings_get_length
 gtk_print_settings_set_length
 gtk_print_settings_get_int
 gtk_print_settings_get_int_with_default
+gtk_print_settings_set_int
 gtk_print_settings_get_printer
 gtk_print_settings_set_printer
 gtk_print_settings_get_orientation
@@ -3018,6 +3058,7 @@ gtk_recent_filter_filter
 gtk_recent_manager_error_quark
 gtk_recent_manager_get_type G_GNUC_CONST
 gtk_recent_manager_new
+gtk_recent_manager_get_items
 gtk_recent_manager_get_default
 gtk_recent_manager_get_for_screen
 gtk_recent_manager_set_screen
@@ -4347,6 +4388,7 @@ gtk_requisition_copy
 gtk_requisition_free
 gtk_requisition_get_type G_GNUC_CONST
 gtk_widget_activate
+gtk_widget_is_composited
 gtk_widget_add_accelerator
 gtk_widget_add_events
 gtk_widget_add_mnemonic_label

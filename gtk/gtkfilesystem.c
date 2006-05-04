@@ -333,14 +333,6 @@ enum
 
 G_DEFINE_TYPE (GtkFileSystemHandle, gtk_file_system_handle, G_TYPE_OBJECT);
 
-#if 0
-GtkFileSystemHandle *
-gtk_file_system_handle_new (void)
-{
-  return g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
-}
-#endif
-
 static void
 gtk_file_system_handle_init (GtkFileSystemHandle *handle)
 {

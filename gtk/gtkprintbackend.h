@@ -124,6 +124,8 @@ GList *     gtk_print_backend_load_modules     (void);
 GtkPrinter *gtk_printer_new               (const char      *name,
 					   GtkPrintBackend *backend,
 					   gboolean         is_virtual);
+void        gtk_printer_set_backend       (GtkPrinter      *printer,
+			                   GtkPrintBackend *backend);
 gboolean    gtk_printer_is_new            (GtkPrinter      *printer);
 void        gtk_printer_set_is_new        (GtkPrinter      *printer,
 					   gboolean         val);

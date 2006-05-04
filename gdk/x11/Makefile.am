@@ -79,4 +79,5 @@ TESTS = checksettings
 EXTRA_DIST = 			\
 	gdkinput-x11.c		\
 	gdkinput-xfree.c	\
-	gdkinput-none.c
+	gdkinput-none.c		\
+	gdksettings.c

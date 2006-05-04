@@ -674,7 +674,7 @@ stamp_files =					\
 # their own .lo rules and don't get publically installed
 gtk_extra_sources =				\
 	paper_names.c				\
-	paper_names_offsts.c			\
+	paper_names_offsets.c			\
 	gen-paper-names.c			\
 	gtk.symbols				\
 	gtkversion.h.in				\

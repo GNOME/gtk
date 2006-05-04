@@ -26,7 +26,7 @@
 G_BEGIN_DECLS
 
 
-#define GTK_TYPE_RECENT_CHOOSER_DEFAULT    (gtk_recent_chooser_default_get_type ())
+#define GTK_TYPE_RECENT_CHOOSER_DEFAULT    (_gtk_recent_chooser_default_get_type ())
 #define GTK_RECENT_CHOOSER_DEFAULT(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RECENT_CHOOSER_DEFAULT, GtkRecentChooserDefault))
 #define GTK_IS_RECENT_CHOOSER_DEFAULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RECENT_CHOOSER_DEFAULT))
 
