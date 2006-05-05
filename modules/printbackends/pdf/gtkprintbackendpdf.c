@@ -97,26 +97,23 @@ static cairo_surface_t *    pdf_printer_create_cairo_surface      (GtkPrinter   
 static void
 gtk_print_backend_pdf_register_type (GTypeModule *module)
 {
-  if (!print_backend_pdf_type)
-    {
-      static const GTypeInfo print_backend_pdf_info =
-      {
-	sizeof (GtkPrintBackendPdfClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_print_backend_pdf_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkPrintBackendPdf),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_print_backend_pdf_init,
-      };
+  static const GTypeInfo print_backend_pdf_info =
+  {
+    sizeof (GtkPrintBackendPdfClass),
+    NULL,		/* base_init */
+    NULL,		/* base_finalize */
+    (GClassInitFunc) gtk_print_backend_pdf_class_init,
+    NULL,		/* class_finalize */
+    NULL,		/* class_data */
+    sizeof (GtkPrintBackendPdf),
+    0,		/* n_preallocs */
+    (GInstanceInitFunc) gtk_print_backend_pdf_init,
+  };
 
-      print_backend_pdf_type = g_type_module_register_type (module,
-							    GTK_TYPE_PRINT_BACKEND,
-							    "GtkPrintBackendPdf",
-							    &print_backend_pdf_info, 0);
-    }
+  print_backend_pdf_type = g_type_module_register_type (module,
+                                                        GTK_TYPE_PRINT_BACKEND,
+                                                        "GtkPrintBackendPdf",
+                                                        &print_backend_pdf_info, 0);
 }
 
 G_MODULE_EXPORT void 

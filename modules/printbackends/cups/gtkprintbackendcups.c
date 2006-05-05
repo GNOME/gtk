@@ -158,26 +158,23 @@ static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter  
 static void
 gtk_print_backend_cups_register_type (GTypeModule *module)
 {
-  if (!print_backend_cups_type)
-    {
-      static const GTypeInfo print_backend_cups_info =
-      {
-	sizeof (GtkPrintBackendCupsClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_print_backend_cups_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkPrintBackendCups),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_print_backend_cups_init
-      };
+  static const GTypeInfo print_backend_cups_info =
+  {
+    sizeof (GtkPrintBackendCupsClass),
+    NULL,		/* base_init */
+    NULL,		/* base_finalize */
+    (GClassInitFunc) gtk_print_backend_cups_class_init,
+    NULL,		/* class_finalize */
+    NULL,		/* class_data */
+    sizeof (GtkPrintBackendCups),
+    0,		/* n_preallocs */
+    (GInstanceInitFunc) gtk_print_backend_cups_init
+  };
 
-      print_backend_cups_type = g_type_module_register_type (module,
-                                                             GTK_TYPE_PRINT_BACKEND,
-						             "GtkPrintBackendCups",
-						             &print_backend_cups_info, 0);
-    }
+  print_backend_cups_type = g_type_module_register_type (module,
+                                                         GTK_TYPE_PRINT_BACKEND,
+                                                         "GtkPrintBackendCups",
+                                                         &print_backend_cups_info, 0);
 }
 
 G_MODULE_EXPORT void 
