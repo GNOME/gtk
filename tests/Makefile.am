@@ -54,6 +54,7 @@ noinst_PROGRAMS =			\
 	testmultiscreen			\
 	testnotebookdnd			\
 	testnouiprint			\
+	testprint			\
 	testrgb				\
 	testrecentchooser 		\
 	testselection			\
@@ -109,6 +110,7 @@ testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
+testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
@@ -158,6 +160,7 @@ testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
+testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
@@ -223,6 +226,10 @@ testtext_SOURCES =	\
 testtoolbar_SOURCES =	\
 	testtoolbar.c	\
 	prop-editor.c
+
+testprint_SOURCES =    	\
+	testprint.c		\
+	testprintfileoperation.c
 
 testsocket_SOURCES =    	\
 	testsocket.c		\

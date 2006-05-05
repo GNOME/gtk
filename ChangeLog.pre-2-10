@@ -1,3 +1,19 @@
+2006-05-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c:
+	Implement per-page paper sizes.
+	
+	* gtk/gtkprintoperation.c:
+	Implement per-page paper sizes for pdf output.
+	Make gtk_print_operation_set_pdf_target() work again
+	
+	* tests/Makefile.am:
+	* tests/testprint.c:
+	* tests/testprintfileoperation.[ch]:
+	Add more test code for printing support.
+	This tests per-page paper sizes & orientation and
+	deriving from GtkPrintOperation.
+
 2006-05-04  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkkeys-directfb.c: DIKI_ALTGR to compile with

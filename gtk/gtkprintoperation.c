@@ -1101,7 +1101,15 @@ pdf_start_page (GtkPrintOperation *op,
 		GtkPrintContext   *print_context,
 		GtkPageSetup      *page_setup)
 {
-  /* TODO: Set up page size, not supported in cairo yet */
+  GtkPaperSize *paper_size;
+  double w, h;
+
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+  
+  cairo_pdf_surface_set_size (op->priv->surface, w, h);
 }
 
 static void
@@ -1143,14 +1151,21 @@ run_pdf (GtkPrintOperation  *op,
   
   priv->surface = cairo_pdf_surface_create (priv->pdf_target,
 					    width, height);
-  /* TODO: DPI from settings object? */
   cairo_pdf_surface_set_dpi (priv->surface, 300, 300);
   
   priv->dpi_x = 72;
   priv->dpi_y = 72;
 
+  priv->print_pages = GTK_PRINT_PAGES_ALL;
+  priv->page_ranges = NULL;
+  priv->num_page_ranges = 0;
+
   priv->manual_num_copies = 1;
   priv->manual_collation = FALSE;
+  priv->manual_reverse = FALSE;
+  priv->manual_page_set = GTK_PAGE_SET_ALL;
+  priv->manual_scale = 1.0;
+  priv->manual_orientation = TRUE;
   
   *do_print = TRUE;
   

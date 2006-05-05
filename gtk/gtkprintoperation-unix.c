@@ -58,7 +58,21 @@ unix_start_page (GtkPrintOperation *op,
 		 GtkPrintContext   *print_context,
 		 GtkPageSetup      *page_setup)
 {
+  GtkPaperSize *paper_size;
+  cairo_surface_type_t type;
+  double w, h;
 
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+  
+  type = cairo_surface_get_type (op->priv->surface);
+
+  if (type == CAIRO_SURFACE_TYPE_PS)
+    cairo_ps_surface_set_size (op->priv->surface, w, h);
+  else if (type == CAIRO_SURFACE_TYPE_PDF)
+    cairo_pdf_surface_set_size (op->priv->surface, w, h);
 }
 
 static void
