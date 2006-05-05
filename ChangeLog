@@ -1,3 +1,11 @@
+2006-05-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.9.0 ===
+
+	* configure.in: Require cairo 1.1.6
+
+	* gtk/Makefile.am: Tweaks to make distcheck work.
+
 2006-05-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c:
