@@ -1243,15 +1243,19 @@ paint_page (GtkWidget *widget,
 	    gfloat     scale,
 	    gint       x_offset, 
 	    gint       y_offset,
-	    gchar     *text)
+	    gchar     *text,
+	    gint       text_x)
 {
   gint x, y, width, height;
-  gint linewidth = 2;
+  gint text_y, linewidth;
 
   x = x_offset * scale;
   y = y_offset * scale;
   width = 20 * scale;
   height = 26 * scale;
+
+  linewidth = 2;
+  text_y = 21;
 
   gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, x, y, width, height);
@@ -1266,7 +1270,7 @@ paint_page (GtkWidget *widget,
 			  CAIRO_FONT_SLANT_NORMAL,
 			  CAIRO_FONT_WEIGHT_NORMAL);
   cairo_set_font_size (cr, (gint)(9 * scale));
-  cairo_move_to (cr, x + (gint)(11 * scale), y + (gint)(21 * scale));
+  cairo_move_to (cr, x + (gint)(text_x * scale), y + (gint)(text_y * scale));
   cairo_show_text (cr, text);
 }
 
@@ -1281,10 +1285,12 @@ draw_collate_cb (GtkWidget	    *widget,
   cairo_t *cr;
   gint size;
   gfloat scale;
-  gboolean collate, reverse;
+  gboolean collate, reverse, rtl;
+  gint text_x;
 
   collate = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->collate_check));
   reverse = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->reverse_check));
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
   settings = gtk_widget_get_settings (widget);
   gtk_icon_size_lookup_for_settings (settings,
@@ -1292,14 +1298,15 @@ draw_collate_cb (GtkWidget	    *widget,
 				     &size,
 				     NULL);
   scale = size / 48.0;
+  text_x = rtl ? 4 : 11;
 
   cr = gdk_cairo_create (widget->window);
 
-  paint_page (widget, cr, scale, 15, 5, collate == reverse ? "1" : "2");
-  paint_page (widget, cr, scale, 5, 15, reverse ? "2" : "1");
+  paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
+  paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
 
-  paint_page (widget, cr, scale, 50, 5, reverse ? "1" : "2");
-  paint_page (widget, cr, scale, 40, 15, collate == reverse ? "2" : "1");
+  paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
+  paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
   
   cairo_destroy (cr);
 
@@ -1745,6 +1752,7 @@ draw_page_cb (GtkWidget	         *widget,
   PangoLayout *layout;
   PangoFontDescription *font;
   char *text;
+  GdkColor *color;
   
   orientation = gtk_page_setup_get_orientation (priv->page_setup);
   landscape =
@@ -1796,17 +1804,18 @@ draw_page_cb (GtkWidget	         *widget,
   
   shadow_offset = 3;
   
-  cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.5);
+  color = &widget->style->text[GTK_STATE_NORMAL];
+  cairo_set_source_rgba (cr, color->red / 65535., color->green / 65535., color->blue / 65535, 0.5);
   cairo_rectangle (cr, shadow_offset + 1, shadow_offset + 1, w, h);
   cairo_fill (cr);
   
-  cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
+  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, 1, 1, w, h);
   cairo_fill (cr);
   cairo_set_line_width (cr, 1.0);
   cairo_rectangle (cr, 0.5, 0.5, w+1, h+1);
   
-  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
   cairo_stroke (cr);
 
   i = 1;

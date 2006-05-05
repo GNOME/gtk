@@ -1,4 +1,12 @@
-2006-05-04  Matthias Clasen  <mclasen@redhat.com>
+2006-05-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c: Use theme colors for 
+	the page layout indicator, and do RTL flipping for
+	the collate indicator.
+
+2006-05-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require GLib 1.11.0
 
 	* configure.in: Bump version
 
