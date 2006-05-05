@@ -93,7 +93,17 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-entry-password-hint-timeout ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-fallback-icon-theme ##### -->
 <para>
 
 </para>
@@ -114,6 +124,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-label-select-on-focus ##### -->
 <para>
 
 </para>
@@ -148,6 +163,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-scrolled-window-placement ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-show-input-method-menu ##### -->
 <para>
 
@@ -168,6 +188,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-timeout-expand ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-timeout-initial ##### -->
 <para>
 
@@ -184,6 +209,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-touchscreen-mode ##### -->
 <para>
 
 </para>
@@ -244,8 +274,6 @@ Sharing settings between applications
 </para>
 
 @pspec: 
-<!-- # Unused Parameters # -->
-@settings: 
 
 
 <!-- ##### FUNCTION gtk_settings_install_property_parser ##### -->
@@ -255,8 +283,6 @@ Sharing settings between applications
 
 @pspec: 
 @parser: 
-<!-- # Unused Parameters # -->
-@settings: 
 
 
 <!-- ##### FUNCTION gtk_rc_property_parse_color ##### -->

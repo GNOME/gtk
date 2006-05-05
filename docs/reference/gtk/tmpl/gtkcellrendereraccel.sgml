@@ -68,6 +68,14 @@ The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ENUM GtkCellRendererAccelMode ##### -->
+<para>
+
+</para>
+
+@GTK_CELL_RENDERER_ACCEL_MODE_GTK: 
+@GTK_CELL_RENDERER_ACCEL_MODE_OTHER: 
+
 <!-- ##### FUNCTION gtk_cell_renderer_accel_new ##### -->
 <para>
 

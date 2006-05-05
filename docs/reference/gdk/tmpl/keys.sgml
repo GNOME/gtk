@@ -167,8 +167,6 @@ be mapped to a keyval.
 @level: 
 @consumed_modifiers: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@unused_modifiers: 
 
 
 <!-- ##### FUNCTION gdk_keymap_get_entries_for_keyval ##### -->

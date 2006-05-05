@@ -95,9 +95,6 @@ Creating a pixbuf from image data that is already in memory.
 @copy_pixels: 
 @error: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@inline_pixbuf: 
-@length: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_new_subpixbuf ##### -->

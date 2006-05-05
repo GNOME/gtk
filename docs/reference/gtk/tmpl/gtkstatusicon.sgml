@@ -71,6 +71,7 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @statusicon: the object which received the signal.
 @arg1: 
+@Returns: 
 
 <!-- ##### ARG GtkStatusIcon:blinking ##### -->
 <para>
@@ -289,5 +290,17 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @status_icon: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_position_menu ##### -->
+<para>
+
+</para>
+
+@menu: 
+@x: 
+@y: 
+@push_in: 
+@user_data: 
 
 

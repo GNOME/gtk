@@ -30,6 +30,7 @@ The type #GdkDrawable refers generically to any of
 these types.
 </para>
 
+@user_data: 
 
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
@@ -211,6 +212,12 @@ window types.
 @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
 @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background 
 window.
+@GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: 
+@GDK_WINDOW_TYPE_HINT_POPUP_MENU: 
+@GDK_WINDOW_TYPE_HINT_TOOLTIP: 
+@GDK_WINDOW_TYPE_HINT_NOTIFICATION: 
+@GDK_WINDOW_TYPE_HINT_COMBO: 
+@GDK_WINDOW_TYPE_HINT_DND: 
 
 <!-- ##### STRUCT GdkWindowAttr ##### -->
 <para>
@@ -889,6 +896,44 @@ backend, <type>MSG</type>s for Win32).
 
 
 <!-- ##### FUNCTION gdk_window_merge_child_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_input_shape_combine_mask ##### -->
+<para>
+
+</para>
+
+@window: 
+@mask: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_input_shape_combine_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@shape_region: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gdk_window_set_child_input_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_merge_child_input_shapes ##### -->
 <para>
 
 </para>

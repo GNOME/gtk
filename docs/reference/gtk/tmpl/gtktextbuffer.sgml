@@ -99,8 +99,6 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 @arg3: 
-<!-- # Unused Parameters # -->
-@arg4: 
 
 <!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
 <para>
@@ -136,7 +134,17 @@ types related to the text widget and how they work together.
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG GtkTextBuffer:copy-target-list ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextBuffer:has-selection ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextBuffer:paste-target-list ##### -->
 <para>
 
 </para>
@@ -291,9 +299,6 @@ types related to the text widget and how they work together.
 @buffer: 
 @start: 
 @end: 
-<!-- # Unused Parameters # -->
-@start_iter: 
-@end_iter: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_delete_interactive ##### -->
@@ -340,9 +345,6 @@ types related to the text widget and how they work together.
 @end: 
 @include_hidden_chars: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@start_iter: 
-@end_iter: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_slice ##### -->
@@ -355,9 +357,6 @@ types related to the text widget and how they work together.
 @end: 
 @include_hidden_chars: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@start_iter: 
-@end_iter: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_insert_pixbuf ##### -->
@@ -505,9 +504,6 @@ types related to the text widget and how they work together.
 @tag: 
 @start: 
 @end: 
-<!-- # Unused Parameters # -->
-@start_index: 
-@end_index: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_remove_tag ##### -->
@@ -519,9 +515,6 @@ types related to the text widget and how they work together.
 @tag: 
 @start: 
 @end: 
-<!-- # Unused Parameters # -->
-@start_index: 
-@end_index: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_apply_tag_by_name ##### -->
@@ -533,9 +526,6 @@ types related to the text widget and how they work together.
 @name: 
 @start: 
 @end: 
-<!-- # Unused Parameters # -->
-@start_index: 
-@end_index: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_remove_tag_by_name ##### -->
@@ -547,9 +537,6 @@ types related to the text widget and how they work together.
 @name: 
 @start: 
 @end: 
-<!-- # Unused Parameters # -->
-@start_index: 
-@end_index: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_remove_all_tags ##### -->
@@ -702,9 +689,6 @@ types related to the text widget and how they work together.
 @clipboard: 
 @override_location: 
 @default_editable: 
-<!-- # Unused Parameters # -->
-@time_: 
-@interactive: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_copy_clipboard ##### -->
@@ -769,5 +753,195 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @clipboard: 
+
+
+<!-- ##### ENUM GtkTextBufferTargetInfo ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS: 
+@GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT: 
+@GTK_TEXT_BUFFER_TARGET_INFO_TEXT: 
+
+<!-- ##### USER_FUNCTION GtkTextBufferDeserializeFunc ##### -->
+<para>
+
+</para>
+
+@register_buffer: 
+@content_buffer: 
+@iter: 
+@data: 
+@length: 
+@create_tags: 
+@user_data: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_deserialize ##### -->
+<para>
+
+</para>
+
+@register_buffer: 
+@content_buffer: 
+@format: 
+@iter: 
+@data: 
+@length: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_deserialize_get_can_create_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_deserialize_set_can_create_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@format: 
+@can_create_tags: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_copy_target_list ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_deserialize_formats ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@n_formats: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_paste_target_list ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_serialize_formats ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@n_formats: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_register_deserialize_format ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mime_type: 
+@function: 
+@user_data: 
+@user_data_destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_register_deserialize_tagset ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@tagset_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_register_serialize_format ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mime_type: 
+@function: 
+@user_data: 
+@user_data_destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_register_serialize_tagset ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@tagset_name: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTextBufferSerializeFunc ##### -->
+<para>
+
+</para>
+
+@register_buffer: 
+@content_buffer: 
+@start: 
+@end: 
+@length: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_serialize ##### -->
+<para>
+
+</para>
+
+@register_buffer: 
+@content_buffer: 
+@format: 
+@start: 
+@end: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_unregister_deserialize_format ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@format: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_unregister_serialize_format ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@format: 
 
 

@@ -164,6 +164,24 @@ notification of drags.
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_drag_dest_set_track_motion ##### -->
+<para>
+
+</para>
+
+@widget: 
+@track_motion: 
+
+
+<!-- ##### FUNCTION gtk_drag_dest_get_track_motion ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_drag_finish ##### -->
 <para>
 Informs the drag source that the drop is finished, and

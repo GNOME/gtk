@@ -378,3 +378,21 @@ Applications should never have any reason to use this facility
 @n_targets: 
 
 
+<!-- ##### FUNCTION gdk_display_supports_shapes ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_input_shapes ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+

@@ -165,9 +165,6 @@ you might have to write a marshaller.
 Use in place of <function>offsetof()</function>, which is used if it exists.
 </para>
 
-<!-- # Unused Parameters # -->
-@struct: 
-@field: 
 
 
 <!-- ##### ENUM GtkSignalRunType ##### -->

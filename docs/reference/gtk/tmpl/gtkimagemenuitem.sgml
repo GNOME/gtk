@@ -56,9 +56,6 @@ fill in the text label.
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@widget: 
-@label: 
 
 
 <!-- ##### FUNCTION gtk_image_menu_item_new_from_stock ##### -->

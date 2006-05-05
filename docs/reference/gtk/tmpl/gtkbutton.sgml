@@ -70,7 +70,7 @@ This should not be accessed directly.  Use the accessor functions below.
 
 </para>
 
-@button:
+@button: 
 
 <!-- ##### ARG GtkButton:focus-on-click ##### -->
 <para>
@@ -133,6 +133,11 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 <!-- ##### ARG GtkButton:displace-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:inner-border ##### -->
 <para>
 
 </para>
@@ -270,8 +275,6 @@ Returns the current relief style of the given #GtkButton.
 
 @button: 
 @use_stock: 
-<!-- # Unused Parameters # -->
-@value: 
 
 
 <!-- ##### FUNCTION gtk_button_get_use_underline ##### -->
@@ -290,8 +293,6 @@ Returns the current relief style of the given #GtkButton.
 
 @button: 
 @use_underline: 
-<!-- # Unused Parameters # -->
-@value: 
 
 
 <!-- ##### FUNCTION gtk_button_set_focus_on_click ##### -->

@@ -281,8 +281,6 @@ directly, but into the @vbox and @action_area, as described above.
 @dialog: 
 @child: 
 @response_id: 
-<!-- # Unused Parameters # -->
-@widget: 
 
 
 <!-- ##### FUNCTION gtk_dialog_get_has_separator ##### -->

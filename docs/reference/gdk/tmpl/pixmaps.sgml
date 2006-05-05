@@ -30,6 +30,7 @@ The type #GdkDrawable refers generically to any of
 these types.
 </para>
 
+@user_data: 
 
 <!-- ##### FUNCTION gdk_pixmap_new ##### -->
 <para>

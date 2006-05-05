@@ -114,8 +114,6 @@ Creates a new #GtkAccelLabel.
 
 @accel_label: 
 @accel_closure: 
-<!-- # Unused Parameters # -->
-@closure: 
 
 
 <!-- ##### FUNCTION gtk_accel_label_get_accel_widget ##### -->

@@ -75,6 +75,11 @@ and should not be accessed directly.
 
 </para>
 
+<!-- ##### ARG GtkAction:icon-name ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAction:is-important ##### -->
 <para>
 

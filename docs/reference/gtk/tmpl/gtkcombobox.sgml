@@ -55,20 +55,6 @@ gtk_combo_box_get_active_text().
 
 @combobox: the object which received the signal.
 
-<!-- ##### SIGNAL GtkComboBox::popup-hide ##### -->
-<para>
-
-</para>
-
-@combobox: the object which received the signal.
-
-<!-- ##### SIGNAL GtkComboBox::popup-show ##### -->
-<para>
-
-</para>
-
-@combobox: the object which received the signal.
-
 <!-- ##### ARG GtkComboBox:active ##### -->
 <para>
 
@@ -99,6 +85,11 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+<!-- ##### ARG GtkComboBox:popup-shown ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:row-span-column ##### -->
 <para>
 
@@ -125,8 +116,6 @@ gtk_combo_box_get_active_text().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@model: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_new_with_model ##### -->
@@ -208,8 +197,6 @@ gtk_combo_box_get_active_text().
 
 @combo_box: 
 @index_: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_get_active_iter ##### -->

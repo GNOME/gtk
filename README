@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.8.2. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.9.0. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -24,6 +24,47 @@ Installation
 ============
 
 See the file 'INSTALL'
+
+Release notes for 2.10
+======================
+
+* The hexadecimal Unicode input feature has been reworked. It no longer
+  blocks the use of the sixteen Ctrl-Shift-<hex digit> key sequences. Now
+  it only uses Ctrl-Shift-u.
+
+* A memory leak in GtkStyle handling has been fixed. This may expose bugs
+  in third-party widgets which forget to call gtk_style_attach() in their
+  realize functions.
+
+* Range widgets like GtkScrollbar now render their arrows insensitive
+  when the slider is at the end. Applications which react to arrow
+  clicks even if the slider is at the end may want to use the new
+  gtk_range_set_[upper/lower]_stepper_sensitivity() functions to
+  prevent the arrows from being rendered insensitive.
+
+* GtkObject now uses the "floating reference" support in GObject. 
+  GTK_OBJECT_IS_FLOATING() will still work, but direct checking
+  of the GTK_FLOATING flag will no longer detect the floating 
+  reference. Details about floating references can be found in the docs:
+  http://developer.gnome.org/doc/API/2.0/gobject/gobject-The-Base-Object-Type.html#floating-ref
+
+* Suffixes like (_F) are now stripped from labels when they are displayed
+  in toolbars. If this is not wanted, the feature can be suppressed by 
+  inserting a Unicode control character, e.g ZWNJ.
+
+* The pixbuf theme engine can now customize expanders (in GtkTreeView
+  and GtkExpander) and resize grips, using the new EXPANDER and
+  RESIZE_GRIP function values.
+
+* Dialogs created by gtk_about_dialog_new no longer hide automatically
+  when the user clicks close. It is the applications responsibility to
+  hide or destroy the dialog.
+
+* Several new signals have been added to GtkNotebook. Care has been taken
+  to choose signal names which do not collide with signals added by well-known
+  derived classes. The names which can no longer be used for signals in 
+  objects derived from GtkNotebook are page-reordered, page-removed and
+  page-added.
 
 Release notes
 =============

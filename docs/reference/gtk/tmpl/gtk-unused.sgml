@@ -513,6 +513,12 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 @b: 
 @Returns: 
 
+<!-- ##### ARG GtkAboutDialog:link-color ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkAccelEntry ##### -->
 <para>
 This is a private struct used by GTK+ internally, don't worry about it.
@@ -619,6 +625,20 @@ Define a function pointer.  Deprecated.
 
 </para>
 
+
+<!-- ##### SIGNAL GtkComboBox::popup-hide ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
+<!-- ##### SIGNAL GtkComboBox::popup-show ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
 
 <!-- ##### ARG GtkComboBox:appearance ##### -->
 <para>
@@ -924,6 +944,33 @@ a RC file.
 
 @menubar: the object which received the signal.
 @arg1: 
+
+<!-- ##### SIGNAL GtkNotebook::tab-added ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkNotebook::tab-removed ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkNotebook::tab-reordered ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@arg2: 
 
 <!-- ##### ARG GtkObject:object-signal ##### -->
 <para>
@@ -2135,6 +2182,13 @@ Claim or disclaim ownership of the PRIMARY X selection.
 @editable: a #GtkEditable widget.
 @claim: if %TRUE, claim the selection, otherwise, disclaim it.
 @time: the timestamp for claiming the selection.
+
+<!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_folder_mode ##### -->
 <para>

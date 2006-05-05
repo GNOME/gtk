@@ -50,7 +50,6 @@ Virtual function that moves the slider. Used for keybindings.
 @arg1: 
 <!-- # Unused Parameters # -->
 @step: how to move the slider
-@arg2: 
 
 <!-- ##### SIGNAL GtkRange::value-changed ##### -->
 <para>
@@ -80,6 +79,11 @@ Emitted when the range value changes.
 </para>
 
 <!-- ##### ARG GtkRange:upper-stepper-sensitivity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:activate-slider ##### -->
 <para>
 
 </para>
@@ -204,5 +208,41 @@ Emitted when the range value changes.
 
 @range: 
 @value: 
+
+
+<!-- ##### FUNCTION gtk_range_set_lower_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@sensitivity: 
+
+
+<!-- ##### FUNCTION gtk_range_get_lower_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_upper_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@sensitivity: 
+
+
+<!-- ##### FUNCTION gtk_range_get_upper_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
 
 

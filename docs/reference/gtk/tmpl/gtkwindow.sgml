@@ -914,9 +914,6 @@ Deprecated alias for gtk_window_set_position().
 @window: 
 @root_x: 
 @root_y: 
-<!-- # Unused Parameters # -->
-@x: 
-@y: 
 
 
 <!-- ##### FUNCTION gtk_window_get_role ##### -->
@@ -1010,6 +1007,15 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_get_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_move ##### -->
 <para>
 
@@ -1062,8 +1068,6 @@ Deprecated alias for gtk_window_set_position().
 </para>
 
 @icon: 
-<!-- # Unused Parameters # -->
-@pixbuf: 
 
 
 <!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->

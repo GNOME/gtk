@@ -59,9 +59,6 @@ with gtk_combo_box_entry_new_text().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@model: 
-@text_column: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_entry_new_with_model ##### -->

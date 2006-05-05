@@ -229,6 +229,7 @@ testtoolbar_SOURCES =	\
 
 testprint_SOURCES =    	\
 	testprint.c		\
+	testprintfileoperation.h \
 	testprintfileoperation.c
 
 testsocket_SOURCES =    	\

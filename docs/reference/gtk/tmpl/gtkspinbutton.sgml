@@ -139,6 +139,13 @@ and should only be modified using the functions below.
 
 @spinbutton: the object which received the signal.
 
+<!-- ##### SIGNAL GtkSpinButton::wrapped ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+
 <!-- ##### ARG GtkSpinButton:adjustment ##### -->
 <para>
 

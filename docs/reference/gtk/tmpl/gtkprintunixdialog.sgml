@@ -2,7 +2,7 @@
 GtkPrintUnixDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-A print dialog 
+A print dialog
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -39,6 +39,36 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 
+<!-- ##### ARG GtkPrintUnixDialog:current-page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:page-setup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:print-settings ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:selected-printer ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_page_setup ##### -->
 <para>
 
@@ -48,6 +78,15 @@ Printing support was added in GTK+ 2.10.
 @page_setup: 
 
 
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_current_page ##### -->
 <para>
 
@@ -55,6 +94,15 @@ Printing support was added in GTK+ 2.10.
 
 @dialog: 
 @current_page: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_current_page ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_settings ##### -->

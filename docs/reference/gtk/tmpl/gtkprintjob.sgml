@@ -92,7 +92,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @Returns: 
 
 
@@ -101,7 +101,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @Returns: 
 
 
@@ -110,7 +110,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @Returns: 
 
 
@@ -119,7 +119,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @Returns: 
 
 
@@ -128,7 +128,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @filename: 
 @error: 
 @Returns: 
@@ -139,7 +139,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @error: 
 @Returns: 
 
@@ -149,7 +149,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@print_job: 
+@job: 
 @callback: 
 @user_data: 
 @dnotify: 

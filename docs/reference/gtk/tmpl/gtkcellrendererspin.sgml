@@ -25,12 +25,10 @@ start-editing signal.
 The #GtkCellRendererSpin cell renderer was added in GTK+ 2.10.
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkCellRendererText, #GtkSpinButton
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 

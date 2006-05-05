@@ -70,9 +70,9 @@ Defines the position and size of a rectangle.
 
 </para>
 
-@src1:
-@src2:
-@dest:
+@src1: 
+@src2: 
+@dest: 
 
 
 <!-- ##### STRUCT GdkRegion ##### -->
@@ -97,6 +97,7 @@ A GdkRegion represents a set of pixels on the screen.
 @points: 
 @npoints: 
 @fill_rule: 
+@Returns: 
 
 
 <!-- ##### ENUM GdkFillRule ##### -->
@@ -141,8 +142,8 @@ included in the region, while areas overlapped an even number of times are not.
 
 </para>
 
-@region:
-@rectangle:
+@region: 
+@rectangle: 
 
 
 <!-- ##### FUNCTION gdk_region_get_rectangles ##### -->
@@ -161,6 +162,7 @@ included in the region, while areas overlapped an even number of times are not.
 </para>
 
 @region: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_region_equal ##### -->
@@ -170,6 +172,7 @@ included in the region, while areas overlapped an even number of times are not.
 
 @region1: 
 @region2: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_region_point_in ##### -->
@@ -177,9 +180,10 @@ included in the region, while areas overlapped an even number of times are not.
 
 </para>
 
-@region:
+@region: 
 @x: 
 @y: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_region_rect_in ##### -->
@@ -189,6 +193,7 @@ included in the region, while areas overlapped an even number of times are not.
 
 @region: 
 @rectangle: 
+@Returns: 
 
 
 <!-- ##### ENUM GdkOverlapType ##### -->
@@ -288,10 +293,10 @@ gdk_region_spans_intersect_foreach().
 </para>
 
 @region: 
-@spans:
-@n_spans:
+@spans: 
+@n_spans: 
 @sorted: 
-@function:
+@function: 
 @data: 
 
 

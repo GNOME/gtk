@@ -34,6 +34,13 @@ when GDK gets multihead support.
 
 @Since: 2.2
 
+<!-- ##### SIGNAL GdkScreen::composited-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
+
 <!-- ##### SIGNAL GdkScreen::size-changed ##### -->
 <para>
 
@@ -123,6 +130,15 @@ when GDK gets multihead support.
 
 
 <!-- ##### FUNCTION gdk_screen_get_rgba_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_is_composited ##### -->
 <para>
 
 </para>
@@ -238,8 +254,6 @@ when GDK gets multihead support.
 @screen: 
 @monitor_num: 
 @dest: 
-<!-- # Unused Parameters # -->
-@Returns: 
 
 
 <!-- ##### FUNCTION gdk_screen_get_monitor_at_point ##### -->
@@ -261,8 +275,6 @@ when GDK gets multihead support.
 @screen: 
 @window: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@anid: 
 
 
 <!-- ##### FUNCTION gdk_screen_broadcast_client_message ##### -->
@@ -319,6 +331,24 @@ when GDK gets multihead support.
 
 @screen: 
 @dpi: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_active_window ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_window_stack ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_spawn_on_screen ##### -->

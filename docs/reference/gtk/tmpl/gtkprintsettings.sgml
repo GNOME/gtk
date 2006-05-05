@@ -2,7 +2,7 @@
 GtkPrintSettings
 
 <!-- ##### SECTION Short_Description ##### -->
-Stores print settings 
+Stores print settings
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -29,7 +29,6 @@ Printing support was added in GTK+ 2.10.
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -220,6 +219,13 @@ Printing support was added in GTK+ 2.10.
 @value: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINTER ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_printer ##### -->
 <para>
 
@@ -248,6 +254,13 @@ Printing support was added in GTK+ 2.10.
 @GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT: 
 @GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE: 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_ORIENTATION ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_orientation ##### -->
 <para>
 
@@ -266,6 +279,13 @@ Printing support was added in GTK+ 2.10.
 @orientation: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PAPER_FORMAT ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_paper_size ##### -->
 <para>
 
@@ -282,6 +302,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @paper_size: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PAPER_WIDTH ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_paper_width ##### -->
@@ -304,6 +331,13 @@ Printing support was added in GTK+ 2.10.
 @unit: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PAPER_HEIGHT ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_paper_height ##### -->
 <para>
 
@@ -320,8 +354,15 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 @settings: 
-@width: 
+@height: 
 @unit: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_USE_COLOR ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_use_color ##### -->
@@ -342,6 +383,13 @@ Printing support was added in GTK+ 2.10.
 @use_color: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_COLLATE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_collate ##### -->
 <para>
 
@@ -358,6 +406,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @collate: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_REVERSE ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_reverse ##### -->
@@ -387,6 +442,13 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_DUPLEX_HORIZONTAL: 
 @GTK_PRINT_DUPLEX_VERTICAL: 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_DUPLEX ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_duplex ##### -->
 <para>
 
@@ -415,6 +477,13 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_QUALITY_HIGH: 
 @GTK_PRINT_QUALITY_DRAFT: 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_QUALITY ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_quality ##### -->
 <para>
 
@@ -431,6 +500,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @quality: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_NUM_COPIES ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_num_copies ##### -->
@@ -451,6 +527,13 @@ Printing support was added in GTK+ 2.10.
 @num_copies: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_NUMBER_UP ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_number_up ##### -->
 <para>
 
@@ -467,6 +550,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @number_up: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_RESOLUTION ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_resolution ##### -->
@@ -487,6 +577,13 @@ Printing support was added in GTK+ 2.10.
 @resolution: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_SCALE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_scale ##### -->
 <para>
 
@@ -503,6 +600,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @scale: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINT_TO_FILE ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_print_to_file ##### -->
@@ -532,6 +636,13 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_PAGES_CURRENT: 
 @GTK_PRINT_PAGES_RANGES: 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINT_PAGES ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_print_pages ##### -->
 <para>
 
@@ -557,6 +668,13 @@ Printing support was added in GTK+ 2.10.
 
 @start: 
 @end: 
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PAGE_RANGES ##### -->
+<para>
+
+</para>
+
+
 
 <!-- ##### FUNCTION gtk_print_settings_get_page_ranges ##### -->
 <para>
@@ -587,6 +705,13 @@ Printing support was added in GTK+ 2.10.
 @GTK_PAGE_SET_EVEN: 
 @GTK_PAGE_SET_ODD: 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PAGE_SET ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_page_set ##### -->
 <para>
 
@@ -603,6 +728,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @page_set: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_DEFAULT_SOURCE ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_default_source ##### -->
@@ -623,6 +755,13 @@ Printing support was added in GTK+ 2.10.
 @default_source: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_MEDIA_TYPE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_media_type ##### -->
 <para>
 
@@ -639,6 +778,13 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @media_type: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_DITHER ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gtk_print_settings_get_dither ##### -->
@@ -659,6 +805,13 @@ Printing support was added in GTK+ 2.10.
 @dither: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_FINISHINGS ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_finishings ##### -->
 <para>
 
@@ -677,6 +830,13 @@ Printing support was added in GTK+ 2.10.
 @finishings: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_OUTPUT_BIN ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_print_settings_get_output_bin ##### -->
 <para>
 
@@ -693,5 +853,19 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @output_bin: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION ##### -->
+<para>
+
+</para>
+
 
 

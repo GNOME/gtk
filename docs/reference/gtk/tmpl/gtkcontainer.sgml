@@ -364,8 +364,6 @@ Does the same as gtk_container_get_children().
 @child: 
 @first_prop_name: 
 @Varargs: 
-<!-- # Unused Parameters # -->
-@first_arg_name: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get_property ##### -->
@@ -485,8 +483,6 @@ Does the same as gtk_container_get_children().
 @cclass: 
 @property_name: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@class: 
 
 
 <!-- ##### FUNCTION gtk_container_class_install_child_property ##### -->
@@ -497,8 +493,6 @@ Does the same as gtk_container_get_children().
 @cclass: 
 @property_id: 
 @pspec: 
-<!-- # Unused Parameters # -->
-@class: 
 
 
 <!-- ##### FUNCTION gtk_container_class_list_child_properties ##### -->
@@ -509,7 +503,5 @@ Does the same as gtk_container_get_children().
 @cclass: 
 @n_properties: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@class: 
 
 

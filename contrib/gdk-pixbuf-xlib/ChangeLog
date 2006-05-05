@@ -1,3 +1,7 @@
+2006-05-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.9.0 ===
+
 2005-11-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-xlib-drawable.c: 

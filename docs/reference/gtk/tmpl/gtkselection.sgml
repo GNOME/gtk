@@ -97,6 +97,7 @@ selection handling code.
 </para>
 
 @list: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_target_list_unref ##### -->
@@ -153,6 +154,17 @@ selection handling code.
 @info: 
 
 
+<!-- ##### FUNCTION gtk_target_list_add_rich_text_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+@info: 
+@deserializable: 
+@buffer: 
+
+
 <!-- ##### FUNCTION gtk_target_list_remove ##### -->
 <para>
 </para>
@@ -168,6 +180,25 @@ selection handling code.
 @list: 
 @target: 
 @info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_table_free ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+
+
+<!-- ##### FUNCTION gtk_target_table_new_from_list ##### -->
+<para>
+
+</para>
+
+@list: 
+@n_targets: 
 @Returns: 
 
 
@@ -341,6 +372,16 @@ selection handling code.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_selection_data_targets_include_rich_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@buffer: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_targets_include_image ##### -->
 <para>
 
@@ -369,6 +410,17 @@ selection handling code.
 
 @targets: 
 @n_targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_rich_text ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@buffer: 
 @Returns: 
 
 

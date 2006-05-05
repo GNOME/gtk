@@ -56,6 +56,17 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 @pixbuf_y: 
 
 
+<!-- ##### FUNCTION gdk_cairo_set_source_pixmap ##### -->
+<para>
+
+</para>
+
+@cr: 
+@pixmap: 
+@pixmap_x: 
+@pixmap_y: 
+
+
 <!-- ##### FUNCTION gdk_cairo_rectangle ##### -->
 <para>
 

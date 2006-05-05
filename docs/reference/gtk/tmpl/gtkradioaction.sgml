@@ -34,6 +34,11 @@ only private members and should not be accessed directly.
 @radioaction: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkRadioAction:current-value ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRadioAction:group ##### -->
 <para>
 
@@ -82,5 +87,14 @@ only private members and should not be accessed directly.
 
 @action: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_action_set_current_value ##### -->
+<para>
+
+</para>
+
+@action: 
+@current_value: 
 
 

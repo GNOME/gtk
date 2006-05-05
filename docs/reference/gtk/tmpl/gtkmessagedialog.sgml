@@ -76,6 +76,26 @@ You might do a non-modal #GtkMessageDialog as follows:
 
 </para>
 
+<!-- ##### ARG GtkMessageDialog:secondary-text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:secondary-use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:use-markup ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMessageDialog:message-border ##### -->
 <para>
 

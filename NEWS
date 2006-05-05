@@ -37,6 +37,8 @@ Overview of Changes from GTK+ 2.8.x to 2.9.0
     modules, such as theme engines, input method modules or pixbuf loaders 
     have to be rebuilt so that they are installed in the right place
     for GTK+ to find them.
+  - The location entry (popped up by C-L) has been integrated in the
+    main dialog.
     
 * Reworked hex Unicode input now requires Ctrl-Shift-U
 

@@ -324,3 +324,11 @@ or GTK_ASSISTANT_PAGE_SUMMARY to be correct.
 @child: 
 
 
+<!-- ##### FUNCTION gtk_assistant_update_buttons_state ##### -->
+<para>
+
+</para>
+
+@assistant: 
+
+

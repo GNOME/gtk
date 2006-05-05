@@ -89,8 +89,8 @@ Gets the currently-selected font.
 <para>
 </para>
 
-@fontsel:
-@fontname:
+@fontsel: 
+@fontname: 
 @Returns: 
 
 

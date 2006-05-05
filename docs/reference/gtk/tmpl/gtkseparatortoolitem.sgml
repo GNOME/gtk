@@ -64,8 +64,6 @@ should only be accessed through the functions described below.
 
 @item: 
 @draw: 
-<!-- # Unused Parameters # -->
-@tool_item: 
 
 
 <!-- ##### FUNCTION gtk_separator_tool_item_get_draw ##### -->

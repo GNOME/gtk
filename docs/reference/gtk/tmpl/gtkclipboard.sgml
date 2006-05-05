@@ -152,6 +152,18 @@ Storing data on clipboards
 @Since: 2.4
 
 
+<!-- ##### USER_FUNCTION GtkClipboardRichTextReceivedFunc ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@format: 
+@text: 
+@length: 
+@data: 
+
+
 <!-- ##### USER_FUNCTION GtkClipboardGetFunc ##### -->
 <para>
 A function that will be called to provide the contents of the selection.
@@ -319,6 +331,17 @@ will not be used again.
 @user_data: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_request_rich_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@buffer: 
+@callback: 
+@user_data: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_for_contents ##### -->
 <para>
 
@@ -347,6 +370,18 @@ will not be used again.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_wait_for_rich_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@buffer: 
+@format: 
+@length: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_is_text_available ##### -->
 <para>
 
@@ -362,6 +397,16 @@ will not be used again.
 </para>
 
 @clipboard: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_wait_is_rich_text_available ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@buffer: 
 @Returns: 
 
 

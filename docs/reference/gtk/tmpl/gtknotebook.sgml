@@ -46,8 +46,6 @@ will be a popup menu allowing the users to switch pages.
 
 @notebook: the object which received the signal.
 @arg1: 
-<!-- # Unused Parameters # -->
-@Returns: 
 
 <!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
 <para>
@@ -66,6 +64,33 @@ will be a popup menu allowing the users to switch pages.
 @notebook: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkNotebook::page-added ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@widget: 
+@arg1: 
+
+<!-- ##### SIGNAL GtkNotebook::page-removed ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@widget: 
+@arg1: 
+
+<!-- ##### SIGNAL GtkNotebook::page-reordered ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@widget: 
+@arg1: 
+
 <!-- ##### SIGNAL GtkNotebook::reorder-tab ##### -->
 <para>
 
@@ -73,6 +98,9 @@ will be a popup menu allowing the users to switch pages.
 
 @notebook: the object which received the signal.
 @arg1: 
+@:
+@:
+@:
 @: 
 
 <!-- ##### SIGNAL GtkNotebook::select-page ##### -->
@@ -92,33 +120,6 @@ Emitted when the user or a function changes the current page.
 @notebook: the object which received the signal.
 @page: the new current page
 @page_num: the index of the page
-
-<!-- ##### SIGNAL GtkNotebook::tab-added ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkNotebook::tab-removed ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkNotebook::tab-reordered ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-@arg2: 
 
 <!-- ##### ARG GtkNotebook:enable-popup ##### -->
 <para>
@@ -576,7 +577,7 @@ gtk_notebook_set_current_page() instead.
 
 @notebook: 
 @child: 
-@reorderable: 
+@detachable: 
 
 
 <!-- ##### FUNCTION gtk_notebook_get_menu_label_text ##### -->

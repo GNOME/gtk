@@ -336,6 +336,15 @@ The #GQuark used for #GtkPrintError errors.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_run_async ##### -->
+<para>
+
+</para>
+
+@op: 
+@parent: 
+
+
 <!-- ##### FUNCTION gtk_print_operation_get_status ##### -->
 <para>
 
@@ -372,5 +381,26 @@ The #GQuark used for #GtkPrintError errors.
 @page_setup: 
 @settings: 
 @Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkPageSetupDoneFunc ##### -->
+<para>
+
+</para>
+
+@page_setup: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_print_run_page_setup_dialog_async ##### -->
+<para>
+
+</para>
+
+@parent: 
+@page_setup: 
+@settings: 
+@done_cb: 
+@data: 
 
 

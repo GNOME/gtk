@@ -177,7 +177,6 @@
 <!ENTITY gtk-Styles SYSTEM "xml/gtkstyle.xml">
 <!ENTITY gtk-Themes SYSTEM "xml/gtkthemes.xml">
 <!ENTITY gtk-Resource-Files SYSTEM "xml/gtkrc.xml">
-<!ENTITY gtk-Rich-Text SYSTEM "xml/gtkrichtext.xml">
 <!ENTITY GtkAccelGroup SYSTEM "xml/gtkaccelgroup.xml">
 <!ENTITY gtk-accel-map SYSTEM "xml/gtkaccelmap.xml">
 <!ENTITY gtk-Selections SYSTEM "xml/gtkselection.xml">
@@ -348,7 +347,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-Graphics-Contexts;
     &gtk-Styles;
     &gtk-Selections;
-    &gtk-Rich-Text;
     &gtk-Feature-Test-Macros;
     &gtk-Signals;
     &gtk-Types;

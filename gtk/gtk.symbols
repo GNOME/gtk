@@ -2549,6 +2549,10 @@ gtk_paper_size_get_default
 #ifdef G_OS_UNIX
 gtk_print_backend_error_quark
 gtk_print_backend_get_type G_GNUC_CONST
+gtk_print_backend_add_printer  
+gtk_print_backend_remove_printer  
+gtk_print_backend_set_list_done  
+gtk_print_backend_destroy  
 gtk_print_backend_get_printer_list  
 gtk_print_backend_printer_list_is_done
 gtk_print_backend_find_printer
@@ -2586,6 +2590,7 @@ gtk_printer_get_location
 gtk_printer_get_icon_name
 gtk_printer_get_job_count
 gtk_printer_is_virtual
+gtk_printer_compare
 #endif
 #endif
 #endif

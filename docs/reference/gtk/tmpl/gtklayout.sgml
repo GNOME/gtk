@@ -95,8 +95,6 @@ area.
 @child_widget: 
 @x: 
 @y: 
-<!-- # Unused Parameters # -->
-@widget: 
 
 
 <!-- ##### FUNCTION gtk_layout_move ##### -->
@@ -108,8 +106,6 @@ area.
 @child_widget: 
 @x: 
 @y: 
-<!-- # Unused Parameters # -->
-@widget: 
 
 
 <!-- ##### FUNCTION gtk_layout_set_size ##### -->

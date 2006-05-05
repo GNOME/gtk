@@ -36,7 +36,6 @@ on it: see gtk_link_button_set_uri_hook().
 #GtkButton
 </para>
 
-
 <!-- ##### SECTION Stability_Level ##### -->
 
 
@@ -97,6 +96,8 @@ clicked.
 
 @button: the #GtkLinkButton which was clicked
 @link: the URI to which the clicked #GtkLinkButton points
+@user_data: 
+<!-- # Unused Parameters # -->
 @data: user data that was passed when the function was registered
   with gtk_link_button_set_uri_hook()
 

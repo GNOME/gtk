@@ -173,6 +173,7 @@ for GTK+.
 target system but at least on Unix systems %0 means success.
 @Deprecated: Use the standard exit() function instead.
 
+
 <!-- ##### FUNCTION gtk_events_pending ##### -->
 <para>
 Checks if any events are pending. This can be used to update the GUI 
@@ -620,7 +621,6 @@ it again).
 @Deprecated: 2.4: This macro is deprecated. You should use %GDK_PRIORITY_REDRAW instead.
 
 
-
 <!-- ##### MACRO GTK_PRIORITY_RESIZE ##### -->
 <para>
 Use this priority for resizing related stuff. It is used internally by
@@ -640,7 +640,6 @@ inside the toolkit.
 @Deprecated: 2.4: This macro is deprecated. You should use %G_PRIORITY_HIGH instead.
 
 
-
 <!-- ##### MACRO GTK_PRIORITY_INTERNAL ##### -->
 <para>
 This priority is for GTK+ internal stuff. Don't use it in your applications.
@@ -656,14 +655,12 @@ Default priority for idle functions.
 @Deprecated: 2.4: This macro is deprecated. You should use %G_PRIORITY_DEFAULT_IDLE instead.
 
 
-
 <!-- ##### MACRO GTK_PRIORITY_LOW ##### -->
 <para>
 Priority for very unimportant background tasks.
 </para>
 
 @Deprecated: 2.4: This macro is deprecated. You should use %G_PRIORITY_LOW instead.
-
 
 
 <!-- ##### FUNCTION gtk_key_snooper_install ##### -->

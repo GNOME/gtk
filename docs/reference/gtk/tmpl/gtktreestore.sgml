@@ -133,6 +133,32 @@ drop</link> interfaces.
 @sibling: 
 
 
+<!-- ##### FUNCTION gtk_tree_store_insert_with_values ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@position: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert_with_valuesv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@position: 
+@columns: 
+@values: 
+@n_values: 
+
+
 <!-- ##### FUNCTION gtk_tree_store_prepend ##### -->
 <para>
 

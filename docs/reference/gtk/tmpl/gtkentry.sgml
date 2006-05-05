@@ -185,7 +185,17 @@ The #GtkEntry-struct struct contains only private data.
 Creates a new #GtkEntry widget.
 </para>
 
-@Returns: a new #GtkEntry.
+<!-- ##### ARG GtkEntry:inner-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_entry_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->

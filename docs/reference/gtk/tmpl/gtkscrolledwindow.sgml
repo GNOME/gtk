@@ -126,6 +126,11 @@ only be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkScrolledWindow:window-placement-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
 <para>
 
@@ -242,6 +247,14 @@ Other values in #GtkCornerType are %GTK_CORNER_TOP_RIGHT,
 @window_placement: Position of the child window.
 
 
+<!-- ##### FUNCTION gtk_scrolled_window_unset_placement ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+
+
 <!-- ##### FUNCTION gtk_scrolled_window_set_shadow_type ##### -->
 <para>
 
@@ -267,8 +280,6 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 
 @scrolled_window: A #GtkScrolledWindow.
 @vadjustment: Vertical scroll adjustment.
-<!-- # Unused Parameters # -->
-@hadjustment: 
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_get_placement ##### -->

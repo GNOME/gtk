@@ -280,6 +280,19 @@ Another name for GDK_DRAWABLE_XID().
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@anid: 
+@width: 
+@height: 
+@depth: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_foreign_new ##### -->
 <para>
 

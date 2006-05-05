@@ -1,5 +1,7 @@
 2006-05-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.9.0 ===
 
 	* configure.in: Require cairo 1.1.6

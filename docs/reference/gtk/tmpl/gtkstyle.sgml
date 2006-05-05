@@ -499,8 +499,6 @@ Deprecated alias for gtk_style_apply_default_background().
 @x: 
 @y: 
 @expander_style: 
-<!-- # Unused Parameters # -->
-@is_open: 
 
 
 <!-- ##### FUNCTION gtk_draw_layout ##### -->
@@ -873,8 +871,6 @@ Deprecated alias for gtk_style_apply_default_background().
 @x: 
 @y: 
 @expander_style: 
-<!-- # Unused Parameters # -->
-@is_open: 
 
 
 <!-- ##### FUNCTION gtk_paint_layout ##### -->

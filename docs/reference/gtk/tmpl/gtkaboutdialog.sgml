@@ -114,11 +114,6 @@ only private fields and should not be directly accessed.
 
 </para>
 
-<!-- ##### ARG GtkAboutDialog:link-color ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_about_dialog_new ##### -->
 <para>
 

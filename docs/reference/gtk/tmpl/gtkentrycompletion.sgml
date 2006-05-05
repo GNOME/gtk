@@ -145,8 +145,6 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 @completion: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@entry: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_set_model ##### -->
@@ -220,8 +218,6 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 @completion: 
 @index_: 
 @text: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_insert_action_markup ##### -->
@@ -232,8 +228,6 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 @completion: 
 @index_: 
 @markup: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_delete_action ##### -->
@@ -243,8 +237,6 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 @completion: 
 @index_: 
-<!-- # Unused Parameters # -->
-@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_set_text_column ##### -->
