@@ -783,7 +783,7 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
  * gdk_window_get_toplevels:
  * 
  * Obtains a list of all toplevel windows known to GDK on the default
- * screen (see gdk_window_get_toplevels_for_screen()).
+ * screen (see gdk_screen_get_toplevel_windows()).
  * A toplevel window is a child of the root window (see
  * gdk_get_default_root_window()).
  *
