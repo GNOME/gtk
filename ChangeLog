@@ -1,6 +1,8 @@
 2006-05-07  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkscale.c: GtkScale is supposed to be an abstract type.
+	* gtk/gtkrange.c:
+	* gtk/gtkscale.c: GtkRange and GtkScale are supposed to be 
+	abstract types.
 
 2006-05-06  Matthias Clasen   <mclasen@redhat.com>
 	

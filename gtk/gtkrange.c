@@ -191,7 +191,7 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkRange, gtk_range, GTK_TYPE_WIDGET);
+G_DEFINE_ABSTRACT_TYPE (GtkRange, gtk_range, GTK_TYPE_WIDGET);
 
 static void
 gtk_range_class_init (GtkRangeClass *class)
