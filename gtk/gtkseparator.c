@@ -30,7 +30,7 @@
 #include "gtkalias.h"
 
 
-G_DEFINE_TYPE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET);
+G_DEFINE_ABSTRACT_TYPE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET);
 
 static void
 gtk_separator_class_init (GtkSeparatorClass *class)

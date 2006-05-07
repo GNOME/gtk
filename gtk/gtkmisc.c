@@ -51,7 +51,7 @@ static void gtk_misc_get_property (GObject         *object,
 				   GParamSpec      *pspec);
 
 
-G_DEFINE_TYPE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET);
+G_DEFINE_ABSTRACT_TYPE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET);
 
 static void
 gtk_misc_class_init (GtkMiscClass *class)

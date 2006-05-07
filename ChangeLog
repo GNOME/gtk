@@ -1,8 +1,14 @@
 2006-05-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkseparator.c: 
+	* gtk/gtkscrollbar.c: 
+	* gtk/gtkpaned.c: 
+	* gtk/gtkoldeditable.c: 
+	* gtk/gtkmisc.c: 
+	* gtk/gtkitem.c: 
+	* gtk/gtkimcontext.c: 
 	* gtk/gtkrange.c:
-	* gtk/gtkscale.c: GtkRange and GtkScale are supposed to be 
-	abstract types.
+	* gtk/gtkscale.c: Make types abstract again.
 
 2006-05-06  Matthias Clasen   <mclasen@redhat.com>
 	

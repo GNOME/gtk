@@ -138,7 +138,7 @@ struct _GtkPanedPrivate
   guint32    grab_time;
 };
 
-G_DEFINE_TYPE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER);
+G_DEFINE_ABSTRACT_TYPE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 

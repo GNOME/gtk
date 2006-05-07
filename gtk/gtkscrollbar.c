@@ -34,7 +34,7 @@
 static void gtk_scrollbar_style_set  (GtkWidget         *widget,
                                       GtkStyle          *previous);
 
-G_DEFINE_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE);
+G_DEFINE_ABSTRACT_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE);
 
 static void
 gtk_scrollbar_class_init (GtkScrollbarClass *class)

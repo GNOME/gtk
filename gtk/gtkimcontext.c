@@ -51,7 +51,7 @@ static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							gint            len,
 							gint            cursor_index);
 
-G_DEFINE_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT);
 
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)

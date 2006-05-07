@@ -128,9 +128,9 @@ static gint     gtk_old_editable_get_position        (GtkEditable *editable);
 
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkOldEditable, gtk_old_editable, GTK_TYPE_WIDGET,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-						gtk_old_editable_editable_init));
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkOldEditable, gtk_old_editable, GTK_TYPE_WIDGET,
+				  G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+							 gtk_old_editable_editable_init));
 
 static void
 gtk_old_editable_class_init (GtkOldEditableClass *class)
