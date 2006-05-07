@@ -1,5 +1,10 @@
 2006-05-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrange.c (gtk_range_key_press):  Chain up, to
+	make bindings work.  Noticed by Al Puzzuoli.
+	
+2006-05-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkseparator.c: 
 	* gtk/gtkscrollbar.c: 
 	* gtk/gtkpaned.c: 

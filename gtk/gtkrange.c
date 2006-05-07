@@ -1398,8 +1398,8 @@ gtk_range_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-
-  return FALSE;
+  else
+    return GTK_WIDGET_CLASS (gtk_range_parent_class)->key_press_event (widget, event);
 }
 
 static gint
