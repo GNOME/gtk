@@ -1,3 +1,7 @@
+2006-05-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkscale.c: GtkScale is supposed to be an abstract type.
+
 2006-05-06  Matthias Clasen   <mclasen@redhat.com>
 	
 	* gdk/gdkwindow.c (gdk_window_get_toplevels): Fix a wrong

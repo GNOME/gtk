@@ -81,7 +81,7 @@ static void gtk_scale_finalize         (GObject       *object);
 static void gtk_scale_screen_changed   (GtkWidget     *widget,
                                         GdkScreen     *old_screen);
 
-G_DEFINE_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE);
+G_DEFINE_ABSTRACT_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE);
 
 static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
