@@ -1,5 +1,11 @@
 2006-05-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c: Some cleanups.
+	
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_property): Silently return
+	NULL if the storage type of the image does not match.  (#340516, Christian
+	Persch)
+
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): Elide (_x) in the middle
 	of the string, too.  (#323956, Abel Cheung)
 
