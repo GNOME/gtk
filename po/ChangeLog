@@ -1,6 +1,10 @@
+2006-05-08  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
+
+	* nl.po: Dutch translation updated by Tino Meinen.
+
 2006-05-08  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-06  Hendrik Richter  <hendrikr@gnome.org>
 
@@ -16,7 +20,7 @@
 
 2006-05-04  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-03  Matthias Clasen  <mclasen@redhat.com>
 
@@ -24,7 +28,7 @@
 
 2006-05-03  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-02  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
@@ -32,7 +36,7 @@
 
 2006-05-02  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-01  Funda Wang  <fundawang@linux.net.cn>
 
@@ -49,7 +53,7 @@
 
 2006-04-26  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-04-25  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -61,15 +65,15 @@
 
 2006-04-18  Rajesh Ranjan <rajeshkajha@yahoo.com>
 
-        * hi.po: Updated Hindi Translation.
+	* hi.po: Updated Hindi Translation.
 
 2006-04-18  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-04-18  Vladimer Sichinava  <alinux@siena.linux.it>
 
-        * ka.po: Updated Georgian translation.
+	* ka.po: Updated Georgian translation.
 
 2006-04-17  Clytie Siddall <clytie@riverland.net.au>
 
@@ -104,7 +108,7 @@
 
 2006-04-01  Gora Mohanty  <gmohanty@cvs.gnome.org>
 
-        * or.po: Added Oriya translation.
+	* or.po: Added Oriya translation.
 
 2006-03-31  Laurent Dhima  <laurenti@alblinux.net>
 
