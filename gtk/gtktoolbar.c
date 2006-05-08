@@ -4877,38 +4877,40 @@ gchar *
 _gtk_toolbar_elide_underscores (const gchar *original)
 {
   gchar *q, *result;
-  const gchar *p;
+  const gchar *p, *end;
+  gsize len;
   gboolean last_underscore;
-  gint s;
   
   if (!original)
     return NULL;
 
-  s = strlen (original);
-  q = result = g_malloc (s + 1);
+  len = strlen (original);
+  q = result = g_malloc (len + 1);
   last_underscore = FALSE;
   
-  for (p = original; *p; p++)
+  end = original + len;
+  for (p = original; p < end; p++)
     {
       if (!last_underscore && *p == '_')
 	last_underscore = TRUE;
       else
 	{
 	  last_underscore = FALSE;
-	  *q++ = *p;
+	  if (*p != '_' && original + 2 <= p && p + 1 <= end && p[-2] == '(' && p[1] == ')')
+	    {
+	      q--;
+	      *q = '\0';
+	      p++;
+	    }
+	  else
+	    *q++ = *p;
 	}
     }
 
+  if (last_underscore)
+    *q++ = '_';
+  
   *q = '\0';
-
-  if (s > 4)
-    {
-      if (original[s - 4] == '(' && 
-	  original[s - 3] == '_' && 
-	  original[s - 1] == ')')
-	q[-3] = '\0';
-    }
-
   
   return result;
 }
