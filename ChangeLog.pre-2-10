@@ -1,5 +1,8 @@
 2006-05-08  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
+	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_class_init):
+	Corrected a duplicate word.
+
 	* gtk/gtkrecentmanager.c (gtk_recent_manager_add_full): Corrected
 	a typo.
 

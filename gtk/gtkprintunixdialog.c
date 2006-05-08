@@ -241,7 +241,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 				   PROP_SELECTED_PRINTER,
 				   g_param_spec_object ("selected-printer",
 							P_("Selected Printer"),
-							P_("The GtkPrinter which which is selected"),
+							P_("The GtkPrinter which is selected"),
 							GTK_TYPE_PRINTER,
 							GTK_PARAM_READABLE));
   
