@@ -1,3 +1,9 @@
+2006-05-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c: 
+	* gtk/gtkwindow.c: 
+	* gtk/gtkrange.c: Fix doc typos.
+
 2006-05-08  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
 	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_class_init):

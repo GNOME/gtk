@@ -6935,7 +6935,9 @@ gtk_notebook_get_group_id (GtkNotebook *notebook)
  * 
  * Gets whether the tab can be reordered via drag and drop or not.
  * 
- * Return Value: TRUE if the tab is reorderable.
+ * Return Value: %TRUE if the tab is reorderable.
+ * 
+ * Since: 2.10
  **/
 gboolean
 gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
@@ -7060,8 +7062,8 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  **/
 void
 gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
-				  GtkWidget   *child,
-				  gboolean     detachable)
+				  GtkWidget  *child,
+				  gboolean    detachable)
 {
   GList *list;
 

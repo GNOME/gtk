@@ -2520,6 +2520,8 @@ gtk_window_set_deletable (GtkWindow *window,
  * via gtk_window_set_deletable().
  *
  * Return value: %TRUE if the window has been set to have a close button
+ *
+ * Since: 2.10
  **/
 gboolean
 gtk_window_get_deletable (GtkWindow *window)

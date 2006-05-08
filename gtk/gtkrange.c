@@ -663,7 +663,7 @@ gtk_range_get_inverted (GtkRange *range)
  * Sets the sensitivity policy for the stepper that points to the
  * 'lower' end of the GtkRange's adjustment.
  *
- * Sine: 2.10
+ * Since: 2.10
  **/
 void
 gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
@@ -706,7 +706,7 @@ gtk_range_get_lower_stepper_sensitivity (GtkRange *range)
  * Sets the sensitivity policy for the stepper that points to the
  * 'upper' end of the GtkRange's adjustment.
  *
- * Sine: 2.10
+ * Since: 2.10
  **/
 void
 gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
