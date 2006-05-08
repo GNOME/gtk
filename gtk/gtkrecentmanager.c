@@ -952,7 +952,7 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
           	   GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING,
           	   _("The description of the recently used resource "
-          	     "must by a valid UTF-8 encoded string."));
+          	     "must be a valid UTF-8 encoded string."));
       return FALSE;
     }
 
