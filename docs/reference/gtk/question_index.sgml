@@ -205,13 +205,15 @@ You eventually have to call gettext() on the string to actually fetch the
 translation.  _() both marks the string for translation and actually translates it.
 </para>
 <para>
+Nowadays, GLib provides the common shorthand macros in the header file
+<filename>gi18n.h</filename>, so you don't have to define them yourself, just
+include that header.
+</para>
+<para>
 Code using these macros ends up looking like this:
 <informalexample>
 <programlisting>
- #include &lt;libintl.h&gt;
-
- #define  _(x)  gettext (x)
- #define N_(x)  x
+ #include &lt;gi18n.h&gt;
 
  static const char *global_variable = N_("Translate this string");
 
@@ -237,6 +239,11 @@ of using the default.For dgettext() the _() macro can be defined as:
   #define _(x) dgettext ("MyDomain", x)
 </programlisting>
 </informalexample>
+</para>
+<para>
+Again, GLib comes with the <filename>gi18n-lib.h</filename>, saving you the trouble
+of defining the macros by hand. The macros in that header expect the translation
+domain to be specified by the %GETTEXT_PACKAGE macro. 
 </para>
 </answer>
 </qandaentry>
