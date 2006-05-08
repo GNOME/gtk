@@ -1,5 +1,7 @@
 2006-05-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Require Pango 1.13.0
+
 	* gtk/gtknotebook.c: 
 	* gtk/gtkwindow.c: 
 	* gtk/gtkrange.c: Fix doc typos.
