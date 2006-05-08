@@ -3,7 +3,7 @@
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): Elide (_x) in the middle
 	of the string, too.  (#323956, Abel Cheung)
 
-	* gtk/gtkuimanager.c (update_node): Fix tooltips.
+	* gtk/gtkuimanager.c (update_node): Fix tooltips. (#340527, Jon-Kare Hellan)
 
 	* configure.in: Require Pango 1.13.0
 
