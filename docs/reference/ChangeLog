@@ -1,3 +1,7 @@
+2006-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_message_dialog_set_image.
+
 2006-05-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/question_index.sgml (reference): Update the internationalization

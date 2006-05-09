@@ -1,3 +1,8 @@
+2006-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkmessagedialog.[hc]: Add an image property.  (#337306, Alex Graveley)
+
 2006-05-09  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c: create an independent GdkWindow to behave nicely

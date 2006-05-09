@@ -37,7 +37,8 @@ typedef enum
   GTK_MESSAGE_INFO,
   GTK_MESSAGE_WARNING,
   GTK_MESSAGE_QUESTION,
-  GTK_MESSAGE_ERROR
+  GTK_MESSAGE_ERROR,
+  GTK_MESSAGE_OTHER
 } GtkMessageType;
 
 typedef enum
@@ -96,6 +97,9 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  GtkButtonsType  buttons,
                                                  const gchar    *message_format,
                                                  ...) G_GNUC_PRINTF (5, 6);
+
+void       gtk_message_dialog_set_image    (GtkMessageDialog *dialog,
+					    GtkWidget        *image);
 
 void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
                                            const gchar      *str);
