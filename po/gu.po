@@ -220,6 +220,8 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -228,14 +230,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-08 06:58+0200\n"
-"PO-Revision-Date: 2006-05-08 11:27+0530\n"
+"POT-Creation-Date: 2006-05-09 07:01+0200\n"
+"PO-Revision-Date: 2006-05-09 11:39+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1746,7 +1749,12 @@ msgstr "ફોલ્ડરમાં બનાવો (_F):"
 msgid "Cannot change to folder because it is not local"
 msgstr "ફોલ્ડર બદલી શકતા નથી કારણ કે તે સ્થાનિક પથ નથી"
 
-#: ../gtk/gtkfilechooserdefault.c:6747 ../gtk/gtkfilechooserdefault.c:6768
+#: ../gtk/gtkfilechooserdefault.c:6747
+#, c-format
+msgid "Shortcut %s already exists"
+msgstr "ટૂંકાણ %s પહેલાથી જ અસ્તિત્વમાં છે"
+
+#: ../gtk/gtkfilechooserdefault.c:6768
 #, c-format
 msgid "shortcut %s already exists"
 msgstr "ટૂંકાણ %s પહેલાથી જ અસ્તિત્વમાં છે"
@@ -2265,7 +2273,7 @@ msgstr "GTK+ વિકલ્પો"
 msgid "Show GTK+ Options"
 msgstr "GTK+ વિકલ્પો બતાવો"
 
-#: ../gtk/gtknotebook.c:3918 ../gtk/gtknotebook.c:6478
+#: ../gtk/gtknotebook.c:4174 ../gtk/gtknotebook.c:6683
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -4201,15 +4209,10 @@ msgstr "બંધારણ %s માટે કોઈ ડિસીરીયલા
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "\"id\" અને \"name\" બંને <%s> ઘટક પર મળ્યા હતા"
 
-#: ../gtk/gtktextbufferserialize.c:801
+#: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
-msgid "The attribute \"name\" were found twice on the <%s> element"
-msgstr "લક્ષણ \"name\" એ <%s> ઘટક પર બે વખત મળ્યું હતું"
-
-#: ../gtk/gtktextbufferserialize.c:827
-#, c-format
-msgid "The attribute \"id\" were found twice on the <%s> element"
-msgstr "લક્ષણ \"id\" એ <%s> ઘટક પર બે વાર મળ્યું હતું"
+msgid "The attribute \"%s\" was found twice on the <%s> element"
+msgstr "લક્ષણ \"%s\" એ <%s> ઘટક પર બે વાર મળ્યું હતું"
 
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
@@ -4218,7 +4221,7 @@ msgstr "<%s> ઘટકને અયોગ્ય id \"%s\" છે"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" element"
 msgstr "<%s> ઘટક નહિં તો \"name\" કે \"id\" ઘટક છે"
 
 #: ../gtk/gtktextbufferserialize.c:938
@@ -4268,8 +4271,8 @@ msgstr "\"%s\" એ \"%s\" પ્રકારની કિંમત એ લક્
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
-msgid "\"%s\" is not a valid value of for attribute \"%s\""
-msgstr "\"%s\" એ માન્ય કિંમત નથી લક્ષણ \"%s\" માટે"
+msgid "\"%s\" is not a valid value for attribute \"%s\""
+msgstr "લક્ષણ \"%s\" એ \"%s\" માટે માન્ય કિંમત નથી"
 
 #: ../gtk/gtktextbufferserialize.c:1280
 #, c-format
