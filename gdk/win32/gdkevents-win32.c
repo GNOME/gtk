@@ -1793,11 +1793,12 @@ static gboolean
 doesnt_want_scroll (gint mask,
 		    MSG *msg)
 {
-#if 0
-  return !(mask & GDK_SCROLL_MASK);
-#else
-  return !(mask & GDK_BUTTON_PRESS_MASK);
-#endif
+  /* As there are no separate scroll events in X11, button press
+   * events are used, so higher level code might be selecting for
+   * either GDK_BUTTON_PRESS_MASK or GDK_SCROLL_MASK when it wants GDK
+   * scroll events. Make sure this works in the Win32 backend, too.
+   */
+  return !(mask & (GDK_SCROLL_MASK|GDK_BUTTON_PRESS_MASK));
 }
 
 static void
