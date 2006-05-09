@@ -95,6 +95,7 @@ enum {
   /* Normal */
   PROP_TEXT,
   PROP_HAS_SELECTION,
+  PROP_CURSOR_POSITION,
   PROP_COPY_TARGET_LIST,
   PROP_PASTE_TARGET_LIST
 };
@@ -212,6 +213,22 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                          P_("Whether the buffer has some text currently selected"),
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
+
+  /**
+   * GtkTextBuffer:cursor-position:
+   *
+   * The position of the insert mark (as offset from the beginning of the buffer). 
+   * It is useful for getting notified when the cursor moves.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_CURSOR_POSITION,
+                                   g_param_spec_int ("cursor-position",
+                                                     P_("Cursor position"),
+                                                     P_("The position of the insert mark (as offset from the beginning of the buffer)"),
+						     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkTextBuffer:copy-target-list:
@@ -467,6 +484,7 @@ gtk_text_buffer_get_property (GObject         *object,
                               GParamSpec      *pspec)
 {
   GtkTextBuffer *text_buffer;
+  GtkTextIter iter;
 
   text_buffer = GTK_TEXT_BUFFER (object);
 
@@ -491,6 +509,12 @@ gtk_text_buffer_get_property (GObject         *object,
 
     case PROP_HAS_SELECTION:
       g_value_set_boolean (value, text_buffer->has_selection);
+      break;
+
+    case PROP_CURSOR_POSITION:
+      gtk_text_buffer_get_iter_at_mark (text_buffer, &iter, 
+    				        gtk_text_buffer_get_insert (text_buffer));
+      g_value_set_int (value, gtk_text_iter_get_offset (&iter));
       break;
 
     case PROP_COPY_TARGET_LIST:
@@ -655,6 +679,7 @@ gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
   _gtk_text_btree_insert (iter, text, len);
 
   g_signal_emit (buffer, signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (buffer), "cursor-position");
 }
 
 static void
@@ -1373,6 +1398,7 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
   update_selection_clipboards (buffer);
 
   g_signal_emit (buffer, signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (buffer), "cursor-position");
 }
 
 static void
@@ -2272,8 +2298,11 @@ gtk_text_buffer_real_mark_set (GtkTextBuffer *buffer,
                                const GtkTextIter *iter,
                                GtkTextMark *mark)
 {
-  if (mark == gtk_text_buffer_get_insert (buffer) ||
-      mark == gtk_text_buffer_get_selection_bound (buffer))
+  GtkTextMark *insert;
+  
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  if (mark == insert || mark == gtk_text_buffer_get_selection_bound (buffer))
     {
       gboolean has_selection;
 
@@ -2287,6 +2316,9 @@ gtk_text_buffer_real_mark_set (GtkTextBuffer *buffer,
           g_object_notify (G_OBJECT (buffer), "has-selection");
         }
     }
+    
+    if (mark == insert)
+      g_object_notify (G_OBJECT (buffer), "cursor-position");
 }
 
 static void

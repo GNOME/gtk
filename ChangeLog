@@ -1,5 +1,8 @@
 2006-05-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Add a :cursor-position
+	property.  (#334412, Yevgen Muntyan)
+
 	* gtk/gtk.symbols:
 	* gtk/gtkmessagedialog.[hc]: Add an image property.  (#337306, Alex Graveley)
 
