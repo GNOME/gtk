@@ -1,3 +1,14 @@
+2006-05-09  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c: create an independent GdkWindow to behave nicely
+	during reordering with tab_labels with their own window, also use
+	gtk_drag_set_icon_widget() for the DnD icon to avoid drawing garbage
+	from offscreen regions. Closes bug #335707.
+	(gtk_notebook_tab_space), (gtk_notebook_calculate_shown_tabs),
+	(gtk_notebook_calculate_tabs_allocation): new functions, 
+	gtk_notebook_pages_allocate() functionality has been splitted into
+	these.
+
 2006-05-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_add_shortcut_folder): 
