@@ -148,7 +148,7 @@ static const PaperInfo standard_names[] = {
   {"na_letter-plus", "8.5x12.69in", N_("US Letter Plus"), "LetterPlus"},
   {"na_monarch", "3.875x7.5in", N_("Monarch Envelope"), "EnvMonarch"},
   {"na_number-10", "4.125x9.5in", N_("#10 Envelope"), "Env10"}, /* na-number-10-envelope 1, 2 comm-10 Envelope */
-  {"na_number-11", "4.5x10.375in", N_("#11 Eenvelope"), "Env11"}, /* number-11 Envelope */
+  {"na_number-11", "4.5x10.375in", N_("#11 Envelope"), "Env11"}, /* number-11 Envelope */
   {"na_number-12", "4.75x11in", N_("#12 Envelope"), "Env12"}, /* number-12 Envelope */
   {"na_number-14", "5x11.5in", N_("#14 Envelope"), "Env14"}, /* number-14 Envelope */
   {"na_number-9", "3.875x8.875in", N_("#9 Envelope"), "Env9"},

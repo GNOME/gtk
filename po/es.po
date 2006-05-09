@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-05 23:05+0200\n"
-"PO-Revision-Date: 2006-05-05 22:44+0200\n"
+"POT-Creation-Date: 2006-05-10 01:34+0200\n"
+"PO-Revision-Date: 2006-05-10 01:38+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1563,7 +1563,12 @@ msgstr "Crear en la _carpeta:"
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:6747 ../gtk/gtkfilechooserdefault.c:6768
+#: ../gtk/gtkfilechooserdefault.c:6747
+#, c-format
+msgid "Shortcut %s already exists"
+msgstr "La combinación %s ya existe"
+
+#: ../gtk/gtkfilechooserdefault.c:6768
 #, c-format
 msgid "shortcut %s already exists"
 msgstr "La combinación %s ya existe"
@@ -2097,7 +2102,7 @@ msgstr "Opciones GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
-#: ../gtk/gtknotebook.c:3918 ../gtk/gtknotebook.c:6478
+#: ../gtk/gtknotebook.c:4174 ../gtk/gtknotebook.c:6683
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2159,7 +2164,7 @@ msgstr "Tamaño del _papel:"
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2024
+#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2033
 msgid "Page Setup"
 msgstr "Configuración de página"
 
@@ -2213,7 +2218,7 @@ msgid "Not available"
 msgstr "No disponible"
 
 #: ../gtk/gtkprinteroptionwidget.c:534
-#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:356
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:353
 msgid "Print to PDF"
 msgstr "Imprimir a PDF"
 
@@ -2266,7 +2271,7 @@ msgstr "Terminado"
 msgid "print operation status|Finished with error"
 msgstr "Terminado con error"
 
-#: ../gtk/gtkprintoperation-unix.c:103
+#: ../gtk/gtkprintoperation-unix.c:117
 msgid "Error printing"
 msgstr "Error en la impresión"
 
@@ -2315,169 +2320,169 @@ msgstr "Error no especificado"
 msgid "Error from StartDoc"
 msgstr "Error desde StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1385
+#: ../gtk/gtkprintunixdialog.c:1392
 msgid "Printer"
 msgstr "Impresora"
 
-#: ../gtk/gtkprintunixdialog.c:1393
+#: ../gtk/gtkprintunixdialog.c:1400
 msgid "Location"
 msgstr "Lugar"
 
-#: ../gtk/gtkprintunixdialog.c:1402
+#: ../gtk/gtkprintunixdialog.c:1409
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:1426
+#: ../gtk/gtkprintunixdialog.c:1433
 msgid "Print Pages"
 msgstr "Páginas a imprimir"
 
-#: ../gtk/gtkprintunixdialog.c:1430
+#: ../gtk/gtkprintunixdialog.c:1437
 msgid "_All"
 msgstr "_Todas"
 
-#: ../gtk/gtkprintunixdialog.c:1437
+#: ../gtk/gtkprintunixdialog.c:1444
 msgid "C_urrent"
 msgstr "La a_ctual"
 
-#: ../gtk/gtkprintunixdialog.c:1446
+#: ../gtk/gtkprintunixdialog.c:1453
 msgid "Ra_nge: "
 msgstr "_Rango: "
 
-#: ../gtk/gtkprintunixdialog.c:1462
+#: ../gtk/gtkprintunixdialog.c:1469
 msgid "Copies"
 msgstr "Copias"
 
 #. FIXMEchpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1467
+#: ../gtk/gtkprintunixdialog.c:1474
 msgid "Copie_s:"
 msgstr "_Copias:"
 
-#: ../gtk/gtkprintunixdialog.c:1481
+#: ../gtk/gtkprintunixdialog.c:1488
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.c:1488
+#: ../gtk/gtkprintunixdialog.c:1495
 msgid "_Reverse"
 msgstr "In_vertir"
 
-#: ../gtk/gtkprintunixdialog.c:1505
+#: ../gtk/gtkprintunixdialog.c:1512
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.c:1880
+#: ../gtk/gtkprintunixdialog.c:1889
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.c:1884
+#: ../gtk/gtkprintunixdialog.c:1893
 msgid "Pages per _sheet:"
 msgstr "Páginas por _hoja:"
 
-#: ../gtk/gtkprintunixdialog.c:1900
+#: ../gtk/gtkprintunixdialog.c:1909
 msgid "T_wo-sided:"
 msgstr "Por las _dos caras:"
 
-#: ../gtk/gtkprintunixdialog.c:1915
+#: ../gtk/gtkprintunixdialog.c:1924
 msgid "_Only Print:"
 msgstr "_Sólo imprimir:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:1930
+#: ../gtk/gtkprintunixdialog.c:1939
 msgid "All sheets"
 msgstr "Todas las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:1931
+#: ../gtk/gtkprintunixdialog.c:1940
 msgid "Even sheets"
 msgstr "Hojas pares"
 
-#: ../gtk/gtkprintunixdialog.c:1932
+#: ../gtk/gtkprintunixdialog.c:1941
 msgid "Odd sheets"
 msgstr "Hojas impares"
 
-#: ../gtk/gtkprintunixdialog.c:1935
+#: ../gtk/gtkprintunixdialog.c:1944
 msgid "Sc_ale:"
 msgstr "_Escala:"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1971
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:1966
+#: ../gtk/gtkprintunixdialog.c:1975
 msgid "Paper _Type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:1981
+#: ../gtk/gtkprintunixdialog.c:1990
 msgid "Paper _Source:"
 msgstr "_Fuente del papel:"
 
-#: ../gtk/gtkprintunixdialog.c:1996
+#: ../gtk/gtkprintunixdialog.c:2005
 msgid "Output T_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.c:2047
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2053
+#: ../gtk/gtkprintunixdialog.c:2062
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.c:2068
+#: ../gtk/gtkprintunixdialog.c:2077
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:2086
+#: ../gtk/gtkprintunixdialog.c:2095
 msgid "Print Document"
 msgstr "Imprimir documento"
 
-#: ../gtk/gtkprintunixdialog.c:2092
+#: ../gtk/gtkprintunixdialog.c:2101
 msgid "_Now"
 msgstr "_Ahora"
 
-#: ../gtk/gtkprintunixdialog.c:2099
+#: ../gtk/gtkprintunixdialog.c:2108
 msgid "A_t:"
 msgstr "_En:"
 
-#: ../gtk/gtkprintunixdialog.c:2114
+#: ../gtk/gtkprintunixdialog.c:2123
 msgid "On _Hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2133
+#: ../gtk/gtkprintunixdialog.c:2142
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
-#: ../gtk/gtkprintunixdialog.c:2139
+#: ../gtk/gtkprintunixdialog.c:2148
 msgid "Be_fore:"
 msgstr "An_tes:"
 
-#: ../gtk/gtkprintunixdialog.c:2154
+#: ../gtk/gtkprintunixdialog.c:2163
 msgid "_After:"
 msgstr "_Después:"
 
-#: ../gtk/gtkprintunixdialog.c:2169
+#: ../gtk/gtkprintunixdialog.c:2178
 msgid "Job"
 msgstr "Tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2235
+#: ../gtk/gtkprintunixdialog.c:2244
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../gtk/gtkprintunixdialog.c:2265
+#: ../gtk/gtkprintunixdialog.c:2274
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
-#: ../gtk/gtkprintunixdialog.c:2268
+#: ../gtk/gtkprintunixdialog.c:2277
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2280
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2293
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkprintunixdialog.c:2324
+#: ../gtk/gtkprintunixdialog.c:2333
 msgid "Print"
 msgstr "Imprimir"
 
@@ -2566,9 +2571,8 @@ msgstr ""
 "cuya codificación UTF-8 sea válida."
 
 #: ../gtk/gtkrecentmanager.c:954
-#, fuzzy
 msgid ""
-"The description of the recently used resource must by a valid UTF-8 encoded "
+"The description of the recently used resource must be a valid UTF-8 encoded "
 "string."
 msgstr ""
 "La descripción del recurso recientemente usado debe ser una cadena "
@@ -3902,98 +3906,98 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1360
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1357
 msgid "Two Sided"
 msgstr "Dos caras"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1361
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1358
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1362
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1359
 msgid "Paper Source"
 msgstr "Fuente de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1363
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1360
 msgid "Output Tray"
 msgstr "Bandeja de salida"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1369
 msgid "One Sided"
 msgstr "Una cara"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1374
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1370
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1371
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Auto Select"
 msgstr "Autoseleccionar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1376
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1377
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1374
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1761
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 msgid "Low"
 msgstr "Baja"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Unclassified"
 msgstr "Desclasificado"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:388
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:385
 msgid "Print to LPR"
 msgstr "Imprimir a LPR"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:417
-#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:387
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:414
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:384
 msgid "Pages Per Sheet"
 msgstr "Páginas por hoja"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Command Line"
 msgstr "Línea de comandos"
 
-#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:394
+#: ../modules/printbackends/pdf/gtkprintbackendpdf.c:391
 msgid "File"
 msgstr "Archivo"
 
@@ -4041,15 +4045,10 @@ msgstr "No se encontró función de deserialización para el formato %s"
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Se encontraron tanto \"id\" como \"name\" en el elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:801
+#: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
-msgid "The attribute \"name\" were found twice on the <%s> element"
-msgstr "Se encontró el atributo \"name\" dos veces en el elemento <%s>"
-
-#: ../gtk/gtktextbufferserialize.c:827
-#, c-format
-msgid "The attribute \"id\" were found twice on the <%s> element"
-msgstr "Se encontró el atributo \"id\" dos veces en el elemento <%s>"
+msgid "The attribute \"%s\" was found twice on the <%s> element"
+msgstr "Se encontró el atributo \"%s\" dos veces en el elemento <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
@@ -4058,8 +4057,9 @@ msgstr "El elemento <%s> tiene el id inválido \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element neither a \"name\" nor an \"id\" element"
-msgstr "El elemento <%s> no es ni un elemento \"name\" ni un elemento \"id\""
+msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgstr ""
+"El elemento <%s> no tiene ni un elemento \"name\" ni un elemento \"id\""
 
 #: ../gtk/gtktextbufferserialize.c:938
 #, c-format
@@ -4111,7 +4111,7 @@ msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
-msgid "\"%s\" is not a valid value of for attribute \"%s\""
+msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" no es un valor válido para el atributo \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1280
@@ -4652,9 +4652,8 @@ msgid "Index 5x8"
 msgstr "Index 5x8"
 
 #: ../gtk/paper_names.c:142
-#, fuzzy
 msgid "Invoice"
-msgstr "Invoice"
+msgstr "Factura"
 
 #. invoice,  statement, mini, half-letter
 #: ../gtk/paper_names.c:143
@@ -4692,8 +4691,8 @@ msgstr "Sobre #10"
 
 #. na-number-10-envelope 1, 2 comm-10 Envelope
 #: ../gtk/paper_names.c:151
-msgid "#11 Eenvelope"
-msgstr ""
+msgid "#11 Envelope"
+msgstr "Sobre #11"
 
 #. number-11 Envelope
 #: ../gtk/paper_names.c:152
