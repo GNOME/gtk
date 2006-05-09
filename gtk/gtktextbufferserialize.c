@@ -798,8 +798,8 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("The attribute \"name\" were found twice on the <%s> element"),
-			 element_name);
+			 _("The attribute \"%s\" was found twice on the <%s> element"),
+			 "name", element_name);
 	      return FALSE;
 	    }
 
@@ -824,8 +824,8 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("The attribute \"id\" were found twice on the <%s> element"),
-			 element_name);
+			 _("The attribute \"%s\" was found twice on the <%s> element"),
+			 "id", element_name);
 	      return FALSE;
 	    }
 
@@ -848,7 +848,7 @@ check_id_or_name (GMarkupParseContext  *context,
     {
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		 _("<%s> element neither a \"name\" nor an \"id\" element"), element_name);
+		 _("<%s> element has neither a \"name\" nor an \"id\" element"), element_name);
       return FALSE;
     }
 
@@ -1194,7 +1194,7 @@ parse_attr_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("\"%s\" is not a valid value of for attribute \"%s\""),
+		     _("\"%s\" is not a valid value for attribute \"%s\""),
 		     value, name);
 	  g_value_unset (&gvalue);
 	  return;

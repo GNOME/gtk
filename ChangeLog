@@ -1,5 +1,9 @@
 2006-05-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_add_shortcut_folder): 
+	* gtk/gtktextbufferserialize.c (parse_attr_element): Fix some typos in
+	messages.  (#341091, Tino Meinen)
+
 	* gtk/gtkstatusicon.c: Some cleanups.
 	
 	* gtk/gtkstatusicon.c (gtk_status_icon_get_property): Silently return

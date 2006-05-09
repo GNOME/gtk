@@ -6744,7 +6744,7 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-		   _("shortcut %s already exists"),
+		   _("Shortcut %s already exists"),
 		   uri);
       g_free (uri);
 
