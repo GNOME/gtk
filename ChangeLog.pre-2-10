@@ -1,3 +1,8 @@
+2006-05-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c: Don't include langinfo.h
+	unconditionally.  (#341217)
+
 2006-05-10  John (J5) Palmieri  <johnp@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c:
