@@ -124,7 +124,7 @@ enum {
 #define PAGE_TOP_Y(_page_)    (((GtkNotebookPage *) (_page_))->allocation.y)
 #define PAGE_BOTTOM_Y(_page_) (((GtkNotebookPage *) (_page_))->allocation.y + ((GtkNotebookPage *) (_page_))->allocation.height)
 #define PAGE_MIDDLE_Y(_page_) (((GtkNotebookPage *) (_page_))->allocation.y + ((GtkNotebookPage *) (_page_))->allocation.height / 2)
-#define NOTEBOOK_IS_TAB_LABEL_PARENT(_notebook_,_page_) (((GtkNotebookPage *) (_page_))->tab_label->parent == ((GtkWidget *) (_notebook_)))
+#define NOTEBOOK_IS_TAB_LABEL_PARENT(_notebook_,_page_) ((_page_)->tab_label != NULL && ((GtkNotebookPage *) (_page_))->tab_label->parent == ((GtkWidget *) (_notebook_)))
 
 struct _GtkNotebookPage
 {
