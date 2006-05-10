@@ -1,3 +1,20 @@
+Wed May 10 15:57:53 2006  Tim Janik  <timj@imendio.com>
+
+	* applied unified patch for configurable scroll arrow sizes from
+	bug #333632 and bug #325282.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): added ::scroll-arrow-hlength
+	and ::scroll-arrow-vlength style properties. fixed upper limit for
+	::separator-width and ::separator-height to be MAXINT.
+
+	* gtk/gtkmenu.c: use GtkWidget::scroll-arrow-vlength to determine the
+	scroll arrow size, instead of using a hard coded constant.
+
+	* gtk/gtknotebook.c: use GtkWidget::scroll-arrow-vlength and
+	GtkWidget::scroll-arrow-hlength to determine scroll arrow sizes.
+	added GtkNotebook::arrow-spacing style property to configure the
+	spacing between scroll arrows.
+
 2006-05-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c: Don't include langinfo.h

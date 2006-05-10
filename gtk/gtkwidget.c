@@ -1513,14 +1513,26 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                            g_param_spec_int ("separator-width",
                                                              P_("Separator Width"),
                                                              P_("The width of separators if wide-separators is TRUE"),
-                                                             0, 64, 0,
+                                                             0, G_MAXINT, 0,
                                                              GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-height",
                                                              P_("Separator Height"),
                                                              P_("The height of separators if wide-separators is TRUE"),
-                                                             0, 64, 0,
+                                                             0, G_MAXINT, 0,
+                                                             GTK_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("scroll-arrow-hlength",
+                                                             P_("Horizontal Scroll Arrow Length"),
+                                                             P_("The length of horizontal scroll arrows"),
+                                                             1, G_MAXINT, 16,
+                                                             GTK_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("scroll-arrow-vlength",
+                                                             P_("Vertical Scroll Arrow Length"),
+                                                             P_("The length of vertical scroll arrows"),
+                                                             1, G_MAXINT, 16,
                                                              GTK_PARAM_READABLE));
 }
 
