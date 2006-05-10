@@ -222,6 +222,7 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -230,14 +231,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-09 07:01+0200\n"
-"PO-Revision-Date: 2006-05-09 11:39+0530\n"
+"POT-Creation-Date: 2006-05-10 06:57+0200\n"
+"PO-Revision-Date: 2006-05-10 11:45+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -4071,80 +4073,80 @@ msgstr "વિયેટનામી (VIQR)"
 msgid "X Input Method"
 msgstr "X ઈનપુટ પદ્ધતિ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1357
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1354
 msgid "Two Sided"
 msgstr "બે બાજુવાળું"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1358
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1355
 msgid "Paper Type"
 msgstr "કાગળ પ્રકાર"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1359
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1356
 msgid "Paper Source"
 msgstr "કાગળ સ્રોત"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1360
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1357
 msgid "Output Tray"
 msgstr "આઉટપુટ ટ્રે"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1369
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1366
 msgid "One Sided"
 msgstr "એક બાજુવાળું"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1370
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1371
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1367
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1368
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Auto Select"
 msgstr "આપોઆપ પસંદગી"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1374
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1761
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1369
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1370
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1371
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1758
 msgid "Printer Default"
 msgstr "પ્રિન્ટર મૂળભૂત"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1942
 msgid "Urgent"
 msgstr "તાત્કાલિક"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1942
 msgid "High"
 msgstr "ઊંચુ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1942
 msgid "Medium"
 msgstr "મધ્યમ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1942
 msgid "Low"
 msgstr "નીચું"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "None"
 msgstr "કંઈ નંહિ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Classified"
 msgstr "વર્ગીકૃત"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Confidential"
 msgstr "ખાનગી"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Secret"
 msgstr "ખાનગી"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Standard"
 msgstr "પ્રમાણભૂત"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Top Secret"
 msgstr "ખૂબ ખાનગી"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1944
 msgid "Unclassified"
 msgstr "બિનવર્ગીકૃત"
 
@@ -4847,7 +4849,7 @@ msgstr "#10 કવર"
 
 #. na-number-10-envelope 1, 2 comm-10 Envelope
 #: ../gtk/paper_names.c:151
-msgid "#11 Eenvelope"
+msgid "#11 Envelope"
 msgstr "#11 કવર"
 
 #. number-11 Envelope
