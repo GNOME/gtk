@@ -58,7 +58,7 @@ typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 #define _CUPS_MAX_CHUNK_SIZE 8192
 
 #define _CUPS_MAP_ATTR_INT(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].integer;}
-#define _CUPS_MAP_ATTR_STR(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = g_strdup (attr->values[0].string.text);}
+#define _CUPS_MAP_ATTR_STR(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].string.text;}
 
 static GType print_backend_cups_type = 0;
 
@@ -632,7 +632,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
 
   /* TODO: determine printer type and use correct icon */
   gtk_printer_set_icon_name (printer, "printer");
-  
+ 
   state_msg = "";
   loc = "";
   desc = "";
@@ -648,9 +648,6 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
       _CUPS_MAP_ATTR_INT (attr, cups_printer->state, "printer-state");
       _CUPS_MAP_ATTR_INT (attr, job_count, "queued-job-count");
     }
-
-  /* if we got a member_printer_uri then this printer is part of a class
-     so use member_printer_uri, else user printer_uri */
 
   status_changed = gtk_printer_set_job_count (printer, job_count);
   

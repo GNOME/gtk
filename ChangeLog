@@ -1,3 +1,9 @@
+2006-05-10  John (J5) Palmieri  <johnp@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	make the _CUPS_MAP_ATTR_STR macro not dup the string so we don't
+	leak 
+
 2006-05-10  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
 	* gtk/paper_names.c: Correct #11 Envelope typo.
