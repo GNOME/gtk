@@ -223,6 +223,8 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -231,14 +233,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-10 06:57+0200\n"
-"PO-Revision-Date: 2006-05-10 11:45+0530\n"
+"POT-Creation-Date: 2006-05-11 07:09+0200\n"
+"PO-Revision-Date: 2006-05-11 12:18+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -2275,7 +2278,15 @@ msgstr "GTK+ વિકલ્પો"
 msgid "Show GTK+ Options"
 msgstr "GTK+ વિકલ્પો બતાવો"
 
-#: ../gtk/gtknotebook.c:4174 ../gtk/gtknotebook.c:6683
+#: ../gtk/gtknotebook.c:759
+msgid "Arrow spacing"
+msgstr "તીર જગ્યા"
+
+#: ../gtk/gtknotebook.c:760
+msgid "Scroll arrow spacing"
+msgstr "તીર જગ્યા સરકાવો"
+
+#: ../gtk/gtknotebook.c:4208 ../gtk/gtknotebook.c:6741
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -2286,11 +2297,11 @@ msgstr "પાનું %u"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkpagesetupunixdialog.c:149
+#: ../gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:357
+#: ../gtk/gtkpagesetupunixdialog.c:360
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2298,15 +2309,15 @@ msgstr ""
 "<b>કોઈપણ પ્રિન્ટર</b>\n"
 "પોર્ટેબલ દસ્તાવેજો માટે"
 
-#: ../gtk/gtkpagesetupunixdialog.c:915 ../gtk/gtkpagesetupunixdialog.c:1352
+#: ../gtk/gtkpagesetupunixdialog.c:918 ../gtk/gtkpagesetupunixdialog.c:1355
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkpagesetupunixdialog.c:1350
+#: ../gtk/gtkpagesetupunixdialog.c:920 ../gtk/gtkpagesetupunixdialog.c:1353
 msgid "inch"
 msgstr "ઈંચ"
 
-#: ../gtk/gtkpagesetupunixdialog.c:936
+#: ../gtk/gtkpagesetupunixdialog.c:939
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2321,68 +2332,68 @@ msgstr ""
 " ટોચ: %s %s\n"
 " તળિયું: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:987
+#: ../gtk/gtkpagesetupunixdialog.c:990
 msgid "Manage Custom Sizes..."
 msgstr "વૈવિધ્યપૂર્ણ માપોની વ્યવસ્થા કરો..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1014
+#: ../gtk/gtkpagesetupunixdialog.c:1017
 msgid "_Format for:"
 msgstr "માટેનું બંધારણ (_F):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1035
+#: ../gtk/gtkpagesetupunixdialog.c:1038
 msgid "_Paper size:"
 msgstr "કાગળ માપ (_P):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1071
+#: ../gtk/gtkpagesetupunixdialog.c:1074
 msgid "_Orientation:"
 msgstr "દિશા (_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2033
+#: ../gtk/gtkpagesetupunixdialog.c:1132 ../gtk/gtkprintunixdialog.c:2033
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1394
+#: ../gtk/gtkpagesetupunixdialog.c:1397
 msgid "Margins from Printer..."
 msgstr "પ્રિન્ટરમાંથી હાંસિયાઓ..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1553
+#: ../gtk/gtkpagesetupunixdialog.c:1556
 #, c-format
 msgid "Custom Size %d"
 msgstr "વૈવિધ્યપૂર્ણ માપ %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1750
+#: ../gtk/gtkpagesetupunixdialog.c:1753
 msgid "Manage Custom Sizes"
 msgstr "વૈવિધ્યપૂર્ણ માપોની વ્યવસ્થા કરો"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1843
+#: ../gtk/gtkpagesetupunixdialog.c:1846
 msgid "_Width:"
 msgstr "પહોળાઈ (_W):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1855
+#: ../gtk/gtkpagesetupunixdialog.c:1858
 msgid "_Height:"
 msgstr "ઊંચાઈ (_H):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1867
+#: ../gtk/gtkpagesetupunixdialog.c:1870
 msgid "Paper Size"
 msgstr "કાગળ માપ"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1877
+#: ../gtk/gtkpagesetupunixdialog.c:1880
 msgid "_Top:"
 msgstr "ટોચ (_T):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1889
+#: ../gtk/gtkpagesetupunixdialog.c:1892
 msgid "_Bottom:"
 msgstr "તળિયું (_B):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1901
+#: ../gtk/gtkpagesetupunixdialog.c:1904
 msgid "_Left:"
 msgstr "ડાબું (_L):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1913
+#: ../gtk/gtkpagesetupunixdialog.c:1916
 msgid "_Right:"
 msgstr "જમણું (_R):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1954
+#: ../gtk/gtkpagesetupunixdialog.c:1957
 msgid "Paper Margins"
 msgstr "કાગળ હાંસિયાઓ"
 
