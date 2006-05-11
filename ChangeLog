@@ -1,3 +1,7 @@
+2006-05-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkkeysyms.h: Consistently use lowercase in hex numbers.
+
 2006-05-10  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c: check that tab_label is not NULL before checking
