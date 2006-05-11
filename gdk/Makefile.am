@@ -8,6 +8,7 @@ EXTRA_DIST =			\
 	keyname-table.h		\
 	gen-keyname-table.pl	\
 	gdkconfig.h.win32 	\
+	gdkkeysyms-update.pl	\
 	gdk.def 		\
 	gdkmarshalers.list	\
 	makeenums.pl		\
