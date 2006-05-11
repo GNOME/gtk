@@ -26,6 +26,7 @@ demos =						\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\
+	printing.c				\
 	rotated_text.c				\
 	sizegroup.c				\
 	stock_browser.c				\
