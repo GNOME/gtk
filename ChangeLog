@@ -1,3 +1,8 @@
+2006-05-11  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	* gtk/gtkfilechooserembed.c: use I_() instead of _() when creating
+	response-requested signal. Fixes bug #341416
+
 2006-05-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkkeysyms.h: Regenerated from Xorg 7.1 keysyms.h, using

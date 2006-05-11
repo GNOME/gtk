@@ -171,7 +171,7 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 		NULL, NULL,
 		_gtk_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
-  g_signal_new (_("response-requested"),
+  g_signal_new (I_("response-requested"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, response_requested),
