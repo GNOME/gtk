@@ -2483,9 +2483,9 @@ cups_printer_prepare_for_print (GtkPrinter *printer,
     gtk_print_settings_set (settings, "cups-OutputOrder", "Reverse");
   print_job->reverse = FALSE;
 
-  if (gtk_print_settings_get_num_copies (settings) > 1)
+  if (gtk_print_settings_get_n_copies (settings) > 1)
     gtk_print_settings_set_int (settings, "cups-copies",
-				gtk_print_settings_get_num_copies (settings));
+				gtk_print_settings_get_n_copies (settings));
   print_job->num_copies = 1;
 
   scale = gtk_print_settings_get_scale (settings);

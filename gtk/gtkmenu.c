@@ -1473,12 +1473,14 @@ gtk_menu_popdown (GtkMenu *menu)
 {
   GtkMenuPrivate *private;
   GtkMenuShell *menu_shell;
+  gboolean had_parent;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
   menu_shell = GTK_MENU_SHELL (menu);
   private = gtk_menu_get_private (menu);
-  
+
+  had_parent = menu_shell->parent_menu_shell != NULL;
   menu_shell->parent_menu_shell = NULL;
   menu_shell->active = FALSE;
   menu_shell->ignore_enter = FALSE;
@@ -1502,7 +1504,8 @@ gtk_menu_popdown (GtkMenu *menu)
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
   gtk_widget_hide (menu->toplevel);
-  gtk_window_group_add_window (gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
+  if (had_parent)
+    gtk_window_group_add_window (gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
 
   if (menu->torn_off)
     {

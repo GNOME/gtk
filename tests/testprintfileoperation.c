@@ -70,7 +70,7 @@ test_print_file_operation_begin_print (GtkPrintOperation *operation, GtkPrintCon
   
   op->num_lines = i;
   op->num_pages = (op->num_lines - 1) / op->lines_per_page + 1;
-  gtk_print_operation_set_nr_of_pages (operation, op->num_pages);
+  gtk_print_operation_set_n_pages (operation, op->num_pages);
 }
 
 static void

@@ -1,3 +1,37 @@
+2006-05-12  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkrecentmanager.c:
+	Fix build errors.
+	
+	* gtk/gtk.symbols:
+	* demos/gtk-demo/printing.c:
+	* gtk/gtkprintoperation-win32.c:
+	* gtk/gtkprintoperation.[ch]:
+	* gtk/gtkprintsettings.[ch]: 
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	* tests/print-editor.c:
+	* tests/testnouiprint.c:
+	* tests/testprint.c:
+	* tests/testprintfileoperation.c:
+	Rename functions from nr_of_pages to n_pages, and num_copies to
+	n_copies to match other gtk+ names.
+	
+	* gtk/gtkmenu.c: (gtk_menu_popdown):
+	Only re-set window group on popdown if we set it on popup (i.e.
+	if there is a parent menu shell).
+	Fixed part of bug #340401
+
+	* gtk/gtkwindow.c:
+	Add (contruct) property "transient-for" to GtkWindow. This
+	is needed for the fix to bug #340401.
+	
+	* gtk/gtkprintunixdialog.c:
+	Use the transient-for property on construction and populate the dialog
+	with widgets after that. This fixes bug #340401.
+	More n_pages renames.
+
 2006-05-11  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* gtk/gtkrecentmanager.h: Remove the error parameter to the

@@ -1037,35 +1037,35 @@ gtk_print_settings_set_page_set (GtkPrintSettings *settings,
 }
 
 /**
- * gtk_print_settings_get_num_copies:
+ * gtk_print_settings_get_n_copies:
  * @settings: a #GtkPrintSettings
  * 
- * Gets the value of %GTK_PRINT_SETTINGS_NUM_COPIES.
+ * Gets the value of %GTK_PRINT_SETTINGS_N_COPIES.
  * 
  * Return value: the number of copies to print
  *
  * Since: 2.10
  */
 gint
-gtk_print_settings_get_num_copies (GtkPrintSettings *settings)
+gtk_print_settings_get_n_copies (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_NUM_COPIES, 1);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_N_COPIES, 1);
 }
 
 /**
- * gtk_print_settings_set_num_copies:
+ * gtk_print_settings_set_n_copies:
  * @settings: a #GtkPrintSettings
  * @num_copies: the number of copies 
  * 
- * Sets the value of %GTK_PRINT_SETTINGS_NUM_COPIES.
+ * Sets the value of %GTK_PRINT_SETTINGS_N_COPIES.
  * 
  * Since: 2.10
  */
 void
-gtk_print_settings_set_num_copies (GtkPrintSettings *settings,
-				   gint              num_copies)
+gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
+				 gint              num_copies)
 {
-  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_NUM_COPIES,
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_N_COPIES,
 			      num_copies);
 }
 

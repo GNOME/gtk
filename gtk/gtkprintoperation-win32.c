@@ -660,8 +660,8 @@ devmode_to_settings (GtkPrintSettings *settings,
 				  devmode->dmScale / 100.0);
   
   if (devmode->dmFields & DM_COPIES)
-    gtk_print_settings_set_num_copies (settings,
-				       devmode->dmCopies);
+    gtk_print_settings_set_n_copies (settings,
+				     devmode->dmCopies);
   
   if (devmode->dmFields & DM_DEFAULTSOURCE)
     {
@@ -941,10 +941,10 @@ devmode_from_settings (GtkPrintSettings *settings,
       devmode->dmScale = gtk_print_settings_get_scale (settings) * 100;
     }
   
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_NUM_COPIES))
+  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_N_COPIES))
     {
       devmode->dmFields |= DM_COPIES;
-      devmode->dmCopies = gtk_print_settings_get_num_copies (settings);
+      devmode->dmCopies = gtk_print_settings_get_n_copies (settings);
     }
 
   if (gtk_print_settings_has_key (settings, "win32-default-source"))

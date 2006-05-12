@@ -58,6 +58,9 @@
 
 static void gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
 static void gtk_print_unix_dialog_finalize     (GObject            *object);
+static GObject* gtk_print_unix_dialog_constructor (GType               type,
+						   guint               n_construct_properties,
+						   GObjectConstructParam *construct_params);
 static void gtk_print_unix_dialog_set_property (GObject            *object,
 						guint               prop_id,
 						const GValue       *value,
@@ -206,6 +209,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   widget_class = (GtkWidgetClass *) class;
 
   object_class->finalize = gtk_print_unix_dialog_finalize;
+  object_class->constructor = gtk_print_unix_dialog_constructor;
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
@@ -245,6 +249,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 							GTK_TYPE_PRINTER,
 							GTK_PARAM_READABLE));
   
+  
   g_type_class_add_private (class, sizeof (GtkPrintUnixDialogPrivate));  
 }
 
@@ -262,8 +267,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   priv->page_setup = gtk_page_setup_new ();
 
-  populate_dialog (dialog);
-
   g_signal_connect (dialog, 
                     "destroy", 
 		    (GCallback) gtk_print_unix_dialog_destroy, 
@@ -277,6 +280,29 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 }
+
+static GObject *
+gtk_print_unix_dialog_constructor (GType               type,
+				   guint               n_construct_properties,
+				   GObjectConstructParam *construct_params)
+{
+  GtkPrintUnixDialog *dialog;
+  GObject *object;
+
+  object =
+    G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->constructor (type,
+								      n_construct_properties,
+								      construct_params);
+
+  /* We need to populate the dialog after the transient-to has been set.
+   * See bug #340401.
+   */
+  dialog = GTK_PRINT_UNIX_DIALOG (object);
+  populate_dialog (dialog);
+
+  return object;
+}
+
 
 static void
 gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)
@@ -2334,15 +2360,13 @@ gtk_print_unix_dialog_new (const gchar *title,
 
   if (title)
     _title = title;
-  
+
   result = g_object_new (GTK_TYPE_PRINT_UNIX_DIALOG,
+			 "transient-for", parent,
                          "title", _title,
 			 "has-separator", FALSE,
                          NULL);
-
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (result), parent);
-
+  
   return result;
 }
 
@@ -2534,7 +2558,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
     {
       dialog_set_collate (dialog, gtk_print_settings_get_collate (settings));
       dialog_set_reverse (dialog, gtk_print_settings_get_reverse (settings));
-      dialog_set_n_copies (dialog, gtk_print_settings_get_num_copies (settings));
+      dialog_set_n_copies (dialog, gtk_print_settings_get_n_copies (settings));
       dialog_set_scale (dialog, gtk_print_settings_get_scale (settings));
       dialog_set_page_set (dialog, gtk_print_settings_get_page_set (settings));
       dialog_set_print_pages (dialog, gtk_print_settings_get_print_pages (settings));
@@ -2610,8 +2634,8 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   gtk_print_settings_set_reverse (settings,
 				  dialog_get_reverse (dialog));
   
-  gtk_print_settings_set_num_copies (settings,
-				     dialog_get_n_copies (dialog));
+  gtk_print_settings_set_n_copies (settings,
+				   dialog_get_n_copies (dialog));
 
   gtk_print_settings_set_scale (settings,
 				dialog_get_scale (dialog));

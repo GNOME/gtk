@@ -116,7 +116,7 @@ void                    gtk_print_operation_set_print_settings     (GtkPrintOper
 GtkPrintSettings *      gtk_print_operation_get_print_settings     (GtkPrintOperation  *op);
 void                    gtk_print_operation_set_job_name           (GtkPrintOperation  *op,
 								    const gchar        *job_name);
-void                    gtk_print_operation_set_nr_of_pages        (GtkPrintOperation  *op,
+void                    gtk_print_operation_set_n_pages            (GtkPrintOperation  *op,
 								    gint                n_pages);
 void                    gtk_print_operation_set_current_page       (GtkPrintOperation  *op,
 								    gint                current_page);

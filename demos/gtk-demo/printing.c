@@ -49,7 +49,7 @@ begin_print (GtkPrintOperation *operation,
   
   data->num_lines = i;
   data->num_pages = (data->num_lines - 1) / data->lines_per_page + 1;
-  gtk_print_operation_set_nr_of_pages (operation, data->num_pages);
+  gtk_print_operation_set_n_pages (operation, data->num_pages);
 }
 
 static void

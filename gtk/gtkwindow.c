@@ -89,6 +89,7 @@ enum {
   PROP_DECORATED,
   PROP_DELETABLE,
   PROP_GRAVITY,
+  PROP_TRANSIENT_FOR,
   
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -657,6 +658,23 @@ gtk_window_class_init (GtkWindowClass *klass)
 						      GDK_GRAVITY_NORTH_WEST,
 						      GTK_PARAM_READWRITE));
 
+
+  /**
+   * GtkWindow:transient-for:
+   *
+   * The transient parent of the window. See gtk_window_set_transient_for() for
+   * more details about transient windows.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_TRANSIENT_FOR,
+				   g_param_spec_object ("transient-for",
+							P_("Transient for Window"),
+							P_("The transient parent of the dialog"),
+							GTK_TYPE_WINDOW,
+							GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
+
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set_focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -903,6 +921,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_GRAVITY:
       gtk_window_set_gravity (window, g_value_get_enum (value));
       break;
+    case PROP_TRANSIENT_FOR:
+      gtk_window_set_transient_for (window, g_value_get_object (value));
+      break;
     default:
       break;
     }
@@ -1010,6 +1031,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_GRAVITY:
       g_value_set_enum (value, gtk_window_get_gravity (window));
+      break;
+    case PROP_TRANSIENT_FOR:
+      g_value_set_object (value, gtk_window_get_transient_for (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1878,7 +1902,6 @@ gtk_window_set_transient_for  (GtkWindow *window,
   g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
   g_return_if_fail (window != parent);
 
-    
   if (window->transient_parent)
     {
       if (GTK_WIDGET_REALIZED (window) && 

@@ -106,7 +106,7 @@ main (int argc, char **argv)
 
   /* Test some random drawing, with per-page paper settings */
   print = gtk_print_operation_new ();
-  gtk_print_operation_set_nr_of_pages (print, 2);
+  gtk_print_operation_set_n_pages (print, 2);
   gtk_print_operation_set_unit (print, GTK_UNIT_MM);
   gtk_print_operation_set_pdf_target (print, "test.pdf");
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);

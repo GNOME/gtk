@@ -43,7 +43,7 @@ enum {
   PROP_DEFAULT_PAGE_SETUP,
   PROP_PRINT_SETTINGS,
   PROP_JOB_NAME,
-  PROP_NR_OF_PAGES,
+  PROP_N_PAGES,
   PROP_CURRENT_PAGE,
   PROP_USE_FULL_PAGE,
   PROP_UNIT,
@@ -144,8 +144,8 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_JOB_NAME:
       gtk_print_operation_set_job_name (op, g_value_get_string (value));
       break;
-    case PROP_NR_OF_PAGES:
-      gtk_print_operation_set_nr_of_pages (op, g_value_get_int (value));
+    case PROP_N_PAGES:
+      gtk_print_operation_set_n_pages (op, g_value_get_int (value));
       break;
     case PROP_CURRENT_PAGE:
       gtk_print_operation_set_current_page (op, g_value_get_int (value));
@@ -188,7 +188,7 @@ gtk_print_operation_get_property (GObject    *object,
     case PROP_JOB_NAME:
       g_value_set_string (value, priv->job_name);
       break;
-    case PROP_NR_OF_PAGES:
+    case PROP_N_PAGES:
       g_value_set_int (value, priv->nr_of_pages);
       break;
     case PROP_CURRENT_PAGE:
@@ -239,7 +239,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * A typical use for this signal is to use the parameters from the
    * #GtkPrintContext and paginate the document accordingly, and then
-   * set the number of pages with gtk_print_operation_set_nr_of_pages().
+   * set the number of pages with gtk_print_operation_set_n_pages().
    *
    * Since: 2.10
    */
@@ -405,7 +405,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkPrintOperation:number-of-pages:
+   * GtkPrintOperation:n-pages:
    *
    * The number of pages in the document. 
    *
@@ -419,8 +419,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
-				   PROP_NR_OF_PAGES,
-				   g_param_spec_int ("number-of-pages",
+				   PROP_N_PAGES,
+				   g_param_spec_int ("n-pages",
 						     P_("Number of Pages"),
 						     P_("The number of pages in the document."),
 						     -1,
@@ -734,7 +734,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_nr_of_pages:
+ * gtk_print_operation_set_n_pages:
  * @op: a #GtkPrintOperation
  * @n_pages: the number of pages
  * 
@@ -752,8 +752,8 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  * Since: 2.10
  **/
 void
-gtk_print_operation_set_nr_of_pages (GtkPrintOperation *op,
-				     gint               n_pages)
+gtk_print_operation_set_n_pages (GtkPrintOperation *op,
+				 gint               n_pages)
 {
   GtkPrintOperationPrivate *priv;
 

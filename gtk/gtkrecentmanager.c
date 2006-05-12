@@ -830,7 +830,7 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
  */
 gboolean
 gtk_recent_manager_add_item (GtkRecentManager  *manager,
-			     const gchar       *uri);
+			     const gchar       *uri)
 {
   GtkRecentData *recent_data;
   GError *add_error;
@@ -916,8 +916,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
 gboolean
 gtk_recent_manager_add_full (GtkRecentManager     *manager,
 			     const gchar          *uri,
-			     const GtkRecentData  *data,
-			     GError              **error)
+			     const GtkRecentData  *data)
 {
   GtkRecentManagerPrivate *priv;
   
@@ -959,7 +958,7 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
     {
       g_warning ("Attempting to add `%s' to the list of recently used "
 		 "resources, but no name of the application that is "
-		 "registering it was defined"
+		 "registering it was defined",
       		 uri);
       return FALSE;
     }

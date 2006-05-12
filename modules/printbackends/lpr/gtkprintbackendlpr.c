@@ -468,7 +468,7 @@ lpr_printer_prepare_for_print (GtkPrinter *printer,
   
   print_job->collate = gtk_print_settings_get_collate (settings);
   print_job->reverse = gtk_print_settings_get_reverse (settings);
-  print_job->num_copies = gtk_print_settings_get_num_copies (settings);
+  print_job->num_copies = gtk_print_settings_get_n_copies (settings);
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)

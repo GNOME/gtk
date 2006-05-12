@@ -298,7 +298,7 @@ begin_print (GtkPrintOperation *operation,
     }
 
   page_breaks = g_list_reverse (page_breaks);
-  gtk_print_operation_set_nr_of_pages (operation, g_list_length (page_breaks) + 1);
+  gtk_print_operation_set_n_pages (operation, g_list_length (page_breaks) + 1);
   
   print_data->page_breaks = page_breaks;
   

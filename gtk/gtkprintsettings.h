@@ -92,7 +92,7 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_PAPER_FORMAT   "paper-format"
 #define GTK_PRINT_SETTINGS_PAPER_WIDTH    "paper-width"
 #define GTK_PRINT_SETTINGS_PAPER_HEIGHT   "paper-height"
-#define GTK_PRINT_SETTINGS_NUM_COPIES     "num-copies"
+#define GTK_PRINT_SETTINGS_N_COPIES       "n-copies"
 #define GTK_PRINT_SETTINGS_DEFAULT_SOURCE "default-source"
 #define GTK_PRINT_SETTINGS_QUALITY        "quality"
 #define GTK_PRINT_SETTINGS_RESOLUTION     "resolution"
@@ -150,8 +150,8 @@ void               gtk_print_settings_set_duplex         (GtkPrintSettings   *se
 GtkPrintQuality    gtk_print_settings_get_quality        (GtkPrintSettings   *settings);
 void               gtk_print_settings_set_quality        (GtkPrintSettings   *settings,
 							  GtkPrintQuality     quality);
-gint               gtk_print_settings_get_num_copies     (GtkPrintSettings   *settings);
-void               gtk_print_settings_set_num_copies     (GtkPrintSettings   *settings,
+gint               gtk_print_settings_get_n_copies       (GtkPrintSettings   *settings);
+void               gtk_print_settings_set_n_copies       (GtkPrintSettings   *settings,
 							  gint                num_copies);
 gint               gtk_print_settings_get_number_up      (GtkPrintSettings   *settings);
 void               gtk_print_settings_set_number_up      (GtkPrintSettings   *settings,
