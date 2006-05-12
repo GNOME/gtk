@@ -768,7 +768,7 @@ gtk_print_operation_set_n_pages (GtkPrintOperation *op,
     {
       priv->nr_of_pages = n_pages;
 
-      g_object_notify (G_OBJECT (op), "number-of-pages");
+      g_object_notify (G_OBJECT (op), "n-pages");
     }
 }
 
