@@ -1,3 +1,11 @@
+2006-05-11  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/tmpl/gtkrecentmanager.sgml: Update the error enum and the
+	gtk_recent_manager_add and gtk_recent_manager_add_full parameters.
+
+	* gtk/migrating-GtkRecentChooser.sgml: Mention
+	gtk_recent_manager_get_default() and update the code examples.
+
 2006-05-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_message_dialog_set_image.

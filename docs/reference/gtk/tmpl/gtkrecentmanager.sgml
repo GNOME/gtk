@@ -29,15 +29,9 @@ file is as simple as:
 <informalexample>
   <programlisting>
 GtkRecentManager *manager;
-GError *error = NULL;
 
 manager = gtk_recent_manager_get_default ();
-gtk_recent_manager_add_item (manager, file_uri, &amp;error);
-if (error)
-  {
-    g_warning ("Could not add the file: &percnt;s", error-&gt;message);
-    g_error_free (error);
-  }
+gtk_recent_manager_add_item (manager, file_uri);
   </programlisting>
 </informalexample>
 
@@ -129,7 +123,6 @@ The #GQuark used for #GtkRecentManagerError errors.
 @GTK_RECENT_MANAGER_ERROR_INVALID_MIME: 
 @GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING: 
 @GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED: 
-@GTK_RECENT_MANAGER_ERROR_BAD_EXEC_STRING: 
 @GTK_RECENT_MANAGER_ERROR_READ: 
 @GTK_RECENT_MANAGER_ERROR_WRITE: 
 @GTK_RECENT_MANAGER_ERROR_UNKNOWN: 
@@ -175,7 +168,6 @@ The #GQuark used for #GtkRecentManagerError errors.
 
 @manager: 
 @uri: 
-@error: 
 @Returns: 
 
 
@@ -187,7 +179,6 @@ The #GQuark used for #GtkRecentManagerError errors.
 @manager: 
 @uri: 
 @recent_data: 
-@error: 
 @Returns: 
 
 

@@ -58,22 +58,22 @@
     </para>
 
     <para>
+      Usually, instead of creating a new #GtkRecentManager each time you
+      need it, you'll want to use the gtk_recent_manager_get_default()
+      function.
+    </para>
+
+    <para>
       To add a document to the list, you can use gtk_recent_manager_add_item(),
       like:
       <informalexample><programlisting>
         GtkRecentManager *manager;
-        GError *error = NULL;
 
 	manager = gtk_recent_manager_new (<!-- -->);
 
-	gtk_recent_manager_add_item (manager, document_uri, &amp;error);
-	if (error)
+	if (!gtk_recent_manager_add_item (manager, document_uri))
 	  {
-	    g_warning ("Unable to add '%s' to the list of recently used documents: %s\n",
-	               document_uri,
-		       error->message);
-            
-	    g_error_free (error);
+	    /* warn about the error */
 	  }
 	
 	g_object_unref (manager);
@@ -85,7 +85,6 @@
       <informalexample><programlisting>
         GtkRecentManager *manager;
         GtkRecentData *recent_data;
-	GError *error = NULL;
 
 	manager = gtk_recent_manager_new (<!-- -->);
 	
@@ -111,8 +110,7 @@
 	 */
 	recent_data-&amp;app_exec = g_strjoin (" ", g_get_prgname (<!-- -->), "--open-file", "%u", NULL);
 
-	gtk_recent_manager_add_full (manager, document_uri, recent_data, &amp;error);
-	if (error)
+	if (!gtk_recent_manager_add_full (manager, document_uri, recent_data))
 	  {
 	    /* warn about the error */
 	  }
@@ -130,7 +128,10 @@
       around, so you must remember to free the data inside the list and then
       the list itself when you are done using it:
       <informalexample><programlisting>
+        GtkRecentManager *manager;
         GList *recent_items, *l;
+
+	manager = gtk_recent_manager_get_default(<!-- -->);
 
 	recent_items = gtk_recent_manager_get_items (manager);
 	for (l = recent_items; l != NULL; l = l-&gt;next)
