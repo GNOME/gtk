@@ -58,9 +58,6 @@
 
 static void gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
 static void gtk_print_unix_dialog_finalize     (GObject            *object);
-static GObject* gtk_print_unix_dialog_constructor (GType               type,
-						   guint               n_construct_properties,
-						   GObjectConstructParam *construct_params);
 static void gtk_print_unix_dialog_set_property (GObject            *object,
 						guint               prop_id,
 						const GValue       *value,
@@ -209,7 +206,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   widget_class = (GtkWidgetClass *) class;
 
   object_class->finalize = gtk_print_unix_dialog_finalize;
-  object_class->constructor = gtk_print_unix_dialog_constructor;
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
@@ -279,30 +275,9 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
+
+  populate_dialog (dialog);  
 }
-
-static GObject *
-gtk_print_unix_dialog_constructor (GType               type,
-				   guint               n_construct_properties,
-				   GObjectConstructParam *construct_params)
-{
-  GtkPrintUnixDialog *dialog;
-  GObject *object;
-
-  object =
-    G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->constructor (type,
-								      n_construct_properties,
-								      construct_params);
-
-  /* We need to populate the dialog after the transient-to has been set.
-   * See bug #340401.
-   */
-  dialog = GTK_PRINT_UNIX_DIALOG (object);
-  populate_dialog (dialog);
-
-  return object;
-}
-
 
 static void
 gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)

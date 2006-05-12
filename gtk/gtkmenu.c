@@ -1004,33 +1004,6 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
     }
 }
 
-static void
-attach_widget_hierarchy_changed (GtkWidget *attach_widget,
-				 GtkWidget *previous_toplevel,
-				 gpointer data)
-{
-  GtkMenu *menu = GTK_MENU (data);
-  GtkWidget *new_toplevel = gtk_widget_get_toplevel (attach_widget);
-
-  if (g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
-    {
-      /* If there is an explicit screen set, then don't set WM_TRANSIENT_FOR.
-       * Because, what would happen if the attach widget moved to a different
-       * screen on a different display? The menu wouldn't move along with it,
-       * so we just make it the responsibility of whoever set the screen to
-       * also set WM_TRANSIENT_FOR.
-       */
-      return;
-    }
-  
-  if (menu->toplevel && !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen") &&
-      (!new_toplevel || GTK_IS_WINDOW (new_toplevel)))
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel),
-				    GTK_WINDOW (new_toplevel));
-    }
-}
-
 void
 gtk_menu_attach_to_widget (GtkMenu	       *menu,
 			   GtkWidget	       *attach_widget,
@@ -1061,10 +1034,6 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   g_signal_connect (attach_widget, "screen_changed",
 		    G_CALLBACK (attach_widget_screen_changed), menu);
   attach_widget_screen_changed (attach_widget, NULL, menu);
-  
-  g_signal_connect (attach_widget, "hierarchy_changed",
-		    G_CALLBACK (attach_widget_hierarchy_changed), menu);
-  attach_widget_hierarchy_changed (attach_widget, NULL, menu);
   
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), data);
@@ -1120,10 +1089,6 @@ gtk_menu_detach (GtkMenu *menu)
   g_signal_handlers_disconnect_by_func (data->attach_widget,
 					(gpointer) attach_widget_screen_changed,
 					menu);
-  g_signal_handlers_disconnect_by_func (data->attach_widget,
-					(gpointer) attach_widget_hierarchy_changed,
-					menu);
-  attach_widget_hierarchy_changed (data->attach_widget, NULL, menu);
 
   if (data->detacher)
     data->detacher (data->attach_widget, menu);
@@ -1307,6 +1272,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkMenuShell *menu_shell;
   gboolean grab_keyboard;
   GtkMenuPrivate *priv;
+  GtkWidget *parent_toplevel;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -1413,16 +1379,21 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       gtk_menu_reparent (menu, menu->toplevel, FALSE);
     }
- 
-  if (parent_menu_shell) 
-    {
-      GtkWidget *toplevel;
 
-      toplevel = gtk_widget_get_toplevel (parent_menu_shell);
-      if (GTK_IS_WINDOW (toplevel))
-	gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
-				     GTK_WINDOW (menu->toplevel));
+  parent_toplevel = NULL;
+  if (parent_menu_shell) 
+    parent_toplevel = gtk_widget_get_toplevel (parent_menu_shell);
+  else if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+    {
+      GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
+      if (attach_widget)
+	parent_toplevel = gtk_widget_get_toplevel (attach_widget);
     }
+
+  /* Set transient for to get the right window group and parent relationship */
+  if (parent_toplevel && GTK_IS_WINDOW (parent_toplevel))
+    gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel),
+				  GTK_WINDOW (parent_toplevel));
   
   menu->parent_menu_item = parent_menu_item;
   menu->position_func = func;
@@ -1473,14 +1444,12 @@ gtk_menu_popdown (GtkMenu *menu)
 {
   GtkMenuPrivate *private;
   GtkMenuShell *menu_shell;
-  gboolean had_parent;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
   menu_shell = GTK_MENU_SHELL (menu);
   private = gtk_menu_get_private (menu);
 
-  had_parent = menu_shell->parent_menu_shell != NULL;
   menu_shell->parent_menu_shell = NULL;
   menu_shell->active = FALSE;
   menu_shell->ignore_enter = FALSE;
@@ -1504,8 +1473,7 @@ gtk_menu_popdown (GtkMenu *menu)
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
   gtk_widget_hide (menu->toplevel);
-  if (had_parent)
-    gtk_window_group_add_window (gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
+  gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
 
   if (menu->torn_off)
     {

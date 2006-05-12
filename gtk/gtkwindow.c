@@ -173,6 +173,7 @@ struct _GtkWindowPrivate
   guint accept_focus : 1;
   guint focus_on_map : 1;
   guint deletable : 1;
+  guint transient_parent_group : 1;
 
   guint reset_type_hint : 1;
   GdkWindowTypeHint type_hint;
@@ -1850,10 +1851,12 @@ gtk_window_transient_parent_screen_changed (GtkWindow	*parent,
 static void       
 gtk_window_unset_transient_for  (GtkWindow *window)
 {
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  
   if (window->transient_parent)
     {
-      if (window->transient_parent->group)
-	gtk_window_group_remove_window (window->transient_parent->group,
+      if (priv->transient_parent_group)
+	gtk_window_group_remove_window (window->group,
 					window);
 
       g_signal_handlers_disconnect_by_func (window->transient_parent,
@@ -1873,6 +1876,7 @@ gtk_window_unset_transient_for  (GtkWindow *window)
         disconnect_parent_destroyed (window);
       
       window->transient_parent = NULL;
+      priv->transient_parent_group = FALSE;
     }
 }
 
@@ -1898,6 +1902,8 @@ void
 gtk_window_set_transient_for  (GtkWindow *window, 
 			       GtkWindow *parent)
 {
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
   g_return_if_fail (window != parent);
@@ -1914,7 +1920,7 @@ gtk_window_set_transient_for  (GtkWindow *window,
     }
 
   window->transient_parent = parent;
-
+  
   if (parent)
     {
       g_signal_connect (parent, "destroy",
@@ -1941,7 +1947,10 @@ gtk_window_set_transient_for  (GtkWindow *window,
 					      GTK_WIDGET (window));
 
       if (parent->group)
-	gtk_window_group_add_window (parent->group, window);
+	{
+	  gtk_window_group_add_window (parent->group, window);
+	  priv->transient_parent_group = TRUE;
+	}
     }
 }
 
