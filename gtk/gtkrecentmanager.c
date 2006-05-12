@@ -812,7 +812,6 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
  * gtk_recent_manager_add_item:
  * @manager: a #GtkRecentManager
  * @uri: a valid URI
- * @error: return location for a #GError, or %NULL
  *
  * Adds a new resource, pointed by @uri, into the recently used
  * resources list.
@@ -831,8 +830,7 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
  */
 gboolean
 gtk_recent_manager_add_item (GtkRecentManager  *manager,
-			     const gchar       *uri,
-			     GError           **error)
+			     const gchar       *uri);
 {
   GtkRecentData *recent_data;
   GError *add_error;
@@ -873,20 +871,13 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
   recent_data->is_private = FALSE;
   
   add_error = NULL;
-  retval = gtk_recent_manager_add_full (manager, uri, recent_data, &add_error);
+  retval = gtk_recent_manager_add_full (manager, uri, recent_data);
   
   g_free (recent_data->mime_type);
   g_free (recent_data->app_name);
   g_free (recent_data->app_exec);
 
   g_slice_free (GtkRecentData, recent_data);
-  
-  if (!retval)
-    {
-      g_propagate_error (error, add_error);
-      
-      return FALSE;
-    }
   
   return retval;
 }
@@ -896,7 +887,6 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
  * @manager: a #GtkRecentManager
  * @uri: a valid URI
  * @recent_data: metadata of the resource
- * @error: return location for a #GError, or %NULL
  *
  * Adds a new resource, pointed by @uri, into the recently used
  * resources list, using the metadata specified inside the #GtkRecentData
@@ -939,53 +929,47 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
   if ((data->display_name) &&
       (!g_utf8_validate (data->display_name, -1, NULL)))
     {
-      g_set_error  (error, GTK_RECENT_MANAGER_ERROR,
-          	    GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING,
-          	    _("The display name of the recently used resource "
-          	      "must be a valid UTF-8 encoded string."));
+      g_warning ("Attempting to add `%s' to the list of recently used "
+		 "resources, but the display name is not a valid UTF-8 "
+          	 "encoded string",
+		 uri);
       return FALSE;
     }
   
   if ((data->description) &&
       (!g_utf8_validate (data->description, -1, NULL)))
     {
-      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-          	   GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING,
-          	   _("The description of the recently used resource "
-          	     "must be a valid UTF-8 encoded string."));
+      g_warning ("Attempting to add `%s' to the list of recently used "
+		 "resources, but the description is not a valid UTF-8 "
+          	 "encoded string",
+		 uri);
       return FALSE;
     }
 
  
   if (!data->mime_type)
     {
-      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-                   GTK_RECENT_MANAGER_ERROR_INVALID_MIME,
-		   _("You must specify the MIME type of the "
-		     "resource pointed by `%s'"),
-		   uri);
+      g_warning ("Attempting to add `%s' to the list of recently used "
+		 "resources, but not MIME type was defined",
+		 uri);
       return FALSE;
     }
   
   if (!data->app_name)
     {
-      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-      		   GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED,
-      		   _("You must specify the name of the application "
-      		     "that is registering the recently used resource "
-      		     "pointed by `%s'"),
-      		   uri);
+      g_warning ("Attempting to add `%s' to the list of recently used "
+		 "resources, but no name of the application that is "
+		 "registering it was defined"
+      		 uri);
       return FALSE;
     }
   
   if (!data->app_exec)
     {
-      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-                   GTK_RECENT_MANAGER_ERROR_BAD_EXEC_STRING,
-		   _("You must specify a command line to "
-		     "be used when launching the resource "
-		     "pointed by `%s'"),
-		   uri);
+      g_warning ("Attempting to add `%s' to the list of recently used "
+		 "resources, but no command line for the application "
+		 "that is registering it was defined",
+		 uri);
       return FALSE;
     }
   

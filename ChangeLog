@@ -1,3 +1,14 @@
+2006-05-11  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* gtk/gtkrecentmanager.h: Remove the error parameter to the
+	gtk_recent_manager_add() and gtk_recent_manager_add_full()
+	functions; remove the unneeded error codes from the error
+	enumeration.  (#336774).
+
+	* gtk/gtkrecentmanager.c: Make gtk_recent_manager_add() and
+	gtk_recent_manager_add_full() complain loudly about wrong or
+	missing meta-data, instead of using a GError.  (#336774)
+
 2006-05-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/Makefile.am (demos): Add it here.

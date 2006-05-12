@@ -104,8 +104,6 @@ struct _GtkRecentManagerClass
  * @GTK_RECENT_MANAGER_ERROR_NOT_FOUND: the URI specified does not exists in
  *   the recently used resources list.
  * @GTK_RECENT_MANAGER_ERROR_INVALID_URI: the URI specified is not valid.
- * @GTK_RECENT_MANAGER_ERROR_INVALID_MIME: the MIME type specified is not
- *   valid.
  * @GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING: the supplied string is not
  *   UTF-8 encoded.
  * @GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED: no application has registered
@@ -122,10 +120,8 @@ typedef enum
 {
   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
   GTK_RECENT_MANAGER_ERROR_INVALID_URI,
-  GTK_RECENT_MANAGER_ERROR_INVALID_MIME,
   GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING,
   GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED,
-  GTK_RECENT_MANAGER_ERROR_BAD_EXEC_STRING,
   GTK_RECENT_MANAGER_ERROR_READ,
   GTK_RECENT_MANAGER_ERROR_WRITE,
   GTK_RECENT_MANAGER_ERROR_UNKNOWN
@@ -145,12 +141,10 @@ void              gtk_recent_manager_set_screen     (GtkRecentManager     *manag
 						     GdkScreen            *screen);
 
 gboolean          gtk_recent_manager_add_item       (GtkRecentManager     *manager,
-						     const gchar          *uri,
-						     GError              **error);
+						     const gchar          *uri);
 gboolean          gtk_recent_manager_add_full       (GtkRecentManager     *manager,
 						     const gchar          *uri,
-						     const GtkRecentData  *recent_data,
-						     GError              **error);
+						     const GtkRecentData  *recent_data);
 gboolean          gtk_recent_manager_remove_item    (GtkRecentManager     *manager,
 						     const gchar          *uri,
 						     GError              **error);
