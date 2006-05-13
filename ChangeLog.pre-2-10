@@ -1,5 +1,8 @@
 2006-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c: Handle tab_label being NULL better.
+	(#341455, William Jon McCann, patch by Carlos Garnacho Parro)
+
 	* gtk/gtkruler.c: Reinstate the ruler metrics strings, since
 	they are used by glade, pointed out by Damon Chaplin.
 
