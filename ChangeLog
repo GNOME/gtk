@@ -1,5 +1,8 @@
 2006-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c: Fix some corner cases in the size
+	allocation logic for tabs.  (#341577, Carlos Garnacho Parro)
+
 	* gtk/gtkprintunixdialog.c: Some fixes to capitalization of
 	labels.  (#341558, Dennis Cranston)
 

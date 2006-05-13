@@ -4943,8 +4943,9 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
       *n = 0;
 
       *remaining_space = max - min - tab_overlap - tab_space;
-      notebook->first_tab = children = gtk_notebook_search_page (notebook, NULL,
-								 STEP_NEXT, TRUE);
+      children = notebook->children;
+      notebook->first_tab = gtk_notebook_search_page (notebook, NULL,
+						      STEP_NEXT, TRUE);
       while (children)
 	{
 	  page = children->data;
@@ -4998,9 +4999,8 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 					GList        *last_child,
 					gboolean      showarrow,
 					gint          direction,
-					gint          n,
 					gint         *remaining_space,
-					gint         *i,
+					gint         *expanded_tabs,
 					gint          min,
 					gint          max)
 {
@@ -5009,8 +5009,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   gboolean allocate_at_bottom;
-  gint tab_overlap, tab_pos, delta;
-  gint new_fill, old_fill;
+  gint tab_overlap, tab_pos, tab_extra_space;
   gint left_x, right_x, top_y, bottom_y, anchor;
   gboolean gap_left, packing_changed;
   GtkAllocation child_allocation = { 0, };
@@ -5022,7 +5021,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   gtk_widget_style_get (widget, "tab-overlap", &tab_overlap, NULL);
   tab_pos = get_effective_tab_pos (notebook);
   allocate_at_bottom = get_allocate_at_bottom (widget, direction);
-  anchor = old_fill = 0;
+  anchor = 0;
 
   child_allocation.x = widget->allocation.x + container->border_width;
   child_allocation.y = widget->allocation.y + container->border_width;
@@ -5083,19 +5082,19 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
       if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
 	continue;
 
-      delta = 0;
-      if (n && (showarrow || page->expand || notebook->homogeneous))
+      tab_extra_space = 0;
+      if (*expanded_tabs && (showarrow || page->expand || notebook->homogeneous))
 	{
-	  new_fill = (*remaining_space * (*i)++) / n;
-	  delta = new_fill - old_fill;
-	  old_fill = new_fill;
+	  tab_extra_space = *remaining_space / *expanded_tabs;
+	  *remaining_space -= tab_extra_space;
+	  (*expanded_tabs)--;
 	}
 
       switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
-	  child_allocation.width = page->requisition.width + tab_overlap + delta;
+	  child_allocation.width = page->requisition.width + tab_overlap + tab_extra_space;
 
 	  /* make sure that the reordered tab doesn't go past the last position */
 	  if (priv->operation == DRAG_OPERATION_REORDER &&
@@ -5152,7 +5151,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
-	  child_allocation.height = page->requisition.height + tab_overlap + delta;
+	  child_allocation.height = page->requisition.height + tab_overlap + tab_extra_space;
 
 	  /* make sure that the reordered tab doesn't go past the last position */
 	  if (priv->operation == DRAG_OPERATION_REORDER &&
@@ -5316,32 +5315,32 @@ gtk_notebook_pages_allocate (GtkNotebook *notebook)
   GList *last_child = NULL;
   gboolean showarrow = FALSE;
   gint tab_space, min, max, remaining_space;
-  gint i, n, operation;
+  gint expanded_tabs, operation;
   gboolean changed;
 
   if (!notebook->show_tabs || !notebook->children || !notebook->cur_page)
     return;
 
   min = max = tab_space = remaining_space = 0;
-  i = n = 1;
+  expanded_tabs = 1;
 
   gtk_notebook_tab_space (notebook, &showarrow,
 			  &min, &max, &tab_space);
 
   gtk_notebook_calculate_shown_tabs (notebook, showarrow,
 				     min, max, tab_space, &last_child,
-				     &n, &remaining_space);
+				     &expanded_tabs, &remaining_space);
 
   children = notebook->first_tab;
   changed = gtk_notebook_calculate_tabs_allocation (notebook, &children, last_child,
 						    showarrow, STEP_NEXT,
-						    n, &remaining_space, &i, min, max);
+						    &remaining_space, &expanded_tabs, min, max);
   if (children && children != last_child)
     {
       children = notebook->children;
       changed |= gtk_notebook_calculate_tabs_allocation (notebook, &children, last_child,
 							 showarrow, STEP_PREV,
-							 n, &remaining_space, &i, min, max);
+							 &remaining_space, &expanded_tabs, min, max);
     }
 
   children = notebook->children;
