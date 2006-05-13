@@ -1,5 +1,8 @@
 2006-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Some fixes to capitalization of
+	labels.  (#341558, Dennis Cranston)
+
 	* gtk/gtknotebook.c: Handle tab_label being NULL better.
 	(#341455, William Jon McCann, patch by Carlos Garnacho Parro)
 

@@ -1922,7 +1922,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new_with_mnemonic (_("_Only Print:"));
+  label = gtk_label_new_with_mnemonic (_("_Only print:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1973,7 +1973,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
   gtk_widget_show (table);
 
-  label = gtk_label_new_with_mnemonic (_("Paper _Type:"));
+  label = gtk_label_new_with_mnemonic (_("Paper _type:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -1988,7 +1988,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new_with_mnemonic (_("Paper _Source:"));
+  label = gtk_label_new_with_mnemonic (_("Paper _source:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2003,7 +2003,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
-  label = gtk_label_new_with_mnemonic (_("Output T_ray:"));
+  label = gtk_label_new_with_mnemonic (_("Output t_ray:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
@@ -2121,7 +2121,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
 
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					      _("On _Hold"));
+					      _("On _hold"));
   priv->print_hold_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
