@@ -3768,9 +3768,9 @@ _gtk_text_line_byte_to_segment (GtkTextLine *line,
 
   while (offset >= seg->byte_count)
     {
-      g_assert (seg != NULL); /* means an invalid byte index */
       offset -= seg->byte_count;
       seg = seg->next;
+      g_assert (seg != NULL); /* means an invalid byte index */
     }
 
   if (seg_offset)
@@ -3794,9 +3794,9 @@ _gtk_text_line_char_to_segment (GtkTextLine *line,
 
   while (offset >= seg->char_count)
     {
-      g_assert (seg != NULL); /* means an invalid char index */
       offset -= seg->char_count;
       seg = seg->next;
+      g_assert (seg != NULL); /* means an invalid char index */
     }
 
   if (seg_offset)
@@ -3820,9 +3820,9 @@ _gtk_text_line_byte_to_any_segment (GtkTextLine *line,
 
   while (offset > 0 && offset >= seg->byte_count)
     {
-      g_assert (seg != NULL); /* means an invalid byte index */
       offset -= seg->byte_count;
       seg = seg->next;
+      g_assert (seg != NULL); /* means an invalid byte index */
     }
 
   if (seg_offset)
@@ -3846,9 +3846,9 @@ _gtk_text_line_char_to_any_segment (GtkTextLine *line,
 
   while (offset > 0 && offset >= seg->char_count)
     {
-      g_assert (seg != NULL); /* means an invalid byte index */
       offset -= seg->char_count;
       seg = seg->next;
+      g_assert (seg != NULL); /* means an invalid byte index */
     }
 
   if (seg_offset)
@@ -3872,12 +3872,10 @@ _gtk_text_line_byte_to_char (GtkTextLine *line,
   while (byte_offset >= seg->byte_count) /* while (we need to go farther than
                                             the next segment) */
     {
-      g_assert (seg != NULL); /* our byte_index was bogus if this happens */
-
       byte_offset -= seg->byte_count;
       char_offset += seg->char_count;
-
       seg = seg->next;
+      g_assert (seg != NULL); /* our byte_index was bogus if this happens */
     }
 
   g_assert (seg != NULL);

@@ -1,7 +1,8 @@
 2006-05-13  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtktextview.c (gtk_text_view_allocate_children): Move
-	an assert to the right place.  (#341661, Pascal Terjan)
+	* gtk/gtktextbtree.c: 
+	* gtk/gtktextview.c: Move some asserts to the right 
+	place.  (#341661, #341665, Pascal Terjan)
 
 2006-05-12  Matthias Clasen  <mclasen@redhat.com>
 
