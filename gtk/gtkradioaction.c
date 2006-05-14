@@ -73,7 +73,7 @@ static void gtk_radio_action_activate     (GtkAction *action);
 static GtkWidget *create_menu_item        (GtkAction *action);
 
 
-G_DEFINE_TYPE (GtkRadioAction, gtk_radio_action, GTK_TYPE_TOGGLE_ACTION);
+G_DEFINE_TYPE (GtkRadioAction, gtk_radio_action, GTK_TYPE_TOGGLE_ACTION)
 
 static guint         radio_action_signals[LAST_SIGNAL] = { 0 };
 

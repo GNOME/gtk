@@ -98,7 +98,7 @@ static void gtk_table_size_allocate_pass1 (GtkTable *table);
 static void gtk_table_size_allocate_pass2 (GtkTable *table);
 
 
-G_DEFINE_TYPE (GtkTable, gtk_table, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkTable, gtk_table, GTK_TYPE_CONTAINER)
 
 static void
 gtk_table_class_init (GtkTableClass *class)

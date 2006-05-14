@@ -82,7 +82,7 @@ struct _FilterRule
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
-G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, GTK_TYPE_OBJECT)
 
 static void
 gtk_file_filter_init (GtkFileFilter *object)

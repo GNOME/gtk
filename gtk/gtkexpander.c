@@ -126,7 +126,7 @@ static void gtk_expander_activate (GtkExpander *expander);
 static void get_expander_bounds (GtkExpander  *expander,
 				 GdkRectangle *rect);
 
-G_DEFINE_TYPE (GtkExpander, gtk_expander, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkExpander, gtk_expander, GTK_TYPE_BIN)
 
 static void
 gtk_expander_class_init (GtkExpanderClass *klass)

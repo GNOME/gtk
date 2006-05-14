@@ -160,7 +160,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserMenu,
 			 gtk_recent_chooser_menu,
 			 GTK_TYPE_MENU,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init));
+				 		gtk_recent_chooser_iface_init))
 
 
 static void

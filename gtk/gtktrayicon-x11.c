@@ -74,7 +74,7 @@ static void gtk_tray_icon_update_manager_window    (GtkTrayIcon *icon,
 						    gboolean     dock_if_realized);
 static void gtk_tray_icon_manager_window_destroyed (GtkTrayIcon *icon);
 
-G_DEFINE_TYPE (GtkTrayIcon, gtk_tray_icon, GTK_TYPE_PLUG);
+G_DEFINE_TYPE (GtkTrayIcon, gtk_tray_icon, GTK_TYPE_PLUG)
 
 static void
 gtk_tray_icon_class_init (GtkTrayIconClass *class)

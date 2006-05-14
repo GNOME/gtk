@@ -306,7 +306,7 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
      
 static void gtk_text_child_anchor_finalize (GObject *obj);
 
-G_DEFINE_TYPE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT)
 
 static void
 gtk_text_child_anchor_init (GtkTextChildAnchor *child_anchor)

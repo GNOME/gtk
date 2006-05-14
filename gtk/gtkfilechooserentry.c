@@ -108,7 +108,7 @@ static GtkEditableClass *parent_editable_iface;
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-						gtk_file_chooser_entry_iface_init));
+						gtk_file_chooser_entry_iface_init))
 
 static void
 _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)

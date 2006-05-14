@@ -58,7 +58,7 @@ static void gtk_tray_icon_size_allocate (GtkWidget          *widget,
 static void gtk_tray_icon_finalize (GObject *object);
 
 
-G_DEFINE_TYPE (GtkTrayIcon, gtk_tray_icon, GTK_TYPE_PLUG);
+G_DEFINE_TYPE (GtkTrayIcon, gtk_tray_icon, GTK_TYPE_PLUG)
 
 static void
 gtk_tray_icon_class_init (GtkTrayIconClass *class)

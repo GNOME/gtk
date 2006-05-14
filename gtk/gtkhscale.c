@@ -39,7 +39,7 @@ static void     gtk_hscale_get_layout_offsets (GtkScale       *scale,
                                                gint           *x,
                                                gint           *y);
 
-G_DEFINE_TYPE (GtkHScale, gtk_hscale, GTK_TYPE_SCALE);
+G_DEFINE_TYPE (GtkHScale, gtk_hscale, GTK_TYPE_SCALE)
 
 static void
 gtk_hscale_class_init (GtkHScaleClass *class)

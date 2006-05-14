@@ -60,7 +60,7 @@ static gboolean     gtk_accel_label_expose_event (GtkWidget          *widget,
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
 
-G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL);
+G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)

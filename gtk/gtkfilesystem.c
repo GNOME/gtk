@@ -331,7 +331,7 @@ enum
   PROP_CANCELLED
 };
 
-G_DEFINE_TYPE (GtkFileSystemHandle, gtk_file_system_handle, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkFileSystemHandle, gtk_file_system_handle, G_TYPE_OBJECT)
 
 static void
 gtk_file_system_handle_init (GtkFileSystemHandle *handle)

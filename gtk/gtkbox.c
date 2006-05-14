@@ -74,7 +74,7 @@ static void gtk_box_get_child_property (GtkContainer    *container,
 static GType gtk_box_child_type (GtkContainer   *container);
      
 
-G_DEFINE_ABSTRACT_TYPE (GtkBox, gtk_box, GTK_TYPE_CONTAINER);
+G_DEFINE_ABSTRACT_TYPE (GtkBox, gtk_box, GTK_TYPE_CONTAINER)
 
 static void
 gtk_box_class_init (GtkBoxClass *class)

@@ -440,7 +440,7 @@ static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_icon_view_cell_layout_init));
+						gtk_icon_view_cell_layout_init))
 
 static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)

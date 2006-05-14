@@ -201,7 +201,7 @@ static gboolean gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
 
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONTAINER)
 
 static void
 gtk_menu_shell_class_init (GtkMenuShellClass *klass)

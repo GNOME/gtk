@@ -56,7 +56,7 @@ enum
   PROP_PIXELS
 };
 
-G_DEFINE_TYPE(GdkPixbuf, gdk_pixbuf, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GdkPixbuf, gdk_pixbuf, G_TYPE_OBJECT)
 
 static void 
 gdk_pixbuf_init (GdkPixbuf *pixbuf)

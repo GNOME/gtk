@@ -41,7 +41,7 @@ static void	gtk_vscale_get_layout_offsets (GtkScale		*scale,
                                                gint		*x,
                                                gint		*y);
 
-G_DEFINE_TYPE (GtkVScale, gtk_vscale, GTK_TYPE_SCALE);
+G_DEFINE_TYPE (GtkVScale, gtk_vscale, GTK_TYPE_SCALE)
 
 static void
 gtk_vscale_class_init (GtkVScaleClass *class)

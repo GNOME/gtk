@@ -142,7 +142,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeStore, gtk_tree_store, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST,
 						gtk_tree_store_drag_dest_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE,
-						gtk_tree_store_sortable_init));
+						gtk_tree_store_sortable_init))
 
 static void
 gtk_tree_store_class_init (GtkTreeStoreClass *class)

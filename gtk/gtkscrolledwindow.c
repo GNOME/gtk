@@ -146,7 +146,7 @@ static void gtk_scrolled_window_update_real_placement (GtkScrolledWindow   *scro
 
 static guint signals[LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN)
 
 static void
 add_scroll_binding (GtkBindingSet  *binding_set,

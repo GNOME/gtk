@@ -65,7 +65,7 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
-G_DEFINE_ABSTRACT_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX);
+G_DEFINE_ABSTRACT_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
 
 static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)

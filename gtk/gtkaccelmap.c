@@ -931,7 +931,7 @@ gtk_accel_map_unlock_path (const gchar *accel_path)
   entry->lock_count -= 1;  
 }
 
-G_DEFINE_TYPE (GtkAccelMap, gtk_accel_map, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkAccelMap, gtk_accel_map, G_TYPE_OBJECT)
 
 static void
 gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)

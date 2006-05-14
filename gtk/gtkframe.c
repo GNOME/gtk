@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -73,7 +73,7 @@ static void gtk_frame_compute_child_allocation      (GtkFrame      *frame,
 static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 						     GtkAllocation *child_allocation);
 
-G_DEFINE_TYPE (GtkFrame, gtk_frame, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkFrame, gtk_frame, GTK_TYPE_BIN)
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)

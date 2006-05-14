@@ -52,7 +52,7 @@ static void gtk_radio_menu_item_get_property   (GObject               *object,
 
 static guint group_changed_signal = 0;
 
-G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM);
+G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 GtkWidget*
 gtk_radio_menu_item_new (GSList *group)

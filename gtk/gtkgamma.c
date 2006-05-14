@@ -208,7 +208,7 @@ static const char *const xpm[][27] =
     }
   };
 
-G_DEFINE_TYPE (GtkGammaCurve, gtk_gamma_curve, GTK_TYPE_VBOX);
+G_DEFINE_TYPE (GtkGammaCurve, gtk_gamma_curve, GTK_TYPE_VBOX)
 
 static void
 gtk_gamma_curve_class_init (GtkGammaCurveClass *class)

@@ -86,7 +86,7 @@ struct _GtkCellRendererTogglePrivate
 };
 
 
-G_DEFINE_TYPE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER);
+G_DEFINE_TYPE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER)
 
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)

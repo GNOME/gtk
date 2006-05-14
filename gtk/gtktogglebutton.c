@@ -69,7 +69,7 @@ static void gtk_toggle_button_update_state  (GtkButton            *button);
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON);
+G_DEFINE_TYPE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)

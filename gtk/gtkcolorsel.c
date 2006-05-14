@@ -1809,7 +1809,7 @@ default_change_palette_func (GdkScreen	    *screen,
   g_free (str);
 }
 
-G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_VBOX);
+G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_VBOX)
 
 static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)

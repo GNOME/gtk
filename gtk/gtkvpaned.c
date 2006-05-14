@@ -34,7 +34,7 @@ static void     gtk_vpaned_size_request   (GtkWidget      *widget,
 static void     gtk_vpaned_size_allocate  (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
 
-G_DEFINE_TYPE (GtkVPaned, gtk_vpaned, GTK_TYPE_PANED);
+G_DEFINE_TYPE (GtkVPaned, gtk_vpaned, GTK_TYPE_PANED)
 
 static void
 gtk_vpaned_class_init (GtkVPanedClass *class)

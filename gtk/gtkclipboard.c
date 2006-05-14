@@ -151,7 +151,7 @@ static GQuark clipboards_owned_key_id = 0;
 
 static guint         clipboard_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkClipboard, gtk_clipboard, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkClipboard, gtk_clipboard, G_TYPE_OBJECT)
 
 static void
 gtk_clipboard_init (GtkClipboard *object)

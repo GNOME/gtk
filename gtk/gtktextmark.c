@@ -55,7 +55,7 @@
 
 static void gtk_text_mark_finalize (GObject *obj);
 
-G_DEFINE_TYPE (GtkTextMark, gtk_text_mark, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkTextMark, gtk_text_mark, G_TYPE_OBJECT)
 
 static void
 gtk_text_mark_init (GtkTextMark *mark)

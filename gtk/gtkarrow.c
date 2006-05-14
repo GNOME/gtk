@@ -55,7 +55,7 @@ static void gtk_arrow_get_property (GObject         *object,
 				    GParamSpec      *pspec);
 
 
-G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC);
+G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC)
 
 
 static void

@@ -46,7 +46,7 @@ static gint gtk_hruler_motion_notify (GtkWidget      *widget,
 static void gtk_hruler_draw_ticks    (GtkRuler       *ruler);
 static void gtk_hruler_draw_pos      (GtkRuler       *ruler);
 
-G_DEFINE_TYPE (GtkHRuler, gtk_hruler, GTK_TYPE_RULER);
+G_DEFINE_TYPE (GtkHRuler, gtk_hruler, GTK_TYPE_RULER)
 
 static void
 gtk_hruler_class_init (GtkHRulerClass *klass)

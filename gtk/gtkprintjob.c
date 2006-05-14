@@ -92,7 +92,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPrintJob, gtk_print_job, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkPrintJob, gtk_print_job, G_TYPE_OBJECT)
 
 static void
 gtk_print_job_class_init (GtkPrintJobClass *class)

@@ -69,7 +69,7 @@ static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 static void gtk_viewport_style_set                (GtkWidget *widget,
 			                           GtkStyle  *previous_style);
 
-G_DEFINE_TYPE (GtkViewport, gtk_viewport, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkViewport, gtk_viewport, GTK_TYPE_BIN)
 
 static void
 gtk_viewport_class_init (GtkViewportClass *class)

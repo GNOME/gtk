@@ -68,7 +68,7 @@ enum {
   PROP_IMAGE
 };
 
-G_DEFINE_TYPE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM)
 
 static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)

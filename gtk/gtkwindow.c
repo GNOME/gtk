@@ -308,7 +308,7 @@ static void gtk_window_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 
 
-G_DEFINE_TYPE (GtkWindow, gtk_window, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkWindow, gtk_window, GTK_TYPE_BIN)
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,

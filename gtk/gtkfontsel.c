@@ -159,7 +159,7 @@ static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
 static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
 
-G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX);
+G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
 static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)

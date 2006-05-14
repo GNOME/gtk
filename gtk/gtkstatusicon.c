@@ -129,7 +129,7 @@ static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
 
 static guint status_icon_signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkStatusIcon, gtk_status_icon, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkStatusIcon, gtk_status_icon, G_TYPE_OBJECT)
 
 static void
 gtk_status_icon_class_init (GtkStatusIconClass *class)

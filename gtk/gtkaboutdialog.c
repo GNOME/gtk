@@ -172,7 +172,7 @@ static GtkAboutDialogActivateLinkFunc activate_url_hook = NULL;
 static gpointer activate_url_hook_data = NULL;
 static GDestroyNotify activate_url_hook_destroy = NULL;
 
-G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
 
 static void
 gtk_about_dialog_class_init (GtkAboutDialogClass *klass)

@@ -130,7 +130,7 @@ static guint editable_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkOldEditable, gtk_old_editable, GTK_TYPE_WIDGET,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-							 gtk_old_editable_editable_init));
+							 gtk_old_editable_editable_init))
 
 static void
 gtk_old_editable_class_init (GtkOldEditableClass *class)

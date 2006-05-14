@@ -48,7 +48,7 @@ static gint gtk_item_leave      (GtkWidget        *widget,
 
 static guint item_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_ABSTRACT_TYPE (GtkItem, gtk_item, GTK_TYPE_BIN);
+G_DEFINE_ABSTRACT_TYPE (GtkItem, gtk_item, GTK_TYPE_BIN)
 
 static void
 gtk_item_class_init (GtkItemClass *class)

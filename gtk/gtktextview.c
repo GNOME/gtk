@@ -418,7 +418,7 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER)
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,

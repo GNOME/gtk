@@ -54,7 +54,7 @@ static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 						   GDK_META_MASK);
 
 
-G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
 
 /* --- functions --- */
 static void

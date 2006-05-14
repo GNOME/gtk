@@ -53,7 +53,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserWidget,
 		         gtk_recent_chooser_widget,
 			 GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-						_gtk_recent_chooser_delegate_iface_init));
+						_gtk_recent_chooser_delegate_iface_init))
 
 static void
 gtk_recent_chooser_widget_class_init (GtkRecentChooserWidgetClass *klass)

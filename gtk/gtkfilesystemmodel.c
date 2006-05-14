@@ -150,7 +150,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJE
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_file_system_model_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						drag_source_iface_init));
+						drag_source_iface_init))
 
 static void
 _gtk_file_system_model_class_init (GtkFileSystemModelClass *class)

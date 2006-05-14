@@ -97,7 +97,7 @@ enum
   PROP_STORAGE_TYPE
 };
 
-G_DEFINE_TYPE (GtkImage, gtk_image, GTK_TYPE_MISC);
+G_DEFINE_TYPE (GtkImage, gtk_image, GTK_TYPE_MISC)
 
 static void
 gtk_image_class_init (GtkImageClass *class)

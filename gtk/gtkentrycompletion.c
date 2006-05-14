@@ -141,7 +141,7 @@ static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntryCompletion, gtk_entry_completion, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_entry_completion_cell_layout_init));
+						gtk_entry_completion_cell_layout_init))
 
 static void
 gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)

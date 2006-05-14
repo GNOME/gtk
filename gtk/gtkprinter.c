@@ -82,7 +82,7 @@ static void gtk_printer_get_property (GObject      *object,
 				      GValue       *value,
 				      GParamSpec   *pspec);
 
-G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT)
 
 static int
 safe_strcmp (const char *a, const char *b)

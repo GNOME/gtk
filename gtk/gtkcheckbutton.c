@@ -49,7 +49,7 @@ static void gtk_check_button_draw_indicator      (GtkCheckButton      *check_but
 static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_button,
 						  GdkRectangle        *area);
 
-G_DEFINE_TYPE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON);
+G_DEFINE_TYPE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
 
 static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)

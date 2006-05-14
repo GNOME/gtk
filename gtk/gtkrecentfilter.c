@@ -83,7 +83,7 @@ struct _FilterRule
   } u;
 };
 
-G_DEFINE_TYPE (GtkRecentFilter, gtk_recent_filter, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkRecentFilter, gtk_recent_filter, GTK_TYPE_OBJECT)
 
 
 static void

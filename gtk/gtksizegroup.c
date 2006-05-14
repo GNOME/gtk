@@ -301,7 +301,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   size_group->ignore_hidden = 0;
 }
 
-G_DEFINE_TYPE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT)
 
 static void
 gtk_size_group_set_property (GObject      *object,

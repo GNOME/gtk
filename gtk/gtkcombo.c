@@ -121,7 +121,7 @@ static void         gtk_combo_get_property       (GObject         *object,
 						  GValue          *value,
 						  GParamSpec      *pspec);
 
-G_DEFINE_TYPE (GtkCombo, gtk_combo, GTK_TYPE_HBOX);
+G_DEFINE_TYPE (GtkCombo, gtk_combo, GTK_TYPE_HBOX)
 
 static void
 gtk_combo_class_init (GtkComboClass * klass)

@@ -72,7 +72,7 @@ static GtkPreviewClass *preview_class = NULL;
 static gint install_cmap = FALSE;
 
 
-G_DEFINE_TYPE (GtkPreview, gtk_preview, GTK_TYPE_WIDGET);
+G_DEFINE_TYPE (GtkPreview, gtk_preview, GTK_TYPE_WIDGET)
 
 static void
 gtk_preview_class_init (GtkPreviewClass *klass)

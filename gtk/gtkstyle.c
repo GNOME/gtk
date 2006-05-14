@@ -357,7 +357,7 @@ static const GdkColor gtk_default_active_base =    { 0, GTK_VERY_DARK_GRAY };
 static guint realize_signal = 0;
 static guint unrealize_signal = 0;
 
-G_DEFINE_TYPE (GtkStyle, gtk_style, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkStyle, gtk_style, G_TYPE_OBJECT)
 
 /* --- functions --- */
 

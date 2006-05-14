@@ -96,7 +96,7 @@ static GtkIconSize icon_size_register_intern (const gchar *name,
    0, 0, 0,								\
    any_direction, any_state, any_size }
 
-G_DEFINE_TYPE (GtkIconFactory, gtk_icon_factory, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkIconFactory, gtk_icon_factory, G_TYPE_OBJECT)
 
 static void
 gtk_icon_factory_init (GtkIconFactory *factory)

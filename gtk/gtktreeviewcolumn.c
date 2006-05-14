@@ -155,7 +155,7 @@ static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_tree_view_column_cell_layout_init));
+						gtk_tree_view_column_cell_layout_init))
 
 static void
 gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)

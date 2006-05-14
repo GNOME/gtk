@@ -938,7 +938,7 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
 
-G_DEFINE_TYPE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT);
+G_DEFINE_TYPE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
 
 static void
 gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)

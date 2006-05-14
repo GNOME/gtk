@@ -87,7 +87,7 @@ static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
 
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
-G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL);
+G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
 
 static void
 gtk_menu_bar_init (GtkMenuBar *object)

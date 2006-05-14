@@ -65,7 +65,7 @@ enum
   PROP_TEXT_COLUMN
 };
 
-G_DEFINE_TYPE (GtkComboBoxEntry, gtk_combo_box_entry, GTK_TYPE_COMBO_BOX);
+G_DEFINE_TYPE (GtkComboBoxEntry, gtk_combo_box_entry, GTK_TYPE_COMBO_BOX)
 
 static void
 gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)

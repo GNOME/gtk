@@ -38,7 +38,7 @@
 /* GtkColorSelectionDialog */
 /***************************/
 
-G_DEFINE_TYPE (GtkColorSelectionDialog, gtk_color_selection_dialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkColorSelectionDialog, gtk_color_selection_dialog, GTK_TYPE_DIALOG)
 
 static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)

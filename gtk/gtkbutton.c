@@ -139,7 +139,7 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkButton, gtk_button, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkButton, gtk_button, GTK_TYPE_BIN)
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)

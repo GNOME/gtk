@@ -35,7 +35,7 @@ static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 					    GtkAllocation       *allocation);
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
-G_DEFINE_TYPE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET);
+G_DEFINE_TYPE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET)
 
 static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)

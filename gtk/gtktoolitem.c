@@ -95,9 +95,9 @@ static gboolean gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
 static gboolean gtk_tool_item_create_menu_proxy (GtkToolItem *item);
 
 
-static guint         toolitem_signals[LAST_SIGNAL] = { 0 };
+static guint toolitem_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToolItem, gtk_tool_item, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkToolItem, gtk_tool_item, GTK_TYPE_BIN)
 
 static void
 gtk_tool_item_class_init (GtkToolItemClass *klass)

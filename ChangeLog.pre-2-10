@@ -1,5 +1,6 @@
 2006-05-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c:
 	* gdk-pixbuf/*.c:
 	* gdk/*.c: Remove erroneous ; after G_DEFINE_TYPE 
 	macros.  (#341692, Yevgen Muntyan)

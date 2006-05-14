@@ -60,7 +60,7 @@ static void gtk_adjustment_set_property (GObject      *object,
 
 static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkAdjustment, gtk_adjustment, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkAdjustment, gtk_adjustment, GTK_TYPE_OBJECT)
 
 static void
 gtk_adjustment_class_init (GtkAdjustmentClass *class)

@@ -56,7 +56,7 @@ static void gtk_text_tag_table_get_property (GObject              *object,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT)
 
 static void
 gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)

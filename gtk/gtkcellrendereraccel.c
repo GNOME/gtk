@@ -70,7 +70,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT);
+G_DEFINE_TYPE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void
 gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)

@@ -98,7 +98,7 @@ static GQuark		 quark_type_separator_item = 0;
 static GQuark		 quark_type_branch = 0;
 static GQuark		 quark_type_last_branch = 0;
 
-G_DEFINE_TYPE (GtkItemFactory, gtk_item_factory, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkItemFactory, gtk_item_factory, GTK_TYPE_OBJECT)
 
 /* --- functions --- */
 static void

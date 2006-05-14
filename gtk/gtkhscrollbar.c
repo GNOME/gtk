@@ -31,7 +31,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-G_DEFINE_TYPE (GtkHScrollbar, gtk_hscrollbar, GTK_TYPE_SCROLLBAR);
+G_DEFINE_TYPE (GtkHScrollbar, gtk_hscrollbar, GTK_TYPE_SCROLLBAR)
 
 static void
 gtk_hscrollbar_class_init (GtkHScrollbarClass *class)

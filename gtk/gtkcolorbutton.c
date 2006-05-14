@@ -135,7 +135,7 @@ static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
 static const GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
 
-G_DEFINE_TYPE (GtkColorButton, gtk_color_button, GTK_TYPE_BUTTON);
+G_DEFINE_TYPE (GtkColorButton, gtk_color_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)

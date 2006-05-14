@@ -112,7 +112,7 @@ static GQuark      quark_gtk_action_proxy  = 0;
 static const gchar accel_path_key[] = "GtkAction::accel_path";
 static const gchar gtk_action_proxy_key[] = "gtk-action";
 
-G_DEFINE_TYPE (GtkAction, gtk_action, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkAction, gtk_action, G_TYPE_OBJECT)
 
 static void gtk_action_finalize     (GObject *object);
 static void gtk_action_set_property (GObject         *object,

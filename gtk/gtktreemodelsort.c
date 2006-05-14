@@ -243,7 +243,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelSort, gtk_tree_model_sort, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE,
 						gtk_tree_model_sort_tree_sortable_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						gtk_tree_model_sort_drag_source_init));
+						gtk_tree_model_sort_drag_source_init))
 
 static void
 gtk_tree_model_sort_init (GtkTreeModelSort *tree_model_sort)

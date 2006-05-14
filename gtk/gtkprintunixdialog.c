@@ -181,7 +181,7 @@ struct GtkPrintUnixDialogPrivate
   gint current_page;
 };
 
-G_DEFINE_TYPE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG)
 
 static gboolean
 is_default_printer (GtkPrintUnixDialog *dialog,

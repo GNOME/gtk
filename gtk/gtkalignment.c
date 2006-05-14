@@ -69,7 +69,7 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
 
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)

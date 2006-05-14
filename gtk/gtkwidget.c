@@ -260,7 +260,7 @@ GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 /* --- functions --- */
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkWidget, gtk_widget, GTK_TYPE_OBJECT,
 				  G_IMPLEMENT_INTERFACE (ATK_TYPE_IMPLEMENTOR,
-							 gtk_widget_accessible_interface_init));
+							 gtk_widget_accessible_interface_init))
 
 static void
 child_property_notify_dispatcher (GObject     *object,

@@ -375,7 +375,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_entry_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
-                                                gtk_entry_cell_editable_init));
+                                                gtk_entry_cell_editable_init))
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,

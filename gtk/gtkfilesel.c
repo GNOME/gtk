@@ -503,7 +503,7 @@ translate_win32_path (GtkFileSelection *filesel)
 }
 #endif
 
-G_DEFINE_TYPE (GtkFileSelection, gtk_file_selection, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkFileSelection, gtk_file_selection, GTK_TYPE_DIALOG)
 
 static void
 gtk_file_selection_class_init (GtkFileSelectionClass *class)

@@ -57,7 +57,7 @@ static GObject *gtk_invisible_constructor (GType                  type,
 					   guint                  n_construct_properties,
 					   GObjectConstructParam *construct_params);
 
-G_DEFINE_TYPE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET);
+G_DEFINE_TYPE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET)
 
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)

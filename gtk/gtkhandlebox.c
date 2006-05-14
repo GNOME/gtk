@@ -145,7 +145,7 @@ static void gtk_handle_box_end_drag       (GtkHandleBox      *hb,
 
 static guint        handle_box_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE (GtkHandleBox, gtk_handle_box, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkHandleBox, gtk_handle_box, GTK_TYPE_BIN)
 
 static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)

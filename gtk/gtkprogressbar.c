@@ -89,7 +89,7 @@ static void gtk_progress_bar_set_activity_blocks_internal (GtkProgressBar *pbar,
 							   guint           blocks);
 
 
-G_DEFINE_TYPE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_PROGRESS);
+G_DEFINE_TYPE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_PROGRESS)
 
 static void
 gtk_progress_bar_class_init (GtkProgressBarClass *class)

@@ -278,7 +278,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJEC
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_tree_model_filter_tree_model_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						gtk_tree_model_filter_drag_source_init));
+						gtk_tree_model_filter_drag_source_init))
 
 static void
 gtk_tree_model_filter_init (GtkTreeModelFilter *filter)

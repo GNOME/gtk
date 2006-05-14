@@ -150,7 +150,7 @@ static void           gtk_recent_info_free            (GtkRecentInfo         *re
 
 static guint signal_changed = 0;
 
-G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT)
 
 static void
 filename_warning (const gchar *format, 

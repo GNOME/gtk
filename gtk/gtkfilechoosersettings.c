@@ -407,9 +407,7 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   settings->settings_read = TRUE;
 }
 
-G_DEFINE_TYPE (GtkFileChooserSettings,
-	       _gtk_file_chooser_settings,
-	       G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkFileChooserSettings, _gtk_file_chooser_settings, G_TYPE_OBJECT)
 
 static void
 _gtk_file_chooser_settings_class_init (GtkFileChooserSettingsClass *class)

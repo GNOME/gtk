@@ -49,7 +49,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
 						_gtk_file_chooser_delegate_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
-						_gtk_file_chooser_embed_delegate_iface_init));
+						_gtk_file_chooser_embed_delegate_iface_init))
 
 static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)

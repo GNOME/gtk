@@ -463,7 +463,7 @@ static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 /* GType Methods
  */
 
-G_DEFINE_TYPE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER)
 
 static void
 gtk_tree_view_class_init (GtkTreeViewClass *class)

@@ -88,7 +88,7 @@ struct _GtkPrintBackendModuleClass
   GTypeModuleClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkPrintBackendModule, _gtk_print_backend_module, G_TYPE_TYPE_MODULE);
+G_DEFINE_TYPE (GtkPrintBackendModule, _gtk_print_backend_module, G_TYPE_TYPE_MODULE)
 #define GTK_TYPE_PRINT_BACKEND_MODULE      (_gtk_print_backend_module_get_type ())
 #define GTK_PRINT_BACKEND_MODULE(module)   (G_TYPE_CHECK_INSTANCE_CAST ((module), GTK_TYPE_PRINT_BACKEND_MODULE, GtkPrintBackendModule))
 
@@ -296,7 +296,7 @@ gtk_print_backend_load_modules ()
  *             GtkPrintBackend           *
  *****************************************/
 
-G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT)
 
 static void
 gtk_print_backend_class_init (GtkPrintBackendClass *class)

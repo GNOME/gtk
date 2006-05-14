@@ -76,7 +76,7 @@ enum {
   PROP_IMAGE
 };
 
-G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
 
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)

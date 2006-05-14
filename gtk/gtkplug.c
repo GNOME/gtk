@@ -71,7 +71,7 @@ enum {
 
 static guint plug_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPlug, gtk_plug, GTK_TYPE_WINDOW);
+G_DEFINE_TYPE (GtkPlug, gtk_plug, GTK_TYPE_WINDOW)
 
 static void
 gtk_plug_class_init (GtkPlugClass *class)

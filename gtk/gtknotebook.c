@@ -400,7 +400,7 @@ static gpointer window_creation_hook_data;
 
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER)
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,

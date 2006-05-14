@@ -42,7 +42,7 @@ enum
 
 static guint tree_selection_signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT)
 
 static void
 gtk_tree_selection_class_init (GtkTreeSelectionClass *class)

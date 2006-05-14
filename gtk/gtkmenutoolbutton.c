@@ -63,7 +63,7 @@ enum
 
 static gint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON);
+G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON)
 
 static gboolean
 gtk_menu_tool_button_set_tooltip (GtkToolItem *tool_item,

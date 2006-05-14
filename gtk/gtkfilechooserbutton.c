@@ -308,7 +308,7 @@ static void     dialog_response_cb               (GtkDialog      *dialog,
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_HBOX, { \
     G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER, gtk_file_chooser_button_file_chooser_iface_init) \
-});
+})
 
 
 /* ***************** *

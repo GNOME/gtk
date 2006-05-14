@@ -40,7 +40,7 @@ static void gtk_bin_forall      (GtkContainer   *container,
 static GType gtk_bin_child_type (GtkContainer   *container);
 
 
-G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER);
+G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 
 static void
 gtk_bin_class_init (GtkBinClass *class)

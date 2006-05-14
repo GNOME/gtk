@@ -62,7 +62,7 @@ static const GtkRulerMetric ruler_metrics[] =
   { "Centimeters", "Cn", 28.35, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
 };
 
-G_DEFINE_TYPE (GtkRuler, gtk_ruler, GTK_TYPE_WIDGET);
+G_DEFINE_TYPE (GtkRuler, gtk_ruler, GTK_TYPE_WIDGET)
 
 static void
 gtk_ruler_class_init (GtkRulerClass *class)

@@ -440,7 +440,7 @@ G_DEFINE_TYPE_WITH_CODE (ShortcutsModelFilter,
 			 _shortcuts_model_filter,
 			 GTK_TYPE_TREE_MODEL_FILTER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						shortcuts_model_filter_drag_source_iface_init));
+						shortcuts_model_filter_drag_source_iface_init))
 
 static GtkTreeModel *shortcuts_model_filter_new (GtkFileChooserDefault *impl,
 						 GtkTreeModel          *child_model,

@@ -263,14 +263,14 @@ static char *       get_parent_dir    (const char       *filename);
  */
 G_DEFINE_TYPE_WITH_CODE (GtkFileSystemUnix, gtk_file_system_unix, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_SYSTEM,
-						gtk_file_system_unix_iface_init));
+						gtk_file_system_unix_iface_init))
 
 /*
  * GtkFileFolderUnix
  */
 G_DEFINE_TYPE_WITH_CODE (GtkFileFolderUnix, _gtk_file_folder_unix, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_FOLDER,
-						gtk_file_folder_unix_iface_init));
+						gtk_file_folder_unix_iface_init))
 
 
 /**

@@ -109,7 +109,7 @@ static GdkPixbufAnimationIter *get_iter (GdkPixbufAnimation *anim,
                                          const GTimeVal     *start_time);
 
 
-G_DEFINE_TYPE(GdkPixbufSimpleAnim, gdk_pixbuf_simple_anim, GDK_TYPE_PIXBUF_ANIMATION);
+G_DEFINE_TYPE (GdkPixbufSimpleAnim, gdk_pixbuf_simple_anim, GDK_TYPE_PIXBUF_ANIMATION)
 
 static void
 gdk_pixbuf_simple_anim_init (GdkPixbufSimpleAnim *anim)
@@ -234,7 +234,7 @@ static gboolean   on_currently_loading_frame (GdkPixbufAnimationIter *iter);
 static gboolean   advance                    (GdkPixbufAnimationIter *iter,
                                               const GTimeVal         *current_time);
 
-G_DEFINE_TYPE (GdkPixbufSimpleAnimIter, gdk_pixbuf_simple_anim_iter, GDK_TYPE_PIXBUF_ANIMATION_ITER);
+G_DEFINE_TYPE (GdkPixbufSimpleAnimIter, gdk_pixbuf_simple_anim_iter, GDK_TYPE_PIXBUF_ANIMATION_ITER)
 
 static void
 gdk_pixbuf_simple_anim_iter_init (GdkPixbufSimpleAnimIter *iter)

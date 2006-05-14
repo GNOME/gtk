@@ -119,7 +119,7 @@ static void gtk_input_dialog_fill_keys        (GtkInputDialog      *inputd,
 
 static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkInputDialog, gtk_input_dialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE (GtkInputDialog, gtk_input_dialog, GTK_TYPE_DIALOG)
 
 static GtkInputDialogPrivate *
 gtk_input_dialog_get_private (GtkInputDialog *input_dialog)

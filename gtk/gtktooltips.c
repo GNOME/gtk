@@ -70,7 +70,7 @@ static gboolean get_keyboard_mode          (GtkWidget   *widget);
 static const gchar  tooltips_data_key[] = "_GtkTooltipsData";
 static const gchar  tooltips_info_key[] = "_GtkTooltipsInfo";
 
-G_DEFINE_TYPE (GtkTooltips, gtk_tooltips, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkTooltips, gtk_tooltips, GTK_TYPE_OBJECT)
 
 static void
 gtk_tooltips_class_init (GtkTooltipsClass *class)

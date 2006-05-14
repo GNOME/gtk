@@ -134,7 +134,7 @@ static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
 
 
-G_DEFINE_TYPE (GtkSettings, gtk_settings, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkSettings, gtk_settings, G_TYPE_OBJECT)
 
 /* --- functions --- */
 static void

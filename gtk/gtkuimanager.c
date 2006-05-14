@@ -163,7 +163,7 @@ enum
 
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkUIManager, gtk_ui_manager, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkUIManager, gtk_ui_manager, G_TYPE_OBJECT)
 
 static void
 gtk_ui_manager_class_init (GtkUIManagerClass *klass)

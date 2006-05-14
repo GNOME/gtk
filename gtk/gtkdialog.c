@@ -90,7 +90,7 @@ enum {
 
 static guint dialog_signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW);
+G_DEFINE_TYPE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW)
 
 static void
 gtk_dialog_class_init (GtkDialogClass *class)

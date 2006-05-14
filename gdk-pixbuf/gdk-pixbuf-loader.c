@@ -66,7 +66,7 @@ typedef struct
         gboolean needs_scale;
 } GdkPixbufLoaderPrivate;
 
-G_DEFINE_TYPE(GdkPixbufLoader, gdk_pixbuf_loader, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkPixbufLoader, gdk_pixbuf_loader, G_TYPE_OBJECT)
 
 static void
 gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)

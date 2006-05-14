@@ -1031,7 +1031,7 @@ gtk_rc_parse (const gchar *filename)
 
 /* Handling of RC styles */
 
-G_DEFINE_TYPE (GtkRcStyle, gtk_rc_style, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkRcStyle, gtk_rc_style, G_TYPE_OBJECT)
 
 static void
 gtk_rc_style_init (GtkRcStyle *style)

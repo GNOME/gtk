@@ -97,7 +97,7 @@ static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
 
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM);
+G_DEFINE_TYPE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM)
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)

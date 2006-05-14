@@ -193,7 +193,7 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 
 static GQuark quark_angle = 0;
 
-G_DEFINE_TYPE (GtkLabel, gtk_label, GTK_TYPE_MISC);
+G_DEFINE_TYPE (GtkLabel, gtk_label, GTK_TYPE_MISC)
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,

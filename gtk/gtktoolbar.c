@@ -304,7 +304,7 @@ static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
 
 static guint			toolbar_signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER)
 
 static void
 add_arrow_bindings (GtkBindingSet   *binding_set,

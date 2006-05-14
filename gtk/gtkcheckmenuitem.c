@@ -65,7 +65,7 @@ static void gtk_check_menu_item_get_property (GObject         *object,
 
 static guint check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_ITEM)
 
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)

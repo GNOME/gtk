@@ -136,7 +136,7 @@ enum
 static guint signals [LAST_SIGNAL] = { 0 };
 
 
-G_DEFINE_TYPE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW);
+G_DEFINE_TYPE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW)
 
 
 static void

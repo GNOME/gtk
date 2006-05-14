@@ -69,7 +69,7 @@ static void menu_item_activated (GtkWidget           *widget,
 
 static guint         toggle_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToggleToolButton, gtk_toggle_tool_button, GTK_TYPE_TOOL_BUTTON);
+G_DEFINE_TYPE (GtkToggleToolButton, gtk_toggle_tool_button, GTK_TYPE_TOOL_BUTTON)
 
 static void
 gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)

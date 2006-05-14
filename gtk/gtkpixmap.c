@@ -43,7 +43,7 @@ static gint gtk_pixmap_expose     (GtkWidget       *widget,
 static void gtk_pixmap_finalize   (GObject         *object);
 static void build_insensitive_pixmap (GtkPixmap *gtkpixmap);
 
-G_DEFINE_TYPE (GtkPixmap, gtk_pixmap, GTK_TYPE_MISC);
+G_DEFINE_TYPE (GtkPixmap, gtk_pixmap, GTK_TYPE_MISC)
 
 static void
 gtk_pixmap_class_init (GtkPixmapClass *class)

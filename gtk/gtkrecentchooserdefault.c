@@ -290,7 +290,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
 			 GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init));
+				 		gtk_recent_chooser_iface_init))
 
 
 
