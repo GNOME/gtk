@@ -56,7 +56,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE(GdkScreen, gdk_screen, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkScreen, gdk_screen, G_TYPE_OBJECT)
 
 static void
 gdk_screen_class_init (GdkScreenClass *klass)

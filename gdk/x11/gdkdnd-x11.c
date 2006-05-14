@@ -142,7 +142,7 @@ const static struct {
   { "XdndDrop",     xdnd_drop_filter },
 };
 	      
-G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)

@@ -110,7 +110,7 @@ static void gdk_window_impl_x11_finalize   (GObject            *object);
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
   )
 
-G_DEFINE_TYPE(GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_DRAWABLE_IMPL_X11);
+G_DEFINE_TYPE (GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_DRAWABLE_IMPL_X11)
 
 GType
 _gdk_window_impl_get_type (void)

@@ -84,7 +84,7 @@ static const GdkPointerHooks singlehead_default_pointer_hooks = {
 
 static const GdkPointerHooks *singlehead_current_pointer_hooks = &singlehead_default_pointer_hooks;
 
-G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
 static void
 gdk_display_class_init (GdkDisplayClass *class)

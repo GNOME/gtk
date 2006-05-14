@@ -143,7 +143,7 @@ static void gdk_drawable_impl_x11_finalize   (GObject *object);
 
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
-G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE);
+G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE)
 
 static void
 _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)

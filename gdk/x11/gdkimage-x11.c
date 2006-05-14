@@ -73,7 +73,7 @@ static void gdk_image_finalize    (GObject       *object);
 
 #define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
 
-G_DEFINE_TYPE(GdkImage, gdk_image, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkImage, gdk_image, G_TYPE_OBJECT)
 
 static void
 gdk_image_init (GdkImage *image)

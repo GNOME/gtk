@@ -68,7 +68,7 @@ static void     gdk_colormap_sync        (GdkColormap *colormap,
 
 static void gdk_colormap_finalize   (GObject              *object);
 
-G_DEFINE_TYPE (GdkColormap, gdk_colormap, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkColormap, gdk_colormap, G_TYPE_OBJECT)
 
 static void
 gdk_colormap_init (GdkColormap *colormap)

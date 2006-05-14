@@ -190,7 +190,7 @@ static void gdk_window_clear_backing_rect (GdkWindow *window,
 					   gint       width,
 					   gint       height);
 
-G_DEFINE_TYPE (GdkWindowObject, gdk_window_object, GDK_TYPE_DRAWABLE);
+G_DEFINE_TYPE (GdkWindowObject, gdk_window_object, GDK_TYPE_DRAWABLE)
 
 GType
 _gdk_paintable_get_type (void)

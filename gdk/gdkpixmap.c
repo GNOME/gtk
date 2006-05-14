@@ -155,7 +155,7 @@ static GdkScreen*   gdk_pixmap_real_get_screen   (GdkDrawable *drawable);
 
 static void gdk_pixmap_finalize   (GObject              *object);
 
-G_DEFINE_TYPE (GdkPixmapObject, gdk_pixmap, GDK_TYPE_DRAWABLE);
+G_DEFINE_TYPE (GdkPixmapObject, gdk_pixmap, GDK_TYPE_DRAWABLE)
 
 static void
 gdk_pixmap_init (GdkPixmapObject *pixmap)
