@@ -2901,6 +2901,8 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
     {
       GtkTextViewChild *child = tmp_list->data;
 
+      g_assert (child != NULL);
+          
       if (child->anchor)
         {
           /* We need to force-validate the regions containing
@@ -2933,8 +2935,6 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           GtkAllocation allocation;          
           GtkRequisition child_req;
              
-          g_assert (child != NULL);
-          
           allocation.x = child->x;
           allocation.y = child->y;
 
