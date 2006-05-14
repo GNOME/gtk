@@ -1,3 +1,8 @@
+2006-05-14  Murray Cumming  <murrayc@murray.com>
+
+	* gtk/gtkframe.c: Restored the / at the start of the comment 
+	block, to fix the build.
+
 2006-05-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c:
