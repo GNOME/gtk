@@ -172,7 +172,7 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
         the column to label for the user, what type of cell renderer to use, 
         and which piece of data to retrieve from the model for a given row.
       </para>
-      <informalexample><programlisting><![CDATA[
+      <informalexample><programlisting>
 GtkCellRenderer *renderer;
 GtkTreeViewColumn *column;
 
@@ -182,7 +182,7 @@ column = gtk_tree_view_column_new_with_attributes ("Author",
                                                    "text", AUTHOR_COLUMN,
                                                    NULL);
 gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
-]]></programlisting></informalexample>
+</programlisting></informalexample>
       <para>
        At this point, all the steps in creating a displayable tree have been
        covered.  The model is created, data is stored in it, a tree view is

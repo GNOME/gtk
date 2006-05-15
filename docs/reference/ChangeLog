@@ -1,3 +1,8 @@
+2006-05-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tree_widget.sgml: Fix up example rendering. (#341855, Guillaume
+	Desmottes)
+
 2006-05-11  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* gtk/tmpl/gtkrecentmanager.sgml: Update the error enum and the
