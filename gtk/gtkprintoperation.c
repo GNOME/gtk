@@ -1256,23 +1256,21 @@ typedef struct
 } PrintPagesData;
 
 static void
-find_range (gboolean      reverse,
-	    GtkPageRange *range, 
-	    gint         *start, 
-	    gint         *end, 
-	    gint         *inc)
+find_range (PrintPagesData *data)
 {
-  if (reverse)
+  GtkPageRange *range;
+
+  range = &data->ranges[data->range];
+
+  if (data->inc < 0)
     {
-      *start = range->end;
-      *end = range->start - 1;
-      *inc = -1;
+      data->start = range->end;
+      data->end = range->start - 1;
     }
   else
     {
-      *start = range->start;
-      *end = range->end + 1;
-      *inc = 1;
+      data->start = range->start;
+      data->end = range->end + 1;
     }
 }
 
@@ -1285,16 +1283,16 @@ increment_page_sequence (PrintPagesData *data)
     data->page += data->inc;
     if (data->page == data->end)
       {
-	data->range++;
-	if (data->range == data->num_ranges)
+	data->range += data->inc;
+	if (data->range == -1 || data->range == data->num_ranges)
 	  {
 	    data->uncollated++;
 	    if (data->uncollated == data->uncollated_copies)
 	      return FALSE;
-	    data->range = 0;
+
+	    data->range = data->inc < 0 ? data->num_ranges - 1 : 0;
 	  }
-	find_range (priv->manual_reverse, &data->ranges[data->range], 
-		    &data->start, &data->end, &data->inc);
+	find_range (data);
 	data->page = data->start;
       }
   }
@@ -1444,8 +1442,18 @@ print_pages (GtkPrintOperation *op,
   data->print_context = print_context;
 
   data->uncollated = 0; 
-  data->range = 0;
-  find_range (data->op->priv->manual_reverse, &data->ranges[0], &data->start, &data->end, &data->inc);
+  if (data->op->priv->manual_reverse)
+    {
+      data->range = data->num_ranges - 1;
+      data->inc = -1;      
+    }
+  else
+    {
+      data->range = 0;
+      data->inc = 1;      
+    }
+  find_range (data);
+
   data->page = data->start - data->inc;
   data->collated = data->collated_copies - 1;
 
