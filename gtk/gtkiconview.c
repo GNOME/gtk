@@ -1105,6 +1105,7 @@ gtk_icon_view_realize (GtkWidget *widget)
 
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
+  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   gdk_window_set_user_data (widget->window, widget);
 
   /* Make the window for the icon view */
@@ -1127,7 +1128,6 @@ gtk_icon_view_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
-  gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
 
   gdk_window_show (icon_view->priv->bin_window);
 }

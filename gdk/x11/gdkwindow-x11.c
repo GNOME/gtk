@@ -257,6 +257,13 @@ tmp_reset_bg (GdkWindow *window)
     }
 }
 
+/* Unsetting and resetting window backgrounds.
+ *
+ * In many cases it is possible to avoid flicker by unsetting the
+ * background of windows. For example if the background of the
+ * parent window is unset when a window is unmapped, a brief flicker
+ * of background painting is avoided.
+ */
 void
 _gdk_x11_window_tmp_unset_bg (GdkWindow *window,
 			      gboolean   recurse)

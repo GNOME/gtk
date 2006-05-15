@@ -1,3 +1,16 @@
+Mon May 15 15:12:05 2006  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_realize),
+	* gtk/gtkiconview.c (gtk_icon_view_realize),
+	* gtk/gtktreeview.c (gtk_tree_view_realize): Set the background of
+	the clip windows to NULL, since they are generally invisible and
+	don't have EXPOSURE set, which means they temp-unvlicker code
+	doesn't apply to them.
+
+	* gdk/x11/gdkgeometry-x11.c (_gdk_window_move_resize_child): Unset
+	the background of the parent window during resizing. Invalidate
+	the uncoered area of the parent window. Bug 341332.
+
 2006-05-15  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (_gdk_events_init): Remove obsolete 

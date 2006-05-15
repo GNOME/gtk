@@ -572,6 +572,17 @@ gdk_window_move_region (GdkWindow *window,
   gdk_region_destroy (dest_region);
 }
 
+static void
+reset_backgrounds (GdkWindow *window)
+{
+  GdkWindowObject *obj = (GdkWindowObject *)window;
+
+  _gdk_x11_window_tmp_reset_bg (window, FALSE);
+  
+  if (obj->parent)
+    _gdk_x11_window_tmp_reset_bg ((GdkWindow *)obj->parent, FALSE);
+}
+
 void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,
@@ -589,13 +600,15 @@ _gdk_window_move_resize_child (GdkWindow *window,
   gint dx, dy;
   gboolean is_move;
   gboolean is_resize;
+
+  GdkRectangle old_pos;
   
   g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW (window)); 
 
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
-  
+
   dx = x - obj->x;
   dy = y - obj->y;
   
@@ -605,6 +618,11 @@ _gdk_window_move_resize_child (GdkWindow *window,
   if (!is_move && !is_resize)
     return;
   
+  old_pos.x = obj->x;
+  old_pos.y = obj->y;
+  old_pos.width = impl->width;
+  old_pos.height = impl->height;
+
   obj->x = x;
   obj->y = y;
   impl->width = width;
@@ -657,9 +675,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
       XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XID (window),
 			 new_info.x, new_info.y, new_info.width, new_info.height);
-      
-      if (impl->position_info.no_bg)
-	_gdk_x11_window_tmp_reset_bg (window, FALSE);
+
+      reset_backgrounds (window);
 
       if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
@@ -704,14 +721,16 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	  tmp_list = tmp_list->next;
 	}
 
-      if (impl->position_info.no_bg)
-	_gdk_x11_window_tmp_reset_bg (window, FALSE);
-
+      reset_backgrounds (window);
+      
       if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 
       impl->position_info = new_info;
     }
+
+  if (GDK_WINDOW_IS_MAPPED (obj) && obj->parent)
+    gdk_window_invalidate_rect ((GdkWindow *)obj->parent, &old_pos, FALSE);
 }
 
 static void
@@ -964,8 +983,7 @@ gdk_window_postmove (GdkWindow          *window,
   if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
     XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
 
-  if (impl->position_info.no_bg)
-    _gdk_x11_window_tmp_reset_bg (window, FALSE);
+  reset_backgrounds (window);
 
   impl->position_info = new_info;
 
@@ -1233,6 +1251,9 @@ gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle
       gdk_window_invalidate_region (window, new_clip_region, FALSE);
     }
 
+  if (obj->parent)
+    _gdk_x11_window_tmp_unset_bg ((GdkWindow *)obj->parent, FALSE);
+  
   gdk_region_destroy (new_clip_region);
   gdk_region_destroy (old_clip_region);
 }

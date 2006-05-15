@@ -842,6 +842,7 @@ gtk_layout_realize (GtkWidget *widget)
 
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
+  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   gdk_window_set_user_data (widget->window, widget);
 
   attributes.x = - layout->hadjustment->value,
@@ -856,7 +857,6 @@ gtk_layout_realize (GtkWidget *widget)
   gdk_window_set_user_data (layout->bin_window, widget);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, layout->bin_window, GTK_STATE_NORMAL);
 
   tmp_list = layout->children;
