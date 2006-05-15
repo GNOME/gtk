@@ -1,3 +1,10 @@
+2006-05-15  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (_gdk_events_init): Remove obsolete 
+	comment.
+	(poll_func): Remove assert and add a comment on how to fix properly.
+	(gdk_events_pending): Implement.
+
 2006-05-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c: Reverse the order of

@@ -283,8 +283,11 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
     {
       ufds[0].revents = G_IO_IN;
 
-      g_assert (current_event == NULL);
-      
+      /* FIXME: We can't assert here, what we need to to is to have a queue
+       * for events instead.
+       */
+      /*g_assert (current_event == NULL);*/
+
       current_event = [event retain];
 
       n_active ++;
@@ -309,9 +312,6 @@ _gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
-  /* FIXME: I really hate it that we need a custom poll function here.
-   * I think we can do better using threads.
-   */
   old_poll_func = g_main_context_get_poll_func (NULL);
   g_main_context_set_poll_func (NULL, poll_func);  
 
@@ -322,8 +322,8 @@ _gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  /* FIXME: Implement */
-  return FALSE;
+  return (_gdk_event_queue_find_first (_gdk_display) ||
+	  (current_event != NULL));
 }
 
 GdkEvent*
