@@ -37,6 +37,7 @@ struct _GtkPrintOperationPrivate
   gboolean use_full_page;
   GtkUnit unit;
   gboolean show_dialog;
+  gboolean track_print_status;
   char *pdf_target;
 
   /* Data for the print job: */

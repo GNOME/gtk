@@ -46,6 +46,7 @@ enum {
   PROP_N_PAGES,
   PROP_CURRENT_PAGE,
   PROP_USE_FULL_PAGE,
+  PROP_TRACK_PRINT_STATUS,
   PROP_UNIT,
   PROP_SHOW_DIALOG,
   PROP_PDF_TARGET,
@@ -118,6 +119,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->use_full_page = FALSE;
   priv->show_dialog = TRUE;
   priv->pdf_target = NULL;
+  priv->track_print_status = FALSE;
 
   priv->unit = GTK_UNIT_PIXEL;
 
@@ -152,6 +154,9 @@ gtk_print_operation_set_property (GObject      *object,
       break;
     case PROP_USE_FULL_PAGE:
       gtk_print_operation_set_use_full_page (op, g_value_get_boolean (value));
+      break;
+    case PROP_TRACK_PRINT_STATUS:
+      gtk_print_operation_set_track_print_status (op, g_value_get_boolean (value));
       break;
     case PROP_UNIT:
       gtk_print_operation_set_unit (op, g_value_get_enum (value));
@@ -196,6 +201,9 @@ gtk_print_operation_get_property (GObject    *object,
       break;      
     case PROP_USE_FULL_PAGE:
       g_value_set_boolean (value, priv->use_full_page);
+      break;
+    case PROP_TRACK_PRINT_STATUS:
+      g_value_set_boolean (value, priv->track_print_status);
       break;
     case PROP_UNIT:
       g_value_set_enum (value, priv->unit);
@@ -466,6 +474,26 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   g_param_spec_boolean ("use-full-page",
 							 P_("Use full page"),
 							 P_("%TRUE if the the origin of the context should be at the corner of the page and not the corner of the imageable area"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+  
+
+  /**
+   * GtkPrintOperation:track-print-status:
+   *
+   * If %TRUE, the print operation will try to continue report on the status of
+   * the print job in the printer queues and printer. This can allow your
+   * application to show things like "out of paper" issues, and when the
+   * print job actually reaches the printer. However, this is often
+   * implemented using polling, and should not be enabled unless needed.
+   * 
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_USE_FULL_PAGE,
+				   g_param_spec_boolean ("track-print-status",
+							 P_("Track Print Status"),
+							 P_("If %TRUE then the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   
@@ -869,6 +897,40 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
       g_object_notify (G_OBJECT (op), "unit");
     }
 }
+
+/**
+ * gtk_print_operation_set_track_print_status:
+ * @op: a #GtkPrintOperation
+ * @track_status: %TRUE to track status after printing
+ * 
+ * If track_status is %TRUE, the print operation will try to continue report
+ * on the status of the print job in the printer queues and printer. This
+ * can allow your application to show things like "out of paper" issues,
+ * and when the print job actually reaches the printer.
+ * 
+ * This function is often implemented using some form of polling, so it should
+ * not be enabled unless needed.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
+					    gboolean            track_status)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  if (priv->track_print_status != track_status)
+    {
+      priv->track_print_status = track_status;
+
+      g_object_notify (G_OBJECT (op), "track-print-status");
+    }
+}
+
 
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,

@@ -404,6 +404,7 @@ do_print (GtkAction *action)
 
   print = gtk_print_operation_new ();
 
+  gtk_print_operation_set_track_print_status (print, TRUE);
   
   if (settings != NULL)
     gtk_print_operation_set_print_settings (print, settings);

@@ -321,15 +321,14 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
       if ((attr = ippFindAttribute(response, "job-id", IPP_TAG_INTEGER)) != NULL)
 	job_id = attr->values[0].integer;
 
-
-        if (job_id == 0)
-	  gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_FINISHED);
-	else
-	  {
-	    gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_PENDING);
-	    cups_begin_polling_info (print_backend, ps->job, job_id);
-	  }
-    }
+      if (!gtk_print_job_get_track_print_status (ps->job) || job_id == 0)
+	gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_FINISHED);
+      else
+	{
+	  gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_PENDING);
+	  cups_begin_polling_info (print_backend, ps->job, job_id);
+	}
+    } 
   else
     gtk_print_job_set_status (ps->job, GTK_PRINT_STATUS_FINISHED_ABORTED);
 

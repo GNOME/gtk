@@ -82,25 +82,28 @@ struct _GtkPrintJobClass
 };
 
 GType                    gtk_print_job_get_type     (void) G_GNUC_CONST;
-GtkPrintJob             *gtk_print_job_new          (const gchar              *title,
-						     GtkPrinter               *printer,
-						     GtkPrintSettings         *settings,
-						     GtkPageSetup             *page_setup);
-GtkPrintSettings        *gtk_print_job_get_settings (GtkPrintJob              *job);
-GtkPrinter              *gtk_print_job_get_printer  (GtkPrintJob              *job);
-G_CONST_RETURN gchar    *gtk_print_job_get_title    (GtkPrintJob              *job);
-GtkPrintStatus           gtk_print_job_get_status   (GtkPrintJob              *job);
+GtkPrintJob             *gtk_print_job_new                    (const gchar              *title,
+							       GtkPrinter               *printer,
+							       GtkPrintSettings         *settings,
+							       GtkPageSetup             *page_setup);
+GtkPrintSettings        *gtk_print_job_get_settings           (GtkPrintJob              *job);
+GtkPrinter              *gtk_print_job_get_printer            (GtkPrintJob              *job);
+G_CONST_RETURN gchar    *gtk_print_job_get_title              (GtkPrintJob              *job);
+GtkPrintStatus           gtk_print_job_get_status             (GtkPrintJob              *job);
+gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
+							       const gchar              *filename,
+							       GError                  **error);
+cairo_surface_t         *gtk_print_job_get_surface            (GtkPrintJob              *job,
+							       GError                  **error);
+void                     gtk_print_job_set_track_print_status (GtkPrintJob              *job,
+							       gboolean                  track_status);
+gboolean                 gtk_print_job_get_track_print_status (GtkPrintJob              *job);
+gboolean                 gtk_print_job_send                   (GtkPrintJob              *job,
+							       GtkPrintJobCompleteFunc   callback,
+							       gpointer                  user_data,
+							       GDestroyNotify            dnotify,
+							       GError                  **error);
 
-gboolean                 gtk_print_job_set_source_file (GtkPrintJob              *job,
-							const gchar              *filename,
-							GError                  **error);
-cairo_surface_t         *gtk_print_job_get_surface     (GtkPrintJob              *job,
-							GError                  **error);
-gboolean                 gtk_print_job_send            (GtkPrintJob              *job,
-							GtkPrintJobCompleteFunc   callback,
-							gpointer                  user_data,
-							GDestroyNotify            dnotify,
-							GError                  **error);
 
 G_END_DECLS
 

@@ -128,6 +128,8 @@ void                    gtk_print_operation_set_show_dialog        (GtkPrintOper
 								    gboolean            show_dialog);
 void                    gtk_print_operation_set_pdf_target         (GtkPrintOperation  *op,
 								    const gchar        *filename);
+void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
+								    gboolean            track_status);
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);

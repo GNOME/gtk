@@ -471,11 +471,15 @@ win32_end_run (GtkPrintOperation *op)
   HANDLE printerHandle = 0;
   
   EndDoc (op_win32->hdc);
-  devnames = GlobalLock (op_win32->devnames);
-  if (!OpenPrinterW (((gunichar2 *)devnames) + devnames->wDeviceOffset,
-		     &printerHandle, NULL))
-    printerHandle = 0;
-  GlobalUnlock (op_win32->devnames);
+
+  if (op->track_print_status)
+    {
+      devnames = GlobalLock (op_win32->devnames);
+      if (!OpenPrinterW (((gunichar2 *)devnames) + devnames->wDeviceOffset,
+			 &printerHandle, NULL))
+	printerHandle = 0;
+      GlobalUnlock (op_win32->devnames);
+    }
   
   GlobalFree(op_win32->devmode);
   GlobalFree(op_win32->devnames);

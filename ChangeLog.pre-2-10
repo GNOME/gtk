@@ -1,3 +1,27 @@
+2006-05-15  Alexander Larsson  <alexl@redhat.com>
+	
+	* gtk/gtkprintjob.[ch]:
+	Added gtk_print_job_set/get_track_print_status
+
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation.[ch]:
+	Add gtk_print_operation_set_track_print_status.
+	
+	* gtk/gtkprintoperation-unix.c:
+	Implement track_print_status on unix
+	
+	* gtk/gtkprintoperation-win32.c:
+	Implement track_print_status on win32
+	
+	* gtk/gtk.symbols:
+	Added symbols
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Implement track_print_status for cups
+	
+	* tests/print-editor.c:
+	Test track_print_status.
+
 2006-05-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c: Do page rendering in an idle when

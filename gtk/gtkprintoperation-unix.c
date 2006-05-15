@@ -233,7 +233,9 @@ finish_print (PrintResponseData *rdata,
 					printer,
 					settings,
 					page_setup);
-  
+
+      gtk_print_job_set_track_print_status (op_unix->job, priv->track_print_status);
+      
       rdata->op->priv->surface = gtk_print_job_get_surface (op_unix->job, rdata->error);
       if (op->priv->surface == NULL)
         {

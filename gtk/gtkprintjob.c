@@ -55,9 +55,10 @@ struct _GtkPrintJobPrivate
   GtkPrintSettings *settings;
   GtkPageSetup *page_setup;
 
-  gint printer_set : 1;
-  gint page_setup_set : 1;
-  gint settings_set  : 1;
+  guint printer_set : 1;
+  guint page_setup_set : 1;
+  guint settings_set  : 1;
+  guint track_print_status : 1;
 };
 
 
@@ -180,7 +181,8 @@ gtk_print_job_init (GtkPrintJob *job)
   priv->settings_set = FALSE;
   priv->page_setup_set = FALSE;
   priv->status = GTK_PRINT_STATUS_INITIAL;
-
+  priv->track_print_status = FALSE;
+  
   job->print_pages = GTK_PRINT_PAGES_ALL;
   job->page_ranges = NULL;
   job->num_page_ranges = 0;
@@ -471,6 +473,57 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 							  priv->spool_file_fd);
  
   return priv->surface;
+}
+
+/**
+ * gtk_print_job_set_track_print_status:
+ * @job: a #GtkPrintJob
+ * @track_status: %TRUE to track status after printing
+ * 
+ * If track_status is %TRUE, the print job will try to continue report
+ * on the status of the print job in the printer queues and printer. This
+ * can allow your application to show things like "out of paper" issues,
+ * and when the print job actually reaches the printer.
+ * 
+ * This function is often implemented using some form of polling, so it should
+ * not be enabled unless needed.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_job_set_track_print_status (GtkPrintJob *job,
+				      gboolean track_status)
+{
+  GtkPrintJobPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_JOB (job));
+
+  priv = job->priv;
+
+  priv->track_print_status = track_status;
+}
+
+/**
+ * gtk_print_job_get_track_print_status:
+ * @job: a #GtkPrintJob
+ *
+ * Returns wheter jobs will be tracked after printing.
+ * For details, see gtk_print_job_set_track_print_status().
+ *
+ * Return value: %TRUE if print job status will be reported after printing
+ *
+ * Since: 2.10
+ */
+gboolean
+gtk_print_job_get_track_print_status (GtkPrintJob *job)
+{
+  GtkPrintJobPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
+
+  priv = job->priv;
+  
+  return priv->track_print_status;
 }
 
 static void
