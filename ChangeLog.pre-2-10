@@ -1,3 +1,8 @@
+2006-05-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.c: Do page rendering in an idle when
+	running asynchronous. 
+
 2006-05-15  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols: 

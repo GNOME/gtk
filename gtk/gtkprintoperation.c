@@ -1124,7 +1124,7 @@ pdf_end_page (GtkPrintOperation *op,
 
 static void
 pdf_end_run (GtkPrintOperation *op,
-	     gboolean wait)
+	     gboolean           wait)
 {
   GtkPrintOperationPrivate *priv = op->priv;
 
@@ -1176,20 +1176,157 @@ run_pdf (GtkPrintOperation  *op,
   return GTK_PRINT_OPERATION_RESULT_APPLY; 
 }
 
-static void
-print_pages (GtkPrintOperation *op,
-	     gboolean wait)
+typedef struct
 {
-  GtkPrintOperationPrivate *priv = op->priv;
-  int page, range;
-  GtkPageSetup *initial_page_setup, *page_setup;
-  GtkPrintContext *print_context;
-  cairo_t *cr;
-  int uncollated_copies, collated_copies;
-  int i, j;
+  GtkPrintOperation *op;
+  gint uncollated_copies;
+  gint collated_copies;
+  gint uncollated, collated;
+
+  gint range, num_ranges;
   GtkPageRange *ranges;
   GtkPageRange one_range;
+
+  gint page, start, end, inc;
+
+  GtkPageSetup *initial_page_setup;
+  GtkPrintContext *print_context;  
+} PrintPagesData;
+
+static void
+find_range (gboolean      reverse,
+	    GtkPageRange *range, 
+	    gint         *start, 
+	    gint         *end, 
+	    gint         *inc)
+{
+  if (reverse)
+    {
+      *start = range->end;
+      *end = range->start - 1;
+      *inc = -1;
+    }
+  else
+    {
+      *start = range->start;
+      *end = range->end + 1;
+      *inc = 1;
+    }
+}
+
+static gboolean 
+increment_page_sequence (PrintPagesData *data)
+{
+  GtkPrintOperationPrivate *priv = data->op->priv;
+
+  do {
+    data->page += data->inc;
+    if (data->page == data->end)
+      {
+	data->range++;
+	if (data->range == data->num_ranges)
+	  {
+	    data->uncollated++;
+	    if (data->uncollated == data->uncollated_copies)
+	      return FALSE;
+	    data->range = 0;
+	  }
+	find_range (priv->manual_reverse, &data->ranges[data->range], 
+		    &data->start, &data->end, &data->inc);
+	data->page = data->start;
+      }
+  }
+  while ((priv->manual_page_set == GTK_PAGE_SET_EVEN && data->page % 2 == 0) ||
+	 (priv->manual_page_set == GTK_PAGE_SET_ODD && data->page % 2 == 1));
+
+  return TRUE;
+}
+
+static gboolean
+print_pages_idle (gpointer user_data)
+{
+  PrintPagesData *data; 
+  GtkPrintOperationPrivate *priv; 
+  GtkPageSetup *page_setup;
+  cairo_t *cr;
+  gboolean done = FALSE;
+
+  GDK_THREADS_ENTER ();
+
+  data = (PrintPagesData*)user_data;
+  priv = data->op->priv;
+
+  data->collated++;
+  if (data->collated == data->collated_copies)
+    {
+      data->collated = 0;
+      if (!increment_page_sequence (data))
+	{
+	  g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
+	  
+	  g_object_unref (data->print_context);
+	  g_object_unref (data->initial_page_setup);
+   
+	  cairo_surface_finish (data->op->priv->surface);
+	  priv->end_run (data->op, TRUE);
+	  
+	  g_object_unref (data->op);
+	  g_free (data);
+
+	  done = TRUE;
+
+	  goto out;
+	}
+    }
+
+  page_setup = gtk_page_setup_copy (data->initial_page_setup);
+  g_signal_emit (data->op, signals[REQUEST_PAGE_SETUP], 0, 
+		 data->print_context, data->page, page_setup);
+  
+  _gtk_print_context_set_page_setup (data->print_context, page_setup);
+  data->op->priv->start_page (data->op, data->print_context, page_setup);
+  
+  cr = gtk_print_context_get_cairo (data->print_context);
+  
+  cairo_save (cr);
+  if (priv->manual_scale != 100.0)
+    cairo_scale (cr,
+		 priv->manual_scale,
+		 priv->manual_scale);
+  
+  if (priv->manual_orientation)
+    _gtk_print_context_rotate_according_to_orientation (data->print_context);
+  
+  if (!priv->use_full_page)
+    _gtk_print_context_translate_into_margin (data->print_context);
+  
+  g_signal_emit (data->op, signals[DRAW_PAGE], 0, 
+		 data->print_context, data->page);
+  
+  priv->end_page (data->op, data->print_context);
+  
+  cairo_restore (cr);
+  
+  g_object_unref (page_setup);
+
+ out:
+
+  GDK_THREADS_LEAVE ();
+
+  return !done;
+}
+  
+static void
+print_pages (GtkPrintOperation *op,
+	     gboolean           wait)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPageSetup *initial_page_setup;
+  GtkPrintContext *print_context;
+  int uncollated_copies, collated_copies;
+  GtkPageRange *ranges;
   int num_ranges;
+  PrintPagesData *data;
 
   if (priv->manual_collation)
     {
@@ -1207,7 +1344,7 @@ print_pages (GtkPrintOperation *op,
   initial_page_setup = create_page_setup (op);
   _gtk_print_context_set_page_setup (print_context, initial_page_setup);
 
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
   g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
   
   g_return_if_fail (priv->nr_of_pages > 0);
@@ -1220,14 +1357,14 @@ print_pages (GtkPrintOperation *op,
   else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
 	   priv->current_page != -1)
     {
-      ranges = &one_range;
+      ranges = &data->one_range;
       num_ranges = 1;
       ranges[0].start = priv->current_page;
       ranges[0].end = priv->current_page;
     }
   else
     {
-      ranges = &one_range;
+      ranges = &data->one_range;
       num_ranges = 1;
       ranges[0].start = 0;
       ranges[0].end = priv->nr_of_pages - 1;
@@ -1235,78 +1372,33 @@ print_pages (GtkPrintOperation *op,
   
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA, NULL);
 
-  for (i = 0; i < uncollated_copies; i++)
+  data = g_new0 (PrintPagesData, 1);
+  data->op = g_object_ref (op);
+  data->uncollated_copies = uncollated_copies;
+  data->collated_copies = collated_copies;
+  data->ranges = ranges;
+  data->num_ranges = num_ranges;
+  data->initial_page_setup = initial_page_setup;
+  data->print_context = print_context;
+
+  data->uncollated = 0; 
+  data->range = 0;
+  find_range (data->op->priv->manual_reverse, &data->ranges[0], &data->start, &data->end, &data->inc);
+  data->page = data->start - data->inc;
+  data->collated = data->collated_copies - 1;
+
+  if (wait)
     {
-      for (range = 0; range < num_ranges; range ++)
+      /* FIXME replace this with a recursive mainloop */
+      while (print_pages_idle (data))
 	{
-	  int start, end, inc;
-	  int low = ranges[range].start;
-	  int high = ranges[range].end;
-	  
-	  if (priv->manual_reverse)
-	    {
-	      start = high;
-	      end = low - 1;
-	      inc = -1;
-	    }
-	  else
-	    {
-	      start = low;
-	      end = high + 1;
-	      inc = 1;
-	    }
-	  for (page = start; page != end; page += inc)
-	    {
-	      if ((priv->manual_page_set == GTK_PAGE_SET_EVEN && page % 2 == 0) ||
-		  (priv->manual_page_set == GTK_PAGE_SET_ODD && page % 2 == 1))
-		continue;
-	      
-	      for (j = 0; j < collated_copies; j++)
-		{
-		  page_setup = gtk_page_setup_copy (initial_page_setup);
-		  g_signal_emit (op, signals[REQUEST_PAGE_SETUP], 0, print_context, page, page_setup);
-		  
-		  _gtk_print_context_set_page_setup (print_context, page_setup);
-		  priv->start_page (op, print_context, page_setup);
-		  
-		  cr = gtk_print_context_get_cairo (print_context);
-
-		  cairo_save (cr);
-		  if (priv->manual_scale != 100.0)
-		    cairo_scale (cr,
-				 priv->manual_scale,
-				 priv->manual_scale);
-		  
-		  if (priv->manual_orientation)
-		    _gtk_print_context_rotate_according_to_orientation (print_context);
-
-		  if (!priv->use_full_page)
-		    _gtk_print_context_translate_into_margin (print_context);
-	  
-		  g_signal_emit (op, signals[DRAW_PAGE], 0, 
-				 print_context, page);
-		  
-		  priv->end_page (op, print_context);
-		  
-		  cairo_restore (cr);
-		  
-		  g_object_unref (page_setup);
-
-		  /* Iterate the mainloop so that we redraw windows */
-		  while (gtk_events_pending ())
-		    gtk_main_iteration ();
-		}
-	    }
+	  /* Iterate the mainloop so that we redraw windows */
+	  while (gtk_events_pending ())
+	    gtk_main_iteration ();
 	}
     }
-  
-  g_signal_emit (op, signals[END_PRINT], 0, print_context);
-
-  g_object_unref (print_context);
-  g_object_unref (initial_page_setup);
-
-  cairo_surface_finish (priv->surface);
-  priv->end_run (op, wait);
+  else
+    g_idle_add (print_pages_idle, data);
 }
 
 /**
@@ -1330,7 +1422,7 @@ print_pages (GtkPrintOperation *op,
  * </programlisting></informalexample>
  *
  * Return value: the result of the print operation. A return value of 
- *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was 
+ *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was
  *   completed successfully. In this case, it is a good idea to obtain 
  *   the used print settings with gtk_print_operation_get_print_settings() 
  *   and store them for reuse with the next print operation.
