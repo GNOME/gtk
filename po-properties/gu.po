@@ -250,14 +250,16 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 #: ../gtk/gtkprintoperation.c:526
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 07:10+0200\n"
-"PO-Revision-Date: 2006-05-11 12:19+0530\n"
+"POT-Creation-Date: 2006-05-14 23:08+0200\n"
+"PO-Revision-Date: 2006-05-15 10:22+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -265,6 +267,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -347,7 +350,7 @@ msgstr "મૂળભૂત ડિસ્પ્લે"
 msgid "The default display for GDK"
 msgstr "GDK માટેનો મૂળભૂત ડિસ્પ્લે"
 
-#: ../gdk/gdkpango.c:546 ../gtk/gtkinvisible.c:86 ../gtk/gtkwindow.c:528
+#: ../gdk/gdkpango.c:546 ../gtk/gtkinvisible.c:86 ../gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "સ્ક્રીન"
 
@@ -542,7 +545,7 @@ msgstr "સ્ટોક ચિહ્ન"
 
 #: ../gtk/gtkaction.c:238 ../gtk/gtkcellrendererpixbuf.c:172
 #: ../gtk/gtkimage.c:229 ../gtk/gtkprinter.c:150 ../gtk/gtkstatusicon.c:170
-#: ../gtk/gtkwindow.c:520
+#: ../gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "ચિહ્ન નામ"
 
@@ -2805,7 +2808,7 @@ msgstr "મેનુ ઈમેજો બતાવો"
 msgid "Whether images should be shown in menus"
 msgstr "શું ઈમેજો મેનુઓમાં બતાવવી જોઈએ"
 
-#: ../gtk/gtkinvisible.c:87 ../gtk/gtkwindow.c:529
+#: ../gtk/gtkinvisible.c:87 ../gtk/gtkwindow.c:531
 msgid "The screen where this window will be displayed"
 msgstr "સ્ક્રિન કે જ્યાં વિન્ડો દેખાડવામાં આવશે"
 
@@ -5427,7 +5430,7 @@ msgstr "વિસ્તૃત કાચા પાશ્વ ભાગનું �
 msgid "Whether to display the column"
 msgstr "શું સ્તંભને દર્શાવવી છે"
 
-#: ../gtk/gtktreeviewcolumn.c:193 ../gtk/gtkwindow.c:451
+#: ../gtk/gtktreeviewcolumn.c:193 ../gtk/gtkwindow.c:453
 msgid "Resizable"
 msgstr "માપ બદલી શકાય તેવુ"
 
@@ -5830,35 +5833,35 @@ msgstr "ઊભી સરકાવવાની તીરની લંબાઈ"
 msgid "The length of vertical scroll arrows"
 msgstr "ઊભી સરકાવવાની તીરોની લંબાઈ"
 
-#: ../gtk/gtkwindow.c:409
+#: ../gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "વિન્ડો પ્રકાર"
 
-#: ../gtk/gtkwindow.c:410
+#: ../gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "વિન્ડોનો પ્રકાર"
 
-#: ../gtk/gtkwindow.c:418
+#: ../gtk/gtkwindow.c:420
 msgid "Window Title"
 msgstr "વિન્ડો શીર્ષક"
 
-#: ../gtk/gtkwindow.c:419
+#: ../gtk/gtkwindow.c:421
 msgid "The title of the window"
 msgstr "વિન્ડોનું શીર્ષક"
 
-#: ../gtk/gtkwindow.c:426
+#: ../gtk/gtkwindow.c:428
 msgid "Window Role"
 msgstr "વિન્ડો શીર્ષક"
 
-#: ../gtk/gtkwindow.c:427
+#: ../gtk/gtkwindow.c:429
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "જ્યારે સત્રનો પુનઃસંગ્રહ કરી રહ્યા હોય ત્યારે વારવા માટેની વિન્ડોની અનન્ય ઓળખ"
 
-#: ../gtk/gtkwindow.c:434
+#: ../gtk/gtkwindow.c:436
 msgid "Allow Shrink"
 msgstr "સંકોચન થવા દો"
 
-#: ../gtk/gtkwindow.c:436
+#: ../gtk/gtkwindow.c:438
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5867,25 +5870,25 @@ msgstr ""
 "જો ખરુ હોય તો, વિન્ડોનું કેાઈ ન્યૂનતમ માપ નથી. આને ખરા તરીકે સુયોજિત કરવાની યુક્તિ ૯૯% "
 "સમય ખોટી છે"
 
-#: ../gtk/gtkwindow.c:443
+#: ../gtk/gtkwindow.c:445
 msgid "Allow Grow"
 msgstr "વિકસવા દો"
 
-#: ../gtk/gtkwindow.c:444
+#: ../gtk/gtkwindow.c:446
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "જો ખરુ હોય તો, વપરાશકર્તા વિન્ડોના માપને ન્યૂનતમ માપ કરતાં વધારી શકે છે"
 
-#: ../gtk/gtkwindow.c:452
+#: ../gtk/gtkwindow.c:454
 msgid "If TRUE, users can resize the window"
 msgstr "જો ખરુ હોય તો, વપરાશકર્તા વિન્ડોનું માપ બદલી શકે છે"
 
 # #-#-#-#-#  libgnomeui.HEAD.hi.po (libgnomeui-2.0.hi)  #-#-#-#-#
 # libgnomeui/gnome-file-entry.c:216
-#: ../gtk/gtkwindow.c:459
+#: ../gtk/gtkwindow.c:461
 msgid "Modal"
 msgstr "આજે"
 
-#: ../gtk/gtkwindow.c:460
+#: ../gtk/gtkwindow.c:462
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5893,71 +5896,71 @@ msgstr ""
 "જો ખરુ હોય તો, વિન્ડો નમૂનારૂપી છે. (જ્યારે આ હોય ત્યારે બીજી બધી વિન્ડોનો ઉપયોગ કરી "
 "શકાય નહિ)"
 
-#: ../gtk/gtkwindow.c:467
+#: ../gtk/gtkwindow.c:469
 msgid "Window Position"
 msgstr "વિન્ડોની સ્થિતિ"
 
-#: ../gtk/gtkwindow.c:468
+#: ../gtk/gtkwindow.c:470
 msgid "The initial position of the window"
 msgstr "વિન્ડોની શરુઆતની સ્થિતિ"
 
-#: ../gtk/gtkwindow.c:476
+#: ../gtk/gtkwindow.c:478
 msgid "Default Width"
 msgstr "મૂળભૂત પહોળાઈ"
 
-#: ../gtk/gtkwindow.c:477
+#: ../gtk/gtkwindow.c:479
 msgid "The default width of the window, used when initially showing the window"
 msgstr "વિન્ડોની મૂળભૂત પહોળાઈ, આનો ઉપયોગ વિન્ડોને શરુઆતમાં દર્શાવતી વખતે કરવામાં આવશે"
 
-#: ../gtk/gtkwindow.c:486
+#: ../gtk/gtkwindow.c:488
 msgid "Default Height"
 msgstr "મૂળભૂત ઊંચાઈ"
 
-#: ../gtk/gtkwindow.c:487
+#: ../gtk/gtkwindow.c:489
 msgid "The default height of the window, used when initially showing the window"
 msgstr "વિન્ડોની મૂળભૂત ઊંચાઈ, આનો ઉપોયોગ વિન્ડોને શરુઆતમાં દર્શાવતી વખતે કરવામાં આવશે"
 
-#: ../gtk/gtkwindow.c:496
+#: ../gtk/gtkwindow.c:498
 msgid "Destroy with Parent"
 msgstr "પિતૃની સાથે નાશ કરો"
 
-#: ../gtk/gtkwindow.c:497
+#: ../gtk/gtkwindow.c:499
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "શું પિતૃનો નાશ કરવામાં આવે ત્યારે આ વિન્ડોનો નાશ કરવો"
 
-#: ../gtk/gtkwindow.c:504
+#: ../gtk/gtkwindow.c:506
 msgid "Icon"
 msgstr "ચિહ્ન"
 
-#: ../gtk/gtkwindow.c:505
+#: ../gtk/gtkwindow.c:507
 msgid "Icon for this window"
 msgstr "આ વિન્ડો માટેનુ ચિહ્ન"
 
-#: ../gtk/gtkwindow.c:521
+#: ../gtk/gtkwindow.c:523
 msgid "Name of the themed icon for this window"
 msgstr "આ વિન્ડો માટેનુ ચિહ્ન"
 
-#: ../gtk/gtkwindow.c:536
+#: ../gtk/gtkwindow.c:538
 msgid "Is Active"
 msgstr "ક્રિયાશીલ છે"
 
-#: ../gtk/gtkwindow.c:537
+#: ../gtk/gtkwindow.c:539
 msgid "Whether the toplevel is the current active window"
 msgstr "શું ઉચ્ચસ્તર એ આપણું વર્તમાન કાર્યશીલ વિન્ડો છે"
 
-#: ../gtk/gtkwindow.c:544
+#: ../gtk/gtkwindow.c:546
 msgid "Focus in Toplevel"
 msgstr "ઉચ્ચસ્તર પ્રકાશિત છે"
 
-#: ../gtk/gtkwindow.c:545
+#: ../gtk/gtkwindow.c:547
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "શું ઈનપુટનું પ્રકાશન આ Gtk વિન્ડોમાં છે"
 
-#: ../gtk/gtkwindow.c:552
+#: ../gtk/gtkwindow.c:554
 msgid "Type hint"
 msgstr "પ્રકાર વિશે સંકેત"
 
-#: ../gtk/gtkwindow.c:553
+#: ../gtk/gtkwindow.c:555
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5965,69 +5968,77 @@ msgstr ""
 "ડેસ્કટોપના વાતાવરણને આ વિન્ડો કયા પ્રકારની છે અને તેની સાથે કઈ રીતે વર્તન કરવુએ માટેની "
 "મદદ માટેનો સંકેત."
 
-#: ../gtk/gtkwindow.c:561
+#: ../gtk/gtkwindow.c:563
 msgid "Skip taskbar"
 msgstr "કાર્ય દર્શક પટ્ટી છોડી દો"
 
-#: ../gtk/gtkwindow.c:562
+#: ../gtk/gtkwindow.c:564
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ખરુ જો વિન્ડો કાર્ય દર્શક પટ્ટીમાં ન હોવી જોઈએ"
 
-#: ../gtk/gtkwindow.c:569
+#: ../gtk/gtkwindow.c:571
 msgid "Skip pager"
 msgstr "પેજર છોડી દો"
 
-#: ../gtk/gtkwindow.c:570
+#: ../gtk/gtkwindow.c:572
 msgid "TRUE if the window should not be in the pager."
 msgstr "ખરુ જો વિન્ડો પેજરમાં ન હોવી જોઈએ"
 
-#: ../gtk/gtkwindow.c:577
+#: ../gtk/gtkwindow.c:579
 msgid "Urgent"
 msgstr "તાત્કાલિક"
 
-#: ../gtk/gtkwindow.c:578
+#: ../gtk/gtkwindow.c:580
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "જો વિન્ડો વપરાશકર્તાના ધ્યાનમાં લેવાવું જોઈએ તો ખરું."
 
-#: ../gtk/gtkwindow.c:592
+#: ../gtk/gtkwindow.c:594
 msgid "Accept focus"
 msgstr "પ્રકાશિત કરેલુ"
 
-#: ../gtk/gtkwindow.c:593
+#: ../gtk/gtkwindow.c:595
 msgid "TRUE if the window should receive the input focus."
 msgstr "ખરુ જો વિન્ડો પેજરમાં ન હોવી જોઈએ"
 
-#: ../gtk/gtkwindow.c:607
+#: ../gtk/gtkwindow.c:609
 msgid "Focus on map"
 msgstr "ઉચ્ચસ્તર પ્રકાશિત છે"
 
-#: ../gtk/gtkwindow.c:608
+#: ../gtk/gtkwindow.c:610
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ખરુ જો વિન્ડો પેજરમાં ન હોવી જોઈએ"
 
-#: ../gtk/gtkwindow.c:622
+#: ../gtk/gtkwindow.c:624
 msgid "Decorated"
 msgstr "શણગારાયેલ"
 
-#: ../gtk/gtkwindow.c:623
+#: ../gtk/gtkwindow.c:625
 msgid "Whether the window should be decorated by the window manager"
 msgstr "ખરુ જો વિન્ડો પેજરમાં ન હોવી જોઈએ"
 
-#: ../gtk/gtkwindow.c:637
+#: ../gtk/gtkwindow.c:639
 msgid "Deletable"
 msgstr "કાઢી શકાય તેવું"
 
-#: ../gtk/gtkwindow.c:638
+#: ../gtk/gtkwindow.c:640
 msgid "Whether the window frame should have a close button"
 msgstr "શું વિન્ડો ચોકઠાંને બંધ કરો બટન હોવું જોઈએ"
 
-#: ../gtk/gtkwindow.c:654
+#: ../gtk/gtkwindow.c:656
 msgid "Gravity"
 msgstr "ગુરુત્વાકર્ષણ"
 
-#: ../gtk/gtkwindow.c:655
+#: ../gtk/gtkwindow.c:657
 msgid "The window gravity of the window"
 msgstr "વિન્ડોનો પ્રકાર"
+
+#: ../gtk/gtkwindow.c:674
+msgid "Transient for Window"
+msgstr "વિન્ડો માટે પારદર્શક"
+
+#: ../gtk/gtkwindow.c:675
+msgid "The transient parent of the dialog"
+msgstr "સંવાદનો પારદર્શક પિતૃ"
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
