@@ -137,7 +137,6 @@ void        gtk_print_backend_print_stream         (GtkPrintBackend         *pri
 						    gpointer                 user_data,
 						    GDestroyNotify           dnotify);
 GList *     gtk_print_backend_load_modules         (void);
-void        gtk_print_backend_unref_at_idle        (GtkPrintBackend         *print_backend);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
 
 /* Backend-only functions for GtkPrintBackend */

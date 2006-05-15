@@ -1,3 +1,16 @@
+2006-05-15  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkprintbackend.[ch]: (_gtk_print_backend_create):
+	Never unload print backends.
+	Remove gtk_print_backend_unref_at_idle.
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	(cups_dispatch_watch_finalize):
+	Don't use the unref_at_idle hack since that caused
+	deadlocks. Instead we never unload print backends, which
+	is not really a big problem.
+
 2006-05-14  Murray Cumming  <murrayc@murray.com>
 
 	* gtk/gtkframe.c: Restored the / at the start of the comment 

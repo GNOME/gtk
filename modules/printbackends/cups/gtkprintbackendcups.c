@@ -547,10 +547,15 @@ cups_dispatch_watch_finalize (GSource *source)
   if (dispatch->backend)
     {
       /* We need to unref this at idle time, because it might be the
-	 last reference to this module causing the code to be
-	 unloaded (including this particular function!)
-      */
-      gtk_print_backend_unref_at_idle (GTK_PRINT_BACKEND (dispatch->backend));
+       * last reference to this module causing the code to be
+       * unloaded (including this particular function!)
+       * Update: Doing this at idle caused a deadlock taking the
+       * mainloop context lock while being in a GSource callout for
+       * multithreaded apps. So, for now we just disable unloading
+       * of print backends. See _gtk_print_backend_create for the
+       * disabling.
+       */
+      g_object_unref (dispatch->backend);
       dispatch->backend = NULL;
     }
 

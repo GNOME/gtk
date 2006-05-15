@@ -227,6 +227,11 @@ _gtk_print_backend_create (const char *backend_name)
 		   		             pb_module);
 
 	  pb = _gtk_print_backend_module_create (pb_module);
+
+	  /* Increase use-count so that we don't unload print backends.
+	     There is a problem with module unloading in the cups module,
+	     see cups_dispatch_watch_finalize for details. */
+	  g_type_module_use (G_TYPE_MODULE (pb_module));
 	}
       
       g_free (module_path);
@@ -519,19 +524,6 @@ gtk_print_backend_print_stream (GtkPrintBackend *backend,
 						       callback,
 						       user_data,
 						       dnotify);
-}
-
-static gboolean
-unref_at_idle_cb (gpointer data)
-{
-  g_object_unref (data);
-  return FALSE;
-}
-
-void
-gtk_print_backend_unref_at_idle (GtkPrintBackend *print_backend)
-{
-  g_idle_add (unref_at_idle_cb, print_backend);
 }
 
 void
