@@ -242,7 +242,7 @@ tree_selection_changed_cb (GtkTreeSelection *selection, gpointer data)
       and puts them together.  Note that the model is never populated 
       with data &mdash; that is left as an exercise for the reader.  
       More information can be found on this in the #GtkTreeModel section.
-      <informalexample><programlisting><![CDATA[
+      <informalexample><programlisting>
 enum
 {
    TITLE_COLUMN,
@@ -311,7 +311,6 @@ setup_tree (void)
    /* Now we can manipulate the view just like any other GTK widget */
    ...
 }
-]]>
       </programlisting></informalexample>
     </para>
   </refsect1>
