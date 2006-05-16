@@ -215,6 +215,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-landscape.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-portrait.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-reverse-landscape.png \
+	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-reverse-portrait.png \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-paste.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-preferences.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-print.png			\

@@ -137,6 +137,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_ORIENTATION_PORTRAIT "gtk-orientation-portrait"
 #define GTK_STOCK_ORIENTATION_LANDSCAPE "gtk-orientation-landscape"
 #define GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE "gtk-orientation-reverse-landscape"
+#define GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT "gtk-orientation-reverse-portrait"
 #define GTK_STOCK_PASTE            "gtk-paste"
 #define GTK_STOCK_PREFERENCES      "gtk-preferences"
 #define GTK_STOCK_PRINT            "gtk-print"

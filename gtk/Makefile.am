@@ -994,6 +994,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-open.png   			\
 	stock-icons/24/gtk-orientation-reverse-landscape.png \
 	stock-icons/24/gtk-orientation-landscape.png	\
+	stock-icons/24/gtk-orientation-reverse-portrait.png	\
 	stock-icons/24/gtk-orientation-portrait.png	\
 	stock-icons/24/gtk-paste.png  			\
 	stock-icons/24/gtk-preferences.png    		\

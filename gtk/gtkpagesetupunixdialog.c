@@ -991,12 +991,33 @@ page_name_func (GtkCellLayout   *cell_layout,
       
 }
 
+static GtkWidget *
+create_radio_button (GSList      *group,
+		     const gchar *stock_id)
+{
+  GtkWidget *radio_button, *image, *label, *hbox;
+  GtkStockItem item;
+
+  radio_button = gtk_radio_button_new (group);
+  image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_stock_lookup (stock_id, &item);
+  label = gtk_label_new (item.label);
+  hbox = gtk_hbox_new (0, 6);
+  gtk_container_add (GTK_CONTAINER (radio_button), hbox);
+  gtk_container_add (GTK_CONTAINER (hbox), image);
+  gtk_container_add (GTK_CONTAINER (hbox), label);
+
+  gtk_widget_show_all (radio_button);
+
+  return radio_button;
+}
+
 static void
 populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 {
   GtkPageSetupUnixDialogPrivate *priv = ps_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (ps_dialog);
-  GtkWidget *table, *label, *combo, *radio_button, *ebox, *image;
+  GtkWidget *table, *label, *combo, *radio_button, *ebox;
   GtkCellRenderer *cell;
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
@@ -1007,7 +1028,7 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
-  table = gtk_table_new (4, 4, FALSE);
+  table = gtk_table_new (5, 4, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -1077,41 +1098,37 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 		    GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
 
-  radio_button = gtk_radio_button_new (NULL);
-  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_PORTRAIT,
-				    GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (radio_button), image);
+  radio_button = create_radio_button (NULL, GTK_STOCK_ORIENTATION_PORTRAIT);
   priv->portrait_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
 		    1, 2, 3, 4,
-		    0, 0, 0, 0);
-  gtk_widget_show (radio_button);
+		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), radio_button);
 
-  radio_button = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)));
-  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_LANDSCAPE,
-				    GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (radio_button), image);
-  priv->landscape_radio = radio_button;
+  radio_button = create_radio_button (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button)),
+				      GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT);
+  priv->reverse_landscape_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
 		    2, 3, 3, 4,
-		    0, 0, 0, 0);
+		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
+
+  radio_button = create_radio_button (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button)),
+				      GTK_STOCK_ORIENTATION_LANDSCAPE);
+  priv->landscape_radio = radio_button;
+  gtk_table_attach (GTK_TABLE (table), radio_button,
+		    1, 2, 4, 5,
+		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
   gtk_widget_show (radio_button);
 
   gtk_table_set_row_spacing (GTK_TABLE (table), 3, 0);
   
-  radio_button = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON(radio_button)));
-  image = gtk_image_new_from_stock (GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE,
-				    GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (radio_button), image);
+  radio_button = create_radio_button (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button)),
+				      GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE);
   priv->reverse_landscape_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
-		    3, 4, 3, 4,
-		    0, 0, 0, 0);
-  gtk_widget_show (radio_button);
+		    2, 3, 4, 5,
+		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
+
 
   priv->tooltips = gtk_tooltips_new ();
 

@@ -1,3 +1,15 @@
+2006-05-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c (populate_dialog): Add labels
+	for page orientations, also add the fourth one.  (#339589)
+
+	* gtk/stock-icons/24/gtk-orientation-reverse-portrait.png: New
+	icon.
+	
+	* gtk/Makefile.am: Add it here.
+	
+	* gtk/gtkstock.[hc]: Add stock items for the page orientations.
+
 2006-05-16  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktoolbar.c: added "max-child-expand" style property which
