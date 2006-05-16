@@ -1,3 +1,9 @@
+2006-05-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Fix
+	an RTL problem with toggles in expander columns. 
+	(#341896, Roozbeh Pournader) 
+
 Mon May 15 15:12:05 2006  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtklayout.c (gtk_layout_realize),

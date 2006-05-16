@@ -2340,9 +2340,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
-              if (TREE_VIEW_DRAW_EXPANDERS(tree_view))
+              if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	        {
-	          cell_area.x += depth * tree_view->priv->expander_size;
+		  if (!rtl)
+		    cell_area.x += depth * tree_view->priv->expander_size;
 	          cell_area.width -= depth * tree_view->priv->expander_size;
 		}
 	    }
