@@ -252,14 +252,15 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
-#: ../gtk/gtkprintoperation.c:526
+#: ../gtk/gtkprintoperation.c:554
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-14 23:08+0200\n"
-"PO-Revision-Date: 2006-05-15 10:22+0530\n"
+"POT-Creation-Date: 2006-05-15 23:34+0200\n"
+"PO-Revision-Date: 2006-05-16 09:54+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -267,6 +268,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1788,7 +1790,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "શું રંગને આલ્ફા કિંમત આપવી કે નહિં"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:386
-#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:113
+#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:114
 #: ../gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "શીર્ષક"
@@ -3455,11 +3457,11 @@ msgstr "જો સાચું હોય, તો બાળ તેની અર�
 msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr "શું પૂર્વદર્શન વિજેટે તેના માટે ફાળવાયેલી બધી જગ્યા લઇ લેવી જોઈએ"
 
-#: ../gtk/gtkprintbackend.c:248
+#: ../gtk/gtkprintbackend.c:253
 msgid "Default print backend"
 msgstr "મૂળભૂત છાપન પાશ્વ ભાગ"
 
-#: ../gtk/gtkprintbackend.c:249
+#: ../gtk/gtkprintbackend.c:254
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "મૂળભૂત રીતે વાપરવા માટેના GtkPrintBackend પાશ્વ ભાગોની યાદી"
 
@@ -3519,114 +3521,124 @@ msgstr "સ્રોત વિકલ્પ"
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption આ વિજેટને બેક કરી રહ્યું છે"
 
-#: ../gtk/gtkprintjob.c:114
+#: ../gtk/gtkprintjob.c:115
 msgid "Title of the print job"
 msgstr "છાપન ક્રિયાનું શીર્ષક"
 
-#: ../gtk/gtkprintjob.c:122
+#: ../gtk/gtkprintjob.c:123
 msgid "Printer"
 msgstr "પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:123
+#: ../gtk/gtkprintjob.c:124
 msgid "Printer to print the job to"
 msgstr "ક્રિયાને છાપવા માટેનું પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:131
+#: ../gtk/gtkprintjob.c:132
 msgid "Settings"
 msgstr "સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:132
+#: ../gtk/gtkprintjob.c:133
 msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:140 ../gtk/gtkprintjob.c:141
+#: ../gtk/gtkprintjob.c:141 ../gtk/gtkprintjob.c:142
 #: ../gtk/gtkprintunixdialog.c:217
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:366
+#: ../gtk/gtkprintoperation.c:374
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:367
+#: ../gtk/gtkprintoperation.c:375
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:384 ../gtk/gtkprintunixdialog.c:235
+#: ../gtk/gtkprintoperation.c:392 ../gtk/gtkprintunixdialog.c:235
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:385 ../gtk/gtkprintunixdialog.c:236
+#: ../gtk/gtkprintoperation.c:393 ../gtk/gtkprintunixdialog.c:236
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:402
+#: ../gtk/gtkprintoperation.c:410
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: ../gtk/gtkprintoperation.c:403
+#: ../gtk/gtkprintoperation.c:411
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: ../gtk/gtkprintoperation.c:424
+#: ../gtk/gtkprintoperation.c:432
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: ../gtk/gtkprintoperation.c:425
+#: ../gtk/gtkprintoperation.c:433
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:446 ../gtk/gtkprintunixdialog.c:225
+#: ../gtk/gtkprintoperation.c:454 ../gtk/gtkprintunixdialog.c:225
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:447
+#: ../gtk/gtkprintoperation.c:455
 msgid "The current page in the document."
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું."
 
-#: ../gtk/gtkprintoperation.c:467
+#: ../gtk/gtkprintoperation.c:475
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: ../gtk/gtkprintoperation.c:468
+#: ../gtk/gtkprintoperation.c:476
 msgid ""
 "%TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "%TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
 
-#: ../gtk/gtkprintoperation.c:485
+#: ../gtk/gtkprintoperation.c:495
+msgid "Track Print Status"
+msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
+
+#: ../gtk/gtkprintoperation.c:496
+msgid ""
+"If %TRUE then the print operation will continue to report on the print job "
+"status after the print data has been sent to the printer or print server."
+msgstr "જો %TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
+
+#: ../gtk/gtkprintoperation.c:513
 msgid "Unit"
 msgstr "એકમ"
 
-#: ../gtk/gtkprintoperation.c:486
+#: ../gtk/gtkprintoperation.c:514
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: ../gtk/gtkprintoperation.c:503
+#: ../gtk/gtkprintoperation.c:531
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: ../gtk/gtkprintoperation.c:504
+#: ../gtk/gtkprintoperation.c:532
 msgid "%TRUE if gtk_print_operation_run() should show the print dialog."
 msgstr "%TRUE જો gtk_print_operation_run() એ છાપન સંવાદ બતાવતું હોવું જોઈએ."
 
-#: ../gtk/gtkprintoperation.c:525
+#: ../gtk/gtkprintoperation.c:553
 msgid "PDF target filename"
 msgstr "PDF લક્ષ્ય ફાઈલનામ"
 
-#: ../gtk/gtkprintoperation.c:540
+#: ../gtk/gtkprintoperation.c:568
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:541
+#: ../gtk/gtkprintoperation.c:569
 msgid "The status of the print operation"
 msgstr "છાપન પ્રક્રિયાની પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:561
+#: ../gtk/gtkprintoperation.c:589
 msgid "Status String"
 msgstr "પરિસ્થિતિ શબ્દમાળા"
 
-#: ../gtk/gtkprintoperation.c:562
+#: ../gtk/gtkprintoperation.c:590
 msgid "A human-readable description of the status"
 msgstr "પરિસ્થિતિનું માનવીય-વાંચનીય વર્ણન"
 
