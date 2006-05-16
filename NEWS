@@ -1,3 +1,63 @@
+Overview of Changes from GTK+ 2.9.0 to 2.9.1
+============================================
+
+* GtkPrintOperation
+ - Many user interface improvements in the unix dialogs
+ - gtk-demo has a printing demo
+ - Don't unload print backends for now, since that has
+   deadlock issues
+ - Asynchronous page rendering is done in an idle
+
+* GtkImage has an image property 
+
+* GtkTextBuffer has a cursor-position property
+
+* Arrow sizes in scrolled menus and notebooks are themable
+
+* GDK keysyms have be synched with Xorg 7.1
+
+* Bugs fixed:
+ 340676 print backend type modules not correctly reregistering 
+        their types
+ 340870 gdk_window_get_toplevels docstring error
+ 323956 Unwanted accelerate key in the action-based toolbar
+ 340527 Tooltips not shown for toolbar buttons created with 
+        uimanager/actions
+ 340516 status icon property getter assertions
+ 341091 a couple of spelling errors in gtk+
+ 335707 notebook DND with event boxes in tab labels
+ 337306 Add a GtkMessageDialog::image property
+ 139628 GtkLayout In GtkScrolledWindow does not receive the 
+        scroll_event
+ 334412 Add cursor-position property for getting notified 
+        about cursor movement
+ 341217 langinfo.h #include'd unconditionally stops build
+ 333632 use GtkMenu::scroll-arrow-height instead of 
+        MENU_SCROLL_ARROW_HEIGHT
+ 325282 Add GtkNotebook::tab-overlap style property
+ 341247 possible crash with tab_label = NULL
+ 321896 Synch gdkkeysyms.h/gtkimcontextsimple.c with X.org 6.9/7.0
+ 341416 Save FileChooserDialog doesn't response
+ 336774 gtk_recent_manager_add_full
+ 340401 critical warnings when using window groups
+ 341661 misplaced g_assert in gtk_text_view_allocate_children
+ 341692 Semicolons after G_DEFINE_TYPE
+ 341665 several misplaced g_assert
+ 341578 reverse page order issues
+ 341332 Unset background in more places
+ 341896 gtktreeview has RTL problems with toggle buttons if using 
+        gtktreestore as a model
+ 341028 crash in new async code
+ 341035 file chooser crash
+ 340722 GtkToolbar::max-child-expand style property
+ 339589 Tooltips on orientation icons in page setup dialog
+ 340951 faq: How do I internationalize a GTK+ program? doesn't 
+        mention glib-I18N
+ 341855 Little typo in the Tree and List Widget Overview
+
+* Updated translations (de,es,gl,gu,nl)
+
+
 Overview of Changes from GTK+ 2.8.x to 2.9.0
 ============================================
 
