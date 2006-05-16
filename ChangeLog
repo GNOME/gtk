@@ -1,5 +1,7 @@
 2006-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter.c (gtk_printer_class_init): 
+	* gtk/gtkprintjob.c (gtk_print_job_class_init): 
 	* gtk/gtkprintoperation.c (gtk_print_operation_class_init): 
 	Cosmetic cleanups.
 

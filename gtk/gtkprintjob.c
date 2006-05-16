@@ -154,13 +154,13 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    * Since: 2.10
    */
   signals[STATUS_CHANGED] =
-   g_signal_new ("status-changed",
-                 G_TYPE_FROM_CLASS (class),
-                 G_SIGNAL_RUN_LAST,
-                 G_STRUCT_OFFSET (GtkPrintJobClass, status_changed),
-                 NULL, NULL,
-                 g_cclosure_marshal_VOID__VOID,
-                 G_TYPE_NONE, 0);
+    g_signal_new (I_("status-changed"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintJobClass, status_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 static void

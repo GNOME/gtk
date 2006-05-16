@@ -173,13 +173,13 @@ gtk_printer_class_init (GtkPrinterClass *class)
    * Since: 2.10
    */
   signals[DETAILS_ACQUIRED] =
-   g_signal_new ("details-acquired",
-                 G_TYPE_FROM_CLASS (class),
-                 G_SIGNAL_RUN_LAST,
-                 G_STRUCT_OFFSET (GtkPrinterClass, details_acquired),
-                 NULL, NULL,
-                 g_cclosure_marshal_VOID__BOOLEAN,
-                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+    g_signal_new (I_("details-acquired"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrinterClass, details_acquired),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__BOOLEAN,
+		  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void
