@@ -595,8 +595,8 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("max-child-expand",
-                                                             P_("Maximum toolbar item spacing"),
-                                                             P_("Maximum space between the toolbar items."),
+                                                             P_("Maximum child expand"),
+                                                             P_("Maximum amount of space an expandable item will be given"),
                                                              0,
                                                              G_MAXINT,
                                                              G_MAXINT,
@@ -1591,7 +1591,9 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
    */
   if (!overflowing)
     {
+      gint max_child_expand;
       n_expand_items = 0;
+      
       for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
 	{
 	  ToolbarContent *content = list->data;
@@ -1600,19 +1602,19 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	    n_expand_items++;
 	}
       
+      max_child_expand = get_max_child_expand (toolbar);
       for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
 	{
 	  ToolbarContent *content = list->data;
 	  
 	  if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
 	    {
-              gint mexpand = get_max_child_expand (toolbar);
 	      gint extra = size / n_expand_items;
 	      if (size % n_expand_items != 0)
 		extra++;
 
-              if (extra > mexpand)
-                extra = mexpand;
+              if (extra > max_child_expand)
+                extra = max_child_expand;
 
 	      allocations[i].width += extra;
 	      size -= extra;

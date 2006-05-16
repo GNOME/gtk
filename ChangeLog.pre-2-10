@@ -1,3 +1,11 @@
+Tue May 16 12:36:25 2006  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Move getting the
+	property out of the loop, and rename the variable 'max_expand'.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): Fix the decription
+	for the max-child-expand property. 
+
 2006-05-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprinter.c (gtk_printer_class_init): 
