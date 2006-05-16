@@ -1,3 +1,8 @@
+2006-05-16  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktoolbar.c: added "max-child-expand" style property which
+	limits the space taken by expanding tool items. Fixes bug #340722.
+
 2006-05-16  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_dispose): cancel all pending handles

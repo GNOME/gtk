@@ -57,7 +57,7 @@
 
 typedef struct _ToolbarContent ToolbarContent;
 
-#define DEFAULT_IPADDING 0
+#define DEFAULT_IPADDING    0
 
 #define DEFAULT_SPACE_SIZE  12
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
@@ -233,6 +233,7 @@ static gboolean   gtk_toolbar_check_old_api        (GtkToolbar          *toolbar
 
 static GtkReliefStyle       get_button_relief    (GtkToolbar *toolbar);
 static gint                 get_internal_padding (GtkToolbar *toolbar);
+static gint                 get_max_child_expand (GtkToolbar *toolbar);
 static GtkShadowType        get_shadow_type      (GtkToolbar *toolbar);
 static gint                 get_space_size       (GtkToolbar *toolbar);
 static GtkToolbarSpaceStyle get_space_style      (GtkToolbar *toolbar);
@@ -591,7 +592,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     G_MAXINT,
                                                              DEFAULT_IPADDING,
                                                              GTK_PARAM_READABLE));
-  
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("max-child-expand",
+                                                             P_("Maximum toolbar item spacing"),
+                                                             P_("Maximum space between the toolbar items."),
+                                                             0,
+                                                             G_MAXINT,
+                                                             G_MAXINT,
+                                                             GTK_PARAM_READABLE));
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("space-style",
 							      P_("Space style"),
@@ -1596,10 +1606,14 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  
 	  if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
 	    {
+              gint mexpand = get_max_child_expand (toolbar);
 	      gint extra = size / n_expand_items;
 	      if (size % n_expand_items != 0)
 		extra++;
-	      
+
+              if (extra > mexpand)
+                extra = mexpand;
+
 	      allocations[i].width += extra;
 	      size -= extra;
 	      n_expand_items--;
@@ -4749,6 +4763,17 @@ get_internal_padding (GtkToolbar *toolbar)
 			NULL);
   
   return ipadding;
+}
+
+static gint
+get_max_child_expand (GtkToolbar *toolbar)
+{
+  gint mexpand = G_MAXINT;
+
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "max-child-expand", &mexpand,
+                        NULL);
+  return mexpand;
 }
 
 static GtkShadowType
