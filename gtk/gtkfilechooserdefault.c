@@ -5768,6 +5768,8 @@ show_and_select_paths_finished_loading (GtkFileFolder *folder,
 				      select_func, data->impl);
     }
 
+  browse_files_center_selected_row (data->impl);
+
   gtk_file_paths_free (data->paths);
   g_free (data);
 }
@@ -6089,6 +6091,7 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
     goto out;
 
   impl->update_current_folder_handle = NULL;
+  impl->reload_state = RELOAD_EMPTY;
 
   set_busy_cursor (impl, FALSE);
 
@@ -6191,6 +6194,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
   data->impl = impl;
   data->path = gtk_file_path_copy (path);
   data->keep_trail = keep_trail;
+
+  impl->reload_state = RELOAD_HAS_FOLDER;
 
   impl->update_current_folder_handle =
     gtk_file_system_get_info (impl->file_system, path, GTK_FILE_INFO_IS_FOLDER,
