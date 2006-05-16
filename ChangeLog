@@ -1,5 +1,8 @@
 2006-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (gtk_print_operation_class_init): 
+	Cosmetic cleanups.
+
 	* gtk/gtkpagesetupunixdialog.c (populate_dialog): Add labels
 	for page orientations, also add the fourth one.  (#339589)
 
