@@ -1,3 +1,9 @@
+2006-05-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Fix
+	an RTL problem with toggles in expander columns. 
+	(#341896, Roozbeh Pournader) 
+
 2006-05-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (doesnt_want_scroll): Look at both

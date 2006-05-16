@@ -2323,9 +2323,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  cell_area.x += horizontal_separator/2;
 	  cell_area.y += vertical_separator/2;
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
-              TREE_VIEW_DRAW_EXPANDERS(tree_view))
+              TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	    {
-	      cell_area.x += depth * tree_view->priv->expander_size;
+              if (!rtl)
+	        cell_area.x += depth * tree_view->priv->expander_size;
 	      cell_area.width -= depth * tree_view->priv->expander_size;
 	    }
 	  break;
