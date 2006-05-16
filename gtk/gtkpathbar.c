@@ -250,6 +250,7 @@ remove_settings_signal (GtkPathBar *path_bar,
 static void
 gtk_path_bar_dispose (GObject *object)
 {
+  GList *list;
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
 
   remove_settings_signal (path_bar, gtk_widget_get_screen (GTK_WIDGET (object)));
@@ -257,6 +258,15 @@ gtk_path_bar_dispose (GObject *object)
   if (path_bar->set_path_handle)
     gtk_file_system_cancel_operation (path_bar->set_path_handle);
   path_bar->set_path_handle = NULL;
+
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      ButtonData *button_data = BUTTON_DATA (list->data);
+
+      if (button_data->handle)
+	gtk_file_system_cancel_operation (button_data->handle);
+      button_data->handle = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }

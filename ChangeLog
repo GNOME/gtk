@@ -1,5 +1,10 @@
 2006-05-16  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkpathbar.c (gtk_path_bar_dispose): cancel all pending handles
+	in the button list. (Fixes #341035, reported by William Jon McCann).
+
+2006-05-16  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c
 	(show_and_select_paths_finished_loading): put the newly selected
 	row(s) the in the middle of the view,
