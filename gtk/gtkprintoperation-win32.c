@@ -464,7 +464,8 @@ win32_poll_status_timeout (GtkPrintOperation *op)
 
 
 static void
-win32_end_run (GtkPrintOperation *op)
+win32_end_run (GtkPrintOperation *op,
+	       gboolean wait)
 {
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
   LPDEVNAMES devnames;
@@ -472,7 +473,7 @@ win32_end_run (GtkPrintOperation *op)
   
   EndDoc (op_win32->hdc);
 
-  if (op->track_print_status)
+  if (op->priv->track_print_status)
     {
       devnames = GlobalLock (op_win32->devnames);
       if (!OpenPrinterW (((gunichar2 *)devnames) + devnames->wDeviceOffset,
@@ -1478,7 +1479,7 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
 
   _gtk_print_operation_platform_backend_run_dialog (op, parent, &do_print, NULL);
   if (do_print)
-    print_cb (op);
+    print_cb (op, FALSE);
   else
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 }
@@ -1622,9 +1623,9 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
 				       GtkPageSetupDoneFunc  done_cb,
 				       gpointer              data)
 {
-  GtkPageSetup *page_setup;
+  GtkPageSetup *new_page_setup;
 
-  page_setup = gtk_print_run_page_setup_dialog (parent, page_setup, settings);
-  done_cb (page_setup, data);
-  g_object_unref (page_setup);
+  new_page_setup = gtk_print_run_page_setup_dialog (parent, page_setup, settings);
+  done_cb (new_page_setup, data);
+  g_object_unref (new_page_setup);
 }
