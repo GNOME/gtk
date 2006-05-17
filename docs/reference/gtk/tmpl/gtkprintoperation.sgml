@@ -138,7 +138,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-<!-- ##### ARG GtkPrintOperation:number-of-pages ##### -->
+<!-- ##### ARG GtkPrintOperation:n-pages ##### -->
 <para>
 
 </para>
@@ -164,6 +164,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:status-string ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:track-print-status ##### -->
 <para>
 
 </para>
@@ -269,15 +274,6 @@ The #GQuark used for #GtkPrintError errors.
 
 @op: 
 @job_name: 
-
-
-<!-- ##### FUNCTION gtk_print_operation_set_nr_of_pages ##### -->
-<para>
-
-</para>
-
-@op: 
-@n_pages: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_set_current_page ##### -->

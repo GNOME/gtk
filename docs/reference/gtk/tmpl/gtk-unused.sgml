@@ -336,6 +336,12 @@ Turns off certain object flags.  (Private)
 @obj: the object to affect.
 @flag: the flags to unset.
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_NUM_COPIES ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
 <para>
 
@@ -371,6 +377,14 @@ Turns off certain object flags.  (Private)
 
 </para>
 
+
+<!-- ##### MACRO GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT ##### -->
+<para>
+The "Reverse Portrait Orientation" item.
+<inlinegraphic fileref="gtk-orientation-reverse-portrait.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.10
 
 <!-- ##### MACRO GTK_TIPS_QUERY ##### -->
 <para>
@@ -1125,6 +1139,12 @@ after other user handlers and the default handler.
 @pattern_reversed: 
 @user_data: 
 @seq_id: 
+
+<!-- ##### ARG GtkPrintOperation:number-of-pages ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
@@ -2776,6 +2796,30 @@ Set the the handle size to @size x @size pixels.
 
 @pspec: 
 @pattern: 
+
+<!-- ##### FUNCTION gtk_print_operation_set_nr_of_pages ##### -->
+<para>
+
+</para>
+
+@op: 
+@n_pages: 
+
+<!-- ##### FUNCTION gtk_print_settings_get_num_copies ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_print_settings_set_num_copies ##### -->
+<para>
+
+</para>
+
+@settings: 
+@num_copies: 
 
 <!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>

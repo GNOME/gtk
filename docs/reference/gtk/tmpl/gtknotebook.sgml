@@ -101,6 +101,7 @@ will be a popup menu allowing the users to switch pages.
 @:
 @:
 @:
+@:
 @: 
 
 <!-- ##### SIGNAL GtkNotebook::select-page ##### -->
@@ -212,6 +213,11 @@ Emitted when the user or a function changes the current page.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-pack ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:arrow-spacing ##### -->
 <para>
 
 </para>

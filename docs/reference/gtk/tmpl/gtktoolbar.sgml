@@ -152,6 +152,11 @@ accessed through the function described below.
 
 </para>
 
+<!-- ##### ARG GtkToolbar:max-child-expand ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkToolbar:shadow-type ##### -->
 <para>
 

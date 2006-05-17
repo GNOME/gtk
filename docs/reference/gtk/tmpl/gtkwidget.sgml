@@ -725,6 +725,16 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
+<!-- ##### ARG GtkWidget:scroll-arrow-hlength ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:scroll-arrow-vlength ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
 <para>
 

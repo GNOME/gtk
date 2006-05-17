@@ -71,6 +71,11 @@ You might do a non-modal #GtkMessageDialog as follows:
 
 </para>
 
+<!-- ##### ARG GtkMessageDialog:image ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMessageDialog:message-type ##### -->
 <para>
 
@@ -115,6 +120,7 @@ The type of message being displayed in the dialog.
 @GTK_MESSAGE_WARNING: Nonfatal warning message
 @GTK_MESSAGE_QUESTION: Question requiring a choice
 @GTK_MESSAGE_ERROR: Fatal error message
+@GTK_MESSAGE_OTHER: 
 
 <!-- ##### ENUM GtkButtonsType ##### -->
 <para>
@@ -165,6 +171,15 @@ then call gtk_dialog_add_buttons().
 
 @message_dialog: 
 @str: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_set_image ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@image: 
 
 
 <!-- ##### FUNCTION gtk_message_dialog_format_secondary_text ##### -->

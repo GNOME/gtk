@@ -703,15 +703,6 @@ The "Reverse Landscape Orientation" item.
 @Since: 2.10
 
 
-<!-- ##### MACRO GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT ##### -->
-<para>
-The "Reverse Portrait Orientation" item.
-<inlinegraphic fileref="gtk-orientation-reverse-portrait.png" format="PNG"></inlinegraphic>
-</para>
-
-@Since: 2.10
-
-
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
 The "Paste" item.

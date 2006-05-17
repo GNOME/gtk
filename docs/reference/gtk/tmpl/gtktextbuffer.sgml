@@ -139,6 +139,11 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### ARG GtkTextBuffer:cursor-position ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextBuffer:has-selection ##### -->
 <para>
 
