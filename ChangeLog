@@ -1,5 +1,8 @@
 2006-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_drag_motion): Don't produce
+	a stuck drag if shift is held.  (#341734, Sebastien Bacher)
+
 	* gdk/x11/gdkdnd-x11.c (_gdk_drag_get_protocol_for_display): 
 	Always set protocol.  (#342003, Tommi Komulainen)
 
