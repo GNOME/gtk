@@ -1,3 +1,10 @@
+2006-05-18  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrange.c: canonicalize the name of the "activate-slider"
+	style property and use GTK_PARAM_READABLE instead of
+	G_PARAM_READABLE. Moved one "activate_slider" variable to the
+	local scope its used in.
+
 2006-06-18  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkscreen-directfb.c: 

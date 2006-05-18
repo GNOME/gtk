@@ -393,11 +393,11 @@ gtk_range_class_init (GtkRangeClass *class)
 							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("activate_slider",
+					   g_param_spec_boolean ("activate-slider",
                                                                  P_("Draw slider ACTIVE during drag"),
 							         P_("With this option set to TRUE, sliders will be drawn ACTIVE and with shadow IN while they are dragged"),
 							         FALSE,
-							         G_PARAM_READABLE));
+							         GTK_PARAM_READABLE));
 }
 
 static void
@@ -1134,7 +1134,6 @@ gtk_range_expose (GtkWidget      *widget,
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
-  gboolean activate_slider;
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
@@ -1203,8 +1202,10 @@ gtk_range_expose (GtkWidget      *widget,
 
   if (range->layout->grab_location == MOUSE_SLIDER)
     {
-      gtk_widget_style_get (widget, "activate_slider", &activate_slider, NULL);
-      
+      gboolean activate_slider;
+
+      gtk_widget_style_get (widget, "activate-slider", &activate_slider, NULL);
+
       if (activate_slider)
         {
           state = GTK_STATE_ACTIVE;
@@ -1518,13 +1519,15 @@ gtk_range_button_press (GtkWidget      *widget,
         }
 
       range_grab_add (range, MOUSE_SLIDER, event->button);
-      
-      gtk_widget_style_get (widget, "activate_slider", &activate_slider, NULL);
-      
-      /* force a redraw, if the active slider is drawn differently to the prelight one */
+
+      gtk_widget_style_get (widget, "activate-slider", &activate_slider, NULL);
+
+      /* force a redraw, if the active slider is drawn differently to the
+       * prelight one
+       */
       if (activate_slider)
         gtk_widget_queue_draw (widget);
-      
+
       if (need_value_update)
         update_slider_position (range, event->x, event->y);
 
