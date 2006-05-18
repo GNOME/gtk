@@ -4814,6 +4814,9 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 
   str = gtk_selection_data_get_text (selection_data);
 
+  x -= widget->style->xthickness;
+  y -= widget->style->ythickness;
+
   if (str && entry->editable)
     {
       gint new_position;
