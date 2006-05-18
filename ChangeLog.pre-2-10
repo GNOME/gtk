@@ -1,3 +1,9 @@
+2006-06-18  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkscreen-directfb.c: 
+	* added gdk_screen_is_composited to compile
+	* Bug 342091
+
 2006-05-17  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation-win32.c:
