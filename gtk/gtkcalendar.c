@@ -2989,7 +2989,7 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
     }
   
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target == GDK_NONE)
+  if (target == GDK_NONE || context->suggested_action == 0)
     gdk_drag_status (context, 0, time);
   else
     {
