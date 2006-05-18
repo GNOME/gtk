@@ -1,5 +1,12 @@
 2006-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.h: 
+	* gtk/gtkprintoperation.c: Add a GtkPrintOperation:: paginate signal 
+	that gets emitted to paginate a document in chunks.
+
+	* gtk/gtkprintoperation-private.h: 
+	* gtk/gtkmarshalers.list: Add necessary glue.
+
 	* gtk/gtkcalendar.c (gtk_calendar_drag_motion): Don't produce
 	a stuck drag if shift is held.  (#341734, Sebastien Bacher) 
 

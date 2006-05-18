@@ -40,6 +40,8 @@ struct _GtkPrintOperationPrivate
   gboolean track_print_status;
   char *pdf_target;
 
+  guint print_pages_idle_id;
+
   /* Data for the print job: */
   cairo_surface_t *surface;
   double dpi_x, dpi_y;

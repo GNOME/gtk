@@ -31,6 +31,7 @@
 
 enum {
   BEGIN_PRINT,
+  PAGINATE,
   REQUEST_PAGE_SETUP,
   DRAW_PAGE,
   END_PRINT,
@@ -98,6 +99,9 @@ gtk_print_operation_finalize (GObject *object)
   
   g_free (priv->pdf_target);
   g_free (priv->job_name);
+
+  if (priv->print_pages_idle_id > 0)
+    g_source_remove (priv->print_pages_idle_id);
 
   G_OBJECT_CLASS (gtk_print_operation_parent_class)->finalize (object);
 }
@@ -259,6 +263,36 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
+
+   /**
+   * Gtkprintoperation::paginate:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @context: the #GtkPrintContext for the current operation
+   *
+   * Gets emitted after the begin-print signal, but before the actual 
+   * rendering starts. It keeps getting emitted until it returns %FALSE. 
+   *
+   * This signal is intended to be used for paginating the document
+   * in small chunks, to avoid blocking the user interface for a long
+   * time. The signal handler should update the number of pages using
+   * gtk_print_operation_set_n_pages(), and return %TRUE if the document
+   * has been completely paginated.
+   *
+   * If you don't need to do pagination in chunks, you can simply do
+   * it all in the begin-print handler, and set the number of pages
+   * from there.
+   *
+   * Since: 2.10
+   */
+  signals[PAGINATE] =
+    g_signal_new (I_("paginate"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, paginate),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__OBJECT,
+		  G_TYPE_BOOLEAN, 1, GTK_TYPE_PRINT_CONTEXT);
+
 
   /**
    * GtkPrintOperation::request-page-setup:
@@ -1309,6 +1343,24 @@ increment_page_sequence (PrintPagesData *data)
   return TRUE;
 }
 
+static void
+print_pages_idle_done (gpointer user_data)
+{
+  PrintPagesData *data;
+  GtkPrintOperationPrivate *priv;
+
+  data = (PrintPagesData*)user_data;
+  priv = data->op->priv;
+
+  g_object_unref (data->print_context);
+  g_object_unref (data->initial_page_setup);
+
+  g_object_unref (data->op);
+  g_free (data);
+
+  priv->print_pages_idle_id = 0;
+}
+
 static gboolean
 print_pages_idle (gpointer user_data)
 {
@@ -1323,6 +1375,66 @@ print_pages_idle (gpointer user_data)
   data = (PrintPagesData*)user_data;
   priv = data->op->priv;
 
+  if (priv->status == GTK_PRINT_STATUS_PREPARING)
+    {
+      if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
+	{
+	  gboolean paginated = FALSE;
+	  g_signal_emit (data->op, signals[PAGINATE], 0, data->print_context, &paginated);
+	  if (!paginated)
+	    goto out;
+	}
+
+      /* FIXME handle this better */
+      if (priv->nr_of_pages == 0)
+	g_warning ("no pages to print");
+      
+      /* Initialize parts of PrintPagesData that depend on nr_of_pages
+       */
+      if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
+	{
+	  data->ranges = priv->page_ranges;
+	  data->num_ranges = priv->num_page_ranges;
+	}
+      else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
+	       priv->current_page != -1)
+	{
+	  data->ranges = &data->one_range;
+	  data->num_ranges = 1;
+	  data->ranges[0].start = priv->current_page;
+	  data->ranges[0].end = priv->current_page;
+	}
+      else
+	{
+	  data->ranges = &data->one_range;
+	  data->num_ranges = 1;
+	  data->ranges[0].start = 0;
+	  data->ranges[0].end = priv->nr_of_pages - 1;
+	}
+      
+      if (data->op->priv->manual_reverse)
+	{
+	  data->range = data->num_ranges - 1;
+	  data->inc = -1;      
+	}
+      else
+	{
+	  data->range = 0;
+	  data->inc = 1;      
+	}
+      find_range (data);
+     
+      /* go back one page, since we preincrement below */
+      data->page = data->start - data->inc;
+      data->collated = data->collated_copies - 1;
+
+      _gtk_print_operation_set_status (data->op, 
+				       GTK_PRINT_STATUS_GENERATING_DATA, 
+				       NULL);
+
+      goto out;
+    }
+
   data->collated++;
   if (data->collated == data->collated_copies)
     {
@@ -1331,15 +1443,9 @@ print_pages_idle (gpointer user_data)
 	{
 	  g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
 	  
-	  g_object_unref (data->print_context);
-	  g_object_unref (data->initial_page_setup);
-   
 	  cairo_surface_finish (data->op->priv->surface);
 	  priv->end_run (data->op, TRUE);
 	  
-	  g_object_unref (data->op);
-	  g_free (data);
-
 	  done = TRUE;
 
 	  goto out;
@@ -1391,9 +1497,16 @@ print_pages (GtkPrintOperation *op,
   GtkPageSetup *initial_page_setup;
   GtkPrintContext *print_context;
   int uncollated_copies, collated_copies;
-  GtkPageRange *ranges;
-  int num_ranges;
   PrintPagesData *data;
+ 
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
+
+  print_context = _gtk_print_context_new (op);
+
+  initial_page_setup = create_page_setup (op);
+  _gtk_print_context_set_page_setup (print_context, initial_page_setup);
+
+  g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
 
   if (priv->manual_collation)
     {
@@ -1406,63 +1519,12 @@ print_pages (GtkPrintOperation *op,
       collated_copies = priv->manual_num_copies;
     }
 
-  print_context = _gtk_print_context_new (op);
-
-  initial_page_setup = create_page_setup (op);
-  _gtk_print_context_set_page_setup (print_context, initial_page_setup);
-
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
-  g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
-  
-  g_return_if_fail (priv->nr_of_pages > 0);
-
-  if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
-    {
-      ranges = priv->page_ranges;
-      num_ranges = priv->num_page_ranges;
-    }
-  else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
-	   priv->current_page != -1)
-    {
-      ranges = &data->one_range;
-      num_ranges = 1;
-      ranges[0].start = priv->current_page;
-      ranges[0].end = priv->current_page;
-    }
-  else
-    {
-      ranges = &data->one_range;
-      num_ranges = 1;
-      ranges[0].start = 0;
-      ranges[0].end = priv->nr_of_pages - 1;
-    }
-  
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_GENERATING_DATA, NULL);
-
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
   data->uncollated_copies = uncollated_copies;
   data->collated_copies = collated_copies;
-  data->ranges = ranges;
-  data->num_ranges = num_ranges;
   data->initial_page_setup = initial_page_setup;
   data->print_context = print_context;
-
-  data->uncollated = 0; 
-  if (data->op->priv->manual_reverse)
-    {
-      data->range = data->num_ranges - 1;
-      data->inc = -1;      
-    }
-  else
-    {
-      data->range = 0;
-      data->inc = 1;      
-    }
-  find_range (data);
-
-  data->page = data->start - data->inc;
-  data->collated = data->collated_copies - 1;
 
   if (wait)
     {
@@ -1475,7 +1537,10 @@ print_pages (GtkPrintOperation *op,
 	}
     }
   else
-    g_idle_add (print_pages_idle, data);
+    priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+						 print_pages_idle, 
+						 data, 
+						 print_pages_idle_done);
 }
 
 /**
@@ -1493,7 +1558,7 @@ print_pages (GtkPrintOperation *op,
  * @op to obtain some information about the progress of the print operation. 
  * Furthermore, it may use a recursive mainloop to show the print dialog.
  * See gtk_print_operation_run_async() if this is a problem.
- * 
+ *
  * <informalexample><programlisting>
  *  FIXME: need an example here
  * </programlisting></informalexample>
