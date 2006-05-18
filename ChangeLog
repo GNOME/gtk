@@ -1,5 +1,7 @@
 2006-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Actually require GLib 2.11
+	
 	* gtk/gtkentry.c (gtk_entry_drag_data_received): Make drops
 	end up at the right spot.  (#342072,  Yevgen Muntyan)
 
