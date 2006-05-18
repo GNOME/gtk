@@ -1,5 +1,9 @@
 2006-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimage.c (icon_theme_changed): Only unref the pixbuf
+	if the image has the appropriate storage type.  (#342096, Tommi
+	Komulainen)
+
 	* gtk/gtkentry.c (gtk_entry_drag_data_received): Make drops
 	end up at the right spot.  (#342072,  Yevgen Muntyan)
 

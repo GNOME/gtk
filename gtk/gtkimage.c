@@ -1409,11 +1409,14 @@ animation_timeout (gpointer data)
 static void
 icon_theme_changed (GtkImage *image)
 {
-  if (image->data.name.pixbuf)
-    g_object_unref (image->data.name.pixbuf);
-  image->data.name.pixbuf = NULL;
+  if (image->storage_type == GTK_IMAGE_ICON_NAME) 
+    {
+      if (image->data.name.pixbuf)
+	g_object_unref (image->data.name.pixbuf);
+      image->data.name.pixbuf = NULL;
 
-  gtk_widget_queue_draw (GTK_WIDGET (image));
+      gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
 }
 
 static void
