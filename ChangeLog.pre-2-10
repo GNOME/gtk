@@ -1,3 +1,9 @@
+2006-05-19  Damon Chaplin  <damon@gnome.org>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_init): use
+	atk_relation_add_target() to add the targets, since it sets up weak
+	references to avoid crashes. (#305530)
+
 2006-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.h: 

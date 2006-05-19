@@ -474,15 +474,13 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
       AtkRelationSet *relation_set;
       AtkRelation *relation;
       AtkObject *obj_array[1];
-      GPtrArray *array;
 
       atk_label = gtk_widget_get_accessible (label);
       relation_set = atk_object_ref_relation_set (atk_obj);
       relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABELLED_BY);
       if (relation)
         {
-          array = atk_relation_get_target (relation);
-          g_ptr_array_add (array, atk_label);
+          atk_relation_add_target (relation, atk_label);
         }
       else 
         {
@@ -496,8 +494,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
       relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABEL_FOR);
       if (relation)
         {
-          array = atk_relation_get_target (relation);
-          g_ptr_array_add (array, atk_obj);
+          atk_relation_add_target (relation, atk_obj);
         }
       else 
         {
