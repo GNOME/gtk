@@ -3342,7 +3342,9 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 					&(notebook->first_tab), &tab_space,
 					STEP_PREV);
 
-	      if (tab_space <= 0)
+	      page = focus_tab->data;
+	      if (tab_space <= 0 &&
+		  !gtk_widget_get_child_visible (page->tab_label))
 		{
 		  notebook->first_tab =
 		    gtk_notebook_search_page (notebook, notebook->first_tab,
