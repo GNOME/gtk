@@ -1245,8 +1245,11 @@ gtk_paned_compute_position (GtkPaned *paned,
 			      paned->min_position,
 			      paned->max_position);
 
-  gtk_widget_set_child_visible (paned->child1, paned->child1_size != 0);
-  gtk_widget_set_child_visible (paned->child2, paned->child1_size != allocation);
+  if (paned->child1)
+    gtk_widget_set_child_visible (paned->child1, paned->child1_size != 0);
+
+  if (paned->child2)
+    gtk_widget_set_child_visible (paned->child2, paned->child1_size != allocation);
 
   g_object_freeze_notify (G_OBJECT (paned));
   if (paned->child1_size != old_position)
