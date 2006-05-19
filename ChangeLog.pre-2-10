@@ -1,3 +1,9 @@
+2006-05-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): Fix a 
+	boundary case in scrolling where a tab was not shown.  (#168105,
+	Hiroyuki Ikezoe, patch by Kouhei Sutou)
+
 2006-05-19  Damon Chaplin  <damon@gnome.org>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_init): use

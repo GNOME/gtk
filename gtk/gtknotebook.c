@@ -4851,7 +4851,9 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 				    &(notebook->first_tab), remaining_space,
 				    STEP_PREV);
 
-	  if (*remaining_space <= 0)
+	  page = notebook->focus_tab->data;
+	  if (*remaining_space <= 0 &&
+	      !gtk_widget_get_child_visible(page->tab_label))
 	    {
 	      notebook->first_tab =
 		gtk_notebook_search_page (notebook, notebook->first_tab,
