@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-17 23:37+0200\n"
-"PO-Revision-Date: 2006-05-17 23:48+0200\n"
+"POT-Creation-Date: 2006-05-19 20:06+0200\n"
+"PO-Revision-Date: 2006-05-19 20:07+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -1912,11 +1912,11 @@ msgid "Si_ze:"
 msgstr "_Tamaño:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:517
+#: ../gtk/gtkfontsel.c:514
 msgid "_Preview:"
 msgstr "_Previsualización:"
 
-#: ../gtk/gtkfontsel.c:1351
+#: ../gtk/gtkfontsel.c:1348
 msgid "Font Selection"
 msgstr "Selección de Fonte"
 
@@ -2092,7 +2092,7 @@ msgstr "Espazo entre frechas"
 msgid "Scroll arrow spacing"
 msgstr "Espazo das frechas de desprazamento"
 
-#: ../gtk/gtknotebook.c:4208 ../gtk/gtknotebook.c:6742
+#: ../gtk/gtknotebook.c:4208 ../gtk/gtknotebook.c:6744
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -2217,47 +2217,47 @@ msgid "_Save in folder:"
 msgstr "_Gardar no cartafol:"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:950
+#: ../gtk/gtkprintoperation.c:984
 msgid "print operation status|Initial state"
 msgstr "Estado inicial"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:952
+#: ../gtk/gtkprintoperation.c:986
 msgid "print operation status|Preparing to print"
 msgstr "Preparado para imprimir"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:954
+#: ../gtk/gtkprintoperation.c:988
 msgid "print operation status|Generating data"
 msgstr "Xerando datos"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:956
+#: ../gtk/gtkprintoperation.c:990
 msgid "print operation status|Sending data"
 msgstr "Enviando datos"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:958
+#: ../gtk/gtkprintoperation.c:992
 msgid "print operation status|Waiting"
 msgstr "Agardando"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:960
+#: ../gtk/gtkprintoperation.c:994
 msgid "print operation status|Blocking on issue"
 msgstr "Bloqueado nunha folla"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:962
+#: ../gtk/gtkprintoperation.c:996
 msgid "print operation status|Printing"
 msgstr "Imprimindo"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:964
+#: ../gtk/gtkprintoperation.c:998
 msgid "print operation status|Finished"
 msgstr "Rematado"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:966
+#: ../gtk/gtkprintoperation.c:1000
 msgid "print operation status|Finished with error"
 msgstr "Rematado con erro"
 
@@ -2816,20 +2816,19 @@ msgstr "_Abrir"
 
 #: ../gtk/gtkstock.c:392
 msgid "Landscape"
-msgstr ""
+msgstr "Horizontal"
 
 #: ../gtk/gtkstock.c:393
-#, fuzzy
 msgid "Portrait"
-msgstr "Imprimir"
+msgstr "Vertical"
 
 #: ../gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr ""
+msgstr "Horizontal invertido"
 
 #: ../gtk/gtkstock.c:395
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Vertical invertido"
 
 #: ../gtk/gtkstock.c:396
 msgid "_Paste"
@@ -4108,7 +4107,9 @@ msgstr "Os datos serializados están mal formados"
 
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Os datos serializados están mal formados. A primeira sección non é GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Os datos serializados están mal formados. A primeira sección non é "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #. sorted by name, remember to sort when changing
 #: ../gtk/paper_names.c:18
