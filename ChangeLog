@@ -1,5 +1,16 @@
 2006-05-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkprintoperation.h: 
+	* gtk/gtkprintoperation.c (gtk_print_operation_cancel): New function
+	to cancel a running print operation.
+
+	* gtk/gtkprintoperation-private.h (struct _GtkPrintOperationPrivate): 
+	Add a cancelled flag, use g types, use bitfields.
+
+	* gtk/gtkprintoperation.c (print_pages): Clean up after the idle
+	in the synchronous case.
+
 	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): Fix a 
 	boundary case in scrolling where a tab was not shown.  (#168105,
 	Hiroyuki Ikezoe, patch by Kouhei Sutou)

@@ -138,6 +138,7 @@ GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOper
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
 G_CONST_RETURN gchar *  gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
+void                    gtk_print_operation_cancel                 (GtkPrintOperation  *op);
 
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
 								    GtkPageSetup       *page_setup,

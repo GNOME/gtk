@@ -2701,6 +2701,7 @@ gtk_print_operation_run_async
 gtk_print_operation_get_status
 gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
+gtk_print_operation_cancel
 #endif
 #endif
 

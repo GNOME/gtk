@@ -28,45 +28,46 @@ G_BEGIN_DECLS
 struct _GtkPrintOperationPrivate
 {
   GtkPrintStatus status;
-  char *status_string;
+  gchar *status_string;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
-  char *job_name;
-  int nr_of_pages;
-  int current_page;
-  gboolean use_full_page;
+  gchar *job_name;
+  gint nr_of_pages;
+  gint current_page;
   GtkUnit unit;
-  gboolean show_dialog;
-  gboolean track_print_status;
-  char *pdf_target;
+  gchar *pdf_target;
+  guint use_full_page      : 1;
+  guint show_dialog        : 1;
+  guint track_print_status : 1;
+  guint cancelled          : 1;
 
   guint print_pages_idle_id;
 
   /* Data for the print job: */
   cairo_surface_t *surface;
-  double dpi_x, dpi_y;
+  gdouble dpi_x, dpi_y;
 
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  int num_page_ranges;
+  gint num_page_ranges;
   
-  int manual_num_copies;
-  gboolean manual_collation;
-  gboolean manual_reverse;
-  gboolean manual_orientation;
+  gint manual_num_copies;
+  guint manual_collation   : 1;
+  guint manual_reverse     : 1;
+  guint manual_orientation : 1;
   double manual_scale;
   GtkPageSet manual_page_set;
  
-  void *platform_data;
+  gpointer platform_data;
+  GDestroyNotify free_platform_data;
 
   void (*start_page) (GtkPrintOperation *operation,
-		      GtkPrintContext *print_context,
-		      GtkPageSetup *page_setup);
-  void (*end_page) (GtkPrintOperation *operation,
-		    GtkPrintContext *print_context);
-  void (*end_run) (GtkPrintOperation *operation,
-		   gboolean wait);
-  GDestroyNotify free_platform_data;
+		      GtkPrintContext   *print_context,
+		      GtkPageSetup      *page_setup);
+  void (*end_page)   (GtkPrintOperation *operation,
+		      GtkPrintContext   *print_context);
+  void (*end_run)    (GtkPrintOperation *operation,
+		      gboolean           wait);
 };
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *operation,
@@ -75,15 +76,15 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  GError           **error);
 
 typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
-					     gboolean wait);
+					     gboolean           wait);
 
 void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
 							     GtkWindow                  *parent,
 							     GtkPrintOperationPrintFunc  print_cb);
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
-				      GtkPrintStatus status,
-				      const char *string);
+				      GtkPrintStatus     status,
+				      const gchar       *string);
 
 /* GtkPrintContext private functions: */
 

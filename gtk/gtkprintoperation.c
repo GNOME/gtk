@@ -1347,18 +1347,15 @@ static void
 print_pages_idle_done (gpointer user_data)
 {
   PrintPagesData *data;
-  GtkPrintOperationPrivate *priv;
 
   data = (PrintPagesData*)user_data;
-  priv = data->op->priv;
+  data->op->priv->print_pages_idle_id = 0;
 
   g_object_unref (data->print_context);
   g_object_unref (data->initial_page_setup);
 
   g_object_unref (data->op);
   g_free (data);
-
-  priv->print_pages_idle_id = 0;
 }
 
 static gboolean
@@ -1484,6 +1481,17 @@ print_pages_idle (gpointer user_data)
 
  out:
 
+  if (priv->cancelled)
+    {
+      g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
+      
+      cairo_surface_finish (data->op->priv->surface);
+      
+      _gtk_print_operation_set_status (data->op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+      
+      done = TRUE;
+    }
+
   GDK_THREADS_LEAVE ();
 
   return !done;
@@ -1535,13 +1543,13 @@ print_pages (GtkPrintOperation *op,
 	  while (gtk_events_pending ())
 	    gtk_main_iteration ();
 	}
+      print_pages_idle_done (data);
     }
   else
     priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 						 print_pages_idle, 
 						 data, 
-						 print_pages_idle_done);
-}
+						 print_pages_idle_done);}
 
 /**
  * gtk_print_operation_run:
@@ -1643,6 +1651,27 @@ gtk_print_operation_run_async (GtkPrintOperation *op,
 							    parent,
 							    print_pages);
 }
+
+
+/**
+ * gtk_print_operation_cancel:
+ * @op: a #GtkPrintOperation
+ *
+ * Cancels a running print operation. This function may
+ * be called from a begin-print, paginate or draw-page
+ * signal handler to stop the currently running print 
+ * operation.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_operation_cancel (GtkPrintOperation *op)
+{
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+  
+  op->priv->cancelled = TRUE;
+}
+
 
 
 #define __GTK_PRINT_OPERATION_C__
