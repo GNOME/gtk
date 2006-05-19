@@ -1,5 +1,8 @@
 2006-05-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpaned.c (gtk_paned_compute_position): Avoid warnings
+	if a child is NULL.  (#342007, Patrick Monnerat)
+	
 	* gtk/gtk.symbols: 
 	* gtk/gtkprintoperation.h: 
 	* gtk/gtkprintoperation.c (gtk_print_operation_cancel): New function
