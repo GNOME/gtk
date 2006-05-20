@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-20 10:37+0200\n"
-"PO-Revision-Date: 2006-05-20 10:53+0200\n"
+"PO-Revision-Date: 2006-05-20 23:41+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -3996,11 +3996,10 @@ msgid "Window Placement"
 msgstr "Colocación da fiestra"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Onde se colocan os contidos respecto ás barras de desprazamento"
+msgstr "Onde se colocan os contidos respecto ás barras de desprazamento. Esta propiedade só ten efecto se \"window-placement-set\" é TRUE."
 
 #: ../gtk/gtkscrolledwindow.c:270
 msgid "Window Placement Set"
@@ -4115,14 +4114,12 @@ msgid "Name of icon theme to use"
 msgstr "Nome do tema de iconas a empregar"
 
 #: ../gtk/gtksettings.c:248
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Nome do tema de iconas"
+msgstr "Nome do tema de iconas de resgardo"
 
 #: ../gtk/gtksettings.c:249
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Nome do tema de iconas a empregar"
+msgstr "Nome do tema de iconas a empregar como resgardo"
 
 #: ../gtk/gtksettings.c:257
 msgid "Key Theme Name"
@@ -4223,18 +4220,16 @@ msgid "Cursor theme name"
 msgstr "Nome do tema do cursor"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "Nome do tema de cursor a empregar"
+msgstr "Nome do tema de cursor a empregar, ou NULL para usar o tema por defecto"
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "Tamaño do tema de cursor"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Tamaño que se vai a usar para os cursores"
+msgstr "Tamaño que se vai a usar para os cursores, ou 0 para usar o tamaño predeterminado"
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
@@ -4270,64 +4265,59 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
-msgstr ""
+msgstr "Tempo de expiración de inicio"
 
 #: ../gtk/gtksettings.c:410
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Valor de inicio para as expiracións, cando se prema o botón"
 
 #: ../gtk/gtksettings.c:419
 msgid "Repeat timeout"
-msgstr ""
+msgstr "Expiración de repetición"
 
 #: ../gtk/gtksettings.c:420
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Valor de repetición para expiracións, cando o botón se prema"
 
 #: ../gtk/gtksettings.c:429
-#, fuzzy
 msgid "Expand timeout"
-msgstr "Tamaño do extensor"
+msgstr "Expiración do expansor"
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
-msgstr ""
+msgstr "Valor de expansión para as expiracións, cando un widget está expandendo unha nova rexión"
 
 #: ../gtk/gtksettings.c:459
-#, fuzzy
 msgid "Color scheme"
-msgstr "Espazo de cor"
+msgstr "Esquema de cor"
 
 #: ../gtk/gtksettings.c:460
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "O nome da icona do tema de iconas"
+msgstr "Unha paleta de cores con nome para usar nos temas"
 
 #: ../gtk/gtksettings.c:469
-#, fuzzy
 msgid "Enable Animations"
-msgstr "Animación"
+msgstr "Activar animacións"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "Indica se se activan as animacións para todo o toolkit"
 
 #: ../gtk/gtksettings.c:488
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Activar modo pantalla táctil"
 
 #: ../gtk/gtksettings.c:489
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr ""
+msgstr "Cando esté a TRUE, non hai eventos de notificación de movemento entregados nesta pantalla"
 
 #: ../gtk/gtksettings.c:507
-#, fuzzy
 msgid "Color Hash"
-msgstr "Espazo de cor"
+msgstr "Hash da cor"
 
 #: ../gtk/gtksettings.c:508
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "Unha representación en táboa hash do esquema de cor."
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
@@ -4596,32 +4586,30 @@ msgid "Whether the buffer has some text currently selected"
 msgstr "Indica se o búfer ten actualmente algún texto seleccionado"
 
 #: ../gtk/gtktextbuffer.c:228
-#, fuzzy
 msgid "Cursor position"
 msgstr "Posición do cursor"
 
 #: ../gtk/gtktextbuffer.c:229
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "A posición da marca de inserción (como offset desde o principio do búfer)"
 
 #: ../gtk/gtktextbuffer.c:244
-#, fuzzy
 msgid "Copy target list"
-msgstr "Cadea dos dereitos de copia"
+msgstr "Lista de destinos da copia"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr ""
+msgstr "A lista de destinos que soporta este búfer para copiar desde o portarretallos e a orixe do DND"
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
-msgstr ""
+msgstr "Lista de destinos de pegado"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
-msgstr ""
+msgstr "A lista de destinos que soporta este búfer para pegar desde o portarretallos e o destino do DND"
 
 #: ../gtk/gtktexttag.c:171
 msgid "Tag name"
@@ -5004,13 +4992,12 @@ msgstr ""
 "acción de radio"
 
 #: ../gtk/gtktoggleaction.c:119
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "Se o botón de activación debería ser preso hacia dentro ou non"
+msgstr "Se a acción de conmutación debería estar activa ou non"
 
 #: ../gtk/gtktogglebutton.c:105 ../gtk/gtktoggletoolbutton.c:102
 msgid "If the toggle button should be pressed in or not"
-msgstr "Se o botón de activación debería ser preso hacia dentro ou non"
+msgstr "Se o botón de conmutación debería estar preso ou non"
 
 #: ../gtk/gtktogglebutton.c:113
 msgid "If the toggle button is in an \"in between\" state"
@@ -5089,13 +5076,12 @@ msgstr ""
 "botóns"
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Anchura mínima do fillo"
+msgstr "Expansión de fillos máxima"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "Cantidade máxima de espazo que se lle dará a un elemento expandible"
 
 #: ../gtk/gtktoolbar.c:607
 msgid "Space style"
@@ -5294,22 +5280,20 @@ msgstr ""
 "sobre elas"
 
 #: ../gtk/gtktreeview.c:685
-#, fuzzy
 msgid "Show Expanders"
-msgstr "O expansor"
+msgstr "Amosar expansores"
 
 #: ../gtk/gtktreeview.c:686
-#, fuzzy
 msgid "View has expanders"
-msgstr "O expansor"
+msgstr "A vista ten expansores"
 
 #: ../gtk/gtktreeview.c:693
 msgid "Level Indentation"
-msgstr ""
+msgstr "Nivel de sangrado"
 
 #: ../gtk/gtktreeview.c:694
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "Sangría extra para cada nivel"
 
 #: ../gtk/gtktreeview.c:716
 msgid "Vertical Separator Width"
@@ -5361,11 +5345,11 @@ msgstr "Cor a usar para as ringleiras impares"
 
 #: ../gtk/gtktreeview.c:762
 msgid "Row Ending details"
-msgstr ""
+msgstr "Detalles de terminación de ringleira"
 
 #: ../gtk/gtktreeview.c:763
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "Activar tema do fondo de extendido de ringleira"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -5716,73 +5700,62 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Tamaño das áreas fora da reserva do widget para debuxar"
 
 #: ../gtk/gtkwidget.c:1493
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Cor do ligazón"
+msgstr "Cor da ligazón non visitada"
 
 #: ../gtk/gtkwidget.c:1494
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "Cor dos hiperenlaces"
+msgstr "Cor das ligazóns non visitadas"
 
 #: ../gtk/gtkwidget.c:1500
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "Cor do ligazón"
+msgstr "Cor da ligazón visitada"
 
 #: ../gtk/gtkwidget.c:1501
-#, fuzzy
 msgid "Color of visited links"
-msgstr "Cor dos hiperenlaces"
+msgstr "Cor das ligazóns visitadas"
 
 #: ../gtk/gtkwidget.c:1507
-#, fuzzy
 msgid "Wide Separators"
-msgstr "Usar separador"
+msgstr "Separadores anchos"
 
 #: ../gtk/gtkwidget.c:1508
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
-msgstr ""
+msgstr "Indica se os separadores teñen anchura configurable e deberían debuxarse usando unha caixa no lugar dunha liña"
 
 #: ../gtk/gtkwidget.c:1514
-#, fuzzy
 msgid "Separator Width"
-msgstr "Anchura do separador vertical"
+msgstr "Anchura do separador"
 
 #: ../gtk/gtkwidget.c:1515
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "A anchura dos separadores se wide-separators é TRUE"
 
 #: ../gtk/gtkwidget.c:1521
-#, fuzzy
 msgid "Separator Height"
-msgstr "Altura por defecto"
+msgstr "Altura do separador"
 
 #: ../gtk/gtkwidget.c:1522
 msgid "The height of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "A altura dos separadores se wide-separators é TRUE"
 
 #: ../gtk/gtkwidget.c:1527
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Comportamento da barra de desprazamento horizontal"
+msgstr "Lonxitude da frecha de desprazamento horizontal"
 
 #: ../gtk/gtkwidget.c:1528
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Cando a barra de desprazamento horizontal é amosada"
+msgstr "A lonxitude das frechas de desprazamento horizontal"
 
 #: ../gtk/gtkwidget.c:1533
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Comportamento da barra de desprazamento vertical"
+msgstr "Lonxitude das frechas de desprazamento vertical"
 
 #: ../gtk/gtkwidget.c:1534
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Cando se mostra a barra de desprazamento vertical"
+msgstr "A lonxitude das frechas de desprazamento vertical"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -5989,12 +5962,11 @@ msgstr "O tipo de gravidade da fiestra"
 
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "Transición para a fiestra"
 
 #: ../gtk/gtkwindow.c:675
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "O botóns mostrados no diálogo de mensaxe"
+msgstr "O pai transitorio do diálogo"
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
