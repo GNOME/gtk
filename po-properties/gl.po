@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-19 20:09+0200\n"
-"PO-Revision-Date: 2006-05-19 20:37+0200\n"
+"POT-Creation-Date: 2006-05-20 10:37+0200\n"
+"PO-Revision-Date: 2006-05-20 10:53+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -1738,8 +1738,8 @@ msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
-"Un título que debe amosarse polo xestor de fiestras cando este menú emerxente "
-"atópese pechado"
+"Un título que debe amosarse polo xestor de fiestras cando este menú "
+"emerxente atópese pechado"
 
 #: ../gtk/gtkcombobox.c:674
 msgid "Popup shown"
@@ -1899,7 +1899,9 @@ msgstr "FALSO quita o bisel exterior da entrada"
 
 #: ../gtk/gtkentry.c:518
 msgid "Border between text and frame. Overrides the inner-border style property"
-msgstr "Bordo entre o texto e o marco. Toma precedencia sobre a propiedade de estilo do bordo interno"
+msgstr ""
+"Bordo entre o texto e o marco. Toma precedencia sobre a propiedade de estilo "
+"do bordo interno"
 
 #: ../gtk/gtkentry.c:525
 msgid "Invisible character"
@@ -3435,7 +3437,9 @@ msgstr "Usar a páxina completa"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr "TRUE se a orixe do contexto debería estar na esquina da páxina e non na esquina da área da imaxe"
+msgstr ""
+"TRUE se a orixe do contexto debería estar na esquina da páxina e non na "
+"esquina da área da imaxe"
 
 #: ../gtk/gtkprintoperation.c:535
 msgid "Track Print Status"
@@ -3445,7 +3449,7 @@ msgstr "Seguemento do estado de impresión"
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr ""
+msgstr "TRUE se a operación de impresión continuará informando ao traballo de impresión despois de que os datos de impresión sexan enviados ao servidor de impresoras ou á impresora."
 
 #: ../gtk/gtkprintoperation.c:553
 msgid "Unit"
@@ -3648,15 +3652,14 @@ msgid "The radio action whose group this action belongs to."
 msgstr "O botón de radio, grupo ao cal pertence esta acción."
 
 #: ../gtk/gtkradioaction.c:144
-#, fuzzy
 msgid "The current value"
-msgstr "A cor actual"
+msgstr "O valor actual"
 
 #: ../gtk/gtkradioaction.c:145
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "A propiedade do valor do membro actualmente activo do grupo ao que esta acción pertence."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3690,27 +3693,27 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:331
 msgid "Lower stepper sensitivity"
-msgstr ""
+msgstr "Sensibilidade do paso baixo"
 
 #: ../gtk/gtkrange.c:332
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
+msgstr "A directiva de sensibilidade do paso que apunta á beira máis baixa do axuste"
 
 #: ../gtk/gtkrange.c:340
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Sensibilidade do paso alto"
 
 #: ../gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
+msgstr "A directiva de sensibilidade do paso que apunta á beira máis alta do axuste"
 
 #: ../gtk/gtkrange.c:348
 msgid "Slider Width"
-msgstr "Ancho do divisor"
+msgstr "Ancho do deslizador"
 
 #: ../gtk/gtkrange.c:349
 msgid "Width of scrollbar or scale thumb"
@@ -3758,123 +3761,105 @@ msgstr "Distancia na dirección y en que se moverá a frecha cando se solte o bo
 
 #: ../gtk/gtkrange.c:397
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Debuxar deslizador ACTIVO durante o arrastre"
 
 #: ../gtk/gtkrange.c:398
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
-msgstr ""
+msgstr "Con esta opción posta a TRUE, os deslizadores debuxaranse ACTIVOS e con sombra DENTRO ao arrastralos"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "Xestor de recentes"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "O obxecto RecentManager a usar"
 
 #: ../gtk/gtkrecentchooser.c:118
-#, fuzzy
 msgid "Show Private"
-msgstr "Amosar texto"
+msgstr "Amosar privados"
 
 #: ../gtk/gtkrecentchooser.c:119
-#, fuzzy
 msgid "Whether the private items should be displayed"
-msgstr "Indica se os ficheiros e cartafoles ocultos deben ser amosados"
+msgstr "Indica se os elementos privados deberían amosarse"
 
 #: ../gtk/gtkrecentchooser.c:124
-#, fuzzy
 msgid "Show Tooltips"
-msgstr "Consellos"
+msgstr "Amosar consellos"
 
 #: ../gtk/gtkrecentchooser.c:125
-#, fuzzy
 msgid "Whether there should be a tooltip on the item"
-msgstr "Indica se o bordo debe amosarse ou non"
+msgstr "Indica se debe haber un consello no elemento"
 
 #: ../gtk/gtkrecentchooser.c:130
-#, fuzzy
 msgid "Show Icons"
-msgstr "Icona de inventario"
+msgstr "Amosar iconas"
 
 #: ../gtk/gtkrecentchooser.c:131
-#, fuzzy
 msgid "Whether there should be an icon near the item"
-msgstr "Indica se o bordo debe amosarse ou non"
+msgstr "Indica se debe haber unha icona cerca do elemento"
 
 #: ../gtk/gtkrecentchooser.c:136
 msgid "Show Not Found"
-msgstr ""
+msgstr "Amosar non atopados"
 
 #: ../gtk/gtkrecentchooser.c:137
-#, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "Indica se os ficheiros e cartafoles ocultos deben ser amosados"
+msgstr "Indica se deben amosarse os elementos que apuntan a recursos non dispoñibles"
 
 #: ../gtk/gtkrecentchooser.c:143
-#, fuzzy
 msgid "Whether to allow multiple items to be selected"
-msgstr "Indica se poden ser seleccionados múltiples ficheiros"
+msgstr "Indica se se permite a selección de múltiples elementos"
 
 #: ../gtk/gtkrecentchooser.c:148
-#, fuzzy
 msgid "Local only"
 msgstr "Só local"
 
 #: ../gtk/gtkrecentchooser.c:149
-#, fuzzy
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
-msgstr ""
-"Indica se os ficheiros seleccionados deberían ser limitados a ficheiros "
-"locais: URLs"
+msgstr "Indica se os recursos seleccionados deberían limitarse a URIs locais file:"
 
 #: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:231
 msgid "Limit"
-msgstr ""
+msgstr "Límite"
 
 #: ../gtk/gtkrecentchooser.c:155
-#, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "O número de lugares decimais a amosar"
+msgstr "O número máximo de elementos a amosar"
 
 #: ../gtk/gtkrecentchooser.c:162
-#, fuzzy
 msgid "Sort Type"
-msgstr "Tipo de sombra"
+msgstr "Tipo de orde"
 
 #: ../gtk/gtkrecentchooser.c:163
-#, fuzzy
 msgid "The sorting order of the items displayed"
-msgstr "Se a parte de activación do botón é amosada"
+msgstr "A orde de colocación dos elementos amosados"
 
 #: ../gtk/gtkrecentchooser.c:170
-#, fuzzy
 msgid "The current filter for selecting which resources are displayed"
-msgstr "O filtro actual para seleccionar que ficheiros estanse amosando"
+msgstr "O filtro actual para seleccionar qué recursos se amosan"
 
 #: ../gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Show Numbers"
-msgstr "Amosar número da semana"
+msgstr "Amosar números"
 
 #: ../gtk/gtkrecentchoosermenu.c:210
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "Indica se deben engadirse tiradores aos menús"
+msgstr "Indica se os elementos deberían amosarse cun número"
 
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
-msgstr ""
+msgstr "A ruta completa ao ficheiro a usar para almacenar e ler a lista"
 
 #: ../gtk/gtkrecentmanager.c:232
 msgid "The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr ""
+msgstr "O número máximo de elementos a devolver por gtk_recent_manager_get_items()"
 
 #: ../gtk/gtkrecentmanager.c:248
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "O tamaño da lista de recursos usados recentemente"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
@@ -4018,16 +4003,14 @@ msgid ""
 msgstr "Onde se colocan os contidos respecto ás barras de desprazamento"
 
 #: ../gtk/gtkscrolledwindow.c:270
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "Colocación da fiestra"
+msgstr "Establecer colocación da fiestra"
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "Onde se colocan os contidos respecto ás barras de desprazamento"
+msgstr "Indica se debería usarse \"window-placement\" para determinar o lugar do contido respecto ás barras de desprazamento."
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4046,16 +4029,14 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Número de píxels entre as barras de desprazamentos e a fiestra desprazada"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "Colocación da fiestra"
+msgstr "Colocación da fiestra onde se desprazou"
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Onde se colocan os contidos respecto ás barras de desprazamento"
+msgstr "Onde se coloca o contido das fiestras desprazadas con respecto ás barras de desprazamento, se non toma precedencia polo propio emprazamento da fiestra onde se desprazou."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
