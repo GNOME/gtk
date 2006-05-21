@@ -1,3 +1,9 @@
+2006-05-22  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c: Make it compile again. Doesn't work
+	properly yet, though. There is lots of commonality between this
+	file and gtkfilesystemunix.c that should really be factored out.
+
 2006-05-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_compute_position): Avoid warnings

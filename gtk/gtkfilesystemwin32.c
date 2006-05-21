@@ -20,8 +20,10 @@
  */
 
 #include <config.h>
+
 #include "gtkfilesystem.h"
 #include "gtkfilesystemwin32.h"
+#include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
@@ -35,16 +37,16 @@
 #include <ctype.h>
 #include <sys/types.h>
 
-#ifdef G_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
 #define STRICT
 #include "gdk/win32/gdkwin32.h"
 #undef STRICT
 #include <shlobj.h>
 #include <shellapi.h>
-#else
-#error "The implementation is Win32 only."
-#endif /* G_OS_WIN32 */
+
+#define BOOKMARKS_FILENAME ".gtk-bookmarks"
+
+#define FOLDER_CACHE_LIFETIME 2 /* seconds */
 
 typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
 
@@ -66,7 +68,18 @@ struct _GtkFileSystemWin32
   guint timeout;
 };
 
-#define GTK_TYPE_FILE_FOLDER_WIN32             (gtk_file_folder_win32_get_type ())
+/* Icon type, supplemented by MIME type
+ */
+typedef enum {
+  ICON_UNDECIDED, /* Only used while we have not yet computed the icon in a struct stat_info_entry */
+  ICON_NONE,      /* "Could not compute the icon type" */
+  ICON_REGULAR,	  /* Use mime type for icon */
+  ICON_DIRECTORY,
+  ICON_EXECUTABLE
+} IconType;
+
+
+#define GTK_TYPE_FILE_FOLDER_WIN32             (_gtk_file_folder_win32_get_type ())
 #define GTK_FILE_FOLDER_WIN32(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_WIN32, GtkFileFolderWin32))
 #define GTK_IS_FILE_FOLDER_WIN32(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_FOLDER_WIN32))
 #define GTK_FILE_FOLDER_WIN32_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_FOLDER_WIN32, GtkFileFolderWin32Class))
@@ -88,27 +101,51 @@ struct _GtkFileFolderWin32
   GtkFileSystemWin32 *system_win32;
   GtkFileInfoType types;
   gchar *filename;
+  GHashTable *stat_info;
+  guint load_folder_id;
+  guint have_stat : 1;
+  guint have_mime_type : 1;
+  guint is_network_dir : 1;
+  guint is_finished_loading : 1;
+  time_t asof;
 };
 
-static GObjectClass *system_parent_class;
-static GObjectClass *folder_parent_class;
+struct stat_info_entry {
+  WIN32_FILE_ATTRIBUTE_DATA wfad;
+  char *mime_type;
+  IconType icon_type;
+  gboolean hidden;
+};
 
-static void           gtk_file_system_win32_class_init       (GtkFileSystemWin32Class  *class);
+static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
+						 GTK_FILE_INFO_MODIFICATION_TIME |
+						 GTK_FILE_INFO_SIZE |
+						 GTK_FILE_INFO_ICON);
+
 static void           gtk_file_system_win32_iface_init       (GtkFileSystemIface       *iface);
-static void           gtk_file_system_win32_init             (GtkFileSystemWin32       *impl);
 static void           gtk_file_system_win32_finalize         (GObject                  *object);
 
 static GSList *       gtk_file_system_win32_list_volumes     (GtkFileSystem      *file_system);
 static GtkFileSystemVolume *gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
                                                                        const GtkFilePath *path);
 
-static GtkFileFolder *gtk_file_system_win32_get_folder       (GtkFileSystem            *file_system,
+static GtkFileSystemHandle *gtk_file_system_win32_get_folder (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GtkFileInfoType           types,
-							      GError                  **error);
-static gboolean       gtk_file_system_win32_create_folder    (GtkFileSystem            *file_system,
-							      const GtkFilePath        *path,
-							      GError                  **error);
+							      GtkFileSystemGetFolderCallback callback,
+							      gpointer                       data);
+
+static GtkFileSystemHandle *gtk_file_system_win32_get_info (GtkFileSystem               *file_system,
+							    const GtkFilePath           *path,
+							    GtkFileInfoType              types,
+							    GtkFileSystemGetInfoCallback callback,
+							    gpointer                     data);
+
+static GtkFileSystemHandle *gtk_file_system_win32_create_folder (GtkFileSystem            *file_system,
+								 const GtkFilePath        *path,
+								 GtkFileSystemCreateFolderCallback callback,
+								 gpointer data);
+static void         gtk_file_system_win32_cancel_operation (GtkFileSystemHandle *handle);
 
 static void         gtk_file_system_win32_volume_free             (GtkFileSystem       *file_system,
 								   GtkFileSystemVolume *volume);
@@ -116,16 +153,15 @@ static GtkFilePath *gtk_file_system_win32_volume_get_base_path    (GtkFileSystem
 								   GtkFileSystemVolume *volume);
 static gboolean     gtk_file_system_win32_volume_get_is_mounted   (GtkFileSystem       *file_system,
 								   GtkFileSystemVolume *volume);
-static gboolean     gtk_file_system_win32_volume_mount            (GtkFileSystem       *file_system,
+static GtkFileSystemHandle *gtk_file_system_win32_volume_mount    (GtkFileSystem       *file_system,
 								   GtkFileSystemVolume *volume,
-								   GError             **error);
+								   GtkFileSystemVolumeMountCallback callback,
+								   gpointer data);
 static gchar *      gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 								   GtkFileSystemVolume *volume);
-static GdkPixbuf *  gtk_file_system_win32_volume_render_icon      (GtkFileSystem        *file_system,
-								   GtkFileSystemVolume  *volume,
-								   GtkWidget            *widget,
-								   gint                  pixel_size,
-								   GError              **error);
+static gchar *      gtk_file_system_win32_volume_get_icon_name    (GtkFileSystem        *file_system,
+								   GtkFileSystemVolume *volume,
+								   GError             **error);
 
 static gboolean       gtk_file_system_win32_get_parent       (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
@@ -149,11 +185,6 @@ static GtkFilePath *  gtk_file_system_win32_uri_to_path      (GtkFileSystem     
 							      const gchar              *uri);
 static GtkFilePath *  gtk_file_system_win32_filename_to_path (GtkFileSystem            *file_system,
 							      const gchar              *filename);
-static GdkPixbuf *gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
-                                                     const GtkFilePath *path,
-                                                     GtkWidget         *widget,
-                                                     gint               pixel_size,
-                                                     GError           **error);
 
 static gboolean       gtk_file_system_win32_insert_bookmark  (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
@@ -162,28 +193,55 @@ static gboolean       gtk_file_system_win32_insert_bookmark  (GtkFileSystem     
 static gboolean       gtk_file_system_win32_remove_bookmark  (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GError                  **error);
-static GSList *       gtk_file_system_win32_list_bookmarks   (GtkFileSystem            *file_system);
-static GType          gtk_file_folder_win32_get_type         (void);
-static void           gtk_file_folder_win32_class_init       (GtkFileFolderWin32Class  *class);
+static GSList        *gtk_file_system_win32_list_bookmarks   (GtkFileSystem            *file_system);
+static gchar         *gtk_file_system_win32_get_bookmark_label (GtkFileSystem          *file_system,
+								const GtkFilePath      *path);
+static void           gtk_file_system_win32_set_bookmark_label (GtkFileSystem     *file_system,
+								const GtkFilePath *path,
+								const gchar       *label);
+
 static void           gtk_file_folder_win32_iface_init       (GtkFileFolderIface       *iface);
-static void           gtk_file_folder_win32_init             (GtkFileFolderWin32       *impl);
 static void           gtk_file_folder_win32_finalize         (GObject                  *object);
-static GtkFileInfo *  gtk_file_folder_win32_get_info         (GtkFileFolder            *folder,
+static GtkFileInfo   *gtk_file_folder_win32_get_info         (GtkFileFolder            *folder,
 							      const GtkFilePath        *path,
 							      GError                  **error);
 static gboolean       gtk_file_folder_win32_list_children    (GtkFileFolder            *folder,
 							      GSList                  **children,
 							      GError                  **error);
 
-static gchar *        filename_from_path                     (const GtkFilePath        *path);
-static GtkFilePath *  filename_to_path                       (const gchar              *filename);
+static gboolean       gtk_file_folder_win32_is_finished_loading (GtkFileFolder *folder);
 
-static gboolean       filename_is_drive_root                 (const char               *filename);
-static gboolean       filename_is_server_share               (const char               *filename);
-static gboolean       filename_is_some_root                  (const char               *filename);
-static GtkFileInfo *  filename_get_info                      (const gchar              *filename,
-							      GtkFileInfoType           types,
-							      GError                  **error);
+static GtkFilePath *  filename_to_path                       (const gchar *filename);
+
+static gboolean       filename_is_root                       (const char *filename);
+
+static gboolean       filename_is_drive_root                 (const char *filename);
+static gboolean       filename_is_server_share               (const char *filename);
+static gboolean       filename_is_some_root                  (const char *filename);
+
+static gboolean     stat_with_error               (const char                *filename,
+						   WIN32_FILE_ATTRIBUTE_DATA *wfad,
+						   GError                   **error);
+static GtkFileInfo *create_file_info              (GtkFileFolderWin32        *folder_win32,
+						   const char                *filename,
+						   const char                *basename,
+						   GtkFileInfoType            types,
+						   WIN32_FILE_ATTRIBUTE_DATA *wfad,
+						   const char                *mime_type);
+
+static gboolean fill_in_names        (GtkFileFolderWin32  *folder_win32,
+				      GError             **error);
+static void     fill_in_stats        (GtkFileFolderWin32  *folder_win32);
+static void     fill_in_mime_type    (GtkFileFolderWin32  *folder_win32);
+
+static gboolean cb_fill_in_stats     (gpointer 	       	   key,
+				      gpointer 		   value,
+				      gpointer 		   user_data);
+static gboolean cb_fill_in_mime_type (gpointer 		   key,
+				      gpointer 		   value,
+				      gpointer 		   user_data);
+
+static char    *get_parent_dir       (const char          *filename);
 
 /* some info kept together for volumes */
 struct _GtkFileSystemVolume
@@ -195,43 +253,16 @@ struct _GtkFileSystemVolume
 /*
  * GtkFileSystemWin32
  */
-GType
-gtk_file_system_win32_get_type (void)
-{
-  static GType file_system_win32_type = 0;
+G_DEFINE_TYPE_WITH_CODE (GtkFileSystemWin32, gtk_file_system_win32, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_SYSTEM,
+						gtk_file_system_win32_iface_init));
 
-  if (!file_system_win32_type)
-    {
-      static const GTypeInfo file_system_win32_info =
-      {
-	sizeof (GtkFileSystemWin32Class),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_system_win32_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileSystemWin32),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_system_win32_init,
-      };
-      
-      static const GInterfaceInfo file_system_info =
-      {
-	(GInterfaceInitFunc) gtk_file_system_win32_iface_init, /* interface_init */
-	NULL,			                               /* interface_finalize */
-	NULL			                               /* interface_data */
-      };
-
-      file_system_win32_type = g_type_register_static (G_TYPE_OBJECT,
-						       I_("GtkFileSystemWin32"),
-						       &file_system_win32_info, 0);
-      g_type_add_interface_static (file_system_win32_type,
-				   GTK_TYPE_FILE_SYSTEM,
-				   &file_system_info);
-    }
-
-  return file_system_win32_type;
-}
+/*
+ * GtkFileFolderWin32
+ */
+G_DEFINE_TYPE_WITH_CODE (GtkFileFolderWin32, _gtk_file_folder_win32, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_FOLDER,
+						gtk_file_folder_win32_iface_init));
 
 /**
  * gtk_file_system_win32_new:
@@ -253,8 +284,6 @@ gtk_file_system_win32_class_init (GtkFileSystemWin32Class *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
-  system_parent_class = g_type_class_peek_parent (class);
-  
   gobject_class->finalize = gtk_file_system_win32_finalize;
 }
 
@@ -264,13 +293,15 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->list_volumes = gtk_file_system_win32_list_volumes;
   iface->get_volume_for_path = gtk_file_system_win32_get_volume_for_path;
   iface->get_folder = gtk_file_system_win32_get_folder;
+  iface->get_info = gtk_file_system_win32_get_info;
   iface->create_folder = gtk_file_system_win32_create_folder;
+  iface->cancel_operation = gtk_file_system_win32_cancel_operation;
   iface->volume_free = gtk_file_system_win32_volume_free;
   iface->volume_get_base_path = gtk_file_system_win32_volume_get_base_path;
   iface->volume_get_is_mounted = gtk_file_system_win32_volume_get_is_mounted;
   iface->volume_mount = gtk_file_system_win32_volume_mount;
   iface->volume_get_display_name = gtk_file_system_win32_volume_get_display_name;
-  iface->volume_render_icon = gtk_file_system_win32_volume_render_icon;
+  iface->volume_get_icon_name = gtk_file_system_win32_volume_get_icon_name;
   iface->get_parent = gtk_file_system_win32_get_parent;
   iface->make_path = gtk_file_system_win32_make_path;
   iface->parse = gtk_file_system_win32_parse;
@@ -278,10 +309,11 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->path_to_filename = gtk_file_system_win32_path_to_filename;
   iface->uri_to_path = gtk_file_system_win32_uri_to_path;
   iface->filename_to_path = gtk_file_system_win32_filename_to_path;
-  iface->render_icon = gtk_file_system_win32_render_icon;
   iface->insert_bookmark = gtk_file_system_win32_insert_bookmark;
   iface->remove_bookmark = gtk_file_system_win32_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_win32_list_bookmarks;
+  iface->get_bookmark_label = gtk_file_system_win32_get_bookmark_label;
+  iface->set_bookmark_label = gtk_file_system_win32_set_bookmark_label;
 }
 
 static gboolean
@@ -300,7 +332,9 @@ check_volumes (gpointer data)
 static void
 gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
 {
-  /* set up an idle handler for volume changes, every second should be enough */
+  /* Set up an idle handler for volume changes. Once a second should
+   * be enough.
+   */
   system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
 
   system_win32->folder_hash = g_hash_table_new (g_str_hash, g_str_equal);
@@ -318,7 +352,7 @@ gtk_file_system_win32_finalize (GObject *object)
   /* FIXME: assert that the hash is empty? */
   g_hash_table_destroy (system_win32->folder_hash);
 
-  system_parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_file_system_win32_parent_class)->finalize (object);
 }
 
 /* Lifted from GLib */
@@ -338,18 +372,9 @@ get_special_folder (int csidl)
   hr = SHGetSpecialFolderLocation (NULL, csidl, &pidl);
   if (hr == S_OK)
     {
-      if (G_WIN32_HAVE_WIDECHAR_API ())
-	{
-	  b = SHGetPathFromIDListW (pidl, path.wc);
-	  if (b)
-	    retval = g_utf16_to_utf8 (path.wc, -1, NULL, NULL, NULL);
-	}
-      else
-	{
-	  b = SHGetPathFromIDListA (pidl, path.c);
-	  if (b)
-	    retval = g_locale_to_utf8 (path.c, -1, NULL, NULL, NULL);
-	}
+      b = SHGetPathFromIDListW (pidl, path.wc);
+      if (b)
+	retval = g_utf16_to_utf8 (path.wc, -1, NULL, NULL, NULL);
       CoTaskMemFree (pidl);
     }
   return retval;
@@ -426,109 +451,583 @@ gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
 	  vol->drive[0] = g_ascii_toupper (vol->drive[0]);
 	  vol->drive_type = GetDriveType (vol->drive);
 	}
-      else if (G_WIN32_HAVE_WIDECHAR_API ())
+      else
 	{
 	  wchar_t *wdrive = g_utf8_to_utf16 (vol->drive, -1, NULL, NULL, NULL);
 	  vol->drive_type = GetDriveTypeW (wdrive);
 	  g_free (wdrive);
 	}
-      else
-	{
-	  gchar *cpdrive = g_locale_from_utf8 (vol->drive, -1, NULL, NULL, NULL);
-	  vol->drive_type = GetDriveTypeA (cpdrive);
-	  g_free (cpdrive);
-	}
     }
   return vol;
 }
 
-static GtkFileFolder *
-gtk_file_system_win32_get_folder (GtkFileSystem     *file_system,
-				  const GtkFilePath *path,
-				  GtkFileInfoType    types,
-				  GError           **error)
+static char *
+remove_trailing_slash (const char *filename)
 {
-  GtkFileSystemWin32 *system_win32;
-  GtkFileFolderWin32 *folder_win32;
-  gchar *filename;
+  int len;
 
-  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+  len = strlen (filename);
 
-  filename = filename_from_path (path);
-  g_return_val_if_fail (filename != NULL, NULL);
-
-  folder_win32 = g_hash_table_lookup (system_win32->folder_hash, filename);
-
-  if (folder_win32)
-    return g_object_ref (folder_win32);
-
-  if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-    {
-      gchar *display_filename = g_filename_display_name (filename);
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("Error getting information for '%s': %s"),
-		   display_filename,
-		   g_strerror (ENOENT));
-      g_free (display_filename);
-      return NULL;
-    }
-  if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
-    {
-      gchar *display_filename = g_filename_display_name (filename);
-
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-		   _("Error getting information for '%s': %s"),
-		   display_filename,
-		   g_strerror (ENOTDIR));
-      g_free (display_filename);
-      return NULL;
-    }
-
-  folder_win32 = g_object_new (GTK_TYPE_FILE_FOLDER_WIN32, NULL);
-  folder_win32->system_win32 = system_win32;
-  folder_win32->filename = filename;
-  folder_win32->types = types;
-
-  g_hash_table_insert (system_win32->folder_hash, folder_win32->filename, folder_win32);
-
-  return GTK_FILE_FOLDER (folder_win32);
+  if (len > 1 && filename[len - 1] == '/')
+    return g_strndup (filename, len - 1);
+  else
+    return g_memdup (filename, len + 1);
 }
 
-static gboolean
-gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
-				     const GtkFilePath *path,
-				     GError           **error)
+/* Delay callback dispatching
+ */
+
+enum callback_types
 {
+  CALLBACK_GET_INFO,
+  CALLBACK_GET_FOLDER,
+  CALLBACK_CREATE_FOLDER,
+  CALLBACK_VOLUME_MOUNT
+};
+
+static void queue_callback (enum callback_types type, gpointer data);
+
+struct get_info_callback
+{
+  GtkFileSystemGetInfoCallback callback;
+  GtkFileSystemHandle *handle;
+  GtkFileInfo *file_info;
+  GError *error;
+  gpointer data;
+};
+
+static inline void
+dispatch_get_info_callback (struct get_info_callback *info)
+{
+  (* info->callback) (info->handle, info->file_info, info->error, info->data);
+
+  if (info->file_info)
+    gtk_file_info_free (info->file_info);
+
+  if (info->error)
+    g_error_free (info->error);
+
+  g_object_unref (info->handle);
+
+  g_free (info);
+}
+
+static inline void
+queue_get_info_callback (GtkFileSystemGetInfoCallback  callback,
+			 GtkFileSystemHandle          *handle,
+			 GtkFileInfo                  *file_info,
+			 GError                       *error,
+			 gpointer                      data)
+{
+  struct get_info_callback *info;
+
+  info = g_new (struct get_info_callback, 1);
+  info->callback = callback;
+  info->handle = handle;
+  info->file_info = file_info;
+  info->error = error;
+  info->data = data;
+
+  queue_callback (CALLBACK_GET_INFO, info);
+}
+
+
+struct get_folder_callback
+{
+  GtkFileSystemGetFolderCallback callback;
+  GtkFileSystemHandle *handle;
+  GtkFileFolder *folder;
+  GError *error;
+  gpointer data;
+};
+
+static inline void
+dispatch_get_folder_callback (struct get_folder_callback *info)
+{
+  (* info->callback) (info->handle, info->folder, info->error, info->data);
+
+  if (info->error)
+    g_error_free (info->error);
+
+  g_object_unref (info->handle);
+
+  g_free (info);
+}
+
+static inline void
+queue_get_folder_callback (GtkFileSystemGetFolderCallback  callback,
+			   GtkFileSystemHandle            *handle,
+			   GtkFileFolder                  *folder,
+			   GError                         *error,
+			   gpointer                        data)
+{
+  struct get_folder_callback *info;
+
+  info = g_new (struct get_folder_callback, 1);
+  info->callback = callback;
+  info->handle = handle;
+  info->folder = folder;
+  info->error = error;
+  info->data = data;
+
+  queue_callback (CALLBACK_GET_FOLDER, info);
+}
+
+
+struct create_folder_callback
+{
+  GtkFileSystemCreateFolderCallback callback;
+  GtkFileSystemHandle *handle;
+  GtkFilePath *path;
+  GError *error;
+  gpointer data;
+};
+
+static inline void
+dispatch_create_folder_callback (struct create_folder_callback *info)
+{
+  (* info->callback) (info->handle, info->path, info->error, info->data);
+
+  if (info->error)
+    g_error_free (info->error);
+
+  if (info->path)
+    gtk_file_path_free (info->path);
+
+  g_object_unref (info->handle);
+
+  g_free (info);
+}
+
+static inline void
+queue_create_folder_callback (GtkFileSystemCreateFolderCallback  callback,
+			      GtkFileSystemHandle               *handle,
+			      const GtkFilePath                 *path,
+			      GError                            *error,
+			      gpointer                           data)
+{
+  struct create_folder_callback *info;
+
+  info = g_new (struct create_folder_callback, 1);
+  info->callback = callback;
+  info->handle = handle;
+  info->path = gtk_file_path_copy (path);
+  info->error = error;
+  info->data = data;
+
+  queue_callback (CALLBACK_CREATE_FOLDER, info);
+}
+
+
+struct volume_mount_callback
+{
+  GtkFileSystemVolumeMountCallback callback;
+  GtkFileSystemHandle *handle;
+  GtkFileSystemVolume *volume;
+  GError *error;
+  gpointer data;
+};
+
+static inline void
+dispatch_volume_mount_callback (struct volume_mount_callback *info)
+{
+  (* info->callback) (info->handle, info->volume, info->error, info->data);
+
+  if (info->error)
+    g_error_free (info->error);
+
+  g_object_unref (info->handle);
+
+  g_free (info);
+}
+
+static inline void
+queue_volume_mount_callback (GtkFileSystemVolumeMountCallback  callback,
+			     GtkFileSystemHandle              *handle,
+			     GtkFileSystemVolume              *volume,
+			     GError                           *error,
+			     gpointer                          data)
+{
+  struct volume_mount_callback *info;
+
+  info = g_new (struct volume_mount_callback, 1);
+  info->callback = callback;
+  info->handle = handle;
+  info->volume = volume;
+  info->error = error;
+  info->data = data;
+
+  queue_callback (CALLBACK_VOLUME_MOUNT, info);
+}
+
+
+struct callback_info
+{
+  enum callback_types type;
+
+  union
+  {
+    struct get_info_callback *get_info;
+    struct get_folder_callback *get_folder;
+    struct create_folder_callback *create_folder;
+    struct volume_mount_callback *volume_mount;
+  } info;
+};
+
+
+static guint execute_callbacks_idle_id = 0;
+static GSList *callbacks = NULL;
+
+static gboolean
+execute_callbacks_idle (gpointer data)
+{
+  GSList *l;
+
+  GDK_THREADS_ENTER ();
+
+  for (l = callbacks; l; l = l->next)
+    {
+      struct callback_info *info = l->data;
+
+      switch (info->type)
+        {
+	  case CALLBACK_GET_INFO:
+	    dispatch_get_info_callback (info->info.get_info);
+	    break;
+
+	  case CALLBACK_GET_FOLDER:
+	    dispatch_get_folder_callback (info->info.get_folder);
+	    break;
+
+	  case CALLBACK_CREATE_FOLDER:
+	    dispatch_create_folder_callback (info->info.create_folder);
+	    break;
+
+	  case CALLBACK_VOLUME_MOUNT:
+	    dispatch_volume_mount_callback (info->info.volume_mount);
+	    break;
+        }
+
+      g_free (info);
+    }
+
+  g_slist_free (callbacks);
+  callbacks = NULL;
+
+  execute_callbacks_idle_id = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+queue_callback (enum callback_types type, gpointer data)
+{
+  struct callback_info *info;
+
+  info = g_new (struct callback_info, 1);
+  info->type = type;
+
+  switch (type)
+    {
+      case CALLBACK_GET_INFO:
+	info->info.get_info = data;
+	break;
+
+      case CALLBACK_GET_FOLDER:
+	info->info.get_folder = data;
+	break;
+
+      case CALLBACK_CREATE_FOLDER:
+	info->info.create_folder = data;
+	break;
+
+      case CALLBACK_VOLUME_MOUNT:
+	info->info.volume_mount = data;
+	break;
+    }
+
+  callbacks = g_slist_append (callbacks, info);
+
+  if (!execute_callbacks_idle_id)
+    execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, NULL);
+}
+
+static GtkFileSystemHandle *
+create_handle (GtkFileSystem *file_system)
+{
+  GtkFileSystemHandle *handle;
+
+  handle = g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
+  handle->file_system = file_system;
+
+  return handle;
+}
+
+static char *
+get_mime_type_for_file (const char *filename)
+{
+  const char *extension;
+  HKEY key = NULL;
+  DWORD type, nbytes = 0;
+  char *value = NULL;
+
+  if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
+    return g_strdup ("application/x-executable");
+
+  extension = strrchr (filename, '.');
+
+  if (extension != NULL &&
+      extension[1] != '\0' &&
+      RegOpenKeyEx (HKEY_CLASSES_ROOT, extension, 0,
+		    KEY_QUERY_VALUE, &key) == ERROR_SUCCESS &&
+      RegQueryValueEx (key, "Content Type", 0,
+		       &type, NULL, &nbytes) == ERROR_SUCCESS &&
+      type == REG_SZ &&
+      (value = g_try_malloc (nbytes + 1)) &&
+      RegQueryValueEx (key, "Content Type", 0,
+		       &type, value, &nbytes) == ERROR_SUCCESS)
+    {
+      value[nbytes] = '\0';
+    }
+  else
+    value = g_strdup ("application/octet-stream");
+  if (key != NULL)
+    RegCloseKey (key);
+
+  return value;
+}
+
+static GtkFileSystemHandle *
+gtk_file_system_win32_get_info (GtkFileSystem               *file_system,
+				const GtkFilePath           *path,
+				GtkFileInfoType              types,
+				GtkFileSystemGetInfoCallback callback,
+				gpointer                     data)
+{
+  GError *error = NULL;
   GtkFileSystemWin32 *system_win32;
-  gchar *filename;
-  gboolean result;
-  char *parent;
+  GtkFileSystemHandle *handle;
+  const char *filename;
+  GtkFileInfo *info;
+  gchar *basename;
+  WIN32_FILE_ATTRIBUTE_DATA wfad;
+  const char *mime_type;
 
   system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+  handle = create_handle (file_system);
 
-  filename = filename_from_path (path);
+  filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
-  result = g_mkdir (filename, 0777) == 0;
+  if (!stat_with_error (filename, &wfad, &error))
+    {
+      g_object_ref (handle);
+      queue_get_info_callback (callback, handle, NULL, error, data);
+      return handle;
+    }
+
+  if ((types & GTK_FILE_INFO_MIME_TYPE) != 0)
+    mime_type = get_mime_type_for_file (filename);
+  else
+    mime_type = NULL;
+
+  basename = g_path_get_basename (filename);
+
+  info = create_file_info (NULL, filename, basename, types, &wfad, mime_type);
+  g_free (basename);
+  g_object_ref (handle);
+  queue_get_info_callback (callback, handle, info, NULL, data);
+
+  return handle;
+}
+
+static gboolean
+load_folder (gpointer data)
+{
+  GtkFileFolderWin32 *folder_win32 = data;
+  GSList *children;
+
+  GDK_THREADS_ENTER ();
+
+  if ((folder_win32->types & STAT_NEEDED_MASK) != 0)
+    fill_in_stats (folder_win32);
+
+  if ((folder_win32->types & GTK_FILE_INFO_MIME_TYPE) != 0)
+    fill_in_mime_type (folder_win32);
+
+  if (gtk_file_folder_win32_list_children (GTK_FILE_FOLDER (folder_win32), &children, NULL))
+    {
+      folder_win32->is_finished_loading = TRUE;
+      g_signal_emit_by_name (folder_win32, "files-added", children);
+      gtk_file_paths_free (children);
+    }
+
+  folder_win32->load_folder_id = 0;
+
+  g_signal_emit_by_name (folder_win32, "finished-loading", 0);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static GtkFileSystemHandle *
+gtk_file_system_win32_get_folder (GtkFileSystem                 *file_system,
+				  const GtkFilePath             *path,
+				  GtkFileInfoType                types,
+				  GtkFileSystemGetFolderCallback callback,
+				  gpointer                       data)
+{
+  GError *error = NULL;
+  GtkFileSystemWin32 *system_win32;
+  GtkFileFolderWin32 *folder_win32;
+  GtkFileSystemHandle *handle;
+  const gchar *filename;
+  char *filename_copy;
+  gboolean set_asof = FALSE;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+
+  filename = gtk_file_path_get_string (path);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
+
+  handle = create_handle (file_system);
+
+  filename_copy = remove_trailing_slash (filename);
+  folder_win32 = g_hash_table_lookup (system_win32->folder_hash, filename_copy);
+
+  if (folder_win32)
+    {
+      g_free (filename_copy);
+      if (folder_win32->stat_info &&
+	  time (NULL) - folder_win32->asof >= FOLDER_CACHE_LIFETIME)
+	{
+#if 0
+	  g_print ("Cleaning out cached directory %s\n", filename);
+#endif
+	  g_hash_table_destroy (folder_win32->stat_info);
+	  folder_win32->stat_info = NULL;
+	  folder_win32->have_mime_type = FALSE;
+	  folder_win32->have_stat = FALSE;
+	  set_asof = TRUE;
+	}
+
+      g_object_ref (folder_win32);
+      folder_win32->types |= types;
+      types = folder_win32->types;
+    }
+  else
+    {
+      WIN32_FILE_ATTRIBUTE_DATA wfad;
+
+      if (!stat_with_error (filename, &wfad, &error))
+	{
+	  g_object_ref (handle);
+	  queue_get_folder_callback (callback, handle, NULL, error, data);
+
+	  g_free (filename_copy);
+	  return handle;
+	}
+
+      if (!wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+	{
+	  gchar *display_name = g_filename_display_name (filename);
+
+	  g_set_error (&error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		       _("Path is not a folder: '%s'"),
+		       display_name);
+
+	  g_object_ref (handle);
+	  queue_get_folder_callback (callback, handle, NULL, error, data);
+
+	  g_free (display_name);
+	  g_free (filename_copy);
+	  return handle;
+	}
+
+      folder_win32 = g_object_new (GTK_TYPE_FILE_FOLDER_WIN32, NULL);
+      folder_win32->system_win32 = system_win32;
+      folder_win32->filename = filename_copy;
+      folder_win32->types = types;
+      folder_win32->stat_info = NULL;
+      folder_win32->load_folder_id = 0;
+      folder_win32->have_mime_type = FALSE;
+      folder_win32->have_stat = FALSE;
+      folder_win32->is_finished_loading = FALSE;
+      set_asof = TRUE;
+	  
+      /* Browsing for shares not yet implemented */
+      folder_win32->is_network_dir = FALSE;
+
+      g_hash_table_insert (system_win32->folder_hash,
+			   folder_win32->filename,
+			   folder_win32);
+    }
+
+  if (set_asof)
+    folder_win32->asof = time (NULL);
+
+  g_object_ref (handle);
+  queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_win32), NULL, data);
+
+  /* Start loading the folder contents in an idle */
+  folder_win32->load_folder_id =
+    g_idle_add ((GSourceFunc) load_folder, folder_win32);
+
+  return handle;
+}
+
+static GtkFileSystemHandle *
+gtk_file_system_win32_create_folder (GtkFileSystem                    *file_system,
+				     const GtkFilePath                *path,
+				     GtkFileSystemCreateFolderCallback callback,
+				     gpointer                          data)
+{
+  GError *error = NULL;
+  GtkFileSystemWin32 *system_win32;
+  GtkFileSystemHandle *handle;
+  const char *filename;
+  gboolean result;
+  char *parent, *tmp;
+  int save_errno;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+
+  filename = gtk_file_path_get_string (path);
+  g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
+
+  handle = create_handle (file_system);
+
+  tmp = remove_trailing_slash (filename);
+  result = g_mkdir (tmp, 0777) == 0;
+  save_errno = errno;
+  g_free (tmp);
 
   if (!result)
     {
-      int save_errno = errno;
       gchar *display_filename = g_filename_display_name (filename);
-      g_set_error (error,
+      g_set_error (&error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("Error creating directory '%s': %s"),
 		   display_filename,
 		   g_strerror (save_errno));
+      
+      g_object_ref (handle);
+      queue_create_folder_callback (callback, handle, path, error, data);
+
       g_free (display_filename);
+      return handle;
     }
-  else if (!filename_is_some_root (filename))
+
+  if (!filename_is_some_root (filename))
     {
       parent = g_path_get_dirname (filename);
       if (parent)
@@ -539,6 +1038,31 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 	  if (folder_win32)
 	    {
 	      GSList *paths;
+	      char *basename;
+	      struct stat_info_entry *entry;
+
+	      /* Make sure the new folder exists in the parent's folder */
+	      entry = g_new0 (struct stat_info_entry, 1);
+	      if (folder_win32->is_network_dir)
+		{
+		  entry->wfad.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
+		  entry->mime_type = g_strdup ("x-directory/normal");
+		}
+	      
+	      basename = g_path_get_basename (filename);
+	      g_hash_table_insert (folder_win32->stat_info,
+				   basename,
+				   entry);
+	      
+	      if (folder_win32->have_stat)
+		{
+		  /* Cheating */
+		  if ((folder_win32->types & STAT_NEEDED_MASK) != 0)
+		    cb_fill_in_stats (basename, entry, folder_win32);
+		  
+		  if ((folder_win32->types & GTK_FILE_INFO_MIME_TYPE) != 0)
+		    cb_fill_in_mime_type (basename, entry, folder_win32);
+		}
 
 	      paths = g_slist_append (NULL, (GtkFilePath *) path);
 	      g_signal_emit_by_name (folder_win32, "files-added", paths);
@@ -548,17 +1072,28 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 	}
     }
 
-  g_free (filename);
+  return handle;
+}
 
-  return result;
+static void
+gtk_file_system_win32_cancel_operation (GtkFileSystemHandle *handle)
+{
+  /* We don't set "cancelled" to TRUE here, since the actual operation
+   * is executed in the function itself and not in a callback.  So
+   * the operations can never be cancelled (since they will be already
+   * completed at this point.
+   */
 }
 
 static void
 gtk_file_system_win32_volume_free (GtkFileSystem        *file_system,
 				   GtkFileSystemVolume  *volume)
 {
+  GtkFilePath *path;
+
   g_free (volume->drive);
-  g_free (volume);
+  path = (GtkFilePath *) volume;
+  gtk_file_path_free (path);
 }
 
 static GtkFilePath *
@@ -575,16 +1110,24 @@ gtk_file_system_win32_volume_get_is_mounted (GtkFileSystem        *file_system,
   return TRUE;
 }
 
-static gboolean
-gtk_file_system_win32_volume_mount (GtkFileSystem        *file_system, 
-				    GtkFileSystemVolume  *volume,
-				    GError              **error)
+static GtkFileSystemHandle *
+gtk_file_system_win32_volume_mount (GtkFileSystem                   *file_system, 
+				    GtkFileSystemVolume             *volume,
+				    GtkFileSystemVolumeMountCallback callback,
+				    gpointer                         data)
 {
-  g_set_error (error,
+  GError *error = NULL;
+  GtkFileSystemHandle *handle = create_handle (file_system);
+
+  g_set_error (&error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
 	       _("This file system does not support mounting"));
-  return FALSE;
+
+  g_object_ref (handle);
+  queue_volume_mount_callback (callback, handle, volume, error, data);
+
+  return handle;
 }
 
 static gchar *
@@ -602,38 +1145,21 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
       volume->drive_type != DRIVE_REMOVABLE)
     {
       gchar *name = NULL;
-      if (G_WIN32_HAVE_WIDECHAR_API ())
+      gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
+      gunichar2 wname[80];
+
+      if (GetVolumeInformationW (wdrive,
+				 wname, G_N_ELEMENTS(wname), 
+				 NULL, /* serial number */
+				 NULL, /* max. component length */
+				 NULL, /* fs flags */
+				 NULL, 0) /* fs type like FAT, NTFS */ &&
+	  wname[0])
 	{
-	  gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
-	  gunichar2 wname[80];
-	  if (GetVolumeInformationW (wdrive,
-				     wname, G_N_ELEMENTS(wname), 
-				     NULL, /* serial number */
-				     NULL, /* max. component length */
-				     NULL, /* fs flags */
-				     NULL, 0) /* fs type like FAT, NTFS */ &&
-	      wname[0])
-	    {
-	      name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
-	    }
-	  g_free (wdrive);
+	  name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
 	}
-      else
-        {
-          gchar *cpdrive = g_locale_from_utf8 (volume->drive, -1, NULL, NULL, NULL);
-          gchar cpname[80];
-          if (GetVolumeInformationA (cpdrive,
-				     cpname, G_N_ELEMENTS(cpname), 
-				     NULL, /* serial number */
-				     NULL, /* max. component length */
-				     NULL, /* fs flags */
-				     NULL, 0) /* fs type like FAT, NTFS */ &&
-	      cpname[0])
-            {
-              name = g_locale_to_utf8 (cpname, -1, NULL, NULL, NULL);
-            }
-          g_free (cpdrive);
-        }
+      g_free (wdrive);
+
       if (name != NULL)
         {
 	  real_display_name = g_strdup_printf (_("%s (%s)"), name, volume->drive);
@@ -650,47 +1176,83 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
   return real_display_name;
 }
 
-static GdkPixbuf *
-gtk_file_system_win32_volume_render_icon (GtkFileSystem        *file_system,
-					  GtkFileSystemVolume  *volume,
-					  GtkWidget            *widget,
-					  gint                  pixel_size,
-					  GError              **error)
+static IconType
+get_icon_type_from_stat (WIN32_FILE_ATTRIBUTE_DATA *wfad)
 {
-  GtkIconSet *icon_set = NULL;
+  if (wfad->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    return ICON_DIRECTORY;
+  else
+    return ICON_REGULAR;
+}
 
-  switch (volume->drive_type)
+static IconType
+get_icon_type (const char *filename,
+	       GError    **error)
+{
+  WIN32_FILE_ATTRIBUTE_DATA wfad;
+
+  if (!stat_with_error (filename, &wfad, error))
+    return ICON_NONE;
+
+  return get_icon_type_from_stat (&wfad);
+}
+
+/* Renders a fallback icon from the stock system */
+static const gchar *
+get_fallback_icon_name (IconType icon_type)
+{
+  const char *stock_name;
+
+  switch (icon_type)
     {
-    case DRIVE_REMOVABLE:
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FLOPPY);
+    case ICON_DIRECTORY:
+      stock_name = GTK_STOCK_DIRECTORY;
       break;
-    case DRIVE_CDROM:
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
+
+    case ICON_EXECUTABLE:
+      stock_name = GTK_STOCK_EXECUTE;
       break;
-    case DRIVE_REMOTE:
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
-      break;
-    case DRIVE_FIXED:
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
-      break;
-    case DRIVE_RAMDISK:
-#if 0
-      /*FIXME: need a ram stock icon?? */
-      gtk_file_info_set_icon_type (info, GTK_STOCK_RAMDISK);
-      break;
-#endif
-    default :
-      /* Use network icon as a guess */ 
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
+
+    default:
+      stock_name = GTK_STOCK_FILE;
       break;
     }
 
-  return gtk_icon_set_render_icon (icon_set, 
-                                   widget->style,
-                                   gtk_widget_get_direction (widget),
-                                   GTK_STATE_NORMAL,
-                                   GTK_ICON_SIZE_BUTTON,
-                                   widget, NULL); 
+  return stock_name;
+}
+
+static gchar *
+gtk_file_system_win32_volume_get_icon_name (GtkFileSystem        *file_system,
+					   GtkFileSystemVolume  *volume,
+					   GError              **error)
+{
+  /* FIXME: maybe we just always want to return GTK_STOCK_HARDDISK here?
+   * or the new tango icon name?
+   */
+  return g_strdup ("gnome-dev-harddisk");
+}
+
+static char *
+get_parent_dir (const char *filename)
+{
+  int len;
+
+  len = strlen (filename);
+
+  /* Ignore trailing slashes */
+  if (len > 1 && G_IS_DIR_SEPARATOR (filename[len - 1]))
+    {
+      char *tmp, *parent;
+
+      tmp = g_strndup (filename, len - 1);
+
+      parent = g_path_get_dirname (tmp);
+      g_free (tmp);
+
+      return parent;
+    }
+  else
+    return g_path_get_dirname (filename);
 }
 
 static gboolean
@@ -956,94 +1518,19 @@ gtk_file_system_win32_filename_to_path (GtkFileSystem *file_system,
   return filename_to_path (filename);
 }
 
-static gboolean
-bookmarks_serialize (GSList  **bookmarks,
-                     gchar    *uri,
-                     gboolean  add,
-                     gint      position,
-                     GError  **error)
-{
-  gchar   *filename;
-  gboolean ok = TRUE;
-  GSList  *list = *bookmarks;
-
-  filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
-
-  if (filename)
-    {
-      gchar *contents = NULL;
-      gsize  len = 0;
-      GSList *entry;
-      FILE  *f;   
-       
-      if (g_file_test (filename, G_FILE_TEST_EXISTS))
-        {
-          if (g_file_get_contents (filename, &contents, &len, error))
-	    {
-	      gchar **lines = g_strsplit (contents, "\n", -1);
-	      gint    i;
-
-	      for (i = 0; lines[i] != NULL; i++)
-		{
-		  if (lines[i][0] && !g_slist_find_custom (list, lines[i], (GCompareFunc) _gtk_file_system_win32_path_compare))
-		    list = g_slist_append (list, g_strdup (lines[i]));
-		}
-	      g_strfreev (lines);
-	    }
-	  else
-	    ok = FALSE;
-	}
-      if (ok && (f = g_fopen (filename, "wb")) != NULL)
-        {
-	  entry = g_slist_find_custom (list, uri, (GCompareFunc) _gtk_file_system_win32_path_compare);
-	  if (add)
-	    {
-	      /* g_slist_insert() and our insert semantics are 
-	       * compatible, but maybe we should check for 
-	       * positon > length ?
-	       * 
-	       */
-	      if (!entry)
-                list = g_slist_insert (list, g_strdup (uri), position);
-	      else
-	        {
-		  g_set_error (error,
-			       GTK_FILE_SYSTEM_ERROR,
-			       GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
-			       "'%s' already exists in the bookmarks list",
-			       uri);
-		  ok = FALSE;
-		}
-	    }
-	  else
-	    {
-	      /* to remove the given uri */
-	      if (entry)
-		list = g_slist_delete_link(list, entry);
-	      for (entry = list; entry != NULL; entry = entry->next)
-		{
-		  fputs (entry->data, f);
-		  fputs ("\n", f);
-		}
-	    }
-	  fclose (f);
-	}
-      else if (ok && error)
-        {
-	  g_set_error (error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_FAILED,
-		       _("Bookmark saving failed: %s"),
-		       g_strerror (errno));
-	}
-    }
-  *bookmarks = list;
-  return ok;
-}
-
 static GdkPixbuf*
 extract_icon (const char* filename)
 {
+#if 0
+  WORD iicon;
+  wchar_t *wfn;
+  wchar_t filename_copy[MAX_PATH];
+#else
+  SHFILEINFOW shfi;
+  wchar_t *wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
+  int rc;
+#endif
+
   GdkPixbuf *pixbuf = NULL;
   HICON hicon;
   
@@ -1058,74 +1545,29 @@ extract_icon (const char* filename)
    * Let's hope MAX_PATH will be large enough. What dork designed that
    * API?
    */
-  if (G_WIN32_HAVE_WIDECHAR_API ())
+    
+  wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
+  if (wcslen (wfn) >= MAX_PATH)
     {
-      WORD iicon;
-      wchar_t *wfn;
-      wchar_t filename_copy[MAX_PATH];
-
-      wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
-      if (wcslen (wfn) >= MAX_PATH)
-	{
-	  g_free (wfn);
-	  return NULL;
-	}
-      wcscpy (filename_copy, wfn);
       g_free (wfn);
-      hicon = ExtractAssociatedIconW (GetModuleHandle (NULL), filename_copy, &iicon);
+      return NULL;
     }
-  else
-    {
-      WORD iicon;
-      char *cpfn;
-      char filename_copy[MAX_PATH];
-
-      cpfn = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
-      if (cpfn == NULL)
-	return NULL;
-      if (strlen (cpfn) >= MAX_PATH)
-	{
-	  g_free (cpfn);
-	  return NULL;
-	}
-      strcpy (filename_copy, cpfn);
-      g_free (cpfn);
-      hicon = ExtractAssociatedIconA (GetModuleHandle (NULL), filename_copy, &iicon);
-    }
+  wcscpy (filename_copy, wfn);
+  g_free (wfn);
+  hicon = ExtractAssociatedIconW (GetModuleHandle (NULL), filename_copy, &iicon);
 
   if (!hicon)
     {
       g_warning (G_STRLOC ":ExtractAssociatedIcon(%s) failed: %s", filename, g_win32_error_message (GetLastError ()));
       return NULL;
     }
-
 #else
-  if (G_WIN32_HAVE_WIDECHAR_API ())
-    {
-      SHFILEINFOW shfi;
-      wchar_t *wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
-      int rc;
-
-      rc = (int) SHGetFileInfoW (wfn, 0, &shfi, sizeof (shfi),
-				 SHGFI_ICON|SHGFI_LARGEICON);
-      g_free (wfn);
-      if (!rc)
-	return NULL;
-      hicon = shfi.hIcon;
-    }
-  else
-    {
-      SHFILEINFOA shfi;
-      char *cpfn = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
-      int rc;
-
-      rc = (int) SHGetFileInfoA (cpfn, 0, &shfi, sizeof (shfi),
-				 SHGFI_ICON|SHGFI_LARGEICON);
-      g_free (cpfn);
-      if (!rc)
-	return NULL;
-      hicon = shfi.hIcon;
-    }
+  rc = (int) SHGetFileInfoW (wfn, 0, &shfi, sizeof (shfi),
+			     SHGFI_ICON|SHGFI_LARGEICON);
+  g_free (wfn);
+  if (!rc)
+    return NULL;
+  hicon = shfi.hIcon;
 #endif
   
   pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hicon);
@@ -1187,80 +1629,284 @@ win32_pseudo_mime_lookup (const char* name)
   return is;
 }
 
-static GdkPixbuf *
-gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
-                                   const GtkFilePath *path,
-                                   GtkWidget         *widget,
-                                   gint               pixel_size,
-                                   GError           **error)
+/* Returns the name of the icon to be used for a path which is known to be a
+ * directory.  This can vary for Home, Desktop, etc.
+ */
+static const char *
+get_icon_name_for_directory (const char *path)
 {
-  GtkIconSet *icon_set = NULL;
-  const char* filename = gtk_file_path_get_string (path);
+  static char *desktop_path = NULL;
 
-  /* handle drives with stock icons */
-  if (filename_is_drive_root (filename))
-    {
-      gchar filename2[] = "?:\\";
-      DWORD dt;
+  if (!g_get_home_dir ())
+    return "gnome-fs-directory";
 
-      filename2[0] = filename[0];
-      dt = GetDriveType (filename2);
+  if (!desktop_path)
+      desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
 
-      switch (dt)
-        {
-        case DRIVE_REMOVABLE :
-          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FLOPPY);
-          break;
-        case DRIVE_CDROM :
-          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
-          break;
-	case DRIVE_REMOTE :
-	  icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
-	  break;
-        case DRIVE_FIXED :
-          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
-          break;
-        default :
-          break;
-        }
-    }
-  else if (filename_is_server_share (filename))
-    {
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
-    }
-  else if (g_file_test (filename, G_FILE_TEST_IS_DIR))
-    {
-      const gchar *home = g_get_home_dir ();
+  if (strcmp (g_get_home_dir (), path) == 0)
+    return "gnome-fs-home";
+  else if (strcmp (desktop_path, path) == 0)
+    return "gnome-fs-desktop";
+  else
+    return "gnome-fs-directory";
 
-      if (home != NULL && 0 == _gtk_file_system_win32_path_compare (home, filename))
-        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HOME);
-      else
-        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_DIRECTORY);
-    }
-  else if (g_file_test (filename, G_FILE_TEST_EXISTS))
-    {
-      icon_set = win32_pseudo_mime_lookup (filename);
-    }
-
-  if (!icon_set)
-    {
-      if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
-        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_EXECUTE);
-      else
-        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FILE);
-    }
-
-  // FIXME : I'd like to get from pixel_size (=20) back to
-  // icon size, which is an index, but there appears to be no way ?
-  return gtk_icon_set_render_icon (icon_set, 
-                                   widget->style,
-                                   gtk_widget_get_direction (widget),
-                                   GTK_STATE_NORMAL,
-                                   GTK_ICON_SIZE_BUTTON,
-				   widget, NULL); 
+  return NULL;
 }
 
-static GSList *_bookmarks = NULL;
+/* Computes our internal icon type based on a path name; also returns the MIME
+ * type in case we come up with ICON_REGULAR.
+ */
+static IconType
+get_icon_type_from_path (GtkFileFolderWin32        *folder_win32,
+			 WIN32_FILE_ATTRIBUTE_DATA *wfad,
+			 const char      	   *filename,
+			 const char      	  **mime_type)
+{
+  IconType icon_type;
+
+  *mime_type = NULL;
+
+  if (folder_win32 && folder_win32->have_stat)
+    {
+      char *basename;
+      struct stat_info_entry *entry;
+
+      g_assert (folder_win32->stat_info != NULL);
+
+      basename = g_path_get_basename (filename);
+      entry = g_hash_table_lookup (folder_win32->stat_info, basename);
+      g_free (basename);
+      if (entry)
+	{
+	  if (entry->icon_type == ICON_UNDECIDED)
+	    {
+	      entry->icon_type = get_icon_type_from_stat (&entry->wfad);
+	      g_assert (entry->icon_type != ICON_UNDECIDED);
+	    }
+	  icon_type = entry->icon_type;
+	  if (icon_type == ICON_REGULAR)
+	    {
+	      fill_in_mime_type (folder_win32);
+	      *mime_type = entry->mime_type;
+	    }
+
+	  return icon_type;
+	}
+    }
+
+  if (wfad)
+    return get_icon_type_from_stat (wfad);
+
+  icon_type = get_icon_type (filename, NULL);
+  if (icon_type == ICON_REGULAR)
+    *mime_type = get_mime_type_for_file (filename);
+
+  return icon_type;
+}
+
+/* Renders an icon for a non-ICON_REGULAR file */
+static const gchar *
+get_special_icon_name (IconType           icon_type,
+		       const gchar       *filename)
+{
+  const char *name;
+
+  g_assert (icon_type != ICON_REGULAR);
+
+  switch (icon_type)
+    {
+    case ICON_DIRECTORY:
+      /* get_icon_name_for_directory() returns a dupped string */
+      return get_icon_name_for_directory (filename);
+    case ICON_EXECUTABLE:
+      name ="gnome-fs-executable";
+      break;
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
+
+  return name;
+}
+
+static gchar *
+get_icon_name_for_mime_type (const char *mime_type)
+{
+  char *name;
+  const char *separator;
+  GString *icon_name;
+
+  if (!mime_type)
+    return NULL;
+
+  separator = strchr (mime_type, '/');
+  if (!separator)
+    return NULL; /* maybe we should return a GError with "invalid MIME-type" */
+
+  /* FIXME: we default to the gnome icon naming for now.  Some question
+   * as below, how are we going to handle a second attempt?
+   */
+#if 0
+  icon_name = g_string_new ("");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+
+  icon_name = g_string_new ("");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append (icon_name, "-x-generic");
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+#endif
+
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  name = icon_name->str;
+  g_string_free (icon_name, FALSE);
+
+  return name;
+
+  /* FIXME: how are we going to implement a second attempt? */
+#if 0
+  if (pixbuf)
+    return pixbuf;
+
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+
+  return pixbuf;
+#endif
+}
+
+static void
+bookmark_list_free (GSList *list)
+{
+  GSList *l;
+
+  for (l = list; l; l = l->next)
+    g_free (l->data);
+
+  g_slist_free (list);
+}
+
+/* Returns whether a URI is a local file:// */
+static gboolean
+is_local_uri (const char *uri)
+{
+  char *filename;
+  char *hostname;
+  gboolean result;
+
+  /* This is rather crude, but hey */
+  filename = g_filename_from_uri (uri, &hostname, NULL);
+
+  result = (filename && !hostname);
+
+  g_free (filename);
+  g_free (hostname);
+
+  return result;
+}
+
+static char *
+bookmark_get_filename (void)
+{
+  char *filename;
+
+  filename = g_build_filename (g_get_home_dir (), 
+			       BOOKMARKS_FILENAME, NULL);
+  g_assert (filename != NULL);
+  return filename;
+}
+
+static gboolean
+bookmark_list_read (GSList **bookmarks, GError **error)
+{
+  gchar *filename;
+  gchar *contents;
+  gboolean result = FALSE;
+
+  filename = bookmark_get_filename ();
+  *bookmarks = NULL;
+
+  if (g_file_get_contents (filename, &contents, NULL, error))
+    {
+      gchar **lines = g_strsplit (contents, "\n", -1);
+      int i;
+      GHashTable *table;
+
+      table = g_hash_table_new (g_str_hash, g_str_equal);
+
+      for (i = 0; lines[i]; i++)
+	{
+	  if (lines[i][0] && !g_hash_table_lookup (table, lines[i]))
+	    {
+	      *bookmarks = g_slist_prepend (*bookmarks, g_strdup (lines[i]));
+	      g_hash_table_insert (table, lines[i], lines[i]);
+	    }
+	}
+
+      g_free (contents);
+      g_hash_table_destroy (table);
+      g_strfreev (lines);
+
+      *bookmarks = g_slist_reverse (*bookmarks);
+      result = TRUE;
+    }
+
+  g_free (filename);
+
+  return result;
+}
+
+static gboolean
+bookmark_list_write (GSList  *bookmarks, 
+		     GError **error)
+{
+  GSList *l;
+  GString *string;
+  char *filename;
+  GError *tmp_error = NULL;
+  gboolean result;
+
+  string = g_string_new ("");
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      g_string_append (string, l->data);
+      g_string_append_c (string, '\n');
+    }
+
+  filename = bookmark_get_filename ();
+
+  result = g_file_set_contents (filename, string->str, -1, &tmp_error);
+
+  g_free (filename);
+  g_string_free (string, TRUE);
+
+  if (!result)
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_FAILED,
+		   _("Bookmark saving failed: %s"),
+		   tmp_error->message);
+      
+      g_error_free (tmp_error);
+    }
+
+  return result;
+}
 
 static gboolean
 gtk_file_system_win32_insert_bookmark (GtkFileSystem     *file_system,
@@ -1268,13 +1914,65 @@ gtk_file_system_win32_insert_bookmark (GtkFileSystem     *file_system,
 				       gint               position,
 				       GError            **error)
 {
-  gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
-  gboolean ret = bookmarks_serialize (&_bookmarks, uri, TRUE, position, error);
-  if (ret)
-    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+  GSList *bookmarks;
+  int num_bookmarks;
+  GSList *l;
+  char *uri;
+  gboolean result;
+  GError *err;
+
+  err = NULL;
+  if (!bookmark_list_read (&bookmarks, &err) && err->code != G_FILE_ERROR_NOENT)
+    {
+      g_propagate_error (error, err);
+      return FALSE;
+    }
+
+  num_bookmarks = g_slist_length (bookmarks);
+  g_return_val_if_fail (position >= -1 && position <= num_bookmarks, FALSE);
+
+  result = FALSE;
+
+  uri = gtk_file_system_win32_path_to_uri (file_system, path);
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      char *bookmark, *space;
+
+      bookmark = l->data;
+      
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
+	{
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
+		       _("'%s' already exists in the bookmarks list"),
+		       uri);
+	  goto out;
+	}
+    }
+
+  bookmarks = g_slist_insert (bookmarks, g_strdup (uri), position);
+  if (bookmark_list_write (bookmarks, error))
+    {
+      result = TRUE;
+      g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+    }
+
+ out:
+
   g_free (uri);
-  return ret;
-                               
+  bookmark_list_free (bookmarks);
+
+  return result;
 }
 
 static gboolean
@@ -1282,82 +1980,184 @@ gtk_file_system_win32_remove_bookmark (GtkFileSystem     *file_system,
 				       const GtkFilePath *path,
 				       GError           **error)
 {
-  gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
-  gboolean ret = bookmarks_serialize (&_bookmarks, uri, FALSE, 0, error);
-  if (ret)
-    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+  GSList *bookmarks;
+  char *uri;
+  GSList *l;
+  gboolean result;
+
+  if (!bookmark_list_read (&bookmarks, error))
+    return FALSE;
+
+  result = FALSE;
+
+  uri = gtk_file_system_path_to_uri (file_system, path);
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      char *bookmark, *space;
+
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
+	{
+	  g_free (l->data);
+	  bookmarks = g_slist_remove_link (bookmarks, l);
+	  g_slist_free_1 (l);
+
+	  if (bookmark_list_write (bookmarks, error))
+	    {
+	      result = TRUE;
+
+	      g_signal_emit_by_name (file_system, "bookmarks-changed", 0);	      
+	    }
+
+	  goto out;
+	}
+    }
+
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+	       _("'%s' does not exist in the bookmarks list"),
+	       uri);
+
+ out:
+
   g_free (uri);
-  return ret;
+  bookmark_list_free (bookmarks);
+
+  return result;
 }
 
 static GSList *
 gtk_file_system_win32_list_bookmarks (GtkFileSystem *file_system)
 {
-  GSList *list = NULL;
-  GSList *entry;
+  GSList *bookmarks;
+  GSList *result;
+  GSList *l;
 
+  if (!bookmark_list_read (&bookmarks, NULL))
+    return NULL;
 
-  if (bookmarks_serialize (&_bookmarks, "", FALSE, 0, NULL))
+  result = NULL;
+
+  for (l = bookmarks; l; l = l->next)
     {
-      for (entry = _bookmarks; entry != NULL; entry = entry->next)
-        {
-	  GtkFilePath *path = gtk_file_system_win32_uri_to_path (
-			        file_system, (gchar *)entry->data);
+      char *bookmark, *space;
 
-          list = g_slist_append (list, path);
-	}
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (is_local_uri (bookmark))
+	result = g_slist_prepend (result, gtk_file_system_win32_uri_to_path (file_system, bookmark));
     }
 
-  return list;
+  bookmark_list_free (bookmarks);
+
+  result = g_slist_reverse (result);
+  return result;
 }
 
-/*
- * GtkFileFolderWin32
- */
-static GType
-gtk_file_folder_win32_get_type (void)
+static gchar *
+gtk_file_system_win32_get_bookmark_label (GtkFileSystem     *file_system,
+					 const GtkFilePath *path)
 {
-  static GType file_folder_win32_type = 0;
+  GSList *labels;
+  gchar *label;
+  GSList *l;
+  char *bookmark, *space, *uri;
+  
+  labels = NULL;
+  label = NULL;
 
-  if (!file_folder_win32_type)
+  uri = gtk_file_system_path_to_uri (file_system, path);
+  bookmark_list_read (&labels, NULL);
+
+  for (l = labels; l && !label; l = l->next) 
     {
-      static const GTypeInfo file_folder_win32_info =
-      {
-	sizeof (GtkFileFolderWin32Class),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_folder_win32_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkFileFolderWin32),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_folder_win32_init,
-      };
-      
-      static const GInterfaceInfo file_folder_info =
-      {
-	(GInterfaceInitFunc) gtk_file_folder_win32_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
-      };
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (!space)
+	continue;
 
-      file_folder_win32_type = g_type_register_static (G_TYPE_OBJECT,
-						       I_("GtkFileFolderWin32"),
-						      &file_folder_win32_info, 0);
-      g_type_add_interface_static (file_folder_win32_type,
-				   GTK_TYPE_FILE_FOLDER,
-				   &file_folder_info);
+      *space = '\0';
+
+      if (strcmp (uri, bookmark) == 0)
+	label = g_strdup (space + 1);
     }
 
-  return file_folder_win32_type;
+  bookmark_list_free (labels);
+  g_free (uri);
+
+  return label;
 }
 
 static void
-gtk_file_folder_win32_class_init (GtkFileFolderWin32Class *class)
+gtk_file_system_win32_set_bookmark_label (GtkFileSystem     *file_system,
+					 const GtkFilePath *path,
+					 const gchar       *label)
+{
+  GSList *labels;
+  GSList *l;
+  gchar *bookmark, *space, *uri;
+  gboolean found;
+
+  labels = NULL;
+
+  uri = gtk_file_system_path_to_uri (file_system, path);
+  bookmark_list_read (&labels, NULL);
+
+  found = FALSE;
+  for (l = labels; l && !found; l = l->next) 
+    {
+      bookmark = (gchar *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
+	{
+	  g_free (bookmark);
+	  
+	  if (label && *label)
+	    l->data = g_strdup_printf ("%s %s", uri, label);
+	  else
+	    l->data = g_strdup (uri);
+
+	  found = TRUE;
+	  break;
+	}
+    }
+
+  if (found)
+    {
+      if (bookmark_list_write (labels, NULL))
+	g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+    }
+  
+  bookmark_list_free (labels);
+  g_free (uri);
+}
+
+static void
+_gtk_file_folder_win32_class_init (GtkFileFolderWin32Class *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  folder_parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_folder_win32_finalize;
 }
@@ -1367,10 +2167,11 @@ gtk_file_folder_win32_iface_init (GtkFileFolderIface *iface)
 {
   iface->get_info = gtk_file_folder_win32_get_info;
   iface->list_children = gtk_file_folder_win32_list_children;
+  iface->is_finished_loading = gtk_file_folder_win32_is_finished_loading;
 }
 
 static void
-gtk_file_folder_win32_init (GtkFileFolderWin32 *impl)
+_gtk_file_folder_win32_init (GtkFileFolderWin32 *impl)
 {
 }
 
@@ -1379,211 +2180,145 @@ gtk_file_folder_win32_finalize (GObject *object)
 {
   GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (object);
 
-  g_hash_table_remove (folder_win32->system_win32->folder_hash, folder_win32->filename);
-
-  g_free (folder_win32->filename);
-  
-  folder_parent_class->finalize (object);
-}
-
-static GtkFileInfo *
-gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
-			        const GtkFilePath *path,
-			        GError           **error)
-{
-  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
-  GtkFileInfo *info;
-  gchar *filename;
-  
-  if (!path)
+  if (folder_win32->load_folder_id)
     {
-      g_return_val_if_fail (filename_is_some_root (folder_win32->filename), NULL);
-
-      /* ??? */
-      info = filename_get_info (folder_win32->filename, folder_win32->types, error);
-
-      return info;
+      g_source_remove (folder_win32->load_folder_id);
+      folder_win32->load_folder_id = 0;
     }
 
-  filename = filename_from_path (path);
-  g_return_val_if_fail (filename != NULL, NULL);
+  g_hash_table_remove (folder_win32->system_win32->folder_hash, folder_win32->filename);
 
-  info = filename_get_info (filename, folder_win32->types, error);
+  if (folder_win32->stat_info)
+    {
+#if 0
+      g_print ("Releasing information for directory %s\n", folder_win32->filename);
+#endif
+      g_hash_table_destroy (folder_win32->stat_info);
+    }
 
-  g_free (filename);
+  g_free (folder_win32->filename);
+
+  G_OBJECT_CLASS (_gtk_file_folder_win32_parent_class)->finalize (object);
+}
+
+/* Creates a GtkFileInfo for a volume root by stat()ing it */
+static GtkFileInfo *
+file_info_for_root_with_error (const char  *root_name,
+			       GError     **error)
+{
+  struct stat statbuf;
+  GtkFileInfo *info;
+
+  if (g_stat (root_name, &statbuf) != 0)
+    {
+      int saved_errno;
+      char *display_name;
+
+      saved_errno = errno; 
+      display_name = g_filename_display_name (root_name);
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_FAILED,
+		   _("Error getting information for '%s': %s"),
+		   display_name,
+		   g_strerror (saved_errno));
+
+      g_free (display_name);
+      return NULL;
+    }
+
+  info = gtk_file_info_new ();
+  gtk_file_info_set_display_name (info, root_name);
+  gtk_file_info_set_is_folder (info, TRUE);
+  gtk_file_info_set_is_hidden (info, FALSE);
+  gtk_file_info_set_mime_type (info, "x-directory/normal");
+  gtk_file_info_set_modification_time (info, statbuf.st_mtime);
+  gtk_file_info_set_size (info, statbuf.st_size);
 
   return info;
 }
 
 static gboolean
-gtk_file_folder_win32_list_children (GtkFileFolder  *folder,
-				     GSList        **children,
-				     GError        **error)
+stat_with_error (const char                *filename,
+		 WIN32_FILE_ATTRIBUTE_DATA *wfad,
+		 GError                   **error)
 {
-  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
-  GDir *dir;
+  wchar_t *wfilename = g_utf8_to_utf16 (filename, -1, NULL, NULL, error);
+  int rc;
 
-  *children = NULL;
-
-  dir = g_dir_open (folder_win32->filename, 0, error);
-
-#if DEBUGGING_OUTPUT
-  printf ("%s: %s: %s\n", __FUNCTION__, folder_win32->filename, dir?"OK":"FAIL"), fflush (stdout);
-#endif
-
-  if (!dir)
+  if (wfilename == NULL)
     return FALSE;
 
-  while (TRUE)
+  rc = GetFileAttributesExW (wfilename, GetFileExInfoStandard, wfad);
+
+  if (rc == 0)
     {
-      const gchar *filename = g_dir_read_name (dir);
-      gchar *fullname;
+      if (error)
+	{
+	  int error_number = GetLastError ();
+	  char *emsg = g_win32_error_message (error_number);
+	  gchar *display_name = g_filename_display_name (filename);
+	  int code;
 
-      if (!filename)
-	break;
-
-      fullname = g_build_filename (folder_win32->filename, filename, NULL);
-      *children = g_slist_prepend (*children, filename_to_path (fullname));
-      g_free (fullname);
+	  if (error_number == ERROR_FILE_NOT_FOUND ||
+	      error_number == ERROR_PATH_NOT_FOUND)
+	    code = GTK_FILE_SYSTEM_ERROR_NONEXISTENT;
+	  else
+	    code = GTK_FILE_SYSTEM_ERROR_FAILED;
+	  
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       code,
+		       _("Error getting information for '%s': %s"),
+		       display_name,
+		       emsg);
+	  g_free (display_name);
+	  g_free (wfilename);
+	  g_free (emsg);
+	}
+      return FALSE;
     }
-
-  g_dir_close (dir);
-
-  *children = g_slist_reverse (*children);
-  
+    
+  g_free (wfilename);
   return TRUE;
 }
 
+/* Creates a new GtkFileInfo from the specified data */
 static GtkFileInfo *
-filename_get_info (const gchar     *filename,
-		   GtkFileInfoType  types,
-		   GError         **error)
+create_file_info (GtkFileFolderWin32 	    *folder_win32,
+                  const char         	    *filename,
+		  const char         	    *basename,
+		  GtkFileInfoType    	     types,
+		  WIN32_FILE_ATTRIBUTE_DATA *wfad,
+		  const char                *mime_type)
 {
   GtkFileInfo *info;
-#if 0 /* it's dead in gtkfilesystemunix.c, too */
-  GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
-#endif
-  WIN32_FILE_ATTRIBUTE_DATA wfad;
-  int rc = 0;
-
-  if (G_WIN32_HAVE_WIDECHAR_API ())
-    {
-      wchar_t *wfilename = g_utf8_to_utf16 (filename, -1, NULL, NULL, error);
-
-      if (!wfilename)
-	return NULL;
-
-      rc = GetFileAttributesExW (wfilename, GetFileExInfoStandard, &wfad);
-      g_free (wfilename);
-    }
-  else
-    {
-      char *cpfilename = g_locale_from_utf8 (filename, -1, NULL, NULL, error);
-
-      if (!cpfilename)
-	return NULL;
-
-      rc = GetFileAttributesExA (cpfilename, GetFileExInfoStandard, &wfad);
-      g_free (cpfilename);
-    }
-
-  if (!rc)
-    {
-      gchar *display_filename = g_filename_display_name (filename);
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("Error getting information for '%s': %s"),
-		   display_filename,
-		   g_win32_error_message (GetLastError ()));
-      g_free (display_filename);
-      
-      return NULL;
-    }
 
   info = gtk_file_info_new ();
-
-  if (filename_is_some_root (filename))
-    {
-      if (types & GTK_FILE_INFO_DISPLAY_NAME)
-	gtk_file_info_set_display_name (info, filename);
-      
-      if (types & GTK_FILE_INFO_IS_HIDDEN)
-	gtk_file_info_set_is_hidden (info, FALSE);
-    }
-  else
-    {
-      gchar *basename = g_path_get_basename (filename);
   
-      if (types & GTK_FILE_INFO_DISPLAY_NAME)
-	{
-	  gchar *display_basename = g_filename_display_name (basename);
-	  
-	  gtk_file_info_set_display_name (info, display_basename);
-	  g_free (display_basename);
-	}
-      
-      if (types & GTK_FILE_INFO_IS_HIDDEN)
-	{
-	  gboolean is_hidden = !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
-	  gtk_file_info_set_is_hidden (info, is_hidden);
-	}
+  if (types & GTK_FILE_INFO_DISPLAY_NAME)
+    {
+      gchar *display_name = g_filename_display_basename (filename);
+      gtk_file_info_set_display_name (info, display_name);
+      g_free (display_name);
+    }
 
-      g_free (basename);
+  if (types & GTK_FILE_INFO_IS_HIDDEN)
+    {
+      gboolean is_hidden = !!(wfad->dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
+      gtk_file_info_set_is_hidden (info, is_hidden);
     }
 
   if (types & GTK_FILE_INFO_IS_FOLDER)
-    {
-      gtk_file_info_set_is_folder (info, !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
-   }
-
-#if 0 /* it's dead in gtkfilesystemunix.c, too */
-  if (types & GTK_FILE_INFO_ICON)
-    {
-      if (wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-	icon_type = GTK_FILE_ICON_DIRECTORY;
-
-      gtk_file_info_set_icon_type (info, icon_type);
-    }
-#endif
+    gtk_file_info_set_is_folder (info, !!(wfad->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 
   if (types & GTK_FILE_INFO_MIME_TYPE)
-    {
-      if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
-	gtk_file_info_set_mime_type (info, "application/x-executable");
-      else
-	{
-	  const char *extension = strrchr (filename, '.');
-	  HKEY key = NULL;
-	  DWORD type, nbytes = 0;
-	  char *value;
-
-	  if (extension != NULL &&
-	      extension[1] != '\0' &&
-	      RegOpenKeyEx (HKEY_CLASSES_ROOT, extension, 0,
-			    KEY_QUERY_VALUE, &key) == ERROR_SUCCESS &&
-	      RegQueryValueEx (key, "Content Type", 0,
-			       &type, NULL, &nbytes) == ERROR_SUCCESS &&
-	      type == REG_SZ &&
-	      (value = g_try_malloc (nbytes + 1)) &&
-	      RegQueryValueEx (key, "Content Type", 0,
-			       &type, value, &nbytes) == ERROR_SUCCESS)
-	    {
-	      value[nbytes] = '\0';
-	      gtk_file_info_set_mime_type (info, value);
-	      g_free (value);
-	    }
-	  else
-	    gtk_file_info_set_mime_type (info, "application/octet-stream");
-	  if (key != NULL)
-	    RegCloseKey (key);
-	}
-    }
+    gtk_file_info_set_mime_type (info, mime_type);
 
   if (types & GTK_FILE_INFO_MODIFICATION_TIME)
     {
-      GtkFileTime time = wfad.ftLastWriteTime.dwLowDateTime 
-                       | ((guint64)wfad.ftLastWriteTime.dwHighDateTime) << 32;
+      GtkFileTime time = (wfad->ftLastWriteTime.dwLowDateTime 
+			  | ((guint64)wfad->ftLastWriteTime.dwHighDateTime) << 32);
       /* 100-nanosecond intervals since January 1, 1601, urgh! */
       time /= G_GINT64_CONSTANT (10000000); /* now seconds */
       time -= G_GINT64_CONSTANT (134774) * 24 * 3600; /* good old Unix time */
@@ -1592,23 +2327,329 @@ filename_get_info (const gchar     *filename,
 
   if (types & GTK_FILE_INFO_SIZE)
     {
-      gint64 size = wfad.nFileSizeLow | ((guint64)wfad.nFileSizeHigh) << 32;
+      gint64 size = wfad->nFileSizeLow | ((guint64)wfad->nFileSizeHigh) << 32;
       gtk_file_info_set_size (info, size);
     }
-  
+
+  if (types & GTK_FILE_INFO_ICON)
+    {
+      IconType icon_type;
+      gboolean free_icon_name = FALSE;
+      const char *icon_name;
+      const char *icon_mime_type;
+
+      icon_type = get_icon_type_from_path (folder_win32, wfad, filename, &icon_mime_type);
+
+      switch (icon_type)
+        {
+          case ICON_NONE:
+	    icon_name = get_fallback_icon_name (icon_type);
+	    break;
+
+          case ICON_REGULAR:
+	    free_icon_name = TRUE;
+	    if (icon_mime_type)
+	      icon_name = get_icon_name_for_mime_type (icon_mime_type);
+	    else
+	      icon_name = get_icon_name_for_mime_type (mime_type);
+            break;
+
+          default:
+	    icon_name = get_special_icon_name (icon_type, filename);
+	    break;
+        }
+
+      gtk_file_info_set_icon_name (info, icon_name);
+
+      if (free_icon_name)
+	g_free ((char *) icon_name);
+    }
+
   return info;
 }
 
-static gchar *
-filename_from_path (const GtkFilePath *path)
+static struct stat_info_entry *
+create_stat_info_entry_and_emit_add (GtkFileFolderWin32        *folder_win32,
+				     const char                *filename,
+				     const char                *basename,
+				     WIN32_FILE_ATTRIBUTE_DATA *wfad)
 {
-  return g_strdup (gtk_file_path_get_string (path));
+  GSList *paths;
+  GtkFilePath *path;
+  struct stat_info_entry *entry;
+
+  entry = g_new0 (struct stat_info_entry, 1);
+
+  if ((folder_win32->types & STAT_NEEDED_MASK) != 0)
+    entry->wfad = *wfad;
+
+  if ((folder_win32->types & GTK_FILE_INFO_MIME_TYPE) != 0)
+    entry->mime_type = get_mime_type_for_file (filename);
+
+  g_hash_table_insert (folder_win32->stat_info,
+		       g_strdup (basename),
+		       entry);
+
+  path = gtk_file_path_new_dup (filename);
+  paths = g_slist_append (NULL, path);
+  g_signal_emit_by_name (folder_win32, "files-added", paths);
+  gtk_file_path_free (path);
+  g_slist_free (paths);
+
+  return entry;
+}
+
+static GtkFileInfo *
+gtk_file_folder_win32_get_info (GtkFileFolder      *folder,
+			        const GtkFilePath  *path,
+				GError            **error)
+{
+  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
+  GtkFileInfo *info;
+  gchar *dirname, *basename;
+  const char *filename;
+  GtkFileInfoType types;
+  WIN32_FILE_ATTRIBUTE_DATA wfad;
+  const char *mime_type;
+
+  /* Get_info for "/" */
+  if (!path)
+    {
+      g_return_val_if_fail (filename_is_root (folder_win32->filename), NULL);
+      return file_info_for_root_with_error (folder_win32->filename, error);
+    }
+
+  /* Get_info for normal files */
+
+  filename = gtk_file_path_get_string (path);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
+
+  dirname = get_parent_dir (filename);
+  g_return_val_if_fail (strcmp (dirname, folder_win32->filename) == 0, NULL);
+  g_free (dirname);
+
+  basename = g_path_get_basename (filename);
+  types = folder_win32->types;
+
+  if (folder_win32->have_stat)
+    {
+      struct stat_info_entry *entry;
+
+      g_assert (folder_win32->stat_info != NULL);
+      entry = g_hash_table_lookup (folder_win32->stat_info, basename);
+
+      if (!entry)
+	{
+	  if (!stat_with_error (filename, &wfad, error))
+	    {
+	      g_free (basename);
+	      return NULL;
+	    }
+
+	  entry = create_stat_info_entry_and_emit_add (folder_win32, filename, basename, &wfad);
+	}
+
+      info = create_file_info (folder_win32, filename, basename, types, &entry->wfad, entry->mime_type);
+      g_free (basename);
+      return info;
+    }
+  else
+    {
+      if (!stat_with_error (filename, &wfad, error))
+	{
+	  g_free (basename);
+	  return NULL;
+	}
+
+      if ((types & GTK_FILE_INFO_MIME_TYPE) != 0)
+	mime_type = get_mime_type_for_file (filename);
+      else
+	mime_type = NULL;
+
+      info = create_file_info (folder_win32, filename, basename, types, &wfad, mime_type);
+      g_free (basename);
+      return info;
+    }
+}
+
+static void
+cb_list_children (gpointer key, gpointer value, gpointer user_data)
+{
+  GSList **children = user_data;
+  *children = g_slist_prepend (*children, key);
+}
+
+static gboolean
+gtk_file_folder_win32_list_children (GtkFileFolder  *folder,
+				     GSList        **children,
+				     GError        **error)
+{
+  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
+  GSList *l;
+
+  *children = NULL;
+
+  /* Get the list of basenames.  */
+  if (folder_win32->stat_info)
+    g_hash_table_foreach (folder_win32->stat_info, cb_list_children, children);
+
+  /* Turn basenames into GFilePaths.  */
+  for (l = *children; l; l = l->next)
+    {
+      const char *basename = l->data;
+      char *fullname = g_build_filename (folder_win32->filename, basename, NULL);
+      l->data = filename_to_path (fullname);
+      g_free (fullname);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_file_folder_win32_is_finished_loading (GtkFileFolder *folder)
+{
+  return GTK_FILE_FOLDER_WIN32 (folder)->is_finished_loading;
+}
+
+static void
+free_stat_info_entry (struct stat_info_entry *entry)
+{
+  g_free (entry->mime_type);
+  g_free (entry);
+}
+
+static gboolean
+fill_in_names (GtkFileFolderWin32 *folder_win32, GError **error)
+{
+  GDir *dir;
+
+  if (folder_win32->stat_info)
+    return TRUE;
+
+  dir = g_dir_open (folder_win32->filename, 0, error);
+  if (!dir)
+    return FALSE;
+
+  folder_win32->stat_info = g_hash_table_new_full (g_str_hash, g_str_equal,
+						  (GDestroyNotify) g_free,
+						  (GDestroyNotify) free_stat_info_entry);
+
+  while (TRUE)
+    {
+      struct stat_info_entry *entry;
+      const gchar *basename;
+
+      basename = g_dir_read_name (dir);
+      if (!basename)
+	break;
+
+      entry = g_new0 (struct stat_info_entry, 1);
+      if (folder_win32->is_network_dir)
+	{
+	  g_assert_not_reached ();
+	  entry->wfad.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
+	  entry->mime_type = g_strdup ("x-directory/normal");
+	}
+
+      g_hash_table_insert (folder_win32->stat_info,
+			   g_strdup (basename),
+			   entry);
+    }
+
+  g_dir_close (dir);
+
+  folder_win32->asof = time (NULL);
+  return TRUE;
+}
+
+static gboolean
+cb_fill_in_stats (gpointer key, gpointer value, gpointer user_data)
+{
+  const char *basename = key;
+  struct stat_info_entry *entry = value;
+  GtkFileFolderWin32 *folder_win32 = user_data;
+  char *fullname = g_build_filename (folder_win32->filename, basename, NULL);
+  gboolean result;
+
+  if (!stat_with_error (fullname, &entry->wfad, NULL))
+    result = TRUE;  /* Couldn't stat -- remove from hash.  */
+  else
+    result = FALSE;
+
+  g_free (fullname);
+  return result;
+}
+
+
+static void
+fill_in_stats (GtkFileFolderWin32 *folder_win32)
+{
+  if (folder_win32->have_stat)
+    return;
+
+  if (!fill_in_names (folder_win32, NULL))
+    return;
+
+  if (!folder_win32->is_network_dir)
+    g_hash_table_foreach_remove (folder_win32->stat_info,
+				 cb_fill_in_stats,
+				 folder_win32);
+
+  folder_win32->have_stat = TRUE;
+}
+
+static gboolean
+cb_fill_in_mime_type (gpointer key, gpointer value, gpointer user_data)
+{
+  const char *basename = key;
+  struct stat_info_entry *entry = value;
+  GtkFileFolderWin32 *folder_win32 = user_data;
+  char *fullname = g_build_filename (folder_win32->filename, basename, NULL);
+
+  entry->mime_type = get_mime_type_for_file (fullname);
+
+  g_free (fullname);
+
+  return FALSE;
+}
+
+static void
+fill_in_mime_type (GtkFileFolderWin32 *folder_win32)
+{
+  if (folder_win32->have_mime_type)
+    return;
+
+  if (!folder_win32->have_stat)
+    return;
+
+  g_assert (folder_win32->stat_info != NULL);
+
+  if (!folder_win32->is_network_dir)
+    g_hash_table_foreach_remove (folder_win32->stat_info,
+				 cb_fill_in_mime_type,
+				 folder_win32);
+
+  folder_win32->have_mime_type = TRUE;
 }
 
 static GtkFilePath *
 filename_to_path (const char *filename)
 {
-  return gtk_file_path_new_dup (filename);
+  char *tmp;
+
+  tmp = remove_trailing_slash (filename);
+  return gtk_file_path_new_steal (tmp);
+}
+
+static gboolean
+filename_is_root (const char *filename)
+{
+  const gchar *after_root;
+
+  after_root = g_path_skip_root (filename);
+
+  return (after_root != NULL && *after_root == '\0');
 }
 
 static gboolean
