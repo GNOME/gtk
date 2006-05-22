@@ -313,7 +313,8 @@ gdk_display_open (const gchar *display_name)
   _gdk_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_x11_screen_request_cm_notification (display_x11->screens[i]);
+    gdk_display_request_selection_notification (display, 
+						GDK_SCREEN_X11 (display_x11->screens[i])->cm_selection_atom);
 
   g_signal_emit_by_name (gdk_display_manager_get(),
 			 "display_opened", display);
@@ -407,7 +408,7 @@ gdk_internal_connection_watch (Display  *display,
  * Since: 2.2
  */
 G_CONST_RETURN gchar *
-gdk_display_get_name (GdkDisplay * display)
+gdk_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
@@ -425,7 +426,7 @@ gdk_display_get_name (GdkDisplay * display)
  * Since: 2.2
  */
 gint
-gdk_display_get_n_screens (GdkDisplay * display)
+gdk_display_get_n_screens (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   
@@ -444,7 +445,8 @@ gdk_display_get_n_screens (GdkDisplay * display)
  * Since: 2.2
  */
 GdkScreen *
-gdk_display_get_screen (GdkDisplay * display, gint screen_num)
+gdk_display_get_screen (GdkDisplay *display, 
+			gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay) > screen_num, NULL);
@@ -463,7 +465,7 @@ gdk_display_get_screen (GdkDisplay * display, gint screen_num)
  * Since: 2.2
  */
 GdkScreen *
-gdk_display_get_default_screen (GdkDisplay * display)
+gdk_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
@@ -497,7 +499,7 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 /**
  * gdk_display_pointer_ungrab:
  * @display: a #GdkDisplay.
- * @time_: a timestap (e.g. GDK_CURRENT_TIME).
+ * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
  *
  * Release any pointer grab.
  *
@@ -536,7 +538,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
  * Since: 2.2
  */
 gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay * display)
+gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
   
@@ -583,7 +585,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
  * Since: 2.2
  */
 void
-gdk_display_beep (GdkDisplay * display)
+gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
@@ -607,7 +609,7 @@ gdk_display_beep (GdkDisplay * display)
  * Since: 2.2
  */
 void
-gdk_display_sync (GdkDisplay * display)
+gdk_display_sync (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
@@ -651,7 +653,8 @@ gdk_display_flush (GdkDisplay *display)
  *
  * Since: 2.4
  **/
-GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
+GdkWindow *
+gdk_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -670,7 +673,7 @@ GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
  * Since: 2.2
  **/
 void
-gdk_x11_display_grab (GdkDisplay * display)
+gdk_x11_display_grab (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11;
   
@@ -693,7 +696,7 @@ gdk_x11_display_grab (GdkDisplay * display)
  * Since: 2.2
  **/
 void
-gdk_x11_display_ungrab (GdkDisplay * display)
+gdk_x11_display_ungrab (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11;
   
@@ -714,12 +717,9 @@ static void
 gdk_display_x11_dispose (GObject *object)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
-  gint           n_screens;
   gint           i;
 
-  n_screens = ScreenCount (display_x11->xdisplay);
-
-  for (i = 0; i < n_screens; i++)
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_screen_close (display_x11->screens[i]);
 
   _gdk_events_uninit (GDK_DISPLAY_OBJECT (object));
@@ -731,7 +731,6 @@ static void
 gdk_display_x11_finalize (GObject *object)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
-  gint           n_screens;
   gint           i;
 
   /* Keymap */
@@ -771,7 +770,6 @@ gdk_display_x11_finalize (GObject *object)
   g_list_free (display_x11->input_windows);
 
   /* Free all GdkScreens */
-  n_screens = ScreenCount (display_x11->xdisplay);
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     g_object_unref (display_x11->screens[i]);
   g_free (display_x11->screens);
@@ -812,7 +810,7 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
 
 /**
  * _gdk_x11_display_screen_for_xrootwin:
- * @display: a #Display
+ * @display: a #GdkDisplay
  * @xrootwin: window ID for one of of the screen's of the display.
  * 
  * Given the root window ID of one of the screen's of a #GdkDisplay,
@@ -824,10 +822,9 @@ GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 				      Window      xrootwin)
 {
-  gint n_screens, i;
+  gint i;
 
-  n_screens = gdk_display_get_n_screens (display);
-  for (i = 0; i < n_screens; i++)
+  for (i = 0; i < ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay); i++)
     {
       GdkScreen *screen = gdk_display_get_screen (display, i);
       if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
@@ -847,7 +844,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
  * Since: 2.2
  */
 Display *
-gdk_x11_display_get_xdisplay (GdkDisplay  *display)
+gdk_x11_display_get_xdisplay (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->xdisplay;
 }
@@ -942,10 +939,10 @@ escape_for_xmessage (const char *str)
 }
 
 static void
-broadcast_xmessage   (GdkDisplay   *display,
-                      const char   *message_type,
-                      const char   *message_type_begin,
-                      const char   *message)
+broadcast_xmessage (GdkDisplay *display,
+		    const char *message_type,
+		    const char *message_type_begin,
+		    const char *message)
 {
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
   GdkScreen *screen = gdk_display_get_default_screen (display);
@@ -1107,8 +1104,8 @@ gdk_display_supports_selection_notification (GdkDisplay *display)
  * Since: 2.6
  **/
 gboolean
-gdk_display_request_selection_notification  (GdkDisplay *display,
-					     GdkAtom     selection)
+gdk_display_request_selection_notification (GdkDisplay *display,
+					    GdkAtom     selection)
 
 {
 #ifdef HAVE_XFIXES
@@ -1148,9 +1145,11 @@ gdk_display_request_selection_notification  (GdkDisplay *display,
 gboolean
 gdk_display_supports_clipboard_persistence (GdkDisplay *display)
 {
+  Atom clipboard_manager;
+
   /* It might make sense to cache this */
-  return XGetSelectionOwner (GDK_DISPLAY_X11 (display)->xdisplay,
-			     gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER")) != None;
+  clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
+  return XGetSelectionOwner (GDK_DISPLAY_X11 (display)->xdisplay, clipboard_manager) != None;
 }
 
 /**

@@ -516,12 +516,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
   return screen;
 }
 
-void
-_gdk_x11_screen_request_cm_notification (GdkScreenX11 *screen_x11)
-{
-  gdk_display_request_selection_notification (screen_x11->display, screen_x11->cm_selection_atom);
-}
-
 /**
  * gdk_screen_is_composited:
  * @screen: a #GdkScreen

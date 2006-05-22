@@ -1,3 +1,12 @@
+2006-05-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c: Remove _gdk_x11_screen_request_cm_notification
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Directly call 
+	gdk_display_request_selection_notification. 
+
+	* gdk/x11/gdkdisplay-x11.c: Several cleanups.
+	
 2006-05-21  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkinternals.h:
