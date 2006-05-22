@@ -229,6 +229,7 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -237,14 +238,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-17 07:03+0200\n"
-"PO-Revision-Date: 2006-05-17 10:49+0530\n"
+"POT-Creation-Date: 2006-05-22 07:12+0200\n"
+"PO-Revision-Date: 2006-05-22 13:04+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -2021,18 +2023,18 @@ msgid "(Empty)"
 msgstr "(ખાલી)"
 
 #: ../gtk/gtkfilesystemunix.c:842 ../gtk/gtkfilesystemunix.c:1089
-#: ../gtk/gtkfilesystemunix.c:2117 ../gtk/gtkfilesystemwin32.c:471
-#: ../gtk/gtkfilesystemwin32.c:484 ../gtk/gtkfilesystemwin32.c:1496
+#: ../gtk/gtkfilesystemunix.c:2117 ../gtk/gtkfilesystemwin32.c:2222
+#: ../gtk/gtkfilesystemwin32.c:2272
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' માટેની જાણકારી મેળવવામાં ભૂલ: %s"
 
-#: ../gtk/gtkfilesystemunix.c:928 ../gtk/gtkfilesystemwin32.c:526
+#: ../gtk/gtkfilesystemunix.c:928 ../gtk/gtkfilesystemwin32.c:1019
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "ડિરેક્ટરી '%s' બનાવવામાં ભૂલ: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1034 ../gtk/gtkfilesystemwin32.c:586
+#: ../gtk/gtkfilesystemunix.c:1034 ../gtk/gtkfilesystemwin32.c:1125
 msgid "This file system does not support mounting"
 msgstr "આ ફાઇલ સિસ્ટમ માઉન્ટ કરવાનુને આધાર આપતી નથી"
 
@@ -2047,17 +2049,17 @@ msgid ""
 "Please use a different name."
 msgstr "નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે. મહેરબાની કરી બીજું નામ વાપરો."
 
-#: ../gtk/gtkfilesystemunix.c:1759 ../gtk/gtkfilesystemwin32.c:1036
+#: ../gtk/gtkfilesystemunix.c:1759 ../gtk/gtkfilesystemwin32.c:1902
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "બૂકમાર્કનો સંગ્રહ કરવાનુ નિષ્ફળ: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1814
+#: ../gtk/gtkfilesystemunix.c:1814 ../gtk/gtkfilesystemwin32.c:1957
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' પહેલાથી જ બુકમાર્કોની યાદીમાં હાજર છે"
 
-#: ../gtk/gtkfilesystemunix.c:1886
+#: ../gtk/gtkfilesystemunix.c:1886 ../gtk/gtkfilesystemwin32.c:2029
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' બુકમાર્કોની યાદીમાં હાજર નથી"
@@ -2067,12 +2069,17 @@ msgstr "'%s' બુકમાર્કોની યાદીમાં હાજ�
 msgid "Error getting information for '/': %s"
 msgstr "'/' માટે જાણકારી મેળવવામાં ભૂલ: %s"
 
-#: ../gtk/gtkfilesystemwin32.c:600
+#: ../gtk/gtkfilesystemwin32.c:943
+#, c-format
+msgid "Path is not a folder: '%s'"
+msgstr "પાથ એ ફોલ્ડર નથી: '%s'"
+
+#: ../gtk/gtkfilesystemwin32.c:1143
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "નેટવર્ક ડ્રાઈવ (%s)"
 
-#: ../gtk/gtkfilesystemwin32.c:639
+#: ../gtk/gtkfilesystemwin32.c:1165
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2109,11 +2116,11 @@ msgid "Si_ze:"
 msgstr "માપ (_z):"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:517
+#: ../gtk/gtkfontsel.c:514
 msgid "_Preview:"
 msgstr "પૂર્વ દર્શન (_P):"
 
-#: ../gtk/gtkfontsel.c:1351
+#: ../gtk/gtkfontsel.c:1348
 msgid "Font Selection"
 msgstr "ફોન્ટની પસંદગી"
 
@@ -2128,7 +2135,7 @@ msgstr "ગામાની કિંમત (_G)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1370
+#: ../gtk/gtkiconfactory.c:1371
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ચિહ્ન લાવવામાં ભૂલ: %s"
@@ -2288,7 +2295,7 @@ msgstr "તીર જગ્યા"
 msgid "Scroll arrow spacing"
 msgstr "તીર જગ્યા સરકાવો"
 
-#: ../gtk/gtknotebook.c:4208 ../gtk/gtknotebook.c:6742
+#: ../gtk/gtknotebook.c:4208 ../gtk/gtknotebook.c:6744
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -2413,47 +2420,47 @@ msgid "_Save in folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_S):"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:950
+#: ../gtk/gtkprintoperation.c:984
 msgid "print operation status|Initial state"
 msgstr "આરંભિક સ્થિતિ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:952
+#: ../gtk/gtkprintoperation.c:986
 msgid "print operation status|Preparing to print"
 msgstr "છાપવા માટે તૈયારી કરી રહ્યા છીએ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:954
+#: ../gtk/gtkprintoperation.c:988
 msgid "print operation status|Generating data"
 msgstr "માહિતી પેદા કરી રહ્યા છીએ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:956
+#: ../gtk/gtkprintoperation.c:990
 msgid "print operation status|Sending data"
 msgstr "માહિતી મોકલી રહ્યા છીએ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:958
+#: ../gtk/gtkprintoperation.c:992
 msgid "print operation status|Waiting"
 msgstr "રાહ જોઈ રહ્યા છીએ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:960
+#: ../gtk/gtkprintoperation.c:994
 msgid "print operation status|Blocking on issue"
 msgstr "મુદ્દા પર અટકેલ છે"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:962
+#: ../gtk/gtkprintoperation.c:996
 msgid "print operation status|Printing"
 msgstr "છાપી રહ્યા છીએ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:964
+#: ../gtk/gtkprintoperation.c:998
 msgid "print operation status|Finished"
 msgstr "સમાપ્ત થયેલ"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:966
+#: ../gtk/gtkprintoperation.c:1000
 msgid "print operation status|Finished with error"
 msgstr "ભૂલ સાથે સમાપ્ત થયેલ"
 
@@ -2461,48 +2468,48 @@ msgstr "ભૂલ સાથે સમાપ્ત થયેલ"
 msgid "Error printing"
 msgstr "ભૂલ છાપન"
 
-#: ../gtk/gtkprintoperation-win32.c:545
+#: ../gtk/gtkprintoperation-win32.c:546
 msgid "Printer offline"
 msgstr "પ્રિન્ટર ઓફલાઈન છે"
 
-#: ../gtk/gtkprintoperation-win32.c:547
+#: ../gtk/gtkprintoperation-win32.c:548
 msgid "Out of paper"
 msgstr "કાગળ નથી"
 
-#: ../gtk/gtkprintoperation-win32.c:549
+#: ../gtk/gtkprintoperation-win32.c:550
 msgid "Paused"
 msgstr "અટકાવાયેલ"
 
-#: ../gtk/gtkprintoperation-win32.c:551
+#: ../gtk/gtkprintoperation-win32.c:552
 msgid "Need user intervention"
 msgstr "વપરાશકર્તાના સંપર્કની જરૂર છે"
 
-#: ../gtk/gtkprintoperation-win32.c:652
+#: ../gtk/gtkprintoperation-win32.c:653
 msgid "Custom size"
 msgstr "વૈવિધ્યપૂર્ણ માપ"
 
-#: ../gtk/gtkprintoperation-win32.c:1301 ../gtk/gtkprintoperation-win32.c:1324
-#: ../gtk/gtkprintoperation-win32.c:1362
+#: ../gtk/gtkprintoperation-win32.c:1302 ../gtk/gtkprintoperation-win32.c:1325
+#: ../gtk/gtkprintoperation-win32.c:1363
 msgid "Not enough free memory"
 msgstr "પૂરતી મુક્ત મેમરી નથી"
 
-#: ../gtk/gtkprintoperation-win32.c:1367
+#: ../gtk/gtkprintoperation-win32.c:1368
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx માટે અયોગ્ય દલીલ"
 
-#: ../gtk/gtkprintoperation-win32.c:1372
+#: ../gtk/gtkprintoperation-win32.c:1373
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx નો અયોગ્ય નિર્દેશક"
 
-#: ../gtk/gtkprintoperation-win32.c:1377
+#: ../gtk/gtkprintoperation-win32.c:1378
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx નો અયોગ્ય નિયંત્રક"
 
-#: ../gtk/gtkprintoperation-win32.c:1382
+#: ../gtk/gtkprintoperation-win32.c:1383
 msgid "Unspecified error"
 msgstr "સ્પષ્ટ નહિં એવી ભૂલ"
 
-#: ../gtk/gtkprintoperation-win32.c:1421
+#: ../gtk/gtkprintoperation-win32.c:1422
 msgid "Error from StartDoc"
 msgstr "StartDoc માંથી ભૂલ"
 
