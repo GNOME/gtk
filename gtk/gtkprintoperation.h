@@ -80,6 +80,10 @@ struct _GtkPrintOperationClass
   void     (*end_print)          (GtkPrintOperation *operation,
 				  GtkPrintContext   *context);
   void     (*status_changed)     (GtkPrintOperation *operation);
+
+  GtkWidget *(*create_custom_widget) (GtkPrintOperation *operation);
+  void       (*custom_widget_apply)  (GtkPrintOperation *operation,
+				      GtkWidget *widget);
   
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

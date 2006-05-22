@@ -57,7 +57,8 @@ struct _GtkPrintOperationPrivate
   guint manual_orientation : 1;
   double manual_scale;
   GtkPageSet manual_page_set;
- 
+  GtkWidget *custom_widget;
+  
   gpointer platform_data;
   GDestroyNotify free_platform_data;
 

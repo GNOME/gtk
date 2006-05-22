@@ -623,8 +623,8 @@ gtk_c_sources += \
 	gtktrayicon-x11.c
 else
 if USE_WIN32
-gtk_private_h_sources += gtkwin32embed.h
-gtk_c_sources +=         gtkplug-win32.c gtksocket-win32.c gtkwin32embed.c
+gtk_private_h_sources += gtkwin32embed.h gtkwin32embedwidget.h
+gtk_c_sources +=         gtkplug-win32.c gtksocket-win32.c gtkwin32embed.c gtkwin32embedwidget.c
 else
 gtk_c_sources +=         gtkplug-stub.c gtksocket-stub.c
 endif
@@ -778,7 +778,7 @@ libgtk_directfb_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool
+libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 libgtk_quartz_2_0_la_LIBADD = $(libadd)
 libgtk_directfb_2_0_la_LIBADD = $(libadd)

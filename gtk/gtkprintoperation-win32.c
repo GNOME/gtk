@@ -33,7 +33,11 @@
 #include "gtkprint-win32.h"
 #include "gtkintl.h"
 #include "gtkinvisible.h"
+#include "gtkplug.h"
+#include "gtkstock.h"
 #include "gtkalias.h"
+#include "gtk.h"
+#include "gtkwin32embedwidget.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
@@ -53,6 +57,8 @@ typedef struct {
   HANDLE printerHandle;
   int job_id;
   guint timeout_id;
+
+  GtkWidget *embed_widget;
 } GtkPrintOperationWin32;
 
 static void win32_poll_status (GtkPrintOperation *op);
@@ -592,7 +598,6 @@ get_parent_hwnd (GtkWidget *widget)
   gtk_widget_realize (widget);
   return gdk_win32_drawable_get_handle (widget->window);
 }
-
 
 static void
 devnames_to_settings (GtkPrintSettings *settings,
@@ -1267,6 +1272,126 @@ print_callback_new  (void)
   return &callback->iPrintDialogCallback;
 }
 
+static  void
+plug_grab_notify (GtkWidget        *widget,
+		  gboolean          was_grabbed,
+		  GtkPrintOperation *op)
+{
+  EnableWindow(GetAncestor (GDK_WINDOW_HWND (widget->window), GA_ROOT),
+	       was_grabbed);
+}
+
+
+static BOOL CALLBACK
+pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
+{
+  GtkPrintOperation *op;
+  GtkPrintOperationWin32 *op_win32;
+  
+  if (message == WM_INITDIALOG)
+    {
+      PROPSHEETPAGEW *page = (PROPSHEETPAGEW *)lparam;
+      GtkWidget *plug;
+
+      op = GTK_PRINT_OPERATION ((gpointer)page->lParam);
+      op_win32 = op->priv->platform_data;
+
+      SetWindowLongPtrW(wnd, GWLP_USERDATA, (LONG_PTR)op);
+      
+      plug = _gtk_win32_embed_widget_new ((GdkNativeWindow) wnd);
+      op_win32->embed_widget = plug;
+      gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
+      gtk_widget_show (op->priv->custom_widget);
+      gtk_widget_show (plug);
+      gdk_window_focus (plug->window, GDK_CURRENT_TIME);
+
+      /* This dialog is modal, so we grab the embed widget */
+      gtk_grab_add (plug);
+
+      /* When we lose the grab we need to disable the print dialog */
+      g_signal_connect (plug, "grab-notify", G_CALLBACK (plug_grab_notify), op);
+      return FALSE;
+    }
+  else if (message == WM_DESTROY)
+    {
+      op = GTK_PRINT_OPERATION (GetWindowLongPtrW(wnd, GWLP_USERDATA));
+      op_win32 = op->priv->platform_data;
+      
+      g_signal_emit_by_name (op, "custom-widget-apply", op->priv->custom_widget);
+      gtk_widget_destroy (op_win32->embed_widget);
+      op_win32->embed_widget = NULL;
+      op->priv->custom_widget = NULL;
+    }
+  else 
+    {
+      op = GTK_PRINT_OPERATION (GetWindowLongPtrW(wnd, GWLP_USERDATA));
+      op_win32 = op->priv->platform_data;
+
+      return _gtk_win32_embed_widget_dialog_procedure (GTK_WIN32_EMBED_WIDGET (op_win32->embed_widget),
+						       wnd, message, wparam, lparam);
+    }
+  
+  return FALSE;
+}
+
+static HPROPSHEETPAGE
+create_application_page (GtkPrintOperation *op)
+{
+  HPROPSHEETPAGE hpage;
+  PROPSHEETPAGEW page;
+  DLGTEMPLATE *template;
+  HGLOBAL htemplate;
+  LONG base_units;
+  WORD baseunitX, baseunitY;
+  WORD *array;
+  GtkRequisition requisition;
+  const char *app_name;
+
+  /* Make the template the size of the custom widget size request */
+  gtk_widget_size_request (op->priv->custom_widget, &requisition);
+      
+  base_units = GetDialogBaseUnits();
+  baseunitX = LOWORD(base_units);
+  baseunitY = HIWORD(base_units);
+  
+  htemplate = GlobalAlloc (GMEM_MOVEABLE, 
+			   sizeof (DLGTEMPLATE) + sizeof(WORD) * 3);
+  template = GlobalLock (htemplate);
+  template->style = WS_CHILDWINDOW | DS_CONTROL;
+  template->dwExtendedStyle = WS_EX_CONTROLPARENT;
+  template->cdit = 0;
+  template->x = MulDiv(0, 4, baseunitX);
+  template->y = MulDiv(0, 8, baseunitY);
+  template->cx = MulDiv(requisition.width, 4, baseunitX);
+  template->cy = MulDiv(requisition.height, 8, baseunitY);
+  
+  array = (WORD *) (template+1);
+  *array++ = 0; /* menu */
+  *array++ = 0; /* class */
+  *array++ = 0; /* title */
+  
+  memset(&page, 0, sizeof (page));
+  page.dwSize = sizeof (page);
+  page.dwFlags = PSP_DLGINDIRECT | PSP_USETITLE | PSP_PREMATURE;
+  page.hInstance = GetModuleHandle (NULL);
+  page.pResource = template;
+  app_name = g_get_application_name ();
+  if (app_name == NULL)
+    app_name = "Application";
+  page.pszTitle = g_utf8_to_utf16 (app_name, 
+				   -1, NULL, NULL, NULL);
+  page.pfnDlgProc = pageDlgProc;
+  page.pfnCallback = NULL;
+  page.lParam = (LPARAM) op;
+  hpage = CreatePropertySheetPageW(&page);
+  
+  GlobalUnlock (htemplate);
+  
+  /* TODO: We're leaking htemplate here... */
+  
+  return hpage;
+}
+
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 						  GtkWindow *parent,
@@ -1281,9 +1406,14 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   GtkPrintOperationResult result;
   GtkPrintOperationWin32 *op_win32;
   IPrintDialogCallback *callback;
+  HPROPSHEETPAGE prop_page;
   
   *do_print = FALSE;
 
+  op_win32 = g_new0 (GtkPrintOperationWin32, 1);
+  op->priv->platform_data = op_win32;
+  op->priv->free_platform_data = (GDestroyNotify) op_win32_free;
+  
   if (parent == NULL)
     {
       invisible = gtk_invisible_new ();
@@ -1338,8 +1468,18 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   printdlgex->hInstance = 0;
   printdlgex->lpPrintTemplateName = NULL;
   printdlgex->lpCallback = NULL;
-  printdlgex->nPropertyPages = 0;
-  printdlgex->lphPropertyPages = NULL;
+
+  g_signal_emit_by_name (op, "create-custom-widget",
+			 &op->priv->custom_widget);
+  if (op->priv->custom_widget) {
+    prop_page = create_application_page (op);
+    printdlgex->nPropertyPages = 1;
+    printdlgex->lphPropertyPages = &prop_page;
+  } else {
+    printdlgex->nPropertyPages = 0;
+    printdlgex->lphPropertyPages = NULL;
+  }
+  
   printdlgex->nStartPage = START_PAGE_GENERAL;
   printdlgex->dwResultAction = 0;
 
@@ -1348,7 +1488,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   callback = print_callback_new ();
   printdlgex->lpCallback = (IUnknown *)callback;
   got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
-  
+
   hResult = PrintDlgExW(printdlgex);
   IUnknown_Release ((IUnknown *)callback);
   gdk_win32_set_modal_dialog_libgtk_only (NULL);
@@ -1426,9 +1566,6 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 	  goto out; 
 	} 
       
-      op_win32 = g_new (GtkPrintOperationWin32, 1);
-      op->priv->platform_data = op_win32;
-      op->priv->free_platform_data = (GDestroyNotify) op_win32_free;
       op_win32->hdc = printdlgex->hDC;
       op_win32->devmode = printdlgex->hDevMode;
       op_win32->devnames = printdlgex->hDevNames;

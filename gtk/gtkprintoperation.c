@@ -36,6 +36,8 @@ enum {
   DRAW_PAGE,
   END_PRINT,
   STATUS_CHANGED,
+  CREATE_CUSTOM_WIDGET,
+  CUSTOM_WIDGET_APPLY,
   LAST_SIGNAL
 };
 
@@ -230,6 +232,29 @@ gtk_print_operation_get_property (GObject    *object,
     }
 }
 
+static GtkWidget *
+gtk_print_operation_create_custom_widget (GtkPrintOperation *operation)
+{
+  return NULL;
+}
+
+static gboolean
+custom_widget_accumulator (GSignalInvocationHint *ihint,
+			   GValue                *return_accu,
+			   const GValue          *handler_return,
+			   gpointer               dummy)
+{
+  gboolean continue_emission;
+  GtkWidget *widget;
+  
+  widget = g_value_get_pointer (handler_return);
+  if (widget != NULL)
+    g_value_set_pointer (return_accu, widget);
+  continue_emission = (widget == NULL);
+  
+  return continue_emission;
+}
+
 static void
 gtk_print_operation_class_init (GtkPrintOperationClass *class)
 {
@@ -238,6 +263,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   gobject_class->set_property = gtk_print_operation_set_property;
   gobject_class->get_property = gtk_print_operation_get_property;
   gobject_class->finalize = gtk_print_operation_finalize;
+
+  class->create_custom_widget = gtk_print_operation_create_custom_widget;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
 
@@ -384,12 +411,60 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   signals[STATUS_CHANGED] =
     g_signal_new (I_("status-changed"),
-		     G_TYPE_FROM_CLASS (class),
-		     G_SIGNAL_RUN_LAST,
-		     G_STRUCT_OFFSET (GtkPrintOperationClass, status_changed),
-		     NULL, NULL,
-		     g_cclosure_marshal_VOID__VOID,
-		     G_TYPE_NONE, 0);
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, status_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+
+
+  /**
+   * GtkPrintOperation::get-custom-widget:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   *
+   * Gets emitted when displaying the print dialog. If you return a
+   * widget in a handler for this signal it will be added to a custom
+   * tab in the print dialog. You typically return a container widget
+   * with multiple widgets in it.
+   *
+   * The print dialog owns the returned widget, and its lifetime
+   * isn't controlled by the app. However, the widget is guaranteed
+   * to stay around until the custom-widget-apply signal is emitted
+   * on the operation. Then you can read out any information you need
+   * from the widgets.
+   *
+   * Since: 2.10
+   */
+  signals[CREATE_CUSTOM_WIDGET] =
+    g_signal_new (I_("create-custom-widget"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, create_custom_widget),
+		  custom_widget_accumulator, NULL,
+		  _gtk_marshal_POINTER__VOID,
+		  G_TYPE_POINTER, 0);
+
+  /**
+   * GtkPrintOperation::custom-widget-apply:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @widget: the custom widget added in create-custom-widget
+   *
+   * This signal gets emitted right before begin-print if you added
+   * a custom widget in the create-custom-widget handler. When you get
+   * this signal you should read the information from the custom widgets,
+   * as the widgets are not guaraneed to be around at a later time.
+   *
+   * Since: 2.10
+   */
+  signals[CUSTOM_WIDGET_APPLY] =
+    g_signal_new (I_("custom-widget-apply"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, custom_widget_apply),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GTK_TYPE_WIDGET);
 
   /**
    * GtkPrintOperation:default-page-setup:

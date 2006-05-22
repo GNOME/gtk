@@ -245,6 +245,8 @@ typedef struct {
   char *text;
   PangoLayout *layout;
   GList *page_breaks;
+  GtkWidget *font_button;
+  char *font;
 } PrintData;
 
 static void
@@ -265,7 +267,7 @@ begin_print (GtkPrintOperation *operation,
 
   print_data->layout = gtk_print_context_create_layout (context);
 
-  desc = pango_font_description_from_string ("Sans 12");
+  desc = pango_font_description_from_string (print_data->font);
   pango_layout_set_font_description (print_data->layout, desc);
   pango_font_description_free (desc);
 
@@ -391,6 +393,42 @@ status_changed_cb (GtkPrintOperation *op,
   update_statusbar ();
 }
 
+static GtkWidget *
+create_custom_widget (GtkPrintOperation *operation,
+		      PrintData *data)
+{
+  GtkWidget *vbox, *hbox, *font, *label;
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+
+  hbox = gtk_hbox_new (FALSE, 8);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (hbox);
+
+  label = gtk_label_new ("Font:");
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+  
+  font = gtk_font_button_new_with_font  (data->font);
+  gtk_box_pack_start (GTK_BOX (hbox), font, FALSE, FALSE, 0);
+  gtk_widget_show (font);
+  data->font_button = font;
+
+  return vbox;
+}
+
+static void
+custom_widget_apply (GtkPrintOperation *operation,
+		     GtkWidget *widget,
+		     PrintData *data)
+{
+  const char *selected_font;
+  selected_font = gtk_font_button_get_font_name  (GTK_FONT_BUTTON (data->font_button));
+  g_free (data->font);
+  data->font = g_strdup (selected_font);
+}
+
 static void
 do_print (GtkAction *action)
 {
@@ -401,6 +439,7 @@ do_print (GtkAction *action)
   GError *error;
 
   print_data.text = get_text ();
+  print_data.font = g_strdup ("Sans 12");
 
   print = gtk_print_operation_new ();
 
@@ -414,7 +453,9 @@ do_print (GtkAction *action)
   
   g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), &print_data);
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), &print_data);
-
+  g_signal_connect (print, "create_custom_widget", G_CALLBACK (create_custom_widget), &print_data);
+  g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), &print_data);
+  
   error = NULL;
   res = gtk_print_operation_run (print, GTK_WINDOW (main_window), &error);
 
@@ -447,8 +488,10 @@ do_print (GtkAction *action)
       g_signal_connect (print, "status_changed",
 			G_CALLBACK (status_changed_cb), NULL);
     }
-  
+
   g_object_unref (print);
+  g_free (print_data.text);
+  g_free (print_data.font);
 }
 
 static void
@@ -671,6 +714,7 @@ create_window (void)
 int
 main (int argc, char **argv)
 {
+  g_set_application_name ("Print editor");
   gtk_init (&argc, &argv);
 
   create_window ();

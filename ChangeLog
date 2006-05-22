@@ -1,3 +1,27 @@
+2006-05-22  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkmain.c:
+	Make sure grab-notify is emitted on toplevels as well as 
+	child widgets.
+
+	* gtk/Makefile.am:
+	* gtk/gtkwin32embedwidget.[ch]
+	Add new widget used for win32 port to embed gtk+
+	widgets in windows dialog.
+
+	* gtk/gtkmarshalers.list:
+	Add POINTER:VOID
+
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation.[ch]:
+	Generic support for custom widgets in print dialog.
+
+	* gtk/gtkprintoperation-win32.c:
+	Implement custom widget support for win32.
+
+	* tests/print-editor.c:
+	Allow setting of font using custom widgets in the print dialog.
+
 2006-05-22  Behdad Esfahbod  <behdad@gnome.org>
 
 	Rollback the following changes, to fix it the proper way in Pango:

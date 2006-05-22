@@ -1560,8 +1560,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       info.is_grabbed = FALSE;
 
       if (group == gtk_window_get_group (toplevel))
-	gtk_container_foreach (GTK_CONTAINER (toplevel), 
-			       gtk_grab_notify_foreach, &info);
+	gtk_grab_notify_foreach (GTK_WIDGET (toplevel), &info);
       g_object_unref (toplevel);
     }
 
