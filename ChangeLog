@@ -1,3 +1,17 @@
+2006-05-22  Behdad Esfahbod  <behdad@gnome.org>
+
+	Rollback the following changes, to fix it the proper way in Pango:
+
+	* gdk/gdkinternals.h:
+	* gdk/gdkscreen.c (gdk_screen_class_init), (gdk_screen_finalize),
+	(update_fontmap_resolution), (gdk_screen_set_resolution):  Add new
+	function _gdk_screen_get_font_map() and have one fontmap per screen,
+	with the correct resolution set on it.
+
+	* gdk/gdkpango.c (gdk_pango_context_get_for_screen): Use
+	_gdk_screen_get_font_map() instead of setting resolution on the
+	PangoCairoContext.  (#342529)
+
 2006-05-22  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.h:
