@@ -1,5 +1,8 @@
 2006-05-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_class_init): Add docs
+	for new style properties.  (#342535, Mart Raudsepp)
+
 	* gdk/x11/gdkscreen-x11.c: Remove _gdk_x11_screen_request_cm_notification
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Directly call 

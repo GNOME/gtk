@@ -1481,6 +1481,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       P_("Aspect ratio with which to draw insertion cursor"),
 							       0.0, 1.0, 0.04,
 							       GTK_PARAM_READABLE));
+
+/**
+ * GtkWidget:draw-border:
+ *
+ * The "draw-border" property defines the size of areas outside 
+ * the widget's allocation to draw.
+ *
+ * Since: 2.8
+ */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("draw-border",
 							       P_("Draw Border"),
@@ -1488,6 +1497,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE));
 
+/**
+ * GtkWidget:link-color:
+ *
+ * The "link-color" property defines the color of unvisited links.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("link-color",
 							       P_("Unvisited Link Color"),
@@ -1495,6 +1511,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GDK_TYPE_COLOR,
 							       GTK_PARAM_READABLE));
 
+/**
+ * GtkWidget:visited-link-color:
+ *
+ * The "visited-link-color" property defines the color of visited links.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("visited-link-color",
 							       P_("Visited Link Color"),
@@ -1502,6 +1525,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GDK_TYPE_COLOR,
 							       GTK_PARAM_READABLE));
 
+/**
+ * GtkWidget:wide-separators:
+ *
+ * The "wide-separators" property defines whether separators have 
+ * configurable width and should be drawn using a box instead of a line.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_boolean ("wide-separators",
                                                                  P_("Wide Separators"),
@@ -1509,6 +1540,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
+/**
+ * GtkWidget:separator-width:
+ *
+ * The "separator-width" property defines the width of separators.
+ * This property only takes effect if "wide-separators" is %TRUE.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-width",
                                                              P_("Separator Width"),
@@ -1516,18 +1555,44 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              0, G_MAXINT, 0,
                                                              GTK_PARAM_READABLE));
 
+/**
+ * GtkWidget:separator-height:
+ *
+ * The "separator-height" property defines the height of separators.
+ * This property only takes effect if "wide-separators" is %TRUE.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-height",
                                                              P_("Separator Height"),
-                                                             P_("The height of separators if wide-separators is TRUE"),
+                                                             P_("The height of separators if \"wide-separators\" is TRUE"),
                                                              0, G_MAXINT, 0,
                                                              GTK_PARAM_READABLE));
+
+/**
+ * GtkWidget:scroll-arrow-hlength:
+ *
+ * The "scroll-arrow-hlength" property defines the length of 
+ * horizontal scroll arrows.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("scroll-arrow-hlength",
                                                              P_("Horizontal Scroll Arrow Length"),
                                                              P_("The length of horizontal scroll arrows"),
                                                              1, G_MAXINT, 16,
                                                              GTK_PARAM_READABLE));
+
+/**
+ * GtkWidget:scroll-arrow-vlength:
+ *
+ * The "scroll-arrow-vlength" property defines the length of 
+ * vertical scroll arrows.
+ *
+ * Since: 2.10
+ */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("scroll-arrow-vlength",
                                                              P_("Vertical Scroll Arrow Length"),
