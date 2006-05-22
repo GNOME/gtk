@@ -1,5 +1,8 @@
 2006-05-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (dialog_set_scale): Don't return
+	a value from a void function.
+
 	* gtk/gtkprinter.c (_gtk_printer_prepare_for_print) 
 	(_gtk_printer_get_settings_from_options) 
 	(_gtk_printer_request_details): Don't return values from void

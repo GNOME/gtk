@@ -1655,8 +1655,7 @@ static void
 dialog_set_scale (GtkPrintUnixDialog *dialog, 
                   gdouble             val)
 {
-  return gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->priv->scale_spin),
-				    val);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->priv->scale_spin), val);
 }
 
 static GtkPageSet
