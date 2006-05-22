@@ -40,6 +40,8 @@ testmerge
 testmultidisplay
 testmultiscreen
 testnotebookdnd
+testnouiprint
+testprint
 testrecentchooser
 testrgb
 testselection
