@@ -1743,7 +1743,7 @@ recent_app_info_free (RecentAppInfo *app_info)
  * @app_name: the name of the application that has registered this item
  * @app_exec: return location for the string containing the command line
  * @count: return location for the number of times this item was registered
- * @time: return location for the timestamp this item was last registered
+ * @time_: return location for the timestamp this item was last registered
  *    for this application
  *
  * Gets the data regarding the application that has registered the resource
@@ -1763,7 +1763,7 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 				      const gchar    *app_name,
 				      gchar         **app_exec,
 				      guint          *count,
-				      time_t         *time)
+				      time_t         *time_)
 {
   RecentAppInfo *ai;
   
@@ -1788,7 +1788,7 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
     *count = ai->count;
   
   if (time)
-    *time = ai->stamp;
+    *time_ = ai->stamp;
 
   return TRUE;
 }

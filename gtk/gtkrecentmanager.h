@@ -182,7 +182,7 @@ gboolean              gtk_recent_info_get_application_info (GtkRecentInfo  *info
 							    const gchar    *app_name,
 							    gchar         **app_exec,
 							    guint          *count,
-							    time_t         *time);
+							    time_t         *time_);
 gchar **              gtk_recent_info_get_applications     (GtkRecentInfo  *info,
 							    gsize          *length) G_GNUC_MALLOC;
 gchar *               gtk_recent_info_last_application     (GtkRecentInfo  *info) G_GNUC_MALLOC;
