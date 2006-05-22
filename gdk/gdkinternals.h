@@ -29,6 +29,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
+#include <pango/pango.h>
 
 #ifndef __GDK_INTERNALS_H__
 #define __GDK_INTERNALS_H__
@@ -403,6 +404,10 @@ void _gdk_windowing_gc_get_foreground (GdkGC    *gc,
 /* Queries the current background color of a GdkGC */
 void _gdk_windowing_gc_get_background (GdkGC    *gc,
 				       GdkColor *color);
+
+/* Gets the fontmap for screen */
+PangoFontMap *
+_gdk_screen_get_font_map (GdkScreen *screen);
 
 /************************************
  * Initialization and exit routines *

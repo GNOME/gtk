@@ -1416,19 +1416,15 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   PangoFontMap *fontmap;
   PangoContext *context;
   const cairo_font_options_t *options;
-  double dpi;
   
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  fontmap = pango_cairo_font_map_get_default ();
+  fontmap = _gdk_screen_get_font_map (screen);
   
   context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
 
   options = gdk_screen_get_font_options (screen);
   pango_cairo_context_set_font_options (context, options);
-
-  dpi = gdk_screen_get_resolution (screen);
-  pango_cairo_context_set_resolution (context, dpi);
 
   return context;
 }
