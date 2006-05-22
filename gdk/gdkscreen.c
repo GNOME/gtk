@@ -25,8 +25,21 @@
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
 #include "gdkwindow.h"
+#include "gdkinternals.h"
 #include "gdkscreen.h"
 #include "gdkalias.h"
+
+
+#define GDK_SCREEN_GET_PRIVATE(o)  \
+    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GDK_TYPE_SCREEN, GdkScreenPrivate))
+
+typedef struct _GdkScreenPrivate GdkScreenPrivate;
+
+struct _GdkScreenPrivate
+{
+  PangoFontMap *fontmap;
+};
+
 
 static void gdk_screen_class_init  (GdkScreenClass *klass);
 static void gdk_screen_init        (GdkScreen      *screen);
@@ -98,6 +111,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  g_type_class_add_private (klass, sizeof (GdkScreenPrivate));
 }
 
 static void
@@ -128,9 +143,13 @@ static void
 gdk_screen_finalize (GObject *object)
 {
   GdkScreen *screen = GDK_SCREEN (object);
-
+  GdkScreenPrivate *priv = GDK_SCREEN_GET_PRIVATE (screen);
+ 
   if (screen->font_options)
       cairo_font_options_destroy (screen->font_options);
+ 
+  if (priv->fontmap)
+      g_object_unref (priv->fontmap);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -337,6 +356,48 @@ gdk_screen_height_mm (void)
   return gdk_screen_get_height_mm (gdk_screen_get_default ());
 }
 
+static void
+update_fontmap_resolution (GdkScreen                  *screen)
+{
+  GdkScreenPrivate *priv = GDK_SCREEN_GET_PRIVATE (screen);
+  double dpi = screen->resolution;
+
+  if (dpi < 0)
+    dpi = 96.;
+
+  if (priv->fontmap)
+    pango_cairo_font_map_set_resolution (priv->fontmap, dpi);
+}
+
+/**
+ * _gdk_screen_get_font_map:
+ * @screen: a #GdkScreen
+ *
+ * Gets the Pango fontmap for this screen that is used to create
+ * #PangoContext, with the right resolution set on it.
+ *
+ * Return value: the fontmap.
+ *
+ * Since: 2.10
+ **/
+PangoFontMap *
+_gdk_screen_get_font_map (GdkScreen *screen)
+{
+  GdkScreenPrivate *priv;
+  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  priv = GDK_SCREEN_GET_PRIVATE (screen);
+
+  if (G_UNLIKELY (!priv->fontmap))
+    {
+      priv->fontmap = pango_cairo_font_map_new ();
+      update_fontmap_resolution (screen);
+    }
+    
+  return priv->fontmap;
+}
+
 /**
  * gdk_screen_set_font_options_libgtk_only:
  * @screen: a #GdkScreen
@@ -404,10 +465,14 @@ gdk_screen_set_resolution_libgtk_only (GdkScreen *screen,
 {
     g_return_if_fail (GDK_IS_SCREEN (screen));
 
-    if (dpi >= 0)
+    if (dpi < 0)
+      dpi = -1;
+
+    if (dpi != screen->resolution)
+      {
 	screen->resolution = dpi;
-    else
-	screen->resolution = -1.;
+        update_fontmap_resolution (screen);
+      }
 }
 
 /**
