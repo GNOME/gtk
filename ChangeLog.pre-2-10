@@ -1,5 +1,17 @@
 2006-05-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter.c (_gtk_printer_prepare_for_print) 
+	(_gtk_printer_get_settings_from_options) 
+	(_gtk_printer_request_details): Don't return values from void
+	functions.
+
+	* gtk/gtkrecentchooserutils.c (delegate_unselect_uri): Don't
+	return a value from a void function.
+
+	* gtk/gtkfilesystem.c (gtk_file_system_cancel_operation): Don't
+	return a value from a void function.  Also, don't put 
+	semicolons behind G_DEFINE_TYPE. (#342543)
+
 	* gtk/gtkwidget.c (gtk_widget_class_init): Add docs
 	for new style properties.  (#342535, Mart Raudsepp)
 

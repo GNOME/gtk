@@ -496,7 +496,7 @@ gtk_file_system_cancel_operation (GtkFileSystemHandle *handle)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_HANDLE (handle));
 
-  return GTK_FILE_SYSTEM_GET_IFACE (handle->file_system)->cancel_operation (handle);
+  GTK_FILE_SYSTEM_GET_IFACE (handle->file_system)->cancel_operation (handle);
 }
 
 /**
@@ -1245,7 +1245,7 @@ struct _GtkFileSystemModuleClass
   GTypeModuleClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkFileSystemModule, _gtk_file_system_module, G_TYPE_TYPE_MODULE);
+G_DEFINE_TYPE (GtkFileSystemModule, _gtk_file_system_module, G_TYPE_TYPE_MODULE)
 #define GTK_TYPE_FILE_SYSTEM_MODULE       (_gtk_file_system_module_get_type ())
 #define GTK_FILE_SYSTEM_MODULE(module)	  (G_TYPE_CHECK_INSTANCE_CAST ((module), GTK_TYPE_FILE_SYSTEM_MODULE, GtkFileSystemModule))
 

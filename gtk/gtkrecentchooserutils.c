@@ -226,7 +226,7 @@ static void
 delegate_unselect_uri (GtkRecentChooser *chooser,
 		       const gchar      *uri)
 {
-  return gtk_recent_chooser_unselect_uri (get_delegate (chooser), uri);
+ gtk_recent_chooser_unselect_uri (get_delegate (chooser), uri);
 }
 
 static GList *

@@ -656,7 +656,7 @@ void
 _gtk_printer_request_details (GtkPrinter *printer)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
-  return backend_class->printer_request_details (printer);
+  backend_class->printer_request_details (printer);
 }
 
 GtkPrinterOptionSet *
@@ -682,7 +682,7 @@ _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrintSettings    *settings)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
-  return backend_class->printer_get_settings_from_options (printer, options, settings);
+  backend_class->printer_get_settings_from_options (printer, options, settings);
 }
 
 void
@@ -692,7 +692,7 @@ _gtk_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPageSetup     *page_setup)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
-  return backend_class->printer_prepare_for_print (printer, print_job, settings, page_setup);
+  backend_class->printer_prepare_for_print (printer, print_job, settings, page_setup);
 }
 
 cairo_surface_t *
