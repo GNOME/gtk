@@ -420,7 +420,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
 
   /**
-   * GtkPrintOperation::get-custom-widget:
+   * GtkPrintOperation::create-custom-widget:
    * @operation: the #GtkPrintOperation on which the signal was emitted
    *
    * Gets emitted when displaying the print dialog. If you return a
@@ -433,6 +433,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * to stay around until the custom-widget-apply signal is emitted
    * on the operation. Then you can read out any information you need
    * from the widgets.
+   *
+   * Returns: A custom widget that gets embedded in the print dialog,
+   *          or %NULL
    *
    * Since: 2.10
    */
