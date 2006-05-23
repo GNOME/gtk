@@ -258,13 +258,14 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-17 07:04+0200\n"
-"PO-Revision-Date: 2006-05-17 10:50+0530\n"
+"POT-Creation-Date: 2006-05-23 00:13+0200\n"
+"PO-Revision-Date: 2006-05-23 09:16+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -272,6 +273,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -3551,99 +3553,101 @@ msgstr "પ્રિન્ટર સુયોજનો"
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:374
+#: ../gtk/gtkprintoperation.c:486
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:375
+#: ../gtk/gtkprintoperation.c:487
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:393 ../gtk/gtkprintunixdialog.c:235
+#: ../gtk/gtkprintoperation.c:505 ../gtk/gtkprintunixdialog.c:235
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:394 ../gtk/gtkprintunixdialog.c:236
+#: ../gtk/gtkprintoperation.c:506 ../gtk/gtkprintunixdialog.c:236
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:412
+#: ../gtk/gtkprintoperation.c:524
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: ../gtk/gtkprintoperation.c:413
+#: ../gtk/gtkprintoperation.c:525
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: ../gtk/gtkprintoperation.c:436
+#: ../gtk/gtkprintoperation.c:548
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: ../gtk/gtkprintoperation.c:437
+#: ../gtk/gtkprintoperation.c:549
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:458 ../gtk/gtkprintunixdialog.c:225
+#: ../gtk/gtkprintoperation.c:570 ../gtk/gtkprintunixdialog.c:225
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:459
+#: ../gtk/gtkprintoperation.c:571
 msgid "The current page in the document."
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું."
 
-#: ../gtk/gtkprintoperation.c:480
+#: ../gtk/gtkprintoperation.c:592
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: ../gtk/gtkprintoperation.c:481
+#: ../gtk/gtkprintoperation.c:593
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
 
-#: ../gtk/gtkprintoperation.c:501
+#: ../gtk/gtkprintoperation.c:613
 msgid "Track Print Status"
 msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
 
-#: ../gtk/gtkprintoperation.c:502
+#: ../gtk/gtkprintoperation.c:614
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr "જો TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
+msgstr ""
+"જો TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન "
+"પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
 
-#: ../gtk/gtkprintoperation.c:519
+#: ../gtk/gtkprintoperation.c:631
 msgid "Unit"
 msgstr "એકમ"
 
-#: ../gtk/gtkprintoperation.c:520
+#: ../gtk/gtkprintoperation.c:632
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: ../gtk/gtkprintoperation.c:537
+#: ../gtk/gtkprintoperation.c:649
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: ../gtk/gtkprintoperation.c:538
+#: ../gtk/gtkprintoperation.c:650
 msgid "TRUE if gtk_print_operation_run() should show the print dialog."
 msgstr "TRUE જો gtk_print_operation_run() એ છાપન સંવાદ બતાવતું હોવું જોઈએ."
 
-#: ../gtk/gtkprintoperation.c:560 ../gtk/gtkprintoperation.c:561
+#: ../gtk/gtkprintoperation.c:672 ../gtk/gtkprintoperation.c:673
 msgid "PDF target filename"
 msgstr "PDF લક્ષ્ય ફાઈલનામ"
 
-#: ../gtk/gtkprintoperation.c:575
+#: ../gtk/gtkprintoperation.c:687
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:576
+#: ../gtk/gtkprintoperation.c:688
 msgid "The status of the print operation"
 msgstr "છાપન પ્રક્રિયાની પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:596
+#: ../gtk/gtkprintoperation.c:708
 msgid "Status String"
 msgstr "પરિસ્થિતિ શબ્દમાળા"
 
-#: ../gtk/gtkprintoperation.c:597
+#: ../gtk/gtkprintoperation.c:709
 msgid "A human-readable description of the status"
 msgstr "પરિસ્થિતિનું માનવીય-વાંચનીય વર્ણન"
 
@@ -5790,35 +5794,35 @@ msgstr "કર્સર લીટી માટેનો ધારેલો ગ�
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ધારેલો ગુણોત્તર કે જેનાથી દાખલ કરવા માટેનુ કર્સર દોરાય છે"
 
-#: ../gtk/gtkwidget.c:1486
+#: ../gtk/gtkwidget.c:1495
 msgid "Draw Border"
 msgstr "કિનારી દોરો"
 
-#: ../gtk/gtkwidget.c:1487
+#: ../gtk/gtkwidget.c:1496
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "દોરવા માટેના વિજેટની સોંપણીની બાહરના વિસ્તારોનું માપ"
 
-#: ../gtk/gtkwidget.c:1493
+#: ../gtk/gtkwidget.c:1509
 msgid "Unvisited Link Color"
 msgstr "નહિં મુલાકાત લેવાયેલ કડીનો રંગ"
 
-#: ../gtk/gtkwidget.c:1494
+#: ../gtk/gtkwidget.c:1510
 msgid "Color of unvisited links"
 msgstr "નહિં મુલાકાત લેવાયેલ કડીઓનો રંગ"
 
-#: ../gtk/gtkwidget.c:1500
+#: ../gtk/gtkwidget.c:1523
 msgid "Visited Link Color"
 msgstr "મુલાકાત લેવાયેલ કડીનો રંગ"
 
-#: ../gtk/gtkwidget.c:1501
+#: ../gtk/gtkwidget.c:1524
 msgid "Color of visited links"
 msgstr "મુલાકાત લેવાયેલ કડીઓનો રંગ"
 
-#: ../gtk/gtkwidget.c:1507
+#: ../gtk/gtkwidget.c:1538
 msgid "Wide Separators"
 msgstr "મોટા વિભાજકો"
 
-#: ../gtk/gtkwidget.c:1508
+#: ../gtk/gtkwidget.c:1539
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -5826,35 +5830,35 @@ msgstr ""
 "શું વિભાજકો પાસે રૂપરેખાંકન કરી શકાય તેવી પહોળાઈ છે અને તે લીટીની જગ્યાએ બોક્સથી દોરાવી "
 "જોઈએ"
 
-#: ../gtk/gtkwidget.c:1514
+#: ../gtk/gtkwidget.c:1553
 msgid "Separator Width"
 msgstr "વિભાજક પહોળાઈ"
 
-#: ../gtk/gtkwidget.c:1515
+#: ../gtk/gtkwidget.c:1554
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "જો મોટા-વિભાજકો એ TRUE હોય તો વિભાજકોની પહોળાઈ"
 
-#: ../gtk/gtkwidget.c:1521
+#: ../gtk/gtkwidget.c:1568
 msgid "Separator Height"
 msgstr "વિભાજક ઊંચાઈ"
 
-#: ../gtk/gtkwidget.c:1522
-msgid "The height of separators if wide-separators is TRUE"
-msgstr "જો મોટા-વિભાજકો એ TRUE હોય તો વિભાજકોની ઊંચાઈ"
+#: ../gtk/gtkwidget.c:1569
+msgid "The height of separators if \"wide-separators\" is TRUE"
+msgstr "જો \"મોટા-વિભાજકો\" એ TRUE હોય તો વિભાજકોની ઊંચાઈ"
 
-#: ../gtk/gtkwidget.c:1527
+#: ../gtk/gtkwidget.c:1583
 msgid "Horizontal Scroll Arrow Length"
 msgstr "આડી સરકાવવાની તીરની લંબાઈ"
 
-#: ../gtk/gtkwidget.c:1528
+#: ../gtk/gtkwidget.c:1584
 msgid "The length of horizontal scroll arrows"
 msgstr "આડી સરકાવવાની તીરોની લંબાઈ"
 
-#: ../gtk/gtkwidget.c:1533
+#: ../gtk/gtkwidget.c:1598
 msgid "Vertical Scroll Arrow Length"
 msgstr "ઊભી સરકાવવાની તીરની લંબાઈ"
 
-#: ../gtk/gtkwidget.c:1534
+#: ../gtk/gtkwidget.c:1599
 msgid "The length of vertical scroll arrows"
 msgstr "ઊભી સરકાવવાની તીરોની લંબાઈ"
 
