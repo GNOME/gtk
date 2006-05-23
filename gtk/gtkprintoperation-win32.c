@@ -471,7 +471,8 @@ win32_poll_status_timeout (GtkPrintOperation *op)
 
 static void
 win32_end_run (GtkPrintOperation *op,
-	       gboolean wait)
+	       gboolean           wait,
+	       gboolean           cancelled)
 {
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
   LPDEVNAMES devnames;
@@ -1616,7 +1617,7 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
 
   _gtk_print_operation_platform_backend_run_dialog (op, parent, &do_print, NULL);
   if (do_print)
-    print_cb (op, FALSE);
+    print_cb (op, parent, FALSE);
   else
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 }

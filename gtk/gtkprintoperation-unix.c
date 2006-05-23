@@ -135,9 +135,13 @@ unix_finish_send  (GtkPrintJob *job,
 
 static void
 unix_end_run (GtkPrintOperation *op,
-	      gboolean wait)
+	      gboolean           wait,
+	      gboolean           cancelled)
 {
   GtkPrintOperationUnix *op_unix = op->priv->platform_data;
+
+  if (cancelled)
+    return;
 
   if (wait)
     op_unix->loop = g_main_loop_new (NULL, FALSE);
@@ -293,7 +297,7 @@ finish_print (PrintResponseData *rdata,
   if (rdata->print_cb)
     {
       if (rdata->do_print)
-        rdata->print_cb (op, FALSE); 
+        rdata->print_cb (op, rdata->parent, FALSE); 
       else
        _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL); 
     }

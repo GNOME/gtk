@@ -19,13 +19,16 @@
  */
 
 #include "config.h"
-#include "string.h"
+#include <string.h>
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
 #include <cairo-pdf.h>
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkmessagedialog.h"
 #include "gtkalias.h"
+
+#define SHOW_PROGRESS_TIME 1200
 
 #define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
 
@@ -52,6 +55,7 @@ enum {
   PROP_TRACK_PRINT_STATUS,
   PROP_UNIT,
   PROP_SHOW_DIALOG,
+  PROP_SHOW_PROGRESS,
   PROP_PDF_TARGET,
   PROP_STATUS,
   PROP_STATUS_STRING
@@ -105,6 +109,9 @@ gtk_print_operation_finalize (GObject *object)
   if (priv->print_pages_idle_id > 0)
     g_source_remove (priv->print_pages_idle_id);
 
+  if (priv->show_progress_timeout_id > 0)
+    g_source_remove (priv->show_progress_timeout_id);
+
   G_OBJECT_CLASS (gtk_print_operation_parent_class)->finalize (object);
 }
 
@@ -124,6 +131,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->current_page = -1;
   priv->use_full_page = FALSE;
   priv->show_dialog = TRUE;
+  priv->show_progress = FALSE;
   priv->pdf_target = NULL;
   priv->track_print_status = FALSE;
 
@@ -169,6 +177,9 @@ gtk_print_operation_set_property (GObject      *object,
       break;
     case PROP_SHOW_DIALOG:
       gtk_print_operation_set_show_dialog (op, g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_PROGRESS:
+      gtk_print_operation_set_show_progress (op, g_value_get_boolean (value));
       break;
     case PROP_PDF_TARGET:
       gtk_print_operation_set_pdf_target (op, g_value_get_string (value));
@@ -216,6 +227,9 @@ gtk_print_operation_get_property (GObject    *object,
       break;
     case PROP_SHOW_DIALOG:
       g_value_set_boolean (value, priv->show_dialog);
+      break;
+    case PROP_SHOW_PROGRESS:
+      g_value_set_boolean (value, priv->show_progress);
       break;
     case PROP_PDF_TARGET:
       g_value_set_string (value, priv->pdf_target);
@@ -651,6 +665,24 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   
+
+  /**
+   * GtkPrintOperation:show-progress:
+   *
+   * Determines whether to show a progress dialog during the 
+   * print operation.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_SHOW_PROGRESS,
+				   g_param_spec_boolean ("show-progress",
+							 P_("Show Dialog"),
+							 P_("TRUE if a progress dialog is shown while printing."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+  
+  
   /**
    * GtkPrintOperation:pdf-target:
    *
@@ -1050,7 +1082,6 @@ gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
     }
 }
 
-
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,
 				 GtkPrintStatus     status,
@@ -1200,6 +1231,37 @@ gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
     }
 }
 
+
+/**
+ * gtk_print_operation_set_show_progress:
+ * @op: a #GtkPrintOperation
+ * @show_progress: %TRUE to show a progress dialog
+ * 
+ * If @show_progress is %TRUE, the print operation will show a 
+ * progress dialog during the print operation.
+ * 
+ * Since: 2.10
+ */
+void
+gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
+				       gboolean            show_progress)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  show_progress = show_progress != FALSE;
+
+  if (priv->show_progress != show_progress)
+    {
+      priv->show_progress = show_progress;
+
+      g_object_notify (G_OBJECT (op), "show-progress");
+    }
+}
+
 /**
  * gtk_print_operation_set_pdf_target:
  * @op: a #GtkPrintOperation
@@ -1305,7 +1367,8 @@ pdf_end_page (GtkPrintOperation *op,
 
 static void
 pdf_end_run (GtkPrintOperation *op,
-	     gboolean           wait)
+	     gboolean           wait,
+	     gboolean           cancelled)
 {
   GtkPrintOperationPrivate *priv = op->priv;
 
@@ -1360,9 +1423,10 @@ run_pdf (GtkPrintOperation  *op,
 typedef struct
 {
   GtkPrintOperation *op;
+  gboolean wait;
   gint uncollated_copies;
   gint collated_copies;
-  gint uncollated, collated;
+  gint uncollated, collated, total;
 
   gint range, num_ranges;
   GtkPageRange *ranges;
@@ -1372,6 +1436,8 @@ typedef struct
 
   GtkPageSetup *initial_page_setup;
   GtkPrintContext *print_context;  
+
+  GtkWidget *progress;
 } PrintPagesData;
 
 static void
@@ -1425,16 +1491,60 @@ static void
 print_pages_idle_done (gpointer user_data)
 {
   PrintPagesData *data;
+  GtkPrintOperationPrivate *priv;
+
+  GDK_THREADS_ENTER ();
 
   data = (PrintPagesData*)user_data;
-  data->op->priv->print_pages_idle_id = 0;
+  priv = data->op->priv;
+
+  priv->print_pages_idle_id = 0;
+
+  if (priv->show_progress_timeout_id > 0)
+    {
+      g_source_remove (priv->show_progress_timeout_id);
+      priv->show_progress_timeout_id = 0;
+    }
+
+  if (data->progress)
+    gtk_widget_destroy (data->progress);
 
   g_object_unref (data->print_context);
   g_object_unref (data->initial_page_setup);
 
   g_object_unref (data->op);
   g_free (data);
+
+  GDK_THREADS_LEAVE ();
 }
+
+static void
+update_progress (PrintPagesData *data)
+{
+  GtkPrintOperationPrivate *priv; 
+  gchar *text = NULL;
+  
+  priv = data->op->priv;
+ 
+  if (data->progress)
+    {
+      if (priv->status == GTK_PRINT_STATUS_PREPARING)
+	{
+	  if (priv->nr_of_pages > 0)
+	    text = g_strdup_printf (_("Preparing %d"), priv->nr_of_pages);
+	  else
+	    text = g_strdup (_("Preparing"));
+	}
+      else if (priv->status == GTK_PRINT_STATUS_GENERATING_DATA)
+	text = g_strdup_printf (_("Printing %d"), data->total);
+      
+      if (text)
+	{
+	  g_object_set (data->progress, "text", text, NULL);
+	  g_free (text);
+	}
+    }
+ }
 
 static gboolean
 print_pages_idle (gpointer user_data)
@@ -1510,17 +1620,13 @@ print_pages_idle (gpointer user_data)
       goto out;
     }
 
+  data->total++;
   data->collated++;
   if (data->collated == data->collated_copies)
     {
       data->collated = 0;
       if (!increment_page_sequence (data))
 	{
-	  g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
-	  
-	  cairo_surface_finish (data->op->priv->surface);
-	  priv->end_run (data->op, TRUE);
-	  
 	  done = TRUE;
 
 	  goto out;
@@ -1561,14 +1667,20 @@ print_pages_idle (gpointer user_data)
 
   if (priv->cancelled)
     {
-      g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
-      
-      cairo_surface_finish (data->op->priv->surface);
-      
       _gtk_print_operation_set_status (data->op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
       
       done = TRUE;
     }
+
+  if (done)
+    {
+      g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
+      
+      cairo_surface_finish (data->op->priv->surface);
+      priv->end_run (data->op, data->wait, priv->cancelled);
+    }
+
+  update_progress (data);
 
   GDK_THREADS_LEAVE ();
 
@@ -1576,7 +1688,33 @@ print_pages_idle (gpointer user_data)
 }
   
 static void
+handle_progress_response (GtkWidget *dialog, 
+			  gint       response,
+			  gpointer   data)
+{
+  GtkPrintOperation *op = (GtkPrintOperation *)data;
+
+  gtk_widget_hide (dialog);
+  gtk_print_operation_cancel (op);
+}
+
+static gboolean
+show_progress_timeout (PrintPagesData *data)
+{
+  GDK_THREADS_ENTER ();
+
+  gtk_window_present (data->progress);
+
+  data->op->priv->show_progress_timeout_id = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
 print_pages (GtkPrintOperation *op,
+	     GtkWindow         *parent,
 	     gboolean           wait)
 {
   GtkPrintOperationPrivate *priv = op->priv;
@@ -1584,8 +1722,26 @@ print_pages (GtkPrintOperation *op,
   GtkPrintContext *print_context;
   int uncollated_copies, collated_copies;
   PrintPagesData *data;
+  GtkWidget *progress = NULL;
  
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
+
+  data = g_new0 (PrintPagesData, 1);
+
+  if (priv->show_progress)
+    {
+      progress = gtk_message_dialog_new (parent, 0, 
+					 GTK_MESSAGE_OTHER,
+					 GTK_BUTTONS_CANCEL,
+					 _("Preparing"));
+      g_signal_connect (progress, "response", 
+			G_CALLBACK (handle_progress_response), op);
+
+      priv->show_progress_timeout_id = 
+	g_timeout_add (SHOW_PROGRESS_TIME, 
+		       (GSourceFunc)show_progress_timeout,
+		       data);
+    }
 
   print_context = _gtk_print_context_new (op);
 
@@ -1605,12 +1761,13 @@ print_pages (GtkPrintOperation *op,
       collated_copies = priv->manual_num_copies;
     }
 
-  data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
+  data->wait = wait;
   data->uncollated_copies = uncollated_copies;
   data->collated_copies = collated_copies;
   data->initial_page_setup = initial_page_setup;
   data->print_context = print_context;
+  data->progress = progress;
 
   if (wait)
     {
@@ -1679,7 +1836,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 							       &do_print,
 							       error);
   if (do_print)
-    print_pages (op, TRUE);
+    print_pages (op, parent, TRUE);
   else 
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 
@@ -1720,7 +1877,7 @@ gtk_print_operation_run_async (GtkPrintOperation *op,
     {
       run_pdf (op, parent, &do_print, NULL);
       if (do_print)
-	print_pages (op, FALSE);
+	print_pages (op, parent, FALSE);
       else 
 	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
     }

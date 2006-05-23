@@ -39,9 +39,11 @@ struct _GtkPrintOperationPrivate
   guint use_full_page      : 1;
   guint show_dialog        : 1;
   guint track_print_status : 1;
+  guint show_progress      : 1;
   guint cancelled          : 1;
 
   guint print_pages_idle_id;
+  guint show_progress_timeout_id;
 
   /* Data for the print job: */
   cairo_surface_t *surface;
@@ -68,7 +70,8 @@ struct _GtkPrintOperationPrivate
   void (*end_page)   (GtkPrintOperation *operation,
 		      GtkPrintContext   *print_context);
   void (*end_run)    (GtkPrintOperation *operation,
-		      gboolean           wait);
+		      gboolean           wait,
+		      gboolean           cancelled);
 };
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *operation,
@@ -77,6 +80,7 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  GError           **error);
 
 typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
+					     GtkWindow         *parent,
 					     gboolean           wait);
 
 void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,

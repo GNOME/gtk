@@ -136,6 +136,8 @@ void                    gtk_print_operation_set_pdf_target         (GtkPrintOper
 								    const gchar        *filename);
 void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
 								    gboolean            track_status);
+void                    gtk_print_operation_set_show_progress      (GtkPrintOperation  *op,
+								    gboolean            show_progress);
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);
