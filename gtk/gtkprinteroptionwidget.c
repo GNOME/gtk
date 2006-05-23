@@ -420,7 +420,14 @@ filesave_changed_cb (GtkWidget *w,
   directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
   file =  gtk_entry_get_text (GTK_ENTRY (priv->entry));
 
-  value = g_build_filename (directory, file, NULL);
+  if (g_path_is_absolute (file))
+    value = g_strdup (file);
+#ifdef G_OS_UNIX
+  else if (file[0] == '~' && file[1] == '/')
+    value = g_build_filename (g_get_home_dir (), file + 2, NULL);
+#endif
+  else
+    value = g_build_filename (directory, file, NULL);
 
   if (value)
     gtk_printer_option_set (priv->source, value);

@@ -1,5 +1,11 @@
 2006-05-23  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprinteroptionwidget.c (filesave_changed_cb):
+	Allow absolute filenames in filename entry.
+	Patch from Yevgen Muntyan (#341679)
+
+2006-05-23  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkprintunixdialog.[ch]:
 	Add gtk_print_unix_dialog_add_custom_tab
