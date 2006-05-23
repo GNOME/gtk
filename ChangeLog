@@ -1,10 +1,16 @@
 2006-05-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (print_pages): Do the begin-print
+	emission in the idle, so that the print dialog goes away
+	before begin-print.
+
+2006-05-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkprintoperation.h: 
 	* gtk/gtkprintoperation.c: Add a boolean show-progress  
 	property, and show a progress dialog if it is set to TRUE.
-	
+
 	* gtk/gtkprintoperation.c (pdf_end_run): 
 	* gtk/gtkprintoperation-win32.c (win32_end_run): 
 	* gtk/gtkprintoperation-unix.c (unix_end_run): 

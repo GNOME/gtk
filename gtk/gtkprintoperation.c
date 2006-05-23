@@ -1562,9 +1562,34 @@ print_pages_idle (gpointer user_data)
 
   if (priv->status == GTK_PRINT_STATUS_PREPARING)
     {
+      if (!data->print_context)
+	{
+	  data->print_context = _gtk_print_context_new (data->op);
+	  data->initial_page_setup = create_page_setup (data->op);
+
+	  _gtk_print_context_set_page_setup (data->print_context, 
+					     data->initial_page_setup);
+      
+	  g_signal_emit (data->op, signals[BEGIN_PRINT], 0, data->print_context);
+      
+	  if (priv->manual_collation)
+	    {
+	      data->uncollated_copies = priv->manual_num_copies;
+	      data->collated_copies = 1;
+	    }
+	  else
+	    {
+	      data->uncollated_copies = 1;
+	      data->collated_copies = priv->manual_num_copies;
+	    }
+
+	  goto out;
+	}
+      
       if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
 	{
 	  gboolean paginated = FALSE;
+
 	  g_signal_emit (data->op, signals[PAGINATE], 0, data->print_context, &paginated);
 	  if (!paginated)
 	    goto out;
@@ -1703,7 +1728,7 @@ show_progress_timeout (PrintPagesData *data)
 {
   GDK_THREADS_ENTER ();
 
-  gtk_window_present (data->progress);
+  gtk_window_present (GTK_WINDOW (data->progress));
 
   data->op->priv->show_progress_timeout_id = 0;
 
@@ -1718,18 +1743,18 @@ print_pages (GtkPrintOperation *op,
 	     gboolean           wait)
 {
   GtkPrintOperationPrivate *priv = op->priv;
-  GtkPageSetup *initial_page_setup;
-  GtkPrintContext *print_context;
-  int uncollated_copies, collated_copies;
   PrintPagesData *data;
-  GtkWidget *progress = NULL;
  
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
 
   data = g_new0 (PrintPagesData, 1);
+  data->op = g_object_ref (op);
+  data->wait = wait;
 
   if (priv->show_progress)
     {
+      GtkWidget *progress;
+
       progress = gtk_message_dialog_new (parent, 0, 
 					 GTK_MESSAGE_OTHER,
 					 GTK_BUTTONS_CANCEL,
@@ -1741,33 +1766,9 @@ print_pages (GtkPrintOperation *op,
 	g_timeout_add (SHOW_PROGRESS_TIME, 
 		       (GSourceFunc)show_progress_timeout,
 		       data);
+
+      data->progress = progress;
     }
-
-  print_context = _gtk_print_context_new (op);
-
-  initial_page_setup = create_page_setup (op);
-  _gtk_print_context_set_page_setup (print_context, initial_page_setup);
-
-  g_signal_emit (op, signals[BEGIN_PRINT], 0, print_context);
-
-  if (priv->manual_collation)
-    {
-      uncollated_copies = priv->manual_num_copies;
-      collated_copies = 1;
-    }
-  else
-    {
-      uncollated_copies = 1;
-      collated_copies = priv->manual_num_copies;
-    }
-
-  data->op = g_object_ref (op);
-  data->wait = wait;
-  data->uncollated_copies = uncollated_copies;
-  data->collated_copies = collated_copies;
-  data->initial_page_setup = initial_page_setup;
-  data->print_context = print_context;
-  data->progress = progress;
 
   if (wait)
     {
