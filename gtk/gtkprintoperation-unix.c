@@ -30,13 +30,17 @@
 #include "gtkmarshal.h"
 #include "gtkmessagedialog.h"
 
+#include <cairo-pdf.h>
+#include <cairo-ps.h>
 #include "gtkprintunixdialog.h"
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
+#include "gtklabel.h"
 #include "gtkalias.h"
 #include "gtkintl.h"
+
 
 typedef struct {
   GtkPrintJob *job;         /* the job we are sending to the printer */
@@ -169,8 +173,9 @@ get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
 {
   GtkPrintOperationPrivate *priv = op->priv;
-  GtkWidget *pd;
+  GtkWidget *pd, *label;
   GtkPageSetup *page_setup;
+  const char *app_name;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
@@ -186,6 +191,20 @@ get_print_dialog (GtkPrintOperation *op,
                                         page_setup);
   g_object_unref (page_setup);
 
+  g_signal_emit_by_name (op, "create-custom-widget",
+			 &op->priv->custom_widget);
+
+  if (op->priv->custom_widget) {
+    app_name = g_get_application_name ();
+    if (app_name == NULL)
+      app_name = _("Application");
+    
+    label = gtk_label_new (app_name);
+    
+    gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
+					  op->priv->custom_widget, label);
+  }
+  
   return pd;
 }
   
@@ -306,6 +325,8 @@ handle_print_response (GtkWidget *dialog,
 
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
+
+      g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     } 
 
  out:  

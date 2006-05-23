@@ -2804,6 +2804,7 @@ gtk_print_unix_dialog_get_current_page
 gtk_print_unix_dialog_set_settings
 gtk_print_unix_dialog_get_settings
 gtk_print_unix_dialog_get_selected_printer
+gtk_print_unix_dialog_add_custom_tab
 #endif
 #endif
 #endif

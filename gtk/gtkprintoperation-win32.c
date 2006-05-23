@@ -1377,7 +1377,7 @@ create_application_page (GtkPrintOperation *op)
   page.pResource = template;
   app_name = g_get_application_name ();
   if (app_name == NULL)
-    app_name = "Application";
+    app_name = _("Application");
   page.pszTitle = g_utf8_to_utf16 (app_name, 
 				   -1, NULL, NULL, NULL);
   page.pfnDlgProc = pageDlgProc;

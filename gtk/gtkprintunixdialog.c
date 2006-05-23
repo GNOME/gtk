@@ -2637,6 +2637,17 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   return settings;
 }
 
+void
+gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
+				      GtkWidget *child,
+				      GtkWidget *tab_label)
+{
+  gtk_notebook_insert_page (GTK_NOTEBOOK (dialog->priv->notebook),
+			    child, tab_label, 2);
+  gtk_widget_show (child);
+  gtk_widget_show (tab_label);
+}
+
 
 #define __GTK_PRINT_UNIX_DIALOG_C__
 #include "gtkaliasdef.c"

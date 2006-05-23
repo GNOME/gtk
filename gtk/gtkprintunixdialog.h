@@ -74,7 +74,9 @@ void              gtk_print_unix_dialog_set_settings         (GtkPrintUnixDialog
 							      GtkPrintSettings   *settings);
 GtkPrintSettings *gtk_print_unix_dialog_get_settings         (GtkPrintUnixDialog *dialog);
 GtkPrinter *      gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog);
-
+void              gtk_print_unix_dialog_add_custom_tab       (GtkPrintUnixDialog *dialog,
+							      GtkWidget          *child,
+							      GtkWidget          *tab_label);
 
 G_END_DECLS
 
