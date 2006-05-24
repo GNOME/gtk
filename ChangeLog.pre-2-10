@@ -1,3 +1,9 @@
+2006-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Remove style properties when a widget
+	class gets finalized, to make style properties work in
+	dynamic types.  (#342513, Christian Persch)
+
 2006-05-24  Henrique Romano  <henrique@async.com.br>
 
 	* gtk/gtkcellview.c: (gtk_cell_view_class_init),

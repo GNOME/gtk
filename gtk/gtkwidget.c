@@ -159,6 +159,9 @@ struct _GtkStateData
 
 
 /* --- prototypes --- */
+static void	gtk_widget_class_init		(GtkWidgetClass     *klass);
+static void	gtk_widget_base_class_finalize	(GtkWidgetClass     *klass);
+static void	gtk_widget_init			(GtkWidget          *widget);
 static void	gtk_widget_set_property		 (GObject           *object,
 						  guint              prop_id,
 						  const GValue      *value,
@@ -233,6 +236,7 @@ static void gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 
 
 /* --- variables --- */
+static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
@@ -258,9 +262,44 @@ GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
 /* --- functions --- */
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkWidget, gtk_widget, GTK_TYPE_OBJECT,
-				  G_IMPLEMENT_INTERFACE (ATK_TYPE_IMPLEMENTOR,
-							 gtk_widget_accessible_interface_init))
+GType
+gtk_widget_get_type (void)
+{
+  static GType widget_type = 0;
+
+  if (G_UNLIKELY (widget_type == 0))
+    {
+      const GTypeInfo widget_info =
+      {
+	sizeof (GtkWidgetClass),
+	NULL,		/* base_init */
+	(GBaseFinalizeFunc) gtk_widget_base_class_finalize,
+	(GClassInitFunc) gtk_widget_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_init */
+	sizeof (GtkWidget),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_widget_init,
+	NULL,		/* value_table */
+      };
+
+      const GInterfaceInfo accessibility_info =
+      {
+	(GInterfaceInitFunc) gtk_widget_accessible_interface_init,
+	(GInterfaceFinalizeFunc) NULL,
+	NULL /* interface data */
+      };
+
+      widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget",
+                                           &widget_info, G_TYPE_FLAG_ABSTRACT);
+
+      g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
+                                   &accessibility_info) ;
+
+    }
+
+  return widget_type;
+}
 
 static void
 child_property_notify_dispatcher (GObject     *object,
@@ -277,7 +316,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
-  
+
+  gtk_widget_parent_class = g_type_class_peek_parent (klass);
+
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
@@ -1599,6 +1640,22 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              P_("The length of vertical scroll arrows"),
                                                              1, G_MAXINT, 16,
                                                              GTK_PARAM_READABLE));
+}
+
+static void
+gtk_widget_base_class_finalize (GtkWidgetClass *klass)
+{
+  GList *list, *node;
+
+  list = g_param_spec_pool_list_owned (style_property_spec_pool, G_OBJECT_CLASS_TYPE (klass));
+  for (node = list; node; node = node->next)
+    {
+      GParamSpec *pspec = node->data;
+
+      g_param_spec_pool_remove (style_property_spec_pool, pspec);
+      g_param_spec_unref (pspec);
+    }
+  g_list_free (list);
 }
 
 static void
