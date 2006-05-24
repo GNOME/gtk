@@ -1376,6 +1376,14 @@ gtk_print_unix_dialog_style_set (GtkWidget *widget,
 }
 
 static void
+update_range_sensitivity (GtkWidget *button,
+			  GtkWidget *range)
+{
+  gtk_widget_set_sensitive (range,
+			    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)));
+}
+
+static void
 create_main_page (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
@@ -1496,6 +1504,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
+  g_signal_connect (radio, "toggled", G_CALLBACK (update_range_sensitivity), entry);
+  update_range_sensitivity (radio, entry);
 
   table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
