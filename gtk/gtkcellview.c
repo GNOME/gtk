@@ -114,7 +114,8 @@ enum
   PROP_0,
   PROP_BACKGROUND,
   PROP_BACKGROUND_GDK,
-  PROP_BACKGROUND_SET
+  PROP_BACKGROUND_SET,
+  PROP_MODEL
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
@@ -152,6 +153,21 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                       GDK_TYPE_COLOR,
                                                       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellView:model
+   *
+   * The model for cell view
+   *
+   * since 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_MODEL,
+				   g_param_spec_object  ("model",
+							 P_("CellView model"),
+							 P_("The model for cell view"),
+							 GTK_TYPE_TREE_MODEL,
+							 GTK_PARAM_READWRITE));
+  
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
@@ -195,6 +211,9 @@ gtk_cell_view_get_property (GObject    *object,
       case PROP_BACKGROUND_SET:
         g_value_set_boolean (value, view->priv->background_set);
         break;
+      case PROP_MODEL:
+	g_value_set_object (value, view->priv->model);
+	break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -231,7 +250,10 @@ gtk_cell_view_set_property (GObject      *object,
       case PROP_BACKGROUND_SET:
         view->priv->background_set = g_value_get_boolean (value);
         break;
-      default:
+      case PROP_MODEL:
+	gtk_cell_view_set_model (view, g_value_get_object (value));
+	break;
+    default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
     }

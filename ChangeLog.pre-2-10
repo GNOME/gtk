@@ -1,3 +1,9 @@
+2006-05-24  Henrique Romano  <henrique@async.com.br>
+
+	* gtk/gtkcellview.c: (gtk_cell_view_class_init),
+	(gtk_cell_view_get_property), (gtk_cell_view_set_property):
+	Add model property for GtkCellView, part of #172535.
+
 2006-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.h: 
