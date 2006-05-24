@@ -34,6 +34,14 @@ G_BEGIN_DECLS
 #define GTK_IS_PRINT_JOB_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_JOB))
 #define GTK_PRINT_JOB_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_JOB, GtkPrintJobClass))
 
+typedef enum
+{
+  GTK_PRINT_CAPABILITY_PAGE_SET = 1 << 0,
+  GTK_PRINT_CAPABILITY_COPIES   = 1 << 1,
+  GTK_PRINT_CAPABILITY_COLLATE  = 1 << 2,
+  GTK_PRINT_CAPABILITY_REVERSE  = 1 << 3,
+  GTK_PRINT_CAPABILITY_SCALE    = 1 << 4
+} GtkPrintCapabilities;
 
 typedef struct _GtkPrintJob          GtkPrintJob;
 typedef struct _GtkPrintJobClass     GtkPrintJobClass;
@@ -57,12 +65,13 @@ struct _GtkPrintJob
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
   int num_page_ranges;
+  gboolean rotate_to_orientation;
+  
   GtkPageSet page_set;
   int num_copies;
   gboolean collate;
   gboolean reverse;
   double scale;
-  gboolean rotate_to_orientation;
 };
 
 struct _GtkPrintJobClass

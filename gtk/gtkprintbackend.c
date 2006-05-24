@@ -303,6 +303,17 @@ gtk_print_backend_load_modules ()
 
 G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT)
 
+static void                 fallback_printer_request_details  (GtkPrinter          *printer);
+static gboolean             fallback_printer_mark_conflicts   (GtkPrinter          *printer,
+							       GtkPrinterOptionSet *options);
+static void                 fallback_printer_get_hard_margins (GtkPrinter          *printer,
+							       double              *top,
+							       double              *bottom,
+							       double              *left,
+							       double              *right);
+static GList *              fallback_printer_list_papers      (GtkPrinter          *printer);
+static GtkPrintCapabilities fallback_printer_get_capabilities (GtkPrinter          *printer);
+  
 static void
 gtk_print_backend_class_init (GtkPrintBackendClass *class)
 {
@@ -313,8 +324,13 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   
   object_class->dispose = gtk_print_backend_dispose;
 
+  class->printer_request_details = fallback_printer_request_details;
+  class->printer_mark_conflicts = fallback_printer_mark_conflicts;
+  class->printer_get_hard_margins = fallback_printer_get_hard_margins;
+  class->printer_list_papers = fallback_printer_list_papers;
+  class->printer_get_capabilities = fallback_printer_get_capabilities;
+  
   g_type_class_add_private (class, sizeof (GtkPrintBackendPrivate));
-
   
   signals[PRINTER_LIST_CHANGED] =
     g_signal_new ("printer-list-changed",
@@ -388,6 +404,44 @@ gtk_print_backend_dispose (GObject *object)
     }
 
   backend_parent_class->dispose (object);
+}
+
+
+static void
+fallback_printer_request_details (GtkPrinter *printer)
+{
+}
+
+static gboolean
+fallback_printer_mark_conflicts (GtkPrinter *printer,
+				 GtkPrinterOptionSet *options)
+{
+  return FALSE;
+}
+
+static void
+fallback_printer_get_hard_margins (GtkPrinter *printer,
+				   double *top,
+				   double *bottom,
+				   double *left,
+				   double *right)
+{
+  *top = 0;
+  *bottom = 0;
+  *left = 0;
+  *right = 0;
+}
+
+static GList *
+fallback_printer_list_papers (GtkPrinter *printer)
+{
+  return NULL;
+}
+
+static GtkPrintCapabilities
+fallback_printer_get_capabilities (GtkPrinter *printer)
+{
+  return 0;
 }
 
 

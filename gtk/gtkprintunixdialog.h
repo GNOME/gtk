@@ -21,6 +21,7 @@
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkprinter.h>
+#include <gtk/gtkprintjob.h>
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkpagesetup.h>
 
@@ -77,6 +78,8 @@ GtkPrinter *      gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog
 void              gtk_print_unix_dialog_add_custom_tab       (GtkPrintUnixDialog *dialog,
 							      GtkWidget          *child,
 							      GtkWidget          *tab_label);
+void              gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
+								 GtkPrintCapabilities capabilities);
 
 G_END_DECLS
 

@@ -67,8 +67,6 @@ static void                 gtk_print_backend_pdf_init            (GtkPrintBacke
 static void                 pdf_printer_get_settings_from_options (GtkPrinter              *printer,
 								   GtkPrinterOptionSet     *options,
 								   GtkPrintSettings        *settings);
-static gboolean             pdf_printer_mark_conflicts            (GtkPrinter              *printer,
-								   GtkPrinterOptionSet     *options);
 static GtkPrinterOptionSet *pdf_printer_get_options               (GtkPrinter              *printer,
 								   GtkPrintSettings        *settings,
 								   GtkPageSetup            *page_setup);
@@ -76,13 +74,6 @@ static void                 pdf_printer_prepare_for_print         (GtkPrinter   
 								   GtkPrintJob             *print_job,
 								   GtkPrintSettings        *settings,
 								   GtkPageSetup            *page_setup);
-static void                 pdf_printer_get_hard_margins          (GtkPrinter              *printer,
-								   double                  *top,
-								   double                  *bottom,
-								   double                  *left,
-								   double                  *right);
-static void                 pdf_printer_request_details           (GtkPrinter              *printer);
-static GList *              pdf_printer_list_papers               (GtkPrinter              *printer);
 static void                 gtk_print_backend_pdf_print_stream    (GtkPrintBackend         *print_backend,
 								   GtkPrintJob             *job,
 								   gint                     data_fd,
@@ -166,14 +157,10 @@ gtk_print_backend_pdf_class_init (GtkPrintBackendPdfClass *class)
   backend_parent_class = g_type_class_peek_parent (class);
 
   backend_class->print_stream = gtk_print_backend_pdf_print_stream;
-  backend_class->printer_request_details = pdf_printer_request_details;
   backend_class->printer_create_cairo_surface = pdf_printer_create_cairo_surface;
   backend_class->printer_get_options = pdf_printer_get_options;
-  backend_class->printer_mark_conflicts = pdf_printer_mark_conflicts;
   backend_class->printer_get_settings_from_options = pdf_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = pdf_printer_prepare_for_print;
-  backend_class->printer_list_papers = pdf_printer_list_papers;
-  backend_class->printer_get_hard_margins = pdf_printer_get_hard_margins;
 }
 
 static cairo_status_t
@@ -364,11 +351,6 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
   gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
-static void
-pdf_printer_request_details (GtkPrinter *printer)
-{
-}
-
 static GtkPrinterOptionSet *
 pdf_printer_get_options (GtkPrinter *printer,
 			 GtkPrintSettings *settings,
@@ -398,14 +380,6 @@ pdf_printer_get_options (GtkPrinter *printer,
     gtk_printer_option_set (option, filename);
 
   return set;
-}
-
-
-static gboolean
-pdf_printer_mark_conflicts  (GtkPrinter          *printer,
-			     GtkPrinterOptionSet *options)
-{
-  return FALSE;
 }
 
 static void
@@ -446,23 +420,4 @@ pdf_printer_prepare_for_print (GtkPrinter *printer,
 
   print_job->page_set = gtk_print_settings_get_page_set (settings);
   print_job->rotate_to_orientation = TRUE;
-}
-
-static void
-pdf_printer_get_hard_margins (GtkPrinter *printer,
-                              double *top,
-                              double *bottom,
-                              double *left,
-                              double *right)
-{
-  *top = 0;
-  *bottom = 0;
-  *left = 0;
-  *right = 0;
-}
-
-static GList *
-pdf_printer_list_papers (GtkPrinter *printer)
-{
-  return NULL;
 }

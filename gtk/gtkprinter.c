@@ -726,6 +726,14 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
   backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
 }
 
+GtkPrintCapabilities
+_gtk_printer_get_capabilities (GtkPrinter *printer)
+{
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+
+  return backend_class->printer_get_capabilities (printer);
+}
+
 gint
 gtk_printer_compare (GtkPrinter *a, GtkPrinter *b)
 {

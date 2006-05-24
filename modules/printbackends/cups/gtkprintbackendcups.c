@@ -137,6 +137,7 @@ static void                 cups_printer_get_hard_margins          (GtkPrinter  
 								    double                            *bottom,
 								    double                            *left,
 								    double                            *right);
+static GtkPrintCapabilities cups_printer_get_capabilities          (GtkPrinter                        *printer);
 static void                 set_option_from_settings               (GtkPrinterOption                  *option,
 								    GtkPrintSettings                  *setting);
 static void                 cups_begin_polling_info                (GtkPrintBackendCups               *print_backend,
@@ -241,6 +242,7 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->printer_prepare_for_print = cups_printer_prepare_for_print;
   backend_class->printer_list_papers = cups_printer_list_papers;
   backend_class->printer_get_hard_margins = cups_printer_get_hard_margins;
+  backend_class->printer_get_capabilities = cups_printer_get_capabilities;
 }
 
 static cairo_status_t
@@ -2592,4 +2594,13 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
   *bottom = ppd_file->custom_margins[1];
   *right = ppd_file->custom_margins[2];
   *top = ppd_file->custom_margins[3];
+}
+
+static GtkPrintCapabilities
+cups_printer_get_capabilities (GtkPrinter *printer)
+{
+  return
+    GTK_PRINT_CAPABILITY_COPIES |
+    GTK_PRINT_CAPABILITY_COLLATE |
+    GTK_PRINT_CAPABILITY_REVERSE;
 }

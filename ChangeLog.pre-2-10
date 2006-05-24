@@ -1,3 +1,28 @@
+2006-05-24  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprintunixdialog.[ch]:
+	Add gtk_print_unix_dialog_set_manual_capabilities that controls
+	what widgets to enable in the dialog depending on the apps
+	capabilities.
+	
+	* gtk/gtkprintbackend.[ch]:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.c:
+	* gtk/gtkprintjob.h:
+	Add printer_get_capabilities to backend.
+	Move some fallback calls to the printbackend base class.
+	
+	* gtk/gtkprintoperation-unix.c:
+	Set manual capabilities
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Implement get_capabilities
+	
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Move some methods to baseclass.
+
 2006-05-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c (print_pages): Do the begin-print

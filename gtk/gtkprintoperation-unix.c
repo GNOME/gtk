@@ -183,6 +183,13 @@ get_print_dialog (GtkPrintOperation *op,
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
+  gtk_print_unix_dialog_set_manual_capabilities (GTK_PRINT_UNIX_DIALOG (pd),
+						 GTK_PRINT_CAPABILITY_PAGE_SET |
+						 GTK_PRINT_CAPABILITY_COPIES |
+						 GTK_PRINT_CAPABILITY_COLLATE |
+						 GTK_PRINT_CAPABILITY_REVERSE |
+						 GTK_PRINT_CAPABILITY_SCALE);
+
   if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
 					priv->print_settings);

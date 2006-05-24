@@ -103,6 +103,7 @@ struct _GtkPrintBackendClass
 							      double     *bottom,
 							      double     *left,
 							      double     *right);
+  GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter *printer);
 
   /* Signals */
   void (*printer_list_changed)   (GtkPrintBackend *backend);

@@ -55,6 +55,7 @@ void                 _gtk_printer_get_hard_margins          (GtkPrinter         
 							     gdouble             *left,
 							     gdouble             *right);
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
+GtkPrintCapabilities _gtk_printer_get_capabilities          (GtkPrinter          *printer);
 
 
 /* GtkPrintJob private methods: */

@@ -56,32 +56,36 @@
 #define GTK_PRINT_UNIX_DIALOG_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogPrivate))
 
-static void gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
-static void gtk_print_unix_dialog_finalize     (GObject            *object);
-static void gtk_print_unix_dialog_set_property (GObject            *object,
-						guint               prop_id,
-						const GValue       *value,
-						GParamSpec         *pspec);
-static void gtk_print_unix_dialog_get_property (GObject            *object,
-						guint               prop_id,
-						GValue             *value,
-						GParamSpec         *pspec);
-static void gtk_print_unix_dialog_style_set    (GtkWidget          *widget,
-						GtkStyle           *previous_style);
-static void populate_dialog                    (GtkPrintUnixDialog *dialog);
-static void unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
-static void selected_printer_changed           (GtkTreeSelection   *selection,
-						GtkPrintUnixDialog *dialog);
-static void clear_per_printer_ui               (GtkPrintUnixDialog *dialog);
-static void printer_added_cb                   (GtkPrintBackend    *backend,
-						GtkPrinter         *printer,
-						GtkPrintUnixDialog *dialog);
-static void printer_removed_cb                 (GtkPrintBackend    *backend,
-						GtkPrinter         *printer,
-						GtkPrintUnixDialog *dialog);
-static void printer_status_cb                  (GtkPrintBackend    *backend,
-						GtkPrinter         *printer,
-						GtkPrintUnixDialog *dialog);
+static void     gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
+static void     gtk_print_unix_dialog_finalize     (GObject            *object);
+static void     gtk_print_unix_dialog_set_property (GObject            *object,
+						    guint               prop_id,
+						    const GValue       *value,
+						    GParamSpec         *pspec);
+static void     gtk_print_unix_dialog_get_property (GObject            *object,
+						    guint               prop_id,
+						    GValue             *value,
+						    GParamSpec         *pspec);
+static void     gtk_print_unix_dialog_style_set    (GtkWidget          *widget,
+						    GtkStyle           *previous_style);
+static void     populate_dialog                    (GtkPrintUnixDialog *dialog);
+static void     unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
+static void     selected_printer_changed           (GtkTreeSelection   *selection,
+						    GtkPrintUnixDialog *dialog);
+static void     clear_per_printer_ui               (GtkPrintUnixDialog *dialog);
+static void     printer_added_cb                   (GtkPrintBackend    *backend,
+						    GtkPrinter         *printer,
+						    GtkPrintUnixDialog *dialog);
+static void     printer_removed_cb                 (GtkPrintBackend    *backend,
+						    GtkPrinter         *printer,
+						    GtkPrintUnixDialog *dialog);
+static void     printer_status_cb                  (GtkPrintBackend    *backend,
+						    GtkPrinter         *printer,
+						    GtkPrintUnixDialog *dialog);
+static void     update_collate_icon                (GtkToggleButton    *toggle_button,
+						    GtkPrintUnixDialog *dialog);
+static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
+static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
 
 enum {
   PROP_0,
@@ -108,6 +112,9 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *notebook;
 
   GtkWidget *printer_treeview;
+
+  GtkPrintCapabilities manual_capabilities;
+  GtkPrintCapabilities printer_capabilities;
   
   GtkTreeModel *printer_list;
   GtkTreeModelFilter *printer_list_filter;
@@ -1004,6 +1011,28 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 }
 
 static void
+update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
+{
+  GtkPrintCapabilities caps;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+
+  caps = priv->manual_capabilities | priv->printer_capabilities;
+
+  gtk_widget_set_sensitive (priv->page_set_combo,
+			    caps & GTK_PRINT_CAPABILITY_PAGE_SET);
+  gtk_widget_set_sensitive (priv->copies_spin,
+			    caps & GTK_PRINT_CAPABILITY_COPIES);
+  gtk_widget_set_sensitive (priv->collate_check,
+			    caps & GTK_PRINT_CAPABILITY_COLLATE);
+  gtk_widget_set_sensitive (priv->reverse_check,
+			    caps & GTK_PRINT_CAPABILITY_REVERSE);
+  gtk_widget_set_sensitive (priv->scale_spin,
+			    caps & GTK_PRINT_CAPABILITY_PAGE_SET);
+
+  update_collate_icon (NULL, dialog);
+}
+
+static void
 mark_conflicts (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
@@ -1215,11 +1244,14 @@ selected_printer_changed (GtkTreeSelection   *selection,
       g_object_unref (priv->current_printer);
     }
 
+  priv->printer_capabilities = 0;
+  
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
   priv->current_printer = printer;
 
   if (printer != NULL)
     {
+      priv->printer_capabilities = _gtk_printer_get_capabilities (printer);
       priv->options = _gtk_printer_get_options (printer, priv->initial_settings,
 							priv->page_setup);
   
@@ -1228,7 +1260,9 @@ selected_printer_changed (GtkTreeSelection   *selection,
     }
 
   update_dialog_from_settings (dialog);
+  update_dialog_from_capabilities (dialog);
 }
+
 static void
 update_collate_icon (GtkToggleButton    *toggle_button,
 		     GtkPrintUnixDialog *dialog)
@@ -1281,7 +1315,6 @@ draw_collate_cb (GtkWidget	    *widget,
 		 GdkEventExpose     *event,
 		 GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkSettings *settings;
   cairo_t *cr;
   gint size;
@@ -1289,8 +1322,8 @@ draw_collate_cb (GtkWidget	    *widget,
   gboolean collate, reverse, rtl;
   gint text_x;
 
-  collate = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->collate_check));
-  reverse = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->reverse_check));
+  collate = dialog_get_collate (dialog);
+  reverse = dialog_get_reverse (dialog);
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
   settings = gtk_widget_get_settings (widget);
@@ -1648,7 +1681,10 @@ dialog_set_print_pages (GtkPrintUnixDialog *dialog, GtkPrintPages pages)
 static gdouble
 dialog_get_scale (GtkPrintUnixDialog *dialog)
 {
-  return gtk_spin_button_get_value (GTK_SPIN_BUTTON (dialog->priv->scale_spin));
+  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->scale_spin))
+    return gtk_spin_button_get_value (GTK_SPIN_BUTTON (dialog->priv->scale_spin));
+  else
+    return 100.0;
 }
 
 static void
@@ -1661,7 +1697,10 @@ dialog_set_scale (GtkPrintUnixDialog *dialog,
 static GtkPageSet
 dialog_get_page_set (GtkPrintUnixDialog *dialog)
 {
-  return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->priv->page_set_combo));
+  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->page_set_combo))
+    return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->priv->page_set_combo));
+  else
+    return GTK_PAGE_SET_ALL;
 }
 
 static void
@@ -1675,7 +1714,9 @@ dialog_set_page_set (GtkPrintUnixDialog *dialog,
 static gint
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
-  return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dialog->priv->copies_spin));
+  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->copies_spin))
+    return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dialog->priv->copies_spin));
+  return 1;
 }
 
 static void
@@ -1689,7 +1730,9 @@ dialog_set_n_copies (GtkPrintUnixDialog *dialog,
 static gboolean
 dialog_get_collate (GtkPrintUnixDialog *dialog)
 {
-  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->collate_check));
+  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->collate_check))
+    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->collate_check));
+  return FALSE;
 }
 
 static void
@@ -1703,7 +1746,9 @@ dialog_set_collate (GtkPrintUnixDialog *dialog,
 static gboolean
 dialog_get_reverse (GtkPrintUnixDialog *dialog)
 {
-  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_check));
+  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->reverse_check))
+    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_check));
+  return FALSE;
 }
 
 static void
@@ -2648,6 +2693,26 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
   gtk_widget_show (tab_label);
 }
 
+/**
+ * gtk_print_unix_dialog_set_manual_capabilities:
+ * @dialog: a #GtkPrintUnixDialog
+ * @capabilites: the printing capabilities of your application
+ *
+ * This lets you specify the printing capabilities your application
+ * supports. For instance, if you can handle scaling the output then
+ * you pass #GTK_PRINT_CAPABILITY_SCALE. If you don't pass that, then
+ * the dialog will only let you select the scale if the printing
+ * system automatically handles scaling.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
+					       GtkPrintCapabilities capabilities)
+{
+  dialog->priv->manual_capabilities = capabilities;
+  update_dialog_from_capabilities (dialog);
+}
 
 #define __GTK_PRINT_UNIX_DIALOG_C__
 #include "gtkaliasdef.c"
