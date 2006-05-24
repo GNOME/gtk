@@ -179,7 +179,7 @@ get_print_dialog (GtkPrintOperation *op,
   GtkPrintOperationPrivate *priv = op->priv;
   GtkWidget *pd, *label;
   GtkPageSetup *page_setup;
-  const char *app_name;
+  const gchar *custom_tab_label;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
@@ -203,18 +203,24 @@ get_print_dialog (GtkPrintOperation *op,
   g_object_unref (page_setup);
 
   g_signal_emit_by_name (op, "create-custom-widget",
-			 &op->priv->custom_widget);
+			 &priv->custom_widget);
 
-  if (op->priv->custom_widget) {
-    app_name = g_get_application_name ();
-    if (app_name == NULL)
-      app_name = _("Application");
-    
-    label = gtk_label_new (app_name);
-    
-    gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
-					  op->priv->custom_widget, label);
-  }
+  if (priv->custom_widget) 
+    {
+      custom_tab_label = priv->custom_tab_label;
+      
+      if (custom_tab_label == NULL)
+	{
+	  custom_tab_label = g_get_application_name ();
+	  if (custom_tab_label == NULL)
+	    custom_tab_label = _("Application");
+	}
+
+      label = gtk_label_new (custom_tab_label);
+      
+      gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
+					    op->priv->custom_widget, label);
+    }
   
   return pd;
 }

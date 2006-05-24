@@ -58,7 +58,8 @@ enum {
   PROP_SHOW_PROGRESS,
   PROP_PDF_TARGET,
   PROP_STATUS,
-  PROP_STATUS_STRING
+  PROP_STATUS_STRING,
+  PROP_CUSTOM_TAB_LABEL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -105,6 +106,7 @@ gtk_print_operation_finalize (GObject *object)
   
   g_free (priv->pdf_target);
   g_free (priv->job_name);
+  g_free (priv->custom_tab_label);
 
   if (priv->print_pages_idle_id > 0)
     g_source_remove (priv->print_pages_idle_id);
@@ -184,6 +186,9 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_PDF_TARGET:
       gtk_print_operation_set_pdf_target (op, g_value_get_string (value));
       break;
+    case PROP_CUSTOM_TAB_LABEL:
+      gtk_print_operation_set_custom_tab_label (op, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -239,6 +244,9 @@ gtk_print_operation_get_property (GObject    *object,
       break;
     case PROP_STATUS_STRING:
       g_value_set_string (value, priv->status_string);
+      break;
+    case PROP_CUSTOM_TAB_LABEL:
+      g_value_set_string (value, priv->custom_tab_label);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -742,6 +750,24 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							"",
 							GTK_PARAM_READABLE));
   
+
+  /**
+   * GtkPrintOperation:custom-tab-label:
+   *
+   * Used as the label of the tab containing custom widgets.
+   * Note that this property may be ignored on some platforms.
+   * 
+   * If this is %NULL, GTK+ uses a default label.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_CUSTOM_TAB_LABEL,
+				   g_param_spec_string ("custom-tab-label",
+							P_("Custom tab label"),
+							P_("Label for the tab containing custom widgets."),
+							NULL,
+							GTK_PARAM_READWRITE));
 
 }
 
@@ -1261,6 +1287,32 @@ gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
       g_object_notify (G_OBJECT (op), "show-progress");
     }
 }
+
+/**
+ * gtk_print_operation_set_custom_tag_label:
+ * @op: a #GtkPrintOperation
+ * @label: the label to use, or %NULL to use the default label
+ *
+ * Sets the label for the tab holding custom widgets.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
+					  const gchar        *label)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  g_free (priv->custom_tab_label);
+  priv->custom_tab_label = g_strdup (label);
+
+  g_object_notify (G_OBJECT (op), "custom-tab-label");
+}
+
 
 /**
  * gtk_print_operation_set_pdf_target:

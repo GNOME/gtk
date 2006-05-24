@@ -1,3 +1,13 @@
+2006-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.h: 
+	* gtk/gtkprintoperation-private.h: 
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation.c: Add a custom-tab-label property.
+	
+	* gtk/gtkprintoperation-unix.c (get_print_dialog): Use it
+	here.  (#342752, Yevgen Muntyan)
+
 2006-05-24  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols:

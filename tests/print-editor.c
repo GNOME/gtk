@@ -399,6 +399,7 @@ create_custom_widget (GtkPrintOperation *operation,
 {
   GtkWidget *vbox, *hbox, *font, *label;
 
+  gtk_print_operation_set_custom_tab_label (operation, "Other");
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
 

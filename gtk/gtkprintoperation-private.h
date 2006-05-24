@@ -60,6 +60,7 @@ struct _GtkPrintOperationPrivate
   double manual_scale;
   GtkPageSet manual_page_set;
   GtkWidget *custom_widget;
+  gchar *custom_tab_label;
   
   gpointer platform_data;
   GDestroyNotify free_platform_data;

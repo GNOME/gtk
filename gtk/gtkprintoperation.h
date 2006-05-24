@@ -138,6 +138,8 @@ void                    gtk_print_operation_set_track_print_status (GtkPrintOper
 								    gboolean            track_status);
 void                    gtk_print_operation_set_show_progress      (GtkPrintOperation  *op,
 								    gboolean            show_progress);
+void                    gtk_print_operation_set_custom_tab_label   (GtkPrintOperation  *op,
+								    const gchar        *label);
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);
