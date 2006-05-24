@@ -1015,6 +1015,9 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 {
   GtkPrintCapabilities caps;
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  gboolean can_collate;
+
+  can_collate = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->copies_spin)) > 1;
 
   caps = priv->manual_capabilities | priv->printer_capabilities;
 
@@ -1023,7 +1026,8 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   gtk_widget_set_sensitive (priv->copies_spin,
 			    caps & GTK_PRINT_CAPABILITY_COPIES);
   gtk_widget_set_sensitive (priv->collate_check,
-			    caps & GTK_PRINT_CAPABILITY_COLLATE);
+			    can_collate && 
+			    (caps & GTK_PRINT_CAPABILITY_COLLATE));
   gtk_widget_set_sensitive (priv->reverse_check,
 			    caps & GTK_PRINT_CAPABILITY_REVERSE);
   gtk_widget_set_sensitive (priv->scale_spin,
@@ -1379,8 +1383,11 @@ static void
 update_range_sensitivity (GtkWidget *button,
 			  GtkWidget *range)
 {
-  gtk_widget_set_sensitive (range,
-			    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)));
+  gboolean active;
+
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+
+  gtk_widget_set_sensitive (range, active);
 }
 
 static void
@@ -1514,7 +1521,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  /* FIXMEchpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns */
+  /* FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns */
   label = gtk_label_new_with_mnemonic (_("Copie_s:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
@@ -1528,7 +1535,9 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    1, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
-
+  g_signal_connect_swapped (spinbutton, "value-changed", 
+			    G_CALLBACK (update_dialog_from_capabilities), dialog);
+  
   check = gtk_check_button_new_with_mnemonic (_("C_ollate"));
   priv->collate_check = check;
   g_signal_connect (check, "toggled", G_CALLBACK (update_collate_icon), dialog);
@@ -1536,6 +1545,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), check,
 		    0, 1, 1, 2,  GTK_FILL, 0,
 		    0, 0);
+
   check = gtk_check_button_new_with_mnemonic (_("_Reverse"));
   g_signal_connect (check, "toggled", G_CALLBACK (update_collate_icon), dialog);
   priv->reverse_check = check;

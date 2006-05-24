@@ -1,5 +1,12 @@
 2006-05-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (create_main_page): Make
+	the range entry insensitive if another range option
+	is selected.  (#342783, Caolan McNamara)
+	(update_dialog_from_capabilities): Make the collate
+	check button insensitive unless multiple copies are
+	printed  (#342781, Caolan McNamara)
+
 	* gtk/gtkwidget.c: Remove style properties when a widget
 	class gets finalized, to make style properties work in
 	dynamic types.  (#342513, Christian Persch)
