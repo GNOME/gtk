@@ -710,9 +710,14 @@ gtk_color_button_clicked (GtkButton *button)
       
       color_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);
 
-      if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW (color_dialog),
-                                      GTK_WINDOW (parent));
+      if (GTK_WIDGET_TOPLEVEL (parent) && GTK_IS_WINDOW (parent))
+        {
+          if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (color_dialog)))
+ 	    gtk_window_set_transient_for (GTK_WINDOW (color_dialog), GTK_WINDOW (parent));
+	       
+	  gtk_window_set_modal (GTK_WINDOW (color_dialog),
+				gtk_window_get_modal (GTK_WINDOW (parent)));
+	}
       
       g_signal_connect (color_dialog->ok_button, "clicked",
                         G_CALLBACK (dialog_ok_clicked), color_button);
@@ -720,10 +725,6 @@ gtk_color_button_clicked (GtkButton *button)
 			G_CALLBACK (dialog_cancel_clicked), color_button);
       g_signal_connect (color_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), color_button);
-      
-      /* If there is a grabbed window, set new dialog as modal */
-      if (gtk_grab_get_current ())
-        gtk_window_set_modal (GTK_WINDOW (color_button->priv->cs_dialog),TRUE);
     }
 
   color_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);

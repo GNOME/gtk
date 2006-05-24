@@ -697,12 +697,14 @@ gtk_font_button_clicked (GtkButton *button)
       
       font_dialog = GTK_FONT_SELECTION_DIALOG (font_button->priv->font_dialog);
       
-      if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));
-      
-      /* If there is a grabbed window, set new dialog as modal */
-      if (gtk_grab_get_current ())
-        gtk_window_set_modal (GTK_WINDOW (font_dialog), TRUE);
+      if (GTK_WIDGET_TOPLEVEL (parent) && GTK_IS_WINDOW (parent))
+        {
+          if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
+ 	    gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));
+	       
+	  gtk_window_set_modal (GTK_WINDOW (font_dialog),
+				gtk_window_get_modal (GTK_WINDOW (parent)));
+	}
 
       g_signal_connect (font_dialog->ok_button, "clicked",
                         G_CALLBACK (dialog_ok_clicked), font_button);

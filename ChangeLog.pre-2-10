@@ -1,5 +1,10 @@
 2006-05-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfontbutton.c (gtk_font_button_clicked): 
+	* gtk/gtkcolorbutton.c (gtk_color_button_clicked): 
+	Fix the handling of modality by copying what
+	GtkFileChooserButton does.  (#342754, Yevgen Muntyan)
+	
 	* gtk/gtkprintunixdialog.c (create_main_page): Make
 	the range entry insensitive if another range option
 	is selected.  (#342783, Caolan McNamara)
