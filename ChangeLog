@@ -1,5 +1,14 @@
 2006-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkstatusicon.h:
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_geometry):
+	New function that can be used to e.g. position 
+	notification bubbles wrt to the status icon.  
+	(#341450, Christian Persch, Havoc Pennington)
+
+2006-05-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Make GTK+ work as an untrusted X client. (#136571,
 	Ed Catmur)
 

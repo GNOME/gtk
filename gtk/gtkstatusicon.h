@@ -109,6 +109,10 @@ void                  gtk_status_icon_position_menu      (GtkMenu            *me
 							  gint               *y,
 							  gboolean           *push_in,
 							  gpointer            user_data);
+gboolean              gtk_status_icon_get_geometry       (GtkStatusIcon      *status_icon,
+							  GdkScreen         **screen,
+							  GdkRectangle       *area,
+							  GtkOrientation     *orientation);
 
 G_END_DECLS
 
