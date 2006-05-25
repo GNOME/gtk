@@ -88,6 +88,7 @@ static void     gdk_window_add_colormap_windows   (GdkWindow  *window);
 static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
+static void     move_to_current_desktop           (GdkWindow *window);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
@@ -730,6 +731,17 @@ gdk_window_new (GdkWindow     *parent,
     }
   else
     private->window_type = attributes->window_type;
+
+  /* Work around a bug where Xorg refuses to map toplevel InputOnly windows 
+   * from an untrusted client: http://bugs.freedesktop.org/show_bug.cgi?id=6988
+   */
+  if (attributes->wclass == GDK_INPUT_ONLY &&
+      GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
+      !G_LIKELY (GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (parent))->trusted_client))
+    {
+      g_warning ("Coercing GDK_INPUT_ONLY toplevel window to GDK_INPUT_OUTPUT to work around bug in Xorg server");
+      attributes->wclass = GDK_INPUT_OUTPUT;
+    }
 
   _gdk_window_init_position (GDK_WINDOW (private));
   if (impl->position_info.big)
@@ -2007,7 +2019,13 @@ gdk_x11_window_move_to_current_desktop (GdkWindow *window)
 
   if (toplevel->on_all_desktops)
     return;
+  
+  move_to_current_desktop (window);
+}
 
+static void
+move_to_current_desktop (GdkWindow *window)
+{
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")))
     {
@@ -3428,6 +3446,8 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
 			    GdkModifierType  *mask)
 {
   GdkScreen *default_screen;
+  Display *xdisplay;
+  Window xwindow;
   Window root = None;
   Window child;
   int rootx, rooty;
@@ -3439,10 +3459,27 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
     return;
 
   default_screen = gdk_display_get_default_screen (display);
+
+  xdisplay = GDK_SCREEN_XDISPLAY (default_screen);
+  xwindow = GDK_SCREEN_XROOTWIN (default_screen);
   
-  XQueryPointer (GDK_SCREEN_XDISPLAY (default_screen),
-		 GDK_SCREEN_XROOTWIN (default_screen),
-		 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client)) 
+    {
+      XQueryPointer (xdisplay, xwindow,
+		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+    } 
+  else 
+    {
+      XSetWindowAttributes attributes;
+      Window w;
+      
+      w = XCreateWindow (xdisplay, xwindow, 0, 0, 1, 1, 0, 
+			 CopyFromParent, InputOnly, CopyFromParent, 
+			 0, &attributes);
+      XQueryPointer (xdisplay, w, 
+		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+      XDestroyWindow (xdisplay, w);
+    }
   
   if (root != None)
     {
@@ -3476,13 +3513,28 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 
   return_val = NULL;
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      XQueryPointer (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask))
+  if (!GDK_WINDOW_DESTROYED (window)) 
     {
-      if (child)
-	return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window), child);
+      if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client)) 
+	{
+	  if (XQueryPointer (GDK_WINDOW_XDISPLAY (window),
+			     GDK_WINDOW_XID (window),
+			     &root, &child, &rootx, &rooty, &winx, &winy, &xmask))
+	    {
+	      if (child)
+		return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window), child);
+	    }
+	} 
+      else 
+	{
+	  GdkScreen *screen;
+	  int originx, originy;
+	  _gdk_windowing_get_pointer (gdk_drawable_get_display (window), &screen, 
+				      &rootx, &rooty, &xmask);
+	  gdk_window_get_origin (window, &originx, &originy);
+	  winx = rootx - originx;
+	  winy = rooty - originy;
+	}
     }
   
   *x = winx + xoffset;
@@ -3555,24 +3607,89 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
    * and the result.
    */
   gdk_x11_display_grab (display);
-  XQueryPointer (xdisplay, xwindow,
-		 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-
-  if (root == xwindow)
-    xwindow = child;
-  else
-    xwindow = root;
-  
-  while (xwindow)
+  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client)) 
     {
-      xwindow_last = xwindow;
       XQueryPointer (xdisplay, xwindow,
-		     &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
+		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+      if (root == xwindow)
+	xwindow = child;
+      else
+	xwindow = root;
+      
+      while (xwindow)
+	{
+	  xwindow_last = xwindow;
+	  XQueryPointer (xdisplay, xwindow,
+			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
+	}
+    } 
+  else 
+    {
+      gint i, screens, width, height;
+      GList *toplevels, *list;
+      Window pointer_window;
+      
+      pointer_window = None;
+      screens = gdk_display_get_n_screens (display);
+      for (i = 0; i < screens; ++i) {
+	screen = gdk_display_get_screen (display, i);
+	toplevels = gdk_screen_get_toplevel_windows (screen);
+	for (list = toplevels; list != NULL; list = g_list_next (list)) {
+	  window = GDK_WINDOW (list->data);
+	  xwindow = GDK_WINDOW_XWINDOW (window);
+	  gdk_error_trap_push ();
+	  XQueryPointer (xdisplay, xwindow,
+			 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+	  gdk_flush ();
+	  if (gdk_error_trap_pop ())
+	    continue;
+	  if (child != None) 
+	    {
+	      pointer_window = child;
+	      break;
+	    }
+	  gdk_window_get_geometry (window, NULL, NULL, &width, &height, NULL);
+	  if (winx >= 0 && winy >= 0 && winx < width && winy < height) 
+	    {
+	      /* A childless toplevel, or below another window? */
+	      XSetWindowAttributes attributes;
+	      Window w;
+	      
+	      w = XCreateWindow (xdisplay, xwindow, winx, winy, 1, 1, 0, 
+				 CopyFromParent, InputOnly, CopyFromParent, 
+				 0, &attributes);
+	      XMapWindow (xdisplay, w);
+	      XQueryPointer (xdisplay, xwindow, 
+			     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+	      XDestroyWindow (xdisplay, w);
+	      if (child == w) 
+		{
+		  pointer_window = xwindow;
+		  break;
+		}
+	    }
+	}
+	g_list_free (toplevels);
+	if (pointer_window != None)
+	  break;
+      }
+      xwindow = pointer_window;
+
+      while (xwindow)
+	{
+	  xwindow_last = xwindow;
+	  gdk_error_trap_push ();
+	  XQueryPointer (xdisplay, xwindow,
+			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
+	  gdk_flush ();
+	  if (gdk_error_trap_pop ())
+	    break;
+	}
     }
+  
   gdk_x11_display_ungrab (display);
 
-  window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
-					  xwindow_last);
+  window = gdk_window_lookup_for_display (display, xwindow_last);
   *win_x = window ? winx : -1;
   *win_y = window ? winy : -1;
 
@@ -4480,52 +4597,12 @@ gdk_window_unstick (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
-      XEvent xev;
-      Atom type;
-      gint format;
-      gulong nitems;
-      gulong bytes_after;
-      guchar *data;
-      gulong *current_desktop;
-      GdkDisplay *display = gdk_drawable_get_display (window);
-      
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
 			       NULL);
 
-      /* Get current desktop, then set it; this is a race, but not
-       * one that matters much in practice.
-       */
-      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window),
-			  gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP"),
-                          0, G_MAXLONG,
-                          False, XA_CARDINAL, &type, &format, &nitems,
-                          &bytes_after, &data);
-
-      if (type == XA_CARDINAL)
-        {
-	  current_desktop = (gulong *)data;
-	  
-          xev.xclient.type = ClientMessage;
-          xev.xclient.serial = 0;
-          xev.xclient.send_event = True;
-          xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-	  xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP");
-          xev.xclient.format = 32;
-
-          xev.xclient.data.l[0] = *current_desktop;
-          xev.xclient.data.l[1] = 0;
-          xev.xclient.data.l[2] = 0;
-          xev.xclient.data.l[3] = 0;
-          xev.xclient.data.l[4] = 0;
-      
-          XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
-                      SubstructureRedirectMask | SubstructureNotifyMask,
-                      &xev);
-
-          XFree (current_desktop);
-        }
+      move_to_current_desktop (window);
     }
   else
     {

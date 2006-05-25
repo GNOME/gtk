@@ -81,6 +81,11 @@ struct _GdkDisplayX11
   gboolean have_xfixes;
   gint xfixes_event_base;
 
+  /* If the SECURITY extension is in place, whether this client holds 
+   * a trusted authorization and so is allowed to make various requests 
+   * (grabs, properties etc.) Otherwise always TRUE. */
+  gboolean trusted_client;
+
   /* Information about current pointer and keyboard grabs held by this
    * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
    * window is NULL, then the other associated fields are ignored

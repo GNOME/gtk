@@ -460,6 +460,25 @@ gdk_window_cache_new (GdkScreen *screen)
 
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XWINDOW (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
+
+  if (G_UNLIKELY (!GDK_DISPLAY_X11 (GDK_SCREEN_X11 (screen)->display)->trusted_client)) 
+    {
+      GList *toplevel_windows, *list;
+      GdkWindow *window;
+      gint x, y, width, height;
+      
+      toplevel_windows = gdk_screen_get_toplevel_windows (screen);
+      for (list = toplevel_windows; list; list = list->next) {
+	window = GDK_WINDOW (list->data);
+	gdk_window_get_geometry (window, &x, &y, &width, &height, NULL);
+	gdk_window_cache_add (result, GDK_WINDOW_XID (window), 
+			      x, y, width, height, 
+			      gdk_window_is_visible (window));
+      }
+      g_list_free (toplevel_windows);
+      return result;
+    }
+
   XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
@@ -1286,6 +1305,9 @@ motif_send_enter (GdkDragContext  *context,
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
   XEvent xev;
+
+  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+    return; /* Motif Dnd requires getting properties on the root window */
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_AND_DROP_MESSAGE");

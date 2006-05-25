@@ -214,10 +214,15 @@ gtk_invisible_get_screen (GtkInvisible *invisible)
 static void
 gtk_invisible_realize (GtkWidget *widget)
 {
+  GdkWindow *parent;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
+  parent = gtk_widget_get_parent_window (widget);
+  if (parent == NULL)
+    parent = gtk_widget_get_root_window (widget);
 
   attributes.x = -100;
   attributes.y = -100;
@@ -230,8 +235,7 @@ gtk_invisible_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
-				   &attributes, attributes_mask);
+  widget->window = gdk_window_new (parent, &attributes, attributes_mask);
 					      
   gdk_window_set_user_data (widget->window, widget);
   

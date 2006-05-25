@@ -2574,6 +2574,8 @@ fetch_net_wm_check_window (GdkScreen *screen)
   
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
+
+  g_return_if_fail (GDK_DISPLAY_X11 (display)->trusted_client);
   
   if (screen_x11->wmspec_check_window != None)
     return; /* already have it */
@@ -2631,6 +2633,9 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 
   screen_x11 = GDK_SCREEN_X11 (screen);
   
+  if (!G_LIKELY (GDK_DISPLAY_X11 (screen_x11->display)->trusted_client))
+    return screen_x11->window_manager_name;
+
   fetch_net_wm_check_window (screen);
 
   if (screen_x11->need_refetch_wm_name)
@@ -2725,6 +2730,9 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
+
+  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+    return FALSE;
 
   supported_atoms = g_object_get_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms");
   if (!supported_atoms)

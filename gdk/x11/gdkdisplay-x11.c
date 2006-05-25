@@ -219,6 +219,24 @@ gdk_display_open (const gchar *display_name)
     }
 #endif
 
+  display_x11->trusted_client = TRUE;
+  {
+    Window root, child;
+    int rootx, rooty, winx, winy;
+    unsigned int xmask;
+
+    gdk_error_trap_push ();
+    XQueryPointer (display_x11->xdisplay, 
+		   GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
+		   &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+    gdk_flush ();
+    if (G_UNLIKELY (gdk_error_trap_pop () == BadWindow)) 
+      {
+	g_warning ("Connection to display %s appears to be untrusted. Pointer and keyboard grabs and inter-client communication may not work as expected.", gdk_display_get_name (display));
+	display_x11->trusted_client = FALSE;
+      }
+  }
+
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
   
@@ -1054,6 +1072,9 @@ gdk_notify_startup_complete (void)
   display_x11 = GDK_DISPLAY_X11 (display);
 
   if (display_x11->startup_notification_id == NULL)
+    return;
+
+  if (!G_LIKELY (display_x11->trusted_client))
     return;
 
   escaped_id = escape_for_xmessage (display_x11->startup_notification_id);

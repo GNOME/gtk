@@ -5822,11 +5822,11 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   GdkWindow *parent_window;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (widget->parent != NULL, NULL);
   
   parent_window = g_object_get_qdata (G_OBJECT (widget), quark_parent_window);
 
-  return (parent_window != NULL) ? parent_window : widget->parent->window;
+  return (parent_window != NULL) ? parent_window : 
+	 (widget->parent != NULL) ? widget->parent->window : NULL;
 }
 
 /**

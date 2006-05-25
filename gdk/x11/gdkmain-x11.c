@@ -191,6 +191,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 {
   gint return_val;
   GdkCursorPrivate *cursor_private;
+  GdkDisplayX11 *display_x11;
   guint xevent_mask;
   Window xwindow;
   Window xconfine_to;
@@ -202,6 +203,8 @@ gdk_pointer_grab (GdkWindow *	  window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
   
+  display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+
   cursor_private = (GdkCursorPrivate*) cursor;
   
   xwindow = GDK_WINDOW_XID (window);
@@ -233,7 +236,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 					confine_to,
 					time);
 
-  if (return_val == GrabSuccess)
+  if (return_val == GrabSuccess || 
+      G_UNLIKELY (!display_x11->trusted_client && return_val == AlreadyGrabbed))
     {
       if (!GDK_WINDOW_DESTROYED (window))
 	{
@@ -257,7 +261,6 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == GrabSuccess)
     {
-      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
       if (display_x11->pointer_xgrab_window != NULL &&
 	  display_x11->pointer_xgrab_window != (GdkWindowObject *)window)
 	generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
@@ -338,10 +341,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
 {
   gint return_val;
   unsigned long serial;
+  GdkDisplayX11 *display_x11;
   
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
+  display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+
   serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
 
   if (!GDK_WINDOW_DESTROYED (window))
@@ -356,13 +362,16 @@ gdk_keyboard_grab (GdkWindow *	   window,
 				    owner_events,
 				    GrabModeAsync, GrabModeAsync,
 				    time);
+	if (G_UNLIKELY (!display_x11->trusted_client && 
+			return_val == AlreadyGrabbed))
+	  /* we can't grab the keyboard, but we can do a GTK-local grab */
+	  return_val = GrabSuccess;
     }
   else
     return_val = AlreadyGrabbed;
 
   if (return_val == GrabSuccess)
     {
-      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
       if (display_x11->keyboard_xgrab_window != NULL &&
 	  display_x11->keyboard_xgrab_window != (GdkWindowObject *)window)
 	generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),

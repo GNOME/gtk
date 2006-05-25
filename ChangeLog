@@ -1,3 +1,59 @@
+2006-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Make GTK+ work as an untrusted X client. (#136571,
+	Ed Catmur)
+
+	* gdk/x11/gdkdisplay-x11.h:
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): When 
+	opening a display, determine if we are untrusted.
+	
+	* gdk/x11/gdkdisplay-x11.c (gdk_notify_startup_complete): 
+	Just bail out when we are untrusted.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Work around
+	a bug in the Xorg XSECURITY implementation by coercing
+	toplevel InputOnly windows to InputOutput.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_get_pointer): 
+	(_gdk_windowing_window_get_pointer): 
+	When untrusted, call XQueryPointer on an auxiliary
+	window, not on the root window.
+	
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_at_pointer): 
+	If untrusted, loop through all GDK-aware toplevels on all
+	screens in the hope we hit one containing the pointer; 
+	then use that as the basis of the current XQueryPointer 
+	child recursion.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab): 
+	(gdk_keyboard_grab): Ignore failed grabs when untrusted.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_new): Only
+	cache our own toplevels when untrusted.
+
+	* gdk/x11/gdkdnd-x11.c (motif_send_enter): Don't try
+	to do Motif DND as untrusted client.
+
+	* gdk/x11/gdkevents-x11.c (fetch_net_wm_check_window): 
+	(gdk_x11_screen_get_window_manager_name): 
+	(gdk_x11_screen_supports_net_wm_hint): 
+	Bail out early if untrusted.
+	
+	* gtk/gtkcolorsel.c (grab_color_at_mouse): If getting 
+	the color under the pointer by screenshooting the root 
+	window fails, it tries to get the color from our own 
+	window.
+
+	* gtk/gtkcolorsel.c (get_screen_color): Make the
+	dropper_grab_widget a child of the dialog, not a 
+	toplevel.
+
+	* gtk/gtkinvisible.c (gtk_invisible_realize): Respect
+	a parent window that has been set before realizing.
+
+	* gtk/gtkwidget.c (gtk_widget_get_parent_window): 
+	Always return a previously set parent window.
+	
 2006-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfontbutton.c (gtk_font_button_clicked): 

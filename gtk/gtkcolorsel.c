@@ -1224,6 +1224,17 @@ grab_color_at_mouse (GdkScreen *screen,
   priv = colorsel->private_data;
   
   image = gdk_drawable_get_image (root_window, x_root, y_root, 1, 1);
+  if (!image)
+    {
+      gint x, y;
+      GdkDisplay *display = gdk_screen_get_display (screen);
+      GdkWindow *window = gdk_display_get_window_at_pointer (display, &x, &y);
+      if (!window)
+	return;
+      image = gdk_drawable_get_image (window, x, y, 1, 1);
+      if (!image)
+	return;
+    }
   pixel = gdk_image_get_pixel (image, 0, 0);
   g_object_unref (image);
 
@@ -1429,11 +1440,11 @@ get_screen_color (GtkWidget *button)
       gtk_widget_add_events (priv->dropper_grab_widget,
                              GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
       
+      gtk_widget_set_parent_window (priv->dropper_grab_widget, 
+				    GTK_WIDGET (colorsel)->window);
       gtk_widget_show (priv->dropper_grab_widget);
 
       gdk_window_set_user_data (priv->dropper_grab_widget->window, colorsel);
-      gdk_window_reparent (priv->dropper_grab_widget->window, 
-			   GTK_WIDGET (colorsel)->window, 0, 0);
     }
 
   if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
