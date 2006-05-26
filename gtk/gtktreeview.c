@@ -5614,6 +5614,10 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
 
   tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node);
   tree_view->priv->dy += tree_view->priv->top_row_dy;
+
+  if (tree_view->priv->dy + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
+    tree_view->priv->dy = tree_view->priv->height - tree_view->priv->vadjustment->page_size;
+
   gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			    (gdouble)tree_view->priv->dy);
 }

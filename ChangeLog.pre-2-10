@@ -1,3 +1,9 @@
+2006-05-26  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_top_row_to_dy): set dy to
+	page_size + height in the event dy + page_size is about to become
+	bigger than height.
+
 2006-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
