@@ -1,3 +1,11 @@
+2006-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/stock-icons/24/gtk-orientation-landscape.png:
+	* gtk/stock-icons/24/gtk-orientation-portrait.png:
+	* gtk/stock-icons/24/gtk-orientation-reverse-landscape.png:
+	* gtk/stock-icons/24/gtk-orientation-reverse-portrait.png:
+	Cleaned up icons by Diana Fong.
+
 2006-05-26  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_queue_draw_arrow): queue a redraw
