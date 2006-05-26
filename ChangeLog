@@ -1,5 +1,11 @@
 2006-05-26  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_queue_draw_arrow): queue a redraw
+	for the full width of the row, not just the width we got allocated.
+	(Fixes #333284, reported by Benjamin Berg).
+
+2006-05-26  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): We shouldn't
 	subtract 1 from the depth when calculating the space reserved for
 	the expanders.  (#342260, Jorg Schuler).
