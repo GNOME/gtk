@@ -5085,6 +5085,11 @@ validate_visible_area (GtkTreeView *tree_view)
       gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment), 0);
       gtk_tree_view_dy_to_top_row (tree_view);
     }
+  else if (tree_view->priv->vadjustment->value + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
+    {
+      gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment), tree_view->priv->height - tree_view->priv->vadjustment->page_size);
+      gtk_tree_view_dy_to_top_row (tree_view);
+    }
   else
     gtk_tree_view_top_row_to_dy (tree_view);
 
@@ -5492,6 +5497,10 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
 
   tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node);
   tree_view->priv->dy += tree_view->priv->top_row_dy;
+
+  if (tree_view->priv->dy + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
+    tree_view->priv->dy = tree_view->priv->height - tree_view->priv->vadjustment->page_size;
+
   gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			    (gdouble)tree_view->priv->dy);
 }

@@ -1,3 +1,10 @@
+2006-05-26  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): add missing chunk from
+	patch in #316689,
+	(gtk_tree_view_top_row_to_dy): set dy to page_size + height in the
+	event dy + page_size is about to become bigger than height.
+
 2006-05-22  Behdad Esfahbod  <behdad@gnome.org>
 
 	Rollback the following changes, to fix it the proper way in Pango:
