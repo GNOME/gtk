@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -1428,7 +1428,7 @@ msgstr ""
 "Bikunzwe Kuri i Ikurikiranyanyuguti NIBA i Akazu OYA Kuri Kugaragaza i "
 "Ikurikiranyanyuguti NIBA ku Byose"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr ""
@@ -1707,7 +1707,7 @@ msgstr "Alufa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Cyangwa OYA Kuri i Ibara Alufa Agaciro"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "umutwe"
@@ -2380,21 +2380,21 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "iganira "
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 #, fuzzy
 msgid "The file chooser dialog to use."
 msgstr "IDOSIYE Ikiganiro Kuri Gukoresha"
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Umutwe Bya i IDOSIYE Ikiganiro"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 #, fuzzy
 msgid "The desired width of the button widget, in characters."
 msgstr "Ubugari Bya i Akabuto in Inyuguti"

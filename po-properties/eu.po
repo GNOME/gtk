@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-02-21 14:18+0100\n"
 "Last-Translator: Iñaki Larrañaga <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -1299,7 +1299,7 @@ msgstr ""
 "Katea elipsi gisa jartzeko lekurik egokiena, errendatutako gelaxkak ez badu "
 "nahikoa toki kate osoa bistaratzeko."
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Zabalera karakteretan"
@@ -1548,7 +1548,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Koloreari alfa balioa emango zaion ala ez adierazten du"
 
 #
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Izenburua"
@@ -2174,20 +2174,20 @@ msgstr ""
 "berrespena eskatzen duen elkarrizketa-koadroa erakutsi edo ez "
 "(erabiltzaileak lehendik dagoen fitxategi-izena hautatzen badu)."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Elkarrizketa-koadroa"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Fitxategiak aukeratzeko erabiliko den elkarrizketa-kuadroa."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr ""
 "Elkarrizketa-koadroaren titulua (fitxategiak aukeratzeko erabiliko dena)"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Botoi-trepetak edukiko duen zabalera, karaktereetan."
 

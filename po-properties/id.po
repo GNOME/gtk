@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -1263,7 +1263,7 @@ msgstr ""
 "Tempat yang diinginkan untuk memasang elipsis pada saat kotak sel tidak "
 "memiliki cukup ruang untuk menampilkan keseluruhan teks"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Lebar dalam karakter"
@@ -1494,7 +1494,7 @@ msgstr "Gunakan alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Menentukan apakah memberikan warna dengan nilai alpha"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Judul"
@@ -2090,19 +2090,19 @@ msgstr ""
 "menampilkan dialog konfirmasi sebelum menimpa berkas yang sudah ada "
 "sebelumnya."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Dialog pemilih berkas yang digunakan"
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Judul dialog pemilih berkas."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Lebar widget tombol dalam karakter"
 

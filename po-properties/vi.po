@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-01-14 14:38+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -1263,7 +1263,7 @@ msgstr ""
 "Chỗ ưa thích để làm cho chuỗi như hình bầu dục. Nếu bộ vẽ ô không có đủ chỗ "
 "để hiển thị toàn chuỗi, nếu có."
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Độ rộng (ký tự)"
@@ -1492,7 +1492,7 @@ msgstr "Dùng anfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Có nên cho màu một giá trị anfa hay không."
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Tiêu đề"
@@ -2082,19 +2082,19 @@ msgstr ""
 "hành động lưu) có nên hiển thị hộp thoại khẳng định ghi đè nếu người dùng "
 "chọn tên tập tin đã có, hay không."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Hộp thoại"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Hộp thoại bộ chọn tập tin cần dùng."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Tựa đề của hộp thoại bộ chọn tập tin."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Độ rộng đã muốn cho ô điều khiển cái nút, theo ký tự."
 

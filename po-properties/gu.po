@@ -94,7 +94,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-01-19 11:50+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
@@ -1318,7 +1318,7 @@ msgstr ""
 "શબ્દમાળાને એલીપ્સાઈઝ કરવાની પ્રાધાન્યવાળી જગ્યા, જો કોષ રેન્ડર કરનાર પાસે વર્તમાન "
 "શબ્દમાળા દર્શાવવા માટે, કોઈપણ હિસાબે પૂરતી જગ્યા નહિં હોય"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "અક્ષરોમાં પહોળાઈ"
@@ -1547,7 +1547,7 @@ msgstr "આલ્ફા વાપરો"
 msgid "Whether or not to give the color an alpha value"
 msgstr "શું રંગને આલ્ફા કિંમત આપવી કે નહિં"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "શીર્ષક"
@@ -2121,19 +2121,19 @@ msgstr ""
 "શું GTK_FILE_CHOOSER_ACTION_SAVE માં ફાઈલ પસંદગીકારક પર ફરીથી લખવામાં ખાતરી સંવાદ "
 "હાજર હશે જો વપરાશકર્તા ફાઈલ નામ પસંદ કરે કે જે પહેલાથી જ હાજર હોય."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "સંવાદ"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "વાપરવા માટે ફાઈલ પસંદગીકારક સંવાદ."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "ફાઈલ પસંદગીકારક સંવાદનું શીર્ષક."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "બટન વિજેટની જરૂરી પહોળાઈ, અક્ષરોમાં."
 

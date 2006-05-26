@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-01-14 01:59+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team:  Spanish Gnome Team <traductores@es.gnome.org>\n"
@@ -1280,7 +1280,7 @@ msgstr ""
 "celda no tiene espacio suficiente para mostrar la cadena completa, si hay "
 "alguna"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
@@ -1513,7 +1513,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Indica si debe darse o no un valor alfa al color"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Título"
@@ -2119,19 +2119,19 @@ msgstr ""
 "un diálogo de confirmación de sobreescritura si el usuario selecciona un "
 "nombre de archivo que ya existe."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "El diálogo del selector de archivos que se va a usar."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "La anchura deseada del widget del botón, en caracteres."
 

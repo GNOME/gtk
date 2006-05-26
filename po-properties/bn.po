@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties (GNOME 2.14)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-03-12 21:30+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -1255,7 +1255,7 @@ msgstr ""
 "পঙ্‌ক্তি প্রদর্শনের জন্য পর্যাপ্ত স্থান না থাকলে, উপবৃত্তকরণের মাধ্যমে যেখানে পঙ্‌ক্তিকে "
 "প্রদর্শন করা হবে।"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "অক্ষর হিসেবে প্রস্থ"
@@ -1488,7 +1488,7 @@ msgstr "আলফা ব্যবহার করো"
 msgid "Whether or not to give the color an alpha value"
 msgstr "রংটিকে একটি আলফা মান দেওয়া হবে কিনা"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "শিরোনাম"
@@ -2080,19 +2080,19 @@ msgstr ""
 "GTK_FILE_CHOOSER_ACTION_SAVE এর অধীনস্ত ফাইল নির্বাচক কোন ডায়ালগ উপস্থাপন করবে "
 "কিনা "
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "ডায়ালগ"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "যে ফাইল নির্বাচক ডায়ালগটি ব্যবহার করা হবে।"
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "ফাইল নির্বাচক ডায়ালগের শিরোনাম।"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "অক্ষর হিসেবে বাটন উইজেটের আকাঙ্খিত প্রস্থ।"
 

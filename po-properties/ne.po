@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1228,7 +1228,7 @@ msgstr ""
 "स्ट्रिङ दिर्घाकार बनाउन प्राथमिक स्थान, यदि कक्ष प्रतिपादकसँग सबै स्ट्रिङ देखाउनका लागि "
 "प्रशस्त कोठा छैन, यदि सबै"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "क्यारेक्टरहरूमा चौडाई"
@@ -1457,7 +1457,7 @@ msgstr "अल्फा प्रयोग गर"
 msgid "Whether or not to give the color an alpha value"
 msgstr "अल्फा मानमा रङ्ग दिने वा नदिने"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "शिर्षक"
@@ -2028,19 +2028,19 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "वार्तालाप"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "फाइल छनोटकर्ता बार्तालाप प्रयोग"
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "फाइल छनोटकर्ताको वार्तालाप शिर्षक"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आबस्यक चौडाई, क्यारेक्टरहरूमा"
 

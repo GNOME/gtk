@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:29-0400\n"
+"POT-Creation-Date: 2006-05-26 11:50-0400\n"
 "PO-Revision-Date: 2005-11-16 07:09+0100\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1372,15 +1372,15 @@ msgstr "Farebné koleso"
 msgid "Color Selection"
 msgstr "Výber farby"
 
-#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7130
+#: gtk/gtkentry.c:4612 gtk/gtktextview.c:7128
 msgid "Select _All"
 msgstr "Vybrať _všetko"
 
-#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7140
+#: gtk/gtkentry.c:4624 gtk/gtktextview.c:7138
 msgid "Input _Methods"
 msgstr "_Metódy vstupu"
 
-#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7151
+#: gtk/gtkentry.c:4636 gtk/gtktextview.c:7149
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložiť ovládací znak Unicode"
 
@@ -1394,7 +1394,7 @@ msgstr "Neplatné meno súboru: %s"
 msgid "Select A File"
 msgstr "Vybrať súbor"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1480
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1522
 msgid "Desktop"
 msgstr "Plocha"
 
@@ -1402,7 +1402,7 @@ msgstr "Plocha"
 msgid "(None)"
 msgstr "(žiadny)"
 
-#: gtk/gtkfilechooserbutton.c:1568
+#: gtk/gtkfilechooserbutton.c:1579
 msgid "Other..."
 msgstr "Iný..."
 
@@ -1439,167 +1439,167 @@ msgstr "Neplatné meno súboru"
 msgid "The folder contents could not be displayed"
 msgstr "Obsah priečinka nemohol byť zobrazený"
 
-#: gtk/gtkfilechooserdefault.c:1311
+#: gtk/gtkfilechooserdefault.c:1325
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Nepodarilo sa získať informácie o '%s': %s"
 
-#: gtk/gtkfilechooserdefault.c:2382
+#: gtk/gtkfilechooserdefault.c:2424
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Pridať priečinok '%s' do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2423
+#: gtk/gtkfilechooserdefault.c:2465
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Pridať aktuálny priečinok do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2425
+#: gtk/gtkfilechooserdefault.c:2467
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Pridať zvolené priečinky do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2465
+#: gtk/gtkfilechooserdefault.c:2507
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstrániť záložku '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2896
+#: gtk/gtkfilechooserdefault.c:2938
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Nepodarilo sa pridať záložku pre '%s', pretože je to neplatné meno cesty."
 
-#: gtk/gtkfilechooserdefault.c:3127
+#: gtk/gtkfilechooserdefault.c:3169
 msgid "Remove"
 msgstr "Odstrániť"
 
-#: gtk/gtkfilechooserdefault.c:3136
+#: gtk/gtkfilechooserdefault.c:3178
 msgid "Rename..."
 msgstr "Premenovať..."
 
-#: gtk/gtkfilechooserdefault.c:3259
+#: gtk/gtkfilechooserdefault.c:3301
 msgid "Shortcuts"
 msgstr "Skratky"
 
-#: gtk/gtkfilechooserdefault.c:3313
+#: gtk/gtkfilechooserdefault.c:3355
 msgid "Folder"
 msgstr "Priečinok"
 
-#: gtk/gtkfilechooserdefault.c:3369 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3411 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Pridať"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3418
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Pridať zvolený priečinok do Záložiek"
 
-#: gtk/gtkfilechooserdefault.c:3381 gtk/gtkstock.c:400
+#: gtk/gtkfilechooserdefault.c:3423 gtk/gtkstock.c:400
 msgid "_Remove"
 msgstr "_Odstrániť"
 
-#: gtk/gtkfilechooserdefault.c:3388
+#: gtk/gtkfilechooserdefault.c:3430
 msgid "Remove the selected bookmark"
 msgstr "Odstrániť zvolnú záložku"
 
-#: gtk/gtkfilechooserdefault.c:3492
+#: gtk/gtkfilechooserdefault.c:3534
 msgid "Could not select file"
 msgstr "Nepodarilo sa vybrať súbor"
 
-#: gtk/gtkfilechooserdefault.c:3548
+#: gtk/gtkfilechooserdefault.c:3590
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Nepodarilo sa vybrať súbor '%s', pretože je to neplatné meno cesty."
 
-#: gtk/gtkfilechooserdefault.c:3620
+#: gtk/gtkfilechooserdefault.c:3662
 msgid "_Add to Bookmarks"
 msgstr "_Pridať do Záložiek"
 
-#: gtk/gtkfilechooserdefault.c:3630
+#: gtk/gtkfilechooserdefault.c:3672
 msgid "Open _Location"
 msgstr "Otvoriť _umiestnenie"
 
-#: gtk/gtkfilechooserdefault.c:3642
+#: gtk/gtkfilechooserdefault.c:3684
 msgid "Show _Hidden Files"
 msgstr "Zobraziť _skryté súbory"
 
-#: gtk/gtkfilechooserdefault.c:3766 gtk/gtkfilesel.c:763
+#: gtk/gtkfilechooserdefault.c:3808 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Súbory"
 
-#: gtk/gtkfilechooserdefault.c:3811
+#: gtk/gtkfilechooserdefault.c:3853
 msgid "Name"
 msgstr "Meno"
 
-#: gtk/gtkfilechooserdefault.c:3836
+#: gtk/gtkfilechooserdefault.c:3878
 msgid "Size"
 msgstr "Veľkosť"
 
-#: gtk/gtkfilechooserdefault.c:3849
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "Modified"
 msgstr "Zmenený"
 
-#: gtk/gtkfilechooserdefault.c:3881
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Select which types of files are shown"
 msgstr "Vybrať, ktoré typy súborov sú zobrazené"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3917
+#: gtk/gtkfilechooserdefault.c:3959
 msgid "Create Fo_lder"
 msgstr "Vytvoriť _priečinok"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:4042
+#: gtk/gtkfilechooserdefault.c:4084
 msgid "_Name:"
 msgstr "_Meno:"
 
-#: gtk/gtkfilechooserdefault.c:4082
+#: gtk/gtkfilechooserdefault.c:4124
 msgid "_Browse for other folders"
 msgstr "_Prechádzať ostatné priečinky"
 
-#: gtk/gtkfilechooserdefault.c:4351
+#: gtk/gtkfilechooserdefault.c:4393
 msgid "Save in _folder:"
 msgstr "Uložiť do _priečinka:"
 
-#: gtk/gtkfilechooserdefault.c:4353
+#: gtk/gtkfilechooserdefault.c:4395
 msgid "Create in _folder:"
 msgstr "Vytvoriť v _priečinku:"
 
-#: gtk/gtkfilechooserdefault.c:5391
+#: gtk/gtkfilechooserdefault.c:5433
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Nepodarilo sa zmeniť priečinok, pretože nie je lokálny"
 
-#: gtk/gtkfilechooserdefault.c:5975
+#: gtk/gtkfilechooserdefault.c:6017
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:6230
+#: gtk/gtkfilechooserdefault.c:6272
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Súbor s názvom \"%s\" už existuje. Chcete ho nahradiť?"
 
-#: gtk/gtkfilechooserdefault.c:6233
+#: gtk/gtkfilechooserdefault.c:6275
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Súbor už existuje v \"%s\". Nahradením prepíšete jeho obsah."
 
-#: gtk/gtkfilechooserdefault.c:6238
+#: gtk/gtkfilechooserdefault.c:6280
 msgid "_Replace"
 msgstr "_Nahradiť"
 
-#: gtk/gtkfilechooserdefault.c:6729
+#: gtk/gtkfilechooserdefault.c:6771
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepodarilo sa pripojiť %s"
 
-#: gtk/gtkfilechooserdefault.c:7035
+#: gtk/gtkfilechooserdefault.c:7077
 msgid "Type name of new folder"
 msgstr "Zadajte meno nového priečinku"
 
-#: gtk/gtkfilechooserdefault.c:7077
+#: gtk/gtkfilechooserdefault.c:7119
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1607,59 +1607,59 @@ msgstr[0] "%d bajtov"
 msgstr[1] "%d bajt"
 msgstr[2] "%d bajty"
 
-#: gtk/gtkfilechooserdefault.c:7079
+#: gtk/gtkfilechooserdefault.c:7121
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:7081
+#: gtk/gtkfilechooserdefault.c:7123
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:7083
+#: gtk/gtkfilechooserdefault.c:7125
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:7129 gtk/gtkfilechooserdefault.c:7153
+#: gtk/gtkfilechooserdefault.c:7171 gtk/gtkfilechooserdefault.c:7195
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: gtk/gtkfilechooserdefault.c:7140
+#: gtk/gtkfilechooserdefault.c:7182
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:7142
+#: gtk/gtkfilechooserdefault.c:7184
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:7220
+#: gtk/gtkfilechooserdefault.c:7262
 msgid "Cannot change folder"
 msgstr "Nepodarilo sa zmeniť priečinok"
 
-#: gtk/gtkfilechooserdefault.c:7221
+#: gtk/gtkfilechooserdefault.c:7263
 msgid "The folder you specified is an invalid path."
 msgstr "Priečinok, ktorý ste zadali má neplatnú cestu."
 
-#: gtk/gtkfilechooserdefault.c:7260
+#: gtk/gtkfilechooserdefault.c:7302
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nepodarilo sa vytvoriť meno súboru z '%s' a '%s'"
 
-#: gtk/gtkfilechooserdefault.c:7296
+#: gtk/gtkfilechooserdefault.c:7338
 msgid "Could not select item"
 msgstr "Nepodarilo sa vybrať položku"
 
-#: gtk/gtkfilechooserdefault.c:7336
+#: gtk/gtkfilechooserdefault.c:7378
 msgid "Open Location"
 msgstr "Otvoriť umiestnenie"
 
-#: gtk/gtkfilechooserdefault.c:7343
+#: gtk/gtkfilechooserdefault.c:7385
 msgid "Save in Location"
 msgstr "Uložiť na umiestnenie"
 
-#: gtk/gtkfilechooserdefault.c:7370
+#: gtk/gtkfilechooserdefault.c:7412
 msgid "_Location:"
 msgstr "_Umiestnenie:"
 
@@ -1940,11 +1940,11 @@ msgid "Si_ze:"
 msgstr "_Veľkosť:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:549
+#: gtk/gtkfontsel.c:546
 msgid "_Preview:"
 msgstr "_Náhľad:"
 
-#: gtk/gtkfontsel.c:1388
+#: gtk/gtkfontsel.c:1385
 msgid "Font Selection"
 msgstr "Výber písma"
 
@@ -2024,44 +2024,44 @@ msgstr "_Osy"
 msgid "_Keys"
 msgstr "_Klávesy"
 
-#: gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:564
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:563
+#: gtk/gtkinputdialog.c:565
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:564
+#: gtk/gtkinputdialog.c:566
 msgid "Pressure"
 msgstr "Tlak"
 
-#: gtk/gtkinputdialog.c:565
+#: gtk/gtkinputdialog.c:567
 msgid "X Tilt"
 msgstr "Sklon X"
 
-#: gtk/gtkinputdialog.c:566
+#: gtk/gtkinputdialog.c:568
 msgid "Y Tilt"
 msgstr "Sklon Y"
 
-#: gtk/gtkinputdialog.c:567
+#: gtk/gtkinputdialog.c:569
 msgid "Wheel"
 msgstr "Koliesko"
 
-#: gtk/gtkinputdialog.c:607
+#: gtk/gtkinputdialog.c:609
 msgid "none"
 msgstr "žiadny"
 
-#: gtk/gtkinputdialog.c:643 gtk/gtkinputdialog.c:679
+#: gtk/gtkinputdialog.c:645 gtk/gtkinputdialog.c:681
 msgid "(disabled)"
 msgstr "(zablokované)"
 
-#: gtk/gtkinputdialog.c:672
+#: gtk/gtkinputdialog.c:674
 msgid "(unknown)"
 msgstr "(neznámy)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:759
+#: gtk/gtkinputdialog.c:761
 msgid "clear"
 msgstr "Vyčistiť"
 
@@ -2111,7 +2111,7 @@ msgstr "Voľby GTK+"
 msgid "Show GTK+ Options"
 msgstr "Zobraziť voľby GTK+"
 
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5143
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
 #, c-format
 msgid "Page %u"
 msgstr "Stránka %u"

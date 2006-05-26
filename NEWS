@@ -1,3 +1,42 @@
+Overview of Changes from GTK+ 2.8.17 to GTK+ 2.8.18
+===================================================
+
+Bugs fixed:
+ 338047 search box positioning has some bugs         [David Trowbridge]
+ 338262 gtk+ Cygwin build fixes
+ 337562 Gdk does not translate VK_NUMPADx to GDK_KP_x   [Timon Christl]
+ 339224 sanely handle late (re)setting of dnd image     [Benjamin Otte]
+ 334582 Text is shifted off-by-one in Add to panel    [Behdad Esfahbod]
+ 340063 gtk_widget_create_pango_layout docs typo      [Behdad Esfahbod]
+ 139628 GtkLayout In GtkScrolledWindow does not receive 
+        the scroll_event
+ 341896 gtktreeview has RTL problems with toggle buttons 
+        if using gtktreestore as a model            [Roozbeh Pournader]
+ 342072 Wrong drop location in GtkEntry                [Yevgen Muntyan]
+ 342096 GtkImage animation CRITICALS on switching 
+        themes                                       [Tommi Komulainen]
+ 342003 DnD: Conditional jump or move depends on 
+        uninitialised value                          [Tommi Komulainen]
+ 341734 cursor blocked to dnd mode after using shift and
+        dnd on a GtkCalendar                         [Sebastien Bacher]
+ 305530 Crashes while creating source code 
+        w/GtkFontSelection                              [Damon Chaplin]
+ 168105 the right edge tab does not appear when switching 
+        tab                             [Hiroyuki Ikezoe, Kouhei Sutou]
+ 342007 Warning in gtk_paned_compute_position        [Patrick Monnerat]
+ 342529 gdk should set resolution on PangoCairoFontmap, 
+        not PangoCairoContext                         [Behdad Esfahbod]
+ 316689 GtkTreeView does not resize correctly       [Kristian Rietveld]
+ 342260 gtk_tree_view_get_cell_area() forgets depth-one 
+        expander                                         [Jorg Schuler]
+ 333284 expander animation not working in RTL mode      [Benjamin Berg]
+        Multiple issues discovered by Coverity               [Coverity]
+        Make gtk_file_chooser_button_new() friendlier
+        for language bindings                          [Murray Cumming]
+
+Updated translations (de,es,fr,he,nn) 
+
+
 Overview of Changes from GTK+ 2.8.16 to GTK+ 2.8.17
 ===================================================
 

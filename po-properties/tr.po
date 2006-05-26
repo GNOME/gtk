@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2005-09-05 21:52+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -1431,7 +1431,7 @@ msgstr ""
 "yeterli yere sahip değilse tam dizgiyi göster"
 
 # gtk/gtkentry.c:435
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Karakter Olarak Genişlik"
@@ -1712,7 +1712,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Renge alfa değerinin verilmesi"
 
 # gtk/gtktreeviewcolumn.c:218
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Başlık"
@@ -2390,20 +2390,20 @@ msgstr ""
 "GTK_FILE_CHOOSER_ACTION_SAVE içindeki dosya seçici kullanıcı zaten var olan "
 "bir dosya ismi seçerse üzerine yazma onayını sorması."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Pencere"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Kullanılacak dosya seçici penceresi."
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Dosya seçim penceresinin başlığı."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Karakter olarak düğme parçacığının arzu edilen genişliği."
 

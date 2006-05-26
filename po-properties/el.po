@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-02-20 13:07+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -1301,7 +1301,7 @@ msgstr ""
 "Η προτιμώμενη θέση για τη χρήση αποσιωπητικών στο αλφαριθμητικό, αν η "
 "εργασία απόδοσης κελιού δεν έχει αρκετό χώρο για να το εμφανίσει ολόκληρο"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Πλάτος σε χαρακτήρες"
@@ -1533,7 +1533,7 @@ msgstr "Χρήση άλφα"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Αν θα δοθεί ή όχι στο χρώμα μια τιμή άλφα"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Τίτλος"
@@ -2135,19 +2135,19 @@ msgstr ""
 "overwrite confirmation dialog if the user selects a file name that already "
 "exists."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Διάλογος"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Ο διάλογος που θα χρησιμοποιείται στον επιλογέα αρχείων."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Ο τίτλος του διαλόγου επιλογής αρχείου"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Το επιθυμητό πλάτος σε·χαρακτήρες. του γραφικού συστατικού."
 

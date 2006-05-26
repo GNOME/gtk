@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2005-08-15 18:33+0200\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -1264,7 +1264,7 @@ msgstr ""
 "Бажане місце еліптизації рядка, якщо механізму відображення рядка не "
 "вистачає місця длі відображення усього рядка."
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Ширина у символах"
@@ -1493,7 +1493,7 @@ msgstr "Використовувати прозорість"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Чи має колір прозорість"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Заголовок"
@@ -2089,19 +2089,19 @@ msgstr ""
 "Чи селектор файлів при GTK_FILE_CHOOSER_ACTION_SAVE буде виводити діалогове "
 "вікно з попередженням, якщо користувач обрав існуючий файл."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Діалог"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Діалог вибору файлів, що використовується."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Заголовок діалогового вікна вибору файла."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Бажана ширина віджета кнопки, у символах."
 

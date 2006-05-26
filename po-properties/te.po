@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2005-09-09 18:27+0530\n"
 "Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Language-Team: Swecha <indlinux-telugu@lists.sourceforge.net>\n"
@@ -1244,7 +1244,7 @@ msgstr ""
 "ఒకవేళ పూర్తి పదబంధమును ప్రదర్శించుటకు అరను సమర్పించుదానివద్ద తగిన స్థలము లేనిచో, పదబంధమును "
 "బహుళ వరుసలలోనికి ఎలా విడగొట్టాలి"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "అక్షరాలలో వెడల్పు"
@@ -1474,7 +1474,7 @@ msgstr "ఆల్ఫానుపయోగించుము"
 msgid "Whether or not to give the color an alpha value"
 msgstr "ఒక ఆల్ఫా విలువకు వర్ణమును ఇవ్వవలెనా వద్దా"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "శీర్షిక"
@@ -2048,19 +2048,19 @@ msgid ""
 "exists."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 

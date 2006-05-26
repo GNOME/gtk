@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-02-25 12:55+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1280,7 +1280,7 @@ msgstr ""
 "Preferowane miejsce przycięcia ciągu tekstowego, w przypadku gdy obiekt "
 "renderujący komórki nie ma miejsca na wyświetlenie go całego"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Szerokość w znakach"
@@ -1512,7 +1512,7 @@ msgstr "Używanie kanału alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Określa czy należy nadawać kolorowi wartości alfa"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "Tytuł"
@@ -2125,19 +2125,19 @@ msgstr ""
 "wyświetlało okno potwierdzenia nadpisania w przypadku wyboru przez "
 "użytkownika istniejącego pliku."
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "Okno dialogowe"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "Wykorzystywane okno dialogowe wyboru plików."
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "Tytuł okna dialogowego wyboru plików."
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "Żądana szerokość widgetu przycisku (w znakach)."
 

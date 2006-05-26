@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-07 15:30-0400\n"
+"POT-Creation-Date: 2006-05-26 11:51-0400\n"
 "PO-Revision-Date: 2006-03-29 17:34-0500\n"
 "Last-Translator: \n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1247,7 +1247,7 @@ msgid ""
 msgstr ""
 "གལ་སྲིད་ནང་ཐིག་ལྷག་སྟོན་པ་ལུ་ ཡིག་རྒྱུན་ཧྲིལ་བུ བཀྲམ་སྟོན་འབད་ནིའི་བར་སྟོང་མེད་པ་ཅིན་ ཡིག་རྒྱུན་དེ་ ཚིག་ཆད"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:371
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:374
 #: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "རྒྱ་ཚད་ཡིག་འབྲུ་ནང་།"
@@ -1476,7 +1476,7 @@ msgstr "ཨཱལ་ཕ་ ལག་ལེན་འཐབ།"
 msgid "Whether or not to give the color an alpha value"
 msgstr "ཚོས་གཞི་ལུ་ ཨཱལ་ཕ་གི་བེ་ལུ་ཅིག་ བྱིན་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:357
+#: gtk/gtkcolorbutton.c:221 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "མགོ་མིང༌།"
@@ -2056,19 +2056,19 @@ msgstr ""
 "GTK_FILE_CHOOSER_ACTION_SAVE ནང་ ཡིག་སྣོད་འདེམས་བྱེད་ཅིག་གིས་ ཚབ་སྲུང་ངེས་དཔྱད་ཀྱི་ ཌའི་ལོག་"
 "ཅིག་སྟོནམ་ཨིན།"
 
-#: gtk/gtkfilechooserbutton.c:342
+#: gtk/gtkfilechooserbutton.c:345
 msgid "Dialog"
 msgstr "ཌའི་ལོག"
 
-#: gtk/gtkfilechooserbutton.c:343
+#: gtk/gtkfilechooserbutton.c:346
 msgid "The file chooser dialog to use."
 msgstr "ལག་ལེན་འཐབ་ནིའི་ ཡིག་སྣོད་འདེམས་་བྱེད་ཀྱི་ཌའི་ལོག"
 
-#: gtk/gtkfilechooserbutton.c:358
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The title of the file chooser dialog."
 msgstr "ཡིག་སྣོད་འདེམས་བྱེད་ ཌའི་ལོག་གི་མགོ་མིང༌།"
 
-#: gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkfilechooserbutton.c:375
 msgid "The desired width of the button widget, in characters."
 msgstr "རེ་འདུན་བསྐྱེད་མི་ ཨེབ་རྟའི་ཝི་གེཊི་གི་རྒྱ་ཚད་ ཡིག་འབྲུ་ནང་།"
 
