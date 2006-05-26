@@ -1,5 +1,11 @@
 2006-05-26  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): We shouldn't
+	subtract 1 from the depth when calculating the space reserved for
+	the expanders.  (#342260, Jorg Schuler).
+
+2006-05-26  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (validate_visible_area): add missing chunk from
 	patch in #316689,
 	(gtk_tree_view_top_row_to_dy): set dy to page_size + height in the

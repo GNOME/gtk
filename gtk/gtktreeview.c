@@ -11670,7 +11670,7 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 	  gtk_tree_view_is_expander_column (tree_view, column) &&
 	  TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	{
-	  gint depth = gtk_tree_path_get_depth (path) - 1;
+	  gint depth = gtk_tree_path_get_depth (path);
 
 	  rect->x += depth * tree_view->priv->expander_size;
 	  rect->width -= depth * tree_view->priv->expander_size;
