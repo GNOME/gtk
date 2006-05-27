@@ -1,5 +1,12 @@
 2006-05-27  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_remove_node):
+	only unref if elt->ref_count > 0,
+	(gtk_tree_model_filter_row_deleted): likewise. (Fixes #340839,
+	reported by Yevgen Muntyan).
+
+2006-05-27  Kristian Rietveld  <kris@gtk.org>
+
 	Small refactoring. (#340428, Paolo Borelli).
 
 	* gtk/gtkliststore.c (gtk_list_store_set_valist_internal),

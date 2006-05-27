@@ -994,7 +994,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
 
       if (parent_level || filter->priv->virtual_root)
         gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), iter);
-      else
+      else if (elt->ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                iter, FALSE);
 
@@ -1792,7 +1792,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       /* release the filter model's reference on the node */
       if (level->parent_level || filter->priv->virtual_root)
         gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &iter);
-      else
+      else if (elt->ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
                                                FALSE);
 
