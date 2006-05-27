@@ -688,6 +688,31 @@ gtk_list_store_set_value (GtkListStore *list_store,
     }
 }
 
+static GtkTreeIterCompareFunc
+gtk_list_store_get_compare_func (GtkListStore *list_store)
+{
+  GtkTreeIterCompareFunc func = NULL;
+
+  if (GTK_LIST_STORE_IS_SORTED (list_store))
+    {
+      if (list_store->sort_column_id != -1)
+	{
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
+						   list_store->sort_column_id);
+	  g_return_val_if_fail (header != NULL, NULL);
+	  g_return_val_if_fail (header->func != NULL, NULL);
+	  func = header->func;
+	}
+      else
+	{
+	  func = list_store->default_sort_func;
+	}
+    }
+
+  return func;
+}
+
 static void
 gtk_list_store_set_valist_internal (GtkListStore *list_store,
 				    GtkTreeIter  *iter,
@@ -700,23 +725,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 
   column = va_arg (var_args, gint);
 
-  if (GTK_LIST_STORE_IS_SORTED (list_store))
-    {
-      if (list_store->sort_column_id != -1)
-	{
-	  GtkTreeDataSortHeader *header;
-	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
-						   list_store->sort_column_id);
-	  g_return_if_fail (header != NULL);
-	  g_return_if_fail (header->func != NULL);
-	  func = header->func;
-	}
-      else
-	{
-	  func = list_store->default_sort_func;
-	}
-    }
-
+  func = gtk_list_store_get_compare_func (list_store);
   if (func != _gtk_tree_data_list_compare_func)
     *maybe_need_sort = TRUE;
 
@@ -1905,23 +1914,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 
   list_store->length++;  
 
-  if (GTK_LIST_STORE_IS_SORTED (list_store))
-    {
-      if (list_store->sort_column_id != -1)
-	{
-	  GtkTreeDataSortHeader *header;
-	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
-						   list_store->sort_column_id);
-	  g_return_if_fail (header != NULL);
-	  g_return_if_fail (header->func != NULL);
-	  func = header->func;
-	}
-      else
-	{
-	  func = list_store->default_sort_func;
-	}
-    }
-
+  func = gtk_list_store_get_compare_func (list_store);
   if (func != _gtk_tree_data_list_compare_func)
     maybe_need_sort = TRUE;
 

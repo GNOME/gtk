@@ -840,6 +840,31 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
     }
 }
 
+static GtkTreeIterCompareFunc
+gtk_tree_store_get_compare_func (GtkTreeStore *tree_store)
+{
+  GtkTreeIterCompareFunc func = NULL;
+
+  if (GTK_TREE_STORE_IS_SORTED (tree_store))
+    {
+      if (tree_store->sort_column_id != -1)
+	{
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+						   tree_store->sort_column_id);
+	  g_return_val_if_fail (header != NULL, NULL);
+	  g_return_val_if_fail (header->func != NULL, NULL);
+	  func = header->func;
+	}
+      else
+	{
+	  func = tree_store->default_sort_func;
+	}
+    }
+
+  return func;
+}
+
 static void
 gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
                                     GtkTreeIter  *iter,
@@ -852,23 +877,7 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
 
   column = va_arg (var_args, gint);
 
-  if (GTK_TREE_STORE_IS_SORTED (tree_store))
-    {
-      if (tree_store->sort_column_id != -1)
-	{
-	  GtkTreeDataSortHeader *header;
-	  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
-						   tree_store->sort_column_id);
-	  g_return_if_fail (header != NULL);
-	  g_return_if_fail (header->func != NULL);
-	  func = header->func;
-	}
-      else
-	{
-	  func = tree_store->default_sort_func;
-	}
-    }
-
+  func = gtk_tree_store_get_compare_func (tree_store);
   if (func != _gtk_tree_data_list_compare_func)
     *maybe_need_sort = TRUE;
 
@@ -1403,23 +1412,7 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
   iter->user_data = new_node;
   g_node_insert (parent_node, position, new_node);
 
-  if (GTK_TREE_STORE_IS_SORTED (tree_store))
-    {
-      if (tree_store->sort_column_id != -1)
-        {
-	  GtkTreeDataSortHeader *header;
-	  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
-						   tree_store->sort_column_id);
-	  g_return_if_fail (header != NULL);
-	  g_return_if_fail (header->func != NULL);
-	  func = header->func;
-	}
-      else
-        {
-	  func = tree_store->default_sort_func;
-        }
-    }
-
+  func = gtk_tree_store_get_compare_func (tree_store);
   if (func != _gtk_tree_data_list_compare_func)
     maybe_need_sort = TRUE;
 

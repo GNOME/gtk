@@ -1,5 +1,16 @@
 2006-05-27  Kristian Rietveld  <kris@gtk.org>
 
+	Small refactoring. (#340428, Paolo Borelli).
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist_internal),
+	(gtk_list_store_insert_with_valuesv): refactor code to determine
+	iter compare func into gtk_list_store_get_compare_func().
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist_internal),
+	(gtk_tree_store_insert_with_valuesv): likewise.
+
+2006-05-27  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_queue_draw_arrow): really fix
 	#333284.
 
