@@ -2722,7 +2722,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       if (list->next)
 	{
-	  real_background_area.width = info->real_width + horizontal_separator + depth ;
+	  real_background_area.width = info->real_width + depth;
 	}
       else
 	{
@@ -2750,7 +2750,6 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 				    &real_expose_area, 
 				    flags);
 	}
-
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
@@ -2859,11 +2858,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_cell_area.x += (real_cell_area.width + tree_column->spacing);
-      real_background_area.x += (real_background_area.width + tree_column->spacing - (2 * focus_line_width ));
+      real_cell_area.x += (real_cell_area.width + 2 * focus_line_width + tree_column->spacing);
+      real_background_area.x += real_background_area.width + tree_column->spacing;
 
       /* Only needed for first cell */
-      depth=0;
+      depth = 0;
     }
 
   /* iterate list for PACK_END cells */
@@ -2895,7 +2894,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       real_cell_area.width = info->real_width;
       real_cell_area.width -= 2 * focus_line_width;
-      real_background_area.width = info->real_width + horizontal_separator + depth;
+      real_background_area.width = info->real_width + depth;
 
       rtl_cell_area = real_cell_area;
       rtl_background_area = real_background_area;
@@ -2963,8 +2962,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
 		    try_event = TRUE;
 		}
-	      else if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
-		  real_cell_area.x + real_cell_area.width > ((GdkEventButton *)event)->x)
+	      else if (rtl_cell_area.x <= ((GdkEventButton *)event)->x &&
+		  rtl_cell_area.x + rtl_cell_area.width > ((GdkEventButton *)event)->x)
 		/* only activate cell if the user clicked on an individual
 		 * cell
 		 */
@@ -3023,8 +3022,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_cell_area.x += (real_cell_area.width + tree_column->spacing);
+      real_cell_area.x += (real_cell_area.width + 2 * focus_line_width + tree_column->spacing);
       real_background_area.x += (real_background_area.width + tree_column->spacing);
+
+      /* Only needed for first cell */
+      depth = 0;
     }
 
   /* fill focus_rectangle when required */
@@ -3531,7 +3533,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 	break;
       
       if (info->cell->visible)
-	l += info->real_width;
+	l += info->real_width + column->spacing;
     }
 
   while (list)
@@ -3541,7 +3543,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
       list = gtk_tree_view_column_cell_next (column, list);
 
       if (info->cell->visible)
-	r += info->real_width;
+	r += info->real_width + column->spacing;
     }
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (column->tree_view)) == GTK_TEXT_DIR_RTL);

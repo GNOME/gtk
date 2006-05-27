@@ -2337,7 +2337,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  cell_area.y += vertical_separator/2;
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
-	      cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
+	      if (!rtl)
+		cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
               if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
@@ -3835,7 +3836,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
-	      cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
+	      if (!rtl)
+		cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
               if (TREE_VIEW_DRAW_EXPANDERS(tree_view))
@@ -11822,13 +11824,18 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 	  gtk_tree_view_is_expander_column (tree_view, column))
 	{
 	  gint depth = gtk_tree_path_get_depth (path);
+	  gboolean rtl;
 
-	  rect->x += (depth - 1) * tree_view->priv->level_indentation;
+	  rtl = gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
+
+	  if (!rtl)
+	    rect->x += (depth - 1) * tree_view->priv->level_indentation;
 	  rect->width -= (depth - 1) * tree_view->priv->level_indentation;
 
 	  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	    {
-	      rect->x += depth * tree_view->priv->expander_size;
+	      if (!rtl)
+		rect->x += depth * tree_view->priv->expander_size;
 	      rect->width -= depth * tree_view->priv->expander_size;
 	    }
 
@@ -12430,6 +12437,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GdkDrawable *drawable;
   gint bin_window_width;
   gboolean is_separator = FALSE;
+  gboolean rtl;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -12486,7 +12494,11 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                       bin_window_width + 2,
                       background_area.height + 2);
 
-  for (list = tree_view->priv->columns; list; list = list->next)
+  rtl = gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
+
+  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
+      list;
+      list = (rtl ? list->prev : list->next))
     {
       GtkTreeViewColumn *column = list->data;
       GdkRectangle cell_area;
@@ -12502,20 +12514,25 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       background_area.x = cell_offset;
       background_area.width = column->width;
 
+      gtk_widget_style_get (widget,
+			    "vertical-separator", &vertical_separator,
+			    NULL);
+
       cell_area = background_area;
 
-      gtk_widget_style_get (widget, "vertical-separator", &vertical_separator, NULL);
       cell_area.y += vertical_separator / 2;
       cell_area.height -= vertical_separator;
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
-	  cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
+	  if (!rtl)
+	    cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	  cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
           if (TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
-	      cell_area.x += depth * tree_view->priv->expander_size;
+	      if (!rtl)
+		cell_area.x += depth * tree_view->priv->expander_size;
 	      cell_area.width -= depth * tree_view->priv->expander_size;
 	    }
         }
@@ -13462,6 +13479,7 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 
 	  area = cell_area;
 	  cell = _gtk_tree_view_column_get_edited_cell (tree_view->priv->focus_column);
+
 	  _gtk_tree_view_column_get_neighbor_sizes (tree_view->priv->focus_column, cell, &left, &right);
 
 	  area.x += left;
