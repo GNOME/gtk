@@ -1,3 +1,23 @@
+2006-05-27  Kristian Rietveld  <kris@gtk.org>
+
+	Editable cell window placement and RTL fixes.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press),
+	(gtk_tree_view_bin_expose), (gtk_tree_view_get_cell_area),
+	(gtk_tree_view_create_row_drag_icon): Only add indentation to x
+	if !rtl,
+	(gtk_tree_view_create_row_drag_icon): Iterate over columns in reverse
+	direction if in rtl mode.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	horizontal_separator is not part of the real background area width,
+	add 2 * focus_line_width to real_cell_area.x and not
+	real_background_area.x, fix up event coordinates check in the
+	PACK_END loop, also set depth to zero at the end of the PACK_END
+	loop,
+	(_gtk_tree_view_get_neighbor_sizes): also add column_spacing for each
+	visible cell.
+
 2006-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/stock-icons/24/gtk-orientation-landscape.png:
