@@ -10231,7 +10231,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
  * Creates a new #GtkTreeViewColumn and inserts it into the @tree_view at
  * @position.  If @position is -1, then the newly created column is inserted at
  * the end.  The column is initialized with the attributes given. If @tree_view
- * has "fixed_height" mode enabled, then @column must have its sizing
+ * has "fixed_height" mode enabled, then the new column will have its sizing
  * property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after insertion.
@@ -10251,6 +10251,8 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
 
   column = gtk_tree_view_column_new ();
+  if (tree_view->priv->fixed_height_mode)
+    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 
   gtk_tree_view_column_set_title (column, title);
   gtk_tree_view_column_pack_start (column, cell, TRUE);
@@ -10287,7 +10289,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
  * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_pack_start().
- * If @tree_view has "fixed_height" mode enabled, then @column must have its
+ * If @tree_view has "fixed_height" mode enabled, then the new column will have its
  * "sizing" property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: number of columns in the tree view post-insert
@@ -10306,6 +10308,8 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
 
   column = gtk_tree_view_column_new ();
+  if (tree_view->priv->fixed_height_mode)
+    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 
   gtk_tree_view_column_set_title (column, title);
   gtk_tree_view_column_pack_start (column, cell, TRUE);
