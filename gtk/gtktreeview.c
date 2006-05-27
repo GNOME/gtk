@@ -8535,7 +8535,7 @@ gtk_tree_view_queue_draw_arrow (GtkTreeView      *tree_view,
     return;
 
   rect.x = 0;
-  rect.width = MAX (tree_view->priv->expander_size, tree_view->priv->width);
+  rect.width = MAX (tree_view->priv->expander_size, MAX (tree_view->priv->width, GTK_WIDGET (tree_view)->allocation.width));
 
   rect.y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node);
   rect.height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node));

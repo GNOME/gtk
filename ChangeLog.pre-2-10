@@ -1,5 +1,10 @@
 2006-05-27  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_queue_draw_arrow): really fix
+	#333284.
+
+2006-05-27  Kristian Rietveld  <kris@gtk.org>
+
 	Editable cell window placement and RTL fixes.
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press),
