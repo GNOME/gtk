@@ -8755,6 +8755,7 @@ static void
 gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 				   gint         count)
 {
+  gint selection_count;
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
   GtkRBTree *new_cursor_tree = NULL;
@@ -8777,12 +8778,23 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   if (cursor_tree == NULL)
     /* FIXME: we lost the cursor; should we get the first? */
     return;
-  if (count == -1)
-    _gtk_rbtree_prev_full (cursor_tree, cursor_node,
-			   &new_cursor_tree, &new_cursor_node);
+
+  selection_count = gtk_tree_selection_count_selected_rows (tree_view->priv->selection);
+
+  if (selection_count == 0 && !tree_view->priv->ctrl_pressed)
+    {
+      new_cursor_tree = cursor_tree;
+      new_cursor_node = cursor_node;
+    }
   else
-    _gtk_rbtree_next_full (cursor_tree, cursor_node,
-			   &new_cursor_tree, &new_cursor_node);
+    {
+      if (count == -1)
+	_gtk_rbtree_prev_full (cursor_tree, cursor_node,
+			       &new_cursor_tree, &new_cursor_node);
+      else
+	_gtk_rbtree_next_full (cursor_tree, cursor_node,
+			       &new_cursor_tree, &new_cursor_node);
+    }
 
   /*
    * If the list has only one item and multi-selection is set then select

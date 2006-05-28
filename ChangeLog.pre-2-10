@@ -1,3 +1,9 @@
+2006-05-29  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): select
+	the current focus row if nothing is selected and ctrl is not pressed.
+	(Fixes #324480, Murray Cumming/Srirama Sharma).
+
 2006-05-28  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_cell_focus): refactor
