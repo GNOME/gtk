@@ -7886,6 +7886,7 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 			  gboolean     recurse)
 {
   GtkRBNode *temp = NULL;
+  GtkTreePath *path = NULL;
   gboolean is_list = GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST);
 
   do
@@ -7909,14 +7910,27 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 	{
 	  GtkTreeIter child;
 
+	  if (!path)
+	    path = gtk_tree_model_get_path (tree_view->priv->model, iter);
+	  else
+	    gtk_tree_path_next (path);
+
 	  if (gtk_tree_model_iter_children (tree_view->priv->model, &child, iter))
 	    {
-	      temp->children = _gtk_rbtree_new ();
-	      temp->children->parent_tree = tree;
-	      temp->children->parent_node = temp;
-	      gtk_tree_view_build_tree (tree_view, temp->children, &child, depth + 1, recurse);
+	      gboolean expand;
+
+	      g_signal_emit (tree_view, tree_view_signals[TEST_EXPAND_ROW], 0, &iter, path, &expand);
+
+	      if (!expand)
+	        {
+	          temp->children = _gtk_rbtree_new ();
+	          temp->children->parent_tree = tree;
+	          temp->children->parent_node = temp;
+	          gtk_tree_view_build_tree (tree_view, temp->children, &child, depth + 1, recurse);
+		}
 	    }
 	}
+
       if (gtk_tree_model_iter_has_child (tree_view->priv->model, iter))
 	{
 	  if ((temp->flags&GTK_RBNODE_IS_PARENT) != GTK_RBNODE_IS_PARENT)
@@ -7924,6 +7938,9 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 	}
     }
   while (gtk_tree_model_iter_next (tree_view->priv->model, iter));
+
+  if (path)
+    gtk_tree_path_free (path);
 }
 
 /* If height is non-NULL, then we set it to be the new height.  if it's all
