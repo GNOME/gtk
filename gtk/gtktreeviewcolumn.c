@@ -842,10 +842,12 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 static void 
 gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 {
+  gint sort_column_id;
   GtkWidget *hbox;
   GtkWidget *alignment;
   GtkWidget *arrow;
   GtkWidget *current_child;
+  GtkArrowType arrow_type = GTK_ARROW_NONE;
 
   /* Create a button if necessary */
   if (tree_column->visible &&
@@ -896,24 +898,32 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 					  "");
     }
 
-  switch (tree_column->sort_order)
+  if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					    &sort_column_id,
+					    NULL))
     {
-    case GTK_SORT_ASCENDING:
-      gtk_arrow_set (GTK_ARROW (arrow),
-		     GTK_ARROW_DOWN,
-		     GTK_SHADOW_IN);
-      break;
+      if (sort_column_id == tree_column->sort_column_id)
+	{
+	  switch (tree_column->sort_order)
+	    {
+	      case GTK_SORT_ASCENDING:
+		arrow_type = GTK_ARROW_DOWN;
+		break;
 
-    case GTK_SORT_DESCENDING:
-      gtk_arrow_set (GTK_ARROW (arrow),
-		     GTK_ARROW_UP,
-		     GTK_SHADOW_IN);
-      break;
+	      case GTK_SORT_DESCENDING:
+		arrow_type = GTK_ARROW_UP;
+		break;
           
-    default:
-      g_warning (G_STRLOC": bad sort order");
-      break;
+	      default:
+		g_warning (G_STRLOC": bad sort order");
+		break;
+	    }
+	}
     }
+
+  gtk_arrow_set (GTK_ARROW (arrow),
+		 arrow_type,
+		 GTK_SHADOW_IN);
 
   /* Put arrow on the right if the text is left-or-center justified, and on the
    * left otherwise; do this by packing boxes, so flipping text direction will
@@ -934,7 +944,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     }
   g_object_unref (arrow);
 
-  if (tree_column->show_sort_indicator)
+  if (tree_column->sort_column_id >= 0)
     gtk_widget_show (arrow);
   else
     gtk_widget_hide (arrow);

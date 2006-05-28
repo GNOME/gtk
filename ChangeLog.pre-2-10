@@ -1,3 +1,11 @@
+2006-05-28  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkenums.h: add GTK_ARROW_NONE.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_column): always
+	"show" the arrow if sort_column_id >= 0, only set arrow type if
+	this column is the column we are currently sorting on. (#331338).
+
 2006-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrecentchoosermenu.c: Avoid trivial differences
