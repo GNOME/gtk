@@ -1,5 +1,11 @@
 2006-05-28  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_build_tree): emit test_expand_row
+	and test return value before expanding a branch. (Fixes #321523,
+	reported by Daniel Lindenaar).
+
+2006-05-28  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_insert_column): set the sizing
 	type of the new column to FIXED,
 	(gtk_tree_view_insert_column_with_attributes): likewise. (#341898,
