@@ -8905,10 +8905,10 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
     }
   gtk_tree_path_free (cursor_path);
 
-  list = tree_view->priv->columns;
+  list = rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns);
   if (tree_view->priv->focus_column)
     {
-      for (list = tree_view->priv->columns; list; list = list->next)
+      for (; list; list = (rtl ? list->prev : list->next))
 	{
 	  if (list->data == tree_view->priv->focus_column)
 	    break;
@@ -8917,6 +8917,8 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 
   while (list)
     {
+      gboolean left, right;
+
       column = list->data;
       if (column->visible == FALSE)
 	goto loop_end;
@@ -8926,9 +8928,19 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 					       &iter,
 					       GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 					       cursor_node->children?TRUE:FALSE);
-      if (_gtk_tree_view_column_cell_focus (column, count,
-					    list->prev?TRUE:FALSE,
-					    list->next?TRUE:FALSE))
+
+      if (rtl)
+        {
+	  right = list->prev ? TRUE : FALSE;
+	  left = list->next ? TRUE : FALSE;
+	}
+      else
+        {
+	  left = list->prev ? TRUE : FALSE;
+	  right = list->next ? TRUE : FALSE;
+        }
+
+      if (_gtk_tree_view_column_cell_focus (column, count, left, right))
 	{
 	  tree_view->priv->focus_column = column;
 	  found_column = TRUE;

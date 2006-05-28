@@ -3250,8 +3250,10 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 				  gboolean           right)
 {
   gint count;
+  gboolean rtl;
 
   count = _gtk_tree_view_column_count_special_cells (tree_column);
+  rtl = gtk_widget_get_direction (GTK_WIDGET (tree_column->tree_view)) == GTK_TEXT_DIR_RTL;
 
   /* if we are the current focus column and have multiple editable cells,
    * try to select the next one, else move the focus to the next column
@@ -3276,8 +3278,16 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 	  if (!list || !info || !info->has_focus)
 	    return FALSE;
 
-	  next = gtk_tree_view_column_cell_next (tree_column, list);
-	  prev = gtk_tree_view_column_cell_prev (tree_column, list);
+	  if (rtl)
+	    {
+	      prev = gtk_tree_view_column_cell_next (tree_column, list);
+	      next = gtk_tree_view_column_cell_prev (tree_column, list);
+	    }
+	  else
+	    {
+	      next = gtk_tree_view_column_cell_next (tree_column, list);
+	      prev = gtk_tree_view_column_cell_prev (tree_column, list);
+	    }
 
 	  info->has_focus = FALSE;
 	  if (direction > 0 && next)
@@ -3288,8 +3298,12 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 	    }
 	  else if (direction > 0 && !next && !right)
 	    {
-	      /* keep focus on latest cell */
-	      info = gtk_tree_view_column_cell_last (tree_column)->data;
+	      /* keep focus on last cell */
+	      if (rtl)
+	        info = gtk_tree_view_column_cell_first (tree_column)->data;
+	      else
+	        info = gtk_tree_view_column_cell_last (tree_column)->data;
+
 	      info->has_focus = TRUE;
 	      return TRUE;
 	    }
@@ -3302,7 +3316,11 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 	  else if (direction < 0 && !prev && !left)
 	    {
 	      /* keep focus on first cell */
-	      info = gtk_tree_view_column_cell_first (tree_column)->data;
+	      if (rtl)
+		info = gtk_tree_view_column_cell_last (tree_column)->data;
+	      else
+		info = gtk_tree_view_column_cell_first (tree_column)->data;
+
 	      info->has_focus = TRUE;
 	      return TRUE;
 	    }
@@ -3325,11 +3343,26 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 	    info->has_focus = FALSE;
 	}
 
-      if (direction > 0)
-	((GtkTreeViewColumnCellInfo *)gtk_tree_view_column_cell_first (tree_column)->data)->has_focus = TRUE;
-      else if (direction < 0)
-	((GtkTreeViewColumnCellInfo *)gtk_tree_view_column_cell_last (tree_column)->data)->has_focus = TRUE;
+      list = NULL;
+      if (rtl)
+        {
+	  if (direction > 0)
+	    list = gtk_tree_view_column_cell_last (tree_column);
+	  else if (direction < 0)
+	    list = gtk_tree_view_column_cell_first (tree_column);
+	}
+      else
+        {
+	  if (direction > 0)
+	    list = gtk_tree_view_column_cell_first (tree_column);
+	  else if (direction < 0)
+	    list = gtk_tree_view_column_cell_last (tree_column);
+	}
+
+      if (list)
+	((GtkTreeViewColumnCellInfo *) list->data)->has_focus = TRUE;
     }
+
   return TRUE;
 }
 

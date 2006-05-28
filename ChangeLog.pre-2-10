@@ -1,3 +1,11 @@
+2006-05-28  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_cell_focus): refactor
+	to work correctly in RTL mode.
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_left_right): make
+	cursor movement to left/right work correctly in RTL mode.
+
 2006-05-28  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkrectangle.c (gdk_rectangle_union, gdk_rectangle_intersect):
