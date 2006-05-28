@@ -1,3 +1,9 @@
+2006-05-28  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_union, gdk_rectangle_intersect):
+	Note in docs that @dest can be the same as @src1 or @src2. (#343233,
+	Christian Persch)
+
 2006-05-28  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkstyle.c (gtk_default_draw_flat_box): handle

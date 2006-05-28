@@ -37,6 +37,7 @@
  * Calculates the union of two rectangles.
  * The union of rectangles @src1 and @src2 is the smallest rectangle which
  * includes both @src1 and @src2 within it.
+ * It is allowed for @dest to be the same as either @src1 or @src2.
  */
 void
 gdk_rectangle_union (GdkRectangle *src1,
@@ -64,6 +65,7 @@ gdk_rectangle_union (GdkRectangle *src1,
  * @dest: return location for the intersection of @src1 and @src2
  *
  * Calculates the intersection of two rectangles.
+ * It is allowed for @dest to be the same as either @src1 or @src2.
  *
  * Returns: %TRUE if the rectangles intersect.
  */
