@@ -3417,7 +3417,8 @@ gtk_default_draw_flat_box (GtkStyle      *style,
             gc1 = style->bg_gc[GTK_STATE_SELECTED];
           else if (!strcmp ("cell_even", detail) ||
                    !strcmp ("cell_odd", detail) ||
-                   !strcmp ("cell_even_ruled", detail))
+                   !strcmp ("cell_even_ruled", detail) ||
+		   !strcmp ("cell_even_ruled_sorted", detail))
             {
 	      /* This has to be really broken; alex made me do it. -jrb */
 	      if (GTK_WIDGET_HAS_FOCUS (widget))
@@ -3425,7 +3426,8 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      else
 	        gc1 = style->base_gc[GTK_STATE_ACTIVE];
             }
-	  else if (!strcmp ("cell_odd_ruled", detail))
+	  else if (!strcmp ("cell_odd_ruled", detail) ||
+		   !strcmp ("cell_odd_ruled_sorted", detail))
 	    {
 	      if (GTK_WIDGET_HAS_FOCUS (widget))
 	        freeme = get_darkened_gc (window, &style->base[state_type], 1);

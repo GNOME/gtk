@@ -1,5 +1,11 @@
 2006-05-28  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtkstyle.c (gtk_default_draw_flat_box): handle
+	cell_even_ruled_sorted and cell_odd_ruled_sorted for the selected
+	state.
+
+2006-05-28  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtkenums.h: add GTK_ARROW_NONE.
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_column): always
