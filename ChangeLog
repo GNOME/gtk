@@ -1,3 +1,8 @@
+2006-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrecentchoosermenu.c: Avoid trivial differences
+	in translated strings.  (#343088, Clytie Siddall)
+
 2006-05-28  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_build_tree): emit test_expand_row
