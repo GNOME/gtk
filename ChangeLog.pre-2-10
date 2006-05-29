@@ -1,5 +1,11 @@
 2006-05-29  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkdialog.h: removed forgotten declaration of
+	_gtk_dialog_get_response_for_widget(), the function has been made
+	public a long time ago.
+
+2006-05-29  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktextview.c (gtk_text_view_target_list_notify): applied
 	patch from Chris Wilson which replaces a useless loop with
 	built-in access to free'd memory by a simple integer comparison.
