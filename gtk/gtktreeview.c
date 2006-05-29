@@ -12771,7 +12771,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
 				     GtkDestroyNotify            search_destroy)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (search_equal_func !=NULL);
+  g_return_if_fail (search_equal_func != NULL);
 
   if (tree_view->priv->search_destroy)
     (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
