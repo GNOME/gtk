@@ -1,3 +1,10 @@
+2006-05-29  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextview.c (gtk_text_view_target_list_notify): applied
+	patch from Chris Wilson which replaces a useless loop with
+	built-in access to free'd memory by a simple integer comparison.
+	Fixes bug #342894.
+
 2006-05-29  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): select

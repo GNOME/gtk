@@ -6883,16 +6883,13 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
   while (list)
     {
       GtkTargetPair *pair = list->data;
-      guint          info;
 
       list = g_list_next (list); /* get next element before removing */
 
-      for (info = GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS;
-           info >= GTK_TEXT_BUFFER_TARGET_INFO_TEXT;
-           info--)
+      if (pair->info >= GTK_TEXT_BUFFER_TARGET_INFO_TEXT &&
+          pair->info <= GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
         {
-          if (pair->info == info)
-            gtk_target_list_remove (view_list, pair->target);
+          gtk_target_list_remove (view_list, pair->target);
         }
     }
 
