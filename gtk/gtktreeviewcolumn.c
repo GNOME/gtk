@@ -848,6 +848,12 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   GtkWidget *arrow;
   GtkWidget *current_child;
   GtkArrowType arrow_type = GTK_ARROW_NONE;
+  GtkTreeModel *model;
+
+  if (tree_column->tree_view)
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_column->tree_view));
+  else
+    model = NULL;
 
   /* Create a button if necessary */
   if (tree_column->visible &&
@@ -898,9 +904,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 					  "");
     }
 
-  if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
-					    &sort_column_id,
-					    NULL))
+  if (GTK_IS_TREE_SORTABLE (model)
+      && gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+					       &sort_column_id,
+					       NULL))
     {
       if (sort_column_id == tree_column->sort_column_id)
 	{
@@ -944,7 +951,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     }
   g_object_unref (arrow);
 
-  if (tree_column->sort_column_id >= 0)
+  if (GTK_IS_TREE_SORTABLE (model) && tree_column->sort_column_id >= 0)
     gtk_widget_show (arrow);
   else
     gtk_widget_hide (arrow);
