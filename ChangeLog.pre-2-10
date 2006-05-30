@@ -1,3 +1,8 @@
+2006-05-30  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (draw_error_underline): Fix offset to center the
+	underline in requested rectangle. (Ported from pango fix.)
+
 2006-05-29  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkdialog.h: removed forgotten declaration of
