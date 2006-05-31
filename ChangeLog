@@ -1,5 +1,8 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c: Don't run the custom page
+	size dialog.  (#340444, Christian Persch)
+
 	* demos/gtk-demo/main.c (main): Display comments in friendly
 	DodgerBlue instead of scary red.  (#343444, Carol Spears)
 

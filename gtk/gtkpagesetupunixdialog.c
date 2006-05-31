@@ -112,7 +112,7 @@ static void gtk_page_setup_unix_dialog_finalize  (GObject                *object
 static void populate_dialog                      (GtkPageSetupUnixDialog *dialog);
 static void fill_paper_sizes_from_printer        (GtkPageSetupUnixDialog *dialog,
 						  GtkPrinter             *printer);
-static void run_custom_paper_dialog              (GtkPageSetupUnixDialog *dialog);
+static void show_custom_paper_dialog             (GtkPageSetupUnixDialog *dialog);
 static void printer_added_cb                     (GtkPrintBackend        *backend,
 						  GtkPrinter             *printer,
 						  GtkPageSetupUnixDialog *dialog);
@@ -888,23 +888,18 @@ paper_size_changed (GtkComboBox *combo_box,
 
       if (page_setup == NULL)
 	{
-	  run_custom_paper_dialog (dialog);
-
-	  /* Save current last_setup as it is changed by updating the list */
-	  last_page_setup = NULL;
-	  if (priv->last_setup)
-	    last_page_setup = g_object_ref (priv->last_setup);
-
-	  /* Update printer page list */
-	  printer_changed_callback (GTK_COMBO_BOX (priv->printer_combo), dialog);
-
-	  /* Change from "manage" menu item to last value */
-	  if (last_page_setup == NULL)
+          /* Change from "manage" menu item to last value */
+          if (priv->last_setup)
+            last_page_setup = g_object_ref (priv->last_setup);
+          else
 	    last_page_setup = gtk_page_setup_new (); /* "good" default */
 	  set_paper_size (dialog, last_page_setup, FALSE, TRUE);
-	  g_object_unref (last_page_setup);
-	  
-	  return;
+          g_object_unref (last_page_setup);
+
+          /* And show the custom paper dialog */
+          show_custom_paper_dialog (dialog);
+
+          return;
 	}
 
       if (priv->last_setup)
@@ -1327,7 +1322,6 @@ typedef struct {
   GtkPageSetupUnixDialog *dialog;
   GtkWidget *treeview;
   GtkTreeViewColumn *text_column;
-  gboolean non_user_change;
   GtkWidget *values_box;
   GtkWidget *printer_combo;
   GtkWidget *width_widget;
@@ -1336,7 +1330,10 @@ typedef struct {
   GtkWidget *bottom_widget;
   GtkWidget *left_widget;
   GtkWidget *right_widget;
+  gulong printer_inserted_tag;
+  gulong printer_removed_tag;
   guint request_details_tag;
+  guint non_user_change : 1;
 } CustomPaperDialog;
 
 static void unit_widget_changed (CustomPaperDialog *data);
@@ -1363,7 +1360,7 @@ new_unit_widget (CustomPaperDialog *dialog, GtkUnit unit, GtkWidget *mnemonic_la
 
   data->spin_button = button;
 
-  g_signal_connect_swapped (button, "value_changed",
+  g_signal_connect_swapped (button, "value-changed",
 			    G_CALLBACK (unit_widget_changed), dialog);
   
   if (unit == GTK_UNIT_INCH)
@@ -1581,7 +1578,7 @@ add_custom_paper (CustomPaperDialog *data)
 					  GTK_UNIT_MM);
   gtk_page_setup_set_paper_size (page_setup, paper_size);
   gtk_paper_size_free (paper_size);
-  
+
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter, 0, page_setup, -1);
   g_object_unref (page_setup);
@@ -1696,6 +1693,11 @@ static void
 custom_paper_dialog_free (gpointer p)
 {
   CustomPaperDialog *data = p;
+  GtkPageSetupUnixDialogPrivate *priv = data->dialog->priv;
+
+  g_signal_handler_disconnect (priv->printer_list, data->printer_inserted_tag);
+  g_signal_handler_disconnect (priv->printer_list, data->printer_removed_tag);
+
   if (data->request_details_tag)
     {
       g_source_remove (data->request_details_tag);
@@ -1753,41 +1755,59 @@ custom_name_func (GtkTreeViewColumn *tree_column,
 }
 
 static void
-run_custom_paper_dialog (GtkPageSetupUnixDialog *ps_dialog)
+custom_paper_dialog_response_cb (GtkWidget *custom_dialog,
+				 gint response,
+				 CustomPaperDialog *data)
+{
+  GtkPageSetupUnixDialog *dialog = data->dialog;
+  GtkPageSetupUnixDialogPrivate *priv = dialog->priv;
+
+  save_custom_papers (priv->custom_paper_list);
+
+  /* Update printer page list */
+  printer_changed_callback (GTK_COMBO_BOX (priv->printer_combo), dialog);
+
+  gtk_widget_destroy (custom_dialog);
+}
+
+static void
+show_custom_paper_dialog (GtkPageSetupUnixDialog *ps_dialog)
 {
   GtkPageSetupUnixDialogPrivate *priv = ps_dialog->priv;
   GtkWidget *custom_dialog, *image, *table, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *button_box, *button;
-  GtkDialog *ddialog;
+  GtkDialog *dialog;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   CustomPaperDialog *data;
   GtkUnit user_units;
-  gulong printer_tag1, printer_tag2;
   
   custom_dialog = gtk_dialog_new_with_buttons (_("Manage Custom Sizes"),
 					       GTK_WINDOW (ps_dialog),
 					       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
-					       GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					       GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					       NULL);
 
-  ddialog = GTK_DIALOG (custom_dialog);
+  dialog = GTK_DIALOG (custom_dialog);
 
   data = g_new0 (CustomPaperDialog, 1);
   data->dialog = ps_dialog;
-  g_object_set_data_full (G_OBJECT (custom_dialog), "custom-dialog", data, custom_paper_dialog_free);
+  g_object_set_data_full (G_OBJECT (custom_dialog), "custom-dialog", data,
+			  custom_paper_dialog_free);
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (custom_paper_dialog_response_cb), data);
 
-  gtk_dialog_set_has_separator (ddialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (ddialog), 5);
-  gtk_box_set_spacing (GTK_BOX (ddialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (ddialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (ddialog->action_area), 6);
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
   hbox = gtk_hbox_new (FALSE, 18);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_pack_start (GTK_BOX (ddialog->vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
   vbox = gtk_vbox_new (FALSE, 6);
@@ -1950,11 +1970,11 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *ps_dialog)
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (priv->printer_list));
   data->printer_combo = combo;
 
-  printer_tag1 =
-    g_signal_connect_swapped (priv->printer_list, "row_inserted",
+  data->printer_inserted_tag =
+    g_signal_connect_swapped (priv->printer_list, "row-inserted",
 			      G_CALLBACK (update_combo_sensitivity_from_printers), data);
-  printer_tag2 =
-    g_signal_connect_swapped (priv->printer_list, "row_deleted",
+  data->printer_removed_tag =
+    g_signal_connect_swapped (priv->printer_list, "row-deleted",
 			      G_CALLBACK (update_combo_sensitivity_from_printers), data);
   update_combo_sensitivity_from_printers (data);
   
@@ -1987,14 +2007,7 @@ run_custom_paper_dialog (GtkPageSetupUnixDialog *ps_dialog)
       add_custom_paper (data);
     }
 
-  gtk_dialog_run (GTK_DIALOG (custom_dialog));
-  gtk_widget_destroy (custom_dialog);
-
-  save_custom_papers (priv->custom_paper_list);
-
-  g_signal_handler_disconnect (priv->printer_list, printer_tag1);
-  g_signal_handler_disconnect (priv->printer_list, printer_tag2);
-  
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 
