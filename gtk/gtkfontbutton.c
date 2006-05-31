@@ -231,9 +231,13 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * GtkFontButton::font-set:
    * @widget: the object which received the signal.
    * 
-   * The ::font-set signal is emitted when the user selects a font. When 
-   * handling this signal, use gtk_font_button_get_font_name() to find out
-   * which font was just selected.
+   * The ::font-set signal is emitted when the user selects a font. 
+   * When handling this signal, use gtk_font_button_get_font_name() 
+   * to find out which font was just selected.
+   *
+   * Note that this signal is only emitted when the <emphasis>user</emphasis>
+   * changes the font. If you need to react to programmatic font changes
+   * as well, use the notify::font-name signal.
    *
    * Since: 2.4
    */

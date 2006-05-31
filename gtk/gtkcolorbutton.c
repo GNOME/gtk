@@ -223,9 +223,13 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * GtkColorButton::color-set:
    * @widget: the object which received the signal.
    * 
-   * The ::color-set signal is emitted when the user selects a color. When handling this signal,
-   * use gtk_color_button_get_color() and gtk_color_button_get_alpha() to find out which color 
-   * was just selected.
+   * The ::color-set signal is emitted when the user selects a color. 
+   * When handling this signal, use gtk_color_button_get_color() and 
+   * gtk_color_button_get_alpha() to find out which color was just selected.
+   *
+   * Note that this signal is only emitted when the <emphasis>user</emphasis>
+   * changes the color. If you need to react to programmatic color changes
+   * as well, use the notify::color signal.
    *
    * Since: 2.4
    */
@@ -237,7 +241,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 						  _gtk_marshal_VOID__VOID,
 						  G_TYPE_NONE, 0);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkColorButtonPrivate));
+  g_type_class_add_private (gobject_class, sizeof (GtkColorButtonPrivat;
 }
 
 static void
