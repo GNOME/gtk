@@ -802,8 +802,19 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_TREE_PATH,
 		  GTK_TYPE_TREE_VIEW_COLUMN);
 
+  /**
+   * GtkTreeView::test-expand-row:
+   * @tree_view: the object on which the signal is emitted
+   * @iter: the tree iter of the row to expand
+   * @path: a tree path that points to the row 
+   * 
+   * The given row is about to be expanded (show its children nodes). Use this
+   * signal if you need to control the expandability of individual rows.
+   *
+   * Returns: %TRUE to allow expansion, %FALSE to reject
+   */
   tree_view_signals[TEST_EXPAND_ROW] =
-    g_signal_new (I_("test_expand_row"),
+    g_signal_new (I_("test-expand-row"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, test_expand_row),
@@ -813,8 +824,19 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
 
+  /**
+   * GtkTreeView::test-collapse-row:
+   * @tree_view: the object on which the signal is emitted
+   * @iter: the tree iter of the row to collapse
+   * @path: a tree path that points to the row 
+   * 
+   * The given row is about to be collapsed (hide its children nodes). Use this
+   * signal if you need to control the collapsibility of individual rows.
+   *
+   * Returns: %TRUE to allow expansion, %FALSE to reject
+   */
   tree_view_signals[TEST_COLLAPSE_ROW] =
-    g_signal_new (I_("test_collapse_row"),
+    g_signal_new (I_("test-collapse-row"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, test_collapse_row),
@@ -824,8 +846,16 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
 
+  /**
+   * GtkTreeView::row-expanded:
+   * @tree_view: the object on which the signal is emitted
+   * @iter: the tree iter of the expanded row
+   * @path: a tree path that points to the row 
+   * 
+   * The given row has been expanded (child nodes are shown).
+   */
   tree_view_signals[ROW_EXPANDED] =
-    g_signal_new (I_("row_expanded"),
+    g_signal_new (I_("row-expanded"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, row_expanded),
@@ -835,8 +865,16 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
 
+  /**
+   * GtkTreeView::row-collapsed:
+   * @tree_view: the object on which the signal is emitted
+   * @iter: the tree iter of the collapsed row
+   * @path: a tree path that points to the row 
+   * 
+   * The given row has been collapsed (child nodes are hidden).
+   */
   tree_view_signals[ROW_COLLAPSED] =
-    g_signal_new (I_("row_collapsed"),
+    g_signal_new (I_("row-collapsed"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, row_collapsed),
@@ -846,8 +884,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
 
+  /**
+   * GtkTreeView::columns-changed:
+   * @tree_view: the object on which the signal is emitted 
+   * 
+   * The number of columns of the treeview has changed.
+   */
   tree_view_signals[COLUMNS_CHANGED] =
-    g_signal_new (I_("columns_changed"),
+    g_signal_new (I_("columns-changed"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
@@ -855,8 +899,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  _gtk_marshal_NONE__NONE,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTreeView::cursor-changed:
+   * @tree_view: the object on which the signal is emitted
+   * 
+   * The position of the cursor (focused cell) has changed.
+   */
   tree_view_signals[CURSOR_CHANGED] =
-    g_signal_new (I_("cursor_changed"),
+    g_signal_new (I_("cursor-changed"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, cursor_changed),

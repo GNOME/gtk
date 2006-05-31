@@ -1,3 +1,8 @@
+2006-05-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Document
+	signals.  (#302556, Stefan Kost)
+
 2006-05-31  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols:
