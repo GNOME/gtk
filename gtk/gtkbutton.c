@@ -33,6 +33,7 @@
 #include "gtkmarshalers.h"
 #include "gtkimage.h"
 #include "gtkhbox.h"
+#include "gtkvbox.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkprivate.h"
@@ -68,6 +69,7 @@ enum {
   PROP_FOCUS_ON_CLICK,
   PROP_XALIGN,
   PROP_YALIGN,
+  PROP_IMAGE_POSITION
 };
 
 #define GTK_BUTTON_GET_PRIVATE(o)       (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_BUTTON, GtkButtonPrivate))
@@ -75,13 +77,14 @@ typedef struct _GtkButtonPrivate GtkButtonPrivate;
 
 struct _GtkButtonPrivate
 {
-  gfloat       xalign;
-  gfloat       yalign;
-  GtkWidget   *image;
-  guint        align_set : 1;
-  guint        image_is_stock : 1;
-  guint        has_grab : 1;
-  guint32      grab_time;
+  gfloat          xalign;
+  gfloat          yalign;
+  GtkWidget      *image;
+  guint           align_set      : 1;
+  guint           image_is_stock : 1;
+  guint           has_grab       : 1;
+  guint32         grab_time;
+  GtkPositionType image_position;
 };
 
 static void gtk_button_destroy        (GtkObject          *object);
@@ -282,6 +285,22 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
+   * GtkButton:image-position:
+   *
+   * Sets the position of the image relative to the text inside the button.
+   * 
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_IMAGE_POSITION,
+                                   g_param_spec_enum ("image-position",
+                                                      P_("Image position"),
+                                                      P_("The position of the image relative to the text"),
+                                                      GTK_TYPE_POSITION_TYPE,
+                                                      GTK_POS_LEFT,
+                                                      GTK_PARAM_READWRITE));
+
+  /**
    * GtkButton::pressed:
    * @button: the object that received the signal
    *
@@ -475,6 +494,7 @@ gtk_button_init (GtkButton *button)
   priv->yalign = 0.5;
   priv->align_set = 0;
   priv->image_is_stock = TRUE;
+  priv->image_position = GTK_POS_LEFT;
 }
 
 static void
@@ -589,6 +609,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_YALIGN:
       gtk_button_set_alignment (button, priv->xalign, g_value_get_float (value));
       break;
+    case PROP_IMAGE_POSITION:
+      gtk_button_set_image_position (button, g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -630,6 +653,9 @@ gtk_button_get_property (GObject         *object,
     case PROP_YALIGN:
       g_value_set_float (value, priv->yalign);
       break;
+    case PROP_IMAGE_POSITION:
+      g_value_set_enum (value, priv->image_position);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -666,7 +692,7 @@ gtk_button_construct_child (GtkButton *button)
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   GtkStockItem item;
   GtkWidget *label;
-  GtkWidget *hbox;
+  GtkWidget *box;
   GtkWidget *align;
   GtkWidget *image = NULL;
   gchar *label_text = NULL;
@@ -705,19 +731,27 @@ gtk_button_construct_child (GtkButton *button)
   if (image)
     {
       priv->image = image;
-
       g_object_set (priv->image, 
 		    "visible", show_image (button),
 		    "no-show-all", TRUE,
 		    NULL);
-      hbox = gtk_hbox_new (FALSE, 2);
+
+      if (priv->image_position == GTK_POS_LEFT ||
+	  priv->image_position == GTK_POS_RIGHT)
+	box = gtk_hbox_new (FALSE, 2);
+      else
+	box = gtk_vbox_new (FALSE, 2);
 
       if (priv->align_set)
 	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
       else
 	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-	
-      gtk_box_pack_start (GTK_BOX (hbox), priv->image, FALSE, FALSE, 0);
+
+      if (priv->image_position == GTK_POS_LEFT ||
+	  priv->image_position == GTK_POS_TOP)
+	gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE, 0);
+      else
+	gtk_box_pack_end (GTK_BOX (box), priv->image, FALSE, FALSE, 0);
 
       if (label_text)
 	{
@@ -725,11 +759,15 @@ gtk_button_construct_child (GtkButton *button)
 	  gtk_label_set_mnemonic_widget (GTK_LABEL (label), 
 					 GTK_WIDGET (button));
 
-	  gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	  if (priv->image_position == GTK_POS_RIGHT ||
+	      priv->image_position == GTK_POS_BOTTOM)
+	    gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+	  else
+	    gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
 	}
       
       gtk_container_add (GTK_CONTAINER (button), align);
-      gtk_container_add (GTK_CONTAINER (align), hbox);
+      gtk_container_add (GTK_CONTAINER (align), box);
       gtk_widget_show_all (align);
 
       g_object_unref (image);
@@ -1899,6 +1937,59 @@ gtk_button_get_image (GtkButton *button)
   
   return priv->image;
 }
+
+/**
+ * gtk_button_set_image_position:
+ * @button: a #GtkButton
+ * @position: the position
+ *
+ * Sets the position of the image relative to the text inside the button.
+ *
+ * Since: 2.10
+ */ 
+void
+gtk_button_set_image_position (GtkButton       *button,
+			       GtkPositionType  position)
+{
+
+  GtkButtonPrivate *priv;
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (position >= GTK_POS_LEFT && position <= GTK_POS_BOTTOM);
   
+  priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->image_position != position)
+    {
+      priv->image_position = position;
+
+      gtk_button_construct_child (button);
+
+      g_object_notify (G_OBJECT (button), "image-position");
+    }
+}
+
+/**
+ * gtk_button_get_image_position:
+ * @button: a #GtkButton
+ *
+ * Gets the position of the image relative to the text inside the button.
+ *
+ * Return value: the position
+ *
+ * Since: 2.10
+ */
+GtkPositionType
+gtk_button_get_image_position (GtkButton *button)
+{
+  GtkButtonPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_POS_LEFT);
+
+  priv = GTK_BUTTON_GET_PRIVATE (button);
+  
+  return priv->image_position;
+}
+
 #define __GTK_BUTTON_C__
 #include "gtkaliasdef.c"  

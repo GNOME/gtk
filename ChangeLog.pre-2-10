@@ -1,3 +1,28 @@
+2006-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkbutton.h: 
+	* gtk/gtkbutton.c: Add a GtkButton::image-position property
+	with getter and setter, to allow constructing buttons with
+	the image stacked on top of the label.  (#342930, Johan Dahlin)
+
+2006-05-30  Johan Dahlin  <jdahlin@async.com.br>
+
+   * gtk/gtk.symbols:
+   * gtk/gtkbutton.c: (gtk_button_class_init), (gtk_button_init),
+   (gtk_button_set_property), (gtk_button_get_property),
+   (gtk_button_construct_child), (gtk_button_set_image_spacing),
+   (gtk_button_get_image_spacing):
+   * gtk/gtkbutton.h:
+   * gtk/gtktoolbutton.c: (gtk_tool_button_class_init),
+   (gtk_tool_button_construct_contents),
+   (gtk_tool_button_set_property), (gtk_tool_button_get_property),
+   (_gtk_tool_button_get_button), (gtk_tool_button_set_icon_spacing),
+   (gtk_tool_button_get_icon_spacing):
+   * gtk/gtktoolbutton.h:
+   Add GtkButton:image-spacing and GtkToolButton::icon-spacing.
+   (#320431, James Moger)
+
 2006-05-30  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button): only

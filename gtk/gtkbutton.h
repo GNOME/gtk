@@ -121,7 +121,9 @@ void                  gtk_button_get_alignment      (GtkButton      *button,
 void                  gtk_button_set_image          (GtkButton      *button,
 					             GtkWidget      *image);
 GtkWidget*            gtk_button_get_image          (GtkButton      *button);
-
+void                  gtk_button_set_image_position (GtkButton      *button,
+						     GtkPositionType position);
+GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
 
 void _gtk_button_set_depressed             (GtkButton     *button,
 					    gboolean       depressed);
