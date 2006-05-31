@@ -1720,7 +1720,7 @@ print_pages_idle (gpointer user_data)
   cr = gtk_print_context_get_cairo_context (data->print_context);
   
   cairo_save (cr);
-  if (priv->manual_scale != 100.0)
+  if (priv->manual_scale != 1.0)
     cairo_scale (cr,
 		 priv->manual_scale,
 		 priv->manual_scale);
