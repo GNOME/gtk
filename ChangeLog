@@ -1,5 +1,8 @@
 2006-05-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c (gtk_grab_notify_foreach): Don't skip internal
+	children when emitting grab-notify.  (#343425, Markku Vire)
+
 	* gdk/gdkpixmap.c: 
 	* gdk/gdkwindow.c: Don't use G_DEFINE_TYPE, since the instance
 	struct name does not match the type name.  (#343453, Ed Catmur)

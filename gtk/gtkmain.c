@@ -1524,7 +1524,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     _gtk_widget_grab_notify (child, was_shadowed);
   
   if ((was_shadowed || is_shadowed) && GTK_IS_CONTAINER (child))
-    gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
+    gtk_container_forall (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
       
   g_object_unref (child);
   
