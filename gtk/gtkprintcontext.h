@@ -38,18 +38,18 @@ GType          gtk_print_context_get_type (void) G_GNUC_CONST;
 
 
 /* Rendering */
-cairo_t *     gtk_print_context_get_cairo      (GtkPrintContext *context);
+cairo_t      *gtk_print_context_get_cairo_context    (GtkPrintContext *context);
 
-GtkPageSetup *gtk_print_context_get_page_setup (GtkPrintContext *context);
-gdouble       gtk_print_context_get_width      (GtkPrintContext *context);
-gdouble       gtk_print_context_get_height     (GtkPrintContext *context);
-gdouble       gtk_print_context_get_dpi_x      (GtkPrintContext *context);
-gdouble       gtk_print_context_get_dpi_y      (GtkPrintContext *context);
+GtkPageSetup *gtk_print_context_get_page_setup       (GtkPrintContext *context);
+gdouble       gtk_print_context_get_width            (GtkPrintContext *context);
+gdouble       gtk_print_context_get_height           (GtkPrintContext *context);
+gdouble       gtk_print_context_get_dpi_x            (GtkPrintContext *context);
+gdouble       gtk_print_context_get_dpi_y            (GtkPrintContext *context);
 
 /* Fonts */
-PangoFontMap *gtk_print_context_get_fontmap    (GtkPrintContext *context);
-PangoContext *gtk_print_context_create_context (GtkPrintContext *context);
-PangoLayout * gtk_print_context_create_layout  (GtkPrintContext *context);
+PangoFontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);
+PangoContext *gtk_print_context_create_pango_context (GtkPrintContext *context);
+PangoLayout  *gtk_print_context_create_pango_layout  (GtkPrintContext *context);
 
 
 G_END_DECLS

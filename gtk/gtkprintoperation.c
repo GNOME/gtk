@@ -376,7 +376,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * Gets emitted for every page that is printed. The signal handler
    * must render the @page_nr's page onto the cairo context obtained
-   * from @context using gtk_print_context_get_cairo().
+   * from @context using gtk_print_context_get_cairo_context().
    *
    * <informalexample><programlisting>
    *  FIXME: need an example here
@@ -1413,7 +1413,7 @@ pdf_end_page (GtkPrintOperation *op,
 {
   cairo_t *cr;
 
-  cr = gtk_print_context_get_cairo (print_context);
+  cr = gtk_print_context_get_cairo_context (print_context);
   cairo_show_page (cr);
 }
 
@@ -1717,7 +1717,7 @@ print_pages_idle (gpointer user_data)
   _gtk_print_context_set_page_setup (data->print_context, page_setup);
   data->op->priv->start_page (data->op, data->print_context, page_setup);
   
-  cr = gtk_print_context_get_cairo (data->print_context);
+  cr = gtk_print_context_get_cairo_context (data->print_context);
   
   cairo_save (cr);
   if (priv->manual_scale != 100.0)

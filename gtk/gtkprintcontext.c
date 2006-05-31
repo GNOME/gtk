@@ -209,7 +209,7 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
 }
 
 /**
- * gtk_print_context_get_cairo:
+ * gtk_print_context_get_cairo_context:
  * @context: a #GtkPrintContext
  *
  * Obtains the cairo context that is associated with the
@@ -220,7 +220,7 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
  * Since: 2.10
  */
 cairo_t *
-gtk_print_context_get_cairo (GtkPrintContext *context)
+gtk_print_context_get_cairo_context (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
@@ -343,7 +343,7 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
 }
 
 /**
- * gtk_print_context_get_fontmap:
+ * gtk_print_context_get_pango_fontmap:
  * @context: a #GtkPrintContext
  *
  * Returns a #PangoFontMap that is suitable for use 
@@ -354,7 +354,7 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
  * Since: 2.10
  */
 PangoFontMap *
-gtk_print_context_get_fontmap (GtkPrintContext *context)
+gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
@@ -362,7 +362,7 @@ gtk_print_context_get_fontmap (GtkPrintContext *context)
 }
 
 /**
- * gtk_print_context_create_context:
+ * gtk_print_context_create_pango_context:
  * @context: a #GtkPrintContext 
  *
  * Creates a new #PangoContext that can be used with the
@@ -373,7 +373,7 @@ gtk_print_context_get_fontmap (GtkPrintContext *context)
  * Since: 2.10
  */
 PangoContext *
-gtk_print_context_create_context (GtkPrintContext *context)
+gtk_print_context_create_pango_context (GtkPrintContext *context)
 {
   PangoContext *pango_context;
 
@@ -385,7 +385,7 @@ gtk_print_context_create_context (GtkPrintContext *context)
 }
 
 /**
- * gtk_print_context_create_layout:
+ * gtk_print_context_create_pango_layout:
  * @context: a #GtkPrintContext
  *
  * Creates a new #PangoLayout that is suitable for use
@@ -396,14 +396,14 @@ gtk_print_context_create_context (GtkPrintContext *context)
  * Since: 2.10
  */
 PangoLayout *
-gtk_print_context_create_layout (GtkPrintContext *context)
+gtk_print_context_create_pango_layout (GtkPrintContext *context)
 {
   PangoContext *pango_context;
   PangoLayout *layout;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
-  pango_context = gtk_print_context_create_context (context);
+  pango_context = gtk_print_context_create_pango_context (context);
   layout = pango_layout_new (pango_context);
 
   pango_cairo_update_context (context->cr, pango_context);

@@ -85,7 +85,7 @@ unix_end_page (GtkPrintOperation *op,
 {
   cairo_t *cr;
 
-  cr = gtk_print_context_get_cairo (print_context);
+  cr = gtk_print_context_get_cairo_context (print_context);
   cairo_show_page (cr);
 }
 

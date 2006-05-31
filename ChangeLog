@@ -1,5 +1,16 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintcontext.h: 
+	* gtk/gtkprintcontext.c: 
+	* gtk/gtkprintoperation.c: 
+	* gtk/gtkprintoperation-unix.c: Change some function names to be 
+	longer and better. 
+	gtk_print_context_get_cairo -> gtk_print_context_get_cairo_context
+	gtk_print_context_get_fontmap -> gtk_print_context_get_pango_fontmap
+	gtk_print_context_create_context -> gtk_print_context_create_pango_context
+	gtk_print_context_create_layout -> gtk_print_context_create_pango_layout
+	Update all callers.
+
 	* gtk/gtkpagesetupunixdialog.c: Don't run the custom page
 	size dialog.  (#340444, Christian Persch)
 
