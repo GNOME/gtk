@@ -264,13 +264,14 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-25 07:12+0200\n"
-"PO-Revision-Date: 2006-05-25 11:09+0530\n"
+"POT-Creation-Date: 2006-05-31 07:18+0200\n"
+"PO-Revision-Date: 2006-05-31 17:33+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -278,6 +279,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -526,7 +528,7 @@ msgstr "નામ"
 msgid "A unique name for the action."
 msgstr "ક્રિયાનું એકલ નામ"
 
-#: ../gtk/gtkaction.c:198 ../gtk/gtkbutton.c:193 ../gtk/gtkexpander.c:185
+#: ../gtk/gtkaction.c:198 ../gtk/gtkbutton.c:196 ../gtk/gtkexpander.c:185
 #: ../gtk/gtkframe.c:95 ../gtk/gtklabel.c:293 ../gtk/gtktoolbutton.c:174
 msgid "Label"
 msgstr "લેબલ"
@@ -716,7 +718,7 @@ msgstr "બટનની ફેરબદલની સ્થિતિ"
 msgid "Horizontal alignment"
 msgstr "આડી કતારબંધ ગોઠવણી"
 
-#: ../gtk/gtkalignment.c:93 ../gtk/gtkbutton.c:244
+#: ../gtk/gtkalignment.c:93 ../gtk/gtkbutton.c:247
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -728,7 +730,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "ઊભી કતારબંધ ગોઠવણી"
 
-#: ../gtk/gtkalignment.c:103 ../gtk/gtkbutton.c:263
+#: ../gtk/gtkalignment.c:103 ../gtk/gtkbutton.c:266
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -955,18 +957,18 @@ msgstr "સ્થિતિ"
 msgid "The index of the child in the parent"
 msgstr "પિતૃમાં બાળનો અનુક્રમાંક "
 
-#: ../gtk/gtkbutton.c:194
+#: ../gtk/gtkbutton.c:197
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "જો બટન લેબલ વિજેટ ધરાવતુ હોય તો, બટનની અંદર લેબલ વિજેટનું લેખન"
 
-#: ../gtk/gtkbutton.c:201 ../gtk/gtkexpander.c:193 ../gtk/gtklabel.c:314
+#: ../gtk/gtkbutton.c:204 ../gtk/gtkexpander.c:193 ../gtk/gtklabel.c:314
 #: ../gtk/gtktoolbutton.c:181
 msgid "Use underline"
 msgstr "નીચે લીટી કરવાનું રાખો"
 
-#: ../gtk/gtkbutton.c:202 ../gtk/gtkexpander.c:194 ../gtk/gtklabel.c:315
+#: ../gtk/gtkbutton.c:205 ../gtk/gtkexpander.c:194 ../gtk/gtklabel.c:315
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -974,104 +976,112 @@ msgstr ""
 "જો સુયોજિત હોય તો, શબ્દની નીચેની લીટી એ સૂચવે છે શુંનો શબ્દ સંજ્ઞાસૂચિની પ્રવેગ કી માટે "
 "વાપરવો જોઇએ"
 
-#: ../gtk/gtkbutton.c:209
+#: ../gtk/gtkbutton.c:212
 msgid "Use stock"
 msgstr "જથ્થાનો ઉપયોગ કરવો"
 
-#: ../gtk/gtkbutton.c:210
+#: ../gtk/gtkbutton.c:213
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "જો સુયોજિત હોય તો, દર્શાવવાની જગ્યાએ લેબલનો ઉપયોગ જથ્થાની વસ્તુને પસંદ કરવા માટે થાય છે"
 
-#: ../gtk/gtkbutton.c:217 ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkbutton.c:220 ../gtk/gtkcombobox.c:640
 #: ../gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "ક્લિક પર ફોકસ"
 
-#: ../gtk/gtkbutton.c:218 ../gtk/gtkfilechooserbutton.c:373
+#: ../gtk/gtkbutton.c:221 ../gtk/gtkfilechooserbutton.c:373
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "જ્યારે માઉસ વડે ક્લિક થાય ત્યારે શું બટન ફોક્સ મેળવે"
 
-#: ../gtk/gtkbutton.c:225
+#: ../gtk/gtkbutton.c:228
 msgid "Border relief"
 msgstr "કિનારી મુક્તિ"
 
-#: ../gtk/gtkbutton.c:226
+#: ../gtk/gtkbutton.c:229
 msgid "The border relief style"
 msgstr "કિનારીમુક્તની રીત"
 
-#: ../gtk/gtkbutton.c:243
+#: ../gtk/gtkbutton.c:246
 msgid "Horizontal alignment for child"
 msgstr "આડી કતારબંધ ગોઠવણી"
 
-#: ../gtk/gtkbutton.c:262
+#: ../gtk/gtkbutton.c:265
 msgid "Vertical alignment for child"
 msgstr "ઊભી કતારબંધ ગોઠવણી"
 
-#: ../gtk/gtkbutton.c:279 ../gtk/gtkimagemenuitem.c:101
+#: ../gtk/gtkbutton.c:282 ../gtk/gtkimagemenuitem.c:101
 msgid "Image widget"
 msgstr "ચિત્ર વિજેટ"
 
-#: ../gtk/gtkbutton.c:280
+#: ../gtk/gtkbutton.c:283
 msgid "Child widget to appear next to the button text"
 msgstr "બટન લખાણની આગળ દેખાડવા માટે બાળ વિજેટ"
 
-#: ../gtk/gtkbutton.c:388
+#: ../gtk/gtkbutton.c:297
+msgid "Image position"
+msgstr "ચિત્ર સ્થિતિ"
+
+#: ../gtk/gtkbutton.c:298
+msgid "The position of the image relative to the text"
+msgstr "લખાણને અનુલક્ષીને ચિત્રની સ્થિતિ"
+
+#: ../gtk/gtkbutton.c:407
 msgid "Default Spacing"
 msgstr "છોડાયેલી મૂળભૂત જગ્યા"
 
-#: ../gtk/gtkbutton.c:389
+#: ../gtk/gtkbutton.c:408
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT બટન માટે ઉમેરવાની વધારાની જગ્યા"
 
-#: ../gtk/gtkbutton.c:395
+#: ../gtk/gtkbutton.c:414
 msgid "Default Outside Spacing"
 msgstr "છોડાયેલી મૂળભૂત બહારની જગ્યા"
 
-#: ../gtk/gtkbutton.c:396
+#: ../gtk/gtkbutton.c:415
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "CAN_DEFAULT બટન માટે વધારાની જગ્યા હંમેશા કિનારીની બહારના વિસ્તારમાં મૂકવી"
 
-#: ../gtk/gtkbutton.c:401
+#: ../gtk/gtkbutton.c:420
 msgid "Child X Displacement"
 msgstr "બાળ X સ્થળાંતર"
 
-#: ../gtk/gtkbutton.c:402
+#: ../gtk/gtkbutton.c:421
 msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "બટનને દબાવવામાં આવે ત્યારે બાળને X ની દિશામાં કેટલો દૂર સુધી ખસેડવી"
 
-#: ../gtk/gtkbutton.c:409
+#: ../gtk/gtkbutton.c:428
 msgid "Child Y Displacement"
 msgstr "બાળ Y સ્થળાંતર"
 
-#: ../gtk/gtkbutton.c:410
+#: ../gtk/gtkbutton.c:429
 msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "બટનને દબાવવામાં આવે ત્યારે બાળને y ની દિશામાં કેટલે દૂર સુધી ખસેડવી"
 
-#: ../gtk/gtkbutton.c:426
+#: ../gtk/gtkbutton.c:445
 msgid "Displace focus"
 msgstr "ડિસ્પ્લે ફોકસ"
 
-#: ../gtk/gtkbutton.c:427
+#: ../gtk/gtkbutton.c:446
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr "શું child_displacement_x/_y ગુણધર્મો ફોકસ લંબચોરસને પણ અસર કરવા જોઈએ"
 
-#: ../gtk/gtkbutton.c:440 ../gtk/gtkentry.c:517 ../gtk/gtkentry.c:860
+#: ../gtk/gtkbutton.c:459 ../gtk/gtkentry.c:517 ../gtk/gtkentry.c:860
 msgid "Inner Border"
 msgstr "અંદરની કિનારી"
 
-#: ../gtk/gtkbutton.c:441
+#: ../gtk/gtkbutton.c:460
 msgid "Border between button edges and child."
 msgstr "બટન બાજુઓ અને બાળ વચ્ચેની કિનારી."
 
-#: ../gtk/gtkbutton.c:446
+#: ../gtk/gtkbutton.c:465
 msgid "Show button images"
 msgstr "બટન ઈમેજો બતાવો"
 
-#: ../gtk/gtkbutton.c:447
+#: ../gtk/gtkbutton.c:466
 msgid "Whether stock icons should be shown in buttons"
 msgstr "શું સ્ટોક ચિહ્નો બટનોમાં દેખાડવા જોઈએ"
 
@@ -1821,7 +1831,7 @@ msgstr "શીર્ષક"
 msgid "The title of the color selection dialog"
 msgstr "રંગ પસંદગી સંવાદનું શીર્ષક"
 
-#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1853
+#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1864
 msgid "Current Color"
 msgstr "વર્તમાન રંગ"
 
@@ -1829,7 +1839,7 @@ msgstr "વર્તમાન રંગ"
 msgid "The selected color"
 msgstr "પસંદિત રંગ"
 
-#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1860
+#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1871
 msgid "Current Alpha"
 msgstr "વર્તમાન આલ્ફા"
 
@@ -1837,35 +1847,35 @@ msgstr "વર્તમાન આલ્ફા"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "વર્તમાન અપારદર્શકતાનું કિંમત (૦ આખું પારદર્શક, ૬૫૫૩૫ આખું અપારદર્શક)"
 
-#: ../gtk/gtkcolorsel.c:1839
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has Opacity Control"
 msgstr "અપારદર્શકતા માટેનુ નિયંત્રણ ધરાવે છે"
 
-#: ../gtk/gtkcolorsel.c:1840
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether the color selector should allow setting opacity"
 msgstr "શું પસંદ કરનારે રંગ અપારદર્શકતાની ગોઠવણી માટે પરવાનગી આપવી જોઇએ છે"
 
-#: ../gtk/gtkcolorsel.c:1846
+#: ../gtk/gtkcolorsel.c:1857
 msgid "Has palette"
 msgstr "પેલેટ છે"
 
-#: ../gtk/gtkcolorsel.c:1847
+#: ../gtk/gtkcolorsel.c:1858
 msgid "Whether a palette should be used"
 msgstr "શું પેલેટનો ઉપયોગ કરવો જોઈએ"
 
-#: ../gtk/gtkcolorsel.c:1854
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current color"
 msgstr "વર્તમાન રંગ"
 
-#: ../gtk/gtkcolorsel.c:1861
+#: ../gtk/gtkcolorsel.c:1872
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "વર્તમાન અપારદર્શકતાનું કિંમત (૦ આખું પારદર્શક, ૬૫૫૩૫ આખું અપારદર્શક)"
 
-#: ../gtk/gtkcolorsel.c:1875
+#: ../gtk/gtkcolorsel.c:1886
 msgid "Custom palette"
 msgstr "વૈવિધ્યપૂર્ણ પેલેટ"
 
-#: ../gtk/gtkcolorsel.c:1876
+#: ../gtk/gtkcolorsel.c:1887
 msgid "Palette to use in the color selector"
 msgstr "રંગની પસંદગીમાં પેલેટનો ઉપયોગ કરવો"
 
