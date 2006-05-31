@@ -6360,15 +6360,15 @@ gtk_page_setup_get_type
 <FILE>gtkprintcontext</FILE>
 <TITLE>GtkPrintContext</TITLE>
 GtkPrintContext
-gtk_print_context_get_cairo
+gtk_print_context_get_cairo_context
 gtk_print_context_get_page_setup
 gtk_print_context_get_width
 gtk_print_context_get_height
 gtk_print_context_get_dpi_x
 gtk_print_context_get_dpi_y
-gtk_print_context_get_fontmap
-gtk_print_context_create_context
-gtk_print_context_create_layout
+gtk_print_context_get_pango_fontmap
+gtk_print_context_create_pango_context
+gtk_print_context_create_pango_layout
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_CONTEXT
