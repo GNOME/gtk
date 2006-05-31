@@ -82,6 +82,7 @@ struct GtkPageSetupUnixDialogPrivate
   GtkWidget *reverse_landscape_radio;
 
   guint request_details_tag;
+  GtkPrinter *request_details_printer;
   
   GtkPrintSettings *print_settings;
 
@@ -388,7 +389,10 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
   
   if (priv->request_details_tag)
     {
-      g_source_remove (priv->request_details_tag);
+      g_signal_handler_disconnect (priv->request_details_printer,
+				   priv->request_details_tag);
+      g_object_unref (priv->request_details_printer);
+      priv->request_details_printer = NULL;
       priv->request_details_tag = 0;
     }
   
@@ -770,7 +774,11 @@ printer_changed_finished_callback (GtkPrinter *printer,
 {
   GtkPageSetupUnixDialogPrivate *priv = dialog->priv;
 
+  g_signal_handler_disconnect (priv->request_details_printer,
+			       priv->request_details_tag);
+  g_object_unref (priv->request_details_printer);
   priv->request_details_tag = 0;
+  priv->request_details_printer = NULL;
   
   if (success)
     fill_paper_sizes_from_printer (dialog, printer);
@@ -795,7 +803,10 @@ printer_changed_callback (GtkComboBox *combo_box,
   
   if (priv->request_details_tag)
     {
-      g_source_remove (priv->request_details_tag);
+      g_signal_handler_disconnect (priv->request_details_printer,
+				   priv->request_details_tag);
+      g_object_unref (priv->request_details_printer);
+      priv->request_details_printer = NULL;
       priv->request_details_tag = 0;
     }
   
@@ -808,6 +819,7 @@ printer_changed_callback (GtkComboBox *combo_box,
 	fill_paper_sizes_from_printer (dialog, printer);
       else
 	{
+	  priv->request_details_printer = g_object_ref (printer);
 	  priv->request_details_tag =
 	    g_signal_connect (printer, "details-acquired",
 			      G_CALLBACK (printer_changed_finished_callback), dialog);
@@ -1333,6 +1345,7 @@ typedef struct {
   gulong printer_inserted_tag;
   gulong printer_removed_tag;
   guint request_details_tag;
+  GtkPrinter *request_details_printer;
   guint non_user_change : 1;
 } CustomPaperDialog;
 
@@ -1640,7 +1653,11 @@ get_margins_finished_callback (GtkPrinter *printer,
 			       gboolean success,
 			       CustomPaperDialog *data)
 {
+  g_signal_handler_disconnect (data->request_details_printer,
+			       data->request_details_tag);
+  g_object_unref (data->request_details_printer);
   data->request_details_tag = 0;
+  data->request_details_printer = NULL;
   
   if (success)
     set_margins_from_printer (data, printer);
@@ -1659,7 +1676,10 @@ margins_from_printer_changed (CustomPaperDialog *data)
 
   if (data->request_details_tag)
     {
-      g_source_remove (data->request_details_tag);
+      g_signal_handler_disconnect (data->request_details_printer,
+				   data->request_details_tag);
+      g_object_unref (data->request_details_printer);
+      data->request_details_printer = NULL;
       data->request_details_tag = 0;
     }
   
@@ -1677,6 +1697,7 @@ margins_from_printer_changed (CustomPaperDialog *data)
 	    }
 	  else
 	    {
+	      data->request_details_printer = g_object_ref (printer);
 	      data->request_details_tag =
 		g_signal_connect (printer, "details-acquired",
 				  G_CALLBACK (get_margins_finished_callback), data);
@@ -1700,7 +1721,10 @@ custom_paper_dialog_free (gpointer p)
 
   if (data->request_details_tag)
     {
-      g_source_remove (data->request_details_tag);
+      g_signal_handler_disconnect (data->request_details_printer,
+				   data->request_details_tag);
+      g_object_unref (data->request_details_printer);
+      data->request_details_printer = NULL;
       data->request_details_tag = 0;
     }
   

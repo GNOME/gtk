@@ -1,3 +1,9 @@
+2006-05-31  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	Remove request_details_tag with g_signal_handler_disconnect,
+	not g_source_remove. (#343475)
+
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintcontext.h: 
