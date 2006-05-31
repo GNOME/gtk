@@ -1,5 +1,8 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/main.c (main): Display comments in friendly
+	DodgerBlue instead of scary red.  (#343444, Carol Spears)
+
 	* gtk/gtkfontbutton.c: 
 	* gtk/gtkcolorbutton.c: Clarify the docs of the color-set and
 	font-set signals.  (#343438, Olexiy Avramchenko)

@@ -894,7 +894,7 @@ main (int argc, char **argv)
                                     NULL);
 
   tag = gtk_text_buffer_create_tag (source_buffer, "comment",
-				    "foreground", "red",
+				    "foreground", "DodgerBlue",
                                     NULL);
   tag = gtk_text_buffer_create_tag (source_buffer, "type",
 				    "foreground", "ForestGreen",
