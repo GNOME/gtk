@@ -1,5 +1,18 @@
 2006-05-31  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtk.symbols:
+	* demos/gtk-demo/printing.c:
+	* tests/print-editor.c:
+	* tests/testnouiprint.c:
+	* tests/testprint.c:
+	* tests/testprintfileoperation.c:
+	Further updates from the GtkPrintContext functions rename.
+	
+	* modules/printbackends/cups/gtkcupsutils.c:
+	Always set requesting-user-name when doing cups requests.
+
+2006-05-31  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c:
 	Remove request_details_tag with g_signal_handler_disconnect,
 	not g_source_remove. (#343475)

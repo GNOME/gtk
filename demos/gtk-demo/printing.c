@@ -66,7 +66,7 @@ draw_page (GtkPrintOperation *operation,
   PangoFontDescription *desc;
   gchar *page_str;
 
-  cr = gtk_print_context_get_cairo (context);
+  cr = gtk_print_context_get_cairo_context (context);
   width = gtk_print_context_get_width (context);
 
   cairo_rectangle (cr, 0, 0, width, HEADER_HEIGHT);
@@ -78,7 +78,7 @@ draw_page (GtkPrintOperation *operation,
   cairo_set_line_width (cr, 1);
   cairo_stroke (cr);
 
-  layout = gtk_print_context_create_layout (context);
+  layout = gtk_print_context_create_pango_layout (context);
 
   desc = pango_font_description_from_string ("sans 14");
   pango_layout_set_font_description (layout, desc);
@@ -104,7 +104,7 @@ draw_page (GtkPrintOperation *operation,
   
   g_object_unref (layout);
   
-  layout = gtk_print_context_create_layout (context);
+  layout = gtk_print_context_create_pango_layout (context);
   
   desc = pango_font_description_from_string ("mono");
   pango_font_description_set_size (desc, data->font_size * PANGO_SCALE);

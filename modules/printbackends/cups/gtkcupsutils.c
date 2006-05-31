@@ -151,6 +151,10 @@ gtk_cups_request_new (http_t *connection,
                                    "attributes-natural-language", 
                                    NULL, language->language);
 
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME,
+                                   "requesting-user-name",
+                                   NULL, cupsUser());
+  
   cupsLangFree (language);
 
   return request;

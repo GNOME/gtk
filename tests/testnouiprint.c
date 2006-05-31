@@ -31,7 +31,7 @@ draw_page (GtkPrintOperation *operation,
   PangoLayout *layout;
   PangoFontDescription *desc;
   
-  cr = gtk_print_context_get_cairo (context);
+  cr = gtk_print_context_get_cairo_context (context);
 
   /* Draw a red rectangle, as wide as the paper (inside the margins) */
   cairo_set_source_rgb (cr, 1.0, 0, 0);
@@ -54,7 +54,7 @@ draw_page (GtkPrintOperation *operation,
 
   /* Draw some text */
   
-  layout = gtk_print_context_create_layout (context);
+  layout = gtk_print_context_create_pango_layout (context);
   pango_layout_set_text (layout, "Hello World! Printing is easy", -1);
   desc = pango_font_description_from_string ("sans 28");
   pango_layout_set_font_description (layout, desc);

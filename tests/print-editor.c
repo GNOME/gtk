@@ -265,7 +265,7 @@ begin_print (GtkPrintOperation *operation,
   width = gtk_print_context_get_width (context);
   height = gtk_print_context_get_height (context);
 
-  print_data->layout = gtk_print_context_create_layout (context);
+  print_data->layout = gtk_print_context_create_pango_layout (context);
 
   desc = pango_font_description_from_string (print_data->font);
   pango_layout_set_font_description (print_data->layout, desc);
@@ -331,7 +331,7 @@ draw_page (GtkPrintOperation *operation,
   else
     end = GPOINTER_TO_INT (pagebreak->data);
     
-  cr = gtk_print_context_get_cairo (context);
+  cr = gtk_print_context_get_cairo_context (context);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
   
