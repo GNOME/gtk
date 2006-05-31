@@ -241,7 +241,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 						  _gtk_marshal_VOID__VOID,
 						  G_TYPE_NONE, 0);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkColorButtonPrivat;
+  g_type_class_add_private (gobject_class, sizeof (GtkColorButtonPrivate));
 }
 
 static void
