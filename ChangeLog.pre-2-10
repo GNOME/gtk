@@ -1,5 +1,9 @@
 2006-05-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkpixmap.c: 
+	* gdk/gdkwindow.c: Don't use G_DEFINE_TYPE, since the instance
+	struct name does not match the type name.  (#343453, Ed Catmur)
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkbutton.h: 
 	* gtk/gtkbutton.c: Add a GtkButton::image-position property
