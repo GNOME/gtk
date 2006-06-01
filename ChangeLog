@@ -1,5 +1,8 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c: Add docs, cleanup some
+	formatting.
+
 	* gtk/gtkprintoperation.c (print_pages_idle): Don't
 	treat manual_scale like a percentage, its a factor.
 
