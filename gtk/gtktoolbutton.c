@@ -74,6 +74,8 @@ static void gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item);
 static gboolean   gtk_tool_button_create_menu_proxy (GtkToolItem     *item);
 static void       button_clicked                    (GtkWidget       *widget,
 						     GtkToolButton   *button);
+static void gtk_tool_button_style_set      (GtkWidget          *widget,
+					    GtkStyle           *prev_style);
 
 static void gtk_tool_button_construct_contents (GtkToolItem *tool_item);
       
@@ -115,17 +117,21 @@ static void
 gtk_tool_button_class_init (GtkToolButtonClass *klass)
 {
   GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
   GtkToolItemClass *tool_item_class;
   
   parent_class = g_type_class_peek_parent (klass);
   
   object_class = (GObjectClass *)klass;
+  widget_class = (GtkWidgetClass *)klass;
   tool_item_class = (GtkToolItemClass *)klass;
   
   object_class->set_property = gtk_tool_button_set_property;
   object_class->get_property = gtk_tool_button_get_property;
   object_class->notify = gtk_tool_button_property_notify;
   object_class->finalize = gtk_tool_button_finalize;
+
+  widget_class->style_set = gtk_tool_button_style_set;
 
   tool_item_class->create_menu_proxy = gtk_tool_button_create_menu_proxy;
   tool_item_class->toolbar_reconfigured = gtk_tool_button_toolbar_reconfigured;
@@ -221,6 +227,22 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkButton::icon-spacing:
+   * 
+   * Spacing in pixels between the icon and label.
+   * 
+   * Since: 2.10
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("icon-spacing",
+							     P_("Icon spacing"),
+							     P_("Spacing in pixels between the icon and label"),
+							     0,
+							     G_MAXINT,
+							     0,
+							     GTK_PARAM_READWRITE));
+
 /**
  * GtkToolButton::clicked:
  * @toolbutton: the object that emitted the signal
@@ -271,6 +293,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   gboolean need_icon = FALSE;
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
+  guint icon_spacing;
+
+  gtk_widget_style_get (GTK_WIDGET (tool_item), 
+			"icon-spacing", &icon_spacing,
+			NULL);
 
   if (button->priv->icon_widget && button->priv->icon_widget->parent)
     {
@@ -398,7 +425,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       break;
 
     case GTK_TOOLBAR_BOTH:
-      box = gtk_vbox_new (FALSE, 0);
+      box = gtk_vbox_new (FALSE, icon_spacing);
       if (icon)
 	gtk_box_pack_start (GTK_BOX (box), icon, TRUE, TRUE, 0);
       gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
@@ -406,7 +433,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       break;
 
     case GTK_TOOLBAR_BOTH_HORIZ:
-      box = gtk_hbox_new (FALSE, 0);
+      box = gtk_hbox_new (FALSE, icon_spacing);
       if (icon)
 	gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
       if (label)
@@ -636,6 +663,13 @@ static void
 gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item)
 {
   gtk_tool_button_construct_contents (tool_item);
+}
+
+static void
+gtk_tool_button_style_set (GtkWidget *widget,
+			   GtkStyle  *prev_style)
+{
+  gtk_tool_button_construct_contents (GTK_TOOL_ITEM (widget));
 }
 
 /**
@@ -1036,6 +1070,7 @@ _gtk_tool_button_get_button (GtkToolButton *button)
 
   return button->priv->button;
 }
+
 
 #define __GTK_TOOL_BUTTON_C__
 #include "gtkaliasdef.c"

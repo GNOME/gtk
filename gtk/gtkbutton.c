@@ -102,6 +102,8 @@ static void gtk_button_realize        (GtkWidget          *widget);
 static void gtk_button_unrealize      (GtkWidget          *widget);
 static void gtk_button_map            (GtkWidget          *widget);
 static void gtk_button_unmap          (GtkWidget          *widget);
+static void gtk_button_style_set      (GtkWidget          *widget,
+				       GtkStyle           *prev_style);
 static void gtk_button_size_request   (GtkWidget          *widget,
 				       GtkRequisition     *requisition);
 static void gtk_button_size_allocate  (GtkWidget          *widget,
@@ -168,6 +170,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->map = gtk_button_map;
   widget_class->unmap = gtk_button_unmap;
+  widget_class->style_set = gtk_button_style_set;
   widget_class->size_request = gtk_button_size_request;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->expose_event = gtk_button_expose;
@@ -287,14 +290,14 @@ gtk_button_class_init (GtkButtonClass *klass)
   /**
    * GtkButton:image-position:
    *
-   * Sets the position of the image relative to the text inside the button.
+   * The position of the image relative to the text inside the button.
    * 
    * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE_POSITION,
                                    g_param_spec_enum ("image-position",
-                                                      P_("Image position"),
+                                            P_("Image position"),
                                                       P_("The position of the image relative to the text"),
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_LEFT,
@@ -460,6 +463,23 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                                P_("Border between button edges and child."),
                                                                GTK_TYPE_BORDER,
                                                                GTK_PARAM_READABLE));
+
+  /**
+   * GtkButton::image-spacing:
+   * 
+   * Spacing in pixels between the image and label.
+   * 
+   * Since: 2.10
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("image-spacing",
+							     P_("Image spacing"),
+							     P_("Spacing in pixels between the image and label"),
+							     0,
+							     G_MAXINT,
+							     2,
+							     GTK_PARAM_READABLE));
+  
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
@@ -696,6 +716,7 @@ gtk_button_construct_child (GtkButton *button)
   GtkWidget *align;
   GtkWidget *image = NULL;
   gchar *label_text = NULL;
+  gint image_spacing;
   
   if (!button->constructed)
     return;
@@ -703,6 +724,10 @@ gtk_button_construct_child (GtkButton *button)
   if (!button->label_text && !priv->image)
     return;
   
+  gtk_widget_style_get (GTK_WIDGET (button), 
+			"image-spacing", &image_spacing, 
+			NULL);
+
   if (priv->image && !priv->image_is_stock)
     {
       image = g_object_ref (priv->image);
@@ -738,9 +763,9 @@ gtk_button_construct_child (GtkButton *button)
 
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_RIGHT)
-	box = gtk_hbox_new (FALSE, 2);
+	box = gtk_hbox_new (FALSE, image_spacing);
       else
-	box = gtk_vbox_new (FALSE, 2);
+	box = gtk_vbox_new (FALSE, image_spacing);
 
       if (priv->align_set)
 	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
@@ -977,6 +1002,13 @@ gtk_button_unmap (GtkWidget *widget)
     gdk_window_hide (button->event_window);
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
+}
+
+static void
+gtk_button_style_set (GtkWidget *widget,
+		      GtkStyle  *prev_style)
+{
+  gtk_button_construct_child (GTK_BUTTON (widget));
 }
 
 static void
@@ -1943,7 +1975,8 @@ gtk_button_get_image (GtkButton *button)
  * @button: a #GtkButton
  * @position: the position
  *
- * Sets the position of the image relative to the text inside the button.
+ * Sets the position of the image relative to the text 
+ * inside the button.
  *
  * Since: 2.10
  */ 
@@ -1973,7 +2006,8 @@ gtk_button_set_image_position (GtkButton       *button,
  * gtk_button_get_image_position:
  * @button: a #GtkButton
  *
- * Gets the position of the image relative to the text inside the button.
+ * Gets the position of the image relative to the text 
+ * inside the button.
  *
  * Return value: the position
  *
@@ -1990,6 +2024,7 @@ gtk_button_get_image_position (GtkButton *button)
   
   return priv->image_position;
 }
+
 
 #define __GTK_BUTTON_C__
 #include "gtkaliasdef.c"  

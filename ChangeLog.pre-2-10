@@ -1,5 +1,12 @@
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (gtk_tool_button_class_init): Add
+	an icon-spacing style property for the same purpose.
+
+	* gtk/gtkbutton.c (gtk_button_class_init):  Add an image-spacing
+	style property that allows to adjust the spacing between image
+	and label in button.  (#320431, James Moger)
+
 	* gtk-pristine/gtkprintoperation-private.h: 
 	* gtk-pristine/gtkprintoperation.c: 
 	* gtk-pristine/gtkprintoperation-unix.c: Move the 
