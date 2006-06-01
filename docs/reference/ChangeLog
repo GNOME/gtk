@@ -1,5 +1,7 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkcellrendererspin.sgml: Fix a typo
+
 	* gtk/gtk-sections.txt: Update 
 
 2006-05-30  Matthias Clasen  <mclasen@redhat.com>
