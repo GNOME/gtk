@@ -9,9 +9,9 @@
 	style property that allows to adjust the spacing between image
 	and label in button.  (#320431, James Moger)
 
-	* gtk-pristine/gtkprintoperation-private.h: 
-	* gtk-pristine/gtkprintoperation.c: 
-	* gtk-pristine/gtkprintoperation-unix.c: Move the 
+	* gtk/gtkprintoperation-private.h: 
+	* gtk/gtkprintoperation.c: 
+	* gtk/gtkprintoperation-unix.c: Move the 
 	PrintPagesData.wait flag to GtkPrintOperationPrivate.is_sync.
 	Also use a recursive mainloop instead of manually looping.
 	
