@@ -1,5 +1,11 @@
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk-pristine/gtkprintoperation-private.h: 
+	* gtk-pristine/gtkprintoperation.c: 
+	* gtk-pristine/gtkprintoperation-unix.c: Move the 
+	PrintPagesData.wait flag to GtkPrintOperationPrivate.is_sync.
+	Also use a recursive mainloop instead of manually looping.
+	
 	* gtk/gtkprintoperation.c: Add some examples to the docs.
 
 	* gtk/gtkprintbackend.c (gtk_print_backend_class_init): 
