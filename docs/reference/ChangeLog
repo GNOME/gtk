@@ -1,5 +1,8 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (IGNORE_HFILES): Add some private
+	headers
+
 	* gtk/tmpl/gtkcellrendererspin.sgml: Fix a typo
 
 	* gtk/gtk-sections.txt: Update 

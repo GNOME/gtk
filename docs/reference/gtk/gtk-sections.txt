@@ -5079,6 +5079,7 @@ gtk_widget_list_mnemonic_labels
 gtk_widget_add_mnemonic_label
 gtk_widget_remove_mnemonic_label
 gtk_widget_get_action
+gtk_widget_is_composited
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -6082,7 +6083,7 @@ gtk_print_operation_get_default_page_setup
 gtk_print_operation_set_print_settings
 gtk_print_operation_get_print_settings
 gtk_print_operation_set_job_name
-gtk_print_operation_set_nr_of_pages
+gtk_print_operation_set_n_pages
 gtk_print_operation_set_current_page
 gtk_print_operation_set_use_full_page
 gtk_print_operation_set_unit
@@ -6091,6 +6092,7 @@ gtk_print_operation_set_pdf_target
 gtk_print_operation_set_show_progress
 gtk_print_operation_set_track_print_status
 gtk_print_operation_set_custom_tab_label
+gtk_print_operation_run
 gtk_print_operation_run_async
 gtk_print_operation_cancel
 gtk_print_operation_get_status
@@ -6128,6 +6130,8 @@ gtk_print_unix_dialog_get_current_page
 gtk_print_unix_dialog_set_settings
 gtk_print_unix_dialog_get_settings
 gtk_print_unix_dialog_get_selected_printer
+gtk_print_unix_dialog_add_custom_tab
+gtk_print_unix_dialog_set_manual_capabilities
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_UNIX_DIALOG
@@ -6159,6 +6163,7 @@ gtk_printer_get_job_count
 gtk_printer_is_active
 gtk_printer_is_virtual
 gtk_printer_is_default
+gtk_printer_compare
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINTER
@@ -6229,9 +6234,9 @@ GtkPrintQuality
 GTK_PRINT_SETTINGS_QUALITY
 gtk_print_settings_get_quality
 gtk_print_settings_set_quality
-GTK_PRINT_SETTINGS_NUM_COPIES
-gtk_print_settings_get_num_copies
-gtk_print_settings_set_num_copies
+GTK_PRINT_SETTINGS_N_COPIES
+gtk_print_settings_get_n_copies
+gtk_print_settings_set_n_copies
 GTK_PRINT_SETTINGS_NUMBER_UP
 gtk_print_settings_get_number_up
 gtk_print_settings_set_number_up
@@ -6393,6 +6398,8 @@ gtk_print_job_get_status
 gtk_print_job_set_source_file
 gtk_print_job_get_surface
 gtk_print_job_send
+gtk_print_job_set_track_print_status
+gtk_print_job_get_track_print_status
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_JOB
