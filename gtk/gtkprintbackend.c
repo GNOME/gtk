@@ -333,7 +333,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   g_type_class_add_private (class, sizeof (GtkPrintBackendPrivate));
   
   signals[PRINTER_LIST_CHANGED] =
-    g_signal_new ("printer-list-changed",
+    g_signal_new (I_("printer-list-changed"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_changed),
@@ -341,7 +341,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   signals[PRINTER_LIST_DONE] =
-      g_signal_new ("printer-list-done",
+    g_signal_new (I_("printer-list-done"),
 		    G_TYPE_FROM_CLASS (class),
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_done),
@@ -349,7 +349,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
   signals[PRINTER_ADDED] =
-    g_signal_new ("printer-added",
+    g_signal_new (I_("printer-added"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_added),
@@ -357,7 +357,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_REMOVED] =
-    g_signal_new ("printer-removed",
+    g_signal_new (I_("printer-removed"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_removed),
@@ -365,7 +365,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_STATUS_CHANGED] =
-    g_signal_new ("printer-status-changed",
+    g_signal_new (I_("printer-status-changed"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_status_changed),

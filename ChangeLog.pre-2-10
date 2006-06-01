@@ -1,5 +1,8 @@
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintbackend.c (gtk_print_backend_class_init): 
+	Intern signal names.
+
 	* gtk/gtkprintunixdialog.c: 
 	* gtk/gtkprintoperation-unix.c: Use canonical signal names.
 
