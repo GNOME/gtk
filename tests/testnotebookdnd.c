@@ -109,12 +109,15 @@ on_notebook_drag_begin (GtkWidget      *widget,
 
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
 
-  pixbuf = gtk_widget_render_icon (widget,
-				   (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
+  if (page_num > 2)
+    {
+      pixbuf = gtk_widget_render_icon (widget,
+  				   (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
 				   GTK_ICON_SIZE_DND, NULL);
 
-  gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
-  g_object_unref (pixbuf);
+      gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
+      g_object_unref (pixbuf);
+    }
 }
 
 static void

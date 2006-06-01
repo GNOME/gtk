@@ -1,4 +1,6 @@
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
+	
+	* tests/testnotebookdnd.c: Small tweaks to test more things.
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_class_init): Add
 	an icon-spacing style property for the same purpose.
