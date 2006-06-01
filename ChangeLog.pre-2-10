@@ -1,5 +1,6 @@
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: 
 	* gtk/gtkprintoperation-unix.c: Use canonical signal names.
 
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>

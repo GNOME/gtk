@@ -1561,7 +1561,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), image,
 		    1, 2, 1, 3, GTK_FILL, 0,
 		    0, 0);
-  g_signal_connect (image, "expose_event", G_CALLBACK (draw_collate_cb), dialog);
+  g_signal_connect (image, "expose-event", G_CALLBACK (draw_collate_cb), dialog);
 
   label = gtk_label_new (_("General"));
   gtk_widget_show (label);
@@ -2090,7 +2090,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   draw = gtk_drawing_area_new ();
   priv->page_layout_preview = draw;
   gtk_widget_set_size_request (draw, 200, 200);
-  g_signal_connect (draw, "expose_event", G_CALLBACK (draw_page_cb), dialog);
+  g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
   gtk_box_pack_start (GTK_BOX (hbox2), draw, TRUE, FALSE, 0);
