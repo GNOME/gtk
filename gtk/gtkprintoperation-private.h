@@ -41,6 +41,7 @@ struct _GtkPrintOperationPrivate
   guint track_print_status : 1;
   guint show_progress      : 1;
   guint cancelled          : 1;
+  guint is_sync            : 1;
 
   guint print_pages_idle_id;
   guint show_progress_timeout_id;
@@ -65,6 +66,8 @@ struct _GtkPrintOperationPrivate
   gpointer platform_data;
   GDestroyNotify free_platform_data;
 
+  GMainLoop *rloop; /* recursive mainloop */
+
   void (*start_page) (GtkPrintOperation *operation,
 		      GtkPrintContext   *print_context,
 		      GtkPageSetup      *page_setup);
@@ -81,8 +84,7 @@ GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPri
 									  GError           **error);
 
 typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
-					     GtkWindow         *parent,
-					     gboolean           wait);
+					     GtkWindow         *parent);
 
 void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
 							     GtkWindow                  *parent,

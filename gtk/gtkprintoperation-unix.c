@@ -310,7 +310,7 @@ finish_print (PrintResponseData *rdata,
   if (rdata->print_cb)
     {
       if (rdata->do_print)
-        rdata->print_cb (op, rdata->parent, FALSE); 
+        rdata->print_cb (op, rdata->parent); 
       else
        _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL); 
     }

@@ -136,7 +136,9 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->show_progress = FALSE;
   priv->pdf_target = NULL;
   priv->track_print_status = FALSE;
+  priv->is_sync = FALSE;
 
+  priv->rloop = NULL;
   priv->unit = GTK_UNIT_PIXEL;
 
   appname = g_get_application_name ();
@@ -1512,7 +1514,6 @@ run_pdf (GtkPrintOperation  *op,
 typedef struct
 {
   GtkPrintOperation *op;
-  gboolean wait;
   gint uncollated_copies;
   gint collated_copies;
   gint uncollated, collated, total;
@@ -1594,7 +1595,7 @@ print_pages_idle_done (gpointer user_data)
       g_source_remove (priv->show_progress_timeout_id);
       priv->show_progress_timeout_id = 0;
     }
-
+ 
   if (data->progress)
     gtk_widget_destroy (data->progress);
 
@@ -1602,6 +1603,10 @@ print_pages_idle_done (gpointer user_data)
   g_object_unref (data->initial_page_setup);
 
   g_object_unref (data->op);
+
+  if (priv->rloop)
+    g_main_loop_quit (priv->rloop);
+
   g_free (data);
 
   GDK_THREADS_LEAVE ();
@@ -1711,7 +1716,7 @@ print_pages_idle (gpointer user_data)
 	  data->ranges[0].end = priv->nr_of_pages - 1;
 	}
       
-      if (data->op->priv->manual_reverse)
+      if (priv->manual_reverse)
 	{
 	  data->range = data->num_ranges - 1;
 	  data->inc = -1;      
@@ -1752,7 +1757,7 @@ print_pages_idle (gpointer user_data)
 		 data->print_context, data->page, page_setup);
   
   _gtk_print_context_set_page_setup (data->print_context, page_setup);
-  data->op->priv->start_page (data->op, data->print_context, page_setup);
+  priv->start_page (data->op, data->print_context, page_setup);
   
   cr = gtk_print_context_get_cairo_context (data->print_context);
   
@@ -1790,8 +1795,8 @@ print_pages_idle (gpointer user_data)
     {
       g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
       
-      cairo_surface_finish (data->op->priv->surface);
-      priv->end_run (data->op, data->wait, priv->cancelled);
+      cairo_surface_finish (priv->surface);
+      priv->end_run (data->op, priv->is_sync, priv->cancelled);
     }
 
   update_progress (data);
@@ -1828,8 +1833,7 @@ show_progress_timeout (PrintPagesData *data)
 
 static void
 print_pages (GtkPrintOperation *op,
-	     GtkWindow         *parent,
-	     gboolean           wait)
+	     GtkWindow         *parent)
 {
   GtkPrintOperationPrivate *priv = op->priv;
   PrintPagesData *data;
@@ -1838,7 +1842,6 @@ print_pages (GtkPrintOperation *op,
 
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
-  data->wait = wait;
 
   if (priv->show_progress)
     {
@@ -1859,22 +1862,25 @@ print_pages (GtkPrintOperation *op,
       data->progress = progress;
     }
 
-  if (wait)
+  priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+					       print_pages_idle, 
+					       data, 
+					       print_pages_idle_done);
+
+  /* Recursive main loop to make sure we don't exit 
+   * on sync operations 
+   */
+  if (priv->is_sync)
     {
-      /* FIXME replace this with a recursive mainloop */
-      while (print_pages_idle (data))
-	{
-	  /* Iterate the mainloop so that we redraw windows */
-	  while (gtk_events_pending ())
-	    gtk_main_iteration ();
-	}
-      print_pages_idle_done (data);
+      priv->rloop = g_main_loop_new (NULL, FALSE);
+
+      GDK_THREADS_LEAVE ();
+      g_main_loop_run (priv->rloop);
+      GDK_THREADS_ENTER ();
     }
-  else
-    priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-						 print_pages_idle, 
-						 data, 
-						 print_pages_idle_done);}
+  g_main_loop_unref (priv->rloop);
+  priv->rloop = NULL;
+}
 
 /**
  * gtk_print_operation_run:
@@ -1948,6 +1954,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
                         GTK_PRINT_OPERATION_RESULT_ERROR);
 
   priv = op->priv;
+  priv->is_sync = TRUE;
 
   if (priv->pdf_target != NULL)
     result = run_pdf (op, parent, &do_print, error);
@@ -1957,7 +1964,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 							       &do_print,
 							       error);
   if (do_print)
-    print_pages (op, parent, TRUE);
+    print_pages (op, parent);
   else 
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 
@@ -1993,12 +2000,13 @@ gtk_print_operation_run_async (GtkPrintOperation *op,
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op)); 
 
   priv = op->priv;
+  priv->is_sync = FALSE;
 
   if (priv->pdf_target != NULL)
     {
       run_pdf (op, parent, &do_print, NULL);
       if (do_print)
-	print_pages (op, parent, FALSE);
+	print_pages (op, parent);
       else 
 	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
     }
