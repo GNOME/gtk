@@ -283,7 +283,7 @@ finish_print (PrintResponseData *rdata,
 
       _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job), NULL);
       op_unix->job_status_changed_tag =
-	g_signal_connect (op_unix->job, "status_changed",
+	g_signal_connect (op_unix->job, "status-changed",
 			  G_CALLBACK (job_status_changed_cb), op);
       
       op_unix->parent = rdata->parent;
