@@ -33,6 +33,7 @@ IGNORE_HFILES=				\
 	gtkfilechooserembed.h		\
 	gtkfilechooserentry.h		\
 	gtkfilechooserprivate.h		\
+	gtkfilechoosersettings.h	\
 	gtkfilechooserutils.h		\
 	gtkfilesystem.h			\
 	gtkfilesystemmodel.h		\
@@ -79,6 +80,7 @@ IGNORE_HFILES=				\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
+	gtkwin32embedwidget.h		\
 	xdgmime				\
 	xembed.h
 

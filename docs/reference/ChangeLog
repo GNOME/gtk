@@ -1,5 +1,9 @@
 2006-05-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkstock.sgml: Updates
+
+	* gtk/gtk-sections.txt: Updates
+
 	* gtk/Makefile.am (IGNORE_HFILES): Add some private
 	headers
 
