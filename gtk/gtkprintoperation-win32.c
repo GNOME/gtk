@@ -492,6 +492,7 @@ win32_end_run (GtkPrintOperation *op,
   GlobalFree(op_win32->devmode);
   GlobalFree(op_win32->devnames);
 
+  cairo_surface_finish (op->priv->surface);
   cairo_surface_destroy (op->priv->surface);
   op->priv->surface = NULL;
 

@@ -19,6 +19,10 @@
  */
 
 #include "config.h"
+
+#include <errno.h>
+#include <stdlib.h>       
+
 #include <string.h>
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
@@ -41,6 +45,7 @@ enum {
   STATUS_CHANGED,
   CREATE_CUSTOM_WIDGET,
   CUSTOM_WIDGET_APPLY,
+  PREVIEW,
   LAST_SIGNAL
 };
 
@@ -65,7 +70,15 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 static int job_nr = 0;
 
-G_DEFINE_TYPE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT)
+static void          preview_iface_init (GtkPrintOperationPreviewIface *iface);
+static GtkPageSetup *create_page_setup  (GtkPrintOperation             *op);
+static void          common_render_page (GtkPrintOperation             *op,
+					 gint                           page_nr);
+
+
+G_DEFINE_TYPE_WITH_CODE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_PRINT_OPERATION_PREVIEW,
+						preview_iface_init))
 
 /**
  * gtk_print_error_quark:
@@ -144,6 +157,94 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   appname = g_get_application_name ();
   priv->job_name = g_strdup_printf ("%s job #%d", appname, ++job_nr);
 }
+
+static void
+preview_iface_render_page (GtkPrintOperationPreview *preview,
+			   gint page_nr)
+{
+  GtkPrintOperation *op;
+
+  op = GTK_PRINT_OPERATION (preview);
+  common_render_page (op, page_nr);
+}
+
+static void
+preview_iface_end_preview (GtkPrintOperationPreview *preview)
+{
+  GtkPrintOperation *op;
+  
+  op = GTK_PRINT_OPERATION (preview);
+
+  g_signal_emit (op, signals[END_PRINT], 0, op->priv->print_context);
+
+  if (op->priv->rloop)
+    g_main_loop_quit (op->priv->rloop);
+
+  op->priv->end_run (op, op->priv->is_sync, TRUE);
+}
+
+static gboolean
+preview_iface_is_selected (GtkPrintOperationPreview *preview,
+			   gint                      page_nr)
+{
+  GtkPrintOperation *op;
+  GtkPrintOperationPrivate *priv;
+  int i;
+  
+  op = GTK_PRINT_OPERATION (preview);
+  priv = op->priv;
+  
+  switch (priv->print_pages)
+    {
+    case GTK_PRINT_PAGES_ALL:
+      return (page_nr >= 0) && (page_nr < priv->nr_of_pages);
+    case GTK_PRINT_PAGES_CURRENT:
+      return page_nr == priv->current_page;
+    case GTK_PRINT_PAGES_RANGES:
+      for (i = 0; i < priv->num_page_ranges; i++)
+	{
+	  if (page_nr >= priv->page_ranges[i].start &&
+	      page_nr <= priv->page_ranges[i].end)
+	    return TRUE;
+	}
+      return FALSE;
+    }
+  return FALSE;
+}
+
+static void
+preview_iface_init (GtkPrintOperationPreviewIface *iface)
+{
+  iface->render_page = preview_iface_render_page;
+  iface->end_preview = preview_iface_end_preview;
+  iface->is_selected = preview_iface_is_selected;
+}
+
+static void
+preview_start_page (GtkPrintOperation *op,
+		    GtkPrintContext   *print_context,
+		    GtkPageSetup      *page_setup)
+{
+  g_signal_emit_by_name (op, "got-page-size",print_context, page_setup);
+}
+
+static void
+preview_end_page (GtkPrintOperation *op,
+		  GtkPrintContext   *print_context)
+{
+}
+
+static void
+preview_end_run (GtkPrintOperation *op,
+		 gboolean           wait,
+		 gboolean           cancelled)
+{
+  g_free (op->priv->page_ranges);
+  op->priv->page_ranges = NULL;
+
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED, NULL);
+}
+
 
 static void
 gtk_print_operation_set_property (GObject      *object,
@@ -256,6 +357,151 @@ gtk_print_operation_get_property (GObject    *object,
     }
 }
 
+typedef struct
+{
+  GtkPrintOperationPreview *preview;
+  GtkPrintContext *print_context;
+  GtkWindow *parent;
+  cairo_surface_t *surface;
+  gchar *filename;
+  guint page_nr;
+  gboolean wait;
+} PreviewOp;
+
+static void
+preview_print_idle_done (gpointer data)
+{
+  GtkPrintOperation *op;
+  PreviewOp *pop = (PreviewOp *) data;
+
+  GDK_THREADS_ENTER ();
+  
+  op = GTK_PRINT_OPERATION (pop->preview);
+
+  _gtk_print_operation_platform_backend_launch_preview (op,
+							pop->parent,
+							pop->filename);
+
+  g_free (pop->filename);
+  cairo_surface_finish (pop->surface);
+  cairo_surface_destroy (pop->surface);
+
+  gtk_print_operation_preview_end_preview (pop->preview);
+  g_free (pop);
+  
+  GDK_THREADS_LEAVE ();
+}
+
+static gboolean
+preview_print_idle (gpointer data)
+{
+  PreviewOp *pop;
+  GtkPrintOperation *op;
+  gboolean retval = TRUE;
+  cairo_t *cr;
+
+  GDK_THREADS_ENTER ();
+
+  pop = (PreviewOp *) data;
+  op = GTK_PRINT_OPERATION (pop->preview);
+
+  gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
+  
+  cr = gtk_print_context_get_cairo_context (pop->print_context);
+  cairo_show_page (cr);
+  
+  /* TODO: print out sheets not pages and follow ranges */
+  pop->page_nr++;
+  if (op->priv->nr_of_pages <= pop->page_nr)
+    retval = FALSE;
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
+}
+
+static void
+preview_got_page_size (GtkPrintOperationPreview *preview, 
+		       GtkPrintContext          *context,
+		       GtkPageSetup             *page_setup,
+		       PreviewOp *pop)
+{
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (preview);
+
+  _gtk_print_operation_platform_backend_resize_preview_surface (op, page_setup, pop->surface);
+}
+
+static void
+preview_ready (GtkPrintOperationPreview *preview,
+               GtkPrintContext *context,
+	       PreviewOp *pop)
+{
+
+  pop->page_nr = 0;
+  pop->print_context = context;
+
+  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+	           preview_print_idle,
+		   pop,
+		   preview_print_idle_done); 
+
+}
+
+/**
+ * gtk_print_operation_preview_handler:
+ *
+ * Default handler for preview operations
+ **/
+static gboolean
+gtk_print_operation_preview_handler (GtkPrintOperation *op,
+                                     GtkPrintOperationPreview *preview, 
+				     GtkPrintContext          *context,
+				     GtkWindow                *parent)
+{
+  gdouble dpi_x, dpi_y;
+  gchar *tmp_dir;
+  gchar *dir_template;
+  gchar *preview_filename;
+  PreviewOp *pop;
+  GtkPageSetup *page_setup;
+  cairo_t *cr;
+
+  dir_template = g_build_filename (g_get_tmp_dir (), "print-preview-XXXXXX", NULL);
+
+  /* use temp dirs because apps like evince need to have extentions
+     to determine the mine type */
+  tmp_dir = mkdtemp(dir_template);
+
+  preview_filename = g_build_filename (tmp_dir, 
+                                      "Print Preview.pdf",
+                                      NULL);
+  
+  g_free (dir_template);
+
+  pop = g_new0 (PreviewOp, 1);
+  pop->filename = preview_filename;
+  pop->preview = preview;
+  pop->parent = parent;
+
+  page_setup = gtk_print_context_get_page_setup (context);
+
+  pop->surface =
+    _gtk_print_operation_platform_backend_create_preview_surface (op,
+								  page_setup,
+								  &dpi_x, &dpi_y,
+								  pop->filename);
+
+  cr = cairo_create (pop->surface);
+  gtk_print_context_set_cairo_context (op->priv->print_context, cr,
+				       dpi_x, dpi_y);
+  cairo_destroy (cr);
+
+  g_signal_connect (preview, "ready", (GCallback) preview_ready, pop);
+  g_signal_connect (preview, "got-page-size", (GCallback) preview_got_page_size, pop);
+  
+  return TRUE;
+}
+
 static GtkWidget *
 gtk_print_operation_create_custom_widget (GtkPrintOperation *operation)
 {
@@ -287,7 +533,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   gobject_class->set_property = gtk_print_operation_set_property;
   gobject_class->get_property = gtk_print_operation_get_property;
   gobject_class->finalize = gtk_print_operation_finalize;
-
+ 
+  class->preview = gtk_print_operation_preview_handler; 
   class->create_custom_widget = gtk_print_operation_create_custom_widget;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
@@ -530,6 +777,36 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_WIDGET);
 
+   /**
+   * GtkPrintOperation::preview:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @preview: the #GtkPrintPreviewOperation for the current operation
+   * @context: the #GtkPrintContext that will be used
+   * @parent: the #GtkWindow to use as window parent, or NULL
+   *
+   * Gets emitted when a preview is requested from the native dialog.
+   * If you handle this you must set the cairo context on the printing context.
+   *
+   * If you don't override this a default implementation using an external
+   * viewer will be used.
+   *
+   * Returns: #TRUE if the listener wants to take over control of the preview
+   * 
+   * Since: 2.10
+   */
+  signals[PREVIEW] =
+    g_signal_new (I_("preview"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, preview),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__OBJECT_OBJECT_OBJECT,
+		  G_TYPE_BOOLEAN, 3,
+		  GTK_TYPE_PRINT_OPERATION_PREVIEW,
+		  GTK_TYPE_PRINT_CONTEXT,
+		  GTK_TYPE_WINDOW);
+
+  
   /**
    * GtkPrintOperation:default-page-setup:
    *
@@ -1436,6 +1713,7 @@ pdf_start_page (GtkPrintOperation *op,
 		GtkPageSetup      *page_setup)
 {
   GtkPaperSize *paper_size;
+  cairo_surface_t *surface = op->priv->platform_data;
   double w, h;
 
   paper_size = gtk_page_setup_get_paper_size (page_setup);
@@ -1443,7 +1721,7 @@ pdf_start_page (GtkPrintOperation *op,
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
   
-  cairo_pdf_surface_set_size (op->priv->surface, w, h);
+  cairo_pdf_surface_set_size (surface, w, h);
 }
 
 static void
@@ -1462,9 +1740,10 @@ pdf_end_run (GtkPrintOperation *op,
 	     gboolean           cancelled)
 {
   GtkPrintOperationPrivate *priv = op->priv;
+  cairo_surface_t *surface = priv->platform_data;
 
-  cairo_surface_destroy (priv->surface);
-  priv->surface = NULL;
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
 }
 
 static GtkPrintOperationResult
@@ -1475,6 +1754,8 @@ run_pdf (GtkPrintOperation  *op,
 {
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPageSetup *page_setup;
+  cairo_surface_t *surface;
+  cairo_t *cr;
   double width, height;
   /* This will be overwritten later by the non-default size, but
      we need to pass some size: */
@@ -1484,13 +1765,19 @@ run_pdf (GtkPrintOperation  *op,
   height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   g_object_unref (page_setup);
   
-  priv->surface = cairo_pdf_surface_create (priv->pdf_target,
-					    width, height);
-  cairo_pdf_surface_set_dpi (priv->surface, 300, 300);
-  
-  priv->dpi_x = 72;
-  priv->dpi_y = 72;
+  surface = cairo_pdf_surface_create (priv->pdf_target,
+				      width, height);
+  cairo_pdf_surface_set_dpi (surface, 300, 300);
 
+  priv->platform_data = surface;
+  priv->free_platform_data = (GDestroyNotify) cairo_surface_destroy;
+
+  cr = cairo_create (surface);
+  gtk_print_context_set_cairo_context (op->priv->print_context,
+				       cr, 72, 72);
+  cairo_destroy (cr);
+
+  
   priv->print_pages = GTK_PRINT_PAGES_ALL;
   priv->page_ranges = NULL;
   priv->num_page_ranges = 0;
@@ -1524,10 +1811,11 @@ typedef struct
 
   gint page, start, end, inc;
 
-  GtkPageSetup *initial_page_setup;
-  GtkPrintContext *print_context;  
+  gboolean initialized;
 
   GtkWidget *progress;
+ 
+  gboolean is_preview; 
 } PrintPagesData;
 
 static void
@@ -1599,12 +1887,9 @@ print_pages_idle_done (gpointer user_data)
   if (data->progress)
     gtk_widget_destroy (data->progress);
 
-  g_object_unref (data->print_context);
-  g_object_unref (data->initial_page_setup);
-
   g_object_unref (data->op);
 
-  if (priv->rloop)
+  if (priv->rloop && !data->is_preview)
     g_main_loop_quit (priv->rloop);
 
   g_free (data);
@@ -1640,13 +1925,56 @@ update_progress (PrintPagesData *data)
     }
  }
 
+static void
+common_render_page (GtkPrintOperation *op,
+		    gint page_nr)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPageSetup *page_setup;
+  GtkPrintContext *print_context;
+  cairo_t *cr;
+
+  print_context = priv->print_context;
+  
+  page_setup = create_page_setup (op);
+  
+  g_signal_emit (op, signals[REQUEST_PAGE_SETUP], 0, 
+		 print_context, page_nr, page_setup);
+  
+  _gtk_print_context_set_page_setup (print_context, page_setup);
+  
+  priv->start_page (op, print_context, page_setup);
+  
+  cr = gtk_print_context_get_cairo_context (print_context);
+  
+  cairo_save (cr);
+  if (priv->manual_scale != 1.0)
+    cairo_scale (cr,
+		 priv->manual_scale,
+		 priv->manual_scale);
+  
+  if (priv->manual_orientation)
+    _gtk_print_context_rotate_according_to_orientation (print_context);
+  
+  if (!priv->use_full_page)
+    _gtk_print_context_translate_into_margin (print_context);
+  
+  g_signal_emit (op, signals[DRAW_PAGE], 0, 
+		 print_context, page_nr);
+
+  priv->end_page (op, print_context);
+  
+  cairo_restore (cr);
+
+  g_object_unref (page_setup);
+}
+
 static gboolean
 print_pages_idle (gpointer user_data)
 {
   PrintPagesData *data; 
   GtkPrintOperationPrivate *priv; 
   GtkPageSetup *page_setup;
-  cairo_t *cr;
   gboolean done = FALSE;
 
   GDK_THREADS_ENTER ();
@@ -1656,15 +1984,15 @@ print_pages_idle (gpointer user_data)
 
   if (priv->status == GTK_PRINT_STATUS_PREPARING)
     {
-      if (!data->print_context)
+      if (!data->initialized)
 	{
-	  data->print_context = _gtk_print_context_new (data->op);
-	  data->initial_page_setup = create_page_setup (data->op);
-
-	  _gtk_print_context_set_page_setup (data->print_context, 
-					     data->initial_page_setup);
+	  data->initialized = TRUE;
+	  page_setup = create_page_setup (data->op);
+	  _gtk_print_context_set_page_setup (priv->print_context, 
+					     page_setup);
+	  g_object_unref (page_setup);
       
-	  g_signal_emit (data->op, signals[BEGIN_PRINT], 0, data->print_context);
+	  g_signal_emit (data->op, signals[BEGIN_PRINT], 0, priv->print_context);
       
 	  if (priv->manual_collation)
 	    {
@@ -1684,7 +2012,7 @@ print_pages_idle (gpointer user_data)
 	{
 	  gboolean paginated = FALSE;
 
-	  g_signal_emit (data->op, signals[PAGINATE], 0, data->print_context, &paginated);
+	  g_signal_emit (data->op, signals[PAGINATE], 0, priv->print_context, &paginated);
 	  if (!paginated)
 	    goto out;
 	}
@@ -1751,36 +2079,18 @@ print_pages_idle (gpointer user_data)
 	  goto out;
 	}
     }
+ 
+  if (data->is_preview)
+    {
+      done = TRUE;
 
-  page_setup = gtk_page_setup_copy (data->initial_page_setup);
-  g_signal_emit (data->op, signals[REQUEST_PAGE_SETUP], 0, 
-		 data->print_context, data->page, page_setup);
-  
-  _gtk_print_context_set_page_setup (data->print_context, page_setup);
-  priv->start_page (data->op, data->print_context, page_setup);
-  
-  cr = gtk_print_context_get_cairo_context (data->print_context);
-  
-  cairo_save (cr);
-  if (priv->manual_scale != 1.0)
-    cairo_scale (cr,
-		 priv->manual_scale,
-		 priv->manual_scale);
-  
-  if (priv->manual_orientation)
-    _gtk_print_context_rotate_according_to_orientation (data->print_context);
-  
-  if (!priv->use_full_page)
-    _gtk_print_context_translate_into_margin (data->print_context);
-  
-  g_signal_emit (data->op, signals[DRAW_PAGE], 0, 
-		 data->print_context, data->page);
-  
-  priv->end_page (data->op, data->print_context);
-  
-  cairo_restore (cr);
-  
-  g_object_unref (page_setup);
+      g_object_ref (data->op);
+      
+      g_signal_emit_by_name (data->op, "ready", priv->print_context);
+      goto out;
+    }
+
+  common_render_page (data->op, data->page);
 
  out:
 
@@ -1791,11 +2101,9 @@ print_pages_idle (gpointer user_data)
       done = TRUE;
     }
 
-  if (done)
+  if (done && !data->is_preview)
     {
-      g_signal_emit (data->op, signals[END_PRINT], 0, data->print_context);
-      
-      cairo_surface_finish (priv->surface);
+      g_signal_emit (data->op, signals[END_PRINT], 0, priv->print_context);
       priv->end_run (data->op, priv->is_sync, priv->cancelled);
     }
 
@@ -1833,15 +2141,17 @@ show_progress_timeout (PrintPagesData *data)
 
 static void
 print_pages (GtkPrintOperation *op,
-	     GtkWindow         *parent)
+	     GtkWindow         *parent,
+	     gboolean		is_preview)
 {
   GtkPrintOperationPrivate *priv = op->priv;
   PrintPagesData *data;
- 
+
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
 
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
+  data->is_preview = is_preview;
 
   if (priv->show_progress)
     {
@@ -1862,6 +2172,37 @@ print_pages (GtkPrintOperation *op,
       data->progress = progress;
     }
 
+  if (is_preview)
+    {
+      gboolean handled;
+      
+      g_signal_emit_by_name (op, "preview",
+			     GTK_PRINT_OPERATION_PREVIEW (op),
+			     op->priv->print_context,
+			     parent,
+			     &handled);
+      
+      if (!handled ||
+	  gtk_print_context_get_cairo_context (priv->print_context) == NULL) {
+	/* Programmer error */
+	g_error ("You must set a cairo context on the print context");
+      }
+      
+      priv->start_page = preview_start_page;
+      priv->end_page = preview_end_page;
+      priv->end_run = preview_end_run;
+
+      priv->print_pages = gtk_print_settings_get_print_pages (priv->print_settings);
+      priv->page_ranges = gtk_print_settings_get_page_ranges (priv->print_settings,
+							      &priv->num_page_ranges);
+      priv->manual_num_copies = 1;
+      priv->manual_collation = FALSE;
+      priv->manual_reverse = FALSE;
+      priv->manual_page_set = GTK_PAGE_SET_ALL;
+      priv->manual_scale = 1.0;
+      priv->manual_orientation = TRUE;
+    }
+  
   priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 					       print_pages_idle, 
 					       data, 
@@ -1877,9 +2218,10 @@ print_pages (GtkPrintOperation *op,
       GDK_THREADS_LEAVE ();
       g_main_loop_run (priv->rloop);
       GDK_THREADS_ENTER ();
+      
+      g_main_loop_unref (priv->rloop);
+      priv->rloop = NULL;
     }
-  g_main_loop_unref (priv->rloop);
-  priv->rloop = NULL;
 }
 
 /**
@@ -1964,7 +2306,7 @@ gtk_print_operation_run (GtkPrintOperation  *op,
 							       &do_print,
 							       error);
   if (do_print)
-    print_pages (op, parent);
+    print_pages (op, parent, result == GTK_PRINT_OPERATION_RESULT_PREVIEW);
   else 
     _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 
@@ -2006,7 +2348,7 @@ gtk_print_operation_run_async (GtkPrintOperation *op,
     {
       run_pdf (op, parent, &do_print, NULL);
       if (do_print)
-	print_pages (op, parent);
+	print_pages (op, parent, FALSE);
       else 
 	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
     }

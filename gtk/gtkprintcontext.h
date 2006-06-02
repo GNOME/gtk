@@ -51,6 +51,11 @@ PangoFontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);
 PangoContext *gtk_print_context_create_pango_context (GtkPrintContext *context);
 PangoLayout  *gtk_print_context_create_pango_layout  (GtkPrintContext *context);
 
+/* Needed for preview implementations */
+void         gtk_print_context_set_cairo_context     (GtkPrintContext *context,
+						      cairo_t         *cr,
+						      double           dpi_x,
+						      double           dpi_y);
 
 G_END_DECLS
 

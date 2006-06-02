@@ -4,6 +4,7 @@ SUBDIRS=theme-bits
 
 if OS_UNIX
 SUBDIRS += xdgmime
+GTK_PRINT_PREVIEW_COMMAND="evince %f"
 endif
 
 DIST_SUBDIRS=theme-bits xdgmime
@@ -25,6 +26,7 @@ INCLUDES =						\
 	-DGTK_HOST=\"$(host)\"				\
 	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
+	-DGTK_PRINT_PREVIEW_COMMAND=\"$(GTK_PRINT_PREVIEW_COMMAND)\"	\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
@@ -231,6 +233,7 @@ gtk_public_h_sources =          \
 	gtkpreview.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
+	gtkprintoperationpreview.h	\
 	gtkprintsettings.h	\
 	gtkprivate.h		\
 	gtkprogress.h		\
@@ -487,6 +490,7 @@ gtk_c_sources =                 \
 	gtkpreview.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
+	gtkprintoperationpreview.c	\
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
 	gtkprogress.c		\

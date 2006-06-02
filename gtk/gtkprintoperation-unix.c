@@ -25,6 +25,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <errno.h>
+#include <stdlib.h>       
+#include <fcntl.h>
 
 #include "gtkprintoperation-private.h"
 #include "gtkmarshal.h"
@@ -41,13 +44,17 @@
 #include "gtkalias.h"
 #include "gtkintl.h"
 
-
 typedef struct {
-  GtkPrintJob *job;         /* the job we are sending to the printer */
-  gulong job_status_changed_tag;
   GtkWindow *parent;        /* just in case we need to throw error dialogs */
   GMainLoop *loop;
   gboolean data_sent;
+
+  /* Real printing (not preview: */
+  GtkPrintJob *job;         /* the job we are sending to the printer */
+  cairo_surface_t *surface;
+  gulong job_status_changed_tag;
+
+  
 } GtkPrintOperationUnix;
 
 typedef struct _PrinterFinder PrinterFinder;
@@ -62,21 +69,24 @@ unix_start_page (GtkPrintOperation *op,
 		 GtkPrintContext   *print_context,
 		 GtkPageSetup      *page_setup)
 {
+  GtkPrintOperationUnix *op_unix;  
   GtkPaperSize *paper_size;
   cairo_surface_type_t type;
   double w, h;
 
+  op_unix = op->priv->platform_data;
+  
   paper_size = gtk_page_setup_get_paper_size (page_setup);
 
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
   
-  type = cairo_surface_get_type (op->priv->surface);
+  type = cairo_surface_get_type (op_unix->surface);
 
   if (type == CAIRO_SURFACE_TYPE_PS)
-    cairo_ps_surface_set_size (op->priv->surface, w, h);
+    cairo_ps_surface_set_size (op_unix->surface, w, h);
   else if (type == CAIRO_SURFACE_TYPE_PDF)
-    cairo_pdf_surface_set_size (op->priv->surface, w, h);
+    cairo_pdf_surface_set_size (op_unix->surface, w, h);
 }
 
 static void
@@ -100,6 +110,112 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
     }
 
   g_free (op_unix);
+}
+
+static char *
+shell_command_substitute_file (const gchar *cmd,
+			       const gchar *filename)
+{
+  const char *inptr, *start;
+  char *result;
+  GString *final;
+
+  g_return_val_if_fail (cmd != NULL, NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
+
+  result = NULL;
+  final = g_string_new (NULL);
+
+  start = inptr = cmd;
+
+  while ((inptr = strchr (inptr, '%')) != NULL) 
+    {
+      g_string_append_len (final, start, inptr - start);
+      inptr++;
+      switch (*inptr) 
+        {
+          case 'f':
+            g_string_append (final, filename ? filename : "");
+            break;
+
+          case '%':
+            g_string_append_c (final, '%');
+            break;
+
+          default:
+            g_string_append_c (final, '%');
+            if (*inptr)
+              g_string_append_c (final, *inptr);
+            break;
+        }
+      if (*inptr)
+        inptr++;
+      start = inptr;
+    }
+  g_string_append (final, start);
+
+  result = final->str;
+
+  g_string_free (final, FALSE);
+
+  return result;
+}
+
+void
+_gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
+						      GtkWindow *parent,
+						      const char *filename)
+{
+  int argc;
+  gchar **argv;
+  gchar *cmd;
+  gchar *preview_cmd;
+  GtkSettings *settings;
+  gchar *quoted_filename;
+  GdkScreen *screen;
+  GError *error = NULL;
+ 
+  settings = gtk_settings_get_default ();
+  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  quoted_filename = g_shell_quote (filename);
+  cmd = shell_command_substitute_file (preview_cmd, quoted_filename);
+  g_shell_parse_argv (cmd, &argc, &argv, &error);
+
+  if (error !=NULL)
+    goto out;
+
+  if (parent)
+    screen = gtk_window_get_screen (parent);
+  else
+    screen = gdk_screen_get_default ();
+  
+  gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
+
+ out:
+  if (error != NULL)
+    {
+      GtkWidget *edialog;
+      edialog = gtk_message_dialog_new (parent, 
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_CLOSE,
+                                        _("Error launching preview") /* FIXME better text */);
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
+                                                "%s", error->message);
+      gtk_window_set_modal (GTK_WINDOW (edialog), TRUE);
+      g_signal_connect (edialog, "response",
+                        G_CALLBACK (gtk_widget_destroy), NULL);
+
+      gtk_window_present (GTK_WINDOW (edialog));
+
+      g_error_free (error); 
+   } 
+
+  g_free (cmd);
+  g_free (quoted_filename);
+  g_free (preview_cmd);
+  g_strfreev (argv);
 }
 
 static void
@@ -129,6 +245,7 @@ unix_finish_send  (GtkPrintJob *job,
     }
 
   op_unix->data_sent = TRUE;
+
   if (op_unix->loop)
     g_main_loop_quit (op_unix->loop);
 }
@@ -140,6 +257,8 @@ unix_end_run (GtkPrintOperation *op,
 {
   GtkPrintOperationUnix *op_unix = op->priv->platform_data;
 
+  cairo_surface_finish (op_unix->surface);
+  
   if (cancelled)
     return;
 
@@ -147,10 +266,11 @@ unix_end_run (GtkPrintOperation *op,
     op_unix->loop = g_main_loop_new (NULL, FALSE);
   
   /* TODO: Check for error */
-  gtk_print_job_send (op_unix->job,
-                      unix_finish_send, 
-                      op_unix, NULL,
-		      NULL);
+  if (op_unix->job != NULL)
+    gtk_print_job_send (op_unix->job,
+                        unix_finish_send, 
+                        op_unix, NULL,
+		        NULL);
 
   if (wait)
     {
@@ -253,64 +373,70 @@ finish_print (PrintResponseData *rdata,
 {
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
+  gboolean is_preview;
 
-  priv->start_page = unix_start_page;
-  priv->end_page = unix_end_page;
-  priv->end_run = unix_end_run;
+  is_preview = rdata->result == GTK_PRINT_OPERATION_RESULT_PREVIEW;
   
   if (rdata->do_print)
     {
-      GtkPrintOperationUnix *op_unix;
-
       gtk_print_operation_set_print_settings (op, settings);
-      
-      op_unix = g_new0 (GtkPrintOperationUnix, 1);
-      op_unix->job = gtk_print_job_new (priv->job_name,
-					printer,
-					settings,
-					page_setup);
+      priv->print_context = _gtk_print_context_new (op);
+      _gtk_print_context_set_page_setup (priv->print_context, page_setup);
 
-      gtk_print_job_set_track_print_status (op_unix->job, priv->track_print_status);
-      
-      rdata->op->priv->surface = gtk_print_job_get_surface (op_unix->job, rdata->error);
-      if (op->priv->surface == NULL)
+      if (!is_preview)
         {
-	  rdata->do_print = FALSE;
-	  op_unix_free (op_unix);
-	  rdata->result = GTK_PRINT_OPERATION_RESULT_ERROR;
-	  goto out;
-	}
+	  GtkPrintOperationUnix *op_unix;
+	  cairo_t *cr;
+	  
+	  op_unix = g_new0 (GtkPrintOperationUnix, 1);     
+	  priv->platform_data = op_unix;
+	  priv->free_platform_data = (GDestroyNotify) op_unix_free;
+	  op_unix->parent = rdata->parent;
+	  
+	  priv->start_page = unix_start_page;
+	  priv->end_page = unix_end_page;
+	  priv->end_run = unix_end_run;
+	  
+	  op_unix->job = gtk_print_job_new (priv->job_name,
+					    printer,
+					    settings,
+					    page_setup);
+          gtk_print_job_set_track_print_status (op_unix->job, priv->track_print_status);
+	  
+	  op_unix->surface = gtk_print_job_get_surface (op_unix->job, rdata->error);
+	  if (op_unix->surface == NULL) {
+	    rdata->do_print = FALSE;
+	    goto out;
+	  }
+	  
+	  cr = cairo_create (op_unix->surface);
+	  gtk_print_context_set_cairo_context (op->priv->print_context,
+					       cr, 72, 72);
+	  cairo_destroy (cr);
 
-      _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job), NULL);
-      op_unix->job_status_changed_tag =
-	g_signal_connect (op_unix->job, "status-changed",
-			  G_CALLBACK (job_status_changed_cb), op);
-      
-      op_unix->parent = rdata->parent;
-
-      priv->dpi_x = 72;
-      priv->dpi_y = 72;
- 
-      priv->platform_data = op_unix;
-      priv->free_platform_data = (GDestroyNotify) op_unix_free;
-
-      priv->print_pages = op_unix->job->print_pages;
-      priv->page_ranges = op_unix->job->page_ranges;
-      priv->num_page_ranges = op_unix->job->num_page_ranges;
-  
-      priv->manual_num_copies = op_unix->job->num_copies;
-      priv->manual_collation = op_unix->job->collate;
-      priv->manual_reverse = op_unix->job->reverse;
-      priv->manual_page_set = op_unix->job->page_set;
-      priv->manual_scale = op_unix->job->scale;
-      priv->manual_orientation = op_unix->job->rotate_to_orientation;
+          _gtk_print_operation_set_status (op, gtk_print_job_get_status (op_unix->job), NULL);
+	  
+          op_unix->job_status_changed_tag =
+	    g_signal_connect (op_unix->job, "status-changed",
+			      G_CALLBACK (job_status_changed_cb), op);
+	  
+          priv->print_pages = op_unix->job->print_pages;
+          priv->page_ranges = op_unix->job->page_ranges;
+          priv->num_page_ranges = op_unix->job->num_page_ranges;
+	  
+          priv->manual_num_copies = op_unix->job->num_copies;
+          priv->manual_collation = op_unix->job->collate;
+          priv->manual_reverse = op_unix->job->reverse;
+          priv->manual_page_set = op_unix->job->page_set;
+          priv->manual_scale = op_unix->job->scale;
+          priv->manual_orientation = op_unix->job->rotate_to_orientation;
+        }
     } 
-
- out:  
+ out:
   if (rdata->print_cb)
     {
       if (rdata->do_print)
-        rdata->print_cb (op, rdata->parent); 
+        rdata->print_cb (op, rdata->parent, is_preview); 
       else
        _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL); 
     }
@@ -319,7 +445,7 @@ finish_print (PrintResponseData *rdata,
     rdata->destroy (rdata);
 }
 
-static void
+static void 
 handle_print_response (GtkWidget *dialog,
 		       gint       response,
 		       gpointer   data)
@@ -335,24 +461,31 @@ handle_print_response (GtkWidget *dialog,
       rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
       printer = gtk_print_unix_dialog_get_selected_printer (GTK_PRINT_UNIX_DIALOG (pd));
-      if (printer == NULL)
-	goto out;
-      
+      if (printer != NULL)
+	rdata->do_print = TRUE;
+    } 
+  else if (response == GTK_RESPONSE_APPLY)
+    {
+      /* print preview */
+      rdata->result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
       rdata->do_print = TRUE;
+    }
 
+  if (rdata->do_print)
+    {
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
-
+      
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
-    } 
-
- out:  
+    }
+  
   finish_print (rdata, printer, page_setup, settings);
 
   if (settings)
     g_object_unref (settings);
-  
+    
   gtk_widget_destroy (GTK_WIDGET (pd));
+ 
 }
 
 
@@ -436,6 +569,39 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
     }
 }
 
+cairo_surface_t *
+_gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
+							      GtkPageSetup *page_setup,
+							      gdouble *dpi_x,
+							      gdouble *dpi_y,
+							      const gchar *target)
+{
+  GtkPaperSize *paper_size;
+  double w, h;
+  
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+    
+  *dpi_x = *dpi_y = 72;
+  return cairo_pdf_surface_create (target, w, h);
+}
+
+void
+_gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation *op,
+							      GtkPageSetup *page_setup,
+							      cairo_surface_t *surface)
+{
+  GtkPaperSize *paper_size;
+  double w, h;
+  
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+  cairo_pdf_surface_set_size (surface, w, h);
+}
+
+
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 						  GtkWindow         *parent,
@@ -459,6 +625,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   if (op->priv->show_dialog)
     {
       pd = get_print_dialog (op, parent);
+
       response = gtk_dialog_run (GTK_DIALOG (pd));
       handle_print_response (pd, response, &rdata);
     }
@@ -477,6 +644,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       GDK_THREADS_ENTER ();  
 
       g_main_loop_unref (rdata.loop);
+      rdata.loop = NULL;
     }
 
   *do_print = rdata.do_print;

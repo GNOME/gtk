@@ -29,6 +29,7 @@
 #include "gtkpagesetup.h"
 #include "gtkprintsettings.h"
 #include "gtkprintcontext.h"
+#include "gtkprintoperationpreview.h"
 
 G_BEGIN_DECLS
 
@@ -84,7 +85,13 @@ struct _GtkPrintOperationClass
   GtkWidget *(*create_custom_widget) (GtkPrintOperation *operation);
   void       (*custom_widget_apply)  (GtkPrintOperation *operation,
 				      GtkWidget *widget);
+
   
+  gboolean (*preview)	     (GtkPrintOperation        *operation,
+			      GtkPrintOperationPreview *preview, 
+			      GtkPrintContext          *context,
+			      GtkWindow                *parent);  
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -98,7 +105,8 @@ struct _GtkPrintOperationClass
 typedef enum {
   GTK_PRINT_OPERATION_RESULT_ERROR,
   GTK_PRINT_OPERATION_RESULT_APPLY,
-  GTK_PRINT_OPERATION_RESULT_CANCEL
+  GTK_PRINT_OPERATION_RESULT_CANCEL,
+  GTK_PRINT_OPERATION_RESULT_PREVIEW
 } GtkPrintOperationResult;
 
 #define GTK_PRINT_ERROR gtk_print_error_quark ()

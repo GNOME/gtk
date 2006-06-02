@@ -46,9 +46,11 @@ struct _GtkPrintOperationPrivate
   guint print_pages_idle_id;
   guint show_progress_timeout_id;
 
+  GtkPrintContext *print_context;
+  
   /* Data for the print job: */
-  cairo_surface_t *surface;
-  gdouble dpi_x, dpi_y;
+  /* cairo_surface_t *surface; */
+  /*  gdouble dpi_x, dpi_y; */
 
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
@@ -78,17 +80,29 @@ struct _GtkPrintOperationPrivate
 		      gboolean           cancelled);
 };
 
-GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *operation,
-									  GtkWindow         *parent,
-									  gboolean          *do_print,
-									  GError           **error);
 
 typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
-					     GtkWindow         *parent);
+					     GtkWindow         *parent,
+					     gboolean           is_preview);
 
-void _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
-							     GtkWindow                  *parent,
-							     GtkPrintOperationPrintFunc  print_cb);
+GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog             (GtkPrintOperation           *operation,
+										      GtkWindow                   *parent,
+										      gboolean                    *do_print,
+										      GError                     **error);
+void                    _gtk_print_operation_platform_backend_run_dialog_async       (GtkPrintOperation           *op,
+										      GtkWindow                   *parent,
+										      GtkPrintOperationPrintFunc   print_cb);
+void                    _gtk_print_operation_platform_backend_launch_preview         (GtkPrintOperation           *op,
+										      GtkWindow                   *parent,
+										      const char                  *filename);
+cairo_surface_t *       _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation           *op,
+										      GtkPageSetup                *page_setup,
+										      gdouble                     *dpi_x,
+										      gdouble                     *dpi_y,
+										      const gchar                 *target);
+void                    _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation           *op,
+										      GtkPageSetup                *page_setup,
+										      cairo_surface_t             *surface);
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
 				      GtkPrintStatus     status,

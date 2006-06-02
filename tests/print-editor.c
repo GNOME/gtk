@@ -1,3 +1,4 @@
+#include <math.h>
 #include <pango/pangocairo.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkprintoperation.h>
@@ -303,7 +304,6 @@ begin_print (GtkPrintOperation *operation,
   gtk_print_operation_set_n_pages (operation, g_list_length (page_breaks) + 1);
   
   print_data->page_breaks = page_breaks;
-  
 }
 
 static void
@@ -317,6 +317,7 @@ draw_page (GtkPrintOperation *operation,
   int start, end, i;
   PangoLayoutIter *iter;
   double start_pos;
+
   if (page_nr == 0)
     start = 0;
   else
@@ -430,17 +431,195 @@ custom_widget_apply (GtkPrintOperation *operation,
   data->font = g_strdup (selected_font);
 }
 
+typedef struct 
+{
+  GtkPrintOperation *op;
+  GtkPrintOperationPreview *preview;
+  GtkWidget         *spin;
+  GtkWidget         *area;
+  gint               page;
+  PrintData *data;
+  gdouble dpi_x, dpi_y;
+} PreviewOp;
+
+static gboolean
+preview_expose (GtkWidget      *widget,
+		GdkEventExpose *event,
+		gpointer        data)
+{
+  PreviewOp *pop = data;
+
+  gdk_window_clear (pop->area->window);
+  gtk_print_operation_preview_render_page (pop->preview,
+					   pop->page - 1);
+
+  return TRUE;
+}
+
+static void
+preview_ready (GtkPrintOperationPreview *preview,
+	       GtkPrintContext          *context,
+	       gpointer                  data)
+{
+  PreviewOp *pop = data;
+  gint n_pages;
+
+  g_object_get (pop->op, "n-pages", &n_pages, NULL);
+
+  gtk_spin_button_set_range (GTK_SPIN_BUTTON (pop->spin), 
+			     1.0, n_pages);
+
+  g_signal_connect (pop->area, "expose_event",
+		    G_CALLBACK (preview_expose),
+		    pop);
+
+  gtk_widget_queue_draw (pop->area);
+}
+
+static void
+preview_got_page_size (GtkPrintOperationPreview *preview, 
+		       GtkPrintContext          *context,
+		       GtkPageSetup             *page_setup,
+		       gpointer                  data)
+{
+  PreviewOp *pop = data;
+  GtkPaperSize *paper_size;
+  double w, h;
+  cairo_t *cr;
+  gdouble dpi_x, dpi_y;
+
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_INCH);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_INCH);
+
+  cr = gdk_cairo_create (pop->area->window);
+
+  dpi_x = pop->area->allocation.width/w;
+  dpi_y = pop->area->allocation.height/h;
+  
+  if (fabs (dpi_x - pop->dpi_x) > 0.001 ||
+      fabs (dpi_y - pop->dpi_y) > 0.001)
+    {
+      gtk_print_context_set_cairo_context (context, cr, dpi_x, dpi_y);
+      pop->dpi_x = dpi_x;
+      pop->dpi_y = dpi_y;
+    }
+
+  pango_cairo_update_layout (cr, pop->data->layout);
+  cairo_destroy (cr);
+}
+
+static void
+update_page (GtkSpinButton *widget,
+	     gpointer       data)
+{
+  PreviewOp *pop = data;
+
+  pop->page = gtk_spin_button_get_value_as_int (widget);
+  gtk_widget_queue_draw (pop->area);
+}
+
+static void
+preview_destroy (GtkWindow *window, 
+		 PreviewOp *pop)
+{
+  gtk_print_operation_preview_end_preview (pop->preview);
+  g_object_unref (pop->op);
+
+  g_free (pop);
+}
+
+static gboolean 
+do_preview (GtkPrintOperation        *op,
+	    GtkPrintOperationPreview *preview,
+	    GtkPrintContext          *context,
+	    GtkWindow                *parent,
+	    gpointer                  data)
+{
+  GtkPrintSettings *settings;
+  GtkWidget *window, *close, *page, *hbox, *vbox, *da;
+  gdouble width, height;
+  cairo_t *cr;
+  PreviewOp *pop;
+  PrintData *print_data = data;
+
+  pop = g_new0 (PreviewOp, 1);
+
+  pop->data = print_data;
+  settings = gtk_print_operation_get_print_settings (op);
+
+  width = 200;
+  height = 300;
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_transient_for (GTK_WINDOW (window), 
+				GTK_WINDOW (main_window));
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox,
+		      FALSE, FALSE, 0);
+  page = gtk_spin_button_new_with_range (1, 100, 1);
+  gtk_box_pack_start (GTK_BOX (hbox), page, FALSE, FALSE, 0);
+  
+  close = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  gtk_box_pack_start (GTK_BOX (hbox), close, FALSE, FALSE, 0);
+
+  da = gtk_drawing_area_new ();
+  gtk_widget_set_size_request (GTK_WIDGET (da), width, height);
+  gtk_box_pack_start (GTK_BOX (vbox), da, TRUE, TRUE, 0);
+
+  gtk_widget_set_double_buffered (da, FALSE);
+
+  gtk_widget_realize (da);
+  
+  cr = gdk_cairo_create (da->window);
+
+  /* TODO: What dpi to use here? This will be used for pagination.. */
+  gtk_print_context_set_cairo_context (context, cr, 72, 72);
+  cairo_destroy (cr);
+  
+  pop->op = op;
+  pop->preview = preview;
+  pop->spin = page;
+  pop->area = da;
+  pop->page = 1;
+
+  g_signal_connect (page, "value-changed", 
+		    G_CALLBACK (update_page), pop);
+  g_signal_connect_swapped (close, "clicked", 
+			    G_CALLBACK (gtk_widget_destroy), window);
+
+  g_signal_connect (preview, "ready",
+		    G_CALLBACK (preview_ready), pop);
+  g_signal_connect (preview, "got-page-size",
+		    G_CALLBACK (preview_got_page_size), pop);
+
+  g_signal_connect (window, "destroy", 
+                    G_CALLBACK (preview_destroy), pop);
+                            
+  gtk_widget_show_all (window);
+  
+  return TRUE;
+}
+
+/* FIXME had to move this to the heap, since previewing
+ * returns too early from the sync api 
+ */
+PrintData *print_data;
+
 static void
 do_print (GtkAction *action)
 {
   GtkWidget *error_dialog;
   GtkPrintOperation *print;
-  PrintData print_data;
   GtkPrintOperationResult res;
   GError *error;
 
-  print_data.text = get_text ();
-  print_data.font = g_strdup ("Sans 12");
+  print_data = g_new0 (PrintData, 1);
+
+  print_data->text = get_text ();
+  print_data->font = g_strdup ("Sans 12");
 
   print = gtk_print_operation_new ();
 
@@ -452,12 +631,15 @@ do_print (GtkAction *action)
   if (page_setup != NULL)
     gtk_print_operation_set_default_page_setup (print, page_setup);
   
-  g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), &print_data);
-  g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), &print_data);
-  g_signal_connect (print, "create_custom_widget", G_CALLBACK (create_custom_widget), &print_data);
-  g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), &print_data);
-  
+  g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), print_data);
+  g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), print_data);
+  g_signal_connect (print, "create_custom_widget", G_CALLBACK (create_custom_widget), print_data);
+  g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), print_data);
+  g_signal_connect (print, "preview", G_CALLBACK (do_preview), print_data);
+
   error = NULL;
+
+#if 1
   res = gtk_print_operation_run (print, GTK_WINDOW (main_window), &error);
 
   if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
@@ -467,7 +649,7 @@ do_print (GtkAction *action)
 					     GTK_MESSAGE_ERROR,
 					     GTK_BUTTONS_CLOSE,
 					     "Error printing file:\n%s",
-					     error->message);
+					     error ? error->message : "no details");
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
       gtk_widget_show (error_dialog);
       g_error_free (error);
@@ -489,10 +671,15 @@ do_print (GtkAction *action)
       g_signal_connect (print, "status_changed",
 			G_CALLBACK (status_changed_cb), NULL);
     }
+#else
+  gtk_print_operation_run_async (print, GTK_WINDOW (main_window));
+#endif
 
   g_object_unref (print);
+#if 0
   g_free (print_data.text);
   g_free (print_data.font);
+#endif
 }
 
 static void

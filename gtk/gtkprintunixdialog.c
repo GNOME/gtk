@@ -275,7 +275,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 		    (GCallback) gtk_print_unix_dialog_destroy, 
 		    NULL);
 
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  GTK_STOCK_PRINT_PREVIEW, GTK_RESPONSE_APPLY, 
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_PRINT, GTK_RESPONSE_OK,
                           NULL);

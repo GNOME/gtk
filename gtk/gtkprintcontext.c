@@ -40,6 +40,9 @@ struct _GtkPrintContext
   GtkPageSetup *page_setup;
   PangoFontMap *fontmap;
 
+  gdouble surface_dpi_x;
+  gdouble surface_dpi_y;
+  
   gdouble pixels_per_unit_x;
   gdouble pixels_per_unit_y;
 };
@@ -60,8 +63,8 @@ gtk_print_context_finalize (GObject *object)
   if (context->page_setup)
     g_object_unref (context->page_setup);
 
-  cairo_destroy (context->cr);
-
+  if (context->cr)
+    cairo_destroy (context->cr);
   
   G_OBJECT_CLASS (gtk_print_context_parent_class)->finalize (object);
 }
@@ -83,15 +86,31 @@ gtk_print_context_class_init (GtkPrintContextClass *class)
 GtkPrintContext *
 _gtk_print_context_new (GtkPrintOperation *op)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintContext *context;
 
   context = g_object_new (GTK_TYPE_PRINT_CONTEXT, NULL);
 
   context->op = op;
-  context->cr = cairo_create (priv->surface);
+  context->cr = NULL;
+  context->fontmap = pango_cairo_font_map_new ();
+  
+  return context;
+}
 
-  switch (priv->unit)
+void
+gtk_print_context_set_cairo_context (GtkPrintContext *context,
+				     cairo_t         *cr,
+				     double           dpi_x,
+				     double           dpi_y)
+{
+  if (context->cr)
+    cairo_destroy (context->cr);
+
+  context->cr = cairo_reference (cr);
+  context->surface_dpi_x = dpi_x;
+  context->surface_dpi_y = dpi_y;
+
+  switch (context->op->priv->unit)
     {
     default:
     case GTK_UNIT_PIXEL:
@@ -100,34 +119,31 @@ _gtk_print_context_new (GtkPrintOperation *op)
       context->pixels_per_unit_y = 1.0;
       break;
     case GTK_UNIT_POINTS:
-      context->pixels_per_unit_x = priv->dpi_x / POINTS_PER_INCH;
-      context->pixels_per_unit_y = priv->dpi_y / POINTS_PER_INCH;
+      context->pixels_per_unit_x = dpi_x / POINTS_PER_INCH;
+      context->pixels_per_unit_y = dpi_y / POINTS_PER_INCH;
       break;
     case GTK_UNIT_INCH:
-      context->pixels_per_unit_x = priv->dpi_x;
-      context->pixels_per_unit_y = priv->dpi_y;
+      context->pixels_per_unit_x = dpi_x;
+      context->pixels_per_unit_y = dpi_y;
       break;
     case GTK_UNIT_MM:
-      context->pixels_per_unit_x = priv->dpi_x / MM_PER_INCH;
-      context->pixels_per_unit_y = priv->dpi_y / MM_PER_INCH;
+      context->pixels_per_unit_x = dpi_x / MM_PER_INCH;
+      context->pixels_per_unit_y = dpi_y / MM_PER_INCH;
       break;
     }
   cairo_scale (context->cr,
 	       context->pixels_per_unit_x,
 	       context->pixels_per_unit_y);
     
-  context->fontmap = pango_cairo_font_map_new ();
   /* We use the unit-scaled resolution, as we still want fonts given in points to work */
   pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (context->fontmap),
-				       priv->dpi_y / context->pixels_per_unit_y);
-  
-  return context;
+				       dpi_y / context->pixels_per_unit_y);
 }
+
 
 void
 _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
 {
-  GtkPrintOperationPrivate *priv = context->op->priv;
   cairo_t *cr = context->cr;
   cairo_matrix_t matrix;
   GtkPaperSize *paper_size;
@@ -136,9 +152,9 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
   paper_size = gtk_page_setup_get_paper_size (context->page_setup);
 
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_INCH);
-  width = width * priv->dpi_x / context->pixels_per_unit_x;
+  width = width * context->surface_dpi_x / context->pixels_per_unit_x;
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_INCH);
-  height = height * priv->dpi_y / context->pixels_per_unit_y;
+  height = height * context->surface_dpi_y / context->pixels_per_unit_y;
   
   switch (gtk_page_setup_get_orientation (context->page_setup))
     {
@@ -188,8 +204,8 @@ _gtk_print_context_translate_into_margin (GtkPrintContext *context)
   top = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
 
   cairo_translate (context->cr,
-		   left * priv->dpi_x / context->pixels_per_unit_x,
-		   top * priv->dpi_y / context->pixels_per_unit_y);
+		   left * context->surface_dpi_x / context->pixels_per_unit_x,
+		   top * context->surface_dpi_y / context->pixels_per_unit_y);
 }
 
 void
@@ -272,7 +288,7 @@ gtk_print_context_get_width (GtkPrintContext *context)
     width = gtk_page_setup_get_page_width (context->page_setup, GTK_UNIT_INCH);
 
   /* Really dpi_x? What about landscape? what does dpi_x mean in that case? */
-  return width * priv->dpi_x / context->pixels_per_unit_x;
+  return width * context->surface_dpi_x / context->pixels_per_unit_x;
 }
 
 /**
@@ -300,8 +316,8 @@ gtk_print_context_get_height (GtkPrintContext *context)
   else
     height = gtk_page_setup_get_page_height (context->page_setup, GTK_UNIT_INCH);
 
-  /* Really dpi_x? What about landscape? what does dpi_x mean in that case? */
-  return height * priv->dpi_y / context->pixels_per_unit_y;
+  /* Really dpi_y? What about landscape? what does dpi_y mean in that case? */
+  return height * context->surface_dpi_y / context->pixels_per_unit_y;
 }
 
 /**
@@ -320,7 +336,7 @@ gtk_print_context_get_dpi_x (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
 
-  return context->op->priv->dpi_x;
+  return context->surface_dpi_x;
 }
 
 /**
@@ -339,7 +355,7 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
 
-  return context->op->priv->dpi_y;
+  return context->surface_dpi_y;
 }
 
 /**
@@ -376,10 +392,16 @@ PangoContext *
 gtk_print_context_create_pango_context (GtkPrintContext *context)
 {
   PangoContext *pango_context;
+  cairo_font_options_t *options;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
   
   pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (context->fontmap));
+
+  options = cairo_font_options_create ();
+  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
+  pango_cairo_context_set_font_options (pango_context, options);
+  cairo_font_options_destroy (options);
   
   return pango_context;
 }

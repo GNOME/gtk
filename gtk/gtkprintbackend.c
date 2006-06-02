@@ -191,7 +191,7 @@ _gtk_print_backend_module_create (GtkPrintBackendModule *pb_module)
   return NULL;
 }
 
-GtkPrintBackend *
+static GtkPrintBackend *
 _gtk_print_backend_create (const char *backend_name)
 {
   GSList *l;
@@ -200,7 +200,6 @@ _gtk_print_backend_create (const char *backend_name)
   GtkPrintBackendModule *pb_module;
   GtkPrintBackend *pb;
 
-  /* TODO: make module loading code work */
   for (l = loaded_backends; l != NULL; l = l->next)
     {
       pb_module = l->data;
@@ -255,6 +254,11 @@ gtk_print_backend_initialize (void)
 							  GTK_PRINT_BACKENDS,
 							  GTK_PARAM_READWRITE));
 
+      gtk_settings_install_property (g_param_spec_string ("gtk-print-preview-command",
+							  P_("Default command to run when displaying a print preview"),
+							  P_("Command to run when displaying a print preview"),
+							  GTK_PRINT_PREVIEW_COMMAND,
+							  GTK_PARAM_READWRITE)); 
       initialized = TRUE;
     }
 }
