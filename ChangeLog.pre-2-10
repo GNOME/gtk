@@ -1,5 +1,11 @@
 2006-06-02  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_leave_notify)P: revert fix of
+	#164884 because it's not a problem in gtk+ but in applications and
+	it breaks starting drags from the edge of a row.
+
+2006-06-02  Kristian Rietveld  <kris@imendio.com>
+
 	Separate sensitive/selectable properties.
 
 	* gtk/gtktreeselection.c (tree_column_is_sensitive): remove,

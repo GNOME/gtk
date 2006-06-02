@@ -4724,11 +4724,10 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
 {
   GtkTreeView *tree_view;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_view->priv->pressed_button = -1;
-
   if (event->mode == GDK_CROSSING_GRAB)
     return TRUE;
+
+  tree_view = GTK_TREE_VIEW (widget);
 
   if (tree_view->priv->prelight_node)
     _gtk_tree_view_queue_draw_node (tree_view,
