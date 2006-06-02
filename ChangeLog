@@ -1,3 +1,11 @@
+2006-06-02  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelfilter.c
+	(gtk_tree_model_filter_convert_child_path_to_path): need to use
+	gtk_tree_model_filter_get_iter_full() since the path returned
+	by gtk_real_tree_model_filter_convert_child_path_to_path() includes
+	invisible nodes.
+
 2006-06-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_get_geometry): Allow

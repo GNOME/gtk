@@ -3170,7 +3170,7 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
    *    version of convert_child_path_to_path immediately returning
    *    a visible-nodes-only path.
    */
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
+  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
 
   gtk_tree_path_free (path);
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
