@@ -1231,44 +1231,11 @@ gtk_tree_selection_unselect_range (GtkTreeSelection *selection,
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
 
-static gboolean
-tree_column_is_sensitive (GtkTreeViewColumn *column,
-			  GtkTreeModel      *model,
-			  GtkTreeIter       *iter)
-{
-  GList *cells, *list;
-  gboolean sensitive;
-  gboolean visible;
-
-  gtk_tree_view_column_cell_set_cell_data (column, model,
-					   iter, FALSE, FALSE);
-
-  cells = gtk_tree_view_column_get_cell_renderers (column);
-
-  list = cells;
-  while (list)
-    {
-      g_object_get (list->data,
-		    "sensitive", &sensitive,
-		    "visible", &visible,
-		    NULL);
-      
-      if (visible && sensitive)
-	break;
-
-      list = list->next;
-    }
-  g_list_free (cells);
-
-  return sensitive;
-}
-
 gboolean
 _gtk_tree_selection_row_is_selectable (GtkTreeSelection *selection,
 				       GtkRBNode        *node,
 				       GtkTreePath      *path)
 {
-  GList *list;
   GtkTreeIter iter;
   gboolean sensitive = FALSE;
 
@@ -1283,19 +1250,6 @@ _gtk_tree_selection_row_is_selectable (GtkTreeSelection *selection,
 							      selection->tree_view->priv->row_separator_data))
 	return FALSE;
     }
-
-  for (list = selection->tree_view->priv->columns; list && !sensitive; list = list->next)
-    {
-      GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
-
-      if (!column->visible)
-	continue;
-
-      sensitive = tree_column_is_sensitive (column, selection->tree_view->priv->model, &iter);
-    }
-
-  if (!sensitive)
-    return FALSE;
 
   if (selection->user_func)
     return (*selection->user_func) (selection, selection->tree_view->priv->model, path,
@@ -1479,10 +1433,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {
       path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
-      if (!select)
-	toggle = TRUE;
-      else
-	toggle = _gtk_tree_selection_row_is_selectable (selection, node, path);
+      toggle = _gtk_tree_selection_row_is_selectable (selection, node, path);
       gtk_tree_path_free (path);
     }
 

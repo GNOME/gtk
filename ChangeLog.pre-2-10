@@ -1,5 +1,23 @@
 2006-06-02  Kristian Rietveld  <kris@imendio.com>
 
+	Separate sensitive/selectable properties.
+
+	* gtk/gtktreeselection.c (tree_column_is_sensitive): remove,
+	(_gtk_tree_selection_row_is_selectable): remove checks to see if at
+	least one column is sensitive,
+	(gtk_tree_selection_real_select_node): remove code which enables
+	insensitive rows to always be unselected.
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): remove code
+	that unselects a node if it just became insensitive.
+
+	* gtk/gtkcombobox.c (gtkcombo_box_list_select_func): new function,
+	based on the at least one column sensitive check from
+	_gtk_tree_selection_row_is_selectable(),
+	(gtk_combo_box_list_setup): set selection function on tree selection.
+
+2006-06-02  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreemodelfilter.c
 	(gtk_tree_model_filter_convert_child_path_to_path): need to use
 	gtk_tree_model_filter_get_iter_full() since the path returned

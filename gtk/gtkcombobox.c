@@ -339,6 +339,12 @@ static gboolean gtk_combo_box_list_button_pressed  (GtkWidget        *widget,
                                                     GdkEventButton   *event,
                                                     gpointer          data);
 
+static gboolean gtk_combo_box_list_select_func     (GtkTreeSelection *selection,
+						    GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    gboolean          path_currently_selected,
+						    gpointer          data);
+
 static void     gtk_combo_box_list_row_changed     (GtkTreeModel     *model,
                                                     GtkTreePath      *path,
                                                     GtkTreeIter      *iter,
@@ -3291,6 +3297,9 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   combo_box->priv->tree_view = gtk_tree_view_new ();
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_BROWSE);
+  gtk_tree_selection_set_select_function (sel,
+					  gtk_combo_box_list_select_func,
+					  NULL, NULL);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (combo_box->priv->tree_view),
                                      FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (combo_box->priv->tree_view),
@@ -3746,6 +3755,50 @@ gtk_combo_box_list_enter_notify (GtkWidget        *widget,
   return TRUE;
 }
 
+static gboolean
+gtk_combo_box_list_select_func (GtkTreeSelection *selection,
+				GtkTreeModel     *model,
+				GtkTreePath      *path,
+				gboolean          path_currently_selected,
+				gpointer          data)
+{
+  GList *list;
+  gboolean sensitive = FALSE;
+
+  for (list = selection->tree_view->priv->columns; list && !sensitive; list = list->next)
+    {
+      GList *cells, *cell;
+      gboolean cell_sensitive, cell_visible;
+      GtkTreeIter iter;
+      GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
+
+      if (!column->visible)
+	continue;
+
+      gtk_tree_model_get_iter (model, &iter, path);
+      gtk_tree_view_column_cell_set_cell_data (column, model, &iter,
+					       FALSE, FALSE);
+
+      cell = cells = gtk_tree_view_column_get_cell_renderers (column);
+      while (cell)
+        {
+	  g_object_get (cell->data,
+			"sensitive", &cell_sensitive,
+			"visible", &cell_visible,
+			NULL);
+
+	  if (cell_visible && cell_sensitive)
+	    break;
+
+	  cell = cell->next;
+	}
+      g_list_free (cells);
+
+      sensitive = cell_sensitive;
+    }
+
+  return sensitive;
+}
 
 static void
 gtk_combo_box_list_row_changed (GtkTreeModel *model,
