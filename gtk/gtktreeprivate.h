@@ -58,6 +58,13 @@ enum
   DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT = 4
 };
 
+enum
+{
+  RUBBER_BAND_OFF = 0,
+  RUBBER_BAND_MAYBE_START = 1,
+  RUBBER_BAND_ACTIVE = 2
+};
+
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
@@ -172,6 +179,18 @@ struct _GtkTreeViewPrivate
   gint press_start_x;
   gint press_start_y;
 
+  gint rubber_band_status;
+  gint rubber_band_x;
+  gint rubber_band_y;
+  gint rubber_band_shift;
+  gint rubber_band_ctrl;
+
+  GtkRBNode *rubber_band_start_node;
+  GtkRBTree *rubber_band_start_tree;
+
+  GtkRBNode *rubber_band_end_node;
+  GtkRBTree *rubber_band_end_tree;
+
   /* fixed height */
   gint fixed_height;
 
@@ -209,6 +228,8 @@ struct _GtkTreeViewPrivate
   guint hover_selection : 1;
   guint hover_expand : 1;
   guint imcontext_changed : 1;
+
+  guint rubber_banding_enable : 1;
 
 
   /* Auto expand/collapse timeout in hover mode */

@@ -1,5 +1,31 @@
 2006-06-02  Kristian Rietveld  <kris@imendio.com>
 
+	Rubber banding for GtkTreeView, #80127.  Uses same method as
+	GtkIconView.
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init),
+	(gtk_tree_view_init), (gtk_tree_view_get_property),
+	(gtk_tree_view_set_property), (gtk_tree_view_set_rubber_banding),
+	(gtk_tree_view_get_rubber_banding): add property,
+	(gtk_tree_view_button_press): start rubber banding if enabled and
+	press is on a non-selected node,
+	(gtk_tree_view_button_release): stop rubber banding,
+	(gtk_tree_view_motion_bin_window), (scrool_row_timeout): enable/update
+	the rubber band,
+	(gtk_tree_view_bin_expose): draw rubber band if active,
+	(gtk_tree_view_stop_rubberband),
+	(gtk_tree_view_update_rubber_band_selection_range),
+	(gtk_tree_view_update_rubber_band_selection),
+	(gtk_tree_view_update_rubber_band),
+	(gtk_tree_view_paint_rubber_band): new functions.
+
+	* gtk/gtktreeview.h: add new set/get function for rubber banding
+	property.
+
+	* gtk/gtktreeprivate.h: add a bunch of new private fields.
+
+2006-06-02  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_leave_notify)P: revert fix of
 	#164884 because it's not a problem in gtk+ but in applications and
 	it breaks starting drags from the edge of a row.

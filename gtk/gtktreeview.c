@@ -135,7 +135,8 @@ enum {
   PROP_HOVER_SELECTION,
   PROP_HOVER_EXPAND,
   PROP_SHOW_EXPANDERS,
-  PROP_LEVEL_INDENTATION
+  PROP_LEVEL_INDENTATION,
+  PROP_RUBBER_BANDING
 };
 
 /* object signals */
@@ -379,6 +380,7 @@ static void     column_sizing_notify                         (GObject           
                                                               gpointer           data);
 static gboolean expand_collapse_timeout                      (gpointer           data);
 static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
+static void     gtk_tree_view_stop_rubber_band                (GtkTreeView       *tree_view);
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
@@ -455,6 +457,8 @@ static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
 						      gint        *tx,
 						      gint        *ty);
 
+static gint scroll_row_timeout                       (gpointer     data);
+static void remove_scroll_timeout                    (GtkTreeView *tree_view);
 
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
@@ -696,6 +700,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       G_MAXINT,
 						       0,
 						       GTK_PARAM_READWRITE));
+
+    g_object_class_install_property (o_class,
+                                     PROP_RUBBER_BANDING,
+                                     g_param_spec_boolean ("rubber-banding",
+                                                           P_("Rubber Banding"),
+                                                           P_("Whether to enable selection of multiple items by dragging the mouse pointer"),
+                                                           FALSE,
+                                                           GTK_PARAM_READWRITE));
 
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 12
@@ -1247,6 +1259,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->hover_expand = FALSE;
 
   tree_view->priv->level_indentation = 0;
+
+  tree_view->priv->rubber_banding_enable = FALSE;
 }
 
 
@@ -1314,6 +1328,9 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_LEVEL_INDENTATION:
       tree_view->priv->level_indentation = g_value_get_int (value);
       break;
+    case PROP_RUBBER_BANDING:
+      tree_view->priv->rubber_banding_enable = g_value_get_boolean (value);
+      break;
     default:
       break;
     }
@@ -1375,6 +1392,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_LEVEL_INDENTATION:
       g_value_set_int (value, tree_view->priv->level_indentation);
+      break;
+    case PROP_RUBBER_BANDING:
+      g_value_set_boolean (value, tree_view->priv->rubber_banding_enable);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2310,6 +2330,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint column_handled_click = FALSE;
       gboolean row_double_click = FALSE;
       gboolean rtl;
+      gboolean node_selected;
 
       /* Empty tree? */
       if (tree_view->priv->tree == NULL)
@@ -2478,6 +2499,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       /* select */
+      node_selected = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
       pre_val = tree_view->priv->vadjustment->value;
 
       /* we only handle selection modifications on the first button press
@@ -2530,6 +2552,21 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->pressed_button = event->button;
           tree_view->priv->press_start_x = event->x;
           tree_view->priv->press_start_y = event->y;
+
+	  if (tree_view->priv->rubber_banding_enable
+	      && !node_selected
+	      && tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE)
+	    {
+	      tree_view->priv->press_start_y += tree_view->priv->dy;
+	      tree_view->priv->rubber_band_x = event->x;
+	      tree_view->priv->rubber_band_y = event->y + tree_view->priv->dy;
+	      tree_view->priv->rubber_band_status = RUBBER_BAND_MAYBE_START;
+
+	      if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+		tree_view->priv->rubber_band_ctrl = TRUE;
+	      if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
+		tree_view->priv->rubber_band_shift = TRUE;
+	    }
         }
 
       /* Test if a double click happened on the same row. */
@@ -2744,6 +2781,9 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
     return gtk_tree_view_button_release_drag_column (widget, event);
+
+  if (tree_view->priv->rubber_band_status)
+    gtk_tree_view_stop_rubber_band (tree_view);
 
   if (tree_view->priv->pressed_button == event->button)
     tree_view->priv->pressed_button = -1;
@@ -3443,6 +3483,335 @@ gtk_tree_view_motion_drag_column (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
+{
+  remove_scroll_timeout (tree_view);
+  gtk_grab_remove (GTK_WIDGET (tree_view));
+
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+
+  if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    {
+      GtkTreePath *tmp_path;
+
+      /* The anchor path should be set to the start path */
+      tmp_path = _gtk_tree_view_find_path (tree_view,
+					   tree_view->priv->rubber_band_start_tree,
+					   tree_view->priv->rubber_band_start_node);
+
+      if (tree_view->priv->anchor)
+	gtk_tree_row_reference_free (tree_view->priv->anchor);
+
+      tree_view->priv->anchor =
+	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+					  tree_view->priv->model,
+					  tmp_path);
+
+      gtk_tree_path_free (tmp_path);
+
+      /* ... and the cursor to the end path */
+      tmp_path = _gtk_tree_view_find_path (tree_view,
+					   tree_view->priv->rubber_band_end_tree,
+					   tree_view->priv->rubber_band_end_node);
+      gtk_tree_view_real_set_cursor (GTK_TREE_VIEW (tree_view), tmp_path, FALSE, FALSE);
+      gtk_tree_path_free (tmp_path);
+
+      _gtk_tree_selection_emit_changed (tree_view->priv->selection);
+    }
+
+  /* Clear status variables */
+  tree_view->priv->rubber_band_status = RUBBER_BAND_OFF;
+  tree_view->priv->rubber_band_shift = 0;
+  tree_view->priv->rubber_band_ctrl = 0;
+
+  tree_view->priv->rubber_band_start_node = NULL;
+  tree_view->priv->rubber_band_start_tree = NULL;
+  tree_view->priv->rubber_band_end_node = NULL;
+  tree_view->priv->rubber_band_end_tree = NULL;
+}
+
+static void
+gtk_tree_view_update_rubber_band_selection_range (GtkTreeView *tree_view,
+						 GtkRBTree   *start_tree,
+						 GtkRBNode   *start_node,
+						 GtkRBTree   *end_tree,
+						 GtkRBNode   *end_node,
+						 gboolean     select,
+						 gboolean     skip_start,
+						 gboolean     skip_end)
+{
+  if (start_node == end_node)
+    return;
+
+  /* We skip the first node and jump inside the loop */
+  if (skip_start)
+    goto skip_first;
+
+  do
+    {
+      if (select)
+        {
+	  if (tree_view->priv->rubber_band_shift)
+	    GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	  else if (tree_view->priv->rubber_band_ctrl)
+	    {
+	      /* Toggle the selection state */
+	      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
+		GTK_RBNODE_UNSET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	      else
+		GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	    }
+	  else
+	    GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	}
+      else
+        {
+	  /* Mirror the above */
+	  if (tree_view->priv->rubber_band_shift)
+	    GTK_RBNODE_UNSET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	  else if (tree_view->priv->rubber_band_ctrl)
+	    {
+	      /* Toggle the selection state */
+	      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
+		GTK_RBNODE_UNSET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	      else
+		GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	    }
+	  else
+	    GTK_RBNODE_UNSET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	}
+
+      _gtk_tree_view_queue_draw_node (tree_view, start_tree, start_node, NULL);
+
+      if (start_node == end_node)
+	break;
+
+skip_first:
+
+      if (start_node->children)
+        {
+	  start_tree = start_node->children;
+	  start_node = start_tree->root;
+	  while (start_node->left != start_tree->nil)
+	    start_node = start_node->left;
+	}
+      else
+        {
+	  _gtk_rbtree_next_full (start_tree, start_node, &start_tree, &start_node);
+
+	  if (!start_tree)
+	    /* Ran out of tree */
+	    break;
+	}
+
+      if (skip_end && start_node == end_node)
+	break;
+    }
+  while (TRUE);
+}
+
+static void
+gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
+{
+  GtkRBTree *start_tree, *end_tree;
+  GtkRBNode *start_node, *end_node;
+
+  _gtk_rbtree_find_offset (tree_view->priv->tree, MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y), &start_tree, &start_node);
+  _gtk_rbtree_find_offset (tree_view->priv->tree, MAX (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y), &end_tree, &end_node);
+
+  /* Handle the start area first */
+  if (!tree_view->priv->rubber_band_start_node)
+    {
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       start_tree,
+						       start_node,
+						       end_tree,
+						       end_node,
+						       TRUE,
+						       FALSE,
+						       FALSE);
+    }
+  else if (_gtk_rbtree_node_find_offset (start_tree, start_node) <
+           _gtk_rbtree_node_find_offset (tree_view->priv->rubber_band_start_tree, tree_view->priv->rubber_band_start_node))
+    {
+      /* New node is above the old one; selection became bigger */
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       start_tree,
+						       start_node,
+						       tree_view->priv->rubber_band_start_tree,
+						       tree_view->priv->rubber_band_start_node,
+						       TRUE,
+						       FALSE,
+						       TRUE);
+    }
+  else if (_gtk_rbtree_node_find_offset (start_tree, start_node) >
+           _gtk_rbtree_node_find_offset (tree_view->priv->rubber_band_start_tree, tree_view->priv->rubber_band_start_node))
+    {
+      /* New node is below the old one; selection became smaller */
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       tree_view->priv->rubber_band_start_tree,
+						       tree_view->priv->rubber_band_start_node,
+						       start_tree,
+						       start_node,
+						       FALSE,
+						       FALSE,
+						       TRUE);
+    }
+
+  tree_view->priv->rubber_band_start_tree = start_tree;
+  tree_view->priv->rubber_band_start_node = start_node;
+
+  /* Next, handle the end area */
+  if (!tree_view->priv->rubber_band_end_node)
+    {
+      /* In the event this happens, start_node was also NULL; this case is
+       * handled above.
+       */
+    }
+  else if (!end_node)
+    {
+      /* Find the last node in the tree */
+      _gtk_rbtree_find_offset (tree_view->priv->tree, tree_view->priv->height - 1,
+			       &end_tree, &end_node);
+
+      /* Selection reached end of the tree */
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       tree_view->priv->rubber_band_end_tree,
+						       tree_view->priv->rubber_band_end_node,
+						       end_tree,
+						       end_node,
+						       TRUE,
+						       TRUE,
+						       FALSE);
+    }
+  else if (_gtk_rbtree_node_find_offset (end_tree, end_node) >
+           _gtk_rbtree_node_find_offset (tree_view->priv->rubber_band_end_tree, tree_view->priv->rubber_band_end_node))
+    {
+      /* New node is below the old one; selection became bigger */
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       tree_view->priv->rubber_band_end_tree,
+						       tree_view->priv->rubber_band_end_node,
+						       end_tree,
+						       end_node,
+						       TRUE,
+						       TRUE,
+						       FALSE);
+    }
+  else if (_gtk_rbtree_node_find_offset (end_tree, end_node) <
+           _gtk_rbtree_node_find_offset (tree_view->priv->rubber_band_end_tree, tree_view->priv->rubber_band_end_node))
+    {
+      /* New node is above the old one; selection became smaller */
+      gtk_tree_view_update_rubber_band_selection_range (tree_view,
+						       end_tree,
+						       end_node,
+						       tree_view->priv->rubber_band_end_tree,
+						       tree_view->priv->rubber_band_end_node,
+						       FALSE,
+						       TRUE,
+						       FALSE);
+    }
+
+  tree_view->priv->rubber_band_end_tree = end_tree;
+  tree_view->priv->rubber_band_end_node = end_node;
+}
+
+static void
+gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
+{
+  gint x, y;
+  GdkRectangle old_area;
+  GdkRectangle new_area;
+  GdkRectangle common;
+  GdkRegion *invalid_region;
+
+  old_area.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
+  old_area.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
+  old_area.width = ABS (tree_view->priv->rubber_band_x - tree_view->priv->press_start_x) + 1;
+  old_area.height = ABS (tree_view->priv->rubber_band_y - tree_view->priv->press_start_y) + 1;
+
+  gdk_window_get_pointer (tree_view->priv->bin_window, &x, &y, NULL);
+
+  x = MAX (x, 0);
+  y = MAX (y, 0) + tree_view->priv->dy;
+
+  new_area.x = MIN (tree_view->priv->press_start_x, x);
+  new_area.y = MIN (tree_view->priv->press_start_y, y) - tree_view->priv->dy;
+  new_area.width = ABS (x - tree_view->priv->press_start_x) + 1;
+  new_area.height = ABS (y - tree_view->priv->press_start_y) + 1;
+
+  invalid_region = gdk_region_rectangle (&old_area);
+  gdk_region_union_with_rect (invalid_region, &new_area);
+
+  gdk_rectangle_intersect (&old_area, &new_area, &common);
+  if (common.width > 2 && common.height > 2)
+    {
+      GdkRegion *common_region;
+
+      /* make sure the border is invalidated */
+      common.x += 1;
+      common.y += 1;
+      common.width -= 2;
+      common.height -= 2;
+
+      common_region = gdk_region_rectangle (&common);
+
+      gdk_region_subtract (invalid_region, common_region);
+      gdk_region_destroy (common_region);
+    }
+
+  gdk_window_invalidate_region (tree_view->priv->bin_window, invalid_region, TRUE);
+
+  gdk_region_destroy (invalid_region);
+
+  tree_view->priv->rubber_band_x = x;
+  tree_view->priv->rubber_band_y = y;
+
+  gtk_tree_view_update_rubber_band_selection (tree_view);
+}
+
+static void
+gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
+				GdkRectangle *area)
+{
+  cairo_t *cr;
+  GdkRectangle rect;
+  GdkRectangle rubber_rect;
+
+  rubber_rect.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
+  rubber_rect.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
+  rubber_rect.width = ABS (tree_view->priv->press_start_x - tree_view->priv->rubber_band_x) + 1;
+  rubber_rect.height = ABS (tree_view->priv->press_start_y - tree_view->priv->rubber_band_y) + 1;
+
+  if (!gdk_rectangle_intersect (&rubber_rect, area, &rect))
+    return;
+
+  cr = gdk_cairo_create (tree_view->priv->bin_window);
+  cairo_set_line_width (cr, 1.0);
+
+  cairo_set_source_rgba (cr,
+			 GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].red / 65535.,
+			 GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].green / 65535.,
+			 GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].blue / 65535.,
+			 .25);
+
+  gdk_cairo_rectangle (cr, &rect);
+  cairo_clip (cr);
+  cairo_paint (cr);
+
+  cairo_set_source_rgb (cr,
+			GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].red / 65535.,
+			GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].green / 65535.,
+			GTK_WIDGET (tree_view)->style->fg[GTK_STATE_NORMAL].blue / 65535.);
+
+  cairo_rectangle (cr,
+		   rubber_rect.x + 0.5, rubber_rect.y + 0.5,
+		   rubber_rect.width - 1, rubber_rect.height - 1);
+  cairo_stroke (cr);
+
+  cairo_destroy (cr);
+}
+
 static gboolean
 gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 				 GdkEventMotion *event)
@@ -3457,8 +3826,26 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
+  if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
+    {
+      gtk_grab_add (GTK_WIDGET (tree_view));
+      gtk_tree_view_update_rubber_band (tree_view);
+
+      tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
+    }
+  else if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    {
+      gtk_tree_view_update_rubber_band (tree_view);
+
+      if (tree_view->priv->scroll_timeout == 0)
+        {
+	  tree_view->priv->scroll_timeout = g_timeout_add (150, scroll_row_timeout, tree_view);
+	}
+    }
+
   /* only check for an initiated drag when a button is pressed */
-  if (tree_view->priv->pressed_button >= 0)
+  if (tree_view->priv->pressed_button >= 0
+      && !tree_view->priv->rubber_band_status)
     gtk_tree_view_maybe_begin_dragging_row (tree_view, event);
 
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
@@ -4143,7 +4530,23 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     }
   while (y_offset < event->area.height);
 
- done:
+done:
+
+ if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+   {
+     GdkRectangle *rectangles;
+     gint n_rectangles;
+
+     gdk_region_get_rectangles (event->region,
+				&rectangles,
+				&n_rectangles);
+
+     while (n_rectangles--)
+       gtk_tree_view_paint_rubber_band (tree_view, &rectangles[n_rectangles]);
+
+     g_free (rectangles);
+   }
+
   if (cursor_path)
     gtk_tree_path_free (cursor_path);
 
@@ -5945,6 +6348,7 @@ remove_scroll_timeout (GtkTreeView *tree_view)
       tree_view->priv->scroll_timeout = 0;
     }
 }
+
 static gboolean
 check_model_dnd (GtkTreeModel *model,
                  GType         required_iface,
@@ -6024,6 +6428,9 @@ scroll_row_timeout (gpointer data)
   GDK_THREADS_ENTER ();
 
   gtk_tree_view_vertical_autoscroll (tree_view);
+
+  if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    gtk_tree_view_update_rubber_band (tree_view);
 
   GDK_THREADS_LEAVE ();
 
@@ -9289,7 +9696,6 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
   return TRUE;
 }
-
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
@@ -13733,6 +14139,49 @@ gboolean
 gtk_tree_view_get_hover_expand (GtkTreeView *tree_view)
 {
   return tree_view->priv->hover_expand;
+}
+
+/**
+ * gtk_tree_view_set_rubber_banding:
+ * @tree_view: a #GtkTreeView
+ * @enable: %TRUE to enable rubber banding
+ *
+ * Enables or disables rubber banding in @tree_view.  If the selection mode
+ * is #GTK_SELECTION_MULTIPLE, rubber banding will allow the user to select
+ * multiple rows by dragging the mouse.
+ * 
+ * Since: 2.10
+ **/
+void
+gtk_tree_view_set_rubber_banding (GtkTreeView *tree_view,
+				  gboolean     enable)
+{
+  enable = enable != FALSE;
+
+  if (enable != tree_view->priv->rubber_banding_enable)
+    {
+      tree_view->priv->rubber_banding_enable = enable;
+
+      g_object_notify (G_OBJECT (tree_view), "rubber-banding");
+    }
+}
+
+/**
+ * gtk_tree_view_get_rubber_banding:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns whether rubber banding is turned on for @tree_view.  If the
+ * selection mode is #GTK_SELECTION_MULTIPLE, rubber banding will allow the
+ * user to select multiple rows by dragging the mouse.
+ * 
+ * Return value: %TRUE if rubber banding in @tree_view is enabled.
+ *
+ * Since: 2.10
+ **/
+gboolean
+gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view)
+{
+  return tree_view->priv->rubber_banding_enable;
 }
 
 /**
