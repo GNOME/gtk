@@ -1634,12 +1634,14 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 /**
  * gtk_status_icon_get_geometry:
  * @status_icon: a #GtkStatusIcon
- * @screen: return location for the screen 
- * @area: return location for the area occupied by the status icon
+ * @screen: return location for the screen, or %NULL if the
+ *          information is not needed 
+ * @area: return location for the area occupied by the status 
+ *        icon, or %NULL
  * @orientation: return location for the orientation of the panel 
- *    in which the status icon is embedded. A panel at the top or
- *    bottom of the screen is horizontal, a panel at the left or
- *    right is vertical.
+ *    in which the status icon is embedded, or %NULL. A panel 
+ *    at the top or bottom of the screen is horizontal, a panel 
+ *    at the left or right is vertical.
  *
  * Obtains information about the location of the status icon
  * on screen. This information can be used to e.g. position 
@@ -1666,18 +1668,25 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
   GtkStatusIconPrivate *priv;
   gint x, y;
 
-  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
 
   priv = status_icon->priv;
   widget = priv->tray_icon;
 
-  *screen = gtk_widget_get_screen (widget);
-  gdk_window_get_origin (widget->window, &x, &y);
-  area->x = x;
-  area->y = y;
-  area->width = widget->allocation.width;
-  area->height = widget->allocation.height;
-  *orientation = _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (widget));
+  if (screen)
+    *screen = gtk_widget_get_screen (widget);
+
+  if (area)
+    {
+      gdk_window_get_origin (widget->window, &x, &y);
+      area->x = x;
+      area->y = y;
+      area->width = widget->allocation.width;
+      area->height = widget->allocation.height;
+    }
+
+  if (orientation)
+    *orientation = _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (widget));
 
   return TRUE;
 #else

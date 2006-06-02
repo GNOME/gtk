@@ -1,5 +1,8 @@
 2006-06-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_geometry): Allow
+	to return partial information.  (#343625, Christian Persch)
+
 	* gtk/gtkwindow.c (gtk_window_key_release_event): Chain up
 	to key_release, not to key_press.  (#343677, Tommi Komulainen)
 
