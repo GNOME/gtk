@@ -1,3 +1,9 @@
+2006-06-02  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c
+	(gtk_recent_info_get_application_info): Fix a typo (spotted by
+	Paolo Borelli and coverity).
+
 2006-06-01  Matthias Clasen  <mclasen@redhat.com>
 	
 	* tests/testnotebookdnd.c: Small tweaks to test more things.

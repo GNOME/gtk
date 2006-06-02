@@ -1787,7 +1787,7 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
   if (count)
     *count = ai->count;
   
-  if (time)
+  if (time_)
     *time_ = ai->stamp;
 
   return TRUE;
