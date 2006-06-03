@@ -1,3 +1,7 @@
+2006-06-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c: Cleanups
+
 2006-06-02  Kristian Rietveld  <kris@imendio.com>
 
 	Rubber banding for GtkTreeView, #80127.  Uses same method as
