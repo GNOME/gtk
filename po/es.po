@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-31 16:15+0200\n"
-"PO-Revision-Date: 2006-05-31 16:16+0200\n"
+"POT-Creation-Date: 2006-06-03 21:06+0200\n"
+"PO-Revision-Date: 2006-06-03 21:06+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2127,7 +2127,7 @@ msgstr "Página %u"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:361
+#: ../gtk/gtkpagesetupunixdialog.c:363
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2135,15 +2135,15 @@ msgstr ""
 "<b>Cualquier impresora</b>\n"
 "Para documentos portables"
 
-#: ../gtk/gtkpagesetupunixdialog.c:925 ../gtk/gtkpagesetupunixdialog.c:1382
+#: ../gtk/gtkpagesetupunixdialog.c:928 ../gtk/gtkpagesetupunixdialog.c:1442
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:927 ../gtk/gtkpagesetupunixdialog.c:1380
+#: ../gtk/gtkpagesetupunixdialog.c:930 ../gtk/gtkpagesetupunixdialog.c:1440
 msgid "inch"
 msgstr "pulgadas"
 
-#: ../gtk/gtkpagesetupunixdialog.c:946
+#: ../gtk/gtkpagesetupunixdialog.c:949
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2158,68 +2158,68 @@ msgstr ""
 " Superior: %s %s\n"
 " Inferior: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:997
+#: ../gtk/gtkpagesetupunixdialog.c:1000
 msgid "Manage Custom Sizes..."
 msgstr "Gestión de tamaños personalizados..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1045
+#: ../gtk/gtkpagesetupunixdialog.c:1048
 msgid "_Format for:"
 msgstr "_Formato para:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1066
+#: ../gtk/gtkpagesetupunixdialog.c:1069
 msgid "_Paper size:"
 msgstr "Tamaño del _papel:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1102
+#: ../gtk/gtkpagesetupunixdialog.c:1105
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1156 ../gtk/gtkprintunixdialog.c:2098
+#: ../gtk/gtkpagesetupunixdialog.c:1170 ../gtk/gtkprintunixdialog.c:2099
 msgid "Page Setup"
 msgstr "Configuración de página"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1424
+#: ../gtk/gtkpagesetupunixdialog.c:1487
 msgid "Margins from Printer..."
 msgstr "Márgenes de la impresora..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1583
+#: ../gtk/gtkpagesetupunixdialog.c:1647
 #, c-format
 msgid "Custom Size %d"
 msgstr "Tamaño personalizado %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1811
+#: ../gtk/gtkpagesetupunixdialog.c:1875
 msgid "Manage Custom Sizes"
 msgstr "Gestionar tamaños personalizados"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1907
+#: ../gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Width:"
 msgstr "A_nchura:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1919
+#: ../gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Height:"
 msgstr "A_ltura:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1931
+#: ../gtk/gtkpagesetupunixdialog.c:1995
 msgid "Paper Size"
 msgstr "Tamaño del papel"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1941
+#: ../gtk/gtkpagesetupunixdialog.c:2005
 msgid "_Top:"
 msgstr "_Superior:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1953
+#: ../gtk/gtkpagesetupunixdialog.c:2017
 msgid "_Bottom:"
 msgstr "In_ferior:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1965
+#: ../gtk/gtkpagesetupunixdialog.c:2029
 msgid "_Left:"
 msgstr "_Izquierdo:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1977
+#: ../gtk/gtkpagesetupunixdialog.c:2041
 msgid "_Right:"
 msgstr "_Derecho:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2018
+#: ../gtk/gtkpagesetupunixdialog.c:2082
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
@@ -2237,280 +2237,284 @@ msgid "_Save in folder:"
 msgstr "_Guardar en la carpeta:"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1119
+#: ../gtk/gtkprintoperation.c:1458
 msgid "print operation status|Initial state"
 msgstr "Estado inicial"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1121
+#: ../gtk/gtkprintoperation.c:1460
 msgid "print operation status|Preparing to print"
 msgstr "Preparado para imprimir"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1123
+#: ../gtk/gtkprintoperation.c:1462
 msgid "print operation status|Generating data"
 msgstr "Generando datos"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1125
+#: ../gtk/gtkprintoperation.c:1464
 msgid "print operation status|Sending data"
 msgstr "Enviando datos"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1127
+#: ../gtk/gtkprintoperation.c:1466
 msgid "print operation status|Waiting"
 msgstr "Esperando"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1129
+#: ../gtk/gtkprintoperation.c:1468
 msgid "print operation status|Blocking on issue"
 msgstr "Bloqueado en una hoja"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1131
+#: ../gtk/gtkprintoperation.c:1470
 msgid "print operation status|Printing"
 msgstr "Imprimiendo"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1133
+#: ../gtk/gtkprintoperation.c:1472
 msgid "print operation status|Finished"
 msgstr "Terminado"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1135
+#: ../gtk/gtkprintoperation.c:1474
 msgid "print operation status|Finished with error"
 msgstr "Terminado con error"
 
-#: ../gtk/gtkprintoperation.c:1586
+#: ../gtk/gtkprintoperation.c:1965
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: ../gtk/gtkprintoperation.c:1588 ../gtk/gtkprintoperation.c:1813
+#: ../gtk/gtkprintoperation.c:1967 ../gtk/gtkprintoperation.c:2215
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ../gtk/gtkprintoperation.c:1591
+#: ../gtk/gtkprintoperation.c:1970
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimiendo %d"
 
-#: ../gtk/gtkprintoperation-unix.c:121
+#: ../gtk/gtkprintoperation-unix.c:204
+msgid "Error launching preview"
+msgstr "Error al lanzar la vista previa"
+
+#: ../gtk/gtkprintoperation-unix.c:238
 msgid "Error printing"
 msgstr "Error en la impresión"
 
-#: ../gtk/gtkprintoperation-unix.c:216 ../gtk/gtkprintoperation-win32.c:1381
+#: ../gtk/gtkprintoperation-unix.c:337 ../gtk/gtkprintoperation-win32.c:1382
 msgid "Application"
 msgstr "Aplicación"
 
-#: ../gtk/gtkprintoperation-win32.c:553
+#: ../gtk/gtkprintoperation-win32.c:554
 msgid "Printer offline"
 msgstr "Impresora desconectada"
 
-#: ../gtk/gtkprintoperation-win32.c:555
+#: ../gtk/gtkprintoperation-win32.c:556
 msgid "Out of paper"
 msgstr "Papel agotado"
 
-#: ../gtk/gtkprintoperation-win32.c:557
+#: ../gtk/gtkprintoperation-win32.c:558
 msgid "Paused"
 msgstr "Pausada"
 
-#: ../gtk/gtkprintoperation-win32.c:559
+#: ../gtk/gtkprintoperation-win32.c:560
 msgid "Need user intervention"
 msgstr "Necesita intervención del usuario"
 
-#: ../gtk/gtkprintoperation-win32.c:659
+#: ../gtk/gtkprintoperation-win32.c:660
 msgid "Custom size"
 msgstr "Tamaño personalizado"
 
-#: ../gtk/gtkprintoperation-win32.c:1433 ../gtk/gtkprintoperation-win32.c:1456
-#: ../gtk/gtkprintoperation-win32.c:1504
+#: ../gtk/gtkprintoperation-win32.c:1434 ../gtk/gtkprintoperation-win32.c:1457
+#: ../gtk/gtkprintoperation-win32.c:1505
 msgid "Not enough free memory"
 msgstr "No hay memoria suficiente"
 
-#: ../gtk/gtkprintoperation-win32.c:1509
+#: ../gtk/gtkprintoperation-win32.c:1510
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argumento invalido para PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1514
+#: ../gtk/gtkprintoperation-win32.c:1515
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Puntero inválido a PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1519
+#: ../gtk/gtkprintoperation-win32.c:1520
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Manipulador inválido a PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1524
+#: ../gtk/gtkprintoperation-win32.c:1525
 msgid "Unspecified error"
 msgstr "Error no especificado"
 
-#: ../gtk/gtkprintoperation-win32.c:1563
+#: ../gtk/gtkprintoperation-win32.c:1564
 msgid "Error from StartDoc"
 msgstr "Error desde StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1441
+#: ../gtk/gtkprintunixdialog.c:1442
 msgid "Printer"
 msgstr "Impresora"
 
-#: ../gtk/gtkprintunixdialog.c:1449
+#: ../gtk/gtkprintunixdialog.c:1450
 msgid "Location"
 msgstr "Lugar"
 
-#: ../gtk/gtkprintunixdialog.c:1458
+#: ../gtk/gtkprintunixdialog.c:1459
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:1482
+#: ../gtk/gtkprintunixdialog.c:1483
 msgid "Print Pages"
 msgstr "Páginas a imprimir"
 
-#: ../gtk/gtkprintunixdialog.c:1486
+#: ../gtk/gtkprintunixdialog.c:1487
 msgid "_All"
 msgstr "_Todas"
 
-#: ../gtk/gtkprintunixdialog.c:1493
+#: ../gtk/gtkprintunixdialog.c:1494
 msgid "C_urrent"
 msgstr "La a_ctual"
 
-#: ../gtk/gtkprintunixdialog.c:1502
+#: ../gtk/gtkprintunixdialog.c:1503
 msgid "Ra_nge: "
 msgstr "_Rango: "
 
-#: ../gtk/gtkprintunixdialog.c:1520
+#: ../gtk/gtkprintunixdialog.c:1521
 msgid "Copies"
 msgstr "Copias"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1525
+#: ../gtk/gtkprintunixdialog.c:1526
 msgid "Copie_s:"
 msgstr "_Copias:"
 
-#: ../gtk/gtkprintunixdialog.c:1541
+#: ../gtk/gtkprintunixdialog.c:1542
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.c:1549
+#: ../gtk/gtkprintunixdialog.c:1550
 msgid "_Reverse"
 msgstr "In_vertir"
 
-#: ../gtk/gtkprintunixdialog.c:1566
+#: ../gtk/gtkprintunixdialog.c:1567
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.c:1954
+#: ../gtk/gtkprintunixdialog.c:1955
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.c:1958
+#: ../gtk/gtkprintunixdialog.c:1959
 msgid "Pages per _sheet:"
 msgstr "Páginas por _hoja:"
 
-#: ../gtk/gtkprintunixdialog.c:1974
+#: ../gtk/gtkprintunixdialog.c:1975
 msgid "T_wo-sided:"
 msgstr "Por las _dos caras:"
 
-#: ../gtk/gtkprintunixdialog.c:1989
+#: ../gtk/gtkprintunixdialog.c:1990
 msgid "_Only print:"
 msgstr "_Sólo imprimir:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2004
+#: ../gtk/gtkprintunixdialog.c:2005
 msgid "All sheets"
 msgstr "Todas las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:2005
+#: ../gtk/gtkprintunixdialog.c:2006
 msgid "Even sheets"
 msgstr "Hojas pares"
 
-#: ../gtk/gtkprintunixdialog.c:2006
+#: ../gtk/gtkprintunixdialog.c:2007
 msgid "Odd sheets"
 msgstr "Hojas impares"
 
-#: ../gtk/gtkprintunixdialog.c:2009
+#: ../gtk/gtkprintunixdialog.c:2010
 msgid "Sc_ale:"
 msgstr "_Escala:"
 
-#: ../gtk/gtkprintunixdialog.c:2036
+#: ../gtk/gtkprintunixdialog.c:2037
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2041
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2055
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Paper _source:"
 msgstr "_Fuente del papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2070
+#: ../gtk/gtkprintunixdialog.c:2071
 msgid "Output t_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.c:2121
+#: ../gtk/gtkprintunixdialog.c:2122
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2127
+#: ../gtk/gtkprintunixdialog.c:2128
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.c:2142
+#: ../gtk/gtkprintunixdialog.c:2143
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:2160
+#: ../gtk/gtkprintunixdialog.c:2161
 msgid "Print Document"
 msgstr "Imprimir documento"
 
-#: ../gtk/gtkprintunixdialog.c:2166
+#: ../gtk/gtkprintunixdialog.c:2167
 msgid "_Now"
 msgstr "_Ahora"
 
-#: ../gtk/gtkprintunixdialog.c:2173
+#: ../gtk/gtkprintunixdialog.c:2174
 msgid "A_t:"
 msgstr "_En:"
 
-#: ../gtk/gtkprintunixdialog.c:2188
+#: ../gtk/gtkprintunixdialog.c:2189
 msgid "On _hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2207
+#: ../gtk/gtkprintunixdialog.c:2208
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
-#: ../gtk/gtkprintunixdialog.c:2213
+#: ../gtk/gtkprintunixdialog.c:2214
 msgid "Be_fore:"
 msgstr "An_tes:"
 
-#: ../gtk/gtkprintunixdialog.c:2228
+#: ../gtk/gtkprintunixdialog.c:2229
 msgid "_After:"
 msgstr "_Después:"
 
-#: ../gtk/gtkprintunixdialog.c:2243
+#: ../gtk/gtkprintunixdialog.c:2244
 msgid "Job"
 msgstr "Tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2309
+#: ../gtk/gtkprintunixdialog.c:2310
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../gtk/gtkprintunixdialog.c:2339
+#: ../gtk/gtkprintunixdialog.c:2340
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
-#: ../gtk/gtkprintunixdialog.c:2342
+#: ../gtk/gtkprintunixdialog.c:2343
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2345
+#: ../gtk/gtkprintunixdialog.c:2346
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.c:2358
+#: ../gtk/gtkprintunixdialog.c:2359
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkprintunixdialog.c:2398
+#: ../gtk/gtkprintunixdialog.c:2399
 msgid "Print"
 msgstr "Imprimir"
 
