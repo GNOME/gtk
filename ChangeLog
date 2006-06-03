@@ -1,3 +1,9 @@
+2006-06-03  Richard Hult  <richard@imendio.com>                                 
+
+	* gdk/quartz/Makefile.am:                                               
+	* gdk/quartz/gdkspawn-quartz.c: Add spawn functions, copied from the
+	win32 backend.
+
 2006-06-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkprintoperation-private.h:
