@@ -38,6 +38,7 @@ struct _GtkPrintOperationPrivate
   gchar *pdf_target;
   guint use_full_page      : 1;
   guint show_dialog        : 1;
+  guint show_preview       : 1;
   guint track_print_status : 1;
   guint show_progress      : 1;
   guint cancelled          : 1;

@@ -140,6 +140,8 @@ void                    gtk_print_operation_set_unit               (GtkPrintOper
 								    GtkUnit             unit);
 void                    gtk_print_operation_set_show_dialog        (GtkPrintOperation  *op,
 								    gboolean            show_dialog);
+void                    gtk_print_operation_set_show_preview       (GtkPrintOperation  *op,
+								    gboolean            show_preview);
 void                    gtk_print_operation_set_pdf_target         (GtkPrintOperation  *op,
 								    const gchar        *filename);
 void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
@@ -151,6 +153,8 @@ void                    gtk_print_operation_set_custom_tab_label   (GtkPrintOper
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
 								    GtkWindow          *parent,
 								    GError            **error);
+void                    gtk_print_operation_run_preview            (GtkPrintOperation  *op,
+                                                                    GtkWindow          *parent);
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
 G_CONST_RETURN gchar *  gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);

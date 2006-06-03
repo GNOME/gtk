@@ -60,6 +60,7 @@ enum {
   PROP_TRACK_PRINT_STATUS,
   PROP_UNIT,
   PROP_SHOW_DIALOG,
+  PROP_SHOW_PREVIEW,
   PROP_SHOW_PROGRESS,
   PROP_PDF_TARGET,
   PROP_STATUS,
@@ -146,6 +147,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->current_page = -1;
   priv->use_full_page = FALSE;
   priv->show_dialog = TRUE;
+  priv->show_preview = FALSE;
   priv->show_progress = FALSE;
   priv->pdf_target = NULL;
   priv->track_print_status = FALSE;
@@ -283,6 +285,9 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_SHOW_DIALOG:
       gtk_print_operation_set_show_dialog (op, g_value_get_boolean (value));
       break;
+    case PROP_SHOW_PREVIEW:
+      gtk_print_operation_set_show_preview (op, g_value_get_boolean (value));
+      break;
     case PROP_SHOW_PROGRESS:
       gtk_print_operation_set_show_progress (op, g_value_get_boolean (value));
       break;
@@ -335,6 +340,9 @@ gtk_print_operation_get_property (GObject    *object,
       break;
     case PROP_SHOW_DIALOG:
       g_value_set_boolean (value, priv->show_dialog);
+      break;
+    case PROP_SHOW_PREVIEW:
+      g_value_set_boolean (value, priv->show_preview);
       break;
     case PROP_SHOW_PROGRESS:
       g_value_set_boolean (value, priv->show_progress);
@@ -988,8 +996,23 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if gtk_print_operation_run() should show the print dialog."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  
 
+  /**
+   * GtkPrintOperation:show-preview:
+   *
+   * Determines whether calling gtk_print_operation_run() will present
+   * the print preview to the user.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_SHOW_PREVIEW,
+				   g_param_spec_boolean ("show-preview",
+							 P_("Show Preview"),
+							 P_("TRUE if gtk_print_operation_run() should show the print preview."),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+  
   /**
    * GtkPrintOperation:show-progress:
    *
@@ -1573,6 +1596,35 @@ gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
     }
 }
 
+/**
+ * gtk_print_operation_set_show_preview:
+ * @op: a #GtkPrintOperation
+ * @show_preview: %TRUE to show the print preview
+ * 
+ * Sets whether calling gtk_print_operation_run() will present
+ * the print preview to the user.
+ *
+ * Since: 2.10
+ */
+void
+gtk_print_operation_set_show_preview (GtkPrintOperation *op,
+				      gboolean           show_preview)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  show_preview = show_preview != FALSE;
+
+  if (priv->show_preview != show_preview)
+    {
+      priv->show_preview = show_preview;
+
+      g_object_notify (G_OBJECT (op), "show-preview");
+    }
+}
 
 /**
  * gtk_print_operation_set_show_progress:

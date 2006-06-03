@@ -504,7 +504,10 @@ found_printer (GtkPrinter        *printer,
 
   if (printer != NULL) 
     {
-      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+      if (priv->show_preview)
+        rdata->result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
+      else
+        rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
       rdata->do_print = TRUE;
 
@@ -835,8 +838,11 @@ printer_added_cb (GtkPrintBackend *backend,
                   GtkPrinter      *printer, 
 		  PrinterFinder   *finder)
 {
-  if (gtk_printer_is_virtual (printer) ||
-      finder->found_printer)
+  if (finder->found_printer)
+    return;
+
+  /* FIXME this skips "Print to PDF" - is this intentional ? */
+  if (gtk_printer_is_virtual (printer))
     return;
 
   if (finder->printer_name != NULL &&
