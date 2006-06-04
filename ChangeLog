@@ -1,3 +1,7 @@
+2006-06-04  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkprintoperationpreview.h: Add missing G_END_DECLS (#343838)
+
 2006-06-03  Richard Hult  <richard@imendio.com>                                 
 
 	* gdk/quartz/Makefile.am:                                               

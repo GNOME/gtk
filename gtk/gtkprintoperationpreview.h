@@ -75,4 +75,6 @@ void     gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *prev
 gboolean gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 						  gint                      page_nr);
 
+G_END_DECLS
+
 #endif /* __GTK_PRINT_OPERATION_PREVIEW_H__ */
