@@ -367,7 +367,7 @@ _gdk_font_destroy (GdkFont *font)
   switch (font->type)
     {
     case GDK_FONT_FONT:
-      _gdk_xid_table_remove (private->display, ((XFontStruct *) private->xfont)->fid);
+      _gdk_xid_table_remove (private->display, private->xid);
       XFreeFont (GDK_DISPLAY_XDISPLAY (private->display),
 		  (XFontStruct *) private->xfont);
       break;
