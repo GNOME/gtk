@@ -269,13 +269,19 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-02 06:19+0200\n"
-"PO-Revision-Date: 2006-06-02 10:34+0530\n"
+"POT-Creation-Date: 2006-06-04 23:02+0200\n"
+"PO-Revision-Date: 2006-06-05 09:50+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -283,6 +289,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -989,7 +996,7 @@ msgstr "જથ્થાનો ઉપયોગ કરવો"
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "જો સુયોજિત હોય તો, દર્શાવવાની જગ્યાએ લેબલનો ઉપયોગ જથ્થાની વસ્તુને પસંદ કરવા માટે થાય છે"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:646
 #: ../gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "ક્લિક પર ફોકસ"
@@ -1600,7 +1607,7 @@ msgstr ""
 "કેવી રીતે શબ્દમાળાને ઘણી લીટીઓમાં તોડવી, જો કોષ રેન્ડર કરનાર પાસે વર્તમાન શબ્દમાળા "
 "દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
-#: ../gtk/gtkcellrenderertext.c:465 ../gtk/gtkcombobox.c:530
+#: ../gtk/gtkcellrenderertext.c:465 ../gtk/gtkcombobox.c:536
 msgid "Wrap width"
 msgstr "પહોળાઈ લપેટો"
 
@@ -1932,85 +1939,85 @@ msgstr "યાદીમાં કિંમત"
 msgid "Whether entered values must already be present in the list"
 msgstr "શું પ્રવેશ કરાતી કિંમતો મેનુમાં પહેલેથી જ હોવી જોઇએ"
 
-#: ../gtk/gtkcombobox.c:513
+#: ../gtk/gtkcombobox.c:519
 msgid "ComboBox model"
 msgstr "ComboBox મોડેલ"
 
-#: ../gtk/gtkcombobox.c:514
+#: ../gtk/gtkcombobox.c:520
 msgid "The model for the combo box"
 msgstr "કમ્બો બોક્સ માટે મોડેલ"
 
-#: ../gtk/gtkcombobox.c:531
+#: ../gtk/gtkcombobox.c:537
 msgid "Wrap width for laying out the items in a grid"
 msgstr "જાળીમાં વસ્તુઓ ગોઠવવા માટે લપેટવાની પહોળાઈ"
 
-#: ../gtk/gtkcombobox.c:553
+#: ../gtk/gtkcombobox.c:559
 msgid "Row span column"
 msgstr "હરોળ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:554
+#: ../gtk/gtkcombobox.c:560
 msgid "TreeModel column containing the row span values"
 msgstr "હરોળ વિસ્તારક કિંમતો સમાવતો TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:575
+#: ../gtk/gtkcombobox.c:581
 msgid "Column span column"
 msgstr "સ્તંભ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:576
+#: ../gtk/gtkcombobox.c:582
 msgid "TreeModel column containing the column span values"
 msgstr "સ્તંભ વિસ્તારતી કિંમતો સમાવતી TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:596
+#: ../gtk/gtkcombobox.c:602
 msgid "Active item"
 msgstr "ક્રિયાશીલ વસ્તુ"
 
-#: ../gtk/gtkcombobox.c:597
+#: ../gtk/gtkcombobox.c:603
 msgid "The item which is currently active"
 msgstr "વસ્તુ કે જે વર્તમાનમાં ક્રિયાશીલ છે"
 
-#: ../gtk/gtkcombobox.c:616 ../gtk/gtkuimanager.c:195
+#: ../gtk/gtkcombobox.c:622 ../gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "મેનુઓમાં ટ્રેડઓફ ઉમેરો"
 
-#: ../gtk/gtkcombobox.c:617
+#: ../gtk/gtkcombobox.c:623
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "શું ડ્રોપડાઉન પાસે ટીયરઓફ મેનુ વસ્તુઓ હોવી જોઈએ"
 
-#: ../gtk/gtkcombobox.c:632 ../gtk/gtkentry.c:509
+#: ../gtk/gtkcombobox.c:638 ../gtk/gtkentry.c:509
 msgid "Has Frame"
 msgstr "ચોકઠુ ધરાવે છે"
 
-#: ../gtk/gtkcombobox.c:633
+#: ../gtk/gtkcombobox.c:639
 msgid "Whether the combo box draws a frame around the child"
 msgstr "શું હેડરોની આસપાસ સ્તંભને ફરીથી ક્રમબધ કરી શકાય છે"
 
-#: ../gtk/gtkcombobox.c:641
+#: ../gtk/gtkcombobox.c:647
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "શું કમ્બો બોક્સ ફોકસ મેળવે છે જ્યારે તે માઉસ સાથે ક્લિક થાય છે"
 
-#: ../gtk/gtkcombobox.c:656 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:662 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Tearoff શીર્ષક"
 
-#: ../gtk/gtkcombobox.c:657
+#: ../gtk/gtkcombobox.c:663
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "શીર્ષક કે જે વિન્ડો વ્યવસ્થાપક દ્રારા દર્શાવવામાં આવશે જ્યારે પોપઅપ એ બંધ હોય"
 
-#: ../gtk/gtkcombobox.c:674
+#: ../gtk/gtkcombobox.c:680
 msgid "Popup shown"
 msgstr "પોપઅપ બતાવાયેલ"
 
-#: ../gtk/gtkcombobox.c:675
+#: ../gtk/gtkcombobox.c:681
 msgid "Whether the combo's dropdown is shown"
 msgstr "શું કમ્બોનું ડ્રોપડાઉન બતાવાયેલ છે"
 
-#: ../gtk/gtkcombobox.c:681
+#: ../gtk/gtkcombobox.c:687
 msgid "Appears as list"
 msgstr "યાદી તરીકે દેખાય છે"
 
-#: ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkcombobox.c:688
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "શું ડ્રોપડાઉનો મેનુઓની જગ્યાએ યાદીઓ તરીકે દેખાવા જોઈએ"
 
@@ -2342,11 +2349,11 @@ msgstr "લેબલ વિજેટ"
 msgid "A widget to display in place of the usual expander label"
 msgstr "ચોકઠાના સામાન્ય લેબલની જગ્યાએ વિજેટ દર્શાવો"
 
-#: ../gtk/gtkexpander.c:226 ../gtk/gtktreeview.c:707
+#: ../gtk/gtkexpander.c:226 ../gtk/gtktreeview.c:719
 msgid "Expander Size"
 msgstr "વિસ્તારકનું માપ"
 
-#: ../gtk/gtkexpander.c:227 ../gtk/gtktreeview.c:708
+#: ../gtk/gtkexpander.c:227 ../gtk/gtktreeview.c:720
 msgid "Size of the expander arrow"
 msgstr "વિસ્તારક તીરનું માપ"
 
@@ -2738,12 +2745,12 @@ msgstr "દિશા"
 msgid "How the text and icon of each item are positioned relative to each other"
 msgstr "કેવી રીતે દરેક વસ્તુનું લખાણ અને ચિહ્ન એકબીજાને અનુલક્ષીને ગોઠવાય છે"
 
-#: ../gtk/gtkiconview.c:709 ../gtk/gtktreeview.c:591
+#: ../gtk/gtkiconview.c:709 ../gtk/gtktreeview.c:595
 #: ../gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "ફરીથી ગોઠવી શકાય તેવું"
 
-#: ../gtk/gtkiconview.c:710 ../gtk/gtktreeview.c:592
+#: ../gtk/gtkiconview.c:710 ../gtk/gtktreeview.c:596
 msgid "View is reorderable"
 msgstr "ફરીથી ગોઠવી શકાય એ રીતે જુઓ"
 
@@ -3502,13 +3509,21 @@ msgstr "જો સાચું હોય, તો બાળ તેની અર�
 msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr "શું પૂર્વદર્શન વિજેટે તેના માટે ફાળવાયેલી બધી જગ્યા લઇ લેવી જોઈએ"
 
-#: ../gtk/gtkprintbackend.c:253
+#: ../gtk/gtkprintbackend.c:252
 msgid "Default print backend"
 msgstr "મૂળભૂત છાપન પાશ્વ ભાગ"
 
-#: ../gtk/gtkprintbackend.c:254
+#: ../gtk/gtkprintbackend.c:253
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "મૂળભૂત રીતે વાપરવા માટેના GtkPrintBackend પાશ્વ ભાગોની યાદી"
+
+#: ../gtk/gtkprintbackend.c:258
+msgid "Default command to run when displaying a print preview"
+msgstr "જ્યારે પૂર્વદર્શન દર્શાવી રહ્યા હોય ત્યારે મૂળભૂત આદેશ"
+
+#: ../gtk/gtkprintbackend.c:259
+msgid "Command to run when displaying a print preview"
+msgstr "જ્યારે છાપન પૂર્વદર્શન દર્શાવી રહ્યા હોય ત્યારે ચલાવવાનો આદેશ"
 
 #: ../gtk/gtkprinter.c:116
 msgid "Name of the printer"
@@ -3591,61 +3606,61 @@ msgstr "પ્રિન્ટર સુયોજનો"
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:547
+#: ../gtk/gtkprintoperation.c:832
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:548
+#: ../gtk/gtkprintoperation.c:833
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:566 ../gtk/gtkprintunixdialog.c:242
+#: ../gtk/gtkprintoperation.c:851 ../gtk/gtkprintunixdialog.c:242
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:567 ../gtk/gtkprintunixdialog.c:243
+#: ../gtk/gtkprintoperation.c:852 ../gtk/gtkprintunixdialog.c:243
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:585
+#: ../gtk/gtkprintoperation.c:870
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: ../gtk/gtkprintoperation.c:586
+#: ../gtk/gtkprintoperation.c:871
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: ../gtk/gtkprintoperation.c:609
+#: ../gtk/gtkprintoperation.c:894
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: ../gtk/gtkprintoperation.c:610
+#: ../gtk/gtkprintoperation.c:895
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:631 ../gtk/gtkprintunixdialog.c:232
+#: ../gtk/gtkprintoperation.c:916 ../gtk/gtkprintunixdialog.c:232
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:632
+#: ../gtk/gtkprintoperation.c:917
 msgid "The current page in the document."
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું."
 
-#: ../gtk/gtkprintoperation.c:653
+#: ../gtk/gtkprintoperation.c:938
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: ../gtk/gtkprintoperation.c:654
+#: ../gtk/gtkprintoperation.c:939
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
 
-#: ../gtk/gtkprintoperation.c:674
+#: ../gtk/gtkprintoperation.c:959
 msgid "Track Print Status"
 msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
 
-#: ../gtk/gtkprintoperation.c:675
+#: ../gtk/gtkprintoperation.c:960
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3653,51 +3668,59 @@ msgstr ""
 "જો TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન "
 "પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
 
-#: ../gtk/gtkprintoperation.c:692
+#: ../gtk/gtkprintoperation.c:977
 msgid "Unit"
 msgstr "એકમ"
 
-#: ../gtk/gtkprintoperation.c:693
+#: ../gtk/gtkprintoperation.c:978
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: ../gtk/gtkprintoperation.c:710 ../gtk/gtkprintoperation.c:727
+#: ../gtk/gtkprintoperation.c:995 ../gtk/gtkprintoperation.c:1027
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: ../gtk/gtkprintoperation.c:711
+#: ../gtk/gtkprintoperation.c:996
 msgid "TRUE if gtk_print_operation_run() should show the print dialog."
 msgstr "TRUE જો gtk_print_operation_run() એ છાપન સંવાદ બતાવતું હોવું જોઈએ."
 
-#: ../gtk/gtkprintoperation.c:728
+#: ../gtk/gtkprintoperation.c:1011
+msgid "Show Preview"
+msgstr "પૂર્વદર્શન બતાવો"
+
+#: ../gtk/gtkprintoperation.c:1012
+msgid "TRUE if gtk_print_operation_run() should show the print preview."
+msgstr "TRUE જો gtk_print_operation_run() એ છાપન પૂર્વદર્શન બતાવતું હોવું જોઈએ."
+
+#: ../gtk/gtkprintoperation.c:1028
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE જો છાપતી વખતે પ્રગતિ સંવાદ બતાવાયેલ હોય."
 
-#: ../gtk/gtkprintoperation.c:751 ../gtk/gtkprintoperation.c:752
+#: ../gtk/gtkprintoperation.c:1051 ../gtk/gtkprintoperation.c:1052
 msgid "PDF target filename"
 msgstr "PDF લક્ષ્ય ફાઈલનામ"
 
-#: ../gtk/gtkprintoperation.c:766
+#: ../gtk/gtkprintoperation.c:1066
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:767
+#: ../gtk/gtkprintoperation.c:1067
 msgid "The status of the print operation"
 msgstr "છાપન પ્રક્રિયાની પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:787
+#: ../gtk/gtkprintoperation.c:1087
 msgid "Status String"
 msgstr "પરિસ્થિતિ શબ્દમાળા"
 
-#: ../gtk/gtkprintoperation.c:788
+#: ../gtk/gtkprintoperation.c:1088
 msgid "A human-readable description of the status"
 msgstr "પરિસ્થિતિનું માનવીય-વાંચનીય વર્ણન"
 
-#: ../gtk/gtkprintoperation.c:806
+#: ../gtk/gtkprintoperation.c:1106
 msgid "Custom tab label"
 msgstr "વૈવિધ્યપૂર્ણ ટેબ લેબલ"
 
-#: ../gtk/gtkprintoperation.c:807
+#: ../gtk/gtkprintoperation.c:1107
 msgid "Label for the tab containing custom widgets."
 msgstr "વૈવિધ્યપૂર્ણ વિજેટોને સમાવતી ટેબ માટેનું લેબલ."
 
@@ -4170,12 +4193,12 @@ msgid "Display a secondary forward arrow button on the opposite end of the scrol
 msgstr "ખસેડવાની પટ્ટીના બીજા છેડા પર આગળ જવા માટેનુ બીજુ બટન દર્શાવો"
 
 #: ../gtk/gtkscrolledwindow.c:221 ../gtk/gtktext.c:541
-#: ../gtk/gtktreeview.c:551
+#: ../gtk/gtktreeview.c:555
 msgid "Horizontal Adjustment"
 msgstr "આડી વ્યવસ્થિત ગોઠવણી"
 
 #: ../gtk/gtkscrolledwindow.c:228 ../gtk/gtktext.c:549
-#: ../gtk/gtktreeview.c:559
+#: ../gtk/gtktreeview.c:563
 msgid "Vertical Adjustment"
 msgstr "ઊભી વ્યવસ્થિત ગોઠવણી"
 
@@ -5353,163 +5376,171 @@ msgstr "TreeModelSort મોડલ"
 msgid "The model for the TreeModelSort to sort"
 msgstr "ક્રમમાં ગોઠવવા માટે TreeModelSort મોડલ"
 
-#: ../gtk/gtktreeview.c:543
+#: ../gtk/gtktreeview.c:547
 msgid "TreeView Model"
 msgstr "TreeView મોડલ"
 
-#: ../gtk/gtktreeview.c:544
+#: ../gtk/gtktreeview.c:548
 msgid "The model for the tree view"
 msgstr "ટ્રીના રૂપમાં દર્શન કરવા માટેનું મોડલ"
 
-#: ../gtk/gtktreeview.c:552
+#: ../gtk/gtktreeview.c:556
 msgid "Horizontal Adjustment for the widget"
 msgstr "વિજેટ માટે વ્યવસ્થિત આડી ગોઠવણી"
 
-#: ../gtk/gtktreeview.c:560
+#: ../gtk/gtktreeview.c:564
 msgid "Vertical Adjustment for the widget"
 msgstr "વિજેટ માટે વ્યવસ્થિત ઊભી ગોઠવણી"
 
-#: ../gtk/gtktreeview.c:567
+#: ../gtk/gtktreeview.c:571
 msgid "Headers Visible"
 msgstr "હેડરો દૃશ્યમાન છે"
 
-#: ../gtk/gtktreeview.c:568
+#: ../gtk/gtktreeview.c:572
 msgid "Show the column header buttons"
 msgstr "સ્તંભ હેડર માટેના બટન બતાવો"
 
-#: ../gtk/gtktreeview.c:575
+#: ../gtk/gtktreeview.c:579
 msgid "Headers Clickable"
 msgstr "હેડરો ક્લિક કરી શકાય તેવા છે"
 
-#: ../gtk/gtktreeview.c:576
+#: ../gtk/gtktreeview.c:580
 msgid "Column headers respond to click events"
 msgstr "સ્તંભ હેડર ક્લિકની ઘટના સામે પ્રતિક્રીયા આપે છે"
 
-#: ../gtk/gtktreeview.c:583
+#: ../gtk/gtktreeview.c:587
 msgid "Expander Column"
 msgstr "વિસ્તારકનો સ્તંભ"
 
-#: ../gtk/gtktreeview.c:584
+#: ../gtk/gtktreeview.c:588
 msgid "Set the column for the expander column"
 msgstr "વિસ્તારક સ્તંભ માટે એક સ્તંભની ગોઠવણ કરો"
 
-#: ../gtk/gtktreeview.c:599
+#: ../gtk/gtktreeview.c:603
 msgid "Rules Hint"
 msgstr "નિયમો માટેના સંકેત"
 
-#: ../gtk/gtktreeview.c:600
+#: ../gtk/gtktreeview.c:604
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "હરોળને એકપછીએક રંગમાં દર્શાવવા માટે થીમયંત્રમાં સંકેતની ગોઠવણી કરો"
 
-#: ../gtk/gtktreeview.c:607
+#: ../gtk/gtktreeview.c:611
 msgid "Enable Search"
 msgstr "શોધવાનું સક્રિય બનાવો"
 
-#: ../gtk/gtktreeview.c:608
+#: ../gtk/gtktreeview.c:612
 msgid "View allows user to search through columns interactively"
 msgstr "આ દેખાવ વપરાશકર્તાને સ્તંભમાં પારસ્પરિક રીતે શોધવાની પરવાનગી આપે છે"
 
-#: ../gtk/gtktreeview.c:615
+#: ../gtk/gtktreeview.c:619
 msgid "Search Column"
 msgstr "સ્તંભમાં શોધો"
 
-#: ../gtk/gtktreeview.c:616
+#: ../gtk/gtktreeview.c:620
 msgid "Model column to search through when searching through code"
 msgstr "જ્યારે કોડમાં શોધતા હોઈએ ત્યારે શોધવા માટેનું મોડલ સ્તંભ"
 
-#: ../gtk/gtktreeview.c:636
+#: ../gtk/gtktreeview.c:640
 msgid "Fixed Height Mode"
 msgstr "ચોક્કસ ઊંચાઈ"
 
-#: ../gtk/gtktreeview.c:637
+#: ../gtk/gtktreeview.c:641
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "GtkTreeView ને બધી હરોળોની ઊંચાઈ સરખી છે એમ ધારીને ઝડપી બનાવે છે"
 
-#: ../gtk/gtktreeview.c:657
+#: ../gtk/gtktreeview.c:661
 msgid "Hover Selection"
 msgstr "ઉપરથી પસંદગી"
 
-#: ../gtk/gtktreeview.c:658
+#: ../gtk/gtktreeview.c:662
 msgid "Whether the selection should follow the pointer"
 msgstr "શું પસંદ કરનારે રંગ અપારદર્શકતાની ગોઠવણી માટે પરવાનગી આપવી જોઇએ છે"
 
-#: ../gtk/gtktreeview.c:677
+#: ../gtk/gtktreeview.c:681
 msgid "Hover Expand"
 msgstr "ઉપરથી વિસ્તારો"
 
-#: ../gtk/gtktreeview.c:678
+#: ../gtk/gtktreeview.c:682
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "શું હરોળો જ્યારે નિર્દેશક તેમના ઉપર ખસે ત્યારે વિસ્તૃત થવી જોઈએ/સંકોચાવી જોઈએ"
 
-#: ../gtk/gtktreeview.c:685
+#: ../gtk/gtktreeview.c:689
 msgid "Show Expanders"
 msgstr "વિસ્તારકો બતાવો"
 
-#: ../gtk/gtktreeview.c:686
+#: ../gtk/gtktreeview.c:690
 msgid "View has expanders"
 msgstr "દૃશ્યને વિસ્તારકો છે"
 
-#: ../gtk/gtktreeview.c:693
+#: ../gtk/gtktreeview.c:697
 msgid "Level Indentation"
 msgstr "સ્તર ગોઠવણી"
 
-#: ../gtk/gtktreeview.c:694
+#: ../gtk/gtktreeview.c:698
 msgid "Extra indentation for each level"
 msgstr "દરેક સ્તર માટે વધારાની ગોઠવણી"
 
-#: ../gtk/gtktreeview.c:716
+#: ../gtk/gtktreeview.c:707
+msgid "Rubber Banding"
+msgstr "રબર બેન્ડીંગ"
+
+#: ../gtk/gtktreeview.c:708
+msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
+msgstr "શું ઘણી વસ્તુઓની પસંદગી માઉસ નિર્દેશક ખેંચીને પસંદ કરવા માટે સક્રિય કરવું જોઈએ"
+
+#: ../gtk/gtktreeview.c:728
 msgid "Vertical Separator Width"
 msgstr "ઊભા વિભાજકની પહોળાઈ"
 
-#: ../gtk/gtktreeview.c:717
+#: ../gtk/gtktreeview.c:729
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "કોષની વચ્ચેની ઊભી જગ્યા. બેકી સંખ્યામાં હોવી જોઈએ"
 
-#: ../gtk/gtktreeview.c:725
+#: ../gtk/gtktreeview.c:737
 msgid "Horizontal Separator Width"
 msgstr "આડા વિભાજકની પહોળાઈ"
 
-#: ../gtk/gtktreeview.c:726
+#: ../gtk/gtktreeview.c:738
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "કોષની વચ્ચેની ઊભી જગ્યા. બેકી સંખ્યામાં હોવી જોઈએ કોષ"
 
-#: ../gtk/gtktreeview.c:734
+#: ../gtk/gtktreeview.c:746
 msgid "Allow Rules"
 msgstr "નિયમોની પરવાનગી આપો"
 
-#: ../gtk/gtktreeview.c:735
+#: ../gtk/gtktreeview.c:747
 msgid "Allow drawing of alternating color rows"
 msgstr "એક પછી એક રંગની હરોળને દોરવાની પરવાનગી"
 
-#: ../gtk/gtktreeview.c:741
+#: ../gtk/gtktreeview.c:753
 msgid "Indent Expanders"
 msgstr "વિસ્તારકો વચ્ચે અંતર લાવો"
 
-#: ../gtk/gtktreeview.c:742
+#: ../gtk/gtktreeview.c:754
 msgid "Make the expanders indented"
 msgstr "વિસ્તારકો વચ્ચે અંતર લાવો"
 
-#: ../gtk/gtktreeview.c:748
+#: ../gtk/gtktreeview.c:760
 msgid "Even Row Color"
 msgstr "બેકી હોય તેવી હરોળનો રંગ"
 
-#: ../gtk/gtktreeview.c:749
+#: ../gtk/gtktreeview.c:761
 msgid "Color to use for even rows"
 msgstr "બેકી હોય તેવી આડી હરોળ માટે ઉપયોગમાં લેવાતો રંગ"
 
-#: ../gtk/gtktreeview.c:755
+#: ../gtk/gtktreeview.c:767
 msgid "Odd Row Color"
 msgstr "એકી હોય તેવી હરોળનો રંગ "
 
-#: ../gtk/gtktreeview.c:756
+#: ../gtk/gtktreeview.c:768
 msgid "Color to use for odd rows"
 msgstr "એકી હોય તેવી આડી હરોળ માટે ઉપયોગમાં લેવાતો રંગ "
 
-#: ../gtk/gtktreeview.c:762
+#: ../gtk/gtktreeview.c:774
 msgid "Row Ending details"
 msgstr "હરોળના અંતની વિગતો"
 
-#: ../gtk/gtktreeview.c:763
+#: ../gtk/gtktreeview.c:775
 msgid "Enable extended row background theming"
 msgstr "વિસ્તૃત કાચા પાશ્વ ભાગનું થીમવાળું સક્રિય કરો"
 
