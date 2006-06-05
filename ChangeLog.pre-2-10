@@ -1,3 +1,8 @@
+2006-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_grab_notify_foreach): Don't skip internal
+	children when emitting grab-notify.  (#343425, Markku Vire)
+
 2006-05-26  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version.
