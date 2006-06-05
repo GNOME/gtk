@@ -1,5 +1,9 @@
 2006-06-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_calculate_shown_tabs):
+	(gtk_notebook_calc_tabs): Fix borderline cases in tab
+	visibility calculation.  (#168105, Carlos Garnacho Parro)
+
 	* gdk/x11/gdkfont-x11.c (_gdk_font_destroy): Remove the right
 	XID from the xid table.  (#34327, Sampo Savolainen, Tim Janik)
 
