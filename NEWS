@@ -1,3 +1,101 @@
+Overview of Changes from GTK+ 2.9.1 to 2.9.2
+============================================
+
+* GtkPrintOperation
+ - Support asynchronous pagination with the ::paginate signal
+ - Add gtk_print_operation_cancel
+ - Support application-specific widgets
+ - Allow disabling features based on application capabilities
+ - Optionally show progress
+ - Change some function names in GtkPrintContext to be longer 
+   and better
+ - Support preview, the default implementation spawns evince,
+   but the api allows for an internal preview implementation
+
+* GtkCellView
+ - Add a model property
+
+* GtkStatusIcon
+ - Allow to obtain screen geometry 
+
+* GtkTreeView
+ - Many bug fixes, in particular for RTL handling
+ - Separate sensitive and selectable properties of rows
+ - Optionally allow rubberband selection
+
+* GtkButton
+ - Add image-spacing style property
+ - Add image-position property 
+
+* GtkToolButton
+ - Add icon-spacing style property
+
+* Make GTK+ work as an untrused X client
+
+* Bugs fixed:
+ 343838 gtkprintoperationpreview.h guards
+ 305530 Crashes while creating source code w/GtkFontSelection
+ 341327 Memory corruption inside glib
+ 341734 cursor blocked to dnd mode after using shift and 
+        dnd on a GtkCalendar
+ 343453 G_DEFINE_TYPE messes up internal typenames of 
+        GdkWindow and GdkPixmap
+ 136571 Problems running as untrusted client
+ 168105 the right edge tab does not appear when switching tab
+ 172535 Add support for UI builders in gtk+
+ 302556 GtkTreeView widget signals are badly documented
+ 324480 Selecting first item with keyboard is difficult
+ 340428 small cleanup
+ 340444 don't run the custom page size dialogue
+ 340839 Critical warnings in GtkTreeModelFilter
+ 341898 gtk_tree_view_insert_column_with_attributes doesn't 
+        work with fixed_height_mode
+ 342003 DnD: Conditional jump or move depends on uninitialised value
+ 342072 Wrong drop location in GtkEntry
+ 342096 GtkImage animation CRITICALS on switching themes
+ 342513 widget class style property with type module
+ 342529 gdk should set resolution on PangoCairoFontmap, 
+        not PangoCairoContext
+ 342535 Add documentation for new GtkWidget style properties 
+        (including Since tags)
+ 342543 can't compile gtk+ on opensolaris using sun cc
+ 342569 Typo in decl of gdk_color_parse
+ 342752 Need a way to specify custom tab label for custom page 
+        in Print dialog
+ 342754 print-editor: font button dialog doesn't get focus if 
+        main window has a window group
+ 342781 GtkPrintUnixDialog: Collate should be insensitive unless 
+        Copies is > 1
+ 342783 GtkPrintUnixDialog: Range textinput area should be 
+        insensitive unless range radiobutton is selected
+ 342894 Use after free inside gtk_text_view_set_buffer
+ 342930 GtkButton should offer a way to position the image 
+        relative to the text
+ 343088 Some typos in the PO file
+ 343425 "grab-notify"-signal is not correctly propagated for 
+        internal children
+ 343438 gtk_color_button_set_color() doesn't emit "color-set" 
+        signal
+ 343475 page setup unix dialog confusion
+ 343625 allow to get only some info from gtk_status_icon_get_geometry
+ 343677 GtkWindow chains key-release to key-press
+ 320431 Text too close when using East/West in a GtkToolButton
+ 321523 GtkTreeView's test_expand_row signal emitting impractical 
+        on row expand all
+ 342007 Warning in gtk_paned_compute_position
+ 343233 gdk_rectangle_intersect doc
+ 333284 expander animation not working in RTL mode
+ 343444 change color of gtk-demo source-buffer comment color 
+        from red to DodgerBlue
+ 343630 Small inconsistence in migration documentation
+  80127 Rubberbanding for GtkTreeView
+ 341450 status icon + libnotify
+ 341679 Allow absolute filenames in the options entries
+
+* Updated translations (bg,cy,de,el,es,et,eu,gl,gu,it,ja,
+                        nb,nl,pt_BR,th,vi)
+
+
 Overview of Changes from GTK+ 2.9.0 to 2.9.1
 ============================================
 
