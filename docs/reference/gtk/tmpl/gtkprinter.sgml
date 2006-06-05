@@ -185,3 +185,13 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_printer_compare ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@Returns: 
+
+

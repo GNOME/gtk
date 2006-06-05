@@ -89,6 +89,22 @@ Printing support was added in GTK+ 2.10.
 @printoperation: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkPrintOperation::create-custom-widget ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPrintOperation::custom-widget-apply ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@widget: 
+
 <!-- ##### SIGNAL GtkPrintOperation::draw-page ##### -->
 <para>
 
@@ -105,6 +121,26 @@ Printing support was added in GTK+ 2.10.
 
 @printoperation: the object which received the signal.
 @arg1: 
+
+<!-- ##### SIGNAL GtkPrintOperation::paginate ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPrintOperation::preview ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkPrintOperation::request-page-setup ##### -->
 <para>
@@ -124,6 +160,11 @@ Printing support was added in GTK+ 2.10.
 @printoperation: the object which received the signal.
 
 <!-- ##### ARG GtkPrintOperation:current-page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:custom-tab-label ##### -->
 <para>
 
 </para>
@@ -154,6 +195,16 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:show-dialog ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:show-preview ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:show-progress ##### -->
 <para>
 
 </para>
@@ -206,6 +257,7 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_OPERATION_RESULT_ERROR: 
 @GTK_PRINT_OPERATION_RESULT_APPLY: 
 @GTK_PRINT_OPERATION_RESULT_CANCEL: 
+@GTK_PRINT_OPERATION_RESULT_PREVIEW: 
 
 <!-- ##### ENUM GtkPrintError ##### -->
 <para>
@@ -276,6 +328,15 @@ The #GQuark used for #GtkPrintError errors.
 @job_name: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_set_n_pages ##### -->
+<para>
+
+</para>
+
+@op: 
+@n_pages: 
+
+
 <!-- ##### FUNCTION gtk_print_operation_set_current_page ##### -->
 <para>
 
@@ -321,6 +382,33 @@ The #GQuark used for #GtkPrintError errors.
 @filename: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_set_show_progress ##### -->
+<para>
+
+</para>
+
+@op: 
+@show_progress: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_track_print_status ##### -->
+<para>
+
+</para>
+
+@op: 
+@track_status: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_custom_tab_label ##### -->
+<para>
+
+</para>
+
+@op: 
+@label: 
+
+
 <!-- ##### FUNCTION gtk_print_operation_run ##### -->
 <para>
 
@@ -339,6 +427,14 @@ The #GQuark used for #GtkPrintError errors.
 
 @op: 
 @parent: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_cancel ##### -->
+<para>
+
+</para>
+
+@op: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_get_status ##### -->

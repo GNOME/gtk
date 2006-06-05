@@ -360,7 +360,7 @@ The #GQuark used for #GtkRecentManagerError errors.
 @app_name: 
 @app_exec: 
 @count: 
-@time: 
+@time_: 
 @Returns: 
 
 

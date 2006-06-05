@@ -132,3 +132,33 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_unix_dialog_add_custom_tab ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@child: 
+@tab_label: 
+
+
+<!-- ##### ENUM GtkPrintCapabilities ##### -->
+<para>
+
+</para>
+
+@GTK_PRINT_CAPABILITY_PAGE_SET: 
+@GTK_PRINT_CAPABILITY_COPIES: 
+@GTK_PRINT_CAPABILITY_COLLATE: 
+@GTK_PRINT_CAPABILITY_REVERSE: 
+@GTK_PRINT_CAPABILITY_SCALE: 
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_manual_capabilities ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@capabilities: 
+
+

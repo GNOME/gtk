@@ -41,6 +41,11 @@ and drag and drop.
 
 </para>
 
+<!-- ##### ARG GtkCellView:model ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_cell_view_new ##### -->
 <para>
 

@@ -2797,6 +2797,38 @@ Set the the handle size to @size x @size pixels.
 @pspec: 
 @pattern: 
 
+<!-- ##### FUNCTION gtk_print_context_create_context ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_print_context_create_layout ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_print_context_get_cairo ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_print_context_get_fontmap ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_print_operation_set_nr_of_pages ##### -->
 <para>
 

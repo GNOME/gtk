@@ -116,6 +116,11 @@ accessed with the function described below.
 
 </para>
 
+<!-- ##### ARG GtkToolButton:icon-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_tool_button_new ##### -->
 <para>
 

@@ -1,3 +1,15 @@
+2006-06-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.9.2 ===
+
+	* configure.in: Set interface age to 0.
+
+	* NEWS: Updates
+
+	* gtk/gtkprintoperationpreview.c: Include gtkalias.h
+
+	* gtk/gtk.symbols: Add some forgotten new functions.
+
 2006-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_calculate_shown_tabs):
@@ -5,7 +17,7 @@
 	visibility calculation.  (#168105, Carlos Garnacho Parro)
 
 	* gdk/x11/gdkfont-x11.c (_gdk_font_destroy): Remove the right
-	XID from the xid table.  (#34327, Sampo Savolainen, Tim Janik)
+	XID from the xid table.  (#341327, Sampo Savolainen, Tim Janik)
 
 2006-06-04  Behdad Esfahbod  <behdad@gnome.org>
 
@@ -55,7 +67,7 @@
 
 2006-06-02  Kristian Rietveld  <kris@imendio.com>
 
-	* gtk/gtktreeview.c (gtk_tree_view_leave_notify)P: revert fix of
+	* gtk/gtktreeview.c (gtk_tree_view_leave_notify): revert fix of
 	#164884 because it's not a problem in gtk+ but in applications and
 	it breaks starting drags from the edge of a row.
 

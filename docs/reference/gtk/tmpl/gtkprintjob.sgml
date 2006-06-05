@@ -157,3 +157,21 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_job_set_track_print_status ##### -->
+<para>
+
+</para>
+
+@job: 
+@track_status: 
+
+
+<!-- ##### FUNCTION gtk_print_job_get_track_print_status ##### -->
+<para>
+
+</para>
+
+@job: 
+@Returns: 
+
+

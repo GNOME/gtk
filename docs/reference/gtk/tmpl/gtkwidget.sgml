@@ -2402,6 +2402,15 @@ This function is deprecated; it does nothing.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_is_composited ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 

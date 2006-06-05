@@ -665,13 +665,13 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   pango_layout_set_text (layout, "some text", -1);
    *   pango_layout_set_width (layout, width);
    *   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
-   *   		      
+   *      		      
    *   pango_layout_get_size (layout, NULL, &amp;layout_height);
    *   text_height = (gdouble)layout_height / PANGO_SCALE;
    *   
    *   cairo_move_to (cr, width / 2,  (HEADER_HEIGHT - text_height) / 2);
    *   pango_cairo_show_layout (cr, layout);
-   *
+   *   
    *   g_object_unref (layout);
    * }
    * </programlisting></informalexample>
@@ -2298,14 +2298,14 @@ print_pages (GtkPrintOperation *op,
  *   
  * if (page_setup != NULL)
  *   gtk_print_operation_set_default_page_setup (print, page_setup);
- *  
+ *   
  * g_signal_connect (print, "begin-print", 
  *                   G_CALLBACK (begin_print), &amp;data);
  * g_signal_connect (print, "draw-page", 
  *                   G_CALLBACK (draw_page), &amp;data);
- * 
+ *  
  * res = gtk_print_operation_run (print, parent, &amp;error);
- * 
+ *  
  * if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
  *  {
  *    error_dialog = gtk_message_dialog_new (GTK_WINDOW (parent),

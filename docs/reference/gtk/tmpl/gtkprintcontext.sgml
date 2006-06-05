@@ -92,7 +92,7 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 
-<!-- ##### FUNCTION gtk_print_context_get_cairo ##### -->
+<!-- ##### FUNCTION gtk_print_context_get_cairo_context ##### -->
 <para>
 
 </para>
@@ -146,7 +146,7 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_print_context_get_fontmap ##### -->
+<!-- ##### FUNCTION gtk_print_context_get_pango_fontmap ##### -->
 <para>
 
 </para>
@@ -155,7 +155,7 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_print_context_create_context ##### -->
+<!-- ##### FUNCTION gtk_print_context_create_pango_context ##### -->
 <para>
 
 </para>
@@ -164,7 +164,7 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_print_context_create_layout ##### -->
+<!-- ##### FUNCTION gtk_print_context_create_pango_layout ##### -->
 <para>
 
 </para>

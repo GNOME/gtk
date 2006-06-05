@@ -304,3 +304,15 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @user_data: 
 
 
+<!-- ##### FUNCTION gtk_status_icon_get_geometry ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@screen: 
+@area: 
+@orientation: 
+@Returns: 
+
+

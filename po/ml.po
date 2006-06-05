@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-16 15:02-0400\n"
+"POT-Creation-Date: 2006-06-05 14:44-0400\n"
 "PO-Revision-Date: 2003-07-05 10:29+0530\n"
 "Last-Translator: FSF-India <locale@gnu.org.in>\n"
 "Language-Team: Malayalam <locale@gnu.org.in>\n"
@@ -1304,11 +1304,11 @@ msgstr ""
 msgid "progress bar label|%d %%"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:556
+#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:445
+#: gtk/gtkcolorbutton.c:449
 msgid "Received invalid color data\n"
 msgstr ""
 
@@ -1335,93 +1335,93 @@ msgid ""
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1919
+#: gtk/gtkcolorsel.c:1930
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1944
+#: gtk/gtkcolorsel.c:1955
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1953
+#: gtk/gtkcolorsel.c:1964
 msgid "_Hue:"
 msgstr "ഹ്യൂ:"
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1965
 msgid "Position on the color wheel."
 msgstr "വ‌‌ര്ണചക്രത്തിലെ സ്ഥാനം."
 
-#: gtk/gtkcolorsel.c:1956
+#: gtk/gtkcolorsel.c:1967
 msgid "_Saturation:"
 msgstr "ആര്ദ്രത:"
 
-#: gtk/gtkcolorsel.c:1957
+#: gtk/gtkcolorsel.c:1968
 msgid "\"Deepness\" of the color."
 msgstr "\"നിറത്തിന്റെ\" തിളക്കം."
 
-#: gtk/gtkcolorsel.c:1958
+#: gtk/gtkcolorsel.c:1969
 msgid "_Value:"
 msgstr "മൂല്യം:"
 
-#: gtk/gtkcolorsel.c:1959
+#: gtk/gtkcolorsel.c:1970
 msgid "Brightness of the color."
 msgstr "നിറത്തിന്റെ തിളക്കം."
 
-#: gtk/gtkcolorsel.c:1960
+#: gtk/gtkcolorsel.c:1971
 msgid "_Red:"
 msgstr "ചുവപ്പ്:"
 
-#: gtk/gtkcolorsel.c:1961
+#: gtk/gtkcolorsel.c:1972
 msgid "Amount of red light in the color."
 msgstr "വ‌ര്ണത്തിലെ ചെമപ്പിന്റെ അളവ്."
 
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1973
 msgid "_Green:"
 msgstr "പച്ച:"
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1974
 msgid "Amount of green light in the color."
 msgstr "വെളിച്ചത്തിലെ പച്ച നിറത്തിന്റെ അളവ്."
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1975
 msgid "_Blue:"
 msgstr "നീല:"
 
-#: gtk/gtkcolorsel.c:1965
+#: gtk/gtkcolorsel.c:1976
 msgid "Amount of blue light in the color."
 msgstr "വെളിച്ചത്തിലെ നീല നിറത്തിന്റെ അളവ്."
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1979
 #, fuzzy
 msgid "Op_acity:"
 msgstr "സുതാര്യത:"
 
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1987
+#: gtk/gtkcolorsel.c:1987 gtk/gtkcolorsel.c:1998
 #, fuzzy
 msgid "Transparency of the color."
 msgstr "ഇപ്പോള് തെരഞ്ഞെടുത്ത നിറത്തിന്റെ സുതാര്യത."
 
-#: gtk/gtkcolorsel.c:1994
+#: gtk/gtkcolorsel.c:2005
 #, fuzzy
 msgid "Color _name:"
 msgstr "നിറത്തിന്റെ പേര‍്:"
 
-#: gtk/gtkcolorsel.c:2009
+#: gtk/gtkcolorsel.c:2020
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:2039
+#: gtk/gtkcolorsel.c:2050
 #, fuzzy
 msgid "_Palette:"
 msgstr "നിറത്തട്ട്"
 
-#: gtk/gtkcolorsel.c:2068
+#: gtk/gtkcolorsel.c:2079
 #, fuzzy
 msgid "Color Wheel"
 msgstr "ചക്രം"
@@ -1431,11 +1431,11 @@ msgstr "ചക്രം"
 msgid "Color Selection"
 msgstr "അക്ഷരരൂപം തെരഞ്ഞെടുക്കല്"
 
-#: gtk/gtkentry.c:4906 gtk/gtktextview.c:7234
+#: gtk/gtkentry.c:4906 gtk/gtktextview.c:7231
 msgid "Input _Methods"
 msgstr "നിവേശക രീതി"
 
-#: gtk/gtkentry.c:4920 gtk/gtktextview.c:7248
+#: gtk/gtkentry.c:4920 gtk/gtktextview.c:7245
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1600,7 +1600,7 @@ msgid "Select which types of files are shown"
 msgstr ""
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4215 gtk/gtkprinteroptionwidget.c:537
+#: gtk/gtkfilechooserdefault.c:4215 gtk/gtkprinteroptionwidget.c:544
 #, fuzzy
 msgid "_Name:"
 msgstr "നിറത്തിന്റെ പേര‍്:"
@@ -1900,18 +1900,18 @@ msgid "(Empty)"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:842 gtk/gtkfilesystemunix.c:1089
-#: gtk/gtkfilesystemunix.c:2117 gtk/gtkfilesystemwin32.c:471
-#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
+#: gtk/gtkfilesystemunix.c:2117 gtk/gtkfilesystemwin32.c:2222
+#: gtk/gtkfilesystemwin32.c:2272
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 
-#: gtk/gtkfilesystemunix.c:928 gtk/gtkfilesystemwin32.c:526
+#: gtk/gtkfilesystemunix.c:928 gtk/gtkfilesystemwin32.c:1019
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 
-#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:586
+#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:1125
 #, c-format
 msgid "This file system does not support mounting"
 msgstr ""
@@ -1928,17 +1928,17 @@ msgid ""
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1036
+#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1814
+#: gtk/gtkfilesystemunix.c:1814 gtk/gtkfilesystemwin32.c:1957
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1886
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2029
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
@@ -1948,26 +1948,31 @@ msgstr ""
 msgid "Error getting information for '/': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 
-#: gtk/gtkfilesystemwin32.c:600
+#: gtk/gtkfilesystemwin32.c:943
+#, c-format
+msgid "Path is not a folder: '%s'"
+msgstr ""
+
+#: gtk/gtkfilesystemwin32.c:1143
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:639
+#: gtk/gtkfilesystemwin32.c:1165
 #, c-format
 msgid "%s (%s)"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:263
+#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr ""
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:257
+#: gtk/gtkfontbutton.c:261
 msgid "Sans 12"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:775
+#: gtk/gtkfontbutton.c:781
 msgid "Font"
 msgstr "അക്ഷരരൂപം"
 
@@ -1990,11 +1995,11 @@ msgid "Si_ze:"
 msgstr "വലിപ്പം"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:514
 msgid "_Preview:"
 msgstr "തിരനോട്ടം"
 
-#: gtk/gtkfontsel.c:1351
+#: gtk/gtkfontsel.c:1348
 msgid "Font Selection"
 msgstr "അക്ഷരരൂപം തെരഞ്ഞെടുക്കല്"
 
@@ -2009,7 +2014,7 @@ msgstr "ഗാമാ മൂല്യം"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1370
+#: gtk/gtkiconfactory.c:1371
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "സൂചകം നിറയ‌്ക്കുന്നതില്‌ പരാജയം : %s"
@@ -2174,7 +2179,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4208 gtk/gtknotebook.c:6742
+#: gtk/gtknotebook.c:4208 gtk/gtknotebook.c:6758
 #, c-format
 msgid "Page %u"
 msgstr "താള് :%u"
@@ -2185,26 +2190,26 @@ msgstr "താള് :%u"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkpagesetupunixdialog.c:152
+#: gtk/gtkpagesetupunixdialog.c:153
 #, fuzzy
 msgid "default:mm"
 msgstr "default:LTR"
 
-#: gtk/gtkpagesetupunixdialog.c:360
+#: gtk/gtkpagesetupunixdialog.c:363
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:918 gtk/gtkpagesetupunixdialog.c:1372
+#: gtk/gtkpagesetupunixdialog.c:928 gtk/gtkpagesetupunixdialog.c:1442
 msgid "mm"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:920 gtk/gtkpagesetupunixdialog.c:1370
+#: gtk/gtkpagesetupunixdialog.c:930 gtk/gtkpagesetupunixdialog.c:1440
 msgid "inch"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:939
+#: gtk/gtkpagesetupunixdialog.c:949
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2214,371 +2219,396 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:990
+#: gtk/gtkpagesetupunixdialog.c:1000
 msgid "Manage Custom Sizes..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1038
+#: gtk/gtkpagesetupunixdialog.c:1048
 msgid "_Format for:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1059
+#: gtk/gtkpagesetupunixdialog.c:1069
 #, fuzzy
 msgid "_Paper size:"
 msgstr "ഗുണഗണങ്ങള്‌"
 
-#: gtk/gtkpagesetupunixdialog.c:1095
+#: gtk/gtkpagesetupunixdialog.c:1105
 #, fuzzy
 msgid "_Orientation:"
 msgstr "ആര്ദ്രത:"
 
-#: gtk/gtkpagesetupunixdialog.c:1149 gtk/gtkprintunixdialog.c:2034
+#: gtk/gtkpagesetupunixdialog.c:1170 gtk/gtkprintunixdialog.c:2099
 #, fuzzy
 msgid "Page Setup"
 msgstr "താള് :%u"
 
-#: gtk/gtkpagesetupunixdialog.c:1414
+#: gtk/gtkpagesetupunixdialog.c:1487
 msgid "Margins from Printer..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1573
+#: gtk/gtkpagesetupunixdialog.c:1647
 #, c-format
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1770
+#: gtk/gtkpagesetupunixdialog.c:1875
 msgid "Manage Custom Sizes"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1863
+#: gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Width:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1875
+#: gtk/gtkpagesetupunixdialog.c:1983
 #, fuzzy
 msgid "_Height:"
 msgstr "ഹ്യൂ:"
 
-#: gtk/gtkpagesetupunixdialog.c:1887
+#: gtk/gtkpagesetupunixdialog.c:1995
 msgid "Paper Size"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1897
+#: gtk/gtkpagesetupunixdialog.c:2005
 #, fuzzy
 msgid "_Top:"
 msgstr "മുകളില്"
 
-#: gtk/gtkpagesetupunixdialog.c:1909
+#: gtk/gtkpagesetupunixdialog.c:2017
 #, fuzzy
 msgid "_Bottom:"
 msgstr "താഴെ"
 
-#: gtk/gtkpagesetupunixdialog.c:1921
+#: gtk/gtkpagesetupunixdialog.c:2029
 #, fuzzy
 msgid "_Left:"
 msgstr "ഇടത്"
 
-#: gtk/gtkpagesetupunixdialog.c:1933
+#: gtk/gtkpagesetupunixdialog.c:2041
 msgid "_Right:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1974
+#: gtk/gtkpagesetupunixdialog.c:2082
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:482
+#: gtk/gtkprinteroptionwidget.c:489
 msgid "Not available"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:534
-#: modules/printbackends/pdf/gtkprintbackendpdf.c:353
+#: gtk/gtkprinteroptionwidget.c:541
+#: modules/printbackends/pdf/gtkprintbackendpdf.c:340
 msgid "Print to PDF"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:549
+#: gtk/gtkprinteroptionwidget.c:556
 #, fuzzy
 msgid "_Save in folder:"
 msgstr "പുതിയ കൂട്"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:1458
 msgid "print operation status|Initial state"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:952
+#: gtk/gtkprintoperation.c:1460
 msgid "print operation status|Preparing to print"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:954
+#: gtk/gtkprintoperation.c:1462
 msgid "print operation status|Generating data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:956
+#: gtk/gtkprintoperation.c:1464
 msgid "print operation status|Sending data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:958
+#: gtk/gtkprintoperation.c:1466
 msgid "print operation status|Waiting"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:1468
 msgid "print operation status|Blocking on issue"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:1470
 msgid "print operation status|Printing"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:1472
 msgid "print operation status|Finished"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:966
+#: gtk/gtkprintoperation.c:1474
 msgid "print operation status|Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:117
+#: gtk/gtkprintoperation.c:1965
+#, c-format
+msgid "Preparing %d"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1967 gtk/gtkprintoperation.c:2215
+#, fuzzy, c-format
+msgid "Preparing"
+msgstr "മുന്നറിയിപ്പ്"
+
+#: gtk/gtkprintoperation.c:1970
+#, fuzzy, c-format
+msgid "Printing %d"
+msgstr "അച്ചടി"
+
+#: gtk/gtkprintoperation-unix.c:204
+#, c-format
+msgid "Error launching preview"
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:238
 #, c-format
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:545
+#: gtk/gtkprintoperation-unix.c:337 gtk/gtkprintoperation-win32.c:1382
+#, fuzzy
+msgid "Application"
+msgstr "തെരഞ്ഞെടുക്കുക:"
+
+#: gtk/gtkprintoperation-win32.c:554
 msgid "Printer offline"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:547
+#: gtk/gtkprintoperation-win32.c:556
 msgid "Out of paper"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:549
+#: gtk/gtkprintoperation-win32.c:558
 #, fuzzy
 msgid "Paused"
 msgstr "ഒട്ടിപ്പ്"
 
-#: gtk/gtkprintoperation-win32.c:551
+#: gtk/gtkprintoperation-win32.c:560
 msgid "Need user intervention"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:652
+#: gtk/gtkprintoperation-win32.c:660
 msgid "Custom size"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1301 gtk/gtkprintoperation-win32.c:1324
-#: gtk/gtkprintoperation-win32.c:1362
+#: gtk/gtkprintoperation-win32.c:1434 gtk/gtkprintoperation-win32.c:1457
+#: gtk/gtkprintoperation-win32.c:1505
 #, fuzzy, c-format
 msgid "Not enough free memory"
 msgstr "സൂചകചിത്രം നിറയ്‌ക്കാന്‌ ആവശ്യമായ സ്ഥലമില്ല"
 
-#: gtk/gtkprintoperation-win32.c:1367
+#: gtk/gtkprintoperation-win32.c:1510
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1372
+#: gtk/gtkprintoperation-win32.c:1515
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1377
+#: gtk/gtkprintoperation-win32.c:1520
 #, fuzzy, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "അസാധുവായ സൂചകചിത്രതലവാചകം"
 
-#: gtk/gtkprintoperation-win32.c:1382
+#: gtk/gtkprintoperation-win32.c:1525
 #, c-format
 msgid "Unspecified error"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1421
+#: gtk/gtkprintoperation-win32.c:1564
 #, c-format
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1393
+#: gtk/gtkprintunixdialog.c:1442
 #, fuzzy
 msgid "Printer"
 msgstr "അച്ചടി"
 
-#: gtk/gtkprintunixdialog.c:1401
+#: gtk/gtkprintunixdialog.c:1450
 #, fuzzy
 msgid "Location"
 msgstr "തെരഞ്ഞെടുക്കുക:"
 
-#: gtk/gtkprintunixdialog.c:1410
+#: gtk/gtkprintunixdialog.c:1459
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1434
+#: gtk/gtkprintunixdialog.c:1483
 #, fuzzy
 msgid "Print Pages"
 msgstr "അച്ചടി-തിരനോട്ടം"
 
-#: gtk/gtkprintunixdialog.c:1438
+#: gtk/gtkprintunixdialog.c:1487
 #, fuzzy
 msgid "_All"
 msgstr "നിറയ്‍ക്കുക"
 
-#: gtk/gtkprintunixdialog.c:1445
+#: gtk/gtkprintunixdialog.c:1494
 #, fuzzy
 msgid "C_urrent"
 msgstr "ഉണ്ടാക്കുക"
 
-#: gtk/gtkprintunixdialog.c:1454
+#: gtk/gtkprintunixdialog.c:1503
 msgid "Ra_nge: "
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1470
+#: gtk/gtkprintunixdialog.c:1521
 msgid "Copies"
 msgstr ""
 
-#. FIXMEchpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1475
+#. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
+#: gtk/gtkprintunixdialog.c:1526
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1489
+#: gtk/gtkprintunixdialog.c:1542
 #, fuzzy
 msgid "C_ollate"
 msgstr "ഉണ്ടാക്കുക"
 
-#: gtk/gtkprintunixdialog.c:1496
+#: gtk/gtkprintunixdialog.c:1550
 #, fuzzy
 msgid "_Reverse"
 msgstr "പൂര്‍വ്വസ്ഥിതി"
 
-#: gtk/gtkprintunixdialog.c:1513
+#: gtk/gtkprintunixdialog.c:1567
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1890
+#: gtk/gtkprintunixdialog.c:1955
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1894
+#: gtk/gtkprintunixdialog.c:1959
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1910
+#: gtk/gtkprintunixdialog.c:1975
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1925
+#: gtk/gtkprintunixdialog.c:1990
 #, fuzzy
 msgid "_Only print:"
 msgstr "അച്ചടി"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:1940
+#: gtk/gtkprintunixdialog.c:2005
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1941
+#: gtk/gtkprintunixdialog.c:2006
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1942
+#: gtk/gtkprintunixdialog.c:2007
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1945
+#: gtk/gtkprintunixdialog.c:2010
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "മൂല്യം:"
 
-#: gtk/gtkprintunixdialog.c:1972
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1976
+#: gtk/gtkprintunixdialog.c:2041
 #, fuzzy
 msgid "Paper _type:"
 msgstr "ഗുണഗണങ്ങള്‌"
 
-#: gtk/gtkprintunixdialog.c:1991
+#: gtk/gtkprintunixdialog.c:2056
 #, fuzzy
 msgid "Paper _source:"
 msgstr "ഗുണഗണങ്ങള്‌"
 
-#: gtk/gtkprintunixdialog.c:2006
+#: gtk/gtkprintunixdialog.c:2071
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2057
+#: gtk/gtkprintunixdialog.c:2122
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2128
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2078
+#: gtk/gtkprintunixdialog.c:2143
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2096
+#: gtk/gtkprintunixdialog.c:2161
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2102
+#: gtk/gtkprintunixdialog.c:2167
 #, fuzzy
 msgid "_Now"
 msgstr "ഇല്ല"
 
-#: gtk/gtkprintunixdialog.c:2109
+#: gtk/gtkprintunixdialog.c:2174
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2189
 #, fuzzy
 msgid "On _hold"
 msgstr "സ്ഥൂലം"
 
-#: gtk/gtkprintunixdialog.c:2143
+#: gtk/gtkprintunixdialog.c:2208
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2149
+#: gtk/gtkprintunixdialog.c:2214
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2164
+#: gtk/gtkprintunixdialog.c:2229
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2179
+#: gtk/gtkprintunixdialog.c:2244
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2245
+#: gtk/gtkprintunixdialog.c:2310
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2275
+#: gtk/gtkprintunixdialog.c:2340
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2278
+#: gtk/gtkprintunixdialog.c:2343
 #, fuzzy
 msgid "Color"
 msgstr "വ‍ര്ണ്ണ‍ം"
 
-#: gtk/gtkprintunixdialog.c:2281
+#: gtk/gtkprintunixdialog.c:2346
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2294
+#: gtk/gtkprintunixdialog.c:2359
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2334
+#: gtk/gtkprintunixdialog.c:2399
 #, fuzzy
 msgid "Print"
 msgstr "അച്ചടി"
@@ -2647,15 +2677,11 @@ msgstr ""
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:674
-#: gtk/gtkrecentchoosermenu.c:683 gtk/gtkrecentchoosermenu.c:691
+#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
+#: gtk/gtkrecentchoosermenu.c:674 gtk/gtkrecentchoosermenu.c:683
+#: gtk/gtkrecentchoosermenu.c:691
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
-
-#: gtk/gtkrecentchoosermenu.c:517
-#, c-format
-msgid "This function is not implemented for widgets of class '%s'."
 msgstr ""
 
 #: gtk/gtkrecentchoosermenu.c:833
@@ -4002,102 +4028,102 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X നിവേശക രീതി"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1358
+#: modules/printbackends/cups/gtkprintbackendcups.c:1360
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1359
+#: modules/printbackends/cups/gtkprintbackendcups.c:1361
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1360
+#: modules/printbackends/cups/gtkprintbackendcups.c:1362
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1361
+#: modules/printbackends/cups/gtkprintbackendcups.c:1363
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1370
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
-#: modules/printbackends/cups/gtkprintbackendcups.c:1372
-#: modules/printbackends/cups/gtkprintbackendcups.c:1376
+#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1374
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 #, fuzzy
 msgid "Auto Select"
 msgstr "അക്ഷരരൂപം തെരഞ്ഞെടുക്കല്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
-#: modules/printbackends/cups/gtkprintbackendcups.c:1374
 #: modules/printbackends/cups/gtkprintbackendcups.c:1375
-#: modules/printbackends/cups/gtkprintbackendcups.c:1762
+#: modules/printbackends/cups/gtkprintbackendcups.c:1376
+#: modules/printbackends/cups/gtkprintbackendcups.c:1377
+#: modules/printbackends/cups/gtkprintbackendcups.c:1764
 #, fuzzy
 msgid "Printer Default"
 msgstr "സ്വതേ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: modules/printbackends/cups/gtkprintbackendcups.c:1948
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: modules/printbackends/cups/gtkprintbackendcups.c:1948
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: modules/printbackends/cups/gtkprintbackendcups.c:1948
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: modules/printbackends/cups/gtkprintbackendcups.c:1948
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 #, fuzzy
 msgid "None"
 msgstr "ഒന്നും"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 #, fuzzy
 msgid "Secret"
 msgstr "തിരച്ചിത്രം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: modules/printbackends/cups/gtkprintbackendcups.c:1950
 msgid "Unclassified"
 msgstr ""
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:385
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:372
 msgid "Print to LPR"
 msgstr ""
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:414
-#: modules/printbackends/pdf/gtkprintbackendpdf.c:384
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:396
+#: modules/printbackends/pdf/gtkprintbackendpdf.c:366
 #, fuzzy
 msgid "Pages Per Sheet"
 msgstr "ഛായാചിത്രത്തിന്റെ ഉയരം പൂജ്യം"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:403
 msgid "Command Line"
 msgstr ""
 
-#: modules/printbackends/pdf/gtkprintbackendpdf.c:391
+#: modules/printbackends/pdf/gtkprintbackendpdf.c:373
 #, fuzzy
 msgid "File"
 msgstr "രചനകള്"

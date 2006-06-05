@@ -82,6 +82,11 @@ This should not be accessed directly.  Use the accessor functions below.
 
 </para>
 
+<!-- ##### ARG GtkButton:image-position ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkButton:label ##### -->
 <para>
 
@@ -133,6 +138,11 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 <!-- ##### ARG GtkButton:displace-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:image-spacing ##### -->
 <para>
 
 </para>
@@ -343,6 +353,24 @@ Returns the current relief style of the given #GtkButton.
 
 
 <!-- ##### FUNCTION gtk_button_get_image ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_set_image_position ##### -->
+<para>
+
+</para>
+
+@button: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_button_get_image_position ##### -->
 <para>
 
 </para>
