@@ -1,3 +1,7 @@
+2006-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: Small optimization
+
 2006-06-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

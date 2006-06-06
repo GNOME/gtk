@@ -1131,9 +1131,15 @@ static void
 _gtk_icon_theme_ensure_builtin_cache (void)
 {
   static gboolean initialized = FALSE;
+  static IconThemeDir dirs[5] = {
+    { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, NULL, "16", NULL, NULL, NULL },
+    { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, NULL, "20", NULL, NULL, NULL },
+    { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, NULL, "24", NULL, NULL, NULL },
+    { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, NULL, "32", NULL, NULL, NULL },
+    { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, NULL, "48", NULL, NULL, NULL }
+  };
   IconThemeDir *dir;
-  gint sizes[5] = { 16, 20, 24, 32, 48 };
-  gint n_sizes = G_N_ELEMENTS (sizes);
+  gint n_sizes = G_N_ELEMENTS (dirs);
   gint i;
 
   if (!initialized)
@@ -1144,16 +1150,7 @@ _gtk_icon_theme_ensure_builtin_cache (void)
 
       for (i = 0; i < n_sizes; i++)
 	{
-	  dir = g_new (IconThemeDir, 1);
-	  dir->type = ICON_THEME_DIR_THRESHOLD;
-	  dir->context = 0;
-	  dir->size = sizes[i];
-	  dir->min_size = sizes[i];
-	  dir->max_size = sizes[i];
-	  dir->threshold = 2;
-	  dir->dir = NULL;
-	  dir->icon_data = NULL;
-	  dir->subdir = g_strdup_printf ("%d", sizes[i]);
+	  dir = &dir[i];
 	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
 
 	  builtin_dirs = g_list_append (builtin_dirs, dir);
