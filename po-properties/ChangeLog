@@ -1,3 +1,7 @@
+2006-06-06  Pablo Saratxaga <pablo@mandriva.com>
+
+	* wa.po: Updated Walloon file
+
 2006-06-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.9.2 ===
@@ -138,7 +142,7 @@
 
 2006-04-27  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati translation.
+	* gu.po: Updated Gujarati translation.
 
 2006-04-26  Ankit Patel  <ankit644@yahoo.com>
 
@@ -162,7 +166,7 @@
 
 2006-04-19  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-04-19  Rajesh Ranjan <rranjan@redhat.com>
 
@@ -174,7 +178,7 @@
 
 2006-04-01  Gora Mohanty  <gmohanty@cvs.gnome.org>
 
-        * or.po: Added Oriya translation.
+	* or.po: Added Oriya translation.
 
 2006-03-24  Ahmad Riza H Nst  <rizahnst@eriagempita.co.id>
 
@@ -340,7 +344,7 @@
 
 2005-09-08  Clytie Siddall <clytie@riverland.net.au>
 
-        * vi.po: Updated Vietnamese translation.
+	* vi.po: Updated Vietnamese translation.
 
 2005-09-06  Alexander Shopov  <ash@contact.bg>
 
@@ -613,7 +617,7 @@
 	
 2005-07-01  Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>
 
-        * zh_TW.po: Updated Traditional Chinese translation.
+	* zh_TW.po: Updated Traditional Chinese translation.
 
 2005-06-28  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
@@ -776,7 +780,7 @@
 
 2005-04-13  Iaki Larraaga  <dooteo@euskalgnu.org>
 
-        * eu.po: Fixed some typos.
+	* eu.po: Fixed some typos.
 	
 2005-04-13  Iaki Larraaga  <dooteo@euskalgnu.org>
 
@@ -870,9 +874,9 @@
 	Adi Attar <adi@canonical.com>.
 
 2005-01-30  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British translation.
-                                                                                
+
+	* en_GB.po: Updated British translation.
+
 2005-01-18  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.
@@ -1057,9 +1061,9 @@
 	* en_CA.po: Updated Canadian English translation.
 
 2004-11-21  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British translation.
-                                                                                
+
+	* en_GB.po: Updated British translation.
+
 2004-11-21  Laszlo Dvornik  <dvornik@gnome.hu>
 
 	* hu.po: Hungarian translation updated.
@@ -1087,12 +1091,12 @@
 
 2004-11-15  Hendrik Richter  <hendrik@gnome-de.org>
 
-        * de.po: Updated German translation.
+	* de.po: Updated German translation.
 	
 2004-11-14  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British translation.
-                                                                                
+
+	* en_GB.po: Updated British translation.
+
 2004-11-14  Alexander Shopov  <ash@contact.bg>
 
 	* bg.po: Updated Bulgarian translation by
@@ -1179,9 +1183,9 @@
 	* sq.po: Updated Albanian translation.
 
 2004-10-20  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British English translation.
-                                                                                
+
+	* en_GB.po: Updated British English translation.
+
 2004-10-20  Miloslav Trmac  <mitr@volny.cz>
 
 	* cs.po: Updated Czech translation.
@@ -1207,9 +1211,9 @@
 	* en_CA.po: Updated Canadian English translation.
 
 2004-10-17  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British English translation.
-                                                                                
+
+	* en_GB.po: Updated British English translation.
+
 2004-10-15  Danilo Šegan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
@@ -1221,15 +1225,15 @@
 	* makefile.mingw: Remove, had been left here by mistake.
 
 2004-10-03  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British English translation.
-                                                                                
+
+	* en_GB.po: Updated British English translation.
+
 2004-10-03  Miloslav Trmac  <mitr@volny.cz>
 
 	* cs.po: Updated Czech translation.
 
 2004-09-27  Roozbeh Pournader  <roozbeh@farsiweb.info>
- 
+
 	* az_IR.po: Added Iranian Azerbaijani translation by Amir Hedayaty
 	<amir@bamdad.org>.
 
@@ -1305,10 +1309,10 @@ Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-04-09  Guntupalli Karunakar  <karunakar@freedomink.org>
 
-        * gu.po: Added Gujurati translation by
-        Gujarati Team <magnet@magnet-i.com>.
+	* gu.po: Added Gujurati translation by
+	  Gujarati Team <magnet@magnet-i.com>.
 
-2004-04-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-04-06  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 
@@ -1317,7 +1321,7 @@ Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* af.po: Updated Afrikaans translation by
 	Zuza Software Foundation <info@translate.org.za>.
 
-2004-03-30  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-03-30  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 	* eu.po: Updated Basque file (Hizkuntza Politikarako Sailburuordetza)
@@ -1329,7 +1333,7 @@ Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 2004-03-22  Guntupalli Karunakar  <karunakar@freedomink.org>
 
 	* pa.po: Punjabi translation by 
-        Amanpreet Singh Alam <amanlinux@netscape.net>.
+	  Amanpreet Singh Alam <amanlinux@netscape.net>.
 
 2004-03-21  Robert Sedak  <robert.sedak@sk.htnet.hr>
 
@@ -1404,7 +1408,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 	* === Released 2.3.6 ===
 
 2004-03-09  Sanlig Badral  <badral@openmn.org>                                                                                 
-        * mn.po: Updated Mongolian translation. 
+	* mn.po: Updated Mongolian translation. 
 
 2004-03-09  Danilo Šegan  <dsegan@gmx.net>
 
@@ -1800,8 +1804,8 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	* ko.po: Updated Korean translation.
 
 2004-02-08  Robert Sedak  <robert.sedak@sk.htnet.hr>
- 
-         * hr.po: Updated Croatian translation.
+
+	* hr.po: Updated Croatian translation.
 
 2004-02-07  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -1833,7 +1837,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	anymore.
 	* sv.po: Updated Swedish translation.
 
-2004-02-02  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-02-02  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* uz*.po: changed default for Uzbek; now just "uz"
 	is in cyrillic and "uz@Latn" for latin; "uz@Cyrl" has been removed
@@ -1918,7 +1922,7 @@ Mon Feb 02 10:01:00 2004 Alastair McKinstry <mckinstry@computer.org>
 
 2004-01-19  Hasbullah Bin Pit <sebol@my-penguin.org>
 
-        * ms.po: Updated Malay translation.
+	* ms.po: Updated Malay translation.
 
 2004-01-19  Artur Flinta  <aflinta@cvs.gnome.org>
 
@@ -1936,7 +1940,7 @@ Mon Jan 19 12:17:25 2004  Laurent Dhima  <laurenti@alblinux.net>
 
 	* sq.po: Reverted Albanian file.
 
-2004-01-19  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-01-19  Pablo Saratxaga  <pablo@mandriva.com>
 
 	* wa.po: Updated Walloon file
 
@@ -1970,6 +1974,4 @@ Sat Jan 17 23:07:06 2004  Matthias Clasen  <maclas@gmx.de>
 	- Change the xgettext invokation to use --keyword --keyword=P_
 
 	- Only keep the property nick and blurb translations in the
-	  
-	  
 	  po files

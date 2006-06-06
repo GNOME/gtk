@@ -1,3 +1,7 @@
+2006-06-06  Pablo Saratxaga <pablo@mandriva.com>
+
+	* wa.po: Updated Walloon file.
+
 2006-06-06  Ilkka Tuohela  <hile@iki.fi>
 
 	* fi.po: Updated Finnish translation.
@@ -8,7 +12,7 @@
 
 2006-06-05  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-06-03  Francisco Javier F. Serrador  <serrador@openshine.com>
 
@@ -52,7 +56,7 @@
 
 2006-05-24  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-24  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -64,7 +68,7 @@
 
 2006-05-22  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-21  Alessio Frusciante  <algol@firenze.linux.it>
 
@@ -101,7 +105,7 @@
 
 2006-05-17  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-16  Matthias Clasen  <mclasen@redhat.com>
 
@@ -113,7 +117,7 @@
 
 2006-05-15  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-11  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
@@ -121,11 +125,11 @@
 
 2006-05-11  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-10  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-10  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
@@ -133,7 +137,7 @@
 
 2006-05-09  Ankit Patel  <ankit644@yahoo.com>
 
-        * gu.po: Updated Gujarati Translation.
+	* gu.po: Updated Gujarati Translation.
 
 2006-05-08  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
 
@@ -455,7 +459,7 @@
 
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
-        * Makefile.in.in: Tell xgettext about all the
+	* Makefile.in.in: Tell xgettext about all the
         printf-like functions we use.
 
 2005-09-05  Iñaki Larrañaga  <dooteo@euskalgnu.org>
@@ -1128,7 +1132,7 @@
 
 2005-01-30  David Lodge <dave@cirt.net>
                                                                                 
-        * en_GB.po: Updated British translation.
+	* en_GB.po: Updated British translation.
 
 2005-01-23  Christian Rose  <menthos@menthos.com>
 
@@ -1399,7 +1403,7 @@
 
 2004-11-15  Hendrik Richter  <hendrik@gnome-de.org>
 
-        * de.po: Updated German translation.
+	* de.po: Updated German translation.
 	
 2004-11-14  Žygimantas Beručka  <uid0@akl.lt>
 
@@ -1460,7 +1464,7 @@
 
 2004-10-17  David Lodge <dave@cirt.net>
                                                                                 
-        * en_GB.po: Updated British English translation.
+	* en_GB.po: Updated British English translation.
                                                                                 
 2004-10-15  Danilo Šegan  <dsegan@gmx.net>
 
@@ -1486,7 +1490,7 @@
 
 2004-10-03  David Lodge <dave@cirt.net>
                                                                                 
-        * en_GB.po: Updated British English translation.
+	* en_GB.po: Updated British English translation.
                                                                                 
 2004-10-03  Miloslav Trmac  <mitr@volny.cz>
 
@@ -1636,7 +1640,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-07-18  David Lodge <dave@cirt.net>
                                                                                 
-        * en_GB.po: Updated British translation.
+	* en_GB.po: Updated British translation.
                                                                                 
 2004-07-16  Matthias Clasen  <mclasen@redhat.com>
 
@@ -1890,7 +1894,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-04-09  Guntupalli Karunakar  <karunakar@freedomink.org>
 
-        * gu.po: Added Gujurati translation by
+	* gu.po: Added Gujurati translation by
         Gujarati Team <magnet@magnet-i.com>.
 
 2004-04-09  Laurent Dhima  <laurenti@alblinux.net>
@@ -1994,7 +1998,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-03-22  Guntupalli Karunakar  <karunakar@freedomink.org>
 
-        * pa.po: Punjabi translation by 
+	* pa.po: Punjabi translation by 
         Amanpreet Singh Alam <amanlinux@netscape.net>.
 
 2004-03-21 Alastair McKinstry <mckinstry@debian.org>
@@ -2011,7 +2015,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-03-21  Robert Sedak  <robert.sedak@sk.htnet.hr>
 
-        * hr.po: Updated Croatian translation.
+	* hr.po: Updated Croatian translation.
 
 2004-03-20  Baris Cicek  <baris@teamforce.name.tr>
 
@@ -2254,7 +2258,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 	* no.po: Updated Norwegian translation.
 
 2004-03-09  Sanlig Badral  <badral@openmn.org>                                                                                 
-        * mn.po: Updated Mongolian translation. 
+	* mn.po: Updated Mongolian translation. 
 
 2004-03-09  Kostas Papadimas <pkst@gnome.org>
 
@@ -2648,7 +2652,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 2004-02-11  Arafat Medini  <lumina@silverpen.de>
 
-        * ar.po: Updated Arabic translation.
+	* ar.po: Updated Arabic translation.
 
 2004-02-11  Christian Neumair  <chris@gnome-de.org>
 
@@ -3284,7 +3288,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 2003-12-05  Paisa Seeluangsawat  <paisa@users.sf.net>
 
-        * th.po: Added Thai (th) translation.
+	* th.po: Added Thai (th) translation.
 
 2003-12-05  Christian Neumair  <chris@gnome-de.org>
 
@@ -3367,12 +3371,12 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 2003-11-11  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
-        * es.po: Updated Spanish translation by
+	* es.po: Updated Spanish translation by
                  Francisco Javier F. Serrador <serrador@arrakis.es>.
 
 2003-11-10  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
-        * es.po: Updated Spanish translation by
+	* es.po: Updated Spanish translation by
                  Francisco Javier F. Serrador <serrador@arrakis.es>.
 		 
 2003-11-09  Hasbullah Bin Pit <sebol@ikhlas.com>
@@ -3452,7 +3456,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 2003-10-06  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
-        * es.po: Updated Spanish translation by
+	* es.po: Updated Spanish translation by
                  Francisco Javier F. Serrador <serrador@arrakis.es>.
 
 2003-10-06  Danilo ? egan  <dsegan@gmx.net>
@@ -3605,7 +3609,7 @@ Wed Jul  2 18:00:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-06-12  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
         
-        * es.po: Updated Spanish translation by
+	* es.po: Updated Spanish translation by
                  Francisco Javier F. Serrador <serrador@arrakis.es>.
 
 2003-06-11  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
@@ -3684,7 +3688,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 2003-04-11  Paul Duffy <dubhthach@frink.nuigalway.ie>
 
-        * ga.po: Updated Irish translation.
+	* ga.po: Updated Irish translation.
 
 2003-04-04  Metin Amiroff <metin@karegen.com>
 
@@ -3793,7 +3797,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 2003-01-26  He Qiangqiang  <carton@linux.net.cn>
 
-        * zh_CN.po: Updated Simplified Chinese translation by
+	* zh_CN.po: Updated Simplified Chinese translation by
         Funda Wang <fundawang@en2china.com>.
 
 2003-01-26  Fatih Demir <kabalak@gtranslator.org>
@@ -3815,11 +3819,11 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 2003-01-15  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
-        * es.po: Fixed another couple of strings in Spanish translation.
+	* es.po: Fixed another couple of strings in Spanish translation.
 
 2003-01-15  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
-        * es.po: Updated a couple of strings in Spanish translation.
+	* es.po: Updated a couple of strings in Spanish translation.
 
 2003-01-15  Pablo Saratxaga  <pablo@mandriva.com>
 
@@ -3969,7 +3973,7 @@ Wed Dec 11 14:06:50 2002  Owen Taylor  <otaylor@redhat.com>
 	
 2002-12-07  Andras Timar  <timar@gnome.hu>
 
-        * hu.po : Updated Hungarian Translation.
+	* hu.po : Updated Hungarian Translation.
  	
 2002-12-07  Gil Osher  <dolfin@rpg.org.il>
 
@@ -3981,7 +3985,7 @@ Wed Dec 11 14:06:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-04  Marius Andreiana <marius galuna.ro>
 
-        * ro.po: updated
+	* ro.po: updated
 
 Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
@@ -4067,11 +4071,11 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-10-26 Szabolcs Ban <shooby@gnome.hu>      
 
-        * hu.po : Updated Hungarian Translation.
+	* hu.po : Updated Hungarian Translation.
  	
 2002-10-25  Marius Andreiana <marius galuna.ro>
 
-        * ro.po: updated
+	* ro.po: updated
 
 2002-10-21  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -4166,7 +4170,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-05-05  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Updated Portuguese translation.
+	* pt.po: Updated Portuguese translation.
 
 2002-05-04  Pablo Saratxaga  <pablo@mandriva.com>
 
@@ -4263,7 +4267,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-04-02  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Updated Portuguese translation.
+	* pt.po: Updated Portuguese translation.
 
 2002-04-02  Christian Rose  <menthos@menthos.com>
 
@@ -4357,11 +4361,11 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 	
 2002-03-06  Germ??n Poo-Caama???±o <gpoo@ubiobio.cl>
 
-        * es.po: Updated spanish translation.
+	* es.po: Updated spanish translation.
 
 2002-03-06  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Updated Portuguese translation.
+	* pt.po: Updated Portuguese translation.
 
 2002-03-05  Christian Rose  <menthos@menthos.com>
 
@@ -4471,7 +4475,7 @@ Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 	
 2002-02-11  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Updated Portuguese translation.
+	* pt.po: Updated Portuguese translation.
 
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -4533,11 +4537,11 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-01-28 Szabolcs Ban <shooby@gnome.hu>      
 
-        * hu.po : Updated Hungarian Translation.
+	* hu.po : Updated Hungarian Translation.
  	
 2002-01-28  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Converted to UTF-8 (I read the README but 
+	* pt.po: Converted to UTF-8 (I read the README but 
                  forgot to do it before).
 
 2002-01-27  Ole Laursen  <olau@hardworking.dk>
@@ -4554,7 +4558,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-01-19  Duarte Loreto <happyguy_pt@hotmail.com>
 
-        * pt.po: Updated Portuguese translation.
+	* pt.po: Updated Portuguese translation.
 
 2002-01-16 Roy-Magne Mo  <rmo@sunnmore.net>
 
@@ -4587,7 +4591,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-22  Marius Andreiana  <mandreiana@yahoo.com>
 
-        * ro.po: updated
+	* ro.po: updated
 
 2001-12-19  Christian Rose  <menthos@menthos.com>
 
@@ -4599,7 +4603,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-15  Marius Andreiana  <mandreiana@yahoo.com>
 
-        * ro.po: updated
+	* ro.po: updated
 
 2001-12-13  Kjartan Maraas  <kmaraas@gnome.org>
 
@@ -4664,7 +4668,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-11-05  Marius Andreiana  <mandreiana@yahoo.com>
 
-        * ro.po: updated
+	* ro.po: updated
 
 2001-11-03  Tor Lillqvist  <tml@iki.fi>
 
@@ -4968,7 +4972,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 2000-11-08  Szabolcs Ban <shooby@gnome.hu>
 
-        * hu.po: Updated Hungarian translation
+	* hu.po: Updated Hungarian translation
 
 2000-10-30  Robert Brady  <robert@suse.co.uk>
 
@@ -5031,7 +5035,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 2000-10-13  Fatih Demir  <kabalak@gmx.net> 
 
-        * tr.po: Updated the Turkish translation.
+	* tr.po: Updated the Turkish translation.
 
 2000-10-10  Christophe Merlet  <christophe@merlet.net>
 
@@ -5115,7 +5119,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 2000-04-29  Pablo Saratxaga <pablo@mandriva.com>
         
-        * wa.po: small fixes
+	* wa.po: small fixes
 
 2000-04-25  Arjan Scherpenisse  <acscherp@wins.uva.nl>
 
@@ -5162,7 +5166,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
 
-        * zh_CN.GB2312.po: Added po file from TurboLinux Chinese Develop Team.
+	* zh_CN.GB2312.po: Added po file from TurboLinux Chinese Develop Team.
 
 2000-01-28  Pablo Saratxaga <pablo@mandriva.com>
 	* lt.po: added Lithuanian file from Kestutis Kruzikas
@@ -5279,7 +5283,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 1999-02-17  Shooby Ban <bansz@szif.hu>
 
-        * hu.po: Updated Hungarian translations
+	* hu.po: Updated Hungarian translations
 
 1999-03-15  Mikko Rauhala <mjr@iki.fi>
 	* fi.po: Added Finnish translations.
@@ -5290,7 +5294,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 	
 1999-02-17  Shooby Ban <bansz@szif.hu>
 
-        * hu.po Added Hungarian translation,
+	* hu.po Added Hungarian translation,
           sorry for late ChangeLog
 
 1999-02-17  Nuno Ferreira  <nmrf@rnl.ist.utl.pt>
@@ -5329,7 +5333,7 @@ Sat Jan  9 17:35:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 Thu Dec 24 00:45:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
-        * no.po: added translation by Kjartan Maraas <kmaraas@fib.hl.no>
+	* no.po: added translation by Kjartan Maraas <kmaraas@fib.hl.no>
 
 Tue Dec 22 14:24:37 1998  Owen Taylor  <otaylor@redhat.com>
 
