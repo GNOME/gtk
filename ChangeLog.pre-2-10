@@ -1,3 +1,7 @@
+2006-06-07  Jürg Billeter  <j@bitron.ch>
+
+	* gtk/Makefile.am: Fix building gtkbuiltincache.h without system GTK+.
+
 2006-06-07  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols:

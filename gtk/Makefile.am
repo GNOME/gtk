@@ -1086,7 +1086,8 @@ stamp-icons: $(STOCK_ICONS)
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache
-	./gtk-update-icon-cache --force --ignore-theme-index 	\
+	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
+	   ./gtk-update-icon-cache --force --ignore-theme-index 		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
 
 EXTRA_DIST +=                   \
