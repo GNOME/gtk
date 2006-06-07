@@ -37,6 +37,7 @@
 #define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
 
 enum {
+  DONE,
   BEGIN_PRINT,
   PAGINATE,
   REQUEST_PAGE_SETUP,
@@ -59,9 +60,8 @@ enum {
   PROP_USE_FULL_PAGE,
   PROP_TRACK_PRINT_STATUS,
   PROP_UNIT,
-  PROP_SHOW_DIALOG,
-  PROP_SHOW_PREVIEW,
   PROP_SHOW_PROGRESS,
+  PROP_ALLOW_ASYNC,
   PROP_PDF_TARGET,
   PROP_STATUS,
   PROP_STATUS_STRING,
@@ -128,6 +128,9 @@ gtk_print_operation_finalize (GObject *object)
   if (priv->show_progress_timeout_id > 0)
     g_source_remove (priv->show_progress_timeout_id);
 
+  if (priv->error)
+    g_error_free (priv->error);
+  
   G_OBJECT_CLASS (gtk_print_operation_parent_class)->finalize (object);
 }
 
@@ -146,8 +149,6 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->nr_of_pages = -1;
   priv->current_page = -1;
   priv->use_full_page = FALSE;
-  priv->show_dialog = TRUE;
-  priv->show_preview = FALSE;
   priv->show_progress = FALSE;
   priv->pdf_target = NULL;
   priv->track_print_status = FALSE;
@@ -183,6 +184,9 @@ preview_iface_end_preview (GtkPrintOperationPreview *preview)
     g_main_loop_quit (op->priv->rloop);
 
   op->priv->end_run (op, op->priv->is_sync, TRUE);
+  
+  g_signal_emit (op, signals[DONE], 0,
+		 GTK_PRINT_OPERATION_RESULT_APPLY);
 }
 
 static gboolean
@@ -282,11 +286,8 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_UNIT:
       gtk_print_operation_set_unit (op, g_value_get_enum (value));
       break;
-    case PROP_SHOW_DIALOG:
-      gtk_print_operation_set_show_dialog (op, g_value_get_boolean (value));
-      break;
-    case PROP_SHOW_PREVIEW:
-      gtk_print_operation_set_show_preview (op, g_value_get_boolean (value));
+    case PROP_ALLOW_ASYNC:
+      gtk_print_operation_set_allow_async (op, g_value_get_boolean (value));
       break;
     case PROP_SHOW_PROGRESS:
       gtk_print_operation_set_show_progress (op, g_value_get_boolean (value));
@@ -338,11 +339,8 @@ gtk_print_operation_get_property (GObject    *object,
     case PROP_UNIT:
       g_value_set_enum (value, priv->unit);
       break;
-    case PROP_SHOW_DIALOG:
-      g_value_set_boolean (value, priv->show_dialog);
-      break;
-    case PROP_SHOW_PREVIEW:
-      g_value_set_boolean (value, priv->show_preview);
+    case PROP_ALLOW_ASYNC:
+      g_value_set_boolean (value, priv->allow_async);
       break;
     case PROP_SHOW_PROGRESS:
       g_value_set_boolean (value, priv->show_progress);
@@ -546,6 +544,31 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   class->create_custom_widget = gtk_print_operation_create_custom_widget;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
+
+  /**
+   * GtkPrintOperation::done:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @result: the result of the print operation
+   *
+   * Gets emitted when the print operation run has finished doing
+   * everything required for printing. @result gives you information
+   * about what happened during the run. If @result is
+   * GTK_PRINT_OPERATION_RESULT_ERROR then you can call
+   * gtk_print_operation_get_error() for more information.
+   *
+   * If you enabled print status tracking then gtk_print_operation_is_finished()
+   * may still return false after this was emitted.
+   *
+   * Since: 2.10
+   */
+  signals[DONE] =
+    g_signal_new (I_("done"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, done),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__INT,
+		  G_TYPE_NONE, 1, G_TYPE_INT);
 
   /**
    * GtkPrintOperation::begin-print:
@@ -980,38 +1003,6 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      GTK_UNIT_PIXEL,
 						      GTK_PARAM_READWRITE));
   
-
-  /**
-   * GtkPrintOperation:show-dialog:
-   *
-   * Determines whether calling gtk_print_operation_run() will present
-   * a print dialog to the user, or just print to the default printer.
-   *
-   * Since: 2.10
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_SHOW_DIALOG,
-				   g_param_spec_boolean ("show-dialog",
-							 P_("Show Dialog"),
-							 P_("TRUE if gtk_print_operation_run() should show the print dialog."),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
-
-  /**
-   * GtkPrintOperation:show-preview:
-   *
-   * Determines whether calling gtk_print_operation_run() will present
-   * the print preview to the user.
-   *
-   * Since: 2.10
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_SHOW_PREVIEW,
-				   g_param_spec_boolean ("show-preview",
-							 P_("Show Preview"),
-							 P_("TRUE if gtk_print_operation_run() should show the print preview."),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
   
   /**
    * GtkPrintOperation:show-progress:
@@ -1028,7 +1019,24 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if a progress dialog is shown while printing."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkPrintOperation:allow-async:
+   *
+   * Determines whether the print operation may run asynchronous or not.
+   * Some systems don't support asynchronous printing, but those that do
+   * will return GTK_PRINT_OPERATION_RESULT_IN_PROGRESS as the status, and
+   * emit the done signal when the operation is actually done.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ALLOW_ASYNC,
+				   g_param_spec_boolean ("allow-async",
+							 P_("Allow Async"),
+							 P_("TRUE if print process may run asynchronous."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
   
   /**
    * GtkPrintOperation:pdf-target:
@@ -1548,6 +1556,10 @@ gtk_print_operation_get_status_string (GtkPrintOperation *op)
  * is finished, either successfully (%GTK_PRINT_STATUS_FINISHED)
  * or unsuccessfully (%GTK_PRINT_STATUS_FINISHED_ABORTED).
  * 
+ * Note: when you enable print status tracking the print operation
+ * can be in a non-finished state even after done has been called, as
+ * the operation status then tracks the print job status on the printer.
+ * 
  * Return value: %TRUE, if the print operation is finished.
  *
  * Since: 2.10
@@ -1563,67 +1575,6 @@ gtk_print_operation_is_finished (GtkPrintOperation *op)
   return
     priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED ||
     priv->status == GTK_PRINT_STATUS_FINISHED;
-}
-
-
-/**
- * gtk_print_operation_set_show_dialog:
- * @op: a #GtkPrintOperation
- * @show_dialog: %TRUE to show the print dialog
- * 
- * Sets whether calling gtk_print_operation_run() will present
- * a print dialog to the user, or just print to the default printer.
- *
- * Since: 2.10
- */
-void
-gtk_print_operation_set_show_dialog (GtkPrintOperation *op,
-				     gboolean           show_dialog)
-{
-  GtkPrintOperationPrivate *priv;
-
-  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
-
-  show_dialog = show_dialog != FALSE;
-
-  if (priv->show_dialog != show_dialog)
-    {
-      priv->show_dialog = show_dialog;
-
-      g_object_notify (G_OBJECT (op), "show-dialog");
-    }
-}
-
-/**
- * gtk_print_operation_set_show_preview:
- * @op: a #GtkPrintOperation
- * @show_preview: %TRUE to show the print preview
- * 
- * Sets whether calling gtk_print_operation_run() will present
- * the print preview to the user.
- *
- * Since: 2.10
- */
-void
-gtk_print_operation_set_show_preview (GtkPrintOperation *op,
-				      gboolean           show_preview)
-{
-  GtkPrintOperationPrivate *priv;
-
-  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
-
-  show_preview = show_preview != FALSE;
-
-  if (priv->show_preview != show_preview)
-    {
-      priv->show_preview = show_preview;
-
-      g_object_notify (G_OBJECT (op), "show-preview");
-    }
 }
 
 /**
@@ -1655,6 +1606,27 @@ gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
       g_object_notify (G_OBJECT (op), "show-progress");
     }
 }
+
+void
+gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
+				     gboolean            allow_async)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  allow_async = allow_async != FALSE;
+
+  if (priv->allow_async != allow_async)
+    {
+      priv->allow_async = allow_async;
+
+      g_object_notify (G_OBJECT (op), "allow-async");
+    }
+}
+
 
 /**
  * gtk_print_operation_set_custom_tag_label:
@@ -1801,18 +1773,21 @@ pdf_end_run (GtkPrintOperation *op,
 static GtkPrintOperationResult
 run_pdf (GtkPrintOperation  *op,
 	 GtkWindow          *parent,
-	 gboolean           *do_print,
-	 GError            **error)
+	 gboolean           *do_print)
 {
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPageSetup *page_setup;
   cairo_surface_t *surface;
   cairo_t *cr;
   double width, height;
-  /* This will be overwritten later by the non-default size, but
-     we need to pass some size: */
+  
+  priv->print_context = _gtk_print_context_new (op);
   
   page_setup = create_page_setup (op);
+  _gtk_print_context_set_page_setup (priv->print_context, page_setup);
+
+  /* This will be overwritten later by the non-default size, but
+     we need to pass some size: */
   width = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
   height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   g_object_unref (page_setup);
@@ -1939,10 +1914,16 @@ print_pages_idle_done (gpointer user_data)
   if (data->progress)
     gtk_widget_destroy (data->progress);
 
-  g_object_unref (data->op);
-
-  if (priv->rloop && !data->is_preview)
+  if (priv->rloop && !data->is_preview) 
     g_main_loop_quit (priv->rloop);
+
+  if (!data->is_preview)
+    g_signal_emit (data->op, signals[DONE], 0,
+		   priv->cancelled ?
+		   GTK_PRINT_OPERATION_RESULT_CANCEL :
+		   GTK_PRINT_OPERATION_RESULT_APPLY);
+  
+  g_object_unref (data->op);
 
   g_free (data);
 
@@ -2194,16 +2175,23 @@ show_progress_timeout (PrintPagesData *data)
 static void
 print_pages (GtkPrintOperation *op,
 	     GtkWindow         *parent,
-	     gboolean		is_preview)
+	     gboolean           do_print,
+	     GtkPrintOperationResult result)
 {
   GtkPrintOperationPrivate *priv = op->priv;
   PrintPagesData *data;
 
+  if (!do_print) {
+    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+    g_signal_emit (op, signals[DONE], 0, result);
+    return;
+  }
+  
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_PREPARING, NULL);  
 
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
-  data->is_preview = is_preview;
+  data->is_preview = (result == GTK_PRINT_OPERATION_RESULT_PREVIEW);
 
   if (priv->show_progress)
     {
@@ -2224,7 +2212,7 @@ print_pages (GtkPrintOperation *op,
       data->progress = progress;
     }
 
-  if (is_preview)
+  if (data->is_preview)
     {
       gboolean handled;
       
@@ -2259,10 +2247,8 @@ print_pages (GtkPrintOperation *op,
 					       print_pages_idle, 
 					       data, 
 					       print_pages_idle_done);
-
-  /* Recursive main loop to make sure we don't exit 
-   * on sync operations 
-   */
+  
+  /* Recursive main loop to make sure we don't exit  on sync operations  */
   if (priv->is_sync)
     {
       priv->rloop = g_main_loop_new (NULL, FALSE);
@@ -2277,8 +2263,31 @@ print_pages (GtkPrintOperation *op,
 }
 
 /**
+ * gtk_print_operation_get_error:
+ * @op: a #GtkPrintOperation
+ * 
+ * Call this when the result of a print operation is
+ * GTK_PRINT_OPERATION_RESULT_ERROR, either as returned by gtk_print_operation_run (),
+ * or in the ::done signal handler. The returned #GError will contain more details
+ * on what went wrong.
+ *
+ * Return value: a GError representing the error, or NULL
+ *
+ * Since: 2.10
+ **/
+GError *
+gtk_print_operation_get_error (GtkPrintOperation  *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), NULL);
+  
+  return op->priv->error;
+}
+
+
+/**
  * gtk_print_operation_run:
  * @op: a #GtkPrintOperation
+ * @action: the action to start
  * @parent: Transient parent of the dialog, or %NULL
  * @error: Return location for errors, or %NULL
  * 
@@ -2286,11 +2295,16 @@ print_pages (GtkPrintOperation *op,
  * print settings in the print dialog, and then print the
  * document.
  *
- * Note that this function does not return until the rendering of all 
+ * Normally that this function does not return until the rendering of all 
  * pages is complete. You can connect to the ::status-changed signal on
  * @op to obtain some information about the progress of the print operation. 
  * Furthermore, it may use a recursive mainloop to show the print dialog.
- * See gtk_print_operation_run_async() if this is a problem.
+ *
+ * If you call gtk_print_operation_set_allow_async () or set the allow-async
+ * property the operation will run asyncronously if this is supported on the
+ * platform. The ::done signal will be emitted with the operation results when
+ * the operation is done (i.e. when the dialog is canceled, or when the print
+ * succeeds or fails).
  *
  * <informalexample><programlisting>
  * if (settings != NULL)
@@ -2304,7 +2318,7 @@ print_pages (GtkPrintOperation *op,
  * g_signal_connect (print, "draw-page", 
  *                   G_CALLBACK (draw_page), &amp;data);
  *  
- * res = gtk_print_operation_run (print, parent, &amp;error);
+ * res = gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, parent, &amp;error);
  *  
  * if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
  *  {
@@ -2331,85 +2345,78 @@ print_pages (GtkPrintOperation *op,
  *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was
  *   completed successfully. In this case, it is a good idea to obtain 
  *   the used print settings with gtk_print_operation_get_print_settings() 
- *   and store them for reuse with the next print operation.
+ *   and store them for reuse with the next print operation. A value of
+ *   %GTK_PRINT_OPERATION_RESULT_IN_PROGRESS means the operation is running
+ *   asynchronously, and will emit the ::done signal when done.
  *
  * Since: 2.10
  **/
 GtkPrintOperationResult
 gtk_print_operation_run (GtkPrintOperation  *op,
+			 GtkPrintOperationAction action,
 			 GtkWindow          *parent,
-			 GError            **error)
+			 GError            **opt_error)
 {
   GtkPrintOperationPrivate *priv;
   GtkPrintOperationResult result;
+  GtkPageSetup *page_setup;
   gboolean do_print;
   
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
                         GTK_PRINT_OPERATION_RESULT_ERROR);
 
   priv = op->priv;
-  priv->is_sync = TRUE;
 
-  if (priv->pdf_target != NULL)
-    result = run_pdf (op, parent, &do_print, error);
-  else
-    result = _gtk_print_operation_platform_backend_run_dialog (op, 
-							       parent,
-							       &do_print,
-							       error);
-  if (do_print)
-    print_pages (op, parent, result == GTK_PRINT_OPERATION_RESULT_PREVIEW);
-  else 
-    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+  do_print = FALSE;
+  priv->error = NULL;
+  priv->action = action;
 
-  return result;
-}
-
-/**
- * gtk_print_operation_run_async:
- * @op: a #GtkPrintOperation
- * @parent: Transient parent of the dialog, or %NULL
- * 
- * Runs the print operation, by first letting the user modify
- * print settings in the print dialog, and then print the
- * document.
- *
- * In contrast to gtk_print_operation_run(), this function returns after 
- * showing the print dialog on platforms that support this, and handles 
- * the printing by connecting a signal handler to the ::response signal 
- * of the dialog. 
- * 
- * If you use this function, it is recommended that you store the modified
- * #GtkPrintSettings in a ::begin-print or ::end-print signal handler.
- * 
- * Since: 2.10
- **/
-void
-gtk_print_operation_run_async (GtkPrintOperation *op,
-			       GtkWindow         *parent)
-{
-  GtkPrintOperationPrivate *priv;
-  gboolean do_print;
-
-  g_return_if_fail (GTK_IS_PRINT_OPERATION (op)); 
-
-  priv = op->priv;
-  priv->is_sync = FALSE;
-
-  if (priv->pdf_target != NULL)
+  if (priv->print_settings == NULL)
+    priv->print_settings = gtk_print_settings_new ();
+  
+  if (action == GTK_PRINT_OPERATION_ACTION_EXPORT)
     {
-      run_pdf (op, parent, &do_print, NULL);
-      if (do_print)
-	print_pages (op, parent, FALSE);
-      else 
-	_gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+      priv->is_sync = TRUE;
+      g_return_val_if_fail (priv->pdf_target != NULL, GTK_PRINT_OPERATION_RESULT_ERROR);
+      result = run_pdf (op, parent, &do_print);
+    }
+  else if (action == GTK_PRINT_OPERATION_ACTION_PREVIEW)
+    {
+      priv->print_context = _gtk_print_context_new (op);
+      page_setup = create_page_setup (op);
+      _gtk_print_context_set_page_setup (priv->print_context, page_setup);
+      g_object_unref (page_setup);
+      do_print = TRUE;
+      result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
+
+      priv->is_sync = !priv->allow_async;
+    }
+  else if (priv->allow_async)
+    {
+      priv->is_sync = FALSE;
+      _gtk_print_operation_platform_backend_run_dialog_async (op,
+							      action == GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+							      parent,
+							      print_pages);
+      result = GTK_PRINT_OPERATION_RESULT_IN_PROGRESS;
     }
   else
-    _gtk_print_operation_platform_backend_run_dialog_async (op, 
-							    parent,
-							    print_pages);
-}
+    {
+      priv->is_sync = TRUE;
+      result = _gtk_print_operation_platform_backend_run_dialog (op, 
+								 action == GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+								 parent,
+								 &do_print);
+    }
 
+  if (result != GTK_PRINT_OPERATION_RESULT_IN_PROGRESS)
+    print_pages (op, parent, do_print, result);
+
+  if (priv->error && opt_error)
+    *opt_error = g_error_copy (priv->error);
+  
+  return result;
+}
 
 /**
  * gtk_print_operation_cancel:

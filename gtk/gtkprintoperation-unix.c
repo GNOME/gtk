@@ -350,7 +350,6 @@ typedef struct
 {
   GtkPrintOperation           *op;
   gboolean                     do_print;
-  GError                     **error;
   GtkPrintOperationResult      result;
   GtkPrintOperationPrintFunc   print_cb;
   GDestroyNotify               destroy;
@@ -391,7 +390,7 @@ finish_print (PrintResponseData *rdata,
 	  GtkPrintOperationUnix *op_unix;
 	  cairo_t *cr;
 	  
-	  op_unix = g_new0 (GtkPrintOperationUnix, 1);     
+	  op_unix = g_new0 (GtkPrintOperationUnix, 1);
 	  priv->platform_data = op_unix;
 	  priv->free_platform_data = (GDestroyNotify) op_unix_free;
 	  op_unix->parent = rdata->parent;
@@ -404,9 +403,10 @@ finish_print (PrintResponseData *rdata,
           op_unix->job = job;
           gtk_print_job_set_track_print_status (job, priv->track_print_status);
 	  
-	  op_unix->surface = gtk_print_job_get_surface (job, rdata->error);
+	  op_unix->surface = gtk_print_job_get_surface (job, &priv->error);
 	  if (op_unix->surface == NULL) 
             {
+	      rdata->result = GTK_PRINT_OPERATION_RESULT_ERROR;
 	      rdata->do_print = FALSE;
 	      goto out;
             }
@@ -435,12 +435,7 @@ finish_print (PrintResponseData *rdata,
     } 
  out:
   if (rdata->print_cb)
-    {
-      if (rdata->do_print)
-        rdata->print_cb (op, rdata->parent, is_preview); 
-      else
-       _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL); 
-    }
+    rdata->print_cb (op, rdata->do_print, rdata->parent, rdata->result); 
 
   if (rdata->destroy)
     rdata->destroy (rdata);
@@ -504,10 +499,7 @@ found_printer (GtkPrinter        *printer,
 
   if (printer != NULL) 
     {
-      if (priv->show_preview)
-        rdata->result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
-      else
-        rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
       rdata->do_print = TRUE;
 
@@ -536,6 +528,7 @@ found_printer (GtkPrinter        *printer,
 
 void
 _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
+							gboolean                    show_dialog,
                                                         GtkWindow                  *parent,
 							GtkPrintOperationPrintFunc  print_cb)
 {
@@ -547,13 +540,12 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
   rdata->op = g_object_ref (op);
   rdata->do_print = FALSE;
   rdata->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
-  rdata->error = NULL;
   rdata->print_cb = print_cb;
   rdata->parent = parent;
   rdata->loop = NULL;
   rdata->destroy = print_response_data_free;
   
-  if (op->priv->show_dialog)
+  if (show_dialog)
     {
       pd = get_print_dialog (op, parent);
       gtk_window_set_modal (GTK_WINDOW (pd), TRUE);
@@ -608,9 +600,9 @@ _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation 
 
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
+						  gboolean           show_dialog,
 						  GtkWindow         *parent,
-						  gboolean          *do_print,
-						  GError           **error)
+						  gboolean          *do_print)
  {
   GtkWidget *pd;
   PrintResponseData rdata;
@@ -620,13 +612,12 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   rdata.op = op;
   rdata.do_print = FALSE;
   rdata.result = GTK_PRINT_OPERATION_RESULT_CANCEL;
-  rdata.error = error;
   rdata.print_cb = NULL;
   rdata.destroy = NULL;
   rdata.parent = parent;
   rdata.loop = NULL;
 
-  if (op->priv->show_dialog)
+  if (show_dialog)
     {
       pd = get_print_dialog (op, parent);
 

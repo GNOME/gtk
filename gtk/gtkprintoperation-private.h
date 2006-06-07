@@ -27,7 +27,9 @@ G_BEGIN_DECLS
 
 struct _GtkPrintOperationPrivate
 {
+  GtkPrintOperationAction action;
   GtkPrintStatus status;
+  GError *error;
   gchar *status_string;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
@@ -37,11 +39,10 @@ struct _GtkPrintOperationPrivate
   GtkUnit unit;
   gchar *pdf_target;
   guint use_full_page      : 1;
-  guint show_dialog        : 1;
-  guint show_preview       : 1;
   guint track_print_status : 1;
   guint show_progress      : 1;
   guint cancelled          : 1;
+  guint allow_async        : 1;
   guint is_sync            : 1;
 
   guint print_pages_idle_id;
@@ -84,13 +85,15 @@ struct _GtkPrintOperationPrivate
 
 typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
 					     GtkWindow         *parent,
-					     gboolean           is_preview);
+					     gboolean           do_print,
+					     GtkPrintOperationResult result);
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog             (GtkPrintOperation           *operation,
+										      gboolean                     show_dialog,
 										      GtkWindow                   *parent,
-										      gboolean                    *do_print,
-										      GError                     **error);
+										      gboolean                    *do_print);
 void                    _gtk_print_operation_platform_backend_run_dialog_async       (GtkPrintOperation           *op,
+										      gboolean                     show_dialog,
 										      GtkWindow                   *parent,
 										      GtkPrintOperationPrintFunc   print_cb);
 void                    _gtk_print_operation_platform_backend_launch_preview         (GtkPrintOperation           *op,

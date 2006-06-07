@@ -56,6 +56,22 @@ typedef enum {
   GTK_PRINT_STATUS_FINISHED_ABORTED
 } GtkPrintStatus;
 
+typedef enum {
+  GTK_PRINT_OPERATION_RESULT_ERROR,
+  GTK_PRINT_OPERATION_RESULT_APPLY,
+  GTK_PRINT_OPERATION_RESULT_CANCEL,
+  GTK_PRINT_OPERATION_RESULT_PREVIEW,
+  GTK_PRINT_OPERATION_RESULT_IN_PROGRESS
+} GtkPrintOperationResult;
+
+typedef enum {
+  GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+  GTK_PRINT_OPERATION_ACTION_PRINT,
+  GTK_PRINT_OPERATION_ACTION_PREVIEW,
+  GTK_PRINT_OPERATION_ACTION_EXPORT,
+} GtkPrintOperationAction;
+
+
 struct _GtkPrintOperation
 {
   GObject parent_instance;
@@ -67,6 +83,8 @@ struct _GtkPrintOperationClass
 {
   GObjectClass parent_class;
   
+  void     (*done)               (GtkPrintOperation *operation,
+				  GtkPrintOperationResult result);
   void     (*begin_print)        (GtkPrintOperation *operation, 
 				  GtkPrintContext   *context);
   gboolean (*paginate)           (GtkPrintOperation *operation, 
@@ -102,13 +120,6 @@ struct _GtkPrintOperationClass
   void (*_gtk_reserved7) (void);
 };
 
-typedef enum {
-  GTK_PRINT_OPERATION_RESULT_ERROR,
-  GTK_PRINT_OPERATION_RESULT_APPLY,
-  GTK_PRINT_OPERATION_RESULT_CANCEL,
-  GTK_PRINT_OPERATION_RESULT_PREVIEW
-} GtkPrintOperationResult;
-
 #define GTK_PRINT_ERROR gtk_print_error_quark ()
 
 typedef enum
@@ -138,23 +149,21 @@ void                    gtk_print_operation_set_use_full_page      (GtkPrintOper
 								    gboolean            full_page);
 void                    gtk_print_operation_set_unit               (GtkPrintOperation  *op,
 								    GtkUnit             unit);
-void                    gtk_print_operation_set_show_dialog        (GtkPrintOperation  *op,
-								    gboolean            show_dialog);
-void                    gtk_print_operation_set_show_preview       (GtkPrintOperation  *op,
-								    gboolean            show_preview);
 void                    gtk_print_operation_set_pdf_target         (GtkPrintOperation  *op,
 								    const gchar        *filename);
 void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
 								    gboolean            track_status);
 void                    gtk_print_operation_set_show_progress      (GtkPrintOperation  *op,
 								    gboolean            show_progress);
+void                    gtk_print_operation_set_allow_async        (GtkPrintOperation  *op,
+								    gboolean            allow_async);
 void                    gtk_print_operation_set_custom_tab_label   (GtkPrintOperation  *op,
 								    const gchar        *label);
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
+								    GtkPrintOperationAction action,
 								    GtkWindow          *parent,
 								    GError            **error);
-void                    gtk_print_operation_run_preview            (GtkPrintOperation  *op,
-                                                                    GtkWindow          *parent);
+GError *                gtk_print_operation_get_error              (GtkPrintOperation  *op);
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
 G_CONST_RETURN gchar *  gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);

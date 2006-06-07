@@ -1,3 +1,20 @@
+2006-06-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.[ch]:
+	Clean up APIs:
+	Make async a setting instead of separate calls.
+	Combine settings like show_dialog, show_preview and pdf_target into
+	an action enum that you pass to gtk_print_dialog_run().
+	
+	* tests/print-editor.c:
+	* tests/testnouiprint.c:
+	* tests/testprint.c:
+	* demos/gtk-demo/printing.c:
+	Update to new APIs
+
 2006-06-07  Bastien Nocera  <hadess@hadess.net>
 
 	* configure.in: Update the ATK requirements (#344148)

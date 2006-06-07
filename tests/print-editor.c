@@ -603,18 +603,57 @@ do_preview (GtkPrintOperation        *op,
   return TRUE;
 }
 
-/* FIXME had to move this to the heap, since previewing
- * returns too early from the sync api 
- */
-PrintData *print_data;
+static void
+print_done (GtkPrintOperation *op,
+	    GtkPrintOperationResult res,
+	    PrintData *print_data)
+{
+  GError *error;
+
+  if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
+    {
+
+      GtkWidget *error_dialog;
+      
+      error = gtk_print_operation_get_error (op);
+      
+      error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
+					     GTK_DIALOG_DESTROY_WITH_PARENT,
+					     GTK_MESSAGE_ERROR,
+					     GTK_BUTTONS_CLOSE,
+					     "Error printing file:\n%s",
+					     error ? error->message : "no details");
+      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      gtk_widget_show (error_dialog);
+    }
+  else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
+    {
+      if (settings != NULL)
+	g_object_unref (settings);
+      settings = g_object_ref (gtk_print_operation_get_print_settings (op));
+    }
+
+  g_free (print_data->text);
+  g_free (print_data->font);
+  g_free (print_data);
+  
+  if (!gtk_print_operation_is_finished (op))
+    {
+      g_object_ref (op);
+      active_prints = g_list_append (active_prints, op);
+      update_statusbar ();
+      
+      /* This ref is unref:ed when we get the final state change */
+      g_signal_connect (op, "status_changed",
+			G_CALLBACK (status_changed_cb), NULL);
+    }
+}
 
 static void
 do_print (GtkAction *action)
 {
-  GtkWidget *error_dialog;
   GtkPrintOperation *print;
-  GtkPrintOperationResult res;
-  GError *error;
+  PrintData *print_data;
 
   print_data = g_new0 (PrintData, 1);
 
@@ -637,49 +676,16 @@ do_print (GtkAction *action)
   g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), print_data);
   g_signal_connect (print, "preview", G_CALLBACK (do_preview), print_data);
 
-  error = NULL;
+  g_signal_connect (print, "done", G_CALLBACK (print_done), print_data);
 
-#if 1
-  res = gtk_print_operation_run (print, GTK_WINDOW (main_window), &error);
+  gtk_print_operation_set_pdf_target (print, "test.pdf");
 
-  if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
-    {
-      error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error printing file:\n%s",
-					     error ? error->message : "no details");
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-      gtk_widget_show (error_dialog);
-      g_error_free (error);
-    }
-  else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
-    {
-      if (settings != NULL)
-	g_object_unref (settings);
-      settings = g_object_ref (gtk_print_operation_get_print_settings (print));
-    }
-
-  if (!gtk_print_operation_is_finished (print))
-    {
-      g_object_ref (print);
-      active_prints = g_list_append (active_prints, print);
-      update_statusbar ();
-      
-      /* This ref is unref:ed when we get the final state change */
-      g_signal_connect (print, "status_changed",
-			G_CALLBACK (status_changed_cb), NULL);
-    }
-#else
-  gtk_print_operation_run_async (print, GTK_WINDOW (main_window));
+#if 0
+  gtk_print_operation_set_allow_async (print, TRUE);
 #endif
+  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PREVIEW, GTK_WINDOW (main_window), NULL);
 
   g_object_unref (print);
-#if 0
-  g_free (print_data.text);
-  g_free (print_data.font);
-#endif
 }
 
 static void
