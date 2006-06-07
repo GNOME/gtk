@@ -551,6 +551,7 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (i = 0; xdg_data_dirs[i]; i++) ;
 
   priv->search_path_len = 2 * i + 2;
+  g_print ("search_path_len 1 %d\n", priv->search_path_len);
   
   priv->search_path = g_new (char *, priv->search_path_len);
   
@@ -663,7 +664,7 @@ gtk_icon_theme_finalize (GObject *object)
   g_free (priv->current_theme);
   priv->current_theme = NULL;
 
-  for (i=0; i < priv->search_path_len; i++)
+  for (i = 0; i < priv->search_path_len; i++)
     g_free (priv->search_path[i]);
 
   g_free (priv->search_path);
@@ -715,6 +716,9 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 
   priv->search_path = g_new (gchar *, n_elements);
   priv->search_path_len = n_elements;
+
+  g_print ("search_path_len 2 %d\n", priv->search_path_len);
+
   for (i = 0; i < priv->search_path_len; i++)
     priv->search_path[i] = g_strdup (path[i]);
 
@@ -780,6 +784,9 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
   priv = icon_theme->priv;
   
   priv->search_path_len++;
+
+  g_print ("search_path_len 3 %d\n", priv->search_path_len);
+
   priv->search_path = g_renew (gchar *, priv->search_path, priv->search_path_len);
   priv->search_path[priv->search_path_len-1] = g_strdup (path);
 
@@ -880,6 +887,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   
   priv = icon_theme->priv;
 
+  g_print ("insert_theme %d\n", priv->search_path_len);
   for (l = priv->themes; l != NULL; l = l->next)
     {
       theme = l->data;
@@ -1131,15 +1139,15 @@ static void
 _gtk_icon_theme_ensure_builtin_cache (void)
 {
   static gboolean initialized = FALSE;
-  static IconThemeDir dirs[5] = {
-    { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, NULL, "16", NULL, NULL, NULL },
-    { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, NULL, "20", NULL, NULL, NULL },
-    { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, NULL, "24", NULL, NULL, NULL },
-    { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, NULL, "32", NULL, NULL, NULL },
-    { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, NULL, "48", NULL, NULL, NULL }
-  };
   IconThemeDir *dir;
-  gint n_sizes = G_N_ELEMENTS (dirs);
+  static IconThemeDir dirs[5] = 
+    {
+      { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, NULL, "16", NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, NULL, "20", NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, NULL, "24", NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, NULL, "32", NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, NULL, "48", NULL, NULL, NULL }
+    };
   gint i;
 
   if (!initialized)
@@ -1148,9 +1156,9 @@ _gtk_icon_theme_ensure_builtin_cache (void)
 
       _builtin_cache = _gtk_icon_cache_new ((gchar *)builtin_icons);
 
-      for (i = 0; i < n_sizes; i++)
+      for (i = 0; i < G_N_ELEMENTS (dirs); i++)
 	{
-	  dir = &dir[i];
+	  dir = &(dirs[i]);
 	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
 
 	  builtin_dirs = g_list_append (builtin_dirs, dir);
