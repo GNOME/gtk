@@ -551,7 +551,6 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (i = 0; xdg_data_dirs[i]; i++) ;
 
   priv->search_path_len = 2 * i + 2;
-  g_print ("search_path_len 1 %d\n", priv->search_path_len);
   
   priv->search_path = g_new (char *, priv->search_path_len);
   
@@ -717,8 +716,6 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
   priv->search_path = g_new (gchar *, n_elements);
   priv->search_path_len = n_elements;
 
-  g_print ("search_path_len 2 %d\n", priv->search_path_len);
-
   for (i = 0; i < priv->search_path_len; i++)
     priv->search_path[i] = g_strdup (path[i]);
 
@@ -784,8 +781,6 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
   priv = icon_theme->priv;
   
   priv->search_path_len++;
-
-  g_print ("search_path_len 3 %d\n", priv->search_path_len);
 
   priv->search_path = g_renew (gchar *, priv->search_path, priv->search_path_len);
   priv->search_path[priv->search_path_len-1] = g_strdup (path);
@@ -887,7 +882,6 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   
   priv = icon_theme->priv;
 
-  g_print ("insert_theme %d\n", priv->search_path_len);
   for (l = priv->themes; l != NULL; l = l->next)
     {
       theme = l->data;
