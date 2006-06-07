@@ -1,3 +1,9 @@
+2006-06-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintercups.c 
+	(gtk_printer_cups_finalize):  Fix a C99ism.
+	(#344123, Jens Ganseuer)
+
 2006-06-06  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): Correct

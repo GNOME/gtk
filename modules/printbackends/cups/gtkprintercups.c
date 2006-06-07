@@ -79,9 +79,11 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
 static void
 gtk_printer_cups_finalize (GObject *object)
 {
+  GtkPrinterCups *printer;
+
   g_return_if_fail (object != NULL);
 
-  GtkPrinterCups *printer = GTK_PRINTER_CUPS (object);
+  printer = GTK_PRINTER_CUPS (object);
 
   g_free (printer->device_uri);
   g_free (printer->printer_uri);
