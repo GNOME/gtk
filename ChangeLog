@@ -1,3 +1,7 @@
+2006-06-07  Bastien Nocera  <hadess@hadess.net>
+
+	* configure.in: Update the ATK requirements (#344148)
+
 2006-06-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintercups.c 
