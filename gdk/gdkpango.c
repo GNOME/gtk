@@ -1238,6 +1238,11 @@ gdk_pango_attr_embossed_new (gboolean embossed)
  * contained inside the line. This is to draw the selection all the way
  * to the side of the layout. However, the clip region is in line coordinates,
  * not layout coordinates.
+ *
+ * Note that the regions returned correspond to logical extents of the text
+ * ranges, not ink extents. So the drawn line may in fact touch areas out of
+ * the clip region.  The clip region is mainly useful for highlightling parts
+ * of text, such as when text is selected.
  * 
  * Return value: a clip region containing the given ranges
  **/
@@ -1287,12 +1292,16 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
       for (j = 0; j < n_pixel_ranges; j++)
         {
           GdkRectangle rect;
+	  int x_off, y_off;
           
-          rect.x = x_origin + pixel_ranges[2*j] / PANGO_SCALE - logical_rect.x / PANGO_SCALE;
-          rect.y = y_origin - (baseline / PANGO_SCALE - logical_rect.y / PANGO_SCALE);
-          rect.width = (pixel_ranges[2*j + 1] - pixel_ranges[2*j]) / PANGO_SCALE;
-          rect.height = logical_rect.height / PANGO_SCALE;
-          
+          x_off = PANGO_PIXELS (pixel_ranges[2*j] - logical_rect.x);
+	  y_off = PANGO_PIXELS (baseline - logical_rect.y);
+
+          rect.x = x_origin + x_off;
+          rect.y = y_origin - y_off;
+          rect.width = PANGO_PIXELS (pixel_ranges[2*j + 1] - logical_rect.x) - x_off;
+          rect.height = PANGO_PIXELS (baseline - logical_rect.y + logical_rect.height) - y_off;
+
           gdk_region_union_with_rect (clip_region, &rect);
         }
 
@@ -1315,6 +1324,11 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * of text would be drawn. @x_origin and @y_origin are the same position
  * you would pass to gdk_draw_layout_line(). @index_ranges should contain
  * ranges of bytes in the layout's text.
+ * 
+ * Note that the regions returned correspond to logical extents of the text
+ * ranges, not ink extents. So the drawn line may in fact touch areas out of
+ * the clip region.  The clip region is mainly useful for highlightling parts
+ * of text, such as when text is selected.
  * 
  * Return value: a clip region containing the given ranges
  **/
