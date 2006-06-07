@@ -1326,7 +1326,7 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * ranges of bytes in the layout's text.
  * 
  * Note that the regions returned correspond to logical extents of the text
- * ranges, not ink extents. So the drawn line may in fact touch areas out of
+ * ranges, not ink extents. So the drawn layout may in fact touch areas out of
  * the clip region.  The clip region is mainly useful for highlightling parts
  * of text, such as when text is selected.
  * 
