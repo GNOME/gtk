@@ -1,10 +1,7 @@
 2006-06-06  Behdad Esfahbod  <behdad@gnome.org>
 
-	Bug 337603 – Possible off-by-one in
-	gdk_pango_layout_line_get_clip_region
-
 	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): Correct
-	rounding of rect members.  Improved docs.
+	rounding of rect members.  Improved docs.  (#337603)
 
 2006-06-06  Matthias Clasen  <mclasen@redhat.com>
 
