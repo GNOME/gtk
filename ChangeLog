@@ -1,5 +1,11 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkprintoperation.h: 
+	* gtk/gtkprintoperation.c: Rename pdf_target to export_filename.
+
+2006-06-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintoperation.h (GtkPrintOperationResult): Get
 	rid of GTK_PRINT_OPERATION_RESULT_PREVIEW.
 	

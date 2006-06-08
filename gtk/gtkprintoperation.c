@@ -64,7 +64,7 @@ enum
   PROP_UNIT,
   PROP_SHOW_PROGRESS,
   PROP_ALLOW_ASYNC,
-  PROP_PDF_TARGET,
+  PROP_EXPORT_FILENAME,
   PROP_STATUS,
   PROP_STATUS_STRING,
   PROP_CUSTOM_TAB_LABEL
@@ -120,7 +120,7 @@ gtk_print_operation_finalize (GObject *object)
   if (priv->print_settings)
     g_object_unref (priv->print_settings);
   
-  g_free (priv->pdf_target);
+  g_free (priv->export_filename);
   g_free (priv->job_name);
   g_free (priv->custom_tab_label);
 
@@ -152,7 +152,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->current_page = -1;
   priv->use_full_page = FALSE;
   priv->show_progress = FALSE;
-  priv->pdf_target = NULL;
+  priv->export_filename = NULL;
   priv->track_print_status = FALSE;
   priv->is_sync = FALSE;
 
@@ -295,8 +295,8 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_SHOW_PROGRESS:
       gtk_print_operation_set_show_progress (op, g_value_get_boolean (value));
       break;
-    case PROP_PDF_TARGET:
-      gtk_print_operation_set_pdf_target (op, g_value_get_string (value));
+    case PROP_EXPORT_FILENAME:
+      gtk_print_operation_set_export_filename (op, g_value_get_string (value));
       break;
     case PROP_CUSTOM_TAB_LABEL:
       gtk_print_operation_set_custom_tab_label (op, g_value_get_string (value));
@@ -348,8 +348,8 @@ gtk_print_operation_get_property (GObject    *object,
     case PROP_SHOW_PROGRESS:
       g_value_set_boolean (value, priv->show_progress);
       break;
-    case PROP_PDF_TARGET:
-      g_value_set_string (value, priv->pdf_target);
+    case PROP_EXPORT_FILENAME:
+      g_value_set_string (value, priv->export_filename);
       break;
     case PROP_STATUS:
       g_value_set_enum (value, priv->status);
@@ -1655,13 +1655,14 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
 
 
 /**
- * gtk_print_operation_set_pdf_target:
+ * gtk_print_operation_set_export_filename:
  * @op: a #GtkPrintOperation
- * @filename: the filename for the PDF file
+ * @filename: the filename for the exported file
  * 
- * Sets up the #GtkPrintOperation to generate a PDF file instead
+ * Sets up the #GtkPrintOperation to generate a file instead
  * of showing the print dialog. The indended use of this function
- * is for implementing "Export to PDF" actions.
+ * is for implementing "Export to PDF" actions. Currently, PDF
+ * is the only supported format.
  *
  * "Print to PDF" support is independent of this and is done
  * by letting the user pick the "Print to PDF" item from the list
@@ -1670,8 +1671,8 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
  * Since: 2.10
  */
 void
-gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
-				    const gchar       *filename)
+gtk_print_operation_set_export_filename (GtkPrintOperation *op,
+					 const gchar       *filename)
 {
   GtkPrintOperationPrivate *priv;
 
@@ -1679,10 +1680,10 @@ gtk_print_operation_set_pdf_target (GtkPrintOperation *op,
 
   priv = op->priv;
 
-  g_free (priv->pdf_target);
-  priv->pdf_target = g_strdup (filename);
+  g_free (priv->export_filename);
+  priv->export_filename = g_strdup (filename);
 
-  g_object_notify (G_OBJECT (op), "pdf-target");
+  g_object_notify (G_OBJECT (op), "export_filename");
 }
 
 /* Creates the initial page setup used for printing unless the
@@ -1792,7 +1793,7 @@ run_pdf (GtkPrintOperation  *op,
   height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   g_object_unref (page_setup);
   
-  surface = cairo_pdf_surface_create (priv->pdf_target,
+  surface = cairo_pdf_surface_create (priv->export_filename,
 				      width, height);
   cairo_pdf_surface_set_dpi (surface, 300, 300);
 
@@ -2379,7 +2380,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   if (action == GTK_PRINT_OPERATION_ACTION_EXPORT)
     {
       priv->is_sync = TRUE;
-      g_return_val_if_fail (priv->pdf_target != NULL, GTK_PRINT_OPERATION_RESULT_ERROR);
+      g_return_val_if_fail (priv->export_filename != NULL, GTK_PRINT_OPERATION_RESULT_ERROR);
       result = run_pdf (op, parent, &do_print);
     }
   else if (action == GTK_PRINT_OPERATION_ACTION_PREVIEW)

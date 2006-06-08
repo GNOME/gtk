@@ -148,7 +148,7 @@ void                    gtk_print_operation_set_use_full_page      (GtkPrintOper
 								    gboolean            full_page);
 void                    gtk_print_operation_set_unit               (GtkPrintOperation  *op,
 								    GtkUnit             unit);
-void                    gtk_print_operation_set_pdf_target         (GtkPrintOperation  *op,
+void                    gtk_print_operation_set_export_filename    (GtkPrintOperation  *op,
 								    const gchar        *filename);
 void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
 								    gboolean            track_status);
