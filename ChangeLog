@@ -1,3 +1,14 @@
+2006-06-08  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	[WM_WINDOWPOSCHANGED] Replace identical code as in
+	handle_configure_event() with call to that function.
+	[WM_SIZING] Fix implementation of aspect ratio hints. (#344244)
+	The hints are for the geometry of the client area, not of the
+	window including decorations. Improve resizing behaviouor in the
+	presence of aspect hints, more in line with typical X window
+	managers.
+
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_style_set): Give
