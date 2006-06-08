@@ -608,14 +608,14 @@ print_done (GtkPrintOperation *op,
 	    GtkPrintOperationResult res,
 	    PrintData *print_data)
 {
-  GError *error;
+  GError *error = NULL;
 
   if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
 
       GtkWidget *error_dialog;
       
-      error = gtk_print_operation_get_error (op);
+      gtk_print_operation_get_error (op, &error);
       
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -678,7 +678,7 @@ do_print (GtkAction *action)
 
   g_signal_connect (print, "done", G_CALLBACK (print_done), print_data);
 
-  gtk_print_operation_set_pdf_target (print, "test.pdf");
+  gtk_print_operation_set_export_filename (print, "test.pdf");
 
 #if 0
   gtk_print_operation_set_allow_async (print, TRUE);
