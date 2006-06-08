@@ -1025,7 +1025,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * Determines whether the print operation may run asynchronous or not.
    * Some systems don't support asynchronous printing, but those that do
-   * will return GTK_PRINT_OPERATION_RESULT_IN_PROGRESS as the status, and
+   * will return %GTK_PRINT_OPERATION_RESULT_IN_PROGRESS as the status, and
    * emit the done signal when the operation is actually done.
    *
    * Since: 2.10
@@ -1607,6 +1607,17 @@ gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
     }
 }
 
+/**
+ * gtk_print_operation_set_allow_async:
+ * @op: a #GtkPrintOperation
+ * @allow_async: %TRUE to allow asynchronous operation
+ *
+ * Sets whether the gtk_print_operation_run() may return
+ * before the print operation is completed. Note that
+ * some platforms may not allow asynchronous operation.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 				     gboolean            allow_async)
@@ -2300,7 +2311,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op)
  * @op to obtain some information about the progress of the print operation. 
  * Furthermore, it may use a recursive mainloop to show the print dialog.
  *
- * If you call gtk_print_operation_set_allow_async () or set the allow-async
+ * If you call gtk_print_operation_set_allow_async() or set the allow-async
  * property the operation will run asyncronously if this is supported on the
  * platform. The ::done signal will be emitted with the operation results when
  * the operation is done (i.e. when the dialog is canceled, or when the print
