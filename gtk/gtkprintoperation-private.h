@@ -37,7 +37,7 @@ struct _GtkPrintOperationPrivate
   gint nr_of_pages;
   gint current_page;
   GtkUnit unit;
-  gchar *pdf_target;
+  gchar *export_filename;
   guint use_full_page      : 1;
   guint track_print_status : 1;
   guint show_progress      : 1;
