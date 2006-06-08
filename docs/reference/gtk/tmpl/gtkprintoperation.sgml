@@ -198,7 +198,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-<!-- ##### ARG GtkPrintOperation:pdf-target ##### -->
+<!-- ##### ARG GtkPrintOperation:export-filename ##### -->
 <para>
 
 </para>
@@ -271,7 +271,7 @@ determines what action the print operation should perform.
    the print dialog, based on the current print settings.
 @GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview.
 @GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
-  the pdf-target to be set.
+  the export-filename property to be set.
 
 <!-- ##### ENUM GtkPrintOperationResult ##### -->
 <para>
@@ -408,7 +408,7 @@ The #GQuark used for #GtkPrintError errors.
 @unit: 
 
 
-<!-- ##### FUNCTION gtk_print_operation_set_pdf_target ##### -->
+<!-- ##### FUNCTION gtk_print_operation_set_export_filename ##### -->
 <para>
 
 </para>
