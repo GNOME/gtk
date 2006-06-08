@@ -48,7 +48,8 @@ do_print (void)
   g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), NULL);
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);
 
-  res = gtk_print_operation_run (print, GTK_WINDOW (main_window), NULL);
+  res = gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                 GTK_WINDOW (main_window), NULL);
 
   if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
     {
@@ -86,15 +87,15 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@printoperation: the object which received the signal.
-@arg1: 
+@printoperation: 
+@context: 
 
 <!-- ##### SIGNAL GtkPrintOperation::create-custom-widget ##### -->
 <para>
 
 </para>
 
-@printoperation: the object which received the signal.
+@printoperation: 
 @Returns: 
 
 <!-- ##### SIGNAL GtkPrintOperation::custom-widget-apply ##### -->
@@ -102,8 +103,16 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
-@printoperation: the object which received the signal.
+@printoperation: 
 @widget: 
+
+<!-- ##### SIGNAL GtkPrintOperation::done ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkPrintOperation::draw-page ##### -->
 <para>
@@ -159,6 +168,11 @@ Printing support was added in GTK+ 2.10.
 
 @printoperation: the object which received the signal.
 
+<!-- ##### ARG GtkPrintOperation:allow-async ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:current-page ##### -->
 <para>
 
@@ -190,16 +204,6 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:print-settings ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPrintOperation:show-dialog ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPrintOperation:show-preview ##### -->
 <para>
 
 </para>
@@ -236,28 +240,51 @@ Printing support was added in GTK+ 2.10.
 
 <!-- ##### ENUM GtkPrintStatus ##### -->
 <para>
-
+The status gives a rough indication of the completion
+of a running print operation.
 </para>
 
-@GTK_PRINT_STATUS_INITIAL: 
-@GTK_PRINT_STATUS_PREPARING: 
-@GTK_PRINT_STATUS_GENERATING_DATA: 
-@GTK_PRINT_STATUS_SENDING_DATA: 
-@GTK_PRINT_STATUS_PENDING: 
-@GTK_PRINT_STATUS_PENDING_ISSUE: 
-@GTK_PRINT_STATUS_PRINTING: 
-@GTK_PRINT_STATUS_FINISHED: 
-@GTK_PRINT_STATUS_FINISHED_ABORTED: 
+@GTK_PRINT_STATUS_INITIAL: The printing has not started yet; this
+  status is set initially, and while the print dialog is shown.
+@GTK_PRINT_STATUS_PREPARING: This status is set while the begin-print 
+  signal is emitted and during pagination.
+@GTK_PRINT_STATUS_GENERATING_DATA: This status is set while the
+  pages are being rendered.
+@GTK_PRINT_STATUS_SENDING_DATA: The print job is being sent off to the 
+  printer.
+@GTK_PRINT_STATUS_PENDING: The print job has been sent to the printer,
+  but is not printed for some reason, e.g. the printer may be stopped.
+@GTK_PRINT_STATUS_PENDING_ISSUE: Some problem has occurred during 
+  printing, e.g. a paper jam.
+@GTK_PRINT_STATUS_PRINTING: The printer is processing the print job.
+@GTK_PRINT_STATUS_FINISHED: The printing has been completed successfully.
+@GTK_PRINT_STATUS_FINISHED_ABORTED: The printing has been aborted.
+
+<!-- ##### ENUM GtkPrintOperationAction ##### -->
+<para>
+The @action parameter to gtk_print_operation_run()
+determines what action the print operation should perform.
+</para>
+
+@GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG: Show the print dialog. 
+@GTK_PRINT_OPERATION_ACTION_PRINT: Start to print without showing
+   the print dialog, based on the current print settings. 
+@GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview. 
+@GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
+  the pdf-target to be set. 
 
 <!-- ##### ENUM GtkPrintOperationResult ##### -->
 <para>
-
+A value of this type is returned by gtk_print_operation_run().
 </para>
 
-@GTK_PRINT_OPERATION_RESULT_ERROR: 
-@GTK_PRINT_OPERATION_RESULT_APPLY: 
-@GTK_PRINT_OPERATION_RESULT_CANCEL: 
+@GTK_PRINT_OPERATION_RESULT_ERROR: An error has occured.
+@GTK_PRINT_OPERATION_RESULT_APPLY: The print settings should be stored.
+@GTK_PRINT_OPERATION_RESULT_CANCEL: The print operation has been canceled,
+  the print settings should not be stored.
 @GTK_PRINT_OPERATION_RESULT_PREVIEW: 
+@GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is complete
+  yet. This value will only be returned when running asynchronously.
 
 <!-- ##### ENUM GtkPrintError ##### -->
 <para>
@@ -280,6 +307,24 @@ The #GQuark used for #GtkPrintError errors.
 
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_allow_async ##### -->
+<para>
+
+</para>
+
+@op: 
+@allow_async: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_error ##### -->
+<para>
+
+</para>
+
+@op: 
 @Returns: 
 
 
@@ -364,15 +409,6 @@ The #GQuark used for #GtkPrintError errors.
 @unit: 
 
 
-<!-- ##### FUNCTION gtk_print_operation_set_show_dialog ##### -->
-<para>
-
-</para>
-
-@op: 
-@show_dialog: 
-
-
 <!-- ##### FUNCTION gtk_print_operation_set_pdf_target ##### -->
 <para>
 
@@ -415,18 +451,10 @@ The #GQuark used for #GtkPrintError errors.
 </para>
 
 @op: 
+@action: 
 @parent: 
 @error: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_print_operation_run_async ##### -->
-<para>
-
-</para>
-
-@op: 
-@parent: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_cancel ##### -->
@@ -464,6 +492,15 @@ The #GQuark used for #GtkPrintError errors.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_get_error ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_print_run_page_setup_dialog ##### -->
 <para>
 
@@ -477,11 +514,14 @@ The #GQuark used for #GtkPrintError errors.
 
 <!-- ##### USER_FUNCTION GtkPageSetupDoneFunc ##### -->
 <para>
-
+The type of function that is passed to gtk_print_run_page_setup_dialog_async().
+This function will be called when the page setup dialog is dismissed, and
+also serves as destroy notify for @data.
 </para>
 
-@page_setup: 
-@data: 
+@page_setup: the #GtkPageSetup that has been
+@data: user data that has been passed to 
+       gtk_print_run_page_setup_dialog_async().
 
 
 <!-- ##### FUNCTION gtk_print_run_page_setup_dialog_async ##### -->
@@ -494,5 +534,38 @@ The #GQuark used for #GtkPrintError errors.
 @settings: 
 @done_cb: 
 @data: 
+
+
+<!-- ##### STRUCT GtkPrintOperationPreview ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_print_operation_preview_end_preview ##### -->
+<para>
+
+</para>
+
+@preview: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_preview_is_selected ##### -->
+<para>
+
+</para>
+
+@preview: 
+@page_nr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_preview_render_page ##### -->
+<para>
+
+</para>
+
+@preview: 
+@page_nr: 
 
 

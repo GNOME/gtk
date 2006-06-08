@@ -4502,6 +4502,8 @@ gtk_tree_view_set_destroy_count_func
 GtkTreeViewRowSeparatorFunc
 gtk_tree_view_get_row_separator_func
 gtk_tree_view_set_row_separator_func
+gtk_tree_view_get_rubber_banding
+gtk_tree_view_set_rubber_banding
 <SUBSECTION Standard>
 GtkTreeSelectionClass
 GTK_TREE_VIEW
@@ -5922,6 +5924,7 @@ GTK_STOCK_OPEN
 GTK_STOCK_ORIENTATION_LANDSCAPE
 GTK_STOCK_ORIENTATION_PORTRAIT
 GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE
+GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT
 GTK_STOCK_PASTE
 GTK_STOCK_PREFERENCES
 GTK_STOCK_PRINT
@@ -6074,10 +6077,13 @@ gtk_icon_source_get_type
 <TITLE>High-level Printing API</TITLE>
 GtkPrintOperation
 GtkPrintStatus
+GtkPrintOperationAction
 GtkPrintOperationResult
 GtkPrintError
 GTK_PRINT_ERROR
 gtk_print_operation_new
+gtk_print_operation_set_allow_async
+gtk_print_operation_get_error
 gtk_print_operation_set_default_page_setup
 gtk_print_operation_get_default_page_setup
 gtk_print_operation_set_print_settings
@@ -6093,14 +6099,20 @@ gtk_print_operation_set_show_progress
 gtk_print_operation_set_track_print_status
 gtk_print_operation_set_custom_tab_label
 gtk_print_operation_run
-gtk_print_operation_run_async
 gtk_print_operation_cancel
 gtk_print_operation_get_status
 gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
+gtk_print_operation_get_error
 gtk_print_run_page_setup_dialog
 GtkPageSetupDoneFunc
 gtk_print_run_page_setup_dialog_async
+
+<SUBSECTION Preview>
+GtkPrintOperationPreview
+gtk_print_operation_preview_end_preview
+gtk_print_operation_preview_is_selected
+gtk_print_operation_preview_render_page
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_OPERATION
@@ -6109,10 +6121,15 @@ GTK_IS_PRINT_OPERATION
 GTK_IS_PRINT_OPERATION_CLASS
 GTK_PRINT_OPERATION_CLASS
 GTK_PRINT_OPERATION_GET_CLASS
+GTK_IS_PRINT_OPERATION_PREVIEW
+GTK_PRINT_OPERATION_PREVIEW
+GTK_PRINT_OPERATION_PREVIEW_GET_IFACE
+GTK_TYPE_PRINT_OPERATION_PREVIEW
 
 <SUBSECTION Private>
 gtk_print_error_quark
 gtk_print_operation_get_type
+gtk_print_operation_preview_get_type
 GtkPrintOperationPrivate
 </SECTION>
 
@@ -6367,6 +6384,7 @@ gtk_page_setup_get_type
 <TITLE>GtkPrintContext</TITLE>
 GtkPrintContext
 gtk_print_context_get_cairo_context
+gtk_print_context_set_cairo_context
 gtk_print_context_get_page_setup
 gtk_print_context_get_width
 gtk_print_context_get_height
