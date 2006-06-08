@@ -1,5 +1,10 @@
 2006-06-08  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c (finish_print):
+	Fix up unix fallout from previous change.
+
+2006-06-08  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkprintoperation-win32.c:
 	Update windows to build with new APIs and first cut
 	at preview work.

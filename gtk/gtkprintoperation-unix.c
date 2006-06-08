@@ -177,7 +177,7 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   GdkScreen *screen;
   GError *error = NULL;
 
-  cairo_surface_destroy (pop->surface);
+  cairo_surface_destroy (surface);
  
   settings = gtk_settings_get_default ();
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
@@ -438,7 +438,7 @@ finish_print (PrintResponseData *rdata,
     } 
  out:
   if (rdata->print_cb)
-    rdata->print_cb (op, rdata->do_print, rdata->parent, rdata->result); 
+    rdata->print_cb (op, rdata->parent, rdata->do_print, rdata->result); 
 
   if (rdata->destroy)
     rdata->destroy (rdata);
