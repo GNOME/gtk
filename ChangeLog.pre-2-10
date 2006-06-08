@@ -1,5 +1,8 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperationpreview.c (gtk_print_operation_preview_is_selected): 
+	Use g_return_val_if_fail (#344288, Kazuki Iwamoto)
+
 	* gtk/gtkprintbackend.h: Don't include gtkprinter-private.h here.
 
 	* gtk/gtkprintunixdialog.c: 
