@@ -1,5 +1,7 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkprintoperation.sgml: Remove GTK_PRINT_OPERATION_RESULT_PREVIEW.
+
 	* gtk/tmpl/gtkstock.sgml: Correct a filename (#344239,
 	John Darrington)
 

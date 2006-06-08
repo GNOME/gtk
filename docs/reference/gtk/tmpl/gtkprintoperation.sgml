@@ -266,12 +266,12 @@ The @action parameter to gtk_print_operation_run()
 determines what action the print operation should perform.
 </para>
 
-@GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG: Show the print dialog. 
+@GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG: Show the print dialog.
 @GTK_PRINT_OPERATION_ACTION_PRINT: Start to print without showing
-   the print dialog, based on the current print settings. 
-@GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview. 
+   the print dialog, based on the current print settings.
+@GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview.
 @GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
-  the pdf-target to be set. 
+  the pdf-target to be set.
 
 <!-- ##### ENUM GtkPrintOperationResult ##### -->
 <para>
@@ -282,7 +282,6 @@ A value of this type is returned by gtk_print_operation_run().
 @GTK_PRINT_OPERATION_RESULT_APPLY: The print settings should be stored.
 @GTK_PRINT_OPERATION_RESULT_CANCEL: The print operation has been canceled,
   the print settings should not be stored.
-@GTK_PRINT_OPERATION_RESULT_PREVIEW: 
 @GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is complete
   yet. This value will only be returned when running asynchronously.
 
