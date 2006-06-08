@@ -3095,6 +3095,11 @@ gdk_event_translate (MSG  *msg,
 	 GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	 !GDK_WINDOW_DESTROYED (window))
 	{
+	  /* Note that this code snippet (upto the comment indicating
+	   * the end), except for the decrementing of resize_count, is
+	   * identical to handle_configure_event(). Should be replaced
+	   * by a call to that function!
+	   */
 	  RECT client_rect;
 	  POINT point;
 
@@ -3143,6 +3148,7 @@ gdk_event_translate (MSG  *msg,
        */
 	      append_event (event);
 #endif
+	      /* End of identical code snippet */
 	      
 	      /* Dispatch main loop - to realize resizes... */
 	      handle_stuff_while_moving_or_resizing ();
@@ -3156,6 +3162,7 @@ gdk_event_translate (MSG  *msg,
 
     case WM_SIZING:
       GetWindowRect (GDK_WINDOW_HWND (window), &rect);
+      drag = (RECT *) msg->lParam;
       GDK_NOTE (EVENTS, g_print (" %s curr:%s drag:%s",
 				 (msg->wParam == WMSZ_BOTTOM ? "BOTTOM" :
 				  (msg->wParam == WMSZ_BOTTOMLEFT ? "BOTTOMLEFT" :
@@ -3168,13 +3175,13 @@ gdk_event_translate (MSG  *msg,
 					(msg->wParam == WMSZ_BOTTOMRIGHT ? "BOTTOMRIGHT" :
 					 "???")))))))),
 				 _gdk_win32_rect_to_string (&rect),
-				 _gdk_win32_rect_to_string ((RECT *) msg->lParam)));
+				 _gdk_win32_rect_to_string (drag)));
 
       impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
-      drag = (RECT *) msg->lParam;
       orig_drag = *drag;
       if (impl->hint_flags & GDK_HINT_RESIZE_INC)
 	{
+	  GDK_NOTE (EVENTS, g_print (" (RESIZE_INC)"));
 	  if (impl->hint_flags & GDK_HINT_BASE_SIZE)
 	    {
 	      /* Resize in increments relative to the base size */
@@ -3203,7 +3210,6 @@ gdk_event_translate (MSG  *msg,
 	      if (drag->bottom == rect.bottom)
 		break;
 	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc);
-
 	      break;
 
 	    case WMSZ_BOTTOMLEFT:
@@ -3258,7 +3264,7 @@ gdk_event_translate (MSG  *msg,
 	    {
 	      *ret_valp = TRUE;
 	      return_val = TRUE;
-	      GDK_NOTE (EVENTS, g_print (" (handled RESIZE_INC: drag:%s)",
+	      GDK_NOTE (EVENTS, g_print (" (handled RESIZE_INC: %s)",
 					 _gdk_win32_rect_to_string (drag)));
 	    }
 	}
@@ -3267,18 +3273,105 @@ gdk_event_translate (MSG  *msg,
 
       if (impl->hint_flags & GDK_HINT_ASPECT)
 	{
-	  gdouble drag_aspect = (gdouble) (drag->right - drag->left) / (drag->bottom - drag->top);
-	  
-	  GDK_NOTE (EVENTS, g_print (" (aspect:%g)", drag_aspect));
-	  if (drag_aspect < impl->hints.min_aspect ||
-	      drag_aspect > impl->hints.max_aspect)
+	  RECT decorated_rect;
+	  RECT undecorated_drag;
+	  int decoration_width, decoration_height;
+	  gdouble drag_aspect;
+	  int drag_width, drag_height, new_width, new_height;
+
+	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
+	  decorated_rect = rect;
+	  _gdk_win32_adjust_client_rect (window, &decorated_rect);
+
+	  /* Set undecorated_drag to the client area being dragged
+	   * out, in screen coordinates.
+	   */
+	  undecorated_drag = *drag;
+	  undecorated_drag.left -= decorated_rect.left - rect.left;
+	  undecorated_drag.right -= decorated_rect.right - rect.right;
+	  undecorated_drag.top -= decorated_rect.top - rect.top;
+	  undecorated_drag.bottom -= decorated_rect.bottom - rect.bottom;
+
+	  decoration_width = (decorated_rect.right - decorated_rect.left) - (rect.right - rect.left);
+	  decoration_height = (decorated_rect.bottom - decorated_rect.top) - (rect.bottom - rect.top);
+
+	  drag_width = undecorated_drag.right - undecorated_drag.left;
+	  drag_height = undecorated_drag.bottom - undecorated_drag.top;
+
+	  drag_aspect = (gdouble) drag_width / drag_height;
+
+	  GDK_NOTE (EVENTS, g_print (" (ASPECT:%g--%g curr: %g)",
+				     impl->hints.min_aspect, impl->hints.max_aspect, drag_aspect));
+
+	  if (drag_aspect < impl->hints.min_aspect)
 	    {
-	      *drag = rect;
-	      *ret_valp = TRUE;
-	      return_val = TRUE;
-	      GDK_NOTE (EVENTS, g_print (" (handled ASPECT: drag:%s)",
-					 _gdk_win32_rect_to_string (drag)));
+	      /* Aspect is getting too narrow */
+	      switch (msg->wParam)
+		{
+		case WMSZ_BOTTOM:
+		case WMSZ_TOP:
+		  /* User drags top or bottom edge outward. Keep height, increase width. */
+		  new_width = impl->hints.min_aspect * drag_height;
+		  drag->left -= (new_width - drag_width) / 2;
+		  drag->right = drag->left + new_width + decoration_width;
+		  break;
+		case WMSZ_BOTTOMLEFT:
+		case WMSZ_BOTTOMRIGHT:
+		  /* User drags bottom-left or bottom-right corner down. Adjust height. */
+		  new_height = drag_width / impl->hints.min_aspect;
+		  drag->bottom = drag->top + new_height + decoration_height;
+		  break;
+		case WMSZ_LEFT:
+		case WMSZ_RIGHT:
+		  /* User drags left or right edge inward. Decrease height */
+		  new_height = drag_width / impl->hints.min_aspect;
+		  drag->top += (drag_height - new_height) / 2;
+		  drag->bottom = drag->top + new_height + decoration_height;
+		  break;
+		case WMSZ_TOPLEFT:
+		case WMSZ_TOPRIGHT:
+		  /* User drags top-left or top-right corner up. Adjust height. */
+		  new_height = drag_width / impl->hints.min_aspect;
+		  drag->top = drag->bottom - new_height - decoration_height;
+		}
 	    }
+	  else if (drag_aspect > impl->hints.max_aspect)
+	    {
+	      /* Aspect is getting too wide */
+	      switch (msg->wParam)
+		{
+		case WMSZ_BOTTOM:
+		case WMSZ_TOP:
+		  /* User drags top or bottom edge inward. Decrease width. */
+		  new_width = impl->hints.max_aspect * drag_height;
+		  drag->left += (drag_width - new_width) / 2;
+		  drag->right = drag->left + new_width + decoration_width;
+		  break;
+		case WMSZ_BOTTOMLEFT:
+		case WMSZ_TOPLEFT:
+		  /* User drags bottom-left or top-left corner left. Adjust width. */
+		  new_width = impl->hints.max_aspect * drag_height;
+		  drag->left = drag->right - new_width - decoration_width;
+		  break;
+		case WMSZ_BOTTOMRIGHT:
+		case WMSZ_TOPRIGHT:
+		  /* User drags bottom-right or top-right corner right. Adjust width. */
+		  new_width = impl->hints.max_aspect * drag_height;
+		  drag->right = drag->left + new_width + decoration_width;
+		  break;
+		case WMSZ_LEFT:
+		case WMSZ_RIGHT:
+		  /* User drags left or right edge outward. Increase height. */
+		  new_height = drag_width / impl->hints.max_aspect;
+		  drag->top -= (new_height - drag_height) / 2;
+		  drag->bottom = drag->top + new_height + decoration_height;
+		  break;
+		}
+	    }
+	  *ret_valp = TRUE;
+	  return_val = TRUE;
+	  GDK_NOTE (EVENTS, g_print (" (handled ASPECT: %s)",
+				     _gdk_win32_rect_to_string (drag)));
 	}
       break;
 

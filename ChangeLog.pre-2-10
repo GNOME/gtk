@@ -1,3 +1,14 @@
+2006-06-08  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	[WM_WINDOWPOSCHANGED] Add note that the code snippet here is
+	mostly identical to the code in handle_configure_event().
+	[WM_SIZING] Fix implementation of aspect ratio hints. (#344244)
+	The hints are for the geometry of the client area, not of the
+	window including decorations. Improve resizing behaviouor in the
+	presence of aspect hints, more in line with typical X window
+	managers.
+
 2006-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkfont-x11.c (_gdk_font_destroy): Remove the right
