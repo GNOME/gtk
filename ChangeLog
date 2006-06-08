@@ -1,3 +1,11 @@
+2006-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.h (GtkPrintOperationResult): Get
+	rid of GTK_PRINT_OPERATION_RESULT_PREVIEW.
+	
+	* gtk/gtkprintoperation-unix.c: 
+	* gtk/gtkprintoperation.c: Update all users.
+
 2006-06-08  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate):

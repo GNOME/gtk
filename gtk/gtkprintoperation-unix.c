@@ -50,7 +50,7 @@ typedef struct
   GMainLoop *loop;
   gboolean data_sent;
 
-  /* Real printing (not preview: */
+  /* Real printing (not preview) */
   GtkPrintJob *job;         /* the job we are sending to the printer */
   cairo_surface_t *surface;
   gulong job_status_changed_tag;
@@ -353,6 +353,7 @@ typedef struct
 {
   GtkPrintOperation           *op;
   gboolean                     do_print;
+  gboolean                     do_preview;
   GtkPrintOperationResult      result;
   GtkPrintOperationPrintFunc   print_cb;
   GDestroyNotify               destroy;
@@ -378,9 +379,6 @@ finish_print (PrintResponseData *rdata,
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintJob *job;
-  gboolean is_preview;
-
-  is_preview = rdata->result == GTK_PRINT_OPERATION_RESULT_PREVIEW;
   
   if (rdata->do_print)
     {
@@ -388,7 +386,7 @@ finish_print (PrintResponseData *rdata,
       priv->print_context = _gtk_print_context_new (op);
       _gtk_print_context_set_page_setup (priv->print_context, page_setup);
 
-      if (!is_preview)
+      if (!rdata->do_preview)
         {
 	  GtkPrintOperationUnix *op_unix;
 	  cairo_t *cr;
@@ -457,16 +455,18 @@ handle_print_response (GtkWidget *dialog,
 
   if (response == GTK_RESPONSE_OK)
     {
-      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
-
       printer = gtk_print_unix_dialog_get_selected_printer (GTK_PRINT_UNIX_DIALOG (pd));
+
+      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+      rdata->do_preview = FALSE;
       if (printer != NULL)
 	rdata->do_print = TRUE;
     } 
   else if (response == GTK_RESPONSE_APPLY)
     {
       /* print preview */
-      rdata->result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
+      rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+      rdata->do_preview = TRUE;
       rdata->do_print = TRUE;
     }
 
@@ -601,15 +601,15 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 
 void
 _gtk_print_operation_platform_backend_preview_start_page (GtkPrintOperation *op,
-							  cairo_surface_t *surface,
-							  cairo_t *cr)
+							  cairo_surface_t   *surface,
+							  cairo_t           *cr)
 {
 }
 
 void
 _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
-							cairo_surface_t *surface,
-							cairo_t *cr)
+							cairo_surface_t   *surface,
+							cairo_t           *cr)
 {
   cairo_show_page (cr);
 }

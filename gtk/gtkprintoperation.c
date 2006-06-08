@@ -418,8 +418,7 @@ preview_print_idle (gpointer data)
   gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
   
   cr = gtk_print_context_get_cairo_context (pop->print_context);
-  _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface,
-							  cr);
+  _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface, cr);
   
   /* TODO: print out sheets not pages and follow ranges */
   pop->page_nr++;
@@ -443,8 +442,7 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
   _gtk_print_operation_platform_backend_resize_preview_surface (op, page_setup, pop->surface);
 
   cr = gtk_print_context_get_cairo_context (pop->print_context);
-  _gtk_print_operation_platform_backend_preview_start_page (op, pop->surface,
-							    cr);
+  _gtk_print_operation_platform_backend_preview_start_page (op, pop->surface, cr);
 
 }
 
@@ -2194,7 +2192,7 @@ print_pages (GtkPrintOperation       *op,
 
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
-  data->is_preview = (result == GTK_PRINT_OPERATION_RESULT_PREVIEW);
+  data->is_preview = (op->priv->action == GTK_PRINT_OPERATION_ACTION_PREVIEW);
 
   if (priv->show_progress)
     {
@@ -2386,14 +2384,13 @@ gtk_print_operation_run (GtkPrintOperation        *op,
     }
   else if (action == GTK_PRINT_OPERATION_ACTION_PREVIEW)
     {
+      priv->is_sync = !priv->allow_async;
       priv->print_context = _gtk_print_context_new (op);
       page_setup = create_page_setup (op);
       _gtk_print_context_set_page_setup (priv->print_context, page_setup);
       g_object_unref (page_setup);
       do_print = TRUE;
-      result = GTK_PRINT_OPERATION_RESULT_PREVIEW;
-
-      priv->is_sync = !priv->allow_async;
+      result = priv->is_sync ? GTK_PRINT_OPERATION_RESULT_APPLY : GTK_PRINT_OPERATION_RESULT_IN_PROGRESS;
     }
 #ifndef G_OS_WIN32
   else if (priv->allow_async)
