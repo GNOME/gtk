@@ -1,5 +1,8 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (gtk_tool_button_style_set): Give
+	GtkToolButton the same treatment.
+
 	* gtk/gtkbutton.c (gtk_button_style_set): Don't call
 	construct_child here, since some apps make assumptions 
 	about the lifecycle of the constructed label.  

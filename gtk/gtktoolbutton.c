@@ -665,11 +665,27 @@ gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item)
   gtk_tool_button_construct_contents (tool_item);
 }
 
+static void 
+gtk_tool_button_update_icon_spacing (GtkToolButton *button)
+{
+  GtkWidget *box;
+  guint spacing;
+
+  box = GTK_BIN (button->priv->button)->child;
+  if (GTK_IS_BOX (box))
+    {
+      gtk_widget_style_get (GTK_WIDGET (button), 
+			    "icon-spacing", &spacing,
+			    NULL);
+      gtk_box_set_spacing (GTK_BOX (box), spacing);      
+    }
+}
+
 static void
 gtk_tool_button_style_set (GtkWidget *widget,
 			   GtkStyle  *prev_style)
 {
-  gtk_tool_button_construct_contents (GTK_TOOL_ITEM (widget));
+  gtk_tool_button_update_icon_spacing (GTK_TOOL_BUTTON (widget));
 }
 
 /**
