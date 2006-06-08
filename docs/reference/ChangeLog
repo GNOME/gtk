@@ -1,3 +1,8 @@
+2006-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkstock.sgml: Correct a filename (#344239,
+	John Darrington)
+
 2006-06-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkprintoperation.sgml:

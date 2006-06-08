@@ -331,7 +331,7 @@ The "File" icon.
 <!-- ##### MACRO GTK_STOCK_FIND ##### -->
 <para>
 The "Find" item.
-<inlinegraphic fileref="gtk-search.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="gtk-find.png" format="PNG"></inlinegraphic>
 </para>
 
 
