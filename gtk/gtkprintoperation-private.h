@@ -50,10 +50,6 @@ struct _GtkPrintOperationPrivate
 
   GtkPrintContext *print_context;
   
-  /* Data for the print job: */
-  /* cairo_surface_t *surface; */
-  /*  gdouble dpi_x, dpi_y; */
-
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
   gint num_page_ranges;
@@ -97,16 +93,23 @@ void                    _gtk_print_operation_platform_backend_run_dialog_async  
 										      GtkWindow                   *parent,
 										      GtkPrintOperationPrintFunc   print_cb);
 void                    _gtk_print_operation_platform_backend_launch_preview         (GtkPrintOperation           *op,
+										      cairo_surface_t             *surface,
 										      GtkWindow                   *parent,
 										      const char                  *filename);
 cairo_surface_t *       _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
 										      gdouble                     *dpi_x,
 										      gdouble                     *dpi_y,
-										      const gchar                 *target);
+										      gchar                       **target);
 void                    _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
 										      cairo_surface_t             *surface);
+void                    _gtk_print_operation_platform_backend_preview_start_page     (GtkPrintOperation *op,
+										      cairo_surface_t *surface,
+										      cairo_t *cr);
+void                    _gtk_print_operation_platform_backend_preview_end_page       (GtkPrintOperation *op,
+										      cairo_surface_t *surface,
+										      cairo_t *cr);
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
 				      GtkPrintStatus     status,

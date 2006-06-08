@@ -26,6 +26,10 @@
 #define COBJMACROS
 #include "config.h"
 #include <math.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#include <stdio.h>
 #include <stdlib.h>
 #include <cairo-win32.h>
 #include <glib.h>
@@ -58,6 +62,7 @@ typedef struct {
   int job_id;
   guint timeout_id;
 
+  cairo_surface_t *surface;
   GtkWidget *embed_widget;
 } GtkPrintOperationWin32;
 
@@ -492,9 +497,9 @@ win32_end_run (GtkPrintOperation *op,
   GlobalFree(op_win32->devmode);
   GlobalFree(op_win32->devnames);
 
-  cairo_surface_finish (op->priv->surface);
-  cairo_surface_destroy (op->priv->surface);
-  op->priv->surface = NULL;
+  cairo_surface_finish (op_win32->surface);
+  cairo_surface_destroy (op_win32->surface);
+  op_win32->surface = NULL;
 
   DeleteDC(op_win32->hdc);
   
@@ -1394,11 +1399,46 @@ create_application_page (GtkPrintOperation *op)
   return hpage;
 }
 
+static GtkPageSetup *
+create_page_setup (GtkPrintOperation *op)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPageSetup *page_setup;
+  GtkPrintSettings *settings;
+  
+  if (priv->default_page_setup)
+    page_setup = gtk_page_setup_copy (priv->default_page_setup);
+  else
+    page_setup = gtk_page_setup_new ();
+
+  settings = priv->print_settings;
+  if (settings)
+    {
+      GtkPaperSize *paper_size;
+      
+      if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_ORIENTATION))
+	gtk_page_setup_set_orientation (page_setup,
+					gtk_print_settings_get_orientation (settings));
+
+
+      paper_size = gtk_print_settings_get_paper_size (settings);
+      if (paper_size)
+	{
+	  gtk_page_setup_set_paper_size (page_setup, paper_size);
+	  gtk_paper_size_free (paper_size);
+	}
+
+      /* TODO: Margins? */
+    }
+  
+  return page_setup;
+}
+
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
+						  gboolean show_dialog,
 						  GtkWindow *parent,
-						  gboolean *do_print,
-						  GError **error)
+						  gboolean *do_print)
 {
   HRESULT hResult;
   LPPRINTDLGEXW printdlgex = NULL;
@@ -1407,14 +1447,17 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   GtkWidget *invisible = NULL;
   GtkPrintOperationResult result;
   GtkPrintOperationWin32 *op_win32;
+  GtkPrintOperationPrivate *priv;
   IPrintDialogCallback *callback;
   HPROPSHEETPAGE prop_page;
   
   *do_print = FALSE;
 
+  priv = op->priv;
+  
   op_win32 = g_new0 (GtkPrintOperationWin32, 1);
-  op->priv->platform_data = op_win32;
-  op->priv->free_platform_data = (GDestroyNotify) op_win32_free;
+  priv->platform_data = op_win32;
+  priv->free_platform_data = (GDestroyNotify) op_win32_free;
   
   if (parent == NULL)
     {
@@ -1428,7 +1471,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   if (!printdlgex)
     {
       result = GTK_PRINT_OPERATION_RESULT_ERROR;
-      g_set_error (error,
+      g_set_error (&priv->error,
 		   GTK_PRINT_ERROR,
 		   GTK_PRINT_ERROR_NOMEM,
 		   _("Not enough free memory"));
@@ -1451,7 +1494,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   if (!page_ranges) 
     {
       result = GTK_PRINT_OPERATION_RESULT_ERROR;
-      g_set_error (error,
+      g_set_error (&priv->error,
 		   GTK_PRINT_ERROR,
 		   GTK_PRINT_ERROR_NOMEM,
 		   _("Not enough free memory"));
@@ -1499,27 +1542,27 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
     {
       result = GTK_PRINT_OPERATION_RESULT_ERROR;
       if (hResult == E_OUTOFMEMORY)
-	g_set_error (error,
+	g_set_error (&priv->error,
 		     GTK_PRINT_ERROR,
 		     GTK_PRINT_ERROR_NOMEM,
 		     _("Not enough free memory"));
       else if (hResult == E_INVALIDARG)
-	g_set_error (error,
+	g_set_error (&priv->error,
 		     GTK_PRINT_ERROR,
 		     GTK_PRINT_ERROR_INTERNAL_ERROR,
 		     _("Invalid argument to PrintDlgEx"));
       else if (hResult == E_POINTER)
-	g_set_error (error,
+	g_set_error (&priv->error,
 		     GTK_PRINT_ERROR,
 		     GTK_PRINT_ERROR_INTERNAL_ERROR,
 		     _("Invalid pointer to PrintDlgEx"));
       else if (hResult == E_HANDLE)
-	g_set_error (error,
+	g_set_error (&priv->error,
 		     GTK_PRINT_ERROR,
 		     GTK_PRINT_ERROR_INTERNAL_ERROR,
 		     _("Invalid handle to PrintDlgEx"));
       else /* E_FAIL */
-	g_set_error (error,
+	g_set_error (&priv->error,
 		     GTK_PRINT_ERROR,
 		     GTK_PRINT_ERROR_GENERAL,
 		     _("Unspecified error"));
@@ -1539,13 +1582,25 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
     {
       DOCINFOW docinfo;
       int job_id;
+      double dpi_x, dpi_y;
+      cairo_t *cr;
+      GtkPageSetup *page_setup;
 
+      priv->print_context = _gtk_print_context_new (op);
+      page_setup = create_page_setup (op);
+      _gtk_print_context_set_page_setup (priv->print_context, page_setup);
+      g_object_unref (page_setup);
+      
       *do_print = TRUE;
 
-      op->priv->surface = cairo_win32_surface_create (printdlgex->hDC);
-      op->priv->dpi_x = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSX);
-      op->priv->dpi_y = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSY);
+      op_win32->surface = cairo_win32_surface_create (printdlgex->hDC);
+      dpi_x = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSX);
+      dpi_y = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSY);
 
+      cr = cairo_create (op_win32->surface);
+      gtk_print_context_set_cairo_context (priv->print_context, cr, dpi_x, dpi_y);
+      cairo_destroy (cr);
+      
       memset( &docinfo, 0, sizeof (DOCINFOW));
       docinfo.cbSize = sizeof (DOCINFOW); 
       docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name, -1, NULL, NULL, NULL); 
@@ -1558,13 +1613,13 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       if (job_id <= 0) 
 	{ 
 	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
-	  g_set_error (error,
+	  g_set_error (&priv->error,
 		       GTK_PRINT_ERROR,
 		       GTK_PRINT_ERROR_GENERAL,
 		     _("Error from StartDoc"));
 	  *do_print = FALSE;
-	  cairo_surface_destroy (op->priv->surface);
-	  op->priv->surface = NULL;
+	  cairo_surface_destroy (op_win32->surface);
+	  op_win32->surface = NULL;
 	  goto out; 
 	} 
       
@@ -1609,18 +1664,101 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   return result;
 }
 
-void 
-_gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
-                                                        GtkWindow                  *parent,
-							GtkPrintOperationPrintFunc  print_cb)
+void
+_gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
+						      cairo_surface_t   *surface,
+						      GtkWindow         *parent,
+						      const gchar       *filename)
 {
-  gboolean do_print;
+  HDC dc;
+  HENHMETAFILE metafile;
+  
+  dc = cairo_win32_surface_get_dc (surface);
+  cairo_surface_destroy (surface);
+  metafile = CloseEnhMetaFile (dc);
+  DeleteEnhMetaFile (metafile);
+  
+  ShellExecuteW (NULL, L"open", (gunichar2 *)filename, NULL, NULL, SW_SHOW);
+}
 
-  _gtk_print_operation_platform_backend_run_dialog (op, parent, &do_print, NULL);
-  if (do_print)
-    print_cb (op, parent, FALSE);
-  else
-    _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+void
+_gtk_print_operation_platform_backend_preview_start_page (GtkPrintOperation *op,
+							  cairo_surface_t *surface,
+							  cairo_t *cr)
+{
+  HDC dc = cairo_win32_surface_get_dc (surface);
+  StartPage (dc);
+}
+
+void
+_gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
+							cairo_surface_t *surface,
+							cairo_t *cr)
+{
+  /* TODO: This doesn't actually seem to work.
+   * Do enhanced metafiles really support multiple pages?
+   */
+  HDC dc = cairo_win32_surface_get_dc (surface);
+  EndPage (dc);
+}
+
+cairo_surface_t *
+_gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
+							      GtkPageSetup      *page_setup,
+							      gdouble           *dpi_x,
+							      gdouble           *dpi_y,
+							      gchar            **target)
+{
+  GtkPaperSize *paper_size;
+  double w, h;
+  HDC metafile_dc;
+  RECT rect;
+  char *template;
+  char *filename;
+  gunichar2 *filename_utf16;
+  int fd;
+
+  template = g_build_filename (g_get_tmp_dir (), "prXXXXXX", NULL);
+  fd = g_mkstemp (template);
+  close(fd);
+
+  filename = g_strconcat (template, ".emf", NULL);
+  g_free (template);
+  
+  filename_utf16 = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
+  g_free (filename);
+
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM);
+  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM);
+  
+  rect.left = 0;
+  rect.right = w*100;
+  rect.top = 0;
+  rect.bottom = h*100;
+  
+  metafile_dc = CreateEnhMetaFileW (NULL, filename_utf16,
+				    &rect, L"Gtk+\0Print Preview\0\0");
+  if (metafile_dc == NULL)
+    {
+      g_warning ("Can't create metafile");
+      return NULL;
+    }
+
+  *target = (char *)filename_utf16;
+  
+  *dpi_x = (double)GetDeviceCaps (metafile_dc, LOGPIXELSX);
+  *dpi_y = (double)GetDeviceCaps (metafile_dc, LOGPIXELSY);
+
+  return cairo_win32_surface_create (metafile_dc);
+}
+
+void
+_gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation *op,
+							      GtkPageSetup      *page_setup,
+							      cairo_surface_t   *surface)
+{
+  /* TODO: Implement */
 }
 
 GtkPageSetup *

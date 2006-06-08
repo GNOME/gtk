@@ -1,3 +1,17 @@
+2006-06-08  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c:
+	Update windows to build with new APIs and first cut
+	at preview work.
+	
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.c
+	Various updates needed when making the preview work on win32.
+
+	* tests/print-editor.c:
+	Print, don't preview.
+
 2006-06-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (popup_targets_received): Make Delete

@@ -387,13 +387,14 @@ preview_print_idle_done (gpointer data)
   
   op = GTK_PRINT_OPERATION (pop->preview);
 
+  cairo_surface_finish (pop->surface);
+  /* Surface is destroyed in launch_preview */
   _gtk_print_operation_platform_backend_launch_preview (op,
+							pop->surface,
 							pop->parent,
 							pop->filename);
 
   g_free (pop->filename);
-  cairo_surface_finish (pop->surface);
-  cairo_surface_destroy (pop->surface);
 
   gtk_print_operation_preview_end_preview (pop->preview);
   g_free (pop);
@@ -417,7 +418,8 @@ preview_print_idle (gpointer data)
   gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
   
   cr = gtk_print_context_get_cairo_context (pop->print_context);
-  cairo_show_page (cr);
+  _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface,
+							  cr);
   
   /* TODO: print out sheets not pages and follow ranges */
   pop->page_nr++;
@@ -436,8 +438,14 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
 		       PreviewOp                *pop)
 {
   GtkPrintOperation *op = GTK_PRINT_OPERATION (preview);
+  cairo_t *cr;
 
   _gtk_print_operation_platform_backend_resize_preview_surface (op, page_setup, pop->surface);
+
+  cr = gtk_print_context_get_cairo_context (pop->print_context);
+  _gtk_print_operation_platform_backend_preview_start_page (op, pop->surface,
+							    cr);
+
 }
 
 static void
@@ -462,28 +470,12 @@ gtk_print_operation_preview_handler (GtkPrintOperation        *op,
 				     GtkWindow                *parent)
 {
   gdouble dpi_x, dpi_y;
-  gchar *tmp_dir;
-  gchar *dir_template;
-  gchar *preview_filename;
   PreviewOp *pop;
   GtkPageSetup *page_setup;
   cairo_t *cr;
 
-  dir_template = g_build_filename (g_get_tmp_dir (), "print-preview-XXXXXX", NULL);
-
-  /* use temp dirs because apps like evince need to have extensions
-   * to determine the mime type 
-   */
-  tmp_dir = mkdtemp(dir_template);
-
-  preview_filename = g_build_filename (tmp_dir, 
-				       "Print Preview.pdf",
-				       NULL);
-  
-  g_free (dir_template);
-
   pop = g_new0 (PreviewOp, 1);
-  pop->filename = preview_filename;
+  pop->filename = NULL;
   pop->preview = preview;
   pop->parent = parent;
 
@@ -493,7 +485,7 @@ gtk_print_operation_preview_handler (GtkPrintOperation        *op,
     _gtk_print_operation_platform_backend_create_preview_surface (op,
 								  page_setup,
 								  &dpi_x, &dpi_y,
-								  pop->filename);
+								  &pop->filename);
 
   cr = cairo_create (pop->surface);
   gtk_print_context_set_cairo_context (op->priv->print_context, cr,
@@ -2403,6 +2395,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 
       priv->is_sync = !priv->allow_async;
     }
+#ifndef G_OS_WIN32
   else if (priv->allow_async)
     {
       priv->is_sync = FALSE;
@@ -2412,6 +2405,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 							      print_pages);
       result = GTK_PRINT_OPERATION_RESULT_IN_PROGRESS;
     }
+#endif
   else
     {
       priv->is_sync = TRUE;

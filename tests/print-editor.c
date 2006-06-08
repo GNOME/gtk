@@ -497,7 +497,7 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
 
   dpi_x = pop->area->allocation.width/w;
   dpi_y = pop->area->allocation.height/h;
-  
+
   if (fabs (dpi_x - pop->dpi_x) > 0.001 ||
       fabs (dpi_y - pop->dpi_y) > 0.001)
     {
@@ -683,7 +683,7 @@ do_print (GtkAction *action)
 #if 0
   gtk_print_operation_set_allow_async (print, TRUE);
 #endif
-  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PREVIEW, GTK_WINDOW (main_window), NULL);
+  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW (main_window), NULL);
 
   g_object_unref (print);
 }

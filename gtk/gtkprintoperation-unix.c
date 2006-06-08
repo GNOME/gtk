@@ -164,6 +164,7 @@ shell_command_substitute_file (const gchar *cmd,
 
 void
 _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
+						      cairo_surface_t   *surface,
 						      GtkWindow         *parent,
 						      const gchar       *filename)
 {
@@ -175,6 +176,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *quoted_filename;
   GdkScreen *screen;
   GError *error = NULL;
+
+  cairo_surface_destroy (pop->surface);
  
   settings = gtk_settings_get_default ();
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
@@ -570,17 +573,45 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 							      GtkPageSetup      *page_setup,
 							      gdouble           *dpi_x,
 							      gdouble           *dpi_y,
-							      const gchar       *target)
+							      gchar            **target)
 {
+  gchar *tmp_dir, *dir_template, *preview_filename;
   GtkPaperSize *paper_size;
   gdouble w, h;
+  
+  dir_template = g_build_filename (g_get_tmp_dir (), "print-preview-XXXXXX", NULL);
+
+  /* use temp dirs because apps like evince need to have extensions
+   * to determine the mime type 
+   */
+  tmp_dir = mkdtemp(dir_template);
+  preview_filename = g_build_filename (tmp_dir, 
+                                      "Print Preview.pdf",
+                                      NULL);
+  g_free (dir_template);
+  *target = preview_filename;
   
   paper_size = gtk_page_setup_get_paper_size (page_setup);
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
     
   *dpi_x = *dpi_y = 72;
-  return cairo_pdf_surface_create (target, w, h);
+  return cairo_pdf_surface_create (preview_filename, w, h);
+}
+
+void
+_gtk_print_operation_platform_backend_preview_start_page (GtkPrintOperation *op,
+							  cairo_surface_t *surface,
+							  cairo_t *cr)
+{
+}
+
+void
+_gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
+							cairo_surface_t *surface,
+							cairo_t *cr)
+{
+  cairo_show_page (cr);
 }
 
 void
