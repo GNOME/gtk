@@ -1,5 +1,7 @@
 2006-06-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testnotebookdnd.c: Update callers.
+
 	* gtk/gtknotebook.h:
 	* gtk/gtknotebook.c (gtk_notebook_set_window_creation_hook):
 	Add a destroy notify for the callback data.  (#344209, 

@@ -212,7 +212,7 @@ main (gint argc, gchar *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   table = gtk_table_new (3, 2, FALSE);
 
-  gtk_notebook_set_window_creation_hook (window_creation_function, NULL);
+  gtk_notebook_set_window_creation_hook (window_creation_function, NULL, NULL);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     create_notebook (tabs1, GROUP_A, PACK_START, GTK_POS_TOP),
