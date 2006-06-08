@@ -163,7 +163,8 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  ***********************************************************/
 
 void gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
-					    gpointer                       data);
+					    gpointer                       data,
+                                            GDestroyNotify                 destroy);
 void gtk_notebook_set_group_id             (GtkNotebook *notebook,
 					    gint         group_id);
 gint gtk_notebook_get_group_id             (GtkNotebook *notebook);

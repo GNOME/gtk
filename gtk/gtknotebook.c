@@ -397,6 +397,7 @@ static void stop_scrolling (GtkNotebook *notebook);
 
 static GtkNotebookWindowCreationFunc window_creation_hook = NULL;
 static gpointer window_creation_hook_data;
+static GDestroyNotify window_creation_hook_destroy = NULL;
 
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
@@ -7142,8 +7143,9 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
 /**
  * gtk_notebook_set_window_creation_hook:
- * @func: the #GtkNotebookWindowCreationFunc, or NULL
- * @data: user data for @func.
+ * @func: the #GtkNotebookWindowCreationFunc, or %NULL
+ * @data: user data for @func
+ * @destroy: Destroy notifier for @data, or %NULL
  *
  * Installs a global function used to create a window
  * when a detached tab is dropped in an empty area.
@@ -7152,10 +7154,15 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
  **/
 void
 gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
-				       gpointer                       data)
+				       gpointer                       data,
+                                       GDestroyNotify                 destroy)
 {
+  if (window_creation_hook_destroy)
+    window_creation_hook_destroy (window_creation_hook_data);
+
   window_creation_hook = func;
   window_creation_hook_data = data;
+  window_creation_hook_destroy = destroy;
 }
 
 /**
