@@ -5,8 +5,8 @@
 	handle_configure_event() with call to that function.
 	[WM_SIZING] Fix implementation of aspect ratio hints. (#344244)
 	The hints are for the geometry of the client area, not of the
-	window including decorations. Improve resizing behaviouor in the
-	presence of aspect hints, more in line with typical X window
+	window including decorations. Improve resizing behaviour in the
+	presence of aspect hints, to be more in line with typical X window
 	managers.
 
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
