@@ -83,9 +83,9 @@ struct _GtkPrintOperationPrivate
 };
 
 
-typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation *op,
-					     GtkWindow         *parent,
-					     gboolean           do_print,
+typedef void (* GtkPrintOperationPrintFunc) (GtkPrintOperation      *op,
+					     GtkWindow              *parent,
+					     gboolean                do_print,
 					     GtkPrintOperationResult result);
 
 GtkPrintOperationResult _gtk_print_operation_platform_backend_run_dialog             (GtkPrintOperation           *operation,
