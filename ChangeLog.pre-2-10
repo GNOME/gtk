@@ -1,5 +1,12 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintbackend.h: Don't include gtkprinter-private.h here.
+
+	* gtk/gtkprintunixdialog.c: 
+	* gtk/gtkprintoperation-unix.c: 
+	* gtk/gtkprintjob.c: 
+	* gtk/gtkprintbackend.c: Instead include it here.
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkprintoperation.h: 
 	* gtk/gtkprintoperation.c: Rename pdf_target to export_filename.

@@ -35,6 +35,7 @@
 
 #include "gtkprintjob.h"
 #include "gtkprinter.h"
+#include "gtkprinter-private.h"
 #include "gtkprintbackend.h"
 #include "gtkalias.h"
 

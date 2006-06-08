@@ -32,9 +32,8 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include "gtkprinter-private.h"
 #include "gtkprintsettings.h"
-#include "gtkprinteroption.h"
+#include "gtkprinteroptionset.h"
 #include "gtkprintjob.h"
 
 G_BEGIN_DECLS

@@ -39,6 +39,7 @@
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter.h"
+#include "gtkprinter-private.h"
 #include "gtkprintjob.h"
 #include "gtklabel.h"
 #include "gtkalias.h"

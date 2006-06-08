@@ -47,6 +47,7 @@
 #include "gtklabel.h"
 
 #include "gtkprintbackend.h"
+#include "gtkprinter-private.h"
 #include "gtkprintunixdialog.h"
 #include "gtkprinteroptionwidget.h"
 #include "gtkalias.h"

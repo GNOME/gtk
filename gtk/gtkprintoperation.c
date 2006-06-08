@@ -2268,22 +2268,24 @@ print_pages (GtkPrintOperation       *op,
 /**
  * gtk_print_operation_get_error:
  * @op: a #GtkPrintOperation
+ * @error: return location for the error
  * 
  * Call this when the result of a print operation is
  * %GTK_PRINT_OPERATION_RESULT_ERROR, either as returned by 
  * gtk_print_operation_run(), or in the ::done signal handler. 
  * The returned #GError will contain more details on what went wrong.
  *
- * Return value: a #GError representing the error, or #NULL
- *
  * Since: 2.10
  **/
-GError *
-gtk_print_operation_get_error (GtkPrintOperation *op)
+void
+gtk_print_operation_get_error (GtkPrintOperation  *op,
+			       GError            **error)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), NULL);
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   
-  return op->priv->error;
+  g_propagate_error (error, op->priv->error);
+
+  op->priv->error = NULL;
 }
 
 
