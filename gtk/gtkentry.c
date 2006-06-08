@@ -4857,7 +4857,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 	gtk_widget_destroy (entry->popup_menu);
       
       entry->popup_menu = gtk_menu_new ();
-      b
+      
       gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
 				 GTK_WIDGET (entry),
 				 popup_menu_detach);
