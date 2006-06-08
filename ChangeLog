@@ -1,5 +1,9 @@
 2006-06-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (popup_targets_received): Make Delete
+	menuitem insensitive if entry is not editable.  (#344232, 
+	Milosz Derezynski)
+
 	* gtk/gtkprintoperation.c: Add some docs. 
 
 	* gtk/gtk.symbols: Add gtk_print_operation_set_allow_async.

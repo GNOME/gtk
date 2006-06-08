@@ -4857,7 +4857,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 	gtk_widget_destroy (entry->popup_menu);
       
       entry->popup_menu = gtk_menu_new ();
-      
+      b
       gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
 				 GTK_WIDGET (entry),
 				 popup_menu_detach);
@@ -4870,7 +4870,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 			    entry->editable && clipboard_contains_text);
       
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
-      gtk_widget_set_sensitive (menuitem, entry->current_pos != entry->selection_bound);
+      gtk_widget_set_sensitive (menuitem, entry->editable && entry->current_pos != entry->selection_bound);
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_delete_cb), entry);
       gtk_widget_show (menuitem);
