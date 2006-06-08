@@ -1,5 +1,7 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.h: Include gtkprintoperationpreview.h
+
 	* gtk/gtkprintoperationpreview.c (gtk_print_operation_preview_is_selected): 
 	Use g_return_val_if_fail (#344288, Kazuki Iwamoto)
 
