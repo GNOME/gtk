@@ -1,3 +1,9 @@
+2006-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_style_set): Don't call
+	construct_child here, since some apps make assumptions 
+	about the lifecycle of the constructed label.  
+
 2006-06-08  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c (finish_print):

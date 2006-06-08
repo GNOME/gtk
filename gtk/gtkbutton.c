@@ -1005,10 +1005,39 @@ gtk_button_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_button_update_image_spacing (GtkButton *button)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+  GtkWidget *child; 
+  gint spacing;
+
+  /* Keep in sync with gtk_button_construct_child,
+   * we only want to update the spacing if the box 
+   * was constructed there.
+   */
+  if (!button->constructed || !priv->image)
+    return;
+
+  child = GTK_BIN (button)->child;
+  if (GTK_IS_ALIGNMENT (child))
+    {
+      child = GTK_BIN (child)->child;
+      if (GTK_IS_BOX (child))
+        {
+          gtk_widget_style_get (GTK_WIDGET (button),
+                                "image-spacing", &spacing,
+                                NULL);
+
+          gtk_box_set_spacing (GTK_BOX (child), spacing);
+        }
+    }   
+}
+
+static void
 gtk_button_style_set (GtkWidget *widget,
 		      GtkStyle  *prev_style)
 {
-  gtk_button_construct_child (GTK_BUTTON (widget));
+  gtk_button_update_image_spacing (GTK_BUTTON (widget));
 }
 
 static void
