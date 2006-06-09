@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-09 19:59+0200\n"
-"PO-Revision-Date: 2006-06-09 20:03+0200\n"
+"PO-Revision-Date: 2006-06-09 20:22+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3251,7 +3251,7 @@ msgstr "Indica si la solapa es desprendible"
 
 #: ../gtk/gtknotebook.c:666 ../gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
-msgstr "Anterior paso secundario"
+msgstr "Flecha de retroceso secundaria"
 
 #: ../gtk/gtknotebook.c:667
 msgid ""
@@ -3262,7 +3262,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:682 ../gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
-msgstr "Siguiente paso secundario"
+msgstr "Flecha de adelanto secundaria"
 
 #: ../gtk/gtknotebook.c:683
 msgid ""
@@ -3273,7 +3273,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:697 ../gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
-msgstr "Paso anterior"
+msgstr "Flecha de retroceso"
 
 #: ../gtk/gtknotebook.c:698 ../gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
@@ -3281,7 +3281,7 @@ msgstr "Mostrar el botón estándar de flecha de retroceso"
 
 #: ../gtk/gtknotebook.c:712 ../gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
-msgstr "Paso siguiente"
+msgstr "Flecha de avance"
 
 #: ../gtk/gtknotebook.c:713 ../gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
@@ -3813,25 +3813,23 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
-msgstr "Sensibilidad del paso de abajo"
+msgstr "Sensibilidad de la flecha inferior"
 
 #: ../gtk/gtkrange.c:337
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
-"La directiva de sensibilidad del paso que apunta al lado más bajo del ajuste"
+msgstr "La directiva de sensibilidad del botón de desplazamiento que apunta al lado más bajo del ajuste"
 
 #: ../gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
-msgstr "Sensibilidad del paso de arriba"
+msgstr "Sensibilidad de la flecha superior"
 
 #: ../gtk/gtkrange.c:346
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
-"La directiva de sensibilidad del paso que apunta al lado más alto del ajuste"
+msgstr "La directiva de sensibilidad del botón de flecha que apunta al lado más alto del ajuste"
 
 #: ../gtk/gtkrange.c:353
 msgid "Slider Width"
@@ -3843,27 +3841,27 @@ msgstr "Anchura de la barra de scroll o escala de miniatura"
 
 #: ../gtk/gtkrange.c:361
 msgid "Trough Border"
-msgstr "Borde de la fosa"
+msgstr "Borde del carril"
 
 #: ../gtk/gtkrange.c:362
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "Espaciado entre la miniaturas/paso y el bisel exterior de la fosa"
+msgstr "Espaciado entre la marcador/flechas de desplazamiento y el bisel exterior del carril"
 
 #: ../gtk/gtkrange.c:369
 msgid "Stepper Size"
-msgstr "Tamaño del paso"
+msgstr "Tamaño del botón de flecha de desplazamiento"
 
 #: ../gtk/gtkrange.c:370
 msgid "Length of step buttons at ends"
-msgstr "Longitud de los botones de paso al final"
+msgstr "Longitud de los botones de flecha en los extremos"
 
 #: ../gtk/gtkrange.c:385
 msgid "Stepper Spacing"
-msgstr "Espaciado del paso"
+msgstr "Espaciado de los botones de flecha de desplazamiento"
 
 #: ../gtk/gtkrange.c:386
 msgid "Spacing between step buttons and thumb"
-msgstr "Espaciado entre los botones de paso y la huella"
+msgstr "Espaciado entre los botones de flecha de desplazamiento y el marcador"
 
 #: ../gtk/gtkrange.c:393
 msgid "Arrow X Displacement"
@@ -3899,23 +3897,23 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:422
 msgid "Trough Side Details"
-msgstr "Detalles del lado de la fosa"
+msgstr "Detalles del lado del carril"
 
 #: ../gtk/gtkrange.c:423
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
-msgstr "Cuando sea TRUE, las partes de la fosa en los dos lados del deslizador se dibujarán con detalles diferentes"
+msgstr "Cuando sea TRUE, las partes del carril en los dos lados del deslizador se dibujarán con detalles diferentes"
 
 #: ../gtk/gtkrange.c:439
 msgid "Trough Under Steppers"
-msgstr "Fosa bajo los pulsadores de paso"
+msgstr "Carril bajo las flechas de deslizamiento"
 
 #: ../gtk/gtkrange.c:440
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
-msgstr "Indica si se debe dibujar la fosa para la longitud completa del rango o excuir los marcadores de paso y el espaciado"
+msgstr "Indica si se debe dibujar el carril para la longitud completa del rango o excuir las flechas de desplazamiento y el espaciado"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
@@ -4088,7 +4086,7 @@ msgstr "Espaciado del valor"
 
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
-msgstr "Espacio entre el texto del valor y el área del deslizador/fosa"
+msgstr "Espacio entre el texto del valor y el área del deslizador/carril"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
