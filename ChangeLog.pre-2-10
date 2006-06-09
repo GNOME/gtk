@@ -1,3 +1,12 @@
+2006-06-09  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_drawable_release_dc):
+	Call ReleaseDC() on DCs acquired with GetDC() (for windows), and
+	DeleteDC() on DCs acquired with CreateCompatibleDC() (for
+	bitmaps). According to MSDN, this is the correct thing to do, even
+	if always using DeleteDC() seems to have worked fine in
+	practice. (#337491)
+
 2006-06-08  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate):

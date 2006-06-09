@@ -1889,7 +1889,10 @@ _gdk_win32_drawable_release_dc (GdkDrawable *drawable)
       
       if (impl->hdc)
 	{
-	  GDI_CALL (DeleteDC, (impl->hdc));
+	  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
+	    GDI_CALL (DeleteDC, (impl->hdc));
+	  else
+	    GDI_CALL (ReleaseDC, (impl->handle, impl->hdc));
 	  impl->hdc = NULL;
 	}
     }
