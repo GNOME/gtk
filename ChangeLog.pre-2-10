@@ -1,3 +1,8 @@
+2006-06-09  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* gtk/gtkmenuitem.c: (get_offsets): Take GtkMenu::horizontal-padding
+	into account when placing submenus (#344290)
+
 2006-06-09  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrange.c: added new style properties "trough-side-details"

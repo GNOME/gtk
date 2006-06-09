@@ -1072,15 +1072,18 @@ get_offsets (GtkMenu *menu,
 	     gint    *vertical_offset)
 {
   gint vertical_padding;
+  gint horizontal_padding;
   
   gtk_widget_style_get (GTK_WIDGET (menu),
 			"horizontal-offset", horizontal_offset,
 			"vertical-offset", vertical_offset,
+			"horizontal-padding", &horizontal_padding,
 			"vertical-padding", &vertical_padding,
 			NULL);
 
   *vertical_offset -= GTK_WIDGET (menu)->style->ythickness;
   *vertical_offset -= vertical_padding;
+  *horizontal_offset += horizontal_padding;
 }
 
 static void
