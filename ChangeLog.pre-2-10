@@ -1,5 +1,10 @@
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testprint.c: Update for api changes.
+
+	* gtk/gtkprintoperation.c: Fix some copy-and-paste errors,
+	and rename the pdf-target property to export-filename.
+
 	* gtk/gtkfilechooserdefault.c: Turn off profiling code.
 
 	* tests/print-editor.c: Update for api changes.

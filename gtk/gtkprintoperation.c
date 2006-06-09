@@ -966,7 +966,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
-				   PROP_USE_FULL_PAGE,
+				   PROP_TRACK_PRINT_STATUS,
 				   g_param_spec_boolean ("track-print-status",
 							 P_("Track Print Status"),
 							 P_("TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."),
@@ -1028,10 +1028,11 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 GTK_PARAM_READWRITE));
   
   /**
-   * GtkPrintOperation:pdf-target:
+   * GtkPrintOperation:export-filename:
    *
-   * The name of a PDF file to generate instead of showing 
-   * the print dialog. 
+   * The name of a file file to generate instead of showing 
+   * the print dialog. Currently, PDF is the only supported
+   * format.
    *
    * The intended use of this property is for implementing 
    * "Export to PDF" actions.
@@ -1043,10 +1044,10 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
-				   PROP_JOB_NAME,
-				   g_param_spec_string ("pdf-target",
-							P_("PDF target filename"),
-							P_("PDF target filename"),
+				   PROP_EXPORT_FILENAME,
+				   g_param_spec_string ("export-filename",
+							P_("Export filename"),
+							P_("Export filename"),
 							NULL,
 							GTK_PARAM_READWRITE));
   
