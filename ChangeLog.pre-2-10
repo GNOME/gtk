@@ -1,3 +1,31 @@
+2006-06-09  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrange.c: added new style properties "trough-side-details"
+	and "draw-trough-under-steppers" and fixed the "stepper-spacing"
+	style property. Fixes bugs #342339 and #342249.
+
+	"draw-trough-under-steppers", when set to FALSE, starts trough
+	drawing next to the steppers instead of drawing the trough "below"
+	(around) the steppers. If "stepper-spacing" is set to any value
+	larger than zero, "draw-trough-under-steppers" is set to FALSE
+	automatically to avoid rendering an area that looks clickable but
+	isn't.
+
+	(gtk_range_calc_layout): honor draw-trough-under-steppers.
+	Don't reserve stepper-spacing on sides of the range that don't
+	have steppers.
+
+	(gtk_range_expose): changed drawing accordingly. Implement
+	"trough-side-details" which enables drawing of the upper and lower
+	parts of the trough with different details. This is useful for
+	theme engines which want to draw these parts differently.
+
+	(coord_to_value): correctly take all rendering options into
+	account. stepper-spacing > 0 caused jumping and otherwise
+	strangely behaving ranges before.
+
+	(other functions): changed accordingly.
+
 2006-06-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_drawable_release_dc):
