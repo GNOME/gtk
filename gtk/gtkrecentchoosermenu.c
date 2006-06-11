@@ -1179,7 +1179,7 @@ gtk_recent_chooser_menu_new (void)
 GtkWidget *
 gtk_recent_chooser_menu_new_for_manager (GtkRecentManager *manager)
 {
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), NULL);
+  g_return_val_if_fail (manager == NULL || GTK_IS_RECENT_MANAGER (manager), NULL);
   
   return g_object_new (GTK_TYPE_RECENT_CHOOSER_MENU,
   		       "recent-manager", manager,

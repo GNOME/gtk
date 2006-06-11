@@ -1,5 +1,12 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkrecentchooserwidget.c 
+	(gtk_recent_chooser_widget_new_for_manager):
+	* gtk/gtkrecentchoosermenu.c
+	(gtk_recent_chooser_menu_new_for_manager): 
+	Allow NULL to mean the default manager.  (#344530, 
+	John Finlay)
+
 	* gtk/gtkprintoperation-unix.c (page_setup_data_free):
 	Check if rdata->page_setup is set before unreffing it. 
 	(#344518, Christian Persch)
