@@ -1,5 +1,8 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk-2.0-uninstalled.pc.in: Make compiling against uninstalled
+	gdk work.  (#344386, Masatake Yamamoto)
+
 	* gtk/gtkprintoperation.c: Register create_custom_widget as 
 	an object-returning signal.  (#344505, Marko Anastasov, patch
 	by Christian Persch)
