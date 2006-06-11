@@ -1796,7 +1796,7 @@ run_pdf (GtkPrintOperation  *op,
   
   surface = cairo_pdf_surface_create (priv->export_filename,
 				      width, height);
-  cairo_pdf_surface_set_dpi (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface, 300, 300);
 
   priv->platform_data = surface;
   priv->free_platform_data = (GDestroyNotify) cairo_surface_destroy;

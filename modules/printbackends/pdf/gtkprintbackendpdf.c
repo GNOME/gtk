@@ -193,7 +193,7 @@ pdf_printer_create_cairo_surface (GtkPrinter *printer,
   surface = cairo_pdf_surface_create_for_stream  (_cairo_write, GINT_TO_POINTER (cache_fd), width, height);
 
   /* TODO: DPI from settings object? */
-  cairo_pdf_surface_set_dpi (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface, 300, 300);
 
   return surface;
 }

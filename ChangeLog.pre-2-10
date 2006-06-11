@@ -1,5 +1,10 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: Use
+	cairo_pdf_surface_set_dpi by cairo_surface_set_fallback_resolution.
+	(#344512, Elijah Newren)
+
 	* gdk-2.0-uninstalled.pc.in: Make compiling against uninstalled
 	gdk work.  (#344386, Masatake Yamamoto)
 
