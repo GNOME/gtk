@@ -1,5 +1,8 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.h: Remove an extra comma.  (#344528, 
+	Elijah Newren)
+
 	* modules/printbackends/gtkprintbackendpdf.c 
 	(gtk_print_backend_pdf_print_stream): Use the passed in 
 	destroy notify.  (#344513, Christian Persch)
