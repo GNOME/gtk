@@ -1505,6 +1505,8 @@ get_is_recent_filtered (GtkRecentChooserDefault *impl,
   /* this we own */
   if (filter_info.applications)
     g_strfreev ((gchar **) filter_info.applications);
+  if (filter_info.groups)
+    g_strfreev ((gchar **) filter_info.groups);
   
   return !retval;
 }
