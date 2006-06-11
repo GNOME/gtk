@@ -1,5 +1,11 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* modules/printbackends/gtkprintbackendpdf.c 
+	(gtk_print_backend_pdf_print_stream): Use the passed in 
+	destroy notify.  (#344513, Christian Persch)
+
+	* configure.in: Require cairo 1.1.7
+
 	* gtk/gtkprintoperation.c:
 	* modules/printbackends/pdf/gtkprintbackendpdf.c: Use
 	cairo_pdf_surface_set_dpi by cairo_surface_set_fallback_resolution.

@@ -306,6 +306,7 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
+  ps->dnotify = dnotify;
   ps->job = g_object_ref (job);
 
   ps->target_fd = creat (filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
