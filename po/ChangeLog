@@ -1,3 +1,8 @@
+2006-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Add missing files, pointed out
+	by Marcel Telka.
+
 2006-06-10  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* th.po: Updated Thai translation.

@@ -80,6 +80,7 @@ gtk/gtkfilechooserdefault.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
+gtk/gtkfilechoosersettings.c
 gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
@@ -145,6 +146,7 @@ gtk/gtkprintjob.c
 gtk/gtkprintoperation.c
 gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
+gtk/gtkprintoperationpreview.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogress.c
 gtk/gtkprogressbar.c
