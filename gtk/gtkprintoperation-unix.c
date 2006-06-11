@@ -693,7 +693,9 @@ page_setup_data_free (gpointer data)
 {
   PageSetupResponseData *rdata = data;
 
-  g_object_unref (rdata->page_setup);
+  if (rdata->page_setup)
+    g_object_unref (rdata->page_setup);
+
   g_free (rdata);
 }
 

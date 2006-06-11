@@ -1,5 +1,9 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c (page_setup_data_free):
+	Check if rdata->page_setup is set before unreffing it. 
+	(#344518, Christian Persch)
+
 	* gtk/gtkprintoperation.h: Remove an extra comma.  (#344528, 
 	Elijah Newren)
 
