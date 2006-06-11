@@ -511,9 +511,9 @@ custom_widget_accumulator (GSignalInvocationHint *ihint,
   gboolean continue_emission;
   GtkWidget *widget;
   
-  widget = g_value_get_pointer (handler_return);
+  widget = g_value_get_object (handler_return);
   if (widget != NULL)
-    g_value_set_pointer (return_accu, widget);
+    g_value_set_object (return_accu, widget);
   continue_emission = (widget == NULL);
   
   return continue_emission;
@@ -773,8 +773,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, create_custom_widget),
 		  custom_widget_accumulator, NULL,
-		  _gtk_marshal_POINTER__VOID,
-		  G_TYPE_POINTER, 0);
+		  _gtk_marshal_OBJECT__VOID,
+		  G_TYPE_OBJECT, 0);
 
   /**
    * GtkPrintOperation::custom-widget-apply:

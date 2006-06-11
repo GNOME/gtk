@@ -1,5 +1,11 @@
 2006-06-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c: Register create_custom_widget as 
+	an object-returning signal.  (#344505, Marko Anastasov, patch
+	by Christian Persch)
+
+	* gtk/gtkmarshalers.list: Add the right marshaller.
+
 	* gtk/gtk.symbols:
 	* gtk/gtkprintjob.[hc]: Register GtkPrintCapabilities as a
 	flags type.  (#344504, Marko Anastasov)
