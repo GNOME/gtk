@@ -64,14 +64,14 @@ struct _GtkPrintJob
    */
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  int num_page_ranges;
+  gint num_page_ranges;
   gboolean rotate_to_orientation;
   
   GtkPageSet page_set;
-  int num_copies;
+  gint num_copies;
   gboolean collate;
   gboolean reverse;
-  double scale;
+  gdouble scale;
 };
 
 struct _GtkPrintJobClass
@@ -90,7 +90,7 @@ struct _GtkPrintJobClass
   void (*_gtk_reserved7) (void);
 };
 
-GType                    gtk_print_job_get_type     (void) G_GNUC_CONST;
+GType                    gtk_print_job_get_type               (void) G_GNUC_CONST;
 GtkPrintJob             *gtk_print_job_new                    (const gchar              *title,
 							       GtkPrinter               *printer,
 							       GtkPrintSettings         *settings,
@@ -113,6 +113,7 @@ gboolean                 gtk_print_job_send                   (GtkPrintJob      
 							       GDestroyNotify            dnotify,
 							       GError                  **error);
 
+GType                    gtk_print_capabilities_get_type      (void) G_GNUC_CONST;
 
 G_END_DECLS
 

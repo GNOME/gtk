@@ -1,3 +1,9 @@
+2006-06-10  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprintjob.[hc]: Register GtkPrintCapabilities as a
+	flags type.  (#344504, Marko Anastasov)
+
 2006-06-09  Benjamin Berg  <benjamin@sipsolutions.net>
 
 	* gtk/gtkmenuitem.c: (get_offsets): Take GtkMenu::horizontal-padding
