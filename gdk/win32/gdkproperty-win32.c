@@ -336,6 +336,9 @@ gdk_property_change (GdkWindow    *window,
 
 	      wclen++;		/* Terminating 0 */
 	      size = wclen * 2;
+	      for (i = 0; i < wclen; i++)
+		if (wcptr[i] == '\n')
+		  size += 2;
 	      GDK_NOTE (DND, g_print ("... as Unicode\n"));
 	    }
 	  else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
@@ -427,9 +430,17 @@ gdk_property_change (GdkWindow    *window,
 	      break;
 
 	    case UNICODE_TEXT:
-	      cf = CF_UNICODETEXT;
-	      memmove (ucptr, wcptr, size);
-	      g_free (wcptr);
+	      {
+		wchar_t *p = (wchar_t *) ucptr;
+		cf = CF_UNICODETEXT;
+		for (i = 0; i < wclen; i++)
+		  {
+		    if (wcptr[i] == '\n')
+		      *p++ = '\r';
+		    *p++ = wcptr[i];
+		  }
+		g_free (wcptr);
+	      }
 	      break;
 
 	    case SINGLE_LOCALE:
