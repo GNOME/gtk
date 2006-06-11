@@ -29,6 +29,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cairo-win32.h>
@@ -70,6 +71,7 @@ static void win32_poll_status (GtkPrintOperation *op);
 
 static const GUID myIID_IPrintDialogCallback  = {0x5852a2c3,0x6530,0x11d1,{0xb6,0xa3,0x0,0x0,0xf8,0x75,0x7b,0xf9}};
 
+#ifndef _MSC_VER
 #undef INTERFACE
 #define INTERFACE IPrintDialogCallback
 DECLARE_INTERFACE_ (IPrintDialogCallback, IUnknown)
@@ -81,6 +83,7 @@ DECLARE_INTERFACE_ (IPrintDialogCallback, IUnknown)
     STDMETHOD (SelectionChange)(THIS) PURE;
     STDMETHOD (HandleMessage)(THIS_ HWND,UINT,WPARAM,LPARAM,LRESULT*) PURE;
 }; 
+#endif
 
 static UINT got_gdk_events_message;
 
@@ -536,8 +539,9 @@ win32_poll_status (GtkPrintOperation *op)
   status_str = NULL;
   if (ret)
     {
+      DWORD win32_status;
       job_info = (JOB_INFO_1W *)data;
-      DWORD win32_status = job_info->Status;
+      win32_status = job_info->Status;
 
       if (job_info->pStatus)
 	status_str = g_utf16_to_utf8 (job_info->pStatus, 

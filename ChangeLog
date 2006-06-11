@@ -1,5 +1,8 @@
 2006-06-11  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkprintoperation-win32.c: Fix MSVC build problem. (#339739,
+	Kazuki Iwamoto)
+
 	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Convert \n
 	to \r\n also when storing CF_UNICODETEXT (UTF-16) in the
 	Clipboard. (#344496)
