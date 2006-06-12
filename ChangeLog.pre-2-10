@@ -1,5 +1,16 @@
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (is_printer_active): Use 
+	gtk_printer_accepts_ps here.
+
+	* modules/printbackends/pdf/gtkprintbackendpdf.c (gtk_print_backend_pdf_init):
+	Mark the virtual "Print to PDF" printer as not accepting PS.
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprinter.h: 
+	* gtk/gtkprinter.c: Add two new properties accepts-pdf and
+	accepts-ps (with getters) to allow learning supported formats.
+
 	* gtk/gtkprintjob.h: Add a GTK_PRINT_CAPABILITY_GENERATE_PDF
 	capability.
 	

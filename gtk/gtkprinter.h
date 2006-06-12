@@ -77,6 +77,8 @@ gint                     gtk_printer_get_job_count     (GtkPrinter      *printer
 gboolean                 gtk_printer_is_active         (GtkPrinter      *printer);
 gboolean                 gtk_printer_is_virtual        (GtkPrinter      *printer);
 gboolean                 gtk_printer_is_default        (GtkPrinter      *printer);
+gboolean                 gtk_printer_accepts_pdf       (GtkPrinter      *printer);
+gboolean                 gtk_printer_accepts_ps        (GtkPrinter      *printer);
 
 gint                     gtk_printer_compare           (GtkPrinter *a,
 							GtkPrinter *b);

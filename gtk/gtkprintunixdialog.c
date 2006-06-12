@@ -586,17 +586,12 @@ is_printer_active (GtkTreeModel       *model,
   
   if (result)
     {
-      /* FIXME needs some printer capabilities 
-       */
-      if ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) == 0 &&
-	  strcmp (gtk_printer_get_name (printer), _("Print to PDF")) == 0)
-	result = FALSE;
-      g_print ("testing printer \"%s\" result %d\n", 
-	       gtk_printer_get_name (printer), result);
+      if ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) == 0)
+	result = gtk_printer_accepts_ps (printer);
     }
-
+  
   g_object_unref (printer);
-
+  
   return result;
 }
 
@@ -2753,3 +2748,4 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 
 #define __GTK_PRINT_UNIX_DIALOG_C__
 #include "gtkaliasdef.c"
+

@@ -338,9 +338,12 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
 {
   GtkPrinter *printer;
   
-  printer = gtk_printer_new (_("Print to PDF"),
-			     GTK_PRINT_BACKEND (backend),
-			     TRUE); 
+  printer = g_object_new (GTK_TYPE_PRINTER,
+			  "name", _("Print to PDF"),
+			  "backend", backend,
+			  "is-virtual", TRUE,
+			  "accepts-ps", FALSE,
+			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
   gtk_printer_set_icon_name (printer, "floppy");

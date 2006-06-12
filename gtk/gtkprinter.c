@@ -43,11 +43,13 @@ struct _GtkPrinterPrivate
   gchar *description;
   gchar *icon_name;
 
-  guint is_active: 1;
-  guint is_new: 1;
-  guint is_virtual : 1;
-  guint is_default : 1;
-  guint has_details: 1;
+  guint is_active   : 1;
+  guint is_new      : 1;
+  guint is_virtual  : 1;
+  guint is_default  : 1;
+  guint has_details : 1;
+  guint accepts_pdf : 1;
+  guint accepts_ps  : 1;
 
   gchar *state_message;  
   gint job_count;
@@ -68,7 +70,9 @@ enum {
   PROP_STATE_MESSAGE,
   PROP_LOCATION,
   PROP_ICON_NAME,
-  PROP_JOB_COUNT
+  PROP_JOB_COUNT,
+  PROP_ACCEPTS_PDF,
+  PROP_ACCEPTS_PS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -129,6 +133,20 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							 P_("Is Virtual"),
 							 P_("FALSE if this represents a real hardware printer"),
 							 FALSE,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (G_OBJECT_CLASS (class),
+                                   PROP_ACCEPTS_PDF,
+                                   g_param_spec_boolean ("accepts-pdf",
+							 P_("Accepts PDF"),
+							 P_("TRUE if this printer can accept PDF"),
+							 TRUE,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (G_OBJECT_CLASS (class),
+                                   PROP_ACCEPTS_PS,
+                                   g_param_spec_boolean ("accepts-ps",
+							 P_("Accepts PostScript"),
+							 P_("TRUE if this printer can accept PostScript"),
+							 TRUE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_STATE_MESSAGE,
@@ -197,6 +215,8 @@ gtk_printer_init (GtkPrinter *printer)
   priv->is_active = TRUE;
   priv->is_new = TRUE;
   priv->has_details = FALSE;
+  priv->accepts_pdf = TRUE;
+  priv->accepts_ps = TRUE;
 
   priv->state_message = NULL;  
   priv->job_count = 0;
@@ -241,6 +261,14 @@ gtk_printer_set_property (GObject         *object,
 
     case PROP_IS_VIRTUAL:
       priv->is_virtual = g_value_get_boolean (value);
+      break;
+
+    case PROP_ACCEPTS_PDF:
+      priv->accepts_pdf = g_value_get_boolean (value);
+      break;
+
+    case PROP_ACCEPTS_PS:
+      priv->accepts_ps = g_value_get_boolean (value);
       break;
 
     default:
@@ -289,6 +317,15 @@ gtk_printer_get_property (GObject    *object,
       break;
     case PROP_JOB_COUNT:
       g_value_set_int (value, priv->job_count);
+      break;
+    case PROP_IS_VIRTUAL:
+      g_value_set_boolean (value, priv->is_virtual);
+      break;
+    case PROP_ACCEPTS_PDF:
+      g_value_set_boolean (value, priv->accepts_pdf);
+      break;
+    case PROP_ACCEPTS_PS:
+      g_value_set_boolean (value, priv->accepts_ps);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -605,6 +642,22 @@ gtk_printer_is_virtual (GtkPrinter *printer)
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
   return printer->priv->is_virtual;
+}
+
+gboolean 
+gtk_printer_accepts_pdf (GtkPrinter *printer)
+{ 
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
+  
+  return printer->priv->accepts_pdf;
+}
+
+gboolean 
+gtk_printer_accepts_ps (GtkPrinter *printer)
+{ 
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
+  
+  return printer->priv->accepts_ps;
 }
 
 gboolean
