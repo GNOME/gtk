@@ -18,6 +18,20 @@ to use gtk_print_unix_dialog_get_selected_printer() to obtain
 a #GtkPrinter object and use it to construct a #GtkPrintJob using
 gtk_print_job_new().
 </para>
+<para>
+#GtkPrintUnixDialog uses the following response values:
+<variablelist>
+  <varlistentry><term>%GTK_RESPONSE_OK</term>
+    <listitem><para>for the "Print" button</para></listitem>
+  </varlistentry>
+  <varlistentry><term>%GTK_RESPONSE_APPLY</term>
+    <listitem><para>for the "Preview" button</para></listitem>
+  </varlistentry>
+  <varlistentry><term>%GTK_RESPONSE_CANCEL</term>
+    <listitem><para>for the "Cancel" button</para></listitem>
+  </varlistentry>
+</variablelist>
+</para>
 
 <!-- FIXME example here -->
 

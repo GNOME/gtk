@@ -1,3 +1,8 @@
+2006-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintunixdialog.sgml: Document resonses used
+	by GtkPrintUnixDialog.  (#344558, Christian Persch)
+
 2006-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkprintoperation.sgml: Updates
