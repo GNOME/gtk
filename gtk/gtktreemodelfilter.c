@@ -2987,34 +2987,43 @@ gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
  * @child_iter: A valid #GtkTreeIter pointing to a row on the child model.
  *
  * Sets @filter_iter to point to the row in @filter that corresponds to the
- * row pointed at by @child_iter.
+ * row pointed at by @child_iter.  If @filter_iter was not set, %FALSE is
+ * returned.
+ *
+ * Return value: %TRUE, if @filter_iter was set, i.e. if @child_iter is a
+ * valid iterator pointing to a visible row in child model.
  *
  * Since: 2.4
  */
-void
+gboolean
 gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
                                                   GtkTreeIter        *filter_iter,
                                                   GtkTreeIter        *child_iter)
 {
+  gboolean ret;
   GtkTreePath *child_path, *path;
 
-  g_return_if_fail (GTK_IS_TREE_MODEL_FILTER (filter));
-  g_return_if_fail (filter->priv->child_model != NULL);
-  g_return_if_fail (filter_iter != NULL);
-  g_return_if_fail (child_iter != NULL);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (filter), FALSE);
+  g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
+  g_return_val_if_fail (filter_iter != NULL, FALSE);
+  g_return_val_if_fail (child_iter != NULL, FALSE);
 
   filter_iter->stamp = 0;
 
   child_path = gtk_tree_model_get_path (filter->priv->child_model, child_iter);
-  g_return_if_fail (child_path != NULL);
+  g_return_val_if_fail (child_path != NULL, FALSE);
 
   path = gtk_tree_model_filter_convert_child_path_to_path (filter,
                                                            child_path);
   gtk_tree_path_free (child_path);
-  g_return_if_fail (path != NULL);
 
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), filter_iter, path);
+  if (!path)
+    return FALSE;
+
+  ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), filter_iter, path);
   gtk_tree_path_free (path);
+
+  return ret;
 }
 
 /**
@@ -3152,7 +3161,8 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  * Converts @child_path to a path relative to @filter. That is, @child_path
  * points to a path in the child model. The rerturned path will point to the
  * same row in the filtered model. If @child_path isn't a valid path on the
- * child model, then %NULL is returned.
+ * child model or points to a row which is not visible in @filter, then %NULL
+ * is returned.
  *
  * Return value: A newly allocated #GtkTreePath, or %NULL.
  *
@@ -3170,6 +3180,9 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
                                                                 child_path,
                                                                 TRUE,
                                                                 TRUE);
+
+  if (!path)
+      return NULL;
 
   /* get a new path which only takes visible nodes into account.
    * -- if this gives any performance issues, we can write a special

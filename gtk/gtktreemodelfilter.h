@@ -84,7 +84,7 @@ void          gtk_tree_model_filter_set_visible_column         (GtkTreeModelFilt
 GtkTreeModel *gtk_tree_model_filter_get_model                  (GtkTreeModelFilter           *filter);
 
 /* conversion */
-void          gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter           *filter,
+gboolean      gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter           *filter,
                                                                 GtkTreeIter                  *filter_iter,
                                                                 GtkTreeIter                  *child_iter);
 void          gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter           *filter,

@@ -1,3 +1,11 @@
+2006-06-12  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelfilter.[ch]
+	(gtk_tree_model_filter_convert_child_iter_to_iter),
+	(gtk_tree_model_filter_convert_child_path_to_path): report status
+	in return value instead of spewing assertions.  (#335729, Yevgen
+	Muntyan).
+
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_finalize): 
