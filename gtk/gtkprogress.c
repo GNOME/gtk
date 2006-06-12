@@ -56,7 +56,7 @@ static void gtk_progress_get_property    (GObject          *object,
 static void gtk_progress_destroy         (GtkObject        *object);
 static void gtk_progress_finalize        (GObject          *object);
 static void gtk_progress_realize         (GtkWidget        *widget);
-static gint gtk_progress_expose          (GtkWidget        *widget,
+static gboolean gtk_progress_expose      (GtkWidget        *widget,
 				 	  GdkEventExpose   *event);
 static void gtk_progress_size_allocate   (GtkWidget        *widget,
 				 	  GtkAllocation    *allocation);
@@ -283,7 +283,7 @@ gtk_progress_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_progress_parent_class)->finalize (object);
 }
 
-static gint
+static gboolean
 gtk_progress_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {

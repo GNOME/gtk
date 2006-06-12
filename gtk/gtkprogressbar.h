@@ -77,6 +77,7 @@ struct _GtkProgressBar
   
   guint activity_dir : 1;
   guint ellipsize : 3;
+  guint dirty : 1;
 };
 
 struct _GtkProgressBarClass

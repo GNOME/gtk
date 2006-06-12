@@ -1,3 +1,9 @@
+2006-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprogressbar.h: Add a dirty flag to GtkProgressBar.n/ 
+	* gtk/gtkprogressbar.c: Defer updating of the offscreen
+	pixmap until expose.  (#344543, Chris Wilson)
+
 2006-06-11  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c
