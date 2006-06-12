@@ -1,3 +1,68 @@
+Overview of Changes from GTK+ 2.9.2 to 2.9.3
+============================================  
+
+* GtkPrintOperation: 
+ - Introduce an allow-async property 
+ - Introduce a GtkPrintOperationAction enumeration
+ - Rename pdf_target to export_filename
+
+* GtkNotebook:
+ - Add a destroy notify to gtk_notebook_set_window_creation_hook.
+
+* GtkRange:
+ - Add a number of new stle properties which allow more
+   fexible stepper theming
+
+* Bugs fixed:
+ 337603
+ 344148
+ 344209
+ 344232
+ 344244
+ 344288
+ 337491
+ 342339
+ 342249
+ 344290
+ 344504
+ 344505
+ 344386
+ 344512
+ 344513
+ 344528
+ 344518
+ 344530
+ 344496
+ 339739
+ 344607
+ 344543
+ 344560
+ 343945
+ 344239
+ 344558
+
+* Updated translations (es,fi,ko,th,wa)
+
+Behdad Esfahbod
+Bastian Nocera
+Alexander Larsson
+Jürg Billeter
+Murray Cumming
+Milosz Derezynski
+Tor Lillqvist
+Kazuki Iwamoto
+Chris Wilson
+Michael Natterer
+Benjamin Berg
+Marko Anastasov
+Christian Persch
+Masatake Yamamoto
+Elijah Newren
+John Finlay
+Emmanuele Bassi
+David Malcolm
+John Darrington
+
 Overview of Changes from GTK+ 2.9.1 to 2.9.2
 ============================================
 

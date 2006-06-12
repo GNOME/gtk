@@ -1,5 +1,7 @@
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkprintjob.c:
 	* gtk/gtkprintbackend.c: 
 	* gtk/gtkpagesetupunixdialog.c: 
