@@ -28,6 +28,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
+#include "gtkclipboard.h"
 #include "gtkcombobox.h"
 #include "gtkentry.h"
 #include "gtkeventbox.h"
@@ -154,6 +155,7 @@ struct _GtkFileChooserDefaultClass
 /* Signal IDs */
 enum {
   LOCATION_POPUP,
+  LOCATION_POPUP_ON_PASTE,
   UP_FOLDER,
   DOWN_FOLDER,
   HOME_FOLDER,
@@ -313,6 +315,7 @@ static void           gtk_file_chooser_default_initial_focus          (GtkFileCh
 
 static void location_popup_handler (GtkFileChooserDefault *impl,
 				    const gchar           *path);
+static void location_popup_on_paste_handler (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
 static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
@@ -486,6 +489,14 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__STRING,
 			     G_TYPE_NONE, 1, G_TYPE_STRING);
+  signals[LOCATION_POPUP_ON_PASTE] =
+    _gtk_binding_signal_new ("location-popup-on-paste",
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (location_popup_on_paste_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
   signals[UP_FOLDER] =
     _gtk_binding_signal_new (I_("up-folder"),
 			     G_OBJECT_CLASS_TYPE (class),
@@ -551,6 +562,11 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				1, G_TYPE_STRING, "~");
 #endif
 #endif
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_v, GDK_CONTROL_MASK,
+				"location-popup-on-paste",
+				0);
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Up, GDK_MOD1_MASK,
@@ -7337,6 +7353,51 @@ out:
 
   g_object_unref (handle);
 }
+
+static void
+paste_text_received (GtkClipboard          *clipboard,
+		     const gchar           *text,
+		     GtkFileChooserDefault *impl)
+{
+  GtkFilePath *path;
+
+  if (!text)
+    return;
+
+  path = gtk_file_system_uri_to_path (impl->file_system, text);
+  if (!path) 
+    {
+      if (!g_path_is_absolute (text)) 
+	{
+	  location_popup_handler (impl, text);
+	  return;
+	}
+
+      path = gtk_file_system_filename_to_path (impl->file_system, text);
+      if (!path) 
+	{
+	  location_popup_handler (impl, text);
+	  return;
+	}
+    }
+
+  if (!gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (impl), path, NULL))
+    location_popup_handler (impl, text);
+
+  gtk_file_path_free (path);
+}
+
+/* Handler for the "location-popup-on-paste" keybinding signal */
+static void
+location_popup_on_paste_handler (GtkFileChooserDefault *impl)
+{
+  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl),
+		  				      GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_text (clipboard,
+		  	      (GtkClipboardTextReceivedFunc) paste_text_received,
+			      impl);
+}
+
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
 static gboolean

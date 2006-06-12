@@ -1,3 +1,8 @@
+2006-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Add support for pasting
+	filenames into the filechooser.  (#153212, Bastian Nocera)
+
 2006-06-12  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelfilter.[ch]
