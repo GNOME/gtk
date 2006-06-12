@@ -2,7 +2,7 @@
 
 	* gtk/gtkassistant.c: Add an accessible implementation in
 	order to make the buttons visible to a11y tools.  (pointed out
-	by David Malcolm)
+	by David Malcolm, #343945)
 
 	* gtk/gtkprintoperation-win32.c: Store scale as a percentage.
 	(#344560, Christian Persch)
