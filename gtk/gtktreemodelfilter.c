@@ -97,7 +97,7 @@ struct _GtkTreeModelFilterPrivate
   GType *modify_types;
   GtkTreeModelFilterModifyFunc modify_func;
   gpointer modify_data;
-  gpointer modify_destroy;
+  GtkDestroyNotify modify_destroy;
 
   gint visible_column;
 
@@ -372,6 +372,12 @@ gtk_tree_model_filter_finalize (GObject *object)
 
   if (filter->priv->modify_types)
     g_free (filter->priv->modify_types);
+  
+  if (filter->priv->modify_destroy)
+    filter->priv->modify_destroy (filter->priv->modify_data);
+
+  if (filter->priv->visible_destroy)
+    filter->priv->visible_destroy (filter->priv->visible_data);
 
   /* must chain up */
   G_OBJECT_CLASS (gtk_tree_model_filter_parent_class)->finalize (object);

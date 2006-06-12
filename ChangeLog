@@ -1,5 +1,8 @@
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_finalize): 
+	Clean up user data.  (#344624, Christian Weiske)
+
 	* NEWS: Updates
 
 	* gtk/gtkprintjob.c:
