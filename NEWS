@@ -1,3 +1,18 @@
+Overview of Changes from GTK+ 2.8.18 to GTK+ 2.8.19
+===================================================
+
+Bugs fixed:
+ 341327	Memory corruption inside glib
+ 337491	_gdk_win32_drawable_release_dc: DeleteDC() 
+        called on a GetDC() handle
+ 343425	"grab-notify"-signal is not correctly propagated 
+        for internal children
+ 344244	Window resizing not working when keeping the 
+        aspect fixed
+ 344496	CRLF converting via Clipboard
+
+Updated translations (ne)
+
 Overview of Changes from GTK+ 2.8.17 to GTK+ 2.8.18
 ===================================================
 

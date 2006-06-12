@@ -1,3 +1,7 @@
+2006-06-12  Matthias Clasen <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2006-06-11  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Convert \n
@@ -27,7 +31,7 @@
 2006-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkfont-x11.c (_gdk_font_destroy): Remove the right
-	XID from the xid table.  (#34327, Sampo Savolainen, Tim Janik)
+	XID from the xid table.  (#341327, Sampo Savolainen, Tim Janik)
 
 2006-05-30  Matthias Clasen  <mclasen@redhat.com>
 
