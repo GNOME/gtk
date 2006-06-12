@@ -277,13 +277,19 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-07 23:53+0200\n"
-"PO-Revision-Date: 2006-06-08 09:55+0530\n"
+"POT-Creation-Date: 2006-06-12 07:07+0200\n"
+"PO-Revision-Date: 2006-06-12 12:15+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -291,6 +297,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -918,7 +925,7 @@ msgstr "છોડેલી જગ્યા"
 msgid "The amount of space between children"
 msgstr "બાળકો વચ્ચે છોડેલી જગ્યાનું પ્રમાણ"
 
-#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:583 ../gtk/gtktoolbar.c:572
+#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:584 ../gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "એક જ સરખાં "
 
@@ -957,18 +964,18 @@ msgstr "પીક્સેલની અંદર, બાળ અને પડો�
 msgid "Pack type"
 msgstr "પેક પ્રકાર"
 
-#: ../gtk/gtkbox.c:138 ../gtk/gtknotebook.c:636
+#: ../gtk/gtkbox.c:138 ../gtk/gtknotebook.c:637
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "બાળ એ પિતૃના શરુઆતના શું અંતના સંદર્ભમાં બંધાયુ છે કે નહિ તે દર્શાવવા માટેનુંGtkPackType"
 
-#: ../gtk/gtkbox.c:144 ../gtk/gtknotebook.c:614 ../gtk/gtkpaned.c:216
+#: ../gtk/gtkbox.c:144 ../gtk/gtknotebook.c:615 ../gtk/gtkpaned.c:216
 #: ../gtk/gtkruler.c:110
 msgid "Position"
 msgstr "સ્થિતિ"
 
-#: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:615
+#: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:616
 msgid "The index of the child in the parent"
 msgstr "પિતૃમાં બાળનો અનુક્રમાંક "
 
@@ -1396,7 +1403,7 @@ msgstr "પ્રગતિદર્શક પટ્ટીની કિંમત"
 
 #: ../gtk/gtkcellrendererprogress.c:134 ../gtk/gtkcellrenderertext.c:190
 #: ../gtk/gtkentry.c:560 ../gtk/gtkmessagedialog.c:152
-#: ../gtk/gtkprogressbar.c:193 ../gtk/gtktextbuffer.c:197
+#: ../gtk/gtkprogressbar.c:196 ../gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "લખાણ"
 
@@ -1577,7 +1584,7 @@ msgstr ""
 "તરીકે કરી શકે છે. જો તમે આ પરિમાણને સમજી ના શકો, તો કઈ નહિતમારે તેની જરુર નહિ પડે"
 
 #: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtklabel.c:406
-#: ../gtk/gtkprogressbar.c:215
+#: ../gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "એલીપ્સાઈઝ"
 
@@ -1845,7 +1852,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "શું રંગને આલ્ફા કિંમત આપવી કે નહિં"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:386
-#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:114
+#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:115
 #: ../gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "શીર્ષક"
@@ -2739,7 +2746,7 @@ msgstr "હાંસ્યો"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "જગ્યા કે જે ચિહ્ન દેખાવની બાજુઓ વચ્ચે દાખલ થયેલ છે"
 
-#: ../gtk/gtkiconview.c:692 ../gtk/gtkprogressbar.c:125
+#: ../gtk/gtkiconview.c:692 ../gtk/gtkprogressbar.c:128
 #: ../gtk/gtktoolbar.c:484 ../gtk/gtktrayicon-x11.c:94
 msgid "Orientation"
 msgstr "દિશા"
@@ -3248,75 +3255,75 @@ msgstr "Y પેડ"
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "વિજેટની ઉપર અને નીચે બાજુને ઉમેરવામાં આવતી જગ્યા પિક્સેલમાં"
 
-#: ../gtk/gtknotebook.c:511
+#: ../gtk/gtknotebook.c:512
 msgid "Page"
 msgstr "પાનું"
 
-#: ../gtk/gtknotebook.c:512
+#: ../gtk/gtknotebook.c:513
 msgid "The index of the current page"
 msgstr "વર્તમાન પાનાનો અનુક્રમાંક"
 
-#: ../gtk/gtknotebook.c:520
+#: ../gtk/gtknotebook.c:521
 msgid "Tab Position"
 msgstr "ટેબની સ્થિતિ"
 
-#: ../gtk/gtknotebook.c:521
+#: ../gtk/gtknotebook.c:522
 msgid "Which side of the notebook holds the tabs"
 msgstr "નોટબુકની કઈ બાજુઓ ટેબો રાખે છે"
 
-#: ../gtk/gtknotebook.c:528
+#: ../gtk/gtknotebook.c:529
 msgid "Tab Border"
 msgstr "ટેબની કિનારી"
 
-#: ../gtk/gtknotebook.c:529
+#: ../gtk/gtknotebook.c:530
 msgid "Width of the border around the tab labels"
 msgstr "ટેબ લેબલના આજુબાજુની કિનારીની પહોળાઈ"
 
-#: ../gtk/gtknotebook.c:537
+#: ../gtk/gtknotebook.c:538
 msgid "Horizontal Tab Border"
 msgstr "આડી ટેબ કિનારી"
 
-#: ../gtk/gtknotebook.c:538
+#: ../gtk/gtknotebook.c:539
 msgid "Width of the horizontal border of tab labels"
 msgstr "ટેબ લેબલની આડી કિનારીની પહોળાઈ"
 
-#: ../gtk/gtknotebook.c:546
+#: ../gtk/gtknotebook.c:547
 msgid "Vertical Tab Border"
 msgstr "ઊભી ટેબ કિનારી"
 
-#: ../gtk/gtknotebook.c:547
+#: ../gtk/gtknotebook.c:548
 msgid "Width of the vertical border of tab labels"
 msgstr "ટેબ લેબલની ઊભી કિનારીની પહોળાઈ"
 
-#: ../gtk/gtknotebook.c:555
+#: ../gtk/gtknotebook.c:556
 msgid "Show Tabs"
 msgstr "ટેબો બતાવો"
 
-#: ../gtk/gtknotebook.c:556
+#: ../gtk/gtknotebook.c:557
 msgid "Whether tabs should be shown or not"
 msgstr "શું ટેબોને બતાવવી જોઈએ કે નહિ"
 
-#: ../gtk/gtknotebook.c:562
+#: ../gtk/gtknotebook.c:563
 msgid "Show Border"
 msgstr "કિનારી બતાવો"
 
-#: ../gtk/gtknotebook.c:563
+#: ../gtk/gtknotebook.c:564
 msgid "Whether the border should be shown or not"
 msgstr "શું કિનારીને બતાવવી જોઈએ કે નહિં"
 
-#: ../gtk/gtknotebook.c:569
+#: ../gtk/gtknotebook.c:570
 msgid "Scrollable"
 msgstr "સરકપટ્ટી"
 
-#: ../gtk/gtknotebook.c:570
+#: ../gtk/gtknotebook.c:571
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "જો ખરુ હોય તો, સરક તીરો ઉમેરાય છે જો ત્યાં ઘણી ટેબો બંધબેસતી હોય"
 
-#: ../gtk/gtknotebook.c:576
+#: ../gtk/gtknotebook.c:577
 msgid "Enable Popup"
 msgstr "પૉપ-અપ સક્રિય કરો"
 
-#: ../gtk/gtknotebook.c:577
+#: ../gtk/gtknotebook.c:578
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3324,115 +3331,115 @@ msgstr ""
 "જો ખરુ હોય તો, નોટબુકમાં માઉસની જમણી બાજુનું બટન દબાવવાથી મેનુ ખુલશે જેનો ઉપયોગ તમે પાના "
 "ઉપર જવા માટે કરી શકો છો"
 
-#: ../gtk/gtknotebook.c:584
+#: ../gtk/gtknotebook.c:585
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "શું બધા જ ટેબનું માપ એકસરખું હોવું જોઈએ"
 
-#: ../gtk/gtknotebook.c:590
+#: ../gtk/gtknotebook.c:591
 msgid "Group ID"
 msgstr "જૂથ ID"
 
-#: ../gtk/gtknotebook.c:591
+#: ../gtk/gtknotebook.c:592
 msgid "Group ID for tabs drag and drop"
 msgstr "ખેંચો અને મૂકો ટેબો માટે જૂથ ID"
 
-#: ../gtk/gtknotebook.c:600
+#: ../gtk/gtknotebook.c:601
 msgid "Tab label"
 msgstr "ટેબનુ લેબલ"
 
-#: ../gtk/gtknotebook.c:601
+#: ../gtk/gtknotebook.c:602
 msgid "The string displayed on the child's tab label"
 msgstr "બાળના ટેબ લેબલ પર દર્શાવાયે શબ્દમાળા"
 
-#: ../gtk/gtknotebook.c:607
+#: ../gtk/gtknotebook.c:608
 msgid "Menu label"
 msgstr "મેનુનું લેબલ"
 
-#: ../gtk/gtknotebook.c:608
+#: ../gtk/gtknotebook.c:609
 msgid "The string displayed in the child's menu entry"
 msgstr "બાળના મેનુ પ્રવેશમાં પ્રદર્શિત કરાયેલી શબ્દમાળા"
 
-#: ../gtk/gtknotebook.c:621
+#: ../gtk/gtknotebook.c:622
 msgid "Tab expand"
 msgstr "ટેબ વિસ્તરણ"
 
-#: ../gtk/gtknotebook.c:622
+#: ../gtk/gtknotebook.c:623
 msgid "Whether to expand the child's tab or not"
 msgstr "શું બાળની ટેબને વિસ્તારવી કે નહિ"
 
-#: ../gtk/gtknotebook.c:628
+#: ../gtk/gtknotebook.c:629
 msgid "Tab fill"
 msgstr "ટેબને ભરવુ"
 
-#: ../gtk/gtknotebook.c:629
+#: ../gtk/gtknotebook.c:630
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "શું બાળની ટેબ ફાળવેલી જગ્યાને ભરવી જોઈએ કે નહિ"
 
-#: ../gtk/gtknotebook.c:635
+#: ../gtk/gtknotebook.c:636
 msgid "Tab pack type"
 msgstr "ટેબ પેકનો પ્રકાર"
 
-#: ../gtk/gtknotebook.c:642
+#: ../gtk/gtknotebook.c:643
 msgid "Tab reorderable"
 msgstr "ટેબ પુનઃગોઠવી શકાય તેવી"
 
-#: ../gtk/gtknotebook.c:643
+#: ../gtk/gtknotebook.c:644
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "શું ટેબ એ વપરાશકર્તા ક્રિયા દ્વારા પુનઃગોઠવી શકાય કે નહિં"
 
-#: ../gtk/gtknotebook.c:649
+#: ../gtk/gtknotebook.c:650
 msgid "Tab detachable"
 msgstr "ટેબ જોડાણ તોડી શકાય તેવી"
 
-#: ../gtk/gtknotebook.c:650
+#: ../gtk/gtknotebook.c:651
 msgid "Whether the tab is detachable"
 msgstr "શું ટેબનું જોડાણ તોડી શકાય"
 
-#: ../gtk/gtknotebook.c:665 ../gtk/gtkscrollbar.c:83
+#: ../gtk/gtknotebook.c:666 ../gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "પાછા ફરવાનું ગૌણ સ્ટેપર"
 
-#: ../gtk/gtknotebook.c:666
+#: ../gtk/gtknotebook.c:667
 msgid "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "ખસેડવાની પટ્ટીના બીજા છેડા પર પાછા આવવા માટેનું એક બીજુ બટન દર્શાવો"
 
-#: ../gtk/gtknotebook.c:681 ../gtk/gtkscrollbar.c:91
+#: ../gtk/gtknotebook.c:682 ../gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "આગળ જવાનું ગૌણ સ્ટેપર"
 
-#: ../gtk/gtknotebook.c:682
+#: ../gtk/gtknotebook.c:683
 msgid "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "ખસેડવાની પટ્ટીના બીજા છેડા પર આગળ જવા માટેનુ બીજુ બટન દર્શાવો"
 
-#: ../gtk/gtknotebook.c:696 ../gtk/gtkscrollbar.c:67
+#: ../gtk/gtknotebook.c:697 ../gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "પાછા ફરવાનું સ્ટેપર"
 
-#: ../gtk/gtknotebook.c:697 ../gtk/gtkscrollbar.c:68
+#: ../gtk/gtknotebook.c:698 ../gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "પાછા આવવા માટેનું મૂળભૂત તીરનું બટન દર્શાવો"
 
-#: ../gtk/gtknotebook.c:711 ../gtk/gtkscrollbar.c:75
+#: ../gtk/gtknotebook.c:712 ../gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "આગળ જવા માટેનું સ્ટેપર"
 
-#: ../gtk/gtknotebook.c:712 ../gtk/gtkscrollbar.c:76
+#: ../gtk/gtknotebook.c:713 ../gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "આગળ જવા માટેનું મૂળભૂત તીરનું બટન દર્શાવો"
 
-#: ../gtk/gtknotebook.c:726
+#: ../gtk/gtknotebook.c:727
 msgid "Tab overlap"
 msgstr "ટેબ ઓવરલેપ"
 
-#: ../gtk/gtknotebook.c:727
+#: ../gtk/gtknotebook.c:728
 msgid "Size of tab overlap area"
 msgstr "ટેબ ઓવરલેપ વિસ્તારનું માપ"
 
-#: ../gtk/gtknotebook.c:742
+#: ../gtk/gtknotebook.c:743
 msgid "Tab curvature"
 msgstr "ટેબ વણાંક"
 
-#: ../gtk/gtknotebook.c:743
+#: ../gtk/gtknotebook.c:744
 msgid "Size of tab curvature"
 msgstr "ટેબ વળાંકનું માપ"
 
@@ -3584,86 +3591,86 @@ msgstr "સ્રોત વિકલ્પ"
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption આ વિજેટને બેક કરી રહ્યું છે"
 
-#: ../gtk/gtkprintjob.c:115
+#: ../gtk/gtkprintjob.c:116
 msgid "Title of the print job"
 msgstr "છાપન ક્રિયાનું શીર્ષક"
 
-#: ../gtk/gtkprintjob.c:123
+#: ../gtk/gtkprintjob.c:124
 msgid "Printer"
 msgstr "પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:124
+#: ../gtk/gtkprintjob.c:125
 msgid "Printer to print the job to"
 msgstr "ક્રિયાને છાપવા માટેનું પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:132
+#: ../gtk/gtkprintjob.c:133
 msgid "Settings"
 msgstr "સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:133
+#: ../gtk/gtkprintjob.c:134
 msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:141 ../gtk/gtkprintjob.c:142
-#: ../gtk/gtkprintunixdialog.c:224
+#: ../gtk/gtkprintjob.c:142 ../gtk/gtkprintjob.c:143
+#: ../gtk/gtkprintunixdialog.c:227
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:855
+#: ../gtk/gtkprintoperation.c:844
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: ../gtk/gtkprintoperation.c:856
+#: ../gtk/gtkprintoperation.c:845
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:874 ../gtk/gtkprintunixdialog.c:242
+#: ../gtk/gtkprintoperation.c:863 ../gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:875 ../gtk/gtkprintunixdialog.c:243
+#: ../gtk/gtkprintoperation.c:864 ../gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:893
+#: ../gtk/gtkprintoperation.c:882
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: ../gtk/gtkprintoperation.c:894
+#: ../gtk/gtkprintoperation.c:883
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: ../gtk/gtkprintoperation.c:917
+#: ../gtk/gtkprintoperation.c:906
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: ../gtk/gtkprintoperation.c:918
+#: ../gtk/gtkprintoperation.c:907
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:939 ../gtk/gtkprintunixdialog.c:232
+#: ../gtk/gtkprintoperation.c:928 ../gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:940
+#: ../gtk/gtkprintoperation.c:929
 msgid "The current page in the document."
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું."
 
-#: ../gtk/gtkprintoperation.c:961
+#: ../gtk/gtkprintoperation.c:950
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: ../gtk/gtkprintoperation.c:962
+#: ../gtk/gtkprintoperation.c:951
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
 
-#: ../gtk/gtkprintoperation.c:982
+#: ../gtk/gtkprintoperation.c:971
 msgid "Track Print Status"
 msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
 
-#: ../gtk/gtkprintoperation.c:983
+#: ../gtk/gtkprintoperation.c:972
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3671,71 +3678,71 @@ msgstr ""
 "જો TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન "
 "પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
 
-#: ../gtk/gtkprintoperation.c:1000
+#: ../gtk/gtkprintoperation.c:989
 msgid "Unit"
 msgstr "એકમ"
 
-#: ../gtk/gtkprintoperation.c:1001
+#: ../gtk/gtkprintoperation.c:990
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: ../gtk/gtkprintoperation.c:1018
+#: ../gtk/gtkprintoperation.c:1007
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: ../gtk/gtkprintoperation.c:1019
+#: ../gtk/gtkprintoperation.c:1008
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE જો છાપતી વખતે પ્રગતિ સંવાદ બતાવાયેલ હોય."
 
-#: ../gtk/gtkprintoperation.c:1036
+#: ../gtk/gtkprintoperation.c:1025
 msgid "Allow Async"
 msgstr "અસુમેળને પરવાનગી આપો"
 
-#: ../gtk/gtkprintoperation.c:1037
+#: ../gtk/gtkprintoperation.c:1026
 msgid "TRUE if print process may run asynchronous."
 msgstr "જો છાપન પ્રક્રિયા અસુમેળ રીતે ચાલશે તો TRUE"
 
-#: ../gtk/gtkprintoperation.c:1059 ../gtk/gtkprintoperation.c:1060
-msgid "PDF target filename"
-msgstr "PDF લક્ષ્ય ફાઈલનામ"
+#: ../gtk/gtkprintoperation.c:1049 ../gtk/gtkprintoperation.c:1050
+msgid "Export filename"
+msgstr "નિકાસ ફાઈલનામ"
 
-#: ../gtk/gtkprintoperation.c:1074
+#: ../gtk/gtkprintoperation.c:1064
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:1075
+#: ../gtk/gtkprintoperation.c:1065
 msgid "The status of the print operation"
 msgstr "છાપન પ્રક્રિયાની પરિસ્થિતિ"
 
-#: ../gtk/gtkprintoperation.c:1095
+#: ../gtk/gtkprintoperation.c:1085
 msgid "Status String"
 msgstr "પરિસ્થિતિ શબ્દમાળા"
 
-#: ../gtk/gtkprintoperation.c:1096
+#: ../gtk/gtkprintoperation.c:1086
 msgid "A human-readable description of the status"
 msgstr "પરિસ્થિતિનું માનવીય-વાંચનીય વર્ણન"
 
-#: ../gtk/gtkprintoperation.c:1114
+#: ../gtk/gtkprintoperation.c:1104
 msgid "Custom tab label"
 msgstr "વૈવિધ્યપૂર્ણ ટેબ લેબલ"
 
-#: ../gtk/gtkprintoperation.c:1115
+#: ../gtk/gtkprintoperation.c:1105
 msgid "Label for the tab containing custom widgets."
 msgstr "વૈવિધ્યપૂર્ણ વિજેટોને સમાવતી ટેબ માટેનું લેબલ."
 
-#: ../gtk/gtkprintunixdialog.c:225
+#: ../gtk/gtkprintunixdialog.c:228
 msgid "The GtkPageSetup to use"
 msgstr "વાપરવા માટેનું GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:233
+#: ../gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું"
 
-#: ../gtk/gtkprintunixdialog.c:250
+#: ../gtk/gtkprintunixdialog.c:253
 msgid "Selected Printer"
 msgstr "પસંદ કરેલ પ્રિન્ટર"
 
-#: ../gtk/gtkprintunixdialog.c:251
+#: ../gtk/gtkprintunixdialog.c:254
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter કે જે પસંદ થયેલ છે"
 
@@ -3781,40 +3788,40 @@ msgid ""
 "in the progress widget"
 msgstr "૦.૦ અને ૧.૦ વચ્ચેની સંખ્યા, પ્રગતિ વિજેટમાં લખાણની ઊભી કતારબંધ ગોઠવણી સ્પષ્ટ કરવા માટે"
 
-#: ../gtk/gtkprogressbar.c:117 ../gtk/gtkrange.c:315
+#: ../gtk/gtkprogressbar.c:120 ../gtk/gtkrange.c:320
 #: ../gtk/gtkspinbutton.c:203
 msgid "Adjustment"
 msgstr "બંધ બેસતુ કરો"
 
-#: ../gtk/gtkprogressbar.c:118
+#: ../gtk/gtkprogressbar.c:121
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "પ્રગતિ દર્શક પટ્ટી સાથે સંકળાયેલ GtkAdjustment (અવગણાયેલ)"
 
-#: ../gtk/gtkprogressbar.c:126
+#: ../gtk/gtkprogressbar.c:129
 msgid "Orientation and growth direction of the progress bar"
 msgstr "પ્રગતિ દર્શક પટ્ટીની દિશા અને વિકાસ"
 
-#: ../gtk/gtkprogressbar.c:134
+#: ../gtk/gtkprogressbar.c:137
 msgid "Bar style"
 msgstr "પટ્ટી ની શૈલી"
 
-#: ../gtk/gtkprogressbar.c:135
+#: ../gtk/gtkprogressbar.c:138
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "પટ્ટીની દૃશ્યમાન શૈલી ટકાવારીની સ્થિતિમાં સ્પષ્ટ કરો (અવગણાયેલ)"
 
-#: ../gtk/gtkprogressbar.c:143
+#: ../gtk/gtkprogressbar.c:146
 msgid "Activity Step"
 msgstr "કાર્યની દિશામાં પગલા"
 
-#: ../gtk/gtkprogressbar.c:144
+#: ../gtk/gtkprogressbar.c:147
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "કાર્યશીલ સ્થિતિમાં દરેક વારાનો ઉપયોગમાં લેવામાં આવતો વધારો (અવગણાયેલ)"
 
-#: ../gtk/gtkprogressbar.c:153
+#: ../gtk/gtkprogressbar.c:156
 msgid "Activity Blocks"
 msgstr "કાર્ય માટેના ખાના"
 
-#: ../gtk/gtkprogressbar.c:154
+#: ../gtk/gtkprogressbar.c:157
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -3822,37 +3829,37 @@ msgstr ""
 "કાર્યશીલ સ્થિતિમાં પ્રગતિ દર્શક પટ્ટી વિસ્તારમાં બંધ બેસાડી શકાતી ખાનાઓની સંખ્યા "
 "(અવગણાયેલ)"
 
-#: ../gtk/gtkprogressbar.c:163
+#: ../gtk/gtkprogressbar.c:166
 msgid "Discrete Blocks"
 msgstr "અલગ અલગ ખાના"
 
-#: ../gtk/gtkprogressbar.c:164
+#: ../gtk/gtkprogressbar.c:167
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr "પ્રગતિ દર્શક પટ્ટીમાં  અલગ અલગ ખાનાની સંખ્યા (જ્યારે અલગ શૈલીમાં બતાવાયુ હોય ત્યારે)"
 
-#: ../gtk/gtkprogressbar.c:173
+#: ../gtk/gtkprogressbar.c:176
 msgid "Fraction"
 msgstr "ભાગ"
 
-#: ../gtk/gtkprogressbar.c:174
+#: ../gtk/gtkprogressbar.c:177
 msgid "The fraction of total work that has been completed"
 msgstr "પૂરા થઇ ગયેલ કામનો કેટલોક ભાગ જે પૂરો થયો છે"
 
-#: ../gtk/gtkprogressbar.c:183
+#: ../gtk/gtkprogressbar.c:186
 msgid "Pulse Step"
 msgstr "કંપન પગલું"
 
-#: ../gtk/gtkprogressbar.c:184
+#: ../gtk/gtkprogressbar.c:187
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "કંપનની સ્થિતિમાં ઉછળતા ખાનાને ખસેડવા માટેનો કુલ પ્રગતિનો ભાગ"
 
-#: ../gtk/gtkprogressbar.c:194
+#: ../gtk/gtkprogressbar.c:197
 msgid "Text to be displayed in the progress bar"
 msgstr "પ્રગતિ દર્શક પટ્ટીમાં દર્શાવવા માટેનું લખાણ"
 
-#: ../gtk/gtkprogressbar.c:216
+#: ../gtk/gtkprogressbar.c:219
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
@@ -3899,105 +3906,125 @@ msgstr "રેડિયો બટન કે જેનું જૂથ આ વિ
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "રેડિયો મેનુ વસ્તુ કે જેનું જૂથમાં આ વિજેટ અનુલક્ષે છે."
 
-#: ../gtk/gtkrange.c:306
+#: ../gtk/gtkrange.c:311
 msgid "Update policy"
 msgstr "સુધારા પોલિસી"
 
-#: ../gtk/gtkrange.c:307
+#: ../gtk/gtkrange.c:312
 msgid "How the range should be updated on the screen"
 msgstr "સ્ક્રીન પર વિસ્તારને કેવી રીતે બદલવી"
 
-#: ../gtk/gtkrange.c:316
+#: ../gtk/gtkrange.c:321
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment કે જે આ વિસ્તારની વસ્તુની વર્તમાન કિંમત ધરાવે છે"
 
-#: ../gtk/gtkrange.c:323
+#: ../gtk/gtkrange.c:328
 msgid "Inverted"
 msgstr "ઉલટુ કરાયેલું"
 
-#: ../gtk/gtkrange.c:324
+#: ../gtk/gtkrange.c:329
 msgid "Invert direction slider moves to increase range value"
 msgstr "વિસ્તારની કિંમત વધારવા માટે દિશાના સરકપટ્ટીને ઉલટુ ફેરવો"
 
-#: ../gtk/gtkrange.c:331
+#: ../gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
 msgstr "નીચી ઊંડી સંવેદનશીલતા"
 
-#: ../gtk/gtkrange.c:332
+#: ../gtk/gtkrange.c:337
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "ઊંડી માટે સંવેદનશીલતા પોલિસી કે જે સંતુલનને નીચી બાજુએ નિર્દેશ કરે છે"
 
-#: ../gtk/gtkrange.c:340
+#: ../gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
 msgstr "ઉપરની ઊંડી સંવેદનશીલતા"
 
-#: ../gtk/gtkrange.c:341
+#: ../gtk/gtkrange.c:346
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "ઊંડાણ માટે સંવેદનશીલતા પોલિસી કે જે સંતુલનની ઉપરની બાજુને નિર્દેશ કરે છે"
 
-#: ../gtk/gtkrange.c:348
+#: ../gtk/gtkrange.c:353
 msgid "Slider Width"
 msgstr "સરકપટ્ટીની પહોળાઈ"
 
-#: ../gtk/gtkrange.c:349
+#: ../gtk/gtkrange.c:354
 msgid "Width of scrollbar or scale thumb"
 msgstr "ખસાડવાની પટ્ટી કે સ્કેલ થમ્બની પહોળાઈ"
 
-#: ../gtk/gtkrange.c:356
+#: ../gtk/gtkrange.c:361
 msgid "Trough Border"
 msgstr "ગર્તની કિનારી"
 
-#: ../gtk/gtkrange.c:357
+#: ../gtk/gtkrange.c:362
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "બહારના ગર્તના બેવેલ અને થમ્બ/સ્ટેપર વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkrange.c:364
+#: ../gtk/gtkrange.c:369
 msgid "Stepper Size"
 msgstr "સ્ટેપરનુ માપ"
 
-#: ../gtk/gtkrange.c:365
+#: ../gtk/gtkrange.c:370
 msgid "Length of step buttons at ends"
 msgstr "છેડા પર સ્ટેપ બટન ની લંબાઈ"
 
-#: ../gtk/gtkrange.c:372
+#: ../gtk/gtkrange.c:385
 msgid "Stepper Spacing"
 msgstr "સ્ટેપરની જગ્યા"
 
-#: ../gtk/gtkrange.c:373
+#: ../gtk/gtkrange.c:386
 msgid "Spacing between step buttons and thumb"
 msgstr "સ્ટેપ બટન અને થમ્બ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkrange.c:380
+#: ../gtk/gtkrange.c:393
 msgid "Arrow X Displacement"
 msgstr "તીરનું X દિશામાં સ્થળાંતર"
 
-#: ../gtk/gtkrange.c:381
+#: ../gtk/gtkrange.c:394
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "જ્યારે બટન દબાવવામાં આવે ત્યારે તીરને x દિશામાં કેટલી દૂર લઈ જવુ"
 
-#: ../gtk/gtkrange.c:388
+#: ../gtk/gtkrange.c:401
 msgid "Arrow Y Displacement"
 msgstr "તીરનુ Y દિશામાં સ્થળાંતર"
 
-#: ../gtk/gtkrange.c:389
+#: ../gtk/gtkrange.c:402
 msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "જ્યારે બટન દબાવવામાં આવે ત્યારે તીરને Y દિશામાં કેટલી દૂર લઈ જવી "
 
-#: ../gtk/gtkrange.c:397
+#: ../gtk/gtkrange.c:410
 msgid "Draw slider ACTIVE during drag"
 msgstr "ખેંચવા દરમ્યાન સરકાવનાર ACTIVE"
 
-#: ../gtk/gtkrange.c:398
+#: ../gtk/gtkrange.c:411
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
 "આ વિકલ્પને TRUE તરીકે સુયોજિત કરીને, સરકનાર ACTIVE તરીકે દોરવામાં આવશે અને પડછાયા IN "
 "સાથે જ્યારે તેઓને ખેંચવામાં આવે"
+
+#: ../gtk/gtkrange.c:422
+msgid "Trough Side Details"
+msgstr "Trough બાજુ વિગતો"
+
+#: ../gtk/gtkrange.c:423
+msgid ""
+"When TRUE, the parts of the trough on the two sides of the slider are drawn "
+"with different details"
+msgstr "જ્યારે TRUE હોય, ત્યારે trough ના બે બાજુઓ પરના સરકપટ્ટીના ભાગો અલગ વિગતો સાથે દોરવામાં આવે છે"
+
+#: ../gtk/gtkrange.c:439
+msgid "Trough Under Steppers"
+msgstr "Trough પગલાંઓ નીચે"
+
+#: ../gtk/gtkrange.c:440
+msgid ""
+"Whether to draw trought for full length of range or exclude the steppers and "
+"spacing"
+msgstr "શું trought ને પૂર્ણ લંબાઈ વિસ્તાર માટે દોરવું કે પગલાંઓ અને જગ્યાઓનો સમાવેશ નહિં કરવો"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
