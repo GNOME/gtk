@@ -677,8 +677,7 @@ devmode_to_settings (GtkPrintSettings *settings,
     }
   
   if (devmode->dmFields & DM_SCALE)
-    gtk_print_settings_set_scale (settings,
-				  devmode->dmScale / 100.0);
+    gtk_print_settings_set_scale (settings, devmode->dmScale);
   
   if (devmode->dmFields & DM_COPIES)
     gtk_print_settings_set_n_copies (settings,
@@ -959,7 +958,7 @@ devmode_from_settings (GtkPrintSettings *settings,
   if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_SCALE))
     {
       devmode->dmFields |= DM_SCALE;
-      devmode->dmScale = gtk_print_settings_get_scale (settings) * 100;
+      devmode->dmScale = gtk_print_settings_get_scale (settings);
     }
   
   if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_N_COPIES))
