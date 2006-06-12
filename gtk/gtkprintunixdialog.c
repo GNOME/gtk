@@ -106,7 +106,7 @@ enum {
   PRINTER_LIST_N_COLS
 };
 
-#define _EXTENTION_POINT_MAIN_PAGE_CUSTOM_INPUT "gtk-main-page-custom-input"
+#define _EXTENSION_POINT_MAIN_PAGE_CUSTOM_INPUT "gtk-main-page-custom-input"
 
 struct GtkPrintUnixDialogPrivate
 {
@@ -164,15 +164,17 @@ struct GtkPrintUnixDialogPrivate
 
   GHashTable *extension_points;  
 
-  /* These are set initially on selected printer (either default printer, printer
-   * taken from set settings, or user-selected), but when any setting is changed
-   * by the user it is cleared */
+  /* These are set initially on selected printer (either default printer, 
+   * printer taken from set settings, or user-selected), but when any setting 
+   * is changed by the user it is cleared.
+   */
   GtkPrintSettings *initial_settings;
   
   /* This is the initial printer set by set_settings. We look for it in the
    * added printers. We clear this whenever the user manually changes
    * to another printer, when the user changes a setting or when we find
-   * this printer */
+   * this printer.
+   */
   char *waiting_for_printer;
   gboolean internal_printer_change;
   
@@ -184,7 +186,7 @@ struct GtkPrintUnixDialogPrivate
   gulong options_changed_handler;
   gulong mark_conflicts_id;
 
-  char *format_for_printer;
+  gchar *format_for_printer;
   
   gint current_page;
 };
@@ -193,7 +195,7 @@ G_DEFINE_TYPE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG)
 
 static gboolean
 is_default_printer (GtkPrintUnixDialog *dialog,
-		    GtkPrinter *printer)
+		    GtkPrinter         *printer)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
@@ -679,7 +681,7 @@ wrap_in_frame (const gchar *label,
                GtkWidget   *child)
 {
   GtkWidget *frame, *alignment, *label_widget;
-  char *bold_text;
+  gchar *bold_text;
 
   label_widget = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
@@ -763,7 +765,7 @@ add_option_to_table (GtkPrinterOption *option,
 {
   GtkTable *table;
   GtkWidget *label, *widget;
-  int row;
+  gint row;
 
   table = GTK_TABLE (user_data);
   
@@ -904,7 +906,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GList *groups, *l;
-  char *group;
+  gchar *group;
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
  
@@ -1104,7 +1106,7 @@ schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
     return;
 
   priv->mark_conflicts_id = g_idle_add (mark_conflicts_callback,
-						dialog);
+					dialog);
 }
 
 static void
@@ -1471,7 +1473,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (custom_input);
   gtk_box_pack_start (GTK_BOX (vbox), custom_input, FALSE, FALSE, 0);
   g_hash_table_insert (priv->extension_points, 
-                       _EXTENTION_POINT_MAIN_PAGE_CUSTOM_INPUT,
+                       _EXTENSION_POINT_MAIN_PAGE_CUSTOM_INPUT,
                        custom_input);
 
   hbox = gtk_hbox_new (FALSE, 18);
@@ -1568,8 +1570,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   label = gtk_label_new (_("General"));
   gtk_widget_show (label);
   
-  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook),
-			    main_vbox, label);
+  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), main_vbox, label);
 }
 
 static gboolean
@@ -1583,11 +1584,11 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 			gint               *n_ranges_out)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  int i, n_ranges;
-  const char *text, *p;
-  char *next;
+  gint i, n_ranges;
+  const gchar *text, *p;
+  gchar *next;
   GtkPageRange *ranges;
-  int start, end;
+  gint start, end;
   
   text = gtk_entry_get_text (GTK_ENTRY (priv->page_range_entry));
 
@@ -1654,7 +1655,7 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
 			gint                n_ranges)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  int i;
+  gint i;
   GString *s = g_string_new ("");
 
   for (i = 0; i < n_ranges; i++)
@@ -1667,8 +1668,7 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
 	g_string_append (s, ",");
     }
 
-  gtk_entry_set_text (GTK_ENTRY (priv->page_range_entry),
-		      s->str);
+  gtk_entry_set_text (GTK_ENTRY (priv->page_range_entry), s->str);
   
   g_string_free (s, TRUE);
 }
@@ -1688,7 +1688,8 @@ dialog_get_print_pages (GtkPrintUnixDialog *dialog)
 }
 
 static void
-dialog_set_print_pages (GtkPrintUnixDialog *dialog, GtkPrintPages pages)
+dialog_set_print_pages (GtkPrintUnixDialog *dialog, 
+			GtkPrintPages       pages)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
@@ -1785,8 +1786,8 @@ static gint
 dialog_get_pages_per_sheet (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  const char *val;
-  int num;
+  const gchar *val;
+  gint num;
 
   val = gtk_printer_option_widget_get_value (priv->pages_per_sheet);
 
@@ -1810,15 +1811,15 @@ draw_page_cb (GtkWidget	         *widget,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   cairo_t *cr;
-  double ratio;
-  int w, h, tmp, shadow_offset;
-  int pages_x, pages_y, i, x, y, layout_w, layout_h;
-  double page_width, page_height;
+  gdouble ratio;
+  gint w, h, tmp, shadow_offset;
+  gint pages_x, pages_y, i, x, y, layout_w, layout_h;
+  gdouble page_width, page_height;
   GtkPageOrientation orientation;
   gboolean landscape;
   PangoLayout *layout;
   PangoFontDescription *font;
-  char *text;
+  gchar *text;
   GdkColor *color;
   
   orientation = gtk_page_setup_get_orientation (priv->page_setup);
@@ -2586,9 +2587,9 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 				    GtkPrintSettings   *settings)
 {
   GtkPrintUnixDialogPrivate *priv;
-  const char *printer;
+  const gchar *printer;
   GtkPageRange *ranges;
-  int num_ranges;
+  gint num_ranges;
   
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
   g_return_if_fail (settings == NULL || GTK_IS_PRINT_SETTINGS (settings));
@@ -2652,7 +2653,7 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   GtkPrintSettings *settings;
   GtkPrintPages print_pages;
   GtkPageRange *ranges;
-  int n_ranges;
+  gint n_ranges;
 
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 
@@ -2706,8 +2707,8 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 
 void
 gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
-				      GtkWidget *child,
-				      GtkWidget *tab_label)
+				      GtkWidget          *child,
+				      GtkWidget          *tab_label)
 {
   gtk_notebook_insert_page (GTK_NOTEBOOK (dialog->priv->notebook),
 			    child, tab_label, 2);

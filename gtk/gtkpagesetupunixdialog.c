@@ -602,7 +602,8 @@ get_current_page_setup (GtkPageSetupUnixDialog *dialog)
 }
 
 static gboolean
-page_setup_is_equal (GtkPageSetup *a, GtkPageSetup *b)
+page_setup_is_equal (GtkPageSetup *a, 
+		     GtkPageSetup *b)
 {
   return
     gtk_paper_size_is_equal (gtk_page_setup_get_paper_size (a),
@@ -614,7 +615,8 @@ page_setup_is_equal (GtkPageSetup *a, GtkPageSetup *b)
 }
 
 static gboolean
-page_setup_is_same_size (GtkPageSetup *a, GtkPageSetup *b)
+page_setup_is_same_size (GtkPageSetup *a,
+			 GtkPageSetup *b)
 {
   return gtk_paper_size_is_equal (gtk_page_setup_get_paper_size (a),
 				  gtk_page_setup_get_paper_size (b));
@@ -796,7 +798,8 @@ printer_changed_callback (GtkComboBox            *combo_box,
   GtkTreeIter iter;
 
   /* If we're waiting for a specific printer but the user changed
-     to another printer, cancel that wait. */
+   * to another printer, cancel that wait. 
+   */
   if (priv->waiting_for_printer)
     {
       g_free (priv->waiting_for_printer);

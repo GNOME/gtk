@@ -193,11 +193,11 @@ _gtk_print_backend_module_create (GtkPrintBackendModule *pb_module)
 }
 
 static GtkPrintBackend *
-_gtk_print_backend_create (const char *backend_name)
+_gtk_print_backend_create (const gchar *backend_name)
 {
   GSList *l;
-  char *module_path;
-  char *full_name;
+  gchar *module_path;
+  gchar *full_name;
   GtkPrintBackendModule *pb_module;
   GtkPrintBackend *pb;
 
@@ -229,8 +229,9 @@ _gtk_print_backend_create (const char *backend_name)
 	  pb = _gtk_print_backend_module_create (pb_module);
 
 	  /* Increase use-count so that we don't unload print backends.
-	     There is a problem with module unloading in the cups module,
-	     see cups_dispatch_watch_finalize for details. */
+	   * There is a problem with module unloading in the cups module,
+	   * see cups_dispatch_watch_finalize for details. 
+	   */
 	  g_type_module_use (G_TYPE_MODULE (pb_module));
 	}
       
@@ -238,8 +239,6 @@ _gtk_print_backend_create (const char *backend_name)
     }
 
   return pb;
-
-  return NULL;
 }
 
 static void
@@ -267,7 +266,7 @@ gtk_print_backend_initialize (void)
 
 
 GList *
-gtk_print_backend_load_modules ()
+gtk_print_backend_load_modules (void)
 {
   GList *result;
   GtkPrintBackend *backend;
@@ -312,10 +311,10 @@ static void                 fallback_printer_request_details  (GtkPrinter       
 static gboolean             fallback_printer_mark_conflicts   (GtkPrinter          *printer,
 							       GtkPrinterOptionSet *options);
 static void                 fallback_printer_get_hard_margins (GtkPrinter          *printer,
-							       double              *top,
-							       double              *bottom,
-							       double              *left,
-							       double              *right);
+							       gdouble             *top,
+							       gdouble             *bottom,
+							       gdouble             *left,
+							       gdouble             *right);
 static GList *              fallback_printer_list_papers      (GtkPrinter          *printer);
 static GtkPrintCapabilities fallback_printer_get_capabilities (GtkPrinter          *printer);
   
@@ -401,7 +400,8 @@ gtk_print_backend_dispose (GObject *object)
   priv = backend->priv;
 
   /* We unref the printers in dispose, not in finalize so that
-     we can break refcount cycles with gtk_print_backend_destroy */
+   * we can break refcount cycles with gtk_print_backend_destroy 
+   */
   if (priv->printers)
     {
       g_hash_table_destroy (priv->printers);
@@ -418,7 +418,7 @@ fallback_printer_request_details (GtkPrinter *printer)
 }
 
 static gboolean
-fallback_printer_mark_conflicts (GtkPrinter *printer,
+fallback_printer_mark_conflicts (GtkPrinter          *printer,
 				 GtkPrinterOptionSet *options)
 {
   return FALSE;
@@ -426,10 +426,10 @@ fallback_printer_mark_conflicts (GtkPrinter *printer,
 
 static void
 fallback_printer_get_hard_margins (GtkPrinter *printer,
-				   double *top,
-				   double *bottom,
-				   double *left,
-				   double *right)
+				   gdouble    *top,
+				   gdouble    *bottom,
+				   gdouble    *left,
+				   gdouble    *right)
 {
   *top = 0;
   *bottom = 0;
@@ -451,9 +451,9 @@ fallback_printer_get_capabilities (GtkPrinter *printer)
 
 
 static void
-printer_hash_to_sorted_active_list (const gchar *key,
-                                    gpointer value,
-                                    GList **out_list)
+printer_hash_to_sorted_active_list (const gchar  *key,
+                                    gpointer      value,
+                                    GList       **out_list)
 {
   GtkPrinter *printer;
 
@@ -471,7 +471,7 @@ printer_hash_to_sorted_active_list (const gchar *key,
 
 void
 gtk_print_backend_add_printer (GtkPrintBackend *backend,
-			       GtkPrinter *printer)
+			       GtkPrinter      *printer)
 {
   GtkPrintBackendPrivate *priv;
   
@@ -489,7 +489,7 @@ gtk_print_backend_add_printer (GtkPrintBackend *backend,
 
 void
 gtk_print_backend_remove_printer (GtkPrintBackend *backend,
-				  GtkPrinter *printer)
+				  GtkPrinter      *printer)
 {
   GtkPrintBackendPrivate *priv;
   
@@ -537,7 +537,7 @@ gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
       priv->printer_list_requested = TRUE;
     }
   
-  return result;;
+  return result;
 }
 
 gboolean
@@ -550,7 +550,7 @@ gtk_print_backend_printer_list_is_done (GtkPrintBackend *print_backend)
 
 GtkPrinter *
 gtk_print_backend_find_printer (GtkPrintBackend *backend,
-                                const gchar *printer_name)
+                                const gchar     *printer_name)
 {
   GtkPrintBackendPrivate *priv;
   GtkPrinter *printer;
@@ -568,12 +568,12 @@ gtk_print_backend_find_printer (GtkPrintBackend *backend,
 }
 
 void
-gtk_print_backend_print_stream (GtkPrintBackend *backend,
-                                GtkPrintJob *job,
-                                gint data_fd,
+gtk_print_backend_print_stream (GtkPrintBackend        *backend,
+                                GtkPrintJob            *job,
+                                gint                    data_fd,
                                 GtkPrintJobCompleteFunc callback,
-                                gpointer user_data,
-				GDestroyNotify dnotify)
+                                gpointer                user_data,
+				GDestroyNotify          dnotify)
 {
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
@@ -589,11 +589,11 @@ void
 gtk_print_backend_destroy (GtkPrintBackend *print_backend)
 {
   /* The lifecycle of print backends and printers are tied, such that
-     the backend owns the printers, but the printers also ref the backend.
-     This is so that if the app has a reference to a printer its backend
-     will be around. However, this results in a cycle, which we break
-     with this call, which causes the print backend to release its printers.
-  */
+   * the backend owns the printers, but the printers also ref the backend.
+   * This is so that if the app has a reference to a printer its backend
+   * will be around. However, this results in a cycle, which we break
+   * with this call, which causes the print backend to release its printers.
+   */
   g_object_run_dispose (G_OBJECT (print_backend));
 }
 

@@ -47,7 +47,7 @@ struct _GtkPrintJobPrivate
 {
   gchar *title;
 
-  int spool_file_fd;
+  gint spool_file_fd;
   cairo_surface_t *surface;
 
   GtkPrintStatus status;
@@ -457,8 +457,8 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   g_return_val_if_fail (priv->spool_file_fd == -1, NULL);
  
   priv->spool_file_fd = g_file_open_tmp ("gtkprint_XXXXXX", 
-						    &filename, 
-						    error);
+					 &filename, 
+					 error);
   if (priv->spool_file_fd == -1)
     return NULL;
 
@@ -470,8 +470,8 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
   
   priv->surface = _gtk_printer_create_cairo_surface (priv->printer,
-							  width, height,
-							  priv->spool_file_fd);
+						     width, height,
+						     priv->spool_file_fd);
  
   return priv->surface;
 }
@@ -493,7 +493,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
  */
 void
 gtk_print_job_set_track_print_status (GtkPrintJob *job,
-				      gboolean track_status)
+				      gboolean     track_status)
 {
   GtkPrintJobPrivate *priv;
 
@@ -501,7 +501,14 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
 
   priv = job->priv;
 
-  priv->track_print_status = track_status;
+  track_status = track_status != FALSE;
+
+  if (priv->track_print_status != track_status)
+    {
+      priv->track_print_status = track_status;
+      
+      g_object_notify (job, "track-status");
+    }
 }
 
 /**
