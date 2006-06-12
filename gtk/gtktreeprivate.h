@@ -255,6 +255,12 @@ struct _GtkTreeViewPrivate
   GtkDestroyNotify row_separator_destroy;
 
   gint level_indentation;
+
+  GtkTreeViewGridLines grid_lines;
+  GdkGC *grid_line_gc;
+
+  gboolean tree_lines_enabled;
+  GdkGC *tree_line_gc;
 };
 
 #ifdef __GNUC__

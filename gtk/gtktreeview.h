@@ -352,6 +352,12 @@ void                        gtk_tree_view_set_row_separator_func (GtkTreeView   
 								  gpointer                    data,
 								  GtkDestroyNotify            destroy);
 
+GtkTreeViewGridLines        gtk_tree_view_get_grid_lines         (GtkTreeView                *tree_view);
+void                        gtk_tree_view_set_grid_lines         (GtkTreeView                *tree_view,
+								  GtkTreeViewGridLines        grid_lines);
+gboolean                    gtk_tree_view_get_enable_tree_lines  (GtkTreeView                *tree_view);
+void                        gtk_tree_view_set_enable_tree_lines  (GtkTreeView                *tree_view,
+								  gboolean                    enabled);
 
 G_END_DECLS
 

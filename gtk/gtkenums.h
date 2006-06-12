@@ -507,6 +507,13 @@ typedef enum {
   GTK_UNIT_MM
 } GtkUnit;
 
+typedef enum {
+  GTK_TREE_VIEW_GRID_LINES_NONE,
+  GTK_TREE_VIEW_GRID_LINES_HORIZONTAL,
+  GTK_TREE_VIEW_GRID_LINES_VERTICAL,
+  GTK_TREE_VIEW_GRID_LINES_BOTH
+} GtkTreeViewGridLines;
+
 G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */

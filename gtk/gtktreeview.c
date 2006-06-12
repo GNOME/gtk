@@ -136,7 +136,9 @@ enum {
   PROP_HOVER_EXPAND,
   PROP_SHOW_EXPANDERS,
   PROP_LEVEL_INDENTATION,
-  PROP_RUBBER_BANDING
+  PROP_RUBBER_BANDING,
+  PROP_ENABLE_GRID_LINES,
+  PROP_ENABLE_TREE_LINES
 };
 
 /* object signals */
@@ -709,6 +711,22 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            FALSE,
                                                            GTK_PARAM_READWRITE));
 
+    g_object_class_install_property (o_class,
+                                     PROP_ENABLE_GRID_LINES,
+                                     g_param_spec_boolean ("enable-grid-lines",
+                                                           P_("Enable Grid Lines"),
+                                                           P_("Whether grid lines should be drawn in the tree view"),
+                                                           FALSE,
+                                                           GTK_PARAM_READWRITE));
+
+    g_object_class_install_property (o_class,
+                                     PROP_ENABLE_TREE_LINES,
+                                     g_param_spec_boolean ("enable-tree-lines",
+                                                           P_("Enable Tree Lines"),
+                                                           P_("Whether tree lines should be drawn in the tree view"),
+                                                           FALSE,
+                                                           GTK_PARAM_READWRITE));
+
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 12
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
@@ -775,6 +793,34 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 								 P_("Enable extended row background theming"),
 								 FALSE,
 								 GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("grid-line-width",
+							     P_("Grid line width"),
+							     P_("Width, in pixels, of the tree view grid lines"),
+							     0, G_MAXINT, 1,
+							     GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("tree-line-width",
+							     P_("Tree line width"),
+							     P_("Width, in pixels, of the tree view lines"),
+							     0, G_MAXINT, 1,
+							     GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_string ("grid-line-pattern",
+								P_("Grid line pattern"),
+								P_("Dash pattern used to draw the tree view grid lines"),
+								"\1\1",
+								GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_string ("tree-line-pattern",
+								P_("Tree line pattern"),
+								P_("Dash pattern used to draw the tree view lines"),
+								"\1\1",
+								GTK_PARAM_READABLE));
 
   /* Signals */
   widget_class->set_scroll_adjustments_signal =
@@ -1261,6 +1307,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->level_indentation = 0;
 
   tree_view->priv->rubber_banding_enable = FALSE;
+
+  tree_view->priv->grid_lines = GTK_TREE_VIEW_GRID_LINES_NONE;
+  tree_view->priv->tree_lines_enabled = FALSE;
 }
 
 
@@ -1331,6 +1380,12 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_RUBBER_BANDING:
       tree_view->priv->rubber_banding_enable = g_value_get_boolean (value);
       break;
+    case PROP_ENABLE_GRID_LINES:
+      gtk_tree_view_set_grid_lines (tree_view, g_value_get_boolean (value));
+      break;
+    case PROP_ENABLE_TREE_LINES:
+      gtk_tree_view_set_enable_tree_lines (tree_view, g_value_get_boolean (value));
+      break;
     default:
       break;
     }
@@ -1395,6 +1450,12 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_RUBBER_BANDING:
       g_value_set_boolean (value, tree_view->priv->rubber_banding_enable);
+      break;
+    case PROP_ENABLE_GRID_LINES:
+      g_value_set_boolean (value, tree_view->priv->grid_lines);
+      break;
+    case PROP_ENABLE_TREE_LINES:
+      g_value_set_boolean (value, tree_view->priv->tree_lines_enabled);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1715,6 +1776,10 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
     _gtk_tree_view_column_realize_button (GTK_TREE_VIEW_COLUMN (tmp_list->data));
+
+  /* Need to call those here, since they craete GCs */
+  gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
+  gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
 
   install_presize_handler (tree_view); 
 }
@@ -3930,6 +3995,40 @@ draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
 		     1, 1, w, h);
 }
 
+static void
+gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
+			       GdkEventExpose *event,
+			       gint            n_visible_columns)
+{
+  GList *list = tree_view->priv->columns;
+  gint i = 0;
+  gint current_x = 0;
+
+  if (tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_VERTICAL
+      && tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_BOTH)
+    return;
+
+  /* Only draw the lines for visible rows and columns */
+  for (list = tree_view->priv->columns; list; list = list->next, i++)
+    {
+      GtkTreeViewColumn *column = list->data;
+
+      /* We don't want a line for the list column */
+      if (i == n_visible_columns - 1)
+	break;
+
+      if (! column->visible)
+	continue;
+
+      current_x += column->width;
+
+      gdk_draw_line (event->window,
+		     tree_view->priv->grid_line_gc,
+		     current_x - 1, 0,
+		     current_x - 1, tree_view->priv->height);
+    }
+}
+
 /* Warning: Very scary function.
  * Modify at your own risk
  *
@@ -4271,6 +4370,80 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				  background_area.height);
 	    }
 
+	  if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_HORIZONTAL
+	      || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
+	    {
+	      if (background_area.y > 0)
+		gdk_draw_line (event->window,
+			       tree_view->priv->grid_line_gc,
+			       background_area.x, background_area.y,
+			       background_area.x + background_area.width,
+			       background_area.y);
+	    }
+
+	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
+	      tree_view->priv->tree_lines_enabled)
+	    {
+	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT
+		  && depth > 1)
+	        {
+		  gdk_draw_line (event->window,
+				 tree_view->priv->tree_line_gc,
+			         background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+			         background_area.y + background_area.height / 2,
+			         background_area.x + tree_view->priv->expander_size * (depth - 1.1),
+			         background_area.y + background_area.height / 2);
+	        }
+	      else if (depth > 1)
+	        {
+		  gdk_draw_line (event->window,
+				 tree_view->priv->tree_line_gc,
+			         background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+			         background_area.y + background_area.height / 2,
+			         background_area.x + tree_view->priv->expander_size * (depth - 0.5),
+			         background_area.y + background_area.height / 2);
+		}
+
+	      if (depth > 1)
+	        {
+		  gint i;
+		  GtkRBNode *tmp_node;
+		  GtkRBTree *tmp_tree;
+
+	          if (!_gtk_rbtree_next (tree, node))
+		    gdk_draw_line (event->window,
+				   tree_view->priv->tree_line_gc,
+				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+				   background_area.y,
+				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+				   background_area.y + background_area.height / 2);
+		  else
+		    gdk_draw_line (event->window,
+				   tree_view->priv->tree_line_gc,
+				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+				   background_area.y,
+				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
+				   background_area.y + background_area.height);
+
+		  tmp_node = tree->parent_node;
+		  tmp_tree = tree->parent_tree;
+
+		  for (i = depth - 2; i > 0; i--)
+		    {
+	              if (_gtk_rbtree_next (tmp_tree, tmp_node))
+			gdk_draw_line (event->window,
+				       tree_view->priv->tree_line_gc,
+				       background_area.x + tree_view->priv->expander_size * (i - 0.5),
+				       background_area.y,
+				       background_area.x + tree_view->priv->expander_size * (i - 0.5),
+				       background_area.y + background_area.height);
+
+		      tmp_node = tmp_tree->parent_node;
+		      tmp_tree = tmp_tree->parent_tree;
+		    }
+		}
+	    }
+
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
 	      if (!rtl)
@@ -4495,6 +4668,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
       else
 	{
 	  gboolean done = FALSE;
+
 	  do
 	    {
 	      node = _gtk_rbtree_next (tree, node);
@@ -4531,6 +4705,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   while (y_offset < event->area.height);
 
 done:
+  gtk_tree_view_draw_grid_lines (tree_view, event, n_visible_columns);
 
  if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
    {
@@ -7548,6 +7723,9 @@ gtk_tree_view_style_set (GtkWidget *widget,
     {
       gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
       gdk_window_set_background (tree_view->priv->bin_window, &widget->style->base[widget->state]);
+
+      gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
+      gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
     }
 
   gtk_widget_style_get (widget,
@@ -14255,6 +14433,153 @@ gtk_tree_view_state_changed (GtkWidget      *widget,
     }
 
   gtk_widget_queue_draw (widget);
+}
+
+/**
+ * gtk_tree_view_get_grid_lines:
+ * @tree_view: a #GtkTreeView
+ *
+ * Returns which grid lines are enabled in @tree_view.
+ *
+ * Return value: a #GtkTreeViewGridLines value indicating which grid lines
+ * are enabled.
+ *
+ * Since: 2.10
+ */
+GtkTreeViewGridLines
+gtk_tree_view_get_grid_lines (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
+
+  return tree_view->priv->grid_lines;
+}
+
+/**
+ * gtk_tree_view_set_grid_lines:
+ * @tree_view: a #GtkTreeView
+ * @grid_lines: a #GtkTreeViewGridLines value indicating which grid lines to
+ * enable.
+ *
+ * Sets which grid lines to draw in @tree_view.
+ *
+ * Since: 2.10
+ */
+void
+gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
+			      GtkTreeViewGridLines   grid_lines)
+{
+  gint line_width;
+  guint8 *dash_list;
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  widget = GTK_WIDGET (tree_view);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      tree_view->priv->grid_lines = grid_lines;
+      return;
+    }
+
+  gtk_widget_style_get (widget,
+			"grid-line-width", &line_width,
+			"grid-line-pattern", (gchar *)&dash_list,
+			NULL);
+
+  if (tree_view->priv->grid_line_gc)
+    g_object_unref (tree_view->priv->grid_line_gc);
+
+  tree_view->priv->grid_lines = grid_lines;
+  if (grid_lines == GTK_TREE_VIEW_GRID_LINES_NONE)
+    {
+      tree_view->priv->grid_line_gc = NULL;
+      return;
+    }
+
+  tree_view->priv->grid_line_gc = gdk_gc_new (widget->window);
+  gdk_gc_copy (tree_view->priv->grid_line_gc,
+	       widget->style->black_gc);
+
+  gdk_gc_set_line_attributes (tree_view->priv->grid_line_gc, line_width,
+			      GDK_LINE_ON_OFF_DASH,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+  gdk_gc_set_dashes (tree_view->priv->grid_line_gc, 0, dash_list, 2);
+
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+}
+
+/**
+ * gtk_tree_view_get_enable_tree_lines:
+ * @tree_view: a #GtkTreeView.
+ *
+ * Returns whether or not tree lines are drawn in @tree_view.
+ *
+ * Return value: %TRUE if tree lines are drawn in @tree_view, %FALSE
+ * otherwise.
+ *
+ * Since: 2.10
+ */
+gboolean
+gtk_tree_view_get_enable_tree_lines (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  return tree_view->priv->tree_lines_enabled;
+}
+
+/**
+ * gtk_tree_view_set_enable_tree_lines:
+ * @tree_view: a #GtkTreeView
+ * @enabled: %TRUE to enable tree line drawing, %FALSE otherwise.
+ *
+ * Sets whether to draw lines interconnecting the expanders in @tree_view.
+ * This does not have any visible effects for lists.
+ *
+ * Since: 2.10
+ */
+void
+gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
+				     gboolean     enabled)
+{
+  gint line_width;
+  guint8 *dash_list;
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  widget = GTK_WIDGET (tree_view);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      tree_view->priv->tree_lines_enabled = enabled;
+      return;
+    }
+
+  gtk_widget_style_get (widget,
+			"tree-line-width", &line_width,
+			"tree-line-pattern", (gchar *)&dash_list,
+			NULL);
+
+  if (tree_view->priv->tree_line_gc)
+    g_object_unref (tree_view->priv->tree_line_gc);
+
+  if (!enabled)
+    {
+      tree_view->priv->tree_line_gc = NULL;
+      return;
+    }
+
+  tree_view->priv->tree_line_gc = gdk_gc_new (widget->window);
+  gdk_gc_copy (tree_view->priv->tree_line_gc,
+	       widget->style->black_gc);
+
+  gdk_gc_set_line_attributes (tree_view->priv->tree_line_gc, line_width,
+			      GDK_LINE_ON_OFF_DASH,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+  gdk_gc_set_dashes (tree_view->priv->tree_line_gc, 0, dash_list, 2);
+
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
 #define __GTK_TREE_VIEW_C__
