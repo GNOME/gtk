@@ -5,63 +5,66 @@ Overview of Changes from GTK+ 2.9.2 to 2.9.3
  - Introduce an allow-async property 
  - Introduce a GtkPrintOperationAction enumeration
  - Rename pdf_target to export_filename
+ - Allow to hide "Print to PDF" in the low-level API
 
 * GtkNotebook:
- - Add a destroy notify to gtk_notebook_set_window_creation_hook.
+ - Add a destroy notify to 
+   gtk_notebook_set_window_creation_hook.
 
 * GtkRange:
  - Add a number of new stle properties which allow more
    fexible stepper theming
 
 * Bugs fixed:
- 337603
- 344148
- 344209
- 344232
- 344244
- 344288
- 337491
- 342339
- 342249
- 344290
- 344504
- 344505
- 344386
- 344512
- 344513
- 344528
- 344518
- 344530
- 344496
- 339739
- 344607
- 344543
- 344560
- 343945
- 344239
- 344558
+ 153212 Have the Paste kbd shortcut jump to the location in 
+        the buffer
+ 337491 _gdk_win32_drawable_release_dc: DeleteDC() called on 
+        a GetDC() handle
+ 339739 gtk/gtkprintoperation-win32.c: 3 compile error
+ 342339 GtkRange::stepper-spacing style property not 
+        implemented correctly
+ 343945 Buttons of a GtkAssistant are not accessible
+ 344148 Wrong reqs for ATK
+ 344209 gtk_notebook_set_window_creation_hook() has no destroy 
+        func.
+ 344232 GtkEntry's "Delete" context menu item is sensitive on a 
+        non-editable GtkEntry
+ 344244 Window resizing not working when keeping the aspect 
+        fixed
+ 344288 gtk_print_operation_preview_is_selected must return 
+        a value
+ 344386 gdk-2.0-uninstalled.pc.in and gdkconfig.h
+ 344496 CRLF converting via Clipboard
+ 344504 GtkPrintCapabilities not in gtktypebuiltins.h
+ 344505 Wrong signal registration for create_custom_widget
+ 344512 cvs build issue
+ 344513 pdf print module's print_stream not calling destroy 
+        notify
+ 344518 NULL unref in page setup dialogue
+ 344543 gtk_progress_bar_pulse calls gtk_progress_bar_paint 
+        directly
+ 344560 gtk_print_settings_[sg]et_scale shouldn't be in percent
+ 344607 memory leaks in gtkrecentchooserdefault.c and 
+        gtkrecentchoosermenu.c
+ 344624 Memory leak in gtk_tree_model_filter_finalize: User 
+        data not freed
+ 337603 Possible off-by-one in 
+        gdk_pango_layout_line_get_clip_region
+ 344239 Wrong filename for gtk-find stock item.
+ 344528 comma at end of GtkPrintOperationAction enum causes 
+        mozilla compilation error
+ 344290 horizontal-padding not take into account when placing 
+        submenus
+ 344558 document print dialogue response codes
+ 339592 Add print-to-postscript
+ 342249 Allow to draw upper and lower sides of GtkRange's 
+        trough differently
+ 344530 gtk_recent_chooser_widget_new_for_manager and 
+        gtk_recent_chooser_menu_new_for_manager should 
+        allow NULL manager arg
 
 * Updated translations (es,fi,ko,th,wa)
 
-Behdad Esfahbod
-Bastian Nocera
-Alexander Larsson
-Jürg Billeter
-Murray Cumming
-Milosz Derezynski
-Tor Lillqvist
-Kazuki Iwamoto
-Chris Wilson
-Michael Natterer
-Benjamin Berg
-Marko Anastasov
-Christian Persch
-Masatake Yamamoto
-Elijah Newren
-John Finlay
-Emmanuele Bassi
-David Malcolm
-John Darrington
 
 Overview of Changes from GTK+ 2.9.1 to 2.9.2
 ============================================
