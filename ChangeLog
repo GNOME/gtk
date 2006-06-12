@@ -1,5 +1,11 @@
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintjob.h: Add a GTK_PRINT_CAPABILITY_GENERATE_PDF
+	capability.
+	
+	* gtk/gtkprintunixdialog.c: Use it here to hide "Print to PDF" 
+	from the printer list.  (#339592, Christian Persch)
+	
 	* gtk/gtkfilechooserdefault.c: Add support for pasting
 	filenames into the filechooser.  (#153212, Bastian Nocera)
 

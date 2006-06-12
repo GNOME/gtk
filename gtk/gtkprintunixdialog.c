@@ -571,6 +571,7 @@ is_printer_active (GtkTreeModel       *model,
 {
   gboolean result;
   GtkPrinter *printer;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
   gtk_tree_model_get (model,
 		      iter,
@@ -582,6 +583,17 @@ is_printer_active (GtkTreeModel       *model,
     return FALSE;
 
   result = gtk_printer_is_active (printer);
+  
+  if (result)
+    {
+      /* FIXME needs some printer capabilities 
+       */
+      if ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) == 0 &&
+	  strcmp (gtk_printer_get_name (printer), _("Print to PDF")) == 0)
+	result = FALSE;
+      g_print ("testing printer \"%s\" result %d\n", 
+	       gtk_printer_get_name (printer), result);
+    }
 
   g_object_unref (printer);
 
@@ -1038,6 +1050,8 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 			    caps & GTK_PRINT_CAPABILITY_PAGE_SET);
 
   update_collate_icon (NULL, dialog);
+
+  gtk_tree_model_filter_refilter (priv->printer_list_filter);
 }
 
 static void
@@ -2730,8 +2744,8 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
  * Since: 2.10
  */
 void
-gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
-					       GtkPrintCapabilities capabilities)
+gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
+					       GtkPrintCapabilities  capabilities)
 {
   dialog->priv->manual_capabilities = capabilities;
   update_dialog_from_capabilities (dialog);
