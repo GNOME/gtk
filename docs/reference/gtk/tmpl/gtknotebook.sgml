@@ -98,7 +98,6 @@ will be a popup menu allowing the users to switch pages.
 
 @notebook: the object which received the signal.
 @arg1: 
-@:
 @Param3: 
 
 <!-- ##### SIGNAL GtkNotebook::select-page ##### -->
@@ -712,5 +711,6 @@ If the function returns %NULL, the drag will be cancelled.
 
 @func: 
 @data: 
+@destroy: 
 
 

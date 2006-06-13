@@ -118,6 +118,16 @@ Emitted when the range value changes.
 
 </para>
 
+<!-- ##### ARG GtkRange:trough-side-details ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:trough-under-steppers ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
 <para>
 

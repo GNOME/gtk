@@ -170,7 +170,17 @@ they work together.
 @treeview: the object which received the signal.
 @Returns: 
 
+<!-- ##### ARG GtkTreeView:enable-grid-lines ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:enable-search ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:enable-tree-lines ##### -->
 <para>
 
 </para>
@@ -265,6 +275,16 @@ they work together.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:grid-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:grid-line-width ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
 <para>
 
@@ -281,6 +301,16 @@ they work together.
 </para>
 
 <!-- ##### ARG GtkTreeView:row-ending-details ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:tree-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:tree-line-width ##### -->
 <para>
 
 </para>
@@ -1147,5 +1177,23 @@ returns.
 @func: 
 @data: 
 @destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_rubber_banding ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_rubber_banding ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enable: 
 
 

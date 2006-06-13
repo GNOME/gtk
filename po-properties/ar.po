@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-05 14:44-0400\n"
+"POT-Creation-Date: 2006-06-12 21:18-0400\n"
 "PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -256,7 +256,7 @@ msgstr "قطعة مفتاح الاختصار"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "القطعة التي ستراقب لتغييرات مفاتيح الاختصار"
 
-#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:115
+#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:119
 msgid "Name"
 msgstr "الاسم"
 
@@ -298,7 +298,7 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "أيقونة المخزون المعروضة في قطع تمثل هذه العملية."
 
 #: gtk/gtkaction.c:238 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:150 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
 #, fuzzy
 msgid "Icon Name"
 msgstr "اسم الخط"
@@ -646,7 +646,7 @@ msgstr "فراغات"
 msgid "The amount of space between children"
 msgstr "مقدار الفراغ بين الأبناء."
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:583 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "متناسق"
 
@@ -685,18 +685,18 @@ msgstr "الفضاء الإضافي لوضعه بين الإبن و جيرانه
 msgid "Pack type"
 msgstr "نوع التحزيم"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:636
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "GtkPackType مؤشر لما إذا سيحزم الإبن بمرجع لبداية أو نهاية الأب"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:614 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "الموقع"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:615
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
 msgid "The index of the child in the parent"
 msgstr "فهرس الإبن عند الأب"
 
@@ -1141,7 +1141,7 @@ msgid "Value of the progress bar"
 msgstr "النص الذي سيعرض في عمود التقدم"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:190
-#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:193
+#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "النص"
@@ -1321,7 +1321,7 @@ msgstr ""
 "اللغة التي فيها هذا النص، كشفرة ISO. يمكن لبانكو إستعمال هذا كتلميحة عند رسم "
 "النص. إذا كنت لا تفهم هذا المتغيّر فأنك ربما لا تستحقّه"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:215
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr ""
 
@@ -1589,7 +1589,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "فيما إذا سيمنح للون شفافية أم لا"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:114 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "العنوان"
 
@@ -2119,11 +2119,11 @@ msgstr "قطعة الشارة"
 msgid "A widget to display in place of the usual expander label"
 msgstr "القطعة التي ستعرض عوض شارة الموسع الاعتادية"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:719
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
 msgid "Expander Size"
 msgstr "حجم الموسع"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:720
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
 msgid "Size of the expander arrow"
 msgstr "حجم سهم الموسع"
 
@@ -2239,11 +2239,11 @@ msgstr "عنوان حوار انتقاء الخطوط"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:599
+#: gtk/gtkfilechooserdefault.c:615
 msgid "Default file chooser backend"
 msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 
-#: gtk/gtkfilechooserdefault.c:600
+#: gtk/gtkfilechooserdefault.c:616
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
@@ -2517,7 +2517,7 @@ msgstr "الهامش الأيسر"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:125 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:94
 msgid "Orientation"
 msgstr "الاتجاه"
@@ -2527,11 +2527,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:595 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "قابل لإعادة الترتيب"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:596
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "العرض قابل لإعادة الترتيب"
 
@@ -3060,75 +3060,75 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "المساحة التي تضاف لأعلى وأسفل القطعة، بالبكسل"
 
-#: gtk/gtknotebook.c:511
+#: gtk/gtknotebook.c:512
 msgid "Page"
 msgstr "صفحة"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:513
 msgid "The index of the current page"
 msgstr "دليل الصفحة الحالية"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:521
 msgid "Tab Position"
 msgstr "موقع اللسان"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:522
 msgid "Which side of the notebook holds the tabs"
 msgstr "أي جهة من الدفتر تحوي الألسنة"
 
-#: gtk/gtknotebook.c:528
+#: gtk/gtknotebook.c:529
 msgid "Tab Border"
 msgstr "حد اللسان"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:530
 msgid "Width of the border around the tab labels"
 msgstr "عرض الحد حول شارات الألسنة"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:538
 msgid "Horizontal Tab Border"
 msgstr "حد اللسان الأفقي"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:539
 msgid "Width of the horizontal border of tab labels"
 msgstr "عرض الحد الأفقي لشارات الألسنة"
 
-#: gtk/gtknotebook.c:546
+#: gtk/gtknotebook.c:547
 msgid "Vertical Tab Border"
 msgstr "الحد العمودي للسان"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:548
 msgid "Width of the vertical border of tab labels"
 msgstr "عرض الحد العمودي لشارات اللسان"
 
-#: gtk/gtknotebook.c:555
+#: gtk/gtknotebook.c:556
 msgid "Show Tabs"
 msgstr "عرض الألسنة"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:557
 msgid "Whether tabs should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:563
 msgid "Show Border"
 msgstr "عرض الحد"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:564
 msgid "Whether the border should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الحد أم لا"
 
-#: gtk/gtknotebook.c:569
+#: gtk/gtknotebook.c:570
 msgid "Scrollable"
 msgstr "قابل للف"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:571
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "إذا كان TRUE، فستضاف أسهم لف إذا كانت هناك ألسنة كثيرة للملائمة"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:577
 msgid "Enable Popup"
 msgstr "تفعيل النوافذ البارزة"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:578
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3136,128 +3136,128 @@ msgstr ""
 "إذا كان TRUE، فإن كبس زر الفأرة الأيمن على الدفتر يبرز لك قائمة تمكنك من "
 "الذهاب لصفحة"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:585
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "فيما إذا وجب أن يكون للألسنة أحجام متناسقة"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:591
 #, fuzzy
 msgid "Group ID"
 msgstr "مجموعة"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:592
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:601
 msgid "Tab label"
 msgstr "شارة اللسان"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:602
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "السلسلة المعروضة على شارة ابن اللسان"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:608
 msgid "Menu label"
 msgstr "شارة القائمة"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:609
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "السلسلة المعروضة في خانة قائمة الابن"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:622
 msgid "Tab expand"
 msgstr "تمديد اللسان"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:623
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "فيما إذا وجب تمديد لسان الأبن أم لا"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:629
 msgid "Tab fill"
 msgstr "ملأ اللسان"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:630
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "فيما إذا وجب للسان الإبن ملأ المساحة المخصصة"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:636
 msgid "Tab pack type"
 msgstr "نوع حزم الألسنة"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:643
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "قابل لإعادة الترتيب"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:644
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "فيما إذا كان سيتم عرض الحد أم لا"
 
-#: gtk/gtknotebook.c:649
+#: gtk/gtknotebook.c:650
 #, fuzzy
 msgid "Tab detachable"
 msgstr "شارة اللسان"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:651
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "فيما إذا كانت العملية مفعلة."
 
-#: gtk/gtknotebook.c:665 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "متخطي التراجع الثانوي"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:667
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "عرض زر سهم التراجع الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "متخطي التقدم الثانوي"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:683
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "عرض زر سهم التقدم الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:696 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "متخطي التراجع"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "عرض زر سهم التراجع القياسي"
 
-#: gtk/gtknotebook.c:711 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "متخطي التقدم"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "عرض زر سهم التقدم القياسي"
 
-#: gtk/gtknotebook.c:726
+#: gtk/gtknotebook.c:727
 #, fuzzy
 msgid "Tab overlap"
 msgstr "حد اللسان"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:728
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "حجم سهم الموسع"
 
-#: gtk/gtknotebook.c:742
+#: gtk/gtknotebook.c:743
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:744
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "حجم الفواصل"
@@ -3360,57 +3360,75 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtkprinter.c:116
+#: gtk/gtkprinter.c:120
 #, fuzzy
 msgid "Name of the printer"
 msgstr "اسم تيمة الأيقونات لاستخدامها"
 
-#: gtk/gtkprinter.c:122
+#: gtk/gtkprinter.c:126
 msgid "Backend"
 msgstr ""
 
-#: gtk/gtkprinter.c:123
+#: gtk/gtkprinter.c:127
 #, fuzzy
 msgid "Backend for the printer"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtkprinter.c:129
+#: gtk/gtkprinter.c:133
 #, fuzzy
 msgid "Is Virtual"
 msgstr "مهم"
 
-#: gtk/gtkprinter.c:130
+#: gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
 msgstr ""
 
-#: gtk/gtkprinter.c:136
+#: gtk/gtkprinter.c:140
+#, fuzzy
+msgid "Accepts PDF"
+msgstr "تقبل الألسنة"
+
+#: gtk/gtkprinter.c:141
+msgid "TRUE if this printer can accept PDF"
+msgstr ""
+
+#: gtk/gtkprinter.c:147
+#, fuzzy
+msgid "Accepts PostScript"
+msgstr "تقبل الألسنة"
+
+#: gtk/gtkprinter.c:148
+msgid "TRUE if this printer can accept PostScript"
+msgstr ""
+
+#: gtk/gtkprinter.c:154
 msgid "State Message"
 msgstr ""
 
-#: gtk/gtkprinter.c:137
+#: gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
 msgstr ""
 
-#: gtk/gtkprinter.c:143
+#: gtk/gtkprinter.c:161
 #, fuzzy
 msgid "Location"
 msgstr "عملية"
 
-#: gtk/gtkprinter.c:144
+#: gtk/gtkprinter.c:162
 #, fuzzy
 msgid "The location of the printer"
 msgstr "اتجاه شريط ا?دوات"
 
-#: gtk/gtkprinter.c:151
+#: gtk/gtkprinter.c:169
 #, fuzzy
 msgid "The icon name to use for the printer"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtkprinter.c:157
+#: gtk/gtkprinter.c:175
 msgid "Job Count"
 msgstr ""
 
-#: gtk/gtkprinter.c:158
+#: gtk/gtkprinter.c:176
 #, fuzzy
 msgid "Number of jobs queued in the printer"
 msgstr "عدد السطور في الجدول"
@@ -3424,175 +3442,172 @@ msgstr "الخيارات العمودية"
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:115
+#: gtk/gtkprintjob.c:116
 #, fuzzy
 msgid "Title of the print job"
 msgstr "عنوان النافذة"
 
-#: gtk/gtkprintjob.c:123
+#: gtk/gtkprintjob.c:124
 #, fuzzy
 msgid "Printer"
 msgstr "مرشح"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 msgid "Printer to print the job to"
 msgstr ""
 
-#: gtk/gtkprintjob.c:132
+#: gtk/gtkprintjob.c:133
 msgid "Settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:141 gtk/gtkprintjob.c:142 gtk/gtkprintunixdialog.c:224
+#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
 #, fuzzy
 msgid "Page Setup"
 msgstr "حجم الصفحة"
 
-#: gtk/gtkprintoperation.c:832
+#: gtk/gtkprintoperation.c:844
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "الإرتفاع الإفتراضي"
 
-#: gtk/gtkprintoperation.c:833
+#: gtk/gtkprintoperation.c:845
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:851 gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:852 gtk/gtkprintunixdialog.c:243
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:870
+#: gtk/gtkprintoperation.c:882
 #, fuzzy
 msgid "Job Name"
 msgstr "اسم الخط"
 
-#: gtk/gtkprintoperation.c:871
+#: gtk/gtkprintoperation.c:883
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:894
+#: gtk/gtkprintoperation.c:906
 #, fuzzy
 msgid "Number of Pages"
 msgstr "عدد القنوات"
 
-#: gtk/gtkprintoperation.c:895
+#: gtk/gtkprintoperation.c:907
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "عدد السطور في الجدول"
 
-#: gtk/gtkprintoperation.c:916 gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "Current Page"
 msgstr "الشفافية الحالية (قيمة ألفا الحالية)"
 
-#: gtk/gtkprintoperation.c:917
+#: gtk/gtkprintoperation.c:929
 #, fuzzy
 msgid "The current page in the document."
 msgstr "حجم الصفحة عند التسوية"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:950
 #, fuzzy
 msgid "Use full page"
 msgstr "استخدام الشفافية (قنات ألفا)"
 
-#: gtk/gtkprintoperation.c:939
+#: gtk/gtkprintoperation.c:951
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:959
+#: gtk/gtkprintoperation.c:971
 msgid "Track Print Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:972
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:977
+#: gtk/gtkprintoperation.c:989
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:978
+#: gtk/gtkprintoperation.c:990
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:995 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintoperation.c:1007
 #, fuzzy
 msgid "Show Dialog"
 msgstr "اظهار الترويسة"
 
-#: gtk/gtkprintoperation.c:996
-msgid "TRUE if gtk_print_operation_run() should show the print dialog."
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1011
-#, fuzzy
-msgid "Show Preview"
-msgstr "اظهار نص"
-
-#: gtk/gtkprintoperation.c:1012
-msgid "TRUE if gtk_print_operation_run() should show the print preview."
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1008
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1051 gtk/gtkprintoperation.c:1052
-msgid "PDF target filename"
+#: gtk/gtkprintoperation.c:1025
+#, fuzzy
+msgid "Allow Async"
+msgstr "اسمح بالقواعد"
+
+#: gtk/gtkprintoperation.c:1026
+msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1066
+#: gtk/gtkprintoperation.c:1049 gtk/gtkprintoperation.c:1050
+#, fuzzy
+msgid "Export filename"
+msgstr "اسم الملف"
+
+#: gtk/gtkprintoperation.c:1064
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1067
+#: gtk/gtkprintoperation.c:1065
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "حالة التحول للزر"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1085
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1086
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1104
 #, fuzzy
 msgid "Custom tab label"
 msgstr "لوحة الألوان الخاصة"
 
-#: gtk/gtkprintoperation.c:1107
+#: gtk/gtkprintoperation.c:1105
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:225
+#: gtk/gtkprintunixdialog.c:228
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:233
+#: gtk/gtkprintunixdialog.c:236
 #, fuzzy
 msgid "The current page in the document"
 msgstr "حجم الصفحة عند التسوية"
 
-#: gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintunixdialog.c:253
 #, fuzzy
 msgid "Selected Printer"
 msgstr "أالسنة المنتقات"
 
-#: gtk/gtkprintunixdialog.c:251
+#: gtk/gtkprintunixdialog.c:254
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "العنصر النشط حاليا"
@@ -3639,75 +3654,75 @@ msgid ""
 "in the progress widget"
 msgstr "رقم بين 0.0 و 1.0 لتحديد الترصيف العمودي للنص عند قطعة التقدم"
 
-#: gtk/gtkprogressbar.c:117 gtk/gtkrange.c:315 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:320 gtk/gtkspinbutton.c:203
 msgid "Adjustment"
 msgstr "الملائمة"
 
-#: gtk/gtkprogressbar.c:118
+#: gtk/gtkprogressbar.c:121
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment المرتبط بعمود التطوّر (ملغى)"
 
-#: gtk/gtkprogressbar.c:126
+#: gtk/gtkprogressbar.c:129
 msgid "Orientation and growth direction of the progress bar"
 msgstr "إتجاه و وجهة نموّ همود التطوّر"
 
-#: gtk/gtkprogressbar.c:134
+#: gtk/gtkprogressbar.c:137
 msgid "Bar style"
 msgstr "أسلوب العمود"
 
-#: gtk/gtkprogressbar.c:135
+#: gtk/gtkprogressbar.c:138
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "يحدد الأسلوب المرئي للعمود بنسق النسبة المائوية (ملغاة)"
 
-#: gtk/gtkprogressbar.c:143
+#: gtk/gtkprogressbar.c:146
 msgid "Activity Step"
 msgstr "خطوة النشاط"
 
-#: gtk/gtkprogressbar.c:144
+#: gtk/gtkprogressbar.c:147
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "التزايد المستخدم لكل تكرار في نسق النشاط (ملغى)"
 
-#: gtk/gtkprogressbar.c:153
+#: gtk/gtkprogressbar.c:156
 msgid "Activity Blocks"
 msgstr "قوالب النشاط"
 
-#: gtk/gtkprogressbar.c:154
+#: gtk/gtkprogressbar.c:157
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr "عدد القوالب التي يمكن أن تلائم منطقة عمود التقدم في نسق النشاط (ملغاة)"
 
-#: gtk/gtkprogressbar.c:163
+#: gtk/gtkprogressbar.c:166
 msgid "Discrete Blocks"
 msgstr "القوالب المتقطعة"
 
-#: gtk/gtkprogressbar.c:164
+#: gtk/gtkprogressbar.c:167
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr "عدد القوالب المتقطعة في عمود التقدم (عند عرضها بالأسلوب المتقطع)"
 
-#: gtk/gtkprogressbar.c:173
+#: gtk/gtkprogressbar.c:176
 msgid "Fraction"
 msgstr "جزء"
 
-#: gtk/gtkprogressbar.c:174
+#: gtk/gtkprogressbar.c:177
 msgid "The fraction of total work that has been completed"
 msgstr "جزء من العمل الذي تم"
 
-#: gtk/gtkprogressbar.c:183
+#: gtk/gtkprogressbar.c:186
 msgid "Pulse Step"
 msgstr "خطوة النبض"
 
-#: gtk/gtkprogressbar.c:184
+#: gtk/gtkprogressbar.c:187
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "جزء التقدم الكلي لتحريك الكتلة القافزة عند النبض"
 
-#: gtk/gtkprogressbar.c:194
+#: gtk/gtkprogressbar.c:197
 msgid "Text to be displayed in the progress bar"
 msgstr "النص الذي سيعرض في عمود التقدم"
 
-#: gtk/gtkprogressbar.c:216
+#: gtk/gtkprogressbar.c:219
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
@@ -3755,104 +3770,124 @@ msgstr "الزر المشع الذي إلى مجموعته تنتمي هذه ا�
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "الزر المشع الذي إلى مجموعته تنتمي هذه القطعة."
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:311
 msgid "Update policy"
 msgstr "سياسة التحديث"
 
-#: gtk/gtkrange.c:307
+#: gtk/gtkrange.c:312
 msgid "How the range should be updated on the screen"
 msgstr "كيفية تحديث المدى على الشاشة"
 
-#: gtk/gtkrange.c:316
+#: gtk/gtkrange.c:321
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment المحتوي على القيمة الحالية لجسم المدى هذا"
 
-#: gtk/gtkrange.c:323
+#: gtk/gtkrange.c:328
 msgid "Inverted"
 msgstr "معكوس"
 
-#: gtk/gtkrange.c:324
+#: gtk/gtkrange.c:329
 msgid "Invert direction slider moves to increase range value"
 msgstr "عكس الاتجاه الذي إليه ينتقل المتزحلق لزيادة قيمة المدى"
 
-#: gtk/gtkrange.c:331
+#: gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:332
+#: gtk/gtkrange.c:337
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:340
+#: gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:341
+#: gtk/gtkrange.c:346
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:348
+#: gtk/gtkrange.c:353
 msgid "Slider Width"
 msgstr "عرض المتزحلق"
 
-#: gtk/gtkrange.c:349
+#: gtk/gtkrange.c:354
 msgid "Width of scrollbar or scale thumb"
 msgstr "عرض عمود اللف أو مربع القياس"
 
-#: gtk/gtkrange.c:356
+#: gtk/gtkrange.c:361
 msgid "Trough Border"
 msgstr "حد منخفض"
 
-#: gtk/gtkrange.c:357
+#: gtk/gtkrange.c:362
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "الفراغات بين المربع/المتخطي والحافة المنحدرة الخارجية"
 
-#: gtk/gtkrange.c:364
+#: gtk/gtkrange.c:369
 msgid "Stepper Size"
 msgstr "حجم المتخطي"
 
-#: gtk/gtkrange.c:365
+#: gtk/gtkrange.c:370
 msgid "Length of step buttons at ends"
 msgstr "طول أزرار الخطوات عند النهايات"
 
-#: gtk/gtkrange.c:372
+#: gtk/gtkrange.c:385
 msgid "Stepper Spacing"
 msgstr "فراغات المتخطي"
 
-#: gtk/gtkrange.c:373
+#: gtk/gtkrange.c:386
 msgid "Spacing between step buttons and thumb"
 msgstr "الفراغات بين أزرار الخطوات والإبهام"
 
-#: gtk/gtkrange.c:380
+#: gtk/gtkrange.c:393
 msgid "Arrow X Displacement"
 msgstr "إزاحة السهم في س"
 
-#: gtk/gtkrange.c:381
+#: gtk/gtkrange.c:394
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "مقدار تحريك السهم باتجاه س عند تحرير الزر"
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:401
 msgid "Arrow Y Displacement"
 msgstr "إزاحة السهم في ص"
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:402
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "مقدار·تحريك·السهم·باتجاه·ص·عند·تحرير·الزر"
 
-#: gtk/gtkrange.c:397
+#: gtk/gtkrange.c:410
 msgid "Draw slider ACTIVE during drag"
 msgstr ""
 
-#: gtk/gtkrange.c:398
+#: gtk/gtkrange.c:411
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
+msgstr ""
+
+#: gtk/gtkrange.c:422
+msgid "Trough Side Details"
+msgstr ""
+
+#: gtk/gtkrange.c:423
+msgid ""
+"When TRUE, the parts of the trough on the two sides of the slider are drawn "
+"with different details"
+msgstr ""
+
+#: gtk/gtkrange.c:439
+msgid "Trough Under Steppers"
+msgstr ""
+
+#: gtk/gtkrange.c:440
+msgid ""
+"Whether to draw trought for full length of range or exclude the steppers and "
+"spacing"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:112
@@ -4069,11 +4104,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "عرض زر سهم تقدم ثان عند النهاية المعاكسة لعمود التدرج"
 
-#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:555
+#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:557
 msgid "Horizontal Adjustment"
 msgstr "ضبط أفقي"
 
-#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:563
+#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:565
 msgid "Vertical Adjustment"
 msgstr "ضبط عمودي"
 
@@ -5301,182 +5336,242 @@ msgstr "نمط ترتيب العرض الشجري"
 msgid "The model for the TreeModelSort to sort"
 msgstr "نمط فرز العرض الشجري المستخدم للفرز"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:549
 msgid "TreeView Model"
 msgstr "نمط العرض الشجري"
 
-#: gtk/gtktreeview.c:548
+#: gtk/gtktreeview.c:550
 msgid "The model for the tree view"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:558
 msgid "Horizontal Adjustment for the widget"
 msgstr "الضبط الأفقي للكائن"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:566
 msgid "Vertical Adjustment for the widget"
 msgstr "الضبط العمودي للكائن"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:573
 #, fuzzy
 msgid "Headers Visible"
 msgstr "الرؤوس قابلة للنقر"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:574
 msgid "Show the column header buttons"
 msgstr "أظهر أزرار رؤوس العمود"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:581
 msgid "Headers Clickable"
 msgstr "الرؤوس قابلة للنقر"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:582
 msgid "Column headers respond to click events"
 msgstr "رؤوس العمود تستجيب لأحداث النقر"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:589
 msgid "Expander Column"
 msgstr "عمود موسع"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:590
 msgid "Set the column for the expander column"
 msgstr "تعين العمود للعمود الموسع"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:605
 msgid "Rules Hint"
 msgstr "تلميحة القواعد"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:606
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "تعين تلميحة لآلة التيمة حتى ترسم صفوفا بألوان متغايرة"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:613
 msgid "Enable Search"
 msgstr "تفعيل البحث"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:614
 msgid "View allows user to search through columns interactively"
 msgstr "عرض يسمح للمستخدم بالبحث خلال الأعمدة بتفاعل"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:621
 msgid "Search Column"
 msgstr "عمود بحث"
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:622
 msgid "Model column to search through when searching through code"
 msgstr "عمود النمط الذي يتم البحث خلاله أثناء البحث خلال الكود"
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:642
 msgid "Fixed Height Mode"
 msgstr "نسق الارتفاع الثابت"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:643
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "يسرع GtkTreeView باعتبار جميع الأعمدة ذات إرتفاع موحد"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:663
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:662
+#: gtk/gtktreeview.c:664
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "فيما اذا كان منتقي الألوان سيسمح بضبط التعتيم"
 
-#: gtk/gtktreeview.c:681
+#: gtk/gtktreeview.c:683
 #, fuzzy
 msgid "Hover Expand"
 msgstr "تمديد"
 
-#: gtk/gtktreeview.c:682
+#: gtk/gtktreeview.c:684
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "ما إذا وجب تزويق النافذة بمدير النوافذ"
 
-#: gtk/gtktreeview.c:689
+#: gtk/gtktreeview.c:691
 #, fuzzy
 msgid "Show Expanders"
 msgstr "هو موسِّع"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:692
 #, fuzzy
 msgid "View has expanders"
 msgstr "هو موسِّع"
 
-#: gtk/gtktreeview.c:697
+#: gtk/gtktreeview.c:699
 msgid "Level Indentation"
 msgstr ""
 
-#: gtk/gtktreeview.c:698
+#: gtk/gtktreeview.c:700
 msgid "Extra indentation for each level"
 msgstr ""
 
-#: gtk/gtktreeview.c:707
+#: gtk/gtktreeview.c:709
 msgid "Rubber Banding"
 msgstr ""
 
-#: gtk/gtktreeview.c:708
+#: gtk/gtktreeview.c:710
 #, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "ما إذا سيتم السماح بانتقاء ملفات متعددة"
 
-#: gtk/gtktreeview.c:728
+#: gtk/gtktreeview.c:717
+#, fuzzy
+msgid "Enable Grid Lines"
+msgstr "تفعيل مفاتيح الأسهم"
+
+#: gtk/gtktreeview.c:718
+#, fuzzy
+msgid "Whether grid lines should be drawn in the tree view"
+msgstr "فيما إذا كان سيتم عرض الحد أم لا"
+
+#: gtk/gtktreeview.c:725
+#, fuzzy
+msgid "Enable Tree Lines"
+msgstr "تفعيل مفاتيح الأسهم"
+
+#: gtk/gtktreeview.c:726
+#, fuzzy
+msgid "Whether tree lines should be drawn in the tree view"
+msgstr "فيما إذا كان سيتم عرض الحد أم لا"
+
+#: gtk/gtktreeview.c:746
 msgid "Vertical Separator Width"
 msgstr "العرض العمودي للفاصل"
 
-#: gtk/gtktreeview.c:729
+#: gtk/gtktreeview.c:747
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "الفراغ العمودي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:737
+#: gtk/gtktreeview.c:755
 msgid "Horizontal Separator Width"
 msgstr "العرض الأفقي للفاصل"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:756
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "الفراغ الأفقي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:764
 msgid "Allow Rules"
 msgstr "اسمح بالقواعد"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:765
 msgid "Allow drawing of alternating color rows"
 msgstr "السماح برسم أعمدة ملونة متوالية"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:771
 msgid "Indent Expanders"
 msgstr "إزاحة الموسعات"
 
-#: gtk/gtktreeview.c:754
+#: gtk/gtktreeview.c:772
 msgid "Make the expanders indented"
 msgstr "جعل الموسعات مجوفة"
 
-#: gtk/gtktreeview.c:760
+#: gtk/gtktreeview.c:778
 msgid "Even Row Color"
 msgstr "لون السطر الزوجي"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:779
 msgid "Color to use for even rows"
 msgstr "اللون للاستخدام للسطور الزوجية"
 
-#: gtk/gtktreeview.c:767
+#: gtk/gtktreeview.c:785
 msgid "Odd Row Color"
 msgstr "لون السطر الغريب"
 
-#: gtk/gtktreeview.c:768
+#: gtk/gtktreeview.c:786
 msgid "Color to use for odd rows"
 msgstr "اللون للاستخدام للسطور الغريبة"
 
-#: gtk/gtktreeview.c:774
+#: gtk/gtktreeview.c:792
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:775
+#: gtk/gtktreeview.c:793
 msgid "Enable extended row background theming"
 msgstr ""
+
+#: gtk/gtktreeview.c:799
+#, fuzzy
+msgid "Grid line width"
+msgstr "عرض خط البؤرة"
+
+#: gtk/gtktreeview.c:800
+#, fuzzy
+msgid "Width, in pixels, of the tree view grid lines"
+msgstr "العرض بالبكسلات لسطر مؤشر التركيز"
+
+#: gtk/gtktreeview.c:806
+#, fuzzy
+msgid "Tree line width"
+msgstr "العرض الثابت"
+
+#: gtk/gtktreeview.c:807
+#, fuzzy
+msgid "Width, in pixels, of the tree view lines"
+msgstr "العرض بالبكسلات لسطر مؤشر التركيز"
+
+#: gtk/gtktreeview.c:813
+#, fuzzy
+msgid "Grid line pattern"
+msgstr "خط البؤرة بالنقش المتقطع"
+
+#: gtk/gtktreeview.c:814
+#, fuzzy
+msgid "Dash pattern used to draw the tree view grid lines"
+msgstr "نمط الخط الفاصل المستعمل لرسم مؤشر التكيز"
+
+#: gtk/gtktreeview.c:820
+#, fuzzy
+msgid "Tree line pattern"
+msgstr "خط البؤرة بالنقش المتقطع"
+
+#: gtk/gtktreeview.c:821
+#, fuzzy
+msgid "Dash pattern used to draw the tree view lines"
+msgstr "نمط الخط الفاصل المستعمل لرسم مؤشر التكيز"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -6112,6 +6207,10 @@ msgstr "أسلوب حالة طريقة الإدخال"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "كيفية رسم عمود الحالة لطريقة الإدخال"
+
+#, fuzzy
+#~ msgid "Show Preview"
+#~ msgstr "اظهار نص"
 
 #~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 #~ msgstr "فيما إذا كان النص مخفيّا. لم ينجز بعد في GTK·2.0"

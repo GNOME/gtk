@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-05 14:44-0400\n"
+"POT-Creation-Date: 2006-06-12 21:18-0400\n"
 "PO-Revision-Date: 2006-02-19 07:45+0100\n"
 "Last-Translator: Giasher <giasher@telenet.ge>\n"
 "Language-Team: Georgian <http://www.gia.ge>\n"
@@ -248,7 +248,7 @@ msgstr "მართვის ელემენტი \"სხარტულ�
 msgid "The widget to be monitored for accelerator changes"
 msgstr "მართვის ელემენტი სხარტულას ცვლილებების თვალსადევნად"
 
-#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:115
+#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:119
 msgid "Name"
 msgstr "სახელი"
 
@@ -292,7 +292,7 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "მართვის ელემენტში ჩაკერებული ხატულა, რომელიც ქმედებას ასახავს."
 
 #: gtk/gtkaction.c:238 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:150 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "ხატულას სახელი"
 
@@ -638,7 +638,7 @@ msgstr "ინტერვალი"
 msgid "The amount of space between children"
 msgstr "ველები ქვეელემენტებს შორის"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:583 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "ერთგვაროვნება (ჰომოგენობა)"
 
@@ -679,7 +679,7 @@ msgstr "ველი ქვეელემენტსა და მის მ�
 msgid "Pack type"
 msgstr "შეფუთვის ტიპი"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:636
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -687,12 +687,12 @@ msgstr ""
 "GtkPackType ტიპი მიუთითებს ქვეელემენტი შეფუთულია ძირეული ელემენტის დაწყების "
 "თუ ბოლოს დამოწმებით"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:614 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "პოზიცია"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:615
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
 msgid "The index of the child in the parent"
 msgstr "ქვეელემენტის ინდექსი ძირეულ ელემენტში"
 
@@ -1134,7 +1134,7 @@ msgid "Value of the progress bar"
 msgstr "მიმდინარეობის მაჩვენებელი"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:190
-#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:193
+#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "ტექსტი"
@@ -1314,7 +1314,7 @@ msgstr ""
 "როგორც მინიშნება ტექსტის გარდასახვისთვის.  თუ ამ პარამეტრის მნიშვნელობა არ "
 "გესმით, მეტად ალბათურია რომ იგი საერთოდ არ გჭირდებათ."
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:215
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "გადანაცვლება"
 
@@ -1583,7 +1583,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "ფერისთვის გამჭვირვალობის მნიშვნელობის მითითება"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:114 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "სათაური"
 
@@ -2113,11 +2113,11 @@ msgstr ""
 "მართვის ელემენტი, რომელიც გამფართოებლის ჩვეულებრივი წარწერის ნაცვლად იქნება "
 "ნაჩვენები"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:719
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
 msgid "Expander Size"
 msgstr "გამფართოებლის ზომა"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:720
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
 msgid "Size of the expander arrow"
 msgstr "გამფართოებლის ისრის ზომა"
 
@@ -2235,11 +2235,11 @@ msgstr "ფაილების არჩევის დიალოგის 
 msgid "The desired width of the button widget, in characters."
 msgstr "მართვის ელემენტის სასურველი სიგანე სიმბოლოებში."
 
-#: gtk/gtkfilechooserdefault.c:599
+#: gtk/gtkfilechooserdefault.c:615
 msgid "Default file chooser backend"
 msgstr "ფაილების არჩევის დიალოგის საწყისი ძრავი."
 
-#: gtk/gtkfilechooserdefault.c:600
+#: gtk/gtkfilechooserdefault.c:616
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "GtkFileChooser საწყისი ძრავის სახელი"
 
@@ -2505,7 +2505,7 @@ msgstr "ველი"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "ინტერვალი ხატულას გარშემო მისი ჩვენებისას"
 
-#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:125 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:94
 msgid "Orientation"
 msgstr "ორიენტაცია"
@@ -2515,11 +2515,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "თითოეული ელემენტის ტექსტისა და ხატულას ურთიერთმიმართება"
 
-#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:595 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "გადაწყობადი"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:596
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "ჩვენების ელემენტების გადაწყობადობა"
 
@@ -3037,77 +3037,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "მართვის ელემენტის ზემოდან და ქვემოდან დასამატებელი ველების სიდიდე"
 
-#: gtk/gtknotebook.c:511
+#: gtk/gtknotebook.c:512
 msgid "Page"
 msgstr "გვერდი"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:513
 msgid "The index of the current page"
 msgstr "მიმდინარე გვერდის ინდექსი"
 
-#: gtk/gtknotebook.c:520
+#: gtk/gtknotebook.c:521
 msgid "Tab Position"
 msgstr "დაფების განლაგება"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:522
 msgid "Which side of the notebook holds the tabs"
 msgstr "დაფების განლაგება ბლოკნოტში"
 
-#: gtk/gtknotebook.c:528
+#: gtk/gtknotebook.c:529
 msgid "Tab Border"
 msgstr "დაფის კონტური"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:530
 msgid "Width of the border around the tab labels"
 msgstr "დაფის წარწერების კონტურის სიგანე"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:538
 msgid "Horizontal Tab Border"
 msgstr "დაფის განივი კონტური"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:539
 msgid "Width of the horizontal border of tab labels"
 msgstr "დაფის წარწერების განივი კონტურის სიგანე"
 
-#: gtk/gtknotebook.c:546
+#: gtk/gtknotebook.c:547
 msgid "Vertical Tab Border"
 msgstr "დაფის მართობული კონტური"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:548
 msgid "Width of the vertical border of tab labels"
 msgstr "დაფის წარწერების მართობული კონტურის სიგანე"
 
-#: gtk/gtknotebook.c:555
+#: gtk/gtknotebook.c:556
 msgid "Show Tabs"
 msgstr "დაფების ჩვენება"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:557
 msgid "Whether tabs should be shown or not"
 msgstr "დაფების ჩვენება"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:563
 msgid "Show Border"
 msgstr "კონტურის ჩვენება"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:564
 msgid "Whether the border should be shown or not"
 msgstr "კონტურის ჩვენება"
 
-#: gtk/gtknotebook.c:569
+#: gtk/gtknotebook.c:570
 msgid "Scrollable"
 msgstr "გადახვევადი"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:571
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "თუ მითითებულია, დაფების დიდი რაოდენობის შემთხვევაში გადახვევის ისრები "
 "დაემატება"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:577
 msgid "Enable Popup"
 msgstr "მოტივტივე მენიუს ნებადართვა"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:578
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3115,124 +3115,124 @@ msgstr ""
 "თუ მითითებულია, თაგუნას მარჯვენა ღილაკის დაჭერისას ბლოკნოტში მოტივტივე მენიუ "
 "გამოჩნდება, რომელიც გვერდებზე გადასვლის საშუალებას მოგცემთ"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:585
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "დაფების ერთიდაიგივე ზომის მითითება"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:591
 #, fuzzy
 msgid "Group ID"
 msgstr "ჯგუფი"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:592
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:601
 msgid "Tab label"
 msgstr "დაფის წარწერა"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:602
 msgid "The string displayed on the child's tab label"
 msgstr "ქვეელემენტის დაფის ელემენტის წარწერის ტექსტი"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:608
 msgid "Menu label"
 msgstr "მენიუს წარწერა"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:609
 msgid "The string displayed in the child's menu entry"
 msgstr "ქვეელემენტის მენიუს ელემენტის წარწერის ტექსტი"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:622
 msgid "Tab expand"
 msgstr "დაფების გაფართოება"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:623
 msgid "Whether to expand the child's tab or not"
 msgstr "ქვეელემენტის დაფების გაფართოება"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:629
 msgid "Tab fill"
 msgstr "დაფების შევსება"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:630
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "ქვეელემენტის დაფების შევსება"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:636
 msgid "Tab pack type"
 msgstr "დაფის შეფუთვის ტიპი"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:643
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "გადაწყობადი"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:644
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "კონტურის ჩვენება"
 
-#: gtk/gtknotebook.c:649
+#: gtk/gtknotebook.c:650
 #, fuzzy
 msgid "Tab detachable"
 msgstr "დაფის წარწერა"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:651
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "ქმედების ჩართვა/ამორთვა"
 
-#: gtk/gtknotebook.c:665 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "უკუსვლის დამატებითი ღილაკი"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:667
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "უკუსვლის დამატებითი ღილაკის დაფის არის საპირისპირო მხარეს მოთავსება"
 
-#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "წინსვლის დამატებითი ღილაკი"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:683
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "წინსვლის დამატებითი ღილაკის დაფის არის საპირისპირო მხარეს მოთავსება"
 
-#: gtk/gtknotebook.c:696 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "უკუსვლის ღილაკი"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "უკუსვლის ისრის სტანდარტული ღილაკის ჩვენება"
 
-#: gtk/gtknotebook.c:711 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "წინსვლის ღილაკი"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "წინსვლის ისრის სტანდარტული ღილაკის ჩვენება"
 
-#: gtk/gtknotebook.c:726
+#: gtk/gtknotebook.c:727
 #, fuzzy
 msgid "Tab overlap"
 msgstr "დაფის კონტური"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:728
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "გამფართოებლის ისრის ზომა"
 
-#: gtk/gtknotebook.c:742
+#: gtk/gtknotebook.c:743
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:744
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "გამყოფების ზომები"
@@ -3334,57 +3334,75 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtkprinter.c:116
+#: gtk/gtkprinter.c:120
 #, fuzzy
 msgid "Name of the printer"
 msgstr "ხატულების გამოსაყენებელი თემის სახელი"
 
-#: gtk/gtkprinter.c:122
+#: gtk/gtkprinter.c:126
 msgid "Backend"
 msgstr ""
 
-#: gtk/gtkprinter.c:123
+#: gtk/gtkprinter.c:127
 #, fuzzy
 msgid "Backend for the printer"
 msgstr "GdkScreen გარდასახვისთვის"
 
-#: gtk/gtkprinter.c:129
+#: gtk/gtkprinter.c:133
 #, fuzzy
 msgid "Is Virtual"
 msgstr "მნიშვნელოვანია"
 
-#: gtk/gtkprinter.c:130
+#: gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
 msgstr ""
 
-#: gtk/gtkprinter.c:136
+#: gtk/gtkprinter.c:140
+#, fuzzy
+msgid "Accepts PDF"
+msgstr "ტაბულაციის მიღება"
+
+#: gtk/gtkprinter.c:141
+msgid "TRUE if this printer can accept PDF"
+msgstr ""
+
+#: gtk/gtkprinter.c:147
+#, fuzzy
+msgid "Accepts PostScript"
+msgstr "ტაბულაციის მიღება"
+
+#: gtk/gtkprinter.c:148
+msgid "TRUE if this printer can accept PostScript"
+msgstr ""
+
+#: gtk/gtkprinter.c:154
 msgid "State Message"
 msgstr ""
 
-#: gtk/gtkprinter.c:137
+#: gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
 msgstr ""
 
-#: gtk/gtkprinter.c:143
+#: gtk/gtkprinter.c:161
 #, fuzzy
 msgid "Location"
 msgstr "ქმედება"
 
-#: gtk/gtkprinter.c:144
+#: gtk/gtkprinter.c:162
 #, fuzzy
 msgid "The location of the printer"
 msgstr "ხელსაწყოთა პანელის ორიენტაცია"
 
-#: gtk/gtkprinter.c:151
+#: gtk/gtkprinter.c:169
 #, fuzzy
 msgid "The icon name to use for the printer"
 msgstr "სახაზავის შკალა"
 
-#: gtk/gtkprinter.c:157
+#: gtk/gtkprinter.c:175
 msgid "Job Count"
 msgstr ""
 
-#: gtk/gtkprinter.c:158
+#: gtk/gtkprinter.c:176
 #, fuzzy
 msgid "Number of jobs queued in the printer"
 msgstr "მწკრივების რაოდენობა ცხრილში"
@@ -3398,176 +3416,173 @@ msgstr "ჩამოშლადი თვითშევსება"
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:115
+#: gtk/gtkprintjob.c:116
 #, fuzzy
 msgid "Title of the print job"
 msgstr "ფანჯრის სათაური"
 
-#: gtk/gtkprintjob.c:123
+#: gtk/gtkprintjob.c:124
 #, fuzzy
 msgid "Printer"
 msgstr "ფილტრი"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 msgid "Printer to print the job to"
 msgstr ""
 
-#: gtk/gtkprintjob.c:132
+#: gtk/gtkprintjob.c:133
 msgid "Settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:141 gtk/gtkprintjob.c:142 gtk/gtkprintunixdialog.c:224
+#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
 #, fuzzy
 msgid "Page Setup"
 msgstr "გვერდის ზომა"
 
-#: gtk/gtkprintoperation.c:832
+#: gtk/gtkprintoperation.c:844
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "ნაგულისხმები სიმაღლე"
 
-#: gtk/gtkprintoperation.c:833
+#: gtk/gtkprintoperation.c:845
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:851 gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:852 gtk/gtkprintunixdialog.c:243
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:870
+#: gtk/gtkprintoperation.c:882
 #, fuzzy
 msgid "Job Name"
 msgstr "ხატულას სახელი"
 
-#: gtk/gtkprintoperation.c:871
+#: gtk/gtkprintoperation.c:883
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:894
+#: gtk/gtkprintoperation.c:906
 #, fuzzy
 msgid "Number of Pages"
 msgstr "არხების რაოდენობა"
 
-#: gtk/gtkprintoperation.c:895
+#: gtk/gtkprintoperation.c:907
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "მწკრივების რაოდენობა ცხრილში"
 
-#: gtk/gtkprintoperation.c:916 gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "Current Page"
 msgstr "გამჭვირვალობის მიმდინარე სიდიდე"
 
-#: gtk/gtkprintoperation.c:917
+#: gtk/gtkprintoperation.c:929
 #, fuzzy
 msgid "The current page in the document."
 msgstr "გვერდის ზომა მორგებისთვის"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:950
 #, fuzzy
 msgid "Use full page"
 msgstr "გამჭვირვალობა"
 
-#: gtk/gtkprintoperation.c:939
+#: gtk/gtkprintoperation.c:951
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:959
+#: gtk/gtkprintoperation.c:971
 msgid "Track Print Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:972
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:977
+#: gtk/gtkprintoperation.c:989
 #, fuzzy
 msgid "Unit"
 msgstr "სასწრაფო"
 
-#: gtk/gtkprintoperation.c:978
+#: gtk/gtkprintoperation.c:990
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:995 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintoperation.c:1007
 #, fuzzy
 msgid "Show Dialog"
 msgstr "დიალოგი"
 
-#: gtk/gtkprintoperation.c:996
-msgid "TRUE if gtk_print_operation_run() should show the print dialog."
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1011
-#, fuzzy
-msgid "Show Preview"
-msgstr "ტექსტის ჩვენება"
-
-#: gtk/gtkprintoperation.c:1012
-msgid "TRUE if gtk_print_operation_run() should show the print preview."
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1008
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1051 gtk/gtkprintoperation.c:1052
-msgid "PDF target filename"
+#: gtk/gtkprintoperation.c:1025
+#, fuzzy
+msgid "Allow Async"
+msgstr "წესების ნებადართვა"
+
+#: gtk/gtkprintoperation.c:1026
+msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1066
+#: gtk/gtkprintoperation.c:1049 gtk/gtkprintoperation.c:1050
+#, fuzzy
+msgid "Export filename"
+msgstr "ფაილის სახელი"
+
+#: gtk/gtkprintoperation.c:1064
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1067
+#: gtk/gtkprintoperation.c:1065
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "გადამრთველი ღილაკის სტატუსი"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1085
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1086
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1104
 #, fuzzy
 msgid "Custom tab label"
 msgstr "თქვენი პალიტრა"
 
-#: gtk/gtkprintoperation.c:1107
+#: gtk/gtkprintoperation.c:1105
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:225
+#: gtk/gtkprintunixdialog.c:228
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:233
+#: gtk/gtkprintunixdialog.c:236
 #, fuzzy
 msgid "The current page in the document"
 msgstr "გვერდის ზომა მორგებისთვის"
 
-#: gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintunixdialog.c:253
 #, fuzzy
 msgid "Selected Printer"
 msgstr "მონიშნული წელი"
 
-#: gtk/gtkprintunixdialog.c:251
+#: gtk/gtkprintunixdialog.c:254
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "მიმდინარე აქტიური ელემენტი"
@@ -3619,40 +3634,40 @@ msgstr ""
 "მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
 "ელემენტში ვერტიკალურ განთავსებას მიუთითებს"
 
-#: gtk/gtkprogressbar.c:117 gtk/gtkrange.c:315 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:320 gtk/gtkspinbutton.c:203
 msgid "Adjustment"
 msgstr "მორგება"
 
-#: gtk/gtkprogressbar.c:118
+#: gtk/gtkprogressbar.c:121
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "მიმდინარეობის მაჩვენებელთან დაკავშირებული GtkAdjustment კომპონენტი (მოძველდა)"
 
-#: gtk/gtkprogressbar.c:126
+#: gtk/gtkprogressbar.c:129
 msgid "Orientation and growth direction of the progress bar"
 msgstr "მიმდინარეობის მაჩვენებლის ზრდის ორიენტაცია და მიმართულება"
 
-#: gtk/gtkprogressbar.c:134
+#: gtk/gtkprogressbar.c:137
 msgid "Bar style"
 msgstr "პანელის სტილი"
 
-#: gtk/gtkprogressbar.c:135
+#: gtk/gtkprogressbar.c:138
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "მიმდინარეობის მაჩვენებლის პროცენტებში გამოსახვის რეჟიმი (მოძველდა)"
 
-#: gtk/gtkprogressbar.c:143
+#: gtk/gtkprogressbar.c:146
 msgid "Activity Step"
 msgstr "აქტივობის ბიჯი"
 
-#: gtk/gtkprogressbar.c:144
+#: gtk/gtkprogressbar.c:147
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "ცალკეული ციკლის ნამატი \"აქტივობის რეჟიმში\" (მოძველდა)"
 
-#: gtk/gtkprogressbar.c:153
+#: gtk/gtkprogressbar.c:156
 msgid "Activity Blocks"
 msgstr "აქტივობის ბლოკები"
 
-#: gtk/gtkprogressbar.c:154
+#: gtk/gtkprogressbar.c:157
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -3660,39 +3675,39 @@ msgstr ""
 "ბლოკების მაქსიმალური რაოდენობა მიმდინარეობის მაჩვენებელის არეში \"აქტივობის "
 "რეჟიმში\" (მოძველდა)"
 
-#: gtk/gtkprogressbar.c:163
+#: gtk/gtkprogressbar.c:166
 msgid "Discrete Blocks"
 msgstr "ცალკეული ბლოკები"
 
-#: gtk/gtkprogressbar.c:164
+#: gtk/gtkprogressbar.c:167
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr "ცალკეული ბლოკების რაოდენობა მიმდინარეობის მაჩვენებელის ზოლში"
 
-#: gtk/gtkprogressbar.c:173
+#: gtk/gtkprogressbar.c:176
 msgid "Fraction"
 msgstr "წილადი"
 
-#: gtk/gtkprogressbar.c:174
+#: gtk/gtkprogressbar.c:177
 msgid "The fraction of total work that has been completed"
 msgstr "სრული სამუშაოს შესრულებული ნაწილი"
 
-#: gtk/gtkprogressbar.c:183
+#: gtk/gtkprogressbar.c:186
 msgid "Pulse Step"
 msgstr "ნამატის ბიჯი"
 
-#: gtk/gtkprogressbar.c:184
+#: gtk/gtkprogressbar.c:187
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "სრული სამუშაოს შესრულებული ნაწილი, რომლის დროსაც მიმდინარეობის მაჩვენებლის "
 "ნამატი ხდება"
 
-#: gtk/gtkprogressbar.c:194
+#: gtk/gtkprogressbar.c:197
 msgid "Text to be displayed in the progress bar"
 msgstr "მიმდინარეობის მაჩვენებლის ტექსტი"
 
-#: gtk/gtkprogressbar.c:216
+#: gtk/gtkprogressbar.c:219
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
@@ -3740,106 +3755,126 @@ msgstr "ინდიკატორის ღილაკი ჯგუფის�
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "ინდიკატორის ღილაკი ჯგუფისთვის, რომელსაც მართვის ეს ელემენტი ეკუთვნის."
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:311
 msgid "Update policy"
 msgstr "წესების განახლება"
 
-#: gtk/gtkrange.c:307
+#: gtk/gtkrange.c:312
 msgid "How the range should be updated on the screen"
 msgstr "დიაპაზონის ეკრანზე განახლების წესი"
 
-#: gtk/gtkrange.c:316
+#: gtk/gtkrange.c:321
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "GtkAdjustment ობიექტი, სადაც ამ ტიპი ობიექტის \"დიაპაზონი\" მიმდინარე "
 "მნიშვნელობა ინახება"
 
-#: gtk/gtkrange.c:323
+#: gtk/gtkrange.c:328
 msgid "Inverted"
 msgstr "ინვერტირებული"
 
-#: gtk/gtkrange.c:324
+#: gtk/gtkrange.c:329
 msgid "Invert direction slider moves to increase range value"
 msgstr "მონიშნული არის ინვერტირება დიაპაზონის გასაზრდელად"
 
-#: gtk/gtkrange.c:331
+#: gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:332
+#: gtk/gtkrange.c:337
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:340
+#: gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:341
+#: gtk/gtkrange.c:346
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:348
+#: gtk/gtkrange.c:353
 msgid "Slider Width"
 msgstr "გადახვევის ზოლის სიგანე"
 
-#: gtk/gtkrange.c:349
+#: gtk/gtkrange.c:354
 msgid "Width of scrollbar or scale thumb"
 msgstr "გადახვევის ზოლის ან მასშტაბის მაჩვენებლის სიგანე"
 
-#: gtk/gtkrange.c:356
+#: gtk/gtkrange.c:361
 msgid "Trough Border"
 msgstr "მიმმართველი კონტური"
 
-#: gtk/gtkrange.c:357
+#: gtk/gtkrange.c:362
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "მანძილი გადატანის მაჩვენებელს/ღილაკსა და მმიმართველის კონტურს შორის"
 
-#: gtk/gtkrange.c:364
+#: gtk/gtkrange.c:369
 msgid "Stepper Size"
 msgstr "გადატანის ღილაკის ზომა"
 
-#: gtk/gtkrange.c:365
+#: gtk/gtkrange.c:370
 msgid "Length of step buttons at ends"
 msgstr "გადატანის ღილაკის სიგრძე"
 
-#: gtk/gtkrange.c:372
+#: gtk/gtkrange.c:385
 msgid "Stepper Spacing"
 msgstr "მანძილი გადატანის ღილაკებს შორის"
 
-#: gtk/gtkrange.c:373
+#: gtk/gtkrange.c:386
 msgid "Spacing between step buttons and thumb"
 msgstr "მანძილი გადატანის ღილაკსა და მაჩვენებელს შორის"
 
-#: gtk/gtkrange.c:380
+#: gtk/gtkrange.c:393
 msgid "Arrow X Displacement"
 msgstr "ისრის X წანაცვლება"
 
-#: gtk/gtkrange.c:381
+#: gtk/gtkrange.c:394
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "ისრის განივი გადანაცვლება ღილაკის დაჭერისას"
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:401
 msgid "Arrow Y Displacement"
 msgstr "ისრის Y წანაცვლება"
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:402
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "ისრის მართობული გადანაცვლება ღილაკის დაჭერისას"
 
-#: gtk/gtkrange.c:397
+#: gtk/gtkrange.c:410
 msgid "Draw slider ACTIVE during drag"
 msgstr ""
 
-#: gtk/gtkrange.c:398
+#: gtk/gtkrange.c:411
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
+msgstr ""
+
+#: gtk/gtkrange.c:422
+msgid "Trough Side Details"
+msgstr ""
+
+#: gtk/gtkrange.c:423
+msgid ""
+"When TRUE, the parts of the trough on the two sides of the slider are drawn "
+"with different details"
+msgstr ""
+
+#: gtk/gtkrange.c:439
+msgid "Trough Under Steppers"
+msgstr ""
+
+#: gtk/gtkrange.c:440
+msgid ""
+"Whether to draw trought for full length of range or exclude the steppers and "
+"spacing"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:112
@@ -4055,11 +4090,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "წინსვლის მეორე ღილაკის ჩვენება გადახვევის ზოლის საპირისპირო მხარეს"
 
-#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:555
+#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:557
 msgid "Horizontal Adjustment"
 msgstr "განივი მორგება"
 
-#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:563
+#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:565
 msgid "Vertical Adjustment"
 msgstr "მართობული მორგება"
 
@@ -5288,180 +5323,240 @@ msgstr "TreeModelSort მოდელი"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort სორტირების მოდელი"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:549
 msgid "TreeView Model"
 msgstr "TreeView მოდელი"
 
-#: gtk/gtktreeview.c:548
+#: gtk/gtktreeview.c:550
 msgid "The model for the tree view"
 msgstr "განტოტვილი ჩვენების მოდელი"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:558
 msgid "Horizontal Adjustment for the widget"
 msgstr "მართვის ელემენტის განივი მორგება"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:566
 msgid "Vertical Adjustment for the widget"
 msgstr "მართვის ელემენტის მართობული მორგება"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:573
 msgid "Headers Visible"
 msgstr "თავსართები ხილულია"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:574
 msgid "Show the column header buttons"
 msgstr "სვეტების თავსართების ღილაკების ჩვენება"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:581
 msgid "Headers Clickable"
 msgstr "დაწკაპვადი თავსართები"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:582
 msgid "Column headers respond to click events"
 msgstr "დაწკაპვისადმი მგრძნობიარე თავსართები"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:589
 msgid "Expander Column"
 msgstr "გაფართოებადი სვეტი"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:590
 msgid "Set the column for the expander column"
 msgstr "გაფართოებადი სვეტის მითითება"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:605
 msgid "Rules Hint"
 msgstr "წესების კარნახი"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:606
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "კარნახი თემების ძრავისთვის მწკრივების ალტერნატული დაფერვისთვის"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:613
 msgid "Enable Search"
 msgstr "ძიების ნებადართვა"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:614
 msgid "View allows user to search through columns interactively"
 msgstr "ძიება სვეტების მიხედვით ინტერაქტიულ რეჟიმში"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:621
 msgid "Search Column"
 msgstr "სვეტის ძიება"
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:622
 msgid "Model column to search through when searching through code"
 msgstr "ძირითადი სვეტი, რომელშიც ძიება ხდება კოდის საშუალებით"
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:642
 msgid "Fixed Height Mode"
 msgstr "ფიქსირებული სიმაღლის რეჟიმი"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:643
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "GtkTreeView მართვის ელემენტის დაჩქარება ყველა მწკრივის ერთი და იგივე "
 "სიმაღლის დაშვებით"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:663
 msgid "Hover Selection"
 msgstr "თავისუფალი შერჩევა"
 
-#: gtk/gtktreeview.c:662
+#: gtk/gtktreeview.c:664
 msgid "Whether the selection should follow the pointer"
 msgstr "მონიშნულის თანმიდევნება მაჩვენებელზე"
 
-#: gtk/gtktreeview.c:681
+#: gtk/gtktreeview.c:683
 msgid "Hover Expand"
 msgstr "თავისუფალი გაფართოება"
 
-#: gtk/gtktreeview.c:682
+#: gtk/gtktreeview.c:684
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "სტრიქონების გაშლა/შეკუმშვა მასზე მაჩვენებელი ისრის გადატარებისას"
 
-#: gtk/gtktreeview.c:689
+#: gtk/gtktreeview.c:691
 #, fuzzy
 msgid "Show Expanders"
 msgstr "გაფართოებადი"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:692
 #, fuzzy
 msgid "View has expanders"
 msgstr "გაფართოებადი"
 
-#: gtk/gtktreeview.c:697
+#: gtk/gtktreeview.c:699
 msgid "Level Indentation"
 msgstr ""
 
-#: gtk/gtktreeview.c:698
+#: gtk/gtktreeview.c:700
 msgid "Extra indentation for each level"
 msgstr ""
 
-#: gtk/gtktreeview.c:707
+#: gtk/gtktreeview.c:709
 msgid "Rubber Banding"
 msgstr ""
 
-#: gtk/gtktreeview.c:708
+#: gtk/gtktreeview.c:710
 #, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "მრავალი ფაილის არჩევის დაშვება"
 
-#: gtk/gtktreeview.c:728
+#: gtk/gtktreeview.c:717
+#, fuzzy
+msgid "Enable Grid Lines"
+msgstr "ისრების გამოყენება"
+
+#: gtk/gtktreeview.c:718
+#, fuzzy
+msgid "Whether grid lines should be drawn in the tree view"
+msgstr "კონტურის ჩვენება"
+
+#: gtk/gtktreeview.c:725
+#, fuzzy
+msgid "Enable Tree Lines"
+msgstr "ისრების გამოყენება"
+
+#: gtk/gtktreeview.c:726
+#, fuzzy
+msgid "Whether tree lines should be drawn in the tree view"
+msgstr "კონტურის ჩვენება"
+
+#: gtk/gtktreeview.c:746
 msgid "Vertical Separator Width"
 msgstr "მართობული გამყოფის სიგანე"
 
-#: gtk/gtktreeview.c:729
+#: gtk/gtktreeview.c:747
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "უჯრების მართობული გამყოფის სიგანე. უნდა იყოს ლუწი რიცხვი"
 
-#: gtk/gtktreeview.c:737
+#: gtk/gtktreeview.c:755
 msgid "Horizontal Separator Width"
 msgstr "განივი გამყოფის სიგანე"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:756
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "უჯრების განივი გამყოფის სიგანე. უნდა იყოს ლუწი რიცხვი"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:764
 msgid "Allow Rules"
 msgstr "წესების ნებადართვა"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:765
 msgid "Allow drawing of alternating color rows"
 msgstr "მწკრივების სხვადასხვა დაფერვის ნებადართვა"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:771
 msgid "Indent Expanders"
 msgstr "გამფართოებლის აბზაცი"
 
-#: gtk/gtktreeview.c:754
+#: gtk/gtktreeview.c:772
 msgid "Make the expanders indented"
 msgstr "გამფართოებელ ობიექტებში აბზაცის მითითება"
 
-#: gtk/gtktreeview.c:760
+#: gtk/gtktreeview.c:778
 msgid "Even Row Color"
 msgstr "ლუწი მწკრივების ფერი"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:779
 msgid "Color to use for even rows"
 msgstr "ფერი ლუწი მწკრივების დასაფერად"
 
-#: gtk/gtktreeview.c:767
+#: gtk/gtktreeview.c:785
 msgid "Odd Row Color"
 msgstr "კენტი მწკრივების ფერი"
 
-#: gtk/gtktreeview.c:768
+#: gtk/gtktreeview.c:786
 msgid "Color to use for odd rows"
 msgstr "ფერი კენტი მწკრივების დასაფერად"
 
-#: gtk/gtktreeview.c:774
+#: gtk/gtktreeview.c:792
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:775
+#: gtk/gtktreeview.c:793
 msgid "Enable extended row background theming"
 msgstr ""
+
+#: gtk/gtktreeview.c:799
+#, fuzzy
+msgid "Grid line width"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის სიგანე"
+
+#: gtk/gtktreeview.c:800
+#, fuzzy
+msgid "Width, in pixels, of the tree view grid lines"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის სიგანე რასტრულ პიქსელებში"
+
+#: gtk/gtktreeview.c:806
+#, fuzzy
+msgid "Tree line width"
+msgstr "ფიქსირებული სიგანე"
+
+#: gtk/gtktreeview.c:807
+#, fuzzy
+msgid "Width, in pixels, of the tree view lines"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის სიგანე რასტრულ პიქსელებში"
+
+#: gtk/gtktreeview.c:813
+#, fuzzy
+msgid "Grid line pattern"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვა"
+
+#: gtk/gtktreeview.c:814
+#, fuzzy
+msgid "Dash pattern used to draw the tree view grid lines"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვის ნიმუში"
+
+#: gtk/gtktreeview.c:820
+#, fuzzy
+msgid "Tree line pattern"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვა"
+
+#: gtk/gtktreeview.c:821
+#, fuzzy
+msgid "Dash pattern used to draw the tree view lines"
+msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვის ნიმუში"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -6110,3 +6205,7 @@ msgstr "შეტანის მეთოდის სტატუსის ს
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "შეტანის მეთოდის სტატუსის გრაფიკული გამოსახულება"
+
+#, fuzzy
+#~ msgid "Show Preview"
+#~ msgstr "ტექსტის ჩვენება"

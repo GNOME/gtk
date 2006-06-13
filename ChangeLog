@@ -1,3 +1,13 @@
+2006-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.9.3 ===
+
+	* NEWS: Updates
+	
+	* gtk/gtk.symbols: Add gtk_tree_view_grid_lines_get_type.
+
+	* configure.in: Set interface age to 0
+
 2006-06-12  Kristian Rietveld  <kris@imendio.com>
 
 	Introduce grid and tree lines in GtkTreeView. (#106406,

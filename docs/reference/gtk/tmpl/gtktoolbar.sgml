@@ -87,7 +87,6 @@ accessed through the function described below.
 
 @toolbar: the object which received the signal.
 @Returns: 
-@:
 @Returns: 
 @Returns: 
 @Returns: 

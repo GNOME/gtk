@@ -166,6 +166,7 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_CAPABILITY_COLLATE: 
 @GTK_PRINT_CAPABILITY_REVERSE: 
 @GTK_PRINT_CAPABILITY_SCALE: 
+@GTK_PRINT_CAPABILITY_GENERATE_PDF: 
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_manual_capabilities ##### -->
 <para>

@@ -188,17 +188,17 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintOperation:export-filename ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:job-name ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkPrintOperation:n-pages ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPrintOperation:export-filename ##### -->
 <para>
 
 </para>
@@ -324,7 +324,7 @@ The #GQuark used for #GtkPrintError errors.
 </para>
 
 @op: 
-@Returns: 
+@error: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_set_default_page_setup ##### -->
@@ -497,7 +497,7 @@ The #GQuark used for #GtkPrintError errors.
 </para>
 
 @op: 
-@Returns: 
+@error: 
 
 
 <!-- ##### FUNCTION gtk_print_run_page_setup_dialog ##### -->

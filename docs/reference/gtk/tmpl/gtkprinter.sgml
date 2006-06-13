@@ -43,6 +43,16 @@ Printing support was added in GTK+ 2.10.
 @printer: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkPrinter:accepts-pdf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrinter:accepts-ps ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrinter:backend ##### -->
 <para>
 

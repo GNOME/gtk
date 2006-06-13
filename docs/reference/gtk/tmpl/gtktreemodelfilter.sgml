@@ -144,6 +144,7 @@ particularly efficient operation.
 @filter: 
 @filter_iter: 
 @child_iter: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_filter_convert_iter_to_child_iter ##### -->

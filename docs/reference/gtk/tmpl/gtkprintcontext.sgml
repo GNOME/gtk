@@ -101,6 +101,17 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_context_set_cairo_context ##### -->
+<para>
+
+</para>
+
+@context: 
+@cr: 
+@dpi_x: 
+@dpi_y: 
+
+
 <!-- ##### FUNCTION gtk_print_context_get_page_setup ##### -->
 <para>
 
