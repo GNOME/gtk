@@ -180,95 +180,78 @@ custom_paper_get_filename (void)
   return filename;
 }
 
-static gboolean
-scan_double (gchar   **text, 
-	     gdouble  *value, 
-	     gboolean  last)
-{
-  gchar *p, *e;
-
-  p = *text;
-  
-  *value = g_ascii_strtod (p, &e);
-  if (p == e)
-    return FALSE;
-
-  p = e;
-  if (!last)
-    {
-      while (g_ascii_isspace (*p))
-	p++;
-      if (*p++ != ',')
-	return FALSE;
-    }
-  *text = p;
-  return TRUE;
-}
-
 static void
 load_custom_papers (GtkListStore *store)
 {
+  GKeyFile *keyfile;
   gchar *filename;
-  gchar *contents;
-  
+  gchar **groups;
+  gsize n_groups, i;
+  gboolean load_ok;
+
   filename = custom_paper_get_filename ();
 
-  if (g_file_get_contents (filename, &contents, NULL, NULL))
+  keyfile = g_key_file_new ();
+  load_ok = g_key_file_load_from_file (keyfile, filename, 0, NULL);
+  g_free (filename);
+  if (!load_ok)
     {
-      gchar **lines = g_strsplit (contents, "\n", -1);
+      g_key_file_free (keyfile);
+      return;
+    }
+
+  groups = g_key_file_get_groups (keyfile, &n_groups);
+  for (i = 0; i < n_groups; ++i)
+    {
+      GError *error = NULL;
       gdouble w, h, top, bottom, left, right;
       GtkPaperSize *paper_size;
       GtkPageSetup *page_setup;
-      gchar *name, *p;
+      gchar *name;
       GtkTreeIter iter;
-      gint i;
 
-      for (i = 0; lines[i]; i++)
-	{
-	  name = lines[i];
-	  p = strchr (lines[i], ':');
-	  if (p == NULL)
-	    continue;
-	  *p++ = 0;
+      name = g_key_file_get_value (keyfile, groups[i], "Name", NULL);
+      if (!name)
+        continue;
 
-	  while (g_ascii_isspace (*p))
-	    p++;
-	  
-	  if (!scan_double (&p, &w, FALSE))
-	    continue;
-	  if (!scan_double (&p, &h, FALSE))
-	    continue;
-	  if (!scan_double (&p, &top, FALSE))
-	    continue;
-	  if (!scan_double (&p, &bottom, FALSE))
-	    continue;
-	  if (!scan_double (&p, &left, FALSE))
-	    continue;
-	  if (!scan_double (&p, &right, TRUE))
-	    continue;
+#define GET_DOUBLE(kf, name, v) \
+      v = g_key_file_get_double (kf, groups[i], name, &error); \
+      if (error != NULL) \
+        {\
+          g_error_free (error);\
+          continue;\
+        }
 
-	  page_setup = gtk_page_setup_new ();
-	  paper_size = gtk_paper_size_new_custom (name, name, w, h, GTK_UNIT_MM);
-	  gtk_page_setup_set_paper_size (page_setup, paper_size);
-	  gtk_paper_size_free (paper_size);
+      GET_DOUBLE (keyfile, "Width", w);
+      GET_DOUBLE (keyfile, "Height", h);
+      GET_DOUBLE (keyfile, "MarginTop", top);
+      GET_DOUBLE (keyfile, "MarginBottom", bottom);
+      GET_DOUBLE (keyfile, "MarginLeft", left);
+      GET_DOUBLE (keyfile, "MarginRight", right);
 
-	  gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
-	  gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
-	  gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
-	  gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
+#undef GET_DOUBLE
 
-	  gtk_list_store_append (store, &iter);
-	  gtk_list_store_set (store, &iter,
-			      0, page_setup, 
-			      -1);
+      page_setup = gtk_page_setup_new ();
+      paper_size = gtk_paper_size_new_custom (name, name, w, h, GTK_UNIT_MM);
+      gtk_page_setup_set_paper_size (page_setup, paper_size);
+      gtk_paper_size_free (paper_size);
 
-	  g_object_unref (page_setup);
-	}
-      
-      g_free (contents);
-      g_strfreev (lines);
+      gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
+      gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
+      gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
+      gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
+
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+			  0, page_setup, 
+			  -1);
+
+      g_object_unref (page_setup);
+      g_free (name);
     }
-  g_free (filename);
+ 
+  g_strfreev (groups);
+  g_key_file_free (keyfile);
 }
 
 static void
@@ -276,10 +259,12 @@ save_custom_papers (GtkListStore *store)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (store);
   GtkTreeIter iter;
-  GString *string;
-  gchar *filename;
+  GKeyFile *keyfile;
+  gchar *filename, *data;
+  gsize len;
+  gint i = 0;
 
-  string = g_string_new ("");
+  keyfile = g_key_file_new ();
   
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
@@ -287,47 +272,37 @@ save_custom_papers (GtkListStore *store)
 	{
 	  GtkPaperSize *paper_size;
 	  GtkPageSetup *page_setup;
-	  gchar buffer[G_ASCII_DTOSTR_BUF_SIZE];
-	  
+	  gchar group[32];
+
+	  g_snprintf (group, sizeof (group), "Paper%u", i);
+
 	  gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
 
 	  paper_size = gtk_page_setup_get_paper_size (page_setup);
-	  g_string_append_printf (string, "%s: ", gtk_paper_size_get_name (paper_size));
-	  
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE,
-			  gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
-	  g_string_append (string, ", ");
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE,
-			  gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
-	  g_string_append (string, ", ");
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE,
-			  gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
-	  g_string_append (string, ", ");
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE, 
-			  gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
-	  g_string_append (string, ", ");
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE,
-			  gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
-	  g_string_append (string, ", ");
-	  g_ascii_dtostr (buffer, G_ASCII_DTOSTR_BUF_SIZE,
-			  gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
-	  g_string_append (string, buffer);
+	  g_key_file_set_string (keyfile, group, "Name", gtk_paper_size_get_name (paper_size));
 
-	  g_string_append (string, "\n");
+	  g_key_file_set_double (keyfile, group, "Width",
+				 gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM));
+	  g_key_file_set_double (keyfile, group, "Height",
+				 gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM));
+	  g_key_file_set_double (keyfile, group, "MarginTop",
+				 gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
+	  g_key_file_set_double (keyfile, group, "MarginBottom",
+				 gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
+	  g_key_file_set_double (keyfile, group, "MarginLeft",
+				 gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
+	  g_key_file_set_double (keyfile, group, "MarginRight",
+				 gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
 	  
+	  ++i;
 	} while (gtk_tree_model_iter_next (model, &iter));
     }
 
   filename = custom_paper_get_filename ();
-  g_file_set_contents (filename, string->str, -1, NULL);
+  data = g_key_file_to_data (keyfile, &len, NULL);
+  g_file_set_contents (filename, data, len, NULL);
+  g_free (data);
   g_free (filename);
-  
-  g_string_free (string, TRUE);
 }
 
 static void

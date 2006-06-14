@@ -1,5 +1,8 @@
 2006-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpagesetupunixdialog.c: Use GKeyFile for the custom
+	filename storage.  (#344867, Christian Persch)
+
 	* gtk/gtkselection.c: Call init_atoms before using atoms
 	in several functions.  (#344743, John Finlay)
 
