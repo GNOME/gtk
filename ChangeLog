@@ -1,3 +1,13 @@
+2006-06-14  Michael Emmel  <mike.emmel@gmail.com>
+	* configure.in: updated mininum  dfb to 0.9.24
+	* gdk/directfb/gdkdirectfb.h: added more directfb wrapper functions
+	* gdk/directfb/gdkdrawable-directfb.c: wrapper functions and patch from 
+	 Claudio Ciccani <klan@users.sf.net> to use a subsurface for cairo
+    * gdk/directfb/gdkvisual-directfb.c: changed initalization sequence
+    * gdk/directfb/gdkwindow-directfb.c: corrected reparent for toplevels
+    * gdk/directfb/gdkdisplay-directfb.c: changed initilization sequence
+	to a more rational order
+
 2006-06-14  Federico Mena Quintero  <federico@novell.com>
 
 	* perf/gtkwidgetprofiler.c (gtk_widget_profiler_profile_expose):

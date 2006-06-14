@@ -1406,7 +1406,7 @@ else
 fi
 
 if test "x$gdktarget" = "xdirectfb"; then
-  DIRECTFB_REQUIRED_VERSION=0.9.21
+  DIRECTFB_REQUIRED_VERSION=0.9.24
   AC_MSG_CHECKING(for DirectFB)
 
   if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb ; then

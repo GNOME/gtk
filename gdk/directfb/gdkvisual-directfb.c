@@ -63,7 +63,7 @@ static DFBSurfacePixelFormat formats[] =
   DSPF_RGB332
 };
 
-static GdkVisual         * system_visual = NULL;
+GdkVisual         * system_visual = NULL;
 static GdkVisualDirectFB * visuals[G_N_ELEMENTS (formats) + 1] = { NULL };
 static gint                available_depths[G_N_ELEMENTS (formats) + 1] = {0};
 static GdkVisualType       available_types[G_N_ELEMENTS (formats) + 1]  = {0};
@@ -110,7 +110,7 @@ gdk_visual_get_type (void)
 }
 
 void
-_gdk_visual_init (void)
+_gdk_visual_init ()
 {
   DFBResult              ret;
   DFBDisplayLayerConfig  dlc;
@@ -118,11 +118,10 @@ _gdk_visual_init (void)
   IDirectFBSurface      *dest;
   gint                   i, c;
 
-  GdkWindowImplDirectFB  *root_impl = GDK_WINDOW_IMPL_DIRECTFB (
-						GDK_WINDOW_OBJECT(_gdk_parent_root)->impl);
 
   _gdk_display->layer->GetConfiguration (_gdk_display->layer, &dlc);
-  
+  g_assert( dlc.pixelformat != DSPF_UNKNOWN);
+
   dest = gdk_display_dfb_create_surface(_gdk_display,dlc.pixelformat,8,8);
   g_assert (dest != NULL);
 
@@ -152,13 +151,9 @@ _gdk_visual_init (void)
 
       dest->GetAccelerationMask (dest, src, &acc);
 
-      if (acc & DFXL_BLIT)
+      if (acc & DFXL_BLIT || formats[i] == dlc.pixelformat)
         {
-          visuals[c] = gdk_directfb_visual_create (formats[i]);
-
-          if (formats[i] == root_impl->drawable.format)
             system_visual = GDK_VISUAL (visuals[c]);
-          
           c++;
         }
 
@@ -167,17 +162,20 @@ _gdk_visual_init (void)
 
   dest->Release (dest);
 
+  //fallback to ARGB
   if (!system_visual)
     {
-      visuals[c] = gdk_directfb_visual_create (root_impl->drawable.format);
-      system_visual = GDK_VISUAL (visuals[c]);      
+        for (i = 0; i < G_N_ELEMENTS (formats); i++) {
+            if (formats[i] == DSPF_ARGB ) {
+                if( visuals[i] == NULL )
+                  visuals[i] = gdk_directfb_visual_create (formats[i]);
+                system_visual = visuals[i];
+                break;
+            }
+        }
     }
 
-  g_assert (system_visual);
-  /*
-	Now we can set up the system colormap
-  */
-  gdk_drawable_set_colormap (GDK_DRAWABLE (_gdk_parent_root),gdk_colormap_get_system());
+  g_assert (system_visual != NULL);
 }
 
 gint
@@ -195,6 +193,7 @@ gdk_visual_get_best_type (void)
 GdkVisual*
 gdk_screen_get_system_visual (GdkScreen *screen)
 {
+  g_assert( system_visual);
   return system_visual;
 }
 

@@ -36,8 +36,6 @@
 #include <cairo.h>
 #include <directfb.h>
 #include "gdk/gdkprivate.h"
-//#include "gdk/gdkwindow.h"
-#include "gdkdisplay-directfb.h"
 
 /* macro for a safe call to DirectFB functions */
 #define DFBCHECK(x...) \
@@ -84,6 +82,11 @@ GdkWindow * gdk_directfb_window_new         (GdkWindow             *parent,
                                              DFBSurfaceCapabilities surface_caps);
 
 GdkVisual * gdk_directfb_visual_by_format   (DFBSurfacePixelFormat  pixel_format);
+
+IDirectFBWindow *gdk_directfb_window_lookup(GdkWindow *window);
+IDirectFBSurface *gdk_directfb_surface_lookup(GdkWindow *window);
+GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
+                IDirectFBSurface *subsurface);
 
 G_END_DECLS
 

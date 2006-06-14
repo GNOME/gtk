@@ -1076,14 +1076,16 @@ gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
     g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable), NULL);
 
     GdkDrawableImplDirectFB *impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-	IDirectFB *dfb = GDK_DISPLAY_DFB(gdk_drawable_get_display(drawable))->directfb;
+    IDirectFB *dfb = GDK_DISPLAY_DFB(gdk_drawable_get_display(drawable))->directfb;
     if (!impl->cairo_surface) {
-	impl->cairo_surface = cairo_directfb_surface_create(dfb ,impl->surface);
-      	cairo_surface_set_user_data (impl->cairo_surface, 
-			             &gdk_directfb_cairo_key,drawable, 
-				     gdk_directfb_cairo_surface_destroy);
-		//XXX!!! MAJOR HACK so cairo coexists with direct drawing
-		//impl->surface->Unlock( impl->surface );
+      IDirectFBSurface *surface;
+      if (impl->surface->GetSubSurface (impl->surface, NULL, &surface) == DFB_OK) {
+        impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
+        cairo_surface_set_user_data (impl->cairo_surface, 
+                                     &gdk_directfb_cairo_key, drawable, 
+                                     gdk_directfb_cairo_surface_destroy);
+        surface->Release (surface);
+      }
     } else {
         cairo_surface_reference (impl->cairo_surface);
     }

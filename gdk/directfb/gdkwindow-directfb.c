@@ -37,6 +37,7 @@
 
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
+#include "gdkdisplay-directfb.h"
 
 #include "gdkregion-generic.h"
 
@@ -160,7 +161,6 @@ gdk_window_impl_directfb_finalize (GObject *object)
     {
       gdk_directfb_window_id_table_remove (impl->dfb_id);
 	  /* native window resource must be release before we can finalize !*/
-      /*impl->window->Release (impl->window);*/
       impl->window = NULL;
     }
 
@@ -218,6 +218,7 @@ create_directfb_window (GdkWindowImplDirectFB *impl,
   if (ret != DFB_OK)
     {
       DirectFBError ("gdk_window_new: Layer->CreateWindow failed", ret);
+      g_assert (0);
       return FALSE;
     }
 
@@ -269,10 +270,11 @@ _gdk_windowing_window_init (void)
     DFBWindowDescription   desc;
     desc.flags = 0;
 	/*XXX I must do this now its a bug  ALPHA ROOT*/
-#if 1 
-    desc.flags |= DWDESC_CAPS;
-    desc.caps = DWCAPS_ALPHACHANNEL;
-#endif
+
+    desc.flags = DWDESC_CAPS;
+    desc.caps = 0;
+    desc.caps  |= DWCAPS_NODECORATION;
+    desc.caps  |= DWCAPS_ALPHACHANNEL;
     desc.flags |= ( DWDESC_WIDTH | DWDESC_HEIGHT |
                       DWDESC_POSX  | DWDESC_POSY );
     desc.posx   = 0;
@@ -285,6 +287,10 @@ _gdk_windowing_window_init (void)
   }
   impl->drawable.surface->GetPixelFormat(impl->drawable.surface,&impl->drawable.format); 
   private->depth = DFB_BITS_PER_PIXEL(impl->drawable.format);
+  /*
+	Now we can set up the system colormap
+  */
+  gdk_drawable_set_colormap (GDK_DRAWABLE (_gdk_parent_root),gdk_colormap_get_system());
 }
 
 
@@ -1281,7 +1287,7 @@ gdk_window_move_resize (GdkWindow *window,
         }
     }
 }
-
+//XXX BROKE if top LEVEL WINDOW ~~~
 void
 gdk_window_reparent (GdkWindow *window,
                      GdkWindow *new_parent,
@@ -1291,6 +1297,9 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
   GdkWindowObject *old_parent_private;
+  GdkWindowImplDirectFB *impl;
+  GdkWindowImplDirectFB *parent_impl;
+  GdkVisual             *visual;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1303,6 +1312,12 @@ gdk_window_reparent (GdkWindow *window,
   window_private = (GdkWindowObject *) window;
   old_parent_private = (GdkWindowObject *) window_private->parent;
   parent_private = (GdkWindowObject *) new_parent;
+  parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
+  visual = gdk_drawable_get_visual (window);
+
+  /* already parented */
+  if( window_private->parent == (GdkWindowObject *)new_parent )
+          return;
 
   window_private->parent = (GdkWindowObject *) new_parent;
 
@@ -1312,9 +1327,66 @@ gdk_window_reparent (GdkWindow *window,
         g_list_remove (old_parent_private->children, window);
     }
 
-  parent_private->children = g_list_prepend (parent_private->children, window);
+    parent_private->children = g_list_prepend (parent_private->children, window);
 
-  gdk_window_move_resize (window, x, y, -1, -1);
+    impl = GDK_WINDOW_IMPL_DIRECTFB (window_private->impl);
+
+    if( impl->drawable.surface ) {
+        impl->drawable.surface->Release (impl->drawable.surface);
+        impl->drawable.surface = NULL;
+    }
+
+    if( impl->window != NULL ) { 
+        gdk_directfb_window_id_table_remove (impl->dfb_id);
+    	impl->window->SetOpacity (impl->window,0);
+   		impl->window->Close(impl->window);
+      	impl->window->Release(impl->window);
+        impl->window = NULL;
+    }
+
+    //create window were a child of the root now
+    if( window_private->parent == (GdkWindowObject *)_gdk_parent_root)  {
+        DFBWindowDescription  desc;
+        DFBWindowOptions  window_options = DWOP_NONE;
+        desc.flags = DWDESC_CAPS;
+        if( window_private->input_only ) {
+            desc.caps = DWCAPS_INPUTONLY;
+        } else {
+            desc.flags |= DWDESC_PIXELFORMAT;
+            desc.pixelformat = ((GdkVisualDirectFB *) visual)->format;
+            if (DFB_PIXELFORMAT_HAS_ALPHA (desc.pixelformat)) {
+                desc.flags |= DWDESC_CAPS;
+                desc.caps = DWCAPS_ALPHACHANNEL;
+            }
+       }
+       if( window_private->window_type ==  GDK_WINDOW_CHILD )
+           window_private->window_type = GDK_WINDOW_TOPLEVEL;
+        desc.flags |= ( DWDESC_WIDTH | DWDESC_HEIGHT |
+                      DWDESC_POSX  | DWDESC_POSY );
+        desc.posx   = x;
+        desc.posy   = y;
+        desc.width  = impl->drawable.width;
+        desc.height = impl->drawable.height;
+        if (!create_directfb_window (impl, &desc, window_options))
+        {
+		  g_assert(0);
+          _gdk_window_destroy (window, FALSE);
+          return;
+        }
+        /* we hold a reference count on ourselves */
+        g_object_ref (window);
+        impl->window->GetID (impl->window, &impl->dfb_id);
+        gdk_directfb_window_id_table_insert (impl->dfb_id, window);
+        gdk_directfb_event_windows_add (window);
+   } else {
+          DFBRectangle rect = { x, y, impl->drawable.width,
+                                     impl->drawable.height};
+          impl->window = NULL;
+          parent_impl->drawable.surface->GetSubSurface (
+                          parent_impl->drawable.surface,
+                          &rect,
+                          &impl->drawable.surface);
+   }
 }
 
 void
@@ -2411,19 +2483,155 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->height = impl->height;
 }
 
+/**
+ * Given a directfb window and a subsurface of that window
+ * create a gdkwindow chaild wrapper
+ */
+GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
+                                IDirectFBSurface *subsurface)
+{
+  GdkWindow             *window;
+  GdkWindowObject       *private;
+  GdkWindowObject       *parent_private;
+  GdkWindowImplDirectFB *impl;
+  GdkWindowImplDirectFB *parent_impl;
+  gint x,y,w,h;
 
+  g_return_val_if_fail (parent != NULL, NULL);
 
+  window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  private = GDK_WINDOW_OBJECT (window);
+  parent_private = GDK_WINDOW_OBJECT (parent);
+  parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
+  private->parent = parent_private;
+
+  subsurface->GetPosition(subsurface,&x,&y);
+  subsurface->GetSize(subsurface,&w,&h);
+
+  impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+  impl->drawable.wrapper = GDK_DRAWABLE (window);
+
+  private->x = x;
+  private->y = y;
+
+  _gdk_directfb_calc_abs (window);
+
+  impl->drawable.width  = w;
+  impl->drawable.height = h;
+  private->window_type = GDK_WINDOW_CHILD;
+  impl->drawable.surface = subsurface;
+  impl->drawable.format = parent_impl->drawable.format;
+  private->depth = parent_private->depth;
+  gdk_drawable_set_colormap (GDK_DRAWABLE (window),
+        gdk_drawable_get_colormap (parent));
+  gdk_window_set_cursor (window, NULL);
+  parent_private->children = g_list_prepend (parent_private->children,window);
+  /*we hold a reference count on ourselves */
+  g_object_ref (window);
+
+  return window;
+
+}
+
+/*
+ * The wrapping is not perfect since directfb does not give full access
+ * to the current state of a window event mask etc need to fix dfb
+ */
 GdkWindow *
 gdk_window_foreign_new_for_display (GdkDisplay* display,GdkNativeWindow anid)
 {
-  GdkWindow *window;
+    GdkWindow *window = NULL;
+    GdkWindow              *parent =NULL;
+    GdkWindowObject       *private =NULL;
+    GdkWindowObject       *parent_private =NULL;
+    GdkWindowImplDirectFB *parent_impl =NULL;
+    GdkWindowImplDirectFB *impl =NULL;
+    DFBWindowOptions options;
+    DFBResult        ret;
+    GdkDisplayDFB * gdkdisplay =  _gdk_display;
+    IDirectFBWindow *dfbwindow;
 
-  window = gdk_window_lookup (anid);
+    window = gdk_window_lookup (anid);
 
-  if (window)
+    if (window) {
+        g_object_ref (window);
+        return window;
+    }
+    if( display != NULL )
+            gdkdisplay = GDK_DISPLAY_DFB(display);
+
+    ret = gdkdisplay->layer->GetWindow (gdkdisplay->layer,
+                    (DFBWindowID)anid,&dfbwindow);
+
+    if (ret != DFB_OK) {
+        DirectFBError ("gdk_window_new: Layer->GetWindow failed", ret);
+        return NULL;
+    }
+
+    parent = _gdk_parent_root;
+
+    if(parent) {
+        parent_private = GDK_WINDOW_OBJECT (parent);
+        parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
+    }
+
+    window = g_object_new (GDK_TYPE_WINDOW, NULL);
+    /* we hold a reference count on ourselves */
     g_object_ref (window);
+    private = GDK_WINDOW_OBJECT (window);
+    private->parent = parent_private;
+    private->window_type = GDK_WINDOW_TOPLEVEL;
+    impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
-  return window;
+    impl->drawable.wrapper = GDK_DRAWABLE (window);
+    impl->window = dfbwindow;
+    dfbwindow->GetOptions(dfbwindow,&options);
+    dfbwindow->GetPosition(dfbwindow,&private->x,&private->y);
+    dfbwindow->GetSize(dfbwindow,&impl->drawable.width,&impl->drawable.height);
+
+
+    private->input_only = FALSE;
+
+    if( dfbwindow->GetSurface (dfbwindow, &impl->drawable.surface) == DFB_UNSUPPORTED ){
+        private->input_only = TRUE;
+        impl->drawable.surface = NULL;
+    }
+    /*
+     * Position ourselevs
+     */
+    _gdk_directfb_calc_abs (window);
+
+    /* We default to all events least surprise to the user 
+     * minus the poll for motion events 
+     */
+    gdk_window_set_events (window, (GDK_ALL_EVENTS_MASK ^ GDK_POINTER_MOTION_HINT_MASK));
+
+    if (impl->drawable.surface)
+    {
+      impl->drawable.surface->GetPixelFormat (impl->drawable.surface,
+					      &impl->drawable.format);
+
+  	  private->depth = DFB_BITS_PER_PIXEL(impl->drawable.format);
+      if( parent )
+        gdk_drawable_set_colormap (GDK_DRAWABLE (window), gdk_drawable_get_colormap (parent));
+      else
+        gdk_drawable_set_colormap (GDK_DRAWABLE (window), gdk_colormap_get_system());
+    }
+
+    //can  be null for the soft cursor window itself when
+    //running a gtk directfb wm
+    if( gdk_display_get_default() != NULL ) {
+        gdk_window_set_cursor (window,NULL);
+    }
+
+    if (parent_private)
+        parent_private->children = g_list_prepend (parent_private->children,
+                                               window);
+    impl->dfb_id = (DFBWindowID)anid; 
+    gdk_directfb_window_id_table_insert (impl->dfb_id, window);
+    gdk_directfb_event_windows_add (window);
+
+    return window;
 }
 
 GdkWindow *
@@ -2438,13 +2646,30 @@ gdk_window_lookup (GdkNativeWindow anid)
   return gdk_directfb_window_id_table_lookup ((DFBWindowID) anid);
 }
 
+IDirectFBWindow *gdk_directfb_window_lookup(GdkWindow *window )
+{
+  GdkWindowObject       *private;
+  GdkWindowImplDirectFB *impl;
+  g_return_val_if_fail (GDK_IS_WINDOW (window),NULL);
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+  return impl->window;
+}
 
+IDirectFBSurface *gdk_directfb_surface_lookup(GdkWindow *window)
+{
+  GdkWindowObject       *private;
+  GdkWindowImplDirectFB *impl;
+  g_return_val_if_fail (GDK_IS_WINDOW (window),NULL);
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+  return impl->drawable.surface;
+}
 
 void
 gdk_window_fullscreen (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-
   g_warning ("gdk_window_fullscreen() not implemented.\n");
 }
 
@@ -2452,8 +2677,7 @@ void
 gdk_window_unfullscreen (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  /*  g_warning ("gdk_window_unfullscreen() not implemented.\n");*/
+  /* g_warning ("gdk_window_unfullscreen() not implemented.\n");*/
 }
 
 void
