@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-12 21:18-0400\n"
-"PO-Revision-Date: 2006-06-09 20:22+0200\n"
+"PO-Revision-Date: 2006-06-14 17:56+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3407,22 +3407,20 @@ msgid "FALSE if this represents a real hardware printer"
 msgstr "FALSE si esto representa una impresora de hardware real"
 
 #: gtk/gtkprinter.c:140
-#, fuzzy
 msgid "Accepts PDF"
-msgstr "Acepta tabuladores"
+msgstr "Acepta PDF"
 
 #: gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "TRUE si esta impresora puede aceptar PDF"
 
 #: gtk/gtkprinter.c:147
-#, fuzzy
 msgid "Accepts PostScript"
-msgstr "Acepta tabuladores"
+msgstr "Acepta tabuladores PostScript"
 
 #: gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "TRUE si esta impresora puede aceptar PostScript"
 
 #: gtk/gtkprinter.c:154
 msgid "State Message"
@@ -5524,24 +5522,20 @@ msgstr ""
 "puntero del ratón"
 
 #: gtk/gtktreeview.c:717
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Activar teclas de flecha"
+msgstr "Activar líneas de la rejilla"
 
 #: gtk/gtktreeview.c:718
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Indica si debe haber un icono cerca del elemento"
 
 #: gtk/gtktreeview.c:725
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "Activar modo pantalla táctil"
+msgstr "Activar líneas del árbol"
 
 #: gtk/gtktreeview.c:726
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Indica si debe haber un icono cerca del elemento"
+msgstr "Indica si deben dibujar las líneas en la vista del árbol"
 
 #: gtk/gtktreeview.c:746
 msgid "Vertical Separator Width"
@@ -5600,44 +5594,36 @@ msgid "Enable extended row background theming"
 msgstr "Activar tema del fondo de extendido de fila"
 
 #: gtk/gtktreeview.c:799
-#, fuzzy
 msgid "Grid line width"
-msgstr "Dar foco al ancho de línea"
+msgstr "Anchura de la línea de la rejilla"
 
 #: gtk/gtktreeview.c:800
-#, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Anchura, en píxeles, de la línea indicadora del foco"
 
 #: gtk/gtktreeview.c:806
-#, fuzzy
 msgid "Tree line width"
-msgstr "El ancho fijo"
+msgstr "Anchura de la línea del árbol"
 
 #: gtk/gtktreeview.c:807
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Anchura, en píxeles, de la línea indicadora del foco"
 
 #: gtk/gtktreeview.c:813
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "Dar foco a la línea con patrón punteado"
+msgstr "Patrón de la línea de la rejilla"
 
 #: gtk/gtktreeview.c:814
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
+msgstr "Patrón de guiones utilizado para dibujar las líneas de rejilla de la vista de árbol"
 
 #: gtk/gtktreeview.c:820
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "Dar foco a la línea con patrón punteado"
+msgstr "Patrón de la línea del árbol"
 
 #: gtk/gtktreeview.c:821
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
+msgstr "Patrón de guiones utilizado para dibujar las líneas de la vista de árbol"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
