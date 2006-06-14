@@ -1,5 +1,8 @@
 2006-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_position+_func):
+	Allow NULL to reset to default.  (#344838, John Finlay)
+
 	* gtk/gtkprintjob.h: Collect booleans into a bitfield
 	(#344765, Christian Persch)
 

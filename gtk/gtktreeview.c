@@ -13505,7 +13505,8 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_set_search_position_func:
  * @tree_view: A #GtkTreeView
- * @func: the function to use to position the search dialog
+ * @func: the function to use to position the search dialog, or %NULL
+ *    to use the default search position function
  * @data: user data to pass to @func, or %NULL
  * @destroy: Destroy notifier for @data, or %NULL
  *
@@ -13520,7 +13521,6 @@ gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view
 				        GDestroyNotify                 destroy)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (func !=NULL);
 
   if (tree_view->priv->search_position_destroy)
     (* tree_view->priv->search_position_destroy) (tree_view->priv->search_position_user_data);
