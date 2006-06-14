@@ -6,7 +6,67 @@ performant does not only mean "paint widgets fast".  It also means
 things like the time needed to set up widgets, to map and draw a
 window for the first time, and emitting/propagating signals.
 
-The following is accurate as of 2005/07/28.
+The following is accurate as of 2006/Jun/14.
+
+
+Background
+----------
+
+A widget's lifetime looks more or less like this:
+
+	1. Instantiation
+	2. Size request
+	3. Size allocate
+	5. Realize
+	4. Map
+	5. Expose
+	6. Destroy
+
+Some of these stages are particularly interesting:
+
+- Instantiation means creating the widget.  This may be as simple as a
+  few malloc()s and setting some fields.  It could also be a
+  complicated operation if the widget needs to contact an external
+  server to create itself, or if it needs to read data files.
+
+- Size requisition is when GTK+ asks the widget, "how big do you want
+  to be on the screen"?  This can be an expensive operation.  The
+  widget has to measure its text, measure its icons (and thus load its
+  icons), and generally run through its internal layout code.
+
+- Realization is when the widget creates its GDK resources, like its
+  GdkWindow and graphics contexts it may need.  This could be
+  expensive if the widget needs to load data files for cursors or
+  backgrounds.
+
+- Expose is when the widget gets repainted.  This will happen many
+  times throughout the lifetime of the widget:  every time you drag a
+  window on top of it, every time its data changes and it needs to
+  redraw, every time it gets resized.
+
+GtkWidgetProfiler is a mechanism to let you get individual timings for
+each of the stages in the lifetime of a widget.  It also lets you run
+some stages many times in a sequence, so that you can run a real
+profiler and get an adequate number of samples.  For example,
+GtkWidgetProfiler lets you say "repaint this widget 1000 times".
+
+Why is this not as simple as doing
+
+	start_timer ();
+	for (i = 0; i < 1000; i++) {
+		gtk_widget_queue_draw (widget);
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
+	}
+	stop_timer ();
+
+Huh?
+
+Because X is an asynchronous window system.  So, when you send the
+"paint" commands, your program will regain control but it will take
+some time for the X server to actually process those commands.
+GtkWidgetProfiler has special code to wait for the X server and give
+you accurate timings.
 
 
 Using the framework
@@ -132,6 +192,8 @@ main (int argc, char **argv)
 
   gtk_widget_profiler_set_num_iterations (profiler, 100);
   gtk_widget_profiler_profile_boot (profiler);
+
+  gtk_widget_profiler_profile_expose (profiler);
   
   return 0;
 }
