@@ -210,7 +210,7 @@ toplevel_idle_after_expose_cb (gpointer data)
 		       gdk_atom_intern ("STRING", FALSE),
 		       8,
 		       GDK_PROP_MODE_REPLACE,
-		       "hello",
+		       (guchar *) "hello",
 		       strlen ("hello"));
 
   return FALSE;
@@ -274,6 +274,24 @@ get_instrumented_toplevel (GtkWidgetProfiler *profiler,
 }
 
 static void
+map_widget (GtkWidgetProfiler *profiler)
+{
+  GtkWidgetProfilerPrivate *priv;
+
+  priv = profiler->priv;
+  g_assert (priv->state == STATE_INSTRUMENTED_NOT_MAPPED);
+
+  /* Time map.
+   *
+   * FIXME: we are really timing a show_all(); we don't really wait for all the "map_event" signals
+   * to happen.  Should we rename GTK_WIDGET_PROFILER_REPORT_MAP report to something else?
+   */
+
+  gtk_widget_show_all (priv->toplevel);
+  priv->state = STATE_INSTRUMENTED_MAPPED;
+}
+
+static void
 profile_map_expose (GtkWidgetProfiler *profiler)
 {
   GtkWidgetProfilerPrivate *priv;
@@ -283,18 +301,10 @@ profile_map_expose (GtkWidgetProfiler *profiler)
 
   g_assert (priv->state == STATE_INSTRUMENTED_NOT_MAPPED);
 
-  /* Time map.
-   *
-   * FIXME: we are really timing a show_all(); we don't really wait for all the "map_event" signals
-   * to happen.  Should we rename GTK_WIDGET_PROFILER_REPORT_MAP report to something else?
-   */
-
   g_timer_reset (priv->timer);
-
-  gtk_widget_show_all (priv->toplevel);
-  priv->state = STATE_INSTRUMENTED_MAPPED;
-
+  map_widget (profiler);
   elapsed = g_timer_elapsed (priv->timer, NULL);
+
   report (profiler, GTK_WIDGET_PROFILER_REPORT_MAP, elapsed);
 
   /* Time expose; this gets recorded in toplevel_property_notify_event_cb() */
@@ -321,6 +331,31 @@ profile_destroy (GtkWidgetProfiler *profiler)
 }
 
 static void
+create_widget (GtkWidgetProfiler *profiler)
+{
+  GtkWidgetProfilerPrivate *priv;
+
+  priv = profiler->priv;
+
+  g_assert (priv->state == STATE_NOT_CREATED);
+
+  priv->profiled_widget = create_widget_via_emission (profiler);
+  priv->toplevel = get_instrumented_toplevel (profiler, priv->profiled_widget);
+
+  priv->state = STATE_INSTRUMENTED_NOT_MAPPED;
+}
+
+/* The "boot time" of a widget is the time needed to
+ *
+ *   1. Create the widget
+ *   2. Map it
+ *   3. Expose it
+ *   4. Destroy it.
+ *
+ * This runs a lot of interesting code:  instantiation, size requisition and
+ * allocation, realization, mapping, exposing, destruction.
+ */
+static void
 profile_boot (GtkWidgetProfiler *profiler)
 {
   GtkWidgetProfilerPrivate *priv;
@@ -333,17 +368,9 @@ profile_boot (GtkWidgetProfiler *profiler)
   /* Time creation */
 
   g_timer_reset (priv->timer);
-
-  priv->profiled_widget = create_widget_via_emission (profiler);
-  priv->toplevel = get_instrumented_toplevel (profiler, priv->profiled_widget);
-
-  priv->state = STATE_INSTRUMENTED_NOT_MAPPED;
-
-  /* Here we include the time to anchor the widget to a toplevel, if
-   * the toplevel was missing --- hopefully not a too-long extra time.
-   */
-
+  create_widget (profiler);
   elapsed = g_timer_elapsed (priv->timer, NULL);
+
   report (profiler, GTK_WIDGET_PROFILER_REPORT_CREATE, elapsed);
 
   /* Start timing map/expose */
@@ -353,6 +380,46 @@ profile_boot (GtkWidgetProfiler *profiler)
   /* Profile destruction */
 
   profile_destroy (profiler);
+}
+
+/* To measure expose time, we trigger a full expose on the toplevel window.  We
+ * do the same as xrefresh(1), i.e. we map and unmap a window to make the other
+ * one expose.
+ */
+static void
+profile_expose (GtkWidgetProfiler *profiler)
+{
+  GtkWidgetProfilerPrivate *priv;
+  GdkWindow *window;
+  GdkWindowAttr attr;
+  int attr_mask;
+
+  priv = profiler->priv;
+
+  g_assert (priv->state == STATE_INSTRUMENTED_MAPPED);
+
+  /* Time creation */
+
+  attr.x = 0;
+  attr.y = 0;
+  attr.width = priv->toplevel->allocation.width;
+  attr.height = priv->toplevel->allocation.width;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.window_type = GDK_WINDOW_CHILD;
+
+  attr_mask = GDK_WA_X | GDK_WA_Y;
+
+  window = gdk_window_new (priv->toplevel->window, &attr, attr_mask);
+  gdk_window_set_back_pixmap (window, NULL, TRUE); /* avoid flicker */
+
+  gdk_window_show (window);
+  gdk_window_hide (window);
+  gdk_window_destroy (window);
+
+  /* Time expose; this gets recorded in toplevel_property_notify_event_cb() */
+
+  g_timer_reset (priv->timer);
+  gtk_main ();
 }
 
 void
@@ -374,4 +441,30 @@ gtk_widget_profiler_profile_boot (GtkWidgetProfiler *profiler)
     profile_boot (profiler);
 
   priv->profiling = FALSE;
+}
+
+void
+gtk_widget_profiler_profile_expose (GtkWidgetProfiler *profiler)
+{
+  GtkWidgetProfilerPrivate *priv;
+  int i, n;
+
+  g_return_if_fail (GTK_IS_WIDGET_PROFILER (profiler));
+
+  priv = profiler->priv;
+  g_return_if_fail (!priv->profiling);
+
+  reset_state (profiler);
+  priv->profiling = TRUE;
+
+  create_widget (profiler);
+  map_widget (profiler);
+
+  n = priv->n_iterations;
+  for (i = 0; i < n; i++)
+    profile_expose (profiler);
+
+  priv->profiling = FALSE;
+
+  reset_state (profiler);
 }

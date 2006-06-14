@@ -52,6 +52,8 @@ void gtk_widget_profiler_set_num_iterations (GtkWidgetProfiler *profiler,
 
 void gtk_widget_profiler_profile_boot (GtkWidgetProfiler *profiler);
 
+void gtk_widget_profiler_profile_expose (GtkWidgetProfiler *profiler);
+
 
 G_END_DECLS
 

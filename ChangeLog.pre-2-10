@@ -1,3 +1,14 @@
+2006-06-14  Federico Mena Quintero  <federico@novell.com>
+
+	* perf/gtkwidgetprofiler.c (gtk_widget_profiler_profile_expose):
+	New function; it lets us time the expose sequence of a widget.
+	(create_widget): New helper function.
+	(map_widget): New helper function.
+	(profile_boot): Use create_widget() instead of doing it by hand.
+	(profile_map_expose): Use map_widget() instead of doing it by hand.
+
+	* perf/main.c (main): Call gtk_widget_profiler_profile_expose() as well.
+
 2006-06-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpagesetupunixdialog.c: Use GKeyFile for the custom
