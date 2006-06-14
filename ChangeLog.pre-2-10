@@ -1,5 +1,8 @@
 2006-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c: Call init_atoms before using atoms
+	in several functions.  (#344743, John Finlay)
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_position+_func):
 	Allow NULL to reset to default.  (#344838, John Finlay)
 

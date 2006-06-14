@@ -1700,6 +1700,9 @@ gtk_targets_include_text (GdkAtom *targets,
 
   /* Keep in sync with gtk_target_list_add_text_targets()
    */
+ 
+  init_atoms ();
+ 
   for (i = 0; i < n_targets; i++)
     {
       if (targets[i] == utf8_atom ||
@@ -1743,6 +1746,8 @@ gtk_targets_include_rich_text (GdkAtom       *targets,
   gboolean result = FALSE;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+
+  init_atoms ();
 
   rich_targets = gtk_text_buffer_get_deserialize_formats (buffer,
                                                           &n_rich_targets);
@@ -1930,6 +1935,9 @@ gtk_targets_include_uri (GdkAtom *targets,
 
   /* Keep in sync with gtk_target_list_add_uri_targets()
    */
+
+  init_atoms ();
+
   for (i = 0; i < n_targets; i++)
     {
       if (targets[i] == text_uri_list_atom)
