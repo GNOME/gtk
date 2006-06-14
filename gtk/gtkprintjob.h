@@ -66,13 +66,12 @@ struct _GtkPrintJob
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
   gint num_page_ranges;
-  gboolean rotate_to_orientation;
-  
   GtkPageSet page_set;
   gint num_copies;
-  gboolean collate;
-  gboolean reverse;
   gdouble scale;
+  guint rotate_to_orientation : 1;
+  guint collate               : 1;
+  guint reverse               : 1;
 };
 
 struct _GtkPrintJobClass
