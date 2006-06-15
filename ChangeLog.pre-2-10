@@ -1,3 +1,7 @@
+2006-06-15  Bastien Nocera  <hadess@hadess.net>
+
+	* configure.in: Update the Cairo requirements (#345008)
+
 2006-06-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperationpreview.c 
