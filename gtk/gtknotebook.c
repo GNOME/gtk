@@ -3342,9 +3342,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 					&(notebook->first_tab), &tab_space,
 					STEP_PREV);
 
-	      page = focus_tab->data;
-	      if (tab_space <= 0 &&
-		  !gtk_widget_get_child_visible (page->tab_label))
+	      if (tab_space < 0)
 		{
 		  notebook->first_tab =
 		    gtk_notebook_search_page (notebook, notebook->first_tab,
@@ -3382,10 +3380,14 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 						   STEP_PREV,
 						   TRUE),
 			 &children, &tab_space, STEP_PREV);
-		      notebook->first_tab = gtk_notebook_search_page(notebook,
-								     children,
-								     STEP_NEXT,
-								     TRUE);
+
+		      if (tab_space == 0)
+			notebook->first_tab = children;
+		      else
+			notebook->first_tab = gtk_notebook_search_page(notebook,
+								       children,
+								       STEP_NEXT,
+								       TRUE);
 		    }
 		}
 	    }
@@ -3742,8 +3744,10 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
   GtkNotebookPage *page = NULL;
   GList *children;
   GList *last_list = NULL;
+  GList *last_calculated_child = NULL;
   gboolean pack;
   gint tab_pos = get_effective_tab_pos (notebook);
+  guint real_direction;
 
   if (!start)
     return;
@@ -3751,7 +3755,9 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
   children = start;
   pack = GTK_NOTEBOOK_PAGE (start)->pack;
   if (pack == GTK_PACK_END)
-    direction = (direction == STEP_PREV) ? STEP_NEXT : STEP_PREV;
+    real_direction = (direction == STEP_PREV) ? STEP_NEXT : STEP_PREV;
+  else
+    real_direction = direction;
 
   while (1)
     {
@@ -3773,14 +3779,20 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 			    {
 			      *tab_space = - (*tab_space +
 					      page->requisition.width);
+
+			      if (*tab_space == 0 && direction == STEP_PREV)
+				children = last_calculated_child;
+
 			      *end = children;
 			    }
 			  return;
 			}
+
+		      last_calculated_child = children;
 		    }
 		  last_list = children;
 		}
-	      if (direction == STEP_NEXT)
+	      if (real_direction == STEP_NEXT)
 		children = children->next;
 	      else
 		children = children->prev;
@@ -3802,24 +3814,30 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 			    {
 			      *tab_space = - (*tab_space +
 					      page->requisition.height);
+
+			      if (*tab_space == 0 && direction == STEP_PREV)
+				children = last_calculated_child;
+
 			      *end = children;
 			    }
 			  return;
 			}
+
+		      last_calculated_child = children;
 		    }
 		  last_list = children;
 		}
-	      if (direction == STEP_NEXT)
+	      if (real_direction == STEP_NEXT)
 		children = children->next;
 	      else
 		children = children->prev;
 	    }
 	  break;
 	}
-      if (direction == STEP_PREV)
+      if (real_direction == STEP_PREV)
 	return;
       pack = (pack == GTK_PACK_END) ? GTK_PACK_START : GTK_PACK_END;
-      direction = STEP_PREV;
+      real_direction = STEP_PREV;
       children = last_list;
     }
 }
