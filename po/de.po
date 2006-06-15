@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-12 21:18-0400\n"
-"PO-Revision-Date: 2006-05-27 23:11+0200\n"
+"PO-Revision-Date: 2006-06-15 17:16+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1517,7 +1517,7 @@ msgstr "(keine)"
 
 #: gtk/gtkfilechooserbutton.c:1870
 msgid "Other..."
-msgstr "Andere..."
+msgstr "Andere …"
 
 #: gtk/gtkfilechooserdefault.c:918
 msgid "Could not retrieve information about the file"
@@ -1585,7 +1585,7 @@ msgstr "Entfernen"
 
 #: gtk/gtkfilechooserdefault.c:3253
 msgid "Rename..."
-msgstr "Umbenennen..."
+msgstr "Umbenennen …"
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: gtk/gtkfilechooserdefault.c:3395
@@ -5067,3 +5067,6 @@ msgstr ""
 
 #~ msgid "Folder"
 #~ msgstr "Ordner"
+
+
+
