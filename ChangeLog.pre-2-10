@@ -1,3 +1,9 @@
+2006-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperationpreview.c 
+	(gtk_print_operation_preview_base_init): Fix errors in the
+	signal definitions.  (#344891, Marko Anastasov)
+
 2006-06-14  Michael Emmel  <mike.emmel@gmail.com>
 	* configure.in: updated mininum  dfb to 0.9.24
 	* gdk/directfb/gdkdirectfb.h: added more directfb wrapper functions

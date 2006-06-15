@@ -72,12 +72,12 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__OBJECT,
 		    G_TYPE_NONE, 1,
-		    G_TYPE_OBJECT);
+		    GTK_TYPE_PRINT_CONTEXT);
 
       g_signal_new (I_("got-page-size"),
 		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, ready),
+		    G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, got_page_size),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__OBJECT_OBJECT,
 		    G_TYPE_NONE, 2,
@@ -111,7 +111,7 @@ gboolean
 gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 					 gint                      page_nr)
 {
-  g_return_if_fail (GTK_IS_PRINT_OPERATION_PREVIEW (preview));
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION_PREVIEW (preview), FALSE);
 
   return GTK_PRINT_OPERATION_PREVIEW_GET_IFACE (preview)->is_selected (preview, page_nr);
 }
