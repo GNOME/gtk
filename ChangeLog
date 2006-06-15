@@ -1,3 +1,20 @@
+2006-06-15  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_motion_notify): use
+	gdk_window_get_pointer() to get pointer coordinates, but limit its
+	calls to a maximum of 45 times per second for not being too
+	CPU/network abusive. stop drag operation if (event->state &
+	GDK_BUTTON1_MASK) is FALSE to prevent tabs from "adhering" to the
+	pointer. Fixes bug #341571
+	(gtk_notebook_calculate_tabs_allocation), (gtk_notebook_button_press):
+	get rid of the "tab jumps to pointer" sensation when beginning a drag
+	by using the pointer offset in the tab when the drag begins as an
+	anchor.
+	(gtk_notebook_redraw_tabs_union): remove, it wasn't worth the little
+	performance gain and could draw artifacts under some circumstances.
+	(gtk_notebook_drag_end): do not reparent the detached tab label until
+	the animation has ended.
+
 2006-06-15  Bastien Nocera  <hadess@hadess.net>
 
 	* configure.in: Update the Cairo requirements (#345008)
