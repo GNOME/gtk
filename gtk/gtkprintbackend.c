@@ -248,17 +248,21 @@ gtk_print_backend_initialize (void)
 
   if (!initialized)
     {
+      /**
+       * GtkSettings::gtk-print-backends:
+       *
+       * A comma-separated list of print backends to use in the print
+       * dialog. Available print backends depend on the GTK+ installation,
+       * and may include "pdf", "cups" or "lpr".
+       *
+       * Since: 2.10
+       */
       gtk_settings_install_property (g_param_spec_string ("gtk-print-backends",
 							  P_("Default print backend"),
 							  P_("List of the GtkPrintBackend backends to use by default"),
 							  GTK_PRINT_BACKENDS,
 							  GTK_PARAM_READWRITE));
 
-      gtk_settings_install_property (g_param_spec_string ("gtk-print-preview-command",
-							  P_("Default command to run when displaying a print preview"),
-							  P_("Command to run when displaying a print preview"),
-							  GTK_PRINT_PREVIEW_COMMAND,
-							  GTK_PARAM_READWRITE)); 
       initialized = TRUE;
     }
 }

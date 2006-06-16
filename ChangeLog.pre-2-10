@@ -1,5 +1,11 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c: 
+	* gtk/gtkprintbackend.c: Move the registration of the 
+	gtk-print-preview-command setting from gtkprintbackend.c to 
+	gtkprintoperation-unix.c, to make sure it is registered before
+	the first use. Also, document the two settings.
+
 	* tests/print-editor.c: Add a "Preview" menu item.
 
 	* gtk/gtkprintoperation-unix.c (handle_print_response): When starting
