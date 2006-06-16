@@ -783,7 +783,7 @@ add_option_to_table (GtkPrinterOption *option,
   gtk_widget_show (widget);
 
   row = table->nrows;
-  gtk_table_resize (table, table->nrows + 1, table->ncols + 1);
+  gtk_table_resize (table, table->nrows + 1, 2);
   
   if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
     {

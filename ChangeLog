@@ -1,5 +1,8 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (add_option_to_table): Don't grow
+	additional columns.
+
 	* gtk/gtkprintbackend.h: Add a GtkPrintSettings parameter to the
 	printer_create_cairo_surface method.
 	
