@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-12 21:18-0400\n"
-"PO-Revision-Date: 2006-06-10 13:54+0700\n"
+"PO-Revision-Date: 2006-06-16 22:22+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1690,35 +1690,35 @@ msgstr "เมื่อวาน"
 #: gtk/gtkfilechoosersettings.c:122
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
-msgstr ""
+msgstr "บรรทัด %d, คอลัมน์ %d: ขาดแอตทริบิวต์ \"%s\""
 
 #: gtk/gtkfilechoosersettings.c:139
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
-msgstr ""
+msgstr "บรรทัด %d, คอลัมน์ %d: มีอิลิเมนต์ไม่คาดหมาย \"%s\""
 
 #: gtk/gtkfilechoosersettings.c:157
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
-msgstr ""
+msgstr "บรรทัด %d, คอลัมน์ %d: ต้องการจุดจบอิลิเมนต์ \"%s\" แต่พบอิลิเมนต์สำหรับ \"%s\" แทน"
 
 #: gtk/gtkfilechoosersettings.c:201
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr ""
+msgstr "บรรทัด %d, คอลัมน์ %d: ต้องการ \"%s\" ที่ระดับบนสุด แต่พบ \"%s\" แทน"
 
 #: gtk/gtkfilechoosersettings.c:237 gtk/gtkfilechoosersettings.c:265
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr ""
+msgstr "บรรทัด %d, คอลัมน์ %d: ต้องการ \"%s\" หรือ \"%s\" แต่พบ \"%s\" แทน"
 
 #: gtk/gtkfilechoosersettings.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory: %s"
-msgstr "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ '%s': %s"
+msgstr "ไม่สามารถสร้างโฟลเดอร์: %s"
 
 #: gtk/gtkfilesel.c:694
 msgid "Folders"
