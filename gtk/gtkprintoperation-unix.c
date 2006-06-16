@@ -471,6 +471,8 @@ handle_print_response (GtkWidget *dialog,
       rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
       rdata->do_preview = TRUE;
       rdata->do_print = TRUE;
+
+      rdata->op->priv->action = GTK_PRINT_OPERATION_ACTION_PREVIEW;
     }
 
   if (rdata->do_print)

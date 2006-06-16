@@ -1840,10 +1840,9 @@ typedef struct
 
   gint page, start, end, inc;
 
-  gboolean initialized;
-
   GtkWidget *progress;
  
+  gboolean initialized;
   gboolean is_preview; 
 } PrintPagesData;
 
@@ -2194,7 +2193,7 @@ print_pages (GtkPrintOperation       *op,
 
   data = g_new0 (PrintPagesData, 1);
   data->op = g_object_ref (op);
-  data->is_preview = (op->priv->action == GTK_PRINT_OPERATION_ACTION_PREVIEW);
+  data->is_preview = (priv->action == GTK_PRINT_OPERATION_ACTION_PREVIEW);
 
   if (priv->show_progress)
     {
@@ -2221,7 +2220,7 @@ print_pages (GtkPrintOperation       *op,
       
       g_signal_emit_by_name (op, "preview",
 			     GTK_PRINT_OPERATION_PREVIEW (op),
-			     op->priv->print_context,
+			     priv->print_context,
 			     parent,
 			     &handled);
       

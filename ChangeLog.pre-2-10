@@ -1,3 +1,10 @@
+2006-06-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c (handle_print_response): When starting
+	a preview from the print dialog, set the action to PREVIEW.
+
+	* gtk/gtkprintoperation.c: Cosmetic changes.
+
 2006-06-16 Matthias Clasens  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c: Mark the preview filename
