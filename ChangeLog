@@ -1,5 +1,8 @@
 2006-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/pdf/gtkprintbackendcups.c: Use the
+	stock floppy icon.
+
 	* gtk/gtkprintoperation-unix.c: Set the GENERATE_PDF capability
 	when creating a print dialog.  (noted by Yevgen Muntyan)
 
