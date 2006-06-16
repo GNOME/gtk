@@ -1,5 +1,15 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintbackend.h: Add a GtkPrintSettings parameter to the
+	printer_create_cairo_surface method.
+	
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: 
+	* modules/printbackends/cups/gtkprintbackendcups.c: 
+	* modules/printbackends/lpr/gtkprintbackendlpr.c: 
+	* gtk/gtkprinter.c (_gtk_printer_create_cairo_surface): 
+	* gtk/gtkprinter-private.h: 
+	* gtk/gtkprintjob.c (gtk_print_job_get_surface): Adapt all users.
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize): Don't
 	leak match data.  (#345107,  Christian Weiske)
 

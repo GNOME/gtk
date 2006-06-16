@@ -74,6 +74,7 @@ static void                 lpr_printer_prepare_for_print         (GtkPrinter   
 								   GtkPrintSettings        *settings,
 								   GtkPageSetup            *page_setup);
 static cairo_surface_t *    lpr_printer_create_cairo_surface      (GtkPrinter              *printer,
+								   GtkPrintSettings        *settings,
 								   gdouble                  width,
 								   gdouble                  height,
 								   gint                     cache_fd);
@@ -163,36 +164,46 @@ gtk_print_backend_lpr_class_init (GtkPrintBackendLprClass *class)
 }
 
 static cairo_status_t
-_cairo_write (void *cache_fd_as_pointer,
+_cairo_write (void                *closure,
               const unsigned char *data,
               unsigned int         length)
 {
-  cairo_status_t result;
-  gint cache_fd;
-  cache_fd = GPOINTER_TO_INT (cache_fd_as_pointer);
+  gint fd = GPOINTER_TO_INT (closure);
+  gssize written;
   
-  result = CAIRO_STATUS_WRITE_ERROR;
-  
-  /* write out the buffer */
-  if (write (cache_fd, data, length) != -1)
-      result = CAIRO_STATUS_SUCCESS;
-   
-  return result;
+  while (length > 0) 
+    {
+      written = write (fd, data, length);
+
+      if (written == -1)
+	{
+	  if (errno == EAGAIN || errno == EINTR)
+	    continue;
+	  
+	  return CAIRO_STATUS_WRITE_ERROR;
+	}    
+
+      data += written;
+      length -= written;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
 }
 
 
 static cairo_surface_t *
-lpr_printer_create_cairo_surface (GtkPrinter *printer,
-				   gdouble width, 
-				   gdouble height,
-				   gint cache_fd)
+lpr_printer_create_cairo_surface (GtkPrinter       *printer,
+				  GtkPrintSettings *settings,
+				  gdouble           width, 
+				  gdouble           height,
+				  gint              cache_fd)
 {
   cairo_surface_t *surface;
   
-  surface = cairo_ps_surface_create_for_stream  (_cairo_write, GINT_TO_POINTER (cache_fd), width, height);
+  surface = cairo_ps_surface_create_for_stream (_cairo_write, GINT_TO_POINTER (cache_fd), width, height);
 
   /* TODO: DPI from settings object? */
-  cairo_ps_surface_set_dpi (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface, 300, 300);
 
   return surface;
 }
@@ -212,8 +223,8 @@ typedef struct {
 
 static void
 lpr_print_cb (GtkPrintBackendLpr *print_backend,
-              GError *error,
-              gpointer user_data)
+              GError             *error,
+              gpointer            user_data)
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
@@ -242,9 +253,9 @@ lpr_print_cb (GtkPrintBackendLpr *print_backend,
 }
 
 static gboolean
-lpr_write (GIOChannel *source,
-           GIOCondition con,
-           gpointer user_data)
+lpr_write (GIOChannel   *source,
+           GIOCondition  con,
+           gpointer      user_data)
 {
   gchar buf[_LPR_MAX_CHUNK_SIZE];
   gsize bytes_read;
@@ -289,12 +300,12 @@ lpr_write (GIOChannel *source,
 #define LPR_COMMAND "lpr"
 
 static void
-gtk_print_backend_lpr_print_stream (GtkPrintBackend *print_backend,
-				    GtkPrintJob *job,
-				    gint data_fd,
+gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
+				    GtkPrintJob            *job,
+				    gint                    data_fd,
 				    GtkPrintJobCompleteFunc callback,
-				    gpointer user_data,
-				    GDestroyNotify dnotify)
+				    gpointer                user_data,
+				    GDestroyNotify          dnotify)
 {
   GError *error;
   GtkPrinter *printer;
@@ -382,9 +393,9 @@ gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 }
 
 static GtkPrinterOptionSet *
-lpr_printer_get_options (GtkPrinter *printer,
+lpr_printer_get_options (GtkPrinter       *printer,
 			 GtkPrintSettings *settings,
-			 GtkPageSetup *page_setup)
+			 GtkPageSetup     *page_setup)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
@@ -413,9 +424,9 @@ lpr_printer_get_options (GtkPrinter *printer,
 }
 
 static void
-lpr_printer_get_settings_from_options (GtkPrinter *printer,
+lpr_printer_get_settings_from_options (GtkPrinter          *printer,
 				       GtkPrinterOptionSet *options,
-				       GtkPrintSettings *settings)
+				       GtkPrintSettings    *settings)
 {
   GtkPrinterOption *option;
 
@@ -424,10 +435,10 @@ lpr_printer_get_settings_from_options (GtkPrinter *printer,
 }
 
 static void
-lpr_printer_prepare_for_print (GtkPrinter *printer,
-			       GtkPrintJob *print_job,
+lpr_printer_prepare_for_print (GtkPrinter       *printer,
+			       GtkPrintJob      *print_job,
 			       GtkPrintSettings *settings,
-			       GtkPageSetup *page_setup)
+			       GtkPageSetup     *page_setup)
 {
   double scale;
 

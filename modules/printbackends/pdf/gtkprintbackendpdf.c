@@ -81,6 +81,7 @@ static void                 gtk_print_backend_pdf_print_stream    (GtkPrintBacke
 								   gpointer                 user_data,
 								   GDestroyNotify           dnotify);
 static cairo_surface_t *    pdf_printer_create_cairo_surface      (GtkPrinter              *printer,
+								   GtkPrintSettings        *settings,
 								   gdouble                  width,
 								   gdouble                  height,
 								   gint                     cache_fd);
@@ -164,29 +165,39 @@ gtk_print_backend_pdf_class_init (GtkPrintBackendPdfClass *class)
 }
 
 static cairo_status_t
-_cairo_write (void *cache_fd_as_pointer,
+_cairo_write (void                *closure,
               const unsigned char *data,
               unsigned int         length)
 {
-  cairo_status_t result;
-  gint cache_fd;
-  cache_fd = GPOINTER_TO_INT (cache_fd_as_pointer);
+  gint fd = GPOINTER_TO_INT (closure);
+  gssize written;
   
-  result = CAIRO_STATUS_WRITE_ERROR;
-  
-  /* write out the buffer */
-  if (write (cache_fd, data, length) != -1)
-      result = CAIRO_STATUS_SUCCESS;
-   
-  return result;
+  while (length > 0) 
+    {
+      written = write (fd, data, length);
+
+      if (written == -1)
+	{
+	  if (errno == EAGAIN || errno == EINTR)
+	    continue;
+	  
+	  return CAIRO_STATUS_WRITE_ERROR;
+	}    
+
+      data += written;
+      length -= written;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
 }
 
 
 static cairo_surface_t *
-pdf_printer_create_cairo_surface (GtkPrinter *printer,
-				   gdouble width, 
-				   gdouble height,
-				   gint cache_fd)
+pdf_printer_create_cairo_surface (GtkPrinter       *printer,
+				  GtkPrintSettings *settings,
+				  gdouble           width, 
+				  gdouble           height,
+				  gint              cache_fd)
 {
   cairo_surface_t *surface;
   
@@ -209,8 +220,8 @@ typedef struct {
 
 static void
 pdf_print_cb (GtkPrintBackendPdf *print_backend,
-              GError *error,
-              gpointer user_data)
+              GError             *error,
+              gpointer            user_data)
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
@@ -233,9 +244,9 @@ pdf_print_cb (GtkPrintBackendPdf *print_backend,
 }
 
 static gboolean
-pdf_write (GIOChannel *source,
-           GIOCondition con,
-           gpointer user_data)
+pdf_write (GIOChannel   *source,
+           GIOCondition  con,
+           gpointer      user_data)
 {
   gchar buf[_PDF_MAX_CHUNK_SIZE];
   gsize bytes_read;
@@ -280,12 +291,12 @@ pdf_write (GIOChannel *source,
 }
 
 static void
-gtk_print_backend_pdf_print_stream (GtkPrintBackend *print_backend,
-				    GtkPrintJob *job,
-				    gint data_fd,
+gtk_print_backend_pdf_print_stream (GtkPrintBackend        *print_backend,
+				    GtkPrintJob            *job,
+				    gint                    data_fd,
 				    GtkPrintJobCompleteFunc callback,
-				    gpointer user_data,
-				    GDestroyNotify dnotify)
+				    gpointer                user_data,
+				    GDestroyNotify          dnotify)
 {
   GError *error;
   GtkPrinter *printer;
@@ -356,9 +367,9 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
 }
 
 static GtkPrinterOptionSet *
-pdf_printer_get_options (GtkPrinter *printer,
+pdf_printer_get_options (GtkPrinter       *printer,
 			 GtkPrintSettings *settings,
-			 GtkPageSetup *page_setup)
+			 GtkPageSetup     *page_setup)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
@@ -387,9 +398,9 @@ pdf_printer_get_options (GtkPrinter *printer,
 }
 
 static void
-pdf_printer_get_settings_from_options (GtkPrinter *printer,
+pdf_printer_get_settings_from_options (GtkPrinter          *printer,
 				       GtkPrinterOptionSet *options,
-				       GtkPrintSettings *settings)
+				       GtkPrintSettings    *settings)
 {
   GtkPrinterOption *option;
 
@@ -398,10 +409,10 @@ pdf_printer_get_settings_from_options (GtkPrinter *printer,
 }
 
 static void
-pdf_printer_prepare_for_print (GtkPrinter *printer,
-			       GtkPrintJob *print_job,
+pdf_printer_prepare_for_print (GtkPrinter       *printer,
+			       GtkPrintJob      *print_job,
 			       GtkPrintSettings *settings,
-			       GtkPageSetup *page_setup)
+			       GtkPageSetup     *page_setup)
 {
   double scale;
 

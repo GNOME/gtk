@@ -248,30 +248,38 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
 }
 
 static cairo_status_t
-_cairo_write_to_cups (void *cache_fd_as_pointer,
+_cairo_write_to_cups (void                *closure,
                       const unsigned char *data,
                       unsigned int         length)
 {
-  cairo_status_t result;
-  gint cache_fd;
-  cache_fd = GPOINTER_TO_INT (cache_fd_as_pointer);
-
-  result = CAIRO_STATUS_WRITE_ERROR;
+  gint fd = GPOINTER_TO_INT (closure);
+  gssize written;
   
-  /* write out the buffer */
-  if (write (cache_fd, data, length) != -1)
-      result = CAIRO_STATUS_SUCCESS;
-   
-  return result;
+  while (length > 0) 
+    {
+      written = write (fd, data, length);
+
+      if (written == -1)
+	{
+	  if (errno == EAGAIN || errno == EINTR)
+	    continue;
+	  
+	  return CAIRO_STATUS_WRITE_ERROR;
+	}    
+
+      data += written;
+      length -= written;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
 }
 
-
 static cairo_surface_t *
-cups_printer_create_cairo_surface (GtkPrinter *printer,
+cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble width, 
-				   gdouble height,
-				   gint cache_fd)
+				   gdouble           width, 
+				   gdouble           height,
+				   gint              cache_fd)
 {
   cairo_surface_t *surface; 
  
@@ -303,8 +311,8 @@ cups_free_print_stream_data (CupsPrintStreamData *data)
 
 static void
 cups_print_cb (GtkPrintBackendCups *print_backend,
-               GtkCupsResult *result,
-               gpointer user_data)
+               GtkCupsResult       *result,
+               gpointer             user_data)
 {
   GError *error = NULL;
   CupsPrintStreamData *ps = user_data;
@@ -362,12 +370,12 @@ add_cups_options (const char *key,
 }
 
 static void
-gtk_print_backend_cups_print_stream (GtkPrintBackend *print_backend,
-                                     GtkPrintJob *job,
-				     gint data_fd,
-				     GtkPrintJobCompleteFunc callback,
-				     gpointer user_data,
-				     GDestroyNotify dnotify)
+gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
+                                     GtkPrintJob             *job,
+				     gint                     data_fd,
+				     GtkPrintJobCompleteFunc  callback,
+				     gpointer                 user_data,
+				     GDestroyNotify           dnotify)
 {
   GError *error;
   GtkPrinterCups *cups_printer;
@@ -503,7 +511,7 @@ cups_dispatch_watch_check (GSource *source)
 
 static gboolean
 cups_dispatch_watch_prepare (GSource *source,
-			     gint *timeout_)
+			     gint    *timeout_)
 {
   GtkPrintCupsDispatchWatch *dispatch;
 
@@ -515,9 +523,9 @@ cups_dispatch_watch_prepare (GSource *source,
 }
 
 static gboolean
-cups_dispatch_watch_dispatch (GSource *source,
-			      GSourceFunc callback,
-			      gpointer user_data)
+cups_dispatch_watch_dispatch (GSource     *source,
+			      GSourceFunc  callback,
+			      gpointer     user_data)
 {
   GtkPrintCupsDispatchWatch *dispatch;
   GtkPrintCupsResponseCallbackFunc ep_callback;  
@@ -576,12 +584,12 @@ static GSourceFuncs _cups_dispatch_watch_funcs = {
 
 
 static void
-cups_request_execute (GtkPrintBackendCups *print_backend,
-                      GtkCupsRequest *request,
-                      GtkPrintCupsResponseCallbackFunc callback,
-                      gpointer user_data,
-                      GDestroyNotify notify,
-                      GError **err)
+cups_request_execute (GtkPrintBackendCups              *print_backend,
+                      GtkCupsRequest                   *request,
+                      GtkPrintCupsResponseCallbackFunc  callback,
+                      gpointer                          user_data,
+                      GDestroyNotify                    notify,
+                      GError                          **err)
 {
   GtkPrintCupsDispatchWatch *dispatch;
 
@@ -600,8 +608,8 @@ cups_request_execute (GtkPrintBackendCups *print_backend,
 
 static void
 cups_request_printer_info_cb (GtkPrintBackendCups *backend,
-                              GtkCupsResult *result,
-                              gpointer user_data)
+                              GtkCupsResult       *result,
+                              gpointer             user_data)
 {
   ipp_attribute_t *attr;
   ipp_t *response;
@@ -671,7 +679,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
 
 static void
 cups_request_printer_info (GtkPrintBackendCups *print_backend,
-                           const gchar *printer_name)
+                           const gchar         *printer_name)
 {
   GError *error;
   GtkCupsRequest *request;
@@ -723,7 +731,7 @@ typedef struct {
 } CupsJobPollData;
 
 static void
-job_object_died	(gpointer user_data,
+job_object_died	(gpointer  user_data,
 		 GObject  *where_the_object_was)
 {
   CupsJobPollData *data = user_data;
@@ -741,8 +749,8 @@ cups_job_poll_data_free (CupsJobPollData *data)
 
 static void
 cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
-			  GtkCupsResult *result,
-			  gpointer user_data)
+			  GtkCupsResult       *result,
+			  gpointer             user_data)
 {
   CupsJobPollData *data = user_data;
   ipp_attribute_t *attr;
@@ -858,8 +866,8 @@ cups_job_info_poll_timeout (gpointer user_data)
 
 static void
 cups_begin_polling_info (GtkPrintBackendCups *print_backend,
-			 GtkPrintJob *job,
-			 int job_id)
+			 GtkPrintJob         *job,
+			 int                  job_id)
 {
   CupsJobPollData *data;
 
@@ -876,7 +884,7 @@ cups_begin_polling_info (GtkPrintBackendCups *print_backend,
 }
 
 static void
-mark_printer_inactive (GtkPrinter *printer, 
+mark_printer_inactive (GtkPrinter      *printer, 
                        GtkPrintBackend *backend)
 {
   gtk_printer_set_is_active (printer, FALSE);
@@ -885,9 +893,10 @@ mark_printer_inactive (GtkPrinter *printer,
 }
 
 static gint
-find_printer (GtkPrinter *printer, const char *find_name)
+find_printer (GtkPrinter  *printer, 
+	      const gchar *find_name)
 {
-  const char *printer_name;
+  const gchar *printer_name;
 
   printer_name = gtk_printer_get_name (printer);
   return g_ascii_strcasecmp (printer_name, find_name);
@@ -895,8 +904,8 @@ find_printer (GtkPrinter *printer, const char *find_name)
 
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
-                              GtkCupsResult *result,
-                              gpointer user_data)
+                              GtkCupsResult       *result,
+                              gpointer             user_data)
 {
   ipp_attribute_t *attr;
   ipp_t *response;
@@ -1147,8 +1156,8 @@ get_ppd_data_free (GetPPDData *data)
 
 static void
 cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
-                     GtkCupsResult *result,
-                     GetPPDData *data)
+                     GtkCupsResult       *result,
+                     GetPPDData          *data)
 {
   ipp_t *response;
   GtkPrinter *printer;
@@ -1170,7 +1179,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 }
 
 static void
-cups_request_ppd (GtkPrinter      *printer)
+cups_request_ppd (GtkPrinter *printer)
 {
   GError *error;
   GtkPrintBackend *print_backend;
@@ -1234,8 +1243,8 @@ cups_request_ppd (GtkPrinter      *printer)
 
 static void
 cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
-				 GtkCupsResult *result,
-				 gpointer user_data)
+				 GtkCupsResult       *result,
+				 gpointer             user_data)
 {
   ipp_t *response;
   ipp_attribute_t *attr;
@@ -1498,7 +1507,8 @@ static const char *cups_option_blacklist[] = {
 };
 
 static char *
-get_option_text (ppd_file_t *ppd_file, ppd_option_t *option)
+get_option_text (ppd_file_t   *ppd_file, 
+		 ppd_option_t *option)
 {
   int i;
   char *utf8;
@@ -1518,7 +1528,8 @@ get_option_text (ppd_file_t *ppd_file, ppd_option_t *option)
 }
 
 static char *
-get_choice_text (ppd_file_t *ppd_file, ppd_choice_t *choice)
+get_choice_text (ppd_file_t   *ppd_file, 
+		 ppd_choice_t *choice)
 {
   int i;
   ppd_option_t *option = choice->option;
@@ -1534,7 +1545,8 @@ get_choice_text (ppd_file_t *ppd_file, ppd_choice_t *choice)
 }
 
 static gboolean
-group_has_option (ppd_group_t *group, ppd_option_t *option)
+group_has_option (ppd_group_t  *group, 
+		  ppd_option_t *option)
 {
   int i;
 
@@ -1572,10 +1584,10 @@ value_is_off (const char *value)
 }
 
 static int
-available_choices (ppd_file_t *ppd,
-		   ppd_option_t *option,
+available_choices (ppd_file_t     *ppd,
+		   ppd_option_t   *option,
 		   ppd_choice_t ***available,
-		   gboolean keep_if_only_one_option)
+		   gboolean        keep_if_only_one_option)
 {
   ppd_option_t *other_option;
   int i, j;
@@ -1735,9 +1747,9 @@ available_choices (ppd_file_t *ppd,
 }
 
 static GtkPrinterOption *
-create_pickone_option (ppd_file_t *ppd_file,
+create_pickone_option (ppd_file_t   *ppd_file,
 		       ppd_option_t *ppd_option,
-		       const char *gtk_name)
+		       const gchar  *gtk_name)
 {
   GtkPrinterOption *option;
   ppd_choice_t **available;
@@ -1784,9 +1796,9 @@ create_pickone_option (ppd_file_t *ppd_file,
 }
 
 static GtkPrinterOption *
-create_boolean_option (ppd_file_t *ppd_file,
+create_boolean_option (ppd_file_t   *ppd_file,
 		       ppd_option_t *ppd_option,
-		       const char *gtk_name)
+		       const gchar  *gtk_name)
 {
   GtkPrinterOption *option;
   ppd_choice_t **available;
@@ -1822,8 +1834,8 @@ create_boolean_option (ppd_file_t *ppd_file,
   return option;
 }
 
-static char *
-get_option_name (const char *keyword)
+static gchar *
+get_option_name (const gchar *keyword)
 {
   int i;
 
@@ -1835,7 +1847,8 @@ get_option_name (const char *keyword)
 }
 
 static int
-strptr_cmp (const void *a, const void *b)
+strptr_cmp (const void *a, 
+	    const void *b)
 {
   char **aa = (char **)a;
   char **bb = (char **)b;
@@ -1844,7 +1857,9 @@ strptr_cmp (const void *a, const void *b)
 
 
 static gboolean
-string_in_table (char *str, const char *table[], int table_len)
+string_in_table (gchar       *str, 
+		 const gchar *table[], 
+		 gint         table_len)
 {
   return bsearch (&str, table, table_len, sizeof (char *), (void *)strptr_cmp) != NULL;
 }
@@ -1853,10 +1868,10 @@ string_in_table (char *str, const char *table[], int table_len)
 
 static void
 handle_option (GtkPrinterOptionSet *set,
-	       ppd_file_t *ppd_file,
-	       ppd_option_t *ppd_option,
-	       ppd_group_t *toplevel_group,
-	       GtkPrintSettings *settings)
+	       ppd_file_t          *ppd_file,
+	       ppd_option_t        *ppd_option,
+	       ppd_group_t         *toplevel_group,
+	       GtkPrintSettings    *settings)
 {
   GtkPrinterOption *option;
   char *name;
@@ -1917,12 +1932,12 @@ handle_option (GtkPrinterOptionSet *set,
 
 static void
 handle_group (GtkPrinterOptionSet *set,
-	      ppd_file_t *ppd_file,
-	      ppd_group_t *group,
-	      ppd_group_t *toplevel_group,
-	      GtkPrintSettings *settings)
+	      ppd_file_t          *ppd_file,
+	      ppd_group_t         *group,
+	      ppd_group_t         *toplevel_group,
+	      GtkPrintSettings    *settings)
 {
-  int i;
+  gint i;
 
   /* Ignore installable options */
   if (strcmp (toplevel_group->name, "InstallableOptions") == 0)
@@ -1937,9 +1952,9 @@ handle_group (GtkPrinterOptionSet *set,
 }
 
 static GtkPrinterOptionSet *
-cups_printer_get_options (GtkPrinter *printer,
-			  GtkPrintSettings                  *settings,
-			  GtkPageSetup                      *page_setup)
+cups_printer_get_options (GtkPrinter       *printer,
+			  GtkPrintSettings *settings,
+			  GtkPageSetup     *page_setup)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
@@ -2040,8 +2055,8 @@ cups_printer_get_options (GtkPrinter *printer,
 
 static void
 mark_option_from_set (GtkPrinterOptionSet *set,
-		      ppd_file_t *ppd_file,
-		      ppd_option_t *ppd_option)
+		      ppd_file_t          *ppd_file,
+		      ppd_option_t        *ppd_option)
 {
   GtkPrinterOption *option;
   char *name = get_option_name (ppd_option->keyword);
@@ -2057,8 +2072,8 @@ mark_option_from_set (GtkPrinterOptionSet *set,
 
 static void
 mark_group_from_set (GtkPrinterOptionSet *set,
-		     ppd_file_t *ppd_file,
-		     ppd_group_t *group)
+		     ppd_file_t          *ppd_file,
+		     ppd_group_t         *group)
 {
   int i;
 
@@ -2071,8 +2086,8 @@ mark_group_from_set (GtkPrinterOptionSet *set,
 
 static void
 set_conflicts_from_option (GtkPrinterOptionSet *set,
-			   ppd_file_t *ppd_file,
-			   ppd_option_t *ppd_option)
+			   ppd_file_t          *ppd_file,
+			   ppd_option_t        *ppd_option)
 {
   GtkPrinterOption *option;
   char *name;
@@ -2092,8 +2107,8 @@ set_conflicts_from_option (GtkPrinterOptionSet *set,
 
 static void
 set_conflicts_from_group (GtkPrinterOptionSet *set,
-			  ppd_file_t *ppd_file,
-			  ppd_group_t *group)
+			  ppd_file_t          *ppd_file,
+			  ppd_group_t         *group)
 {
   int i;
 
@@ -2146,12 +2161,12 @@ typedef struct {
 } NameMapping;
 
 static void
-map_settings_to_option (GtkPrinterOption *option,
-			const NameMapping table[],
-			int n_elements,
-			GtkPrintSettings *settings,
-			const char *standard_name,
-			const char *cups_name)
+map_settings_to_option (GtkPrinterOption  *option,
+			const NameMapping  table[],
+			gint               n_elements,
+			GtkPrintSettings  *settings,
+			const gchar       *standard_name,
+			const gchar       *cups_name)
 {
   int i;
   char *name;
@@ -2196,12 +2211,12 @@ map_settings_to_option (GtkPrinterOption *option,
 }
 
 static void
-map_option_to_settings (const char *value,
-			const NameMapping table[],
-			int n_elements,
-			GtkPrintSettings *settings,
-			const char *standard_name,
-			const char *cups_name)
+map_option_to_settings (const gchar       *value,
+			const NameMapping  table[],
+			gint               n_elements,
+			GtkPrintSettings  *settings,
+			const gchar       *standard_name,
+			const gchar       *cups_name)
 {
   int i;
   char *name;
@@ -2376,7 +2391,7 @@ set_option_from_settings (GtkPrinterOption *option,
 }
 
 static void
-foreach_option_get_settings (GtkPrinterOption  *option,
+foreach_option_get_settings (GtkPrinterOption *option,
 			     gpointer          user_data)
 {
   struct OptionData *data = user_data;
@@ -2428,9 +2443,9 @@ foreach_option_get_settings (GtkPrinterOption  *option,
 }
 
 static void
-cups_printer_get_settings_from_options (GtkPrinter *printer,
+cups_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrinterOptionSet *options,
-					GtkPrintSettings *settings)
+					GtkPrintSettings    *settings)
 {
   struct OptionData data;
   const char *print_at, *print_at_time;
@@ -2465,10 +2480,10 @@ cups_printer_get_settings_from_options (GtkPrinter *printer,
 }
 
 static void
-cups_printer_prepare_for_print (GtkPrinter *printer,
-				GtkPrintJob *print_job,
+cups_printer_prepare_for_print (GtkPrinter       *printer,
+				GtkPrintJob      *print_job,
 				GtkPrintSettings *settings,
-				GtkPageSetup *page_setup)
+				GtkPageSetup     *page_setup)
 {
   GtkPageSet page_set;
   GtkPaperSize *paper_size;
@@ -2582,10 +2597,10 @@ cups_printer_list_papers (GtkPrinter *printer)
 
 static void
 cups_printer_get_hard_margins (GtkPrinter *printer,
-			       double     *top,
-			       double     *bottom,
-			       double     *left,
-			       double     *right)
+			       gdouble    *top,
+			       gdouble    *bottom,
+			       gdouble    *left,
+			       gdouble    *right)
 {
   ppd_file_t *ppd_file;
 

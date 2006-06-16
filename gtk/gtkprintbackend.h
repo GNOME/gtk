@@ -70,49 +70,50 @@ struct _GtkPrintBackendClass
   GObjectClass parent_class;
 
   /* Global backend methods: */
-  void (*request_printer_list) (GtkPrintBackend *backend);
-  void (*print_stream)         (GtkPrintBackend *backend,
-				GtkPrintJob *job,
-				gint data_fd,
-				GtkPrintJobCompleteFunc callback,
-				gpointer user_data,
-				GDestroyNotify dnotify);
+  void                   (*request_printer_list)            (GtkPrintBackend        *backend);
+  void                   (*print_stream)                    (GtkPrintBackend        *backend,
+							     GtkPrintJob            *job,
+							     gint                    data_fd,
+							     GtkPrintJobCompleteFunc callback,
+							     gpointer                user_data,
+							     GDestroyNotify          dnotify);
 
   /* Printer methods: */
-  void                  (*printer_request_details)           (GtkPrinter *printer);
-  cairo_surface_t *     (*printer_create_cairo_surface)      (GtkPrinter *printer,
-							      gdouble height,
-							      gdouble width,
-							      gint cache_fd);
-  GtkPrinterOptionSet * (*printer_get_options)               (GtkPrinter *printer,
-							      GtkPrintSettings *settings,
-							      GtkPageSetup *page_setup);
-  gboolean              (*printer_mark_conflicts)            (GtkPrinter *printer,
+  void                  (*printer_request_details)           (GtkPrinter          *printer);
+  cairo_surface_t *     (*printer_create_cairo_surface)      (GtkPrinter          *printer,
+							      GtkPrintSettings    *settings,
+							      gdouble              height,
+							      gdouble              width,
+							      gint                 cache_fd);
+  GtkPrinterOptionSet * (*printer_get_options)               (GtkPrinter          *printer,
+							      GtkPrintSettings    *settings,
+							      GtkPageSetup        *page_setup);
+  gboolean              (*printer_mark_conflicts)            (GtkPrinter          *printer,
 							      GtkPrinterOptionSet *options);
-  void                  (*printer_get_settings_from_options) (GtkPrinter *printer,
+  void                  (*printer_get_settings_from_options) (GtkPrinter          *printer,
 							      GtkPrinterOptionSet *options,
-							      GtkPrintSettings *settings);
-  void                  (*printer_prepare_for_print)         (GtkPrinter *printer,
-							      GtkPrintJob *print_job,
-							      GtkPrintSettings *settings,
-							      GtkPageSetup *page_setup);
-  GList  *              (*printer_list_papers)               (GtkPrinter *printer);
-  void                  (*printer_get_hard_margins)          (GtkPrinter *printer,
-							      double     *top,
-							      double     *bottom,
-							      double     *left,
-							      double     *right);
-  GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter *printer);
+							      GtkPrintSettings    *settings);
+  void                  (*printer_prepare_for_print)         (GtkPrinter          *printer,
+							      GtkPrintJob         *print_job,
+							      GtkPrintSettings    *settings,
+							      GtkPageSetup        *page_setup);
+  GList  *              (*printer_list_papers)               (GtkPrinter          *printer);
+  void                  (*printer_get_hard_margins)          (GtkPrinter          *printer,
+							      double              *top,
+							      double              *bottom,
+							      double              *left,
+							      double              *right);
+  GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter          *printer);
 
   /* Signals */
-  void (*printer_list_changed)   (GtkPrintBackend *backend);
-  void (*printer_list_done)      (GtkPrintBackend *backend);
-  void (*printer_added)          (GtkPrintBackend *backend,
-				  GtkPrinter      *printer);
-  void (*printer_removed)        (GtkPrintBackend *backend,
-				  GtkPrinter      *printer);
-  void (*printer_status_changed) (GtkPrintBackend *backend,
-				  GtkPrinter      *printer);
+  void                  (*printer_list_changed)              (GtkPrintBackend     *backend);
+  void                  (*printer_list_done)                 (GtkPrintBackend     *backend);
+  void                  (*printer_added)                     (GtkPrintBackend     *backend,
+							      GtkPrinter          *printer);
+  void                  (*printer_removed)                   (GtkPrintBackend     *backend,
+							      GtkPrinter          *printer);
+  void                  (*printer_status_changed)            (GtkPrintBackend     *backend,
+							      GtkPrinter          *printer);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
