@@ -470,6 +470,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
   
   priv->surface = _gtk_printer_create_cairo_surface (priv->printer,
+						     priv->settings,
 						     width, height,
 						     priv->spool_file_fd);
  
@@ -507,7 +508,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
     {
       priv->track_print_status = track_status;
       
-      g_object_notify (job, "track-status");
+      g_object_notify (G_OBJECT (job), "track-status");
     }
 }
 
