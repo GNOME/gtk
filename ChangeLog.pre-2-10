@@ -1,5 +1,8 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize): Don't
+	leak match data.  (#345107,  Christian Weiske)
+
 	* gtk/gtkprintunixdialog.c (populate_dialog): Move the conflict
 	label out of the button box.  (#339456, Christian Persch)
 

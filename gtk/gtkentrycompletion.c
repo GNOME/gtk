@@ -572,6 +572,9 @@ gtk_entry_completion_finalize (GObject *object)
   if (completion->priv->popup_window)
     gtk_widget_destroy (completion->priv->popup_window);
 
+  if (completion->priv->match_notify)
+    (* completion->priv->match_notify) (completion->priv->match_data);
+
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->finalize (object);
 }
 
