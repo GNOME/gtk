@@ -2331,7 +2331,7 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
 {
   GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (print_dialog);
-  GtkWidget *hbox, *conflict_hbox, *image, *label;
+  GtkWidget *vbox, *conflict_hbox, *image, *label;
 
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
@@ -2339,9 +2339,14 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
+  gtk_widget_show (vbox);
+
   priv->notebook = gtk_notebook_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (priv->notebook), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), priv->notebook, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->notebook, TRUE, TRUE, 0);
+  gtk_widget_show (priv->notebook);
 
   create_printer_list_model (print_dialog);
 
@@ -2359,35 +2364,15 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
 			&priv->finishing_page);
   create_advanced_page (print_dialog);
 
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (hbox);
-  gtk_box_pack_end (GTK_BOX (dialog->vbox), hbox, FALSE, TRUE, 0);
-  
-  conflict_hbox = gtk_hbox_new (FALSE, 0);
+  priv->conflicts_widget = conflict_hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_end (GTK_BOX (vbox), conflict_hbox, FALSE, FALSE, 0);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   gtk_box_pack_start (GTK_BOX (conflict_hbox), image, FALSE, TRUE, 0);
   label = gtk_label_new (_("Some of the settings in the dialog conflict"));
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (conflict_hbox), label, FALSE, TRUE, 0);
-  priv->conflicts_widget = conflict_hbox;
-
-  gtk_box_pack_start (GTK_BOX (hbox), conflict_hbox,
-		      FALSE, FALSE, 0);
-
-  /* Reparent the action area into the hbox. This is so we can have the
-   * conflict warning on the same row, but not make the buttons the same
-   * width as the warning (which the buttonbox does).
-   */
-  g_object_ref (dialog->action_area);
-  gtk_container_remove (GTK_CONTAINER (dialog->vbox),
-			dialog->action_area);
-  gtk_box_pack_end (GTK_BOX (hbox), dialog->action_area,
-		    FALSE, FALSE, 0);
-  g_object_unref (dialog->action_area);
   
-  gtk_widget_show (priv->notebook);
-
   load_print_backends (print_dialog);
 }
 

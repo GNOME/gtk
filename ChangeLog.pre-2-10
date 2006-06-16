@@ -1,5 +1,8 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c (populate_dialog): Move the conflict
+	label out of the button box.  (#339456, Christian Persch)
+
 	* gtk/gtksizegroup.c (compute_dimension): Ignore unmapped widgets
 	when ignore_hidden is TRUE.  (#344707, Christian Persch)
 
