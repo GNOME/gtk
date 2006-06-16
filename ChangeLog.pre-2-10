@@ -1,3 +1,8 @@
+2006-06-16 Matthias Clasens  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c: Mark the preview filename
+	as translatable (#345093, Christian Persch)
+
 Fri Jun 16 11:49:53 2006  Tim Janik  <timj@imendio.com>
 
 	* fixed #337882 by applying patches from Tommi Komulainen:

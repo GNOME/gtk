@@ -587,10 +587,11 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   /* use temp dirs because apps like evince need to have extensions
    * to determine the mime type 
    */
-  tmp_dir = mkdtemp(dir_template);
+  tmp_dir = mkdtemp (dir_template);
+  /* print preview pdf filename (please leave the trailing .pdf in place) */
   preview_filename = g_build_filename (tmp_dir, 
-                                      "Print Preview.pdf",
-                                      NULL);
+                                       _("Print Preview.pdf"),
+                                       NULL);
   g_free (dir_template);
   *target = preview_filename;
   
