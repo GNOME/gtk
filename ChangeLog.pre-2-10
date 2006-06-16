@@ -1,5 +1,8 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c (compute_dimension): Ignore unmapped widgets
+	when ignore_hidden is TRUE.  (#344707, Christian Persch)
+
 	* configure.in: Require cvs glib.
 
 	* gtk/gtkprintoperation-unix.c: 

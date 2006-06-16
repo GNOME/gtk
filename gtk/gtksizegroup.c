@@ -273,7 +273,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
   /**
    * GtkSizeGroup:ignore-hidden:
    *
-   * If %TRUE, hidden widgets are ignored when determining 
+   * If %TRUE, unmapped widgets are ignored when determining 
    * the size of the group.
    *
    * Since: 2.8
@@ -282,7 +282,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 				   PROP_IGNORE_HIDDEN,
 				   g_param_spec_boolean ("ignore-hidden",
 							 P_("Ignore hidden"),
-							 P_("If TRUE, hidden widgets are ignored "
+							 P_("If TRUE, unmapped widgets are ignored "
 							    "when determining the size of the group"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
@@ -414,10 +414,10 @@ gtk_size_group_get_mode (GtkSizeGroup *size_group)
 /**
  * gtk_size_group_set_ignore_hidden:
  * @size_group: a #GtkSizeGroup
- * @ignore_hidden: whether hidden widgets should be ignored
+ * @ignore_hidden: whether unmapped widgets should be ignored
  *   when calculating the size
  * 
- * Sets whether invisible widgets should be ignored when
+ * Sets whether unmapped widgets should be ignored when
  * calculating the size.
  *
  * Since: 2.8 
@@ -632,7 +632,7 @@ compute_dimension (GtkWidget        *widget,
 
 	      gint dimension = compute_base_dimension (tmp_widget, mode);
 
-	      if (GTK_WIDGET_VISIBLE (tmp_widget) || !group->ignore_hidden)
+	      if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
 		{
 		  if (dimension > result)
 		    result = dimension;
