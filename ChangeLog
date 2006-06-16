@@ -1,6 +1,14 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Require cvs glib.
+
 	* gtk/gtkprintoperation-unix.c: 
+	(_gtk_print_operation_platform_backend_create_preview_surface): 
+	Don't use a temporary directory for preview files, since it
+	is not clear who cleans it up. Instead, use g_mkstemp() directly
+	to create a temp pdf file, and make the preview app responsible
+	for cleaning it up.
+
 	* gtk/gtkprintbackend.c: Move the registration of the 
 	gtk-print-preview-command setting from gtkprintbackend.c to 
 	gtkprintoperation-unix.c, to make sure it is registered before

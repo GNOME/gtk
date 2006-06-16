@@ -604,6 +604,41 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
     }
 }
 
+static cairo_status_t
+write_preview (void                *closure,
+               const unsigned char *data,
+               unsigned int         length)
+{
+  gint fd = GPOINTER_TO_INT (closure);
+  gssize written;
+  
+  while (length > 0) 
+    {
+      written = write (fd, data, length);
+
+      if (written == -1)
+	{
+	  if (errno == EAGAIN || errno == EINTR)
+	    continue;
+	  
+	  return CAIRO_STATUS_WRITE_ERROR;
+	}    
+
+      data += written;
+      length -= written;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+close_preview (void *data)
+{
+  gint fd = GPOINTER_TO_INT (data);
+
+  close (fd);
+}
+
 cairo_surface_t *
 _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
 							      GtkPageSetup      *page_setup,
@@ -611,29 +646,29 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 							      gdouble           *dpi_y,
 							      gchar            **target)
 {
-  gchar *tmp_dir, *dir_template, *preview_filename;
+  gchar *filename;
+  gint fd;
   GtkPaperSize *paper_size;
   gdouble w, h;
+  cairo_surface_t *surface;
+  static cairo_user_data_key_t key;
   
-  dir_template = g_build_filename (g_get_tmp_dir (), "print-preview-XXXXXX", NULL);
+  filename = g_build_filename (g_get_tmp_dir (), "previewXXXXXX.pdf", NULL);
+  fd = g_mkstemp (filename);
+  *target = filename;
+  
+  g_print ("target is %s\n", filename);
 
-  /* use temp dirs because apps like evince need to have extensions
-   * to determine the mime type 
-   */
-  tmp_dir = mkdtemp (dir_template);
-  /* print preview pdf filename (please leave the trailing .pdf in place) */
-  preview_filename = g_build_filename (tmp_dir, 
-                                       _("Print Preview.pdf"),
-                                       NULL);
-  g_free (dir_template);
-  *target = preview_filename;
-  
   paper_size = gtk_page_setup_get_paper_size (page_setup);
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
     
   *dpi_x = *dpi_y = 72;
-  return cairo_pdf_surface_create (preview_filename, w, h);
+  surface = cairo_pdf_surface_create_for_stream (write_preview, GINT_TO_POINTER(fd), w, h);
+ 
+  cairo_surface_set_user_data (surface, &key, GINT_TO_POINTER (fd), close_preview);
+
+  return surface;
 }
 
 void
