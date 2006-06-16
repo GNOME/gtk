@@ -1,3 +1,19 @@
+Fri Jun 16 11:49:53 2006  Tim Janik  <timj@imendio.com>
+
+	* fixed #337882 by applying patches from Tommi Komulainen:
+
+	* gtk/gtkprogressbar.c:
+	(gtk_progress_bar_paint_activity):
+	(gtk_progress_bar_get_activity): Move activity bar offset and size
+	calculations to separate function.
+	(gtk_progress_bar_paint_text): Allow caller to specify offset for the
+	prelight part in addition to width.
+	(gtk_progress_bar_paint): Paint the text also in activity mode, #337882.
+
+	* gtk/gtkprogressbar.c: (gtk_progress_bar_paint_text): Paint the
+	prelighted text on top of the normal rather than side by side, to
+	simplify painting text in activity mode.
+
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Include

@@ -599,6 +599,30 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 }
 
 static void
+gtk_progress_bar_get_activity (GtkProgressBar            *pbar,
+			       GtkProgressBarOrientation  orientation,
+			       gint                      *offset,
+			       gint                      *amount)
+{
+  GtkWidget *widget = GTK_WIDGET (pbar);
+
+  *offset = pbar->activity_pos;
+
+  switch (orientation)
+    {
+    case GTK_PROGRESS_LEFT_TO_RIGHT:
+    case GTK_PROGRESS_RIGHT_TO_LEFT:
+      *amount = MAX (2, widget->allocation.width / pbar->activity_blocks);
+      break;
+
+    case GTK_PROGRESS_TOP_TO_BOTTOM:
+    case GTK_PROGRESS_BOTTOM_TO_TOP:
+      *amount = MAX (2, widget->allocation.height / pbar->activity_blocks);
+      break;
+    }
+}
+
+static void
 gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
 				 GtkProgressBarOrientation  orientation)
 {
@@ -610,18 +634,16 @@ gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
-      area.x = pbar->activity_pos;
+      gtk_progress_bar_get_activity (pbar, orientation, &area.x, &area.width);
       area.y = widget->style->ythickness;
-      area.width = MAX (2, widget->allocation.width / pbar->activity_blocks);
       area.height = widget->allocation.height - 2 * widget->style->ythickness;
       break;
 
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
+      gtk_progress_bar_get_activity (pbar, orientation, &area.y, &area.height);
       area.x = widget->style->xthickness;
-      area.y = pbar->activity_pos;
       area.width = widget->allocation.width - 2 * widget->style->xthickness;
-      area.height = MAX (2, widget->allocation.height / pbar->activity_blocks);
       break;
 
     default:
@@ -738,6 +760,7 @@ gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
 
 static void
 gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
+			     gint                       offset,
 			     gint			amount,
 			     GtkProgressBarOrientation  orientation)
 {
@@ -781,45 +804,49 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
+      if (offset != -1)
+	prelight_clip.x = offset;
       prelight_clip.width = amount;
-      normal_clip.x += amount;
-      normal_clip.width -= amount;
       break;
       
     case GTK_PROGRESS_RIGHT_TO_LEFT:
-      normal_clip.width -= amount;
-      prelight_clip.x += normal_clip.width;
-      prelight_clip.width -= normal_clip.width;
+      if (offset != -1)
+	prelight_clip.x = offset;
+      else
+	prelight_clip.x = rect.x + rect.width - amount;
+      prelight_clip.width = amount;
       break;
        
     case GTK_PROGRESS_TOP_TO_BOTTOM:
+      if (offset != -1)
+	prelight_clip.y = offset;
       prelight_clip.height = amount;
-      normal_clip.y += amount;
-      normal_clip.height -= amount;
       break;
       
     case GTK_PROGRESS_BOTTOM_TO_TOP:
-      normal_clip.height -= amount;
-      prelight_clip.y += normal_clip.height;
-      prelight_clip.height -= normal_clip.height;
+      if (offset != -1)
+	prelight_clip.y = offset;
+      else
+	prelight_clip.y = rect.y + rect.height - amount;
+      prelight_clip.height = amount;
       break;
     }
-  
-  gtk_paint_layout (widget->style,
-		    progress->offscreen_pixmap,
-		    GTK_STATE_PRELIGHT,
-		    FALSE,
-		    &prelight_clip,
-		    widget,
-		    "progressbar",
-		    x, y,
-		    layout);
-  
+
   gtk_paint_layout (widget->style,
 		    progress->offscreen_pixmap,
 		    GTK_STATE_NORMAL,
 		    FALSE,
 		    &normal_clip,
+		    widget,
+		    "progressbar",
+		    x, y,
+		    layout);
+
+  gtk_paint_layout (widget->style,
+		    progress->offscreen_pixmap,
+		    GTK_STATE_PRELIGHT,
+		    FALSE,
+		    &prelight_clip,
 		    widget,
 		    "progressbar",
 		    x, y,
@@ -864,6 +891,15 @@ gtk_progress_bar_paint (GtkProgress *progress)
       if (progress->activity_mode)
 	{
 	  gtk_progress_bar_paint_activity (pbar, orientation);
+
+	  if (GTK_PROGRESS (pbar)->show_text)
+	    {
+	      gint offset;
+	      gint amount;
+
+	      gtk_progress_bar_get_activity (pbar, orientation, &offset, &amount);
+	      gtk_progress_bar_paint_text (pbar, offset, amount, orientation);
+	    }
 	}
       else
 	{
@@ -884,7 +920,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	      gtk_progress_bar_paint_continuous (pbar, amount, orientation);
 
 	      if (GTK_PROGRESS (pbar)->show_text)
-		gtk_progress_bar_paint_text (pbar, amount, orientation);
+		gtk_progress_bar_paint_text (pbar, -1, amount, orientation);
 	    }
 	  else
 	    gtk_progress_bar_paint_discrete (pbar, orientation);
