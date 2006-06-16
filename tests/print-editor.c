@@ -531,7 +531,7 @@ preview_destroy (GtkWindow *window,
 }
 
 static gboolean 
-do_preview (GtkPrintOperation        *op,
+preview_cb (GtkPrintOperation        *op,
 	    GtkPrintOperationPreview *preview,
 	    GtkPrintContext          *context,
 	    GtkWindow                *parent,
@@ -650,7 +650,7 @@ print_done (GtkPrintOperation *op,
 }
 
 static void
-do_print (GtkAction *action)
+do_print_or_preview (GtkAction *action, GtkPrintOperationAction print_action)
 {
   GtkPrintOperation *print;
   PrintData *print_data;
@@ -674,7 +674,7 @@ do_print (GtkAction *action)
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), print_data);
   g_signal_connect (print, "create_custom_widget", G_CALLBACK (create_custom_widget), print_data);
   g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), print_data);
-  g_signal_connect (print, "preview", G_CALLBACK (do_preview), print_data);
+  g_signal_connect (print, "preview", G_CALLBACK (preview_cb), print_data);
 
   g_signal_connect (print, "done", G_CALLBACK (print_done), print_data);
 
@@ -683,9 +683,21 @@ do_print (GtkAction *action)
 #if 0
   gtk_print_operation_set_allow_async (print, TRUE);
 #endif
-  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW (main_window), NULL);
+  gtk_print_operation_run (print, print_action, GTK_WINDOW (main_window), NULL);
 
   g_object_unref (print);
+}
+
+static void
+do_print (GtkAction *action)
+{
+  do_print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
+}
+
+static void
+do_preview (GtkAction *action)
+{
+  do_print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PREVIEW);
 }
 
 static void
@@ -741,10 +753,14 @@ static GtkActionEntry entries[] = {
     "Page _Setup", NULL,                       /* label, accelerator */     
     "Set up the page",                         /* tooltip */
     G_CALLBACK (do_page_setup) },
+  { "Preview", NULL,                           /* name, stock id */
+    "Print Preview", NULL,                     /* label, accelerator */     
+    "Preview the printed document",            /* tooltip */
+    G_CALLBACK (do_preview) },
   { "Print", GTK_STOCK_PRINT,                  /* name, stock id */
      NULL, NULL,                               /* label, accelerator */     
     "Print the document",                      /* tooltip */
-    G_CALLBACK (do_print) },
+    G_CALLBACK (do_print) }
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -757,6 +773,7 @@ static const gchar *ui_info =
 "      <menuitem action='Save'/>"
 "      <menuitem action='SaveAs'/>"
 "      <menuitem action='PageSetup'/>"
+"      <menuitem action='Preview'/>"
 "      <menuitem action='Print'/>"
 "      <separator/>"
 "      <menuitem action='Quit'/>"
