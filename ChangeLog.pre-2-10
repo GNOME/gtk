@@ -1,6 +1,11 @@
+2006-06-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Include
+	gtkprinter-private.h  (#345038, Christian Persch)
+ 
 2006-06-15  Matthias Clasen  <mclasen@redhat.com>
 
-	* modules/printbackends/pdf/gtkprintbackendcups.c: Use the
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: Use the
 	stock floppy icon.
 
 	* gtk/gtkprintoperation-unix.c: Set the GENERATE_PDF capability

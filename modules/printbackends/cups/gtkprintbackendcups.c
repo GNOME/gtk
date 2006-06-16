@@ -41,6 +41,7 @@
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprintbackend.h>
 #include <gtk/gtkprinter.h>
+#include <gtk/gtkprinter-private.h>
 
 #include "gtkprintbackendcups.h"
 #include "gtkprintercups.h"
@@ -151,6 +152,7 @@ static void                 gtk_print_backend_cups_print_stream    (GtkPrintBack
 								    gpointer                           user_data,
 								    GDestroyNotify                     dnotify);
 static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter                        *printer,
+								    GtkPrintSettings                  *settings,
 								    gdouble                            width,
 								    gdouble                            height,
 								    gint                               cache_fd);
@@ -266,6 +268,7 @@ _cairo_write_to_cups (void *cache_fd_as_pointer,
 
 static cairo_surface_t *
 cups_printer_create_cairo_surface (GtkPrinter *printer,
+				   GtkPrintSettings *settings,
 				   gdouble width, 
 				   gdouble height,
 				   gint cache_fd)
@@ -277,7 +280,7 @@ cups_printer_create_cairo_surface (GtkPrinter *printer,
   surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, GINT_TO_POINTER (cache_fd), width, height);
 
   /* TODO: DPI from settings object? */
-  cairo_ps_surface_set_dpi (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface, 300, 300);
 
   return surface;
 }
@@ -1180,7 +1183,7 @@ cups_request_ppd (GtkPrinter      *printer)
   cups_printer = GTK_PRINTER_CUPS (printer);
 
   error = NULL;
-
+  /* FIXME this can return NULL! */
   http = httpConnectEncrypt(cups_printer->hostname, 
                             cups_printer->port,
                             cupsEncryption());
@@ -1219,7 +1222,7 @@ cups_request_ppd (GtkPrinter      *printer)
   cups_printer->reading_ppd = TRUE;
 
   print_backend = gtk_printer_get_backend (printer);
- 
+
   cups_request_execute (GTK_PRINT_BACKEND_CUPS (print_backend),
                         request,
                         (GtkPrintCupsResponseCallbackFunc) cups_request_ppd_cb,
