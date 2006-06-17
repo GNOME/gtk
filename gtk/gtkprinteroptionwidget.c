@@ -32,6 +32,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
+#include "gtkradiobutton.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktogglebutton.h"
@@ -60,6 +61,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *filechooser;
+  GtkWidget *box;
 };
 
 enum {
@@ -472,12 +474,68 @@ entry_changed_cb (GtkWidget *entry,
 
 
 static void
+radio_changed_cb (GtkWidget              *button,
+		  GtkPrinterOptionWidget *widget)
+{
+  GtkPrinterOptionWidgetPrivate *priv = widget->priv;
+  char *value;
+  
+  g_signal_handler_block (priv->source, priv->source_changed_handler);
+  value = g_object_get_data (G_OBJECT (button), "value");
+  if (value)
+    gtk_printer_option_set (priv->source, value);
+  g_free (value);
+  g_signal_handler_unblock (priv->source, priv->source_changed_handler);
+  emit_changed (widget);
+}
+
+static void
+alternative_set (GtkWidget   *box,
+		 const gchar *value)
+{
+  GList *children, *l;
+
+  children = gtk_container_get_children (GTK_CONTAINER (box));
+
+  for (l = children; l != NULL; l = l->next)
+    {
+      char *v = g_object_get_data (G_OBJECT (l->data), "value");
+      
+      if (strcmp (value, v) == 0)
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (l->data), TRUE);
+    }
+
+  g_list_free (children);
+}
+
+static GSList *
+alternative_append (GtkWidget   *box,
+		    const gchar *label,
+                    const gchar *value,
+		    GtkPrinterOptionWidget *widget,
+		    GSList      *group)
+{
+  GtkWidget *button;
+
+  button = gtk_radio_button_new_with_label (group, label);
+  gtk_widget_show (button);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  g_object_set_data (G_OBJECT (button), "value", (gpointer)value);
+  g_signal_connect (button, "toggled", 
+		    G_CALLBACK (radio_changed_cb), widget);
+
+  return gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+}
+
+static void
 construct_widgets (GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   GtkPrinterOption *source;
   char *text;
   int i;
+  GSList *group;
 
   source = priv->source;
   
@@ -500,6 +558,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_widget_show (priv->check);
       gtk_box_pack_start (GTK_BOX (widget), priv->check, TRUE, TRUE, 0);
       break;
+
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
       priv->combo = combo_box_new ();
       for (i = 0; i < source->num_choices; i++)
@@ -515,6 +574,28 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       g_free (text);
       gtk_widget_show (priv->label);
       break;
+
+    case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
+      group = NULL;
+      priv->box = gtk_hbox_new (FALSE, 12);
+      gtk_widget_show (priv->box);
+      gtk_box_pack_start (GTK_BOX (widget), priv->box, TRUE, TRUE, 0);
+      for (i = 0; i < source->num_choices; i++)
+	group = alternative_append (priv->box,
+				    source->choices_display[i],
+				    source->choices[i],
+				    widget,
+				    group);
+
+      if (source->display_text)
+	{
+	  text = g_strdup_printf ("%s:", source->display_text);
+	  priv->label = gtk_label_new_with_mnemonic (text);
+	  g_free (text);
+	  gtk_widget_show (priv->label);
+	}
+      break;
+
     case GTK_PRINTER_OPTION_TYPE_STRING:
       priv->entry = gtk_entry_new ();
       gtk_widget_show (priv->entry);
@@ -605,6 +686,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
       combo_box_set (priv->combo, source->value);
+      break;
+    case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
+      alternative_set (priv->box, source->value);
       break;
     case GTK_PRINTER_OPTION_TYPE_STRING:
       gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);

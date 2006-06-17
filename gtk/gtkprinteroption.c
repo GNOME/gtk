@@ -113,7 +113,8 @@ gtk_printer_option_set (GtkPrinterOption *option,
   if (strcmp (option->value, value) == 0)
     return;
 
-  if (option->type == GTK_PRINTER_OPTION_TYPE_PICKONE &&
+  if ((option->type == GTK_PRINTER_OPTION_TYPE_PICKONE ||
+       option->type == GTK_PRINTER_OPTION_TYPE_ALTERNATIVE) &&
       value != NULL)
     {
       int i;

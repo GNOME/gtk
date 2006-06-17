@@ -1,3 +1,13 @@
+2006-06-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprinteroption.h: 
+	* gtk/gtkprinteroption.c: Add GTK_PRINTER_OPTION_TYPE_ALTERNATIVE
+	which is semantically the same as PICKONE, but is intended to 
+	show all options all the time.
+	
+	* gtk/gtkprinteroptionwidget.c: Implement ALTERNATIVE as radio
+	group.
+
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c:
