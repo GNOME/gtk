@@ -490,22 +490,22 @@ radio_changed_cb (GtkWidget              *button,
 }
 
 static void
+select_maybe (GtkWidget   *widget, 
+	      const gchar *value)
+{
+  char *v = g_object_get_data (G_OBJECT (widget), "value");
+      
+  if (strcmp (value, v) == 0)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+}
+
+static void
 alternative_set (GtkWidget   *box,
 		 const gchar *value)
 {
-  GList *children, *l;
-
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-
-  for (l = children; l != NULL; l = l->next)
-    {
-      char *v = g_object_get_data (G_OBJECT (l->data), "value");
-      
-      if (strcmp (value, v) == 0)
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (l->data), TRUE);
-    }
-
-  g_list_free (children);
+  gtk_container_foreach (GTK_CONTAINER (box), 
+			 (GtkCallback) select_maybe,
+			 value);
 }
 
 static GSList *

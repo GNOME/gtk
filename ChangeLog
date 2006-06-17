@@ -1,5 +1,10 @@
 2006-06-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Clean up the handling of 
+	printer-specific options. There is just one extension point on the
+	main tab now, and all options in the GtkPrintDialogExtension
+	group are put there. 
+
 	* gtk/gtkprinteroption.h: 
 	* gtk/gtkprinteroption.c: Add GTK_PRINTER_OPTION_TYPE_ALTERNATIVE
 	which is semantically the same as PICKONE, but is intended to 

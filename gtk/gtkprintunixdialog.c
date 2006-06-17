@@ -106,8 +106,6 @@ enum {
   PRINTER_LIST_N_COLS
 };
 
-#define _EXTENSION_POINT_MAIN_PAGE_CUSTOM_INPUT "gtk-main-page-custom-input"
-
 struct GtkPrintUnixDialogPrivate
 {
   GtkWidget *notebook;
@@ -162,7 +160,7 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *advanced_vbox;
   GtkWidget *advanced_page;
 
-  GHashTable *extension_points;  
+  GtkWidget *extension_point;
 
   /* These are set initially on selected printer (either default printer, 
    * printer taken from set settings, or user-selected), but when any setting 
@@ -268,9 +266,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->print_backends = NULL;
   priv->current_page = -1;
 
-  priv->extension_points = g_hash_table_new (g_str_hash,
-                                             g_str_equal);
-
   priv->page_setup = gtk_page_setup_new ();
 
   g_signal_connect (dialog, 
@@ -338,13 +333,7 @@ gtk_print_unix_dialog_finalize (GObject *object)
       priv->options = NULL;
     }
  
-  if (priv->extension_points)
-    {
-      g_hash_table_unref (priv->extension_points);
-      priv->extension_points = NULL;
-    }
- 
-  if (priv->page_setup)
+ if (priv->page_setup)
     {
       g_object_unref (priv->page_setup);
       priv->page_setup = NULL;
@@ -730,40 +719,32 @@ setup_option (GtkPrintUnixDialog     *dialog,
 
 static void
 add_option_to_extension_point (GtkPrinterOption *option,
-		               gpointer          user_data)
+		               gpointer          data)
 {
-  GHashTable *extension_points = (GHashTable *) user_data;
-  GtkWidget *widget, *extension_hbox;
+  GtkWidget *extension_point = data;
+  GtkWidget *widget;
 
-  extension_hbox = g_hash_table_lookup (extension_points, option->name);
-
-  if (extension_hbox)
-    {
-
-      widget = gtk_printer_option_widget_new (option);
-      gtk_widget_show (widget);
+  widget = gtk_printer_option_widget_new (option);
+  gtk_widget_show (widget);
    
-      if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
-        {
-          GtkWidget *label, *hbox;
-
-          label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
-          gtk_widget_show (label);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
-
-          hbox = gtk_hbox_new (FALSE, 12);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-          gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-          gtk_widget_show (hbox);
-
-          gtk_box_pack_start (GTK_BOX (extension_hbox), hbox, FALSE, FALSE, 0);
-        }
-      else
-        gtk_box_pack_start (GTK_BOX (extension_hbox), widget, FALSE, FALSE, 0);
+  if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
+    {
+      GtkWidget *label, *hbox;
+      
+      label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
+      gtk_widget_show (label);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
+      
+      hbox = gtk_hbox_new (FALSE, 12);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+      gtk_widget_show (hbox);
+      
+      gtk_box_pack_start (GTK_BOX (extension_point), hbox, FALSE, FALSE, 0);
     }
   else
-    g_warning ("Extension point %s requested but not found.", option->name);
+    gtk_box_pack_start (GTK_BOX (extension_point), widget, FALSE, FALSE, 0);
 }
 
 static void
@@ -964,6 +945,11 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 		    priv->color_table,
 		    priv->color_page);
 
+  gtk_printer_option_set_foreach_in_group (priv->options,
+					   "GtkPrintDialogExtension",
+					   add_option_to_extension_point,
+					   priv->extension_point);
+
   /* Put the rest of the groups in the advanced page */
   groups = gtk_printer_option_set_get_groups (priv->options);
 
@@ -977,17 +963,9 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
       
       if (strcmp (group, "ImageQualityPage") == 0 ||
 	  strcmp (group, "ColorPage") == 0 ||
-	  strcmp (group, "FinishingPage") == 0)
+	  strcmp (group, "FinishingPage") == 0 ||
+	  strcmp (group, "GtkPrintDialogExtension") == 0)
 	continue;
-
-      if (strcmp (group, "GtkPrintDialogExtention") == 0)
-        {
-          gtk_printer_option_set_foreach_in_group (priv->options,
-					           group,
-					           add_option_to_extension_point,
-					           priv->extension_points);
-          continue;
-        }
 
       table = gtk_table_new (1, 2, FALSE);
       gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -1143,9 +1121,7 @@ remove_custom_widget (GtkWidget    *widget,
 }
 
 static void
-extension_point_clear_children (const gchar  *key,
-                                GtkContainer *container,
-                                gpointer      data)
+extension_point_clear_children (GtkContainer *container)
 {
   gtk_container_foreach (container,
                          (GtkCallback)remove_custom_widget,
@@ -1172,9 +1148,7 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
   gtk_container_foreach (GTK_CONTAINER (priv->advanced_vbox),
 			 (GtkCallback)gtk_widget_destroy,
 			 NULL);
-  g_hash_table_foreach (priv->extension_points, 
-                        (GHFunc) extension_point_clear_children, 
-                        NULL);
+  extension_point_clear_children (priv->extension_point);
 }
 
 static void
@@ -1481,9 +1455,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   custom_input = gtk_hbox_new (FALSE, 18);
   gtk_widget_show (custom_input);
   gtk_box_pack_start (GTK_BOX (vbox), custom_input, FALSE, FALSE, 0);
-  g_hash_table_insert (priv->extension_points, 
-                       _EXTENSION_POINT_MAIN_PAGE_CUSTOM_INPUT,
-                       custom_input);
+  priv->extension_point = custom_input;
 
   hbox = gtk_hbox_new (FALSE, 18);
   gtk_widget_show (hbox);
