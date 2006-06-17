@@ -1,5 +1,9 @@
 2006-06-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c: Fix a typo:
+	s/Extention/Extension/. 
+	
 	* gtk/gtkprintunixdialog.c: Clean up the handling of 
 	printer-specific options. There is just one extension point on the
 	main tab now, and all options in the GtkPrintDialogExtension
