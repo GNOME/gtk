@@ -648,7 +648,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
   response = gtk_cups_result_get_response (result);
 
   /* TODO: determine printer type and use correct icon */
-  gtk_printer_set_icon_name (printer, "printer");
+  gtk_printer_set_icon_name (printer, "gtk-print");
  
   state_msg = "";
   loc = "";

@@ -34,10 +34,9 @@
 #include <glib/gi18n-lib.h>
 
 #include "gtkprintoperation.h"
-
 #include "gtkprintbackendlpr.h"
-
 #include "gtkprinter.h"
+#include "gtkprinter-private.h"
 
 typedef struct _GtkPrintBackendLprClass GtkPrintBackendLprClass;
 
@@ -384,7 +383,7 @@ gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 			     GTK_PRINT_BACKEND (backend),
 			     TRUE); 
   gtk_printer_set_has_details (printer, TRUE);
-  gtk_printer_set_icon_name (printer, "printer");
+  gtk_printer_set_icon_name (printer, "gtk-print");
   gtk_printer_set_is_active (printer, TRUE);
   gtk_printer_set_is_default (printer, TRUE);
 

@@ -1,5 +1,9 @@
 2006-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c: Use a stock icon
+	for printers.
+
 	* gtk/gtkprintunixdialog.c (add_option_to_table): Don't grow
 	additional columns.
 
