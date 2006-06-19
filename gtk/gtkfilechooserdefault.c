@@ -6762,6 +6762,7 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
       gchar *uri;
 
       uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      /* translators, "Shortcut" means "Bookmark" here */
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
@@ -6872,6 +6873,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
  out:
 
   uri = gtk_file_system_path_to_uri (impl->file_system, path);
+  /* translators, "Shortcut" means "Bookmark" here */
   g_set_error (error,
 	       GTK_FILE_CHOOSER_ERROR,
 	       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,

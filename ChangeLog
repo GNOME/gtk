@@ -1,7 +1,8 @@
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_add_shortcut_folder): 
-	Avoid a near-duplicate string.  (#345320, Hendrik Richter)
+	* gtk/gtkfilechooserdefault.c: 
+	Avoid a near-duplicate string and add some
+	translator comments.  (#345320, #345321, Hendrik Richter)
 
 2006-06-19  Federico Mena Quintero  <federico@novell.com>
 
