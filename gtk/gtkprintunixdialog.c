@@ -573,10 +573,17 @@ is_printer_active (GtkTreeModel       *model,
 
   result = gtk_printer_is_active (printer);
   
-  if (result)
+  if (result && 
+      priv->manual_capabilities & (GTK_PRINT_CAPABILITY_GENERATE_PDF |
+				   GTK_PRINT_CAPABILITY_GENERATE_PS))
     {
-      if ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) == 0)
-	result = gtk_printer_accepts_ps (printer);
+       /* Check that the printer can handle at least one of the data 
+	* formats that the application supports.
+        */
+       result = ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) &&
+		 gtk_printer_accepts_pdf (printer)) ||
+		((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PS) &&
+		 gtk_printer_accepts_ps (printer));
     }
   
   g_object_unref (printer);
@@ -1148,7 +1155,7 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
   gtk_container_foreach (GTK_CONTAINER (priv->advanced_vbox),
 			 (GtkCallback)gtk_widget_destroy,
 			 NULL);
-  extension_point_clear_children (priv->extension_point);
+  extension_point_clear_children (GTK_CONTAINER (priv->extension_point));
 }
 
 static void
@@ -1244,7 +1251,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
     {
       priv->printer_capabilities = _gtk_printer_get_capabilities (printer);
       priv->options = _gtk_printer_get_options (printer, priv->initial_settings,
-							priv->page_setup);
+						priv->page_setup);
   
       priv->options_changed_handler = 
         g_signal_connect_swapped (priv->options, "changed", G_CALLBACK (options_changed_cb), dialog);
