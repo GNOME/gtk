@@ -83,6 +83,7 @@ enum {
   PROP_JUSTIFY,
   PROP_PATTERN,
   PROP_WRAP,
+  PROP_WRAP_MODE,
   PROP_SELECTABLE,
   PROP_MNEMONIC_KEYVAL,
   PROP_MNEMONIC_WIDGET,
@@ -340,6 +341,23 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         P_("If set, wrap lines if the text becomes too wide"),
                                                         FALSE,
                                                         GTK_PARAM_READWRITE));
+  /**
+   * GtkLabel:wrap-mode:
+   *
+   * If line wrapping is on (see the wrap property) this controls how
+   * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
+   * wrap on word boundaries.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_WRAP_MODE,
+                                   g_param_spec_enum ("wrap-mode",
+						      P_("Line wrap mode"),
+						      P_("If wrap is set, controls how linewrapping is done"),
+						      PANGO_TYPE_WRAP_MODE,
+						      PANGO_WRAP_WORD,
+						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTABLE,
                                    g_param_spec_boolean ("selectable",
@@ -641,6 +659,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_WRAP:
       gtk_label_set_line_wrap (label, g_value_get_boolean (value));
       break;	  
+    case PROP_WRAP_MODE:
+      gtk_label_set_line_wrap_mode (label, g_value_get_enum (value));
+      break;	  
     case PROP_SELECTABLE:
       gtk_label_set_selectable (label, g_value_get_boolean (value));
       break;	  
@@ -697,6 +718,9 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_WRAP:
       g_value_set_boolean (value, label->wrap);
+      break;
+    case PROP_WRAP_MODE:
+      g_value_set_enum (value, label->wrap_mode);
       break;
     case PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_label_get_selectable (label));
@@ -763,6 +787,7 @@ gtk_label_init (GtkLabel *label)
 
   label->jtype = GTK_JUSTIFY_LEFT;
   label->wrap = FALSE;
+  label->wrap_mode = PANGO_WRAP_WORD;
   label->ellipsize = PANGO_ELLIPSIZE_NONE;
 
   label->use_underline = FALSE;
@@ -1693,6 +1718,51 @@ gtk_label_get_line_wrap (GtkLabel *label)
   return label->wrap;
 }
 
+/**
+ * gtk_label_set_line_wrap_mode:
+ * @label: a #GtkLabel
+ * @wrap: the line wrapping mode
+ *
+ * If line wrapping is on (see gtk_label_set_line_wrap()) this controls how
+ * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
+ * wrap on word boundaries.
+ *
+ * Since: 2.10
+ **/
+void
+gtk_label_set_line_wrap_mode (GtkLabel *label,
+			      PangoWrapMode wrap_mode)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+  
+  if (label->wrap_mode != wrap_mode)
+    {
+      label->wrap_mode = wrap_mode;
+      g_object_notify (G_OBJECT (label), "wrap-mode");
+      
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+    }
+}
+
+/**
+ * gtk_label_get_line_wrap_mode:
+ * @label: a #GtkLabel
+ *
+ * Returns line wrap mode used by the label. See gtk_label_set_line_wrap_mode ().
+ *
+ * Return value: %TRUE if the lines of the label are automatically wrapped.
+ *
+ * Since: 2.10
+ */
+PangoWrapMode
+gtk_label_get_line_wrap_mode (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+
+  return label->wrap_mode;
+}
+
+
 void
 gtk_label_get (GtkLabel *label,
 	       gchar   **str)
@@ -1875,6 +1945,8 @@ gtk_label_ensure_layout (GtkLabel *label)
 	  GtkWidgetAuxInfo *aux_info;
 	  gint longest_paragraph;
 	  gint width, height;
+
+	  pango_layout_set_wrap (label->layout, label->wrap_mode);
 	  
 	  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 	  if (aux_info && aux_info->width > 0)

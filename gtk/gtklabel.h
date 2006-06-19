@@ -61,6 +61,7 @@ struct _GtkLabel
   guint   single_line_mode : 1;
   guint   have_transform   : 1;
   guint   in_click         : 1;
+  guint   wrap_mode        : 3;
 
   guint   mnemonic_keyval;
   
@@ -143,6 +144,9 @@ void     gtk_label_set_pattern                    (GtkLabel         *label,
 void     gtk_label_set_line_wrap                  (GtkLabel         *label,
 						   gboolean          wrap);
 gboolean gtk_label_get_line_wrap                  (GtkLabel         *label);
+void     gtk_label_set_line_wrap_mode             (GtkLabel         *label,
+						   PangoWrapMode     wrap_mode);
+PangoWrapMode gtk_label_get_line_wrap_mode        (GtkLabel         *label);
 void     gtk_label_set_selectable                 (GtkLabel         *label,
 						   gboolean          setting);
 gboolean gtk_label_get_selectable                 (GtkLabel         *label);

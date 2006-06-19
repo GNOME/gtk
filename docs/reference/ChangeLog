@@ -1,3 +1,8 @@
+2006-06-19  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk-sections.txt:
+	Add gtk_label_set_line_wrap_mode and gtk_label_get_line_wrap_mode
+
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.9.3 ===

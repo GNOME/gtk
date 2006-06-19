@@ -1,3 +1,10 @@
+2006-06-19  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtklabel.[ch]:
+	Add gtk_label_set_line_wrap_mode, gtk_label_get_line_wrap_mode, and
+	a wrap-mode property that lets you set the PangoWrapMode.
+
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprinter-private.h: 
