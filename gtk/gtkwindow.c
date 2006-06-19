@@ -3668,7 +3668,8 @@ gtk_window_get_size (GtkWindow *window,
  * reference point. So, to place a window in the bottom right corner
  * you would first set gravity to south east, then write:
  * <literal>gtk_window_move (window, gdk_screen_width () - window_width,
- * gdk_screen_height () - window_height)</literal>.
+ * gdk_screen_height () - window_height)</literal> (note that this
+ * example does not take multi-head scenarios into account).
  *
  * The Extended Window Manager Hints specification at <ulink 
  * url="http://www.freedesktop.org/Standards/wm-spec">
@@ -3676,8 +3677,7 @@ gtk_window_get_size (GtkWindow *window,
  * nice table of gravities in the "implementation notes" section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
- * 
- **/
+ */
 void
 gtk_window_move (GtkWindow *window,
                  gint       x,

@@ -1,3 +1,8 @@
+2006-06-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move): Small doc addition. 
+	(#345275, Behdad Esfahbod)
+
 2006-06-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/pdf/gtkprintbackendpdf.c:
