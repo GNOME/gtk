@@ -1486,7 +1486,7 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
 			  &iter, completion->priv->text_column, &text,
 			  -1);
 
-      if (g_str_has_prefix (text, key))
+      if (text && g_str_has_prefix (text, key))
 	{
 	  if (!prefix)
 	    prefix = g_strdup (text);
