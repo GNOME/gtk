@@ -1,3 +1,8 @@
+2006-06-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_add_shortcut_folder): 
+	Avoid a near-duplicate string.  (#345320, Hendrik Richter)
+
 2006-06-19  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder)
@@ -15,8 +20,15 @@
 
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add new functions
+
+	* gtk/gtkprinter.h: 
+	* gtk/gtkprinter.c (gtk_enumerate_printers): New function
+	to list all printers (#344074, Felipe Heidrich)
+
 	* gtk/gtkprinter-private.h: 
-	* gtk/gtkprinter.c (_gtk_printer_get_options): 
+	* gtk/gtkprinter.c (_gtk_printer_get_options) 
+
 	* gtk/gtkprintbackend.h: Add a capabilities argument to the 
 	printer_get_options method and to the _gtk_printer_get_options
 	function
