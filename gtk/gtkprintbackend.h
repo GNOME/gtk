@@ -87,7 +87,8 @@ struct _GtkPrintBackendClass
 							      gint                 cache_fd);
   GtkPrinterOptionSet * (*printer_get_options)               (GtkPrinter          *printer,
 							      GtkPrintSettings    *settings,
-							      GtkPageSetup        *page_setup);
+							      GtkPageSetup        *page_setup,
+							      GtkPrintCapabilities capabilities);
   gboolean              (*printer_mark_conflicts)            (GtkPrinter          *printer,
 							      GtkPrinterOptionSet *options);
   void                  (*printer_get_settings_from_options) (GtkPrinter          *printer,

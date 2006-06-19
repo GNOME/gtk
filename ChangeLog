@@ -1,5 +1,20 @@
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter-private.h: 
+	* gtk/gtkprinter.c (_gtk_printer_get_options): 
+	* gtk/gtkprintbackend.h: Add a capabilities argument to the 
+	printer_get_options method and to the _gtk_printer_get_options
+	function
+	
+	* modules/printbackends/lpr/gtkprintbackendlpr.c 
+	(lpr_printer_get_options): 
+	* modules/printbackends/pdf/gtkprintbackendpdf.c 
+	(pdf_printer_get_options): 
+	* modules/printbackends/cups/gtkprintbackendcups.c 
+	(cups_printer_get_options): 
+	* gtk/gtkprintunixdialog.c (selected_printer_changed): Adjust
+	callers and implementations.
+
 	* gtk/gtkprintjob.h: Add a GENERATE_PS capability. 
 	* gtk/gtkprintunixdialog.c (is_printer_active): And use it here.
 

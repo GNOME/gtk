@@ -713,12 +713,13 @@ _gtk_printer_request_details (GtkPrinter *printer)
 }
 
 GtkPrinterOptionSet *
-_gtk_printer_get_options (GtkPrinter       *printer,
-			  GtkPrintSettings *settings,
-			  GtkPageSetup     *page_setup)
+_gtk_printer_get_options (GtkPrinter           *printer,
+			  GtkPrintSettings     *settings,
+			  GtkPageSetup         *page_setup,
+			  GtkPrintCapabilities  capabilities)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
-  return backend_class->printer_get_options (printer, settings, page_setup);
+  return backend_class->printer_get_options (printer, settings, page_setup, capabilities);
 }
 
 gboolean

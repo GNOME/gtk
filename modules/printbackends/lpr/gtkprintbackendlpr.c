@@ -67,7 +67,8 @@ static void                 lpr_printer_get_settings_from_options (GtkPrinter   
 								   GtkPrintSettings        *settings);
 static GtkPrinterOptionSet *lpr_printer_get_options               (GtkPrinter              *printer,
 								   GtkPrintSettings        *settings,
-								   GtkPageSetup            *page_setup);
+								   GtkPageSetup            *page_setup,
+								   GtkPrintCapabilities     capabilities);
 static void                 lpr_printer_prepare_for_print         (GtkPrinter              *printer,
 								   GtkPrintJob             *print_job,
 								   GtkPrintSettings        *settings,
@@ -392,9 +393,10 @@ gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 }
 
 static GtkPrinterOptionSet *
-lpr_printer_get_options (GtkPrinter       *printer,
-			 GtkPrintSettings *settings,
-			 GtkPageSetup     *page_setup)
+lpr_printer_get_options (GtkPrinter           *printer,
+			 GtkPrintSettings     *settings,
+			 GtkPageSetup         *page_setup,
+			 GtkPrintCapabilities  capabilities)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;

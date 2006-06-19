@@ -39,6 +39,7 @@
 #include "gtkprintbackendpdf.h"
 
 #include "gtkprinter.h"
+#include "gtkprinter-private.h"
 
 typedef struct _GtkPrintBackendPdfClass GtkPrintBackendPdfClass;
 
@@ -69,7 +70,8 @@ static void                 pdf_printer_get_settings_from_options (GtkPrinter   
 								   GtkPrintSettings        *settings);
 static GtkPrinterOptionSet *pdf_printer_get_options               (GtkPrinter              *printer,
 								   GtkPrintSettings        *settings,
-								   GtkPageSetup            *page_setup);
+								   GtkPageSetup            *page_setup,
+								   GtkPrintCapabilities     capabilities);
 static void                 pdf_printer_prepare_for_print         (GtkPrinter              *printer,
 								   GtkPrintJob             *print_job,
 								   GtkPrintSettings        *settings,
@@ -367,9 +369,10 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
 }
 
 static GtkPrinterOptionSet *
-pdf_printer_get_options (GtkPrinter       *printer,
-			 GtkPrintSettings *settings,
-			 GtkPageSetup     *page_setup)
+pdf_printer_get_options (GtkPrinter           *printer,
+			 GtkPrintSettings     *settings,
+			 GtkPageSetup         *page_setup,
+			 GtkPrintCapabilities  capabilities)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
