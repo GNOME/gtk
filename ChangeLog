@@ -1,5 +1,16 @@
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
+	Make transparent tray icons work.  (#320034, based on a 
+	patch by Dan Winship)
+	
+	* gtk/gtktrayicon-x11.c (gtk_tray_icon_init): Make trayicons
+	app-paintable and non-double buffered. 
+
+	* gtk/gtkrc.c (_gtk_rc_init): Give tray icons a parent-relative
+	background in the default style.
+
+2006-06-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/updateiconcache.c: Marks strings for translation.  (#314278,
 	Claudio Saavedra)
 
