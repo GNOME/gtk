@@ -6184,6 +6184,8 @@ gtk_printer_is_active
 gtk_printer_is_virtual
 gtk_printer_is_default
 gtk_printer_compare
+GtkPrinterFunc
+gtk_enumerate_printers
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINTER

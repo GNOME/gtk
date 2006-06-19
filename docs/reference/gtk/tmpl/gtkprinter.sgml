@@ -205,3 +205,26 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### USER_FUNCTION GtkPrinterFunc ##### -->
+<para>
+The type of function passed to gtk_enumerate_printers().
+Note that you need to ref @printer, if you want to keep
+a reference to it after the function has returned.
+</para>
+
+@printer: a #GtkPrinter 
+@data: user data passed to gtk_enumerate_printers() 
+@Returns: %TRUE to stop the enumeration, %FALSE to continue 
+
+
+<!-- ##### FUNCTION gtk_enumerate_printers ##### -->
+<para>
+
+</para>
+
+@func: 
+@data: 
+@destroy: 
+@wait: 
+
+
