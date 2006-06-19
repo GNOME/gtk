@@ -1,3 +1,11 @@
+2006-06-19  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder)
+	(gtk_file_chooser_get_current_folder_uri): Clarify the use of
+	these functions, to avoid the case where a chooser is in
+	SELECT_FOLDER mode and people mistakenly use _get_current_folder()
+	to get the selection:  they should use _get_filename() instead.
+
 2006-06-19  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtk.symbols:
