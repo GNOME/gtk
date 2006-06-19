@@ -1250,8 +1250,10 @@ selected_printer_changed (GtkTreeSelection   *selection,
   if (printer != NULL)
     {
       priv->printer_capabilities = _gtk_printer_get_capabilities (printer);
-      priv->options = _gtk_printer_get_options (printer, priv->initial_settings,
-						priv->page_setup);
+      priv->options = _gtk_printer_get_options (printer, 
+						priv->initial_settings,
+						priv->page_setup,
+						priv->manual_capabilities);
   
       priv->options_changed_handler = 
         g_signal_connect_swapped (priv->options, "changed", G_CALLBACK (options_changed_cb), dialog);
