@@ -248,3 +248,4 @@ gtk/gtkrecentchooser.c
 gtk/gtktextbufferrichtext.c
 gtk/gtktextbufferserialize.c
 gtk/paper_names.c
+gtk/updateiconcache.c

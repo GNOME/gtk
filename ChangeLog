@@ -1,5 +1,8 @@
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c: Marks strings for translation.  (#314278,
+	Claudio Saavedra)
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_compute_prefix): Don't
 	call g_str_has_prefix on a NULL strung.  (#344897, Tommi Komulainen)
 

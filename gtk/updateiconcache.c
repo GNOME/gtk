@@ -37,6 +37,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
+#include <glib/gi18n.h>
 
 static gboolean force_update = FALSE;
 static gboolean ignore_theme_index = FALSE;
@@ -409,7 +410,7 @@ maybe_cache_image_data (Image       *image,
 	  idata2 = g_hash_table_lookup (image_data_hash, path2);
 
 	  if (idata && idata2 && idata != idata2)
-	    g_error ("different idatas found for symlinked '%s' and '%s'\n",
+	    g_error (_("different idatas found for symlinked '%s' and '%s'\n"),
 		     path, path2);
 
 	  if (idata && !idata2)
@@ -1112,19 +1113,19 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
    * back and change it later */
   if (!write_header (cache, 0))
     {
-      g_printerr ("Failed to write header\n");
+      g_printerr (_("Failed to write header\n"));
       return FALSE;
     }
 
   if (!write_hash_table (cache, &context, &new_offset))
     {
-      g_printerr ("Failed to write hash table\n");
+      g_printerr (_("Failed to write hash table\n"));
       return FALSE;
     }
 
   if (!write_dir_index (cache, new_offset, directories))
     {
-      g_printerr ("Failed to write directory index\n");
+      g_printerr (_("Failed to write directory index\n"));
       return FALSE;
     }
   
@@ -1132,7 +1133,7 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
 
   if (!write_header (cache, new_offset))
     {
-      g_printerr ("Failed to rewrite header\n");
+      g_printerr (_("Failed to rewrite header\n"));
       return FALSE;
     }
     
@@ -1158,7 +1159,7 @@ build_cache (const gchar *path)
   
   if (!cache)
     {
-      g_printerr ("Failed to write cache file: %s\n", g_strerror (errno));
+      g_printerr (_("Failed to write cache file: %s\n"), g_strerror (errno));
       exit (1);
     }
 
@@ -1198,7 +1199,7 @@ build_cache (const gchar *path)
       g_unlink (bak_cache_path);
       if (g_rename (cache_path, bak_cache_path) == -1)
 	{
-	  g_printerr ("Could not rename %s to %s: %s, removing %s then.\n",
+	  g_printerr (_("Could not rename %s to %s: %s, removing %s then.\n"),
 		      cache_path, bak_cache_path,
 		      g_strerror (errno),
 		      cache_path);
@@ -1210,14 +1211,14 @@ build_cache (const gchar *path)
 
   if (g_rename (tmp_cache_path, cache_path) == -1)
     {
-      g_printerr ("Could not rename %s to %s: %s\n",
+      g_printerr (_("Could not rename %s to %s: %s\n"),
 		  tmp_cache_path, cache_path,
 		  g_strerror (errno));
       g_unlink (tmp_cache_path);
 #ifdef G_OS_WIN32
       if (bak_cache_path != NULL)
 	if (g_rename (bak_cache_path, cache_path) == -1)
-	  g_printerr ("Could not rename %s back to %s: %s.\n",
+	  g_printerr (_("Could not rename %s back to %s: %s.\n"),
 		      bak_cache_path, cache_path,
 		      g_strerror (errno));
 #endif
@@ -1239,7 +1240,7 @@ build_cache (const gchar *path)
   utime (path, &utime_buf);
   
   if (!quiet)
-    g_printerr ("Cache file created successfully.\n");
+    g_printerr (_("Cache file created successfully.\n"));
 }
 
 void
@@ -1278,11 +1279,11 @@ write_csource (const gchar *path)
 }
 
 static GOptionEntry args[] = {
-  { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
-  { "ignore-theme-index", 't', 0, G_OPTION_ARG_NONE, &ignore_theme_index, "Don't check for the existence of index.theme", NULL },
-  { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, "Don't include image data in the cache", NULL },
-  { "source", 'c', 0, G_OPTION_ARG_STRING, &var_name, "Output a C header file", "NAME" },
-  { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, "Turn off verbose output", NULL },
+  { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, N_("Overwrite an existing cache, even if uptodate"), NULL },
+  { "ignore-theme-index", 't', 0, G_OPTION_ARG_NONE, &ignore_theme_index, N_("Don't check for the existence of index.theme"), NULL },
+  { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, N_("Don't include image data in the cache"), NULL },
+  { "source", 'c', 0, G_OPTION_ARG_STRING, &var_name, N_("Output a C header file"), "NAME" },
+  { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, N_("Turn off verbose output"), NULL },
   { NULL }
 };
 
@@ -1294,9 +1295,12 @@ main (int argc, char **argv)
 
   if (argc < 2)
     return 0;
+  
+  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
   context = g_option_context_new ("ICONPATH");
-  g_option_context_add_main_entries (context, args, NULL);
+  g_option_context_add_main_entries (context, args, GETTEXT_PACKAGE);
 
   g_option_context_parse (context, &argc, &argv, NULL);
   
@@ -1307,8 +1311,8 @@ main (int argc, char **argv)
   
   if (!ignore_theme_index && !has_theme_index (path))
     {
-      g_printerr ("No theme index file in '%s'.\n"
-		  "If you really want to create an icon cache here, use --ignore-theme-index.\n", path);
+      g_printerr (_("No theme index file in '%s'.\n"
+		    "If you really want to create an icon cache here, use --ignore-theme-index.\n"), path);
       return 1;
     }
   
