@@ -84,12 +84,8 @@ main (int argc, char **argv)
   GtkPrintOperationResult res;
   GtkPrintSettings *settings;
 
-  
-  /* Unfortunately we need a display for the XSettings to get the
-     list of backends... */
-  /* gtk_parse_args (&argc, &argv); */
-  gtk_init (&argc, &argv);
-
+  g_type_init (); 
+ 
   loop = g_main_loop_new (NULL, TRUE);
 
   settings = gtk_print_settings_new ();

@@ -1,5 +1,10 @@
 2006-06-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testnouiprint.c (main): Don't open a display connection.
+
+	* gtk/gtkprintbackend.c (gtk_print_backend_load_modules): Make
+	this work without a display connection.  (339702, Alexander Larsson)
+
 	* gtk/gtkwindow.c (gtk_window_move): Small doc addition. 
 	(#345275, Behdad Esfahbod)
 

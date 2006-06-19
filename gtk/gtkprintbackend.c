@@ -284,8 +284,10 @@ gtk_print_backend_load_modules (void)
   gtk_print_backend_initialize ();
   
   settings = gtk_settings_get_default ();
-
-  g_object_get (settings, "gtk-print-backends", &setting, NULL);
+  if (settings)
+    g_object_get (settings, "gtk-print-backends", &setting, NULL);
+  else
+    setting = g_strdup (GTK_PRINT_BACKENDS);
 
   backends = g_strsplit (setting, ",", -1);
 
