@@ -809,5 +809,151 @@ gtk_printer_compare (GtkPrinter *a, GtkPrinter *b)
     return g_ascii_strcasecmp (name_a, name_b);
 }
 
+
+typedef struct 
+{
+  GList *backends;
+  GtkPrinterFunc func;
+  gpointer data;
+  GDestroyNotify destroy;
+  GMainLoop *loop;
+} PrinterList;
+
+static void list_done_cb (GtkPrintBackend *backend, 
+			  PrinterList     *printer_list);
+
+static void
+stop_enumeration (PrinterList *printer_list)
+{
+  GList *list, *next;
+  GtkPrintBackend *backend;
+
+  for (list = printer_list->backends; list; list = next)
+    {
+      next = list->next;
+      backend = GTK_PRINT_BACKEND (list->data);
+      list_done_cb (backend, printer_list);
+    }
+
+  if (printer_list->destroy)
+    printer_list->destroy (printer_list->data);
+
+  if (printer_list->loop)
+    {    
+      g_main_loop_quit (printer_list->loop);
+
+      g_main_loop_unref (printer_list->loop);
+    }
+
+  g_free (printer_list);
+}
+
+static void
+list_added_cb (GtkPrintBackend *backend, 
+	       GtkPrinter      *printer, 
+	       PrinterList     *printer_list)
+{
+  if (printer_list->func (printer, printer_list->data))
+    stop_enumeration (printer_list);
+}
+
+static void
+list_done_cb (GtkPrintBackend *backend, 
+	      PrinterList     *printer_list)
+{
+  printer_list->backends = g_list_remove (printer_list->backends, backend);
+  
+  g_signal_handlers_disconnect_by_func (backend, list_added_cb, printer_list);
+  g_signal_handlers_disconnect_by_func (backend, list_done_cb, printer_list);
+  
+  gtk_print_backend_destroy (backend);
+  g_object_unref (backend);
+
+  if (printer_list->backends == NULL)
+    stop_enumeration (printer_list);
+}
+
+static void
+list_printers_init (PrinterList     *printer_list,
+		    GtkPrintBackend *backend)
+{
+  GList *list;
+  GList *node;
+
+  list = gtk_print_backend_get_printer_list (backend);
+
+  for (node = list; node != NULL; node = node->next)
+    list_added_cb (backend, node->data, printer_list);
+
+  g_list_free (list);
+
+  if (gtk_print_backend_printer_list_is_done (backend))
+    {
+      printer_list->backends = g_list_remove (printer_list->backends, backend);
+      gtk_print_backend_destroy (backend);
+      g_object_unref (backend);
+    }
+  else
+    {
+      g_signal_connect (backend, "printer-added", 
+			(GCallback) list_added_cb, 
+			printer_list);
+      g_signal_connect (backend, "printer-list-done", 
+			(GCallback) list_done_cb, 
+			printer_list);
+    }
+
+}
+
+/**
+ * gtk_enumerate_printers:
+ * @func: a function to call for each printer
+ * @data: user data to pass to @func
+ * @destroy: function to call if @data is no longer needed
+ * @wait: if %TRUE, wait in a recursive mainloop until
+ *    all printers are enumerated; otherwise return early
+ *
+ * Calls a function for all #GtkPrinter<!-- -->s. If @func
+ * returns %TRUE, the enumeration is stopped.
+ *
+ * Since: 2.10
+ */
+void
+gtk_enumerate_printers (GtkPrinterFunc func,
+			gpointer       data,
+			GDestroyNotify destroy,
+			gboolean       wait)
+{
+  PrinterList *printer_list;
+  GList *printers, *node, *next;
+  GtkPrintBackend *backend;
+
+  printer_list = g_new0 (PrinterList, 1);
+
+  printer_list->func = func;
+  printer_list->data = data;
+  printer_list->destroy = destroy;
+
+  if (g_module_supported ())
+    printer_list->backends = gtk_print_backend_load_modules ();
+
+  for (node = printer_list->backends; node != NULL; node = next)
+    {
+      next = node->next;
+      backend = GTK_PRINT_BACKEND (node->data);
+      list_printers_init (printer_list, backend);
+    }
+
+  if (wait && printer_list->backends)
+    {
+      printer_list->loop = g_main_loop_new (NULL, FALSE);
+
+      GDK_THREADS_LEAVE ();  
+      g_main_loop_run (printer_list->loop);
+      GDK_THREADS_ENTER ();  
+    }
+}
+
+
 #define __GTK_PRINTER_C__
 #include "gtkaliasdef.c"

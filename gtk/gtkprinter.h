@@ -83,6 +83,14 @@ gboolean                 gtk_printer_accepts_ps        (GtkPrinter      *printer
 gint                     gtk_printer_compare           (GtkPrinter *a,
 							GtkPrinter *b);
 
+typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
+				    gpointer    data);
+
+void                     gtk_enumerate_printers        (GtkPrinterFunc   func,
+							gpointer         data,
+							GDestroyNotify   destroy,
+							gboolean         wait);
+						      
 G_END_DECLS
 
 #endif /* __GTK_PRINTER_H__ */
