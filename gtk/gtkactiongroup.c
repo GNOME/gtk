@@ -782,9 +782,9 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
 
       if (entries[i].stock_id) 
 	{
-	  if (gtk_icon_factory_lookup_default (entries[i].stock_id))
-	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
-	  else
+	  g_object_set (action, "stock-id", entries[i].stock_id, NULL);
+	  if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), 
+				       entries[i].stock_id))
 	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
 	}
 	  

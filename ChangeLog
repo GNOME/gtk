@@ -1,5 +1,17 @@
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix handling of stock items without icons in action-based
+	ui.  (#342458, Callum McKenzie)
+	
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): Set
+	the stock id even if there is no icon for it.
+
+	* gtk/gtkaction.c (connect_proxy): 
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): Only
+	construct a stock icon if the stock item has an icon.
+
+2006-06-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_info): Better 
 	fix.
 

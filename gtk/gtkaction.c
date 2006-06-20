@@ -712,7 +712,9 @@ connect_proxy (GtkAction     *action,
 					     image);
 	      gtk_widget_show (image);
 	    }
-	  if (action->private_data->stock_id)
+	  
+	  if (action->private_data->stock_id &&
+	      gtk_icon_factory_lookup_default (action->private_data->stock_id))
 	    gtk_image_set_from_stock (GTK_IMAGE (image),
 				      action->private_data->stock_id, GTK_ICON_SIZE_MENU);
 	  else if (action->private_data->icon_name)
