@@ -1,3 +1,9 @@
+2006-06-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkprintsettings.h: 
+	* gtk/gtkprintsettings.c: Remove unused print-to-file setting.
+
 2006-06-20  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): unset the pressed
