@@ -153,7 +153,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              P_("Spacing between buttons"),
                                                              0,
                                                              G_MAXINT,
-                                                             10,
+                                                             6,
                                                              GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,

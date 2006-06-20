@@ -1,3 +1,8 @@
+2006-06-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkdialog.c: (gtk_dialog_class_init): Set default action area
+	spacing to HIG-compliant 6px. Bug #345106, follow-up from bug #163850.
+
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_enable_model_drag_dest): 
