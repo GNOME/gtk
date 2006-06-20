@@ -1,5 +1,8 @@
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_info): Better 
+	fix.
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkprintsettings.h: 
 	* gtk/gtkprintsettings.c: Remove unused print-to-file setting.
