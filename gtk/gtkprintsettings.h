@@ -110,6 +110,9 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_NUMBER_UP      "number-up"
 #define GTK_PRINT_SETTINGS_OUTPUT_BIN     "output-bin"
 
+#define GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT  "output-file-format"
+#define GTK_PRINT_SETTINGS_OUTPUT_URI          "output-uri"
+
 #define GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION "win32-driver-version"
 #define GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA   "win32-driver-extra"
 

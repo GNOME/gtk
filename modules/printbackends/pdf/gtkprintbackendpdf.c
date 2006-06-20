@@ -305,25 +305,32 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend        *print_backend,
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *save_channel;  
-  const char *filename;
+  const gchar *uri;
+  gchar *filename = NULL; /* quit gcc */
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   error = NULL;
 
-  filename = gtk_print_settings_get (settings, "pdf-filename");
+  uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
+  if (uri)
+    filename = g_filename_from_uri (uri, NULL, NULL);
+  /* FIXME: shouldn't we error out if we get an URI we cannot handle,
+   * rather than to print to some random file somewhere?
+   */
   if (filename == NULL)
-    filename = "output.pdf";
+    filename = g_strdup_printf ("output.pdf");
   
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
   ps->dnotify = dnotify;
   ps->job = g_object_ref (job);
+  ps->backend = print_backend;
 
   ps->target_fd = creat (filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-  ps->backend = print_backend;
+  g_free (filename);
 
   if (ps->target_fd == -1)
     {
@@ -376,7 +383,7 @@ pdf_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  const char *filename;
+  const char *uri;
   char *n_up[] = {"1" };
 
   set = gtk_printer_option_set_new ();
@@ -394,8 +401,8 @@ pdf_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
 
   if (settings != NULL &&
-      (filename = gtk_print_settings_get (settings, "pdf-filename"))!= NULL)
-    gtk_printer_option_set (option, filename);
+      (uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI))!= NULL)
+    gtk_printer_option_set (option, uri);
 
   return set;
 }
@@ -408,7 +415,7 @@ pdf_printer_get_settings_from_options (GtkPrinter          *printer,
   GtkPrinterOption *option;
 
   option = gtk_printer_option_set_lookup (options, "gtk-main-page-custom-input");
-  gtk_print_settings_set (settings, "pdf-filename", option->value);
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, option->value);
 }
 
 static void

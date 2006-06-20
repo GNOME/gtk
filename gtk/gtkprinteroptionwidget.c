@@ -411,31 +411,41 @@ filesave_changed_cb (GtkWidget *w,
                      GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  char *value;
-  char *directory;
-  const char *file;
+  gchar *uri, *directory, *path;
+  const gchar *file;
+
+  /* TODO: how do we support nonlocal file systems? */
+  directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
+  file = g_filename_from_utf8 (gtk_entry_get_text (GTK_ENTRY (priv->entry)),
+			       -1, NULL, NULL, NULL);
+  if (file == NULL)
+    return;
 
   /* combine the value of the chooser with the value of the entry */
   g_signal_handler_block (priv->source, priv->source_changed_handler);  
-  
-  /* TODO: how do we support nonlocal file systems? */
-  directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
-  file =  gtk_entry_get_text (GTK_ENTRY (priv->entry));
 
   if (g_path_is_absolute (file))
-    value = g_strdup (file);
-#ifdef G_OS_UNIX
-  else if (file[0] == '~' && file[1] == '/')
-    value = g_build_filename (g_get_home_dir (), file + 2, NULL);
-#endif
+    uri = g_filename_to_uri (file, NULL, NULL);
   else
-    value = g_build_filename (directory, file, NULL);
+    {
+#ifdef G_OS_UNIX
+      if (file[0] == '~' && file[1] == '/')
+        {
+          directory = g_strdup (g_get_home_dir ());
+	  file += 2;
+	}
+#endif
+    
+      path = g_build_filename (directory, file, NULL);
+      uri = g_filename_to_uri (path, NULL, NULL);
+      g_free (path);
+    }
 
-  if (value)
-    gtk_printer_option_set (priv->source, value);
+  if (uri)
+    gtk_printer_option_set (priv->source, uri);
 
   g_free (directory);
-  g_free (value);
+  g_free (uri);
 
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
@@ -505,7 +515,7 @@ alternative_set (GtkWidget   *box,
 {
   gtk_container_foreach (GTK_CONTAINER (box), 
 			 (GtkCallback) select_maybe,
-			 value);
+			 (gpointer) value);
 }
 
 static GSList *
@@ -619,8 +629,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
         /* TODO: make this a gtkfilechooserentry once we move to GTK */
         priv->entry = gtk_entry_new ();
-        priv->combo = gtk_file_chooser_button_new (_("Print to PDF"),
-                                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+        priv->combo = gtk_file_chooser_button_new (source->display_text,
+                                                   GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
