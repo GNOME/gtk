@@ -14494,6 +14494,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
   if (grid_lines == GTK_TREE_VIEW_GRID_LINES_NONE)
     {
       tree_view->priv->grid_line_gc = NULL;
+      g_free (dash_list);
       return;
     }
 
@@ -14505,6 +14506,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
 			      GDK_LINE_ON_OFF_DASH,
 			      GDK_CAP_BUTT, GDK_JOIN_MITER);
   gdk_gc_set_dashes (tree_view->priv->grid_line_gc, 0, dash_list, 2);
+  g_free (dash_list);
 
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
