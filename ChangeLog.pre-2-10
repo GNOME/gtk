@@ -1,5 +1,8 @@
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_enable_model_drag_dest): 
+	Small doc fix.  (#345176, Claudio Saavedra)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_functions): Update
 	the docs. (#345194, Yevgen Muntyan)
 

@@ -6411,7 +6411,7 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @targets: the table of targets that the drag will support
  * @n_targets: the number of items in @targets
- * @actions: the bitmask of possible actions for a drag from this
+ * @actions: the bitmask of possible actions for a drag to this
  *    widget
  * 
  * Turns @icon_view into a drop destination for automatic DND.
