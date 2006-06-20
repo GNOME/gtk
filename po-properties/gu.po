@@ -300,13 +300,15 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-18 23:12+0200\n"
-"PO-Revision-Date: 2006-06-19 11:26+0530\n"
+"POT-Creation-Date: 2006-06-19 23:25+0200\n"
+"PO-Revision-Date: 2006-06-20 10:52+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -314,6 +316,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -570,7 +573,7 @@ msgid "A unique name for the action."
 msgstr "ક્રિયાનું એકલ નામ"
 
 #: ../gtk/gtkaction.c:198 ../gtk/gtkbutton.c:199 ../gtk/gtkexpander.c:185
-#: ../gtk/gtkframe.c:95 ../gtk/gtklabel.c:293 ../gtk/gtktoolbutton.c:180
+#: ../gtk/gtkframe.c:95 ../gtk/gtklabel.c:294 ../gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "લેબલ"
 
@@ -1004,12 +1007,12 @@ msgid ""
 "widget"
 msgstr "જો બટન લેબલ વિજેટ ધરાવતુ હોય તો, બટનની અંદર લેબલ વિજેટનું લેખન"
 
-#: ../gtk/gtkbutton.c:207 ../gtk/gtkexpander.c:193 ../gtk/gtklabel.c:314
+#: ../gtk/gtkbutton.c:207 ../gtk/gtkexpander.c:193 ../gtk/gtklabel.c:315
 #: ../gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "નીચે લીટી કરવાનું રાખો"
 
-#: ../gtk/gtkbutton.c:208 ../gtk/gtkexpander.c:194 ../gtk/gtklabel.c:315
+#: ../gtk/gtkbutton.c:208 ../gtk/gtkexpander.c:194 ../gtk/gtklabel.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1442,7 +1445,7 @@ msgstr "નિશાન કરવુ"
 msgid "Marked up text to render"
 msgstr "ઘાટ આપવા માટે નિશાનીત કરાયેલુ લેખન"
 
-#: ../gtk/gtkcellrenderertext.c:206 ../gtk/gtklabel.c:300
+#: ../gtk/gtkcellrenderertext.c:206 ../gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "લાક્ષણિકતાઓ"
 
@@ -1602,7 +1605,7 @@ msgstr ""
 "આ લખાણ જે ભાષામાં છે, ISO ના કોડ તરીકે. પેન્ગો લખાણને ઘાટ આપતી વખતેતેનો ઉપયોગ સંકેત "
 "તરીકે કરી શકે છે. જો તમે આ પરિમાણને સમજી ના શકો, તો કઈ નહિતમારે તેની જરુર નહિ પડે"
 
-#: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtklabel.c:406
+#: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtklabel.c:424
 #: ../gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "એલીપ્સાઈઝ"
@@ -1616,11 +1619,11 @@ msgstr ""
 "શબ્દમાળા દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
 #: ../gtk/gtkcellrenderertext.c:426 ../gtk/gtkfilechooserbutton.c:400
-#: ../gtk/gtklabel.c:426
+#: ../gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "અક્ષરોમાં પહોળાઈ"
 
-#: ../gtk/gtkcellrenderertext.c:427 ../gtk/gtklabel.c:427
+#: ../gtk/gtkcellrenderertext.c:427 ../gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "લેબલની જરૂરી પહોળાઈ, અક્ષરોમાં"
 
@@ -2146,19 +2149,19 @@ msgstr "કાર્યશીલ વિસ્તારની કિનારી"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "સંવાદના નીચલા ભાગમાં બટનની આસપાસ કિનારીની પહોળાઈ"
 
-#: ../gtk/gtkentry.c:464 ../gtk/gtklabel.c:371
+#: ../gtk/gtkentry.c:464 ../gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "કર્સરનું સ્થાન"
 
-#: ../gtk/gtkentry.c:465 ../gtk/gtklabel.c:372
+#: ../gtk/gtkentry.c:465 ../gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "શબ્દોમાં લખાણ ઉમેરવા માટેના કર્સરની વર્તમાન સ્થિતિ"
 
-#: ../gtk/gtkentry.c:474 ../gtk/gtklabel.c:381
+#: ../gtk/gtkentry.c:474 ../gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "પસંદ કરવા માટેની સીમા"
 
-#: ../gtk/gtkentry.c:475 ../gtk/gtklabel.c:382
+#: ../gtk/gtkentry.c:475 ../gtk/gtklabel.c:400
 msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "શબ્દોમાં તેને પસંદ કરતી વખતે કર્સરની વિરુધ્ધ દિશાની સ્થિતિ"
 
@@ -2252,7 +2255,7 @@ msgstr "શું એક લીટીમાં મલ્ટીલાઈન ચ�
 msgid "Border between text and frame."
 msgstr "લખાણ અને ચોકઠાં વચ્ચેની કિનારી."
 
-#: ../gtk/gtkentry.c:866 ../gtk/gtklabel.c:602
+#: ../gtk/gtkentry.c:866 ../gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "ફોકસ કરવા પર પસંદ કરો"
 
@@ -2358,11 +2361,11 @@ msgstr "શું વિસ્તારક બાળ વિજેટ રીવ�
 msgid "Text of the expander's label"
 msgstr "ચોકઠાના લેબલનું લખાણ"
 
-#: ../gtk/gtkexpander.c:201 ../gtk/gtklabel.c:307
+#: ../gtk/gtkexpander.c:201 ../gtk/gtklabel.c:308
 msgid "Use markup"
 msgstr "માર્કઅપ વાપરો"
 
-#: ../gtk/gtkexpander.c:202 ../gtk/gtklabel.c:308
+#: ../gtk/gtkexpander.c:202 ../gtk/gtklabel.c:309
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "લેબલનું લખાણ XML માર્કઅપનો સમાવેશ કરે છે. Pango-Parse_markup() જુઓ"
 
@@ -2895,19 +2898,19 @@ msgstr "શું ઈમેજો મેનુઓમાં બતાવવી �
 msgid "The screen where this window will be displayed"
 msgstr "સ્ક્રિન કે જ્યાં વિન્ડો દેખાડવામાં આવશે"
 
-#: ../gtk/gtklabel.c:294
+#: ../gtk/gtklabel.c:295
 msgid "The text of the label"
 msgstr "લેબલનું લખાણ"
 
-#: ../gtk/gtklabel.c:301
+#: ../gtk/gtklabel.c:302
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "લેબલના લખાણ પર અમલમાં મૂકવા માટેની શૈલીના ગુણધર્મોની યાદી"
 
-#: ../gtk/gtklabel.c:322 ../gtk/gtktexttag.c:357 ../gtk/gtktextview.c:565
+#: ../gtk/gtklabel.c:323 ../gtk/gtktexttag.c:357 ../gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "સમર્થન"
 
-#: ../gtk/gtklabel.c:323
+#: ../gtk/gtklabel.c:324
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2916,49 +2919,57 @@ msgstr ""
 "લેબલના લખાણમાં એકબીજા સાથે સંકળાયેલી લીટીઓની ગોઠવણી. આ લેબલની ફાળવણીની અંદરની એની "
 "ગોઠવણીને અસર કરતું નથી. આના માટે GtkMisc::xalign જુઓ"
 
-#: ../gtk/gtklabel.c:331
+#: ../gtk/gtklabel.c:332
 msgid "Pattern"
 msgstr "ભાત"
 
-#: ../gtk/gtklabel.c:332
+#: ../gtk/gtklabel.c:333
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "શબ્દમાળા સાથે અક્ષરોની નીચે લીટી (_) કરવા માટેના લખાણમાંના અક્ષરોને અનુરુપ સ્થિતિ"
 
-#: ../gtk/gtklabel.c:339
+#: ../gtk/gtklabel.c:340
 msgid "Line wrap"
 msgstr "લીટી લપેટો"
 
-#: ../gtk/gtklabel.c:340
+#: ../gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "જો સુયોજિત હોય તો, લખાણ બહું મોટું થઈ જાય તો લીટીઓને લપેટી દો"
 
-#: ../gtk/gtklabel.c:346
+#: ../gtk/gtklabel.c:356
+msgid "Line wrap mode"
+msgstr "લીટી લપેટો સ્થિતિ"
+
+#: ../gtk/gtklabel.c:357
+msgid "If wrap is set, controls how linewrapping is done"
+msgstr "જો લપેટો સુયોજિત હોય, તો તે કેવી રીતે લીટી લપેટવાનું થાય તે નિયંત્રિત કરે છે"
+
+#: ../gtk/gtklabel.c:364
 msgid "Selectable"
 msgstr "પસંદ કરી શકાય તેવું"
 
-#: ../gtk/gtklabel.c:347
+#: ../gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
 msgstr "શું લેબલનું લખાણ માઉસથી પસંદ કરી શકાય"
 
-#: ../gtk/gtklabel.c:353
+#: ../gtk/gtklabel.c:371
 msgid "Mnemonic key"
 msgstr "સંજ્ઞાસૂચિ કી"
 
-#: ../gtk/gtklabel.c:354
+#: ../gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
 msgstr "આ લેબલ માટે સંજ્ઞાસૂચી પ્રવેગક કી"
 
-#: ../gtk/gtklabel.c:362
+#: ../gtk/gtklabel.c:380
 msgid "Mnemonic widget"
 msgstr "સંજ્ઞાસૂચી વિજેટ"
 
-#: ../gtk/gtklabel.c:363
+#: ../gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "જ્યારે લેબલની સંજ્ઞાસૂચી કી દબાવવામાં આવે ત્યારે કાર્યશીલ કરવામાં આવતુ વિજેટ"
 
-#: ../gtk/gtklabel.c:407
+#: ../gtk/gtklabel.c:425
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -2966,31 +2977,31 @@ msgstr ""
 "શબ્દમાળા ઈલીપ્સાઈઝ કરવા માટેની પ્રાધાન્યવાળી જગ્યા, જો લેબલ પાસે પૂરતી આખી શબ્દમાળા "
 "દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
-#: ../gtk/gtklabel.c:447
+#: ../gtk/gtklabel.c:465
 msgid "Single Line Mode"
 msgstr "એક લીટી સ્થિતિ"
 
-#: ../gtk/gtklabel.c:448
+#: ../gtk/gtklabel.c:466
 msgid "Whether the label is in single line mode"
 msgstr "શું લેબલ એક લીટી સ્થિતિમાં છે"
 
-#: ../gtk/gtklabel.c:465
+#: ../gtk/gtklabel.c:483
 msgid "Angle"
 msgstr "કોણ"
 
-#: ../gtk/gtklabel.c:466
+#: ../gtk/gtklabel.c:484
 msgid "Angle at which the label is rotated"
 msgstr "કોણ કે જે માપે લેબલ ફરશે"
 
-#: ../gtk/gtklabel.c:486
+#: ../gtk/gtklabel.c:504
 msgid "Maximum Width In Characters"
 msgstr "મહત્તમ પહોળાઈ અક્ષરોમાં"
 
-#: ../gtk/gtklabel.c:487
+#: ../gtk/gtklabel.c:505
 msgid "The desired maximum width of the label, in characters"
 msgstr "લેબલની જરૂરી મહત્તમ પહોળાઈ, અક્ષરોમાં"
 
-#: ../gtk/gtklabel.c:603
+#: ../gtk/gtklabel.c:621
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "શું પસંદ કરી શકાય તેવા લેબલના સમાવિષ્ટોને જ્યારે તેઓ ફોકસ થયેલ હોય ત્યારે પસંદ કરવા કે નહિં"
 
