@@ -1,3 +1,10 @@
+2006-06-20  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): unset the pressed
+	button here.
+	(gtk_notebook_grab_notify): stop reorder when the widget becomes
+	shadowed. Fixes bug #335873
+
 2006-06-18  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkdialog.c: (gtk_dialog_class_init): Set default action area

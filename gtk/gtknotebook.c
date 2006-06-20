@@ -2592,6 +2592,8 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
   if (!page)
     return;
 
+  priv->pressed_button = -1;
+
   if (page->reorderable || page->detachable)
     {
       if (!priv->during_detach)
@@ -2646,10 +2648,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
   if (!priv->during_detach &&
       page->reorderable &&
       event->button == priv->pressed_button)
-    {
-      priv->pressed_button = -1;
-      gtk_notebook_stop_reorder (notebook);
-    }
+    gtk_notebook_stop_reorder (notebook);
 
   if (event->button == notebook->button)
     {
@@ -2834,7 +2833,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   if (!(event->state & GDK_BUTTON1_MASK) &&
       priv->pressed_button != -1)
     {
-      priv->pressed_button = -1;
       gtk_notebook_stop_reorder (notebook);
       stop_scrolling (notebook);
     }
@@ -2920,8 +2918,13 @@ static void
 gtk_notebook_grab_notify (GtkWidget *widget,
 			  gboolean   was_grabbed)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
   if (!was_grabbed)
-    stop_scrolling (GTK_NOTEBOOK (widget));
+    {
+      gtk_notebook_stop_reorder (notebook);
+      stop_scrolling (notebook);
+    }
 }
 
 static void
@@ -3073,7 +3076,6 @@ gtk_notebook_drag_end (GtkWidget      *widget,
 {
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (widget);
 
-  priv->pressed_button = -1;
   gtk_notebook_stop_reorder (GTK_NOTEBOOK (widget));
 
   GTK_BIN (priv->dnd_window)->child = NULL;
