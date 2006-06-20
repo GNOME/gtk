@@ -86,10 +86,11 @@ enum {
 
 enum {
   PROP_0,
-  GTK_PRINT_JOB_PROP_TITLE,
-  GTK_PRINT_JOB_PROP_PRINTER,
-  GTK_PRINT_JOB_PROP_PAGE_SETUP,
-  GTK_PRINT_JOB_PROP_SETTINGS
+  PROP_TITLE,
+  PROP_PRINTER,
+  PROP_PAGE_SETUP,
+  PROP_SETTINGS,
+  PROP_TRACK_PRINT_STATUS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -109,8 +110,8 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 
   g_type_class_add_private (class, sizeof (GtkPrintJobPrivate));
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   GTK_PRINT_JOB_PROP_TITLE,
+  g_object_class_install_property (object_class,
+                                   PROP_TITLE,
                                    g_param_spec_string ("title",
 						        P_("Title"),
 						        P_("Title of the print job"),
@@ -118,8 +119,8 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   GTK_PRINT_JOB_PROP_PRINTER,
+  g_object_class_install_property (object_class,
+                                   PROP_PRINTER,
                                    g_param_spec_object ("printer",
 						        P_("Printer"),
 						        P_("Printer to print the job to"),
@@ -127,8 +128,8 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   GTK_PRINT_JOB_PROP_SETTINGS,
+  g_object_class_install_property (object_class,
+                                   PROP_SETTINGS,
                                    g_param_spec_object ("settings",
 						        P_("Settings"),
 						        P_("Printer settings"),
@@ -136,14 +137,25 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   GTK_PRINT_JOB_PROP_PAGE_SETUP,
+  g_object_class_install_property (object_class,
+                                   PROP_PAGE_SETUP,
                                    g_param_spec_object ("page-setup",
 						        P_("Page Setup"),
 						        P_("Page Setup"),
 						        GTK_TYPE_PAGE_SETUP,
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
+				   PROP_TRACK_PRINT_STATUS,
+				   g_param_spec_boolean ("track-print-status",
+							 P_("Track Print Status"),
+							 P_("TRUE if the print job will continue to emit "
+							    "status-changed signals after the print data "
+							    "has been sent to the printer or print server."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+  
 
   /**
    * GtkPrintJob::status-changed:
@@ -509,7 +521,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
     {
       priv->track_print_status = track_status;
       
-      g_object_notify (G_OBJECT (job), "track-status");
+      g_object_notify (G_OBJECT (job), "track-print-status");
     }
 }
 
@@ -549,27 +561,31 @@ gtk_print_job_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case GTK_PRINT_JOB_PROP_TITLE:
+    case PROP_TITLE:
       priv->title = g_value_dup_string (value);
       break;
     
-    case GTK_PRINT_JOB_PROP_PRINTER:
+    case PROP_PRINTER:
       priv->printer = GTK_PRINTER (g_value_dup_object (value));
       priv->printer_set = TRUE;
       priv->backend = g_object_ref (gtk_printer_get_backend (priv->printer));
       break;
 
-    case GTK_PRINT_JOB_PROP_PAGE_SETUP:
+    case PROP_PAGE_SETUP:
       priv->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
       priv->page_setup_set = TRUE;
       break;
       
-    case GTK_PRINT_JOB_PROP_SETTINGS:
+    case PROP_SETTINGS:
       /* We save a copy of the settings since we modify
        * if when preparing the printer job. */
       settings = GTK_PRINT_SETTINGS (g_value_get_object (value));
       priv->settings = gtk_print_settings_copy (settings);
       priv->settings_set = TRUE;
+      break;
+
+    case PROP_TRACK_PRINT_STATUS:
+      gtk_print_job_set_track_print_status (job, g_value_get_boolean (value));
       break;
 
     default:
@@ -589,17 +605,20 @@ gtk_print_job_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case GTK_PRINT_JOB_PROP_TITLE:
+    case PROP_TITLE:
       g_value_set_string (value, priv->title);
       break;
-    case GTK_PRINT_JOB_PROP_PRINTER:
+    case PROP_PRINTER:
       g_value_set_object (value, priv->printer);
       break;
-    case GTK_PRINT_JOB_PROP_SETTINGS:
+    case PROP_SETTINGS:
       g_value_set_object (value, priv->settings);
       break;
-    case GTK_PRINT_JOB_PROP_PAGE_SETUP:
+    case PROP_PAGE_SETUP:
       g_value_set_object (value, priv->page_setup);
+      break;
+    case PROP_TRACK_PRINT_STATUS:
+      g_value_set_boolean (value, priv->track_print_status);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
