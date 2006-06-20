@@ -2,7 +2,9 @@
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): Don't leak
 	dash_list.
-
+	(gtk_tree_view_set_column_drag_info): Don't crash if the 
+	column_drop_func says always no.  (#344850, Christian Weiske)
+	
 	Make transparent tray icons work.  (#320034, based on a 
 	patch by Dan Winship)
 	
