@@ -389,7 +389,8 @@ gtk_print_job_set_status (GtkPrintJob   *job,
  * Make the #GtkPrintJob send an existing document to the 
  * printing system. The file can be in any format understood
  * by the platforms printing system (typically PostScript,
- * but on many platforms PDF may work too).
+ * but on many platforms PDF may work too). See 
+ * gtk_printer_accepts_pdf() and gtk_printer_accepts_ps().
  * 
  * Returns: %FALSE if an error occurred
  *

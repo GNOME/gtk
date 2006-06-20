@@ -1,5 +1,7 @@
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintjob.c (gtk_print_job_set_source_file): Add to docs.
+
 	Fix handling of stock items without icons in action-based
 	ui.  (#342458, Callum McKenzie)
 	
