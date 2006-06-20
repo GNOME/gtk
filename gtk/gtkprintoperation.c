@@ -556,8 +556,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, done),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__INT,
-		  G_TYPE_NONE, 1, G_TYPE_INT);
+		  g_cclosure_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_OPERATION_RESULT);
 
   /**
    * GtkPrintOperation::begin-print:
