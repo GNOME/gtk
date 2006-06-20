@@ -1,6 +1,6 @@
 /* GTK - The GIMP Toolkit
  * gtkprintbackendpdf.c: Default implementation of GtkPrintBackend 
- * for printing to PDF files
+ * for printing to a file
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,6 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -26,7 +28,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <config.h>
 #include <errno.h>
 #include <cairo.h>
 #include <cairo-pdf.h>
@@ -36,84 +37,84 @@
 #include "gtkprintoperation.h"
 
 #include "gtkprintbackend.h"
-#include "gtkprintbackendpdf.h"
+#include "gtkprintbackendfile.h"
 
 #include "gtkprinter.h"
 #include "gtkprinter-private.h"
 
-typedef struct _GtkPrintBackendPdfClass GtkPrintBackendPdfClass;
+typedef struct _GtkPrintBackendFileClass GtkPrintBackendFileClass;
 
-#define GTK_PRINT_BACKEND_PDF_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_BACKEND_PDF, GtkPrintBackendPdfClass))
-#define GTK_IS_PRINT_BACKEND_PDF_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_BACKEND_PDF))
-#define GTK_PRINT_BACKEND_PDF_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_BACKEND_PDF, GtkPrintBackendPdfClass))
+#define GTK_PRINT_BACKEND_FILE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_BACKEND_FILE, GtkPrintBackendFileClass))
+#define GTK_IS_PRINT_BACKEND_FILE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_BACKEND_FILE))
+#define GTK_PRINT_BACKEND_FILE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_BACKEND_FILE, GtkPrintBackendFileClass))
 
-#define _PDF_MAX_CHUNK_SIZE 8192
+#define _STREAM_MAX_CHUNK_SIZE 8192
 
-static GType print_backend_pdf_type = 0;
+static GType print_backend_file_type = 0;
 
-struct _GtkPrintBackendPdfClass
+struct _GtkPrintBackendFileClass
 {
   GtkPrintBackendClass parent_class;
 };
 
-struct _GtkPrintBackendPdf
+struct _GtkPrintBackendFile
 {
   GtkPrintBackend parent_instance;
 };
 
 static GObjectClass *backend_parent_class;
 
-static void                 gtk_print_backend_pdf_class_init      (GtkPrintBackendPdfClass *class);
-static void                 gtk_print_backend_pdf_init            (GtkPrintBackendPdf      *impl);
-static void                 pdf_printer_get_settings_from_options (GtkPrinter              *printer,
-								   GtkPrinterOptionSet     *options,
-								   GtkPrintSettings        *settings);
-static GtkPrinterOptionSet *pdf_printer_get_options               (GtkPrinter              *printer,
-								   GtkPrintSettings        *settings,
-								   GtkPageSetup            *page_setup,
-								   GtkPrintCapabilities     capabilities);
-static void                 pdf_printer_prepare_for_print         (GtkPrinter              *printer,
-								   GtkPrintJob             *print_job,
-								   GtkPrintSettings        *settings,
-								   GtkPageSetup            *page_setup);
-static void                 gtk_print_backend_pdf_print_stream    (GtkPrintBackend         *print_backend,
-								   GtkPrintJob             *job,
-								   gint                     data_fd,
-								   GtkPrintJobCompleteFunc  callback,
-								   gpointer                 user_data,
-								   GDestroyNotify           dnotify);
-static cairo_surface_t *    pdf_printer_create_cairo_surface      (GtkPrinter              *printer,
-								   GtkPrintSettings        *settings,
-								   gdouble                  width,
-								   gdouble                  height,
-								   gint                     cache_fd);
+static void                 gtk_print_backend_file_class_init      (GtkPrintBackendFileClass *class);
+static void                 gtk_print_backend_file_init            (GtkPrintBackendFile      *impl);
+static void                 file_printer_get_settings_from_options (GtkPrinter              *printer,
+								    GtkPrinterOptionSet     *options,
+								    GtkPrintSettings        *settings);
+static GtkPrinterOptionSet *file_printer_get_options               (GtkPrinter              *printer,
+								    GtkPrintSettings        *settings,
+								    GtkPageSetup            *page_setup,
+								    GtkPrintCapabilities     capabilities);
+static void                 file_printer_prepare_for_print         (GtkPrinter              *printer,
+								    GtkPrintJob             *print_job,
+								    GtkPrintSettings        *settings,
+								    GtkPageSetup            *page_setup);
+static void                 gtk_print_backend_file_print_stream     (GtkPrintBackend         *print_backend,
+								    GtkPrintJob             *job,
+								    gint                     data_fd,
+								    GtkPrintJobCompleteFunc  callback,
+								    gpointer                 user_data,
+								    GDestroyNotify           dnotify);
+static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter              *printer,
+								    GtkPrintSettings        *settings,
+								    gdouble                  width,
+								    gdouble                  height,
+								    gint                     cache_fd);
 
 static void
-gtk_print_backend_pdf_register_type (GTypeModule *module)
+gtk_print_backend_file_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_pdf_info =
+  static const GTypeInfo print_backend_file_info =
   {
-    sizeof (GtkPrintBackendPdfClass),
+    sizeof (GtkPrintBackendFileClass),
     NULL,		/* base_init */
     NULL,		/* base_finalize */
-    (GClassInitFunc) gtk_print_backend_pdf_class_init,
+    (GClassInitFunc) gtk_print_backend_file_class_init,
     NULL,		/* class_finalize */
     NULL,		/* class_data */
-    sizeof (GtkPrintBackendPdf),
+    sizeof (GtkPrintBackendFile),
     0,		/* n_preallocs */
-    (GInstanceInitFunc) gtk_print_backend_pdf_init,
+    (GInstanceInitFunc) gtk_print_backend_file_init,
   };
 
-  print_backend_pdf_type = g_type_module_register_type (module,
-                                                        GTK_TYPE_PRINT_BACKEND,
-                                                        "GtkPrintBackendPdf",
-                                                        &print_backend_pdf_info, 0);
+  print_backend_file_type = g_type_module_register_type (module,
+                                                         GTK_TYPE_PRINT_BACKEND,
+                                                         "GtkPrintBackendFile",
+                                                         &print_backend_file_info, 0);
 }
 
 G_MODULE_EXPORT void 
 pb_module_init (GTypeModule *module)
 {
-  gtk_print_backend_pdf_register_type (module);
+  gtk_print_backend_file_register_type (module);
 }
 
 G_MODULE_EXPORT void 
@@ -125,45 +126,45 @@ pb_module_exit (void)
 G_MODULE_EXPORT GtkPrintBackend * 
 pb_module_create (void)
 {
-  return gtk_print_backend_pdf_new ();
+  return gtk_print_backend_file_new ();
 }
 
 /*
- * GtkPrintBackendPdf
+ * GtkPrintBackendFile
  */
 GType
-gtk_print_backend_pdf_get_type (void)
+gtk_print_backend_file_get_type (void)
 {
-  return print_backend_pdf_type;
+  return print_backend_file_type;
 }
 
 /**
- * gtk_print_backend_pdf_new:
+ * gtk_print_backend_file_new:
  *
- * Creates a new #GtkPrintBackendPdf object. #GtkPrintBackendPdf
+ * Creates a new #GtkPrintBackendFile object. #GtkPrintBackendFile
  * implements the #GtkPrintBackend interface with direct access to
  * the filesystem using Unix/Linux API calls
  *
- * Return value: the new #GtkPrintBackendPdf object
+ * Return value: the new #GtkPrintBackendFile object
  **/
 GtkPrintBackend *
-gtk_print_backend_pdf_new (void)
+gtk_print_backend_file_new (void)
 {
-  return g_object_new (GTK_TYPE_PRINT_BACKEND_PDF, NULL);
+  return g_object_new (GTK_TYPE_PRINT_BACKEND_FILE, NULL);
 }
 
 static void
-gtk_print_backend_pdf_class_init (GtkPrintBackendPdfClass *class)
+gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_CLASS (class);
 
   backend_parent_class = g_type_class_peek_parent (class);
 
-  backend_class->print_stream = gtk_print_backend_pdf_print_stream;
-  backend_class->printer_create_cairo_surface = pdf_printer_create_cairo_surface;
-  backend_class->printer_get_options = pdf_printer_get_options;
-  backend_class->printer_get_settings_from_options = pdf_printer_get_settings_from_options;
-  backend_class->printer_prepare_for_print = pdf_printer_prepare_for_print;
+  backend_class->print_stream = gtk_print_backend_file_print_stream;
+  backend_class->printer_create_cairo_surface = file_printer_create_cairo_surface;
+  backend_class->printer_get_options = file_printer_get_options;
+  backend_class->printer_get_settings_from_options = file_printer_get_settings_from_options;
+  backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
 }
 
 static cairo_status_t
@@ -195,11 +196,11 @@ _cairo_write (void                *closure,
 
 
 static cairo_surface_t *
-pdf_printer_create_cairo_surface (GtkPrinter       *printer,
-				  GtkPrintSettings *settings,
-				  gdouble           width, 
-				  gdouble           height,
-				  gint              cache_fd)
+file_printer_create_cairo_surface (GtkPrinter       *printer,
+				   GtkPrintSettings *settings,
+				   gdouble           width, 
+				   gdouble           height,
+				   gint              cache_fd)
 {
   cairo_surface_t *surface;
   
@@ -221,9 +222,9 @@ typedef struct {
 } _PrintStreamData;
 
 static void
-pdf_print_cb (GtkPrintBackendPdf *print_backend,
-              GError             *error,
-              gpointer            user_data)
+file_print_cb (GtkPrintBackendFile *print_backend,
+               GError              *error,
+               gpointer            user_data)
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
@@ -246,11 +247,11 @@ pdf_print_cb (GtkPrintBackendPdf *print_backend,
 }
 
 static gboolean
-pdf_write (GIOChannel   *source,
-           GIOCondition  con,
-           gpointer      user_data)
+file_write (GIOChannel   *source,
+            GIOCondition  con,
+            gpointer      user_data)
 {
-  gchar buf[_PDF_MAX_CHUNK_SIZE];
+  gchar buf[_STREAM_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
@@ -262,9 +263,7 @@ pdf_write (GIOChannel   *source,
 
   bytes_read = read (source_fd,
                      buf,
-                     _PDF_MAX_CHUNK_SIZE);
-
-   
+                     _STREAM_MAX_CHUNK_SIZE);
 
   if (bytes_read > 0)
     {
@@ -284,7 +283,7 @@ pdf_write (GIOChannel   *source,
 
   if (bytes_read == 0 || error != NULL)
     {
-      pdf_print_cb (GTK_PRINT_BACKEND_PDF (ps->backend), error, user_data);
+      file_print_cb (GTK_PRINT_BACKEND_FILE (ps->backend), error, user_data);
 
       return FALSE;
     }
@@ -293,7 +292,7 @@ pdf_write (GIOChannel   *source,
 }
 
 static void
-gtk_print_backend_pdf_print_stream (GtkPrintBackend        *print_backend,
+gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 				    GtkPrintJob            *job,
 				    gint                    data_fd,
 				    GtkPrintJobCompleteFunc callback,
@@ -338,9 +337,7 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend        *print_backend,
                            GTK_PRINT_ERROR_INTERNAL_ERROR, 
                            g_strerror (errno));
 
-      pdf_print_cb (GTK_PRINT_BACKEND_PDF (print_backend),
-                    error,
-                    ps);
+      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend), error, ps);
 
       return;
     }
@@ -349,17 +346,17 @@ gtk_print_backend_pdf_print_stream (GtkPrintBackend        *print_backend,
 
   g_io_add_watch (save_channel, 
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
-                  (GIOFunc) pdf_write,
+                  (GIOFunc) file_write,
                   ps);
 }
 
 static void
-gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
+gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 {
   GtkPrinter *printer;
   
   printer = g_object_new (GTK_TYPE_PRINTER,
-			  "name", _("Print to PDF"),
+			  "name", _("Print to File"),
 			  "backend", backend,
 			  "is-virtual", TRUE,
 			  "accepts-ps", FALSE,
@@ -376,10 +373,10 @@ gtk_print_backend_pdf_init (GtkPrintBackendPdf *backend)
 }
 
 static GtkPrinterOptionSet *
-pdf_printer_get_options (GtkPrinter           *printer,
-			 GtkPrintSettings     *settings,
-			 GtkPageSetup         *page_setup,
-			 GtkPrintCapabilities  capabilities)
+file_printer_get_options (GtkPrinter           *printer,
+			  GtkPrintSettings     *settings,
+			  GtkPageSetup         *page_setup,
+			  GtkPrintCapabilities  capabilities)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
@@ -408,9 +405,9 @@ pdf_printer_get_options (GtkPrinter           *printer,
 }
 
 static void
-pdf_printer_get_settings_from_options (GtkPrinter          *printer,
-				       GtkPrinterOptionSet *options,
-				       GtkPrintSettings    *settings)
+file_printer_get_settings_from_options (GtkPrinter          *printer,
+					GtkPrinterOptionSet *options,
+					GtkPrintSettings    *settings)
 {
   GtkPrinterOption *option;
 
@@ -419,12 +416,12 @@ pdf_printer_get_settings_from_options (GtkPrinter          *printer,
 }
 
 static void
-pdf_printer_prepare_for_print (GtkPrinter       *printer,
-			       GtkPrintJob      *print_job,
-			       GtkPrintSettings *settings,
-			       GtkPageSetup     *page_setup)
+file_printer_prepare_for_print (GtkPrinter       *printer,
+				GtkPrintJob      *print_job,
+				GtkPrintSettings *settings,
+				GtkPageSetup     *page_setup)
 {
-  double scale;
+  gdouble scale;
 
   print_job->print_pages = gtk_print_settings_get_print_pages (settings);
   print_job->page_ranges = NULL;

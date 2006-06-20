@@ -1,6 +1,6 @@
 /* GTK - The GIMP Toolkit
  * gtkprintbackendpdf.h: Default implementation of GtkPrintBackend 
- * for printing to a PDF 
+ * for printing to a file
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,25 +19,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_PRINT_BACKEND_PDF_H__
-#define __GTK_PRINT_BACKEND_PDF_H__
+#ifndef __GTK_PRINT_BACKEND_FILE_H__
+#define __GTK_PRINT_BACKEND_FILE_H__
 
 #include <glib-object.h>
 #include "gtkprintbackend.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_PRINT_BACKEND_PDF            (gtk_print_backend_pdf_get_type ())
-#define GTK_PRINT_BACKEND_PDF(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_BACKEND_PDF, GtkPrintBackendPdf))
-#define GTK_IS_PRINT_BACKEND_PDF(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_BACKEND_PDF))
+#define GTK_TYPE_PRINT_BACKEND_FILE    (gtk_print_backend_file_get_type ())
+#define GTK_PRINT_BACKEND_FILE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_BACKEND_FILE, GtkPrintBackendFile))
+#define GTK_IS_PRINT_BACKEND_FILE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_BACKEND_FILE))
 
-typedef struct _GtkPrintBackendPdf      GtkPrintBackendPdf;
+typedef struct _GtkPrintBackendFile    GtkPrintBackendFile;
 
-GtkPrintBackend *gtk_print_backend_pdf_new      (void);
-GType          gtk_print_backend_pdf_get_type (void) G_GNUC_CONST;
+GtkPrintBackend *gtk_print_backend_file_new      (void);
+GType            gtk_print_backend_file_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_BACKEND_PDF_H__ */
-
-
+#endif /* __GTK_PRINT_BACKEND_FILE_H__ */

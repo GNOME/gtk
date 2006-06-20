@@ -1,3 +1,24 @@
+2006-06-20  Christian Persch  <chpe@cvs.gnome.org>
+	
+	* configure.in
+	* gtk/Makefile.am
+	* modules/printbackends/Makefile.am
+	A modules/printbackends/file/.cvsignore
+	A modules/printbackends/file/Makefile.am
+	A modules/printbackends/file/gtkprintbackendfile.c
+	A modules/printbackends/file/gtkprintbackendfile.h
+	R modules/printbackends/pdf/*:
+	Rename "pdf" backend to "file" backend. Step 2 from bug #339592.
+
+2006-06-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkprinteroptionwidget.c: (filesave_changed_cb),
+	(alternative_set), (construct_widgets): Convert input to filename
+	encoding and construct an URI from that.
+	* gtk/gtkprintsettings.h: Add OUTPUT_FILE_FORMAT and OUTPUT_URI keys.
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: Use those defines.
+	Step 1 from bug #339592.
+
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintjob.c (gtk_print_job_set_source_file): Add to docs.

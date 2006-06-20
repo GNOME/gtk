@@ -10,9 +10,9 @@ endif
 DIST_SUBDIRS=theme-bits xdgmime
 
 if HAVE_CUPS
-GTK_PRINT_BACKENDS=pdf,cups
+GTK_PRINT_BACKENDS=file,cups
 else
-GTK_PRINT_BACKENDS=pdf,lpr
+GTK_PRINT_BACKENDS=file,lpr
 endif
 
 INCLUDES =						\

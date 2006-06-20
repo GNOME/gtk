@@ -1,7 +1,7 @@
-if HAVE_CUPS
-CUPS_SUBDIR=cups
-endif
+SUBDIRS = file lpr
 
-SUBDIRS=$(CUPS_SUBDIR) lpr pdf
+if HAVE_CUPS
+SUBDIRS += cups
+endif
 
 DIST_SUBDIRS=cups pdf lpr
