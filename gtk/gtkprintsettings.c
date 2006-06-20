@@ -1171,41 +1171,6 @@ gtk_print_settings_set_scale (GtkPrintSettings *settings,
 }
 
 /**
- * gtk_print_settings_get_print_to_file:
- * @settings: a #GtkPrintSettings
- * 
- * Gets the value of %GTK_PRINT_SETTINGS_PRINT_TO_FILE.
- * 
- * Return value: whether to print to a file
- *
- * Since: 2.10
- */
-gboolean
-gtk_print_settings_get_print_to_file (GtkPrintSettings *settings)
-{
-  return gtk_print_settings_get_bool (settings, 
-				      GTK_PRINT_SETTINGS_PRINT_TO_FILE);
-}
-
-/**
- * gtk_print_settings_set_print_to_file:
- * @settings: a #GtkPrintSettings
- * @print_to_file: whether to print to a file
- * 
- * Sets the value of %GTK_PRINT_SETTINGS_PRINT_TO_FILE.
- * 
- * Since: 2.10
- */
-void
-gtk_print_settings_set_print_to_file (GtkPrintSettings *settings,
-				      gboolean          print_to_file)
-{
-  gtk_print_settings_set_bool (settings,
-			       GTK_PRINT_SETTINGS_PRINT_TO_FILE, 
-			       print_to_file);
-}
-
-/**
  * gtk_print_settings_get_print_pages:
  * @settings: a #GtkPrintSettings
  * 

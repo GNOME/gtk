@@ -1,3 +1,7 @@
+2006-06-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Remove unused print-to-file setting
+
 2006-06-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkprinter.sgml: Document GtkPrinterFunc

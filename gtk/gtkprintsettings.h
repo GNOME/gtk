@@ -106,7 +106,6 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_PRINT_PAGES    "print-pages"
 #define GTK_PRINT_SETTINGS_PAGE_RANGES    "page-ranges"
 #define GTK_PRINT_SETTINGS_PAGE_SET       "page-set"
-#define GTK_PRINT_SETTINGS_PRINT_TO_FILE  "print-to-file"
 #define GTK_PRINT_SETTINGS_FINISHINGS     "finishings"
 #define GTK_PRINT_SETTINGS_NUMBER_UP      "number-up"
 #define GTK_PRINT_SETTINGS_OUTPUT_BIN     "output-bin"
@@ -162,9 +161,6 @@ void               gtk_print_settings_set_resolution     (GtkPrintSettings   *se
 gdouble            gtk_print_settings_get_scale          (GtkPrintSettings   *settings);
 void               gtk_print_settings_set_scale          (GtkPrintSettings   *settings,
 							  gdouble             scale);
-gboolean           gtk_print_settings_get_print_to_file  (GtkPrintSettings   *settings);
-void               gtk_print_settings_set_print_to_file  (GtkPrintSettings   *settings,
-							  gboolean            print_to_file);
 GtkPrintPages      gtk_print_settings_get_print_pages    (GtkPrintSettings   *settings);
 void               gtk_print_settings_set_print_pages    (GtkPrintSettings   *settings,
 							  GtkPrintPages       pages);
