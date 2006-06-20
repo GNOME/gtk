@@ -5066,9 +5066,11 @@ gdk_window_get_decorations(GdkWindow       *window,
  * @window: a toplevel #GdkWindow
  * @functions: bitmask of operations to allow on @window
  *
- * This function isn't really good for much. It sets the traditional
- * Motif window manager hint for which operations the window manager
- * should allow on a toplevel window. However, few window managers do
+ * Sets hints about the window management functions to make available
+ * via buttons on the window frame.
+ * 
+ * On the X backend, this function sets the traditional Motif window 
+ * manager hint for this purpose. However, few window managers do
  * anything reliable or interesting with this hint. Many ignore it
  * entirely.
  *
