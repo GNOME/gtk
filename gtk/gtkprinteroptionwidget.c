@@ -494,7 +494,6 @@ radio_changed_cb (GtkWidget              *button,
   value = g_object_get_data (G_OBJECT (button), "value");
   if (value)
     gtk_printer_option_set (priv->source, value);
-  g_free (value);
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
 }

@@ -1,5 +1,10 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinteroptionwidget.c (radio_changed_cb): Don't free
+	the value.
+
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
 	Apply a patch by John Palmieri to use buffered io using
 	GIOChannels, clean up error handling and support Cups 1.2
 	api in the printing code.
