@@ -1,3 +1,7 @@
+2006-06-21  Jakub Friedl <jfriedl@suse.cz>
+
+	* cs.po: Partial update for Czech translation.
+
 2006-06-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* POTFILES.in: Fix for bug #345518, use printbackends/file
