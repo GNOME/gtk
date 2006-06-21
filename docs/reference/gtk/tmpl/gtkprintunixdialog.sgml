@@ -158,7 +158,9 @@ Printing support was added in GTK+ 2.10.
 
 <!-- ##### ENUM GtkPrintCapabilities ##### -->
 <para>
-
+An enum for specifying which features the print dialog should offer.
+I neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor %GTK_PRINT_CAPABILITY_GENERATE_PS is
+specified, GTK+ assumes that all formats are supported.
 </para>
 
 @GTK_PRINT_CAPABILITY_PAGE_SET: 
@@ -166,7 +168,8 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_CAPABILITY_COLLATE: 
 @GTK_PRINT_CAPABILITY_REVERSE: 
 @GTK_PRINT_CAPABILITY_SCALE: 
-@GTK_PRINT_CAPABILITY_GENERATE_PDF: 
+@GTK_PRINT_CAPABILITY_GENERATE_PDF: The program will send the document to the printer in PDF format
+@GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to the printer in Postscript format
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_manual_capabilities ##### -->
 <para>

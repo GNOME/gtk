@@ -1,5 +1,8 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkprintunixdialog.sgml: Document some of the
+	print capabilities
+
 	* gtk/question_index.sgml: Add some questions.
 
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
