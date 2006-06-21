@@ -713,11 +713,12 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
     g_object_class_install_property (o_class,
                                      PROP_ENABLE_GRID_LINES,
-                                     g_param_spec_boolean ("enable-grid-lines",
-                                                           P_("Enable Grid Lines"),
-                                                           P_("Whether grid lines should be drawn in the tree view"),
-                                                           FALSE,
-                                                           GTK_PARAM_READWRITE));
+                                     g_param_spec_enum ("enable-grid-lines",
+							P_("Enable Grid Lines"),
+							P_("Whether grid lines should be drawn in the tree view"),
+							GTK_TYPE_TREE_VIEW_GRID_LINES,
+							GTK_TREE_VIEW_GRID_LINES_NONE,
+							GTK_PARAM_READWRITE));
 
     g_object_class_install_property (o_class,
                                      PROP_ENABLE_TREE_LINES,
@@ -1381,7 +1382,7 @@ gtk_tree_view_set_property (GObject         *object,
       tree_view->priv->rubber_banding_enable = g_value_get_boolean (value);
       break;
     case PROP_ENABLE_GRID_LINES:
-      gtk_tree_view_set_grid_lines (tree_view, g_value_get_boolean (value));
+      gtk_tree_view_set_grid_lines (tree_view, g_value_get_enum (value));
       break;
     case PROP_ENABLE_TREE_LINES:
       gtk_tree_view_set_enable_tree_lines (tree_view, g_value_get_boolean (value));
@@ -1452,7 +1453,7 @@ gtk_tree_view_get_property (GObject    *object,
       g_value_set_boolean (value, tree_view->priv->rubber_banding_enable);
       break;
     case PROP_ENABLE_GRID_LINES:
-      g_value_set_boolean (value, tree_view->priv->grid_lines);
+      g_value_set_enum (value, tree_view->priv->grid_lines);
       break;
     case PROP_ENABLE_TREE_LINES:
       g_value_set_boolean (value, tree_view->priv->tree_lines_enabled);

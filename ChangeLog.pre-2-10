@@ -1,3 +1,8 @@
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Fix the registration
+	of the grid-lines property  (#345456, Murray Cumming) 
+	
 2006-06-21  Kristian Rietveld  <kris@imendio.com>
 
 	Allocate space for the grid lines when they are enabled.
