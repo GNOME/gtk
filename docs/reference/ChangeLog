@@ -1,3 +1,7 @@
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/question_index.sgml: Add some questions.
+
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Remove unused print-to-file setting

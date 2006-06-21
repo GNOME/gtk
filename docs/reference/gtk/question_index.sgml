@@ -524,6 +524,38 @@ volatile GType dummy = GTK_TYPE_BLAH;
 </para>
 </answer>
 </qandaentry>
+
+<qandaentry>
+<question>
+<para>
+How do I create a transparent toplevel window ?
+</para>
+</question>
+
+<answer>
+<para>
+To make a window transparent, it needs to use a visual which supports that.
+This is done by getting the RGBA colormap of the screen with 
+gdk_screen_get_rgba_colormap() and setting it on the window. Note that
+gdk_screen_get_rgba_colormap() will return %NULL if transparent windows
+are not supported on the screen; also note that this may change from
+screen to screen, so it needs to be repeated whenever the window is moved
+to a different screen.
+<informalexample><programlisting>
+GdkColormap *colormap;
+
+colormap = gdk_screen_get_rgba_colormap (screen);
+if (!colormap)
+  colormap = gtk_screen_get_rgb_colormap (screen);
+
+gtk_widget_set_colormap (widget, colormap);
+</programlisting></informalexample>
+One possibility to fill the alpha channel on the window is to use
+gdk_draw_rgb_32_image().
+</para>
+</answer>
+</qandaentry>
+
 </qandadiv>
 
 <qandadiv><title>Which widget should I use...</title>
@@ -887,6 +919,83 @@ How do I hide the expander arrows in my tree view ?
 <answer><para>
 Set the expander-column property of the tree view to a hidden column.
 See gtk_tree_view_set_expander_column() and gtk_tree_view_column_set_visible().
+</para></answer>
+</qandaentry>
+
+</qandadiv>
+
+<qandadiv><title>Using cairo with GTK+</title>
+
+<qandaentry>
+<question><para>
+How do I use cairo to draw in GTK+ applications ?
+</para></question>
+
+<answer><para>
+USe gdk_cairo_create() to obtain a cairo context for drawing
+on a GDK window or pixmap. See <link linkend="gdk-Cairo-Interaction">Cairo 
+Interaction</link> for some more useful functions.
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+I have created a cairo context with gdk_cairo_create(), but when I
+later use it, my drawing does not show up. Why is that ?
+</para></question>
+
+<answer>
+<para>
+All drawing in GTK+ is normally done in an expose handler, and GTK+
+creates a temporary pixmap for double-buffering the drawing. If you 
+create a cairo context outside the expose handler, it is backed
+by the GDK window itself, not the double-buffering pixmap. Consequently,
+any drawing you do with that cairo context gets overwritten at the 
+end of the expose handler, when the double-buffering pixmap is copied
+back.
+</para>
+<para>
+Possible solutions to this problem are:
+<itemizedlist>
+<listitem><para>
+Turn off double-buffering, with gtk_widget_set_double_buffered().
+This is not ideal, since it can cause some flickering.
+</para></listitem>
+<listitem><para>
+Create the cairo context inside the expose handler. If you do this,
+gdk_create_cairo() arranges for it to be backed by the double-buffering 
+pixmap. This is the preferred solution, and is used throughout GTK+
+itself.
+</para></listitem>
+</itemizedlist>
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+Can I improve the performance of my application by using the
+Glitz backend of cairo ?
+</para></question>
+
+<answer><para>
+No. The GDK X11 backend uses the cairo X backend (and the other
+GDK backends use their respective native cairo backends). The
+GTK+ developers believe that the best way to improving the GDK
+drawing performance is to optimize the cairo X backend and the
+relevant code paths in the X server that is uses (mostly the
+Render extension).
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+Can I use cairo to draw on a #GdkPixbuf ?
+</para></question>
+
+<answer><para>
+No, at least not yet. The cairo image surface does not support the
+pixel format used by GdkPixbuf. 
 </para></answer>
 </qandaentry>
 
