@@ -1,3 +1,9 @@
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Remove the
+	GError parameter from cups_request_execute(), and various other
+	cleanups.
+
 2006-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintjob.c (gtk_print_job_class_init): Make 
