@@ -1,3 +1,13 @@
+2006-06-21  Kristian Rietveld  <kris@imendio.com>
+
+	Allocate space for the grid lines when they are enabled.
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): make sure the cell
+	area does not overlap with the grid lines, also draw the line for
+	"the next cell" in the last loop iteration, make sure the cursor falls
+	in between the grid lines,
+	(validate_row): request extra space for the grid lines.
+
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintbackend.h: 

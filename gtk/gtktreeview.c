@@ -4013,7 +4013,7 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
     {
       GtkTreeViewColumn *column = list->data;
 
-      /* We don't want a line for the list column */
+      /* We don't want a line for the last column */
       if (i == n_visible_columns - 1)
 	break;
 
@@ -4062,7 +4062,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint bin_window_height;
   GtkTreePath *cursor_path;
   GtkTreePath *drag_dest_path;
-  GList *last_column;
+  GList *first_column, *last_column;
   gint vertical_separator;
   gint horizontal_separator;
   gint focus_line_width;
@@ -4071,8 +4071,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gboolean rtl;
   gint n_visible_columns;
   gint pointer_x, pointer_y;
+  gint grid_line_width;
   gboolean got_pointer = FALSE;
   gboolean row_ending_details;
+  gboolean draw_vgrid_lines, draw_hgrid_lines;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
@@ -4151,6 +4153,15 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     _gtk_tree_view_find_node (tree_view, drag_dest_path,
                               &drag_highlight_tree, &drag_highlight);
 
+  draw_vgrid_lines =
+    tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL
+    || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
+  draw_hgrid_lines =
+    tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_HORIZONTAL
+    || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
+
+  if (draw_vgrid_lines || draw_hgrid_lines)
+    gtk_widget_style_get (widget, "grid-line-width", &grid_line_width, NULL);
   
   n_visible_columns = 0;
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -4161,11 +4172,15 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     }
 
   /* Find the last column */
-  for (last_column = rtl ? g_list_first (tree_view->priv->columns) : g_list_last (tree_view->priv->columns);
-       last_column &&
-	 !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible) &&
-	 GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button);
-       last_column = rtl ? last_column->next : last_column->prev)
+  for (last_column = g_list_last (tree_view->priv->columns);
+       last_column && !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible);
+       last_column = last_column->prev)
+    ;
+
+  /* and the first */
+  for (first_column = g_list_first (tree_view->priv->columns);
+       first_column && !(GTK_TREE_VIEW_COLUMN (first_column->data)->visible);
+       first_column = first_column->next)
     ;
 
   /* Actually process the expose event.  To do this, we want to
@@ -4260,6 +4275,30 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           cell_area.x += horizontal_separator / 2;
           cell_area.height -= vertical_separator;
 	  cell_area.width -= horizontal_separator;
+
+	  if (draw_vgrid_lines)
+	    {
+	      if (list == first_column)
+	        {
+		  cell_area.width -= grid_line_width / 2;
+		}
+	      else if (list == last_column)
+	        {
+		  cell_area.x += grid_line_width / 2;
+		  cell_area.width -= grid_line_width / 2;
+		}
+	      else
+	        {
+	          cell_area.x += grid_line_width / 2;
+	          cell_area.width -= grid_line_width;
+		}
+	    }
+
+	  if (draw_hgrid_lines)
+	    {
+	      cell_area.y += grid_line_width / 2;
+	      cell_area.height -= grid_line_width;
+	    }
 
 	  if (gdk_region_rect_in (event->region, &background_area) == GDK_OVERLAP_RECTANGLE_OUT)
 	    {
@@ -4370,8 +4409,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				  background_area.height);
 	    }
 
-	  if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_HORIZONTAL
-	      || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
+	  if (draw_hgrid_lines)
 	    {
 	      if (background_area.y > 0)
 		gdk_draw_line (event->window,
@@ -4379,6 +4417,13 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			       background_area.x, background_area.y,
 			       background_area.x + background_area.width,
 			       background_area.y);
+
+	      if (y_offset + max_height >= event->area.height)
+		gdk_draw_line (event->window,
+			       tree_view->priv->grid_line_gc,
+			       background_area.x, background_area.y + max_height,
+			       background_area.x + background_area.width,
+			       background_area.y + max_height);
 	    }
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
@@ -4606,6 +4651,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS) &&
 	  GTK_WIDGET_HAS_FOCUS (widget))
         {
+	  gint tmp_y, tmp_height;
 	  gint width;
 	  GtkStateType focus_rect_state;
 
@@ -4618,6 +4664,17 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  gdk_drawable_get_size (tree_view->priv->bin_window,
 				 &width, NULL);
 	  
+	  if (draw_hgrid_lines)
+	    {
+	      tmp_y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node) + grid_line_width / 2;
+	      tmp_height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node)) - grid_line_width;
+	    }
+	  else
+	    {
+	      tmp_y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node);
+	      tmp_height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node));
+	    }
+
 	  if (row_ending_details)
 	    gtk_paint_focus (widget->style,
 			     tree_view->priv->bin_window,
@@ -4627,10 +4684,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			     (is_first
 			      ? (is_last ? "treeview" : "treeview-left" )
 			      : (is_last ? "treeview-right" : "treeview-middle" )),
-			     0,
-			     BACKGROUND_FIRST_PIXEL (tree_view, tree, node),
-			     width,
-			     ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node)));
+			     0, tmp_y,
+			     width, tmp_height);
 	  else
 	    gtk_paint_focus (widget->style,
 			     tree_view->priv->bin_window,
@@ -4638,10 +4693,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			     NULL,
 			     widget,
 			     "treeview",
-			     0,
-			     BACKGROUND_FIRST_PIXEL (tree_view, tree, node),
-			     width,
-			     ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node)));
+			     0, tmp_y,
+			     width, tmp_height);
 	}
 
       y_offset += max_height;
@@ -5388,7 +5441,7 @@ validate_row (GtkTreeView *tree_view,
 	      GtkTreePath *path)
 {
   GtkTreeViewColumn *column;
-  GList *list;
+  GList *list, *first_column, *last_column;
   gint height = 0;
   gint horizontal_separator;
   gint vertical_separator;
@@ -5396,7 +5449,9 @@ validate_row (GtkTreeView *tree_view,
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
+  gboolean draw_vgrid_lines, draw_hgrid_lines;
   gint focus_pad;
+  gint grid_line_width;
 
   /* double check the row needs validating */
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) &&
@@ -5415,8 +5470,26 @@ validate_row (GtkTreeView *tree_view,
 			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
+			"grid-line-width", &grid_line_width,
 			NULL);
   
+  draw_vgrid_lines =
+    tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL
+    || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
+  draw_hgrid_lines =
+    tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_HORIZONTAL
+    || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
+
+  for (last_column = g_list_last (tree_view->priv->columns);
+       last_column && !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible);
+       last_column = last_column->prev)
+    ;
+
+  for (first_column = g_list_first (tree_view->priv->columns);
+       first_column && !(GTK_TREE_VIEW_COLUMN (first_column->data)->visible);
+       first_column = first_column->next)
+    ;
+
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       gint tmp_width;
@@ -5456,12 +5529,23 @@ validate_row (GtkTreeView *tree_view,
       else
 	tmp_width = tmp_width + horizontal_separator;
 
+      if (draw_vgrid_lines)
+        {
+	  if (list->data == first_column || list->data == last_column)
+	    tmp_width += grid_line_width / 2.0;
+	  else
+	    tmp_width += grid_line_width;
+	}
+
       if (tmp_width > column->requested_width)
 	{
 	  retval = TRUE;
 	  column->requested_width = tmp_width;
 	}
     }
+
+  if (draw_hgrid_lines)
+    height += grid_line_width;
 
   if (height != GTK_RBNODE_GET_HEIGHT (node))
     {
