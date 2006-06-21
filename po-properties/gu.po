@@ -302,13 +302,14 @@
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
 # translation of gtk+-properties.HEAD.gu.po to Gujarati
+# translation of gtk+-properties.HEAD.gu.po to Gujarati
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-19 23:25+0200\n"
-"PO-Revision-Date: 2006-06-20 10:52+0530\n"
+"POT-Creation-Date: 2006-06-20 23:33+0200\n"
+"PO-Revision-Date: 2006-06-21 10:06+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -316,6 +317,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1874,7 +1876,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "શું રંગને આલ્ફા કિંમત આપવી કે નહિં"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:386
-#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:115
+#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "શીર્ષક"
@@ -2769,7 +2771,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "જગ્યા કે જે ચિહ્ન દેખાવની બાજુઓ વચ્ચે દાખલ થયેલ છે"
 
 #: ../gtk/gtkiconview.c:692 ../gtk/gtkprogressbar.c:128
-#: ../gtk/gtktoolbar.c:484 ../gtk/gtktrayicon-x11.c:94
+#: ../gtk/gtktoolbar.c:484 ../gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "દિશા"
 
@@ -3629,30 +3631,40 @@ msgstr "સ્રોત વિકલ્પ"
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption આ વિજેટને બેક કરી રહ્યું છે"
 
-#: ../gtk/gtkprintjob.c:116
+#: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
 msgstr "છાપન ક્રિયાનું શીર્ષક"
 
-#: ../gtk/gtkprintjob.c:124
+#: ../gtk/gtkprintjob.c:125
 msgid "Printer"
 msgstr "પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:125
+#: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr "ક્રિયાને છાપવા માટેનું પ્રિન્ટર"
 
-#: ../gtk/gtkprintjob.c:133
+#: ../gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr "સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:134
+#: ../gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
-#: ../gtk/gtkprintjob.c:142 ../gtk/gtkprintjob.c:143
+#: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
 #: ../gtk/gtkprintunixdialog.c:225
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
+
+#: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
+
+#: ../gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr "TRUE જો છાપન ક્રિયા પરિસ્થિતિ-બદલાયેલ સંકેતોને છાપન  માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ ગયા પછી મોકલવાનું ચાલુ રાખશે."
 
 #: ../gtk/gtkprintoperation.c:844
 msgid "Default Page Setup"
@@ -3703,10 +3715,6 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "TRUE જો સંદર્ભનું મૂળ પાનાંની કિનારીએ હોવું જોઈએ અને નહિં કે ચિત્રવાળા વિસ્તારની કિનારીએ"
-
-#: ../gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
-msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
 
 #: ../gtk/gtkprintoperation.c:972
 msgid ""
@@ -5430,7 +5438,7 @@ msgstr ""
 "શું સાધનપટ્ટી વસ્તુ એ મહત્વની તરીકે સમજાયેલ છે. જ્યારે સાચું હોય, તો સાધનપટ્ટી બટનો "
 "GTK_TOOLBAR_BOTH_HORIZ સ્થિતિમાં બતાવો"
 
-#: ../gtk/gtktrayicon-x11.c:95
+#: ../gtk/gtktrayicon-x11.c:98
 msgid "The orientation of the tray"
 msgstr "ટ્રેની દિશા"
 
