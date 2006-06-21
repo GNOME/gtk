@@ -123,7 +123,8 @@ static gboolean             cups_printer_mark_conflicts            (GtkPrinter  
 								    GtkPrinterOptionSet               *options);
 static GtkPrinterOptionSet *cups_printer_get_options               (GtkPrinter                        *printer,
 								    GtkPrintSettings                  *settings,
-								    GtkPageSetup                      *page_setup);
+								    GtkPageSetup                      *page_setup,
+                                                                    GtkPrintCapabilities               capabilities);
 static void                 cups_printer_prepare_for_print         (GtkPrinter                        *printer,
 								    GtkPrintJob                       *print_job,
 								    GtkPrintSettings                  *settings,
@@ -149,7 +150,8 @@ static void                 gtk_print_backend_cups_print_stream    (GtkPrintBack
 								    gint                               data_fd,
 								    GtkPrintJobCompleteFunc            callback,
 								    gpointer                           user_data,
-								    GDestroyNotify                     dnotify);
+								    GDestroyNotify                     dnotify,
+								    GError                           **error);
 static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter                        *printer,
 								    GtkPrintSettings                  *settings,
 								    gdouble                            width,
@@ -374,7 +376,8 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 				     gint                     data_fd,
 				     GtkPrintJobCompleteFunc  callback,
 				     gpointer                 user_data,
-				     GDestroyNotify           dnotify)
+				     GDestroyNotify           dnotify,
+				     GError                 **error)
 {
   GtkPrinterCups *cups_printer;
   CupsPrintStreamData *ps;
@@ -1919,9 +1922,10 @@ handle_group (GtkPrinterOptionSet *set,
 }
 
 static GtkPrinterOptionSet *
-cups_printer_get_options (GtkPrinter       *printer,
-			  GtkPrintSettings *settings,
-			  GtkPageSetup     *page_setup)
+cups_printer_get_options (GtkPrinter           *printer,
+			  GtkPrintSettings     *settings,
+			  GtkPageSetup         *page_setup,
+			  GtkPrintCapabilities  capabilities)
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
@@ -2088,8 +2092,8 @@ set_conflicts_from_group (GtkPrinterOptionSet *set,
 }
 
 static gboolean
-cups_printer_mark_conflicts  (GtkPrinter          *printer,
-			      GtkPrinterOptionSet *options)
+cups_printer_mark_conflicts (GtkPrinter          *printer,
+			     GtkPrinterOptionSet *options)
 {
   ppd_file_t *ppd_file;
   int num_conflicts;

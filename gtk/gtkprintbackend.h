@@ -76,7 +76,8 @@ struct _GtkPrintBackendClass
 							     gint                    data_fd,
 							     GtkPrintJobCompleteFunc callback,
 							     gpointer                user_data,
-							     GDestroyNotify          dnotify);
+							     GDestroyNotify          dnotify,
+							     GError                **error);
 
   /* Printer methods: */
   void                  (*printer_request_details)           (GtkPrinter          *printer);
@@ -137,7 +138,8 @@ void        gtk_print_backend_print_stream         (GtkPrintBackend         *pri
 						    gint                     data_fd,
 						    GtkPrintJobCompleteFunc  callback,
 						    gpointer                 user_data,
-						    GDestroyNotify           dnotify);
+						    GDestroyNotify           dnotify,
+						    GError                 **error);
 GList *     gtk_print_backend_load_modules         (void);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
 

@@ -77,12 +77,13 @@ static void                 file_printer_prepare_for_print         (GtkPrinter  
 								    GtkPrintJob             *print_job,
 								    GtkPrintSettings        *settings,
 								    GtkPageSetup            *page_setup);
-static void                 gtk_print_backend_file_print_stream     (GtkPrintBackend         *print_backend,
+static void                 gtk_print_backend_file_print_stream    (GtkPrintBackend         *print_backend,
 								    GtkPrintJob             *job,
 								    gint                     data_fd,
 								    GtkPrintJobCompleteFunc  callback,
 								    gpointer                 user_data,
-								    GDestroyNotify           dnotify);
+								    GDestroyNotify           dnotify,
+								    GError                 **error);
 static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter              *printer,
 								    GtkPrintSettings        *settings,
 								    gdouble                  width,
@@ -293,19 +294,20 @@ file_write (GIOChannel   *source,
 
 static void
 gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
-				    GtkPrintJob            *job,
-				    gint                    data_fd,
-				    GtkPrintJobCompleteFunc callback,
-				    gpointer                user_data,
-				    GDestroyNotify          dnotify)
+				     GtkPrintJob            *job,
+				     gint                    data_fd,
+				     GtkPrintJobCompleteFunc callback,
+				     gpointer                user_data,
+				     GDestroyNotify          dnotify,
+				     GError                **error)
 {
-  GError *error;
+  GError *internal_error = NULL;
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *save_channel;  
   const gchar *uri;
-  gchar *filename = NULL; /* quit gcc */
+  gchar *filename = NULL; 
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
@@ -333,12 +335,13 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 
   if (ps->target_fd == -1)
     {
-      error = g_error_new (GTK_PRINT_ERROR,
-                           GTK_PRINT_ERROR_INTERNAL_ERROR, 
-                           g_strerror (errno));
+      internal_error = g_error_new (GTK_PRINT_ERROR,
+				    GTK_PRINT_ERROR_INTERNAL_ERROR, 
+				    g_strerror (errno));
 
-      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend), error, ps);
-
+      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend), 
+		     internal_error, ps);
+      g_propagate_error (error, internal_error);
       return;
     }
   

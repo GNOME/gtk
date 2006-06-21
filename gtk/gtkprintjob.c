@@ -648,6 +648,7 @@ gtk_print_job_send (GtkPrintJob             *job,
 		    GError                 **error)
 {
   GtkPrintJobPrivate *priv;
+  GError *print_error = NULL;
 
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
 
@@ -656,12 +657,16 @@ gtk_print_job_send (GtkPrintJob             *job,
   
   gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
   lseek (priv->spool_file_fd, 0, SEEK_SET);
-  gtk_print_backend_print_stream (priv->backend,
-                                  job,
+  gtk_print_backend_print_stream (priv->backend, job,
 				  priv->spool_file_fd,
-                                  callback,
-                                  user_data,
-				  dnotify);
+                                  callback, user_data, dnotify,
+				  &print_error);
+  if (print_error)
+    {
+      g_propagate_error (error, print_error);
+
+      return FALSE;
+    }
 
   return TRUE;
 }

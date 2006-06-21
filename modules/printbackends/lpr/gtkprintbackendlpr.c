@@ -83,7 +83,8 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 								   gint                     data_fd,
 								   GtkPrintJobCompleteFunc  callback,
 								   gpointer                 user_data,
-								   GDestroyNotify           dnotify);
+								   GDestroyNotify           dnotify,
+								   GError                 **error);
 
 static void
 gtk_print_backend_lpr_register_type (GTypeModule *module)
@@ -243,8 +244,9 @@ lpr_print_cb (GtkPrintBackendLpr *print_backend,
   if (ps->dnotify)
     ps->dnotify (ps->user_data);
 
-  gtk_print_job_set_status (ps->job,
-			    (error != NULL)?GTK_PRINT_STATUS_FINISHED_ABORTED:GTK_PRINT_STATUS_FINISHED);
+  gtk_print_job_set_status (ps->job, 
+			    error ? GTK_PRINT_STATUS_FINISHED_ABORTED 
+			          : GTK_PRINT_STATUS_FINISHED);
 
   if (ps->job)
     g_object_unref (ps->job);
@@ -289,7 +291,11 @@ lpr_write (GIOChannel   *source,
 
   if (bytes_read == 0 || error != NULL)
     {
-      lpr_print_cb (GTK_PRINT_BACKEND_LPR (ps->backend), error, user_data);
+      lpr_print_cb (GTK_PRINT_BACKEND_LPR (ps->backend), 
+		    error, user_data);
+
+      if (error)
+	g_error_free (error);
 
       return FALSE;
     }
@@ -305,21 +311,20 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 				    gint                    data_fd,
 				    GtkPrintJobCompleteFunc callback,
 				    gpointer                user_data,
-				    GDestroyNotify          dnotify)
+				    GDestroyNotify          dnotify,
+				    GError                **error)
 {
-  GError *error;
+  GError *print_error = NULL;
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   GIOChannel *send_channel;
   gint argc;  
   gchar **argv;
-  const char *cmd_line;
+  const gchar *cmd_line;
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
-
-  error = NULL;
 
   cmd_line = gtk_print_settings_get (settings, "lpr-commandline");
   if (cmd_line == NULL)
@@ -335,13 +340,11 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
   ps->err = 0;
 
  /* spawn lpr with pipes and pipe ps file to lpr */
-  if (!g_shell_parse_argv (cmd_line,
-                           &argc,
-                           &argv,
-                           &error))
+  if (!g_shell_parse_argv (cmd_line, &argc, &argv, &print_error))
     {
-      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
-                    error, ps);
+      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend), 
+		    print_error, ps);
+      g_propagate_error (error, print_error);
       return;
     }
 
@@ -355,11 +358,11 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
                                  &ps->in,
                                  &ps->out,
                                  &ps->err,
-                                 &error))
+                                 &print_error))
     {
-       lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
-		     error, ps);
-
+      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
+		    print_error, ps);
+      g_propagate_error (error, print_error);
       goto out;
 
     }

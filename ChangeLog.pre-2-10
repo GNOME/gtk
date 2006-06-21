@@ -1,5 +1,18 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintbackend.h: 
+	* gtk/gtkprintbackend.c (gtk_print_backend_print_stream): Add an
+	GError parameter.
+
+	* modules/printbackends/file/gtkprintbackendfile.c 
+	(gtk_print_backend_file_print_stream): 
+	* modules/printbackends/lpr/gtkprintbackendlpr.c 
+	(gtk_print_backend_lpr_print_stream): 
+	* modules/printbackends/cups/gtkprintbackendcups.c 
+	(gtk_print_backend_cups_print_stream): 
+	* gtk/gtkprintjob.c (gtk_print_job_send): Update all callers and
+	implementations.
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Remove the
 	GError parameter from cups_request_execute(), and various other
 	cleanups.

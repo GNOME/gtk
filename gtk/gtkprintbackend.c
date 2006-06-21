@@ -579,7 +579,8 @@ gtk_print_backend_print_stream (GtkPrintBackend        *backend,
                                 gint                    data_fd,
                                 GtkPrintJobCompleteFunc callback,
                                 gpointer                user_data,
-				GDestroyNotify          dnotify)
+				GDestroyNotify          dnotify,
+				GError                **error)
 {
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
@@ -588,7 +589,8 @@ gtk_print_backend_print_stream (GtkPrintBackend        *backend,
 						       data_fd,
 						       callback,
 						       user_data,
-						       dnotify);
+						       dnotify,
+						       error);
 }
 
 void
