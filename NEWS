@@ -1,3 +1,62 @@
+Overview of Changes from GTK+ 2.9.3 to 2.9.4
+============================================
+
+* GtkPrintOperation:
+ - UI improvements in the print dialog
+ - Make printing work without a display connection
+ - Replace "Print to PDF" by "Print to file" that
+   can generate PDF of PostScript
+ - Add a function to the low-level API to 
+   enumerate all printers
+
+* GtkNotebook tab DND has been improved
+
+* GtkProgressbar supports text in activity mode 
+
+* GtkLabel allows to set the wrap mode
+
+* GtkStatusIcon supports transparency
+
+* Bugs fixed:
+ 344850 Dragging a GtkTreeViewColumn segfaults when 
+        using certain GtkTreeViewColumnDropFunc
+ 342458 Stock menu items without icons are broken in 
+        recent GTK+ releases.
+ 335873 notebook DND + popup windows
+ 337882 gtk_progress_bar_set_text() does nothing in 
+        activity mode
+ 339456 unix print dialogue help button bug
+ 339702 Make sure printing works without a display
+ 341571 tabs too easily reordered
+ 344074 New Feature: get printer list, and get default print
+ 344743 gtk_targets_include_text() should initialize atoms
+ 344838 Allow func to be NULL in 
+        gtk_tree_view_set_search_position_func
+ 344891 GtkPrintOperationPreview signal defs correction
+ 345008 Need updated cairo req
+ 345093 print preview temp file issues
+ 345107 Memory leak in gtk_entry_completion_finalize: 
+        User data not freed
+ 345194 gdk_window_set_functions() docs need to be updated
+ 345456 grid-lines property is wrongly registered and 
+        get/set.
+ 314278 strings in gtk-update-icon-cache are not marked 
+        for translation
+ 344707 size group with widgets in hidden container
+ 344897 Entry completion model NULL handling should be 
+        documented
+ 345038 gtk_print_job_set_status' status
+ 345106 dialog button box spacings
+ 345176 GtkIconView doc about drag and drop
+ 345275 doc imporovements for gtk_window_move
+ 345320 Two very similiar strings should be made equal
+ 345321 Add meaning of "shortcut" as translator comment
+ 320034 transparency gtkstatusicon
+ 339592 Add print-to-postscript
+ 344867 custom paper file could use keyfile
+
+* Updated translations (cs,de,es,fr,gl,gu,hi,ko,ta,th)
+
 Overview of Changes from GTK+ 2.9.2 to 2.9.3
 ============================================  
 

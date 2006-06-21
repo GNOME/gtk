@@ -1,5 +1,7 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Fix the registration
 	of the grid-lines property  (#345456, Murray Cumming) 
 	
@@ -316,6 +318,7 @@ Fri Jun 16 11:49:53 2006  Tim Janik  <timj@imendio.com>
 	signal definitions.  (#344891, Marko Anastasov)
 
 2006-06-14  Michael Emmel  <mike.emmel@gmail.com>
+	
 	* configure.in: updated mininum  dfb to 0.9.24
 	* gdk/directfb/gdkdirectfb.h: added more directfb wrapper functions
 	* gdk/directfb/gdkdrawable-directfb.c: wrapper functions and patch from 
