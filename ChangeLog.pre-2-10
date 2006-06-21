@@ -1,5 +1,9 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/file/gtkprintbackendfile.c: 
+	Apply a patch by Christian Persch to support PostScript and PDF
+	output.
+
 	* gtk/gtkprinteroptionwidget.c (radio_changed_cb): Don't free
 	the value.
 

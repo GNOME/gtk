@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <cairo.h>
 #include <cairo-pdf.h>
+#include <cairo-ps.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -60,6 +61,19 @@ struct _GtkPrintBackendFileClass
 struct _GtkPrintBackendFile
 {
   GtkPrintBackend parent_instance;
+};
+
+typedef enum
+{
+  FORMAT_PDF,
+  FORMAT_PS,
+  N_FORMATS
+} OutputFormat;
+
+static const gchar* formats[N_FORMATS] =
+{
+  "pdf",
+  "ps"
 };
 
 static GObjectClass *backend_parent_class;
@@ -167,6 +181,56 @@ gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
   backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
 }
 
+static OutputFormat
+format_from_settings (GtkPrintSettings *settings)
+{
+  const gchar *value;
+  gint i;
+
+  if (settings == NULL)
+    return FORMAT_PDF;
+
+  value = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
+  if (value == NULL)
+    return FORMAT_PDF;
+
+  for (i = 0; i < N_FORMATS; ++i)
+    if (strcmp (value, formats[i]) == 0)
+      break;
+  g_assert (i < N_FORMATS);
+
+  return (OutputFormat) i;
+}
+
+static gchar *
+filename_from_settings (GtkPrintSettings *settings)
+{
+  gchar *filename;
+
+  filename = NULL;
+  if (settings)
+    {
+      const gchar *uri;
+
+      uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
+      if (uri)
+	filename = g_filename_from_uri (uri, NULL, NULL);
+    }
+  /* FIXME: shouldn't we error out if we get an URI we cannot handle,
+   * rather than to print to some random file somewhere?
+   */
+  if (filename == NULL)
+    { 
+      OutputFormat format;
+
+      format = format_from_settings (settings);
+
+      filename = g_strdup_printf ("output.%s", formats[format]);
+    }
+
+  return filename;
+}
+
 static cairo_status_t
 _cairo_write (void                *closure,
               const unsigned char *data,
@@ -213,8 +277,14 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
-  
-  surface = cairo_pdf_surface_create_for_stream  (_cairo_write, cache_io, width, height);
+  OutputFormat format;
+
+  format = format_from_settings (settings);
+
+  if (format == FORMAT_PDF)
+    surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
+  else
+    surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
 
   /* TODO: DPI from settings object? */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
@@ -320,23 +390,11 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  const gchar *uri;
   gchar *filename = NULL; 
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
-  internal_error = NULL;
-
-  uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
-  if (uri)
-    filename = g_filename_from_uri (uri, NULL, NULL);
-  /* FIXME: shouldn't we error out if we get an URI we cannot handle,
-   * rather than to print to some random file somewhere?
-   */
-  if (filename == NULL)
-    filename = g_strdup_printf ("output.pdf");
-  
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
@@ -344,7 +402,12 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   ps->job = g_object_ref (job);
   ps->backend = print_backend;
 
+  internal_error = NULL;
+  filename = filename_from_settings (settings);
+  
   ps->target_io = g_io_channel_new_file (filename, "w", &internal_error);
+
+  g_free (filename);
 
   if (internal_error == NULL)
     g_io_channel_set_encoding (ps->target_io, NULL, &internal_error);
@@ -352,8 +415,7 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   if (internal_error != NULL)
     {
       file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend),
-                    internal_error,
-                    ps);
+                    internal_error, ps);
 
       g_error_free (internal_error);
       return;
@@ -374,7 +436,6 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  "name", _("Print to File"),
 			  "backend", backend,
 			  "is-virtual", TRUE,
-			  "accepts-ps", FALSE,
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
@@ -395,26 +456,75 @@ file_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  const char *uri;
-  char *n_up[] = {"1" };
+  const gchar *n_up[] = { "1" };
+  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript") };
+  const gchar *supported_formats[N_FORMATS];
+  gchar *display_format_names[N_FORMATS];
+  gint n_formats = 0;
+  OutputFormat format;
+  gchar *filename;
+  gint current_format;
+
+  format = format_from_settings (settings);
+  filename = filename_from_settings (settings);
 
   set = gtk_printer_option_set_new ();
 
-  option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-n-up", _("Pages per _sheet:"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					 n_up, n_up);
+					 (char **) n_up, (char **) n_up /* FIXME i18n (localised digits)! */);
   gtk_printer_option_set (option, "1");
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), GTK_PRINTER_OPTION_TYPE_FILESAVE);
-  gtk_printer_option_set (option, "output.pdf");
+  gtk_printer_option_set (option, filename);
   option->group = g_strdup ("GtkPrintDialogExtension");
   gtk_printer_option_set_add (set, option);
 
-  if (settings != NULL &&
-      (uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI))!= NULL)
-    gtk_printer_option_set (option, uri);
+  if (capabilities & (GTK_PRINT_CAPABILITY_GENERATE_PDF | GTK_PRINT_CAPABILITY_GENERATE_PS))
+    {
+      if (capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF)
+        {
+	  if (format == FORMAT_PDF)
+	    current_format = n_formats;
+          supported_formats[n_formats] = formats[FORMAT_PDF];
+	  display_format_names[n_formats] = _(format_names[FORMAT_PDF]);
+	  n_formats++;
+	}
+      if (capabilities & GTK_PRINT_CAPABILITY_GENERATE_PS)
+        {
+	  if (format == FORMAT_PS)
+	    current_format = n_formats;
+          supported_formats[n_formats] = formats[FORMAT_PS];
+          display_format_names[n_formats] = _(format_names[FORMAT_PS]);
+	  n_formats++;
+	}
+    }
+  else
+    {
+      current_format = format;
+      for (n_formats = 0; n_formats < N_FORMATS; ++n_formats)
+        {
+	  supported_formats[n_formats] = formats[n_formats];
+          display_format_names[n_formats] = _(format_names[n_formats]);
+	}
+    }
+
+  if (n_formats > 1)
+    {
+      option = gtk_printer_option_new ("output-file-format", _("_Output format"), 
+				       GTK_PRINTER_OPTION_TYPE_ALTERNATIVE);
+      option->group = g_strdup ("GtkPrintDialogExtension");
+
+      gtk_printer_option_choices_from_array (option, n_formats,
+					     (char **) supported_formats,
+					     display_format_names);
+      gtk_printer_option_set (option, supported_formats[current_format]);
+      gtk_printer_option_set_add (set, option);
+      
+      g_object_unref (option);
+    }
 
   return set;
 }
@@ -428,6 +538,9 @@ file_printer_get_settings_from_options (GtkPrinter          *printer,
 
   option = gtk_printer_option_set_lookup (options, "gtk-main-page-custom-input");
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, option->value);
+
+  option = gtk_printer_option_set_lookup (options, "output-file-format");
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, option->value);
 }
 
 static void
