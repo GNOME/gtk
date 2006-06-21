@@ -815,6 +815,38 @@
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
+# translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gk.hi.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
@@ -826,8 +858,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-19 23:25+0200\n"
-"PO-Revision-Date: 2006-06-20 12:28+0530\n"
+"POT-Creation-Date: 2006-06-21 07:23+0200\n"
+"PO-Revision-Date: 2006-06-21 13:24+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -835,6 +867,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -2378,7 +2411,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "अल्फा मूल्य को रंग दिया जाना है या नहीं"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:386
-#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:115
+#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "शीर्षक"
@@ -3275,7 +3308,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "प्रतीक दृश्य के बीच किनारे पर दिया गया स्थान"
 
 #: ../gtk/gtkiconview.c:692 ../gtk/gtkprogressbar.c:128
-#: ../gtk/gtktoolbar.c:484 ../gtk/gtktrayicon-x11.c:94
+#: ../gtk/gtktoolbar.c:484 ../gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "दिशा"
 
@@ -3479,7 +3512,7 @@ msgstr "जब लेबल की मेमोनिक कुंजी को 
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
-msgstr ""
+msgstr "स्ट्रिंग लपटने का पसंदीदा स्थान, अगर लेबल के पास पूरे स्ट्रिंग दिखाने का पर्याप्त स्थान नहीं हो"
 
 #: ../gtk/gtklabel.c:465
 msgid "Single Line Mode"
@@ -3637,7 +3670,7 @@ msgstr "उपमेनू के आने के पहले विलंब 
 
 #: ../gtk/gtkmenu.c:670
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
+msgstr "उपमेनू के प्रकट होने के पहले मेनू मद पर संकेतक को न्यूनतम समय के लिये जरूर रहना चाहिये"
 
 #: ../gtk/gtkmenu.c:677
 msgid "Delay before hiding a submenu"
@@ -3647,7 +3680,7 @@ msgstr "उपमेनू के छुपाने के पहले वि�
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
+msgstr "उपमेनू छिपाने के पहले का समय जब संकेतक उपमेनू की तरफ खिसक रहा है"
 
 #: ../gtk/gtkmenubar.c:175
 msgid "Pack direction"
@@ -4039,7 +4072,7 @@ msgstr "आकार बदलें"
 
 #: ../gtk/gtkpaned.c:286
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
+msgstr "अगर सही है, संतति पैन किये विजेट के अनुसार फैलता व सिकुंड़ता है"
 
 #: ../gtk/gtkpaned.c:301
 msgid "Shrink"
@@ -4047,11 +4080,11 @@ msgstr "सिकुड़ें"
 
 #: ../gtk/gtkpaned.c:302
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr ""
+msgstr "अगर सही है, संतति को छोटा इसकी जरूरत के अनुसार बनाया जा सकता है"
 
 #: ../gtk/gtkpreview.c:106
 msgid "Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
+msgstr "क्या पूर्वावलोकन विजेट को इसे दिये पूरे स्थान को लेना चाहिये"
 
 #: ../gtk/gtkprintbackend.c:261
 msgid "Default print backend"
@@ -4133,30 +4166,40 @@ msgstr "श्रोत विकल्प"
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption इस विजेट को वैक करता है"
 
-#: ../gtk/gtkprintjob.c:116
+#: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
 msgstr "छापी जाने वाली सामग्री का शीर्षक"
 
-#: ../gtk/gtkprintjob.c:124
+#: ../gtk/gtkprintjob.c:125
 msgid "Printer"
 msgstr "मुद्रक"
 
-#: ../gtk/gtkprintjob.c:125
+#: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr "इसमें मुद्रक को यह कार्य छापना है"
 
-#: ../gtk/gtkprintjob.c:133
+#: ../gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr "जमावट"
 
-#: ../gtk/gtkprintjob.c:134
+#: ../gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr "मुद्रक जमावट"
 
-#: ../gtk/gtkprintjob.c:142 ../gtk/gtkprintjob.c:143
+#: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
 #: ../gtk/gtkprintunixdialog.c:225
 msgid "Page Setup"
 msgstr "पृष्ठ सेटअप"
+
+#: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr "छपाई स्थिति ट्रैक करें"
+
+#: ../gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr "सही अगर छपाई कार्य प्रस्थिति बदलाव संकेत देना जारी रखेगा छपाई आंकड़ा के मुद्रक या मुद्रक सर्वर में भेजे जाने के बाद."
 
 #: ../gtk/gtkprintoperation.c:844
 msgid "Default Page Setup"
@@ -4206,17 +4249,13 @@ msgstr "पूर्ण पृष्ठ का प्रयोग करें"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr ""
-
-#: ../gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
-msgstr "छपाई स्थिति ट्रैक करें"
+msgstr "सही अगर संदर्भ का मूल को पृष्ठ के कोने में होना चाहिये और न कि चित्र वाले क्षेत्र में"
 
 #: ../gtk/gtkprintoperation.c:972
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr ""
+msgstr "सही अगर छपाई कार्य छपाई कार्य स्थिति पर रिपोर्ट देना जारी रखेगा मुद्रक या मुद्रक सर्वर में प्रिंट आंकड़ा भेजे जाने के बाद."
 
 #: ../gtk/gtkprintoperation.c:989
 msgid "Unit"
@@ -4224,7 +4263,7 @@ msgstr "इकाई"
 
 #: ../gtk/gtkprintoperation.c:990
 msgid "The unit in which distances can be measured in the context"
-msgstr ""
+msgstr "ईकाई जिसमें दूरी को संदर्भ के अनुसार मापा जायेगा"
 
 #: ../gtk/gtkprintoperation.c:1007
 msgid "Show Dialog"
@@ -4317,7 +4356,7 @@ msgstr "Text-x alignment"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr ""
+msgstr "0.0 और 1.0 के बीच प्रगति विजेट में पाठ के क्षैतिज संरेखण निर्दिष्ठ करता एक संख्या"
 
 #: ../gtk/gtkprogress.c:124
 msgid "Text y alignment"
@@ -4327,7 +4366,7 @@ msgstr "Text y alignment"
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr ""
+msgstr "0.0 और 1.0 के बीच प्रगति विजेट में पाठ के लंबवत संरेखण निर्दिष्ठ करता एक संख्या"
 
 #: ../gtk/gtkprogressbar.c:120 ../gtk/gtkrange.c:320
 #: ../gtk/gtkspinbutton.c:203
@@ -4356,7 +4395,7 @@ msgstr "क्रिया के चरण"
 
 #: ../gtk/gtkprogressbar.c:147
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
+msgstr "क्रियाकलाप मोड में हर पुनरावृति के लिये प्रयुक्त वृद्धि (पदावनत)"
 
 #: ../gtk/gtkprogressbar.c:156
 msgid "Activity Blocks"
@@ -4366,7 +4405,7 @@ msgstr "क्रिया के हिस्से"
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr ""
+msgstr "खंड की संख्या जो क्रियाकलाप मोड के प्रगति बार में फिट हो सकता है (पदावनत)"
 
 #: ../gtk/gtkprogressbar.c:166
 msgid "Discrete Blocks"
@@ -4376,7 +4415,7 @@ msgstr "आरक्षित खंड"
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr ""
+msgstr "प्रगति बार में विलगति खंड की संख्या (जब विलगित शैली में दिखाया जाता है)"
 
 #: ../gtk/gtkprogressbar.c:176
 msgid "Fraction"
@@ -4392,7 +4431,7 @@ msgstr "नब्ज चरण"
 
 #: ../gtk/gtkprogressbar.c:187
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr ""
+msgstr "कुल प्रगति की अंश जिसे पल्स के दौरान उछलते खंड खिसकाने के लिये"
 
 #: ../gtk/gtkprogressbar.c:197
 msgid "Text to be displayed in the progress bar"
@@ -4402,7 +4441,7 @@ msgstr "प्रगति बार में दिखाया जाने �
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "स्ट्रिंग लपटेने के लिये पसंदीदा स्थान, अगर प्रगतिबार के पास पूरे स्ट्रिंग दिखाने के लिये पर्याप्त स्थान नहीं है"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4412,7 +4451,7 @@ msgstr "मान"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr ""
+msgstr "gtk_radio_action_get_current_value() के द्वारा दिया मान जब यह क्रिया इस समूह का वर्तमान स्ट्रिंग है."
 
 #: ../gtk/gtkradioaction.c:128 ../gtk/gtkradiobutton.c:82
 #: ../gtk/gtkradiomenuitem.c:342
@@ -4431,7 +4470,7 @@ msgstr "मौजूदा मान"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "समूह के सक्रिय सदस्य का मान गुण जिसमें क्रिया होती है."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -4451,7 +4490,7 @@ msgstr "स्क्रीन पर सीमा को कैसे अद्�
 
 #: ../gtk/gtkrange.c:321
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr ""
+msgstr "GtkAdjustment जो इस परिसर वस्तु के मौजूदा मान को समाहित रखता है"
 
 #: ../gtk/gtkrange.c:328
 msgid "Inverted"
@@ -4459,7 +4498,7 @@ msgstr "उलट"
 
 #: ../gtk/gtkrange.c:329
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "उल्टा दिशा स्लाइडर परिसर मान बढ़ाने के लिये आगे बढ़ा"
 
 #: ../gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
@@ -4469,7 +4508,7 @@ msgstr "नीचला स्टेपर संवेदनशीलता"
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
+msgstr "स्टेपर के लिये संवेदनशीलता नीति जो कि समायोजन के निचले हिस्से में इंगित करता है"
 
 #: ../gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
@@ -4479,7 +4518,7 @@ msgstr "ऊपरी स्टेपर संवेदनशीलता"
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
+msgstr "स्टेपर के लिये संवेदनशीलता नीति जो कि समायोजन के ऊपरी हिस्से में इंगित करता है"
 
 #: ../gtk/gtkrange.c:353
 msgid "Slider Width"
@@ -4495,7 +4534,7 @@ msgstr "नली किनारा"
 
 #: ../gtk/gtkrange.c:362
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr ""
+msgstr "थंब/स्टेपर और बाहरी बेलनाकार वेभेल में स्थान"
 
 #: ../gtk/gtkrange.c:369
 msgid "Stepper Size"
@@ -4519,7 +4558,7 @@ msgstr "तीर X विस्थापन"
 
 #: ../gtk/gtkrange.c:394
 msgid "How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
+msgstr "बटन के बबाने के दौरान x दिशा में कितना आगे जाना है"
 
 #: ../gtk/gtkrange.c:401
 msgid "Arrow Y Displacement"
@@ -4527,7 +4566,7 @@ msgstr "तीर Y विस्थापन"
 
 #: ../gtk/gtkrange.c:402
 msgid "How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
+msgstr "बटन के बबाने के दौरान y दिशा में कितना आगे जाना है"
 
 #: ../gtk/gtkrange.c:410
 msgid "Draw slider ACTIVE during drag"
@@ -4537,7 +4576,7 @@ msgstr "खींचने के दौरान स्लाइडर सक�
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
-msgstr ""
+msgstr "सही पर इस विकल्प के सेट करने के साथ, स्लाइडर सक्रिय किया जायेगा और छायांकित इन के साथ जब वे खींचे जाते हैं"
 
 #: ../gtk/gtkrange.c:422
 msgid "Trough Side Details"
@@ -5914,7 +5953,7 @@ msgid ""
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
 
-#: ../gtk/gtktrayicon-x11.c:95
+#: ../gtk/gtktrayicon-x11.c:98
 msgid "The orientation of the tray"
 msgstr "तश्तरी का अभिमुखन"
 
@@ -5988,7 +6027,7 @@ msgstr "कालम में ढूंढें"
 
 #: ../gtk/gtktreeview.c:622
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "कोड के सहारे खोज के दौरान खोजने के लिये मॉडल कॉलम"
 
 #: ../gtk/gtktreeview.c:642
 msgid "Fixed Height Mode"
@@ -5996,7 +6035,7 @@ msgstr "स्थिर ऊंचाई मोड"
 
 #: ../gtk/gtktreeview.c:643
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
+msgstr "GtkTreeView की गति बढ़ायें यह मानते हुये कि सारी पंक्ति की समान ऊंचाई है"
 
 #: ../gtk/gtktreeview.c:663
 msgid "Hover Selection"
@@ -6294,7 +6333,7 @@ msgstr "चौड़ाई निवेदित"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr ""
+msgstr "विजेट के चौड़ाई निवेदन पर अध्यारोहित करें, या -1 अगर प्राकृतिक आग्रह प्रयोग किया जाता है"
 
 #: ../gtk/gtkwidget.c:442
 msgid "Height request"
@@ -6304,7 +6343,7 @@ msgstr "ऊंचाई आग्रह"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr ""
+msgstr "विजेट के ऊंचाई निवेदन पर अध्यारोहित करें, या -1 अगर प्राकृतिक आग्रह प्रयोग किया जाता है"
 
 #: ../gtk/gtkwidget.c:452
 msgid "Whether the widget is visible"
@@ -6460,7 +6499,9 @@ msgstr "द्वितीयक संकेतक रंग"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr "रंग जिससे द्वितीयक दाखिल किया जाने वाला कर्सर खींचा जाना है जब दायें से बांयें और बांयें से दायें पाठ संपादित का मिश्रण संपादित किया जाना है."
+msgstr ""
+"रंग जिससे द्वितीयक दाखिल किया जाने वाला कर्सर खींचा जाना है जब दायें से बांयें और बांयें से "
+"दायें पाठ संपादित का मिश्रण संपादित किया जाना है."
 
 #: ../gtk/gtkwidget.c:1521
 msgid "Cursor line aspect ratio"
