@@ -925,7 +925,7 @@ gtk_enumerate_printers (GtkPrinterFunc func,
 			gboolean       wait)
 {
   PrinterList *printer_list;
-  GList *printers, *node, *next;
+  GList *node, *next;
   GtkPrintBackend *backend;
 
   printer_list = g_new0 (PrinterList, 1);
