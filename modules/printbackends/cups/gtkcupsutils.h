@@ -61,7 +61,7 @@ struct _GtkCupsRequest
 
   gchar *server;
   gchar *resource;
-  gint data_fd;
+  GIOChannel *data_io;
   gint attempts;
 
   GtkCupsResult *result;
@@ -100,7 +100,7 @@ enum
 GtkCupsRequest * gtk_cups_request_new             (http_t             *connection,
 						   GtkCupsRequestType  req_type,
 						   gint                operation_id,
-						   gint                data_fd,
+						   GIOChannel         *data_io,
 						   const char         *server,
 						   const char         *resource);
 void             gtk_cups_request_ipp_add_string  (GtkCupsRequest     *request,

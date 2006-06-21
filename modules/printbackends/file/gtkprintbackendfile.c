@@ -79,16 +79,15 @@ static void                 file_printer_prepare_for_print         (GtkPrinter  
 								    GtkPageSetup            *page_setup);
 static void                 gtk_print_backend_file_print_stream    (GtkPrintBackend         *print_backend,
 								    GtkPrintJob             *job,
-								    gint                     data_fd,
+								    GIOChannel              *data_io,
 								    GtkPrintJobCompleteFunc  callback,
 								    gpointer                 user_data,
-								    GDestroyNotify           dnotify,
-								    GError                 **error);
+								    GDestroyNotify           dnotify);
 static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter              *printer,
 								    GtkPrintSettings        *settings,
 								    gdouble                  width,
 								    gdouble                  height,
-								    gint                     cache_fd);
+								    GIOChannel              *cache_io);
 
 static void
 gtk_print_backend_file_register_type (GTypeModule *module)
@@ -173,21 +172,31 @@ _cairo_write (void                *closure,
               const unsigned char *data,
               unsigned int         length)
 {
-  gint fd = GPOINTER_TO_INT (closure);
-  gssize written;
-  
+  GIOChannel *io = (GIOChannel *)closure;
+  gsize written;
+  GError *error;
+
+  error = NULL;
+
+  GTK_NOTE (PRINTING,
+            g_print ("FILE Backend: Writting %i byte chunk to temp file\n", length));
+
   while (length > 0) 
     {
-      written = write (fd, data, length);
+      g_io_channel_write_chars (io, data, length, &written, &error);
 
-      if (written == -1)
+      if (error != NULL)
 	{
-	  if (errno == EAGAIN || errno == EINTR)
-	    continue;
-	  
+	  GTK_NOTE (PRINTING,
+                     g_print ("FILE Backend: Error writting to temp file, %s\n", error->message));
+
+          g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}    
 
+      GTK_NOTE (PRINTING,
+                g_print ("FILE Backend: Wrote %i bytes to temp file\n", written));
+      
       data += written;
       length -= written;
     }
@@ -201,11 +210,11 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
 				   gdouble           width, 
 				   gdouble           height,
-				   gint              cache_fd)
+				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
   
-  surface = cairo_pdf_surface_create_for_stream  (_cairo_write, GINT_TO_POINTER (cache_fd), width, height);
+  surface = cairo_pdf_surface_create_for_stream  (_cairo_write, cache_io, width, height);
 
   /* TODO: DPI from settings object? */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
@@ -217,7 +226,7 @@ typedef struct {
   GtkPrintBackend *backend;
   GtkPrintJobCompleteFunc callback;
   GtkPrintJob *job;
-  gint target_fd;
+  GIOChannel *target_io;
   gpointer user_data;
   GDestroyNotify dnotify;
 } _PrintStreamData;
@@ -229,8 +238,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
-  if (ps->target_fd > 0)
-    close (ps->target_fd);
+  if (ps->target_io != NULL)
+    g_io_channel_unref (ps->target_io);
 
   if (ps->callback)
     ps->callback (ps->job, ps->user_data, error);
@@ -255,39 +264,46 @@ file_write (GIOChannel   *source,
   gchar buf[_STREAM_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
+  GIOStatus read_status;
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
-  gint source_fd;
 
   error = NULL;
 
-  source_fd = g_io_channel_unix_get_fd (source);
+  read_status = 
+    g_io_channel_read_chars (source,
+                             buf,
+                             _STREAM_MAX_CHUNK_SIZE,
+                             &bytes_read,
+                             &error);
 
-  bytes_read = read (source_fd,
-                     buf,
-                     _STREAM_MAX_CHUNK_SIZE);
+  if (read_status != G_IO_STATUS_ERROR)
+    {
+      gsize bytes_written;
 
-  if (bytes_read > 0)
-    {
-      if (write (ps->target_fd, buf, bytes_read) == -1)
-        {
-          error = g_error_new (GTK_PRINT_ERROR,
-                           GTK_PRINT_ERROR_INTERNAL_ERROR, 
-                           g_strerror (errno));
-        }
-    }
-  else if (bytes_read == -1)
-    {
-      error = g_error_new (GTK_PRINT_ERROR,
-                           GTK_PRINT_ERROR_INTERNAL_ERROR, 
-                           g_strerror (errno));
+      g_io_channel_write_chars (ps->target_io, 
+                                buf, 
+				bytes_read, 
+				&bytes_written, 
+				&error);
     }
 
-  if (bytes_read == 0 || error != NULL)
+  if (error != NULL || read_status == G_IO_STATUS_EOF)
     {
       file_print_cb (GTK_PRINT_BACKEND_FILE (ps->backend), error, user_data);
 
+      if (error != NULL)
+        {
+          GTK_NOTE (PRINTING,
+                    g_print ("FILE Backend: %s\n", error->message));
+
+          g_error_free (error);
+        }
+
       return FALSE;
     }
+
+  GTK_NOTE (PRINTING,
+            g_print ("FILE Backend: Writting %i byte chunk to target file\n", bytes_read));
 
   return TRUE;
 }
@@ -295,24 +311,22 @@ file_write (GIOChannel   *source,
 static void
 gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 				     GtkPrintJob            *job,
-				     gint                    data_fd,
+				     GIOChannel             *data_io,
 				     GtkPrintJobCompleteFunc callback,
 				     gpointer                user_data,
-				     GDestroyNotify          dnotify,
-				     GError                **error)
+				     GDestroyNotify          dnotify)
 {
   GError *internal_error = NULL;
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  GIOChannel *save_channel;  
   const gchar *uri;
   gchar *filename = NULL; 
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
-  error = NULL;
+  internal_error = NULL;
 
   uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
   if (uri)
@@ -330,24 +344,22 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   ps->job = g_object_ref (job);
   ps->backend = print_backend;
 
-  ps->target_fd = creat (filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-  g_free (filename);
+  ps->target_io = g_io_channel_new_file (filename, "w", &internal_error);
 
-  if (ps->target_fd == -1)
+  if (internal_error == NULL)
+    g_io_channel_set_encoding (ps->target_io, NULL, &internal_error);
+
+  if (internal_error != NULL)
     {
-      internal_error = g_error_new (GTK_PRINT_ERROR,
-				    GTK_PRINT_ERROR_INTERNAL_ERROR, 
-				    g_strerror (errno));
+      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend),
+                    internal_error,
+                    ps);
 
-      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend), 
-		     internal_error, ps);
-      g_propagate_error (error, internal_error);
+      g_error_free (internal_error);
       return;
     }
-  
-  save_channel = g_io_channel_unix_new (data_fd);
 
-  g_io_add_watch (save_channel, 
+  g_io_add_watch (data_io, 
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
                   (GIOFunc) file_write,
                   ps);

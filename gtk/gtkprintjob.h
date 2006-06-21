@@ -108,11 +108,10 @@ cairo_surface_t         *gtk_print_job_get_surface            (GtkPrintJob      
 void                     gtk_print_job_set_track_print_status (GtkPrintJob              *job,
 							       gboolean                  track_status);
 gboolean                 gtk_print_job_get_track_print_status (GtkPrintJob              *job);
-gboolean                 gtk_print_job_send                   (GtkPrintJob              *job,
+void                     gtk_print_job_send                   (GtkPrintJob              *job,
 							       GtkPrintJobCompleteFunc   callback,
 							       gpointer                  user_data,
-							       GDestroyNotify            dnotify,
-							       GError                  **error);
+							       GDestroyNotify            dnotify);
 
 GType                    gtk_print_capabilities_get_type      (void) G_GNUC_CONST;
 

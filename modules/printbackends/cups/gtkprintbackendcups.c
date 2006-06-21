@@ -47,7 +47,7 @@
 #include "gtkprintercups.h"
 
 #include "gtkcupsutils.h"
-
+#include "gtkdebug.h"
 
 typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 
@@ -147,16 +147,15 @@ static void                 cups_begin_polling_info                (GtkPrintBack
 static gboolean             cups_job_info_poll_timeout             (gpointer                           user_data);
 static void                 gtk_print_backend_cups_print_stream    (GtkPrintBackend                   *backend,
 								    GtkPrintJob                       *job,
-								    gint                               data_fd,
+								    GIOChannel                        *data_io,
 								    GtkPrintJobCompleteFunc            callback,
 								    gpointer                           user_data,
-								    GDestroyNotify                     dnotify,
-								    GError                           **error);
+								    GDestroyNotify                     dnotify);
 static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter                        *printer,
 								    GtkPrintSettings                  *settings,
 								    gdouble                            width,
 								    gdouble                            height,
-								    gint                               cache_fd);
+								    GIOChannel                        *cache_io);
 
 
 static void
@@ -184,6 +183,9 @@ gtk_print_backend_cups_register_type (GTypeModule *module)
 G_MODULE_EXPORT void 
 pb_module_init (GTypeModule *module)
 {
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Initializing the CUPS print backend module\n")); 
+
   gtk_print_backend_cups_register_type (module);
   gtk_printer_cups_register_type (module);
 }
@@ -221,6 +223,9 @@ gtk_print_backend_cups_get_type (void)
 GtkPrintBackend *
 gtk_print_backend_cups_new (void)
 {
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Creating a new CUPS print backend object\n"));
+
   return g_object_new (GTK_TYPE_PRINT_BACKEND_CUPS, NULL);
 }
 
@@ -253,20 +258,30 @@ _cairo_write_to_cups (void                *closure,
                       const unsigned char *data,
                       unsigned int         length)
 {
-  gint fd = GPOINTER_TO_INT (closure);
-  gssize written;
-  
+  GIOChannel *io = (GIOChannel *)closure;
+  gsize written;
+  GError *error;
+
+  error = NULL;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Writting %i byte chunk to temp file\n", length));
+
   while (length > 0) 
     {
-      written = write (fd, data, length);
+      g_io_channel_write_chars (io, data, length, &written, &error);
 
-      if (written == -1)
+      if (error != NULL)
 	{
-	  if (errno == EAGAIN || errno == EINTR)
-	    continue;
-	  
+	  GTK_NOTE (PRINTING,
+                    g_print ("CUPS Backend: Error writting to temp file, %s\n", error->message));
+
+          g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}    
+
+      GTK_NOTE (PRINTING,
+                g_print ("CUPS Backend: Wrote %i bytes to temp file\n", written));
 
       data += written;
       length -= written;
@@ -280,13 +295,13 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
 				   gdouble           width, 
 				   gdouble           height,
-				   gint              cache_fd)
+				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface; 
  
   /* TODO: check if it is a ps or pdf printer */
   
-  surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, GINT_TO_POINTER (cache_fd), width, height);
+  surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
 
   /* TODO: DPI from settings object? */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
@@ -304,6 +319,9 @@ typedef struct {
 static void
 cups_free_print_stream_data (CupsPrintStreamData *data)
 {
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   if (data->dnotify)
     data->dnotify (data->user_data);
   g_object_unref (data->job);
@@ -317,6 +335,9 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
 {
   GError *error = NULL;
   CupsPrintStreamData *ps = user_data;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC)); 
 
   if (gtk_cups_result_is_error (result))
     error = g_error_new_literal (gtk_print_error_quark (),
@@ -373,11 +394,10 @@ add_cups_options (const gchar *key,
 static void
 gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                      GtkPrintJob             *job,
-				     gint                     data_fd,
+				     GIOChannel              *data_io,
 				     GtkPrintJobCompleteFunc  callback,
 				     gpointer                 user_data,
-				     GDestroyNotify           dnotify,
-				     GError                 **error)
+				     GDestroyNotify           dnotify)
 {
   GtkPrinterCups *cups_printer;
   CupsPrintStreamData *ps;
@@ -385,13 +405,16 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   GtkPrintSettings *settings;
   const gchar *title;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));   
+
   cups_printer = GTK_PRINTER_CUPS (gtk_print_job_get_printer (job));
   settings = gtk_print_job_get_settings (job);
 
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
                                   IPP_PRINT_JOB,
-				  data_fd,
+				  data_io,
 				  NULL,
 				  cups_printer->device_uri);
 
@@ -435,6 +458,9 @@ static void
 gtk_print_backend_cups_finalize (GObject *object)
 {
   GtkPrintBackendCups *backend_cups;
+  
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: finalizing CUPS backend module\n"));
 
   backend_cups = GTK_PRINT_BACKEND_CUPS (object);
 
@@ -448,6 +474,9 @@ static void
 gtk_print_backend_cups_dispose (GObject *object)
 {
   GtkPrintBackendCups *backend_cups;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
   backend_cups = GTK_PRINT_BACKEND_CUPS (object);
 
@@ -465,6 +494,9 @@ cups_dispatch_watch_check (GSource *source)
   GtkPrintCupsDispatchWatch *dispatch;
   GtkCupsPollState poll_state;
   gboolean result;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source)); 
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -514,7 +546,10 @@ cups_dispatch_watch_prepare (GSource *source,
   GtkPrintCupsDispatchWatch *dispatch;
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
- 
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+
   *timeout_ = -1;
   
   return gtk_cups_request_read_write (dispatch->request);
@@ -537,8 +572,11 @@ cups_dispatch_watch_dispatch (GSource     *source,
 
   result = gtk_cups_request_get_result (dispatch->request);
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+
   if (gtk_cups_result_is_error (result))
-    g_warning (gtk_cups_result_get_error_string (result));
+    g_warning ("Error result: %s", gtk_cups_result_get_error_string (result));
 
   ep_callback (GTK_PRINT_BACKEND (dispatch->backend), result, user_data);
 
@@ -549,6 +587,9 @@ static void
 cups_dispatch_watch_finalize (GSource *source)
 {
   GtkPrintCupsDispatchWatch *dispatch;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -593,6 +634,9 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
   dispatch = (GtkPrintCupsDispatchWatch *) g_source_new (&_cups_dispatch_watch_funcs, 
                                                          sizeof (GtkPrintCupsDispatchWatch));
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));
+
   dispatch->request = request;
   dispatch->backend = g_object_ref (print_backend);
   dispatch->data_poll = NULL;
@@ -625,8 +669,15 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
   printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (backend),
 					    printer_name);
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s - Got printer info for printer '%s'\n", G_STRFUNC, printer_name));
+
   if (!printer)
-    return;
+    {
+      GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Could not find printer called '%s'\n", printer_name));
+      return;
+    }
 
   cups_printer = GTK_PRINTER_CUPS (printer);
   
@@ -692,7 +743,7 @@ cups_request_printer_info (GtkPrintBackendCups *print_backend,
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
                                   IPP_GET_PRINTER_ATTRIBUTES,
-				  0,
+				  NULL,
 				  NULL,
 				  NULL);
 
@@ -700,6 +751,9 @@ cups_request_printer_info (GtkPrintBackendCups *print_backend,
                                   printer_name);
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI,
                                    "printer-uri", NULL, printer_uri);
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s - Requesting printer info for URI '%s'\n", G_STRFUNC, printer_uri));
 
   g_free (printer_uri);
 
@@ -823,7 +877,7 @@ cups_request_job_info (CupsJobPollData *data)
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
                                   IPP_GET_JOB_ATTRIBUTES,
-				  0,
+				  NULL,
 				  NULL,
 				  NULL);
 
@@ -1080,7 +1134,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
                                   CUPS_GET_PRINTERS,
-				  0,
+				  NULL,
 				  NULL,
 				  NULL);
 
@@ -1114,16 +1168,16 @@ cups_get_printer_list (GtkPrintBackend *backend)
 
 typedef struct {
   GtkPrinterCups *printer;
-  gint ppd_fd;
-  gchar *ppd_filename;
+  GIOChannel *ppd_io;
 } GetPPDData;
 
 static void
 get_ppd_data_free (GetPPDData *data)
 {
-  close (data->ppd_fd);
-  unlink (data->ppd_filename);
-  g_free (data->ppd_filename);
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
+  g_io_channel_unref (data->ppd_io);
   g_object_unref (data->printer);
   g_free (data);
 }
@@ -1136,6 +1190,9 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   ipp_t *response;
   GtkPrinter *printer;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   printer = GTK_PRINTER (data->printer);
   GTK_PRINTER_CUPS (printer)->reading_ppd = FALSE;
 
@@ -1147,7 +1204,10 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
   response = gtk_cups_result_get_response (result);
 
-  data->printer->ppd_file = ppdOpenFile (data->ppd_filename);
+  /* let ppdOpenFd take over the ownership of the open file */
+  g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
+  data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
+  
   gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", printer, TRUE);
 }
@@ -1159,13 +1219,19 @@ cups_request_ppd (GtkPrinter *printer)
   GtkPrintBackend *print_backend;
   GtkPrinterCups *cups_printer;
   GtkCupsRequest *request;
+  char *ppd_filename;
   gchar *resource;
   http_t *http;
   GetPPDData *data;
-  
+  int fd;
+
   cups_printer = GTK_PRINTER_CUPS (printer);
 
   error = NULL;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   /* FIXME this can return NULL! */
   http = httpConnectEncrypt (cups_printer->hostname, 
 			     cups_printer->port,
@@ -1173,22 +1239,34 @@ cups_request_ppd (GtkPrinter *printer)
 
   data = g_new0 (GetPPDData, 1);
 
-  data->ppd_fd = g_file_open_tmp ("gtkprint_ppd_XXXXXX", 
-                                  &data->ppd_filename, 
-                                  &error);
+  fd = g_file_open_tmp ("gtkprint_ppd_XXXXXX", 
+                        &ppd_filename, 
+                        &error);
+
+#ifdef G_ENABLE_DEBUG 
+  /* If we are debugging printing don't delete the tmp files */
+  if (!(gtk_debug_flags & GTK_DEBUG_PRINTING))
+    unlink (ppd_filename);
+#else
+  unlink (ppd_filename);
+#endif /* G_ENABLE_DEBUG */
 
   if (error != NULL)
     {
       g_warning ("%s", error->message);
       g_error_free (error);
       httpClose (http);
+      g_free (ppd_filename);
       g_free (data);
 
       g_signal_emit_by_name (printer, "details-acquired", printer, FALSE);
       return;
     }
     
-  fchmod (data->ppd_fd, S_IRUSR | S_IWUSR);
+  fchmod (fd, S_IRUSR | S_IWUSR);
+  data->ppd_io = g_io_channel_unix_new (fd);
+  g_io_channel_set_encoding (data->ppd_io, NULL, NULL);
+  g_io_channel_set_close_on_unref (data->ppd_io, TRUE);
 
   data->printer = g_object_ref (printer);
 
@@ -1196,12 +1274,16 @@ cups_request_ppd (GtkPrinter *printer)
   request = gtk_cups_request_new (http,
                                   GTK_CUPS_GET,
 				  0,
-                                  data->ppd_fd,
+                                  data->ppd_io,
 				  cups_printer->hostname,
 				  resource);
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Requesting resource %s to be written to temp file %s\n", resource, ppd_filename));
+
   g_free (resource);
- 
+  g_free (ppd_filename);
+
   cups_printer->reading_ppd = TRUE;
 
   print_backend = gtk_printer_get_backend (printer);
@@ -1259,7 +1341,7 @@ cups_request_default_printer (GtkPrintBackendCups *print_backend)
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
                                   CUPS_GET_DEFAULT,
-				  0,
+				  NULL,
 				  NULL,
 				  NULL);
   
@@ -2007,7 +2089,8 @@ cups_printer_get_options (GtkPrinter           *printer,
     {
       GtkPaperSize *paper_size;
       ppd_option_t *option;
-      
+      ppd_coption_t *coption;
+
       ppdMarkDefaults (ppd_file);
 
       paper_size = gtk_page_setup_get_paper_size (page_setup);

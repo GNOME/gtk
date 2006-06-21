@@ -47,7 +47,7 @@ struct _GtkPrintJobPrivate
 {
   gchar *title;
 
-  gint spool_file_fd;
+  GIOChannel *spool_io;
   cairo_surface_t *surface;
 
   GtkPrintStatus status;
@@ -183,7 +183,7 @@ gtk_print_job_init (GtkPrintJob *job)
 
   priv = job->priv = GTK_PRINT_JOB_GET_PRIVATE (job); 
 
-  priv->spool_file_fd = -1;
+  priv->spool_io = NULL;
 
   priv->title = g_strdup ("");
   priv->surface = NULL;
@@ -244,10 +244,10 @@ gtk_print_job_finalize (GObject *object)
   GtkPrintJob *job = GTK_PRINT_JOB (object);
   GtkPrintJobPrivate *priv = job->priv;
 
-  if (priv->spool_file_fd >= 0)
+  if (priv->spool_io != NULL)
     {
-      close (priv->spool_file_fd);
-      priv->spool_file_fd = -1;
+      g_io_channel_unref (priv->spool_io);
+      priv->spool_io = NULL;
     }
   
   if (priv->backend)
@@ -414,29 +414,26 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
 			       GError     **error)
 {
   GtkPrintJobPrivate *priv;
+  GError *tmp_error;
+
+  tmp_error = NULL;
 
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
 
   priv = job->priv;
 
-  priv->spool_file_fd = g_open (filename, O_RDONLY|O_BINARY);
-  if (priv->spool_file_fd < 0)
-    {
-      gchar *display_filename = g_filename_display_name (filename);
-      int save_errno = errno;
-      
-      g_set_error (error,
-                   G_FILE_ERROR,
-                   g_file_error_from_errno (save_errno),
-                   _("Failed to open file '%s': %s"),
-                   display_filename, 
-		   g_strerror (save_errno));
-      
-      g_free (display_filename);
+  priv->spool_io = g_io_channel_new_file (filename, "r", &tmp_error);
 
+  if (tmp_error == NULL)
+    g_io_channel_set_encoding (priv->spool_io, NULL, &tmp_error);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
       return FALSE;
     }
-    return TRUE;
+
+  return TRUE;
 }
 
 /**
@@ -459,7 +456,11 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   gchar *filename;
   gdouble width, height;
   GtkPaperSize *paper_size;
-  
+  int fd;
+  GError *tmp_error;
+
+  tmp_error = NULL;
+
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
 
   priv = job->priv;
@@ -467,26 +468,46 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   if (priv->surface)
     return priv->surface;
  
-  g_return_val_if_fail (priv->spool_file_fd == -1, NULL);
+  g_return_val_if_fail (priv->spool_io == NULL, NULL);
  
-  priv->spool_file_fd = g_file_open_tmp ("gtkprint_XXXXXX", 
-					 &filename, 
-					 error);
-  if (priv->spool_file_fd == -1)
-    return NULL;
+  fd = g_file_open_tmp ("gtkprint_XXXXXX", 
+			 &filename, 
+			 &tmp_error);
+  if (fd == -1)
+    {
+      g_propagate_error (error, tmp_error);
+      return NULL;
+    }
 
-  fchmod (priv->spool_file_fd, S_IRUSR | S_IWUSR);
+  fchmod (fd, S_IRUSR | S_IWUSR);
+  
+#ifdef G_ENABLE_DEBUG 
+  /* If we are debugging printing don't delete the tmp files */
+  if (!(gtk_debug_flags & GTK_DEBUG_PRINTING))
+#endif /* G_ENABLE_DEBUG */
   unlink (filename);
 
   paper_size = gtk_page_setup_get_paper_size (priv->page_setup);
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+ 
+  priv->spool_io = g_io_channel_unix_new (fd);
+  g_io_channel_set_close_on_unref (priv->spool_io, TRUE);
+  g_io_channel_set_encoding (priv->spool_io, NULL, &tmp_error);
   
+  if (tmp_error != NULL)
+    {
+      g_io_channel_unref (priv->spool_io);
+      priv->spool_io = NULL;
+      g_propagate_error (error, tmp_error);
+      return NULL;
+    }
+
   priv->surface = _gtk_printer_create_cairo_surface (priv->printer,
 						     priv->settings,
 						     width, height,
-						     priv->spool_file_fd);
- 
+						     priv->spool_io);
+  
   return priv->surface;
 }
 
@@ -629,46 +650,34 @@ gtk_print_job_get_property (GObject    *object,
 /**
  * gtk_print_job_send:
  * @job: a GtkPrintJob
- * @callback: function to call when the job completes
+ * @callback: function to call when the job completes or an error occures
  * @user_data: user data that gets passed to @callback
  * @dnotify: destroy notify for @user_data
- * @error: return location for errors, or %NULL
  * 
  * Sends the print job off to the printer.  
  * 
- * Return value: %FALSE if an error occurred
- *
  * Since: 2.10
  **/
-gboolean
+void
 gtk_print_job_send (GtkPrintJob             *job,
                     GtkPrintJobCompleteFunc  callback,
                     gpointer                 user_data,
-		    GDestroyNotify           dnotify,
-		    GError                 **error)
+		    GDestroyNotify           dnotify)
 {
   GtkPrintJobPrivate *priv;
-  GError *print_error = NULL;
 
-  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
+  g_return_if_fail (GTK_IS_PRINT_JOB (job));
 
   priv = job->priv;
-  g_return_val_if_fail (priv->spool_file_fd > 0, FALSE);
+  g_return_if_fail (priv->spool_io != NULL);
   
   gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
-  lseek (priv->spool_file_fd, 0, SEEK_SET);
+  
+  g_io_channel_seek_position (priv->spool_io, 0, G_SEEK_SET, NULL);
+  
   gtk_print_backend_print_stream (priv->backend, job,
-				  priv->spool_file_fd,
-                                  callback, user_data, dnotify,
-				  &print_error);
-  if (print_error)
-    {
-      g_propagate_error (error, print_error);
-
-      return FALSE;
-    }
-
-  return TRUE;
+				  priv->spool_io,
+                                  callback, user_data, dnotify);
 }
 
 GType

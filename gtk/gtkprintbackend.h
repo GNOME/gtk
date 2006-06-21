@@ -73,11 +73,10 @@ struct _GtkPrintBackendClass
   void                   (*request_printer_list)            (GtkPrintBackend        *backend);
   void                   (*print_stream)                    (GtkPrintBackend        *backend,
 							     GtkPrintJob            *job,
-							     gint                    data_fd,
+							     GIOChannel             *data_io,
 							     GtkPrintJobCompleteFunc callback,
 							     gpointer                user_data,
-							     GDestroyNotify          dnotify,
-							     GError                **error);
+							     GDestroyNotify          dnotify);
 
   /* Printer methods: */
   void                  (*printer_request_details)           (GtkPrinter          *printer);
@@ -85,7 +84,7 @@ struct _GtkPrintBackendClass
 							      GtkPrintSettings    *settings,
 							      gdouble              height,
 							      gdouble              width,
-							      gint                 cache_fd);
+							      GIOChannel          *cache_io);
   GtkPrinterOptionSet * (*printer_get_options)               (GtkPrinter          *printer,
 							      GtkPrintSettings    *settings,
 							      GtkPageSetup        *page_setup,
@@ -135,11 +134,10 @@ GtkPrinter *gtk_print_backend_find_printer         (GtkPrintBackend         *pri
 						    const gchar             *printer_name);
 void        gtk_print_backend_print_stream         (GtkPrintBackend         *print_backend,
 						    GtkPrintJob             *job,
-						    gint                     data_fd,
+						    GIOChannel              *data_io,
 						    GtkPrintJobCompleteFunc  callback,
 						    gpointer                 user_data,
-						    GDestroyNotify           dnotify,
-						    GError                 **error);
+						    GDestroyNotify           dnotify);
 GList *     gtk_print_backend_load_modules         (void);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
 

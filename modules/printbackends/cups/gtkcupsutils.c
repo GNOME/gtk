@@ -20,6 +20,8 @@
  */
 
 #include "gtkcupsutils.h"
+#include "config.h"
+#include "gtkdebug.h"
 
 #include <errno.h>
 #include <unistd.h>
@@ -86,7 +88,7 @@ GtkCupsRequest *
 gtk_cups_request_new (http_t *connection,
                       GtkCupsRequestType req_type, 
                       gint operation_id,
-                      gint data_fd,
+                      GIOChannel *data_io,
                       const char *server,
                       const char *resource)
 {
@@ -135,7 +137,7 @@ gtk_cups_request_new (http_t *connection,
   request->last_status = HTTP_CONTINUE;
 
   request->attempts = 0;
-  request->data_fd = data_fd;
+  request->data_io = data_io;
 
   request->ipp_request = ippNew();
   request->ipp_request->request.op.operation_id = operation_id;
@@ -514,11 +516,14 @@ _post_send (GtkCupsRequest *request)
   gchar length[255];
   struct stat data_info;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   request->poll_state = GTK_CUPS_HTTP_WRITE;
 
-  if (request->data_fd != 0)
+  if (request->data_io != NULL)
     {
-      fstat (request->data_fd, &data_info);
+      fstat (g_io_channel_unix_get_fd (request->data_io), &data_info);
       sprintf (length, "%lu", (unsigned long)ippLength(request->ipp_request) + data_info.st_size);
     }
   else
@@ -556,6 +561,9 @@ _post_write_request (GtkCupsRequest *request)
 {
   ipp_state_t ipp_status;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   request->poll_state = GTK_CUPS_HTTP_WRITE;
   
   ipp_status = ippWrite(request->http, request->ipp_request);
@@ -571,7 +579,7 @@ _post_write_request (GtkCupsRequest *request)
 
   if (ipp_status == IPP_DATA)
     {
-      if (request->data_fd != 0)
+      if (request->data_io != NULL)
         request->state = GTK_CUPS_POST_WRITE_DATA;
       else
         {
@@ -584,9 +592,12 @@ _post_write_request (GtkCupsRequest *request)
 static void 
 _post_write_data (GtkCupsRequest *request)
 {
-  ssize_t bytes;
+  gsize bytes;
   char buffer[_GTK_CUPS_MAX_CHUNK_SIZE];
   http_status_t http_status;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
   request->poll_state = GTK_CUPS_HTTP_WRITE;
   
@@ -600,10 +611,30 @@ _post_write_data (GtkCupsRequest *request)
 
   if (http_status == HTTP_CONTINUE || http_status == HTTP_OK)
     {
-      /* send data */
-      bytes = read(request->data_fd, buffer, _GTK_CUPS_MAX_CHUNK_SIZE);
+      GIOStatus io_status;
+      GError *error;
 
-      if (bytes == 0)
+      error = NULL;
+
+      /* send data */
+      io_status =
+        g_io_channel_read_chars (request->data_io, 
+	                         buffer, 
+				 _GTK_CUPS_MAX_CHUNK_SIZE,
+				 &bytes,
+				 &error);
+
+      if (io_status == G_IO_STATUS_ERROR)
+        {
+          request->state = GTK_CUPS_POST_DONE;
+	  request->poll_state = GTK_CUPS_HTTP_IDLE;
+     
+          gtk_cups_result_set_error (request->result, "Error reading from cache file: %s", error->message);
+
+	  g_error_free (error);
+          return;
+	}
+      else if (bytes == 0 && io_status == G_IO_STATUS_EOF)
         {
           request->state = GTK_CUPS_POST_CHECK;
 	  request->poll_state = GTK_CUPS_HTTP_READ;
@@ -611,16 +642,13 @@ _post_write_data (GtkCupsRequest *request)
           request->attempts = 0;
           return;
         }
-      else if (bytes == -1)
-        {
-          request->state = GTK_CUPS_POST_DONE;
-	  request->poll_state = GTK_CUPS_HTTP_IDLE;
-     
-          gtk_cups_result_set_error (request->result, "Error reading from cache file: %s", strerror (errno));
-          return;
-	}
-	
-      if (httpWrite(request->http, buffer, (int)bytes) < bytes)
+
+
+#if HAVE_CUPS_API_1_2
+      if (httpWrite2(request->http, buffer, bytes) < bytes)
+#else
+      if (httpWrite(request->http, buffer, (int) bytes) < bytes)
+#endif /* HAVE_CUPS_API_1_2 */
         {
           request->state = GTK_CUPS_POST_DONE;
 	  request->poll_state = GTK_CUPS_HTTP_IDLE;
@@ -641,6 +669,9 @@ _post_check (GtkCupsRequest *request)
   http_status_t http_status;
 
   http_status = request->last_status;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s - status %i\n", G_STRFUNC, http_status));
 
   request->poll_state = GTK_CUPS_HTTP_READ;
 
@@ -744,6 +775,9 @@ _post_read_response (GtkCupsRequest *request)
 {
   ipp_state_t ipp_status;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   request->poll_state = GTK_CUPS_HTTP_READ;
 
   if (request->result->ipp_response == NULL)
@@ -772,11 +806,14 @@ _post_read_response (GtkCupsRequest *request)
 static void 
 _get_send (GtkCupsRequest *request)
 {
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   request->poll_state = GTK_CUPS_HTTP_WRITE;
 
-  if (request->data_fd == 0)
+  if (request->data_io == NULL)
     {
-      gtk_cups_result_set_error (request->result, "Get requires an open file descriptor");
+      gtk_cups_result_set_error (request->result, "Get requires an open io channel");
       request->state = GTK_CUPS_GET_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
 
@@ -812,6 +849,9 @@ static void
 _get_check (GtkCupsRequest *request)
 {
   http_status_t http_status;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
   http_status = request->last_status;
 
@@ -894,12 +934,27 @@ static void
 _get_read_data (GtkCupsRequest *request)
 {
   char buffer[_GTK_CUPS_MAX_CHUNK_SIZE];
-  int bytes;
- 
-  request->poll_state = GTK_CUPS_HTTP_READ;
- 
-  bytes = httpRead(request->http, buffer, sizeof(buffer));
+  gsize bytes;
+  gsize bytes_written;
+  GIOStatus io_status;
+  GError *error;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
+  error = NULL;
+
+  request->poll_state = GTK_CUPS_HTTP_READ;
+
+#if HAVE_CUPS_API_1_2
+  bytes = httpRead2(request->http, buffer, sizeof(buffer));
+#else
+  bytes = httpRead(request->http, buffer, sizeof(buffer));
+#endif /* HAVE_CUPS_API_1_2 */
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %i bytes read\n", bytes));
+  
   if (bytes == 0)
     {
       request->state = GTK_CUPS_GET_DONE;
@@ -907,16 +962,21 @@ _get_read_data (GtkCupsRequest *request)
 
       return;
     }
-    
-  if (write (request->data_fd, buffer, bytes) == -1)
-    {
-      char *error_msg;
+  
+  io_status =
+    g_io_channel_write_chars (request->data_io, 
+                              buffer, 
+			      bytes, 
+			      &bytes_written,
+			      &error);
 
+  if (io_status == G_IO_STATUS_ERROR)
+    {
       request->state = GTK_CUPS_POST_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
     
-      error_msg = strerror (errno);
-      gtk_cups_result_set_error (request->result, error_msg ? error_msg:""); 
+      gtk_cups_result_set_error (request->result, error->message);
+      g_error_free (error);
     }
 }
 

@@ -68,6 +68,8 @@
 
 #undef GETTEXT_PACKAGE
 
+#undef HAVE_CUPS_API_1_2
+
 /* #undef PACKAGE */
 /* #undef VERSION */
 

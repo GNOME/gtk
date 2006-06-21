@@ -33,6 +33,7 @@
 
 #include <glib/gi18n-lib.h>
 
+#include "gtkdebug.h"
 #include "gtkprintoperation.h"
 #include "gtkprintbackendlpr.h"
 #include "gtkprinter.h"
@@ -77,14 +78,13 @@ static cairo_surface_t *    lpr_printer_create_cairo_surface      (GtkPrinter   
 								   GtkPrintSettings        *settings,
 								   gdouble                  width,
 								   gdouble                  height,
-								   gint                     cache_fd);
+								   GIOChannel              *cache_io);
 static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBackend         *print_backend,
 								   GtkPrintJob             *job,
-								   gint                     data_fd,
+								   GIOChannel              *data_io,
 								   GtkPrintJobCompleteFunc  callback,
 								   gpointer                 user_data,
-								   GDestroyNotify           dnotify,
-								   GError                 **error);
+								   GDestroyNotify           dnotify);
 
 static void
 gtk_print_backend_lpr_register_type (GTypeModule *module)
@@ -169,20 +169,30 @@ _cairo_write (void                *closure,
               const unsigned char *data,
               unsigned int         length)
 {
-  gint fd = GPOINTER_TO_INT (closure);
-  gssize written;
-  
+  GIOChannel *io = (GIOChannel *)closure;
+  gsize written;
+  GError *error;
+
+  error = NULL;
+
+  GTK_NOTE (PRINTING,
+            g_print ("LPR Backend: Writting %i byte chunk to temp file\n", length));
+
   while (length > 0) 
     {
-      written = write (fd, data, length);
+      g_io_channel_write_chars (io, data, length, &written, &error);
 
-      if (written == -1)
+      if (error != NULL)
 	{
-	  if (errno == EAGAIN || errno == EINTR)
-	    continue;
-	  
+	  GTK_NOTE (PRINTING,
+                     g_print ("LPR Backend: Error writting to temp file, %s\n", error->message));
+
+          g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}    
+
+      GTK_NOTE (PRINTING,
+                g_print ("LPR Backend: Wrote %i bytes to temp file\n", written));
 
       data += written;
       length -= written;
@@ -191,17 +201,16 @@ _cairo_write (void                *closure,
   return CAIRO_STATUS_SUCCESS;
 }
 
-
 static cairo_surface_t *
 lpr_printer_create_cairo_surface (GtkPrinter       *printer,
 				  GtkPrintSettings *settings,
 				  gdouble           width, 
 				  gdouble           height,
-				  gint              cache_fd)
+				  GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
   
-  surface = cairo_ps_surface_create_for_stream (_cairo_write, GINT_TO_POINTER (cache_fd), width, height);
+  surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
 
   /* TODO: DPI from settings object? */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
@@ -216,10 +225,7 @@ typedef struct {
   gpointer user_data;
   GDestroyNotify dnotify;
 
-  gint in;
-  gint out;
-  gint err;
-
+  GIOChannel *in;
 } _PrintStreamData;
 
 static void
@@ -229,14 +235,8 @@ lpr_print_cb (GtkPrintBackendLpr *print_backend,
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
-  if (ps->in > 0)
-    close (ps->in);
-
-  if (ps->out > 0)
-    close (ps->out);
-
-  if (ps->err > 0)
-    close (ps->err);
+  if (ps->in != NULL) 
+    g_io_channel_unref (ps->in);
 
   if (ps->callback)
     ps->callback (ps->job, ps->user_data, error);
@@ -262,34 +262,30 @@ lpr_write (GIOChannel   *source,
   gchar buf[_LPR_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
+  GIOStatus status;
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
-  gint source_fd;
 
   error = NULL;
 
-  source_fd = g_io_channel_unix_get_fd (source);
+  status = 
+    g_io_channel_read_chars (source,
+                             buf,
+                             _LPR_MAX_CHUNK_SIZE,
+                             &bytes_read,
+                             &error);
 
-  bytes_read = read (source_fd,
-                     buf,
-                     _LPR_MAX_CHUNK_SIZE);
+  if (status != G_IO_STATUS_ERROR)
+    {
+      gsize bytes_written;
 
-  if (bytes_read > 0)
-    {
-      if (write (ps->in, buf, bytes_read) == -1)
-        {
-          error = g_error_new (GTK_PRINT_ERROR,
-                           GTK_PRINT_ERROR_INTERNAL_ERROR, 
-                           g_strerror (errno));
-        }
-    }
-  else if (bytes_read == -1)
-    {
-      error = g_error_new (GTK_PRINT_ERROR,
-                           GTK_PRINT_ERROR_INTERNAL_ERROR, 
-                           g_strerror (errno));
+      g_io_channel_write_chars (ps->in, 
+                                buf, 
+				bytes_read, 
+				&bytes_written, 
+				&error);
     }
 
-  if (bytes_read == 0 || error != NULL)
+  if (error != NULL || status == G_IO_STATUS_EOF)
     {
       lpr_print_cb (GTK_PRINT_BACKEND_LPR (ps->backend), 
 		    error, user_data);
@@ -297,8 +293,20 @@ lpr_write (GIOChannel   *source,
       if (error)
 	g_error_free (error);
 
+      if (error != NULL)
+        {
+          GTK_NOTE (PRINTING,
+                    g_print ("LPR Backend: %s\n", error->message));
+
+          g_error_free (error);
+        } 
+
       return FALSE;
     }
+
+  GTK_NOTE (PRINTING,
+            g_print ("LPR Backend: Writting %i byte chunk to lpr pipe\n", bytes_read));
+
 
   return TRUE;
 }
@@ -308,21 +316,20 @@ lpr_write (GIOChannel   *source,
 static void
 gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 				    GtkPrintJob            *job,
-				    gint                    data_fd,
+				    GIOChannel             *data_io,
 				    GtkPrintJobCompleteFunc callback,
 				    gpointer                user_data,
-				    GDestroyNotify          dnotify,
-				    GError                **error)
+				    GDestroyNotify          dnotify)
 {
   GError *print_error = NULL;
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  GIOChannel *send_channel;
   gint argc;  
-  gchar **argv;
-  const gchar *cmd_line;
-
+  gint in_fd;
+  gchar **argv = NULL;
+  const char *cmd_line;
+  
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
@@ -335,18 +342,11 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
   ps->user_data = user_data;
   ps->dnotify = dnotify;
   ps->job = g_object_ref (job);
-  ps->in = 0;
-  ps->out = 0;
-  ps->err = 0;
+  ps->in = NULL;
 
  /* spawn lpr with pipes and pipe ps file to lpr */
   if (!g_shell_parse_argv (cmd_line, &argc, &argv, &print_error))
-    {
-      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend), 
-		    print_error, ps);
-      g_propagate_error (error, print_error);
-      return;
-    }
+    goto out; 
 
   if (!g_spawn_async_with_pipes (NULL,
                                  argv,
@@ -355,27 +355,38 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
                                  NULL,
                                  NULL,
                                  NULL,
-                                 &ps->in,
-                                 &ps->out,
-                                 &ps->err,
+                                 &in_fd,
+                                 NULL,
+                                 NULL,
                                  &print_error))
-    {
-      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
-		    print_error, ps);
-      g_propagate_error (error, print_error);
       goto out;
 
+  ps->in = g_io_channel_unix_new (in_fd);
+
+  g_io_channel_set_encoding (ps->in, NULL, &print_error);
+  if (print_error != NULL)
+    {
+      if (ps->in != NULL)
+        g_io_channel_unref (ps->in);
+      
+      goto out;
     }
 
-  send_channel = g_io_channel_unix_new (data_fd);
- 
-  g_io_add_watch (send_channel, 
+  g_io_add_watch (data_io, 
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
                   (GIOFunc) lpr_write,
                   ps);
 
  out:
-  g_strfreev (argv);
+  if (argv != NULL)
+    g_strfreev (argv);
+
+  if (print_error != NULL)
+    {
+      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
+		    print_error, ps);
+      g_error_free (print_error);
+    }
 }
 
 static void

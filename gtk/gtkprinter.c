@@ -754,12 +754,12 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
 				   gdouble           width, 
 				   gdouble           height,
-				   gint              cache_fd)
+				   GIOChannel       *cache_io)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
   return backend_class->printer_create_cairo_surface (printer, settings,
-						      width, height, cache_fd);
+						      width, height, cache_io);
 }
 
 GList  *

@@ -306,8 +306,7 @@ unix_end_run (GtkPrintOperation *op,
   if (op_unix->job != NULL)
     gtk_print_job_send (op_unix->job,
                         unix_finish_send, 
-                        op_unix, NULL,
-		        NULL);
+                        op_unix, NULL);
 
   if (wait)
     {

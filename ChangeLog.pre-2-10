@@ -1,5 +1,42 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	Apply a patch by John Palmieri to use buffered io using
+	GIOChannels, clean up error handling and support Cups 1.2
+	api in the printing code.
+
+	* acconfig.h:
+	* configure.in: Detect Cups 1.2
+
+	* gtk/gtkdebug.h:
+	* gtk/gtkmain.c: Add a printing debug key.
+
+	* gtk/gtkprintbackend.[hc]: Remove the GError parameter from
+	gtk_print_backend_print_stream, and take a  GIOChannel instead
+	of an fd.
+
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.c: Replace the fd parameter of 
+	_gtk_printer_create_cairo_surface by a GIOChannel.
+
+	* gtk/gtkprintjob.[hc]: Remove the GError parameter from
+	gtk_print_job_send and make it return void.
+
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintjob.c: Adjust callers, add some debugging support.
+
+	* modules/printbackends/Makefile.am: Fix DIST_SUBDIRS.
+
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/lpr/Makefile.am: Add debug CFLAGS.
+	
+	* modules/printbackends/cups/gtkcupsutils.[hc]: 
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/file/gtkprintbackendfile.c:
+	* modules/printbackends/lpr/gtkprintbackendfile.c: Adapt to
+	the GIOChannel and GError changes, add debug output
+	
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprinter.c (gtk_enumerate_printers): Remove an 
 	unused variable.
 

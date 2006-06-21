@@ -10,7 +10,8 @@ INCLUDES = \
 	-I$(top_builddir)/gdk				\
 	$(CUPS_CFLAGS)					\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)				\
+	$(GTK_DEBUG_FLAGS)
 
 LDADDS = \
 	$(GTK_DEP_LIBS)					\

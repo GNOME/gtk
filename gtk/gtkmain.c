@@ -159,7 +159,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"multihead", GTK_DEBUG_MULTIHEAD},
   {"modules", GTK_DEBUG_MODULES},
   {"geometry", GTK_DEBUG_GEOMETRY},
-  {"icontheme", GTK_DEBUG_ICONTHEME}
+  {"icontheme", GTK_DEBUG_ICONTHEME},
+  {"printing", GTK_DEBUG_PRINTING}
 };
 #endif /* G_ENABLE_DEBUG */
 

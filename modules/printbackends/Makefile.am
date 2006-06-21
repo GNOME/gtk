@@ -4,4 +4,4 @@ if HAVE_CUPS
 SUBDIRS += cups
 endif
 
-DIST_SUBDIRS=cups pdf lpr
+DIST_SUBDIRS=cups file lpr
