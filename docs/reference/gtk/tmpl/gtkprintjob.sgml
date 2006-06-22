@@ -65,6 +65,11 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintJob:track-print-status ##### -->
+<para>
+
+</para>
+
 <!-- ##### USER_FUNCTION GtkPrintJobCompleteFunc ##### -->
 <para>
 
@@ -153,8 +158,6 @@ Printing support was added in GTK+ 2.10.
 @callback: 
 @user_data: 
 @dnotify: 
-@error: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_print_job_set_track_print_status ##### -->

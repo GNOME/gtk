@@ -342,6 +342,12 @@ Turns off certain object flags.  (Private)
 </para>
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINT_TO_FILE ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
 <para>
 
@@ -2837,6 +2843,14 @@ Set the the handle size to @size x @size pixels.
 @settings: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_print_settings_get_print_to_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_print_settings_set_num_copies ##### -->
 <para>
 
@@ -2844,6 +2858,14 @@ Set the the handle size to @size x @size pixels.
 
 @settings: 
 @num_copies: 
+
+<!-- ##### FUNCTION gtk_print_settings_set_print_to_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@print_to_file: 
 
 <!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>

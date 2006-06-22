@@ -1,4 +1,10 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+	
+	* === Released 2.9.4 ===
+
+2006-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Some additions
 
 	* gtk/tmpl/gtkprintunixdialog.sgml: Document some of the
 	print capabilities

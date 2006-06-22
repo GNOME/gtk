@@ -1197,3 +1197,49 @@ returns.
 @enable: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_enable_tree_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_enable_tree_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enabled: 
+
+
+<!-- ##### ENUM GtkTreeViewGridLines ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_VIEW_GRID_LINES_NONE: 
+@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: 
+@GTK_TREE_VIEW_GRID_LINES_VERTICAL: 
+@GTK_TREE_VIEW_GRID_LINES_BOTH: 
+
+<!-- ##### FUNCTION gtk_tree_view_get_grid_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_grid_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@grid_lines: 
+
+

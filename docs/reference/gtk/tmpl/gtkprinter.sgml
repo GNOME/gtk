@@ -195,6 +195,24 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_printer_accepts_ps ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_accepts_pdf ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_printer_compare ##### -->
 <para>
 
@@ -212,9 +230,9 @@ Note that you need to ref @printer, if you want to keep
 a reference to it after the function has returned.
 </para>
 
-@printer: a #GtkPrinter 
-@data: user data passed to gtk_enumerate_printers() 
-@Returns: %TRUE to stop the enumeration, %FALSE to continue 
+@printer: a #GtkPrinter
+@data: user data passed to gtk_enumerate_printers()
+@Returns: %TRUE to stop the enumeration, %FALSE to continue
 
 
 <!-- ##### FUNCTION gtk_enumerate_printers ##### -->

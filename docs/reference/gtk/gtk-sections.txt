@@ -4506,6 +4506,12 @@ gtk_tree_view_get_row_separator_func
 gtk_tree_view_set_row_separator_func
 gtk_tree_view_get_rubber_banding
 gtk_tree_view_set_rubber_banding
+gtk_tree_view_get_enable_tree_lines
+gtk_tree_view_set_enable_tree_lines
+GtkTreeViewGridLines
+gtk_tree_view_get_grid_lines
+gtk_tree_view_set_grid_lines
+
 <SUBSECTION Standard>
 GtkTreeSelectionClass
 GTK_TREE_VIEW
@@ -6164,6 +6170,7 @@ GTK_PRINT_UNIX_DIALOG_GET_CLASS
 <SUBSECTION Private>
 GtkPrintUnixDialogPrivate
 gtk_print_unix_dialog_get_type
+gtk_print_capabilities_get_type
 </SECTION>
 
 
@@ -6183,6 +6190,8 @@ gtk_printer_get_job_count
 gtk_printer_is_active
 gtk_printer_is_virtual
 gtk_printer_is_default
+gtk_printer_accepts_ps
+gtk_printer_accepts_pdf
 gtk_printer_compare
 GtkPrinterFunc
 gtk_enumerate_printers

@@ -602,31 +602,6 @@ Printing support was added in GTK+ 2.10.
 @scale: 
 
 
-<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINT_TO_FILE ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### FUNCTION gtk_print_settings_get_print_to_file ##### -->
-<para>
-
-</para>
-
-@settings: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_print_settings_set_print_to_file ##### -->
-<para>
-
-</para>
-
-@settings: 
-@print_to_file: 
-
-
 <!-- ##### ENUM GtkPrintPages ##### -->
 <para>
 

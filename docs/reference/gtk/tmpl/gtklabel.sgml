@@ -258,6 +258,11 @@ described below.
 
 </para>
 
+<!-- ##### ARG GtkLabel:wrap-mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_label_new ##### -->
 <para>
 
@@ -383,6 +388,15 @@ probably only used within the Gtk+ library itself for menu items and such.
 
 @label: 
 @wrap: 
+
+
+<!-- ##### FUNCTION gtk_label_set_line_wrap_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@wrap_mode: 
 
 
 <!-- ##### MACRO gtk_label_set ##### -->
@@ -540,6 +554,15 @@ Gtk+ 1.0.x.
 
 
 <!-- ##### FUNCTION gtk_label_get_line_wrap ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_line_wrap_mode ##### -->
 <para>
 
 </para>

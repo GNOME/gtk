@@ -5,7 +5,7 @@ Overview of Changes from GTK+ 2.9.3 to 2.9.4
  - UI improvements in the print dialog
  - Make printing work without a display connection
  - Replace "Print to PDF" by "Print to file" that
-   can generate PDF of PostScript
+   can generate PDF or PostScript
  - Add a function to the low-level API to 
    enumerate all printers
 
