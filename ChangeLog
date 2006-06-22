@@ -1,3 +1,11 @@
+2006-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #345663, reported by Kazuki Iwamoto
+	
+	* gtk/gtkaction.c: Include gtkiconfactory.h
+
+	* gtk/gtkactiongroup.c: Include gtkicontheme.h
+
 2006-06-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextview.c (gtk_text_view_size_allocate): keep the cursor
