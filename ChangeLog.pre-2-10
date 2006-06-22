@@ -1,5 +1,9 @@
 2006-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpintjob.h: Add a note about updating the registration.
+	* gtk/gtkprintjob.c (gtk_print_capabilites_get_type): Add missing
+	capabilitites. 
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Remove
 	an unused variable and make it compile with Cups 1.1.  (#345644,
 	Joseph Sacco)
