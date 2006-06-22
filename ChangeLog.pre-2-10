@@ -1,3 +1,9 @@
+2006-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Remove
+	an unused variable and make it compile with Cups 1.1.  (#345644,
+	Joseph Sacco)
+
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

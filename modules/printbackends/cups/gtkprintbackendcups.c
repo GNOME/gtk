@@ -2089,7 +2089,6 @@ cups_printer_get_options (GtkPrinter           *printer,
     {
       GtkPaperSize *paper_size;
       ppd_option_t *option;
-      ppd_coption_t *coption;
 
       ppdMarkDefaults (ppd_file);
 
