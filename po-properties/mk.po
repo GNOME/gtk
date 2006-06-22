@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 21:18-0400\n"
+"POT-Creation-Date: 2006-06-21 21:18-0400\n"
 "PO-Revision-Date: 2005-08-28 17:12+0200\n"
 "Last-Translator: Arangel Angov <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -261,7 +261,7 @@ msgid "A unique name for the action."
 msgstr "Уникатно име за дејството."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
-#: gtk/gtkframe.c:95 gtk/gtklabel.c:293 gtk/gtktoolbutton.c:180
+#: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Ознака"
 
@@ -643,7 +643,7 @@ msgstr "Растојание"
 msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
@@ -684,7 +684,7 @@ msgstr "Extra space to put between the child and its neighbors, in pixels"
 msgid "Pack type"
 msgstr "Pack type"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -692,12 +692,12 @@ msgstr ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Позиција"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
@@ -709,12 +709,12 @@ msgstr ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 
-#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:315
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Use underline"
 
-#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:315
+#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1166,7 +1166,7 @@ msgstr "Markup"
 msgid "Marked up text to render"
 msgstr "Marked up text to render"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:300
+#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -1325,7 +1325,7 @@ msgstr ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Ellipsize"
 
@@ -1339,11 +1339,11 @@ msgstr ""
 "have enough room to display the entire string, if at all"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
-#: gtk/gtklabel.c:426
+#: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Width In Characters"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:427
+#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "The desired width of the label, in characters"
 
@@ -1594,7 +1594,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the color an alpha value"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "Наслов"
 
@@ -1874,19 +1874,19 @@ msgstr "Action area border"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialog"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Позиција на стрелката"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:372
+#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "The current position of the insertion cursor in chars"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Не е направен избор"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:382
+#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -1992,7 +1992,7 @@ msgstr "Whether to allow multiple files to be selected"
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Избери при фокусирање"
 
@@ -2100,11 +2100,11 @@ msgstr "Whether the expander has been opened to reveal the child widget"
 msgid "Text of the expander's label"
 msgstr "Text of the expander's label"
 
-#: gtk/gtkexpander.c:201 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:201 gtk/gtklabel.c:308
 msgid "Use markup"
 msgstr "Use markup"
 
-#: gtk/gtkexpander.c:202 gtk/gtklabel.c:308
+#: gtk/gtkexpander.c:202 gtk/gtklabel.c:309
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "The text of the label includes XML markup. See pango_parse_markup()"
 
@@ -2120,11 +2120,11 @@ msgstr "Label widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "A widget to display in place of the usual expander label"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:738
 msgid "Expander Size"
 msgstr "Големина"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:739
 msgid "Size of the expander arrow"
 msgstr "Големина на стрелката"
 
@@ -2516,7 +2516,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
 #: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
-#: gtk/gtktrayicon-x11.c:94
+#: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Ориентација"
 
@@ -2646,19 +2646,19 @@ msgstr "Whether images should be shown in menus"
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
-#: gtk/gtklabel.c:294
+#: gtk/gtklabel.c:295
 msgid "The text of the label"
 msgstr "The text of the label"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:302
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: gtk/gtklabel.c:322 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "Порамнување"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:324
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2668,11 +2668,11 @@ msgstr ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 
-#: gtk/gtklabel.c:331
+#: gtk/gtklabel.c:332
 msgid "Pattern"
 msgstr "Шара"
 
-#: gtk/gtklabel.c:332
+#: gtk/gtklabel.c:333
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2680,39 +2680,48 @@ msgstr ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:340
 msgid "Line wrap"
 msgstr "Line wrap"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "If set, wrap lines if the text becomes too wide"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:356
+#, fuzzy
+msgid "Line wrap mode"
+msgstr "Line wrap"
+
+#: gtk/gtklabel.c:357
+msgid "If wrap is set, controls how linewrapping is done"
+msgstr ""
+
+#: gtk/gtklabel.c:364
 msgid "Selectable"
 msgstr "Selectable"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Whether the label text can be selected with the mouse"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:371
 msgid "Mnemonic key"
 msgstr "Mnemonic key"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
 msgstr "The mnemonic accelerator key for this label"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:380
 msgid "Mnemonic widget"
 msgstr "Mnemonic widget"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "The widget to be activated when the label's mnemonic key is pressed"
 
-#: gtk/gtklabel.c:407
+#: gtk/gtklabel.c:425
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
@@ -2721,31 +2730,31 @@ msgstr ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:465
 msgid "Single Line Mode"
 msgstr "Single Line Mode"
 
-#: gtk/gtklabel.c:448
+#: gtk/gtklabel.c:466
 msgid "Whether the label is in single line mode"
 msgstr "Whether the label is in single line mode"
 
-#: gtk/gtklabel.c:465
+#: gtk/gtklabel.c:483
 msgid "Angle"
 msgstr "Angle"
 
-#: gtk/gtklabel.c:466
+#: gtk/gtklabel.c:484
 msgid "Angle at which the label is rotated"
 msgstr "Angle at which the label is rotated"
 
-#: gtk/gtklabel.c:486
+#: gtk/gtklabel.c:504
 msgid "Maximum Width In Characters"
 msgstr "Maximum Width In Characters"
 
-#: gtk/gtklabel.c:487
+#: gtk/gtklabel.c:505
 msgid "The desired maximum width of the label, in characters"
 msgstr "The desired maximum width of the label, in characters"
 
-#: gtk/gtklabel.c:603
+#: gtk/gtklabel.c:621
 #, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Дали да ја избере содржината на записот кога истиот е фокусиран"
@@ -3057,75 +3066,75 @@ msgid ""
 msgstr ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:527
 msgid "Page"
 msgstr "Страница"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:528
 msgid "The index of the current page"
 msgstr "Индексот на тековната страна"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:536
 msgid "Tab Position"
 msgstr "Позиција на јазичето"
 
-#: gtk/gtknotebook.c:522
+#: gtk/gtknotebook.c:537
 msgid "Which side of the notebook holds the tabs"
 msgstr "Which side of the notebook holds the tabs"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:544
 msgid "Tab Border"
 msgstr "Граница на јазичето"
 
-#: gtk/gtknotebook.c:530
+#: gtk/gtknotebook.c:545
 msgid "Width of the border around the tab labels"
 msgstr "Width of the border around the tab labels"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:553
 msgid "Horizontal Tab Border"
 msgstr "Horizontal Tab Border"
 
-#: gtk/gtknotebook.c:539
+#: gtk/gtknotebook.c:554
 msgid "Width of the horizontal border of tab labels"
 msgstr "Width of the horizontal border of tab labels"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:562
 msgid "Vertical Tab Border"
 msgstr "Vertical Tab Border"
 
-#: gtk/gtknotebook.c:548
+#: gtk/gtknotebook.c:563
 msgid "Width of the vertical border of tab labels"
 msgstr "Width of the vertical border of tab labels"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:571
 msgid "Show Tabs"
 msgstr "Покажи јазичиња"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:572
 msgid "Whether tabs should be shown or not"
 msgstr "Whether tabs should be shown or not"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:578
 msgid "Show Border"
 msgstr "Покажи граница"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:579
 msgid "Whether the border should be shown or not"
 msgstr "Whether the border should be shown or not"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:585
 msgid "Scrollable"
 msgstr "Scrollable"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:586
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "If TRUE, scroll arrows are added if there are too many tabs to fit"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:592
 msgid "Enable Popup"
 msgstr "Enable Popup"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:593
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3133,126 +3142,126 @@ msgstr ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:600
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Whether tabs should have homogeneous sizes"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:606
 #, fuzzy
 msgid "Group ID"
 msgstr "Група"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:607
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:616
 msgid "Tab label"
 msgstr "Tab label"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:617
 msgid "The string displayed on the child's tab label"
 msgstr "The string displayed on the child's tab label"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:623
 msgid "Menu label"
 msgstr "Menu label"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:624
 msgid "The string displayed in the child's menu entry"
 msgstr "The string displayed in the child's menu entry"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:637
 msgid "Tab expand"
 msgstr "Tab expand"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:638
 msgid "Whether to expand the child's tab or not"
 msgstr "Whether to expand the child's tab or not"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:644
 msgid "Tab fill"
 msgstr "Tab fill"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:645
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Whether the child's tab should fill the allocated area or not"
 
-#: gtk/gtknotebook.c:636
+#: gtk/gtknotebook.c:651
 msgid "Tab pack type"
 msgstr "Tab pack type"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:658
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Reorderable"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:659
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Whether the border should be shown or not"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:665
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Tab label"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:666
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Дали дејството е вклучено."
 
-#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:682
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second backward arrow button on the opposite end of the tab area"
 
-#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:698
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second forward arrow button on the opposite end of the tab area"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:742
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Граница на јазичето"
 
-#: gtk/gtknotebook.c:728
+#: gtk/gtknotebook.c:743
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Големина на стрелката"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:758
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:744
+#: gtk/gtknotebook.c:759
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Size of spacers"
@@ -3338,23 +3347,15 @@ msgid ""
 msgstr ""
 "Whether the preview widget should take up the entire space it is allocated"
 
-#: gtk/gtkprintbackend.c:252
+#: gtk/gtkprintbackend.c:261
 #, fuzzy
 msgid "Default print backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkprintbackend.c:253
+#: gtk/gtkprintbackend.c:262
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
-
-#: gtk/gtkprintbackend.c:258
-msgid "Default command to run when displaying a print preview"
-msgstr ""
-
-#: gtk/gtkprintbackend.c:259
-msgid "Command to run when displaying a print preview"
-msgstr ""
 
 #: gtk/gtkprinter.c:120
 #, fuzzy
@@ -3429,41 +3430,51 @@ msgstr ""
 msgid "Number of jobs queued in the printer"
 msgstr "The number of rows in the table"
 
-#: gtk/gtkprinteroptionwidget.c:119
+#: gtk/gtkprinteroptionwidget.c:121
 #, fuzzy
 msgid "Source option"
 msgstr "Поени за фонт"
 
-#: gtk/gtkprinteroptionwidget.c:120
+#: gtk/gtkprinteroptionwidget.c:122
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:116
+#: gtk/gtkprintjob.c:117
 #, fuzzy
 msgid "Title of the print job"
 msgstr "Насловот на прозорецот"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 #, fuzzy
 msgid "Printer"
 msgstr "Филтер"
 
-#: gtk/gtkprintjob.c:125
+#: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr ""
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:134
+#: gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
 #, fuzzy
 msgid "Page Setup"
 msgstr "Големина на страница"
+
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr ""
+
+#: gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr ""
 
 #: gtk/gtkprintoperation.c:844
 #, fuzzy
@@ -3474,11 +3485,11 @@ msgstr "Стандардна височина"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3501,7 +3512,7 @@ msgstr "Број на канали"
 msgid "The number of pages in the document."
 msgstr "The number of rows in the table"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
 #, fuzzy
 msgid "Current Page"
 msgstr "Тековна алфа"
@@ -3520,10 +3531,6 @@ msgstr "Користи алфа"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:972
@@ -3590,21 +3597,21 @@ msgstr "Сопствена палета"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:228
+#: gtk/gtkprintunixdialog.c:226
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "The current page in the document"
 msgstr "The page size of the adjustment"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:251
 #, fuzzy
 msgid "Selected Printer"
 msgstr "The selected year"
 
-#: gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Предметот кој што е моментално активен"
@@ -4485,8 +4492,9 @@ msgid "Ignore hidden"
 msgstr "Ignore hidden"
 
 #: gtk/gtksizegroup.c:285
+#, fuzzy
 msgid ""
-"If TRUE, hidden widgets are ignored when determining the size of the group"
+"If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
 "If TRUE, hidden widgets are ignored when determining the size of the group"
 
@@ -5328,7 +5336,7 @@ msgstr ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 
-#: gtk/gtktrayicon-x11.c:95
+#: gtk/gtktrayicon-x11.c:98
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "The orientation of the toolbar"
@@ -5469,108 +5477,108 @@ msgstr "Вклучи копчиња со стрелки"
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Whether the border should be shown or not"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "Вклучи копчиња со стрелки"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Whether the border should be shown or not"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
 msgstr "Vertical Separator Width"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:748
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertical space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:755
+#: gtk/gtktreeview.c:756
 msgid "Horizontal Separator Width"
 msgstr "Horizontal Separator Width"
 
-#: gtk/gtktreeview.c:756
+#: gtk/gtktreeview.c:757
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontal space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Allow Rules"
 msgstr "Allow Rules"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Allow drawing of alternating color rows"
 msgstr "Allow drawing of alternating color rows"
 
-#: gtk/gtktreeview.c:771
+#: gtk/gtktreeview.c:772
 msgid "Indent Expanders"
 msgstr "Indent Expanders"
 
-#: gtk/gtktreeview.c:772
+#: gtk/gtktreeview.c:773
 msgid "Make the expanders indented"
 msgstr "Make the expanders indented"
 
-#: gtk/gtktreeview.c:778
+#: gtk/gtktreeview.c:779
 msgid "Even Row Color"
 msgstr "Even Row Color"
 
-#: gtk/gtktreeview.c:779
+#: gtk/gtktreeview.c:780
 msgid "Color to use for even rows"
 msgstr "Color to use for even rows"
 
-#: gtk/gtktreeview.c:785
+#: gtk/gtktreeview.c:786
 msgid "Odd Row Color"
 msgstr "Odd Row Color"
 
-#: gtk/gtktreeview.c:786
+#: gtk/gtktreeview.c:787
 msgid "Color to use for odd rows"
 msgstr "Color to use for odd rows"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:793
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:799
+#: gtk/gtktreeview.c:800
 #, fuzzy
 msgid "Grid line width"
 msgstr "Focus linewidth"
 
-#: gtk/gtktreeview.c:800
+#: gtk/gtktreeview.c:801
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Width, in pixels, of the focus indicator line"
 
-#: gtk/gtktreeview.c:806
+#: gtk/gtktreeview.c:807
 #, fuzzy
 msgid "Tree line width"
 msgstr "The fixed width"
 
-#: gtk/gtktreeview.c:807
+#: gtk/gtktreeview.c:808
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Width, in pixels, of the focus indicator line"
 
-#: gtk/gtktreeview.c:813
+#: gtk/gtktreeview.c:814
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Focus line dash pattern"
 
-#: gtk/gtktreeview.c:814
+#: gtk/gtktreeview.c:815
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Dash pattern used to draw the focus indicator"
 
-#: gtk/gtktreeview.c:820
+#: gtk/gtktreeview.c:821
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Focus line dash pattern"
 
-#: gtk/gtktreeview.c:821
+#: gtk/gtktreeview.c:822
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Dash pattern used to draw the focus indicator"

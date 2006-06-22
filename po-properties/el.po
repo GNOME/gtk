@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 21:18-0400\n"
+"POT-Creation-Date: 2006-06-21 21:18-0400\n"
 "PO-Revision-Date: 2005-08-12 18:14+0300\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -282,7 +282,7 @@ msgid "A unique name for the action."
 msgstr "Ένα μοναδικό όνομα για αυτή την ενέργεια"
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
-#: gtk/gtkframe.c:95 gtk/gtklabel.c:293 gtk/gtktoolbutton.c:180
+#: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Ετικέτα"
 
@@ -677,7 +677,7 @@ msgstr "Διαστήματα"
 msgid "The amount of space between children"
 msgstr "Το μέγεθος του διαστήματος μεταξύ θυγατρικών"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Ομογενοποίηση"
 
@@ -721,7 +721,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Τύπος συσκευασίας"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -729,12 +729,12 @@ msgstr ""
 "Ο τύπος GtkPack που ορίζει αν το θυγατρικό θα συσκευάζεται με αναφορά στην "
 "αρχή ή το τέλος του μητρικού"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Θέση"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
 msgid "The index of the child in the parent"
 msgstr "Ο δείκτης του θυγατρικού στο μητρικό"
 
@@ -746,12 +746,12 @@ msgstr ""
 "Κείμενο της ετικέτας γραφικού συστατικού μέσα στο κουμπί, αν το κουμπί "
 "περιέχει ετικέτα γραφικού συστατικού."
 
-#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:315
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Χρήση υπογράμμισης"
 
-#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:315
+#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1211,7 +1211,7 @@ msgstr "Επισήμανση"
 msgid "Marked up text to render"
 msgstr "Επισημασμένο κείμενο προς εμφάνιση"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:300
+#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Γνωρίσματα"
 
@@ -1373,7 +1373,7 @@ msgstr ""
 "χρησιμοποιήσει αυτό ως συμβουλή όταν θα εμφανίζει το κείμενο. Αν δεν "
 "καταλαβαίνετε αυτήν την παράμετρο πιθανόν και να μην τη χρειάζεστε."
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Χρήση αποσιωπητικών"
 
@@ -1387,11 +1387,11 @@ msgstr ""
 "εργασία απόδοσης κελιού δεν έχει αρκετό χώρο για να το εμφανίσει ολόκληρο"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
-#: gtk/gtklabel.c:426
+#: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Πλάτος σε χαρακτήρες"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:427
+#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "Το επιθυμητό πλάτος της ετικέτας, σε χαρακτήρες"
 
@@ -1645,7 +1645,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Αν θα δοθεί ή όχι στο χρώμα μια τιμή άλφα"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "Τίτλος"
 
@@ -1929,19 +1929,19 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Πλάτος πλαισίου γύρω από την περιοχή του κουμπιού στο κάτω μέρος του διαλόγου"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Θέση Δρομέα"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:372
+#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "Η τρέχουσα θέση του δρομέα εισαγωγής σε χαρακτήρες"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Όριο Επιλογής"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:382
+#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Η θέση του αντίθετου άκρου της επιλογής από το δρομέα σε χαρακτήρες"
@@ -2049,7 +2049,7 @@ msgstr "Αν θα επιτρέπεται η επιλογή πολλαπλών α
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Επιλογή σε εστίαση"
 
@@ -2159,11 +2159,11 @@ msgstr ""
 msgid "Text of the expander's label"
 msgstr "Κείμενο της ετικέτας του σε ανάτυξη παραθύρου"
 
-#: gtk/gtkexpander.c:201 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:201 gtk/gtklabel.c:308
 msgid "Use markup"
 msgstr "Χρήση markup"
 
-#: gtk/gtkexpander.c:202 gtk/gtklabel.c:308
+#: gtk/gtkexpander.c:202 gtk/gtklabel.c:309
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Το κείμενο της ετικέτας περιέχει XML markup. Βλέπε pango_parse_markup()."
@@ -2182,11 +2182,11 @@ msgstr "Γραφικό συστατικό ετικέτας"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Ένα  γραφικό συστατικό στη θέση της σύνηθους ετικέττας αναπτυσόμμενου"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:738
 msgid "Expander Size"
 msgstr "Μέγεθος αναπτυσσόμενου"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:739
 msgid "Size of the expander arrow"
 msgstr "Μέγεθος του βέλους ανάπτυξης"
 
@@ -2590,7 +2590,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Το διάστημα που εισάγεται στα όρια της προβολής εικονιδίου"
 
 #: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
-#: gtk/gtktrayicon-x11.c:94
+#: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Προσανατολισμός"
 
@@ -2723,19 +2723,19 @@ msgstr "Αν θα εμφανίζονται ή όχι οι εικόνες στα 
 msgid "The screen where this window will be displayed"
 msgstr "Η οθόνη όπου και θα προβάλλεται αυτό το παράθυρο"
 
-#: gtk/gtklabel.c:294
+#: gtk/gtklabel.c:295
 msgid "The text of the label"
 msgstr "Το κείμενο της ετικέτας"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:302
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Μια λίστα γνωρισμάτων στυλ για εφαρμογή στο κείμενο της ετικέτας"
 
-#: gtk/gtklabel.c:322 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "Στοίχιση"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:324
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2744,11 +2744,11 @@ msgstr ""
 "Η στοίχιση των γραμμών του κείμενου της ετικέτας είναι σχετική μεταξύ τους. "
 "Αυτό ΔΕΝ επηρεάζει τη στοίχιση της ετικέτας . Βλέπε GtkMisc::xalign for that."
 
-#: gtk/gtklabel.c:331
+#: gtk/gtklabel.c:332
 msgid "Pattern"
 msgstr "Μοτίβο"
 
-#: gtk/gtklabel.c:332
+#: gtk/gtklabel.c:333
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2756,42 +2756,51 @@ msgstr ""
 "Ένα string με χαρακτήρες  _ σε θέσεις που αντιστοιχούν σε χαρακτήρες "
 "χρησιμοποιείται στο κείμενο για υπογράμμιση."
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:340
 msgid "Line wrap"
 msgstr "Αναδίπλωση γραμμής"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr ""
 "Αν ορισθεί θα γίνεται αναδίπλωση γραμμών αν το κείμενο είναι πολύ πλατύ"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:356
+#, fuzzy
+msgid "Line wrap mode"
+msgstr "Αναδίπλωση γραμμής"
+
+#: gtk/gtklabel.c:357
+msgid "If wrap is set, controls how linewrapping is done"
+msgstr ""
+
+#: gtk/gtklabel.c:364
 msgid "Selectable"
 msgstr "Δυνατότητα επιλογής"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Αν το κείμενο της ετικέτας μπορεί να επιλεχθεί με το ποντίκι"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:371
 msgid "Mnemonic key"
 msgstr "Μνημονικό κλειδί"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
 msgstr "Το μνημονικό κλειδί συντόμευσης για αυτήν την ετικέτα"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:380
 msgid "Mnemonic widget"
 msgstr "Μνημονικό γραφικό συστατικό"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Το γραφικό συστατικό που θα ενεργοποιείται όταν πατιέται το μνημονικό κλειδί "
 "της ετικέτας"
 
-#: gtk/gtklabel.c:407
+#: gtk/gtklabel.c:425
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
@@ -2800,31 +2809,31 @@ msgstr ""
 "Η προτιμώμενη θέση για την αποσιώπηση αλφαριθμητικού, αν η ετικέτα δεν έχει "
 "αρκετό χώρο για την εμφάνιση ολόκληρου του αλφαριθμητικού"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:465
 msgid "Single Line Mode"
 msgstr "Λειτουργία μονής γραμμής"
 
-#: gtk/gtklabel.c:448
+#: gtk/gtklabel.c:466
 msgid "Whether the label is in single line mode"
 msgstr "Αν η ετικέτα είναι σε λειτουργία μονής γραμμής"
 
-#: gtk/gtklabel.c:465
+#: gtk/gtklabel.c:483
 msgid "Angle"
 msgstr "Γωνία"
 
-#: gtk/gtklabel.c:466
+#: gtk/gtklabel.c:484
 msgid "Angle at which the label is rotated"
 msgstr "Γωνία υπό την οποία περιστρέφεται η ετικέτα"
 
-#: gtk/gtklabel.c:486
+#: gtk/gtklabel.c:504
 msgid "Maximum Width In Characters"
 msgstr "Μέγιστο μέγεθος σε χαρακτήρες"
 
-#: gtk/gtklabel.c:487
+#: gtk/gtklabel.c:505
 msgid "The desired maximum width of the label, in characters"
 msgstr "Το επιθυμητό μέγιστο πλάτος της ετικέτας, σε χαρακτήρες"
 
-#: gtk/gtklabel.c:603
+#: gtk/gtklabel.c:621
 #, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Αν θα επιλέγονται τα περιεχόμενα μιας καταχώρισης όταν γίνεται εστίαση"
@@ -3146,75 +3155,75 @@ msgstr ""
 "Το μέγεθος του διαστήματος για προσθήκη στο πάνω και κάτω μέρος του γραφικού "
 "συστατικού, σε εικονοστοιχεία"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:527
 msgid "Page"
 msgstr "Σελίδα"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:528
 msgid "The index of the current page"
 msgstr "Ο δείκτης της τρέχουσας σελίδας"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:536
 msgid "Tab Position"
 msgstr "Θέση στηλοθέτη"
 
-#: gtk/gtknotebook.c:522
+#: gtk/gtknotebook.c:537
 msgid "Which side of the notebook holds the tabs"
 msgstr "Ποιό μέρος του σημειωματάριου ελέγχει τους στηλοθέτες"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:544
 msgid "Tab Border"
 msgstr "Περίγραμμα στηλοθέτη"
 
-#: gtk/gtknotebook.c:530
+#: gtk/gtknotebook.c:545
 msgid "Width of the border around the tab labels"
 msgstr "Πλάτος του περιγράμματος γύρω από τις ετικέτες στηλοθετών"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:553
 msgid "Horizontal Tab Border"
 msgstr "Οριζόντιο περίγραμμα στηλοθέτη"
 
-#: gtk/gtknotebook.c:539
+#: gtk/gtknotebook.c:554
 msgid "Width of the horizontal border of tab labels"
 msgstr "Πλάτος του οριζόντιου περιγράμματος γύρω από τις ετικέτες στηλοθετών"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:562
 msgid "Vertical Tab Border"
 msgstr "Κάθετο Περίγραμμα Στηλοθέτη"
 
-#: gtk/gtknotebook.c:548
+#: gtk/gtknotebook.c:563
 msgid "Width of the vertical border of tab labels"
 msgstr "Πλάτος του κάθετου περιγράμματος γύρω από τις ετικέτες στηλοθετών"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:571
 msgid "Show Tabs"
 msgstr "Προβολή Στηλοθετών"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:572
 msgid "Whether tabs should be shown or not"
 msgstr "Αν θα εμφανίζονται ή όχι οι στηλοθέτες"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:578
 msgid "Show Border"
 msgstr "Προβολή Περιγράμματος"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:579
 msgid "Whether the border should be shown or not"
 msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:585
 msgid "Scrollable"
 msgstr "Με δυνατότητα κύλισης"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:586
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Αν TRUE, προστίθενται βέλη κύλισης αν υπάρχουν πολλοί στηλοθέτες"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:592
 msgid "Enable Popup"
 msgstr "Ενεργοποίηση Αναδυόμενων Μενού"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:593
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3222,128 +3231,128 @@ msgstr ""
 "Αν TRUE, ή πίεση του δεξιού ποντικιού στο σημειωματάριο, αναδύει ένα μενού "
 "που μπορεί να χρησιμοποιηθεί για τη μετάβαση σε μιά σελίδα"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:600
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Αν οι στηλοθέτες θα πρέπει να έχουν ομογενοποιημένο μέγεθος"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:606
 #, fuzzy
 msgid "Group ID"
 msgstr "Ομάδα"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:607
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:616
 msgid "Tab label"
 msgstr "Ετικέτα στήλης"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:617
 msgid "The string displayed on the child's tab label"
 msgstr "Το αλφαριθμητικό που θα προβάλλεται στην ετικέτα στήλης θυγατρικού"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:623
 msgid "Menu label"
 msgstr "Ετικέτα μενού"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:624
 msgid "The string displayed in the child's menu entry"
 msgstr "Το αλφαριθμητικό που θα προβάλλεται στην καταχώριση μενού θυγατρικού"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:637
 msgid "Tab expand"
 msgstr "Tab expand"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:638
 msgid "Whether to expand the child's tab or not"
 msgstr "Αν θα αναπτύσσεται ή όχι η στήλη θυγατρικού"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:644
 msgid "Tab fill"
 msgstr "Γέμισμα στήλης"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:645
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Αν η στήλη των θυγατρικών θα γεμίζει ή όχι τη δοθείσα περιοχή"
 
-#: gtk/gtknotebook.c:636
+#: gtk/gtknotebook.c:651
 msgid "Tab pack type"
 msgstr "Τύπος συσκευασίας στήλης"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:658
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Δυνατότητα αναταξινόμησης"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:659
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:665
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Ετικέτα στήλης"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:666
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
-#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Δευτερεύον προς τα πίσω βήμα"
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:682
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Προβολή ενός δεύτερου κουμπιού βέλους προς τα πίσω στην αντίθετη άκρη της "
 "περιοχής στήλης"
 
-#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Δευτερεύον προς τα μπροστά βήμα"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:698
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Προβολή ενός δεύτερου κουμπιού βέλους προς τα μπροστά στην αντίθετη άκρη της "
 "περιοχής στήλης"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Προς τα πίσω βέλος"
 
-#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Να εμφανίζεται το κλασσικό προς τα πίσω κουμπί βέλους"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Βήμα προς τα μπροστά"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Να εμφανίζεται το κλασσικό προς τα μπροστά κουμπί βέλους"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:742
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Περίγραμμα στηλοθέτη"
 
-#: gtk/gtknotebook.c:728
+#: gtk/gtknotebook.c:743
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Μέγεθος του βέλους ανάπτυξης"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:758
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:744
+#: gtk/gtknotebook.c:759
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Μέγεθος διαστημάτων"
@@ -3430,23 +3439,15 @@ msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "Αν η προεπισκόπηση θα καταλαμβάνει όλο τον καθορισμένο χώρο"
 
-#: gtk/gtkprintbackend.c:252
+#: gtk/gtkprintbackend.c:261
 #, fuzzy
 msgid "Default print backend"
 msgstr "Προεπιλεγμένο backend επιλογέα αρχείων"
 
-#: gtk/gtkprintbackend.c:253
+#: gtk/gtkprintbackend.c:262
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Όνομα του GtkFileChooser backend για προεπιλεγμένη χρήση"
-
-#: gtk/gtkprintbackend.c:258
-msgid "Default command to run when displaying a print preview"
-msgstr ""
-
-#: gtk/gtkprintbackend.c:259
-msgid "Command to run when displaying a print preview"
-msgstr ""
 
 #: gtk/gtkprinter.c:120
 #, fuzzy
@@ -3521,41 +3522,51 @@ msgstr ""
 msgid "Number of jobs queued in the printer"
 msgstr "Ο αριθμός των κελιών στον πίνακα"
 
-#: gtk/gtkprinteroptionwidget.c:119
+#: gtk/gtkprinteroptionwidget.c:121
 #, fuzzy
 msgid "Source option"
 msgstr "Συμπλήρωση μέσω αναδυόμενου"
 
-#: gtk/gtkprinteroptionwidget.c:120
+#: gtk/gtkprinteroptionwidget.c:122
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:116
+#: gtk/gtkprintjob.c:117
 #, fuzzy
 msgid "Title of the print job"
 msgstr "Ο τίτλος του παραθύρου"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 #, fuzzy
 msgid "Printer"
 msgstr "Φίλτρο"
 
-#: gtk/gtkprintjob.c:125
+#: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr ""
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:134
+#: gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
 #, fuzzy
 msgid "Page Setup"
 msgstr "Μέγεθος σελίδας"
+
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr ""
+
+#: gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr ""
 
 #: gtk/gtkprintoperation.c:844
 #, fuzzy
@@ -3566,11 +3577,11 @@ msgstr "Προεπιλεγμένο Ύψος"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3593,7 +3604,7 @@ msgstr "Αριθμός καναλιών"
 msgid "The number of pages in the document."
 msgstr "Ο αριθμός των κελιών στον πίνακα"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
 #, fuzzy
 msgid "Current Page"
 msgstr "Τρέχον Alpha"
@@ -3612,10 +3623,6 @@ msgstr "Χρήση άλφα"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:972
@@ -3682,21 +3689,21 @@ msgstr "Προσαρμοσμένη παλέτα"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:228
+#: gtk/gtkprintunixdialog.c:226
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Το μέγεθος σελίδας της στοίχισης"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:251
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Το επιλεγμένο έτος"
 
-#: gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Το αντικείμενο που είναι αυτή τη στιγμή ενεργό"
@@ -4597,8 +4604,9 @@ msgid "Ignore hidden"
 msgstr "Αγνόηση κρυφών"
 
 #: gtk/gtksizegroup.c:285
+#, fuzzy
 msgid ""
-"If TRUE, hidden widgets are ignored when determining the size of the group"
+"If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
 "Αν TRUE, τα αγνοούνται τα κρυφά γραφικά συστατικά κατά τον υπολογισμό του "
 "μεγέθους της ομάδας"
@@ -5464,7 +5472,7 @@ msgstr ""
 "Αν το αντικείμενο εργαλειοθήκης θα θεωρείται σημαντικό. Οταν TRUE, τα "
 "κουμπιά εργαλειοθήκης εμφανίζουν κείμενο σε λειτουργία GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktrayicon-x11.c:95
+#: gtk/gtktrayicon-x11.c:98
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "Ο προσανατολισμός της εργαλειοθήκης"
@@ -5610,108 +5618,108 @@ msgstr "Ενεργοποίηση κουμπιών βέλους"
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "Ενεργοποίηση κουμπιών βέλους"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
 msgstr "Πλάτος Κάθετου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:748
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Κάθετο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:755
+#: gtk/gtktreeview.c:756
 msgid "Horizontal Separator Width"
 msgstr "Πλάτος Οριζόντιου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:756
+#: gtk/gtktreeview.c:757
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Οριζόντιο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Allow Rules"
 msgstr "Να Επιτρέπονται Κανόνες"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Allow drawing of alternating color rows"
 msgstr "Να επιτρέπεται ο σχεδιασμός γραμμών με εναλλαγές γραμμές χρωμάτων"
 
-#: gtk/gtktreeview.c:771
+#: gtk/gtktreeview.c:772
 msgid "Indent Expanders"
 msgstr "Εσοχή Διαστελλόμενων Στοιχείων"
 
-#: gtk/gtktreeview.c:772
+#: gtk/gtktreeview.c:773
 msgid "Make the expanders indented"
 msgstr "Να οριοθετείται η εσοχή των διαστελλόμενων στοιχείων"
 
-#: gtk/gtktreeview.c:778
+#: gtk/gtktreeview.c:779
 msgid "Even Row Color"
 msgstr "Χρώμα Ζυγής Γραμμής"
 
-#: gtk/gtktreeview.c:779
+#: gtk/gtktreeview.c:780
 msgid "Color to use for even rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις ζυγές γραμμές"
 
-#: gtk/gtktreeview.c:785
+#: gtk/gtktreeview.c:786
 msgid "Odd Row Color"
 msgstr "Χρώμα Μονής Γραμμής"
 
-#: gtk/gtktreeview.c:786
+#: gtk/gtktreeview.c:787
 msgid "Color to use for odd rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις μονές γραμμές"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:793
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:799
+#: gtk/gtktreeview.c:800
 #, fuzzy
 msgid "Grid line width"
 msgstr "Πλάτος γραμμής εστίασης"
 
-#: gtk/gtktreeview.c:800
+#: gtk/gtktreeview.c:801
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Πλάτος, σε εικονοστοιχεία της γραμμής επισήμανσης εστίασης"
 
-#: gtk/gtktreeview.c:806
+#: gtk/gtktreeview.c:807
 #, fuzzy
 msgid "Tree line width"
 msgstr "Το σταθερό πλάτος"
 
-#: gtk/gtktreeview.c:807
+#: gtk/gtktreeview.c:808
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Πλάτος, σε εικονοστοιχεία της γραμμής επισήμανσης εστίασης"
 
-#: gtk/gtktreeview.c:813
+#: gtk/gtktreeview.c:814
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Μοτίβο γραμμής εστίασης"
 
-#: gtk/gtktreeview.c:814
+#: gtk/gtktreeview.c:815
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Μοτίβο που θα χρησιμοποιείται για τη σχεδίαση της επισήμανσης εστίασης"
 
-#: gtk/gtktreeview.c:820
+#: gtk/gtktreeview.c:821
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Μοτίβο γραμμής εστίασης"
 
-#: gtk/gtktreeview.c:821
+#: gtk/gtktreeview.c:822
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Μοτίβο που θα χρησιμοποιείται για τη σχεδίαση της επισήμανσης εστίασης"

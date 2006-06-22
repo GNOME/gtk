@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 21:18-0400\n"
+"POT-Creation-Date: 2006-06-21 21:18-0400\n"
 "PO-Revision-Date: 2006-05-20 12:37+0100\n"
 "Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -276,7 +276,7 @@ msgid "A unique name for the action."
 msgstr "Een unieke naar voor de actie."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
-#: gtk/gtkframe.c:95 gtk/gtklabel.c:293 gtk/gtktoolbutton.c:180
+#: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Label"
 
@@ -668,7 +668,7 @@ msgstr "Spatiëring"
 msgid "The amount of space between children"
 msgstr "De hoeveelheid ruimte tussen dochters"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -709,7 +709,7 @@ msgstr "Extra ruimte tussen de dochter en haar buren, in beeldpunten"
 msgid "Pack type"
 msgstr "Verpakkingsstijl"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -717,12 +717,12 @@ msgstr ""
 "Een GtkPackType welke aangeeft of de dochter verpakt is met het begin of met "
 "het einde van de moeder"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Positie"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
 msgid "The index of the child in the parent"
 msgstr "De index van de dochter in de moeder"
 
@@ -733,12 +733,12 @@ msgid ""
 msgstr ""
 "Tekst van het labelwidget op de knop, indien de knop een labelwidget bevat"
 
-#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:315
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Gebruik onderstreping"
 
-#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:315
+#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1197,7 +1197,7 @@ msgstr "Opmaak"
 msgid "Marked up text to render"
 msgstr "Te renderen opgemaakte tekst"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:300
+#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Attributen"
 
@@ -1361,7 +1361,7 @@ msgstr ""
 "hint bij het renderen van de tekst. Als u deze parameter niet begrijpt, "
 "heeft u het waarschijnlijk niet nodig."
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Ellipsis"
 
@@ -1375,11 +1375,11 @@ msgstr ""
 "weer te geven"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
-#: gtk/gtklabel.c:426
+#: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Breedte in lettertekens"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:427
+#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "De gewenste breedte van het label, in lettertekens"
 
@@ -1630,7 +1630,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Of aan de kleur een alpha-waarde moet worden gegeven"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "Titel"
 
@@ -1923,19 +1923,19 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Breedte van het kader rondom de knoppenbalk onderaan het dialoogvenster"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Cursorpositie"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:372
+#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "De huidige positie van de invoegcurser, in lettertekens"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Selectie begrensd"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:382
+#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -2048,7 +2048,7 @@ msgstr "Of meerdere bestanden tegelijk mogen worden geselecteerd"
 msgid "Border between text and frame."
 msgstr "Ruimte tussen tekst en frame."
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Selecteren bij aandacht"
 
@@ -2164,11 +2164,11 @@ msgstr "Of de uitklapper is geopend en het dochterwidget toont"
 msgid "Text of the expander's label"
 msgstr "Labeltekst van de uitklapper"
 
-#: gtk/gtkexpander.c:201 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:201 gtk/gtklabel.c:308
 msgid "Use markup"
 msgstr "Opmaak gebruiken"
 
-#: gtk/gtkexpander.c:202 gtk/gtklabel.c:308
+#: gtk/gtkexpander.c:202 gtk/gtklabel.c:309
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "De tekst van het label bevat XML-opmaak. Bekijk pango_parse_markup()"
 
@@ -2185,11 +2185,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "Een widget dat weergegeven wordt in plaats van het gebruikelijke uiklap-label"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:738
 msgid "Expander Size"
 msgstr "Uitklapper-grootte"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:739
 msgid "Size of the expander arrow"
 msgstr "Grootte van de uitklappijl"
 
@@ -2588,7 +2588,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ruimte die aan de randen van de pictogramweergave geplaatst wordt"
 
 #: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
-#: gtk/gtktrayicon-x11.c:94
+#: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Oriëntatie"
 
@@ -2723,20 +2723,20 @@ msgstr "Of afbeeldingen in menus worden getoond"
 msgid "The screen where this window will be displayed"
 msgstr "Het scherm waar dit venster wordt getoond"
 
-#: gtk/gtklabel.c:294
+#: gtk/gtklabel.c:295
 msgid "The text of the label"
 msgstr "De tekst van het label"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:302
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 "Een lijst van stijlattributen om toe te passen op de tekst van het label"
 
-#: gtk/gtklabel.c:322 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "Uitvulling"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:324
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2746,11 +2746,11 @@ msgstr ""
 "Dit beïnvloed NIET de uitlijning van het label in zijn huidige plaatsing. "
 "Bekijk daarvoor GtkMisc::xalign."
 
-#: gtk/gtklabel.c:331
+#: gtk/gtklabel.c:332
 msgid "Pattern"
 msgstr "Patroon"
 
-#: gtk/gtklabel.c:332
+#: gtk/gtklabel.c:333
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2758,41 +2758,50 @@ msgstr ""
 "Een tekenreeks met _-tekens in posities komt overeen met tekens in de te "
 "onderstrepen tekst"
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:340
 msgid "Line wrap"
 msgstr "Regelterugloop"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Indien aangezet, is er regelterugloop  als de tekst te breed wordt"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:356
+#, fuzzy
+msgid "Line wrap mode"
+msgstr "Regelterugloop"
+
+#: gtk/gtklabel.c:357
+msgid "If wrap is set, controls how linewrapping is done"
+msgstr ""
+
+#: gtk/gtklabel.c:364
 msgid "Selectable"
 msgstr "Selecteerbaar"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Of de labeltekst geselecteerd kan worden met de muis"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:371
 msgid "Mnemonic key"
 msgstr "Sneltoets"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
 msgstr "De sneltoets voor dit label"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:380
 msgid "Mnemonic widget"
 msgstr "Sneltoets-widget"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Het widget om te activeren als de sneltoets van het label wordt ingedrukt"
 
 # if at all  vertalen?
-#: gtk/gtklabel.c:407
+#: gtk/gtklabel.c:425
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -2801,31 +2810,31 @@ msgstr ""
 "wanneer het label niet voldoende ruimte heeft om de gehele tekenreeks weer "
 "te geven"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:465
 msgid "Single Line Mode"
 msgstr "Enkele-regel modus"
 
-#: gtk/gtklabel.c:448
+#: gtk/gtklabel.c:466
 msgid "Whether the label is in single line mode"
 msgstr "Of het label in enkele-regel modus staat"
 
-#: gtk/gtklabel.c:465
+#: gtk/gtklabel.c:483
 msgid "Angle"
 msgstr "Hoek"
 
-#: gtk/gtklabel.c:466
+#: gtk/gtklabel.c:484
 msgid "Angle at which the label is rotated"
 msgstr "Hoek waaronder het label wordt gedraaid"
 
-#: gtk/gtklabel.c:486
+#: gtk/gtklabel.c:504
 msgid "Maximum Width In Characters"
 msgstr "Maximale breedte, in lettertekens"
 
-#: gtk/gtklabel.c:487
+#: gtk/gtklabel.c:505
 msgid "The desired maximum width of the label, in characters"
 msgstr "De gewenste maximale breedte van het label, in lettertekens"
 
-#: gtk/gtklabel.c:603
+#: gtk/gtklabel.c:621
 #, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
@@ -3139,77 +3148,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "De toe te voegen ruimte boven en onder een widget, in beeldpunten"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:527
 msgid "Page"
 msgstr "Pagina"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:528
 msgid "The index of the current page"
 msgstr "De index van de huidige pagina"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:536
 msgid "Tab Position"
 msgstr "Tab-positie"
 
-#: gtk/gtknotebook.c:522
+#: gtk/gtknotebook.c:537
 msgid "Which side of the notebook holds the tabs"
 msgstr "Aan welke kant de tabbladen komen te zitten"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:544
 msgid "Tab Border"
 msgstr "Tab-kader"
 
-#: gtk/gtknotebook.c:530
+#: gtk/gtknotebook.c:545
 msgid "Width of the border around the tab labels"
 msgstr "Breedte van het kader rondom de tab-labels"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:553
 msgid "Horizontal Tab Border"
 msgstr "Horizontaal tab-kader"
 
-#: gtk/gtknotebook.c:539
+#: gtk/gtknotebook.c:554
 msgid "Width of the horizontal border of tab labels"
 msgstr "Breedte van het horizontale kader van tab-labels"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:562
 msgid "Vertical Tab Border"
 msgstr "Vertikaal tab-kader"
 
-#: gtk/gtknotebook.c:548
+#: gtk/gtknotebook.c:563
 msgid "Width of the vertical border of tab labels"
 msgstr "Breedte van het verticale kader van tab-labels"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:571
 msgid "Show Tabs"
 msgstr "Tabs weergeven"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:572
 msgid "Whether tabs should be shown or not"
 msgstr "Of tabs weergegeven worden of niet"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:578
 msgid "Show Border"
 msgstr "Kader weergeven"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:579
 msgid "Whether the border should be shown or not"
 msgstr "Of het kader weergegeven wordt of niet"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:585
 msgid "Scrollable"
 msgstr "Schuifbaar"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:586
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Indien WAAR (TRUE), worden schuifpijlen weergegeven als er meer tabs zijn "
 "dan er plaats is"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:592
 msgid "Enable Popup"
 msgstr "Zet Popup aan"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:593
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3217,125 +3226,125 @@ msgstr ""
 "Indien WAAR (TRUE), wordt met een rechter muisklik op het kladblok een menu "
 "weergegeven waarmee je direkt naar een pagina kunt gaan"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:600
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelijke afmetingen moeten hebben"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:606
 #, fuzzy
 msgid "Group ID"
 msgstr "Groep"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:607
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:616
 msgid "Tab label"
 msgstr "Tab-label"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:617
 msgid "The string displayed on the child's tab label"
 msgstr "De weergegeven tekenreeks op het tab-label van de dochter"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:623
 msgid "Menu label"
 msgstr "Menu-label"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:624
 msgid "The string displayed in the child's menu entry"
 msgstr "De weergegeven tekenreeks in het menu-item van de dochter"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:637
 msgid "Tab expand"
 msgstr "Tab-verlenging"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:638
 msgid "Whether to expand the child's tab or not"
 msgstr "Of de tab van de dochter verlengd wordt of niet"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:644
 msgid "Tab fill"
 msgstr "Tab-opvulling"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:645
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Of de tab van de dochter de beschikbare ruimte moet opvullen of niet"
 
-#: gtk/gtknotebook.c:636
+#: gtk/gtknotebook.c:651
 msgid "Tab pack type"
 msgstr "Tab-verpakkingsstijl"
 
 # herschikbaar/Volgorde te veranderen/wijzigbare volgorde
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:658
 msgid "Tab reorderable"
 msgstr "Tabblad herschikbaar"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:659
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Of het tabblad herschikbaar is of niet"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:665
 msgid "Tab detachable"
 msgstr "Tabblad loskoppelbaar"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:666
 msgid "Whether the tab is detachable"
 msgstr "Of het tabblad loskoppelbaar is"
 
-#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Secundaire achterwaardse stapper"
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:682
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Geef een tweede achterwaardse pijlknop weer op de overstaande kant van het "
 "tab-gedeelte"
 
-#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Secundaire voorwaardse stapper"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:698
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Geef een tweede voorwaardse pijlknop weer aan de overstaande kant van het "
 "tab-gedeelte"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Achterwaardse stapper"
 
-#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Geef de standaard achterwaardse pijlknop weer"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Voorwaardse stapper"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Geef de standaard voorwaardse pijlknop weer"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:742
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Tab-kader"
 
-#: gtk/gtknotebook.c:728
+#: gtk/gtknotebook.c:743
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Grootte van de uitklappijl"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:758
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:744
+#: gtk/gtknotebook.c:759
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Grootte van afstandhouders"
@@ -3422,23 +3431,15 @@ msgstr ""
 "Of het voorbeeldwidget de volledige ruimte moet gebruiken die het is "
 "toebedeeld"
 
-#: gtk/gtkprintbackend.c:252
+#: gtk/gtkprintbackend.c:261
 #, fuzzy
 msgid "Default print backend"
 msgstr "Standaard backend bestandkiezer"
 
-#: gtk/gtkprintbackend.c:253
+#: gtk/gtkprintbackend.c:262
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
-
-#: gtk/gtkprintbackend.c:258
-msgid "Default command to run when displaying a print preview"
-msgstr ""
-
-#: gtk/gtkprintbackend.c:259
-msgid "Command to run when displaying a print preview"
-msgstr ""
 
 #: gtk/gtkprinter.c:120
 msgid "Name of the printer"
@@ -3513,40 +3514,50 @@ msgid "Number of jobs queued in the printer"
 msgstr "Het aantal rijen in de tabel"
 
 # Lettertypes/lettertypeopties
-#: gtk/gtkprinteroptionwidget.c:119
+#: gtk/gtkprinteroptionwidget.c:121
 #, fuzzy
 msgid "Source option"
 msgstr "Lettertypeopties"
 
-#: gtk/gtkprinteroptionwidget.c:120
+#: gtk/gtkprinteroptionwidget.c:122
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:116
+#: gtk/gtkprintjob.c:117
 #, fuzzy
 msgid "Title of the print job"
 msgstr "De titel van het venster"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 #, fuzzy
 msgid "Printer"
 msgstr "Filter"
 
-#: gtk/gtkprintjob.c:125
+#: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr "Printer waarnaar afgedrukt wordt"
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr "Instellingen"
 
-#: gtk/gtkprintjob.c:134
+#: gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr "Printerinstellingen"
 
-#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
 msgid "Page Setup"
 msgstr "Pagina-instellingen"
+
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr ""
+
+#: gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr ""
 
 #: gtk/gtkprintoperation.c:844
 #, fuzzy
@@ -3557,11 +3568,11 @@ msgstr "Standaardhoogte"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
 msgid "Print Settings"
 msgstr "Afdrukinstellingen"
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3584,7 +3595,7 @@ msgstr "Aantal kanalen"
 msgid "The number of pages in the document."
 msgstr "Het aantal rijen in de tabel"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
 #, fuzzy
 msgid "Current Page"
 msgstr "Huidig Alpha"
@@ -3603,10 +3614,6 @@ msgstr "Alpha gebruiken"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:972
@@ -3674,21 +3681,21 @@ msgstr "Eigen palet"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:228
+#: gtk/gtkprintunixdialog.c:226
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "The current page in the document"
 msgstr "De pagina-afmeting van de aanpassing"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:251
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Het geselecteerde jaar"
 
-#: gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Het item dat momenteel actief is"
@@ -4604,8 +4611,9 @@ msgid "Ignore hidden"
 msgstr "Verborgen negeren"
 
 #: gtk/gtksizegroup.c:285
+#, fuzzy
 msgid ""
-"If TRUE, hidden widgets are ignored when determining the size of the group"
+"If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
 "Indien WAAR (TRUE) zullen verborgen widgets worden genegeerd bij het bepalen "
 "van de grootte van de groep"
@@ -5464,7 +5472,7 @@ msgstr ""
 "Of de werkbalkitem belangrijk wordt geacht. Indien WAAR, tonen "
 "werkbalkknoppen de tekst in GTK_TOOLBAR_BOTH_HORIZ modus"
 
-#: gtk/gtktrayicon-x11.c:95
+#: gtk/gtktrayicon-x11.c:98
 msgid "The orientation of the tray"
 msgstr "De oriëntatie van de balk"
 
@@ -5608,108 +5616,108 @@ msgstr "Pijltjestoetsen gebruiken"
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Of het kader weergegeven wordt of niet"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "Pijltjestoetsen gebruiken"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Of het kader weergegeven wordt of niet"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
 msgstr "Breedte verticale scheiding"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:748
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Verticale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:755
+#: gtk/gtktreeview.c:756
 msgid "Horizontal Separator Width"
 msgstr "Breedte horizontale scheiding"
 
-#: gtk/gtktreeview.c:756
+#: gtk/gtktreeview.c:757
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Allow Rules"
 msgstr "Regels toestaan"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Allow drawing of alternating color rows"
 msgstr "Alternerende rijkleuren mogelijk maken"
 
-#: gtk/gtktreeview.c:771
+#: gtk/gtktreeview.c:772
 msgid "Indent Expanders"
 msgstr "Uitklappers inspringen"
 
-#: gtk/gtktreeview.c:772
+#: gtk/gtktreeview.c:773
 msgid "Make the expanders indented"
 msgstr "De uitklappers laten inspringen"
 
-#: gtk/gtktreeview.c:778
+#: gtk/gtktreeview.c:779
 msgid "Even Row Color"
 msgstr "Even rijkleur"
 
-#: gtk/gtktreeview.c:779
+#: gtk/gtktreeview.c:780
 msgid "Color to use for even rows"
 msgstr "De kleur van de even rijen"
 
-#: gtk/gtktreeview.c:785
+#: gtk/gtktreeview.c:786
 msgid "Odd Row Color"
 msgstr "Oneven rijkleur"
 
-#: gtk/gtktreeview.c:786
+#: gtk/gtktreeview.c:787
 msgid "Color to use for odd rows"
 msgstr "De kleur van de oneven rijen"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:793
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:799
+#: gtk/gtktreeview.c:800
 #, fuzzy
 msgid "Grid line width"
 msgstr "Aandacht-lijnbreedte"
 
-#: gtk/gtktreeview.c:800
+#: gtk/gtktreeview.c:801
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Breedte, in beeldpunten, van de aandacht-indicatorlijn"
 
-#: gtk/gtktreeview.c:806
+#: gtk/gtktreeview.c:807
 #, fuzzy
 msgid "Tree line width"
 msgstr "De vaste breedte"
 
-#: gtk/gtktreeview.c:807
+#: gtk/gtktreeview.c:808
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Breedte, in beeldpunten, van de aandacht-indicatorlijn"
 
-#: gtk/gtktreeview.c:813
+#: gtk/gtktreeview.c:814
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Aandachtlijn-streeppatroon"
 
-#: gtk/gtktreeview.c:814
+#: gtk/gtktreeview.c:815
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Streeppatroon van de aandacht-indicator"
 
-#: gtk/gtktreeview.c:820
+#: gtk/gtktreeview.c:821
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Aandachtlijn-streeppatroon"
 
-#: gtk/gtktreeview.c:821
+#: gtk/gtktreeview.c:822
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Streeppatroon van de aandacht-indicator"

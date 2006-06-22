@@ -913,8 +913,8 @@ list_printers_init (PrinterList     *printer_list,
  * @wait: if %TRUE, wait in a recursive mainloop until
  *    all printers are enumerated; otherwise return early
  *
- * Calls a function for all #GtkPrinter<!-- -->s. If @func
- * returns %TRUE, the enumeration is stopped.
+ * Calls a function for all #GtkPrinter<!-- -->s. 
+ * If @func returns %TRUE, the enumeration is stopped.
  *
  * Since: 2.10
  */

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 21:18-0400\n"
+"POT-Creation-Date: 2006-06-21 21:18-0400\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -261,7 +261,7 @@ msgid "A unique name for the action."
 msgstr "Nama unik untuk aksi ini."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
-#: gtk/gtkframe.c:95 gtk/gtklabel.c:293 gtk/gtktoolbutton.c:180
+#: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Label"
 
@@ -648,7 +648,7 @@ msgstr "Jarak"
 msgid "The amount of space between children"
 msgstr "Jarak antar anak"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:584 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -690,7 +690,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Tipe pak"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:637
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -698,12 +698,12 @@ msgstr ""
 "Suatu nilai GtkPackType yang menentukan apakah anak dipak dengan merujuk "
 "pada awal atau akhir bapaknya"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:615 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Posisi"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:616
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
 msgid "The index of the child in the parent"
 msgstr "Indek anak dalam bapak"
 
@@ -714,12 +714,12 @@ msgid ""
 msgstr ""
 "Tulisan pada widget label dalam tombol, (jika tombol berisi widget label"
 
-#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:193 gtk/gtklabel.c:315
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Gunakan garis bawah"
 
-#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:315
+#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:194 gtk/gtklabel.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1174,7 +1174,7 @@ msgstr "Markup"
 msgid "Marked up text to render"
 msgstr "Teks bermarkup yang hendak ditulis"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:300
+#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Atribut"
 
@@ -1334,7 +1334,7 @@ msgstr ""
 "sebagai petunjuk dalam menggambar tulisan itu. Jika Anda tidak mengerti "
 "parameter ini, berarti Anda tidak memerlukannya."
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Elipsis"
 
@@ -1348,11 +1348,11 @@ msgstr ""
 "memiliki cukup ruang untuk menampilkan keseluruhan teks"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
-#: gtk/gtklabel.c:426
+#: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Lebar dalam karakter"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:427
+#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "Lebar label yang diinginkan dalam karakter"
 
@@ -1605,7 +1605,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Menentukan apakah memberikan warna dengan nilai alpha"
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:115 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr "Judul"
 
@@ -1888,19 +1888,19 @@ msgstr "Batas area aksi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lebar batas disekeliling area tombol di bawah dialog"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Posisi kursor"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:372
+#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "Posisi kursor saat ini untuk memasukkan karakter"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Batas seleksi"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:382
+#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisi lawan pilihan dari kursor dalam satuan karakter"
@@ -2005,7 +2005,7 @@ msgstr "Menentukan apakah bisa memilih banyak file sekaligus atau tidak"
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Langsung pilih saat fokus"
 
@@ -2115,11 +2115,11 @@ msgstr ""
 msgid "Text of the expander's label"
 msgstr "Teks dari nama expander"
 
-#: gtk/gtkexpander.c:201 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:201 gtk/gtklabel.c:308
 msgid "Use markup"
 msgstr "Gunakan markup"
 
-#: gtk/gtkexpander.c:202 gtk/gtklabel.c:308
+#: gtk/gtkexpander.c:202 gtk/gtklabel.c:309
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Label teks termasuk markup XML-nya. Silakan baca pango_parse_markup() untuk "
@@ -2137,11 +2137,11 @@ msgstr "Widget label"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget yang digunakan untuk menampilkan nama expander yang biasa"
 
-#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:737
+#: gtk/gtkexpander.c:226 gtk/gtktreeview.c:738
 msgid "Expander Size"
 msgstr "Ukuran ekspander"
 
-#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:738
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:739
 msgid "Size of the expander arrow"
 msgstr "Ukuran panah ekspander"
 
@@ -2539,7 +2539,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ruangan yang akan disisipkan pada sisi tampilan ikon"
 
 #: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
-#: gtk/gtktrayicon-x11.c:94
+#: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Orientasi"
 
@@ -2669,19 +2669,19 @@ msgstr "Menentukan apakah gambar akan ditampilkan pada menu"
 msgid "The screen where this window will be displayed"
 msgstr "Layar tempat jendela hendak ditampilkan"
 
-#: gtk/gtklabel.c:294
+#: gtk/gtklabel.c:295
 msgid "The text of the label"
 msgstr "Label teks"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:302
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Daftar gaya atribut yang hendak ditempelkan pada label teks"
 
-#: gtk/gtklabel.c:322 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "Rata"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:324
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2691,11 +2691,11 @@ msgstr ""
 "lainnya. Hal ini tidak berpengaruh pada penyesuaian letak label dalam "
 "lokasinya.  Silakan baca GtkMis::xalign untuk informasi lengkapnya"
 
-#: gtk/gtklabel.c:331
+#: gtk/gtklabel.c:332
 msgid "Pattern"
 msgstr "Pola"
 
-#: gtk/gtklabel.c:332
+#: gtk/gtklabel.c:333
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2703,39 +2703,48 @@ msgstr ""
 "Kalimat dengan karakter _ (underscore) pada suatu karakter akan membuat "
 "karakter tersebut diberi garis bawah"
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:340
 msgid "Line wrap"
 msgstr "potong baris"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Jika diset, baris akan dipotong bila terlalu lebar"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:356
+#, fuzzy
+msgid "Line wrap mode"
+msgstr "potong baris"
+
+#: gtk/gtklabel.c:357
+msgid "If wrap is set, controls how linewrapping is done"
+msgstr ""
+
+#: gtk/gtklabel.c:364
 msgid "Selectable"
 msgstr "Dapat dipilih"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Menentukan apakah teks label dapat dipilih dengan mouse atau tidak"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:371
 msgid "Mnemonic key"
 msgstr "Tombol singkat"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
 msgstr "Tombol singkat untuk label ini"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:380
 msgid "Mnemonic widget"
 msgstr "Widget mnemonik"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
 
-#: gtk/gtklabel.c:407
+#: gtk/gtklabel.c:425
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
@@ -2744,31 +2753,31 @@ msgstr ""
 "Tempat yang diinginkan untuk meletakan elipsis pada teks pada saat label "
 "tidak memiliki cukup ruang untuk menampilkan keseluruhan isi teks"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:465
 msgid "Single Line Mode"
 msgstr "Moda Satu Baris"
 
-#: gtk/gtklabel.c:448
+#: gtk/gtklabel.c:466
 msgid "Whether the label is in single line mode"
 msgstr "Menentukan apakah teks label dalam mode baris tunggal"
 
-#: gtk/gtklabel.c:465
+#: gtk/gtklabel.c:483
 msgid "Angle"
 msgstr "Sudut"
 
-#: gtk/gtklabel.c:466
+#: gtk/gtklabel.c:484
 msgid "Angle at which the label is rotated"
 msgstr "Sudut rotasi label"
 
-#: gtk/gtklabel.c:486
+#: gtk/gtklabel.c:504
 msgid "Maximum Width In Characters"
 msgstr "Lebar Maksimum Dalam Karakter"
 
-#: gtk/gtklabel.c:487
+#: gtk/gtklabel.c:505
 msgid "The desired maximum width of the label, in characters"
 msgstr "Lebar maksimum label dalam karakter"
 
-#: gtk/gtklabel.c:603
+#: gtk/gtklabel.c:621
 #, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Menentukan apakah isi langsung dipilih saat isian mendapat fokus"
@@ -3080,201 +3089,201 @@ msgid ""
 msgstr ""
 "Ruangan yang diisikan pada sisi atas dan bawah widget dalam satuan piksel"
 
-#: gtk/gtknotebook.c:512
+#: gtk/gtknotebook.c:527
 msgid "Page"
 msgstr "Halaman"
 
-#: gtk/gtknotebook.c:513
+#: gtk/gtknotebook.c:528
 msgid "The index of the current page"
 msgstr "Indeks halaman saat ini"
 
-#: gtk/gtknotebook.c:521
+#: gtk/gtknotebook.c:536
 msgid "Tab Position"
 msgstr "Posisi tab"
 
-#: gtk/gtknotebook.c:522
+#: gtk/gtknotebook.c:537
 msgid "Which side of the notebook holds the tabs"
 msgstr "Lokasi sisi notebook tempat tab berada"
 
-#: gtk/gtknotebook.c:529
+#: gtk/gtknotebook.c:544
 msgid "Tab Border"
 msgstr "Batas Tab"
 
-#: gtk/gtknotebook.c:530
+#: gtk/gtknotebook.c:545
 msgid "Width of the border around the tab labels"
 msgstr "Lebar batas di sekeliling label tab"
 
-#: gtk/gtknotebook.c:538
+#: gtk/gtknotebook.c:553
 msgid "Horizontal Tab Border"
 msgstr "Batas Tab Horisontal"
 
-#: gtk/gtknotebook.c:539
+#: gtk/gtknotebook.c:554
 msgid "Width of the horizontal border of tab labels"
 msgstr "Lebah batas horisontal pada label tab"
 
-#: gtk/gtknotebook.c:547
+#: gtk/gtknotebook.c:562
 msgid "Vertical Tab Border"
 msgstr "Batas Tab Vertikal"
 
-#: gtk/gtknotebook.c:548
+#: gtk/gtknotebook.c:563
 msgid "Width of the vertical border of tab labels"
 msgstr "Lebar batas vertikal pada label tab"
 
-#: gtk/gtknotebook.c:556
+#: gtk/gtknotebook.c:571
 msgid "Show Tabs"
 msgstr "Tampilkan Tab"
 
-#: gtk/gtknotebook.c:557
+#: gtk/gtknotebook.c:572
 msgid "Whether tabs should be shown or not"
 msgstr "Menentukan apakah tab digambar atau tidak"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:578
 msgid "Show Border"
 msgstr "Tampilkan Batas"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:579
 msgid "Whether the border should be shown or not"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtknotebook.c:570
+#: gtk/gtknotebook.c:585
 msgid "Scrollable"
 msgstr "Dapat discroll"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:586
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Bila bernilai TRUE, panah scroll digambar dengan syarat tidak terlalu banyak "
 "tab"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:592
 msgid "Enable Popup"
 msgstr "Tampilkan popup"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:593
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "Bila bernilai TRUE, dengan menekan tombol kanan pada notebook akan men"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:600
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Menentukan apakah tab memiliki ukuran homogen"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:606
 #, fuzzy
 msgid "Group ID"
 msgstr "Kelompok"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:607
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:616
 msgid "Tab label"
 msgstr "Label tab"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:617
 msgid "The string displayed on the child's tab label"
 msgstr "String yang ditampilkan pada label tab anak"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:623
 msgid "Menu label"
 msgstr "Label menu"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:624
 msgid "The string displayed in the child's menu entry"
 msgstr "String yang ditampilkan pada isian menu anak"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:637
 msgid "Tab expand"
 msgstr "Ekspansi tab"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:638
 msgid "Whether to expand the child's tab or not"
 msgstr "Menentukan apakah tab anak diekspansi atau tidak"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:644
 msgid "Tab fill"
 msgstr "Isi penuh tab"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:645
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr ""
 "Menentukan apakah tab anak dapat mengisi area yang dialokasikan atau tidak"
 
-#: gtk/gtknotebook.c:636
+#: gtk/gtknotebook.c:651
 msgid "Tab pack type"
 msgstr "Tipe pak tab"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:658
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Dapat diurut kembali"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:659
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:665
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Label tab"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:666
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Menentukan apkaah aksi diaktifkan"
 
-#: gtk/gtknotebook.c:666 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Tangga mundur sekunder"
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:682
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah mundur sekunder pada sisi ujung area tab"
 
-#: gtk/gtknotebook.c:682 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Tangga maju sekunder"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:698
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah maju sekunder pada sisi ujung area tab"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Tangga Mundur"
 
-#: gtk/gtknotebook.c:698 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Menampilkan tombol panah mundur standar"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Tangga maju"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Menampilkan tombol panah maju standar"
 
-#: gtk/gtknotebook.c:727
+#: gtk/gtknotebook.c:742
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Batas Tab"
 
-#: gtk/gtknotebook.c:728
+#: gtk/gtknotebook.c:743
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Ukuran panah ekspander"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:758
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:744
+#: gtk/gtknotebook.c:759
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Ukuran pengisi ruang"
@@ -3363,23 +3372,15 @@ msgstr ""
 "Menentukan apakah widget yang dipreview dapat mengambil ukuran seluas "
 "alokasi secara penuh"
 
-#: gtk/gtkprintbackend.c:252
+#: gtk/gtkprintbackend.c:261
 #, fuzzy
 msgid "Default print backend"
 msgstr "Sistem pemilih berkas utama"
 
-#: gtk/gtkprintbackend.c:253
+#: gtk/gtkprintbackend.c:262
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Nama sistem GtkFileChooser yang digunakan sebagai standar"
-
-#: gtk/gtkprintbackend.c:258
-msgid "Default command to run when displaying a print preview"
-msgstr ""
-
-#: gtk/gtkprintbackend.c:259
-msgid "Command to run when displaying a print preview"
-msgstr ""
 
 #: gtk/gtkprinter.c:120
 #, fuzzy
@@ -3454,41 +3455,51 @@ msgstr ""
 msgid "Number of jobs queued in the printer"
 msgstr "Jumlah baris dalam tabel"
 
-#: gtk/gtkprinteroptionwidget.c:119
+#: gtk/gtkprinteroptionwidget.c:121
 #, fuzzy
 msgid "Source option"
 msgstr "Pelengkap otomatis dalam popup"
 
-#: gtk/gtkprinteroptionwidget.c:120
+#: gtk/gtkprinteroptionwidget.c:122
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
-#: gtk/gtkprintjob.c:116
+#: gtk/gtkprintjob.c:117
 #, fuzzy
 msgid "Title of the print job"
 msgstr "Judul window"
 
-#: gtk/gtkprintjob.c:124
+#: gtk/gtkprintjob.c:125
 #, fuzzy
 msgid "Printer"
 msgstr "Penyaring"
 
-#: gtk/gtkprintjob.c:125
+#: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
 msgstr ""
 
-#: gtk/gtkprintjob.c:133
+#: gtk/gtkprintjob.c:134
 msgid "Settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:134
+#: gtk/gtkprintjob.c:135
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:142 gtk/gtkprintjob.c:143 gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
 #, fuzzy
 msgid "Page Setup"
 msgstr "Ukuran Halaman"
+
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+msgid "Track Print Status"
+msgstr ""
+
+#: gtk/gtkprintjob.c:153
+msgid ""
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
+msgstr ""
 
 #: gtk/gtkprintoperation.c:844
 #, fuzzy
@@ -3499,11 +3510,11 @@ msgstr "Tinggi Awal"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3526,7 +3537,7 @@ msgstr "Jumlah Kanal"
 msgid "The number of pages in the document."
 msgstr "Jumlah baris dalam tabel"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
 #, fuzzy
 msgid "Current Page"
 msgstr "Alpha saat ini"
@@ -3545,10 +3556,6 @@ msgstr "Gunakan alfa"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:971
-msgid "Track Print Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:972
@@ -3615,21 +3622,21 @@ msgstr "Palet pilihan sendiri"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:228
+#: gtk/gtkprintunixdialog.c:226
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Ukuran halaman"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:251
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Objek yang aktif"
@@ -4525,8 +4532,9 @@ msgid "Ignore hidden"
 msgstr "Abaikan sembunyi"
 
 #: gtk/gtksizegroup.c:285
+#, fuzzy
 msgid ""
-"If TRUE, hidden widgets are ignored when determining the size of the group"
+"If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
 "Jika BENAR, widget sembunyi akan diabaikan ketika mendeterminasikan ukuran "
 "dari kelompok"
@@ -5387,7 +5395,7 @@ msgstr ""
 "maka tombol dalam batang alat akan menampilkan teks dalam moda "
 "GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktrayicon-x11.c:95
+#: gtk/gtktrayicon-x11.c:98
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "Arah orientasi toolbar"
@@ -5533,108 +5541,108 @@ msgstr "Aktifkan tombol panah"
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:726
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "Aktifkan tombol panah"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:727
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
 msgstr "Lebar Separator Vertikal"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:748
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Ruangan vertikal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:755
+#: gtk/gtktreeview.c:756
 msgid "Horizontal Separator Width"
 msgstr "Lebar Separator Horisontal"
 
-#: gtk/gtktreeview.c:756
+#: gtk/gtktreeview.c:757
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Ruangan horisontal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:764
+#: gtk/gtktreeview.c:765
 msgid "Allow Rules"
 msgstr "Membolehkan aturan"
 
-#: gtk/gtktreeview.c:765
+#: gtk/gtktreeview.c:766
 msgid "Allow drawing of alternating color rows"
 msgstr "Membolehkan penggambaran baris-baris dalam warna yang bergantian"
 
-#: gtk/gtktreeview.c:771
+#: gtk/gtktreeview.c:772
 msgid "Indent Expanders"
 msgstr "Indentasi pada ekspander"
 
-#: gtk/gtktreeview.c:772
+#: gtk/gtktreeview.c:773
 msgid "Make the expanders indented"
 msgstr "Buat ekspander memiliki indentasi"
 
-#: gtk/gtktreeview.c:778
+#: gtk/gtktreeview.c:779
 msgid "Even Row Color"
 msgstr "Warna pada baris genap"
 
-#: gtk/gtktreeview.c:779
+#: gtk/gtktreeview.c:780
 msgid "Color to use for even rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi genap"
 
-#: gtk/gtktreeview.c:785
+#: gtk/gtktreeview.c:786
 msgid "Odd Row Color"
 msgstr "Warna baris ganjil"
 
-#: gtk/gtktreeview.c:786
+#: gtk/gtktreeview.c:787
 msgid "Color to use for odd rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi ganjil"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:793
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:799
+#: gtk/gtktreeview.c:800
 #, fuzzy
 msgid "Grid line width"
 msgstr "Lebar garis fokus"
 
-#: gtk/gtktreeview.c:800
+#: gtk/gtktreeview.c:801
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Lebar garis indikator fokus dalam piksel"
 
-#: gtk/gtktreeview.c:806
+#: gtk/gtktreeview.c:807
 #, fuzzy
 msgid "Tree line width"
 msgstr "Lebar tetap"
 
-#: gtk/gtktreeview.c:807
+#: gtk/gtktreeview.c:808
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Lebar garis indikator fokus dalam piksel"
 
-#: gtk/gtktreeview.c:813
+#: gtk/gtktreeview.c:814
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Garis fokus berpola garis-garis"
 
-#: gtk/gtktreeview.c:814
+#: gtk/gtktreeview.c:815
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Pola garis-garis yang digunakan untuk menggambar indikator fokus"
 
-#: gtk/gtktreeview.c:820
+#: gtk/gtktreeview.c:821
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Garis fokus berpola garis-garis"
 
-#: gtk/gtktreeview.c:821
+#: gtk/gtktreeview.c:822
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Pola garis-garis yang digunakan untuk menggambar indikator fokus"

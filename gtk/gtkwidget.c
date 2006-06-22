@@ -5262,17 +5262,17 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
 
 /**
  * gtk_widget_is_composited:
- * @widget: 
+ * @widget: a #GtkWidget
  * 
  * Whether @widget can rely on having its alpha channel
  * drawn correctly. On X11 this function returns whether a
  * compositing manager is running for @widget's screen
  * 
- * Return value: #TRUE if the widget can rely on its alpha
+ * Return value: %TRUE if the widget can rely on its alpha
  * channel being drawn correctly.
  * 
  * Since: 2.10
- **/
+ */
 gboolean
 gtk_widget_is_composited (GtkWidget *widget)
 {
