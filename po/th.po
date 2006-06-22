@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-21 21:18-0400\n"
-"PO-Revision-Date: 2006-06-20 19:10+0700\n"
+"PO-Revision-Date: 2006-06-22 12:24+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -4067,27 +4067,24 @@ msgid "Command Line"
 msgstr "บรรทัดคำสั่ง"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:436
-#, fuzzy
 msgid "Print to File"
-msgstr "พิมพ์เป็น PDF"
+msgstr "พิมพ์ลงแฟ้ม"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:460
-#, fuzzy
 msgid "Postscript"
-msgstr "แนวตั้ง"
+msgstr "โพสต์สคริปต์"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:480
 msgid "File"
 msgstr "แฟ้ม"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:516
-#, fuzzy
 msgid "_Output format"
-msgstr "ถาดกระดาษออก"
+msgstr "รูปแ_บบผลลัพธ์"
 
 #: tests/testfilechooser.c:205
 #, c-format
