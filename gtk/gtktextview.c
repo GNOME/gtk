@@ -3127,11 +3127,21 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
   gtk_text_view_flush_first_validate (text_view);
 
-  /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
-   * be invalidated
-   */
   if (size_changed && GTK_WIDGET_REALIZED (widget))
-    gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+    {
+      GtkTextBuffer *buffer;
+
+      /* widget->window doesn't get auto-redrawn as the layout is
+       * computed, so has to be invalidated
+       */
+      gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+
+      /* keep cursor visible */
+      buffer = get_buffer (text_view);
+      gtk_text_view_scroll_to_mark (text_view,
+                                    gtk_text_buffer_get_mark (buffer, "insert"),
+                                    0.0, FALSE, 0.0, 0.0);
+    }
 }
 
 static void

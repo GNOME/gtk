@@ -1,3 +1,8 @@
+2006-06-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextview.c (gtk_text_view_size_allocate): keep the cursor
+	visible when the size changes. Fixes bug #344874.
+
 2006-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpintjob.h: Add a note about updating the registration.
