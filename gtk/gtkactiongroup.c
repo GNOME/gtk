@@ -32,6 +32,7 @@
 
 #include "gtkactiongroup.h"
 #include "gtkiconfactory.h"
+#include "gtkicontheme.h"
 #include "gtkstock.h"
 #include "gtktoggleaction.h"
 #include "gtkradioaction.h"

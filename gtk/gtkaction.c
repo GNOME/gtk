@@ -34,6 +34,7 @@
 #include "gtkactiongroup.h"
 #include "gtkaccellabel.h"
 #include "gtkbutton.h"
+#include "gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
