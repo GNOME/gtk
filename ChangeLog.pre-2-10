@@ -1,3 +1,7 @@
+2006-06-23  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "ur" to ALL_LINGUAS.
+
 2006-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix #345663, reported by Kazuki Iwamoto
