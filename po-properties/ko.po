@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properrties 2.9.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-21 21:18-0400\n"
-"PO-Revision-Date: 2006-06-17 15:33+0900\n"
+"PO-Revision-Date: 2006-06-24 08:16+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -765,7 +765,7 @@ msgstr "기본 간격"
 
 #: gtk/gtkbutton.c:411
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "CAN_DEFAULT 단추에 추가할 간격"
+msgstr "CAN_DEFAULT 단추에 더할 간격"
 
 #: gtk/gtkbutton.c:417
 msgid "Default Outside Spacing"
@@ -775,7 +775,7 @@ msgstr "기본 외부 간격"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "CAN_DEFAULT 단추의 외부에 추가할 테두리 바깥에 언제나 그려지는 간격"
+msgstr "CAN_DEFAULT 단추의 외부에 더할 테두리 바깥에 언제나 그려지는 간격"
 
 #: gtk/gtkbutton.c:423
 msgid "Child X Displacement"
@@ -2129,7 +2129,7 @@ msgstr "미리 보기 위젯 활성화"
 #: gtk/gtkfilechooser.c:229
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
-msgstr "애플리케이션에서 자체 제작한 미리 보기 위젯을 표시할 지 여부."
+msgstr "프로그램에서 자체 제작한 미리 보기 위젯을 표시할 지 여부."
 
 #: gtk/gtkfilechooser.c:234
 msgid "Use Preview Label"
@@ -2145,7 +2145,7 @@ msgstr "추가 위젯"
 
 #: gtk/gtkfilechooser.c:241
 msgid "Application supplied widget for extra options."
-msgstr "추가적인 기능을 위해 애플리케이션에서 만든 위젯."
+msgstr "추가적인 기능을 위해 프로그램에서 만든 위젯."
 
 #: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
@@ -2630,13 +2630,12 @@ msgid "If set, wrap lines if the text becomes too wide"
 msgstr "참인 경우, 텍스트가 너무 길면 줄을 바꿉니다."
 
 #: gtk/gtklabel.c:356
-#, fuzzy
 msgid "Line wrap mode"
-msgstr "줄 바꿈"
+msgstr "줄바꿈 모드"
 
 #: gtk/gtklabel.c:357
 msgid "If wrap is set, controls how linewrapping is done"
-msgstr ""
+msgstr "줄바꿈을 하는 경우 어떻게 줄바꿈을 할 지 설정합니다"
 
 #: gtk/gtklabel.c:364
 msgid "Selectable"
@@ -3364,13 +3363,10 @@ msgid "Track Print Status"
 msgstr "인쇄 상태 추적"
 
 #: gtk/gtkprintjob.c:153
-#, fuzzy
 msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
-msgstr ""
-"참이면 인쇄 데이터를 프린터나 인쇄 서버로 보낸 후에 계속해서 인쇄 작업의 상태"
-"를 보냅니다."
+msgstr "참이면 인쇄 데이터를 프린터나 인쇄 서버로 보낸 후에 계속해서 status-changed 시그널을 보냅니다."
 
 #: gtk/gtkprintoperation.c:844
 msgid "Default Page Setup"

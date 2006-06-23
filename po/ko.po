@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.9.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-21 21:18-0400\n"
-"PO-Revision-Date: 2006-06-17 15:24+0900\n"
+"PO-Revision-Date: 2006-06-24 08:13+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -4100,27 +4100,24 @@ msgid "Command Line"
 msgstr "명령행"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:436
-#, fuzzy
 msgid "Print to File"
-msgstr "PDF로 인쇄"
+msgstr "파일로 인쇄"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:460
-#, fuzzy
 msgid "Postscript"
-msgstr "세로 방향"
+msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:480
 msgid "File"
 msgstr "파일"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:516
-#, fuzzy
 msgid "_Output format"
-msgstr "출력 트레이"
+msgstr "출력 형식(_O)"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4941,72 +4938,72 @@ msgstr "ROC 8k"
 #: gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "심볼릭 링크가 걸린 '%s' 및 '%s'의 idata가 다릅니다\n"
 
 #: gtk/updateiconcache.c:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write header\n"
-msgstr "TIFF 데이터를 쓰는 데 실패"
+msgstr "헤더를 쓰는 데 실패\n"
 
 #: gtk/updateiconcache.c:1122
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write hash table\n"
-msgstr "TIFF 데이터를 쓰는 데 실패"
+msgstr "해시 테이블을 쓰는 데 실패\n"
 
 #: gtk/updateiconcache.c:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write directory index\n"
-msgstr "임시 파일을 읽는 데 실패했습니다"
+msgstr "디렉토리 인덱스를 쓰는 데 실패\n"
 
 #: gtk/updateiconcache.c:1136
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rewrite header\n"
-msgstr "TIFF 데이터를 쓰는 데 실패"
+msgstr "헤더를 다시 쓰는 데 실패\n"
 
 #: gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "파일 '%s' 열기 실패 : %s"
+msgstr "캐시 파일을 쓰는 데 실패: %s\n"
 
 #: gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s, %s을(를) 지웁니다.\n"
 
 #: gtk/updateiconcache.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "디렉토리를 만들 수 없습니다: %s"
+msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s\n"
 
 #: gtk/updateiconcache.c:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "디렉토리를 만들 수 없습니다: %s"
+msgstr "%s의 이름을 %s(으)로 되돌릴 수 없습니다: %s.\n"
 
 #: gtk/updateiconcache.c:1243
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "캐시 파일을 성공적으로 만들었습니다.\n"
 
 #: gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "캐시가 최신이더라도 현재 캐시를 덮어 씁니다"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "index.theme 파일이 있는 지 검사하지 않습니다"
 
 #: gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "캐시에 그림 데이터를 포함하지 않습니다"
 
 #: gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "C 헤더 파일을 출력합니다"
 
 #: gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "자세히 출력하지 않습니다"
 
 #: gtk/updateiconcache.c:1314
 #, c-format
@@ -5014,6 +5011,5 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-#~ msgid "shortcut %s already exists"
-#~ msgstr "%s 바로 가기가 이미 있습니다"
+"'%s' 안에 테마 인덱스 파일이 없습니다.\n"
+"정말로 여기에 아이콘 캐시를 만드려면, --ignore-theme-index 옵션을 사용하십시오.\n"
