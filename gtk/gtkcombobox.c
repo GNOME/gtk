@@ -107,6 +107,7 @@ struct _GtkComboBoxPrivate
   guint resize_idle_id;
 
   gint width;
+  gint height;
   GSList *cells;
 
   guint popup_in_progress : 1;
@@ -721,6 +722,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   gtk_widget_show (combo_box->priv->cell_view);
 
   combo_box->priv->width = 0;
+  combo_box->priv->height = 0;
   combo_box->priv->wrap_width = 0;
 
   combo_box->priv->active_row = NULL;
@@ -1787,6 +1789,7 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
     return;
 
   combo_box->priv->width = 0;
+  combo_box->priv->height = 0;
 
   path = gtk_tree_path_new_from_indices (0, -1);
 
@@ -1798,9 +1801,13 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
 	gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (combo_box->priv->cell_view), 
                                        path, &req);
       else
-        req.width = 0;
+        {
+          req.width = 0;
+          req.height = 0;
+        }
 
       combo_box->priv->width = MAX (combo_box->priv->width, req.width);
+      combo_box->priv->height = MAX (combo_box->priv->height, req.height);
 
       gtk_tree_path_next (path);
     }
@@ -1823,6 +1830,7 @@ gtk_combo_box_size_request (GtkWidget      *widget,
   gtk_widget_size_request (GTK_BIN (widget)->child, &bin_req);
   gtk_combo_box_remeasure (combo_box);
   bin_req.width = MAX (bin_req.width, combo_box->priv->width);
+  bin_req.height = MAX (bin_req.height, combo_box->priv->height);
 
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
@@ -1844,6 +1852,7 @@ gtk_combo_box_size_request (GtkWidget      *widget,
           ythickness = combo_box->priv->button->style->ythickness;
 
           bin_req.width = MAX (bin_req.width, combo_box->priv->width);
+          bin_req.height = MAX (bin_req.height, combo_box->priv->height);
 
           gtk_widget_size_request (combo_box->priv->separator, &sep_req);
           gtk_widget_size_request (combo_box->priv->arrow, &arrow_req);

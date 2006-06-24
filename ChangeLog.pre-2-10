@@ -1,3 +1,8 @@
+2006-06-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c: Update the height as well
+	when changing fonts.  (#321393, Billy Biggs)
+`
 2006-06-23  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "ur" to ALL_LINGUAS.
