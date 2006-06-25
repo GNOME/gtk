@@ -834,27 +834,35 @@ stop_enumeration (PrinterList *printer_list)
       backend = GTK_PRINT_BACKEND (list->data);
       list_done_cb (backend, printer_list);
     }
+}
 
+static void 
+free_printer_list (PrinterList *printer_list)
+{
   if (printer_list->destroy)
     printer_list->destroy (printer_list->data);
 
   if (printer_list->loop)
     {    
       g_main_loop_quit (printer_list->loop);
-
       g_main_loop_unref (printer_list->loop);
     }
 
   g_free (printer_list);
 }
 
-static void
+static gboolean
 list_added_cb (GtkPrintBackend *backend, 
 	       GtkPrinter      *printer, 
 	       PrinterList     *printer_list)
 {
   if (printer_list->func (printer, printer_list->data))
-    stop_enumeration (printer_list);
+    {
+      stop_enumeration (printer_list);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -870,20 +878,25 @@ list_done_cb (GtkPrintBackend *backend,
   g_object_unref (backend);
 
   if (printer_list->backends == NULL)
-    stop_enumeration (printer_list);
+    free_printer_list (printer_list);
 }
 
-static void
+static gboolean
 list_printers_init (PrinterList     *printer_list,
 		    GtkPrintBackend *backend)
 {
-  GList *list;
-  GList *node;
+  GList *list, *node;
 
   list = gtk_print_backend_get_printer_list (backend);
 
   for (node = list; node != NULL; node = node->next)
-    list_added_cb (backend, node->data, printer_list);
+    {
+      if (list_added_cb (backend, node->data, printer_list))
+        {
+          g_list_free (list);
+          return TRUE;
+        }
+    }
 
   g_list_free (list);
 
@@ -903,6 +916,7 @@ list_printers_init (PrinterList     *printer_list,
 			printer_list);
     }
 
+  return FALSE;
 }
 
 /**
@@ -941,7 +955,8 @@ gtk_enumerate_printers (GtkPrinterFunc func,
     {
       next = node->next;
       backend = GTK_PRINT_BACKEND (node->data);
-      list_printers_init (printer_list, backend);
+      if (list_printers_init (printer_list, backend))
+        return;
     }
 
   if (wait && printer_list->backends)

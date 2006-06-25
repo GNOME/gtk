@@ -1,3 +1,9 @@
+2006-06-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprinter.c (gtk_enumerate_printers): Make
+	this work when the enumeration is stopped early.  (#344074,
+	Felipe Heidrich)
+
 2006-06-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: Update the height as well
