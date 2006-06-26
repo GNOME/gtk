@@ -1,3 +1,8 @@
+2006-06-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextview.c (gtk_text_view_size_allocate): revert "keep
+	cursor visible when size changes" since it breaks things (#344874).
+
 2006-06-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_cell_view_menu_item_new): Avoid
