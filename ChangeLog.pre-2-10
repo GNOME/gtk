@@ -1,3 +1,8 @@
+2006-06-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_cell_view_menu_item_new): Avoid
+	a refcounting leak in the python bindings.  (#344876, Phil Dumont)
+
 2006-06-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump the atk requirement to 1.9.0
