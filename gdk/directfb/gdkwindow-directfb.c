@@ -2485,8 +2485,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 
 /**
  * Given a directfb window and a subsurface of that window
- * create a gdkwindow chaild wrapper
+ * create a gdkwindow child wrapper
  */
+#if (DIRECTFB_MICRO_VERSION > 24)
 GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
                                 IDirectFBSurface *subsurface)
 {
@@ -2532,6 +2533,7 @@ GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
   return window;
 
 }
+#endif
 
 /*
  * The wrapping is not perfect since directfb does not give full access

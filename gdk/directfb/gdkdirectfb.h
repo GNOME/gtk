@@ -85,8 +85,12 @@ GdkVisual * gdk_directfb_visual_by_format   (DFBSurfacePixelFormat  pixel_format
 
 IDirectFBWindow *gdk_directfb_window_lookup(GdkWindow *window);
 IDirectFBSurface *gdk_directfb_surface_lookup(GdkWindow *window);
+
+#if (DIRECTFB_MICRO_VERSION > 24)
 GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
                 IDirectFBSurface *subsurface);
+#endif
+
 
 G_END_DECLS
 
