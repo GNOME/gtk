@@ -2565,6 +2565,9 @@ gtk_cell_view_menu_item_new (GtkComboBox  *combo_box,
   GtkRequisition req;
 
   cell_view = gtk_cell_view_new ();
+  item = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (item), cell_view);
+
   gtk_cell_view_set_model (GTK_CELL_VIEW (cell_view), model);	  
   path = gtk_tree_model_get_path (model, iter);
   gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (cell_view), path);
@@ -2573,9 +2576,6 @@ gtk_cell_view_menu_item_new (GtkComboBox  *combo_box,
   gtk_combo_box_sync_cells (combo_box, GTK_CELL_LAYOUT (cell_view));
   gtk_widget_size_request (cell_view, &req);
   gtk_widget_show (cell_view);
-
-  item = gtk_menu_item_new ();
-  gtk_container_add (GTK_CONTAINER (item), cell_view);
   
   return item;
 }
