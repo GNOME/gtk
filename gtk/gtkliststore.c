@@ -1777,7 +1777,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 /**
  * gtk_list_store_insert_with_values:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: An unset #GtkTreeIter to set to the new row, or %NULL.
  * @position: position to insert the new row
  * @Varargs: pairs of column number and value, terminated with -1
  *
@@ -1811,6 +1811,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
   GtkTreePath *path;
   GtkSequence *seq;
   GtkSequencePtr ptr;
+  GtkTreeIter tmp_iter;
   gint length;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
@@ -1818,7 +1819,9 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 
   /* FIXME: refactor to reduce overlap with gtk_list_store_set() */
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter != NULL);
+
+  if (!iter)
+    iter = &tmp_iter;
 
   list_store->columns_dirty = TRUE;
 
@@ -1860,7 +1863,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 /**
  * gtk_list_store_insert_with_valuesv:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: An unset #GtkTreeIter to set to the new row, or %NULL.
  * @position: position to insert the new row
  * @columns: an array of column numbers
  * @values: an array of GValues 
@@ -1884,6 +1887,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   GtkTreePath *path;
   GtkSequence *seq;
   GtkSequencePtr ptr;
+  GtkTreeIter tmp_iter;
   gint length;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
@@ -1894,7 +1898,9 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
    * gtk_list_store_insert_with_values() 
    */
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter != NULL);
+
+  if (!iter)
+    iter = &tmp_iter;
 
   list_store->columns_dirty = TRUE;
 

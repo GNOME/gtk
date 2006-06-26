@@ -1277,7 +1277,7 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_values:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set the new row
+ * @iter: An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  * @Varargs: pairs of column number and value, terminated with -1
@@ -1313,12 +1313,16 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
   GtkTreePath *path;
   GNode *parent_node;
   GNode *new_node;
+  GtkTreeIter tmp_iter;
   va_list var_args;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-  g_return_if_fail (iter != NULL);
+
+  if (!iter)
+    iter = &tmp_iter;
+
   if (parent)
     g_return_if_fail (VALID_ITER (parent, tree_store));
 
@@ -1364,7 +1368,7 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_valuesv:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set the new row
+ * @iter: An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  * @columns: an array of column numbers
@@ -1389,13 +1393,17 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
   GtkTreePath *path;
   GNode *parent_node;
   GNode *new_node;
+  GtkTreeIter tmp_iter;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
   GtkTreeIterCompareFunc func = NULL;
   gint i;
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-  g_return_if_fail (iter != NULL);
+
+  if (!iter)
+    iter = &tmp_iter;
+
   if (parent)
     g_return_if_fail (VALID_ITER (parent, tree_store));
 
