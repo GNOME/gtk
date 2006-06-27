@@ -10399,6 +10399,12 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
       gtk_tree_view_stop_editing (tree_view, TRUE);
 
+      if (tree_view->priv->expand_collapse_timeout)
+        {
+          g_source_remove (tree_view->priv->expand_collapse_timeout);
+          tree_view->priv->expand_collapse_timeout = 0;
+	}
+
       g_signal_handlers_disconnect_by_func (tree_view->priv->model,
 					    gtk_tree_view_row_changed,
 					    tree_view);

@@ -1,3 +1,9 @@
+2006-06-27  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): cancel the
+	expand collapse timeout when unsetting the model (Fixes #327164,
+	reported by Daichi Kawahata).
+
 2006-06-26  Michael Emmel  <mike.emmel@gmail.com>
 	
 	* gdk/directfb/gdkdirectfb.h: added ifdef to compile with directfb 0.9.24 
