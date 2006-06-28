@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+#if !defined (GTK_DISABLE_DEPRECATED)
 
 typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
 					    const gchar		*str);
@@ -231,7 +231,7 @@ void	gtk_item_factory_create_menu_entries (guint		 n_entries,
 void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
 					    const gchar		*path);
 
-#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 
 G_END_DECLS

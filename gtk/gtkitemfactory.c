@@ -29,20 +29,23 @@
 
 #include	<config.h>
 
+#undef GTK_DISABLE_DEPRECATED
 #include	"gtkitemfactory.h"
-#include	"gtk/gtkmenubar.h"
-#include	"gtk/gtkmenu.h"
-#include	"gtk/gtkmenuitem.h"
-#include	"gtk/gtkradiomenuitem.h"
-#include	"gtk/gtkcheckmenuitem.h"
-#include	"gtk/gtkimagemenuitem.h"
-#include	"gtk/gtktearoffmenuitem.h"
-#include	"gtk/gtkaccelmap.h"
-#include	"gtk/gtkaccellabel.h"
+#include	"gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
+#include	"gtkmenubar.h"
+#include	"gtkmenu.h"
+#include	"gtkmenuitem.h"
+#include	"gtkradiomenuitem.h"
+#include	"gtkcheckmenuitem.h"
+#include	"gtkimagemenuitem.h"
+#include	"gtktearoffmenuitem.h"
+#include	"gtkaccelmap.h"
+#include	"gtkaccellabel.h"
 #include        "gdk/gdkkeysyms.h"
-#include	"gtk/gtkimage.h"
-#include	"gtk/gtkstock.h"
-#include	"gtk/gtkiconfactory.h"
+#include	"gtkimage.h"
+#include	"gtkstock.h"
+#include	"gtkiconfactory.h"
 #include	"gtkintl.h"
 #include	<string.h>
 #include	<fcntl.h>
@@ -51,9 +54,6 @@
 #endif
 #include	<stdio.h>
 
-#undef GTK_DISABLE_DEPRECATED
-#include	"gtk/gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 #include 	"gtkalias.h"
 
 /* --- defines --- */
