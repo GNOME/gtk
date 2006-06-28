@@ -295,7 +295,8 @@ gdk_display_open (const gchar *display_name)
 	    /* keep this in sync with _gdk_keymap_state_changed() */ 
 	    XkbSelectEventDetails (display_x11->xdisplay,
 				   XkbUseCoreKbd, XkbStateNotify,
-				   XkbGroupLockMask, XkbGroupLockMask);
+				   XkbAllStateComponentsMask,
+                                   XkbGroupLockMask);
 
 	    XkbSetDetectableAutoRepeat (display_x11->xdisplay,
 					True,
