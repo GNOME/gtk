@@ -1,3 +1,8 @@
+2006-06-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Only select the
+	XKB event details we actually care about.  (#346079, Ryan Lortie)
+
 2006-06-27  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): cancel the
