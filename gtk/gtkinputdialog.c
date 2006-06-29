@@ -33,16 +33,13 @@
 
 
 #include <config.h>
-#include <glib/gprintf.h>
 #include <stdlib.h>
 #include "gdk/gdkkeysyms.h"
+#include "gtkinputdialog.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
 #include "gtkhbox.h"
-#include "gtkhseparator.h"
-#include "gtkinputdialog.h"
 #include "gtklabel.h"
-#include "gtklistitem.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"

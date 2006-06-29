@@ -644,6 +644,17 @@ gtk_printer_is_virtual (GtkPrinter *printer)
   return printer->priv->is_virtual;
 }
 
+/**
+ * gtk_printer_accepts_pdf:
+ * @printer: a #GtkPrinter
+ *
+ * Returns whether the printer accepts input in
+ * PDF format.  
+ *
+ * Return value: %TRUE if @printer accepts PDF
+ *
+ * Since: 2.10
+ */
 gboolean 
 gtk_printer_accepts_pdf (GtkPrinter *printer)
 { 
@@ -652,6 +663,17 @@ gtk_printer_accepts_pdf (GtkPrinter *printer)
   return printer->priv->accepts_pdf;
 }
 
+/**
+ * gtk_printer_accepts_ps:
+ * @printer: a #GtkPrinter
+ *
+ * Returns whether the printer accepts input in
+ * PostScript format.  
+ *
+ * Return value: %TRUE if @printer accepts PostScript
+ *
+ * Since: 2.10
+ */
 gboolean 
 gtk_printer_accepts_ps (GtkPrinter *printer)
 { 
@@ -790,8 +812,21 @@ _gtk_printer_get_capabilities (GtkPrinter *printer)
   return backend_class->printer_get_capabilities (printer);
 }
 
+/**
+ * gtk_printer_compare:
+ * @a: a #GtkPrinter
+ * @b: another #GtkPrinter
+ *
+ * Compares two printers.
+ * 
+ * Return value: 0 if the printer match, a negative value if @a &lt; @b, 
+ *   or a positive value if @a &gt; @b
+ *
+ * Since: 2.10
+ */
 gint
-gtk_printer_compare (GtkPrinter *a, GtkPrinter *b)
+gtk_printer_compare (GtkPrinter *a, 
+                     GtkPrinter *b)
 {
   const char *name_a, *name_b;
   

@@ -1,7 +1,24 @@
 2006-06-28  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkitemfactory.[hc]: Don't unnecessarily use 
-	GTK_COMPILATION.
+	* gtk/gtkprinter.c: 
+	* gtk/gtkprintunixdialog.c: 
+	* gtk/gtkprintoperationpreview.c: 
+	* gtk/gtkprintcontext.c (gtk_print_context_set_cairo_context): 
+	* gtk/gtklabel.c (gtk_label_set_line_wrap_mode): 
+	* gtk/gtkentry.c (gtk_entry_new): 	
+	* gtk/gtkprintoperation.c (gtk_print_operation_set_custom_tab_label): 
+	* gtk/gtkclipboard.c (gtk_clipboard_wait_for_rich_text): Documentation
+	additions and fixes.
+
+	* gtk/gtkaspectframe.h:
+	* gtk/gtkaboutdialog.c:
+	* gtk/gtkcalendar.c:
+	* gtk/gtkinputdialog.c: 
+	* gtk/gtk.symbols: Remove unnecessary includes.
+	
+	* gtk/gtkprogress.[hc]: 
+	* gtk/gtkitemfactory.[hc]: Don't unnecessarily use GTK_COMPILATION,
+	remove unnecessary includes.
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Only select the
 	XKB event details we actually care about.  (#346079, Ryan Lortie)

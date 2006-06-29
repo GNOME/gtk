@@ -1721,7 +1721,7 @@ gtk_label_get_line_wrap (GtkLabel *label)
 /**
  * gtk_label_set_line_wrap_mode:
  * @label: a #GtkLabel
- * @wrap: the line wrapping mode
+ * @wrap_mode: the line wrapping mode
  *
  * If line wrapping is on (see gtk_label_set_line_wrap()) this controls how
  * the line wrapping is done. The default is %PANGO_WRAP_WORD which means

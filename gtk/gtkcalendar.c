@@ -47,8 +47,6 @@
 #include <windows.h>
 #endif
 
-#include <glib/gprintf.h>
-
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkcalendar.h"
 #define GTK_DISABLE_DEPRECATED

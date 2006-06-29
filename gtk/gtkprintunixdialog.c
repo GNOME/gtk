@@ -2680,6 +2680,16 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   return settings;
 }
 
+/**
+ * gtk_print_unix_dialog_add_custom_tab:
+ * @dialog: a #GtkPrintUnixDialog
+ * @child: the widget to put in the custom tab
+ * @tab_label: the widget to use as tab label
+ *
+ * Adds a custom tab to the print dialog.
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
 				      GtkWidget          *child,
@@ -2694,7 +2704,7 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
 /**
  * gtk_print_unix_dialog_set_manual_capabilities:
  * @dialog: a #GtkPrintUnixDialog
- * @capabilites: the printing capabilities of your application
+ * @capabilities: the printing capabilities of your application
  *
  * This lets you specify the printing capabilities your application
  * supports. For instance, if you can handle scaling the output then

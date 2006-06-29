@@ -1337,6 +1337,7 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * gtk_clipboard_wait_for_rich_text:
  * @clipboard: a #GtkClipboard
  * @buffer: a #GtkTextBuffer
+ * @format: return location for the format of the returned data
  * @length: return location for the length of the returned data
  *
  * Requests the contents of the clipboard as rich text.  This function

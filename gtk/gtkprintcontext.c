@@ -96,7 +96,22 @@ _gtk_print_context_new (GtkPrintOperation *op)
   
   return context;
 }
-
+/**
+ * gtk_print_context_set_cairo_context:
+ * @context: a #GtkPrintContext
+ * @cr: the cairo context
+ * @dpi_x: the horizontal resolution to use with @cr
+ * @dpi_y: the vertical resolution to use with @cr
+ *
+ * Sets a new cairo context on a print context. 
+ * 
+ * This function is intended to be used when implementing
+ * an internal print preview, it is not needed for printing,
+ * since GTK+ itself creates a suitable cairo context in that
+ * case.
+ *
+ * Since: 2.10 
+ */
 void
 gtk_print_context_set_cairo_context (GtkPrintContext *context,
 				     cairo_t         *cr,
@@ -135,7 +150,9 @@ gtk_print_context_set_cairo_context (GtkPrintContext *context,
 	       context->pixels_per_unit_x,
 	       context->pixels_per_unit_y);
     
-  /* We use the unit-scaled resolution, as we still want fonts given in points to work */
+  /* We use the unit-scaled resolution, as we still want 
+   * fonts given in points to work 
+   */
   pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (context->fontmap),
 				       dpi_y / context->pixels_per_unit_y);
 }

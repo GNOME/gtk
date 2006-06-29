@@ -2870,6 +2870,7 @@ gtk_progress_bar_set_ellipsize
 
 #if IN_HEADER(__GTK_PROGRESS_H__)
 #if IN_FILE(__GTK_PROGRESS_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_progress_configure
 gtk_progress_get_current_percentage
 gtk_progress_get_current_text
@@ -2884,6 +2885,7 @@ gtk_progress_set_percentage
 gtk_progress_set_show_text
 gtk_progress_set_text_alignment
 gtk_progress_set_value
+#endif
 #endif
 #endif
 

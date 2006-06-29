@@ -583,7 +583,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
 
    /**
-   * Gtkprintoperation::paginate:
+   * GtkPrintOperation::paginate:
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @context: the #GtkPrintContext for the current operation
    *
@@ -599,6 +599,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * If you don't need to do pagination in chunks, you can simply do
    * it all in the begin-print handler, and set the number of pages
    * from there.
+   *
+   * Return value: %TRUE if pagination is complete
    *
    * Since: 2.10
    */
@@ -1630,7 +1632,7 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 
 
 /**
- * gtk_print_operation_set_custom_tag_label:
+ * gtk_print_operation_set_custom_tab_label:
  * @op: a #GtkPrintOperation
  * @label: the label to use, or %NULL to use the default label
  *

@@ -4059,6 +4059,13 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
 /* Public API
  */
 
+/**
+ * gtk_entry_new:
+ *
+ * Creates a new entry.
+ *
+ * Return value: a new #GtkEntry.
+ */
 GtkWidget*
 gtk_entry_new (void)
 {

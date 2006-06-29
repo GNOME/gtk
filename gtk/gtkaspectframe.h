@@ -29,7 +29,6 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkbin.h>
 #include <gtk/gtkframe.h>
 
 G_BEGIN_DECLS

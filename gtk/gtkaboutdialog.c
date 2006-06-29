@@ -30,6 +30,8 @@
 
 #include <config.h>
 
+#include <string.h>
+
 #include <gdk/gdkkeysyms.h>
 
 #include "gtkaboutdialog.h"
@@ -46,14 +48,11 @@
 #include "gtkstock.h"
 #include "gtktextview.h"
 #include "gtkvbox.h"
-#include "gtkviewport.h"
 #include "gtkiconfactory.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
 #include "gtkalias.h"
-
-#include <string.h>
 
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };

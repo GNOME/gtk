@@ -88,7 +88,15 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
     }
 }
 
-
+/**
+ * gtk_print_operation_preview_render_page:
+ * @preview: a #GtkPrintOperationPreview
+ * @page_nr: the page to render
+ *
+ * Renders a page to the preview.
+ *
+ * Since: 2.10 
+ */
 void    
 gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
 					 gint			   page_nr)
@@ -99,6 +107,14 @@ gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
 								page_nr);
 }
 
+/**
+ * gtk_print_operation_preview_end_preview:
+ * @preview: a #GtkPrintOperationPreview
+ *
+ * Ends a preview. 
+ *
+ * Since: 2.10
+ */
 void
 gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
 {
@@ -107,6 +123,18 @@ gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
   GTK_PRINT_OPERATION_PREVIEW_GET_IFACE (preview)->end_preview (preview);
 }
 
+/**
+ * gtk_print_operation_preview_is_selected:
+ * @preview: a #GtkPrintOperationPreview
+ * @page_nr: a page number
+ *
+ * Returns whether the given page is included in the set of pages that
+ * have been selected for printing.
+ * 
+ * Returns: %TRUE if the page has been selected for printing
+ *
+ * Since: 2.10
+ */
 gboolean
 gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 					 gint                      page_nr)
