@@ -58,7 +58,7 @@ Used to indicate the direction in which a #GtkArrow should point.
 @GTK_ARROW_DOWN: Represents a downward pointing arrow.
 @GTK_ARROW_LEFT: Represents a left pointing arrow.
 @GTK_ARROW_RIGHT: Represents a right pointing arrow.
-@GTK_ARROW_NONE: 
+@GTK_ARROW_NONE: No arrow. Since 2.10.
 
 <!-- ##### ENUM GtkAttachOptions ##### -->
 <para>

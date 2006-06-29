@@ -220,6 +220,18 @@ Emitted when the range value changes.
 @value: 
 
 
+<!-- ##### ENUM GtkSensitivityType ##### -->
+<para>
+Determines how GTK+ handles the sensitivity of stepper arrows
+at the end of range widgets.
+</para>
+
+@GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
+   thumb is at the end
+@GTK_SENSITIVITY_ON: The arrow is always sensitive
+@GTK_SENSITIVITY_OFF: The arrow is always insensitive 
+
+
 <!-- ##### FUNCTION gtk_range_set_lower_stepper_sensitivity ##### -->
 <para>
 

@@ -2741,6 +2741,7 @@ gtk_range_get_value
 gtk_range_set_increments
 gtk_range_set_range
 gtk_range_set_value
+GtkSensitivityType
 gtk_range_set_lower_stepper_sensitivity
 gtk_range_get_lower_stepper_sensitivity
 gtk_range_set_upper_stepper_sensitivity
@@ -4647,6 +4648,7 @@ GTK_IS_CELL_RENDERER_SPIN
 GTK_IS_CELL_RENDERER_SPIN_CLASS
 GTK_CELL_RENDERER_SPIN_GET_CLASS
 <SUBSECTION Private>
+GtkCellRendererSpinPrivate
 gtk_cell_renderer_spin_get_type
 </SECTION>
 
@@ -6101,7 +6103,6 @@ gtk_print_operation_set_n_pages
 gtk_print_operation_set_current_page
 gtk_print_operation_set_use_full_page
 gtk_print_operation_set_unit
-gtk_print_operation_set_show_dialog
 gtk_print_operation_set_export_filename 
 gtk_print_operation_set_show_progress
 gtk_print_operation_set_track_print_status
@@ -6304,8 +6305,11 @@ gtk_print_settings_set_finishings
 GTK_PRINT_SETTINGS_OUTPUT_BIN
 gtk_print_settings_get_output_bin
 gtk_print_settings_set_output_bin
+GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT
+GTK_PRINT_SETTINGS_OUTPUT_URI
 GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA
 GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION
+
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_SETTINGS

@@ -39,24 +39,9 @@ style of an arrow can be changed after creation by using gtk_arrow_set().
 
 <!-- ##### STRUCT GtkArrow ##### -->
 <para>
-The #GtkArrow-struct containes the following fields.
+The #GtkArrow struct containes the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
-
-<informaltable pgwide="1" frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>#gint16 <structfield>arrow_type</structfield>;</entry>
-<entry>the direction of the arrow, one of #GtkArrowType.</entry>
-</row>
-
-<row>
-<entry>#gint16 <structfield>shadow_type</structfield>;</entry>
-<entry>the style of the arrow, one of #GtkShadowType.</entry>
-</row>
-</tbody></tgroup></informaltable>
 </para>
 
 

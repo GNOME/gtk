@@ -260,7 +260,6 @@ Does the same as gtk_container_set_border_width().
 Does the same as gtk_container_get_children().
 </para>
 
-@Returns: 
 @Deprecated: Use gtk_container_get_children() instead.
 
 

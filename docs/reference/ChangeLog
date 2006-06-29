@@ -1,3 +1,17 @@
+2006-06-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintjob.sgml: Document GtkPrintJobCompleteFunc
+
+	* gtk/tmpl/gtkrange.sgml: Document GtkSensitivityType
+
+	* gtk/gtk-sections.txt: Remove gtk_print_operation_set_show_dialog
+
+	* gtk/tmpl/gtkcontainer.sgml: Updates.
+
+	* gtk/tmpl/gtkenums.sgml: Document GTK_ARROW_NONE.
+	* gtk/tmpl/gtkarrow.sgml: Cleanups
+	* gtk/gtk-sections.txt: Add some private things
+
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 	
 	* === Released 2.9.4 ===
