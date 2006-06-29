@@ -1,5 +1,7 @@
 2006-06-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkprintoperation.c: Clarify docs for the allow-async
 	property.  (#346108, Christian Persch)
 

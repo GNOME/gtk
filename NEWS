@@ -1,3 +1,18 @@
+Overview of Changes from GTK+ 2.9.4 to 2.10.0
+=============================================
+
+* Bug fixes:
+ 321393	Incorrect size request after changing the font
+ 327164	(GtkRBNode *)node becomes NULL inside GtkTreeView
+ 344074	Feature request: get printer list, and get default print
+ 344876	refcount leak when using ComboBox.set_cell_data_func
+ 345644	gtk+-2.9.4 requires CUPS-1.2.x
+ 345663	gtkaction(group)?.c: using functions without prototype declaration
+ 346079	gtk receives all sorts of events from the X server
+ 343841	Misguided iter assertion in gtk_list_store_insert_with_values()
+
+* Updated translations (cs,cy,dz,es,gu,hi,ko,mk,nb,nl,ru,th,ur)
+
 Overview of Changes from GTK+ 2.9.3 to 2.9.4
 ============================================
 
