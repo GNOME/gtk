@@ -1819,7 +1819,13 @@ gdk_event_translate (GdkDisplay *display,
 			   ? " (discarding substructure)"
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
-	_gdk_x11_screen_size_changed (screen, xevent);
+        { 
+	  window_impl->width = xevent->xconfigure.width;
+	  window_impl->height = xevent->xconfigure.height;
+	  
+	  _gdk_x11_drawable_update_size (window_private->impl);
+	  _gdk_x11_screen_size_changed (screen, xevent);
+        }
 
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
