@@ -2389,6 +2389,9 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   
   if (action == GTK_PRINT_OPERATION_ACTION_EXPORT)
     {
+      /* note: if you implement async EXPORT, update the docs
+       * docs for the allow-async property.
+       */
       priv->is_sync = TRUE;
       g_return_val_if_fail (priv->export_filename != NULL, GTK_PRINT_OPERATION_RESULT_ERROR);
       result = run_pdf (op, parent, &do_print);
