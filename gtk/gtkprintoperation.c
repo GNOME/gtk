@@ -1015,9 +1015,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * GtkPrintOperation:allow-async:
    *
    * Determines whether the print operation may run asynchronously or not.
+   *
    * Some systems don't support asynchronous printing, but those that do
    * will return %GTK_PRINT_OPERATION_RESULT_IN_PROGRESS as the status, and
    * emit the done signal when the operation is actually done.
+   *
+   * The Windows port does not support asynchronous operation
+   * at all (this is unlikely to change). On other platforms, all actions
+   * except for %GTK_PRINT_OPERATION_ACTION_EXPORT support asynchronous
+   * operation.
    *
    * Since: 2.10
    */
