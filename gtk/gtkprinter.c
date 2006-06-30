@@ -985,6 +985,12 @@ gtk_enumerate_printers (GtkPrinterFunc func,
 
   if (g_module_supported ())
     printer_list->backends = gtk_print_backend_load_modules ();
+  
+  if (printer_list->backends == NULL)
+    {
+      free_printer_list (printer_list);
+      return;
+    }
 
   for (node = printer_list->backends; node != NULL; node = next)
     {

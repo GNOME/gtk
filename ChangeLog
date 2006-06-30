@@ -1,5 +1,8 @@
 2006-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter.c (gtk_enumerate_printers): Always call the
+	destroy notify.  (#346027, Christian Persch)
+
 	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
 	Documentation updates.
 
