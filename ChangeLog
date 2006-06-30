@@ -1,3 +1,13 @@
+2006-06-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintjob.[hc]: Add a PREVIEW capability to hide
+	the preview button.  (#346113, Christian Persch)
+
+	* gtk/gtkprintunixdialog.c (update_dialog_from_capabilities):
+	Hide the preview button depending on the capability.
+
+	* gtk/gtkprintoperation-unix.c: Set the PREVIEW capability.
+
 2006-06-29  Bill Skaggs  <weskaggs@primate.ucdavis.edu>
 
 	* gtk/gtkprogress.h: revert last change by Matthias -- it broke the

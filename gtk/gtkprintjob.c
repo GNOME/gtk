@@ -695,6 +695,7 @@ gtk_print_capabilities_get_type (void)
         { GTK_PRINT_CAPABILITY_SCALE, "GTK_PRINT_CAPABILITY_SCALE", "scale" },
         { GTK_PRINT_CAPABILITY_GENERATE_PDF, "GTK_PRINT_CAPABILITY_GENERATE_PDF", "generate-pdf" },
         { GTK_PRINT_CAPABILITY_GENERATE_PS, "GTK_PRINT_CAPABILITY_GENERATE_PS", "generate-ps" },
+        { GTK_PRINT_CAPABILITY_PREVIEW, "GTK_PRINT_CAPABILITY_PREVIEW", "preview" },
         { 0, NULL, NULL }
       };
 

@@ -136,6 +136,7 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *print_at_radio;
   GtkWidget *print_at_entry;
   GtkWidget *print_hold_radio;
+  GtkWidget *preview_button;
   gboolean updating_print_at;
   GtkPrinterOptionWidget *pages_per_sheet;
   GtkPrinterOptionWidget *duplex;
@@ -273,8 +274,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 		    (GCallback) gtk_print_unix_dialog_destroy, 
 		    NULL);
 
+  priv->preview_button = gtk_button_new_from_stock (GTK_STOCK_PRINT_PREVIEW);
+  gtk_widget_show (priv->preview_button);
+   
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), 
+                                priv->preview_button, 
+                                GTK_RESPONSE_APPLY);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			  GTK_STOCK_PRINT_PREVIEW, GTK_RESPONSE_APPLY, 
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_PRINT, GTK_RESPONSE_OK,
                           NULL);
@@ -1028,6 +1034,11 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 			    caps & GTK_PRINT_CAPABILITY_REVERSE);
   gtk_widget_set_sensitive (priv->scale_spin,
 			    caps & GTK_PRINT_CAPABILITY_PAGE_SET);
+
+  if (caps & GTK_PRINT_CAPABILITY_PREVIEW)
+    gtk_widget_show (priv->preview_button);
+  else
+    gtk_widget_hide (priv->preview_button);
 
   update_collate_icon (NULL, dialog);
 
