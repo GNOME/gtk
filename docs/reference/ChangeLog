@@ -1,3 +1,8 @@
+2006-06-30 Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintsettings.sgml: Document print-to-file specific
+	settings.  (#346241, Carolyn MacLeod)
+
 2006-06-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkprintjob.sgml: Document GtkPrintJobCompleteFunc

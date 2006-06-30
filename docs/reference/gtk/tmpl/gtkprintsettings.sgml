@@ -830,6 +830,23 @@ Printing support was added in GTK+ 2.10.
 @output_bin: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT ##### -->
+<para>
+The key used by the "Print to file" printer to store the format
+of the output. The supported values are "PS" and "PDF".
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_OUTPUT_URI ##### -->
+<para>
+The key used by the "Print to file" printer to store the URI
+to which the output should be written. GTK+ itself supports
+only "file://" URIs.
+</para>
+
+
+
 <!-- ##### MACRO GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA ##### -->
 <para>
 
