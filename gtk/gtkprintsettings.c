@@ -1238,7 +1238,8 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
  * 
- * Return value: an array of #GtkPageRange<!-- -->s
+ * Return value: an array of #GtkPageRange<!-- -->s. Use g_free()
+ *   to free the array when it is no longer needed. 
  *
  * Since: 2.10
  */

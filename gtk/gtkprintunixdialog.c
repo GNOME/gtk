@@ -2592,7 +2592,10 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
       dialog_set_print_pages (dialog, gtk_print_settings_get_print_pages (settings));
       ranges = gtk_print_settings_get_page_ranges (settings, &num_ranges);
       if (ranges)
-	dialog_set_page_ranges (dialog, ranges, num_ranges);
+        {
+	  dialog_set_page_ranges (dialog, ranges, num_ranges);
+          g_free (ranges);
+        }
 
       priv->format_for_printer =
 	g_strdup (gtk_print_settings_get (settings, "format-for-printer"));

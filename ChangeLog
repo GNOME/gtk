@@ -1,5 +1,11 @@
 2006-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
+	Documentation updates.
+
+	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_set_settings):
+	Don't leak the ranges.  (#346237, Carolyn MacLeod)
+
 	* gtk/gtkprintjob.[hc]: Add a PREVIEW capability to hide
 	the preview button.  (#346113, Christian Persch)
 
