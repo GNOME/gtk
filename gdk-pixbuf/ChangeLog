@@ -1,5 +1,8 @@
 2006-06-21  Matthias Clasen  <mclasen@redhat.com>
 	
+	* pixops/*.S: NetBSD portability fixes.  (#346374,
+	Thomas Klausner)
+	
 	* === Released 2.9.4 ===
 
 2006-06-12  Matthias Clasen  <mclasen@redhat.com>
