@@ -1,4 +1,11 @@
+2006-07-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_finalize): 
+	Don't leak default_sort_data.  (#346341, Christian Weiske)
+
 2006-06-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Update the
 	size of the drawable for the root window when the screen size

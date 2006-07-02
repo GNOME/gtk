@@ -410,6 +410,13 @@ gtk_tree_model_sort_finalize (GObject *object)
       tree_model_sort->sort_list = NULL;
     }
 
+  if (tree_model_sort->default_sort_destroy)
+    {
+      tree_model_sort->default_sort_destroy (tree_model_sort->default_sort_data);
+      tree_model_sort->default_sort_destroy = NULL;
+      tree_model_sort->default_sort_data = NULL;
+    }
+
   /* must chain up */
   parent_class->finalize (object);
 }
