@@ -1103,8 +1103,12 @@ EXTRA_DIST +=                   \
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
+	gtkwin32embedwidget.h	\
+	gtkwin32embedwidget.c	\
 	gtkfilesystemwin32.h	\
 	gtkfilesystemwin32.c	\
+	gtkprint-win32.h	\
+	gtkprint-win32.c	\
 	gtkrc.default		\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
