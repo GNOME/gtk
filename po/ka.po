@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 13:37-0400\n"
+"POT-Creation-Date: 2006-07-02 10:45-0400\n"
 "PO-Revision-Date: 2006-04-20 03:50+0200\n"
 "Last-Translator: Vladimer Sichinava <alinux@siena.linux.it>\n"
 "Language-Team: Georgian <geognome@googlegroups.com>\n"
@@ -2099,7 +2099,7 @@ msgstr "GTK+ პარამეტრები"
 msgid "Show GTK+ Options"
 msgstr "GTK+ პარამეტრების ჩვენება"
 
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5165
 #, c-format
 msgid "Page %u"
 msgstr "გვერდი %u"

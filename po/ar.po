@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 13:37-0400\n"
+"POT-Creation-Date: 2006-07-02 10:45-0400\n"
 "PO-Revision-Date: 2004-08-30 19:23+0300\n"
 "Last-Translator: Ayman Hourieh <aymanh@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -2125,7 +2125,7 @@ msgstr ""
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5165
 #, c-format
 msgid "Page %u"
 msgstr "الصفحة %u"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 13:37-0400\n"
+"POT-Creation-Date: 2006-07-02 10:45-0400\n"
 "PO-Revision-Date: 2004-03-17 17:16+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -2398,7 +2398,7 @@ msgid "Show GTK+ Options"
 msgstr ""
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5165
 #, c-format
 msgid "Page %u"
 msgstr "Хуудас %u"

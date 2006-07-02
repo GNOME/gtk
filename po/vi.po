@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.8.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 13:37-0400\n"
+"POT-Creation-Date: 2006-07-02 10:45-0400\n"
 "PO-Revision-Date: 2006-03-14 15:50+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -2101,7 +2101,7 @@ msgstr "Tùy chọn GTK+"
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5165
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"

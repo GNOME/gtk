@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-12 13:37-0400\n"
+"POT-Creation-Date: 2006-07-02 10:45-0400\n"
 "PO-Revision-Date: 2006-04-13 20:09+0300\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -2095,7 +2095,7 @@ msgstr "GTK+ Options"
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
-#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5147
+#: gtk/gtknotebook.c:2770 gtk/gtknotebook.c:5165
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
