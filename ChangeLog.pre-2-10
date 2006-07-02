@@ -1,5 +1,8 @@
 2006-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_finalize):
+	Don't leak default_sort_data.  (#346341, Christian Weiske)
+
 	* gtk/Makefile.am: Make sure all win32-specific printing
 	sources are distributed.  (#346312, Erik van Pienbroek)
 	
