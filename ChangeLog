@@ -1,5 +1,9 @@
 2006-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_tab_space): Remove
+	redundant assignments to page, which may cause NULL
+	dereferences.  (#346334, Dave Vasilevsky)
+
 	* demos/gtk-demo/editable_cells.c: Portability fix.
 	(#346375, Thomas Klausner)
 

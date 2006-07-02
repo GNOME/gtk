@@ -4683,7 +4683,6 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv;
   GtkWidget *widget;
-  GtkNotebookPage *page;
   GList *children;
   gint tab_pos = get_effective_tab_pos (notebook);
   gint tab_overlap;
@@ -4710,6 +4709,8 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 
       while (children)
 	{
+          GtkNotebookPage *page;
+
 	  page = children->data;
 	  children = children->next;
 
@@ -4725,6 +4726,8 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 
       while (children)
 	{
+          GtkNotebookPage *page;
+
 	  page = children->data;
 	  children = children->next;
 
@@ -4748,7 +4751,6 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 	  if (*tab_space > *max - *min - tab_overlap)
 	    {
 	      *show_arrows = TRUE;
-	      page = notebook->focus_tab->data;
 
 	      /* take arrows into account */
 	      *tab_space = widget->allocation.width - tab_overlap -
@@ -4784,7 +4786,6 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 	  if (*tab_space > *max - *min - tab_overlap)
 	    {
 	      *show_arrows = TRUE;
-	      page = notebook->focus_tab->data;
 
 	      /* take arrows into account */
 	      *tab_space = widget->allocation.height -
