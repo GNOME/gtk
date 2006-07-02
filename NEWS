@@ -1,3 +1,18 @@
+Overview of changes from GTK+ 2.8.19 to 2.8.20
+==============================================
+
+* GTK+ requires ATK 1.9.0 now 
+
+* Bugs fixed:
+ 168105 the right edge tab does not appear when switching tab
+ 344876 refcount leak when using ComboBox.set_cell_data_func
+ 346102 root window doesn't update size as it should
+ 346341 Memory leak in gtk_tree_model_sort_finalize: User data 
+        not freed
+
+* Updated translations (lv)
+
+
 Overview of Changes from GTK+ 2.8.18 to GTK+ 2.8.19
 ===================================================
 
