@@ -1,6 +1,10 @@
 Overview of Changes from GTK+ 2.9.4 to 2.10.0
 =============================================
 
+* Printing:
+  - A PREVIEW capability has been added to allow hiding the
+    preview button
+
 * Bug fixes:
  321393	Incorrect size request after changing the font
  327164	(GtkRBNode *)node becomes NULL inside GtkTreeView
@@ -10,6 +14,12 @@ Overview of Changes from GTK+ 2.9.4 to 2.10.0
  345663	gtkaction(group)?.c: using functions without prototype declaration
  346079	gtk receives all sorts of events from the X server
  343841	Misguided iter assertion in gtk_list_store_insert_with_values()
+ 346113 unix print dialogue always has preview button
+ 346237 Possible leak in gtkprintunixdialog.c
+ 346027 cancelling printer enumeration
+ 346312 gtk 2.9.4 tarball lacks the files gtkwin32embedwidget.h 
+        and gtkprint-win32.h
+ 346341 Memory leak in gtk_tree_model_sort_finalize: User data not freed
 
 * Updated translations (cs,cy,dz,es,gu,hi,ko,mk,nb,nl,ru,th,ur)
 

@@ -3,9 +3,9 @@ Prerequisites
 
 GTK+ requires the following packages:
 
- - The GLib, Pango, and Atk libraries, available at the same location as GTK+
-   (Either Pango-1.0 or Pango-1.2 can be used with GTK+-2.2; 
-   Pango-1.2 is recommended.)
+ - The GLib, Pango, ATK and cairo libraries, available at the same 
+   location as GTK+. GTK+ @GTK_VERSION@ requires at least GLib 2.12, 
+   Pango 1.13, ATK 1.9 and cairo 1.2.
 
  - The TIFF, PNG, and JPEG image loading libraries. You most
    likely have these installed on your system already. If not
@@ -21,9 +21,9 @@ Simple install procedure
   % gzip -cd gtk+-@GTK_VERSION@.tar.gz | tar xvf - # unpack the sources
   % cd gtk+-@GTK_VERSION@			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
-  % make				   # build GTK
+  % make				   # build GTK+
   [ Become root if necessary ]
-  % make install			   # install GTK
+  % make install			   # install GTK+
 
 The Details
 ===========

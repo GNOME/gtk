@@ -20,10 +20,12 @@ The official web site is:
 Information about mailing lists can be found at
   http://www.gtk.org/mailinglists.html
 
+
 Installation
 ============
 
 See the file 'INSTALL'
+
 
 Release notes for 2.10
 ======================
@@ -48,15 +50,15 @@ Release notes for 2.10
   reference. Details about floating references can be found in the docs:
   http://developer.gnome.org/doc/API/2.0/gobject/gobject-The-Base-Object-Type.html#floating-ref
 
-* Suffixes like (_F) are now stripped from labels when they are displayed
-  in toolbars. If this is not wanted, the feature can be suppressed by 
-  inserting a Unicode control character, e.g ZWNJ.
+* Accelerators like (_F) are now stripped from labels when they are 
+  displayed in toolbars. If this is not wanted, the feature can be 
+  suppressed by inserting a Unicode control character, e.g ZWNJ.
 
 * The pixbuf theme engine can now customize expanders (in GtkTreeView
   and GtkExpander) and resize grips, using the new EXPANDER and
   RESIZE_GRIP function values.
 
-* Dialogs created by gtk_about_dialog_new no longer hide automatically
+* Dialogs created by gtk_about_dialog_new() no longer hide automatically
   when the user clicks close. It is the applications responsibility to
   hide or destroy the dialog.
 
@@ -66,8 +68,63 @@ Release notes for 2.10
   objects derived from GtkNotebook are page-reordered, page-removed and
   page-added.
 
-Release notes
-=============
+* Due to the interface changes in the file chooser backend interface, 
+  the GTK+ ABI version has been bumped to 2.10.0. Third-party filesystem 
+  backends have to be ported to the new interface, other modules, such as 
+  theme engines, input method modules or pixbuf loaders have to be rebuilt 
+  so that they are installed in the right place for GTK+ to find them.
+
+
+Release notes for 2.8
+=====================
+
+* GTK+ 2.8 and Pango 1.10 require the cairo library.
+
+* The default theme has been renamed to "Raleigh". Existing configurations
+  specifying the "Default" theme name should still work.
+
+* The GtkTreeView::enable-search property has been changed to control
+  only typeahead search, not the C-f keybinding to start an interactive
+  search. To turn off interactive searching completely, you have to
+  set GtkTreeView::search-column to -1.
+
+* The restriction on using the same cell renderer in multiple columns
+  of a GtkTreeView is now more strictly enforced.
+
+* In GTK+ 2.8, GtkCalendar uses nl_langinfo() (if available) to determine
+  the first day of the week. Thus, it is possible to select the first day
+  of the week independently from the language, by setting LC_TIME.
+
+* In GTK+ 2.8, the gtk-update-icon-cache utility includes image data
+  in the icon caches, which will make the icon cache files larger than
+  the one produced by GTK+ 2.6. This change will reduce the memory
+  overhead of icon themes at runtime, since all GTK+ applications can
+  share the image data in memory.
+
+* In 2.8, GDK emits GdkEventGrabBroken events when a keyboard or pointer
+  grab is broken. On X11, this can happen if the same application grabs
+  again, or if the window used for the grab becomes unviewable. It happens
+  more often on Win32. Applications which use grabs should pay attention
+  to these events and do the necessary cleanups when the grab is lost.
+* The GIOChannel code for sockets on win32 has been rewritten.
+  Applications who make non-trivial use of GIOChannels on win32 should
+  be watched for possible problems.
+
+* GLib 2.8 uses atomic operations to implement reference counting, thus
+  g_object_ref/unref, g_closure_ref/sink/unref and g_iochannel_ref/unref
+  can be used without locking in multithreaded applications. Note that
+  other modifications, like concurrent setting of properties still require
+  locking.
+
+* g_convert() and related character set conversion functions have been
+  fixed to emit pending shift states and to not cache iconv descriptors
+  across multiple calls, since that is problematic for some encodings.
+  Note that these functions are not suitable for streaming conversions;
+  use g_iconv() to do streaming conversion.
+
+
+Release notes for 2.6
+=====================
 
 * GTK+ 2.6 supports clipboard persistency. To make use of this feature,
   a clipboard manager following the specification at
@@ -149,6 +206,7 @@ Release notes
   consideration, and use the gstdio wrappers to access files whose 
   names have been constructed from strings returned from GTK+ or GLib.
 
+
 How to report bugs
 ==================
 
@@ -181,6 +239,7 @@ In the bug report please include:
   necessary. If you do send a stack trace, and the error is an X error,
   it will be more useful if the stacktrace is produced running the test
   program with the --sync command line option.
+
 
 Patches
 =======
