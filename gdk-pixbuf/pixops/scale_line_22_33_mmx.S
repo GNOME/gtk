@@ -22,7 +22,7 @@ gcc2_compiled.:
 .text
 	.align 16
 
-#if !defined(__MINGW32__) && !defined(__CYGWIN__)	
+#if !defined(__MINGW32__) && !defined(__CYGWIN__) && !defined(__INTERIX)	
 	
 /* Magic indicating no need for an executable stack */
 #if !defined __powerpc64__ && !defined __ia64__

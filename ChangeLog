@@ -1,4 +1,11 @@
 2006-07-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	* === Released 2.8.20 ===
+
+	* NEWS: Updates
+
+	* demos/gtk-demo/editable_cells.c: Portability fix.  
+	(#346375, Thomas Klausner)
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_finalize): 
 	Don't leak default_sort_data.  (#346341, Christian Weiske)

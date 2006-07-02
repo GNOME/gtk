@@ -9,6 +9,8 @@ Overview of changes from GTK+ 2.8.19 to 2.8.20
  346102 root window doesn't update size as it should
  346341 Memory leak in gtk_tree_model_sort_finalize: User data 
         not freed
+ 346375 MIPSPro compilation fix for gtk-2.8.19
+ 346374 Patches for Interix
 
 * Updated translations (lv)
 
