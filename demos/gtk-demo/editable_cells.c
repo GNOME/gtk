@@ -121,7 +121,10 @@ create_numbers_model (void)
   /* add numbers */
   for (i = 0; i < N_NUMBERS; i++)
     {
-      char str[2] = { '0' + i, '\0' };
+      char str[2];
+
+      str[0] = '0' + i;
+      str[1] = '\0';
 
       gtk_list_store_append (model, &iter);
 

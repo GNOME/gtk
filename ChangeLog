@@ -1,5 +1,8 @@
 2006-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/editable_cells.c: Portability fix.
+	(#346375, Thomas Klausner)
+
 	* NEWS, README.in, INSTALL.in: Updates
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_finalize):
