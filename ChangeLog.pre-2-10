@@ -1,5 +1,10 @@
-2006-06-30  Matthias Clasen  <mclasen@redhat.com>
+2006-07-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Require cairo 1.2 and GLib 2.12,
+	set version to 2.10
+
+2006-06-30  Matthias Clasen  <mclasen@redhat.com>
+	
 	* gtk/gtknotebook.c (gtk_notebook_tab_space): Remove
 	redundant assignments to page, which may cause NULL
 	dereferences.  (#346334, Dave Vasilevsky)
