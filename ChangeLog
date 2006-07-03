@@ -1,4 +1,9 @@
 2006-07-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkmenubar.c (window_key_press_handler): Treat
+	"" like NULL when parsing the menu-bar-accel setting.	
+	* gtk/gtkmenu.c (gtk_menu_key_press): Here too.  
+	(#346420, Yevgen Muntyan)
 
 	* configure.in: Require cairo 1.2 and GLib 2.12,
 	set version to 2.10

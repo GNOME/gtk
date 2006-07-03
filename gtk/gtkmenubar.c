@@ -594,11 +594,10 @@ window_key_press_handler (GtkWidget   *widget,
   gboolean retval = FALSE;
   
   g_object_get (gtk_widget_get_settings (widget),
-                "gtk-menu-bar-accel",
-                &accel,
+                "gtk-menu-bar-accel", &accel,
                 NULL);
 
-  if (accel)
+  if (accel && *accel)
     {
       guint keyval = 0;
       GdkModifierType mods = 0;

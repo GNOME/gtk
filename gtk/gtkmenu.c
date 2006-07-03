@@ -2688,7 +2688,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 		"gtk-can-change-accels", &can_change_accels,
                 NULL);
 
-  if (accel)
+  if (accel && *accel)
     {
       guint keyval = 0;
       GdkModifierType mods = 0;
