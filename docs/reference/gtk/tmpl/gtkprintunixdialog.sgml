@@ -170,6 +170,7 @@ specified, GTK+ assumes that all formats are supported.
 @GTK_PRINT_CAPABILITY_SCALE: 
 @GTK_PRINT_CAPABILITY_GENERATE_PDF: The program will send the document to the printer in PDF format
 @GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to the printer in Postscript format
+@GTK_PRINT_CAPABILITY_PREVIEW: 
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_manual_capabilities ##### -->
 <para>

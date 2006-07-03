@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:14-0400\n"
 "PO-Revision-Date: 2006-06-15 22:25+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
@@ -123,11 +123,11 @@ msgstr "Resolución de fonte"
 msgid "The resolution for fonts on the screen"
 msgstr "A resolución para as fontes na pantalla"
 
-#: gtk/gtkaboutdialog.c:207
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Nome do programa"
 
-#: gtk/gtkaboutdialog.c:208
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -135,43 +135,43 @@ msgstr ""
 "O nome do programa. Se non estivese establecido, se obterá de forma "
 "predeterminada mediante g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:222
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Versión do programa"
 
-#: gtk/gtkaboutdialog.c:223
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "A versión do programa"
 
-#: gtk/gtkaboutdialog.c:237
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Cadea dos dereitos de copia"
 
-#: gtk/gtkaboutdialog.c:238
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Información de dereitos de copia do programa"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Cadea de comentarios"
 
-#: gtk/gtkaboutdialog.c:256
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Comentarios acerca do programa"
 
-#: gtk/gtkaboutdialog.c:290
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "URL do sitio web"
 
-#: gtk/gtkaboutdialog.c:291
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "A URL para o ligazón ao sitio web do programa"
 
-#: gtk/gtkaboutdialog.c:307
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Etiqueta do sitio web"
 
-#: gtk/gtkaboutdialog.c:308
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -179,44 +179,44 @@ msgstr ""
 "A etiqueta para o ligazón ao sitio web do programa. Se non está establecida, "
 "usarase a URL de forma predeterminada"
 
-#: gtk/gtkaboutdialog.c:324
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Autores"
 
-#: gtk/gtkaboutdialog.c:325
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Lista de autores do programa"
 
-#: gtk/gtkaboutdialog.c:341
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Documentadores"
 
-#: gtk/gtkaboutdialog.c:342
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Lista de xente documentando o programa"
 
-#: gtk/gtkaboutdialog.c:358
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Artistas"
 
-#: gtk/gtkaboutdialog.c:359
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Lista de xente que contribuiron con traballo artístico ao programa"
 
-#: gtk/gtkaboutdialog.c:376
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Créditos de traducción"
 
-#: gtk/gtkaboutdialog.c:377
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Créditos aos traductores. Esta cadea debería marcarse como traducible"
 
-#: gtk/gtkaboutdialog.c:392
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:393
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -224,19 +224,19 @@ msgstr ""
 "Un logo para a caixa acerca de. Se non se establece, o predeterminado é "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Nome da icona do logo"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Unha icona con nome para usar como o logo para a caixa Acerca de."
 
-#: gtk/gtkaboutdialog.c:422
+#: gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
 msgstr "Saltar licencia"
 
-#: gtk/gtkaboutdialog.c:423
+#: gtk/gtkaboutdialog.c:422
 msgid "Whether to wrap the license text."
 msgstr "Indica se se debe saltar o texto da licencia"
 
@@ -256,66 +256,66 @@ msgstr "Widget acelerador"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "O widget a monitorizar para trocos no acelerador"
 
-#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:191 gtk/gtkactiongroup.c:137 gtk/gtkprinter.c:119
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkaction.c:191
+#: gtk/gtkaction.c:192
 msgid "A unique name for the action."
 msgstr "Un nome único para a acción."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
+#: gtk/gtkaction.c:199 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
 #: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etiqueta"
 
-#: gtk/gtkaction.c:199
+#: gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "A etiqueta empregada para os elementos de menú e botóns que activan esta "
 "acción."
 
-#: gtk/gtkaction.c:206
+#: gtk/gtkaction.c:207
 msgid "Short label"
 msgstr "Etiqueta corta"
 
-#: gtk/gtkaction.c:207
+#: gtk/gtkaction.c:208
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr ""
 "Unha etiqueta máis corta que poderá empregarse nos botóns da barra de "
 "ferramentas."
 
-#: gtk/gtkaction.c:213
+#: gtk/gtkaction.c:214
 msgid "Tooltip"
 msgstr "Consello"
 
-#: gtk/gtkaction.c:214
+#: gtk/gtkaction.c:215
 msgid "A tooltip for this action."
 msgstr "Un consello para esta acción."
 
-#: gtk/gtkaction.c:220
+#: gtk/gtkaction.c:221
 msgid "Stock Icon"
 msgstr "Icona de inventario"
 
-#: gtk/gtkaction.c:221
+#: gtk/gtkaction.c:222
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "A icona de inventario mostrada nos widgets representando esta acción."
 
-#: gtk/gtkaction.c:238 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
+#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "Nome da icona"
 
-#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
 #: gtk/gtkstatusicon.c:171
 msgid "The name of the icon from the icon theme"
 msgstr "O nome da icona do tema de iconas"
 
-#: gtk/gtkaction.c:245 gtk/gtktoolitem.c:130
+#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
 msgstr "Visible cando é horizontal"
 
-#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:131
+#: gtk/gtkaction.c:247 gtk/gtktoolitem.c:131
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -323,11 +323,11 @@ msgstr ""
 "Indica se o elemento da barra de ferramentas é visible cando a barra está en "
 "orientación horizontal."
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:262
 msgid "Visible when overflown"
 msgstr "Visible cando rebosa"
 
-#: gtk/gtkaction.c:262
+#: gtk/gtkaction.c:263
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
@@ -335,11 +335,11 @@ msgstr ""
 "Cando sexa VERDADEIRO, os proxies de menú representaranse no menú de "
 "rebosamento da barra de tarefas."
 
-#: gtk/gtkaction.c:269 gtk/gtktoolitem.c:137
+#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
 msgstr "Visible cando é vertical"
 
-#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:138
+#: gtk/gtkaction.c:271 gtk/gtktoolitem.c:138
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -347,11 +347,11 @@ msgstr ""
 "Indica se o elemento da barra de ferramentas é visible cando a barra está en "
 "orientación vertical."
 
-#: gtk/gtkaction.c:277 gtk/gtktoolitem.c:144
+#: gtk/gtkaction.c:278 gtk/gtktoolitem.c:144
 msgid "Is important"
 msgstr "É importante"
 
-#: gtk/gtkaction.c:278
+#: gtk/gtkaction.c:279
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -359,39 +359,39 @@ msgstr ""
 "Indica se a acción é considerada importante. Cando sexa VERDADEIRO, os "
 "proxies do elemento toolitem mostran texto no modo GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:286
+#: gtk/gtkaction.c:287
 msgid "Hide if empty"
 msgstr "Ocultar se está baleiro"
 
-#: gtk/gtkaction.c:287
+#: gtk/gtkaction.c:288
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Cando sexa VERDADEIRO, os proxies de menú baleiros para esta aplicación "
 "ocultaranse."
 
-#: gtk/gtkaction.c:293 gtk/gtkactiongroup.c:143 gtk/gtkcellrenderer.c:193
+#: gtk/gtkaction.c:294 gtk/gtkactiongroup.c:144 gtk/gtkcellrenderer.c:193
 #: gtk/gtkwidget.c:458
 msgid "Sensitive"
 msgstr "Sensible"
 
-#: gtk/gtkaction.c:294
+#: gtk/gtkaction.c:295
 msgid "Whether the action is enabled."
 msgstr "Indica se a acción está activada."
 
-#: gtk/gtkaction.c:300 gtk/gtkactiongroup.c:150 gtk/gtkstatusicon.c:205
+#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:205
 #: gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:451
 msgid "Visible"
 msgstr "Visible"
 
-#: gtk/gtkaction.c:301
+#: gtk/gtkaction.c:302
 msgid "Whether the action is visible."
 msgstr "Indica se a acción é visible"
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:308
 msgid "Action Group"
 msgstr "Grupo de acción"
 
-#: gtk/gtkaction.c:308
+#: gtk/gtkaction.c:309
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
@@ -399,15 +399,15 @@ msgstr ""
 "O GtkActionGroup co que esta GtkAction está asociada, ou NULL (para uso "
 "interno)."
 
-#: gtk/gtkactiongroup.c:137
+#: gtk/gtkactiongroup.c:138
 msgid "A name for the action group."
 msgstr "Un nome para o grupo da acción."
 
-#: gtk/gtkactiongroup.c:144
+#: gtk/gtkactiongroup.c:145
 msgid "Whether the action group is enabled."
 msgstr "Indica se o grupo de acción está activado."
 
-#: gtk/gtkactiongroup.c:151
+#: gtk/gtkactiongroup.c:152
 msgid "Whether the action group is visible."
 msgstr "Indica se o grupo de acción está visible."
 
@@ -744,7 +744,7 @@ msgstr ""
 "Se se establece, a etiqueta emprégase para tomar un elemento do inventario "
 "en vez de ser amosada"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:646 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Enfocar ao premer"
 
@@ -860,27 +860,27 @@ msgstr "Amosar imaxes nos botóns"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Indica se deben amosarse ou non as iconas de inventario nos botóns"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:417
 msgid "Year"
 msgstr "Ano"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:418
 msgid "The selected year"
 msgstr "O ano seleccionado"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:424
 msgid "Month"
 msgstr "Mes"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:425
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "O mes seleccionado (como número entre 0 e 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:431
 msgid "Day"
 msgstr "Día"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:432
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -888,35 +888,35 @@ msgstr ""
 "O día seleccionado (como un número entre 1 e 31, ou 0 para deseleccionar o "
 "día actualmente seleccionado)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:446
 msgid "Show Heading"
 msgstr "Amosar titular"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:447
 msgid "If TRUE, a heading is displayed"
 msgstr "Se é VERDADEIRO, amósase un titular"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:461
 msgid "Show Day Names"
 msgstr "Amosar nomes dos días"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:462
 msgid "If TRUE, day names are displayed"
 msgstr "Se é VERDADEIRO, amósanse os nomes dos días"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:475
 msgid "No Month Change"
 msgstr "Sen cambiar mes"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:476
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Se é VERDADEIRO, o mes seleccionado non pode cambiarse"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:490
 msgid "Show Week Numbers"
 msgstr "Amosar número da semana"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:491
 msgid "If TRUE, week numbers are displayed"
 msgstr "Se é VERDADEIRO, amósanse os números da semana"
 
@@ -1361,7 +1361,7 @@ msgstr ""
 "Como romper a cadea en liñas múltiples, se o renderizador da celda non ten "
 "suficiente espazo para amosar a cadea completa"
 
-#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:536
+#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:537
 msgid "Wrap width"
 msgstr "Axustar anchura"
 
@@ -1693,67 +1693,67 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica se os valores introducidos deben estar xa presentes na lista"
 
-#: gtk/gtkcombobox.c:519
+#: gtk/gtkcombobox.c:520
 msgid "ComboBox model"
 msgstr "Modelo CaixaCombo"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:521
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa combo"
 
-#: gtk/gtkcombobox.c:537
+#: gtk/gtkcombobox.c:538
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Axusta a anchura para distribuir os elementos nun enreixado"
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:560
 msgid "Row span column"
 msgstr "Expandir ringleiras e columnas"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:561
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contén os valores de expansión da ringleira"
 
-#: gtk/gtkcombobox.c:581
+#: gtk/gtkcombobox.c:582
 msgid "Column span column"
 msgstr "Columna expande columna"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:583
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contén os valores de expansión de columna"
 
-#: gtk/gtkcombobox.c:602
+#: gtk/gtkcombobox.c:603
 msgid "Active item"
 msgstr "Elemento activo"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:604
 msgid "The item which is currently active"
 msgstr "O elemento que está activo actualmente"
 
-#: gtk/gtkcombobox.c:622 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Engadir tiradores aos menús"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:624
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indica se os despregables debe ter un elemento do menú como tirador"
 
-#: gtk/gtkcombobox.c:638 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
 msgid "Has Frame"
 msgstr "Ten marco"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:640
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indica se a caixa combo ten un marco arredor do fillo"
 
-#: gtk/gtkcombobox.c:647
+#: gtk/gtkcombobox.c:648
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Indica se a caixa combo obtén o foco cando se preme co rato"
 
-#: gtk/gtkcombobox.c:662 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Título do separador"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:664
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1761,19 +1761,19 @@ msgstr ""
 "Un título que debe amosarse polo xestor de fiestras cando este menú "
 "emerxente atópese pechado"
 
-#: gtk/gtkcombobox.c:680
+#: gtk/gtkcombobox.c:681
 msgid "Popup shown"
 msgstr "Emerxente amosado"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:682
 msgid "Whether the combo's dropdown is shown"
 msgstr "Indica se se amosa o despregable do combo"
 
-#: gtk/gtkcombobox.c:687
+#: gtk/gtkcombobox.c:688
 msgid "Appears as list"
 msgstr "Aparece como unha lista"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:689
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Indica se os despregables deben parecerse a listas en vez de a menús"
 
@@ -3449,11 +3449,11 @@ msgstr "Configuración"
 msgid "Printer settings"
 msgstr "Configuración da impresora"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:226
 msgid "Page Setup"
 msgstr "Configuración da páxina"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
 msgid "Track Print Status"
 msgstr "Seguemento do estado de impresión"
 
@@ -3467,51 +3467,51 @@ msgstr ""
 "impresión despois de que os datos de impresión sexan enviados ao servidor de "
 "impresoras ou á impresora."
 
-#: gtk/gtkprintoperation.c:844
+#: gtk/gtkprintoperation.c:846
 msgid "Default Page Setup"
 msgstr "Configuración da páxina predeterminada"
 
-#: gtk/gtkprintoperation.c:845
+#: gtk/gtkprintoperation.c:847
 msgid "The GtkPageSetup used by default"
 msgstr "A GtkPageSetup usada por defecto"
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
+#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr "Configuración de impresión"
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Os GtkPrintSettings empregados para inicializar o diálogo"
 
-#: gtk/gtkprintoperation.c:882
+#: gtk/gtkprintoperation.c:884
 msgid "Job Name"
 msgstr "Nome do traballo"
 
-#: gtk/gtkprintoperation.c:883
+#: gtk/gtkprintoperation.c:885
 msgid "A string used for identifying the print job."
 msgstr "Unha cadea usada para identificar o traballo de impresión."
 
-#: gtk/gtkprintoperation.c:906
+#: gtk/gtkprintoperation.c:908
 msgid "Number of Pages"
 msgstr "Número de páxinas"
 
-#: gtk/gtkprintoperation.c:907
+#: gtk/gtkprintoperation.c:909
 msgid "The number of pages in the document."
 msgstr "O número de páxinas no documento."
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
+#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
 msgid "Current Page"
 msgstr "Páxina actual"
 
-#: gtk/gtkprintoperation.c:929
+#: gtk/gtkprintoperation.c:931
 msgid "The current page in the document."
 msgstr "A páxina actual no documento."
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:952
 msgid "Use full page"
 msgstr "Usar a páxina completa"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:953
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3519,7 +3519,7 @@ msgstr ""
 "TRUE se a orixe do contexto debería estar na esquina da páxina e non na "
 "esquina da área da imaxe"
 
-#: gtk/gtkprintoperation.c:972
+#: gtk/gtkprintoperation.c:974
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3528,79 +3528,79 @@ msgstr ""
 "impresión despois de que os datos de impresión sexan enviados ao servidor de "
 "impresoras ou á impresora."
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:991
 msgid "Unit"
 msgstr "Unidade"
 
-#: gtk/gtkprintoperation.c:990
+#: gtk/gtkprintoperation.c:992
 msgid "The unit in which distances can be measured in the context"
 msgstr "A unidade na que se poden medir as distancias no contexto"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1009
 msgid "Show Dialog"
 msgstr "Amosar diálogo"
 
-#: gtk/gtkprintoperation.c:1008
+#: gtk/gtkprintoperation.c:1010
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE se se amosa ao imprimir un diálogo de progreso."
 
-#: gtk/gtkprintoperation.c:1025
+#: gtk/gtkprintoperation.c:1033
 msgid "Allow Async"
 msgstr "Permitir asíncrono"
 
-#: gtk/gtkprintoperation.c:1026
+#: gtk/gtkprintoperation.c:1034
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE se o proceso de impresión pode executarse asíncronamente"
 
-#: gtk/gtkprintoperation.c:1049 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
 msgid "Export filename"
 msgstr "Exportar nome de ficheiro"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1072
 msgid "Status"
 msgstr "Estado"
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1073
 msgid "The status of the print operation"
 msgstr "O estado da operación de impresión"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1093
 msgid "Status String"
 msgstr "Cadea de estado"
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1094
 msgid "A human-readable description of the status"
 msgstr "Unha descrición lexible por humanos do estado"
 
-#: gtk/gtkprintoperation.c:1104
+#: gtk/gtkprintoperation.c:1112
 msgid "Custom tab label"
 msgstr "Etiqueta de solapa personalizada"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1113
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para a solapa contendo widgets personalizados."
 
-#: gtk/gtkprintunixdialog.c:226
+#: gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
 msgstr "O GtkPageSetup a usar"
 
-#: gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintunixdialog.c:235
 msgid "The current page in the document"
 msgstr "A páxina actual no documento"
 
-#: gtk/gtkprintunixdialog.c:251
+#: gtk/gtkprintunixdialog.c:252
 msgid "Selected Printer"
 msgstr "Impresora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintunixdialog.c:253
 msgid "The GtkPrinter which is selected"
 msgstr "O GtkPrinter que está seleccionado"
 
-#: gtk/gtkprogress.c:99
+#: gtk/gtkprogress.c:100
 msgid "Activity mode"
 msgstr "Modo de actividade"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:101
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3610,19 +3610,19 @@ msgstr ""
 "que algo pasou, pero non canto da actividade está rematada. Isto úsase cando "
 "está facendo algo que non sabe canto tempo pode tomar finalizalo"
 
-#: gtk/gtkprogress.c:107
+#: gtk/gtkprogress.c:108
 msgid "Show text"
 msgstr "Amosar texto"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:109
 msgid "Whether the progress is shown as text"
 msgstr "Indica se o avance debe amosarse como texto"
 
-#: gtk/gtkprogress.c:115
+#: gtk/gtkprogress.c:116
 msgid "Text x alignment"
 msgstr "Aliñación x do texto"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:117
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3630,11 +3630,11 @@ msgstr ""
 "Un número entre 0.0 e 1.0 que especifica a aliñación horizontal do texto no "
 "widget de progreso"
 
-#: gtk/gtkprogress.c:124
+#: gtk/gtkprogress.c:125
 msgid "Text y alignment"
 msgstr "Aliñación y do texto"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:126
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"

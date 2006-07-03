@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:13-0400\n"
 "PO-Revision-Date: 2006-06-06 12:53+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -1113,46 +1113,46 @@ msgstr "COLEURS"
 msgid "Make X calls synchronous"
 msgstr "Rinde les houcaedjes di X sincrones"
 
-#: gtk/gtkaboutdialog.c:274 gtk/gtkaboutdialog.c:2075
+#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2074
 msgid "License"
 msgstr "Licince"
 
-#: gtk/gtkaboutdialog.c:275
+#: gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
 msgstr "Li licince do programe"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:504
+#: gtk/gtkaboutdialog.c:503
 msgid "C_redits"
 msgstr "_Gråces"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:516
+#: gtk/gtkaboutdialog.c:515
 msgid "_License"
 msgstr "_Licince"
 
-#: gtk/gtkaboutdialog.c:753
+#: gtk/gtkaboutdialog.c:752
 #, c-format
 msgid "About %s"
 msgstr "Åd fwait di %s"
 
-#: gtk/gtkaboutdialog.c:2003
+#: gtk/gtkaboutdialog.c:2002
 msgid "Credits"
 msgstr "Gråces"
 
-#: gtk/gtkaboutdialog.c:2029
+#: gtk/gtkaboutdialog.c:2028
 msgid "Written by"
 msgstr "Sicrît pa"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2031
 msgid "Documented by"
 msgstr "Documinté pa"
 
-#: gtk/gtkaboutdialog.c:2044
+#: gtk/gtkaboutdialog.c:2043
 msgid "Translated by"
 msgstr "Ratourné pa"
 
-#: gtk/gtkaboutdialog.c:2048
+#: gtk/gtkaboutdialog.c:2047
 msgid "Artwork by"
 msgstr "Dessins da"
 
@@ -1235,7 +1235,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:696
+#: gtk/gtkcalendar.c:694
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1243,7 +1243,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:718
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1255,7 +1255,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1606
+#: gtk/gtkcalendar.c:1604
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1270,7 +1270,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1637 gtk/gtkcalendar.c:2215
+#: gtk/gtkcalendar.c:1635 gtk/gtkcalendar.c:2213
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1286,7 +1286,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2089
+#: gtk/gtkcalendar.c:1669 gtk/gtkcalendar.c:2087
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1302,7 +1302,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1880
+#: gtk/gtkcalendar.c:1878
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1453,11 +1453,11 @@ msgstr "Rowe des coleurs"
 msgid "Color Selection"
 msgstr "Tchoezixhaedje del coleur"
 
-#: gtk/gtkentry.c:4906 gtk/gtktextview.c:7231
+#: gtk/gtkentry.c:4913 gtk/gtktextview.c:7231
 msgid "Input _Methods"
 msgstr "_Metôdes d' intrêye"
 
-#: gtk/gtkentry.c:4920 gtk/gtktextview.c:7245
+#: gtk/gtkentry.c:4927 gtk/gtktextview.c:7245
 msgid "_Insert Unicode Control Character"
 msgstr "_Sititchî caractere di contrôle unicôde"
 
@@ -2079,82 +2079,82 @@ msgstr "L' imådjete «%s» n' est nén prezinte dins l' tinme"
 msgid "Default"
 msgstr "Prémetou"
 
-#: gtk/gtkinputdialog.c:194
+#: gtk/gtkinputdialog.c:191
 msgid "Input"
 msgstr "Intrêye"
 
-#: gtk/gtkinputdialog.c:209
+#: gtk/gtkinputdialog.c:206
 msgid "No extended input devices"
 msgstr "Nol éndjin d' intrêye sitindowe"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:219
 msgid "_Device:"
 msgstr "_Éndjin:"
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:236
 msgid "Disabled"
 msgstr "Essocté"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:243
 msgid "Screen"
 msgstr "Waitroûle"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "Purnea"
 
-#: gtk/gtkinputdialog.c:260
+#: gtk/gtkinputdialog.c:257
 msgid "_Mode:"
 msgstr "_Môde:"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:281
+#: gtk/gtkinputdialog.c:278
 msgid "Axes"
 msgstr "Aessis"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:299
+#: gtk/gtkinputdialog.c:296
 msgid "Keys"
 msgstr "Tapes"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:521
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:522
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:523
 msgid "_Pressure:"
 msgstr "_Pression:"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:524
 msgid "X _tilt:"
 msgstr "Limite X:"
 
-#: gtk/gtkinputdialog.c:528
+#: gtk/gtkinputdialog.c:525
 msgid "Y t_ilt:"
 msgstr "Limite Y:"
 
-#: gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:526
 msgid "_Wheel:"
 msgstr "_Rôlete:"
 
-#: gtk/gtkinputdialog.c:577
+#: gtk/gtkinputdialog.c:574
 msgid "none"
 msgstr "nole"
 
-#: gtk/gtkinputdialog.c:614 gtk/gtkinputdialog.c:650
+#: gtk/gtkinputdialog.c:611 gtk/gtkinputdialog.c:647
 msgid "(disabled)"
 msgstr "(essocté)"
 
-#: gtk/gtkinputdialog.c:643
+#: gtk/gtkinputdialog.c:640
 msgid "(unknown)"
 msgstr "(nén cnoxhou)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:743
+#: gtk/gtkinputdialog.c:740
 msgid "Cl_ear"
 msgstr "_Netyî"
 
@@ -2214,7 +2214,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6793
+#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6794
 #, c-format
 msgid "Page %u"
 msgstr "Pådje %u"
@@ -2269,7 +2269,7 @@ msgstr "Grandeu do _papî:"
 msgid "_Orientation:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2091
+#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2102
 msgid "Page Setup"
 msgstr "Apontiaedje del pådje"
 
@@ -2327,61 +2327,61 @@ msgid "_Save in folder:"
 msgstr "Schaper e _ridant:"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1456
+#: gtk/gtkprintoperation.c:1464
 msgid "print operation status|Initial state"
 msgstr "Estat di cmince"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1458
+#: gtk/gtkprintoperation.c:1466
 msgid "print operation status|Preparing to print"
 msgstr "Si preparant po-z imprimer"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1460
+#: gtk/gtkprintoperation.c:1468
 msgid "print operation status|Generating data"
 msgstr "Djenerant les dnêyes"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1462
+#: gtk/gtkprintoperation.c:1470
 msgid "print operation status|Sending data"
 msgstr "Evoyant les dnêyes"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1464
+#: gtk/gtkprintoperation.c:1472
 msgid "print operation status|Waiting"
 msgstr "Ratindant"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1466
+#: gtk/gtkprintoperation.c:1474
 msgid "print operation status|Blocking on issue"
 msgstr "Aresté so on problinme"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1468
+#: gtk/gtkprintoperation.c:1476
 msgid "print operation status|Printing"
 msgstr "Imprimant"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1470
+#: gtk/gtkprintoperation.c:1478
 msgid "print operation status|Finished"
 msgstr "Tot fwait"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1472
+#: gtk/gtkprintoperation.c:1480
 msgid "print operation status|Finished with error"
 msgstr "Fini avou ene aroke"
 
-#: gtk/gtkprintoperation.c:1947
+#: gtk/gtkprintoperation.c:1955
 #, c-format
 msgid "Preparing %d"
 msgstr "Dji prepare %d"
 
-#: gtk/gtkprintoperation.c:1949 gtk/gtkprintoperation.c:2205
+#: gtk/gtkprintoperation.c:1957 gtk/gtkprintoperation.c:2213
 #, c-format
 msgid "Preparing"
 msgstr "Dji prepare"
 
-#: gtk/gtkprintoperation.c:1952
+#: gtk/gtkprintoperation.c:1960
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimant %d"
@@ -2396,7 +2396,7 @@ msgstr "Åk n' a nén stî tot-z enondant l' prévoeyaedje"
 msgid "Error printing"
 msgstr "Åk n' a nén stî tot-z imprimant"
 
-#: gtk/gtkprintoperation-unix.c:374 gtk/gtkprintoperation-win32.c:1390
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
 msgstr "Programe"
 
@@ -2451,170 +2451,170 @@ msgstr "Aroke nén specifieye"
 msgid "Error from StartDoc"
 msgstr "Aroke di StartDoc"
 
-#: gtk/gtkprintunixdialog.c:1437
+#: gtk/gtkprintunixdialog.c:1448
 msgid "Printer"
 msgstr "Sicrirece"
 
-#: gtk/gtkprintunixdialog.c:1445
+#: gtk/gtkprintunixdialog.c:1456
 msgid "Location"
 msgstr "Eplaeçmint"
 
-#: gtk/gtkprintunixdialog.c:1454
+#: gtk/gtkprintunixdialog.c:1465
 msgid "Status"
 msgstr "Estat"
 
-#: gtk/gtkprintunixdialog.c:1476
+#: gtk/gtkprintunixdialog.c:1487
 msgid "Print Pages"
 msgstr "Imprimer les pådjes"
 
-#: gtk/gtkprintunixdialog.c:1480
+#: gtk/gtkprintunixdialog.c:1491
 msgid "_All"
 msgstr "_Totes"
 
-#: gtk/gtkprintunixdialog.c:1487
+#: gtk/gtkprintunixdialog.c:1498
 msgid "C_urrent"
 msgstr "Do _moumint"
 
-#: gtk/gtkprintunixdialog.c:1496
+#: gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
 msgstr "_Fortchete: "
 
-#: gtk/gtkprintunixdialog.c:1514
+#: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
 msgstr "Copeyes"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1519
+#: gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
 msgstr "Copeye_s:"
 
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1546
 msgid "C_ollate"
 msgstr "Re_lére"
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1554
 msgid "_Reverse"
 msgstr "Å _rvier"
 
-#: gtk/gtkprintunixdialog.c:1560
+#: gtk/gtkprintunixdialog.c:1571
 msgid "General"
 msgstr "Djenerå"
 
-#: gtk/gtkprintunixdialog.c:1947
+#: gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
 msgstr "Adjinçmint"
 
-#: gtk/gtkprintunixdialog.c:1951
+#: gtk/gtkprintunixdialog.c:1962
 #: modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Pages per _sheet:"
 msgstr "Pådjes pa _foye:"
 
-#: gtk/gtkprintunixdialog.c:1967
+#: gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
 msgstr "So les _deus costés:"
 
-#: gtk/gtkprintunixdialog.c:1982
+#: gtk/gtkprintunixdialog.c:1993
 msgid "_Only print:"
 msgstr "Imprimer _seulmint:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:1997
+#: gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
 msgstr "Totes les foyes"
 
-#: gtk/gtkprintunixdialog.c:1998
+#: gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
 msgstr "Les foyes paires"
 
-#: gtk/gtkprintunixdialog.c:1999
+#: gtk/gtkprintunixdialog.c:2010
 msgid "Odd sheets"
 msgstr "Les foyes impaires"
 
-#: gtk/gtkprintunixdialog.c:2002
+#: gtk/gtkprintunixdialog.c:2013
 msgid "Sc_ale:"
 msgstr "Sc_håle:"
 
-#: gtk/gtkprintunixdialog.c:2029
+#: gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
 msgstr "Papî"
 
-#: gtk/gtkprintunixdialog.c:2033
+#: gtk/gtkprintunixdialog.c:2044
 msgid "Paper _type:"
 msgstr "_Sôre di papî:"
 
-#: gtk/gtkprintunixdialog.c:2048
+#: gtk/gtkprintunixdialog.c:2059
 msgid "Paper _source:"
 msgstr "S_ourdant do papî:"
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
 msgstr "Ridant d' re_xhowe do papî:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
 msgstr "Detays del bouye"
 
-#: gtk/gtkprintunixdialog.c:2120
+#: gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
 msgstr "Pr_umiristé:"
 
-#: gtk/gtkprintunixdialog.c:2135
+#: gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2153
+#: gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
 msgstr "Imprimer documint"
 
-#: gtk/gtkprintunixdialog.c:2159
+#: gtk/gtkprintunixdialog.c:2170
 msgid "_Now"
 msgstr "As_teure"
 
-#: gtk/gtkprintunixdialog.c:2166
+#: gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
 msgstr "_A:"
 
-#: gtk/gtkprintunixdialog.c:2181
+#: gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
 msgstr "Radjouter pådje di coviete"
 
-#: gtk/gtkprintunixdialog.c:2206
+#: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
 msgstr "Di_vant:"
 
-#: gtk/gtkprintunixdialog.c:2221
+#: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
 msgstr "_Après:"
 
-#: gtk/gtkprintunixdialog.c:2236
+#: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
 msgstr "Bouye"
 
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
 msgstr "Sipepieus"
 
-#: gtk/gtkprintunixdialog.c:2337
+#: gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
 msgstr "Cwålité d' l' imådje"
 
-#: gtk/gtkprintunixdialog.c:2340
+#: gtk/gtkprintunixdialog.c:2351
 msgid "Color"
 msgstr "Coleur"
 
-#: gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2376
+#: gtk/gtkprintunixdialog.c:2387
 msgid "Print"
 msgstr "Imprimer"
 

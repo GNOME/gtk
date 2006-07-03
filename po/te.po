@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:13-0400\n"
 "PO-Revision-Date: 2004-10-17 12:50+0100\n"
 "Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Language-Team: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
@@ -1093,47 +1093,47 @@ msgstr "వర్ణాలు"
 msgid "Make X calls synchronous"
 msgstr "Xపిలుపులను కాలనియమితం చేయుము"
 
-#: gtk/gtkaboutdialog.c:274 gtk/gtkaboutdialog.c:2075
+#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2074
 msgid "License"
 msgstr "లైసెన్స్"
 
-#: gtk/gtkaboutdialog.c:275
+#: gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
 msgstr "కార్యక్రమలైసెన్స్"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:504
+#: gtk/gtkaboutdialog.c:503
 #, fuzzy
 msgid "C_redits"
 msgstr "పరపతులు"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:516
+#: gtk/gtkaboutdialog.c:515
 msgid "_License"
 msgstr "_లైసెన్స్"
 
-#: gtk/gtkaboutdialog.c:753
+#: gtk/gtkaboutdialog.c:752
 #, c-format
 msgid "About %s"
 msgstr "గురించి%s"
 
-#: gtk/gtkaboutdialog.c:2003
+#: gtk/gtkaboutdialog.c:2002
 msgid "Credits"
 msgstr "పరపతులు"
 
-#: gtk/gtkaboutdialog.c:2029
+#: gtk/gtkaboutdialog.c:2028
 msgid "Written by"
 msgstr "వ్రాసినవారు"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2031
 msgid "Documented by"
 msgstr "పత్రరచనచేసినవారు"
 
-#: gtk/gtkaboutdialog.c:2044
+#: gtk/gtkaboutdialog.c:2043
 msgid "Translated by"
 msgstr "అనువదించినవారు"
 
-#: gtk/gtkaboutdialog.c:2048
+#: gtk/gtkaboutdialog.c:2047
 msgid "Artwork by"
 msgstr "కళ"
 
@@ -1216,7 +1216,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:696
+#: gtk/gtkcalendar.c:694
 msgid "calendar:MY"
 msgstr "calender:MY"
 
@@ -1224,7 +1224,7 @@ msgstr "calender:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:718
 msgid "calendar:week_start:0"
 msgstr "కాలసూచి:వారారంభం:0"
 
@@ -1236,7 +1236,7 @@ msgstr "కాలసూచి:వారారంభం:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1606
+#: gtk/gtkcalendar.c:1604
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1251,7 +1251,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1637 gtk/gtkcalendar.c:2215
+#: gtk/gtkcalendar.c:1635 gtk/gtkcalendar.c:2213
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1267,7 +1267,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2089
+#: gtk/gtkcalendar.c:1669 gtk/gtkcalendar.c:2087
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "కాలసూచి:వారారంభం:0"
@@ -1283,7 +1283,7 @@ msgstr "కాలసూచి:వారారంభం:0"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1880
+#: gtk/gtkcalendar.c:1878
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1442,11 +1442,11 @@ msgstr "వర్ణచట్రం"
 msgid "Color Selection"
 msgstr "వర్ణెంపిక"
 
-#: gtk/gtkentry.c:4906 gtk/gtktextview.c:7231
+#: gtk/gtkentry.c:4913 gtk/gtktextview.c:7231
 msgid "Input _Methods"
 msgstr "ఎగుబడి _విధానములు"
 
-#: gtk/gtkentry.c:4920 gtk/gtktextview.c:7245
+#: gtk/gtkentry.c:4927 gtk/gtktextview.c:7245
 msgid "_Insert Unicode Control Character"
 msgstr "_యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము"
 
@@ -2086,89 +2086,89 @@ msgstr "ప్రతిమ '%s' వైద్యాంశంలో లేదు"
 msgid "Default"
 msgstr "అప్రమేయం"
 
-#: gtk/gtkinputdialog.c:194
+#: gtk/gtkinputdialog.c:191
 msgid "Input"
 msgstr "ఎగుబడి"
 
-#: gtk/gtkinputdialog.c:209
+#: gtk/gtkinputdialog.c:206
 msgid "No extended input devices"
 msgstr "కొనసాగింపబడిన ఎగుబడి  పరికరములు లేవు"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:219
 msgid "_Device:"
 msgstr "_పరికరము:"
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:236
 msgid "Disabled"
 msgstr "నిరుపయోగింపబడు"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:243
 msgid "Screen"
 msgstr "తెర"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "గవాక్షం"
 
-#: gtk/gtkinputdialog.c:260
+#: gtk/gtkinputdialog.c:257
 #, fuzzy
 msgid "_Mode:"
 msgstr "_విధం: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:281
+#: gtk/gtkinputdialog.c:278
 #, fuzzy
 msgid "Axes"
 msgstr "_అక్షము"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:299
+#: gtk/gtkinputdialog.c:296
 #, fuzzy
 msgid "Keys"
 msgstr "_మీటలు"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:521
 msgid "_X:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:522
 msgid "_Y:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:523
 #, fuzzy
 msgid "_Pressure:"
 msgstr "పీడనము"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:524
 #, fuzzy
 msgid "X _tilt:"
 msgstr "X వాలు"
 
-#: gtk/gtkinputdialog.c:528
+#: gtk/gtkinputdialog.c:525
 #, fuzzy
 msgid "Y t_ilt:"
 msgstr "Y వాలు"
 
-#: gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:526
 #, fuzzy
 msgid "_Wheel:"
 msgstr "చట్రం"
 
-#: gtk/gtkinputdialog.c:577
+#: gtk/gtkinputdialog.c:574
 msgid "none"
 msgstr "శూన్యం"
 
-#: gtk/gtkinputdialog.c:614 gtk/gtkinputdialog.c:650
+#: gtk/gtkinputdialog.c:611 gtk/gtkinputdialog.c:647
 msgid "(disabled)"
 msgstr "(నిరుపయోగం)"
 
-#: gtk/gtkinputdialog.c:643
+#: gtk/gtkinputdialog.c:640
 msgid "(unknown)"
 msgstr "(అపరిచిత)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:743
+#: gtk/gtkinputdialog.c:740
 #, fuzzy
 msgid "Cl_ear"
 msgstr "_శుభ్రం"
@@ -2227,7 +2227,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6793
+#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6794
 #, c-format
 msgid "Page %u"
 msgstr "పుట %u"
@@ -2285,7 +2285,7 @@ msgstr "_లక్షణాలు"
 msgid "_Orientation:"
 msgstr "_చిక్కని:"
 
-#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2091
+#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2102
 #, fuzzy
 msgid "Page Setup"
 msgstr "పుట %u"
@@ -2349,61 +2349,61 @@ msgid "_Save in folder:"
 msgstr "సంచిలో దాచు:"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1456
+#: gtk/gtkprintoperation.c:1464
 msgid "print operation status|Initial state"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1458
+#: gtk/gtkprintoperation.c:1466
 msgid "print operation status|Preparing to print"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1460
+#: gtk/gtkprintoperation.c:1468
 msgid "print operation status|Generating data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1462
+#: gtk/gtkprintoperation.c:1470
 msgid "print operation status|Sending data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1464
+#: gtk/gtkprintoperation.c:1472
 msgid "print operation status|Waiting"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1466
+#: gtk/gtkprintoperation.c:1474
 msgid "print operation status|Blocking on issue"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1468
+#: gtk/gtkprintoperation.c:1476
 msgid "print operation status|Printing"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1470
+#: gtk/gtkprintoperation.c:1478
 msgid "print operation status|Finished"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1472
+#: gtk/gtkprintoperation.c:1480
 msgid "print operation status|Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1947
+#: gtk/gtkprintoperation.c:1955
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1949 gtk/gtkprintoperation.c:2205
+#: gtk/gtkprintoperation.c:1957 gtk/gtkprintoperation.c:2213
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "హెచ్చరిక"
 
-#: gtk/gtkprintoperation.c:1952
+#: gtk/gtkprintoperation.c:1960
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "_ప్రచురణ"
@@ -2418,7 +2418,7 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:374 gtk/gtkprintoperation-win32.c:1390
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 #, fuzzy
 msgid "Application"
 msgstr "_స్థానము:"
@@ -2475,184 +2475,184 @@ msgstr ""
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1437
+#: gtk/gtkprintunixdialog.c:1448
 #, fuzzy
 msgid "Printer"
 msgstr "_ప్రచురణ"
 
-#: gtk/gtkprintunixdialog.c:1445
+#: gtk/gtkprintunixdialog.c:1456
 #, fuzzy
 msgid "Location"
 msgstr "_స్థానము:"
 
-#: gtk/gtkprintunixdialog.c:1454
+#: gtk/gtkprintunixdialog.c:1465
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1476
+#: gtk/gtkprintunixdialog.c:1487
 #, fuzzy
 msgid "Print Pages"
 msgstr "ప్రచురణ_ఉపదర్శనం"
 
-#: gtk/gtkprintunixdialog.c:1480
+#: gtk/gtkprintunixdialog.c:1491
 #, fuzzy
 msgid "_All"
 msgstr "_నింపు"
 
-#: gtk/gtkprintunixdialog.c:1487
+#: gtk/gtkprintunixdialog.c:1498
 #, fuzzy
 msgid "C_urrent"
 msgstr "సృస్టించు"
 
-#: gtk/gtkprintunixdialog.c:1496
+#: gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1514
+#: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1519
+#: gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1546
 #, fuzzy
 msgid "C_ollate"
 msgstr "సృస్టించు"
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1554
 #, fuzzy
 msgid "_Reverse"
 msgstr "_యథాస్థితికి తెచ్చు."
 
-#: gtk/gtkprintunixdialog.c:1560
+#: gtk/gtkprintunixdialog.c:1571
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1947
+#: gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1951
+#: gtk/gtkprintunixdialog.c:1962
 #: modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1967
+#: gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1982
+#: gtk/gtkprintunixdialog.c:1993
 #, fuzzy
 msgid "_Only print:"
 msgstr "_ప్రచురణ"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:1997
+#: gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1998
+#: gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1999
+#: gtk/gtkprintunixdialog.c:2010
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2002
+#: gtk/gtkprintunixdialog.c:2013
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_విలువ:"
 
-#: gtk/gtkprintunixdialog.c:2029
+#: gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2033
+#: gtk/gtkprintunixdialog.c:2044
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_లక్షణాలు"
 
-#: gtk/gtkprintunixdialog.c:2048
+#: gtk/gtkprintunixdialog.c:2059
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_లక్షణాలు"
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2120
+#: gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2135
+#: gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2153
+#: gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2159
+#: gtk/gtkprintunixdialog.c:2170
 #, fuzzy
 msgid "_Now"
 msgstr "_వద్దు"
 
-#: gtk/gtkprintunixdialog.c:2166
+#: gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2181
+#: gtk/gtkprintunixdialog.c:2192
 #, fuzzy
 msgid "On _hold"
 msgstr "_మందం"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2206
+#: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2221
+#: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2236
+#: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2337
+#: gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2340
+#: gtk/gtkprintunixdialog.c:2351
 #, fuzzy
 msgid "Color"
 msgstr "_వర్ణము"
 
-#: gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2376
+#: gtk/gtkprintunixdialog.c:2387
 #, fuzzy
 msgid "Print"
 msgstr "_ప్రచురణ"

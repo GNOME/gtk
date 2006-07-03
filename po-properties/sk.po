@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:14-0400\n"
 "PO-Revision-Date: 2005-08-05 22:54+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -122,116 +122,116 @@ msgstr "Počet bodov písma"
 msgid "The resolution for fonts on the screen"
 msgstr "Ako má byť prvok rozsah aktualizovaný"
 
-#: gtk/gtkaboutdialog.c:207
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Názov programu"
 
-#: gtk/gtkaboutdialog.c:208
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:222
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Verzia programu"
 
-#: gtk/gtkaboutdialog.c:223
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Verzia programu"
 
-#: gtk/gtkaboutdialog.c:237
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Reťazec o autorských právach"
 
-#: gtk/gtkaboutdialog.c:238
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Informácie o autorských právach pre program"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Reťazec komentárov"
 
-#: gtk/gtkaboutdialog.c:256
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Komentáre o programe"
 
-#: gtk/gtkaboutdialog.c:290
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "URL www stránky"
 
-#: gtk/gtkaboutdialog.c:291
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "URL odkazu na www stránku programu"
 
-#: gtk/gtkaboutdialog.c:307
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Označenie www stránky"
 
-#: gtk/gtkaboutdialog.c:308
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:324
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Autori"
 
-#: gtk/gtkaboutdialog.c:325
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Zoznam autorov programu"
 
-#: gtk/gtkaboutdialog.c:341
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Autori dokumentácie"
 
-#: gtk/gtkaboutdialog.c:342
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Zoznam ľudí, ktorí dokumentujú program"
 
-#: gtk/gtkaboutdialog.c:358
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Výtvarníci"
 
-#: gtk/gtkaboutdialog.c:359
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Zoznam ľudí, ktorí prispeli grafikou k programu"
 
-#: gtk/gtkaboutdialog.c:376
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Poďakovanie prekladateľom"
 
-#: gtk/gtkaboutdialog.c:377
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Poďakovanie prekladateľom. Tento reťazec by mal byť označený ako preložiteľný"
 
-#: gtk/gtkaboutdialog.c:392
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:393
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Názov ikony loga"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Pomenovaná ikona, ktorá bude použitá ako logo pre dialógové okno o programe."
 
-#: gtk/gtkaboutdialog.c:422
+#: gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
 msgstr "Zalomiť licenciu"
 
-#: gtk/gtkaboutdialog.c:423
+#: gtk/gtkaboutdialog.c:422
 msgid "Whether to wrap the license text."
 msgstr "Či zalomiť text licencie."
 
@@ -251,93 +251,93 @@ msgstr "Prvok akcelerátora"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Prvok monitorovaný týmto akcelerátorovým popisom"
 
-#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:191 gtk/gtkactiongroup.c:137 gtk/gtkprinter.c:119
 msgid "Name"
 msgstr "Meno"
 
-#: gtk/gtkaction.c:191
+#: gtk/gtkaction.c:192
 msgid "A unique name for the action."
 msgstr "Jednoznačné meno akcie."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
+#: gtk/gtkaction.c:199 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
 #: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Označenie"
 
-#: gtk/gtkaction.c:199
+#: gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
 msgstr "Text použitý v menu a tlačidlách, ktoré túto akciu aktivujú."
 
-#: gtk/gtkaction.c:206
+#: gtk/gtkaction.c:207
 msgid "Short label"
 msgstr "Krátky text"
 
-#: gtk/gtkaction.c:207
+#: gtk/gtkaction.c:208
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Kratší text, ktorý sa dá použiť pre tlačidlá v paneli nástrojov."
 
-#: gtk/gtkaction.c:213
+#: gtk/gtkaction.c:214
 msgid "Tooltip"
 msgstr "Rada"
 
-#: gtk/gtkaction.c:214
+#: gtk/gtkaction.c:215
 msgid "A tooltip for this action."
 msgstr "Rada pre túto akciu."
 
-#: gtk/gtkaction.c:220
+#: gtk/gtkaction.c:221
 msgid "Stock Icon"
 msgstr "Štandardná ikona"
 
-#: gtk/gtkaction.c:221
+#: gtk/gtkaction.c:222
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Štandardná ikona zobrazená v prvok pre túto akciu."
 
-#: gtk/gtkaction.c:238 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
+#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "Názov ikony"
 
-#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
 #: gtk/gtkstatusicon.c:171
 msgid "The name of the icon from the icon theme"
 msgstr "Názov ikony z témy ikon"
 
-#: gtk/gtkaction.c:245 gtk/gtktoolitem.c:130
+#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
 msgstr "Viditeľný pre horizontálny"
 
-#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:131
+#: gtk/gtkaction.c:247 gtk/gtktoolitem.c:131
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr "Či je položka panelu nástrojov viditeľná aj pre horizontálny panel."
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:262
 msgid "Visible when overflown"
 msgstr "Viditeľný pri pretečení"
 
-#: gtk/gtkaction.c:262
+#: gtk/gtkaction.c:263
 #, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr "Ak TRUE, prázdne medzi-menu pre túto akciu nebudú zobrazené."
 
-#: gtk/gtkaction.c:269 gtk/gtktoolitem.c:137
+#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
 msgstr "Viditeľný pre vertikálny"
 
-#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:138
+#: gtk/gtkaction.c:271 gtk/gtktoolitem.c:138
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "Či je položka panelu nástrojov viditeľná aj pre vertikálny panel."
 
-#: gtk/gtkaction.c:277 gtk/gtktoolitem.c:144
+#: gtk/gtkaction.c:278 gtk/gtktoolitem.c:144
 msgid "Is important"
 msgstr "Je dôležitá"
 
-#: gtk/gtkaction.c:278
+#: gtk/gtkaction.c:279
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -345,37 +345,37 @@ msgstr ""
 "Či je táto akcia považovaná za dôležitú. Ak TRUE, toolitem pre túto akciu "
 "budú zobrazovať text v režime GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:286
+#: gtk/gtkaction.c:287
 msgid "Hide if empty"
 msgstr "Skryť ak prázdne"
 
-#: gtk/gtkaction.c:287
+#: gtk/gtkaction.c:288
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Ak TRUE, prázdne medzi-menu pre túto akciu nebudú zobrazené."
 
-#: gtk/gtkaction.c:293 gtk/gtkactiongroup.c:143 gtk/gtkcellrenderer.c:193
+#: gtk/gtkaction.c:294 gtk/gtkactiongroup.c:144 gtk/gtkcellrenderer.c:193
 #: gtk/gtkwidget.c:458
 msgid "Sensitive"
 msgstr "Citlivý"
 
-#: gtk/gtkaction.c:294
+#: gtk/gtkaction.c:295
 msgid "Whether the action is enabled."
 msgstr "Či je akcia povolená."
 
-#: gtk/gtkaction.c:300 gtk/gtkactiongroup.c:150 gtk/gtkstatusicon.c:205
+#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:205
 #: gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:451
 msgid "Visible"
 msgstr "Viditeľný"
 
-#: gtk/gtkaction.c:301
+#: gtk/gtkaction.c:302
 msgid "Whether the action is visible."
 msgstr "Či je akcia viditeľná."
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:308
 msgid "Action Group"
 msgstr "Skupina akcií"
 
-#: gtk/gtkaction.c:308
+#: gtk/gtkaction.c:309
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
@@ -383,15 +383,15 @@ msgstr ""
 "GtkActionGroup, s ktorou je táto GtkAction asociovaná, alebo NULL (pre "
 "interné použitie)."
 
-#: gtk/gtkactiongroup.c:137
+#: gtk/gtkactiongroup.c:138
 msgid "A name for the action group."
 msgstr "Meno skupiny akcií."
 
-#: gtk/gtkactiongroup.c:144
+#: gtk/gtkactiongroup.c:145
 msgid "Whether the action group is enabled."
 msgstr "Či je skupina akcií povolená."
 
-#: gtk/gtkactiongroup.c:151
+#: gtk/gtkactiongroup.c:152
 msgid "Whether the action group is visible."
 msgstr "Či je skupina akcií viditeľná."
 
@@ -724,7 +724,7 @@ msgstr ""
 "Ak je nastavené, text sa použije pre voľbu štandardnej položky namiesto "
 "zobrazenia"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:646 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Ohnisko pri kliknutí"
 
@@ -840,27 +840,27 @@ msgstr "Zobraziť obrázky tlačidiel"
 msgid "Whether stock icons should be shown in buttons"
 msgstr ""
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:417
 msgid "Year"
 msgstr "Rok"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:418
 msgid "The selected year"
 msgstr "Zvolený rok"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:424
 msgid "Month"
 msgstr "Mesiac"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:425
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Zvolený mesiac (ako číslo medzi 0 a 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:431
 msgid "Day"
 msgstr "Deň"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:432
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -868,35 +868,35 @@ msgstr ""
 "Zvolený deň (ako číslo medzi 1 a 31, alebo 0 pre odznačenie aktuálne "
 "zvoleného dňa)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:446
 msgid "Show Heading"
 msgstr "Zobraziť záhlavie"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:447
 msgid "If TRUE, a heading is displayed"
 msgstr "Ak je TRUE, záhlavie je zobrazené"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:461
 msgid "Show Day Names"
 msgstr "Zobraziť názvy dní"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:462
 msgid "If TRUE, day names are displayed"
 msgstr "Ak je TRUE, názvy dní sú zobrazené"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:475
 msgid "No Month Change"
 msgstr "Bez zmeny mesiaca"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:476
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Ak je TRUE, zvolený mesiac nemôže byť zmenený"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:490
 msgid "Show Week Numbers"
 msgstr "Zobraziť čísla týždňov"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:491
 msgid "If TRUE, week numbers are displayed"
 msgstr "Ak je TRUE, čísla týždňov sú zobrazené"
 
@@ -1339,7 +1339,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:536
+#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:537
 msgid "Wrap width"
 msgstr "Šírka zalomenia"
 
@@ -1676,94 +1676,94 @@ msgstr "Hodnota v zozname"
 msgid "Whether entered values must already be present in the list"
 msgstr "Či musí byť zadaná hodnota už v zozname"
 
-#: gtk/gtkcombobox.c:519
+#: gtk/gtkcombobox.c:520
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:521
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Model pre stromový pohľad"
 
-#: gtk/gtkcombobox.c:537
+#: gtk/gtkcombobox.c:538
 msgid "Wrap width for laying out the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:560
 #, fuzzy
 msgid "Row span column"
 msgstr "Rozstup riadkov"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:561
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:581
+#: gtk/gtkcombobox.c:582
 #, fuzzy
 msgid "Column span column"
 msgstr "Rozstup stĺpcov"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:583
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:602
+#: gtk/gtkcombobox.c:603
 msgid "Active item"
 msgstr "Aktívna položka"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:604
 msgid "The item which is currently active"
 msgstr "Položka, ktorá je teraz aktívna"
 
-#: gtk/gtkcombobox.c:622 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Pridať odtrhávatká do menu"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:624
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Či majú byť záložky rovnako veľké"
 
-#: gtk/gtkcombobox.c:638 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
 msgid "Has Frame"
 msgstr "Má rám"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:640
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Či sa dá stĺpec preusporiadať pomocou hlavičiek"
 
-#: gtk/gtkcombobox.c:647
+#: gtk/gtkcombobox.c:648
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Či je text v popise možné vybrať myšou"
 
-#: gtk/gtkcombobox.c:662 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Titulok pre odtrhnutie"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:664
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Titulok, ktorý bude zobrazený v prípade, že bude toto meno odtrhnuté"
 
-#: gtk/gtkcombobox.c:680
+#: gtk/gtkcombobox.c:681
 #, fuzzy
 msgid "Popup shown"
 msgstr "Šírka čiary fokusu"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:682
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Či má byť zobrazený okraj"
 
-#: gtk/gtkcombobox.c:687
+#: gtk/gtkcombobox.c:688
 msgid "Appears as list"
 msgstr "Vyzerá ako zoznam"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:689
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -3455,12 +3455,12 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:226
 #, fuzzy
 msgid "Page Setup"
 msgstr "Veľkosť stránky"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
 msgid "Track Print Status"
 msgstr ""
 
@@ -3470,150 +3470,150 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:844
+#: gtk/gtkprintoperation.c:846
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Štandardná výška"
 
-#: gtk/gtkprintoperation.c:845
+#: gtk/gtkprintoperation.c:847
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
+#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:882
+#: gtk/gtkprintoperation.c:884
 #, fuzzy
 msgid "Job Name"
 msgstr "Názov ikony"
 
-#: gtk/gtkprintoperation.c:883
+#: gtk/gtkprintoperation.c:885
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:906
+#: gtk/gtkprintoperation.c:908
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Počet kanálov"
 
-#: gtk/gtkprintoperation.c:907
+#: gtk/gtkprintoperation.c:909
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Počet riadkov v tabuľke"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
+#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "Current Page"
 msgstr "Aktuálna hodnota alfa"
 
-#: gtk/gtkprintoperation.c:929
+#: gtk/gtkprintoperation.c:931
 #, fuzzy
 msgid "The current page in the document."
 msgstr "Veľkosť stránky prispôsobenia"
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:952
 #, fuzzy
 msgid "Use full page"
 msgstr "Použiť alfu"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:953
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:972
+#: gtk/gtkprintoperation.c:974
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:991
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:990
+#: gtk/gtkprintoperation.c:992
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1009
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Dialógové okno"
 
-#: gtk/gtkprintoperation.c:1008
+#: gtk/gtkprintoperation.c:1010
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1025
+#: gtk/gtkprintoperation.c:1033
 #, fuzzy
 msgid "Allow Async"
 msgstr "Povoliť pravidlá"
 
-#: gtk/gtkprintoperation.c:1026
+#: gtk/gtkprintoperation.c:1034
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1049 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
 #, fuzzy
 msgid "Export filename"
 msgstr "Názov súboru"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1072
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1073
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Prepne stav tlačidla"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1093
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1094
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1104
+#: gtk/gtkprintoperation.c:1112
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Vlastná paleta"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1113
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:226
+#: gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Veľkosť stránky prispôsobenia"
 
-#: gtk/gtkprintunixdialog.c:251
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Zvolený rok"
 
-#: gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintunixdialog.c:253
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Položka, ktorá je teraz aktívna"
 
-#: gtk/gtkprogress.c:99
+#: gtk/gtkprogress.c:100
 msgid "Activity mode"
 msgstr "Aktívny mód"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:101
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3623,19 +3623,19 @@ msgstr ""
 "niečo deje, ale nezobrazuje, aká veľká časť už je dokončená. To sa používa v "
 "prípade, že niečo robíte, ale neviete, ako dlho to bude trvať"
 
-#: gtk/gtkprogress.c:107
+#: gtk/gtkprogress.c:108
 msgid "Show text"
 msgstr "Zobraziť text"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:109
 msgid "Whether the progress is shown as text"
 msgstr "Či sa má priebeh zobraziť ako text"
 
-#: gtk/gtkprogress.c:115
+#: gtk/gtkprogress.c:116
 msgid "Text x alignment"
 msgstr "X zarovnanie textu"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:117
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3643,11 +3643,11 @@ msgstr ""
 "Číslo medzi 0.0 a 1.0 udávajúce horizontálne zarovnanie textu v prvku "
 "priebehu"
 
-#: gtk/gtkprogress.c:124
+#: gtk/gtkprogress.c:125
 msgid "Text y alignment"
 msgstr "Y zarovnanie textu"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:126
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"

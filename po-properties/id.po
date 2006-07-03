@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:14-0400\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -118,11 +118,11 @@ msgstr "Point Font"
 msgid "The resolution for fonts on the screen"
 msgstr "Bagaimana jangkauan akan diupdate pada layar"
 
-#: gtk/gtkaboutdialog.c:207
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Nama program"
 
-#: gtk/gtkaboutdialog.c:208
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -130,43 +130,43 @@ msgstr ""
 "Nama program. Jika tidak ada isinya, maka mengacu pada g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:222
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Versi program"
 
-#: gtk/gtkaboutdialog.c:223
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Versi program ini"
 
-#: gtk/gtkaboutdialog.c:237
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Kalimat hak cipta"
 
-#: gtk/gtkaboutdialog.c:238
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Informasi hak cipta program"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Teks keterangan"
 
-#: gtk/gtkaboutdialog.c:256
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Keterangan mengenai program"
 
-#: gtk/gtkaboutdialog.c:290
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "URL Situs Web"
 
-#: gtk/gtkaboutdialog.c:291
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "URL taut situs program ini"
 
-#: gtk/gtkaboutdialog.c:307
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Label situs web"
 
-#: gtk/gtkaboutdialog.c:308
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -174,44 +174,44 @@ msgstr ""
 "Label yang digunakan untuk taut situs program ini. Jika tidak ada isinya, "
 "maka isinya akan dibuat sama dengan URL-nya"
 
-#: gtk/gtkaboutdialog.c:324
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Penyusun"
 
-#: gtk/gtkaboutdialog.c:325
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Daftar penyusun program ini"
 
-#: gtk/gtkaboutdialog.c:341
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Penulis Dokumentasi"
 
-#: gtk/gtkaboutdialog.c:342
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Daftar orang yang menulis dokumentasi program ini"
 
-#: gtk/gtkaboutdialog.c:358
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Seniman"
 
-#: gtk/gtkaboutdialog.c:359
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Daftar orang yang menyumbangkan karya seninya pada program ini"
 
-#: gtk/gtkaboutdialog.c:376
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Pengalih bahasa"
 
-#: gtk/gtkaboutdialog.c:377
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Pengalih bahasa. Kalimat ini harus dibuat agar dapat diterjemahkan"
 
-#: gtk/gtkaboutdialog.c:392
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Lambang"
 
-#: gtk/gtkaboutdialog.c:393
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -219,20 +219,20 @@ msgstr ""
 "Lambang untuk kotak keterangan program. Jika tidak ada isinya, maka mengacu "
 "ke gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Nama Ikon Lambang"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Nama ikon yang digunakan sebagai lambang pada kotak keterangan program."
 
-#: gtk/gtkaboutdialog.c:422
+#: gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
 msgstr "Potong lisensi"
 
-#: gtk/gtkaboutdialog.c:423
+#: gtk/gtkaboutdialog.c:422
 msgid "Whether to wrap the license text."
 msgstr "Menentukan apakah teks lisensi dipotong"
 
@@ -252,64 +252,64 @@ msgstr "Widget Akselerator"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget yang dimonitor saat akselerator berubah"
 
-#: gtk/gtkaction.c:190 gtk/gtkactiongroup.c:136 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:191 gtk/gtkactiongroup.c:137 gtk/gtkprinter.c:119
 msgid "Name"
 msgstr "Nama"
 
-#: gtk/gtkaction.c:191
+#: gtk/gtkaction.c:192
 msgid "A unique name for the action."
 msgstr "Nama unik untuk aksi ini."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
+#: gtk/gtkaction.c:199 gtk/gtkbutton.c:199 gtk/gtkexpander.c:185
 #: gtk/gtkframe.c:95 gtk/gtklabel.c:294 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Label"
 
-#: gtk/gtkaction.c:199
+#: gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Label yang digunakan sebagai isian menu dan tombol yang akan mengaktifkan "
 "aksi ini."
 
-#: gtk/gtkaction.c:206
+#: gtk/gtkaction.c:207
 msgid "Short label"
 msgstr "Label pendek"
 
-#: gtk/gtkaction.c:207
+#: gtk/gtkaction.c:208
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Label pendek yang akan digunakan sebagai tombol pada batang alat."
 
-#: gtk/gtkaction.c:213
+#: gtk/gtkaction.c:214
 msgid "Tooltip"
 msgstr "Kalimat bantuan"
 
-#: gtk/gtkaction.c:214
+#: gtk/gtkaction.c:215
 msgid "A tooltip for this action."
 msgstr "Kalimat bantuan pendek untuk aksi ini."
 
-#: gtk/gtkaction.c:220
+#: gtk/gtkaction.c:221
 msgid "Stock Icon"
 msgstr "Ikon Stok"
 
-#: gtk/gtkaction.c:221
+#: gtk/gtkaction.c:222
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Ikon stok yang ditampilkan pada widget untuk melambangkan aksi ini."
 
-#: gtk/gtkaction.c:238 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
+#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "Nama Ikon"
 
-#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
 #: gtk/gtkstatusicon.c:171
 msgid "The name of the icon from the icon theme"
 msgstr "Nama ikon dari tema ikon"
 
-#: gtk/gtkaction.c:245 gtk/gtktoolitem.c:130
+#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
 msgstr "Nampak pada kondisi horisontal"
 
-#: gtk/gtkaction.c:246 gtk/gtktoolitem.c:131
+#: gtk/gtkaction.c:247 gtk/gtktoolitem.c:131
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -317,11 +317,11 @@ msgstr ""
 "Menentukan apakah isi batang alat ditunjukkan pada saat batang alat dalam "
 "keadaan horisontal."
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:262
 msgid "Visible when overflown"
 msgstr "Nampak pada kondisi overflow"
 
-#: gtk/gtkaction.c:262
+#: gtk/gtkaction.c:263
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
@@ -329,11 +329,11 @@ msgstr ""
 "Jika diisi TRUE, maka proksi tooltiem untuk aksi ini dilambangkan dalam menu "
 "overflow pada batang alat."
 
-#: gtk/gtkaction.c:269 gtk/gtktoolitem.c:137
+#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
 msgstr "Nampak dalam kondisi vertikal"
 
-#: gtk/gtkaction.c:270 gtk/gtktoolitem.c:138
+#: gtk/gtkaction.c:271 gtk/gtktoolitem.c:138
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -341,11 +341,11 @@ msgstr ""
 "Menentukan apakah isi batang alat ditunjukkan pada saat batang alat dalam "
 "keadaan vertikal."
 
-#: gtk/gtkaction.c:277 gtk/gtktoolitem.c:144
+#: gtk/gtkaction.c:278 gtk/gtktoolitem.c:144
 msgid "Is important"
 msgstr "Penting?"
 
-#: gtk/gtkaction.c:278
+#: gtk/gtkaction.c:279
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -354,39 +354,39 @@ msgstr ""
 "toolitem untuk aksi ini akan menampilkan teks pada moda "
 "GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:286
+#: gtk/gtkaction.c:287
 msgid "Hide if empty"
 msgstr "Sembunyikan bila kosong"
 
-#: gtk/gtkaction.c:287
+#: gtk/gtkaction.c:288
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Jika diisi TRUE, maka proksi menu yang kosong untuk aksi ini akan "
 "disembunyikan"
 
-#: gtk/gtkaction.c:293 gtk/gtkactiongroup.c:143 gtk/gtkcellrenderer.c:193
+#: gtk/gtkaction.c:294 gtk/gtkactiongroup.c:144 gtk/gtkcellrenderer.c:193
 #: gtk/gtkwidget.c:458
 msgid "Sensitive"
 msgstr "Sensitif"
 
-#: gtk/gtkaction.c:294
+#: gtk/gtkaction.c:295
 msgid "Whether the action is enabled."
 msgstr "Menentukan apkaah aksi diaktifkan"
 
-#: gtk/gtkaction.c:300 gtk/gtkactiongroup.c:150 gtk/gtkstatusicon.c:205
+#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:205
 #: gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:451
 msgid "Visible"
 msgstr "Terlihat"
 
-#: gtk/gtkaction.c:301
+#: gtk/gtkaction.c:302
 msgid "Whether the action is visible."
 msgstr "Menentukan apakah aksi terlihat atau tidak"
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:308
 msgid "Action Group"
 msgstr "Kelompok Aksi"
 
-#: gtk/gtkaction.c:308
+#: gtk/gtkaction.c:309
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
@@ -394,15 +394,15 @@ msgstr ""
 "GtkActionGroup yang digunakan pada GtkAction ini, atau isi saja NULL (untuk "
 "keperluan internal)."
 
-#: gtk/gtkactiongroup.c:137
+#: gtk/gtkactiongroup.c:138
 msgid "A name for the action group."
 msgstr "Nama kelompok aksi ini."
 
-#: gtk/gtkactiongroup.c:144
+#: gtk/gtkactiongroup.c:145
 msgid "Whether the action group is enabled."
 msgstr "Menentukan apakah kelompok aksi aktif atau tidak"
 
-#: gtk/gtkactiongroup.c:151
+#: gtk/gtkactiongroup.c:152
 msgid "Whether the action group is visible."
 msgstr "Menentukan apakah kelompok aksi tampak atau tidak"
 
@@ -736,7 +736,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jika ini diisi, tulisan pada label akan dipilih dari item stok"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:646 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Klik untuk membuat fokus"
 
@@ -856,27 +856,27 @@ msgstr "Tampilkan gambar pada tombol"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Menentukan apakah icon stock ditampilkan pada tombol"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:417
 msgid "Year"
 msgstr "Tahun"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:418
 msgid "The selected year"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:424
 msgid "Month"
 msgstr "Bulan"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:425
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Bulan yang dipilih (dalam angka mulai 0 hingga 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:431
 msgid "Day"
 msgstr "Hari"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:432
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -884,35 +884,35 @@ msgstr ""
 "Hari yang dipilih (dalam angka dari 1 hingga 31, atau 0 untuk membatalkan "
 "pilihan pada hari yang sudah dipilih)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:446
 msgid "Show Heading"
 msgstr "Tampilkan heading"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:447
 msgid "If TRUE, a heading is displayed"
 msgstr "Bila bernilai TRUE, heading ditampilkan"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:461
 msgid "Show Day Names"
 msgstr "Tampilkan nama-nama hari"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:462
 msgid "If TRUE, day names are displayed"
 msgstr "Bila bernilai TRUE, nama-nama hari ditampilkan"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:475
 msgid "No Month Change"
 msgstr "Bulan Tetap"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:476
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Bila bernilai TRUE, bulan yang sudah dipilih tidak dapat diganti"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:490
 msgid "Show Week Numbers"
 msgstr "Tampilkan angka minggu"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:491
 msgid "If TRUE, week numbers are displayed"
 msgstr "Bila bernilai TRUE, angka minggu ditampilkan"
 
@@ -1368,7 +1368,7 @@ msgstr ""
 "Cara memecah kalimat dalam baris-baris pada saat kotak sel tidak memiliki "
 "cukup ruang untuk menampilkan keseluruhan teks"
 
-#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:536
+#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:537
 msgid "Wrap width"
 msgstr "Potong lebar"
 
@@ -1703,90 +1703,90 @@ msgstr "Nilai dalam daftar"
 msgid "Whether entered values must already be present in the list"
 msgstr "Menentukan apakah nilai yang dimasukan selalu ada pada daftar"
 
-#: gtk/gtkcombobox.c:519
+#: gtk/gtkcombobox.c:520
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:521
 msgid "The model for the combo box"
 msgstr "Model kotak combo"
 
-#: gtk/gtkcombobox.c:537
+#: gtk/gtkcombobox.c:538
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Lebar pemotongan untuk menata isi pada kotak-kotak"
 
-#: gtk/gtkcombobox.c:559
+#: gtk/gtkcombobox.c:560
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:561
 msgid "TreeModel column containing the row span values"
 msgstr "Kolom TreeModel berisi nilai row span"
 
-#: gtk/gtkcombobox.c:581
+#: gtk/gtkcombobox.c:582
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:583
 msgid "TreeModel column containing the column span values"
 msgstr "Kolom TreeModel berisi nilai column span"
 
-#: gtk/gtkcombobox.c:602
+#: gtk/gtkcombobox.c:603
 msgid "Active item"
 msgstr "Objek aktif"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:604
 msgid "The item which is currently active"
 msgstr "Objek yang aktif"
 
-#: gtk/gtkcombobox.c:622 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Tambahkan penyobek pada menu"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:624
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Apakah dropdown harus memiliki sebuah objek menu tearoff"
 
-#: gtk/gtkcombobox.c:638 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
 msgid "Has Frame"
 msgstr "Ada bingkai atau tidak"
 
-#: gtk/gtkcombobox.c:639
+#: gtk/gtkcombobox.c:640
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Menentukan apakah kotak combo mengambarkan suatu bingkai di sekitar anak"
 
-#: gtk/gtkcombobox.c:647
+#: gtk/gtkcombobox.c:648
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Menentukan apakah kotak combo memfokuskan ketika diklik dengan mouse"
 
-#: gtk/gtkcombobox.c:662 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Judul saat disobek"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:664
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Judul yang ditampilkan jendela manager saat menu ini disobek"
 
-#: gtk/gtkcombobox.c:680
+#: gtk/gtkcombobox.c:681
 #, fuzzy
 msgid "Popup shown"
 msgstr "Lebar popup"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:682
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtkcombobox.c:687
+#: gtk/gtkcombobox.c:688
 msgid "Appears as list"
 msgstr "Tampilkan sebagai daftar"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:689
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Menentukan apakah dropdowns harus kelihatan seperti daftar dari pada menu"
@@ -3486,12 +3486,12 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:225
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:226
 #, fuzzy
 msgid "Page Setup"
 msgstr "Ukuran Halaman"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:971
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
 msgid "Track Print Status"
 msgstr ""
 
@@ -3501,151 +3501,151 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:844
+#: gtk/gtkprintoperation.c:846
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Tinggi Awal"
 
-#: gtk/gtkprintoperation.c:845
+#: gtk/gtkprintoperation.c:847
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:863 gtk/gtkprintunixdialog.c:243
+#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:864 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:882
+#: gtk/gtkprintoperation.c:884
 #, fuzzy
 msgid "Job Name"
 msgstr "Nama Ikon"
 
-#: gtk/gtkprintoperation.c:883
+#: gtk/gtkprintoperation.c:885
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:906
+#: gtk/gtkprintoperation.c:908
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Jumlah Kanal"
 
-#: gtk/gtkprintoperation.c:907
+#: gtk/gtkprintoperation.c:909
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Jumlah baris dalam tabel"
 
-#: gtk/gtkprintoperation.c:928 gtk/gtkprintunixdialog.c:233
+#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "Current Page"
 msgstr "Alpha saat ini"
 
-#: gtk/gtkprintoperation.c:929
+#: gtk/gtkprintoperation.c:931
 #, fuzzy
 msgid "The current page in the document."
 msgstr "Ukuran halaman"
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:952
 #, fuzzy
 msgid "Use full page"
 msgstr "Gunakan alfa"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:953
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:972
+#: gtk/gtkprintoperation.c:974
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:991
 #, fuzzy
 msgid "Unit"
 msgstr "Penting"
 
-#: gtk/gtkprintoperation.c:990
+#: gtk/gtkprintoperation.c:992
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1009
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkprintoperation.c:1008
+#: gtk/gtkprintoperation.c:1010
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1025
+#: gtk/gtkprintoperation.c:1033
 #, fuzzy
 msgid "Allow Async"
 msgstr "Membolehkan aturan"
 
-#: gtk/gtkprintoperation.c:1026
+#: gtk/gtkprintoperation.c:1034
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1049 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
 #, fuzzy
 msgid "Export filename"
 msgstr "Nama file"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1072
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1073
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Status togel tombol"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1093
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1094
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1104
+#: gtk/gtkprintoperation.c:1112
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Palet pilihan sendiri"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1113
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:226
+#: gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Ukuran halaman"
 
-#: gtk/gtkprintunixdialog.c:251
+#: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintunixdialog.c:253
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Objek yang aktif"
 
-#: gtk/gtkprogress.c:99
+#: gtk/gtkprogress.c:100
 msgid "Activity mode"
 msgstr "Modus aktif"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:101
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3657,19 +3657,19 @@ msgstr ""
 "melakukan sesuatu yang Anda sendiri tidak tahu berapa lama waktu yang "
 "dibutuhkan"
 
-#: gtk/gtkprogress.c:107
+#: gtk/gtkprogress.c:108
 msgid "Show text"
 msgstr "Tampilkan teks"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:109
 msgid "Whether the progress is shown as text"
 msgstr "Menentukan apakah kemajuan aktivitas ditampilkan dalam bentuk teks"
 
-#: gtk/gtkprogress.c:115
+#: gtk/gtkprogress.c:116
 msgid "Text x alignment"
 msgstr "Penyesuaian x pada teks"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:117
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3677,11 +3677,11 @@ msgstr ""
 "Angka dari 0.0 hingga 1.0 yang menentukan penyesuaian horisontal pada teks "
 "pada widget progress"
 
-#: gtk/gtkprogress.c:124
+#: gtk/gtkprogress.c:125
 msgid "Text y alignment"
 msgstr "Penyesuaian y pada teks"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:126
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"

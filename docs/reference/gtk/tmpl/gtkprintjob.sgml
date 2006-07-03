@@ -46,7 +46,6 @@ and should not be directly accessed.
 
 @printjob: the object which received the signal.
 
-
 <!-- ##### ARG GtkPrintJob:page-setup ##### -->
 <para>
 
@@ -79,7 +78,7 @@ It is called when the print job has been completely sent.
 </para>
 
 @print_job: the #GtkPrintJob
-@user_data: user data that has been passed to gtk_print_job_send() 
+@user_data: user data that has been passed to gtk_print_job_send()
 @error: a #GError that contains error information if the sending
   of the print job failed, otherwise %NULL
 

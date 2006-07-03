@@ -1,5 +1,7 @@
 2006-07-02  Matthias Clasen  <mclasen@redhat.com>
 	
+	* === Released 2.10.0 ===
+
 	* gtk/gtkmenubar.c (window_key_press_handler): Treat
 	"" like NULL when parsing the menu-bar-accel setting.	
 	* gtk/gtkmenu.c (gtk_menu_key_press): Here too.  

@@ -206,7 +206,9 @@ the #GtkProgress.
 
 @progress: a #GtkProgress.
 @value: the current progress value.
-@min: the minimum progress value.
+@hmin: 
 @max: the maximum progress value.
+<!-- # Unused Parameters # -->
+@min: the minimum progress value.
 
 

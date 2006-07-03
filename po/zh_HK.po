@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-21 21:18-0400\n"
+"POT-Creation-Date: 2006-07-02 23:13-0400\n"
 "PO-Revision-Date: 2006-01-15 15:53+0800\n"
 "Last-Translator: Abel Cheung <abel@oaka.org>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -1093,46 +1093,46 @@ msgstr "顏色"
 msgid "Make X calls synchronous"
 msgstr "使用同步方式調用 X 函數"
 
-#: gtk/gtkaboutdialog.c:274 gtk/gtkaboutdialog.c:2075
+#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2074
 msgid "License"
 msgstr "授權條款"
 
-#: gtk/gtkaboutdialog.c:275
+#: gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
 msgstr "程式的授權條款"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:504
+#: gtk/gtkaboutdialog.c:503
 msgid "C_redits"
 msgstr "鳴謝(_R)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:516
+#: gtk/gtkaboutdialog.c:515
 msgid "_License"
 msgstr "授權條款(_L)"
 
-#: gtk/gtkaboutdialog.c:753
+#: gtk/gtkaboutdialog.c:752
 #, c-format
 msgid "About %s"
 msgstr "關於 %s"
 
-#: gtk/gtkaboutdialog.c:2003
+#: gtk/gtkaboutdialog.c:2002
 msgid "Credits"
 msgstr "鳴謝"
 
-#: gtk/gtkaboutdialog.c:2029
+#: gtk/gtkaboutdialog.c:2028
 msgid "Written by"
 msgstr "程式編寫"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2031
 msgid "Documented by"
 msgstr "文件編寫"
 
-#: gtk/gtkaboutdialog.c:2044
+#: gtk/gtkaboutdialog.c:2043
 msgid "Translated by"
 msgstr "翻譯"
 
-#: gtk/gtkaboutdialog.c:2048
+#: gtk/gtkaboutdialog.c:2047
 msgid "Artwork by"
 msgstr "美工設計"
 
@@ -1215,7 +1215,7 @@ msgstr "反斜鍵"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:696
+#: gtk/gtkcalendar.c:694
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1223,7 +1223,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:718
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1235,7 +1235,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1606
+#: gtk/gtkcalendar.c:1604
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1250,7 +1250,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1637 gtk/gtkcalendar.c:2215
+#: gtk/gtkcalendar.c:1635 gtk/gtkcalendar.c:2213
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1266,7 +1266,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2089
+#: gtk/gtkcalendar.c:1669 gtk/gtkcalendar.c:2087
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "calendar:week_start:0"
@@ -1282,7 +1282,7 @@ msgstr "calendar:week_start:0"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1880
+#: gtk/gtkcalendar.c:1878
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1440,11 +1440,11 @@ msgstr "色彩圓盤"
 msgid "Color Selection"
 msgstr "色彩選擇"
 
-#: gtk/gtkentry.c:4906 gtk/gtktextview.c:7231
+#: gtk/gtkentry.c:4913 gtk/gtktextview.c:7231
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:4920 gtk/gtktextview.c:7245
+#: gtk/gtkentry.c:4927 gtk/gtktextview.c:7245
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
@@ -2058,89 +2058,89 @@ msgstr "圖示「%s」不存在於佈景主題中"
 msgid "Default"
 msgstr "預設"
 
-#: gtk/gtkinputdialog.c:194
+#: gtk/gtkinputdialog.c:191
 msgid "Input"
 msgstr "輸入"
 
-#: gtk/gtkinputdialog.c:209
+#: gtk/gtkinputdialog.c:206
 msgid "No extended input devices"
 msgstr "沒有延伸輸入裝置"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:219
 msgid "_Device:"
 msgstr "裝置(_D)："
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:236
 msgid "Disabled"
 msgstr "已失效"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:243
 msgid "Screen"
 msgstr "螢幕"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "視窗"
 
-#: gtk/gtkinputdialog.c:260
+#: gtk/gtkinputdialog.c:257
 #, fuzzy
 msgid "_Mode:"
 msgstr "模式(_M)："
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:281
+#: gtk/gtkinputdialog.c:278
 #, fuzzy
 msgid "Axes"
 msgstr "軸(_A)"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:299
+#: gtk/gtkinputdialog.c:296
 #, fuzzy
 msgid "Keys"
 msgstr "按鍵(_K)"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:521
 msgid "_X:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:522
 msgid "_Y:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:523
 #, fuzzy
 msgid "_Pressure:"
 msgstr "力度"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:524
 #, fuzzy
 msgid "X _tilt:"
 msgstr "X 傾斜"
 
-#: gtk/gtkinputdialog.c:528
+#: gtk/gtkinputdialog.c:525
 #, fuzzy
 msgid "Y t_ilt:"
 msgstr "Y 傾斜"
 
-#: gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:526
 #, fuzzy
 msgid "_Wheel:"
 msgstr "滾輪"
 
-#: gtk/gtkinputdialog.c:577
+#: gtk/gtkinputdialog.c:574
 msgid "none"
 msgstr "無"
 
-#: gtk/gtkinputdialog.c:614 gtk/gtkinputdialog.c:650
+#: gtk/gtkinputdialog.c:611 gtk/gtkinputdialog.c:647
 msgid "(disabled)"
 msgstr "（已失效）"
 
-#: gtk/gtkinputdialog.c:643
+#: gtk/gtkinputdialog.c:640
 msgid "(unknown)"
 msgstr "（未知）"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:743
+#: gtk/gtkinputdialog.c:740
 #, fuzzy
 msgid "Cl_ear"
 msgstr "清除(_C)"
@@ -2199,7 +2199,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6793
+#: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6794
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2257,7 +2257,7 @@ msgstr "屬性(_P)"
 msgid "_Orientation:"
 msgstr "彩度(_S)："
 
-#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2091
+#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2102
 #, fuzzy
 msgid "Page Setup"
 msgstr "第 %u 頁"
@@ -2319,61 +2319,61 @@ msgid "_Save in folder:"
 msgstr "儲存於資料夾(_F)："
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1456
+#: gtk/gtkprintoperation.c:1464
 msgid "print operation status|Initial state"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1458
+#: gtk/gtkprintoperation.c:1466
 msgid "print operation status|Preparing to print"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1460
+#: gtk/gtkprintoperation.c:1468
 msgid "print operation status|Generating data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1462
+#: gtk/gtkprintoperation.c:1470
 msgid "print operation status|Sending data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1464
+#: gtk/gtkprintoperation.c:1472
 msgid "print operation status|Waiting"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1466
+#: gtk/gtkprintoperation.c:1474
 msgid "print operation status|Blocking on issue"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1468
+#: gtk/gtkprintoperation.c:1476
 msgid "print operation status|Printing"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1470
+#: gtk/gtkprintoperation.c:1478
 msgid "print operation status|Finished"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1472
+#: gtk/gtkprintoperation.c:1480
 msgid "print operation status|Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1947
+#: gtk/gtkprintoperation.c:1955
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1949 gtk/gtkprintoperation.c:2205
+#: gtk/gtkprintoperation.c:1957 gtk/gtkprintoperation.c:2213
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "警告"
 
-#: gtk/gtkprintoperation.c:1952
+#: gtk/gtkprintoperation.c:1960
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "列印(_P)"
@@ -2388,7 +2388,7 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:374 gtk/gtkprintoperation-win32.c:1390
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 #, fuzzy
 msgid "Application"
 msgstr "位置(_L)："
@@ -2445,184 +2445,184 @@ msgstr ""
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1437
+#: gtk/gtkprintunixdialog.c:1448
 #, fuzzy
 msgid "Printer"
 msgstr "列印(_P)"
 
-#: gtk/gtkprintunixdialog.c:1445
+#: gtk/gtkprintunixdialog.c:1456
 #, fuzzy
 msgid "Location"
 msgstr "位置(_L)："
 
-#: gtk/gtkprintunixdialog.c:1454
+#: gtk/gtkprintunixdialog.c:1465
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1476
+#: gtk/gtkprintunixdialog.c:1487
 #, fuzzy
 msgid "Print Pages"
 msgstr "預覽列印(_V)"
 
-#: gtk/gtkprintunixdialog.c:1480
+#: gtk/gtkprintunixdialog.c:1491
 #, fuzzy
 msgid "_All"
 msgstr "套用(_A)"
 
-#: gtk/gtkprintunixdialog.c:1487
+#: gtk/gtkprintunixdialog.c:1498
 #, fuzzy
 msgid "C_urrent"
 msgstr "建立(_R)"
 
-#: gtk/gtkprintunixdialog.c:1496
+#: gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1514
+#: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1519
+#: gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1546
 #, fuzzy
 msgid "C_ollate"
 msgstr "建立(_R)"
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1554
 #, fuzzy
 msgid "_Reverse"
 msgstr "回復(_R)"
 
-#: gtk/gtkprintunixdialog.c:1560
+#: gtk/gtkprintunixdialog.c:1571
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1947
+#: gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1951
+#: gtk/gtkprintunixdialog.c:1962
 #: modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1967
+#: gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1982
+#: gtk/gtkprintunixdialog.c:1993
 #, fuzzy
 msgid "_Only print:"
 msgstr "列印(_P)"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:1997
+#: gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1998
+#: gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1999
+#: gtk/gtkprintunixdialog.c:2010
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2002
+#: gtk/gtkprintunixdialog.c:2013
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "明度(_V)："
 
-#: gtk/gtkprintunixdialog.c:2029
+#: gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2033
+#: gtk/gtkprintunixdialog.c:2044
 #, fuzzy
 msgid "Paper _type:"
 msgstr "屬性(_P)"
 
-#: gtk/gtkprintunixdialog.c:2048
+#: gtk/gtkprintunixdialog.c:2059
 #, fuzzy
 msgid "Paper _source:"
 msgstr "屬性(_P)"
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2120
+#: gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2135
+#: gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2153
+#: gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2159
+#: gtk/gtkprintunixdialog.c:2170
 #, fuzzy
 msgid "_Now"
 msgstr "否(_N)"
 
-#: gtk/gtkprintunixdialog.c:2166
+#: gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2181
+#: gtk/gtkprintunixdialog.c:2192
 #, fuzzy
 msgid "On _hold"
 msgstr "粗體(_B)"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2206
+#: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2221
+#: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2236
+#: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2337
+#: gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2340
+#: gtk/gtkprintunixdialog.c:2351
 #, fuzzy
 msgid "Color"
 msgstr "色彩(_C)"
 
-#: gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2376
+#: gtk/gtkprintunixdialog.c:2387
 #, fuzzy
 msgid "Print"
 msgstr "列印(_P)"

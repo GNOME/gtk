@@ -229,8 +229,7 @@ at the end of range widgets.
 @GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
    thumb is at the end
 @GTK_SENSITIVITY_ON: The arrow is always sensitive
-@GTK_SENSITIVITY_OFF: The arrow is always insensitive 
-
+@GTK_SENSITIVITY_OFF: The arrow is always insensitive
 
 <!-- ##### FUNCTION gtk_range_set_lower_stepper_sensitivity ##### -->
 <para>
