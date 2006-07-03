@@ -1,3 +1,9 @@
+2006-06-26  Michael Emmel  <mike.emmel@gmail.com>
+	
+	* gdk/directfb/gdkdirectfb.h: changed ifdef to compile with api introduced
+	in directfb 0.9.25 
+	* gdk/directfb/gdkwindow-directfb.c: changed ifdef to 0.9.25 
+
 2006-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
