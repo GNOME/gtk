@@ -603,7 +603,7 @@ msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM"
 #: gdk-pixbuf/io-pnm.c:726
 #, c-format
 msgid "Premature end-of-file encountered"
-msgstr "Gặp kết thức tập tin quá sớm"
+msgstr "Gặp kết thúc tập tin quá sớm"
 
 #: gdk-pixbuf/io-pnm.c:758 gdk-pixbuf/io-pnm.c:989
 #, c-format
@@ -624,7 +624,7 @@ msgstr "Không đủ bộ nhớ để tải cấu trúc ngữ cảnh PNM"
 #: gdk-pixbuf/io-pnm.c:886
 #, c-format
 msgid "Unexpected end of PNM image data"
-msgstr "Gặp kết thức bất ngờ trong dữ liệu ảnh PNM"
+msgstr "Gặp kết thúc bất ngờ trong dữ liệu ảnh PNM"
 
 #: gdk-pixbuf/io-pnm.c:1018
 #, c-format
