@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <gdk-pixbuf/gdk-pixdata.h>
+
 #include "gtkgamma.h"
 #include "gtkcurve.h"
 #include "gtkdialog.h"
@@ -64,149 +66,177 @@ enum
     NUM_XPMS
   };
 
-static const char *const xpm[][27] =
-  {
-    /* spline: */
-    {
-      /* width height ncolors chars_per_pixel */
-      "16 16 4 1",
-      /* colors */
-      ". c None",
-      "B c #000000",
-      "+ c #BC2D2D",
-      "r c #FF0000",
-      /* pixels */
-      "..............BB",
-      ".........rrrrrrB",
-      ".......rr.......",
-      ".....B+.........",
-      "....BBB.........",
-      "....+B..........",
-      "....r...........",
-      "...r............",
-      "...r............",
-      "..r.............",
-      "..r.............",
-      ".r..............",
-      ".r..............",
-      ".r..............",
-      "B+..............",
-      "BB.............."
-    },
-    /* linear: */
-    {
-      /* width height ncolors chars_per_pixel */
-      "16 16 5 1",
-      /* colors */
-      ". c None", /* transparent */
-      "B c #000000",
-      "' c #7F7F7F",
-      "+ c #824141",
-      "r c #FF0000",
-      /* pixels */
-      "..............BB",
-      "..............+B",
-      "..............r.",
-      ".............r..",
-      ".............r..",
-      "....'B'.....r...",
-      "....BBB.....r...",
-      "....+B+....r....",
-      "....r.r....r....",
-      "...r...r..r.....",
-      "...r...r..r.....",
-      "..r.....rB+.....",
-      "..r.....BBB.....",
-      ".r......'B'.....",
-      "B+..............",
-      "BB.............."
-    },
-    /* free: */
-    {
-      /* width height ncolors chars_per_pixel */
-      "16 16 2 1",
-      /* colors */
-      ". c None",
-      "r c #FF0000",
-      /* pixels */
-      "................",
-      "................",
-      "......r.........",
-      "......r.........",
-      ".......r........",
-      ".......r........",
-      ".......r........",
-      "........r.......",
-      "........r.......",
-      "........r.......",
-      ".....r...r.rrrrr",
-      "....r....r......",
-      "...r.....r......",
-      "..r.......r.....",
-      ".r........r.....",
-      "r..............."
-    },
-    /* gamma: */
-    {
-      /* width height ncolors chars_per_pixel */
-      "16 16 10 1",
-      /* colors */
-      ". c None",
-      "B c #000000",
-      "& c #171717",
-      "# c #2F2F2F",
-      "X c #464646",
-      "= c #5E5E5E",
-      "/ c #757575",
-      "+ c #8C8C8C",
-      "- c #A4A4A4",
-      "` c #BBBBBB",
-      /* pixels */
-      "................",
-      "................",
-      "................",
-      "....B=..+B+.....",
-      "....X&`./&-.....",
-      "...../+.XX......",
-      "......B.B+......",
-      "......X.X.......",
-      "......X&+.......",
-      "......-B........",
-      "....../=........",
-      "......#B........",
-      "......BB........",
-      "......B#........",
-      "................",
-      "................"
-    },
-    /* reset: */
-    {
-      /* width height ncolors chars_per_pixel */
-      "16 16 4 1",
-      /* colors */
-      ". c None",
-      "B c #000000",
-      "+ c #824141",
-      "r c #FF0000",
-      /* pixels */
-      "..............BB",
-      "..............+B",
-      ".............r..",
-      "............r...",
-      "...........r....",
-      "..........r.....",
-      ".........r......",
-      "........r.......",
-      ".......r........",
-      "......r.........",
-      ".....r..........",
-      "....r...........",
-      "...r............",
-      "..r.............",
-      "B+..............",
-      "BB.............."
-    }
-  };
+/* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
+
+#ifdef __SUNPRO_C
+#pragma align 4 (spline_pixdata)
+#endif
+#ifdef __GNUC__
+static const guint8 spline_pixdata[] __attribute__ ((__aligned__ (4))) = 
+#else
+static const guint8 spline_pixdata[] = 
+#endif
+{ ""
+  /* Pixbuf magic (0x47646b50) */
+  "GdkP"
+  /* length: header (24) + pixel_data (182) */
+  "\0\0\0\316"
+  /* pixdata_type (0x2010002) */
+  "\2\1\0\2"
+  /* rowstride (64) */
+  "\0\0\0@"
+  /* width (16) */
+  "\0\0\0\20"
+  /* height (16) */
+  "\0\0\0\20"
+  /* pixel_data: */
+  "\216\0\0\0\0\202\0\0\0\377\211\0\0\0\0\206\377\0\0\377\1\0\0\0\377\207"
+  "\0\0\0\0\202\377\0\0\377\214\0\0\0\0\2\0\0\0\377\274--\377\215\0\0\0"
+  "\0\203\0\0\0\377\215\0\0\0\0\2\274--\377\0\0\0\377\216\0\0\0\0\1\377"
+  "\0\0\377\216\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\216\0\0"
+  "\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377"
+  "\217\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\216\0\0\0\0\2\0"
+  "\0\0\377\274--\377\216\0\0\0\0\202\0\0\0\377\216\0\0\0\0"};
+
+
+/* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
+
+#ifdef __SUNPRO_C
+#pragma align 4 (linear_pixdata)
+#endif
+#ifdef __GNUC__
+static const guint8 linear_pixdata[] __attribute__ ((__aligned__ (4))) = 
+#else
+static const guint8 linear_pixdata[] = 
+#endif
+{ ""
+  /* Pixbuf magic (0x47646b50) */
+  "GdkP"
+  /* length: header (24) + pixel_data (323) */
+  "\0\0\1["
+  /* pixdata_type (0x2010002) */
+  "\2\1\0\2"
+  /* rowstride (64) */
+  "\0\0\0@"
+  /* width (16) */
+  "\0\0\0\20"
+  /* height (16) */
+  "\0\0\0\20"
+  /* pixel_data: */
+  "\216\0\0\0\0\202\0\0\0\377\216\0\0\0\0\2\202AA\377\0\0\0\377\216\0\0"
+  "\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377"
+  "\206\0\0\0\0\3\177\177\177\377\0\0\0\377\177\177\177\377\205\0\0\0\0"
+  "\1\377\0\0\377\207\0\0\0\0\203\0\0\0\377\205\0\0\0\0\1\377\0\0\377\207"
+  "\0\0\0\0\3\202AA\377\0\0\0\377\202AA\377\204\0\0\0\0\1\377\0\0\377\210"
+  "\0\0\0\0\3\377\0\0\377\0\0\0\0\377\0\0\377\204\0\0\0\0\1\377\0\0\377"
+  "\207\0\0\0\0\1\377\0\0\377\203\0\0\0\0\1\377\0\0\377\202\0\0\0\0\1\377"
+  "\0\0\377\210\0\0\0\0\1\377\0\0\377\203\0\0\0\0\1\377\0\0\377\202\0\0"
+  "\0\0\1\377\0\0\377\207\0\0\0\0\1\377\0\0\377\205\0\0\0\0\3\377\0\0\377"
+  "\0\0\0\377\202AA\377\207\0\0\0\0\1\377\0\0\377\205\0\0\0\0\203\0\0\0"
+  "\377\206\0\0\0\0\1\377\0\0\377\206\0\0\0\0\3\177\177\177\377\0\0\0\377"
+  "\177\177\177\377\205\0\0\0\0\2\0\0\0\377\202AA\377\216\0\0\0\0\202\0"
+  "\0\0\377\216\0\0\0\0"};
+
+
+/* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
+
+#ifdef __SUNPRO_C
+#pragma align 4 (free_pixdata)
+#endif
+#ifdef __GNUC__
+static const guint8 free_pixdata[] __attribute__ ((__aligned__ (4))) = 
+#else
+static const guint8 free_pixdata[] = 
+#endif
+{ ""
+  /* Pixbuf magic (0x47646b50) */
+  "GdkP"
+  /* length: header (24) + pixel_data (204) */
+  "\0\0\0\344"
+  /* pixdata_type (0x2010002) */
+  "\2\1\0\2"
+  /* rowstride (64) */
+  "\0\0\0@"
+  /* width (16) */
+  "\0\0\0\20"
+  /* height (16) */
+  "\0\0\0\20"
+  /* pixel_data: */
+  "\246\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\220\0\0\0\0\1\377"
+  "\0\0\377\217\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\220\0\0"
+  "\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377\217\0\0\0\0\1\377\0\0\377"
+  "\214\0\0\0\0\1\377\0\0\377\203\0\0\0\0\2\377\0\0\377\0\0\0\0\205\377"
+  "\0\0\377\204\0\0\0\0\1\377\0\0\377\204\0\0\0\0\1\377\0\0\377\211\0\0"
+  "\0\0\1\377\0\0\377\205\0\0\0\0\1\377\0\0\377\210\0\0\0\0\1\377\0\0\377"
+  "\207\0\0\0\0\1\377\0\0\377\206\0\0\0\0\1\377\0\0\377\210\0\0\0\0\1\377"
+  "\0\0\377\205\0\0\0\0\1\377\0\0\377\217\0\0\0\0"};
+
+
+/* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
+
+#ifdef __SUNPRO_C
+#pragma align 4 (gamma_pixdata)
+#endif
+#ifdef __GNUC__
+static const guint8 gamma_pixdata[] __attribute__ ((__aligned__ (4))) = 
+#else
+static const guint8 gamma_pixdata[] = 
+#endif
+{ ""
+  /* Pixbuf magic (0x47646b50) */
+  "GdkP"
+  /* length: header (24) + pixel_data (218) */
+  "\0\0\0\362"
+  /* pixdata_type (0x2010002) */
+  "\2\1\0\2"
+  /* rowstride (64) */
+  "\0\0\0@"
+  /* width (16) */
+  "\0\0\0\20"
+  /* height (16) */
+  "\0\0\0\20"
+  /* pixel_data: */
+  "\264\0\0\0\0\2\0\0\0\377^^^\377\202\0\0\0\0\3\214\214\214\377\0\0\0\377"
+  "\214\214\214\377\211\0\0\0\0\7FFF\377\27\27\27\377\273\273\273\377\0"
+  "\0\0\0uuu\377\27\27\27\377\244\244\244\377\212\0\0\0\0\3uuu\377\214\214"
+  "\214\377\0\0\0\0\202FFF\377\214\0\0\0\0\4\0\0\0\377\0\0\0\0\0\0\0\377"
+  "\214\214\214\377\214\0\0\0\0\3FFF\377\0\0\0\0FFF\377\215\0\0\0\0\3FF"
+  "F\377\27\27\27\377\214\214\214\377\215\0\0\0\0\2\244\244\244\377\0\0"
+  "\0\377\216\0\0\0\0\2uuu\377^^^\377\216\0\0\0\0\2///\377\0\0\0\377\216"
+  "\0\0\0\0\202\0\0\0\377\216\0\0\0\0\2\0\0\0\377///\377\250\0\0\0\0"};
+
+
+/* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
+
+#ifdef __SUNPRO_C
+#pragma align 4 (reset_pixdata)
+#endif
+#ifdef __GNUC__
+static const guint8 reset_pixdata[] __attribute__ ((__aligned__ (4))) = 
+#else
+static const guint8 reset_pixdata[] = 
+#endif
+{ ""
+  /* Pixbuf magic (0x47646b50) */
+  "GdkP"
+  /* length: header (24) + pixel_data (173) */
+  "\0\0\0\305"
+  /* pixdata_type (0x2010002) */
+  "\2\1\0\2"
+  /* rowstride (64) */
+  "\0\0\0@"
+  /* width (16) */
+  "\0\0\0\20"
+  /* height (16) */
+  "\0\0\0\20"
+  /* pixel_data: */
+  "\216\0\0\0\0\202\0\0\0\377\216\0\0\0\0\2\202AA\377\0\0\0\377\215\0\0"
+  "\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377"
+  "\216\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377"
+  "\0\0\377\216\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377\216\0\0"
+  "\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377\216\0\0\0\0\1\377\0\0\377"
+  "\216\0\0\0\0\1\377\0\0\377\215\0\0\0\0\2\0\0\0\377\202AA\377\216\0\0"
+  "\0\0\202\0\0\0\377\216\0\0\0\0"};
 
 G_DEFINE_TYPE (GtkGammaCurve, gtk_gamma_curve, GTK_TYPE_VBOX)
 
@@ -275,21 +305,29 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
 static void
 button_realize_callback (GtkWidget *w)
 {
-  GtkWidget *pixmap;
-  GdkBitmap *mask;
-  GdkPixmap *pm;
+  GtkWidget *image;
+  struct {
+    const guint8 *stream;
+    gint length;
+  } streams[5] = {
+    { linear_pixdata, sizeof (linear_pixdata) },
+    { spline_pixdata, sizeof (spline_pixdata) },
+    { free_pixdata, sizeof (free_pixdata) },
+    { gamma_pixdata, sizeof (gamma_pixdata) },
+    { reset_pixdata, sizeof (reset_pixdata) }
+  };
+  GdkPixdata pixdata;
+  GdkPixbuf *pixbuf;
   int i;
 
   i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "_GtkGammaCurveIndex"));
-  pm = gdk_pixmap_create_from_xpm_d (w->window, &mask,
-				     &w->style->bg[GTK_STATE_NORMAL], (gchar **)xpm[i]);
+  gdk_pixdata_deserialize (&pixdata, streams[i].length, streams[i].stream, NULL);
+  pixbuf = gdk_pixbuf_from_pixdata (&pixdata, TRUE, NULL);
+  image = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_container_add (GTK_CONTAINER (w), image);
+  gtk_widget_show (image);
 
-  pixmap = gtk_image_new_from_pixmap (pm, mask);
-  gtk_container_add (GTK_CONTAINER (w), pixmap);
-  gtk_widget_show (pixmap);
-
-  g_object_unref (pm);
-  g_object_unref (mask);
+  g_object_unref (pixbuf);
 }
 
 static void
