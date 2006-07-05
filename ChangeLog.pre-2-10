@@ -1,5 +1,8 @@
 2006-07-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_enable_tree_lines): Don't
+	leak dash_list.  (#346639, Christian Persch)
+
 	* gtk/gtkwindow.c (gtk_window_unmap, gtk_window_set_keep_above) 
 	(gtk_window_set_keep_below): Fix some assignments involving
 	booleans.  (#346467, Christian Persch)
