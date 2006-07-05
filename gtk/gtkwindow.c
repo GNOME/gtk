@@ -4208,11 +4208,11 @@ gtk_window_unmap (GtkWidget *widget)
     }
 
   state = gdk_window_get_state (widget->window);
-  window->iconify_initially = state & GDK_WINDOW_STATE_ICONIFIED;
-  window->maximize_initially = state & GDK_WINDOW_STATE_MAXIMIZED;
-  window->stick_initially = state & GDK_WINDOW_STATE_STICKY;
-  priv->above_initially = state & GDK_WINDOW_STATE_ABOVE;
-  priv->below_initially = state & GDK_WINDOW_STATE_BELOW;
+  window->iconify_initially = (state & GDK_WINDOW_STATE_ICONIFIED) != 0;
+  window->maximize_initially = (state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
+  window->stick_initially = (state & GDK_WINDOW_STATE_STICKY) != 0;
+  priv->above_initially = (state & GDK_WINDOW_STATE_ABOVE) != 0;
+  priv->below_initially = (state & GDK_WINDOW_STATE_BELOW) != 0;
 }
 
 static void
@@ -6597,7 +6597,7 @@ gtk_window_set_keep_above (GtkWindow *window,
   widget = GTK_WIDGET (window);
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  priv->above_initially = setting;
+  priv->above_initially = setting != FALSE;
   if (setting)
     priv->below_initially = FALSE;
 
@@ -6651,7 +6651,7 @@ gtk_window_set_keep_below (GtkWindow *window,
   widget = GTK_WIDGET (window);
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  priv->below_initially = setting;
+  priv->below_initially = setting != FALSE;
   if (setting)
     priv->above_initially = FALSE;
 

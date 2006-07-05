@@ -1,3 +1,9 @@
+2006-07-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_unmap, gtk_window_set_keep_above) 
+	(gtk_window_set_keep_below): Fix some assignments involving
+	booleans.  (#346467, Christian Persch)
+
 2006-07-03  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkgamma.c: Use serialized pixbufs instead of xpms.
