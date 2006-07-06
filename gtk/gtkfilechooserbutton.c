@@ -1643,7 +1643,7 @@ model_add_special (GtkFileChooserButton *button)
       gtk_tree_path_free (tree_path);
 
       handle = gtk_file_system_get_info (button->priv->fs, path,
-					 GTK_FILE_INFO_ICON,
+					 GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
 					 model_add_special_get_info_cb, info);
 
       gtk_list_store_set (store, &iter,
