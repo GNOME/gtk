@@ -251,7 +251,7 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
 
       gtk_option_menu_calc_size (option_menu);
 
-      g_signal_connect_after (option_menu->menu, "selection_done",
+      g_signal_connect_after (option_menu->menu, "selection-done",
 			      G_CALLBACK (gtk_option_menu_selection_done),
 			      option_menu);
       g_signal_connect_swapped (option_menu->menu, "size_request",
@@ -394,11 +394,11 @@ gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
   GtkBorder *indicator_spacing;
   
   gtk_widget_style_get (GTK_WIDGET (option_menu),
-			"indicator_size", &indicator_size,
-			"indicator_spacing", &indicator_spacing,
-			"interior_focus", &props->interior_focus,
-			"focus_line_width", &props->focus_width,
-			"focus_padding", &props->focus_pad,
+			"indicator-size", &indicator_size,
+			"indicator-spacing", &indicator_spacing,
+			"interior-focus", &props->interior_focus,
+			"focus-line-width", &props->focus_width,
+			"focus-padding", &props->focus_pad,
 			NULL);
 
   if (indicator_size)

@@ -2426,7 +2426,7 @@ update_node (GtkUIManager *self,
 	  /* don't show accels in popups */
 	  GtkWidget *label = GTK_BIN (info->proxy)->child;
 	  g_object_set (label,
-			"accel_closure", NULL,
+			"accel-closure", NULL,
 			NULL);
 	}
       

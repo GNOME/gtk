@@ -824,7 +824,7 @@ apply_queued_setting (GtkSettings             *data,
       gchar *debug = g_strdup_value_contents (&qvalue->public.value);
       
       g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
-		 qvalue->public.origin,
+		 qvalue->public.origin ? qvalue->public.origin : "(for origin information, set GTK_DEBUG)",
 		 pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		 debug,
@@ -971,7 +971,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
     }
   
   name = g_strdup (prop_name);
-  g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+  g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
   name_quark = g_quark_from_string (name);
   g_free (name);
 
@@ -1003,7 +1003,6 @@ gtk_settings_set_property_value (GtkSettings            *settings,
   g_return_if_fail (GTK_SETTINGS (settings));
   g_return_if_fail (prop_name != NULL);
   g_return_if_fail (new_value != NULL);
-  g_return_if_fail (new_value->origin != NULL);
 
   gtk_settings_set_property_value_internal (settings, prop_name, new_value,
 					    GTK_SETTINGS_SOURCE_APPLICATION);
@@ -1017,7 +1016,6 @@ _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
   g_return_if_fail (GTK_SETTINGS (settings));
   g_return_if_fail (prop_name != NULL);
   g_return_if_fail (new_value != NULL);
-  g_return_if_fail (new_value->origin != NULL);
 
   gtk_settings_set_property_value_internal (settings, prop_name, new_value,
 					    GTK_SETTINGS_SOURCE_RC_FILE);
@@ -1034,7 +1032,6 @@ gtk_settings_set_string_property (GtkSettings *settings,
   g_return_if_fail (GTK_SETTINGS (settings));
   g_return_if_fail (name != NULL);
   g_return_if_fail (v_string != NULL);
-  g_return_if_fail (origin != NULL);
 
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_STRING);
@@ -1053,7 +1050,6 @@ gtk_settings_set_long_property (GtkSettings *settings,
   
   g_return_if_fail (GTK_SETTINGS (settings));
   g_return_if_fail (name != NULL);
-  g_return_if_fail (origin != NULL);
 
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_LONG);
@@ -1072,7 +1068,6 @@ gtk_settings_set_double_property (GtkSettings *settings,
 
   g_return_if_fail (GTK_SETTINGS (settings));
   g_return_if_fail (name != NULL);
-  g_return_if_fail (origin != NULL);
 
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_DOUBLE);

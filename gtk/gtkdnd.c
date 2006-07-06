@@ -2311,7 +2311,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
 
-  g_signal_connect (info->ipc_widget, "grab-broken-event",
+  g_signal_connect (info->ipc_widget, "grab_broken_event",
 		    G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
   g_signal_connect (info->ipc_widget, "button_release_event",
 		    G_CALLBACK (gtk_drag_button_release_cb), info);

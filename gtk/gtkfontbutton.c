@@ -388,7 +388,7 @@ gtk_font_button_new (void)
 GtkWidget *
 gtk_font_button_new_with_font (const gchar *fontname)
 {
-  return g_object_new (GTK_TYPE_FONT_BUTTON, "font_name", fontname, NULL);
+  return g_object_new (GTK_TYPE_FONT_BUTTON, "font-name", fontname, NULL);
 } 
 
 /**

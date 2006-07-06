@@ -1275,8 +1275,8 @@ selection_set_text_plain (GtkSelectionData *selection_data,
 
   if (!result)
     {
-      g_warning ("Error converting from UTF-8 to %s: %s",
-		 charset, error->message);
+      g_warning ("Error converting from %s to %s: %s",
+		 "UTF-8", charset, error->message);
       g_error_free (error);
       
       return FALSE;
@@ -1316,8 +1316,8 @@ selection_get_text_plain (GtkSelectionData *selection_data)
 
       if (!str)
 	{
-	  g_warning ("Error converting from %s to UTF-8: %s",
-		      charset, error->message);
+	  g_warning ("Error converting from %s to %s: %s",
+		     charset, "UTF-8", error->message);
 	  g_error_free (error);
 
 	  return NULL;
@@ -1325,7 +1325,8 @@ selection_get_text_plain (GtkSelectionData *selection_data)
     }
   else if (!g_utf8_validate (str, -1, NULL))
     {
-      g_warning ("Error converting from text/plain;charset=utf-8 to UTF-8");
+      g_warning ("Error converting from %s to %s: %s",
+		 "text/plain;charset=utf-8", "UTF-8", "invalid UTF-8");
       g_free (str);
 
       return NULL;

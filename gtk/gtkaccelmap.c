@@ -542,7 +542,7 @@ gtk_accel_map_load_scanner (GScanner *scanner)
   gchar *cpair_comment_single;
   gpointer saved_symbol;
   
-  g_return_if_fail (scanner != 0);
+  g_return_if_fail (scanner != NULL);
 
   /* configure scanner */
   skip_comment_single = scanner->config->skip_comment_single;

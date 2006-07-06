@@ -665,7 +665,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   g_free (priv->backend);
   priv->backend = NULL;
 
-  g_signal_connect (priv->dialog, "delete-event",
+  g_signal_connect (priv->dialog, "delete_event",
 		    G_CALLBACK (dialog_delete_event_cb), object);
   g_signal_connect (priv->dialog, "response",
 		    G_CALLBACK (dialog_response_cb), object);

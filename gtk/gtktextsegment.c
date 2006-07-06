@@ -174,12 +174,12 @@ char_segment_self_check (GtkTextLineSegment *seg)
 
   if (seg->byte_count <= 0)
     {
-      g_error ("char_segment_check_func: segment has size <= 0");
+      g_error ("segment has size <= 0");
     }
 
   if (strlen (seg->body.chars) != seg->byte_count)
     {
-      g_error ("char_segment_check_func: segment has wrong size");
+      g_error ("segment has wrong size");
     }
 
   if (g_utf8_strlen (seg->body.chars, seg->byte_count) != seg->char_count)
@@ -404,7 +404,7 @@ char_segment_check_func (segPtr, line)
     {
       if (segPtr->next->type == &gtk_text_char_type)
         {
-          g_error ("char_segment_check_func: adjacent character segments weren't merged");
+          g_error ("adjacent character segments weren't merged");
         }
     }
 }

@@ -351,7 +351,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   fontsel->family_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
 
-  g_signal_connect (fontsel->family_list, "row-activated",
+  g_signal_connect (fontsel->family_list, "row_activated",
 		    G_CALLBACK (list_row_activated), fontsel);
 
   column = gtk_tree_view_column_new_with_attributes ("Family",
@@ -577,7 +577,7 @@ static void
 gtk_font_selection_preview_changed (GtkWidget        *entry,
 				    GtkFontSelection *fontsel)
 {
-  g_object_notify (G_OBJECT (fontsel), "preview_text");
+  g_object_notify (G_OBJECT (fontsel), "preview-text");
 }
 
 static void
@@ -1260,7 +1260,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
   
   g_object_freeze_notify (G_OBJECT (fontsel));
-  g_object_notify (G_OBJECT (fontsel), "font_name");
+  g_object_notify (G_OBJECT (fontsel), "font-name");
   g_object_notify (G_OBJECT (fontsel), "font");
   g_object_thaw_notify (G_OBJECT (fontsel));
 

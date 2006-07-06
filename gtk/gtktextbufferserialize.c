@@ -1350,7 +1350,7 @@ start_element_handler (GMarkupParseContext  *context,
 	  if (info->parsed_tags)
 	    {
 	      set_error (error, context, G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("A <tags> element has already been specified"));
+			 _("A <%s> element has already been specified"), "tags");
 	      return;
 	    }
 
@@ -1366,7 +1366,7 @@ start_element_handler (GMarkupParseContext  *context,
 	  if (info->parsed_text)
 	    {
 	      set_error (error, context, G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("A <text> element has already been specified"));
+			 _("A <%s> element has already been specified"), "text");
 	      return;
 	    }
 	  else if (!info->parsed_tags)

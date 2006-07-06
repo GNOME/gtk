@@ -2733,8 +2733,8 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
     {
       gtk_container_child_get (GTK_CONTAINER (menu), 
 			       last,
-			       "right_attach", &current_col,
-			       "top_attach", &current_row,
+			       "right-attach", &current_col,
+			       "top-attach", &current_row,
 			       NULL);
       if (current_col + cols > combo_box->priv->wrap_width)
 	{

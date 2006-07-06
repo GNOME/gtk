@@ -1885,13 +1885,13 @@ add_credits_page (GtkAboutDialog *about,
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 8);
   gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 8);
 
-  g_signal_connect (view, "key-press-event",
+  g_signal_connect (view, "key_press_event",
                     G_CALLBACK (credits_key_press_event), about);
-  g_signal_connect (view, "event-after",
+  g_signal_connect (view, "event_after",
                     G_CALLBACK (credits_event_after), about);
-  g_signal_connect (view, "motion-notify-event", 
+  g_signal_connect (view, "motion_notify_event", 
                     G_CALLBACK (credits_motion_notify_event), about);
-  g_signal_connect (view, "visibility-notify-event", 
+  g_signal_connect (view, "visibility_notify_event", 
                     G_CALLBACK (credits_visibility_notify_event), about);
 
   sw = gtk_scrolled_window_new (NULL, NULL);

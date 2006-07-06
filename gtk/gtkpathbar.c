@@ -1332,7 +1332,7 @@ make_directory_button (GtkPathBar  *path_bar,
 		       targets,
 		       G_N_ELEMENTS (targets),
 		       GDK_ACTION_COPY);
-  g_signal_connect (button_data->button, "drag-data-get",
+  g_signal_connect (button_data->button, "drag_data_get",
 		    G_CALLBACK (button_drag_data_get_cb), button_data);
 
   return button_data;

@@ -243,13 +243,14 @@ static const GScannerConfig gtk_rc_scanner_config =
    " \t\r\n"
    )			/* cset_skip_characters */,
   (
-   G_CSET_a_2_z
    "_"
+   G_CSET_a_2_z
    G_CSET_A_2_Z
    )			/* cset_identifier_first */,
   (
+   G_CSET_DIGITS
+   "-_"
    G_CSET_a_2_z
-   "_-0123456789"
    G_CSET_A_2_Z
    )			/* cset_identifier_nth */,
   ( "#\n" )		/* cpair_comment_single */,
@@ -2388,7 +2389,10 @@ gtk_rc_parse_assignment (GScanner      *scanner,
   scanner->config->numbers_2_int = TRUE;
 
   /* record location */
-  prop->origin = g_strdup_printf ("%s:%u", scanner->input_name, scanner->line);
+  if (g_getenv ("GTK_DEBUG"))
+    prop->origin = g_strdup_printf ("%s:%u", scanner->input_name, scanner->line);
+  else
+    prop->origin = NULL;
 
   /* parse optional sign */
   if (g_scanner_peek_next_token (scanner) == '-')
@@ -2467,9 +2471,9 @@ is_c_identifier (const gchar *string)
   const gchar *p;
   gboolean is_varname;
 
-  is_varname = strchr (G_CSET_a_2_z G_CSET_A_2_Z "_", string[0]) != NULL;
+  is_varname = strchr ("_" G_CSET_a_2_z G_CSET_A_2_Z, string[0]) != NULL;
   for (p = string + 1; *p && is_varname; p++)
-    is_varname &= strchr (G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "_-", *p) != NULL;
+    is_varname &= strchr (G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, *p) != NULL;
 
   return is_varname;
 }
@@ -2586,7 +2590,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
 
 	      svalue.origin = prop.origin;
 	      memcpy (&svalue.value, &prop.value, sizeof (prop.value));
-	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+	      g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
 	      _gtk_settings_set_property_value_from_rc (context->settings,
 							name,
 							&svalue);
@@ -2885,14 +2889,14 @@ gtk_rc_parse_style (GtkRcContext *context,
 
 	      /* it's important that we do the same canonification as GParamSpecPool here */
 	      name = g_strdup (scanner->value.v_identifier);
-	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+	      g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
 	      prop.property_name = g_quark_from_string (name);
 	      g_free (name);
 
 	      token = gtk_rc_parse_assignment (scanner, &prop);
 	      if (token == G_TOKEN_NONE)
 		{
-		  g_return_val_if_fail (prop.origin != NULL && G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
+		  g_return_val_if_fail (G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
 		  insert_rc_property (rc_style, &prop, TRUE);
 		}
 	      

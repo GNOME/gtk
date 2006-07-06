@@ -248,8 +248,7 @@ gtk_tree_store_new (gint n_columns,
       GType type = va_arg (args, GType);
       if (! _gtk_tree_data_list_check_type (type))
 	{
-	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_new_with_types\n",
-		     G_STRLOC, g_type_name (type));
+	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
 	  g_object_unref (retval);
 	  return NULL;
 	}
@@ -284,8 +283,7 @@ gtk_tree_store_newv (gint   n_columns,
     {
       if (! _gtk_tree_data_list_check_type (types[i]))
 	{
-	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_new_with_types\n",
-		     G_STRLOC, g_type_name (types[i]));
+	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (types[i]));
 	  g_object_unref (retval);
 	  return NULL;
 	}
@@ -322,7 +320,7 @@ gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
     {
       if (! _gtk_tree_data_list_check_type (types[i]))
 	{
-	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_set_column_types\n", G_STRLOC, g_type_name (types[i]));
+	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (types[i]));
 	  continue;
 	}
       gtk_tree_store_set_column_type (tree_store, i, types[i]);
@@ -378,7 +376,7 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 {
   if (!_gtk_tree_data_list_check_type (type))
     {
-      g_warning ("%s: Invalid type %s passed to gtk_tree_store_new_with_types\n", G_STRLOC, g_type_name (type));
+      g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
       return;
     }
   tree_store->column_headers[column] = type;

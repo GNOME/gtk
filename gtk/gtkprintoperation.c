@@ -928,7 +928,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_CURRENT_PAGE,
 				   g_param_spec_int ("current-page",
 						     P_("Current Page"),
-						     P_("The current page in the document."),
+						     P_("The current page in the document"),
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -1692,7 +1692,7 @@ gtk_print_operation_set_export_filename (GtkPrintOperation *op,
   g_free (priv->export_filename);
   priv->export_filename = g_strdup (filename);
 
-  g_object_notify (G_OBJECT (op), "export_filename");
+  g_object_notify (G_OBJECT (op), "export-filename");
 }
 
 /* Creates the initial page setup used for printing unless the

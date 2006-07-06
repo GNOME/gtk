@@ -153,11 +153,11 @@ gtk_link_button_init (GtkLinkButton *link_button)
   
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   
-  g_signal_connect (link_button, "enter-notify-event",
+  g_signal_connect (link_button, "enter_notify_event",
   		    G_CALLBACK (gtk_link_button_enter_cb), NULL);
-  g_signal_connect (link_button, "leave-notify-event",
+  g_signal_connect (link_button, "leave_notify_event",
   		    G_CALLBACK (gtk_link_button_leave_cb), NULL);
-  g_signal_connect (link_button, "drag-data-get",
+  g_signal_connect (link_button, "drag_data_get",
   		    G_CALLBACK (gtk_link_button_drag_data_get_cb), NULL);
   
   /* enable drag source */

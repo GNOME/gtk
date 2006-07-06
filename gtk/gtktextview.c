@@ -4474,7 +4474,7 @@ blink_cb (gpointer data)
     {
       g_warning ("GtkTextView - did not receive focus-out-event. If you\n"
                  "connect a handler to this signal, it must return\n"
-                 "FALSE so the entry gets the event as well");
+                 "FALSE so the text view gets the event as well");
     }
 
   g_assert (text_view->layout);
@@ -6013,7 +6013,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
   target_list = gtk_text_buffer_get_copy_target_list (get_buffer (text_view));
 
-  g_signal_connect (text_view, "drag-begin",
+  g_signal_connect (text_view, "drag_begin",
                     G_CALLBACK (drag_begin_cb), NULL);
   gtk_drag_begin (GTK_WIDGET (text_view), target_list,
 		  GDK_ACTION_COPY | GDK_ACTION_MOVE,

@@ -89,7 +89,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
     gtk_widget_class_install_style_property (widget_class,
                                              g_param_spec_boolean ("has-secondary-forward-stepper",
                                                                    P_("Secondary forward stepper"),
-                                                                   P_("Display a secondary forward arrow button on the opposite end of the scrollbar"),
+                                                                   P_("Display a second forward arrow button on the opposite end of the scrollbar"),
                                                                    FALSE,
                                                                    
                                                                    GTK_PARAM_READABLE));

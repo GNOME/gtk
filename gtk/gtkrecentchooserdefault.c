@@ -397,9 +397,9 @@ gtk_recent_chooser_default_constructor (GType                  type,
   		    G_CALLBACK (recent_view_popup_menu_cb), impl);
   g_signal_connect (impl->recent_view, "button-press-event",
   		    G_CALLBACK (recent_view_button_press_cb), impl);
-  g_signal_connect (impl->recent_view, "drag-begin",
+  g_signal_connect (impl->recent_view, "drag_begin",
 		    G_CALLBACK (recent_view_drag_begin_cb), impl);
-  g_signal_connect (impl->recent_view, "drag-data-get",
+  g_signal_connect (impl->recent_view, "drag_data_get",
 		    G_CALLBACK (recent_view_drag_data_get_cb), impl);
 
   g_object_set_data (G_OBJECT (impl->recent_view), "GtkRecentChooserDefault", impl);

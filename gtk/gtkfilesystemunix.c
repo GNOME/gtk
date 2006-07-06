@@ -2074,8 +2074,8 @@ file_info_for_root_with_error (const char  *root_name,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_FAILED,
-		   _("Error getting information for '/': %s"),
-		   g_strerror (saved_errno));
+		   _("Error getting information for '%s': %s"),
+		   "/", g_strerror (saved_errno));
 
       return NULL;
     }

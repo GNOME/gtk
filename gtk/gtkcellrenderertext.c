@@ -262,7 +262,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    PROP_FONT,
                                    g_param_spec_string ("font",
                                                         P_("Font"),
-                                                        P_("Font description as a string"),
+                                                        P_("Font description as a string, e.g. \"Sans Italic 12\""),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
@@ -1025,7 +1025,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 					NULL,
 					&error))
 	  {
-	    g_warning ("Failed to set cell text from markup due to error parsing markup: %s",
+	    g_warning ("Failed to set text from markup due to error parsing markup: %s",
 		       error->message);
 	    g_error_free (error);
 	    return;

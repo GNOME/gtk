@@ -143,7 +143,7 @@ gtk_tree_class_init (GtkTreeClass *class)
   class->unselect_child = gtk_real_tree_unselect_child;
 
   tree_signals[SELECTION_CHANGED] =
-    gtk_signal_new (I_("selection_changed"),
+    gtk_signal_new (I_("selection-changed"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),

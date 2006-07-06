@@ -1304,7 +1304,7 @@ set_markup (GtkLabel    *label,
                            with_uline ? &accel_char : NULL,
                            &error))
     {
-      g_warning ("Failed to set label from markup due to error parsing markup: %s",
+      g_warning ("Failed to set text from markup due to error parsing markup: %s",
                  error->message);
       g_error_free (error);
       return;
@@ -3040,7 +3040,7 @@ gtk_label_motion (GtkWidget      *widget,
 
 	  gtk_target_list_add_text_targets (target_list, 0);
 	  
-          g_signal_connect (widget, "drag-begin", 
+          g_signal_connect (widget, "drag_begin", 
                             G_CALLBACK (drag_begin_cb), NULL);
 	  gtk_drag_begin (widget, target_list, 
 			  GDK_ACTION_COPY,
@@ -4114,7 +4114,7 @@ gtk_label_do_popup (GtkLabel       *label,
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
       
-  menuitem = gtk_menu_item_new_with_label (_("Select All"));
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
   g_signal_connect_swapped (menuitem, "activate",
 			    G_CALLBACK (gtk_label_select_all), label);
   gtk_widget_show (menuitem);

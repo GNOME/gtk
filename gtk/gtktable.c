@@ -162,8 +162,8 @@ gtk_table_class_init (GtkTableClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
-							 P_("Homogenous"),
-							 P_("If TRUE this means the table cells are all the same width/height"),
+							 P_("Homogeneous"),
+							 P_("If TRUE, the table cells are all the same width/height"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 

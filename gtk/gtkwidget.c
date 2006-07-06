@@ -745,7 +745,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EVENT_AFTER] =
-    g_signal_new (I_("event-after"),
+    g_signal_new (I_("event_after"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  0,
 		  0,

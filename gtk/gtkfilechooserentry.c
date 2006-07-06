@@ -157,7 +157,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
                                  cell,
                                  "text", 0);
 
-  g_signal_connect (comp, "match-selected",
+  g_signal_connect (comp, "match_selected",
 		    G_CALLBACK (match_selected_callback), chooser_entry);
 
   gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);

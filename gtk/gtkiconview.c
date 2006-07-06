@@ -749,7 +749,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  GTK_TYPE_TREE_PATH);
 
   icon_view_signals[SELECTION_CHANGED] =
-    g_signal_new (I_("selection_changed"),
+    g_signal_new (I_("selection-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkIconViewClass, selection_changed),
@@ -1649,7 +1649,7 @@ gtk_icon_view_start_editing (GtkIconView         *icon_view,
 
       /* FIXME ugly special case */ 
       if (GTK_IS_ENTRY (editable) || GTK_IS_COMBO_BOX (editable))
-	g_object_set (editable, "has_frame", TRUE, NULL);
+	g_object_set (editable, "has-frame", TRUE, NULL);
 
       /* the rest corresponds to tree_view_real_start_editing... */
       icon_view->priv->edited_item = item;
@@ -4770,15 +4770,15 @@ update_text_cell (GtkIconView *icon_view)
 
       if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	g_object_set (info->cell,
-		      "wrap_mode", PANGO_WRAP_CHAR,
-		      "wrap_width", icon_view->priv->item_width,
+		      "wrap-mode", PANGO_WRAP_CHAR,
+		      "wrap-width", icon_view->priv->item_width,
 		      "xalign", 0.5,
 		      "yalign", 0.0,
 		      NULL);
       else
 	g_object_set (info->cell,
-		      "wrap_mode", PANGO_WRAP_CHAR,
-		      "wrap_width", icon_view->priv->item_width,
+		      "wrap-mode", PANGO_WRAP_CHAR,
+		      "wrap-width", icon_view->priv->item_width,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
@@ -4838,13 +4838,13 @@ update_pixbuf_cell (GtkIconView *icon_view)
 
 	if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	  g_object_set (info->cell,
-			"follow_state", TRUE, 
+			"follow-state", TRUE, 
 			"xalign", 0.5,
 			"yalign", 1.0,
 			NULL);
 	else
 	  g_object_set (info->cell,
-			"follow_state", TRUE, 
+			"follow-state", TRUE, 
 			"xalign", 0.0,
 			"yalign", 0.0,
 			NULL);
@@ -8362,7 +8362,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
   AtkObject *atk_obj;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
-  g_signal_emit_by_name (atk_obj, "visible-data-changed");
+  g_signal_emit_by_name (atk_obj, "visible_data_changed");
 
   return;
 }
@@ -8532,16 +8532,16 @@ gtk_icon_view_accessible_connect_model_signals (GtkIconView *icon_view)
   GObject *obj;
 
   obj = G_OBJECT (icon_view->priv->model);
-  g_signal_connect_data (obj, "row-changed",
+  g_signal_connect_data (obj, "row_changed",
                          (GCallback) gtk_icon_view_accessible_model_row_changed,
                          icon_view, NULL, 0);
-  g_signal_connect_data (obj, "row-inserted",
+  g_signal_connect_data (obj, "row_inserted",
                          (GCallback) gtk_icon_view_accessible_model_row_inserted, 
                          icon_view, NULL, G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "row-deleted",
+  g_signal_connect_data (obj, "row_deleted",
                          (GCallback) gtk_icon_view_accessible_model_row_deleted, 
                          icon_view, NULL, G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "rows-reordered",
+  g_signal_connect_data (obj, "rows_reordered",
                          (GCallback) gtk_icon_view_accessible_model_rows_reordered, 
                          icon_view, NULL, G_CONNECT_AFTER);
 }

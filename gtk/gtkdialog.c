@@ -980,7 +980,7 @@ gtk_dialog_run (GtkDialog *dialog)
   
   delete_handler =
     g_signal_connect (dialog,
-                      "delete_event",
+                      "delete-event",
                       G_CALLBACK (run_delete_handler),
                       &ri);
   

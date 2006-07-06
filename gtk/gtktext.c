@@ -727,7 +727,7 @@ gtk_text_set_word_wrap (GtkText *text,
       gtk_widget_queue_draw (GTK_WIDGET (text));
     }
   
-  g_object_notify (G_OBJECT (text), "word_wrap");
+  g_object_notify (G_OBJECT (text), "word-wrap");
 }
 
 void
@@ -744,7 +744,7 @@ gtk_text_set_line_wrap (GtkText *text,
       gtk_widget_queue_draw (GTK_WIDGET (text));
     }
   
-  g_object_notify (G_OBJECT (text), "line_wrap");
+  g_object_notify (G_OBJECT (text), "line-wrap");
 }
 
 void

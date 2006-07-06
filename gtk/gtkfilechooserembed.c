@@ -81,9 +81,9 @@ _gtk_file_chooser_embed_set_delegate (GtkFileChooserEmbed *receiver,
   
   g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-embed-delegate"), delegate);
 
-  g_signal_connect (delegate, "default_size_changed",
+  g_signal_connect (delegate, "default-size-changed",
 		    G_CALLBACK (delegate_default_size_changed), receiver);
-  g_signal_connect (delegate, "response_requested",
+  g_signal_connect (delegate, "response-requested",
 		    G_CALLBACK (delegate_response_requested), receiver);
 }
 

@@ -247,7 +247,7 @@ gtk_list_class_init (GtkListClass *class)
   class->unselect_child = gtk_real_list_unselect_child;
 
   list_signals[SELECTION_CHANGED] =
-    gtk_signal_new (I_("selection_changed"),
+    gtk_signal_new (I_("selection-changed"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),

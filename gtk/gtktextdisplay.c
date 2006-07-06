@@ -123,7 +123,7 @@ text_renderer_get_error_color (GtkTextRenderer *text_renderer)
 
   if (!text_renderer->error_color)
     gtk_widget_style_get (text_renderer->widget,
-			  "error-underline_color", &text_renderer->error_color,
+			  "error-underline-color", &text_renderer->error_color,
 			  NULL);
   
   if (!text_renderer->error_color)

@@ -982,7 +982,7 @@ gtk_combo_init (GtkCombo * combo)
 				       gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
 
-  combo->list_change_id = g_signal_connect (combo->list, "selection_changed",
+  combo->list_change_id = g_signal_connect (combo->list, "selection-changed",
 					    G_CALLBACK (gtk_combo_selection_changed), combo);
   
   g_signal_connect (combo->popwin, "key_press_event",
@@ -1038,12 +1038,12 @@ gtk_combo_set_value_in_list (GtkCombo * combo, gboolean val, gboolean ok_if_empt
   if (combo->value_in_list != val)
     {
        combo->value_in_list = val;
-  g_object_notify (G_OBJECT (combo), "value_in_list");
+  g_object_notify (G_OBJECT (combo), "value-in-list");
     }
   if (combo->ok_if_empty != ok_if_empty)
     {
        combo->ok_if_empty = ok_if_empty;
-  g_object_notify (G_OBJECT (combo), "allow_empty");
+  g_object_notify (G_OBJECT (combo), "allow-empty");
     }
   g_object_thaw_notify (G_OBJECT (combo));
 }
@@ -1057,7 +1057,7 @@ gtk_combo_set_case_sensitive (GtkCombo * combo, gboolean val)
   if (combo->case_sensitive != val) 
     {
   combo->case_sensitive = val;
-  g_object_notify (G_OBJECT (combo), "case_sensitive");
+  g_object_notify (G_OBJECT (combo), "case-sensitive");
     }
 }
 
@@ -1070,7 +1070,7 @@ gtk_combo_set_use_arrows (GtkCombo * combo, gboolean val)
   if (combo->use_arrows != val) 
     {
   combo->use_arrows = val;
-  g_object_notify (G_OBJECT (combo), "enable_arrow_keys");
+  g_object_notify (G_OBJECT (combo), "enable-arrow-keys");
     }
 }
 
@@ -1084,12 +1084,12 @@ gtk_combo_set_use_arrows_always (GtkCombo * combo, gboolean val)
     {
        g_object_freeze_notify (G_OBJECT (combo));
   combo->use_arrows_always = val;
-       g_object_notify (G_OBJECT (combo), "enable_arrows_always");
+       g_object_notify (G_OBJECT (combo), "enable-arrows-always");
 
        if (combo->use_arrows != TRUE) 
          {
   combo->use_arrows = TRUE;
-  g_object_notify (G_OBJECT (combo), "enable_arrow_keys");
+  g_object_notify (G_OBJECT (combo), "enable-arrow-keys");
          }
   g_object_thaw_notify (G_OBJECT (combo));
     }

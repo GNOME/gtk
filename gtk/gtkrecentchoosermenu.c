@@ -318,8 +318,7 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
       menu->priv->show_icons = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: RecentChoosers of type `%s' do not support "
-                 "selecting multiple items.",
+      g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
                  G_STRFUNC,
                  G_OBJECT_TYPE_NAME (object));
       break;
@@ -376,8 +375,7 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       g_value_set_boolean (value, menu->priv->show_icons);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: Recent Choosers of type `%s' do not support "
-                 "selecting multiple items.",
+      g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
                  G_STRFUNC,
                  G_OBJECT_TYPE_NAME (object));
       break;

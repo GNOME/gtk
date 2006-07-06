@@ -683,7 +683,7 @@ connect_proxy (GtkAction     *action,
 
       if (!label)
 	label = g_object_new (GTK_TYPE_ACCEL_LABEL,
-			      "use_underline", TRUE,
+			      "use-underline", TRUE,
 			      "xalign", 0.0,
 			      "visible", TRUE,
 			      "parent", proxy,
@@ -691,7 +691,7 @@ connect_proxy (GtkAction     *action,
       
       if (GTK_IS_ACCEL_LABEL (label) && action->private_data->accel_quark)
 	g_object_set (label,
-		      "accel_closure", action->private_data->accel_closure,
+		      "accel-closure", action->private_data->accel_closure,
 		      NULL);
 
       gtk_label_set_label (GTK_LABEL (label), action->private_data->label);
@@ -734,9 +734,9 @@ connect_proxy (GtkAction     *action,
       /* toolbar item specific synchronisers ... */
 
       g_object_set (proxy,
-		    "visible_horizontal", action->private_data->visible_horizontal,
-		    "visible_vertical",	action->private_data->visible_vertical,
-		    "is_important", action->private_data->is_important,
+		    "visible-horizontal", action->private_data->visible_horizontal,
+		    "visible-vertical",	action->private_data->visible_vertical,
+		    "is-important", action->private_data->is_important,
 		    NULL);
 
       gtk_action_sync_tooltip (action, proxy);
@@ -784,7 +784,7 @@ connect_proxy (GtkAction     *action,
 	      /* synchronise the label */
 	      g_object_set (proxy,
 			    "label", action->private_data->short_label,
-			    "use_underline", TRUE,
+			    "use-underline", TRUE,
 			    NULL);
 	    }
 	}

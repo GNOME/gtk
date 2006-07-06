@@ -98,7 +98,7 @@ gtk_progress_class_init (GtkProgressClass *class)
                                    PROP_ACTIVITY_MODE,
                                    g_param_spec_boolean ("activity-mode",
 							 P_("Activity mode"),
-							 P_("If TRUE the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"),
+							 P_("If TRUE, the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 

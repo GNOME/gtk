@@ -1110,7 +1110,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
   
   gtk_file_selection_update_fileops (filesel);
   
-  g_object_notify (G_OBJECT (filesel), "show_fileops");
+  g_object_notify (G_OBJECT (filesel), "show-fileops");
 }
 
 void       
@@ -1135,7 +1135,7 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
       gtk_widget_destroy (filesel->fileop_c_dir);
       filesel->fileop_c_dir = NULL;
     }
-  g_object_notify (G_OBJECT (filesel), "show_fileops");
+  g_object_notify (G_OBJECT (filesel), "show-fileops");
 }
 
 
@@ -1406,8 +1406,8 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
 	buf = g_strdup_printf (_("The folder name \"%s\" contains symbols that are not allowed in filenames"), dirname);
       else
-	buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n%s"), dirname, error->message,
-			       _("You probably used symbols not allowed in filenames."));
+	buf = g_strdup_printf (_("Error creating directory '%s': %s"), 
+			       dirname, error->message);
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out;
@@ -1415,8 +1415,8 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 
   if (g_mkdir (sys_full_path, 0777) < 0)
     {
-      buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n"), dirname,
-			     g_strerror (errno));
+      buf = g_strdup_printf (_("Error creating directory '%s': %s"), 
+			     dirname, g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
 
@@ -1534,9 +1534,8 @@ gtk_file_selection_delete_file_response (GtkDialog *dialog,
 	buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"),
 			       fs->fileop_file);
       else
-	buf = g_strdup_printf (_("Error deleting file \"%s\": %s\n%s"),
-			       fs->fileop_file, error->message,
-			       _("It probably contains symbols not allowed in filenames."));
+	buf = g_strdup_printf (_("Error deleting file '%s': %s"),
+			       fs->fileop_file, error->message);
       
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
@@ -1545,7 +1544,7 @@ gtk_file_selection_delete_file_response (GtkDialog *dialog,
 
   if (g_unlink (sys_full_path) < 0) 
     {
-      buf = g_strdup_printf (_("Error deleting file \"%s\": %s"),
+      buf = g_strdup_printf (_("Error deleting file '%s': %s"),
 			     fs->fileop_file, g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
@@ -1639,11 +1638,10 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), new_filename);
+	buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"), new_filename);
       else
-	buf = g_strdup_printf (_("Error renaming file to \"%s\": %s\n%s"),
-			       new_filename, error->message,
-			       _("You probably used symbols not allowed in filenames."));
+	buf = g_strdup_printf (_("Error renaming file to \"%s\": %s"),
+			       new_filename, error->message);
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out1;
@@ -1653,11 +1651,10 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), old_filename);
+	buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"), old_filename);
       else
-	buf = g_strdup_printf (_("Error renaming file \"%s\": %s\n%s"),
-			       old_filename, error->message,
-			       _("It probably contains symbols not allowed in filenames."));
+	buf = g_strdup_printf (_("Error renaming file \"%s\": %s"),
+			       old_filename, error->message);
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out2;

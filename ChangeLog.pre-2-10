@@ -1,3 +1,8 @@
+2006-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/*.c: Improve the -/_ consistency in signal and
+	property names, reducing the amount of near-duplicate strings.
+
 2006-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_enable_tree_lines): Don't

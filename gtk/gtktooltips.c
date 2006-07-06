@@ -329,7 +329,7 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 
       tooltips->tips_data_list = g_list_append (tooltips->tips_data_list,
                                                 tooltipsdata);
-      g_signal_connect_after (widget, "event-after",
+      g_signal_connect_after (widget, "event_after",
                               G_CALLBACK (gtk_tooltips_event_handler),
 			      tooltipsdata);
 
