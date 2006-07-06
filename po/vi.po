@@ -2477,7 +2477,7 @@ msgstr "_Hiện có"
 
 #: gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
-msgstr "_Phạm vị: "
+msgstr "_Phạm vi: "
 
 #: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"

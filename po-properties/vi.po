@@ -3749,12 +3749,12 @@ msgstr "Chính sách cập nhật"
 
 #: gtk/gtkrange.c:312
 msgid "How the range should be updated on the screen"
-msgstr "Cách cập nhật phạm vị trên màn hình."
+msgstr "Cách cập nhật phạm vi trên màn hình."
 
 #: gtk/gtkrange.c:321
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
-"GtkAdjustment (điều chỉnh Gtk) chứa giá trị hiện thời của đối tượng phạm vị "
+"GtkAdjustment (điều chỉnh Gtk) chứa giá trị hiện thời của đối tượng phạm vi "
 "này."
 
 #: gtk/gtkrange.c:328
@@ -3763,7 +3763,7 @@ msgstr "Bị đảo"
 
 #: gtk/gtkrange.c:329
 msgid "Invert direction slider moves to increase range value"
-msgstr "Đảo hướng nào con trượt di chuyển để tăng giá trị phạm vị lên."
+msgstr "Đảo hướng nào con trượt di chuyển để tăng giá trị phạm vi lên."
 
 #: gtk/gtkrange.c:336
 msgid "Lower stepper sensitivity"
