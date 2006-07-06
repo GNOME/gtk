@@ -1,3 +1,7 @@
+2006-07-06  Behdad Esfahbod  <behdad@gnome.org>
+
+	* configure.in: Drop required Pango version down to 1.12.0. (#346597)
+
 2006-07-06  John (J5) Palmieri  <johnp@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: 
