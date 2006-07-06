@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-05 16:34+0300\n"
-"PO-Revision-Date: 2006-07-05 17:52+0300\n"
+"POT-Creation-Date: 2006-07-06 14:51+0300\n"
+"PO-Revision-Date: 2006-07-06 15:08+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -655,7 +655,8 @@ msgstr "Разредка"
 msgid "The amount of space between children"
 msgstr "Разстоянието между дъщерни елементи"
 
-#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:599 ../gtk/gtktoolbar.c:572
+#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:599 ../gtk/gtktable.c:165
+#: ../gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Еднакво големи"
 
@@ -1244,9 +1245,9 @@ msgstr "Дали текстът може да бъде модифициран о
 msgid "Font"
 msgstr "Шрифт"
 
-#: ../gtk/gtkcellrenderertext.c:265
-msgid "Font description as a string"
-msgstr "Описание на шрифт като низ"
+#: ../gtk/gtkcellrenderertext.c:265 ../gtk/gtktexttag.c:266
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "Описание на шрифт като низ., напр. „Sans Italic 12“"
 
 #: ../gtk/gtkcellrenderertext.c:273 ../gtk/gtktexttag.c:274
 msgid "Font description as a PangoFontDescription struct"
@@ -1351,7 +1352,9 @@ msgstr "Съкращаване"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Предпочитаното място за съкращаване на низа в случаите, когато клетката не разполага с достатъчно място да изобрази целия низ"
+msgstr ""
+"Предпочитаното място за съкращаване на низа в случаите, когато клетката не "
+"разполага с достатъчно място да изобрази целия низ"
 
 #: ../gtk/gtkcellrenderertext.c:426 ../gtk/gtkfilechooserbutton.c:400
 #: ../gtk/gtklabel.c:444
@@ -1776,7 +1779,9 @@ msgstr "Заглавие за откъснато"
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
-msgstr "Заглавие, което може да се покаже от мениджъра на прозорци, когато този изскачащ прозорец е отделен"
+msgstr ""
+"Заглавие, което може да се покаже от мениджъра на прозорци, когато този "
+"изскачащ прозорец е отделен"
 
 #: ../gtk/gtkcombobox.c:681
 msgid "Popup shown"
@@ -3547,9 +3552,9 @@ msgstr "Брой редове в таблицата"
 msgid "Current Page"
 msgstr "Текущата алфа"
 
-#: ../gtk/gtkprintoperation.c:931
+#: ../gtk/gtkprintoperation.c:931 ../gtk/gtkprintunixdialog.c:235
 #, fuzzy
-msgid "The current page in the document."
+msgid "The current page in the document"
 msgstr "Размерът на страницата на изменението"
 
 #: ../gtk/gtkprintoperation.c:952
@@ -3631,11 +3636,6 @@ msgstr ""
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:235
-#, fuzzy
-msgid "The current page in the document"
-msgstr "Размерът на страницата на изменението"
-
 #: ../gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "Selected Printer"
@@ -3651,8 +3651,9 @@ msgid "Activity mode"
 msgstr "Режим на активност"
 
 #: ../gtk/gtkprogress.c:101
+#, fuzzy
 msgid ""
-"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
@@ -4148,8 +4149,9 @@ msgstr ""
 "Втори бутон със стрелка „назад“ от другата страна на лентата за придвижване"
 
 #: ../gtk/gtkscrollbar.c:92
+#, fuzzy
 msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+"Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Втори бутон със стрелка „напред“ от другата страна на лентата за придвижване"
 
@@ -4498,9 +4500,8 @@ msgid "A palette of named colors for use in themes"
 msgstr "Името на иконата от темата на иконите"
 
 #: ../gtk/gtksettings.c:469
-#, fuzzy
 msgid "Enable Animations"
-msgstr "Анимация"
+msgstr "Включване на анимациите"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
@@ -4621,23 +4622,20 @@ msgid "Style of bevel around the statusbar text"
 msgstr "Стил на вдаването около лентата за състоянието"
 
 #: ../gtk/gtkstatusicon.c:188
-#, fuzzy
 msgid "The size of the icon"
-msgstr "Заглавието на прозореца"
+msgstr "Размерът на иконата"
 
 #: ../gtk/gtkstatusicon.c:197
 msgid "Blinking"
-msgstr ""
+msgstr "Мигаща"
 
 #: ../gtk/gtkstatusicon.c:198
-#, fuzzy
 msgid "Whether or not the status icon is blinking"
-msgstr "Дали действието е видимо."
+msgstr "Дали иконата за състоянието да мига"
 
 #: ../gtk/gtkstatusicon.c:206
-#, fuzzy
 msgid "Whether or not the status icon is visible"
-msgstr "Дали действието е видимо."
+msgstr "Дали иконата за състоянието да е видима"
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
@@ -4671,13 +4669,9 @@ msgstr "Разстояние между колони"
 msgid "The amount of space between two consecutive columns"
 msgstr "Разстоянието между две съседни колони"
 
-#: ../gtk/gtktable.c:165
-msgid "Homogenous"
-msgstr "Еднакво"
-
 #: ../gtk/gtktable.c:166
-msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ако е TRUE клетките на таблицата ще са с еднакви височина/широчина"
+msgid "If TRUE, the table cells are all the same width/height"
+msgstr "Ако е TRUE, клетките на таблицата ще са с еднакви височина/широчина"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
@@ -4872,10 +4866,6 @@ msgstr "Посока на текст"
 #: ../gtk/gtktexttag.c:241
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Посока на текст, напр. от „ляво на дясно“ или от „дясно на ляво“"
-
-#: ../gtk/gtktexttag.c:266
-msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Описание на шрифт като низ., напр. „Sans Italic 12“"
 
 #: ../gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -5631,7 +5621,7 @@ msgstr "Шаблон с тирета използван за изчертава�
 #: ../gtk/gtktreeview.c:821
 #, fuzzy
 msgid "Tree line pattern"
-msgstr "Шаблон за линия с пунктир за фокуса"
+msgstr "Шаблон за линия с пунктир"
 
 #: ../gtk/gtktreeview.c:822
 #, fuzzy
@@ -5994,73 +5984,62 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Размер на зоната, извън заделената за обекта, в която ще се чертае"
 
 #: ../gtk/gtkwidget.c:1550
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Цвят на връзката"
+msgstr "Цвят на непосетена връзка"
 
 #: ../gtk/gtkwidget.c:1551
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "Цветът на хипервръзките"
+msgstr "Цветът на непосетените връзки"
 
 #: ../gtk/gtkwidget.c:1564
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "Цвят на връзката"
+msgstr "Цвят на посетена връзка"
 
 #: ../gtk/gtkwidget.c:1565
-#, fuzzy
 msgid "Color of visited links"
-msgstr "Цветът на хипервръзките"
+msgstr "Цветът на посетените връзки"
 
 #: ../gtk/gtkwidget.c:1579
-#, fuzzy
 msgid "Wide Separators"
-msgstr "Разделител"
+msgstr "Широки разделители"
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
-msgstr ""
+msgstr "Дали разделителите са с ширина, която може да се настройва, за да се изчертаят като правоъгълници вместо линии"
 
 #: ../gtk/gtkwidget.c:1594
-#, fuzzy
 msgid "Separator Width"
-msgstr "Широчина на вертикален разделител"
+msgstr "Широчина на разделител"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "Широчина на разделител, ако е зададено да е широк"
 
 #: ../gtk/gtkwidget.c:1609
-#, fuzzy
 msgid "Separator Height"
-msgstr "Първоначална височина"
+msgstr "Височина на разделител"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "Височина на разделител, ако е зададено да е широк"
 
 #: ../gtk/gtkwidget.c:1624
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Политика на хоризонтална лента за придвижване"
+msgstr "Дължина на хоризонтална стрелка за прелистване"
 
 #: ../gtk/gtkwidget.c:1625
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Когато се показва хоризонтална лента за придвижване"
+msgstr "Дължината на хоризонталната стрелка за прелистване"
 
 #: ../gtk/gtkwidget.c:1639
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Политика на вертикална лента за придвижване"
+msgstr "Височина на вертикална стрелка за прелистване"
 
 #: ../gtk/gtkwidget.c:1640
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Когато се показва вертикалната лента за придвижване"
+msgstr "Височината на вертикалната стрелка за прелистване"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
