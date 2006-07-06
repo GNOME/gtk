@@ -50,6 +50,7 @@ struct _GtkPrinterCups
 
   ipp_pstate_t state;
   gboolean reading_ppd;
+  gchar      *ppd_name;
   ppd_file_t *ppd_file;
 };
 
@@ -63,7 +64,8 @@ GType                    gtk_printer_cups_get_type      (void) G_GNUC_CONST;
 void                     gtk_printer_cups_register_type (GTypeModule     *module);
 GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
 							 GtkPrintBackend *backend);
-ppd_file_t *             gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
+ppd_file_t 		*gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
+char			*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
 
 G_END_DECLS
 

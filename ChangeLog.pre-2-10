@@ -1,3 +1,15 @@
+2006-07-06  John (J5) Palmieri  <johnp@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: 
+	(cups_request_printer_list_cb): Get the name of the first printer
+	in a class to use when requesting a PPD
+	(cups_request_ppd_cb, cups_request_ppd): Fix the parameters of
+	the "details-acquired" signal emittion
+	(cups_request_ppd): get the ppd name from the cups printer
+
+	* modules/printbackends/cups/gtkprintercups.c (gtk_printer_cups_get_ppd_name):
+	New method for getting the name of the ppd we should request
+
 2006-07-06  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c: added a bunch of utility functions to copy

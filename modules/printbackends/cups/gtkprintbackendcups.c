@@ -956,6 +956,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
   list_has_changed = FALSE;
 
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
   cups_backend->list_printers_pending = FALSE;
 
   if (gtk_cups_result_is_error (result))
@@ -1001,6 +1004,11 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	else if (!strcmp (attr->name, "member-uris") &&
 		 attr->value_tag == IPP_TAG_URI)
 	  member_uris = attr->values[0].string.text;
+        else
+	  {
+	    GTK_NOTE (PRINTING,
+                      g_print ("CUPS Backend: Attribute %s ignored", attr->name));
+	  }
 
         attr = attr->next;
       }
@@ -1034,10 +1042,20 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
 	  cups_printer->device_uri = g_strdup_printf ("/printers/%s", printer_name);
 
+          /* Check to see if we are looking at a class */
 	  if (member_uris)
-	    cups_printer->printer_uri = g_strdup (member_uris);
+	    {
+	      cups_printer->printer_uri = g_strdup (member_uris);
+	      /* TODO if member_uris is a class we need to recursivly find a printer */
+	      GTK_NOTE (PRINTING,
+                        g_print ("CUPS Backend: Found class with printer %s\n", member_uris));
+	    }
 	  else
-	    cups_printer->printer_uri = g_strdup (printer_uri);
+	    {
+	      cups_printer->printer_uri = g_strdup (printer_uri);
+              GTK_NOTE (PRINTING,
+                        g_print ("CUPS Backend: Found printer %s\n", printer_uri));
+            }
 
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
 	  httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri, 
@@ -1055,6 +1073,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 			&port, 
 			resource);
 #endif
+
+          if (member_uris && !strncmp (resource, "/printers/", 10))
+	    {
+	      cups_printer->ppd_name = g_strdup (resource + 10);
+              GTK_NOTE (PRINTING,
+                        g_print ("CUPS Backend: Setting ppd name '%s' for printer class '%s'\n", cups_printer->ppd_name, printer_name));
+            }
 
 	  gethostname (uri, sizeof(uri));
 	  if (strcasecmp (uri, hostname) == 0)
@@ -1198,7 +1223,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
   if (gtk_cups_result_is_error (result))
     {
-      g_signal_emit_by_name (printer, "details-acquired", printer, FALSE);
+      g_signal_emit_by_name (printer, "details-acquired", FALSE);
       return;
     }
 
@@ -1209,7 +1234,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
   
   gtk_printer_set_has_details (printer, TRUE);
-  g_signal_emit_by_name (printer, "details-acquired", printer, TRUE);
+  g_signal_emit_by_name (printer, "details-acquired", TRUE);
 }
 
 static void
@@ -1259,7 +1284,7 @@ cups_request_ppd (GtkPrinter *printer)
       g_free (ppd_filename);
       g_free (data);
 
-      g_signal_emit_by_name (printer, "details-acquired", printer, FALSE);
+      g_signal_emit_by_name (printer, "details-acquired", FALSE);
       return;
     }
     
@@ -1270,7 +1295,8 @@ cups_request_ppd (GtkPrinter *printer)
 
   data->printer = g_object_ref (printer);
 
-  resource = g_strdup_printf ("/printers/%s.ppd", gtk_printer_get_name (printer));
+  resource = g_strdup_printf ("/printers/%s.ppd", 
+                              gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS(printer)));
   request = gtk_cups_request_new (http,
                                   GTK_CUPS_GET,
 				  0,

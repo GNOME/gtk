@@ -73,6 +73,7 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->state = 0;
   printer->hostname = NULL;
   printer->port = 0;
+  printer->ppd_name = NULL;
   printer->ppd_file = NULL;
 }
 
@@ -88,6 +89,7 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->device_uri);
   g_free (printer->printer_uri);
   g_free (printer->hostname);
+  g_free (printer->ppd_name);
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
@@ -124,3 +126,17 @@ gtk_printer_cups_get_ppd (GtkPrinterCups *printer)
 {
   return printer->ppd_file;
 }
+
+char *
+gtk_printer_cups_get_ppd_name (GtkPrinterCups  *printer)
+{
+  gchar *result;
+
+  result = printer->ppd_name;
+
+  if (result == NULL)
+    result = gtk_printer_get_name (GTK_PRINTER (printer));
+
+  return result;
+}
+
