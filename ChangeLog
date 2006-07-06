@@ -1,3 +1,10 @@
+2006-07-06  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrc.c: added a bunch of utility functions to copy
+	icon_factories and color_hashes between GtkRcStyles and make sure
+	that newly created, duplicated and merged styles have access to
+	all icon_factories and color_hashes they need. Fixes bug #346668.
+
 2006-07-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c: Improve the -/_ consistency in signal and

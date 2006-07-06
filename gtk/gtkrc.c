@@ -232,6 +232,9 @@ static void        gtk_rc_style_real_merge           (GtkRcStyle      *dest,
                                                       GtkRcStyle      *src);
 static GtkRcStyle* gtk_rc_style_real_create_rc_style (GtkRcStyle      *rc_style);
 static GtkStyle*   gtk_rc_style_real_create_style    (GtkRcStyle      *rc_style);
+static void        gtk_rc_style_copy_icons_and_colors(GtkRcStyle      *rc_style,
+                                                      GtkRcStyle      *src_style,
+                                                      GtkRcContext    *context);
 static gint	   gtk_rc_properties_cmp	     (gconstpointer    bsearch_node1,
 						      gconstpointer    bsearch_node2);
 static void        gtk_rc_set_free                   (GtkRcSet        *rc_set);
@@ -1191,6 +1194,8 @@ gtk_rc_style_copy (GtkRcStyle *orig)
   style = GTK_RC_STYLE_GET_CLASS (orig)->create_rc_style (orig);
   GTK_RC_STYLE_GET_CLASS (style)->merge (style, orig);
 
+  gtk_rc_style_copy_icons_and_colors (style, orig, NULL);
+
   return style;
 }
 
@@ -1294,7 +1299,7 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
 			 GtkRcStyle *src)
 {
   gint i;
-  
+
   for (i = 0; i < 5; i++)
     {
       if (!dest->bg_pixmap_name[i] && src->bg_pixmap_name[i])
@@ -1354,6 +1359,101 @@ static GtkStyle *
 gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
 {
   return gtk_style_new ();
+}
+
+static void
+gtk_rc_style_prepend_empty_icon_factory (GtkRcStyle *rc_style)
+{
+  GtkIconFactory *factory = gtk_icon_factory_new ();
+
+  rc_style->icon_factories = g_slist_prepend (rc_style->icon_factories, factory);
+}
+
+static void
+gtk_rc_style_prepend_empty_color_hash (GtkRcStyle *rc_style)
+{
+  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
+  GHashTable        *hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                   g_free,
+                                                   (GDestroyNotify) gdk_color_free);
+
+  priv->color_hashes = g_slist_prepend (priv->color_hashes, hash);
+}
+
+static void
+gtk_rc_style_append_icon_factories (GtkRcStyle *rc_style,
+                                    GtkRcStyle *src_style)
+{
+  GSList *concat = g_slist_copy (src_style->icon_factories);
+
+  g_slist_foreach (concat, (GFunc) g_object_ref, NULL);
+
+  rc_style->icon_factories = g_slist_concat (rc_style->icon_factories, concat);
+}
+
+static void
+gtk_rc_style_append_color_hashes (GtkRcStyle *rc_style,
+                                  GtkRcStyle *src_style)
+{
+  GtkRcStylePrivate *priv     = GTK_RC_STYLE_GET_PRIVATE (rc_style);
+  GtkRcStylePrivate *src_priv = GTK_RC_STYLE_GET_PRIVATE (src_style);
+  GSList            *concat   = g_slist_copy (src_priv->color_hashes);
+
+  g_slist_foreach (concat, (GFunc) g_hash_table_ref, NULL);
+
+  priv->color_hashes = g_slist_concat (priv->color_hashes, concat);
+}
+
+static void
+gtk_rc_style_copy_icons_and_colors (GtkRcStyle   *rc_style,
+                                    GtkRcStyle   *src_style,
+                                    GtkRcContext *context)
+{
+  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
+
+  if (src_style)
+    {
+      GtkRcStylePrivate *src_priv = GTK_RC_STYLE_GET_PRIVATE (src_style);
+
+      /* Append src_style's factories, adding a ref to them */
+      if (src_style->icon_factories != NULL)
+        {
+          /* Add a factory for ourselves if we have none,
+           * in case we end up defining more stock icons.
+           * I see no real way around this; we need to maintain
+           * the invariant that the first factory in the list
+           * is always our_factory, the one belonging to us,
+           * and if we put src_style factories in the list we can't
+           * do that if the style is reopened.
+           */
+          if (rc_style->icon_factories == NULL)
+            gtk_rc_style_prepend_empty_icon_factory (rc_style);
+
+          gtk_rc_style_append_icon_factories (rc_style, src_style);
+        }
+
+      /* Also append src_style's color hashes, adding a ref to them */
+      if (src_priv->color_hashes != NULL)
+        {
+          /* See comment above .. */
+          if (priv->color_hashes == NULL)
+            gtk_rc_style_prepend_empty_color_hash (rc_style);
+
+          gtk_rc_style_append_color_hashes (rc_style, src_style);
+        }
+    }
+
+  /*  if we didn't get color hashes from the src_style, initialize
+   *  the list with the settings' color scheme (if it exists)
+   */
+  if (priv->color_hashes == NULL && context && context->color_hash != NULL)
+    {
+      gtk_rc_style_prepend_empty_color_hash (rc_style);
+
+      priv->color_hashes =
+        g_slist_append (priv->color_hashes,
+                        g_hash_table_ref (context->color_hash));
+    }
 }
 
 static void
@@ -2212,7 +2312,6 @@ gtk_rc_init_style (GtkRcContext *context,
     {
       GtkRcStyle *base_style = NULL;
       GtkRcStyle *proto_style;
-      GtkRcStylePrivate *proto_priv;
       GtkRcStyleClass *proto_style_class;
       GSList *tmp_styles;
       GType rc_style_type = GTK_TYPE_RC_STYLE;
@@ -2240,30 +2339,20 @@ gtk_rc_init_style (GtkRcContext *context,
       
       proto_style_class = GTK_RC_STYLE_GET_CLASS (base_style);
       proto_style = proto_style_class->create_rc_style (base_style);
-      proto_priv = GTK_RC_STYLE_GET_PRIVATE (proto_style);
 
       tmp_styles = rc_styles;
       while (tmp_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
-          GtkRcStylePrivate *rc_priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
-          GSList *concat_list;
-          
+
 	  proto_style_class->merge (proto_style, rc_style);	  
           
 	  /* Point from each rc_style to the list of styles */
 	  if (!g_slist_find (rc_style->rc_style_lists, rc_styles))
 	    rc_style->rc_style_lists = g_slist_prepend (rc_style->rc_style_lists, rc_styles);
 
-          concat_list = g_slist_copy (rc_style->icon_factories);
-          g_slist_foreach (concat_list, (GFunc) g_object_ref, NULL);
-          proto_style->icon_factories = g_slist_concat (proto_style->icon_factories,
-                                                        concat_list);
-
-          concat_list = g_slist_copy (rc_priv->color_hashes);
-          g_slist_foreach (concat_list, (GFunc) g_hash_table_ref, NULL);
-          proto_priv->color_hashes = g_slist_concat (proto_priv->color_hashes,
-                                                     concat_list);
+          gtk_rc_style_append_icon_factories (proto_style, rc_style);
+          gtk_rc_style_append_color_hashes (proto_style, rc_style);
 
 	  tmp_styles = tmp_styles->next;
 	}
@@ -2643,7 +2732,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 {
   GtkRcStyle *rc_style;
   GtkRcStyle *orig_style;
-  GtkRcStyle *parent_style;
+  GtkRcStyle *parent_style = NULL;
   GtkRcStylePrivate *rc_priv = NULL;
   guint token;
   gint i;
@@ -2701,9 +2790,6 @@ gtk_rc_parse_style (GtkRcContext *context,
       parent_style = gtk_rc_style_find (context, scanner->value.v_string);
       if (parent_style)
 	{
-          GtkRcStylePrivate *parent_priv = GTK_RC_STYLE_GET_PRIVATE (parent_style);
-          GSList *concat_list;
-
 	  for (i = 0; i < 5; i++)
 	    {
 	      rc_style->color_flags[i] = parent_style->color_flags[i];
@@ -2739,65 +2825,19 @@ gtk_rc_parse_style (GtkRcContext *context,
 		g_free (rc_style->bg_pixmap_name[i]);
 	      rc_style->bg_pixmap_name[i] = g_strdup (parent_style->bg_pixmap_name[i]);
 	    }
-          
-          /* Append parent's factories, adding a ref to them */
-          if (parent_style->icon_factories != NULL)
-            {
-              /* Add a factory for ourselves if we have none,
-               * in case we end up defining more stock icons.
-               * I see no real way around this; we need to maintain
-               * the invariant that the first factory in the list
-               * is always our_factory, the one belonging to us,
-               * and if we put parent factories in the list we can't
-               * do that if the style is reopened.
-               */
-              if (our_factory == NULL)
-                {
-                  our_factory = gtk_icon_factory_new ();
-                  rc_style->icon_factories = g_slist_prepend (rc_style->icon_factories,
-                                                              our_factory);
-                }
-
-              concat_list = g_slist_copy (parent_style->icon_factories);
-              g_slist_foreach (concat_list, (GFunc) g_object_ref, NULL);
-              rc_style->icon_factories = g_slist_concat (rc_style->icon_factories,
-                                                         concat_list);
-            }
-
-          /* Also append parent's color hashes, adding a ref to them */
-          if (parent_priv->color_hashes != NULL)
-            {
-              /* See comment above .. */
-              if (our_hash == NULL)
-                {
-                  our_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                    g_free,
-                                                    (GDestroyNotify) gdk_color_free);
-                  rc_priv->color_hashes = g_slist_prepend (rc_priv->color_hashes,
-                                                           our_hash);
-                }
-
-              concat_list = g_slist_copy (parent_priv->color_hashes);
-              g_slist_foreach (concat_list, (GFunc) g_hash_table_ref, NULL);
-              rc_priv->color_hashes = g_slist_concat (rc_priv->color_hashes,
-                                                      concat_list);
-            }
 	}
     }
 
-  /*  if we didn't get color hashes from our parent style, initialize
-   *  the list with the settings' color scheme (if it exists)
+  /*  get icon_factories and color_hashes from the parent style;
+   *  if the parent_style doesn't have color_hashes, initializes
+   *  the color_hashes with the settings' color scheme (if it exists)
    */
-  if (our_hash == NULL && context->color_hash != NULL)
-    {
-      our_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                        g_free,
-                                        (GDestroyNotify) gdk_color_free);
-      rc_priv->color_hashes = g_slist_prepend (rc_priv->color_hashes,
-                                               our_hash);
-      rc_priv->color_hashes = g_slist_append (rc_priv->color_hashes,
-                                              g_hash_table_ref (context->color_hash));
-    }
+  gtk_rc_style_copy_icons_and_colors (rc_style, parent_style, context);
+
+  if (rc_style->icon_factories)
+    our_factory = rc_style->icon_factories->data;
+  if (rc_priv->color_hashes)
+    our_hash = rc_priv->color_hashes->data;
 
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_CURLY)
@@ -2846,22 +2886,14 @@ gtk_rc_parse_style (GtkRcContext *context,
 	  break;
         case GTK_RC_TOKEN_STOCK:
           if (our_factory == NULL)
-            {
-              our_factory = gtk_icon_factory_new ();
-              rc_style->icon_factories = g_slist_prepend (rc_style->icon_factories,
-                                                          our_factory);
-            }
+            gtk_rc_style_prepend_empty_icon_factory (rc_style);
+          our_factory = rc_style->icon_factories->data;
           token = gtk_rc_parse_stock (context, scanner, rc_style, our_factory);
           break;
         case GTK_RC_TOKEN_COLOR:
           if (our_hash == NULL)
-            {
-              our_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                g_free,
-                                                (GDestroyNotify) gdk_color_free);
-              rc_priv->color_hashes = g_slist_prepend (rc_priv->color_hashes,
-                                                       our_hash);
-            }
+            gtk_rc_style_prepend_empty_color_hash (rc_style);
+          our_hash = rc_priv->color_hashes->data;
           token = gtk_rc_parse_logical_color (scanner, rc_style, our_hash);
           break;
 	case G_TOKEN_IDENTIFIER:
@@ -3415,6 +3447,18 @@ gtk_rc_parse_engine (GtkRcContext *context,
 
   if (new_style)
     {
+      GtkRcStylePrivate *rc_priv = GTK_RC_STYLE_GET_PRIVATE (*rc_style);
+      GtkRcStylePrivate *new_priv = GTK_RC_STYLE_GET_PRIVATE (new_style);
+
+      /* take over icon factories and color hashes from the to-be-deleted style
+       */
+
+      new_style->icon_factories = (*rc_style)->icon_factories;
+      (*rc_style)->icon_factories = NULL;
+
+      new_priv->color_hashes = rc_priv->color_hashes;
+      rc_priv->color_hashes = NULL;
+
       new_style->engine_specified = TRUE;
 
       g_object_unref (*rc_style);
