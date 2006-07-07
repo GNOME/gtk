@@ -133,7 +133,7 @@ Sets the time between the user moving the mouse over a widget and the widget's t
 </para>
 
 @tooltips: a #GtkTooltips.
-@delay: an integer value representing seconds (FIXME: double-check this).
+@delay: an integer value representing milliseconds.
 
 
 <!-- ##### FUNCTION gtk_tooltips_set_tip ##### -->
