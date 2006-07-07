@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-06 09:45+0300\n"
-"PO-Revision-Date: 2006-07-06 10:16+0300\n"
+"POT-Creation-Date: 2006-07-07 09:37+0300\n"
+"PO-Revision-Date: 2006-07-07 09:39+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -639,7 +639,8 @@ msgstr "Välit"
 msgid "The amount of space between children"
 msgstr "Lasten välien suuruus"
 
-#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:599 ../gtk/gtktoolbar.c:572
+#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:599 ../gtk/gtktable.c:165
+#: ../gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Tasakokoisuus"
 
@@ -1060,8 +1061,7 @@ msgstr "On syöttö"
 
 #: ../gtk/gtkcellrenderercombo.c:129
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Jos FALSE, muiden kuin annettujen merkkijonojen syöttämistä ei sallita"
+msgstr "Jos FALSE, muiden kuin annettujen merkkijonojen syöttämistä ei sallita"
 
 #: ../gtk/gtkcellrendererpixbuf.c:112
 msgid "Pixbuf Object"
@@ -1213,9 +1213,9 @@ msgstr "Voiko käyttäjä muuttaa tekstiä"
 msgid "Font"
 msgstr "Kirjasin"
 
-#: ../gtk/gtkcellrenderertext.c:265
-msgid "Font description as a string"
-msgstr "Kirjasimen kuvaus merkkijonona"
+#: ../gtk/gtkcellrenderertext.c:265 ../gtk/gtktexttag.c:266
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "Kirjasimen kuvaus merkkijonona. Esimerkiksi \"Sans Italic 12\""
 
 #: ../gtk/gtkcellrenderertext.c:273 ../gtk/gtktexttag.c:274
 msgid "Font description as a PangoFontDescription struct"
@@ -1743,7 +1743,8 @@ msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
-"Otsikko, jonka ikkunointiohjelma voi näyttää, kun ponnahdusikkuna on irrotettu"
+"Otsikko, jonka ikkunointiohjelma voi näyttää, kun ponnahdusikkuna on "
+"irrotettu"
 
 #: ../gtk/gtkcombobox.c:681
 msgid "Popup shown"
@@ -3455,9 +3456,9 @@ msgstr "Sivujen lukumäärä asiakirjassa."
 msgid "Current Page"
 msgstr "Nykyinen sivu"
 
-#: ../gtk/gtkprintoperation.c:931
-msgid "The current page in the document."
-msgstr "Nykyinen sivu asiakirjassa."
+#: ../gtk/gtkprintoperation.c:931 ../gtk/gtkprintunixdialog.c:235
+msgid "The current page in the document"
+msgstr "Nykyinen sivu asiakirjassa"
 
 #: ../gtk/gtkprintoperation.c:952
 msgid "Use full page"
@@ -3468,8 +3469,8 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
-"TRUE, jos tässä yhteydessä lähteen tulisi olla sivun kulmassa eikä piirrettävän "
-"alueen kulmassa"
+"TRUE, jos tässä yhteydessä lähteen tulisi olla sivun kulmassa eikä "
+"piirrettävän alueen kulmassa"
 
 #: ../gtk/gtkprintoperation.c:974
 msgid ""
@@ -3535,10 +3536,6 @@ msgstr "Otsake välilehdelle, joka sisältää omia ikkunaelementtejä."
 msgid "The GtkPageSetup to use"
 msgstr "Käytettävä GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:235
-msgid "The current page in the document"
-msgstr "Nykyinen sivu asiakirjassa"
-
 #: ../gtk/gtkprintunixdialog.c:252
 msgid "Selected Printer"
 msgstr "Valittu tulostin"
@@ -3553,13 +3550,13 @@ msgstr "Aktiivisuustila"
 
 #: ../gtk/gtkprogress.c:101
 msgid ""
-"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
 "Jos TRUE, niin GtkProgress on aktiivisuustilassa, eli se ilmaisee että "
-"jotakin on käynnissä, muttei ilmoita edistymistilasta mitään. Tätä "
-"käytetään, kun tehdään jotakin, jonka kestoa ei tiedetä."
+"jotakin on käynnissä, muttei ilmoita toiminnon edistymisestä mitään. Tätä "
+"käytetään tehtäessä jotakin, jonka kestoa ei tiedetä."
 
 #: ../gtk/gtkprogress.c:108
 msgid "Show text"
@@ -3704,8 +3701,7 @@ msgstr "Nykyinen arvo"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
-"Nykyisen jäsenen arvo-ominaisuus ryhmässä, johon tämä toiminto kuuluu."
+msgstr "Nykyisen jäsenen arvo-ominaisuus ryhmässä, johon tämä toiminto kuuluu."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3743,8 +3739,7 @@ msgstr "Askeltimen alarajan herkkyys"
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
-"Askeltimen herkkyyden määritelmä, joka koskee säädön alarajaa"
+msgstr "Askeltimen herkkyyden määritelmä, joka koskee säädön alarajaa"
 
 #: ../gtk/gtkrange.c:345
 msgid "Upper stepper sensitivity"
@@ -3754,8 +3749,7 @@ msgstr "Askeltimen ylärajan herkkyys"
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
-"Askeltimen herkkyyden määritelmä, joka koskee säädön ylärajaa"
+msgstr "Askeltimen herkkyyden määritelmä, joka koskee säädön ylärajaa"
 
 #: ../gtk/gtkrange.c:353
 msgid "Slider Width"
@@ -3816,8 +3810,8 @@ msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
-"Jos TOSI, liu'ut piirretään valitsimilla ACTIVE ja sisäänvarjostettuina, "
-"kun niitä raahataan."
+"Jos TOSI, liu'ut piirretään valitsimilla ACTIVE ja sisäänvarjostettuina, kun "
+"niitä raahataan."
 
 #: ../gtk/gtkrange.c:422
 msgid "Trough Side Details"
@@ -4038,10 +4032,9 @@ msgstr ""
 
 #: ../gtk/gtkscrollbar.c:92
 msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+"Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
-"Näytä toissijainen eteenpäin-nuolipainike vierityspalkin vastakkaisessa "
-"päässä"
+"Näytä toinen eteenpäin-nuolipainike vierityspalkin vastakkaisessa päässä"
 
 #: ../gtk/gtkscrolledwindow.c:221 ../gtk/gtktext.c:541
 #: ../gtk/gtktreeview.c:557
@@ -4331,8 +4324,8 @@ msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
-"Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta "
-"voi vaihtaa syöttötapaa"
+"Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta voi "
+"vaihtaa syöttötapaa"
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
@@ -4343,8 +4336,8 @@ msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
-"Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta "
-"voi lisätä kontrollimerkkejä"
+"Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta voi "
+"lisätä kontrollimerkkejä"
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
@@ -4392,8 +4385,7 @@ msgstr "Käytä kosketusnäyttöä"
 
 #: ../gtk/gtksettings.c:489
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr ""
-"Jos TRUE, ei siirron huomatustapahtumia raportoida tälle näytölle"
+msgstr "Jos TRUE, ei siirron huomatustapahtumia raportoida tälle näytölle"
 
 #: ../gtk/gtksettings.c:507
 msgid "Color Hash"
@@ -4547,13 +4539,9 @@ msgstr "Sarakeväli"
 msgid "The amount of space between two consecutive columns"
 msgstr "Kahden peräkkäisen sarakkeen väli"
 
-#: ../gtk/gtktable.c:165
-msgid "Homogenous"
-msgstr "Tasakokoisuus"
-
 #: ../gtk/gtktable.c:166
-msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "TRUEtarkoittaa, että taulukon solut ovat samanlevyisiä/-kokoisia"
+msgid "If TRUE, the table cells are all the same width/height"
+msgstr "Jos TRUE, taulukon solut ovat samanlevyisiä ja -kokoisia"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
@@ -4748,10 +4736,6 @@ msgstr "Tekstin suunta"
 #: ../gtk/gtktexttag.c:241
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Tekstin suunta (oikealta vasemmalle tai vasemmalta oikealle)"
-
-#: ../gtk/gtktexttag.c:266
-msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Kirjasimen kuvaus merkkijonona. Esimerkiksi \"Sans Italic 12\""
 
 #: ../gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -6122,3 +6106,11 @@ msgstr "Syöttötavan tilan tyyli"
 msgid "How to draw the input method statusbar"
 msgstr "Miten syöttötapojen tilarivi piirtyy"
 
+#~ msgid "Font description as a string"
+#~ msgstr "Kirjasimen kuvaus merkkijonona"
+
+#~ msgid "The current page in the document."
+#~ msgstr "Nykyinen sivu asiakirjassa."
+
+#~ msgid "Homogenous"
+#~ msgstr "Tasakokoisuus"
