@@ -2679,7 +2679,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
 
 	      svalue.origin = prop.origin;
 	      memcpy (&svalue.value, &prop.value, sizeof (prop.value));
-	      g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
+	      g_strcanon (name, G_CSET_DIGITS "-" G_CSET_a_2_z G_CSET_A_2_Z, '-');
 	      _gtk_settings_set_property_value_from_rc (context->settings,
 							name,
 							&svalue);
@@ -2921,7 +2921,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 
 	      /* it's important that we do the same canonification as GParamSpecPool here */
 	      name = g_strdup (scanner->value.v_identifier);
-	      g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
+	      g_strcanon (name, G_CSET_DIGITS "-" G_CSET_a_2_z G_CSET_A_2_Z, '-');
 	      prop.property_name = g_quark_from_string (name);
 	      g_free (name);
 

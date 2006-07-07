@@ -971,7 +971,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
     }
   
   name = g_strdup (prop_name);
-  g_strcanon (name, G_CSET_DIGITS "-_" G_CSET_a_2_z G_CSET_A_2_Z, '-');
+  g_strcanon (name, G_CSET_DIGITS "-" G_CSET_a_2_z G_CSET_A_2_Z, '-');
   name_quark = g_quark_from_string (name);
   g_free (name);
 
