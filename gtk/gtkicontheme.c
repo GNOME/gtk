@@ -578,7 +578,7 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
     _gtk_icon_cache_unref (dir_mtime->cache);
 
   g_free (dir_mtime->dir);
-  g_free (dir_mtime);
+  g_slice_free (IconThemeDirMtime, dir_mtime);
 
 }
 
@@ -894,7 +894,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
       path = g_build_filename (priv->search_path[i],
 			       theme_name,
 			       NULL);
-      dir_mtime = g_new (IconThemeDirMtime, 1);
+      dir_mtime = g_slice_new (IconThemeDirMtime);
       dir_mtime->cache = NULL;
       dir_mtime->dir = path;
       if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
@@ -1044,7 +1044,7 @@ load_themes (GtkIconTheme *icon_theme)
     {
       dir = icon_theme->priv->search_path[base];
 
-      dir_mtime = g_new (IconThemeDirMtime, 1);
+      dir_mtime = g_slice_new (IconThemeDirMtime);
       dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
       dir_mtime->dir = g_strdup (dir);
       if (g_stat (dir, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
@@ -2056,7 +2056,6 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
   char *base_name;
   char **split;
   gsize length;
-  char *dot;
   char *str;
   char *split_point;
   int i;
@@ -2076,9 +2075,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
     }
   else
     {
-      base_name = g_strdup (name);
-      dot = strrchr (base_name, '.');
-      *dot = 0;
+      base_name = strip_suffix (name);
       
       data = g_slice_new0 (GtkIconData);
       g_hash_table_replace (dir->icon_data, base_name, data);

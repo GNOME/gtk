@@ -1,3 +1,7 @@
+2006-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: Small memory savings.
+
 2006-07-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c: Get the display name
