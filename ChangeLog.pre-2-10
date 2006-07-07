@@ -1,3 +1,13 @@
+2006-07-07  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: Generate a grab broken event when
+	appropriate. Fixes bug #346603, patch from Dave Vasilevsky.
+	
+	* gdk/quartz/gdkevents-quartz.c:
+	* gdk/quartz/gdkkeys-quartz.c:
+	* gdk/quartz/gdkprivate-quartz.c: Another patch from Dave Vasilevsky,
+	fixes bug #346605. Makes modifier key events being sent properly.
+
 2006-07-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c

@@ -122,6 +122,8 @@ GdkImage *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
 
 void _gdk_quartz_send_map_events (GdkWindow *window);
 
+GdkEventType _gdk_quartz_flags_changed_is_press (NSEvent *event);
+
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
 

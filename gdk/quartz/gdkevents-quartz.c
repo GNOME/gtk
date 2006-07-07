@@ -333,6 +333,28 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   return NULL;
 }
 
+static void
+generate_grab_broken_event (GdkWindow *window,
+			    gboolean   keyboard,
+			    gboolean   implicit,
+			    GdkWindow *grab_window)
+{
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkEvent event;
+  
+      event.type = GDK_GRAB_BROKEN;
+      event.grab_broken.window = window;
+      event.grab_broken.send_event = 0;
+      event.grab_broken.keyboard = keyboard;
+      event.grab_broken.implicit = implicit;
+      event.grab_broken.grab_window = grab_window;
+      
+      gdk_event_put (&event);
+    }
+}
+
+
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow  *window,
 		   gint        owner_events,
@@ -342,7 +364,11 @@ gdk_keyboard_grab (GdkWindow  *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
   if (_gdk_quartz_keyboard_grab_window)
-    gdk_keyboard_ungrab (time);
+    {
+      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
+				  TRUE, FALSE, window);
+      g_object_unref (_gdk_quartz_keyboard_grab_window);
+    }
 
   _gdk_quartz_keyboard_grab_window = g_object_ref (window);
   keyboard_grab_owner_events = owner_events;
@@ -454,10 +480,15 @@ gdk_pointer_grab (GdkWindow    *window,
 
   if (_gdk_quartz_pointer_grab_window)
     {
-      if (!pointer_grab_implicit)
-	return GDK_GRAB_ALREADY_GRABBED;
+      if (_gdk_quartz_pointer_grab_window == window && !pointer_grab_implicit)
+        return GDK_GRAB_ALREADY_GRABBED;
       else
-	pointer_ungrab_internal (TRUE);
+        {
+          if (_gdk_quartz_pointer_grab_window != window)
+            generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
+					FALSE, pointer_grab_implicit, window);
+          pointer_ungrab_internal (TRUE);
+        }
     }
 
   return pointer_grab_internal (window, owner_events, event_mask, 
@@ -680,9 +711,18 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 	return mask;
       }
     case NSKeyDown:
-      return GDK_KEY_PRESS_MASK;
     case NSKeyUp:
-      return GDK_KEY_RELEASE_MASK;
+    case NSFlagsChanged:
+      {
+        GdkEventType type = _gdk_quartz_key_event_type (nsevent);
+        switch (type)
+          {
+            case GDK_KEY_PRESS:   return GDK_KEY_PRESS_MASK;
+            case GDK_KEY_RELEASE: return GDK_KEY_RELEASE_MASK;
+            case GDK_NOTHING:     return 0;
+            default: g_assert_not_reached ();
+          }
+      }
     default:
       g_assert_not_reached ();
     }
@@ -1137,6 +1177,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 
     case NSKeyDown:
     case NSKeyUp:
+    case NSFlagsChanged:
       {
 	GdkWindow *keyboard_window;
 	GdkEventMask event_mask;
@@ -1274,24 +1315,11 @@ create_scroll_event (GdkWindow *window, NSEvent *nsevent, GdkScrollDirection dir
 }
 
 static GdkEvent *
-create_key_event (GdkWindow *window, NSEvent *nsevent)
+create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 {
-  GdkEventType event_type;
   GdkEvent *event;
 
-  switch ([nsevent type]) 
-    {
-    case NSKeyDown:
-      event_type = GDK_KEY_PRESS;
-      break;
-    case NSKeyUp:
-      event_type = GDK_KEY_RELEASE;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  event = gdk_event_new (event_type);
+  event = gdk_event_new (type);
   event->key.window = window;
   event->key.time = get_event_time (nsevent);
   event->key.state = get_keyboard_modifiers_from_nsevent (nsevent);
@@ -1305,6 +1333,12 @@ create_key_event (GdkWindow *window, NSEvent *nsevent)
 				       &event->key.keyval,
 				       NULL, NULL, NULL);
 
+  GDK_NOTE(EVENTS,
+    g_message ("key %s:\t\twindow: %p  key: %12s  %d",
+	  type == GDK_KEY_PRESS ? "press" : "release",
+	  event->key.window,
+	  event->key.keyval ? gdk_keyval_name (event->key.keyval) : "(none)",
+	  event->key.keyval));
   return event;
 }
 
@@ -1425,11 +1459,17 @@ gdk_event_translate (NSEvent *nsevent)
       }
     case NSKeyDown:
     case NSKeyUp:
-      event = create_key_event (window, nsevent);
-      append_event (event);
-      return TRUE;
-      break;
-
+    case NSFlagsChanged:
+      {
+        GdkEventType type = _gdk_quartz_key_event_type (nsevent);
+        if (type == GDK_NOTHING)
+          return FALSE;
+        
+        event = create_key_event (window, nsevent, type);
+        append_event (event);
+        return TRUE;
+        break;
+      }
     default:
       NSLog(@"Untranslated: %@", nsevent);
     }

@@ -52,6 +52,7 @@
 #include <config.h>
 
 #include <Carbon/Carbon.h>
+#include <AppKit/NSEvent.h>
 #include "gdk.h"
 #include "gdkkeysyms.h"
 
@@ -102,30 +103,32 @@ macroman2ucs (unsigned char c)
 const static struct {
   guint keycode;
   guint keyval;
+  unsigned int modmask; /* So we can tell when a mod key is pressed/released */
 } known_keys[] = {
-  {  55, GDK_Meta_L },
-  {  56, GDK_Shift_L },
-  {  57, GDK_Caps_Lock },
-  {  58, GDK_Alt_L },
-  {  59, GDK_Control_L },
-  {  60, GDK_Shift_R },
-  {  61, GDK_Alt_R },
-  {  62, GDK_Control_R },
-  { 122, GDK_F1 },
-  { 120, GDK_F2 },
-  {  99, GDK_F3 },
-  { 118, GDK_F4 },
-  {  96, GDK_F5 },
-  {  97, GDK_F6 },
-  {  98, GDK_F7 },
-  { 100, GDK_F8 },
-  { 101, GDK_F9 },
-  { 109, GDK_F10 },
-  { 103, GDK_F11 },
-  { 111, GDK_F12 },
-  { 105, GDK_F13 },
-  { 107, GDK_F14 },
-  { 113, GDK_F15 },
+  {  54, GDK_Meta_R,    NSCommandKeyMask },
+  {  55, GDK_Meta_L,    NSCommandKeyMask },
+  {  56, GDK_Shift_L,   NSShiftKeyMask },
+  {  57, GDK_Caps_Lock, NSAlphaShiftKeyMask },
+  {  58, GDK_Alt_L,     NSAlternateKeyMask },
+  {  59, GDK_Control_L, NSControlKeyMask },
+  {  60, GDK_Shift_R,   NSShiftKeyMask },
+  {  61, GDK_Alt_R,     NSAlternateKeyMask },
+  {  62, GDK_Control_R, NSControlKeyMask },
+  { 122, GDK_F1, 0 },
+  { 120, GDK_F2, 0 },
+  {  99, GDK_F3, 0 },
+  { 118, GDK_F4, 0 },
+  {  96, GDK_F5, 0 },
+  {  97, GDK_F6, 0 },
+  {  98, GDK_F7, 0 },
+  { 100, GDK_F8, 0 },
+  { 101, GDK_F9, 0 },
+  { 109, GDK_F10, 0 },
+  { 103, GDK_F11, 0 },
+  { 111, GDK_F12, 0 },
+  { 105, GDK_F13, 0 },
+  { 107, GDK_F14, 0 },
+  { 113, GDK_F15, 0 },
 };
 
 const static struct {
@@ -573,4 +576,42 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     *keyval = tmp_keyval; 
 
   return TRUE;
+}
+
+/* What sort of key event is this? Returns one of
+ * GDK_KEY_PRESS, GDK_KEY_RELEASE, GDK_NOTHING (should be ignored)
+ */
+GdkEventType _gdk_quartz_key_event_type (NSEvent *event)
+{
+  unsigned short keycode;
+  unsigned int flags;
+  int i;
+  
+  switch ([event type])
+    {
+      case NSKeyDown: return GDK_KEY_PRESS;
+      case NSKeyUp:   return GDK_KEY_RELEASE;
+      case NSFlagsChanged: break; /* Continue... */
+      default: g_assert_not_reached ();
+    }
+  
+  /* For flags-changed events, we have to find the special key that caused the
+   * event, and see if it's in the modifier mask. */
+  keycode = [event keyCode];
+  flags = [event modifierFlags];
+  
+  for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
+    {
+      if (known_keys[i].keycode == keycode)
+	   {
+		 if (flags & known_keys[i].modmask)
+		   return GDK_KEY_PRESS;
+		 else
+		   return GDK_KEY_RELEASE;
+	   }
+	}
+  
+  /* Some keypresses (eg: Expose' activations) seem to trigger flags-changed
+   * events for no good reason. Ignore them! */
+  return GDK_NOTHING;
 }
