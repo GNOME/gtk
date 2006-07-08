@@ -1,3 +1,11 @@
+2006-07-08  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (layout_iter_get_line_clip_region),
+	(gdk_pango_layout_line_get_clip_region),
+	(gdk_pango_layout_get_clip_region): Fix quadratic implementation of
+	gdk_pango_layout_get_clip_region into a linear one. (#337910, patch
+	by Priit Laes)
+
 2006-07-07  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: Generate a grab broken event when

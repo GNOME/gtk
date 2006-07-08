@@ -1220,59 +1220,26 @@ gdk_pango_attr_embossed_new (gboolean embossed)
  * region which contains the given ranges, i.e. if you draw with the
  * region as clip, only the given ranges are drawn.
  */
-
-/**
- * gdk_pango_layout_line_get_clip_region:
- * @line: a #PangoLayoutLine 
- * @x_origin: X pixel where you intend to draw the layout line with this clip
- * @y_origin: baseline pixel where you intend to draw the layout line with this clip
- * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
- * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
- * 
- * Obtains a clip region which contains the areas where the given
- * ranges of text would be drawn. @x_origin and @y_origin are the same
- * position you would pass to gdk_draw_layout_line(). @index_ranges
- * should contain ranges of bytes in the layout's text. The clip
- * region will include space to the left or right of the line (to the
- * layout bounding box) if you have indexes above or below the indexes
- * contained inside the line. This is to draw the selection all the way
- * to the side of the layout. However, the clip region is in line coordinates,
- * not layout coordinates.
- *
- * Note that the regions returned correspond to logical extents of the text
- * ranges, not ink extents. So the drawn line may in fact touch areas out of
- * the clip region.  The clip region is mainly useful for highlightling parts
- * of text, such as when text is selected.
- * 
- * Return value: a clip region containing the given ranges
- **/
-GdkRegion*
-gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
-                                       gint             x_origin,
-                                       gint             y_origin,
-                                       gint            *index_ranges,
-                                       gint             n_ranges)
+static GdkRegion*
+layout_iter_get_line_clip_region (PangoLayoutIter *iter,
+				  gint             x_origin,
+				  gint             y_origin,
+				  gint            *index_ranges,
+				  gint             n_ranges)
 {
+  PangoLayoutLine *line;
   GdkRegion *clip_region;
-  gint i;
   PangoRectangle logical_rect;
-  PangoLayoutIter *iter;
   gint baseline;
-  
-  g_return_val_if_fail (line != NULL, NULL);
-  g_return_val_if_fail (index_ranges != NULL, NULL);
-  
+  gint i;
+
+  line = pango_layout_iter_get_line (iter);
+
   clip_region = gdk_region_new ();
 
-  iter = pango_layout_get_iter (line->layout);
-  while (pango_layout_iter_get_line (iter) != line)
-    pango_layout_iter_next_line (iter);
-  
   pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
   baseline = pango_layout_iter_get_baseline (iter);
-  
-  pango_layout_iter_free (iter);
-  
+
   i = 0;
   while (i < n_ranges)
     {  
@@ -1308,6 +1275,54 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
       g_free (pixel_ranges);
       ++i;
     }
+  return clip_region;
+}
+
+/**
+ * gdk_pango_layout_line_get_clip_region:
+ * @line: a #PangoLayoutLine 
+ * @x_origin: X pixel where you intend to draw the layout line with this clip
+ * @y_origin: baseline pixel where you intend to draw the layout line with this clip
+ * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
+ * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
+ * 
+ * Obtains a clip region which contains the areas where the given
+ * ranges of text would be drawn. @x_origin and @y_origin are the same
+ * position you would pass to gdk_draw_layout_line(). @index_ranges
+ * should contain ranges of bytes in the layout's text. The clip
+ * region will include space to the left or right of the line (to the
+ * layout bounding box) if you have indexes above or below the indexes
+ * contained inside the line. This is to draw the selection all the way
+ * to the side of the layout. However, the clip region is in line coordinates,
+ * not layout coordinates.
+ *
+ * Note that the regions returned correspond to logical extents of the text
+ * ranges, not ink extents. So the drawn line may in fact touch areas out of
+ * the clip region.  The clip region is mainly useful for highlightling parts
+ * of text, such as when text is selected.
+ * 
+ * Return value: a clip region containing the given ranges
+ **/
+GdkRegion*
+gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
+                                       gint             x_origin,
+                                       gint             y_origin,
+                                       gint            *index_ranges,
+                                       gint             n_ranges)
+{
+  GdkRegion *clip_region;
+  PangoLayoutIter *iter;
+  
+  g_return_val_if_fail (line != NULL, NULL);
+  g_return_val_if_fail (index_ranges != NULL, NULL);
+  
+  iter = pango_layout_get_iter (line->layout);
+  while (pango_layout_iter_get_line (iter) != line)
+    pango_layout_iter_next_line (iter);
+  
+  clip_region = layout_iter_get_line_clip_region(iter, x_origin, y_origin, index_ranges, n_ranges);
+
+  pango_layout_iter_free (iter);
 
   return clip_region;
 }
@@ -1356,16 +1371,14 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
       GdkRegion *line_region;
       gint baseline;
       
-      line = pango_layout_iter_get_line (iter);      
-
       pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
       baseline = pango_layout_iter_get_baseline (iter);      
 
-      line_region = gdk_pango_layout_line_get_clip_region (line,
-                                                           x_origin + logical_rect.x / PANGO_SCALE,
-                                                           y_origin + baseline / PANGO_SCALE,
-                                                           index_ranges,
-                                                           n_ranges);
+      line_region = layout_iter_get_line_clip_region(iter, 
+						     x_origin + logical_rect.x / PANGO_SCALE,
+						     y_origin + baseline / PANGO_SCALE,
+						     index_ranges,
+						     n_ranges);
 
       gdk_region_union (clip_region, line_region);
       gdk_region_destroy (line_region);
