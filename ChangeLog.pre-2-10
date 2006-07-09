@@ -1,3 +1,8 @@
+2006-07-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (update_label_and_image): Don't
+	leak an empty list.  (#346970, Chris Wilson)
+
 2006-07-08  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkpango.c (layout_iter_get_line_clip_region),

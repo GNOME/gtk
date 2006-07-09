@@ -2141,7 +2141,7 @@ update_label_and_image (GtkFileChooserButton *button)
   gchar *label_text;
   GSList *paths;
 
-  paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (button->priv->dialog));
+  paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
   label_text = NULL;
   pixbuf = NULL;
 
@@ -2185,10 +2185,9 @@ update_label_and_image (GtkFileChooserButton *button)
 				  GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
 				  update_label_get_info_cb,
 				  g_object_ref (button));
-
-     out:
-      gtk_file_paths_free (paths);
     }
+out:
+  gtk_file_paths_free (paths);
 
   if (label_text)
     {
