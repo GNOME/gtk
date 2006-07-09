@@ -1,3 +1,10 @@
+2006-07-09  Richard Hult  <richard@imendio.com>                                                            
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_new): Release the pool
+	in all cases.
+	(move_resize_window_internal): Surround by alloc/release pool.
+	Patch from Brian Tarricone, fixes bug #347018.
+
 2006-07-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (update_label_and_image): Don't

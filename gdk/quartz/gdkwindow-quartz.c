@@ -370,6 +370,7 @@ gdk_window_new (GdkWindow     *parent,
       break;
     default:
       g_warning (G_STRLOC "cannot make windows of type %d", private->window_type);
+      GDK_QUARTZ_RELEASE_POOL;
       return NULL;
     }
 
@@ -659,8 +660,13 @@ move_resize_window_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl;
 
+  GDK_QUARTZ_ALLOC_POOL;
+
   if (GDK_WINDOW_DESTROYED (window))
-    return;
+    {
+      GDK_QUARTZ_RELEASE_POOL;
+      return;
+    }
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
@@ -698,6 +704,8 @@ move_resize_window_internal (GdkWindow *window,
 	  [impl->view setNeedsDisplay:YES];
 	}
     }
+
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void
