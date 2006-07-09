@@ -1,4 +1,13 @@
-2006-07-09  Richard Hult  <richard@imendio.com>                                                            
+2006-07-09  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkgeometry-quartz.c:
+	* gdk/quartz/gdkmain-quartz.c:
+	* gdk/quartz/gdkpixmap-quartz.c:
+	* gdk/quartz/gdkwindow-quartz.c:
+	* gtk/gtkclipboard-quartz.c: Implement some more stubs for pygtk, 
+	bug #346713.
+
+2006-07-09  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c (gdk_window_new): Release the pool
 	in all cases.

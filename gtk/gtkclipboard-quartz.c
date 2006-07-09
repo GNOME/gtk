@@ -720,6 +720,17 @@ gtk_clipboard_request_rich_text (GtkClipboard                    *clipboard,
   /* FIXME: Implement */
 }
 
+
+guint8 *
+gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
+                                  GtkTextBuffer *buffer,
+                                  GdkAtom       *format,
+                                  gsize         *length)
+{
+  /* FIXME: Implement */
+  return NULL;
+}
+
 /**
  * gtk_clipboard_request_image:
  * @clipboard: a #GtkClipboard

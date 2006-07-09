@@ -1226,6 +1226,12 @@ gdk_window_set_type_hint (GdkWindow        *window,
   /* FIXME: Implement */
 }
 
+GdkWindowTypeHint
+gdk_window_get_type_hint (GdkWindow *window)
+{
+  /* FIXME: Implement */
+}
+
 void
 gdk_window_set_modal_hint (GdkWindow *window,
 			   gboolean   modal)
@@ -1481,4 +1487,12 @@ gdk_window_enable_synchronized_configure (GdkWindow *window)
 void
 gdk_window_configure_finished (GdkWindow *window)
 {
+}
+
+void
+gdk_window_destroy_notify (GdkWindow *window)
+{
+  /* FIXME: Implement. We should call this from -[GdkQuartzWindow dealloc] or
+   * -[GdkQuartzView dealloc], although I suspect that currently they leak
+   * anyway. */
 }
