@@ -1,3 +1,10 @@
+2006-07-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooserdefault.c (scan_for_uri_cb): Do not
+	leak the URI returned by the model; select the row when
+	calling gtk_recent_chooser_set_current_uri(). (patch by
+	Torsten Schoenfeld)
+
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpapersize.c (gtk_paper_size_is_equal): Fix a 

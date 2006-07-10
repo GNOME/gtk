@@ -96,7 +96,6 @@ struct _GtkRecentChooserDefault
   guint show_private : 1;
   guint show_not_found : 1;
   guint select_multiple : 1;
-  guint show_numbers : 1;
   guint show_tips : 1;
   guint show_icons : 1;
   guint local_only : 1;
@@ -177,8 +176,8 @@ static const int num_recent_list_source_targets = (sizeof (recent_list_source_ta
 
 
 /* GObject */
-static void     gtk_recent_chooser_default_class_init   (GtkRecentChooserDefaultClass *klass);
-static void     gtk_recent_chooser_default_init         (GtkRecentChooserDefault      *impl);
+static void     _gtk_recent_chooser_default_class_init  (GtkRecentChooserDefaultClass *klass);
+static void     _gtk_recent_chooser_default_init        (GtkRecentChooserDefault      *impl);
 static GObject *gtk_recent_chooser_default_constructor  (GType                         type,
 						         guint                         n_construct_prop,
 						         GObjectConstructParam        *construct_params);
@@ -1063,7 +1062,7 @@ scan_for_uri_cb (GtkTreeModel *model,
 		 gpointer      user_data)
 {
   SelectURIData *select_data = (SelectURIData *) user_data;
-  gchar *uri;
+  gchar *uri = NULL;
   
   if (!select_data)
     return TRUE;
@@ -1072,26 +1071,29 @@ scan_for_uri_cb (GtkTreeModel *model,
     return TRUE;
   
   gtk_tree_model_get (model, iter, RECENT_URI_COLUMN, &uri, -1);
-  if (uri && (0 == strcmp (uri, select_data->uri)))
+  if (!uri)
+    return FALSE;
+  
+  if (strcmp (uri, select_data->uri) == 0)
     {
       select_data->found = TRUE;
       
       if (select_data->do_activate)
-        {
-          gtk_tree_view_row_activated (GTK_TREE_VIEW (select_data->impl->recent_view),
-        				       path,
-        				       select_data->impl->meta_column);
-          
-          return TRUE;
-        }
+        gtk_tree_view_row_activated (GTK_TREE_VIEW (select_data->impl->recent_view),
+        			     path,
+        			     select_data->impl->meta_column);
       
       if (select_data->do_select)
-        gtk_tree_selection_select_iter (select_data->impl->selection, iter);
+        gtk_tree_selection_select_path (select_data->impl->selection, path);
       else
-        gtk_tree_selection_unselect_iter (select_data->impl->selection, iter);
+        gtk_tree_selection_unselect_path (select_data->impl->selection, path);
+
+      g_free (uri);
       
       return TRUE;
     }
+
+  g_free (uri);
   
   return FALSE;
 }
