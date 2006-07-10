@@ -1,3 +1,7 @@
+2006-07-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/directfb/gdkwindow-directfb.c: Don't confuse gtk-doc.
+
 2006-07-10  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkpixmap-quartz.c: (gdk_bitmap_create_from_data): 

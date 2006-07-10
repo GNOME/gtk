@@ -2483,7 +2483,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->height = impl->height;
 }
 
-/**
+/*
  * Given a directfb window and a subsurface of that window
  * create a gdkwindow child wrapper
  */
