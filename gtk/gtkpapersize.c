@@ -410,7 +410,7 @@ gtk_paper_size_free (GtkPaperSize *size)
 /**
  * gtk_paper_size_is_equal:
  * @size1: a #GtkPaperSize object
- * @size2: another @GtkPaperSize object
+ * @size2: another #GtkPaperSize object
  * 
  * Compares two #GtkPaperSize objects.
  * 

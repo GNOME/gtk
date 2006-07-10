@@ -1,5 +1,8 @@
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpapersize.c (gtk_paper_size_is_equal): Fix a 
+	typo in the docs.  (#347041, Kouhei Sutou)
+
 	* gtk/gtkprintcontext.c (gtk_print_context_get_height): Fix
 	a typo in the docs.  (#347032, Kouhei Sutou)
 
