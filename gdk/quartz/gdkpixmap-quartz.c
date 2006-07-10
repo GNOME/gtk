@@ -201,7 +201,7 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 {
   GdkPixmap *pixmap;
   GdkPixmapImplQuartz *impl;
-  int x, y;
+  int x, y, bpl;
 
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
@@ -212,19 +212,21 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 
   g_assert (CGImageGetBytesPerRow (impl->image) == width);
 
+  /* Bytes per line: Each line consumes an integer number of bytes, possibly
+   * ignoring any excess bits. */
+  bpl = (width + 7) / 8;
   for (y = 0; y < height; y++)
     {
-      guchar *ptr = impl->data + y * width;
-      gint idx;
-      
+      guchar *dst = impl->data + y * width;
+      const gchar *src = data + (y * bpl);   
       for (x = 0; x < width; x++)
 	{
-	  if ((data[(y * width + x) / 8] >> x % 8) & 1)
-	    *ptr = 0xff;
+	  if ((src[x / 8] >> x % 8) & 1)
+	    *dst = 0xff;
 	  else
-	    *ptr = 0;
+	    *dst = 0;
 
-	  ptr++;
+	  dst++;
 	}
     }
 

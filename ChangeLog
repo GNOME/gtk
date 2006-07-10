@@ -1,3 +1,9 @@
+2006-07-10  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkpixmap-quartz.c: (gdk_bitmap_create_from_data): 
+	Account for alignment when reading xbm data. (#346721, patch
+	by Dave Vasilevsky)
+
 2006-07-09  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkgeometry-quartz.c:
