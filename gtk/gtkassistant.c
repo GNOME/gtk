@@ -1325,7 +1325,8 @@ gtk_assistant_focus (GtkWidget        *widget,
   if (container->focus_child == priv->action_area)
     {
       if (!gtk_widget_child_focus (priv->action_area, direction) &&
-	  !gtk_widget_child_focus (priv->current_page->page, direction))
+	  (priv->current_page == NULL ||
+	   !gtk_widget_child_focus (priv->current_page->page, direction)))
 	{
 	  /* if we're leaving the action area and the current page hasn't
 	     any focusable widget, clear focus and go back to the action area */
@@ -1335,13 +1336,15 @@ gtk_assistant_focus (GtkWidget        *widget,
     }
   else
     {
-      if (!gtk_widget_child_focus (priv->current_page->page, direction) &&
+      if ((priv->current_page ==  NULL ||
+	   !gtk_widget_child_focus (priv->current_page->page, direction)) &&
 	  !gtk_widget_child_focus (priv->action_area, direction))
 	{
 	  /* if we're leaving the current page and there isn't nothing focusable
 	     in the action area, try to clear focus and go back to the page */
 	  gtk_window_set_focus (GTK_WINDOW (widget), NULL);
-	  gtk_widget_child_focus (priv->current_page->page, direction);
+	  if (priv->current_page != NULL)
+	    gtk_widget_child_focus (priv->current_page->page, direction);
 	}
     }
 
