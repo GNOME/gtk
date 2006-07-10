@@ -1,3 +1,8 @@
+2006-07-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c: Fix some memory handling
+	issues.  (#347043, Chris Wilson)
+
 2006-07-10  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c (scan_for_uri_cb): Do not

@@ -460,7 +460,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 					G_TYPE_CHAR,	 /* Row Type */
 					G_TYPE_POINTER	 /* Volume || Path */,
 					G_TYPE_BOOLEAN   /* Is Folder? */,
-					G_TYPE_OBJECT	 /* handle */));
+					G_TYPE_POINTER	 /* handle */));
 
   priv->combo_box = gtk_combo_box_new ();
   priv->combo_box_changed_id =
@@ -894,9 +894,7 @@ gtk_file_chooser_button_destroy (GtkObject *object)
       priv->dialog = NULL;
     }
 
-  gtk_tree_model_get_iter_first (priv->model, &iter);
-
-  do
+  if (priv->model && gtk_tree_model_get_iter_first (priv->model, &iter)) do
     {
       model_free_row_data (button, &iter);
     }
@@ -1604,6 +1602,7 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 		      -1);
 
 out:
+  g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
