@@ -2053,6 +2053,7 @@ gtk_link_button_set_uri_hook
 
 #if IN_HEADER(__GTK_LIST_H__)
 #if IN_FILE(__GTK_LIST_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_list_append_items
 gtk_list_child_position
 gtk_list_clear_items
@@ -2081,14 +2082,17 @@ gtk_list_unselect_child
 gtk_list_unselect_item
 #endif
 #endif
+#endif
 
 #if IN_HEADER(__GTK_LIST_ITEM_H__)
 #if IN_FILE(__GTK_LIST_ITEM_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_list_item_deselect
 gtk_list_item_get_type G_GNUC_CONST
 gtk_list_item_new
 gtk_list_item_new_with_label
 gtk_list_item_select
+#endif
 #endif
 #endif
 
@@ -2450,11 +2454,13 @@ gtk_path_bar_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GTK_PIXMAP_H__)
 #if IN_FILE(__GTK_PIXMAP_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_pixmap_get
 gtk_pixmap_get_type G_GNUC_CONST
 gtk_pixmap_new
 gtk_pixmap_set
 gtk_pixmap_set_build_insensitive
+#endif
 #endif
 #endif
 
@@ -2471,6 +2477,7 @@ gtk_plug_new_for_display
 
 #if IN_HEADER(__GTK_PREVIEW_H__)
 #if IN_FILE(__GTK_PREVIEW_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_preview_draw_row
 gtk_preview_get_cmap
 gtk_preview_get_info
@@ -2487,6 +2494,7 @@ gtk_preview_set_install_cmap
 gtk_preview_set_reserved
 gtk_preview_size
 gtk_preview_uninit
+#endif
 #endif
 #endif
 

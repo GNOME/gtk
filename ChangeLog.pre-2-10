@@ -1,5 +1,7 @@
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add some missing deprecation guards.
+
 	* gdk/directfb/gdkwindow-directfb.c: Don't confuse gtk-doc.
 
 2006-07-10  Richard Hult  <richard@imendio.com>
