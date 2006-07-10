@@ -1,5 +1,8 @@
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintcontext.c (gtk_print_context_get_height): Fix
+	a typo in the docs.  (#347032, Kouhei Sutou)
+
 	* gtk/gtkassistant.c (gtk_assistant_focus): Don't assume
 	that priv->current_page is non-NULL.  (#347048, Guillaume 
 	Cottenceau)

@@ -312,7 +312,7 @@ gtk_print_context_get_width (GtkPrintContext *context)
  * gtk_print_context_get_height:
  * @context: a #GtkPrintContext
  * 
- * Obtains the width of the #GtkPrintContext, in pixels.
+ * Obtains the height of the #GtkPrintContext, in pixels.
  *
  * Return value: the height of @context
  *
