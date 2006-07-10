@@ -249,7 +249,7 @@ gtk_print_backend_initialize (void)
   if (!initialized)
     {
       /**
-       * GtkSettings::gtk-print-backends:
+       * GtkSettings:gtk-print-backends:
        *
        * A comma-separated list of print backends to use in the print
        * dialog. Available print backends depend on the GTK+ installation,

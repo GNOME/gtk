@@ -228,7 +228,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkButton::icon-spacing:
+   * GtkButton:icon-spacing:
    * 
    * Spacing in pixels between the icon and label.
    * 

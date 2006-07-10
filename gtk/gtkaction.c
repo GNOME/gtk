@@ -224,7 +224,7 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
 							GTK_PARAM_READWRITE));
   /**
-   * GtkAction::icon-name:
+   * GtkAction:icon-name:
    *
    * The name of the icon from the icon theme. 
    * Note that the stock icon is preferred, if

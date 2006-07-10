@@ -597,7 +597,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   
 
   /**
-   * GtkIconView::item-width:
+   * GtkIconView:item-width:
    *
    * The item-width property specifies the width to use for each item. 
    * If it is set to -1, the icon view will automatically determine a 
@@ -614,7 +614,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     GTK_PARAM_READWRITE));  
 
   /**
-   * GtkIconView::spacing:
+   * GtkIconView:spacing:
    *
    * The spacing property specifies the space which is inserted between
    * the cells (i.e. the icon and the text) of an item.
@@ -630,7 +630,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     GTK_PARAM_READWRITE));
 
   /**
-   * GtkIconView::row-spacing:
+   * GtkIconView:row-spacing:
    *
    * The row-spacing property specifies the space which is inserted between
    * the rows of the icon view.
@@ -646,7 +646,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     GTK_PARAM_READWRITE));
 
   /**
-   * GtkIconView::column-spacing:
+   * GtkIconView:column-spacing:
    *
    * The column-spacing property specifies the space which is inserted between
    * the columns of the icon view.
@@ -662,7 +662,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     GTK_PARAM_READWRITE));
 
   /**
-   * GtkIconView::margin:
+   * GtkIconView:margin:
    *
    * The margin property specifies the space which is inserted 
    * at the edges of the icon view.
@@ -679,7 +679,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 
 
   /**
-   * GtkIconView::orientation:
+   * GtkIconView:orientation:
    *
    * The orientation property specifies how the cells (i.e. the icon and 
    * the text) of the item are positioned relative to each other.

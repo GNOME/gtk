@@ -173,7 +173,7 @@ gtk_print_operation_unix_initialize (void)
   if (!initialized)
     {
       /**
-       * GtkSettings::gtk-print-preview-command:
+       * GtkSettings:gtk-print-preview-command:
        *
        * A command to run for displaying the print preview. The command
        * should contain a %f placeholder, which will get replaced by

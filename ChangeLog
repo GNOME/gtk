@@ -1,5 +1,13 @@
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c:
+	* gtk/gtkiconview.c:
+	* gtk/gtkprintbackend.c:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkscrolledwindow.c:
+	* gtk/gtktoolbar.c: Fix some typos with inline property
+	docs.  (#347065, John Finlay)
+
 	* gtk/gtkfilechooserbutton.c: Fix some memory handling
 	issues.  (#347043, Chris Wilson)
 

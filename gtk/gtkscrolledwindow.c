@@ -256,7 +256,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
   
   /**
-   * GtkScrolledWindow::window-placement-set:
+   * GtkScrolledWindow:window-placement-set:
    *
    * Whether "window-placement" should be used to determine the location 
    * of the contents with respect to the scrollbars. Otherwise, the 
@@ -290,7 +290,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     GTK_PARAM_READABLE));
 
   /**
-   * GtkSettings::gtk-scrolled-window-placement:
+   * GtkSettings:gtk-scrolled-window-placement:
    *
    * Where the contents of scrolled windows are located with respect to the 
    * scrollbars, if not overridden by the scrolled window's own placement.
