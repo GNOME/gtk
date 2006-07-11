@@ -497,13 +497,36 @@ gtk_recent_chooser_get_show_tips (GtkRecentChooser *chooser)
  *
  * Whether to show recently used resources prepended by a unique number.
  *
+ * Do not use this function: use gtk_recent_chooser_menu_set_show_numbers()
+ * instead.
+ *
  * Since: 2.10
  */
 void
 gtk_recent_chooser_set_show_numbers (GtkRecentChooser *chooser,
 				     gboolean          show_numbers)
 {
+  GParamSpec *pspec;
+  
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
+
+  /* This is the result of a minor screw up: the "show-numbers" property
+   * was removed from the GtkRecentChooser interface, but the accessors
+   * remained in the interface API; now we need to check whether the
+   * implementation of the RecentChooser interface has a "show-numbers"
+   * boolean property installed before accessing it, and avoid an
+   * assertion failure using a more graceful warning.  This should really
+   * go away as soon as we can break API and remove these accessors.
+   */
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (chooser),
+		  			"show-numbers");
+  if (!pspec || pspec->value_type != G_TYPE_BOOLEAN)
+    {
+      g_warning ("Choosers of type `%s' do not support showing numbers",
+		 G_OBJECT_TYPE_NAME (chooser));
+
+      return;
+    }
   
   g_object_set (chooser, "show-numbers", show_numbers, NULL);
 }
@@ -515,6 +538,9 @@ gtk_recent_chooser_set_show_numbers (GtkRecentChooser *chooser,
  * Returns whether @chooser should display recently used resources
  * prepended by a unique number.
  *
+ * Do not use this function: use gtk_recent_chooser_menu_get_show_numbers()
+ * instead.
+ *
  * Return value: %TRUE if the recent chooser should show display numbers,
  *   %FALSE otherwise.
  *
@@ -523,9 +549,20 @@ gtk_recent_chooser_set_show_numbers (GtkRecentChooser *chooser,
 gboolean
 gtk_recent_chooser_get_show_numbers (GtkRecentChooser *chooser)
 {
+  GParamSpec *pspec;
   gboolean show_numbers;
   
   g_return_val_if_fail (GTK_IS_RECENT_CHOOSER (chooser), FALSE);
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (chooser),
+		  			"show-numbers");
+  if (!pspec || pspec->value_type != G_TYPE_BOOLEAN)
+    {
+      g_warning ("Choosers of type `%s' do not support showing numbers",
+		 G_OBJECT_TYPE_NAME (chooser));
+
+      return FALSE;
+    }
   
   g_object_get (chooser, "show-numbers", &show_numbers, NULL);
   

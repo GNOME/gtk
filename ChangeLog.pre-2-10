@@ -1,3 +1,11 @@
+2006-07-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_set_show_numbers),
+	(gtk_recent_chooser_get_show_numbers): Check if the chooser
+	implementation supports the "show-number" property and use a
+	meaningful warning in case it doesn't; tell developers not to
+	use these functions.
+
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c:
