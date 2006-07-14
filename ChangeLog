@@ -1,3 +1,20 @@
+2006-07-13  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkdrawable-directfb.c
+	Remove +1 in fill and draw rect this may be wrong.
+	Commented out update calls left for reference the should not be needed.
+	Comment out subsurface for cairo remove when proved its not needed
+	* gdk/directfb/gdkkeys-directfb.c
+	Allow multiple calls and return if initalized
+	* gdk/directfb/gdkmain-directfb.c
+	Make sure string is malloced since its freed by apps
+	* gdk/directfb/gdkprivate-directfb.c
+	Added back pointer to window for paintable impl
+	* gdk/directfb/gdkvisual-directfb.c
+	Fix for Bug 346733 make sure visual list is populated
+	* gdk/directfb/gdkwindow-directfb.c
+	Finally removed uneeded pixmap buffering now implements GdkPainter
+
 2006-07-11  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooser.c (gtk_recent_chooser_set_show_numbers),

@@ -54,12 +54,12 @@ static GdkVisualDirectFB * gdk_directfb_visual_create (DFBSurfacePixelFormat  pi
 
 static DFBSurfacePixelFormat formats[] =
 {
-  DSPF_RGB32,
   DSPF_ARGB,
+  DSPF_LUT8,
+  DSPF_RGB32,
   DSPF_RGB24,
   DSPF_RGB16,
   DSPF_ARGB1555,
-  DSPF_LUT8,
   DSPF_RGB332
 };
 
@@ -133,6 +133,10 @@ _gdk_visual_init ()
      If you want to use a special pixelformat that is not registered
      here, you can create it using the DirectFB-specific function
      gdk_directfb_visual_by_format().
+     Note:
+     changed to do all formats but we should redo this code
+     to ensure the base format ARGB LUT8 RGB etc then add ones supported
+     by the hardware
    */
   for (i = 0, c = 0; i < G_N_ELEMENTS (formats); i++)
     {
@@ -143,11 +147,12 @@ _gdk_visual_init ()
       desc.width       = 8;
       desc.height      = 8;
       desc.pixelformat = formats[i];
-
       //call direct so fail silently  is ok
       if (_gdk_display->directfb->CreateSurface (_gdk_display->directfb,
-	 &desc, &src) != DFB_OK)
+	 &desc, &src) != DFB_OK) 
         continue;
+
+      visuals[i] = gdk_directfb_visual_create (formats[i]);
 
       dest->GetAccelerationMask (dest, src, &acc);
 
@@ -162,17 +167,11 @@ _gdk_visual_init ()
 
   dest->Release (dest);
 
-  //fallback to ARGB
+  //fallback to ARGB must be supported
   if (!system_visual)
     {
-        for (i = 0; i < G_N_ELEMENTS (formats); i++) {
-            if (formats[i] == DSPF_ARGB ) {
-                if( visuals[i] == NULL )
-                  visuals[i] = gdk_directfb_visual_create (formats[i]);
-                system_visual = visuals[i];
-                break;
-            }
-        }
+       g_assert (visuals[DSPF_ARGB] != NULL);
+       system_visual = GDK_VISUAL(visuals[DSPF_ARGB]);
     }
 
   g_assert (system_visual != NULL);
@@ -210,10 +209,12 @@ gdk_visual_get_best_with_depth (gint depth)
 
   for (i = 0; visuals[i]; i++)
     {
-      GdkVisual *visual = GDK_VISUAL (visuals[i]);
+      if( visuals[i] ) {
+        GdkVisual *visual = GDK_VISUAL (visuals[i]);
 
-      if (depth == visual->depth)
-        return visual;
+        if (depth == visual->depth)
+            return visual;
+      }
     }
 
   return NULL;
@@ -226,10 +227,12 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 
   for (i = 0; visuals[i]; i++)
     {
-      GdkVisual *visual = GDK_VISUAL (visuals[i]);
+      if( visuals[i] ) {
+        GdkVisual *visual = GDK_VISUAL (visuals[i]);
 
-      if (visual_type == visual->type)
-        return visual;
+        if (visual_type == visual->type)
+            return visual;
+      }
     }
 
   return NULL;
@@ -243,10 +246,12 @@ gdk_visual_get_best_with_both (gint          depth,
 
   for (i = 0; visuals[i]; i++)
     {
-      GdkVisual *visual = GDK_VISUAL (visuals[i]);
+      if( visuals[i] ) {
+        GdkVisual *visual = GDK_VISUAL (visuals[i]);
 
-      if (depth == visual->depth && visual_type == visual->type)
-        return visual;
+        if (depth == visual->depth && visual_type == visual->type)
+            return visual;
+      }
     }
 
   return system_visual;
@@ -285,7 +290,10 @@ gdk_screen_list_visuals (GdkScreen *screen)
   gint   i;
 
   for (i = 0; visuals[i]; i++)
-    list = g_list_append (list, visuals[i]);
+   if( visuals[i] ) {
+        GdkVisual * vis = GDK_VISUAL(visuals[i]);
+        list = g_list_append (list,vis);
+   }
 
   return list;
 }
@@ -313,7 +321,7 @@ gdk_directfb_visual_by_format (DFBSurfacePixelFormat pixel_format)
 
   /* first check if one the registered visuals matches */
   for (i = 0; visuals[i]; i++)
-    if (visuals[i]->format == pixel_format)
+    if ( visuals[i] && visuals[i]->format == pixel_format)
       return GDK_VISUAL (visuals[i]);
 
   /* none matched, try to create a new one for this pixel_format */
@@ -332,9 +340,7 @@ gdk_directfb_visual_by_format (DFBSurfacePixelFormat pixel_format)
     test->Release (test);
   }
 
-  visuals[i] = gdk_directfb_visual_create (pixel_format);
-
-  return GDK_VISUAL (visuals[i]);
+  return GDK_VISUAL(gdk_directfb_visual_create (pixel_format));
 }
 
 GdkScreen *

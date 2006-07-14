@@ -70,7 +70,6 @@ struct _GdkDrawableImplDirectFB
 
   GdkRegion              *paint_region;
   gint                    paint_depth;
-
   gint                    width;
   gint                    height;
   gint                    abs_x;
@@ -140,6 +139,7 @@ typedef struct
 struct _GdkWindowImplDirectFB
 {
   GdkDrawableImplDirectFB drawable;
+  GdkWindow             *gdkWindow;
 
   IDirectFBWindow        *window;
 

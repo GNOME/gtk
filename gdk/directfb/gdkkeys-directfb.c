@@ -1670,6 +1670,8 @@ _gdk_directfb_keyboard_init (void)
 
 	if (!keyboard)
 		return;
+    if( directfb_keymap )    
+            return;
 
 	keyboard->GetDescription (keyboard, &desc);
 	_gdk_display->keymap=g_object_new (gdk_keymap_get_type (), NULL);
@@ -1682,7 +1684,6 @@ _gdk_directfb_keyboard_init (void)
 
 	length = directfb_max_keycode - desc.min_keycode + 1;
 
-	g_assert (directfb_keymap == NULL);
 
 	directfb_keymap = g_new0 (guint, 4 * length);
 

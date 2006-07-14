@@ -32,6 +32,7 @@
 
 #include <config.h>
 #include "gdk.h"
+#include <assert.h>
 
 #include <string.h>
 
@@ -456,17 +457,17 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
   else
     {
 
-      DFBRegion region = { x, y, x + width+1, y + height+1 };
+      DFBRegion region = { x, y, x + width, y + height };
       impl->surface->SetClip (impl->surface, &region);
 
       /*  DirectFB does not draw rectangles the X way. Using DirectFB,
           a filled Rectangle has the same size as a drawn one, while
           X draws the rectangle one pixel taller and wider.  */
       impl->surface->DrawRectangle (impl->surface,
-                                    x, y, width + 1, height + 1);
+                                    x, y, width , height);
       impl->surface->SetClip (impl->surface, NULL);
 
-      _gdk_directfb_update (impl, &region);
+      //_gdk_directfb_update (impl, &region);
     }
 }
 
@@ -679,7 +680,7 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
 
   gdk_region_destroy (clip);
 
-  _gdk_directfb_update (impl, &region);
+  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -759,7 +760,7 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
         region.y2 = segs->y2;
     }
 
-  _gdk_directfb_update (impl, &region);
+  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -828,7 +829,7 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
 
   gdk_region_destroy (clip);
 
-  _gdk_directfb_update (impl, &region);
+  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -1078,14 +1079,17 @@ gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
     GdkDrawableImplDirectFB *impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
     IDirectFB *dfb = GDK_DISPLAY_DFB(gdk_drawable_get_display(drawable))->directfb;
     if (!impl->cairo_surface) {
-      IDirectFBSurface *surface;
-      if (impl->surface->GetSubSurface (impl->surface, NULL, &surface) == DFB_OK) {
-        impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
+//      IDirectFBSurface *surface;
+     // if (impl->surface->GetSubSurface (impl->surface, NULL, &surface) == DFB_OK) {
+        //impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
+        g_assert( impl->surface != NULL);
+        impl->cairo_surface = cairo_directfb_surface_create (dfb,impl->surface);
+        g_assert( impl->cairo_surface != NULL);
         cairo_surface_set_user_data (impl->cairo_surface, 
                                      &gdk_directfb_cairo_key, drawable, 
                                      gdk_directfb_cairo_surface_destroy);
-        surface->Release (surface);
-      }
+       // surface->Release (surface);
+      //}
     } else {
         cairo_surface_reference (impl->cairo_surface);
     }

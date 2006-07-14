@@ -105,7 +105,7 @@ _gdk_windowing_exit (void)
 gchar *
 gdk_get_display (void)
 {
-  return "DirectFB";
+  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
 }
 
 
