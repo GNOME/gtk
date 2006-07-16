@@ -1973,11 +1973,11 @@ msgstr "_מקשים"
 
 #: ../gtk/gtkinputdialog.c:521
 msgid "_X:"
-msgstr ""
+msgstr "_X:"
 
 #: ../gtk/gtkinputdialog.c:522
 msgid "_Y:"
-msgstr ""
+msgstr "_Y:"
 
 #: ../gtk/gtkinputdialog.c:523
 #, fuzzy
@@ -3028,62 +3028,62 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
-msgstr ""
+msgstr "A0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
-msgstr ""
+msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
-msgstr ""
+msgstr "A10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
-msgstr ""
+msgstr "A2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
-msgstr ""
+msgstr "A3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:31
@@ -3093,32 +3093,32 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
-msgstr ""
+msgstr "A4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:45
@@ -3133,42 +3133,42 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
-msgstr ""
+msgstr "A5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:65
@@ -3178,57 +3178,57 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
-msgstr ""
+msgstr "A6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
-msgstr ""
+msgstr "A7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
-msgstr ""
+msgstr "A8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
-msgstr ""
+msgstr "A9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
-msgstr ""
+msgstr "B0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
-msgstr ""
+msgstr "B1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
-msgstr ""
+msgstr "B10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
-msgstr ""
+msgstr "B2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
-msgstr ""
+msgstr "B3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
-msgstr ""
+msgstr "B4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
-msgstr ""
+msgstr "B5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:89
@@ -3238,92 +3238,92 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
-msgstr ""
+msgstr "B6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
-msgstr ""
+msgstr "B7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
-msgstr ""
+msgstr "B8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
-msgstr ""
+msgstr "B9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
-msgstr ""
+msgstr "C0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
-msgstr ""
+msgstr "C1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
-msgstr ""
+msgstr "C10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
-msgstr ""
+msgstr "C2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
-msgstr ""
+msgstr "C3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
-msgstr ""
+msgstr "C4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
-msgstr ""
+msgstr "C5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
-msgstr ""
+msgstr "C6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
-msgstr ""
+msgstr "C7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
-msgstr ""
+msgstr "C8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
-msgstr ""
+msgstr "C9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:127
@@ -3333,87 +3333,87 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:163
@@ -3463,42 +3463,42 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr ""
+msgstr "10x11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
-msgstr ""
+msgstr "10x13"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
-msgstr ""
+msgstr "10x14"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
-msgstr ""
+msgstr "10x15"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
-msgstr ""
+msgstr "11x12"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
-msgstr ""
+msgstr "11x15"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
-msgstr ""
+msgstr "12x19"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
-msgstr ""
+msgstr "5x7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:199
@@ -3985,7 +3985,7 @@ msgstr ""
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "Postscript"
@@ -4156,51 +4156,51 @@ msgstr "שם"
 #. f           5    e1
 #: ../gtk/paper_names.c:19
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #: ../gtk/paper_names.c:20
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: ../gtk/paper_names.c:21
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #: ../gtk/paper_names.c:22
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: ../gtk/paper_names.c:23
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #: ../gtk/paper_names.c:24
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #: ../gtk/paper_names.c:25
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #: ../gtk/paper_names.c:26
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: ../gtk/paper_names.c:27
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #: ../gtk/paper_names.c:28
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #: ../gtk/paper_names.c:29
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #: ../gtk/paper_names.c:30
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: ../gtk/paper_names.c:31
 msgid "A3 Extra"
@@ -4208,27 +4208,27 @@ msgstr ""
 
 #: ../gtk/paper_names.c:32
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #: ../gtk/paper_names.c:33
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #: ../gtk/paper_names.c:34
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #: ../gtk/paper_names.c:35
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #: ../gtk/paper_names.c:36
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #: ../gtk/paper_names.c:37
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: ../gtk/paper_names.c:38
 msgid "A4 Extra"
@@ -4240,35 +4240,35 @@ msgstr ""
 
 #: ../gtk/paper_names.c:40
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #: ../gtk/paper_names.c:41
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #: ../gtk/paper_names.c:42
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #: ../gtk/paper_names.c:43
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #: ../gtk/paper_names.c:44
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #: ../gtk/paper_names.c:45
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #: ../gtk/paper_names.c:46
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #: ../gtk/paper_names.c:47
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: ../gtk/paper_names.c:48
 msgid "A5 Extra"
@@ -4276,47 +4276,47 @@ msgstr ""
 
 #: ../gtk/paper_names.c:49
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: ../gtk/paper_names.c:50
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: ../gtk/paper_names.c:51
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: ../gtk/paper_names.c:52
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: ../gtk/paper_names.c:53
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: ../gtk/paper_names.c:54
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: ../gtk/paper_names.c:55
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: ../gtk/paper_names.c:56
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: ../gtk/paper_names.c:57
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: ../gtk/paper_names.c:58
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: ../gtk/paper_names.c:59
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: ../gtk/paper_names.c:60
 msgid "B5 Extra"
@@ -4324,77 +4324,77 @@ msgstr ""
 
 #: ../gtk/paper_names.c:61
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: ../gtk/paper_names.c:62
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. b6/c4 Envelope
 #: ../gtk/paper_names.c:63
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: ../gtk/paper_names.c:64
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: ../gtk/paper_names.c:65
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: ../gtk/paper_names.c:66
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: ../gtk/paper_names.c:67
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: ../gtk/paper_names.c:68
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: ../gtk/paper_names.c:69
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: ../gtk/paper_names.c:70
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: ../gtk/paper_names.c:71
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: ../gtk/paper_names.c:72
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: ../gtk/paper_names.c:73
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: ../gtk/paper_names.c:74
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #: ../gtk/paper_names.c:75
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: ../gtk/paper_names.c:76
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. c7/c6 Envelope
 #: ../gtk/paper_names.c:77
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: ../gtk/paper_names.c:78
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: ../gtk/paper_names.c:79
 msgid "DL Envelope"
@@ -4403,71 +4403,71 @@ msgstr ""
 #. iso-designated 1, 2 designated-long, dl Envelope
 #: ../gtk/paper_names.c:80
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: ../gtk/paper_names.c:81
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: ../gtk/paper_names.c:82
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: ../gtk/paper_names.c:83
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: ../gtk/paper_names.c:84
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: ../gtk/paper_names.c:85
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: ../gtk/paper_names.c:86
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: ../gtk/paper_names.c:87
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: ../gtk/paper_names.c:88
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: ../gtk/paper_names.c:89
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: ../gtk/paper_names.c:90
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: ../gtk/paper_names.c:91
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: ../gtk/paper_names.c:92
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: ../gtk/paper_names.c:93
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: ../gtk/paper_names.c:94
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: ../gtk/paper_names.c:95
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: ../gtk/paper_names.c:96
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: ../gtk/paper_names.c:97
 msgid "jis exec"
@@ -4507,35 +4507,35 @@ msgstr ""
 
 #: ../gtk/paper_names.c:106
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #: ../gtk/paper_names.c:107
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #: ../gtk/paper_names.c:108
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #: ../gtk/paper_names.c:109 ../gtk/paper_names.c:110
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #: ../gtk/paper_names.c:111
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #: ../gtk/paper_names.c:112
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #: ../gtk/paper_names.c:113
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #: ../gtk/paper_names.c:114
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
 #: ../gtk/paper_names.c:115
 msgid "6x9 Envelope"
