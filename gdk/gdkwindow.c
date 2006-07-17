@@ -2935,7 +2935,8 @@ gdk_window_constrain_size (GdkGeometry *geometry,
  * @mask: return location for modifier mask
  *
  * Obtains the current pointer position and modifier state.
- * The position is given in coordinates relative to @window.
+ * The position is given in coordinates relative to the upper left 
+ * corner of @window.
  * 
  * Return value: the window containing the pointer (as with
  * gdk_window_at_pointer()), or %NULL if the window containing the
