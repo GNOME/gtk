@@ -1040,11 +1040,28 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	switch (site->icon_type)
 	  {
 	  case GTK_IMAGE_PIXMAP:
-	    gtk_drag_set_icon_pixmap (context,
-				      site->colormap,
-				      site->icon_data.pixmap.pixmap,
-				      site->icon_mask,
-				      -2, -2);
+	    /* This is not supported, so just set a small transparent pixbuf
+	     * since we need to have something.
+	     */
+	    if (0)
+	      gtk_drag_set_icon_pixmap (context,
+					site->colormap,
+					site->icon_data.pixmap.pixmap,
+					site->icon_mask,
+					-2, -2);
+	    else
+	      {
+		GdkPixbuf *pixbuf;
+
+		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 1, 1);
+		gdk_pixbuf_fill (pixbuf, 0xffffff);
+	    
+		gtk_drag_set_icon_pixbuf (context,
+					  pixbuf,
+					  0, 0);
+
+		g_object_unref (pixbuf);
+	      }
 	    break;
 	  case GTK_IMAGE_PIXBUF:
 	    gtk_drag_set_icon_pixbuf (context,

@@ -1,5 +1,11 @@
 2006-07-17  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkdnd-quartz.c: (gtk_drag_begin_internal): Set an empty
+	NSImage if there is none, covers the cases where applications try
+	to set a pixmap which is not supported by the quartz backend.
+
+2006-07-17  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c: (create_key_event):
 	* gdk/quartz/gdkkeys-quartz.c: (_gdk_quartz_key_event_type),
 	(_gdk_quartz_key_is_modifier):
