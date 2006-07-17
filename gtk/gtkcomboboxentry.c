@@ -283,7 +283,7 @@ gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
  * Sets the model column which @entry_box should use to get strings from
  * to be @text_column.
  *
- * Since: 2.4.
+ * Since: 2.4
  */
 void
 gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,

@@ -1003,7 +1003,7 @@ gtk_entry_completion_get_model (GtkEntryCompletion *completion)
  * is used to determine if a row should or should not be in the completion
  * list.
  *
- * Since: 2.4.
+ * Since: 2.4
  */
 void
 gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,

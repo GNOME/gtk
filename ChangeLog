@@ -1,3 +1,9 @@
+2006-07-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_match_func): 
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_set_text_column): 
+	Fix typos in the docs.
+
 2006-07-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkassistant.c: Some small documentation
