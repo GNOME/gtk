@@ -223,7 +223,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * A handler for the ::apply signal should carry out the actions for which the
    * wizard has collected data. If the action takes a long time to complete, you
    * might consider to put a page of type GTK_ASSISTANT_PAGE_PROGRESS after the
-   * confirmation page and handle this operation within the "prepare" signal of
+   * confirmation page and handle this operation within the ::prepare signal of
    * the progress page.
    *
    * Since: 2.10
@@ -1767,7 +1767,7 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_page_title:
  * @assistant: a #GtkAssistant
- * @page: a page of @assitant
+ * @page: a page of @assistant
  * @title: the new title for @page
  * 
  * Sets a title for @page. The title is displayed in the header
@@ -1834,7 +1834,7 @@ gtk_assistant_get_page_title (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_page_type:
  * @assistant: a #GtkAssistant
- * @page: a page of @assitant
+ * @page: a page of @assistant
  * @type: the new type for @page
  * 
  * Sets the page type for @page. The page type determines the page
@@ -1909,7 +1909,7 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_page_header_image:
  * @assistant: a #GtkAssistant
- * @page: a page of @assitant
+ * @page: a page of @assistant
  * @pixbuf: the new header image @page
  * 
  * Sets a header image for @page. This image is displayed in the header
@@ -1991,7 +1991,7 @@ gtk_assistant_get_page_header_image (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_page_side_image:
  * @assistant: a #GtkAssistant
- * @page: a page of @assitant
+ * @page: a page of @assistant
  * @pixbuf: the new header image @page
  * 
  * Sets a header image for @page. This image is displayed in the side
@@ -2073,7 +2073,7 @@ gtk_assistant_get_page_side_image (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_page_complete:
  * @assistant: a #GtkAssistant
- * @page: a page of @assitant
+ * @page: a page of @assistant
  * @complete: the completeness status of the page
  * 
  * Sets whether @page contents are complete. This will make
