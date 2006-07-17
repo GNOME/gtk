@@ -186,6 +186,8 @@ dates_difference(guint year1, guint mm1, guint dd1,
 #define DAY_XSEP		 0 /* not really good for small calendar */
 #define DAY_YSEP		 0 /* not really good for small calendar */
 
+#define SCROLL_DELAY_FACTOR      5
+
 /* Color usage */
 #define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
 #define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[GTK_WIDGET_STATE (widget)])
@@ -2398,7 +2400,7 @@ calendar_timer (gpointer data)
           g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
 	  priv->need_timer = FALSE;
-	  priv->timer = g_timeout_add (timeout,
+	  priv->timer = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
                                        (GSourceFunc) calendar_timer,
                                        (gpointer) calendar);
 	}

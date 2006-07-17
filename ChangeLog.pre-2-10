@@ -1,3 +1,9 @@
+2006-07-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcalendar.c (calendar_timer): use 5 * gtk-timeout-repeat,
+	just as many other widgets. Makes the calendar arrow buttons
+	usable for quick month/year skipping (#142582).
+
 2006-07-17  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c:
