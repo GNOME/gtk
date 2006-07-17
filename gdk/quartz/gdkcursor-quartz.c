@@ -58,6 +58,37 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
     case GDK_SB_V_DOUBLE_ARROW:
       nscursor = [NSCursor resizeUpDownCursor];
       break;
+    case GDK_SB_UP_ARROW:
+    case GDK_BASED_ARROW_UP:
+    case GDK_BOTTOM_TEE:
+    case GDK_TOP_SIDE:
+      nscursor = [NSCursor resizeUpCursor];
+      break;
+    case GDK_SB_DOWN_ARROW:
+    case GDK_BASED_ARROW_DOWN:
+    case GDK_TOP_TEE:
+    case GDK_BOTTOM_SIDE:
+      nscursor = [NSCursor resizeDownCursor];
+      break;
+    case GDK_SB_LEFT_ARROW:
+    case GDK_RIGHT_TEE:
+    case GDK_LEFT_SIDE:
+      nscursor = [NSCursor resizeLeftCursor];
+      break;
+    case GDK_SB_RIGHT_ARROW:
+    case GDK_LEFT_TEE:
+    case GDK_RIGHT_SIDE:
+      nscursor = [NSCursor resizeRightCursor];
+      break;
+    case GDK_TCROSS:
+    case GDK_CROSS:
+    case GDK_CROSSHAIR:
+    case GDK_DIAMOND_CROSS:
+      nscursor = [NSCursor crosshairCursor];
+    case GDK_HAND1:
+    case GDK_HAND2:
+      nscursor = [NSCursor pointingHandCursor];
+      break;
     default:
       g_warning ("Unsupported cursor type %d, using default", cursor_type);
       nscursor = [NSCursor arrowCursor];

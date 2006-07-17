@@ -539,7 +539,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 void
 _gdk_windowing_window_destroy_foreign (GdkWindow *window)
 {
-  /* FIXME: Implement */
+  /* Foreign windows aren't supported in OSX. */
 }
 
 static gboolean
@@ -660,13 +660,8 @@ move_resize_window_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl;
 
-  GDK_QUARTZ_ALLOC_POOL;
-
   if (GDK_WINDOW_DESTROYED (window))
-    {
-      GDK_QUARTZ_RELEASE_POOL;
-      return;
-    }
+    return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
@@ -681,6 +676,8 @@ move_resize_window_internal (GdkWindow *window,
 
   if (height != -1)
     impl->height = height;
+
+  GDK_QUARTZ_ALLOC_POOL;
 
   if (impl->toplevel)
     {
@@ -699,7 +696,7 @@ move_resize_window_internal (GdkWindow *window,
 	{
 	  [impl->view setFrame:NSMakeRect (private->x, private->y, 
 					   impl->width, impl->height)];
-	  
+
 	  /* FIXME: Maybe we should use setNeedsDisplayInRect instead */
 	  [impl->view setNeedsDisplay:YES];
 	}
@@ -930,8 +927,7 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  /* FIXME: Implement */
-  return FALSE;
+  return gdk_window_get_origin (window, x, y);
 }
 
 void
@@ -939,9 +935,20 @@ gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,
 			    gint      *y)
 {
+  GdkRectangle rect;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+  rect.x = 0;
+  rect.y = 0;
+  
+  gdk_window_get_frame_extents (window, &rect);
+
+  if (x)
+    *x = rect.x;
+
+  if (y)
+    *y = rect.y;
 }
 
 void
@@ -951,6 +958,10 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
 			    gint             *y,
 			    GdkModifierType  *mask)
 {
+  g_return_if_fail (display == _gdk_display);
+  
+  *screen = _gdk_screen;
+  _gdk_windowing_window_get_pointer (_gdk_display, _gdk_root, x, y, mask);
 }
 
 GdkWindow *
@@ -1061,7 +1072,9 @@ gdk_window_set_title (GdkWindow   *window,
 
   if (impl->toplevel)
     {
+      GDK_QUARTZ_ALLOC_POOL;
       [impl->toplevel setTitle:[NSString stringWithUTF8String:title]];
+      GDK_QUARTZ_RELEASE_POOL;
     }
 }
 
@@ -1230,6 +1243,7 @@ GdkWindowTypeHint
 gdk_window_get_type_hint (GdkWindow *window)
 {
   /* FIXME: Implement */
+  return GDK_WINDOW_TYPE_HINT_NORMAL;
 }
 
 void
@@ -1295,7 +1309,33 @@ void
 gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
-  /* FIXME: Implement */
+  GdkWindowObject *private;
+  GdkWindow *toplevel;
+  GdkWindowImplQuartz *impl;
+  NSRect ns_rect;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (rect != NULL);
+
+  private = GDK_WINDOW_OBJECT (window);
+
+  rect->x = 0;
+  rect->y = 0;
+  rect->width = 1;
+  rect->height = 1;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  toplevel = gdk_window_get_toplevel (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+
+  ns_rect = [impl->toplevel frame];
+
+  rect->x = ns_rect.origin.x;
+  rect->y = _gdk_quartz_get_inverted_screen_y (ns_rect.origin.y + ns_rect.size.height);
+  rect->width = ns_rect.size.width;
+  rect->height = ns_rect.size.height;
 }
 
 void
@@ -1308,8 +1348,8 @@ gdk_window_set_decorations (GdkWindow      *window,
 }
 
 gboolean
-gdk_window_get_decorations(GdkWindow       *window,
-			   GdkWMDecoration *decorations)
+gdk_window_get_decorations (GdkWindow       *window,
+			    GdkWMDecoration *decorations)
 {
   /* FIXME: Implement */
   return FALSE;
@@ -1371,27 +1411,25 @@ void
 gdk_window_iconify (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
-  NSAutoreleasePool *pool;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
+  
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
   if (!impl->toplevel)
     return;
-
-  pool = [[NSAutoreleasePool alloc] init];
+  
+  GDK_QUARTZ_ALLOC_POOL;
   [impl->toplevel miniaturize:nil];
-  [pool release];
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void
 gdk_window_deiconify (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
-  NSAutoreleasePool *pool;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1402,9 +1440,9 @@ gdk_window_deiconify (GdkWindow *window)
   if (!impl->toplevel)
     return;
 
-  pool = [[NSAutoreleasePool alloc] init];
+  GDK_QUARTZ_ALLOC_POOL;
   [impl->toplevel deminiaturize:nil];
-  [pool release];
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void

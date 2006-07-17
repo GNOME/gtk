@@ -802,9 +802,16 @@ static void
 convert_window_coordinates_to_root (GdkWindow *window, gdouble x, gdouble y,
 				    gdouble *x_root, gdouble *y_root)
 {
-  /* FIXME: Implement */
-  *x_root = 0;
-  *y_root = 0;
+  gint ox, oy;
+
+  *x_root = x;
+  *y_root = y;
+  
+  if (gdk_window_get_origin (window, &ox, &oy))
+    {
+      *x_root += ox;
+      *y_root += oy;
+    }
 }
 
 static GdkEvent *
@@ -815,13 +822,21 @@ create_crossing_event (GdkWindow      *window,
 		       GdkNotifyType   detail)
 {
   GdkEvent *event;
+  NSPoint point;
 
   event = gdk_event_new (event_type);
   
   event->crossing.window = window;
   event->crossing.subwindow = NULL; /* FIXME */
   event->crossing.time = get_event_time (nsevent);
-  /* FIXME: x, y, x_root, y_root */
+
+  point = [nsevent locationInWindow];
+  event->crossing.x = point.x;
+  event->crossing.y = point.y;
+  convert_window_coordinates_to_root (window, event->crossing.x, event->crossing.y, 
+				      &event->crossing.x_root,
+				      &event->crossing.y_root);
+
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   /* FIXME: focus */
@@ -1300,16 +1315,23 @@ static GdkEvent *
 create_scroll_event (GdkWindow *window, NSEvent *nsevent, GdkScrollDirection direction)
 {
   GdkEvent *event;
-
+  NSPoint point;
+  
   event = gdk_event_new (GDK_SCROLL);
   event->scroll.window = window;
   event->scroll.time = get_event_time (nsevent);
-  /* FIXME event->x, event->y */
+
+  point = [nsevent locationInWindow];
+  event->scroll.x = point.x;
+  event->scroll.y = point.y;
+  convert_window_coordinates_to_root (window, event->scroll.x, event->scroll.y, 
+				      &event->scroll.x_root,
+				      &event->scroll.y_root);
+
   /* FIXME event->state; */
   /* FIXME event->is_hint; */
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
-  /* FIXME: event->x_root, event->y_root */
   
   return event;
 }

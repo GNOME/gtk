@@ -1,3 +1,24 @@
+2006-07-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(_gdk_windowing_window_destroy_foreign): Fix comment.
+	(gdk_window_set_title): Surround by release pool macros.
+	(gdk_window_get_type_hint): Fix return value.
+	(gdk_window_get_frame_extents): Implement.
+	(gdk_window_iconify): Use the release pool macros.
+	(gdk_window_deiconify): Likewise. 
+	(_gdk_windowing_get_pointer): Implement.
+	(gdk_window_get_deskrelative_origin, gdk_window_get_root_origin): 
+	Implement.
+
+	* gdk/quartz/gdkevents-quartz.c (create_crossing_event) 
+	(create_scroll_event, convert_window_coordinates_to_root): 
+	Set coordinates and root coordinates for crossing and scroll 
+	events.
+
+	* gdk/quartz/gdkcursor-quartz.c (gdk_cursor_new_for_display): 
+	Map some more cursors.
+
 2006-07-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_get_pointer): Add some more
