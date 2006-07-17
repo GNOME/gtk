@@ -303,6 +303,27 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
                                MIN (height, gdk_pixbuf_animation_get_height (priv->animation)));
 }
 
+/* Defense against broken loaders; DO NOT take this as a GError example! */
+static void
+gdk_pixbuf_loader_ensure_error (GdkPixbufLoader *loader,
+                                GError         **error)
+{ 
+        GdkPixbufLoaderPrivate *priv = loader->priv;
+
+        if (error == NULL || *error != NULL)
+                return;
+
+        g_warning ("Bug! loader '%s' didn't set an error on failure",
+                   priv->image_module->module_name);
+        g_set_error (error,
+                     GDK_PIXBUF_ERROR,
+                     GDK_PIXBUF_ERROR_FAILED,
+                     _("Internal error: Image loader module '%s' failed to"
+                       " complete an operation, but didn't give a reason for"
+                       " the failure"),
+                     priv->image_module->module_name);
+}
+
 static gint
 gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
                                const char      *image_type,
@@ -358,23 +379,7 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
   
         if (priv->context == NULL)
                 {
-                        /* Defense against broken loaders; DO NOT take this as a GError
-                         * example
-                         */
-                        if (error && *error == NULL)
-                                {
-                                        g_warning ("Bug! loader '%s' didn't set an error on failure",
-                                                   priv->image_module->module_name);
-                                        g_set_error (error,
-                                                     GDK_PIXBUF_ERROR,
-                                                     GDK_PIXBUF_ERROR_FAILED,
-                                                     _("Internal error: Image loader module '%s'"
-                                                       " failed to begin loading an image, but didn't"
-                                                       " give a reason for the failure"),
-                                                     priv->image_module->module_name);
-
-                                }
-      
+                        gdk_pixbuf_loader_ensure_error (loader, error);
                         return 0;
                 }
   
@@ -450,7 +455,10 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
       
                         eaten = gdk_pixbuf_loader_eat_header_write (loader, buf, count, error);
                         if (eaten <= 0)
-                                return FALSE;
+                                {
+                                        gdk_pixbuf_loader_ensure_error (loader, error);
+                                        return FALSE;
+                                }
       
                         count -= eaten;
                         buf += eaten;
@@ -461,19 +469,8 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
                         gboolean retval;
                         retval = priv->image_module->load_increment (priv->context, buf, count,
                                                                      error);
-                        if (!retval && error && *error == NULL)
-                                {
-                                        /* Fix up busted image loader */
-                                        g_warning ("Bug! loader '%s' didn't set an error on failure",
-                                                   priv->image_module->module_name);
-                                        g_set_error (error,
-                                                     GDK_PIXBUF_ERROR,
-                                                     GDK_PIXBUF_ERROR_FAILED,
-                                                     _("Internal error: Image loader module '%s'"
-                                                       " failed to begin loading an image, but didn't"
-                                                       " give a reason for the failure"),
-                                                     priv->image_module->module_name);
-                                }
+                        if (!retval)
+                                gdk_pixbuf_loader_ensure_error (loader, error);
 
                         return retval;
                 }
@@ -716,7 +713,10 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
         if (priv->image_module && priv->image_module->stop_load && priv->context) 
                 {
                         if (!priv->image_module->stop_load (priv->context, error))
-                                retval = FALSE;
+                                {
+                                        gdk_pixbuf_loader_ensure_error (loader, error);
+                                        retval = FALSE;
+                                }
                 }
   
         priv->closed = TRUE;

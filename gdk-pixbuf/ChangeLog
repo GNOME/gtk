@@ -1,5 +1,12 @@
 2006-07-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module) 
+	(gdk_pixbuf_loader_write, gdk_pixbuf_loader_close) 
+	(gdk_pixbuf_loader_ensure_error): Put the code to protect
+	against broken loaders that forget to set error in an
+	auxiliary function and call it in more places.  (#346428,
+	 Catmur)
+
 	* io-xbm.c: Fix incremental loading of 
 	xbms.  (#346427, Ed Catmur)
 	Also make the xbm loader accept const variations.
