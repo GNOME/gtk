@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-11 14:07+0200\n"
-"PO-Revision-Date: 2006-07-11 16:20+0200\n"
+"POT-Creation-Date: 2006-07-17 12:30+0200\n"
+"PO-Revision-Date: 2006-07-17 12:37+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,19 +126,19 @@ msgstr ""
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nicht genug Speicher, um Bild in einen Puffer zu speichern"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:343
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to complete an operation, "
+"but didn't give a reason for the failure"
+msgstr ""
+"Interner Fehler: Bildlader-Modul »%s« schaffte es nicht, eine Operation "
+"abzuschileßen, gab aber keinen Grund für den Fehler an"
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Schrittweises Laden des Bildtyps »%s« wird nicht unterstützt"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:371 ../gdk-pixbuf/gdk-pixbuf-loader.c:472
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Interner Fehler: Bildlader-Modul »%s« schaffte es nicht, das Laden eines "
-"Bildes zu beginnen, gab aber keinen Grund für den Fehler an"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -739,21 +739,21 @@ msgstr "Der Rest konnte nicht gespeichert werden"
 msgid "The WBMP image format"
 msgstr "Das WBMP-Bildformat"
 
-#: ../gdk-pixbuf/io-xbm.c:287
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "Ungültige XBM-Datei"
 
-#: ../gdk-pixbuf/io-xbm.c:297
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Nicht genug Speicher, um XBM-Bilddatei zu laden"
 
-#: ../gdk-pixbuf/io-xbm.c:443
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "Beim Laden eines XBM-Bildes konnte nicht in eine temporäre Datei geschrieben "
 "werden"
 
-#: ../gdk-pixbuf/io-xbm.c:478
+#: ../gdk-pixbuf/io-xbm.c:488
 msgid "The XBM image format"
 msgstr "Das XBM-Bildformat"
 
@@ -1554,41 +1554,45 @@ msgid "Type a file name"
 msgstr "Geben Sie einen Dateinamen an"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4546
 msgid "Create Fo_lder"
-msgstr "_Ordner anlegen"
+msgstr "Ord_ner anlegen"
 
-#: ../gtk/gtkfilechooserdefault.c:4793
+#: ../gtk/gtkfilechooserdefault.c:4556
+msgid "_Location:"
+msgstr "_Ort:"
+
+#: ../gtk/gtkfilechooserdefault.c:4796
 msgid "Save in _folder:"
 msgstr "In _Ordner speichern:"
 
-#: ../gtk/gtkfilechooserdefault.c:4795
+#: ../gtk/gtkfilechooserdefault.c:4798
 msgid "Create in _folder:"
 msgstr "In _Ordner anlegen"
 
-#: ../gtk/gtkfilechooserdefault.c:6199
+#: ../gtk/gtkfilechooserdefault.c:6202
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, da dieser nicht "
 "lokal ist."
 
-#: ../gtk/gtkfilechooserdefault.c:6769 ../gtk/gtkfilechooserdefault.c:6790
+#: ../gtk/gtkfilechooserdefault.c:6772 ../gtk/gtkfilechooserdefault.c:6793
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Das Lesezeichen %s existiert bereits"
 
 #. translators, "Shortcut" means "Bookmark" here
-#: ../gtk/gtkfilechooserdefault.c:6880
+#: ../gtk/gtkfilechooserdefault.c:6883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
-#: ../gtk/gtkfilechooserdefault.c:7135
+#: ../gtk/gtkfilechooserdefault.c:7138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Eine Datei namens »%s« existiert bereits. Möchten Sie diese ersetzen?"
 
-#: ../gtk/gtkfilechooserdefault.c:7138
+#: ../gtk/gtkfilechooserdefault.c:7141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1596,51 +1600,51 @@ msgstr ""
 "Die Datei existiert bereits in »%s«. Durch ihr Ersetzen wird sämtlicher "
 "Inhalt überschrieben."
 
-#: ../gtk/gtkfilechooserdefault.c:7143
+#: ../gtk/gtkfilechooserdefault.c:7146
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../gtk/gtkfilechooserdefault.c:7793
+#: ../gtk/gtkfilechooserdefault.c:7796
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s konnte nicht eingebunden werden"
 
 # CHECK
-#: ../gtk/gtkfilechooserdefault.c:8184
+#: ../gtk/gtkfilechooserdefault.c:8187
 msgid "Type name of new folder"
 msgstr "Ordnername eingeben"
 
-#: ../gtk/gtkfilechooserdefault.c:8229
+#: ../gtk/gtkfilechooserdefault.c:8232
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d Byte"
 msgstr[1] "%d Bytes"
 
-#: ../gtk/gtkfilechooserdefault.c:8231
+#: ../gtk/gtkfilechooserdefault.c:8234
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: ../gtk/gtkfilechooserdefault.c:8233
+#: ../gtk/gtkfilechooserdefault.c:8236
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:8235
+#: ../gtk/gtkfilechooserdefault.c:8238
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:8283 ../gtk/gtkfilechooserdefault.c:8307
+#: ../gtk/gtkfilechooserdefault.c:8286 ../gtk/gtkfilechooserdefault.c:8310
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../gtk/gtkfilechooserdefault.c:8294
+#: ../gtk/gtkfilechooserdefault.c:8297
 msgid "Today"
 msgstr "Heute"
 
-#: ../gtk/gtkfilechooserdefault.c:8296
+#: ../gtk/gtkfilechooserdefault.c:8299
 msgid "Yesterday"
 msgstr "Gestern"
 
@@ -4162,671 +4166,6 @@ msgstr ""
 "Serialisierte Daten sind fehlerhaft. Erste Sektion ist nicht "
 "GTKTEXTBUFFERCONTENTS-0001"
 
-#. sorted by name, remember to sort when changing
-#: ../gtk/paper_names.c:18
-msgid "asme_f"
-msgstr "asme_f"
-
-#. f           5    e1
-#: ../gtk/paper_names.c:19
-msgid "A0x2"
-msgstr "1/2 A0"
-
-#: ../gtk/paper_names.c:20
-msgid "A0"
-msgstr "A0"
-
-#: ../gtk/paper_names.c:21
-msgid "A0x3"
-msgstr "1/3 A0"
-
-#: ../gtk/paper_names.c:22
-msgid "A1"
-msgstr "A1"
-
-#: ../gtk/paper_names.c:23
-msgid "A10"
-msgstr "A10"
-
-#: ../gtk/paper_names.c:24
-msgid "A1x3"
-msgstr "1/3 A1"
-
-#: ../gtk/paper_names.c:25
-msgid "A1x4"
-msgstr "1/4 A1"
-
-#: ../gtk/paper_names.c:26
-msgid "A2"
-msgstr "A2"
-
-#: ../gtk/paper_names.c:27
-msgid "A2x3"
-msgstr "1/3 A2"
-
-#: ../gtk/paper_names.c:28
-msgid "A2x4"
-msgstr "1/4 A2"
-
-#: ../gtk/paper_names.c:29
-msgid "A2x5"
-msgstr "1/5 A2"
-
-#: ../gtk/paper_names.c:30
-msgid "A3"
-msgstr "A3"
-
-#: ../gtk/paper_names.c:31
-msgid "A3 Extra"
-msgstr "A3 Extra"
-
-#: ../gtk/paper_names.c:32
-msgid "A3x3"
-msgstr "1/3 A3"
-
-#: ../gtk/paper_names.c:33
-msgid "A3x4"
-msgstr "1/4 A3"
-
-#: ../gtk/paper_names.c:34
-msgid "A3x5"
-msgstr "1/5 A3"
-
-#: ../gtk/paper_names.c:35
-msgid "A3x6"
-msgstr "1/6 A3"
-
-#: ../gtk/paper_names.c:36
-msgid "A3x7"
-msgstr "1/7 A3"
-
-#: ../gtk/paper_names.c:37
-msgid "A4"
-msgstr "A4"
-
-#: ../gtk/paper_names.c:38
-msgid "A4 Extra"
-msgstr "A4 Extra"
-
-#: ../gtk/paper_names.c:39
-msgid "A4 Tab"
-msgstr "A4 Tab"
-
-#: ../gtk/paper_names.c:40
-msgid "A4x3"
-msgstr "1/3 A4"
-
-#: ../gtk/paper_names.c:41
-msgid "A4x4"
-msgstr "1/4 A4"
-
-#: ../gtk/paper_names.c:42
-msgid "A4x5"
-msgstr "1/5 A4"
-
-#: ../gtk/paper_names.c:43
-msgid "A4x6"
-msgstr "1/6 A4"
-
-#: ../gtk/paper_names.c:44
-msgid "A4x7"
-msgstr "1/7 A4"
-
-#: ../gtk/paper_names.c:45
-msgid "A4x8"
-msgstr "1/8 A4"
-
-#: ../gtk/paper_names.c:46
-msgid "A4x9"
-msgstr "1/9 A4"
-
-#: ../gtk/paper_names.c:47
-msgid "A5"
-msgstr "A5"
-
-#: ../gtk/paper_names.c:48
-msgid "A5 Extra"
-msgstr "A5 Extra"
-
-#: ../gtk/paper_names.c:49
-msgid "A6"
-msgstr "A6"
-
-#: ../gtk/paper_names.c:50
-msgid "A7"
-msgstr "A7"
-
-#: ../gtk/paper_names.c:51
-msgid "A8"
-msgstr "A8"
-
-#: ../gtk/paper_names.c:52
-msgid "A9"
-msgstr "A9"
-
-#: ../gtk/paper_names.c:53
-msgid "B0"
-msgstr "B0"
-
-#: ../gtk/paper_names.c:54
-msgid "B1"
-msgstr "B1"
-
-#: ../gtk/paper_names.c:55
-msgid "B10"
-msgstr "B10"
-
-#: ../gtk/paper_names.c:56
-msgid "B2"
-msgstr "B2"
-
-#: ../gtk/paper_names.c:57
-msgid "B3"
-msgstr "B3"
-
-#: ../gtk/paper_names.c:58
-msgid "B4"
-msgstr "B4"
-
-#: ../gtk/paper_names.c:59
-msgid "B5"
-msgstr "B5"
-
-#: ../gtk/paper_names.c:60
-msgid "B5 Extra"
-msgstr "B5 Extra"
-
-#: ../gtk/paper_names.c:61
-msgid "B6"
-msgstr "B6"
-
-#: ../gtk/paper_names.c:62
-msgid "B6/C4"
-msgstr "B6/C4"
-
-#. b6/c4 Envelope
-#: ../gtk/paper_names.c:63
-msgid "B7"
-msgstr "B7"
-
-#: ../gtk/paper_names.c:64
-msgid "B8"
-msgstr "B8"
-
-#: ../gtk/paper_names.c:65
-msgid "B9"
-msgstr "B9"
-
-#: ../gtk/paper_names.c:66
-msgid "C0"
-msgstr "C0"
-
-#: ../gtk/paper_names.c:67
-msgid "C1"
-msgstr "C1"
-
-#: ../gtk/paper_names.c:68
-msgid "C10"
-msgstr "C10"
-
-#: ../gtk/paper_names.c:69
-msgid "C2"
-msgstr "C2"
-
-#: ../gtk/paper_names.c:70
-msgid "C3"
-msgstr "C3"
-
-#: ../gtk/paper_names.c:71
-msgid "C4"
-msgstr "C4"
-
-#: ../gtk/paper_names.c:72
-msgid "C5"
-msgstr "C5"
-
-#: ../gtk/paper_names.c:73
-msgid "C6"
-msgstr "C6"
-
-#: ../gtk/paper_names.c:74
-msgid "C6/C5"
-msgstr "C6/C5"
-
-#: ../gtk/paper_names.c:75
-msgid "C7"
-msgstr "C7"
-
-#: ../gtk/paper_names.c:76
-msgid "C7/C6"
-msgstr "C7/C6"
-
-#. c7/c6 Envelope
-#: ../gtk/paper_names.c:77
-msgid "C8"
-msgstr "C8"
-
-#: ../gtk/paper_names.c:78
-msgid "C9"
-msgstr "C9"
-
-#: ../gtk/paper_names.c:79
-msgid "DL Envelope"
-msgstr "DL-Umschlag"
-
-#. iso-designated 1, 2 designated-long, dl Envelope
-#: ../gtk/paper_names.c:80
-msgid "RA0"
-msgstr "RA0"
-
-#: ../gtk/paper_names.c:81
-msgid "RA1"
-msgstr "RA1"
-
-#: ../gtk/paper_names.c:82
-msgid "RA2"
-msgstr "RA2"
-
-#: ../gtk/paper_names.c:83
-msgid "SRA0"
-msgstr "SRA0"
-
-#: ../gtk/paper_names.c:84
-msgid "SRA1"
-msgstr "SRA1"
-
-#: ../gtk/paper_names.c:85
-msgid "SRA2"
-msgstr "SRA2"
-
-#: ../gtk/paper_names.c:86
-msgid "JB0"
-msgstr "JB0"
-
-#: ../gtk/paper_names.c:87
-msgid "JB1"
-msgstr "JB1"
-
-#: ../gtk/paper_names.c:88
-msgid "JB10"
-msgstr "JB10"
-
-#: ../gtk/paper_names.c:89
-msgid "JB2"
-msgstr "JB2"
-
-#: ../gtk/paper_names.c:90
-msgid "JB3"
-msgstr "JB3"
-
-#: ../gtk/paper_names.c:91
-msgid "JB4"
-msgstr "JB4"
-
-#: ../gtk/paper_names.c:92
-msgid "JB5"
-msgstr "JB5"
-
-#: ../gtk/paper_names.c:93
-msgid "JB6"
-msgstr "JB6"
-
-#: ../gtk/paper_names.c:94
-msgid "JB7"
-msgstr "JB7"
-
-#: ../gtk/paper_names.c:95
-msgid "JB8"
-msgstr "JB8"
-
-#: ../gtk/paper_names.c:96
-msgid "JB9"
-msgstr "JB9"
-
-#: ../gtk/paper_names.c:97
-msgid "jis exec"
-msgstr "jus exec"
-
-#: ../gtk/paper_names.c:98
-msgid "Choukei 2 Envelope"
-msgstr "Choukei 2-Umschlag"
-
-#: ../gtk/paper_names.c:99
-msgid "Choukei 3 Envelope"
-msgstr "Choukei 3-Umschlag"
-
-#: ../gtk/paper_names.c:100
-msgid "Choukei 4 Envelope"
-msgstr "Choukei 4-Umschlag"
-
-#: ../gtk/paper_names.c:101
-msgid "hagaki (postcard)"
-msgstr "hagaki (Postkarte)"
-
-#: ../gtk/paper_names.c:102
-msgid "kahu Envelope"
-msgstr "kahu-Umschlag"
-
-#: ../gtk/paper_names.c:103
-msgid "kaku2 Envelope"
-msgstr "kaku2-Umschlag"
-
-#: ../gtk/paper_names.c:104
-msgid "oufuku (reply postcard)"
-msgstr "oufuku (Antwortpostkarte)"
-
-#: ../gtk/paper_names.c:105
-msgid "you4 Envelope"
-msgstr "you4-Umschlag"
-
-#: ../gtk/paper_names.c:106
-msgid "10x11"
-msgstr "10x11"
-
-#: ../gtk/paper_names.c:107
-msgid "10x13"
-msgstr "10x13"
-
-#: ../gtk/paper_names.c:108
-msgid "10x14"
-msgstr "10x14"
-
-#: ../gtk/paper_names.c:109 ../gtk/paper_names.c:110
-msgid "10x15"
-msgstr "10x15"
-
-#: ../gtk/paper_names.c:111
-msgid "11x12"
-msgstr "11x12"
-
-#: ../gtk/paper_names.c:112
-msgid "11x15"
-msgstr "11x15"
-
-#: ../gtk/paper_names.c:113
-msgid "12x19"
-msgstr "12x19"
-
-#: ../gtk/paper_names.c:114
-msgid "5x7"
-msgstr "5x7"
-
-#: ../gtk/paper_names.c:115
-msgid "6x9 Envelope"
-msgstr "6x9-Umschlag"
-
-#: ../gtk/paper_names.c:116
-msgid "7x9 Envelope"
-msgstr "7x9-Umschlag"
-
-#: ../gtk/paper_names.c:117
-msgid "9x11 Envelope"
-msgstr "9x11-Umschlag"
-
-#: ../gtk/paper_names.c:118
-msgid "a2 Envelope"
-msgstr "a2-Umschlag"
-
-#: ../gtk/paper_names.c:119
-msgid "Arch A"
-msgstr "Arch A"
-
-#: ../gtk/paper_names.c:120
-msgid "Arch B"
-msgstr "Arch B"
-
-#: ../gtk/paper_names.c:121
-msgid "Arch C"
-msgstr "Arch C"
-
-#: ../gtk/paper_names.c:122
-msgid "Arch D"
-msgstr "Arch D"
-
-#: ../gtk/paper_names.c:123
-msgid "Arch E"
-msgstr "Arch E"
-
-#: ../gtk/paper_names.c:124
-msgid "b-plus"
-msgstr "b-plus"
-
-#: ../gtk/paper_names.c:125
-msgid "c"
-msgstr "c"
-
-#: ../gtk/paper_names.c:126
-msgid "c5 Envelope"
-msgstr "c5-Umschlag"
-
-#: ../gtk/paper_names.c:127
-msgid "d"
-msgstr "d"
-
-#: ../gtk/paper_names.c:128
-msgid "e"
-msgstr "e"
-
-#: ../gtk/paper_names.c:129
-msgid "edp"
-msgstr "edp"
-
-#: ../gtk/paper_names.c:130
-msgid "European edp"
-msgstr "Europäisches edp"
-
-#: ../gtk/paper_names.c:131
-msgid "Executive"
-msgstr "Executive"
-
-#: ../gtk/paper_names.c:132
-msgid "f"
-msgstr "f"
-
-#: ../gtk/paper_names.c:133
-msgid "FanFold European"
-msgstr "FanFold Europäisch"
-
-#: ../gtk/paper_names.c:134
-msgid "FanFold US"
-msgstr "FanFold US"
-
-#: ../gtk/paper_names.c:135
-msgid "FanFold German Legal"
-msgstr "FanFold Deutsch-Legal"
-
-#. foolscap, german-legal-fanfold
-#: ../gtk/paper_names.c:136
-msgid "Government Legal"
-msgstr "Government-Legal"
-
-#: ../gtk/paper_names.c:137
-msgid "Government Letter"
-msgstr "Government-Letter"
-
-#: ../gtk/paper_names.c:138
-msgid "Index 3x5"
-msgstr "Index 3x5"
-
-#: ../gtk/paper_names.c:139
-msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (Postkarte)"
-
-#: ../gtk/paper_names.c:140
-msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
-
-#: ../gtk/paper_names.c:141
-msgid "Index 5x8"
-msgstr "Index 5x8"
-
-# CHECK
-#: ../gtk/paper_names.c:142
-msgid "Invoice"
-msgstr "Rechnung"
-
-#. invoice,  statement, mini, half-letter
-#: ../gtk/paper_names.c:143
-msgid "Tabloid"
-msgstr "Tabloid"
-
-#. tabloid, engineering-b
-#: ../gtk/paper_names.c:144
-msgid "US Legal"
-msgstr "US-Legal"
-
-#: ../gtk/paper_names.c:145
-msgid "US Legal Extra"
-msgstr "US-Legal Extra"
-
-#: ../gtk/paper_names.c:146
-msgid "US Letter"
-msgstr "US-Letter"
-
-#: ../gtk/paper_names.c:147
-msgid "US Letter Extra"
-msgstr "US-Letter Extra"
-
-#: ../gtk/paper_names.c:148
-msgid "US Letter Plus"
-msgstr "US-Letter Plus"
-
-#: ../gtk/paper_names.c:149
-msgid "Monarch Envelope"
-msgstr "Monarch-Umschlag"
-
-#: ../gtk/paper_names.c:150
-msgid "#10 Envelope"
-msgstr "#10-Umschlag"
-
-#. na-number-10-envelope 1, 2 comm-10 Envelope
-#: ../gtk/paper_names.c:151
-msgid "#11 Envelope"
-msgstr "#11-Umschlag"
-
-#. number-11 Envelope
-#: ../gtk/paper_names.c:152
-msgid "#12 Envelope"
-msgstr "#12-Umschlag"
-
-#. number-12 Envelope
-#: ../gtk/paper_names.c:153
-msgid "#14 Envelope"
-msgstr "#14-Umschlag"
-
-#. number-14 Envelope
-#: ../gtk/paper_names.c:154
-msgid "#9 Envelope"
-msgstr "#9-Umschlag"
-
-#: ../gtk/paper_names.c:155
-msgid "Personal Envelope"
-msgstr "Personal-Umschlag"
-
-#: ../gtk/paper_names.c:156
-msgid "Quarto"
-msgstr "Quarto"
-
-#: ../gtk/paper_names.c:157
-msgid "Super A"
-msgstr "Super A"
-
-#: ../gtk/paper_names.c:158
-msgid "Super B"
-msgstr "Super B"
-
-#: ../gtk/paper_names.c:159
-msgid "Wide Format"
-msgstr "Weites Format"
-
-#: ../gtk/paper_names.c:160
-msgid "Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-#: ../gtk/paper_names.c:161
-msgid "Folio"
-msgstr "Folio"
-
-#: ../gtk/paper_names.c:162
-msgid "Folio sp"
-msgstr "Folio sp"
-
-#: ../gtk/paper_names.c:163
-msgid "Invite Envelope"
-msgstr "Invite-Umschlag"
-
-#: ../gtk/paper_names.c:164
-msgid "Italian Envelope"
-msgstr "Italien-Umschlag"
-
-#: ../gtk/paper_names.c:165
-msgid "juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#: ../gtk/paper_names.c:166
-msgid "pa-kai"
-msgstr "pa-kai"
-
-#: ../gtk/paper_names.c:167
-msgid "Postfix Envelope"
-msgstr "Postfix-Umschlag"
-
-#: ../gtk/paper_names.c:168
-msgid "Small Photo"
-msgstr "Kleines Foto"
-
-#: ../gtk/paper_names.c:169
-msgid "prc1 Envelope"
-msgstr "prc1-Umschlag"
-
-#: ../gtk/paper_names.c:170
-msgid "prc10 Envelope"
-msgstr "prc10-Umschlag"
-
-#: ../gtk/paper_names.c:171
-msgid "prc 16k"
-msgstr "prc 16k"
-
-#: ../gtk/paper_names.c:172
-msgid "prc2 Envelope"
-msgstr "prc2-Umschlag"
-
-#: ../gtk/paper_names.c:173
-msgid "prc3 Envelope"
-msgstr "prc3-Umschlag"
-
-#: ../gtk/paper_names.c:174
-msgid "prc 32k"
-msgstr "prc 32k"
-
-#: ../gtk/paper_names.c:175
-msgid "prc4 Envelope"
-msgstr "prc4-Umschlag"
-
-#: ../gtk/paper_names.c:176
-msgid "prc5 Envelope"
-msgstr "prc5-Umschlag"
-
-#: ../gtk/paper_names.c:177
-msgid "prc6 Envelope"
-msgstr "prc6-Umschlag"
-
-#: ../gtk/paper_names.c:178
-msgid "prc7 Envelope"
-msgstr "prc7-Umschlag"
-
-#: ../gtk/paper_names.c:179
-msgid "prc8 Envelope"
-msgstr "prc8-Umschlag"
-
-#: ../gtk/paper_names.c:180
-msgid "ROC 16k"
-msgstr "ROC 16k"
-
-#: ../gtk/paper_names.c:181
-msgid "ROC 8k"
-msgstr "ROC 8k"
-
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
@@ -4857,8 +4196,8 @@ msgstr "Cache-Datei konnte nicht gespeichert werden: %s\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt."
-"\n"
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen "
+"entfernt.\n"
 
 #: ../gtk/updateiconcache.c:1214
 #, c-format
@@ -4903,6 +4242,496 @@ msgstr ""
 "Keine Themenindex-Datei in »%s«.\n"
 "Wenn Sie hier wirklich einen Symbol-Cache erstellen möchten, verwenden Sie "
 "bitte --ignore-theme-index.\n"
+
+#~ msgid "asme_f"
+#~ msgstr "asme_f"
+
+#~ msgid "A0x2"
+#~ msgstr "1/2 A0"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A0x3"
+#~ msgstr "1/3 A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A10"
+#~ msgstr "A10"
+
+#~ msgid "A1x3"
+#~ msgstr "1/3 A1"
+
+#~ msgid "A1x4"
+#~ msgstr "1/4 A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A2x3"
+#~ msgstr "1/3 A2"
+
+#~ msgid "A2x4"
+#~ msgstr "1/4 A2"
+
+#~ msgid "A2x5"
+#~ msgstr "1/5 A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A3 Extra"
+#~ msgstr "A3 Extra"
+
+#~ msgid "A3x3"
+#~ msgstr "1/3 A3"
+
+#~ msgid "A3x4"
+#~ msgstr "1/4 A3"
+
+#~ msgid "A3x5"
+#~ msgstr "1/5 A3"
+
+#~ msgid "A3x6"
+#~ msgstr "1/6 A3"
+
+#~ msgid "A3x7"
+#~ msgstr "1/7 A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A4 Extra"
+#~ msgstr "A4 Extra"
+
+#~ msgid "A4 Tab"
+#~ msgstr "A4 Tab"
+
+#~ msgid "A4x3"
+#~ msgstr "1/3 A4"
+
+#~ msgid "A4x4"
+#~ msgstr "1/4 A4"
+
+#~ msgid "A4x5"
+#~ msgstr "1/5 A4"
+
+#~ msgid "A4x6"
+#~ msgstr "1/6 A4"
+
+#~ msgid "A4x7"
+#~ msgstr "1/7 A4"
+
+#~ msgid "A4x8"
+#~ msgstr "1/8 A4"
+
+#~ msgid "A4x9"
+#~ msgstr "1/9 A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A5 Extra"
+#~ msgstr "A5 Extra"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B5 Extra"
+#~ msgstr "B5 Extra"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B6/C4"
+#~ msgstr "B6/C4"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "C0"
+#~ msgstr "C0"
+
+#~ msgid "C1"
+#~ msgstr "C1"
+
+#~ msgid "C10"
+#~ msgstr "C10"
+
+#~ msgid "C2"
+#~ msgstr "C2"
+
+#~ msgid "C3"
+#~ msgstr "C3"
+
+#~ msgid "C4"
+#~ msgstr "C4"
+
+#~ msgid "C5"
+#~ msgstr "C5"
+
+#~ msgid "C6"
+#~ msgstr "C6"
+
+#~ msgid "C6/C5"
+#~ msgstr "C6/C5"
+
+#~ msgid "C7"
+#~ msgstr "C7"
+
+#~ msgid "C7/C6"
+#~ msgstr "C7/C6"
+
+#~ msgid "C8"
+#~ msgstr "C8"
+
+#~ msgid "C9"
+#~ msgstr "C9"
+
+#~ msgid "DL Envelope"
+#~ msgstr "DL-Umschlag"
+
+#~ msgid "RA0"
+#~ msgstr "RA0"
+
+#~ msgid "RA1"
+#~ msgstr "RA1"
+
+#~ msgid "RA2"
+#~ msgstr "RA2"
+
+#~ msgid "SRA0"
+#~ msgstr "SRA0"
+
+#~ msgid "SRA1"
+#~ msgstr "SRA1"
+
+#~ msgid "SRA2"
+#~ msgstr "SRA2"
+
+#~ msgid "JB0"
+#~ msgstr "JB0"
+
+#~ msgid "JB1"
+#~ msgstr "JB1"
+
+#~ msgid "JB10"
+#~ msgstr "JB10"
+
+#~ msgid "JB2"
+#~ msgstr "JB2"
+
+#~ msgid "JB3"
+#~ msgstr "JB3"
+
+#~ msgid "JB4"
+#~ msgstr "JB4"
+
+#~ msgid "JB5"
+#~ msgstr "JB5"
+
+#~ msgid "JB6"
+#~ msgstr "JB6"
+
+#~ msgid "JB7"
+#~ msgstr "JB7"
+
+#~ msgid "JB8"
+#~ msgstr "JB8"
+
+#~ msgid "JB9"
+#~ msgstr "JB9"
+
+#~ msgid "jis exec"
+#~ msgstr "jus exec"
+
+#~ msgid "Choukei 2 Envelope"
+#~ msgstr "Choukei 2-Umschlag"
+
+#~ msgid "Choukei 3 Envelope"
+#~ msgstr "Choukei 3-Umschlag"
+
+#~ msgid "Choukei 4 Envelope"
+#~ msgstr "Choukei 4-Umschlag"
+
+#~ msgid "hagaki (postcard)"
+#~ msgstr "hagaki (Postkarte)"
+
+#~ msgid "kahu Envelope"
+#~ msgstr "kahu-Umschlag"
+
+#~ msgid "kaku2 Envelope"
+#~ msgstr "kaku2-Umschlag"
+
+#~ msgid "oufuku (reply postcard)"
+#~ msgstr "oufuku (Antwortpostkarte)"
+
+#~ msgid "you4 Envelope"
+#~ msgstr "you4-Umschlag"
+
+#~ msgid "10x11"
+#~ msgstr "10x11"
+
+#~ msgid "10x13"
+#~ msgstr "10x13"
+
+#~ msgid "10x14"
+#~ msgstr "10x14"
+
+#~ msgid "10x15"
+#~ msgstr "10x15"
+
+#~ msgid "11x12"
+#~ msgstr "11x12"
+
+#~ msgid "11x15"
+#~ msgstr "11x15"
+
+#~ msgid "12x19"
+#~ msgstr "12x19"
+
+#~ msgid "5x7"
+#~ msgstr "5x7"
+
+#~ msgid "6x9 Envelope"
+#~ msgstr "6x9-Umschlag"
+
+#~ msgid "7x9 Envelope"
+#~ msgstr "7x9-Umschlag"
+
+#~ msgid "9x11 Envelope"
+#~ msgstr "9x11-Umschlag"
+
+#~ msgid "a2 Envelope"
+#~ msgstr "a2-Umschlag"
+
+#~ msgid "Arch A"
+#~ msgstr "Arch A"
+
+#~ msgid "Arch B"
+#~ msgstr "Arch B"
+
+#~ msgid "Arch C"
+#~ msgstr "Arch C"
+
+#~ msgid "Arch D"
+#~ msgstr "Arch D"
+
+#~ msgid "Arch E"
+#~ msgstr "Arch E"
+
+#~ msgid "b-plus"
+#~ msgstr "b-plus"
+
+#~ msgid "c"
+#~ msgstr "c"
+
+#~ msgid "c5 Envelope"
+#~ msgstr "c5-Umschlag"
+
+#~ msgid "d"
+#~ msgstr "d"
+
+#~ msgid "e"
+#~ msgstr "e"
+
+#~ msgid "edp"
+#~ msgstr "edp"
+
+#~ msgid "European edp"
+#~ msgstr "Europäisches edp"
+
+#~ msgid "Executive"
+#~ msgstr "Executive"
+
+#~ msgid "f"
+#~ msgstr "f"
+
+#~ msgid "FanFold European"
+#~ msgstr "FanFold Europäisch"
+
+#~ msgid "FanFold US"
+#~ msgstr "FanFold US"
+
+#~ msgid "FanFold German Legal"
+#~ msgstr "FanFold Deutsch-Legal"
+
+#~ msgid "Government Legal"
+#~ msgstr "Government-Legal"
+
+#~ msgid "Government Letter"
+#~ msgstr "Government-Letter"
+
+#~ msgid "Index 3x5"
+#~ msgstr "Index 3x5"
+
+#~ msgid "Index 4x6 (postcard)"
+#~ msgstr "Index 4x6 (Postkarte)"
+
+#~ msgid "Index 4x6 ext"
+#~ msgstr "Index 4x6 ext"
+
+#~ msgid "Index 5x8"
+#~ msgstr "Index 5x8"
+
+# CHECK
+#~ msgid "Invoice"
+#~ msgstr "Rechnung"
+
+#~ msgid "Tabloid"
+#~ msgstr "Tabloid"
+
+#~ msgid "US Legal"
+#~ msgstr "US-Legal"
+
+#~ msgid "US Legal Extra"
+#~ msgstr "US-Legal Extra"
+
+#~ msgid "US Letter"
+#~ msgstr "US-Letter"
+
+#~ msgid "US Letter Extra"
+#~ msgstr "US-Letter Extra"
+
+#~ msgid "US Letter Plus"
+#~ msgstr "US-Letter Plus"
+
+#~ msgid "Monarch Envelope"
+#~ msgstr "Monarch-Umschlag"
+
+#~ msgid "#10 Envelope"
+#~ msgstr "#10-Umschlag"
+
+#~ msgid "#11 Envelope"
+#~ msgstr "#11-Umschlag"
+
+#~ msgid "#12 Envelope"
+#~ msgstr "#12-Umschlag"
+
+#~ msgid "#14 Envelope"
+#~ msgstr "#14-Umschlag"
+
+#~ msgid "#9 Envelope"
+#~ msgstr "#9-Umschlag"
+
+#~ msgid "Personal Envelope"
+#~ msgstr "Personal-Umschlag"
+
+#~ msgid "Quarto"
+#~ msgstr "Quarto"
+
+#~ msgid "Super A"
+#~ msgstr "Super A"
+
+#~ msgid "Super B"
+#~ msgstr "Super B"
+
+#~ msgid "Wide Format"
+#~ msgstr "Weites Format"
+
+#~ msgid "Dai-pa-kai"
+#~ msgstr "Dai-pa-kai"
+
+#~ msgid "Folio"
+#~ msgstr "Folio"
+
+#~ msgid "Folio sp"
+#~ msgstr "Folio sp"
+
+#~ msgid "Invite Envelope"
+#~ msgstr "Invite-Umschlag"
+
+#~ msgid "Italian Envelope"
+#~ msgstr "Italien-Umschlag"
+
+#~ msgid "juuro-ku-kai"
+#~ msgstr "juuro-ku-kai"
+
+#~ msgid "pa-kai"
+#~ msgstr "pa-kai"
+
+#~ msgid "Postfix Envelope"
+#~ msgstr "Postfix-Umschlag"
+
+#~ msgid "Small Photo"
+#~ msgstr "Kleines Foto"
+
+#~ msgid "prc1 Envelope"
+#~ msgstr "prc1-Umschlag"
+
+#~ msgid "prc10 Envelope"
+#~ msgstr "prc10-Umschlag"
+
+#~ msgid "prc 16k"
+#~ msgstr "prc 16k"
+
+#~ msgid "prc2 Envelope"
+#~ msgstr "prc2-Umschlag"
+
+#~ msgid "prc3 Envelope"
+#~ msgstr "prc3-Umschlag"
+
+#~ msgid "prc 32k"
+#~ msgstr "prc 32k"
+
+#~ msgid "prc4 Envelope"
+#~ msgstr "prc4-Umschlag"
+
+#~ msgid "prc5 Envelope"
+#~ msgstr "prc5-Umschlag"
+
+#~ msgid "prc6 Envelope"
+#~ msgstr "prc6-Umschlag"
+
+#~ msgid "prc7 Envelope"
+#~ msgstr "prc7-Umschlag"
+
+#~ msgid "prc8 Envelope"
+#~ msgstr "prc8-Umschlag"
+
+#~ msgid "ROC 16k"
+#~ msgstr "ROC 16k"
+
+#~ msgid "ROC 8k"
+#~ msgstr "ROC 8k"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
