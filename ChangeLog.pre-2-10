@@ -1,5 +1,10 @@
 2006-07-17  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkkeys-quartz.c: Add escape to the list of special
+	keys, to get the escape key working.
+
+2006-07-17  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkdisplay-quartz.c (gdk_display_open): Initialize
 	GdkInput.
 	

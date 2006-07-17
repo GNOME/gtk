@@ -91,7 +91,7 @@ macroman2ucs (unsigned char c)
     0x2021, 0xb7, 0x201a, 0x201e, 0x2030, 0xc2, 0xca, 0xc1,
     0xcb, 0xc8, 0xcd, 0xce, 0xcf, 0xcc, 0xd3, 0xd4,
     0xf8ff, 0xd2, 0xda, 0xdb, 0xd9, 0x131, 0x2c6, 0x2dc,
-    0xaf, 0x2d8, 0x2d9, 0x2da, 0xb8, 0x2dd, 0x2db, 0x2c7,
+    0xaf, 0x2d8, 0x2d9, 0x2da, 0xb8, 0x2dd, 0x2db, 0x2c7
   };
 
   if (c < 128)
@@ -128,7 +128,7 @@ const static struct {
   { 111, GDK_F12, 0 },
   { 105, GDK_F13, 0 },
   { 107, GDK_F14, 0 },
-  { 113, GDK_F15, 0 },
+  { 113, GDK_F15, 0 }
 };
 
 const static struct {
@@ -151,7 +151,7 @@ const static struct {
   { 88, GDK_6, GDK_KP_6 },
   { 89, GDK_7, GDK_KP_7 },
   { 91, GDK_8, GDK_KP_8 },
-  { 92, GDK_9, GDK_KP_9 },
+  { 92, GDK_9, GDK_KP_9 }
 };
 
 /* These values aren't covered by gdk_unicode_to_keyval */
@@ -165,10 +165,11 @@ const static struct {
   { 0x000b, GDK_Page_Up },
   { 0x000c, GDK_Page_Down },
   { 0x000d, GDK_Return },
+  { 0x001b, GDK_Escape },
   { 0x001c, GDK_Left },
   { 0x001d, GDK_Right },
   { 0x001e, GDK_Up },
-  { 0x001f, GDK_Down },
+  { 0x001f, GDK_Down }
 };
 
 static void
@@ -233,7 +234,7 @@ maybe_update_keymap (void)
 		       * uchr version. 
 		       */
 		      uc = macroman2ucs (c);
-		      
+
 		      for (k = 0; k < G_N_ELEMENTS (special_ucs_table); k++) 
 			{
 			  if (special_ucs_table[k].ucs_value == uc)
@@ -302,7 +303,7 @@ maybe_update_keymap (void)
 		      gboolean found = FALSE;
 		      
 		      uc = chars[0];
-		      
+
 		      for (k = 0; k < G_N_ELEMENTS (special_ucs_table); k++) 
 			{
 			  if (special_ucs_table[k].ucs_value == uc)
