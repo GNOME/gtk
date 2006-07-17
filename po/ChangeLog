@@ -1,3 +1,8 @@
+2006-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Remove gk/paper_names.c.  (#347224,
+	Hendrik Richter)
+
 2006-07-16  Lukas Novotny  <lukasnov@cvs.gnome.org>
 
  	* cs.po: Updated Czech translation.
