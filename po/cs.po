@@ -1,3 +1,4 @@
+# translation of cs.po to Czech
 # translation of cs.po to
 # Czech translation of Gtk+.
 # Copyright (C) 1999, 2006 Free Software Foundation, Inc.
@@ -10,20 +11,21 @@
 # Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 # Jakub Friedl <jfriedl@suse.cz>, 2006.
 # Lukas Novotny <lukasnov@cvs.gnome.org>, 2006.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-16 08:38+0200\n"
-"PO-Revision-Date: 2006-07-16 20:21+0200\n"
-"Last-Translator: Lukas Novotny <lukasnov@cvs.gnome.org>\n"
-"Language-Team: Czech <cs@li.org>\n"
+"POT-Creation-Date: 2006-07-17 15:46+0200\n"
+"PO-Revision-Date: 2006-07-17 15:46+0200\n"
+"Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
+"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;"
+"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: KBabel 1.10.2\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../tests/testfilechooser.c:218
@@ -127,19 +129,19 @@ msgstr ""
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nedostatek paměti pro uložení obrázku do bufferu"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:343
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Postupné načítání obrázku typu '%s' není podporováno"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:371 ../gdk-pixbuf/gdk-pixbuf-loader.c:472
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
+#, fuzzy, c-format
 msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
+"Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
 "Interní chyba: Modulu pro načítání obrázku '%s' nezačal načítat obrázek, ale "
 "pro toto selhání neudal důvod"
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr "Postupné načítání obrázku typu '%s' není podporováno"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -726,19 +728,19 @@ msgstr "Nemohu uložit zbytek"
 msgid "The WBMP image format"
 msgstr "Formát obrázku WBMP"
 
-#: ../gdk-pixbuf/io-xbm.c:287
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "Neplatný soubor XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:297
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Nedostatek paměti pro načtení souboru obrázku XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:443
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Nemohu psát do dočasného souboru při načítání obrázku XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:478
+#: ../gdk-pixbuf/io-xbm.c:488
 msgid "The XBM image format"
 msgstr "Formát obrázku XBM"
 
@@ -1130,7 +1132,7 @@ msgstr "Obrácené lomítko"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:694
+#: ../gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1138,7 +1140,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:718
+#: ../gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1150,7 +1152,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1604
+#: ../gtk/gtkcalendar.c:1606
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1165,7 +1167,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1635 ../gtk/gtkcalendar.c:2213
+#: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2215
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1181,7 +1183,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1669 ../gtk/gtkcalendar.c:2087
+#: ../gtk/gtkcalendar.c:1671 ../gtk/gtkcalendar.c:2089
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "calendar:week_start:1"
@@ -1197,7 +1199,7 @@ msgstr "calendar:week_start:1"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:1880
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1325,18 +1327,16 @@ msgid "Amount of blue light in the color."
 msgstr "Množství modrého světla v barvě."
 
 #: ../gtk/gtkcolorsel.c:1979
-#, fuzzy
 msgid "Op_acity:"
-msgstr "Stup_eň krytí:"
+msgstr "_Krytí:"
 
 #: ../gtk/gtkcolorsel.c:1987 ../gtk/gtkcolorsel.c:1998
 msgid "Transparency of the color."
 msgstr "Průhlednost barvy."
 
 #: ../gtk/gtkcolorsel.c:2005
-#, fuzzy
 msgid "Color _name:"
-msgstr "_Název barvy: "
+msgstr "Jmé_no barvy:"
 
 #: ../gtk/gtkcolorsel.c:2020
 msgid ""
@@ -1454,13 +1454,12 @@ msgstr "Přejmenovat..."
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3395
 msgid "Places"
-msgstr ""
+msgstr "Místa"
 
 #. Column header for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3449
-#, fuzzy
 msgid "_Places"
-msgstr "Na_hradit"
+msgstr "_Místa"
 
 #: ../gtk/gtkfilechooserdefault.c:3505 ../gtk/gtkstock.c:317
 msgid "_Add"
@@ -1525,62 +1524,65 @@ msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
 #: ../gtk/gtkfilechooserdefault.c:4509
-#, fuzzy
 msgid "Type a file name"
-msgstr "Neplatný název souboru"
+msgstr "Zadejte jméno souboru"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4546
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
-#: ../gtk/gtkfilechooserdefault.c:4793
+#: ../gtk/gtkfilechooserdefault.c:4556
+msgid "_Location:"
+msgstr "_Umístění:"
+
+#: ../gtk/gtkfilechooserdefault.c:4796
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: ../gtk/gtkfilechooserdefault.c:4795
+#: ../gtk/gtkfilechooserdefault.c:4798
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: ../gtk/gtkfilechooserdefault.c:6199
+#: ../gtk/gtkfilechooserdefault.c:6202
 msgid "Cannot change to folder because it is not local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: ../gtk/gtkfilechooserdefault.c:6769 ../gtk/gtkfilechooserdefault.c:6790
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:6772 ../gtk/gtkfilechooserdefault.c:6793
+#, c-format
 msgid "Shortcut %s already exists"
-msgstr "zkratka %s již existuje"
+msgstr "Zkratka %s již existuje"
 
-#: ../gtk/gtkfilechooserdefault.c:6880
+#: ../gtk/gtkfilechooserdefault.c:6883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:7135
+#: ../gtk/gtkfilechooserdefault.c:7138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný \"%s\" již existuje. Chcete jej nahradit?"
 
-#: ../gtk/gtkfilechooserdefault.c:7138
+#: ../gtk/gtkfilechooserdefault.c:7141
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "V \"%s\" již tento soubor existuje. Jeho nahrazení přepíše jeho obsah."
 
-#: ../gtk/gtkfilechooserdefault.c:7143
+#: ../gtk/gtkfilechooserdefault.c:7146
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: ../gtk/gtkfilechooserdefault.c:7793
+#: ../gtk/gtkfilechooserdefault.c:7796
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nemohu připojit %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8184
+#: ../gtk/gtkfilechooserdefault.c:8187
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: ../gtk/gtkfilechooserdefault.c:8229
+#: ../gtk/gtkfilechooserdefault.c:8232
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1588,30 +1590,30 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: ../gtk/gtkfilechooserdefault.c:8231
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8234
+#, c-format
 msgid "%.1f KB"
-msgstr "%.1f K"
+msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:8233
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8236
+#, c-format
 msgid "%.1f MB"
-msgstr "%.1f M"
+msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:8235
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8238
+#, c-format
 msgid "%.1f GB"
-msgstr "%.1f G"
+msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:8283 ../gtk/gtkfilechooserdefault.c:8307
+#: ../gtk/gtkfilechooserdefault.c:8286 ../gtk/gtkfilechooserdefault.c:8310
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserdefault.c:8294
+#: ../gtk/gtkfilechooserdefault.c:8297
 msgid "Today"
 msgstr "Dnes"
 
-#: ../gtk/gtkfilechooserdefault.c:8296
+#: ../gtk/gtkfilechooserdefault.c:8299
 msgid "Yesterday"
 msgstr "Včera"
 
@@ -1644,9 +1646,9 @@ msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
 
 #: ../gtk/gtkfilechoosersettings.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory: %s"
-msgstr "chyba při vytváření adresáře '%s': %s"
+msgstr "Nelze vytvořit adresář: %s"
 
 #: ../gtk/gtkfilesel.c:694
 msgid "Folders"
@@ -1721,9 +1723,9 @@ msgstr ""
 "Název souboru \"%s\" obsahuje znaky, které nejsou v názvech souborů povoleny"
 
 #: ../gtk/gtkfilesel.c:1537 ../gtk/gtkfilesel.c:1547
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting file '%s': %s"
-msgstr "Chyba při odstraňování souboru \"%s\": %s"
+msgstr "Chyba při mazání souboru '%s': %s"
 
 #: ../gtk/gtkfilesel.c:1590
 #, c-format
@@ -1735,18 +1737,14 @@ msgid "Delete File"
 msgstr "Odstranit soubor"
 
 #: ../gtk/gtkfilesel.c:1643
-#, fuzzy, c-format
+#, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr ""
-"Chyba při přejmenovávání souboru na \"%s\": %s\n"
-"%s"
+msgstr "Chyba při přejmenovávání souboru na \"%s\": %s"
 
 #: ../gtk/gtkfilesel.c:1656
-#, fuzzy, c-format
+#, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr ""
-"Chyba při přejmenovávání souboru \"%s\": %s\n"
-"%s"
+msgstr "Chyba při přejmenovávání souboru \"%s\": %s"
 
 #: ../gtk/gtkfilesel.c:1665
 #, c-format
@@ -1792,9 +1790,9 @@ msgid "Couldn't convert filename"
 msgstr "Nemohu převést název souboru"
 
 #: ../gtk/gtkfilesystem.c:317
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s\n"
-msgstr "Nemohu získat standardní ikonu pro %s"
+msgstr "Nemohu získat standardní ikonu pro %s\n"
 
 #: ../gtk/gtkfilesystemmodel.c:745
 #, fuzzy
@@ -2100,7 +2098,7 @@ msgstr "mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:908 ../gtk/gtkpagesetupunixdialog.c:1418
 msgid "inch"
-msgstr ""
+msgstr "palec"
 
 #: ../gtk/gtkpagesetupunixdialog.c:927
 #, c-format
@@ -2111,6 +2109,11 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"Okraje:\n"
+" Levý: %s %s\n"
+" Pravý: %s %s\n"
+" Horní: %s %s\n"
+" Dolní: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:978
 msgid "Manage Custom Sizes..."
@@ -2118,7 +2121,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:1026
 msgid "_Format for:"
-msgstr ""
+msgstr "_Formát pro:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1047
 msgid "_Paper size:"
@@ -2135,12 +2138,12 @@ msgstr "Strana %u"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1465
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "Okraje z tiskárny..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1625
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Vlastní velikost %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1853
 msgid "Manage Custom Sizes"
@@ -2262,16 +2265,15 @@ msgstr "Aplikace"
 
 #: ../gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr ""
+msgstr "Tiskárna je offline"
 
 #: ../gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
 msgstr "Došel papír"
 
 #: ../gtk/gtkprintoperation-win32.c:567
-#, fuzzy
 msgid "Paused"
-msgstr "V_ložit"
+msgstr "Přerušeno"
 
 #: ../gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
@@ -2301,7 +2303,7 @@ msgstr "Neplatná hlavička ikony"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
-msgstr ""
+msgstr "Neurčená chyba"
 
 #: ../gtk/gtkprintoperation-win32.c:1622
 msgid "Error from StartDoc"
@@ -2320,32 +2322,29 @@ msgid "Status"
 msgstr "Stav"
 
 #: ../gtk/gtkprintunixdialog.c:1487
-#, fuzzy
 msgid "Print Pages"
-msgstr "Ná_hled tisku"
+msgstr "Vytisknout strany"
 
 #: ../gtk/gtkprintunixdialog.c:1491
-#, fuzzy
 msgid "_All"
-msgstr "_Použít"
+msgstr "_Všechny"
 
 #: ../gtk/gtkprintunixdialog.c:1498
-#, fuzzy
 msgid "C_urrent"
-msgstr "_Vytvořit"
+msgstr "_Aktuální"
 
 #: ../gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
-msgstr ""
+msgstr "_Rozsah: "
 
 #: ../gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
-msgstr ""
+msgstr "Kopie"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
-msgstr ""
+msgstr "_Kopie:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
 #, fuzzy
@@ -2359,7 +2358,7 @@ msgstr "_Vrátit"
 
 #: ../gtk/gtkprintunixdialog.c:1571
 msgid "General"
-msgstr ""
+msgstr "Obecné"
 
 #: ../gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
@@ -2375,9 +2374,8 @@ msgid "T_wo-sided:"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1993
-#, fuzzy
 msgid "_Only print:"
-msgstr "_Tisk"
+msgstr "P_ouze tisk:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2008
@@ -2432,9 +2430,8 @@ msgid "Print Document"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2170
-#, fuzzy
 msgid "_Now"
-msgstr "_Ne"
+msgstr "_Nyní"
 
 #: ../gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
@@ -2467,12 +2464,11 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
-msgstr ""
+msgstr "Kvalita obrazu"
 
 #: ../gtk/gtkprintunixdialog.c:2351
-#, fuzzy
 msgid "Color"
-msgstr "_Barva"
+msgstr "Barva"
 
 #: ../gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
@@ -2483,9 +2479,8 @@ msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2387
-#, fuzzy
 msgid "Print"
-msgstr "_Tisk"
+msgstr "Tisk"
 
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -2516,9 +2511,8 @@ msgid "No item for URI '%s' found"
 msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:1774
-#, fuzzy
 msgid "Could not remove item"
-msgstr "Nemohu vybrat položku"
+msgstr "Nemohu odstranit položku"
 
 #: ../gtk/gtkrecentchooserdefault.c:1817
 #, fuzzy
@@ -2558,18 +2552,17 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "Otevřít '%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:864
-#, fuzzy
 msgid "Unknown item"
-msgstr "Neznámé"
+msgstr "Neznámá položka"
 
 #: ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1203
 #: ../gtk/gtkrecentmanager.c:1213 ../gtk/gtkrecentmanager.c:1272
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Nemohu nalézt vložený soubor: \"%s\""
+msgstr "Nelze nalézt položku s URI '%s'"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -4147,674 +4140,6 @@ msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 
-#. sorted by name, remember to sort when changing
-#: ../gtk/paper_names.c:18
-#, fuzzy
-msgid "asme_f"
-msgstr "Název"
-
-#. f           5    e1
-#: ../gtk/paper_names.c:19
-msgid "A0x2"
-msgstr "A0x2"
-
-#: ../gtk/paper_names.c:20
-msgid "A0"
-msgstr "A0"
-
-#: ../gtk/paper_names.c:21
-msgid "A0x3"
-msgstr "A0x3"
-
-#: ../gtk/paper_names.c:22
-msgid "A1"
-msgstr "A1"
-
-#: ../gtk/paper_names.c:23
-msgid "A10"
-msgstr "A10"
-
-#: ../gtk/paper_names.c:24
-msgid "A1x3"
-msgstr "A1x3"
-
-#: ../gtk/paper_names.c:25
-msgid "A1x4"
-msgstr "A1x4"
-
-#: ../gtk/paper_names.c:26
-msgid "A2"
-msgstr "A2"
-
-#: ../gtk/paper_names.c:27
-msgid "A2x3"
-msgstr "A2x3"
-
-#: ../gtk/paper_names.c:28
-msgid "A2x4"
-msgstr "A2x4"
-
-#: ../gtk/paper_names.c:29
-msgid "A2x5"
-msgstr "A2x5"
-
-#: ../gtk/paper_names.c:30
-msgid "A3"
-msgstr "A3"
-
-#: ../gtk/paper_names.c:31
-msgid "A3 Extra"
-msgstr "A3 Extra"
-
-#: ../gtk/paper_names.c:32
-msgid "A3x3"
-msgstr "A3x3"
-
-#: ../gtk/paper_names.c:33
-msgid "A3x4"
-msgstr "A3x4"
-
-#: ../gtk/paper_names.c:34
-msgid "A3x5"
-msgstr "A3x5"
-
-#: ../gtk/paper_names.c:35
-msgid "A3x6"
-msgstr "A3x6"
-
-#: ../gtk/paper_names.c:36
-msgid "A3x7"
-msgstr "A3x7"
-
-#: ../gtk/paper_names.c:37
-msgid "A4"
-msgstr "A4"
-
-#: ../gtk/paper_names.c:38
-msgid "A4 Extra"
-msgstr "A4 Extra"
-
-#: ../gtk/paper_names.c:39
-msgid "A4 Tab"
-msgstr ""
-
-#: ../gtk/paper_names.c:40
-msgid "A4x3"
-msgstr "A4x3"
-
-#: ../gtk/paper_names.c:41
-msgid "A4x4"
-msgstr "A4x4"
-
-#: ../gtk/paper_names.c:42
-msgid "A4x5"
-msgstr "A4x5"
-
-#: ../gtk/paper_names.c:43
-msgid "A4x6"
-msgstr "A4x6"
-
-#: ../gtk/paper_names.c:44
-msgid "A4x7"
-msgstr "A4x7"
-
-#: ../gtk/paper_names.c:45
-msgid "A4x8"
-msgstr "A4x8"
-
-#: ../gtk/paper_names.c:46
-msgid "A4x9"
-msgstr "A4x9"
-
-#: ../gtk/paper_names.c:47
-msgid "A5"
-msgstr "A5"
-
-#: ../gtk/paper_names.c:48
-msgid "A5 Extra"
-msgstr "A5 Extra"
-
-#: ../gtk/paper_names.c:49
-msgid "A6"
-msgstr "A6"
-
-#: ../gtk/paper_names.c:50
-msgid "A7"
-msgstr "A7"
-
-#: ../gtk/paper_names.c:51
-msgid "A8"
-msgstr "A8"
-
-#: ../gtk/paper_names.c:52
-msgid "A9"
-msgstr "A9"
-
-#: ../gtk/paper_names.c:53
-msgid "B0"
-msgstr "B0"
-
-#: ../gtk/paper_names.c:54
-msgid "B1"
-msgstr "B1"
-
-#: ../gtk/paper_names.c:55
-msgid "B10"
-msgstr "B10"
-
-#: ../gtk/paper_names.c:56
-msgid "B2"
-msgstr "B2"
-
-#: ../gtk/paper_names.c:57
-msgid "B3"
-msgstr "B3"
-
-#: ../gtk/paper_names.c:58
-msgid "B4"
-msgstr "B4"
-
-#: ../gtk/paper_names.c:59
-msgid "B5"
-msgstr "B5"
-
-#: ../gtk/paper_names.c:60
-msgid "B5 Extra"
-msgstr "B5 Extra"
-
-#: ../gtk/paper_names.c:61
-msgid "B6"
-msgstr "B6"
-
-#: ../gtk/paper_names.c:62
-msgid "B6/C4"
-msgstr "B6/C4"
-
-#. b6/c4 Envelope
-#: ../gtk/paper_names.c:63
-msgid "B7"
-msgstr "B7"
-
-#: ../gtk/paper_names.c:64
-msgid "B8"
-msgstr "B8"
-
-#: ../gtk/paper_names.c:65
-msgid "B9"
-msgstr "B9"
-
-#: ../gtk/paper_names.c:66
-msgid "C0"
-msgstr "C0"
-
-#: ../gtk/paper_names.c:67
-msgid "C1"
-msgstr "C1"
-
-#: ../gtk/paper_names.c:68
-msgid "C10"
-msgstr "C10"
-
-#: ../gtk/paper_names.c:69
-msgid "C2"
-msgstr "C2"
-
-#: ../gtk/paper_names.c:70
-msgid "C3"
-msgstr "C3"
-
-#: ../gtk/paper_names.c:71
-msgid "C4"
-msgstr "C4"
-
-#: ../gtk/paper_names.c:72
-msgid "C5"
-msgstr "C5"
-
-#: ../gtk/paper_names.c:73
-msgid "C6"
-msgstr "C6"
-
-#: ../gtk/paper_names.c:74
-msgid "C6/C5"
-msgstr "C6/C5"
-
-#: ../gtk/paper_names.c:75
-msgid "C7"
-msgstr "C7"
-
-#: ../gtk/paper_names.c:76
-msgid "C7/C6"
-msgstr "C7/C6"
-
-#. c7/c6 Envelope
-#: ../gtk/paper_names.c:77
-msgid "C8"
-msgstr "C8"
-
-#: ../gtk/paper_names.c:78
-msgid "C9"
-msgstr "C9"
-
-#: ../gtk/paper_names.c:79
-msgid "DL Envelope"
-msgstr "Obálka DL"
-
-#. iso-designated 1, 2 designated-long, dl Envelope
-#: ../gtk/paper_names.c:80
-msgid "RA0"
-msgstr ""
-
-#: ../gtk/paper_names.c:81
-msgid "RA1"
-msgstr ""
-
-#: ../gtk/paper_names.c:82
-msgid "RA2"
-msgstr ""
-
-#: ../gtk/paper_names.c:83
-msgid "SRA0"
-msgstr "SRA0"
-
-#: ../gtk/paper_names.c:84
-msgid "SRA1"
-msgstr "SRA1"
-
-#: ../gtk/paper_names.c:85
-msgid "SRA2"
-msgstr "SRA2"
-
-#: ../gtk/paper_names.c:86
-msgid "JB0"
-msgstr "JB0"
-
-#: ../gtk/paper_names.c:87
-msgid "JB1"
-msgstr "JB1"
-
-#: ../gtk/paper_names.c:88
-msgid "JB10"
-msgstr "JB10"
-
-#: ../gtk/paper_names.c:89
-msgid "JB2"
-msgstr "JB2"
-
-#: ../gtk/paper_names.c:90
-msgid "JB3"
-msgstr "JB3"
-
-#: ../gtk/paper_names.c:91
-msgid "JB4"
-msgstr "JB4"
-
-#: ../gtk/paper_names.c:92
-msgid "JB5"
-msgstr "JB5"
-
-#: ../gtk/paper_names.c:93
-msgid "JB6"
-msgstr "JB6"
-
-#: ../gtk/paper_names.c:94
-msgid "JB7"
-msgstr "JB7"
-
-#: ../gtk/paper_names.c:95
-msgid "JB8"
-msgstr "JB8"
-
-#: ../gtk/paper_names.c:96
-msgid "JB9"
-msgstr "JB9"
-
-#: ../gtk/paper_names.c:97
-msgid "jis exec"
-msgstr ""
-
-#: ../gtk/paper_names.c:98
-msgid "Choukei 2 Envelope"
-msgstr "Obálka Choukei 2"
-
-#: ../gtk/paper_names.c:99
-msgid "Choukei 3 Envelope"
-msgstr "Obálka Choukei 3"
-
-#: ../gtk/paper_names.c:100
-msgid "Choukei 4 Envelope"
-msgstr "Obálka Choukei 4"
-
-#: ../gtk/paper_names.c:101
-msgid "hagaki (postcard)"
-msgstr "hagaki (pohlednice)"
-
-#: ../gtk/paper_names.c:102
-msgid "kahu Envelope"
-msgstr "Obálka kahu"
-
-#: ../gtk/paper_names.c:103
-msgid "kaku2 Envelope"
-msgstr "Obálka kaku2"
-
-#: ../gtk/paper_names.c:104
-msgid "oufuku (reply postcard)"
-msgstr ""
-
-#: ../gtk/paper_names.c:105
-msgid "you4 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:106
-msgid "10x11"
-msgstr ""
-
-#: ../gtk/paper_names.c:107
-msgid "10x13"
-msgstr ""
-
-#: ../gtk/paper_names.c:108
-msgid "10x14"
-msgstr ""
-
-#: ../gtk/paper_names.c:109 ../gtk/paper_names.c:110
-msgid "10x15"
-msgstr ""
-
-#: ../gtk/paper_names.c:111
-msgid "11x12"
-msgstr ""
-
-#: ../gtk/paper_names.c:112
-msgid "11x15"
-msgstr ""
-
-#: ../gtk/paper_names.c:113
-msgid "12x19"
-msgstr ""
-
-#: ../gtk/paper_names.c:114
-msgid "5x7"
-msgstr ""
-
-#: ../gtk/paper_names.c:115
-msgid "6x9 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:116
-msgid "7x9 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:117
-msgid "9x11 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:118
-msgid "a2 Envelope"
-msgstr "Obálka a2"
-
-#: ../gtk/paper_names.c:119
-msgid "Arch A"
-msgstr "Arch A"
-
-#: ../gtk/paper_names.c:120
-msgid "Arch B"
-msgstr "Arch B"
-
-#: ../gtk/paper_names.c:121
-msgid "Arch C"
-msgstr "Arch C"
-
-#: ../gtk/paper_names.c:122
-msgid "Arch D"
-msgstr "Arch D"
-
-#: ../gtk/paper_names.c:123
-msgid "Arch E"
-msgstr "Arch E"
-
-#: ../gtk/paper_names.c:124
-msgid "b-plus"
-msgstr ""
-
-#: ../gtk/paper_names.c:125
-msgid "c"
-msgstr "c"
-
-#: ../gtk/paper_names.c:126
-msgid "c5 Envelope"
-msgstr "Obálka c5"
-
-#: ../gtk/paper_names.c:127
-msgid "d"
-msgstr "d"
-
-#: ../gtk/paper_names.c:128
-msgid "e"
-msgstr "e"
-
-#: ../gtk/paper_names.c:129
-msgid "edp"
-msgstr ""
-
-#: ../gtk/paper_names.c:130
-msgid "European edp"
-msgstr ""
-
-#: ../gtk/paper_names.c:131
-#, fuzzy
-msgid "Executive"
-msgstr "_Spustit"
-
-#: ../gtk/paper_names.c:132
-msgid "f"
-msgstr "f"
-
-#: ../gtk/paper_names.c:133
-msgid "FanFold European"
-msgstr ""
-
-#: ../gtk/paper_names.c:134
-msgid "FanFold US"
-msgstr ""
-
-#: ../gtk/paper_names.c:135
-msgid "FanFold German Legal"
-msgstr ""
-
-#. foolscap, german-legal-fanfold
-#: ../gtk/paper_names.c:136
-msgid "Government Legal"
-msgstr ""
-
-#: ../gtk/paper_names.c:137
-msgid "Government Letter"
-msgstr ""
-
-#: ../gtk/paper_names.c:138
-#, fuzzy
-msgid "Index 3x5"
-msgstr "_Index"
-
-#: ../gtk/paper_names.c:139
-msgid "Index 4x6 (postcard)"
-msgstr ""
-
-#: ../gtk/paper_names.c:140
-msgid "Index 4x6 ext"
-msgstr ""
-
-#: ../gtk/paper_names.c:141
-#, fuzzy
-msgid "Index 5x8"
-msgstr "_Index"
-
-#: ../gtk/paper_names.c:142
-msgid "Invoice"
-msgstr ""
-
-#. invoice,  statement, mini, half-letter
-#: ../gtk/paper_names.c:143
-msgid "Tabloid"
-msgstr ""
-
-#. tabloid, engineering-b
-#: ../gtk/paper_names.c:144
-msgid "US Legal"
-msgstr ""
-
-#: ../gtk/paper_names.c:145
-msgid "US Legal Extra"
-msgstr ""
-
-#: ../gtk/paper_names.c:146
-msgid "US Letter"
-msgstr ""
-
-#: ../gtk/paper_names.c:147
-msgid "US Letter Extra"
-msgstr ""
-
-#: ../gtk/paper_names.c:148
-msgid "US Letter Plus"
-msgstr ""
-
-#: ../gtk/paper_names.c:149
-msgid "Monarch Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:150
-msgid "#10 Envelope"
-msgstr ""
-
-#. na-number-10-envelope 1, 2 comm-10 Envelope
-#: ../gtk/paper_names.c:151
-msgid "#11 Envelope"
-msgstr ""
-
-#. number-11 Envelope
-#: ../gtk/paper_names.c:152
-msgid "#12 Envelope"
-msgstr ""
-
-#. number-12 Envelope
-#: ../gtk/paper_names.c:153
-msgid "#14 Envelope"
-msgstr ""
-
-#. number-14 Envelope
-#: ../gtk/paper_names.c:154
-msgid "#9 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:155
-msgid "Personal Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:156
-msgid "Quarto"
-msgstr "Quarto"
-
-#: ../gtk/paper_names.c:157
-msgid "Super A"
-msgstr ""
-
-#: ../gtk/paper_names.c:158
-msgid "Super B"
-msgstr ""
-
-#: ../gtk/paper_names.c:159
-msgid "Wide Format"
-msgstr ""
-
-#: ../gtk/paper_names.c:160
-msgid "Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-#: ../gtk/paper_names.c:161
-msgid "Folio"
-msgstr ""
-
-#: ../gtk/paper_names.c:162
-msgid "Folio sp"
-msgstr ""
-
-#: ../gtk/paper_names.c:163
-msgid "Invite Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:164
-msgid "Italian Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:165
-msgid "juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#: ../gtk/paper_names.c:166
-msgid "pa-kai"
-msgstr "pa-kai"
-
-#: ../gtk/paper_names.c:167
-msgid "Postfix Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:168
-msgid "Small Photo"
-msgstr "Malé foto"
-
-#: ../gtk/paper_names.c:169
-msgid "prc1 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:170
-msgid "prc10 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:171
-msgid "prc 16k"
-msgstr ""
-
-#: ../gtk/paper_names.c:172
-msgid "prc2 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:173
-msgid "prc3 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:174
-msgid "prc 32k"
-msgstr ""
-
-#: ../gtk/paper_names.c:175
-msgid "prc4 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:176
-msgid "prc5 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:177
-msgid "prc6 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:178
-msgid "prc7 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:179
-msgid "prc8 Envelope"
-msgstr ""
-
-#: ../gtk/paper_names.c:180
-msgid "ROC 16k"
-msgstr ""
-
-#: ../gtk/paper_names.c:181
-msgid "ROC 8k"
-msgstr ""
-
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
@@ -4890,38 +4215,3 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Chyba při vytváření adresáře \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "Pravděpodobně jste použili znaky nepovolené v názvech souborů."
-
-#~ msgid "Error creating folder \"%s\": %s\n"
-#~ msgstr "Chyba při vytváření adresáře \"%s\": %s\n"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Chyba při odstraňování souboru \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "Pravděpodobně obsahuje znaky nepovolené v názvech souborů."
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "Název souboru \"%s\" obsahuje znaky, které nejsou povoleny v názvech "
-#~ "souborů."
-
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "Chyba při získávání informací o '/': %s"
-
-#~ msgid "Select All"
-#~ msgstr "Vybrat vše"
