@@ -160,6 +160,8 @@ const static struct {
   guint keyval;
 } special_ucs_table [] = {
   { 0x0001, GDK_Home },
+  { 0x0003, GDK_Return },
+  { 0x0004, GDK_End },
   { 0x0008, GDK_BackSpace },
   { 0x0009, GDK_Tab },
   { 0x000b, GDK_Page_Up },
@@ -169,7 +171,8 @@ const static struct {
   { 0x001c, GDK_Left },
   { 0x001d, GDK_Right },
   { 0x001e, GDK_Up },
-  { 0x001f, GDK_Down }
+  { 0x001f, GDK_Down },
+  { 0x007f, GDK_Delete }
 };
 
 static void
@@ -582,7 +585,8 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 /* What sort of key event is this? Returns one of
  * GDK_KEY_PRESS, GDK_KEY_RELEASE, GDK_NOTHING (should be ignored)
  */
-GdkEventType _gdk_quartz_key_event_type (NSEvent *event)
+GdkEventType
+_gdk_quartz_key_event_type (NSEvent *event)
 {
   unsigned short keycode;
   unsigned int flags;
@@ -590,10 +594,14 @@ GdkEventType _gdk_quartz_key_event_type (NSEvent *event)
   
   switch ([event type])
     {
-      case NSKeyDown: return GDK_KEY_PRESS;
-      case NSKeyUp:   return GDK_KEY_RELEASE;
-      case NSFlagsChanged: break; /* Continue... */
-      default: g_assert_not_reached ();
+    case NSKeyDown:
+      return GDK_KEY_PRESS;
+    case NSKeyUp:
+      return GDK_KEY_RELEASE;
+    case NSFlagsChanged:
+      break;
+    default:
+      g_assert_not_reached ();
     }
   
   /* For flags-changed events, we have to find the special key that caused the
@@ -604,15 +612,32 @@ GdkEventType _gdk_quartz_key_event_type (NSEvent *event)
   for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
     {
       if (known_keys[i].keycode == keycode)
-	   {
-		 if (flags & known_keys[i].modmask)
-		   return GDK_KEY_PRESS;
-		 else
-		   return GDK_KEY_RELEASE;
-	   }
+	{
+	  if (flags & known_keys[i].modmask)
+	    return GDK_KEY_PRESS;
+	  else
+	    return GDK_KEY_RELEASE;
 	}
+    }
   
   /* Some keypresses (eg: Expose' activations) seem to trigger flags-changed
    * events for no good reason. Ignore them! */
   return GDK_NOTHING;
+}
+
+gboolean
+_gdk_quartz_key_is_modifier (guint keycode)
+{
+  gint i;
+  
+  for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
+    {
+      if (known_keys[i].modmask == 0)
+	break;
+
+      if (known_keys[i].keycode == keycode)
+	return TRUE;
+    }
+
+  return FALSE;
 }

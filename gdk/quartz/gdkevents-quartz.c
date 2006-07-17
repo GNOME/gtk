@@ -26,7 +26,11 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include <Carbon/Carbon.h>
+
 #include "gdkscreen.h"
+#include "gdkkeysyms.h"
+
 #include "gdkprivate-quartz.h"
 
 static GPollFD event_poll_fd;
@@ -1340,6 +1344,8 @@ static GdkEvent *
 create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 {
   GdkEvent *event;
+  gchar buf[7];
+  gunichar c = 0;
 
   event = gdk_event_new (type);
   event->key.window = window;
@@ -1347,6 +1353,8 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
   event->key.state = get_keyboard_modifiers_from_nsevent (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
+
+  event->key.keyval = GDK_VoidSymbol;
   
   gdk_keymap_translate_keyboard_state (NULL,
 				       event->key.hardware_keycode,
@@ -1354,6 +1362,46 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 				       event->key.group,
 				       &event->key.keyval,
 				       NULL, NULL, NULL);
+
+  event->key.is_modifier = _gdk_quartz_key_is_modifier (event->key.hardware_keycode);
+
+  event->key.string = NULL;
+
+  /* Fill in ->string since apps depend on it, taken from the x11 backend. */
+  if (event->key.keyval != GDK_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->key.keyval);
+
+    if (c)
+    {
+      gsize bytes_written;
+      gint len;
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+      
+      event->key.string = g_locale_from_utf8 (buf, len,
+					      NULL, &bytes_written,
+					      NULL);
+      if (event->key.string)
+	event->key.length = bytes_written;
+    }
+  else if (event->key.keyval == GDK_Escape)
+    {
+      event->key.length = 1;
+      event->key.string = g_strdup ("\033");
+    }
+  else if (event->key.keyval == GDK_Return ||
+	  event->key.keyval == GDK_KP_Enter)
+    {
+      event->key.length = 1;
+      event->key.string = g_strdup ("\r");
+    }
+
+  if (!event->key.string)
+    {
+      event->key.length = 0;
+      event->key.string = g_strdup ("");
+    }
 
   GDK_NOTE(EVENTS,
     g_message ("key %s:\t\twindow: %p  key: %12s  %d",

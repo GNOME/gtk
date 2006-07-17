@@ -1,3 +1,11 @@
+2006-07-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (create_key_event):
+	* gdk/quartz/gdkkeys-quartz.c: (_gdk_quartz_key_event_type),
+	(_gdk_quartz_key_is_modifier):
+	* gdk/quartz/gdkprivate-quartz.h: Fill in string, length and
+	is_modifier for key events. Map some more keys into gdk keyvals.
+
 2006-07-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): Don't undo

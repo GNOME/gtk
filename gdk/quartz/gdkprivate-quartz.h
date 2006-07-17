@@ -96,6 +96,7 @@ GdkGC *_gdk_quartz_gc_new (GdkDrawable      *drawable,
 void _gdk_windowing_window_init (void);
 void _gdk_events_init           (void);
 void _gdk_visual_init           (void);
+void _gdk_input_init            (void);
 
 void _gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
 void _gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
@@ -122,7 +123,8 @@ GdkImage *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
 
 void _gdk_quartz_send_map_events (GdkWindow *window);
 
-GdkEventType _gdk_quartz_flags_changed_is_press (NSEvent *event);
+GdkEventType _gdk_quartz_key_event_type  (NSEvent   *event);
+gboolean     _gdk_quartz_key_is_modifier (guint      keycode);
 
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
