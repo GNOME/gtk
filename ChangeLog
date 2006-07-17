@@ -1,3 +1,9 @@
+2006-07-17  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_build_tree): check if the iter
+	still has children after running the test-expand-row func,
+	(gtk_tree_view_real_expand_row): ditto. (#302127, Billy Biggs).
+
 2006-07-17  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcalendar.c (calendar_timer): use 5 * gtk-timeout-repeat,
