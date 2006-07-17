@@ -1,3 +1,8 @@
+2006-07-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): Don't undo
+	reordering if we haven't been reordering.  (#346836, Ed Catmur)
+
 2006-07-17  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkkeys-quartz.c: Add escape to the list of special

@@ -2596,7 +2596,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
   if (page->reorderable || page->detachable)
     {
-      if (!priv->during_detach)
+      if (priv->during_reorder)
 	{
 	  gint old_page_num, page_num;
 	  GList *element;
@@ -2605,8 +2605,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 	  old_page_num = g_list_position (notebook->children, notebook->focus_tab);
 	  page_num = reorder_tab (notebook, element, notebook->focus_tab);
 
-	  if (priv->has_scrolled ||
-	      old_page_num != page_num)
+	  if (priv->has_scrolled || old_page_num != page_num)
 	    g_signal_emit (notebook,
 			   notebook_signals[PAGE_REORDERED], 0,
 			   page->child, page_num);
