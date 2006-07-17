@@ -1,5 +1,8 @@
 2006-07-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintjob.c (gtk_print_job_send): Fix a typo in 
+	the docs.  (#347211, Kouhei Sutou)   
+
 	* configure.in: Make the test for the sync extension
 	more robust.  (#347315, Tommi Komulainen)
 
