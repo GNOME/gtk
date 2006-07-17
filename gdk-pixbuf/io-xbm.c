@@ -143,10 +143,12 @@ next_int (FILE *fstream)
 }
 
 static gboolean
-read_bitmap_file_data (FILE *fstream,
-		       guint *width, guint *height,
+read_bitmap_file_data (FILE    *fstream,
+		       guint   *width, 
+		       guint   *height,
 		       guchar **data,
-		       int *x_hot, int *y_hot)
+		       int     *x_hot, 
+		       int     *y_hot)
 {
 	guchar *bits = NULL;		/* working variable */
 	char line[MAX_SIZE];		/* input line from file */
@@ -198,7 +200,11 @@ read_bitmap_file_data (FILE *fstream,
     
 		if (sscanf (line, "static short %s = {", name_and_type) == 1)
 			version10p = 1;
+		else if (sscanf (line,"static const unsigned char %s = {",name_and_type) == 1)
+			version10p = 0;
 		else if (sscanf (line,"static unsigned char %s = {",name_and_type) == 1)
+			version10p = 0;
+		else if (sscanf (line, "static const char %s = {", name_and_type) == 1)
 			version10p = 0;
 		else if (sscanf (line, "static char %s = {", name_and_type) == 1)
 			version10p = 0;
@@ -267,7 +273,9 @@ read_bitmap_file_data (FILE *fstream,
 
 
 static GdkPixbuf *
-gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
+gdk_pixbuf__xbm_image_load_real (FILE     *f, 
+				 XBMData  *context, 
+				 GError  **error)
 {
 	guint w, h;
 	int x_hot, y_hot;
@@ -340,8 +348,6 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 	if (context) {
 		if (context->update_func)
 			(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
-		g_object_unref (pixbuf);
-		pixbuf = NULL;
 	}
 
 	return pixbuf;
@@ -351,7 +357,8 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 /* Static loader */
 
 static GdkPixbuf *
-gdk_pixbuf__xbm_image_load (FILE *f, GError **error)
+gdk_pixbuf__xbm_image_load (FILE    *f, 
+			    GError **error)
 {
 	return gdk_pixbuf__xbm_image_load_real (f, NULL, error);
 }
@@ -365,11 +372,11 @@ gdk_pixbuf__xbm_image_load (FILE *f, GError **error)
  */
 
 static gpointer
-gdk_pixbuf__xbm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
-                                  GdkPixbufModulePreparedFunc prepare_func,
-				  GdkPixbufModuleUpdatedFunc update_func,
-				  gpointer user_data,
-				  GError **error)
+gdk_pixbuf__xbm_image_begin_load (GdkPixbufModuleSizeFunc       size_func,
+                                  GdkPixbufModulePreparedFunc   prepare_func,
+				  GdkPixbufModuleUpdatedFunc    update_func,
+				  gpointer                      user_data,
+				  GError                      **error)
 {
 	XBMData *context;
 	gint fd;
@@ -398,8 +405,8 @@ gdk_pixbuf__xbm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 }
 
 static gboolean
-gdk_pixbuf__xbm_image_stop_load (gpointer data,
-                                 GError **error)
+gdk_pixbuf__xbm_image_stop_load (gpointer   data,
+                                 GError   **error)
 {
 	XBMData *context = (XBMData*) data;
         gboolean retval = TRUE;
@@ -410,10 +417,13 @@ gdk_pixbuf__xbm_image_stop_load (gpointer data,
 	rewind (context->file);
 	if (context->all_okay) {
                 GdkPixbuf *pixbuf;
-                pixbuf = gdk_pixbuf__xbm_image_load_real (context->file, context,
+                pixbuf = gdk_pixbuf__xbm_image_load_real (context->file, 
+							  context,
                                                           error);
                 if (pixbuf == NULL)
                         retval = FALSE;
+		else
+			g_object_unref (pixbuf);
         }
 
 	fclose (context->file);
@@ -425,10 +435,10 @@ gdk_pixbuf__xbm_image_stop_load (gpointer data,
 }
 
 static gboolean
-gdk_pixbuf__xbm_image_load_increment (gpointer data,
+gdk_pixbuf__xbm_image_load_increment (gpointer       data,
                                       const guchar  *buf,
-                                      guint    size,
-                                      GError **error)
+                                      guint          size,
+                                      GError       **error)
 {
 	XBMData *context = (XBMData *) data;
 
