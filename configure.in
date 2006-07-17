@@ -1192,11 +1192,15 @@ if test "x$gdktarget" = "xx11"; then
       AC_DEFINE(HAVE_SHAPE_EXT))
 
   # X SYNC check
+  gtk_save_CFLAGS="$CFLAGS"
+  CFLAGS="$CFLAGS $x_cflags"
   
   AC_CHECK_FUNC(XSyncQueryExtension,
       [AC_CHECK_HEADER(X11/extensions/sync.h,
 	  AC_DEFINE(HAVE_XSYNC, 1, Have the SYNC extension library),
 	  :, [#include <X11/Xlib.h>])])
+
+  CFLAGS="$gtk_save_CFLAGS"
 
   # Xshm checks
 
