@@ -1,3 +1,8 @@
+2006-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.types: Add  gtk_cell_renderer_spin_get_type  (#347710,
+	Guillaume Cottenceau)
+
 2006-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.types: Add missing types  (#347037, Josh Green)
