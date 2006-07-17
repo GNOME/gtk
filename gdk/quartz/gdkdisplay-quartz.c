@@ -56,11 +56,11 @@ gdk_display_open (const gchar *display_name)
                                    gdk_screen_get_system_colormap (_gdk_screen));
   _gdk_windowing_window_init ();
 
-
   _gdk_events_init ();
+  _gdk_input_init ();
+
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
-  _gdk_input_init ();
   _gdk_dnd_init ();
 #endif
 
