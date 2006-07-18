@@ -1,4 +1,7 @@
 # translation of es.po to Spanish
+# GTK+'s Spanish translation.
+# Copyright © 1999-2002, 2006 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk+ package.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
@@ -7,21 +10,18 @@
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Francisco Javier F. Serrador <serrador@tecknolabs.com>, 2006.
-# GTK+'s Spanish translation.
-# Copyright © 1999-2002, 2006 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gtk+ package.
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-06 19:02+0200\n"
-"PO-Revision-Date: 2006-07-06 19:35+0200\n"
-"Last-Translator: Francisco Javier F. Serrador <serrador@tecknolabs.com>\n"
+"POT-Creation-Date: 2006-07-18 09:49+0200\n"
+"PO-Revision-Date: 2006-07-18 10:23+0200\n"
+"Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.9.1\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
@@ -93,9 +93,7 @@ msgstr "Error al escribir en el archivo imagen: %s"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1425 ../gdk-pixbuf/gdk-pixbuf-io.c:1556
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Esta compilación de gdk-pixbuf no soporta el almacenamiento de imágenes con "
-"el formato: %s"
+msgstr "Esta compilación de gdk-pixbuf no soporta el guardar imágenes con el formato: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1459
 msgid "Insufficient memory to save image to callback"
@@ -127,19 +125,17 @@ msgstr ""
 msgid "Insufficient memory to save image into a buffer"
 msgstr "No hay memoria suficiente para guardar la imagen en un búfer"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:343
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "No está hay soporte para la carga incremental de los tipos de imagen «%s»"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:371 ../gdk-pixbuf/gdk-pixbuf-loader.c:472
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
 #, c-format
 msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
+"Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
-msgstr ""
-"Error interno: El módulo de carga de imágenes «%s» ha fallado al comenzar la "
-"carga de una imagen, pero no ha dado ningún motivo del fallo"
+msgstr "Error interno: El módulo de carga de imágenes «%s» ha fallado al completar una operación, pero no ha dado ninguna razón del fallo"
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr "No hay soporte para la carga incremental de las imágenes del tipo «%s»"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -220,7 +216,7 @@ msgstr "El formato de imagen BMP"
 #: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "Fallo durante la lectura del GIF: %s"
+msgstr "Se produjo un fallo durante la lectura del GIF: %s"
 
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1472
 #: ../gdk-pixbuf/io-gif.c:1633
@@ -309,11 +305,11 @@ msgstr "La altura del icono es cero"
 
 #: ../gdk-pixbuf/io-ico.c:363
 msgid "Compressed icons are not supported"
-msgstr "Los iconos comprimidos no están implementados"
+msgstr "Los iconos comprimidos no están soportados"
 
 #: ../gdk-pixbuf/io-ico.c:396
 msgid "Unsupported icon type"
-msgstr "Tipo de icono no implementado"
+msgstr "Tipo de icono no soportado"
 
 #: ../gdk-pixbuf/io-ico.c:490
 msgid "Not enough memory to load ICO file"
@@ -321,7 +317,7 @@ msgstr "No hay memoria suficiente para cargar el archivo ICO"
 
 #: ../gdk-pixbuf/io-ico.c:955
 msgid "Image too large to be saved as ICO"
-msgstr "Imagen demasiado grande para ser guardada como ICO"
+msgstr "Imagen demasiado grande para guardarse como ICO"
 
 #: ../gdk-pixbuf/io-ico.c:966
 msgid "Cursor hotspot outside image"
@@ -346,7 +342,7 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"No hay memoria suficiente para cargar la imagen, intente cerrar algunas "
+"No hay memoria suficiente para cargar la imagen, intente salir de algunas "
 "aplicaciones para liberar memoria"
 
 #: ../gdk-pixbuf/io-jpeg.c:386 ../gdk-pixbuf/io-jpeg.c:588
@@ -364,9 +360,7 @@ msgstr "No se puede asignar memoria para cargar el archivo JPG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
-"puede ser interpretado."
+msgstr "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no se puede interpretar."
 
 #: ../gdk-pixbuf/io-jpeg.c:941
 #, c-format
@@ -442,9 +436,7 @@ msgstr "El PNG transformado no es RGB o RGBA."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"El PNG transformado posee un número de canales no soportados, deben ser 3 o "
-"4."
+msgstr "El PNG transformado posee un número de canales no soportados, deben ser 3 o 4."
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
@@ -488,9 +480,7 @@ msgstr "Las claves para las porciones de texto PNG deben ser caracteres ASCII."
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
-msgstr ""
-"El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no "
-"puede ser analizado."
+msgstr "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no se puede interpretar."
 
 #: ../gdk-pixbuf/io-png.c:843
 #, c-format
@@ -641,13 +631,13 @@ msgstr "No se puede asignar memoria para la cabecera TGA"
 
 #: ../gdk-pixbuf/io-tga.c:765
 msgid "TGA image has invalid dimensions"
-msgstr "La imagen TGA tiene dimensiones no válidas"
+msgstr "La imagen TGA tiene dimensiones inválidas"
 
 #: ../gdk-pixbuf/io-tga.c:771 ../gdk-pixbuf/io-tga.c:780
 #: ../gdk-pixbuf/io-tga.c:790 ../gdk-pixbuf/io-tga.c:800
 #: ../gdk-pixbuf/io-tga.c:807
 msgid "TGA image type not supported"
-msgstr "El tipo de imagen TGA no está implementado"
+msgstr "El tipo de imagen TGA no está soportado"
 
 #: ../gdk-pixbuf/io-tga.c:854
 msgid "Cannot allocate memory for TGA context struct"
@@ -734,21 +724,21 @@ msgstr "No se ha podido guardar el resto"
 msgid "The WBMP image format"
 msgstr "El formato de imagen WBMP"
 
-#: ../gdk-pixbuf/io-xbm.c:287
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "El archivo XBM no es válido"
 
-#: ../gdk-pixbuf/io-xbm.c:297
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "No hay memoria suficiente para cargar el archivo gráfico XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:443
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "No se ha podido escribir en el archivo temporal cuando se cargaba la imagen "
 "XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:478
+#: ../gdk-pixbuf/io-xbm.c:488
 msgid "The XBM image format"
 msgstr "El formato de imagen XBM"
 
@@ -836,7 +826,7 @@ msgstr "PANTALLA"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:129
 msgid "Gdk debugging flags to set"
-msgstr "Opciones de depuración Gdk a poner"
+msgstr "Opciones de depuración Gdk que establecer"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -849,7 +839,7 @@ msgstr "OPCIONES"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:132
 msgid "Gdk debugging flags to unset"
-msgstr "Opciones de depuración Gdk a quitar"
+msgstr "Opciones de depuración Gdk que quitar"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -1140,7 +1130,7 @@ msgstr "Contrabarra"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:694
+#: ../gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1148,7 +1138,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:718
+#: ../gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1160,7 +1150,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1604
+#: ../gtk/gtkcalendar.c:1606
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1175,7 +1165,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1635 ../gtk/gtkcalendar.c:2213
+#: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2215
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1191,7 +1181,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1669 ../gtk/gtkcalendar.c:2087
+#: ../gtk/gtkcalendar.c:1671 ../gtk/gtkcalendar.c:2089
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1207,7 +1197,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:1880
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1257,8 +1247,8 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"El que color elegido. Puede arrastrar este color a la paleta y guardarla "
-"para usarla en el futuro."
+"El color elegido. Puede arrastrar este color a una entrada de la paleta para guardarlo "
+"para usarlo en el futuro."
 
 #: ../gtk/gtkcolorsel.c:958
 msgid "_Save color here"
@@ -1269,7 +1259,7 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Pulse sobre esta entrada de paleta para convertirla en el color actual. Para "
+"Pulse sobre esta entrada de la paleta para convertirla en el color actual. Para "
 "cambiar esta entrada, arrastre un color de muestra aquí o pulse con el botón "
 "derecho sobre éste y seleccione «Guardar color aquí»."
 
@@ -1286,7 +1276,7 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Seleccione el gotero, luego pulse sobre cualquier color que haya en su "
+"Pulse en el gotero, luego pulse sobre cualquier color que haya en su "
 "pantalla para seleccionar ese color."
 
 #: ../gtk/gtkcolorsel.c:1964
@@ -1303,7 +1293,7 @@ msgstr "_Saturación:"
 
 #: ../gtk/gtkcolorsel.c:1968
 msgid "\"Deepness\" of the color."
-msgstr "«Profundidad» del color."
+msgstr "Profundidad del color."
 
 #: ../gtk/gtkcolorsel.c:1969
 msgid "_Value:"
@@ -1396,7 +1386,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: ../gtk/gtkfilechooserbutton.c:1870
+#: ../gtk/gtkfilechooserbutton.c:1869
 msgid "Other..."
 msgstr "Otro…"
 
@@ -1410,7 +1400,7 @@ msgstr "No se pudo añadir un marcador"
 
 #: ../gtk/gtkfilechooserdefault.c:940
 msgid "Could not remove bookmark"
-msgstr "No se pudo eliminar el marcador"
+msgstr "No se pudo quitar el marcador"
 
 #: ../gtk/gtkfilechooserdefault.c:951
 msgid "The folder could not be created"
@@ -1540,86 +1530,90 @@ msgid "Type a file name"
 msgstr "Teclee un nombre de archivo"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4546
 msgid "Create Fo_lder"
 msgstr "Crear _carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:4793
+#: ../gtk/gtkfilechooserdefault.c:4556
+msgid "_Location:"
+msgstr "_Lugar:"
+
+#: ../gtk/gtkfilechooserdefault.c:4796
 msgid "Save in _folder:"
 msgstr "Guardar en una _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:4795
+#: ../gtk/gtkfilechooserdefault.c:4798
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6199
+#: ../gtk/gtkfilechooserdefault.c:6202
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:6769 ../gtk/gtkfilechooserdefault.c:6790
+#: ../gtk/gtkfilechooserdefault.c:6772 ../gtk/gtkfilechooserdefault.c:6793
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:6880
+#: ../gtk/gtkfilechooserdefault.c:6883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7135
+#: ../gtk/gtkfilechooserdefault.c:7138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:7138
+#: ../gtk/gtkfilechooserdefault.c:7141
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:7143
+#: ../gtk/gtkfilechooserdefault.c:7146
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:7793
+#: ../gtk/gtkfilechooserdefault.c:7796
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8184
+#: ../gtk/gtkfilechooserdefault.c:8187
 msgid "Type name of new folder"
 msgstr "Teclee el nombre de la carpeta nueva"
 
-#: ../gtk/gtkfilechooserdefault.c:8229
+#: ../gtk/gtkfilechooserdefault.c:8232
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: ../gtk/gtkfilechooserdefault.c:8231
+#: ../gtk/gtkfilechooserdefault.c:8234
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f Kib"
 
-#: ../gtk/gtkfilechooserdefault.c:8233
+#: ../gtk/gtkfilechooserdefault.c:8236
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mib"
 
-#: ../gtk/gtkfilechooserdefault.c:8235
+#: ../gtk/gtkfilechooserdefault.c:8238
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Gib"
 
-#: ../gtk/gtkfilechooserdefault.c:8283 ../gtk/gtkfilechooserdefault.c:8307
+#: ../gtk/gtkfilechooserdefault.c:8286 ../gtk/gtkfilechooserdefault.c:8310
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:8294
+#: ../gtk/gtkfilechooserdefault.c:8297
 msgid "Today"
 msgstr "Hoy"
 
-#: ../gtk/gtkfilechooserdefault.c:8296
+#: ../gtk/gtkfilechooserdefault.c:8299
 msgid "Yesterday"
 msgstr "Ayer"
 
@@ -2077,7 +2071,7 @@ msgstr "Espaciado de las flechas"
 msgid "Scroll arrow spacing"
 msgstr "Espaciado de las flechas de desplazamiento"
 
-#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6794
+#: ../gtk/gtknotebook.c:4240 ../gtk/gtknotebook.c:6793
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2487,46 +2481,46 @@ msgstr "Grupo"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "La herramienta de botón de radio a cuyo grupo pertenece este botón."
 
-#: ../gtk/gtkrc.c:2528
+#: ../gtk/gtkrc.c:2617
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No se ha podido encontrar el archivo «include»: «%s»"
 
-#: ../gtk/gtkrc.c:3217 ../gtk/gtkrc.c:3220
+#: ../gtk/gtkrc.c:3249 ../gtk/gtkrc.c:3252
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible encontrar un archivo imagen en pixmap_path: «%s»"
 
-#: ../gtk/gtkrecentchooserdefault.c:460
+#: ../gtk/gtkrecentchooserdefault.c:459
 msgid "Select which type of documents are shown"
 msgstr "Seleccione qué tipos de documentos se muestran"
 
-#: ../gtk/gtkrecentchooserdefault.c:1125 ../gtk/gtkrecentchooserdefault.c:1162
+#: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "No se encontró ningún elementos para la URI «%s»"
 
-#: ../gtk/gtkrecentchooserdefault.c:1772
+#: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Could not remove item"
 msgstr "No se pudo quitar el elemento"
 
-#: ../gtk/gtkrecentchooserdefault.c:1815
+#: ../gtk/gtkrecentchooserdefault.c:1817
 msgid "Could not clear list"
 msgstr "No se pudo limpiar la lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1899
+#: ../gtk/gtkrecentchooserdefault.c:1901
 msgid "Copy _Location"
 msgstr "Copiar _lugar"
 
-#: ../gtk/gtkrecentchooserdefault.c:1912
+#: ../gtk/gtkrecentchooserdefault.c:1914
 msgid "_Remove From List"
 msgstr "_Quitar de la lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1921
+#: ../gtk/gtkrecentchooserdefault.c:1923
 msgid "_Clear List"
 msgstr "_Limpiar lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1935
+#: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
 msgstr "Mostrar recursos _privados"
 
@@ -3872,81 +3866,81 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1450
 msgid "Two Sided"
 msgstr "Dos caras"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1451
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1452
 msgid "Paper Source"
 msgstr "Fuente de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
 msgstr "Bandeja de salida"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1436
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "One Sided"
 msgstr "Una cara"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1437
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1438
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1442
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1464
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Auto Select"
 msgstr "Autoseleccionar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1439
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1440
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1441
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1465
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1857
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2045
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2045
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2045
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2045
 msgid "Low"
 msgstr "Baja"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Unclassified"
 msgstr "Desclasificado"
 
@@ -4124,670 +4118,6 @@ msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0
 msgstr ""
 "Los datos serializados están mal formados. La primera sección no es "
 "GTKTEXTBUFFERCONTENTS-0001"
-
-#. sorted by name, remember to sort when changing
-#: ../gtk/paper_names.c:18
-msgid "asme_f"
-msgstr "asme_f"
-
-#. f           5    e1
-#: ../gtk/paper_names.c:19
-msgid "A0x2"
-msgstr "A0x2"
-
-#: ../gtk/paper_names.c:20
-msgid "A0"
-msgstr "A0"
-
-#: ../gtk/paper_names.c:21
-msgid "A0x3"
-msgstr "A0x3"
-
-#: ../gtk/paper_names.c:22
-msgid "A1"
-msgstr "A1"
-
-#: ../gtk/paper_names.c:23
-msgid "A10"
-msgstr "A10"
-
-#: ../gtk/paper_names.c:24
-msgid "A1x3"
-msgstr "A1x3"
-
-#: ../gtk/paper_names.c:25
-msgid "A1x4"
-msgstr "A1x4"
-
-#: ../gtk/paper_names.c:26
-msgid "A2"
-msgstr "A2"
-
-#: ../gtk/paper_names.c:27
-msgid "A2x3"
-msgstr "A2x3"
-
-#: ../gtk/paper_names.c:28
-msgid "A2x4"
-msgstr "A2x4"
-
-#: ../gtk/paper_names.c:29
-msgid "A2x5"
-msgstr "A2x5"
-
-#: ../gtk/paper_names.c:30
-msgid "A3"
-msgstr "A3"
-
-#: ../gtk/paper_names.c:31
-msgid "A3 Extra"
-msgstr "A3 Extra"
-
-#: ../gtk/paper_names.c:32
-msgid "A3x3"
-msgstr "A3x3"
-
-#: ../gtk/paper_names.c:33
-msgid "A3x4"
-msgstr "A3x4"
-
-#: ../gtk/paper_names.c:34
-msgid "A3x5"
-msgstr "A3x5"
-
-#: ../gtk/paper_names.c:35
-msgid "A3x6"
-msgstr "A3x6"
-
-#: ../gtk/paper_names.c:36
-msgid "A3x7"
-msgstr "A3x7"
-
-#: ../gtk/paper_names.c:37
-msgid "A4"
-msgstr "A4"
-
-#: ../gtk/paper_names.c:38
-msgid "A4 Extra"
-msgstr "A4 Extra"
-
-#: ../gtk/paper_names.c:39
-msgid "A4 Tab"
-msgstr "A4 Tab"
-
-#: ../gtk/paper_names.c:40
-msgid "A4x3"
-msgstr "A4x3"
-
-#: ../gtk/paper_names.c:41
-msgid "A4x4"
-msgstr "A4x4"
-
-#: ../gtk/paper_names.c:42
-msgid "A4x5"
-msgstr "A4x5"
-
-#: ../gtk/paper_names.c:43
-msgid "A4x6"
-msgstr "A4x6"
-
-#: ../gtk/paper_names.c:44
-msgid "A4x7"
-msgstr "A4x7"
-
-#: ../gtk/paper_names.c:45
-msgid "A4x8"
-msgstr "A4x8"
-
-#: ../gtk/paper_names.c:46
-msgid "A4x9"
-msgstr "A4x9"
-
-#: ../gtk/paper_names.c:47
-msgid "A5"
-msgstr "A5"
-
-#: ../gtk/paper_names.c:48
-msgid "A5 Extra"
-msgstr "A5 Extra"
-
-#: ../gtk/paper_names.c:49
-msgid "A6"
-msgstr "A6"
-
-#: ../gtk/paper_names.c:50
-msgid "A7"
-msgstr "A7"
-
-#: ../gtk/paper_names.c:51
-msgid "A8"
-msgstr "A8"
-
-#: ../gtk/paper_names.c:52
-msgid "A9"
-msgstr "A9"
-
-#: ../gtk/paper_names.c:53
-msgid "B0"
-msgstr "B0"
-
-#: ../gtk/paper_names.c:54
-msgid "B1"
-msgstr "B1"
-
-#: ../gtk/paper_names.c:55
-msgid "B10"
-msgstr "B10"
-
-#: ../gtk/paper_names.c:56
-msgid "B2"
-msgstr "B2"
-
-#: ../gtk/paper_names.c:57
-msgid "B3"
-msgstr "B3"
-
-#: ../gtk/paper_names.c:58
-msgid "B4"
-msgstr "B4"
-
-#: ../gtk/paper_names.c:59
-msgid "B5"
-msgstr "B5"
-
-#: ../gtk/paper_names.c:60
-msgid "B5 Extra"
-msgstr "B5 Extra"
-
-#: ../gtk/paper_names.c:61
-msgid "B6"
-msgstr "B6"
-
-#: ../gtk/paper_names.c:62
-msgid "B6/C4"
-msgstr "B6/C4"
-
-#. b6/c4 Envelope
-#: ../gtk/paper_names.c:63
-msgid "B7"
-msgstr "B7"
-
-#: ../gtk/paper_names.c:64
-msgid "B8"
-msgstr "B8"
-
-#: ../gtk/paper_names.c:65
-msgid "B9"
-msgstr "B9"
-
-#: ../gtk/paper_names.c:66
-msgid "C0"
-msgstr "C0"
-
-#: ../gtk/paper_names.c:67
-msgid "C1"
-msgstr "C1"
-
-#: ../gtk/paper_names.c:68
-msgid "C10"
-msgstr "C10"
-
-#: ../gtk/paper_names.c:69
-msgid "C2"
-msgstr "C2"
-
-#: ../gtk/paper_names.c:70
-msgid "C3"
-msgstr "C3"
-
-#: ../gtk/paper_names.c:71
-msgid "C4"
-msgstr "C4"
-
-#: ../gtk/paper_names.c:72
-msgid "C5"
-msgstr "C5"
-
-#: ../gtk/paper_names.c:73
-msgid "C6"
-msgstr "C6"
-
-#: ../gtk/paper_names.c:74
-msgid "C6/C5"
-msgstr "C6/C5"
-
-#: ../gtk/paper_names.c:75
-msgid "C7"
-msgstr "C7"
-
-#: ../gtk/paper_names.c:76
-msgid "C7/C6"
-msgstr "C7/C6"
-
-#. c7/c6 Envelope
-#: ../gtk/paper_names.c:77
-msgid "C8"
-msgstr "C8"
-
-#: ../gtk/paper_names.c:78
-msgid "C9"
-msgstr "C9"
-
-#: ../gtk/paper_names.c:79
-msgid "DL Envelope"
-msgstr "Sobre DL"
-
-#. iso-designated 1, 2 designated-long, dl Envelope
-#: ../gtk/paper_names.c:80
-msgid "RA0"
-msgstr "RA0"
-
-#: ../gtk/paper_names.c:81
-msgid "RA1"
-msgstr "RA1"
-
-#: ../gtk/paper_names.c:82
-msgid "RA2"
-msgstr "RA2"
-
-#: ../gtk/paper_names.c:83
-msgid "SRA0"
-msgstr "SRA0"
-
-#: ../gtk/paper_names.c:84
-msgid "SRA1"
-msgstr "SRA1"
-
-#: ../gtk/paper_names.c:85
-msgid "SRA2"
-msgstr "SRA2"
-
-#: ../gtk/paper_names.c:86
-msgid "JB0"
-msgstr "JB0"
-
-#: ../gtk/paper_names.c:87
-msgid "JB1"
-msgstr "JB1"
-
-#: ../gtk/paper_names.c:88
-msgid "JB10"
-msgstr "JB10"
-
-#: ../gtk/paper_names.c:89
-msgid "JB2"
-msgstr "JB2"
-
-#: ../gtk/paper_names.c:90
-msgid "JB3"
-msgstr "JB3"
-
-#: ../gtk/paper_names.c:91
-msgid "JB4"
-msgstr "JB4"
-
-#: ../gtk/paper_names.c:92
-msgid "JB5"
-msgstr "JB5"
-
-#: ../gtk/paper_names.c:93
-msgid "JB6"
-msgstr "JB6"
-
-#: ../gtk/paper_names.c:94
-msgid "JB7"
-msgstr "JB7"
-
-#: ../gtk/paper_names.c:95
-msgid "JB8"
-msgstr "JB8"
-
-#: ../gtk/paper_names.c:96
-msgid "JB9"
-msgstr "JB9"
-
-#: ../gtk/paper_names.c:97
-msgid "jis exec"
-msgstr "jis exec"
-
-#: ../gtk/paper_names.c:98
-msgid "Choukei 2 Envelope"
-msgstr "Sobre Choukei 2"
-
-#: ../gtk/paper_names.c:99
-msgid "Choukei 3 Envelope"
-msgstr "Sobre Choukei 3"
-
-#: ../gtk/paper_names.c:100
-msgid "Choukei 4 Envelope"
-msgstr "Sobre Choukei 4"
-
-#: ../gtk/paper_names.c:101
-msgid "hagaki (postcard)"
-msgstr "hagaki (postal)"
-
-#: ../gtk/paper_names.c:102
-msgid "kahu Envelope"
-msgstr "Sobre Kahu"
-
-#: ../gtk/paper_names.c:103
-msgid "kaku2 Envelope"
-msgstr "Sobre Kahu2"
-
-#: ../gtk/paper_names.c:104
-msgid "oufuku (reply postcard)"
-msgstr "oufuku (postal de respuesta)"
-
-#: ../gtk/paper_names.c:105
-msgid "you4 Envelope"
-msgstr "Sobre you4"
-
-#: ../gtk/paper_names.c:106
-msgid "10x11"
-msgstr "10x11"
-
-#: ../gtk/paper_names.c:107
-msgid "10x13"
-msgstr "10x13"
-
-#: ../gtk/paper_names.c:108
-msgid "10x14"
-msgstr "10x14"
-
-#: ../gtk/paper_names.c:109 ../gtk/paper_names.c:110
-msgid "10x15"
-msgstr "10x15"
-
-#: ../gtk/paper_names.c:111
-msgid "11x12"
-msgstr "11x12"
-
-#: ../gtk/paper_names.c:112
-msgid "11x15"
-msgstr "11x15"
-
-#: ../gtk/paper_names.c:113
-msgid "12x19"
-msgstr "12x19"
-
-#: ../gtk/paper_names.c:114
-msgid "5x7"
-msgstr "5x7"
-
-#: ../gtk/paper_names.c:115
-msgid "6x9 Envelope"
-msgstr "Sobre 6x9"
-
-#: ../gtk/paper_names.c:116
-msgid "7x9 Envelope"
-msgstr "Sobre 7x9"
-
-#: ../gtk/paper_names.c:117
-msgid "9x11 Envelope"
-msgstr "Sobre 9x11"
-
-#: ../gtk/paper_names.c:118
-msgid "a2 Envelope"
-msgstr "Sobre a2"
-
-#: ../gtk/paper_names.c:119
-msgid "Arch A"
-msgstr "Arch A"
-
-#: ../gtk/paper_names.c:120
-msgid "Arch B"
-msgstr "Arch B"
-
-#: ../gtk/paper_names.c:121
-msgid "Arch C"
-msgstr "Arch C"
-
-#: ../gtk/paper_names.c:122
-msgid "Arch D"
-msgstr "Arch D"
-
-#: ../gtk/paper_names.c:123
-msgid "Arch E"
-msgstr "Arch E"
-
-#: ../gtk/paper_names.c:124
-msgid "b-plus"
-msgstr "b-plus"
-
-#: ../gtk/paper_names.c:125
-msgid "c"
-msgstr "c"
-
-#: ../gtk/paper_names.c:126
-msgid "c5 Envelope"
-msgstr "Sobre c5"
-
-#: ../gtk/paper_names.c:127
-msgid "d"
-msgstr "d"
-
-#: ../gtk/paper_names.c:128
-msgid "e"
-msgstr "e"
-
-#: ../gtk/paper_names.c:129
-msgid "edp"
-msgstr "edp"
-
-#: ../gtk/paper_names.c:130
-msgid "European edp"
-msgstr "edp europeo"
-
-#: ../gtk/paper_names.c:131
-msgid "Executive"
-msgstr "Ejecutivo"
-
-#: ../gtk/paper_names.c:132
-msgid "f"
-msgstr "f"
-
-#: ../gtk/paper_names.c:133
-msgid "FanFold European"
-msgstr "FanFold europeo"
-
-#: ../gtk/paper_names.c:134
-msgid "FanFold US"
-msgstr "FanFold US"
-
-#: ../gtk/paper_names.c:135
-msgid "FanFold German Legal"
-msgstr "FanFold Alemán Legal"
-
-#. foolscap, german-legal-fanfold
-#: ../gtk/paper_names.c:136
-msgid "Government Legal"
-msgstr "Legal gubernamental"
-
-#: ../gtk/paper_names.c:137
-msgid "Government Letter"
-msgstr "Carta gubernamental"
-
-#: ../gtk/paper_names.c:138
-msgid "Index 3x5"
-msgstr "Index 3x5"
-
-#: ../gtk/paper_names.c:139
-msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (postal)"
-
-#: ../gtk/paper_names.c:140
-msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
-
-#: ../gtk/paper_names.c:141
-msgid "Index 5x8"
-msgstr "Index 5x8"
-
-#: ../gtk/paper_names.c:142
-msgid "Invoice"
-msgstr "Factura"
-
-#. invoice,  statement, mini, half-letter
-#: ../gtk/paper_names.c:143
-msgid "Tabloid"
-msgstr "Tabloide"
-
-#. tabloid, engineering-b
-#: ../gtk/paper_names.c:144
-msgid "US Legal"
-msgstr "US Legal"
-
-#: ../gtk/paper_names.c:145
-msgid "US Legal Extra"
-msgstr "US Legal Extra"
-
-#: ../gtk/paper_names.c:146
-msgid "US Letter"
-msgstr "US Letter"
-
-#: ../gtk/paper_names.c:147
-msgid "US Letter Extra"
-msgstr "US Letter Extra"
-
-#: ../gtk/paper_names.c:148
-msgid "US Letter Plus"
-msgstr "US Letter Plus"
-
-#: ../gtk/paper_names.c:149
-msgid "Monarch Envelope"
-msgstr "Sobre Monarch"
-
-#: ../gtk/paper_names.c:150
-msgid "#10 Envelope"
-msgstr "Sobre nº10"
-
-#. na-number-10-envelope 1, 2 comm-10 Envelope
-#: ../gtk/paper_names.c:151
-msgid "#11 Envelope"
-msgstr "Sobre nº11"
-
-#. number-11 Envelope
-#: ../gtk/paper_names.c:152
-msgid "#12 Envelope"
-msgstr "Sobre nº12"
-
-#. number-12 Envelope
-#: ../gtk/paper_names.c:153
-msgid "#14 Envelope"
-msgstr "Sobre nº14"
-
-#. number-14 Envelope
-#: ../gtk/paper_names.c:154
-msgid "#9 Envelope"
-msgstr "Sobre nº9"
-
-#: ../gtk/paper_names.c:155
-msgid "Personal Envelope"
-msgstr "Sobre personal"
-
-#: ../gtk/paper_names.c:156
-msgid "Quarto"
-msgstr "Quarto"
-
-#: ../gtk/paper_names.c:157
-msgid "Super A"
-msgstr "Super A"
-
-#: ../gtk/paper_names.c:158
-msgid "Super B"
-msgstr "Super B"
-
-#: ../gtk/paper_names.c:159
-msgid "Wide Format"
-msgstr "Formato ancho"
-
-#: ../gtk/paper_names.c:160
-msgid "Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-#: ../gtk/paper_names.c:161
-msgid "Folio"
-msgstr "Folio"
-
-#: ../gtk/paper_names.c:162
-msgid "Folio sp"
-msgstr "Folio sp"
-
-#: ../gtk/paper_names.c:163
-msgid "Invite Envelope"
-msgstr "Sobre de invitación"
-
-#: ../gtk/paper_names.c:164
-msgid "Italian Envelope"
-msgstr "Sobre italiano"
-
-#: ../gtk/paper_names.c:165
-msgid "juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#: ../gtk/paper_names.c:166
-msgid "pa-kai"
-msgstr "pa-kai"
-
-#: ../gtk/paper_names.c:167
-msgid "Postfix Envelope"
-msgstr "Sobre Postfix"
-
-#: ../gtk/paper_names.c:168
-msgid "Small Photo"
-msgstr "Foto pequeña"
-
-#: ../gtk/paper_names.c:169
-msgid "prc1 Envelope"
-msgstr "Sobre prc1"
-
-#: ../gtk/paper_names.c:170
-msgid "prc10 Envelope"
-msgstr "Sobre prc10"
-
-#: ../gtk/paper_names.c:171
-msgid "prc 16k"
-msgstr "prc 16k"
-
-#: ../gtk/paper_names.c:172
-msgid "prc2 Envelope"
-msgstr "Sobre prc2"
-
-#: ../gtk/paper_names.c:173
-msgid "prc3 Envelope"
-msgstr "Sobre prc3"
-
-#: ../gtk/paper_names.c:174
-msgid "prc 32k"
-msgstr "prc 32k"
-
-#: ../gtk/paper_names.c:175
-msgid "prc4 Envelope"
-msgstr "Sobre prc4"
-
-#: ../gtk/paper_names.c:176
-msgid "prc5 Envelope"
-msgstr "Sobre prc5"
-
-#: ../gtk/paper_names.c:177
-msgid "prc6 Envelope"
-msgstr "Sobre prc6"
-
-#: ../gtk/paper_names.c:178
-msgid "prc7 Envelope"
-msgstr "Sobre prc7"
-
-#: ../gtk/paper_names.c:179
-msgid "prc8 Envelope"
-msgstr "Sobre prc8"
-
-#: ../gtk/paper_names.c:180
-msgid "ROC 16k"
-msgstr "ROC 16k"
-
-#: ../gtk/paper_names.c:181
-msgid "ROC 8k"
-msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
