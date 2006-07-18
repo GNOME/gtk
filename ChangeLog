@@ -1,5 +1,10 @@
 2006-07-18  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing):
+	oooops.
+
+2006-07-18  Kristian Rietveld  <kris@imendio.com>
+
 	Fix for #335012, reported by Matteo Nastasi.
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_start_editing): if the

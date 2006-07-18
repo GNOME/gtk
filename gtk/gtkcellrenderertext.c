@@ -1778,7 +1778,6 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkBorder border;
   GtkRequisition requisition;
   GtkCellRendererText *celltext;
   GtkCellRendererTextPrivate *priv;
@@ -1804,7 +1803,25 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gtk_widget_size_request (priv->entry, &requisition);
   if (requisition.height < cell_area->height)
     {
-      g_object_get (priv->entry, "inner-border", &border, NULL);
+      GtkBorder *style_border;
+      GtkBorder border;
+
+      gtk_widget_style_get (priv->entry,
+			    "inner-border", &style_border,
+			    NULL);
+
+      if (style_border)
+        {
+	  border = *style_border;
+	  g_boxed_free (GTK_TYPE_BORDER, style_border);
+	}
+      else
+        {
+	  /* Since boxed style properties can't have default values ... */
+	  border.left = 2;
+	  border.right = 2;
+	}
+
       border.top = (cell_area->height - requisition.height) / 2;
       border.bottom = (cell_area->height - requisition.height) / 2;
       gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
