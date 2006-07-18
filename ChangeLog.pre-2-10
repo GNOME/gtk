@@ -1,5 +1,15 @@
 2006-07-18  Kristian Rietveld  <kris@imendio.com>
 
+	Another fix for #164884.
+
+	* gtk/gtktreeprivate.h: add in_grab field.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): only save press
+	to possibly begin a drag when there's no grab pending,
+	(gtk_tree_view_grab_notify): toggle in_grab field.
+
+2006-07-18  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_realize): use MAX
 	priv->width, alloc.width when allocating the bin_window,
 	(gtk_tree_view_bin_expose): don't overrun bin_window when drawing

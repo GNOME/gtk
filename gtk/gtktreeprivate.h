@@ -231,6 +231,8 @@ struct _GtkTreeViewPrivate
 
   guint rubber_banding_enable : 1;
 
+  guint in_grab : 1;
+
 
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
