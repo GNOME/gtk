@@ -88,11 +88,15 @@ struct _GtkRangeLayout
   /* last mouse coords we got, or -1 if mouse is outside the range */
   gint mouse_x;
   gint mouse_y;
+
   /* "grabbed" mouse location, OUTSIDE for no grab */
   MouseLocation grab_location;
-  gint grab_button; /* 0 if none */
+  guint grab_button : 8; /* 0 if none */
 
   /* Stepper sensitivity */
+  guint lower_sensitive : 1;
+  guint upper_sensitive : 1;
+
   GtkSensitivityType lower_sensitivity;
   GtkSensitivityType upper_sensitivity;
 };
@@ -532,6 +536,8 @@ gtk_range_init (GtkRange *range)
   range->layout->grab_button = 0;
   range->layout->lower_sensitivity = GTK_SENSITIVITY_AUTO;
   range->layout->upper_sensitivity = GTK_SENSITIVITY_AUTO;
+  range->layout->lower_sensitive = TRUE;
+  range->layout->upper_sensitive = TRUE;
   range->timer = NULL;  
 }
 
@@ -716,7 +722,11 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
   if (range->layout->lower_sensitivity != sensitivity)
     {
       range->layout->lower_sensitivity = sensitivity;
+
+      range->need_recalc = TRUE;
+      gtk_range_calc_layout (range, range->adjustment->value);
       gtk_widget_queue_draw (GTK_WIDGET (range));
+
       g_object_notify (G_OBJECT (range), "lower-stepper-sensitivity");
     }
 }
@@ -759,7 +769,11 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
   if (range->layout->upper_sensitivity != sensitivity)
     {
       range->layout->upper_sensitivity = sensitivity;
+
+      range->need_recalc = TRUE;
+      gtk_range_calc_layout (range, range->adjustment->value);
       gtk_widget_queue_draw (GTK_WIDGET (range));
+
       g_object_notify (G_OBJECT (range), "upper-stepper-sensitivity");
     }
 }
@@ -1079,40 +1093,11 @@ draw_stepper (GtkRange     *range,
       (range->inverted  && (arrow_type == GTK_ARROW_UP ||
                             arrow_type == GTK_ARROW_LEFT)))
     {
-      switch (range->layout->upper_sensitivity)
-        {
-        case GTK_SENSITIVITY_AUTO:
-          arrow_sensitive =
-            (range->adjustment->value <
-             (range->adjustment->upper - range->adjustment->page_size));
-          break;
-
-        case GTK_SENSITIVITY_ON:
-          arrow_sensitive = TRUE;
-          break;
-
-        case GTK_SENSITIVITY_OFF:
-          arrow_sensitive = FALSE;
-          break;
-        }
+      arrow_sensitive = range->layout->upper_sensitive;
     }
   else
     {
-      switch (range->layout->lower_sensitivity)
-        {
-        case GTK_SENSITIVITY_AUTO:
-          arrow_sensitive =
-            (range->adjustment->value > range->adjustment->lower);
-          break;
-
-        case GTK_SENSITIVITY_ON:
-          arrow_sensitive = TRUE;
-          break;
-
-        case GTK_SENSITIVITY_OFF:
-          arrow_sensitive = FALSE;
-          break;
-        }
+      arrow_sensitive = range->layout->lower_sensitive;
     }
 
   if (!GTK_WIDGET_IS_SENSITIVE (range) || !arrow_sensitive)
@@ -1946,6 +1931,9 @@ layout_changed (GtkRangeLayout *layout1,
   check_rectangle (layout1->stepper_d, layout2->stepper_d);
   check_rectangle (layout1->stepper_b, layout2->stepper_b);
   check_rectangle (layout1->stepper_c, layout2->stepper_c);
+
+  if (layout1->upper_sensitive != layout2->upper_sensitive) return TRUE;
+  if (layout1->lower_sensitive != layout2->lower_sensitive) return TRUE;
 
   return FALSE;
 }
@@ -2843,6 +2831,39 @@ gtk_range_calc_layout (GtkRange *range,
     }
   
   gtk_range_update_mouse_location (range);
+
+  switch (range->layout->upper_sensitivity)
+    {
+    case GTK_SENSITIVITY_AUTO:
+      range->layout->upper_sensitive =
+        (range->adjustment->value <
+         (range->adjustment->upper - range->adjustment->page_size));
+      break;
+
+    case GTK_SENSITIVITY_ON:
+      range->layout->upper_sensitive = TRUE;
+      break;
+
+    case GTK_SENSITIVITY_OFF:
+      range->layout->upper_sensitive = FALSE;
+      break;
+    }
+
+  switch (range->layout->lower_sensitivity)
+    {
+    case GTK_SENSITIVITY_AUTO:
+      range->layout->lower_sensitive =
+        (range->adjustment->value > range->adjustment->lower);
+      break;
+
+    case GTK_SENSITIVITY_ON:
+      range->layout->lower_sensitive = TRUE;
+      break;
+
+    case GTK_SENSITIVITY_OFF:
+      range->layout->lower_sensitive = FALSE;
+      break;
+    }
 }
 
 static GdkRectangle*

@@ -1,3 +1,11 @@
+2006-07-18  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrange.c: remember the sensitivity of the steppers in
+	GtkRangeLayout, update it in gtk_range_calc_layout() and check for
+	changes in layout_changed(), so adjustment changes that leave the
+	slider position unchanged are still able to update the steppers'
+	sensitivity. Fixes bug #347902.
+
 2006-07-18  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing):
