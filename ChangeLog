@@ -1,4 +1,10 @@
-2006-07-19  John (J5) Palmieri  <johnp@redhat.com>
+2006-07-18  John (J5) Palmieri  <johnp@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Make bits from my last commit are conditionally compiled
+	only if cups 1.2 is available. 
+
+2006-07-18  John (J5) Palmieri  <johnp@redhat.com>
 
 	* gtk/gtkprinteroption.h:
 	* gtk/gtkprinteroptionwidget.c:

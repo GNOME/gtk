@@ -1824,6 +1824,7 @@ available_choices (ppd_file_t     *ppd,
   return option->num_choices - num_conflicts + add_auto;
 }
 
+#if HAVE_CUPS_API_1_2
 static GtkPrinterOption *
 create_pickone_option_custom (ppd_file_t   *ppd_file,
 		              ppd_option_t *ppd_option,
@@ -1923,6 +1924,7 @@ create_pickone_option_custom (ppd_file_t   *ppd_file,
 
   return option;
 }
+#endif /* HAVE_CUPS_API_1_2 */
 
 static GtkPrinterOption *
 create_pickone_option (ppd_file_t   *ppd_file,
@@ -2016,21 +2018,25 @@ handle_option (GtkPrinterOptionSet *set,
 {
   GtkPrinterOption *option;
   char *name;
-  ppd_coption_t *coption;
+
+#ifdef HAVE_CUPS_API_1_2
+  ppd_coption_t *coption = NULL;
+  coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
+#endif
 
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
-  
-  name = get_option_name (ppd_option->keyword);
 
-  coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
+  name = get_option_name (ppd_option->keyword);
 
   option = NULL;
   if (ppd_option->ui == PPD_UI_PICKONE)
     {
+#ifdef HAVE_CUPS_API_1_2
       if (coption)
         option = create_pickone_option_custom (ppd_file, ppd_option, coption, name);
       else
+#endif
         option = create_pickone_option (ppd_file, ppd_option, name);
     }
   else if (ppd_option->ui == PPD_UI_BOOLEAN)
