@@ -3,7 +3,7 @@
 #include "gtkwidgetprofiler.h"
 #include "widgets.h"
 
-#define ITERS 100
+#define ITERS 100000
 
 static GtkWidget *
 create_widget_cb (GtkWidgetProfiler *profiler, gpointer data)
@@ -38,10 +38,10 @@ report_cb (GtkWidgetProfiler *profiler, GtkWidgetProfilerReport report, GtkWidge
     type = NULL;
   }
 
-  fprintf (stderr, "%s: %g sec\n", type, elapsed);
+  fprintf (stdout, "%s: %g sec\n", type, elapsed);
 
   if (report == GTK_WIDGET_PROFILER_REPORT_DESTROY)
-    fputs ("\n", stderr);
+    fputs ("\n", stdout);
 }
 
 int
@@ -59,7 +59,7 @@ main (int argc, char **argv)
 
   gtk_widget_profiler_set_num_iterations (profiler, ITERS);
 
-  gtk_widget_profiler_profile_boot (profiler);
+/*   gtk_widget_profiler_profile_boot (profiler); */
   gtk_widget_profiler_profile_expose (profiler);
   
   return 0;

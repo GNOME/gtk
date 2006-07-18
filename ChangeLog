@@ -1,3 +1,51 @@
+2006-07-18  Federico Mena Quintero  <federico@novell.com>
+
+	Fix https://bugzilla.novell.com/show_bug.cgi?id=184875 - make the
+	location entry in Save mode preserve the stuff from
+	set_filename(); it was overwriting it with $cwd.
+
+	This is the same fix for
+	http://bugzilla.gnome.org/show_bug.cgi?id=347066
+
+	* tests/autotestfilechooser.c: (test_black_box): Added black-box
+	test for set_filename() and set_current_name().
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_type): Cast to
+	GClassInitFunc in the call to g_type_register_static_simple(), to
+	avoid a compiler warning.
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Added a browse_files_last_selected_name field.  We'll copy the
+	logic from gtkfilesel.c to see when to clear the location entry.
+	(struct _GtkFileChooserDefault): Removed the
+	processing_pending_selections field.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
+	Free impl->browse_files_last_selected_name.
+	(pending_select_paths_process): Don't use
+	impl->processing_pending_selections.
+	(update_chooser_entry): Keep track of the name that was last
+	selected in the file list.  We use this to know when to clear the
+	location entry.  The logic is similar to that of
+	gtkfilesel.c:gtk_file_selection_file_changed().  This also lets us
+	get rid of the processing_pending_selections flag.
+	(update_chooser_entry): Clear the entry if we didn't have a
+	selection before.
+	(location_switch_to_filename_entry): Do not set $cwd as the
+	contents of the location entry here...
+	(location_popup_handler): ... but do it here instead, only as the
+	result of the user asking to turn on the location entry.
+	(gtk_file_chooser_default_get_paths): If the location entry is
+	empty, do the fallback of seeing if it is sensible to say that
+	$cwd is the selected path.
+	(gtk_file_chooser_default_update_current_folder): Don't set the
+	text of the location entry; this is no longer needed with the
+	fixes above.
+	(shortcuts_activate_iter): Clear the location entry when
+	activating a shortcut if we are not in SAVE mode.  This keeps the
+	contents of the location entry consistent even when switching
+	folders via the shortcuts.
+
 2006-07-18  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrange.c: remember the sensitivity of the steppers in

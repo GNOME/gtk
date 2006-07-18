@@ -23,9 +23,6 @@
 
 /* TODO:
  *
- * - Use g_log_set_default_handler() instead of the mess of specific handlers we
- *   have in main().
- *
  * - In test_reload_sequence(), test that the selection is preserved properly
  *   between unmap/map.
  *
@@ -54,6 +51,207 @@ log_test (gboolean passed, const char *test_name, ...)
 
   g_printf ("%s: %s\n", passed ? "PASSED" : "FAILED", str);
   g_free (str);
+}
+
+typedef void (* SetFilenameFn) (GtkFileChooser *chooser, gpointer data);
+typedef gboolean (* CompareFilenameFn) (GtkFileChooser *chooser, gpointer data);
+
+struct test_set_filename_closure {
+  GtkWidget *chooser;
+  GtkWidget *accept_button;
+  gboolean focus_button;
+};
+
+static gboolean
+timeout_cb (gpointer data)
+{
+  struct test_set_filename_closure *closure;
+
+  closure = data;
+
+  if (closure->focus_button)
+    gtk_widget_grab_focus (closure->accept_button);
+
+  gtk_button_clicked (GTK_BUTTON (closure->accept_button));
+
+  return FALSE;
+}
+
+static gboolean
+test_set_filename (GtkFileChooserAction action,
+		   gboolean focus_button,
+		   SetFilenameFn set_filename_fn,const
+		   CompareFilenameFn compare_filename_fn,
+		   gpointer data)
+{
+  GtkWidget *chooser;
+  struct test_set_filename_closure closure;
+  gboolean retval;
+
+  chooser = gtk_file_chooser_dialog_new ("hello", NULL, action,
+					 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					 NULL);
+
+  closure.chooser = chooser;
+  closure.accept_button = gtk_dialog_add_button (GTK_DIALOG (chooser), GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
+  closure.focus_button = focus_button;
+
+  gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
+
+  (* set_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
+
+  g_timeout_add (2000, timeout_cb, &closure);
+  gtk_dialog_run (GTK_DIALOG (chooser));
+
+  retval = (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
+
+  gtk_widget_destroy (chooser);
+
+  return retval;
+}
+
+static void
+set_filename_cb (GtkFileChooser *chooser, gpointer data)
+{
+  const char *filename;
+
+  filename = data;
+  gtk_file_chooser_set_filename (chooser, filename);
+}
+
+static gboolean
+compare_filename_cb (GtkFileChooser *chooser, gpointer data)
+{
+  const char *filename;
+  char *out_filename;
+  gboolean retval;
+
+  filename = data;
+  out_filename = gtk_file_chooser_get_filename (chooser);
+
+  if (out_filename)
+    {
+      retval = (strcmp (out_filename, filename) == 0);
+      g_free (out_filename);
+    } else
+      retval = FALSE;
+
+  return retval;
+}
+
+static gboolean
+test_black_box_set_filename (GtkFileChooserAction action, const char *filename, gboolean focus_button)
+{
+  gboolean passed;
+
+  passed = test_set_filename (action, focus_button, set_filename_cb, compare_filename_cb, (char *) filename);
+
+  log_test (passed, "set_filename: action %d, focus_button=%s",
+	    (int) action,
+	    focus_button ? "TRUE" : "FALSE");
+
+  return passed;
+
+}
+
+struct current_name_closure {
+	const char *path;
+	const char *current_name;
+};
+
+static void
+set_current_name_cb (GtkFileChooser *chooser, gpointer data)
+{
+  struct current_name_closure *closure;
+
+  closure = data;
+
+  gtk_file_chooser_set_current_folder (chooser, closure->path);
+  gtk_file_chooser_set_current_name (chooser, closure->current_name);
+}
+
+static gboolean
+compare_current_name_cb (GtkFileChooser *chooser, gpointer data)
+{
+  struct current_name_closure *closure;
+  char *out_filename;
+  gboolean retval;
+
+  closure = data;
+
+  out_filename = gtk_file_chooser_get_filename (chooser);
+
+  if (out_filename)
+    {
+      char *filename;
+
+      filename = g_build_filename (closure->path, closure->current_name, NULL);
+      retval = (strcmp (filename, out_filename) == 0);
+      g_free (filename);
+      g_free (out_filename);
+    } else
+      retval = FALSE;
+
+  return retval;
+}
+
+static gboolean
+test_black_box_set_current_name (const char *path, const char *current_name, gboolean focus_button)
+{
+  struct current_name_closure closure;
+  gboolean passed;
+
+  closure.path = path;
+  closure.current_name = current_name;
+
+  passed = test_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, focus_button,
+			      set_current_name_cb, compare_current_name_cb, &closure);
+
+  log_test (passed, "set_current_name, focus_button=%s", focus_button ? "TRUE" : "FALSE");
+
+  return passed;
+}
+
+/* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
+
+#if 0
+#define FILE_NAME "/nonexistent"
+#define FOLDER_NAME "/etc"
+#else
+#define FILE_NAME "/etc/passwd"
+#define FOLDER_NAME "/etc"
+#endif
+
+#define CURRENT_NAME "parangaricutirimicuaro.txt"
+
+/* https://bugzilla.novell.com/show_bug.cgi?id=184875
+ * http://bugzilla.gnome.org/show_bug.cgi?id=347066
+ */
+static gboolean
+test_black_box (void)
+{
+  gboolean passed;
+  char *cwd;
+
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, FALSE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, TRUE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, FALSE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, TRUE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, FALSE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, TRUE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, FALSE);
+  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, TRUE);
+
+  cwd = g_get_current_dir ();
+
+  passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, FALSE);
+  passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, TRUE);
+
+  g_free (cwd);
+
+  log_test (passed, "Black box tests");
+
+  return passed;
 }
 
 static const GtkFileChooserAction open_actions[] = {
@@ -707,6 +905,7 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   /* Start tests */
+  passed = passed && test_black_box ();
   passed = passed && test_action_widgets ();
   passed = passed && test_reload ();
   passed = passed && test_button_folder_states ();

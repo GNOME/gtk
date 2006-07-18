@@ -178,6 +178,7 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_path_bar;
 
   GtkFileSystemModel *browse_files_model;
+  char *browse_files_last_selected_name;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
@@ -263,7 +264,6 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
-  guint processing_pending_selections : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;

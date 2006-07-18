@@ -42,7 +42,7 @@ gtk_file_chooser_get_type (void)
       file_chooser_type = g_type_register_static_simple (G_TYPE_INTERFACE,
 							 I_("GtkFileChooser"),
 							 sizeof (GtkFileChooserIface),
-							 gtk_file_chooser_class_init,
+							 (GClassInitFunc) gtk_file_chooser_class_init,
 							 0, NULL, 0);
       
       g_type_interface_add_prerequisite (file_chooser_type, GTK_TYPE_WIDGET);
