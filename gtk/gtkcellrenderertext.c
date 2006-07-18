@@ -1778,6 +1778,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)
 {
+  GtkBorder border;
+  GtkRequisition requisition;
   GtkCellRendererText *celltext;
   GtkCellRendererTextPrivate *priv;
 
@@ -1799,6 +1801,14 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
   
+  gtk_widget_size_request (priv->entry, &requisition);
+  if (requisition.height < cell_area->height)
+    {
+      g_object_get (priv->entry, "inner-border", &border, NULL);
+      border.top = (cell_area->height - requisition.height) / 2;
+      border.bottom = (cell_area->height - requisition.height) / 2;
+      gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
+    }
 
   priv->in_entry_menu = FALSE;
   if (priv->entry_menu_popdown_timeout)

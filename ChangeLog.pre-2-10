@@ -1,5 +1,17 @@
 2006-07-18  Kristian Rietveld  <kris@imendio.com>
 
+	Fix for #335012, reported by Matteo Nastasi.
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_editing): if the
+	requested space of the editable is smaller than the cell area,
+	put it up above the middle of the cell area.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing):
+	configure the inner border to cover the cell area if the 
+	entry requisition is smaller than the cell_area.
+
+2006-07-18  Kristian Rietveld  <kris@imendio.com>
+
 	Another fix for #164884.
 
 	* gtk/gtktreeprivate.h: add in_grab field.

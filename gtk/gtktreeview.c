@@ -14280,6 +14280,7 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 				  guint              flags)
 {
   gint pre_val = tree_view->priv->vadjustment->value;
+  GtkRequisition requisition;
 
   tree_view->priv->edited_column = column;
   _gtk_tree_view_column_start_editing (column, GTK_CELL_EDITABLE (cell_editable));
@@ -14288,12 +14289,29 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 
   cell_area->y += pre_val - tree_view->priv->vadjustment->value;
 
+  gtk_widget_size_request (GTK_WIDGET (cell_editable), &requisition);
+
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-  gtk_tree_view_put (tree_view,
-		     GTK_WIDGET (cell_editable),
-		     cell_area->x, cell_area->y, cell_area->width, cell_area->height);
+
+  if (requisition.height < cell_area->height)
+    {
+      gint diff = cell_area->height - requisition.height;
+      gtk_tree_view_put (tree_view,
+			 GTK_WIDGET (cell_editable),
+			 cell_area->x, cell_area->y + diff/2,
+			 cell_area->width, requisition.height);
+    }
+  else
+    {
+      gtk_tree_view_put (tree_view,
+			 GTK_WIDGET (cell_editable),
+			 cell_area->x, cell_area->y,
+			 cell_area->width, cell_area->height);
+    }
+
   gtk_cell_editable_start_editing (GTK_CELL_EDITABLE (cell_editable),
 				   (GdkEvent *)event);
+
   gtk_widget_grab_focus (GTK_WIDGET (cell_editable));
   g_signal_connect (cell_editable, "remove_widget",
 		    G_CALLBACK (gtk_tree_view_remove_widget), tree_view);
