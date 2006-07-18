@@ -202,7 +202,8 @@ static GdkCursor *   gtk_drag_get_cursor         (GdkDisplay     *display,
 						  GdkDragAction   action,
 						  GtkDragSourceInfo *info);
 static void          gtk_drag_update_cursor      (GtkDragSourceInfo *info);
-static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen	 *screen);
+static GtkWidget    *gtk_drag_get_ipc_widget            (GtkWidget *widget);
+static GtkWidget    *gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
 static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
@@ -339,17 +340,8 @@ get_can_change_screen (GtkWidget *widget)
 
 }
 
-/*************************************************************
- * gtk_drag_get_ipc_widget:
- *     Return a invisible, off-screen, override-redirect
- *     widget for IPC.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
 static GtkWidget *
-gtk_drag_get_ipc_widget (GdkScreen *screen)
+gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
 {
   GtkWidget *result;
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen), 
@@ -367,12 +359,36 @@ gtk_drag_get_ipc_widget (GdkScreen *screen)
     }
   else
     {
-      result = gtk_invisible_new_for_screen (screen);
+      result = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_screen (GTK_WINDOW (result), screen);
+      gtk_window_resize (GTK_WINDOW (result), 1, 1);
+      gtk_window_move (GTK_WINDOW (result), -100, -100);
       gtk_widget_show (result);
+    }  
+
+  return result;
+}
+
+static GtkWidget *
+gtk_drag_get_ipc_widget (GtkWidget *widget)
+{
+  GtkWidget *result;
+  GtkWidget *toplevel;
+
+  result = gtk_drag_get_ipc_widget_for_screen (gtk_widget_get_screen (widget));
+  
+  toplevel = gtk_widget_get_toplevel (widget);
+  
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      if (GTK_WINDOW (toplevel)->group)
+	gtk_window_group_add_window (GTK_WINDOW (toplevel)->group, 
+                                     GTK_WINDOW (result));
     }
 
   return result;
 }
+
 
 /***************************************************************
  * gtk_drag_release_ipc_widget:
@@ -385,9 +401,12 @@ gtk_drag_get_ipc_widget (GdkScreen *screen)
 static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
 					    "gtk-dnd-ipc-widgets");
+  if (window->group)
+    gtk_window_group_remove_window (window->group, window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
   g_object_set_data (G_OBJECT (screen),
 		     I_("gtk-dnd-ipc-widgets"),
@@ -814,7 +833,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (!context->is_source);
 
-  selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  selection_widget = gtk_drag_get_ipc_widget (widget);
 
   g_object_ref (context);
   g_object_ref (widget);
@@ -904,7 +923,7 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget (gdk_drawable_get_screen (context->source_window));
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_drawable_get_screen (context->source_window));
 
       g_object_ref (context);
       
@@ -1770,7 +1789,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
       dest_info->proxy_source = NULL;
     }
   
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (widget);
   context = gdk_drag_begin (ipc_widget->window,
 			    dest_info->context->targets);
 
@@ -2164,7 +2183,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GtkWidget *ipc_widget;
   GdkCursor *cursor;
  
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (widget);
   
   gtk_drag_get_event_actions (event, button, actions,
 			      &suggested_action, &possible_actions);

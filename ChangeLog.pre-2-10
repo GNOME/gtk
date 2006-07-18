@@ -1,3 +1,11 @@
+2006-07-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c: Make the ipc widgets GtkWindows instead
+	of GtkInvisibles, and put them in the same window group
+	as the drag source, to avoid interactions between DND
+	and window groups.  (#347277, Michael Wu, analysis by
+	Owen Taylor)
+
 2006-07-18  John (J5) Palmieri  <johnp@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c:
