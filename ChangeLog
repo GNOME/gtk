@@ -1,3 +1,10 @@
+2006-07-18  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_realize): use MAX
+	priv->width, alloc.width when allocating the bin_window,
+	(gtk_tree_view_bin_expose): don't overrun bin_window when drawing
+	the flat box.
+
 2006-07-17  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkdnd-quartz.c: (gtk_drag_begin_internal): Set an empty

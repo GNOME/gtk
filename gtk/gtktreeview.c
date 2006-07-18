@@ -1728,7 +1728,7 @@ gtk_tree_view_realize (GtkWidget *widget)
   /* Make the window for the tree */
   attributes.x = 0;
   attributes.y = TREE_VIEW_HEADER_HEIGHT (tree_view);
-  attributes.width = tree_view->priv->width;
+  attributes.width = MAX (tree_view->priv->width, widget->allocation.width);
   attributes.height = widget->allocation.height;
   attributes.event_mask = GDK_EXPOSURE_MASK |
     GDK_SCROLL_MASK |
@@ -4121,7 +4121,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                           widget,
                           "cell_even",
                           0, tree_view->priv->height,
-                          bin_window_width, bin_window_height);
+                          bin_window_width,
+                          bin_window_height - tree_view->priv->height);
     }
 
   if (node == NULL)
