@@ -253,6 +253,8 @@
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk.po to
 # Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 # MagNet <magnet@magnet-i.com>, 2004.
@@ -261,14 +263,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-07 01:09+0200\n"
-"PO-Revision-Date: 2006-07-07 10:02+0530\n"
+"POT-Creation-Date: 2006-07-17 23:43+0200\n"
+"PO-Revision-Date: 2006-07-18 09:43+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -384,19 +387,17 @@ msgstr "ચિત્ર લખતી વખતે %s બંધ કરવામ�
 msgid "Insufficient memory to save image into a buffer"
 msgstr "અનામત મૅમરીમાં ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મૅમરી"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:343
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to complete an operation, "
+"but didn't give a reason for the failure"
+msgstr "આંતરિક ભૂલ: ચિત્ર લાવનાર મોડ્યુલ '%s' પ્રક્રિયા પૂર્ણ કરવામાં નિષ્ફળ, પરંતુ નિષ્ફળતા માટે તેણે કારણ આપ્યું ન હતું"
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "ચિત્રના પ્રકાર '%s'ને  ધીરેધીરે લાવવા માટે આધાર નથી"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:371 ../gdk-pixbuf/gdk-pixbuf-loader.c:472
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
-"but didn't give a reason for the failure"
-msgstr ""
-"આંતરિક ભૂલ: ચિત્ર લાવવા માટેનું '%s' મોડ્યુલ ચિત્ર લાવવા માટેની શરૂઆત કરવામાં નિષ્ફળ પરંતુ "
-"નિષ્ફળતા માટે કોઈ કારણ આપતુ નથી"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -975,19 +976,19 @@ msgstr "બાકીનું સંગ્રહી શકાતુ નથી"
 msgid "The WBMP image format"
 msgstr "WBMP ચિત્ર બંધારણ"
 
-#: ../gdk-pixbuf/io-xbm.c:287
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "અયોગ્ય XBM ફાઈલ"
 
-#: ../gdk-pixbuf/io-xbm.c:297
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
 
-#: ../gdk-pixbuf/io-xbm.c:443
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ."
 
-#: ../gdk-pixbuf/io-xbm.c:478
+#: ../gdk-pixbuf/io-xbm.c:488
 msgid "The XBM image format"
 msgstr "XBM ચિત્ર બંધારણ."
 
@@ -1379,7 +1380,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:694
+#: ../gtk/gtkcalendar.c:696
 msgid "calendar:MY"
 msgstr "કેલેન્ડર:MY"
 
@@ -1387,7 +1388,7 @@ msgstr "કેલેન્ડર:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:718
+#: ../gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
 msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત:૧"
 
@@ -1399,7 +1400,7 @@ msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1604
+#: ../gtk/gtkcalendar.c:1606
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1414,7 +1415,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1635 ../gtk/gtkcalendar.c:2213
+#: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2215
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1430,7 +1431,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1669 ../gtk/gtkcalendar.c:2087
+#: ../gtk/gtkcalendar.c:1671 ../gtk/gtkcalendar.c:2089
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1446,7 +1447,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:1880
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1630,7 +1631,7 @@ msgstr "ડેસ્કટોપ"
 msgid "(None)"
 msgstr "(કંઈ નહિ)"
 
-#: ../gtk/gtkfilechooserbutton.c:1870
+#: ../gtk/gtkfilechooserbutton.c:1869
 msgid "Other..."
 msgstr "અન્ય..."
 
@@ -1774,88 +1775,92 @@ msgid "Type a file name"
 msgstr "ફાઈલ નામ લખો"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4546
 msgid "Create Fo_lder"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
-#: ../gtk/gtkfilechooserdefault.c:4793
+#: ../gtk/gtkfilechooserdefault.c:4556
+msgid "_Location:"
+msgstr "સ્થાન (_L):"
+
+#: ../gtk/gtkfilechooserdefault.c:4796
 msgid "Save in _folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:4795
+#: ../gtk/gtkfilechooserdefault.c:4798
 msgid "Create in _folder:"
 msgstr "ફોલ્ડરમાં બનાવો (_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:6199
+#: ../gtk/gtkfilechooserdefault.c:6202
 msgid "Cannot change to folder because it is not local"
 msgstr "ફોલ્ડર બદલી શકતા નથી કારણ કે તે સ્થાનિક પથ નથી"
 
-#: ../gtk/gtkfilechooserdefault.c:6769 ../gtk/gtkfilechooserdefault.c:6790
+#: ../gtk/gtkfilechooserdefault.c:6772 ../gtk/gtkfilechooserdefault.c:6793
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ટૂંકાણ %s પહેલાથી જ અસ્તિત્વમાં છે"
 
-#: ../gtk/gtkfilechooserdefault.c:6880
+#: ../gtk/gtkfilechooserdefault.c:6883
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ટૂંકાણ %s અસ્તિત્વમાં નથી"
 
-#: ../gtk/gtkfilechooserdefault.c:7135
+#: ../gtk/gtkfilechooserdefault.c:7138
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હાજર છે.  શું તમે તેને બદલવા માંગો છો?"
 
-#: ../gtk/gtkfilechooserdefault.c:7138
+#: ../gtk/gtkfilechooserdefault.c:7141
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
-#: ../gtk/gtkfilechooserdefault.c:7143
+#: ../gtk/gtkfilechooserdefault.c:7146
 msgid "_Replace"
 msgstr "બદલો (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:7793
+#: ../gtk/gtkfilechooserdefault.c:7796
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
-#: ../gtk/gtkfilechooserdefault.c:8184
+#: ../gtk/gtkfilechooserdefault.c:8187
 msgid "Type name of new folder"
 msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
 
-#: ../gtk/gtkfilechooserdefault.c:8229
+#: ../gtk/gtkfilechooserdefault.c:8232
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d બાઇટ"
 msgstr[1] "%d બાઇટો"
 
-#: ../gtk/gtkfilechooserdefault.c:8231
+#: ../gtk/gtkfilechooserdefault.c:8234
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:8233
+#: ../gtk/gtkfilechooserdefault.c:8236
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:8235
+#: ../gtk/gtkfilechooserdefault.c:8238
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:8283 ../gtk/gtkfilechooserdefault.c:8307
+#: ../gtk/gtkfilechooserdefault.c:8286 ../gtk/gtkfilechooserdefault.c:8310
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
 # #-#-#-#-#  libgnomeui.HEAD.hi.po (libgnomeui-2.0.hi)  #-#-#-#-#
 # libgnomeui/gnome-file-entry.c:216
-#: ../gtk/gtkfilechooserdefault.c:8294
+#: ../gtk/gtkfilechooserdefault.c:8297
 msgid "Today"
 msgstr "આજે"
 
-#: ../gtk/gtkfilechooserdefault.c:8296
+#: ../gtk/gtkfilechooserdefault.c:8299
 msgid "Yesterday"
 msgstr "ગઇકાલે"
 
@@ -2300,7 +2305,7 @@ msgstr "તીર જગ્યા"
 msgid "Scroll arrow spacing"
 msgstr "તીર જગ્યા સરકાવો"
 
-#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6794
+#: ../gtk/gtknotebook.c:4240 ../gtk/gtknotebook.c:6793
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -2720,36 +2725,36 @@ msgstr "સમાવવા માટેની ફાઈલ ને શોધવ�
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path માં ચિત્ર ફાઈલ મેળવવામાં નિષ્ફળ: \"%s\""
 
-#: ../gtk/gtkrecentchooserdefault.c:460
+#: ../gtk/gtkrecentchooserdefault.c:459
 msgid "Select which type of documents are shown"
 msgstr "કયા પ્રકારના દસ્તાવેજો બતાવેલ છે તે પસંદ કરો"
 
-#: ../gtk/gtkrecentchooserdefault.c:1125 ../gtk/gtkrecentchooserdefault.c:1162
+#: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' માટે કોઈ વસ્તુ મળી નહિં"
 
-#: ../gtk/gtkrecentchooserdefault.c:1772
+#: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Could not remove item"
 msgstr "વસ્તુ દૂર કરી શક્યા નહિં"
 
-#: ../gtk/gtkrecentchooserdefault.c:1815
+#: ../gtk/gtkrecentchooserdefault.c:1817
 msgid "Could not clear list"
 msgstr "યાદી સાફ કરી શક્યા નહિં"
 
-#: ../gtk/gtkrecentchooserdefault.c:1899
+#: ../gtk/gtkrecentchooserdefault.c:1901
 msgid "Copy _Location"
 msgstr "સ્થાનની નકલ કરો (_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1912
+#: ../gtk/gtkrecentchooserdefault.c:1914
 msgid "_Remove From List"
 msgstr "યાદીમાંથી દૂર કરો (_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1921
+#: ../gtk/gtkrecentchooserdefault.c:1923
 msgid "_Clear List"
 msgstr "યાદી સાફ કરો (_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1935
+#: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
 msgstr "ખાનગી સ્રોતો બતાવો (_P)"
 
@@ -4342,670 +4347,6 @@ msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે"
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે. પ્રથમ વિભાગ એ GTKTEXTBUFFERCONTENTS-0001 નથી"
-
-#. sorted by name, remember to sort when changing
-#: ../gtk/paper_names.c:18
-msgid "asme_f"
-msgstr "asme_f"
-
-#. f           5    e1
-#: ../gtk/paper_names.c:19
-msgid "A0x2"
-msgstr "A0x2"
-
-#: ../gtk/paper_names.c:20
-msgid "A0"
-msgstr "A0"
-
-#: ../gtk/paper_names.c:21
-msgid "A0x3"
-msgstr "A0x3"
-
-#: ../gtk/paper_names.c:22
-msgid "A1"
-msgstr "A1"
-
-#: ../gtk/paper_names.c:23
-msgid "A10"
-msgstr "A10"
-
-#: ../gtk/paper_names.c:24
-msgid "A1x3"
-msgstr "A1x3"
-
-#: ../gtk/paper_names.c:25
-msgid "A1x4"
-msgstr "A1x4"
-
-#: ../gtk/paper_names.c:26
-msgid "A2"
-msgstr "A2"
-
-#: ../gtk/paper_names.c:27
-msgid "A2x3"
-msgstr "A2x3"
-
-#: ../gtk/paper_names.c:28
-msgid "A2x4"
-msgstr "A2x4"
-
-#: ../gtk/paper_names.c:29
-msgid "A2x5"
-msgstr "A2x5"
-
-#: ../gtk/paper_names.c:30
-msgid "A3"
-msgstr "A3"
-
-#: ../gtk/paper_names.c:31
-msgid "A3 Extra"
-msgstr "A3 વધારાનું"
-
-#: ../gtk/paper_names.c:32
-msgid "A3x3"
-msgstr "A3x3"
-
-#: ../gtk/paper_names.c:33
-msgid "A3x4"
-msgstr "A3x4"
-
-#: ../gtk/paper_names.c:34
-msgid "A3x5"
-msgstr "A3x5"
-
-#: ../gtk/paper_names.c:35
-msgid "A3x6"
-msgstr "A3x6"
-
-#: ../gtk/paper_names.c:36
-msgid "A3x7"
-msgstr "A3x7"
-
-#: ../gtk/paper_names.c:37
-msgid "A4"
-msgstr "A4"
-
-#: ../gtk/paper_names.c:38
-msgid "A4 Extra"
-msgstr "A4 વધારાનું"
-
-#: ../gtk/paper_names.c:39
-msgid "A4 Tab"
-msgstr "A4 ટેબ"
-
-#: ../gtk/paper_names.c:40
-msgid "A4x3"
-msgstr "A4x3"
-
-#: ../gtk/paper_names.c:41
-msgid "A4x4"
-msgstr "A4x4"
-
-#: ../gtk/paper_names.c:42
-msgid "A4x5"
-msgstr "A4x5"
-
-#: ../gtk/paper_names.c:43
-msgid "A4x6"
-msgstr "A4x6"
-
-#: ../gtk/paper_names.c:44
-msgid "A4x7"
-msgstr "A4x7"
-
-#: ../gtk/paper_names.c:45
-msgid "A4x8"
-msgstr "A4x8"
-
-#: ../gtk/paper_names.c:46
-msgid "A4x9"
-msgstr "A4x9"
-
-#: ../gtk/paper_names.c:47
-msgid "A5"
-msgstr "A5"
-
-#: ../gtk/paper_names.c:48
-msgid "A5 Extra"
-msgstr "A5 વધારાનું"
-
-#: ../gtk/paper_names.c:49
-msgid "A6"
-msgstr "A6"
-
-#: ../gtk/paper_names.c:50
-msgid "A7"
-msgstr "A7"
-
-#: ../gtk/paper_names.c:51
-msgid "A8"
-msgstr "A8"
-
-#: ../gtk/paper_names.c:52
-msgid "A9"
-msgstr "A9"
-
-#: ../gtk/paper_names.c:53
-msgid "B0"
-msgstr "B0"
-
-#: ../gtk/paper_names.c:54
-msgid "B1"
-msgstr "B1"
-
-#: ../gtk/paper_names.c:55
-msgid "B10"
-msgstr "B10"
-
-#: ../gtk/paper_names.c:56
-msgid "B2"
-msgstr "B2"
-
-#: ../gtk/paper_names.c:57
-msgid "B3"
-msgstr "B3"
-
-#: ../gtk/paper_names.c:58
-msgid "B4"
-msgstr "B4"
-
-#: ../gtk/paper_names.c:59
-msgid "B5"
-msgstr "B5"
-
-#: ../gtk/paper_names.c:60
-msgid "B5 Extra"
-msgstr "B5 વધારાનું"
-
-#: ../gtk/paper_names.c:61
-msgid "B6"
-msgstr "B6"
-
-#: ../gtk/paper_names.c:62
-msgid "B6/C4"
-msgstr "B6/C4"
-
-#. b6/c4 Envelope
-#: ../gtk/paper_names.c:63
-msgid "B7"
-msgstr "B7"
-
-#: ../gtk/paper_names.c:64
-msgid "B8"
-msgstr "B8"
-
-#: ../gtk/paper_names.c:65
-msgid "B9"
-msgstr "B9"
-
-#: ../gtk/paper_names.c:66
-msgid "C0"
-msgstr "C0"
-
-#: ../gtk/paper_names.c:67
-msgid "C1"
-msgstr "C1"
-
-#: ../gtk/paper_names.c:68
-msgid "C10"
-msgstr "C10"
-
-#: ../gtk/paper_names.c:69
-msgid "C2"
-msgstr "C2"
-
-#: ../gtk/paper_names.c:70
-msgid "C3"
-msgstr "C3"
-
-#: ../gtk/paper_names.c:71
-msgid "C4"
-msgstr "C4"
-
-#: ../gtk/paper_names.c:72
-msgid "C5"
-msgstr "C5"
-
-#: ../gtk/paper_names.c:73
-msgid "C6"
-msgstr "C6"
-
-#: ../gtk/paper_names.c:74
-msgid "C6/C5"
-msgstr "C6/C5"
-
-#: ../gtk/paper_names.c:75
-msgid "C7"
-msgstr "C7"
-
-#: ../gtk/paper_names.c:76
-msgid "C7/C6"
-msgstr "C7/C6"
-
-#. c7/c6 Envelope
-#: ../gtk/paper_names.c:77
-msgid "C8"
-msgstr "C8"
-
-#: ../gtk/paper_names.c:78
-msgid "C9"
-msgstr "C9"
-
-#: ../gtk/paper_names.c:79
-msgid "DL Envelope"
-msgstr "DL કવર"
-
-#. iso-designated 1, 2 designated-long, dl Envelope
-#: ../gtk/paper_names.c:80
-msgid "RA0"
-msgstr "RA0"
-
-#: ../gtk/paper_names.c:81
-msgid "RA1"
-msgstr "RA1"
-
-#: ../gtk/paper_names.c:82
-msgid "RA2"
-msgstr "RA2"
-
-#: ../gtk/paper_names.c:83
-msgid "SRA0"
-msgstr "SRA0"
-
-#: ../gtk/paper_names.c:84
-msgid "SRA1"
-msgstr "SRA1"
-
-#: ../gtk/paper_names.c:85
-msgid "SRA2"
-msgstr "SRA2"
-
-#: ../gtk/paper_names.c:86
-msgid "JB0"
-msgstr "JB0"
-
-#: ../gtk/paper_names.c:87
-msgid "JB1"
-msgstr "JB1"
-
-#: ../gtk/paper_names.c:88
-msgid "JB10"
-msgstr "JB10"
-
-#: ../gtk/paper_names.c:89
-msgid "JB2"
-msgstr "JB2"
-
-#: ../gtk/paper_names.c:90
-msgid "JB3"
-msgstr "JB3"
-
-#: ../gtk/paper_names.c:91
-msgid "JB4"
-msgstr "JB4"
-
-#: ../gtk/paper_names.c:92
-msgid "JB5"
-msgstr "JB5"
-
-#: ../gtk/paper_names.c:93
-msgid "JB6"
-msgstr "JB6"
-
-#: ../gtk/paper_names.c:94
-msgid "JB7"
-msgstr "JB7"
-
-#: ../gtk/paper_names.c:95
-msgid "JB8"
-msgstr "JB8"
-
-#: ../gtk/paper_names.c:96
-msgid "JB9"
-msgstr "JB9"
-
-#: ../gtk/paper_names.c:97
-msgid "jis exec"
-msgstr "jis exec"
-
-#: ../gtk/paper_names.c:98
-msgid "Choukei 2 Envelope"
-msgstr "Choukei 2 કવર"
-
-#: ../gtk/paper_names.c:99
-msgid "Choukei 3 Envelope"
-msgstr "Choukei 3 કવર"
-
-#: ../gtk/paper_names.c:100
-msgid "Choukei 4 Envelope"
-msgstr "Choukei 4 કવર"
-
-#: ../gtk/paper_names.c:101
-msgid "hagaki (postcard)"
-msgstr "hagaki (પોસ્ટકાર્ડ)"
-
-#: ../gtk/paper_names.c:102
-msgid "kahu Envelope"
-msgstr "kahu કવર"
-
-#: ../gtk/paper_names.c:103
-msgid "kaku2 Envelope"
-msgstr "kaku2 કવર"
-
-#: ../gtk/paper_names.c:104
-msgid "oufuku (reply postcard)"
-msgstr "oufuku (પ્રત્યુત્તર પોસ્ટકાર્ડ)"
-
-#: ../gtk/paper_names.c:105
-msgid "you4 Envelope"
-msgstr "you4 કવર"
-
-#: ../gtk/paper_names.c:106
-msgid "10x11"
-msgstr "10x11"
-
-#: ../gtk/paper_names.c:107
-msgid "10x13"
-msgstr "10x13"
-
-#: ../gtk/paper_names.c:108
-msgid "10x14"
-msgstr "10x14"
-
-#: ../gtk/paper_names.c:109 ../gtk/paper_names.c:110
-msgid "10x15"
-msgstr "10x15"
-
-#: ../gtk/paper_names.c:111
-msgid "11x12"
-msgstr "11x12"
-
-#: ../gtk/paper_names.c:112
-msgid "11x15"
-msgstr "11x15"
-
-#: ../gtk/paper_names.c:113
-msgid "12x19"
-msgstr "12x19"
-
-#: ../gtk/paper_names.c:114
-msgid "5x7"
-msgstr "5x7"
-
-#: ../gtk/paper_names.c:115
-msgid "6x9 Envelope"
-msgstr "6x9 કવર"
-
-#: ../gtk/paper_names.c:116
-msgid "7x9 Envelope"
-msgstr "7x9 કવર"
-
-#: ../gtk/paper_names.c:117
-msgid "9x11 Envelope"
-msgstr "9x11 કવર"
-
-#: ../gtk/paper_names.c:118
-msgid "a2 Envelope"
-msgstr "a2 કવર"
-
-#: ../gtk/paper_names.c:119
-msgid "Arch A"
-msgstr "Arch A"
-
-#: ../gtk/paper_names.c:120
-msgid "Arch B"
-msgstr "Arch B"
-
-#: ../gtk/paper_names.c:121
-msgid "Arch C"
-msgstr "Arch C"
-
-#: ../gtk/paper_names.c:122
-msgid "Arch D"
-msgstr "Arch D"
-
-#: ../gtk/paper_names.c:123
-msgid "Arch E"
-msgstr "Arch E"
-
-#: ../gtk/paper_names.c:124
-msgid "b-plus"
-msgstr "b-plus"
-
-#: ../gtk/paper_names.c:125
-msgid "c"
-msgstr "c"
-
-#: ../gtk/paper_names.c:126
-msgid "c5 Envelope"
-msgstr "c5 કવર"
-
-#: ../gtk/paper_names.c:127
-msgid "d"
-msgstr "d"
-
-#: ../gtk/paper_names.c:128
-msgid "e"
-msgstr "e"
-
-#: ../gtk/paper_names.c:129
-msgid "edp"
-msgstr "edp"
-
-#: ../gtk/paper_names.c:130
-msgid "European edp"
-msgstr "યુરોપીય edp"
-
-#: ../gtk/paper_names.c:131
-msgid "Executive"
-msgstr "એક્ઝેક્યુટીવ"
-
-#: ../gtk/paper_names.c:132
-msgid "f"
-msgstr "f"
-
-#: ../gtk/paper_names.c:133
-msgid "FanFold European"
-msgstr "FanFold યુરોપીય"
-
-#: ../gtk/paper_names.c:134
-msgid "FanFold US"
-msgstr "FanFold US"
-
-#: ../gtk/paper_names.c:135
-msgid "FanFold German Legal"
-msgstr "FanFold જર્મન કાયદાકીય"
-
-#. foolscap, german-legal-fanfold
-#: ../gtk/paper_names.c:136
-msgid "Government Legal"
-msgstr "સરકારી કાયદાકીય"
-
-#: ../gtk/paper_names.c:137
-msgid "Government Letter"
-msgstr "સરકારી પત્ર"
-
-#: ../gtk/paper_names.c:138
-msgid "Index 3x5"
-msgstr "Index 3x5"
-
-#: ../gtk/paper_names.c:139
-msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (પોસ્ટકાર્ડ)"
-
-#: ../gtk/paper_names.c:140
-msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
-
-#: ../gtk/paper_names.c:141
-msgid "Index 5x8"
-msgstr "Index 5x8"
-
-#: ../gtk/paper_names.c:142
-msgid "Invoice"
-msgstr "ઈનવોઈસ"
-
-#. invoice,  statement, mini, half-letter
-#: ../gtk/paper_names.c:143
-msgid "Tabloid"
-msgstr "ટેબ્લોઈડ"
-
-#. tabloid, engineering-b
-#: ../gtk/paper_names.c:144
-msgid "US Legal"
-msgstr "US કાયદાકીય"
-
-#: ../gtk/paper_names.c:145
-msgid "US Legal Extra"
-msgstr "US કાયદાકીય વધારાનું"
-
-#: ../gtk/paper_names.c:146
-msgid "US Letter"
-msgstr "US પત્ર"
-
-#: ../gtk/paper_names.c:147
-msgid "US Letter Extra"
-msgstr "US પત્ર વધારાનું"
-
-#: ../gtk/paper_names.c:148
-msgid "US Letter Plus"
-msgstr "US પત્ર વત્તા"
-
-#: ../gtk/paper_names.c:149
-msgid "Monarch Envelope"
-msgstr "મોનાર્ક કવર"
-
-#: ../gtk/paper_names.c:150
-msgid "#10 Envelope"
-msgstr "#10 કવર"
-
-#. na-number-10-envelope 1, 2 comm-10 Envelope
-#: ../gtk/paper_names.c:151
-msgid "#11 Envelope"
-msgstr "#11 કવર"
-
-#. number-11 Envelope
-#: ../gtk/paper_names.c:152
-msgid "#12 Envelope"
-msgstr "#12 કવર"
-
-#. number-12 Envelope
-#: ../gtk/paper_names.c:153
-msgid "#14 Envelope"
-msgstr "#14 કવર"
-
-#. number-14 Envelope
-#: ../gtk/paper_names.c:154
-msgid "#9 Envelope"
-msgstr "#9 કવર"
-
-#: ../gtk/paper_names.c:155
-msgid "Personal Envelope"
-msgstr "વ્યક્તિગત કવર"
-
-#: ../gtk/paper_names.c:156
-msgid "Quarto"
-msgstr "ક્વાર્ટો"
-
-#: ../gtk/paper_names.c:157
-msgid "Super A"
-msgstr "Super A"
-
-#: ../gtk/paper_names.c:158
-msgid "Super B"
-msgstr "Super B"
-
-#: ../gtk/paper_names.c:159
-msgid "Wide Format"
-msgstr "પહોળું બંધારણ"
-
-#: ../gtk/paper_names.c:160
-msgid "Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-#: ../gtk/paper_names.c:161
-msgid "Folio"
-msgstr "Folio"
-
-#: ../gtk/paper_names.c:162
-msgid "Folio sp"
-msgstr "Folio sp"
-
-#: ../gtk/paper_names.c:163
-msgid "Invite Envelope"
-msgstr "આમંત્રણ કવર"
-
-#: ../gtk/paper_names.c:164
-msgid "Italian Envelope"
-msgstr "ઈટાલિયન કવર"
-
-#: ../gtk/paper_names.c:165
-msgid "juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#: ../gtk/paper_names.c:166
-msgid "pa-kai"
-msgstr "pa-kai"
-
-#: ../gtk/paper_names.c:167
-msgid "Postfix Envelope"
-msgstr "પોસ્ટફિક્સ કવર"
-
-#: ../gtk/paper_names.c:168
-msgid "Small Photo"
-msgstr "નાનો ફોટો"
-
-#: ../gtk/paper_names.c:169
-msgid "prc1 Envelope"
-msgstr "prc1 કવર"
-
-#: ../gtk/paper_names.c:170
-msgid "prc10 Envelope"
-msgstr "prc10 કવર"
-
-#: ../gtk/paper_names.c:171
-msgid "prc 16k"
-msgstr "prc 16k"
-
-#: ../gtk/paper_names.c:172
-msgid "prc2 Envelope"
-msgstr "prc2 કવર"
-
-#: ../gtk/paper_names.c:173
-msgid "prc3 Envelope"
-msgstr "prc3 કવર"
-
-#: ../gtk/paper_names.c:174
-msgid "prc 32k"
-msgstr "prc 32k"
-
-#: ../gtk/paper_names.c:175
-msgid "prc4 Envelope"
-msgstr "prc4 કવર"
-
-#: ../gtk/paper_names.c:176
-msgid "prc5 Envelope"
-msgstr "prc5 કવર"
-
-#: ../gtk/paper_names.c:177
-msgid "prc6 Envelope"
-msgstr "prc6 કવર"
-
-#: ../gtk/paper_names.c:178
-msgid "prc7 Envelope"
-msgstr "prc7 કવર"
-
-#: ../gtk/paper_names.c:179
-msgid "prc8 Envelope"
-msgstr "prc8 કવર"
-
-#: ../gtk/paper_names.c:180
-msgid "ROC 16k"
-msgstr "ROC 16k"
-
-#: ../gtk/paper_names.c:181
-msgid "ROC 8k"
-msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
