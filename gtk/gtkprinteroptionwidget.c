@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "gtkintl.h"
 #include "gtkalignment.h"
@@ -28,6 +29,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
+#include "gtkcomboboxentry.h"
 #include "gtkfilechooserbutton.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -254,22 +256,49 @@ gtk_printer_option_widget_set_source (GtkPrinterOptionWidget  *widget,
   g_object_notify (G_OBJECT (widget), "source");
 }
 
-static GtkWidget *
-combo_box_new (void)
+static void
+combo_box_set_model (GtkWidget *combo_box)
 {
-  GtkWidget *combo_box;
-  GtkCellRenderer *cell;
   GtkListStore *store;
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-  combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+  gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
   g_object_unref (store);
+}
+
+static void
+combo_box_set_view (GtkWidget *combo_box)
+{
+  GtkCellRenderer *cell;
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-                                  "text", 0,
-                                  NULL);
+                                  "text", 1,
+                                   NULL);
+}
+
+static GtkWidget *
+combo_box_entry_new (void)
+{
+  GtkWidget *combo_box;
+  combo_box = gtk_combo_box_entry_new ();
+
+  combo_box_set_model (combo_box);
+
+  gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo_box), 1);
+
+  return combo_box;
+}
+
+static GtkWidget *
+combo_box_new (void)
+{
+  GtkWidget *combo_box;
+  combo_box = gtk_combo_box_new ();
+
+  combo_box_set_model (combo_box);
+  combo_box_set_view (combo_box);
 
   return combo_box;
 }
@@ -337,14 +366,21 @@ combo_box_get (GtkWidget *combo)
   GtkTreeModel *model;
   char *val;
   GtkTreeIter iter;
-  
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 
-  val = NULL;
-  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-    gtk_tree_model_get (model, &iter,
-			1, &val,
-			-1);
+  if (GTK_IS_COMBO_BOX_ENTRY (combo))
+    {
+      val = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
+    }
+  else
+    {
+      model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+
+      val = NULL;
+      if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
+         gtk_tree_model_get (model, &iter,
+	 		     1, &val,
+			    -1);
+     }
   return val;
 }
 
@@ -451,15 +487,93 @@ filesave_changed_cb (GtkWidget *w,
   emit_changed (widget);
 }
 
+static char *
+filter_numeric (const char *val,
+                gboolean allow_neg,
+		gboolean allow_dec,
+                gboolean *changed_out)
+{
+  gchar *filtered_val;
+  int i, j;
+  int len = strlen (val);
+  gboolean dec_set = FALSE;
+
+  filtered_val = g_malloc (len + 1);
+
+  for (i = 0, j = 0; i < len; i++)
+    {
+      if (isdigit(val[i]))
+        {
+          filtered_val[j] = val[i];
+	  j++;
+	}
+      else if (allow_dec && !dec_set && 
+               (val[i] == '.' || val[i] == ','))
+        {
+	  /* allow one period or comma
+	   * we should be checking locals
+	   * but this is good enough for now
+	   */
+          filtered_val[j] = val[i];
+	  dec_set = TRUE;
+	  j++;
+	}
+      else if (allow_neg && i == 0 && val[0] == '-')
+        {
+          filtered_val[0] = val[0];
+	  j++;
+	}
+    }
+
+  filtered_val[j] = '\0';
+  *changed_out = !(i == j);
+
+  return filtered_val;
+}
 static void
 combo_changed_cb (GtkWidget *combo,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  char *value;
-  
+  gchar *value;
+  gchar *filtered_val = NULL;
+  gboolean changed;
+
   g_signal_handler_block (priv->source, priv->source_changed_handler);
+  
   value = combo_box_get (combo);
+
+  /* handle some constraints */
+  switch (priv->source->type)
+    {
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+      filtered_val = filter_numeric (value, FALSE, FALSE, &changed);
+      break;   
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+      filtered_val = filter_numeric (value, TRUE, FALSE, &changed);
+      break;
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+      filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
+      break;
+    default:
+      break;
+    }
+
+  if (filtered_val)
+    {
+      g_free (value);
+
+      if (changed)
+        {
+          GtkEntry *entry;
+	  
+	  entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
+
+          gtk_entry_set_text (entry, filtered_val);
+	}
+      value = filtered_val;
+    }
+
   if (value)
     gtk_printer_option_set (priv->source, value);
   g_free (value);
@@ -567,9 +681,32 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_widget_show (priv->check);
       gtk_box_pack_start (GTK_BOX (widget), priv->check, TRUE, TRUE, 0);
       break;
-
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
-      priv->combo = combo_box_new ();
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_STRING:
+      if (source->type == GTK_PRINTER_OPTION_TYPE_PICKONE)
+        {
+          priv->combo = combo_box_new ();
+	}
+      else
+        {
+          priv->combo = combo_box_entry_new ();
+
+          if (source->type == GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD ||
+	      source->type == GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE)
+	    {
+              GtkEntry *entry;
+
+	      entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->combo)));
+
+              gtk_entry_set_visibility (entry, FALSE); 
+	    }
+        }
+       
+
       for (i = 0; i < source->num_choices; i++)
 	  combo_box_append (priv->combo,
 			    source->choices_display[i],

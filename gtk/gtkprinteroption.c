@@ -84,7 +84,7 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
 
 GtkPrinterOption *
 gtk_printer_option_new (const char *name, const char *display_text,
-			       GtkPrinterOptionType type)
+			GtkPrinterOptionType type)
 {
   GtkPrinterOption *option;
 

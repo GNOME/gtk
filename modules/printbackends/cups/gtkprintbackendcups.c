@@ -1825,9 +1825,10 @@ available_choices (ppd_file_t     *ppd,
 }
 
 static GtkPrinterOption *
-create_pickone_option (ppd_file_t   *ppd_file,
-		       ppd_option_t *ppd_option,
-		       const gchar  *gtk_name)
+create_pickone_option_custom (ppd_file_t   *ppd_file,
+		              ppd_option_t *ppd_option,
+			      ppd_coption_t *coption,
+		              const gchar  *gtk_name)
 {
   GtkPrinterOption *option;
   ppd_choice_t **available;
@@ -1842,9 +1843,59 @@ create_pickone_option (ppd_file_t   *ppd_file,
   n_choices = available_choices (ppd_file, ppd_option, &available, g_str_has_prefix (gtk_name, "gtk-"));
   if (n_choices > 0)
     {
+      ppd_cparam_t *cparam;
+      
       label = get_option_text (ppd_file, ppd_option);
-      option = gtk_printer_option_new (gtk_name, label,
-				       GTK_PRINTER_OPTION_TYPE_PICKONE);
+
+      /* right now only support one parameter per custom option 
+       * if more than one print warning and only offer the default choices
+       */
+      if (coption)
+        {
+          cparam = ppdFirstCustomParam (coption);
+
+          if (ppdNextCustomParam (coption) == NULL)
+	    {
+              switch (cparam->type)
+	        {
+                case PPD_CUSTOM_INT:
+		  option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE_INT);
+		  break;
+                case PPD_CUSTOM_PASSCODE:
+		  option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE);
+		  break;
+                case PPD_CUSTOM_PASSWORD:
+		    option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD);
+		  break;
+               case PPD_CUSTOM_REAL:
+		    option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE_REAL);
+		  break;
+                case PPD_CUSTOM_STRING:
+		  option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE_STRING);
+		  break;
+                case PPD_CUSTOM_POINTS: 
+		  g_warning ("Not Supported: PPD Custom Points Option");
+		  break;
+                case PPD_CUSTOM_CURVE:
+                  g_warning ("Not Supported: PPD Custom Curve Option");
+		  break;
+                case PPD_CUSTOM_INVCURVE: 	
+		  g_warning ("Not Supported: PPD Custom Inverse Curve Option");
+		  break;
+		}
+	    }
+	  else
+	    g_warning ("Not Supported: PPD Custom Option has more than one parameter");
+	}
+
+      if (!option)
+        option = gtk_printer_option_new (gtk_name, label,
+				         GTK_PRINTER_OPTION_TYPE_PICKONE);
       g_free (label);
       
       gtk_printer_option_allocate_choices (option, n_choices);
@@ -1869,6 +1920,18 @@ create_pickone_option (ppd_file_t   *ppd_file,
     g_warning ("Ignoring pickone %s\n", ppd_option->text);
 #endif
   g_free (available);
+
+  return option;
+}
+
+static GtkPrinterOption *
+create_pickone_option (ppd_file_t   *ppd_file,
+		       ppd_option_t *ppd_option,
+		       const gchar  *gtk_name)
+{
+  GtkPrinterOption *option;  
+
+  option = create_pickone_option_custom (ppd_file, ppd_option, NULL, gtk_name);
 
   return option;
 }
@@ -1953,16 +2016,22 @@ handle_option (GtkPrinterOptionSet *set,
 {
   GtkPrinterOption *option;
   char *name;
+  ppd_coption_t *coption;
 
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
   
   name = get_option_name (ppd_option->keyword);
 
+  coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
+
   option = NULL;
   if (ppd_option->ui == PPD_UI_PICKONE)
     {
-      option = create_pickone_option (ppd_file, ppd_option, name);
+      if (coption)
+        option = create_pickone_option_custom (ppd_file, ppd_option, coption, name);
+      else
+        option = create_pickone_option (ppd_file, ppd_option, name);
     }
   else if (ppd_option->ui == PPD_UI_BOOLEAN)
     {

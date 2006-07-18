@@ -1,3 +1,15 @@
+2006-07-19  John (J5) Palmieri  <johnp@redhat.com>
+
+	* gtk/gtkprinteroption.h:
+	* gtk/gtkprinteroptionwidget.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	add GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD,
+	GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE,
+	GTK_PRINTER_OPTION_TYPE_PICKONE_REAL,
+	GTK_PRINTER_OPTION_TYPE_PICKONE_INT,
+	and GTK_PRINTER_OPTION_TYPE_PICKONE_STRING options to support a subset
+	of the new CUPS 1.2 custom options spec
+
 2006-07-18  Federico Mena Quintero  <federico@novell.com>
 
 	Fix https://bugzilla.novell.com/show_bug.cgi?id=184875 - make the
