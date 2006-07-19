@@ -540,7 +540,8 @@ file_printer_get_settings_from_options (GtkPrinter          *printer,
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, option->value);
 
   option = gtk_printer_option_set_lookup (options, "output-file-format");
-  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, option->value);
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, option->value);
 }
 
 static void

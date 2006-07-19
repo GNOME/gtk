@@ -1,5 +1,9 @@
 2006-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/file/gtkprintbackendfile.c 
+	(file_printer_get_settings_from_options): Check if option
+	is NULL before using it.  (#348014, Christian Persch)
+
 	* gdk/x11/gdkx.h (gdk_font_lookup_for_display): When looking
 	up a font XID, add the XID_FONT_BIT.  (#348001)
 
