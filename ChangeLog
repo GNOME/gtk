@@ -1,3 +1,8 @@
+2006-07-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkx.h (gdk_font_lookup_for_display): When looking
+	up a font XID, add the XID_FONT_BIT.  (#348001)
+
 2006-07-19  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzView.c ([GdkQuartzView -drawRect:]):

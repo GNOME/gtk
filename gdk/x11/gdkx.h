@@ -187,7 +187,7 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
 #define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))
 
-#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
+#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, ((xid)|XID_FONT_BIT)))
 
 #endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
 
