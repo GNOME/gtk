@@ -135,11 +135,61 @@
 
 -(BOOL)canBecomeMainWindow
 {
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  switch (impl->type_hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_NORMAL:
+    case GDK_WINDOW_TYPE_HINT_DIALOG:
+      return YES;
+      
+    case GDK_WINDOW_TYPE_HINT_MENU:
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_DESKTOP:
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+    case GDK_WINDOW_TYPE_HINT_DND:
+      return NO;
+    }
+  
   return YES;
 }
 
 -(BOOL)canBecomeKeyWindow
 {
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  switch (impl->type_hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_NORMAL:
+    case GDK_WINDOW_TYPE_HINT_DIALOG:
+    case GDK_WINDOW_TYPE_HINT_MENU:
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_DESKTOP:
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+      return YES;
+      
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_DND:
+      return NO;
+    }
+  
   return YES;
 }
 

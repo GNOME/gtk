@@ -52,6 +52,8 @@ struct _GdkWindowImplQuartz
   NSTrackingRectTag tracking_rect;
   GdkQuartzView *view;
 
+  GdkWindowTypeHint type_hint;
+
   /* This is the autorelease pool which is retained
    * while the context is being held 
    */

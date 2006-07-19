@@ -1,5 +1,15 @@
 2006-07-19  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_impl_quartz_init)
+	(gdk_window_set_type_hint, gdk_window_get_type_hint):
+	* gdk/quartz/GdkQuartzWindow.c
+	([GdkQuartzWindow -canBecomeMainWindow])
+	([GdkQuartzWindow -canBecomeKeyWindow]): Implement type hints and
+	use them to determine which windows should be allowed to become
+	main and key windows.
+
+2006-07-19  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	(_gdk_windowing_window_get_pointer): Get the position correctly
 	for the root window. Fixes bug #347976, patch by Dave Vasilevsky.

@@ -134,6 +134,7 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 {
   impl->width = 1;
   impl->height = 1;
+  impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 }
 
 static void
@@ -300,13 +301,10 @@ gdk_window_new (GdkWindow     *parent,
   GdkDrawableImplQuartz *draw_impl;
   GdkVisual *visual;
 
-  GDK_QUARTZ_ALLOC_POOL;
-
   if (parent && GDK_WINDOW_DESTROYED (parent))
-    {
-      GDK_QUARTZ_RELEASE_POOL;
-      return NULL;
-    }
+    return NULL;
+
+  GDK_QUARTZ_ALLOC_POOL;
 
   if (!parent)
     parent = _gdk_root;
@@ -562,13 +560,12 @@ show_window_internal (GdkWindow *window, gboolean raise)
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
 
-  private = (GdkWindowObject *)window;
-
-  if (private->destroyed)
+  if (GDK_WINDOW_DESTROYED (window))
     return;
 
   GDK_QUARTZ_ALLOC_POOL;
 
+  private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   /* FIXME: We need to raise the window (move it to the top in the list) */
@@ -1245,14 +1242,19 @@ gdk_window_set_type_hint (GdkWindow        *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl)->type_hint = hint;
 }
 
 GdkWindowTypeHint
 gdk_window_get_type_hint (GdkWindow *window)
 {
-  /* FIXME: Implement */
-  return GDK_WINDOW_TYPE_HINT_NORMAL;
+  if (GDK_WINDOW_DESTROYED (window))
+    return GDK_WINDOW_TYPE_HINT_NORMAL;
+  
+  return GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl)->type_hint;
 }
 
 void
