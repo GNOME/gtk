@@ -4251,8 +4251,7 @@ msgstr "Thẻ « %s » có ưu tiên không hợp lệ « %s »"
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
-"Yếu ngoài cùng trong văn bản phải là <text_view_markup> (văn bản_xem_mã định "
-"dạng kiểu dáng) không phải <%s>"
+"Yếu ngoài cùng trong văn bản phải là <text_view_markup> không phải <%s>"
 
 #: gtk/gtktextbufferserialize.c:1353
 msgid "A <tags> element has already been specified"
