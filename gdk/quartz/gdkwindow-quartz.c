@@ -974,27 +974,36 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   GdkWindow *toplevel = gdk_window_get_toplevel (window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  NSWindow *nswindow = impl->toplevel;
-  NSPoint point = [nswindow mouseLocationOutsideOfEventStream];
+  NSPoint point;
   int x_tmp, y_tmp;
 
-  /* FIXME: Might need to special-case window being the root window. */
-  
-  /* First flip the y coordinate */
+  /* Must flip the y coordinate. */
+  if (window == _gdk_root)
+    {
+      point = [NSEvent mouseLocation];
+      y_tmp = _gdk_quartz_get_inverted_screen_y (point.y);
+    }
+  else
+    {
+      NSWindow *nswindow = impl->toplevel;
+      point = [nswindow mouseLocationOutsideOfEventStream];
+      y_tmp = impl->height - point.y;
+    }
   x_tmp = point.x;
-  y_tmp = impl->height - point.y;
       
-  while (private != GDK_WINDOW_OBJECT (toplevel)) {
-    x_tmp -= private->x;
-    y_tmp -= private->y;
+  while (private != GDK_WINDOW_OBJECT (toplevel))
+    {
+      x_tmp -= private->x;
+      y_tmp -= private->y;
     
-    private = private->parent;
-  }
+      private = private->parent;
+    }
 
-  if (x)
-    *x = x_tmp;
-  if (y)
-    *y = y_tmp;
+  *x = x_tmp;
+  *y = y_tmp;
+
+  /* FIXME: Implement mask. */
+  *mask = 0;
 
   /* FIXME: Implement return value */
   return NULL;

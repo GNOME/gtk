@@ -1,3 +1,9 @@
+2006-07-19  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(_gdk_windowing_window_get_pointer): Get the position correctly
+	for the root window. Fixes bug #347976, patch by Dave Vasilevsky.
+
 2006-07-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
