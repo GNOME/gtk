@@ -417,7 +417,7 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
       if (!nswindow)
 	return;
 
-      pool= [[NSAutoreleasePool alloc] init];
+      pool = [[NSAutoreleasePool alloc] init];
       types = _gtk_quartz_target_list_to_pasteboard_types (site->target_list);
 
       [nswindow registerForDraggedTypes:types];

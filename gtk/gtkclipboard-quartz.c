@@ -371,8 +371,12 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 {
   GtkClipboardOwner *owner;
   NSArray *types;
+  NSAutoreleasePool *pool;
+
+  pool = [[NSAutoreleasePool alloc] init];
 
   owner = [[GtkClipboardOwner alloc] initWithClipboard:clipboard];
+
   types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
 
   clipboard->user_data = user_data;
@@ -383,6 +387,8 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   clipboard->clear_func = clear_func;
 
   [clipboard->pasteboard declareTypes:types owner:owner];
+
+  [pool release];
 
   return true;
 }

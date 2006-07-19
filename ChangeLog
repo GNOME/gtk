@@ -1,5 +1,12 @@
 2006-07-19  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkdnd-quartz.c (register_types): Reindent.
+	
+	* gtk/gtkclipboard-quartz.c (gtk_clipboard_set_contents): Add
+	autorelease pool.
+
+2006-07-19  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzWindow.c
 	([GdkQuartzWindow -windowDidResignMain:]):
 	* gdk/quartz/gdkevents-quartz.c (_gdk_quartz_update_focus_window):
