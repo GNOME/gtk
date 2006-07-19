@@ -48,7 +48,6 @@
 
 -(void)drawRect:(NSRect)rect 
 {
-  NSRect bounds = [self bounds];
   GdkRectangle gdk_rect;
   GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);

@@ -1,5 +1,11 @@
 2006-07-19  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzView.c ([GdkQuartzView -drawRect:]):
+	* gdk/quartz/gdkpixmap-quartz.c (gdk_pixmap_new): Remove unused
+	variables to fix compiler warnings.
+
+2006-07-19  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c (gdk_window_impl_quartz_init)
 	(gdk_window_set_type_hint, gdk_window_get_type_hint):
 	* gdk/quartz/GdkQuartzWindow.c

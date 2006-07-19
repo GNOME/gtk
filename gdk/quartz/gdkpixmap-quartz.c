@@ -114,7 +114,6 @@ gdk_pixmap_new (GdkDrawable *drawable,
   GdkPixmap *pixmap;
   GdkDrawableImplQuartz *draw_impl;
   GdkPixmapImplQuartz *pix_impl;
-  GdkColormap *cmap;
   gint window_depth;
   CGColorSpaceRef colorspace;
   CGDataProviderRef data_provider;
