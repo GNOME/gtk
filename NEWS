@@ -1,3 +1,67 @@
+Overview of Changes from GTK+ 2.10.0 to 2.10.1
+==============================================
+
+* Drop Pango requirement 1.12.0
+
+* Many fixes and improvements for the OS X 
+  and directfb backends
+
+* The printing framework now supports a subset
+  of the Cups 1.2 custom PPD option spec
+
+* Bug fixes:
+ 142582	Add animation xsetting
+ 346427	xbm loader returns false, fails to set error
+ 346733	GList of visuals is always empty and causes 
+        crashes in gdk_rgb_choose_visual()
+ 347048	crash on using GtkAssistant
+ 164884	GtkTreeView row drag is sometimes started 
+        spuriously
+ 302127	GtkTreeView gets angry when items deleted 
+        from a test_expand_row handler
+ 346092 gtk_tooltip_set_delay documentation wrong
+ 346428	Be robust against broken loaders failing to 
+        set error on failure
+ 346467	gtkwindow state assignments bug
+ 346598	modeline takes too much memory
+ 346603	Context menus only work once
+ 346639	treeview memleak
+ 346668	symbolic colors are broken when specifying 
+        engine
+ 346713 quartz backend is missing functions that 
+        pygtk needs
+ 346721	XBM reading in quartz backend is broken
+ 346836	Tabs jump around when opening menus
+ 347018 missing GDK_QUARTZ_ALLOC/RELEASE_POOL calls
+ 347277	gtk_drag_get_ipc_widget() and window groups
+ 347315	SYNC extension check failing
+ 347902	GtkRange doesn't reliably update stepper 
+        sensitivity
+ 335012 gtkcellrenderertext - gtkeditable: bad 
+        interaction when ypad is set to hi value
+ 337910	gdk_pango_layout_get_clip_region is inefficient
+ 346605	Modifier-key events are not sent
+ 346970	gtkfilechooserbutton leaks an empty list
+ 347032	documentation of gtk_print_context_get_height() 
+        has typo
+ 347037	GObject info missing for GtkRecentManager and 
+        GtkRecentChooser* in gtk-doc API reference
+ 347041 documentation of gtk_paper_size_is_equal() 
+        has a typo
+ 347043	Reference leaks in GtkFileChooserButton
+ 347066	gimp 2.3.9/2.2.12 GTK+ assertion fails on 
+        open file dialog
+ 347211 documentation of gtk_print_job_send() has a 
+        typo
+ 347710	new GtkCellRendererSpin misses a lot of API 
+        documentation
+ 347711	slight glitches in GtkAssistant API documentation
+ 347065	Fix in-line doc typos
+ 311399	relative to the window string can be better 
+
+* Updated translations (bg,bn_IN,cs,de,dz,es,et,
+  eu,fi,fr,gu,he,ko,or,th)
+
 Overview of Changes from GTK+ 2.9.4 to 2.10.0
 =============================================
 

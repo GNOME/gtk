@@ -1,5 +1,7 @@
 2006-07-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkdnd.c: Make the ipc widgets GtkWindows instead
 	of GtkInvisibles, and put them in the same window group
 	as the drag source, to avoid interactions between DND
@@ -198,9 +200,6 @@
 
 	* configure.in: Make the test for the sync extension
 	more robust.  (#347315, Tommi Komulainen)
-
-	* gtk/gtktextiter.c: Declare GtkTextRealIter as a type that 
-	may alias.  (#347585, Ed Catmur)
 
 2006-07-13  Michael Emmel  <mike.emmel@gmail.com>
 
