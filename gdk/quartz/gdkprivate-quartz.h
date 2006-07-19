@@ -103,7 +103,8 @@ void _gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkC
 
 void _gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc);
 
-void _gdk_quartz_update_focus_window (GdkWindow *new_window);
+void _gdk_quartz_update_focus_window (GdkWindow *new_window,
+				      gboolean   got_focus);
 
 gint _gdk_quartz_get_inverted_screen_y (gint y);
 

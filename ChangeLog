@@ -1,3 +1,11 @@
+2006-07-19  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.c
+	([GdkQuartzWindow -windowDidResignMain:]):
+	* gdk/quartz/gdkevents-quartz.c (_gdk_quartz_update_focus_window):
+	Listen to windowDidResignMain notifications and properly update the
+	focus window when windows are unfocused.
+
 2006-07-19  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_init),

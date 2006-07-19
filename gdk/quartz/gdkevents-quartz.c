@@ -748,24 +748,42 @@ create_focus_event (GdkWindow *window,
   return event;
 }
 
+/* Note: Used to both set a new focus window and to unset the old one. */
 void
-_gdk_quartz_update_focus_window (GdkWindow *new_window)
+_gdk_quartz_update_focus_window (GdkWindow *window,
+				 gboolean   got_focus)
 {
+  GdkEvent *event;
+
+  if (got_focus && window == current_keyboard_window)
+    return;
+
   /* FIXME: Don't do this when grabbed */
 
-  if (new_window != current_keyboard_window)
+  if (!got_focus)
     {
-      GdkEvent *event;
+      if (window == current_keyboard_window)
+	{
+	  event = create_focus_event (current_keyboard_window, FALSE);
+	  append_event (event);
+	  g_object_unref (current_keyboard_window);
+	  current_keyboard_window = NULL;
+	}
+    }
 
-      event = create_focus_event (current_keyboard_window, FALSE);
+  if (got_focus)
+    {
+      if (current_keyboard_window)
+	{
+	  event = create_focus_event (current_keyboard_window, FALSE);
+	  append_event (event);
+	  g_object_unref (current_keyboard_window);
+	  current_keyboard_window = NULL;
+	}
+      
+      event = create_focus_event (window, TRUE);
       append_event (event);
-
-      event = create_focus_event (new_window, TRUE);
-      append_event (event);
-
-      g_object_unref (current_keyboard_window);
-
-      current_keyboard_window = g_object_ref (new_window);
+      current_keyboard_window = g_object_ref (window);
     }
 }
 
@@ -1466,7 +1484,6 @@ gdk_event_translate (NSEvent *nsevent)
     case NSRightMouseUp:
     case NSOtherMouseUp:
       event = create_button_event (window, nsevent, x, y);
-
       append_event (event);
       
       /* Ungrab implicit grab */
@@ -1550,17 +1567,14 @@ gdk_event_translate (NSEvent *nsevent)
 void
 _gdk_events_queue (GdkDisplay *display)
 {  
-    if (current_event)
-      {
-	
-	if (!gdk_event_translate (current_event))
-	  {
-	    [NSApp sendEvent:current_event];
-	  }
-	
-	[current_event release];
-	current_event = NULL;
-      }
+  if (current_event)
+    {
+      if (!gdk_event_translate (current_event))
+	[NSApp sendEvent:current_event];
+      
+      [current_event release];
+      current_event = NULL;
+    }
 }
 
 void
