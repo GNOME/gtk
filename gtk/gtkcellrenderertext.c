@@ -131,6 +131,7 @@ struct _GtkCellRendererTextPrivate
   guint language_set : 1;
   guint markup_set : 1;
   guint ellipsize_set : 1;
+  guint align_set : 1;
   
   gulong focus_out_id;
   PangoLanguage *language;
@@ -167,6 +168,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   priv->width_chars = -1;
   priv->wrap_width = -1;
   priv->align = PANGO_ALIGN_LEFT;
+  priv->align_set = FALSE;
 }
 
 static void
@@ -1234,6 +1236,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_ALIGN:
       priv->align = g_value_get_enum (value);
+      priv->align_set = TRUE;
       break;
 
     case PROP_BACKGROUND_SET:
@@ -1433,7 +1436,19 @@ get_layout (GtkCellRendererText *celltext,
       pango_layout_set_wrap (layout, PANGO_WRAP_CHAR);
     }
 
-  pango_layout_set_alignment (layout, priv->align);
+  if (priv->align_set)
+    pango_layout_set_alignment (layout, priv->align);
+  else
+    {
+      PangoAlignment align;
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	align = PANGO_ALIGN_RIGHT;
+      else
+	align = PANGO_ALIGN_LEFT;
+
+      pango_layout_set_alignment (layout, align);
+    }
 
   pango_layout_set_attributes (layout, attr_list);
 

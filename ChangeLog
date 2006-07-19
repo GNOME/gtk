@@ -1,3 +1,11 @@
+2006-07-19  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_init),
+	(gtk_cell_renderer_text_[gs]et_property), (get_layout): add
+	align_set field to keep track whether the align property was
+	set by the user, if not we will use the alignment by looking
+	at the direction of the widget. (#157439)
+
 2006-07-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/file/gtkprintbackendfile.c 
