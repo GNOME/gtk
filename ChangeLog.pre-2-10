@@ -1,3 +1,11 @@
+2006-07-19  Federico Mena Quintero  <federico@novell.com>
+
+	* tests/autotestfilechooser.c (test_black_box): Argh, initialize
+	"passed"!
+	(set_filename_timeout_cb): Renamed from timeout_cb().
+	(test_confirm_overwrite): New function, test confirmation before
+	overwriting a file in SAVE mode.
+
 2006-07-20  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_finalize):
