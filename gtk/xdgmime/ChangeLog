@@ -1,5 +1,8 @@
 2006-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* xdgmime.c (xdg_mime_shutdown): Unref the caches.
+	Patch by Yevgen Muntyan, bugs.freedesktop.org #7496
+
 	* xdgmimemagic.c: 
 	* xdgmime.c: 
 	* xdgmime.h: Add xdg_init-free versions of some
