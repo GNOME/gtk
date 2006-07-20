@@ -369,17 +369,23 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
 {
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
-  if (layout->ltr_context)
-    g_object_unref (ltr_context);
+  if (layout->ltr_context != ltr_context)
+    {
+      if (layout->ltr_context)
+	g_object_unref (layout->ltr_context);
 
-  layout->ltr_context = ltr_context;
-  g_object_ref (ltr_context);
+      layout->ltr_context = ltr_context;
+      g_object_ref (layout->ltr_context);
+    }
 
-  if (layout->rtl_context)
-    g_object_unref (rtl_context);
+  if (layout->rtl_context != rtl_context)
+    {
+      if (layout->rtl_context)
+	g_object_unref (layout->rtl_context);
 
-  layout->rtl_context = rtl_context;
-  g_object_ref (rtl_context);
+      layout->rtl_context = rtl_context;
+      g_object_ref (layout->rtl_context);
+    }
 
   DV (g_print ("invalidating all due to new pango contexts (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);

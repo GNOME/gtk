@@ -1,5 +1,8 @@
 2006-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_set_contexts): Fix
+	messed up refcounting.  (#348090, Chris Wilson)
+
 	* gtk/gtkicontheme.h: 
 	* gtk/gtkicontheme.c (_gtk_icon_theme_ensure_builtin_cache): 
 	Export this privately.
