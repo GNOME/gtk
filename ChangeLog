@@ -1,5 +1,8 @@
 2006-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_destroy): Just remove the scroll
+	timeout here, don't access settings.  (#348095, Chris Wilson)
+
 	* gtk/gtktextlayout.c (gtk_text_layout_set_contexts): Fix
 	messed up refcounting.  (#348090, Chris Wilson)
 

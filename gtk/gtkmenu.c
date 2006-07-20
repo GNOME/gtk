@@ -910,7 +910,7 @@ gtk_menu_destroy (GtkObject *object)
 
   menu = GTK_MENU (object);
 
-  gtk_menu_stop_scrolling (menu);
+  gtk_menu_remove_scroll_timeout (menu);
   
   data = g_object_get_data (G_OBJECT (object), attach_data_key);
   if (data)
@@ -3956,13 +3956,14 @@ gtk_menu_stop_scrolling (GtkMenu *menu)
 {
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (menu));
   gboolean touchscreen_mode;
+  gboolean was_scrolling;
 
   gtk_menu_remove_scroll_timeout (menu);
-
+  
   g_object_get (G_OBJECT (settings),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
+		"gtk-touchscreen-mode", &touchscreen_mode,
+		NULL);
+  
   if (!touchscreen_mode)
     {
       menu->upper_arrow_prelight = FALSE;
