@@ -1566,9 +1566,13 @@ render_fallback_image (GtkStyle          *style,
 
   if (fallback_source.type == GTK_ICON_SOURCE_EMPTY)
     {
-      GdkPixbuf *pixbuf = _gtk_icon_cache_get_icon (_builtin_cache,
-						    GTK_STOCK_MISSING_IMAGE,
-						    "24");
+      GdkPixbuf *pixbuf;
+
+      _gtk_icon_theme_ensure_builtin_cache ();
+
+      pixbuf = _gtk_icon_cache_get_icon (_builtin_cache,
+					 GTK_STOCK_MISSING_IMAGE,
+					 "24");
       gtk_icon_source_set_pixbuf (&fallback_source, pixbuf);
       g_object_unref (pixbuf);
     }

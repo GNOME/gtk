@@ -169,6 +169,7 @@ G_CONST_RETURN gchar *gtk_icon_info_get_display_name  (GtkIconInfo   *icon_info)
 
 /* Non-public methods */
 void _gtk_icon_theme_check_reload                     (GdkDisplay *display);
+void _gtk_icon_theme_ensure_builtin_cache             (void);
 
 G_END_DECLS
 

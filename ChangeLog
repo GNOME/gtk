@@ -1,3 +1,13 @@
+2006-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.h: 
+	* gtk/gtkicontheme.c (_gtk_icon_theme_ensure_builtin_cache): 
+	Export this privately.
+
+	* gtk/gtkiconfactory.c (render_fallback_image): And call it
+	here to initialize the builtin cache before using it.  (#348063,
+	Diego Pettenò)
+
 2006-07-19  Federico Mena Quintero  <federico@novell.com>
 
 	* tests/autotestfilechooser.c (test_black_box): Argh, initialize

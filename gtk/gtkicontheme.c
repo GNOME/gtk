@@ -1129,7 +1129,7 @@ load_themes (GtkIconTheme *icon_theme)
   priv->last_stat_time = tv.tv_sec;
 }
 
-static void
+void
 _gtk_icon_theme_ensure_builtin_cache (void)
 {
   static gboolean initialized = FALSE;
