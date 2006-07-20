@@ -96,8 +96,16 @@ int          xdg_mime_register_reload_callback     (XdgMimeCallback  callback,
 						    XdgMimeDestroy   destroy);
 void         xdg_mime_remove_callback              (int              callback_id);
 
+   /* Private versions of functions that don't call xdg_mime_init () */
+int          _xdg_mime_mime_type_equal             (const char *mime_a,
+						    const char *mime_b);
+int          _xdg_mime_media_type_equal            (const char *mime_a,
+						    const char *mime_b);
+int          _xdg_mime_mime_type_subclass          (const char *mime,
+						    const char *base);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 #endif /* __XDG_MIME_H__ */

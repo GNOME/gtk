@@ -664,7 +664,7 @@ _xdg_mime_magic_lookup_data (XdgMimeMagic *mime_magic,
     {
       if (_xdg_mime_magic_match_compare_to_data (match, data, len))
 	{
-	  if ((mime_type == NULL) || (xdg_mime_mime_type_subclass (match->mime_type, mime_type))) {
+	  if ((mime_type == NULL) || (_xdg_mime_mime_type_subclass (match->mime_type, mime_type))) {
 	    mime_type = match->mime_type;
 	  }
 	}
@@ -673,7 +673,7 @@ _xdg_mime_magic_lookup_data (XdgMimeMagic *mime_magic,
 	  for (n = 0; n < n_mime_types; n++)
 	    {
 	      if (mime_types[n] && 
-		  xdg_mime_mime_type_equal (mime_types[n], match->mime_type))
+		  _xdg_mime_mime_type_equal (mime_types[n], match->mime_type))
 		mime_types[n] = NULL;
 	    }
 	}

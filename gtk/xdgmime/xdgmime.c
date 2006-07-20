@@ -602,11 +602,9 @@ xdg_mime_get_max_buffer_extents (void)
 }
 
 const char *
-xdg_mime_unalias_mime_type (const char *mime_type)
+_xdg_mime_unalias_mime_type (const char *mime_type)
 {
   const char *lookup;
-
-  xdg_mime_init ();
 
   if (_caches)
     return _xdg_mime_cache_unalias_mime_type (mime_type);
@@ -617,21 +615,36 @@ xdg_mime_unalias_mime_type (const char *mime_type)
   return mime_type;
 }
 
+const char *
+xdg_mime_unalias_mime_type (const char *mime_type)
+{
+  xdg_mime_init ();
+
+  return _xdg_mime_unalias_mime_type (mime_type);
+}
+
 int
-xdg_mime_mime_type_equal (const char *mime_a,
-			  const char *mime_b)
+_xdg_mime_mime_type_equal (const char *mime_a,
+			   const char *mime_b)
 {
   const char *unalias_a, *unalias_b;
 
-  xdg_mime_init ();
-
-  unalias_a = xdg_mime_unalias_mime_type (mime_a);
-  unalias_b = xdg_mime_unalias_mime_type (mime_b);
+  unalias_a = _xdg_mime_unalias_mime_type (mime_a);
+  unalias_b = _xdg_mime_unalias_mime_type (mime_b);
 
   if (strcmp (unalias_a, unalias_b) == 0)
     return 1;
 
   return 0;
+}
+
+int
+xdg_mime_mime_type_equal (const char *mime_a,
+			  const char *mime_b)
+{
+  xdg_mime_init ();
+
+  return _xdg_mime_mime_type_equal (mime_a, mime_b);
 }
 
 int
@@ -668,19 +681,17 @@ xdg_mime_is_super_type (const char *mime)
 #endif
 
 int
-xdg_mime_mime_type_subclass (const char *mime,
-			     const char *base)
+_xdg_mime_mime_type_subclass (const char *mime,
+			      const char *base)
 {
   const char *umime, *ubase;
   const char **parents;
 
-  xdg_mime_init ();
-
   if (_caches)
     return _xdg_mime_cache_mime_type_subclass (mime, base);
 
-  umime = xdg_mime_unalias_mime_type (mime);
-  ubase = xdg_mime_unalias_mime_type (base);
+  umime = _xdg_mime_unalias_mime_type (mime);
+  ubase = _xdg_mime_unalias_mime_type (base);
 
   if (strcmp (umime, ubase) == 0)
     return 1;
@@ -703,11 +714,20 @@ xdg_mime_mime_type_subclass (const char *mime,
   parents = _xdg_mime_parent_list_lookup (parent_list, umime);
   for (; parents && *parents; parents++)
     {
-      if (xdg_mime_mime_type_subclass (*parents, ubase))
+      if (_xdg_mime_mime_type_subclass (*parents, ubase))
 	return 1;
     }
 
   return 0;
+}
+
+int
+xdg_mime_mime_type_subclass (const char *mime,
+			     const char *base)
+{
+  xdg_mime_init ();
+
+  return _xdg_mime_mime_type_subclass (mime, base);
 }
 
 char **
@@ -741,7 +761,7 @@ xdg_mime_get_mime_parents (const char *mime)
 
   xdg_mime_init ();
 
-  umime = xdg_mime_unalias_mime_type (mime);
+  umime = _xdg_mime_unalias_mime_type (mime);
 
   return _xdg_mime_parent_list_lookup (parent_list, umime);
 }
