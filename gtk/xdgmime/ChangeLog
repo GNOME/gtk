@@ -1,5 +1,14 @@
 2006-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix a thinko that leads to constantly reloading
+	the mime data if a mime.cache is present.  Patch
+	by Yevgen Muntyan, bugs.freedesktop.org #7495
+	
+	* xdgmime.c (xdg_check_dir): Look for mime.cache first.
+	(xdg_check_file): Report existance of the file separately.
+	
+2006-07-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* xdgmime.c (xdg_mime_shutdown): Unref the caches.
 	Patch by Yevgen Muntyan, bugs.freedesktop.org #7496
 
