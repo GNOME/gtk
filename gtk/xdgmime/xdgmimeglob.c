@@ -308,11 +308,13 @@ _xdg_glob_hash_node_lookup_file_name (XdgGlobHashNode *glob_hash_node,
 	  if (*file_name == '\000')
 	    {
 	      n = 0;
-	      mime_types[n++] = node->mime_type;
+              if (node->mime_type)
+	        mime_types[n++] = node->mime_type;
 	      node = node->child;
 	      while (n < n_mime_types && node && node->character == 0)
 		{
-		  mime_types[n++] = node->mime_type;
+                  if (node->mime_type)
+		    mime_types[n++] = node->mime_type;
 		  node = node->next;
 		}
 	    }
