@@ -290,6 +290,72 @@ _gdk_quartz_get_inverted_screen_y (gint y)
   return rect.size.height - y;
 }
 
+static GdkWindow *
+find_child_window_by_point_helper (GdkWindow *window,
+				   int        x,
+				   int        y,
+				   int        x_offset,
+				   int        y_offset,
+				   int       *x_ret,
+				   int       *y_ret)
+{
+  GList *l;
+
+  for (l = GDK_WINDOW_OBJECT (window)->children; l; l = l->next)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (l->data);
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+      int temp_x, temp_y;
+
+      if (!GDK_WINDOW_IS_MAPPED (private))
+	continue;
+
+      temp_x = x_offset + private->x;
+      temp_y = y_offset + private->y;
+      
+      /* FIXME: Are there off by one errors here? */
+      if (x >= temp_x && y >= temp_y &&
+	  x < temp_x + impl->width && y < temp_y + impl->height) 
+	{
+	  *x_ret = x - x_offset - private->x;
+	  *y_ret = y - y_offset - private->y;
+	  
+	  /* Look for child windows */
+	  return find_child_window_by_point_helper (GDK_WINDOW (l->data),
+						    x, y,
+						    temp_x, temp_y,
+						    x_ret, y_ret);
+	}
+    }
+
+  return window;
+}
+
+/* Given a toplevel window and coordinates, returns the window
+ * in which the point is. Note that x and y should be non-flipped
+ * (and relative the toplevel), while the returned positions are
+ * flipped.
+ */
+GdkWindow *
+_gdk_quartz_find_child_window_by_point (GdkWindow *toplevel,
+					int        x,
+					int        y,
+					int       *x_ret,
+					int       *y_ret)
+{
+  GdkWindowObject *private = (GdkWindowObject *)toplevel;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  /* If the point is in the title bar, ignore it */
+  if (y > impl->height)
+    return NULL;
+
+  /* First flip the y coordinate */
+  y = impl->height - y;
+
+  return find_child_window_by_point_helper (toplevel, x, y, 0, 0, x_ret, y_ret);
+}
+
 GdkWindow *
 gdk_window_new (GdkWindow     *parent,
 		GdkWindowAttr *attributes,
@@ -435,7 +501,10 @@ gdk_window_new (GdkWindow     *parent,
 	  style_mask = NSBorderlessWindowMask;
 	  break;
 	default:
-	  style_mask = NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask;
+	  style_mask = (NSTitledWindowMask |
+			NSClosableWindowMask |
+			NSMiniaturizableWindowMask |
+			NSResizableWindowMask);
 	} 
 
 	impl->toplevel = [[GdkQuartzWindow alloc] initWithContentRect:content_rect 
@@ -450,7 +519,6 @@ gdk_window_new (GdkWindow     *parent,
 	  [impl->toplevel setLevel:NSPopUpMenuWindowLevel];
 
 	gdk_window_set_title (window, title);
-
 	  
 	if (draw_impl->colormap == gdk_screen_get_rgba_colormap (_gdk_screen))
 	  {
@@ -961,6 +1029,7 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   _gdk_windowing_window_get_pointer (_gdk_display, _gdk_root, x, y, mask);
 }
 
+/* Returns coordinates relative to the upper left corner of window. */
 GdkWindow *
 _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   GdkWindow       *window,
@@ -968,11 +1037,23 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   gint            *y,
 				   GdkModifierType *mask)
 {
-  GdkWindow *toplevel = gdk_window_get_toplevel (window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkWindow *toplevel;
+  GdkWindowImplQuartz *impl;
+  GdkWindowObject *private;
   NSPoint point;
-  int x_tmp, y_tmp;
+  gint x_tmp, y_tmp;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    {
+      *x = 0;
+      *y = 0;
+      *mask = 0;
+      return NULL;
+    }
+  
+  toplevel = gdk_window_get_toplevel (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+  private = GDK_WINDOW_OBJECT (window);
 
   /* Must flip the y coordinate. */
   if (window == _gdk_root)
@@ -987,7 +1068,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       y_tmp = impl->height - point.y;
     }
   x_tmp = point.x;
-      
+
   while (private != GDK_WINDOW_OBJECT (toplevel))
     {
       x_tmp -= private->x;
@@ -996,14 +1077,14 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       private = private->parent;
     }
 
+  /* FIXME: Implement mask. */
   *x = x_tmp;
   *y = y_tmp;
-
-  /* FIXME: Implement mask. */
   *mask = 0;
 
-  /* FIXME: Implement return value */
-  return NULL;
+  return _gdk_quartz_find_child_window_by_point (window,
+						 point.x, point.y,
+						 &x_tmp, &y_tmp);
 }
 
 void
@@ -1020,8 +1101,12 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,
 				  gint       *win_y)
 {
-  /* FIXME: Implement */
-  return NULL;
+  GdkModifierType mask;
+
+  return _gdk_windowing_window_get_pointer (display,
+					    _gdk_root,
+					    win_x, win_y,
+					    &mask);
 }
 
 GdkEventMask  

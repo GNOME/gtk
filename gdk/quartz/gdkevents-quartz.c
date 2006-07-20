@@ -52,6 +52,8 @@ static gboolean pointer_grab_implicit;
 GdkWindow *_gdk_quartz_keyboard_grab_window;
 static gboolean keyboard_grab_owner_events;
 
+static void append_event (GdkEvent *event);
+
 static gboolean
 gdk_event_prepare (GSource *source,
 		   gint    *timeout)
@@ -345,19 +347,17 @@ generate_grab_broken_event (GdkWindow *window,
 {
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GdkEvent event;
-  
-      event.type = GDK_GRAB_BROKEN;
-      event.grab_broken.window = window;
-      event.grab_broken.send_event = 0;
-      event.grab_broken.keyboard = keyboard;
-      event.grab_broken.implicit = implicit;
-      event.grab_broken.grab_window = grab_window;
+      GdkEvent *event = gdk_event_new (GDK_GRAB_BROKEN);
+
+      event->grab_broken.window = window;
+      event->grab_broken.send_event = 0;
+      event->grab_broken.keyboard = keyboard;
+      event->grab_broken.implicit = implicit;
+      event->grab_broken.grab_window = grab_window;
       
-      gdk_event_put (&event);
+      append_event (event);
     }
 }
-
 
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow  *window,
@@ -421,7 +421,6 @@ pointer_ungrab_internal (gboolean implicit)
   _gdk_quartz_pointer_grab_window = NULL;
   /* FIXME: Send crossing events */
 }
-
 
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
@@ -564,69 +563,17 @@ apply_filters (GdkWindow  *window,
   return result;
 }
 
-static GdkWindow *
-find_child_window_by_point_helper (GdkWindow *window, int x, int y, int x_offset, int y_offset, int *x_ret, int *y_ret)
-{
-  GList *children;
-
-  for (children = GDK_WINDOW_OBJECT (window)->children;
-       children; children = children->next)
-    {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (children->data);
-      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-      int temp_x, temp_y;
-
-      if (!GDK_WINDOW_IS_MAPPED (private))
-	continue;
-
-      temp_x = x_offset + private->x;
-      temp_y = y_offset + private->y;
-
-      /* FIXME: Are there off by one errors here? */
-      if (x >= temp_x && y >= temp_y &&
-	  x < temp_x + impl->width && y < temp_y + impl->height) 
-	{
-	  *x_ret = x - x_offset - private->x;
-	  *y_ret = y - y_offset - private->y;
-	  
-	  /* Look for child windows */
-	  return find_child_window_by_point_helper (GDK_WINDOW (children->data), x, y, temp_x, temp_y, x_ret, y_ret);
-	}
-    }
-  
-  return window;
-}
-
-/* Given a toplevel window and coordinates, returns the window
- * in which the point is.
- */
-static GdkWindow *
-find_child_window_by_point (GdkWindow *toplevel, int x, int y, int *x_ret, int *y_ret)
-{
-  GdkWindowObject *private = (GdkWindowObject *)toplevel;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-
-  /* If the point is in the title bar, ignore it */
-  if (y > impl->height)
-    return NULL;
-
-  /* FIXME: Check this for off-by-one errors */
-  /* First flip the y coordinate */
-  y = impl->height - y;
-
-  return find_child_window_by_point_helper (toplevel, x, y, 0, 0, x_ret, y_ret);
-}
-
 /* Returns the current keyboard window */
 static GdkWindow *
 find_current_keyboard_window (void)
 {
-  /* FIXME: Handle keyboard grabs */
-
+  if (_gdk_quartz_keyboard_grab_window && keyboard_grab_owner_events)
+    return _gdk_quartz_keyboard_grab_window;
+  
   return current_keyboard_window;
 }
 
-/* this function checks if the passed in window is interested in the
+/* This function checks if the passed in window is interested in the
  * event mask. If so, it's returned. If not, the event can be propagated
  * to its parent.
  */
@@ -679,9 +626,7 @@ convert_mouse_button_number (int button)
 static GdkEventMask
 get_event_mask_from_ns_event (NSEvent *nsevent)
 {
-  NSEventType event_type = [nsevent type];
-
-  switch (event_type)
+  switch ([nsevent type])
     {
     case NSLeftMouseDown:
     case NSRightMouseDown:
@@ -692,23 +637,27 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
     case NSOtherMouseUp:
       return GDK_BUTTON_RELEASE_MASK;
     case NSMouseMoved:
-      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK;
+      return GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK;
     case NSScrollWheel:
       /* Since applications that want button press events can get
        * scroll events on X11 (since scroll wheel events are really
        * button press events there), we need to use GDK_BUTTON_PRESS_MASK too.
        */
-      return GDK_SCROLL_MASK|GDK_BUTTON_PRESS_MASK;
+      return GDK_SCROLL_MASK | GDK_BUTTON_PRESS_MASK;
     case NSLeftMouseDragged:
-      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK|
+      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK |
 	     GDK_BUTTON_MOTION_MASK|GDK_BUTTON1_MOTION_MASK;
     case NSRightMouseDragged:
-      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK|
+      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK |
 	     GDK_BUTTON_MOTION_MASK|GDK_BUTTON3_MOTION_MASK;
     case NSOtherMouseDragged:
       {
-	GdkEventMask mask = GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK|
-	                    GDK_BUTTON_MOTION_MASK;
+	GdkEventMask mask;
+
+	mask = (GDK_POINTER_MOTION_MASK |
+		GDK_POINTER_MOTION_HINT_MASK |
+		GDK_BUTTON_MOTION_MASK);
+
 	if (convert_mouse_button_number ([nsevent buttonNumber]) == 2)
 	  mask |= GDK_BUTTON2_MOTION_MASK;
 
@@ -718,14 +667,17 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
     case NSKeyUp:
     case NSFlagsChanged:
       {
-        GdkEventType type = _gdk_quartz_key_event_type (nsevent);
-        switch (type)
-          {
-            case GDK_KEY_PRESS:   return GDK_KEY_PRESS_MASK;
-            case GDK_KEY_RELEASE: return GDK_KEY_RELEASE_MASK;
-            case GDK_NOTHING:     return 0;
-            default: g_assert_not_reached ();
-          }
+        switch (_gdk_quartz_key_event_type (nsevent))
+	  {
+	  case GDK_KEY_PRESS:
+	    return GDK_KEY_PRESS_MASK;
+	  case GDK_KEY_RELEASE:
+	    return GDK_KEY_RELEASE_MASK;
+	  case GDK_NOTHING:
+	    return 0;
+	  default:
+	    g_assert_not_reached ();
+	  }
       }
     default:
       g_assert_not_reached ();
@@ -742,7 +694,6 @@ create_focus_event (GdkWindow *window,
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = window;
-  /* FIXME: send event */
   event->focus_change.in = in;
 
   return event;
@@ -821,8 +772,11 @@ get_keyboard_modifiers_from_nsevent (NSEvent *nsevent)
 }
 
 static void
-convert_window_coordinates_to_root (GdkWindow *window, gdouble x, gdouble y,
-				    gdouble *x_root, gdouble *y_root)
+convert_window_coordinates_to_root (GdkWindow *window,
+				    gdouble    x,
+				    gdouble    y,
+				    gdouble   *x_root,
+				    gdouble   *y_root)
 {
   gint ox, oy;
 
@@ -1017,7 +971,6 @@ synthesize_crossing_events (GdkWindow      *window,
   _gdk_quartz_update_mouse_window (window);
 }
 
-
 void 
 _gdk_quartz_send_map_events (GdkWindow *window)
 {
@@ -1044,7 +997,9 @@ _gdk_quartz_send_map_events (GdkWindow *window)
 GdkWindow *
 _gdk_quartz_get_mouse_window (void)
 {
-  /* FIXME: What about grabs? */
+  if (_gdk_quartz_pointer_grab_window)
+    return _gdk_quartz_pointer_grab_window;
+  
   return current_mouse_window;
 }
 
@@ -1106,7 +1061,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
       NSPoint point = [nsevent locationInWindow];
       GdkWindow *mouse_window;
 
-      mouse_window = find_child_window_by_point (toplevel, point.x, point.y, x, y);
+      mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
 
       if (!mouse_window)
 	mouse_window = _gdk_root;
@@ -1152,8 +1107,11 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
 		int tempx, tempy;
-		GdkWindowObject *w = GDK_WINDOW_OBJECT (_gdk_quartz_pointer_grab_window);
-		GdkWindowObject *grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window));
+		GdkWindowObject *w;
+		GdkWindowObject *grab_toplevel;
+
+		w = GDK_WINDOW_OBJECT (_gdk_quartz_pointer_grab_window);
+		grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window));
 
 		tempx = point.x;
 		tempy = GDK_WINDOW_IMPL_QUARTZ (grab_toplevel->impl)->height -
@@ -1182,9 +1140,9 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	  {
 	    mouse_window = _gdk_root;
 	  }
-	else 
+        else
 	  {
-	    mouse_window = find_child_window_by_point (toplevel, point.x, point.y, x, y);
+	    mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
 	  }
 
 	event_mask = get_event_mask_from_ns_event (nsevent);
@@ -1202,7 +1160,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 
 	toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
 
-	mouse_window = find_child_window_by_point (toplevel, point.x, point.y, x, y);
+	mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
 	
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
 
@@ -1453,7 +1411,6 @@ gdk_event_translate (NSEvent *nsevent)
     }
 
   window = find_window_for_event (nsevent, &x, &y);
-
   if (!window)
     return FALSE;
 
@@ -1548,15 +1505,17 @@ gdk_event_translate (NSEvent *nsevent)
     case NSKeyUp:
     case NSFlagsChanged:
       {
-        GdkEventType type = _gdk_quartz_key_event_type (nsevent);
+        GdkEventType type;
+
+        type = _gdk_quartz_key_event_type (nsevent);
         if (type == GDK_NOTHING)
           return FALSE;
         
         event = create_key_event (window, nsevent, type);
         append_event (event);
         return TRUE;
-        break;
       }
+      break;
     default:
       NSLog(@"Untranslated: %@", nsevent);
     }
@@ -1580,19 +1539,19 @@ _gdk_events_queue (GdkDisplay *display)
 void
 gdk_flush (void)
 {
-  gdk_display_flush (NULL);
+  /* Not supported. */
 }
 
 void
 gdk_display_sync (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* Not supported. */
 }
 
 void
 gdk_display_flush (GdkDisplay *display)
 {
-  /* FIXME: Implement */
+  /* Not supported. */
 }
 
 gboolean
@@ -1600,13 +1559,15 @@ gdk_event_send_client_message_for_display (GdkDisplay      *display,
 					   GdkEvent        *event,
 					   GdkNativeWindow  winid)
 {
+  /* Not supported. */
   return FALSE;
 }
 
 void
 gdk_screen_broadcast_client_message (GdkScreen *screen,
-                     				     GdkEvent  *event)
+				     GdkEvent  *event)
 {
+  /* Not supported. */
 }
 
 gboolean
@@ -1616,7 +1577,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
 {
   if (strcmp (name, "gtk-font-name") == 0)
     {
-	   /* FIXME: This should be fetched from the correct preference value */
+      /* FIXME: This should be fetched from the correct preference value */
       g_value_set_string (value, "Lucida Grande 13");
       return TRUE;
     }

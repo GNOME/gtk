@@ -103,15 +103,19 @@ void _gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkC
 
 void _gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc);
 
-void _gdk_quartz_update_focus_window (GdkWindow *new_window,
-				      gboolean   got_focus);
+gint        _gdk_quartz_get_inverted_screen_y      (gint y);
 
-gint _gdk_quartz_get_inverted_screen_y (gint y);
+GdkWindow * _gdk_quartz_find_child_window_by_point (GdkWindow *toplevel,
+						    int        x,
+						    int        y,
+						    int       *x_ret,
+						    int       *y_ret);
 
-GdkWindow *_gdk_quartz_get_mouse_window (void);
-void _gdk_quartz_update_mouse_window (GdkWindow *window);
-
-void _gdk_quartz_update_cursor (GdkWindow *window);
+void        _gdk_quartz_update_focus_window (GdkWindow *new_window,
+					     gboolean   got_focus);
+GdkWindow *_gdk_quartz_get_mouse_window     (void);
+void       _gdk_quartz_update_mouse_window  (GdkWindow *window);
+void       _gdk_quartz_update_cursor        (GdkWindow *window);
 
 GdkImage *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
 				     GdkImage    *image,

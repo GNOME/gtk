@@ -1,3 +1,26 @@
+2006-07-20  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (generate_grab_broken_event):
+	Append the event to the queue instead of using gdk_event_put.
+	(_gdk_quartz_get_mouse_window, find_current_keyboard_window):
+	Handle grabs.
+	(get_event_mask_from_ns_event, create_focus_event)
+	(convert_window_coordinates_to_root, find_window_for_event)
+	(gdk_event_translate): Improve readability (style changes).
+	(gdk_flush, gdk_display_sync, gdk_display_flush)
+	(gdk_event_send_client_message_for_display),
+	(gdk_screen_broadcast_client_message): Remove FIXMEs.	
+	(gdk_screen_get_setting): Reindent.
+	Also move find_child_window_by_point to gdkwindow-quartz.c.
+	
+	* gdk/quartz/gdkwindow-quartz.c:
+	(find_child_window_by_point_helper),
+	(_gdk_quartz_find_child_window_by_point): Move here from 
+	gdkevents-quartz.c
+	(_gdk_windowing_window_get_pointer): Handle destroyed windows and
+	imlement the return value.
+	(_gdk_windowing_window_at_pointer): Implement.
+
 2006-07-19  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkdnd-quartz.c (register_types): Reindent.
