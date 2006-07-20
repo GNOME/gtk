@@ -1,3 +1,9 @@
+2006-07-20  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c:
+	(gtk_recent_chooser_menu_finalize): Correctly chain up the
+	finalization vfunc. (#348089, Chris Wilson)
+
 2006-07-20  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (generate_grab_broken_event):

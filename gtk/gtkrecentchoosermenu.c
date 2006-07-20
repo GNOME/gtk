@@ -268,7 +268,7 @@ gtk_recent_chooser_menu_finalize (GObject *object)
   if (priv->current_filter)
     g_object_unref (priv->current_filter);
   
-  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->finalize;
+  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->finalize (gobject);
 }
 
 static GObject *
