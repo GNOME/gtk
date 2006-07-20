@@ -1,3 +1,8 @@
+2006-07-20  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_finalize):
+	fix typo to make it compile again.
+
 2006-07-20  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c:
