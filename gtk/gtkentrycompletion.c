@@ -566,7 +566,7 @@ gtk_entry_completion_finalize (GObject *object)
     gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
 
   if (priv->actions)
-    g_object_unref (priv->actions, priv->actions);
+    g_object_unref (priv->actions);
   if (priv->action_view)
     g_object_unref (priv->action_view);
 

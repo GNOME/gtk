@@ -1,3 +1,8 @@
+2006-07-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize):
+	remove accidential 2nd parameter to g_object_unref().
+
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize):
