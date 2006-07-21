@@ -2611,6 +2611,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 			   page->child, page_num);
 
 	  priv->has_scrolled = FALSE;
+          priv->during_reorder = FALSE; 
 	}
 
       hide_drag_window (notebook, priv, page);

@@ -1,3 +1,9 @@
+2006-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): Unset
+	the during_reorder flag.  (#348049, Sven Herzberg, patch
+	by Benjamin Otte)
+
 2006-07-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_destroy): Just remove the scroll
