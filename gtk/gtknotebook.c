@@ -4442,10 +4442,8 @@ gtk_notebook_paint (GtkWidget    *widget,
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, notebook->cur_page) ||
       !GTK_WIDGET_MAPPED (notebook->cur_page->tab_label))
     {
-      gtk_paint_box (widget->style, widget->window,
-		     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		     area, widget, "notebook",
-		     x, y, width, height);
+      gap_x = 0;
+      gap_width = 0;
     }
   else
     {
@@ -4472,13 +4470,12 @@ gtk_notebook_paint (GtkWidget    *widget,
 	  step = STEP_PREV;
 	  break;
 	}
-
-      gtk_paint_box_gap (widget->style, widget->window,
-			 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-			 area, widget, "notebook",
-			 x, y, width, height,
-			 tab_pos, gap_x, gap_width);
     }
+  gtk_paint_box_gap (widget->style, widget->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		     area, widget, "notebook",
+		     x, y, width, height,
+		     tab_pos, gap_x, gap_width);
 
   showarrow = FALSE;
   children = gtk_notebook_search_page (notebook, NULL, step, TRUE);
