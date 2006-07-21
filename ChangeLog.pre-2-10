@@ -1,3 +1,8 @@
+2006-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_get_preedit_string): 
+	0-terminate outbuf in all cases.  (#348227, Nguyen Thái Ngoc Duy)
+
 2006-07-21  Michael Natterer  <mitch@imendio.com>
 
 	Enable symbolic colors and color expressions in style

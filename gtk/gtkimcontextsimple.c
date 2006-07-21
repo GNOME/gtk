@@ -1540,17 +1540,12 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 	}
 
       g_assert (len < 25);
-      outbuf[len] = '\0';      
     }
   else if (context_simple->tentative_match)
-    {
-      len = g_unichar_to_utf8 (context_simple->tentative_match, outbuf);
-    }
-  else
-    {
-      outbuf[0] = '\0';
-    }
+    len = g_unichar_to_utf8 (context_simple->tentative_match, outbuf);
       
+  outbuf[len] = '\0';      
+
   if (str)
     *str = g_strdup (outbuf);
 
