@@ -2284,9 +2284,7 @@ gtk_rc_style_to_style (GtkRcContext *context,
   style = GTK_RC_STYLE_GET_CLASS (rc_style)->create_style (rc_style);
   _gtk_style_init_for_settings (style, context->settings);
 
-  style->rc_style = rc_style;
-
-  gtk_rc_style_ref (rc_style);
+  style->rc_style = g_object_ref (rc_style);
   
   GTK_STYLE_GET_CLASS (style)->init_from_rc (style, rc_style);  
 

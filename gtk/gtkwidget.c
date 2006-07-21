@@ -4887,7 +4887,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
  * 
  * Return value: the modifier style for the widget. This rc style is
  *   owned by the widget. If you want to keep a pointer to value this
- *   around, you must add a refcount using gtk_rc_style_ref().
+ *   around, you must add a refcount using g_object_ref().
  **/
 GtkRcStyle *
 gtk_widget_get_modifier_style (GtkWidget      *widget)

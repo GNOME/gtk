@@ -1614,10 +1614,10 @@ gtk_style_real_copy (GtkStyle *style,
   style->ythickness = src->ythickness;
 
   if (style->rc_style)
-    gtk_rc_style_unref (style->rc_style);
+    g_object_unref (style->rc_style);
   style->rc_style = src->rc_style;
   if (src->rc_style)
-    gtk_rc_style_ref (src->rc_style);
+    g_object_ref (src->rc_style);
 
   /* don't copy, just clear cache */
   clear_property_cache (style);
