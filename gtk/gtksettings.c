@@ -524,6 +524,8 @@ gtk_settings_finalize (GObject *object)
     g_value_unset (&settings->property_values[i].value);
   g_free (settings->property_values);
 
+  _gtk_rc_context_destroy (settings);
+  
   g_datalist_clear (&settings->queued_settings);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
@@ -551,7 +553,8 @@ gtk_settings_get_for_screen (GdkScreen *screen)
     {
       settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
       settings->screen = screen;
-      g_object_set_data (G_OBJECT (screen), I_("gtk-settings"), settings);
+      g_object_set_data_full (G_OBJECT (screen), I_("gtk-settings"), 
+			      settings, g_object_unref);
 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
       settings_update_double_click (settings);

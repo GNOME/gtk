@@ -720,6 +720,70 @@ gtk_rc_context_get (GtkSettings *settings)
   return settings->rc_context;
 }
 
+static void 
+gtk_rc_clear_rc_files (GtkRcContext *context)
+{
+  GSList *list;
+
+  list = context->rc_files;
+  while (list)
+    {
+      GtkRcFile *rc_file = list->data;
+      
+      if (rc_file->canonical_name != rc_file->name)
+	g_free (rc_file->canonical_name);
+      g_free (rc_file->directory);
+      g_free (rc_file->name);
+      g_free (rc_file);
+      
+      list = list->next;
+    }
+  
+  g_slist_free (context->rc_files);
+  context->rc_files = NULL;
+}
+
+void
+_gtk_rc_context_destroy (GtkSettings *settings)
+{
+  GtkRcContext *context;
+
+  g_return_if_fail (GTK_IS_SETTINGS (settings));
+
+  context = settings->rc_context;
+  if (!context)
+    return;
+
+  _gtk_settings_reset_rc_values (context->settings);
+  gtk_rc_clear_styles (context);
+  gtk_rc_clear_rc_files (context);
+
+  if (context->default_style)
+    g_object_unref (context->default_style);
+
+  g_strfreev (context->pixmap_path);
+
+  g_free (context->theme_name);
+  g_free (context->key_theme_name);
+  g_free (context->font_name);
+
+  if (context->color_hash)
+    g_hash_table_unref (context->color_hash);
+
+  g_signal_handlers_disconnect_by_func (settings,
+					gtk_rc_settings_changed, context);
+  g_signal_handlers_disconnect_by_func (settings,
+					gtk_rc_font_name_changed, context);
+  g_signal_handlers_disconnect_by_func (settings,
+					gtk_rc_color_hash_changed, context);
+
+  rc_contexts = g_slist_remove (rc_contexts, context);
+
+  g_free (context);
+
+  settings->rc_context = NULL;
+}
+
 static void
 gtk_rc_parse_named (GtkRcContext *context,
 		    const gchar  *name,
@@ -1646,7 +1710,6 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
   GtkRcFile *rc_file;
   GSList *tmp_list;
   GtkRcContext *context;
-
   struct stat statbuf;
 
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
@@ -1684,22 +1747,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       context->reloading = TRUE;
 
       _gtk_settings_reset_rc_values (context->settings);
-      tmp_list = context->rc_files;
-      while (tmp_list)
-	{
-	  rc_file = tmp_list->data;
-
-	  if (rc_file->canonical_name != rc_file->name)
-	    g_free (rc_file->canonical_name);
-	  g_free (rc_file->directory);
-	  g_free (rc_file->name);
-	  g_free (rc_file);
-
-	  tmp_list = tmp_list->next;
-	}
-
-      g_slist_free (context->rc_files);
-      context->rc_files = NULL;
+      gtk_rc_clear_rc_files (context);
 
       gtk_rc_parse_default_files (context);
 

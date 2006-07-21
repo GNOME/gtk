@@ -248,6 +248,7 @@ const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
 
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
+void         _gtk_rc_context_destroy               (GtkSettings *settings);
 
 G_END_DECLS
 

@@ -1,3 +1,13 @@
+2006-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrc.h:
+	* gtk/gtkrc.c (_gtk_rc_context_destroy): New function to
+	destroy an rc context.
+
+	* gtk/gtksettings.c (gtk_settings_finalize): Destroy the rc context.
+	(gtk_settings_get_for_screen): Unref the settings when the screen
+	goes away. (#348096, Chris Wilson)
+
 2006-07-21  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkgc-quartz.c: (gdk_quartz_gc_get_values),
@@ -8,11 +18,6 @@
 	Implement.
 
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
-
-	* gtk/gtkstyle.c: 
-	* gtk/gtkrc.c: 
-	* gtk/gtkwidget.c: Replace gtk_rc_style_ref/unref by
-	g_object_ref/unref.
 
 	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_get_preedit_string): 
 	0-terminate outbuf in all cases.  (#348227, Nguyen Thái Ngoc Duy)
