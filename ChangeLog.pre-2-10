@@ -1,5 +1,8 @@
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize):
+	Don't leak the action_view.  (#348120, Chris Wilson)
+
 	* gtk/gtknotebook.c (gtk_notebook_paint): Improve drawing
 	of tabs while reordering.  (#348115, Benjamin Otte)
 

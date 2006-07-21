@@ -407,6 +407,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
 
   priv->action_view =
     gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->actions));
+  g_object_ref_sink (priv->action_view);
   g_signal_connect (priv->action_view, "button_press_event",
                     G_CALLBACK (gtk_entry_completion_action_button_press),
                     completion);
@@ -467,7 +468,7 @@ gtk_entry_completion_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
-  GtkEntryCompletionPrivate *priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (completion);
+  GtkEntryCompletionPrivate *priv = completion->priv;
 
   switch (prop_id)
     {
@@ -556,24 +557,27 @@ static void
 gtk_entry_completion_finalize (GObject *object)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
+  GtkEntryCompletionPrivate *priv = completion->priv;
 
-  if (completion->priv->tree_view)
-    gtk_widget_destroy (completion->priv->tree_view);
+  if (priv->tree_view)
+    gtk_widget_destroy (priv->tree_view);
 
-  if (completion->priv->entry)
-    gtk_entry_set_completion (GTK_ENTRY (completion->priv->entry), NULL);
+  if (priv->entry)
+    gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
 
-  if (completion->priv->actions)
-    g_object_unref (completion->priv->actions);
+  if (priv->actions)
+    g_object_unref (priv->actions, priv->actions);
+  if (priv->action_view)
+    g_object_unref (priv->action_view);
 
-  if (completion->priv->case_normalized_key)
-    g_free (completion->priv->case_normalized_key);
+  if (priv->case_normalized_key)
+    g_free (priv->case_normalized_key);
 
-  if (completion->priv->popup_window)
-    gtk_widget_destroy (completion->priv->popup_window);
+  if (priv->popup_window)
+    gtk_widget_destroy (priv->popup_window);
 
-  if (completion->priv->match_notify)
-    (* completion->priv->match_notify) (completion->priv->match_data);
+  if (priv->match_notify)
+    (* priv->match_notify) (priv->match_data);
 
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->finalize (object);
 }
