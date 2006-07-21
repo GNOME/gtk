@@ -176,6 +176,7 @@ static guint       gtk_rc_parse_statement            (GtkRcContext    *context,
 static guint       gtk_rc_parse_style                (GtkRcContext    *context,
 						      GScanner        *scanner);
 static guint       gtk_rc_parse_assignment           (GScanner        *scanner,
+                                                      GtkRcStyle      *style,
 						      GtkRcProperty   *prop);
 static guint       gtk_rc_parse_bg                   (GScanner        *scanner,
                                                       GtkRcStyle      *style);
@@ -2380,10 +2381,36 @@ gtk_rc_init_style (GtkRcContext *context,
  * Parsing functions *
  *********************/
 
+static gboolean
+lookup_color (GtkRcStyle *style,
+              const char *color_name,
+              GdkColor   *color)
+{
+  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (style);
+  GSList *iter;
+
+  for (iter = priv->color_hashes; iter != NULL; iter = iter->next)
+    {
+      GHashTable *hash  = iter->data;
+      GdkColor   *match = g_hash_table_lookup (hash, color_name);
+
+      if (match)
+        {
+          color->red = match->red;
+          color->green = match->green;
+          color->blue = match->blue;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static guint
-rc_parse_token_or_compound (GScanner  *scanner,
-			    GString   *gstring,
-			    GTokenType delimiter)
+rc_parse_token_or_compound (GScanner   *scanner,
+                            GtkRcStyle *style,
+			    GString    *gstring,
+			    GTokenType  delimiter)
 {
   guint token = g_scanner_get_next_token (scanner);
 
@@ -2415,28 +2442,51 @@ rc_parse_token_or_compound (GScanner  *scanner,
       break;
     case G_TOKEN_COMMENT_SINGLE:
     case G_TOKEN_COMMENT_MULTI:
-      return rc_parse_token_or_compound (scanner, gstring, delimiter);
+      return rc_parse_token_or_compound (scanner, style, gstring, delimiter);
     case G_TOKEN_LEFT_PAREN:
       g_string_append_c (gstring, ' ');
       g_string_append_c (gstring, token);
-      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_PAREN);
+      token = rc_parse_token_or_compound (scanner, style, gstring, G_TOKEN_RIGHT_PAREN);
       if (token != G_TOKEN_NONE)
 	return token;
       break;
     case G_TOKEN_LEFT_CURLY:
       g_string_append_c (gstring, ' ');
       g_string_append_c (gstring, token);
-      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_CURLY);
+      token = rc_parse_token_or_compound (scanner, style, gstring, G_TOKEN_RIGHT_CURLY);
       if (token != G_TOKEN_NONE)
 	return token;
       break;
     case G_TOKEN_LEFT_BRACE:
       g_string_append_c (gstring, ' ');
       g_string_append_c (gstring, token);
-      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_BRACE);
+      token = rc_parse_token_or_compound (scanner, style, gstring, G_TOKEN_RIGHT_BRACE);
       if (token != G_TOKEN_NONE)
 	return token;
       break;
+    case '@':
+      if (g_scanner_peek_next_token (scanner) == G_TOKEN_IDENTIFIER)
+        {
+          GdkColor color;
+
+          g_scanner_get_next_token (scanner);
+
+          if (!style || !lookup_color (style, scanner->value.v_identifier,
+                                       &color))
+            {
+              g_scanner_warn (scanner, "Invalid symbolic color '%s'",
+                              scanner->value.v_identifier);
+              return G_TOKEN_IDENTIFIER;
+            }
+
+          g_string_append_printf (gstring, " { %0.4f, %0.4f, %0.4f }",
+                                  (gdouble) color.red   / 65535.0,
+                                  (gdouble) color.green / 65535.0,
+                                  (gdouble) color.blue  / 65535.0);
+          break;
+        }
+      else
+        return G_TOKEN_IDENTIFIER;
     default:
       if (token >= 256 || token < 1)
 	return delimiter ? delimiter : G_TOKEN_STRING;
@@ -2449,11 +2499,12 @@ rc_parse_token_or_compound (GScanner  *scanner,
   if (!delimiter)
     return G_TOKEN_NONE;
   else
-    return rc_parse_token_or_compound (scanner, gstring, delimiter);
+    return rc_parse_token_or_compound (scanner, style, gstring, delimiter);
 }
 
 static guint
 gtk_rc_parse_assignment (GScanner      *scanner,
+                         GtkRcStyle    *style,
 			 GtkRcProperty *prop)
 {
   gboolean scan_identifier = scanner->config->scan_identifier;
@@ -2463,7 +2514,8 @@ gtk_rc_parse_assignment (GScanner      *scanner,
   gboolean scan_identifier_NULL = scanner->config->scan_identifier_NULL;
   gboolean numbers_2_int = scanner->config->numbers_2_int;
   gboolean negate = FALSE;
-  guint token;
+  gboolean is_color = FALSE;
+  guint    token;
 
   /* check that this is an assignment */
   if (g_scanner_get_next_token (scanner) != '=')
@@ -2483,15 +2535,31 @@ gtk_rc_parse_assignment (GScanner      *scanner,
   else
     prop->origin = NULL;
 
+  /* parse optional symbolic color prefix */
+  if (g_scanner_peek_next_token (scanner) == '@')
+    {
+      g_scanner_get_next_token (scanner); /* eat color prefix */
+      is_color = TRUE;
+    }
+
   /* parse optional sign */
-  if (g_scanner_peek_next_token (scanner) == '-')
+  if (!is_color && g_scanner_peek_next_token (scanner) == '-')
     {
       g_scanner_get_next_token (scanner); /* eat sign */
       negate = TRUE;
     }
 
-  /* parse one of LONG, DOUBLE and STRING or, if that fails, create an unparsed compund */
+  /* parse one of LONG, DOUBLE and STRING or, if that fails, create an
+   * unparsed compund
+   */
   token = g_scanner_peek_next_token (scanner);
+
+  if (is_color && token != G_TOKEN_IDENTIFIER)
+    {
+      token = G_TOKEN_IDENTIFIER;
+      goto out;
+    }
+
   switch (token)
     {
     case G_TOKEN_INT:
@@ -2518,14 +2586,63 @@ gtk_rc_parse_assignment (GScanner      *scanner,
 	}
       break;
     case G_TOKEN_IDENTIFIER:
+      if (is_color)
+        {
+          GdkColor  color;
+          GString  *gstring;
+
+          g_scanner_get_next_token (scanner);
+
+          if (!style || !lookup_color (style, scanner->value.v_identifier,
+                                       &color))
+            {
+              g_scanner_warn (scanner, "Invalid symbolic color '%s'",
+                              scanner->value.v_identifier);
+              token = G_TOKEN_IDENTIFIER;
+              break;
+            }
+
+          gstring = g_string_new (NULL);
+
+          g_string_append_printf (gstring, " { %0.4f, %0.4f, %0.4f } ",
+                                  (gdouble) color.red   / 65535.0,
+                                  (gdouble) color.green / 65535.0,
+                                  (gdouble) color.blue  / 65535.0);
+
+          g_value_init (&prop->value, G_TYPE_GSTRING);
+          g_value_take_boxed (&prop->value, gstring);
+          token = G_TOKEN_NONE;
+          break;
+        }
+      /* fall through */
     case G_TOKEN_LEFT_PAREN:
     case G_TOKEN_LEFT_CURLY:
     case G_TOKEN_LEFT_BRACE:
       if (!negate)
 	{
-	  GString *gstring = g_string_new (NULL);
+          GString  *gstring  = g_string_new (NULL);
+          gboolean  parse_on = TRUE;
 
-	  token = rc_parse_token_or_compound (scanner, gstring, 0);
+          /*  allow identifier(foobar) to support color expressions  */
+          if (token == G_TOKEN_IDENTIFIER)
+            {
+              g_scanner_get_next_token (scanner);
+
+              g_string_append_c (gstring, ' ');
+              g_string_append (gstring, scanner->value.v_identifier);
+
+              token = g_scanner_peek_next_token (scanner);
+
+              if (token != G_TOKEN_LEFT_PAREN)
+                {
+                  token = G_TOKEN_NONE;
+                  parse_on = FALSE;
+                }
+            }
+
+          if (parse_on)
+            token = rc_parse_token_or_compound (scanner, style, gstring, 0);
+
 	  if (token == G_TOKEN_NONE)
 	    {
 	      g_string_append_c (gstring, ' ');
@@ -2542,6 +2659,8 @@ gtk_rc_parse_assignment (GScanner      *scanner,
       token = G_TOKEN_INT;
       break;
     }
+
+ out:
 
   /* restore scanner mode */
   scanner->config->scan_identifier = scan_identifier;
@@ -2672,7 +2791,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
 	  g_scanner_get_next_token (scanner); /* eat identifier */
 	  name = g_strdup (scanner->value.v_identifier);
 	  
-	  token = gtk_rc_parse_assignment (scanner, &prop);
+	  token = gtk_rc_parse_assignment (scanner, NULL, &prop);
 	  if (token == G_TOKEN_NONE)
 	    {
 	      GtkSettingsValue svalue;
@@ -2925,7 +3044,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 	      prop.property_name = g_quark_from_string (name);
 	      g_free (name);
 
-	      token = gtk_rc_parse_assignment (scanner, &prop);
+	      token = gtk_rc_parse_assignment (scanner, rc_style, &prop);
 	      if (token == G_TOKEN_NONE)
 		{
 		  g_return_val_if_fail (G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
@@ -3567,31 +3686,6 @@ gtk_rc_parse_priority (GScanner	           *scanner,
   g_scanner_set_scope (scanner, old_scope);
 
   return G_TOKEN_NONE;
-}
-
-static gboolean
-lookup_color (GtkRcStyle *style,
-              const char *color_name,
-              GdkColor   *color)
-{
-  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (style);
-  GSList *iter;
-
-  for (iter = priv->color_hashes; iter != NULL; iter = iter->next)
-    {
-      GHashTable *hash  = iter->data;
-      GdkColor   *match = g_hash_table_lookup (hash, color_name);
-
-      if (match)
-        {
-          color->red = match->red;
-          color->green = match->green;
-          color->blue = match->blue;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
 }
 
 guint

@@ -1,5 +1,22 @@
 2006-07-21  Michael Natterer  <mitch@imendio.com>
 
+	Enable symbolic colors and color expressions in style
+	properties. Fixes bug #346751.
+
+	* gtk/gtkrc.c (rc_parse_token_or_compound): add GtkRcStyle
+	parameter and replace symbolic colors by color constants.
+
+	(gtk_rc_parse_assignment): likewise. Also support parsing of
+	expressions of the form identifier(compound).
+
+	(gtk_rc_parse_style): pass the GtkRcStyle to
+	gtk_rc_parse_assignment().
+
+	(gtk_rc_parse_statement): pass NULL since we don't have a
+	GtkRcStyle here.
+
+2006-07-21  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_finalize):
 	remove accidential 2nd parameter to g_object_unref().
 
