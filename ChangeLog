@@ -1,3 +1,12 @@
+2006-07-21  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkgc-quartz.c: (gdk_quartz_gc_get_values),
+	(gdk_quartz_gc_set_values), (_gdk_windowing_gc_copy),
+	(gdk_gc_get_screen): Implement.
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_back_pixmap):
+	Implement.
+
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstyle.c: 

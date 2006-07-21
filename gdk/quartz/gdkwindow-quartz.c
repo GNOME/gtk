@@ -128,7 +128,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   drawable_class->get_visible_region = gdk_window_impl_quartz_get_visible_region;
 }
 
-
 static void
 gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 {
@@ -887,11 +886,37 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 			    GdkPixmap *pixmap,
 			    gboolean   parent_relative)
 {
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (pixmap == NULL || !parent_relative);
   g_return_if_fail (pixmap == NULL || gdk_drawable_get_depth (window) == gdk_drawable_get_depth (pixmap));
 
-  /* FIXME: Implement */
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (private->bg_pixmap &&
+      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+      private->bg_pixmap != GDK_NO_BG)
+    g_object_unref (private->bg_pixmap);
+
+  if (parent_relative)
+    {
+      private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
+      GDK_NOTE (MISC, g_print (G_STRLOC ": setting background pixmap to parent_relative\n"));
+    }
+  else
+    {
+      if (pixmap)
+	{
+	  g_object_ref (pixmap);
+	  private->bg_pixmap = pixmap;
+	}
+      else
+	{
+	  private->bg_pixmap = GDK_NO_BG;
+	}
+    }
 }
 
 void

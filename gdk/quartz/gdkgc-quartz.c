@@ -27,15 +27,38 @@ static gpointer parent_class = NULL;
 
 static void
 gdk_quartz_gc_get_values (GdkGC       *gc,
-			 GdkGCValues *values)
+			  GdkGCValues *values)
 {
-  /* FIXME: Implement */
+  GdkGCQuartz *private;
+
+  private = GDK_GC_QUARTZ (gc);
+
+  memset (values, 0, sizeof (GdkGCValues));
+  
+  /* FIXME: Fill in more value as/if they are added. */
+
+  values->foreground.pixel = _gdk_gc_get_fg_pixel (gc);
+  values->background.pixel = _gdk_gc_get_bg_pixel (gc);
+
+  values->function = GDK_COPY;
+
+  values->fill = _gdk_gc_get_fill (gc);
+  values->tile = _gdk_gc_get_tile (gc);
+  values->stipple = _gdk_gc_get_stipple (gc);
+  
+  /* The X11 backend always returns a NULL clip_mask. */
+  values->clip_mask = NULL;
+
+  values->ts_x_origin = gc->ts_x_origin;
+  values->ts_y_origin = gc->ts_y_origin;
+  values->clip_x_origin = gc->clip_x_origin;
+  values->clip_y_origin = gc->clip_y_origin;
 }
 
 static void
 gdk_quartz_gc_set_values (GdkGC           *gc,
-			 GdkGCValues     *values,
-			 GdkGCValuesMask  mask)
+			  GdkGCValues     *values,
+			  GdkGCValuesMask  mask)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
 
@@ -160,13 +183,29 @@ void
 _gdk_windowing_gc_copy (GdkGC *dst_gc,
 			GdkGC *src_gc)
 {
-  /* FIXME: Implement */
+  GdkGCQuartz *dst_quartz_gc = GDK_GC_QUARTZ (dst_gc);
+  GdkGCQuartz *src_quartz_gc = GDK_GC_QUARTZ (src_gc);
+
+  dst_quartz_gc->values_mask = src_quartz_gc->values_mask;
+  
+  dst_quartz_gc->have_clip_region = src_quartz_gc->have_clip_region;
+  dst_quartz_gc->have_clip_mask = src_quartz_gc->have_clip_mask;
+
+  if (dst_quartz_gc->values_mask & GDK_GC_CLIP_MASK && dst_quartz_gc->clip_mask)
+    {
+      CGImageRelease (dst_quartz_gc->clip_mask);
+      dst_quartz_gc->clip_mask = NULL;
+    }
+  
+  if (src_quartz_gc->values_mask & GDK_GC_CLIP_MASK && src_quartz_gc->clip_mask)
+    dst_quartz_gc->clip_mask =
+      CGImageCreateCopy (GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (src_quartz_gc->clip_mask)->impl)->image);
 }
 
 GdkScreen *  
 gdk_gc_get_screen (GdkGC *gc)
 {
-  return NULL;
+  return _gdk_screen;
 }
 
 void
@@ -210,13 +249,13 @@ _gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc)
     }
   else if (private->have_clip_mask && private->clip_mask)
     {
-      /* FIXME: This is 10.4 only. For lower versions, we need to transform the
+      /* Note: This is 10.4 only. For lower versions, we need to transform the
        * mask into a region.
        */
       CGContextClipToMask (context,
-			   CGRectMake(gc->clip_x_origin, gc->clip_y_origin,
-				      CGImageGetWidth (private->clip_mask),
-				      CGImageGetHeight (private->clip_mask)),
+			   CGRectMake (gc->clip_x_origin, gc->clip_y_origin,
+				       CGImageGetWidth (private->clip_mask),
+				       CGImageGetHeight (private->clip_mask)),
 			   private->clip_mask);
     }
 }
