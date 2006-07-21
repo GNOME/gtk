@@ -1,5 +1,8 @@
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_destroy): Don't
+	leak the adjustments.  (#348094, Chris Wilson)
+
 	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): Unset
 	the during_reorder flag.  (#348049, Sven Herzberg, patch
 	by Benjamin Otte)

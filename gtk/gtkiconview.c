@@ -948,6 +948,18 @@ gtk_icon_view_destroy (GtkObject *object)
     }
 
   remove_scroll_timeout (icon_view);
+
+  if (icon_view->priv->hadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->hadjustment);
+      icon_view->priv->hadjustment = NULL;
+    }
+
+  if (icon_view->priv->vadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->vadjustment);
+      icon_view->priv->vadjustment = NULL;
+    }
   
   (* GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy) (object);
 }
