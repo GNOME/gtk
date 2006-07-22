@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-21 01:41+0200\n"
-"PO-Revision-Date: 2006-07-21 01:41+0200\n"
+"POT-Creation-Date: 2006-07-22 19:34+0200\n"
+"PO-Revision-Date: 2006-07-22 19:34+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -2090,7 +2090,7 @@ msgstr "Espacement autour de la flèche"
 msgid "Scroll arrow spacing"
 msgstr "Espacement autour de la flèche"
 
-#: ../gtk/gtknotebook.c:4240 ../gtk/gtknotebook.c:6793
+#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
@@ -2501,12 +2501,12 @@ msgstr "Groupe"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Le groupe de boutons radio auquel appartient ce bouton."
 
-#: ../gtk/gtkrc.c:2617
+#: ../gtk/gtkrc.c:2782
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Impossible de trouver le fichier à inclure : « %s »"
 
-#: ../gtk/gtkrc.c:3249 ../gtk/gtkrc.c:3252
+#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
@@ -2701,7 +2701,7 @@ msgstr "_Revenir"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
-msgstr "_Vers le bas"
+msgstr "Vers le _bas"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
@@ -2711,7 +2711,7 @@ msgstr "_Avancer"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "_Vers le haut"
+msgstr "Vers le _haut"
 
 #: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
