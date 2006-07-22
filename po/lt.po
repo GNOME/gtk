@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-20 17:04+0300\n"
-"PO-Revision-Date: 2006-07-20 18:26+0300\n"
+"POT-Creation-Date: 2006-07-22 10:09+0300\n"
+"PO-Revision-Date: 2006-07-22 10:43+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,8 @@ msgstr "Klaida skaitant GIF: %s"
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1472
 #: ../gdk-pixbuf/io-gif.c:1633
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF rinkmenai trūksta dalies duomenų (galbūt ji buvo kaip nors sugadinta?)"
+msgstr ""
+"GIF rinkmenai trūksta dalies duomenų (galbūt ji buvo kaip nors sugadinta?)"
 
 #: ../gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -554,7 +555,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pnm.c:785
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "Nepavyko rezervuoti atminties kiekio būtino PNM rinkmenos atvaizdavimui"
+msgstr ""
+"Nepavyko rezervuoti atminties kiekio būtino PNM rinkmenos atvaizdavimui"
 
 #: ../gdk-pixbuf/io-pnm.c:835
 msgid "Insufficient memory to load PNM context struct"
@@ -1165,7 +1167,7 @@ msgstr "2000"
 #: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2215
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1407,7 +1409,8 @@ msgid ""
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 "Šio aplanko sukurti nepavyko, nes jau yra rinkmena tokiu pat pavadinimu. "
-"Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite rinkmeną."
+"Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite "
+"rinkmeną."
 
 #: ../gtk/gtkfilechooserdefault.c:979
 msgid "Invalid file name"
@@ -1481,7 +1484,8 @@ msgstr "Rinkmenos pasirinkti nepavyko"
 #: ../gtk/gtkfilechooserdefault.c:3762
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr "Nepavyko pasirinkti rinkmenos „%s“, nes nurodytas kelias yra netinkamas."
+msgstr ""
+"Nepavyko pasirinkti rinkmenos „%s“, nes nurodytas kelias yra netinkamas."
 
 #: ../gtk/gtkfilechooserdefault.c:3819
 msgid "_Add to Bookmarks"
@@ -1565,7 +1569,8 @@ msgstr "Rinkmena pavadinimu „%s“ jau egzistuoja. Ar norite ją perrašyti?"
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Rinkmena vietoje „%s“ jau egzistuoja. Pakeitus ją, jos turinys bus perrašytas."
+"Rinkmena vietoje „%s“ jau egzistuoja. Pakeitus ją, jos turinys bus "
+"perrašytas."
 
 #: ../gtk/gtkfilechooserdefault.c:7195
 msgid "_Replace"
@@ -1631,17 +1636,21 @@ msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
 msgstr ""
+"Eilutė %d, stulpelis %d: laukta elemento „%s“ pabaigos, tačiau vietoje to "
+"gautas elementas „%s“"
 
 #: ../gtk/gtkfilechoosersettings.c:201
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr ""
+"Eilutė %d, stulpelis %d: laukta „%s“ viršutiniame lygmenyje, tačiau vietoje "
+"to rasta „%s“"
 
 #: ../gtk/gtkfilechoosersettings.c:237 ../gtk/gtkfilechoosersettings.c:265
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr ""
+msgstr "Eilutė %d, stulpelis %d: laukta „%s“ arba „%s“, tačiau vietoje to rasta „%s“"
 
 #: ../gtk/gtkfilechoosersettings.c:515
 #, c-format
@@ -1672,8 +1681,8 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Rinkmena „%s“ yra saugoma kitame kompiuteryje (pavadinimu %s) ir gali būti šiai "
-"programai nepasiekiama.\n"
+"Rinkmena „%s“ yra saugoma kitame kompiuteryje (pavadinimu %s) ir gali būti "
+"šiai programai nepasiekiama.\n"
 "Ar tikrai norite ją pasirinkti?"
 
 #: ../gtk/gtkfilesel.c:1080
@@ -1693,7 +1702,8 @@ msgstr "Pe_rvadinti rinkmeną"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Aplanko pavadinime „%s“ yra simbolių, kurių negalima naudoti rinkmenų varduose"
+"Aplanko pavadinime „%s“ yra simbolių, kurių negalima naudoti rinkmenų "
+"varduose"
 
 #: ../gtk/gtkfilesel.c:1409 ../gtk/gtkfilesel.c:1418
 #: ../gtk/gtkfilesystemunix.c:928 ../gtk/gtkfilesystemwin32.c:1019
@@ -1770,8 +1780,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"Rinkmenos vardas „%s“ negali būti konvertuotas į UTF-8 (pabandykite nustatyti "
-"aplinkos kintamąjį G_FILENAME_ENCODING): %s"
+"Rinkmenos vardas „%s“ negali būti konvertuotas į UTF-8 (pabandykite "
+"nustatyti aplinkos kintamąjį G_FILENAME_ENCODING): %s"
 
 #: ../gtk/gtkfilesel.c:3116
 msgid "Invalid UTF-8"
@@ -1840,7 +1850,7 @@ msgstr "„%s“ nėra žymelių sąraše"
 #: ../gtk/gtkfilesystemwin32.c:943
 #, c-format
 msgid "Path is not a folder: '%s'"
-msgstr ""
+msgstr "Kelias nėra aplankas: „%s“"
 
 #: ../gtk/gtkfilesystemwin32.c:1143
 #, c-format
@@ -1970,11 +1980,11 @@ msgstr "Klavišai"
 
 #: ../gtk/gtkinputdialog.c:521
 msgid "_X:"
-msgstr ""
+msgstr "_X:"
 
 #: ../gtk/gtkinputdialog.c:522
 msgid "_Y:"
-msgstr ""
+msgstr "_Y:"
 
 #: ../gtk/gtkinputdialog.c:523
 msgid "_Pressure:"
@@ -2053,13 +2063,13 @@ msgstr "Rodyti GTK+ parinktis"
 
 #: ../gtk/gtknotebook.c:775
 msgid "Arrow spacing"
-msgstr ""
+msgstr "Rodyklių protarpis"
 
 #: ../gtk/gtknotebook.c:776
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "Slinkties rodyklės protarpis"
 
-#: ../gtk/gtknotebook.c:4240 ../gtk/gtknotebook.c:6793
+#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -2075,13 +2085,12 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:338
-#, fuzzy
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
 "<b>Bet koks spausdintuvas</b>\n"
-"Pernešamiems dokumentams"
+"Perkeliamiems dokumentams"
 
 #: ../gtk/gtkpagesetupunixdialog.c:906 ../gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
@@ -2108,7 +2117,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:978
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "Tvarkyti kitus dydžius..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1026
 msgid "_Format for:"
@@ -2137,7 +2146,7 @@ msgstr "Kitas dydis %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1853
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "Tvarkyti kitus dydžius"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1949
 msgid "_Width:"
@@ -2333,9 +2342,8 @@ msgid "Copie_s:"
 msgstr "Kopijo_s:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
-#, fuzzy
 msgid "C_ollate"
-msgstr ""
+msgstr "Su_dėstyti"
 
 #: ../gtk/gtkprintunixdialog.c:1554
 msgid "_Reverse"
@@ -2377,7 +2385,7 @@ msgstr "Nelyginius puslapius"
 
 #: ../gtk/gtkprintunixdialog.c:2013
 msgid "Sc_ale:"
-msgstr ""
+msgstr "_Mastelis:"
 
 #: ../gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
@@ -2405,7 +2413,7 @@ msgstr "Pri_oritetas:"
 
 #: ../gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
-msgstr ""
+msgstr "_Našumo informacija:"
 
 #: ../gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
@@ -2420,9 +2428,8 @@ msgid "A_t:"
 msgstr "_Laiku:"
 
 #: ../gtk/gtkprintunixdialog.c:2192
-#, fuzzy
 msgid "On _hold"
-msgstr ""
+msgstr "Susta_bdyta"
 
 #: ../gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
@@ -2472,12 +2479,12 @@ msgstr "Grupė"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Žymimosios akutės grupė, kuriai priklauso šis mygtukas."
 
-#: ../gtk/gtkrc.c:2617
+#: ../gtk/gtkrc.c:2782
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nepavyko rasti įterpiamos rinkmenos: „%s“"
 
-#: ../gtk/gtkrc.c:3249 ../gtk/gtkrc.c:3252
+#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nepavyko rasti paveikslėlio rinkmenos pixmap_path: „%s“"
@@ -2518,14 +2525,14 @@ msgstr "Rodyti _asmeninius resursus"
 #: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "Nerasta neseniai naudoto resurso su URI „%s“"
 
 #: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
 #: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
 #: ../gtk/gtkrecentchoosermenu.c:689
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "Ši funkcija nerealizuota „%s“ klasės valdymo elementams"
 
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
@@ -3996,151 +4003,150 @@ msgstr "Netinkamas URI"
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Nežinoma klaida bandant nuoseklinti %s"
 
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "Formatui %s nuoseklinimo funkcija nerasta"
 
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "Elemente <%s> buvo rasta ir „id“ ir „name“"
 
 #: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "Požymis „%s“ elemente <%s> buvo rastas du kartus"
 
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "<%s> elementas turi netinkamą id „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" element"
-msgstr ""
+msgstr "<%s> elementas neturi nei „name“, nei „id“ elemento"
 
 #: ../gtk/gtktextbufferserialize.c:938
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Požymis „%s“ pakartotas du kartus tame pačiame elemente <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:956 ../gtk/gtktextbufferserialize.c:981
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "Požymis „%s“ šiame kontekste netinkamas elementui <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1017
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "Žyma „%s“ neapibrėžta."
 
 #: ../gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Rasta anoniminė žyma ir žymos negali būti sukurtos."
 
 #: ../gtk/gtktextbufferserialize.c:1040
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "Žymos „%s“ buferyje nėra ir žymos negali būti sukurtos."
 
 #: ../gtk/gtktextbufferserialize.c:1139 ../gtk/gtktextbufferserialize.c:1214
 #: ../gtk/gtktextbufferserialize.c:1315 ../gtk/gtktextbufferserialize.c:1389
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "Elementas <%s> neleistinas žemiau <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "„%s“ nėra tinkamas požymio tipas"
 
 #: ../gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "„%s“ nėra tinkamas požymio pavadinimas"
 
 #: ../gtk/gtktextbufferserialize.c:1188
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"„%s“ nepavyko konvertuoti į „%s“ tipo reikšmę atributui „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "„%s“ nėra tinkama reikšmė požymiui „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1280
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "Žyma „%s“ jau apibrėžta"
 
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "Žymos „%s“ netinkamas prioritetas „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1344
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "Išorinis elementas tekste turi būti <text_view_markup>, o ne <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1353 ../gtk/gtktextbufferserialize.c:1369
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "Elementas <%s> jau buvo nurodytas"
 
 #: ../gtk/gtktextbufferserialize.c:1375
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Elementas <text> negali būti naudojamas prieš elementą <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1783
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Nuoseklinti duomenys yra netinkamai suformuoti"
 
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"Nuoseklinti duomenys yra netinkamai suformuoti. Pirmas skyrius nėra "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "simboliškai susietiem „%s“ ir „%s“ rasti skirtingi i-duomenys\n"
 
 #: ../gtk/updateiconcache.c:1116
-#, fuzzy
 msgid "Failed to write header\n"
-msgstr "Nepavyko atverti TIFF rinkmenos"
+msgstr "Nepavyko įrašyti antraštės\n"
 
 #: ../gtk/updateiconcache.c:1122
-#, fuzzy
 msgid "Failed to write hash table\n"
-msgstr "Nepavyko atverti TIFF rinkmenos"
+msgstr "Nepavyko įrašyti maišos lentelės\n"
 
 #: ../gtk/updateiconcache.c:1128
-#, fuzzy
 msgid "Failed to write directory index\n"
-msgstr "Nepavyko perskaityti laikinos rinkmenos"
+msgstr "Nepavyko įrašyti aplanko indekso\n"
 
 #: ../gtk/updateiconcache.c:1136
-#, fuzzy
 msgid "Failed to rewrite header\n"
-msgstr "Nepavyko atverti TIFF rinkmenos"
+msgstr "Nepavyko perrašyti antraštės\n"
 
 #: ../gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Nepavyko atverti rinkmenos „%s“: %s"
+msgstr "Nepavyko įrašyti podėlio rinkmenos: %s\n"
 
 #: ../gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Nepavyko pervadinti %s į %s: %s, taigi %s pašalinama.\n"
 
 #: ../gtk/updateiconcache.c:1214
 #, c-format
@@ -4154,15 +4160,15 @@ msgstr "Nepavyko pervadinti %s atgal į %s: %s.\n"
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Podėlio rinkmena sukurta sėkmingai.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "Perrašyti esamą podėlį, netgi jei nepasenęs"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "Netikrinti ar egzistuoja index.theme"
 
 #: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
@@ -4183,5 +4189,5 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "„%s“ nėra temos indekso rinkmenos.\n"
-"Jei tikrai čia norite sukurti piktogramos podėlį, naudokite "
-"--ignore-theme-index.\n"
+"Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-"
+"index.\n"
