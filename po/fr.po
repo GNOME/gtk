@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-21 01:29+0200\n"
-"PO-Revision-Date: 2006-07-21 01:29+0200\n"
+"POT-Creation-Date: 2006-07-22 19:39+0200\n"
+"PO-Revision-Date: 2006-07-22 19:39+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -2194,7 +2194,7 @@ msgstr "_Revenir"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
-msgstr "_Vers le bas"
+msgstr "Vers le _bas"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
@@ -2204,7 +2204,7 @@ msgstr "_Avancer"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "_Vers le haut"
+msgstr "Vers le _haut"
 
 #: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
