@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-22 10:09+0300\n"
-"PO-Revision-Date: 2006-07-22 10:43+0300\n"
+"PO-Revision-Date: 2006-07-22 20:55+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -990,7 +990,7 @@ msgstr "Tas pats kaip --no-wintab"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr "Naudoti Wintab API [įprastas]"
+msgstr "Naudoti Wintab API [numatytasis]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:68
@@ -1938,7 +1938,7 @@ msgstr "Piktogramos „%s“ temoje nėra"
 
 #: ../gtk/gtkimmodule.c:407
 msgid "Default"
-msgstr "Įprastas"
+msgstr "Numatytasis"
 
 #: ../gtk/gtkinputdialog.c:191
 msgid "Input"
@@ -2803,7 +2803,7 @@ msgstr "_Gerai"
 
 #: ../gtk/gtkstock.c:391
 msgid "_Open"
-msgstr "Ati_daryti"
+msgstr "At_verti"
 
 #: ../gtk/gtkstock.c:392
 msgid "Landscape"
