@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-22 19:34+0200\n"
-"PO-Revision-Date: 2006-07-22 19:34+0200\n"
-"Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
+"POT-Creation-Date: 2006-07-23 23:43+0200\n"
+"PO-Revision-Date: 2006-07-23 23:43+0200\n"
+"Last-Translator: Jonathan Ernst <jonathan@ernstfamily.ch>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1656,17 +1656,23 @@ msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
 msgstr ""
+"Ligne %d, colonne %d : fin de l'élément « %s » attendue mais l'élément pour "
+"« %s » a été reçu à la place"
 
 #: ../gtk/gtkfilechoosersettings.c:201
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr ""
+"Ligne %d, colonne %d : élément « %s » attendu au niveau supérieur mais « %"
+"s » a été trouvé à la place"
 
 #: ../gtk/gtkfilechoosersettings.c:237 ../gtk/gtkfilechoosersettings.c:265
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
+"Ligne %d, colonne %d : « %s » ou « %s » attendu mais « %s » a été trouvé à "
+"la place"
 
 #: ../gtk/gtkfilechoosersettings.c:515
 #, c-format
@@ -2081,14 +2087,12 @@ msgid "Show GTK+ Options"
 msgstr "Afficher les options GTK+"
 
 #: ../gtk/gtknotebook.c:775
-#, fuzzy
 msgid "Arrow spacing"
 msgstr "Espacement autour de la flèche"
 
 #: ../gtk/gtknotebook.c:776
-#, fuzzy
 msgid "Scroll arrow spacing"
-msgstr "Espacement autour de la flèche"
+msgstr "Espacement autour de la flèche de défilement"
 
 #: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
 #, c-format
@@ -2481,13 +2485,12 @@ msgid "Color"
 msgstr "Couleur"
 
 #: ../gtk/gtkprintunixdialog.c:2354
-#, fuzzy
 msgid "Finishing"
-msgstr "Terminaison"
+msgstr "Se termine"
 
 #: ../gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Certains paramètres dans la boîte de dialogue sont en conflit"
 
 #: ../gtk/gtkprintunixdialog.c:2387
 msgid "Print"
@@ -2548,7 +2551,7 @@ msgstr "Afficher les ressources privées"
 #: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "Aucune ressource utilisée récemment n'a été trouvée avec l'URI « %s »"
 
 #: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
 #: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
@@ -3584,7 +3587,7 @@ msgstr "Edp européen"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr "Fiche"
+msgstr "Executive"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
@@ -3599,17 +3602,17 @@ msgstr "FanFold européen"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr "FanFold étasunien"
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr "FanFold allemand officiel"
+msgstr "Legal FanFold allemand"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr "Officiel gouvernemental"
+msgstr "Legal gouvernemental"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
@@ -3639,7 +3642,7 @@ msgstr "Index 5x8"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr "Facture"
+msgstr "Statement"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:255
@@ -3649,12 +3652,12 @@ msgstr "Tabloïd"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
-msgstr "Officiel étasunien"
+msgstr "US Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr "Officiel étasunien Extra"
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
@@ -4025,21 +4028,20 @@ msgid "Invalid URI"
 msgstr "URI non valide"
 
 #: ../gtk/gtktextbufferrichtext.c:651
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr ""
-"Une erreur inconnue est survenue lors de la tentative d'ouverture de « %s »"
+"Une erreur inconnue est survenue lors de la tentative de décodage de %s"
 
 #: ../gtk/gtktextbufferrichtext.c:710
-#, fuzzy, c-format
+#, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
-"Aucun décodeur correspondant au format de la source n'a pu être trouvé."
+msgstr "Aucune fonction de décodage trouvée pour le format %s"
 
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "« id » et « name » ont tous deux été trouvés dans l'élément <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
@@ -4054,7 +4056,7 @@ msgstr "<%s> a un identifiant non valide « %s »"
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" element"
-msgstr ""
+msgstr "L'élément <%s> n'a ni élément « name », ni élément « id »"
 
 #: ../gtk/gtktextbufferserialize.c:938
 #, c-format
@@ -4075,11 +4077,14 @@ msgstr "La balise « %s » n'a pas été définie."
 #: ../gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
 msgstr ""
+"Une balise anonyme a été trouvée et les balises ne peuvent pas être créées."
 
 #: ../gtk/gtktextbufferserialize.c:1040
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
+"La balise « %s » n'existe pas dans le tampon et les balises ne peuvent pas "
+"être créées."
 
 #: ../gtk/gtktextbufferserialize.c:1139 ../gtk/gtktextbufferserialize.c:1214
 #: ../gtk/gtktextbufferserialize.c:1315 ../gtk/gtktextbufferserialize.c:1389
@@ -4102,6 +4107,8 @@ msgstr "« %s » n'est pas un nom d'attribut valide"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"« %s » ne peut pas être converti en une valeur de type « %s » pour "
+"l'attribut « %s »"
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
@@ -4122,6 +4129,8 @@ msgstr "La balise « %s » a une priorité non valide « %s »"
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
+"L'élément le plus à l'extérieur dans le texte doit être <text_view_markup> "
+"et non <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1353 ../gtk/gtktextbufferserialize.c:1369
 #, c-format
@@ -4130,21 +4139,23 @@ msgstr "Un élément <%s> a déjà été spécifié"
 
 #: ../gtk/gtktextbufferserialize.c:1375
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Un élément <text> ne peut pas être présent avant un élément <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1783
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Les données linéarisées sont non conforme"
 
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"Les données linéarisées sont non conforme. La première section n'est pas "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "idatas différents trouvés pour « %s » et « %s » liés symboliquement\n"
 
 #: ../gtk/updateiconcache.c:1116
 msgid "Failed to write header\n"
@@ -4170,7 +4181,7 @@ msgstr "Impossible d'écrire le fichier de cache : %s\n"
 #: ../gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Impossible de renommer %s en %s : %s, suppression de %s.\n"
 
 #: ../gtk/updateiconcache.c:1214
 #, c-format
@@ -4188,7 +4199,7 @@ msgstr "Fichier de cache écrit avec succès.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "Écraser un cache existant même s'il est à jour"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
@@ -4212,3 +4223,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"Aucun fichier d'index de thème dans « %s ».\n"
+"Si vous souhaitez vraiment créer un cache d'icône ici, utilisez --ignore-"
+"theme-index.\n"
