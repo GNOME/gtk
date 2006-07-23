@@ -1,3 +1,8 @@
+2006-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
+	Fix a memory leak.  (#348424, Carlos Garcia Campos)
+
 2006-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.h:

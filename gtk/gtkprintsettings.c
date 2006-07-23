@@ -1289,6 +1289,8 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
       ranges[i].end = end;
     }
 
+  g_strfreev (range_strs);
+
   *num_ranges = n;
   return ranges;
 }
