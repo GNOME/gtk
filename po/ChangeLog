@@ -1,3 +1,9 @@
+2006-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.skip: New file
+	
+	* Makefile.in.in: Add POTFILES.skip to DIST
+
 2006-07-22  Žygimantas Beručka  <zygis@gnome.org>
 
 	* lt.po: Updated Lithuanian translation.
