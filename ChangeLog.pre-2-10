@@ -1,3 +1,23 @@
+2006-07-24  Richard Hult  <richard@imendio.com>                                                                         
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_type_hint): Set the
+	window level depending on the type hint.
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_keyboard_grab,
+	pointer_ungrab_internal): Only break the grab if the new window is
+	a different one.
+	(gdk_event_translate): Catch the case where the entire app loses 
+	focus and break any grabs. Only do implicit grabs when the event
+	mask has both press and release.
+
+	* gdk/quartz/gdkkeys-quartz.c (translate_keysym):
+	* gdk/quartz/gdkselection-quartz.c:
+
+        * gdk/quartz/GdkQuartzWindow.c
+	([GdkQuartzWindow -windowDidResignKey:]): Use this to update the
+	focus window instead of resignMain, fixes the case where other apps
+	uses focus follows mouse (like the terminal can).
+
 2006-07-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
