@@ -38,7 +38,21 @@ The #GtkCellRendererSpin cell renderer was added in GTK+ 2.10.
 
 </para>
 
-@parent: 
+
+<!-- ##### ARG GtkCellRendererSpin:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererSpin:climb-rate ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererSpin:digits ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION gtk_cell_renderer_spin_new ##### -->
 <para>

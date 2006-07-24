@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-02 23:14-0400\n"
+"POT-Creation-Date: 2006-07-23 20:06-0400\n"
 "PO-Revision-Date: 2005-07-28 11:09+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -652,7 +652,8 @@ msgstr "Hapësira"
 msgid "The amount of space between children"
 msgstr "Sasia e hapësirës ndërmjet bijve"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktable.c:165
+#: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogjene"
 
@@ -863,27 +864,27 @@ msgstr "Shfaq figurat e butonit"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"
 
-#: gtk/gtkcalendar.c:417
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Viti"
 
-#: gtk/gtkcalendar.c:418
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "Viti i zgjedhur"
 
-#: gtk/gtkcalendar.c:424
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Muaji"
 
-#: gtk/gtkcalendar.c:425
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Muaji i zgjedhur (si numër nga 0 deri 11)"
 
-#: gtk/gtkcalendar.c:431
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Dita"
 
-#: gtk/gtkcalendar.c:432
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -891,35 +892,35 @@ msgstr ""
 "Dita e zgjedhur (si numër nga 1 në 31, ose 0 për të hequr ditën e zgjedhur "
 "për çastin)"
 
-#: gtk/gtkcalendar.c:446
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Shfaq Titullin"
 
-#: gtk/gtkcalendar.c:447
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Nëse TRUE, shfaqet një titull"
 
-#: gtk/gtkcalendar.c:461
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Shfaq Emrat e Ditëve"
 
-#: gtk/gtkcalendar.c:462
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Nëse TRUE, do të shfaqen emrat e ditëve"
 
-#: gtk/gtkcalendar.c:475
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Pa Ndryshim Muaji"
 
-#: gtk/gtkcalendar.c:476
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Nëse TRUE, muaji i zgjedhur nuk mund të ndryshohet"
 
-#: gtk/gtkcalendar.c:490
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Shfaq Numrat e Javëve"
 
-#: gtk/gtkcalendar.c:491
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Nëse TRUE, do të shfaqen numrat e javëve"
 
@@ -1154,7 +1155,7 @@ msgstr "Nëse pixbuf i krijuar duhet ngjyrosur në përputhje me situatën"
 msgid "Value of the progress bar"
 msgstr "Vlera e shtyllës së përparimit"
 
-#: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:190
+#: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
 #: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
@@ -1164,169 +1165,169 @@ msgstr "Teksti"
 msgid "Text on the progress bar"
 msgstr "Teksti në shtyllën e përparimit"
 
-#: gtk/gtkcellrenderertext.c:191
+#: gtk/gtkcellrenderertext.c:193
 msgid "Text to render"
 msgstr "Teksti që duhet vizatuar"
 
-#: gtk/gtkcellrenderertext.c:198
+#: gtk/gtkcellrenderertext.c:200
 msgid "Markup"
 msgstr "Markues"
 
-#: gtk/gtkcellrenderertext.c:199
+#: gtk/gtkcellrenderertext.c:201
 msgid "Marked up text to render"
 msgstr "Teksti i markuar që duhet vizatuar"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Vetitë"
 
-#: gtk/gtkcellrenderertext.c:207
+#: gtk/gtkcellrenderertext.c:209
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Një listë vetish stili për t'u zbatuar tek teksti i vizatuesit"
 
-#: gtk/gtkcellrenderertext.c:214
+#: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
 msgstr "Modalitet me paragraf të vetëm"
 
-#: gtk/gtkcellrenderertext.c:215
+#: gtk/gtkcellrenderertext.c:217
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Nëse duhet apo jo mbajtur i gjithë teksti në një paragraf të vetëm"
 
-#: gtk/gtkcellrenderertext.c:223 gtk/gtkcellview.c:144 gtk/gtktexttag.c:181
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:144 gtk/gtktexttag.c:181
 msgid "Background color name"
 msgstr "Emri i ngjyrës së sfondit"
 
-#: gtk/gtkcellrenderertext.c:224 gtk/gtkcellview.c:145 gtk/gtktexttag.c:182
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:145 gtk/gtktexttag.c:182
 msgid "Background color as a string"
 msgstr "Ngjyra e sfondit e shprehur me një vlerë"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkcellview.c:151 gtk/gtktexttag.c:189
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:151 gtk/gtktexttag.c:189
 msgid "Background color"
 msgstr "Ngjyra e sfondit"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkcellview.c:152
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:152
 msgid "Background color as a GdkColor"
 msgstr "Ngjyra e sfondit si GdkColor"
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:215
 msgid "Foreground color name"
 msgstr "Emri i ngjyrës së planit të parë"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:216
+#: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:216
 msgid "Foreground color as a string"
 msgstr "Ngjyra e përparme e shprehur si vlerë"
 
-#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:223
+#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:223
 msgid "Foreground color"
 msgstr "Ngjyra e përparme"
 
-#: gtk/gtkcellrenderertext.c:248
+#: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
 #: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "E ndryshueshme"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:250 gtk/gtktextview.c:549
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:549
 msgid "Whether the text can be modified by the user"
 msgstr "Nëse teksti mund të ndryshohet nga përdoruesi"
 
-#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:272
+#: gtk/gtkcellrenderertext.c:266 gtk/gtkcellrenderertext.c:274
 #: gtk/gtkfontsel.c:185 gtk/gtktexttag.c:265 gtk/gtktexttag.c:273
 msgid "Font"
 msgstr "Gërmat"
 
-#: gtk/gtkcellrenderertext.c:265
-msgid "Font description as a string"
-msgstr "Përshkrimi i gërmës si vlerë"
+#: gtk/gtkcellrenderertext.c:267 gtk/gtktexttag.c:266
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "Përshkrimi i gërmave si një frazë, p.sh. \"Sans Italic 12\""
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:275 gtk/gtktexttag.c:274
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Përshkrimi i gërmave si strukturë PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:281 gtk/gtktexttag.c:281
+#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:281
 msgid "Font family"
 msgstr "Familja e gërmave"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtktexttag.c:282
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:282
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 "Emri i familjes së gërmave, për shembull Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:289 gtk/gtkcellrenderertext.c:290
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:289
 msgid "Font style"
 msgstr "Stili i gërmave"
 
-#: gtk/gtkcellrenderertext.c:298 gtk/gtkcellrenderertext.c:299
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:298
 msgid "Font variant"
 msgstr "Varianti i gërmave"
 
-#: gtk/gtkcellrenderertext.c:307 gtk/gtkcellrenderertext.c:308
+#: gtk/gtkcellrenderertext.c:309 gtk/gtkcellrenderertext.c:310
 #: gtk/gtktexttag.c:307
 msgid "Font weight"
 msgstr "Trashësia e gërmave"
 
-#: gtk/gtkcellrenderertext.c:317 gtk/gtkcellrenderertext.c:318
+#: gtk/gtkcellrenderertext.c:319 gtk/gtkcellrenderertext.c:320
 #: gtk/gtktexttag.c:318
 msgid "Font stretch"
 msgstr "Gjerësia e gërmave"
 
-#: gtk/gtkcellrenderertext.c:326 gtk/gtkcellrenderertext.c:327
+#: gtk/gtkcellrenderertext.c:328 gtk/gtkcellrenderertext.c:329
 #: gtk/gtktexttag.c:327
 msgid "Font size"
 msgstr "Madhësia e gërmave"
 
-#: gtk/gtkcellrenderertext.c:336 gtk/gtktexttag.c:347
+#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:347
 msgid "Font points"
 msgstr "Pikët e gërmave (si njësi matëse)"
 
-#: gtk/gtkcellrenderertext.c:337 gtk/gtktexttag.c:348
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:348
 msgid "Font size in points"
 msgstr "Madhësia e gërmave në pikë"
 
-#: gtk/gtkcellrenderertext.c:346 gtk/gtktexttag.c:337
+#: gtk/gtkcellrenderertext.c:348 gtk/gtktexttag.c:337
 msgid "Font scale"
 msgstr "Shkalla e gërmave"
 
-#: gtk/gtkcellrenderertext.c:347
+#: gtk/gtkcellrenderertext.c:349
 msgid "Font scaling factor"
 msgstr "Faktori i shkallëzimit të gërmave"
 
-#: gtk/gtkcellrenderertext.c:356 gtk/gtktexttag.c:416
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:416
 msgid "Rise"
 msgstr "Sfazimi"
 
-#: gtk/gtkcellrenderertext.c:357
+#: gtk/gtkcellrenderertext.c:359
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Sfazimi i tekstit mbi vijën bazë (nën vijën bazë nëse vlera është negative)"
 
-#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:456
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:456
 msgid "Strikethrough"
 msgstr "Vizuar"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:457
+#: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:457
 msgid "Whether to strike through the text"
 msgstr "Tregon nëse teksti është i vizuar"
 
-#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:464
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:464
 msgid "Underline"
 msgstr "Nënvizimi"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:465
 msgid "Style of underline for this text"
 msgstr "Stili i nënvizimit për këtë tekst"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:376
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:376
 msgid "Language"
 msgstr "Gjuha"
 
-#: gtk/gtkcellrenderertext.c:386
+#: gtk/gtkcellrenderertext.c:388
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1336,11 +1337,11 @@ msgstr ""
 "ndihmëz kur shfaq tekstin. Nëse nuk e kuptoni këtë parametër, ka mundësi të "
 "mos keni nevojë për të"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Sfazimi"
 
-#: gtk/gtkcellrenderertext.c:407
+#: gtk/gtkcellrenderertext.c:409
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
@@ -1349,20 +1350,20 @@ msgstr ""
 "Zona e preferuar për të sfazuar tekstin, nëse kutia e krijuar nuk ka "
 "hapësirë të mjaftueshme për të shfaqur të gjithë tekstin"
 
-#: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
+#: gtk/gtkcellrenderertext.c:428 gtk/gtkfilechooserbutton.c:400
 #: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Gjerësia llogaritur në gërma"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
+#: gtk/gtkcellrenderertext.c:429 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "Gjerësia e dëshiruar e etiketës, në gërma"
 
-#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:473
 msgid "Wrap mode"
 msgstr "Në krye automatikisht"
 
-#: gtk/gtkcellrenderertext.c:446
+#: gtk/gtkcellrenderertext.c:448
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
@@ -1370,141 +1371,141 @@ msgstr ""
 "Si duhet pjesëzuar teksti në më shumë se një rresht, nëse kutia e krijuar "
 "nuk ka hapësirë të mjaftueshme për të shfaqur të gjithë tekstin"
 
-#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
 msgid "Wrap width"
 msgstr "Gjerësia e hapit"
 
-#: gtk/gtkcellrenderertext.c:466
+#: gtk/gtkcellrenderertext.c:468
 msgid "The width at which the text is wrapped"
 msgstr "Gjerësia tek e cila teksti shkëputet"
 
-#: gtk/gtkcellrenderertext.c:482 gtk/gtktreeviewcolumn.c:291
+#: gtk/gtkcellrenderertext.c:484 gtk/gtktreeviewcolumn.c:291
 msgid "Alignment"
 msgstr "Drejtimi"
 
-#: gtk/gtkcellrenderertext.c:483
+#: gtk/gtkcellrenderertext.c:485
 #, fuzzy
 msgid "How to align the lines"
 msgstr "Si të vizatohet kollona e mjeteve"
 
-#: gtk/gtkcellrenderertext.c:493 gtk/gtkcellview.c:174 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:174 gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr "Rregullimi i sfondit"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcellview.c:175 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:175 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr "Nëse ky tag ndikon tek ngjyra e sfondit"
 
-#: gtk/gtkcellrenderertext.c:497 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:555
 msgid "Foreground set"
 msgstr "Rregullimi i ngjyrës së planit të parë"
 
-#: gtk/gtkcellrenderertext.c:498 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:556
 msgid "Whether this tag affects the foreground color"
 msgstr "Nëse ky tag ndikon mbi ngjyrën e përparme"
 
-#: gtk/gtkcellrenderertext.c:501 gtk/gtktexttag.c:563
+#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:563
 msgid "Editability set"
 msgstr "Rregullimi i përpunueshmërisë"
 
-#: gtk/gtkcellrenderertext.c:502 gtk/gtktexttag.c:564
+#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:564
 msgid "Whether this tag affects text editability"
 msgstr "Nëse ky tag ndikon përpunueshmërinë e tekstit"
 
-#: gtk/gtkcellrenderertext.c:505 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:567
 msgid "Font family set"
 msgstr "Zgjedhja e familjes së gërmave"
 
-#: gtk/gtkcellrenderertext.c:506 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:568
 msgid "Whether this tag affects the font family"
 msgstr "Tregon nëse ky tag ka efekt mbi familjen e gërmave"
 
-#: gtk/gtkcellrenderertext.c:509 gtk/gtktexttag.c:571
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:571
 msgid "Font style set"
 msgstr "Rregullimi i stilit të gërmave"
 
-#: gtk/gtkcellrenderertext.c:510 gtk/gtktexttag.c:572
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:572
 msgid "Whether this tag affects the font style"
 msgstr "Tregon nëse ky tag ka efekt mbi stilin e gërmave"
 
-#: gtk/gtkcellrenderertext.c:513 gtk/gtktexttag.c:575
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:575
 msgid "Font variant set"
 msgstr "Rregullimi i variantit të gërmave"
 
-#: gtk/gtkcellrenderertext.c:514 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:576
 msgid "Whether this tag affects the font variant"
 msgstr "Tregon nëse ky tag ka efekt mbi variantin e gërmave"
 
-#: gtk/gtkcellrenderertext.c:517 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:579
 msgid "Font weight set"
 msgstr "Rregullimi i trashësisë së gërmave"
 
-#: gtk/gtkcellrenderertext.c:518 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the font weight"
 msgstr "Tregon nëse ky tag ka efekt mbi trashësinë e gërmave"
 
-#: gtk/gtkcellrenderertext.c:521 gtk/gtktexttag.c:583
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:583
 msgid "Font stretch set"
 msgstr "Rregullimi i gjerësisë së gërmave"
 
-#: gtk/gtkcellrenderertext.c:522 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:584
 msgid "Whether this tag affects the font stretch"
 msgstr "Tregon nëse ky tag ka efekt mbi gjerësinë e gërmave"
 
-#: gtk/gtkcellrenderertext.c:525 gtk/gtktexttag.c:587
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:587
 msgid "Font size set"
 msgstr "Rregullimi i madhësisë së gërmave"
 
-#: gtk/gtkcellrenderertext.c:526 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:588
 msgid "Whether this tag affects the font size"
 msgstr "Tregon nëse ky tag ka efekt mbi madhësinë e gërmave"
 
-#: gtk/gtkcellrenderertext.c:529 gtk/gtktexttag.c:591
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:591
 msgid "Font scale set"
 msgstr "Përcaktimi i shkallës së gërmave"
 
-#: gtk/gtkcellrenderertext.c:530 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:592
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Nëse ky tag ndryshon madhësinë e gërmave sipas një faktori"
 
-#: gtk/gtkcellrenderertext.c:533 gtk/gtktexttag.c:611
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:611
 msgid "Rise set"
 msgstr "Rregullimi i sfazimit"
 
-#: gtk/gtkcellrenderertext.c:534 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:612
 msgid "Whether this tag affects the rise"
 msgstr "Tregon nëse ky tag ka efekt mbi sfazimin"
 
-#: gtk/gtkcellrenderertext.c:537 gtk/gtktexttag.c:627
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:627
 msgid "Strikethrough set"
 msgstr "Përcaktimi i vizimit"
 
-#: gtk/gtkcellrenderertext.c:538 gtk/gtktexttag.c:628
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:628
 msgid "Whether this tag affects strikethrough"
 msgstr "Tregon nëse ky tag ka efekt mbi vizimin"
 
-#: gtk/gtkcellrenderertext.c:541 gtk/gtktexttag.c:635
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:635
 msgid "Underline set"
 msgstr "Rregullimi i nënvizimit"
 
-#: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:636
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:636
 msgid "Whether this tag affects underlining"
 msgstr "Tregon nëse ky tag ka efekt mbi nënvizimin"
 
-#: gtk/gtkcellrenderertext.c:545 gtk/gtktexttag.c:599
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:599
 msgid "Language set"
 msgstr "Përcaktimi i gjuhës"
 
-#: gtk/gtkcellrenderertext.c:546 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:600
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 "Tregon nëse ky tag ka efekt tek gjuha e përdorur për shfaqjen e tekstit"
 
-#: gtk/gtkcellrenderertext.c:549
+#: gtk/gtkcellrenderertext.c:551
 msgid "Ellipsize set"
 msgstr "Rregullimi i sfazimit"
 
-#: gtk/gtkcellrenderertext.c:550
+#: gtk/gtkcellrenderertext.c:552
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Tregon nëse ky tag ka efekt mbi mënyrën e sfazimit"
 
@@ -3471,12 +3472,12 @@ msgstr ""
 msgid "Number of jobs queued in the printer"
 msgstr "Numri i rreshtave në tabelë"
 
-#: gtk/gtkprinteroptionwidget.c:121
+#: gtk/gtkprinteroptionwidget.c:123
 #, fuzzy
 msgid "Source option"
 msgstr "Plotësimi popup"
 
-#: gtk/gtkprinteroptionwidget.c:122
+#: gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
@@ -3558,9 +3559,9 @@ msgstr "Numri i rreshtave në tabelë"
 msgid "Current Page"
 msgstr "Alfa e Aktuale"
 
-#: gtk/gtkprintoperation.c:931
+#: gtk/gtkprintoperation.c:931 gtk/gtkprintunixdialog.c:235
 #, fuzzy
-msgid "The current page in the document."
+msgid "The current page in the document"
 msgstr "Madhësia e faqes së rregullimit"
 
 #: gtk/gtkprintoperation.c:952
@@ -3642,11 +3643,6 @@ msgstr ""
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:235
-#, fuzzy
-msgid "The current page in the document"
-msgstr "Madhësia e faqes së rregullimit"
-
 #: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "Selected Printer"
@@ -3662,8 +3658,9 @@ msgid "Activity mode"
 msgstr "Modaliteti veprimtari"
 
 #: gtk/gtkprogress.c:101
+#, fuzzy
 msgid ""
-"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
@@ -3703,7 +3700,7 @@ msgstr ""
 "Një numër nga 0.0 në 1.0 që përcakton drejtimin vertikal të tekstit në "
 "\"widget\"-in në rrugë e sipër"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:320 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:203
 msgid "Adjustment"
 msgstr "Përshtatja"
 
@@ -3826,127 +3823,127 @@ msgstr "Butoni radio i grupit të cilit ky \"widget\" i përket."
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Butoni radio i grupit të cilit ky \"widget\" i përket."
 
-#: gtk/gtkrange.c:311
+#: gtk/gtkrange.c:315
 msgid "Update policy"
 msgstr "Rifresko rregullin"
 
-#: gtk/gtkrange.c:312
+#: gtk/gtkrange.c:316
 msgid "How the range should be updated on the screen"
 msgstr "Si do duhej të rifreskohej intervali në ekran"
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:325
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "\"GtkAdjustment\" që përmban vlerën aktuale për këtë objekt intervali"
 
-#: gtk/gtkrange.c:328
+#: gtk/gtkrange.c:332
 msgid "Inverted"
 msgstr "I përmbysur"
 
-#: gtk/gtkrange.c:329
+#: gtk/gtkrange.c:333
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Përmbys drejtimin e lëvizjes së rrëshqitësit për të rritur vlerën e "
 "intervalit"
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:340
 msgid "Lower stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:345
+#: gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:357
 msgid "Slider Width"
 msgstr "Gjerësia e Rrëshqitësit"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:358
 msgid "Width of scrollbar or scale thumb"
 msgstr "Gjerësia e përshkuesëve "
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:365
 msgid "Trough Border"
 msgstr "Kornizë e futur"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:366
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Hapësira midis kursorit të rrëshqitjes/butonëve të hapit dhe kornizës së "
 "futur më në anë"
 
-#: gtk/gtkrange.c:369
+#: gtk/gtkrange.c:373
 msgid "Stepper Size"
 msgstr "Madhësia e pulsantit të hapit"
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:374
 msgid "Length of step buttons at ends"
 msgstr "Gjatësia e pulsantëve të hapit në ekstremitetet"
 
-#: gtk/gtkrange.c:385
+#: gtk/gtkrange.c:389
 msgid "Stepper Spacing"
 msgstr "Hapësira pulsantit të hapit"
 
-#: gtk/gtkrange.c:386
+#: gtk/gtkrange.c:390
 msgid "Spacing between step buttons and thumb"
 msgstr "Hapësira midis pulsantëve të hapit dhe kursorit të rrëshqitjes"
 
-#: gtk/gtkrange.c:393
+#: gtk/gtkrange.c:397
 msgid "Arrow X Displacement"
 msgstr "Zhvendosja X e Shigjetës"
 
-#: gtk/gtkrange.c:394
+#: gtk/gtkrange.c:398
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Sa larg në drejtimin horizontal të zhvendoset shigjeta kur shtypet butoni"
 
-#: gtk/gtkrange.c:401
+#: gtk/gtkrange.c:405
 msgid "Arrow Y Displacement"
 msgstr "Zhvendosja Y e Shigjetës"
 
-#: gtk/gtkrange.c:402
+#: gtk/gtkrange.c:406
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Sa larg në drejtimin vertikal të zhvendoset shigjeta kur shtypet butoni"
 
-#: gtk/gtkrange.c:410
+#: gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
 msgstr ""
 
-#: gtk/gtkrange.c:411
+#: gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:426
 msgid "Trough Side Details"
 msgstr ""
 
-#: gtk/gtkrange.c:423
+#: gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
 msgstr ""
 
-#: gtk/gtkrange.c:440
+#: gtk/gtkrange.c:444
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
@@ -4164,8 +4161,9 @@ msgstr ""
 "rrëshqitësit"
 
 #: gtk/gtkscrollbar.c:92
+#, fuzzy
 msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+"Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Shfaq një buton të dytë shigjetë para në anën e kundërt të panelit të "
 "rrëshqitësit"
@@ -4686,12 +4684,9 @@ msgstr "Hapësira e kollonave"
 msgid "The amount of space between two consecutive columns"
 msgstr "Sasia e hapësirës ndërmjet dy kollonave të njëpasnjëshme"
 
-#: gtk/gtktable.c:165
-msgid "Homogenous"
-msgstr "Njëtrajtshëm"
-
 #: gtk/gtktable.c:166
-msgid "If TRUE this means the table cells are all the same width/height"
+#, fuzzy
+msgid "If TRUE, the table cells are all the same width/height"
 msgstr ""
 "Nëse TRUE kjo do të thotë që kutitë e tabelës janë të tëra të të njëjtës "
 "gjerësi/lartësi"
@@ -4891,10 +4886,6 @@ msgstr "Drejtimi i tekstit"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr ""
 "Drejtim teksti, p.sh. nga e djathta-në-të majtë ose nga e majta-në-të djathtë"
-
-#: gtk/gtktexttag.c:266
-msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Përshkrimi i gërmave si një frazë, p.sh. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -6320,6 +6311,16 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
+
+#~ msgid "Font description as a string"
+#~ msgstr "Përshkrimi i gërmës si vlerë"
+
+#, fuzzy
+#~ msgid "The current page in the document."
+#~ msgstr "Madhësia e faqes së rregullimit"
+
+#~ msgid "Homogenous"
+#~ msgstr "Njëtrajtshëm"
 
 #, fuzzy
 #~ msgid "Show Preview"

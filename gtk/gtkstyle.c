@@ -4264,7 +4264,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
               gdk_draw_line (window, gc2,
                              x, y + gap_x, x, y + gap_x);
             }
-          if ((width - (gap_x + gap_width)) > 0)
+          if ((height - (gap_x + gap_width)) > 0)
             {
               gdk_draw_line (window, gc1,
                              x, y + gap_x + gap_width, x, y + height - 2);
@@ -4297,7 +4297,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
               gdk_draw_line (window, gc3,
                              x + width - 1, y + gap_x, x + width - 1, y + gap_x);
             }
-          if ((width - (gap_x + gap_width)) > 0)
+          if ((height - (gap_x + gap_width)) > 0)
             {
               gdk_draw_line (window, gc4,
                              x + width - 1, y + gap_x + gap_width, x + width - 1, y + height - 2);

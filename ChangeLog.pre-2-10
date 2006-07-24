@@ -1,4 +1,11 @@
 2006-07-23  Matthias Clasen  <mclasen@redhat.com>
+	
+	* === Released 2.10.1 ===
+
+	*  NEWS: Updates
+
+	* gtk/gtkstyle.c (gtk_default_draw_box_gap): Draw
+	gaps on the left/right properly.  (#348134, Benjamin Otte)
 
 	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
 	Fix a memory leak.  (#348424, Carlos Garcia Campos)

@@ -34,6 +34,11 @@ Recently used files are supported since GTK+ 2.10.
 </para>
 
 
+<!-- ##### ARG GtkRecentChooserMenu:show-numbers ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_recent_chooser_menu_new ##### -->
 <para>
 

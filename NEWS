@@ -10,6 +10,27 @@ Overview of Changes from GTK+ 2.10.0 to 2.10.1
   of the Cups 1.2 custom PPD option spec
 
 * Bug fixes:
+ 348134 box gaps on left and right can be drawn wrong
+ 348014	crash on Epiphany Web Browser
+ 348063	_gtk_icon_cache_get_icon crashes when no 
+        cache available
+ 348096	GtkStyle leaks GtkRcContext
+ 157439	The "adding to panel" is buggy when switching 
+        to an rtl environment
+ 346751	symbolic colors can't be use in properties
+ 347976	Context menus appear in strange locations
+ 348001	xid / fid X11 font id's are used intermixed
+ 348049	Tabs "magically" re-order
+ 348094	Adjustment leak from gtkiconview
+ 348115 improve notebook visuals when dragging
+ 348120	gtkentrycompletion leaks action_view
+ 348227	gtkimcontextsimple doesn't terminate a string 
+        with null
+ 348424	mem leak in GtkPrintSettings
+ 348089	Missing chaining up in gtk_recent_chooser_menu_finalize
+ 348090	Reference leak in gtk_text_layout_set_contexts
+ 348095	gtk_menu_stop_scrolling does work even if we 
+        were not scrolling...
  142582	Add animation xsetting
  346427	xbm loader returns false, fails to set error
  346733	GList of visuals is always empty and causes 

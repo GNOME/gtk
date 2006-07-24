@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties 2.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-02 23:14-0400\n"
+"POT-Creation-Date: 2006-07-23 20:06-0400\n"
 "PO-Revision-Date: 2006-06-18 12:26+0200\n"
 "Last-Translator: Jonathan Ernst <jonathan@ernstfamily.ch>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -661,7 +661,8 @@ msgstr "Espacement"
 msgid "The amount of space between children"
 msgstr "La quantité d'espace entre les fils"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktoolbar.c:572
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktable.c:165
+#: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogène"
 
@@ -873,27 +874,27 @@ msgid "Whether stock icons should be shown in buttons"
 msgstr ""
 "Indique si des icônes prédéfinies doivent être affichées dans les boutons"
 
-#: gtk/gtkcalendar.c:417
+#: gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Année"
 
-#: gtk/gtkcalendar.c:418
+#: gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "L'année sélectionnée"
 
-#: gtk/gtkcalendar.c:424
+#: gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Mois"
 
-#: gtk/gtkcalendar.c:425
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Le mois sélectionné (un nombre entre 0 et 11)"
 
-#: gtk/gtkcalendar.c:431
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Jour"
 
-#: gtk/gtkcalendar.c:432
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -901,35 +902,35 @@ msgstr ""
 "Le jour sélectionné (un nombre entre 1 et 31, ou 0 pour désélectionner le "
 "jour actuellement sélectionné)"
 
-#: gtk/gtkcalendar.c:446
+#: gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Afficher les en-têtes"
 
-#: gtk/gtkcalendar.c:447
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "Si VRAI, un en-tête est affiché"
 
-#: gtk/gtkcalendar.c:461
+#: gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Afficher le nom des jours"
 
-#: gtk/gtkcalendar.c:462
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "Si VRAI, le nom des jours est affiché"
 
-#: gtk/gtkcalendar.c:475
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "Aucun changement de mois"
 
-#: gtk/gtkcalendar.c:476
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Si VRAI, le mois sélectionné ne peut être modifié"
 
-#: gtk/gtkcalendar.c:490
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Afficher les numéros de semaine"
 
-#: gtk/gtkcalendar.c:491
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "Si VRAI, les numéros de semaine sont affichés"
 
@@ -1170,7 +1171,7 @@ msgstr "Indique si le pixbuf rendu doit être colorié en accord avec l'état"
 msgid "Value of the progress bar"
 msgstr "Valeur de la barre de progression"
 
-#: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:190
+#: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
 #: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
@@ -1180,170 +1181,170 @@ msgstr "Texte"
 msgid "Text on the progress bar"
 msgstr "Texte à afficher dans la barre de progression"
 
-#: gtk/gtkcellrenderertext.c:191
+#: gtk/gtkcellrenderertext.c:193
 msgid "Text to render"
 msgstr "Texte à rendre"
 
-#: gtk/gtkcellrenderertext.c:198
+#: gtk/gtkcellrenderertext.c:200
 msgid "Markup"
 msgstr "Texte balisé"
 
-#: gtk/gtkcellrenderertext.c:199
+#: gtk/gtkcellrenderertext.c:201
 msgid "Marked up text to render"
 msgstr "Texte balisé à rendre"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtklabel.c:301
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:301
 msgid "Attributes"
 msgstr "Attributs"
 
-#: gtk/gtkcellrenderertext.c:207
+#: gtk/gtkcellrenderertext.c:209
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Une liste d'attributs de style à appliquer au texte à rendre"
 
-#: gtk/gtkcellrenderertext.c:214
+#: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
 msgstr "Mode simple paragraphe"
 
-#: gtk/gtkcellrenderertext.c:215
+#: gtk/gtkcellrenderertext.c:217
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Indique si il faut garder tout le texte dans un seul paragraphe ou non"
 
-#: gtk/gtkcellrenderertext.c:223 gtk/gtkcellview.c:144 gtk/gtktexttag.c:181
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:144 gtk/gtktexttag.c:181
 msgid "Background color name"
 msgstr "Nom de la couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:224 gtk/gtkcellview.c:145 gtk/gtktexttag.c:182
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:145 gtk/gtktexttag.c:182
 msgid "Background color as a string"
 msgstr "Couleur d'arrière-plan en tant que chaîne"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkcellview.c:151 gtk/gtktexttag.c:189
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:151 gtk/gtktexttag.c:189
 msgid "Background color"
 msgstr "Couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkcellview.c:152
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:152
 msgid "Background color as a GdkColor"
 msgstr "Couleur d'arrière-plan en tant que GdkColor"
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:215
 msgid "Foreground color name"
 msgstr "Nom de la couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:216
+#: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:216
 msgid "Foreground color as a string"
 msgstr "Couleur de premier plan en tant que chaîne"
 
-#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:223
+#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:223
 msgid "Foreground color"
 msgstr "Couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:248
+#: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
 msgstr "Couleur de premier plan en tant que GdkColor"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
 #: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "Éditable"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:250 gtk/gtktextview.c:549
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:549
 msgid "Whether the text can be modified by the user"
 msgstr "Indique si le texte peut être modifié par l'utilisateur"
 
-#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:272
+#: gtk/gtkcellrenderertext.c:266 gtk/gtkcellrenderertext.c:274
 #: gtk/gtkfontsel.c:185 gtk/gtktexttag.c:265 gtk/gtktexttag.c:273
 msgid "Font"
 msgstr "Police"
 
-#: gtk/gtkcellrenderertext.c:265
-msgid "Font description as a string"
-msgstr "Description de la police en tant que chaîne"
+#: gtk/gtkcellrenderertext.c:267 gtk/gtktexttag.c:266
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "Description de la police en tant que chaîne, c.à.d. « Sans Italic 12 »"
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:275 gtk/gtktexttag.c:274
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Description de la police en tant que structure PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:281 gtk/gtktexttag.c:281
+#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:281
 msgid "Font family"
 msgstr "Famille de la police"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtktexttag.c:282
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:282
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 "Nom de la famille de la police, c.à.d. Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:289 gtk/gtkcellrenderertext.c:290
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:289
 msgid "Font style"
 msgstr "Style de la police"
 
-#: gtk/gtkcellrenderertext.c:298 gtk/gtkcellrenderertext.c:299
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:298
 msgid "Font variant"
 msgstr "Variante de la police"
 
-#: gtk/gtkcellrenderertext.c:307 gtk/gtkcellrenderertext.c:308
+#: gtk/gtkcellrenderertext.c:309 gtk/gtkcellrenderertext.c:310
 #: gtk/gtktexttag.c:307
 msgid "Font weight"
 msgstr "Épaisseur de la police"
 
-#: gtk/gtkcellrenderertext.c:317 gtk/gtkcellrenderertext.c:318
+#: gtk/gtkcellrenderertext.c:319 gtk/gtkcellrenderertext.c:320
 #: gtk/gtktexttag.c:318
 msgid "Font stretch"
 msgstr "Étirement de la police"
 
-#: gtk/gtkcellrenderertext.c:326 gtk/gtkcellrenderertext.c:327
+#: gtk/gtkcellrenderertext.c:328 gtk/gtkcellrenderertext.c:329
 #: gtk/gtktexttag.c:327
 msgid "Font size"
 msgstr "Taille de la police"
 
-#: gtk/gtkcellrenderertext.c:336 gtk/gtktexttag.c:347
+#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:347
 msgid "Font points"
 msgstr "Points de la police"
 
-#: gtk/gtkcellrenderertext.c:337 gtk/gtktexttag.c:348
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:348
 msgid "Font size in points"
 msgstr "Taille de la police en points"
 
-#: gtk/gtkcellrenderertext.c:346 gtk/gtktexttag.c:337
+#: gtk/gtkcellrenderertext.c:348 gtk/gtktexttag.c:337
 msgid "Font scale"
 msgstr "Échelle de la police"
 
-#: gtk/gtkcellrenderertext.c:347
+#: gtk/gtkcellrenderertext.c:349
 msgid "Font scaling factor"
 msgstr "Facteur d'échelle de la police"
 
-#: gtk/gtkcellrenderertext.c:356 gtk/gtktexttag.c:416
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:416
 msgid "Rise"
 msgstr "Élévation"
 
-#: gtk/gtkcellrenderertext.c:357
+#: gtk/gtkcellrenderertext.c:359
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Décalage du texte au-dessus de la ligne de base (au-dessous si l'élévation "
 "est négative)"
 
-#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:456
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:456
 msgid "Strikethrough"
 msgstr "Barré"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:457
+#: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:457
 msgid "Whether to strike through the text"
 msgstr "Indique si le texte est barré"
 
-#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:464
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:464
 msgid "Underline"
 msgstr "Souligné"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:465
 msgid "Style of underline for this text"
 msgstr "Style de soulignement pour ce texte"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:376
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:376
 msgid "Language"
 msgstr "Langue"
 
-#: gtk/gtkcellrenderertext.c:386
+#: gtk/gtkcellrenderertext.c:388
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1353,11 +1354,11 @@ msgstr ""
 "aide pour rendre le texte. Si vous ne comprenez pas ce paramètre, vous n'en "
 "avez probablement pas besoin"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
 msgid "Ellipsize"
 msgstr "Découpe"
 
-#: gtk/gtkcellrenderertext.c:407
+#: gtk/gtkcellrenderertext.c:409
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
@@ -1366,20 +1367,20 @@ msgstr ""
 "L'endroit préféré pour découper la chaîne de caractères, si jamais la "
 "cellule n'offre pas assez de place pour l'afficher en entier."
 
-#: gtk/gtkcellrenderertext.c:426 gtk/gtkfilechooserbutton.c:400
+#: gtk/gtkcellrenderertext.c:428 gtk/gtkfilechooserbutton.c:400
 #: gtk/gtklabel.c:444
 msgid "Width In Characters"
 msgstr "Largeur en caractères"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtklabel.c:445
+#: gtk/gtkcellrenderertext.c:429 gtk/gtklabel.c:445
 msgid "The desired width of the label, in characters"
 msgstr "La taille désirée des étiquettes, en caractères"
 
-#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:473
 msgid "Wrap mode"
 msgstr "Mode de coupure"
 
-#: gtk/gtkcellrenderertext.c:446
+#: gtk/gtkcellrenderertext.c:448
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
@@ -1387,141 +1388,141 @@ msgstr ""
 "Méthode pour couper la chaîne en lignes multiples, si l'espace n'est pas "
 "suffisant pour afficher la chaîne complète"
 
-#: gtk/gtkcellrenderertext.c:465 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
 msgid "Wrap width"
 msgstr "Largeur de la coupure"
 
-#: gtk/gtkcellrenderertext.c:466
+#: gtk/gtkcellrenderertext.c:468
 msgid "The width at which the text is wrapped"
 msgstr "La largeur à laquelle le texte doit être coupé"
 
-#: gtk/gtkcellrenderertext.c:482 gtk/gtktreeviewcolumn.c:291
+#: gtk/gtkcellrenderertext.c:484 gtk/gtktreeviewcolumn.c:291
 msgid "Alignment"
 msgstr "Alignement"
 
-#: gtk/gtkcellrenderertext.c:483
+#: gtk/gtkcellrenderertext.c:485
 #, fuzzy
 msgid "How to align the lines"
 msgstr "Comment dessiner la barre d'outils"
 
-#: gtk/gtkcellrenderertext.c:493 gtk/gtkcellview.c:174 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:174 gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr "Arrière-plan défini"
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcellview.c:175 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:175 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr "Indique si cette balise affecte la couleur de fond"
 
-#: gtk/gtkcellrenderertext.c:497 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:555
 msgid "Foreground set"
 msgstr "Premier plan défini"
 
-#: gtk/gtkcellrenderertext.c:498 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:556
 msgid "Whether this tag affects the foreground color"
 msgstr "Indique si cette balise affecte la couleur d'avant-plan"
 
-#: gtk/gtkcellrenderertext.c:501 gtk/gtktexttag.c:563
+#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:563
 msgid "Editability set"
 msgstr "Éditabilité défini"
 
-#: gtk/gtkcellrenderertext.c:502 gtk/gtktexttag.c:564
+#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:564
 msgid "Whether this tag affects text editability"
 msgstr "Indique si cette balise affecte l'éditabilité du texte"
 
-#: gtk/gtkcellrenderertext.c:505 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:567
 msgid "Font family set"
 msgstr "Famille de la police définie"
 
-#: gtk/gtkcellrenderertext.c:506 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:568
 msgid "Whether this tag affects the font family"
 msgstr "Indique si cette balise affecte la famille de la police"
 
-#: gtk/gtkcellrenderertext.c:509 gtk/gtktexttag.c:571
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:571
 msgid "Font style set"
 msgstr "Style de la police défini"
 
-#: gtk/gtkcellrenderertext.c:510 gtk/gtktexttag.c:572
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:572
 msgid "Whether this tag affects the font style"
 msgstr "Indique si cette balise affecte le style de la police"
 
-#: gtk/gtkcellrenderertext.c:513 gtk/gtktexttag.c:575
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:575
 msgid "Font variant set"
 msgstr "Variante de la police définie"
 
-#: gtk/gtkcellrenderertext.c:514 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:576
 msgid "Whether this tag affects the font variant"
 msgstr "Indique si cette balise affecte la variante de la police"
 
-#: gtk/gtkcellrenderertext.c:517 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:579
 msgid "Font weight set"
 msgstr "Épaisseur de la police définie"
 
-#: gtk/gtkcellrenderertext.c:518 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the font weight"
 msgstr "Indique si cette balise affecte l'épaisseur de la police"
 
-#: gtk/gtkcellrenderertext.c:521 gtk/gtktexttag.c:583
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:583
 msgid "Font stretch set"
 msgstr "Étirement de la police défini"
 
-#: gtk/gtkcellrenderertext.c:522 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:584
 msgid "Whether this tag affects the font stretch"
 msgstr "Indique si cette balise affecte l'étirement de la police"
 
-#: gtk/gtkcellrenderertext.c:525 gtk/gtktexttag.c:587
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:587
 msgid "Font size set"
 msgstr "Taille de la police définie"
 
-#: gtk/gtkcellrenderertext.c:526 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:588
 msgid "Whether this tag affects the font size"
 msgstr "Indique si cette balise affecte la taille de la police"
 
-#: gtk/gtkcellrenderertext.c:529 gtk/gtktexttag.c:591
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:591
 msgid "Font scale set"
 msgstr "Échelle de la police définie"
 
-#: gtk/gtkcellrenderertext.c:530 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:592
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Indique si cette balise change la taille de la police"
 
-#: gtk/gtkcellrenderertext.c:533 gtk/gtktexttag.c:611
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:611
 msgid "Rise set"
 msgstr "Élévation définie"
 
-#: gtk/gtkcellrenderertext.c:534 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:612
 msgid "Whether this tag affects the rise"
 msgstr "Indique si cette balise affecte l'élévation"
 
-#: gtk/gtkcellrenderertext.c:537 gtk/gtktexttag.c:627
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:627
 msgid "Strikethrough set"
 msgstr "Barré défini"
 
-#: gtk/gtkcellrenderertext.c:538 gtk/gtktexttag.c:628
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:628
 msgid "Whether this tag affects strikethrough"
 msgstr "Indique si cette balise affecte le barré"
 
-#: gtk/gtkcellrenderertext.c:541 gtk/gtktexttag.c:635
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:635
 msgid "Underline set"
 msgstr "Soulignement défini"
 
-#: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:636
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:636
 msgid "Whether this tag affects underlining"
 msgstr "Indique si cette balise affecte le soulignement"
 
-#: gtk/gtkcellrenderertext.c:545 gtk/gtktexttag.c:599
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:599
 msgid "Language set"
 msgstr "Langue défini"
 
-#: gtk/gtkcellrenderertext.c:546 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:600
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 "Indique si cette balise affecte le langage utilisé pour afficher le texte"
 
-#: gtk/gtkcellrenderertext.c:549
+#: gtk/gtkcellrenderertext.c:551
 msgid "Ellipsize set"
 msgstr "Découpage actif"
 
-#: gtk/gtkcellrenderertext.c:550
+#: gtk/gtkcellrenderertext.c:552
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Indique si cette marque affecte le mode découpe"
 
@@ -3504,12 +3505,12 @@ msgstr ""
 msgid "Number of jobs queued in the printer"
 msgstr "Le nombre de lignes dans la table"
 
-#: gtk/gtkprinteroptionwidget.c:121
+#: gtk/gtkprinteroptionwidget.c:123
 #, fuzzy
 msgid "Source option"
 msgstr "Complétion dans un popup"
 
-#: gtk/gtkprinteroptionwidget.c:122
+#: gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
@@ -3591,9 +3592,9 @@ msgstr "Le nombre de lignes dans la table"
 msgid "Current Page"
 msgstr "Alpha actuel"
 
-#: gtk/gtkprintoperation.c:931
+#: gtk/gtkprintoperation.c:931 gtk/gtkprintunixdialog.c:235
 #, fuzzy
-msgid "The current page in the document."
+msgid "The current page in the document"
 msgstr "La taille de la page de l'ajustement"
 
 #: gtk/gtkprintoperation.c:952
@@ -3675,11 +3676,6 @@ msgstr ""
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:235
-#, fuzzy
-msgid "The current page in the document"
-msgstr "La taille de la page de l'ajustement"
-
 #: gtk/gtkprintunixdialog.c:252
 #, fuzzy
 msgid "Selected Printer"
@@ -3695,8 +3691,9 @@ msgid "Activity mode"
 msgstr "Mode d'activité"
 
 #: gtk/gtkprogress.c:101
+#, fuzzy
 msgid ""
-"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
@@ -3737,7 +3734,7 @@ msgstr ""
 "Nombre entre 0.0 et 1.0 indiquant l'alignement vertical du texte dans le "
 "composant graphique de progression"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:320 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:203
 msgid "Adjustment"
 msgstr "Ajustement"
 
@@ -3858,124 +3855,124 @@ msgstr "Le bouton radio qui groupe ce composant graphique avec."
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Le bouton radio qui groupe ce composant graphique avec."
 
-#: gtk/gtkrange.c:311
+#: gtk/gtkrange.c:315
 msgid "Update policy"
 msgstr "Politique de mise à jour"
 
-#: gtk/gtkrange.c:312
+#: gtk/gtkrange.c:316
 msgid "How the range should be updated on the screen"
 msgstr "De combien l'intervalle doit être mis à jour à l'écran"
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:325
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "Le GtkAdjustement qui contient la valeur actuelle de cette objet d'intervalle"
 
-#: gtk/gtkrange.c:328
+#: gtk/gtkrange.c:332
 msgid "Inverted"
 msgstr "Inversé"
 
-#: gtk/gtkrange.c:329
+#: gtk/gtkrange.c:333
 msgid "Invert direction slider moves to increase range value"
 msgstr "Inverser la direction du réglages augmente la valeur de l'intervalle"
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:340
 msgid "Lower stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:345
+#: gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:357
 msgid "Slider Width"
 msgstr "Largeur de la glissière"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:358
 msgid "Width of scrollbar or scale thumb"
 msgstr "Largeur de l'ascenseur ou échelle"
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:365
 msgid "Trough Border"
 msgstr "Bordure"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:366
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Espace entre le curseur et la bordure"
 
-#: gtk/gtkrange.c:369
+#: gtk/gtkrange.c:373
 msgid "Stepper Size"
 msgstr "Taille du curseur"
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:374
 msgid "Length of step buttons at ends"
 msgstr "Longueur des boutons à la fin"
 
-#: gtk/gtkrange.c:385
+#: gtk/gtkrange.c:389
 msgid "Stepper Spacing"
 msgstr "Espacement du curseur"
 
-#: gtk/gtkrange.c:386
+#: gtk/gtkrange.c:390
 msgid "Spacing between step buttons and thumb"
 msgstr "Espace entre les boutons et le curseur"
 
-#: gtk/gtkrange.c:393
+#: gtk/gtkrange.c:397
 msgid "Arrow X Displacement"
 msgstr "Déplacement de la flèche en X"
 
-#: gtk/gtkrange.c:394
+#: gtk/gtkrange.c:398
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Déplacement à effectuer dans la direction x quand le bouton est enfoncé"
 
-#: gtk/gtkrange.c:401
+#: gtk/gtkrange.c:405
 msgid "Arrow Y Displacement"
 msgstr "Déplacement de la flèche en Y"
 
-#: gtk/gtkrange.c:402
+#: gtk/gtkrange.c:406
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Déplacement à effectuer dans la direction y quand le bouton est enfoncé"
 
-#: gtk/gtkrange.c:410
+#: gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
 msgstr ""
 
-#: gtk/gtkrange.c:411
+#: gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:426
 msgid "Trough Side Details"
 msgstr ""
 
-#: gtk/gtkrange.c:423
+#: gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
 msgstr ""
 
-#: gtk/gtkrange.c:440
+#: gtk/gtkrange.c:444
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
@@ -4196,8 +4193,9 @@ msgstr ""
 "défilement"
 
 #: gtk/gtkscrollbar.c:92
+#, fuzzy
 msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+"Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Afficher un second bouton fléché avant au coté opposé de la barre de "
 "défilement"
@@ -4718,12 +4716,9 @@ msgstr "Espacement des colonnes"
 msgid "The amount of space between two consecutive columns"
 msgstr "Espace entre deux colonnes consécutives"
 
-#: gtk/gtktable.c:165
-msgid "Homogenous"
-msgstr "Homogène"
-
 #: gtk/gtktable.c:166
-msgid "If TRUE this means the table cells are all the same width/height"
+#, fuzzy
+msgid "If TRUE, the table cells are all the same width/height"
 msgstr ""
 "Si VRAI, indique que la hauteur/largeur de toutes les cellules de la table "
 "sera identique"
@@ -4930,10 +4925,6 @@ msgstr "Direction du texte"
 #: gtk/gtktexttag.c:241
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Direction du texte, de droite à gauche ou de gauche à droite"
-
-#: gtk/gtktexttag.c:266
-msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Description de la police en tant que chaîne, c.à.d. « Sans Italic 12 »"
 
 #: gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -6395,3 +6386,13 @@ msgstr "Style d'état IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Comment dessiner la barre d'état de la méthode de saisie"
+
+#~ msgid "Font description as a string"
+#~ msgstr "Description de la police en tant que chaîne"
+
+#, fuzzy
+#~ msgid "The current page in the document."
+#~ msgstr "La taille de la page de l'ajustement"
+
+#~ msgid "Homogenous"
+#~ msgstr "Homogène"

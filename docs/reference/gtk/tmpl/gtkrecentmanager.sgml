@@ -79,6 +79,28 @@ and it will contain information about current recent manager
 for that screen.</para>
 
 
+<!-- ##### SIGNAL GtkRecentManager::changed ##### -->
+<para>
+
+</para>
+
+@recentmanager: the object which received the signal.
+
+<!-- ##### ARG GtkRecentManager:filename ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentManager:limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentManager:size ##### -->
+<para>
+
+</para>
+
 <!-- ##### STRUCT GtkRecentInfo ##### -->
 <para>
 Contains informations found when looking up an entry of the
