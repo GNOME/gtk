@@ -1,5 +1,10 @@
 2006-07-24  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (gdk_screen_get_setting): Implement
+	getting the double click threshold.
+
+2006-07-24  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_type_hint): Set the
 	window level depending on the type hint.
 
