@@ -62,7 +62,7 @@
   _gdk_quartz_update_focus_window (window, TRUE);
 }
 
--(void)windowDidResignMain:(NSNotification *)aNotification
+-(void)windowDidResignKey:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
 

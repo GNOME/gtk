@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2006 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -369,8 +369,10 @@ gdk_keyboard_grab (GdkWindow  *window,
 
   if (_gdk_quartz_keyboard_grab_window)
     {
-      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-				  TRUE, FALSE, window);
+      if (_gdk_quartz_keyboard_grab_window != window)
+	generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
+				    TRUE, FALSE, window);
+      
       g_object_unref (_gdk_quartz_keyboard_grab_window);
     }
 
@@ -408,17 +410,17 @@ gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
 }
 
 static void
-pointer_ungrab_internal (gboolean implicit)
+pointer_ungrab_internal (gboolean only_if_implicit)
 {
   if (!_gdk_quartz_pointer_grab_window)
     return;
 
-  if (pointer_grab_implicit && !implicit)
+  if (only_if_implicit && !pointer_grab_implicit)
     return;
 
   g_object_unref (_gdk_quartz_pointer_grab_window);
-
   _gdk_quartz_pointer_grab_window = NULL;
+
   /* FIXME: Send crossing events */
 }
 
@@ -563,16 +565,6 @@ apply_filters (GdkWindow  *window,
   return result;
 }
 
-/* Returns the current keyboard window */
-static GdkWindow *
-find_current_keyboard_window (void)
-{
-  if (_gdk_quartz_keyboard_grab_window && keyboard_grab_owner_events)
-    return _gdk_quartz_keyboard_grab_window;
-  
-  return current_keyboard_window;
-}
-
 /* This function checks if the passed in window is interested in the
  * event mask. If so, it's returned. If not, the event can be propagated
  * to its parent.
@@ -709,17 +701,16 @@ _gdk_quartz_update_focus_window (GdkWindow *window,
   if (got_focus && window == current_keyboard_window)
     return;
 
-  /* FIXME: Don't do this when grabbed */
-
-  if (!got_focus)
+  /* FIXME: Don't do this when grabbed? Or make GdkQuartzWindow
+   * disallow it in the first place instead?
+   */
+  
+  if (!got_focus && window == current_keyboard_window)
     {
-      if (window == current_keyboard_window)
-	{
 	  event = create_focus_event (current_keyboard_window, FALSE);
 	  append_event (event);
 	  g_object_unref (current_keyboard_window);
 	  current_keyboard_window = NULL;
-	}
     }
 
   if (got_focus)
@@ -997,7 +988,7 @@ _gdk_quartz_send_map_events (GdkWindow *window)
 GdkWindow *
 _gdk_quartz_get_mouse_window (void)
 {
-  if (_gdk_quartz_pointer_grab_window)
+  if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
     return _gdk_quartz_pointer_grab_window;
   
   return current_mouse_window;
@@ -1150,6 +1141,8 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	
 	return real_window;
       }
+      break;
+      
     case NSMouseEntered:
       {
 	NSPoint point;
@@ -1163,9 +1156,9 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
 	
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
-
-	break;
       }
+      break;
+
     case NSMouseExited:
       synthesize_crossing_events (_gdk_root, GDK_CROSSING_NORMAL, nsevent, *x, *y);
       break;
@@ -1174,18 +1167,13 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
     case NSKeyUp:
     case NSFlagsChanged:
       {
-	GdkWindow *keyboard_window;
 	GdkEventMask event_mask;
-	GdkWindow *real_window;
 
 	if (_gdk_quartz_keyboard_grab_window && !keyboard_grab_owner_events)
 	  return _gdk_quartz_keyboard_grab_window;
 
-	keyboard_window = find_current_keyboard_window ();
 	event_mask = get_event_mask_from_ns_event (nsevent);
-	real_window = find_window_interested_in_event_mask (keyboard_window, event_mask, TRUE);
-
-	return real_window;
+	return find_window_interested_in_event_mask (current_keyboard_window, event_mask, TRUE);
       }
       break;
 
@@ -1214,24 +1202,18 @@ create_button_event (GdkWindow *window, NSEvent *nsevent,
     case NSRightMouseDown:
     case NSOtherMouseDown:
       type = GDK_BUTTON_PRESS;
-      button = convert_mouse_button_number ([nsevent buttonNumber]);
       break;
     case NSLeftMouseUp:
-      type = GDK_BUTTON_RELEASE;
-      button = 1;
-      break;
     case NSRightMouseUp:
-      type = GDK_BUTTON_RELEASE;
-      button = 3;
-      break;
     case NSOtherMouseUp:
       type = GDK_BUTTON_RELEASE;
-      button = convert_mouse_button_number ([nsevent buttonNumber]);
       break;
     default:
       g_assert_not_reached ();
     }
   
+  button = convert_mouse_button_number ([nsevent buttonNumber]);
+
   event = gdk_event_new (type);
   event->button.window = window;
   event->button.time = get_event_time (nsevent);
@@ -1410,7 +1392,38 @@ gdk_event_translate (NSEvent *nsevent)
 	return TRUE;
     }
 
+  /* Catch the case where the entire app loses focus, and break any grabs. */
+  if ([nsevent type] == NSAppKitDefined)
+    {
+      if ([nsevent subtype] == NSApplicationDeactivatedEventType)
+	{
+	  if (_gdk_quartz_keyboard_grab_window)
+	    {
+	      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
+					  TRUE, FALSE,
+					  NULL);
+	      g_object_unref (_gdk_quartz_keyboard_grab_window);
+	      _gdk_quartz_keyboard_grab_window = NULL;
+	    }
+
+	  if (_gdk_quartz_pointer_grab_window)
+	    {
+	      generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
+					  FALSE, pointer_grab_implicit,
+					  NULL);
+	      g_object_unref (_gdk_quartz_pointer_grab_window);
+	      _gdk_quartz_pointer_grab_window = NULL;
+	    }
+	}
+    }
+
   window = find_window_for_event (nsevent, &x, &y);
+
+  /* FIXME: During owner_event grabs, we don't find a window when there is a
+   * click on a no-window widget, which makes popups etc still stay up. Need
+   * to figure out why that is.
+   */
+  
   if (!window)
     return FALSE;
 
@@ -1424,13 +1437,23 @@ gdk_event_translate (NSEvent *nsevent)
     case NSLeftMouseDown:
     case NSRightMouseDown:
     case NSOtherMouseDown:
-      /* Emulate implicit grab */
-      if (!_gdk_quartz_pointer_grab_window)
-	{
-	  pointer_grab_internal (window, FALSE, GDK_WINDOW_OBJECT (window)->event_mask,
-				 NULL, NULL, TRUE);
-	}
+      {
+	GdkEventMask event_mask;
 
+	/* Emulate implicit grab, when the window has both PRESS and RELEASE
+	 * in its mask, like X (and make it owner_events since that's what
+	 * implicit grabs are like).
+	 */
+	event_mask = (GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK);
+	if (!_gdk_quartz_pointer_grab_window &&
+	    (GDK_WINDOW_OBJECT (window)->event_mask & event_mask) == event_mask)
+	  {
+	    pointer_grab_internal (window, TRUE,
+				   GDK_WINDOW_OBJECT (window)->event_mask,
+				   NULL, NULL, TRUE);
+	  }
+      }
+      
       event = create_button_event (window, nsevent, x, y);
       append_event (event);
       

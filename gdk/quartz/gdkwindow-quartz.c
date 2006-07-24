@@ -514,9 +514,6 @@ gdk_window_new (GdkWindow     *parent,
 	else
 	  title = get_default_title ();
 
-	if (attributes->window_type == GDK_WINDOW_TEMP)
-	  [impl->toplevel setLevel:NSPopUpMenuWindowLevel];
-
 	gdk_window_set_title (window, title);
 	  
 	if (draw_impl->colormap == gdk_screen_get_rgba_colormap (_gdk_screen))
@@ -634,8 +631,6 @@ show_window_internal (GdkWindow *window, gboolean raise)
 
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-
-  /* FIXME: We need to raise the window (move it to the top in the list) */
 
   if (impl->toplevel)
     {
@@ -1350,12 +1345,81 @@ void
 gdk_window_set_type_hint (GdkWindow        *window,
 			  GdkWindowTypeHint hint)
 {
+  GdkWindowImplQuartz *impl;
+  gint                 level;
+  gboolean             shadow;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl)->type_hint = hint;
+  impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl);
+
+  impl->type_hint = hint;
+
+  /* Match the documentation, only do something if we're not mapped yet. */
+  if (GDK_WINDOW_IS_MAPPED (window))
+    return;
+
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
+    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
+    case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
+      level = NSNormalWindowLevel;
+      shadow = TRUE;
+      break;
+
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      level = NSFloatingWindowLevel;
+      shadow = TRUE;
+      break;
+
+    case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
+      level = NSTornOffMenuWindowLevel;
+      shadow = TRUE;
+      break;
+      
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
+      level = NSSubmenuWindowLevel;
+      shadow = TRUE;
+      break;
+      
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      level = NSPopUpMenuWindowLevel;
+      shadow = TRUE;
+      break;
+      
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+      level = NSPopUpMenuWindowLevel;
+      shadow = TRUE;
+      break;
+      
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      level = NSStatusWindowLevel;
+      shadow = TRUE;
+      break;
+
+    case GDK_WINDOW_TYPE_HINT_DND:
+      level = NSPopUpMenuWindowLevel;
+      shadow = FALSE;
+      break;
+
+    default:
+      level = NSNormalWindowLevel;
+      shadow = FALSE;
+      break;
+    }
+
+  /* Note: The shadow should probably be handled in a theme:
+     [impl->toplevel setHasShadow:shadow];
+  */
+  [impl->toplevel setLevel:level];
 }
 
 GdkWindowTypeHint

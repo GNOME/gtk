@@ -1,6 +1,6 @@
 /* gdkwindow-quartz.c
  *
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2006 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,6 @@
 #ifndef __GDK_PRIVATE_QUARTZ_H__
 #define __GDK_PRIVATE_QUARTZ_H__
 
-#include <config.h>
-
 #define GDK_QUARTZ_ALLOC_POOL NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]
 #define GDK_QUARTZ_RELEASE_POOL [pool release]
 
@@ -33,6 +31,8 @@
 #include <gdk/gdk.h>
 
 #include "gdkinternals.h"
+
+#include <config.h>
 
 #define GDK_TYPE_GC_QUARTZ              (_gdk_gc_quartz_get_type ())
 #define GDK_GC_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_QUARTZ, GdkGCQuartz))
@@ -117,14 +117,14 @@ GdkWindow *_gdk_quartz_get_mouse_window     (void);
 void       _gdk_quartz_update_mouse_window  (GdkWindow *window);
 void       _gdk_quartz_update_cursor        (GdkWindow *window);
 
-GdkImage *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
-				     GdkImage    *image,
-				     gint         src_x,
-				     gint         src_y,
-				     gint         dest_x,
-				     gint         dest_y,
-				     gint         width,
-				     gint         height);
+GdkImage  *_gdk_quartz_copy_to_image (GdkDrawable *drawable,
+				      GdkImage    *image,
+				      gint         src_x,
+				      gint         src_y,
+				      gint         dest_x,
+				      gint         dest_y,
+				      gint         width,
+				      gint         height);
 
 void _gdk_quartz_send_map_events (GdkWindow *window);
 

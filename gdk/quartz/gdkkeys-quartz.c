@@ -497,15 +497,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   return 0;
 }
 
-
 #define GET_KEYVAL(keycode, group, level) (keyval_array[(keycode * KEYVALS_PER_KEYCODE + group * 2 + level)])
 
 static guint
 translate_keysym (guint           hardware_keycode,
 		  gint            group,
 		  GdkModifierType state,
-		  guint          *effective_group,
-		  guint          *effective_level)
+		  gint           *effective_group,
+		  gint           *effective_level)
 {
   gint level;
   guint tmp_keyval;

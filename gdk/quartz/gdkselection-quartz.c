@@ -23,6 +23,7 @@
 #include <config.h>
 
 #include "gdkselection.h"
+#include "gdkproperty.h"
 
 gboolean
 gdk_selection_owner_set_for_display (GdkDisplay *display,
