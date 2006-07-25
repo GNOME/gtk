@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-24 23:12+0300\n"
-"PO-Revision-Date: 2006-07-24 23:12+0300\n"
+"POT-Creation-Date: 2006-07-25 19:39+0300\n"
+"PO-Revision-Date: 2006-07-25 19:38+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -1550,9 +1550,8 @@ msgid "Create Fo_lder"
 msgstr "Създаване на _папка"
 
 #: ../gtk/gtkfilechooserdefault.c:4557
-#, fuzzy
 msgid "_Location:"
-msgstr "Местоположение"
+msgstr "_Местоположение:"
 
 #: ../gtk/gtkfilechooserdefault.c:4797
 msgid "Save in _folder:"
@@ -2139,32 +2138,29 @@ msgid "_Format for:"
 msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:1047
-#, fuzzy
 msgid "_Paper size:"
-msgstr "_Настройки"
+msgstr "_Размер на листите:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1083
-#, fuzzy
 msgid "_Orientation:"
-msgstr "_Наситеност:"
+msgstr "_Ориентация:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2102
-#, fuzzy
 msgid "Page Setup"
-msgstr "Страница %u"
+msgstr "Настройки на листите"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1465
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "Бели полета от принтера..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1625
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Друг размер: %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1853
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "Управление на другите размери"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1949
 msgid "_Width:"
@@ -2317,7 +2313,7 @@ msgstr "Грешна заглавна част в иконата"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
-msgstr ""
+msgstr "Неуказана грешка"
 
 #: ../gtk/gtkprintoperation-win32.c:1622
 msgid "Error from StartDoc"
@@ -2352,88 +2348,82 @@ msgstr "_Създаване"
 
 #: ../gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
-msgstr ""
+msgstr "_Обхват: "
 
 #: ../gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
-msgstr ""
+msgstr "Разпечатки"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
-msgstr ""
+msgstr "Раз_печатки:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
-#, fuzzy
 msgid "C_ollate"
-msgstr "_Създаване"
+msgstr "По_следователно подреждане"
 
 #: ../gtk/gtkprintunixdialog.c:1554
-#, fuzzy
 msgid "_Reverse"
-msgstr "_Връщане"
+msgstr "_Обратен ред"
 
 #: ../gtk/gtkprintunixdialog.c:1571
 msgid "General"
-msgstr ""
+msgstr "Общи"
 
 #: ../gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
-msgstr ""
+msgstr "Наместване"
 
 #: ../gtk/gtkprintunixdialog.c:1962
 #: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "Страници на _лист:"
 
 #: ../gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "_Двустранен печат:"
 
 #: ../gtk/gtkprintunixdialog.c:1993
-#, fuzzy
 msgid "_Only print:"
-msgstr "_Печат"
+msgstr "_Обхват на печата:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
-msgstr ""
+msgstr "Всички страници"
 
 #: ../gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
-msgstr ""
+msgstr "Четните страници"
 
 #: ../gtk/gtkprintunixdialog.c:2010
 msgid "Odd sheets"
-msgstr ""
+msgstr "Нечетните страници"
 
 #: ../gtk/gtkprintunixdialog.c:2013
-#, fuzzy
 msgid "Sc_ale:"
-msgstr "_Стойност:"
+msgstr "_Мащабиране:"
 
 #: ../gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
-msgstr ""
+msgstr "Хартия"
 
 #: ../gtk/gtkprintunixdialog.c:2044
-#, fuzzy
 msgid "Paper _type:"
-msgstr "_Настройки"
+msgstr "_Вид хартия:"
 
 #: ../gtk/gtkprintunixdialog.c:2059
-#, fuzzy
 msgid "Paper _source:"
-msgstr "_Настройки"
+msgstr "_Източник на листите:"
 
 #: ../gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
-msgstr ""
+msgstr "_Изходна касета:"
 
 #: ../gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
-msgstr ""
+msgstr "Информация а задачата"
 
 #: ../gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
@@ -2441,54 +2431,51 @@ msgstr "П_риоритет:"
 
 #: ../gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
-msgstr ""
+msgstr "Информация за осчетоводяване:"
 
 #: ../gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
-msgstr ""
+msgstr "Отпечатване на документ"
 
 #: ../gtk/gtkprintunixdialog.c:2170
-#, fuzzy
 msgid "_Now"
-msgstr "_Не"
+msgstr "_Сега"
 
 #: ../gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
-msgstr ""
+msgstr "_Точно в:"
 
 #: ../gtk/gtkprintunixdialog.c:2192
-#, fuzzy
 msgid "On _hold"
-msgstr "_Получерно"
+msgstr "_На пауза"
 
 #: ../gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Със заглавна страница"
 
 #: ../gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr ""
+msgstr "_Преди:"
 
 #: ../gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr ""
+msgstr "_След:"
 
 #: ../gtk/gtkprintunixdialog.c:2247
 msgid "Job"
-msgstr ""
+msgstr "Задача"
 
 #: ../gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
-msgstr ""
+msgstr "Допълнителни"
 
 #: ../gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
-msgstr ""
+msgstr "Качество на изобрженията"
 
 #: ../gtk/gtkprintunixdialog.c:2351
-#, fuzzy
 msgid "Color"
-msgstr "_Цвят"
+msgstr "Цвят"
 
 #: ../gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
@@ -2496,12 +2483,12 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Някои от настройките в прозорецда взаимно си противоречат"
 
 #: ../gtk/gtkprintunixdialog.c:2387
 #, fuzzy
 msgid "Print"
-msgstr "_Печат"
+msgstr "Печат"
 
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -2522,9 +2509,8 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Графичният файл не може да бъде открит в пътя за изображения: „%s“"
 
 #: ../gtk/gtkrecentchooserdefault.c:459
-#, fuzzy
 msgid "Select which type of documents are shown"
-msgstr "Избор на видовете файлове, които се показват"
+msgstr "Избор на видовете документи, които се показват"
 
 #: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
 #, c-format
@@ -2532,28 +2518,24 @@ msgid "No item for URI '%s' found"
 msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:1774
-#, fuzzy
 msgid "Could not remove item"
-msgstr "Елементът не може да бъде избран"
+msgstr "Елементът не може да бъде премахнат"
 
 #: ../gtk/gtkrecentchooserdefault.c:1817
-#, fuzzy
 msgid "Could not clear list"
-msgstr "Елементът не може да бъде избран"
+msgstr "Списъкът не може да бъде изчистен"
 
 #: ../gtk/gtkrecentchooserdefault.c:1901
-#, fuzzy
 msgid "Copy _Location"
-msgstr "Отваряне на _местоположение"
+msgstr "Копиране на _местоположение"
 
 #: ../gtk/gtkrecentchooserdefault.c:1914
 msgid "_Remove From List"
-msgstr ""
+msgstr "_Премахване от списък"
 
 #: ../gtk/gtkrecentchooserdefault.c:1923
-#, fuzzy
 msgid "_Clear List"
-msgstr "_Изчистване"
+msgstr "_Изчистване на списък"
 
 #: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
@@ -2577,9 +2559,8 @@ msgid "Open '%s'"
 msgstr ""
 
 #: ../gtk/gtkrecentchoosermenu.c:864
-#, fuzzy
 msgid "Unknown item"
-msgstr "Неизвестен"
+msgstr "Неизвестен елемент"
 
 #: ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1203
 #: ../gtk/gtkrecentmanager.c:1213 ../gtk/gtkrecentmanager.c:1272
@@ -3982,13 +3963,12 @@ msgid "Print to LPR"
 msgstr ""
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
-#, fuzzy
 msgid "Pages Per Sheet"
-msgstr "Изображението е с нулева височина"
+msgstr "Страници на лист"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
-msgstr ""
+msgstr "Команден ред"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:436
 msgid "Print to File"
@@ -4008,7 +3988,7 @@ msgstr "Файл"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:516
 msgid "_Output format"
-msgstr ""
+msgstr "_Изходен формат"
 
 #: ../tests/testfilechooser.c:205
 #, c-format
@@ -4159,9 +4139,8 @@ msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 
 #: ../gtk/updateiconcache.c:1116
-#, fuzzy
 msgid "Failed to write header\n"
-msgstr "Неуспех при запазване на данните в TIFF"
+msgstr "Неуспех при запазване на заглавната част\n"
 
 #: ../gtk/updateiconcache.c:1122
 #, fuzzy
@@ -4174,9 +4153,8 @@ msgid "Failed to write directory index\n"
 msgstr "Неуспех при четенето на временния файл"
 
 #: ../gtk/updateiconcache.c:1136
-#, fuzzy
 msgid "Failed to rewrite header\n"
-msgstr "Неуспех при запазване на данните в TIFF"
+msgstr "Неуспех при замяната на заглавната част\n"
 
 #: ../gtk/updateiconcache.c:1162
 #, fuzzy, c-format
