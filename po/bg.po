@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-25 19:39+0300\n"
-"PO-Revision-Date: 2006-07-25 19:38+0300\n"
+"POT-Creation-Date: 2006-07-26 22:36+0300\n"
+"PO-Revision-Date: 2006-07-26 22:35+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -2079,11 +2079,11 @@ msgstr "Показване на настройките на GTK+"
 
 #: ../gtk/gtknotebook.c:775
 msgid "Arrow spacing"
-msgstr ""
+msgstr "Разстояние между стрелките"
 
 #: ../gtk/gtknotebook.c:776
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "Разстояние между стрелките за прелистване"
 
 #: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
 #, c-format
@@ -2105,6 +2105,8 @@ msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>Всеки принтер</b>\n"
+"За преносими документи"
 
 #: ../gtk/gtkpagesetupunixdialog.c:906 ../gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
@@ -2135,7 +2137,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:1026
 msgid "_Format for:"
-msgstr ""
+msgstr "_Формат за:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1047
 msgid "_Paper size:"
@@ -2196,7 +2198,7 @@ msgstr "Бели полета"
 
 #: ../gtk/gtkprinteroptionwidget.c:670
 msgid "Not available"
-msgstr ""
+msgstr "Не е достъпен"
 
 #: ../gtk/gtkprinteroptionwidget.c:783
 msgid "_Save in folder:"
@@ -2267,7 +2269,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation-unix.c:274
 msgid "Error printing"
-msgstr ""
+msgstr "Грешка при печат"
 
 #: ../gtk/gtkprintoperation-unix.c:375 ../gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
@@ -2275,7 +2277,7 @@ msgstr "Програма"
 
 #: ../gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr ""
+msgstr "Принтерът не е на линия"
 
 #: ../gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
@@ -2291,7 +2293,7 @@ msgstr "Нужда от намеса на потребителя"
 
 #: ../gtk/gtkprintoperation-win32.c:669
 msgid "Custom size"
-msgstr ""
+msgstr "Друг размер"
 
 #: ../gtk/gtkprintoperation-win32.c:1480 ../gtk/gtkprintoperation-win32.c:1503
 #: ../gtk/gtkprintoperation-win32.c:1551
@@ -2307,9 +2309,8 @@ msgid "Invalid pointer to PrintDlgEx"
 msgstr "Невалиден указател към PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
-#, fuzzy
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Грешна заглавна част в иконата"
+msgstr "Невалиден указател за рaбота с PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
@@ -2332,19 +2333,16 @@ msgid "Status"
 msgstr "Състояние"
 
 #: ../gtk/gtkprintunixdialog.c:1487
-#, fuzzy
 msgid "Print Pages"
-msgstr "_Мостра на печата"
+msgstr "Отпечатване на страници"
 
 #: ../gtk/gtkprintunixdialog.c:1491
-#, fuzzy
 msgid "_All"
-msgstr "_Използване"
+msgstr "_Всички"
 
 #: ../gtk/gtkprintunixdialog.c:1498
-#, fuzzy
 msgid "C_urrent"
-msgstr "_Създаване"
+msgstr "_Текущата"
 
 #: ../gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
@@ -2486,7 +2484,6 @@ msgid "Some of the settings in the dialog conflict"
 msgstr "Някои от настройките в прозорецда взаимно си противоречат"
 
 #: ../gtk/gtkprintunixdialog.c:2387
-#, fuzzy
 msgid "Print"
 msgstr "Печат"
 
@@ -2556,7 +2553,7 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "Отваряне на „%s“"
 
 #: ../gtk/gtkrecentchoosermenu.c:864
 msgid "Unknown item"
@@ -2564,9 +2561,9 @@ msgstr "Неизвестен елемент"
 
 #: ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1203
 #: ../gtk/gtkrecentmanager.c:1213 ../gtk/gtkrecentmanager.c:1272
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Файлът за включване - „%s“ не може да бъде намерен"
+msgstr "На адрес-УРИ „%s“ не може да се открие елемент"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -3324,7 +3321,7 @@ msgstr "C9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "Плик DL"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:129
@@ -3414,47 +3411,47 @@ msgstr "JB9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "JIS Exec"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "Плик Choukei 2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "Плик Choukei 3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "Плик Choukei 4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr ""
+msgstr "Пощенска картичка Hagaki"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "Плик Kahu"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "Плик Kaku2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "Пощенска картичка за отговор Oufuku"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "Плик you4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:181
@@ -3499,327 +3496,327 @@ msgstr "5x7"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "Плик 6x9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "Плик 7x9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "Плик 9x11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "Плик A2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "B-plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "C"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "Плик C5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "D"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:225
 msgid "paper size|e"
-msgstr ""
+msgstr "E"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "Edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "Европейски Edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr ""
+msgstr "Executive"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "F"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "Европейски FanFold"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "Американски FanFold"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr ""
+msgstr "Германски юридически FanFold"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr ""
+msgstr "Държавен юридически"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "Държавни писма"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr ""
+msgstr "Индекс 3x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr ""
+msgstr "Пощенска картичка Индекс 4x6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr ""
+msgstr "Индекс 4x6 удължен"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
-msgstr ""
+msgstr "Индекс 5x8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr ""
+msgstr "Фактура"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
-msgstr ""
+msgstr "Таблоид"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr ""
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
-msgstr ""
+msgstr "US Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
-msgstr ""
+msgstr "US Letter Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
-msgstr ""
+msgstr "US Letter Plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "Плик Monarch"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "Плик #10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Eenvelope"
-msgstr ""
+msgstr "Плик #11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "Плик #12"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "Плик #14"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "Плик #9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr ""
+msgstr "Личен плик"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
-msgstr ""
+msgstr "Кварто"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr ""
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr ""
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr ""
+msgstr "Широк формат"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr ""
+msgstr "Фолио"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
-msgstr ""
+msgstr "Фолио sp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "Плик за покана"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "Италиански плик"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "Juuro-ku-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "Pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "Плик Postfix"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
-msgstr ""
+msgstr "Малка снимка"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "Плик Prc1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "Плик Prc10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "Prc16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "Плик Prc2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "Плик Prc3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "Prc 32k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "Плик Prc4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "Плик Prc5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "Плик Prc6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "Плик Prc7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "Плик Prc8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:329
@@ -3883,11 +3880,11 @@ msgstr "Метод за въвеждане към X"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1450
 msgid "Two Sided"
-msgstr ""
+msgstr "Двустранно"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1451
 msgid "Paper Type"
-msgstr ""
+msgstr "Вид хартия"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1452
 msgid "Paper Source"
@@ -3895,11 +3892,11 @@ msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
-msgstr ""
+msgstr "Изходяща тава"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "One Sided"
-msgstr ""
+msgstr "Едностранно"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1463
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1464
@@ -3960,7 +3957,7 @@ msgstr "Некласифицирано"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr ""
+msgstr "Печат към LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
@@ -4005,11 +4002,11 @@ msgstr ""
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr ""
+msgstr "Адрес-УРИ"
 
 #: ../gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr ""
+msgstr "Адресът-УРИ присвоен на този бутон"
 
 #: ../gtk/gtklinkbutton.c:395
 msgid "Copy URL"
@@ -4022,17 +4019,17 @@ msgstr "Грешен адрес-УРИ"
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Неизвестна грешка при опит за десериализиране на %s"
 
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "Не е открита функция за десериализирнето на формата %s"
 
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "В елемента <%s> са открити както атрибута „id“, така и „name“"
 
 #: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
@@ -4042,7 +4039,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "Елементът <%s> е с невалиден идентификатор „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
@@ -4062,32 +4059,33 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1017
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "Етикетът „%s“ не е дефиниран."
 
 #: ../gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Открит е анонимен етикет и не могат да се създават етикети."
 
 #: ../gtk/gtktextbufferserialize.c:1040
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
+"Етикетът „%s“ не е съществува в буфера и не могат да се създават етикети."
 
 #: ../gtk/gtktextbufferserialize.c:1139 ../gtk/gtktextbufferserialize.c:1214
 #: ../gtk/gtktextbufferserialize.c:1315 ../gtk/gtktextbufferserialize.c:1389
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "Елементът <%s> е забранен под <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "„%s“ не е валиден вид на атрибут"
 
 #: ../gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "„%s“ не е валидно име на атрибут"
 
 #: ../gtk/gtktextbufferserialize.c:1188
 #, c-format
@@ -4098,12 +4096,12 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "„%s“ не е валидна стойност за атрибута „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1280
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "Етикетът „%s“ вече е дефиниран"
 
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
@@ -4113,25 +4111,27 @@ msgstr "Етикетът „%s“ е с невалиден приоритет pr
 #: ../gtk/gtktextbufferserialize.c:1344
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "Най-външният елемент в текст трябва да е <text_view_markup>, а не <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1353 ../gtk/gtktextbufferserialize.c:1369
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "Вече е указан елемент <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1375
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Елемент <text> не може да се появява преди елемент <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1783
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Сериализирните данни са неправилни"
 
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"Сериализирните данни са неправилни. Първата част не е GTKTEXTBUFFERCONTENTS-"
+"0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
@@ -4143,28 +4143,27 @@ msgid "Failed to write header\n"
 msgstr "Неуспех при запазване на заглавната част\n"
 
 #: ../gtk/updateiconcache.c:1122
-#, fuzzy
 msgid "Failed to write hash table\n"
-msgstr "Неуспех при запазване на данните в TIFF"
+msgstr "Неуспех при запазване на таблицата с извадките\n"
 
 #: ../gtk/updateiconcache.c:1128
-#, fuzzy
 msgid "Failed to write directory index\n"
-msgstr "Неуспех при четенето на временния файл"
+msgstr "Неуспех при записването на индекса на папка\n"
 
 #: ../gtk/updateiconcache.c:1136
 msgid "Failed to rewrite header\n"
 msgstr "Неуспех при замяната на заглавната част\n"
 
 #: ../gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Неуспех при отваряне на файла „%s“: %s"
+msgstr "Неуспех при запазване на файла за временни данни: %s\n"
 
 #: ../gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
+"Грешка при преименуването на „%s“ към „%s“: %s, затова „%s“ ще се изтрие.\n"
 
 #: ../gtk/updateiconcache.c:1214
 #, c-format
@@ -4172,9 +4171,9 @@ msgid "Could not rename %s to %s: %s\n"
 msgstr "Грешка при преименуването на „%s“ към „%s“: %s\n"
 
 #: ../gtk/updateiconcache.c:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Грешка при създаването на папка „%s“: %s"
+msgstr "Грешка при преименуването на „%s“ обратно към „%s“: %s\n"
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
@@ -4207,9 +4206,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 
-#, fuzzy
 #~ msgid "asme_f"
-#~ msgstr "Име"
+#~ msgstr "asme_f"
 
 #~ msgid "A0x2"
 #~ msgstr "A0x2"
@@ -4466,13 +4464,11 @@ msgstr ""
 #~ msgid "f"
 #~ msgstr "f"
 
-#, fuzzy
 #~ msgid "Index 3x5"
-#~ msgstr "_Индекс"
+#~ msgstr "Индекс 3x5"
 
-#, fuzzy
 #~ msgid "Index 5x8"
-#~ msgstr "_Индекс"
+#~ msgstr "Индекс 5x8"
 
 #~ msgid "prc 32k"
 #~ msgstr "prc 32k"
