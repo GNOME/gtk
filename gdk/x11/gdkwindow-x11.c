@@ -2322,7 +2322,7 @@ gdk_window_get_type_hint (GdkWindow *window)
       if ((type_return == XA_ATOM) && (format_return == 32) &&
           (data) && (nitems_return == 1))
         {
-          Atom atom = (Atom) *data;
+          Atom atom = *(Atom*)data;
 
           if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DIALOG"))
             type = GDK_WINDOW_TYPE_HINT_DIALOG;
