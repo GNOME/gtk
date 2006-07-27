@@ -1,3 +1,9 @@
+2006-07-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_finalize): Move the
+	_gtk_rc_context_destroy call to the right spot.  (#348096,
+	Chris Wilson)
+
 2006-07-24  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (gdk_screen_get_setting): Implement
