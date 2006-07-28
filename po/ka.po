@@ -2089,7 +2089,7 @@ msgstr "GTK+ გამართვის ალმების მოხსნ�
 #.
 #: gtk/gtkmain.c:502
 msgid "default:LTR"
-msgstr "ნაგულისხმები:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:597
 msgid "GTK+ Options"
