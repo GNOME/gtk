@@ -48,8 +48,8 @@
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
 
-/* a poll per second should be enough */
-#define POLL_DELTA	1000
+/* a poll every two seconds should be enough */
+#define POLL_DELTA	2000
 
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
@@ -283,10 +283,6 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   				      GTK_TYPE_RECENT_MANAGER);
   manager->priv = priv;
   
-  priv->filename = g_build_filename (g_get_home_dir (),
-				     GTK_RECENTLY_USED_FILE,
-				     NULL);
-  
   priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
   
@@ -296,6 +292,13 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->read_in_progress = FALSE;
 
   priv->screen = NULL;
+
+  priv->filename = g_build_filename (g_get_home_dir (),
+				     GTK_RECENTLY_USED_FILE,
+				     NULL);
+  priv->poll_timeout = g_timeout_add (POLL_DELTA,
+		  		      gtk_recent_manager_poll_timeout,
+				      manager);
 
   build_recent_items_list (manager);
 }
