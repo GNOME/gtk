@@ -209,7 +209,7 @@ gdk_gc_get_screen (GdkGC *gc)
 }
 
 void
-_gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc)
+gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc)
 {
   GdkGCQuartz *private;
 

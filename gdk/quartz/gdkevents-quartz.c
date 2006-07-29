@@ -1604,7 +1604,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
   */
   if (strcmp (name, "gtk-font-name") == 0)
     {
-      g_value_set_string (value, "Lucida Grande 13");
+      g_value_set_string (value, "Lucida Grande 12");
       return TRUE;
     }
   else if (strcmp (name, "gtk-double-click-time") == 0)

@@ -54,8 +54,8 @@ struct _GdkDrawableImplQuartzClass
 
 GType gdk_drawable_impl_quartz_get_type (void);
 
-CGContextRef _gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias);
-void _gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef context);
+CGContextRef gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias);
+void gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef context);
 
 G_END_DECLS
 

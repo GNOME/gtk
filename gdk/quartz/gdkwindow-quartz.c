@@ -141,7 +141,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
 					   GdkRegion    *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  CGContextRef context = _gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
   int i, n_rects;
   GdkRectangle *rects;
 
@@ -155,15 +155,15 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
   gdk_region_get_rectangles (region, &rects, &n_rects);
   for (i = 0; i < n_rects; i++) 
     {
-      _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
-						     GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel);
+      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
+						    GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel);
       
       CGContextFillRect (context, CGRectMake (rects[i].x, rects[i].y, rects[i].width, rects[i].height));
       
     }
   g_free (rects);
 
-  _gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
+  gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
 }
 
 static void
@@ -1366,10 +1366,14 @@ gdk_window_set_type_hint (GdkWindow        *window,
     {
     case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
     case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
+      level = NSNormalWindowLevel;
+      shadow = TRUE;
+      break;
+
     case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
     case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
       level = NSNormalWindowLevel;
-      shadow = TRUE;
+      shadow = FALSE;
       break;
 
     case GDK_WINDOW_TYPE_HINT_DOCK:
@@ -1416,9 +1420,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
       break;
     }
 
-  /* Note: The shadow should probably be handled in a theme:
-     [impl->toplevel setHasShadow:shadow];
-  */
+  [impl->toplevel setHasShadow:shadow];
   [impl->toplevel setLevel:level];
 }
 

@@ -98,10 +98,10 @@ void _gdk_events_init           (void);
 void _gdk_visual_init           (void);
 void _gdk_input_init            (void);
 
-void _gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
-void _gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
+void gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
+void gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
 
-void _gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc);
+void gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc);
 
 gint        _gdk_quartz_get_inverted_screen_y      (gint y);
 

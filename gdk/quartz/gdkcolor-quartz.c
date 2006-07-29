@@ -140,6 +140,9 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 	                ((colors[i].blue >> 8) & 0xff);
     }
 
+  if (success)
+    *success = TRUE;
+
   return ncolors;
 }
 
@@ -167,7 +170,7 @@ gdk_colormap_get_screen (GdkColormap *cmap)
 }
 
 void
-_gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
+gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
 {
   float red, green, blue, alpha;
 
@@ -184,7 +187,7 @@ _gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap
 }
 
 void
-_gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
+gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
 {
   float red, green, blue, alpha;
 
@@ -204,7 +207,9 @@ gboolean
 gdk_color_change (GdkColormap *colormap,
 		  GdkColor    *color)
 {
-  /* FIXME: Implement */
-  return FALSE;
+  if (color->pixel < 0 || color->pixel >= colormap->size)
+    return FALSE;
+
+  return TRUE;
 }
 

@@ -176,6 +176,14 @@
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  /* FIXME: Is this right? If so, the switch shouldn't be needed. Need
+   * this + some tweaking to the event/grab code to get menus
+   * working...
+   */
+  /*if (private->window_type == GDK_WINDOW_TEMP)
+    return NO;
+  */
+
   switch (impl->type_hint)
     {
     case GDK_WINDOW_TYPE_HINT_NORMAL:

@@ -37,7 +37,7 @@ surface_info_destroy (void *data)
 {
   SurfaceInfo *info = data;
 
-  _gdk_quartz_drawable_release_context (info->drawable, info->context);
+  gdk_quartz_drawable_release_context (info->drawable, info->context);
 
   g_free (info);
 }
@@ -55,7 +55,7 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
-  context = _gdk_quartz_drawable_get_context (drawable, TRUE);
+  context = gdk_quartz_drawable_get_context (drawable, TRUE);
   if (!context)
     return NULL;
 
@@ -123,28 +123,28 @@ gdk_quartz_draw_rectangle (GdkDrawable *drawable,
 			  gint         width,
 			  gint         height)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   CGRect rect = CGRectMake (x + 0.5, y + 0.5, width, height);
 
   if (!context)
     return;
 
-  _gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc);
 
   if (filled)
     {
-      _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						    _gdk_gc_get_fg_pixel (gc));
       CGContextFillRect (context, rect);
     }
   else
     {
-      _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+      gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						      _gdk_gc_get_fg_pixel (gc));
       CGContextStrokeRect (context, rect);
     }
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -158,13 +158,13 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 		    gint         angle1,
 		    gint         angle2)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   float start_angle, end_angle;
 
   if (!context)
     return;
 
-  _gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc);
 
   CGContextSaveGState (context);
 
@@ -177,7 +177,7 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 
   if (filled)
     {
-      _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
                                                     _gdk_gc_get_fg_pixel (gc));
 
       CGContextMoveToPoint (context, 0, 0);
@@ -189,7 +189,7 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
     }
   else
     {
-      _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+      gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						      _gdk_gc_get_fg_pixel (gc));
       CGContextAddArc (context, 0, 0, width / 2,
 		       start_angle, end_angle,
@@ -199,7 +199,7 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 
   CGContextRestoreGState (context);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -209,19 +209,19 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
 			 GdkPoint    *points,
 			 gint         npoints)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   int i;
 
   if (!context)
     return;
 
-  _gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc);
 
   if (filled)
-    _gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+    gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						   _gdk_gc_get_fg_pixel (gc));
   else
-    _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+    gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						     _gdk_gc_get_fg_pixel (gc));
 
   CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
@@ -235,7 +235,7 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
   else
     CGContextStrokePath (context);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -296,12 +296,12 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
     }
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
-      CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+      CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
 
       if (!context)
 	return;
 
-      _gdk_quartz_update_context_from_gc (context, gc);
+      gdk_quartz_update_context_from_gc (context, gc);
 
       CGContextSetBlendMode (context, kCGBlendModeNormal);
 
@@ -312,7 +312,7 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
 					      GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
 			  GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
 
-      _gdk_quartz_drawable_release_context (drawable, context);
+      gdk_quartz_drawable_release_context (drawable, context);
     }
   else
     g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
@@ -342,14 +342,14 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
 			 GdkSegment     *segs,
 			 gint            nsegs)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   int i;
 
   if (!context)
     return;
 
-  _gdk_quartz_update_context_from_gc (context, gc);
-  _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
 						  _gdk_gc_get_fg_pixel (gc));
 
   for (i = 0; i < nsegs; i++)
@@ -360,7 +360,7 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
   
   CGContextStrokePath (context);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -369,15 +369,15 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 		       GdkPoint    *points,
 		       gint         npoints)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   int i;
 
   if (!context)
     return;
 
-  _gdk_quartz_update_context_from_gc (context, gc);
-  _gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						   _gdk_gc_get_fg_pixel (gc));
+  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+						  _gdk_gc_get_fg_pixel (gc));
   
   for (i = 1; i < npoints; i++)
     {
@@ -387,7 +387,7 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
   
   CGContextStrokePath (context);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -404,7 +404,7 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
 		       gint             x_dither,
 		       gint             y_dither)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   CGColorSpaceRef colorspace;
   CGDataProviderRef data_provider;
   CGImageRef image;
@@ -435,7 +435,7 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  _gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc);
 
   CGContextSetBlendMode (context, kCGBlendModeNormal);
 
@@ -446,7 +446,7 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
   CGContextDrawImage (context, CGRectMake (0, 0, pixbuf_width, pixbuf_height), image);
   CGImageRelease (image);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -460,7 +460,7 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
 		      gint             width,
 		      gint             height)
 {
-  CGContextRef context = _gdk_quartz_drawable_get_context (drawable, FALSE);
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   CGColorSpaceRef colorspace;
   CGDataProviderRef data_provider;
   CGImageRef cgimage;
@@ -482,7 +482,7 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  _gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc);
 
   CGContextSetBlendMode (context, kCGBlendModeNormal);
 
@@ -493,7 +493,7 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   CGContextDrawImage (context, CGRectMake (0, 0, image->width, image->height), cgimage);
   CGImageRelease (cgimage);
 
-  _gdk_quartz_drawable_release_context (drawable, context);
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void
@@ -571,7 +571,7 @@ gdk_drawable_impl_quartz_get_type (void)
 }
 
 CGContextRef 
-_gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias)
+gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias)
 {
   if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
     {
@@ -647,7 +647,7 @@ _gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias)
 }
 
 void
-_gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef context)
+gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef context)
 {
   if (!context)
     return;

@@ -1,3 +1,28 @@
+2006-07-29  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkcolor-quartz.c (gdk_colormap_alloc_colors): Always
+	set success to TRUE.
+	(gdk_color_change): Implement.
+
+	* gdk/quartz/GdkQuartzWindow.c
+	([GdkQuartzWindow -canBecomeKeyWindow]): Add comment.
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_screen_get_setting): Make the
+	default font a bit smaller until we have made this get the system
+	setting.
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_type_hint): Enable
+	shadows for the right window types.
+
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkgc-quartz.c:
+	* gdk/quartz/gdkdrawable-quartz.c:
+	* gdk/quartz/gdkcolor-quartz.c: Expose the CGContext functions,
+	update callers.
+
+	* gdk/quartz/gdkmain-quartz.c: (_gdk_windowing_init): No need to
+	get the current process ID, use the right constant instead.
+
 2006-07-28  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c (gtk_recent_manager_init): Add the
