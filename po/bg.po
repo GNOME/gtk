@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-26 22:36+0300\n"
-"PO-Revision-Date: 2006-07-26 22:35+0300\n"
+"POT-Creation-Date: 2006-07-30 17:08+0300\n"
+"PO-Revision-Date: 2006-07-30 17:08+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -372,7 +372,7 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Kачеството за JPEG трябва да бъде между 0 и 100. Стойността „%d“ не е "
+"Качеството за JPEG трябва да бъде между 0 и 100. Стойността „%d“ не е "
 "разрешена"
 
 #: ../gdk-pixbuf/io-jpeg.c:1103
@@ -2133,7 +2133,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:978
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "Управление на другите размери..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1026
 msgid "_Format for:"
@@ -2265,7 +2265,7 @@ msgstr "Печат на %d"
 
 #: ../gtk/gtkprintoperation-unix.c:240
 msgid "Error launching preview"
-msgstr ""
+msgstr "Грешка при стартирането на прегледа"
 
 #: ../gtk/gtkprintoperation-unix.c:274
 msgid "Error printing"
@@ -2310,7 +2310,7 @@ msgstr "Невалиден указател към PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Невалиден указател за рaбота с PrintDlgEx"
+msgstr "Невалиден указател за работа с PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
@@ -2469,7 +2469,7 @@ msgstr "Допълнителни"
 
 #: ../gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
-msgstr "Качество на изобрженията"
+msgstr "Качество на изображенията"
 
 #: ../gtk/gtkprintunixdialog.c:2351
 msgid "Color"
@@ -2477,11 +2477,11 @@ msgstr "Цвят"
 
 #: ../gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
-msgstr ""
+msgstr "Гланц"
 
 #: ../gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
-msgstr "Някои от настройките в прозорецда взаимно си противоречат"
+msgstr "Някои от настройките в прозореца взаимно си противоречат"
 
 #: ../gtk/gtkprintunixdialog.c:2387
 msgid "Print"
@@ -2512,7 +2512,7 @@ msgstr "Избор на видовете документи, които се п�
 #: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "Не е открит елемент за адреса-УРИ „%s“"
 
 #: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Could not remove item"
@@ -2536,19 +2536,19 @@ msgstr "_Изчистване на списък"
 
 #: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "Показване на _частните ресурси"
 
 #: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "Не е открит скоро използван ресурс с адрес-УРИ „%s“"
 
 #: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
 #: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
 #: ../gtk/gtkrecentchoosermenu.c:689
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "Тази функция не е реализирана за графичните обекти от клас „%s“"
 
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
@@ -2559,8 +2559,8 @@ msgstr "Отваряне на „%s“"
 msgid "Unknown item"
 msgstr "Неизвестен елемент"
 
-#: ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1203
-#: ../gtk/gtkrecentmanager.c:1213 ../gtk/gtkrecentmanager.c:1272
+#: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
+#: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "На адрес-УРИ „%s“ не може да се открие елемент"
@@ -3888,7 +3888,7 @@ msgstr "Вид хартия"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1452
 msgid "Paper Source"
-msgstr ""
+msgstr "Източник на хартията"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
@@ -3994,11 +3994,11 @@ msgstr "Информацията за файла „%s“ не може да б�
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "аргумент на directfb"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "системни"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
@@ -4006,7 +4006,7 @@ msgstr "Адрес-УРИ"
 
 #: ../gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr "Адресът-УРИ присвоен на този бутон"
+msgstr "Адресът-УРИ на този бутон"
 
 #: ../gtk/gtklinkbutton.c:395
 msgid "Copy URL"
@@ -4034,7 +4034,7 @@ msgstr "В елемента <%s> са открити както атрибута
 #: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "Атрибутът „%s“ е открит двукратно в елемента <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
@@ -4044,17 +4044,17 @@ msgstr "Елементът <%s> е с невалиден идентификат�
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" element"
-msgstr ""
+msgstr "Елементът <%s> няма нито атрибут „name“, нито „id“"
 
 #: ../gtk/gtktextbufferserialize.c:938
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Атрибутът „%s“е повторен двукратно в един и същ елемент <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:956 ../gtk/gtktextbufferserialize.c:981
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "Атрибутът „%s“ не е валиден за елемента <%s> в този контекст"
 
 #: ../gtk/gtktextbufferserialize.c:1017
 #, c-format
@@ -4092,6 +4092,7 @@ msgstr "„%s“ не е валидно име на атрибут"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"„%s“ не може да бъде преобразуван към стойност от вида „%s“ за атрибута „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
@@ -4106,7 +4107,7 @@ msgstr "Етикетът „%s“ вече е дефиниран"
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "Етикетът „%s“ е с невалиден приоритет priority „%s“"
+msgstr "Етикетът „%s“ е с невалиден приоритет „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1344
 #, c-format
@@ -4130,13 +4131,13 @@ msgstr "Сериализирните данни са неправилни"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"Сериализирните данни са неправилни. Първата част не е GTKTEXTBUFFERCONTENTS-"
+"Сериализираните данни са неправилни. Първата част не е GTKTEXTBUFFERCONTENTS-"
 "0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "открити са различни данни idatas за символните връзки „%s“ и „%s“\n"
 
 #: ../gtk/updateiconcache.c:1116
 msgid "Failed to write header\n"
@@ -4177,27 +4178,27 @@ msgstr "Грешка при преименуването на „%s“ обра�
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Файлът за временни данни е създаден успешно.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "Презаписване на файла за временни данни дори и да е актуален"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "Да не се проверява за съществуването на файл „index.theme“"
 
 #: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "Данните за изображения да не се записват във файл за временни данни"
 
 #: ../gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "Генериране на заглавен файл на C"
 
 #: ../gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Изключване на подробния изход"
 
 #: ../gtk/updateiconcache.c:1314
 #, c-format
@@ -4205,276 +4206,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-#~ msgid "asme_f"
-#~ msgstr "asme_f"
-
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A10"
-#~ msgstr "A10"
-
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "C0"
-#~ msgstr "C0"
-
-#~ msgid "C1"
-#~ msgstr "C1"
-
-#~ msgid "C10"
-#~ msgstr "C10"
-
-#~ msgid "C2"
-#~ msgstr "C2"
-
-#~ msgid "C3"
-#~ msgstr "C3"
-
-#~ msgid "C4"
-#~ msgstr "C4"
-
-#~ msgid "C5"
-#~ msgstr "C5"
-
-#~ msgid "C6"
-#~ msgstr "C6"
-
-#~ msgid "C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "C7"
-#~ msgstr "C7"
-
-#~ msgid "C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "C8"
-#~ msgstr "C8"
-
-#~ msgid "C9"
-#~ msgstr "C9"
-
-#~ msgid "RA0"
-#~ msgstr "RA0"
-
-#~ msgid "RA1"
-#~ msgstr "RA1"
-
-#~ msgid "RA2"
-#~ msgstr "RA2"
-
-#~ msgid "SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "JB0"
-#~ msgstr "JB0"
-
-#~ msgid "JB1"
-#~ msgstr "JB1"
-
-#~ msgid "JB10"
-#~ msgstr "JB10"
-
-#~ msgid "JB2"
-#~ msgstr "JB2"
-
-#~ msgid "JB3"
-#~ msgstr "JB3"
-
-#~ msgid "JB4"
-#~ msgstr "JB4"
-
-#~ msgid "JB5"
-#~ msgstr "JB5"
-
-#~ msgid "JB6"
-#~ msgstr "JB6"
-
-#~ msgid "JB7"
-#~ msgstr "JB7"
-
-#~ msgid "JB8"
-#~ msgstr "JB8"
-
-#~ msgid "JB9"
-#~ msgstr "JB9"
-
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#~ msgid "c"
-#~ msgstr "c"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "e"
-#~ msgstr "e"
-
-#~ msgid "edp"
-#~ msgstr "edp"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "Index 3x5"
-#~ msgstr "Индекс 3x5"
-
-#~ msgid "Index 5x8"
-#~ msgstr "Индекс 5x8"
-
-#~ msgid "prc 32k"
-#~ msgstr "prc 32k"
-
-#~ msgid "ROC 16k"
-#~ msgstr "ROC 16k"
-
-#~ msgid "ROC 8k"
-#~ msgstr "ROC 8k"
+"В „%s“ не е открит индексен файл за тема.\n"
+"Ако наистина искате да създадете временен файл за икони тук, използвате "
+"опцията „--ignore-theme-index“.\n"
