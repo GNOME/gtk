@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-31 17:45+0200\n"
-"PO-Revision-Date: 2006-07-31 17:46+0200\n"
+"POT-Creation-Date: 2006-07-31 17:47+0200\n"
+"PO-Revision-Date: 2006-07-31 17:51+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -914,7 +914,7 @@ msgstr "Pos1"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "Drucken"
+msgstr "Druck"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
@@ -958,7 +958,7 @@ msgstr "NB_Runter"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "NB_Bild_Hoch"
+msgstr "NB_Bild_Auf"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
@@ -966,7 +966,7 @@ msgstr "NB_Zurück"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "NB_Bild_Runter"
+msgstr "NB_Bild_Ab"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
@@ -986,7 +986,7 @@ msgstr "NB_Einfügen"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "NB_Löschen"
+msgstr "NB_Entfernen"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
@@ -1078,7 +1078,7 @@ msgstr "Grafiken von"
 #.
 #: ../gtk/gtkaccellabel.c:89
 msgid "keyboard label|Shift"
-msgstr "Umschalttaste"
+msgstr "Umschalt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
