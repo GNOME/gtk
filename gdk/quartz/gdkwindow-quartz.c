@@ -141,9 +141,12 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
 					   GdkRegion    *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  CGContextRef context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-  int i, n_rects;
+  int n_rects;
   GdkRectangle *rects;
+  GdkPixmap *bg_pixmap;
+  GdkWindow *window;
+  
+  bg_pixmap = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_pixmap;
 
   if (impl->begin_paint_count == 0)
     impl->paint_clip_region = gdk_region_copy (region);
@@ -152,18 +155,76 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
 
   impl->begin_paint_count ++;
 
+  if (bg_pixmap == GDK_NO_BG)
+    return;
+	
   gdk_region_get_rectangles (region, &rects, &n_rects);
-  for (i = 0; i < n_rects; i++) 
+  
+  if (bg_pixmap == NULL)
     {
-      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
-						    GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel);
+      CGContextRef context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+      gint i;
+    
+      for (i = 0; i < n_rects; i++) 
+        {
+          gdk_quartz_set_context_fill_color_from_pixel 
+	    (context, gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
+	     GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel);
+	  
+          CGContextFillRect (context, CGRectMake (rects[i].x, rects[i].y, rects[i].width, rects[i].height));
+        }
       
-      CGContextFillRect (context, CGRectMake (rects[i].x, rects[i].y, rects[i].width, rects[i].height));
-      
+      gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
     }
-  g_free (rects);
+  else
+    {
+      int x, y;
+      int x_offset, y_offset;
+      int width, height;
+      GdkGC *gc;
+      
+      x_offset = y_offset = 0;
+      
+      window = GDK_WINDOW (GDK_DRAWABLE_IMPL_QUARTZ (impl));
+      while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+        {
+          /* If this window should have the same background as the parent,
+           * fetch the parent. (And if the same goes for the parent, fetch
+           * the grandparent, etc.)
+           */
+          x_offset += ((GdkWindowObject *) window)->x;
+          y_offset += ((GdkWindowObject *) window)->y;
+          window = GDK_WINDOW (((GdkWindowObject *) window)->parent);
+        }
 
-  gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
+      /* Note: There should be a CG API to draw tiled images, we might
+       * want to look into that for this. 
+       */
+      gc = gdk_gc_new (GDK_DRAWABLE (impl));
+      
+      gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
+      
+      x = -x_offset;
+      while (x < (rects[0].x + rects[0].width))
+        {
+          if (x + width >= rects[0].x)
+	    {
+              y = -y_offset;
+              while (y < (rects[0].y + rects[0].height))
+                {
+                  if (y + height >= rects[0].y)
+                    gdk_draw_drawable (GDK_DRAWABLE (impl), gc, bg_pixmap, 0, 0, x, y, width, height);
+		  
+                  y += height;
+                }
+            }
+          x += width;
+        }
+      
+      g_object_unref (G_OBJECT (gc));
+    }
+  
+  g_free (rects);
 }
 
 static void

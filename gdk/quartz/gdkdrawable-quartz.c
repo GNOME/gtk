@@ -264,14 +264,14 @@ gdk_quartz_draw_text_wc (GdkDrawable    *drawable,
 
 static void
 gdk_quartz_draw_drawable (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 GdkPixmap   *src,
-			 gint         xsrc,
-			 gint         ysrc,
-			 gint         xdest,
-			 gint         ydest,
-			 gint         width,
-			 gint         height)
+			  GdkGC       *gc,
+			  GdkPixmap   *src,
+			  gint         xsrc,
+			  gint         ysrc,
+			  gint         xdest,
+			  gint         ydest,
+			  gint         width,
+			  gint         height)
 {
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);
@@ -307,9 +307,10 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc);
-      CGContextDrawImage (context, CGRectMake(0, 0, 
-					      GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width, 
-					      GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
+      CGContextDrawImage (context, 
+			  CGRectMake(0, 0, 
+				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width, 
+				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
 			  GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
 
       gdk_quartz_drawable_release_context (drawable, context);

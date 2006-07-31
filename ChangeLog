@@ -1,3 +1,10 @@
+2006-07-31  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c: (gdk_quartz_draw_drawable):
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_impl_quartz_begin_paint_region): Patch from Erik van
+	Pienbroek to implement drawing bg_pixmaps (#348145).
+
 2006-07-29  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkcolor-quartz.c (gdk_colormap_alloc_colors): Always
