@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-23 20:06-0400\n"
-"PO-Revision-Date: 2006-07-31 18:34+0530\n"
+"PO-Revision-Date: 2006-08-01 10:29+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
 "MIME-Version: 1.0\n"
@@ -2275,27 +2275,27 @@ msgstr "ଅପେକ୍ଷା କରୁଅଛି"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1474
 msgid "print operation status|Blocking on issue"
-msgstr ""
+msgstr "ନିର୍ଦ୍ଦିଷ୍ଟ ବିଷୟ ନେଇ ଅବରୋଧ କରୁଅଛି"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1476
 msgid "print operation status|Printing"
-msgstr ""
+msgstr "ମୂଦ୍ରଣ କରୁଅଛି"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1478
 msgid "print operation status|Finished"
-msgstr ""
+msgstr "ସମାପ୍ତ"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1480
 msgid "print operation status|Finished with error"
-msgstr ""
+msgstr "ତ୍ରୁଟି ସହିତ ସମାପ୍ତ"
 
 #: gtk/gtkprintoperation.c:1955
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "%dକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
 #: gtk/gtkprintoperation.c:1957 gtk/gtkprintoperation.c:2213
 msgid "Preparing"
@@ -2309,12 +2309,12 @@ msgstr "%dକୁ ମୁଦ୍ରଣ କରୁଅଛି"
 #: gtk/gtkprintoperation-unix.c:240
 #, c-format
 msgid "Error launching preview"
-msgstr ""
+msgstr "ପ୍ରାକଦର୍ଶନକୁ ଚଲାଇବା ସମୟରେ ତ୍ରୁଟି"
 
 #: gtk/gtkprintoperation-unix.c:274
 #, c-format
 msgid "Error printing"
-msgstr ""
+msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
 #: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
@@ -2322,11 +2322,11 @@ msgstr "ପ୍ରୟୋଗ"
 
 #: gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀ ଅଫ-ଲାଇନ"
 
 #: gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
-msgstr ""
+msgstr "କାଗଜ ବାହାରେ"
 
 #: gtk/gtkprintoperation-win32.c:567
 msgid "Paused"
@@ -2334,11 +2334,11 @@ msgstr "ସାମୟିକ ବିରାମ ନେଉଛି"
 
 #: gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
-msgstr ""
+msgstr "ଚାଳକ ହସ୍ତକ୍ଷେପ ଆବଶ୍ଯକ"
 
 #: gtk/gtkprintoperation-win32.c:669
 msgid "Custom size"
-msgstr ""
+msgstr "ଆକାରକୁ ଇଚ୍ଛାରୂପଣ କରନ୍ତୁ"
 
 #: gtk/gtkprintoperation-win32.c:1480 gtk/gtkprintoperation-win32.c:1503
 #: gtk/gtkprintoperation-win32.c:1551
@@ -2349,12 +2349,12 @@ msgstr "ଯଥେଷ୍ଟ ଅବ୍ଯବହ୍ରୁତ ସ୍ମୃତି ନ
 #: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ସ୍ବତନ୍ତ୍ରଚର"
 
 #: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ସୂଚକ"
 
 #: gtk/gtkprintoperation-win32.c:1566
 #, c-format
@@ -2364,12 +2364,12 @@ msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ନିୟନ୍ତ୍ରକ"
 #: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Unspecified error"
-msgstr ""
+msgstr "ଅନିର୍ଦ୍ଦିଷ୍ଟ ତ୍ରୁଟି"
 
 #: gtk/gtkprintoperation-win32.c:1622
 #, c-format
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "StartDoc ରୁ ତ୍ରୁଟି"
 
 #: gtk/gtkprintunixdialog.c:1448
 msgid "Printer"
@@ -2381,7 +2381,7 @@ msgstr "ଅବସ୍ଥାନ"
 
 #: gtk/gtkprintunixdialog.c:1465
 msgid "Status"
-msgstr ""
+msgstr "ସ୍ଥିତି"
 
 #: gtk/gtkprintunixdialog.c:1487
 msgid "Print Pages"
@@ -2393,7 +2393,7 @@ msgstr "ସମସ୍ତ (_A)"
 
 #: gtk/gtkprintunixdialog.c:1498
 msgid "C_urrent"
-msgstr "ସାମ୍ପ୍ରତିକ (_u)"
+msgstr "ବର୍ତମାନ (_u)"
 
 #: gtk/gtkprintunixdialog.c:1507
 msgid "Ra_nge: "
@@ -2401,12 +2401,12 @@ msgstr "ପରିସର (_n):"
 
 #: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
-msgstr ""
+msgstr "ପ୍ରତିଲିପି"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
-msgstr ""
+msgstr "ପ୍ରତିଲିପି (_s):"
 
 #: gtk/gtkprintunixdialog.c:1546
 msgid "C_ollate"
@@ -2418,20 +2418,20 @@ msgstr "ପ୍ରତ୍ଯାବୃତ କରନ୍ତୁ (_R)"
 
 #: gtk/gtkprintunixdialog.c:1571
 msgid "General"
-msgstr ""
+msgstr "ସାମାନ୍ଯ"
 
 #: gtk/gtkprintunixdialog.c:1958
 msgid "Layout"
-msgstr ""
+msgstr "ବିନ୍ଯାସ"
 
 #: gtk/gtkprintunixdialog.c:1962
 #: modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "ପ୍ରୁଷ୍ଠା ପ୍ରତି ସୀଟରେ (_s):"
 
 #: gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "ଉଭୟ ପାର୍ଶ୍ବ (_w):"
 
 #: gtk/gtkprintunixdialog.c:1993
 msgid "_Only print:"
@@ -2440,15 +2440,15 @@ msgstr "କେବଳ ମୁଦ୍ରଣ କରନ୍ତୁ (_O):"
 #. In enum order
 #: gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
-msgstr ""
+msgstr "ସମସ୍ତ ସୀଟ"
 
 #: gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
-msgstr ""
+msgstr "ଯୁଗ୍ମ ଅଙ୍କ ବିଶିଷ୍ଟ ସୀଟ୍ସ"
 
 #: gtk/gtkprintunixdialog.c:2010
 msgid "Odd sheets"
-msgstr ""
+msgstr "ଅଯୁଗ୍ମ ଅଙ୍କ ବିଶିଷ୍ଟ ସୀଟ୍ସ"
 
 #: gtk/gtkprintunixdialog.c:2013
 msgid "Sc_ale:"
@@ -2456,7 +2456,7 @@ msgstr "ମାପନ୍ତୁ (_a):"
 
 #: gtk/gtkprintunixdialog.c:2040
 msgid "Paper"
-msgstr ""
+msgstr "କାଗଜ"
 
 #: gtk/gtkprintunixdialog.c:2044
 msgid "Paper _type:"
@@ -2468,23 +2468,23 @@ msgstr "କାଗଜର ଉତ୍ସ (_s):"
 
 #: gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
-msgstr ""
+msgstr "ନିର୍ଗମ ଟ୍ରେ (_r):"
 
 #: gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
-msgstr ""
+msgstr "କାର୍ଯ୍ଯର ବିସ୍ତ୍ରୁତ ବିବରଣୀ"
 
 #: gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
-msgstr ""
+msgstr "ଅଗ୍ରାଧିକାର"
 
 #: gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
-msgstr ""
+msgstr "ବିଲି ସମ୍ବନ୍ଧୀୟ ସୂଚନା (_B):"
 
 #: gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
-msgstr ""
+msgstr "ଦଲିଲକୁ ମୂଦ୍ରଣ କରନ୍ତୁ"
 
 #: gtk/gtkprintunixdialog.c:2170
 msgid "_Now"
@@ -2492,7 +2492,7 @@ msgstr "ବର୍ତମାନ (_N)"
 
 #: gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
-msgstr ""
+msgstr "ସେହିଠାରେ (_t):"
 
 #: gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
@@ -2500,27 +2500,27 @@ msgstr "ଆୟତ୍ତ ରେ (_h)"
 
 #: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
-msgstr ""
+msgstr "ଉପର ପ୍ରୁଷ୍ଠାକୁ ସଂଯୋଗ କରନ୍ତୁ"
 
 #: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr ""
+msgstr "ଏହା ପୂର୍ବରୁ (_f):"
 
 #: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr ""
+msgstr "ଏହା ପରେ (_A):"
 
 #: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
-msgstr ""
+msgstr "କାର୍ଯ୍ଯ"
 
 #: gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
-msgstr ""
+msgstr "ଉନ୍ନତ"
 
 #: gtk/gtkprintunixdialog.c:2348
 msgid "Image Quality"
-msgstr ""
+msgstr "ପ୍ରତିଛବି ଗୁଣବତ୍ତା"
 
 #: gtk/gtkprintunixdialog.c:2351
 msgid "Color"
@@ -2528,11 +2528,11 @@ msgstr "ରଙ୍ଗ"
 
 #: gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
-msgstr ""
+msgstr "ସମ୍ପନ୍ନ କରୁଅଛି"
 
 #: gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "ସଂଳାପ ବିରୋଧରେ କିଛି ବିନ୍ଯାସ"
 
 #: gtk/gtkprintunixdialog.c:2387
 msgid "Print"
@@ -2563,7 +2563,7 @@ msgstr "କେଉଁ ପ୍ରକାରର ଦଲିଲ ମାନଙ୍କୁ �
 #: gtk/gtkrecentchooserdefault.c:1127 gtk/gtkrecentchooserdefault.c:1164
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "'%s' ୟୁ.ଆର.ଆଇ. ପାଇଁ କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
 #: gtk/gtkrecentchooserdefault.c:1774
 msgid "Could not remove item"
@@ -2579,7 +2579,7 @@ msgstr "ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_L)"
 
 #: gtk/gtkrecentchooserdefault.c:1914
 msgid "_Remove From List"
-msgstr ""
+msgstr "ତାଲିକାରୁ ବାହାର କରି ଦିଅନ୍ତୁ (_R)"
 
 #: gtk/gtkrecentchooserdefault.c:1923
 msgid "_Clear List"
@@ -2587,24 +2587,24 @@ msgstr "ତାଲିକାକୁ ସଫା କରନ୍ତୁ (_C)"
 
 #: gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "ବ୍ଯକ୍ତିଗତ ସମ୍ବଳ ଗୁଡିକୁ ଦେଖାନ୍ତୁ (_P)"
 
 #: gtk/gtkrecentchoosermenu.c:422 gtk/gtkrecentchoosermenu.c:483
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "`%s' ୟୁ.ଆର.ଆଇ. ରେ ନିକଟ ଅତୀତରେ ବ୍ଯବହ୍ରୁତ କୌଣସି ମିଳିଲା ନାହିଁ"
 
 #: gtk/gtkrecentchoosermenu.c:507 gtk/gtkrecentchoosermenu.c:515
 #: gtk/gtkrecentchoosermenu.c:672 gtk/gtkrecentchoosermenu.c:681
 #: gtk/gtkrecentchoosermenu.c:689
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "'%s' ଶ୍ରେଣୀର ଓ୍ବେଜେଟ ପାଇଁ ଏହି ପ୍ରକ୍ରିୟାଟି ଲାଗୁ କରାଯାଇ ନାହିଁ"
 
 #: gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "'%s' କୁ ଖୋଲନ୍ତୁ"
 
 #: gtk/gtkrecentchoosermenu.c:864
 msgid "Unknown item"
@@ -3067,817 +3067,817 @@ msgstr "ଖାଲି"
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
-msgstr ""
+msgstr "A0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
-msgstr ""
+msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
-msgstr ""
+msgstr "A10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
-msgstr ""
+msgstr "A2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
-msgstr ""
+msgstr "A3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
-msgstr ""
+msgstr "A3 ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
-msgstr ""
+msgstr "A4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
-msgstr ""
+msgstr "A4 ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
-msgstr ""
+msgstr "A4 ଟ୍ଯାବ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
-msgstr ""
+msgstr "A5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:65
 msgid "paper size|A5 Extra"
-msgstr ""
+msgstr "A5 ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
-msgstr ""
+msgstr "A6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
-msgstr ""
+msgstr "A7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
-msgstr ""
+msgstr "A8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
-msgstr ""
+msgstr "A9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
-msgstr ""
+msgstr "B0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
-msgstr ""
+msgstr "B1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
-msgstr ""
+msgstr "B10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
-msgstr ""
+msgstr "B2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
-msgstr ""
+msgstr "B3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
-msgstr ""
+msgstr "B4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
-msgstr ""
+msgstr "B5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:89
 msgid "paper size|B5 Extra"
-msgstr ""
+msgstr "B5 ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
-msgstr ""
+msgstr "B6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
-msgstr ""
+msgstr "B7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
-msgstr ""
+msgstr "B8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
-msgstr ""
+msgstr "B9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
-msgstr ""
+msgstr "C0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
-msgstr ""
+msgstr "C1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
-msgstr ""
+msgstr "C10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
-msgstr ""
+msgstr "C2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
-msgstr ""
+msgstr "C3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
-msgstr ""
+msgstr "C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
-msgstr ""
+msgstr "C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
-msgstr ""
+msgstr "C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
-msgstr ""
+msgstr "C7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
-msgstr ""
+msgstr "C8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
-msgstr ""
+msgstr "C9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "DL ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "Choukei 2 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "Choukei 3 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "Choukei 4 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr ""
+msgstr "ହଜାକି (ପୋଷ୍ଟକାର୍ଡ)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "kaku ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "kaku2 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (ଜବାବୀ ପୋଷ୍ଟକାର୍ଡ)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "you4 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr ""
+msgstr "୧୦x୧୧"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
-msgstr ""
+msgstr "୧୦x୧୩"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
-msgstr ""
+msgstr "୧୦x୧୪"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
-msgstr ""
+msgstr "୧୦x୧୫"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
-msgstr ""
+msgstr "୧୧x୧୨"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
-msgstr ""
+msgstr "୧୧x୧୫"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
-msgstr ""
+msgstr "୧୨x୧୯"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
-msgstr ""
+msgstr "୫x୭"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "୬x୯ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "୭x୯ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "୯x୧୧ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "a2 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "b-ପ୍ଲସ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "c5 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:225
 msgid "paper size|e"
-msgstr ""
+msgstr "e"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "ୟୁରୋପୂୟାନ edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr ""
+msgstr "ଏକ୍ଜିକ୍ଯୁଟିଭ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "ଫାନ-ଫୋଲ୍ଡ ୟୁରୋପୂୟାନ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "ଫାନ-ଫୋଲ୍ଡ ୟୁ.ଏସ."
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr ""
+msgstr "ଫାନ-ଫୋଲ୍ଡ ଜର୍ମାନ ଲିଗାଲ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr ""
+msgstr "ଗଭର୍ନମେଣ୍ଟ ଲିଗାଲ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "ଗଭର୍ନମେଣ୍ଟ ଲେଟର"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr ""
+msgstr "ଇଣ୍ଡେକ୍ସ ୩x୫"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr ""
+msgstr "ଇଣ୍ଡେକ୍ସ ୪x୬ (ପୋଷ୍ଟକାର୍ଡ)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr ""
+msgstr "ଇଣ୍ଡେକ୍ସ ୪x୬ ext"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
-msgstr ""
+msgstr "ଇଣ୍ଡେକ୍ସ ୫x୮"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr ""
+msgstr "ଇନଭୋଏସ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
-msgstr ""
+msgstr "ଟ୍ଯାବ୍ଲୋଏଡ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ଲିଗାଲ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ଲିଗାଲ ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ଲେଟାର"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ଲେଟାର ଏକ୍ସଟ୍ରା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ଲେଟାର ପ୍ଲସ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "ମୋନାର୍କ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "#10 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Eenvelope"
-msgstr ""
+msgstr "#11 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "#12 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "#14 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "#9 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr ""
+msgstr "ବ୍ଯକ୍ତିଗତ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
-msgstr ""
+msgstr "କ୍ବାର୍ଟୋ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr ""
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr ""
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr ""
+msgstr "ପ୍ରସାରିତ ଶୈଳୀ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "ଡାଇ-ପା-କାଇ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr ""
+msgstr "ଫୋଲିଓ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
-msgstr ""
+msgstr "ଫୋଲିଓ sp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "ନିମନ୍ତ୍ରଣ ପତ୍ର ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "ଇଟାଲୀୟ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "ଜୁରୋ-କୁ-କାଇ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "ପା-କାଇ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "ପୋଷ୍ଟ-ଫିକ୍ସ ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
-msgstr ""
+msgstr "ଛୋଟ ଫଟୋ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "prc1 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "prc10 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "prc2 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "prc3 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "prc4 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "prc5 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "prc6 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "prc7 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "prc8 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -3931,29 +3931,29 @@ msgstr "ଏକ୍ସ ନିବେଶ ପ୍ରଣାଳୀ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1450
 msgid "Two Sided"
-msgstr ""
+msgstr "ଉଭୟ ପାର୍ଶ୍ବ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1451
 msgid "Paper Type"
-msgstr ""
+msgstr "କାଗଜର ପ୍ରକାର"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1452
 msgid "Paper Source"
-msgstr ""
+msgstr "କାଗଜ ଉତ୍ସ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
-msgstr ""
+msgstr "ନିର୍ଗମ ଟ୍ରେ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "One Sided"
-msgstr ""
+msgstr "ଗୋଟିଏ ପାଖ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1463
 #: modules/printbackends/cups/gtkprintbackendcups.c:1464
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Auto Select"
-msgstr "ସ୍ବତଃଚୟନ"
+msgstr "ସ୍ବତଃ ଚୟନ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1466
@@ -3964,19 +3964,19 @@ msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Urgent"
-msgstr ""
+msgstr "ଜରୁରୀ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "High"
-msgstr ""
+msgstr "ଉଚ୍ଚ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Medium"
-msgstr ""
+msgstr "ମଧ୍ଯମ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Low"
-msgstr ""
+msgstr "ନିମ୍ନ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "None"
@@ -3984,39 +3984,39 @@ msgstr "(କିଛି ନୁହେଁ)"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Classified"
-msgstr ""
+msgstr "ବର୍ଗୀକ୍ରୁତ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Confidential"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:2122
-msgid "Secret"
 msgstr "ଗୋପନୀୟ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
+msgid "Secret"
+msgstr "ଗୁପ୍ତ"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Standard"
-msgstr ""
+msgstr "ମାନକ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Top Secret"
-msgstr ""
+msgstr "ଅତ୍ଯନ୍ତ ଗୋପନୀୟ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Unclassified"
-msgstr ""
+msgstr "ଅବର୍ଗୀକ୍ରୁତ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr ""
+msgstr "LPR ରେ ମୂଦ୍ରଣ କରନ୍ତୁ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
-msgstr "ଦିସ୍ତା ପ୍ରତି ପ୍ରୁଷ୍ଠା"
+msgstr "ପ୍ରୁଷ୍ଠା ପ୍ରତି ସୀଟରେ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
-msgstr ""
+msgstr "ପାଠ୍ଯ ନିର୍ଦ୍ଦେଶ"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:436
 msgid "Print to File"
@@ -4028,7 +4028,7 @@ msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "Postscript"
-msgstr ""
+msgstr "ପୋଷ୍ଟ-ସ୍କ୍ରିପ୍ଟ"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:480
 msgid "File"
@@ -4036,7 +4036,7 @@ msgstr "ଫାଇଲ"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:516
 msgid "_Output format"
-msgstr ""
+msgstr "ନିର୍ଗମ ଶୈଳୀ (_O)"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4045,19 +4045,19 @@ msgstr "'%s' ଫାଇଲ ପାଇଁ ସୂଚନା ଆଣିହେଲା ନ
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "directfb arg"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "ତନ୍ତ୍ର"
 
 #: gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr ""
+msgstr "ୟୁ.ଆର.ଆଇ."
 
 #: gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr ""
+msgstr "ଏହି ବଟନ ସହିତ ୟୁ.ଆର.ଆଇ. ଟି ସଂଯୁକ୍ତ"
 
 #: gtk/gtklinkbutton.c:395
 msgid "Copy URL"
@@ -4070,77 +4070,77 @@ msgstr "ଅବୈଧ ୟୁ.ଆର.ଆଇ."
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "%s କ୍ରମନ୍ବୟକୁ ହଟାଇବାର (ଡି-ସିରିଏଲାଇଜ) ପ୍ରଚେଷ୍ଟା କରୁଥିବା ସମୟରେ ଅଜଣା ତ୍ରୁଟି"
 
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "%s ଶୈଳୀ ପାଇଁ କୌଣସି ଡି-ସିରିଏଲାଇଜ ପ୍ରକ୍ରିୟା ମିଳିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:791 gtk/gtktextbufferserialize.c:817
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "<%s> ତତ୍ବରେ ଉଭୟ \"ପରିଚୟ\" ଏବଂ \"ନାମ\" ମିଳିଲା"
 
 #: gtk/gtktextbufferserialize.c:801 gtk/gtktextbufferserialize.c:827
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "\"%s\" ଗୁଣ <%s> ତତ୍ବରେ ଦୁଇଥର ମିଳିଲା"
 
 #: gtk/gtktextbufferserialize.c:841
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "<%s> ବସ୍ତୁ ନିକଟର ଅବୈଧ \"%s\" ପରିଚୟ ଅଛି"
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" element"
-msgstr ""
+msgstr "<%s> ବସ୍ତୁ ନିକଟର ଗୋଟିଏ \"ନାମ\" କିମ୍ବା ଗୋଟିଏ \"ପରିଚୟ\" ବସ୍ତୁ ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:938
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "\"%s\" ଗୁଣକୁ ଦୁଇଥର ଏହି <%s> ତତ୍ବରେ ପୁନରାବ୍ରୁତ୍ତି କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:956 gtk/gtktextbufferserialize.c:981
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "\"%s\" ଗୁଣ ଏହି ପ୍ରସଙ୍ଗରେ <%s> ତତ୍ବ ପାଇଁ ଅବୈଧ"
 
 #: gtk/gtktextbufferserialize.c:1017
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "\"%s\" ସୂଚକକୁ ବ୍ଯାଖ୍ଯ କରାଯାଇ ନାହିଁ।"
 
 #: gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "ଅଜ୍ଞାତ ସୂଚକ ମିଳିଲା ଏବଂ ସୂଚକ ଗୁଡିକୁ ସ୍ରୁଷ୍ଟି କରିହେବ ନାହିଁ।"
 
 #: gtk/gtktextbufferserialize.c:1040
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "\"%s\" ସୂଚକ ବଫରରେ ଅବସ୍ଥିତ ନାହିଁ ଏବଂ ସୂଚକ ଗୁଡିକୁ ସ୍ରୁଷ୍ଟି କରିହେବ ନାହିଁ।"
 
 #: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
 #: gtk/gtktextbufferserialize.c:1315 gtk/gtktextbufferserialize.c:1389
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "<%s> ବସ୍ତୁଟି <%s> ତଳେ ସ୍ବୀକାର୍ଯ୍ଯ ନୁହେଁ"
 
 #: gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" ଟି  ଗୋଟିଏ ବୈଧ ଗୁଣ ପ୍ରକାର ନୁହେଁ"
 
 #: gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେଁ"
 
 #: gtk/gtktextbufferserialize.c:1188
 #, c-format
 msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
