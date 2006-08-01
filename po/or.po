@@ -1697,12 +1697,12 @@ msgstr "ଗତକାଲି"
 #: gtk/gtkfilechoosersettings.c:122
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
-msgstr ""
+msgstr "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ଅନୁପସ୍ଥିତ ଗୁଣ \"%s\""
 
 #: gtk/gtkfilechoosersettings.c:139
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
-msgstr ""
+msgstr "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ଅପ୍ରତ୍ଯାଶିତ ତତ୍ବ \"%s\""
 
 #: gtk/gtkfilechoosersettings.c:157
 #, c-format
@@ -1710,16 +1710,17 @@ msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
 msgstr ""
+"ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ବସ୍ତୁର ସମାପ୍ତି \"%s\" ହେବ ବୋଲି ଆଶା କରାଯାଉଥିଲା, କିନ୍ତୁ ଏହା ପରିବର୍ତ୍ତେ \"%s\" ବସ୍ତୁ କୁ ପାଇଲା"
 
 #: gtk/gtkfilechoosersettings.c:201
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr ""
+msgstr "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ଉପର ସ୍ତରରେ \"%s\"କୁ ଆଶା କରାଯାଉଥିଲା, କିନ୍ତୁ ଏହା ପରିବର୍ତ୍ତେ \"%s\" ମିଳିଲା"
 
 #: gtk/gtkfilechoosersettings.c:237 gtk/gtkfilechoosersettings.c:265
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr ""
+msgstr "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: \"%s\" କିମ୍ବା \"%s\" କୁ ଆଶା କରାଯାଉଥିଲା, କିନ୍ତୁ ଏହା ପରିବର୍ତ୍ତେ \"%s\" ମିଳିଲା"
 
 #: gtk/gtkfilechoosersettings.c:515
 #, c-format
@@ -2129,11 +2130,11 @@ msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ ଦେଖାନ୍ତୁ"
 
 #: gtk/gtknotebook.c:775
 msgid "Arrow spacing"
-msgstr ""
+msgstr "ତୀର ସ୍ଥାନ"
 
 #: gtk/gtknotebook.c:776
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "ତୀର ସ୍ଥାନକୁ ସ୍କ୍ରୋଲ କରନ୍ତୁ"
 
 #: gtk/gtknotebook.c:4241 gtk/gtknotebook.c:6791
 #, c-format
@@ -2148,17 +2149,19 @@ msgstr "ପୃଷ୍ଠା %u"
 #.
 #: gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ:mm"
+msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ:ମିମି"
 
 #: gtk/gtkpagesetupunixdialog.c:338
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>ଯେ କୌଣସି ମୂଦ୍ରଣୀ</b>\n"
+"ସଂକ୍ଷିପ୍ତ ଦଲିଲ ପାଇଁ"
 
 #: gtk/gtkpagesetupunixdialog.c:906 gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
-msgstr "mm"
+msgstr "ମିମି"
 
 #: gtk/gtkpagesetupunixdialog.c:908 gtk/gtkpagesetupunixdialog.c:1418
 msgid "inch"
@@ -2173,6 +2176,11 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"ମାର୍ଜିନ:\n"
+" ବାମ: %s %s\n"
+" ଡାହାଣ: %s %s\n"
+" ଉପର: %s %s\n"
+" ତଳ: %s %s"
 
 #: gtk/gtkpagesetupunixdialog.c:978
 msgid "Manage Custom Sizes..."
@@ -2840,7 +2848,7 @@ msgstr "ପୂର୍ବବର୍ତ୍ତୀ (_v)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
 msgid "Media|_Record"
-msgstr "ଅନୁଲିପି କରନ୍ତୁ (_R)"
+msgstr "ଲିପିବଦ୍ଧ କରନ୍ତୁ (_R)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
@@ -2854,11 +2862,11 @@ msgstr "ବିରାମ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:387
 msgid "_Network"
-msgstr "ଜାଲକ (_N)"
+msgstr "ନେଟଓ୍ବାର୍କ (_N)"
 
 #: gtk/gtkstock.c:388
 msgid "_New"
-msgstr "ନୂଆ (_N)"
+msgstr "ନୂତନ (_N)"
 
 #: gtk/gtkstock.c:389
 msgid "_No"
@@ -2866,7 +2874,7 @@ msgstr "ନା (_N)"
 
 #: gtk/gtkstock.c:390
 msgid "_OK"
-msgstr "ଠିକ (_O)"
+msgstr "ଠିକ ଅଛି (_O)"
 
 #: gtk/gtkstock.c:391
 msgid "_Open"
@@ -2874,7 +2882,7 @@ msgstr "ଖୋଲନ୍ତୁ (_O)"
 
 #: gtk/gtkstock.c:392
 msgid "Landscape"
-msgstr ""
+msgstr "ଭୂଦ୍ରୁଶ୍ଯ"
 
 #: gtk/gtkstock.c:393
 msgid "Portrait"
@@ -2882,11 +2890,11 @@ msgstr "ଚିତ୍ରପଟ"
 
 #: gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr ""
+msgstr "ଓଲଟା ଭୂଦ୍ରୁଶ୍ଯ"
 
 #: gtk/gtkstock.c:395
 msgid "Reverse portrait"
-msgstr ""
+msgstr "ଓଲଟା ଚିତ୍ରପଟ"
 
 #: gtk/gtkstock.c:396
 msgid "_Paste"
@@ -4145,46 +4153,46 @@ msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍�
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" ଟି \"%s\" ଗୁଣ ପାଇଁ ଗୋଟିଏ ବୈଧ ମୂଲ୍ଯ ନୁହେଁ"
 
 #: gtk/gtktextbufferserialize.c:1280
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "\"%s\" ସୂଚକକୁ ପୂର୍ବରୁ ବ୍ଯାଖ୍ଯା କରାଯାଇ ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "\"%s\" ସୂଚକ ନିକଟରେ ଗୋଟିଏ ଅବୈଧ \"%s\" ଅଗ୍ରାଧିକାର ଅଛି"
 
 #: gtk/gtktextbufferserialize.c:1344
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "ପାଠ୍ଯରେ ବାହ୍ଯ ତତ୍ଯଟି <text_view_markup> ହେବା ଉଚିତ <%s> ନୁହେଁ"
 
 #: gtk/gtktextbufferserialize.c:1353 gtk/gtktextbufferserialize.c:1369
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "ଗୋଟିଏ <%s> ବସ୍ତୁକୁ ପୂର୍ବରୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:1375
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "ଗୋଟିଏ <text> ତତ୍ବ ଗୋଟିଏ <tags> ତତ୍ବ ପୂର୍ବରୁ ଆସି ପାରିବ ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1783
 #, c-format
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକ୍ରୁତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:1861
 #, c-format
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକ୍ରୁତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "'%s' ଏବଂ '%s' ପ୍ରତିକାତ୍ମାକ ସଂଯୋଗ ପାଇଁ ବିଭିନ୍ନ ଆଇ-ଡାଟା ମିଳିଲା\n"
 
 #: gtk/updateiconcache.c:1116
 #, c-format
@@ -4214,7 +4222,7 @@ msgstr "କ୍ଯାଶ ଫାଇଲରେ ଲେଖିବାରେ ବିଫଳ
 #: gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "%s ନାମକୁ %sରେ ବଦଳାଇ ପାରିଲା ନାହିଁ: %s, ସେଥିପାଇଁ %s କୁ ଅପସାରିତ କରିଦେଉଛି।\n"
 
 #: gtk/updateiconcache.c:1214
 #, c-format
@@ -4229,27 +4237,27 @@ msgstr "%sର ନାମକୁ ତାହାର ପୂର୍ବ ନାମ %sରେ
 #: gtk/updateiconcache.c:1243
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "କ୍ଯାେଶ ଫାଇଲକୁ ସଫଳତାର ସହିତ ସ୍ରୁଷ୍ଟି କରାଗଲା।\n"
 
 #: gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "ଗୋଟିଏ ଅବସ୍ଥିତ କ୍ଯାେଶ କୁ ନବଲିଖନ କରନ୍ତୁ, ଯଦିଚ ଏହା ଅଦ୍ଯତିତ ହୋଇଛି"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "index.theme ଅସ୍ତିତ୍ବକୁ ଯାଞ୍ଚ କରନ୍ତୁ ନାହିଁ"
 
 #: gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "କ୍ଯାଶେରେ ଗୋଟିଏ ପ୍ରତିଛବିକୁ ଅନ୍ତର୍ଭୂକ୍ତ କରନ୍ତୁ ନାହିଁ"
 
 #: gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "ଗୋଟିଏ C ହେଟର ଫାଇଲ ନିର୍ଗମ କରନ୍ତୁ"
 
 #: gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "ଦ୍ରୁଷ୍ଟି ସୂଚନାଯୁକ୍ତ ନିର୍ଗମକୁ ବନ୍ଦ କରନ୍ତୁ"
 
 #: gtk/updateiconcache.c:1314
 #, c-format
@@ -4257,4 +4265,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
+"'%s' ରେ କୌଣସି ପ୍ରସଙ୍ଗ ଅନୁକ୍ରମଣିକା ଫାଇଲ ନାହିଁ।\n"
+"ଯଦି ଆପଣ ପ୍ରକ୍ରୁତରେ ଏଠାରେ ଗୋଟିଏ ଚିତ୍ରସଙ୍କେତ କ୍ଯାଶେକୁ ସ୍ରୁଷ୍ଟି କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି, ତାହାହେଲେ"
+"--ignore-theme-index ନିର୍ଦ୍ଦେଶ କୁ ବ୍ଯବହାର କରନ୍ତୁ।\n"
