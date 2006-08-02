@@ -1298,9 +1298,6 @@ _gdk_directfb_move_resize_child (GdkWindow *window,
       _gdk_directfb_move_resize_child (list->data,
                                        private->x, private->y,
                                        impl->drawable.width, impl->drawable.height);
-      //FIXEME should this really happen ?
-      if( impl->drawable.surface )
-        impl->drawable.surface->GetPosition(impl->drawable.surface,&x,&y);
     }
 }
 
