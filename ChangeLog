@@ -1,3 +1,8 @@
+2006-08-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstyle.c: removed the "widget &&" part from
+	"widget && GTK_IS_FOO (widget)" checks.
+
 2006-07-13  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkwindow-directfb.c

@@ -2458,7 +2458,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
   
   if (shadow_type == GTK_SHADOW_IN)
     {
-      if (detail && (strcmp (detail, "buttondefault") == 0))
+      if (detail && strcmp (detail, "buttondefault") == 0)
 	{
 	  sanitize_size (window, &width, &height);
 
@@ -2473,7 +2473,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
 			    x, y, width, height);
 	  return;
 	}
-      if (widget && GTK_IS_SPIN_BUTTON (widget) &&
+      if (GTK_IS_SPIN_BUTTON (widget) &&
          detail && strcmp (detail, "spinbutton") == 0)
 	{
 	  draw_spinbutton_shadow (style, window, state_type, 
@@ -2711,7 +2711,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
     }
 
   if (shadow_type == GTK_SHADOW_IN &&
-      widget && GTK_IS_SPIN_BUTTON (widget) &&
+      GTK_IS_SPIN_BUTTON (widget) &&
       detail && strcmp (detail, "entry") == 0)
     {
       if (get_direction (widget) == GTK_TEXT_DIR_LTR)
@@ -3261,7 +3261,7 @@ gtk_default_draw_box (GtkStyle      *style,
   
   sanitize_size (window, &width, &height);
 
-  if (widget && GTK_IS_SPIN_BUTTON (widget) && detail)
+  if (GTK_IS_SPIN_BUTTON (widget) && detail)
     {
       if (strcmp (detail, "spinbutton_up") == 0)
 	{
