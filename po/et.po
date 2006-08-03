@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-02 07:40+0200\n"
-"PO-Revision-Date: 2006-08-02 10:27+0300\n"
+"PO-Revision-Date: 2006-08-03 17:20+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -124,13 +124,13 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "Pildi puhvrisse salvestamiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Sisemine viga: Pildilaadimismooduli '%s' tõrge pildi laadimisel, tõrke "
-"põhjust moodul ei teatanud."
+"Sisemine viga: Pildilaadimismooduli '%s' tõrge toimingu läbiviimisel, moodul "
+"ei andud tõrke põhjuste kohta andmeid"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
@@ -1320,7 +1320,6 @@ msgid "Amount of blue light in the color."
 msgstr "Sinise valguse kogus värvis."
 
 #: ../gtk/gtkcolorsel.c:1979
-#, fuzzy
 msgid "Op_acity:"
 msgstr "Kat_vus:"
 
@@ -1782,14 +1781,13 @@ msgid "Couldn't convert filename"
 msgstr "Failinime pole võimalik teisendada"
 
 #: ../gtk/gtkfilesystem.c:317
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s\n"
-msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
+msgstr ""
 
 #: ../gtk/gtkfilesystemmodel.c:745
-#, fuzzy
 msgid "Could not obtain root folder"
-msgstr "Faili pole võimalik valida"
+msgstr ""
 
 #: ../gtk/gtkfilesystemmodel.c:1339
 msgid "(Empty)"
@@ -1948,7 +1946,6 @@ msgid "Window"
 msgstr "Aken"
 
 #: ../gtk/gtkinputdialog.c:257
-#, fuzzy
 msgid "_Mode:"
 msgstr "_Režiim:"
 
@@ -1964,26 +1961,23 @@ msgstr "Klahvid"
 
 #: ../gtk/gtkinputdialog.c:521
 msgid "_X:"
-msgstr ""
+msgstr "_X:"
 
 #: ../gtk/gtkinputdialog.c:522
 msgid "_Y:"
-msgstr ""
+msgstr "_Y:"
 
 #: ../gtk/gtkinputdialog.c:523
-#, fuzzy
 msgid "_Pressure:"
-msgstr "Vajutus"
+msgstr ""
 
 #: ../gtk/gtkinputdialog.c:524
-#, fuzzy
 msgid "X _tilt:"
-msgstr "X kalle"
+msgstr "X _kalle:"
 
 #: ../gtk/gtkinputdialog.c:525
-#, fuzzy
 msgid "Y t_ilt:"
-msgstr "Y kalle"
+msgstr "Y k_alle:"
 
 #: ../gtk/gtkinputdialog.c:526
 msgid "_Wheel:"
@@ -2003,7 +1997,6 @@ msgstr "(tundmatu)"
 
 #. and clear button
 #: ../gtk/gtkinputdialog.c:740
-#, fuzzy
 msgid "Cl_ear"
 msgstr "_Tühjenda"
 
@@ -2171,34 +2164,33 @@ msgid "Not available"
 msgstr "Pole saadaval"
 
 #: ../gtk/gtkprinteroptionwidget.c:783
-#, fuzzy
 msgid "_Save in folder:"
 msgstr "Salvesta _kataloogi:"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1464
 msgid "print operation status|Initial state"
-msgstr ""
+msgstr "Lähteolek"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1466
 msgid "print operation status|Preparing to print"
-msgstr ""
+msgstr "Printimiseks valmistumine"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1468
 msgid "print operation status|Generating data"
-msgstr ""
+msgstr "Andmete genereerimine"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1470
 msgid "print operation status|Sending data"
-msgstr ""
+msgstr "Andmete saatmine"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1472
 msgid "print operation status|Waiting"
-msgstr ""
+msgstr "Ootamine"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1474
@@ -2208,32 +2200,31 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1476
 msgid "print operation status|Printing"
-msgstr ""
+msgstr "Printimine"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1478
 msgid "print operation status|Finished"
-msgstr ""
+msgstr "Lõpetatud"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1480
 msgid "print operation status|Finished with error"
-msgstr ""
+msgstr "Lõpetatud veaga"
 
 #: ../gtk/gtkprintoperation.c:1955
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "Ettevalmistamine: %d"
 
 #: ../gtk/gtkprintoperation.c:1957 ../gtk/gtkprintoperation.c:2213
-#, fuzzy
 msgid "Preparing"
-msgstr "Hoiatus"
+msgstr "Ettevalmistamine"
 
 #: ../gtk/gtkprintoperation.c:1960
 #, c-format
 msgid "Printing %d"
-msgstr ""
+msgstr "Printimine: %d"
 
 #: ../gtk/gtkprintoperation-unix.c:240
 msgid "Error launching preview"
@@ -2256,9 +2247,8 @@ msgid "Out of paper"
 msgstr "Paber on lõppenud"
 
 #: ../gtk/gtkprintoperation-win32.c:567
-#, fuzzy
 msgid "Paused"
-msgstr "_Aseta"
+msgstr "Pausitud"
 
 #: ../gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
@@ -2282,13 +2272,12 @@ msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
 #: ../gtk/gtkprintoperation-win32.c:1566
-#, fuzzy
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Vigane päis ikoonis"
+msgstr ""
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
-msgstr ""
+msgstr "Kirjeldamata viga"
 
 #: ../gtk/gtkprintoperation-win32.c:1622
 msgid "Error from StartDoc"
@@ -2332,14 +2321,12 @@ msgid "Copie_s:"
 msgstr "K_oopiaid:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
-#, fuzzy
 msgid "C_ollate"
-msgstr "_Loo"
+msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1554
-#, fuzzy
 msgid "_Reverse"
-msgstr "_Taasta"
+msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1571
 msgid "General"
@@ -2405,25 +2392,23 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
-msgstr ""
+msgstr "_Maksmise andmed:"
 
 #: ../gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
-msgstr ""
+msgstr "Dokumenti printimine"
 
 #: ../gtk/gtkprintunixdialog.c:2170
-#, fuzzy
 msgid "_Now"
-msgstr "_Ei"
+msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2192
-#, fuzzy
 msgid "On _hold"
-msgstr "_Paks"
+msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
@@ -2455,16 +2440,15 @@ msgstr "Värv"
 
 #: ../gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
-msgstr ""
+msgstr "Lõpetamine"
 
 #: ../gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 
 #: ../gtk/gtkprintunixdialog.c:2387
-#, fuzzy
 msgid "Print"
-msgstr "_Trüki"
+msgstr "Prindi"
 
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -2485,24 +2469,21 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
 
 #: ../gtk/gtkrecentchooserdefault.c:459
-#, fuzzy
 msgid "Select which type of documents are shown"
-msgstr "Vali, milliseid failitüüpe näidata"
+msgstr "Vali, milliseid dokumendiliike näidata"
 
 #: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr "URL '%s' jaoks ei leitud kirjet"
+msgstr "'%s' URI jaoks ei leitud kirjet"
 
 #: ../gtk/gtkrecentchooserdefault.c:1774
-#, fuzzy
 msgid "Could not remove item"
-msgstr "Kirjet pole võimalik valida"
+msgstr "Kirjet pole võimalik eemaldada"
 
 #: ../gtk/gtkrecentchooserdefault.c:1817
-#, fuzzy
 msgid "Could not clear list"
-msgstr "Kirjet pole võimalik valida"
+msgstr "Loendit pole võimalik tühjendada"
 
 #: ../gtk/gtkrecentchooserdefault.c:1901
 msgid "Copy _Location"
@@ -2513,9 +2494,8 @@ msgid "_Remove From List"
 msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:1923
-#, fuzzy
 msgid "_Clear List"
-msgstr "_Tühjenda"
+msgstr "_Tühjenda loend"
 
 #: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
@@ -2531,12 +2511,12 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:689
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
 
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "'%s' avamine"
 
 #: ../gtk/gtkrecentchoosermenu.c:864
 msgid "Unknown item"
@@ -2544,14 +2524,14 @@ msgstr "Tundmatu kirje"
 
 #: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
 #: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Faili pole võimalik kaasata: \"%s\""
+msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
 msgid "Information"
-msgstr "Info"
+msgstr "Teave"
 
 #: ../gtk/gtkstock.c:309
 msgid "Warning"
@@ -3479,22 +3459,22 @@ msgstr "5x7"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "6x9 ümbrik"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "7x9 ümbrik"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "9x11 ümbrik"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "a2 ümbrik"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
@@ -3871,7 +3851,7 @@ msgstr "Paberi liik"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1452
 msgid "Paper Source"
-msgstr ""
+msgstr "Paberi allikas"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
@@ -3879,43 +3859,40 @@ msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "One Sided"
-msgstr ""
+msgstr "Ühepoolne"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1463
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1464
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
-#, fuzzy
 msgid "Auto Select"
-msgstr "Kirjatüübi valik"
+msgstr "Automaatne valik"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1909
-#, fuzzy
 msgid "Printer Default"
-msgstr "Vaikimisi"
+msgstr "Printeri vaikimisi"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Urgent"
-msgstr ""
+msgstr "Kiireloomuline"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "High"
-msgstr ""
+msgstr "Kõrge"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Medium"
-msgstr ""
+msgstr "Keskmine"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
 msgid "Low"
-msgstr ""
+msgstr "Madal"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
-#, fuzzy
 msgid "None"
-msgstr "(puudub)"
+msgstr "Puudub"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Classified"
@@ -3926,9 +3903,8 @@ msgid "Confidential"
 msgstr "Konfidentsiaalne"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
-#, fuzzy
 msgid "Secret"
-msgstr "Ekraan"
+msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Standard"
@@ -3947,9 +3923,8 @@ msgid "Print to LPR"
 msgstr ""
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
-#, fuzzy
 msgid "Pages Per Sheet"
-msgstr "Pildi kõrgus on null"
+msgstr ""
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
@@ -4088,7 +4063,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1280
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "Silt \"%s\" on juba kirjeldatud"
 
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
@@ -4128,23 +4103,21 @@ msgid "Failed to write header\n"
 msgstr "Tõrge päise kirjutamisel\n"
 
 #: ../gtk/updateiconcache.c:1122
-#, fuzzy
 msgid "Failed to write hash table\n"
-msgstr "Tõrge räsitabeli kirjutamisel\n"
+msgstr ""
 
 #: ../gtk/updateiconcache.c:1128
 msgid "Failed to write directory index\n"
 msgstr "Tõrge kataloogiindeksi kirjutamisel\n"
 
 #: ../gtk/updateiconcache.c:1136
-#, fuzzy
 msgid "Failed to rewrite header\n"
-msgstr "Tõrge TIFF-faili avamisel"
+msgstr "Tõrge päise uuestikirjutamisel\n"
 
 #: ../gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Tõrge faili '%s' avamisel: %s"
+msgstr ""
 
 #: ../gtk/updateiconcache.c:1202
 #, c-format
@@ -4152,14 +4125,14 @@ msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 
 #: ../gtk/updateiconcache.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "Viga kataloogi '%s' loomisel: %s"
+msgstr "Kataloogi %s pole võimalik nime %s alla ümber nimetada: %s\n"
 
 #: ../gtk/updateiconcache.c:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Viga kataloogi '%s' loomisel: %s"
+msgstr "Kataloogi %s pole võimalik tagasi nime %s alla ümber nimetada: %s\n"
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
@@ -4179,7 +4152,7 @@ msgstr ""
 
 #: ../gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "C-päisefaili väljastamine"
 
 #: ../gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
@@ -4191,262 +4164,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-#, fuzzy
-#~ msgid "asme_f"
-#~ msgstr "Nimi"
-
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A10"
-#~ msgstr "A10"
-
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "C0"
-#~ msgstr "C0"
-
-#~ msgid "C1"
-#~ msgstr "C1"
-
-#~ msgid "C10"
-#~ msgstr "C10"
-
-#~ msgid "C2"
-#~ msgstr "C2"
-
-#~ msgid "C3"
-#~ msgstr "C3"
-
-#~ msgid "C4"
-#~ msgstr "C4"
-
-#~ msgid "C5"
-#~ msgstr "C5"
-
-#~ msgid "C6"
-#~ msgstr "C6"
-
-#~ msgid "C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "C7"
-#~ msgstr "C7"
-
-#~ msgid "C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "C8"
-#~ msgstr "C8"
-
-#~ msgid "C9"
-#~ msgstr "C9"
-
-#~ msgid "RA0"
-#~ msgstr "RA0"
-
-#~ msgid "RA1"
-#~ msgstr "RA1"
-
-#~ msgid "RA2"
-#~ msgstr "RA2"
-
-#~ msgid "SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "JB0"
-#~ msgstr "JB0"
-
-#~ msgid "JB1"
-#~ msgstr "JB1"
-
-#~ msgid "JB10"
-#~ msgstr "JB10"
-
-#~ msgid "JB2"
-#~ msgstr "JB2"
-
-#~ msgid "JB3"
-#~ msgstr "JB3"
-
-#~ msgid "JB4"
-#~ msgstr "JB4"
-
-#~ msgid "JB5"
-#~ msgstr "JB5"
-
-#~ msgid "JB6"
-#~ msgstr "JB6"
-
-#~ msgid "JB7"
-#~ msgstr "JB7"
-
-#~ msgid "JB8"
-#~ msgstr "JB8"
-
-#~ msgid "JB9"
-#~ msgstr "JB9"
-
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#, fuzzy
-#~ msgid "Executive"
-#~ msgstr "K_äivita"
-
-#, fuzzy
-#~ msgid "Index 3x5"
-#~ msgstr "_Indeks"
-
-#, fuzzy
-#~ msgid "Index 5x8"
-#~ msgstr "_Indeks"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
@@ -4513,15 +4230,6 @@ msgstr ""
 
 #~ msgid "Save in Location"
 #~ msgstr "Salvestamine asukohta"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#~ msgid "Y"
-#~ msgstr "Y"
-
-#~ msgid "clear"
-#~ msgstr "kustuta"
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Pildi raja element: \"%s\" peab olema absoluutne, %s, rida %d"
