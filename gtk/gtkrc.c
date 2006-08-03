@@ -2553,12 +2553,19 @@ gtk_rc_parse_assignment (GScanner      *scanner,
                          GtkRcStyle    *style,
 			 GtkRcProperty *prop)
 {
-  gboolean scan_identifier = scanner->config->scan_identifier;
-  gboolean scan_symbols = scanner->config->scan_symbols;
-  gboolean identifier_2_string = scanner->config->identifier_2_string;
-  gboolean char_2_token = scanner->config->char_2_token;
+#define MY_SCAN_IDENTIFIER      TRUE
+#define MY_SCAN_SYMBOLS         FALSE
+#define MY_IDENTIFIER_2_STRING  FALSE
+#define MY_CHAR_2_TOKEN         TRUE
+#define MY_SCAN_IDENTIFIER_NULL FALSE
+#define MY_NUMBERS_2_INT        TRUE
+
+  gboolean scan_identifier      = scanner->config->scan_identifier;
+  gboolean scan_symbols         = scanner->config->scan_symbols;
+  gboolean identifier_2_string  = scanner->config->identifier_2_string;
+  gboolean char_2_token         = scanner->config->char_2_token;
   gboolean scan_identifier_NULL = scanner->config->scan_identifier_NULL;
-  gboolean numbers_2_int = scanner->config->numbers_2_int;
+  gboolean numbers_2_int        = scanner->config->numbers_2_int;
   gboolean negate = FALSE;
   gboolean is_color = FALSE;
   guint    token;
@@ -2568,12 +2575,12 @@ gtk_rc_parse_assignment (GScanner      *scanner,
     return '=';
 
   /* adjust scanner mode */
-  scanner->config->scan_identifier = TRUE;
-  scanner->config->scan_symbols = FALSE;
-  scanner->config->identifier_2_string = FALSE;
-  scanner->config->char_2_token = TRUE;
-  scanner->config->scan_identifier_NULL = FALSE;
-  scanner->config->numbers_2_int = TRUE;
+  scanner->config->scan_identifier      = MY_SCAN_IDENTIFIER;
+  scanner->config->scan_symbols         = MY_SCAN_SYMBOLS;
+  scanner->config->identifier_2_string  = MY_IDENTIFIER_2_STRING;
+  scanner->config->char_2_token         = MY_CHAR_2_TOKEN;
+  scanner->config->scan_identifier_NULL = MY_SCAN_IDENTIFIER_NULL;
+  scanner->config->numbers_2_int        = MY_NUMBERS_2_INT;
 
   /* record location */
   if (g_getenv ("GTK_DEBUG"))
@@ -2677,7 +2684,31 @@ gtk_rc_parse_assignment (GScanner      *scanner,
               g_string_append_c (gstring, ' ');
               g_string_append (gstring, scanner->value.v_identifier);
 
+              /* temporarily reset scanner mode to default, so we
+               * don't peek the next token in a mode that only makes
+               * sense in this function; because if anything but
+               * G_TOKEN_LEFT_PAREN follows, the next token will be
+               * parsed by our caller.
+               *
+               * FIXME: right fix would be to call g_scanner_unget()
+               *        but that doesn't exist
+               */
+              scanner->config->scan_identifier      = scan_identifier;
+              scanner->config->scan_symbols         = scan_symbols;
+              scanner->config->identifier_2_string  = identifier_2_string;
+              scanner->config->char_2_token         = char_2_token;
+              scanner->config->scan_identifier_NULL = scan_identifier_NULL;
+              scanner->config->numbers_2_int        = numbers_2_int;
+
               token = g_scanner_peek_next_token (scanner);
+
+              /* restore adjusted scanner mode */
+              scanner->config->scan_identifier      = MY_SCAN_IDENTIFIER;
+              scanner->config->scan_symbols         = MY_SCAN_SYMBOLS;
+              scanner->config->identifier_2_string  = MY_IDENTIFIER_2_STRING;
+              scanner->config->char_2_token         = MY_CHAR_2_TOKEN;
+              scanner->config->scan_identifier_NULL = MY_SCAN_IDENTIFIER_NULL;
+              scanner->config->numbers_2_int        = MY_NUMBERS_2_INT;
 
               if (token != G_TOKEN_LEFT_PAREN)
                 {
@@ -2709,12 +2740,12 @@ gtk_rc_parse_assignment (GScanner      *scanner,
  out:
 
   /* restore scanner mode */
-  scanner->config->scan_identifier = scan_identifier;
-  scanner->config->scan_symbols = scan_symbols;
-  scanner->config->identifier_2_string = identifier_2_string;
-  scanner->config->char_2_token = char_2_token;
+  scanner->config->scan_identifier      = scan_identifier;
+  scanner->config->scan_symbols         = scan_symbols;
+  scanner->config->identifier_2_string  = identifier_2_string;
+  scanner->config->char_2_token         = char_2_token;
   scanner->config->scan_identifier_NULL = scan_identifier_NULL;
-  scanner->config->numbers_2_int = numbers_2_int;
+  scanner->config->numbers_2_int        = numbers_2_int;
 
   return token;
 }

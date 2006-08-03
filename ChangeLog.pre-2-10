@@ -1,5 +1,12 @@
 2006-08-03  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkrc.c (gtk_rc_parse_assignment): reset scanner config to
+	default values while checking if an expression(foobar) follows,
+	because if no expression follows the scanner's "next token" must
+	be usable for the caller of this function (fixes bug #349552).
+
+2006-08-03  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkstyle.c: removed the "widget &&" part from
 	"widget && GTK_IS_FOO (widget)" checks.
 
