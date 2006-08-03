@@ -83,6 +83,8 @@ struct _GtkRecentChooserMenuPrivate
   guint local_manager : 1;
   gulong manager_changed_id;
 
+  gulong populate_id;
+
   /* tooltips for our bookmark items*/
   GtkTooltips *tooltips;
 };
@@ -139,7 +141,7 @@ static GSList *          gtk_recent_chooser_menu_list_filters       (GtkRecentCh
 static void              gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
 								     GtkRecentFilter      *filter);
 
-static void              gtk_recent_chooser_menu_map (GtkWidget *widget);
+static void              gtk_recent_chooser_menu_populate           (GtkRecentChooserMenu *menu);
 static void              gtk_recent_chooser_menu_set_show_tips      (GtkRecentChooserMenu *menu,
 								     gboolean              show_tips);
 
@@ -184,15 +186,12 @@ static void
 gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  
+
   gobject_class->constructor = gtk_recent_chooser_menu_constructor;
   gobject_class->finalize = gtk_recent_chooser_menu_finalize;
   gobject_class->set_property = gtk_recent_chooser_menu_set_property;
   gobject_class->get_property = gtk_recent_chooser_menu_get_property;
 
-  widget_class->map = gtk_recent_chooser_menu_map;
-  
   _gtk_recent_chooser_install_properties (gobject_class);
 
   /**
@@ -940,117 +939,156 @@ gtk_recent_chooser_menu_dispose_items (GtkRecentChooserMenu *menu)
   g_list_free (children);
 }
 
-/* GtkWidget::map method override
- *
- * We override this method in order to populate the menu with our
- * menu items linked to the recently used resources.
- */
-static void
-gtk_recent_chooser_menu_map (GtkWidget *widget)
+typedef struct
 {
-  GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (widget);
-  GtkRecentChooserMenuPrivate *priv = menu->priv;
-  GList *items, *l;
-  gint count;
-  gboolean has_items = FALSE;
+  GList *items;
+  gint n_items;
+  gint loaded_items;
+  GtkRecentChooserMenu *menu;
+} MenuPopulateData;
+
+static gboolean
+idle_populate_func (gpointer data)
+{
+  MenuPopulateData *pdata;
+  GtkRecentChooserMenuPrivate *priv;
+  GtkRecentInfo *info;
+  gboolean retval;
+  GtkWidget *item;
+
+  GDK_THREADS_ENTER ();
+
+  pdata = (MenuPopulateData *) data;
   
-  if (GTK_WIDGET_CLASS (gtk_recent_chooser_menu_parent_class)->map)
-    GTK_WIDGET_CLASS (gtk_recent_chooser_menu_parent_class)->map (widget);
-  
-  priv->icon_size = get_icon_size_for_widget (widget);
+  if (!pdata->items)
+    {
+      pdata->items = gtk_recent_chooser_get_items (GTK_RECENT_CHOOSER (pdata->menu));
+      if (!pdata->items)
+        {
+          item = gtk_menu_item_new_with_label (_("No items found"));
+          gtk_widget_set_sensitive (item, FALSE);
+      
+          /* we also mark this item, so that it gets removed when rebuilding
+           * the menu on the next map event
+           */
+          g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
+      			     GINT_TO_POINTER (1));
+      
+          gtk_menu_shell_prepend (GTK_MENU_SHELL (pdata->menu), item);
+          gtk_widget_show (item);
+
+	  /* no items: add a placeholder menu */
+          GDK_THREADS_LEAVE ();
+
+	  return FALSE;
+	}
+      
+      /* reverse the list */
+      pdata->items = g_list_reverse (pdata->items);
+      
+      pdata->n_items = g_list_length (pdata->items);
+      pdata->loaded_items = 0;
+    }
+
+  info = g_list_nth_data (pdata->items, pdata->loaded_items);
+  priv = pdata->menu->priv;
+
+  /* skip non-local items on request */
+  if (priv->local_only && !gtk_recent_info_is_local (info))
+    goto check_and_return;
+      
+  /* skip private items on request */
+  if (!priv->show_private && gtk_recent_info_get_private_hint (info))
+    goto check_and_return;
+      
+  /* skip non-existing items on request */
+  if (!priv->show_not_found && !gtk_recent_info_exists (info))
+    goto check_and_return;
+
+  /* filter items based on the currently set filter object */
+  if (get_is_recent_filtered (pdata->menu, info))
+    goto check_and_return;
+ 
+  item = gtk_recent_chooser_menu_create_item (pdata->menu,
+                                              info,
+					      pdata->loaded_items);
+  if (!item)
+    goto check_and_return;
+      
+  gtk_recent_chooser_menu_add_tip (pdata->menu, info, item);
+      
+  /* FIXME
+   *
+   * We should really place our items taking into account user
+   * defined menu items; this would also remove the need of
+   * reverting the scan order.
+   */
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (pdata->menu), item);
+  gtk_widget_show (item);
+      
+  /* mark the menu item as one of our own */
+  g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
+      		     GINT_TO_POINTER (1));
+      
+  /* attach the RecentInfo object to the menu item, and own a reference
+   * to it, so that it will be destroyed with the menu item when it's
+   * not needed anymore.
+   */
+  g_object_set_data_full (G_OBJECT (item), "gtk-recent-info",
+      			  gtk_recent_info_ref (info),
+      			  (GDestroyNotify) gtk_recent_info_unref);
+
+check_and_return:
+  pdata->loaded_items += 1;
+
+  if (pdata->loaded_items == pdata->n_items)
+    {
+      g_list_foreach (pdata->items, (GFunc) gtk_recent_info_unref, NULL);
+      g_list_free (pdata->items);
+
+      retval = FALSE;
+    }
+  else
+    retval = TRUE;
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
+}
+
+static void
+idle_populate_clean_up (gpointer data)
+{
+  MenuPopulateData *pdata = data;
+
+  pdata->menu->priv->populate_id = 0;
+
+  g_slice_free (MenuPopulateData, pdata);
+}
+
+static void
+gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
+{
+  MenuPopulateData *pdata;
+
+  if (menu->priv->populate_id)
+    return;
+
+  pdata = g_slice_new (MenuPopulateData);
+  pdata->items = NULL;
+  pdata->n_items = 0;
+  pdata->loaded_items = 0;
+  pdata->menu = menu;
+
+  menu->priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));
   
   /* dispose our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
- 
-  items = gtk_recent_chooser_get_items (GTK_RECENT_CHOOSER (menu));
   
-  count = g_list_length (items);
-  items = g_list_reverse (items);
-
-  for (l = items; l != NULL; l = l->next)
-    {
-      GtkRecentInfo *info = (GtkRecentInfo *) l->data;
-      GtkWidget *item;
-
-      g_assert (info != NULL);
-      
-      /* skip non-local items on request */
-      if (priv->local_only && !gtk_recent_info_is_local (info))
-        continue;
-      
-      /* skip private items on request */
-      if (!priv->show_private && gtk_recent_info_get_private_hint (info))
-        continue;
-      
-      /* skip non-existing items on request */
-      if (!priv->show_not_found && !gtk_recent_info_exists (info))
-        continue;
-
-      /* filter items based on the currently set filter object */
-      if (get_is_recent_filtered (menu, info))
-        continue;
- 
-      item = gtk_recent_chooser_menu_create_item (menu, info, count);
-      if (!item)
-        continue;
-      
-      gtk_recent_chooser_menu_add_tip (menu, info, item);
-      
-      /* FIXME
-       *
-       * We should really place our items taking into account user
-       * defined menu items; this would also remove the need of
-       * reverting the scan order.
-       */
-      gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-      gtk_widget_show (item);
-      
-      /* mark the menu item as one of our own */
-      g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
-      			 GINT_TO_POINTER (1));
-      
-      /* attach the RecentInfo object to the menu item, and own a reference
-       * to it, so that it will be destroyed with the menu item when it's
-       * not needed anymore.
-       */
-      g_object_set_data_full (G_OBJECT (item), "gtk-recent-info",
-      			      gtk_recent_info_ref (info),
-      			      (GDestroyNotify) gtk_recent_info_unref);
-      
-      /* we have at least one item */
-      if (!has_items)
-        has_items = TRUE;
-    }
-  
-  /* now, the RecentInfo objects are bound to the lifetime of the menu */
-  if (items)
-    {
-      g_list_foreach (items,
-  		      (GFunc) gtk_recent_info_unref,
-  		      NULL);
-      g_list_free (items);
-    }
-
-  /* no recently used resources were found, or they were filtered out, so
-   * we build an item stating that no recently used resources were found
-   * (as night follows the day...).
-   */
-  if (!has_items)
-    {
-      GtkWidget *item;
-      
-      item = gtk_menu_item_new_with_label ("No items found");
-      gtk_widget_set_sensitive (item, FALSE);
-      
-      /* we also mark this item, so that it gets removed when rebuilding
-       * the menu on the next map event
-       */
-      g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
-      			 GINT_TO_POINTER (1));
-      
-      gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-      gtk_widget_show (item);
-    }
+  menu->priv->populate_id = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 30,
+  					     idle_populate_func,
+					     pdata,
+					     idle_populate_clean_up);
 }
 
 /* bounce activate signal from the recent menu item widget 
@@ -1070,7 +1108,9 @@ static void
 manager_changed_cb (GtkRecentManager *manager,
 		    gpointer          user_data)
 {
-  gtk_widget_queue_draw (GTK_WIDGET (user_data));
+  GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (user_data);
+
+  gtk_recent_chooser_menu_populate (menu);
 }
 
 static void
@@ -1078,9 +1118,10 @@ set_recent_manager (GtkRecentChooserMenu *menu,
 		    GtkRecentManager     *manager)
 {
   if (menu->priv->manager)
-    g_signal_handler_disconnect (menu, menu->priv->manager_changed_id);
-  
-  menu->priv->manager = NULL;
+    {
+      g_signal_handler_disconnect (menu, menu->priv->manager_changed_id);
+      menu->priv->manager = NULL;
+    }
   
   if (manager)
     menu->priv->manager = manager;
@@ -1091,6 +1132,8 @@ set_recent_manager (GtkRecentChooserMenu *menu,
     menu->priv->manager_changed_id = g_signal_connect (menu->priv->manager, "changed",
       						       G_CALLBACK (manager_changed_cb),
       						       menu);
+  /* (re)populate the menu */
+  gtk_recent_chooser_menu_populate (menu);
 }
 
 static gint
