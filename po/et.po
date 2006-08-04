@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-02 07:40+0200\n"
-"PO-Revision-Date: 2006-08-03 17:20+0300\n"
+"POT-Creation-Date: 2006-08-04 00:06+0200\n"
+"PO-Revision-Date: 2006-08-04 08:32+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1835,7 +1835,7 @@ msgstr "'%s' pole järjehoidjate loendis olemas"
 #: ../gtk/gtkfilesystemwin32.c:943
 #, c-format
 msgid "Path is not a folder: '%s'"
-msgstr ""
+msgstr "Rada pole kataloog: '%s'"
 
 #: ../gtk/gtkfilesystemwin32.c:1143
 #, c-format
@@ -2252,7 +2252,7 @@ msgstr "Pausitud"
 
 #: ../gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
-msgstr ""
+msgstr "Vajalik on kasutaja sekkumine"
 
 #: ../gtk/gtkprintoperation-win32.c:669
 msgid "Custom size"
@@ -2458,12 +2458,12 @@ msgstr "Grupp"
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
 
-#: ../gtk/gtkrc.c:2782
+#: ../gtk/gtkrc.c:2813
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Faili pole võimalik kaasata: \"%s\""
 
-#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
+#: ../gtk/gtkrc.c:3445 ../gtk/gtkrc.c:3448
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
@@ -2501,26 +2501,30 @@ msgstr "_Tühjenda loend"
 msgid "Show _Private Resources"
 msgstr ""
 
-#: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
+#: ../gtk/gtkrecentchoosermenu.c:421 ../gtk/gtkrecentchoosermenu.c:482
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
-#: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
-#: ../gtk/gtkrecentchoosermenu.c:689
+#: ../gtk/gtkrecentchoosermenu.c:506 ../gtk/gtkrecentchoosermenu.c:514
+#: ../gtk/gtkrecentchoosermenu.c:671 ../gtk/gtkrecentchoosermenu.c:680
+#: ../gtk/gtkrecentchoosermenu.c:688
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
 
-#: ../gtk/gtkrecentchoosermenu.c:833
+#: ../gtk/gtkrecentchoosermenu.c:832
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' avamine"
 
-#: ../gtk/gtkrecentchoosermenu.c:864
+#: ../gtk/gtkrecentchoosermenu.c:863
 msgid "Unknown item"
 msgstr "Tundmatu kirje"
+
+#: ../gtk/gtkrecentchoosermenu.c:968
+msgid "No items found"
+msgstr "Kirjeid ei leitud"
 
 #: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
 #: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
@@ -3982,12 +3986,12 @@ msgstr "Vigane URI"
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Tundmatu viga %s deserialiseerimise katsel"
 
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "Vormingu %s jaoks ei leitud deserialiseerimise funktsiooni"
 
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
@@ -4136,7 +4140,7 @@ msgstr "Kataloogi %s pole võimalik tagasi nime %s alla ümber nimetada: %s\n"
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Puhverfail edukalt loodud.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
@@ -4144,11 +4148,11 @@ msgstr ""
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "index.theme olemasolu ei kontrollita"
 
 #: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "Pildiandmeid puhvrisse ei kaasata"
 
 #: ../gtk/updateiconcache.c:1285
 msgid "Output a C header file"
@@ -4164,72 +4168,3 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Viga kataloogi \"%s\" loomisel: %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "Tõenäoliselt kasutasid sa failinimedes keelatud märke."
-
-#~ msgid "Error creating folder \"%s\": %s\n"
-#~ msgstr "Viga kataloogi \"%s\" loomisel: %s\n"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Viga faili \"%s\" kustutamisel: %s\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "Tõenäoliselt sisaldab see failinimedes keelatud märke."
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Failinimi \"%s\" sisaldab failinimedes keelatud märke"
-
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "Viga info saamisel '/' jaoks: %s"
-
-#~ msgid "Select All"
-#~ msgstr "Vali kõik"
-
-#~ msgid "shortcut %s already exists"
-#~ msgstr "kiirklahv %s on juba olemas"
-
-#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr "PNM-faile rohkem kui 255 värviga pole võimalik käsitleda"
-
-#~ msgid "Home"
-#~ msgstr "Kodu"
-
-#~ msgid "Could not get information about '%s': %s"
-#~ msgstr "Viga info saamisel '%s' jaoks: %s"
-
-#~ msgid "Shortcuts"
-#~ msgstr "Kiirklahvid"
-
-#~ msgid "Folder"
-#~ msgstr "Kataloog"
-
-#~ msgid "Cannot change folder"
-#~ msgstr "Kataloogi pole võimalik vahetada"
-
-#~ msgid "The folder you specified is an invalid path."
-#~ msgstr "Sinu kirjeldatud kataloog on vigase otsinguteega."
-
-#~ msgid "Could not build file name from '%s' and '%s'"
-#~ msgstr "Faili nime pole '%s' ja '%s' põhjal võimalik luua"
-
-#~ msgid "Open Location"
-#~ msgstr "Asukoha avamine"
-
-#~ msgid "Save in Location"
-#~ msgstr "Salvestamine asukohta"
-
-#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-#~ msgstr "Pildi raja element: \"%s\" peab olema absoluutne, %s, rida %d"
