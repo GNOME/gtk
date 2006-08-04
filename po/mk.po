@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-02 07:40+0200\n"
-"PO-Revision-Date: 2006-08-02 08:53+0200\n"
+"POT-Creation-Date: 2006-08-04 07:45+0200\n"
+"PO-Revision-Date: 2006-08-04 08:31+0200\n"
 "Last-Translator: Arangel Angov <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -2469,12 +2469,12 @@ msgstr "Група"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Копчето за радио на кое што припаѓа ова копче."
 
-#: ../gtk/gtkrc.c:2782
+#: ../gtk/gtkrc.c:2813
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не можам да ја најдам датотеката: \"%s\""
 
-#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
+#: ../gtk/gtkrc.c:3445 ../gtk/gtkrc.c:3448
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Не успеав да ја лоцирам сликата на патеката: \"%s\""
@@ -2512,26 +2512,30 @@ msgstr "_Исчисти ја листата"
 msgid "Show _Private Resources"
 msgstr "Прикажи ги _приватните ресурси"
 
-#: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
+#: ../gtk/gtkrecentchoosermenu.c:421 ../gtk/gtkrecentchoosermenu.c:482
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Не е пронајден скоро употребуван ресурс на URI `%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
-#: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
-#: ../gtk/gtkrecentchoosermenu.c:689
+#: ../gtk/gtkrecentchoosermenu.c:506 ../gtk/gtkrecentchoosermenu.c:514
+#: ../gtk/gtkrecentchoosermenu.c:671 ../gtk/gtkrecentchoosermenu.c:680
+#: ../gtk/gtkrecentchoosermenu.c:688
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Функцијата не е имплементирана за графичките контроли на класата '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:833
+#: ../gtk/gtkrecentchoosermenu.c:832
 #, c-format
 msgid "Open '%s'"
 msgstr "Отвори '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:864
+#: ../gtk/gtkrecentchoosermenu.c:863
 msgid "Unknown item"
 msgstr "Непознат предмет"
+
+#: ../gtk/gtkrecentchoosermenu.c:968
+msgid "No items found"
+msgstr "Не се пронајдени предмети"
 
 #: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
 #: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
