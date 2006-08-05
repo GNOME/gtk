@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-31 17:47+0200\n"
-"PO-Revision-Date: 2006-07-31 17:51+0200\n"
+"POT-Creation-Date: 2006-08-05 20:30+0200\n"
+"PO-Revision-Date: 2006-08-05 20:30+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -862,7 +862,7 @@ msgstr "Nicht zu übergebende GDK-Fehlerdiagnoseoptionen"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "Rücktaste"
+msgstr "Löschen"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
