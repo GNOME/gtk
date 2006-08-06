@@ -1,5 +1,8 @@
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_x11_finalize): Free
+	all XKB data. (#349997, Chris Wilson)
+
 	* gtk/gtkstyle.c (option_menu_get_props): Only get the
 	indicator-size and indicator-spacing style properties
 	for GtkOptionMenu.  (#349859, Benjamin Otte)

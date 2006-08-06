@@ -187,7 +187,7 @@ gdk_keymap_x11_finalize (GObject *object)
 
 #ifdef HAVE_XKB
   if (keymap_x11->xkb_desc)
-    XkbFreeClientMap (keymap_x11->xkb_desc, 0, True);
+    XkbFreeKeyboard (keymap_x11->xkb_desc, XkbAllComponentsMask, True);
 #endif
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
