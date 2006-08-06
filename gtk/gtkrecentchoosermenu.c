@@ -225,7 +225,7 @@ gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
   priv->show_icons= TRUE;
   priv->show_numbers = FALSE;
   priv->show_tips = FALSE;
-  priv->show_not_found = FALSE;
+  priv->show_not_found = TRUE;
   priv->show_private = FALSE;
   priv->local_only = TRUE;
   
@@ -636,12 +636,12 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
   
   if (compare_func)  
     items = g_list_sort_with_data (items, compare_func, menu);
-  
+ 
   length = g_list_length (items);
   if ((limit != -1) && (length > limit))
     {
       GList *clamp, *l;
-      
+
       clamp = g_list_nth (items, limit - 1);
 
       l = clamp->next;
@@ -650,7 +650,7 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
       g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
       g_list_free (l);
     }
-  
+
   return items;
 }
 
@@ -888,14 +888,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       image = gtk_image_new_from_pixbuf (icon);
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     }
-  
-  if (!gtk_recent_info_exists (info))
-    {
-      gtk_widget_set_sensitive (item, FALSE);
-      
-      goto out;
-    }
-  
+
   g_signal_connect (item, "activate",
   		    G_CALLBACK (item_activate_cb),
   		    menu);
@@ -994,21 +987,31 @@ idle_populate_func (gpointer data)
   priv = pdata->menu->priv;
 
   /* skip non-local items on request */
-  if (priv->local_only && !gtk_recent_info_is_local (info))
-    goto check_and_return;
+  if (priv->local_only &&
+      !gtk_recent_info_is_local (info))
+    {
+      goto check_and_return;
+    }
       
   /* skip private items on request */
-  if (!priv->show_private && gtk_recent_info_get_private_hint (info))
-    goto check_and_return;
-      
-  /* skip non-existing items on request */
-  if (!priv->show_not_found && !gtk_recent_info_exists (info))
-    goto check_and_return;
+  if (!priv->show_private &&
+      gtk_recent_info_get_private_hint (info))
+    {
+      goto check_and_return;
+    }
 
+  /* skip non-existing items on request */
+  if (!priv->show_not_found &&
+      !gtk_recent_info_exists (info))
+    {
+      goto check_and_return;
+    }
   /* filter items based on the currently set filter object */
   if (get_is_recent_filtered (pdata->menu, info))
-    goto check_and_return;
- 
+    {
+      goto check_and_return;
+    }
+
   item = gtk_recent_chooser_menu_create_item (pdata->menu,
                                               info,
 					      pdata->loaded_items);
@@ -1037,7 +1040,7 @@ idle_populate_func (gpointer data)
   g_object_set_data_full (G_OBJECT (item), "gtk-recent-info",
       			  gtk_recent_info_ref (info),
       			  (GDestroyNotify) gtk_recent_info_unref);
-
+  
 check_and_return:
   pdata->loaded_items += 1;
 

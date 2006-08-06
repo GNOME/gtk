@@ -341,7 +341,7 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 
   impl->show_icons = TRUE;
   impl->show_private = FALSE;
-  impl->show_not_found = FALSE;
+  impl->show_not_found = TRUE;
   impl->show_tips = TRUE;
   impl->select_multiple = FALSE;
   impl->local_only = TRUE;
@@ -1010,7 +1010,6 @@ recent_meta_data_func (GtkTreeViewColumn *tree_column,
   
   g_object_set (cell,
                 "markup", data->str,
-                "sensitive", gtk_recent_info_exists (info),
                 NULL);
   
   g_string_free (data, TRUE);
@@ -1340,9 +1339,6 @@ gtk_recent_chooser_default_get_items (GtkRecentChooser *chooser)
       GList *clamp, *l;
       
       clamp = g_list_nth (items, limit - 1);
-      
-      if (!clamp)
-        return items;
       
       l = clamp->next;
       clamp->next = NULL;

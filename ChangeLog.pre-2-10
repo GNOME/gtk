@@ -1,3 +1,17 @@
+2006-08-07  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooserdefault.c:
+	(_gtk_recent_chooser_default_init): Show non existing
+	resources by default.
+	(recent_meta_data_func): Do not mark non existing
+	resources as insensitive.
+
+	* gtk/gtkrecentchoosermenu.c:
+	(gtk_recent_chooser_menu_init): Show non existing
+	resources by default.
+	(gtk_recent_chooser_menu_create_item): Do not mark
+	non existing resources as insensitive.
+
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_x11_finalize): Free
