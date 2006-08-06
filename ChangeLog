@@ -1,5 +1,9 @@
 2006-08-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_style_set): Create new
+	PangoContexts and set them on the layout, to catch changes in
+	font options.  (#348278, Behdad Esfahbod)
+
 	* gtk/gtkstyle.c (gtk_default_draw_flat_box): Add a 
 	missing initialization.  (#349863, Benjamin Berg)
 

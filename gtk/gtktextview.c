@@ -3584,6 +3584,7 @@ gtk_text_view_style_set (GtkWidget *widget,
                          GtkStyle  *previous_style)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  PangoContext *ltr_context, *rtl_context;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -3595,7 +3596,17 @@ gtk_text_view_style_set (GtkWidget *widget,
       gtk_text_view_set_attributes_from_style (text_view,
                                                text_view->layout->default_style,
                                                widget->style);
-      gtk_text_layout_default_style_changed (text_view->layout);
+      
+      
+      ltr_context = gtk_widget_create_pango_context (widget);
+      pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
+      rtl_context = gtk_widget_create_pango_context (widget);
+      pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
+
+      gtk_text_layout_set_contexts (text_view->layout, ltr_context, rtl_context);
+
+      g_object_unref (ltr_context);
+      g_object_unref (rtl_context);
     }
 }
 
@@ -3608,6 +3619,7 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
   if (text_view->layout)
     {
       text_view->layout->default_style->direction = gtk_widget_get_direction (widget);
+
       gtk_text_layout_default_style_changed (text_view->layout);
     }
 }
