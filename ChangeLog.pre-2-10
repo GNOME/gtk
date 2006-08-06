@@ -3,6 +3,8 @@
 	* gtk/gtknotebook.c (gtk_notebook_drag_motion): Don't allow
 	dragging a notebook tab to one of its children.  (#348626,
 	Benjamin Otte)
+	(gtk_notebook_drag_motion): Don't accept drops on 
+	arrows.  (#348706, Benjamin Otte)
 
 	* tests/testnotebookdnd.c: Test more corner cases.
 

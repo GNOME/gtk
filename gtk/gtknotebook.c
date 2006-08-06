@@ -3139,6 +3139,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
     {
       notebook->click_child = arrow;
       gtk_notebook_set_scroll_timer (notebook);
+      gdk_drag_status (context, 0, time);
       return TRUE;
     }
 
