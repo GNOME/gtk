@@ -1,5 +1,9 @@
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c (option_menu_get_props): Only get the
+	indicator-size and indicator-spacing style properties
+	for GtkOptionMenu.  (#349859, Benjamin Otte)
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines) 
 	(gtk_tree_view_set_enable_tree_lines): Be more careful
 	when creating gcs, also emit change notification.

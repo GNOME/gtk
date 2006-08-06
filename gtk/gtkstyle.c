@@ -30,6 +30,9 @@
 #include <string.h>
 #include "gtkgc.h"
 #include "gtkmarshalers.h"
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"
@@ -3221,7 +3224,7 @@ option_menu_get_props (GtkWidget      *widget,
   GtkRequisition *tmp_size = NULL;
   GtkBorder *tmp_spacing = NULL;
   
-  if (widget)
+  if (GTK_IS_OPTION_MENU (widget))
     gtk_widget_style_get (widget, 
 			  "indicator-size", &tmp_size,
 			  "indicator-spacing", &tmp_spacing,
