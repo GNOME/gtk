@@ -34,10 +34,10 @@ enum {
 };
 
 gchar *tabs1 [] = {
-  "a",
-  "b",
-  "c",
-  "d",
+  "aaaaaaaaaa",
+  "bbbbbbbbbb",
+  "cccccccccc",
+  "dddddddddd",
   NULL
 };
 
@@ -46,7 +46,7 @@ gchar *tabs2 [] = {
   "2",
   "3",
   "4",
-  "5",
+  "55555",
   NULL
 };
 
@@ -185,6 +185,47 @@ create_notebook (gchar           **labels,
 }
 
 static GtkWidget*
+create_notebook_with_notebooks (gchar           **labels,
+			        gint              group_id,
+			        gint              packing,
+			        GtkPositionType   pos)
+{
+  GtkWidget *notebook, *title, *page;
+  gint count = 0;
+
+  notebook = gtk_notebook_new ();
+
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
+  gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
+  gtk_notebook_set_group_id (GTK_NOTEBOOK (notebook), group_id);
+
+  while (*labels)
+    {
+      page = create_notebook (labels, group_id, packing, pos);
+
+      title = gtk_label_new (*labels);
+
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, title);
+      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
+      gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
+
+      if (packing == PACK_END ||
+	  (packing == PACK_ALTERNATE && count % 2 == 1))
+	gtk_container_child_set (GTK_CONTAINER (notebook), page, "tab-pack", GTK_PACK_END, NULL);
+
+      count++;
+      labels++;
+    }
+
+  g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
+		    G_CALLBACK (on_page_reordered), NULL);
+  g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
+			  G_CALLBACK (on_notebook_drag_begin), NULL);
+  return notebook;
+}
+
+static GtkWidget*
 create_trash_button (void)
 {
   GtkWidget *button;
@@ -215,7 +256,7 @@ main (gint argc, gchar *argv[])
   gtk_notebook_set_window_creation_hook (window_creation_function, NULL, NULL);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook (tabs1, GROUP_A, PACK_START, GTK_POS_TOP),
+			     create_notebook (tabs1, GROUP_A, PACK_ALTERNATE, GTK_POS_TOP),
 			     0, 1, 0, 1);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
@@ -227,7 +268,7 @@ main (gint argc, gchar *argv[])
 			     1, 2, 0, 1);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook (tabs4, GROUP_A, PACK_ALTERNATE, GTK_POS_RIGHT),
+			     create_notebook_with_notebooks (tabs4, GROUP_A, PACK_ALTERNATE, GTK_POS_RIGHT),
 			     1, 2, 1, 2);
 
   gtk_table_attach (GTK_TABLE (table),

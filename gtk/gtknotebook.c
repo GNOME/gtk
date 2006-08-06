@@ -3159,7 +3159,9 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
       if (widget_group != -1 &&
 	  source_widget_group != -1 &&
-	  widget_group == source_widget_group)
+	  widget_group == source_widget_group &&
+	  !(widget == GTK_NOTEBOOK (source_widget)->cur_page->child || 
+	    gtk_widget_is_ancestor (widget, GTK_NOTEBOOK (source_widget)->cur_page->child)))
 	{
 	  gdk_drag_status (context, GDK_ACTION_MOVE, time);
 	  return TRUE;
