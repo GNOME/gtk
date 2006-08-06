@@ -3474,7 +3474,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
             }
 	  else if (!strcmp ("cell_odd_ruled", detail))
 	    {
-	      GdkColor *color;
+	      GdkColor *color = NULL;
 
 	      gtk_widget_style_get (widget,
 		                    "odd-row-color", &color,

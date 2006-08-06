@@ -1,5 +1,8 @@
 2006-08-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c (gtk_default_draw_flat_box): Add a 
+	missing initialization.  (#349863, Benjamin Berg)
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_reorder): 
 	Protect against tree_view being NULL.  (#348652, Patrick K. O'Brian,
 	Chris Wilson)
