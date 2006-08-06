@@ -1,5 +1,8 @@
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Use $PKG_CONFIG consistently.  (#348740,
+	Jeremy Lainé)
+	
 	* gtk/gtknotebook.c (gtk_notebook_drag_motion): Don't allow
 	dragging a notebook tab to one of its children.  (#348626,
 	Benjamin Otte)
