@@ -2400,9 +2400,10 @@ calendar_timer (gpointer data)
           g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
 	  priv->need_timer = FALSE;
-	  priv->timer = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
-                                       (GSourceFunc) calendar_timer,
-                                       (gpointer) calendar);
+	  priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
+					    timeout * SCROLL_DELAY_FACTOR,
+					    (GSourceFunc) calendar_timer,
+					    (gpointer) calendar, NULL);
 	}
       else 
 	retval = TRUE;
@@ -2430,9 +2431,10 @@ calendar_start_spinning (GtkCalendar *calendar,
       g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
 
       priv->need_timer = TRUE;
-      priv->timer = g_timeout_add (timeout,
-				   calendar_timer,
-				   calendar);
+      priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
+					timeout,
+					(GSourceFunc) calendar_timer,
+					(gpointer) calendar, NULL);
     }
 }
 

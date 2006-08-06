@@ -1,5 +1,11 @@
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (calendar_start_spinning, calendar_timer): 
+	Use G_PRIORITY_DEFAULT_IDLE for the month/year-change timer,
+	so that the caller will have a chance to redraw/resize itself
+	between every change.  (#348824, Federico Mena Quintero, patch
+	by Michael Meeks)
+	
 	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): 
 	Add a missing initialization.  (#348787, Leonardo Boshell)
 	
