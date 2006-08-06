@@ -1,5 +1,14 @@
 2006-08-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c:
+	* gtk/gtkentryprivate.h: Export gtk_entry_reset_im_context
+	privately.
+	
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_action_button_press): 
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Reset the
+	entry's im context here.  (#348478, Nguyen Thai Ngoc Duy, Christian
+	Persch) 
+
 	* gtk/gtktextview.c (gtk_text_view_style_set): Create new
 	PangoContexts and set them on the layout, to catch changes in
 	font options.  (#348278, Behdad Esfahbod)

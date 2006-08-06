@@ -295,7 +295,6 @@ static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
 static void         gtk_entry_reset_layout             (GtkEntry       *entry);
 static void         gtk_entry_queue_draw               (GtkEntry       *entry);
-static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);
 static gint         gtk_entry_find_position            (GtkEntry       *entry,
 							gint            x);
@@ -924,7 +923,7 @@ gtk_entry_set_property (GObject         *object,
 	  {
 	    if (!new_value)
 	      {
-		gtk_entry_reset_im_context (entry);
+		_gtk_entry_reset_im_context (entry);
 		if (GTK_WIDGET_HAS_FOCUS (entry))
 		  gtk_im_context_focus_out (entry->im_context);
 
@@ -1110,7 +1109,7 @@ gtk_entry_destroy (GtkObject *object)
 
   entry->n_bytes = 0;
   entry->current_pos = entry->selection_bound = entry->text_length = 0;
-  gtk_entry_reset_im_context (entry);
+  _gtk_entry_reset_im_context (entry);
   gtk_entry_reset_layout (entry);
 
   if (entry->blink_timeout)
@@ -1612,7 +1611,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       if (event->state & GDK_SHIFT_MASK)
 	{
-	  gtk_entry_reset_im_context (entry);
+	  _gtk_entry_reset_im_context (entry);
 	  
 	  if (!have_selection) /* select from the current position to the clicked position */
 	    sel_start = sel_end = entry->current_pos;
@@ -1966,7 +1965,7 @@ gtk_entry_key_press (GtkWidget   *widget,
           completion->priv->completion_timeout = 0;
         }
 
-      gtk_entry_reset_im_context (entry);
+      _gtk_entry_reset_im_context (entry);
     }
 
   if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, event))
@@ -2191,7 +2190,7 @@ gtk_entry_set_position_internal (GtkEntry    *entry,
       position != entry->selection_bound)
     {
       if (reset_im)
-	gtk_entry_reset_im_context (entry);
+	_gtk_entry_reset_im_context (entry);
       gtk_entry_set_positions (entry, position, position);
     }
 }
@@ -2221,7 +2220,7 @@ gtk_entry_set_selection_bounds (GtkEditable *editable,
   if (end < 0)
     end = entry->text_length;
   
-  gtk_entry_reset_im_context (entry);
+  _gtk_entry_reset_im_context (entry);
 
   gtk_entry_set_positions (entry,
 			   MIN (end, entry->text_length),
@@ -2521,7 +2520,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 {
   gint new_pos = entry->current_pos;
 
-  gtk_entry_reset_im_context (entry);
+  _gtk_entry_reset_im_context (entry);
 
   if (entry->current_pos != entry->selection_bound && !extend_selection)
     {
@@ -2613,7 +2612,7 @@ gtk_entry_insert_at_cursor (GtkEntry    *entry,
 
   if (entry->editable)
     {
-      gtk_entry_reset_im_context (entry);
+      _gtk_entry_reset_im_context (entry);
 
       gtk_editable_insert_text (editable, str, -1, &pos);
       gtk_editable_set_position (editable, pos);
@@ -2629,7 +2628,7 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
   gint start_pos = entry->current_pos;
   gint end_pos = entry->current_pos;
   
-  gtk_entry_reset_im_context (entry);
+  _gtk_entry_reset_im_context (entry);
 
   if (!entry->editable)
     return;
@@ -2699,7 +2698,7 @@ gtk_entry_backspace (GtkEntry *entry)
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint prev_pos;
 
-  gtk_entry_reset_im_context (entry);
+  _gtk_entry_reset_im_context (entry);
 
   if (!entry->editable || !entry->text)
     return;
@@ -3498,8 +3497,8 @@ gtk_entry_queue_draw (GtkEntry *entry)
     gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
 }
 
-static void
-gtk_entry_reset_im_context (GtkEntry *entry)
+void
+_gtk_entry_reset_im_context (GtkEntry *entry)
 {
   if (entry->need_im_reset)
     {
@@ -5400,6 +5399,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return FALSE;
 
+  _gtk_entry_reset_im_context (GTK_ENTRY (widget));
+
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
   if (completion->priv->actions)
@@ -5500,15 +5501,12 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 	   event->keyval == GDK_KP_Tab ||
 	   event->keyval == GDK_ISO_Left_Tab) 
     {
-      GtkWidget *entry;
       GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
 	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
 
       _gtk_entry_completion_popdown (completion);
       
-      entry = gtk_entry_completion_get_entry (completion);
-
-      gtk_widget_child_focus (gtk_widget_get_toplevel (entry), dir);
+      gtk_widget_child_focus (gtk_widget_get_toplevel (widget), dir);
 
       return TRUE;
     }
@@ -5529,12 +5527,10 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           if (!gtk_tree_selection_get_selected (sel, &model, &iter))
             return FALSE;
 
-	  g_signal_handler_block (completion->priv->entry,
-				  completion->priv->changed_id);
+	  g_signal_handler_block (widget, completion->priv->changed_id);
           g_signal_emit_by_name (completion, "match_selected",
                                  model, &iter, &entry_set);
-	  g_signal_handler_unblock (completion->priv->entry,
-				    completion->priv->changed_id);
+	  g_signal_handler_unblock (widget, completion->priv->changed_id);
 
           if (!entry_set)
             {

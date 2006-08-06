@@ -829,6 +829,8 @@ gtk_entry_completion_action_button_press (GtkWidget      *widget,
   if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return FALSE;
 
+  _gtk_entry_reset_im_context (completion->priv->entry);
+
   if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
                                      event->x, event->y,
                                      &path, NULL, NULL, NULL))
