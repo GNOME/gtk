@@ -53,7 +53,7 @@ if (error)
 else
   {
     /* Use the info object */
-    g_object_unref (info);
+    gtk_recent_info_unref (info);
   }
   </programlisting>
 </informalexample>
