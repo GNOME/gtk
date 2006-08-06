@@ -64,33 +64,9 @@ GNU Network Object Model Environment (GNOME) project. GTK is built on
 top of GDK (GIMP Drawing Kit) which is basically a wrapper around the
 low-level functions for accessing the underlying windowing functions
 (Xlib in the case of the X windows system), and gdk-pixbuf, a library for
-client-side image manipulation.
+client-side image manipulation.</para>
+
 </para>
-<para>The primary authors of GTK are:</para>
-
-<itemizedlist>
-<listitem><simpara> Peter Mattis <ulink url="mailto:petm@xcf.berkeley.edu">
-petm@xcf.berkeley.edu</ulink></simpara>
-</listitem>
-<listitem><simpara> Spencer Kimball <ulink url="mailto:spencer@xcf.berkeley.edu">
-spencer@xcf.berkeley.edu</ulink></simpara>
-</listitem>
-<listitem><simpara> Josh MacDonald <ulink url="mailto:jmacd@xcf.berkeley.edu">
-jmacd@xcf.berkeley.edu</ulink></simpara>
-</listitem>
-</itemizedlist>
-
-<para>GTK is currently maintained by:</para>
-
-<itemizedlist>
-<listitem><simpara> Owen Taylor <ulink url="mailto:otaylor@redhat.com">
-otaylor@redhat.com</ulink></simpara>
-</listitem>
-<listitem><simpara> Tim Janik <ulink url="mailto:timj@gtk.org">
-timj@gtk.org</ulink></simpara>
-</listitem>
-</itemizedlist>
-
 <para>GTK is essentially an object oriented application programmers
 interface (API). Although written completely in C, it is implemented
 using the idea of classes and callback functions (pointers to

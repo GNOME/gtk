@@ -1,5 +1,8 @@
 2006-08-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tutorial/gtk-tut.sgml: Remove outdated lists of
+	authors and maintainers.  (#348538, Owen Taylor)
+
 	* gtk/gtkentry.c:
 	* gtk/gtkentryprivate.h: Export gtk_entry_reset_im_context
 	privately.
