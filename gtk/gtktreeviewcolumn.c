@@ -750,7 +750,8 @@ gtk_tree_view_column_cell_layout_reorder (GtkCellLayout   *cell_layout,
   column->cell_list = g_list_remove_link (column->cell_list, link);
   column->cell_list = g_list_insert (column->cell_list, info, position);
 
-  gtk_widget_queue_draw (column->tree_view);
+  if (column->tree_view)
+    gtk_widget_queue_draw (column->tree_view);
 }
 
 static void

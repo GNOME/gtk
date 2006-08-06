@@ -1,3 +1,9 @@
+2006-08-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_reorder): 
+	Protect against tree_view being NULL.  (#348652, Patrick K. O'Brian,
+	Chris Wilson)
+
 2006-08-03  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c:
