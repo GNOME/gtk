@@ -326,15 +326,24 @@ gdk_quartz_draw_points (GdkDrawable *drawable,
 		       GdkPoint    *points,
 		       gint         npoints)
 {
+  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   int i;
+
+  if (!context)
+    return;
+
+  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
+						_gdk_gc_get_fg_pixel (gc));
 
   /* Just draw 1x1 rectangles */
   for (i = 0; i < npoints; i++) 
     {
-      gdk_draw_rectangle (drawable, gc, TRUE, 
-			  points[i].x, points[i].y,
-			  1, 1);
+      CGRect rect = CGRectMake (points[i].x + 0.5, points[i].y + 0.5, 1, 1);
+      CGContextFillRect (context, rect);
     }
+
+  gdk_quartz_drawable_release_context (drawable, context);
 }
 
 static void

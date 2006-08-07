@@ -1,3 +1,9 @@
+2006-08-07  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_points): Don't
+	get and release the context for each point, just once, speeds up
+	drawing many points a lot.
+
 2006-08-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkdnd-quartz.c (gtk_drag_dest_unset): need to disconnect
