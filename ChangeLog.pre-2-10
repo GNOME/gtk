@@ -1,3 +1,11 @@
+2006-08-07  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkdnd-quartz.c (gtk_drag_dest_unset): need to disconnect
+	from signals connected in gtk_drag_dest_set() here.
+
+	* gtk/gtkdnd-quartz.c (gtk_drag_dest_set): call gtk_drag_dest_unset()
+	instead of disconnecting the old signal connections here.
+
 2006-08-07  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c:
