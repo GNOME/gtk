@@ -1,3 +1,8 @@
+2006-08-09  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_geometry_hints):
+	implement MIN_SIZE, MAX_SIZE and RESIZE_INC.
+
 2006-08-08  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkdnd-quartz.c: Implement get/set_track_motion.

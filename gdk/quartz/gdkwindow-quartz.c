@@ -1299,7 +1299,77 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkGeometry    *geometry,
 			       GdkWindowHints  geom_mask)
 {
-  /* FIXME: Implement */
+  GdkWindowImplQuartz *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (geometry != NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl);
+  if (!impl->toplevel)
+    return;
+
+  if (geom_mask & GDK_HINT_POS)
+    {
+      /* FIXME: Implement */
+    }
+
+  if (geom_mask & GDK_HINT_USER_POS)
+    {
+      /* FIXME: Implement */
+    }
+
+  if (geom_mask & GDK_HINT_USER_SIZE)
+    {
+      /* FIXME: Implement */
+    }
+  
+  if (geom_mask & GDK_HINT_MIN_SIZE)
+    {
+      NSSize size;
+
+      size.width = geometry->min_width;
+      size.height = geometry->min_height;
+
+      [impl->toplevel setContentMinSize:size];
+    }
+  
+  if (geom_mask & GDK_HINT_MAX_SIZE)
+    {
+      NSSize size;
+
+      size.width = geometry->max_width;
+      size.height = geometry->max_height;
+
+      [impl->toplevel setContentMaxSize:size];
+    }
+  
+  if (geom_mask & GDK_HINT_BASE_SIZE)
+    {
+      /* FIXME: Implement */
+    }
+  
+  if (geom_mask & GDK_HINT_RESIZE_INC)
+    {
+      NSSize size;
+
+      size.width = geometry->width_inc;
+      size.height = geometry->height_inc;
+
+      [impl->toplevel setContentResizeIncrements:size];
+    }
+  
+  if (geom_mask & GDK_HINT_ASPECT)
+    {
+      /* FIXME: Implement */
+    }
+
+  if (geom_mask & GDK_HINT_WIN_GRAVITY)
+    {
+      /* FIXME: Implement */
+    }
 }
 
 void
@@ -1331,7 +1401,7 @@ gdk_window_set_role (GdkWindow   *window,
   /* FIXME: Implement */
 }
 
-void          
+void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
@@ -1438,7 +1508,6 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* FIXME: Implement */
@@ -1448,7 +1517,6 @@ void
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* FIXME: Implement */
