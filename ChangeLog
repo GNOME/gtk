@@ -1,3 +1,8 @@
+2006-08-08  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (poll_func): Whitespace cleanup.	 
+	(synthesize_crossing_events): Add comments and prevent a crash.
+
 2006-08-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c

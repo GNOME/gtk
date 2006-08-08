@@ -250,7 +250,6 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
     {
       if ([event type] == NSApplicationDefined)
 	{
-
 	  pthread_mutex_lock (&pollfd_mutex);
 
 	  for (i = 0; i < n_pollfds; i++)
@@ -282,6 +281,7 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
   if (n_active == 0 && wakeup_pipe[1])
     {
       char c = 'A';
+
       write (wakeup_pipe[1], &c, 1);
     }
 
@@ -289,8 +289,8 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
     {
       ufds[0].revents = G_IO_IN;
 
-      /* FIXME: We can't assert here, what we need to to is to have a queue
-       * for events instead.
+      /* FIXME: We can't assert here, but we might need to have a
+       * queue for events instead.
        */
       /*g_assert (current_event == NULL);*/
 
@@ -955,8 +955,15 @@ synthesize_crossing_events (GdkWindow      *window,
     }
   else
     {
-      /* Dunno where we are coming from */
-      synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_UNKNOWN);
+      /* This means we have not current_mouse_window. FIXME: Should
+       * we make sure to always set the root window instead of NULL?
+       */
+
+      /* FIXME: Figure out why this is being called with window being
+       * NULL. The check works around a crash for now.
+       */ 
+      if (window)
+	synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_UNKNOWN);
     }
   
   _gdk_quartz_update_mouse_window (window);
