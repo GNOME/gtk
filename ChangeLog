@@ -1,3 +1,12 @@
+2006-08-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c
+	(gdk_window_maximize)
+	(gdk_window_unmaximize): implement.
+
+	(gdk_window_iconify)
+	(gdk_window_deiconify): remove unneeded autorelease pools.
+
 2006-08-08  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzView.c: Just expose the minimal region 

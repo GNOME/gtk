@@ -640,7 +640,9 @@ gdk_window_new (GdkWindow     *parent,
 
 	impl->toplevel = [[GdkQuartzWindow alloc] initWithContentRect:content_rect 
 			                                    styleMask:style_mask
-			                                      backing:NSBackingStoreBuffered defer:NO];
+			                                      backing:NSBackingStoreBuffered
+			                                        defer:NO];
+
 	if (attributes_mask & GDK_WA_TITLE)
 	  title = attributes->title;
 	else
@@ -1524,12 +1526,12 @@ gdk_window_set_type_hint (GdkWindow        *window,
       level = NSTornOffMenuWindowLevel;
       shadow = TRUE;
       break;
-      
+
     case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       level = NSPopUpMenuWindowLevel;
       shadow = TRUE;
       break;
-      
+
     case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
     case GDK_WINDOW_TYPE_HINT_COMBO:
       level = NSPopUpMenuWindowLevel;
@@ -1714,17 +1716,34 @@ gdk_window_unstick (GdkWindow *window)
 void
 gdk_window_maximize (GdkWindow *window)
 {
+  GdkWindowImplQuartz *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (impl->toplevel && ![impl->toplevel isZoomed])
+    [impl->toplevel zoom:nil];
 }
 
 void
 gdk_window_unmaximize (GdkWindow *window)
 {
+  GdkWindowImplQuartz *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (impl->toplevel && [impl->toplevel isZoomed])
+    [impl->toplevel zoom:nil];
 }
 
 void
@@ -1738,12 +1757,9 @@ gdk_window_iconify (GdkWindow *window)
     return;
   
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
-  if (!impl->toplevel)
-    return;
-  
-  GDK_QUARTZ_ALLOC_POOL;
-  [impl->toplevel miniaturize:nil];
-  GDK_QUARTZ_RELEASE_POOL;
+
+  if (impl->toplevel)
+    [impl->toplevel miniaturize:nil];
 }
 
 void
@@ -1757,12 +1773,9 @@ gdk_window_deiconify (GdkWindow *window)
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
-  if (!impl->toplevel)
-    return;
 
-  GDK_QUARTZ_ALLOC_POOL;
-  [impl->toplevel deminiaturize:nil];
-  GDK_QUARTZ_RELEASE_POOL;
+  if (impl->toplevel)
+    [impl->toplevel deminiaturize:nil];
 }
 
 void
