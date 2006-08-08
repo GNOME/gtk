@@ -26,6 +26,10 @@
 
 static gpointer parent_class;
 
+static GSList *update_windows = NULL;
+static guint update_idle = 0;
+
+
 NSView *
 gdk_quartz_window_get_nsview (GdkWindow *window)
 {
@@ -242,26 +246,87 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
 }
 
 static void
+gdk_window_quartz_process_all_updates (void)
+{
+  GSList *old_update_windows = update_windows;
+  GSList *tmp_list = update_windows;
+
+  update_idle = 0;
+  update_windows = NULL;
+
+  g_slist_foreach (old_update_windows, (GFunc) g_object_ref, NULL);
+  
+  while (tmp_list)
+    {
+      GdkWindowObject *private = tmp_list->data;
+      GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *) private->impl;
+      int i, n_rects;
+      GdkRectangle *rects;
+      
+      if (private->update_area)
+	{
+	  gdk_region_get_rectangles (private->update_area, &rects, &n_rects);
+
+	  gdk_region_destroy (private->update_area);
+	  private->update_area = NULL;
+	  
+	  for (i = 0; i < n_rects; i++) 
+	    {
+	      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
+							    rects[i].width, rects[i].height)];
+	    }
+	  
+	  [impl->view displayIfNeeded];
+
+	  g_free (rects);
+	}
+
+      g_object_unref (tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (old_update_windows);
+}
+
+static gboolean
+gdk_window_update_idle (gpointer data)
+{
+  GDK_THREADS_ENTER ();
+  gdk_window_quartz_process_all_updates ();
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
 gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable *paintable,
 						 GdkRegion    *region,
 						 gboolean    (*child_func) (GdkWindow *, gpointer),
 						 gpointer      user_data)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  int i, n_rects;
-  GdkRectangle *rects;
+  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  GdkDrawableImplQuartz *drawable_impl = (GdkDrawableImplQuartz *) window_impl;
+  GdkWindow *window = (GdkWindow *) drawable_impl->wrapper;
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkRegion *visible_region;
 
-  gdk_region_get_rectangles (region, &rects, &n_rects);
+  visible_region = gdk_drawable_get_visible_region (window);
+  gdk_region_intersect (visible_region, region);
 
-  for (i = 0; i < n_rects; i++) 
+  if (private->update_area)
     {
-      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
-						    rects[i].width, rects[i].height)];
+      gdk_region_union (private->update_area, visible_region);
+      gdk_region_destroy (visible_region);
     }
+  else
+    {
+      update_windows = g_slist_prepend (update_windows, window);
+      private->update_area = visible_region;
 
-  g_free (rects);
-
-  /* FIXME: Check if we need to traverse the children */
+      if (update_idle == 0)
+	update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
+				       gdk_window_update_idle, NULL, NULL);
+    }
 }
 
 static void
@@ -269,10 +334,17 @@ gdk_window_impl_quartz_process_updates (GdkPaintable *paintable,
 					gboolean      update_children)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  GdkDrawableImplQuartz *drawable_impl = (GdkDrawableImplQuartz *) impl;
+  GdkWindowObject *private = (GdkWindowObject *) drawable_impl->wrapper;
 
-  [impl->view display];
+  if (private->update_area)
+    {
+      gdk_region_destroy (private->update_area);
+      private->update_area = NULL;
+    }  
 
-  /* FIXME: Check if display actually updates the children too */
+  [impl->view setNeedsDisplay: YES];
+  update_windows = g_slist_remove (update_windows, private);
 }
 
 static void
@@ -284,7 +356,6 @@ gdk_window_impl_quartz_paintable_init (GdkPaintableIface *iface)
   iface->invalidate_maybe_recurse = gdk_window_impl_quartz_invalidate_maybe_recurse;
   iface->process_updates = gdk_window_impl_quartz_process_updates;
 }
-
 
 GType
 _gdk_window_impl_quartz_get_type (void)
@@ -642,7 +713,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   recursing,
 			       gboolean   foreign_destroy)
 {
-  if (!recursing && ! foreign_destroy)
+  update_windows = g_slist_remove (update_windows, window);
+
+  if (!recursing && !foreign_destroy)
     {
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
@@ -655,7 +728,6 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	[impl->toplevel close];
       else if (impl->view)
 	[impl->view release];
-      
     }
 }
 
@@ -1449,7 +1521,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
       break;
       
     case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
-      level = NSSubmenuWindowLevel;
+      level = NSTornOffMenuWindowLevel;
       shadow = TRUE;
       break;
       

@@ -51,25 +51,42 @@
   GdkRectangle gdk_rect;
   GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  const NSRect *drawn_rects;
+  int count, i;
+  GdkRegion *region;
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  gdk_rect.x = rect.origin.x;
-  gdk_rect.y = rect.origin.y;
-  gdk_rect.width = rect.size.width;
-  gdk_rect.height = rect.size.height;
-  
-  if (private->event_mask & GDK_EXPOSURE_MASK)
+  [self getRectsBeingDrawn:&drawn_rects count:&count];
+
+  region = gdk_region_new ();
+
+  for (i = 0; i < count; i++)
+    {
+      gdk_rect.x = drawn_rects[i].origin.x;
+      gdk_rect.y = drawn_rects[i].origin.y;
+      gdk_rect.width = drawn_rects[i].size.width;
+      gdk_rect.height = drawn_rects[i].size.height;
+
+      gdk_region_union_with_rect (region, &gdk_rect);
+    }
+
+  if (!gdk_region_empty (region) && private->event_mask & GDK_EXPOSURE_MASK)
     {
       GdkEvent event;
+      
+      gdk_rect.x = rect.origin.x;
+      gdk_rect.y = rect.origin.y;
+      gdk_rect.width = rect.size.width;
+      gdk_rect.height = rect.size.height;
       
       event.expose.type = GDK_EXPOSE;
       event.expose.window = g_object_ref (gdk_window);
       event.expose.send_event = FALSE;
       event.expose.count = 0;
-      event.expose.region = gdk_region_rectangle (&gdk_rect);
+      event.expose.region = region;
       event.expose.area = gdk_rect;
-    
+      
       impl->in_paint_rect_count ++;
 
       (*_gdk_event_func) (&event, _gdk_event_data);

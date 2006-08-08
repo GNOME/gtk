@@ -1,3 +1,18 @@
+2006-08-08  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzView.c: Just expose the minimal region 
+	instead of the whole rect.
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_quartz_process_all_updates), (gdk_window_update_idle),
+	(gdk_window_impl_quartz_invalidate_maybe_recurse),
+	(gdk_window_impl_quartz_process_updates),
+	(_gdk_windowing_window_destroy): Rework the expose handling so that
+	it works like the X11 backend, using an idle with the right
+	priority instead of relying on quartz to do it.
+	(gdk_window_set_type_hint): Use tornoff instead of submenu as the
+	documentation (and Mitch) suggests.
+
 2006-08-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c: some whitespace and indentation
