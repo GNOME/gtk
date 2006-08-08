@@ -1,3 +1,17 @@
+2006-08-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c: some whitespace and indentation
+	cleanup.
+
+	(gdk_quartz_draw_rectangle)
+	(gdk_quartz_draw_arc)
+	(gdk_quartz_draw_polygon)
+	(gdk_quartz_draw_points): for pixel-prefect drawing, stroked
+	coordinates need to go through pixel centers, while filled ones
+	need to go along pixel boundaries. Moved +0.5 adjusting to the
+	if(!filled) branches and added/removed some adjustments where they
+	were wrong.
+
 2006-08-07  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_points): Don't
