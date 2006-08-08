@@ -1,5 +1,9 @@
 2006-08-08  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkdnd-quartz.c: Implement get/set_track_motion.
+	
+2006-08-08  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c: (poll_func): Whitespace cleanup.	 
 	(synthesize_crossing_events): Add comments and prevent a crash.
 

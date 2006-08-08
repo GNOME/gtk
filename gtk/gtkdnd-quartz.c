@@ -105,6 +105,7 @@ struct _GtkDragDestSite
   GtkTargetList     *target_list;
   GdkDragAction      actions;
   guint              have_drag : 1;
+  guint              track_motion : 1;
 };
 
 struct _GtkDragDestInfo 
@@ -281,6 +282,7 @@ gtk_drag_get_source_info (GdkDragContext *context,
 			  gboolean        create)
 {
   GtkDragSourceInfo *info;
+
   if (!dest_info_quark)
     dest_info_quark = g_quark_from_static_string ("gtk-source-info");
   
@@ -462,9 +464,11 @@ gtk_drag_dest_set (GtkWidget            *widget,
 		   gint                  n_targets,
 		   GdkDragAction         actions)
 {
-  GtkDragDestSite *site;
+  GtkDragDestSite *old_site, *site;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
   gtk_drag_dest_unset (widget);
 
@@ -476,6 +480,11 @@ gtk_drag_dest_set (GtkWidget            *widget,
   else
     site->target_list = NULL;
   site->actions = actions;
+
+  if (old_site)
+    site->track_motion = old_site->track_motion;
+  else
+    site->track_motion = FALSE;
 
   if (GTK_WIDGET_REALIZED (widget))
     gtk_drag_dest_realized (widget, site);
@@ -760,9 +769,9 @@ gtk_drag_dest_leave (GtkWidget      *widget,
   if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
     gtk_drag_unhighlight (widget);
   
-  if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
-    g_signal_emit_by_name (widget, "drag_leave",
-			   context, time);
+  if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
+      site->track_motion)
+    g_signal_emit_by_name (widget, "drag_leave", context, time);
   
   site->have_drag = FALSE;
 }
@@ -781,7 +790,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
-  if (site->flags & GTK_DEST_DEFAULT_MOTION)
+  if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
     {
       if (context->suggested_action & site->actions)
 	action = context->suggested_action;
@@ -800,7 +809,8 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
       else
 	{
 	  gdk_drag_status (context, 0, time);
-	  return TRUE;
+	  if (!site->track_motion)
+	    return TRUE;
 	}
     }
 
@@ -853,17 +863,28 @@ void
 gtk_drag_dest_set_track_motion (GtkWidget *widget,
 				gboolean   track_motion)
 {
+  GtkDragDestSite *site;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  /* FIXME: Implement */
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
+  
+  g_return_if_fail (site != NULL);
+
+  site->track_motion = track_motion != FALSE;
 }
 
 gboolean
 gtk_drag_dest_get_track_motion (GtkWidget *widget)
 {
+  GtkDragDestSite *site;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  /* FIXME: Implement */
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
+
+  if (site)
+    return site->track_motion;
 
   return FALSE;
 }
