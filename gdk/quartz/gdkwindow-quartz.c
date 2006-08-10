@@ -754,7 +754,8 @@ all_parents_shown (GdkWindowObject *private)
 }
 
 static void
-show_window_internal (GdkWindow *window, gboolean raise)
+show_window_internal (GdkWindow *window,
+		      gboolean   raise)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
@@ -782,6 +783,12 @@ show_window_internal (GdkWindow *window, gboolean raise)
     _gdk_quartz_send_map_events (window);
 
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_WITHDRAWN, 0);
+
+  if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+    gdk_window_maximize (window);
+
+  if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    gdk_window_iconify (window);
 
   GDK_QUARTZ_RELEASE_POOL;
 }
@@ -1788,14 +1795,26 @@ gdk_window_maximize (GdkWindow *window)
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (impl->toplevel && ![impl->toplevel isZoomed])
-    [impl->toplevel zoom:nil];
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+
+      if (impl->toplevel && ![impl->toplevel isZoomed])
+	[impl->toplevel zoom:nil];
+
+      GDK_QUARTZ_RELEASE_POOL;
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+				   0,
+				   GDK_WINDOW_STATE_MAXIMIZED);
+    }
 }
 
 void
@@ -1810,8 +1829,21 @@ gdk_window_unmaximize (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (impl->toplevel && [impl->toplevel isZoomed])
-    [impl->toplevel zoom:nil];
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+
+      if (impl->toplevel && [impl->toplevel isZoomed])
+	[impl->toplevel zoom:nil];
+
+      GDK_QUARTZ_RELEASE_POOL;
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+				   GDK_WINDOW_STATE_MAXIMIZED,
+				   0);
+    }
 }
 
 void
@@ -1826,8 +1858,21 @@ gdk_window_iconify (GdkWindow *window)
   
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (impl->toplevel)
-    [impl->toplevel miniaturize:nil];
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+
+      if (impl->toplevel)
+	[impl->toplevel miniaturize:nil];
+
+      GDK_QUARTZ_RELEASE_POOL;
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+				   0,
+				   GDK_WINDOW_STATE_ICONIFIED);
+    }
 }
 
 void
@@ -1842,8 +1887,21 @@ gdk_window_deiconify (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (impl->toplevel)
-    [impl->toplevel deminiaturize:nil];
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+
+      if (impl->toplevel)
+	[impl->toplevel deminiaturize:nil];
+
+      GDK_QUARTZ_RELEASE_POOL;
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+				   GDK_WINDOW_STATE_ICONIFIED,
+				   0);
+    }
 }
 
 void
