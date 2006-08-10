@@ -250,6 +250,9 @@ gtk_recent_chooser_menu_finalize (GObject *object)
   g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
   priv->manager_changed_id = 0;
 
+  if (priv->populate_id)
+    g_source_remove (priv->populate_id);
+
   priv->manager = NULL;
   
   if (priv->sort_data_destroy)
@@ -952,7 +955,10 @@ idle_populate_func (gpointer data)
   GDK_THREADS_ENTER ();
 
   pdata = (MenuPopulateData *) data;
-  
+  priv = pdata->menu->priv;
+
+  priv->populate_id = 0;
+
   if (!pdata->items)
     {
       pdata->items = gtk_recent_chooser_get_items (GTK_RECENT_CHOOSER (pdata->menu));
@@ -984,7 +990,6 @@ idle_populate_func (gpointer data)
     }
 
   info = g_list_nth_data (pdata->items, pdata->loaded_items);
-  priv = pdata->menu->priv;
 
   /* skip non-local items on request */
   if (priv->local_only &&
@@ -1062,11 +1067,7 @@ check_and_return:
 static void
 idle_populate_clean_up (gpointer data)
 {
-  MenuPopulateData *pdata = data;
-
-  pdata->menu->priv->populate_id = 0;
-
-  g_slice_free (MenuPopulateData, pdata);
+  g_slice_free (MenuPopulateData, data);
 }
 
 static void
