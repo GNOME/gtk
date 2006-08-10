@@ -2118,7 +2118,7 @@ msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତ୍ର�
 #.
 #: gtk/gtkmain.c:498
 msgid "default:LTR"
-msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:594
 msgid "GTK+ Options"
