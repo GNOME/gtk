@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-05 20:30+0200\n"
-"PO-Revision-Date: 2006-08-05 20:30+0200\n"
+"POT-Creation-Date: 2006-08-11 14:02+0200\n"
+"PO-Revision-Date: 2006-08-11 14:02+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1378,11 +1378,11 @@ msgstr "Farbrad"
 msgid "Color Selection"
 msgstr "Schriftwahl"
 
-#: ../gtk/gtkentry.c:4913 ../gtk/gtktextview.c:7231
+#: ../gtk/gtkentry.c:4912 ../gtk/gtktextview.c:7243
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: ../gtk/gtkentry.c:4927 ../gtk/gtktextview.c:7245
+#: ../gtk/gtkentry.c:4926 ../gtk/gtktextview.c:7257
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
@@ -2098,7 +2098,7 @@ msgstr "Pfeilabstand"
 msgid "Scroll arrow spacing"
 msgstr "Abstand der Pfeile zum Rollen"
 
-#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
+#: ../gtk/gtknotebook.c:4244 ../gtk/gtknotebook.c:6794
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -2515,12 +2515,12 @@ msgstr "Gruppe"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Der Radio-Werkzeugknopf, zu dessen Gruppe dieser Knopf gehört."
 
-#: ../gtk/gtkrc.c:2782
+#: ../gtk/gtkrc.c:2813
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Include-Datei konnte nicht gefunden werden: »%s«"
 
-#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
+#: ../gtk/gtkrc.c:3445 ../gtk/gtkrc.c:3448
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Bilddatei konnte nicht in pixmap_path gefunden werden: »%s«"
@@ -2529,58 +2529,62 @@ msgstr "Bilddatei konnte nicht in pixmap_path gefunden werden: »%s«"
 msgid "Select which type of documents are shown"
 msgstr "Wählen Sie die anzuzeigenden Dokumententypen"
 
-#: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
+#: ../gtk/gtkrecentchooserdefault.c:1126 ../gtk/gtkrecentchooserdefault.c:1163
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Es konnte kein Eintrag für den URI »%s« gefunden werden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1774
+#: ../gtk/gtkrecentchooserdefault.c:1770
 msgid "Could not remove item"
 msgstr "Eintrag konnte nicht entfernt werden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1817
+#: ../gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
 msgstr "Liste konnte nicht geleert werden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1901
+#: ../gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
 msgstr "O_rt kopieren"
 
-#: ../gtk/gtkrecentchooserdefault.c:1914
+#: ../gtk/gtkrecentchooserdefault.c:1910
 msgid "_Remove From List"
 msgstr "Von Liste _entfernen"
 
-#: ../gtk/gtkrecentchooserdefault.c:1923
+#: ../gtk/gtkrecentchooserdefault.c:1919
 msgid "_Clear List"
 msgstr "_Liste leeren"
 
 # CHECK
-#: ../gtk/gtkrecentchooserdefault.c:1937
+#: ../gtk/gtkrecentchooserdefault.c:1933
 msgid "Show _Private Resources"
 msgstr "_Private Ressourcen anzeigen"
 
-#: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
+#: ../gtk/gtkrecentchoosermenu.c:424 ../gtk/gtkrecentchoosermenu.c:485
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 "Es konnte keine vor kurzem geöffnete Ressource mit dem URI »%s« gefunden "
 "werden"
 
-#: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
-#: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
-#: ../gtk/gtkrecentchoosermenu.c:689
+#: ../gtk/gtkrecentchoosermenu.c:509 ../gtk/gtkrecentchoosermenu.c:517
+#: ../gtk/gtkrecentchoosermenu.c:674 ../gtk/gtkrecentchoosermenu.c:683
+#: ../gtk/gtkrecentchoosermenu.c:691
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Diese Funktion ist für Widgets der Klasse »%s« nicht implementiert"
 
-#: ../gtk/gtkrecentchoosermenu.c:833
+#: ../gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgid "Open '%s'"
 msgstr "»%s« öffnen"
 
-#: ../gtk/gtkrecentchoosermenu.c:864
+#: ../gtk/gtkrecentchoosermenu.c:866
 msgid "Unknown item"
 msgstr "Unbekannter Eintrag"
+
+#: ../gtk/gtkrecentchoosermenu.c:967
+msgid "No items found"
+msgstr "Keine Einträge gefunden"
 
 #: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
 #: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
