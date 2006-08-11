@@ -64,9 +64,6 @@ static void gdk_directfb_draw_lines (GdkDrawable *drawable,
                                      GdkPoint    *points,
                                      gint         npoints);
 
-static void inline gdk_directfb_update_region (GdkDrawableImplDirectFB *impl,
-                                               GdkRegion               *region);
-
 static cairo_surface_t *gdk_directfb_ref_cairo_surface (GdkDrawable *drawable);
 
 
@@ -451,7 +448,6 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
             }
         }
 
-      gdk_directfb_update_region (impl, clip);
       gdk_region_destroy (clip);
     }
   else
@@ -466,8 +462,6 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
       impl->surface->DrawRectangle (impl->surface,
                                     x, y, width , height);
       impl->surface->SetClip (impl->surface, NULL);
-
-      //_gdk_directfb_update (impl, &region);
     }
 }
 
@@ -528,8 +522,6 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
 
               }
             impl->surface->SetClip (impl->surface, NULL);
-
-            gdk_directfb_update_region (impl, clip);
             gdk_region_destroy (clip);
 
             return;
@@ -631,7 +623,6 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
                            xdest, ydest);
     }
   impl->surface->SetClip (impl->surface, NULL);
-  gdk_directfb_update_region (impl, clip);
   gdk_region_destroy (clip);
 }
 
@@ -679,8 +670,6 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
     }
 
   gdk_region_destroy (clip);
-
-  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -759,8 +748,6 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
       if (segs->y2 > region.y2)
         region.y2 = segs->y2;
     }
-
-  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -828,8 +815,6 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
   impl->surface->SetClip (impl->surface, NULL);
 
   gdk_region_destroy (clip);
-
-  //_gdk_directfb_update (impl, &region);
 }
 
 static void
@@ -883,8 +868,6 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
       image_private->surface->Lock (image_private->surface, DSLF_WRITE,
                                     &image->mem, &pitch);
       image->bpl = pitch;
-
-      gdk_directfb_update_region (impl, clip);
     }
 
   gdk_region_destroy (clip);
@@ -1031,32 +1014,6 @@ gdk_drawable_impl_directfb_get_type (void)
 
   return object_type;
 }
-
-static inline void
-gdk_directfb_update_region (GdkDrawableImplDirectFB *impl,
-                            GdkRegion               *region)
-{
-  DFBRegion reg = { region->extents.x1,     region->extents.y1,
-                    region->extents.x2 , region->extents.y2  };
-
-  _gdk_directfb_update (impl, &reg);
-}
-
-void
-_gdk_directfb_update (GdkDrawableImplDirectFB *impl,
-                      DFBRegion               *region)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (impl));
-
-  if (impl->buffered)
-    return;
-
-  if (!impl->surface)
-    return;
-
-  impl->surface->Flip (impl->surface, region, 0);
-}
-
 
 static GdkScreen * gdk_directfb_get_screen (GdkDrawable    *drawable){
         return gdk_screen_get_default();

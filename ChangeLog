@@ -1,3 +1,12 @@
+2006-08-10  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkdrawable-directfb.c
+	Remove gdk_directfb_update_region and calls 
+	* gdk/directfb/gdkwindow-directfb.c
+	Code cleanup 
+	* gdk/directfb/gdkgeometry-directfb.c
+	Fix scroll call to use region
+
 2006-08-10  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c:

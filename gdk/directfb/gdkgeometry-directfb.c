@@ -119,8 +119,7 @@ gdk_window_scroll (GdkWindow *window,
               impl->surface->SetClip (impl->surface, &update);
               impl->surface->Blit (impl->surface, impl->surface, NULL, dx, dy);
               impl->surface->SetClip (impl->surface, NULL);
-
-              _gdk_directfb_update (impl, &update);
+              impl->surface->Flip(impl->surface,&update,0);
             }
         }
     }
@@ -238,18 +237,18 @@ gdk_window_move_region (GdkWindow *window,
 	if (impl->surface)
 	{
     	DFBRectangle source = { dest_extents.x - dx, 
-							 dest_extents.y - dy,
+					    dest_extents.y - dy,
                              dest_extents.width,
                              dest_extents.height};
     	DFBRegion destination = { dest_extents.x, 
-							 	  dest_extents.y,
-                             	  dest_extents.width,
-                             	  dest_extents.height};
+						 dest_extents.y,
+                             	 dest_extents.x+dest_extents.width-1,
+                             	 dest_extents.y+dest_extents.height-1};
 
               impl->surface->SetClip (impl->surface, &destination);
               impl->surface->Blit (impl->surface, impl->surface,&source,dx,dy);
               impl->surface->SetClip (impl->surface, NULL);
-              _gdk_directfb_update (impl, &destination);
+              impl->surface->Flip(impl->surface,&destination,0);
 	}
   gdk_region_destroy (src_region);
   gdk_region_destroy (dest_region);

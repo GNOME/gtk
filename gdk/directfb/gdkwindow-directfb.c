@@ -65,7 +65,6 @@ typedef struct
  */
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
-static gboolean debug_updates = FALSE;
 
 static void
 gdk_window_directfb_process_all_updates (void)
@@ -609,9 +608,6 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (window == gdk_directfb_focused_window)
     gdk_directfb_change_focus (NULL);
 
-/*
-printf( " DESTROYING WINDOW %p %p %d parent=%p\n",window,impl->window,recursing,(GDK_WINDOW_OBJECT (window))->parent);
-*/
   if (!recursing && !foreign_destroy && impl->window ) {
     	impl->window->SetOpacity (impl->window,0);
    		impl->window->Close(impl->window);
@@ -2828,8 +2824,6 @@ gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
   
   if (!gdk_region_empty (visible_region))
     {
-      //if (debug_updates)
-       // draw_ugly_color (window, region);
       
       if (private->update_area)
 	{
@@ -2842,7 +2836,6 @@ gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
 	  gdk_window_schedule_update (window);
 	}
     }
-  
     gdk_region_destroy (visible_region);
 }
 
@@ -2877,14 +2870,6 @@ gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
 	  GdkRegion *expose_region;
 	  GdkRegion *window_region;
           gint width, height;
-
-          //if (debug_updates)
-           // {
-              /* Make sure we see the red invalid area before redrawing. */
-             // gdk_display_sync (gdk_drawable_get_display (window));
-              //g_usleep (70000);
-            //}
-          
 	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
 
 	  if (save_region)
@@ -2915,7 +2900,6 @@ gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
 	      event.expose.count = 0;
 	      event.expose.region = expose_region;
 	      gdk_region_get_clipbox (expose_region, &event.expose.area);
-	      
 	      (*_gdk_event_func) (&event, _gdk_event_data);
 	      
 	      g_object_unref (window);
@@ -2939,6 +2923,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable *paintable,
   gint                     i;
 
 
+  g_assert (region != NULL );
   wimpl = GDK_WINDOW_IMPL_DIRECTFB (paintable);
   impl = (GdkDrawableImplDirectFB *)wimpl;
   impl->buffered = TRUE;
@@ -2984,11 +2969,10 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
         {
           DFBRegion reg = { impl->paint_region->extents.x1,
                             impl->paint_region->extents.y1,
-                            impl->paint_region->extents.x2 - 1,
-                            impl->paint_region->extents.y2 - 1 };
+                            impl->paint_region->extents.x2 ,
+                            impl->paint_region->extents.y2 };
 
-          _gdk_directfb_update (impl, &reg);
-
+          impl->surface->Flip(impl->surface, &reg,0);
           gdk_region_destroy (impl->paint_region);
           impl->paint_region = NULL;
         }
