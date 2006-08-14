@@ -1,3 +1,21 @@
+2006-08-14  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooser.c:
+	(gtk_recent_chooser_add_filter),
+	(gtk_recent_chooser_remove_filter),
+	(gtk_recent_chooser_set_filter): Add a check on the
+	filter argument, instead of blindly passing it to
+	underlying implementation.
+
+	* gtk/gtkrecentchoosermenu.c:
+	(gtk_recent_chooser_menu_add_filter),
+	(gtk_recent_chooser_menu_remove_filter),
+	(gtk_recent_chooser_menu_list_filters): Implement
+	these GtkRecentChooser methods, by setting and
+	returning the only GtkRecentFilter object supported
+	by a GtkRecentChooserMenu. (#347856, reported by Rod
+	Butcher)
+
 2006-08-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_remove): Null the

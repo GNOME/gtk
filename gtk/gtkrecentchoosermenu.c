@@ -671,28 +671,40 @@ static void
 gtk_recent_chooser_menu_add_filter (GtkRecentChooser *chooser,
 				    GtkRecentFilter  *filter)
 {
-  g_warning (_("This function is not implemented for "
-               "widgets of class '%s'"),
-             g_type_name (G_OBJECT_TYPE (chooser)));
+  GtkRecentChooserMenu *menu;
+
+  menu = GTK_RECENT_CHOOSER_MENU (chooser);
+  
+  gtk_recent_chooser_menu_set_current_filter (menu, filter);
 }
 
 static void
 gtk_recent_chooser_menu_remove_filter (GtkRecentChooser *chooser,
 				       GtkRecentFilter  *filter)
 {
-  g_warning (_("This function is not implemented for "
-               "widgets of class '%s'"),
-             g_type_name (G_OBJECT_TYPE (chooser)));
+  GtkRecentChooserMenu *menu;
+
+  menu = GTK_RECENT_CHOOSER_MENU (chooser);
+  
+  if (filter == menu->priv->current_filter)
+    {
+      g_object_unref (menu->priv->current_filter);
+      menu->priv->current_filter = NULL;
+
+      g_object_notify (G_OBJECT (menu), "filter");
+    }
 }
 
 static GSList *
 gtk_recent_chooser_menu_list_filters (GtkRecentChooser  *chooser)
 {
-  g_warning (_("This function is not implemented for "
-               "widgets of class '%s'"),
-             g_type_name (G_OBJECT_TYPE (chooser)));
+  GtkRecentChooserMenu *menu;
+  GSList *retval = NULL;
 
-  return NULL;
+  if (menu->priv->current_filter)
+    retval = g_slist_prepend (retval, menu->priv->current_filter);
+
+  return retval;
 }
 
 static void
@@ -706,8 +718,11 @@ gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
   if (priv->current_filter)
     g_object_unref (G_OBJECT (priv->current_filter));
   
-  priv->current_filter = filter;
-  g_object_ref_sink (priv->current_filter);
+  if (filter)
+    {
+      priv->current_filter = filter;
+      g_object_ref_sink (priv->current_filter);
+    }
   
   g_object_notify (G_OBJECT (menu), "filter");
 }

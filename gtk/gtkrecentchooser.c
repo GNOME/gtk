@@ -884,6 +884,7 @@ gtk_recent_chooser_add_filter (GtkRecentChooser *chooser,
 			       GtkRecentFilter  *filter)
 {
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
+  g_return_if_fail (GTK_IS_RECENT_FILTER (filter));
   
   GTK_RECENT_CHOOSER_GET_IFACE (chooser)->add_filter (chooser, filter);
 }
@@ -902,6 +903,7 @@ gtk_recent_chooser_remove_filter (GtkRecentChooser *chooser,
 				  GtkRecentFilter  *filter)
 {
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
+  g_return_if_fail (GTK_IS_RECENT_FILTER (filter));
   
   GTK_RECENT_CHOOSER_GET_IFACE (chooser)->remove_filter (chooser, filter);
 }
@@ -940,6 +942,7 @@ gtk_recent_chooser_set_filter (GtkRecentChooser *chooser,
 			       GtkRecentFilter  *filter)
 {
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
+  g_return_if_fail (GTK_IS_RECENT_FILTER (filter));
   
   g_object_set (G_OBJECT (chooser), "filter", filter, NULL);
 }
