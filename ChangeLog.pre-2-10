@@ -1,3 +1,8 @@
+2006-08-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_drag_data_received): Don't leak
+	in the non-editable case.  (#350258, Colin Leroy)
+
 2006-08-10  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkdrawable-directfb.c

@@ -5130,7 +5130,6 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 	  gtk_editable_insert_text (editable, str, length, &sel1);
 	}
       
-      g_free (str);
       gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
     }
   else
@@ -5138,6 +5137,8 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
       /* Drag and drop didn't happen! */
       gtk_drag_finish (context, FALSE, FALSE, time);
     }
+
+  g_free (str);
 }
 
 static void
