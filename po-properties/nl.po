@@ -17,13 +17,14 @@
 # tag              - markering/etiket?
 # tooltip          - tooltip/werktip/tip/scherminfo(novell)
 # tree view        - tree view/boomweergave/vertakkingsbeeld
-#
+# ----------------------------------------------------------
+# foo set          - foo gebruiken
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-06 00:28+0200\n"
-"PO-Revision-Date: 2006-08-08 17:03+0200\n"
+"POT-Creation-Date: 2006-08-14 08:13+0200\n"
+"PO-Revision-Date: 2006-08-14 17:38+0200\n"
 "Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -861,7 +862,7 @@ msgstr ""
 "Of de eigenschappen voor dochter_verplaatsing_x/_y tevens de voor de "
 "aandachtsrechthoek moeten gelden"
 
-#: ../gtk/gtkbutton.c:462 ../gtk/gtkentry.c:517 ../gtk/gtkentry.c:860
+#: ../gtk/gtkbutton.c:462 ../gtk/gtkentry.c:516 ../gtk/gtkentry.c:859
 msgid "Inner Border"
 msgstr "Binnenrand"
 
@@ -1178,7 +1179,7 @@ msgid "Value of the progress bar"
 msgstr "Waarde van de voortgangsbalk"
 
 #: ../gtk/gtkcellrendererprogress.c:134 ../gtk/gtkcellrenderertext.c:192
-#: ../gtk/gtkentry.c:560 ../gtk/gtkmessagedialog.c:152
+#: ../gtk/gtkentry.c:559 ../gtk/gtkmessagedialog.c:152
 #: ../gtk/gtkprogressbar.c:196 ../gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "Tekst"
@@ -1255,7 +1256,7 @@ msgstr "Voorgrondkleur"
 msgid "Foreground color as a GdkColor"
 msgstr "Voorgrondkleur als een GdkColor"
 
-#: ../gtk/gtkcellrenderertext.c:258 ../gtk/gtkentry.c:484
+#: ../gtk/gtkcellrenderertext.c:258 ../gtk/gtkentry.c:483
 #: ../gtk/gtktexttag.c:249 ../gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "Wijzigbaar"
@@ -1694,11 +1695,11 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1886
 msgid "Custom palette"
-msgstr "Eigen palet"
+msgstr "Zelfgekozen palet"
 
 #: ../gtk/gtkcolorsel.c:1887
 msgid "Palette to use in the color selector"
-msgstr "Te grbuiken kleurenkaart in de kleurenselectie"
+msgstr "Te gebruiken kleurenkaart in de kleurenselectie"
 
 #: ../gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1706,7 +1707,7 @@ msgstr "Pijltjestoetsen gebruiken"
 
 #: ../gtk/gtkcombo.c:144
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Of de pijltjestoetsen door de lijst met items bewegen"
+msgstr "Of met de pijltjestoetsen door de lijst met items kan worden genavigeerd"
 
 #: ../gtk/gtkcombo.c:150
 msgid "Always enable arrows"
@@ -1791,7 +1792,7 @@ msgstr "Afscheurlijn aan menus toevoegen"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of dropdowns een afscheurlijn moeten hebben"
 
-#: ../gtk/gtkcombobox.c:639 ../gtk/gtkentry.c:509
+#: ../gtk/gtkcombobox.c:639 ../gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Heeft kader"
 
@@ -1930,42 +1931,42 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Breedte van het kader rondom de knoppenbalk onderaan het dialoogvenster"
 
-#: ../gtk/gtkentry.c:464 ../gtk/gtklabel.c:389
+#: ../gtk/gtkentry.c:463 ../gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Cursorpositie"
 
-#: ../gtk/gtkentry.c:465 ../gtk/gtklabel.c:390
+#: ../gtk/gtkentry.c:464 ../gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "De huidige positie van de invoegcurser, in lettertekens"
 
-#: ../gtk/gtkentry.c:474 ../gtk/gtklabel.c:399
+#: ../gtk/gtkentry.c:473 ../gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Selectie begrensd"
 
-#: ../gtk/gtkentry.c:475 ../gtk/gtklabel.c:400
+#: ../gtk/gtkentry.c:474 ../gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "De positie van de tegenoverstaande zijde van de selectie vanaf de cursor in "
 "lettertekens"
 
-#: ../gtk/gtkentry.c:485
+#: ../gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Of de inhoud van het veld bewerkt mag worden"
 
-#: ../gtk/gtkentry.c:492
+#: ../gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Maximumlengte"
 
-#: ../gtk/gtkentry.c:493
+#: ../gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maximum aantal tekens voor dit veld. Nul als er geen maximum is"
 
-#: ../gtk/gtkentry.c:501
+#: ../gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
-#: ../gtk/gtkentry.c:502
+#: ../gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1973,31 +1974,31 @@ msgstr ""
 "FALSE geeft het \"onzichtbaar teken\" in plaats van de werkelijke tekst "
 "(wachtwoordmodus)"
 
-#: ../gtk/gtkentry.c:510
+#: ../gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE verwijdert de buitenrand van het veld"
 
-#: ../gtk/gtkentry.c:518
+#: ../gtk/gtkentry.c:517
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Ruimte tussen tekst en frame. Overschrijft de eigenschap \"inner-border\"."
 
-#: ../gtk/gtkentry.c:525
+#: ../gtk/gtkentry.c:524
 msgid "Invisible character"
 msgstr "Onzichtbaar teken"
 
-#: ../gtk/gtkentry.c:526
+#: ../gtk/gtkentry.c:525
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Het te gebruiken teken om de inhoud van een veld te maskeren (in "
 "\"wachtwoordmodus\")"
 
-#: ../gtk/gtkentry.c:533
+#: ../gtk/gtkentry.c:532
 msgid "Activates default"
 msgstr "Activeert de standaard"
 
-#: ../gtk/gtkentry.c:534
+#: ../gtk/gtkentry.c:533
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2005,35 +2006,35 @@ msgstr ""
 "Of het standaardwidget geactiveerd moet worden (zoals de standaardknop in "
 "een dialoogvenster) wanneer op Enter wordt gedrukt"
 
-#: ../gtk/gtkentry.c:540
+#: ../gtk/gtkentry.c:539
 msgid "Width in chars"
 msgstr "Breedte, in lettertekens"
 
-#: ../gtk/gtkentry.c:541
+#: ../gtk/gtkentry.c:540
 msgid "Number of characters to leave space for in the entry"
 msgstr "Het aantal gereserveerde lettertekens in een veld"
 
-#: ../gtk/gtkentry.c:550
+#: ../gtk/gtkentry.c:549
 msgid "Scroll offset"
 msgstr "Schuifafstand"
 
-#: ../gtk/gtkentry.c:551
+#: ../gtk/gtkentry.c:550
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Aantal beeldpunten van het veld dat aan de linkerkant van het scherm is "
 "afgeschoven."
 
-#: ../gtk/gtkentry.c:561
+#: ../gtk/gtkentry.c:560
 msgid "The contents of the entry"
 msgstr "De inhoud van het veld"
 
-#: ../gtk/gtkentry.c:576 ../gtk/gtkmisc.c:73
+#: ../gtk/gtkentry.c:575 ../gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "X-uitlijning"
 
 # RTL right to left
 # misschien omzetten naar RNL?
-#: ../gtk/gtkentry.c:577 ../gtk/gtkmisc.c:74
+#: ../gtk/gtkentry.c:576 ../gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2041,32 +2042,32 @@ msgstr ""
 "De horizontale opstelling, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL "
 "indelingen"
 
-#: ../gtk/gtkentry.c:593
+#: ../gtk/gtkentry.c:592
 msgid "Truncate multiline"
 msgstr "Multi-regel wordt afgekapt"
 
-#: ../gtk/gtkentry.c:594
+#: ../gtk/gtkentry.c:593
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Of het plakken van meerdere regels wordt afgekapt tot één regel."
 
-#: ../gtk/gtkentry.c:861
+#: ../gtk/gtkentry.c:860
 msgid "Border between text and frame."
 msgstr "Ruimte tussen tekst en frame."
 
-#: ../gtk/gtkentry.c:866 ../gtk/gtklabel.c:620
+#: ../gtk/gtkentry.c:865 ../gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Selecteren bij aandacht"
 
-#: ../gtk/gtkentry.c:867
+#: ../gtk/gtkentry.c:866
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Of de inhoud van een veld wordt geselecteerd als het veld de aandacht krijgt"
 
-#: ../gtk/gtkentry.c:881
+#: ../gtk/gtkentry.c:880
 msgid "Password Hint Timeout"
 msgstr "Wachtwoord tip time-out"
 
-#: ../gtk/gtkentry.c:882
+#: ../gtk/gtkentry.c:881
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
 "Hoe lang the laatst ingetikte teken weergegeven dient te worden in velden "
@@ -2229,12 +2230,11 @@ msgstr "Het huidige filter dat bepaalt welke bestanden worden weergegeven"
 
 #: ../gtk/gtkfilechooser.c:216
 msgid "Local Only"
-msgstr "Alleen locale"
+msgstr "Alleen lokale"
 
 #: ../gtk/gtkfilechooser.c:217
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr ""
-"Of de geselecteerde bestand(en) beperkt worden tot locale bestand: URLs"
+msgstr "Of de geselecteerde bestand(en) beperkt worden tot lokale bestand-URLs"
 
 #: ../gtk/gtkfilechooser.c:222
 msgid "Preview widget"
@@ -2242,7 +2242,7 @@ msgstr "Voorbeeldwidget"
 
 #: ../gtk/gtkfilechooser.c:223
 msgid "Application supplied widget for custom previews."
-msgstr "Widget door toepassing geleverd voor zelfgemaakte voorbeelden."
+msgstr "Widget door toepassing geleverd voor aangepaste voorbeelden."
 
 #: ../gtk/gtkfilechooser.c:228
 msgid "Preview Widget Active"
@@ -2251,9 +2251,7 @@ msgstr "Voorbeeldwidget actief"
 #: ../gtk/gtkfilechooser.c:229
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
-msgstr ""
-"Of het door de toepassing geleverde widget voor zelfgemaakte voorbeelden "
-"wordt getoond."
+msgstr "Of het door de toepassing geleverde widget voor aangepaste voorbeelden wordt getoond."
 
 #: ../gtk/gtkfilechooser.c:234
 msgid "Use Preview Label"
@@ -2772,7 +2770,8 @@ msgstr "Regelterugloop"
 
 #: ../gtk/gtklabel.c:341
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Indien aangevinkt, is er regelterugloop wanneer de tekst te breed wordt"
+msgstr ""
+"Indien aangevinkt, is er regelterugloop wanneer de tekst te breed wordt"
 
 #: ../gtk/gtklabel.c:356
 msgid "Line wrap mode"
@@ -2780,7 +2779,8 @@ msgstr "Regelterugloop modus"
 
 #: ../gtk/gtklabel.c:357
 msgid "If wrap is set, controls how linewrapping is done"
-msgstr "Indien regelterugloop is aangevinkt, bepaalt hoe regelterugloop gebeurt"
+msgstr ""
+"Indien regelterugloop is aangevinkt, bepaalt hoe regelterugloop gebeurt"
 
 #: ../gtk/gtklabel.c:364
 msgid "Selectable"
@@ -2843,7 +2843,9 @@ msgstr "De gewenste maximale breedte van het label, in lettertekens"
 
 #: ../gtk/gtklabel.c:621
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr "Of de inhoud van een selecteerbaar label geselecteerd wordt wanneer het de aandacht krijgt"
+msgstr ""
+"Of de inhoud van een selecteerbaar label geselecteerd wordt wanneer het de "
+"aandacht krijgt"
 
 #: ../gtk/gtklayout.c:602 ../gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
@@ -3219,9 +3221,7 @@ msgstr "Zet Popup aan"
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
-msgstr ""
-"Indien WAAR (TRUE), wordt met een rechter muisklik op het kladblok een menu "
-"weergegeven waarmee je direkt naar een pagina kunt gaan"
+msgstr "Indien WAAR (TRUE), wordt met een rechter muisklik op het kladblok een menu weergegeven waarmee u direct naar een pagina kunt gaan"
 
 #: ../gtk/gtknotebook.c:600
 msgid "Whether tabs should have homogeneous sizes"
@@ -3295,7 +3295,9 @@ msgstr "Secundaire achterwaartse stapper"
 #: ../gtk/gtknotebook.c:682
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
-msgstr "Geef een tweede achterwaartse pijlknop weer op de overstaande kant van het tab-gedeelte"
+msgstr ""
+"Geef een tweede achterwaartse pijlknop weer op de overstaande kant van het "
+"tab-gedeelte"
 
 #: ../gtk/gtknotebook.c:697 ../gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
@@ -3304,7 +3306,9 @@ msgstr "Secundaire voorwaartse stapper"
 #: ../gtk/gtknotebook.c:698
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
-msgstr "Geef een tweede voorwaartse pijlknop weer aan de overstaande kant van het tab-gedeelte"
+msgstr ""
+"Geef een tweede voorwaartse pijlknop weer aan de overstaande kant van het "
+"tab-gedeelte"
 
 #: ../gtk/gtknotebook.c:712 ../gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
@@ -3370,7 +3374,7 @@ msgstr "Positie aangezet"
 
 #: ../gtk/gtkpaned.c:226
 msgid "TRUE if the Position property should be used"
-msgstr "WAAR (TRUE) als de Positie-eigenschap gebruikt moet worden"
+msgstr "WAAR (TRUE) als de positie-eigenschap gebruikt moet worden"
 
 #: ../gtk/gtkpaned.c:232
 msgid "Handle Size"
@@ -3534,7 +3538,10 @@ msgstr "Printstatus volgen"
 msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
-msgstr "WAAR indien de printopdracht doorgaat met het zenden van 'status-gewijzigd' signalen nadat de afdrukgegevens naar de printer of de print-server zijn verzonden."
+msgstr ""
+"WAAR indien de printopdracht doorgaat met het zenden van 'status-gewijzigd' "
+"signalen nadat de afdrukgegevens naar de printer of de print-server zijn "
+"verzonden."
 
 #: ../gtk/gtkprintoperation.c:846
 msgid "Default Page Setup"
@@ -3550,7 +3557,9 @@ msgstr "Afdrukinstellingen"
 
 #: ../gtk/gtkprintoperation.c:866 ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr "De GtkPrintSettings die gebruikt worden voor het initialiseren van het dialoogvenster"
+msgstr ""
+"De GtkPrintSettings die gebruikt worden voor het initialiseren van het "
+"dialoogvenster"
 
 #: ../gtk/gtkprintoperation.c:884
 msgid "Job Name"
@@ -3585,13 +3594,18 @@ msgstr "Hele pagina gebruiken"
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
-msgstr "WAAR indien de oorsprong van de context in de hoek van de pagina moet staan en niet in de hoek van het afrukbare gebied"
+msgstr ""
+"WAAR indien de oorsprong van de context in de hoek van de pagina moet staan "
+"en niet in de hoek van het afrukbare gebied"
 
 #: ../gtk/gtkprintoperation.c:974
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr "WAAR indien de printopdracht doorgaat met het rapporteren van de afdrukstatus nadat de afdrukgegevens naar de printer of print-server zijn verzonden."
+msgstr ""
+"WAAR indien de printopdracht doorgaat met het rapporteren van de "
+"afdrukstatus nadat de afdrukgegevens naar de printer of print-server zijn "
+"verzonden."
 
 #: ../gtk/gtkprintoperation.c:991
 msgid "Unit"
@@ -3640,11 +3654,11 @@ msgstr "Een leesbare omschrijving van de status"
 
 #: ../gtk/gtkprintoperation.c:1112
 msgid "Custom tab label"
-msgstr "Eigen tabblad-label"
+msgstr "Zelfgekozen tabblad-label"
 
 #: ../gtk/gtkprintoperation.c:1113
 msgid "Label for the tab containing custom widgets."
-msgstr "Label voor het tabblad met aangepaste widgets."
+msgstr "Label voor het tabblad met zelfgekozen widgets."
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
@@ -3660,18 +3674,14 @@ msgstr "De geselecteerde GtkPinter"
 
 #: ../gtk/gtkprogress.c:100
 msgid "Activity mode"
-msgstr "Activiteitsmodus"
+msgstr "Activiteitmodus"
 
 #: ../gtk/gtkprogress.c:101
-#, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr ""
-"Indien WAAR (TRUE), is GtkProgress in activiteitsmodus: er wordt aangegeven "
-"*dat* iets gebeurt, maar niet hoeveel er al gedaan is. Deze modus wordt "
-"gebruikt als je iets doet waarvan je niet weet hoe lang het zal duren"
+msgstr "Indien WAAR (TRUE), is GtkProgress in activiteitmodus: er wordt aangegeven *dat* iets gebeurt, maar niet hoeveel er al gedaan is. Deze modus wordt gebruikt wanneer u iets doet waarvan u niet weet hoe lang het zal duren"
 
 #: ../gtk/gtkprogress.c:108
 msgid "Show text"
@@ -3820,7 +3830,7 @@ msgstr "De huidige waarde"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "De waarde van het huidige actieve lid van de groep waartoe deze actie behoort."
 
 # de widget is eigendom van de groep van het keuzerondje
 # de radioknop van de groep waartoe dit widget behoort.
@@ -3856,31 +3866,30 @@ msgstr ""
 "Keer de richting om waarheen het schuifobject beweegt als de bereikwaarde "
 "toeneemt"
 
-# lower/upper 
+# lower/upper , dus lower is hier niet 'verlagen'
 #: ../gtk/gtkrange.c:340
-#, fuzzy
 msgid "Lower stepper sensitivity"
-msgstr "gevoeligheid voor stapper"
+msgstr "Onderste stapper gevoeligheid"
 
 #: ../gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
+msgstr "De instellingen voor de gevoeligheid van de stapper die wijzigingen naar beneden regelt"
 
 #: ../gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Bovenste stapper gevoeligheid"
 
 #: ../gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
+msgstr "De instellingen voor de gevoeligheid van de stapper die wijzigingen naar boven regelt"
 
 #: ../gtk/gtkrange.c:357
 msgid "Slider Width"
-msgstr "Breedte van schuifobject"
+msgstr "Breedte van schuifknop"
 
 #: ../gtk/gtkrange.c:358
 msgid "Width of scrollbar or scale thumb"
@@ -3888,15 +3897,15 @@ msgstr "Breedte van de schuifbalk of duimschaal"
 
 #: ../gtk/gtkrange.c:365
 msgid "Trough Border"
-msgstr "Door het kader"
+msgstr "Gootrand"
 
 #: ../gtk/gtkrange.c:366
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "Afstand tussen duim/stappers en buitenrand"
+msgstr "Afstand tussen duim/stappers en rand van de goot"
 
 #: ../gtk/gtkrange.c:373
 msgid "Stepper Size"
-msgstr "Stapperafmeting"
+msgstr "Stappergrootte"
 
 #: ../gtk/gtkrange.c:374
 msgid "Length of step buttons at ends"
@@ -3934,33 +3943,33 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Schuifknop ACTIEF tonen tijdens slepen"
 
 #: ../gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
-msgstr ""
+msgstr "Met deze optie aangevinkt worden schuifknoppen tijdens het slepen ACTIEF getoont en met schaduw IN"
 
 #: ../gtk/gtkrange.c:426
 msgid "Trough Side Details"
-msgstr ""
+msgstr "Goot Randdetails"
 
 #: ../gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
-msgstr ""
+msgstr "Indien aangevinkt, worden de gedeelten van de goot aan de twee zijden van de schuifknop met andere details getoond."
 
 #: ../gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
-msgstr ""
+msgstr "Goot onder stappers"
 
 #: ../gtk/gtkrange.c:444
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
-msgstr ""
+msgstr "Of de goot over de volledige lengte getekend wordt of dat de stappers en de spatiëring er buiten vallen"
 
 # bah! Recentelijk-beheer/Beheer voor recente bestanden/toepassingen
 #: ../gtk/gtkrecentchooser.c:112
@@ -4003,9 +4012,8 @@ msgid "Show Not Found"
 msgstr "Niet gevonden tonen"
 
 #: ../gtk/gtkrecentchooser.c:137
-#, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "Of verborgen bestanden en mappen moeten worden weergegeven"
+msgstr "Of items die naar niet beschikbare bronnen wijzen moeten worden weergegeven"
 
 #: ../gtk/gtkrecentchooser.c:143
 msgid "Whether to allow multiple items to be selected"
@@ -4016,10 +4024,8 @@ msgid "Local only"
 msgstr "Alleen lokale"
 
 #: ../gtk/gtkrecentchooser.c:149
-#, fuzzy
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
-msgstr ""
-"Of de geselecteerde bestand(en) beperkt worden tot locale bestand: URLs"
+msgstr "Of de geselecteerde bron(nen) beperkt moeten worden tot lokale bestand-URIs"
 
 # grenswaarde
 #: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:231
@@ -4054,12 +4060,16 @@ msgstr "Of de items een nummer moeten krijgen"
 
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
-msgstr "Het volledige pad naar het bestand dat gebruikt wordt om de lijst op te slaan en te lezen"
+msgstr ""
+"Het volledige pad naar het bestand dat gebruikt wordt om de lijst op te "
+"slaan en te lezen"
 
 #: ../gtk/gtkrecentmanager.c:232
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr "Het maximum aantal items dat gegeven wordt door gtk_recent_manager_get_items()"
+msgstr ""
+"Het maximum aantal items dat gegeven wordt door gtk_recent_manager_get_items"
+"()"
 
 #: ../gtk/gtkrecentmanager.c:248
 msgid "The size of the recently used resources list"
@@ -4163,12 +4173,16 @@ msgstr ""
 #: ../gtk/gtkscrollbar.c:84
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "Geef een tweede achterwaartse pijlknop weer op de overstaande kant van de schuifbalk"
+msgstr ""
+"Geef een tweede achterwaartse pijlknop weer op de overstaande kant van de "
+"schuifbalk"
 
 #: ../gtk/gtkscrollbar.c:92
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
-msgstr "Geef een tweede voorwaartse pijlknop weer aan de overstaande kant van de schuifbalk"
+msgstr ""
+"Geef een tweede voorwaartse pijlknop weer aan de overstaande kant van de "
+"schuifbalk"
 
 #: ../gtk/gtkscrolledwindow.c:221 ../gtk/gtktext.c:541
 #: ../gtk/gtktreeview.c:557
@@ -4201,23 +4215,20 @@ msgid "Window Placement"
 msgstr "Vensterplaatsing"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Waar de inhoud weergegeven wordt ten opzichte van de schuifbalken"
+msgstr "Waar de inhoud weergegeven wordt ten opzichte van de schuifbalken. Deze eigenschap wordt alleen gebruikt als ‘window-placement-set’ geselecteerd is (TRUE)."
 
 #: ../gtk/gtkscrolledwindow.c:270
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "Vensterplaatsing"
+msgstr "Vensterplaatsing gebruiken"
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "Waar de inhoud weergegeven wordt ten opzichte van de schuifbalken"
+msgstr "Of ‘vensterplaatsing’ gebruikt moet worden om te bepalen waar de inhoud weergegeven wordt ten opzichte van de schuifbalken."
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4237,16 +4248,14 @@ msgstr ""
 "Het aantal beeldpunten tussen de schuifbalk en het corresponderende venster"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "Vensterplaatsing"
+msgstr "Schuifvensterplaatsing"
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Waar de inhoud weergegeven wordt ten opzichte van de schuifbalken"
+msgstr "Waar de inhoud van schuifvensters weergegeven wordt ten opzichte van de schuifbalken, wanneer deze niet door de plaatsing van het schuifvenster zelf bepaald wordt."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4326,14 +4335,12 @@ msgid "Name of icon theme to use"
 msgstr "Naam van het gebruikte pictogramthema"
 
 #: ../gtk/gtksettings.c:248
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Pictogramthema-naam"
+msgstr "Terugval pictogramthema-naam"
 
 #: ../gtk/gtksettings.c:249
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Naam van het gebruikte pictogramthema"
+msgstr "Naam van het gebruikte pictogramthema waarop kan worden teruggevallen"
 
 #: ../gtk/gtksettings.c:257
 msgid "Key Theme Name"
@@ -4557,13 +4564,11 @@ msgstr ""
 msgid "Ignore hidden"
 msgstr "Verborgen negeren"
 
+# unmapped=niet getekende/niet getoonde/verborgen
 #: ../gtk/gtksizegroup.c:285
-#, fuzzy
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr ""
-"Indien WAAR (TRUE) zullen verborgen widgets worden genegeerd bij het bepalen "
-"van de grootte van de groep"
+msgstr "Indien WAAR (TRUE) zullen verborgen widgets worden genegeerd bij het bepalen van de grootte van de groep"
 
 #: ../gtk/gtkspinbutton.c:204
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4575,7 +4580,7 @@ msgstr "Klimsnelheid"
 
 #: ../gtk/gtkspinbutton.c:212
 msgid "The acceleration rate when you hold down a button"
-msgstr "De versnelling als je de knop vasthoud"
+msgstr "De versnelling wanneer de knop ingedrukt wordt gehouden"
 
 #: ../gtk/gtkspinbutton.c:222
 msgid "The number of decimal places to display"
@@ -4816,24 +4821,25 @@ msgid ""
 msgstr ""
 "De positie van de invoegcursor (als verschuiving van het begin van de buffer)"
 
+# dus niet 'doellijst kopieren'
 #: ../gtk/gtktextbuffer.c:244
 msgid "Copy target list"
-msgstr ""
+msgstr "Kopieerdoel-lijst"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr ""
+msgstr "De lijst met typen bestanden die mogelijk zijn voor klembordkopiëren en als bron voor verslepen"
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
-msgstr ""
+msgstr "Plakdoel-lijst"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
-msgstr ""
+msgstr "De lijst met typen bestanden die mogelijk zijn voor klembordplakken en als doel voor verslepen"
 
 #: ../gtk/gtktexttag.c:171
 msgid "Tag name"
@@ -5538,7 +5544,9 @@ msgstr "Elastieken"
 #: ../gtk/gtktreeview.c:710
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Of meerdere bestanden tegelijk geselecteerd kunnen worden door de muis te verslepen"
+msgstr ""
+"Of meerdere bestanden tegelijk geselecteerd kunnen worden door de muis te "
+"verslepen"
 
 #: ../gtk/gtktreeview.c:717
 msgid "Enable Grid Lines"
@@ -5606,11 +5614,11 @@ msgstr "De kleur van de oneven rijen"
 
 #: ../gtk/gtktreeview.c:793
 msgid "Row Ending details"
-msgstr ""
+msgstr "Details voor rij-uiteinden"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "Uitgebreide rijachtergrond themakleuring gebruiken"
 
 #: ../gtk/gtktreeview.c:800
 msgid "Grid line width"
@@ -6271,13 +6279,16 @@ msgstr "Zwaartekracht"
 msgid "The window gravity of the window"
 msgstr "De zwaartekrachtstijl voor het venster"
 
+# vergankelijk voor venster
+# tijdelijk venster, behorend bij
+# (het wijst naar het venster waar het transient voor is gemaakt)
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "Behorend bij venster"
 
 #: ../gtk/gtkwindow.c:675
 msgid "The transient parent of the dialog"
-msgstr ""
+msgstr "Het moedervenster van de dialoog"
 
 # IM = Input-method. Wordt gebruikt bij de invoer van Chinese tekens
 #: ../modules/input/gtkimcontextxim.c:330
