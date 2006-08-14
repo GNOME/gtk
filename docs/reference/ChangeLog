@@ -1,3 +1,8 @@
+2006-08-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkruler.sgml: Fix a swapped argument 
+	description.  (#351241, Étienne Bersac)
+
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkcelllayout.sgml: Add an explanation
