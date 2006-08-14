@@ -1011,6 +1011,9 @@ gtk_combo_box_remove (GtkContainer *container,
   GtkTreePath *path;
   gboolean appears_as_list;
 
+  if (widget == combo_box->priv->cell_view)
+    combo_box->priv->cell_view = NULL;
+
   gtk_widget_unparent (widget);
   GTK_BIN (container)->child = NULL;
 

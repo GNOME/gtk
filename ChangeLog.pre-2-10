@@ -1,5 +1,9 @@
 2006-08-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_remove): Null the
+	cell_view pointer if the internal cell view is removed. 
+	(#348828, Rolando Espinoza La Fuente)
+
 	* gtk/gtkentry.c (gtk_entry_drag_data_received): Don't leak
 	in the non-editable case.  (#350258, Colin Leroy)
 
