@@ -17,6 +17,18 @@ you should use the functions that work on a #GtkRecentChooser.
 </para>
 
 <para>
+Note also that #GtkRecentChooserMenu does not support multiple filters, as it
+has no way to let the user choose between them as the #GtkRecentChooserWidget
+and #GtkRecentChooserDialog widgets do. Thus using gtk_recent_chooser_add_filter()
+on a #GtkRecentChooserMenu widget will yield the same effects as using
+gtk_recent_chooser_set_filter(), replacing any currently set filter
+with the supplied filter; gtk_recent_chooser_remove_filter() will remove
+any currently set #GtkRecentFilter object and will unset the current filter;
+gtk_recent_chooser_list_filters() will return a list containing a single
+#GtkRecentFilter object.
+</para>
+
+<para>
 Recently used files are supported since GTK+ 2.10.
 </para>
 
