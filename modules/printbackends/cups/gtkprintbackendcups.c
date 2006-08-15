@@ -1824,18 +1824,19 @@ available_choices (ppd_file_t     *ppd,
   return option->num_choices - num_conflicts + add_auto;
 }
 
-#if HAVE_CUPS_API_1_2
 static GtkPrinterOption *
-create_pickone_option_custom (ppd_file_t   *ppd_file,
-		              ppd_option_t *ppd_option,
-			      ppd_coption_t *coption,
-		              const gchar  *gtk_name)
+create_pickone_option (ppd_file_t   *ppd_file,
+		       ppd_option_t *ppd_option,
+		       const gchar  *gtk_name)
 {
   GtkPrinterOption *option;
   ppd_choice_t **available;
   char *label;
   int n_choices;
   int i;
+#ifdef HAVE_CUPS_API_1_2
+  ppd_coption_t *coption;
+#endif
 
   g_assert (ppd_option->ui == PPD_UI_PICKONE);
   
@@ -1844,15 +1845,20 @@ create_pickone_option_custom (ppd_file_t   *ppd_file,
   n_choices = available_choices (ppd_file, ppd_option, &available, g_str_has_prefix (gtk_name, "gtk-"));
   if (n_choices > 0)
     {
-      ppd_cparam_t *cparam;
       
-      label = get_option_text (ppd_file, ppd_option);
-
       /* right now only support one parameter per custom option 
        * if more than one print warning and only offer the default choices
        */
+
+      label = get_option_text (ppd_file, ppd_option);
+
+#ifdef HAVE_CUPS_API_1_2
+      coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
+
       if (coption)
         {
+	  ppd_cparam_t *cparam;
+
           cparam = ppdFirstCustomParam (coption);
 
           if (ppdNextCustomParam (coption) == NULL)
@@ -1893,6 +1899,7 @@ create_pickone_option_custom (ppd_file_t   *ppd_file,
 	  else
 	    g_warning ("Not Supported: PPD Custom Option has more than one parameter");
 	}
+#endif /* HAVE_CUPS_API_1_2 */
 
       if (!option)
         option = gtk_printer_option_new (gtk_name, label,
@@ -1921,19 +1928,6 @@ create_pickone_option_custom (ppd_file_t   *ppd_file,
     g_warning ("Ignoring pickone %s\n", ppd_option->text);
 #endif
   g_free (available);
-
-  return option;
-}
-#endif /* HAVE_CUPS_API_1_2 */
-
-static GtkPrinterOption *
-create_pickone_option (ppd_file_t   *ppd_file,
-		       ppd_option_t *ppd_option,
-		       const gchar  *gtk_name)
-{
-  GtkPrinterOption *option;  
-
-  option = create_pickone_option_custom (ppd_file, ppd_option, NULL, gtk_name);
 
   return option;
 }
@@ -2019,11 +2013,6 @@ handle_option (GtkPrinterOptionSet *set,
   GtkPrinterOption *option;
   char *name;
 
-#ifdef HAVE_CUPS_API_1_2
-  ppd_coption_t *coption = NULL;
-  coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
-#endif
-
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
 
@@ -2032,12 +2021,7 @@ handle_option (GtkPrinterOptionSet *set,
   option = NULL;
   if (ppd_option->ui == PPD_UI_PICKONE)
     {
-#ifdef HAVE_CUPS_API_1_2
-      if (coption)
-        option = create_pickone_option_custom (ppd_file, ppd_option, coption, name);
-      else
-#endif
-        option = create_pickone_option (ppd_file, ppd_option, name);
+      option = create_pickone_option (ppd_file, ppd_option, name);
     }
   else if (ppd_option->ui == PPD_UI_BOOLEAN)
     {

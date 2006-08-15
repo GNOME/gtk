@@ -1,5 +1,8 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c (create_pickone_option): 
+	Simplify, make it build against cups 1.1.  (#350329)	
+
 	* gtk/gtkliststore.c (gtk_list_store_insert_with_values): 
 	Fix a typo in the docs.  (#349501, Carlos GUSLiBu)
 
