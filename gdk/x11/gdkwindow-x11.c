@@ -5021,6 +5021,8 @@ gdk_window_set_decorations (GdkWindow      *window,
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   
+  /* initialize to zero to avoid writing uninitialized data to socket */
+  memset(&hints, 0, sizeof(hints));
   hints.flags = MWM_HINTS_DECORATIONS;
   hints.decorations = decorations;
   
@@ -5089,6 +5091,8 @@ gdk_window_set_functions (GdkWindow    *window,
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   
+  /* initialize to zero to avoid writing uninitialized data to socket */
+  memset(&hints, 0, sizeof(hints));
   hints.flags = MWM_HINTS_FUNCTIONS;
   hints.functions = functions;
   

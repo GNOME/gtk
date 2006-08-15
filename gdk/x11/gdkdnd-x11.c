@@ -3754,6 +3754,8 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   motif_drag_receiver_info_atom = gdk_x11_get_xatom_by_name_for_display (display,
 									 "_MOTIF_DRAG_RECEIVER_INFO");
+  /* initialize to zero to avoid writing uninitialized data to socket */
+  memset(&info, 0, sizeof(info));
   info.byte_order = local_byte_order;
   info.protocol_version = 0;
   info.protocol_style = XmDRAG_DYNAMIC;

@@ -1,3 +1,11 @@
+2006-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_register_dnd):
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_decorations):
+	(gdk_window_set_functions): Zero out some stack-allocated
+	X structures, to avoid valgrind warnings about uninitialized
+	memory.  (#349382, David Baron)
+
 2006-08-14  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooser.c:
