@@ -619,7 +619,7 @@ do_theme_change (GtkIconTheme *icon_theme)
 
   if (!priv->reset_styles_idle)
     priv->reset_styles_idle = 
-      g_idle_add_full (GTK_PRIORITY_RESIZE + 2, 
+      g_idle_add_full (GTK_PRIORITY_RESIZE - 2, 
 		       reset_styles_idle, icon_theme, NULL);
 }
 
