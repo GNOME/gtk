@@ -301,15 +301,20 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
           GtkIconTheme *icon_theme;
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name,
-					     pixel_size, 0, NULL);
+          if (gtk_icon_theme_has_icon (icon_theme, info->icon_name))
+            pixbuf = gtk_icon_theme_load_icon (icon_theme, info->icon_name,
+                                               pixel_size, 0, NULL);
 	}
     }
 
   if (!pixbuf)
     {
       /* load a fallback icon */
-      pixbuf = gtk_widget_render_icon (widget, GTK_STOCK_FILE, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+      pixbuf = gtk_widget_render_icon (widget,
+                                       gtk_file_info_get_is_folder (info)
+                                        ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
+                                       GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                       NULL);
       if (!pixbuf && error)
         g_set_error (error,
 		     GTK_FILE_SYSTEM_ERROR,
@@ -648,7 +653,7 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
 				    GError              **error)
 {
   gchar *icon_name;
-  GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf = NULL;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (volume != NULL, NULL);
@@ -658,14 +663,22 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
 
   icon_name = gtk_file_system_volume_get_icon_name (file_system, volume,
 						    error);
-  if (!icon_name)
+  if (icon_name)
     {
-      return NULL;
+      GtkIconTheme *icon_theme;
+
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+      if (gtk_icon_theme_has_icon (icon_theme, icon_name))
+        pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                           icon_name, pixel_size, 0, NULL);
+      g_free (icon_name);
     }
 
-  pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget)),
-				     icon_name, pixel_size, 0, NULL);
-  g_free (icon_name);
+  if (!pixbuf)
+    pixbuf = gtk_widget_render_icon (widget,
+                                     GTK_STOCK_HARDDISK,
+                                     GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                     NULL);
 
   return pixbuf;
 }

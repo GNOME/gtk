@@ -1,5 +1,10 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c (gtk_file_info_render_icon) 
+	(gtk_file_system_volume_render_icon): Do better fallbacks
+	if the icon theme does not have icons.  (#345666,
+	Kazuki Iwamoto)
+
 	* gtk/gtkruler.c (gtk_ruler_unrealize): Don't leak
 	no_gr_exp_gc.  (#350050, Chris Wilson)
 
