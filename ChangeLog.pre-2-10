@@ -1,3 +1,8 @@
+2006-08-15  Michael Emmel  <mike.emmel@gmail.com>
+
+	* configure.in  
+	Added cairo flag patch to fix directfb build from bug #351519
+
 2006-08-15  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (get_event_mask_from_ns_event): 
