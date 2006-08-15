@@ -4271,7 +4271,7 @@ msgstr "<%s> ઘટકને અયોગ્ય id \"%s\" છે"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> ઘટક નહિં તો \"name\" કે \"id\" ઘટક છે"
 
 #: ../gtk/gtktextbufferserialize.c:938

@@ -4171,7 +4171,7 @@ msgstr "Элемент <%s> имеет ошибочный идентификат
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Элемент <%s> не имеет ни атрибута \"name\", ни \"id\""
 
 #: gtk/gtktextbufferserialize.c:938

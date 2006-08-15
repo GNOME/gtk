@@ -848,7 +848,7 @@ check_id_or_name (GMarkupParseContext  *context,
     {
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		 _("<%s> element has neither a \"name\" nor an \"id\" element"), element_name);
+		 _("<%s> element has neither a \"name\" nor an \"id\" attribute"), element_name);
       return FALSE;
     }
 

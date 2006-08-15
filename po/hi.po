@@ -4241,7 +4241,7 @@ msgstr "<%s> तत्व के पास अवैध \"%s\" id है."
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> तत्व के पास न तो एक \"नाम\" है और न एक \"id\" तत्व"
 
 #: gtk/gtktextbufferserialize.c:938

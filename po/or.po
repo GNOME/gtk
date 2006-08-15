@@ -4102,7 +4102,7 @@ msgstr "<%s> ବସ୍ତୁ ନିକଟର ଅବୈଧ \"%s\" ପରିଚୟ
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> ବସ୍ତୁ ନିକଟର ଗୋଟିଏ \"ନାମ\" କିମ୍ବା ଗୋଟିଏ \"ପରିଚୟ\" ବସ୍ତୁ ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:938

@@ -3981,7 +3981,7 @@ msgstr "อิลิเมนต์ <%s> มี id \"%s\" ซึ่งไม่�
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "อิลิเมนต์ <%s> ไม่มีอิลิเมนต์ \"name\" หรือ \"id\""
 
 #: gtk/gtktextbufferserialize.c:938

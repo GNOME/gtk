@@ -4078,7 +4078,7 @@ msgstr "»%s«-Elemet hat ungültige id »%s«"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "»%s«-Element hat weder ein »name«- noch ein »id«-Element"
 
 #: ../gtk/gtktextbufferserialize.c:938

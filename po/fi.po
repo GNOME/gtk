@@ -4025,7 +4025,7 @@ msgstr "Alkio <%s> sisältää virheellisen tunnisteen \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> alkiossa ei ole ominaisuutta \"name\" eikä \"id\""
 
 #: ../gtk/gtktextbufferserialize.c:938

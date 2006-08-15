@@ -4021,7 +4021,7 @@ msgstr "<%s> елемент има невалидно Ид. \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> елементот нема ниту \"име\" ниту \"Ид.\" елемент"
 
 #: ../gtk/gtktextbufferserialize.c:938

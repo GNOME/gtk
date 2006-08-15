@@ -4013,7 +4013,7 @@ msgstr "<%s> 엘리먼트의 \"%s\" id가 잘못되었습니다"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> 엘리먼트에 \"id\" 혹은 \"name\" 엘리먼트가 없습니다"
 
 #: ../gtk/gtktextbufferserialize.c:938

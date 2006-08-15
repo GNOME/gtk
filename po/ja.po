@@ -4140,7 +4140,7 @@ msgstr "要素 <%s> の id \"%s\" が間違っています"
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "要素 <%s> には \"name\" も \"id\" もありません"
 
 #: gtk/gtktextbufferserialize.c:938

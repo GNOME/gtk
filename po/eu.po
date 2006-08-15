@@ -4018,7 +4018,7 @@ msgstr "<%s> elementuak \"%s\" id baliogabea du"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> elementuak ez du \"name\" ez \"id\" elementurik"
 
 #: ../gtk/gtktextbufferserialize.c:938

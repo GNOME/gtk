@@ -4172,7 +4172,7 @@ msgstr "<%s> a un identifiant non valide « %s »"
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "L'élément <%s> n'a ni élément « name », ni élément « id »"
 
 #: gtk/gtktextbufferserialize.c:938

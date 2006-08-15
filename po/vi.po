@@ -4136,7 +4136,7 @@ msgstr "Yếu tố <%s> có mã nhận diện không hợp lệ « %s »"
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr ""
 "Yếu tố <%s> không có yếu tố « name » (tên), cũng không phải có yếu tố « id "
 "» (mã nhận diện)"

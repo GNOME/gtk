@@ -4034,7 +4034,7 @@ msgstr "Елемент <%s> має неправильний ідентифіка
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> не має ані елементу \"name\", ані елементу \"id\""
 
 #: ../gtk/gtktextbufferserialize.c:938

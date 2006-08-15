@@ -3990,7 +3990,7 @@ msgstr "<%s> 元素有無效的 id“%s”"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> 元素缺少了“name”或“id”元素"
 
 #: ../gtk/gtktextbufferserialize.c:938

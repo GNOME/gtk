@@ -3970,7 +3970,7 @@ msgstr "<%s> স্বত্বার id \"%s\" বৈধ নয়"
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> স্বত্বার মধ্যে \"name\" ও \"id\" অনুপস্থিত"
 
 #: ../gtk/gtktextbufferserialize.c:938

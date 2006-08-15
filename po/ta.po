@@ -4167,7 +4167,7 @@ msgstr "<%s> உருப்படி தவறான ஐடியை கொண�
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> உருப்படியில் ஒரு \"பெயர்\" அல்லது ஒரு \"குறியீடு\" உருப்படியை கொண்டுள்ளது"
 
 #: gtk/gtktextbufferserialize.c:938

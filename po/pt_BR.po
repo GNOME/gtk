@@ -4160,7 +4160,7 @@ msgstr "O elemento <%s> tem id \"%s\" inválida"
 
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "O elemento <%s> não tem nem os elementos \"name\" ou \"id\""
 
 #: gtk/gtktextbufferserialize.c:938

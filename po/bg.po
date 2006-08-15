@@ -4043,7 +4043,7 @@ msgstr "Елементът <%s> е с невалиден идентификат�
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Елементът <%s> няма нито атрибут „name“, нито „id“"
 
 #: ../gtk/gtktextbufferserialize.c:938

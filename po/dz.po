@@ -4025,7 +4025,7 @@ msgstr "ཆ་ཤས་<%s>ལུ་ ནུས་མེད་ཨའི་ཌི�
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" element"
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "ཆ་ཤས་<%s>དེ་ལུ་ ཡང་ཅིན་\"name\"མིན་འདུག། ཡང་ཅིན་\"id\" གི་ཆ་ཤས་ཅིག་མིན་འདུག།"
 
 #: ../gtk/gtktextbufferserialize.c:938
