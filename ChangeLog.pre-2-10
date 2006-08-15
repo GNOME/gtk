@@ -1,5 +1,9 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_enter_notify): Remove.
+	(gtk_notebook_motion_notify): Instead, update the arrow
+	state here.  (#349570, Benjamin Otte)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_get_geometry_hints):
 	Use XAllocSizeHints to allocate the XSizeHints struct.
 	(#249285, David Baron)

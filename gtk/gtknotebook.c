@@ -243,8 +243,6 @@ static gint gtk_notebook_button_press        (GtkWidget        *widget,
 static gint gtk_notebook_button_release      (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
-static gint gtk_notebook_enter_notify        (GtkWidget        *widget,
-					      GdkEventCrossing *event);
 static gint gtk_notebook_leave_notify        (GtkWidget        *widget,
 					      GdkEventCrossing *event);
 static gint gtk_notebook_motion_notify       (GtkWidget        *widget,
@@ -487,7 +485,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
   widget_class->popup_menu = gtk_notebook_popup_menu;
-  widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
   widget_class->grab_notify = gtk_notebook_grab_notify;
@@ -1442,7 +1439,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_button_press
  * gtk_notebook_button_release
  * gtk_notebook_popup_menu
- * gtk_notebook_enter_notify
  * gtk_notebook_leave_notify
  * gtk_notebook_motion_notify
  * gtk_notebook_focus_in
@@ -1597,7 +1593,7 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
-			    GDK_POINTER_MOTION_MASK |
+			    GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK |
 			    GDK_SCROLL_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -2660,35 +2656,6 @@ gtk_notebook_button_release (GtkWidget      *widget,
 }
 
 static gint
-gtk_notebook_enter_notify (GtkWidget        *widget,
-			   GdkEventCrossing *event)
-{
-  GtkNotebook *notebook;
-  GtkNotebookArrow arrow;
-  gint x, y;
-
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  notebook = GTK_NOTEBOOK (widget);
-
-  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
-    return FALSE;
-
-  arrow = gtk_notebook_get_arrow (notebook, x, y);
-
-  if (arrow != notebook->in_child)
-    {
-      notebook->in_child = arrow;
-      gtk_notebook_redraw_arrows (notebook);
-
-      return TRUE;
-    }
-
-  return TRUE;
-}
-
-static gint
 gtk_notebook_leave_notify (GtkWidget        *widget,
 			   GdkEventCrossing *event)
 {
@@ -2821,6 +2788,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   GtkNotebookPage *page;
+  GtkNotebookArrow arrow;
   GtkNotebookPointerPosition pointer_position;
   GtkSettings *settings;
   guint timeout;
@@ -2837,9 +2805,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
       stop_scrolling (notebook);
     }
 
-  if (priv->pressed_button == -1)
-    return FALSE;
-
   if (event->time < priv->timestamp + MSECS_BETWEEN_UPDATES)
     return FALSE;
 
@@ -2848,6 +2813,16 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 			  &priv->mouse_x,
 			  &priv->mouse_y,
 			  NULL);
+
+  arrow = gtk_notebook_get_arrow (notebook, priv->mouse_x, priv->mouse_y);
+  if (arrow != notebook->in_child)
+    {
+      notebook->in_child = arrow;
+      gtk_notebook_redraw_arrows (notebook);
+    }
+
+  if (priv->pressed_button == -1)
+    return FALSE;
 
   if (page->detachable &&
       check_threshold (notebook, priv->mouse_x, priv->mouse_y))
@@ -4657,7 +4632,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
           arrow = (ARROW_IS_LEFT (nbarrow) ? GTK_ARROW_LEFT : GTK_ARROW_RIGHT);
           arrow_size = scroll_arrow_hlength;
         }
-      
+     
       gtk_paint_arrow (widget->style, widget->window, state_type, 
 		       shadow_type, NULL, widget, "notebook",
 		       arrow, TRUE, arrow_rect.x, arrow_rect.y, 
