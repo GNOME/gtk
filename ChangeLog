@@ -1,5 +1,8 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkruler.c (gtk_ruler_unrealize): Don't leak
+	no_gr_exp_gc.  (#350050, Chris Wilson)
+
 	* gdk/x11/gdkdrawable-x11.c (get_shm_pixmap_for_image): Don't
 	leak ShmPixmapInfo.  (#349858, Chris Wilson)
 

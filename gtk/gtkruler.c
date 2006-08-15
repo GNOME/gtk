@@ -385,10 +385,16 @@ gtk_ruler_unrealize (GtkWidget *widget)
   GtkRuler *ruler = GTK_RULER (widget);
 
   if (ruler->backing_store)
-    g_object_unref (ruler->backing_store);
+    {
+      g_object_unref (ruler->backing_store);
+      ruler->backing_store = NULL;
+    }
 
-  ruler->backing_store = NULL;
-  ruler->non_gr_exp_gc = NULL;
+  if (ruler->non_gr_exp_gc)
+    {
+      g_object_unref (ruler->non_gr_exp_gc);
+      ruler->non_gr_exp_gc = NULL;
+    }
 
   if (GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize) (widget);
