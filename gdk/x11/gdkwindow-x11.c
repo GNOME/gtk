@@ -2659,8 +2659,8 @@ gdk_window_get_geometry_hints (GdkWindow      *window,
                                GdkGeometry    *geometry,
                                GdkWindowHints *geom_mask)
 {
-  XSizeHints size_hints;  
-  glong junk_size_mask = 0;
+  XSizeHints *size_hints;  
+  glong junk_supplied_mask = 0;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (geometry != NULL);
@@ -2670,47 +2670,53 @@ gdk_window_get_geometry_hints (GdkWindow      *window,
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  size_hints = XAllocSizeHints ();
+  if (!size_hints)
+    return;
   
   if (!XGetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
                           GDK_WINDOW_XID (window),
-                          &size_hints,
-                          &junk_size_mask))
-    return;                   
+                          size_hints,
+                          &junk_supplied_mask))
+    size_hints->flags = 0;
 
-  if (size_hints.flags & PMinSize)
+  if (size_hints->flags & PMinSize)
     {
       *geom_mask |= GDK_HINT_MIN_SIZE;
-      geometry->min_width = size_hints.min_width;
-      geometry->min_height = size_hints.min_height;
+      geometry->min_width = size_hints->min_width;
+      geometry->min_height = size_hints->min_height;
     }
 
-  if (size_hints.flags & PMaxSize)
+  if (size_hints->flags & PMaxSize)
     {
       *geom_mask |= GDK_HINT_MAX_SIZE;
-      geometry->max_width = MAX (size_hints.max_width, 1);
-      geometry->max_height = MAX (size_hints.max_height, 1);
+      geometry->max_width = MAX (size_hints->max_width, 1);
+      geometry->max_height = MAX (size_hints->max_height, 1);
     }
 
-  if (size_hints.flags & PResizeInc)
+  if (size_hints->flags & PResizeInc)
     {
       *geom_mask |= GDK_HINT_RESIZE_INC;
-      geometry->width_inc = size_hints.width_inc;
-      geometry->height_inc = size_hints.height_inc;
+      geometry->width_inc = size_hints->width_inc;
+      geometry->height_inc = size_hints->height_inc;
     }
 
-  if (size_hints.flags & PAspect)
+  if (size_hints->flags & PAspect)
     {
       *geom_mask |= GDK_HINT_ASPECT;
 
-      geometry->min_aspect = (gdouble) size_hints.min_aspect.x / (gdouble) size_hints.min_aspect.y;
-      geometry->max_aspect = (gdouble) size_hints.max_aspect.x / (gdouble) size_hints.max_aspect.y;
+      geometry->min_aspect = (gdouble) size_hints->min_aspect.x / (gdouble) size_hints->min_aspect.y;
+      geometry->max_aspect = (gdouble) size_hints->max_aspect.x / (gdouble) size_hints->max_aspect.y;
     }
 
-  if (size_hints.flags & PWinGravity)
+  if (size_hints->flags & PWinGravity)
     {
       *geom_mask |= GDK_HINT_WIN_GRAVITY;
-      geometry->win_gravity = size_hints.win_gravity;
+      geometry->win_gravity = size_hints->win_gravity;
     }
+
+  XFree (size_hints);
 }
 
 static gboolean
