@@ -1,5 +1,11 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdrawable-x11.c (get_shm_pixmap_for_image): Don't
+	leak ShmPixmapInfo.  (#349858, Chris Wilson)
+
+	* gtk/Makefile.am (GTK_PRINT_PREVIEW_COMMAND): Call evince
+	with the --preview option.  (#350139, Carlos Garcia Campos)
+
 	* modules/printbackends/cups/gtkprintbackendcups.c (create_pickone_option): 
 	Simplify, make it build against cups 1.1.  (#350329)	
 

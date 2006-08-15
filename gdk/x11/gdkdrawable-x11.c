@@ -1257,11 +1257,25 @@ typedef struct _ShmPixmapInfo ShmPixmapInfo;
 
 struct _ShmPixmapInfo
 {
-  GdkImage *image;
+  Display  *display;
   Pixmap    pix;
   Picture   pict;
   Picture   mask;
 };
+
+static void
+shm_pixmap_info_destroy (gpointer data)
+{
+  ShmPixmapInfo *info = data;
+
+  if (info->pict != None)
+    XRenderFreePicture (info->display, info->pict);
+  if (info->mask != None)
+    XRenderFreePicture (info->display, info->mask);
+
+  g_free (data);
+}
+
 
 /* Returns FALSE if we can't get a shm pixmap */
 static gboolean
@@ -1287,6 +1301,7 @@ get_shm_pixmap_for_image (Display           *xdisplay,
 	return FALSE;
       
       info = g_new (ShmPixmapInfo, 1);
+      info->display = xdisplay;
       info->pix = *pix;
       
       info->pict = XRenderCreatePicture (xdisplay, info->pix,
@@ -1297,7 +1312,8 @@ get_shm_pixmap_for_image (Display           *xdisplay,
       else
 	info->mask = None;
 
-      g_object_set_data (G_OBJECT (image), "gdk-x11-shm-pixmap", info);
+      g_object_set_data_full (G_OBJECT (image), "gdk-x11-shm-pixmap", info,
+	  shm_pixmap_info_destroy);
     }
 
   *pix = info->pix;
