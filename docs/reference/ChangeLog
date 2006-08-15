@@ -1,5 +1,8 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtktable.sgml: Fix docs for gtk_table_set_row/col_spacing.
+	(#348728)
+
 	* gtk/running.sgml: Document new GTK_DEBUG values.  (#350023,
 	Mart Raudsepp)
 

@@ -226,7 +226,7 @@ As there are many options associated with gtk_table_attach(), this convenience f
 
 <!-- ##### FUNCTION gtk_table_set_row_spacing ##### -->
 <para>
-Changes the space between a given table row and its surrounding rows.
+Changes the space between a given table row and the subsequent row.
 </para>
 
 @table: a #GtkTable containing the row whose properties you wish to change.
@@ -236,7 +236,8 @@ Changes the space between a given table row and its surrounding rows.
 
 <!-- ##### FUNCTION gtk_table_set_col_spacing ##### -->
 <para>
-Alters the amount of space between a given table column and the adjacent columns.
+Alters the amount of space between a given table column and the following 
+column.
 </para>
 
 @table: a #GtkTable.
