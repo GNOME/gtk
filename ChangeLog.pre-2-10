@@ -1,5 +1,11 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c (palette_paint): Remove a leftover
+	debug statement. (#350072, Iago Rubio)
+
+	* gtk/gtktextbufferserialize.c (check_id_or_name): Fix
+	warning text.  (#349277)
+
 	* gtk/gtknotebook.c (gtk_notebook_enter_notify): Remove.
 	(gtk_notebook_motion_notify): Instead, update the arrow
 	state here.  (#349570, Benjamin Otte)

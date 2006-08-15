@@ -623,10 +623,6 @@ palette_paint (GtkWidget    *drawing_area,
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {
       set_focus_line_attributes (drawing_area, cr, &focus_width);
-      g_print ("%g %g %g %g\n",
-	       focus_width / 2., focus_width / 2.,
-	       (double)drawing_area->allocation.width - focus_width,
-	       (double)drawing_area->allocation.height - focus_width);
 
       cairo_rectangle (cr,
 		       focus_width / 2., focus_width / 2.,
