@@ -1,5 +1,8 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Set CAN_DEFAULT
+	on all buttons.  (#168737, fix proposed by Benjamin Berg)
+
 	* gtk/gtkentryprivate.h: 
 	* gtk/gtkentry.c (_gtk_entry_effective_inner_border): Export 
 	privately. Adjust all callers.
