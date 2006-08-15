@@ -807,10 +807,21 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @parent: the #GtkWindow to use as window parent, or %NULL
    *
    * Gets emitted when a preview is requested from the native dialog.
-   * If you handle this you must set the cairo context on the printing context.
    *
-   * If you don't override this a default implementation using an external
-   * viewer will be used.
+   * The default handler for this signal uses an external viewer 
+   * application to preview.
+   *
+   * To implement a custom print preview, an application must return
+   * %TRUE from its handler for this signal. In order to use the
+   * provided @context for the preview implementation, it must be
+   * given a suitable cairo context with gtk_print_context_set_cairo_context().
+   * 
+   * The custom preview implementation can use 
+   * gtk_print_operation_preview_is_selected() and 
+   * gtk_print_operation_preview_render_page() to find pages which
+   * are selected for print and render them. The preview must be
+   * finished by calling gtk_print_operation_preview_end_preview()
+   * (typically in response to the user clicking a close button).
    *
    * Returns: %TRUE if the listener wants to take over control of the preview
    * 

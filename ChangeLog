@@ -1,5 +1,9 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperationpreview.c: 
+	* gtk/gtkprintoperation.c (gtk_print_operation_class_init): Add
+	more docs.
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Set CAN_DEFAULT
 	on all buttons.  (#168737, fix proposed by Benjamin Berg)
 

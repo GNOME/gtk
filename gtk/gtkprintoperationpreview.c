@@ -93,7 +93,12 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
  * @preview: a #GtkPrintOperationPreview
  * @page_nr: the page to render
  *
- * Renders a page to the preview.
+ * Renders a page to the preview, using the print context that
+ * was passed to the GtkPrintOperation::preview handler together
+ * with @preview.
+ *
+ * Note that this function requires a suitable cairo context to 
+ * be associated with the print context. 
  *
  * Since: 2.10 
  */
@@ -112,6 +117,8 @@ gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
  * @preview: a #GtkPrintOperationPreview
  *
  * Ends a preview. 
+ *
+ * This function must be called to finish a custom print preview.
  *
  * Since: 2.10
  */
