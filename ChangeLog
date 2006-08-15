@@ -1,5 +1,12 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserentry.c (struct _GtkFileChooserEntry): Don't
+	store GSource pointers, but ids.
+	(gtk_file_chooser_entry_dispose): Remove idles.
+	(idle_add, idle_add): Factor this out.
+	(gtk_file_chooser_entry_maybe_update_directory): 
+	(add_completion_idle): And use it here. (#350039, Chris Wilson)
+
 	* gtk/gtkicontheme.c (do_theme_change): Run the reset_styles
 	idle at a priority higher than size negotiation.  (#350517,
 	Søren Sandmann)

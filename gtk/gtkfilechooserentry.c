@@ -51,8 +51,8 @@ struct _GtkFileChooserEntry
   GtkFilePath *current_folder_path;
   gchar *file_part;
   gint file_part_pos;
-  GSource *check_completion_idle;
-  GSource *load_directory_idle;
+  guint check_completion_idle;
+  guint load_directory_idle;
 
   GtkFileFolder *current_folder;
   GtkFileSystemHandle *load_folder_handle;
@@ -212,6 +212,18 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_object_unref (chooser_entry->file_system);
       chooser_entry->file_system = NULL;
+    }
+
+  if (chooser_entry->check_completion_idle)
+    {
+      g_source_remove (chooser_entry->check_completion_idle);
+      chooser_entry->check_completion_idle = 0;
+    }
+
+  if (chooser_entry->load_directory_idle)
+    {
+      g_source_remove (chooser_entry->load_directory_idle);
+      chooser_entry->load_directory_idle = 0;
     }
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
@@ -492,7 +504,7 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 
   g_assert (chooser_entry->file_part);
 
-  chooser_entry->check_completion_idle = NULL;
+  chooser_entry->check_completion_idle = 0;
 
   if (strcmp (chooser_entry->file_part, "") == 0)
     goto done;
@@ -512,19 +524,30 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
   return FALSE;
 }
 
+static guint
+idle_add (GtkFileChooserEntry *chooser_entry, 
+	  GCallback            cb)
+{
+  GSource *source;
+  guint id;
+
+  source = g_idle_source_new ();
+  g_source_set_priority (source, G_PRIORITY_HIGH);
+  g_source_set_closure (source,
+			g_cclosure_new_object (cb, G_OBJECT (chooser_entry)));
+  id = g_source_attach (source, NULL);
+  g_source_unref (source);
+
+  return id;
+}
+
 static void
 add_completion_idle (GtkFileChooserEntry *chooser_entry)
 {
   /* idle to update the selection based on the file list */
-  if (chooser_entry->check_completion_idle == NULL)
-    {
-      chooser_entry->check_completion_idle = g_idle_source_new ();
-      g_source_set_priority (chooser_entry->check_completion_idle, G_PRIORITY_HIGH);
-      g_source_set_closure (chooser_entry->check_completion_idle,
-			    g_cclosure_new_object (G_CALLBACK (check_completion_callback),
-						   G_OBJECT (chooser_entry)));
-      g_source_attach (chooser_entry->check_completion_idle, NULL);
-    }
+  if (chooser_entry->check_completion_idle == 0)
+    chooser_entry->check_completion_idle = 
+      idle_add (chooser_entry, G_CALLBACK (check_completion_callback));
 }
 
 
@@ -627,7 +650,7 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
 
   GDK_THREADS_ENTER ();
 
-  chooser_entry->load_directory_idle = NULL;
+  chooser_entry->load_directory_idle = 0;
 
   /* guard against bogus settings*/
   if (chooser_entry->current_folder_path == NULL ||
@@ -783,15 +806,9 @@ gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entr
 
   chooser_entry->current_folder_path = folder_path;
 
-  if (queue_idle && chooser_entry->load_directory_idle == NULL)
-    {
-      chooser_entry->load_directory_idle = g_idle_source_new ();
-      g_source_set_priority (chooser_entry->load_directory_idle, G_PRIORITY_HIGH);
-      g_source_set_closure (chooser_entry->load_directory_idle,
-			    g_cclosure_new_object (G_CALLBACK (load_directory_callback),
-						   G_OBJECT (chooser_entry)));
-      g_source_attach (chooser_entry->load_directory_idle, NULL);
-    }
+  if (queue_idle && chooser_entry->load_directory_idle == 0)
+    chooser_entry->load_directory_idle =
+      idle_add (chooser_entry, G_CALLBACK (load_directory_callback));
 }
 
 
