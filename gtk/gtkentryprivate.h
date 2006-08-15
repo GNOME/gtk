@@ -71,8 +71,12 @@ gboolean _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_popup        (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 
-void     _gtk_entry_reset_im_context        (GtkEntry           *entry);
-
+void      _gtk_entry_get_borders            (GtkEntry  *entry,
+					     gint      *xborder,
+					     gint      *yborder);
+void     _gtk_entry_effective_inner_border (GtkEntry  *entry,
+					    GtkBorder *border);
+void     _gtk_entry_reset_im_context       (GtkEntry  *entry);
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_PRIVATE_H__ */

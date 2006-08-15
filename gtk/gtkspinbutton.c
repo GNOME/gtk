@@ -36,6 +36,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkspinbutton.h"
+#include "gtkentryprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
@@ -624,6 +625,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       gboolean interior_focus;
       gint focus_width;
       gint xborder, yborder;
+      GtkBorder inner_border;
 
       gtk_widget_style_get (widget,
 			    "interior-focus", &interior_focus,
@@ -657,10 +659,9 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       width = MAX (width, w);
       
       _gtk_entry_get_borders (entry, &xborder, &yborder);
-      
-      xborder += 2; /* INNER_BORDER */
+      _gtk_entry_effective_inner_border (entry, &inner_border);
 
-      requisition->width = width + xborder * 2;
+      requisition->width = width + xborder * 2 + inner_border.left + inner_border.right;
     }
 
   requisition->width += arrow_size + 2 * widget->style->xthickness;

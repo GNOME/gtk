@@ -1,5 +1,12 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentryprivate.h: 
+	* gtk/gtkentry.c (_gtk_entry_effective_inner_border): Export 
+	privately. Adjust all callers.
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Use it
+	here to get the actual inner border.  (#349429, Benjamin Berg)
+
 	* gtk/gtkfilechooserentry.c (struct _GtkFileChooserEntry): Don't
 	store GSource pointers, but ids.
 	(gtk_file_chooser_entry_dispose): Remove idles.

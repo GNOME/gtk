@@ -342,8 +342,6 @@ static void         get_widget_window_size             (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
-static void         get_inner_border                   (GtkEntry       *entry,
-                                                        GtkBorder      *border);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -1302,7 +1300,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry->descent = pango_font_metrics_get_descent (metrics);
   
   _gtk_entry_get_borders (entry, &xborder, &yborder);
-  get_inner_border (entry, &inner_border);
+  _gtk_entry_effective_inner_border (entry, &inner_border);
 
   if (entry->width_chars < 0)
     requisition->width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
@@ -1383,9 +1381,9 @@ get_widget_window_size (GtkEntry *entry,
     }
 }
 
-static void
-get_inner_border (GtkEntry  *entry,
-                  GtkBorder *border)
+void
+_gtk_entry_effective_inner_border (GtkEntry  *entry,
+                                   GtkBorder *border)
 {
   GtkBorder *tmp_border;
 
@@ -3297,7 +3295,7 @@ get_layout_position (GtkEntry *entry,
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
   get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
-  get_inner_border (entry, &inner_border);
+  _gtk_entry_effective_inner_border (entry, &inner_border);
 
   area_height = PANGO_SCALE * (area_height - inner_border.top - inner_border.bottom);
 
@@ -3372,7 +3370,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      text_color = &widget->style->text [GTK_STATE_ACTIVE];
 	    }
 
-          get_inner_border (entry, &inner_border);
+          _gtk_entry_effective_inner_border (entry, &inner_border);
 
 	  for (i = 0; i < n_ranges; ++i)
 	    cairo_rectangle (cr,
@@ -3439,7 +3437,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       gint x1 = 0;
       gint x2 = 0;
 
-      get_inner_border (entry, &inner_border);
+      _gtk_entry_effective_inner_border (entry, &inner_border);
 
       xoffset = inner_border.left - entry->scroll_offset;
 
@@ -3611,7 +3609,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   if (!GTK_WIDGET_REALIZED (entry))
     return;
 
-  get_inner_border (entry, &inner_border);
+  _gtk_entry_effective_inner_border (entry, &inner_border);
 
   gdk_drawable_get_size (entry->text_area, &text_area_width, NULL);
   text_area_width -= inner_border.left + inner_border.right;
@@ -4807,7 +4805,7 @@ popup_position_func (GtkMenu   *menu,
   gtk_widget_size_request (entry->popup_menu, &menu_req);
   gdk_drawable_get_size (entry->text_area, NULL, &height);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
-  get_inner_border (entry, &inner_border);
+  _gtk_entry_effective_inner_border (entry, &inner_border);
 
   *x += inner_border.left + strong_x - entry->scroll_offset;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
