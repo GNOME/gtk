@@ -1,5 +1,9 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (do_theme_change): Run the reset_styles
+	idle at a priority higher than size negotiation.  (#350517,
+	Søren Sandmann)
+	
 	* gtk/gtkfilesystem.c (gtk_file_info_render_icon) 
 	(gtk_file_system_volume_render_icon): Do better fallbacks
 	if the icon theme does not have icons.  (#345666,
