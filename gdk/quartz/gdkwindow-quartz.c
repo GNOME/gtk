@@ -289,7 +289,7 @@ gdk_window_quartz_process_all_updates (void)
 }
 
 static gboolean
-gdk_window_update_idle (gpointer data)
+gdk_window_quartz_update_idle (gpointer data)
 {
   GDK_THREADS_ENTER ();
   gdk_window_quartz_process_all_updates ();
@@ -325,7 +325,7 @@ gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable *paintable,
 
       if (update_idle == 0)
 	update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
-				       gdk_window_update_idle, NULL, NULL);
+				       gdk_window_quartz_update_idle, NULL, NULL);
     }
 }
 
@@ -1222,12 +1222,14 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
     {
       point = [NSEvent mouseLocation];
       y_tmp = _gdk_quartz_get_inverted_screen_y (point.y);
+      *mask = _gdk_quartz_get_current_event_mask ();
     }
   else
     {
       NSWindow *nswindow = impl->toplevel;
       point = [nswindow mouseLocationOutsideOfEventStream];
       y_tmp = impl->height - point.y;
+      *mask = _gdk_quartz_get_current_event_mask ();
     }
   x_tmp = point.x;
 
@@ -1239,10 +1241,8 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       private = private->parent;
     }
 
-  /* FIXME: Implement mask. */
   *x = x_tmp;
   *y = y_tmp;
-  *mask = 0;
 
   return _gdk_quartz_find_child_window_by_point (window,
 						 point.x, point.y,

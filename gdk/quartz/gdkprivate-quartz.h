@@ -131,6 +131,8 @@ void _gdk_quartz_send_map_events (GdkWindow *window);
 GdkEventType _gdk_quartz_key_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_key_is_modifier (guint      keycode);
 
+GdkEventMask _gdk_quartz_get_current_event_mask (void);
+
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
 

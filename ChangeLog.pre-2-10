@@ -1,3 +1,16 @@
+2006-08-15  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (get_event_mask_from_ns_event): 
+	Add GDK button mask for NS dragging events.
+	(create_scroll_event): Remove obsolete comment.
+	(_gdk_quartz_get_current_event_mask), (gdk_event_translate): Keep
+	track of the latest event mask here...
+
+	* gdk/quartz/gdkwindow-quartz.c: 
+	(_gdk_windowing_window_get_pointer): And use it here. Patch from
+	Kristian Rietveld.
+	(gdk_window_quartz_update_idle): Rename to make things clearer.
+
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperationpreview.c: 

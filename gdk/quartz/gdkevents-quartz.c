@@ -637,11 +637,13 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
        */
       return GDK_SCROLL_MASK | GDK_BUTTON_PRESS_MASK;
     case NSLeftMouseDragged:
-      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK |
-	     GDK_BUTTON_MOTION_MASK|GDK_BUTTON1_MOTION_MASK;
+      return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | 
+	      GDK_BUTTON1_MASK);
     case NSRightMouseDragged:
-      return GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK |
-	     GDK_BUTTON_MOTION_MASK|GDK_BUTTON3_MOTION_MASK;
+      return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | 
+	      GDK_BUTTON3_MASK);
     case NSOtherMouseDragged:
       {
 	GdkEventMask mask;
@@ -651,7 +653,8 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 		GDK_BUTTON_MOTION_MASK);
 
 	if (convert_mouse_button_number ([nsevent buttonNumber]) == 2)
-	  mask |= GDK_BUTTON2_MOTION_MASK;
+	  mask |= (GDK_BUTTON2_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | 
+		   GDK_BUTTON2_MASK);
 
 	return mask;
       }
@@ -756,7 +759,7 @@ get_keyboard_modifiers_from_nsevent (NSEvent *nsevent)
     modifiers |= GDK_CONTROL_MASK;
   if (nsflags & NSCommandKeyMask)
     modifiers |= GDK_MOD1_MASK;
-  
+
   /* FIXME: Support GDK_BUTTON_MASK */
 
   return modifiers;
@@ -1297,8 +1300,6 @@ create_scroll_event (GdkWindow *window, NSEvent *nsevent, GdkScrollDirection dir
 				      &event->scroll.x_root,
 				      &event->scroll.y_root);
 
-  /* FIXME event->state; */
-  /* FIXME event->is_hint; */
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
   
@@ -1377,6 +1378,12 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
   return event;
 }
 
+static GdkEventMask current_mask = 0;
+GdkEventMask _gdk_quartz_get_current_event_mask (void)
+{
+  return current_mask;
+}
+
 static gboolean
 gdk_event_translate (NSEvent *nsevent)
 {
@@ -1438,7 +1445,9 @@ gdk_event_translate (NSEvent *nsevent)
 
   if (result == GDK_FILTER_REMOVE)
     return TRUE;
-  
+
+  current_mask = get_event_mask_from_ns_event (nsevent);
+
   switch ([nsevent type])
     {
     case NSLeftMouseDown:
