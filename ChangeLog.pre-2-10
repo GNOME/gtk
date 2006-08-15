@@ -1,5 +1,8 @@
 2006-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c (gtk_list_store_insert_with_values): 
+	Fix a typo in the docs.  (#349501, Carlos GUSLiBu)
+
 	* gtk/gtkcolorsel.c (palette_paint): Remove a leftover
 	debug statement. (#350072, Iago Rubio)
 
