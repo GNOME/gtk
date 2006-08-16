@@ -231,6 +231,13 @@ gtk_tree_model_base_init (gpointer g_class)
        *
        * Note that no iterator is passed to the signal handler,
        * since the row is already deleted.
+       *
+       * Implementations of GtkTreeModel must emit row-deleted 
+       * <emphasis>before</emphasis> removing the node from its
+       * internal data structures.  This is because models and 
+       * views which access and monitor this model might have
+       * references on the node which need to be released in the
+       * row-deleted handler.
        */
       closure = g_closure_new_simple (sizeof (GClosure), NULL);
       g_closure_set_marshal (closure, row_deleted_marshal);
