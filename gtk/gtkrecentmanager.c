@@ -1181,7 +1181,9 @@ build_recent_info (GBookmarkFile  *bookmarks,
  *   about the resource pointed by @uri, or %NULL if the URI was
  *   not registered in the recently used resources list.  Free with
  *   gtk_recent_info_unref().
- **/
+ *
+ * Since: 2.10
+ */
 GtkRecentInfo *
 gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
 				const gchar       *uri,

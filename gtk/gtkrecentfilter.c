@@ -472,6 +472,8 @@ gtk_recent_filter_add_custom (GtkRecentFilter      *filter,
  * #GtkRecentChooser.
  * 
  * Return value: %TRUE if the file should be displayed
+ *
+ * Since: 2.10
  */
 gboolean
 gtk_recent_filter_filter (GtkRecentFilter           *filter,

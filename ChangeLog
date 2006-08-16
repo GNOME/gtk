@@ -1,3 +1,9 @@
+2006-08-15  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkrecentfilter.c (gtk_recent_filter_filter):
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_lookup_item):
+	Add Since tags.  (#351581, Brian Cameron)
+
 2006-08-15  Michael Emmel  <mike.emmel@gmail.com>
 
 	* configure.in  
