@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-05 20:06+0700\n"
-"PO-Revision-Date: 2006-08-05 20:09+0700\n"
+"PO-Revision-Date: 2006-08-16 11:14+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -3982,7 +3982,7 @@ msgstr "อิลิเมนต์ <%s> มี id \"%s\" ซึ่งไม่�
 #: gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "อิลิเมนต์ <%s> ไม่มีอิลิเมนต์ \"name\" หรือ \"id\""
+msgstr "อิลิเมนต์ <%s> ไม่มีแอตทริบิวต์ \"name\" หรือ \"id\""
 
 #: gtk/gtktextbufferserialize.c:938
 #, c-format
