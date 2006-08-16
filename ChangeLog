@@ -1,3 +1,10 @@
+2006-08-16  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_fetch_child):
+	update the refs from children to parents for all nodes, since
+	they may all have been moved by the insert operation. (#346800,
+	patch from Jonathan Matthew).
+
 2006-08-15  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkrecentfilter.c (gtk_recent_filter_filter):

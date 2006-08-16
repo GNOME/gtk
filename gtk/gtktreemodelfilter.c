@@ -927,10 +927,7 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
   g_array_insert_val (level->array, i, elt);
   *index = i;
 
-  if (i > 0)
-    i--;
-
-  for ( ; i < level->array->len; i++)
+  for (i = 0; i < level->array->len; i++)
     {
       FilterElt *e = &(g_array_index (level->array, FilterElt, i));
       if (e->children)
