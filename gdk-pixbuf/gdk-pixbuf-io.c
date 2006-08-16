@@ -1095,6 +1095,9 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 		gint height;
 		gboolean preserve_aspect_ratio;
 	} info;
+	GdkPixbufAnimation *animation;
+	GdkPixbufAnimationIter *iter;
+	gboolean has_frame;
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 || width == -1, NULL);
@@ -1122,7 +1125,8 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 
 	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), &info);
 
-	while (!feof (f) && !ferror (f)) {
+	has_frame = FALSE;
+	while (!has_frame && !feof (f) && !ferror (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
 		if (length > 0)
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
@@ -1131,11 +1135,20 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 				g_object_unref (loader);
 				return NULL;
 			}
+		
+		animation = gdk_pixbuf_loader_get_animation (loader);
+		if (animation) {
+			iter = gdk_pixbuf_animation_get_iter (animation, 0);
+			if (!gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)) {
+				has_frame = TRUE;
+			}
+			g_object_unref (iter);
+		}
 	}
 
 	fclose (f);
 
-	if (!gdk_pixbuf_loader_close (loader, error)) {
+	if (!gdk_pixbuf_loader_close (loader, error) && !has_frame) {
 		g_object_unref (loader);
 		return NULL;
 	}
