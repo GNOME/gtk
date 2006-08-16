@@ -6265,8 +6265,13 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
  *            than the number of pages in the notebook, nothing
  *            will be done.
  *                
- * Switches to the page number @page_num.
- **/
+ * Switches to the page number @page_num. 
+ *
+ * Note that due to historical reasons, GtkNotebook refuses
+ * to switch to a page unless the child widget is visible. 
+ * Therefore, it is recommended to show child widgets before
+ * adding them to a notebook. 
+ */
 void
 gtk_notebook_set_current_page (GtkNotebook *notebook,
 			       gint         page_num)
