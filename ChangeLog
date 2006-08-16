@@ -1,5 +1,8 @@
 2006-08-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c: Update background upon style-set and
+	state-changed.  (#348634, Thomas Rydzynski)
+
 	* gtk/gtkentry.c (paste_received): Popup completion if paste
 	is at the end (patch was already in 2.8.x).  (#165714, 
 	Christian Persch)

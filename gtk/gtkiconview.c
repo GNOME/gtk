@@ -239,6 +239,10 @@ static void             gtk_icon_view_destroy                   (GtkObject      
 /* GtkWidget vfuncs */
 static void             gtk_icon_view_realize                   (GtkWidget          *widget);
 static void             gtk_icon_view_unrealize                 (GtkWidget          *widget);
+static void             gtk_icon_view_style_set                 (GtkWidget        *widget,
+						                 GtkStyle         *previous_style);
+static void             gtk_icon_view_state_changed             (GtkWidget        *widget,
+			                                         GtkStateType      previous_state);
 static void             gtk_icon_view_size_request              (GtkWidget          *widget,
 								 GtkRequisition     *requisition);
 static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
@@ -468,6 +472,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
+  widget_class->style_set = gtk_icon_view_style_set;
+  widget_class->get_accessible = gtk_icon_view_get_accessible;
   widget_class->size_request = gtk_icon_view_size_request;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->expose_event = gtk_icon_view_expose;
@@ -482,7 +488,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->drag_motion = gtk_icon_view_drag_motion;
   widget_class->drag_drop = gtk_icon_view_drag_drop;
   widget_class->drag_data_received = gtk_icon_view_drag_data_received;
-  widget_class->get_accessible = gtk_icon_view_get_accessible;
+  widget_class->state_changed = gtk_icon_view_state_changed;
 
   container_class->remove = gtk_icon_view_remove;
   container_class->forall = gtk_icon_view_forall;
@@ -1158,6 +1164,40 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   /* GtkWidget::unrealize destroys children and widget->window */
   if (GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize) (widget);
+}
+
+static void
+gtk_icon_view_state_changed (GtkWidget      *widget,
+		 	     GtkStateType    previous_state)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
+      gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
+    }
+
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_icon_view_style_set (GtkWidget *widget,
+			 GtkStyle *previous_style)
+{
+  GtkIconView *icon_view;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW (widget));
+
+  icon_view = GTK_ICON_VIEW (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
+      gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
+    }
+
+  gtk_widget_queue_resize (widget);
 }
 
 static void
