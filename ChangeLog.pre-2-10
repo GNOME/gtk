@@ -1,3 +1,8 @@
+2006-08-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Explain
+	some quirks of this function.  (#351112)
+
 2006-08-16  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
