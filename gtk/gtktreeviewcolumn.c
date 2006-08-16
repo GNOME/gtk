@@ -2631,6 +2631,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   gint special_cells;
   gint horizontal_separator;
   gboolean cursor_row = FALSE;
+  gboolean first_cell = TRUE;
   gboolean rtl;
   /* If we have rtl text, we need to transform our areas */
   GdkRectangle rtl_cell_area;
@@ -2699,7 +2700,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (info->expand == TRUE)
 	expand_cell_count ++;
       full_requested_width += info->requested_width;
-      /* FIXME: We prolly need to include tree_column->spacing here */
+
+      if (!first_cell)
+	full_requested_width += tree_column->spacing;
+
+      first_cell = FALSE;
     }
 
   extra_space = cell_area->width - full_requested_width;

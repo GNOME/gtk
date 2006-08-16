@@ -1,5 +1,11 @@
 2006-08-16  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	take the cell spacing into account when calculating the available
+	extra space. (#350938, patch from Peter Johanson).
+
+2006-08-16  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_fetch_child):
 	update the refs from children to parents for all nodes, since
 	they may all have been moved by the insert operation. (#346800,
