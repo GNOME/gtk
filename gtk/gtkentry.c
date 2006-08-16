@@ -3950,16 +3950,24 @@ paste_received (GtkClipboard *clipboard,
     {
       gint pos, start, end;
       gint length = -1;
-      GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+      gboolean popup_completion;
+      GtkEntryCompletion *completion;
+
+      completion = gtk_entry_get_completion (entry);
 
       if (entry->truncate_multiline)
         length = truncate_multiline (text);
 
+      /* only complete if the selection is at the end */
+      popup_completion = (entry->text_length == MAX (entry->current_pos, entry->selection_bound));
+
       if (completion)
 	{
-	  g_signal_handler_block (entry, completion->priv->changed_id);
 	  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
 	    _gtk_entry_completion_popdown (completion);
+
+          if (!popup_completion && completion->priv->changed_id > 0)
+            g_signal_handler_block (entry, completion->priv->changed_id);
 	}
 
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
@@ -3969,7 +3977,8 @@ paste_received (GtkClipboard *clipboard,
       gtk_editable_insert_text (editable, text, length, &pos);
       gtk_editable_set_position (editable, pos);
 
-      if (completion)
+      if (completion &&
+          !popup_completion && completion->priv->changed_id > 0)
 	g_signal_handler_unblock (entry, completion->priv->changed_id);
     }
 

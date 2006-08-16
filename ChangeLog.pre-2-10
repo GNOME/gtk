@@ -1,5 +1,9 @@
 2006-08-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (paste_received): Popup completion if paste
+	is at the end (patch was already in 2.8.x).  (#165714, 
+	Christian Persch)
+
 	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Explain
 	some quirks of this function.  (#351112)
 
