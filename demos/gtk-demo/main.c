@@ -19,7 +19,7 @@ enum {
   TITLE_COLUMN,
   FILENAME_COLUMN,
   FUNC_COLUMN,
-  ITALIC_COLUMN,
+  STYLE_COLUMN,
   NUM_COLUMNS
 };
 
@@ -94,15 +94,15 @@ window_closed_cb (GtkWidget *window, gpointer data)
 {
   CallbackData *cbdata = data;
   GtkTreeIter iter;
-  gboolean italic;
+  PangoStyle style;
 
   gtk_tree_model_get_iter (cbdata->model, &iter, cbdata->path);
   gtk_tree_model_get (GTK_TREE_MODEL (cbdata->model), &iter,
-		      ITALIC_COLUMN, &italic,
+		      STYLE_COLUMN, &style,
 		      -1);
-  if (italic)
+  if (style == PANGO_STYLE_ITALIC)
     gtk_tree_store_set (GTK_TREE_STORE (cbdata->model), &iter,
-			ITALIC_COLUMN, !italic,
+			STYLE_COLUMN, PANGO_STYLE_NORMAL,
 			-1);
 
   gtk_tree_path_free (cbdata->path);
@@ -586,7 +586,7 @@ row_activated_cb (GtkTreeView       *tree_view,
 		  GtkTreeViewColumn *column)
 {
   GtkTreeIter iter;
-  gboolean italic;
+  PangoStyle style;
   GDoDemoFunc func;
   GtkWidget *window;
   GtkTreeModel *model;
@@ -597,14 +597,14 @@ row_activated_cb (GtkTreeView       *tree_view,
   gtk_tree_model_get (GTK_TREE_MODEL (model),
 		      &iter,
 		      FUNC_COLUMN, &func,
-		      ITALIC_COLUMN, &italic,
+		      STYLE_COLUMN, &style,
 		      -1);
 
   if (func)
     {
       gtk_tree_store_set (GTK_TREE_STORE (model),
 			  &iter,
-			  ITALIC_COLUMN, !italic,
+			  STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
 			  -1);
       window = (func) (gtk_widget_get_toplevel (GTK_WIDGET (tree_view)));
       
@@ -700,7 +700,7 @@ create_tree (void)
 
   Demo *d = testgtk_demos;
 
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
   tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
@@ -723,7 +723,7 @@ create_tree (void)
 			  TITLE_COLUMN, d->title,
 			  FILENAME_COLUMN, d->filename,
 			  FUNC_COLUMN, d->func,
-			  ITALIC_COLUMN, FALSE,
+			  STYLE_COLUMN, PANGO_STYLE_NORMAL,
 			  -1);
 
       d++;
@@ -742,7 +742,7 @@ create_tree (void)
 			      TITLE_COLUMN, children->title,
 			      FILENAME_COLUMN, children->filename,
 			      FUNC_COLUMN, children->func,
-			      ITALIC_COLUMN, FALSE,
+			      STYLE_COLUMN, PANGO_STYLE_NORMAL,
 			      -1);
 	  
 	  children++;
@@ -751,14 +751,10 @@ create_tree (void)
 
   cell = gtk_cell_renderer_text_new ();
 
-  g_object_set (cell,
-                "style", PANGO_STYLE_ITALIC,
-                NULL);
-  
   column = gtk_tree_view_column_new_with_attributes ("Widget (double click for demo)",
 						     cell,
 						     "text", TITLE_COLUMN,
-						     "style_set", ITALIC_COLUMN,
+						     "style", STYLE_COLUMN,
 						     NULL);
   
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),

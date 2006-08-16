@@ -1,3 +1,10 @@
+2006-08-17  Kristian Rietveld  <kris@gtk.org>
+
+	* demos/gtk-demo/main.c (window_closed_cb), (row_activated_cb),
+	(create_tree): move the ITALIC_COLUMN over to a STYLE_COLUMN
+	which sets the style attribute.  Makes drawing the active demos
+	in italic work again.
+
 2006-08-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_base_init): Add some
