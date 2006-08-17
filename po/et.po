@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-04 00:06+0200\n"
-"PO-Revision-Date: 2006-08-04 08:32+0300\n"
+"PO-Revision-Date: 2006-08-17 12:53+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1200,7 +1200,7 @@ msgstr "%Y"
 #.
 #: ../gtk/gtkcellrendereraccel.c:245
 msgid "Accelerator|Disabled"
-msgstr ""
+msgstr "Keelatud"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1532,7 +1532,7 @@ msgstr "Asuk_oht:"
 
 #: ../gtk/gtkfilechooserdefault.c:4797
 msgid "Save in _folder:"
-msgstr "Salvesta _kataloogi:"
+msgstr "Salvestada _kataloogi:"
 
 #: ../gtk/gtkfilechooserdefault.c:4799
 msgid "Create in _folder:"
@@ -1614,12 +1614,12 @@ msgstr "eile"
 #: ../gtk/gtkfilechoosersettings.c:122
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
-msgstr ""
+msgstr "Rida %d, veerg %d: puudub atribuut \"%s\""
 
 #: ../gtk/gtkfilechoosersettings.c:139
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
-msgstr ""
+msgstr "Rida %d, veerg %d: ootamatu kirje \"%s\""
 
 #: ../gtk/gtkfilechoosersettings.c:157
 #, c-format
@@ -2297,7 +2297,7 @@ msgstr "Olek"
 
 #: ../gtk/gtkprintunixdialog.c:1487
 msgid "Print Pages"
-msgstr ""
+msgstr "Prinditakse leheküljed"
 
 #: ../gtk/gtkprintunixdialog.c:1491
 msgid "_All"
@@ -2318,15 +2318,15 @@ msgstr "Koopiad"
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:1530
 msgid "Copie_s:"
-msgstr "K_oopiaid:"
+msgstr "Koop_iaid:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
 msgid "C_ollate"
-msgstr ""
+msgstr "S_orditud järjestus"
 
 #: ../gtk/gtkprintunixdialog.c:1554
 msgid "_Reverse"
-msgstr ""
+msgstr "Tagu_rpidine järjestus"
 
 #: ../gtk/gtkprintunixdialog.c:1571
 msgid "General"
@@ -2352,7 +2352,7 @@ msgstr "Prindita_kse ainult:"
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2008
 msgid "All sheets"
-msgstr "Kõik lehed"
+msgstr "Kõik leheküljed"
 
 #: ../gtk/gtkprintunixdialog.c:2009
 msgid "Even sheets"
@@ -2380,7 +2380,7 @@ msgstr "Paberi _allikas:"
 
 #: ../gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
-msgstr ""
+msgstr "_Väljundsalv:"
 
 #: ../gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
@@ -2400,11 +2400,11 @@ msgstr "Dokumenti printimine"
 
 #: ../gtk/gtkprintunixdialog.c:2170
 msgid "_Now"
-msgstr ""
+msgstr "_Nüüd"
 
 #: ../gtk/gtkprintunixdialog.c:2177
 msgid "A_t:"
-msgstr ""
+msgstr "A_jal:"
 
 #: ../gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
@@ -2416,15 +2416,15 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr ""
+msgstr "_Enne:"
 
 #: ../gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr ""
+msgstr "_Pärast:"
 
 #: ../gtk/gtkprintunixdialog.c:2247
 msgid "Job"
-msgstr ""
+msgstr "Töö"
 
 #: ../gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
@@ -2814,11 +2814,11 @@ msgstr "_Eelistused"
 
 #: ../gtk/gtkstock.c:398
 msgid "_Print"
-msgstr "_Trüki"
+msgstr "_Prindi"
 
 #: ../gtk/gtkstock.c:399
 msgid "Print Pre_view"
-msgstr "Trükkimise eel_vaade"
+msgstr "Printimise eel_vaade"
 
 #: ../gtk/gtkstock.c:400
 msgid "_Properties"
@@ -3900,7 +3900,7 @@ msgstr "Puudub"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Classified"
-msgstr ""
+msgstr "Liigitatud"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Confidential"
@@ -3908,7 +3908,7 @@ msgstr "Konfidentsiaalne"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Secret"
-msgstr ""
+msgstr "Salajane"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Standard"
@@ -3920,11 +3920,11 @@ msgstr "Salastatud"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
 msgid "Unclassified"
-msgstr ""
+msgstr "Liigitamata"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr ""
+msgstr "Printimint LPR-i"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
@@ -3936,7 +3936,7 @@ msgstr "Käsurida"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:436
 msgid "Print to File"
-msgstr "Trükkimine faili"
+msgstr "Printimine faili"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "PDF"
@@ -4010,7 +4010,7 @@ msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
-msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
+msgid "<%s> element has neither a \"name\" nor an \"id\" element"
 msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:938
@@ -4046,12 +4046,12 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" pole rekvisiidi liigiks lubatud"
 
 #: ../gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" pole rekvisiidi väärtuseks lubatud"
 
 #: ../gtk/gtktextbufferserialize.c:1188
 #, c-format
@@ -4062,7 +4062,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" pole rekvisiidile \"%s\" sobilik väärtus"
 
 #: ../gtk/gtktextbufferserialize.c:1280
 #, c-format
@@ -4082,11 +4082,11 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1353 ../gtk/gtktextbufferserialize.c:1369
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "Kirje <%s> on juba kirjeldatud"
 
 #: ../gtk/gtktextbufferserialize.c:1375
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Kirje <text> ei tohi olla enne kirjet <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1783
 msgid "Serialized data is malformed"
@@ -4121,7 +4121,7 @@ msgstr "Tõrge päise uuestikirjutamisel\n"
 #: ../gtk/updateiconcache.c:1162
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr ""
+msgstr "Tõrge puhverfaili kirjutamisel: %s\n"
 
 #: ../gtk/updateiconcache.c:1202
 #, c-format
