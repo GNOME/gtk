@@ -439,7 +439,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
   
   /* Get ready to send the message */
   gtk_tray_icon_send_manager_message (icon, SYSTEM_TRAY_BEGIN_MESSAGE,
-				      icon->priv->manager_window,
+				      (Window)gtk_plug_get_id (GTK_PLUG (icon)),
 				      timeout, len, stamp);
 
   /* Now to send the actual message */
@@ -452,7 +452,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
       xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
       
       ev.type = ClientMessage;
-      ev.window = icon->priv->manager_window;
+      ev.window = (Window)gtk_plug_get_id (GTK_PLUG (icon));
       ev.format = 8;
       ev.message_type = XInternAtom (xdisplay,
 				     "_NET_SYSTEM_TRAY_MESSAGE_DATA", False);
@@ -487,7 +487,7 @@ _gtk_tray_icon_cancel_message (GtkTrayIcon *icon,
   g_return_if_fail (id > 0);
   
   gtk_tray_icon_send_manager_message (icon, SYSTEM_TRAY_CANCEL_MESSAGE,
-				      icon->priv->manager_window,
+				      (Window)gtk_plug_get_id (GTK_PLUG (icon)),
 				      id, 0, 0);
 }
 

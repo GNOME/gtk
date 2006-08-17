@@ -1,5 +1,9 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktrayicon-x11.c: Fix the ClientMessages we are
+	sending to the notification area to be more in sync with
+	the systray spec.  (#350860, Wincent Untz)
+
 	* gtk/gtkprintoperation.c (print_pages, preview_ready): Queue
 	printing idles at a low priority.  (#348289, Yevgen Muntyan)
 
