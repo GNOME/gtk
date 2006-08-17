@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 17:27+0200\n"
+"POT-Creation-Date: 2006-08-17 12:51+0200\n"
 "PO-Revision-Date: 2006-08-04 03:28+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1113 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Openen van bestand ‘%s’ mislukt: %s"
@@ -39,7 +39,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Afbeelding ‘%s’ bevat geen data"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:907
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1151 ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1164 ../tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -89,36 +89,36 @@ msgstr "Onbekend afbeeldingstype"
 msgid "Failed to load image '%s': %s"
 msgstr "Laden van afbeelding ‘%s’ mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1379
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1392
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Fout bij het schrijven naar afbeelding: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1425 ../gdk-pixbuf/gdk-pixbuf-io.c:1556
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1438 ../gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
 "bestandsformaat: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1459
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1472
 msgid "Insufficient memory to save image to callback"
 msgstr "Onvoldoende geheugen om de afbeelding op te slaan naar de callback"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1472
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1485
 msgid "Failed to open temporary file"
 msgstr "Openen van tijdelijk bestand is mislukt"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1498
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1511
 msgid "Failed to read from temporary file"
 msgstr "Lezen van tijdelijk bestand is mislukt"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1733
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1746
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Openen van ‘%s’ voor schrijven is mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1758
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1771
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -127,7 +127,7 @@ msgstr ""
 "Sluiten van ‘%s’ tijdens het schrijven is mislukt; er kan data verloren zijn "
 "gegaan: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1978 ../gdk-pixbuf/gdk-pixbuf-io.c:2028
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1991 ../gdk-pixbuf/gdk-pixbuf-io.c:2041
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
 
@@ -1054,7 +1054,7 @@ msgstr "KLEUREN"
 msgid "Make X calls synchronous"
 msgstr "Alle X-aanroepen synchroon maken"
 
-#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2074
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2076
 msgid "License"
 msgstr "Licentie"
 
@@ -1068,33 +1068,33 @@ msgid "C_redits"
 msgstr "_Met dank aan"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:515
+#: ../gtk/gtkaboutdialog.c:516
 msgid "_License"
 msgstr "_Licentie"
 
-#: ../gtk/gtkaboutdialog.c:752
+#: ../gtk/gtkaboutdialog.c:754
 #, c-format
 msgid "About %s"
 msgstr "Over %s"
 
-#: ../gtk/gtkaboutdialog.c:2002
+#: ../gtk/gtkaboutdialog.c:2004
 msgid "Credits"
 msgstr "Met dank aan"
 
-#: ../gtk/gtkaboutdialog.c:2028
+#: ../gtk/gtkaboutdialog.c:2030
 msgid "Written by"
 msgstr "Geschreven door"
 
-#: ../gtk/gtkaboutdialog.c:2031
+#: ../gtk/gtkaboutdialog.c:2033
 msgid "Documented by"
 msgstr "Gedocumenteerd door"
 
-#: ../gtk/gtkaboutdialog.c:2043
+#: ../gtk/gtkaboutdialog.c:2045
 msgid "Translated by"
 msgstr "Vertaald door"
 
 # grafisch werk van
-#: ../gtk/gtkaboutdialog.c:2047
+#: ../gtk/gtkaboutdialog.c:2049
 msgid "Artwork by"
 msgstr "Grafisch werk door"
 
@@ -1419,11 +1419,11 @@ msgstr "Kleurenwiel"
 msgid "Color Selection"
 msgstr "Kleurselectie"
 
-#: ../gtk/gtkentry.c:4912 ../gtk/gtktextview.c:7243
+#: ../gtk/gtkentry.c:4919 ../gtk/gtktextview.c:7243
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
-#: ../gtk/gtkentry.c:4926 ../gtk/gtktextview.c:7257
+#: ../gtk/gtkentry.c:4933 ../gtk/gtktextview.c:7257
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode controleteken invoegen "
 
@@ -1448,7 +1448,7 @@ msgstr "(Geen)"
 
 # dit is het label op de knop waarmee je naar andere mappen zoekt
 # (andere mappen dan de favoriete)
-#: ../gtk/gtkfilechooserbutton.c:1869
+#: ../gtk/gtkfilechooserbutton.c:1877
 msgid "Other..."
 msgstr "Andere..."
 
@@ -1893,7 +1893,7 @@ msgstr "Naam is te lang"
 msgid "Couldn't convert filename"
 msgstr "Kon bestandsnaam niet omzetten"
 
-#: ../gtk/gtkfilesystem.c:317
+#: ../gtk/gtkfilesystem.c:322
 #, c-format
 msgid "Could not get a stock icon for %s\n"
 msgstr "Kon geen standaard pictogram verkrijgen voor %s\n"
@@ -2021,7 +2021,7 @@ msgstr "_Gammawaarde"
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
 
-#: ../gtk/gtkicontheme.c:1312
+#: ../gtk/gtkicontheme.c:1314
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2034,7 +2034,7 @@ msgstr ""
 "U kunt een kopie verkrijgen bij:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1381
+#: ../gtk/gtkicontheme.c:1383
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Pictogram ‘%s’ niet beschikbaar in dit thema"
@@ -2175,7 +2175,7 @@ msgstr "Ruimte bij pijlen"
 msgid "Scroll arrow spacing"
 msgstr "De ruimte bij de schuifpijlen"
 
-#: ../gtk/gtknotebook.c:4219 ../gtk/gtknotebook.c:6769
+#: ../gtk/gtknotebook.c:4219 ../gtk/gtknotebook.c:6774
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2311,61 +2311,61 @@ msgid "_Save in folder:"
 msgstr "_Opslaan in map:"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1464
+#: ../gtk/gtkprintoperation.c:1475
 msgid "print operation status|Initial state"
 msgstr "Aanvankelijke toestand"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1466
+#: ../gtk/gtkprintoperation.c:1477
 msgid "print operation status|Preparing to print"
 msgstr "Voorbereiden voor afdrukken"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1468
+#: ../gtk/gtkprintoperation.c:1479
 msgid "print operation status|Generating data"
 msgstr "Data genereren"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1470
+#: ../gtk/gtkprintoperation.c:1481
 msgid "print operation status|Sending data"
 msgstr "Data versturen"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1472
+#: ../gtk/gtkprintoperation.c:1483
 msgid "print operation status|Waiting"
 msgstr "Wachten"
 
 # geblokkeerd vanwege [komt hier nog iets achter?]
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1474
+#: ../gtk/gtkprintoperation.c:1485
 msgid "print operation status|Blocking on issue"
 msgstr "Geblokkeerd vanwege"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1476
+#: ../gtk/gtkprintoperation.c:1487
 msgid "print operation status|Printing"
 msgstr "Afdrukken"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1478
+#: ../gtk/gtkprintoperation.c:1489
 msgid "print operation status|Finished"
 msgstr "Voltooid"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1480
+#: ../gtk/gtkprintoperation.c:1491
 msgid "print operation status|Finished with error"
 msgstr "Voltooid met fout"
 
-#: ../gtk/gtkprintoperation.c:1955
+#: ../gtk/gtkprintoperation.c:1966
 #, c-format
 msgid "Preparing %d"
 msgstr "Voorbereiden van %d"
 
-#: ../gtk/gtkprintoperation.c:1957 ../gtk/gtkprintoperation.c:2213
+#: ../gtk/gtkprintoperation.c:1968 ../gtk/gtkprintoperation.c:2224
 msgid "Preparing"
 msgstr "Voorbereiden"
 
-#: ../gtk/gtkprintoperation.c:1960
+#: ../gtk/gtkprintoperation.c:1971
 #, c-format
 msgid "Printing %d"
 msgstr "Afdrukken van %d"
@@ -2490,7 +2490,7 @@ msgid "Layout"
 msgstr "Indeling"
 
 #: ../gtk/gtkprintunixdialog.c:1962
-#: ../modules/printbackends/file/gtkprintbackendfile.c:473
+#: ../modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "Pages per _sheet:"
 msgstr "Pagina's per _bladzijde:"
 
@@ -2689,8 +2689,8 @@ msgstr "Onbekend item"
 msgid "No items found"
 msgstr "Geen items gevonden"
 
-#: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
-#: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
+#: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1208
+#: ../gtk/gtkrecentmanager.c:1218 ../gtk/gtkrecentmanager.c:1277
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kan geen item vinden met URI ‘%s’"
@@ -4070,55 +4070,55 @@ msgstr "Automatisch selecteren"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1909
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1916
 msgid "Printer Default"
 msgstr "Standaard printer"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Urgent"
 msgstr "Urgent"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "High"
 msgstr "Hoog"
 
 # gemiddeld/medium
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Medium"
 msgstr "Medium"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Low"
 msgstr "Laag"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "None"
 msgstr "Geen"
 
 # Gevoelige informatie
 # Classified-Confidential-Secret-Top Secret
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Classified"
 msgstr "Gevoelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Confidential"
 msgstr "Vertrouwelijk"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Secret"
 msgstr "Geheim"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Standard"
 msgstr "Standaard"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Top Secret"
 msgstr "Topgeheim"
 
 # niet geheim/niet gevoelig/niet vertrouwelijk/openbaar
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Unclassified"
 msgstr "Openbaar"
 
@@ -4134,23 +4134,29 @@ msgstr "Pagna's per bladzijde"
 msgid "Command Line"
 msgstr "Opdrachtregel"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:436
+#. default filename used for print-to-file
+#: ../modules/printbackends/file/gtkprintbackendfile.c:241
+#, c-format
+msgid "output.%s"
+msgstr "afdruk.%s"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:449
 msgid "Print to File"
 msgstr "Afdrukken naar bestand"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:480
+#: ../modules/printbackends/file/gtkprintbackendfile.c:526
 msgid "File"
 msgstr "Bestand"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:516
+#: ../modules/printbackends/file/gtkprintbackendfile.c:534
 msgid "_Output format"
 msgstr "_Uitvoerformaat"
 
