@@ -1,6 +1,13 @@
+2006-08-17  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtktextbuffer.c: make sure the has-selection property is
+	updated when the delection is deleted. Bug #329752
+	* tests/testtext.c: add a copy menu item and show how to
+	update its sensitivity tracking the has-selection property.
+
 2006-08-17  Michael Emmel  <mike.emmel@gmail.com>
 
-	* configure.in  
+	* configure.in:
 	Changed  to use cairo-directfb.pc bug #351519
 
 2006-08-17  Kristian Rietveld  <kris@gtk.org>

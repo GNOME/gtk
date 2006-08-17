@@ -1583,6 +1583,20 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
 }
 
 static void
+do_copy  (gpointer callback_data,
+          guint callback_action,
+          GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextBuffer *buffer;
+
+  buffer = view->buffer->buffer;
+
+  gtk_text_buffer_copy_clipboard (buffer,
+                                  gtk_clipboard_get (GDK_NONE));
+}
+
+static void
 do_search (gpointer callback_data,
            guint callback_action,
            GtkWidget *widget)
@@ -1918,6 +1932,8 @@ static GtkItemFactoryEntry menu_items[] =
   { "/File/E_xit",      "<control>Q" , do_exit,     0, NULL },
 
   { "/_Edit", NULL, 0, 0, "<Branch>" },
+  { "/Edit/Copy", NULL, do_copy, 0, NULL },
+  { "/Edit/sep1", NULL, NULL, 0, "<Separator>" },
   { "/Edit/Find...", NULL, do_search, 0, NULL },
   { "/Edit/Select All", "<control>A", do_select_all, 0, NULL }, 
 
@@ -2843,11 +2859,19 @@ line_numbers_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static void
+selection_changed (GtkTextBuffer *buffer,
+		   GParamSpec    *pspec,
+		   GtkWidget     *copy_menu)
+{
+  gtk_widget_set_sensitive (copy_menu, gtk_text_buffer_get_has_selection (buffer));
+}
+
 static View *
 create_view (Buffer *buffer)
 {
   View *view;
-  
+  GtkWidget *copy_menu;
   GtkWidget *sw;
   GtkWidget *vbox;
   
@@ -2868,6 +2892,14 @@ create_view (Buffer *buffer)
   g_object_set_data (G_OBJECT (view->item_factory), "view", view);
   
   gtk_item_factory_create_items (view->item_factory, G_N_ELEMENTS (menu_items), menu_items, view);
+
+  /* make the Copy menu item sensitivity update according to the selection */
+  copy_menu = gtk_item_factory_get_item (view->item_factory, "<main>/Edit/Copy");
+  gtk_widget_set_sensitive (copy_menu, gtk_text_buffer_get_has_selection (view->buffer->buffer));
+  g_signal_connect (view->buffer->buffer,
+		    "notify::has-selection",
+		    G_CALLBACK (selection_changed),
+		    copy_menu);
 
   gtk_window_add_accel_group (GTK_WINDOW (view->window), view->accel_group);
 

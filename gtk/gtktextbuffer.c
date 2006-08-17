@@ -1388,6 +1388,8 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
                                    GtkTextIter   *start,
                                    GtkTextIter   *end)
 {
+  gboolean has_selection;
+
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (start != NULL);
   g_return_if_fail (end != NULL);
@@ -1396,6 +1398,13 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
 
   /* may have deleted the selection... */
   update_selection_clipboards (buffer);
+
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, NULL, NULL);
+  if (has_selection != buffer->has_selection)
+    {
+      buffer->has_selection = has_selection;
+      g_object_notify (G_OBJECT (buffer), "has-selection");
+    }
 
   g_signal_emit (buffer, signals[CHANGED], 0);
   g_object_notify (G_OBJECT (buffer), "cursor-position");
@@ -1854,12 +1863,6 @@ gtk_text_buffer_set_mark (GtkTextBuffer *buffer,
                                    iter,
                                    should_exist);
   
-  if (_gtk_text_btree_mark_is_insert (get_btree (buffer), mark) ||
-      _gtk_text_btree_mark_is_selection_bound (get_btree (buffer), mark))
-    {
-      update_selection_clipboards (buffer);
-    }
-
   _gtk_text_btree_get_iter_at_mark (get_btree (buffer),
                                    &location,
                                    mark);
@@ -2200,7 +2203,6 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
   gtk_text_buffer_mark_set (buffer, &real_bound,
                             gtk_text_buffer_get_mark (buffer,
                                                       "selection_bound"));
-  update_selection_clipboards (buffer);
 }
 
 /*
@@ -2306,6 +2308,8 @@ gtk_text_buffer_real_mark_set (GtkTextBuffer *buffer,
     {
       gboolean has_selection;
 
+      update_selection_clipboards (buffer);
+    
       has_selection = gtk_text_buffer_get_selection_bounds (buffer,
                                                             NULL,
                                                             NULL);
