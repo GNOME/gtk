@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-30 17:08+0300\n"
-"PO-Revision-Date: 2006-07-30 17:08+0300\n"
+"POT-Creation-Date: 2006-08-17 11:49+0300\n"
+"PO-Revision-Date: 2006-08-17 12:08+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1110 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1113 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Неуспех при отваряне на файла „%s“: %s"
@@ -30,7 +30,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Графичният файл „%s“ не съдържа данни"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:907
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1151 ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1164 ../tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -80,35 +80,35 @@ msgstr "Неразпознат графичен формат"
 msgid "Failed to load image '%s': %s"
 msgstr "Неуспех при зареждане на изображението „%s“: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1379
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1392
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Грешка при записва на изображението: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1425 ../gdk-pixbuf/gdk-pixbuf-io.c:1556
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1438 ../gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Този компилат на „gdk-pixbuf“ не поддържа записа на графичен формат: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1459
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1472
 msgid "Insufficient memory to save image to callback"
 msgstr "Недостатъчно памет, за да се запази изображението към функцията"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1472
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1485
 msgid "Failed to open temporary file"
 msgstr "Грешка при отварянето на временния файл"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1498
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1511
 msgid "Failed to read from temporary file"
 msgstr "Неуспех при четенето на временния файл"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1733
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1746
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Неуспех при отваряне на „%s“ за запис: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1758
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1771
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -117,7 +117,7 @@ msgstr ""
 "Неуспех при затваряне на „%s“ по време на запис на изображение, възможно е "
 "да не са записани всички данни: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1978 ../gdk-pixbuf/gdk-pixbuf-io.c:2028
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1991 ../gdk-pixbuf/gdk-pixbuf-io.c:2041
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недостатъчно памет за записа на изображението в буфер"
 
@@ -1023,7 +1023,7 @@ msgstr "ЦВЕТОВЕ"
 msgid "Make X calls synchronous"
 msgstr "Заявките към Х да са синхронни"
 
-#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2074
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2076
 msgid "License"
 msgstr "Лиценз"
 
@@ -1037,32 +1037,32 @@ msgid "C_redits"
 msgstr "_Заслуги"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:515
+#: ../gtk/gtkaboutdialog.c:516
 msgid "_License"
 msgstr "_Лиценз"
 
-#: ../gtk/gtkaboutdialog.c:752
+#: ../gtk/gtkaboutdialog.c:754
 #, c-format
 msgid "About %s"
 msgstr "Относно %s"
 
-#: ../gtk/gtkaboutdialog.c:2002
+#: ../gtk/gtkaboutdialog.c:2004
 msgid "Credits"
 msgstr "Заслуги"
 
-#: ../gtk/gtkaboutdialog.c:2028
+#: ../gtk/gtkaboutdialog.c:2030
 msgid "Written by"
 msgstr "Създадено от"
 
-#: ../gtk/gtkaboutdialog.c:2031
+#: ../gtk/gtkaboutdialog.c:2033
 msgid "Documented by"
 msgstr "Документирано от"
 
-#: ../gtk/gtkaboutdialog.c:2043
+#: ../gtk/gtkaboutdialog.c:2045
 msgid "Translated by"
 msgstr "Преведено от"
 
-#: ../gtk/gtkaboutdialog.c:2047
+#: ../gtk/gtkaboutdialog.c:2049
 msgid "Artwork by"
 msgstr "Дизайн"
 
@@ -1264,11 +1264,11 @@ msgstr ""
 "Цветът, който сте избрали. Може да го изтеглите върху палитрата, за да го "
 "запазите за бъдеща употреба."
 
-#: ../gtk/gtkcolorsel.c:958
+#: ../gtk/gtkcolorsel.c:954
 msgid "_Save color here"
 msgstr "_Запазване на цвета тук"
 
-#: ../gtk/gtkcolorsel.c:1163
+#: ../gtk/gtkcolorsel.c:1159
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1277,7 +1277,7 @@ msgstr ""
 "смените цвета, изтеглете примерен цвят тук или натиснете десния клавиш и "
 "изберете „Запазване на цвета тук“."
 
-#: ../gtk/gtkcolorsel.c:1930
+#: ../gtk/gtkcolorsel.c:1926
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1285,7 +1285,7 @@ msgstr ""
 "Изберете цвета, който Ви трябва, от външния пръстен. Изберете светлостта му "
 "чрез вътрешния триъгълник."
 
-#: ../gtk/gtkcolorsel.c:1955
+#: ../gtk/gtkcolorsel.c:1951
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1293,67 +1293,67 @@ msgstr ""
 "Натиснете върху пипетката, а след това на цвят върху Вашия екран, за да го "
 "изберете."
 
-#: ../gtk/gtkcolorsel.c:1964
+#: ../gtk/gtkcolorsel.c:1960
 msgid "_Hue:"
 msgstr "_Нюанс:"
 
-#: ../gtk/gtkcolorsel.c:1965
+#: ../gtk/gtkcolorsel.c:1961
 msgid "Position on the color wheel."
 msgstr "Позиция върху цветното колело."
 
-#: ../gtk/gtkcolorsel.c:1967
+#: ../gtk/gtkcolorsel.c:1963
 msgid "_Saturation:"
 msgstr "_Наситеност:"
 
-#: ../gtk/gtkcolorsel.c:1968
+#: ../gtk/gtkcolorsel.c:1964
 msgid "\"Deepness\" of the color."
 msgstr "„Дълбочина“ на цвят."
 
-#: ../gtk/gtkcolorsel.c:1969
+#: ../gtk/gtkcolorsel.c:1965
 msgid "_Value:"
 msgstr "_Стойност:"
 
-#: ../gtk/gtkcolorsel.c:1970
+#: ../gtk/gtkcolorsel.c:1966
 msgid "Brightness of the color."
 msgstr "Яркост на цвета."
 
-#: ../gtk/gtkcolorsel.c:1971
+#: ../gtk/gtkcolorsel.c:1967
 msgid "_Red:"
 msgstr "_Червено:"
 
-#: ../gtk/gtkcolorsel.c:1972
+#: ../gtk/gtkcolorsel.c:1968
 msgid "Amount of red light in the color."
 msgstr "Количеството червена светлина в цвета."
 
-#: ../gtk/gtkcolorsel.c:1973
+#: ../gtk/gtkcolorsel.c:1969
 msgid "_Green:"
 msgstr "_Зелено:"
 
-#: ../gtk/gtkcolorsel.c:1974
+#: ../gtk/gtkcolorsel.c:1970
 msgid "Amount of green light in the color."
 msgstr "Количеството зелена светлина в цвета."
 
-#: ../gtk/gtkcolorsel.c:1975
+#: ../gtk/gtkcolorsel.c:1971
 msgid "_Blue:"
 msgstr "_Синьо:"
 
-#: ../gtk/gtkcolorsel.c:1976
+#: ../gtk/gtkcolorsel.c:1972
 msgid "Amount of blue light in the color."
 msgstr "Количеството синя светлина в цвета."
 
-#: ../gtk/gtkcolorsel.c:1979
+#: ../gtk/gtkcolorsel.c:1975
 msgid "Op_acity:"
 msgstr "Н_епрозрачност:"
 
-#: ../gtk/gtkcolorsel.c:1987 ../gtk/gtkcolorsel.c:1998
+#: ../gtk/gtkcolorsel.c:1983 ../gtk/gtkcolorsel.c:1994
 msgid "Transparency of the color."
 msgstr "Прозрачност на цвята."
 
-#: ../gtk/gtkcolorsel.c:2005
+#: ../gtk/gtkcolorsel.c:2001
 msgid "Color _name:"
 msgstr "Име на _цвят:"
 
-#: ../gtk/gtkcolorsel.c:2020
+#: ../gtk/gtkcolorsel.c:2016
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1361,11 +1361,11 @@ msgstr ""
 "Може да въведете цвят като шестнадесетична стойност за HTML или можете "
 "просто да посочите името му."
 
-#: ../gtk/gtkcolorsel.c:2050
+#: ../gtk/gtkcolorsel.c:2046
 msgid "_Palette:"
 msgstr "_Палитра:"
 
-#: ../gtk/gtkcolorsel.c:2079
+#: ../gtk/gtkcolorsel.c:2075
 msgid "Color Wheel"
 msgstr "Цветова палитра"
 
@@ -1373,11 +1373,11 @@ msgstr "Цветова палитра"
 msgid "Color Selection"
 msgstr "Избор на цвят"
 
-#: ../gtk/gtkentry.c:4913 ../gtk/gtktextview.c:7231
+#: ../gtk/gtkentry.c:4919 ../gtk/gtktextview.c:7243
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: ../gtk/gtkentry.c:4927 ../gtk/gtktextview.c:7245
+#: ../gtk/gtkentry.c:4933 ../gtk/gtktextview.c:7257
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на контролен символ за Уникод"
 
@@ -1399,7 +1399,7 @@ msgstr "Работен плот"
 msgid "(None)"
 msgstr "(без)"
 
-#: ../gtk/gtkfilechooserbutton.c:1869
+#: ../gtk/gtkfilechooserbutton.c:1877
 msgid "Other..."
 msgstr "Друго място..."
 
@@ -1812,7 +1812,7 @@ msgstr "Името е твърде дълго"
 msgid "Couldn't convert filename"
 msgstr "Името на файла не може да бъде конвертирано"
 
-#: ../gtk/gtkfilesystem.c:317
+#: ../gtk/gtkfilesystem.c:322
 #, c-format
 msgid "Could not get a stock icon for %s\n"
 msgstr "Не може да се извлече стандартната икона за %s\n"
@@ -1934,7 +1934,7 @@ msgstr "_Стойност на гама"
 msgid "Error loading icon: %s"
 msgstr "Грешка при зареждането на икона: %s"
 
-#: ../gtk/gtkicontheme.c:1312
+#: ../gtk/gtkicontheme.c:1314
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1947,7 +1947,7 @@ msgstr ""
 "Можете да я получите от:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1381
+#: ../gtk/gtkicontheme.c:1383
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Иконата „%s“ не е включена в темата"
@@ -2077,15 +2077,15 @@ msgstr "Настройки на GTK+"
 msgid "Show GTK+ Options"
 msgstr "Показване на настройките на GTK+"
 
-#: ../gtk/gtknotebook.c:775
+#: ../gtk/gtknotebook.c:772
 msgid "Arrow spacing"
 msgstr "Разстояние между стрелките"
 
-#: ../gtk/gtknotebook.c:776
+#: ../gtk/gtknotebook.c:773
 msgid "Scroll arrow spacing"
 msgstr "Разстояние между стрелките за прелистване"
 
-#: ../gtk/gtknotebook.c:4241 ../gtk/gtknotebook.c:6791
+#: ../gtk/gtknotebook.c:4219 ../gtk/gtknotebook.c:6774
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2205,60 +2205,60 @@ msgid "_Save in folder:"
 msgstr "Запазване в п_апка:"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1464
+#: ../gtk/gtkprintoperation.c:1475
 msgid "print operation status|Initial state"
 msgstr "Първоначално състояние"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1466
+#: ../gtk/gtkprintoperation.c:1477
 msgid "print operation status|Preparing to print"
 msgstr "Подготовка за печат"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1468
+#: ../gtk/gtkprintoperation.c:1479
 msgid "print operation status|Generating data"
 msgstr "Генериране на данни"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1470
+#: ../gtk/gtkprintoperation.c:1481
 msgid "print operation status|Sending data"
 msgstr "Изпращане на данни"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1472
+#: ../gtk/gtkprintoperation.c:1483
 msgid "print operation status|Waiting"
 msgstr "Изчакване"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1474
+#: ../gtk/gtkprintoperation.c:1485
 msgid "print operation status|Blocking on issue"
 msgstr "Блокиране поради проблем"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1476
+#: ../gtk/gtkprintoperation.c:1487
 msgid "print operation status|Printing"
 msgstr "Отпечатване"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1478
+#: ../gtk/gtkprintoperation.c:1489
 msgid "print operation status|Finished"
 msgstr "Завършено"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1480
+#: ../gtk/gtkprintoperation.c:1491
 msgid "print operation status|Finished with error"
 msgstr "Завършено с грешка"
 
-#: ../gtk/gtkprintoperation.c:1955
+#: ../gtk/gtkprintoperation.c:1966
 #, c-format
 msgid "Preparing %d"
 msgstr "Подготвяне на %d"
 
-#: ../gtk/gtkprintoperation.c:1957 ../gtk/gtkprintoperation.c:2213
+#: ../gtk/gtkprintoperation.c:1968 ../gtk/gtkprintoperation.c:2224
 msgid "Preparing"
 msgstr "Подготвяне"
 
-#: ../gtk/gtkprintoperation.c:1960
+#: ../gtk/gtkprintoperation.c:1971
 #, c-format
 msgid "Printing %d"
 msgstr "Печат на %d"
@@ -2374,7 +2374,7 @@ msgid "Layout"
 msgstr "Наместване"
 
 #: ../gtk/gtkprintunixdialog.c:1962
-#: ../modules/printbackends/file/gtkprintbackendfile.c:473
+#: ../modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "Pages per _sheet:"
 msgstr "Страници на _лист:"
 
@@ -2495,12 +2495,12 @@ msgstr "Група"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Групата радио-бутони, към които този принадлежи."
 
-#: ../gtk/gtkrc.c:2782
+#: ../gtk/gtkrc.c:2813
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Файлът за включване - „%s“ не може да бъде намерен"
 
-#: ../gtk/gtkrc.c:3414 ../gtk/gtkrc.c:3417
+#: ../gtk/gtkrc.c:3445 ../gtk/gtkrc.c:3448
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Графичният файл не може да бъде открит в пътя за изображения: „%s“"
@@ -2509,58 +2509,60 @@ msgstr "Графичният файл не може да бъде открит �
 msgid "Select which type of documents are shown"
 msgstr "Избор на видовете документи, които се показват"
 
-#: ../gtk/gtkrecentchooserdefault.c:1127 ../gtk/gtkrecentchooserdefault.c:1164
+#: ../gtk/gtkrecentchooserdefault.c:1126 ../gtk/gtkrecentchooserdefault.c:1163
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Не е открит елемент за адреса-УРИ „%s“"
 
-#: ../gtk/gtkrecentchooserdefault.c:1774
+#: ../gtk/gtkrecentchooserdefault.c:1770
 msgid "Could not remove item"
 msgstr "Елементът не може да бъде премахнат"
 
-#: ../gtk/gtkrecentchooserdefault.c:1817
+#: ../gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
 msgstr "Списъкът не може да бъде изчистен"
 
-#: ../gtk/gtkrecentchooserdefault.c:1901
+#: ../gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
 msgstr "Копиране на _местоположение"
 
-#: ../gtk/gtkrecentchooserdefault.c:1914
+#: ../gtk/gtkrecentchooserdefault.c:1910
 msgid "_Remove From List"
 msgstr "_Премахване от списък"
 
-#: ../gtk/gtkrecentchooserdefault.c:1923
+#: ../gtk/gtkrecentchooserdefault.c:1919
 msgid "_Clear List"
 msgstr "_Изчистване на списък"
 
-#: ../gtk/gtkrecentchooserdefault.c:1937
+#: ../gtk/gtkrecentchooserdefault.c:1933
 msgid "Show _Private Resources"
 msgstr "Показване на _частните ресурси"
 
-#: ../gtk/gtkrecentchoosermenu.c:422 ../gtk/gtkrecentchoosermenu.c:483
+#: ../gtk/gtkrecentchoosermenu.c:424 ../gtk/gtkrecentchoosermenu.c:485
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Не е открит скоро използван ресурс с адрес-УРИ „%s“"
 
-#: ../gtk/gtkrecentchoosermenu.c:507 ../gtk/gtkrecentchoosermenu.c:515
-#: ../gtk/gtkrecentchoosermenu.c:672 ../gtk/gtkrecentchoosermenu.c:681
-#: ../gtk/gtkrecentchoosermenu.c:689
+#: ../gtk/gtkrecentchoosermenu.c:509 ../gtk/gtkrecentchoosermenu.c:517
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Тази функция не е реализирана за графичните обекти от клас „%s“"
 
-#: ../gtk/gtkrecentchoosermenu.c:833
+#: ../gtk/gtkrecentchoosermenu.c:850
 #, c-format
 msgid "Open '%s'"
 msgstr "Отваряне на „%s“"
 
-#: ../gtk/gtkrecentchoosermenu.c:864
+#: ../gtk/gtkrecentchoosermenu.c:881
 msgid "Unknown item"
 msgstr "Неизвестен елемент"
 
-#: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1206
-#: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
+#: ../gtk/gtkrecentchoosermenu.c:982
+msgid "No items found"
+msgstr "Не са открити елементи"
+
+#: ../gtk/gtkrecentmanager.c:1058 ../gtk/gtkrecentmanager.c:1208
+#: ../gtk/gtkrecentmanager.c:1218 ../gtk/gtkrecentmanager.c:1277
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "На адрес-УРИ „%s“ не може да се открие елемент"
@@ -3907,51 +3909,51 @@ msgstr "Автоматичен избор"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1909
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1916
 msgid "Printer Default"
 msgstr "Стандартните настройки на принтера"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Urgent"
 msgstr "Спешен"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "High"
 msgstr "Висок"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Medium"
 msgstr "Среден"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2120
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Low"
 msgstr "Нисък"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "None"
 msgstr "(Без)"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Classified"
 msgstr "Класифицирано"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Confidential"
 msgstr "Конфиденциално"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Secret"
 msgstr "Секретно"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Standard"
 msgstr "Стандартно"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Top Secret"
 msgstr "Строго секретно"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2122
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2106
 msgid "Unclassified"
 msgstr "Некласифицирано"
 
@@ -3967,23 +3969,29 @@ msgstr "Страници на лист"
 msgid "Command Line"
 msgstr "Команден ред"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:436
+#. default filename used for print-to-file
+#: ../modules/printbackends/file/gtkprintbackendfile.c:241
+#, c-format
+msgid "output.%s"
+msgstr "разпечатка.%s"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:449
 msgid "Print to File"
 msgstr "Печат към файл"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:480
+#: ../modules/printbackends/file/gtkprintbackendfile.c:526
 msgid "File"
 msgstr "Файл"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:516
+#: ../modules/printbackends/file/gtkprintbackendfile.c:534
 msgid "_Output format"
 msgstr "_Изходен формат"
 
