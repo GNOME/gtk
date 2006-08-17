@@ -1,5 +1,12 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmodules.c (find_module): Revert the local binding
+	change to avoid a11y regressions in current OpenOffice.org
+	releases. The G_MODULE_BIND_LOCAL will be reintroduced 
+	in 2.12.
+
+2006-08-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktrayicon-x11.c: Fix the ClientMessages we are
 	sending to the notification area to be more in sync with
 	the systray spec.  (#350860, Wincent Untz)
