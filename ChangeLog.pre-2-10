@@ -1,3 +1,8 @@
+2006-08-17  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/Makefile.am (libgtk_win32_2_0_la_LIBADD): Link with -luuid
+	for IID_IUnknown that gtkprintoperation-win32.o needs.
+
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/file/gtkprintbackendfile.c: Improve
