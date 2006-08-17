@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-16 23:22+0900\n"
-"PO-Revision-Date: 2006-08-16 23:52+0900\n"
+"POT-Creation-Date: 2006-08-17 22:06+0900\n"
+"PO-Revision-Date: 2006-08-17 22:07+0900\n"
 "Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -129,8 +129,9 @@ msgstr "画像をバッファへ保存するために必要なメモリが足り
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
-msgstr "内部エラー: 画像読み込みモジュール '%s' が処理を"
-"完了できました。そしてその失敗の理由も不明です。"
+msgstr ""
+"内部エラー: 画像読み込みモジュール '%s' が処理を完了できました。そしてその失"
+"敗の理由も不明です。"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
@@ -1355,11 +1356,11 @@ msgstr "色ホイール"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: ../gtk/gtkentry.c:4910 ../gtk/gtktextview.c:7243
+#: ../gtk/gtkentry.c:4919 ../gtk/gtktextview.c:7243
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: ../gtk/gtkentry.c:4924 ../gtk/gtktextview.c:7257
+#: ../gtk/gtkentry.c:4933 ../gtk/gtktextview.c:7257
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -1381,7 +1382,7 @@ msgstr "デスクトップ"
 msgid "(None)"
 msgstr "(なし)"
 
-#: ../gtk/gtkfilechooserbutton.c:1869
+#: ../gtk/gtkfilechooserbutton.c:1877
 msgid "Other..."
 msgstr "その他..."
 
@@ -1628,21 +1629,24 @@ msgstr "行 %d, 列 %d: 予期しない要素 \"%s\""
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
-msgstr "行 %d, 列 %d: 要素 \"%s\" の終端を期待していましたが"
-"代わりに得たのは \"%s\" の要素でした"
+msgstr ""
+"行 %d, 列 %d: 要素 \"%s\" の終端を期待していましたが代わりに得たのは \"%s\" "
+"の要素でした"
 
 #: ../gtk/gtkfilechoosersettings.c:201
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr "行 %d, 列 %d: 最上位の \"%s\" を期待していましたが"
-"代わりに得たのは \"%s\" でした"
+msgstr ""
+"行 %d, 列 %d: 最上位の \"%s\" を期待していましたが代わりに得たのは \"%s\" で"
+"した"
 
 #: ../gtk/gtkfilechoosersettings.c:237 ../gtk/gtkfilechoosersettings.c:265
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr "行 %d, 列 %d: \"%s\" または \"%s\" を期待していましたが"
-"代わりに \"%s\" がみつかりました"
+msgstr ""
+"行 %d, 列 %d: \"%s\" または \"%s\" を期待していましたが代わりに \"%s\" がみつ"
+"かりました"
 
 #: ../gtk/gtkfilechoosersettings.c:515
 #, c-format
@@ -2059,7 +2063,7 @@ msgstr "矢印の間隔"
 msgid "Scroll arrow spacing"
 msgstr "スクロール用の矢印の間隔"
 
-#: ../gtk/gtknotebook.c:4219 ../gtk/gtknotebook.c:6769
+#: ../gtk/gtknotebook.c:4219 ../gtk/gtknotebook.c:6774
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -2348,7 +2352,7 @@ msgid "Layout"
 msgstr "レイアウト"
 
 #: ../gtk/gtkprintunixdialog.c:1962
-#: ../modules/printbackends/file/gtkprintbackendfile.c:473
+#: ../modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "Pages per _sheet:"
 msgstr "段組み印刷(_S):"
 
@@ -3943,23 +3947,29 @@ msgstr "段組印刷"
 msgid "Command Line"
 msgstr "コマンドライン"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:436
+#. default filename used for print-to-file
+#: ../modules/printbackends/file/gtkprintbackendfile.c:241
+#, c-format
+msgid "output.%s"
+msgstr "output.%s"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:449
 msgid "Print to File"
 msgstr "ファイルへ出力する"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:460
+#: ../modules/printbackends/file/gtkprintbackendfile.c:473
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:480
+#: ../modules/printbackends/file/gtkprintbackendfile.c:526
 msgid "File"
 msgstr "ファイル"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:516
+#: ../modules/printbackends/file/gtkprintbackendfile.c:534
 msgid "_Output format"
 msgstr "出力形式(_O)"
 
@@ -4113,8 +4123,9 @@ msgstr ""
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "シンボリックリンクを張られた '%s' と '%s' について"
-"別の画像データがみつかりました\n"
+msgstr ""
+"シンボリックリンクを張られた '%s' と '%s' について別の画像データがみつかりま"
+"した\n"
 
 #: ../gtk/updateiconcache.c:1116
 msgid "Failed to write header\n"
@@ -4181,9 +4192,10 @@ msgstr "冗長な出力をオフにする"
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "'%s' 内にはテーマの索引ファイルがありません。\n"
-"本当にここにアイコンキャッシュを作成したい場合は "
-"--ignore-theme-index を使用します。\n"
+msgstr ""
+"'%s' 内にはテーマの索引ファイルがありません。\n"
+"本当にここにアイコンキャッシュを作成したい場合は --ignore-theme-index を使用"
+"します。\n"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
