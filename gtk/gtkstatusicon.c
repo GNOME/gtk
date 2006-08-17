@@ -1646,11 +1646,15 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
  * Obtains information about the location of the status icon
  * on screen. This information can be used to e.g. position 
  * popups like notification bubbles. 
+ *
  * See gtk_status_icon_position_menu() for a more convenient 
  * alternative for positioning menus.
  *
  * Note that some platforms do not allow GTK+ to provide 
- * this information.
+ * this information, and even on platforms that do allow it,
+ * the information is not reliable unless the status icon
+ * is embedded in a notification area, see
+ * gtk_status_icon_is_embedded().
  *
  * Return value: %TRUE if the location information has 
  *               been filled in
