@@ -1,3 +1,17 @@
+2006-08-17  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(_gtk_file_chooser_default_class_init): Enable "/" and "~" as
+	bindings to activate the location entry again.  Fixes bug #340856.
+	(tree_view_keybinding_cb): Likewise.
+	(trap_activate_cb): Likewise.
+	(location_popup_handler): Handle the "path" argument again; set it
+	as the text on the location entry.
+	(location_set_user_text): New helper function.
+	(load_setup_timer): Fix comment.
+
+	* tests/autotestfilechooser.c (main): Oops, enable all the tests again.
+
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmodules.c (find_module): Revert the local binding

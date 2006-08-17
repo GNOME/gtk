@@ -544,8 +544,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_l, GDK_CONTROL_MASK,
 				"location-popup",
 				1, G_TYPE_STRING, "");
-  /* FMQ: remove this? */
-#if 0
+
   gtk_binding_entry_add_signal (binding_set,
 				GDK_slash, 0,
 				"location-popup",
@@ -560,7 +559,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_asciitilde, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "~");
-#endif
 #endif
 
   gtk_binding_entry_add_signal (binding_set,
@@ -3160,8 +3158,6 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
 			 GdkEventKey           *event,
 			 GtkFileChooserDefault *impl)
 {
-  /* FMQ: remove this? */
-#if 0
   if ((event->keyval == GDK_slash
        || event->keyval == GDK_KP_Divide
 #ifdef G_OS_UNIX
@@ -3172,7 +3168,7 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
       location_popup_handler (impl, event->string);
       return TRUE;
     }
-#endif
+
   return FALSE;
 }
 
@@ -3544,8 +3540,6 @@ trap_activate_cb (GtkWidget   *widget,
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  /* FMQ: remove this? */
-#if 0
   if ((event->keyval == GDK_slash
        || event->keyval == GDK_KP_Divide
 #ifdef G_OS_UNIX
@@ -3556,7 +3550,6 @@ trap_activate_cb (GtkWidget   *widget,
       location_popup_handler (impl, event->string);
       return TRUE;
     }
-#endif
 
   if ((event->keyval == GDK_Return
        || event->keyval == GDK_ISO_Enter
@@ -5644,7 +5637,7 @@ load_timeout_cb (gpointer data)
   return FALSE;
 }
 
-/* Sets up a new load timer for the model and switches to the LOAD_LOADING state */
+/* Sets up a new load timer for the model and switches to the LOAD_PRELOAD state */
 static void
 load_setup_timer (GtkFileChooserDefault *impl)
 {
@@ -8382,6 +8375,14 @@ _gtk_file_chooser_default_new (const char *file_system)
 }
 
 static void
+location_set_user_text (GtkFileChooserDefault *impl,
+			const gchar           *path)
+{
+  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), path);
+  gtk_editable_set_position (GTK_EDITABLE (impl->location_entry), -1);
+}
+
+static void
 location_popup_handler (GtkFileChooserDefault *impl,
 			const gchar           *path)
 {
@@ -8390,7 +8391,12 @@ location_popup_handler (GtkFileChooserDefault *impl,
     {
       LocationMode new_mode;
 
-      if (impl->location_mode == LOCATION_MODE_PATH_BAR)
+      if (path != NULL)
+	{
+	  /* since the user typed something, we unconditionally want to turn on the entry */
+	  new_mode = LOCATION_MODE_FILENAME_ENTRY;
+	}
+      else if (impl->location_mode == LOCATION_MODE_PATH_BAR)
 	new_mode = LOCATION_MODE_FILENAME_ENTRY;
       else if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
 	new_mode = LOCATION_MODE_PATH_BAR;
@@ -8403,13 +8409,22 @@ location_popup_handler (GtkFileChooserDefault *impl,
       location_mode_set (impl, new_mode, TRUE);
       if (new_mode == LOCATION_MODE_FILENAME_ENTRY)
 	{
-	  location_entry_set_initial_text (impl);
-	  gtk_editable_select_region (GTK_EDITABLE (impl->location_entry), 0, -1);
+	  if (path != NULL)
+	    location_set_user_text (impl, path);
+	  else
+	    {
+	      location_entry_set_initial_text (impl);
+	      gtk_editable_select_region (GTK_EDITABLE (impl->location_entry), 0, -1);
+	    }
 	}
     }
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    gtk_widget_grab_focus (impl->location_entry);
+    {
+      gtk_widget_grab_focus (impl->location_entry);
+      if (path != NULL)
+	location_set_user_text (impl, path);
+    }
   else
     g_assert_not_reached ();
 }
