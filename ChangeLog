@@ -1,3 +1,9 @@
+2006-08-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (set_info_get_info_cb) 
+	(model_add_special_get_info_cb): Handle the case where the
+	filechooser button is destroyed quickly.
+
 2006-08-17  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtktextbuffer.c: make sure the has-selection property is

@@ -1397,6 +1397,10 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
   GtkFileSystemHandle *model_handle;
   struct SetDisplayNameData *data = callback_data;
 
+  if (!data->button->priv->model)
+    /* button got destroyed */
+    goto out;
+
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (!path)
     /* Handle doesn't exist anymore in the model */
@@ -1564,6 +1568,10 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   GtkFileSystemHandle *model_handle;
   struct ChangeIconThemeData *data = user_data;
+
+  if (!data->button->priv->model)
+    /* button got destroyed */
+    goto out;
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (!path)
