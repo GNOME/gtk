@@ -1,3 +1,7 @@
+Thu Aug 17 16:19:35 2006  Tim Janik  <timj@imendio.com>
+
+	* docs/tutorial/gtk-tut.sgml: fixed buglet from #351759.
+
 2006-08-17  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am (libgtk_win32_2_0_la_LIBADD): Link with -luuid

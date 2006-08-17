@@ -6001,7 +6001,7 @@ void gtk_color_selection_set_current_alpha( GtkColorSelection *colorsel,
 gtk_color_selection_set_current_color() with a pointer to a GdkColor. 
 Setting the opacity (alpha channel) is done with 
 gtk_color_selection_set_current_alpha(). The alpha value should be between
-0 (fully transparent) and 65636 (fully opaque).
+0 (fully transparent) and 65535 (fully opaque).
 </para>
 
 <programlisting role="C">
