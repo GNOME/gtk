@@ -2732,8 +2732,24 @@ void
 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 					       GtkPrintCapabilities  capabilities)
 {
-  dialog->priv->manual_capabilities = capabilities;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+
+  g_print ("set caps %d\n", capabilities);
+  priv->manual_capabilities = capabilities;
   update_dialog_from_capabilities (dialog);
+
+  if (priv->current_printer)
+    {
+      GtkTreeSelection *selection;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+
+      g_object_unref (priv->current_printer);
+      priv->current_printer = NULL;
+      priv->internal_printer_change = TRUE;
+      selected_printer_changed (selection, dialog);
+      priv->internal_printer_change = FALSE;
+   }
 }
 
 #define __GTK_PRINT_UNIX_DIALOG_C__
