@@ -454,7 +454,7 @@ preview_ready (GtkPrintOperationPreview *preview,
   pop->page_nr = 0;
   pop->print_context = context;
 
-  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
 	           preview_print_idle,
 		   pop,
 		   preview_print_idle_done);
@@ -2265,7 +2265,7 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_orientation = TRUE;
     }
   
-  priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+  priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
 					       print_pages_idle, 
 					       data, 
 					       print_pages_idle_done);
