@@ -2734,7 +2734,6 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  g_print ("set caps %d\n", capabilities);
   priv->manual_capabilities = capabilities;
   update_dialog_from_capabilities (dialog);
 
