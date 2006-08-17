@@ -1,5 +1,10 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/file/gtkprintbackendfile.c: Improve
+	the handling of the default output filename, to ensure
+	that we default to output.ps when only PostScript output
+	is possible.  (#348236, Don Scorgie)
+
 	* gtk/gtkprintunixdialog.c (gtk_print_unix_dialog_set_manual_capabilities): 
 	Re-select the current printer to update per-printer ui. 
 	(#348245, Don Scorgie)
