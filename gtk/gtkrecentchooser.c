@@ -836,8 +836,6 @@ gtk_recent_chooser_get_uris (GtkRecentChooser *chooser,
   gsize n_items, i;
   
   items = gtk_recent_chooser_get_items (chooser);
-  if (!items)
-    return NULL;
   
   n_items = g_list_length (items);
   retval = g_new0 (gchar *, n_items + 1);

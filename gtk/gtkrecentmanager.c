@@ -402,6 +402,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
       g_bookmark_file_to_file (priv->recent_items,
 		               priv->filename,
 			       &write_error);
+
       if (write_error)
         {
           filename_warning ("Attempting to store changes into `%s', "
@@ -411,6 +412,8 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 	  g_error_free (write_error);
 	}
 
+      priv->write_in_progress = FALSE;
+	  
       /* we have sync'ed our list with the storage file, so we
        * update the file mtime in order to skip the timed check
        * and spare us from a re-read.
@@ -422,8 +425,6 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 			    priv->filename,
 			    g_strerror (errno));
 
-	  priv->write_in_progress = FALSE;
-	  
 	  g_object_thaw_notify (G_OBJECT (manager));
 
 	  return;

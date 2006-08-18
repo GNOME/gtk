@@ -1,3 +1,11 @@
+2006-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_get_uris): Behave as
+	documented and always return a NULL-terminated array.
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_real_changed): Make sure
+	to reset write_in_progress.  
+
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
