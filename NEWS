@@ -9,14 +9,15 @@ Overview of Changes from GTK+ 2.10.1 to 2.10.2
   OpenOffice.org releases.
 
 * GtkRecenManager 
- - poll for changes to the XBEL file
- - fix initial bad placement of recent files menu
- - show nonexisting resources by default, and do 
+ - Poll for changes to the XBEL file
+ - Fix initial bad placement of recent files menu
+ - Show nonexisting resources by default, and do 
    not mark them as insensitive
- - allow adding a filter to GtkRecentChooserMenu
+ - Allow adding a filter to GtkRecentChooserMenu
 
 * GtkFileChooser
- - improve the fallbacks for icons
+ - Improve the fallbacks for icons
+ - Make  / and ~ activate the location entry again
 
 * Bugs fixed:
  348828	Segmentation Fault in gtk_combo_box_menu_setup 
@@ -91,7 +92,7 @@ Overview of Changes from GTK+ 2.10.1 to 2.10.2
  351241	swapped argument description
  350023	"Running GTK+ Applications" chapter does not 
         document new GTK_DEBUG possibilities
-
+ 351812 file print backend filename encoding issue
 
 * New and updated translations (bg,bn_IN,de,dz,el,es,
   et,eu,fi,gu,hu,ko,ku,ja,lt,mk,ml,nb,ne,nl,or,pl,po,
