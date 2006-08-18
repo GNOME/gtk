@@ -1,5 +1,7 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.10.2 ===
 
 	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_list_filters):
