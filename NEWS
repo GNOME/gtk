@@ -1,3 +1,103 @@
+Overview of Changes from GTK+ 2.10.1 to 2.10.2
+==============================================
+
+* Many fixes and improvements for the OS X backends
+
+* Revert to using gtk modules with global binding,
+  since the local binding that was introduced in 
+  2.10 breaks the accessibility support of current 
+  OpenOffice.org releases.
+
+* GtkRecenManager 
+ - poll for changes to the XBEL file
+ - fix initial bad placement of recent files menu
+ - show nonexisting resources by default, and do 
+   not mark them as insensitive
+ - allow adding a filter to GtkRecentChooserMenu
+
+* GtkFileChooser
+ - improve the fallbacks for icons
+
+* Bugs fixed:
+ 348828	Segmentation Fault in gtk_combo_box_menu_setup 
+        when removing combobox child
+ 349552	problem with parsing (enum) style properties
+ 351581	API Documentation issues with 2.15 release
+ 348652	reorder() from ComboBoxEntry produces Gtk+ assert 
+        error
+ 349128	Fix docs about GtkTreeModel::row-deleted
+ 350605	Crash caused by the recent menu
+ 348096	GtkStyle leaks GtkRcContext
+ 348145	Background images not working with Quartz backend
+ 329752	Problem with has_selection notification when 
+        deleting the selection
+ 347856	gtk_recent_chooser_add_filter not implemented 
+        for GtkRecentChooserMenu
+ 348245	Disabling pdf printing doesn't hide option
+ 348278	textview doesn't update on hinting setting change
+ 348289	Filechooser is blocked by higher priority idle
+ 348478	entry completions needs to reset the IM context 
+        before emitting action-activate signal
+ 348538	Remove old email addreses from the tutorial
+ 348626	drag-to-child should not work
+ 348634	IconView does not update background
+ 348706	don't allow dnd onto arrows
+ 348740	configure script does not honour PKG_CONFIG variable
+ 348787	Segfault in gtk_font_button_update_font_info()
+ 348824	test attached calendar-sane-timer patch in head
+ 348971	gtk_status_icon_get_geometry returns bogus data
+ 349382	valgrind uninitialized memory warnings setting 
+        partly uninitialized X properties
+ 349570	notebook arrow PRELIGHT drawing doesn't work
+ 349834	Memleak from gtk_tree_view_set_enable_tree_lines
+ 349858	Leak of ShmPixmapInfo from get_shm_pixmap_for_image
+ 349859	gtk_paint_tab doesn't work when widget is now 
+        option menu
+ 349997	Indirect leak from XkbGetMap
+ 350039	GtkFileChooserEntry leaks sources
+ 350050	GdkGC leak from GtkRuler
+ 350139	Should use evince preview mode
+ 350258	Memory leak in gtk_entry_drag_data_received()
+ 350329	The CUPS printer backend in GTK+-2.10.1 fails 
+        with CUPS 1.1.
+ 350517	reset_style_idle() interferes with application 
+        idles
+ 350860	Balloon messages sent to tray do not have the 
+        correct window in XEvent
+ 350938	TreeViewColumn rendering off when "spacing" 
+        property set
+ 351112	gtk_notebook_set_current_page fails when the 
+        notebook has not yet been shown
+ 351519	Directfb backend fails to build
+ 165714	GtkEntryCompletion doesn't complete on paste
+ 168737	Different button sizes in About dialogs
+ 345666	The icons of file, directory and device at 
+        GtkFileChooser
+ 349429	spin button does not use correct value for 
+        inner_border
+ 349501	fix in the documentation of function 
+        gtk_list_store_insert_with_values()
+ 350072	stdout output from colorselection
+ 351759	Wrong range value in documentation of 
+        gtk_color_selection_set_current_alpha
+ 349277	Wrong message for problems with serializing 
+        texts
+ 346800	Rework sort/filter models to use indices to 
+        parents instead of pointers
+ 349120	Small error in doc
+ 350911 gdk_pixbuf_new_from_file_at_scale() should 
+        skip when there's enough image data 
+ 348728	GtkTable Row and Column Spacing
+ 351241	swapped argument description
+ 350023	"Running GTK+ Applications" chapter does not 
+        document new GTK_DEBUG possibilities
+
+
+* New and updated translations (bg,bn_IN,de,dz,el,es,
+  et,eu,fi,gu,hu,ko,ku,ja,lt,mk,ml,nb,ne,nl,or,pl,po,
+  sv,th,tr,tt,uk,zh_HK,zh_TW)
+
+
 Overview of Changes from GTK+ 2.10.0 to 2.10.1
 ==============================================
 

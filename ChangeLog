@@ -1,3 +1,7 @@
+2006-08-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2006-08-17  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserdefault.c
