@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-23 20:06-0400\n"
+"POT-Creation-Date: 2006-08-17 23:42-0400\n"
 "PO-Revision-Date: 2006-07-06 15:08+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -407,7 +407,7 @@ msgid "Whether the action group is visible."
 msgstr "Дали групата за действия е видима."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:116
-#: gtk/gtkspinbutton.c:264
+#: gtk/gtkspinbutton.c:265
 msgid "Value"
 msgstr "Стойност"
 
@@ -643,7 +643,7 @@ msgstr ""
 "Ако е TRUE, дъщерния елемент се появява във вторична група от дъщерни "
 "елементи, напр. за бутони за помощ."
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:627
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:633
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Spacing"
 msgstr "Разредка"
@@ -652,7 +652,7 @@ msgstr "Разредка"
 msgid "The amount of space between children"
 msgstr "Разстоянието между дъщерни елементи"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:596 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Еднакво големи"
@@ -696,7 +696,7 @@ msgstr "Допълнително място между дъщерния елем
 msgid "Pack type"
 msgstr "Тип пакетиране"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:649
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -704,12 +704,12 @@ msgstr ""
 "GtkPackType, който указва, дали дъщерният елемент е пакетиран с указател към "
 "началото или края на контейнера"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:627 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Позиция"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:628
 msgid "The index of the child in the parent"
 msgstr "Индексът на дъщерния елемент в контейнера"
 
@@ -838,7 +838,7 @@ msgstr ""
 "Дали свойствата за отместване на дъщерните елементи по X и Y да оказват "
 "влияние и върху правоъгълника на фокусиране"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:517 gtk/gtkentry.c:860
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:514 gtk/gtkentry.c:857
 msgid "Inner Border"
 msgstr "Вътрешна граница"
 
@@ -1152,7 +1152,7 @@ msgid "Value of the progress bar"
 msgstr "Стойност на лентата за прогрес"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
-#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
+#: gtk/gtkentry.c:557 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "Текст"
@@ -1222,7 +1222,7 @@ msgstr "Цвят на преден план"
 msgid "Foreground color as a GdkColor"
 msgstr "Цвят на преден план като GdkColor"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:481 gtk/gtktexttag.c:249
 #: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "Редактируем"
@@ -1606,7 +1606,7 @@ msgstr "Заглавие"
 msgid "The title of the color selection dialog"
 msgstr "Заглавието на прозореца за избор на цвят"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
 msgid "Current Color"
 msgstr "Текущ цвят"
 
@@ -1614,7 +1614,7 @@ msgstr "Текущ цвят"
 msgid "The selected color"
 msgstr "Избрания цвят"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
 msgid "Current Alpha"
 msgstr "Текущата алфа"
 
@@ -1624,37 +1624,37 @@ msgstr ""
 "Избраната стойност на непрозрачност (0 пълна прозрачност, 65535 пълна "
 "непрозрачност)"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1846
 msgid "Has Opacity Control"
 msgstr "Има контрол на непрозрачност"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1847
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Дали избраният цвят ще позволи настройки на прозрачност"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1853
 msgid "Has palette"
 msgstr "Има палитра"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1854
 msgid "Whether a palette should be used"
 msgstr "Дали ще бъде използвана палитра"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1861
 msgid "The current color"
 msgstr "Текущият цвят"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1868
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Текущата стойност на непрозрачност (0 пълна прозрачност, 65535 пълна "
 "непрозрачност)"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1882
 msgid "Custom palette"
 msgstr "Потребителска палитра"
 
-#: gtk/gtkcolorsel.c:1887
+#: gtk/gtkcolorsel.c:1883
 msgid "Palette to use in the color selector"
 msgstr "Палитра за избор на цвят"
 
@@ -1744,7 +1744,7 @@ msgstr "Откъсване на менютата"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Дали менютата да имат елемент за откъсване"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:506
 msgid "Has Frame"
 msgstr "С рамка"
 
@@ -1882,69 +1882,69 @@ msgstr "Граница на пространството за действие"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Широчина на рамката около мястото с бутони долу в диалога"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
+#: gtk/gtkentry.c:461 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Позиция на показалеца"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "Текущата позиция на вмъкващия показалец в символи"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:471 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Свързана към избора"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Позицията на противоположния край от избраното от показалеца в символи"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:482
 msgid "Whether the entry contents can be edited"
 msgstr "Дали съдържанието на записите да бъде редактирано"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:489
 msgid "Maximum length"
 msgstr "Максимална дължина"
 
-#: gtk/gtkentry.c:493
+#: gtk/gtkentry.c:490
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Максимален брой символи за този запис. 0, ако няма максимална стойност"
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:498
 msgid "Visibility"
 msgstr "Видимост"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:499
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSE показва „заместващи символи“ вместо истинския текст (режим на парола)"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:507
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE премахва външното вдаване от полето"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:515
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:522
 msgid "Invisible character"
 msgstr "Заместващ символ"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:523
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символите използвани за скриване съдържанието на записи (в „режим на парола“)"
 
-#: gtk/gtkentry.c:533
+#: gtk/gtkentry.c:530
 msgid "Activates default"
 msgstr "Активиране на подразбиращ се елемент"
 
-#: gtk/gtkentry.c:534
+#: gtk/gtkentry.c:531
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1952,31 +1952,31 @@ msgstr ""
 "Дали да се активира елементът по подразбиране (като бутон по подразбиране в "
 "диалог) когато е натиснат „Enter“"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:537
 msgid "Width in chars"
 msgstr "Широчина в символи"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:538
 msgid "Number of characters to leave space for in the entry"
 msgstr "Брой символи, за които е оставено място в записа"
 
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:547
 msgid "Scroll offset"
 msgstr "Отместване на придвижването"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:548
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Брой пиксели от полето придвижени извън екрана вляво"
 
-#: gtk/gtkentry.c:561
+#: gtk/gtkentry.c:558
 msgid "The contents of the entry"
 msgstr "Съдържание на записа"
 
-#: gtk/gtkentry.c:576 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:573 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Подравняване по X "
 
-#: gtk/gtkentry.c:577 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:574 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -1984,33 +1984,33 @@ msgstr ""
 "Хоризонталното подравняване, от 0 (отляво) до 1 (отдясно). Обърнато за "
 "подредби отдясно-наляво (RTL)"
 
-#: gtk/gtkentry.c:593
+#: gtk/gtkentry.c:590
 #, fuzzy
 msgid "Truncate multiline"
 msgstr "Избор на няколко"
 
-#: gtk/gtkentry.c:594
+#: gtk/gtkentry.c:591
 #, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Дали е позволен избор на няколко файла"
 
-#: gtk/gtkentry.c:861
+#: gtk/gtkentry.c:858
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
+#: gtk/gtkentry.c:863 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Избор на фокус"
 
-#: gtk/gtkentry.c:867
+#: gtk/gtkentry.c:864
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Дали да се избере съдържанието на записа, когато той се фокусира"
 
-#: gtk/gtkentry.c:881
+#: gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:882
+#: gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
 
@@ -2030,7 +2030,7 @@ msgstr "Минимална дължина на ключа"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Минимална дължина на низа за търсене, за да се търсят съвпадения"
 
-#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:548
+#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:554
 msgid "Text column"
 msgstr "Текстова колона"
 
@@ -2258,11 +2258,11 @@ msgstr "Заглавието на диалоговата кутия за изб�
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаната широчина на бутона, в символи"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:613
 msgid "Default file chooser backend"
 msgstr "Модулът за файлова система по подразбиране"
 
-#: gtk/gtkfilechooserdefault.c:616
+#: gtk/gtkfilechooserdefault.c:614
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Име на модула за GtkFileChooser, който да се използва по подразбиране"
 
@@ -2283,11 +2283,11 @@ msgstr "Показване на файловите операции"
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Дали бутоните за създаване/управление на файловете да бъдат показани"
 
-#: gtk/gtkfilesystem.c:384
+#: gtk/gtkfilesystem.c:389
 msgid "Cancelled"
 msgstr ""
 
-#: gtk/gtkfilesystem.c:385
+#: gtk/gtkfilesystem.c:390
 msgid "Whether or not the operation has been successfully cancelled"
 msgstr ""
 
@@ -2448,119 +2448,119 @@ msgstr ""
 "Дали да използва стойността на характеристиката snap_edge или стойност "
 "извлечена от handle_position"
 
-#: gtk/gtkiconview.c:511
+#: gtk/gtkiconview.c:517
 msgid "Selection mode"
 msgstr "Начин на избор"
 
-#: gtk/gtkiconview.c:512
+#: gtk/gtkiconview.c:518
 msgid "The selection mode"
 msgstr "Начинът за избор"
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:536
 msgid "Pixbuf column"
 msgstr "Колона на буферите"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:537
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Колона в модела, от която се вземат буферите с пиксели за иконите"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:555
 msgid "Model column used to retrieve the text from"
 msgstr "Колона в модела, от която се взема текста"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:574
 msgid "Markup column"
 msgstr "Колона с маркиране"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Колона в модела, от която се взема текста, ако се ползва маркиране на Pango"
 
-#: gtk/gtkiconview.c:576
+#: gtk/gtkiconview.c:582
 msgid "Icon View Model"
 msgstr "Изглед с икони"
 
-#: gtk/gtkiconview.c:577
+#: gtk/gtkiconview.c:583
 msgid "The model for the icon view"
 msgstr "Моделът на изглед с икони"
 
-#: gtk/gtkiconview.c:593
+#: gtk/gtkiconview.c:599
 msgid "Number of columns"
 msgstr "Брой колони"
 
-#: gtk/gtkiconview.c:594
+#: gtk/gtkiconview.c:600
 msgid "Number of columns to display"
 msgstr "Брой колони, които да се изобразяват"
 
-#: gtk/gtkiconview.c:611
+#: gtk/gtkiconview.c:617
 msgid "Width for each item"
 msgstr "Широчина на всеки елемент"
 
-#: gtk/gtkiconview.c:612
+#: gtk/gtkiconview.c:618
 msgid "The width used for each item"
 msgstr "Широчината, която се ползва за всеки елемент"
 
-#: gtk/gtkiconview.c:628
+#: gtk/gtkiconview.c:634
 msgid "Space which is inserted between cells of an item"
 msgstr "Пространството, което се вмъква между клетките на елемент"
 
-#: gtk/gtkiconview.c:643
+#: gtk/gtkiconview.c:649
 msgid "Row Spacing"
 msgstr "Разредка на редовете"
 
-#: gtk/gtkiconview.c:644
+#: gtk/gtkiconview.c:650
 msgid "Space which is inserted between grid rows"
 msgstr "Пространството, което се вмъква между редовете в мрежата"
 
-#: gtk/gtkiconview.c:659
+#: gtk/gtkiconview.c:665
 msgid "Column Spacing"
 msgstr "Разредка на колоните"
 
-#: gtk/gtkiconview.c:660
+#: gtk/gtkiconview.c:666
 #, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "Пространството, което се вмъква между колоните в мрежата"
 
-#: gtk/gtkiconview.c:675
+#: gtk/gtkiconview.c:681
 msgid "Margin"
 msgstr "Поле"
 
-#: gtk/gtkiconview.c:676
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Пространството, което се вмъква по ръбовете на изгледа с икони"
 
-#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:698 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: gtk/gtkiconview.c:693
+#: gtk/gtkiconview.c:699
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Как се разполагат относително един спрямо друг текста и иконата"
 
-#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:715 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "Преподредим"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:598
+#: gtk/gtkiconview.c:716 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "Изгледът може да се преподрежда"
 
-#: gtk/gtkiconview.c:717
+#: gtk/gtkiconview.c:723
 msgid "Selection Box Color"
 msgstr "Цвят на прозореца за избор"
 
-#: gtk/gtkiconview.c:718
+#: gtk/gtkiconview.c:724
 msgid "Color of the selection box"
 msgstr "Цветът на прозореца за избор"
 
-#: gtk/gtkiconview.c:724
+#: gtk/gtkiconview.c:730
 msgid "Selection Box Alpha"
 msgstr "Алфа каналът на прозореца за избор"
 
-#: gtk/gtkiconview.c:725
+#: gtk/gtkiconview.c:731
 msgid "Opacity of the selection box"
 msgstr "Непрозрачността на прозореца за избор"
 
@@ -3088,77 +3088,77 @@ msgstr ""
 "Количеството празно пространство, което да се добави отгоре и отдолу на "
 "графичния обект в пиксели"
 
-#: gtk/gtknotebook.c:527
+#: gtk/gtknotebook.c:524
 msgid "Page"
 msgstr "Страница"
 
-#: gtk/gtknotebook.c:528
+#: gtk/gtknotebook.c:525
 msgid "The index of the current page"
 msgstr "Индексът на текущата страница"
 
-#: gtk/gtknotebook.c:536
+#: gtk/gtknotebook.c:533
 msgid "Tab Position"
 msgstr "Положение на табовете"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:534
 msgid "Which side of the notebook holds the tabs"
 msgstr "От коя страна на контейнера-бележник са табовете"
 
-#: gtk/gtknotebook.c:544
+#: gtk/gtknotebook.c:541
 msgid "Tab Border"
 msgstr "Граница на табовете"
 
-#: gtk/gtknotebook.c:545
+#: gtk/gtknotebook.c:542
 msgid "Width of the border around the tab labels"
 msgstr "Широчина на рамката около етикетите на таб"
 
-#: gtk/gtknotebook.c:553
+#: gtk/gtknotebook.c:550
 msgid "Horizontal Tab Border"
 msgstr "Хоризонтална рамка на таб"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:551
 msgid "Width of the horizontal border of tab labels"
 msgstr "Широчина на хоризонталната рамка около етикетите на таб"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:559
 msgid "Vertical Tab Border"
 msgstr "Вертикална рамка на таб"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:560
 msgid "Width of the vertical border of tab labels"
 msgstr "Широчина на вертикалната рамка около етикетите на таб"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:568
 msgid "Show Tabs"
 msgstr "Показване на табове"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:569
 msgid "Whether tabs should be shown or not"
 msgstr "Дали табовете ще бъдат показани или не"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:575
 msgid "Show Border"
 msgstr "Граници"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:576
 msgid "Whether the border should be shown or not"
 msgstr "Показва дали ще се показват граници"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:582
 msgid "Scrollable"
 msgstr "Може да се придвижва"
 
-#: gtk/gtknotebook.c:586
+#: gtk/gtknotebook.c:583
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ако е TRUE, се добавят стрелки за придвижване, когато табовете са повече "
 "отколкото свободното екранно място"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:589
 msgid "Enable Popup"
 msgstr "Изскачащи менюта"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:590
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3166,123 +3166,123 @@ msgstr ""
 "Ако е TRUE, натискането на десен клавиш на мишката в контейнера-бележник "
 "предизвиква появата на меню за придвижването до страница"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:597
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Дали табовете ще имат еднакви размери"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:603
 msgid "Group ID"
 msgstr "Идентификатор на група"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:613
 msgid "Tab label"
 msgstr "Текст на таба"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:614
 msgid "The string displayed on the child's tab label"
 msgstr "Низът изобразен на етикета на таба на дъщерния елемент"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:620
 msgid "Menu label"
 msgstr "Меню текст"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:621
 msgid "The string displayed in the child's menu entry"
 msgstr "Низът изобразен в елемента в менюто за поделемента"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:634
 msgid "Tab expand"
 msgstr "Разширение на таба"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:635
 msgid "Whether to expand the child's tab or not"
 msgstr "Дали да се разширява таба на дъщерния елемент или не"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:641
 msgid "Tab fill"
 msgstr "Допълване на таба"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:642
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Дали табът на дъщерния елемент да запълва заделеното място или не"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:648
 msgid "Tab pack type"
 msgstr "Тип пакетиране на таба"
 
-#: gtk/gtknotebook.c:658
+#: gtk/gtknotebook.c:655
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Преподредим"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:656
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Показва дали ще се показват граници"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:662
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Текст на таба"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:663
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Дали действието е включено."
 
-#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:678 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Втора стрелка назад"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:679
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Втори бутон със стрелка назад от другата страна на лентата с табове"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:694 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Втора стрелка напред"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:695
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Втори бутон със стрелка напред от другата страна на лентата с табовете"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:709 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Стрелка назад"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:710 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Използване на стандартния бутон за стрелка назад"
 
-#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:724 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Стрелка напред"
 
-#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:725 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Използване на стандартния бутон за стрелка напред"
 
-#: gtk/gtknotebook.c:742
+#: gtk/gtknotebook.c:739
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Граница на табовете"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:740
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Големина на стрелката на разширителя"
 
-#: gtk/gtknotebook.c:758
+#: gtk/gtknotebook.c:755
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:759
+#: gtk/gtknotebook.c:756
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Размерът на разделителите"
@@ -3483,7 +3483,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Размер на страницата"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:984
 msgid "Track Print Status"
 msgstr ""
 
@@ -3493,124 +3493,124 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:846
+#: gtk/gtkprintoperation.c:857
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Първоначална височина"
 
-#: gtk/gtkprintoperation.c:847
+#: gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:876 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:895
 #, fuzzy
 msgid "Job Name"
 msgstr "Име на икона"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:896
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:908
+#: gtk/gtkprintoperation.c:919
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Брой канали"
 
-#: gtk/gtkprintoperation.c:909
+#: gtk/gtkprintoperation.c:920
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Брой редове в таблицата"
 
-#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "Current Page"
 msgstr "Текущата алфа"
 
-#: gtk/gtkprintoperation.c:931 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Размерът на страницата на изменението"
 
-#: gtk/gtkprintoperation.c:952
+#: gtk/gtkprintoperation.c:963
 #, fuzzy
 msgid "Use full page"
 msgstr "Използване на алфа"
 
-#: gtk/gtkprintoperation.c:953
+#: gtk/gtkprintoperation.c:964
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:1002
 #, fuzzy
 msgid "Unit"
 msgstr "Спешност"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1003
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1009
+#: gtk/gtkprintoperation.c:1020
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Диалогова кутия"
 
-#: gtk/gtkprintoperation.c:1010
+#: gtk/gtkprintoperation.c:1021
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1044
 #, fuzzy
 msgid "Allow Async"
 msgstr "Позволяване на правила"
 
-#: gtk/gtkprintoperation.c:1034
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1068 gtk/gtkprintoperation.c:1069
 #, fuzzy
 msgid "Export filename"
 msgstr "Име на файл"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1083
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1084
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Състояние на превключване на бутоните"
 
-#: gtk/gtkprintoperation.c:1093
+#: gtk/gtkprintoperation.c:1104
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1094
+#: gtk/gtkprintoperation.c:1105
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1112
+#: gtk/gtkprintoperation.c:1123
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Потребителска палитра"
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -3676,7 +3676,7 @@ msgstr ""
 "Число между 0.0 и 1.0 задаващо вертикалното подравняване на текст в "
 "графичния обект за прогрес"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:204
 msgid "Adjustment"
 msgstr "Нагласяване"
 
@@ -4007,12 +4007,12 @@ msgstr "Дали частта за превключване на бутона е
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Текущият филтър за избиране на показваните файлове"
 
-#: gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentchoosermenu.c:208
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Показване на номерата на седмиците"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:209
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Дали откъснатите елементи на менюто да се добавят към менюто"
@@ -4066,7 +4066,7 @@ msgstr "Метрика"
 msgid "The metric used for the ruler"
 msgstr "Широчината, на всеки елемент в измерващите единици"
 
-#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:221
+#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
 msgid "Digits"
 msgstr "Цифри"
 
@@ -4526,62 +4526,62 @@ msgstr ""
 "Ако е TRUE, скритите графични обекти биват пренебрегнати при определяне на "
 "големината на групата"
 
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "Стъпка, който съдържа стойността на брояча"
 
-#: gtk/gtkspinbutton.c:211
+#: gtk/gtkspinbutton.c:212
 msgid "Climb Rate"
 msgstr "Скорост на нарастване"
 
-#: gtk/gtkspinbutton.c:212
+#: gtk/gtkspinbutton.c:213
 msgid "The acceleration rate when you hold down a button"
 msgstr "Степента на ускорение, когато е задържан натиснат бутон"
 
-#: gtk/gtkspinbutton.c:222
+#: gtk/gtkspinbutton.c:223
 msgid "The number of decimal places to display"
 msgstr "Брой десетични точки, които да се изобразяват"
 
-#: gtk/gtkspinbutton.c:231
+#: gtk/gtkspinbutton.c:232
 msgid "Snap to Ticks"
 msgstr "Придържане към стъпките"
 
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:233
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr "Дали невалидните стойности в броя ще се закръглят най-близката стъпка"
 
-#: gtk/gtkspinbutton.c:239
+#: gtk/gtkspinbutton.c:240
 msgid "Numeric"
 msgstr "Само цифри"
 
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:241
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Дали не-цифровите символи ще бъдат игнорирани"
 
-#: gtk/gtkspinbutton.c:247
+#: gtk/gtkspinbutton.c:248
 msgid "Wrap"
 msgstr "Превъртане"
 
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:249
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Дали броячът ще превърта при достигане на своя лимит"
 
-#: gtk/gtkspinbutton.c:255
+#: gtk/gtkspinbutton.c:256
 msgid "Update Policy"
 msgstr "Политика на актуализиране"
 
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:257
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "Дали броячът ще се обновява винаги или само при правилна стойност"
 
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:266
 msgid "Reads the current value, or sets a new value"
 msgstr "Четене на текущата стойност или задаване на нова"
 
-#: gtk/gtkspinbutton.c:274
+#: gtk/gtkspinbutton.c:275
 msgid "Style of bevel around the spin button"
 msgstr "Стил на вдаването около брояча"
 

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-23 20:06-0400\n"
+"POT-Creation-Date: 2006-08-17 23:42-0400\n"
 "PO-Revision-Date: 2006-07-05 16:39+0530\n"
 "Last-Translator: Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -414,7 +414,7 @@ msgid "Whether the action group is visible."
 msgstr "செயல்குழு தெரிகிறதா."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:116
-#: gtk/gtkspinbutton.c:264
+#: gtk/gtkspinbutton.c:265
 msgid "Value"
 msgstr "மதிப்பு"
 
@@ -636,7 +636,7 @@ msgid ""
 "g., help buttons"
 msgstr ""
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:627
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:633
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Spacing"
 msgstr "இடைவெளி"
@@ -645,7 +645,7 @@ msgstr "இடைவெளி"
 msgid "The amount of space between children"
 msgstr "சேய்களுக்கிடையே உள்ள இடைவெளி"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:596 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homogeneous"
@@ -685,18 +685,18 @@ msgstr ""
 msgid "Pack type"
 msgstr "அடுக்கும் வகை"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:649
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:627 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "இடம்"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:628
 msgid "The index of the child in the parent"
 msgstr "பெற்றோரில் சேயின் அகரவரிசை"
 
@@ -819,7 +819,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:517 gtk/gtkentry.c:860
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:514 gtk/gtkentry.c:857
 msgid "Inner Border"
 msgstr "உள் எல்லை"
 
@@ -1127,7 +1127,7 @@ msgid "Value of the progress bar"
 msgstr "முன்னேற்றுப்பட்டையின் மதிப்பு"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
-#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
+#: gtk/gtkentry.c:557 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "உரை"
@@ -1196,7 +1196,7 @@ msgstr "முன்னணி வண்ணம்"
 msgid "Foreground color as a GdkColor"
 msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:481 gtk/gtktexttag.c:249
 #: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "பதிப்பிக்கக்கூடியது"
@@ -1572,7 +1572,7 @@ msgstr "தலைப்பு"
 msgid "The title of the color selection dialog"
 msgstr "நிற தேர்ந்தெடுப்பு உரையாடலின் தலைப்பு"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
 msgid "Current Color"
 msgstr "தற்போதைய வண்ணம்"
 
@@ -1580,7 +1580,7 @@ msgstr "தற்போதைய வண்ணம்"
 msgid "The selected color"
 msgstr "தேர்ந்தெடுக்கப்பட்ட நிறம்"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
 msgid "Current Alpha"
 msgstr "தற்போதைய Alpha"
 
@@ -1588,35 +1588,35 @@ msgstr "தற்போதைய Alpha"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1846
 msgid "Has Opacity Control"
 msgstr "ஒளிப் புகாமை கட்டுப்பாடு உண்டு"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1847
 msgid "Whether the color selector should allow setting opacity"
 msgstr "வண்ணத் தேரிவு ஒளிப் புகாமை அமைதைதலுக்கு அநுமதி கொடுக்கவேண்டுமா"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1853
 msgid "Has palette"
 msgstr "வண்ணத் தட்டு உண்டு"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1854
 msgid "Whether a palette should be used"
 msgstr "ஒரு நிறத்தட்டு பயன்படுத்த வேண்டுமா"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1861
 msgid "The current color"
 msgstr "தற்போதைய வண்ணம்"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1868
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "தற்போதைய ஒளிப் புகாமை மதிப்பு (0 fully transparent, 65535 fully opaque)"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1882
 msgid "Custom palette"
 msgstr "தனிப்பயன் வண்ணத் தட்டு"
 
-#: gtk/gtkcolorsel.c:1887
+#: gtk/gtkcolorsel.c:1883
 msgid "Palette to use in the color selector"
 msgstr "வண்ணத் தேர்தலில் பயன்படுத்த வேண்டிய வண்ணத் தட்டு"
 
@@ -1704,7 +1704,7 @@ msgstr ""
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:506
 msgid "Has Frame"
 msgstr "சட்டம் கொன்டது"
 
@@ -1838,40 +1838,40 @@ msgstr "செயல் பரப்பு எல்லை"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialog"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
+#: gtk/gtkentry.c:461 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "இடம்-காட்டி இடம்"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:471 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "தேர்வு எல்லை"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:482
 msgid "Whether the entry contents can be edited"
 msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:489
 msgid "Maximum length"
 msgstr "மிகக்கூடிய நீட்டம்"
 
-#: gtk/gtkentry.c:493
+#: gtk/gtkentry.c:490
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:498
 msgid "Visibility"
 msgstr "பார்கக்கூடியது"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:499
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1879,89 +1879,89 @@ msgstr ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:507
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:515
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:522
 msgid "Invisible character"
 msgstr "பார்க்கமுடியாத வரியுரு"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:523
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
 
-#: gtk/gtkentry.c:533
+#: gtk/gtkentry.c:530
 msgid "Activates default"
 msgstr "கொடா நிலையை தொடங்கும்"
 
-#: gtk/gtkentry.c:534
+#: gtk/gtkentry.c:531
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:537
 msgid "Width in chars"
 msgstr "charsஇல் அகலம்"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:538
 msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:547
 msgid "Scroll offset"
 msgstr "திரை உருளல் ஒதுக்கம்"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:548
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Number of pixels of the entry scrolled off the screen to the left"
 
-#: gtk/gtkentry.c:561
+#: gtk/gtkentry.c:558
 msgid "The contents of the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:576 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:573 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "X align"
 
-#: gtk/gtkentry.c:577 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:574 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
 
-#: gtk/gtkentry.c:593
+#: gtk/gtkentry.c:590
 msgid "Truncate multiline"
 msgstr ""
 
-#: gtk/gtkentry.c:594
+#: gtk/gtkentry.c:591
 msgid "Whether to truncate multiline pastes to one line."
 msgstr ""
 
-#: gtk/gtkentry.c:861
+#: gtk/gtkentry.c:858
 msgid "Border between text and frame."
 msgstr "உரைக்கும் சட்டத்திற்கும் இடையேயான எல்லை"
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
+#: gtk/gtkentry.c:863 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr ""
 
-#: gtk/gtkentry.c:867
+#: gtk/gtkentry.c:864
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:881
+#: gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:882
+#: gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
 
@@ -1981,7 +1981,7 @@ msgstr "குறைந்தபட்ச விசை நீளம்"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:548
+#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:554
 msgid "Text column"
 msgstr "உரை நிரல்"
 
@@ -2192,11 +2192,11 @@ msgstr ""
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:613
 msgid "Default file chooser backend"
 msgstr "முன்னிருப்பு கோப்பு தேர்ந்தெடுப்பு பின்தளம்"
 
-#: gtk/gtkfilechooserdefault.c:616
+#: gtk/gtkfilechooserdefault.c:614
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 
@@ -2217,11 +2217,11 @@ msgstr "கோப்பு இயக்கங்களைக் காண்ப�
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
-#: gtk/gtkfilesystem.c:384
+#: gtk/gtkfilesystem.c:389
 msgid "Cancelled"
 msgstr "ரத்து செய்யப்பட்டது"
 
-#: gtk/gtkfilesystem.c:385
+#: gtk/gtkfilesystem.c:390
 msgid "Whether or not the operation has been successfully cancelled"
 msgstr ""
 
@@ -2378,117 +2378,117 @@ msgid ""
 "handle_position"
 msgstr ""
 
-#: gtk/gtkiconview.c:511
+#: gtk/gtkiconview.c:517
 msgid "Selection mode"
 msgstr ""
 
-#: gtk/gtkiconview.c:512
+#: gtk/gtkiconview.c:518
 msgid "The selection mode"
 msgstr ""
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:536
 msgid "Pixbuf column"
 msgstr "Pixbuf நிரல்"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:537
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:555
 msgid "Model column used to retrieve the text from"
 msgstr "உரையை திரும்பப்பெற பயன்படும் மாதிரி நிரல்"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:574
 msgid "Markup column"
 msgstr "Markup நிரல்"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:576
+#: gtk/gtkiconview.c:582
 msgid "Icon View Model"
 msgstr "சின்னம் காட்சி மாதிரி"
 
-#: gtk/gtkiconview.c:577
+#: gtk/gtkiconview.c:583
 msgid "The model for the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:593
+#: gtk/gtkiconview.c:599
 msgid "Number of columns"
 msgstr "நிரல்களின் எண்ணிக்கை"
 
-#: gtk/gtkiconview.c:594
+#: gtk/gtkiconview.c:600
 msgid "Number of columns to display"
 msgstr ""
 
-#: gtk/gtkiconview.c:611
+#: gtk/gtkiconview.c:617
 msgid "Width for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:612
+#: gtk/gtkiconview.c:618
 msgid "The width used for each item"
 msgstr "ஒவ்வொரு உருப்படிக்கும் பயன்படுத்திய அகலம்"
 
-#: gtk/gtkiconview.c:628
+#: gtk/gtkiconview.c:634
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:643
+#: gtk/gtkiconview.c:649
 msgid "Row Spacing"
 msgstr "நிரை இடைவெளி"
 
-#: gtk/gtkiconview.c:644
+#: gtk/gtkiconview.c:650
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:659
+#: gtk/gtkiconview.c:665
 msgid "Column Spacing"
 msgstr "நிரல் இடைவெளி"
 
-#: gtk/gtkiconview.c:660
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between grid columns"
 msgstr ""
 
-#: gtk/gtkiconview.c:675
+#: gtk/gtkiconview.c:681
 msgid "Margin"
 msgstr "ஓரம்"
 
-#: gtk/gtkiconview.c:676
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:698 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "திசை அமைவு"
 
-#: gtk/gtkiconview.c:693
+#: gtk/gtkiconview.c:699
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:715 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "மறுவரிசையாக்கக்கூடியது"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:598
+#: gtk/gtkiconview.c:716 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
-#: gtk/gtkiconview.c:717
+#: gtk/gtkiconview.c:723
 msgid "Selection Box Color"
 msgstr "தேர்வு பெட்டி நிறம்"
 
-#: gtk/gtkiconview.c:718
+#: gtk/gtkiconview.c:724
 msgid "Color of the selection box"
 msgstr "தேர்ந்தெடுத்த பெட்டியின் நிறம்"
 
-#: gtk/gtkiconview.c:724
+#: gtk/gtkiconview.c:730
 msgid "Selection Box Alpha"
 msgstr "தேர்வு பெட்டி ஆல்ஃபா"
 
-#: gtk/gtkiconview.c:725
+#: gtk/gtkiconview.c:731
 msgid "Opacity of the selection box"
 msgstr "தேர்ந்தெடுத்த பெட்டியின் ஒளிபுகாமை"
 
@@ -2979,75 +2979,75 @@ msgid ""
 msgstr ""
 "பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
-#: gtk/gtknotebook.c:527
+#: gtk/gtknotebook.c:524
 msgid "Page"
 msgstr "பக்கம்"
 
-#: gtk/gtknotebook.c:528
+#: gtk/gtknotebook.c:525
 msgid "The index of the current page"
 msgstr "தற்போதைய பக்கத்தின் சுட்டு"
 
-#: gtk/gtknotebook.c:536
+#: gtk/gtknotebook.c:533
 msgid "Tab Position"
 msgstr "தத்தல் இடம்"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:534
 msgid "Which side of the notebook holds the tabs"
 msgstr "தத்தல் இருக்குமிடம் புத்தகத்தின் எப்பக்கத்தில்"
 
-#: gtk/gtknotebook.c:544
+#: gtk/gtknotebook.c:541
 msgid "Tab Border"
 msgstr "தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:545
+#: gtk/gtknotebook.c:542
 msgid "Width of the border around the tab labels"
 msgstr "தத்தல் அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:553
+#: gtk/gtknotebook.c:550
 msgid "Horizontal Tab Border"
 msgstr "கிடை தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:551
 msgid "Width of the horizontal border of tab labels"
 msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள கிடை எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:559
 msgid "Vertical Tab Border"
 msgstr "நெடு தத்தல் எல்லை"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:560
 msgid "Width of the vertical border of tab labels"
 msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள நெடு எல்லையின் அகலம்"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:568
 msgid "Show Tabs"
 msgstr "தத்தல்களைக் காண்பி"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:569
 msgid "Whether tabs should be shown or not"
 msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:575
 msgid "Show Border"
 msgstr "எல்லைக் காண்பி"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:576
 msgid "Whether the border should be shown or not"
 msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:582
 msgid "Scrollable"
 msgstr "திரை உருளலக்கூடியது"
 
-#: gtk/gtknotebook.c:586
+#: gtk/gtknotebook.c:583
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:589
 msgid "Enable Popup"
 msgstr "Enable Popup"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:590
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3055,117 +3055,117 @@ msgstr ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:597
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Whether tabs should have homogeneous sizes"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:603
 msgid "Group ID"
 msgstr "குழு எண்"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:613
 msgid "Tab label"
 msgstr "தத்தல் பெயர்"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:614
 msgid "The string displayed on the child's tab label"
 msgstr ""
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:620
 msgid "Menu label"
 msgstr "பட்டி அடையாளம்"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:621
 msgid "The string displayed in the child's menu entry"
 msgstr ""
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:634
 msgid "Tab expand"
 msgstr "தத்தல் விரிவு"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:635
 msgid "Whether to expand the child's tab or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:641
 msgid "Tab fill"
 msgstr "தத்தல் நிரப்பு"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:642
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:648
 msgid "Tab pack type"
 msgstr "தத்தல் பொதி வகை"
 
-#: gtk/gtknotebook.c:658
+#: gtk/gtknotebook.c:655
 msgid "Tab reorderable"
 msgstr ""
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:656
 msgid "Whether the tab is reorderable by user action or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:662
 msgid "Tab detachable"
 msgstr ""
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:663
 msgid "Whether the tab is detachable"
 msgstr ""
 
-#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:678 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:679
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:694 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:695
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:709 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:710 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:724 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:725 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "செந்தரமான முன்புற-அம்பு-பொத்தான் காண்பி"
 
-#: gtk/gtknotebook.c:742
+#: gtk/gtknotebook.c:739
 msgid "Tab overlap"
 msgstr ""
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:740
 msgid "Size of tab overlap area"
 msgstr ""
 
-#: gtk/gtknotebook.c:758
+#: gtk/gtknotebook.c:755
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:759
+#: gtk/gtknotebook.c:756
 msgid "Size of tab curvature"
 msgstr ""
 
@@ -3352,7 +3352,7 @@ msgstr "அச்சடிப்பி அமைவுகள்"
 msgid "Page Setup"
 msgstr "பக்கம் அமைப்பு"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:984
 msgid "Track Print Status"
 msgstr "அச்சிடுதல் நிலையை தேடு"
 
@@ -3362,111 +3362,111 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:846
+#: gtk/gtkprintoperation.c:857
 msgid "Default Page Setup"
 msgstr "முன்னிருப்பு பக்கம் அமைப்பு"
 
-#: gtk/gtkprintoperation.c:847
+#: gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:876 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr "அச்சிடும் அமைவுகள்"
 
-#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:895
 msgid "Job Name"
 msgstr "பணி பெயர்"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:896
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:908
+#: gtk/gtkprintoperation.c:919
 msgid "Number of Pages"
 msgstr "பக்கங்களின் எண்ணிக்கை"
 
-#: gtk/gtkprintoperation.c:909
+#: gtk/gtkprintoperation.c:920
 msgid "The number of pages in the document."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:234
 msgid "Current Page"
 msgstr "நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:931 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
 msgid "The current page in the document"
 msgstr "ஆவணத்தின் நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:952
+#: gtk/gtkprintoperation.c:963
 msgid "Use full page"
 msgstr "முழு பக்கத்தைப் பயன்படுத்து"
 
-#: gtk/gtkprintoperation.c:953
+#: gtk/gtkprintoperation.c:964
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:1002
 msgid "Unit"
 msgstr "அலகு"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1003
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1009
+#: gtk/gtkprintoperation.c:1020
 msgid "Show Dialog"
 msgstr "உரையாடலை காட்டு"
 
-#: gtk/gtkprintoperation.c:1010
+#: gtk/gtkprintoperation.c:1021
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1044
 msgid "Allow Async"
 msgstr "ஒருங்கிணைப்பில்லாததை அனுமதி"
 
-#: gtk/gtkprintoperation.c:1034
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1068 gtk/gtkprintoperation.c:1069
 msgid "Export filename"
 msgstr "கோப்புப்பெயரை ஏற்று"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1083
 msgid "Status"
 msgstr "நிலை"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1084
 msgid "The status of the print operation"
 msgstr "அச்சு செயல்பாட்டின் நிலை"
 
-#: gtk/gtkprintoperation.c:1093
+#: gtk/gtkprintoperation.c:1104
 msgid "Status String"
 msgstr "நிலை சரம்"
 
-#: gtk/gtkprintoperation.c:1094
+#: gtk/gtkprintoperation.c:1105
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1112
+#: gtk/gtkprintoperation.c:1123
 msgid "Custom tab label"
 msgstr "தனிபயன் தத்தல் பெயர்"
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -3523,7 +3523,7 @@ msgstr ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:204
 msgid "Adjustment"
 msgstr "ஒழிங்குபடுத்தல்"
 
@@ -3827,11 +3827,11 @@ msgstr ""
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentchoosermenu.c:208
 msgid "Show Numbers"
 msgstr "எண்களை காட்டு"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:209
 msgid "Whether the items should be displayed with a number"
 msgstr ""
 
@@ -3884,7 +3884,7 @@ msgstr ""
 msgid "The metric used for the ruler"
 msgstr ""
 
-#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:221
+#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
 msgid "Digits"
 msgstr "இலக்கங்கள்"
 
@@ -4314,27 +4314,27 @@ msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "of"
 
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "The adjustment that holds the value of the spinbutton"
 
-#: gtk/gtkspinbutton.c:211
+#: gtk/gtkspinbutton.c:212
 msgid "Climb Rate"
 msgstr "Climb Rate"
 
-#: gtk/gtkspinbutton.c:212
+#: gtk/gtkspinbutton.c:213
 msgid "The acceleration rate when you hold down a button"
 msgstr "The acceleration rate when you hold down a button"
 
-#: gtk/gtkspinbutton.c:222
+#: gtk/gtkspinbutton.c:223
 msgid "The number of decimal places to display"
 msgstr "The number of decimal places to display"
 
-#: gtk/gtkspinbutton.c:231
+#: gtk/gtkspinbutton.c:232
 msgid "Snap to Ticks"
 msgstr "Snap to Ticks"
 
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:233
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -4342,37 +4342,37 @@ msgstr ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 
-#: gtk/gtkspinbutton.c:239
+#: gtk/gtkspinbutton.c:240
 msgid "Numeric"
 msgstr "எண்"
 
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:241
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Whether non-numeric characters should be ignored"
 
-#: gtk/gtkspinbutton.c:247
+#: gtk/gtkspinbutton.c:248
 msgid "Wrap"
 msgstr "மடிப்பு"
 
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:249
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Whether a spin button should wrap upon reaching its limits"
 
-#: gtk/gtkspinbutton.c:255
+#: gtk/gtkspinbutton.c:256
 msgid "Update Policy"
 msgstr "நிகழ்நிலைப் புதிப்பித்தல் திட்டம்"
 
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:257
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Whether the spin button should update always, or only when the value is legal"
 
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:266
 msgid "Reads the current value, or sets a new value"
 msgstr "தற்போதைய மதிப்பை வாசிக்கும், அல்லது புதிய மதிப்பை அமைக்கும்"
 
-#: gtk/gtkspinbutton.c:274
+#: gtk/gtkspinbutton.c:275
 msgid "Style of bevel around the spin button"
 msgstr ""
 

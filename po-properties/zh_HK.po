@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-23 20:06-0400\n"
+"POT-Creation-Date: 2006-08-17 23:42-0400\n"
 "PO-Revision-Date: 2006-04-17 19:14+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -385,7 +385,7 @@ msgid "Whether the action group is visible."
 msgstr "該指令集是否為可見。"
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:116
-#: gtk/gtkspinbutton.c:264
+#: gtk/gtkspinbutton.c:265
 msgid "Value"
 msgstr "數值"
 
@@ -611,7 +611,7 @@ msgid ""
 "g., help buttons"
 msgstr "如設為定為‘TRUE’，子元件將出現於次要的子元件群組中，適用於：求助按鈕"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:627
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:633
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Spacing"
 msgstr "間距"
@@ -620,7 +620,7 @@ msgstr "間距"
 msgid "The amount of space between children"
 msgstr "子元件之間的間距"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:599 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:596 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "尺寸一致"
@@ -662,19 +662,19 @@ msgstr "加入額外的空位隔開子元件及周圍的元件，以像素為單
 msgid "Pack type"
 msgstr "排列方式"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:652
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:649
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 "GtkPackType 意指子元件的排列方式是從主元件的開始位置，還是從結束位置進行排列"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:630 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:627 gtk/gtkpaned.c:216
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "位置"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:631
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:628
 msgid "The index of the child in the parent"
 msgstr "子元件在母元件中的索引編號"
 
@@ -792,7 +792,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y 屬性是否也影響焦點方塊"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:517 gtk/gtkentry.c:860
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:514 gtk/gtkentry.c:857
 #, fuzzy
 msgid "Inner Border"
 msgstr "顯示邊框"
@@ -1109,7 +1109,7 @@ msgid "Value of the progress bar"
 msgstr "進度列中所顯示的數值"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
-#: gtk/gtkentry.c:560 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
+#: gtk/gtkentry.c:557 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "文字"
@@ -1178,7 +1178,7 @@ msgstr "前景顏色"
 msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表達的前景顏色"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:484 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:481 gtk/gtktexttag.c:249
 #: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "可編輯的"
@@ -1560,7 +1560,7 @@ msgstr "標題"
 msgid "The title of the color selection dialog"
 msgstr "顏色選擇對話框的標題"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
 msgid "Current Color"
 msgstr "目前的顏色"
 
@@ -1568,7 +1568,7 @@ msgstr "目前的顏色"
 msgid "The selected color"
 msgstr "選取的顏色"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
 msgid "Current Alpha"
 msgstr "目前的透明度"
 
@@ -1576,35 +1576,35 @@ msgstr "目前的透明度"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "目前的透明度（0 為完全透明，65535 為完全不透明）"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1846
 msgid "Has Opacity Control"
 msgstr "可控制透明度"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1847
 msgid "Whether the color selector should allow setting opacity"
 msgstr "設定顏色選擇程序是否允許設定透明度"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1853
 msgid "Has palette"
 msgstr "有色盤"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1854
 msgid "Whether a palette should be used"
 msgstr "應否使用色盤"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1861
 msgid "The current color"
 msgstr "目前的顏色"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1868
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "目前的透明度（0 為完全透明，65535 為完全不透明）"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1882
 msgid "Custom palette"
 msgstr "自訂色盤"
 
-#: gtk/gtkcolorsel.c:1887
+#: gtk/gtkcolorsel.c:1883
 msgid "Palette to use in the color selector"
 msgstr "顏色選擇程序使用的色盤"
 
@@ -1693,7 +1693,7 @@ msgstr "在選單上加上可卸下標記"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "下拉選單是否應有分離選單項目"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:509
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:506
 msgid "Has Frame"
 msgstr "有框架"
 
@@ -1830,129 +1830,129 @@ msgstr "動作區域邊緣"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "對話框按鈕下方按鈕區域的邊緣寬度"
 
-#: gtk/gtkentry.c:464 gtk/gtklabel.c:389
+#: gtk/gtkentry.c:461 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "游標位置"
 
-#: gtk/gtkentry.c:465 gtk/gtklabel.c:390
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "游標目前的位置，以字元計。"
 
-#: gtk/gtkentry.c:474 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:471 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "選取邊界"
 
-#: gtk/gtkentry.c:475 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "所選取的部份中，游標到另一端位置的距離（字元為單位）"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:482
 msgid "Whether the entry contents can be edited"
 msgstr "可否編輯欄位的內容"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:489
 msgid "Maximum length"
 msgstr "最大長度"
 
-#: gtk/gtkentry.c:493
+#: gtk/gtkentry.c:490
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "本欄位的最大長度，0 表示不設上限"
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:498
 msgid "Visibility"
 msgstr "可見狀態"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:499
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "FALSE 表示顯示「隱形字元」而非實際文字（密碼模式）"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:507
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE 可將外部裝飾"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:515
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:522
 msgid "Invisible character"
 msgstr "隱形字元"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:523
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "用來遮蓋輸入內容的字元（在「密碼模式」裏）"
 
-#: gtk/gtkentry.c:533
+#: gtk/gtkentry.c:530
 msgid "Activates default"
 msgstr "啟動預設元件"
 
-#: gtk/gtkentry.c:534
+#: gtk/gtkentry.c:531
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr "當Enter鍵按下時，是否啟動預設視窗元件（例如對話框的按鈕）"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:537
 msgid "Width in chars"
 msgstr "預留寬度"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:538
 msgid "Number of characters to leave space for in the entry"
 msgstr "輸入元件中預留的空白長度（單位為字元）"
 
-#: gtk/gtkentry.c:550
+#: gtk/gtkentry.c:547
 msgid "Scroll offset"
 msgstr "捲動偏移"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:548
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "輸入元件相對於螢幕向左捲動偏移的程度（單位為像素）"
 
-#: gtk/gtkentry.c:561
+#: gtk/gtkentry.c:558
 msgid "The contents of the entry"
 msgstr "輸入的內容"
 
-#: gtk/gtkentry.c:576 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:573 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "水平對齊"
 
-#: gtk/gtkentry.c:577 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:574 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "水平方向對齊，0 為左，1 為右。相反即為右至左 (RTL) 排列。"
 
-#: gtk/gtkentry.c:593
+#: gtk/gtkentry.c:590
 #, fuzzy
 msgid "Truncate multiline"
 msgstr "選取多個項目"
 
-#: gtk/gtkentry.c:594
+#: gtk/gtkentry.c:591
 #, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "可否允許同時選取多個檔案"
 
-#: gtk/gtkentry.c:861
+#: gtk/gtkentry.c:858
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:866 gtk/gtklabel.c:620
+#: gtk/gtkentry.c:863 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "聚焦時選取"
 
-#: gtk/gtkentry.c:867
+#: gtk/gtkentry.c:864
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "當輸入元件取得焦點時，其內容是否呈現被選取狀態"
 
-#: gtk/gtkentry.c:881
+#: gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:882
+#: gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
 
@@ -1972,7 +1972,7 @@ msgstr "最小關鍵字長度"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "用來搜尋的關鍵字的最小長度"
 
-#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:548
+#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:554
 msgid "Text column"
 msgstr "文字欄位"
 
@@ -2186,11 +2186,11 @@ msgstr "檔案選擇對話框的標題。"
 msgid "The desired width of the button widget, in characters."
 msgstr "按鈕元件所需的寬度，以字元計。"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:613
 msgid "Default file chooser backend"
 msgstr "預設檔案選擇元件後端"
 
-#: gtk/gtkfilechooserdefault.c:616
+#: gtk/gtkfilechooserdefault.c:614
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "預設使用的 GtkFileChooser 後端名稱"
 
@@ -2211,11 +2211,11 @@ msgstr "顯示檔案操作按鈕"
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "是否顯示新增/修改檔案的功能按鈕"
 
-#: gtk/gtkfilesystem.c:384
+#: gtk/gtkfilesystem.c:389
 msgid "Cancelled"
 msgstr ""
 
-#: gtk/gtkfilesystem.c:385
+#: gtk/gtkfilesystem.c:390
 msgid "Whether or not the operation has been successfully cancelled"
 msgstr ""
 
@@ -2372,118 +2372,118 @@ msgid ""
 "handle_position"
 msgstr "是否依照 snap_edge 屬性，或採用 handle_position 的設定值"
 
-#: gtk/gtkiconview.c:511
+#: gtk/gtkiconview.c:517
 msgid "Selection mode"
 msgstr "選擇模式"
 
-#: gtk/gtkiconview.c:512
+#: gtk/gtkiconview.c:518
 msgid "The selection mode"
 msgstr "選擇模式"
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:536
 msgid "Pixbuf column"
 msgstr "Pixbuf 欄"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:537
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "用來取得圖示 pixbuf 的典型欄"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:555
 msgid "Model column used to retrieve the text from"
 msgstr "用來取得文字 pixbuf 的典型欄"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:574
 msgid "Markup column"
 msgstr "標記欄位"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "如果使用 Pango 標記時用來取得文字的典型欄"
 
-#: gtk/gtkiconview.c:576
+#: gtk/gtkiconview.c:582
 msgid "Icon View Model"
 msgstr "Icon View 模型"
 
-#: gtk/gtkiconview.c:577
+#: gtk/gtkiconview.c:583
 msgid "The model for the icon view"
 msgstr "圖示檢視所使用的模型"
 
-#: gtk/gtkiconview.c:593
+#: gtk/gtkiconview.c:599
 msgid "Number of columns"
 msgstr "欄位數目"
 
-#: gtk/gtkiconview.c:594
+#: gtk/gtkiconview.c:600
 msgid "Number of columns to display"
 msgstr "要顯示的欄數"
 
-#: gtk/gtkiconview.c:611
+#: gtk/gtkiconview.c:617
 msgid "Width for each item"
 msgstr "各項目的寬度"
 
-#: gtk/gtkiconview.c:612
+#: gtk/gtkiconview.c:618
 msgid "The width used for each item"
 msgstr "用於各個項目的寬度"
 
-#: gtk/gtkiconview.c:628
+#: gtk/gtkiconview.c:634
 msgid "Space which is inserted between cells of an item"
 msgstr "用來插入項目的格位之間的空間"
 
-#: gtk/gtkiconview.c:643
+#: gtk/gtkiconview.c:649
 msgid "Row Spacing"
 msgstr "行的間隔"
 
-#: gtk/gtkiconview.c:644
+#: gtk/gtkiconview.c:650
 msgid "Space which is inserted between grid rows"
 msgstr "用來插入格線行之間的空間"
 
-#: gtk/gtkiconview.c:659
+#: gtk/gtkiconview.c:665
 msgid "Column Spacing"
 msgstr "欄的間隔"
 
-#: gtk/gtkiconview.c:660
+#: gtk/gtkiconview.c:666
 #, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "用來插入格線欄之間的空間"
 
-#: gtk/gtkiconview.c:675
+#: gtk/gtkiconview.c:681
 msgid "Margin"
 msgstr "邊界"
 
-#: gtk/gtkiconview.c:676
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "用來插入圖示檢視邊緣的空間"
 
-#: gtk/gtkiconview.c:692 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:698 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "方向"
 
-#: gtk/gtkiconview.c:693
+#: gtk/gtkiconview.c:699
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "每個項目的文字與圖示之間要如何排列"
 
-#: gtk/gtkiconview.c:709 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:715 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:598
+#: gtk/gtkiconview.c:716 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "該顯示為可排序的"
 
-#: gtk/gtkiconview.c:717
+#: gtk/gtkiconview.c:723
 msgid "Selection Box Color"
 msgstr "選取區方塊色彩"
 
-#: gtk/gtkiconview.c:718
+#: gtk/gtkiconview.c:724
 msgid "Color of the selection box"
 msgstr "選取區方塊的色彩"
 
-#: gtk/gtkiconview.c:724
+#: gtk/gtkiconview.c:730
 msgid "Selection Box Alpha"
 msgstr "選取區方塊的α混色"
 
-#: gtk/gtkiconview.c:725
+#: gtk/gtkiconview.c:731
 msgid "Opacity of the selection box"
 msgstr "選取區方塊的透明度"
 
@@ -2985,198 +2985,198 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "加在視窗元件上下的空間，單位為像素"
 
-#: gtk/gtknotebook.c:527
+#: gtk/gtknotebook.c:524
 msgid "Page"
 msgstr "頁碼"
 
-#: gtk/gtknotebook.c:528
+#: gtk/gtknotebook.c:525
 msgid "The index of the current page"
 msgstr "本頁的索引"
 
-#: gtk/gtknotebook.c:536
+#: gtk/gtknotebook.c:533
 msgid "Tab Position"
 msgstr "標簽位置"
 
-#: gtk/gtknotebook.c:537
+#: gtk/gtknotebook.c:534
 msgid "Which side of the notebook holds the tabs"
 msgstr "標簽頁中含有標簽的一邊"
 
-#: gtk/gtknotebook.c:544
+#: gtk/gtknotebook.c:541
 msgid "Tab Border"
 msgstr "標簽邊框"
 
-#: gtk/gtknotebook.c:545
+#: gtk/gtknotebook.c:542
 msgid "Width of the border around the tab labels"
 msgstr "標簽標題周圍的邊框寬度"
 
-#: gtk/gtknotebook.c:553
+#: gtk/gtknotebook.c:550
 msgid "Horizontal Tab Border"
 msgstr "水平標簽邊框"
 
-#: gtk/gtknotebook.c:554
+#: gtk/gtknotebook.c:551
 msgid "Width of the horizontal border of tab labels"
 msgstr "標簽標題周圍的水平邊框寬度"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:559
 msgid "Vertical Tab Border"
 msgstr "垂直標簽邊框"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:560
 msgid "Width of the vertical border of tab labels"
 msgstr "標籤標題周圍的垂直邊框寬度"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:568
 msgid "Show Tabs"
 msgstr "顯示標簽"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:569
 msgid "Whether tabs should be shown or not"
 msgstr "應否顯示標簽"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:575
 msgid "Show Border"
 msgstr "顯示邊框"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:576
 msgid "Whether the border should be shown or not"
 msgstr "應否顯示邊框"
 
-#: gtk/gtknotebook.c:585
+#: gtk/gtknotebook.c:582
 msgid "Scrollable"
 msgstr "可捲動"
 
-#: gtk/gtknotebook.c:586
+#: gtk/gtknotebook.c:583
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "如設為定為‘TRUE’，如果標籤太多時，會在兩旁加上箭頭"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:589
 msgid "Enable Popup"
 msgstr "使用蹦出選單"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:590
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "若為 TRUE，在標籤頁按下滑鼠右鍵時會蹦出可選擇頁面的選單"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:597
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "標籤的尺寸應否統一"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:603
 #, fuzzy
 msgid "Group ID"
 msgstr "群組"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:613
 msgid "Tab label"
 msgstr "標籤文字"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:614
 msgid "The string displayed on the child's tab label"
 msgstr "子分頁標籤所顯示的文字"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:620
 msgid "Menu label"
 msgstr "選單文字標籤"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:621
 msgid "The string displayed in the child's menu entry"
 msgstr "子選單項目顯示的字串"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:634
 msgid "Tab expand"
 msgstr "擴展標籤"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:635
 msgid "Whether to expand the child's tab or not"
 msgstr "是否擴展子分頁"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:641
 msgid "Tab fill"
 msgstr "標籤填滿"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:642
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "子分頁是否應填滿配置的區域"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:648
 msgid "Tab pack type"
 msgstr "標籤包裝形式"
 
-#: gtk/gtknotebook.c:658
+#: gtk/gtknotebook.c:655
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:656
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "應否顯示邊框"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:662
 #, fuzzy
 msgid "Tab detachable"
 msgstr "標籤文字"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:663
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "本指令是否有效。"
 
-#: gtk/gtknotebook.c:681 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:678 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "次要倒退鍵"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:679
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "在標籤區域對面顯示第二個用來倒退的箭頭"
 
-#: gtk/gtknotebook.c:697 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:694 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "次要前進鍵"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:695
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "在標籤區域對面顯示第二個用來前進的箭頭"
 
-#: gtk/gtknotebook.c:712 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:709 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "倒退鍵"
 
-#: gtk/gtknotebook.c:713 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:710 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "顯示標準倒退箭頭按鈕"
 
-#: gtk/gtknotebook.c:727 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:724 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "前進鍵"
 
-#: gtk/gtknotebook.c:728 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:725 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "顯示標準前進箭頭按鈕"
 
-#: gtk/gtknotebook.c:742
+#: gtk/gtknotebook.c:739
 #, fuzzy
 msgid "Tab overlap"
 msgstr "標簽邊框"
 
-#: gtk/gtknotebook.c:743
+#: gtk/gtknotebook.c:740
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "可擴展元件的箭頭大小"
 
-#: gtk/gtknotebook.c:758
+#: gtk/gtknotebook.c:755
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:759
+#: gtk/gtknotebook.c:756
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "間隔的大小"
@@ -3379,7 +3379,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "分頁大小"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:973
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:984
 msgid "Track Print Status"
 msgstr ""
 
@@ -3389,124 +3389,124 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:846
+#: gtk/gtkprintoperation.c:857
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "預設高度"
 
-#: gtk/gtkprintoperation.c:847
+#: gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:865 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:876 gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:866 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:895
 #, fuzzy
 msgid "Job Name"
 msgstr "圖示名稱"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:896
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:908
+#: gtk/gtkprintoperation.c:919
 #, fuzzy
 msgid "Number of Pages"
 msgstr "頻道數目"
 
-#: gtk/gtkprintoperation.c:909
+#: gtk/gtkprintoperation.c:920
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "表格的行數"
 
-#: gtk/gtkprintoperation.c:930 gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:234
 #, fuzzy
 msgid "Current Page"
 msgstr "目前的透明度"
 
-#: gtk/gtkprintoperation.c:931 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "The current page in the document"
 msgstr "調整元件的分頁大小"
 
-#: gtk/gtkprintoperation.c:952
+#: gtk/gtkprintoperation.c:963
 #, fuzzy
 msgid "Use full page"
 msgstr "使用透明度"
 
-#: gtk/gtkprintoperation.c:953
+#: gtk/gtkprintoperation.c:964
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:1002
 #, fuzzy
 msgid "Unit"
 msgstr "迫切"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1003
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1009
+#: gtk/gtkprintoperation.c:1020
 #, fuzzy
 msgid "Show Dialog"
 msgstr "對話框"
 
-#: gtk/gtkprintoperation.c:1010
+#: gtk/gtkprintoperation.c:1021
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1044
 #, fuzzy
 msgid "Allow Async"
 msgstr "允許分割線"
 
-#: gtk/gtkprintoperation.c:1034
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1057 gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1068 gtk/gtkprintoperation.c:1069
 #, fuzzy
 msgid "Export filename"
 msgstr "檔案名稱"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1083
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1084
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "按鈕的切換狀態"
 
-#: gtk/gtkprintoperation.c:1093
+#: gtk/gtkprintoperation.c:1104
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1094
+#: gtk/gtkprintoperation.c:1105
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1112
+#: gtk/gtkprintoperation.c:1123
 #, fuzzy
 msgid "Custom tab label"
 msgstr "自訂色盤"
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -3566,7 +3566,7 @@ msgid ""
 "in the progress widget"
 msgstr "在 0.0 到 1.0 之間的數字用來指定進度列上文字的垂直對齊位置"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:203
+#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:204
 msgid "Adjustment"
 msgstr "調整"
 
@@ -3885,12 +3885,12 @@ msgstr "是否顯示按鈕的開關部份"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "用來選擇顯示何種檔案的過濾器"
 
-#: gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentchoosermenu.c:208
 #, fuzzy
 msgid "Show Numbers"
 msgstr "顯示週數"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:209
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "是否在選單上加上可卸下標記的選單項目"
@@ -3944,7 +3944,7 @@ msgstr "公制"
 msgid "The metric used for the ruler"
 msgstr "尺規使用公制單位"
 
-#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:221
+#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
 msgid "Digits"
 msgstr "位數"
 
@@ -4381,62 +4381,62 @@ msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "如設為定為‘TRUE’，當溪定群組的大小時會忽略隱藏的元件。"
 
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "含有微調按鈕數值的調整元件"
 
-#: gtk/gtkspinbutton.c:211
+#: gtk/gtkspinbutton.c:212
 msgid "Climb Rate"
 msgstr "數值調整速度"
 
-#: gtk/gtkspinbutton.c:212
+#: gtk/gtkspinbutton.c:213
 msgid "The acceleration rate when you hold down a button"
 msgstr "按下按鈕時數值調整的加速度"
 
-#: gtk/gtkspinbutton.c:222
+#: gtk/gtkspinbutton.c:223
 msgid "The number of decimal places to display"
 msgstr "顯示的小數點後位數"
 
-#: gtk/gtkspinbutton.c:231
+#: gtk/gtkspinbutton.c:232
 msgid "Snap to Ticks"
 msgstr "校正數值"
 
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:233
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr "當微調按鈕內的數值不正確時，是否自動更換為最接近的正確數值"
 
-#: gtk/gtkspinbutton.c:239
+#: gtk/gtkspinbutton.c:240
 msgid "Numeric"
 msgstr "數字"
 
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:241
 msgid "Whether non-numeric characters should be ignored"
 msgstr "是否忽略非數字的字元"
 
-#: gtk/gtkspinbutton.c:247
+#: gtk/gtkspinbutton.c:248
 msgid "Wrap"
 msgstr "換行"
 
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:249
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "當到達界限時微調按鈕是否換行"
 
-#: gtk/gtkspinbutton.c:255
+#: gtk/gtkspinbutton.c:256
 msgid "Update Policy"
 msgstr "更新方式"
 
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:257
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "微調按鈕應該任何時候都更新，還是只有輸入的數值合法時才會更新"
 
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:266
 msgid "Reads the current value, or sets a new value"
 msgstr "讀取目前的數值，或是設定新的數值"
 
-#: gtk/gtkspinbutton.c:274
+#: gtk/gtkspinbutton.c:275
 msgid "Style of bevel around the spin button"
 msgstr "微調按鈕周圍的邊界樣式"
 
