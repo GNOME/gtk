@@ -841,14 +841,27 @@ update_widgets (GtkPrinterOptionWidget *widget)
       break;
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
-	char *basename = g_path_get_basename (source->value);
-	char *dirname = g_path_get_dirname (source->value);
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), basename);
-	if (g_path_is_absolute (dirname))
-	  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->combo),
-					       dirname);
-	g_free (basename);
-	g_free (dirname);
+        gchar *filename = g_filename_from_uri (source->value, NULL, NULL);
+        if (filename != NULL)
+          {
+            gchar *basename, *dirname, *text;
+
+            basename = g_path_get_basename (filename);
+            dirname = g_path_get_dirname (filename);
+            text = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+
+            if (text != NULL)
+              gtk_entry_set_text (GTK_ENTRY (priv->entry), basename);
+            if (g_path_is_absolute (dirname))
+              gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->combo),
+                                                   dirname);
+            g_free (text);
+            g_free (basename);
+            g_free (dirname);
+            g_free (filename);
+          }
+	else
+	  gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
 	break;
       }
     default:

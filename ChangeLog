@@ -1,5 +1,10 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinteroptionwidget.c (update_widgets): 
+	* modules/printbackends/file/gtkprintbackendfile.c 
+	(output_file_from_settings): Handle filename encoding
+	consistently.  (#351812, Christian Persch)
+
 	* NEWS: Updates
 
 2006-08-17  Federico Mena Quintero  <federico@novell.com>

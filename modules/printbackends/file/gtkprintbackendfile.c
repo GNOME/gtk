@@ -205,27 +205,18 @@ format_from_settings (GtkPrintSettings *settings)
 }
 
 static gchar *
-filename_from_settings (GtkPrintSettings *settings,
-			gchar            *default_format)
+output_file_from_settings (GtkPrintSettings *settings,
+			   const gchar      *default_format)
 {
-  gchar *filename;
-
-  filename = NULL;
+  gchar *uri = NULL;
+  
   if (settings)
-    {
-      const gchar *uri;
+    uri = g_strdup (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI));
 
-      uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
-      if (uri)
-	filename = g_filename_from_uri (uri, NULL, NULL);
-    }
-  /* FIXME: shouldn't we error out if we get an URI we cannot handle,
-   * rather than to print to some random file somewhere?
-   */
-
-  if (filename == NULL)
+  if (uri == NULL)
     { 
-      gchar *extension;
+      const gchar *extension;
+      gchar *name, *locale_name, *path;
 
       if (default_format)
         extension = default_format;
@@ -238,10 +229,21 @@ filename_from_settings (GtkPrintSettings *settings,
         }
  
       /* default filename used for print-to-file */ 
-      filename = g_strdup_printf (_("output.%s"), extension);
+      name = g_strdup_printf (_("output.%s"), extension);
+      locale_name = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
+      g_free (name);
+
+      if (locale_name != NULL)
+        {
+          path = g_build_filename (g_get_current_dir (), locale_name, NULL);
+          g_free (locale_name);
+
+          uri = g_filename_to_uri (path, NULL, NULL);
+          g_free (path);
+	}
     }
 
-  return filename;
+  return uri;
 }
 
 static cairo_status_t
@@ -260,7 +262,7 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, data, length, &written, &error);
+      g_io_channel_write_chars (io, (const gchar *) data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -403,7 +405,7 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gchar *filename = NULL; 
+  gchar *uri, *filename;
 
   printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
@@ -416,8 +418,13 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   ps->backend = print_backend;
 
   internal_error = NULL;
-  filename = filename_from_settings (settings, NULL);
-  
+  uri = output_file_from_settings (settings, NULL);
+  filename = g_filename_from_uri (uri, NULL, &internal_error);
+  g_free (uri);
+
+  if (filename == NULL)
+    goto error;
+
   ps->target_io = g_io_channel_new_file (filename, "w", &internal_error);
 
   g_free (filename);
@@ -425,6 +432,7 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   if (internal_error == NULL)
     g_io_channel_set_encoding (ps->target_io, NULL, &internal_error);
 
+error:
   if (internal_error != NULL)
     {
       file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend),
@@ -475,7 +483,7 @@ file_printer_get_options (GtkPrinter           *printer,
   gchar *display_format_names[N_FORMATS];
   gint n_formats = 0;
   OutputFormat format;
-  gchar *filename;
+  gchar *uri;
   gint current_format = 0;
 
   format = format_from_settings (settings);
@@ -521,11 +529,11 @@ file_printer_get_options (GtkPrinter           *printer,
 	}
     }
 
-  filename = filename_from_settings (settings, supported_formats[current_format]);
+  uri = output_file_from_settings (settings, supported_formats[current_format]);
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), 
 				   GTK_PRINTER_OPTION_TYPE_FILESAVE);
-  gtk_printer_option_set (option, filename);
+  gtk_printer_option_set (option, uri);
   option->group = g_strdup ("GtkPrintDialogExtension");
   gtk_printer_option_set_add (set, option);
 
