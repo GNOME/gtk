@@ -1,5 +1,8 @@
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_list_filters):
+	Initialize menu.  (#351857, Chris Wilson)
+
 	* gtk/gtkprinteroptionwidget.c (update_widgets): 
 	* modules/printbackends/file/gtkprintbackendfile.c 
 	(output_file_from_settings): Handle filename encoding

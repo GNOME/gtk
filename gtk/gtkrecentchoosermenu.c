@@ -696,11 +696,13 @@ gtk_recent_chooser_menu_remove_filter (GtkRecentChooser *chooser,
 }
 
 static GSList *
-gtk_recent_chooser_menu_list_filters (GtkRecentChooser  *chooser)
+gtk_recent_chooser_menu_list_filters (GtkRecentChooser *chooser)
 {
   GtkRecentChooserMenu *menu;
   GSList *retval = NULL;
 
+  menu = GTK_RECENT_CHOOSER_MENU (chooser);
+ 
   if (menu->priv->current_filter)
     retval = g_slist_prepend (retval, menu->priv->current_filter);
 
