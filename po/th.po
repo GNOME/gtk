@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-16 11:14+0700\n"
+"PO-Revision-Date: 2006-08-19 10:39+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -4024,7 +4024,7 @@ msgstr "บรรทัดคำสั่ง"
 #: modules/printbackends/file/gtkprintbackendfile.c:232
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "output.%s"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:457
 msgid "Print to File"
