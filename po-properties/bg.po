@@ -8,10 +8,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gtk+-properties 2.8\n"
+"Project-Id-Version: Gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-18 16:51+0300\n"
-"PO-Revision-Date: 2006-08-18 16:46+0300\n"
+"POT-Creation-Date: 2006-08-19 22:58+0300\n"
+"PO-Revision-Date: 2006-08-19 16:14+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr "Адрес на уеб сайт"
 
 #: ../gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
-msgstr "URL към уеб сайта на програмата"
+msgstr "Адрес на уеб сайта на програмата"
 
 #: ../gtk/gtkaboutdialog.c:306
 msgid "Website label"
@@ -171,7 +171,7 @@ msgid ""
 "defaults to the URL"
 msgstr ""
 "Етикетът за хипервръзката към уеб сайта на програмата. Ако не е зададен, по "
-"подразбиране е URL-то"
+"подразбиране е адресът-УРЛ"
 
 #: ../gtk/gtkaboutdialog.c:323
 msgid "Authors"
@@ -848,7 +848,7 @@ msgstr "Вътрешна граница"
 
 #: ../gtk/gtkbutton.c:463
 msgid "Border between button edges and child."
-msgstr ""
+msgstr "Граница между границата на бутона и дъщерния елемент."
 
 #: ../gtk/gtkbutton.c:476
 msgid "Image spacing"
@@ -1043,7 +1043,7 @@ msgstr "Стойност на клавиша на бързия клавиш"
 
 #: ../gtk/gtkcellrendereraccel.c:124
 msgid "Accelerator modifiers"
-msgstr "Модификатори за бързия калвиш"
+msgstr "Модификатори за бързия клавиш"
 
 #: ../gtk/gtkcellrendereraccel.c:125
 msgid "The modifier mask of the accelerator"
@@ -1055,7 +1055,7 @@ msgstr "Код на клавиша за бързия клавиш"
 
 #: ../gtk/gtkcellrendereraccel.c:143
 msgid "The hardware keycode of the accelerator"
-msgstr "Хардуерният ко на клавиша за бързия клавиш"
+msgstr "Хардуерният код на клавиша за бързия клавиш"
 
 #: ../gtk/gtkcellrendereraccel.c:162
 msgid "Accelerator Mode"
@@ -1063,7 +1063,7 @@ msgstr "Режим на бързия клавиш"
 
 #: ../gtk/gtkcellrendereraccel.c:163
 msgid "The type of accelerators"
-msgstr "Видът на бързите клавии"
+msgstr "Видът на бързите клавиши"
 
 #: ../gtk/gtkcellrenderercombo.c:89
 msgid "Model"
@@ -1939,6 +1939,7 @@ msgstr "FALSE премахва външното вдаване от полето
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
+"Граница между текст и рамка. Има превес над стила на вътрешната граница"
 
 #: ../gtk/gtkentry.c:522
 msgid "Invisible character"
@@ -1994,18 +1995,16 @@ msgstr ""
 "подредби отдясно-наляво (RTL)"
 
 #: ../gtk/gtkentry.c:590
-#, fuzzy
 msgid "Truncate multiline"
 msgstr "Съкращаване на множество редове"
 
 #: ../gtk/gtkentry.c:591
-#, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Дали при поставянето на много редове се поставя само първия"
 
 #: ../gtk/gtkentry.c:858
 msgid "Border between text and frame."
-msgstr ""
+msgstr "Граница между текста и рамката."
 
 #: ../gtk/gtkentry.c:863 ../gtk/gtklabel.c:620
 msgid "Select on focus"
@@ -2017,11 +2016,11 @@ msgstr "Дали да се избере съдържанието на запис
 
 #: ../gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
-msgstr ""
+msgstr "Време за подсказка на парола"
 
 #: ../gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
-msgstr ""
+msgstr "Колко дълго да се показва последния въведен знак в полета със скриване"
 
 #: ../gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -2181,7 +2180,7 @@ msgstr "Само локални"
 #: ../gtk/gtkfilechooser.c:217
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr ""
-"Дали избраните файлове да бъдат ограничени само до локални URL-та - file:"
+"Дали избраните файлове да бъдат ограничени само до локални адреси - file:"
 
 #: ../gtk/gtkfilechooser.c:222
 msgid "Preview widget"
@@ -2294,11 +2293,11 @@ msgstr "Дали бутоните за създаване/управление �
 
 #: ../gtk/gtkfilesystem.c:389
 msgid "Cancelled"
-msgstr ""
+msgstr "Отменена"
 
 #: ../gtk/gtkfilesystem.c:390
 msgid "Whether or not the operation has been successfully cancelled"
-msgstr ""
+msgstr "Дали операцията е била успешно отменена"
 
 #: ../gtk/gtkfixed.c:90 ../gtk/gtklayout.c:582
 msgid "X position"
@@ -2527,7 +2526,6 @@ msgid "Column Spacing"
 msgstr "Разредка на колоните"
 
 #: ../gtk/gtkiconview.c:666
-#, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "Пространството, което се вмъква между колоните в мрежата"
 
@@ -3178,7 +3176,7 @@ msgstr "Идентификатор на група"
 
 #: ../gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
-msgstr ""
+msgstr "Идентификатор на група за влачене и пускане"
 
 #: ../gtk/gtknotebook.c:613
 msgid "Tab label"
@@ -3217,22 +3215,18 @@ msgid "Tab pack type"
 msgstr "Тип пакетиране на таба"
 
 #: ../gtk/gtknotebook.c:655
-#, fuzzy
 msgid "Tab reorderable"
 msgstr "Преподредими табове"
 
 #: ../gtk/gtknotebook.c:656
-#, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Дали табовете могат да се преподреждат от потребителя или не"
 
 #: ../gtk/gtknotebook.c:662
-#, fuzzy
 msgid "Tab detachable"
 msgstr "Отделими табове"
 
 #: ../gtk/gtknotebook.c:663
-#, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Дали табът може да се отделя."
 
@@ -3271,12 +3265,10 @@ msgid "Display the standard forward arrow button"
 msgstr "Използване на стандартния бутон за стрелка напред"
 
 #: ../gtk/gtknotebook.c:739
-#, fuzzy
 msgid "Tab overlap"
 msgstr "Припокриване на табовете"
 
 #: ../gtk/gtknotebook.c:740
-#, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Размер на припокриването на табовете"
 
@@ -3285,7 +3277,6 @@ msgid "Tab curvature"
 msgstr "Заобляне на табовете"
 
 #: ../gtk/gtknotebook.c:756
-#, fuzzy
 msgid "Size of tab curvature"
 msgstr "Размер на заоблянето на табовете"
 
@@ -3397,7 +3388,7 @@ msgstr "Виртуален"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
-msgstr "ЛЪЖА, ако товеа е реално хардуерно устройство"
+msgstr "ЛЪЖА, ако това е реално хардуерно устройство"
 
 #: ../gtk/gtkprinter.c:140
 msgid "Accepts PDF"
@@ -3405,7 +3396,7 @@ msgstr "Приема PDF"
 
 #: ../gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "ИСТИНА, ако този принтер приема PDF-и"
 
 #: ../gtk/gtkprinter.c:147
 msgid "Accepts PostScript"
@@ -3413,15 +3404,15 @@ msgstr "Приема PostScript"
 
 #: ../gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "ИСТИНА, ако този принтер приема PostScript"
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "Съобщение за състоянието"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Низ, даващ текущото състояние на принтера"
 
 #: ../gtk/gtkprinter.c:161
 msgid "Location"
@@ -3490,9 +3481,8 @@ msgstr ""
 "сървъра за печат."
 
 #: ../gtk/gtkprintoperation.c:857
-#, fuzzy
 msgid "Default Page Setup"
-msgstr "Настройки на странцата по подразбиране"
+msgstr "Настройки на страницата по подразбиране"
 
 #: ../gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
@@ -3507,7 +3497,6 @@ msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings, който се ползва за иницилизирането на диалога"
 
 #: ../gtk/gtkprintoperation.c:895
-#, fuzzy
 msgid "Job Name"
 msgstr "Име на задание"
 
@@ -3516,27 +3505,22 @@ msgid "A string used for identifying the print job."
 msgstr "Низ за идентифицирането на заданието за печат"
 
 #: ../gtk/gtkprintoperation.c:919
-#, fuzzy
 msgid "Number of Pages"
 msgstr "Брой страници"
 
 #: ../gtk/gtkprintoperation.c:920
-#, fuzzy
 msgid "The number of pages in the document."
 msgstr "Броят страници в документа"
 
 #: ../gtk/gtkprintoperation.c:941 ../gtk/gtkprintunixdialog.c:234
-#, fuzzy
 msgid "Current Page"
 msgstr "Текущата страница"
 
 #: ../gtk/gtkprintoperation.c:942 ../gtk/gtkprintunixdialog.c:235
-#, fuzzy
 msgid "The current page in the document"
 msgstr "Текущата страница в документа"
 
 #: ../gtk/gtkprintoperation.c:963
-#, fuzzy
 msgid "Use full page"
 msgstr "Използване на цялата страница"
 
@@ -3545,15 +3529,18 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
+"ИСТИНА, ако началото на контекста трябва да е ъгъла на страницата, а не "
+"ъгъла на зоната за изобразяване"
 
 #: ../gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
+"ИСТИНА, ако операцията за печат продължава да докладва са състоянието си "
+"след като данните за печат са били пратени на принтера или сървъра за печат."
 
 #: ../gtk/gtkprintoperation.c:1002
-#, fuzzy
 msgid "Unit"
 msgstr "Единица"
 
@@ -3562,7 +3549,6 @@ msgid "The unit in which distances can be measured in the context"
 msgstr "Единицата за разстоянията в този контекст"
 
 #: ../gtk/gtkprintoperation.c:1020
-#, fuzzy
 msgid "Show Dialog"
 msgstr "Показване на диалогова кутия"
 
@@ -3571,7 +3557,6 @@ msgid "TRUE if a progress dialog is shown while printing."
 msgstr "ИСТИНА, ако диалогът за прогрес бива показван докато се печата."
 
 #: ../gtk/gtkprintoperation.c:1044
-#, fuzzy
 msgid "Allow Async"
 msgstr "Позволяване на асинхронност"
 
@@ -3580,7 +3565,6 @@ msgid "TRUE if print process may run asynchronous."
 msgstr "ИСТИНА, ако заданието за печат може да се изпълни асинхронно"
 
 #: ../gtk/gtkprintoperation.c:1068 ../gtk/gtkprintoperation.c:1069
-#, fuzzy
 msgid "Export filename"
 msgstr "Име на файл при изнасяне"
 
@@ -3589,7 +3573,6 @@ msgid "Status"
 msgstr "Състояние"
 
 #: ../gtk/gtkprintoperation.c:1084
-#, fuzzy
 msgid "The status of the print operation"
 msgstr "Състояние на операцията по печата"
 
@@ -3602,7 +3585,6 @@ msgid "A human-readable description of the status"
 msgstr "Човешко описание на състоянието"
 
 #: ../gtk/gtkprintoperation.c:1123
-#, fuzzy
 msgid "Custom tab label"
 msgstr "Потребителски етикет на таб"
 
@@ -3782,7 +3764,7 @@ msgid ""
 "action belongs."
 msgstr ""
 "Свойството стойност на текущо активният член на групата, към която "
-"придналежи това действие."
+"принадлежи това действие."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3816,23 +3798,27 @@ msgstr "Обръщане на посоката"
 
 #: ../gtk/gtkrange.c:340
 msgid "Lower stepper sensitivity"
-msgstr ""
+msgstr "Чувствителност на стрелките нагоре"
 
 #: ../gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
+"Политиката на чувствителност на стрелките, които сочат към долната граница "
+"на интервала"
 
 #: ../gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Чувствителност на стрелките надолу"
 
 #: ../gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
+"Политиката на чувствителност на стрелките, които сочат към горната граница "
+"на интервала"
 
 #: ../gtk/gtkrange.c:357
 msgid "Slider Width"
@@ -3888,41 +3874,47 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Изчертаване на АКТИВЕН плъзгач при влачене"
 
 #: ../gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
+"Когато е ИСТИНА, плъзгачите ще бъдат изчертвани АКТИВНИ и с ВЪТРЕШНА сянка "
+"при влачене"
 
 #: ../gtk/gtkrange.c:426
 msgid "Trough Side Details"
-msgstr ""
+msgstr "Странични детайли на дупките"
 
 #: ../gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
+"Ако е ИСТИНА, частите на дупките от двете страни на плъзгача се изчертават с "
+"различни детайли"
 
 #: ../gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
-msgstr ""
+msgstr "Скали под дупките"
 
 #: ../gtk/gtkrange.c:444
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
+"Дали да се изчертава през целия интервал или да се пропускат стрелките и "
+"отстоянието"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "Управление на последно ползвани"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "Кой обект за последно използвани обекти да се използва"
 
 #: ../gtk/gtkrecentchooser.c:118
 msgid "Show Private"
@@ -3984,26 +3976,24 @@ msgstr "Вид подредба"
 
 #: ../gtk/gtkrecentchooser.c:163
 msgid "The sorting order of the items displayed"
-msgstr "Редъд на подреждане на показваните елементи"
+msgstr "Редът на подреждане на показваните елементи"
 
 #: ../gtk/gtkrecentchooser.c:170
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Текущият филтър за избиране, кои ресурси да се показват"
 
 #: ../gtk/gtkrecentchoosermenu.c:208
-#, fuzzy
 msgid "Show Numbers"
 msgstr "Показване на номерата"
 
 #: ../gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Дали елементите да се показват с номер"
 
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
-"Пълният пъ към файла, който да се ползва за запазване и прочитане на списъка"
+"Пълният път към файла, който да се ползва за запазване и прочитане на списъка"
 
 #: ../gtk/gtkrecentmanager.c:232
 msgid ""
@@ -4014,7 +4004,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentmanager.c:248
 msgid "The size of the recently used resources list"
-msgstr "Размерът на списъак с последно използваните елементи"
+msgstr "Размерът на списък с последно използваните елементи"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
@@ -4115,11 +4105,11 @@ msgstr ""
 "Втори бутон със стрелка „назад“ от другата страна на лентата за придвижване"
 
 #: ../gtk/gtkscrollbar.c:92
-#, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
-"Втори бутон със стрелка „напред“ от другата страна на лентата за придвижване"
+"Показван на втори бутон със стрелка „напред“ от другата страна на лентата за "
+"придвижване"
 
 #: ../gtk/gtkscrolledwindow.c:221 ../gtk/gtktext.c:541
 #: ../gtk/gtktreeview.c:557
@@ -4152,23 +4142,24 @@ msgid "Window Placement"
 msgstr "Разполагане на прозорец"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Къде е поместено съдържанието спрямо лентите за придвижване"
+msgstr ""
+"Къде е поместено съдържанието спрямо лентите за придвижване. Това свойство "
+"се взима предвид, само ако „window-placement-set“ е ИСТИНА."
 
 #: ../gtk/gtkscrolledwindow.c:270
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "Разполагане на прозорец"
+msgstr "Разполагане на няколко прозореца"
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "Къде е поместено съдържанието спрямо лентите за придвижване"
+msgstr ""
+"Дали „window-placement“ да се ползва при определянето къде е поместено "
+"съдържанието спрямо лентите за придвижване"
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4187,16 +4178,16 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Брой пиксели между лентите за придвижване и придвижвания прозорец"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "Разполагане на прозорец"
+msgstr "Разполагане на прозорец с придвижване"
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Къде е поместено съдържанието спрямо лентите за придвижване"
+msgstr ""
+"Къде е поместено съдържанието спрямо лентите за придвижване на придвижените "
+"прозорци, ако няма изрично задаване от прозореца с лентите"
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4275,14 +4266,12 @@ msgid "Name of icon theme to use"
 msgstr "Име на темата за икони, която да се използва"
 
 #: ../gtk/gtksettings.c:248
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Име на тема за икони"
+msgstr "Име на резервната тема за икони"
 
 #: ../gtk/gtksettings.c:249
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Име на темата за икони, която да се използва"
+msgstr "Име на темата за икони, която да се използва, когато няма друга"
 
 #: ../gtk/gtksettings.c:257
 msgid "Key Theme Name"
@@ -4389,18 +4378,20 @@ msgid "Cursor theme name"
 msgstr "Име на тема за показалеца"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "Име на темата за показалеца, която да се използва"
+msgstr ""
+"Име на темата за показалеца, която да се използва или NULL, за да се ползва "
+"темата по подразбиране"
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "Размер на показалеца"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Размерът, който да се използва за показалците"
+msgstr ""
+"Размерът, който да се използва за показалците или 0, за да се ползва "
+"размерът по подразбиране"
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
@@ -4412,58 +4403,61 @@ msgstr "Дали бутоните в прозорците да използва�
 
 #: ../gtk/gtksettings.c:391
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "Показване на менюто „Методи за вход“"
 
 #: ../gtk/gtksettings.c:392
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
+"Дали контекстните менюта на елементите и текстовите полета ще позволяват да "
+"се сменя метода за вход"
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "Показване на менюто „Вмъкване на контролен символ за Уникод“"
 
 #: ../gtk/gtksettings.c:401
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
+"Дали контекстните менюта на елементите и текстовите полета ще позволяват "
+"въвеждането на контролни символи"
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
-msgstr ""
+msgstr "Начало на изтичане"
 
 #: ../gtk/gtksettings.c:410
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Началното време за изтичане, когато се натисне бутон"
 
 #: ../gtk/gtksettings.c:419
 msgid "Repeat timeout"
-msgstr ""
+msgstr "Изтичане на повтаряне"
 
 #: ../gtk/gtksettings.c:420
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Време за изтичане на повтарянето, когато се натисне бутон"
 
 #: ../gtk/gtksettings.c:429
-#, fuzzy
 msgid "Expand timeout"
-msgstr "Големина на разширителя"
+msgstr "Изтичане на разширение"
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
+"Време за изтичане на разширение, когато графичен обект се разширява в нов "
+"регион"
 
 #: ../gtk/gtksettings.c:459
-#, fuzzy
 msgid "Color scheme"
-msgstr "Цветово пространство"
+msgstr "Цветова схема"
 
 #: ../gtk/gtksettings.c:460
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "Името на иконата от темата на иконите"
+msgstr "Палитра с наименувани цветове, която да се ползва в темите"
 
 #: ../gtk/gtksettings.c:469
 msgid "Enable Animations"
@@ -4471,24 +4465,25 @@ msgstr "Включване на анимациите"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "Дали да се включат анимациите на ниво графични обекти"
 
 #: ../gtk/gtksettings.c:488
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Режим на допир на екрана"
 
 #: ../gtk/gtksettings.c:489
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
+"Когато е ИСТИНА, към този екран не се доставят събития за докладване на "
+"действие"
 
 #: ../gtk/gtksettings.c:507
-#, fuzzy
 msgid "Color Hash"
-msgstr "Цветово пространство"
+msgstr "Цветова извадка"
 
 #: ../gtk/gtksettings.c:508
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "Таблица с извадки, която представя цветовата схема."
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
@@ -4507,7 +4502,6 @@ msgid "Ignore hidden"
 msgstr "Игнориране на скритите"
 
 #: ../gtk/gtksizegroup.c:285
-#, fuzzy
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
@@ -4742,44 +4736,44 @@ msgid "Current text of the buffer"
 msgstr "Текущият текст на буфера"
 
 #: ../gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "Следящ избор"
+msgstr "Има избрано"
 
 #: ../gtk/gtktextbuffer.c:213
-#, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "GdkFont, който текущо е избран"
+msgstr "Дали в буфера има текущо избран текст"
 
 #: ../gtk/gtktextbuffer.c:228
-#, fuzzy
 msgid "Cursor position"
 msgstr "Позиция на показалеца"
 
 #: ../gtk/gtktextbuffer.c:229
 msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "Позиция на вмъкване (отместване от началото на буфера)"
 
 #: ../gtk/gtktextbuffer.c:244
-#, fuzzy
 msgid "Copy target list"
-msgstr "Авторски права"
+msgstr "Списък на копируемите"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
+"Списъкът с целите, които този буфер поддържа за копиране от буфера и при "
+"влачене с мишката"
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
-msgstr ""
+msgstr "Списък на поставимите"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
 msgstr ""
+"Списъкът с целите, които този буфер поддържа за поставяне от буфера и при "
+"влачене с мишката"
 
 #: ../gtk/gtktexttag.c:171
 msgid "Tag name"
@@ -5157,9 +5151,8 @@ msgstr ""
 "бутони"
 
 #: ../gtk/gtktoggleaction.c:119
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "Дали бутонът за превключване да бъде натиснат или не"
+msgstr "Дали бутонът за превключване да бъде активен или не"
 
 #: ../gtk/gtktogglebutton.c:105 ../gtk/gtktoggletoolbutton.c:102
 msgid "If the toggle button should be pressed in or not"
@@ -5239,13 +5232,12 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Размерът на рамката между сянката на лентата с инструменти и бутоните"
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Минимална широчина на дъщерен елемент"
+msgstr "Максимално разширяване на дъщерен елемент"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "Максималното място, което ще бъде отделено на разширим елемент"
 
 #: ../gtk/gtktoolbar.c:607
 msgid "Space style"
@@ -5325,14 +5317,12 @@ msgid "Icon widget to display in the item"
 msgstr "Графичен обект за икона, който да се показва в елемента"
 
 #: ../gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "Интервалът между редове"
+msgstr "Интервалът между икони"
 
 #: ../gtk/gtktoolbutton.c:240
-#, fuzzy
 msgid "Spacing in pixels between the icon and label"
-msgstr "Разстояние между бутоните на стрелката и показалеца"
+msgstr "Разстояние между иконата и етикета в пиксели"
 
 #: ../gtk/gtktoolitem.c:145
 msgid ""
@@ -5343,9 +5333,8 @@ msgstr ""
 "бутонът на лентата с инструменти показва текст в режим GTK_TOOLBAR_BOTH_HORIZ"
 
 #: ../gtk/gtktrayicon-x11.c:98
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "Ориентация на лентата с инструменти"
+msgstr "Ориентация на тавата"
 
 #: ../gtk/gtktreemodelsort.c:274
 msgid "TreeModelSort Model"
@@ -5451,52 +5440,46 @@ msgstr ""
 "тях"
 
 #: ../gtk/gtktreeview.c:691
-#, fuzzy
 msgid "Show Expanders"
-msgstr "Е разширител"
+msgstr "Показване на разширители"
 
 #: ../gtk/gtktreeview.c:692
-#, fuzzy
 msgid "View has expanders"
-msgstr "Е разширител"
+msgstr "Изгледът има разширители"
 
 #: ../gtk/gtktreeview.c:699
 msgid "Level Indentation"
-msgstr ""
+msgstr "Отстъп на ниво"
 
 #: ../gtk/gtktreeview.c:700
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "Допълнителен достъп за всяко ниво"
 
 #: ../gtk/gtktreeview.c:709
 msgid "Rubber Banding"
-msgstr ""
+msgstr "Свързване"
 
 #: ../gtk/gtktreeview.c:710
-#, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Дали е позволен избор на няколко файла"
+msgstr ""
+"Дали е позволен избор на множество елементи с провлачване на показалеца"
 
 #: ../gtk/gtktreeview.c:717
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Клавиши със стрелки"
+msgstr "Включване на мрежата от линии"
 
 #: ../gtk/gtktreeview.c:718
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Показва дали ще се показват граници"
+msgstr "Дали мрежата от линии да се показва в дървовидния изглед"
 
 #: ../gtk/gtktreeview.c:726
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "Клавиши със стрелки"
+msgstr "Включване на линиите на дървото"
 
 #: ../gtk/gtktreeview.c:727
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Показва дали ще се показват граници"
+msgstr "Дали линиите на дървото да се показва в дървовидния изглед"
 
 #: ../gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
@@ -5548,51 +5531,47 @@ msgstr "Цветът, който да се използва за нечетни 
 
 #: ../gtk/gtktreeview.c:793
 msgid "Row Ending details"
-msgstr ""
+msgstr "Настройки за края на ред"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "Допълнителна тема на фона на ред"
 
 #: ../gtk/gtktreeview.c:800
-#, fuzzy
 msgid "Grid line width"
-msgstr "Широчина на линия за фокус"
+msgstr "Широчина на линиите в мрежата"
 
 #: ../gtk/gtktreeview.c:801
-#, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr "Широчина, в пиксели, за линията на индикатора на фокус"
+msgstr "Широчина, в пиксели, на линиите в мрежата в дървовидния изглед"
 
 #: ../gtk/gtktreeview.c:807
-#, fuzzy
 msgid "Tree line width"
-msgstr "Фиксираната широчина"
+msgstr "Широчина на линиите за дървото"
 
 #: ../gtk/gtktreeview.c:808
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
-msgstr "Широчина, в пиксели, за линията на индикатора на фокус"
+msgstr "Широчина, в пиксели, на линиите за дървото в дървовидния изглед"
 
 #: ../gtk/gtktreeview.c:814
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "Шаблон за линия с пунктир за фокуса"
+msgstr "Шаблон за линията за мрежата"
 
 #: ../gtk/gtktreeview.c:815
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Шаблон с тирета използван за изчертаване на индикатор за фокус"
+msgstr ""
+"Шаблон с тирета използван за изчертаване на линиите на мрежата в дървовидния "
+"изглед"
 
 #: ../gtk/gtktreeview.c:821
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "Шаблон за линия с пунктир"
+msgstr "Шаблон за линията на дървото"
 
 #: ../gtk/gtktreeview.c:822
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Шаблон с тирета използван за изчертаване на индикатор за фокус"
+msgstr ""
+"Шаблон с тирета използван за изчертаване на линиите на дървото в дървовидния "
+"изглед"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -6215,12 +6194,11 @@ msgstr "Гравитацията на прозореца"
 
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "Временен прозорец"
 
 #: ../gtk/gtkwindow.c:675
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "Бутоните показани в диалога за съобщение"
+msgstr "Временния родител на диалога"
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
