@@ -5230,8 +5230,7 @@ gtk_text_view_backspace (GtkTextView *text_view)
 
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
                                     &insert,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                              "insert"));
+                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
 
   if (gtk_text_buffer_backspace (get_buffer (text_view), &insert,
 				 TRUE, text_view->editable))
@@ -5239,7 +5238,7 @@ gtk_text_view_backspace (GtkTextView *text_view)
       gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
-					  gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
+                                          gtk_text_buffer_get_insert (get_buffer (text_view)));
     }
 }
 
@@ -5254,8 +5253,7 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
 				 text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
-                                      gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                "insert"));
+                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
 }
 
 static void
@@ -5266,10 +5264,8 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
   
   gtk_text_buffer_copy_clipboard (get_buffer (text_view),
 				  clipboard);
-  DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_mark_onscreen (text_view,
-                                      gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                "insert"));
+
+  /* on copy do not scroll, we are already onscreen */
 }
 
 static void
@@ -5284,8 +5280,7 @@ gtk_text_view_paste_clipboard (GtkTextView *text_view)
 				   text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
-                                      gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                "insert"));
+                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
 }
 
 static void
