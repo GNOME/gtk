@@ -1183,7 +1183,11 @@ gtk_file_path_get_type (void)
 GSList *
 gtk_file_paths_sort (GSList *paths)
 {
+#ifndef G_OS_WIN32
   return g_slist_sort (paths, (GCompareFunc)strcmp);
+#else
+  return g_slist_sort (paths, (GCompareFunc)_gtk_file_system_win32_path_compare);
+#endif
 }
 
 /**

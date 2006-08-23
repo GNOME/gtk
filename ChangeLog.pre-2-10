@@ -1,8 +1,51 @@
 2006-08-23  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkfilesystemwin32.c: Remove dead code. Reduce spurious
+	differences between this file and gtkfilesystemunix.c so that it
+	is easier to compare them and check if differences are
+	intentional. I will later factor out the common functions and code
+	snippets from these two files.
+
+2006-08-23  Tor Lillqvist  <tml@novell.com>
+
+	Fix several problems with the file chooser on Windows, for
+	instance prevent duplicated directory entries from appearing.
+
+	* gtk/gtkfilesystem.c (gtk_file_paths_sort): Use
+	_gtk_file_system_win32_path_compare() on Windows for casefolded
+	sorting.
+
+	* gtk/gtkfilesystemwin32.c (casefolded_hash, casefolded_equal):
+	case-independent hash and equality functions. Scan the UTF-8
+	strings gunichar by gunichar, and ignore special casing rules, to
+	more closely match NTFS behaviour.
+	(gtk_file_system_win32_init): Use casefolded_hash() and
+	casefolded_equal() for the folder hash table.
+	(remove_trailing_slash): Don't remove the slash of a drive or
+	share root.
+	(get_mime_type_for_file): Take also a WIN32_FILE_ATTRIBUTE_DATA as
+	argument, and use that to recognize directories. Don't call
+	g_file_test() to check for executables, just look at the file name
+	extension directly.
+	(gtk_file_system_win32_make_path): Check illegal chars in file
+	name, like in gtkfilesystemunix.c.
+	(create_file_info): Drop unused basename parameter. Call
+	g_filename_display_name() directly for roots, as
+	g_filename_display_basename() mishandles those.
+	(gtk_file_folder_win32_get_info): Skip sanity check for now, as it
+	fails for server share roots. Construct basename only in the if
+	branch that uses it.
+	(fill_in_names): Use casefolded_hash() and casefolded_equal() for
+	the folder's stat_info hash table, too.
+	(_gtk_file_system_win32_path_compare): Scan the strings gunichar
+	by gunichar and ignore special casing here, too, instead of using
+	g_utf8_casefold(). Match slash and backslash.
+
+2006-08-23  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_shape_combine_mask)
 	(gdk_window_input_shape_combine_mask)
-	gdk_window_shape_combine_region)
+	(gdk_window_shape_combine_region)
 	(gdk_window_input_shape_combine_region): Add Win32 detail to doc
 	comments.
 
