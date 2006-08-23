@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-01 10:29+0530\n"
+"PO-Revision-Date: 2006-08-23 10:41+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
 "MIME-Version: 1.0\n"
@@ -2635,9 +2635,8 @@ msgid "Unknown item"
 msgstr "ଅଜଣା ବସ୍ତୁ"
 
 #: gtk/gtkrecentchoosermenu.c:984
-#, fuzzy
 msgid "No items found"
-msgstr "'%s' ୟୁ.ଆର.ଆଇ. ପାଇଁ କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
+msgstr "କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
 #: gtk/gtkrecentmanager.c:1058 gtk/gtkrecentmanager.c:1208
 #: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
@@ -4051,7 +4050,7 @@ msgstr "ପାଠ୍ଯ ନିର୍ଦ୍ଦେଶ"
 #: modules/printbackends/file/gtkprintbackendfile.c:232
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "%s ନିର୍ଗମ।"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:457
 msgid "Print to File"
