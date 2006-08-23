@@ -89,7 +89,7 @@ static void gtk_printer_option_widget_get_property (GObject      *object,
 						    GValue       *value,
 						    GParamSpec   *pspec);
 static gboolean gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
-							      gboolean   group_cycling);
+							      gboolean  group_cycling);
 
 static void
 gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
@@ -229,8 +229,8 @@ source_changed_cb (GtkPrinterOption *source,
 }
 
 void
-gtk_printer_option_widget_set_source (GtkPrinterOptionWidget  *widget,
-				      GtkPrinterOption *source)
+gtk_printer_option_widget_set_source (GtkPrinterOptionWidget *widget,
+				      GtkPrinterOption       *source)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
 
@@ -256,12 +256,18 @@ gtk_printer_option_widget_set_source (GtkPrinterOptionWidget  *widget,
   g_object_notify (G_OBJECT (widget), "source");
 }
 
+enum {
+  NAME_COLUMN,
+  VALUE_COLUMN,
+  N_COLUMNS
+};
+
 static void
 combo_box_set_model (GtkWidget *combo_box)
 {
   GtkListStore *store;
 
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+  store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
   gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
   g_object_unref (store);
 }
@@ -274,7 +280,7 @@ combo_box_set_view (GtkWidget *combo_box)
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-                                  "text", 1,
+                                  "text", NAME_COLUMN,
                                    NULL);
 }
 
@@ -286,7 +292,7 @@ combo_box_entry_new (void)
 
   combo_box_set_model (combo_box);
 
-  gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo_box), 1);
+  gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo_box), NAME_COLUMN);
 
   return combo_box;
 }
@@ -304,9 +310,9 @@ combo_box_new (void)
 }
   
 static void
-combo_box_append (GtkWidget *combo,
-		  const char *display_text,
-		  const char *value)
+combo_box_append (GtkWidget   *combo,
+		  const gchar *display_text,
+		  const gchar *value)
 {
   GtkTreeModel *model;
   GtkListStore *store;
@@ -317,24 +323,27 @@ combo_box_append (GtkWidget *combo,
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-		      0, display_text,
-		      1, value,
+		      NAME_COLUMN, display_text,
+		      VALUE_COLUMN, value,
 		      -1);
 }
 
 struct ComboSet {
   GtkComboBox *combo;
-  const char *value;
+  const gchar *value;
 };
 
 static gboolean
-set_cb (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+set_cb (GtkTreeModel *model, 
+	GtkTreePath  *path, 
+	GtkTreeIter  *iter, 
+	gpointer      data)
 {
   struct ComboSet *set_data = data;
   gboolean found;
   char *value;
   
-  gtk_tree_model_get (model, iter, 1, &value, -1);
+  gtk_tree_model_get (model, iter, VALUE_COLUMN, &value, -1);
   found = (strcmp (value, set_data->value) == 0);
   g_free (value);
   
@@ -345,8 +354,8 @@ set_cb (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data
 }
 
 static void
-combo_box_set (GtkWidget *combo,
-	       const char *value)
+combo_box_set (GtkWidget   *combo,
+	       const gchar *value)
 {
   GtkTreeModel *model;
   GtkListStore *store;
@@ -364,24 +373,23 @@ static char *
 combo_box_get (GtkWidget *combo)
 {
   GtkTreeModel *model;
-  char *val;
+  gchar *value;
   GtkTreeIter iter;
 
   if (GTK_IS_COMBO_BOX_ENTRY (combo))
     {
-      val = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
+      value = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
     }
   else
     {
       model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 
-      val = NULL;
+      value = NULL;
       if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-         gtk_tree_model_get (model, &iter,
-	 		     1, &val,
-			    -1);
+         gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
      }
-  return val;
+
+  return value;
 }
 
 
@@ -430,7 +438,7 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 }
 
 static void
-check_toggled_cb (GtkToggleButton *toggle_button,
+check_toggled_cb (GtkToggleButton        *toggle_button,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
@@ -443,7 +451,7 @@ check_toggled_cb (GtkToggleButton *toggle_button,
 }
 
 static void
-filesave_changed_cb (GtkWidget *w,
+filesave_changed_cb (GtkWidget              *button,
                      GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
@@ -487,11 +495,11 @@ filesave_changed_cb (GtkWidget *w,
   emit_changed (widget);
 }
 
-static char *
-filter_numeric (const char *val,
-                gboolean allow_neg,
-		gboolean allow_dec,
-                gboolean *changed_out)
+static gchar *
+filter_numeric (const gchar *val,
+                gboolean     allow_neg,
+		gboolean     allow_dec,
+                gboolean    *changed_out)
 {
   gchar *filtered_val;
   int i, j;
@@ -530,8 +538,9 @@ filter_numeric (const char *val,
 
   return filtered_val;
 }
+
 static void
-combo_changed_cb (GtkWidget *combo,
+combo_changed_cb (GtkWidget              *combo,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
@@ -582,11 +591,11 @@ combo_changed_cb (GtkWidget *combo,
 }
 
 static void
-entry_changed_cb (GtkWidget *entry,
+entry_changed_cb (GtkWidget              *entry,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  const char *value;
+  const gchar *value;
   
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -602,7 +611,7 @@ radio_changed_cb (GtkWidget              *button,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  char *value;
+  gchar *value;
   
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = g_object_get_data (G_OBJECT (button), "value");
@@ -616,7 +625,7 @@ static void
 select_maybe (GtkWidget   *widget, 
 	      const gchar *value)
 {
-  char *v = g_object_get_data (G_OBJECT (widget), "value");
+  gchar *v = g_object_get_data (G_OBJECT (widget), "value");
       
   if (strcmp (value, v) == 0)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
@@ -632,11 +641,11 @@ alternative_set (GtkWidget   *box,
 }
 
 static GSList *
-alternative_append (GtkWidget   *box,
-		    const gchar *label,
-                    const gchar *value,
+alternative_append (GtkWidget              *box,
+		    const gchar            *label,
+                    const gchar            *value,
 		    GtkPrinterOptionWidget *widget,
-		    GSList      *group)
+		    GSList                 *group)
 {
   GtkWidget *button;
 
@@ -875,7 +884,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
 }
 
 gboolean
-gtk_printer_option_widget_has_external_label (GtkPrinterOptionWidget  *widget)
+gtk_printer_option_widget_has_external_label (GtkPrinterOptionWidget *widget)
 {
   return widget->priv->label != NULL;
 }
@@ -886,8 +895,8 @@ gtk_printer_option_widget_get_external_label (GtkPrinterOptionWidget  *widget)
   return widget->priv->label;
 }
 
-const char *
-gtk_printer_option_widget_get_value (GtkPrinterOptionWidget  *widget)
+const gchar *
+gtk_printer_option_widget_get_value (GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
 
