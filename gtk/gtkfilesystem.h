@@ -441,7 +441,7 @@ void    gtk_file_paths_free (GSList *paths);
 
 /* GtkFileSystem modules support */
 
-GtkFileSystem  *_gtk_file_system_create (const char *file_system_name);
+GtkFileSystem  *gtk_file_system_create (const char *file_system_name);
 
 G_END_DECLS
 

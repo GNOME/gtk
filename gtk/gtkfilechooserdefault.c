@@ -4732,7 +4732,7 @@ set_file_system_backend (GtkFileChooserDefault *impl,
 
   impl->file_system = NULL;
   if (backend)
-    impl->file_system = _gtk_file_system_create (backend);
+    impl->file_system = gtk_file_system_create (backend);
   else
     {
       GtkSettings *settings = gtk_settings_get_default ();
@@ -4741,7 +4741,7 @@ set_file_system_backend (GtkFileChooserDefault *impl,
       g_object_get (settings, "gtk-file-chooser-backend", &default_backend, NULL);
       if (default_backend)
 	{
-	  impl->file_system = _gtk_file_system_create (default_backend);
+	  impl->file_system = gtk_file_system_create (default_backend);
 	  g_free (default_backend);
 	}
     }

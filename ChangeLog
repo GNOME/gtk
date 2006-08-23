@@ -1,3 +1,19 @@
+2006-08-23  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilesystem.[ch] (_gtk_file_system_create): Renamed to
+	gtk_file_system_create() so that it will get exported and we can
+	use it in the test program.
+
+	* gtk/gtk.symbols: Added gtk_file_system_create.
+
+	* gtk/gtkfilechooserdefault.c (set_file_system_backend): Use
+	gtk_file_system_create().
+
+	* tests/autotestfilesystem.c: New file with automatic tests for
+	the async callbacks and cancelation policy of GtkFileSystem.
+
+	* tests/Makefile.am: Added autotestfilesystem.
+
 2006-08-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprinteroptionwidget.[hc]: Fix confusion about

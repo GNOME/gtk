@@ -28,6 +28,7 @@ TESTS = floatingtest
 
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
+	autotestfilesystem		\
 	floatingtest			\
 	simple				\
 	print-editor			\
@@ -84,6 +85,7 @@ noinst_PROGRAMS =			\
 	testgrouping
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
+autotestfilesystem_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 floatingtest_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
@@ -134,6 +136,7 @@ testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
+autotestfilesystem_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
@@ -192,6 +195,9 @@ testgrouping_LDADD = $(LDADDS)
 
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c
+
+autotestfilesystem_SOURCES =	\
+	autotestfilesystem.c
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

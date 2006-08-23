@@ -1431,6 +1431,7 @@ gtk_file_path_get_type G_GNUC_CONST
 gtk_file_paths_copy
 gtk_file_paths_free
 gtk_file_paths_sort
+gtk_file_system_create
 gtk_file_system_cancel_operation
 gtk_file_system_create_folder
 gtk_file_system_error_quark
