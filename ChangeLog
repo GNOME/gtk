@@ -7,8 +7,8 @@
 2006-08-23  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_make_path):
-	Revert accidental translatable string change, use same string
-	for warning as in gtkfilesystemunix.c.
+	Revert unintended translatable string addition. Use same string
+	in GError as in gtkfilesystemunix.c.
 
 	* gtk/gtkfilesystemwin32.c (_gtk_file_system_win32_path_compare):
 	Fix logic at the end of strings. 
