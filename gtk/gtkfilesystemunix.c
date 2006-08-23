@@ -18,6 +18,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* #define this if you want the program to crash when a file system gets
+ * finalized while async handles are still outstanding.
+ */
+#undef HANDLE_ME_HARDER
+
 #include <config.h>
 
 #include "gtkfilesystem.h"
@@ -67,6 +72,8 @@ struct _GtkFileSystemUnix
   /* For /afs and /net */
   struct stat afs_statbuf;
   struct stat net_statbuf;
+
+  GHashTable *handles;
 
   guint have_afs : 1;
   guint have_net : 1;
@@ -339,7 +346,79 @@ gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
     system_unix->have_net = TRUE;
   else
     system_unix->have_net = FALSE;
+
+  system_unix->handles = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
+
+static void
+check_handle_fn (gpointer key, gpointer value, gpointer data)
+{
+  GtkFileSystemHandle *handle;
+  int *num_live_handles;
+
+  handle = key;
+  num_live_handles = data;
+
+  (*num_live_handles)++;
+
+  g_warning ("file_system_unix=%p still has handle=%p at finalization which is %s!",
+	     handle->file_system,
+	     handle,
+	     handle->cancelled ? "CANCELLED" : "NOT CANCELLED");
+}
+
+static void
+check_handles_at_finalization (GtkFileSystemUnix *system_unix)
+{
+  int num_live_handles;
+
+  num_live_handles = 0;
+
+  g_hash_table_foreach (system_unix->handles, check_handle_fn, &num_live_handles);
+#ifdef HANDLE_ME_HARDER
+  g_assert (num_live_handles == 0);
+#endif
+
+  g_hash_table_destroy (system_unix->handles);
+}
+
+#define GTK_TYPE_FILE_SYSTEM_HANDLE_UNIX (_gtk_file_system_handle_unix_get_type ())
+
+typedef struct _GtkFileSystemHandle GtkFileSystemHandleUnix;
+typedef struct _GtkFileSystemHandleClass GtkFileSystemHandleUnixClass;
+
+G_DEFINE_TYPE (GtkFileSystemHandleUnix, _gtk_file_system_handle_unix, GTK_TYPE_FILE_SYSTEM_HANDLE)
+
+static void
+_gtk_file_system_handle_unix_init (GtkFileSystemHandleUnix *handle)
+{
+}
+
+static void 
+_gtk_file_system_handle_unix_finalize (GObject *object)
+{
+  GtkFileSystemHandleUnix *handle;
+  GtkFileSystemUnix *system_unix;
+
+  handle = (GtkFileSystemHandleUnix *)object;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (GTK_FILE_SYSTEM_HANDLE (handle)->file_system);
+
+  g_assert (g_hash_table_lookup (system_unix->handles, handle) != NULL);
+  g_hash_table_remove (system_unix->handles, handle);
+
+  if (G_OBJECT_CLASS (_gtk_file_system_handle_unix_parent_class)->finalize)
+    G_OBJECT_CLASS (_gtk_file_system_handle_unix_parent_class)->finalize (object);
+}
+
+static void
+_gtk_file_system_handle_unix_class_init (GtkFileSystemHandleUnixClass *class)
+{
+  GObjectClass *gobject_class = (GObjectClass *) class;
+
+  gobject_class->finalize = _gtk_file_system_handle_unix_finalize;
+}
+
 
 static void
 gtk_file_system_unix_finalize (GObject *object)
@@ -347,6 +426,8 @@ gtk_file_system_unix_finalize (GObject *object)
   GtkFileSystemUnix *system_unix;
 
   system_unix = GTK_FILE_SYSTEM_UNIX (object);
+
+  check_handles_at_finalization  (system_unix);
 
   /* FIXME: assert that the hash is empty? */
   g_hash_table_destroy (system_unix->folder_hash);
@@ -670,10 +751,16 @@ queue_callback (enum callback_types type, gpointer data)
 static GtkFileSystemHandle *
 create_handle (GtkFileSystem *file_system)
 {
+  GtkFileSystemUnix *system_unix;
   GtkFileSystemHandle *handle;
 
-  handle = g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
+  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
+
+  handle = g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE_UNIX, NULL);
   handle->file_system = file_system;
+
+  g_assert (g_hash_table_lookup (system_unix->handles, handle) == NULL);
+  g_hash_table_insert (system_unix->handles, handle, handle);
 
   return handle;
 }

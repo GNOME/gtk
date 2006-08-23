@@ -1,3 +1,10 @@
+2006-08-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: Maintain a hash table
+	of live handles and check that we have no outstanding
+	handles at finalization time. (Copying what
+	Federico did for gtkfilesystemgnomevfs.c)
+
 2006-08-22  Matthias Clasen  <mclasen@redhat.com> 
 
 	* Branch for 2.10
