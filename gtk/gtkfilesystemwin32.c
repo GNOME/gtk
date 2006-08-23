@@ -19,6 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* #define this if you want the program to crash when a file system gets
+ * finalized while async handles are still outstanding.
+ */
+#undef HANDLE_ME_HARDER
+
 #include <config.h>
 
 #include "gtkfilesystem.h"
@@ -66,6 +71,8 @@ struct _GtkFileSystemWin32
   guint32 drives;		/* bitmask as returned by GetLogicalDrives() */
   GHashTable *folder_hash;
   guint timeout;
+
+  GHashTable *handles;
 };
 
 /* Icon type, supplemented by MIME type
@@ -356,6 +363,77 @@ gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
    * be enough.
    */
   system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
+
+  system_win32->handles = g_hash_table_new (g_direct_hash, g_direct_equal);
+}
+
+static void
+check_handle_fn (gpointer key, gpointer value, gpointer data)
+{
+  GtkFileSystemHandle *handle;
+  int *num_live_handles;
+
+  handle = key;
+  num_live_handles = data;
+
+  (*num_live_handles)++;
+
+  g_warning ("file_system_win32=%p still has handle=%p at finalization which is %s!",
+	     handle->file_system,
+	     handle,
+	     handle->cancelled ? "CANCELLED" : "NOT CANCELLED");
+}
+
+static void
+check_handles_at_finalization (GtkFileSystemWin32 *system_win32)
+{
+  int num_live_handles;
+
+  num_live_handles = 0;
+
+  g_hash_table_foreach (system_win32->handles, check_handle_fn, &num_live_handles);
+#ifdef HANDLE_ME_HARDER
+  g_assert (num_live_handles == 0);
+#endif
+
+  g_hash_table_destroy (system_win32->handles);
+}
+
+#define GTK_TYPE_FILE_SYSTEM_HANDLE_WIN32 (_gtk_file_system_handle_win32_get_type ())
+
+typedef struct _GtkFileSystemHandle GtkFileSystemHandleWin32;
+typedef struct _GtkFileSystemHandleClass GtkFileSystemHandleWin32Class;
+
+G_DEFINE_TYPE (GtkFileSystemHandleWin32, _gtk_file_system_handle_win32, GTK_TYPE_FILE_SYSTEM_HANDLE)
+
+static void
+_gtk_file_system_handle_win32_init (GtkFileSystemHandleWin32 *handle)
+{
+}
+
+static void 
+_gtk_file_system_handle_win32_finalize (GObject *object)
+{
+  GtkFileSystemHandleWin32 *handle;
+  GtkFileSystemWin32 *system_win32;
+
+  handle = (GtkFileSystemHandleWin32 *)object;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (GTK_FILE_SYSTEM_HANDLE (handle)->file_system);
+
+  g_assert (g_hash_table_lookup (system_win32->handles, handle) != NULL);
+  g_hash_table_remove (system_win32->handles, handle);
+
+  if (G_OBJECT_CLASS (_gtk_file_system_handle_win32_parent_class)->finalize)
+    G_OBJECT_CLASS (_gtk_file_system_handle_win32_parent_class)->finalize (object);
+}
+
+static void
+_gtk_file_system_handle_win32_class_init (GtkFileSystemHandleWin32Class *class)
+{
+  GObjectClass *gobject_class = (GObjectClass *) class;
+
+  gobject_class->finalize = _gtk_file_system_handle_win32_finalize;
 }
 
 static void
@@ -366,6 +444,8 @@ gtk_file_system_win32_finalize (GObject *object)
   system_win32 = GTK_FILE_SYSTEM_WIN32 (object);
 
   g_source_remove (system_win32->timeout);
+
+  check_handles_at_finalization  (system_win32);
 
   /* FIXME: assert that the hash is empty? */
   g_hash_table_destroy (system_win32->folder_hash);
@@ -779,10 +859,16 @@ queue_callback (enum callback_types type, gpointer data)
 static GtkFileSystemHandle *
 create_handle (GtkFileSystem *file_system)
 {
+  GtkFileSystemWin32 *system_win32;
   GtkFileSystemHandle *handle;
 
-  handle = g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE, NULL);
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+
+  handle = g_object_new (GTK_TYPE_FILE_SYSTEM_HANDLE_WIN32, NULL);
   handle->file_system = file_system;
+
+  g_assert (g_hash_table_lookup (system_win32->handles, handle) == NULL);
+  g_hash_table_insert (system_win32->handles, handle, handle);
 
   return handle;
 }
@@ -2736,7 +2822,14 @@ _gtk_file_system_win32_path_compare (const gchar *path1,
       else
 	break;
     }
-  return *path1 - *path2;
+  if (!*path1 && !*path2)
+    return 0;
+  else if (!*path1)
+    return -1;
+  else if (!*path2)
+    return 1;
+  else
+    return g_unichar_toupper (g_utf8_get_char (path1)) - g_unichar_toupper (g_utf8_get_char (path2));
 }
 
 #define __GTK_FILE_SYSTEM_WIN32_C__
