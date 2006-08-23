@@ -1403,13 +1403,17 @@ gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
 
   if ((p = strpbrk (display_name, "<>\"/\\|")))
     {
+      gchar badchar[2];
+
+      badchar[0] = *p;		/* We know it is a single-byte char */
+      badchar[1] = '\0';
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
-		   _("The name \"%s\" is not valid because it contains the character \"%c\". "
+		   _("The name \"%s\" is not valid because it contains the character \"%s\". "
 		     "Please use a different name."),
 		   display_name,
-		   *p);
+		   badchar);
       return NULL;
     }
 
