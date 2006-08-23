@@ -3895,6 +3895,8 @@ do_shape_combine_mask (GdkWindow *window,
  * buggy. On servers without the shape extension, this function
  * will do nothing.
  *
+ * On the Win32 platform the functionality is always present.
+ *
  * This function works on both toplevel and child windows.
  * 
  **/
@@ -3927,6 +3929,9 @@ gdk_window_shape_combine_mask (GdkWindow *window,
  *
  * On the X11 platform, this requires version 1.1 of the
  * shape extension.
+ *
+ * On the Win32 platform, this functionality is not present and the
+ * function does nothing.
  *
  * Since: 2.10
  */
@@ -4020,6 +4025,8 @@ do_shape_combine_region (GdkWindow *window,
  * buggy. On servers without the shape extension, this function
  * will do nothing.
  *
+ * On the Win32 platform, this functionality is always present.
+ *
  * This function works on both toplevel and child windows.
  * 
  **/
@@ -4052,6 +4059,9 @@ gdk_window_shape_combine_region (GdkWindow *window,
  *
  * On the X11 platform, this requires version 1.1 of the
  * shape extension.
+ *
+ * On the Win32 platform, this functionality is not present and the
+ * function does nothing.
  *
  * Since: 2.10
  */
