@@ -1,3 +1,13 @@
+2006-08-23  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c (_gtk_file_system_win32_path_compare):
+	Fix logic at the end of strings. 
+
+	* gtk/gtkfilesystemwin32.c: Maintain a hash table of live
+	handles and check that we have no outstanding handles at
+	finalization time. (Copying what Matthias did for
+	gtkfilesystemunix.c)
+
 2006-08-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemunix.c: Maintain a hash table
@@ -5,7 +15,7 @@
 	handles at finalization time. (Copying what
 	Federico did for gtkfilesystemgnomevfs.c)
 
-2006-08-22  Matthias Clasen  <mclasen@redhat.com> 
+2007-08-22  Matthias Clasen  <mclasen@redhat.com> 
 
 	* Branch for 2.10
 
