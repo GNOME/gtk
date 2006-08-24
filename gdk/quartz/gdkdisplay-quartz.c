@@ -73,8 +73,12 @@ gdk_display_open (const gchar *display_name)
 G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
-  /* FIXME: Implement */
-  return NULL;
+  static gchar *display_name = NULL;
+
+  if (! display_name)
+    display_name = g_strdup ([[[NSHost currentHost] name] UTF8String]);
+
+  return display_name;
 }
 
 int
@@ -157,4 +161,3 @@ gdk_display_store_clipboard (GdkDisplay *display,
 {
   /* FIXME: Implement */
 }
-
