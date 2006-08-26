@@ -1,5 +1,8 @@
 2006-08-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c (gtk_status_icon_reset_image_data): 
+	Don't leak pixbufs.  (#352264, Ross Burton)
+	
 	* gtk/gtklinkbutton.c (set_link_underline): Don't leak
 	PangoAttributes.  (#352391, Paolo Borelli)
 
