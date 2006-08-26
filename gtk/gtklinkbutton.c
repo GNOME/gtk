@@ -265,6 +265,7 @@ set_link_underline (GtkLinkButton *link_button)
       attributes = pango_attr_list_new ();
       pango_attr_list_insert (attributes, uline); 
       gtk_label_set_attributes (GTK_LABEL (label), attributes);
+      pango_attr_list_unref (attributes);
     }
 }
 
