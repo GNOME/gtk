@@ -31,6 +31,7 @@ demos =						\
 	sizegroup.c				\
 	stock_browser.c				\
 	textview.c				\
+	textscroll.c				\
 	tree_store.c				\
 	ui_manager.c
 

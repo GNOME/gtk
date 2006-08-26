@@ -1,3 +1,9 @@
+2006-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/textscroll.c: Add an example of automatic
+	scrolling, thanks to Yevgen Muntyan.  (#351206)
+	
 2006-08-23  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilesystem.[ch] (_gtk_file_system_create): Renamed to

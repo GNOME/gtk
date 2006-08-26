@@ -757,18 +757,21 @@ How do I make a text view scroll to the end of the buffer automatically ?
 
 <answer>
 <para>
-The "insert" <link linkend="GtkTextMark">mark</link> marks the insertion point
-where gtk_text_buffer_insert() inserts new text into the buffer. The text is inserted 
-<emphasis>before</emphasis> the "insert" mark, so that it generally stays 
-at the end of the buffer. If it gets explicitly moved to some other position, 
-e.g. when the user selects some text, use gtk_text_buffer_move_mark() to set it to 
-the desired location before inserting more text. The "insert" mark of a buffer can be 
-obtained with gtk_text_buffer_get_insert().
+A good way to keep a text buffer scrolled to the end is to place a
+<link linkend="GtkTextMark">mark</link> at the end of the buffer, and
+give it right gravity. The gravity has the effect that text inserted
+at the mark gets inserted <emphasis>before</emphasis>, keeping the mark
+at the end. 
 </para>
 
 <para> 
 To ensure that the end of the buffer remains visible, use
-gtk_text_view_scroll_to_mark() to scroll to the "insert" mark after inserting new text.
+gtk_text_view_scroll_to_mark() to scroll to the mark after 
+inserting new text.
+</para>
+
+<para>
+The gtk-demo application contains an example of this technique. 
 </para>
 </answer>
 </qandaentry>
