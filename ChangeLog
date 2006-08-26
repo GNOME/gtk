@@ -1,5 +1,9 @@
 2006-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/textscroll.c: Add an example of automatic
+	scrolling, thanks to Yevgen Muntyan.  (#351206)
+	
 	* gtk/gtkmodules.c (find_module): Use local binding when
 	loading modules.  (#351868)
 
