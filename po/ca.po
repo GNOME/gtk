@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-23 00:42+0200\n"
-"PO-Revision-Date: 2006-08-24 02:33+0200\n"
+"POT-Creation-Date: 2006-08-26 17:10+0200\n"
+"PO-Revision-Date: 2006-08-26 22:37+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,13 +123,13 @@ msgstr ""
 "No hi ha memòria suficient per a desar la imatge en una memòria intermèdia"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Error intern: S'ha produït un error al mòdul de carregador d'imatge '%s' en "
-"iniciar la càrrega d'una imatge, però no s'ha donat cap motiu per a l'error"
+"Error intern: El carregador d'imatge «%s» no ha pogut acabar una operació, "
+"però no ha donat cap raó per a la fallada"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
@@ -1092,7 +1092,7 @@ msgstr "Alt"
 #.
 #: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Super"
-msgstr ""
+msgstr "Súper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1102,7 +1102,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:591
 msgid "keyboard label|Hyper"
-msgstr ""
+msgstr "Hiper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1112,7 +1112,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:605
 msgid "keyboard label|Meta"
-msgstr ""
+msgstr "Meta"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:619
@@ -1523,7 +1523,7 @@ msgid "Select which types of files are shown"
 msgstr "Seleccioneu quins tipus de fitxers es mostren"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4226 ../gtk/gtkprinteroptionwidget.c:771
+#: ../gtk/gtkfilechooserdefault.c:4226 ../gtk/gtkprinteroptionwidget.c:780
 msgid "_Name:"
 msgstr "_Nom:"
 
@@ -1712,7 +1712,7 @@ msgstr ""
 "fitxer"
 
 #: ../gtk/gtkfilesel.c:1409 ../gtk/gtkfilesel.c:1418
-#: ../gtk/gtkfilesystemunix.c:928 ../gtk/gtkfilesystemwin32.c:1019
+#: ../gtk/gtkfilesystemunix.c:1015 ../gtk/gtkfilesystemwin32.c:1129
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "S'ha produït un error en crear el directori «%s»: %s"
@@ -1816,22 +1816,22 @@ msgstr "No s'ha pogut obtenir la carpeta arrel"
 msgid "(Empty)"
 msgstr "(Buit)"
 
-#: ../gtk/gtkfilesystemunix.c:842 ../gtk/gtkfilesystemunix.c:1089
-#: ../gtk/gtkfilesystemunix.c:2077 ../gtk/gtkfilesystemunix.c:2117
-#: ../gtk/gtkfilesystemwin32.c:2222 ../gtk/gtkfilesystemwin32.c:2272
+#: ../gtk/gtkfilesystemunix.c:929 ../gtk/gtkfilesystemunix.c:1176
+#: ../gtk/gtkfilesystemunix.c:2164 ../gtk/gtkfilesystemunix.c:2204
+#: ../gtk/gtkfilesystemwin32.c:2348 ../gtk/gtkfilesystemwin32.c:2398
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "S'ha produït un error en obtenir informació per a «%s»: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1034 ../gtk/gtkfilesystemwin32.c:1125
+#: ../gtk/gtkfilesystemunix.c:1121 ../gtk/gtkfilesystemwin32.c:1236
 msgid "This file system does not support mounting"
 msgstr "Aquest sistema de fitxers no permet ser muntat"
 
-#: ../gtk/gtkfilesystemunix.c:1046
+#: ../gtk/gtkfilesystemunix.c:1133
 msgid "File System"
 msgstr "Sistema de fitxers"
 
-#: ../gtk/gtkfilesystemunix.c:1210
+#: ../gtk/gtkfilesystemunix.c:1297 ../gtk/gtkfilesystemwin32.c:1413
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1840,32 +1840,32 @@ msgstr ""
 "El nom «%s» no és vàlid perquè conté el caràcter «%s». Utilitzeu un nom "
 "diferent."
 
-#: ../gtk/gtkfilesystemunix.c:1759 ../gtk/gtkfilesystemwin32.c:1902
+#: ../gtk/gtkfilesystemunix.c:1846 ../gtk/gtkfilesystemwin32.c:2028
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "S'ha produït un error en desar l'adreça d'interès: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1814 ../gtk/gtkfilesystemwin32.c:1957
+#: ../gtk/gtkfilesystemunix.c:1901 ../gtk/gtkfilesystemwin32.c:2083
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "«%s» ja existeix a la llista d'adreces d'interès"
 
-#: ../gtk/gtkfilesystemunix.c:1886 ../gtk/gtkfilesystemwin32.c:2029
+#: ../gtk/gtkfilesystemunix.c:1973 ../gtk/gtkfilesystemwin32.c:2155
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "«%s» no existeix a la llista d'adreces d'interès"
 
-#: ../gtk/gtkfilesystemwin32.c:943
+#: ../gtk/gtkfilesystemwin32.c:1053
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "El camí no és una carpeta: '%s'"
 
-#: ../gtk/gtkfilesystemwin32.c:1143
+#: ../gtk/gtkfilesystemwin32.c:1254
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Unitat de xarxa (%s)"
 
-#: ../gtk/gtkfilesystemwin32.c:1165
+#: ../gtk/gtkfilesystemwin32.c:1276
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2192,11 +2192,11 @@ msgstr "_Dret:"
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: ../gtk/gtkprinteroptionwidget.c:670
+#: ../gtk/gtkprinteroptionwidget.c:679
 msgid "Not available"
 msgstr "No està disponible"
 
-#: ../gtk/gtkprinteroptionwidget.c:783
+#: ../gtk/gtkprinteroptionwidget.c:792
 msgid "_Save in folder:"
 msgstr "De_sa a la carpeta:"
 
@@ -2227,9 +2227,8 @@ msgstr "Esperant"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1485
-#, fuzzy
 msgid "print operation status|Blocking on issue"
-msgstr "Finalitzat"
+msgstr "Blocat en un problema"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1487
@@ -2427,7 +2426,7 @@ msgstr "Pri_oritat:"
 
 #: ../gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
-msgstr ""
+msgstr "Informació de _facturació:"
 
 #: ../gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
@@ -3449,10 +3448,11 @@ msgstr "Sobre kahu"
 msgid "paper size|kaku2 Envelope"
 msgstr "Sobre kahu2"
 
+# FIXME
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (postal de resposta)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:179
@@ -3607,12 +3607,12 @@ msgstr "Paper continu alemany legal"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr ""
+msgstr "Legal govern"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "Letter govern"
 
 # FIXME
 #. translators, strip everything up to the first |
@@ -3673,7 +3673,7 @@ msgstr "US Letter plus"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "Sobre Monarch"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
@@ -3743,7 +3743,7 @@ msgstr "Foli sp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "Sobre d'invitació"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
@@ -4009,11 +4009,11 @@ msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "argument directfb"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "sdl|sistema"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
@@ -4023,23 +4023,25 @@ msgstr "URI"
 msgid "The URI bound to this button"
 msgstr "La URI vincualda a aquest botó"
 
-#: ../gtk/gtklinkbutton.c:395
+#: ../gtk/gtklinkbutton.c:396
 msgid "Copy URL"
 msgstr "Copia la URL"
 
-#: ../gtk/gtklinkbutton.c:535
+#: ../gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
 msgstr "URI no vàlida"
 
+# FIXME
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "S'ha produït un error en intentar deserialitzar %s"
 
+# FIXME
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "No s'ha trobat cap funció per a deserialitzar el format %s"
 
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
@@ -4069,7 +4071,7 @@ msgstr "L'atribut «%s» està repetit dues vegades en el mateix element <%s>"
 #: ../gtk/gtktextbufferserialize.c:956 ../gtk/gtktextbufferserialize.c:981
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "L'atribut «%s» no és vàlid per a l'element <%s> en aquest context"
 
 #: ../gtk/gtktextbufferserialize.c:1017
 #, c-format
@@ -4084,12 +4086,14 @@ msgstr "S'han trobat etiquetes anònimes, i no se n'han pogut crear."
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
+"L'etiqueta «%s» no existeix a la memòria intermèdia, i no es poden crear "
+"etiquetes."
 
 #: ../gtk/gtktextbufferserialize.c:1139 ../gtk/gtktextbufferserialize.c:1214
 #: ../gtk/gtktextbufferserialize.c:1315 ../gtk/gtktextbufferserialize.c:1389
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "No es permet l'element <%s> per sota de <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1170
 #, c-format
@@ -4106,6 +4110,7 @@ msgstr "«%s» no és un nom d'atribut vàlid"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"No s'ha pogut convertir «%s» a un valor de tipus «%s» per a l'atribut «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1197
 #, c-format
@@ -4120,12 +4125,13 @@ msgstr "L'etiqueta «%s» ja està definida"
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "L'etiqueta «%s» té la propietat invàlida «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1344
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
+"L'element de més enfora del text ha de ser <text_view_markup> i no pas <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1353 ../gtk/gtktextbufferserialize.c:1369
 #, c-format
@@ -4144,11 +4150,13 @@ msgstr "Les dades en sèrie estan mal formades"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"Les dades en sèrie estan mal formades. La primera secció no és "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "s'han trobat diferents idatas per als enllaços simbòlics «%s» i «%s»\n"
 
 #: ../gtk/updateiconcache.c:1116
 msgid "Failed to write header\n"
