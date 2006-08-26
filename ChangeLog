@@ -1,3 +1,8 @@
+2006-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmodules.c (find_module): Use local binding when
+	loading modules.  (#351868)
+
 2006-08-24  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/gdkdisplay-quartz.c (gdk_display_get_name): return
