@@ -1,3 +1,7 @@
+2006-08-26  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	* th.po: Fixed plural strings.
+
 2006-08-26  Priit Laes  <plaes@cvs.gnome.org>
 
 	* et.po: Translation updated by Ivar Smolin.
