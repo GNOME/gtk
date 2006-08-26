@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-19 10:39+0700\n"
+"PO-Revision-Date: 2006-08-26 23:33+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,6 @@ msgstr "ข้อมูลพิกเซลในแฟ้มเสีย"
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
-msgstr[1] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -1656,7 +1655,6 @@ msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
-msgstr[1] "%d ไบต์"
 
 #: gtk/gtkfilechooserdefault.c:8279
 #, c-format

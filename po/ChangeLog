@@ -1,3 +1,7 @@
+2006-08-26  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	* th.po: Fixed plural strings.
+
 2006-08-25  Artur Flinta  <aflinta@cvs.gnome.org>
 
 	* pl.po: Updated Polish translation by GNOME PL Team.
