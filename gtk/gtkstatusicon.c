@@ -981,9 +981,6 @@ gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
 
-  priv->storage_type = GTK_IMAGE_EMPTY;
-  g_object_notify (G_OBJECT (status_icon), "storage-type");
-
   switch (priv->storage_type)
   {
     case GTK_IMAGE_PIXBUF:
@@ -1013,6 +1010,9 @@ gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
       g_assert_not_reached ();
       break;
   }
+
+  priv->storage_type = GTK_IMAGE_EMPTY;
+  g_object_notify (G_OBJECT (status_icon), "storage-type");
 }
 
 static void
