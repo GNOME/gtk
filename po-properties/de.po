@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-20 16:31+0200\n"
-"PO-Revision-Date: 2006-08-20 16:58+0200\n"
+"PO-Revision-Date: 2006-08-27 15:56+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1804,9 +1804,8 @@ msgid "Popup shown"
 msgstr "Popups anzeigen"
 
 #: ../gtk/gtkcombobox.c:682
-#, fuzzy
 msgid "Whether the combo's dropdown is shown"
-msgstr "Legt fest, ob XXX"
+msgstr "Legt fest, ob Herabklapper von Kombinationsfelder angezeigt werden"
 
 #: ../gtk/gtkcombobox.c:688
 msgid "Appears as list"
@@ -2879,9 +2878,10 @@ msgid "Horizontal Padding"
 msgstr "Horizontale Polsterung"
 
 #: ../gtk/gtkmenu.c:516
-#, fuzzy
 msgid "Extra space at the left and right edges of the menu"
-msgstr "Die oben und unten am Menü hinzuzufügende Polsterung in Pixel"
+msgstr ""
+"Die an den linken und rechten Ecken des Menüs hinzuzufügende Polsterung in "
+"Pixel"
 
 #: ../gtk/gtkmenu.c:524
 msgid "Vertical Offset"
@@ -3312,32 +3312,28 @@ msgid "Display the standard forward arrow button"
 msgstr "Den normalen Vorwärtspfeil anzeigen"
 
 #: ../gtk/gtknotebook.c:739
-#, fuzzy
 msgid "Tab overlap"
-msgstr "Reiterrand"
+msgstr "Reiterüberlappung"
 
 #: ../gtk/gtknotebook.c:740
-#, fuzzy
 msgid "Size of tab overlap area"
-msgstr "Größe des Ausklapppfeils"
+msgstr "Größe der überlappenden Reiterregion"
 
 #: ../gtk/gtknotebook.c:755
 msgid "Tab curvature"
-msgstr ""
+msgstr "Reiterbogen"
 
 #: ../gtk/gtknotebook.c:756
-#, fuzzy
 msgid "Size of tab curvature"
-msgstr "Die Größe der Trenner"
+msgstr "Der Bogen der Reiter"
 
 #: ../gtk/gtkobject.c:367
-#, fuzzy
 msgid "User Data"
-msgstr "Alpha verwenden"
+msgstr "Benutzerdaten"
 
 #: ../gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
-msgstr ""
+msgstr "Zeiger auf anonyme Benutzerdaten"
 
 #: ../gtk/gtkoptionmenu.c:163
 msgid "The menu of options"
@@ -3412,185 +3408,166 @@ msgid ""
 msgstr "Soll das Vorschau-Widget den gesamten ihm zugewiesenen Raum einnehmen?"
 
 #: ../gtk/gtkprintbackend.c:261
-#, fuzzy
 msgid "Default print backend"
-msgstr "Vorgabe-Backend des Dateiwählers"
+msgstr "Vorgabe-Backend des Druckdialogs"
 
 #: ../gtk/gtkprintbackend.c:262
-#, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr "Der Name des per Vorgabe zu verwendenden GtkFileChooser-Backends"
+msgstr ""
+"Liste der Namen von per Vorgabe zu verwendenden GtkPrintBackend-Backends"
 
 #: ../gtk/gtkprinter.c:120
-#, fuzzy
 msgid "Name of the printer"
-msgstr "Der Name des zu verwendenden Symbolthemas"
+msgstr "Der Name des zu verwendenden Druckers"
 
 #: ../gtk/gtkprinter.c:126
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #: ../gtk/gtkprinter.c:127
-#, fuzzy
 msgid "Backend for the printer"
-msgstr "Der GdkScreen für den Renderer"
+msgstr "Backend für den Druckerr"
 
 #: ../gtk/gtkprinter.c:133
-#, fuzzy
 msgid "Is Virtual"
-msgstr "Ist wichtig"
+msgstr "Ist virtuell"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
-msgstr ""
+msgstr "FALSCH, falls dies einen realen Drucker darstellt"
 
 #: ../gtk/gtkprinter.c:140
-#, fuzzy
 msgid "Accepts PDF"
-msgstr "Akzeptiert Tabulator"
+msgstr "Akzeptiert PDF"
 
 #: ../gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "WAHR, falls dieser Drucker PDF akzeptieren kann"
 
 #: ../gtk/gtkprinter.c:147
-#, fuzzy
 msgid "Accepts PostScript"
-msgstr "Akzeptiert Tabulator"
+msgstr "Akzeptiert PostScript"
 
 #: ../gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "WAHR, falls dieser Drucker PostScript akzeptieren kann"
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "Statusmitteilung"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Zeichenkette, die den momentanen Status des Druckers wiedergibt"
 
 #: ../gtk/gtkprinter.c:161
-#, fuzzy
 msgid "Location"
-msgstr "Aktion"
+msgstr "Ort"
 
 #: ../gtk/gtkprinter.c:162
-#, fuzzy
 msgid "The location of the printer"
-msgstr "Die Ausrichtung der Werkzeugleiste"
+msgstr "Der Ort des Druckers"
 
 #: ../gtk/gtkprinter.c:169
-#, fuzzy
 msgid "The icon name to use for the printer"
-msgstr "Die metrische Einheit des Lineals"
+msgstr "Der Name des für diesen Drucker zu verwendenen Symbols"
 
 #: ../gtk/gtkprinter.c:175
 msgid "Job Count"
-msgstr ""
+msgstr "Aufträge"
 
 #: ../gtk/gtkprinter.c:176
-#, fuzzy
 msgid "Number of jobs queued in the printer"
-msgstr "Die Anzahl der Zeilen in der Tabelle"
+msgstr "Anzahl der eingereihten Aufdräge dieses Druckers"
 
 #: ../gtk/gtkprinteroptionwidget.c:123
-#, fuzzy
 msgid "Source option"
-msgstr "Punktgröße"
+msgstr "Quell-Option"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
-msgstr ""
+msgstr "Die PrinterOption für dieses Widget"
 
 #: ../gtk/gtkprintjob.c:117
-#, fuzzy
 msgid "Title of the print job"
-msgstr "Der Titel des Fensters"
+msgstr "Der Titel des Druckauftrags"
 
 #: ../gtk/gtkprintjob.c:125
-#, fuzzy
 msgid "Printer"
-msgstr "Filter"
+msgstr "Drucker"
 
 #: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
-msgstr ""
+msgstr "Der für diesen Druckauftrag zu verwendene Drucker"
 
 #: ../gtk/gtkprintjob.c:134
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: ../gtk/gtkprintjob.c:135
 msgid "Printer settings"
-msgstr ""
+msgstr "Druckereinstellungen"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
 #: ../gtk/gtkprintunixdialog.c:226
-#, fuzzy
 msgid "Page Setup"
-msgstr "Seitengröße"
+msgstr "Seiteneinstellungen"
 
 #: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:984
 msgid "Track Print Status"
-msgstr ""
+msgstr "Druckstatus überwachen"
 
 #: ../gtk/gtkprintjob.c:153
 msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
+"WAHR, falls der Druckauftrag Statusänderungs-Signale emittieren soll nachdem "
+"die Druckdaten an den Drucker oder den Drucker-Server gesendet wurden."
 
 #: ../gtk/gtkprintoperation.c:857
-#, fuzzy
 msgid "Default Page Setup"
-msgstr "Vorgabehöhe"
+msgstr "Vorgabe-Seiteneinstellungen"
 
 #: ../gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
-msgstr ""
+msgstr "Das als Vorgabe zu verwendende GtkPageSetup"
 
 #: ../gtk/gtkprintoperation.c:876 ../gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
-msgstr ""
+msgstr "Druckeinstellungen"
 
 #: ../gtk/gtkprintoperation.c:877 ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr ""
+msgstr "Die beim Initialisieren des Dialogs zu verwendenden GtkPrintSettings"
 
 #: ../gtk/gtkprintoperation.c:895
-#, fuzzy
 msgid "Job Name"
-msgstr "Symbolname"
+msgstr "Auftragsname"
 
 #: ../gtk/gtkprintoperation.c:896
 msgid "A string used for identifying the print job."
-msgstr ""
+msgstr "Eine Zeichenkette zur Identifizierung des Druckauftrags."
 
 #: ../gtk/gtkprintoperation.c:919
-#, fuzzy
 msgid "Number of Pages"
-msgstr "Kanalanzahl"
+msgstr "Seitenanzahl"
 
 #: ../gtk/gtkprintoperation.c:920
-#, fuzzy
 msgid "The number of pages in the document."
-msgstr "Die Anzahl der Zeilen in der Tabelle"
+msgstr "Die Anzahl der Seiten des Dokuments."
 
 #: ../gtk/gtkprintoperation.c:941 ../gtk/gtkprintunixdialog.c:234
-#, fuzzy
 msgid "Current Page"
-msgstr "Aktuelles Alpha"
+msgstr "Aktuelles Seite"
 
 #: ../gtk/gtkprintoperation.c:942 ../gtk/gtkprintunixdialog.c:235
-#, fuzzy
 msgid "The current page in the document"
-msgstr "Die Seitengröße der Stellgröße"
+msgstr "Die aktuelle Seite des Dokuments"
 
 #: ../gtk/gtkprintoperation.c:963
-#, fuzzy
 msgid "Use full page"
-msgstr "Alpha verwenden"
+msgstr "Gesamte Seite verwenden"
 
 #: ../gtk/gtkprintoperation.c:964
 msgid ""
@@ -3605,83 +3582,76 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1002
-#, fuzzy
 msgid "Unit"
-msgstr "Aufdringlich"
+msgstr "Einheit"
 
 #: ../gtk/gtkprintoperation.c:1003
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1020
-#, fuzzy
 msgid "Show Dialog"
-msgstr "Dialog"
+msgstr "Dialog anzeigen"
 
 #: ../gtk/gtkprintoperation.c:1021
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
+"WAHR, falls ein Fortschrittsanzeige-Dialog während des Druckens angezeigt "
+"wird."
 
 #: ../gtk/gtkprintoperation.c:1044
-#, fuzzy
 msgid "Allow Async"
-msgstr "Lesehilfen erlauben"
+msgstr "Async erlauben"
 
 #: ../gtk/gtkprintoperation.c:1045
 msgid "TRUE if print process may run asynchronous."
-msgstr ""
+msgstr "WAHR, falls der Druckprozess asynchron laufen darf."
 
 #: ../gtk/gtkprintoperation.c:1068 ../gtk/gtkprintoperation.c:1069
-#, fuzzy
 msgid "Export filename"
-msgstr "Dateiname"
+msgstr "Export-Dateiname"
 
 #: ../gtk/gtkprintoperation.c:1083
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: ../gtk/gtkprintoperation.c:1084
-#, fuzzy
 msgid "The status of the print operation"
-msgstr "Der Schaltzustand des Knopfes"
+msgstr "Der Status der Druckoperation"
 
 #: ../gtk/gtkprintoperation.c:1104
 msgid "Status String"
-msgstr ""
+msgstr "Status-Zeichenkette"
 
 #: ../gtk/gtkprintoperation.c:1105
 msgid "A human-readable description of the status"
-msgstr ""
+msgstr "Eine verständliche Beschreibung des Status"
 
 #: ../gtk/gtkprintoperation.c:1123
-#, fuzzy
 msgid "Custom tab label"
-msgstr "Eigene Palette"
+msgstr "Eigene Reiterbeschriftung"
 
 #: ../gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "Beschriftung für den Reiter mit benutzerdefinierten Widgets."
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
-msgstr ""
+msgstr "Das zu verwendende GtkPageSetup"
 
 #: ../gtk/gtkprintunixdialog.c:252
-#, fuzzy
 msgid "Selected Printer"
-msgstr "Das gewählte Jahr"
+msgstr "Ausgewählter Drucker"
 
 #: ../gtk/gtkprintunixdialog.c:253
-#, fuzzy
 msgid "The GtkPrinter which is selected"
-msgstr "Das momentan aktive Objekt"
+msgstr "Der ausgewählte GtkPrinter"
 
 #: ../gtk/gtkprogress.c:100
 msgid "Activity mode"
 msgstr "Aktivitätsmodus"
 
 #: ../gtk/gtkprogress.c:101
-#, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3829,9 +3799,8 @@ msgid "The radio action whose group this action belongs to."
 msgstr "Die Radioaktion, zu dessen Gruppe diese Aktion gehört."
 
 #: ../gtk/gtkradioaction.c:144
-#, fuzzy
 msgid "The current value"
-msgstr "Die aktuelle Farbe"
+msgstr "Der aktuelle Wert"
 
 #: ../gtk/gtkradioaction.c:145
 msgid ""
@@ -3844,9 +3813,8 @@ msgid "The radio button whose group this widget belongs to."
 msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehört."
 
 #: ../gtk/gtkradiomenuitem.c:343
-#, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehört."
+msgstr "Das Radio-Menüeintrag, zu dessen Gruppe dieses Widget gehört."
 
 #: ../gtk/gtkrange.c:315
 msgid "Update policy"
@@ -3980,84 +3948,74 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "»Zuletzt geöffnet«-Verwaltung"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "Der zu verwendende RecentManager"
 
 #: ../gtk/gtkrecentchooser.c:118
-#, fuzzy
 msgid "Show Private"
-msgstr "Text anzeigen"
+msgstr "Private anzeigen"
 
 #: ../gtk/gtkrecentchooser.c:119
-#, fuzzy
 msgid "Whether the private items should be displayed"
-msgstr "Sollen verborgene Dateien und Ordner angezeigt werden?"
+msgstr "Sollen private Einträge angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:124
-#, fuzzy
 msgid "Show Tooltips"
-msgstr "Minihilfen"
+msgstr "Minihilfen anzeigen"
 
 #: ../gtk/gtkrecentchooser.c:125
-#, fuzzy
 msgid "Whether there should be a tooltip on the item"
-msgstr "Soll der Rand gezeigt werden?"
+msgstr "Soll bei Einträgen eine Minihilfe angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:130
-#, fuzzy
 msgid "Show Icons"
-msgstr "Repertoire-Symbol"
+msgstr "Symbole anzeigen"
 
 #: ../gtk/gtkrecentchooser.c:131
-#, fuzzy
 msgid "Whether there should be an icon near the item"
-msgstr "Soll der Rand gezeigt werden?"
+msgstr "Soll bei Einträgen ein Symbol angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:136
 msgid "Show Not Found"
-msgstr ""
+msgstr "Nicht gefundene Dateien anzeigen"
 
 #: ../gtk/gtkrecentchooser.c:137
-#, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "Sollen verborgene Dateien und Ordner angezeigt werden?"
+msgstr ""
+"Sollen Einträge, die auf nicht verfügbare Ressourcen zeigen, angezeigt "
+"werden?"
 
 #: ../gtk/gtkrecentchooser.c:143
-#, fuzzy
 msgid "Whether to allow multiple items to be selected"
-msgstr "Sollen mehrere Dateien ausgewählt werden können?"
+msgstr "Sollen mehrere Einträge ausgewählt werden können?"
 
 #: ../gtk/gtkrecentchooser.c:148
-#, fuzzy
 msgid "Local only"
 msgstr "Nur lokal"
 
 #: ../gtk/gtkrecentchooser.c:149
-#, fuzzy
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
-msgstr "Sollen die auswählbaren Dateien auf lokale file:-URLs begrenzt werden?"
+msgstr ""
+"Sollen die auswählbaren Ressourcen auf lokale file:-URIs begrenzt werden?"
 
 #: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:231
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 #: ../gtk/gtkrecentchooser.c:155
-#, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "Die Anzahl der anzuzeigenden Nachkommastellen"
+msgstr "Die Anzahl der anzuzeigenden Einträge"
 
 #: ../gtk/gtkrecentchooser.c:162
-#, fuzzy
 msgid "Sort Type"
-msgstr "Schattentyp"
+msgstr "Sortierreihenfolge"
 
 #: ../gtk/gtkrecentchooser.c:163
-#, fuzzy
 msgid "The sorting order of the items displayed"
-msgstr "Soll der Umschaltteil des Knopfes dargestellt werden?"
+msgstr "Die Sortierreihenfolge der angezeigten Einträge"
 
 #: ../gtk/gtkrecentchooser.c:170
 #, fuzzy
