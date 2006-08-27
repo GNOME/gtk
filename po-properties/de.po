@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-20 16:31+0200\n"
-"PO-Revision-Date: 2006-08-27 19:26+0200\n"
+"PO-Revision-Date: 2006-08-27 20:47+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1963,6 +1963,7 @@ msgstr "FALSCH entfernt die äußere Fase des Eintrags"
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
+"Rand zwischen Text und Rahmen. Überschreibt die Eigenschaft »inner-border«."
 
 #: ../gtk/gtkentry.c:522
 msgid "Invisible character"
@@ -2030,7 +2031,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:858
 msgid "Border between text and frame."
-msgstr ""
+msgstr "Rand zwischen Text und Rahmen."
 
 #: ../gtk/gtkentry.c:863 ../gtk/gtklabel.c:620
 msgid "Select on focus"
@@ -2043,11 +2044,13 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
-msgstr ""
+msgstr "Timetout des Passwort-Hinweises"
 
 #: ../gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
+"Wie lange soll das zuletzt eingegebene Zeichen in versteckten Eingabefeldern "
+"angezeigt werden?"
 
 #: ../gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -2323,11 +2326,11 @@ msgstr ""
 
 #: ../gtk/gtkfilesystem.c:389
 msgid "Cancelled"
-msgstr ""
+msgstr "Abgebrochen"
 
 #: ../gtk/gtkfilesystem.c:390
 msgid "Whether or not the operation has been successfully cancelled"
-msgstr ""
+msgstr "Gibt an, ob die Operation erfolgreich abgebrochen wurde"
 
 #: ../gtk/gtkfixed.c:90 ../gtk/gtklayout.c:582
 msgid "X position"
@@ -3222,7 +3225,7 @@ msgstr "Gruppen-ID für Reiter beim Drag&Drop"
 
 #: ../gtk/gtknotebook.c:613
 msgid "Tab label"
-msgstr "Reiter-Beschriftung"
+msgstr "Reiterbeschriftung"
 
 #: ../gtk/gtknotebook.c:614
 msgid "The string displayed on the child's tab label"
@@ -3320,11 +3323,11 @@ msgstr "Größe der überlappenden Reiterregion"
 
 #: ../gtk/gtknotebook.c:755
 msgid "Tab curvature"
-msgstr "Reiterbogen"
+msgstr "Reiterkrümmung"
 
 #: ../gtk/gtknotebook.c:756
 msgid "Size of tab curvature"
-msgstr "Der Bogen der Reiter"
+msgstr "Die Größe der Reiterkrümmung"
 
 #: ../gtk/gtkobject.c:367
 msgid "User Data"
@@ -3573,12 +3576,17 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
+"WAHR, falls der Ursprung des Kontexts an der Ecke der Seite sein soll und "
+"nicht an der Ecke des druckbaren Bereichs"
 
 #: ../gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
+"WAHR, falls die Druckoperation ihren Status an den Druckauftrag melden soll, "
+"nachdem die Druckdaten an den Drucker oder den Drucker-Server gesendet "
+"wurden."
 
 #: ../gtk/gtkprintoperation.c:1002
 msgid "Unit"
@@ -3586,7 +3594,7 @@ msgstr "Einheit"
 
 #: ../gtk/gtkprintoperation.c:1003
 msgid "The unit in which distances can be measured in the context"
-msgstr ""
+msgstr "Die Einheit, mit der Abstände in diesem Kontext gemessen werden"
 
 #: ../gtk/gtkprintoperation.c:1020
 msgid "Show Dialog"
@@ -3806,6 +3814,8 @@ msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
 msgstr ""
+"Der Wert des momentan aktiven Mitglieds der Gruppe, zu der diese Aktion "
+"gehört."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3841,23 +3851,25 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:340
 msgid "Lower stepper sensitivity"
-msgstr ""
+msgstr "Untere Empfindlichkeit des Schrittschalters"
 
 #: ../gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
+"Die Empfindlichkeit des Schrittschalters am unteren Ende der Möglichkeiten"
 
 #: ../gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Obere Empfindlichkeit des Schrittschaltes"
 
 #: ../gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
+"Die Empfindlichkeit des Schrittschalters am oberen Ende der Möglichkeiten"
 
 #: ../gtk/gtkrange.c:357
 msgid "Slider Width"
@@ -3917,33 +3929,40 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Schieber beim Ziehen als »aktiv« darstellen"
 
 #: ../gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
+"Falls diese Eigenschaft WAHR ist, werden Schieber als »aktiv« und mit "
+"Schatten nach innen dargestellt, wenn sie gezogen werden"
 
 #: ../gtk/gtkrange.c:426
 msgid "Trough Side Details"
-msgstr ""
+msgstr "Details der Trogseiten"
 
 #: ../gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
+"Falls diese Option WAHR ist, werden die Teile des Trogs auf den beiden "
+"Seiten des Schiebers mit verschiedenen Details dargestellt"
+
 
 #: ../gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
-msgstr ""
+msgstr "Trog unter Schrittzählern"
 
 #: ../gtk/gtkrange.c:444
 msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
+"Legt fest, ob der Trog über die gesamte Länge gezeichnet wird oder ob "
+"Schrittzähler und Abstände ausgenommen werden"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
@@ -4032,15 +4051,19 @@ msgstr "Sollen die Einträge nummeriert werden?"
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
+"Der gesamte Pfad zur Datei, der zum Speichern und Lesen der Liste verwendet "
+"wird"
 
 #: ../gtk/gtkrecentmanager.c:232
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
+"Die maximale Anzahl an Einträgen, die von gtk_recent_manager_get_items() "
+"zurück gegeben wird"
 
 #: ../gtk/gtkrecentmanager.c:248
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "Die Größe der »Zuletzt verwendet«-Liste"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
@@ -4259,8 +4282,8 @@ msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"Die maximale Zeit, die zwischen zwei Klicks verstreichen darf, damit diese "
-"als Doppelklick interpretiert werden (in Millisekunden)"
+"Der maximale Abstand, der zwischen zwei Klicks liegen darf, damit diese "
+"als Doppelklick interpretiert werden (in Pixel)"
 
 #: ../gtk/gtksettings.c:206
 msgid "Cursor Blink"
@@ -4438,23 +4461,27 @@ msgstr "Sollen Knöpfe in Dialogen die alternative Reihenfolge verwenden?"
 
 #: ../gtk/gtksettings.c:391
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "Menü »Eingabemethoden« anzeigen"
 
 #: ../gtk/gtksettings.c:392
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
+"Sollen die Kontextmenüs von Eingabe- und Textfeldern die Möglichkeit zum "
+"Ändern der Eingabemethode bieten?"
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "Menü »Unicode-Steuerzeichen einfügen« anzeigen"
 
 #: ../gtk/gtksettings.c:401
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
+"Sollen die Kontextmenüs von Eingabe- und Textfeldern die Möglichkeit zum "
+"Einfügen von Steuerzeichen bieten?"
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
@@ -4788,22 +4815,26 @@ msgstr "Die Position des Einfügezeigers (Versatz zum Beginn des Puffers)"
 
 #: ../gtk/gtktextbuffer.c:244
 msgid "Copy target list"
-msgstr ""
+msgstr "Ziele für »Kopieren«"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
+"Die Liste der Ziele, die dieser Puffer für das Kopieren aus der "
+"Zwischenablage und Drag&Drop-Quellen unterstützt."
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
-msgstr ""
+msgstr "Ziele für »Einfügen«"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
 msgstr ""
+"Die Liste der Ziele, die dieser Puffer für das Einfügen aus der "
+"Zwischenablage und durch Drag&Drop-Zielen unterstützt."
 
 #: ../gtk/gtktexttag.c:171
 msgid "Tag name"
@@ -5279,7 +5310,7 @@ msgstr "Maximale Breite des Kindes"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "Der maximale Platz, den ein ausgeklapptes Objet erhält"
 
 #: ../gtk/gtktoolbar.c:607
 msgid "Space style"
@@ -5587,7 +5618,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "Erweitertes Festlegen des Spaltenhintergrunds aktivieren"
 
 #: ../gtk/gtktreeview.c:800
 msgid "Grid line width"
@@ -6253,13 +6284,14 @@ msgstr "Schwere"
 msgid "The window gravity of the window"
 msgstr "Die Fensterschwere des Fensters"
 
+# CHECK
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "Flüchtig für Fenster"
 
 #: ../gtk/gtkwindow.c:675
 msgid "The transient parent of the dialog"
-msgstr ""
+msgstr "Das vorrübergehende Eltern-Widget des Dialogs"
 
 # CHECK
 #: ../modules/input/gtkimcontextxim.c:330
