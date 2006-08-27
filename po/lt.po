@@ -63,7 +63,7 @@ msgstr "Paveikslėlio tipas „%s“ nepalaikomas"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Negalėjau atpažinti paveikslėlio rinkmenos „%s“ formato"
+msgstr "Nepavyko atpažinti paveikslėlio rinkmenos „%s“ formato"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:747
 msgid "Unrecognized image file format"
@@ -636,11 +636,11 @@ msgstr "Targa paveikslėlių formatas"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Negalėjau gauti paveikslėlio pločio (bloga TIFF rinkmena)"
+msgstr "Nepavyko gauti paveikslėlio pločio (bloga TIFF rinkmena)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Negalėjau gauti paveikslėlio aukščio (bloga TIFF rinkmena)"
+msgstr "Nepavyko gauti paveikslėlio aukščio (bloga TIFF rinkmena)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
