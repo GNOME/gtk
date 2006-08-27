@@ -7,7 +7,6 @@
 # Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006.
 # Hendrik Brandt <heb@gnome-de.org>, 2005.
 #
-#
 # IM = Input method => Eingabemethode
 # 
 msgid ""
@@ -15,7 +14,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-20 16:31+0200\n"
-"PO-Revision-Date: 2006-08-27 15:56+0200\n"
+"PO-Revision-Date: 2006-08-27 19:26+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -275,8 +274,8 @@ msgstr "Beschriftung"
 #: ../gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
-"Die für Menüeinträge und -knöpfe verwendete Beschriftung, die diese Aktion "
-"auslösen."
+"Die für Menüeinträge und -knöpfe zu verwendende Beschriftung, die diese "
+"Aktion auslösen."
 
 #: ../gtk/gtkaction.c:207
 msgid "Short label"
@@ -4018,20 +4017,17 @@ msgid "The sorting order of the items displayed"
 msgstr "Die Sortierreihenfolge der angezeigten Einträge"
 
 #: ../gtk/gtkrecentchooser.c:170
-#, fuzzy
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
-"Der momentan zum Auswählen der anzuzeigenden Dateien zu verwendende Filter"
+"Der momentan zum Auswählen der anzuzeigenden Ressourcen zu verwendende Filter"
 
 #: ../gtk/gtkrecentchoosermenu.c:208
-#, fuzzy
 msgid "Show Numbers"
-msgstr "Wochennummern anzeigen"
+msgstr "Nummern anzeigen"
 
 #: ../gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "Sollen Abreiß-Menüeinträge zu Menüs hinzugefügt werden?"
+msgstr "Sollen die Einträge nummeriert werden?"
 
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
@@ -4149,7 +4145,6 @@ msgstr ""
 "anzeigen"
 
 #: ../gtk/gtkscrollbar.c:92
-#, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
@@ -4187,23 +4182,24 @@ msgid "Window Placement"
 msgstr "Fensterplatzierung"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen?"
+msgstr ""
+"Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen? Diese Eigenschaft "
+"tritt nur in Kraft, falls »window-placement-set« WAHR ist."
 
 #: ../gtk/gtkscrolledwindow.c:270
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "Fensterplatzierung"
+msgstr "Fensterplatzierung aktiviert"
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen?"
+msgstr ""
+"Legt fest, ob »window-placement« verwendet wird um die Position des Inhalts "
+"im Verhältnis zu den Rollbalken zu bestimmen."
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4222,16 +4218,17 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Die Anzahl der Pixel zwischen den Rollbalken und dem gerollten Fenster"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "Fensterplatzierung"
+msgstr "Platzierung gerollter Fenster"
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen?"
+msgstr ""
+"Wo soll der Inhalt gerollter Fenster im Verhältnis zu den Rollbalken liegen, "
+"falls der Wert nicht durch die eigene Position des gerollten Fensters "
+"überschrieben wird?"
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4418,18 +4415,18 @@ msgid "Cursor theme name"
 msgstr "Mauszeigerthema"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "Der Name des zu verwendenden Zeigerthemas"
+msgstr ""
+"Der Name des zu verwendenden Zeigerthemas, oder NULL, um das Vorgabethema zu "
+"verwenden."
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "Größe des Zeigerthemas"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Zu verwendende Zeigergröße"
+msgstr "Zu verwendende Zeigergröße, oder 0, um die Vorgabegröße zu verwenden."
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
@@ -4461,65 +4458,62 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
-msgstr ""
+msgstr "Anfangs-Timeout"
 
 #: ../gtk/gtksettings.c:410
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Anfangswert für Timeouts, wenn der Knopf gedrückt wird"
 
 #: ../gtk/gtksettings.c:419
 msgid "Repeat timeout"
-msgstr ""
+msgstr "Wiederholungs-Timeout"
 
 #: ../gtk/gtksettings.c:420
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Widerholungswert für Timeouts, wenn der Knopf gedrückt wird"
 
 #: ../gtk/gtksettings.c:429
-#, fuzzy
 msgid "Expand timeout"
-msgstr "Ausklappergröße"
+msgstr "Erweiterungs-Timeout"
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
+"Erweiterungswert für Timeouts, wenn ein Widget in eine neue Region expandiert"
 
 #: ../gtk/gtksettings.c:459
-#, fuzzy
 msgid "Color scheme"
-msgstr "Farbraum"
+msgstr "Farbschema"
 
 #: ../gtk/gtksettings.c:460
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "Der Name des Symbols aus dem Symbolthema der gewählten Schrift"
+msgstr "Eine Palette benannter Farben zur Verwendung in Themen"
 
 #: ../gtk/gtksettings.c:469
-#, fuzzy
 msgid "Enable Animations"
-msgstr "Animation"
+msgstr "Animationen aktivieren"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "Sollen Toolkit-weite Animationen aktiviert werden?"
 
 #: ../gtk/gtksettings.c:488
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Touchscreen-Modus aktivieren"
 
 #: ../gtk/gtksettings.c:489
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
+"Falls WAHR, werden auf diesem Bildschirm keine Bewegungsbenachrichtitungs-"
+"Ereignisse geliefert"
 
 #: ../gtk/gtksettings.c:507
-#, fuzzy
 msgid "Color Hash"
-msgstr "Farbraum"
+msgstr "Farb-Hash"
 
 #: ../gtk/gtksettings.c:508
-#, fuzzy
 msgid "A hash table representation of the color scheme."
-msgstr "Die Ausrichtung der Werkzeugleiste"
+msgstr "Eine Hash-Tabelle des Farbschemas"
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
@@ -4538,12 +4532,11 @@ msgid "Ignore hidden"
 msgstr "Versteckte ignorieren"
 
 #: ../gtk/gtksizegroup.c:285
-#, fuzzy
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
-"Wenn WAHR, werden alle versteckten Widgets beim Berechnen der Gruppengröße "
-"ignoriert"
+"Wenn WAHR, werden alle nicht zugewiesenen Widgets beim Berechnen der "
+"Gruppengröße ignoriert"
 
 #: ../gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4621,23 +4614,20 @@ msgid "Style of bevel around the statusbar text"
 msgstr "Stil der Fase um den Text der Statusleiste"
 
 #: ../gtk/gtkstatusicon.c:188
-#, fuzzy
 msgid "The size of the icon"
-msgstr "Der Titel des Fensters"
+msgstr "Die Größe des Symbols"
 
 #: ../gtk/gtkstatusicon.c:197
 msgid "Blinking"
-msgstr ""
+msgstr "Blinken"
 
 #: ../gtk/gtkstatusicon.c:198
-#, fuzzy
 msgid "Whether or not the status icon is blinking"
-msgstr "Soll die Aktion sichtbar sein?"
+msgstr "Soll das Statussymbol blinken?"
 
 #: ../gtk/gtkstatusicon.c:206
-#, fuzzy
 msgid "Whether or not the status icon is visible"
-msgstr "Soll die Aktion sichtbar sein?"
+msgstr "Soll das Statussymbol sichtbar sein?"
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
@@ -4672,7 +4662,6 @@ msgid "The amount of space between two consecutive columns"
 msgstr "Der Abstand zwischen zwei aufeinanderfolgenden Spalten"
 
 #: ../gtk/gtktable.c:166
-#, fuzzy
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr "Falls WAHR, sind die Tabellenzellen alle gleich breit/hoch"
 
@@ -4781,29 +4770,25 @@ msgid "Current text of the buffer"
 msgstr "Aktueller Text des Puffers"
 
 #: ../gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "Schwebende Auswahl"
+msgstr "Hat Auswahl"
 
 #: ../gtk/gtktextbuffer.c:213
-#, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "Die momentan gewählte GdkFont"
+msgstr "Ob der Puffer einen momentan ausgewählten Text hat"
 
 #: ../gtk/gtktextbuffer.c:228
-#, fuzzy
 msgid "Cursor position"
 msgstr "Zeigerposition"
 
 #: ../gtk/gtktextbuffer.c:229
 msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "Die Position des Einfügezeigers (Versatz zum Beginn des Puffers)"
 
 #: ../gtk/gtktextbuffer.c:244
-#, fuzzy
 msgid "Copy target list"
-msgstr "Copyright Zeichenkette"
+msgstr ""
 
 #: ../gtk/gtktextbuffer.c:245
 msgid ""
@@ -5207,9 +5192,8 @@ msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "Sollen die Proxys dieser Aktion wie Radio-Aktions-Proxys aussehen?"
 
 #: ../gtk/gtktoggleaction.c:119
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "Soll der Umschaltknopf eingedrückt sein oder nicht?"
+msgstr "Soll der Umschaltaktion aktiv sein oder nicht?"
 
 #: ../gtk/gtktogglebutton.c:105 ../gtk/gtktoggletoolbutton.c:102
 msgid "If the toggle button should be pressed in or not"
@@ -5256,19 +5240,16 @@ msgid "If the tooltips of the toolbar should be active or not"
 msgstr "Legt fest, ob die Minihilfen der Werkzeugleiste angezeigt werden"
 
 #: ../gtk/gtktoolbar.c:540
-#, fuzzy
 msgid "Size of icons in this toolbar"
-msgstr "Die Größe der Symbole in normalen Werkzeugleisten"
+msgstr "Die Größe der Symbole in dieser Werkzeugleiste"
 
 #: ../gtk/gtktoolbar.c:555
-#, fuzzy
 msgid "Icon size set"
-msgstr "Schriftgröße einstellen"
+msgstr "Symbolgröße gesetzt"
 
 #: ../gtk/gtktoolbar.c:556
-#, fuzzy
 msgid "Whether the icon-size property has been set"
-msgstr "Ist die Aktionsgruppe aktiviert?"
+msgstr "Gibt an, ob die Eigenschaft »icon-size« gesetzt ist"
 
 #: ../gtk/gtktoolbar.c:565
 msgid "Whether the item should receive extra space when the toolbar grows"
@@ -5293,9 +5274,8 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Der Abstand zwischen dem Schatten der Werkzeugleiste und den Knöpfen"
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Minimale Breite des Kindes"
+msgstr "Maximale Breite des Kindes"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
@@ -5383,9 +5363,8 @@ msgid "Icon widget to display in the item"
 msgstr "Im Objekt anzuzeigendes Symbol-Widget"
 
 #: ../gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "Zeilenabstand"
+msgstr "Symbolabstand"
 
 #: ../gtk/gtktoolbutton.c:240
 msgid "Spacing in pixels between the icon and label"
@@ -5400,9 +5379,8 @@ msgstr ""
 "zeigen Knöpfe Text im Modus »GTK_TOOLBAR_BOTH_HORIZ« an"
 
 #: ../gtk/gtktrayicon-x11.c:98
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "Die Ausrichtung der Werkzeugleiste"
+msgstr "Die Ausrichtung des Benachrichtigungsfeldes"
 
 #: ../gtk/gtktreemodelsort.c:274
 msgid "TreeModelSort Model"
@@ -5512,52 +5490,47 @@ msgstr ""
 "bewegt"
 
 #: ../gtk/gtktreeview.c:691
-#, fuzzy
 msgid "Show Expanders"
-msgstr "Ist ausklappbar"
+msgstr "Ausklapper anzeigen"
 
 #: ../gtk/gtktreeview.c:692
-#, fuzzy
 msgid "View has expanders"
-msgstr "Ist ausklappbar"
+msgstr "Ansicht hat Ausklapper"
 
 #: ../gtk/gtktreeview.c:699
 msgid "Level Indentation"
-msgstr ""
+msgstr "Einrückung von Ebenen"
 
 #: ../gtk/gtktreeview.c:700
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "Zusätzliche Einrückung für jede Ebene"
 
 #: ../gtk/gtktreeview.c:709
 msgid "Rubber Banding"
-msgstr ""
+msgstr "Gummiband"
 
 #: ../gtk/gtktreeview.c:710
-#, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Sollen mehrere Dateien ausgewählt werden können?"
+msgstr ""
+"Sollen mehrere Einträge durch Ziehen des Mauszeigers ausgewählt werden "
+"können?"
 
 #: ../gtk/gtktreeview.c:717
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Pfeiltasten aktivieren"
+msgstr "Rasterlinien aktivieren"
 
 #: ../gtk/gtktreeview.c:718
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Soll der Rand gezeigt werden?"
+msgstr "Sollen Rasterlinien in der Baumansicht angezeigt werden?"
 
 #: ../gtk/gtktreeview.c:726
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "Pfeiltasten aktivieren"
+msgstr "Baumlinien aktivieren"
 
 #: ../gtk/gtktreeview.c:727
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Soll der Rand gezeigt werden?"
+msgstr "Sollen Baumlinien in der Baumansicht angezeigt werden?"
 
 #: ../gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
@@ -5617,44 +5590,37 @@ msgid "Enable extended row background theming"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:800
-#, fuzzy
 msgid "Grid line width"
-msgstr "Länge der Fokuszeile"
+msgstr "Breite der Rasterlinie"
 
 #: ../gtk/gtktreeview.c:801
-#, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr "Die Breite der Fokusanzeiger-Linie in Pixel"
+msgstr "Die Breite der Rasterlinien einer Baumansicht in Pixel"
 
 #: ../gtk/gtktreeview.c:807
-#, fuzzy
 msgid "Tree line width"
-msgstr "Die feste Breite"
+msgstr "Breite der Baumlinie"
 
 #: ../gtk/gtktreeview.c:808
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
-msgstr "Die Breite der Fokusanzeiger-Linie in Pixel"
+msgstr "Die Breite der Linien einer Baumansicht in Pixel"
 
 #: ../gtk/gtktreeview.c:814
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "Strichelmuster der Fokuszeile"
+msgstr "Muster der Rasterlinie"
 
 #: ../gtk/gtktreeview.c:815
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Das zum Zeichnen des Fokusanzeigers verwendete Strichelmuster"
+msgstr ""
+"Das zum Zeichnen der Gitterlinien einer Baumansicht zu verwendende Muster"
 
 #: ../gtk/gtktreeview.c:821
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "Strichelmuster der Fokuszeile"
+msgstr "Muster der Baumlinie"
 
 #: ../gtk/gtktreeview.c:822
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Das zum Zeichnen des Fokusanzeigers verwendete Strichelmuster"
+msgstr "Das zum Zeichnen der Linien einer Baumansicht zu verwendende Muster"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -5963,7 +5929,7 @@ msgstr "Strichelmuster der Fokuszeile"
 
 #: ../gtk/gtkwidget.c:1498
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Das zum Zeichnen des Fokusanzeigers verwendete Strichelmuster"
+msgstr "Das zum Zeichnen des Fokusanzeigers zu verwendende Strichelmuster"
 
 #: ../gtk/gtkwidget.c:1503
 msgid "Focus padding"
@@ -6012,73 +5978,64 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Größe der Zonen außerhalb des Widget-Belegung die gezeichnet wird"
 
 #: ../gtk/gtkwidget.c:1550
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Farbe für Links"
+msgstr "Farbe für unbesuchte Links"
 
 #: ../gtk/gtkwidget.c:1551
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "Farbe für Hyperlinks"
+msgstr "Farbe für unbesuchte Hyperlinks"
 
 #: ../gtk/gtkwidget.c:1564
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "Farbe für Links"
+msgstr "Farbe für besuchte Links"
 
 #: ../gtk/gtkwidget.c:1565
-#, fuzzy
 msgid "Color of visited links"
-msgstr "Farbe für Hyperlinks"
+msgstr "Farbe für besuchte Hyperlinks"
 
 #: ../gtk/gtkwidget.c:1579
-#, fuzzy
 msgid "Wide Separators"
-msgstr "Trennbalken verwenden"
+msgstr "Breite Trennbalken"
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
+"Sollen Trennbalken eine festlegbare Breite haben und als Fläche anstatt "
+"einer Linie dargestellt werden?"
 
 #: ../gtk/gtkwidget.c:1594
-#, fuzzy
 msgid "Separator Width"
-msgstr "Breite des vertikalen Trennbalkens"
+msgstr "Breite der Trennbalken"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "Die Breite der Trennbalken falls »wide-separators« WAHR ist"
 
 #: ../gtk/gtkwidget.c:1609
-#, fuzzy
 msgid "Separator Height"
-msgstr "Vorgabehöhe"
+msgstr "Höhe der Trennbalken"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "Die Höhe der Trennbalken falls »wide-separators« WAHR ist"
 
 #: ../gtk/gtkwidget.c:1624
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Horizontale Rollbalkenrichtlinie"
+msgstr "Länge horizontaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:1625
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Wann soll der horizontale Rollbalken angezeigt werden?"
+msgstr "Die Länge horizontaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:1639
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Vertikale Rollbalkenrichtlinie"
+msgstr "Länge vertikaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:1640
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Wann soll der vertikale Rollbalken angezeigt werden?"
+msgstr "Die Länge vertikaler Rollpfeile"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -6279,14 +6236,12 @@ msgid "Whether the window should be decorated by the window manager"
 msgstr "Soll das Fenster vom Fenstermanager dekoriert werden?"
 
 #: ../gtk/gtkwindow.c:639
-#, fuzzy
 msgid "Deletable"
-msgstr "Markierbar"
+msgstr "Entfernbar"
 
 #: ../gtk/gtkwindow.c:640
-#, fuzzy
 msgid "Whether the window frame should have a close button"
-msgstr "Soll das Fenster vom Fenstermanager dekoriert werden?"
+msgstr "Soll der Fensterrahmen einen »Schließen«-Knopf haben?"
 
 # CHECK
 #: ../gtk/gtkwindow.c:656
@@ -6303,9 +6258,8 @@ msgid "Transient for Window"
 msgstr ""
 
 #: ../gtk/gtkwindow.c:675
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "Die im Nachrichtendialogfenster angezeigten Knöpfe"
+msgstr ""
 
 # CHECK
 #: ../modules/input/gtkimcontextxim.c:330
