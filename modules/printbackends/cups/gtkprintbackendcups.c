@@ -448,7 +448,8 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 static void
 gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
 {
-  backend_cups->list_printers_poll = 0;  
+  backend_cups->list_printers_poll = FALSE;  
+  backend_cups->got_default_printer = FALSE;  
   backend_cups->list_printers_pending = FALSE;
 
   cups_request_default_printer (backend_cups);
@@ -1185,7 +1186,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
   if (cups_backend->list_printers_poll == 0)
     {
       cups_request_printer_list (cups_backend);
-      cups_backend->list_printers_poll = g_timeout_add (3000 * 100000,
+      cups_backend->list_printers_poll = g_timeout_add (3000,
                                                         (GSourceFunc) cups_request_printer_list,
                                                         backend);
     }
