@@ -1,3 +1,9 @@
+2006-08-28  Matthias Clasen   <mclasen@redhat.com>
+
+	* modules/printbackend/cups/gtkprintbackendcups.c: Use a
+	resonable timeout of 3 seconds when polling for printer
+	list updates, instead of 300000 seconds...
+
 2006-08-28  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextbufferserialize.c (serialize_text): don't write out
