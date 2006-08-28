@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-22 19:39+0200\n"
+"POT-Creation-Date: 2006-08-28 13:14+0200\n"
 "PO-Revision-Date: 2006-07-22 19:39+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:646 ../gdk-pixbuf/gdk-pixbuf-io.c:698
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "L'image du type « %s » n'est pas supportée"
+msgstr "Le type d'images « %s » n'est pas supportée"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:738
 #, c-format
@@ -506,7 +506,7 @@ msgstr ""
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
-"La valeur pour le chunk texte PNG %s ne peut pas être converti dans le "
+"La valeur pour le chunk texte PNG %s ne peut pas être convertie dans le "
 "codage ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:1026
@@ -1168,7 +1168,7 @@ msgid ""
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "La couleur précédemment sélectionnée, en comparaison de la couleur que vous "
-"êtes en train de sélectionner maintenant. Vous pouvez glissez cette couleur "
+"êtes en train de sélectionner maintenant. Vous pouvez glisser cette couleur "
 "sur une entrée de palette, ou sélectionner cette couleur comme actuel en la "
 "glissant sur un autre échantillon de couleur à coté."
 
