@@ -58,6 +58,7 @@ noinst_PROGRAMS =			\
 	testprint			\
 	testrgb				\
 	testrecentchooser 		\
+	testrichtext			\
 	testselection			\
 	$(testsocket_programs)		\
 	testspinbutton			\
@@ -115,6 +116,7 @@ testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
+testrichtext_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
 testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
@@ -166,6 +168,7 @@ testnouiprint_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
+testrichtext_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)

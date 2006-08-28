@@ -1,3 +1,17 @@
+2006-08-28  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gtk/gtktextbufferserialize.c (serialize_text): don't write out
+	</apply_tag> for tags that have already been closed by the logic
+	which turns overlapping spans into XML-able trees. Fixes broken
+	XML when there are overlapping tags in the buffer. Also free two
+	leaked GLists and did some cleanup.
+
+	* tests/Makefile.am
+	* tests/testrichtext.c: new test which creates randomly tagged
+	GtkTextBuffers and serializes/deserializes them.
+
 2006-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_reset_image_data): 

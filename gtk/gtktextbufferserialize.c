@@ -434,14 +434,13 @@ serialize_text (GtkTextBuffer        *buffer,
 {
   GtkTextIter iter, old_iter;
   GSList *tag_list, *new_tag_list;
-  GQueue *active_tags;
-  int i;
+  GSList *active_tags;
 
   g_string_append (context->text_str, "<text>");
 
   iter = context->start;
   tag_list = NULL;
-  active_tags = g_queue_new ();
+  active_tags = NULL;
 
   do
     {
@@ -453,29 +452,33 @@ serialize_text (GtkTextBuffer        *buffer,
       find_list_delta (tag_list, new_tag_list, &added, &removed);
 
       /* Handle removed tags */
-      tmp = removed;
-      while (tmp)
+      for (tmp = removed; tmp; tmp = tmp->next)
 	{
 	  GtkTextTag *tag = tmp->data;
 
-	  g_string_append (context->text_str, "</apply_tag>");
+          /* Only close the tag if we didn't close it before (by using
+           * the stack logic in the while() loop below)
+           */
+          if (g_slist_find (active_tags, tag))
+            {
+              g_string_append (context->text_str, "</apply_tag>");
 
-	  /* We might need to drop some of the tags and re-add them afterwards */
-	  while (g_queue_peek_head (active_tags) != tag &&
-		     !g_queue_is_empty (active_tags))
-	    {
-	      added = g_list_prepend (added, g_queue_pop_head (active_tags));
-	      g_string_append_printf (context->text_str, "</apply_tag>");
-	    }
+              /* Drop all tags that were opened after this one (which are
+               * above this on in the stack)
+               */
+              while (active_tags->data != tag)
+                {
+                  added = g_list_prepend (added, active_tags->data);
+                  active_tags = g_slist_remove (active_tags, active_tags->data);
+                  g_string_append_printf (context->text_str, "</apply_tag>");
+                }
 
-	  g_queue_pop_head (active_tags);
-
-	  tmp = tmp->next;
+              active_tags = g_slist_remove (active_tags, active_tags->data);
+            }
 	}
 
       /* Handle added tags */
-      tmp = added;
-      while (tmp)
+      for (tmp = added; tmp; tmp = tmp->next)
 	{
 	  GtkTextTag *tag = tmp->data;
 	  gchar *tag_name;
@@ -505,13 +508,15 @@ serialize_text (GtkTextBuffer        *buffer,
 
 	      g_string_append_printf (context->text_str, "<apply_tag id=\"%d\">", GPOINTER_TO_INT (tag_id));
 	    }
-	  g_queue_push_head (active_tags, tag);
 
-	  tmp = tmp->next;
+	  active_tags = g_slist_prepend (active_tags, tag);
 	}
 
       g_slist_free (tag_list);
       tag_list = new_tag_list;
+
+      g_list_free (added);
+      g_list_free (removed);
 
       old_iter = iter;
 
@@ -570,10 +575,10 @@ serialize_text (GtkTextBuffer        *buffer,
   while (!gtk_text_iter_equal (&iter, &context->end));
 
   /* Close any open tags */
-  for (i = 0; i < g_queue_get_length (active_tags); i++) {
+  for (tag_list = active_tags; tag_list; tag_list = tag_list->next)
     g_string_append (context->text_str, "</apply_tag>");
-  }
-  g_queue_free (active_tags);
+
+  g_slist_free (active_tags);
   g_string_append (context->text_str, "</text>\n</text_view_markup>\n");
 }
 
