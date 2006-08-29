@@ -22,14 +22,7 @@ libwntab32x_a = .libs/libwntab32x.a
 	cp $< $@
 endif
 
-if HAVE_IE55
-libie55uuid_a = .libs/libie55uuid.a
-
-.libs/libie55uuid.a: $(IE55_UUID_LIB)
-	cp $< $@
-endif
-
-noinst_DATA = $(libwntab32x_a) $(libie55uuid_a)
+noinst_DATA = $(libwntab32x_a)
 
 noinst_LTLIBRARIES = libgdk-win32.la
 
@@ -38,7 +31,6 @@ SUBDIRS=rc
 EXTRA_DIST = \
 	bdfcursor.c \
 	makefile.msc	\
-	libie55uuid.la	\
 	libwntab32x.la
 
 libgdk_win32_la_SOURCES = \

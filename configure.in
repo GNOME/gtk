@@ -214,10 +214,6 @@ AC_ARG_WITH(xinput,
 AC_ARG_WITH(wintab,
             [AC_HELP_STRING([--with-wintab=DIRECTORY],
                             [use Wintab API with win32 backend])])
-AC_ARG_WITH(ie55,
-            [AC_HELP_STRING([--with-ie55=DIRECTORY],
-                            [IE5.5 libs and headers (for Active IMM)])])
-
 if test "$platform_win32" = yes; then
   gdktarget=win32
 else
@@ -570,45 +566,6 @@ LIBS=$gtk_save_LIBS
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
-
-if test "${with_ie55+set}" = set && test $with_ie55 != no; then
-  AC_MSG_CHECKING([for dimm.h])
-  saved_CFLAGS="$CFLAGS"
-  CFLAGS="$CFLAGS -idirafter $with_ie55/Include"
-  AC_TRY_COMPILE([/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
-#ifdef __GNUC__
-#define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
-#define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
-#endif
-#include <windows.h>
-#include <objbase.h>
-#include <imm.h>
-#ifdef __GNUC__
-#undef IMEMENUITEMINFOA
-#undef IMEMENUITEMINFOW
-#endif
-#include <dimm.h>
-],
-   [],
-   [AC_MSG_RESULT(yes)
-    AC_MSG_CHECKING([for IE55 uuid.lib])
-    if test -f $with_ie55/Lib/uuid.lib ; then
-      AC_MSG_RESULT(yes)
-      have_ie55=yes
-      AC_DEFINE(HAVE_DIMM_H)
-      IE55_UUID_LIB="$with_ie55/Lib/uuid.lib"
-      AC_SUBST(IE55_UUID_LIB)
-    else
-      AC_MSG_RESULT(no)
-      CFLAGS="$saved_CFLAGS"
-      have_ie55=no
-    fi
-    ],
-   [AC_MSG_RESULT(no)
-    CFLAGS="$saved_CFLAGS"
-    have_ie55=no])
-fi
-AM_CONDITIONAL(HAVE_IE55, test x$have_ie55 = xyes)
 
 if test "${with_wintab+set}" = set && test $with_wintab != no; then
   AC_MSG_CHECKING([for wintab.h])

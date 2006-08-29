@@ -162,9 +162,6 @@ libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols gdk.d
 if HAVE_WINTAB
 libgdk_win32_2_0_la_LIBADD += -Lwin32 -lwntab32x
 endif
-if HAVE_IE55
-libgdk_win32_2_0_la_LIBADD += -Lwin32 -lie55uuid
-endif
 
 if OS_WIN32
 install-def-file: gdk.def

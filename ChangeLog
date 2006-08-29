@@ -1,3 +1,44 @@
+2006-08-29  Tor Lillqvist  <tml@novell.com>
+
+	Remove support for Windows 9x/ME. GTK+ hasn't worked on Win9x
+	since 2.6 or 2.8. It's pointless to keep the Win9x code in here as
+	it isn't being maintained anyway. If somebody is interested, it
+	can always be found in older GTK+ versions, and in CVS.
+
+	* configure.in
+	* acconfig.h
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am
+	* gdk/win32/libie55uid.la
+	* gdk/win32/gdkevents-win32.c: Remove the --with-ie55 configure
+	switch and associated stuff. Active IMM and the <dimm.h> header
+	was used for IM support on NT4 and Win9x. Win2k and later have IM
+	support built-in.
+
+	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/gdkdnd-win32.c
+	* gdk/win32/gdkdrawable-win32.c
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkkeys-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/win32/gdkselection-win32.c: Remove the G_WIN32_IS_NT_BASED()
+	and G_WIN32_HAVE_WIDECHAR_API() tests and their false (Win9x)
+	branches, and any variables or static functions used only by the
+	Win9x branches.
+
+	* gdk/win32/gdkprivate-win32.h: Remove backup definitions for
+	constants that aren't missing from current mingw and MSVC6
+	headers.
+
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkprivate-win32.h: Remove the _gdk_win32_gdi_failed()
+	function. On NT-based Windows GetLastError() returns error codes
+	also for failed GDI calls, so we can use _gdk_win32_api_failed()
+	always.
+
 2006-08-29  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c

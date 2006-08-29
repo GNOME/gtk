@@ -43,12 +43,6 @@
 
 #include <glib/gprintf.h>
 
-#if defined (__GNUC__) && defined (HAVE_DIMM_H)
-/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
-# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
-# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
-#endif
-
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
@@ -64,15 +58,6 @@
 #include <objbase.h>
 
 #include <imm.h>
-
-#if defined (__GNUC__) && defined (HAVE_DIMM_H)
-# undef IMEMENUITEMINFOA
-# undef IMEMENUITEMINFOW
-#endif
-
-#ifdef HAVE_DIMM_H
-#include <dimm.h>
-#endif
 
 #ifndef XBUTTON1
 #define XBUTTON1 1
@@ -146,11 +131,6 @@ static UINT client_message;
 
 static UINT got_gdk_events_message;
 static HWND modal_win32_dialog = NULL;
-
-#ifdef HAVE_DIMM_H
-static IActiveIMMApp *active_imm_app = NULL;
-static IActiveIMMMessagePumpOwner *active_imm_msgpump_owner = NULL;
-#endif
 
 #if 0
 static HKL latin_locale = NULL;
@@ -265,9 +245,6 @@ inner_window_procedure (HWND   hwnd,
 {
   MSG msg;
   DWORD pos;
-#ifdef HAVE_DIMM_H
-  LRESULT lres;
-#endif
   gint ret_val = 0;
 
   msg.hwnd = hwnd;
@@ -293,15 +270,7 @@ inner_window_procedure (HWND   hwnd,
     {
       /* Otherwise call DefWindowProc(). */
       GDK_NOTE (EVENTS, g_print (" DefWindowProc"));
-#ifndef HAVE_DIMM_H
       return DefWindowProc (hwnd, message, wparam, lparam);
-#else
-      if (active_imm_app == NULL ||
-	  (*active_imm_app->lpVtbl->OnDefWindowProc) (active_imm_app, hwnd, message, wparam, lparam, &lres) == S_FALSE)
-	return DefWindowProc (hwnd, message, wparam, lparam);
-      else
-	return lres;
-#endif
     }
 }
 
@@ -331,9 +300,6 @@ void
 _gdk_events_init (void)
 {
   GSource *source;
-#ifdef HAVE_DIMM_H
-  HRESULT hres;
-#endif
 
 #if 0
   int i, j, n;
@@ -443,26 +409,6 @@ _gdk_events_init (void)
   g_source_add_poll (source, &event_poll_fd);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
-
-#ifdef HAVE_DIMM_H
-  hres = CoCreateInstance (&CLSID_CActiveIMM,
-			   NULL,
-			   CLSCTX_ALL,
-			   &IID_IActiveIMMApp,
-			   (LPVOID *) &active_imm_app);
-  
-  if (hres == S_OK)
-    {
-      GDK_NOTE (EVENTS, g_print ("IActiveIMMApp created %p\n",
-				 active_imm_app));
-      (*active_imm_app->lpVtbl->Activate) (active_imm_app, TRUE);
-      
-      hres = (*active_imm_app->lpVtbl->QueryInterface) (active_imm_app, &IID_IActiveIMMMessagePumpOwner, (void **) &active_imm_msgpump_owner);
-      GDK_NOTE (EVENTS, g_print ("IActiveIMMMessagePumpOwner created %p\n",
-				 active_imm_msgpump_owner));
-      (active_imm_msgpump_owner->lpVtbl->Start) (active_imm_msgpump_owner);
-    }
-#endif
 }
 
 gboolean
@@ -901,21 +847,6 @@ build_key_event_state (GdkEvent *event,
     event->key.state |= GDK_BUTTON4_MASK;
   if (key_state[VK_XBUTTON2] & 0x80)
     event->key.state |= GDK_BUTTON5_MASK;
-
-  /* Win9x doesn't distinguish between left and right Control and Alt
-   * in the keyboard state as returned by GetKeyboardState(), so we
-   * have to punt, and accept either Control + either Alt to be AltGr.
-   *
-   * Alternatively, we could have some state saved when the Control
-   * and Alt keys messages come in, as the KF_EXTENDED bit in lParam
-   * does indicate correctly whether it is the right Control or Alt
-   * key. But that would be a bit messy.
-   */
-  if (!G_WIN32_IS_NT_BASED () &&
-      _gdk_keyboard_has_altgr &&
-      key_state[VK_CONTROL] & 0x80 &&
-      key_state[VK_MENU] & 0x80)
-    key_state[VK_LCONTROL] = key_state[VK_RMENU] = 0x80;
 
   if (_gdk_keyboard_has_altgr &&
       (key_state[VK_LCONTROL] & 0x80) &&
