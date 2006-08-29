@@ -1,3 +1,13 @@
+Fri Jul 14 16:13:37 2006  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkprogressbar.c: introduced ::xspacing and ::yspacing style 
+	properties which make all hardcoded padding and spacing values
+	configurable. properly swap ::text-xalign treatment for RTL widgets.
+
+	* gtk/gtkprogress.c: fixed style property blurbs. made alignment 
+	proeprty more consistent with GtkMisc alignment blurbs. mention
+	RTL treatment for text-xalign.
+
 Tue Aug 29 11:57:40 2006  Tim Janik  <timj@imendio.com>
 
 	* tests/testgtk.c: allow (most) windows to be resizable.

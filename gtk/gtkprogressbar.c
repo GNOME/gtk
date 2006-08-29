@@ -45,7 +45,6 @@
 #define MIN_VERTICAL_BAR_WIDTH     22
 #define MIN_VERTICAL_BAR_HEIGHT    80
 #define MAX_TEXT_LENGTH            80
-#define TEXT_SPACING               2
 
 enum {
   PROP_0,
@@ -145,9 +144,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    g_param_spec_uint ("activity-step",
 						      P_("Activity Step"),
 						      P_("The increment used for each iteration in activity mode (Deprecated)"),
-						      0,
-						      G_MAXUINT,
-						      3,
+						      0, G_MAXUINT, 3,
 						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
@@ -155,9 +152,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    g_param_spec_uint ("activity-blocks",
 						      P_("Activity Blocks"),
 						      P_("The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"),
-						      2,
-						      G_MAXUINT,
-						      5,
+						      2, G_MAXUINT, 5,
 						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
@@ -165,9 +160,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    g_param_spec_uint ("discrete-blocks",
 						      P_("Discrete Blocks"),
 						      P_("The number of discrete blocks in a progress bar (when shown in the discrete style)"),
-						      2,
-						      G_MAXUINT,
-						      10,
+						      2, G_MAXUINT, 10,
 						      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
@@ -175,9 +168,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 				   g_param_spec_double ("fraction",
 							P_("Fraction"),
 							P_("The fraction of total work that has been completed"),
-							0.0,
-							1.0,
-							0.0,
+							0.0, 1.0, 0.0,
 							GTK_PARAM_READWRITE));  
   
   g_object_class_install_property (gobject_class,
@@ -185,9 +176,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 				   g_param_spec_double ("pulse-step",
 							P_("Pulse Step"),
 							P_("The fraction of total progress to move the bouncing block when pulsed"),
-							0.0,
-							1.0,
-							0.1,
+							0.0, 1.0, 0.1,
 							GTK_PARAM_READWRITE));  
   
   g_object_class_install_property (gobject_class,
@@ -216,11 +205,23 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 				   PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
                                                       P_("Ellipsize"),
-                                                      P_("The preferred place to ellipsize the string, if the progressbar does not have enough room to display the entire string, if at all"),
+                                                      P_("The preferred place to ellipsize the string, if the progress bar "
+                                                         "does not have enough room to display the entire string, if at all."),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
                                                       GTK_PARAM_READWRITE));
-
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("xspacing",
+                                                             P_("XSpacing"),
+                                                             P_("Extra spacing applied to the width of a progress bar."),
+                                                             0, G_MAXINT, 7,
+                                                             G_PARAM_READWRITE));
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("yspacing",
+                                                             "YSpacing",
+                                                             "Extra spacing applied to the height of a progress bar.",
+                                                             0, G_MAXINT, 7,
+                                                             G_PARAM_READWRITE));
 }
 
 static void
@@ -486,15 +487,21 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   PangoRectangle logical_rect;
   PangoLayout *layout;
   gint width, height;
+  gint xspacing, yspacing;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
+  gtk_widget_style_get (widget,
+                        "xspacing", &xspacing,
+                        "yspacing", &yspacing,
+                        NULL);
+
   progress = GTK_PROGRESS (widget);
   pbar = GTK_PROGRESS_BAR (widget);
 
-  width = 2 * widget->style->xthickness + 3 + 2 * TEXT_SPACING;
-  height = 2 * widget->style->ythickness + 3 + 2 * TEXT_SPACING;
+  width = 2 * widget->style->xthickness + xspacing;
+  height = 2 * widget->style->ythickness + yspacing;
 
   if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
     {
@@ -766,7 +773,6 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
 {
   GtkProgress *progress = GTK_PROGRESS (pbar);
   GtkWidget *widget = GTK_WIDGET (pbar);
-  
   gint x;
   gint y;
   gchar *buf;
@@ -774,7 +780,12 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   PangoLayout *layout;
   PangoRectangle logical_rect;
   GdkRectangle prelight_clip, normal_clip;
-  
+  gfloat text_xalign = progress->x_align;
+  gfloat text_yalign = progress->y_align;
+
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    text_xalign = 1.0 - text_xalign;
+
   buf = gtk_progress_get_current_text (progress);
   
   layout = gtk_widget_create_pango_layout (widget, buf);
@@ -784,15 +795,13 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
 
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
-  x = widget->style->xthickness + 1 +
-    (widget->allocation.width - 2 * widget->style->xthickness -
-     2 - logical_rect.width)
-    * progress->x_align; 
+  x = widget->style->xthickness + 1 + text_xalign *
+      (widget->allocation.width - 2 * widget->style->xthickness -
+       2 - logical_rect.width);
 
-  y = widget->style->ythickness + 1 +
-    (widget->allocation.height - 2 * widget->style->ythickness -
-     2 - logical_rect.height)
-    * progress->y_align;
+  y = widget->style->ythickness + 1 + text_yalign *
+      (widget->allocation.height - 2 * widget->style->ythickness -
+       2 - logical_rect.height);
 
   rect.x = widget->style->xthickness;
   rect.y = widget->style->ythickness;

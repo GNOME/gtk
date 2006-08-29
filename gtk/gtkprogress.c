@@ -93,40 +93,36 @@ gtk_progress_class_init (GtkProgressClass *class)
   class->paint = NULL;
   class->update = NULL;
   class->act_mode_enter = NULL;
-
+  
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVITY_MODE,
                                    g_param_spec_boolean ("activity-mode",
 							 P_("Activity mode"),
-							 P_("If TRUE, the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"),
+							 P_("If TRUE, the GtkProgress is in activity mode, meaning that it signals "
+                                                            "something is happening, but not how much of the activity is finished. "
+                                                            "This is used when you're doing something but don't know how long it will take."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_TEXT,
                                    g_param_spec_boolean ("show-text",
 							 P_("Show text"),
-							 P_("Whether the progress is shown as text"),
+							 P_("Whether the progress is shown as text."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
 				   PROP_TEXT_XALIGN,
 				   g_param_spec_float ("text-xalign",
 						       P_("Text x alignment"),
-						       P_("A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progress widget"),
-						       0.0,
-						       1.0,
-						       0.5,
+                                                       P_("The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+						       0.0, 1.0, 0.5,
 						       GTK_PARAM_READWRITE));  
-    g_object_class_install_property (gobject_class,
+  g_object_class_install_property (gobject_class,
 				   PROP_TEXT_YALIGN,
 				   g_param_spec_float ("text-yalign",
 						       P_("Text y alignment"),
-						       P_("A number between 0.0 and 1.0 specifying the vertical alignment of the text in the progress widget"),
-						       0.0,
-						       1.0,
-						       0.5,
+                                                       P_("The vertical text alignment, from 0 (top) to 1 (bottom)."),
+						       0.0, 1.0, 0.5,
 						       GTK_PARAM_READWRITE));
 }
 
