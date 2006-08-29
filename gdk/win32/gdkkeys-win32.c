@@ -48,9 +48,6 @@ static GdkKeymap *default_keymap = NULL;
 
 static guint *keysym_tab = NULL;
 
-typedef int (WINAPI *t_ToUnicodeEx) (UINT,UINT,PBYTE,LPWSTR,int,UINT,HKL);
-static t_ToUnicodeEx p_ToUnicodeEx = NULL;
-
 #ifdef G_ENABLE_DEBUG
 static void
 print_keysym_tab (void)
@@ -266,6 +263,7 @@ static void
 reset_after_dead (guchar key_state[256])
 {
   guchar temp_key_state[256];
+  wchar_t wcs[2];
 
   memmove (temp_key_state, key_state, sizeof (key_state));
 
@@ -273,20 +271,9 @@ reset_after_dead (guchar key_state[256])
     temp_key_state[VK_CONTROL] =
     temp_key_state[VK_MENU] = 0;
 
-  if (G_WIN32_HAVE_WIDECHAR_API ())
-    {
-      wchar_t wcs[2];
-      (*p_ToUnicodeEx) (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
-			temp_key_state, wcs, G_N_ELEMENTS (wcs),
-			0, _gdk_input_locale);
-    }
-  else
-    {
-      char chars[2];
-      ToAsciiEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
-		 temp_key_state, (LPWORD) chars, 0,
-		 _gdk_input_locale);
-    }
+  ToUnicodeEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
+	       temp_key_state, wcs, G_N_ELEMENTS (wcs),
+	       0, _gdk_input_locale);
 }
 
 static void
@@ -346,21 +333,9 @@ update_keymap (void)
   guint scancode;
   guint vk;
   gboolean capslock_tested = FALSE;
-  static HMODULE user32 = NULL;
 
   if (keysym_tab != NULL && current_serial == _gdk_keymap_serial)
     return;
-
-  g_assert (G_WIN32_HAVE_WIDECHAR_API () || _gdk_input_codepage != 0);
-
-  if (G_WIN32_HAVE_WIDECHAR_API () && user32 == NULL)
-    {
-      user32 = GetModuleHandle ("user32.dll");
-
-      g_assert (user32 != NULL);
-
-      p_ToUnicodeEx = (t_ToUnicodeEx) GetProcAddress (user32, "ToUnicodeEx");
-    }
 
   current_serial = _gdk_keymap_serial;
 
@@ -409,50 +384,17 @@ update_keymap (void)
 		  wchar_t wcs[10];
 		  gint k;
 
-		  if (G_WIN32_HAVE_WIDECHAR_API ())
-		    {
-		      k = (*p_ToUnicodeEx) (vk, scancode, key_state,
-					    wcs, G_N_ELEMENTS (wcs),
-					    0, _gdk_input_locale);
+		  k = ToUnicodeEx (vk, scancode, key_state,
+				   wcs, G_N_ELEMENTS (wcs),
+				   0, _gdk_input_locale);
 #if 0
-		      g_print ("ToUnicodeEx(%02x, %d: %d): %d, %04x %04x\n",
-			       vk, scancode, shift, k,
-			       (k != 0 ? wcs[0] : 0),
-			       (k >= 2 ? wcs[1] : 0));
+		  g_print ("ToUnicodeEx(%02x, %d: %d): %d, %04x %04x\n",
+			   vk, scancode, shift, k,
+			   (k != 0 ? wcs[0] : 0),
+			   (k >= 2 ? wcs[1] : 0));
 #endif
-		      if (k == 1)
-			*ksymp = gdk_unicode_to_keyval (wcs[0]);
-		    }
-		  else
-		    {
-		      k = ToAsciiEx (vk, scancode, key_state,
-				     (LPWORD) chars, 0, _gdk_input_locale);
-#if 0
-		      g_print ("ToAsciiEx(%02x, %d: %d): %d, %02x %02x\n",
-			       vk, scancode, shift, k,
-			       (k != 0 ? chars[0] : 0),
-			       (k == 2 ? chars[1] : 0));
-#endif
-		      if (k == 1)
-			{
-			  if (_gdk_input_codepage >= 1250 &&
-			      _gdk_input_codepage <= 1258 &&
-			      chars[0] >= GDK_space &&
-			      chars[0] <= GDK_asciitilde)
-			    *ksymp = chars[0];
-			  else
-			    {
-			      if (MultiByteToWideChar (_gdk_input_codepage, 0,
-						       chars, 1, wcs, 1) > 0)
-				*ksymp = gdk_unicode_to_keyval (wcs[0]);
-			    }
-			}
-		      else if (k == -1)
-			{
-			  MultiByteToWideChar (_gdk_input_codepage, 0,
-					       chars, 1, wcs, 1);
-			}
-		    }
+		  if (k == 1)
+		    *ksymp = gdk_unicode_to_keyval (wcs[0]);
 
 		  if (k == 1)
 		    {
@@ -489,10 +431,8 @@ update_keymap (void)
 		    {
 #if 0
 		      GDK_NOTE (EVENTS,
-				g_print ("%s returns %d "
+				g_print ("ToUnicodeEx returns %d "
 					 "for vk:%02x, sc:%02x%s%s\n",
-					 (G_WIN32_HAVE_WIDECHAR_API () ?
-					  "ToUnicodeEx" : "ToAsciiEx"),
 					 k, vk, scancode,
 					 (shift&0x1 ? " shift" : ""),
 					 (shift&0x2 ? " altgr" : "")));

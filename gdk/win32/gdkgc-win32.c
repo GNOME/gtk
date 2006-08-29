@@ -172,35 +172,14 @@ fixup_pen (GdkGCWin32 *win32_gc)
 	  win32_gc->pen_dashes[0] = 4;
 	  win32_gc->pen_num_dashes = 1;
 	}
-      if (G_WIN32_IS_NT_BASED ())
-	{
-	  if (!(win32_gc->pen_style & PS_TYPE_MASK) == PS_GEOMETRIC &&
-	      win32_gc->pen_dashes[0] == 1 &&
-	      (win32_gc->pen_num_dashes == 1 ||
-	       (win32_gc->pen_num_dashes == 2 && win32_gc->pen_dashes[0] == 1)))
-	    win32_gc->pen_style |= PS_ALTERNATE;
-	  else
-	    win32_gc->pen_style |= PS_USERSTYLE;
-	}
+
+      if (!(win32_gc->pen_style & PS_TYPE_MASK) == PS_GEOMETRIC &&
+	  win32_gc->pen_dashes[0] == 1 &&
+	  (win32_gc->pen_num_dashes == 1 ||
+	   (win32_gc->pen_num_dashes == 2 && win32_gc->pen_dashes[0] == 1)))
+	win32_gc->pen_style |= PS_ALTERNATE;
       else
-	{
-	  /* Render "short" on-off dashes drawn with R2_COPYPEN and a
-	   * cosmetic pen using PS_DOT
-	   */
-	  if (win32_gc->line_style == GDK_LINE_ON_OFF_DASH &&
-	      win32_gc->rop2 == R2_COPYPEN &&
-	      (win32_gc->pen_style & PS_TYPE_MASK) == PS_COSMETIC &&
-	      win32_gc->pen_dashes[0] <= 2 &&
-	      (win32_gc->pen_num_dashes == 1 ||
-	       (win32_gc->pen_num_dashes == 2 && win32_gc->pen_dashes[1] <= 2)))
-	    win32_gc->pen_style |= PS_DOT;
-	  else
-	    /* Otherwise render opaque lines solid, horizontal or
-	     * vertical ones will be dashed manually, see
-	     * gdkdrawable-win32.c.
-	     */
-	    win32_gc->pen_style |= PS_SOLID;
-	}
+	win32_gc->pen_style |= PS_USERSTYLE;
      break;
     }
 

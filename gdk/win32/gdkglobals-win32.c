@@ -46,7 +46,6 @@ HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime;
 UINT		  _gdk_input_codepage;
 
-WORD  		  _cf_rtf;
 WORD		  _cf_utf8_string;
 WORD		  _cf_image_bmp;
 

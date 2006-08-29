@@ -47,9 +47,7 @@
 
 #define MUST_RENDER_DASHES_MANUALLY(gcwin32)			\
   (gcwin32->line_style == GDK_LINE_DOUBLE_DASH ||		\
-   (gcwin32->line_style == GDK_LINE_ON_OFF_DASH &&		\
-    (gcwin32->pen_dash_offset ||				\
-     (!G_WIN32_IS_NT_BASED () && (gcwin32->pen_style & PS_STYLE_MASK) == PS_SOLID))))
+   (gcwin32->line_style == GDK_LINE_ON_OFF_DASH && gcwin32->pen_dash_offset))
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
 				      GdkGC          *gc,
@@ -717,64 +715,12 @@ generic_draw (GdkDrawable    *drawable,
        * the areas where mask is one. (It is filled with said pattern.)
        */
 
-      if (G_WIN32_IS_NT_BASED ())
-	{
-	  GDI_CALL (MaskBlt, (hdc, region->extents.x1, region->extents.y1,
-			      width, height,
-			      tile_hdc, 0, 0,
-			      GDK_PIXMAP_HBITMAP (mask_pixmap), 0, 0,
-			      MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
-	}
-      else
-	{
-	  GdkPixmap *temp1_pixmap =
-	    gdk_pixmap_new (drawable, width, height, -1);
-	  GdkPixmap *temp2_pixmap =
-	    gdk_pixmap_new (drawable, width, height, -1);
-	  HDC temp1_hdc = CreateCompatibleDC (hdc);
-	  HDC temp2_hdc = CreateCompatibleDC (hdc);
-	  HGDIOBJ old_temp1_hbm =
-	    SelectObject (temp1_hdc, GDK_PIXMAP_HBITMAP (temp1_pixmap));
-	  HGDIOBJ old_temp2_hbm =
-	    SelectObject (temp2_hdc, GDK_PIXMAP_HBITMAP (temp2_pixmap));
+      GDI_CALL (MaskBlt, (hdc, region->extents.x1, region->extents.y1,
+			  width, height,
+			  tile_hdc, 0, 0,
+			  GDK_PIXMAP_HBITMAP (mask_pixmap), 0, 0,
+			  MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
 
-	  /* Grab copy of dest region to temp1 */
-	  GDI_CALL (BitBlt,(temp1_hdc, 0, 0, width, height,
-			    hdc, region->extents.x1, region->extents.y1, SRCCOPY));
-
-	  /* Paint tile to temp1 using correct function */
-	  GDI_CALL (BitBlt, (temp1_hdc, 0, 0, width, height,
-			     tile_hdc, 0, 0, rop2_to_rop3 (gcwin32->rop2)));
-
-	  /* Mask out temp1 where function didn't paint */
-	  GDI_CALL (BitBlt, (temp1_hdc, 0, 0, width, height,
-			     mask_hdc, 0, 0, SRCAND));
-
-	  /* Grab another copy of dest region to temp2 */
-	  GDI_CALL (BitBlt, (temp2_hdc, 0, 0, width, height,
-			     hdc, region->extents.x1, region->extents.y1, SRCCOPY));
-
-	  /* Mask out temp2 where function did paint */
-	  GDI_CALL (BitBlt, (temp2_hdc, 0, 0, width, height,
-			     mask_hdc, 0, 0, ROP3_DSna));
-
-	  /* Combine temp1 with temp2 */
-	  GDI_CALL (BitBlt, (temp2_hdc, 0, 0, width, height,
-			     temp1_hdc, 0, 0, SRCPAINT));
-
-	  /* Blit back */
-	  GDI_CALL (BitBlt, (hdc, region->extents.x1, region->extents.y1, width, height,
-			     temp2_hdc, 0, 0, SRCCOPY));
-
-	  /* Cleanup */
-	  GDI_CALL (SelectObject, (temp1_hdc, old_temp1_hbm));
-	  GDI_CALL (SelectObject, (temp2_hdc, old_temp2_hbm));
-	  GDI_CALL (DeleteDC, (temp1_hdc));
-	  GDI_CALL (DeleteDC, (temp2_hdc));
-	  g_object_unref (temp1_pixmap);
-	  g_object_unref (temp2_pixmap);
-	}
-      
       /* Cleanup */
       GDI_CALL (SelectObject, (mask_hdc, old_mask_hbm));
       GDI_CALL (SelectObject, (tile_hdc, old_tile_hbm));

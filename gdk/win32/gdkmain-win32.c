@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define WINVER 0x0500
+
 #include <config.h>
 
 #include <glib/gprintf.h>
@@ -42,12 +44,6 @@
 #include "gdkinput-win32.h"
 
 #include <objbase.h>
-
-#if defined (__GNUC__) && defined (HAVE_DIMM_H)
-/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
-# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
-# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
-#endif
 
 #include <imm.h>
 
@@ -108,7 +104,6 @@ _gdk_windowing_init (void)
 
   CoInitialize (NULL);
 
-  _cf_rtf = RegisterClipboardFormat ("Rich Text Format");
   _cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
   _cf_image_bmp = RegisterClipboardFormat ("image/bmp");
 
@@ -145,20 +140,6 @@ _gdk_other_api_failed (const gchar *where,
 		      const gchar *api)
 {
   g_warning ("%s:%d: %s failed", where, line, api);
-}
-
-void
-_gdk_win32_gdi_failed (const gchar *where,
-		      gint         line,
-		      const gchar *api)
-{
-  /* On Win9x GDI calls are implemented in 16-bit code and thus
-   * don't set the 32-bit error code, sigh.
-   */
-  if (G_WIN32_IS_NT_BASED ())
-    _gdk_win32_api_failed (where, line, api);
-  else
-    _gdk_other_api_failed (where, line, api);
 }
 
 void
@@ -1025,11 +1006,10 @@ _gdk_win32_drawable_description (GdkDrawable *d)
   gdk_drawable_get_size (d, &width, &height);
   depth = gdk_drawable_get_depth (d);
 
-  return static_printf
-    ("%s:%p:%dx%dx%d",
-     G_OBJECT_TYPE_NAME (d),
-     GDK_DRAWABLE_HANDLE (d),
-     width, height, depth);
+  return static_printf ("%s:%p:%dx%dx%d",
+			G_OBJECT_TYPE_NAME (d),
+			GDK_DRAWABLE_HANDLE (d),
+			width, height, depth);
 }
 
 #endif /* G_ENABLE_DEBUG */

@@ -35,79 +35,16 @@
 
 #include <config.h>
 
-/* Make up for some minor w32api header lossage */
+/* Make up for some minor w32api or MSVC6 header lossage */
 
-/* PS_JOIN_MASK is missing */
 #ifndef PS_JOIN_MASK
 #define PS_JOIN_MASK (PS_JOIN_BEVEL|PS_JOIN_MITER|PS_JOIN_ROUND)
-#endif
-
-/* CLR_INVALID is missing */
-#ifndef CLR_INVALID
-#define CLR_INVALID CLR_NONE
-#endif
-
-/* Some charsets are missing from MSVC 5 headers */
-#ifndef JOHAB_CHARSET
-#define JOHAB_CHARSET 130
-#endif
-#ifndef VIETNAMESE_CHARSET
-#define VIETNAMESE_CHARSET 163
 #endif
 
 #ifndef FS_VIETNAMESE
 #define FS_VIETNAMESE 0x100
 #endif
 
-/* Some virtual keycodes are missing */
-#ifndef VK_OEM_PLUS
-#define VK_OEM_PLUS 0xBB
-#endif
-
-#ifndef VK_OEM_COMMA
-#define VK_OEM_COMMA 0xBC
-#endif
-
-#ifndef VK_OEM_MINUS
-#define VK_OEM_MINUS 0xBD
-#endif
-
-#ifndef VK_OEM_PERIOD
-#define VK_OEM_PERIOD 0xBE
-#endif
-
-#ifndef VK_OEM_1
-#define VK_OEM_1 0xBA
-#endif
-#ifndef VK_OEM_2
-#define VK_OEM_2 0xBF
-#endif
-#ifndef VK_OEM_3
-#define VK_OEM_3 0xC0
-#endif
-#ifndef VK_OEM_4
-#define VK_OEM_4 0xDB
-#endif
-#ifndef VK_OEM_5
-#define VK_OEM_5 0xDC
-#endif
-#ifndef VK_OEM_6
-#define VK_OEM_6 0xDD
-#endif
-#ifndef VK_OEM_7
-#define VK_OEM_7 0xDE
-#endif
-#ifndef VK_OEM_8
-#define VK_OEM_8 0xDF
-#endif
-
-/* Missing messages */
-#ifndef WM_SYNCPAINT
-#define WM_SYNCPAINT 0x88
-#endif
-#ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL 0X20A
-#endif
 #ifndef WM_GETOBJECT
 #define WM_GETOBJECT 0x3D
 #endif
@@ -119,21 +56,6 @@
 #endif
 #ifndef WM_NCXBUTTONDBLCLK
 #define WM_NCXBUTTONDBLCLK 0xAD
-#endif
-#ifndef WM_MENURBUTTONUP
-#define WM_MENURBUTTONUP 0x122
-#endif
-#ifndef WM_MENUDRAG
-#define WM_MENUDRAG 0x123
-#endif
-#ifndef WM_MENUGETOBJECT
-#define WM_MENUGETOBJECT 0x124
-#endif
-#ifndef WM_UNINITMENUPOPUP
-#define WM_UNINITMENUPOPUP 0x125
-#endif
-#ifndef WM_MENUCOMMAND
-#define WM_MENUCOMMAND 0x126
 #endif
 #ifndef WM_CHANGEUISTATE
 #define WM_CHANGEUISTATE 0x127
@@ -153,15 +75,6 @@
 #ifndef WM_XBUTTONDBLCLK
 #define WM_XBUTTONDBLCLK 0x20D
 #endif
-#ifndef WM_IME_REQUEST
-#define WM_IME_REQUEST 0x288
-#endif
-#ifndef WM_MOUSEHOVER
-#define WM_MOUSEHOVER 0x2A1
-#endif
-#ifndef WM_MOUSELEAVE
-#define WM_MOUSELEAVE 0x2A3
-#endif
 #ifndef WM_NCMOUSEHOVER
 #define WM_NCMOUSEHOVER 0x2A0
 #endif
@@ -170,22 +83,6 @@
 #endif
 #ifndef WM_APPCOMMAND
 #define WM_APPCOMMAND 0x319
-#endif
-#ifndef WM_HANDHELDFIRST
-#define WM_HANDHELDFIRST 0x358
-#endif
-#ifndef WM_HANDHELDLAST
-#define WM_HANDHELDLAST 0x35F
-#endif
-#ifndef WM_AFXFIRST
-#define WM_AFXFIRST 0x360
-#endif
-#ifndef WM_AFXLAST
-#define WM_AFXLAST 0x37F
-#endif
-
-#ifndef CopyCursor
-#define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
 /* Define some combinations of GdkDebugFlags */
@@ -413,17 +310,14 @@ void    _gdk_win32_api_failed        (const gchar *where,
 void    _gdk_other_api_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
-void    _gdk_win32_gdi_failed        (const gchar *where,
-				     gint line,
-				     const gchar *api);
 
 #if defined(__GNUC__) && (__GNUC__ < 3)
 #define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
-#define WIN32_GDI_FAILED(api) _gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #else
 #define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__, __LINE__, api)
-#define WIN32_GDI_FAILED(api) _gdk_win32_gdi_failed (__FILE__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
@@ -469,7 +363,6 @@ extern gboolean		 _gdk_keyboard_has_altgr;
 extern guint		 _scancode_rshift;
 
 /* Registered clipboard formats */
-extern WORD		 _cf_rtf;
 extern WORD		 _cf_utf8_string;
 extern WORD		 _cf_image_bmp;
 

@@ -857,7 +857,6 @@ resolve_link (HWND     hWnd,
 	      guchar **lpszPath)
 {
   HRESULT hres;
-  IShellLinkA *pslA = NULL;
   IShellLinkW *pslW = NULL;
   IPersistFile *ppf = NULL;
 
@@ -869,18 +868,11 @@ resolve_link (HWND     hWnd,
    * assumed that CoInitialize has been called.
    */
 
-  if (G_WIN32_HAVE_WIDECHAR_API ())
-    hres = CoCreateInstance (&CLSID_ShellLink,
-			     NULL,
-			     CLSCTX_INPROC_SERVER,
-			     &IID_IShellLinkW,
-			     (LPVOID *)&pslW);
-  else
-    hres = CoCreateInstance (&CLSID_ShellLink,
-			     NULL,
-			     CLSCTX_INPROC_SERVER,
-			     &IID_IShellLinkA,
-			     (LPVOID *)&pslA);
+  hres = CoCreateInstance (&CLSID_ShellLink,
+			   NULL,
+			   CLSCTX_INPROC_SERVER,
+			   &IID_IShellLinkW,
+			   (LPVOID *)&pslW);
 
   if (SUCCEEDED (hres))
    {
@@ -888,14 +880,9 @@ resolve_link (HWND     hWnd,
      /* The IShellLink interface supports the IPersistFile
       * interface. Get an interface pointer to it.
       */
-     if (G_WIN32_HAVE_WIDECHAR_API ())
-       hres = pslW->lpVtbl->QueryInterface (pslW,
-					    &IID_IPersistFile,
-					    (LPVOID *) &ppf);
-     else
-       hres = pslA->lpVtbl->QueryInterface (pslA,
-					    &IID_IPersistFile,
-					    (LPVOID *) &ppf);
+     hres = pslW->lpVtbl->QueryInterface (pslW,
+					  &IID_IPersistFile,
+					  (LPVOID *) &ppf);
    }     
 
   if (SUCCEEDED (hres))
@@ -913,38 +900,23 @@ resolve_link (HWND     hWnd,
       /* Resolve the link by calling the Resolve()
        * interface function.
        */
-      if (G_WIN32_HAVE_WIDECHAR_API ())
-	hres = pslW->lpVtbl->Resolve (pslW, hWnd, SLR_ANY_MATCH | SLR_NO_UI);
-      else
-	hres = pslA->lpVtbl->Resolve (pslA, hWnd, SLR_ANY_MATCH | SLR_NO_UI);
+      hres = pslW->lpVtbl->Resolve (pslW, hWnd, SLR_ANY_MATCH | SLR_NO_UI);
     }
 
   if (SUCCEEDED (hres))
     {
-      if (G_WIN32_HAVE_WIDECHAR_API ())
-	{
-	  wchar_t wtarget[MAX_PATH];
+      wchar_t wtarget[MAX_PATH];
 
-	  hres = pslW->lpVtbl->GetPath (pslW, wtarget, MAX_PATH, NULL, 0);
-	  if (SUCCEEDED (hres))
-	    *lpszPath = g_utf16_to_utf8 (wtarget, -1, NULL, NULL, NULL);
-	}
-      else
-	{
-	  guchar cptarget[MAX_PATH];
-
-	  hres = pslA->lpVtbl->GetPath (pslA, cptarget, MAX_PATH, NULL, 0);
-	  if (SUCCEEDED (hres))
-	    *lpszPath = g_locale_to_utf8 (cptarget, -1, NULL, NULL, NULL);
-	}
+      hres = pslW->lpVtbl->GetPath (pslW, wtarget, MAX_PATH, NULL, 0);
+      if (SUCCEEDED (hres))
+	*lpszPath = g_utf16_to_utf8 (wtarget, -1, NULL, NULL, NULL);
     }
   
   if (ppf)
     ppf->lpVtbl->Release (ppf);
+
   if (pslW)
     pslW->lpVtbl->Release (pslW);
-  if (pslA)
-    pslA->lpVtbl->Release (pslA);
 
   return SUCCEEDED (hres);
 }
@@ -999,21 +971,10 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       for (i = 0; i < nfiles; i++)
 	{
 	  gchar *uri;
+	  wchar_t wfn[MAX_PATH];
 
-	  if (G_WIN32_HAVE_WIDECHAR_API ())
-	    {
-	      wchar_t wfn[MAX_PATH];
-
-	      DragQueryFileW (hdrop, i, wfn, MAX_PATH);
-	      fileName = g_utf16_to_utf8 (wfn, -1, NULL, NULL, NULL);
-	    }
-	  else
-	    {
-	      char cpfn[MAX_PATH];
-
-	      DragQueryFileA (hdrop, i, cpfn, MAX_PATH);
-	      fileName = g_locale_to_utf8 (cpfn, -1, NULL, NULL, NULL);
-	    }
+	  DragQueryFileW (hdrop, i, wfn, MAX_PATH);
+	  fileName = g_utf16_to_utf8 (wfn, -1, NULL, NULL, NULL);
 
 	  /* Resolve shortcuts */
 	  if (resolve_link (msg->hwnd, fileName, &linkedFile))

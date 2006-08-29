@@ -433,7 +433,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	return;
 
       /* Try various formats. First the simplest, CF_UNICODETEXT. */
-      if (G_WIN32_IS_NT_BASED () && (hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
+      if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
 	{
 	  wchar_t *ptr, *wcs, *p, *q;
 	  guchar *data;
