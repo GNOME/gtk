@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-20 09:13+0200\n"
-"PO-Revision-Date: 2006-08-21 00:08+0100\n"
+"POT-Creation-Date: 2006-08-22 16:51+0200\n"
+"PO-Revision-Date: 2006-08-23 00:07+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -994,7 +994,7 @@ msgstr "Genvägsmodiferare"
 
 #: ../gtk/gtkcellrendereraccel.c:125
 msgid "The modifier mask of the accelerator"
-msgstr ""
+msgstr "Modifierarmasken för genvägen"
 
 #: ../gtk/gtkcellrendereraccel.c:142
 msgid "Accelerator keycode"
@@ -1947,7 +1947,7 @@ msgstr "FALSKT tar bort den yttre avfasningen från fältet"
 
 #: ../gtk/gtkentry.c:515
 msgid "Border between text and frame. Overrides the inner-border style property"
-msgstr ""
+msgstr "Kant mellan text och ram. Åsidosätter den inre kantstilsegenskapen"
 
 #: ../gtk/gtkentry.c:522
 msgid "Invisible character"
@@ -2711,7 +2711,7 @@ msgstr "Radbrytsläge"
 
 #: ../gtk/gtklabel.c:357
 msgid "If wrap is set, controls how linewrapping is done"
-msgstr ""
+msgstr "Om brytning är inställd, kontrollera hur radbrytning hanteras"
 
 #: ../gtk/gtklabel.c:364
 msgid "Selectable"
@@ -3014,7 +3014,7 @@ msgstr "Sekundär text"
 
 #: ../gtk/gtkmessagedialog.c:184
 msgid "The secondary text of the message dialog"
-msgstr "Sekundärar texten för meddelandedialogen"
+msgstr "Sekundära texten för meddelandedialogen"
 
 #: ../gtk/gtkmessagedialog.c:199
 msgid "Use Markup in secondary"
@@ -3022,7 +3022,7 @@ msgstr "Använd markup i sekundär"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "The secondary text includes Pango markup."
-msgstr ""
+msgstr "Sekundär text som inkluderar Pango-markup."
 
 #: ../gtk/gtkmessagedialog.c:215
 msgid "The image"
@@ -3134,7 +3134,7 @@ msgstr "Grupp-id"
 
 #: ../gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
-msgstr ""
+msgstr "Grupp-id för flikarnas drag-och-släpp"
 
 #: ../gtk/gtknotebook.c:613
 msgid "Tab label"
@@ -3173,9 +3173,8 @@ msgid "Tab pack type"
 msgstr "Flikpackningstyp"
 
 #: ../gtk/gtknotebook.c:655
-#, fuzzy
 msgid "Tab reorderable"
-msgstr "Omarrangeringsbar"
+msgstr "Omarrangeringsbar flik"
 
 #: ../gtk/gtknotebook.c:656
 #, fuzzy
@@ -3231,23 +3230,20 @@ msgid "Display the standard forward arrow button"
 msgstr "Visa standardknappen med framåtpil"
 
 #: ../gtk/gtknotebook.c:739
-#, fuzzy
 msgid "Tab overlap"
-msgstr "Flikram"
+msgstr "Fliköverlappning"
 
 #: ../gtk/gtknotebook.c:740
-#, fuzzy
 msgid "Size of tab overlap area"
-msgstr "Storlek på expanderarpilen"
+msgstr "Storlek på fliköverlappningsområdet"
 
 #: ../gtk/gtknotebook.c:755
 msgid "Tab curvature"
-msgstr ""
+msgstr "Flikdeformering"
 
 #: ../gtk/gtknotebook.c:756
-#, fuzzy
 msgid "Size of tab curvature"
-msgstr "Storlek på utfyllnad"
+msgstr "Storlek på flikdeformering"
 
 #: ../gtk/gtkobject.c:367
 msgid "User Data"
@@ -3255,7 +3251,7 @@ msgstr "Användardata"
 
 #: ../gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
-msgstr ""
+msgstr "Pekare till anonym användardata"
 
 #: ../gtk/gtkoptionmenu.c:163
 msgid "The menu of options"
@@ -3326,14 +3322,12 @@ msgid "Whether the preview widget should take up the entire space it is allocate
 msgstr "Huruvida förhandsvisningswidgeten ska fylla ut hela det utrymme det har allokerats"
 
 #: ../gtk/gtkprintbackend.c:261
-#, fuzzy
 msgid "Default print backend"
-msgstr "Standardbakände för filväljare"
+msgstr "Standardbakände för utskrifter"
 
 #: ../gtk/gtkprintbackend.c:262
-#, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr "Namn på den GtkFileChooser-bakände som ska användas som standard"
+msgstr "Lista på de GtkPrintBackend-bakändor som ska användas som standard"
 
 #: ../gtk/gtkprinter.c:120
 msgid "Name of the printer"
@@ -3406,7 +3400,7 @@ msgstr "Källalternativ"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
-msgstr ""
+msgstr "Den PrinterOption som står bakom denna widget"
 
 #: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
@@ -3441,7 +3435,7 @@ msgstr "Spåra utskriftsstatus"
 
 #: ../gtk/gtkprintjob.c:153
 msgid "TRUE if the print job will continue to emit status-changed signals after the print data has been sent to the printer or print server."
-msgstr ""
+msgstr "TRUE om utskriftsjobbet ska fortsätta att skicka statusändrade signaler efter att utskriftsdata har skickats till skrivaren eller utskriftsservern."
 
 #: ../gtk/gtkprintoperation.c:857
 msgid "Default Page Setup"
@@ -3449,7 +3443,7 @@ msgstr "Standardsidinställning"
 
 #: ../gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
-msgstr ""
+msgstr "GtkPageSetup som används som standard"
 
 #: ../gtk/gtkprintoperation.c:876
 #: ../gtk/gtkprintunixdialog.c:244
@@ -3459,7 +3453,7 @@ msgstr "Utskriftsinställningar"
 #: ../gtk/gtkprintoperation.c:877
 #: ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr ""
+msgstr "GtkPrintSettings som används för att initiera dialogen"
 
 #: ../gtk/gtkprintoperation.c:895
 msgid "Job Name"
@@ -3493,11 +3487,11 @@ msgstr "Använd hela sidan"
 
 #: ../gtk/gtkprintoperation.c:964
 msgid "TRUE if the the origin of the context should be at the corner of the page and not the corner of the imageable area"
-msgstr ""
+msgstr "TRUE om sammanhangets ursprung bör vara hörnet av sidan och inte hörnet av det bildmässiga området"
 
 #: ../gtk/gtkprintoperation.c:985
 msgid "TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."
-msgstr ""
+msgstr "TRUE om utskriftsoperationen ska fortsätta att rapportera om statusen för utskriftsjobbet efter att utskriftsdata har skickats till skrivaren eller utskriftsservern."
 
 #: ../gtk/gtkprintoperation.c:1002
 msgid "Unit"
@@ -3545,13 +3539,12 @@ msgid "A human-readable description of the status"
 msgstr "En läsbar beskrivning av statusen"
 
 #: ../gtk/gtkprintoperation.c:1123
-#, fuzzy
 msgid "Custom tab label"
-msgstr "Anpassad palett"
+msgstr "Anpassad fliketikett"
 
 #: ../gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "Etikett för fliken som innehåller anpassade widgetar."
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
@@ -3692,16 +3685,15 @@ msgstr "Det aktuella värdet"
 
 #: ../gtk/gtkradioaction.c:145
 msgid "The value property of the currently active member of the group to which this action belongs."
-msgstr ""
+msgstr "Värdet för den för närvarande aktiva medlemmen av gruppen till vilken denna åtgärd hör till."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
 msgstr "Den radioknapp vars grupp denna widget tillhör."
 
 #: ../gtk/gtkradiomenuitem.c:343
-#, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "Den radioknapp vars grupp denna widget tillhör."
+msgstr "Den radioknappspost vars grupp denna widget tillhör."
 
 #: ../gtk/gtkrange.c:315
 msgid "Update policy"
@@ -4278,7 +4270,7 @@ msgstr "Huruvida knappar i dialoger ska använda den alternativa knappordningen"
 
 #: ../gtk/gtksettings.c:391
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "Visa \"Inmatningsmetoder\"-menyn"
 
 #: ../gtk/gtksettings.c:392
 msgid "Whether the context menus of entries and text views should offer to change the input method"
@@ -4286,7 +4278,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "Visa \"Infoga Unicode-styrtecken\"-menyn"
 
 #: ../gtk/gtksettings.c:401
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
@@ -4309,9 +4301,8 @@ msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Upprepningsvärde för tidsgränser, när knappen blir nedtryckt"
 
 #: ../gtk/gtksettings.c:429
-#, fuzzy
 msgid "Expand timeout"
-msgstr "Storlek på expanderare"
+msgstr "Utöka tidsgräns"
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
@@ -4606,7 +4597,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
-msgstr ""
+msgstr "Klistra in mållista"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid "The list of targets this buffer supports for clipboard pasting and DND destination"
@@ -5358,27 +5349,24 @@ msgid "Tree line width"
 msgstr "Trädradsbredd"
 
 #: ../gtk/gtktreeview.c:808
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
-msgstr "Bredd, i bildpunkter, på fokusindikatorlinjen"
+msgstr "Bredd, i bildpunkter, på trädvyns rader"
 
 #: ../gtk/gtktreeview.c:814
 msgid "Grid line pattern"
 msgstr "Rutnätsradmönster"
 
 #: ../gtk/gtktreeview.c:815
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Punktmönster som används för att rita fokusindikatorn"
+msgstr "Punktmönster som används för att rita trädvyns rutnätslinjer"
 
 #: ../gtk/gtktreeview.c:821
 msgid "Tree line pattern"
 msgstr "Trädradsmönster"
 
 #: ../gtk/gtktreeview.c:822
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Punktmönster som används för att rita fokusindikatorn"
+msgstr "Punktmönster som används för att rita trädvyns linjer"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -5746,24 +5734,20 @@ msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:1624
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Policy för horisontella rullningslister"
+msgstr "Längd på horisontell rullningspil"
 
 #: ../gtk/gtkwidget.c:1625
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "När den horisontella rullningslisten visas"
+msgstr "Längden på horisonella rullningspilar"
 
 #: ../gtk/gtkwidget.c:1639
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Policy för vertikal rullningslista"
+msgstr "Längd på vertikal rullningspil"
 
 #: ../gtk/gtkwidget.c:1640
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "När den vertikala rullningslisten visas"
+msgstr "Längden på vertikala rullningspilar"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
