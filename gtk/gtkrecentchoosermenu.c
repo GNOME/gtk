@@ -411,26 +411,28 @@ gtk_recent_chooser_menu_set_current_uri (GtkRecentChooser  *chooser,
       if (!info)
         continue;
       
-      if (0 == strcmp (uri, gtk_recent_info_get_uri (info)))
-        found = TRUE;
+      if (strcmp (uri, gtk_recent_info_get_uri (info)) == 0)
+        {
+          gtk_menu_shell_activate_item (GTK_MENU_SHELL (menu),
+	                                menu_item,
+					TRUE);
+          found = TRUE;
+
+	  break;
+	}
     }
 
   g_list_free (children);
   
-  if (!found)  
+  if (!found)
     {
       g_set_error (error, GTK_RECENT_CHOOSER_ERROR,
       		   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,
       		   _("No recently used resource found with URI `%s'"),
       		   uri);
-      return FALSE;
     }
-  else
-    {
-      gtk_menu_shell_activate_item (GTK_MENU_SHELL (menu), menu_item, TRUE);
-      
-      return TRUE;
-    }
+
+  return found;
 }
 
 static gchar *

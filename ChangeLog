@@ -1,3 +1,12 @@
+2006-08-29  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Backport from HEAD
+
+	* gtk/gtkrecentchoosermenu.c
+	(gtk_recent_chooser_menu_set_current_uri): Break when an item
+	is found and activated. (#353449, based on a patch from Jan Arne
+	Petersen)
+
 2006-08-29  Paolo Borelli  <pborelli@katamail.com>
 
 	* tests/autotestfilesystem.c: add this file from HEAD to fix
