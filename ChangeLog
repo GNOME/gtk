@@ -1,7 +1,7 @@
 2006-08-29  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c
-	(gtk_recent_chooser_menu_set_current_item): Break when an item
+	(gtk_recent_chooser_menu_set_current_uri): Break when an item
 	is found and activated. (#353449, based on a patch by Jan Arne
 	Petersen)
 
