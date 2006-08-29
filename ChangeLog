@@ -1,3 +1,8 @@
+Tue Aug 29 11:57:40 2006  Tim Janik  <timj@imendio.com>
+
+	* tests/testgtk.c: allow (most) windows to be resizable.
+	added ellipsization settings to progress bars. 
+
 2006-08-28  Matthias Clasen   <mclasen@redhat.com>
 
 	* modules/printbackend/cups/gtkprintbackendcups.c: Use a

@@ -2316,7 +2316,7 @@ create_handle_box (GtkWidget *widget)
     gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_title (GTK_WINDOW (window),
 			  "Handle Box Test");
-    gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+    gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
     
     g_signal_connect (window, "destroy",
 		      G_CALLBACK (gtk_widget_destroyed),
@@ -2986,7 +2986,7 @@ create_rotated_label (GtkWidget *widget)
 					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					    NULL);
 
-      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
@@ -5362,7 +5362,7 @@ create_size_group_window (GdkScreen    *screen,
 
   gtk_window_set_screen (GTK_WINDOW (window), screen);
 
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
   g_signal_connect (window, "response",
 		    G_CALLBACK (gtk_widget_destroy),
@@ -11345,6 +11345,7 @@ typedef struct _ProgressData {
   GtkWidget *act_blocks_spin;
   GtkWidget *label;
   GtkWidget *omenu1;
+  GtkWidget *elmenu;
   GtkWidget *omenu2;
   GtkWidget *entry;
   int timer;
@@ -11405,6 +11406,16 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
 			    GTK_TOGGLE_BUTTON (widget)->active);
   gtk_widget_set_sensitive (pdata->y_align_spin,
 			    GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+static void
+progressbar_toggle_ellipsize (GtkWidget *widget, ProgressData *pdata)
+{
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gint i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
+      gtk_progress_bar_set_ellipsize (GTK_PROGRESS_BAR (pdata->pbar), i);
+    }
 }
 
 static void
@@ -11519,6 +11530,13 @@ create_progress_bar (GtkWidget *widget)
     "Continuous",
     "Discrete"
   };
+
+  static char *ellipsize_items[] = {
+    "None",     // PANGO_ELLIPSIZE_NONE,
+    "Start",    // PANGO_ELLIPSIZE_START,
+    "Middle",   // PANGO_ELLIPSIZE_MIDDLE,
+    "End",      // PANGO_ELLIPSIZE_END
+  };
   
   if (!pdata)
     pdata = g_new0 (ProgressData, 1);
@@ -11530,7 +11548,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_window_set_screen (GTK_WINDOW (pdata->window),
 			     gtk_widget_get_screen (widget));
 
-      gtk_window_set_resizable (GTK_WINDOW (pdata->window), FALSE);
+      gtk_window_set_resizable (GTK_WINDOW (pdata->window), TRUE);
 
       g_signal_connect (pdata->window, "destroy",
 			G_CALLBACK (destroy_progress),
@@ -11658,8 +11676,24 @@ create_progress_bar (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), pdata->y_align_spin, FALSE, TRUE, 0);
       gtk_widget_set_sensitive (pdata->y_align_spin, FALSE);
 
+      label = gtk_label_new ("Ellipsize text :");
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 10, 11,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      pdata->elmenu = build_option_menu (ellipsize_items,
+                                         sizeof (ellipsize_items) / sizeof (ellipsize_items[0]),
+                                         2, // PANGO_ELLIPSIZE_MIDDLE
+					 progressbar_toggle_ellipsize,
+					 pdata);
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 10, 11,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->elmenu, TRUE, TRUE, 0);
+
       label = gtk_label_new ("Bar Style :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 3, 4,
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 13, 14,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
@@ -11668,19 +11702,19 @@ create_progress_bar (GtkWidget *widget)
 					 progressbar_toggle_bar_style,
 					 pdata);
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 3, 4,
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 13, 14,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu2, TRUE, TRUE, 0);
 
       label = gtk_label_new ("Block count :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 4, 5,
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 14, 15,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 4, 5,
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 14, 15,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       adj = (GtkAdjustment *) gtk_adjustment_new (10, 2, 20, 1, 5, 0);
@@ -11693,12 +11727,12 @@ create_progress_bar (GtkWidget *widget)
       check = gtk_check_button_new_with_label ("Activity mode");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_activity_mode), pdata);
-      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 5, 6,
+      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 15, 16,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
 
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 5, 6,
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 15, 16,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       label = gtk_label_new ("Step size : ");
@@ -11711,7 +11745,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_widget_set_sensitive (pdata->step_spin, FALSE);
 
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 6, 7,
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 16, 17,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
       label = gtk_label_new ("Blocks :     ");
