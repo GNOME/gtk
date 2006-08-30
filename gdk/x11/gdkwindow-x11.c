@@ -6329,13 +6329,19 @@ gdk_window_configure_finished (GdkWindow *window)
 void
 gdk_window_beep (GdkWindow *window)
 {
+  GdkDisplay *display;
+
+  display = GDK_WINDOW_DISPLAY (window);
+
 #ifdef HAVE_XKB
-  XkbBell (GDK_WINDOW_XDISPLAY (window),
-           GDK_WINDOW_XID (window),
-           0,
-           None);
+  if (GDK_DISPLAY_X11 (display)->use_xkb)
+    XkbBell (GDK_DISPLAY_XDISPLAY (display),
+	     GDK_WINDOW_XID (window),
+	     0,
+	     None);
+  else
 #else
-  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+    gdk_display_beep (display);
 #endif
 }
 
