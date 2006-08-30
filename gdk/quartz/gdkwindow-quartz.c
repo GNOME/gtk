@@ -1993,3 +1993,9 @@ gdk_window_destroy_notify (GdkWindow *window)
    * -[GdkQuartzView dealloc], although I suspect that currently they leak
    * anyway. */
 }
+
+void 
+gdk_window_beep (GdkWindow *window)
+{
+  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+}

@@ -29,6 +29,11 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif
+
 #include <netinet/in.h>
 #include <unistd.h>
 
@@ -6308,6 +6313,29 @@ gdk_window_configure_finished (GdkWindow *window)
 	  XSyncIntToValue (&toplevel->current_counter_value, 0);
 	}
     }
+#endif
+}
+
+/**
+ * gdk_window_beep:
+ * @window: a toplevel #GdkWindow
+ *
+ * Emits a short beep associated to @window in the appropriate
+ * display, if supported. Otherwise, emits a short beep on
+ * the display just as gdk_display_beep().
+ *
+ * Since: 2.12
+ **/
+void
+gdk_window_beep (GdkWindow *window)
+{
+#ifdef HAVE_XKB
+  XkbBell (GDK_WINDOW_XDISPLAY (window),
+           GDK_WINDOW_XID (window),
+           0,
+           None);
+#else
+  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
 #endif
 }
 

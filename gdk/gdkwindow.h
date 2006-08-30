@@ -552,6 +552,7 @@ void	      gdk_window_set_functions	 (GdkWindow	  *window,
 GList *       gdk_window_get_toplevels   (void);
 #endif
 
+void          gdk_window_beep            (GdkWindow       *window);
 void          gdk_window_iconify         (GdkWindow       *window);
 void          gdk_window_deiconify       (GdkWindow       *window);
 void          gdk_window_stick           (GdkWindow       *window);

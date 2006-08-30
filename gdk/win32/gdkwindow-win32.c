@@ -3397,3 +3397,9 @@ gdk_window_configure_finished (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 }
+
+void
+gdk_window_beep (GdkWindow *window)
+{
+  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+}

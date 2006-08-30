@@ -2990,6 +2990,12 @@ gdk_window_impl_directfb_paintable_init (GdkPaintableIface *iface)
   iface->process_updates = gdk_window_impl_directfb_process_updates;
 }
 
+void
+gdk_window_beep (GdkWindow *window)
+{
+  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+}
+
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"
 
