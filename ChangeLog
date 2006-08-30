@@ -24,7 +24,8 @@
 	* gdk/win32/gdkkeys-win32.c
 	* gdk/win32/gdkmain-win32.c
 	* gdk/win32/gdkproperty-win32.c
-	* gdk/win32/gdkselection-win32.c: Remove the G_WIN32_IS_NT_BASED()
+	* gdk/win32/gdkselection-win32.c
+	* gdk/win32/gdkwindow-win32.c: Remove the G_WIN32_IS_NT_BASED()
 	and G_WIN32_HAVE_WIDECHAR_API() tests and their false (Win9x)
 	branches, and any variables or static functions used only by the
 	Win9x branches.

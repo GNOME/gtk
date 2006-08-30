@@ -588,6 +588,10 @@ gdk_window_new_internal (GdkWindow     *parent,
     }
   else
     {
+      /* I very much doubt using WS_EX_TRANSPARENT actually
+       * corresponds to how X11 InputOnly windows work, but it appears
+       * to work well enough for the actual use cases in gtk.
+       */
       dwExStyle = WS_EX_TRANSPARENT;
       private->depth = 0;
       private->input_only = TRUE;
@@ -1737,6 +1741,8 @@ void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
+  wchar_t *wtitle;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (title != NULL);
 
@@ -1750,18 +1756,9 @@ gdk_window_set_title (GdkWindow   *window,
   GDK_NOTE (MISC, g_print ("gdk_window_set_title: %p: %s\n",
 			   GDK_WINDOW_HWND (window), title));
   
-  if (G_WIN32_HAVE_WIDECHAR_API ())
-    {
-      wchar_t *wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
-      API_CALL (SetWindowTextW, (GDK_WINDOW_HWND (window), wtitle));
-      g_free (wtitle);
-    }
-  else
-    {
-      char *cptitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
-      API_CALL (SetWindowTextA, (GDK_WINDOW_HWND (window), cptitle));
-      g_free (cptitle);
-    }
+  wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
+  API_CALL (SetWindowTextW, (GDK_WINDOW_HWND (window), wtitle));
+  g_free (wtitle);
 }
 
 void          
