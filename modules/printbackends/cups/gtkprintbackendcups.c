@@ -965,7 +965,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   if (gtk_cups_result_is_error (result))
     {
       g_warning ("Error getting printer list: %s", gtk_cups_result_get_error_string (result));
-      return;
+
+      goto done;
     }
   
   /* Gather the names of the printers in the current queue
@@ -1134,6 +1135,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       list_has_changed = TRUE;
     }
   
+ done:
+
   if (list_has_changed)
     g_signal_emit_by_name (backend, "printer-list-changed");
   
