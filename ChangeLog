@@ -1,6 +1,9 @@
 2006-08-31  Matthias Clasen  <mclasen@redhat.com>
 
-	* modules/printbackends/cups/gtkprintbackendcups.c (cups_request_printer_list_cb): Send printer-list-done on error.
+	* gtk/gtkprintoperation-unix.c (get_print_dialog): Don't specify
+	explicit format capabilities.  (#346505, Christian Persch)
+
+	* modules/printbackends/cups/gtkprintbackendcups.c (cups_request_printer_list_cb): Send printer-list-done on error. 
 
 2006-08-31  Michael Natterer  <mitch@imendio.com>
 

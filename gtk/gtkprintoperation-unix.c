@@ -345,9 +345,7 @@ get_print_dialog (GtkPrintOperation *op,
 						 GTK_PRINT_CAPABILITY_COLLATE |
 						 GTK_PRINT_CAPABILITY_REVERSE |
 						 GTK_PRINT_CAPABILITY_SCALE |
-                                                 GTK_PRINT_CAPABILITY_GENERATE_PDF |
-						 GTK_PRINT_CAPABILITY_GENERATE_PS |
-                                                 GTK_PRINT_CAPABILITY_PREVIEW);
+						 GTK_PRINT_CAPABILITY_PREVIEW);
 
   if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
