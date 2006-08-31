@@ -6340,9 +6340,8 @@ gdk_window_beep (GdkWindow *window)
 	     0,
 	     None);
   else
-#else
-    gdk_display_beep (display);
 #endif
+    gdk_display_beep (display);
 }
 
 #define __GDK_WINDOW_X11_C__
