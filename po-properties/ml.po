@@ -9,6 +9,12 @@
 # translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
 # translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
 # translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
+# translation of gtk+-properties.gtk-2-10.ml.po to Malayalam
 # translation of gtk+-properties.HEAD.ml.po to Malayalam
 # translation of gtk+-properties.HEAD.ml.po to Malayalam
 # translation of gtk+-properties.HEAD.ml.po to Malayalam
@@ -26,7 +32,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ml\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-28 08:41+0200\n"
-"PO-Revision-Date: 2006-08-30 17:48+0530\n"
+"PO-Revision-Date: 2006-08-31 16:42+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
 "MIME-Version: 1.0\n"
@@ -1958,7 +1964,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:590
 msgid "Truncate multiline"
-msgstr ""
+msgstr "തെരഞ്ഞെടുക്കുക"
 
 #: ../gtk/gtkentry.c:591
 msgid "Whether to truncate multiline pastes to one line."
@@ -2381,7 +2387,7 @@ msgstr ""
 
 #: ../gtk/gtkhandlebox.c:194
 msgid "Snap edge"
-msgstr ""
+msgstr "ഛായാപട തലം"
 
 #: ../gtk/gtkhandlebox.c:195
 msgid ""
@@ -2391,7 +2397,7 @@ msgstr ""
 
 #: ../gtk/gtkhandlebox.c:203
 msgid "Snap edge set"
-msgstr ""
+msgstr "ഛായാപടതല കൂട്ടം"
 
 #: ../gtk/gtkhandlebox.c:204
 msgid ""
@@ -3870,7 +3876,7 @@ msgstr ""
 
 #: ../gtk/gtkruler.c:111
 msgid "Position of mark on the ruler"
-msgstr ""
+msgstr "ഈ വലിപ്പ് പാനലില് ചേ‍ര്ക്കുക"
 
 #: ../gtk/gtkruler.c:120
 msgid "Max Size"
@@ -3972,7 +3978,7 @@ msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:243
 msgid "Vertical Scrollbar Policy"
-msgstr ""
+msgstr "തോത്"
 
 #: ../gtk/gtkscrolledwindow.c:244
 msgid "When the vertical scrollbar is displayed"
@@ -4376,7 +4382,7 @@ msgstr ""
 
 #: ../gtk/gtkstatusbar.c:169
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "സ്റ്റേറ്റസ് ബാര്‍ വാചകത്തിന്‍റെ ചുറ്റിനുമുളള ചരിവിന്‍റെ രീതി"
 
 #: ../gtk/gtkstatusicon.c:188
 msgid "The size of the icon"
@@ -4536,7 +4542,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:228
 msgid "Cursor position"
-msgstr ""
+msgstr "കര്‍സറിന്‍റെ സ്ഥാനം"
 
 #: ../gtk/gtktextbuffer.c:229
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
@@ -5533,15 +5539,15 @@ msgstr "സ്വതേയുള്ളതാക്കാമോ"
 
 #: ../gtk/gtkwidget.c:494
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "വിഡ്ജറ്റ് ഡീഫോള്‍ട്ട് വിഡ്ജറ്റ് ആകാന്‍ സാധ്യതയുണ്ടോ എന്ന്"
 
 #: ../gtk/gtkwidget.c:500
 msgid "Has default"
-msgstr "സ്വതേയുള്ളയുള്ളതാണ്"
+msgstr "ഡീഫോള്‍ട്ട് ഉണ്ട്"
 
 #: ../gtk/gtkwidget.c:501
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "വിഡ്ജറ്റ് ഡീഫോള്‍ട്ട് വിഡ്ജറ്റ് ആണോ എന്ന്"
 
 #: ../gtk/gtkwidget.c:507
 msgid "Receives default"
@@ -5549,15 +5555,15 @@ msgstr "സ്വതേയുള്ളത് സ്വീകരിക്കു�
 
 #: ../gtk/gtkwidget.c:508
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
+msgstr "ട്രൂ എങ്കില്‍, വിഡ്ജറ്റില്‍ മൌസ് കേന്ദ്രിക്കുന്പോള്‍ ഡീഫോള്‍ട്ട് പ്രവര്‍ത്തനം ലഭ്യമാകുക"
 
 #: ../gtk/gtkwidget.c:514
 msgid "Composite child"
-msgstr ""
+msgstr "മറ്റ് ഘടകങ്ങളുളള ചൈള്‍ഡ്"
 
 #: ../gtk/gtkwidget.c:515
 msgid "Whether the widget is part of a composite widget"
-msgstr "അവസാനിക്കുമ്പോള് അതിന‍് എന്ത് സംഭവിക്കുന്നു."
+msgstr "വിഡ്ജറ്റ് മറ്റോരു വിഡ്ജറ്റിന്‍റെ ഭാഗമാണോ എന്ന്"
 
 #: ../gtk/gtkwidget.c:521
 msgid "Style"
@@ -5567,15 +5573,15 @@ msgstr "രീതി"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr ""
+msgstr "വിഡ്ജറ്റിനെ പറ്റിയുളള വിവരങ്ങള്‍ (ഉദാഹരണത്തിന് നിറം ആതിയായവ)"
 
 #: ../gtk/gtkwidget.c:528
 msgid "Events"
-msgstr "സംഭവങ്ങള്‌"
+msgstr "സംഭവങ്ങള്‍"
 
 #: ../gtk/gtkwidget.c:529
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
+msgstr "ഈ തരത്തിലുളള GdkEvents-നു ലഭ്യമാകുന്ന വിഡ്ജറ്റുകള്‍ ഏത് എന്ന് തീരുമാനിക്കുന്ന ഈവന്‍റ്"
 
 #: ../gtk/gtkwidget.c:536
 msgid "Extension events"
@@ -5587,19 +5593,19 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:544
 msgid "No show all"
-msgstr ""
+msgstr "എല്ലാം കാണിക്കുക"
 
 #: ../gtk/gtkwidget.c:545
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
+msgstr "gtk_widget_show_all() എല്ലാ വിഡ്ജറ്റുകളും സ്വീകരിക്കേണ്ടതില്ല"
 
 #: ../gtk/gtkwidget.c:1483
 msgid "Interior Focus"
-msgstr ""
+msgstr "അകത്തേക്ക് ശ്രദ്ധിക്കുക"
 
 #: ../gtk/gtkwidget.c:1484
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr ""
+msgstr "വിഡ്ജറ്റുകളുടെ ഉളളിലേക്ക് സൂചികയുടെ ശ്രദ്ധ കേന്ദ്രീകരിക്കണമോ എന്ന്"
 
 #: ../gtk/gtkwidget.c:1490
 msgid "Focus linewidth"
@@ -5615,7 +5621,7 @@ msgstr "ഘടന മായ്‍ക്കാന്‌ കഴിയില്ല"
 
 #: ../gtk/gtkwidget.c:1498
 msgid "Dash pattern used to draw the focus indicator"
-msgstr ""
+msgstr "ശ്രദ്ധ കേന്ദ്രീകരിക്കുന്നതിനായി വരയ്ക്കുന്ന ഡാഷ് പാറ്റേണ്‍"
 
 #: ../gtk/gtkwidget.c:1503
 msgid "Focus padding"
@@ -5653,31 +5659,31 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1536
 msgid "Draw Border"
-msgstr ""
+msgstr "അതിര് വരയ്ക്കുക"
 
 #: ../gtk/gtkwidget.c:1537
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr ""
+msgstr "വിഡ്ജറ്റിന് മാറ്റിവച്ചിട്ടില്ലാത്ത പരിധിയുടെ വലിപ്പം"
 
 #: ../gtk/gtkwidget.c:1550
 msgid "Unvisited Link Color"
-msgstr ""
+msgstr "പരിശോധിച്ചിട്ടില്ലാത്ത ലിങ്കിന്‍റെ നിറം"
 
 #: ../gtk/gtkwidget.c:1551
 msgid "Color of unvisited links"
-msgstr ""
+msgstr "പരിശോധിച്ചിട്ടില്ലാത്ത ലിങ്കിന്‍റെ നിറം"
 
 #: ../gtk/gtkwidget.c:1564
 msgid "Visited Link Color"
-msgstr ""
+msgstr "പരിശോധിച്ച ലിങ്കിന്‍റെ നിറം"
 
 #: ../gtk/gtkwidget.c:1565
 msgid "Color of visited links"
-msgstr ""
+msgstr "പരിശോധിച്ച ലിങ്കിന്‍റെ നിറം"
 
 #: ../gtk/gtkwidget.c:1579
 msgid "Wide Separators"
-msgstr ""
+msgstr "Wide Separators"
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
@@ -5691,7 +5697,7 @@ msgstr "വേ‌ര്തിരിവിന്റെ വീതി"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "wide-separators ട്രൂ എങ്കില്‍, സെപ്പറേറ്ററുകളുടെ വീതി"
 
 #: ../gtk/gtkwidget.c:1609
 msgid "Separator Height"
@@ -5699,23 +5705,23 @@ msgstr "ഉയരം"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "\"wide-separators\" ട്രൂ എങ്കില്‍, സെപ്പറേറ്ററുകളുടെ ഉയരം"
 
 #: ../gtk/gtkwidget.c:1624
 msgid "Horizontal Scroll Arrow Length"
-msgstr ""
+msgstr "ഇടത്ത് നിന്നും വലത്തേക്ക് സ്ക്രീനില്‍ നീക്കുവാന്‍ സാധ്യമാകുന്ന ആരോകളുടെ നീളം"
 
 #: ../gtk/gtkwidget.c:1625
 msgid "The length of horizontal scroll arrows"
-msgstr ""
+msgstr "ഇടത്ത് നിന്നും വലത്തേക്ക് സ്ക്രീനില്‍ നീക്കുവാന്‍ സാധ്യമാകുന്ന ആരോകളുടെ നീളം"
 
 #: ../gtk/gtkwidget.c:1639
 msgid "Vertical Scroll Arrow Length"
-msgstr "തോത്"
+msgstr "മുകളില്‍ നിന്നും താഴേക്ക് സ്ക്രീനില്‍ നീക്കുവാന്‍ സാധ്യമാകുന്ന ആരോകളുടെ നീളം"
 
 #: ../gtk/gtkwidget.c:1640
 msgid "The length of vertical scroll arrows"
-msgstr ""
+msgstr "മുകളില്‍ നിന്നും താഴേക്ക് സ്ക്രീനില്‍ നീക്കുവാന്‍ സാധ്യമാകുന്ന ആരോകളുടെ നീളം"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -5735,7 +5741,7 @@ msgstr "ജാലകത്തിന്റെ തലക്കുറി"
 
 #: ../gtk/gtkwindow.c:428
 msgid "Window Role"
-msgstr ""
+msgstr "ജാലകത്തിന്‍റെ ഉപയോഗം"
 
 #: ../gtk/gtkwindow.c:429
 msgid "Unique identifier for the window to be used when restoring a session"
@@ -5751,6 +5757,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
+"ട്രൂ എങ്കില്‍, ജാലകത്തിന് ഏറ്റവും കുറഞ്ഞ വലിപ്പം ഉണ്ടാവില്ല. ഇത് 99 ശതമാനം ക്രമീകരിക്കുന്നത് "
+"ശരിയാവില്ല"
 
 #: ../gtk/gtkwindow.c:445
 msgid "Allow Grow"
@@ -5758,21 +5766,23 @@ msgstr "വളരാന്‌ അനുവദിക്കുക"
 
 #: ../gtk/gtkwindow.c:446
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr ""
+msgstr "ട്രൂ എങ്കില്‍, ജാലകത്തിന്‍റെ ഏറ്റവും കുറഞ്ഞ വലിപ്പത്തില്‍ നിന്നും ഉപയോഗിക്കുന്നവര്‍ക്ക് വികസിപ്പിക്കുവാന്ഡ സാധ്യമാണ്"
 
 #: ../gtk/gtkwindow.c:454
 msgid "If TRUE, users can resize the window"
-msgstr ""
+msgstr "ട്രൂ എങ്കില്‍, ഉപയോഗിക്കുന്നവര്‍ക്ക് ജാലകത്തിന്‍റെ വലിപ്പം മാറ്റുവാന്ഡ സാധ്യമാണ്"
 
 #: ../gtk/gtkwindow.c:461
 msgid "Modal"
-msgstr "മാതൃക"
+msgstr "Modal"
 
 #: ../gtk/gtkwindow.c:462
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
+"ട്രൂ എങ്കില്‍, ജാലകത്തിന് അനുവാദമുണ്ട് (ഇത് പ്രവര്‍ത്തനത്തിലാണ് എങ്കില്‍ മറ്റ് ജാലകങ്ങള്‍ "
+"ഉപയോഗിക്കുവാന്‍ സാധ്യമല്ല)"
 
 #: ../gtk/gtkwindow.c:469
 msgid "Window Position"
@@ -5788,7 +5798,7 @@ msgstr "സ്വതേയുള്ള വീതി"
 
 #: ../gtk/gtkwindow.c:479
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
+msgstr "ജാലകം തുടക്കത്തില്‍ കാണിക്കുന്പോള്‍ ഉപയോഗിക്കേണ്ട ഡീഫോള്‍ട്ടായ വീതി"
 
 #: ../gtk/gtkwindow.c:488
 msgid "Default Height"
@@ -5796,7 +5806,7 @@ msgstr "സ്വതേയുള്ള ഉയരം"
 
 #: ../gtk/gtkwindow.c:489
 msgid "The default height of the window, used when initially showing the window"
-msgstr ""
+msgstr "ജാലകം തുടക്കത്തില്‍ കാണിക്കുന്പോള്‍ ഉപയോഗിക്കേണ്ട ഡീഫോള്‍ട്ടായ ഉയരം"
 
 #: ../gtk/gtkwindow.c:498
 msgid "Destroy with Parent"
@@ -5804,7 +5814,7 @@ msgstr "സെ‍ര്‍വ‍റില് റെജിസ്റ്റ‍ര�
 
 #: ../gtk/gtkwindow.c:499
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "പേരന്‍റിനെ നീക്കം ചെയ്യുന്പോള്‍ ഈ ജാലകവും ഒപ്പം നീക്കം ചെയ്യണമോ എന്ന്"
 
 #: ../gtk/gtkwindow.c:506
 msgid "Icon"
@@ -5816,7 +5826,7 @@ msgstr "ഈ ജാലകത്തിനുളള പ്രതിരൂപം"
 
 #: ../gtk/gtkwindow.c:523
 msgid "Name of the themed icon for this window"
-msgstr ""
+msgstr "ഈ ജാലകത്തിനുളള ഥീമുളള പ്രതിരൂപത്തിന്‍റെ പേര്"
 
 #: ../gtk/gtkwindow.c:538
 msgid "Is Active"
@@ -5832,7 +5842,7 @@ msgstr "മുകളിലേക്ക് കേന്ദ്രീകരിക�
 
 #: ../gtk/gtkwindow.c:547
 msgid "Whether the input focus is within this GtkWindow"
-msgstr ""
+msgstr "ഇന്‍പുട്ട് ചെയ്യുന്നതിനുളള ശ്രദ്ധ കേന്ദ്രീകരിക്കേണ്ടത് ഈ GtkWindow-യ്ക്ക് ഉളളില്‍ ആണോ എന്ന്"
 
 #: ../gtk/gtkwindow.c:554
 msgid "Type hint"
@@ -5842,7 +5852,7 @@ msgstr "സൂചനാതരം"
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr ""
+msgstr "ഈ ജാലകം എങ്ങനെ ഉളളതെന്നും അതെങ്ങനെ ഉപയോഗിക്കണമെന്നും ഡസ്ക്-ടോപ്പ് എന്‍വിറോണ്‍മെന്‍റിനെ അറിയിക്കുന്നതിനുളള സൂചന"
 
 #: ../gtk/gtkwindow.c:563
 msgid "Skip taskbar"
@@ -5850,7 +5860,7 @@ msgstr "ടാസ്ക് ബാര്‍ അവഗണിക്കുക"
 
 #: ../gtk/gtkwindow.c:564
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "ജാലകം ടാസ്ക് ബാറില്‍ ആകുവാന്‍ പാടില്ല എങ്കില്‍ ട്രൂ ആക്കുക."
 
 #: ../gtk/gtkwindow.c:571
 msgid "Skip pager"
@@ -5858,7 +5868,7 @@ msgstr "പേജര്‍ അവഗണിക്കുക"
 
 #: ../gtk/gtkwindow.c:572
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "ജാലകം പേജറില്‍ ആകുവാന്‍ പാടില്ല എങ്കില്‍ ട്രൂ ആക്കുക."
 
 #: ../gtk/gtkwindow.c:579
 msgid "Urgent"
@@ -5866,11 +5876,11 @@ msgstr "അത്യാവശ്യമായ"
 
 #: ../gtk/gtkwindow.c:580
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr ""
+msgstr "ജാലകം ഉപയോഗിക്കുന്ന വ്യക്തിയുടെ ശ്രദ്ധയില്‍പ്പെടുത്തണമെങ്കില്‍ ട്രൂ ആണ്."
 
 #: ../gtk/gtkwindow.c:594
 msgid "Accept focus"
-msgstr ""
+msgstr "പ്രവര്‍ത്തന കേന്ദ്രം സ്വീകരിക്കുക"
 
 #: ../gtk/gtkwindow.c:595
 msgid "TRUE if the window should receive the input focus."
@@ -5902,11 +5912,11 @@ msgstr "ജാലകത്തിന്‍റെ ഫ്രെയിമിന് �
 
 #: ../gtk/gtkwindow.c:656
 msgid "Gravity"
-msgstr ""
+msgstr "ഗ്രാവിറ്റി"
 
 #: ../gtk/gtkwindow.c:657
 msgid "The window gravity of the window"
-msgstr ""
+msgstr "ജാലകത്തിന്‍റെ ഗ്രാവിറ്റി"
 
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
