@@ -2183,27 +2183,20 @@ gtk_entry_get_chars      (GtkEditable   *editable,
 }
 
 static void
-gtk_entry_set_position_internal (GtkEntry    *entry,
-				 gint         position,
-				 gboolean     reset_im)
+gtk_entry_real_set_position (GtkEditable *editable,
+			     gint         position)
 {
+  GtkEntry *entry = GTK_ENTRY (editable);
+
   if (position < 0 || position > entry->text_length)
     position = entry->text_length;
 
   if (position != entry->current_pos ||
       position != entry->selection_bound)
     {
-      if (reset_im)
-	_gtk_entry_reset_im_context (entry);
+      _gtk_entry_reset_im_context (entry);
       gtk_entry_set_positions (entry, position, position);
     }
-}
-
-static void
-gtk_entry_real_set_position (GtkEditable *editable,
-			     gint         position)
-{
-  gtk_entry_set_position_internal (GTK_ENTRY (editable), position, TRUE);
 }
 
 static gint
@@ -2926,6 +2919,10 @@ gtk_entry_enter_text (GtkEntry       *entry,
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint tmp_pos;
+  gboolean old_need_im_reset;
+
+  old_need_im_reset = entry->need_im_reset;
+  entry->need_im_reset = FALSE;
 
   if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
     gtk_editable_delete_selection (editable);
@@ -2937,7 +2934,9 @@ gtk_entry_enter_text (GtkEntry       *entry,
 
   tmp_pos = entry->current_pos;
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
-  gtk_entry_set_position_internal (entry, tmp_pos, FALSE);
+  gtk_editable_set_position (editable, tmp_pos);
+
+  entry->need_im_reset = old_need_im_reset;
 }
 
 /* All changes to entry->current_pos and entry->selection_bound

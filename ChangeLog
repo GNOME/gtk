@@ -1,3 +1,8 @@
+2006-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Don't unnecessarily reset the im context
+	when deleting the selection.  (#353803, Alex Larsson)
+
 2006-09-01  Abel Cheung  <abel@oaka.org>
 
 	* configure.in: Added 'ang' 'dz' to ALL_LINGUAS.
