@@ -82,6 +82,7 @@ struct _GtkEntryPrivate
 {
   gfloat xalign;
   gint insert_pos;
+  guint blink_time;  /* time in msec the cursor has blinked since last user event */
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -332,6 +333,7 @@ static void         gtk_entry_state_changed            (GtkWidget      *widget,
 							GtkStateType    previous_state);
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
+static void         gtk_entry_reset_blink_time         (GtkEntry       *entry);
 static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
@@ -1589,6 +1591,8 @@ gtk_entry_button_press (GtkWidget      *widget,
       (entry->button && event->button != entry->button))
     return FALSE;
 
+  gtk_entry_reset_blink_time (entry);
+
   entry->button = event->button;
   
   if (!GTK_WIDGET_HAS_FOCUS (widget))
@@ -1676,7 +1680,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 	      entry->drag_start_y = event->y + entry->scroll_offset;
 	    }
 	  else
-	    gtk_editable_set_position (editable, tmp_pos);
+            gtk_editable_set_position (editable, tmp_pos);
 	  break;
  
 	case GDK_2BUTTON_PRESS:
@@ -1938,6 +1942,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
+  gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
 
   if (entry->editable)
@@ -2010,6 +2015,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
 		    "direction_changed",
 		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
+  gtk_entry_reset_blink_time (entry);
   gtk_entry_check_cursor_blink (entry);
 
   return FALSE;
@@ -5189,9 +5195,10 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
  *  - the widget has focus
  */
 
-#define CURSOR_ON_MULTIPLIER 0.66
-#define CURSOR_OFF_MULTIPLIER 0.34
-#define CURSOR_PEND_MULTIPLIER 1.0
+#define CURSOR_ON_MULTIPLIER 2
+#define CURSOR_OFF_MULTIPLIER 1
+#define CURSOR_PEND_MULTIPLIER 3
+#define CURSOR_DIVIDER 3
 
 static gboolean
 cursor_blinks (GtkEntry *entry)
@@ -5219,6 +5226,17 @@ get_cursor_time (GtkEntry *entry)
   g_object_get (settings, "gtk-cursor-blink-time", &time, NULL);
 
   return time;
+}
+
+static gint
+get_cursor_blink_timeout (GtkEntry *entry)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+  gint timeout;
+
+  g_object_get (settings, "gtk-cursor-blink-timeout", &timeout, NULL);
+
+  return timeout;
 }
 
 static void
@@ -5252,11 +5270,14 @@ static gint
 blink_cb (gpointer data)
 {
   GtkEntry *entry;
+  GtkEntryPrivate *priv; 
+  gint blink_timeout;
 
   GDK_THREADS_ENTER ();
 
   entry = GTK_ENTRY (data);
-
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+ 
   if (!GTK_WIDGET_HAS_FOCUS (entry))
     {
       g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
@@ -5266,18 +5287,27 @@ blink_cb (gpointer data)
   
   g_assert (GTK_WIDGET_HAS_FOCUS (entry));
   g_assert (entry->selection_bound == entry->current_pos);
-
-  if (entry->cursor_visible)
+  
+  blink_timeout = get_cursor_blink_timeout (entry);
+  if (priv->blink_time > 1000 * blink_timeout && 
+      blink_timeout < G_MAXINT/1000) 
+    {
+      /* we've blinked enough without the user doing anything, stop blinking */
+      show_cursor (entry);
+      entry->blink_timeout = 0;
+    } 
+  else if (entry->cursor_visible)
     {
       hide_cursor (entry);
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER,
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
   else
     {
       show_cursor (entry);
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
+      priv->blink_time += get_cursor_time (entry);
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
@@ -5291,14 +5321,18 @@ blink_cb (gpointer data)
 static void
 gtk_entry_check_cursor_blink (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv; 
+  
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
   if (cursor_blinks (entry))
     {
       if (!entry->blink_timeout)
 	{
-	  entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
+	  show_cursor (entry);
+	  entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						blink_cb,
 						entry);
-	  show_cursor (entry);
 	}
     }
   else
@@ -5322,12 +5356,23 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       if (entry->blink_timeout != 0)
 	g_source_remove (entry->blink_timeout);
       
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER,
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
       show_cursor (entry);
     }
 }
+
+static void
+gtk_entry_reset_blink_time (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv; 
+  
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+  
+  priv->blink_time = 0;
+}
+
 
 /* completion */
 static gint

@@ -1,5 +1,29 @@
 2006-08-31  Matthias Clasen  <mclasen@redhat.com>
 
+	Stop cursor blinking after a configurable timeout.
+	(#353670, #352442, Arjan van de Ven, Manu Cornet)
+	
+	* gtk/gtksettings.c (gtk_settings_class_init): Add a 
+	gtk-cursor-blink-timeout setting, which specifies the number
+	of seconds that the cursor should blink after a user interaction.
+	The default value is G_MAXINT to preserve the current behaviour.
+
+	* gtk/gtkentry.c (blink_cb): Stop blinking after blink-timeout
+	seconds.
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press) 
+	(gtk_entry_button_press, gtk_entry_focus_in): Reset the
+	blink timer.
+
+	* gtk/gtktextview.c (blink_cb): Stop blinking after blink-timeout
+	seconds. 
+
+	* gtk/gtktextview.c (gtk_text_view_key_press_event) 
+	(gtk_text_view_button_press_event, gtk_text_view_focus_in_event): 
+	Reset the blink timer.
+	
+2006-08-31  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintoperation-unix.c (get_print_dialog): Don't specify
 	explicit format capabilities.  (#346505, Christian Persch)
 

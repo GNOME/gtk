@@ -64,6 +64,7 @@ enum {
   PROP_DOUBLE_CLICK_DISTANCE,
   PROP_CURSOR_BLINK,
   PROP_CURSOR_BLINK_TIME,
+  PROP_CURSOR_BLINK_TIMEOUT,
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_ICON_THEME_NAME,
@@ -201,6 +202,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_DISTANCE);
+
+  /**
+   * GtkSettings:gtk-cursor-blink:
+   *
+   * Whether the cursor should blink. 
+   *
+   * Also see the gtk-cursor-blink-timeout setting, which allows 
+   * more flexible control over cursor blinking.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-cursor-blink",
 								   P_("Cursor Blink"),
@@ -212,11 +222,31 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-time",
                                                                P_("Cursor Blink Time"),
-                                                               P_("Length of the cursor blink cycle, in milleseconds"),
+                                                               P_("Length of the cursor blink cycle, in milliseconds"),
                                                                100, G_MAXINT, 1200,
                                                                GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
+ 
+  /**
+   * GtkSettings:gtk-cursor-blink-timeout:
+   *
+   * Time after which the cursor stops blinking, in seconds.
+   * The timer is reset after each user interaction.
+   *
+   * Setting this to zero has the same effect as setting
+   * gtk-cursor-blinks to %FALSE. 
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-cursor-blink-timeout",
+                                                               P_("Cursor Blink Timeout"),
+                                                               P_("Time after which the cursor stops blinking, in seconds"),
+                                                               1, G_MAXINT, G_MAXINT,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-split-cursor",
 								   P_("Split Cursor"),
