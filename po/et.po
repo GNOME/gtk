@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-04 00:06+0200\n"
-"PO-Revision-Date: 2006-08-28 15:21+0300\n"
+"PO-Revision-Date: 2006-08-31 13:28+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -2265,15 +2265,15 @@ msgstr "Vaba mälu pole piisavalt"
 
 #: ../gtk/gtkprintoperation-win32.c:1556
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "Vigane PrintDlgEx argument"
 
 #: ../gtk/gtkprintoperation-win32.c:1561
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "Vigane PrintDlgEx pointer"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid handle to PrintDlgEx"
-msgstr ""
+msgstr "Vigane PrintDlgEx käsitleja"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
@@ -2384,11 +2384,11 @@ msgstr "_Väljundsalv:"
 
 #: ../gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
-msgstr ""
+msgstr "Töö üksikasjad"
 
 #: ../gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
-msgstr ""
+msgstr "Tä_htsus:"
 
 #: ../gtk/gtkprintunixdialog.c:2146
 msgid "_Billing info:"
@@ -2412,7 +2412,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Esilehe lisamine"
 
 #: ../gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
@@ -3928,7 +3928,7 @@ msgstr "Printimint LPR-i"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
-msgstr ""
+msgstr "Lehekülgi lehel"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
@@ -4090,7 +4090,7 @@ msgstr "Kirje <text> ei tohi olla enne kirjet <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1783
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Serialiseeritud andmed on vääralt vormindatud"
 
 #: ../gtk/gtktextbufferserialize.c:1861
 msgid ""
@@ -4108,7 +4108,7 @@ msgstr "Tõrge päise kirjutamisel\n"
 
 #: ../gtk/updateiconcache.c:1122
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "Tõrge räsitabeli kirjutamisel\n"
 
 #: ../gtk/updateiconcache.c:1128
 msgid "Failed to write directory index\n"
