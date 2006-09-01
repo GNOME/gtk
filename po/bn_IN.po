@@ -2386,7 +2386,7 @@ msgstr "অনির্ধারিত ত্রুটি"
 #: gtk/gtkprintoperation-win32.c:1622
 #, c-format
 msgid "Error from StartDoc"
-msgstr "StartDoc'এ উত্‌পন্ন সমস্যা"
+msgstr "StartDoc'এ উৎপন্ন সমস্যা"
 
 #: gtk/gtkprintunixdialog.c:1448
 msgid "Printer"
@@ -4100,7 +4100,7 @@ msgstr "অবৈধ URI"
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr "%s ডি-সিরিয়েলাইজ করতে অজানা সমস্যা উত্‌পন্ন হয়েছে"
+msgstr "%s ডি-সিরিয়েলাইজ করতে অজানা সমস্যা উৎপন্ন হয়েছে"
 
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
