@@ -5594,7 +5594,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1536
 msgid "Draw Border"
-msgstr ""
+msgstr "ଅଙ୍କନ ଧାର"
 
 #: ../gtk/gtkwidget.c:1537
 msgid "Size of areas outside the widget's allocation to draw"
@@ -5602,89 +5602,91 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1550
 msgid "Unvisited Link Color"
-msgstr ""
+msgstr "ଅପରଦର୍ଶିତ ସଂଯୋଗର ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1551
 msgid "Color of unvisited links"
-msgstr ""
+msgstr "ଅପରିଦର୍ଶିତ ସଂଯୋଗ ମାନଙ୍କର ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1564
 msgid "Visited Link Color"
-msgstr ""
+msgstr "ପରଦର୍ଶିତ ସଂଯୋଗର ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1565
 msgid "Color of visited links"
-msgstr ""
+msgstr "ପରିଦର୍ଶିତ ସଂଯୋଗ ମାନଙ୍କର ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1579
 msgid "Wide Separators"
-msgstr ""
+msgstr "ପ୍ରଶସ୍ତ"
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
+"ବିଭାଜକ ମାନଙ୍କର ବିନ୍ଯାସ ଯୋଗ୍ଯ ଓସାର ଅଛି କି ନାହିଁ ଏବଂ ସେମାନଙ୍କୁ ଗୋଟିଏ ରେଖା ପରିବର୍ତ୍ତେ ଗୋଟିଏ ବାକ୍ସ ବ୍ଯବହାର କରି "
+"ଅଙ୍କନ କରାଯିବା ଉଚିତ କି"
 
 #: ../gtk/gtkwidget.c:1594
 msgid "Separator Width"
-msgstr ""
+msgstr "ବିଭାଜକର ଓସାର"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "ବିଭାଜକର ଓସାର ଯଦି ପ୍ରଶସ୍ତ-ବିଭାଜକ ସକ୍ରିୟ (TRUE) ଅଟେ"
 
 #: ../gtk/gtkwidget.c:1609
 msgid "Separator Height"
-msgstr ""
+msgstr "ବିଭାଜକ ଉଚ୍ଚତା"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "ବିଭାଜକର ଉଚ୍ଚତା ଯଦି \"ପ୍ରଶସ୍ତ-ବିଭାଜକ\" ସକ୍ରିୟ (TRUE) ଅଟେ"
 
 #: ../gtk/gtkwidget.c:1624
 msgid "Horizontal Scroll Arrow Length"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତର ସ୍କ୍ରୋଲ ତୀର ଲମ୍ବ"
 
 #: ../gtk/gtkwidget.c:1625
 msgid "The length of horizontal scroll arrows"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତର ସ୍କ୍ରୋଲ ତୀରର ଲମ୍ବ"
 
 #: ../gtk/gtkwidget.c:1639
 msgid "Vertical Scroll Arrow Length"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ସ୍କ୍ରୋଲ ତୀର ଲମ୍ବ"
 
 #: ../gtk/gtkwidget.c:1640
 msgid "The length of vertical scroll arrows"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ସ୍କ୍ରୋଲ ତୀରର ଲମ୍ବ"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋ ପ୍ରକାର"
 
 #: ../gtk/gtkwindow.c:412
 msgid "The type of the window"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋର ପ୍ରକାର"
 
 #: ../gtk/gtkwindow.c:420
 msgid "Window Title"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋ ଶୀର୍ଷକ"
 
 #: ../gtk/gtkwindow.c:421
 msgid "The title of the window"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋର ଶୀର୍ଷକ"
 
 #: ../gtk/gtkwindow.c:428
 msgid "Window Role"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋ ଭୂମିକା"
 
 #: ../gtk/gtkwindow.c:429
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr ""
+msgstr "ଗୋଟିଏ ଅଧିବେଶନକୁ ପୁନଃସ୍ଥାପନ କରିବା ସମୟରେ ୱିଣ୍ଡୋ ପାଇଁ ଗୋଟିଏ ଅନନ୍ଯ ପରିଚୟକ"
 
 #: ../gtk/gtkwindow.c:436
 msgid "Allow Shrink"
-msgstr ""
+msgstr "ସଂକୋଚନ ପ୍ରକାରକୁ ସ୍ବୀକାର କରନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:438
 #, no-c-format
@@ -5692,18 +5694,20 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
+"ଯଦି ସତ (TRUE), ୱିଣ୍ଡୋର କୌଣସି ସର୍ବନିମ୍ନ ଆକାର ନାହିଁ। ୯୯% ସମୟରେ ଏହାକୁ ସତ୍ଯ (TRUE) ଭାବରେ ବିନ୍ଯାସ କରିବା "
+"ଗୋଟିଏ ଭୂଲ ଉପାୟ ଅଟେ"
 
 #: ../gtk/gtkwindow.c:445
 msgid "Allow Grow"
-msgstr ""
+msgstr "ବର୍ଦ୍ଧନକୁ ସ୍ବୀକାର କରନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:446
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE), ଚାଳକ ୱିଣ୍ଡୋକୁ ଏହାର ସର୍ବାନିମ୍ନ ଆକାରରୁ ଅଧିକ ପ୍ରସାରିତ କରିପାରିବ"
 
 #: ../gtk/gtkwindow.c:454
 msgid "If TRUE, users can resize the window"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE), ଚାଳକ ୱିଣ୍ଡୋର ଆକାରକୁ ପରିବର୍ତ୍ତନ କରିପାରିବ"
 
 #: ../gtk/gtkwindow.c:461
 msgid "Modal"
@@ -5714,92 +5718,95 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
+"ଯଦି ସତ (TRUE), ୱିଣ୍ଡୋଟି ଗୋଟିଏ ନମୁନା ଅଟେ (ଏହା ବ୍ଯବହ୍ରୁତ ହେଉଥିବା ସମୟରେ ଅନ୍ଯାନ୍ଯ ୱିଣ୍ଡୋ ଗୁଡିକ ବ୍ଯବହାର ଯୋଗ୍ଯ "
+"ନୁହଁନ୍ତି)"
 
 #: ../gtk/gtkwindow.c:469
 msgid "Window Position"
-msgstr ""
+msgstr "ଓ୍ବିଣ୍ଡୋର ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkwindow.c:470
 msgid "The initial position of the window"
-msgstr ""
+msgstr "ଓ୍ବିଣ୍ଡୋର ପ୍ରାରମ୍ଭିକ ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkwindow.c:478
 msgid "Default Width"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଓସାର"
 
 #: ../gtk/gtkwindow.c:479
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
+msgstr "ସର୍ବପ୍ରଥମେ ୱିଣ୍ଡୋକୁ ପ୍ରଦର୍ଶିତା କରିବା ସମୟରେ ବ୍ଯବହାର କରାଯାଉଥିବା ୱିଣ୍ଡୋର ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଓସାର"
 
 #: ../gtk/gtkwindow.c:488
 msgid "Default Height"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଉଚ୍ଚତା"
 
 #: ../gtk/gtkwindow.c:489
 msgid "The default height of the window, used when initially showing the window"
-msgstr ""
+msgstr "ସର୍ବପ୍ରଥମେ ୱିଣ୍ଡୋକୁ ପ୍ରଦର୍ଶିତା କରିବା ସମୟରେ ବ୍ଯବହାର କରାଯାଉଥିବା ୱିଣ୍ଡୋର ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଉଚ୍ଚତା"
 
 #: ../gtk/gtkwindow.c:498
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "ମୂଳ ସହିତ ନଷ୍ଟ କରି ଦିଅନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:499
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "ମୂଳ ନଷ୍ଟ ହୋଇଗଲେ ଏହି ୱିଣ୍ଡୋଟି ନଷ୍ଟ ହୋଇଯିବା ଉଚିତ କି"
 
 #: ../gtk/gtkwindow.c:506
 msgid "Icon"
-msgstr "ଚିତ୍ର ସଙ୍କେତ"
+msgstr "ଚିତ୍ରସଙ୍କେତ"
 
 #: ../gtk/gtkwindow.c:507
 msgid "Icon for this window"
-msgstr ""
+msgstr "ଏହି ୱିଣ୍ଡୋ ପାଇଁ ଚିତ୍ରସଙ୍କେତ"
 
 #: ../gtk/gtkwindow.c:523
 msgid "Name of the themed icon for this window"
-msgstr ""
+msgstr "ଏହି ୱିଣ୍ଡୋ ପାଇଁ ପ୍ରସଙ୍ଗିତ ଚିତ୍ରସଙ୍କେତର ନାମ"
 
 #: ../gtk/gtkwindow.c:538
 msgid "Is Active"
-msgstr ""
+msgstr "ସକ୍ରିୟ ଅଟେ"
 
 #: ../gtk/gtkwindow.c:539
 msgid "Whether the toplevel is the current active window"
-msgstr ""
+msgstr "ଉଚ୍ଚ ସ୍ତରଟି ସମ୍ପ୍ରତିକ ସକ୍ରିୟଣ ୱିଣ୍ଡୋରେ ଅଛି କି ନାହିଁ"
 
 #: ../gtk/gtkwindow.c:546
 msgid "Focus in Toplevel"
-msgstr ""
+msgstr "ଉଚ୍ଚ ସ୍ତରରେ ଫୋକସ"
 
 #: ../gtk/gtkwindow.c:547
 msgid "Whether the input focus is within this GtkWindow"
-msgstr ""
+msgstr "ନିବେଶ ଫୋକସଟି GtkWindow ମଧ୍ଯରେ ଅଛି କି ନାହିଁ"
 
 #: ../gtk/gtkwindow.c:554
 msgid "Type hint"
-msgstr ""
+msgstr "ଆଭାସକୁ ଟାଇପ କରନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:555
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
+"ଏହା କେଉଁ ପ୍ରକାରର ୱିଣ୍ଡୋ ଏବଂ ଏହାକୁ କିପରି ବ୍ଯବହାର କରିବେ ତାହା ବୁଝିବା ପାଇଁ ଡେସ୍କଟପ ପରିବେଶ ସହାୟତାର ଆଭାସ"
 
 #: ../gtk/gtkwindow.c:563
 msgid "Skip taskbar"
-msgstr ""
+msgstr "ସାଧନ ପଟିକୁ ଏଡାଇ ଦିଅନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:564
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "ସତ (TRUE), ଯଦି ୱିଣ୍ଡୋଟି ସାଧନ ପଟିରେ ନାହିଁ।"
 
 #: ../gtk/gtkwindow.c:571
 msgid "Skip pager"
-msgstr ""
+msgstr "ପେଜରକୁ ଏଡାଇ ଦିଅନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:572
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "ସତ (TRUE), ଯଦି ୱିଣ୍ଡୋଟି ପେଜରରେ ନାହିଁ।"
 
 #: ../gtk/gtkwindow.c:579
 msgid "Urgent"
@@ -5807,69 +5814,69 @@ msgstr "ଜରୁରୀ"
 
 #: ../gtk/gtkwindow.c:580
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr ""
+msgstr "ସତ (TRUE), ଯଦି ୱିଣ୍ଡୋକୁ ଉପଭୋକ୍ତର ଦ୍ରୁଷ୍ଟିକୁ ଅଣାଯାଏ।"
 
 #: ../gtk/gtkwindow.c:594
 msgid "Accept focus"
-msgstr ""
+msgstr "ଫୋକସକୁ ଗ୍ରହଣ କରନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:595
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
+msgstr "ସତ (TRUE), ଯଦି ୱିଣ୍ଡୋ ନିବେଶ ଫୋକସକୁ ପାଇଥାଏ।"
 
 #: ../gtk/gtkwindow.c:609
 msgid "Focus on map"
-msgstr ""
+msgstr "ମ୍ଯାପରେ ଫୋକସ କରନ୍ତୁ"
 
 #: ../gtk/gtkwindow.c:610
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr ""
+msgstr "ସତ (TRUE), ଯଦି ମ୍ଯାପ କରାଯିବା ସମୟରେ ୱିଣ୍ଡୋ ନିବେଶ ଫୋକସକୁ ପାଇଥାଏ।"
 
 #: ../gtk/gtkwindow.c:624
 msgid "Decorated"
-msgstr ""
+msgstr "ସଜା ଯାଇଛି"
 
 #: ../gtk/gtkwindow.c:625
 msgid "Whether the window should be decorated by the window manager"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋଟି ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ବାରା ସଜାଯିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtkwindow.c:639
 msgid "Deletable"
-msgstr ""
+msgstr "ଅପସାରଣ ଯୋଗ୍ଯ"
 
 #: ../gtk/gtkwindow.c:640
 msgid "Whether the window frame should have a close button"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋ ଫ୍ରେମ ନିକଟରେ ବନ୍ଦ କରିବା ପାଇଁ ଗୋଟିଏ ବଟନ ରହିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtkwindow.c:656
 msgid "Gravity"
-msgstr ""
+msgstr "ସ୍ଥିରତା"
 
 #: ../gtk/gtkwindow.c:657
 msgid "The window gravity of the window"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋର ୱିଣ୍ଡୋ ସ୍ଥିରତା"
 
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "ୱିଣ୍ଡୋ ପାଇଁ ଅସ୍ଥାୟୀ"
 
 #: ../gtk/gtkwindow.c:675
 msgid "The transient parent of the dialog"
-msgstr ""
+msgstr "ସଂଳାପର ଅସ୍ଥାୟୀ ମୂଳ"
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
-msgstr ""
+msgstr "IM ଉପସମ୍ପାଦନ ଶୈଳୀ"
 
 #: ../modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "ନିବେଳ ପ୍ରଣାଳୀ ଉପସମ୍ପାଦନ ବାକ୍ଯଖଣ୍ଡକୁ କିପରି ଅଙ୍କନ କରିବେ"
 
 #: ../modules/input/gtkimcontextxim.c:339
 msgid "IM Status style"
-msgstr ""
+msgstr "IM ଅବସ୍ଥିତି ଶୈଳୀ"
 
 #: ../modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
-msgstr ""
+msgstr "ନିବେଶ ପ୍ରଣାଳୀ ସାଧନ ପଟିକୁ କିପରି ଅଙ୍କନ କରିବେ"
 
