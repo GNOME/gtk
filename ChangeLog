@@ -1,3 +1,20 @@
+2006-08-31  Federico Mena Quintero  <federico@novell.com>
+
+	* tests/autotestfilesystem.c (run_test): Let the cleanup function
+	be optional.
+	(TestSpec): Replaced the "callback_must_be_called" field with a
+	"callback_type" one.  This is an enum that indicates whether the
+	callback must be run, must not be run, or is irrelevant.  This
+	lets us run self-contained tests with no auxiliary machinery for
+	callbacks.
+	(tests): Added a test for loading a folder.
+	(test_folder_load): New test function.  Tests loading a folder,
+	tests that the returned info matches the files on disk, and that
+	the returned list of files is complete with respect to what is on
+	disk.
+
+	*** BRANCHED TO cancelation-changes ***
+
 2006-08-23  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilesystem.[ch] (_gtk_file_system_create): Renamed to
