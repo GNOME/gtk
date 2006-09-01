@@ -5162,7 +5162,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:717
 msgid "Enable Grid Lines"
-msgstr ""
+msgstr "ଜାଲି ରେଖା ମାନଙ୍କୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:718
 msgid "Whether grid lines should be drawn in the tree view"
@@ -5170,155 +5170,155 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:726
 msgid "Enable Tree Lines"
-msgstr ""
+msgstr "ବୃକ୍ଷ ରେଖା ମାନଙ୍କୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:727
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr ""
+msgstr "ବୃକ୍ଷ ଦୃଶ୍ଯରେ ବୃକ୍ଷ ରେଖା ମାନଙ୍କୁ ଅଙ୍କିତ କରାଯିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ବିଭାଜକ ଓସାର"
 
 #: ../gtk/gtktreeview.c:748
 msgid "Vertical space between cells.  Must be an even number"
-msgstr ""
+msgstr "କକ୍ଷ ମାନଙ୍କ ମଧ୍ଯରେ ଭୂଲମ୍ବ ଖାଲିସ୍ଥାନ। ଗୋଟିଏ ଯୁଗ୍ମ ସଂଖ୍ଯା ହେବା ଉଚିତ"
 
 #: ../gtk/gtktreeview.c:756
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତର ବିଭାଜକ ଓସାର"
 
 #: ../gtk/gtktreeview.c:757
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr ""
+msgstr "କକ୍ଷ ମାନଙ୍କ ମଧ୍ଯରେ ଭୂସମାନ୍ତର ଖାଲିସ୍ଥାନ। ଗୋଟିଏ ଯୁଗ୍ମ ସଂଖ୍ଯା ହେବା ଉଚିତ"
 
 #: ../gtk/gtktreeview.c:765
 msgid "Allow Rules"
-msgstr ""
+msgstr "ନିୟମ ମାନଙ୍କୁ ସ୍ବୀକାର କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:766
 msgid "Allow drawing of alternating color rows"
-msgstr ""
+msgstr "ପର୍ଯ୍ଯାୟକ୍ରମିକ ରଙ୍ଗୀନ ଧାଡି ମାନଙ୍କର ଅଙ୍କନକୁ ସ୍ବୀକାର କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:772
 msgid "Indent Expanders"
-msgstr ""
+msgstr "ଅନୁଚ୍ଛେଦ ସମ୍ପ୍ରସାରକ"
 
 #: ../gtk/gtktreeview.c:773
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "ଅନୁଚ୍ଛେଦ ସମ୍ପ୍ରସାରକକୁ ପ୍ରସ୍ତୁତ କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:779
 msgid "Even Row Color"
-msgstr ""
+msgstr "ଯୁଗ୍ମ ଧାଡିର ରଙ୍ଗ"
 
 #: ../gtk/gtktreeview.c:780
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "ଯୁଗ୍ମ ଧାଡି ମାନଙ୍କ ପାଇଁ ବ୍ଯବହାର କରାଯିବା ରଙ୍ଗ"
 
 #: ../gtk/gtktreeview.c:786
 msgid "Odd Row Color"
-msgstr ""
+msgstr "ଅଯୁଗ୍ମ ଧାଡିର ରଙ୍ଗ"
 
 #: ../gtk/gtktreeview.c:787
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "ଅଯୁଗ୍ମ ଧାଡି ମାନଙ୍କ ପାଇଁ ବ୍ଯବହାର କରାଯିବା ରଙ୍ଗ"
 
 #: ../gtk/gtktreeview.c:793
 msgid "Row Ending details"
-msgstr ""
+msgstr "ଧାଡି ସମାପ୍ତି ବିବରଣୀ"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "ବର୍ଦ୍ଧିତ ଧାଡି ପୃଷ୍ଠଭୂମି ପ୍ରସଙ୍ଗକୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
 #: ../gtk/gtktreeview.c:800
 msgid "Grid line width"
-msgstr ""
+msgstr "ଜାଲି ରେଖାର ଓସାର"
 
 #: ../gtk/gtktreeview.c:801
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr ""
+msgstr "ପିକ୍ସେଲରେ ବୃକ୍ଷ ଦୃଶ୍ଯମାନ ଜାଲି ରେଖାର ଓସାର"
 
 #: ../gtk/gtktreeview.c:807
 msgid "Tree line width"
-msgstr ""
+msgstr "ବୃକ୍ଷ ରେଖା ପ୍ରସ୍ଥ"
 
 #: ../gtk/gtktreeview.c:808
 msgid "Width, in pixels, of the tree view lines"
-msgstr ""
+msgstr "ପିକ୍ସେଲରେ ବୃକ୍ଷ ଦୃଶ୍ଯମାନ ରେଖାର ଓସାର"
 
 #: ../gtk/gtktreeview.c:814
 msgid "Grid line pattern"
-msgstr ""
+msgstr "ଜାଲି ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtktreeview.c:815
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr ""
+msgstr "ବୃକ୍ଷର ଦୃଶ୍ଯମାନ ଜାଲି ରେଖା ଅଙ୍କନ କରିବା ପାଇଁ ବ୍ଯବହୃତ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtktreeview.c:821
 msgid "Tree line pattern"
-msgstr ""
+msgstr "ବୃକ୍ଷ ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtktreeview.c:822
 msgid "Dash pattern used to draw the tree view lines"
-msgstr ""
+msgstr "ବୃକ୍ଷର ଦୃଶ୍ଯମାନ ରେଖା ଅଙ୍କନ କରିବା ପାଇଁ ବ୍ଯବହୃତ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭକୁ ପ୍ରଦର୍ଶିତ କରାଯିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtktreeviewcolumn.c:193 ../gtk/gtkwindow.c:453
 msgid "Resizable"
-msgstr ""
+msgstr "ଆକାର ପରିବର୍ତ୍ତନ ଯୋଗ୍ଯ"
 
 #: ../gtk/gtktreeviewcolumn.c:194
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ଆକାର ଚାଳକ ଦ୍ବାରା ପରିବର୍ତ୍ତନୀୟ"
 
 #: ../gtk/gtktreeviewcolumn.c:202
 msgid "Current width of the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ବର୍ତ୍ତମାନ ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:211
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "ଖାଲି ସ୍ଥାନ ଯାହାକି ଦୁଇଟି କକ୍ଷ ମଧ୍ଯରେ ସନ୍ନବେଶ କରାଯାଇଛି"
 
 #: ../gtk/gtktreeviewcolumn.c:219
 msgid "Sizing"
-msgstr ""
+msgstr "ସଠିକ ଆକାର ସ୍ଥିର କରୁଅଛି"
 
 #: ../gtk/gtktreeviewcolumn.c:220
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ଧାରାର ଆକାର ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 
 #: ../gtk/gtktreeviewcolumn.c:228
 msgid "Fixed Width"
-msgstr ""
+msgstr "ସ୍ଥିର ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:229
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ସାମ୍ପ୍ରତିକ ସ୍ଥିର ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:238
 msgid "Minimum Width"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:239
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ସର୍ବନିମ୍ନ ସ୍ବୀକୃତ ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:248
 msgid "Maximum Width"
-msgstr ""
+msgstr "ସର୍ବାଧିକ ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:249
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭର ସର୍ବାଧିକ ସ୍ବୀକୃତ ଓସାର"
 
 #: ../gtk/gtktreeviewcolumn.c:259
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭ ଶୀର୍ଷକରେ ଦେଖାଯିବା ଶିରୋନାମା"
 
 #: ../gtk/gtktreeviewcolumn.c:267
 msgid "Column gets share of extra width allocated to the widget"
@@ -5326,55 +5326,55 @@ msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:274
 msgid "Clickable"
-msgstr ""
+msgstr "ଦବାଇ ହେବ"
 
 #: ../gtk/gtktreeviewcolumn.c:275
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "ଶୀର୍ଷକକୁ ଦବାଇ ହେବ କି ନାହିଁ"
 
 #: ../gtk/gtktreeviewcolumn.c:283
 msgid "Widget"
-msgstr ""
+msgstr "ୱିଜେଟ"
 
 #: ../gtk/gtktreeviewcolumn.c:284
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭ ଶିରେନାମା ପରିବର୍ତ୍ତେ ସ୍ତମ୍ଭ ଶୀର୍ଷକରେ ୱିଜେଟକୁ ରଖନ୍ତୁ"
 
 #: ../gtk/gtktreeviewcolumn.c:292
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭ ଶୀର୍ଷକ ପାଠ୍ଯ କିମ୍ବା ୱିଜେଟର ଏକ୍ସ ପାର୍ଶ୍ବସଜ୍ଜା"
 
 #: ../gtk/gtktreeviewcolumn.c:302
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭକୁ ଶୀର୍ଷକ ଚାରିପାଖେ ପୁନଃବ୍ଯବସ୍ଥାପିତ କରିହେବ କି ନାହିଁ"
 
 #: ../gtk/gtktreeviewcolumn.c:309
 msgid "Sort indicator"
-msgstr ""
+msgstr "ସଜାଡିବା ସୂଚକ"
 
 #: ../gtk/gtktreeviewcolumn.c:310
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "ଗୋଟିଏ ସଜାଡିବା ସୂଚକକୁ ଦେଖାଯିବ କି ନାହିଁ"
 
 #: ../gtk/gtktreeviewcolumn.c:317
 msgid "Sort order"
-msgstr ""
+msgstr "ସଜାଡିବା କ୍ରମ"
 
 #: ../gtk/gtktreeviewcolumn.c:318
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "ସଜାଡିବା କ୍ରମ ଯାହାକୁ ସଜାଡିବା ସୂଚକ ସୂଚୀତ କରିବ"
 
 #: ../gtk/gtkuimanager.c:196
 msgid "Whether tearoff menu items should be added to menus"
-msgstr ""
+msgstr "ଟିଅର-ଅଫ ତାଲିକା ବସ୍ତୁକୁ ତାଲିକାରେ ଯୋଗ କରାଯିବ କି ନାହିଁ"
 
 #: ../gtk/gtkuimanager.c:203
 msgid "Merged UI definition"
-msgstr ""
+msgstr "ମିଶ୍ରିତ ୟୁ.ଆଇ. ବ୍ଯାଖ୍ଯା"
 
 #: ../gtk/gtkuimanager.c:204
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "ମିଶ୍ରିତ ୟୁ.ଆଇ. କୁ ବର୍ଣ୍ଣନା କରୁଥିବା ଗୋଟିଏ XML ବାକ୍ଯଖଣ୍ଡ"
 
 #: ../gtk/gtkviewport.c:107
 msgid ""
@@ -5390,115 +5390,117 @@ msgstr ""
 
 #: ../gtk/gtkviewport.c:123
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr ""
+msgstr "ଦୃଶ୍ଯ ସଂଯୋଗିକୀ ଚତଃପାର୍ଶ୍ବରେ ଛାୟାଙ୍କିତ ବାକ୍ସ ମାନଙ୍କୁ କିପରି ଅଙ୍କନ କରାଯାଇଛି ତାହା ସ୍ଥିର କରନ୍ତୁ"
 
 #: ../gtk/gtkwidget.c:418
 msgid "Widget name"
-msgstr ""
+msgstr "ୱିଜେଟ ନାମ"
 
 #: ../gtk/gtkwidget.c:419
 msgid "The name of the widget"
-msgstr ""
+msgstr "ୱିଜେଟର ନାମ"
 
 #: ../gtk/gtkwidget.c:425
 msgid "Parent widget"
-msgstr ""
+msgstr "ମୂଳ ୱିଜେଟ"
 
 #: ../gtk/gtkwidget.c:426
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr ""
+msgstr "ଏହି ୱିଜେଟଟ ମୂଳ ୱିଜେଟ। ଗୋଟିଏ ଆଧାର ୱିଜେଟ ହେବା ଉଚିତ"
 
 #: ../gtk/gtkwidget.c:433
 msgid "Width request"
-msgstr ""
+msgstr "ଓସାର ନିବେଦନ"
 
 #: ../gtk/gtkwidget.c:434
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
+"ୱିଜେଟର ଓସାର ନିବେଦନକୁ ନବଲିଖନ କରିଦିଅନ୍ତୁ, କିମ୍ବା -1 ଯଦି ସ୍ବାଭାବିକ ନିବେଦନ ମାନଙ୍କୁ ବ୍ଯବହାର କରାଯିବ"
 
 #: ../gtk/gtkwidget.c:442
 msgid "Height request"
-msgstr ""
+msgstr "ଉଚ୍ଚତା ନିବେଦନ"
 
 #: ../gtk/gtkwidget.c:443
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
+"ୱିଜେଟର ଉଚ୍ଚତା ନିବେଦନକୁ ନବଲିଖନ କରିଦିଅନ୍ତୁ, କିମ୍ବା -1 ଯଦି ସ୍ବାଭାବିକ ନିବେଦନ ମାନଙ୍କୁ ବ୍ଯବହାର କରାଯିବ"
 
 #: ../gtk/gtkwidget.c:452
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "ୱିଜେଟଟି ଦୃଶ୍ଯମାନ ଅଟେ ନାଁ ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:459
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "ୱିଜେଟଟି ନିବେଶକୁ ଉତ୍ତର ଦେଇଥାଏ କି ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:465
 msgid "Application paintable"
-msgstr ""
+msgstr "ପ୍ରୟୋଗ ମୂଦ୍ରଣଯୋଗ୍ଯ"
 
 #: ../gtk/gtkwidget.c:466
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "ପ୍ରୟୋଗଟି ସିଧାସଳଖ ଭାବରେ ୱିଜେଟକୁ ରଞ୍ଜିତ କରିବ କି"
 
 #: ../gtk/gtkwidget.c:472
 msgid "Can focus"
-msgstr ""
+msgstr "ଫୋକସ କରିପାରିବ"
 
 #: ../gtk/gtkwidget.c:473
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "ୱିଜେଟ ନିବଶ ଫୋକସକୁ ଗ୍ରହଣ କରିପାରିବ କି ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:479
 msgid "Has focus"
-msgstr ""
+msgstr "ନିକଟରେ ଫୋକସ ଅଛି"
 
 #: ../gtk/gtkwidget.c:480
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "ୱିଜେଟ ନିକଟରେ ନିବେଶ ଫୋକସ ଅଛି କି ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:486
 msgid "Is focus"
-msgstr ""
+msgstr "ଫୋକସ ଅଟେ"
 
 #: ../gtk/gtkwidget.c:487
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr ""
+msgstr "ଉପରେ ସ୍ତରରେ ଥିବା ୱିଜେଟଟି ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ କି ନୁହେଁ"
 
 #: ../gtk/gtkwidget.c:493
 msgid "Can default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହୋଇପାରିବ"
 
 #: ../gtk/gtkwidget.c:494
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "ୱିଜେଟଟି ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ ହୋଇପାରିବ କି ନୁହେଁ"
 
 #: ../gtk/gtkwidget.c:500
 msgid "Has default"
-msgstr ""
+msgstr "ନିକଟରେ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଅଛି"
 
 #: ../gtk/gtkwidget.c:501
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "ୱିଜେଟଟି ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ କି ନୁହେଁ"
 
 #: ../gtk/gtkwidget.c:507
 msgid "Receives default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତକୁ ପ୍ରାପ୍ତ କରୁଅଛି"
 
 #: ../gtk/gtkwidget.c:508
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE), ୱିଜେଟ ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କାର୍ଯ୍ଯକୁ ପାଇବ ଯେତେବେଳେ ଏହାକୁ ଫୋକସ କରାଯିବ"
 
 #: ../gtk/gtkwidget.c:514
 msgid "Composite child"
-msgstr ""
+msgstr "ମିଶ୍ରିତ ନିର୍ଭରକ"
 
 #: ../gtk/gtkwidget.c:515
 msgid "Whether the widget is part of a composite widget"
-msgstr ""
+msgstr "ୱିଜେଟଟି ଗୋଟିଏ ମିଶ୍ରିତ ୱିଜେଟର ଗୋଟିଏ ଅଂଶ କି ନୁହିଁ"
 
 #: ../gtk/gtkwidget.c:521
 msgid "Style"
@@ -5509,62 +5511,63 @@ msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
+"ୱିଜେଟର ଶୈଳୀ, ଯାହାକି ଏହା କିପରି ଦେଖାଯିବ (କେଉଁ ରଙ୍ଗ ବିଶିଷ୍ଟ) ସେ ବିଷୟରେ ସୂଚନା ରଖିଥାଏ"
 
 #: ../gtk/gtkwidget.c:528
 msgid "Events"
-msgstr ""
+msgstr "ଘଟଣା"
 
 #: ../gtk/gtkwidget.c:529
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
+msgstr "ଏହି ୱିଜେଟ କେଉଁ ପ୍ରକାରର GdkEvents ପାଇଥାଏ ତାହା ଏହି ଘଟଣା ମାସ୍କଟି ସ୍ଥିର କରିଥାଏ"
 
 #: ../gtk/gtkwidget.c:536
 msgid "Extension events"
-msgstr ""
+msgstr "ଅଭିବୃଦ୍ଧି ଘଟଣା"
 
 #: ../gtk/gtkwidget.c:537
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr ""
+msgstr "ଏହି ୱିଜେଟ କେଉଁ ପ୍ରକାରର ଅଭିବୃଦ୍ଧି ପାଇଥାଏ ତାହା ଏହି ମାସ୍କଟି ସ୍ଥିର କରିଥାଏ"
 
 #: ../gtk/gtkwidget.c:544
 msgid "No show all"
-msgstr ""
+msgstr "ନାଁ ସବୁକିଛି ଦେଖାନ୍ତୁ"
 
 #: ../gtk/gtkwidget.c:545
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
+msgstr "gtk_widget_show_all() ଏହି ୱିଜେଟ ଉପରେ ପ୍ରଭାବ ପକାଇବ କି ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:1483
 msgid "Interior Focus"
-msgstr ""
+msgstr "ଅଭ୍ଯନ୍ତରୀଣ ଫୋକସ"
 
 #: ../gtk/gtkwidget.c:1484
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr ""
+msgstr "ୱିଜେଟ ମଧ୍ଯରେ ଫୋକସ ସୂଚକକୁ ଅଙ୍କନ କରାଯିବ କି ନାହିଁ"
 
 #: ../gtk/gtkwidget.c:1490
 msgid "Focus linewidth"
-msgstr ""
+msgstr "ଫୋକସ ଲାଇନ ଓସାର"
 
 #: ../gtk/gtkwidget.c:1491
 msgid "Width, in pixels, of the focus indicator line"
-msgstr ""
+msgstr "ପିକ୍ସେଲରେ ଫୋକସ ସୂଚକ ରେଖାର ଓସାର"
 
 #: ../gtk/gtkwidget.c:1497
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "ଫୋକସ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtkwidget.c:1498
 msgid "Dash pattern used to draw the focus indicator"
-msgstr ""
+msgstr "ଫୋକସ ସୂଚକକୁ ଅଙ୍କନ କରିବା ପାଇଁ ବ୍ଯବହୃତ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
 #: ../gtk/gtkwidget.c:1503
 msgid "Focus padding"
-msgstr ""
+msgstr "ଫୋକସ ପ୍ଯାଡିଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1504
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr ""
+msgstr "ଫୋକସ ସୂଚକ ଏବଂ ୱିଜେଟ 'ବାକ୍ସ' ମଧ୍ଯରେ ଓସାର, ପିକ୍ସେଲରେ"
 
 #: ../gtk/gtkwidget.c:1509
 msgid "Cursor color"
@@ -5572,25 +5575,27 @@ msgstr "ଦର୍ଶିକା ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1510
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "ଯେଉଁ ରଙ୍ଗର ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ ଅଙ୍କନ କରିଯିବ"
 
 #: ../gtk/gtkwidget.c:1515
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକ ଦର୍ଶିକା ରଙ୍ଗ"
 
 #: ../gtk/gtkwidget.c:1516
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
+"ମିଶ୍ର ଡାହାଣରୁ-ବାମକୁ ଏବଂ ବାମରୁ-ଡାହଣକୁ ପାଠ୍ଯକୁ ସମ୍ପାଦନ କରିବା ସମୟରେ ଯେଉଁ ରଙ୍ଗରେ ଦ୍ବିତୀୟକ ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ "
+"ଅଙ୍କନ କରାଯିବ"
 
 #: ../gtk/gtkwidget.c:1521
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "ଦର୍ଶିକା ରେଖା ପରିମାପ ଅନୁପାତ"
 
 #: ../gtk/gtkwidget.c:1522
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "ପରିମାପ ଅନୁପାତ ଯାହା ସହିତ ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ ଅଙ୍କନ କରାଯିବ"
 
 #: ../gtk/gtkwidget.c:1536
 msgid "Draw Border"
@@ -5598,7 +5603,7 @@ msgstr "ଅଙ୍କନ ଧାର"
 
 #: ../gtk/gtkwidget.c:1537
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr ""
+msgstr "ଅଙ୍କନ କରିବା ପାଇଁ ୱିଜେଟର ସ୍ଥାନ ବାହ୍ଯକ୍ଷେତ୍ରର ଆକାର"
 
 #: ../gtk/gtkwidget.c:1550
 msgid "Unvisited Link Color"
