@@ -313,15 +313,15 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 <!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
 <para>
-Emitted when there is a chance in the hierarchy to
-which a widget belong. More precisely, a widget is
+Emitted when there is a change in the hierarchy to
+which a widget belongs. More precisely, a widget is
 <firstterm>anchored</firstterm> when its toplevel
 ancestor is a #GtkWindow. This signal is emitted when 
 a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
-@widget2: 
+@widget2: the toplevel ancestor, or %NULL
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
