@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-02 20:03+0200\n"
-"PO-Revision-Date: 2006-09-02 20:00+0200\n"
+"POT-Creation-Date: 2006-09-03 01:45+0200\n"
+"PO-Revision-Date: 2006-09-03 01:45+0200\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1167,7 +1167,7 @@ msgstr "2000"
 #: ../gtk/gtkcalendar.c:1637 ../gtk/gtkcalendar.c:2215
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1183,7 +1183,7 @@ msgstr ""
 #: ../gtk/gtkcalendar.c:1671 ../gtk/gtkcalendar.c:2089
 #, c-format
 msgid "calendar:week:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -2459,7 +2459,7 @@ msgstr "Farge"
 
 #: ../gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
-msgstr ""
+msgstr "Finpuss"
 
 #: ../gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
@@ -3917,7 +3917,7 @@ msgstr "Ingen"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
-msgstr ""
+msgstr "Avgrensa"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Confidential"
