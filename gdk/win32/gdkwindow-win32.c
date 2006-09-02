@@ -3401,5 +3401,5 @@ gdk_window_configure_finished (GdkWindow *window)
 void
 gdk_window_beep (GdkWindow *window)
 {
-  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+  gdk_display_beep (_gdk_display);
 }

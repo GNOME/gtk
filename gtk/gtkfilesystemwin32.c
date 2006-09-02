@@ -73,6 +73,9 @@ struct _GtkFileSystemWin32
   guint timeout;
 
   GHashTable *handles;
+
+  guint execute_callbacks_idle_id;
+  GSList *callbacks;
 };
 
 /* Icon type, supplemented by MIME type
@@ -129,8 +132,9 @@ static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
 						 GTK_FILE_INFO_ICON);
 
-static void gtk_file_system_win32_iface_init  (GtkFileSystemIface       *iface);
-static void gtk_file_system_win32_finalize    (GObject                  *object);
+static void gtk_file_system_win32_iface_init  (GtkFileSystemIface      *iface);
+static void gtk_file_system_win32_dispose     (GObject                 *object);
+static void gtk_file_system_win32_finalize    (GObject                 *object);
 
 static GSList *             gtk_file_system_win32_list_volumes        (GtkFileSystem     *file_system);
 static GtkFileSystemVolume *gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
@@ -235,6 +239,8 @@ static GtkFileInfo *create_file_info       (GtkFileFolderWin32        *folder_wi
 					    WIN32_FILE_ATTRIBUTE_DATA *wfad,
 					    const char                *mime_type);
 
+static gboolean execute_callbacks_idle (gpointer data);
+
 static gboolean fill_in_names        (GtkFileFolderWin32  *folder_win32,
 				      GError             **error);
 static void     fill_in_stats        (GtkFileFolderWin32  *folder_win32);
@@ -288,6 +294,7 @@ gtk_file_system_win32_class_init (GtkFileSystemWin32Class *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->dispose = gtk_file_system_win32_dispose;
   gobject_class->finalize = gtk_file_system_win32_finalize;
 }
 
@@ -365,6 +372,9 @@ gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
   system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
 
   system_win32->handles = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  system_win32->execute_callbacks_idle_id = 0;
+  system_win32->callbacks = NULL;
 }
 
 static void
@@ -397,6 +407,7 @@ check_handles_at_finalization (GtkFileSystemWin32 *system_win32)
 #endif
 
   g_hash_table_destroy (system_win32->handles);
+  system_win32->handles = NULL;
 }
 
 #define GTK_TYPE_FILE_SYSTEM_HANDLE_WIN32 (_gtk_file_system_handle_win32_get_type ())
@@ -434,6 +445,25 @@ _gtk_file_system_handle_win32_class_init (GtkFileSystemHandleWin32Class *class)
   GObjectClass *gobject_class = (GObjectClass *) class;
 
   gobject_class->finalize = _gtk_file_system_handle_win32_finalize;
+}
+
+static void
+gtk_file_system_win32_dispose (GObject *object)
+{
+  GtkFileSystemWin32 *system_win32;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (object);
+
+  if (system_win32->execute_callbacks_idle_id)
+    {
+      g_source_remove (system_win32->execute_callbacks_idle_id);
+      system_win32->execute_callbacks_idle_id = 0;
+
+      /* call pending callbacks */
+      execute_callbacks_idle (system_win32);
+    }
+
+  G_OBJECT_CLASS (gtk_file_system_win32_parent_class)->dispose (object);
 }
 
 static void
@@ -587,7 +617,7 @@ enum callback_types
   CALLBACK_VOLUME_MOUNT
 };
 
-static void queue_callback (enum callback_types type, gpointer data);
+static void queue_callback (GtkFileSystemWin32 *system_win32, enum callback_types type, gpointer data);
 
 struct get_info_callback
 {
@@ -630,7 +660,7 @@ queue_get_info_callback (GtkFileSystemGetInfoCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_GET_INFO, info);
+  queue_callback (GTK_FILE_SYSTEM_WIN32 (handle->file_system), CALLBACK_GET_INFO, info);
 }
 
 
@@ -672,7 +702,7 @@ queue_get_folder_callback (GtkFileSystemGetFolderCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_GET_FOLDER, info);
+  queue_callback (GTK_FILE_SYSTEM_WIN32 (handle->file_system), CALLBACK_GET_FOLDER, info);
 }
 
 
@@ -717,7 +747,7 @@ queue_create_folder_callback (GtkFileSystemCreateFolderCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_CREATE_FOLDER, info);
+  queue_callback (GTK_FILE_SYSTEM_WIN32 (handle->file_system), CALLBACK_CREATE_FOLDER, info);
 }
 
 
@@ -759,7 +789,7 @@ queue_volume_mount_callback (GtkFileSystemVolumeMountCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_VOLUME_MOUNT, info);
+  queue_callback (GTK_FILE_SYSTEM_WIN32 (handle->file_system), CALLBACK_VOLUME_MOUNT, info);
 }
 
 
@@ -777,17 +807,22 @@ struct callback_info
 };
 
 
-static guint execute_callbacks_idle_id = 0;
-static GSList *callbacks = NULL;
 
 static gboolean
 execute_callbacks_idle (gpointer data)
 {
   GSList *l;
+  gboolean unref_file_system = TRUE;
+  GtkFileSystemWin32 *system_win32 = GTK_FILE_SYSTEM_WIN32 (data);
 
   GDK_THREADS_ENTER ();
 
-  for (l = callbacks; l; l = l->next)
+  if (!system_win32->execute_callbacks_idle_id)
+    unref_file_system = FALSE;
+  else
+    g_object_ref (system_win32);
+
+  for (l = system_win32->callbacks; l; l = l->next)
     {
       struct callback_info *info = l->data;
 
@@ -813,10 +848,13 @@ execute_callbacks_idle (gpointer data)
       g_free (info);
     }
 
-  g_slist_free (callbacks);
-  callbacks = NULL;
+  g_slist_free (system_win32->callbacks);
+  system_win32->callbacks = NULL;
 
-  execute_callbacks_idle_id = 0;
+  if (unref_file_system)
+    g_object_unref (system_win32);
+
+  system_win32->execute_callbacks_idle_id = 0;
 
   GDK_THREADS_LEAVE ();
 
@@ -824,7 +862,9 @@ execute_callbacks_idle (gpointer data)
 }
 
 static void
-queue_callback (enum callback_types type, gpointer data)
+queue_callback (GtkFileSystemWin32  *system_win32,
+		enum callback_types  type,
+		gpointer             data)
 {
   struct callback_info *info;
 
@@ -850,10 +890,10 @@ queue_callback (enum callback_types type, gpointer data)
 	break;
     }
 
-  callbacks = g_slist_append (callbacks, info);
+  system_win32->callbacks = g_slist_append (system_win32->callbacks, info);
 
-  if (!execute_callbacks_idle_id)
-    execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, NULL);
+  if (!system_win32->execute_callbacks_idle_id)
+    system_win32->execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, system_win32);
 }
 
 static GtkFileSystemHandle *
@@ -1087,8 +1127,9 @@ gtk_file_system_win32_get_folder (GtkFileSystem                 *file_system,
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_win32), NULL, data);
 
   /* Start loading the folder contents in an idle */
-  folder_win32->load_folder_id =
-    g_idle_add ((GSourceFunc) load_folder, folder_win32);
+  if (!folder_win32->load_folder_id)
+    folder_win32->load_folder_id =
+      g_idle_add ((GSourceFunc) load_folder, folder_win32);
 
   return handle;
 }

@@ -1,3 +1,11 @@
+2006-09-03  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_beep): No
+	GDK_WINDOW_DISPLAY in the Win32 backend.
+
+	* gtk/gtkfilesystemwin32.c: Copy what Kris did to
+	gtkfilesystemunix.c
+
 2006-09-02  Kristian Rietveld  <kris@imendio.com>
 
 	First part of file chooser fixes.
