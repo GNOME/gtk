@@ -1905,7 +1905,11 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 	  shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
 	}
       else
-	shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
+        {
+	  shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
+	  if (volume)
+	    gtk_file_system_volume_free (impl->file_system, volume);
+	}
 
       if (base_path)
 	gtk_file_path_free (base_path);
@@ -1965,7 +1969,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					      G_TYPE_BOOLEAN,   /* is the previous column a volume? */
 					      G_TYPE_BOOLEAN,   /* removable */
 					      G_TYPE_BOOLEAN,   /* pixbuf cell visibility */
-					      G_TYPE_OBJECT);   /* GtkFileSystemHandle */
+					      G_TYPE_POINTER);   /* GtkFileSystemHandle */
 
   if (impl->file_system)
     {
@@ -5783,6 +5787,7 @@ show_and_select_paths_finished_loading (GtkFileFolder *folder,
 
   browse_files_center_selected_row (data->impl);
 
+  g_object_unref (data->impl);
   gtk_file_paths_free (data->paths);
   g_free (data);
 }

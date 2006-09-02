@@ -1,3 +1,28 @@
+2006-09-02  Kristian Rietveld  <kris@imendio.com>
+
+	First part of file chooser fixes.
+
+	* gtk/gtkfilechooserbutton.c (model_add_special): also set the
+	handle in the model for the desktopdir case.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_current_folder): free
+	volume in case we retrieved it but don't pass it on to insert_path,
+	(shortcuts_model_create): change the column type for the handles
+	to pointer instead of GObject so our handle ref counting is not
+	disturbed,
+	(show_and_select_paths_finished_loading): don't forget to unref
+	the dialog.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_class_init),
+	(gtk_file_system_unix_init), (gtk_file_system_unix_dispose):
+	remove pending execute_callbacks_idle during dispose, also
+	execute all callbacks waiting to be run in the next idle,
+	(queue_*callback), (execute_callbacks_idle): refactor to maintain
+	a list of callbacks to call per file system instead of globally,
+	guard the file system during callback invocation,
+	(gtk_file_system_unix_get_folder): only add load folder idle if
+	none has been added yet.
+
 2006-09-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Don't unnecessarily reset the im context
