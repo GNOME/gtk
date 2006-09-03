@@ -1,3 +1,11 @@
+2006-09-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzView.c (drawRect): Don't do anything if
+	exposure isn't in the event mask, plug a leak, and check that the
+	window isn't destroyed.
+	(isOpaque): Check that the window isn't destroyed, fixes bug 
+	#353028.
+
 2006-09-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix a typo.  
