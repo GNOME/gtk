@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-27 20:50+0200\n"
-"PO-Revision-Date: 2006-08-27 20:51+0200\n"
+"PO-Revision-Date: 2006-09-03 12:13+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -5613,7 +5613,7 @@ msgstr "Die für gerade Zeilen zu verwendende Farbe"
 
 #: ../gtk/gtktreeview.c:793
 msgid "Row Ending details"
-msgstr ""
+msgstr "Details der Zeilenenden"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
