@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-01 07:10+0200\n"
-"PO-Revision-Date: 2006-09-01 11:30+0530\n"
+"PO-Revision-Date: 2006-09-03 03:41+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,23 +34,23 @@ msgstr "ରଙ୍ଗକ୍ଷେତ୍ର"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:97
 msgid "The colorspace in which the samples are interpreted"
-msgstr ""
+msgstr "ରଙ୍ଗସ୍ଥାନ ଯେଉଁଥିରେ ନମୁନା ଗୁଡୁକୁ ବ୍ଯାଖ୍ଯା କରାଯାଇଛି"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:105
 msgid "Has Alpha"
-msgstr ""
+msgstr "ନିକଟରେ ଆଲଫା ଅଛି"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:106
 msgid "Whether the pixbuf has an alpha channel"
-msgstr ""
+msgstr "ପିକ୍ସ-ବଫ ର ଗୋଟିଏ ଆଲଫା ଉପପଥ ଅଛି କି"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:119
 msgid "Bits per Sample"
-msgstr ""
+msgstr "ନମୁନା ପ୍ରତି ବିଟ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:120
 msgid "The number of bits per sample"
-msgstr ""
+msgstr "ପ୍ରତି ନମୁନା ପାଇଁ କେତେ ବିଟ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:129 ../gtk/gtklayout.c:618
 #: ../gtk/gtktreeviewcolumn.c:201
@@ -59,7 +59,7 @@ msgstr "ପ୍ରସ୍ଥ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:130
 msgid "The number of columns of the pixbuf"
-msgstr ""
+msgstr "ପିକ୍ସ-ବଫ ର ସ୍ତମ୍ଭ ସଂଖ୍ଯା"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:139 ../gtk/gtklayout.c:627
 msgid "Height"
@@ -67,31 +67,31 @@ msgstr "ଉଚ୍ଚତା"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:140
 msgid "The number of rows of the pixbuf"
-msgstr ""
+msgstr "ପିକ୍ସ-ବଫ ର ଧାଡି ସଂଖ୍ଯା"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:156
 msgid "Rowstride"
-msgstr ""
+msgstr "ଧାଡି-ଦୈର୍ଘ୍ଯ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:157
 msgid "The number of bytes between the start of a row and the start of the next row"
-msgstr ""
+msgstr "ଗୋଟିଏ ଧାଡିର ପ୍ରାରମ୍ଭ ଏବଂ ପରବର୍ତ୍ତୀ ଧାଡିର ପ୍ରାରମ୍ଭ ମଧ୍ଯରେ ବାଇଟ ସଂଖ୍ଯା"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:166
 msgid "Pixels"
-msgstr ""
+msgstr "ପିକ୍ସେଲ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:167
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr ""
+msgstr "ପିକ୍ସ-ବଫ ର ପିକ୍ସେଲ ତଥ୍ଯ ପାଇଁ ଗୋଟିଏ ସୂଚକ"
 
 #: ../gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ପ୍ରଦର୍ଶନ"
 
 #: ../gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
-msgstr ""
+msgstr "GDK ପାଇଁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ପ୍ରଦର୍ଶନ"
 
 #: ../gdk/gdkpango.c:546 ../gtk/gtkinvisible.c:86 ../gtk/gtkwindow.c:530
 msgid "Screen"
@@ -99,37 +99,38 @@ msgstr "ପରଦା"
 
 #: ../gdk/gdkpango.c:547
 msgid "the GdkScreen for the renderer"
-msgstr ""
+msgstr "ଚିତ୍ରଣ କରିବା ପାଇଁ GdkScreen"
 
 #: ../gdk/gdkscreen.c:74
 msgid "Font options"
-msgstr ""
+msgstr "ଅକ୍ଷରରୂପ ବିକଲ୍ପ"
 
 #: ../gdk/gdkscreen.c:75
 msgid "The default font options for the screen"
-msgstr ""
+msgstr "ପରଦା ପାଇଁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଅକ୍ଷରରୂପ ବିକଲ୍ପ"
 
 #: ../gdk/gdkscreen.c:82
 msgid "Font resolution"
-msgstr ""
+msgstr "ଅକ୍ଷରରୂପ ବିଭେଦନ"
 
 #: ../gdk/gdkscreen.c:83
 msgid "The resolution for fonts on the screen"
-msgstr ""
+msgstr "ପରଦାରେ ଅକ୍ଷରରୂପ ପାଇଁ ବିଭେଦନ"
 
 #: ../gtk/gtkaboutdialog.c:206
 msgid "Program name"
-msgstr "ପ୍ରୋଗ୍ରାମ ର ନାମ"
+msgstr "ପ୍ରୋଗ୍ରାମ ନାମ"
 
 #: ../gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
+"ପ୍ରୋଗ୍ରାମ ର ନାମ। ଯଦି ଏହା ସେଟ କରାଯାଇ ନାହିଁ, ତାହାହେଲେ ଏହା ପୂର୍ବନିର୍ଦ୍ଧାରିତ g_get_application_name() ହେବ"
 
 #: ../gtk/gtkaboutdialog.c:221
 msgid "Program version"
-msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
+msgstr "ପ୍ରୋଗ୍ରାମ ସଂସ୍କରଣ"
 
 #: ../gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
@@ -153,29 +154,31 @@ msgstr "ପ୍ରୋଗ୍ରାମ ବିଷୟରେ ଟିପ୍ପଣୀ"
 
 #: ../gtk/gtkaboutdialog.c:289
 msgid "Website URL"
-msgstr ""
+msgstr "ୱେବସାଇଟ ୟୁ.ଆର.ଏଲ."
 
 #: ../gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "ପ୍ରୋଗ୍ରାମ ର ୱେବସାଇଟ ସହିତ ସଂଯୋଗ କରିବା ପାଇଁ ୟୁ.ଆର.ଏଲ."
 
 #: ../gtk/gtkaboutdialog.c:306
 msgid "Website label"
-msgstr ""
+msgstr "ୱେବସାଇଟ ସୂଚକ"
 
 #: ../gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
+"ପ୍ରୋଗ୍ରାମ ର ୱେବସାଇଟ ସହିତ ସଂଯୋଗ କରିବା ପାଇଁ ସୂଚକ। ଯଦି ଏହାକୁ ସେଟ କରାଯାଇ ନାହିଁ, ଏହା ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୟୁ.ଆର.ଏଲ. ରୂପେ "
+"ବିନ୍ଯସ୍ତ ହୋଇଯିବ"
 
 #: ../gtk/gtkaboutdialog.c:323
 msgid "Authors"
-msgstr "ଲେଖକ ମାନେ"
+msgstr "ଲେଖକ ଗଣ"
 
 #: ../gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
-msgstr ""
+msgstr "ପ୍ରୋଗ୍ରାମର ଲେଖକ ମାନଙ୍କର ତାଲିକା"
 
 #: ../gtk/gtkaboutdialog.c:340
 msgid "Documenters"
@@ -187,15 +190,16 @@ msgstr "ଏହି ପ୍ରୋଗ୍ରାମର ଦସ୍ତାବେଜୀକ�
 
 #: ../gtk/gtkaboutdialog.c:357
 msgid "Artists"
-msgstr ""
+msgstr "କଳାକାର"
 
 #: ../gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "ପ୍ରୋଗ୍ରାମର କାରୁକୃତି ପାଇଁ ଯୋଗଦାନ କରିଥିବା ଲୋକ ମାନଙ୍କର ତାଲିକା"
 
 #: ../gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
-msgstr "ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>"
+msgstr "ଗୋରା ମହାନ୍ତି <gora_mohanty@yahoo.co.in>\n"
+"ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>"
 
 #: ../gtk/gtkaboutdialog.c:376
 msgid "Credits to the translators. This string should be marked as translatable"
@@ -210,38 +214,40 @@ msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"ବିବରଣୀ ବାକ୍ସ ପାଇଁ ପ୍ରତୀକ। ଯଦି ଏହାକୁ ସେଟ କରାଯାଇ ନାହିଁ, ତାହାହେଲେ ଏହା ପୂର୍ବନିର୍ଦ୍ଧାରିତ "
+"gtk_window_get_default_icon_list() ରୂପେ ବିନ୍ଯସ୍ତ ହୋଇଯିବ"
 
 #: ../gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
-msgstr ""
+msgstr "ପ୍ରତୀକ ଚିତ୍ରସଙ୍କେତ ନାମ"
 
 #: ../gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "ବିବରଣୀ ବାକ୍ସରେ ବ୍ଯବହାର କରାଯିବା ପ୍ରତୀକ ପାଇଁ ଗୋଟିଏ ପ୍ରଖ୍ଯାତ ଚିତ୍ରସଙ୍କେତ"
 
 #: ../gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
-msgstr ""
+msgstr "ପାଠ୍ଯଭଙ୍ଗ ଲାଇସେନ୍ସ"
 
 #: ../gtk/gtkaboutdialog.c:422
 msgid "Whether to wrap the license text."
-msgstr ""
+msgstr "ଲାଇସେନ୍ସ ପାଠ୍ଯକୁ ଆବୃତ କରାଯିବ କି।"
 
 #: ../gtk/gtkaccellabel.c:111
 msgid "Accelerator Closure"
-msgstr ""
+msgstr "ତ୍ବରକ ପରିସମାପ୍ତି"
 
 #: ../gtk/gtkaccellabel.c:112
 msgid "The closure to be monitored for accelerator changes"
-msgstr ""
+msgstr "ତ୍ବରକ ପରିବର୍ତ୍ତନ ପାଇଁ ଦୃଷ୍ଟି ରଖାଯିବା ପରିସମାପ୍ତି ବିତର୍କ"
 
 #: ../gtk/gtkaccellabel.c:118
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "ତ୍ବରକ ୱିଜେଟ"
 
 #: ../gtk/gtkaccellabel.c:119
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "ତ୍ବରକ ପରିବର୍ତ୍ତନ ପାଇଁ ଦୃଷ୍ଟି ରଖାଯିବା ୱିଜେଟ"
 
 #: ../gtk/gtkaction.c:191 ../gtk/gtkactiongroup.c:137 ../gtk/gtkprinter.c:119
 msgid "Name"
@@ -249,7 +255,7 @@ msgstr "ନାମ"
 
 #: ../gtk/gtkaction.c:192
 msgid "A unique name for the action."
-msgstr ""
+msgstr "କାର୍ଯ୍ଯ ପାଇଁ ଗୋଟିଏ ଅନନ୍ଯ ନାମ"
 
 #: ../gtk/gtkaction.c:199 ../gtk/gtkbutton.c:199 ../gtk/gtkexpander.c:185
 #: ../gtk/gtkframe.c:95 ../gtk/gtklabel.c:294 ../gtk/gtktoolbutton.c:180
@@ -258,46 +264,46 @@ msgstr "ସୂଚକ"
 
 #: ../gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
+msgstr "ଏହି କାର୍ଯ୍ଯକୁ ସକ୍ରିୟ କରୁଥିବା ବଟନ ଏବଂ ତାଲିକା ବସ୍ତୁ ପାଇଁ ବ୍ଯବହୃତ ହେଉଥିବା ସୂଚକ।"
 
 #: ../gtk/gtkaction.c:207
 msgid "Short label"
-msgstr ""
+msgstr "କ୍ଷୁଦ୍ର ସୂଚକ"
 
 #: ../gtk/gtkaction.c:208
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr ""
+msgstr "ସାଧନ ପଟି ବଟନରେ ବ୍ଯବହୃତ ହୋଇ ପାରିବା ଗୋଟିଏ କ୍ଷୁଦ୍ର ସୂଚକ"
 
 #: ../gtk/gtkaction.c:214
 msgid "Tooltip"
-msgstr ""
+msgstr "ଉପକରଣ ସୂଚନା"
 
 #: ../gtk/gtkaction.c:215
 msgid "A tooltip for this action."
-msgstr ""
+msgstr "ଏହି କାର୍ଯ୍ଯ ପାଇଁ ଉପକରଣ ସୂଚନା।"
 
 #: ../gtk/gtkaction.c:221
 msgid "Stock Icon"
-msgstr ""
+msgstr "ଷ୍ଟୋକ ଚିତ୍ରସଙ୍କେତ"
 
 #: ../gtk/gtkaction.c:222
 msgid "The stock icon displayed in widgets representing this action."
-msgstr ""
+msgstr "ଏହି କାର୍ଯ୍ଯକୁ ବର୍ଣ୍ଣନା କରୁଥିବା ଷ୍ଟୋକ ଚିତ୍ରସଙ୍କେତରେ ପ୍ରଦର୍ଶିତ ୱିଜେଟ"
 
 #: ../gtk/gtkaction.c:239 ../gtk/gtkcellrendererpixbuf.c:172
 #: ../gtk/gtkimage.c:229 ../gtk/gtkprinter.c:168 ../gtk/gtkstatusicon.c:170
 #: ../gtk/gtkwindow.c:522
 msgid "Icon Name"
-msgstr ""
+msgstr "ଚିତ୍ରସଙ୍କେତ ନାମ"
 
 #: ../gtk/gtkaction.c:240 ../gtk/gtkcellrendererpixbuf.c:173
 #: ../gtk/gtkimage.c:230 ../gtk/gtkstatusicon.c:171
 msgid "The name of the icon from the icon theme"
-msgstr ""
+msgstr "ଚିତ୍ରସଙ୍କେତ ପ୍ରସଙ୍ଗରୁ ଉପଲବ୍ଧ ଚିତ୍ରସଙ୍କେତର ନାମ"
 
 #: ../gtk/gtkaction.c:246 ../gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତର ଥିବା ସମୟରେ ଦୃଶ୍ଯ"
 
 #: ../gtk/gtkaction.c:247 ../gtk/gtktoolitem.c:131
 msgid ""
@@ -4525,23 +4531,23 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:206
 msgid "Background stipple mask"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ବିନ୍ଦୁରୀତି ମାସ୍କ"
 
 #: ../gtk/gtktexttag.c:207
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "ପାଠ୍ଯ ପୃଷ୍ଠଭୂମି ଅଙ୍କନ କରିବା ସମୟରେ"
 
 #: ../gtk/gtktexttag.c:224
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr ""
+msgstr "ଗୋଟିଏ (ସମ୍ଭବତଃ ଅବଣ୍ଟିତ) GdkColor ରଙ୍ଗ ଭାବରେ ଅଗ୍ରଭୂମି"
 
 #: ../gtk/gtktexttag.c:232
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "ଅଗ୍ରଭୂମି ବିନ୍ଦୁରୀତି ମାସ୍କ"
 
 #: ../gtk/gtktexttag.c:233
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "ପାଠ୍ଯ ଅଗ୍ରଭୂମିକୁ ଅଙ୍କନ କରିବା ସମୟରେ ଗୋଟିଏ ମାସ୍କ ଭାବରେ ବ୍ଯବହାର କରିବା ପାଇଁ ବିଟମ୍ଯାପ"
 
 #: ../gtk/gtktexttag.c:240
 msgid "Text direction"
@@ -4553,11 +4559,11 @@ msgstr "ପାଠ୍ଯକ୍ରମ, ଉଦାହରଣ ସ୍ବରୂପ ଡ�
 
 #: ../gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "ଗୋଟିଏ PangoStyle ଭାବରେ ଅକ୍ଷରୂପର ଶୈଳୀ, ଉଦାହରଣ ସ୍ବରୂପ PANGO_STYLE_ITALIC"
+msgstr "ଗୋଟିଏ PangoStyle ଭାବରେ ଅକ୍ଷରରୂପ ଶୈଳୀ, ଉଦାହରଣ ସ୍ବରୂପ PANGO_STYLE_ITALIC"
 
 #: ../gtk/gtktexttag.c:299
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "ଗୋଟିଏ PangoVariant ଭଳି ଅକ୍ଷରରୂପର ବ୍ଯତିକ୍ରମ, ଉଦାହରଣ ସ୍ବରୂପ PANGO_VARIANT_SMALL_CAPS"
+msgstr "ଗୋଟିଏ PangoVariant ଭଳି ଅକ୍ଷରରୂପ ବ୍ଯତିକ୍ରମ, ଉଦାହରଣ ସ୍ବରୂପ PANGO_VARIANT_SMALL_CAPS"
 
 #: ../gtk/gtktexttag.c:308
 msgid ""
@@ -4567,7 +4573,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:319
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "ଗୋଟିଏ PangoStretch ଭଳି ଅକ୍ଷରରୂପ ପ୍ରସାରଣ, ଉଦାହରଣ ସ୍ବରୂପ PANGO_STRETCH_CONDENSED"
 
 #: ../gtk/gtktexttag.c:328
 msgid "Font size in Pango units"
