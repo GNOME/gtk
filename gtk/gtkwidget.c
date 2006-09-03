@@ -1208,7 +1208,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * %TRUE. In this case, the handler must ensure that gtk_drag_finish() is called 
    * to let the source know that the drop is done. The call to gtk_drag_finish() 
    * can be done either directly or in a ::drag-data-received handler which gets 
-   * triggered by calling gtk_drop_get_data() to receive the data for one or more 
+   * triggered by calling gtk_drag_get_data() to receive the data for one or more 
    * of the supported targets.
    */
   widget_signals[DRAG_DROP] =
