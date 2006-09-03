@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-01 07:10+0200\n"
-"PO-Revision-Date: 2006-09-04 02:03+0530\n"
+"PO-Revision-Date: 2006-09-04 02:23+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
 "MIME-Version: 1.0\n"
@@ -1607,11 +1607,10 @@ msgid "The folder could not be created"
 msgstr "फोल्डर निर्माण करता आले नाही"
 
 #: ../gtk/gtkfilechooserdefault.c:964
-#, fuzzy
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
-msgstr "a अस्तित्वात आहे a च्यासाठी पहिला."
+msgstr ""
 
 # gdk-pixbuf/io-xbm.c:283
 #: ../gtk/gtkfilechooserdefault.c:977
@@ -1643,9 +1642,8 @@ msgstr "खूणगाठ '%s' काढून टाका"
 
 #: ../gtk/gtkfilechooserdefault.c:3011
 #, c-format
-#, fuzzy
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr "a च्यासाठी आहे."
+msgstr ""
 
 # gtk/gtkstock.c:319
 #: ../gtk/gtkfilechooserdefault.c:3242
@@ -2067,11 +2065,10 @@ msgstr "फाइल प्रणाली"
 
 #: ../gtk/gtkfilesystemunix.c:1297 ../gtk/gtkfilesystemwin32.c:1413
 #, c-format
-#, fuzzy
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "आहे a."
+msgstr ""
 
 #: ../gtk/gtkfilesystemunix.c:1846 ../gtk/gtkfilesystemwin32.c:2028
 #, c-format
@@ -2172,13 +2169,12 @@ msgstr "आइकान सुरु करताना चुक: %s"
 
 #: ../gtk/gtkicontheme.c:1314
 #, c-format
-#, fuzzy
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
 "was not found either, perhaps you need to install it.\n"
 "You can get a copy from:\n"
 "\t%s"
-msgstr "a"
+msgstr ""
 
 #: ../gtk/gtkicontheme.c:1383
 #, c-format
@@ -2846,15 +2842,13 @@ msgstr "खाजगी साधने दाखवा(_P)"
 
 #: ../gtk/gtkrecentchoosermenu.c:431 ../gtk/gtkrecentchoosermenu.c:487
 #, c-format
-#, fuzzy
 msgid "No recently used resource found with URI `%s'"
-msgstr "नाही"
+msgstr ""
 
 #: ../gtk/gtkrecentchoosermenu.c:511 ../gtk/gtkrecentchoosermenu.c:519
 #, c-format
-#, fuzzy
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr "आहे च्यासाठी"
+msgstr ""
 
 #: ../gtk/gtkrecentchoosermenu.c:854
 #, c-format
@@ -3387,21 +3381,18 @@ msgstr "--- मदत नाही ---"
 
 #: ../gtk/gtkuimanager.c:1126
 #, c-format
-#, fuzzy
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "अपरिचित वर"
+msgstr ""
 
 #: ../gtk/gtkuimanager.c:1343
 #, c-format
-#, fuzzy
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "वर"
+msgstr ""
 
 #: ../gtk/gtkuimanager.c:1433
 #, c-format
-#, fuzzy
 msgid "Unexpected character data on line %d char %d"
-msgstr "वर"
+msgstr ""
 
 #: ../gtk/gtkuimanager.c:2224
 msgid "Empty"
@@ -4186,189 +4177,175 @@ msgstr "#14 पाकीट"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "#9 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
-#, fuzzy
 msgid "paper size|Personal Envelope"
-msgstr "खाजगी"
+msgstr "खाजगी पाकीट"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:281
-#, fuzzy
 msgid "paper size|Quarto"
-msgstr "स्पेसरचा आकार"
+msgstr "Quarto"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:283
-#, fuzzy
 msgid "paper size|Super A"
-msgstr "स्पेसरचा आकार"
+msgstr "सूपर A"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:285
-#, fuzzy
 msgid "paper size|Super B"
-msgstr "स्पेसरचा आकार"
+msgstr "सूपर B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
-#, fuzzy
 msgid "paper size|Wide Format"
-msgstr "स्वरुप(फॉरमॅट)"
+msgstr "रूंद स्वरुप"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
-#, fuzzy
 msgid "paper size|Folio"
-msgstr "स्पेसरचा आकार"
+msgstr "Folio"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:293
-#, fuzzy
 msgid "paper size|Folio sp"
-msgstr "स्पेसरचा आकार"
+msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "आमंत्रण पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "इटालिअन पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:301
-#, fuzzy
 msgid "paper size|pa-kai"
-msgstr "स्पेसरचा आकार"
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "Postfix पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:305
-#, fuzzy
 msgid "paper size|Small Photo"
-msgstr "लहान"
+msgstr "लहान छायाचित्र"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "prc1 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "prc10 पाकीट"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:311
-#, fuzzy
 msgid "paper size|prc 16k"
-msgstr "स्पेसरचा आकार"
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "prc2 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "prc3 पाकीट"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:317
-#, fuzzy
 msgid "paper size|prc 32k"
-msgstr "स्पेसरचा आकार"
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "prc4 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "prc5 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "prc6 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "prc7 पाकीट"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "prc8 पाकीट"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:329
-#, fuzzy
 msgid "paper size|ROC 16k"
-msgstr "ROC"
+msgstr "ROC 16k"
 
 # gtk/gtktoolbar.c:242
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:331
-#, fuzzy
 msgid "paper size|ROC 8k"
-msgstr "ROC"
+msgstr "ROC 8k"
 
 # modules/input/imam-et.c:454
 #. ID
 #: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr "Amharic (EZ+)"
+msgstr "आम्हारिक (EZ+)"
 
 #. ID
 #: ../modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr ""
+msgstr "सेडिल्ला"
 
 # modules/input/imcyrillic-translit.c:216
 #. ID
 #: ../modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Cyrillic (Transliterated)"
+msgstr "सिरिलिक (Transliterated)"
 
 # modules/input/iminuktitut.c:126
 #. ID
 #: ../modules/input/iminuktitut.c:127
-#, fuzzy
 msgid "Inuktitut (Transliterated)"
-msgstr "Inukitut (Transliterated)"
+msgstr "इनुक्टीटूट (Transliterated)"
 
 # modules/input/imipa.c:144
 #. ID
@@ -4380,141 +4357,127 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr "Thai (Broken)"
+msgstr "थाई (भंगीत)"
 
 # modules/input/imti-er.c:453
 #. ID
 #: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrigna-Eritrean (EZ+)"
+msgstr "टिग्रीना-एरिट्रीन (EZ+)"
 
 # modules/input/imti-et.c:453
 #. ID
 #: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr "टिग्रीना-इथिओपिअन (EZ+)"
 
 # modules/input/imviqr.c:243
 #. ID
 #: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr "विएटनामी (VIQR)"
+msgstr "विएतनामी (VIQR)"
 
 # modules/input/imxim.c:27
 #. ID
 #: ../modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "X माहीती पध्दत "
+msgstr "X आदान पध्दत "
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1454
 msgid "Two Sided"
-msgstr ""
+msgstr "पाठपोट"
 
 # gtk/gtkmessagedialog.c:113
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1455
-#, fuzzy
 msgid "Paper Type"
 msgstr "कागद प्रकार"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1456
-#, fuzzy
 msgid "Paper Source"
 msgstr "कागद स्त्रोत"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Output Tray"
-msgstr ""
+msgstr "प्रदान ट्रे"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
-#, fuzzy
 msgid "One Sided"
-msgstr "एक"
+msgstr "एका बाजूचे"
 
 # gtk/gtkfontsel.c:1253
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
-#, fuzzy
 msgid "Auto Select"
-msgstr "फोन्ट निवडणे"
+msgstr "स्वयं निवडणे"
 
 # gtk/gtkwindow.c:466
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1471
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1920
-#, fuzzy
 msgid "Printer Default"
-msgstr "मुलभूत"
+msgstr "मुलभूत प्रिंटर"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Urgent"
-msgstr ""
+msgstr "तातडीने"
 
 # gtk/gtklayout.c:642
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2108
-#, fuzzy
 msgid "High"
 msgstr "उंच"
 
 # gtk/gtkoptionmenu.c:188
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2108
-#, fuzzy
 msgid "Medium"
 msgstr "मध्यम"
 
 # gtk/gtkruler.c:118
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2108
-#, fuzzy
 msgid "Low"
 msgstr "खाली"
 
 # gtk/gtkinputdialog.c:519
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
-#, fuzzy
 msgid "None"
 msgstr "काहीच नाही"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
-msgstr ""
+msgstr "वर्गीकृत"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
-#, fuzzy
 msgid "Confidential"
 msgstr "गुप्त"
 
 # gtk/gtkinputdialog.c:246
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
-#, fuzzy
 msgid "Secret"
-msgstr "पडदा"
+msgstr "गुपित"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Standard"
-msgstr ""
+msgstr "मानक"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Top Secret"
-msgstr ""
+msgstr "उच्च गुपित"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Unclassified"
-msgstr ""
+msgstr "अवर्गिकृत"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
-#, fuzzy
 msgid "Print to LPR"
-msgstr "छापा"
+msgstr "LPR वर छापा"
 
 # gdk-pixbuf/io-wbmp.c:296
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
-#, fuzzy
 msgid "Pages Per Sheet"
-msgstr "प्रतिमेची ऊंची शून्य आहे"
+msgstr "प्रति पत्र पृष्ठे"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
-#, fuzzy
 msgid "Command Line"
 msgstr "आदेश पंक्ती"
 
@@ -4522,51 +4485,48 @@ msgstr "आदेश पंक्ती"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:232
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "प्रदान.%s"
 
 # gtk/gtkstock.c:313
 #: ../modules/printbackends/file/gtkprintbackendfile.c:457
-#, fuzzy
 msgid "Print to File"
-msgstr "छापा फाइल"
+msgstr "फाइलमध्ये छापा"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:481
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 # gtk/gtkstock.c:313
 #: ../modules/printbackends/file/gtkprintbackendfile.c:481
-#, fuzzy
 msgid "Postscript"
-msgstr "मुद्रण(_P)"
+msgstr "Postscript"
 
 # gtk/gtkfilesel.c:742
 #: ../modules/printbackends/file/gtkprintbackendfile.c:534
-#, fuzzy
 msgid "File"
 msgstr "फाइल"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "_Output format"
-msgstr ""
+msgstr "प्रदान स्वरूप(_O)"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:538
 #: ../tests/testfilechooser.c:205
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "च्यासाठी"
+msgstr "'%s' फाइलची माहिती मिळवता आली नाही: %s"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "directfb arg"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "प्रणाली"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 # gtk/gtkcellrenderertoggle.c:131
 #: ../gtk/gtklinkbutton.c:142
@@ -4576,15 +4536,13 @@ msgstr "बटनाची परीवर्तन करण्याची स
 
 # gtk/gtkstock.c:283
 #: ../gtk/gtklinkbutton.c:396
-#, fuzzy
 msgid "Copy URL"
-msgstr "प्रतिलिपी URL"
+msgstr "URL प्रतिलिपी करा"
 
 # gtk/gtkfilesel.c:2986
 #: ../gtk/gtklinkbutton.c:536
-#, fuzzy
 msgid "Invalid URI"
-msgstr "अवैध"
+msgstr "अवैध URI"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -4594,21 +4552,18 @@ msgstr "अपरिचित"
 
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
-#, fuzzy
 msgid "No deserialize function found for format %s"
-msgstr "नाही च्यासाठी"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
 #, c-format
-#, fuzzy
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "वर"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
-#, fuzzy
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "वर"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
@@ -4617,21 +4572,18 @@ msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
-#, fuzzy
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "a"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
-#, fuzzy
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "वर"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
-#, fuzzy
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "आहे वर"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -4650,33 +4602,28 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
 #: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
 #, c-format
-#, fuzzy
 msgid "Element <%s> is not allowed below <%s>"
-msgstr "आहे"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
-#, fuzzy
 msgid "\"%s\" is not a valid attribute type"
-msgstr "आहे a"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
-#, fuzzy
 msgid "\"%s\" is not a valid attribute name"
-msgstr "आहे a"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-#, fuzzy
 msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "a च्यासाठी"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
-#, fuzzy
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "आहे a च्यासाठी"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
@@ -4699,43 +4646,36 @@ msgid "A <%s> element has already been specified"
 msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1380
-#, fuzzy
 msgid "A <text> element can't occur before a <tags> element"
-msgstr "<text> आधी a<tags>"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1788
-#, fuzzy
 msgid "Serialized data is malformed"
-msgstr "आहे"
+msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1866
-#, fuzzy
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "आहे"
+msgstr ""
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
-#, fuzzy
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "च्यासाठी"
+msgstr ""
 
 # gdk-pixbuf/io-tiff.c:273
 #: ../gtk/updateiconcache.c:1116
-#, fuzzy
 msgid "Failed to write header\n"
-msgstr "TIFF प्रतिमा उघडण्यात असफल"
+msgstr ""
 
 # gdk-pixbuf/io-tiff.c:273
 #: ../gtk/updateiconcache.c:1122
-#, fuzzy
 msgid "Failed to write hash table\n"
-msgstr "TIFF प्रतिमा उघडण्यात असफल"
+msgstr ""
 
 # gdk-pixbuf/io-xbm.c:427
 #: ../gtk/updateiconcache.c:1128
-#, fuzzy
 msgid "Failed to write directory index\n"
-msgstr "XBM प्रतिमा फाइल सुरु करताना तात्पुरत्या फाइलमध्ये लेखन करतेवेळी असफल"
+msgstr ""
 
 # gdk-pixbuf/io-tiff.c:273
 #: ../gtk/updateiconcache.c:1136
@@ -4776,18 +4716,16 @@ msgid "Overwrite an existing cache, even if uptodate"
 msgstr "गिरवा"
 
 #: ../gtk/updateiconcache.c:1283
-#, fuzzy
 msgid "Don't check for the existence of index.theme"
-msgstr "च्यासाठी"
+msgstr ""
 
 #: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
 msgstr ""
 
 #: ../gtk/updateiconcache.c:1285
-#, fuzzy
 msgid "Output a C header file"
-msgstr "a"
+msgstr ""
 
 #: ../gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
@@ -4795,9 +4733,8 @@ msgstr ""
 
 #: ../gtk/updateiconcache.c:1314
 #, c-format
-#, fuzzy
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "नाही"
+msgstr ""
 
