@@ -206,6 +206,7 @@ struct _GtkFileChooserDefault
   GtkFileSystemHandle *update_current_folder_handle;
   GtkFileSystemHandle *show_and_select_paths_handle;
   GtkFileSystemHandle *should_respond_get_info_handle;
+  GtkFileSystemHandle *file_exists_get_info_handle;
   GtkFileSystemHandle *update_from_entry_handle;
   GtkFileSystemHandle *shortcuts_activate_iter_handle;
   GSList *pending_handles;

@@ -77,6 +77,28 @@ set_filename_timeout_cb (gpointer data)
   return FALSE;
 }
 
+
+static guint wait_for_idle_id = 0;
+
+static gboolean
+wait_for_idle_idle (gpointer data)
+{
+  wait_for_idle_id = 0;
+
+  return FALSE;
+}
+
+static void
+wait_for_idle (void)
+{
+  wait_for_idle_id = g_idle_add_full (G_PRIORITY_LOW + 100,
+				      wait_for_idle_idle,
+				      NULL, NULL);
+
+  while (wait_for_idle_id)
+    gtk_main_iteration ();
+}
+
 static gboolean
 test_set_filename (GtkFileChooserAction action,
 		   gboolean focus_button,
@@ -289,7 +311,7 @@ confirm_overwrite_timeout_cb (gpointer data)
 
 /* http://bugzilla.gnome.org/show_bug.cgi?id=347883 */
 static gboolean
-test_confirm_overwrite (void)
+test_confirm_overwrite_for_path (const char *path)
 {
   gboolean passed;
   struct confirm_overwrite_closure closure;
@@ -308,13 +330,13 @@ test_confirm_overwrite (void)
   g_signal_connect (closure.chooser, "confirm-overwrite",
 		    G_CALLBACK (confirm_overwrite_cb), &closure);
 
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (closure.chooser), "/etc/passwd"); /* a file we know will always exist */
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (closure.chooser), path);
 
   g_timeout_add (2000, confirm_overwrite_timeout_cb, &closure);
   gtk_dialog_run (GTK_DIALOG (closure.chooser));
 
   filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (closure.chooser));
-  passed = passed && filename && (strcmp (filename, "/etc/passwd") == 0);
+  passed = passed && filename && (strcmp (filename, path) == 0);
   g_free (filename);
   
   gtk_widget_destroy (closure.chooser);
@@ -323,6 +345,16 @@ test_confirm_overwrite (void)
 
   log_test (passed, "Confirm overwrite");
 
+  return passed;
+}
+
+static gboolean
+test_confirm_overwrite (void)
+{
+  gboolean passed = TRUE;
+
+  passed = passed && test_confirm_overwrite_for_path ("/etc/passwd"); /* a file we know will always exist */
+  
   return passed;
 }
 
@@ -585,6 +617,8 @@ test_reload_sequence (gboolean set_folder_before_map)
     {
       gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
 
+      wait_for_idle ();
+
       passed = passed && (impl->current_folder != NULL
 			  && impl->browse_files_model != NULL
 			  && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
@@ -593,6 +627,8 @@ test_reload_sequence (gboolean set_folder_before_map)
 			  && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 			      ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
 			      : TRUE));
+
+      wait_for_idle ();
 
       folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
       passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
@@ -608,6 +644,8 @@ test_reload_sequence (gboolean set_folder_before_map)
 			  && impl->reload_state == RELOAD_EMPTY
 			  && impl->load_timeout_id == 0);
 
+      wait_for_idle ();
+
       folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
       passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
     }
@@ -617,6 +655,8 @@ test_reload_sequence (gboolean set_folder_before_map)
   /* After mapping, it is loading some folder, either the one that was explicitly set or the default one */
 
   gtk_widget_show_now (dialog);
+
+  wait_for_idle ();
 
   passed = passed && (impl->current_folder != NULL
 		      && impl->browse_files_model != NULL
@@ -641,6 +681,8 @@ test_reload_sequence (gboolean set_folder_before_map)
 
   gtk_widget_hide (dialog);
 
+  wait_for_idle ();
+
   passed = passed && (impl->current_folder != NULL
 		      && impl->browse_files_model != NULL
 		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
@@ -663,6 +705,8 @@ test_reload_sequence (gboolean set_folder_before_map)
   /* Map it again! */
 
   gtk_widget_show_now (dialog);
+
+  wait_for_idle ();
 
   passed = passed && (impl->current_folder != NULL
 		      && impl->browse_files_model != NULL
@@ -743,6 +787,7 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   gtk_container_add (GTK_CONTAINER (window), button);
 
   /* Pre-map; no folder is set */
+  wait_for_idle ();
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
   if (must_have_cwd)
@@ -760,6 +805,9 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
 
   gtk_widget_show_all (window);
   gtk_widget_show_now (window);
+
+  wait_for_idle ();
+
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
 
   if (must_have_cwd)
@@ -777,6 +825,7 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   /* Unmap; folder should be set */
 
   gtk_widget_hide (window);
+  wait_for_idle ();
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (button));
 
   if (must_have_cwd)
@@ -800,7 +849,7 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
     passed = passed && (folder != NULL && strcmp (folder, current_working_dir) == 0);
   else
     passed = passed && (folder != NULL && strcmp (folder, g_get_home_dir()) == 0);
-
+  wait_for_idle ();
   log_test (passed, "test_button_folder_states_for_action(): %s, use_dialog=%d, set_folder_on_dialog=%d, re-mapped, %s",
 	    get_action_name (action),
 	    use_dialog,
