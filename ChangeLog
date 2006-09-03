@@ -1,3 +1,11 @@
+2006-09-04  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.c: Use wide-char API for message and
+	window handling (PeekMessage, PostMessage, SendMessage,
+	DispatchMessage, DefWindowProc, RegisterClassEx,
+	CreateWindowEx). (#321597)
+
 2006-09-03  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (save_entry_get_info_cb),

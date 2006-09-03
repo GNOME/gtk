@@ -262,15 +262,15 @@ inner_window_procedure (HWND   hwnd,
        * the window procedure.
        */
       if (modal_win32_dialog)
-	PostMessage (modal_win32_dialog, got_gdk_events_message,
-		     (WPARAM) 1, 0);
+	PostMessageW (modal_win32_dialog, got_gdk_events_message,
+		      (WPARAM) 1, 0);
       return ret_val;
     }
   else
     {
-      /* Otherwise call DefWindowProc(). */
-      GDK_NOTE (EVENTS, g_print (" DefWindowProc"));
-      return DefWindowProc (hwnd, message, wparam, lparam);
+      /* Otherwise call DefWindowProcW(). */
+      GDK_NOTE (EVENTS, g_print (" DefWindowProcW"));
+      return DefWindowProcW (hwnd, message, wparam, lparam);
     }
 }
 
@@ -417,7 +417,7 @@ gdk_events_pending (void)
   MSG msg;
   return (_gdk_event_queue_find_first (_gdk_display) ||
 	  (modal_win32_dialog == NULL &&
-	   PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
+	   PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
 }
 
 GdkEvent*
@@ -430,7 +430,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose\n"));
 
-  if (PeekMessage (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
+  if (PeekMessageW (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
     {
       handle_wm_paint (&msg, window, TRUE, &event);
       if (event != NULL)
@@ -2166,7 +2166,7 @@ gdk_event_translate (MSG  *msg,
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
-       * we return TRUE, and DefWindowProc() will not be called.
+       * we return TRUE, and DefWindowProcW() will not be called.
        */
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	return TRUE;
@@ -2194,12 +2194,11 @@ gdk_event_translate (MSG  *msg,
 	   */
 	  GDK_NOTE (EVENTS, g_print (" (posted)"));
 	
-	  PostMessage (msg->hwnd, msg->message,
-		       msg->wParam, msg->lParam);
+	  PostMessageW (msg->hwnd, msg->message, msg->wParam, msg->lParam);
 	}
       else if (msg->message == WM_CREATE)
 	{
-	  window = (UNALIGNED GdkWindow*) (((LPCREATESTRUCT) msg->lParam)->lpCreateParams);
+	  window = (UNALIGNED GdkWindow*) (((LPCREATESTRUCTW) msg->lParam)->lpCreateParams);
 	  GDK_WINDOW_HWND (window) = msg->hwnd;
 	}
       else
@@ -2453,7 +2452,7 @@ gdk_event_translate (MSG  *msg,
     case WM_SYSCHAR:
       if (msg->wParam != VK_SPACE)
 	{
-	  /* To prevent beeps, don't let DefWindowProc() be called */
+	  /* To prevent beeps, don't let DefWindowProcW() be called */
 	  return_val = TRUE;
 	  goto done;
 	}
@@ -3310,7 +3309,7 @@ gdk_event_translate (MSG  *msg,
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
 	{
-	  /* Don't call DefWindowProc() */
+	  /* Don't call DefWindowProcW() */
 	  GDK_NOTE (EVENTS, g_print (" (handled, mintrack:%ldx%ld maxtrack:%ldx%ld "
 				     "maxpos:%+ld%+ld maxsize:%ldx%ld)",
 				     mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
@@ -3505,10 +3504,10 @@ _gdk_events_queue (GdkDisplay *display)
     return;
   
   while (!_gdk_event_queue_find_first (display) &&
-	 PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
+	 PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
     {
       TranslateMessage (&msg);
-      DispatchMessage (&msg);
+      DispatchMessageW (&msg);
     }
 }
 
@@ -3525,7 +3524,7 @@ gdk_event_prepare (GSource *source,
 
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    (modal_win32_dialog == NULL &&
-	     PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
+	     PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
 
   GDK_THREADS_LEAVE ();
 
@@ -3543,7 +3542,7 @@ gdk_event_check (GSource *source)
   if (event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	      (modal_win32_dialog == NULL &&
-	       PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)));
+	       PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
   else
     retval = FALSE;
 
@@ -3600,9 +3599,9 @@ gdk_event_send_client_message_for_display (GdkDisplay     *display,
 {
   check_for_too_much_data (event);
 
-  return PostMessage ((HWND) winid, client_message,
-		      (WPARAM) event->client.message_type,
-		      event->client.data.l[0]);
+  return PostMessageW ((HWND) winid, client_message,
+		       (WPARAM) event->client.message_type,
+		       event->client.data.l[0]);
 }
 
 void
@@ -3611,9 +3610,9 @@ gdk_screen_broadcast_client_message (GdkScreen *screen,
 {
   check_for_too_much_data (event);
 
-  PostMessage (HWND_BROADCAST, client_message,
+  PostMessageW (HWND_BROADCAST, client_message,
 	       (WPARAM) event->client.message_type,
-	       event->client.data.l[0]);
+		event->client.data.l[0]);
 }
 
 void
@@ -3623,10 +3622,10 @@ gdk_flush (void)
   MSG msg;
 
   /* Process all messages currently available */
-  while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
+  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
     {
       TranslateMessage (&msg);
-      DispatchMessage (&msg);
+      DispatchMessageW (&msg);
     }
 #endif
 
@@ -3641,8 +3640,8 @@ gdk_display_sync (GdkDisplay * display)
   g_return_if_fail (display == _gdk_display);
 
   /* Process all messages currently available */
-  while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
-    DispatchMessage (&msg);
+  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
+    DispatchMessageW (&msg);
 }
 
 void
