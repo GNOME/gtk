@@ -328,7 +328,8 @@ gdk_init (int *argc, char ***argv)
 {
   if (!gdk_init_check (argc, argv))
     {
-      g_warning ("cannot open display: %s", gdk_get_display_arg_name ());
+      const char *display_name = gdk_get_display_arg_name ();
+      g_warning ("cannot open display: %s", display_name ? display_name : "");
       exit(1);
     }
 }

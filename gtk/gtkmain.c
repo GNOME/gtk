@@ -551,11 +551,12 @@ post_parse_hook (GOptionContext *context,
     {
       if (gdk_display_open_default_libgtk_only () == NULL)
 	{
+	  const char *display_name = gdk_get_display_arg_name ();
 	  g_set_error (error, 
 		       G_OPTION_ERROR, 
 		       G_OPTION_ERROR_FAILED,
 		       "cannot open display: %s",
-		       gdk_get_display_arg_name ());
+		       display_name ? display_name : "" );
 	  
 	  return FALSE;
 	}
