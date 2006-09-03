@@ -1,3 +1,9 @@
+2006-09-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (post_parse_hook): 
+	* gdk/gdk.c (gdk_init): Handle display_name being NULL.
+	(#354004, Chris Wilson)
+
 2006-09-03  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_beep): No
