@@ -1,5 +1,8 @@
 2006-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_class_init): Fix a typo.  
+	(#354035, Mariano Suárez-Alvarez)
+	
 	* gtk/gtkmain.c (post_parse_hook): 
 	* gdk/gdk.c (gdk_init): Handle display_name being NULL.
 	(#354004, Chris Wilson)
