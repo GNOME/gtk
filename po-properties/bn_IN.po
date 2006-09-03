@@ -8,10 +8,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bn_IN\n"
+"Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-01 12:59+0200\n"
-"PO-Revision-Date: 2006-09-01 20:55+0530\n"
+"PO-Revision-Date: 2006-09-03 19:43+0530\n"
 "Last-Translator: Runa Bhattacharjee <runabh@gmail.com>\n"
 "Language-Team: Bengali India\n"
 "MIME-Version: 1.0\n"
@@ -943,19 +943,19 @@ msgstr "ওয়াই-অ্যালাইন"
 
 #: ../gtk/gtkcellrenderer.c:221
 msgid "xpad"
-msgstr "এক্স-প্যাড"
+msgstr "xpad"
 
 #: ../gtk/gtkcellrenderer.c:222
 msgid "The xpad"
-msgstr "এক্স-প্যাড"
+msgstr "xpad"
 
 #: ../gtk/gtkcellrenderer.c:231
 msgid "ypad"
-msgstr "ওয়াই-প্যাড"
+msgstr "ypad"
 
 #: ../gtk/gtkcellrenderer.c:232
 msgid "The ypad"
-msgstr "ওয়াই-প্যাড"
+msgstr "ypad"
 
 #: ../gtk/gtkcellrenderer.c:241
 msgid "width"
@@ -1310,7 +1310,7 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"এই ভাষাটির আই.এস.ও. কোড। টেক্সট আঁকার সময় প্যানগো এই কোডটিকে ইঙ্গিত হিসেবে "
+"এই ভাষাটির আই.এস.ও. কোড। টেক্সট আঁকার সময় Pango এই কোডটিকে ইঙ্গিত হিসেবে "
 "ব্যবহার করতে পারে। যদি আপনি এই ব্যাপারটি বুঝতে না পারেন তবে আপনার এটির প্রয়োজন "
 "নেই"
 
@@ -2360,7 +2360,7 @@ msgstr "লেবেলের উলম্ব অ্যালাইনমেন�
 
 #: ../gtk/gtkframe.c:121 ../gtk/gtkhandlebox.c:169
 msgid "Deprecated property, use shadow_type instead"
-msgstr "এই বৈশিষ্ট্যটি অনুমোদিত নয়, এর পরিবর্তে ছায়া _ধরন (Shadow type) ব্যবহার করুন"
+msgstr "এই বৈশিষ্ট্যটি অবচিত, এর পরিবর্তে shadow_type ব্যবহার করুন"
 
 #: ../gtk/gtkframe.c:128
 msgid "Frame shadow"
@@ -2440,7 +2440,7 @@ msgstr "মার্কআপ কলাম"
 # FIXME: The sentence is unclear ;-(
 #: ../gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr "প্যানগো মার্কআপ ব্যবহার করলে মডেল কলাম ব্যবহার করে টেক্সট আহরণ করা হয়"
+msgstr "Pango মার্কআপ ব্যবহার করলে মডেল কলাম ব্যবহার করে টেক্সট আহরণ করা হয়"
 
 #: ../gtk/gtkiconview.c:582
 msgid "Icon View Model"
@@ -2814,11 +2814,11 @@ msgstr "এটি যদি সাবমেনু হয়, তবে একে �
 
 #: ../gtk/gtkmenu.c:542
 msgid "Double Arrows"
-msgstr ""
+msgstr "দৈত তীরচিহ্ন"
 
 #: ../gtk/gtkmenu.c:543
 msgid "When scrolling, always show both arrows."
-msgstr ""
+msgstr "স্ক্রোল করার সময় উভয় তীরচিহ্ন প্রদর্শন করা হবে।"
 
 #: ../gtk/gtkmenu.c:551
 msgid "Left Attach"
@@ -3148,7 +3148,7 @@ msgstr "ট্যাব আটানোর (Pack) ধরন"
 
 #: ../gtk/gtknotebook.c:655
 msgid "Tab reorderable"
-msgstr ""
+msgstr "ট্যাবের অনুক্রম পরিবর্তনযোগ্য"
 
 #: ../gtk/gtknotebook.c:656
 msgid "Whether the tab is reorderable by user action or not"
@@ -3235,7 +3235,7 @@ msgstr "নির্দেশকের চারপাশে স্পেস স
 
 #: ../gtk/gtkpaned.c:217
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "পিক্সেল হিসেবে প্যান্‌ড বিভাজকের অবস্থান (০ হলে উপরে এবং বামপার্শ্বে অবস্থিত)"
+msgstr "পিক্সেল হিসেবে পেইন্ড বিভাজকের অবস্থান (০ হলে উপরে এবং বামপার্শ্বে অবস্থিত)"
 
 #: ../gtk/gtkpaned.c:225
 msgid "Position Set"
@@ -3298,7 +3298,7 @@ msgstr ""
 
 #: ../gtk/gtkprintbackend.c:261
 msgid "Default print backend"
-msgstr ""
+msgstr "প্রিন্ট কর্মের ডিফল্ট ব্যাক-এন্ড"
 
 #: ../gtk/gtkprintbackend.c:262
 msgid "List of the GtkPrintBackend backends to use by default"
@@ -3314,12 +3314,12 @@ msgstr "ব্যাক-এন্ড"
 
 #: ../gtk/gtkprinter.c:127
 msgid "Backend for the printer"
-msgstr ""
+msgstr "প্রিন্টারের ব্যাক-এন্ড"
 
 # FIXME
 #: ../gtk/gtkprinter.c:133
 msgid "Is Virtual"
-msgstr ""
+msgstr "ভার্চুয়াল"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
@@ -3343,7 +3343,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "অবস্থা সংক্রান্ত বার্তা"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
@@ -3363,7 +3363,7 @@ msgstr "প্রিন্টারের জন্য ব্যবহৃত আ
 
 #: ../gtk/gtkprinter.c:175
 msgid "Job Count"
-msgstr ""
+msgstr "কর্মের সংখ্যা"
 
 #: ../gtk/gtkprinter.c:176
 msgid "Number of jobs queued in the printer"
@@ -3379,7 +3379,7 @@ msgstr ""
 
 #: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
-msgstr ""
+msgstr "প্রিন্ট কর্মের শিরোনাম"
 
 #: ../gtk/gtkprintjob.c:125
 msgid "Printer"
@@ -3387,7 +3387,7 @@ msgstr "প্রিন্টার"
 
 #: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
-msgstr ""
+msgstr "প্রিন্ট কর্মের জন্য চিহ্নিত প্রিন্টার"
 
 #: ../gtk/gtkprintjob.c:134
 msgid "Settings"
@@ -3418,7 +3418,7 @@ msgstr "পৃষ্ঠার ডিফল্ট বৈশিষ্ট্য"
 
 #: ../gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
-msgstr ""
+msgstr "ডিফল্টরূপে ব্যবহৃত GtkPageSetup"
 
 #: ../gtk/gtkprintoperation.c:876 ../gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
@@ -3426,7 +3426,7 @@ msgstr "প্রিন্ট কর্ম সংক্রান্ত বৈশ
 
 #: ../gtk/gtkprintoperation.c:877 ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr ""
+msgstr "ডায়লগ বক্স আরম্ভের জন্য ব্যবহৃত GtkPrintSettings"
 
 #: ../gtk/gtkprintoperation.c:895
 msgid "Job Name"
@@ -3434,7 +3434,7 @@ msgstr "কর্মের নাম"
 
 #: ../gtk/gtkprintoperation.c:896
 msgid "A string used for identifying the print job."
-msgstr ""
+msgstr "প্রিন্ট কর্ম সনাক্ত করতে ব্যবহৃত পংক্তি।"
 
 #: ../gtk/gtkprintoperation.c:919
 msgid "Number of Pages"
@@ -3506,11 +3506,11 @@ msgstr "প্রিন্ট কর্মের বর্তমান অবস
 
 #: ../gtk/gtkprintoperation.c:1104
 msgid "Status String"
-msgstr ""
+msgstr "অবস্থা সংক্রান্ত পংক্তি"
 
 #: ../gtk/gtkprintoperation.c:1105
 msgid "A human-readable description of the status"
-msgstr ""
+msgstr "অবস্থা বর্ণনাকারী একটি পাঠযোগ্য পংক্তি"
 
 #: ../gtk/gtkprintoperation.c:1123
 msgid "Custom tab label"
@@ -3518,11 +3518,11 @@ msgstr "ট্যাবের স্বনির্বাচিত লেবে�
 
 #: ../gtk/gtkprintoperation.c:1124
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "স্বনির্বাচিত উইজেট ধারণকারী ট্যাবের লেবেল"
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
-msgstr ""
+msgstr "ব্যবহারের জন্য চিহ্নিত GtkPageSetup"
 
 #: ../gtk/gtkprintunixdialog.c:252
 msgid "Selected Printer"
@@ -3814,11 +3814,11 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "Recent Manager"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "ব্যবহারের জন্য চিহ্নিত RecentManager অবজেক্ট"
 
 #: ../gtk/gtkrecentchooser.c:118
 msgid "Show Private"
@@ -4037,23 +4037,20 @@ msgid "Window Placement"
 msgstr "উইন্ডো স্থাপন"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "যেখানে স্ক্রলবারের সাপেক্ষে অভ্যন্তরস্থ বস্তু (Content) অবস্থান করে"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:270
-#, fuzzy
 msgid "Window Placement Set"
-msgstr "উইন্ডো স্থাপন"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "যেখানে স্ক্রলবারের সাপেক্ষে অভ্যন্তরস্থ বস্তু (Content) অবস্থান করে"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4072,16 +4069,14 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "স্ক্রলবার এবং স্ক্রলবারের সাথে সংযুক্ত উইন্ডোর মধ্যবর্তী পিক্সেলের সংখ্যা"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "উইন্ডো স্থাপন"
+msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "যেখানে স্ক্রলবারের সাপেক্ষে অভ্যন্তরস্থ বস্তু (Content) অবস্থান করে"
+msgstr ""
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4160,14 +4155,12 @@ msgid "Name of icon theme to use"
 msgstr "যে আইকন থিম ব্যবহার করা হবে তার নাম"
 
 #: ../gtk/gtksettings.c:248
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "আইকন থিমের নাম"
+msgstr ""
 
 #: ../gtk/gtksettings.c:249
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "যে আইকন থিম ব্যবহার করা হবে তার নাম"
+msgstr ""
 
 #: ../gtk/gtksettings.c:257
 msgid "Key Theme Name"
@@ -4263,18 +4256,16 @@ msgid "Cursor theme name"
 msgstr "কার্সার থিমের নাম"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "যে কার্সার থিম ব্যবহার করা হবে তার নাম"
+msgstr ""
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "কার্সার থিমের আকার"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "যে আকারের কার্সার ব্যবহার করা হবে"
+msgstr "কার্সারের মাপ, অথবা ডিফল্ট মাপ ব্যবহার জন্য 0(০)"
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
@@ -4286,7 +4277,7 @@ msgstr "ডায়ালগের বাটনসমূহ বিকল্প ব
 
 #: ../gtk/gtksettings.c:391
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "'ইনপুট পদ্ধতি' শীর্ষক মেনু প্রদর্শন করা হবে"
 
 #: ../gtk/gtksettings.c:392
 msgid ""
@@ -4296,7 +4287,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "ইউনিকোড কন্ট্রোল ক্যারেক্টার সন্নিবেশ' মেনু প্রদর্শন করা হবে"
 
 #: ../gtk/gtksettings.c:401
 msgid ""
@@ -4321,29 +4312,25 @@ msgid "Repeat value for timeouts, when button is pressed"
 msgstr ""
 
 #: ../gtk/gtksettings.c:429
-#, fuzzy
 msgid "Expand timeout"
-msgstr "বর্ধিষ্ণু আকার"
+msgstr ""
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 
 #: ../gtk/gtksettings.c:459
-#, fuzzy
 msgid "Color scheme"
-msgstr "কালারস্পেস"
+msgstr "রঙের বিন্যাস"
 
 # FIXME
 #: ../gtk/gtksettings.c:460
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "আইকন থিম থেকে প্রাপ্ত আইকনের নাম"
+msgstr ""
 
 #: ../gtk/gtksettings.c:469
-#, fuzzy
 msgid "Enable Animations"
-msgstr "আ্যনিমেশন"
+msgstr "অ্যানিমোশন সক্রিয় করা হবে"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
@@ -4358,9 +4345,8 @@ msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 
 #: ../gtk/gtksettings.c:507
-#, fuzzy
 msgid "Color Hash"
-msgstr "কালারস্পেস"
+msgstr "রঙের হ্যাশ মান"
 
 #: ../gtk/gtksettings.c:508
 msgid "A hash table representation of the color scheme."
@@ -4381,9 +4367,8 @@ msgid "Ignore hidden"
 msgstr "লুকানো উইজেটকে অগ্রাহ্য করো"
 
 #: ../gtk/gtksizegroup.c:285
-#, fuzzy
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr "এটির মান সত্য (TRUE) হলে, গ্রুপের আকার নির্ধারণের সময় লুকানো উইজেটকে অগ্রাহ্য করা হয়"
+msgstr ""
 
 #: ../gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4459,23 +4444,20 @@ msgid "Style of bevel around the statusbar text"
 msgstr "স্ট্যাটাসবার টেক্সটের চারপাশে প্রদর্শিত বেভেলের ধরন"
 
 #: ../gtk/gtkstatusicon.c:188
-#, fuzzy
 msgid "The size of the icon"
-msgstr "উইন্ডোর শিরোনাম "
+msgstr "আইকনের মাপ"
 
 #: ../gtk/gtkstatusicon.c:197
 msgid "Blinking"
 msgstr ""
 
 #: ../gtk/gtkstatusicon.c:198
-#, fuzzy
 msgid "Whether or not the status icon is blinking"
-msgstr "কাজটি দৃশ্যমান কিনা।"
+msgstr ""
 
 #: ../gtk/gtkstatusicon.c:206
-#, fuzzy
 msgid "Whether or not the status icon is visible"
-msgstr "কাজটি দৃশ্যমান কিনা।"
+msgstr ""
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
@@ -4510,9 +4492,8 @@ msgid "The amount of space between two consecutive columns"
 msgstr "দুইটি পাশাপাশি কলামের মধ্যবর্তী স্পেস-এর সংখ্যা"
 
 #: ../gtk/gtktable.c:166
-#, fuzzy
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr "যদি TRUE হয় তবে ছকের প্রতিটি ঘরের প্রস্থ/উচ্চতা সমান"
+msgstr ""
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
@@ -4616,17 +4597,14 @@ msgstr "বাফারে বর্তমানে রক্ষিত টেক
 
 # FIXME
 #: ../gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "ভাসমান (Hover) নির্বাচন"
+msgstr "নির্বাচিত"
 
 #: ../gtk/gtktextbuffer.c:213
-#, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "বর্তমানে বাছাইকৃত জিডিকে-ফন্ট"
+msgstr "বাফারে কিছু টেক্সট বর্তমানে নির্বাচিত কিনা"
 
 #: ../gtk/gtktextbuffer.c:228
-#, fuzzy
 msgid "Cursor position"
 msgstr "কার্সারের অবস্থান"
 
@@ -4635,9 +4613,8 @@ msgid "The position of the insert mark (as offset from the beginning of the buff
 msgstr ""
 
 #: ../gtk/gtktextbuffer.c:244
-#, fuzzy
 msgid "Copy target list"
-msgstr "কপিরাইট পংক্তি"
+msgstr ""
 
 #: ../gtk/gtktextbuffer.c:245
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
@@ -4725,7 +4702,7 @@ msgstr "PangoStretch হিসাবে ফন্টের প্রসারন
 
 #: ../gtk/gtktexttag.c:328
 msgid "Font size in Pango units"
-msgstr "প্যানগো এককে ফন্টের আকার"
+msgstr "Pango এককে ফন্টের আকার"
 
 #: ../gtk/gtktexttag.c:338
 msgid ""
@@ -4734,7 +4711,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 "ফন্টের ডিফল্ট আকারের গুণিতক হিসেবে ফন্টের আকার।  এটি পরিবর্তিত থিমের সাথে ভালভাবে "
-"খাপখাইয়ে নেয় বিধায় এটি ব্যবহারের পরামর্শ দেওয়া গেল।  প্যানগো কিছু গুণিতক, যেমন "
+"খাপখাইয়ে নেয় বিধায় এটি ব্যবহারের পরামর্শ দেওয়া গেল।  Pango কিছু গুণিতক, যেমন "
 "PANGO_SCALE_X_LARGE-এর মান পূর্ব থেকে নির্ধারণ করে থাকে।"
 
 #: ../gtk/gtktexttag.c:358 ../gtk/gtktextview.c:566
@@ -4746,7 +4723,7 @@ msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
-"এই টেক্সটের ভাষার আই.এস.ও. কোড।  টেক্সট আঁকার সময় প্যানগো এই কোডকে ইঙ্গিত হিসেবে "
+"এই টেক্সটের ভাষার ISO কোড।  টেক্সট আঁকার সময় Pango এই কোডকে ইঙ্গিত হিসেবে "
 "ব্যবহার করতে পারে।  কোন কোড নির্ধারণ করা না হলে ডিফল্ট হিসেবে একটি উপযুক্ত কোড "
 "ব্যবহার করা হবে।"
 
@@ -5029,9 +5006,8 @@ msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "এই অ্যাকশনের প্রক্সিকে রেডিও অ্যাকশনের প্রক্সির মত মনে হয় কিনা"
 
 #: ../gtk/gtktoggleaction.c:119
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "টোগল বাটন চাপা হবে কিনা"
+msgstr ""
 
 #: ../gtk/gtktogglebutton.c:105 ../gtk/gtktoggletoolbutton.c:102
 msgid "If the toggle button should be pressed in or not"
@@ -5078,19 +5054,16 @@ msgid "If the tooltips of the toolbar should be active or not"
 msgstr "টুলবারের টুলটিপ সক্রিয় থাকবে কিনা"
 
 #: ../gtk/gtktoolbar.c:540
-#, fuzzy
 msgid "Size of icons in this toolbar"
-msgstr "ডিফল্ট টুলবারে আইকনের আয়তন"
+msgstr "টুল-বারে প্রদর্শিত আইকনের মাপ"
 
 #: ../gtk/gtktoolbar.c:555
-#, fuzzy
 msgid "Icon size set"
-msgstr "ফন্ট আকারের সমষ্টি"
+msgstr ""
 
 #: ../gtk/gtktoolbar.c:556
-#, fuzzy
 msgid "Whether the icon-size property has been set"
-msgstr "এই কাজের গ্রুপটি সক্রিয় কিনা।"
+msgstr ""
 
 #: ../gtk/gtktoolbar.c:565
 msgid "Whether the item should receive extra space when the toolbar grows"
@@ -5113,9 +5086,8 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "টুলবারের ছায়া ও বাটনসমূহের মাঝে প্রান্তীয় স্থান"
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "চাইল্ডের সর্বনিম্ন প্রস্থ"
+msgstr ""
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
@@ -5199,14 +5171,12 @@ msgid "Icon widget to display in the item"
 msgstr "আইটেমে যে আইকন উইজেট প্রদর্শন করা হবে"
 
 #: ../gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "প্রতি সারি স্পেস-এর সংখ্যা"
+msgstr ""
 
 #: ../gtk/gtktoolbutton.c:240
-#, fuzzy
 msgid "Spacing in pixels between the icon and label"
-msgstr "স্টেপ বাটন ও থাম্ব এর মধ্যবর্তী স্পেস এর পরিমাণ"
+msgstr ""
 
 #: ../gtk/gtktoolitem.c:145
 msgid ""
@@ -5217,9 +5187,8 @@ msgstr ""
 "বাটন GTK_TOOLBAR_BOTH_HORIZ মোডে টেক্সট প্রদর্শন করে"
 
 #: ../gtk/gtktrayicon-x11.c:98
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "টুলবারের দিক"
+msgstr "ট্রে'র দিশা"
 
 #: ../gtk/gtktreemodelsort.c:274
 msgid "TreeModelSort Model"
@@ -5321,14 +5290,12 @@ msgid "Whether rows should be expanded/collapsed when the pointer moves over the
 msgstr "কোন সারির ওপর পয়েন্টার রাখা হলে তাকে সম্প্রসারিত-করা/খোলা হবে কিনা"
 
 #: ../gtk/gtktreeview.c:691
-#, fuzzy
 msgid "Show Expanders"
-msgstr "প্রসারিত করে"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:692
-#, fuzzy
 msgid "View has expanders"
-msgstr "প্রসারিত করে"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:699
 msgid "Level Indentation"
@@ -5343,29 +5310,24 @@ msgid "Rubber Banding"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:710
-#, fuzzy
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "একাধিক ফাইলকে চিহ্নিত করা যাবে কিনা"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:717
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "অ্যারো (তীরচিহ্ন প্রদর্শনকারী) কী (Key) সক্রিয় করো"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:718
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "প্রান্ত প্রদর্শন করা হবে কিনা"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:726
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "অ্যারো (তীরচিহ্ন প্রদর্শনকারী) কী (Key) সক্রিয় করো"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:727
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "প্রান্ত প্রদর্শন করা হবে কিনা"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
@@ -5424,44 +5386,36 @@ msgid "Enable extended row background theming"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:800
-#, fuzzy
 msgid "Grid line width"
-msgstr "ফোকাসের লাইনব্যাপ্তি"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:801
-#, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr "পিক্সেল হিসেবে ফোকাস নির্দেশক লাইনের প্রস্থ"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:807
-#, fuzzy
 msgid "Tree line width"
-msgstr "পূর্বনির্দিষ্ট প্রস্থ"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:808
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
-msgstr "পিক্সেল হিসেবে ফোকাস নির্দেশক লাইনের প্রস্থ"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:814
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "ফোকাস লাইনের ড্যাশ প্যাটার্ন"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:815
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "ফোকাস নির্দেশক আঁকতে যে ধরনের ড্যাশ প্যাটার্ন আঁকতে হবে"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:821
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "ফোকাস লাইনের ড্যাশ প্যাটার্ন"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:822
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "ফোকাস নির্দেশক আঁকতে যে ধরনের ড্যাশ প্যাটার্ন আঁকতে হবে"
+msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -5809,29 +5763,24 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr "উইজেটের বরাদ্দকৃত অংশের বাইরে যেখানে আঁকা হবে তার আকার"
 
 #: ../gtk/gtkwidget.c:1550
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "লিঙ্কের রং"
+msgstr "অপ্রদর্শিত লিঙ্কের রং"
 
 #: ../gtk/gtkwidget.c:1551
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "হাইপারলিঙ্কের রং"
+msgstr "অপ্রদর্শিত লিঙ্কের রং"
 
 #: ../gtk/gtkwidget.c:1564
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "লিঙ্কের রং"
+msgstr "প্রদর্শিত লিঙ্কের রং"
 
 #: ../gtk/gtkwidget.c:1565
-#, fuzzy
 msgid "Color of visited links"
-msgstr "হাইপারলিঙ্কের রং"
+msgstr "প্রদর্শিত লিঙ্কের রং"
 
 #: ../gtk/gtkwidget.c:1579
-#, fuzzy
 msgid "Wide Separators"
-msgstr "বিভাজক ব্যবহার করো"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
@@ -5840,42 +5789,36 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkwidget.c:1594
-#, fuzzy
 msgid "Separator Width"
-msgstr "উলম্ব বিভাজকের প্রস্থ"
+msgstr "বিভাজনরেখার প্রস্থ"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:1609
-#, fuzzy
 msgid "Separator Height"
-msgstr "ডিফল্ট উচ্চতা"
+msgstr "বিভাজনরেখার উচ্চতা"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:1624
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "অনুভূমিক স্ক্রলবারের নীতি"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:1625
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "যখন অনুভূমিক স্ক্রলবার প্রদর্শিত হবে"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:1639
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "উলম্ব স্ক্রলবারের নীতি"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:1640
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "যখন উলম্ব স্ক্রলবার প্রদর্শিত হবে"
+msgstr ""
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -6064,14 +6007,12 @@ msgid "Whether the window should be decorated by the window manager"
 msgstr "উইন্ডো ব্যবস্থাপক উইন্ডোটি সজ্জিত করবে কিনা"
 
 #: ../gtk/gtkwindow.c:639
-#, fuzzy
 msgid "Deletable"
-msgstr "চিহ্নিত করার যোগ্য"
+msgstr "অপসারণযোগ্য"
 
 #: ../gtk/gtkwindow.c:640
-#, fuzzy
 msgid "Whether the window frame should have a close button"
-msgstr "উইন্ডো ব্যবস্থাপক উইন্ডোটি সজ্জিত করবে কিনা"
+msgstr ""
 
 #: ../gtk/gtkwindow.c:656
 msgid "Gravity"
@@ -6086,9 +6027,8 @@ msgid "Transient for Window"
 msgstr ""
 
 #: ../gtk/gtkwindow.c:675
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "মেসেজ বাটনে প্রদর্শিত বাটন"
+msgstr ""
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
