@@ -1,4 +1,4 @@
-# Chinese (Taiwan) translation of gtk+ 2.x
+# Chinese (Hong Kong) translation of gtk+ 2.x
 # Copyright (C) 2000, 01, 02, 03, 04, 05, 06 Free Software Foundation, Inc.
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
 # 辛立仁 <hsin@med.cgu.edu.tw>, 2000, 2004.
@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-08 17:30+0800\n"
+"PO-Revision-Date: 2006-09-04 02:19+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
+"Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -308,7 +308,7 @@ msgstr "圖示的標頭資料無效"
 #: gdk-pixbuf/io-ico.c:301
 #, c-format
 msgid "Icon has zero width"
-msgstr "圖示的寬度為零"
+msgstr "圖示的闊度為零"
 
 #: gdk-pixbuf/io-ico.c:311
 #, c-format
@@ -403,7 +403,7 @@ msgstr "無法分配記憶體來載入內容結構"
 #: gdk-pixbuf/io-pcx.c:607
 #, c-format
 msgid "Image has invalid width and/or height"
-msgstr "圖片的寬度和/或高度無效"
+msgstr "圖片的闊度和/或高度無效"
 
 # 姑且用 color depth 代替 bpp -- Abel
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
@@ -453,7 +453,7 @@ msgstr "PNG 圖片中每個色板所佔的位元數目無效。"
 #: gdk-pixbuf/io-png.c:136
 #, c-format
 msgid "Transformed PNG has zero width or height."
-msgstr "變換後的 PNG 寬度及高度均為零。"
+msgstr "變換後的 PNG 闊度及高度均為零。"
 
 #: gdk-pixbuf/io-png.c:144
 #, c-format
@@ -503,12 +503,12 @@ msgstr "讀入 PNG 圖片檔時發生嚴重錯誤：%s"
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG text 區段的關鍵字必須在 1 至 79 字元之內。"
+msgstr "PNG text 區段的關鍵字必須在 1 至 79 字符之內。"
 
 #: gdk-pixbuf/io-png.c:818
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG text 區段的關鍵字必須是 ASCII 字元。"
+msgstr "PNG text 區段的關鍵字必須是 ASCII 字符。"
 
 #: gdk-pixbuf/io-png.c:831
 #, c-format
@@ -714,7 +714,7 @@ msgstr "Targa 圖片格式"
 
 #: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "無法取得圖片寬度（TIFF 檔損毀）"
+msgstr "無法取得圖片闊度（TIFF 檔損毀）"
 
 #: gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
@@ -723,7 +723,7 @@ msgstr "無法取得圖片高度（TIFF 檔損毀）"
 #: gdk-pixbuf/io-tiff.c:188
 #, c-format
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF 圖片的寬度或高度為零"
+msgstr "TIFF 圖片的闊度或高度為零"
 
 #: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
 #, c-format
@@ -772,7 +772,7 @@ msgstr "TIFF 圖片格式"
 #: gdk-pixbuf/io-wbmp.c:246
 #, c-format
 msgid "Image has zero width"
-msgstr "圖片寬度為零"
+msgstr "圖片闊度為零"
 
 #: gdk-pixbuf/io-wbmp.c:264
 #, c-format
@@ -825,7 +825,7 @@ msgstr "無效的 XPM 標頭"
 #: gdk-pixbuf/io-xpm.c:485
 #, c-format
 msgid "XPM file has image width <= 0"
-msgstr "XPM 圖片寬度不大於 0"
+msgstr "XPM 圖片闊度不大於 0"
 
 #: gdk-pixbuf/io-xpm.c:493
 #, c-format
@@ -919,7 +919,7 @@ msgstr "旗標"
 msgid "Gdk debugging flags to unset"
 msgstr "準備去除的 Gdk 偵錯旗標"
 
-# (Abel) 按鍵的名最好不要譯，不然人們可能找不到那個鍵的
+# (Abel) 鍵盤的名最好不要譯，不然人們可能找不到那個鍵的
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
 msgstr "BackSpace"
@@ -1420,8 +1420,7 @@ msgstr "顏色名稱(_N)："
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr ""
-"你可在本欄輸入 HTML 方式的 16 進位色彩值，或是像「orange」的普通顏色名稱。"
+msgstr "你可在本欄輸入 HTML 方式的 16 進位色彩值，或是像「orange」的普通顏色名稱。"
 
 #: gtk/gtkcolorsel.c:2046
 msgid "_Palette:"
@@ -1441,7 +1440,7 @@ msgstr "輸入法(_M)"
 
 #: gtk/gtkentry.c:4933 gtk/gtktextview.c:7257
 msgid "_Insert Unicode Control Character"
-msgstr "插入統一碼控制字元(_I)"
+msgstr "插入統一碼控制字符(_I)"
 
 #: gtk/gtkfilechooser.c:1695 gtk/gtkfilechooser.c:1739
 #: gtk/gtkfilechooser.c:1814 gtk/gtkfilechooser.c:1858
@@ -1485,9 +1484,7 @@ msgstr "無法建立資料夾"
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"此資料夾無法建立，因為已有相同名稱的檔案存在。試着使用不同的資料夾名稱，或者"
-"先重新命名該檔案。"
+msgstr "此資料夾無法建立，因為已有相同名稱的檔案存在。試着使用不同的資料夾名稱，或者先重新命名該檔案。"
 
 #: gtk/gtkfilechooserdefault.c:977
 msgid "Invalid file name"
@@ -1847,8 +1844,7 @@ msgstr "選取檔案(_S)："
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"檔案名稱“%s”無法轉換至 UTF-8（請嘗試設定環境變數 G_FILENAME_ENCODING）：%s"
+msgstr "檔案名稱“%s”無法轉換至 UTF-8（請嘗試設定環境變數 G_FILENAME_ENCODING）：%s"
 
 #: gtk/gtkfilesel.c:3116
 msgid "Invalid UTF-8"
@@ -1897,7 +1893,7 @@ msgstr "檔案系統"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "名稱“%s”是無效的，因為它包含了字元‘%s’。請選擇另一個名稱。"
+msgstr "名稱“%s”是無效的，因為它包含了字符‘%s’。請選擇另一個名稱。"
 
 #: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
 #, c-format
@@ -2156,7 +2152,7 @@ msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
-"<b>任何印表機</b>\n"
+"<b>任何打印機</b>\n"
 "給可攜式文件"
 
 #: gtk/gtkpagesetupunixdialog.c:906 gtk/gtkpagesetupunixdialog.c:1420
@@ -2204,7 +2200,7 @@ msgstr "頁面設定"
 
 #: gtk/gtkpagesetupunixdialog.c:1465
 msgid "Margins from Printer..."
-msgstr "印表機邊界..."
+msgstr "打印機邊界..."
 
 #: gtk/gtkpagesetupunixdialog.c:1625
 #, c-format
@@ -2217,7 +2213,7 @@ msgstr "管理自訂大小"
 
 #: gtk/gtkpagesetupunixdialog.c:1949
 msgid "_Width:"
-msgstr "寬度(_W)："
+msgstr "闊度(_W)："
 
 #: gtk/gtkpagesetupunixdialog.c:1961
 msgid "_Height:"
@@ -2263,7 +2259,7 @@ msgstr "初始狀態"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1477
 msgid "print operation status|Preparing to print"
-msgstr "正準備列印"
+msgstr "準備打印"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1479
@@ -2288,7 +2284,7 @@ msgstr "正被阻礙"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1487
 msgid "print operation status|Printing"
-msgstr "列印中"
+msgstr "打印中"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1489
@@ -2313,7 +2309,7 @@ msgstr "準備中"
 #: gtk/gtkprintoperation.c:1971
 #, c-format
 msgid "Printing %d"
-msgstr "正在列印 %d"
+msgstr "正在打印 %d"
 
 #: gtk/gtkprintoperation-unix.c:240
 #, c-format
@@ -2323,7 +2319,7 @@ msgstr "執行預覽時發生錯誤"
 #: gtk/gtkprintoperation-unix.c:274
 #, c-format
 msgid "Error printing"
-msgstr "列印錯誤"
+msgstr "打印錯誤"
 
 #: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
@@ -2331,7 +2327,7 @@ msgstr "應用程式"
 
 #: gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr "印表機離線"
+msgstr "打印機離線"
 
 #: gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
@@ -2382,7 +2378,7 @@ msgstr "來自 StartDoc 的錯誤"
 
 #: gtk/gtkprintunixdialog.c:1448
 msgid "Printer"
-msgstr "印表機"
+msgstr "打印機"
 
 #: gtk/gtkprintunixdialog.c:1456
 msgid "Location"
@@ -2394,7 +2390,7 @@ msgstr "狀態"
 
 #: gtk/gtkprintunixdialog.c:1487
 msgid "Print Pages"
-msgstr "列印"
+msgstr "打印"
 
 #: gtk/gtkprintunixdialog.c:1491
 msgid "_All"
@@ -2410,7 +2406,7 @@ msgstr "範圍(_N)："
 
 #: gtk/gtkprintunixdialog.c:1525
 msgid "Copies"
-msgstr "列印數量"
+msgstr "打印數量"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: gtk/gtkprintunixdialog.c:1530
@@ -2444,7 +2440,7 @@ msgstr "雙面(_W)："
 
 #: gtk/gtkprintunixdialog.c:1993
 msgid "_Only print:"
-msgstr "列印範圍(_O)："
+msgstr "打印範圍(_O)："
 
 #. In enum order
 #: gtk/gtkprintunixdialog.c:2008
@@ -2481,7 +2477,7 @@ msgstr "出紙匣(_R)："
 
 #: gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
-msgstr "列印工作詳細資料"
+msgstr "打印工作詳細資料"
 
 #: gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
@@ -2493,7 +2489,7 @@ msgstr "帳目資訊(_B)："
 
 #: gtk/gtkprintunixdialog.c:2164
 msgid "Print Document"
-msgstr "列印文件"
+msgstr "打印文件"
 
 #: gtk/gtkprintunixdialog.c:2170
 msgid "_Now"
@@ -2505,7 +2501,7 @@ msgstr "於(_T)："
 
 #: gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
-msgstr "耽擱(_H)"
+msgstr "擱置(_H)"
 
 #: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
@@ -2513,15 +2509,15 @@ msgstr "加入封面"
 
 #: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr "前(_F)："
+msgstr "這頁之前(_F)："
 
 #: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr "後(_A)："
+msgstr "這頁之後(_A)："
 
 #: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
-msgstr "列印工作"
+msgstr "打印工作"
 
 #: gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
@@ -2545,15 +2541,15 @@ msgstr "對話視窗中某些設定有衝突"
 
 #: gtk/gtkprintunixdialog.c:2387
 msgid "Print"
-msgstr "列印"
+msgstr "打印"
 
 #: gtk/gtkradiotoolbutton.c:65
 msgid "Group"
-msgstr "群組"
+msgstr "羣組"
 
 #: gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
-msgstr "此按鈕所屬的單選工具按鈕群組。"
+msgstr "此按鈕所屬的單選工具按鈕羣組。"
 
 #: gtk/gtkrc.c:2813
 #, c-format
@@ -2580,7 +2576,7 @@ msgstr "無法移除項目"
 
 #: gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
-msgstr "無法除清清單"
+msgstr "無法清除清單"
 
 #: gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
@@ -2601,7 +2597,7 @@ msgstr "顯示私有資源(_P)"
 #: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "在 URI ’%s‘中找不到最近曾使用的資源"
+msgstr "在 URI ‘%s’ 中找不到最近曾使用的資源"
 
 #: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
 #, c-format
@@ -2625,7 +2621,7 @@ msgstr "找不到項目"
 #: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "無法找到有 URI‘%s’的項目"
+msgstr "無法找到有 URI ‘%s’ 的項目"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:308
@@ -2719,13 +2715,15 @@ msgstr "尋找及取代(_R)"
 msgid "_Floppy"
 msgstr "軟碟(_F)"
 
+# (Abel) 「全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
 #: gtk/gtkstock.c:335
 msgid "_Fullscreen"
-msgstr "全螢幕模式(_F)"
+msgstr "全螢幕(_F)"
 
+# (Abel) 「離開全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
 #: gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
-msgstr "離開全螢幕模式(_L)"
+msgstr "取消全螢幕(_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
@@ -2826,7 +2824,7 @@ msgstr "靠右(_R)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Forward"
-msgstr "向前(_F)"
+msgstr "快轉(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
@@ -2893,11 +2891,11 @@ msgstr "直向"
 
 #: gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr "反序橫向"
+msgstr "橫向倒置"
 
 #: gtk/gtkstock.c:395
 msgid "Reverse portrait"
-msgstr "反序直向"
+msgstr "直向倒置"
 
 #: gtk/gtkstock.c:396
 msgid "_Paste"
@@ -2909,11 +2907,11 @@ msgstr "偏好設定(_P)"
 
 #: gtk/gtkstock.c:398
 msgid "_Print"
-msgstr "列印(_P)"
+msgstr "打印(_P)"
 
 #: gtk/gtkstock.c:399
 msgid "Print Pre_view"
-msgstr "預覽列印(_V)"
+msgstr "預覽打印(_V)"
 
 #: gtk/gtkstock.c:400
 msgid "_Properties"
@@ -3037,15 +3035,15 @@ msgstr "_PDF 回復以往方向"
 
 #: gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
-msgstr "_ZWS 零寬度空格"
+msgstr "_ZWS 零闊度空格"
 
 #: gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
-msgstr "ZW_J 零寬度連接符"
+msgstr "ZW_J 零闊度連接符"
 
 #: gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZW_NJ 零寬度非連接符"
+msgstr "ZW_NJ 零闊度非連接符"
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -3069,7 +3067,7 @@ msgstr "第 %2$d 行第 %3$d 字有非預設的開始標記‘%1$s’"
 #: gtk/gtkuimanager.c:1433
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "第 %d 行第 %d 字有非預設的字元資料"
+msgstr "第 %d 行第 %d 字有非預設的字符資料"
 
 #: gtk/gtkuimanager.c:2224
 msgid "Empty"
@@ -3918,7 +3916,7 @@ msgstr "國際音標"
 #. ID
 #: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr "泰文（不完整）"
+msgstr "泰文（斷字）"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -3928,17 +3926,18 @@ msgstr "提格里尼亞語[厄立特里安] (EZ+)"
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "提格里尼亞語[衣索比亞] (EZ+)"
+msgstr "提格里尼亞語[埃塞俄比亞] (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "越南文 (VIQR)"
 
+# (Abel) 這個很特殊，人們看到簡寫 XIM 反而更易明白
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "X 輸入法"
+msgstr "一般輸入法 (XIM)"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1450
 msgid "Two Sided"
@@ -3971,7 +3970,7 @@ msgstr "自動選擇"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1916
 msgid "Printer Default"
-msgstr "印表機預設"
+msgstr "打印機預設"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2104
 msgid "Urgent"
@@ -4019,7 +4018,7 @@ msgstr "未分類"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr "列印至 LPR"
+msgstr "打印至 LPR"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
@@ -4037,7 +4036,7 @@ msgstr ""
 
 #: modules/printbackends/file/gtkprintbackendfile.c:457
 msgid "Print to File"
-msgstr "列印至檔案"
+msgstr "打印至檔案"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:481
 msgid "PDF"
@@ -4053,7 +4052,7 @@ msgstr "檔案"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "_Output format"
-msgstr "輸出格式(&O)"
+msgstr "輸出格式(_O)"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4252,7 +4251,7 @@ msgstr "快取檔案建立完成。\n"
 
 #: gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "即使時最新的，於複寫已存的快取"
+msgstr "即使是最新的，仍複寫已存的快取"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
@@ -4277,7 +4276,7 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "在‘%s’中沒有佈景主題的索引檔。\n"
-"如如你想要在這裏裏建立圖示快取，請使用 --ignore-theme-index 參數。\n"
+"如果你想在這裏建立圖示快取，請使用 --ignore-theme-index 選項。\n"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"

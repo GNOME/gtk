@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-08 17:30+0800\n"
+"PO-Revision-Date: 2006-09-04 02:19+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
@@ -919,7 +919,7 @@ msgstr "旗標"
 msgid "Gdk debugging flags to unset"
 msgstr "準備去除的 Gdk 偵錯旗標"
 
-# (Abel) 按鍵的名最好不要譯，不然人們可能找不到那個鍵的
+# (Abel) 鍵盤的名最好不要譯，不然人們可能找不到那個鍵的
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
 msgstr "BackSpace"
@@ -2263,7 +2263,7 @@ msgstr "初始狀態"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1477
 msgid "print operation status|Preparing to print"
-msgstr "正準備列印"
+msgstr "準備列印"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1479
@@ -2505,7 +2505,7 @@ msgstr "於(_T)："
 
 #: gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
-msgstr "耽擱(_H)"
+msgstr "擱置(_H)"
 
 #: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
@@ -2513,11 +2513,11 @@ msgstr "加入封面"
 
 #: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr "前(_F)："
+msgstr "這頁之前(_F)："
 
 #: gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr "後(_A)："
+msgstr "這頁之後(_A)："
 
 #: gtk/gtkprintunixdialog.c:2247
 msgid "Job"
@@ -2580,7 +2580,7 @@ msgstr "無法移除項目"
 
 #: gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
-msgstr "無法除清清單"
+msgstr "無法清除清單"
 
 #: gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
@@ -2601,7 +2601,7 @@ msgstr "顯示私有資源(_P)"
 #: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "在 URI ’%s‘中找不到最近曾使用的資源"
+msgstr "在 URI ‘%s’ 中找不到最近曾使用的資源"
 
 #: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
 #, c-format
@@ -2625,7 +2625,7 @@ msgstr "找不到項目"
 #: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "無法找到有 URI‘%s’的項目"
+msgstr "無法找到有 URI ‘%s’ 的項目"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:308
@@ -2719,13 +2719,15 @@ msgstr "尋找及取代(_R)"
 msgid "_Floppy"
 msgstr "軟碟(_F)"
 
+# (Abel) 「全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
 #: gtk/gtkstock.c:335
 msgid "_Fullscreen"
-msgstr "全螢幕模式(_F)"
+msgstr "全螢幕(_F)"
 
+# (Abel) 「離開全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
 #: gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
-msgstr "離開全螢幕模式(_L)"
+msgstr "取消全螢幕(_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
@@ -2826,7 +2828,7 @@ msgstr "靠右(_R)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
 msgid "Media|_Forward"
-msgstr "向前(_F)"
+msgstr "快轉(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
@@ -2893,11 +2895,11 @@ msgstr "直向"
 
 #: gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr "反序橫向"
+msgstr "橫向倒置"
 
 #: gtk/gtkstock.c:395
 msgid "Reverse portrait"
-msgstr "反序直向"
+msgstr "直向倒置"
 
 #: gtk/gtkstock.c:396
 msgid "_Paste"
@@ -3918,7 +3920,7 @@ msgstr "國際音標"
 #. ID
 #: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr "泰文（不完整）"
+msgstr "泰文（斷字）"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -3935,10 +3937,11 @@ msgstr "提格里尼亞語[衣索比亞] (EZ+)"
 msgid "Vietnamese (VIQR)"
 msgstr "越南文 (VIQR)"
 
+# (Abel) 這個很特殊，人們看到簡寫 XIM 反而更易明白
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "X 輸入法"
+msgstr "一般輸入法 (XIM)"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1450
 msgid "Two Sided"
@@ -4053,7 +4056,7 @@ msgstr "檔案"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "_Output format"
-msgstr "輸出格式(&O)"
+msgstr "輸出格式(_O)"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4252,7 +4255,7 @@ msgstr "快取檔案建立完成。\n"
 
 #: gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "即使時最新的，於複寫已存的快取"
+msgstr "即使是最新的，仍複寫已存的快取"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
@@ -4277,7 +4280,7 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "在‘%s’中沒有佈景主題的索引檔。\n"
-"如如您想要在這裡裡建立圖示快取，請使用 --ignore-theme-index 參數。\n"
+"如果您想在這裡建立圖示快取，請使用 --ignore-theme-index 選項。\n"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
