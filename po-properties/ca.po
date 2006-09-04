@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-03 23:52+0200\n"
-"PO-Revision-Date: 2006-09-04 01:05+0200\n"
+"PO-Revision-Date: 2006-09-04 11:14+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -991,7 +991,7 @@ msgstr "La fila té fills"
 
 #: ../gtk/gtkcellrenderer.c:270
 msgid "Is Expanded"
-msgstr "És expandit"
+msgstr "És expandida"
 
 #: ../gtk/gtkcellrenderer.c:271
 msgid "Row is an expander row, and is expanded"
@@ -1995,7 +1995,7 @@ msgstr "Trunca línies múltiples"
 
 #: ../gtk/gtkentry.c:591
 msgid "Whether to truncate multiline pastes to one line."
-msgstr ""
+msgstr "Si s'han de truncar enganxades de més d'una línia en una de sola."
 
 #: ../gtk/gtkentry.c:858
 msgid "Border between text and frame."
@@ -3405,7 +3405,7 @@ msgstr "Missatge d'estat"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Cadena que informa de l'estat actual de la impressora"
 
 #: ../gtk/gtkprinter.c:161
 msgid "Location"
@@ -3429,11 +3429,11 @@ msgstr "El nombre de treballs a la cua de la impressora"
 
 #: ../gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
-msgstr ""
+msgstr "Opció de la font"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
-msgstr ""
+msgstr "La PrinterOption com a rerefons d'aquest giny"
 
 #: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
@@ -3476,7 +3476,7 @@ msgstr "Configuració de la pàgina per defecte"
 
 #: ../gtk/gtkprintoperation.c:858
 msgid "The GtkPageSetup used by default"
-msgstr ""
+msgstr "El GtkPageSetup utilitzat per defecte"
 
 #: ../gtk/gtkprintoperation.c:876 ../gtk/gtkprintunixdialog.c:244
 msgid "Print Settings"
@@ -3484,7 +3484,7 @@ msgstr "Paràmetres de la impressora"
 
 #: ../gtk/gtkprintoperation.c:877 ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr ""
+msgstr "El GtkPrintSettings utilitzat per a inicialitzar el diàleg"
 
 #: ../gtk/gtkprintoperation.c:895
 msgid "Job Name"
@@ -3519,12 +3519,17 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
+"CERT si l'origen del context ha de ser al racó de la pàgina, i no al racó de "
+"l'àrea representable"
 
 #: ../gtk/gtkprintoperation.c:985
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
+"CERT si l'operació d'impressió continuarà informant de l'estat del treball "
+"d'impressió quan ja s'hagin enviat tots les dades a la impressora o al "
+"servidor d'impressió."
 
 #: ../gtk/gtkprintoperation.c:1002
 msgid "Unit"
@@ -3540,7 +3545,7 @@ msgstr "Mostra el diàleg"
 
 #: ../gtk/gtkprintoperation.c:1021
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr ""
+msgstr "CERT si el diàleg de progrés es mostra mentre s'imprimeix."
 
 # FIXME (josep)
 #: ../gtk/gtkprintoperation.c:1044
@@ -3748,6 +3753,8 @@ msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
 msgstr ""
+"El valor de la propietat del membre actualment actiu del grup al qual "
+"pertany aquesta acció."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -4450,15 +4457,17 @@ msgstr "Habilita les animacions"
 
 #: ../gtk/gtksettings.c:470
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "Si s'han d'habilitar animacions per als jocs d'eines."
 
 #: ../gtk/gtksettings.c:488
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Habilita el mode de pantalla tàctil"
 
 #: ../gtk/gtksettings.c:489
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
+"Si s'estableix a CERT, no es notificaran esdeveniments de moviment a aquesta "
+"pantalla"
 
 #: ../gtk/gtksettings.c:507
 #, fuzzy
@@ -4736,6 +4745,8 @@ msgstr "Posició del cursor"
 msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 msgstr ""
+"La posició de la marca d'inserció (com a desplaçament des de l'inici de la "
+"memòria intermèdia)"
 
 # FIXME
 #: ../gtk/gtktextbuffer.c:244
@@ -5222,13 +5233,14 @@ msgstr ""
 "Quantitat d'espai del contorn entre l'ombra de la barra d'eines i els botons"
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Espansió màxima del fill"
+msgstr "Expansió màxima del fill"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
 msgstr ""
+"La quantitat màxima d'espai que es donarà a un element per a poder-s'hi "
+"expandir"
 
 #: ../gtk/gtktoolbar.c:607
 msgid "Space style"
@@ -5454,10 +5466,11 @@ msgid "Rubber Banding"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:710
-#, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Si s'ha permetre que fitxers múltiples siguin seleccionats"
+msgstr ""
+"Si s'ha permetre seleccionar diversos elements arrossegant el punter de "
+"ratolí"
 
 #: ../gtk/gtktreeview.c:717
 msgid "Enable Grid Lines"
@@ -5527,7 +5540,7 @@ msgstr "Color a utilitzar a les files imparells"
 
 #: ../gtk/gtktreeview.c:793
 msgid "Row Ending details"
-msgstr ""
+msgstr "Detalls finals de la fila"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
@@ -5550,27 +5563,26 @@ msgid "Width, in pixels, of the tree view lines"
 msgstr "Amplada, en píxels, de les línies de la vista d'arbre"
 
 #: ../gtk/gtktreeview.c:814
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "Patró de traç de la línia de focus"
+msgstr "Patró de les línies de graella"
 
 # FIXME
 #: ../gtk/gtktreeview.c:815
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Patró de traç utilitzat per dibuixar l'indicador del focus"
+msgstr ""
+"Patró de traç utilitzat per dibuixar les línies de graella de la "
+"visualització en arbre"
 
 # FIXME traç (josep)
 #: ../gtk/gtktreeview.c:821
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "Patró de traç de la línia de focus"
+msgstr "Patró de la línia dels arbres"
 
 # FIXME
 #: ../gtk/gtktreeview.c:822
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Patró de traç utilitzat per dibuixar l'indicador del focus"
+msgstr ""
+"Patró de traç utilitzat per dibuixar les línies de la visualització en arbre"
 
 #: ../gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -5928,35 +5940,32 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Mida de les àrees a dibuixar fora de la ubicació del giny"
 
 #: ../gtk/gtkwidget.c:1550
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Color de l'enllaç"
+msgstr "Color dels enllaços no visitats"
 
 #: ../gtk/gtkwidget.c:1551
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "Color dels hiperenllaços"
+msgstr "El color dels enllaços que no s'hagin visitat"
 
 #: ../gtk/gtkwidget.c:1564
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "Color de l'enllaç"
+msgstr "Color dels enllaços visitats"
 
 #: ../gtk/gtkwidget.c:1565
-#, fuzzy
 msgid "Color of visited links"
-msgstr "Color dels hiperenllaços"
+msgstr "El color dels enllaços que s'hagin visitat"
 
 #: ../gtk/gtkwidget.c:1579
-#, fuzzy
 msgid "Wide Separators"
-msgstr "Usa un separador"
+msgstr "Separadors amples"
 
 #: ../gtk/gtkwidget.c:1580
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
+"Si els separadors tenen una amplada configurable, i s'haurien de dibuixar "
+"amb una caixa enlloc d'una línia"
 
 #: ../gtk/gtkwidget.c:1594
 msgid "Separator Width"
@@ -5964,35 +5973,31 @@ msgstr "Amplada del separador"
 
 #: ../gtk/gtkwidget.c:1595
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "L'amplada dels separadors si «wide-separators» és CERT"
 
 #: ../gtk/gtkwidget.c:1609
 msgid "Separator Height"
-msgstr "Alçàda del separador"
+msgstr "Alçada del separador"
 
 #: ../gtk/gtkwidget.c:1610
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "L'alçada dels separadors si «wide-separators» és CERT"
 
 #: ../gtk/gtkwidget.c:1624
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Política de la barra de desplaçament horitzontal"
+msgstr "Longitut de la fletxa de desplaçament horitzontal"
 
 #: ../gtk/gtkwidget.c:1625
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Quan la barra de desplaçament horitzontal es mostra"
+msgstr "La longitud de la fletxa de desplaçament horitzontal"
 
 #: ../gtk/gtkwidget.c:1639
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Política de la barra de desplaçament vertical"
+msgstr "Longitut de la fletxa de desplaçament vertical"
 
 #: ../gtk/gtkwidget.c:1640
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Quan es mostra la barra de desplaçament vertical"
+msgstr "La longitud de la fletxa de desplaçament vertical"
 
 #: ../gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -6202,12 +6207,11 @@ msgstr "La gravetat de finestra de la finestra"
 
 #: ../gtk/gtkwindow.c:674
 msgid "Transient for Window"
-msgstr ""
+msgstr "Finestra transitòria"
 
 #: ../gtk/gtkwindow.c:675
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "Els botons mostrats en el diàleg del missatge"
+msgstr "El pare transitori del diàleg"
 
 #  ID
 #: ../modules/input/gtkimcontextxim.c:330
@@ -6229,16 +6233,8 @@ msgstr "Com dibuixar la barra d'estat del mètode d'entrada"
 #~ msgid "Font description as a string"
 #~ msgstr "Descripció del tipus de lletra com a cadena"
 
-#, fuzzy
-#~ msgid "The current page in the document."
-#~ msgstr "La mida de pàgina de l'ajustament"
-
 #~ msgid "Homogenous"
 #~ msgstr "Homogeni"
-
-#, fuzzy
-#~ msgid "Show Preview"
-#~ msgstr "Mostra text"
 
 #~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 #~ msgstr "Si aquest text és ocult. No està implementat en GTK 2.0"
