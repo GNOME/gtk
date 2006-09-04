@@ -207,14 +207,14 @@ msgstr "El nom dels traductors. Aquesta cadena s'ha de marcar com a traduïble"
 
 #: ../gtk/gtkaboutdialog.c:391
 msgid "Logo"
-msgstr "Logotipus"
+msgstr "Logotip"
 
 #: ../gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
-"Un logotipus per a la caixa d'informació de l'aplicació. Si no està definit, "
+"Un logotip per a la caixa d'informació de l'aplicació. Si no està definit, "
 "es fa servir el valor de gtk_window_get_default_icon_list()"
 
 #: ../gtk/gtkaboutdialog.c:407
@@ -223,7 +223,7 @@ msgstr "Nom de la icona del logotip"
 
 #: ../gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
-msgstr "Una icona amb nom per a usar com a logotipus a la caixa d'informació"
+msgstr "Una icona amb nom per a usar com a logotip a la caixa d'informació"
 
 #: ../gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
@@ -741,7 +741,7 @@ msgstr "Focus en clicar"
 
 #: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:373
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "Si el botó captura el focus quan es fa clic amb el ratolí"
+msgstr "Si el botó captura el focus quan s'hi fa clic amb el ratolí"
 
 #: ../gtk/gtkbutton.c:231
 msgid "Border relief"
@@ -929,6 +929,7 @@ msgstr "visible"
 msgid "Display the cell"
 msgstr "Mostra la cel·la"
 
+# FIXME
 #: ../gtk/gtkcellrenderer.c:194
 msgid "Display the cell sensitive"
 msgstr "Mostra la cel·la"
@@ -1135,7 +1136,7 @@ msgstr "Segueix l'estat"
 #: ../gtk/gtkcellrendererpixbuf.c:189
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr ""
-"Si la memòria de pixels representada s'hauria d'acolorir segons l'estat"
+"Si la memòria de píxels representada s'hauria d'acolorir segons l'estat"
 
 #: ../gtk/gtkcellrendererprogress.c:117
 msgid "Value of the progress bar"
@@ -1326,7 +1327,7 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"En quin idioma està el text, com a codi ISO. Pango ho pot utilitzar com a "
+"En quin idioma està el text, com a codi ISO. El pango ho pot utilitzar com a "
 "pista en representar el text. Si no enteneu aquest paràmetre, probablement "
 "no el necessitareu"
 
@@ -1658,7 +1659,7 @@ msgstr "Paleta personalitzada"
 
 #: ../gtk/gtkcolorsel.c:1883
 msgid "Palette to use in the color selector"
-msgstr "Paleta per utilitzar en el selector de color"
+msgstr "Paleta per utilitzar en el seleccionador de color"
 
 #: ../gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1743,7 +1744,7 @@ msgstr "Afegeix separadors als menús"
 
 #: ../gtk/gtkcombobox.c:624
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "Si els menus desplegables han de tenir un element per desprendre'ls"
+msgstr "Si els menús desplegables han de tenir un element per desprendre'ls"
 
 #: ../gtk/gtkcombobox.c:639 ../gtk/gtkentry.c:506
 msgid "Has Frame"
@@ -1931,7 +1932,7 @@ msgstr "FALS treu el bisell exterior de l'entrada"
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
-"Vora entre el text i el marc. Substitueix l'stil de la propietat de la vora "
+"Vora entre el text i el marc. Substitueix l'estil de la propietat de la vora "
 "de dins"
 
 #: ../gtk/gtkentry.c:522
@@ -1941,7 +1942,7 @@ msgstr "Caràcter invisible"
 #: ../gtk/gtkentry.c:523
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"El caràcter a usar quen s'emmascara el contingut de l'entrada (en «mode "
+"El caràcter a usar quan s'emmascara el contingut de l'entrada (en «mode "
 "contrasenya»)"
 
 #: ../gtk/gtkentry.c:530
@@ -2015,7 +2016,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
-msgstr ""
+msgstr "Quanta estona mostrar el darrer caràcter entrat en entrades ocultes"
 
 #: ../gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -2149,7 +2150,7 @@ msgstr "Acció"
 
 #: ../gtk/gtkfilechooser.c:198
 msgid "The type of operation that the file selector is performing"
-msgstr "El tipus d'operació que el selector de fitxers fa"
+msgstr "El tipus d'operació que fa el seleccionador de fitxers"
 
 #: ../gtk/gtkfilechooser.c:204
 msgid "File System Backend"
@@ -2477,7 +2478,7 @@ msgstr "Columna d'etiquetatge"
 #: ../gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
-"Columna del model d'on obtenir el text si es fa servir el marcatge Pango"
+"Columna del model d'on obtenir el text si es fa servir el etiquetatge Pango"
 
 #: ../gtk/gtkiconview.c:582
 msgid "Icon View Model"
@@ -2622,7 +2623,7 @@ msgstr "Mida d'icona"
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Mida simbòlica a utilitzar per a la icona del sistema, conjunt d'icones o "
-"iona especificada"
+"icona especificada"
 
 #: ../gtk/gtkimage.c:204
 msgid "Pixel size"
@@ -3007,7 +3008,7 @@ msgstr "Tipus de missatge"
 
 #: ../gtk/gtkmessagedialog.c:128
 msgid "The type of message"
-msgstr "El tipus de missatage"
+msgstr "El tipus de missatge"
 
 #: ../gtk/gtkmessagedialog.c:135
 msgid "Message Buttons"
@@ -3156,7 +3157,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:597
 msgid "Whether tabs should have homogeneous sizes"
-msgstr "Si les pestanyes hauríen de tenir mides homogènies"
+msgstr "Si les pestanyes haurien de tenir mides homogènies"
 
 #: ../gtk/gtknotebook.c:603
 msgid "Group ID"
@@ -3470,7 +3471,7 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 "CERT si el treball d'impressió ha de continuar emetent senyals «status-"
-"changed» un cop ja s'hagin transmés les dades a la impressora, o al servidor "
+"changed» un cop ja s'hagin transmès les dades a la impressora, o al servidor "
 "d'impressió."
 
 #: ../gtk/gtkprintoperation.c:857
@@ -3557,7 +3558,7 @@ msgstr "Permet asíncron"
 
 #: ../gtk/gtkprintoperation.c:1045
 msgid "TRUE if print process may run asynchronous."
-msgstr "CERT si el procés d'impressió es pot executar asíncronicament."
+msgstr "CERT si el procés d'impressió es pot executar asincronicament."
 
 #: ../gtk/gtkprintoperation.c:1068 ../gtk/gtkprintoperation.c:1069
 msgid "Export filename"
@@ -4234,8 +4235,8 @@ msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
-"Si s'han de mostrar dos cursors en text mixte d'esquerre a dreta i de dreta "
-"a esquerre"
+"Si s'han de mostrar dos cursors en text mixt d'esquerra a dreta i de dreta a "
+"esquerra"
 
 #: ../gtk/gtksettings.c:230
 msgid "Theme Name"
@@ -4482,9 +4483,8 @@ msgid "Color Hash"
 msgstr "Espai de color"
 
 #: ../gtk/gtksettings.c:508
-#, fuzzy
 msgid "A hash table representation of the color scheme."
-msgstr "L'orientació de la barra d'eines"
+msgstr ""
 
 #: ../gtk/gtksizegroup.c:267
 msgid "Mode"
@@ -4802,6 +4802,7 @@ msgstr ""
 "Si el color de fons omple l'alçària de la línia sencera o només l'alçària "
 "dels caràcters marcats"
 
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:206
 msgid "Background stipple mask"
 msgstr "Màscara del puntejador de fons"
@@ -4814,6 +4815,7 @@ msgstr "Mapa de bits usat com a màscara quan s'ajusta el fons del text"
 msgid "Foreground color as a (possibly unallocated) GdkColor"
 msgstr "Color de primer pla com a (possiblement no assignat) GdkColor"
 
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:232
 msgid "Foreground stipple mask"
 msgstr "Màscara del puntejador de primer pla"
@@ -4982,19 +4984,22 @@ msgstr "Alçària completa de fons fixada"
 msgid "Whether this tag affects background height"
 msgstr "Si aquesta etiqueta afecta l'alçària del fons"
 
-# FIXME
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:551
 msgid "Background stipple set"
 msgstr "Puntejador de fons fixat"
 
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:552
 msgid "Whether this tag affects the background stipple"
 msgstr "Si aquesta etiqueta afecta el puntejador de fons"
 
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:559
 msgid "Foreground stipple set"
 msgstr "Puntejador de primer pla fixat"
 
+# FIXME puntejador (josep)
 #: ../gtk/gtktexttag.c:560
 msgid "Whether this tag affects the foreground stipple"
 msgstr "Si aquesta etiqueta afecta el puntejador de primer pla"
@@ -5167,7 +5172,7 @@ msgstr "Si el botó de commutació ha d'estar premut"
 
 #: ../gtk/gtktogglebutton.c:113
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "Si el botó de commutació és en un estat «intermig»"
+msgstr "Si el botó de commutació és en un estat «intermedi»"
 
 #: ../gtk/gtktogglebutton.c:120
 msgid "Draw Indicator"
@@ -5580,7 +5585,6 @@ msgstr ""
 "Patró de traç utilitzat per dibuixar les línies de graella de la "
 "visualització en arbre"
 
-# FIXME traç (josep)
 #: ../gtk/gtktreeview.c:821
 msgid "Tree line pattern"
 msgstr "Patró de la línia dels arbres"
@@ -5718,7 +5722,7 @@ msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
 msgstr ""
-"El GtkAdjustment que determnina els valors de la posició vertical per a "
+"El GtkAdjustment que determina els valors de la posició vertical per a "
 "aquesta subàrea"
 
 #: ../gtk/gtkviewport.c:123
@@ -5849,7 +5853,7 @@ msgstr "Estil del giny, que conté informació sobre com es veurà (colors, etc.
 
 #: ../gtk/gtkwidget.c:528
 msgid "Events"
-msgstr "Events"
+msgstr "Esdeveniments"
 
 #: ../gtk/gtkwidget.c:529
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
@@ -5859,7 +5863,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:536
 msgid "Extension events"
-msgstr "Events d'extensió"
+msgstr "Esdeveniments d'extensió"
 
 #: ../gtk/gtkwidget.c:537
 msgid "The mask that decides what kind of extension events this widget gets"
@@ -5992,7 +5996,7 @@ msgstr "L'alçada dels separadors si «wide-separators» és CERT"
 
 #: ../gtk/gtkwidget.c:1624
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Longitut de la fletxa de desplaçament horitzontal"
+msgstr "Longitud de la fletxa de desplaçament horitzontal"
 
 #: ../gtk/gtkwidget.c:1625
 msgid "The length of horizontal scroll arrows"
@@ -6000,7 +6004,7 @@ msgstr "La longitud de la fletxa de desplaçament horitzontal"
 
 #: ../gtk/gtkwidget.c:1639
 msgid "Vertical Scroll Arrow Length"
-msgstr "Longitut de la fletxa de desplaçament vertical"
+msgstr "Longitud de la fletxa de desplaçament vertical"
 
 #: ../gtk/gtkwidget.c:1640
 msgid "The length of vertical scroll arrows"
