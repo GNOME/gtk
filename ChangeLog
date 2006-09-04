@@ -1,3 +1,9 @@
+2006-09-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrc.c (rc_parse_token_or_compound)
+	(gtk_rc_parse_assignment): serialize floating point values using
+	locale-independent functions. (#346751, Frederic Crozat)
+
 2006-09-04  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c

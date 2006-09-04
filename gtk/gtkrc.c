@@ -2514,6 +2514,9 @@ rc_parse_token_or_compound (GScanner   *scanner,
       if (g_scanner_peek_next_token (scanner) == G_TOKEN_IDENTIFIER)
         {
           GdkColor color;
+          gchar    rbuf[G_ASCII_DTOSTR_BUF_SIZE];
+          gchar    gbuf[G_ASCII_DTOSTR_BUF_SIZE];
+          gchar    bbuf[G_ASCII_DTOSTR_BUF_SIZE];
 
           g_scanner_get_next_token (scanner);
 
@@ -2525,10 +2528,17 @@ rc_parse_token_or_compound (GScanner   *scanner,
               return G_TOKEN_IDENTIFIER;
             }
 
-          g_string_append_printf (gstring, " { %0.4f, %0.4f, %0.4f }",
-                                  (gdouble) color.red   / 65535.0,
-                                  (gdouble) color.green / 65535.0,
-                                  (gdouble) color.blue  / 65535.0);
+
+          g_string_append_printf (gstring, " { %s, %s, %s }",
+                                  g_ascii_formatd (rbuf, sizeof (rbuf),
+                                                   "%0.4f",
+                                                   color.red / 65535.0),
+                                  g_ascii_formatd (gbuf, sizeof (gbuf),
+                                                   "%0.4f",
+                                                   color.green / 65535.0),
+                                  g_ascii_formatd (bbuf, sizeof (bbuf),
+                                                   "%0.4f",
+                                                   color.blue / 65535.0));
           break;
         }
       else
@@ -2642,6 +2652,9 @@ gtk_rc_parse_assignment (GScanner      *scanner,
       if (is_color)
         {
           GdkColor  color;
+          gchar     rbuf[G_ASCII_DTOSTR_BUF_SIZE];
+          gchar     gbuf[G_ASCII_DTOSTR_BUF_SIZE];
+          gchar     bbuf[G_ASCII_DTOSTR_BUF_SIZE];
           GString  *gstring;
 
           g_scanner_get_next_token (scanner);
@@ -2657,10 +2670,16 @@ gtk_rc_parse_assignment (GScanner      *scanner,
 
           gstring = g_string_new (NULL);
 
-          g_string_append_printf (gstring, " { %0.4f, %0.4f, %0.4f } ",
-                                  (gdouble) color.red   / 65535.0,
-                                  (gdouble) color.green / 65535.0,
-                                  (gdouble) color.blue  / 65535.0);
+          g_string_append_printf (gstring, " { %s, %s, %s }",
+                                  g_ascii_formatd (rbuf, sizeof (rbuf),
+                                                   "%0.4f",
+                                                   color.red / 65535.0),
+                                  g_ascii_formatd (gbuf, sizeof (gbuf),
+                                                   "%0.4f",
+                                                   color.green / 65535.0),
+                                  g_ascii_formatd (bbuf, sizeof (bbuf),
+                                                   "%0.4f",
+                                                   color.blue / 65535.0));
 
           g_value_init (&prop->value, G_TYPE_GSTRING);
           g_value_take_boxed (&prop->value, gstring);
