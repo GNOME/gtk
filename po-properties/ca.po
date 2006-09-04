@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-03 23:52+0200\n"
-"PO-Revision-Date: 2006-09-04 11:14+0200\n"
+"PO-Revision-Date: 2006-09-04 11:29+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -3469,6 +3469,9 @@ msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
+"CERT si el treball d'impressió ha de continuar emetent senyals «status-"
+"changed» un cop ja s'hagin transmés les dades a la impressora, o al servidor "
+"d'impressió."
 
 #: ../gtk/gtkprintoperation.c:857
 msgid "Default Page Setup"
@@ -3890,11 +3893,11 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "Gestor recent"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "L'objecte RecentManager a utilitzar"
 
 #: ../gtk/gtkrecentchooser.c:118
 msgid "Show Private"
@@ -4407,6 +4410,8 @@ msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
+"Si els menús de context de les entrades i visualitzacions de text han "
+"d'oferir canviar el mètode d'entrada"
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
@@ -4417,6 +4422,8 @@ msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
+"Si els menús de context de les entrades i visualitzacions de text han "
+"d'oferir entrar caràcters de control"
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
