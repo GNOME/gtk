@@ -1,3 +1,14 @@
+2006-09-04  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_dispose): don't cancel the
+	operations spawned by buttons here,
+	(set_button_image_get_info_cb): bail out if button is NULL, but
+	do free button_data,
+	(button_data_free): only free the data is non NULL (since this
+	function can be called multiple times for the same data), cancel
+	handle is pending but don't free button_data in this case (will
+	happen in the callback).
+
 2006-09-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c (rc_parse_token_or_compound)

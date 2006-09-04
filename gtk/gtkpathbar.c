@@ -259,15 +259,6 @@ gtk_path_bar_dispose (GObject *object)
     gtk_file_system_cancel_operation (path_bar->set_path_handle);
   path_bar->set_path_handle = NULL;
 
-  for (list = path_bar->button_list; list; list = list->next)
-    {
-      ButtonData *button_data = BUTTON_DATA (list->data);
-
-      if (button_data->handle)
-	gtk_file_system_cancel_operation (button_data->handle);
-      button_data->handle = NULL;
-    }
-
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }
 
@@ -1020,6 +1011,12 @@ set_button_image_get_info_cb (GtkFileSystemHandle *handle,
 
   data->button_data->handle = NULL;
 
+  if (!data->button_data->button)
+    {
+      g_free (data->button_data);
+      goto out;
+    }
+
   if (cancelled || error)
     goto out;
 
@@ -1134,12 +1131,20 @@ set_button_image (GtkPathBar *path_bar,
 static void
 button_data_free (ButtonData *button_data)
 {
+  if (button_data->path)
+    gtk_file_path_free (button_data->path);
+  button_data->path = NULL;
+
+  if (button_data->dir_name)
+    g_free (button_data->dir_name);
+  button_data->dir_name = NULL;
+
+  button_data->button = NULL;
+
   if (button_data->handle)
     gtk_file_system_cancel_operation (button_data->handle);
-
-  gtk_file_path_free (button_data->path);
-  g_free (button_data->dir_name);
-  g_free (button_data);
+  else
+    g_free (button_data);
 }
 
 static const char *
