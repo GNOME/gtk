@@ -160,7 +160,6 @@ msgstr "ნახატის წერტილოვანი მონაც�
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "ნახატის ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
-msgstr[1] "ნახატის ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -1685,7 +1684,6 @@ msgstr "ახალი საქაღალდეს სახელის მ
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ბაიტი"
-msgstr[1] "%d ბაიტი"
 
 #: gtk/gtkfilechooserdefault.c:8279
 #, fuzzy, c-format

@@ -184,7 +184,6 @@ msgstr "Resmin benek verisi bozuk"
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u baytlık resim tamponu ayrılamadı"
-msgstr[1] "%u baytlık resim tamponu ayrılamadı"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -1855,7 +1854,6 @@ msgstr "Yeni klasörün adını girin"
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
-msgstr[1] "%d bayt"
 
 #: gtk/gtkfilechooserdefault.c:8279
 #, c-format

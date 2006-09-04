@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2005-07-19 17:50+0500\n"
+"PO-Revision-Date: 2006-09-04 13:36+0200\n"
 "Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
 "Language-Team:  <norik@freenet.am>\n"
 "MIME-Version: 1.0\n"
@@ -158,7 +158,7 @@ msgstr "Պատկերի պիքսելային տվյալները վնասված ե
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "Չհաջողվեց հատկացնել պատկերի %u բայթանոց բուֆեր"
-msgstr[1] ""
+msgstr[1] "Չհաջողվեց հատկացնել պատկերի %u բայթանոց բուֆեր"
 
 #: gdk-pixbuf/io-ani.c:244
 #, fuzzy, c-format

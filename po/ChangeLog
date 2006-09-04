@@ -1,3 +1,11 @@
+2006-09-04  Michael Natterer  <mitch@imendio.com>
+
+	* hy.po
+	* ja.po
+	* ka.po
+	* tr.po: msgfmt 0.15 chokes on excess and broken plural forms,
+	remove / fix them.
+
 2006-09-04  Mugurel Tudor  <mugurelu@gnome.ro>
 
 	* ro.po: Updated Romanian translation by
