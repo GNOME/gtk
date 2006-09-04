@@ -7327,7 +7327,7 @@ out:
   g_object_unref (handle);
 }
 
-struct SaveEntryData
+struct FileExistsData
 {
   GtkFileChooserDefault *impl;
   gboolean file_exists_and_is_not_folder;
@@ -7343,7 +7343,7 @@ save_entry_get_info_cb (GtkFileSystemHandle *handle,
 {
   gboolean parent_is_folder;
   gboolean cancelled = handle->cancelled;
-  struct SaveEntryData *data = user_data;
+  struct FileExistsData *data = user_data;
 
   if (handle != data->impl->should_respond_get_info_handle)
     goto out;
@@ -7402,6 +7402,72 @@ out:
   gtk_file_path_free (data->path);
   gtk_file_path_free (data->parent_path);
   g_free (data);
+
+  g_object_unref (handle);
+}
+
+static void
+file_exists_get_info_cb (GtkFileSystemHandle *handle,
+			 const GtkFileInfo   *info,
+			 const GError        *error,
+			 gpointer             user_data)
+{
+  gboolean data_ownership_taken = FALSE;
+  gboolean cancelled = handle->cancelled;
+  gboolean file_exists_and_is_not_folder;
+  struct FileExistsData *data = user_data;
+
+  if (handle != data->impl->file_exists_get_info_handle)
+    goto out;
+
+  data->impl->file_exists_get_info_handle = NULL;
+
+  set_busy_cursor (data->impl, FALSE);
+
+  if (cancelled)
+    goto out;
+
+  file_exists_and_is_not_folder = info && !gtk_file_info_get_is_folder (info);
+
+  if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    /* user typed a filename; we are done */
+    g_signal_emit_by_name (data->impl, "response-requested");
+  else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+	   && file_exists_and_is_not_folder)
+    {
+      /* Oops, the user typed the name of an existing path which is not
+       * a folder
+       */
+      error_creating_folder_over_existing_file_dialog (data->impl, data->path,
+						       g_error_copy (error));
+    }
+  else
+    {
+      /* check that everything up to the last component exists */
+
+      data->file_exists_and_is_not_folder = file_exists_and_is_not_folder;
+      data_ownership_taken = TRUE;
+
+      if (data->impl->should_respond_get_info_handle)
+	gtk_file_system_cancel_operation (data->impl->should_respond_get_info_handle);
+
+      data->impl->should_respond_get_info_handle =
+	gtk_file_system_get_info (data->impl->file_system,
+				  data->parent_path,
+				  GTK_FILE_INFO_IS_FOLDER,
+				  save_entry_get_info_cb,
+				  data);
+      set_busy_cursor (data->impl, TRUE);
+    }
+
+out:
+  if (!data_ownership_taken)
+    {
+      g_object_unref (data->impl);
+      gtk_file_path_free (data->path);
+      gtk_file_path_free (data->parent_path);
+      g_free (data);
+    }
 
   g_object_unref (handle);
 }
@@ -7593,46 +7659,26 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	}
       else
 	{
-	  gboolean file_exists_and_is_not_folder;
+	  struct FileExistsData *data;
 
-	  file_exists_and_is_not_folder = g_error_matches (error, GTK_FILE_SYSTEM_ERROR, GTK_FILE_SYSTEM_ERROR_NOT_FOLDER);
+	  /* We need to check whether path exists and is not a folder */
 
-	  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-	    retval = TRUE; /* user typed a filename; we are done */
-	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER && file_exists_and_is_not_folder)
-	    {
-	      /* Oops, the user typed the name of an existing path which is not a folder */
-	      error_creating_folder_over_existing_file_dialog (impl, path, error);
-	      error = NULL; /* as it will be freed below for the general case */
-	      retval = FALSE;
-	    }
-	  else
-	    {
-	      GtkFilePath *parent_path;
-	      struct SaveEntryData *data;
+	  data = g_new0 (struct FileExistsData, 1);
+	  data->impl = g_object_ref (impl);
+	  data->path = gtk_file_path_copy (path);
+	  data->parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
 
-	      /* check that everything up to the last component exists */
+	  if (impl->file_exists_get_info_handle)
+	    gtk_file_system_cancel_operation (impl->file_exists_get_info_handle);
 
-	      parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
+	  impl->file_exists_get_info_handle =
+	    gtk_file_system_get_info (impl->file_system, path,
+				      GTK_FILE_INFO_IS_FOLDER,
+				      file_exists_get_info_cb,
+				      data);
 
-	      data = g_new0 (struct SaveEntryData, 1);
-	      data->impl = g_object_ref (impl);
-	      data->file_exists_and_is_not_folder = file_exists_and_is_not_folder;
-	      data->parent_path = parent_path; /* Takes ownership */
-	      data->path = gtk_file_path_copy (path);
-
-	      if (impl->should_respond_get_info_handle)
-		gtk_file_system_cancel_operation (impl->should_respond_get_info_handle);
-
-	      impl->should_respond_get_info_handle =
-	        gtk_file_system_get_info (impl->file_system, parent_path,
-					  GTK_FILE_INFO_IS_FOLDER,
-					  save_entry_get_info_cb,
-					  data);
-	      set_busy_cursor (impl, TRUE);
-
-	      retval = FALSE;
-	    }
+	  set_busy_cursor (impl, TRUE);
+	  retval = FALSE;
 
 	  if (error != NULL)
 	    g_error_free (error);

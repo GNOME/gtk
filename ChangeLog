@@ -2,6 +2,27 @@
 
 	Merged from HEAD:
 
+	* gtk/gtkfilechooserdefault.c (save_entry_get_info_cb),
+	(file_exists_get_info_cb), (gtk_file_chooser_default_should_respond):
+	change file_exists_and_is_not_folder checks to get the file info
+	for the path directly instead of querying the current file folder
+	of the save entry.
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault): add
+	new field.
+
+	* tests/autotestfilechooser.c (wait_for_idle_idle), (wait_for_idle),
+	(test_reload_sequence), (test_button_folder_states_for_action): wait
+	for idle after setting a folder to ensure the async operations to load
+	the folder are finished,
+	(test_confirm_overwrite), (test_confirm_overwrite_for_path):
+	factor out test_confirm_overwrite code so we can add tests for more
+	paths more easily.
+
+2006-09-04  Kristian Rietveld  <kris@imendio.com>
+
+	Merged from HEAD:
+
 	First part of file chooser fixes.
 
 	* gtk/gtkfilechooserbutton.c (model_add_special): also set the
