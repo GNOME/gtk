@@ -1,5 +1,11 @@
 2006-09-04  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
+	if setting the given folder failed, try setting the parent folder
+	until we succeed; display an error box at the end.
+
+2006-09-04  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkpathbar.c (gtk_path_bar_dispose): don't cancel the
 	operations spawned by buttons here,
 	(set_button_image_get_info_cb): bail out if button is NULL, but

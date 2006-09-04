@@ -6138,6 +6138,8 @@ struct UpdateCurrentFolderData
   GtkFileChooserDefault *impl;
   GtkFilePath *path;
   gboolean keep_trail;
+  GtkFilePath *original_path;
+  GError *original_error;
 };
 
 static void
@@ -6163,8 +6165,51 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
 
   if (error)
     {
-      error_changing_folder_dialog (impl, data->path, g_error_copy (error));
-      goto out;
+      GtkFilePath *parent_path;
+
+      if (!data->original_path)
+        {
+	  data->original_path = gtk_file_path_copy (data->path);
+	  data->original_error = g_error_copy (error);
+	}
+
+      /* get parent path and try to change the folder to that */
+      if (gtk_file_system_get_parent (impl->file_system, data->path, &parent_path, NULL))
+        {
+	  gtk_file_path_free (data->path);
+	  data->path = parent_path;
+
+	  g_object_unref (handle);
+
+	  /* restart the update current folder operation */
+	  impl->reload_state = RELOAD_HAS_FOLDER;
+
+	  impl->update_current_folder_handle =
+	    gtk_file_system_get_info (impl->file_system, data->path,
+				      GTK_FILE_INFO_IS_FOLDER,
+				      update_current_folder_get_info_cb,
+				      data);
+
+	  set_busy_cursor (impl, TRUE);
+
+	  return;
+	}
+      else
+        {
+	  /* error and bail out */
+	  error_changing_folder_dialog (impl, data->original_path, data->original_error);
+
+	  gtk_file_path_free (data->original_path);
+
+	  goto out;
+	}
+    }
+
+  if (data->original_path)
+    {
+      error_changing_folder_dialog (impl, data->original_path, data->original_error);
+
+      gtk_file_path_free (data->original_path);
     }
 
   if (!gtk_file_info_get_is_folder (info))
