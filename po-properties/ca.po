@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-03 23:52+0200\n"
-"PO-Revision-Date: 2006-09-04 11:29+0200\n"
+"POT-Creation-Date: 2006-09-04 18:22+0200\n"
+"PO-Revision-Date: 2006-09-04 15:35+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -2012,11 +2012,12 @@ msgstr "Si s'ha de seleccionar els continguts d'una entrada quan s'enfoca"
 
 #: ../gtk/gtkentry.c:878
 msgid "Password Hint Timeout"
-msgstr ""
+msgstr "Temps d'espera de l'ajuda emergent per a contrasenyes"
 
 #: ../gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
-msgstr "Quanta estona mostrar el darrer caràcter entrat en entrades ocultes"
+msgstr ""
+"Quant s'ha de trigar en mostrar el darrer caràcter entrat en entrades ocultes"
 
 #: ../gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -3037,15 +3038,15 @@ msgstr "Text secundari"
 
 #: ../gtk/gtkmessagedialog.c:184
 msgid "The secondary text of the message dialog"
-msgstr "Els text secondari del diàleg de missatge"
+msgstr "Els text secundari del diàleg de missatge"
 
 #: ../gtk/gtkmessagedialog.c:199
 msgid "Use Markup in secondary"
-msgstr "Empra etiquetatge en el secondari"
+msgstr "Empra etiquetatge en el secundari"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "The secondary text includes Pango markup."
-msgstr "El text secondari inclou etiquetatge Pango."
+msgstr "El text secundari inclou etiquetatge Pango."
 
 #: ../gtk/gtkmessagedialog.c:215
 msgid "The image"
