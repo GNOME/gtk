@@ -1701,6 +1701,7 @@ model_add_special (GtkFileChooserButton *button)
 			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
 			  DATA_COLUMN, path,
 			  IS_FOLDER_COLUMN, TRUE,
+			  HANDLE_COLUMN, handle,
 			  -1);
 
       button->priv->n_special++;

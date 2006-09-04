@@ -75,6 +75,9 @@ struct _GtkFileSystemUnix
 
   GHashTable *handles;
 
+  guint execute_callbacks_idle_id;
+  GSList *callbacks;
+
   guint have_afs : 1;
   guint have_net : 1;
 };
@@ -140,6 +143,7 @@ static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_ICON);
 
 static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
+static void gtk_file_system_unix_dispose      (GObject                *object);
 static void gtk_file_system_unix_finalize     (GObject                *object);
 
 static GSList *             gtk_file_system_unix_list_volumes        (GtkFileSystem     *file_system);
@@ -250,6 +254,8 @@ static GtkFileInfo *create_file_info              (GtkFileFolderUnix *folder_uni
 						   struct stat *statbuf,
 						   const char *mime_type);
 
+static gboolean execute_callbacks_idle (gpointer data);
+
 static gboolean fill_in_names     (GtkFileFolderUnix  *folder_unix,
 				   GError            **error);
 static void     fill_in_stats     (GtkFileFolderUnix  *folder_unix);
@@ -300,6 +306,7 @@ gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->dispose = gtk_file_system_unix_dispose;
   gobject_class->finalize = gtk_file_system_unix_finalize;
 }
 
@@ -348,6 +355,9 @@ gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
     system_unix->have_net = FALSE;
 
   system_unix->handles = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  system_unix->execute_callbacks_idle_id = 0;
+  system_unix->callbacks = NULL;
 }
 
 static void
@@ -380,6 +390,7 @@ check_handles_at_finalization (GtkFileSystemUnix *system_unix)
 #endif
 
   g_hash_table_destroy (system_unix->handles);
+  system_unix->handles = NULL;
 }
 
 #define GTK_TYPE_FILE_SYSTEM_HANDLE_UNIX (_gtk_file_system_handle_unix_get_type ())
@@ -419,6 +430,24 @@ _gtk_file_system_handle_unix_class_init (GtkFileSystemHandleUnixClass *class)
   gobject_class->finalize = _gtk_file_system_handle_unix_finalize;
 }
 
+static void
+gtk_file_system_unix_dispose (GObject *object)
+{
+  GtkFileSystemUnix *system_unix;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (object);
+
+  if (system_unix->execute_callbacks_idle_id)
+    {
+      g_source_remove (system_unix->execute_callbacks_idle_id);
+      system_unix->execute_callbacks_idle_id = 0;
+
+      /* call pending callbacks */
+      execute_callbacks_idle (system_unix);
+    }
+
+  G_OBJECT_CLASS (gtk_file_system_unix_parent_class)->dispose (object);
+}
 
 static void
 gtk_file_system_unix_finalize (GObject *object)
@@ -479,7 +508,7 @@ enum callback_types
   CALLBACK_VOLUME_MOUNT
 };
 
-static void queue_callback (enum callback_types type, gpointer data);
+static void queue_callback (GtkFileSystemUnix *system_unix, enum callback_types type, gpointer data);
 
 struct get_info_callback
 {
@@ -522,7 +551,7 @@ queue_get_info_callback (GtkFileSystemGetInfoCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_GET_INFO, info);
+  queue_callback (GTK_FILE_SYSTEM_UNIX (handle->file_system), CALLBACK_GET_INFO, info);
 }
 
 
@@ -564,7 +593,7 @@ queue_get_folder_callback (GtkFileSystemGetFolderCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_GET_FOLDER, info);
+  queue_callback (GTK_FILE_SYSTEM_UNIX (handle->file_system), CALLBACK_GET_FOLDER, info);
 }
 
 
@@ -609,7 +638,7 @@ queue_create_folder_callback (GtkFileSystemCreateFolderCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_CREATE_FOLDER, info);
+  queue_callback (GTK_FILE_SYSTEM_UNIX (handle->file_system), CALLBACK_CREATE_FOLDER, info);
 }
 
 
@@ -651,7 +680,7 @@ queue_volume_mount_callback (GtkFileSystemVolumeMountCallback  callback,
   info->error = error;
   info->data = data;
 
-  queue_callback (CALLBACK_VOLUME_MOUNT, info);
+  queue_callback (GTK_FILE_SYSTEM_UNIX (handle->file_system), CALLBACK_VOLUME_MOUNT, info);
 }
 
 
@@ -669,17 +698,22 @@ struct callback_info
 };
 
 
-static guint execute_callbacks_idle_id = 0;
-static GSList *callbacks = NULL;
 
 static gboolean
 execute_callbacks_idle (gpointer data)
 {
   GSList *l;
+  gboolean unref_file_system = TRUE;
+  GtkFileSystemUnix *system_unix = GTK_FILE_SYSTEM_UNIX (data);
 
   GDK_THREADS_ENTER ();
 
-  for (l = callbacks; l; l = l->next)
+  if (!system_unix->execute_callbacks_idle_id)
+    unref_file_system = FALSE;
+  else
+    g_object_ref (system_unix);
+
+  for (l = system_unix->callbacks; l; l = l->next)
     {
       struct callback_info *info = l->data;
 
@@ -705,10 +739,13 @@ execute_callbacks_idle (gpointer data)
       g_free (info);
     }
 
-  g_slist_free (callbacks);
-  callbacks = NULL;
+  g_slist_free (system_unix->callbacks);
+  system_unix->callbacks = NULL;
 
-  execute_callbacks_idle_id = 0;
+  if (unref_file_system)
+    g_object_unref (system_unix);
+
+  system_unix->execute_callbacks_idle_id = 0;
 
   GDK_THREADS_LEAVE ();
 
@@ -716,7 +753,9 @@ execute_callbacks_idle (gpointer data)
 }
 
 static void
-queue_callback (enum callback_types type, gpointer data)
+queue_callback (GtkFileSystemUnix   *system_unix,
+		enum callback_types  type,
+		gpointer             data)
 {
   struct callback_info *info;
 
@@ -742,10 +781,10 @@ queue_callback (enum callback_types type, gpointer data)
 	break;
     }
 
-  callbacks = g_slist_append (callbacks, info);
+  system_unix->callbacks = g_slist_append (system_unix->callbacks, info);
 
-  if (!execute_callbacks_idle_id)
-    execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, NULL);
+  if (!system_unix->execute_callbacks_idle_id)
+    system_unix->execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, system_unix);
 }
 
 static GtkFileSystemHandle *
@@ -972,8 +1011,9 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   queue_get_folder_callback (callback, handle, GTK_FILE_FOLDER (folder_unix), NULL, data);
 
   /* Start loading the folder contents in an idle */
-  folder_unix->load_folder_id =
-    g_idle_add ((GSourceFunc) load_folder, folder_unix);
+  if (!folder_unix->load_folder_id)
+    folder_unix->load_folder_id =
+      g_idle_add ((GSourceFunc) load_folder, folder_unix);
 
   return handle;
 }
