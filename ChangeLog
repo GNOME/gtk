@@ -1,3 +1,11 @@
+2006-09-04  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkrc.c (rc_parse_token_or_compound)
+	(gtk_rc_parse_assignment): serialize floating point values using
+	locale-independent functions. (#346751, Frederic Crozat)
+
 2006-09-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix a typo.  
