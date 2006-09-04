@@ -163,7 +163,6 @@ msgstr "画像のピクセルデータが壊れています"
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u バイトの画像バッファの確保に失敗しました"
-msgstr[1] "%u バイトの画像バッファの確保に失敗しました"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -1691,7 +1690,6 @@ msgstr "新しいフォルダの種類"
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%dバイト"
-msgstr[1] "%dバイト"
 
 #: gtk/gtkfilechooserdefault.c:8279
 #, c-format
