@@ -1611,7 +1611,7 @@ msgstr "ତୀର ସକ୍ରିୟଣକୁ ସ୍ବୀକାର କରନ୍
 
 #: ../gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr "ପରିତ୍ଯକ୍ତ ସମ୍ପତିକୁ, ଆଗ୍ରହ୍ଯ କରିଦିଅନ୍ତୁ"
+msgstr "ପରିତ୍ଯକ୍ତ ଗୁଣଧର୍ମକୁ, ଆଗ୍ରହ୍ଯ କରିଦିଅନ୍ତୁ"
 
 #: ../gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -2299,7 +2299,7 @@ msgstr "ସୂଚକର ଭୂଲମ୍ବ ପାର୍ଶ୍ବସଜ୍ଜା"
 
 #: ../gtk/gtkframe.c:121 ../gtk/gtkhandlebox.c:169
 msgid "Deprecated property, use shadow_type instead"
-msgstr "ଅପସନ୍ଦ ସମ୍ପତି, ଏହା ପରିବର୍ତ୍ତେ shadow_type କୁ ବ୍ଯବହାର କରନ୍ତୁ"
+msgstr "ଅପସନ୍ଦ ଗୁଣଧର୍ମ, ଏହା ପରିବର୍ତ୍ତେ shadow_type କୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkframe.c:128
 msgid "Frame shadow"
@@ -2794,61 +2794,62 @@ msgstr "ଉପତାଲିକା ଆବିର୍ଭାବ ହେବା ପୂର
 
 #: ../gtk/gtkmenu.c:670
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
+msgstr "ଉପ-ତାଲିକା ଦେଖାଯିବା ପୂର୍ବରୁ ସୂଚକଟି ଗୋଟିଏ ତାଲିକା ବସ୍ତୁ ଉପରେ ରହିବାର ସର୍ବନିମ୍ନ ସମୟ "
 
 #: ../gtk/gtkmenu.c:677
 msgid "Delay before hiding a submenu"
-msgstr ""
+msgstr "ଗୋଟିଏ ଉପ-ତାଲିକାକୁ ଲୁଚାଇବା ପୂର୍ବରୁ ବିଳମ୍ବ"
 
 #: ../gtk/gtkmenu.c:678
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
+"ସୂଚକଟି ଉପତାଲିକା ଦିଗରେ ଅଗ୍ରସରିତ ହେବା ସମୟରେ ଗୋଟିଏ ଉପତାଲିକାକୁ ଲୁଚାଇବା ପୂର୍ବରୁ କେତେ ସମୟ"
 
 #: ../gtk/gtkmenubar.c:175
 msgid "Pack direction"
-msgstr ""
+msgstr "ପ୍ଯାକ ଦିଗ"
 
 #: ../gtk/gtkmenubar.c:176
 msgid "The pack direction of the menubar"
-msgstr ""
+msgstr "ମେନୁ ପଟିର ପେକ ଦିଗ"
 
 #: ../gtk/gtkmenubar.c:192
 msgid "Child Pack direction"
-msgstr ""
+msgstr "ନିର୍ଭରକ ପ୍ଯାକ ଦିଗ"
 
 #: ../gtk/gtkmenubar.c:193
 msgid "The child pack direction of the menubar"
-msgstr ""
+msgstr "ମେନୁ ପଟିର ନିର୍ଭରକ ପ୍ଯାକ ଦିଗ"
 
 #: ../gtk/gtkmenubar.c:202
 msgid "Style of bevel around the menubar"
-msgstr ""
+msgstr "ମେନୁ ପଟି ଚତୁଃପାର୍ଶ୍ବରେ ଗଡାଣିଆ ଧାର ଶୈଳୀ"
 
 #: ../gtk/gtkmenubar.c:209 ../gtk/gtktoolbar.c:589
 msgid "Internal padding"
-msgstr ""
+msgstr "ଆଭ୍ଯନ୍ତରୀଣ ପ୍ଯାଡିଙ୍ଗ"
 
 #: ../gtk/gtkmenubar.c:210
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
+msgstr "ମେନୁ ପଟି ଛାୟା ଏବଂ ତାଲିକା ବସ୍ତୁ ମଧ୍ଯରେ ଧାର ବ୍ଯବଧାନର ମାତ୍ରା"
 
 #: ../gtk/gtkmenubar.c:217
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "ଡ୍ରୋପ-ଡାଉନ ତାଲିକା ଦେଖାଦେବା ପୂର୍ବରୁ ବିଳମ୍ବତା"
 
 #: ../gtk/gtkmenubar.c:218
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "ଗୋଟିଏ ମେନୁ ପଟିର ଉପ-ତାଲିକା ଦେଖାଦେବା ପୂର୍ବରୁ ବିଳମ୍ବତା"
 
 #: ../gtk/gtkmenushell.c:344
 msgid "Take Focus"
-msgstr ""
+msgstr "ଫୋକସ ନିଅନ୍ତୁ"
 
 #: ../gtk/gtkmenushell.c:345
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr ""
+msgstr "ତାଲିକାଟି କି-ବୋର୍ଡ ଫୋକସର ଧ୍ଯାନ ଆକର୍ଷଣ କରିବ କି ନାହିଁ ଗୋଟିଏ ବୁଲିଆନ ତାହା ସ୍ଥିର କରିଥାଏ"
 
 #: ../gtk/gtkmenutoolbutton.c:236 ../gtk/gtkoptionmenu.c:162
 msgid "Menu"
@@ -2856,7 +2857,7 @@ msgstr "ତାଲିକା"
 
 #: ../gtk/gtkmenutoolbutton.c:237
 msgid "The dropdown menu"
-msgstr ""
+msgstr "ଡ୍ରୋପ-ଡାଉନ ତାଲିକା"
 
 #: ../gtk/gtkmessagedialog.c:97
 msgid "Image/label border"
@@ -2868,7 +2869,7 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:113
 msgid "Use separator"
-msgstr ""
+msgstr "ବିଭାଜକକୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkmessagedialog.c:114
 msgid "Whether to put a separator between the message dialog's text and the buttons"
@@ -2876,75 +2877,75 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:127
 msgid "Message Type"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ପ୍ରକାର"
 
 #: ../gtk/gtkmessagedialog.c:128
 msgid "The type of message"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ପ୍ରକାର"
 
 #: ../gtk/gtkmessagedialog.c:135
 msgid "Message Buttons"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ବଟନ"
 
 #: ../gtk/gtkmessagedialog.c:136
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ସଂଳାପରେ ଦେଖାଯାଇଥିବା ବଟନ"
 
 #: ../gtk/gtkmessagedialog.c:153
 msgid "The primary text of the message dialog"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ସଂଳାପର ମୌଳିକ ପାଠ୍ଯ"
 
 #: ../gtk/gtkmessagedialog.c:168
 msgid "Use Markup"
-msgstr ""
+msgstr "ମାର୍କ-ଅପ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkmessagedialog.c:169
 msgid "The primary text of the title includes Pango markup."
-msgstr ""
+msgstr "ଶୀର୍ଷକର ମୌଳିକ ପାଠ୍ଯ ପେଙ୍ଗୋ ମାର୍କ-ଅପକୁ ସଂଲଗ୍ନିତ କରିଥାଏ।"
 
 #: ../gtk/gtkmessagedialog.c:183
 msgid "Secondary Text"
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକ ପାଠ୍ଯ"
 
 #: ../gtk/gtkmessagedialog.c:184
 msgid "The secondary text of the message dialog"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ସଂଳାପର ଦ୍ବିତୀୟକ ପାଠ୍ଯ"
 
 #: ../gtk/gtkmessagedialog.c:199
 msgid "Use Markup in secondary"
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକରେ ମାର୍କ-ଅପକୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "The secondary text includes Pango markup."
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକ ପାଠ୍ଯ ପେଙ୍ଗୋ ମାର୍କ-ଅପକୁ ସଂଲଗ୍ନିତ କରିଥାଏ।"
 
 #: ../gtk/gtkmessagedialog.c:215
 msgid "The image"
-msgstr ""
+msgstr "ପ୍ରତିଛବି"
 
 #: ../gtk/gtkmisc.c:83
 msgid "Y align"
-msgstr ""
+msgstr "ୱାଈ ପାର୍ଶ୍ବସଜ୍ଜା"
 
 #: ../gtk/gtkmisc.c:84
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ପାର୍ଶ୍ବସଜ୍ଜା, ୦ (ଉପର) ରୁ ୧ (ତଳ)"
 
 #: ../gtk/gtkmisc.c:93
 msgid "X pad"
-msgstr ""
+msgstr "ଏକ୍ସ ପ୍ଯାଡ"
 
 #: ../gtk/gtkmisc.c:94
 msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "ୱିଜେଟର ବାମ ଏବଂ ଡାହାଣରେ ଯୋଗ କରିବା ପାଇଁ କେତେ ସ୍ଥାନ, ପିକ୍ସେଲରେ"
 
 #: ../gtk/gtkmisc.c:103
 msgid "Y pad"
-msgstr ""
+msgstr "ୱାଈ ପ୍ଯାଡ"
 
 #: ../gtk/gtkmisc.c:104
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "ୱିଜେଟର ଉପର ଏବଂ ତଳେ ଯୋଗ କରିବା ପାଇଁ କେତେ ସ୍ଥାନ, ପିକ୍ସେଲରେ"
 
 #: ../gtk/gtknotebook.c:524
 msgid "Page"
@@ -2952,67 +2953,68 @@ msgstr "ପ୍ରୁଷ୍ଠା"
 
 #: ../gtk/gtknotebook.c:525
 msgid "The index of the current page"
-msgstr ""
+msgstr "ସମ୍ପ୍ରତିକ ପୃଷ୍ଠାର ଅନୁକ୍ରମଣିକା"
 
 #: ../gtk/gtknotebook.c:533
 msgid "Tab Position"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଅବସ୍ଥାନ"
 
 #: ../gtk/gtknotebook.c:534
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "ନୋଟବୁକର କେଉଁ ପାର୍ଶ୍ବ ଟ୍ଯାବକୁ ଧାରଣ କରିଅଛି"
 
 #: ../gtk/gtknotebook.c:541
 msgid "Tab Border"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଧାର"
 
 #: ../gtk/gtknotebook.c:542
 msgid "Width of the border around the tab labels"
-msgstr ""
+msgstr "ଟ୍ଯାବ ସୂଚକ ଚତୁଃପାର୍ଶ୍ବରେ ଧାରର ଓସାର"
 
 #: ../gtk/gtknotebook.c:550
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତର ଟ୍ଯାବ ଧାର"
 
 #: ../gtk/gtknotebook.c:551
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "ଟ୍ଯାବ ସୂଚକର ଭୂସମାନ୍ତର ଧାରର ଓସାର"
 
 #: ../gtk/gtknotebook.c:559
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ଟ୍ଯାବ ଧାର"
 
 #: ../gtk/gtknotebook.c:560
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "ଟ୍ଯାବ ସୂଚକର ଭୂଲମ୍ବ ଧାରର ଓସାର"
 
 #: ../gtk/gtknotebook.c:568
 msgid "Show Tabs"
-msgstr ""
+msgstr "ଟ୍ଯାବ ପ୍ରଦର୍ଶନ କରନ୍ତୁ"
 
 #: ../gtk/gtknotebook.c:569
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଦେଖାଯିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtknotebook.c:575
 msgid "Show Border"
-msgstr ""
+msgstr "ଧାର ଦେଖାନ୍ତୁ"
 
 #: ../gtk/gtknotebook.c:576
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "ଧାର ଦେଖାଯିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtknotebook.c:582
 msgid "Scrollable"
-msgstr ""
+msgstr "ସ୍କ୍ରୋଲ କରିବା ଯୋଗ୍ଯ"
 
 #: ../gtk/gtknotebook.c:583
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE) ହୋଇଥାଏ, ଏବଂ ଖାପ ଖାଇବା ପାଇଁ ଯଦି ବହୁତ ଗୁଡାଏ ଟ୍ଯାବ ଥାଏ ତାହାହେଲେ ସ୍କ୍ରୋଲ ତୀର ମାନଙ୍କୁ "
+"ଯୋଗ କରାଯାଏ"
 
 #: ../gtk/gtknotebook.c:589
 msgid "Enable Popup"
-msgstr ""
+msgstr "ପପ-ଅପ ଧାରାକୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
 #: ../gtk/gtknotebook.c:590
 msgid ""
@@ -3026,67 +3028,67 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:603
 msgid "Group ID"
-msgstr "ସମୂହ ର ପରିଚୟ"
+msgstr "ସମୂହର ପରିଚୟ"
 
 #: ../gtk/gtknotebook.c:604
 msgid "Group ID for tabs drag and drop"
-msgstr ""
+msgstr "ଟ୍ଯାବ ମାନଙ୍କୁ ଟାଣି ପକାଇବା ପାଇଁ ସମୂହ ପରିଚୟ"
 
 #: ../gtk/gtknotebook.c:613
 msgid "Tab label"
-msgstr ""
+msgstr "ଟ୍ଯାବ ସୂଚକ"
 
 #: ../gtk/gtknotebook.c:614
 msgid "The string displayed on the child's tab label"
-msgstr ""
+msgstr "ନିର୍ଭରକର ଟ୍ଯାବ ସୂଚକରେ ପ୍ରତର୍ଶିତ ବାକ୍ଯଖଣ୍ଡ"
 
 #: ../gtk/gtknotebook.c:620
 msgid "Menu label"
-msgstr ""
+msgstr "ତାଲିକା ସୂଚକ"
 
 #: ../gtk/gtknotebook.c:621
 msgid "The string displayed in the child's menu entry"
-msgstr ""
+msgstr "ନିର୍ଭରକର ତାଲିକା ପ୍ରବିଷ୍ଟିରେ ପ୍ରତର୍ଶିତ ବାକ୍ଯଖଣ୍ଡ"
 
 #: ../gtk/gtknotebook.c:634
 msgid "Tab expand"
-msgstr ""
+msgstr "ଟ୍ଯାବ ସମ୍ପ୍ରସାରଣ"
 
 #: ../gtk/gtknotebook.c:635
 msgid "Whether to expand the child's tab or not"
-msgstr ""
+msgstr "ନିର୍ଭରକର ଟ୍ଯାବକୁ ସମ୍ପ୍ରସାରଣ କରାଯିବ କି ନାହିଁ"
 
 #: ../gtk/gtknotebook.c:641
 msgid "Tab fill"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଫିଲ"
 
 #: ../gtk/gtknotebook.c:642
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr ""
+msgstr "ନିର୍ଭରକର ଟ୍ଯାବ ବଣ୍ଟିତ କ୍ଷେତ୍ରକୁ ଭରଣ କରିବା ଉଚିତ କି ନୁହେଁ"
 
 #: ../gtk/gtknotebook.c:648
 msgid "Tab pack type"
-msgstr ""
+msgstr "ଟ୍ଯାବ ପ୍ଯାକ ପ୍ରକାର"
 
 #: ../gtk/gtknotebook.c:655
 msgid "Tab reorderable"
-msgstr ""
+msgstr "ଟ୍ଯାବ ପୁନଃଅନୁକ୍ରମଯୋଗ୍ଯ"
 
 #: ../gtk/gtknotebook.c:656
 msgid "Whether the tab is reorderable by user action or not"
-msgstr ""
+msgstr "ଚାଳକ କାର୍ଯ୍ଯ ଦ୍ବାରା ଟ୍ଯାବଟି ପୁନଃଅନୁକ୍ରମଯୋଗ୍ଯ ଅଟେ କି ନାହିଁ"
 
 #: ../gtk/gtknotebook.c:662
 msgid "Tab detachable"
-msgstr ""
+msgstr "ଟ୍ଯାବ ପୃଥକୀକରଣଯୋଗ୍ଯ"
 
 #: ../gtk/gtknotebook.c:663
 msgid "Whether the tab is detachable"
-msgstr ""
+msgstr "ଟ୍ଯାବଟି ପୃଥକୀକରଣଯୋଗ୍ଯ ଅଟେ କି ନାହିଁ"
 
 #: ../gtk/gtknotebook.c:678 ../gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକ ପଶ୍ଚାତଗାମୀ ପଦକ୍ଷେପକ"
 
 #: ../gtk/gtknotebook.c:679
 msgid "Display a second backward arrow button on the opposite end of the tab area"
@@ -3094,7 +3096,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:694 ../gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "ଦ୍ବିତୀୟକ ଅଗ୍ରଗାମୀ ପଦକ୍ଷେପକ"
 
 #: ../gtk/gtknotebook.c:695
 msgid "Display a second forward arrow button on the opposite end of the tab area"
@@ -3102,55 +3104,55 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:709 ../gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
-msgstr ""
+msgstr "ପଶ୍ଚାତଗାମୀ ପଦକ୍ଷେପକ"
 
 #: ../gtk/gtknotebook.c:710 ../gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
-msgstr ""
+msgstr "ମାନକ ପଶ୍ଚାତଗାମୀ ତୀର ବଟନକୁ ପ୍ରଦର୍ଶିତ କରନ୍ତୁ"
 
 #: ../gtk/gtknotebook.c:724 ../gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
-msgstr ""
+msgstr "ଅଗ୍ରଗାମୀ ପଦକ୍ଷେପକ"
 
 #: ../gtk/gtknotebook.c:725 ../gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
-msgstr ""
+msgstr "ମାନକ ଅଗ୍ରଗାମୀ ତୀର ବଟନକୁ ପ୍ରଦର୍ଶିତ କରନ୍ତୁ"
 
 #: ../gtk/gtknotebook.c:739
 msgid "Tab overlap"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଆଂଶିକ ଆଚ୍ଛାଦନ"
 
 #: ../gtk/gtknotebook.c:740
 msgid "Size of tab overlap area"
-msgstr ""
+msgstr "ଟ୍ଯାବ ଆଂଶିକ ଆଚ୍ଛାଦନ କ୍ଷେତ୍ରର ଆକାର"
 
 #: ../gtk/gtknotebook.c:755
 msgid "Tab curvature"
-msgstr ""
+msgstr "ଟ୍ଯାବ ବକ୍ରିମା"
 
 #: ../gtk/gtknotebook.c:756
 msgid "Size of tab curvature"
-msgstr ""
+msgstr "ଟ୍ଯାବ ବକ୍ରିମାର ଆକାର"
 
 #: ../gtk/gtkobject.c:367
 msgid "User Data"
-msgstr ""
+msgstr "ଚାଳକ ତଥ୍ଯ"
 
 #: ../gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
-msgstr ""
+msgstr "ଅଜ୍ଞାତ ଚାଳକ ତଥ୍ଯ ସୂଚକ"
 
 #: ../gtk/gtkoptionmenu.c:163
 msgid "The menu of options"
-msgstr ""
+msgstr "ତାଲିକାର ବିକଲ୍ପ"
 
 #: ../gtk/gtkoptionmenu.c:170
 msgid "Size of dropdown indicator"
-msgstr ""
+msgstr "ଡ୍ରୋପ-ଡାଉନ ସୂଚକର ଆକାର"
 
 #: ../gtk/gtkoptionmenu.c:176
 msgid "Spacing around indicator"
-msgstr ""
+msgstr "ସୂଚକ ଚତୁଃପାର୍ଶ୍ବରେ ବ୍ଯବଧାନ"
 
 #: ../gtk/gtkpaned.c:217
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
@@ -3158,51 +3160,51 @@ msgstr ""
 
 #: ../gtk/gtkpaned.c:225
 msgid "Position Set"
-msgstr ""
+msgstr "ଅବସ୍ଥାନ ବିନ୍ଯାସ"
 
 #: ../gtk/gtkpaned.c:226
 msgid "TRUE if the Position property should be used"
-msgstr ""
+msgstr "ସତ (TRUE) ଯଦି ଅବସ୍ଥାନ ଗୁଣଧର୍ମକୁ ବ୍ଯବହାର କରାଯିବ"
 
 #: ../gtk/gtkpaned.c:232
 msgid "Handle Size"
-msgstr ""
+msgstr "ନିୟନ୍ତ୍ରଣ ଆକାର"
 
 #: ../gtk/gtkpaned.c:233
 msgid "Width of handle"
-msgstr ""
+msgstr "ନିୟନ୍ତ୍ରଣର ଓସାର"
 
 #: ../gtk/gtkpaned.c:249
 msgid "Minimal Position"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkpaned.c:250
 msgid "Smallest possible value for the \"position\" property"
-msgstr ""
+msgstr "\"ଅବସ୍ଥାନ\" ଗୁଣଧର୍ମର ସର୍ବନିମ୍ନ ସମ୍ଭାବ୍ଯ ମୂଲ୍ଯ"
 
 #: ../gtk/gtkpaned.c:267
 msgid "Maximal Position"
-msgstr ""
+msgstr "ସର୍ବାଧିକ ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkpaned.c:268
 msgid "Largest possible value for the \"position\" property"
-msgstr ""
+msgstr "\"ଅବସ୍ଥାନ\" ଗୁଣଧର୍ମର ସର୍ବାଧିକ ସମ୍ଭାବ୍ଯ ମୂଲ୍ଯ"
 
 #: ../gtk/gtkpaned.c:285
 msgid "Resize"
-msgstr ""
+msgstr "ଆକାର ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 
 #: ../gtk/gtkpaned.c:286
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE), ତାହାହେଲେ ପରଦାଖଣ୍ଟ ୱିଜେଟ ସହିତ ନିର୍ଭରକଟି ସମ୍ପ୍ରସାରତ ଏବଂ ସଙ୍କୁଚିତ ହେବ"
 
 #: ../gtk/gtkpaned.c:301
 msgid "Shrink"
-msgstr ""
+msgstr "ସଙ୍କୁଚିତ ହେବ"
 
 #: ../gtk/gtkpaned.c:302
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr ""
+msgstr "ଯଦି ସତ (TRUE), ତାହାହେଲେ ନିର୍ଭରକଟି ଏହାର ଲିଖିଲ ଅନୁରୋଧ ଠାରୁ କ୍ଷୁଦ୍ରତର ଭାବରେ ପ୍ରସ୍ତୁତ କରାଯିବ"
 
 #: ../gtk/gtkpreview.c:106
 msgid "Whether the preview widget should take up the entire space it is allocated"
@@ -3210,55 +3212,55 @@ msgstr ""
 
 #: ../gtk/gtkprintbackend.c:261
 msgid "Default print backend"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ ପୃଷ୍ଠଭାଗ"
 
 #: ../gtk/gtkprintbackend.c:262
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଭାବରେ ବ୍ଯବହାର କରାଯିବା GtkPrintBackend ପୃଷ୍ଠଭାଗର ତାଲିକା"
 
 #: ../gtk/gtkprinter.c:120
 msgid "Name of the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀର ନାମ"
 
 #: ../gtk/gtkprinter.c:126
 msgid "Backend"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭାଗ"
 
 #: ../gtk/gtkprinter.c:127
 msgid "Backend for the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀ ପାଇଁ ପୃଷ୍ଠଭାଗ"
 
 #: ../gtk/gtkprinter.c:133
 msgid "Is Virtual"
-msgstr ""
+msgstr "ଆଭାସୀ ଅଟେ"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
-msgstr ""
+msgstr "ମିଛ (FALSE) ଯଦି ଏହା ଗୋଟିଏ ବାସ୍ତବ ହାର୍ଡୱେର ମୂଦ୍ରଣୀକୁ ବର୍ଣ୍ଣନା କରିଥାଏ"
 
 #: ../gtk/gtkprinter.c:140
 msgid "Accepts PDF"
-msgstr ""
+msgstr "PDF କୁ ସ୍ବୀକାର କରିଥାଏ"
 
 #: ../gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "ସତ (TRUE) ଯଦି ଏହା ମୂଦ୍ରଣୀ PDF କୁ ସ୍ବୀକାର କରିପାରିବ"
 
 #: ../gtk/gtkprinter.c:147
 msgid "Accepts PostScript"
-msgstr ""
+msgstr "ପୋଷ୍ଟ-ସ୍କ୍ରିପ୍ଟକୁ ସ୍ବୀକାର କରିଥାଏ"
 
 #: ../gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "ସତ (TRUE) ଯଦି ଏହା ମୂଦ୍ରଣୀ ପୋଷ୍ଟ-ସ୍କ୍ରିପ୍ଟ କୁ ସ୍ବୀକାର କରିପାରିବ"
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "ଅବସ୍ଥା ସନ୍ଦେଶ"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀର ବର୍ତ୍ତମାନ ଅବସ୍ଥା ବିଷୟରେ ସୂଚନା ଦେଉଥିବା ବାକ୍ଯଖଣ୍ଡ"
 
 #: ../gtk/gtkprinter.c:161
 msgid "Location"
@@ -3266,23 +3268,23 @@ msgstr "ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkprinter.c:162
 msgid "The location of the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀର ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkprinter.c:169
 msgid "The icon name to use for the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀ ପାଇଁ ବ୍ଯବହାର କରାଯିବା ଚିତ୍ରସଙ୍କେତ ନାମ"
 
 #: ../gtk/gtkprinter.c:175
 msgid "Job Count"
-msgstr ""
+msgstr "କାର୍ଯ୍ଯ ଗଣାନା"
 
 #: ../gtk/gtkprinter.c:176
 msgid "Number of jobs queued in the printer"
-msgstr ""
+msgstr "ମୂଦ୍ରଣୀରେ ଧାଡି ଲାଗିଥିବା କାର୍ଯ୍ଯ ମାନଙ୍କ ସଂଖ୍ଯା"
 
 #: ../gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
-msgstr ""
+msgstr "ଉତ୍ସ ବିକଲ୍ପ"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
