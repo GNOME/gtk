@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-04 23:50-0400\n"
-"PO-Revision-Date: 2006-08-23 10:41+0530\n"
+"PO-Revision-Date: 2006-09-05 16:57+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
 "MIME-Version: 1.0\n"
@@ -1125,19 +1125,19 @@ msgstr "ସ୍ବୀକୃତି"
 
 #: gtk/gtkaboutdialog.c:2030
 msgid "Written by"
-msgstr "ଦ୍ବାରା ଲେଖା"
+msgstr "ଲେଖକ"
 
 #: gtk/gtkaboutdialog.c:2033
 msgid "Documented by"
-msgstr "ଦଲିଲିକରଣ ଦ୍ବାରା"
+msgstr "ଦଲିଲିକରଣ ଲେଖକ"
 
 #: gtk/gtkaboutdialog.c:2045
 msgid "Translated by"
-msgstr "ଅନୁବାଦ ଦ୍ବାରା"
+msgstr "ଅନୁବାଦକ"
 
 #: gtk/gtkaboutdialog.c:2049
 msgid "Artwork by"
-msgstr "କଳା ଦ୍ବାରା"
+msgstr "କଳାକାର"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
