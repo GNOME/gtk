@@ -1,3 +1,34 @@
+Overview of Changes from GTK+ 2.10.2 to 2.10.3
+==============================================
+
+* GtkFileChooser:
+ - Fix several Win32-specific problems
+ - Add automated tests for GtkFileSystem
+ - Make overwrite confirmation work again
+
+* Printing support:
+ - Fix confusion between names and values in combo boxes
+ - Poll for printer list updates in the cups backend
+
+* Add an automatic scrolling example to gtk-demo
+
+* Bugs fixed:
+ 354004 Use of g_warning("%s", NULL) after failing to 
+        open a display
+ 346751 symbolic colors can't be use in properties
+ 352264 gtk_status_icon_set_from_pixbuf leaks the old 
+        pixbuf
+ 352391 small link button leak
+ 353449 A break is missing in 
+        gtk_recent_chooser_menu_set_current_uri
+ 329604 do not scroll on copy to clipboard
+ 354035 Typo in the GtkWidget::drag-drop doc blurb
+
+* Translation updates (ang,bn_IN,ca,de,dz,el,eu,fi,
+  fr,hi,hu,it,ja,lt,ml,mr,nn,or,pl,pt_BR,ro,ru,sl,
+  sr,sr@Latn,sv,ta,th,tr,vi,zh_CN,zh_HK,zh_TW)
+
+
 Overview of Changes from GTK+ 2.10.1 to 2.10.2
 ==============================================
 

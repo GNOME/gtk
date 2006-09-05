@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-17 23:42-0400\n"
+"POT-Creation-Date: 2006-09-04 23:50-0400\n"
 "PO-Revision-Date: 2006-08-17 22:07+0900\n"
 "Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -1458,11 +1458,11 @@ msgstr "色ホイール"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7243
+#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7238
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7257
+#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7252
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -1484,7 +1484,7 @@ msgstr "デスクトップ"
 msgid "(None)"
 msgstr "(なし)"
 
-#: gtk/gtkfilechooserbutton.c:1877
+#: gtk/gtkfilechooserbutton.c:1878
 msgid "Other..."
 msgstr "その他..."
 
@@ -1520,201 +1520,201 @@ msgstr "ファイル名が不正です"
 msgid "The folder contents could not be displayed"
 msgstr "フォルダの内容を表示できませんでした"
 
-#: gtk/gtkfilechooserdefault.c:2497
+#: gtk/gtkfilechooserdefault.c:2501
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' というフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:2538
+#: gtk/gtkfilechooserdefault.c:2542
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "このフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:2540
+#: gtk/gtkfilechooserdefault.c:2544
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:2580
+#: gtk/gtkfilechooserdefault.c:2584
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' というブックマークを削除します"
 
-#: gtk/gtkfilechooserdefault.c:3011
+#: gtk/gtkfilechooserdefault.c:3015
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "パス名が正しくないので、'%s' のブックマークを追加できませんでした。"
 
-#: gtk/gtkfilechooserdefault.c:3242
+#: gtk/gtkfilechooserdefault.c:3246
 msgid "Remove"
 msgstr "削除"
 
-#: gtk/gtkfilechooserdefault.c:3251
+#: gtk/gtkfilechooserdefault.c:3255
 msgid "Rename..."
 msgstr "ファイル名の変更..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3393
+#: gtk/gtkfilechooserdefault.c:3397
 msgid "Places"
 msgstr "場所"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3447
+#: gtk/gtkfilechooserdefault.c:3451
 msgid "_Places"
 msgstr "場所(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3503 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3507 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "追加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3510
+#: gtk/gtkfilechooserdefault.c:3514
 msgid "Add the selected folder to the Bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:3515 gtk/gtkstock.c:404
+#: gtk/gtkfilechooserdefault.c:3519 gtk/gtkstock.c:404
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3526
 msgid "Remove the selected bookmark"
 msgstr "指定したブックマークを削除します"
 
-#: gtk/gtkfilechooserdefault.c:3618
+#: gtk/gtkfilechooserdefault.c:3622
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: gtk/gtkfilechooserdefault.c:3755
+#: gtk/gtkfilechooserdefault.c:3759
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "パス名が正しくないので '%s' というファイルを選択できませんでした。"
 
-#: gtk/gtkfilechooserdefault.c:3812
+#: gtk/gtkfilechooserdefault.c:3816
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3826
+#: gtk/gtkfilechooserdefault.c:3830
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: gtk/gtkfilechooserdefault.c:3963 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:3967 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ファイル"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4012
 msgid "Name"
 msgstr "名前"
 
-#: gtk/gtkfilechooserdefault.c:4033
+#: gtk/gtkfilechooserdefault.c:4037
 msgid "Size"
 msgstr "サイズ"
 
-#: gtk/gtkfilechooserdefault.c:4046
+#: gtk/gtkfilechooserdefault.c:4050
 msgid "Modified"
 msgstr "最終変更日"
 
-#: gtk/gtkfilechooserdefault.c:4078
+#: gtk/gtkfilechooserdefault.c:4082
 msgid "Select which types of files are shown"
 msgstr "表示するファイルの種類を選択して下さい"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4226 gtk/gtkprinteroptionwidget.c:771
+#: gtk/gtkfilechooserdefault.c:4230 gtk/gtkprinteroptionwidget.c:780
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4268
+#: gtk/gtkfilechooserdefault.c:4272
 msgid "_Browse for other folders"
 msgstr "他のフォルダ(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4503
+#: gtk/gtkfilechooserdefault.c:4507
 msgid "Type a file name"
 msgstr "ファイル名を入力して下さい"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4540
+#: gtk/gtkfilechooserdefault.c:4544
 msgid "Create Fo_lder"
 msgstr "フォルダの作成(_L)"
 
-#: gtk/gtkfilechooserdefault.c:4550
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "_Location:"
 msgstr "場所(_L):"
 
-#: gtk/gtkfilechooserdefault.c:4790
+#: gtk/gtkfilechooserdefault.c:4794
 msgid "Save in _folder:"
 msgstr "フォルダの中に保存(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: gtk/gtkfilechooserdefault.c:4796
 msgid "Create in _folder:"
 msgstr "フォルダの中に作成(_F):"
 
-#: gtk/gtkfilechooserdefault.c:6241
+#: gtk/gtkfilechooserdefault.c:6291
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ローカルではないので、フォルダを変更できません"
 
-#: gtk/gtkfilechooserdefault.c:6814 gtk/gtkfilechooserdefault.c:6835
+#: gtk/gtkfilechooserdefault.c:6864 gtk/gtkfilechooserdefault.c:6885
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ショートカット %s は既にあります"
 
-#: gtk/gtkfilechooserdefault.c:6925
+#: gtk/gtkfilechooserdefault.c:6975
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ショートカット %s はありません"
 
-#: gtk/gtkfilechooserdefault.c:7180
+#: gtk/gtkfilechooserdefault.c:7230
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" というファイルは既に存在します。上書きしてもよろしいですか？"
 
-#: gtk/gtkfilechooserdefault.c:7183
+#: gtk/gtkfilechooserdefault.c:7233
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\" にファイルが既に存在しています。全ての内容を上書きします。"
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7238
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserdefault.c:7838
+#: gtk/gtkfilechooserdefault.c:7934
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s をマウントできませんでした"
 
-#: gtk/gtkfilechooserdefault.c:8232
+#: gtk/gtkfilechooserdefault.c:8328
 msgid "Type name of new folder"
 msgstr "新しいフォルダの種類"
 
-#: gtk/gtkfilechooserdefault.c:8277
+#: gtk/gtkfilechooserdefault.c:8373
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%dバイト"
 
-#: gtk/gtkfilechooserdefault.c:8279
+#: gtk/gtkfilechooserdefault.c:8375
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1fKバイト"
 
-#: gtk/gtkfilechooserdefault.c:8281
+#: gtk/gtkfilechooserdefault.c:8377
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1fMバイト"
 
-#: gtk/gtkfilechooserdefault.c:8283
+#: gtk/gtkfilechooserdefault.c:8379
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1fGバイト"
 
-#: gtk/gtkfilechooserdefault.c:8331 gtk/gtkfilechooserdefault.c:8355
+#: gtk/gtkfilechooserdefault.c:8427 gtk/gtkfilechooserdefault.c:8451
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:8342
+#: gtk/gtkfilechooserdefault.c:8438
 msgid "Today"
 msgstr "今日"
 
-#: gtk/gtkfilechooserdefault.c:8344
+#: gtk/gtkfilechooserdefault.c:8440
 msgid "Yesterday"
 msgstr "昨日"
 
@@ -1803,8 +1803,8 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "フォルダ名 \"%s\" にファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:928
-#: gtk/gtkfilesystemwin32.c:1019
+#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:1055
+#: gtk/gtkfilesystemwin32.c:1129
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "フォルダ '%s' を作成する際にエラー: %s"
@@ -1907,23 +1907,23 @@ msgstr "ルート・フォルダのストック・アイコンを取得できま
 msgid "(Empty)"
 msgstr "(空です)"
 
-#: gtk/gtkfilesystemunix.c:842 gtk/gtkfilesystemunix.c:1089
-#: gtk/gtkfilesystemunix.c:2077 gtk/gtkfilesystemunix.c:2117
-#: gtk/gtkfilesystemwin32.c:2222 gtk/gtkfilesystemwin32.c:2272
+#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
+#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
+#: gtk/gtkfilesystemwin32.c:2348 gtk/gtkfilesystemwin32.c:2398
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' の情報を取得する際にエラー: %s"
 
-#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:1125
+#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1236
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "このファイル・システムでは mount をサポートしていません"
 
-#: gtk/gtkfilesystemunix.c:1046
+#: gtk/gtkfilesystemunix.c:1173
 msgid "File System"
 msgstr "ファイル・システム"
 
-#: gtk/gtkfilesystemunix.c:1210
+#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1413
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1932,32 +1932,32 @@ msgstr ""
 "\"%s\" という名前に \"%s\" という文字が含まれているため正しくありません (別の"
 "名前を使用して下さい)"
 
-#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2028
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ブックマークの保存に失敗: %s"
 
-#: gtk/gtkfilesystemunix.c:1814 gtk/gtkfilesystemwin32.c:1957
+#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2083
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "既に '%s' がブックマーク一覧にあります"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2029
+#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2155
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' はブックマーク一覧にありません"
 
-#: gtk/gtkfilesystemwin32.c:943
+#: gtk/gtkfilesystemwin32.c:1053
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "パスはフォルダではありません: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1143
+#: gtk/gtkfilesystemwin32.c:1254
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "ネットワーク・ドライブ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1165
+#: gtk/gtkfilesystemwin32.c:1276
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2153,11 +2153,11 @@ msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "GTK+ のオプション"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 
@@ -2280,11 +2280,11 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: gtk/gtkprinteroptionwidget.c:670
+#: gtk/gtkprinteroptionwidget.c:679
 msgid "Not available"
 msgstr "利用できません"
 
-#: gtk/gtkprinteroptionwidget.c:783
+#: gtk/gtkprinteroptionwidget.c:792
 msgid "_Save in folder:"
 msgstr "フォルダの中に保存(_S):"
 
@@ -2588,12 +2588,12 @@ msgstr "グループ"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "このボタンに属するグループのラジオ・ツールボタンです"
 
-#: gtk/gtkrc.c:2813
+#: gtk/gtkrc.c:2832
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "インクルードファイルが見つかりません: \"%s\""
 
-#: gtk/gtkrc.c:3445 gtk/gtkrc.c:3448
+#: gtk/gtkrc.c:3464 gtk/gtkrc.c:3467
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path に画像ファイルがありません: \"%s\""
@@ -2631,31 +2631,31 @@ msgstr "一覧のクリア(_C)"
 msgid "Show _Private Resources"
 msgstr "プライベートなリソースの表示(_P)"
 
-#: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
+#: gtk/gtkrecentchoosermenu.c:431 gtk/gtkrecentchoosermenu.c:487
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI '%s' に関連する最近使用したリソースはありません"
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
+#: gtk/gtkrecentchoosermenu.c:511 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "この関数は '%s' クラスのウィジットでは実装されていません"
 
-#: gtk/gtkrecentchoosermenu.c:852
+#: gtk/gtkrecentchoosermenu.c:854
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' を開く"
 
-#: gtk/gtkrecentchoosermenu.c:883
+#: gtk/gtkrecentchoosermenu.c:885
 msgid "Unknown item"
 msgstr "不明なアイテム"
 
-#: gtk/gtkrecentchoosermenu.c:984
+#: gtk/gtkrecentchoosermenu.c:986
 msgid "No items found"
 msgstr "アイテムがありません"
 
-#: gtk/gtkrecentmanager.c:1058 gtk/gtkrecentmanager.c:1208
-#: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
+#: gtk/gtkrecentmanager.c:1059 gtk/gtkrecentmanager.c:1209
+#: gtk/gtkrecentmanager.c:1219 gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' のアイテムが見つかりません"
@@ -3973,80 +3973,80 @@ msgstr "ベトナム語 (VIQR)"
 msgid "X Input Method"
 msgstr "X 入力メソッド"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1450
+#: modules/printbackends/cups/gtkprintbackendcups.c:1454
 msgid "Two Sided"
 msgstr "両面印刷"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Paper Type"
 msgstr "用紙の種類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Source"
 msgstr "用紙のソース"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Output Tray"
 msgstr "出力トレイ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "One Sided"
 msgstr "片面印刷"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Auto Select"
 msgstr "自動選択"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1916
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1920
 msgid "Printer Default"
 msgstr "プリンタのデフォルト"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "High"
 msgstr "高い"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Medium"
 msgstr "中くらい"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Low"
 msgstr "低い"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "None"
 msgstr "なし"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Confidential"
 msgstr "極秘"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Secret"
 msgstr "秘密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Top Secret"
 msgstr "トップ・シークレット"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Unclassified"
 msgstr "機密ではない"
 
@@ -4109,11 +4109,11 @@ msgstr "URI"
 msgid "The URI bound to this button"
 msgstr "このボタンに付与する URI"
 
-#: gtk/gtklinkbutton.c:395
+#: gtk/gtklinkbutton.c:396
 msgid "Copy URL"
 msgstr "URL のコピー"
 
-#: gtk/gtklinkbutton.c:535
+#: gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
 msgstr "URI が間違っています"
 
@@ -4127,109 +4127,109 @@ msgstr "%s をデシリアライズする際に原因不明のエラー"
 msgid "No deserialize function found for format %s"
 msgstr "%s 形式をデシリアライズする関数がありません"
 
-#: gtk/gtktextbufferserialize.c:791 gtk/gtktextbufferserialize.c:817
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "\"id\" と \"name\" の両方が要素 <%s> 上にありました"
 
-#: gtk/gtktextbufferserialize.c:801 gtk/gtktextbufferserialize.c:827
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "属性 \"%s\" が要素 <%s> 上に二つありました"
 
-#: gtk/gtktextbufferserialize.c:841
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "要素 <%s> の id \"%s\" が間違っています"
 
-#: gtk/gtktextbufferserialize.c:851
+#: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "要素 <%s> には \"name\" も \"id\" もありません"
 
-#: gtk/gtktextbufferserialize.c:938
+#: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "属性 \"%s\" が同じ要素 <%s> 上に二回出現しました"
 
-#: gtk/gtktextbufferserialize.c:956 gtk/gtktextbufferserialize.c:981
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "このコンテキストの中にある要素 <%2$s> の属性 \"%1$s\" が間違っています"
 
-#: gtk/gtktextbufferserialize.c:1017
+#: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "タグ \"%s\" が定義されていません"
 
-#: gtk/gtktextbufferserialize.c:1029
+#: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "匿名のタグがあるので、タグを生成できません"
 
-#: gtk/gtktextbufferserialize.c:1040
+#: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "タグ \"%s\" がバッファに存在しないので、タグを生成できません"
 
-#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
-#: gtk/gtktextbufferserialize.c:1315 gtk/gtktextbufferserialize.c:1389
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "要素 <%s> は <%s> の下で定義できません"
 
-#: gtk/gtktextbufferserialize.c:1170
+#: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" は属性の種類として妥当ではありません"
 
-#: gtk/gtktextbufferserialize.c:1178
+#: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" は属性名としては妥当ではありません"
 
-#: gtk/gtktextbufferserialize.c:1188
+#: gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" を \"%s\" (属性は \"%s\") という種類の値に変換できませんでした"
 
-#: gtk/gtktextbufferserialize.c:1197
+#: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" は属性 \"%s\" に対して妥当な値ではありません"
 
-#: gtk/gtktextbufferserialize.c:1280
+#: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "タグ \"%s\" は既に定義されています"
 
-#: gtk/gtktextbufferserialize.c:1291
+#: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "タグ \"%s\" の優先度 \"%s\" が間違っています"
 
-#: gtk/gtktextbufferserialize.c:1344
+#: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
 "テキストの中にある一番外側の要素は <%s> ではなく <text view markup> にして下"
 "さい"
 
-#: gtk/gtktextbufferserialize.c:1353 gtk/gtktextbufferserialize.c:1369
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "要素 <%s> は既に指定されています"
 
-#: gtk/gtktextbufferserialize.c:1375
+#: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "要素 <text> は要素 <tag> の前に記述できません"
 
-#: gtk/gtktextbufferserialize.c:1783
+#: gtk/gtktextbufferserialize.c:1788
 #, c-format
 msgid "Serialized data is malformed"
 msgstr "シリアライズしたデータが壊れています"
 
-#: gtk/gtktextbufferserialize.c:1861
+#: gtk/gtktextbufferserialize.c:1866
 #, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"

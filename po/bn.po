@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-17 23:42-0400\n"
+"POT-Creation-Date: 2006-09-04 23:50-0400\n"
 "PO-Revision-Date: 2005-09-05 22:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -1472,11 +1472,11 @@ msgstr "রঙের চাকা"
 msgid "Color Selection"
 msgstr "রং নির্বাচন"
 
-#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7243
+#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7238
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_প)"
 
-#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7257
+#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7252
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোড কন্ট্রোল ক্যারেকটার ঢোকাও (_ঢ)"
 
@@ -1498,7 +1498,7 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(একটিও নয়)"
 
-#: gtk/gtkfilechooserbutton.c:1877
+#: gtk/gtkfilechooserbutton.c:1878
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -1534,160 +1534,160 @@ msgstr "ফাইলের নাম বেঠিক"
 msgid "The folder contents could not be displayed"
 msgstr "ফোল্ডারের ভেতরের কোন কিছু প্রদর্শন করা যায় নি"
 
-#: gtk/gtkfilechooserdefault.c:2497
+#: gtk/gtkfilechooserdefault.c:2501
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' ফোল্ডারকে বুকমার্ক তালিকায় যোগ করো"
 
-#: gtk/gtkfilechooserdefault.c:2538
+#: gtk/gtkfilechooserdefault.c:2542
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "বর্তমান ফোল্ডারকে বুকমার্ক তালিকায় যোগ করো"
 
-#: gtk/gtkfilechooserdefault.c:2540
+#: gtk/gtkfilechooserdefault.c:2544
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "নির্বাচিত ফোল্ডারগুলোকে বুকমার্ক তালিকায় যোগ করো"
 
-#: gtk/gtkfilechooserdefault.c:2580
+#: gtk/gtkfilechooserdefault.c:2584
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' বুকমার্ককে অপসারণ করো"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:3011
+#: gtk/gtkfilechooserdefault.c:3015
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "%s কোন নির্ভূল পাথ (Path) না হওয়ায় এর জন্য বুকমার্ক যোগ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:3242
+#: gtk/gtkfilechooserdefault.c:3246
 msgid "Remove"
 msgstr "অপসারণ"
 
-#: gtk/gtkfilechooserdefault.c:3251
+#: gtk/gtkfilechooserdefault.c:3255
 msgid "Rename..."
 msgstr "নাম পরিবর্তন..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3393
+#: gtk/gtkfilechooserdefault.c:3397
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3447
+#: gtk/gtkfilechooserdefault.c:3451
 #, fuzzy
 msgid "_Places"
 msgstr "প্রতিস্থাপন (_প)"
 
-#: gtk/gtkfilechooserdefault.c:3503 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3507 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "যোগ (_য)"
 
-#: gtk/gtkfilechooserdefault.c:3510
+#: gtk/gtkfilechooserdefault.c:3514
 msgid "Add the selected folder to the Bookmarks"
 msgstr "নির্বাচিত ফোল্ডারকে বুকমার্ক তালিকায় যোগ করো"
 
-#: gtk/gtkfilechooserdefault.c:3515 gtk/gtkstock.c:404
+#: gtk/gtkfilechooserdefault.c:3519 gtk/gtkstock.c:404
 msgid "_Remove"
 msgstr "অপসারণ (_অ)"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3526
 msgid "Remove the selected bookmark"
 msgstr "নির্বাচিত বুকমার্ককে অপসারণ করো"
 
-#: gtk/gtkfilechooserdefault.c:3618
+#: gtk/gtkfilechooserdefault.c:3622
 msgid "Could not select file"
 msgstr "ফাইল বাছাই করা যায় নি"
 
-#: gtk/gtkfilechooserdefault.c:3755
+#: gtk/gtkfilechooserdefault.c:3759
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "%s একটি ভুল পাথ (Path) হওয়ায় ফাইলটিক নির্বাচন করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:3812
+#: gtk/gtkfilechooserdefault.c:3816
 msgid "_Add to Bookmarks"
 msgstr "বুকমার্ক তালিকায় যোগ করো (_য)"
 
-#: gtk/gtkfilechooserdefault.c:3826
+#: gtk/gtkfilechooserdefault.c:3830
 msgid "Show _Hidden Files"
 msgstr "লুকানো ফাইল দেখাও (_ল)"
 
-#: gtk/gtkfilechooserdefault.c:3963 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:3967 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ফাইল"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4012
 msgid "Name"
 msgstr "নাম"
 
-#: gtk/gtkfilechooserdefault.c:4033
+#: gtk/gtkfilechooserdefault.c:4037
 msgid "Size"
 msgstr "আকার"
 
-#: gtk/gtkfilechooserdefault.c:4046
+#: gtk/gtkfilechooserdefault.c:4050
 msgid "Modified"
 msgstr "পরিবর্তিত"
 
-#: gtk/gtkfilechooserdefault.c:4078
+#: gtk/gtkfilechooserdefault.c:4082
 msgid "Select which types of files are shown"
 msgstr "কোন ধরনের ফাইল প্রদর্শন করা হবে তা বেছে নিন"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4226 gtk/gtkprinteroptionwidget.c:771
+#: gtk/gtkfilechooserdefault.c:4230 gtk/gtkprinteroptionwidget.c:780
 msgid "_Name:"
 msgstr "নাম (_ন):"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:4268
+#: gtk/gtkfilechooserdefault.c:4272
 msgid "_Browse for other folders"
 msgstr "অন্যান্য ফোল্ডারের জন্য ব্রাউজ করো (_ব)"
 
-#: gtk/gtkfilechooserdefault.c:4503
+#: gtk/gtkfilechooserdefault.c:4507
 #, fuzzy
 msgid "Type a file name"
 msgstr "ফাইলের নাম বেঠিক"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4540
+#: gtk/gtkfilechooserdefault.c:4544
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার তৈরি করো (_ত)"
 
-#: gtk/gtkfilechooserdefault.c:4550
+#: gtk/gtkfilechooserdefault.c:4554
 #, fuzzy
 msgid "_Location:"
 msgstr "অবস্থান (_অ):"
 
-#: gtk/gtkfilechooserdefault.c:4790
+#: gtk/gtkfilechooserdefault.c:4794
 msgid "Save in _folder:"
 msgstr "এই ফোল্ডারে সংরক্ষণ করো (_ফ):"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: gtk/gtkfilechooserdefault.c:4796
 msgid "Create in _folder:"
 msgstr "এই ফোল্ডারে তৈরি করো (_ল):"
 
-#: gtk/gtkfilechooserdefault.c:6241
+#: gtk/gtkfilechooserdefault.c:6291
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ফোল্ডারটি স্থানীয় না হওয়ায় এতে প্রবেশ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:6814 gtk/gtkfilechooserdefault.c:6835
+#: gtk/gtkfilechooserdefault.c:6864 gtk/gtkfilechooserdefault.c:6885
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s শর্টকাটের অস্তিত্ব নেই"
 
-#: gtk/gtkfilechooserdefault.c:6925
+#: gtk/gtkfilechooserdefault.c:6975
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s শর্টকাটের অস্তিত্ব নেই"
 
-#: gtk/gtkfilechooserdefault.c:7180
+#: gtk/gtkfilechooserdefault.c:7230
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 "\"%s\" নামের একটি ফাইল ইতিমধ্যেই বিদ্যমান।  আপনি কি নতুন ফাইলটি দিয়ে তাকে "
 "প্রতিস্থাপন করতে চান?"
 
-#: gtk/gtkfilechooserdefault.c:7183
+#: gtk/gtkfilechooserdefault.c:7233
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1695,50 +1695,50 @@ msgstr ""
 "\"%s\"-এ ফাইলটি ইতিমধ্যেই বিদ্যমান।  একে প্রতিস্থাপন করলে এর ভেতর যা আছে তার ওপর "
 "দিয়েই লেখা হবে।"
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7238
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_প)"
 
-#: gtk/gtkfilechooserdefault.c:7838
+#: gtk/gtkfilechooserdefault.c:7934
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s-কে মাউন্ট করা যায় নি"
 
-#: gtk/gtkfilechooserdefault.c:8232
+#: gtk/gtkfilechooserdefault.c:8328
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: gtk/gtkfilechooserdefault.c:8277
+#: gtk/gtkfilechooserdefault.c:8373
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d বাইট"
 msgstr[1] "%d বাইট"
 
-#: gtk/gtkfilechooserdefault.c:8279
+#: gtk/gtkfilechooserdefault.c:8375
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f কিলোবাইট"
 
-#: gtk/gtkfilechooserdefault.c:8281
+#: gtk/gtkfilechooserdefault.c:8377
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f মেগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:8283
+#: gtk/gtkfilechooserdefault.c:8379
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f গিগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:8331 gtk/gtkfilechooserdefault.c:8355
+#: gtk/gtkfilechooserdefault.c:8427 gtk/gtkfilechooserdefault.c:8451
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:8342
+#: gtk/gtkfilechooserdefault.c:8438
 msgid "Today"
 msgstr "আজ"
 
-#: gtk/gtkfilechooserdefault.c:8344
+#: gtk/gtkfilechooserdefault.c:8440
 msgid "Yesterday"
 msgstr "গতকাল"
 
@@ -1821,8 +1821,8 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ফোল্ডারের নাম \"%s\"-এ এমন কিছু অক্ষর রয়েছে যা ফাইলের নামে গ্রহণযোগ্য নয়"
 
-#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:928
-#: gtk/gtkfilesystemwin32.c:1019
+#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:1055
+#: gtk/gtkfilesystemwin32.c:1129
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "'%s' নামক ডিরেক্টরি তৈরিতে এই সমস্যা দেখা দিয়েছে: %s"
@@ -1931,23 +1931,23 @@ msgstr "%s-এর জন্য নির্ধারিত কোন আইক�
 msgid "(Empty)"
 msgstr "(ফাঁকা)"
 
-#: gtk/gtkfilesystemunix.c:842 gtk/gtkfilesystemunix.c:1089
-#: gtk/gtkfilesystemunix.c:2077 gtk/gtkfilesystemunix.c:2117
-#: gtk/gtkfilesystemwin32.c:2222 gtk/gtkfilesystemwin32.c:2272
+#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
+#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
+#: gtk/gtkfilesystemwin32.c:2348 gtk/gtkfilesystemwin32.c:2398
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' সংক্রান্ত তথ্য পেতে সমস্যা হয়েছে: %s"
 
-#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:1125
+#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1236
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "এই ফাইল-সিস্টেম মাউন্ট করার প্রক্রিয়া সমর্থন করে না"
 
-#: gtk/gtkfilesystemunix.c:1046
+#: gtk/gtkfilesystemunix.c:1173
 msgid "File System"
 msgstr "ফাইল-সিস্টেম"
 
-#: gtk/gtkfilesystemunix.c:1210
+#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1413
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1956,32 +1956,32 @@ msgstr ""
 "\"%s\" নামটিতে \"%s\" অক্ষরটি রয়েছে বলে এটি কোন বৈধ নাম নয়।  অনুগ্রহপূর্বক ভিন্ন "
 "একটি নাম লিখুন।"
 
-#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2028
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "বুকমার্ক সংরক্ষণ করার প্রচেষ্টা ব্যর্থ হয়েছে: %s"
 
-#: gtk/gtkfilesystemunix.c:1814 gtk/gtkfilesystemwin32.c:1957
+#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2083
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' ইতিমধ্যেই বুকমার্ক তালিকায় রয়েছে"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2029
+#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2155
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "%s বুকমার্ক তালিকায় নেই"
 
-#: gtk/gtkfilesystemwin32.c:943
+#: gtk/gtkfilesystemwin32.c:1053
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1143
+#: gtk/gtkfilesystemwin32.c:1254
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "নেটওয়ার্ক ড্রাইভ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1165
+#: gtk/gtkfilesystemwin32.c:1276
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2187,11 +2187,11 @@ msgstr "যে সকল জি.টি.কে.+ ডিবাগিং ফ্ল�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "জি.টি.কে.+ অপশন"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "জি.টি.কে.+ অপশনগুলো দেখাও"
 
@@ -2313,11 +2313,11 @@ msgstr ""
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:670
+#: gtk/gtkprinteroptionwidget.c:679
 msgid "Not available"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:783
+#: gtk/gtkprinteroptionwidget.c:792
 #, fuzzy
 msgid "_Save in folder:"
 msgstr "এই ফোল্ডারে সংরক্ষণ করো (_ফ):"
@@ -2639,12 +2639,12 @@ msgstr "গ্রুপ"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "এই বাটনটি যে গ্রুপের অন্তর্ভুক্ত, সেই গ্রুপের রেডিও টুল বাটন।"
 
-#: gtk/gtkrc.c:2813
+#: gtk/gtkrc.c:2832
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "এই অন্তর্ভুক্ত (Include) ফাইলটি খুঁজে পাওয়া যায় নি: \"%s\""
 
-#: gtk/gtkrc.c:3445 gtk/gtkrc.c:3448
+#: gtk/gtkrc.c:3464 gtk/gtkrc.c:3467
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path-এ এই ছবির ফাইলটি খুঁজে পাওয়া যায় নি: \"%s\""
@@ -2687,33 +2687,33 @@ msgstr "পরিষ্কার (_প)"
 msgid "Show _Private Resources"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
+#: gtk/gtkrecentchoosermenu.c:431 gtk/gtkrecentchoosermenu.c:487
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
+#: gtk/gtkrecentchoosermenu.c:511 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:852
+#: gtk/gtkrecentchoosermenu.c:854
 #, c-format
 msgid "Open '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:883
+#: gtk/gtkrecentchoosermenu.c:885
 #, fuzzy
 msgid "Unknown item"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkrecentchoosermenu.c:984
+#: gtk/gtkrecentchoosermenu.c:986
 #, fuzzy
 msgid "No items found"
 msgstr "কোন এক্স.পি.এম. হেডার পাওয়া যায় নি"
 
-#: gtk/gtkrecentmanager.c:1058 gtk/gtkrecentmanager.c:1208
-#: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
+#: gtk/gtkrecentmanager.c:1059 gtk/gtkrecentmanager.c:1209
+#: gtk/gtkrecentmanager.c:1219 gtk/gtkrecentmanager.c:1278
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "এই অন্তর্ভুক্ত (Include) ফাইলটি খুঁজে পাওয়া যায় নি: \"%s\""
@@ -4036,84 +4036,84 @@ msgstr "ভিয়েতনামী (ভি.আই.কিউ.আর.)"
 msgid "X Input Method"
 msgstr "এক্স ইনপুট পদ্ধতি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1450
+#: modules/printbackends/cups/gtkprintbackendcups.c:1454
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 #, fuzzy
 msgid "Auto Select"
 msgstr "ফন্ট নির্বাচন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1916
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1920
 #, fuzzy
 msgid "Printer Default"
 msgstr "ডিফল্ট"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 #, fuzzy
 msgid "None"
 msgstr "(একটিও নয়)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 #, fuzzy
 msgid "Secret"
 msgstr "পর্দা"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Unclassified"
 msgstr ""
 
@@ -4181,12 +4181,12 @@ msgstr ""
 msgid "The URI bound to this button"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:395
+#: gtk/gtklinkbutton.c:396
 #, fuzzy
 msgid "Copy URL"
 msgstr "কপি (_ক)"
 
-#: gtk/gtklinkbutton.c:535
+#: gtk/gtklinkbutton.c:536
 #, fuzzy
 msgid "Invalid URI"
 msgstr "ভুল UTF-8"
@@ -4201,107 +4201,107 @@ msgstr ""
 msgid "No deserialize function found for format %s"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:791 gtk/gtktextbufferserialize.c:817
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:801 gtk/gtktextbufferserialize.c:827
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:841
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:851
+#: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:938
+#: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:956 gtk/gtktextbufferserialize.c:981
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1017
+#: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1029
+#: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1040
+#: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
-#: gtk/gtktextbufferserialize.c:1315 gtk/gtktextbufferserialize.c:1389
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1170
+#: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1178
+#: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1188
+#: gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1197
+#: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1280
+#: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1291
+#: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1344
+#: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1353 gtk/gtktextbufferserialize.c:1369
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1375
+#: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1783
+#: gtk/gtktextbufferserialize.c:1788
 #, c-format
 msgid "Serialized data is malformed"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1861
+#: gtk/gtktextbufferserialize.c:1866
 #, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"

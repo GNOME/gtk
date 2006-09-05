@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-17 23:42-0400\n"
+"POT-Creation-Date: 2006-09-04 23:50-0400\n"
 "PO-Revision-Date: 2006-08-17 12:00+0200\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -1464,11 +1464,11 @@ msgstr "Тркало со бои"
 msgid "Color Selection"
 msgstr "Избор на боја"
 
-#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7243
+#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7238
 msgid "Input _Methods"
 msgstr "Методи за запис"
 
-#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7257
+#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7252
 msgid "_Insert Unicode Control Character"
 msgstr "_Внесете Јуникод знаци за контрола"
 
@@ -1490,7 +1490,7 @@ msgstr "Работна површина"
 msgid "(None)"
 msgstr "(Ништо)"
 
-#: gtk/gtkfilechooserbutton.c:1877
+#: gtk/gtkfilechooserbutton.c:1878
 msgid "Other..."
 msgstr "Друго..."
 
@@ -1526,155 +1526,155 @@ msgstr "Невалидно име на датотека"
 msgid "The folder contents could not be displayed"
 msgstr "Содржината на папката не може да биде прикажана"
 
-#: gtk/gtkfilechooserdefault.c:2497
+#: gtk/gtkfilechooserdefault.c:2501
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Додај ја папката '%s' во обележувачите"
 
-#: gtk/gtkfilechooserdefault.c:2538
+#: gtk/gtkfilechooserdefault.c:2542
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Додај ја моменталната папка во обележувачите"
 
-#: gtk/gtkfilechooserdefault.c:2540
+#: gtk/gtkfilechooserdefault.c:2544
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Додајте ги избраните папки во обележувачите"
 
-#: gtk/gtkfilechooserdefault.c:2580
+#: gtk/gtkfilechooserdefault.c:2584
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Отстрани го обележувачот: '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3011
+#: gtk/gtkfilechooserdefault.c:3015
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Не можам да додадам обележувач за '%s' бидејќи името на патеката е невалидно."
 
-#: gtk/gtkfilechooserdefault.c:3242
+#: gtk/gtkfilechooserdefault.c:3246
 msgid "Remove"
 msgstr "Отстрани"
 
-#: gtk/gtkfilechooserdefault.c:3251
+#: gtk/gtkfilechooserdefault.c:3255
 msgid "Rename..."
 msgstr "Реименувај..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3393
+#: gtk/gtkfilechooserdefault.c:3397
 msgid "Places"
 msgstr "Места"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3447
+#: gtk/gtkfilechooserdefault.c:3451
 msgid "_Places"
 msgstr "_Места"
 
-#: gtk/gtkfilechooserdefault.c:3503 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3507 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Додај"
 
-#: gtk/gtkfilechooserdefault.c:3510
+#: gtk/gtkfilechooserdefault.c:3514
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Додај ја избраната папка во обележувачите"
 
-#: gtk/gtkfilechooserdefault.c:3515 gtk/gtkstock.c:404
+#: gtk/gtkfilechooserdefault.c:3519 gtk/gtkstock.c:404
 msgid "_Remove"
 msgstr "_Отстрани"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3526
 msgid "Remove the selected bookmark"
 msgstr "Отстранете го избраниот обележувач"
 
-#: gtk/gtkfilechooserdefault.c:3618
+#: gtk/gtkfilechooserdefault.c:3622
 msgid "Could not select file"
 msgstr "Не можам да ја одберам датотеката"
 
-#: gtk/gtkfilechooserdefault.c:3755
+#: gtk/gtkfilechooserdefault.c:3759
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Не можам да ја изберам датотеката '%s' бидејќи се наоѓа на невалидна патека."
 
-#: gtk/gtkfilechooserdefault.c:3812
+#: gtk/gtkfilechooserdefault.c:3816
 msgid "_Add to Bookmarks"
 msgstr "_Додај обележувачи"
 
-#: gtk/gtkfilechooserdefault.c:3826
+#: gtk/gtkfilechooserdefault.c:3830
 msgid "Show _Hidden Files"
 msgstr "Покажи _скриени датотеки"
 
-#: gtk/gtkfilechooserdefault.c:3963 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:3967 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Датотеки"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4012
 msgid "Name"
 msgstr "Име"
 
-#: gtk/gtkfilechooserdefault.c:4033
+#: gtk/gtkfilechooserdefault.c:4037
 msgid "Size"
 msgstr "Големина"
 
-#: gtk/gtkfilechooserdefault.c:4046
+#: gtk/gtkfilechooserdefault.c:4050
 msgid "Modified"
 msgstr "Променето"
 
-#: gtk/gtkfilechooserdefault.c:4078
+#: gtk/gtkfilechooserdefault.c:4082
 msgid "Select which types of files are shown"
 msgstr "Изберете кои типови на датотеки да бидат прикажани"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4226 gtk/gtkprinteroptionwidget.c:771
+#: gtk/gtkfilechooserdefault.c:4230 gtk/gtkprinteroptionwidget.c:780
 msgid "_Name:"
 msgstr "_Име:"
 
-#: gtk/gtkfilechooserdefault.c:4268
+#: gtk/gtkfilechooserdefault.c:4272
 msgid "_Browse for other folders"
 msgstr "_Разгледај други папки"
 
-#: gtk/gtkfilechooserdefault.c:4503
+#: gtk/gtkfilechooserdefault.c:4507
 msgid "Type a file name"
 msgstr "Внесете име на датотека"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4540
+#: gtk/gtkfilechooserdefault.c:4544
 msgid "Create Fo_lder"
 msgstr "Креирај па_пка"
 
-#: gtk/gtkfilechooserdefault.c:4550
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "_Location:"
 msgstr "_Локација:"
 
-#: gtk/gtkfilechooserdefault.c:4790
+#: gtk/gtkfilechooserdefault.c:4794
 msgid "Save in _folder:"
 msgstr "Зачувај во _папка:"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: gtk/gtkfilechooserdefault.c:4796
 msgid "Create in _folder:"
 msgstr "Креирај во _папка:"
 
-#: gtk/gtkfilechooserdefault.c:6241
+#: gtk/gtkfilechooserdefault.c:6291
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Не можам да ја сменам папката поради тоа што не е локална"
 
-#: gtk/gtkfilechooserdefault.c:6814 gtk/gtkfilechooserdefault.c:6835
+#: gtk/gtkfilechooserdefault.c:6864 gtk/gtkfilechooserdefault.c:6885
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Кратенката %s веќе постои"
 
-#: gtk/gtkfilechooserdefault.c:6925
+#: gtk/gtkfilechooserdefault.c:6975
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Кратенката %s не постои"
 
-#: gtk/gtkfilechooserdefault.c:7180
+#: gtk/gtkfilechooserdefault.c:7230
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Датотека со името \"%s\" веќе постои.  Дали сакате да ја замените?"
 
-#: gtk/gtkfilechooserdefault.c:7183
+#: gtk/gtkfilechooserdefault.c:7233
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1682,20 +1682,20 @@ msgstr ""
 "Датотеката веќе постои во \"%s\".  Ако ја замените ќе ја замените нејзината "
 "содржина."
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7238
 msgid "_Replace"
 msgstr "_Замени"
 
-#: gtk/gtkfilechooserdefault.c:7838
+#: gtk/gtkfilechooserdefault.c:7934
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не можам да монтирам %s"
 
-#: gtk/gtkfilechooserdefault.c:8232
+#: gtk/gtkfilechooserdefault.c:8328
 msgid "Type name of new folder"
 msgstr "Внесете име за новата папка"
 
-#: gtk/gtkfilechooserdefault.c:8277
+#: gtk/gtkfilechooserdefault.c:8373
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1703,30 +1703,30 @@ msgstr[0] "%d бајт"
 msgstr[1] "%d бајти"
 msgstr[2] "%d бајти"
 
-#: gtk/gtkfilechooserdefault.c:8279
+#: gtk/gtkfilechooserdefault.c:8375
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:8281
+#: gtk/gtkfilechooserdefault.c:8377
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:8283
+#: gtk/gtkfilechooserdefault.c:8379
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:8331 gtk/gtkfilechooserdefault.c:8355
+#: gtk/gtkfilechooserdefault.c:8427 gtk/gtkfilechooserdefault.c:8451
 msgid "Unknown"
 msgstr "Непознато"
 
-#: gtk/gtkfilechooserdefault.c:8342
+#: gtk/gtkfilechooserdefault.c:8438
 msgid "Today"
 msgstr "Денес"
 
-#: gtk/gtkfilechooserdefault.c:8344
+#: gtk/gtkfilechooserdefault.c:8440
 msgid "Yesterday"
 msgstr "Вчера"
 
@@ -1816,8 +1816,8 @@ msgstr ""
 "Името на папката \"%s\" содржи симболи што не се дозволени во имиња на "
 "датотеки"
 
-#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:928
-#: gtk/gtkfilesystemwin32.c:1019
+#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:1055
+#: gtk/gtkfilesystemwin32.c:1129
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Грешка при креирање на директориумот '%s': %s"
@@ -1921,23 +1921,23 @@ msgstr "Не можам да го добијам главниот директо
 msgid "(Empty)"
 msgstr "(Празно)"
 
-#: gtk/gtkfilesystemunix.c:842 gtk/gtkfilesystemunix.c:1089
-#: gtk/gtkfilesystemunix.c:2077 gtk/gtkfilesystemunix.c:2117
-#: gtk/gtkfilesystemwin32.c:2222 gtk/gtkfilesystemwin32.c:2272
+#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
+#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
+#: gtk/gtkfilesystemwin32.c:2348 gtk/gtkfilesystemwin32.c:2398
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Грешка при добивањето на информации за '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:1125
+#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1236
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Датотечниот систем не поддржува монтирање"
 
-#: gtk/gtkfilesystemunix.c:1046
+#: gtk/gtkfilesystemunix.c:1173
 msgid "File System"
 msgstr "Датотечен систем"
 
-#: gtk/gtkfilesystemunix.c:1210
+#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1413
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1946,32 +1946,32 @@ msgstr ""
 "Името \"%s\" не е валидно бидејќи содржи \"%s\". Ве молам пробајте со друго "
 "име."
 
-#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2028
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Зачувувањето на обележувачот е неуспешно: %s"
 
-#: gtk/gtkfilesystemunix.c:1814 gtk/gtkfilesystemwin32.c:1957
+#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2083
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' веќе постои во листата на обележувачи"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2029
+#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2155
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' не постои во листата на обележувачи"
 
-#: gtk/gtkfilesystemwin32.c:943
+#: gtk/gtkfilesystemwin32.c:1053
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "Патеката не е папка: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1143
+#: gtk/gtkfilesystemwin32.c:1254
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Мрежен уред (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1165
+#: gtk/gtkfilesystemwin32.c:1276
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2167,11 +2167,11 @@ msgstr "Отстранување на GTK+ знамиња за дебагира�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "GTK+ Options"
 msgstr "Опции за GTK+"
 
-#: gtk/gtkmain.c:594
+#: gtk/gtkmain.c:595
 msgid "Show GTK+ Options"
 msgstr "Покажи опции за GTK+"
 
@@ -2294,11 +2294,11 @@ msgstr "Д_есно:"
 msgid "Paper Margins"
 msgstr "Маргини на хартијата"
 
-#: gtk/gtkprinteroptionwidget.c:670
+#: gtk/gtkprinteroptionwidget.c:679
 msgid "Not available"
 msgstr "Не е достапно"
 
-#: gtk/gtkprinteroptionwidget.c:783
+#: gtk/gtkprinteroptionwidget.c:792
 msgid "_Save in folder:"
 msgstr "_Зачувај во папка:"
 
@@ -2602,12 +2602,12 @@ msgstr "Група"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Копчето за радио на кое што припаѓа ова копче."
 
-#: gtk/gtkrc.c:2813
+#: gtk/gtkrc.c:2832
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не можам да ја најдам датотеката: \"%s\""
 
-#: gtk/gtkrc.c:3445 gtk/gtkrc.c:3448
+#: gtk/gtkrc.c:3464 gtk/gtkrc.c:3467
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Не успеав да ја лоцирам сликата на патеката: \"%s\""
@@ -2645,31 +2645,31 @@ msgstr "_Исчисти ја листата"
 msgid "Show _Private Resources"
 msgstr "Прикажи ги _приватните ресурси"
 
-#: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
+#: gtk/gtkrecentchoosermenu.c:431 gtk/gtkrecentchoosermenu.c:487
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Не е пронајден скоро употребуван ресурс на URI `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
+#: gtk/gtkrecentchoosermenu.c:511 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Функцијата не е имплементирана за графичките контроли на класата '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:852
+#: gtk/gtkrecentchoosermenu.c:854
 #, c-format
 msgid "Open '%s'"
 msgstr "Отвори '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:883
+#: gtk/gtkrecentchoosermenu.c:885
 msgid "Unknown item"
 msgstr "Непознат предмет"
 
-#: gtk/gtkrecentchoosermenu.c:984
+#: gtk/gtkrecentchoosermenu.c:986
 msgid "No items found"
 msgstr "Не се пронајдени предмети"
 
-#: gtk/gtkrecentmanager.c:1058 gtk/gtkrecentmanager.c:1208
-#: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
+#: gtk/gtkrecentmanager.c:1059 gtk/gtkrecentmanager.c:1209
+#: gtk/gtkrecentmanager.c:1219 gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Не можам да го најдам предметот со URI '%s'"
@@ -3988,80 +3988,80 @@ msgstr "Vietnamese (VIQR)"
 msgid "X Input Method"
 msgstr "Метод на запис за X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1450
+#: modules/printbackends/cups/gtkprintbackendcups.c:1454
 msgid "Two Sided"
 msgstr "Двострани"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Paper Type"
 msgstr "Тип на хартија"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Source"
 msgstr "Извор на хартија"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Output Tray"
 msgstr "Фиока за испечатени листови"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "One Sided"
 msgstr "Еднострани"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Auto Select"
 msgstr "Автоматска селекција"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1916
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1920
 msgid "Printer Default"
 msgstr "Стандардно на печатачот"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Urgent"
 msgstr "Итно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "High"
 msgstr "Висок"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Medium"
 msgstr "Среден"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Low"
 msgstr "Низок"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "None"
 msgstr "Ништо"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
 msgstr "Тајно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Confidential"
 msgstr "Доверливо"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Secret"
 msgstr "Тајно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Standard"
 msgstr "Стандардно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Top Secret"
 msgstr "Тајно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Unclassified"
 msgstr "Не е тајно"
 
@@ -4124,11 +4124,11 @@ msgstr "URI"
 msgid "The URI bound to this button"
 msgstr "URI-та поврзана со ова копче"
 
-#: gtk/gtklinkbutton.c:395
+#: gtk/gtklinkbutton.c:396
 msgid "Copy URL"
 msgstr "Копирај ја URL"
 
-#: gtk/gtklinkbutton.c:535
+#: gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
 msgstr "Невалидна URI"
 
@@ -4142,68 +4142,68 @@ msgstr "Непозната грешка при обидот за расчлен�
 msgid "No deserialize function found for format %s"
 msgstr "Не е пронајдена функција за расчленување за форматот %s"
 
-#: gtk/gtktextbufferserialize.c:791 gtk/gtktextbufferserialize.c:817
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "И \"Ид.\" и \"име\" беа пронајдени на <%s> елементот"
 
-#: gtk/gtktextbufferserialize.c:801 gtk/gtktextbufferserialize.c:827
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Атрибутот \"%s\" беше пронајден двапати на <%s> елементот"
 
-#: gtk/gtktextbufferserialize.c:841
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "<%s> елемент има невалидно Ид. \"%s\""
 
-#: gtk/gtktextbufferserialize.c:851
+#: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> елементот нема ниту \"име\" ниту \"Ид.\" елемент"
 
-#: gtk/gtktextbufferserialize.c:938
+#: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Атрибутот \"%s\" се повторува двапати на истиот <%s> елемент"
 
-#: gtk/gtktextbufferserialize.c:956 gtk/gtktextbufferserialize.c:981
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Атрибутот \"%s\" е невалиден на <%s> елемент во оваа содржина"
 
-#: gtk/gtktextbufferserialize.c:1017
+#: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Етикетата \"%s\" не е дефинирана."
 
-#: gtk/gtktextbufferserialize.c:1029
+#: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Анонимна етикета е пронајдена и етикетите не може да се креираат."
 
-#: gtk/gtktextbufferserialize.c:1040
+#: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Етикетата \"%s\" не постои во баферот и етикетите не може да се креираат."
 
-#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
-#: gtk/gtktextbufferserialize.c:1315 gtk/gtktextbufferserialize.c:1389
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Елементот <%s> не е дозволен под <%s>"
 
-#: gtk/gtktextbufferserialize.c:1170
+#: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" не е валиден тип на атрибут"
 
-#: gtk/gtktextbufferserialize.c:1178
+#: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" не е валидно име на атрибут"
 
-#: gtk/gtktextbufferserialize.c:1188
+#: gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
@@ -4211,41 +4211,41 @@ msgstr ""
 "\"%s\" не може да биде конвертирано во вредност од тип \"%s\" за атрибутот "
 "\"%s\""
 
-#: gtk/gtktextbufferserialize.c:1197
+#: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" е невалидна вредност за атрибутот \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1280
+#: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Етикетата \"%s\" е веќе дефинирана"
 
-#: gtk/gtktextbufferserialize.c:1291
+#: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Етикетата \"%s\" има невалиден приоритет \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1344
+#: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Најоддалечениот елемент мора да биде <text_view_markup>, а не <%s>"
 
-#: gtk/gtktextbufferserialize.c:1353 gtk/gtktextbufferserialize.c:1369
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "<%s> елемент е веќе одреден"
 
-#: gtk/gtktextbufferserialize.c:1375
+#: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "<text> не може да биде пред <tags> елемент"
 
-#: gtk/gtktextbufferserialize.c:1783
+#: gtk/gtktextbufferserialize.c:1788
 #, c-format
 msgid "Serialized data is malformed"
 msgstr "Емитуваните податоци се деформирани"
 
-#: gtk/gtktextbufferserialize.c:1861
+#: gtk/gtktextbufferserialize.c:1866
 #, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
