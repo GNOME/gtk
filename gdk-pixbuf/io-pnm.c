@@ -535,7 +535,7 @@ pnm_read_ascii_mono_scanline (PnmLoaderContext *context)
 	guchar *dptr;
 	gint max_length;
 
-	if (context->type == PNM_TYPE_PBM)
+	if (context->type == PNM_FORMAT_PBM)
 		max_length = 1;
 	else
 		max_length = -1;
@@ -551,7 +551,7 @@ pnm_read_ascii_mono_scanline (PnmLoaderContext *context)
 		if (retval != PNM_OK)
 			return retval;
 
-		if (context->type == PNM_TYPE_PBM) {
+		if (context->type == PNM_FORMAT_PBM) {
 			value = value ? 0 : 0xff;
 		}
 		else {
