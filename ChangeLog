@@ -1,3 +1,10 @@
+2006-09-06  Tor Lillqvist  <tml@novell.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilesystemwin32.c: Copy what Kris did to
+	gtkfilesystemunix.c
+
 2006-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
