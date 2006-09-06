@@ -2747,27 +2747,27 @@ msgstr "ପୂର୍ଣ୍ଣ ପରଦା ଧାରା ଛାଡ଼ନ୍ତୁ
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
-msgstr "ତଳ (_B)"
+msgstr "ତଳକୁ (_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_First"
-msgstr "ପ୍ରଥମ (_F)"
+msgstr "ପ୍ରଥମ ସ୍ଥାନକୁ (_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Last"
-msgstr "ଶେଷ (_L)"
+msgstr "ଶେଷ ସ୍ଥାନକୁ (_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Top"
-msgstr "ଉପର (_T)"
+msgstr "ଉପରକୁ (_T)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Back"
-msgstr "ପଛ (_B)"
+msgstr "ପଛକୁ (_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
@@ -2782,7 +2782,7 @@ msgstr "ଆଗକୁ (_F)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "ଇପରକୁ (_U)"
+msgstr "ଉପରକୁ (_U)"
 
 #: gtk/gtkstock.c:353
 msgid "_Harddisk"
@@ -2790,7 +2790,7 @@ msgstr "ହାର୍ଡ଼ ଡିସ୍କ (_H)"
 
 #: gtk/gtkstock.c:354
 msgid "_Help"
-msgstr "ସାହାଯ୍ଯ (_H)"
+msgstr "ସହାୟତା (_H)"
 
 #: gtk/gtkstock.c:355
 msgid "_Home"
@@ -2833,12 +2833,12 @@ msgstr "ପୂରଣ (_F)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Justify|_Left"
-msgstr "ବାମ (_L)"
+msgstr "ବାମକୁ (_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:369
 msgid "Justify|_Right"
-msgstr "ଡାହାଣ (_R)"
+msgstr "ଡାହାଣକୁ (_R)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
@@ -2890,7 +2890,7 @@ msgstr "ନୂତନ (_N)"
 
 #: gtk/gtkstock.c:389
 msgid "_No"
-msgstr "ନା (_N)"
+msgstr "ନାଁ (_N)"
 
 #: gtk/gtkstock.c:390
 msgid "_OK"
@@ -2974,11 +2974,11 @@ msgstr "ଅକ୍ଷରରୂପ (_F)"
 
 #: gtk/gtkstock.c:411
 msgid "_Ascending"
-msgstr "ଆରୋହୀ (_A)"
+msgstr "ଆରୋହୀ କ୍ରମ (_A)"
 
 #: gtk/gtkstock.c:412
 msgid "_Descending"
-msgstr "ଅବରୋହୀ (_D)"
+msgstr "ଅବରୋହୀ କ୍ରମ (_D)"
 
 #: gtk/gtkstock.c:413
 msgid "_Spell Check"
