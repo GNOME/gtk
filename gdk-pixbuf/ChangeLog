@@ -1,3 +1,7 @@
+2006-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-pnm.c: Simplify and fix reading of ASCII images. 
+
 2006-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.3 ===
