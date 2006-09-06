@@ -1056,7 +1056,7 @@ msgstr "Model"
 
 #: gtk/gtkcellrenderercombo.c:90
 msgid "The model containing the possible values for the combo box"
-msgstr "El model que conté els valors possibles de la quadre combinat"
+msgstr "El model que conté els valors possibles del quadre combinat"
 
 #: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:91
 msgid "Text Column"
@@ -1644,7 +1644,7 @@ msgstr "Paleta personalitzada"
 
 #: gtk/gtkcolorsel.c:1883
 msgid "Palette to use in the color selector"
-msgstr "Paleta per utilitzar en el seleccionador de color"
+msgstr "Paleta a utilitzar en el selector de color"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1973,7 +1973,7 @@ msgid ""
 "layouts."
 msgstr ""
 "L'alineació horitzontal, des de 0 (esquerre) a 1 (dreta). Només per a "
-"formats RTL (dreta a esquerre)."
+"formats RTL (dreta a esquerra)."
 
 #: gtk/gtkentry.c:590
 msgid "Truncate multiline"
@@ -2002,7 +2002,7 @@ msgstr "Temps d'espera de l'ajuda emergent per a contrasenyes"
 #: gtk/gtkentry.c:879
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
-"Quant s'ha de trigar en mostrar el darrer caràcter entrat en entrades ocultes"
+"Quant s'ha de trigar a mostrar el darrer caràcter entrat en entrades ocultes"
 
 #: gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -2136,7 +2136,7 @@ msgstr "Acció"
 
 #: gtk/gtkfilechooser.c:198
 msgid "The type of operation that the file selector is performing"
-msgstr "El tipus d'operació que fa el seleccionador de fitxers"
+msgstr "El tipus d'operació que fa el selector de fitxers"
 
 #: gtk/gtkfilechooser.c:204
 msgid "File System Backend"
@@ -2226,8 +2226,8 @@ msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
 msgstr ""
-"Si un seleccionador de fitxers que permeti desar ha de demanar confirmació "
-"en cas que se sobreescrigui algun fitxer."
+"Si un selector de fitxers que permeti desar ha de demanar confirmació en cas "
+"que se sobreescrigui algun fitxer."
 
 #: gtk/gtkfilechooserbutton.c:355
 msgid "Dialog"
@@ -2463,7 +2463,7 @@ msgstr "Columna d'etiquetatge"
 #: gtk/gtkiconview.c:575
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
-"Columna del model d'on obtenir el text si es fa servir el etiquetatge Pango"
+"Columna del model d'on obtenir el text si es fa servir l'etiquetatge Pango"
 
 #: gtk/gtkiconview.c:582
 msgid "Icon View Model"
@@ -2815,7 +2815,7 @@ msgstr "Farciment horitzontal"
 
 #: gtk/gtkmenu.c:516
 msgid "Extra space at the left and right edges of the menu"
-msgstr "Espai extra a esquerra i dreta de les vores del menú"
+msgstr "Espai extra a dreta i esquerra de les vores del menú"
 
 #: gtk/gtkmenu.c:524
 msgid "Vertical Offset"
