@@ -567,9 +567,9 @@ gtk_text_buffer_finalize (GObject *object)
 
   buffer = GTK_TEXT_BUFFER (object);
 
-  remove_all_selection_clipboards (buffer);
-
   priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+
+  remove_all_selection_clipboards (buffer);
 
   if (buffer->tag_table)
     {
@@ -3509,19 +3509,7 @@ gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer,
 static void
 remove_all_selection_clipboards (GtkTextBuffer *buffer)
 {
-  GSList *tmp_list = buffer->selection_clipboards;
-  while (tmp_list)
-    {
-      SelectionClipboard *selection_clipboard = tmp_list->data;
-      
-      if (gtk_clipboard_get_owner (selection_clipboard->clipboard) == G_OBJECT (buffer))
-	gtk_clipboard_clear (selection_clipboard->clipboard);
-      
-      g_free (selection_clipboard);
-
-      tmp_list = tmp_list->next;
-    }
-
+  g_slist_foreach (buffer->selection_clipboards, (GFunc)g_free, NULL);
   g_slist_free (buffer->selection_clipboards);
   buffer->selection_clipboards = NULL;
 }
