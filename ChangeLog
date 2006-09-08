@@ -1,3 +1,9 @@
+2006-09-08  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtktextbuffer.c (remove_all_selection_clipboards):
+	Don't clear clipboards here, since we are called from finalize
+	and can't emit signals.
+
 2006-09-06  Tor Lillqvist  <tml@novell.com>
 
 	Merged from HEAD:
