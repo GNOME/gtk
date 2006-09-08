@@ -2554,7 +2554,7 @@ msgstr "Küsimus"
 #.
 #: ../gtk/gtkstock.c:316
 msgid "_About"
-msgstr "_Programmist"
+msgstr "_Programmist lähemalt"
 
 #: ../gtk/gtkstock.c:318
 msgid "_Apply"
