@@ -1,5 +1,8 @@
 2006-09-09  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Don't unnecessarily reset the im context
+	when deleting the selection.  (#353803, Alex Larsson)
+
 	* gtk/gtkwidget.c: Add docs for the parent-set signal.
 	(#353772, Mariano Suárez-Alvarez)
 
