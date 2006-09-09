@@ -67,7 +67,8 @@ gdk_font_name_hash_get (GdkDisplay *display)
   if (!result)
     {
       result = g_hash_table_new (g_str_hash, g_str_equal);
-      g_object_set_qdata (G_OBJECT (display), font_name_quark, result);
+      g_object_set_qdata_full (G_OBJECT (display),
+         font_name_quark, result, (GDestroyNotify) g_hash_table_destroy);
     }
 
   return result;
@@ -87,7 +88,9 @@ gdk_fontset_name_hash_get (GdkDisplay *display)
   if (!result)
     {
       result = g_hash_table_new (g_str_hash, g_str_equal);
-      g_object_set_qdata (G_OBJECT (display), fontset_name_quark, result);
+
+      g_object_set_qdata_full (G_OBJECT (display),
+         fontset_name_quark, result, (GDestroyNotify) g_hash_table_destroy);
     }
 
   return result;

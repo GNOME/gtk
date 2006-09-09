@@ -1,5 +1,8 @@
 2006-09-09  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk/x11/gdkfonts-x11.c: Fix small theoretical memory leaks.
+	(#353916, Chris Wilson)
+
 	* gtk/gtksettings.c (_gtk_settings_reset_rc_values):
 	Don't leak the to_reset list.  (#353914, Chris Wilson)
 
