@@ -1,3 +1,9 @@
+2006-09-09  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Add docs for the parent-set signal.
+	(#353772, Mariano Suárez-Alvarez)
+
+
 2006-09-08  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtktextbuffer.c (remove_all_selection_clipboards):
