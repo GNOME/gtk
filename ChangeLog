@@ -1,8 +1,10 @@
 2006-09-09  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (_gtk_settings_reset_rc_values):
+	Don't leak the to_reset list.  (#353914, Chris Wilson)
+
 	* gtk/gtkwidget.c: Add docs for the parent-set signal.
 	(#353772, Mariano Suárez-Alvarez)
-
 
 2006-09-08  Matthias Clasen <mclasen@redhat.com>
 

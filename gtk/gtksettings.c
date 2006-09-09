@@ -1480,6 +1480,8 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
       g_datalist_id_remove_data (&settings->queued_settings, key_id);
     }
 
+   g_slist_free (to_reset);
+
   /* Now reset the active settings
    */
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
