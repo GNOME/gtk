@@ -620,6 +620,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__ENUM,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STATE_TYPE);
+
+  /**
+   * GtkWidget::parent-set:
+   * @widget: the object on which the signal is emitted
+   * @old_parent: the previous parent, or %NULL if the widget 
+   *   just got its initial parent.
+   *
+   * The parent-set signal is emitted when a new parent has been set 
+   * on a widget. 
+   */
   widget_signals[PARENT_SET] =
     g_signal_new (I_("parent_set"),
 		  G_TYPE_FROM_CLASS (gobject_class),
