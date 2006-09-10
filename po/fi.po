@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-02 10:45-0400\n"
-"PO-Revision-Date: 2005-10-23 09:14+0300\n"
+"PO-Revision-Date: 2006-09-10 11:13+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1544,7 +1544,7 @@ msgstr "Valitse minkätyyppiset tiedostot näkyvät"
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:3959
 msgid "Create Fo_lder"
-msgstr "Luo _kansio"
+msgstr "_Uusi kansio"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:4084
@@ -1553,7 +1553,7 @@ msgstr "_Nimi:"
 
 #: gtk/gtkfilechooserdefault.c:4124
 msgid "_Browse for other folders"
-msgstr "_Selaa muita kansioita"
+msgstr "Selaa _muita kansioita"
 
 #: gtk/gtkfilechooserdefault.c:4393
 msgid "Save in _folder:"
