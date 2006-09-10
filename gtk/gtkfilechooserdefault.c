@@ -8670,6 +8670,3 @@ shortcuts_model_filter_new (GtkFileChooserDefault *impl,
 
   return GTK_TREE_MODEL (model);
 }
-
-#define __GTK_FILE_CHOOSER_DEFAULT_C__
-#include "gtkaliasdef.c"

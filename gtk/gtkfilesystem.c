@@ -24,8 +24,8 @@
 #include "gtkicontheme.h"
 #include "gtkmodules.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 #include "gtkstock.h"
+#include "gtkalias.h"
 
 #include <string.h>
 

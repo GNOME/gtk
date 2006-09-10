@@ -16,11 +16,6 @@ print <<EOF;
 
 #ifdef G_HAVE_GNUC_VISIBILITY
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define GTK_DISABLE_DEPRECATED
-#define REENABLE_DEPRECATED
-#endif
-
 EOF
 
 if ($do_def) {
@@ -134,10 +129,6 @@ EOF
 }
 
 print <<EOF;
-#ifdef REENABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-#endif
-
 #endif /* G_HAVE_GNUC_VISIBILITY */
 #endif /* DISABLE_VISIBILITY */
 EOF

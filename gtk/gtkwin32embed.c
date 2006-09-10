@@ -26,6 +26,8 @@
 
 #include "gtkwin32embed.h"
 
+#include "gtkalias.h"
+
 static guint message_type[GTK_WIN32_EMBED_LAST];
 
 static GSList *current_messages;
@@ -130,6 +132,3 @@ _gtk_win32_embed_get_focus_wrapped (void)
 
   return (msg->lParam & GTK_WIN32_EMBED_FOCUS_WRAPAROUND) != 0;
 }
-
-
-

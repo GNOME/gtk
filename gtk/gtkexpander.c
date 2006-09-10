@@ -32,8 +32,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include <gdk/gdkkeysyms.h>
-#include "gtkalias.h"
 #include "gtkdnd.h"
+#include "gtkalias.h"
 
 #define GTK_EXPANDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_EXPANDER, GtkExpanderPrivate))
 

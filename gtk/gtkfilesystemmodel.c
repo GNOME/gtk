@@ -2021,6 +2021,3 @@ root_files_removed_callback (GtkFileFolder      *folder,
 {
   do_files_removed (model, NULL, paths);
 }
-
-#define __GTK_FILE_SYSTEM_MODEL_C__
-#include "gtkaliasdef.c"

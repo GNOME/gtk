@@ -25,8 +25,8 @@
 
 #include "gtktextbufferrichtext.h"
 #include "gtktextbufferserialize.h"
-#include "gtkalias.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 typedef struct

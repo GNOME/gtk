@@ -33,7 +33,6 @@
 
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 
 #include "gtkprivate.h"
 #include "gtkalias.h"

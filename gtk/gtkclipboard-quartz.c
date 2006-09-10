@@ -30,10 +30,9 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 #include "gtktextbuffer.h"
-
 #include "gtkquartz.h"
+#include "gtkalias.h"
 
 enum {
   OWNER_CHANGE,

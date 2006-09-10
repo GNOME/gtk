@@ -22,8 +22,8 @@
 #include "gtktreemodelfilter.h"
 #include "gtkintl.h"
 #include "gtktreednd.h"
-#include "gtkalias.h"
 #include "gtkprivate.h"
+#include "gtkalias.h"
 #include <string.h>
 
 /* ITER FORMAT:

@@ -37,8 +37,8 @@
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 #include "gtkdnd.h"
+#include "gtkalias.h"
 
 #define SCROLL_DELAY_FACTOR   5
 #define SCROLL_THRESHOLD      12

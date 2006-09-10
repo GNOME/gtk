@@ -21,6 +21,8 @@
 
 #include "gtkdebug.h"
 #include "gtkiconcache.h"
+#include "gtkalias.h"
+
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 

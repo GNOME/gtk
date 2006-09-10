@@ -596,8 +596,8 @@ gtk_check_button_new_with_mnemonic
 #endif
 #endif
 
-#if IN_HEADER(__GTK_MENU_CHECK_ITEM_H__)
-#if IN_FILE(__GTK_MENU_CHECK_ITEM_C__)
+#if IN_HEADER(__GTK_CHECK_MENU_ITEM_H__)
+#if IN_FILE(__GTK_CHECK_MENU_ITEM_C__)
 gtk_check_menu_item_get_active
 gtk_check_menu_item_get_draw_as_radio
 gtk_check_menu_item_get_inconsistent
@@ -884,8 +884,8 @@ gtk_container_unset_focus_chain
 #endif
 #endif
 
-#if IN_HEADER(__C_TREE_H__)
-#if IN_FILE(__G_TREE_C__)
+#if IN_HEADER(__GTK_CTREE_H__)
+#if IN_FILE(__GTK_CTREE_C__)
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_ctree_collapse
 gtk_ctree_collapse_recursive
@@ -1477,7 +1477,6 @@ gtk_file_system_unix_new
 #ifdef G_OS_WIN32
 gtk_file_system_win32_get_type G_GNUC_CONST
 gtk_file_system_win32_new
-_gtk_file_system_win32_path_compare
 #endif
 #endif
 #endif
@@ -1537,8 +1536,8 @@ gtk_font_button_set_use_size
 #endif
 #endif
 
-#if IN_HEADER(__GTK_FONSEL_H__)
-#if IN_FILE(__GTK_FONSEL_C__)
+#if IN_HEADER(__GTK_FONTSEL_H__)
+#if IN_FILE(__GTK_FONTSEL_C__)
 gtk_font_selection_dialog_get_font_name
 gtk_font_selection_dialog_get_preview_text
 gtk_font_selection_dialog_get_type G_GNUC_CONST
@@ -1939,7 +1938,7 @@ gtk_item_toggle
 #endif
 #endif
 
-#if IN_HEADER(__GTK_ITEM__FACTORY_H__)
+#if IN_HEADER(__GTK_ITEM_FACTORY_H__)
 #if IN_FILE(__GTK_ITEM_FACTORY_C__)
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_item_factories_path_delete
@@ -2189,6 +2188,7 @@ gtk_input_dialog_new
 
 #if IN_HEADER(__gtk_marshal_MARSHAL_H__)
 #if IN_FILE(__gtk_marshal_MARSHAL_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_marshal_BOOLEAN__POINTER
 gtk_marshal_BOOLEAN__POINTER_INT_INT
 gtk_marshal_BOOLEAN__POINTER_INT_INT_UINT
@@ -2215,6 +2215,7 @@ gtk_marshal_VOID__STRING_INT_POINTER
 gtk_marshal_VOID__UINT_POINTER_UINT_ENUM_ENUM_POINTER
 gtk_marshal_VOID__UINT_POINTER_UINT_UINT_ENUM
 gtk_marshal_VOID__UINT_STRING
+#endif
 #endif
 #endif
 
@@ -4371,19 +4372,21 @@ gtk_vbox_new
 #endif
 #endif
 
-#if IN_HEADER(__GTK_VBUTTONBOX_H__)
-#if IN_FILE(__GTK_VBUTTONBOX_C__)
+#if IN_HEADER(__GTK_VBBOX_H__)
+#if IN_FILE(__GTK_VBBOX_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_vbutton_box_get_layout_default
 gtk_vbutton_box_get_spacing_default
-gtk_vbutton_box_get_type G_GNUC_CONST
-gtk_vbutton_box_new
 gtk_vbutton_box_set_layout_default
 gtk_vbutton_box_set_spacing_default
 #endif
+gtk_vbutton_box_get_type G_GNUC_CONST
+gtk_vbutton_box_new
+#endif
 #endif
 
-#if IN_HEADER(__GTK_VIEPORT_H__)
-#if IN_FILE(__GTK_VIEPORT_C__)
+#if IN_HEADER(__GTK_VIEWPORT_H__)
+#if IN_FILE(__GTK_VIEWPORT_C__)
 gtk_viewport_get_hadjustment
 gtk_viewport_get_shadow_type
 gtk_viewport_get_type G_GNUC_CONST
@@ -4684,6 +4687,14 @@ gtk_window_stick
 gtk_window_unfullscreen
 gtk_window_unmaximize
 gtk_window_unstick
+#endif
+#endif
+
+#if IN_HEADER(__GTK_WIN32_EMBED_WIDGET_H__)
+#if IN_FILE(__GTK_WIN32_EMBED_WIDGET_C__)
+#ifdef G_OS_WIN32
+gtk_win32_embed_widget_get_type G_GNUC_CONST
+#endif
 #endif
 #endif
 

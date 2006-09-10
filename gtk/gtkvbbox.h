@@ -24,8 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_VBUTTON_BOX_H__
-#define __GTK_VBUTTON_BOX_H__
+#ifndef __GTK_VBBOX_H__
+#define __GTK_VBBOX_H__
 
 
 #include <gtk/gtkbbox.h>
@@ -73,4 +73,4 @@ void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout);
 G_END_DECLS
 
 
-#endif /* __GTK_VBUTTON_BOX_H__ */
+#endif /* __GTK_VBBOX_H__ */

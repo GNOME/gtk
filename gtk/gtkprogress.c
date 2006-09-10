@@ -29,7 +29,6 @@
 #include <string.h>
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkprogress.h" 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkprivate.h" 
 #include "gtkintl.h"
 #include "gtkalias.h"

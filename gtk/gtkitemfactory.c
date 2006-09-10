@@ -32,7 +32,6 @@
 #undef GTK_DISABLE_DEPRECATED
 #include	"gtkitemfactory.h"
 #include	"gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 #include	"gtkmenubar.h"
 #include	"gtkmenu.h"
 #include	"gtkmenuitem.h"
@@ -54,7 +53,7 @@
 #endif
 #include	<stdio.h>
 
-#include 	"gtkalias.h"
+#include "gtkalias.h"
 
 /* --- defines --- */
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)

@@ -50,7 +50,7 @@ gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
 	 $(PERL) $(srcdir)/makegdkpixbufalias.pl -def < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
 
 if OS_LINUX
-TESTS = abicheck.sh
+TESTS = abicheck.sh pltcheck.sh
 endif
 
 lib_LTLIBRARIES = 		\
@@ -273,7 +273,6 @@ INCLUDES = \
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"	\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"	\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 	-DGTK_PREFIX=\"$(prefix)\"		\
 	$(INCLUDED_LOADER_DEFINE) 		\
 	$(GTK_DEBUG_FLAGS)			\

@@ -29,6 +29,7 @@
 
 #include "gdktypes.h"
 #include "gdkprivate-x11.h"
+#include "gdkalias.h"
 
 gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
 Display          *gdk_display = NULL;

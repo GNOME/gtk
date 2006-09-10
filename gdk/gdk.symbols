@@ -137,13 +137,10 @@ gdk_threads_set_lock_functions
 #endif
 
 #if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_INPUT_C__)
+#if IN_FILE(__GDK_EVENTS_C__)
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_input_add
 gdk_input_remove
-gdk_input_add_full
-#endif
-#ifdef GTK_COMPILATION
 gdk_input_add_full
 #endif
 #endif
@@ -642,9 +639,6 @@ gdk_window_clear_area
 gdk_window_clear_area_e
 gdk_window_constrain_size
 gdk_window_destroy
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_window_destroy_notify
-#endif
 gdk_window_end_paint
 gdk_window_foreign_new
 gdk_window_freeze_updates
@@ -1089,6 +1083,12 @@ gdk_spawn_on_screen_with_pipes
 #if IN_HEADER(__GDK_PRIVATE_H__)
 #if IN_FILE(__GDK_EVENTS_C__)
 gdk_synthesize_window_state
+#endif
+#endif
+
+#if IN_HEADER(__GDK_PRIVATE_H__)
+#if IN_FILE(__GDK_WINDOW_X11_C__)
+gdk_window_destroy_notify
 #endif
 #endif
 

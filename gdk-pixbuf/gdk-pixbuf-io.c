@@ -2277,7 +2277,3 @@ gdk_pixbuf_get_formats (void)
 
 #define __GDK_PIXBUF_IO_C__
 #include "gdk-pixbuf-aliasdef.c"
-
-
-
-

@@ -49,7 +49,6 @@
 
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkcalendar.h"
-#define GTK_DISABLE_DEPRECATED
 
 #include "gtkdnd.h"
 #include "gtkintl.h"

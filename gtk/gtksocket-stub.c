@@ -27,6 +27,7 @@
 
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
+#include "gtkalias.h"
 
 GdkNativeWindow
 _gtk_socket_windowing_get_id (GtkSocket *socket)
