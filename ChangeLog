@@ -1,5 +1,8 @@
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_scroll_event): Renew
+	the flush timeout.  (#354043, Nelson Benitez)
+	
 	* gtk/paper_names_offsets.c: Fix a typo. String change! (#355134,
 	David Lodge)
 
