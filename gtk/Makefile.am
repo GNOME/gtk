@@ -33,7 +33,6 @@ INCLUDES =						\
 	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
-	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
@@ -89,8 +88,15 @@ gtkalias.h: gtk.symbols
 gtkaliasdef.c: gtk.symbols
 	  $(PERL) $(srcdir)/makegtkalias.pl -def < $(srcdir)/gtk.symbols > gtkaliasdef.c
 
+check-aliases:
+	@$(TESTS_ENVIRONMENT) $(srcdir)/aliasfilescheck.sh
+
+.PHONY: check-aliases
+
+TESTS_ENVIRONMENT = gtk_all_c_sources="$(gtk_all_c_sources)"
+TESTS = aliasfilescheck.sh
 if OS_LINUX
-TESTS = abicheck.sh
+TESTS += abicheck.sh pltcheck.sh
 endif
 
 # libtool stuff: set version and export symbols for resolving
@@ -319,7 +325,7 @@ gtk_unix_print_public_h_sources =    \
 
 
 # Installed header files without compatibility guarantees
-# that are not include in gtk/gtk.h
+# that are not included in gtk/gtk.h
 gtk_semi_private_h_sources =    \
 	gtktextlayout.h		\
 	gtkfilesystem.h
@@ -336,7 +342,11 @@ gtk_private_h_sources =		\
 	gtkfilechooserutils.h	\
 	gtkfilesystemmodel.h	\
 	gtkfilesystemunix.h	\
+	gtkhsv.h		\
 	gtkiconcache.h		\
+	gtkintl.h		\
+	gtkkeyhash.h		\
+	gtkmnemonichash.h	\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkprintoperation-private.h\
@@ -348,6 +358,7 @@ gtk_private_h_sources =		\
 	gtksequence.h		\
 	gtksocketprivate.h	\
 	gtktextbtree.h		\
+	gtktextbufferserialize.h\
 	gtktextchildprivate.h	\
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
@@ -362,7 +373,7 @@ gtk_private_h_sources =		\
 	gtkwindow-decorate.h
 
 # GTK+ C sources to build the library from
-gtk_c_sources =                 \
+gtk_base_c_sources =            \
 	fnmatch.c		\
 	gtkaboutdialog.c	\
 	gtkaccelgroup.c		\
@@ -440,7 +451,6 @@ gtk_c_sources =                 \
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
 	gtkhsv.c		\
-	gtkhsv.h		\
 	gtkiconcache.c		\
 	gtkiconfactory.c	\
 	gtkicontheme.c		\
@@ -452,12 +462,10 @@ gtk_c_sources =                 \
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinputdialog.c	\
-	gtkintl.h		\
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkitemfactory.c	\
 	gtkkeyhash.c		\
-	gtkkeyhash.h		\
 	gtklabel.c		\
 	gtklayout.c		\
 	gtklinkbutton.c		\
@@ -475,7 +483,6 @@ gtk_c_sources =                 \
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
-	gtkmnemonichash.h	\
 	gtkmodules.c		\
 	gtknotebook.c		\
 	gtkobject.c		\
@@ -535,14 +542,11 @@ gtk_c_sources =                 \
 	gtktextbuffer.c		\
 	gtktextbufferrichtext.c	\
 	gtktextbufferserialize.c\
-	gtktextbufferserialize.h\
 	gtktextchild.c		\
 	gtktextdisplay.c	\
 	gtktextiter.c		\
-	gtktextiterprivate.h	\
 	gtktextlayout.c		\
 	gtktextmark.c		\
-	gtktextmarkprivate.h	\
 	gtktextsegment.c	\
 	gtktexttag.c		\
 	gtktexttagtable.c	\
@@ -584,19 +588,11 @@ gtk_c_sources =                 \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
-	xembed.h		\
 	$(gtk_clipboard_dnd_c_sources)
+gtk_c_sources = $(gtk_base_c_sources)
+gtk_all_c_sources = $(gtk_base_c_sources)
 
-if OS_UNIX
-gtk_private_h_sources += \
-	gtkfilesystemunix.h		\
-	gtkprintbackend.h		\
-	gtkprinter-private.h		\
-	gtkprinteroption.h		\
-	gtkprinteroptionset.h		\
-	gtkprinteroptionwidget.h
-
-gtk_c_sources += \
+gtk_os_unix_c_sources = \
 	gtkfilesystemunix.c		\
 	gtkpagesetupunixdialog.c	\
 	gtkprinter.c			\
@@ -607,30 +603,51 @@ gtk_c_sources += \
 	gtkprintoperation-unix.c	\
 	gtkprintunixdialog.c		\
         gtkprintbackend.c
+gtk_all_c_sources += $(gtk_os_unix_c_sources)
+if OS_UNIX
+gtk_private_h_sources += \
+	gtkfilesystemunix.h		\
+	gtkprintbackend.h		\
+	gtkprinter-private.h		\
+	gtkprinteroption.h		\
+	gtkprinteroptionset.h		\
+	gtkprinteroptionwidget.h
+gtk_c_sources += $(gtk_os_unix_c_sources)
 endif
 
-if OS_WIN32
-gtk_private_h_sources += gtkfilesystemwin32.h gtkprint-win32.h
-
-gtk_c_sources += \
+gtk_os_win32_c_sources = \
 	gtkfilesystemwin32.c		\
 	gtkprint-win32.c		\
 	gtkprintoperation-win32.c
+gtk_all_c_sources += $(gtk_os_win32_c_sources)
+if OS_WIN32
+gtk_private_h_sources += gtkfilesystemwin32.h gtkprint-win32.h
+gtk_c_sources += $(gtk_os_win32_c_sources)
 endif
 
-if USE_X11
-gtk_private_h_sources += gtkxembed.h gtktrayicon.h
-gtk_c_sources += \
+gtk_use_x11_c_sources = \
 	gtkplug-x11.c   \
 	gtksocket-x11.c \
 	gtkxembed.c     \
 	gtktrayicon-x11.c
+gtk_use_win32_c_sources = \
+	gtkplug-win32.c   \
+	gtksocket-win32.c \
+	gtkwin32embed.c   \
+	gtkwin32embedwidget.c
+gtk_use_stuc_c_sources = \
+	gtkplug-stub.c   \
+	gtksocket-stub.c
+gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_stuc_c_sources)
+if USE_X11
+gtk_private_h_sources += gtkxembed.h gtktrayicon.h xembed.h
+gtk_c_sources += $(gtk_use_x11_c_sources)
 else
 if USE_WIN32
 gtk_private_h_sources += gtkwin32embed.h gtkwin32embedwidget.h
-gtk_c_sources +=         gtkplug-win32.c gtksocket-win32.c gtkwin32embed.c gtkwin32embedwidget.c
+gtk_c_sources += $(gtk_use_win32_c_sources)
 else
-gtk_c_sources +=         gtkplug-stub.c gtksocket-stub.c
+gtk_c_sources += $(gtk_use_stub_c_sources)
 endif
 endif
 
@@ -653,7 +670,7 @@ gtk_built_public_sources =			\
 	gtkmarshal.h				\
 	gtktypebuiltins.h
 
-# built sources that don't get installed
+# built headers that don't get installed
 gtk_built_private_headers =			\
 	gtkalias.h				\
 	gtkmarshalers.h				\
@@ -663,7 +680,6 @@ gtk_built_sources =				\
 	gtkaliasdef.c				\
 	gtktypebuiltins.c			\
 	gtkmarshalers.c				\
-	gtkmarshalers.h				\
 	gtkmarshal.c				\
 	${gtk_built_private_headers}		\
 	${gtk_built_public_sources}
@@ -717,7 +733,9 @@ stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)	
 gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
-	(echo "#include \"gtkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
+	(echo "#include \"gtkmarshalers.h\""; \
+	 echo "#include \"gtkalias.h\""; \
+	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 
@@ -731,7 +749,11 @@ stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list
 	&& rm -f xgen-gmh \
 	&& echo timestamp > $(@F)
 gtkmarshal.c: @REBUILD@ gtkmarshal.list
-	(echo "#include \"gtkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body) >> xgen-gmc \
+	(echo "#include \"gtkmarshal.h\""; \
+	 echo "#include \"gtkalias.h\""; \
+	 $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body; \
+	 echo "#define __gtk_marshal_MARSHAL_C__"; \
+	 echo "#include \"gtkaliasdef.c\"") >> xgen-gmc \
 	&& cp xgen-gmc gtkmarshal.c \
 	&& rm -f xgen-gmc 
 

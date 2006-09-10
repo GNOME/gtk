@@ -9,7 +9,6 @@ INCLUDES = 				\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED	\
 	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
 

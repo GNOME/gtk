@@ -28,9 +28,8 @@
 #include "gdkrgb.h"
 #include "gdkprivate.h"
 #include "gdkscreen.h"
-#include "gdkalias.h"
-
 #include "gdkintl.h"
+#include "gdkalias.h"
 
 #define GDK_INFO_KEY "gdk-info"
 

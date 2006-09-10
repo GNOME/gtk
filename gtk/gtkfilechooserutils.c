@@ -360,6 +360,3 @@ delegate_confirm_overwrite (GtkFileChooser    *chooser,
   g_signal_emit_by_name (data, "confirm-overwrite", &conf);
   return conf;
 }
-
-#define __GTK_FILE_CHOOSER_UTILS_C__
-#include "gtkaliasdef.c"

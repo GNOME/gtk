@@ -39,8 +39,6 @@
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 
-#include "gtkalias.h"
-
 #ifdef GDK_WINDOWING_WIN32
 #include "gtkicontheme.h"
 #include "gtklabel.h"
@@ -48,6 +46,8 @@
 #include "win32/gdkwin32.h"
 #define WM_GTK_TRAY_NOTIFICATION (WM_USER+1)
 #endif
+
+#include "gtkalias.h"
 
 #define BLINK_TIMEOUT 500
 

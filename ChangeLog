@@ -1,5 +1,9 @@
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* Commit a patch by Behdad to fix typos, omissions and other
+	errors in the symbol aliasing, and add checks for local PLT
+	entries.  (#354687, Behdad Esfahbod)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_scroll_event): Renew
 	the flush timeout.  (#354043, Nelson Benitez)
 	

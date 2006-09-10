@@ -32,7 +32,6 @@
 #include "gtkmarshalers.h"
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"

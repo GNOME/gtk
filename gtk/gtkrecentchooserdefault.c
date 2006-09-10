@@ -2069,6 +2069,3 @@ _gtk_recent_chooser_default_new (GtkRecentManager *manager)
   		       "recent-manager", manager,
   		       NULL);
 }
-
-#define __GTK_RECENT_CHOOSER_DEFAULT_C__
-#include "gtkaliasdef.c"

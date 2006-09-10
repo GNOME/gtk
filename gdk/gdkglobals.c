@@ -30,6 +30,7 @@
 
 #include "gdktypes.h"
 #include "gdkprivate.h"
+#include "gdkalias.h"
 
 guint               _gdk_debug_flags = 0;
 gint                _gdk_error_code = 0;

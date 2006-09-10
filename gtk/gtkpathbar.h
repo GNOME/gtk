@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_PATH_BAR__
-#define __GTK_PATH_BAR__
+#ifndef __GTK_PATH_BAR_H__
+#define __GTK_PATH_BAR_H__
 
 #include "gtkcontainer.h"
 #include "gtkfilesystem.h"
@@ -91,4 +91,4 @@ void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 
 G_END_DECLS
 
-#endif /* __GTK_PATH_BAR__ */
+#endif /* __GTK_PATH_BAR_H__ */

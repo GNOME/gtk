@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkrecentchooserutils.h"
+#include "gtkalias.h"
 
 /* Methods */
 static void      delegate_set_sort_func              (GtkRecentChooser  *chooser,

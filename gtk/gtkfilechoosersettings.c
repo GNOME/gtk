@@ -34,6 +34,7 @@
 #include <string.h>
 #include <glib/gi18n-lib.h>
 #include "gtkfilechoosersettings.h"
+#include "gtkalias.h"
 
 /* Increment this every time you change the configuration format */
 #define CONFIG_VERSION 0

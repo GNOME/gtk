@@ -20,6 +20,7 @@
 #include <glib.h>
 
 #include "gtksequence.h"
+#include "gtkalias.h"
 
 typedef struct _GtkSequenceNode GtkSequenceNode;
 

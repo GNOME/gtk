@@ -1075,6 +1075,3 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 
   return retval;
 }
-
-#define __GTK_FILE_CHOOSER_ENTRY_C__
-#include "gtkaliasdef.c"

@@ -44,8 +44,8 @@
 #include "gtkprinter-private.h"
 #include "gtkprintjob.h"
 #include "gtklabel.h"
-#include "gtkalias.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct 
 {

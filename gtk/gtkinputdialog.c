@@ -52,7 +52,6 @@
 
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 
 #include "gtkintl.h"
 #include "gtkalias.h"

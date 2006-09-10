@@ -27,8 +27,8 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
-#include "gtkalias.h"
 #include "gtkprivate.h"
+#include "gtkalias.h"
 
 #include <string.h>
 

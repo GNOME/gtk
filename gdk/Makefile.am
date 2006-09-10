@@ -24,8 +24,7 @@ INCLUDES =                              \
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk-pixbuf 	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED	\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED \
 	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
 
@@ -202,7 +201,7 @@ gdkaliasdef.c: gdk.symbols
 	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
 
 if OS_LINUX
-TESTS = abicheck.sh
+TESTS = pltcheck.sh abicheck.sh
 endif
 
 

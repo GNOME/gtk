@@ -30,6 +30,9 @@
 #define GDK_PIXBUF_COMPILATION
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
+/* Include the marshallers */
+#include <glib-object.h>
+#include "gdk-pixbuf-marshal.c"
 #include "gdk-pixbuf-alias.h"
 
 static void gdk_pixbuf_finalize     (GObject        *object);
@@ -752,12 +755,6 @@ gdk_pixbuf_get_property (GObject         *object,
                   break;
           }
 }
-
-
-
-/* Include the marshallers */
-#include <glib-object.h>
-#include "gdk-pixbuf-marshal.c"
 
 #define __GDK_PIXBUF_C__
 #include "gdk-pixbuf-aliasdef.c"

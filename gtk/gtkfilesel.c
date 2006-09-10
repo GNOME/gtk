@@ -78,7 +78,6 @@
 
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 
 #define WANT_HPANED 1
 #include "gtkhpaned.h"

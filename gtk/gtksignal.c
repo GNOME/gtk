@@ -21,7 +21,7 @@
 
 #include	<config.h>
 #include	"gtksignal.h"
-#include 	"gtkalias.h"
+#include "gtkalias.h"
 
 /* the real parameter limit is of course given by GSignal, bu we need
  * an upper limit for the implementations. so this should be adjusted

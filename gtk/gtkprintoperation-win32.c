@@ -40,9 +40,9 @@
 #include "gtkinvisible.h"
 #include "gtkplug.h"
 #include "gtkstock.h"
-#include "gtkalias.h"
 #include "gtk.h"
 #include "gtkwin32embedwidget.h"
+#include "gtkalias.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
@@ -1909,3 +1909,6 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
   done_cb (new_page_setup, data);
   g_object_unref (new_page_setup);
 }
+
+#define __GTK_PRINT_OPERATION_WIN32_C__
+#include "gtkaliasdef.c"

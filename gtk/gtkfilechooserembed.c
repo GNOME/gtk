@@ -219,6 +219,3 @@ _gtk_file_chooser_embed_get_resizable_hints (GtkFileChooserEmbed *chooser_embed,
 
   GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->get_resizable_hints (chooser_embed, resize_horizontally, resize_vertically);
 }
-
-#define __GTK_FILE_CHOOSER_EMBED_C__
-#include "gtkaliasdef.c"

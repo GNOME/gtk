@@ -36,7 +36,7 @@
 #include	"gtkmain.h"
 #include        "gtkmarshalers.h"
 #include	"gtkintl.h"
-#include 	"gtkalias.h"
+#include "gtkalias.h"
 
 
 

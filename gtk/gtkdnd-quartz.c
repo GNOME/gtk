@@ -43,9 +43,8 @@
 #include "gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 #include "gtkquartz.h"
+#include "gtkalias.h"
 #include "gdk/quartz/gdkquartz.h"
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;

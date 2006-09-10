@@ -43,6 +43,7 @@
 #include "gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtkdndcursors.h"
 #include "gtkalias.h"
 
 static GSList *source_widgets = NULL;
@@ -299,8 +300,6 @@ static void     set_icon_stock_pixbuf          (GdkDragContext    *context,
 /************************
  * Cursor and Icon data *
  ************************/
-
-#include "gtkdndcursors.h"
 
 static struct {
   GdkDragAction action;
