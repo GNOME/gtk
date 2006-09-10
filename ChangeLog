@@ -1,9 +1,12 @@
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/updateiconcache.c: Improve wording. String change! (#355128,
+	* gtk/gtkfilechoosersettings.c (set_unexpected_element_end_error): 
+	Improve wording. String change!  (#355126, David Lodge)
+
+	* gtk/updateiconcache.c: Improve wording. String change!  (#355128,
 	David Lodge)
 
-	* gtk/paper_names_offsets.c: Fix a typo. String change! (#355134,
+	* gtk/paper_names_offsets.c: Fix a typo. String change!  (#355134,
 	David Lodge)
 
 2006-09-09  Matthias Clasen <mclasen@redhat.com>
