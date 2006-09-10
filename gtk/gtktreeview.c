@@ -13853,6 +13853,17 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
       retval = TRUE;
     }
 
+  /* renew the flush timeout */
+  if (retval && tree_view->priv->typeselect_flush_timeout
+      && !tree_view->priv->search_custom_entry_set)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout =
+	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		       tree_view);
+    }
+
   return retval;
 }
 
