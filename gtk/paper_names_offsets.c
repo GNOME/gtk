@@ -268,7 +268,7 @@ N_("paper size|Monarch Envelope")
 /* translators, strip everything up to the first | */
 N_("paper size|#10 Envelope")
 /* translators, strip everything up to the first | */
-N_("paper size|#11 Eenvelope")
+N_("paper size|#11 Envelope")
 /* translators, strip everything up to the first | */
 N_("paper size|#12 Envelope")
 /* translators, strip everything up to the first | */

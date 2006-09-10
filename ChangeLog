@@ -1,3 +1,8 @@
+2006-09-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/paper_names_offsets.c: Fix a typo. String change! (#355134,
+	David Lodge)
+
 2006-09-09  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk/x11/gdkfonts-x11.c: Fix small theoretical memory leaks.
