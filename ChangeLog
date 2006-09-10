@@ -1,3 +1,14 @@
+2006-09-10  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkwindow-win32.c: Define WINVER and _WIN32_WINNT as
+	0x0500 in gdkprivate-win32.h instead of doing it in two source
+	files. (#355212, Mike Edenfield)
+
+	* gdk/win32/gdkwindow-win32.c: We can also remove the ersatz
+	GetAncestor() for the _MSC_VER && WINVER < 0x0500 case, I hope.
+
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* Commit a patch by Behdad to fix typos, omissions and other

@@ -27,6 +27,14 @@
 #ifndef __GDK_PRIVATE_WIN32_H__
 #define __GDK_PRIVATE_WIN32_H__
 
+#ifndef WINVER
+#define WINVER 0x0500
+#endif
+
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT WINVER
+#endif
+
 #include <gdk/gdkprivate.h>
 #include <gdk/win32/gdkwindow-win32.h>
 #include <gdk/win32/gdkpixmap-win32.h>

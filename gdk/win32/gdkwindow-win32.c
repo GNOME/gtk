@@ -29,59 +29,9 @@
 #include <config.h>
 #include <stdlib.h>
 
-#ifndef _MSC_VER
-#define _WIN32_WINNT 0x0500
-#define WINVER _WIN32_WINNT
-#endif
-
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
-
-#if defined(_MSC_VER) && (WINVER < 0x0500)
-
-typedef struct
-{
-  UINT cbSize;
-  HWND hwnd;
-  DWORD dwFlags;
-  UINT uCount;
-  DWORD dwTimeout;
-} FLASHWINFO;
-
-#define FLASHW_STOP 0
-#define FLASHW_CAPTION 1
-#define FLASHW_TRAY 2
-#define FLASHW_ALL (FLASHW_CAPTION|FLASHW_TRAY)
-#define FLASHW_TIMER 4
-
-#define GetAncestor(hwnd,what) _gdk_win32_get_ancestor_parent (hwnd)
-
-static HWND
-_gdk_win32_get_ancestor_parent (HWND hwnd)
-{
-#ifndef GA_PARENT
-#  define GA_PARENT 1 
-#endif
-  typedef HWND (WINAPI *PFN_GetAncestor) (HWND,UINT);
-  static PFN_GetAncestor p_GetAncestor = NULL;
-  static gboolean once = FALSE;
-  
-  if (!once)
-    {
-      HMODULE user32;
-
-      user32 = GetModuleHandle ("user32.dll");
-      p_GetAncestor = (PFN_GetAncestor)GetProcAddress (user32, "GetAncestor");
-      once = TRUE;
-    }
-  if (p_GetAncestor)
-    return p_GetAncestor (hwnd, GA_PARENT);
-  else /* not completely right, but better than nothing ? */
-    return GetParent (hwnd);
-}
-
-#endif
 
 #if 0
 #include <gdk-pixbuf/gdk-pixbuf.h>

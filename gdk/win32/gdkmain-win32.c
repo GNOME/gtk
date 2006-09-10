@@ -25,8 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#define WINVER 0x0500
-
 #include <config.h>
 
 #include <glib/gprintf.h>
