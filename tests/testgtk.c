@@ -75,7 +75,7 @@ static GtkWidget *
 build_option_menu (gchar           *items[],
 		   gint             num_items,
 		   gint             history,
-		   void           (*func)(GtkWidget *widget, gpointer data),
+		   void           (*func) (GtkWidget *widget, gpointer data),
 		   gpointer         data);
 
 /* macro, structure and variables used by tree window demos */
@@ -2272,7 +2272,7 @@ create_gridded_geometry (GtkWidget *widget)
 
       g_signal_connect (window, "response",
 			G_CALLBACK (gridded_geometry_response), entry);
-      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer) &window);
 
       gtk_widget_show_all (window);
     }
@@ -4673,7 +4673,7 @@ create_key_lookup (GtkWidget *widget)
       button = accel_button_new (accel_group, "Button 15", "<Shift><Mod4>b");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       
-      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer) &window);
       g_signal_connect (window, "response", G_CALLBACK (gtk_object_destroy), NULL);
 
       gtk_widget_show_all (window);
@@ -7904,6 +7904,7 @@ color_selection_changed (GtkWidget *w,
   gtk_color_selection_get_color(colorsel,color);
 }
 
+#if 0 /* unused */
 static void
 opacity_toggled_cb (GtkWidget *w,
 		    GtkColorSelectionDialog *cs)
@@ -7925,6 +7926,7 @@ palette_toggled_cb (GtkWidget *w,
   gtk_color_selection_set_has_palette (colorsel,
 				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
 }
+#endif
 
 void
 create_color_selection (GtkWidget *widget)
@@ -11409,8 +11411,10 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
 }
 
 static void
-progressbar_toggle_ellipsize (GtkWidget *widget, ProgressData *pdata)
+progressbar_toggle_ellipsize (GtkWidget *widget,
+                              gpointer   data)
 {
+  ProgressData *pdata = data;
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gint i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -11891,7 +11895,7 @@ find_widget_at_pointer (GdkDisplay *display)
  pointer_window = gdk_display_get_window_at_pointer (display, NULL, NULL);
  
  if (pointer_window)
-   gdk_window_get_user_data (pointer_window, (gpointer*) &widget);
+   gdk_window_get_user_data (pointer_window, (gpointer) &widget);
 
  if (widget)
    {

@@ -1,3 +1,7 @@
+Mon Sep 11 14:22:39 2006  Tim Janik  <timj@imendio.com>
+
+	* tests/testgtk.c: fixed compiler warnings.
+
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (model_add_special): Request
