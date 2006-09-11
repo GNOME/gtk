@@ -1,5 +1,9 @@
 2006-09-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (model_add_special): Request
+	the display name too, otherwise "Desktop" does not appear
+	in the file chooser button. 
+
 	* Commit a patch by Behdad to fix typos, omissions and other
 	errors in the symbol aliasing, and add checks for local PLT
 	entries.  (#354687, Behdad Esfahbod)
