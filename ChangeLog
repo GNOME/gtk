@@ -1,3 +1,9 @@
+2006-09-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (model_add_special): Request
+	the display name too, otherwise "Desktop" does not appear
+	in the file chooser button. 
+
 2006-09-10  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkprivate-win32.h
