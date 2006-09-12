@@ -1,3 +1,11 @@
+2006-09-12 Hong Jen Yee <pcman.tw@gmail.com>
+
+	signed off by: Dom Lachowicz
+	
+	* modules/engines/ms-windows/msw_style.c: Bug 340201. This contains
+	a large number of improvements to the Microsoft Windows theme engine
+	which are fully described in the bug report.
+	
 2006-07-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
