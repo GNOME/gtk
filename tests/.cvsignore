@@ -5,6 +5,7 @@ makefile.msc
 .deps
 .libs
 autotestfilechooser
+autotestfilesystem
 pixbuf-lowmem
 pixbuf-random
 pixbuf-random-image
@@ -44,6 +45,7 @@ testnouiprint
 testprint
 testrecentchooser
 testrgb
+testrichtext
 testselection
 testsocket
 testsocket_child
