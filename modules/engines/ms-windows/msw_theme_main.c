@@ -120,6 +120,7 @@ theme_exit (void)
     gdk_window_remove_filter (hidden_msg_window, global_filter_func, NULL);
     gdk_window_destroy (hidden_msg_window);
     hidden_msg_window = NULL;
+    msw_style_finalize();
 
     if (this_module)
 	{

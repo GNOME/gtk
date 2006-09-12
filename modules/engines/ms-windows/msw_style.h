@@ -49,6 +49,7 @@ struct _MswStyleClass
 
 void msw_style_register_type (GTypeModule *module);
 void msw_style_init (void);
+void msw_style_finalize (void);
 void msw_style_setup_system_settings (void);
 
 #endif /* MSW_TYPE_STYLE */

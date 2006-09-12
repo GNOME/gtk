@@ -1,3 +1,11 @@
+2006-09-12 Hong Jen Yee <pcman.tw@gmail.com>
+
+	signed off by: Dom Lachowicz
+	
+	* modules/engines/ms-windows/msw_style.c: Bug 340201. This contains
+	a large number of improvements to the Microsoft Windows theme engine
+	which are fully described in the bug report.
+	
 Mon Sep 11 14:22:39 2006  Tim Janik  <timj@imendio.com>
 
 	* tests/testgtk.c: fixed compiler warnings.

@@ -1,6 +1,7 @@
 /* MS-Windows Engine (aka GTK-Wimp)
  *
  * Copyright (C) 2003, 2004 Raymond Penners <raymond@dotsphinx.com>
+ * Copyright (C) 2006 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
  * Includes code adapted from redmond95 by Owen Taylor, and
  * gtk-nativewin by Evan Martin
  *
@@ -43,6 +44,9 @@
 
 #include "gdk/win32/gdkwin32.h"
 
+static HDC get_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type, gint x, gint y, gint width, gint height, RECT *rect);
+static void release_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type);
+
 
 /* Default values, not normally used
  */
@@ -50,6 +54,10 @@ static const GtkRequisition default_option_indicator_size = { 9, 8 };
 static const GtkBorder default_option_indicator_spacing = { 7, 5, 2, 2 };
 
 static GtkStyleClass *parent_class;
+static HBRUSH g_dither_brush = NULL;
+
+static HPEN g_light_pen = NULL;
+static HPEN g_dark_pen = NULL;
 
 typedef enum
 {
@@ -615,6 +623,7 @@ static void
 setup_msw_rc_style (void)
 {
     char buf[1024], font_buf[256], *font_ptr;
+    char menu_bar_prelight_str[128];
 
     GdkColor menu_color;
     GdkColor menu_text_color;
@@ -684,14 +693,31 @@ setup_msw_rc_style (void)
 		(font_ptr ? font_ptr : " font name should go here"));
     gtk_rc_parse_string (buf);
 
+    if( xp_theme_is_active() ) {
+        *menu_bar_prelight_str = '\0';
+    }
+    else {
+        g_snprintf(menu_bar_prelight_str, sizeof(menu_bar_prelight_str),
+                    "fg[PRELIGHT] = { %d, %d, %d }\n", 
+                    menu_text_color.red, menu_text_color.green, menu_text_color.blue);
+    }
+
     /* Enable coloring for menu bars. */
     g_snprintf (buf, sizeof (buf),
 		"style \"msw-menu-bar\" = \"msw-menu\"\n"
 		"{\n"
 		"bg[NORMAL] = { %d, %d, %d }\n"
-		"GtkMenuBar::shadow-type = %s\n"
+                "%s"
+		"GtkMenuBar::shadow-type = %d\n"
+        /*
+          FIXME: This should be enabled once gtk+ support
+          GtkMenuBar::prelight-item style property.
+        */
+		/* "GtkMenuBar::prelight-item = 1\n" */
 		"}widget_class \"*MenuBar*\" style \"msw-menu-bar\"\n",
-		btn_face.red, btn_face.green, btn_face.blue, "etched-in");
+		btn_face.red, btn_face.green, btn_face.blue,
+                menu_bar_prelight_str,
+                xp_theme_is_active() ? 0 : 2 );
     gtk_rc_parse_string (buf);
 
     g_snprintf (buf, sizeof (buf),
@@ -745,15 +771,17 @@ setup_msw_rc_style (void)
 		"bg[PRELIGHT] = { %d, %d, %d }\n"
 		"bg[INSENSITIVE] = { %d, %d, %d }\n"
 		"fg[PRELIGHT] = { %d, %d, %d }\n"
-		"GtkButton::default-border = { 1, 1, 1, 1 }\n"
+		"GtkButton::default-border = { 0, 0, 0, 0 }\n"
 		"GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
 		"GtkButton::child-displacement-x = 1\n"
 		"GtkButton::child-displacement-y = 1\n"
+		"GtkButton::focus-padding = %d\n"
 		"}widget_class \"*Button*\" style \"msw-button\"\n",
 		btn_face.red, btn_face.green, btn_face.blue,
 		btn_face.red, btn_face.green, btn_face.blue,
 		btn_face.red, btn_face.green, btn_face.blue,
-		btn_fore.red, btn_fore.green, btn_fore.blue);
+		btn_fore.red, btn_fore.green, btn_fore.blue,
+		xp_theme_is_active() ? 1 : 2 );
     gtk_rc_parse_string (buf);
 
     /* enable coloring for progress bars */
@@ -807,9 +835,9 @@ setup_msw_rc_style (void)
 		"widget_class \"*RadioButton*\" style \"msw-checkbutton\"\n");
     gtk_rc_parse_string (buf);
 
-	if(xp_theme_is_active()) {
+    /* size of combo box toggle button */
 		g_snprintf (buf, sizeof(buf),
-		"style \"msw-combobox-toggle\" = \"msw-default\"\n"
+	    "style \"msw-combo-button\" = \"msw-default\"\n"
 		"{\n"
   		"xthickness = 0\n"
   		"ythickness = 0\n"
@@ -820,9 +848,44 @@ setup_msw_rc_style (void)
   		"GtkWidget::focus-padding = 0\n"
   		"GtkWidget::focus-line-width = 0\n"
 		"}\n"
-		"widget_class \"*ComboBox*ToggleButton*\" style \"msw-combobox-toggle\"\n");
+	    "widget_class \"*ComboBox*ToggleButton*\" style \"msw-combo-button\"\n");
     	gtk_rc_parse_string (buf);
-	}
+
+    /* size of tree view header */
+    g_snprintf (buf, sizeof(buf),
+	    "style \"msw-header-button\" = \"msw-default\"\n"
+	    "{\n"
+  	    "xthickness = 4\n"
+  	    "ythickness = %d\n"
+  	    "GtkButton::default-border = { 0, 0, 0, 0 }\n"
+  	    "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
+  	    "GtkButton::child-displacement-x = 1\n"
+  	    "GtkButton::child-displacement-y = 1\n"
+  	    "GtkWidget::focus-padding = 0\n"
+  	    "GtkWidget::focus-line-width = 0\n"
+	    "}\n"
+	    "widget_class \"*TreeView*Button*\" style \"msw-header-button\"\n",
+            xp_theme_is_active() ? 2 : 0 );
+    gtk_rc_parse_string (buf);
+
+    /* FIXME: This should be enabled once gtk+ support GtkNotebok::prelight-tab */
+    /* enable prelight tab of GtkNotebook */
+    /*
+    g_snprintf (buf, sizeof (buf),
+		"style \"msw-notebook\" = \"msw-default\"\n"
+		"{GtkNotebook::prelight-tab=1\n"
+		"}widget_class \"*Notebook*\" style \"msw-notebook\"\n");
+    gtk_rc_parse_string (buf);
+    */
+
+    /* FIXME: This should be enabled once gtk+ support GtkTreeView::full-row-focus */
+    /*
+    g_snprintf (buf, sizeof (buf),
+		"style \"msw-treeview\" = \"msw-default\"\n"
+		"{GtkTreeView::full-row-focus=0\n"
+		"}widget_class \"*TreeView*\" style \"msw-treeview\"\n");
+    gtk_rc_parse_string (buf);
+    */
 }
 
 static void
@@ -965,6 +1028,9 @@ combo_box_draw_arrow (GtkStyle * style,
 	    GdkRectangle * area,
 	    GtkWidget * widget)
 {
+    HDC dc;
+    RECT rect;
+
     if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
 		       style, widget->allocation.x, widget->allocation.y,
 		       widget->allocation.width, widget->allocation.height,
@@ -972,7 +1038,15 @@ combo_box_draw_arrow (GtkStyle * style,
 	{
 	    return TRUE;
 	}
-
+    else if ( !xp_theme_is_active () && widget && GTK_IS_TOGGLE_BUTTON(widget->parent) )
+    {
+        dc = get_window_dc( style, window, state, area->x, area->y, area->width, area->height, &rect );
+        InflateRect( &rect, 1, 1 );
+        DrawFrameControl( dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | 
+            (GTK_TOGGLE_BUTTON(widget->parent)->active ? DFCS_PUSHED|DFCS_FLAT : 0) );
+        release_window_dc( style, window, state );
+        return TRUE;
+    }
     return FALSE;
 }
 
@@ -992,6 +1066,8 @@ combo_box_draw_box (GtkStyle * style,
 {
     GtkWidget* combo_box;
     GdkRectangle combo_alloc;
+    HDC dc;
+    RECT rect;
 
     if (!widget)
 	return FALSE;
@@ -1022,6 +1098,43 @@ combo_box_draw_box (GtkStyle * style,
                        combo_alloc.width, combo_alloc.height,
 		       state_type, area))
 	return TRUE;
+    else
+    {
+        UINT edges = 0;
+        gboolean rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+
+        if( !strcmp(detail, "button") )
+            edges = BF_BOTTOM|BF_TOP|(rtl ? BF_LEFT : BF_RIGHT);
+        else if( !strcmp( detail, "frame") || !strcmp( detail, "entry" ) )
+            edges = BF_BOTTOM|BF_TOP|(rtl ? BF_RIGHT : BF_LEFT);
+        else
+            return TRUE;
+        dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+        DrawEdge( dc, &rect, EDGE_SUNKEN, edges );
+
+        /* Fill blank area between frame/entry and button */
+        if( !strcmp(detail, "button") ) {  /* button */
+            if( rtl ) {
+                rect.left = rect.right;
+                rect.right += 2;
+            }
+            else
+                rect.right = rect.left + 2;
+        }
+        else{ /* frame or entry */
+            if( rtl ) {
+                rect.right = rect.left;
+                rect.left -= 2;
+            }
+            else
+                rect.left = rect.right - 2;
+        }
+        rect.top += 2;
+        rect.bottom -= 2;
+        FillRect( dc, &rect, GetSysColorBrush(COLOR_WINDOW) );
+        release_window_dc( style, window, state_type );
+        return TRUE;
+    }
 
     return FALSE;
 }
@@ -1079,6 +1192,9 @@ draw_check (GtkStyle * style,
 				: XP_THEME_ELEMENT_CHECKBOX,
 				style, x, y, width, height, state, area))
 		{
+                    if( detail && !strcmp(detail, "cellcheck") )
+                        state = GTK_STATE_NORMAL;
+
 		    draw_part (window, style->black_gc, area, x, y,
 			       CHECK_BLACK);
 		    draw_part (window, style->dark_gc[state], area, x, y,
@@ -1112,9 +1228,6 @@ draw_expander (GtkStyle * style,
 {
     gint expander_size;
     gint expander_semi_size;
-    GdkColor color;
-    GdkGCValues values;
-    gboolean success;
     XpThemeElement xp_expander;
 
     gtk_widget_style_get (widget, "expander_size", &expander_size, NULL);
@@ -1143,45 +1256,36 @@ draw_expander (GtkStyle * style,
     x -= expander_semi_size;
     y -= expander_semi_size;
 
-    gdk_gc_get_values (style->fg_gc[state], &values);
-
     if (!xp_theme_draw (window, xp_expander, style,
 			x, y, expander_size, expander_size, state, area))
 	{
-	    /* RGB values to emulate Windows Classic style */
-	    color.red = color.green = color.blue = 128 << 8;
+        HDC dc;
+        RECT rect;
+        HPEN pen;
+        HGDIOBJ old_pen;
 
-	    success = gdk_colormap_alloc_color
-		(gtk_widget_get_default_colormap (), &color, FALSE, TRUE);
+        dc = get_window_dc( style, window, state, x, y, expander_size, expander_size, &rect );
+        FrameRect( dc, &rect, GetSysColorBrush(COLOR_GRAYTEXT) );
+        InflateRect( &rect, -1, -1 );
+        FillRect( dc, &rect, GetSysColorBrush(state == GTK_STATE_INSENSITIVE ? COLOR_BTNFACE : COLOR_WINDOW) );
 
-	    if (success)
-		gdk_gc_set_foreground (style->fg_gc[state], &color);
+        InflateRect( &rect, -1, -1 );
 
-	    gdk_draw_rectangle
-		(window, style->fg_gc[state], FALSE, x, y,
-		 expander_size - 1, expander_size - 1);
+        pen = CreatePen( PS_SOLID, 1, GetSysColor(COLOR_WINDOWTEXT) );
+        old_pen = SelectObject( dc, pen );
 
-	    gdk_draw_line
-		(window, style->fg_gc[state], x + 2, y + expander_semi_size,
-		 x + expander_size - 3, y + expander_semi_size);
+        MoveToEx( dc, rect.left, rect.top - 2 + expander_semi_size, NULL );
+        LineTo( dc, rect.right, rect.top - 2 + expander_semi_size );
 
-	    switch (expander_style)
-		{
-		case GTK_EXPANDER_COLLAPSED:
-		case GTK_EXPANDER_SEMI_COLLAPSED:
-		    gdk_draw_line
-			(window, style->fg_gc[state], x + expander_semi_size,
-			 y + 2, x + expander_semi_size,
-			 y + expander_size - 3);
-		    break;
-
-		default:
-		    break;
+        if( expander_style == GTK_EXPANDER_COLLAPSED ||
+            expander_style == GTK_EXPANDER_SEMI_COLLAPSED )
+        {
+            MoveToEx( dc, rect.left - 2 + expander_semi_size, rect.top, NULL );
+            LineTo( dc, rect.left - 2 + expander_semi_size, rect.bottom );
 		}
 
-	    if (success)
-		gdk_gc_set_foreground (style->fg_gc[state],
-				       &values.foreground);
+        SelectObject( dc, old_pen );
+        release_window_dc( style, window, state );
 	}
 
     if (area)
@@ -1216,6 +1320,9 @@ draw_option (GtkStyle * style,
 		}
 	    else
 		{
+                    if( detail && !strcmp(detail, "cellradio") )
+                        state = GTK_STATE_NORMAL;
+
 		    draw_part (window, style->black_gc, area, x, y,
 			       RADIO_BLACK);
 		    draw_part (window, style->dark_gc[state], area, x, y,
@@ -1393,6 +1500,8 @@ draw_arrow (GtkStyle * style,
 	    gboolean fill, gint x, gint y, gint width, gint height)
 {
     const gchar *name;
+    HDC dc;
+    RECT rect;
 
     name = gtk_widget_get_name (widget);
 
@@ -1412,23 +1521,28 @@ draw_arrow (GtkStyle * style,
 		{
 		    return;
 		}
-	    else
-		{
-		    x += (width - 7) / 2;
 
-		    if (arrow_type == GTK_ARROW_UP)
-			y += (height - 4) / 2;
-		    else
-			y += (1 + height - 4) / 2;
-		    draw_varrow (window, style->fg_gc[state], shadow, area,
-				 arrow_type, x, y, 7, 4);
+            width -= 2;
+            --height;
+            if( arrow_type == GTK_ARROW_DOWN )
+                ++y;
+	    ++x;
+
+            if( state == GTK_STATE_ACTIVE ) {
+                ++x;
+                ++y;
 		}
+	    draw_varrow (window, style->fg_gc[state], shadow, area,
+			 arrow_type, x, y, width, height);
+            return;
 	}
     else if (detail && (!strcmp (detail, "vscrollbar")
 			|| !strcmp (detail, "hscrollbar")))
 	{
 	    gboolean is_disabled = FALSE;
+            UINT btn_type = 0;
 	    GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
+
 	    gint box_x = x;
 	    gint box_y = y;
 	    gint box_width = width;
@@ -1448,26 +1562,34 @@ draw_arrow (GtkStyle * style,
 		 box_width, box_height, state, area))
 		{
 		}
-	    else if (arrow_type == GTK_ARROW_UP
-		     || arrow_type == GTK_ARROW_DOWN)
-		{
-		    x += (width - 7) / 2;
-		    y += (height - 5) / 2;
-
-		    draw_varrow (window,
-				 is_disabled ? style->
-				 text_aa_gc[state] : style->fg_gc[state],
-				 shadow, area, arrow_type, x, y, 7, 5);
-		}
 	    else
 		{
-		    y += (height - 7) / 2;
-		    x += (width - 5) / 2;
+                switch (arrow_type)
+                {
+                case GTK_ARROW_UP:
+                    btn_type = DFCS_SCROLLUP;
+                    break;
+                case GTK_ARROW_DOWN:
+                    btn_type = DFCS_SCROLLDOWN;
+                    break;
+                case GTK_ARROW_LEFT:
+                    btn_type = DFCS_SCROLLLEFT;
+                    break;
+                case GTK_ARROW_RIGHT:
+                    btn_type = DFCS_SCROLLRIGHT;
+                    break;
+                }
+                if( state == GTK_STATE_INSENSITIVE )
+                    btn_type |= DFCS_INACTIVE;
+                if( widget ) {
+                    sanitize_size (window, &width, &height);
 
-		    draw_harrow (window,
-				 is_disabled ? style->
-				 text_aa_gc[state] : style->fg_gc[state],
-				 shadow, area, arrow_type, x, y, 5, 7);
+                    dc = get_window_dc( style, window, state, 
+                                        box_x, box_y, box_width, box_height, &rect );
+                    DrawFrameControl( dc, &rect, DFC_SCROLL, 
+                        btn_type|(shadow == GTK_SHADOW_IN ? (DFCS_PUSHED|DFCS_FLAT) : 0) );
+                    release_window_dc( style, window, state );
+                }
 		}
 	}
     else
@@ -1554,7 +1676,20 @@ is_toolbar_child (GtkWidget * wid)
     return FALSE;
 }
 
-static HDC get_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type, gint x, gint y, gint width, gint height, RECT *rect)
+static gboolean
+is_menu_tool_button_child (GtkWidget * wid)
+{
+    while (wid)
+	{
+	    if (GTK_IS_MENU_TOOL_BUTTON (wid) )
+		return TRUE;
+	    else
+		wid = wid->parent;
+	}
+    return FALSE;
+}
+
+HDC get_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type, gint x, gint y, gint width, gint height, RECT *rect)
 {
 	int xoff, yoff;
 	GdkDrawable *drawable;
@@ -1578,7 +1713,7 @@ static HDC get_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType stat
 	return gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
 }
 
-static void release_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type)
+void release_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType state_type)
 {
 	GdkDrawable *drawable;
 
@@ -1592,6 +1727,185 @@ static void release_window_dc(GtkStyle * style, GdkWindow * window, GtkStateType
 		}
 
 	gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
+}
+
+static HPEN get_light_pen()
+{
+    if( ! g_light_pen ) {
+    	g_light_pen = CreatePen( PS_SOLID|PS_INSIDEFRAME, 1, GetSysColor(COLOR_BTNHIGHLIGHT) );
+    }
+    return g_light_pen;
+}
+
+static HPEN get_dark_pen()
+{
+    if( ! g_dark_pen ) {
+    	g_dark_pen = CreatePen( PS_SOLID|PS_INSIDEFRAME, 1, GetSysColor(COLOR_BTNSHADOW) );
+    }
+    return g_dark_pen;
+}
+
+static void
+draw_3d_border( HDC hdc, RECT* rc, gboolean sunken )
+{
+    HPEN pen1, pen2;
+    HGDIOBJ old_pen;
+
+    if( sunken ){
+        pen1 = get_dark_pen();
+        pen2 = get_light_pen();
+    }
+    else{
+        pen1 = get_light_pen();
+        pen2 = get_dark_pen();
+    }
+
+    MoveToEx( hdc, rc->left, rc->bottom - 1, NULL);
+
+    old_pen = SelectObject( hdc, pen1 );
+    LineTo( hdc, rc->left, rc->top );
+    LineTo( hdc, rc->right-1, rc->top );
+    SelectObject( hdc, old_pen );
+
+    old_pen = SelectObject( hdc, pen2 );
+    LineTo( hdc, rc->right-1, rc->bottom-1 );
+    LineTo( hdc, rc->left, rc->bottom-1 );
+    SelectObject( hdc, old_pen );
+}
+
+static gboolean 
+draw_menu_item(GdkWindow* window, GtkWidget* widget, GtkStyle* style, 
+               gint x, gint y, gint width, gint height, 
+               GtkStateType state_type, GdkRectangle* area )
+{
+    GtkWidget* parent;
+    GtkMenuShell* bar;
+    HDC dc;
+    RECT rect;
+
+    if ( xp_theme_is_active() ) {
+        return xp_theme_draw( window, XP_THEME_ELEMENT_MENU_ITEM, style,
+                              x, y, width, height, state_type, area );
+    }
+
+    if( (parent = gtk_widget_get_parent(widget))
+        &&  GTK_IS_MENU_BAR(parent) )
+    {
+        bar = GTK_MENU_SHELL(parent);
+
+        dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+        if( state_type == GTK_STATE_PRELIGHT ){
+            draw_3d_border( dc, &rect, bar->active );
+        }
+        release_window_dc( style, window, state_type );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static HBRUSH
+get_dither_brush( void )
+{
+    WORD pattern[8];
+    HBITMAP pattern_bmp;
+    int i;
+
+    if( g_dither_brush )
+        return g_dither_brush;
+    for ( i = 0; i < 8; i++ )
+        pattern[i] = (WORD)(0x5555 << (i & 1));
+    pattern_bmp = CreateBitmap(8, 8, 1, 1, &pattern);
+    if (pattern_bmp) {
+        g_dither_brush = CreatePatternBrush(pattern_bmp);
+        DeleteObject(pattern_bmp);
+    }
+    return g_dither_brush;
+}
+
+static gboolean 
+draw_tool_button(GdkWindow* window, GtkWidget* widget, GtkStyle* style, 
+                 gint x, gint y, gint width, gint height, 
+                 GtkStateType state_type, GdkRectangle* area )
+{
+    HDC dc;
+    RECT rect;
+    gboolean is_toggled = FALSE;
+
+    if ( xp_theme_is_active() ) {
+		return (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style,
+                               x, y, width, height, state_type, area) );
+    }
+
+    if( GTK_IS_TOGGLE_BUTTON(widget) ){
+        if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)) ) {
+            is_toggled = TRUE;
+        }
+    }
+
+    if( state_type != GTK_STATE_PRELIGHT
+        && state_type != GTK_STATE_ACTIVE && !is_toggled )
+        return FALSE;
+
+    dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+    if( state_type == GTK_STATE_PRELIGHT ){
+        if( is_toggled ) {
+            FillRect( dc, &rect, GetSysColorBrush(COLOR_BTNFACE));
+        }
+        draw_3d_border( dc, &rect, is_toggled);
+    }
+    else if ( state_type == GTK_STATE_ACTIVE ){
+        if( is_toggled && ! is_menu_tool_button_child(widget->parent) ){
+	    SetTextColor( dc, GetSysColor(COLOR_3DHILIGHT) );
+	    SetBkColor( dc, GetSysColor(COLOR_BTNFACE) );
+            FillRect( dc, &rect, get_dither_brush() );
+        }
+        draw_3d_border( dc, &rect, TRUE );
+    }
+    release_window_dc( style, window, state_type );
+    return TRUE;
+}
+
+static void
+draw_push_button( GdkWindow* window, GtkWidget* widget, GtkStyle* style, gint x, gint y,
+		  gint width, gint height, 
+		  GtkStateType state_type, gboolean is_default )
+{
+	HDC dc;
+	RECT rect;
+
+	dc = get_window_dc( style, window, state_type, 
+			x, y, width, height, &rect );
+        if( GTK_IS_TOGGLE_BUTTON(widget) )  {
+            if( state_type == GTK_STATE_PRELIGHT &&
+                gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)) )
+            {
+                state_type = GTK_STATE_ACTIVE;
+            }
+        }
+
+	if( state_type == GTK_STATE_ACTIVE ) {
+            if( GTK_IS_TOGGLE_BUTTON(widget) ) {
+                DrawEdge( dc, &rect, EDGE_SUNKEN, BF_RECT|BF_ADJUST);
+                SetTextColor( dc, GetSysColor(COLOR_3DHILIGHT) );
+                SetBkColor( dc, GetSysColor(COLOR_BTNFACE) );
+                FillRect( dc, &rect, get_dither_brush() );
+            }
+            else {
+                FrameRect( dc, &rect, GetSysColorBrush(COLOR_WINDOWFRAME) );
+	        InflateRect( &rect, -1, -1 );
+                FrameRect( dc, &rect, GetSysColorBrush(COLOR_BTNSHADOW) );
+	        InflateRect( &rect, -1, -1 );
+                FillRect( dc, &rect, GetSysColorBrush(COLOR_BTNFACE) );
+            }
+	}
+	else {
+		if( is_default || GTK_WIDGET_HAS_FOCUS(widget) ) {
+                    FrameRect( dc, &rect, GetSysColorBrush(COLOR_WINDOWFRAME) );
+                    InflateRect( &rect, -1, -1 );
+		}
+		DrawFrameControl( dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH );
+	}
+	release_window_dc(style, window, state_type);
 }
 
 static void
@@ -1619,25 +1933,41 @@ draw_box (GtkStyle * style,
 			(window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
 			 width, height, state_type, area))
 			return;
+                    else {
+                        HDC dc;
+                        RECT rect;
+                        dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+
+                        DrawFrameControl( dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH | 
+                            (state_type == GTK_STATE_ACTIVE ? (DFCS_PUSHED|DFCS_FLAT) : 0 ) );
+                        release_window_dc( style, window, state_type );
 		}
-	    else if (is_toolbar_child (widget->parent))
+		}
+	    else if (is_toolbar_child (widget->parent)
+                    || (GTK_RELIEF_NONE == gtk_button_get_relief(GTK_BUTTON(widget)) ) )
 		{
-		    if (xp_theme_draw
-			(window, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style, x, y,
-			 width, height, state_type, area))
+			if( draw_tool_button( window, widget, style, x, y, 
+					  width, height, state_type, area ) )
+		{
 			return;
+		}
 		}
 	    else
 		{
-		    gboolean is_default = !strcmp (detail, "buttondefault");
-
+			gboolean is_default = GTK_WIDGET_HAS_DEFAULT(widget);
 		    if (xp_theme_draw
 			(window,
 			 is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :
 			 XP_THEME_ELEMENT_BUTTON, style, x, y, width, height,
 			 state_type, area))
+			{
+				return;
+			}
+			draw_push_button( window, widget, style, 
+				x, y, width, height, state_type, is_default );
 			return;
 		}
+            return;
 	}
     else if (detail && !strcmp (detail, "spinbutton"))
 	{
@@ -1649,14 +1979,24 @@ draw_box (GtkStyle * style,
     else if (detail && (!strcmp (detail, "spinbutton_up")
 			|| !strcmp (detail, "spinbutton_down")))
 	{
-	    if (xp_theme_draw (window,
+	    if ( ! xp_theme_draw ( window,
 			       (!strcmp (detail, "spinbutton_up"))
 			       ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
 			       : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
 			       style, x, y, width, height, state_type, area))
 		{
-		    return;
+                RECT rect;
+                HDC dc;
+                gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
+                gboolean up = !strcmp (detail, "spinbutton_up");
+
+                dc = get_window_dc( style, window, state_type,
+                                    x, y, width, height, &rect );
+                DrawEdge( dc, &rect, 
+                        state_type == GTK_STATE_ACTIVE ? EDGE_SUNKEN : EDGE_RAISED, BF_RECT );
+                release_window_dc( style, window, state_type );
 		}
+            return;
 	}
     else if (detail && !strcmp (detail, "slider"))
 	{
@@ -1721,9 +2061,8 @@ draw_box (GtkStyle * style,
     else if (detail && strcmp (detail, "menuitem") == 0)
 	{
 	    shadow_type = GTK_SHADOW_NONE;
-	    if (xp_theme_draw
-		(window, XP_THEME_ELEMENT_MENU_ITEM, style, x, y, width,
-		 height, state_type, area))
+        if( draw_menu_item(window, widget, style, 
+            x, y, width, height, state_type, area ) )
 		{
 		    return;
 		}
@@ -1761,45 +2100,15 @@ draw_box (GtkStyle * style,
 			}
 		    else
 			{
-			    GdkGCValues gc_values;
-			    GdkGC *gc;
-			    GdkPixmap *pixmap;
+                            HDC dc;
+                            RECT rect;
 
 			    sanitize_size (window, &width, &height);
-
-			    pixmap = gdk_pixmap_new (window, 2, 2, -1);
-
-			    gdk_draw_point (pixmap,
-					    style->bg_gc[GTK_STATE_NORMAL], 0,
-					    0);
-			    gdk_draw_point (pixmap,
-					    style->bg_gc[GTK_STATE_NORMAL], 1,
-					    1);
-			    gdk_draw_point (pixmap,
-					    style->light_gc[GTK_STATE_NORMAL],
-					    1, 0);
-			    gdk_draw_point (pixmap,
-					    style->light_gc[GTK_STATE_NORMAL],
-					    0, 1);
-
-			    gc_values.fill = GDK_TILED;
-			    gc_values.tile = pixmap;
-			    gc_values.ts_x_origin = x;
-			    gc_values.ts_y_origin = y;
-			    gc = gdk_gc_new_with_values (window, &gc_values,
-							 GDK_GC_TS_X_ORIGIN |
-							 GDK_GC_TS_Y_ORIGIN |
-							 GDK_GC_FILL |
-							 GDK_GC_TILE);
-
-			    if (area)
-				gdk_gc_set_clip_rectangle (gc, area);
-
-			    gdk_draw_rectangle (window, gc, TRUE, x, y, width,
-						height);
-
-			    g_object_unref (gc);
-			    g_object_unref (pixmap);
+                            dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+                            SetTextColor( dc, GetSysColor(COLOR_3DHILIGHT) );
+                            SetBkColor( dc, GetSysColor(COLOR_BTNFACE) );
+                            FillRect( dc, &rect, get_dither_brush() );
+                            release_window_dc( style, window, state_type );
 
 			    return;
 			}
@@ -1859,12 +2168,14 @@ draw_box (GtkStyle * style,
 	     && (strcmp (detail, "vscrollbar") == 0
 		 || strcmp (detail, "hscrollbar") == 0))
 	{
+            return;
 	}
     else if (detail
 	     && (strcmp (detail, "handlebox_bin") == 0
 		 || strcmp (detail, "toolbar") == 0
 		 || strcmp (detail, "menubar") == 0))
 	{
+            sanitize_size( window, &width, &height );
 	    if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR,
 			       style, x, y, width, height, state_type, area))
 		{
@@ -1873,6 +2184,9 @@ draw_box (GtkStyle * style,
 	}
     else if (detail && (!strcmp (detail, "handlebox")))	/* grip */
 	{
+            if( !xp_theme_is_active() ) {
+                return;
+            }
 	}
     else
 	{
@@ -2119,6 +2433,8 @@ draw_extension (GtkStyle * style,
 			else
 				aPosition = BF_RIGHT;
 
+                    if( state_type == GTK_STATE_PRELIGHT )
+                        state_type = GTK_STATE_NORMAL;
 			if (area)
 				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
 			DrawTab (dc, rect, aPosition, state_type != GTK_STATE_PRELIGHT, (real_gap_side != GTK_POS_LEFT), (real_gap_side != GTK_POS_RIGHT));
@@ -2126,6 +2442,7 @@ draw_extension (GtkStyle * style,
 				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
 
 			release_window_dc (style, window, state_type);
+                    return;
 		}
 	}
     parent_class->draw_extension
@@ -2153,22 +2470,59 @@ draw_box_gap (GtkStyle * style, GdkWindow * window, GtkStateType state_type,
 				gap_side, gap_x, gap_width);
 }
 
+static gboolean is_popup_window_child( GtkWidget* widget )
+{
+    GtkWidget* top;
+    GtkWindowType type = -1;
+
+    top = gtk_widget_get_toplevel( widget );
+    if( top && GTK_IS_WINDOW(top) ) {
+        g_object_get(top, "type", &type, NULL );
+        if( type == GTK_WINDOW_POPUP ) { /* Hack for combo boxes */
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 static void
 draw_flat_box (GtkStyle * style, GdkWindow * window,
 	       GtkStateType state_type, GtkShadowType shadow_type,
 	       GdkRectangle * area, GtkWidget * widget,
 	       const gchar * detail, gint x, gint y, gint width, gint height)
 {
-    if (detail && !strcmp (detail, "checkbutton"))
+    if( detail ) {
+        if ( !strcmp (detail, "checkbutton") )
 	{
 	    if (state_type == GTK_STATE_PRELIGHT)
 		{
 		    return;
 		}
 	}
+    }
 
     parent_class->draw_flat_box (style, window, state_type, shadow_type,
 				 area, widget, detail, x, y, width, height);
+}
+
+static gboolean
+draw_menu_border ( GdkWindow* win, GtkStyle* style, 
+				  gint x, gint y, gint width, gint height )
+{
+    RECT rect;
+    HDC dc;
+
+    dc = get_window_dc (style, win, GTK_STATE_NORMAL, x, y, width, height, &rect );
+    if (!dc)
+        return FALSE;
+    if( xp_theme_is_active() ) {
+        FrameRect( dc, &rect, GetSysColorBrush(COLOR_3DSHADOW) );
+    }
+    else {
+        DrawEdge( dc, &rect, EDGE_RAISED, BF_RECT );
+    }
+    release_window_dc( style, win, GTK_STATE_NORMAL );
+    return TRUE;
 }
 
 static void
@@ -2180,7 +2534,8 @@ draw_shadow (GtkStyle * style,
 	     GtkWidget * widget,
 	     const gchar * detail, gint x, gint y, gint width, gint height)
 {
-    gboolean is_handlebox_grippie = (detail && !strcmp (detail, "handlebox"));
+    gboolean is_handlebox;
+    gboolean is_toolbar;
 
     if (is_combo_box_child (widget)
 	&& combo_box_draw_box (style, window, state_type, shadow_type,
@@ -2188,179 +2543,148 @@ draw_shadow (GtkStyle * style,
         {
 	    return;
 	}
-    if (detail && !strcmp (detail, "entry"))
+    if( detail && !strcmp( detail, "frame") )
 	{
-	    if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
+        HDC dc;
+        RECT rect;
+        dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+        if( is_popup_window_child(widget) ) {
+            FrameRect( dc, &rect, GetSysColorBrush( COLOR_WINDOWFRAME ) );
+        }
+        else{
+            switch( shadow_type ){
+            case GTK_SHADOW_IN:
+                draw_3d_border(dc, &rect, TRUE);
+                break;
+            case GTK_SHADOW_OUT:
+                draw_3d_border(dc, &rect, FALSE);
+                break;
+            case GTK_SHADOW_ETCHED_IN:
+                draw_3d_border(dc, &rect, TRUE);
+                InflateRect( &rect, -1, -1 );
+                draw_3d_border(dc, &rect, FALSE);
+                break;
+            case GTK_SHADOW_ETCHED_OUT:
+                draw_3d_border(dc, &rect, FALSE);
+                InflateRect( &rect, -1, -1 );
+                draw_3d_border(dc, &rect, TRUE);
+                break;
+            }
+        }
+        release_window_dc( style, window, state_type );
+        return;
+    }
+    if (detail && !strcmp (detail, "entry") )
+	{
+	    if ( xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
 			       x, y, width, height, state_type, area))
 		{
 		    return;
 		}
+            if( shadow_type == GTK_SHADOW_IN ) {
+                HDC dc;
+                RECT rect;
+                dc = get_window_dc( style, window, state_type, 
+                                    x, y, width, height, &rect );
+                DrawEdge( dc, &rect, EDGE_SUNKEN, BF_RECT );
+                release_window_dc( style, window, state_type );
+		return;
+            }
 	}
 
-    if (is_handlebox_grippie
-	|| (widget && (shadow_type == GTK_SHADOW_ETCHED_IN)
-	    && (GTK_IS_MENU_BAR (widget) || GTK_IS_TOOLBAR (widget)
-		|| GTK_IS_HANDLE_BOX (widget))))
-	{
-	    GdkGC *gc1 = NULL;
-	    GdkGC *gc2 = NULL;
-	    gint thickness_light;
-	    gint thickness_dark;
-	    gint i;
-
-	    gc1 = style->light_gc[state_type];
-	    gc2 = style->dark_gc[state_type];
-
-	    sanitize_size (window, &width, &height);
-
-	    if (area)
+    if( detail && !strcmp( detail, "spinbutton" ) )
 		{
-		    gdk_gc_set_clip_rectangle (gc1, area);
-		    gdk_gc_set_clip_rectangle (gc2, area);
-		    if (shadow_type == GTK_SHADOW_IN ||
-			shadow_type == GTK_SHADOW_OUT)
+        return;
+    }
+
+    if (detail && !strcmp (detail, "menu"))
 			{
-			    gdk_gc_set_clip_rectangle (style->black_gc, area);
-			    gdk_gc_set_clip_rectangle (style->
-						       bg_gc[state_type],
-						       area);
+	    if ( draw_menu_border ( window, style, x, y, width, height ) ) {
+		    return;
 			}
 		}
 
-	    if (style->xthickness > 0)
-		{
-		    if (style->xthickness > 1)
-			{
-			    thickness_light = 1;
-			    thickness_dark = 1;
+    if (detail && !strcmp (detail, "handlebox"))
+        return;
 
-			    for (i = 0; i < thickness_dark; i++)
-				{
-				    if (!is_handlebox_grippie)
-					gdk_draw_line (window, gc1,
-						       x + width - i - 1,
-						       y + i,
-						       x + width - i - 1,
-						       y + height - i - 1);
-				    if (is_handlebox_grippie
-					|| (widget
-					    && GTK_IS_MENU_BAR (widget)))
-					gdk_draw_line (window, gc2, x + i,
-						       y + i, x + i,
-						       y + height - i - 1);
-				}
+    is_handlebox = (detail && !strcmp (detail, "handlebox_bin"));
+    is_toolbar = (detail && (!strcmp (detail, "toolbar") || !strcmp(detail, "menubar")));
 
-			    for (i = 0; i < thickness_light; i++)
+    if ( is_toolbar || is_handlebox )
 				{
-				    if (is_handlebox_grippie
-					|| (widget
-					    && GTK_IS_MENU_BAR (widget)))
-					gdk_draw_line (window, gc1,
-						       x + thickness_dark + i,
-						       y + thickness_dark + i,
-						       x + thickness_dark + i,
-						       y + height -
-						       thickness_dark - i -
-						       1);
-				    if (!is_handlebox_grippie)
-					gdk_draw_line (window, gc2,
-						       x + width -
-						       thickness_light - i -
-						       1,
-						       y + thickness_dark + i,
-						       x + width -
-						       thickness_light - i -
-						       1,
-						       y + height -
-						       thickness_light - 1);
+        if( widget ) {
+            HDC dc;
+            RECT rect;
+            HGDIOBJ old_pen;
+            GtkPositionType pos;
+
+            sanitize_size (window, &width, &height);
+
+            if( is_handlebox ) {
+                pos = gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(widget));
+                /*
+                    If the handle box is at left side, 
+                    we shouldn't draw its right border.
+                    The same holds true for top, right, and bottom.
+                */
+                switch( pos ) {
+                case GTK_POS_LEFT:
+                    pos = GTK_POS_RIGHT;    break;
+                case GTK_POS_RIGHT:
+                    pos = GTK_POS_LEFT;     break;
+                case GTK_POS_TOP:
+                    pos = GTK_POS_BOTTOM;   break;
+                case GTK_POS_BOTTOM:
+                    pos = GTK_POS_TOP;      break;
 				}
 			}
-		    else
-			{
-			    gdk_draw_line (window,
-					   style->dark_gc[state_type],
-					   x, y, x, y + height);
-			    gdk_draw_line (window,
-					   style->dark_gc[state_type],
-					   x + width, y, x + width,
-					   y + height);
+            else {
+                GtkWidget* parent = gtk_widget_get_parent(widget);
+                /* Dirty hack for toolbars contained in handle boxes */
+                if( GTK_IS_HANDLE_BOX( parent ) ) {
+                    pos = gtk_handle_box_get_handle_position( GTK_HANDLE_BOX( parent ) );
 			}
+                else {
+                    /*
+                        Dirty hack:
+                        Make pos != all legal enum vaules of GtkPositionType.
+                        So every border will be draw.
+                    */
+                    pos = (GtkPositionType)-1;
+		}
+				}
+
+            dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+            if( pos != GTK_POS_LEFT ) {
+                old_pen = SelectObject( dc, get_light_pen() );
+                MoveToEx( dc, rect.left, rect.top, NULL );
+                LineTo( dc, rect.left, rect.bottom );
+				}
+            if( pos != GTK_POS_TOP ) {
+                old_pen = SelectObject( dc, get_light_pen() );
+                MoveToEx( dc, rect.left, rect.top, NULL );
+                LineTo( dc, rect.right, rect.top );
+			}
+            if( pos != GTK_POS_RIGHT ) {
+                old_pen = SelectObject( dc, get_dark_pen() );
+                MoveToEx( dc, rect.right-1, rect.top, NULL );
+                LineTo( dc, rect.right-1, rect.bottom );
+			}
+            if( pos != GTK_POS_BOTTOM ) {
+                old_pen = SelectObject( dc, get_dark_pen() );
+                MoveToEx( dc, rect.left, rect.bottom-1, NULL );
+                LineTo( dc, rect.right, rect.bottom-1 );
+		}
+            SelectObject( dc, old_pen );
+            release_window_dc( style, window, state_type );
+			}
+        return;
 		}
 
-	    if (style->ythickness > 0)
-		{
-		    if (style->ythickness > 1)
-			{
-			    thickness_light = 1;
-			    thickness_dark = 1;
-
-			    for (i = 0; i < thickness_dark; i++)
-				{
-				    gdk_draw_line (window, gc1,
-						   x + i,
-						   y + height - i - 1,
-						   x + width - i - 1,
-						   y + height - i - 1);
-
-				    if (widget && GTK_IS_MENU_BAR (widget))
-					gdk_draw_line (window, gc2,
-						       x + i,
-						       y + i,
-						       x + width - i - 2,
-						       y + i);
-				}
-
-			    for (i = 0; i < thickness_light; i++)
-				{
-				    gdk_draw_line (window, gc2,
-						   x + thickness_dark + i,
-						   y + height -
-						   thickness_light - i - 1,
-						   x + width -
-						   thickness_light - 1,
-						   y + height -
-						   thickness_light - i - 1);
-
-				    if (widget && GTK_IS_MENU_BAR (widget))
-					gdk_draw_line (window, gc1,
-						       x + thickness_dark + i,
-						       y + thickness_dark + i,
-						       x + width -
-						       thickness_dark - i - 2,
-						       y + thickness_dark +
-						       i);
-				}
-			}
-		    else
-			{
-			    gdk_draw_line (window,
-					   style->dark_gc[state_type],
-					   x, y, x + width, y);
-
-			    gdk_draw_line (window,
-					   style->dark_gc[state_type],
-					   x, y + height, x + width,
-					   y + height);
-
-			}
-		}
-
-	    if (area)
-		{
-		    gdk_gc_set_clip_rectangle (gc1, NULL);
-		    gdk_gc_set_clip_rectangle (gc2, NULL);
-		    if (shadow_type == GTK_SHADOW_IN ||
-			shadow_type == GTK_SHADOW_OUT)
-			{
-			    gdk_gc_set_clip_rectangle (style->black_gc, NULL);
-			    gdk_gc_set_clip_rectangle (style->
-						       bg_gc[state_type],
-						       NULL);
-			}
-		}
-
+    if (detail && !strcmp (detail, "statusbar")) {
 	    return;
 	}
+
     parent_class->draw_shadow (style, window, state_type, shadow_type, area,
 			       widget, detail, x, y, width, height);
 }
@@ -2386,8 +2710,27 @@ draw_hline (GtkStyle * style,
 	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
 	}
   } else {
+      if( style->ythickness == 2 )
+      {
+        if (area)
+        {
+          gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+          gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+        }
+        gdk_draw_line (window, style->dark_gc[state_type], x1, y, x2, y);
+        ++y;
+        gdk_draw_line (window, style->light_gc[state_type], x1, y, x2, y);
+        if (area)
+        {
+          gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+          gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
+        }
+      }
+      else
+      {
     parent_class->draw_hline (style, window, state_type, area, widget,
 			      detail, x1, x2, y);
+  }
   }
 }
 
@@ -2399,8 +2742,27 @@ draw_vline (GtkStyle * style,
 	    GtkWidget * widget,
 	    const gchar * detail, gint y1, gint y2, gint x)
 {
+  if( style->xthickness == 2 )
+  {
+    if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+      gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+    }
+    gdk_draw_line (window, style->dark_gc[state_type], x, y1, x, y2);
+    ++x;
+    gdk_draw_line (window, style->light_gc[state_type], x, y1, x, y2);
+    if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+      gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
+    }
+  }
+  else
+  {
     parent_class->draw_vline (style, window, state_type, area, widget,
 			      detail, y1, y2, x);
+  }
 }
 
 static void
@@ -2475,13 +2837,27 @@ draw_handle (GtkStyle * style,
 	     gint x,
 	     gint y, gint width, gint height, GtkOrientation orientation)
 {
+    HDC dc;
+    RECT rect;
+
     if (is_toolbar_child (widget))
 	{
 	    XpThemeElement hndl;
 
 	    sanitize_size (window, &width, &height);
 
-	    if (orientation == GTK_ORIENTATION_VERTICAL)
+            if( GTK_IS_HANDLE_BOX(widget) ) {
+                GtkPositionType pos;
+                pos = gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(widget));
+                if( pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM ) {
+                    orientation = GTK_ORIENTATION_HORIZONTAL;
+                }
+                else {
+                    orientation = GTK_ORIENTATION_VERTICAL;
+                }
+            }
+
+            if ( orientation == GTK_ORIENTATION_VERTICAL )
 		hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_V;
 	    else
 		hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_H;
@@ -2491,6 +2867,23 @@ draw_handle (GtkStyle * style,
 		{
 		    return;
 		}
+
+            dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+	    if ( orientation == GTK_ORIENTATION_VERTICAL ) {
+                rect.left += 3;
+                rect.right = rect.left + 3;
+                rect.bottom -= 3;
+                rect.top += 3;
+            }
+            else{
+                rect.top += 3;
+                rect.bottom = rect.top + 3;
+                rect.right -= 3;
+                rect.left += 3;
+            }
+            draw_3d_border( dc, &rect, FALSE );
+            release_window_dc( style, window, state_type );
+            return;
 	}
 
     if (!GTK_IS_PANED (widget))
@@ -2552,6 +2945,46 @@ draw_handle (GtkStyle * style,
 	    gdk_gc_set_clip_rectangle (light_gc, NULL);
 	    gdk_gc_set_clip_rectangle (dark_gc, NULL);
 	}
+}
+
+static void
+draw_focus ( GtkStyle      *style,
+             GdkWindow     *window,
+             GtkStateType   state_type,
+             GdkRectangle  *area,
+             GtkWidget     *widget,
+             const gchar   *detail,
+             gint           x,
+             gint           y,
+             gint           width,
+             gint           height)
+{
+    HDC dc;
+    RECT rect;
+    if( !GTK_WIDGET_CAN_FOCUS(widget) ) {
+        return;
+    }
+    if( detail && 0 == strcmp(detail, "button") 
+        && GTK_RELIEF_NONE == gtk_button_get_relief( GTK_BUTTON(widget) ) )
+    {
+        return;
+    }
+    if ( is_combo_box_child(widget) 
+        && (GTK_IS_ARROW(widget) || GTK_IS_BUTTON(widget)) ) {
+        return;
+    }
+    if (GTK_IS_TREE_VIEW (widget->parent) /* list view bheader */
+        || GTK_IS_CLIST (widget->parent)) {
+        return;
+    }
+
+    dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
+    DrawFocusRect(dc, &rect);
+    release_window_dc( style, window, state_type );
+/*
+    parent_class->draw_focus (style, window, state_type,
+						     area, widget, detail, x, y, width, height);
+*/
 }
 
 static void
@@ -2706,6 +3139,7 @@ msw_style_class_init (MswStyleClass * klass)
     style_class->draw_handle = draw_handle;
     style_class->draw_resize_grip = draw_resize_grip;
     style_class->draw_slider = draw_slider;
+    style_class->draw_focus = draw_focus;
 
     style_class->realize = msw_style_realize;
     style_class->unrealize = msw_style_unrealize;
@@ -2740,4 +3174,27 @@ msw_style_init (void)
     xp_theme_init ();
     msw_style_setup_system_settings ();
     setup_msw_rc_style ();
+
+    if( g_light_pen ){
+        DeleteObject( g_light_pen );
+        g_light_pen = NULL;
+    }
+    if( g_dark_pen ){
+        DeleteObject( g_dark_pen );
+        g_dark_pen = NULL;
+    }
 }
+
+void msw_style_finalize(void)
+{
+    if( g_dither_brush ){
+        DeleteObject( g_dither_brush );
+    }
+    if( g_light_pen ){
+        DeleteObject( g_light_pen );
+    }
+    if( g_dark_pen ){
+        DeleteObject( g_dark_pen );
+    }
+}
+
