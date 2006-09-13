@@ -1,42 +1,4 @@
 # translation of mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.gtk-2-10.mr.po to Marathi
-# translation of gtk+.mr.po to
 # Copyright (C) 2003 Jitendra Shah
 # First Author: Swapnil Hajare <dreamil1000a@yahoo.com>, 2003.
 # Second Author: Pradeep Deshpande <npdeshpande@vsnl.net>, 2004.
@@ -1306,7 +1268,7 @@ msgstr "Backslash"
 #.
 #: ../gtk/gtkcalendar.c:696
 msgid "calendar:MY"
-msgstr "दिनदर्शिका:MY"
+msgstr "calender:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1314,7 +1276,7 @@ msgstr "दिनदर्शिका:MY"
 #.
 #: ../gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
-msgstr "दिनदर्शिका:सप्ताहारंभ(_s):0"
+msgstr "calender:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
