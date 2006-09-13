@@ -1,3 +1,7 @@
+2006-09-13  Guntupalli Karunakar  <karunakar@indlinux.org>
+
+	* hi.po: Remove junk in header & tail.
+
 2006-09-13  Jovan Naumovski  <jovan@lugola.net>
 
 	* mk.po: fixed bad translation (bugid: 355784).
