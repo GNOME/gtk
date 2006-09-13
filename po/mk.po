@@ -1,4 +1,4 @@
-# translation of gtk+.HEAD.mk.po to Macedonian
+# translation of mk.po to Macedonian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER.
 #
@@ -9,10 +9,10 @@
 # Jovan Naumovski <jovan@lugola.net>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD.mk\n"
+"Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-23 08:44+0200\n"
-"PO-Revision-Date: 2006-08-23 14:29+0200\n"
+"PO-Revision-Date: 2006-09-13 23:21+0200\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -2215,7 +2215,7 @@ msgstr "Чекам"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1485
 msgid "print operation status|Blocking on issue"
-msgstr "статус за печатење|Се блокира поради проблем"
+msgstr "Се блокира поради проблем"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1487
