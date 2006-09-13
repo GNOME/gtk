@@ -1305,7 +1305,7 @@ msgstr "Backslash"
 #.
 #: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
-msgstr "कैलेंडर:MY"
+msgstr "calendar:MY"
 
 #  Translate to calendar:week_start:0 if you want Sunday to be the
 #  * first day of the week to calendar:week_start:1 if you want Monday
@@ -1316,7 +1316,7 @@ msgstr "कैलेंडर:MY"
 #.
 #: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
-msgstr "कैलेंडर:week_start:1"
+msgstr "calendar:week_start:1"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.

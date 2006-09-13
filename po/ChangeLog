@@ -1,3 +1,7 @@
+2006-09-13  Guntupalli Karunakar  <karunakar@indlinux.org>
+
+	* hi.po: Fixed bad translation (bugid: 355778).
+
 2006-09-13  David Lodge <dave@cirt.net>
 
 	* en_GB.po: Fixed bad context translations.
