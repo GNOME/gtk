@@ -1,3 +1,9 @@
+2006-09-13 Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkcolorsel.c: Use a GtkWindow instead of a GtkInvisible
+	for the grab widget, to make the color picker work with window
+	groups.  
+
 2006-09-12 Hong Jen Yee <pcman.tw@gmail.com>
 
 	signed off by: Dom Lachowicz

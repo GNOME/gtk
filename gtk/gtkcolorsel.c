@@ -1427,20 +1427,31 @@ get_screen_color (GtkWidget *button)
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (button));
   GdkCursor *picker_cursor;
   GdkGrabStatus grab_status;
+  GtkWidget *grab_widget, *toplevel;
+
   guint32 time = gtk_get_current_event_time ();
   
   if (priv->dropper_grab_widget == NULL)
     {
-      priv->dropper_grab_widget = gtk_invisible_new_for_screen (screen);
+      grab_widget = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_screen (GTK_WINDOW (grab_widget), screen);
+      gtk_window_resize (GTK_WINDOW (grab_widget), 1, 1);
+      gtk_window_move (GTK_WINDOW (grab_widget), -100, -100);
+      gtk_widget_show (grab_widget);
 
-      gtk_widget_add_events (priv->dropper_grab_widget,
+      gtk_widget_add_events (grab_widget,
                              GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
       
-      gtk_widget_set_parent_window (priv->dropper_grab_widget, 
-				    GTK_WIDGET (colorsel)->window);
-      gtk_widget_show (priv->dropper_grab_widget);
+      toplevel = gtk_widget_get_toplevel (colorsel);
+  
+      if (GTK_IS_WINDOW (toplevel))
+	{
+	  if (GTK_WINDOW (toplevel)->group)
+	    gtk_window_group_add_window (GTK_WINDOW (toplevel)->group, 
+					 GTK_WINDOW (grab_widget));
+	}
 
-      gdk_window_set_user_data (priv->dropper_grab_widget->window, colorsel);
+      priv->dropper_grab_widget = grab_widget;
     }
 
   if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
