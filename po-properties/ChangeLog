@@ -1,3 +1,7 @@
+2006-09-14  Guntupalli Karunakar  <karunakar@indlinux.org>
+
+	* hi.po: Removed junk lines from PO header.
+
 2006-09-13  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* ru.po: Updated Russian translation.
