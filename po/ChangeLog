@@ -1,3 +1,7 @@
+2006-09-13  David Lodge <dave@cirt.net>
+
+	* en_GB.po: Fixed bad context translations.
+
 2006-09-12  Gintautas Miliauskas  <gintas@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
