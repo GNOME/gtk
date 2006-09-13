@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-12 08:09+0200\n"
-"PO-Revision-Date: 2006-09-12 13:09+0200\n"
+"POT-Creation-Date: 2006-09-13 16:10+0200\n"
+"PO-Revision-Date: 2006-09-13 23:10+0200\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -2202,7 +2202,7 @@ msgstr "Чекам"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1485
 msgid "print operation status|Blocking on issue"
-msgstr "статус за печатење|Се блокира поради проблем"
+msgstr "Се блокира поради проблем"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1487
