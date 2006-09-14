@@ -1,3 +1,8 @@
+Thu Sep 14 12:28:51 2006  Tim Janik  <timj@imendio.com>
+
+	* tests/testrichtext.c (main): intialize random number generator state
+	upon program start, to enable truely random testing.
+
 2006-09-13 Michael Emmel <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkcolor-directfb.c small clean ups include order
