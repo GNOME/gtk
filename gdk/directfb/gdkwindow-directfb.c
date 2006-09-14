@@ -2993,7 +2993,7 @@ gdk_window_impl_directfb_paintable_init (GdkPaintableIface *iface)
 void
 gdk_window_beep (GdkWindow *window)
 {
-  gdk_display_beep (GDK_WINDOW_DISPLAY (window));
+  gdk_display_beep (gdk_display_get_default());
 }
 
 #define __GDK_WINDOW_X11_C__

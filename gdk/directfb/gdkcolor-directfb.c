@@ -38,12 +38,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gdkcolor.h"
+#include "gdkinternals.h"
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
-
-#include "gdkinternals.h"
-
-#include "gdkcolor.h"
 #include "gdkalias.h"
 
 
@@ -618,6 +616,5 @@ gdk_directfb_allocate_color_key (GdkColormap *colormap)
 
   private->info[255].ref_count++;
 }
-
 #define __GDK_COLOR_X11_C__
 #include "gdkaliasdef.c"

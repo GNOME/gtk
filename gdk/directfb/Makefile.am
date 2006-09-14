@@ -4,12 +4,11 @@ libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
 INCLUDES = 		\
 	-DG_LOG_DOMAIN=\"Gdk-DirectFB\"	\
+	-DGDK_COMPILATION \
 	-I$(top_srcdir)			\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
 	-DG_DISABLE_DEPRECATED		\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED	\
 	@GTK_DEBUG_FLAGS@		\
 	@GDK_DEP_CFLAGS@		
 

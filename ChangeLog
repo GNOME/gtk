@@ -1,3 +1,12 @@
+2006-09-13 Michael Emmel <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkcolor-directfb.c small clean ups include order
+	* gdk/directfb/gdkwindow-directfb.c fixed beep compile error
+	* gdk/directfb/Makefile.am removed GDK_PIXBUF_DISABLE_DEPRECATED
+		GDK_DISABLE_DEPRECATED to allow compile per Behdad
+	* gdk/quartz/Makefile.am same change as directfb Makefile
+	* gtk/Makefile.am fixed typo that cause socket stubs not to compile
+
 2006-09-13 Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkcolorsel.c: Use a GtkWindow instead of a GtkInvisible
