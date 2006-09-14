@@ -635,10 +635,10 @@ gtk_use_win32_c_sources = \
 	gtksocket-win32.c \
 	gtkwin32embed.c   \
 	gtkwin32embedwidget.c
-gtk_use_stuc_c_sources = \
+gtk_use_stub_c_sources = \
 	gtkplug-stub.c   \
 	gtksocket-stub.c
-gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_stuc_c_sources)
+gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_stub_c_sources)
 if USE_X11
 gtk_private_h_sources += gtkxembed.h gtktrayicon.h xembed.h
 gtk_c_sources += $(gtk_use_x11_c_sources)
