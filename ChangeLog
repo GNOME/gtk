@@ -1,3 +1,12 @@
+2006-09-14  Ryan Lortie  <desrt@desrt.ca>
+
+	* docs/reference/gdk/gdk-sections.txt:
+	* gdk/gdk.symbols:
+	* gdk/gdkpango.h:
+	* gdk/gdkpango.c: Bug 355343.  Add a GdkPangoAttrEmbossColor.
+	  (gdk_pango_layout_get_clip_region): Remove an unused variable.
+	  (gdk_pango_attr_embossed_new): Fix documentation.
+
 Thu Sep 14 12:28:51 2006  Tim Janik  <timj@imendio.com>
 
 	* tests/testrichtext.c (main): intialize random number generator state
