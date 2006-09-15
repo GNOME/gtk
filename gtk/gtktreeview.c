@@ -5252,7 +5252,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  return TRUE;
 		}
 
-	      break;
+	      return TRUE;
 	    }
 	  width += GTK_TREE_VIEW_COLUMN (list->data)->width;
 	  list = list->next;

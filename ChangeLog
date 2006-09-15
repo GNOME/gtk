@@ -1,5 +1,12 @@
 2006-09-15  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): actually directly
+	return after handling column button focus; we disable wrap around
+	with this (which actually happened via a really weird code path).
+	(Michael Natterer)
+
+2006-09-15  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): make column resizing
 	code RTL aware, also break from the loops after we have seen the
 	focussed column button (Michael Natterer).
