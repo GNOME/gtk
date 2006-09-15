@@ -5104,7 +5104,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	      if (!column->resizable)
 		return TRUE;
 
-	      if (event->keyval == GDK_Left || event->keyval == GDK_KP_Left)
+	      if (event->keyval == (rtl ? GDK_Right : GDK_Left)
+                  || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
 	        {
 		  column->resized_width = MAX (column->resized_width,
 					       column->width);
@@ -5124,8 +5125,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  gtk_widget_queue_resize (widget);
 		  return TRUE;
 		}
-	      else if (event->keyval == GDK_Right
-                       || event->keyval == GDK_KP_Right)
+	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
+                       || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
 	        {
 		  column->resized_width = MAX (column->resized_width,
 					       column->width);
@@ -5138,6 +5139,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  gtk_widget_queue_resize (widget);
 		  return TRUE;
 		}
+
+	      break;
 	    }
 	  list = list->next;
 	}
@@ -5190,6 +5193,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		    gtk_tree_view_move_column_after (tree_view, column, col);
 		  return TRUE;
 		}
+
+	      break;
 	    }
 	  list = list->next;
 	}
@@ -5246,6 +5251,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  gtk_adjustment_set_value (tree_view->priv->hadjustment, CLAMP (width, tree_view->priv->hadjustment->lower, tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
 		  return TRUE;
 		}
+
+	      break;
 	    }
 	  width += GTK_TREE_VIEW_COLUMN (list->data)->width;
 	  list = list->next;

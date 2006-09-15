@@ -1,3 +1,9 @@
+2006-09-15  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): make column resizing
+	code RTL aware, also break from the loops after we have seen the
+	focussed column button (Michael Natterer).
+
 2006-09-14  Ryan Lortie  <desrt@desrt.ca>
 
 	* docs/reference/gdk/gdk-sections.txt:
