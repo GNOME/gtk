@@ -5075,10 +5075,6 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 			 GdkEventKey *event)
 {
   GtkTreeView *tree_view = (GtkTreeView *) widget;
-  GList *list;
-  gboolean rtl;
-
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
     {
@@ -5090,179 +5086,177 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       return TRUE;
     }
 
-  if (tree_view->priv->columns && 
-      (event->state & GDK_SHIFT_MASK) && (event->state & GDK_MOD1_MASK) &&
-      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
     {
-      list = tree_view->priv->columns;
-      while (list)
+      GList *focus_column;
+      gint focus_column_width = 0;
+      gboolean rtl;
+
+      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+
+      for (focus_column = tree_view->priv->columns;
+           focus_column;
+           focus_column = focus_column->next)
         {
-	  GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
-	  if (GTK_WIDGET_HAS_FOCUS (column->button))
-	    {
-	      if (!column->resizable)
-		return TRUE;
+          GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
-	      if (event->keyval == (rtl ? GDK_Right : GDK_Left)
-                  || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
-	        {
-		  column->resized_width = MAX (column->resized_width,
-					       column->width);
-		  column->resized_width -= 2;
-		  if (column->resized_width < 0)
-		    column->resized_width = 0;
+          if (GTK_WIDGET_HAS_FOCUS (column->button))
+            break;
 
-		  if (column->min_width == -1)
-		    column->resized_width = MAX (column->button->requisition.width, column->resized_width);
-		  else
-		    column->resized_width = MAX (column->min_width, column->resized_width);
+          if (column->visible)
+            focus_column_width += GTK_TREE_VIEW_COLUMN (column)->width;
+        }
 
-		  if (column->max_width != -1)
-		    column->resized_width = MIN (column->resized_width, column->max_width);
-
-		  column->use_resized_width = TRUE;
-		  gtk_widget_queue_resize (widget);
-		  return TRUE;
-		}
-	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
-                       || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
-	        {
-		  column->resized_width = MAX (column->resized_width,
-					       column->width);
-		  column->resized_width += 2;
-
-		  if (column->max_width != -1)
-		    column->resized_width = MIN (column->resized_width, column->max_width);
-
-		  column->use_resized_width = TRUE;
-		  gtk_widget_queue_resize (widget);
-		  return TRUE;
-		}
-
-	      break;
-	    }
-	  list = list->next;
-	}
-    }
-
-  if (tree_view->priv->columns && (event->state & GDK_MOD1_MASK) &&
-      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right
-       || event->keyval == GDK_Home || event->keyval == GDK_KP_Home
-       || event->keyval == GDK_End || event->keyval == GDK_KP_End))
-    {
-      list = tree_view->priv->columns;
-      while (list)
+      if (focus_column &&
+          (event->state & GDK_SHIFT_MASK) && (event->state & GDK_MOD1_MASK) &&
+          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
         {
-	  GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
-	  if (GTK_WIDGET_HAS_FOCUS (column->button))
-	    {
-	      if (event->keyval == (rtl ? GDK_Right : GDK_Left)
-                  || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
-	        {
-		  GtkTreeViewColumn *col;
-		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_LEFT);
-		  if (col != (GtkTreeViewColumn *)0x1)
-		    gtk_tree_view_move_column_after (tree_view, column, col);
-		  return TRUE;
-		}
-	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
-                       || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
-	        {
-		  GtkTreeViewColumn *col;
-		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_RIGHT);
-		  if (col != (GtkTreeViewColumn *)0x1)
-		    gtk_tree_view_move_column_after (tree_view, column, col);
-		  return TRUE;
-		}
-	      else if (event->keyval == GDK_Home
-                       || event->keyval == GDK_KP_Home)
-	        {
-		  GtkTreeViewColumn *col;
-		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_HOME);
-		  if (col != (GtkTreeViewColumn *)0x1)
-		    gtk_tree_view_move_column_after (tree_view, column, col);
-		  return TRUE;
-	        }
-	      else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
-	        {
-		  GtkTreeViewColumn *col;
-		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_END);
-		  if (col != (GtkTreeViewColumn *)0x1)
-		    gtk_tree_view_move_column_after (tree_view, column, col);
-		  return TRUE;
-		}
+          GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
-	      break;
-	    }
-	  list = list->next;
-	}
-    }
+          if (!column->resizable)
+            return TRUE;
 
-  if (tree_view->priv->columns &&
-      GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE) &&
-      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
-    {
-      gint width = 0;
-      list = tree_view->priv->columns;
-      while (list)
-	{
-	  GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
-	  if (GTK_WIDGET_HAS_FOCUS (column->button))
-	    {
-	      if ((event->keyval == (rtl ? GDK_Right : GDK_Left)
-                   || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
-                  && list->prev)
-	        {
-		  GList *tmp;
+          if (event->keyval == (rtl ? GDK_Right : GDK_Left)
+              || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+            {
+              column->resized_width = MAX (column->resized_width,
+                                           column->width);
+              column->resized_width -= 2;
+              if (column->resized_width < 0)
+                column->resized_width = 0;
 
-		  for (tmp = list->prev; tmp; tmp = tmp->prev)
-		    if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
-		      break;
+              if (column->min_width == -1)
+                column->resized_width = MAX (column->button->requisition.width,
+                                             column->resized_width);
+              else
+                column->resized_width = MAX (column->min_width,
+                                             column->resized_width);
 
-		  if (!tmp)
-		    return FALSE;
+              if (column->max_width != -1)
+                column->resized_width = MIN (column->resized_width,
+                                             column->max_width);
 
-		  tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
-		  gtk_widget_grab_focus (tree_view->priv->focus_column->button);
-		  width -= tree_view->priv->focus_column->width;
-		  gtk_adjustment_set_value (tree_view->priv->hadjustment, CLAMP (width, tree_view->priv->hadjustment->lower, tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
-		  return TRUE;
-		}
-	      else if ((event->keyval == (rtl ? GDK_Left : GDK_Right)
-                        || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
-                       && list->next)
-	        {
-		  GList *tmp;
+              column->use_resized_width = TRUE;
+              gtk_widget_queue_resize (widget);
+            }
+          else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
+                   || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+            {
+              column->resized_width = MAX (column->resized_width,
+                                           column->width);
+              column->resized_width += 2;
 
-		  for (tmp = list->next; tmp; tmp = tmp->next)
-		    if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
-		      break;
+              if (column->max_width != -1)
+                column->resized_width = MIN (column->resized_width,
+                                             column->max_width);
 
-		  if (!tmp)
-		    return FALSE;
+              column->use_resized_width = TRUE;
+              gtk_widget_queue_resize (widget);
+            }
 
-		  tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
+          return TRUE;
+        }
 
-		  gtk_widget_grab_focus (tree_view->priv->focus_column->button);
-		  width += tree_view->priv->focus_column->width;
-		  gtk_adjustment_set_value (tree_view->priv->hadjustment, CLAMP (width, tree_view->priv->hadjustment->lower, tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
-		  return TRUE;
-		}
+      if (focus_column &&
+          (event->state & GDK_MOD1_MASK) &&
+          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right
+           || event->keyval == GDK_Home || event->keyval == GDK_KP_Home
+           || event->keyval == GDK_End || event->keyval == GDK_KP_End))
+        {
+          GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
-	      return TRUE;
-	    }
-	  width += GTK_TREE_VIEW_COLUMN (list->data)->width;
-	  list = list->next;
-	}
+          if (event->keyval == (rtl ? GDK_Right : GDK_Left)
+              || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+            {
+              GtkTreeViewColumn *col;
+              col = gtk_tree_view_get_drop_column (tree_view, column, DROP_LEFT);
+              if (col != (GtkTreeViewColumn *)0x1)
+                gtk_tree_view_move_column_after (tree_view, column, col);
+            }
+          else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
+                   || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+            {
+              GtkTreeViewColumn *col;
+              col = gtk_tree_view_get_drop_column (tree_view, column, DROP_RIGHT);
+              if (col != (GtkTreeViewColumn *)0x1)
+                gtk_tree_view_move_column_after (tree_view, column, col);
+            }
+          else if (event->keyval == GDK_Home || event->keyval == GDK_KP_Home)
+            {
+              GtkTreeViewColumn *col;
+              col = gtk_tree_view_get_drop_column (tree_view, column, DROP_HOME);
+              if (col != (GtkTreeViewColumn *)0x1)
+                gtk_tree_view_move_column_after (tree_view, column, col);
+            }
+          else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
+            {
+              GtkTreeViewColumn *col;
+              col = gtk_tree_view_get_drop_column (tree_view, column, DROP_END);
+              if (col != (GtkTreeViewColumn *)0x1)
+                gtk_tree_view_move_column_after (tree_view, column, col);
+            }
+
+          return TRUE;
+        }
+
+      if (focus_column &&
+          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
+        {
+          if ((event->keyval == (rtl ? GDK_Right : GDK_Left)
+               || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+              && focus_column->prev)
+            {
+              GList *tmp;
+
+              for (tmp = focus_column->prev; tmp; tmp = tmp->prev)
+                if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
+                  break;
+
+              if (!tmp)
+                return FALSE;
+
+              tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
+              gtk_widget_grab_focus (tree_view->priv->focus_column->button);
+              focus_column_width -= tree_view->priv->focus_column->width;
+              gtk_adjustment_set_value (tree_view->priv->hadjustment,
+                                        CLAMP (focus_column_width,
+                                               tree_view->priv->hadjustment->lower,
+                                               tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
+            }
+          else if ((event->keyval == (rtl ? GDK_Left : GDK_Right)
+                    || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+                   && focus_column->next)
+            {
+              GList *tmp;
+
+              for (tmp = focus_column->next; tmp; tmp = tmp->next)
+                if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
+                  break;
+
+              if (!tmp)
+                return FALSE;
+
+              tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
+
+              gtk_widget_grab_focus (tree_view->priv->focus_column->button);
+              focus_column_width += tree_view->priv->focus_column->width;
+              gtk_adjustment_set_value (tree_view->priv->hadjustment,
+                                        CLAMP (focus_column_width,
+                                               tree_view->priv->hadjustment->lower,
+                                               tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
+            }
+
+          return TRUE;
+        }
     }
 
   /* Chain up to the parent class.  It handles the keybindings. */
-  if ((* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event) (widget, event))
+  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event (widget, event))
     return TRUE;
-							    
+
   /* We pass the event to the search_entry.  If its text changes, then we start
    * the typeahead find capabilities. */
   if (tree_view->priv->enable_search

@@ -1,3 +1,9 @@
+2006-09-15  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): refactored column
+	header navigation/resizing/reordering to be more readable and lose
+	one level of nesting.
+
 2006-09-15  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): actually directly
