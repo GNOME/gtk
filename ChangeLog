@@ -1,3 +1,9 @@
+2006-09-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): Send
+	change notification for the right property.  (#355308,
+	Torsten Schoenfeld)
+
 2006-09-15  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): refactored column
