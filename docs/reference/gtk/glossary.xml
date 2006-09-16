@@ -95,6 +95,17 @@
     </glossdef>
   </glossentry>
 
+  <glossentry id="ellipsization">
+    <glossdef>
+      <para>
+        Ellipsization is the process of replacing some part
+        of a text by an ellipsis (usually "...") to make the
+        text fit in a smaller space. Pango can ellipsize text
+        at the beginning, at the end or in the middle.
+      </para>
+    </glossdef>
+  </glossentry>
+
   <glossentry id="event">
     <glossterm>event</glossterm>
     <glossdef>
