@@ -1,5 +1,8 @@
 2006-09-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_finalize): Unref the
+	treeview use in list mode.  (#355732, Richard Hult)
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): Send
 	change notification for the right property.  (#355308,
 	Torsten Schoenfeld)
