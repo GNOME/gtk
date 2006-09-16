@@ -14659,7 +14659,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
     {
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
       
-      g_object_notify (G_OBJECT (tree_view), "grid-lines");
+      g_object_notify (G_OBJECT (tree_view), "enable-grid-lines");
     }
 }
 
