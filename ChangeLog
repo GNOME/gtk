@@ -1,5 +1,8 @@
 2006-09-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c: Use bookmark labels in 
+	the combobox. 
+
 	* gtk/gtkfilechooserbutton.c: Don't add remote volumes and 
 	bookmarks to the model in local-only mode, to avoid 
 	authentication dialogs pop up for invisible bookmarks, and

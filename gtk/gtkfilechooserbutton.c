@@ -1386,6 +1386,7 @@ get_icon_theme (GtkWidget *widget)
 struct SetDisplayNameData
 {
   GtkFileChooserButton *button;
+  char *label;
   GtkTreeRowReference *row_ref;
 };
 
@@ -1432,9 +1433,12 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
 				      data->button->priv->icon_size, NULL);
 
+  if (!data->label)
+    data->label = g_strdup (gtk_file_info_get_display_name (info));
+
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      ICON_COLUMN, pixbuf,
-		      DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
+		      DISPLAY_NAME_COLUMN, data->label,
 		      IS_FOLDER_COLUMN, gtk_file_info_get_is_folder (info),
 		      -1);
 
@@ -1443,6 +1447,7 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (data->button);
+  g_free (data->label);
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
@@ -1460,6 +1465,8 @@ set_info_for_path_at_iter (GtkFileChooserButton *button,
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = g_object_ref (button);
+
+  data->label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
   data->row_ref = gtk_tree_row_reference_new (button->priv->model, tree_path);
