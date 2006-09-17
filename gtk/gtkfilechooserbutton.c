@@ -797,7 +797,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       priv->has_title = TRUE;
       /* Intentionally fall through instead of breaking here, to actually set the property. */
     case GTK_FILE_CHOOSER_PROP_FILTER:
-    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
@@ -805,6 +804,12 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
+      break;
+
+    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
+      g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
+      fs_volumes_changed_cb (priv->fs, button);
+      fs_bookmarks_changed_cb (priv->fs, button);
       break;
 
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
@@ -1714,33 +1719,61 @@ model_add_volumes (GtkFileChooserButton *button,
 {
   GtkListStore *store;
   gint pos;
-
+  gboolean local_only;
+  GtkFileSystem *file_system;
+  GSList *l;
+  
   if (!volumes)
     return;
 
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
+  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
+  file_system = button->priv->fs;
 
-  do
+  for (l = volumes; l; l = l->next)
     {
+      GtkFileSystemVolume *volume;
       GtkTreeIter iter;
       GdkPixbuf *pixbuf;
       gchar *display_name;
 
-      pixbuf = gtk_file_system_volume_render_icon (button->priv->fs,
-						   volumes->data,
+      volume = l->data;
+
+      if (local_only)
+	{
+	  if (gtk_file_system_volume_get_is_mounted (file_system, volume))
+	    {
+	      GtkFilePath *base_path;
+
+	      base_path = gtk_file_system_volume_get_base_path (file_system, volume);
+	      if (base_path != NULL)
+		{
+		  gboolean is_local = gtk_file_system_path_is_local (file_system, base_path);
+		  gtk_file_path_free (base_path);
+
+		  if (!is_local)
+		    {
+		      gtk_file_system_volume_free (file_system, volume);
+		      continue;
+		    }
+		}
+	    }
+	}
+
+      pixbuf = gtk_file_system_volume_render_icon (file_system,
+						   volume,
 						   GTK_WIDGET (button),
 						   button->priv->icon_size,
 						   NULL);
-      display_name = gtk_file_system_volume_get_display_name (button->priv->fs,
-							      volumes->data);
+      display_name = gtk_file_system_volume_get_display_name (file_system, volume);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, display_name,
 			  TYPE_COLUMN, ROW_TYPE_VOLUME,
-			  DATA_COLUMN, volumes->data,
+			  DATA_COLUMN, volume,
 			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
@@ -1750,9 +1783,7 @@ model_add_volumes (GtkFileChooserButton *button,
 
       button->priv->n_volumes++;
       pos++;
-      volumes = volumes->next;
     }
-  while (volumes);
 }
 
 static void
@@ -1762,15 +1793,45 @@ model_add_bookmarks (GtkFileChooserButton *button,
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
+  gboolean local_only;
+  GSList *l;
 
   if (!bookmarks)
     return;
 
   store = GTK_LIST_STORE (button->priv->model);
-  pos = model_get_type_position (button, ROW_TYPE_BOOKMARK_SEPARATOR);
+  pos = model_get_type_position (button, ROW_TYPE_BOOKMARK);
+  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
 
-  if (!button->priv->has_bookmark_separator)
+  for (l = bookmarks; l; l = l->next)
     {
+      GtkFilePath *path;
+
+      path = l->data;
+
+      if (local_only &&
+	  !gtk_file_system_path_is_local (button->priv->fs, path))
+	continue;
+
+      gtk_list_store_insert (store, &iter, pos);
+      gtk_list_store_set (store, &iter,
+			  ICON_COLUMN, NULL,
+			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+			  TYPE_COLUMN, ROW_TYPE_BOOKMARK,
+			  DATA_COLUMN, gtk_file_path_copy (path),
+			  IS_FOLDER_COLUMN, FALSE,
+			  -1);
+      set_info_for_path_at_iter (button, path, &iter);
+
+      button->priv->n_bookmarks++;
+      pos++;
+    }
+
+  if (button->priv->n_bookmarks > 0 && 
+      !button->priv->has_bookmark_separator)
+    {
+      pos = model_get_type_position (button, ROW_TYPE_BOOKMARK_SEPARATOR);
+
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, NULL,
@@ -1781,25 +1842,6 @@ model_add_bookmarks (GtkFileChooserButton *button,
 			  -1);
       button->priv->has_bookmark_separator = TRUE;
     }
-
-  do
-    {
-      pos++;
-
-      gtk_list_store_insert (store, &iter, pos);
-      gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, NULL,
-			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
-			  TYPE_COLUMN, ROW_TYPE_BOOKMARK,
-			  DATA_COLUMN, gtk_file_path_copy (bookmarks->data),
-			  IS_FOLDER_COLUMN, FALSE,
-			  -1);
-      set_info_for_path_at_iter (button, bookmarks->data, &iter);
-
-      button->priv->n_bookmarks++;
-      bookmarks = bookmarks->next;
-    }
-  while (bookmarks);
 }
 
 static void
@@ -1960,17 +2002,26 @@ filter_model_visible_func (GtkTreeModel *model,
       break;
     case ROW_TYPE_VOLUME:
       {
-	GtkFilePath *base_path;
-
-	base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
-	if (base_path)
+	if (local_only)
 	  {
-	    retval = (!local_only ||
-		      gtk_file_system_path_is_local (priv->fs, base_path));
-	    gtk_file_path_free (base_path);
+	    if (gtk_file_system_volume_get_is_mounted (priv->fs, data))
+	      {
+		GtkFilePath *base_path;
+		
+		base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
+		if (base_path)
+		  {
+		    gboolean is_local = gtk_file_system_path_is_local (priv->fs, base_path);
+		    
+		    gtk_file_path_free (base_path);
+
+		    if (!is_local)
+		      retval = FALSE;
+		  }
+		else
+		  retval = FALSE;
+	      }
 	  }
-	else
-	  retval = FALSE;
       }
       break;
     default:
@@ -2245,19 +2296,11 @@ fs_bookmarks_changed_cb (GtkFileSystem *fs,
   GSList *bookmarks;
 
   bookmarks = gtk_file_system_list_bookmarks (fs);
-  if (!bookmarks)
-    {
-      model_remove_rows (user_data,
-			 model_get_type_position (user_data,
-						  ROW_TYPE_BOOKMARK_SEPARATOR),
-			 (priv->n_bookmarks + priv->has_bookmark_separator));
-      priv->has_bookmark_separator = FALSE;
-    }
-  else
-    model_remove_rows (user_data,
-		       model_get_type_position (user_data, ROW_TYPE_BOOKMARK),
-		       priv->n_bookmarks);
-
+  model_remove_rows (user_data,
+		     model_get_type_position (user_data,
+					      ROW_TYPE_BOOKMARK_SEPARATOR),
+		     (priv->n_bookmarks + priv->has_bookmark_separator));
+  priv->has_bookmark_separator = FALSE;
   priv->n_bookmarks = 0;
   model_add_bookmarks (user_data, bookmarks);
   gtk_file_paths_free (bookmarks);
