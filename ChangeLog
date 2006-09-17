@@ -1,5 +1,11 @@
 2006-09-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c: Don't add remote volumes and 
+	bookmarks to the model in local-only mode, to avoid 
+	authentication dialogs pop up for invisible bookmarks, and
+	to fix issues with separators not being hidden when
+	they should.  (#354887, Dennis Cranston)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_finalize): Unref the
 	treeview use in list mode.  (#355732, Richard Hult)
 
