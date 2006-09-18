@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-08-07 08:09+0300\n"
+"PO-Revision-Date: 2006-09-17 13:00+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -845,7 +845,7 @@ msgstr "Näita päist"
 
 #: ../gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
-msgstr ""
+msgstr "Kui märgitud, siis kuvatakse päist"
 
 #: ../gtk/gtkcalendar.c:463
 msgid "Show Day Names"
@@ -853,7 +853,7 @@ msgstr "Päevanimede näitamine"
 
 #: ../gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
-msgstr ""
+msgstr "Kui märgitud, siis kuvatakse päevade nimesid"
 
 #: ../gtk/gtkcalendar.c:477
 msgid "No Month Change"
@@ -861,7 +861,7 @@ msgstr "Kuud ei saa muuta"
 
 #: ../gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
-msgstr ""
+msgstr "Kui märgitud, siis kuud pole võimalik muuta"
 
 #: ../gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
@@ -869,7 +869,7 @@ msgstr "Nädalanumbrite näitamine"
 
 #: ../gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
-msgstr ""
+msgstr "Kui märgitud, siis kuvatakse nädalate numberid"
 
 #: ../gtk/gtkcellrenderer.c:177
 msgid "mode"
@@ -2882,33 +2882,32 @@ msgstr "Sõnumidialoogis oleva pildi või sildi raami laius"
 
 #: ../gtk/gtkmessagedialog.c:113
 msgid "Use separator"
-msgstr ""
+msgstr "Eraldaja kasutamine"
 
 #: ../gtk/gtkmessagedialog.c:114
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr ""
+msgstr "Kas teatedialoogi teate ja nuppude vahel peab olema eraldaja"
 
 #: ../gtk/gtkmessagedialog.c:127
 msgid "Message Type"
-msgstr ""
+msgstr "Teate liik"
 
 #: ../gtk/gtkmessagedialog.c:128
 msgid "The type of message"
-msgstr ""
+msgstr "Teate liik"
 
 #: ../gtk/gtkmessagedialog.c:135
 msgid "Message Buttons"
-msgstr ""
+msgstr "Teatenupud"
 
 #: ../gtk/gtkmessagedialog.c:136
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Teatedialoogis näidatavad nupud"
 
 #: ../gtk/gtkmessagedialog.c:153
-#, fuzzy
 msgid "The primary text of the message dialog"
-msgstr "Failivalimise dialoogi pealkiri"
+msgstr "Teatedialoogi peamine tekst"
 
 #: ../gtk/gtkmessagedialog.c:168
 msgid "Use Markup"
@@ -2920,12 +2919,11 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:183
 msgid "Secondary Text"
-msgstr ""
+msgstr "Teisene tekst"
 
 #: ../gtk/gtkmessagedialog.c:184
-#, fuzzy
 msgid "The secondary text of the message dialog"
-msgstr "Failivalimise dialoogi pealkiri"
+msgstr "Teatedialoogi teisene tekst"
 
 #: ../gtk/gtkmessagedialog.c:199
 msgid "Use Markup in secondary"
@@ -3097,12 +3095,11 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:665
 msgid "Tab detachable"
-msgstr ""
+msgstr "Sakk lahtihaagitav"
 
 #: ../gtk/gtknotebook.c:666
-#, fuzzy
 msgid "Whether the tab is detachable"
-msgstr "Kas tegevus on lubatud või mitte."
+msgstr "Kas sakk on lahtihaagitav või mitte"
 
 #: ../gtk/gtknotebook.c:681 ../gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
@@ -3305,9 +3302,8 @@ msgid "Number of jobs queued in the printer"
 msgstr "Printeri järjekorras olevate tööde arv"
 
 #: ../gtk/gtkprinteroptionwidget.c:123
-#, fuzzy
 msgid "Source option"
-msgstr "Kirjatüübi valikud"
+msgstr "Lähtevalik"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
@@ -3410,29 +3406,27 @@ msgstr "Ühik"
 
 #: ../gtk/gtkprintoperation.c:992
 msgid "The unit in which distances can be measured in the context"
-msgstr ""
+msgstr "Kontekstis vahemaade määramiseks kasutatav ühik"
 
 #: ../gtk/gtkprintoperation.c:1009
-#, fuzzy
 msgid "Show Dialog"
-msgstr "Dialoog"
+msgstr "Dialoogi kuvamine"
 
 #: ../gtk/gtkprintoperation.c:1010
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr ""
+msgstr "Kui märgitud, siis printimise ajal kuvatakse edenemisdialoogi."
 
 #: ../gtk/gtkprintoperation.c:1033
 msgid "Allow Async"
-msgstr ""
+msgstr "Asünk. lubatud"
 
 #: ../gtk/gtkprintoperation.c:1034
 msgid "TRUE if print process may run asynchronous."
-msgstr ""
+msgstr "Kui märgitud, siis võib printimisprotsess töötada asünkroonselt."
 
 #: ../gtk/gtkprintoperation.c:1057 ../gtk/gtkprintoperation.c:1058
-#, fuzzy
 msgid "Export filename"
-msgstr "Failinimi"
+msgstr "Ekspordi failinimi"
 
 #: ../gtk/gtkprintoperation.c:1072
 msgid "Status"
@@ -3451,20 +3445,18 @@ msgid "A human-readable description of the status"
 msgstr "Oleku kirjeldus inimloetaval kujul"
 
 #: ../gtk/gtkprintoperation.c:1112
-#, fuzzy
 msgid "Custom tab label"
-msgstr "Kohandatud palett"
+msgstr "Kohandatud saki silt"
 
 #: ../gtk/gtkprintoperation.c:1113
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "Kohandatud vidinaid sisaldava saki silt."
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:252
-#, fuzzy
 msgid "Selected Printer"
 msgstr "Valitud printer"
 
@@ -3761,16 +3753,15 @@ msgstr "Kas privaatkirjeid näidatakse või mitte"
 
 #: ../gtk/gtkrecentchooser.c:124
 msgid "Show Tooltips"
-msgstr ""
+msgstr "Vihjete näitamine"
 
 #: ../gtk/gtkrecentchooser.c:125
-#, fuzzy
 msgid "Whether there should be a tooltip on the item"
-msgstr "Kas aknaraamil peaks olema sulgemisnupp"
+msgstr "Kas kirjele peaks kuvama vihjeid või mitte"
 
 #: ../gtk/gtkrecentchooser.c:130
 msgid "Show Icons"
-msgstr "Näita ikoone"
+msgstr "Ikoonide näitamine"
 
 #: ../gtk/gtkrecentchooser.c:131
 msgid "Whether there should be an icon near the item"
@@ -3781,9 +3772,8 @@ msgid "Show Not Found"
 msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:137
-#, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "Kas näidata peidetud faile ja katalooge või mitte"
+msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:143
 msgid "Whether to allow multiple items to be selected"
@@ -3799,35 +3789,31 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:231
 msgid "Limit"
-msgstr ""
+msgstr "Piirang"
 
 #: ../gtk/gtkrecentchooser.c:155
-#, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "Kuvatavate tulpade arv"
+msgstr "Suurim kuvatavate kirjete arv"
 
 #: ../gtk/gtkrecentchooser.c:162
-#, fuzzy
 msgid "Sort Type"
-msgstr "Sortimisjärjestus"
+msgstr "Sortimise liik"
 
 #: ../gtk/gtkrecentchooser.c:163
 msgid "The sorting order of the items displayed"
-msgstr ""
+msgstr "Kuvatavate kirjete sortimisjärjestus"
 
 #: ../gtk/gtkrecentchooser.c:170
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
 #: ../gtk/gtkrecentchoosermenu.c:208
-#, fuzzy
 msgid "Show Numbers"
-msgstr "Nädalanumbrite näitamine"
+msgstr "Numbrite näitamine"
 
 #: ../gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "Kas näidata peidetud faile ja katalooge või mitte"
+msgstr "Kas kirjeid näidatakse koos numbritega või mitte"
 
 #: ../gtk/gtkrecentmanager.c:217
 msgid "The full path to the file to be used to store and read the list"
@@ -4091,9 +4077,8 @@ msgid "Fallback Icon Theme Name"
 msgstr ""
 
 #: ../gtk/gtksettings.c:249
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Kasutatava kursoriteema nimi"
+msgstr ""
 
 #: ../gtk/gtksettings.c:257
 msgid "Key Theme Name"
@@ -4189,18 +4174,16 @@ msgid "Cursor theme name"
 msgstr "Kursoriteema nimi"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "Kasutatava kursoriteema nimi"
+msgstr "Kasutatava kursoriteema nimi, vaikimis teema jaoks NULL"
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "Kursoriteema suurus"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Kursorite jaoks kasutatav suurus"
+msgstr "Kursorite jaoks kasutatav suurus, vaikimisi suuruse jaoks 0"
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
@@ -5001,9 +4984,8 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 
 #: ../gtk/gtktoolbar.c:598
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Suurim pikkus"
+msgstr ""
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
@@ -5087,13 +5069,12 @@ msgid "Icon widget to display in the item"
 msgstr "Ikoonividin kirje kuvamiseks"
 
 #: ../gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "Ikooni suurus"
+msgstr ""
 
 #: ../gtk/gtktoolbutton.c:240
 msgid "Spacing in pixels between the icon and label"
-msgstr ""
+msgstr "Ikooni ja sildi vahel olev ruum pikslites"
 
 #: ../gtk/gtktoolitem.c:145
 msgid ""
@@ -5203,9 +5184,8 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtktreeview.c:691
-#, fuzzy
 msgid "Show Expanders"
-msgstr "Laiene"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:692
 msgid "View has expanders"
@@ -5229,24 +5209,20 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtktreeview.c:717
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Nooleklahvide lubamine"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:718
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Kas aknaraamil peaks olema sulgemisnupp"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:726
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "Nooleklahvide lubamine"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:727
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Kas aknaraamil peaks olema sulgemisnupp"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:747
 msgid "Vertical Separator Width"
@@ -5305,18 +5281,16 @@ msgid "Enable extended row background theming"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:800
-#, fuzzy
 msgid "Grid line width"
-msgstr "Fikseeritud laius"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:801
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:807
-#, fuzzy
 msgid "Tree line width"
-msgstr "Fikseeritud laius"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:808
 msgid "Width, in pixels, of the tree view lines"
