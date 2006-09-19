@@ -1,3 +1,12 @@
+Tue Sep 19 17:00:04 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkarrow.c: added GtkArrow::arrow-scaling style property to 
+	control the arrow/border ratio within the allocation.
+
+	* tests/testgtk.c: added a GtkArrow to handle box test.
+
+	* tests/testgtkrc: test ::arrow-scaling property.
+
 2006-09-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):

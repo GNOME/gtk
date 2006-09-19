@@ -86,7 +86,13 @@ gtk_arrow_class_init (GtkArrowClass *class)
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_OUT,
                                                       GTK_PARAM_READWRITE));
-  
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_float ("arrow-scaling",
+                                                               P_("Arrow Scaling"),
+                                                               P_("Amount of space sed up by arrow"),
+                                                               0.0, 1.0, 0.7,
+                                                               GTK_PARAM_READABLE));
+
   widget_class->expose_event = gtk_arrow_expose;
 }
 
@@ -204,8 +210,6 @@ static gboolean
 gtk_arrow_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkArrow *arrow;
-  GtkMisc *misc;
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
@@ -215,12 +219,14 @@ gtk_arrow_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      arrow = GTK_ARROW (widget);
-      misc = GTK_MISC (widget);
+      GtkArrow *arrow = GTK_ARROW (widget);
+      GtkMisc *misc = GTK_MISC (widget);
+      gfloat arrow_scaling;
+      gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
       width = widget->allocation.width - misc->xpad * 2;
       height = widget->allocation.height - misc->ypad * 2;
-      extent = MIN (width, height) * 0.7;
+      extent = MIN (width, height) * arrow_scaling;
       effective_arrow_type = arrow->arrow_type;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)

@@ -2389,9 +2389,11 @@ create_handle_box (GtkWidget *widget)
 		      "detached");
     gtk_widget_show (handle_box2);
 
+    hbox = g_object_new (GTK_TYPE_HBOX, "visible", 1, "parent", handle_box2, NULL);
     label = gtk_label_new ("Fooo!");
-    gtk_container_add (GTK_CONTAINER (handle_box2), label);
+    gtk_container_add (GTK_CONTAINER (hbox), label);
     gtk_widget_show (label);
+    g_object_new (GTK_TYPE_ARROW, "visible", 1, "parent", hbox, NULL);
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
