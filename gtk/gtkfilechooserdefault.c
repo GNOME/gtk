@@ -6174,7 +6174,8 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
 	}
 
       /* get parent path and try to change the folder to that */
-      if (gtk_file_system_get_parent (impl->file_system, data->path, &parent_path, NULL))
+      if (gtk_file_system_get_parent (impl->file_system, data->path, &parent_path, NULL) &&
+	parent_path)
         {
 	  gtk_file_path_free (data->path);
 	  data->path = parent_path;
