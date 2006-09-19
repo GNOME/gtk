@@ -48,6 +48,7 @@ struct _GdkPangoRendererPrivate
   gboolean override_color_set[MAX_RENDER_PART + 1];
   
   GdkBitmap *stipple[MAX_RENDER_PART + 1];
+  PangoColor emboss_color;
   gboolean embossed;
 
   cairo_t *cr;
@@ -62,6 +63,7 @@ struct _GdkPangoRendererPrivate
 
 static PangoAttrType gdk_pango_attr_stipple_type;
 static PangoAttrType gdk_pango_attr_embossed_type;
+static PangoAttrType gdk_pango_attr_emboss_color_type;
 
 enum {
   PROP_0,
@@ -115,9 +117,11 @@ gdk_pango_renderer_constructor (GType                  type,
 /* Adjusts matrix and color for the renderer to draw the secondary
  * "shadow" copy for embossed text */
 static void
-emboss_context (cairo_t *cr)
+emboss_context (GdkPangoRenderer *renderer, cairo_t *cr)
 {
+  GdkPangoRendererPrivate *priv = renderer->priv;
   cairo_matrix_t tmp_matrix;
+  double red, green, blue;
 
   /* The gymnastics here to adjust the matrix are because we want
    * to offset by +1,+1 in device-space, not in user-space,
@@ -128,11 +132,15 @@ emboss_context (cairo_t *cr)
   tmp_matrix.y0 += 1.0;
   cairo_set_matrix (cr, &tmp_matrix);
 
-  cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
+  red = (double) priv->emboss_color.red / 65535.;
+  green = (double) priv->emboss_color.green / 65535.;
+  blue = (double) priv->emboss_color.blue / 65535.;
+
+  cairo_set_source_rgb (cr, red, green, blue);
 }
 
 static inline gboolean
-color_equal (PangoColor *c1, PangoColor *c2)
+color_equal (const PangoColor *c1, const PangoColor *c2)
 {
   if (!c1 && !c2)
     return TRUE;
@@ -233,12 +241,12 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
   if (priv->embossed)
     {
       cairo_save (cr);
-      emboss_context (cr);
+      emboss_context (gdk_renderer, cr);
       cairo_move_to (cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
       pango_cairo_show_glyph_string (cr, font, glyphs);
       cairo_restore (cr);
     }
-  
+
   cairo_move_to (cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
   pango_cairo_show_glyph_string (cr, font, glyphs);
 }
@@ -339,7 +347,7 @@ gdk_pango_renderer_draw_rectangle (PangoRenderer    *renderer,
   if (priv->embossed && part != PANGO_RENDER_PART_BACKGROUND)
     {
       cairo_save (cr);
-      emboss_context (cr);
+      emboss_context (gdk_renderer, cr);
       cairo_rectangle (cr,
 		       (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
 		       (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
@@ -370,7 +378,7 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
   if (priv->embossed)
     {
       cairo_save (cr);
-      emboss_context (cr);
+      emboss_context (gdk_renderer, cr);
       draw_error_underline (cr,
 			    (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
 			    (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
@@ -426,12 +434,15 @@ gdk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
   gboolean embossed = FALSE;
   GdkBitmap *stipple = NULL;
+  gboolean changed = FALSE;
+  PangoColor emboss_color;
   GSList *l;
   int i;
-  
-  embossed = FALSE;
-  stipple = NULL;
-  
+
+  emboss_color.red = 0xffff;
+  emboss_color.green = 0xffff;
+  emboss_color.blue = 0xffff;
+
   for (l = run->item->analysis.extra_attrs; l; l = l->next)
     {
       PangoAttribute *attr = l->data;
@@ -448,6 +459,10 @@ gdk_pango_renderer_prepare_run (PangoRenderer  *renderer,
 	{
 	  embossed = ((GdkPangoAttrEmbossed*)attr)->embossed;
 	}
+      else if (attr->klass->type == gdk_pango_attr_emboss_color_type)
+	{
+	  emboss_color = ((GdkPangoAttrEmbossColor*)attr)->color;
+	}
     }
 
   gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_FOREGROUND, stipple);
@@ -458,8 +473,17 @@ gdk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   if (embossed != gdk_renderer->priv->embossed)
     {
       gdk_renderer->priv->embossed = embossed;
-      pango_renderer_part_changed (renderer, PANGO_RENDER_PART_FOREGROUND);
+      changed = TRUE;
     }
+
+  if (!color_equal (&gdk_renderer->priv->emboss_color, &emboss_color))
+    {
+      gdk_renderer->priv->emboss_color = emboss_color;
+      changed = TRUE;
+    }
+
+  if (changed)
+    pango_renderer_part_changed (renderer, PANGO_RENDER_PART_FOREGROUND);
 
   PANGO_RENDERER_CLASS (gdk_pango_renderer_parent_class)->prepare_run (renderer, run);
 
@@ -1091,6 +1115,8 @@ gdk_draw_layout (GdkDrawable     *drawable,
   gdk_draw_layout_with_colors (drawable, gc, x, y, layout, NULL, NULL);
 }
 
+/* GdkPangoAttrStipple */
+
 static PangoAttribute *
 gdk_pango_attr_stipple_copy (const PangoAttribute *attr)
 {
@@ -1157,6 +1183,8 @@ gdk_pango_attr_stipple_new (GdkBitmap *stipple)
   return (PangoAttribute *)result;
 }
 
+/* GdkPangoAttrEmbossed */
+
 static PangoAttribute *
 gdk_pango_attr_embossed_copy (const PangoAttribute *attr)
 {
@@ -1183,10 +1211,9 @@ gdk_pango_attr_embossed_compare (const PangoAttribute *attr1,
 
 /**
  * gdk_pango_attr_embossed_new:
- * @embossed: a bitmap to be set as embossed
+ * @embossed: if the region should be embossed
  *
- * Creates a new attribute containing a embossed bitmap to be used when
- * rendering the text.
+ * Creates a new attribute flagging a region as embossed or not.
  *
  * Return value: new #PangoAttribute
  **/
@@ -1212,6 +1239,72 @@ gdk_pango_attr_embossed_new (gboolean embossed)
   result->embossed = embossed;
   
   return (PangoAttribute *)result;
+}
+
+/* GdkPangoAttrEmbossColor */
+
+static PangoAttribute *
+gdk_pango_attr_emboss_color_copy (const PangoAttribute *attr)
+{
+  const GdkPangoAttrEmbossColor *old = (const GdkPangoAttrEmbossColor*) attr;
+  GdkPangoAttrEmbossColor *copy;
+
+  copy = g_new (GdkPangoAttrEmbossColor, 1);
+  copy->attr.klass = old->attr.klass;
+  copy->color = old->color;
+
+  return (PangoAttribute *) copy;
+}
+
+static void
+gdk_pango_attr_emboss_color_destroy (PangoAttribute *attr)
+{
+  g_free (attr);
+}
+
+static gboolean
+gdk_pango_attr_emboss_color_compare (const PangoAttribute *attr1,
+                                     const PangoAttribute *attr2)
+{
+  const GdkPangoAttrEmbossColor *c1 = (const GdkPangoAttrEmbossColor*) attr1;
+  const GdkPangoAttrEmbossColor *c2 = (const GdkPangoAttrEmbossColor*) attr2;
+
+  return color_equal (&c1->color, &c2->color);
+}
+
+/**
+ * gdk_pango_attr_emboss_color_new:
+ * @color: a GdkColor representing the color to emboss with
+ *
+ * Creates a new attribute specifying the color to emboss text with.
+ *
+ * Return value: new #PangoAttribute
+ *
+ * Since: 2.12
+ **/
+PangoAttribute *
+gdk_pango_attr_emboss_color_new (const GdkColor *color)
+{
+  GdkPangoAttrEmbossColor *result;
+  
+  static PangoAttrClass klass = {
+    0,
+    gdk_pango_attr_emboss_color_copy,
+    gdk_pango_attr_emboss_color_destroy,
+    gdk_pango_attr_emboss_color_compare
+  };
+
+  if (!klass.type)
+    klass.type = gdk_pango_attr_emboss_color_type =
+      pango_attr_type_register ("GdkPangoAttrEmbossColor");
+
+  result = g_new (GdkPangoAttrEmbossColor, 1);
+  result->attr.klass = &klass;
+  result->color.red = color->red;
+  result->color.green = color->green;
+  result->color.blue = color->blue;
+
+  return (PangoAttribute *) result;
 }
 
 /* Get a clip region to draw only part of a layout. index_ranges
@@ -1366,7 +1459,6 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
   do
     {
       PangoRectangle logical_rect;
-      PangoLayoutLine *line;
       GdkRegion *line_region;
       gint baseline;
       

@@ -859,6 +859,7 @@ gdk_net_wm_supports
 
 #if IN_HEADER(__GDK_PANGO_H__)
 #if IN_FILE(__GDK_PANGO_C__)
+gdk_pango_attr_emboss_color_new
 gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_context_get

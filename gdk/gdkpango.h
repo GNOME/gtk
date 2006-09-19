@@ -133,6 +133,7 @@ GdkRegion    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
 
 typedef struct _GdkPangoAttrStipple GdkPangoAttrStipple;
 typedef struct _GdkPangoAttrEmbossed GdkPangoAttrEmbossed;
+typedef struct _GdkPangoAttrEmbossColor GdkPangoAttrEmbossColor;
 
 struct _GdkPangoAttrStipple
 {
@@ -146,8 +147,15 @@ struct _GdkPangoAttrEmbossed
   gboolean embossed;
 };
 
+struct _GdkPangoAttrEmbossColor
+{
+  PangoAttribute attr;
+  PangoColor color;
+};
+
 PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *stipple);
 PangoAttribute *gdk_pango_attr_embossed_new (gboolean embossed);
+PangoAttribute *gdk_pango_attr_emboss_color_new (const GdkColor *color);
 
 G_END_DECLS
 

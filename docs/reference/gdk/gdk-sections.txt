@@ -863,6 +863,7 @@ gdk_pango_context_get_for_screen
 gdk_pango_context_set_colormap
 GdkPangoAttrEmbossed
 GdkPangoAttrStipple
+gdk_pango_attr_emboss_color_new
 gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_layout_get_clip_region

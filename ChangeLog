@@ -1,3 +1,12 @@
+2006-09-19  Ryan Lortie  <desrt@desrt.ca>
+
+	* docs/reference/gdk/gdk-sections.txt:
+	* gdk/gdk.symbols:
+	* gdk/gdkpango.h:
+	* gdk/gdkpango.c: Bug 355343.  Add a GdkPangoAttrEmbossColor.
+	  (gdk_pango_layout_get_clip_region): Remove an unused variable.
+	  (gdk_pango_attr_embossed_new): Fix documentation.
+
 Tue Sep 19 17:00:04 2006  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkarrow.c: added GtkArrow::arrow-scaling style property to 
@@ -50,15 +59,6 @@ Tue Sep 19 17:00:04 2006  Tim Janik  <timj@imendio.com>
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): make column resizing
 	code RTL aware, also break from the loops after we have seen the
 	focussed column button (Michael Natterer).
-
-2006-09-14  Ryan Lortie  <desrt@desrt.ca>
-
-	* docs/reference/gdk/gdk-sections.txt:
-	* gdk/gdk.symbols:
-	* gdk/gdkpango.h:
-	* gdk/gdkpango.c: Bug 355343.  Add a GdkPangoAttrEmbossColor.
-	  (gdk_pango_layout_get_clip_region): Remove an unused variable.
-	  (gdk_pango_attr_embossed_new): Fix documentation.
 
 Thu Sep 14 12:28:51 2006  Tim Janik  <timj@imendio.com>
 
