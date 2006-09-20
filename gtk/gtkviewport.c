@@ -734,9 +734,9 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   GtkBin *bin = GTK_BIN (widget);
   gint border_width = GTK_CONTAINER (widget)->border_width;
   gboolean hadjustment_value_changed, vadjustment_value_changed;
-
   GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
   GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+  GtkAllocation child_allocation;
 
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.
@@ -748,47 +748,37 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
     gdk_window_invalidate_rect (widget->window, NULL, FALSE);
   
   widget->allocation = *allocation;
-
+  
   viewport_set_hadjustment_values (viewport, &hadjustment_value_changed);
   viewport_set_vadjustment_values (viewport, &vadjustment_value_changed);
-
+  
+  child_allocation.x = 0;
+  child_allocation.y = 0;
+  child_allocation.width = hadjustment->upper;
+  child_allocation.height = vadjustment->upper;
   if (GTK_WIDGET_REALIZED (widget))
     {
       GtkAllocation view_allocation;
-      
-      viewport_get_view_allocation (viewport, &view_allocation);
-  
       gdk_window_move_resize (widget->window,
 			      allocation->x + border_width,
 			      allocation->y + border_width,
 			      allocation->width - border_width * 2,
 			      allocation->height - border_width * 2);
-
+      
+      viewport_get_view_allocation (viewport, &view_allocation);
       gdk_window_move_resize (viewport->view_window,
 			      view_allocation.x,
 			      view_allocation.y,
 			      view_allocation.width,
 			      view_allocation.height);
+      gdk_window_move_resize (viewport->bin_window,
+                              - hadjustment->value,
+                              - vadjustment->value,
+                              child_allocation.width,
+                              child_allocation.height);
     }
-
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
-    {
-      GtkAllocation child_allocation;
-      
-      child_allocation.x = 0;
-      child_allocation.y = 0;
-      child_allocation.width = hadjustment->upper;
-      child_allocation.height = vadjustment->upper;
-
-      if (GTK_WIDGET_REALIZED (widget))
-	gdk_window_move_resize (viewport->bin_window,
-				- hadjustment->value,
-				- vadjustment->value,
-				child_allocation.width,
-				child_allocation.height);
-
-      gtk_widget_size_allocate (bin->child, &child_allocation);
-    }
+    gtk_widget_size_allocate (bin->child, &child_allocation);
 
   gtk_adjustment_changed (hadjustment);
   gtk_adjustment_changed (vadjustment);

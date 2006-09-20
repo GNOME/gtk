@@ -1,3 +1,12 @@
+Wed Sep 20 16:59:38 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkviewport.c: always update the bin_window position and size
+	in size_allocate, even if we don't have a visible child. this fixes
+	expose artefacts as described in #313508.
+
+	* gtk/gtkscrolledwindow.c: make hiding of automatic scrollbars when we
+	have no visible child explicit.
+
 2006-09-19  Ryan Lortie  <desrt@desrt.ca>
 
 	* docs/reference/gdk/gdk-sections.txt:

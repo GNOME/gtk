@@ -1348,7 +1348,11 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	     previous_vvis != scrolled_window->vscrollbar_visible);
     }
   else
-    gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
+    {
+      scrolled_window->hscrollbar_visible = scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS;
+      scrolled_window->vscrollbar_visible = scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS;
+      gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
+    }
   
   if (scrolled_window->hscrollbar_visible)
     {
