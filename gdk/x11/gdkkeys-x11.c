@@ -561,27 +561,23 @@ get_direction (XkbDescRec *xkb,
 
   for (code = xkb->min_key_code; code <= xkb->max_key_code; code++)
     {
-      gint width = XkbKeyGroupWidth (xkb, code, group);
-      gint level;
-      for (level = 0; level < width; level++)
-	{
-	  KeySym sym = XkbKeySymEntry (xkb, code, level, group);
-	  PangoDirection dir = pango_unichar_direction (gdk_keyval_to_unicode (sym));
+      gint level = 0;
+      KeySym sym = XkbKeySymEntry (xkb, code, level, group);
+      PangoDirection dir = pango_unichar_direction (gdk_keyval_to_unicode (sym));
 
-	  switch (dir)
-	    {
-	    case PANGO_DIRECTION_RTL:
-	      rtl_minus_ltr++;
-	      break;
-	    case PANGO_DIRECTION_LTR:
-	      rtl_minus_ltr--;
-	      break;
-	    default:
-	      break;
-	    }
+      switch (dir)
+	{
+	case PANGO_DIRECTION_RTL:
+	  rtl_minus_ltr++;
+	  break;
+	case PANGO_DIRECTION_LTR:
+	  rtl_minus_ltr--;
+	  break;
+	default:
+	  break;
 	}
     }
-    
+
   if (rtl_minus_ltr > 0)
     return PANGO_DIRECTION_RTL;
   else
