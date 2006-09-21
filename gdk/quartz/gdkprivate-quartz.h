@@ -50,13 +50,27 @@ typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 struct _GdkGCQuartz
 {
-  GdkGC parent_instance;
+  GdkGC             parent_instance;
 
-  GdkGCValuesMask values_mask;
+  GdkFont          *font;
+  GdkFunction       function;
+  GdkSubwindowMode  subwindow_mode;
+  gboolean          graphics_exposures;
 
-  gboolean have_clip_region;
-  gboolean have_clip_mask;
-  CGImageRef clip_mask;
+  gboolean          have_clip_region;
+  gboolean          have_clip_mask;
+  CGImageRef        clip_mask;
+
+  gint              line_width;
+  GdkLineStyle      line_style;
+  GdkCapStyle       cap_style;
+  GdkJoinStyle      join_style;
+
+  gfloat           *dash_lengths;
+  gint              dash_count;
+  gfloat            dash_phase;
+
+  CGPatternRef      ts_pattern;
 };
 
 struct _GdkGCQuartzClass
@@ -98,10 +112,22 @@ void _gdk_events_init           (void);
 void _gdk_visual_init           (void);
 void _gdk_input_init            (void);
 
-void gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
-void gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel);
+typedef enum {
+  GDK_QUARTZ_CONTEXT_STROKE = 1 << 0,
+  GDK_QUARTZ_CONTEXT_FILL   = 1 << 1,
+  GDK_QUARTZ_CONTEXT_TEXT   = 1 << 2
+} GdkQuartzContextValuesMask;
 
-void gdk_quartz_update_context_from_gc (CGContextRef context, GdkGC *gc);
+void gdk_quartz_get_rgba_from_pixel    (GdkColormap *colormap,
+					guint32      pixel,
+					gfloat      *red,
+					gfloat      *green,
+					gfloat      *blue,
+					gfloat      *alpha);
+
+void gdk_quartz_update_context_from_gc (CGContextRef                context,
+					GdkGC                      *gc,
+					GdkQuartzContextValuesMask  mask);
 
 gint        _gdk_quartz_get_inverted_screen_y      (gint y);
 

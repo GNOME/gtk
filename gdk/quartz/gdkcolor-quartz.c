@@ -170,37 +170,21 @@ gdk_colormap_get_screen (GdkColormap *cmap)
 }
 
 void
-gdk_quartz_set_context_fill_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
+gdk_quartz_get_rgba_from_pixel (GdkColormap *colormap,
+				guint32      pixel,
+				float       *red,
+				float       *green,
+				float       *blue,
+				float       *alpha)
 {
-  float red, green, blue, alpha;
-
-  red = (pixel >> 16 & 0xff) / 255.0;
-  green = (pixel >> 8 & 0xff) / 255.0;
-  blue = (pixel & 0xff) / 255.0;
-
+  *red   = (pixel >> 16 & 0xff) / 255.0;
+  *green = (pixel >> 8  & 0xff) / 255.0;
+  *blue  = (pixel       & 0xff) / 255.0;
+ 
   if (colormap && gdk_colormap_get_visual (colormap)->depth == 32)
-    alpha = (pixel >> 24 & 0xff) / 255.0;
+    *alpha = (pixel >> 24 & 0xff) / 255.0;
   else
-    alpha = 1.0;
-
-  CGContextSetRGBFillColor (context, red, green, blue, alpha);
-}
-
-void
-gdk_quartz_set_context_stroke_color_from_pixel (CGContextRef context, GdkColormap *colormap, guint32 pixel)
-{
-  float red, green, blue, alpha;
-
-  red = (pixel >> 16 & 0xff) / 255.0;
-  green = (pixel >> 8 & 0xff) / 255.0;
-  blue = (pixel & 0xff) / 255.0;
-
-  if (colormap && gdk_colormap_get_visual (colormap)->depth == 32)
-    alpha = (pixel >> 24 & 0xff) / 255.0;
-  else
-    alpha = 1.0;
-
-  CGContextSetRGBStrokeColor (context, red, green, blue, 1.0);  
+    *alpha = 1.0;
 }
 
 gboolean

@@ -128,22 +128,21 @@ gdk_quartz_draw_rectangle (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc,
+				     filled ?
+				     GDK_QUARTZ_CONTEXT_FILL :
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   if (filled)
     {
       CGRect rect = CGRectMake (x, y, width, height);
 
-      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						    _gdk_gc_get_fg_pixel (gc));
       CGContextFillRect (context, rect);
     }
   else
     {
       CGRect rect = CGRectMake (x + 0.5, y + 0.5, width, height);
 
-      gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						      _gdk_gc_get_fg_pixel (gc));
       CGContextStrokeRect (context, rect);
     }
 
@@ -167,7 +166,10 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc,
+				     filled ?
+				     GDK_QUARTZ_CONTEXT_FILL :
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextSaveGState (context);
 
@@ -176,9 +178,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 
   if (filled)
     {
-      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-                                                    _gdk_gc_get_fg_pixel (gc));
-
       CGContextTranslateCTM (context,
                              x + width / 2.0,
                              y + height / 2.0);
@@ -193,9 +192,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
     }
   else
     {
-      gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						      _gdk_gc_get_fg_pixel (gc));
-
       CGContextTranslateCTM (context,
                              x + width / 2.0 + 0.5,
                              y + height / 2.0 + 0.5);
@@ -225,13 +221,13 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
+  gdk_quartz_update_context_from_gc (context, gc,
+				     filled ?
+				     GDK_QUARTZ_CONTEXT_FILL :
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   if (filled)
     {
-      gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						    _gdk_gc_get_fg_pixel (gc));
-
       CGContextMoveToPoint (context, points[0].x, points[0].y);
       for (i = 1; i < npoints; i++)
 	CGContextAddLineToPoint (context, points[i].x, points[i].y);
@@ -241,9 +237,6 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
     }
   else
     {
-      gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						      _gdk_gc_get_fg_pixel (gc));
-
       CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
       for (i = 1; i < npoints; i++)
 	CGContextAddLineToPoint (context, points[i].x + 0.5, points[i].y + 0.5);
@@ -318,9 +311,8 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
       if (!context)
 	return;
 
-      gdk_quartz_update_context_from_gc (context, gc);
-
-      CGContextSetBlendMode (context, kCGBlendModeNormal);
+      gdk_quartz_update_context_from_gc (context, gc,
+					 GDK_QUARTZ_CONTEXT_STROKE);
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc);
@@ -349,9 +341,9 @@ gdk_quartz_draw_points (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
-  gdk_quartz_set_context_fill_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						_gdk_gc_get_fg_pixel (gc));
+  gdk_quartz_update_context_from_gc (context, gc,
+				     GDK_QUARTZ_CONTEXT_STROKE |
+				     GDK_QUARTZ_CONTEXT_FILL);
 
   /* Just draw 1x1 rectangles */
   for (i = 0; i < npoints; i++) 
@@ -375,9 +367,8 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
-  gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						  _gdk_gc_get_fg_pixel (gc));
+  gdk_quartz_update_context_from_gc (context, gc,
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   for (i = 0; i < nsegs; i++)
     {
@@ -402,16 +393,14 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc);
-  gdk_quartz_set_context_stroke_color_from_pixel (context, gdk_drawable_get_colormap (drawable),
-						  _gdk_gc_get_fg_pixel (gc));
-  
+  gdk_quartz_update_context_from_gc (context, gc,
+				     GDK_QUARTZ_CONTEXT_STROKE);
+
+  CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
+
   for (i = 1; i < npoints; i++)
-    {
-      CGContextMoveToPoint (context, points[i - 1].x + 0.5, points[i - 1].y + 0.5);
-      CGContextAddLineToPoint (context, points[i].x + 0.5, points[i].y + 0.5);
-    }
-  
+    CGContextAddLineToPoint (context, points[i].x + 0.5, points[i].y + 0.5);
+
   CGContextStrokePath (context);
 
   gdk_quartz_drawable_release_context (drawable, context);
@@ -462,9 +451,8 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  gdk_quartz_update_context_from_gc (context, gc);
-
-  CGContextSetBlendMode (context, kCGBlendModeNormal);
+  gdk_quartz_update_context_from_gc (context, gc,
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextClipToRect (context, CGRectMake (dest_x, dest_y, width, height));
   CGContextTranslateCTM (context, dest_x - src_x, dest_y - src_y + pixbuf_height);
@@ -509,9 +497,8 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  gdk_quartz_update_context_from_gc (context, gc);
-
-  CGContextSetBlendMode (context, kCGBlendModeNormal);
+  gdk_quartz_update_context_from_gc (context, gc,
+				     GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
   CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc + image->height);

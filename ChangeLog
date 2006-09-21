@@ -1,5 +1,44 @@
 2006-09-21  Michael Natterer  <mitch@imendio.com>
 
+       Implement lots of value setters for GdkGC, based on a heavily
+       modified patch from Thomas Broyer (bug #328853):
+
+	* gdk/quartz/gdkcolor-quartz.c: removed functions which set colors
+	on the CGContext. Instead, added gdk_quartz_get_rgba_from_pixel()
+	which simply returns RGBA values from a GdkColor's pixel value.
+	See gdk_quartz_update_context_from_gc() below.
+
+	* gdk/quartz/gdkprivate-quartz.h (struct GdkGCQuartz): added lots
+	of members for the newly suppored GC values. Added enum
+	GdkQuartzContextValuesMask which is used for setting up the
+	CGContext for filling and/or stroking.
+
+	* gdk/quartz/gdkgc-quartz.c (gdk_quartz_gc_get_values)
+	(gdk_quartz_gc_set_values)
+	(_gdk_windowing_gc_copy): support a lot more GC values.
+
+	(gdk_quartz_update_context_from_gc): added
+	GdkQuartzContextValuesMask parameter and set filling/stroking
+	parameters accordingly. This function also gained full control
+	over the FG and BG colors (they can't be set separately any more).
+
+	The stipple mask part of the patch doesn't work but seems to take
+	the right approach and doesn't make things worse, so i applied it.
+
+	Did *not* apply the clipping part of the patch since I don't
+	understand it (I don't understand the version in CVS either, but
+	it at least works :-)
+
+	* gdk/quartz/gdkdrawable-quartz.c: pass the right masks to
+	gdk_quartz_update_context_from_gc() and removed separate color
+	setting calls. Some minor fixes.
+
+	* gdk/quartz/gdkwindow-quartz.c
+	(gdk_window_impl_quartz_begin_paint_region): set the CGContext's
+	fill color manually. We don't have/need a GC here.
+
+2006-09-21  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c
 	(gdk_window_impl_quartz_begin_paint_region): fix cast: it's
 	drawable_impl->wrapper that is the GdkWindow, not the
