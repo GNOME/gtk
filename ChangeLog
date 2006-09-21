@@ -1,4 +1,12 @@
+2006-09-21  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c
+	(gdk_window_impl_quartz_begin_paint_region): fix cast: it's
+	drawable_impl->wrapper that is the GdkWindow, not the
+	drawable_impl itself.
+
 2006-09-20  Behnam Esfahbod <behnam@zwnj.org>
+
 	* gdk/x11/gdkkeys-x11.c:
 	  (get_direction): just check the first shift-level of keyboard
 	layout for RTL and LTR keysyms() (compliment to #116626)

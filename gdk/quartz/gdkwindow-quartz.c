@@ -189,7 +189,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
       
       x_offset = y_offset = 0;
       
-      window = GDK_WINDOW (GDK_DRAWABLE_IMPL_QUARTZ (impl));
+      window = GDK_WINDOW (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper);
       while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
           /* If this window should have the same background as the parent,
