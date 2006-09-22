@@ -1,3 +1,8 @@
+2006-09-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstyle.c (gtk_style_real_copy): also copy icon factories
+	and color hashes. Fixes bug #357132.
+
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Make remote bookmarks work better (#354887)
@@ -42,7 +47,7 @@
 	over the FG and BG colors (they can't be set separately any more).
 
 	The stipple mask part of the patch doesn't work but seems to take
-	the right approach and doesn't make things worse, so i applied it.
+	the right approach and doesn't make things worse, so I applied it.
 
 	Did *not* apply the clipping part of the patch since I don't
 	understand it (I don't understand the version in CVS either, but

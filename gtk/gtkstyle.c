@@ -1583,6 +1583,8 @@ static void
 gtk_style_real_copy (GtkStyle *style,
 		     GtkStyle *src)
 {
+  GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
+  GtkStylePrivate *src_priv = GTK_STYLE_GET_PRIVATE (src);
   gint i;
   
   for (i = 0; i < 5; i++)
@@ -1620,6 +1622,16 @@ gtk_style_real_copy (GtkStyle *style,
   style->rc_style = src->rc_style;
   if (src->rc_style)
     g_object_ref (src->rc_style);
+
+  g_slist_foreach (style->icon_factories, (GFunc) g_object_unref, NULL);
+  g_slist_free (style->icon_factories);
+  style->icon_factories = g_slist_copy (src->icon_factories);
+  g_slist_foreach (style->icon_factories, (GFunc) g_object_ref, NULL);
+
+  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
+  g_slist_free (priv->color_hashes);
+  priv->color_hashes = g_slist_copy (src_priv->color_hashes);
+  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_ref, NULL);
 
   /* don't copy, just clear cache */
   clear_property_cache (style);
