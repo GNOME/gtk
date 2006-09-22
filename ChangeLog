@@ -1,5 +1,9 @@
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2006-09-22  Matthias Clasen  <mclasen@redhat.com>
+
 	Make remote bookmarks work better (#354887)
 	String addition !
 
