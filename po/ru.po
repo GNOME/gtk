@@ -4222,3 +4222,6 @@ msgstr ""
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "Данное изображение формата PNM недопустимо"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s на %2$s"

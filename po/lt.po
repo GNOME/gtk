@@ -4200,3 +4200,6 @@ msgstr ""
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "PNM paveikslėlio formatas yra neteisingas"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s kompiuteryje %2$s"

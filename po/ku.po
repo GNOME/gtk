@@ -4422,3 +4422,6 @@ msgstr ""
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Endamê nexşeya Pix: \"%s\" Pêwiste ku bê kêmasî be  %s, rêzik %d"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s di %2$s de"

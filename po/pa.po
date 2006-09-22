@@ -4776,3 +4776,6 @@ msgstr ""
 
 #~ msgid "ROC 8k"
 #~ msgstr "ROC 8k"
+
+msgid "%1$s on %2$s"
+msgstr "%2$s ਉੱਤੇ %1$s"

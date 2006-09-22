@@ -4333,3 +4333,6 @@ msgstr ""
 "Nem található témaindexfájl a következőben: \"%s\".\n"
 "HA valóban ikongyorsítótárat kíván itt létrehozni, akkor használja a --"
 "ignore-theme-index kapcsolót.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s ezen: %2$s"

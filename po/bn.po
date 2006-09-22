@@ -4170,3 +4170,6 @@ msgstr ""
 # FIXME
 #~ msgid "PNM image format is invalid"
 #~ msgstr "PNM ছবির বিন্যাস বৈধ নয়"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s, %2$s'র উপর"

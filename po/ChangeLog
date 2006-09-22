@@ -1,3 +1,8 @@
+2006-09-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* *.po: Copy existing translations for a new string
+	from the panel.
+
 2006-09-22  Francisco Javier F. Serrador  <serrador@openshine.com>
 
 	* es.po: Updated Spanish translation.

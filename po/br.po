@@ -4456,3 +4456,6 @@ msgstr ""
 
 #~ msgid "Gravity"
 #~ msgstr "Dedennerezh"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s war %2$s"

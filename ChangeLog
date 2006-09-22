@@ -1,4 +1,25 @@
+2006-09-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Make remote bookmarks work better (#354887)
+	String addition !
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): 
+	(shortcuts_insert_path): 
+	* gtk/gtkfilechooserbutton.c (change_icon_theme): 
+	(model_add_bookmarks): 
+	(model_update_current_folder): 
+	(update_label_and_image): 
+	If the bookmark points to a remote file, don't call get_info(), 
+	since that may a) take a long time and b) pop up an auth dialog.
+	Instead, just use a folder icon and create a display name
+	from the uri.
+
+	* gtk/gtkfilechooserdefault.c (_gtk_file_chooser_label_for_uri): 
+	New function to create a suitable display name for a remote
+	uri. This should really be done in GtkFileSystem.
+
 2006-09-20  Behnam Esfahbod <behnam@zwnj.org>
+
 	* gdk/x11/gdkkeys-x11.c:
 	  (get_direction): just check the first shift-level of keyboard
 	layout for RTL and LTR keysyms() (compliment to #116626)

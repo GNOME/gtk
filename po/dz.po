@@ -4638,3 +4638,6 @@ msgstr ""
 #~ msgid "_Up"
 #~ msgstr "ཡར།(_U)"
 
+
+msgid "%1$s on %2$s"
+msgstr "%1$s, %2$s གུ"

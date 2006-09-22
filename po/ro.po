@@ -4325,3 +4325,6 @@ msgstr ""
 "Nu s-a găsit un fişier index în „%s”.\n"
 "Dacă chiar doriţi să creaţi aici un cache pentru iconiţe, utilizaţi --ignore-"
 "theme-index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s pe %2$s"

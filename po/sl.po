@@ -4184,3 +4184,6 @@ msgstr ""
 "Nobene indeksne datoteke s temo ni v '%s'.\n"
 "Če res želite tukaj ustvariti ikonski predpomnilnik, uporabite --ignore-theme-index.\n"
 
+
+msgid "%1$s on %2$s"
+msgstr "%1$s na %2$s"

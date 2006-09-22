@@ -4832,3 +4832,6 @@ msgstr ""
 
 #~ msgid "A <text> element has already been specified"
 #~ msgstr "<text> 엘리먼트가 이미 지정되었습니다"
+
+msgid "%1$s on %2$s"
+msgstr "%s %s"

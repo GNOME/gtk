@@ -4188,3 +4188,6 @@ msgstr ""
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "PNM attēla formāts ir nepareizs"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s uz %2$s"

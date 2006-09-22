@@ -5099,3 +5099,6 @@ msgstr ""
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Dit bestandsysteem ondersteunt geen pictogrammen"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s op %2$s"

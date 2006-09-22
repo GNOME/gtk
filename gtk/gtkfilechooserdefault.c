@@ -1177,7 +1177,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	      if (pixbuf)
 		g_object_unref (pixbuf);
 	    }
-	  else
+	  else if (gtk_file_system_path_is_local (impl->file_system, (GtkFilePath *)data))
 	    {
 	      const GtkFilePath *path;
 	      struct ReloadIconsData *info;
@@ -1197,6 +1197,26 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 						 shortcuts_reload_icons_get_info_cb,
 						 info);
 	      impl->reload_icon_handles = g_slist_append (impl->reload_icon_handles, handle);
+	    }
+	  else
+	    {
+	      GtkIconTheme *icon_theme;
+
+	      /* Don't call get_info for remote paths to avoid latency and
+	       * auth dialogs.
+	       * If we switch to a better bookmarks file format (XBEL), we
+	       * should use mime info to get a better icon.
+	       */
+	      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+	      pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+						 impl->icon_size, 0, NULL);
+
+	      gtk_list_store_set (impl->shortcuts_model, &iter,
+				  SHORTCUTS_COL_PIXBUF, pixbuf,
+				  -1);
+
+	      if (pixbuf)
+		g_object_unref (pixbuf);
 	    }
 	}
     }
@@ -1430,6 +1450,54 @@ out:
   g_object_unref (handle);
 }
 
+/* FIXME: GtkFileSystem needs a function to split a remote path
+ * into hostname and path components, or maybe just have a 
+ * gtk_file_system_path_get_display_name().
+ *
+ * This function is also used in gtkfilechooserbutton.c
+ */
+gchar *
+_gtk_file_chooser_label_for_uri (const gchar *uri)
+{
+  const gchar *path, *start, *end, *p;
+  gchar *host, *label;
+  
+  start = strstr (uri, "://");
+  start += 3;
+  path = strchr (start, '/');
+  
+  if (path)
+    end = path;
+  else
+    {
+      end = uri + strlen (uri);
+      path = "/";
+    }
+
+  /* strip username */
+  p = strchr (start, '@');
+  if (p && p < end)
+    {
+      start = p + 1;
+    }
+  
+  p = strchr (start, ':');
+  if (p && p < end)
+    end = p;
+  
+  host = g_strndup (start, end - start);
+
+  /* Translators: the first string is a path and the second string 
+   * is a hostname. Nautilus and the panel contain the same string 
+   * to translate. 
+   */
+  label = g_strdup_printf (_("%1$s on %2$s"), path, host);
+  
+  g_free (host);
+
+  return label;
+}
+
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
  * inserts a volume.  A position of -1 indicates the end of the tree.
  */
@@ -1447,6 +1515,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   GdkPixbuf *pixbuf = NULL;
   gpointer data = NULL;
   GtkTreeIter iter;
+  GtkIconTheme *icon_theme;      
 
   profile_start ("start", is_volume ? "volume" : (char *) path);
 
@@ -1457,7 +1526,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
 						   impl->icon_size, NULL);
     }
-  else
+  else if (gtk_file_system_path_is_local (impl->file_system, path))
     {
       struct ShortcutsInsertRequest *request;
       GtkFileSystemHandle *handle;
@@ -1496,9 +1565,32 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 
       return;
     }
+  else
+    {
+      /* Don't call get_info for remote paths to avoid latency and
+       * auth dialogs.
+       */
+      data = gtk_file_path_copy (path);
+      if (label)
+	label_copy = g_strdup (label);
+      else
+	{
+	  gchar *uri;
 
-  if (!data)
-    data = gtk_file_path_copy (path);
+	  uri = gtk_file_system_path_to_uri (impl->file_system, path);
+
+	  label_copy = _gtk_file_chooser_label_for_uri (uri);
+
+	  g_free (uri);
+	}
+    
+      /* If we switch to a better bookmarks file format (XBEL), we
+       * should use mime info to get a better icon.
+       */
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+      pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+					 impl->icon_size, 0, NULL);
+    }
 
   if (pos == -1)
     gtk_list_store_append (impl->shortcuts_model, &iter);
@@ -1711,6 +1803,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
   profile_start ("start", NULL);
 
+
   old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
 
@@ -1797,7 +1890,6 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 
   profile_start ("start", NULL);
         
-
   old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
 

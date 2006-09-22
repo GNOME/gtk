@@ -4391,3 +4391,6 @@ msgstr ""
 "File indice del tema non presente in «%s».\n"
 "Per creare una cache delle icone in questa posizione, utilizzare --ignore-"
 "theme-index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s su %2$s"

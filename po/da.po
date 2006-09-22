@@ -4579,3 +4579,6 @@ msgstr ""
 
 #~ msgid "Zoom to _Fit"
 #~ msgstr "Zoom _tilpasset"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s på %2$s"

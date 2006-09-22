@@ -4168,3 +4168,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+
+msgid "%1$s on %2$s"
+msgstr "%2$s hostil %1$s"

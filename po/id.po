@@ -4276,3 +4276,6 @@ msgstr ""
 
 #~ msgid "Home"
 #~ msgstr "Rumah"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s pada %2$s"

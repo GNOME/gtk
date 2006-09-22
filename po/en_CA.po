@@ -4451,3 +4451,6 @@ msgstr ""
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s on %2$s"

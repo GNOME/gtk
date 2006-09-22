@@ -5549,3 +5549,6 @@ msgstr ""
 
 #~ msgid "Text to render"
 #~ msgstr "Y testun i'w lunio"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s ar %2$s"

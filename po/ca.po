@@ -4468,3 +4468,6 @@ msgstr ""
 
 #~ msgid "_Up"
 #~ msgstr "A _dalt"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s a %2$s"

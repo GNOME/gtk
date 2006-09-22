@@ -4318,3 +4318,6 @@ msgstr ""
 "Không có tập tin chỉ mục sắc thái nằm trong « %s ».\n"
 "Nếu bạn thật muốn tạo một bộ nhớ biểu tượng ở đây, hãy dùng « --ignore-theme-"
 "index ».\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s trên %2$s"
