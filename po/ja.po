@@ -4850,3 +4850,6 @@ msgstr ""
 
 #~ msgid "This function is not implemented for widgets of class '%s'."
 #~ msgstr "この関数は '%s' クラスのウィジットでは実装されていません"
+
+msgid "%1$s on %2$s"
+msgstr "%2$s にある %1$s"

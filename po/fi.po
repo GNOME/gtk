@@ -4766,3 +4766,6 @@ msgstr ""
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Kuvan polku \"%s\" ei voi olla suhteellinen, %s, rivi %d"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s - %2$s"

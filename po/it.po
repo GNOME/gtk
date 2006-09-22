@@ -4521,3 +4521,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "shortcut %s already exists"
 #~ msgstr "La scorciatoia %s non esiste"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s su %2$s"

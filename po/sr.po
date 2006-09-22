@@ -4411,3 +4411,6 @@ msgstr ""
 
 #~ msgid "This file system does not support bookmarks"
 #~ msgstr "Овај систем датотека не подржава обележиваче"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s на %2$s"

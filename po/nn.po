@@ -4560,3 +4560,6 @@ msgstr ""
 
 #~ msgid "Unsupported TIFF variant"
 #~ msgstr "Ustøtta TIFF-variant"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s på %2$s"

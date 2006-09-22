@@ -4227,3 +4227,6 @@ msgstr ""
 "No hay archivo de índice del tema en «%s».\n"
 "Si realmente quiere crear un caché de iconos aquí, use --ignore-theme-"
 "index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s en %2$s"

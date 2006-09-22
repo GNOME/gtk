@@ -1290,23 +1290,34 @@ change_icon_theme (GtkFileChooserButton *button)
 	case ROW_TYPE_CURRENT_FOLDER:
 	  if (data)
 	    {
-	      GtkTreePath *path;
-	      GtkFileSystemHandle *handle;
-	      struct ChangeIconThemeData *info;
-
-	      info = g_new0 (struct ChangeIconThemeData, 1);
-	      info->button = g_object_ref (button);
-	      path = gtk_tree_model_get_path (priv->model, &iter);
-	      info->row_ref = gtk_tree_row_reference_new (priv->model, path);
-	      gtk_tree_path_free (path);
-
-	      handle =
-	        gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
-					  change_icon_theme_get_info_cb,
-					  info);
-	      button->priv->change_icon_theme_handles =
-		g_slist_append (button->priv->change_icon_theme_handles, handle);
-	      pixbuf = NULL;
+	      if (gtk_file_system_path_is_local (priv->fs, (GtkFilePath *)data))
+		{
+		  GtkTreePath *path;
+		  GtkFileSystemHandle *handle;
+		  struct ChangeIconThemeData *info;		  
+		  
+		  info = g_new0 (struct ChangeIconThemeData, 1);
+		  info->button = g_object_ref (button);
+		  path = gtk_tree_model_get_path (priv->model, &iter);
+		  info->row_ref = gtk_tree_row_reference_new (priv->model, path);
+		  gtk_tree_path_free (path);
+		  
+		  handle =
+		    gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
+					      change_icon_theme_get_info_cb,
+					      info);
+		  button->priv->change_icon_theme_handles =
+		    g_slist_append (button->priv->change_icon_theme_handles, handle);
+		  pixbuf = NULL;
+		}
+	      else
+		/* Don't call get_info for remote paths to avoid latency and
+		 * auth dialogs.
+		 * If we switch to a better bookmarks file format (XBEL), we
+		 * should use mime info to get a better icon.
+		 */
+		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-regular",
+						   priv->icon_size, 0, NULL);
 	    }
 	  else
 	    pixbuf = gtk_icon_theme_load_icon (theme, FALLBACK_ICON_NAME,
@@ -1465,7 +1476,6 @@ set_info_for_path_at_iter (GtkFileChooserButton *button,
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = g_object_ref (button);
-
   data->label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
@@ -1793,6 +1803,8 @@ model_add_volumes (GtkFileChooserButton *button,
     }
 }
 
+extern gchar * _gtk_file_chooser_label_for_uri (const gchar *uri);
+
 static void
 model_add_bookmarks (GtkFileChooserButton *button,
 		     GSList               *bookmarks)
@@ -1816,19 +1828,58 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
       path = l->data;
 
-      if (local_only &&
-	  !gtk_file_system_path_is_local (button->priv->fs, path))
-	continue;
+      if (gtk_file_system_path_is_local (button->priv->fs, path))
+	{
+	  gtk_list_store_insert (store, &iter, pos);
+	  gtk_list_store_set (store, &iter,
+			      ICON_COLUMN, NULL,
+			      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+			      TYPE_COLUMN, ROW_TYPE_BOOKMARK,
+			      DATA_COLUMN, gtk_file_path_copy (path),
+			      IS_FOLDER_COLUMN, FALSE,
+			      -1);
+	  set_info_for_path_at_iter (button, path, &iter);
+	}
+      else
+	{
+	  gchar *label;
+	  GtkIconTheme *icon_theme;
+	  GdkPixbuf *pixbuf;
 
-      gtk_list_store_insert (store, &iter, pos);
-      gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, NULL,
-			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
-			  TYPE_COLUMN, ROW_TYPE_BOOKMARK,
-			  DATA_COLUMN, gtk_file_path_copy (path),
-			  IS_FOLDER_COLUMN, FALSE,
-			  -1);
-      set_info_for_path_at_iter (button, path, &iter);
+	  if (local_only)
+	    continue;
+
+	  /* Don't call get_info for remote paths to avoid latency and
+	   * auth dialogs.
+	   * If we switch to a better bookmarks file format (XBEL), we
+	   * should use mime info to get a better icon.
+	   */
+	  label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+	  if (!label)
+	    {
+	      gchar *uri;
+
+	      uri = gtk_file_system_path_to_uri (button->priv->fs, path);
+	      label = _gtk_file_chooser_label_for_uri (uri);
+	      g_free (uri);
+	    }
+
+	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+					     button->priv->icon_size, 0, NULL);
+
+	  gtk_list_store_insert (store, &iter, pos);
+	  gtk_list_store_set (store, &iter,
+			      ICON_COLUMN, pixbuf,
+			      DISPLAY_NAME_COLUMN, label,
+			      TYPE_COLUMN, ROW_TYPE_BOOKMARK,
+			      DATA_COLUMN, gtk_file_path_copy (path),
+			      IS_FOLDER_COLUMN, TRUE,
+			      -1);
+
+	  g_free (label);
+	  g_object_unref (pixbuf);
+	}
 
       button->priv->n_bookmarks++;
       pos++;
@@ -1890,14 +1941,53 @@ model_update_current_folder (GtkFileChooserButton *button,
       model_free_row_data (button, &iter);
     }
 
-  gtk_list_store_set (store, &iter,
-		      ICON_COLUMN, NULL,
-		      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
-		      TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
-		      DATA_COLUMN, gtk_file_path_copy (path),
-		      IS_FOLDER_COLUMN, FALSE,
-		      -1);
-  set_info_for_path_at_iter (button, path, &iter);
+  if (gtk_file_system_path_is_local (button->priv->fs, path))
+    {
+      gtk_list_store_set (store, &iter,
+			  ICON_COLUMN, NULL,
+			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+			  TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
+			  DATA_COLUMN, gtk_file_path_copy (path),
+			  IS_FOLDER_COLUMN, FALSE,
+			  -1);
+      set_info_for_path_at_iter (button, path, &iter);
+    }
+  else
+    {
+      gchar *label;
+      GtkIconTheme *icon_theme;
+      GdkPixbuf *pixbuf;
+
+      /* Don't call get_info for remote paths to avoid latency and
+       * auth dialogs.
+       * If we switch to a better bookmarks file format (XBEL), we
+       * should use mime info to get a better icon.
+       */
+      label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+      if (!label)
+	{
+	  gchar *uri;
+	  
+	  uri = gtk_file_system_path_to_uri (button->priv->fs, path);
+	  label = _gtk_file_chooser_label_for_uri (uri);
+	  g_free (uri);
+	}
+      
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
+      pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+					 button->priv->icon_size, 0, NULL);
+      
+      gtk_list_store_set (store, &iter,
+			  ICON_COLUMN, pixbuf,
+			  DISPLAY_NAME_COLUMN, label,
+			  TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
+			  DATA_COLUMN, gtk_file_path_copy (path),
+			  IS_FOLDER_COLUMN, TRUE,
+			  -1);
+      
+      g_free (label);
+      g_object_unref (pixbuf);
+    }
 }
 
 static inline void
@@ -2009,6 +2099,7 @@ filter_model_visible_func (GtkTreeModel *model,
       break;
     case ROW_TYPE_VOLUME:
       {
+	retval = TRUE;
 	if (local_only)
 	  {
 	    if (gtk_file_system_volume_get_is_mounted (priv->fs, data))
@@ -2244,13 +2335,34 @@ update_label_and_image (GtkFileChooserButton *button)
 	}
 
       if (priv->update_button_handle)
-	gtk_file_system_cancel_operation (priv->update_button_handle);
+	{
+	  gtk_file_system_cancel_operation (priv->update_button_handle);
+	  priv->upate_button_handle = NULL;
+	}
+	  
+      if (gtk_file_system_path_is_local (priv->fs, path))
+	{
+	  priv->update_button_handle =
+	    gtk_file_system_get_info (priv->fs, path,
+				      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+				      update_label_get_info_cb,
+				      g_object_ref (button));
+	}
+      else
+	{
+	  GdkPixbuf *pixbuf;
 
-      priv->update_button_handle =
-        gtk_file_system_get_info (priv->fs, path,
-				  GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-				  update_label_get_info_cb,
-				  g_object_ref (button));
+	  label_text = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+	  
+	  pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)), 
+					     "gnome-fs-regular",
+					     priv->icon_size, 0, NULL);
+	  
+	  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
+
+	  if (pixbuf)
+	    g_object_unref (pixbuf);
+	}
     }
 out:
   gtk_file_paths_free (paths);

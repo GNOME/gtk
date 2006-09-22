@@ -4571,3 +4571,6 @@ msgstr ""
 #~ msgid "_Up"
 #~ msgstr "_Acima"
 
+
+msgid "%1$s on %2$s"
+msgstr "%1$s em %2$s"

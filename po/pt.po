@@ -4498,3 +4498,6 @@ msgstr ""
 
 #~ msgid "This file system does not support bookmarks"
 #~ msgstr "Este sistema de ficheiros não suporta marcadores"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s em %2$s"

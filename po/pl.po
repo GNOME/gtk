@@ -4335,3 +4335,6 @@ msgstr ""
 "Brak pliku indeksu motywu w \"%s\".\n"
 "Jeżeli naprawdę chcesz tutaj utworzyć bufor ikon, użyj --ignore-theme-"
 "index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s na %2$s"

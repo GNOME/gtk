@@ -4141,3 +4141,6 @@ msgid ""
 msgstr ""
 "“%s”中没有主题索引文件。\n"
 "如果您真的想要在此创建图标缓存，请使用 --ignore-theme-index。\n"
+
+msgid "%1$s on %2$s"
+msgstr "%2$s 上的 %1$s"

@@ -4990,3 +4990,6 @@ msgstr ""
 # gtk/gtkcolorsel.c:1718
 #~ msgid "Current folder: %s"
 #~ msgstr "Идэвхитэй хавтас: %s"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s, %2$s"

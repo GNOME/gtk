@@ -4322,3 +4322,6 @@ msgid ""
 msgstr ""
 "Ez dago gaiaren indize fitxategirik '%s'(e)n.\n"
 "Ikono-cache bat sortzea nahi baduzu erabili --ignore-theme-index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s, %2$s"

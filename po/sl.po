@@ -4560,3 +4560,6 @@ msgstr ""
 
 #~ msgid "Zoom to _Fit"
 #~ msgstr "Povečaj na _stran"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s na %2$s"

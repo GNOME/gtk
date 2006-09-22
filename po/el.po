@@ -4232,3 +4232,6 @@ msgstr ""
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "Μη έγκυρος τύπος εικόνας PNM"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s σε %2$s"

@@ -4881,3 +4881,6 @@ msgstr ""
 
 #~ msgid "shortcut %s already exists"
 #~ msgstr "o atallo %s xa existe"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s en %2$s"

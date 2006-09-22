@@ -4927,3 +4927,6 @@ msgstr ""
 
 #~ msgid "Zoom to _Fit"
 #~ msgstr "ขยายให้พอดี (_F)"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s ที่ %2$s"

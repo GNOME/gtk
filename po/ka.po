@@ -4431,3 +4431,6 @@ msgstr ""
 
 #~ msgid "Home"
 #~ msgstr "ჩემი სახლი"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s - %2$s"

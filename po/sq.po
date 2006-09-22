@@ -4431,3 +4431,6 @@ msgstr ""
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr ""
 #~ "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s mbi %2$s"

@@ -4458,3 +4458,6 @@ msgstr ""
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Element cesty k pixmap: \"%s\" musí byť absolútny, %s, riadok %d"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s na %2$s"

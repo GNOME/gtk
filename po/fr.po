@@ -4236,3 +4236,6 @@ msgstr ""
 "Aucun fichier d'index de thème dans « %s ».\n"
 "Si vous souhaitez vraiment créer un cache d'icône ici, utilisez --ignore-"
 "theme-index.\n"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s sur %2$s"

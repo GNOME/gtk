@@ -4727,3 +4727,6 @@ msgstr ""
 
 #~ msgid "Home"
 #~ msgstr "個人資料夾"
+
+msgid "%1$s on %2$s"
+msgstr "%1$s 於 %2$s"
