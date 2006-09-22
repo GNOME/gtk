@@ -1,3 +1,9 @@
+2006-09-22  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/tmpl/gtkprintcontext.sgml:
+	* gtk/tmpl/gtkpagesetup.sgml: Apply a patch
+	to fix some typos.  (#355961, Claudio Saavedra)
+
 2006-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.3 ===

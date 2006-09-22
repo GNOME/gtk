@@ -29,7 +29,7 @@ draw_page (GtkPrintOperation *operation,
   PangoLayout *layout;
   PangoFontDescription *desc;
   
-  cr = gtk_print_context_get_cairo (context);
+  cr = gtk_print_context_get_cairo_context (context);
 
   /* Draw a red rectangle, as wide as the paper (inside the margins) */
   cairo_set_source_rgb (cr, 1.0, 0, 0);
