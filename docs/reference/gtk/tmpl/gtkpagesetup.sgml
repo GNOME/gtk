@@ -8,7 +8,7 @@ Stores page setup information
 <para>
 A GtkPageSetup object stores the page size, orientation and margins. 
 The idea is that you can get one of these from the page setup dialog 
-and then pass it to the #GtkPrittntOperation when printing. 
+and then pass it to the #GtkPrintOperation when printing. 
 The benefit of splitting this out of the #GtkPrintSettings is that 
 these affect the actual layout of the page, and thus need to be set 
 long before user prints. 
