@@ -2337,7 +2337,7 @@ update_label_and_image (GtkFileChooserButton *button)
       if (priv->update_button_handle)
 	{
 	  gtk_file_system_cancel_operation (priv->update_button_handle);
-	  priv->upate_button_handle = NULL;
+	  priv->update_button_handle = NULL;
 	}
 	  
       if (gtk_file_system_path_is_local (priv->fs, path))
