@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -16,84 +16,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr ""
 
 # gdk-pixbuf/io-xpm.c:1267
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 #, fuzzy
 msgid "The number of samples per pixel"
 msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
 
 # gtk/gtkcolorsel.c:1858
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 #, fuzzy
 msgid "Colorspace"
 msgstr "रंगाचे नाव(_N):"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1711
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 #, fuzzy
 msgid "Has Alpha"
 msgstr "रंगफळी आहे"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr ""
 
 # gtk/gtktable.c:157
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 #, fuzzy
 msgid "The number of bits per sample"
 msgstr "टेबलमधील ओळींची संख्या"
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "रुंदी"
 
 # gtk/gtktable.c:166
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 #, fuzzy
 msgid "The number of columns of the pixbuf"
 msgstr "टेबलमधील स्तंभ संख्या"
 
 # gtk/gtklayout.c:642
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "ऊंची"
 
 # gtk/gtktable.c:157
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 #, fuzzy
 msgid "The number of rows of the pixbuf"
 msgstr "टेबलमधील ओळींची संख्या"
 
 # gtk/gtktable.c:156
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 #, fuzzy
 msgid "Rowstride"
 msgstr "ओळी"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr ""
 
@@ -108,12 +108,12 @@ msgid "The default display for GDK"
 msgstr ""
 
 # gtk/gtkinputdialog.c:246
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "पडदा"
 
 # gtk/gtktreeview.c:515
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "ट्रीमॉडेलचे (बहुस्तरीय) स्वरुप"
@@ -1003,71 +1003,71 @@ msgid "Whether stock icons should be shown in buttons"
 msgstr "टॅब दाखवायचे आहेत की नाहीत"
 
 # gtk/gtkinputdialog.c:667
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 #, fuzzy
 msgid "Year"
 msgstr "रिक्त"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 #, fuzzy
 msgid "The selected year"
 msgstr "सध्या निवडलेल्या फाइलचे नाव"
 
 # gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 # gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 #, fuzzy
 msgid "Month"
 msgstr "फोन्ट(अक्षर रचना)"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr ""
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 
 # gtk/gtktable.c:174
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 #, fuzzy
 msgid "Show Heading"
 msgstr "ओळीमधील रिकामी जागा"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr ""
 
 # gtk/gtknotebook.c:406
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 #, fuzzy
 msgid "Show Day Names"
 msgstr "टॅब दाखवा"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr ""
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr ""
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
@@ -1870,12 +1870,12 @@ msgid "The model for cell view"
 msgstr "ट्रीमॉडेलचे (बहुस्तरीय) स्वरुप"
 
 # gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:195
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "सूचनादर्शकाचा आकार"
 
 # gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:201
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "सूचनादर्शकांच्या मधील रिकामी जागा"
 
@@ -1940,7 +1940,7 @@ msgid "The title of the color selection dialog"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkcolorsel.c:1718
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "सध्याचा रंग"
 
@@ -1951,7 +1951,7 @@ msgid "The selected color"
 msgstr "सध्याचा रंग"
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "चालू अल्फा"
 
@@ -1962,42 +1962,42 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "चालू अपारदर्शकता मूल्य (० म्हणजे पूर्ण पारदर्शक, ६५५३५ म्हणजे पूर्ण अपारदर्शक )"
 
 # gtk/gtkcolorsel.c:1704
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "अपारदर्शकता नियंत्रक आहे"
 
 # gtk/gtkcolorsel.c:1705
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "रंगनिवडकाने अपारदर्शकाचे नियंत्रण करावे काय"
 
 # gtk/gtkcolorsel.c:1711
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "रंगफळी आहे"
 
 # gtk/gtkcolorsel.c:1712
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "रंगफळी वापरावी काय"
 
 # gtk/gtkcolorsel.c:1719
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "सध्याचा रंग"
 
 # gtk/gtkcolorsel.c:1726
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "चालू अपारदर्शकता मूल्य (० म्हणजे पूर्ण पारदर्शक, ६५५३५ म्हणजे पूर्ण अपारदर्शक )"
 
 # gtk/gtkcolorsel.c:1739
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "वापरात असणारी रंगफळी"
 
 # gtk/gtkcolorsel.c:1740
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "रंगनिवडकामध्ये वापरायची रंगफळी"
 
@@ -2673,13 +2673,13 @@ msgid "Application supplied widget for extra options."
 msgstr ""
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 #, fuzzy
 msgid "Select Multiple"
 msgstr "बहुसंख्य निवडा"
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "अनेक फाइली निवडण्याची अनुमती आहे काय."
@@ -2733,24 +2733,24 @@ msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "फाइलचे नाव"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "सध्या निवडलेल्या फाइलचे नाव"
 
 # gtk/gtkfilesel.c:543
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "फाइलींच्या क्रिया दाखवा"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "फाइली निर्माण/अदलाबदल करण्याची बटणे प्रदर्शित करावित का"
@@ -3620,7 +3620,7 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "हा मेनु काढुन टाकल्यानंतर विन्डो मॅनेजर असे शिर्षक देता येतेकृती बंद"
 
 # gtk/gtkoptionmenu.c:188
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "मेनू"
 
@@ -3999,17 +3999,17 @@ msgid "Anonymous User Data Pointer"
 msgstr ""
 
 # gtk/gtkoptionmenu.c:189
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "ऐच्छिक कृतींचा मेनू"
 
 # gtk/gtkoptionmenu.c:196
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "ड्रापडाऊन सूचकाचा  आकार"
 
 # gtk/gtkoptionmenu.c:202
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "सूचकाभोवतीची रिकामी जागा"
 
@@ -4372,12 +4372,12 @@ msgid "The GtkPrinter which is selected"
 msgstr "हा आत्ता निवडलेला GdkFont आहे"
 
 # gtk/gtkprogress.c:122
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "कार्यपद्धती"
 
 # gtk/gtkprogress.c:123
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 #, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
@@ -4390,22 +4390,22 @@ msgstr ""
 "जातो "
 
 # gtk/gtkprogress.c:130
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "मजकुर दाखवा"
 
 # gtk/gtkprogress.c:131
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "मजकुराच्या स्वरूपात प्रगती दाखवायची आहे का"
 
 # gtk/gtkprogress.c:138
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "x दिशेने मजकुर घेणे"
 
 # gtk/gtkprogress.c:139
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 #, fuzzy
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
@@ -4414,12 +4414,12 @@ msgstr ""
 "प्रोग्रेसविजेट मधीलमजकुराची समतल पातळी रचना दर्शविणारी ०.० आणि १.० यांच्यामधील संख्या"
 
 # gtk/gtkprogress.c:147
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "मजकुराची y रचना"
 
 # gtk/gtkprogress.c:148
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -7049,66 +7049,66 @@ msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
 # gtk/gtkwidget.c:1051
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "प्रकाशित अंतर्भाग"
 
 # gtk/gtkwidget.c:1052
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "विजेटचा आतील भाग प्रकाशमय करायचा आहे का"
 
 # gtk/gtkwidget.c:1058
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "ओळींची रुंदी प्रकाशित करा"
 
 # gtk/gtkwidget.c:1059
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "प्रकाशित सूचक ओळींची रुंदी"
 
 # gtk/gtkwidget.c:1065
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "प्रकाशित करणारी ओळ तुटक रेषेच्या कोणत्या स्वरुपात दाखवावी"
 
 # gtk/gtkwidget.c:1066
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 #, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "प्रकाशित ओळ बनविण्यासाठी वापरायची तुटक रेषा पध्दती "
 
 # gtk/gtkwidget.c:1071
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr ""
 
 # gtk/gtkwidget.c:1072
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "प्रकाशित सूचक ओळी आणि विजेट 'चौकट' यांच्या मधील चित्रकणांच्या स्वरुपातील रुंदी"
 
 # gtk/gtkwidget.c:1077
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "कर्सरचा रंग"
 
 # gtk/gtkwidget.c:1078
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "ज्या रंगाने कर्सर बनवायचा आहे तो रंग"
 
 # gtk/gtkwidget.c:1083
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "कर्सरचा दुय्यम रंग"
 
 # gtk/gtkwidget.c:1084
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 #, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
@@ -7118,101 +7118,101 @@ msgstr ""
 "डावीकडून-उजवीकडे असा मजकुर असताना"
 
 # gtk/gtkwidget.c:1089
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr ""
 
 # gtk/gtkwidget.c:1090
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 # gtk/gtknotebook.c:379
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 #, fuzzy
 msgid "Draw Border"
 msgstr "टॅबची सीमा"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
 # gtk/gtkstock.c:323
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "रंग(_C)"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkstock.c:323
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "रंग(_C)"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 #, fuzzy
 msgid "Color of visited links"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkdialog.c:128
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 #, fuzzy
 msgid "Wide Separators"
 msgstr "भेदक आहे"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
 # gtk/gtktreeview.c:609
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 #, fuzzy
 msgid "Separator Width"
 msgstr "उभ्या विभाजकाची रुंदी"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
 # gtk/gtkwindow.c:476
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 #, fuzzy
 msgid "Separator Height"
 msgstr "सर्वसाधारण ऊंची"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
 # gtk/gtkscrolledwindow.c:250
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "क्षितिजपातळीवरील स्क्रोलबारची रीत"
 
 # gtk/gtkscrolledwindow.c:251
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "क्षितिजपातळीवरील स्क्रोलबार केव्हा प्रदर्शित करायचा आहे"
 
 # gtk/gtkscrolledwindow.c:258
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "उभ्या दिशेकडील स्क्रोलबारची रीत"
 
 # gtk/gtkscrolledwindow.c:259
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "उभ्या दिशेकडील स्क्रोलबार केव्हा प्रदर्शित करायचा आहे"

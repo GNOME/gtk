@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -18,68 +18,68 @@ msgstr ""
 "X-Poedit-Country: BHUTAN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "རྒྱུ་ལམ་གྱི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "པིག་སེལ་རེའི་ དཔེ་ཚད་ཀྱི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "ཚོས་གཞིའི་བར་སྟོང་།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "དཔེ་ཚད་ཚུ་ ཁ་བསྒྱུར་སའི་ ཚོས་གཞིའི་བར་སྟོང།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "ཨཱལ་ཕ་ འདུག"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "པར་ཁོངས་དེ་ལུ་ ཨཱལ་ཕའི་རྒྱུ་ལམ་ཅིག་ཡོད་ག"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "དཔེ་ཚད་རེའི་ བིཊིསི།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "དཔེ་ཚད་རེའི་ བིཊིསི་གི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "རྒྱ་ཚད།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "པར་ཁོངས་ཀྱི་ ཀེར་ཐིག་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "མཐོ་ཚད།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "པར་ཁོངས་ཀྱི་ གྲལ་ཐིག་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "གྲལ་ཐིག་ སིཊའིཌི། "
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "གྲལ་ཐིག་་ཅིག་འགོ་བཙུགས་ས་ལས་ ཤུལ་མའི་གྲལ་ཐིག་ འགོ་བཙུགས་ཀྱི་བར་ནའི་ བ་ཡིཊིསི་གི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "པིག་སེལསི། "
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "པར་ཁོངས་ཀྱི་ པིག་སེལ་གནད་སྡུད་ལུ་ དཔག་བྱེད་ཅིག"
 
@@ -91,11 +91,11 @@ msgstr "སྔོན་སྒྲིག་བཀྲམ་སྟོན་"
 msgid "The default display for GDK"
 msgstr "ཇི་ཌི་ཀེ་གི་དོན་ལུ་ སྔོན་སྒྲིག་བཀྲམ་སྟོན།"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "གསལ་གཞི།"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 msgid "the GdkScreen for the renderer"
 msgstr "ལྷག་སྟོན་པའི་དོན་ལུ་ ཇི་ཌི་ཀེ་གསལ་གཞི།"
 
@@ -841,27 +841,27 @@ msgstr "ཨེབ་རྟའི་གཟུགས་བརྙན་ཚུ་ས
 msgid "Whether stock icons should be shown in buttons"
 msgstr "ཅ་མཛོད་ཀྱི་ངོས་དཔར་ཚུ་ ཨེབ་རྟའི་ཐོག་ལུ་ སྟོན་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "ལོ། "
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "སེལ་འཐུ་འབད་མི་ལོ་དེ།"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "ཟླཝ།"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "སེལ་འཐུ་འབད་མི་ཟླཝ། (༠ དང་ ༡༡ གི་བར་ནའི་ ཨང་གྲངས་བཟུམ་ཅིག་སྦེ)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "གཟའ།"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -869,35 +869,35 @@ msgstr ""
 "སེལ་འཐུ་འབད་མི་གཟའ། (༡ དང་ ༣༡ བར་ན་ ཨང་གྲངས་བཟུམ་ཅིག་སྦེ་ ཡང་ཅིན་ ད་ལྟོ་སེལ་འཐུ་འབད་མི་གཟའ་"
 "དེ་ སེལ་འཐུ་བཤོལ།)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "མགུ་རྒྱན་སྟོན།"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "ངེས་བདེན་ཨིན་པ་ཅིན་ མགུ་རྒྱན་ཅིག་ བཀྲམ་སྟོན་འབདཝ་ཨིན།"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "གཟའི་མིང་སྟོན།"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "ངེས་བདེན་ཨིན་པ་ཅིན་ གཟའི་མིང་ཚུ་ བཀྲམ་སྟོན་འབདཝ་ཨིན།"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "ཟླཝ་སོར་ནི་མེད།"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "ངེས་བདེན་ཨིན་པ་ཅིན་ སེལ་འཐུ་འབད་མི་ཟླཝ་དེ་ སོར་མི་ཚུགས།"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "བདུན་ཕྲག་གི་ཨང་གྲངས་ཚུ་སྟོན།"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "ངེས་བདེན་ཨིན་པ་ཅིན་ བདུན་ཕྲག་གི་ཨང་གྲངས་ཚུ་ བཀྲམ་སྟོན་འབདཝ་ཨིན།"
 
@@ -1524,11 +1524,11 @@ msgstr "ནང་ཐིག་མཐོང་སྣང་གི་དཔེ།"
 msgid "The model for cell view"
 msgstr "ནང་ཐིག་མཐོང་སྣང་གི་དོན་ལུ་དཔེ།"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "བརྡ་སྟོན་པའི་ཚད།"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "བརྡ་སྟོན་པའི་བར་སྟོང་བཞག་ཐངས།"
 
@@ -1578,7 +1578,7 @@ msgstr "མགོ་མིང༌།"
 msgid "The title of the color selection dialog"
 msgstr "ཚོས་གཞི་སེལ་འཐུའི་ ཌའི་ལོག་གི་མགོ་མིང༌།"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "ད་ལྟོའི་ཚོས་གཞི།"
 
@@ -1586,7 +1586,7 @@ msgstr "ད་ལྟོའི་ཚོས་གཞི།"
 msgid "The selected color"
 msgstr "སེལ་འཐུ་འབད་མི་ཚོས་གཞི།"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "ད་ལྟོའི་ཨཱལ་ཕ།"
 
@@ -1594,35 +1594,35 @@ msgstr "ད་ལྟོའི་ཨཱལ་ཕ།"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "སེལ་འཐུ་འབད་་མི་ དྭངས་སྒྲིབ་ཀྱི་བེ་ལུ་དེ་ (༠ ཆ་ཚང་དྭངས་གསལ་དང་ ༦༥༣༥ ཆ་ཚང་དྭངས་སྒྲིབ་ཅན)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "དྭངས་སྒྲིབ་ཀྱི་ཚད་འཛིན་འདུག"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "ཚོས་གཞི་སེལ་བྱེད་ཀྱིས་ དྭངས་སྒྲིབ་གཞི་སྒྲིག་འབད་བཅུག་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "པེ་ལེཊི་འདུག"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "པེ་ལེཊི་ཅིག་ ལག་ལེན་འཐབ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "ད་ལྟོའི་ཚོས་གཞི་དེ།"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "ད་ལྟོའི་དྭངས་སྒྲིབ་བེ་ལུ་དེ་ (༠ ཆ་ཚང་དྭངས་གསལ་དང་ ༦༥༥༣༥ ཆ་ཚང་དྭངས་སྒྲིབ་ཅན།)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "་སྲོལ་སྒྲིག་པེ་ལེཊི།"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "ཚོས་གཞི་སེལ་བྱེད་ནང་ ལག་ལེན་འཐབ་ནིའི་ པེ་ལེཊི།"
 
@@ -2165,11 +2165,11 @@ msgstr "ཝིཌི་གེཊི་ཐེབས།"
 msgid "Application supplied widget for extra options."
 msgstr "གདམ་ཁ་ཐེབས་ཀྱི་དོན་ལུ་ གློག་རིམ་གྱིས་ བཀྲམ་སྤེལ་འབད་ཡོད་པའི་ ཝིཌི་གེཊི།"
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "སྣ་མང་སེལ་འཐུ་འབད།"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "སྣ་མང་ཡིག་སྣོད་ཚུ་ སེལ་འཐུ་འབད་བཅུག་ནི་ཨིན་ན་མེན།"
 
@@ -2217,20 +2217,20 @@ msgstr "ཡིག་སྣོད་འདེམས་བྱེད་ཀྱི་
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "སྔོན་སྒྲིག་གྱིས་ ལག་ལེན་འཐབ་ནིའི་ ཇི་ཊི་ཀེ་ཡིག་སྣོད་འདེམས་བྱེད་ཀྱི་ རྒྱབ་མཐའི་མིང༌།"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "ཡིག་སྣོད་མིང༌།"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "ད་ལྟོ་སེལ་འཐུ་འབད་མི་ ཡིག་སྣོད་མིང༌།"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "ཡིག་སྣོད་བཀོལ་སྤྱོད་ཚུ་སྟོན།"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "ཡིག་སྣོད་གསར་བསྐྲུན་འབད་ནིའམ་སྤྱོད་ནིའི་ ཨེབ་རྟ་ཚུ་ བཀྲམ་སྟོན་འབད་དགོཔ་ཨིན་ན་མེན།"
 
@@ -2913,7 +2913,7 @@ msgstr "ཆེད་དམིགས་འབད།"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "དཀར་ཆག་གིས་ ལྡེ་སྒྲོམ་གྱི་ཆེད་དམིགས་འཛིན་ནི་ཨིན་ན་མེན་ ཐག་གཅད་མི་བུ་ལིན་ཅིག"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "དཀར་ཆག"
 
@@ -3214,15 +3214,15 @@ msgstr "ལག་ལེན་པའི་གནད་སྡུད།"
 msgid "Anonymous User Data Pointer"
 msgstr "མིང་མེད་པའི་ ལག་ལེན་པའི་གནད་སྡུད་དཔག་བྱེད་"
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "གདམ་ཁ་ཚུ་གི་ དཀར་ཆག་དེ།"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "གདམ་ཐོའི་བརྡ་སྟོན་པའི་ཚད།"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "བརྡ་སྟོན་པའི་མཐའ་སྐོར་ལུ་ བར་སྟོང་བཞག་ཐངས།"
 
@@ -3527,11 +3527,11 @@ msgstr "སེལ་འཐུ་འབད་མི་དཔར་འཕྲུལ
 msgid "The GtkPrinter which is selected"
 msgstr "སེལ་འཐུ་འབད་ཡོད་མི་ ཇི་ཊི་ཀེ་དཔར་འཕྲུལ་དེ།"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "བྱ་བའི་ཐབས་ལམ།"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3541,19 +3541,19 @@ msgstr ""
 "ལས་ བརྡ་སྟོནམ་ཨིན་རུང་ བྱ་བ་དེ་ ག་དེམ་ཅིག་ ཚར་སོངམ་ཨིན་ན་མི་སྟོན། འདི་ཁྱོད་ཀྱིས་ དུས་ཡུན་ག་དེམ་ཅིག་"
 "འགོར་ནི་ཨིན་ན་མ་ཤེས་པའི་ ལཱ་ཅིག་འབད་བའི་སྐབས་ ལག་ལེན་འཐབ་ཨིན།"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "ཚིག་ཡིག་སྟོན།"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "ཡར་འཕེལ་དེ་ ཚིག་ཡིག་བཟུམ་ཅིག་སྦེ་ སྟོནམ་ཨིན་ན་མེན།"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "ཚིག་ཡིག་གི་ ཨེགསི་ཕྲང་སྒྲིག"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3561,11 +3561,11 @@ msgstr ""
 "ཡར་འཕེལ་ཝིཌི་གེཊི་ནང་གི་ ཐད་སྙོམས་ཕྲང་སྒྲིག་གི་ཚིག་ཡིག་ གསལ་བཀོད་འབད་མི་ཨང་ ༠.༠ དང་ ༡.༠ གི་བར་"
 "ན་འབད་མི་ཅིག"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "ཚིག་ཡིག་གི་ ཝའི་ཕྲང་སྒྲིག"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5722,51 +5722,51 @@ msgstr "ཆ་མཉམ་མ་སྟོན།"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() གིས་ ཝིཌི་གེཊི་འདི་ལུ་ ཕན་གནོད་མེདཔ་སྦེ་ དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "ནང་ཁོངས་ཆེད་དམིགས།"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ཝིཌི་གེཊི་ཚུ་གི་ནང་ན་ ཆེད་དམིགས་བརྡ་སྟོན་པ་ འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "ཆེད་དམིགས་ཀྱི་ གྱལ་རིམ་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པའི་ གྱལ་རིམ་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "ཐིག་གི་སྦྲེལ་རྟགས་དཔེ་གཞི་ལུ་ ཆེད་དམིགས་འབད།"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པ་ འབྲི་ནི་ལུ་ ལག་ལེན་འཐབ་མི་ སྦྲེལ་རྟགས་ཀྱི་དཔེ་གཞི།"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "ཆེད་དམིགས་བར་ཤབས།"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པ་དང་ ཝིཌི་གེཊི་སྒྲོམ་གྱི་བར་ནའི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "འོད་རྟགས་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "བར་བཙུགས་འོད་རྟགས་ འབྲི་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "གལ་གནད་ཆུང་བའི་ འོད་རྟགས་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5774,43 +5774,43 @@ msgstr ""
 "ཚིག་ཡིག་གཡས་ལས་གཡོན་དང་ གཡོན་ལསགཡས་ལུ་ བླ་བསྲེས་སྦེ་ ཞུན་དག་བརྐྱབ་དགོཔའི་སྐབས་ གལ་གནད་ཆུང་བའི་ "
 "བར་བཙུགས་འོད་རྟགས་ འབྲི་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "འོད་རྟགས་གྱལ་རིམ་རྣམ་པ་གི་དཔྱ་ཚད།"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "བར་བཙུགས་འོད་རྟགས་འབྲི་ནིའི་ དཔྱ་ཚད་ཀྱི་རྣམ་པ།"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 msgid "Draw Border"
 msgstr "མཐའ་མཚམས་བྲིས།"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "ཝི་གེཊི་གི་སྐལ་སྤྲོད་ས་སྒོའི་ཕྱི་ཁར་ འབྲི་དགོ་པའི་མངའ་ཁོངས་ཀྱི་ཚད།"
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 msgid "Unvisited Link Color"
 msgstr "ལྟ་སྤྱོད་མ་འབད་བའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 msgid "Color of unvisited links"
 msgstr "ལྟ་སྤྱོད་མ་འབད་བའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 msgid "Visited Link Color"
 msgstr "ལྟ་སྤྱོད་འབད་ཡོད་པའི་འབྲེལ་ལམ་ཚོས་གཞི། "
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 msgid "Color of visited links"
 msgstr "ལྟ་སྤྱོད་འབད་ཡོད་པའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 msgid "Wide Separators"
 msgstr "རྒྱ་ཅན་དབྱེ་བྱེད།"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -5818,35 +5818,35 @@ msgstr ""
 "དབྱེ་བྱེད་ཚུ་ལུ་ རིམ་སྒྲིག་འབད་བཏུབ་པའི་རྒྱ་ཚད་ཡོད་དགོཔ་ཨིན་ན་མེན་དང་ ཐིག་གི་ཚབ་ལུ་སྒྲོམ་ཅིག་ལག་ལེན་"
 "འཐབ་ཐོག་ལས་འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 msgid "Separator Width"
 msgstr "དབྱེ་བྱེད་ཀྱི་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "རྒྱ་ཅན་དབྱེ་བྱེད་ཚུ་བདེན་པ་ཨིན་པ་ཅིན་ དབྱེ་བྱེད་ཚུ་གི་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 msgid "Separator Height"
 msgstr "དབྱེ་བྱེད་ཀྱི་མཐོ་ཚད།"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "་གལ་སྲིད\"wide-separators\"དེ་ བདེན་པ་ཨིན་པ་ཅིན་ དབྱེ་བྱེད་ཚུ་གི་མཐོ་ཚད། "
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ཐད་སྙོམས་ཀྱི་བཤུད་སྒྲིལ་མདའ་རྟགས་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 msgid "The length of horizontal scroll arrows"
 msgstr "ཐད་སྙོམས་ཀྱི་བཤུད་སྒྲིལ་མདའ་རྟགས་ཚུ་གི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 msgid "Vertical Scroll Arrow Length"
 msgstr "ཀེར་ཕྲང་གི་བཤུད་སྒྲིལ་མཐའ་རྟགས་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 msgid "The length of vertical scroll arrows"
 msgstr "ཀེར་ཕྲང་གི་བཤུད་སྒྲིལ་མཐའ་རྟགས་ཚུ་གི་རིང་ཚད།"
 

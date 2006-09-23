@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2005-07-28 11:09+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -17,70 +17,70 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "Numri i kanaleve"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "Numri i shembujve për pixel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "Ngjyra e hapësirës"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "Ngjyra e hapësirës ku do të interpretohen shembujt"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "Përdor alfa"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "Kur pixbuf ka një kanal alfa"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "Bits për shembull"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "Numri i bits për shembull"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Gjerësia"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "Numri i kollonave në pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "Lartësia"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "Numri i rreshtave të pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "Rowstride"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 "Numri i bytes midis fillimit të një rreshti dhe fillimit të rreshtit në "
 "vazhdim"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "Pixels"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Një kursor tek e dhëna pixel e pixbuf"
 
@@ -92,11 +92,11 @@ msgstr "Ekrani i prezgjedhur"
 msgid "The default display for GDK"
 msgstr "Ekrani i prezgjedhur për GDK"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "Ekrani"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen për vizatuesin"
 
@@ -864,27 +864,27 @@ msgstr "Shfaq figurat e butonit"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "Viti"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "Viti i zgjedhur"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "Muaji"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Muaji i zgjedhur (si numër nga 0 deri 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "Dita"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -892,35 +892,35 @@ msgstr ""
 "Dita e zgjedhur (si numër nga 1 në 31, ose 0 për të hequr ditën e zgjedhur "
 "për çastin)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "Shfaq Titullin"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "Nëse TRUE, shfaqet një titull"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "Shfaq Emrat e Ditëve"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "Nëse TRUE, do të shfaqen emrat e ditëve"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "Pa Ndryshim Muaji"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Nëse TRUE, muaji i zgjedhur nuk mund të ndryshohet"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "Shfaq Numrat e Javëve"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "Nëse TRUE, do të shfaqen numrat e javëve"
 
@@ -1561,11 +1561,11 @@ msgstr "Modeli i paraqitjes së degëzuar"
 msgid "The model for cell view"
 msgstr "Modeli për paraqitjen me ikona"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "Madhësia e treguesit"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "Hapësira e treguesit"
 
@@ -1615,7 +1615,7 @@ msgstr "Titulli"
 msgid "The title of the color selection dialog"
 msgstr "Titulli i dritares së dialogut për zgjedhjen e ngjyrave"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "Ngjyra aktuale"
 
@@ -1623,7 +1623,7 @@ msgstr "Ngjyra aktuale"
 msgid "The selected color"
 msgstr "Ngjyra e zgjedhur"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "Alfa e Aktuale"
 
@@ -1633,38 +1633,38 @@ msgstr ""
 "Vlera aktuale për patejdukshmërinë (0 plotësisht i tejdukshëm, 65535 krejt "
 "opak)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "Kontrollon Patejdukshmërinë"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 "Nëse zgjedhësi i ngjyrave duhet të lejojë apo jo rregullimin e "
 "patejdukshmërisë"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "Ka paletë"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "Nëse duhet përdorur një paletë"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "Ngjyra aktuale"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Vlera aktuale për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krejt opak)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "Paleta e personalizuar"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "Paleta që duhet përdorur tek zgjedhësi i ngjyrave"
 
@@ -2228,11 +2228,11 @@ msgstr "Widget shtesë"
 msgid "Application supplied widget for extra options."
 msgstr "Programi afron një widget për opcione shtesë."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "Zgjedhje shumëfishe"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "Nëse lejohet zgjedhja e files shumfishë"
 
@@ -2282,20 +2282,20 @@ msgstr "Zgjedhësi backend i prezgjedhur i file"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "Emri i file"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "Emri i file të zgjedhur aktualisht"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "Trego veprimet e file"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Nëse duhen shfaqur butonat për krijim/trajtim files"
 
@@ -2995,7 +2995,7 @@ msgstr "Merr fokus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Një boolean që tregon se kur menuja merr fokusin e tastierës"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menu"
 
@@ -3317,15 +3317,15 @@ msgstr "Përdor alfa"
 msgid "Anonymous User Data Pointer"
 msgstr ""
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "Menuja e mundësive"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "Madhësia e treguesit të menusë në kaskatë"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "Hapësira rreth treguesit"
 
@@ -3653,11 +3653,11 @@ msgstr "Viti i zgjedhur"
 msgid "The GtkPrinter which is selected"
 msgstr "Elementi aktualisht aktiv"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "Modaliteti veprimtari"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 #, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
@@ -3668,19 +3668,19 @@ msgstr ""
 "që diçka po ndodh, por jo sa prej veprimtarisë ka përfunduar. Përdoret kur "
 "jeni duke bërë diçka që nuk dini sa do zgjasë"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "Shfaq tekstin"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "Nëse përparimi duhet treguar si tekst"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "Drejtimi x i tekstit"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3688,11 +3688,11 @@ msgstr ""
 "Një numër nga 0.0 në 1.0 që përcakton drejtimin horizontal të tekstit në "
 "\"widget\"-in në rrugë e sipër"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "Drejtimi y i tekstit"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5944,52 +5944,52 @@ msgstr "Mos shfaq gjithçka"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Kur gtk_widget_show_all() nuk duhet të ndikojë mbi këtë widget"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "Fokus i brendshëm"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Tregon nëse duhet vizatuar treguesi i fokus në brendësi të widget"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "Gjërësia e vijës të treguesit të fokus"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Gjerësia, në pixel, e vijës për treguesin e fokus"
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "Lloji i vijës së ndërprerë për treguesin e fokus"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 "Lloji i vijës së ndërprerë të përdorur për të vizatuar treguesin e fokus"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "Hapësira për treguesin e fokus"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Gjerësia, në pixel, midis treguesit të fokus dhe widget 'box'"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "Ngjyra e kursorit"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "Ngjyra me të cilën duhet vizatuar kursori i shtimit"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "Ngjyra e kursorit dytësor"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5998,87 +5998,87 @@ msgstr ""
 "editing të përzier nga e djathta në të majtë e nga e majta në të djathtë "
 "teksti"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "Proporcionet e kursorit të rreshtit"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proporcionet me të cilat duhet vizatuar kursori"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 msgid "Draw Border"
 msgstr "Krijo kornizë"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Madhësia e zonave jashtë pozicionit të instrumentit për t'u vizatuar"
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Ngjyra e lidhjes"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Ngjyra për hiper-lidhjet"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Ngjyra e lidhjes"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Ngjyra për hiper-lidhjet"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Përdor ndarës"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 #, fuzzy
 msgid "Separator Width"
 msgstr "Gjerësia e Ndarësit Vertikal"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 #, fuzzy
 msgid "Separator Height"
 msgstr "Lartësia e prezgjedhur"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Sjellja e panelit horizontal të rrëshqitjes"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Kur shfaqet përshkuesi horizontal"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Sjellja e panelit vertikal të rrëshqitjes"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Kur shfaqet përshkuesi vertikal"

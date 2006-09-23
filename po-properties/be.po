@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -15,76 +15,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 #, fuzzy
 msgid "The number of samples per pixel"
 msgstr "XPM мае нерэчаісную колькасьц сымбаляў на кропку"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 #, fuzzy
 msgid "Colorspace"
 msgstr "Назва _колеру:"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 #, fuzzy
 msgid "Has Alpha"
 msgstr "Выкарыстоўваць разьметку"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 #, fuzzy
 msgid "The number of bits per sample"
 msgstr "Колькасьць радкоў у табліцы"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Шырыня"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 #, fuzzy
 msgid "The number of columns of the pixbuf"
 msgstr "Колькасьць слупкоў у табліцы."
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "Вышыня"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 #, fuzzy
 msgid "The number of rows of the pixbuf"
 msgstr "Колькасьць радкоў у табліцы"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 #, fuzzy
 msgid "Rowstride"
 msgstr "Радкі"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 #, fuzzy
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "Прамежак паміж палоскай пракруткі й акном для пракруткі."
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr ""
 
@@ -96,11 +96,11 @@ msgstr "Дапомны дысплей"
 msgid "The default display for GDK"
 msgstr "Дапомны дысплей для GDK"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "Экран"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "Разнавід для адлюстраваньня дрэва"
@@ -888,66 +888,66 @@ msgstr ""
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 #, fuzzy
 msgid "Year"
 msgstr "ачысьціць"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 #, fuzzy
 msgid "The selected year"
 msgstr "Назоў файла, адзначанага зараз."
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 #, fuzzy
 msgid "Month"
 msgstr "Шрыфт"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr ""
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 #, fuzzy
 msgid "Show Heading"
 msgstr "Водступ між радкоў"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 #, fuzzy
 msgid "Show Day Names"
 msgstr "Паказаць лычкі"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr ""
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr ""
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
@@ -1593,11 +1593,11 @@ msgstr "Разнавід для TreeView "
 msgid "The model for cell view"
 msgstr "Разнавід для адлюстраваньня дрэва"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "Памер індыкатара"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "Прастора індыкатару"
 
@@ -1650,7 +1650,7 @@ msgstr "Подпіс"
 msgid "The title of the color selection dialog"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "Бягучы колер"
 
@@ -1659,7 +1659,7 @@ msgstr "Бягучы колер"
 msgid "The selected color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "Бягучы альфа-каналь"
 
@@ -1670,37 +1670,37 @@ msgstr ""
 "Бягучае значэньне непразрыстасьці (0 - поўнасьцю празрыста, 65536 - "
 "поўнасьцю непразрыста)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "Мае кіраваньне непразрыстаьцю"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Ці павіна пры выбары колеру выкарыс�оўвывацца непразрыстасьць"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "Мае палітру"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "Ці павінна выкарыстоўвывацца палітра"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Бягучае значэньне непразрыстасьці (0 - поўнасьцю празрыста, 65536 - "
 "поўнасьцю непразрыста)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "Пажаданая палітра"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "Палітра, для выкарыстаньня пры абіраньні колеру"
 
@@ -2284,12 +2284,12 @@ msgstr "Віджэт-малюнак"
 msgid "Application supplied widget for extra options."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 #, fuzzy
 msgid "Select Multiple"
 msgstr "Адзначыць некалькі"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "Ці могуць быць адзначаны некалькі файлаў запар."
 
@@ -2339,20 +2339,20 @@ msgstr ""
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Назва звычайнага шрыфту"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "Назоў файла"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "Назоў файла, адзначанага зараз."
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "Паказаць дзеяньні з файлам"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Ці павінны быць адлюстраваны кнопкі для стварэньня/зьмяненьня файла."
 
@@ -3090,7 +3090,7 @@ msgstr ""
 "Загаловак, які можа адлюстроўвацца аконным кіраўніком, пасля таго, як мэню "
 "будзе выключана."
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Мэню"
 
@@ -3415,15 +3415,15 @@ msgstr "Выкарыстоўваць разьметку"
 msgid "Anonymous User Data Pointer"
 msgstr ""
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "Мэню выбараў"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "Памер выпадаючага паказальніку"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "Прастора вакол паказальніку"
 
@@ -3755,11 +3755,11 @@ msgstr "Назоў файла, адзначанага зараз."
 msgid "The GtkPrinter which is selected"
 msgstr "GdkFont, што вылучаны ў бягучы момант."
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "Рэжым дзейнасьці"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 #, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
@@ -3770,19 +3770,19 @@ msgstr ""
 "што ён паведамляе, што нешта адбываецца, яле дзейнасьць шчэ незавершана. "
 "Гэта выкарыстоўвываецца калі вы робіце нешта, што невядома каліскончыцца."
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "Адлюстраваць тэкст"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "Ці будзе посьпех адлюстроўвацца як тэкст"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "Выроўніваньне тэксту па X"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3790,11 +3790,11 @@ msgstr ""
 "Лік паміж 0.0 і 1.0, што задае гарызантальнае выроўніваньне тэксту ў віджэце "
 "посьпеху."
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "Выроўніваньне тэксту па Y"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -6059,52 +6059,52 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "Унутранае засяроджаньне"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Ці будзе адлюстроўвацца паказальнік засяроджаньня ўнутры віджэтаў."
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "Шырыня лініі засяроджаньня"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Шырыня, у піксэлях, лініі засяроджаньня."
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "Узор лініі засяроджаньня"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Узор штрыхоў для адлюстраваньня засяроджаньня."
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "Спад засяроджаньня"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Шырыня, у піксалях, паміж паказальнікам засяроджаньня й віджэтам \"box\"."
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "Колер курсора"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "Колер, выкарыстоўвываемы для адлюстраваньня курсору"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "Колер другога курсору"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6112,88 +6112,88 @@ msgstr ""
 "Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца зьмешаны"
 "(зьлева направа й справа налева) ўвод тэксту."
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "Прапорцыі курсору"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Прапорцыі курсору"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 #, fuzzy
 msgid "Draw Border"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Мае падзяляльнік"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 #, fuzzy
 msgid "Separator Width"
 msgstr "Шырыня вэртыкальнага падзяляльніку"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 #, fuzzy
 msgid "Separator Height"
 msgstr "Дапомная вышыня"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Гарызантальная пракрутка"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Калі будзе адлюстроўвацца гарызантальная паласа пракруткі"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Вэртыкальная пракрутка"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Калі будзе адлюстроўвацца вэртыкальная паласа пракруткі"

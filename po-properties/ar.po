@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -19,68 +19,68 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "عدد القنوات"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "عدد النماذج لكل بكسل"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "مساحة اللون"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "مساحة اللون التي فيها تترجم النماذج"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "له شفافية"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "فيما إذا كان للبكسبف شفافية (قنات ألفا)"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "بيتات لكل نموذج"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "عدد البيتات لكل نموذج"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "العرض"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "عدد أعمدة البكسبف"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "الارتفاع"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "عدد السطور في البكسبف"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "Rowstride"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "عدد البيتات بين بداية عمود و بداية العمود التالي"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "بكسلات"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "مؤشر للبيانات البكسلية للبكسبف"
 
@@ -92,11 +92,11 @@ msgstr "الشاشة الافتراضية"
 msgid "The default display for GDK"
 msgstr "شاشة GDK الافتراضية"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "شاشة"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "نمط عرض الشجرة"
@@ -846,62 +846,62 @@ msgstr "إظهار صور الأزرار"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "فيما إذا سيتم عرض أيقونات المخزون في الأزرار"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "السنة"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "أالسنة المنتقات"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "الشهر"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "الشهر المنتقى (كعدد بين 0 و 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "اليوم"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr "اليوم المنتقى (كعدد بين 1 و 31، أو 0 لإلغاء انتقاء العدد الحالي)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "اظهار الترويسة"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "اذا كان TRUE، ستعرض ترويسة"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "اظهار اسماء الأيام"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "اذا كان TRUE، ستعرض اسماء الأيام"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "لا تغيير للشهر"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 #, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "اذا كان TRUE، فلن يمكن تغيير الشهر المنتقى"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "اظهار أرقام الأسابيع"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "اذا كان TRUE، ستعرض أرقام الأسابيع"
 
@@ -1544,11 +1544,11 @@ msgstr "نمط العرض الشجري"
 msgid "The model for cell view"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "حجم المؤشر"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "فراغات المؤشر"
 
@@ -1598,7 +1598,7 @@ msgstr "العنوان"
 msgid "The title of the color selection dialog"
 msgstr "عنوان حوار انتقاء الألوان"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "اللون الحالي"
 
@@ -1606,7 +1606,7 @@ msgstr "اللون الحالي"
 msgid "The selected color"
 msgstr "اللون المنتقى"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "الشفافية الحالية (قيمة ألفا الحالية)"
 
@@ -1614,35 +1614,35 @@ msgstr "الشفافية الحالية (قيمة ألفا الحالية)"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "قيمة التعتيم الحالية (0 شفاف تماماً, 65535 معتم تماماً)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "له متحكم تعتيم"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "فيما اذا كان منتقي الألوان سيسمح بضبط التعتيم"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "له لوحة ألوان"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "فيما اذا وجب استخدام لوحة ألوان"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "اللون الحالي"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "قيمة التعتيم الحالية (0 شفاف تماماً, 65535 معتم تماماً)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "لوحة الألوان الخاصة"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "لوحة الألوان التي ستستخدم في منتقي الألوان"
 
@@ -2197,11 +2197,11 @@ msgstr "قطعة اضافية"
 msgid "Application supplied widget for extra options."
 msgstr "قطعة ممدّدة بتطبيق للخيارات الإضافيّة."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "إنتقاء متعدّد"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "ما إذا سيتم السماح بانتقاء ملفات متعددة"
 
@@ -2248,20 +2248,20 @@ msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "اسم الملف"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "اسم الملف المنتقى حاليا"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "إظهار عمليات الملفات"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "فيم اذا وجب عرض أزرار لإنشاء أو معالجة الملفات"
 
@@ -2965,7 +2965,7 @@ msgstr "له بؤرة"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "عنوان قد يعرض من قبل مدير النوافذ عند قطف هذه القائمة"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "القائمة"
 
@@ -3281,15 +3281,15 @@ msgstr "استخدام الشفافية (قنات ألفا)"
 msgid "Anonymous User Data Pointer"
 msgstr ""
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "قائمة الخيارات"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "حجم مؤشر الإسقاط السفلي"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "الفراغات حول المؤشر"
 
@@ -3615,11 +3615,11 @@ msgstr "أالسنة المنتقات"
 msgid "The GtkPrinter which is selected"
 msgstr "العنصر النشط حاليا"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "نمط النشاط"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 #, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
@@ -3630,29 +3630,29 @@ msgstr ""
 "شيء ما لكنه لن يشير إلى كمية النشاط المكتملة. يستعمل هذا عندما تكون تفعلُ "
 "شيئا لا تعلم كم سيستغرق"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "اظهار نص"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "فيما إذا كان التقدم سيعرض كنص"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "ترصيف س للنص"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
 msgstr "عدد بين 0.0 و 1.0 لتحديد الترصيف الأفقي للنص عند قطعة التقدم"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "ترصيف ص للنص"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5841,51 +5841,51 @@ msgstr "لا عرض للكل"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "فيما إذا لن يؤثّر gtk_widget_show_all() هذه القطعة"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "بؤرة داخلية"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ما إذا يرسم مؤشر التركيز داخل القطع"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "عرض خط البؤرة"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "العرض بالبكسلات لسطر مؤشر التركيز"
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "خط البؤرة بالنقش المتقطع"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "نمط الخط الفاصل المستعمل لرسم مؤشر التكيز"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "حشو البؤرة"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "العرض بالبكسلات بين مؤشر التركيز و قطعة 'صندوق'"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "لون المؤشر"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "اللون الذي يتم به رسم مؤشر ا?دخال"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "مؤشر ا?دخال الثانوي"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5893,88 +5893,88 @@ msgstr ""
 "اللون الذي سيرسم يه مؤشر الإدخال الثانوي عند تحرير نص مختلط من اليمين إلى "
 "اليسار و من اليسار إلى اليمين"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "نسبة الطول للعرض لمؤشر السطر"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "نسبة الطول للعرض التي سيرسم بها مؤشر إدخال."
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 #, fuzzy
 msgid "Draw Border"
 msgstr "حد اللسان"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "اللون الحالي"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "عنوان حوار انتقاء الخطوط"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "اللون الحالي"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 #, fuzzy
 msgid "Color of visited links"
 msgstr "عنوان حوار انتقاء الخطوط"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 #, fuzzy
 msgid "Wide Separators"
 msgstr "استخدم فاصل"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 #, fuzzy
 msgid "Separator Width"
 msgstr "العرض العمودي للفاصل"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 #, fuzzy
 msgid "Separator Height"
 msgstr "الإرتفاع الإفتراضي"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "سياسة عمود اللف الأفقي"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "آن عرض عمود اللف الأفقي"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "سياسة عمود التدرج العمودي"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "آن عرض شريط التدرج العمودي"

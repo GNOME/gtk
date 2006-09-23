@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2006-07-08 04:31+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -14,68 +14,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "채널 개수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "픽셀당 샘플 개수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "색 공간"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "샘플을 해석할 때 쓸 색 공간"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "투명 사용"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "픽스 버퍼에 투명 채널이 있는 지 여부"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "샘플 당 비트수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "샘플 당 비트의 개수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "너비"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "픽스 버퍼의 열 개수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "높이"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "픽스 버퍼의 행 개수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "행 크기"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "행이 시작하는 위치에서부터 다음 행이 시작하는 곳까지의 바이트 수"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "픽셀"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "픽스 버퍼에서 픽셀 데이타를 가리키는 포인터"
 
@@ -87,11 +87,11 @@ msgstr "기본 디스플레이"
 msgid "The default display for GDK"
 msgstr "GDK 기본 디스플레이"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "화면"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 msgid "the GdkScreen for the renderer"
 msgstr "렌더러의 GdkScreen"
 
@@ -830,61 +830,61 @@ msgstr "단추 그림 표시"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "단추 안에 스톡 아이콘을 표시할 지 여부"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "연"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "선택한 연도"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "월"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "선택한 월 (0부터 11까지)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "일"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr "선택한 일 (1부터 31까지, 0이면 현재 선택한 일을 선택 해제합니다)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "제목 표시"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "참이면, 제목을 표시합니다"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "날짜 이름 표시"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "참이면, 각 날짜 이름을 표시합니다"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "달 안 바꿈"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "참이면, 선택한 달을 바꿀 수 없습니다"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "몇 번째 주인지 표시"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "참이면, 몇 번째 주인지를 표시합니다"
 
@@ -1510,11 +1510,11 @@ msgstr "셀 보기 모델"
 msgid "The model for cell view"
 msgstr "셀 보기를 위한 모델"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "표시기 크기"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "표시기 간격"
 
@@ -1564,7 +1564,7 @@ msgstr "제목"
 msgid "The title of the color selection dialog"
 msgstr "색 선택 대화 상자의 제목"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "현재 색"
 
@@ -1572,7 +1572,7 @@ msgstr "현재 색"
 msgid "The selected color"
 msgstr "선택한 색"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "현재 투명값"
 
@@ -1580,35 +1580,35 @@ msgstr "현재 투명값"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "선택한 투명도 값 (0은 완전히 투명, 65535는 완전히 불투명)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "투명도 조정 사용"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "색 선택기에서 투명도를 조정할 수 있는 지 여부"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "색상표 사용"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "색상표를 사용하는 지 여부"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "현재 색"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "현재 투명도 값 (0은 완전히 투명, 65535는 완전히 불투명)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "사용자 색상표"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "색 선택기에서 사용할 색상표"
 
@@ -2148,11 +2148,11 @@ msgstr "추가 위젯"
 msgid "Application supplied widget for extra options."
 msgstr "추가적인 기능을 위해 프로그램에서 만든 위젯."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "여러 개 선택"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "여러 개 파일을 선택할 수 있도록 허용할 지 여부"
 
@@ -2198,20 +2198,20 @@ msgstr "기본 파일 선택창 백엔드"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "기본적으로 사용할 GtkFileChooser 백엔드의 이름"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "파일 이름"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "현재 선택된 파일이름"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "파일 작업 표시"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "파일 생성/조작 단추를 표시할 것인지 여부"
 
@@ -2888,7 +2888,7 @@ msgstr "포커스 받음"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "메뉴가 키보드 포커스를 잡는 지 여부를 결정하는 불리언 값"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "메뉴"
 
@@ -3185,15 +3185,15 @@ msgstr "사용자 데이터"
 msgid "Anonymous User Data Pointer"
 msgstr "임의의 사용자 데이터 포인터"
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "옵션 메뉴"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "드롭다운 표시기의 크기"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "표시기 주위의 간격"
 
@@ -3495,11 +3495,11 @@ msgstr "선택한 프린터"
 msgid "The GtkPrinter which is selected"
 msgstr "선택한 GtkPrinter"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "활동 모드"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3509,29 +3509,29 @@ msgstr ""
 "는 사실을 시그널로 받지만, 얼마나 많이 진행되었는지는 시그널로 받지 못합니"
 "다. 시간이 얼마나 걸릴 지 모르는 일을 할 때 쓰입니다."
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "텍스트 보기"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "진행상태를 텍스트로 볼 지 여부"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "텍스트 가로 맞춤"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
 msgstr "progress 위젯의 텍스트의 가로 맞춤을 지정하는 0.0과 1.0 사이의 수"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "텍스트 세로 맞춤"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5654,51 +5654,51 @@ msgstr "show all 안 하기"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all()이 이 위젯에 영향을 미치지 않는 지 여부"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "내부 포커스"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "위젯 내에 포커스 표시기를 그릴 지 여부"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "포커스 라인 두께"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "포커스 표시기 라인의 너비 (픽셀 단위)."
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "포커스 라인의 점선 패턴"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "포커스 표시기를 그릴 때 쓸 점선 패턴"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "포커스 여백"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "포커스 표시기와 위젯 '상자' 사이의 거리 (픽셀 단위)"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "커서 색"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "삽입 커서를 그릴때 사용할 색"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "보조 커서 색"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5706,77 +5706,77 @@ msgstr ""
 "오른쪽에서 왼쪽으로 쓰는 텍스트와 왼쪽에서 오른쪽으로 쓰는 텍스트가 섞인 텍스"
 "트를 편집하는 경우 보조 삽입 커서를 그릴 때 쓰는 색"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "커서 선 가로 세로 비율"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "삽입 커서를 그릴때 사용할 가로 세로 비율"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 msgid "Draw Border"
 msgstr "테두리 그리기"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "위젯에 할당된 부분 밖의 영역의 크기"
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 msgid "Unvisited Link Color"
 msgstr "방문하지 않은 바로 가기 색"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 msgid "Color of unvisited links"
 msgstr "방문하지 않은 바로 가기의 색"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 msgid "Visited Link Color"
 msgstr "방문한 바로 가기 색"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 msgid "Color of visited links"
 msgstr "방문한 바로 가기의 색"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 msgid "Wide Separators"
 msgstr "넓은 구분선"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr "구분선의 너비를 설정 가능하게 하고, 선 대신에 상자로 그릴 지 여부"
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 msgid "Separator Width"
 msgstr "구분선 너비"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators가 참일 때 구분선의 너비"
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 msgid "Separator Height"
 msgstr "구분선 높이"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "wide-separators가 참일 때 구분선의 높이"
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 msgid "Horizontal Scroll Arrow Length"
 msgstr "가로 스크롤 화살표 길이"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 msgid "The length of horizontal scroll arrows"
 msgstr "가로 스크롤 화살표의 길이"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 msgid "Vertical Scroll Arrow Length"
 msgstr "세로 스크롤 화살표 길이"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 msgid "The length of vertical scroll arrows"
 msgstr "세로 스크롤 화살표의 길이"
 

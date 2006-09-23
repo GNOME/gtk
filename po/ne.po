@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:50-0400\n"
+"POT-Creation-Date: 2006-09-22 22:53-0400\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -582,47 +582,42 @@ msgstr "PNM फाइलमा अधिकतम रङ मान अति ठ
 msgid "Raw PNM image type is invalid"
 msgstr "कच्चा PNM छवि प्रकार अवैध छ"
 
-#: gdk-pixbuf/io-pnm.c:570 gdk-pixbuf/io-pnm.c:612
-#, c-format
-msgid "PNM image format is invalid"
-msgstr "PNM छवि ढाँचा अवैध छ"
-
-#: gdk-pixbuf/io-pnm.c:671
+#: gdk-pixbuf/io-pnm.c:656
 #, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM छवि लोडरले यो PNM उपढाँचा समर्थन गर्दैन"
 
-#: gdk-pixbuf/io-pnm.c:726
+#: gdk-pixbuf/io-pnm.c:711
 #, c-format
 msgid "Premature end-of-file encountered"
 msgstr "अपरिपक्व फाइल-को-अन्त्य सँग  सामना भयो"
 
-#: gdk-pixbuf/io-pnm.c:758 gdk-pixbuf/io-pnm.c:989
+#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "कच्चा PNM ढाँचाहरुलाई नमूना डेटा भन्दा अघि ठीक एउटा सेतो खाली स्थान आवश्यक पर्दछ"
 
-#: gdk-pixbuf/io-pnm.c:785
+#: gdk-pixbuf/io-pnm.c:770
 #, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM छवि लोड गर्नका लागि स्मृति निर्धारण गर्न सक्दैन"
 
-#: gdk-pixbuf/io-pnm.c:835
+#: gdk-pixbuf/io-pnm.c:820
 #, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM प्रसंग  स्ट्रक्ट लोड गर्न अपर्याप्त स्मृति"
 
-#: gdk-pixbuf/io-pnm.c:886
+#: gdk-pixbuf/io-pnm.c:871
 #, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "PNM छवि डेटाको अप्रत्याशित अन्त्य"
 
-#: gdk-pixbuf/io-pnm.c:1018
+#: gdk-pixbuf/io-pnm.c:1003
 #, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM फाइल लोड गर्न अपर्याप्त स्मृति"
 
-#: gdk-pixbuf/io-pnm.c:1098
+#: gdk-pixbuf/io-pnm.c:1083
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM छवि ढाँचा परिवार"
 
@@ -1221,7 +1216,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:696
+#: gtk/gtkcalendar.c:695
 msgid "calendar:MY"
 msgstr "पात्रो:MY"
 
@@ -1229,7 +1224,7 @@ msgstr "पात्रो:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr "पात्रो:हप्ता सुरू:०"
 
@@ -1241,7 +1236,7 @@ msgstr "पात्रो:हप्ता सुरू:०"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1606
+#: gtk/gtkcalendar.c:1605
 msgid "year measurement template|2000"
 msgstr "२०००"
 
@@ -1256,7 +1251,7 @@ msgstr "२०००"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1637 gtk/gtkcalendar.c:2215
+#: gtk/gtkcalendar.c:1636 gtk/gtkcalendar.c:2214
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1272,7 +1267,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2089
+#: gtk/gtkcalendar.c:1670 gtk/gtkcalendar.c:2088
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "पात्रो:हप्ता सुरू:०"
@@ -1288,7 +1283,7 @@ msgstr "पात्रो:हप्ता सुरू:०"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1880
+#: gtk/gtkcalendar.c:1879
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1353,7 +1348,7 @@ msgstr ""
 "रङ खण्डलाई यहाँ तान्नुहोस् वा यसलाई दायाँ-क्लिक गर्नुहोस् र \"यहाँ रङ बचत गर्नुहोस्\" चयन "
 "गर्नुहोस् ।"
 
-#: gtk/gtkcolorsel.c:1926
+#: gtk/gtkcolorsel.c:1937
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1361,7 +1356,7 @@ msgstr ""
 "तपाईँले बाहिरी घेराबाट चाहेको रङ चयन गर्नुहोस् । भित्री त्रिकोण प्रयोग गर्ने रङको "
 "अँध्यारोपन वा चम्किलोपन चयन गर्नुहोस् ।"
 
-#: gtk/gtkcolorsel.c:1951
+#: gtk/gtkcolorsel.c:1962
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1369,69 +1364,69 @@ msgstr ""
 "आइड्रपरमा क्लिक गर्नुहोस्, त्यसपछि त्यो रङ चयन गर्न तपाईँको पर्दामा कुनै पनि ठाउँमा एउटा "
 "रङमा क्लिक गर्नुहोस् ।"
 
-#: gtk/gtkcolorsel.c:1960
+#: gtk/gtkcolorsel.c:1971
 msgid "_Hue:"
 msgstr "ह्यु:"
 
-#: gtk/gtkcolorsel.c:1961
+#: gtk/gtkcolorsel.c:1972
 msgid "Position on the color wheel."
 msgstr "रङ चक्रमा स्थिति"
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1974
 msgid "_Saturation:"
 msgstr "स्याचुरेसन:"
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1975
 msgid "\"Deepness\" of the color."
 msgstr "\"गहिराइ\" रङको"
 
-#: gtk/gtkcolorsel.c:1965
+#: gtk/gtkcolorsel.c:1976
 msgid "_Value:"
 msgstr "मान:"
 
-#: gtk/gtkcolorsel.c:1966
+#: gtk/gtkcolorsel.c:1977
 msgid "Brightness of the color."
 msgstr "रङको चम्किलोपन ।"
 
-#: gtk/gtkcolorsel.c:1967
+#: gtk/gtkcolorsel.c:1978
 msgid "_Red:"
 msgstr "रातो:"
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1979
 msgid "Amount of red light in the color."
 msgstr "रङमा रातो प्रकाशको मात्रा"
 
-#: gtk/gtkcolorsel.c:1969
+#: gtk/gtkcolorsel.c:1980
 msgid "_Green:"
 msgstr "हरियो:"
 
-#: gtk/gtkcolorsel.c:1970
+#: gtk/gtkcolorsel.c:1981
 msgid "Amount of green light in the color."
 msgstr "रङमा हरियो प्रकाशको मात्रा"
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1982
 msgid "_Blue:"
 msgstr "नीलो:"
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1983
 msgid "Amount of blue light in the color."
 msgstr "रङमा नीलो प्रकाशको मात्रा"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1986
 #, fuzzy
 msgid "Op_acity:"
 msgstr "अस्पष्टता:"
 
-#: gtk/gtkcolorsel.c:1983 gtk/gtkcolorsel.c:1994
+#: gtk/gtkcolorsel.c:1994 gtk/gtkcolorsel.c:2005
 msgid "Transparency of the color."
 msgstr "रङको पारदर्शिता"
 
-#: gtk/gtkcolorsel.c:2001
+#: gtk/gtkcolorsel.c:2012
 #, fuzzy
 msgid "Color _name:"
 msgstr "रङ नाम:"
 
-#: gtk/gtkcolorsel.c:2016
+#: gtk/gtkcolorsel.c:2027
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1439,12 +1434,12 @@ msgstr ""
 "तपाईँले एउटा HTML-शैली हेक्जाडेसिमल रङ मान प्रविष्ट गर्न सक्नहुन्छ, वा कुनै एउटा रङ नाम "
 "जस्तो कि यो प्रविष्टिमा 'सुन्तला रङ'"
 
-#: gtk/gtkcolorsel.c:2046
+#: gtk/gtkcolorsel.c:2057
 #, fuzzy
 msgid "_Palette:"
 msgstr "रङदानी"
 
-#: gtk/gtkcolorsel.c:2075
+#: gtk/gtkcolorsel.c:2086
 msgid "Color Wheel"
 msgstr "रङ चक्र"
 
@@ -1452,11 +1447,11 @@ msgstr "रङ चक्र"
 msgid "Color Selection"
 msgstr "रङ चयन"
 
-#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7238
+#: gtk/gtkentry.c:4918 gtk/gtktextview.c:7238
 msgid "Input _Methods"
 msgstr "आगत विधिहरू"
 
-#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7252
+#: gtk/gtkentry.c:4932 gtk/gtktextview.c:7252
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
@@ -1470,7 +1465,7 @@ msgstr "अवैध फाइलनाम: %s"
 msgid "Select A File"
 msgstr "एउटा फाइल चयन गर्नुहोस्"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1690
 msgid "Desktop"
 msgstr "डेस्कटप"
 
@@ -1478,7 +1473,7 @@ msgstr "डेस्कटप"
 msgid "(None)"
 msgstr "(कुनै पनि होइन)"
 
-#: gtk/gtkfilechooserbutton.c:1878
+#: gtk/gtkfilechooserbutton.c:2017
 msgid "Other..."
 msgstr "अन्य..."
 
@@ -1514,260 +1509,269 @@ msgstr "अवैध फाइल नाम"
 msgid "The folder contents could not be displayed"
 msgstr "फोल्डरको सामग्रीहरू प्रदर्शन गर्न सकिएन"
 
-#: gtk/gtkfilechooserdefault.c:2501
+#. Translators: the first string is a path and the second string
+#. * is a hostname. Nautilus and the panel contain the same string
+#. * to translate.
+#.
+#: gtk/gtkfilechooserdefault.c:1494
+#, c-format
+msgid "%1$s on %2$s"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2593
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "पुस्तकचिनोहरुमा फोल्डर '%s' थप गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:2542
+#: gtk/gtkfilechooserdefault.c:2634
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "पुस्तकचिनोहरुमा हालको फोल्डर थप गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:2544
+#: gtk/gtkfilechooserdefault.c:2636
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "पुस्तकचिनोहरुमा चयन गरिएको फोल्डरहरू थप गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:2584
+#: gtk/gtkfilechooserdefault.c:2676
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "पुस्तकचिनो '%s' हटाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3015
+#: gtk/gtkfilechooserdefault.c:3107
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "'%s' का लागि पुस्तकचिनो थप गर्न सकेन किनभने यो एउटा अवैध मार्ग नाम हो ।"
 
-#: gtk/gtkfilechooserdefault.c:3246
+#: gtk/gtkfilechooserdefault.c:3338
 msgid "Remove"
 msgstr "हटाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3255
+#: gtk/gtkfilechooserdefault.c:3347
 msgid "Rename..."
 msgstr "पुन: नामकरण गर्नुहोस्..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3397
+#: gtk/gtkfilechooserdefault.c:3489
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3451
+#: gtk/gtkfilechooserdefault.c:3543
 #, fuzzy
 msgid "_Places"
 msgstr "बदल्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3507 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3599 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "थप्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3514
+#: gtk/gtkfilechooserdefault.c:3606
 msgid "Add the selected folder to the Bookmarks"
 msgstr "पुस्तकचिनोहरुमा चयन गरिएको फोल्डर थप्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3519 gtk/gtkstock.c:404
+#: gtk/gtkfilechooserdefault.c:3611 gtk/gtkstock.c:404
 msgid "_Remove"
 msgstr "हटाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3526
+#: gtk/gtkfilechooserdefault.c:3618
 msgid "Remove the selected bookmark"
 msgstr "चयन गरिएको पुस्तकचिनो हटाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3622
+#: gtk/gtkfilechooserdefault.c:3714
 msgid "Could not select file"
 msgstr "फाइल चयन गर्न सकेन"
 
-#: gtk/gtkfilechooserdefault.c:3759
+#: gtk/gtkfilechooserdefault.c:3851
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "फाइल '%s' चयन गर्न सकेन किनभने यो एउटा अवैध मार्ग नाम हो ।"
 
-#: gtk/gtkfilechooserdefault.c:3816
+#: gtk/gtkfilechooserdefault.c:3908
 msgid "_Add to Bookmarks"
 msgstr "पुस्तकचिनोहरुलाई थप्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3830
+#: gtk/gtkfilechooserdefault.c:3922
 msgid "Show _Hidden Files"
 msgstr "लुकाइएको फाइलहरू देखाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3967 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4059 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "फाइलहरू"
 
-#: gtk/gtkfilechooserdefault.c:4012
+#: gtk/gtkfilechooserdefault.c:4104
 msgid "Name"
 msgstr "नाम"
 
-#: gtk/gtkfilechooserdefault.c:4037
+#: gtk/gtkfilechooserdefault.c:4129
 msgid "Size"
 msgstr "साइज"
 
-#: gtk/gtkfilechooserdefault.c:4050
+#: gtk/gtkfilechooserdefault.c:4142
 msgid "Modified"
 msgstr "परिमार्जित"
 
-#: gtk/gtkfilechooserdefault.c:4082
+#: gtk/gtkfilechooserdefault.c:4174
 msgid "Select which types of files are shown"
 msgstr "कुन प्रकारहरुको फाइलहरू देखाइएको छ चयन गर्नुहोस्"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4230 gtk/gtkprinteroptionwidget.c:780
+#: gtk/gtkfilechooserdefault.c:4322 gtk/gtkprinteroptionwidget.c:780
 msgid "_Name:"
 msgstr "नाम:"
 
-#: gtk/gtkfilechooserdefault.c:4272
+#: gtk/gtkfilechooserdefault.c:4364
 msgid "_Browse for other folders"
 msgstr "अन्य फोल्डरहरुका लागि ब्राउज गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:4507
+#: gtk/gtkfilechooserdefault.c:4599
 #, fuzzy
 msgid "Type a file name"
 msgstr "अवैध फाइल नाम"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4544
+#: gtk/gtkfilechooserdefault.c:4636
 msgid "Create Fo_lder"
 msgstr "फोल्डर सिर्जना गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:4554
+#: gtk/gtkfilechooserdefault.c:4646
 msgid "_Location:"
 msgstr "स्थान:"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#: gtk/gtkfilechooserdefault.c:4886
 msgid "Save in _folder:"
 msgstr "फोल्डरमा बचत गर्नुहोस्:"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4888
 msgid "Create in _folder:"
 msgstr "फोल्डरमा सिर्जना गर्नुहोस्:"
 
-#: gtk/gtkfilechooserdefault.c:6291
+#: gtk/gtkfilechooserdefault.c:6384
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "फोल्डरमा परिवर्तन गर्न सक्दैन किनभने यो स्थानीय होइन ।"
 
-#: gtk/gtkfilechooserdefault.c:6864 gtk/gtkfilechooserdefault.c:6885
+#: gtk/gtkfilechooserdefault.c:6957 gtk/gtkfilechooserdefault.c:6978
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "सर्टकट %s अवस्थित छैन"
 
-#: gtk/gtkfilechooserdefault.c:6975
+#: gtk/gtkfilechooserdefault.c:7068
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "सर्टकट %s अवस्थित छैन"
 
-#: gtk/gtkfilechooserdefault.c:7230
+#: gtk/gtkfilechooserdefault.c:7323
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "फाइल नाम \"%s\" पहिल्यै अवस्थित छ । के तपाईँ यसलाई बदल्नु चाहानुहुन्छ ?"
 
-#: gtk/gtkfilechooserdefault.c:7233
+#: gtk/gtkfilechooserdefault.c:7326
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "फाइल नाम \"%s\" पहिल्यै अवस्थित छ । यसलाई बदल्नाले यसको सामग्रीहरुमा अधिलेखन हुन्छ ।"
 
-#: gtk/gtkfilechooserdefault.c:7238
+#: gtk/gtkfilechooserdefault.c:7331
 msgid "_Replace"
 msgstr "बदल्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:7934
+#: gtk/gtkfilechooserdefault.c:8027
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s माउण्ट गर्न सकेन"
 
-#: gtk/gtkfilechooserdefault.c:8328
+#: gtk/gtkfilechooserdefault.c:8421
 msgid "Type name of new folder"
 msgstr "नयाँ फोल्डरको नाम टाइप गर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:8373
+#: gtk/gtkfilechooserdefault.c:8466
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d बाईट"
 msgstr[1] "%d बाईट्स"
 
-#: gtk/gtkfilechooserdefault.c:8375
+#: gtk/gtkfilechooserdefault.c:8468
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:8377
+#: gtk/gtkfilechooserdefault.c:8470
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:8379
+#: gtk/gtkfilechooserdefault.c:8472
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:8427 gtk/gtkfilechooserdefault.c:8451
+#: gtk/gtkfilechooserdefault.c:8520 gtk/gtkfilechooserdefault.c:8544
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/gtkfilechooserdefault.c:8438
+#: gtk/gtkfilechooserdefault.c:8531
 msgid "Today"
 msgstr "आज"
 
-#: gtk/gtkfilechooserdefault.c:8440
+#: gtk/gtkfilechooserdefault.c:8533
 msgid "Yesterday"
 msgstr "हिजो"
 
-#: gtk/gtkfilechoosersettings.c:122
+#: gtk/gtkfilechoosersettings.c:123
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:139
+#: gtk/gtkfilechoosersettings.c:140
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:157
+#: gtk/gtkfilechoosersettings.c:158
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:201
+#: gtk/gtkfilechoosersettings.c:202
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:237 gtk/gtkfilechoosersettings.c:265
+#: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:515
+#: gtk/gtkfilechoosersettings.c:516
 #, fuzzy, c-format
 msgid "Could not create directory: %s"
 msgstr "%s का लागि मौज्दात प्रतिमा प्राप्त गर्न सकेन"
 
-#: gtk/gtkfilesel.c:694
+#: gtk/gtkfilesel.c:693
 msgid "Folders"
 msgstr "फोल्डरहरू"
 
-#: gtk/gtkfilesel.c:698
+#: gtk/gtkfilesel.c:697
 msgid "Fol_ders"
 msgstr "फोल्डरहरू"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:733
 msgid "_Files"
 msgstr "फाइलहरू"
 
 # c-format
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "फोल्डर पढ्न-योग्य होइन: %s"
 
-#: gtk/gtkfilesel.c:950
+#: gtk/gtkfilesel.c:949
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1777,98 +1781,98 @@ msgstr ""
 "फाइल \"%s\" अर्को मेशिनमा छ ( %s भनिने) र यो कार्यक्रममा उपलब्ध नहुन सक्छ ।\n"
 "के तपाईँ यसलाई चयन गर्न चाहानुमा विश्वस्त हुनुहुन्छ ?"
 
-#: gtk/gtkfilesel.c:1080
+#: gtk/gtkfilesel.c:1079
 msgid "_New Folder"
 msgstr "नयाँ फोल्डर"
 
-#: gtk/gtkfilesel.c:1091
+#: gtk/gtkfilesel.c:1090
 msgid "De_lete File"
 msgstr "फाइल मेट्नुहोस्"
 
-#: gtk/gtkfilesel.c:1102
+#: gtk/gtkfilesel.c:1101
 msgid "_Rename File"
 msgstr "फाइलको पुन: नामाकरण गर्नुहोस्"
 
-#: gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1406
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "फोल्डर नाम \"%s\" ले फाइलनामहरुमा अनुमिति नभएको संकेतहरू समावेश गर्दछ"
 
-#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1129
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
+#: gtk/gtkfilesystemwin32.c:1170
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "डाइरेक्टरी '%s' सिर्जना गर्दा त्रुटि: %s"
 
-#: gtk/gtkfilesel.c:1452
+#: gtk/gtkfilesel.c:1451
 msgid "New Folder"
 msgstr "नयाँ फोल्डर"
 
-#: gtk/gtkfilesel.c:1467
+#: gtk/gtkfilesel.c:1466
 msgid "_Folder name:"
 msgstr "फोल्डर नाम:"
 
-#: gtk/gtkfilesel.c:1491
+#: gtk/gtkfilesel.c:1490
 msgid "C_reate"
 msgstr "सिर्जना गर्नुहोस्"
 
-#: gtk/gtkfilesel.c:1534 gtk/gtkfilesel.c:1641 gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1533 gtk/gtkfilesel.c:1640 gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "फाइल नाम \"%s\" ले फाइलनामहरुमा अनुमिति नभएको संकेतहरू समावेश गर्दछ"
 
-#: gtk/gtkfilesel.c:1537 gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
 #, fuzzy, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "फाइल \"%s\" मेट्दा त्रुटि: %s"
 
-#: gtk/gtkfilesel.c:1590
+#: gtk/gtkfilesel.c:1589
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "फाइल \"%s\" वास्तवमै मेट्नुहुन्छ ?"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1594
 msgid "Delete File"
 msgstr "फाइल मेट्नुहोस्"
 
-#: gtk/gtkfilesel.c:1643
+#: gtk/gtkfilesel.c:1642
 #, fuzzy, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr ""
 "\"%s\" मा फाइलको नाम फेर्दा त्रुटि: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1655
 #, fuzzy, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr ""
 "फाइल \"%s\" को नाम फेर्दा त्रुटि: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1665
+#: gtk/gtkfilesel.c:1664
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "\"%s\"बाट\"%s\" मा फाइलको नाम फेर्दा त्रुटि: %s"
 
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1711
 msgid "Rename File"
 msgstr "फाइलको पुन: नामाकरण गर्नुहोस्"
 
-#: gtk/gtkfilesel.c:1727
+#: gtk/gtkfilesel.c:1726
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "मा फाइल \"%s\" को पुन: नामाकरण गर्नुहोस्:"
 
-#: gtk/gtkfilesel.c:1756
+#: gtk/gtkfilesel.c:1755
 msgid "_Rename"
 msgstr "पुन: नामाकरण गर्नुहोस्"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2187
 msgid "_Selection: "
 msgstr "चयन: "
 
-#: gtk/gtkfilesel.c:3113
+#: gtk/gtkfilesel.c:3112
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1877,15 +1881,15 @@ msgstr ""
 "फाइलनाम \"%s\" लाई युटिएफ-८ मा रुपान्तरण गर्न सकिएन ।(परिवेश चल "
 "G_FILENAME_ENCODING सेट गरेर प्रयास गर्नुहोस्): %s"
 
-#: gtk/gtkfilesel.c:3116
+#: gtk/gtkfilesel.c:3115
 msgid "Invalid UTF-8"
 msgstr "अवैध UTF-8"
 
-#: gtk/gtkfilesel.c:3992
+#: gtk/gtkfilesel.c:3991
 msgid "Name too long"
 msgstr "अति लामो नाम"
 
-#: gtk/gtkfilesel.c:3994
+#: gtk/gtkfilesel.c:3993
 msgid "Couldn't convert filename"
 msgstr "फाइलनाम रुपान्तरण गर्न सकेन"
 
@@ -1905,12 +1909,12 @@ msgstr "(खाली)"
 
 #: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
 #: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2348 gtk/gtkfilesystemwin32.c:2398
+#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' का लागि जानकारी प्राप्त गर्दा त्रुटि: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1236
+#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "यो फाइल प्रणालीले माउण्टिङ्ग समर्थन गर्दैन"
@@ -1919,7 +1923,7 @@ msgstr "यो फाइल प्रणालीले माउण्टिङ
 msgid "File System"
 msgstr "फाइल प्रणाली"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1413
+#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1928,32 +1932,32 @@ msgstr ""
 "नाम \"%s\" अवैध छ किनभने यसमा \"%s\" क्यारेक्टर समाहित छ । कृपया एउटा भिन्न नाम "
 "प्रयोग गर्नुहोस् ।"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2028
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "पुस्तकचिनो बचत गर्दा असफल: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2083
+#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' पुस्तकचिनो सूचीमा पहिल्यै अवस्थित छ"
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2155
+#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' पुस्तकचिनो सूचीमा अवस्थित छैन"
 
-#: gtk/gtkfilesystemwin32.c:1053
+#: gtk/gtkfilesystemwin32.c:1093
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1254
+#: gtk/gtkfilesystemwin32.c:1295
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "सञ्जाल ड्राइभ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1276
+#: gtk/gtkfilesystemwin32.c:1317
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2036,90 +2040,90 @@ msgstr "विषयवस्तुमा प्रतिमा '%s' उपस�
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
-#: gtk/gtkinputdialog.c:191
+#: gtk/gtkinputdialog.c:190
 msgid "Input"
 msgstr "आगत"
 
-#: gtk/gtkinputdialog.c:206
+#: gtk/gtkinputdialog.c:205
 msgid "No extended input devices"
 msgstr "विस्तारित आगत यन्त्रहरू छैन"
 
-#: gtk/gtkinputdialog.c:219
+#: gtk/gtkinputdialog.c:218
 msgid "_Device:"
 msgstr "यन्त्र:"
 
-#: gtk/gtkinputdialog.c:236
+#: gtk/gtkinputdialog.c:235
 msgid "Disabled"
 msgstr "अक्षम पारिएको"
 
-#: gtk/gtkinputdialog.c:243
+#: gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "स्क्रिन"
 
-#: gtk/gtkinputdialog.c:250
+#: gtk/gtkinputdialog.c:249
 msgid "Window"
 msgstr "सञ्झ्याल"
 
-#: gtk/gtkinputdialog.c:257
+#: gtk/gtkinputdialog.c:256
 #, fuzzy
 msgid "_Mode:"
 msgstr "मोड: "
 
 #  The axis listbox
 #. The axis listbox
-#: gtk/gtkinputdialog.c:278
+#: gtk/gtkinputdialog.c:277
 #, fuzzy
 msgid "Axes"
 msgstr "अक्षहरू"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:296
+#: gtk/gtkinputdialog.c:295
 #, fuzzy
 msgid "Keys"
 msgstr "कुञ्जीहरू"
 
-#: gtk/gtkinputdialog.c:521
+#: gtk/gtkinputdialog.c:520
 msgid "_X:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:522
+#: gtk/gtkinputdialog.c:521
 msgid "_Y:"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:523
+#: gtk/gtkinputdialog.c:522
 #, fuzzy
 msgid "_Pressure:"
 msgstr "दवाब"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:523
 #, fuzzy
 msgid "X _tilt:"
 msgstr "X झुकाव"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:524
 #, fuzzy
 msgid "Y t_ilt:"
 msgstr "Y झुकाव"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:525
 #, fuzzy
 msgid "_Wheel:"
 msgstr "चक्र"
 
-#: gtk/gtkinputdialog.c:574
+#: gtk/gtkinputdialog.c:573
 msgid "none"
 msgstr "कुनै पनि होइन"
 
-#: gtk/gtkinputdialog.c:611 gtk/gtkinputdialog.c:647
+#: gtk/gtkinputdialog.c:610 gtk/gtkinputdialog.c:646
 msgid "(disabled)"
 msgstr "(अक्षम पारिएको)"
 
-#: gtk/gtkinputdialog.c:640
+#: gtk/gtkinputdialog.c:639
 msgid "(unknown)"
 msgstr "(अज्ञात)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:740
+#: gtk/gtkinputdialog.c:739
 #, fuzzy
 msgid "Cl_ear"
 msgstr "खाली गर्नुहोस्"
@@ -3795,7 +3799,7 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
-msgid "paper size|#11 Eenvelope"
+msgid "paper size|#11 Envelope"
 msgstr ""
 
 #. translators, strip everything up to the first |
@@ -4351,6 +4355,9 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+
+#~ msgid "PNM image format is invalid"
+#~ msgstr "PNM छवि ढाँचा अवैध छ"
 
 #~ msgid "Cannot handle PNM files with maximum color values greater than 255"
 #~ msgstr "२५५ भन्दा ठूलो अधिकतम रङ मानहरू सँग  PNM फाइलहरू ह्यान्डल गर्न सक्दैन"

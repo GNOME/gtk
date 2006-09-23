@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.10.2 HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2006-08-18 23:14+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -17,68 +17,68 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.6fc1\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "Số kênh"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "Số mẫu trên một điểm ảnh"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "Miền màu:"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "Miền mẫu trong đó có thông dịch các mẫu"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "Có anfa"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "Có nên bộ đệm điểm ảnh có một kênh anfa hay không"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "Bit/mẫu"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "Số bit trong mỗi mẫu"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Độ rộng"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "Số cột trong bộ đệm điểm ảnh"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "Độ cao"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "Số hàng trong bộ đệm điểm ảnh"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "Bước hàng"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "Số byte giữa đầu hàng và đầu hàng kế tiếp"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "Điểm ảnh"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Bộ trỏ tới dữ liệu điểm ảnh của bộ đệm điểm ảnh"
 
@@ -90,11 +90,11 @@ msgstr "Bộ trình bày mặc định"
 msgid "The default display for GDK"
 msgstr "Bộ trình bày mặc định cho GDK"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "Màn hình"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen cho bộ vẽ"
 
@@ -847,27 +847,27 @@ msgstr "Hiện ảnh nút"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Có nên hiển thị biểu tượng chuẩn trên nút hay không"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "Năm"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "Năm được chọn"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "Tháng"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Tháng được chọn (theo số từ 0 đến 11)"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "Ngày"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -875,35 +875,35 @@ msgstr ""
 "Ngày được chọn (theo số từ 1 đến 31, hoặc giá trị 0 để bỏ chọn ngày được "
 "chọn hiện thời)"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "Hiện tiêu đề"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "Nếu ĐÚNG thì hiển thị tiêu đề"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "Hiện tên ngày"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "Nếu ĐÚNG thì hiển thị tên ngày"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "Đừng đổi tháng"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Nếu ĐÚNG thì không thể thay đổi tháng được chọn"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "Hiện số tuần"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "Nếu ĐÚNG thì hiển thị số thứ tự tuần trong năm"
 
@@ -1535,11 +1535,11 @@ msgstr "Mô hình Xem Ô"
 msgid "The model for cell view"
 msgstr "Mô hình cho khung xem ô"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "Cỡ cái chỉ"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "Khoảng cách cái chỉ"
 
@@ -1589,7 +1589,7 @@ msgstr "Tiêu đề"
 msgid "The title of the color selection dialog"
 msgstr "Tiêu đề của hộp thoại chọn màu"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "Màu hiện có"
 
@@ -1597,7 +1597,7 @@ msgstr "Màu hiện có"
 msgid "The selected color"
 msgstr "Màu hiện thời được chọn"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "Độ anfa hiện thời"
 
@@ -1606,36 +1606,36 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Giá trị độ đục được chọn (0 là trong suốt hoàn toàn, 65535 là đặc hoàn toàn)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "Điều khiển độ đục"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Bộ chọn màu cho phép đặt độ đục hay không"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "Có bảng chọn"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "Bảng chọn có được dùng hay không"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "Màu hiện thời"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Giá trị độ đục hiện thời (0 là trong suốt hoàn toàn, 65535 là đục hoàn toàn)"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "Bảng chọn riêng"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "Bảng chọn cần dùng trong bộ chọn màu"
 
@@ -2184,11 +2184,11 @@ msgstr "Ô điều khiển thêm"
 msgid "Application supplied widget for extra options."
 msgstr "Ô điều khiển do ứng dụng cung cấp cho tùy chọn thêm."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "Đa chọn"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "Cho phép chọn cùng lúc nhiều tập tin hay không"
 
@@ -2238,20 +2238,20 @@ msgstr ""
 "Tên của hậu phương GtkFileChooser (Gtk bộ chọn tập tin) cần dùng theo mặc "
 "định"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "Tên tập tin"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "Tên tập tin hiện thời được chọn"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "Hiện thao tác tập tin"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Có nên hiển thị các cái nút dùng để tạo/thao tác trên tập tin hay không"
@@ -2939,7 +2939,7 @@ msgstr ""
 "Giá trị hợp lý (đúng/sai) có quyết định nếu trình đơn lấy tiêu điểm bàn phím "
 "hay không"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Trình đơn"
 
@@ -3238,15 +3238,15 @@ msgstr "Dữ liệu người dùng"
 msgid "Anonymous User Data Pointer"
 msgstr "Con trỏ dữ liệu của người dùng vô danh"
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "Trình đơn các tùy chọn"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "Kích thước của cái chỉ thả xuống"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "Khoảng trong quanh cái chỉ"
 
@@ -3553,11 +3553,11 @@ msgstr "Máy in được chọn"
 msgid "The GtkPrinter which is selected"
 msgstr "Máy in GtkPrinter được chọn"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "Chế độ hoạt động"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3567,19 +3567,19 @@ msgstr ""
 "nghĩa là nó thông báo có gì xảy ra, nhưng không thông báo lớp tiến hành. "
 "Dùng khi bạn làm công việc sẽ chiếm thời gian không rõ."
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "Hiện chữ"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "Có nên hiển thị tiến hành dạng chữ hay không"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "Canh lề X cho chữ"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3587,11 +3587,11 @@ msgstr ""
 "Một giá trị giữa 0.0 và 1.0 xác định sự canh lề ngang của chữ trong ô điều "
 "khiển tiến hành"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "Canh lề Y cho chữ"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5797,51 +5797,51 @@ msgstr ""
 "« gtk_widget_show_all() » (Gtk ô điều khiển hiển thị tất cả) nên không có "
 "tác động tới ô điều khiển này hay có"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "Tiêu điểm trong"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Có nên vẽ cái chỉ tiêu điểm ở trong các ô điều khiển"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "Độ rộng dòng tiêu điểm"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Độ rộng của dòng chỉ tiêu điểm (theo điểm ảnh)"
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "Mẫu gạch dòng tiêu điểm"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Mẫu gạch được dùng để vẽ cái chỉ tiêu điểm"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "Đệm tiêu điểm"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Độ rộng giữa cái chỉ tiêu điểm và « hộp » ô điều khiển, theo điểm ảnh"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "Màu con trỏ"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "Màu vẽ con trỏ chèn"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "Màu con trỏ phụ"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5849,43 +5849,43 @@ msgstr ""
 "Màu vẽ con trỏ chèn phụ khi hiệu chỉnh văn bản cả phải-sang-trái lẫn trái-"
 "sang-phải đều trộn với nhau"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "Tỷ lệ hình thể dòng con trỏ"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Tỷ lệ hình thể với đó cần vẽ con trỏ chèn"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 msgid "Draw Border"
 msgstr "Vẽ viền"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Kích thước vùng ở ngoại vùng được cấp cho ô điều khiển cần vẽ"
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 msgid "Unvisited Link Color"
 msgstr "Màu liên kết chưa thăm"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 msgid "Color of unvisited links"
 msgstr "Màu của liên kết chưa thăm, chưa nhắp vào"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 msgid "Visited Link Color"
 msgstr "Màu liên kết đã thăm"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 msgid "Color of visited links"
 msgstr "Màu của liên kết đã thăm, đã nhắp vào"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 msgid "Wide Separators"
 msgstr "Bộ ngăn cách rộng"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -5893,37 +5893,37 @@ msgstr ""
 "Bộ ngăn cách có độ rộng có thể cấu hình hay không; nó nên được vẽ bằng hộp "
 "thay vào đường hay không"
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 msgid "Separator Width"
 msgstr "Độ rộng bộ ngăn cách"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Độ rộng của bộ ngăn cách nếu bộ ngăn cách có độ rộng"
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 msgid "Separator Height"
 msgstr "Độ cao bộ ngăn cách"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 "Độ cao của bộ ngăn cách nếu bộ ngăn cách có độ rộng (wide-separators) là "
 "TRUE (đúng)"
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Độ dài mũi tên cuộn ngang"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 msgid "The length of horizontal scroll arrows"
 msgstr "Độ dài của các mũi tên cuộn theo chiều ngang"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 msgid "Vertical Scroll Arrow Length"
 msgstr "Độ dài mũi tên cuộn dọc"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 msgid "The length of vertical scroll arrows"
 msgstr "Độ dài của các mũi tên cuộn theo chiều dọc"
 

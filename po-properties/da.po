@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-04 23:51-0400\n"
+"POT-Creation-Date: 2006-09-22 22:54-0400\n"
 "PO-Revision-Date: 2005-10-17 15:49+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -43,68 +43,68 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:86
+#: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
 msgstr "Antal kanaler"
 
-#: gdk-pixbuf/gdk-pixbuf.c:87
+#: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr "Antallet af farveværdier per punkt"
 
-#: gdk-pixbuf/gdk-pixbuf.c:96
+#: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
 msgstr "Farverum"
 
-#: gdk-pixbuf/gdk-pixbuf.c:97
+#: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
 msgstr "Det farverum som farveværdierne fortolkes i"
 
-#: gdk-pixbuf/gdk-pixbuf.c:105
+#: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
 msgstr "Har alfa"
 
-#: gdk-pixbuf/gdk-pixbuf.c:106
+#: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "Om billedet har en alfakanal"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
 msgstr "Bit per kanal"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
 msgstr "Antal bit per farveværdi"
 
-#: gdk-pixbuf/gdk-pixbuf.c:129 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Bredde"
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr "Antal kolonner i billedet"
 
-#: gdk-pixbuf/gdk-pixbuf.c:139 gtk/gtklayout.c:627
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
 msgstr "Højde"
 
-#: gdk-pixbuf/gdk-pixbuf.c:140
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
 msgstr "Antal rækker i billedet"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156
+#: gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
 msgstr "Rækkespand"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "Antal byte mellem begyndelsen af en række og starten på den næste"
 
-#: gdk-pixbuf/gdk-pixbuf.c:166
+#: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
 msgstr "Punkter"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167
+#: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Adressen på punktdataene for billedet"
 
@@ -116,11 +116,11 @@ msgstr "Standardterminal"
 msgid "The default display for GDK"
 msgstr "Standardterminalen for GDK"
 
-#: gdk/gdkpango.c:546 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
+#: gdk/gdkpango.c:545 gtk/gtkinvisible.c:86 gtk/gtkwindow.c:530
 msgid "Screen"
 msgstr "Skærm"
 
-#: gdk/gdkpango.c:547
+#: gdk/gdkpango.c:546
 msgid "the GdkScreen for the renderer"
 msgstr "Optegnerens GdkScreen"
 
@@ -877,27 +877,27 @@ msgstr "Vis knapbilleder"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Om lagerikoner skal vises i knapper"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:418
 msgid "Year"
 msgstr "År"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:419
 msgid "The selected year"
 msgstr "Det valgte år"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:425
 msgid "Month"
 msgstr "Måned"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Den valgte måned som et tal mellem 0 og 11"
 
-#: gtk/gtkcalendar.c:433
+#: gtk/gtkcalendar.c:432
 msgid "Day"
 msgstr "Dag"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:433
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -905,35 +905,35 @@ msgstr ""
 "Den valgte dag som et tal mellem 1 og 31 eller 0 for at fravælge den aktuelt "
 "valgte dag"
 
-#: gtk/gtkcalendar.c:448
+#: gtk/gtkcalendar.c:447
 msgid "Show Heading"
 msgstr "Vis overskrift"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:448
 msgid "If TRUE, a heading is displayed"
 msgstr "Om en overskrift skal vises"
 
-#: gtk/gtkcalendar.c:463
+#: gtk/gtkcalendar.c:462
 msgid "Show Day Names"
 msgstr "Vis dagnavne"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:463
 msgid "If TRUE, day names are displayed"
 msgstr "Om dagnavne skal vises"
 
-#: gtk/gtkcalendar.c:477
+#: gtk/gtkcalendar.c:476
 msgid "No Month Change"
 msgstr "Ingen månedsændring"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:477
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Hvis sand kan den valgte måned ikke ændres"
 
-#: gtk/gtkcalendar.c:492
+#: gtk/gtkcalendar.c:491
 msgid "Show Week Numbers"
 msgstr "Vis ugenumre"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:492
 msgid "If TRUE, week numbers are displayed"
 msgstr "Om ugenumre skal vises"
 
@@ -1567,11 +1567,11 @@ msgstr "TreeView-model"
 msgid "The model for cell view"
 msgstr "Modellen for ikonvisningen"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:169
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "Indikatorstørrelse"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:175
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "Indikatormellemrum"
 
@@ -1621,7 +1621,7 @@ msgstr "Titel"
 msgid "The title of the color selection dialog"
 msgstr "Titlen på farvevælgervinduet"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
 msgid "Current Color"
 msgstr "Nuværende farve"
 
@@ -1629,7 +1629,7 @@ msgstr "Nuværende farve"
 msgid "The selected color"
 msgstr "Den valgte farve"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
 msgstr "Nuværende alfa"
 
@@ -1639,38 +1639,38 @@ msgstr ""
 "Den valgte uigennemsigtighedsværdi (0 helt gennemsigtig, 65535 helt "
 "uigennemsigtig)"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
 msgstr "Kontrol til uigennemsigtighed"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Om farvevælgeren understøtter ændring af uigennemsigtigheden"
 
-#: gtk/gtkcolorsel.c:1853
+#: gtk/gtkcolorsel.c:1864
 msgid "Has palette"
 msgstr "Med palet"
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1865
 msgid "Whether a palette should be used"
 msgstr "Om en palet skal bruges"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1872
 msgid "The current color"
 msgstr "Den aktive farve"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1879
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Aktuel værdi for uigennemsigtighed (0 helt gennemsigtig, 65535 helt "
 "uigennemsigtig)"
 
 # RETMIG: er dette rigtigt?
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1893
 msgid "Custom palette"
 msgstr "Brugerdefineret palet"
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1894
 msgid "Palette to use in the color selector"
 msgstr "Palet som skal bruges i farvevælgeren"
 
@@ -2225,11 +2225,11 @@ msgstr "Ekstra kontrol"
 msgid "Application supplied widget for extra options."
 msgstr "Kontrol givet af programmet til ekstra tilvalg."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr "Vælg flere"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "Om det er muligt at vælge mere end én fil"
 
@@ -2278,20 +2278,20 @@ msgstr "Standard-filvælgerbagende"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på den GtkFileChooser-bagende som skal anvendes som standard"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
 #: gtk/gtkstatusicon.c:154
 msgid "Filename"
 msgstr "Filnavn"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
 msgstr "Navnet på den aktuelt valgte fil"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:532
 msgid "Show file operations"
 msgstr "Vis filhandlingsknapper"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Om knapper til oprettelse/manipulering af filer skal vises"
 
@@ -2986,7 +2986,7 @@ msgstr "Tag fokus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "En sandhedsværdi der bestemmer om menuen tager tastatur-fokus"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:162
+#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menu"
 
@@ -3306,15 +3306,15 @@ msgstr "Brugerdata"
 msgid "Anonymous User Data Pointer"
 msgstr "Anonym brugerdata-peger"
 
-#: gtk/gtkoptionmenu.c:163
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "Menuen af valg"
 
-#: gtk/gtkoptionmenu.c:170
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "Størrelse af pop op-indikator"
 
-#: gtk/gtkoptionmenu.c:176
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "Mellemrum omkring indikator"
 
@@ -3644,11 +3644,11 @@ msgstr "Det valgte år"
 msgid "The GtkPrinter which is selected"
 msgstr "Det element som aktuelt er aktivt"
 
-#: gtk/gtkprogress.c:100
+#: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "Aktivitetstilstand"
 
-#: gtk/gtkprogress.c:101
+#: gtk/gtkprogress.c:100
 #, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
@@ -3660,19 +3660,19 @@ msgstr ""
 "Dette kan bruges hvis programmet foretager sig noget som du ikke ved hvor "
 "lang tid vil tage"
 
-#: gtk/gtkprogress.c:108
+#: gtk/gtkprogress.c:107
 msgid "Show text"
 msgstr "Vis tekst"
 
-#: gtk/gtkprogress.c:109
+#: gtk/gtkprogress.c:108
 msgid "Whether the progress is shown as text"
 msgstr "Vis fremgang som tekst"
 
-#: gtk/gtkprogress.c:116
+#: gtk/gtkprogress.c:115
 msgid "Text x alignment"
 msgstr "Vandret tekstjustering"
 
-#: gtk/gtkprogress.c:117
+#: gtk/gtkprogress.c:116
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3680,11 +3680,11 @@ msgstr ""
 "Et tal mellem 0.0 og 1.0 der angiver den vandrette justering af teksten i "
 "fremgangskontrollen"
 
-#: gtk/gtkprogress.c:125
+#: gtk/gtkprogress.c:124
 msgid "Text y alignment"
 msgstr "Lodret tekstjustering"
 
-#: gtk/gtkprogress.c:126
+#: gtk/gtkprogress.c:125
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -5901,52 +5901,52 @@ msgstr "Ingen vis alle"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Om gtk_widget_show_all() ikke skal påvirke denne kontrol"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1493
 msgid "Interior Focus"
 msgstr "Indvendig fokus"
 
-#: gtk/gtkwidget.c:1484
+#: gtk/gtkwidget.c:1494
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Om fokusindikatoren skal tegnes inde i kontrollen"
 
-#: gtk/gtkwidget.c:1490
+#: gtk/gtkwidget.c:1500
 msgid "Focus linewidth"
 msgstr "Fokuslinjebredde"
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1501
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Bredde, i skærmpunkter, af fokuseringsindikatorens linje"
 
-#: gtk/gtkwidget.c:1497
+#: gtk/gtkwidget.c:1507
 msgid "Focus line dash pattern"
 msgstr "Stiplingsmønster til fokuslinje"
 
-#: gtk/gtkwidget.c:1498
+#: gtk/gtkwidget.c:1508
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Stiplingsmønster der bruges til at tegne fokuseringsindikatoren"
 
-#: gtk/gtkwidget.c:1503
+#: gtk/gtkwidget.c:1513
 msgid "Focus padding"
 msgstr "Fokusudfyldning"
 
-#: gtk/gtkwidget.c:1504
+#: gtk/gtkwidget.c:1514
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Bredde, i skærmpunkter, mellem fokuseringsindikatoren og kontrollens 'boks'"
 
-#: gtk/gtkwidget.c:1509
+#: gtk/gtkwidget.c:1519
 msgid "Cursor color"
 msgstr "Markørfarve"
 
-#: gtk/gtkwidget.c:1510
+#: gtk/gtkwidget.c:1520
 msgid "Color with which to draw insertion cursor"
 msgstr "Farve som indtastningsmarkøren skal tegnes med"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1525
 msgid "Secondary cursor color"
 msgstr "Sekundær markørfarve"
 
-#: gtk/gtkwidget.c:1516
+#: gtk/gtkwidget.c:1526
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5954,87 +5954,87 @@ msgstr ""
 "Farve som bruges til at tegne den sekundære indtastningsmarkør ved "
 "redigering af blandet højre-mod-venstre- og venstre-mod-højre-tekst"
 
-#: gtk/gtkwidget.c:1521
+#: gtk/gtkwidget.c:1531
 msgid "Cursor line aspect ratio"
 msgstr "Formatforhold for markørlinje"
 
-#: gtk/gtkwidget.c:1522
+#: gtk/gtkwidget.c:1532
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Det formatforhold indtastningsmarkøren skal tegnes med"
 
-#: gtk/gtkwidget.c:1536
+#: gtk/gtkwidget.c:1546
 msgid "Draw Border"
 msgstr "Tegn kant"
 
-#: gtk/gtkwidget.c:1537
+#: gtk/gtkwidget.c:1547
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Størrelse af området udenfor kontrollens tegne-tildeling"
 
-#: gtk/gtkwidget.c:1550
+#: gtk/gtkwidget.c:1560
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Link-farve"
 
-#: gtk/gtkwidget.c:1551
+#: gtk/gtkwidget.c:1561
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Farven på links"
 
-#: gtk/gtkwidget.c:1564
+#: gtk/gtkwidget.c:1574
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Link-farve"
 
-#: gtk/gtkwidget.c:1565
+#: gtk/gtkwidget.c:1575
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Farven på links"
 
-#: gtk/gtkwidget.c:1579
+#: gtk/gtkwidget.c:1589
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Benyt adskillelseslinje"
 
-#: gtk/gtkwidget.c:1580
+#: gtk/gtkwidget.c:1590
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1594
+#: gtk/gtkwidget.c:1604
 #, fuzzy
 msgid "Separator Width"
 msgstr "Lodret adskillelsesbredde"
 
-#: gtk/gtkwidget.c:1595
+#: gtk/gtkwidget.c:1605
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1609
+#: gtk/gtkwidget.c:1619
 #, fuzzy
 msgid "Separator Height"
 msgstr "Standardhøjde"
 
-#: gtk/gtkwidget.c:1610
+#: gtk/gtkwidget.c:1620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1624
+#: gtk/gtkwidget.c:1634
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Vandret rullebjælkepolitik"
 
-#: gtk/gtkwidget.c:1625
+#: gtk/gtkwidget.c:1635
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Hvornår den vandrette rullebjælke vises"
 
-#: gtk/gtkwidget.c:1639
+#: gtk/gtkwidget.c:1649
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Lodret rullebjælkepolitik"
 
-#: gtk/gtkwidget.c:1640
+#: gtk/gtkwidget.c:1650
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Hvornår den lodrette rullebjælke vises"

@@ -16,7 +16,8 @@ EXTRA_DIST =			\
 	gdk.symbols		\
 	makegdkalias.pl		\
 	gdkaliasdef.c		\
-	abicheck.sh
+	abicheck.sh		\
+	pltcheck.sh
 
 INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\

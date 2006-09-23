@@ -1,5 +1,9 @@
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.10.4 ===
+
+2006-09-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* *.po: Copy existing translations for a new string
 	from the panel.
 
