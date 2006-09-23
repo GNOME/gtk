@@ -1,3 +1,7 @@
+2006-09-23  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/Makefile.am: Use EXEEXT.
+
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
