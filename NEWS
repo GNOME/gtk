@@ -12,12 +12,17 @@ Overview of Changes from GTK+ 2.10.3 to 2.10.4
  353914 Leak of to_reset list from _gtk_settings_reset_rc_values
  354043 Renew the typeahead search timeout when using scrollwheel
  354687 PLT-reduction stuff not quite working
- 354887 GtkFileChooserButton displays unnecessary authentication dialogs
+ 354887 GtkFileChooserButton displays unnecessary authentication 
+        dialogs
  355308 gtk_tree_view_set_grid_lines notifies wrong property
  355732 Combobox leaks treeview in list mode
  355134 Type in string
  355961 Typo in documentation for GtkPrintContext
  340201 Enhancement of Wimp theme engine.
+ 357132 Setting an RGBA colormap using gtk_widget_set_colormap() 
+        on any widget at application start (before other widgets 
+        are used) causes the running app to revert to the stock 
+        icon theme
 
 * Updated translations (bg,bn,bn_IN,de,dz,el,
   en_GB,et,fi,gu,hi,id,ka,lt,lv,mk,nb,nl,nn,or,
