@@ -1,5 +1,7 @@
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.10.4 ===
 
 2006-09-22  Michael Natterer  <mitch@imendio.com>
