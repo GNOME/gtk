@@ -2178,7 +2178,7 @@ msgstr "Հանել GTK+ կարգաբերման դրոշները"
 #.
 #: gtk/gtkmain.c:498
 msgid "default:LTR"
-msgstr "դեֆոլթ.LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:594
 msgid "GTK+ Options"

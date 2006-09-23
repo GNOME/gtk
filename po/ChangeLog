@@ -1,3 +1,8 @@
+2006-09-23  Pablo Saratxaga <pablo@mandriva.com>
+
+	* wa.po: Updated Walloon file.
+	* {dz,hy,rw,tk,ur}.po: fixed default:LTR translation
+
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* *.po: Copy existing translations for a new string
@@ -21,7 +26,7 @@
 
 2006-09-14  Raivis Dejus  <orvils@gmail.com>
 
-        * lv.po: Updated Latvian translation.
+	* lv.po: Updated Latvian translation.
 
 2006-09-14  Ankit Patel  <ankit644@yahoo.com>
 

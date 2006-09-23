@@ -2288,9 +2288,8 @@ msgstr "Amabendera Kuri"
 #. * it isn't default:LTR or default:RTL it will not work
 #.
 #: gtk/gtkmain.c:498
-#, fuzzy
 msgid "default:LTR"
-msgstr "Mburabuzi"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:594
 msgid "GTK+ Options"

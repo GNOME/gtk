@@ -2112,7 +2112,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:498
 msgid "default:LTR"
-msgstr "oň bellenen:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:594
 msgid "GTK+ Options"

@@ -2086,7 +2086,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:498
 msgid "default:LTR"
-msgstr ""
+msgstr "default:RTL"
 
 #: gtk/gtkmain.c:594
 msgid "GTK+ Options"
