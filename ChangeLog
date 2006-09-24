@@ -1,5 +1,11 @@
 2006-09-24  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),
+	(gtk_cell_renderer_text_[sg]et_property): actually add align-set
+	property to the API (left-over patch from #157439).
+
+2006-09-24  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button): draw
 	the indicator if the column has a sort column id (and the model is
 	sortable) or if the user explicitly requested the indicator

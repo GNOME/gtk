@@ -115,7 +115,8 @@ enum {
   PROP_UNDERLINE_SET,
   PROP_RISE_SET,
   PROP_LANGUAGE_SET,
-  PROP_ELLIPSIZE_SET
+  PROP_ELLIPSIZE_SET,
+  PROP_ALIGN_SET
 };
 
 static guint text_cell_renderer_signals [LAST_SIGNAL];
@@ -551,6 +552,10 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Ellipsize set"),
                 P_("Whether this tag affects the ellipsize mode"));
 
+  ADD_SET_PROP ("align-set", PROP_ALIGN_SET,
+                P_("Align set"),
+                P_("Whether this tag affects the alignment mode"));
+
   text_cell_renderer_signals [EDITED] =
     g_signal_new (I_("edited"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -781,6 +786,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 
     case PROP_ELLIPSIZE_SET:
       g_value_set_boolean (value, priv->ellipsize_set);
+      break;
+
+    case PROP_ALIGN_SET:
+      g_value_set_boolean (value, priv->align_set);
       break;
       
     case PROP_WIDTH_CHARS:
@@ -1237,6 +1246,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_ALIGN:
       priv->align = g_value_get_enum (value);
       priv->align_set = TRUE;
+      g_object_notify (object, "align-set");
       break;
 
     case PROP_BACKGROUND_SET:
@@ -1294,6 +1304,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_ELLIPSIZE_SET:
       priv->ellipsize_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_ALIGN_SET:
+      priv->align_set = g_value_get_boolean (value);
       break;
       
     default:
