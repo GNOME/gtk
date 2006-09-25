@@ -1,3 +1,8 @@
+2006-09-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (_gtk_menu_is_empty): Don't leak
+	the list of children (#357454, Paolo Borelli)
+
 2006-09-25  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_finalize): free

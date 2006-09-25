@@ -1941,6 +1941,7 @@ gboolean
 _gtk_menu_is_empty (GtkWidget *menu)
 {
   GList *children, *cur;
+  gboolean result = TRUE;
 
   g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
 
@@ -1956,13 +1957,16 @@ _gtk_menu_is_empty (GtkWidget *menu)
 	{
 	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
 	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
-	    return FALSE;
+            {
+	      result = FALSE;
+              break;
+            }
 	}
       cur = cur->next;
     }
   g_list_free (children);
 
-  return TRUE;
+  return result;
 }
 
 enum {
