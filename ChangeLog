@@ -1,3 +1,9 @@
+2006-09-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/*.c:
+	* gtk/gtkeventbox.c:
+	* gtk/gtkprintoperation.c: Fix typos. String change.
+
 2006-09-25  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): if the tree view

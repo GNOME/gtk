@@ -961,7 +961,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_USE_FULL_PAGE,
 				   g_param_spec_boolean ("use-full-page",
 							 P_("Use full page"),
-							 P_("TRUE if the the origin of the context should be at the corner of the page and not the corner of the imageable area"),
+							 P_("TRUE if the origin of the context should be at the corner of the page and not the corner of the imageable area"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   

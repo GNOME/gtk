@@ -61,7 +61,7 @@ load_pixbufs (GError **error)
   if (background)
     return TRUE; /* already loaded earlier */
 
-  /* demo_find_file() looks in the the current directory first,
+  /* demo_find_file() looks in the current directory first,
    * so you can run gtk-demo without installing GTK, then looks
    * in the location where the file is installed.
    */

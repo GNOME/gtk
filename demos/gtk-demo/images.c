@@ -184,7 +184,7 @@ progressive_timeout (gpointer data)
       gchar *error_message = NULL;
       GError *error = NULL; 
 
-      /* demo_find_file() looks in the the current directory first,
+      /* demo_find_file() looks in the current directory first,
        * so you can run gtk-demo without installing GTK, then looks
        * in the location where the file is installed.
        */
@@ -352,7 +352,7 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (align), frame);
       gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
 
-      /* demo_find_file() looks in the the current directory first,
+      /* demo_find_file() looks in the current directory first,
        * so you can run gtk-demo without installing GTK, then looks
        * in the location where the file is installed.
        */

@@ -195,7 +195,7 @@ gtk_event_box_get_visible_window (GtkEventBox *event_box)
  * Set whether the event box uses a visible or invisible child
  * window. The default is to use visible windows.
  *
- * In an invisible window event box, the window that that the
+ * In an invisible window event box, the window that the
  * event box creates is a %GDK_INPUT_ONLY window, which 
  * means that it is invisible and only serves to receive
  * events.
