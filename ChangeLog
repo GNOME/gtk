@@ -1,3 +1,9 @@
+2006-09-25  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_finalize): free
+	display->input_windows with g_free(), not g_object_unref()
+	(#357566, Tommi Komulainen).
+
 2006-09-24  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),

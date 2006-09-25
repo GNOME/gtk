@@ -785,7 +785,7 @@ gdk_display_x11_finalize (GObject *object)
   g_list_free (display_x11->input_devices);
 
   /* input GdkWindow list */
-  g_list_foreach (display_x11->input_windows, (GFunc) g_object_unref, NULL);
+  g_list_foreach (display_x11->input_windows, (GFunc) g_free, NULL);
   g_list_free (display_x11->input_windows);
 
   /* Free all GdkScreens */
