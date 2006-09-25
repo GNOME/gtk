@@ -1,5 +1,11 @@
 2006-09-25  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): if the tree view
+	has already been realized; scroll to background area instead of
+	cell area. (Fixes #330683, Johan Dahlin, Tommi Komulainen).
+
+2006-09-25  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): only attempt
 	to create the GCs if the widget is realized. (Fixes #357578).
 

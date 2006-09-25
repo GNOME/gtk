@@ -11406,7 +11406,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
       GdkRectangle vis_rect;
       gint dest_x, dest_y;
 
-      gtk_tree_view_get_cell_area (tree_view, path, column, &cell_rect);
+      gtk_tree_view_get_background_area (tree_view, path, column, &cell_rect);
       gtk_tree_view_tree_window_to_tree_coords (tree_view, cell_rect.x, cell_rect.y, &(cell_rect.x), &(cell_rect.y));
       gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
 
