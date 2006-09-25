@@ -14624,7 +14624,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
   old_grid_lines = priv->grid_lines;
   priv->grid_lines = grid_lines;
   
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (GTK_WIDGET_REALIZED (widget))
     {
       if (grid_lines == GTK_TREE_VIEW_GRID_LINES_NONE &&
 	  priv->grid_line_gc)

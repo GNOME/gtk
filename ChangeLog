@@ -1,3 +1,8 @@
+2006-09-25  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): only attempt
+	to create the GCs if the widget is realized. (Fixes #357578).
+
 2006-09-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (_gtk_menu_is_empty): Don't leak
