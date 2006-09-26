@@ -1,3 +1,7 @@
+2006-09-26  Vladimer Sichinava  <vsichi@gnome.org>
+
+        * ka.po: Updated Georgian translation.
+
 2006-09-25  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
 	* gl.po: Updated Galician Translation.
@@ -80,6 +84,7 @@
 
 	* fi.po: Updated Finnish translation.
 
+>>>>>>> 1.1422.2.63
 2006-09-12  Gintautas Miliauskas  <gintas@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
