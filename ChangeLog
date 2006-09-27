@@ -1,5 +1,12 @@
 2006-09-26  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_free_level),
+	(gtk_tree_model_filter_ref_node),
+	(gtk_tree_model_filter_real_unref_node): bring zero ref count loops
+	in sync with each other and the sort model.
+
+2006-09-26  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_init),
 	(gtk_tree_model_filter_finalize), (gtk_tree_model_filter_row_deleted),
 	(gtk_tree_model_filter_new): unref the virtual root path once that

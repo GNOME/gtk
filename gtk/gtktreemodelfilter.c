@@ -629,18 +629,14 @@ gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
       FilterLevel *parent_level = filter_level->parent_level;
       FilterElt *parent_elt = filter_level->parent_elt;
 
-      do
+      while (parent_level)
         {
-          if (parent_elt)
-            parent_elt->zero_ref_count--;
+	  parent_elt->zero_ref_count--;
 
-          if (parent_level)
-            {
-              parent_elt = parent_level->parent_elt;
-              parent_level = parent_level->parent_level;
-            }
+	  parent_elt = parent_level->parent_elt;
+	  parent_level = parent_level->parent_level;
         }
-      while (parent_level);
+
       if (filter_level != filter->priv->root)
         filter->priv->zero_ref_count--;
     }
@@ -2574,19 +2570,16 @@ gtk_tree_model_filter_ref_node (GtkTreeModel *model,
       FilterElt *parent_elt = level->parent_elt;
 
       /* we were at zero -- time to decrease the zero_ref_count val */
-      do
+      while (parent_level)
         {
-          if (parent_elt)
-            parent_elt->zero_ref_count--;
+	  parent_elt->zero_ref_count--;
 
-          if (parent_level)
-            {
-              parent_elt = parent_level->parent_elt;
-              parent_level = parent_level->parent_level;
-            }
+	  parent_elt = parent_level->parent_elt;
+	  parent_level = parent_level->parent_level;
         }
-      while (parent_level);
-      filter->priv->zero_ref_count--;
+
+      if (filter->priv->root != level)
+	filter->priv->zero_ref_count--;
     }
 }
 
@@ -2637,7 +2630,9 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
           parent_elt = parent_level->parent_elt;
           parent_level = parent_level->parent_level;
         }
-      filter->priv->zero_ref_count++;
+
+      if (filter->priv->root != level)
+	filter->priv->zero_ref_count++;
     }
 }
 
