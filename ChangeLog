@@ -1,11 +1,11 @@
-2006-09-26  Kristian Rietveld  <kris@imendio.com>
+2006-09-27  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_free_level),
 	(gtk_tree_model_filter_ref_node),
 	(gtk_tree_model_filter_real_unref_node): bring zero ref count loops
 	in sync with each other and the sort model.
 
-2006-09-26  Kristian Rietveld  <kris@imendio.com>
+2006-09-27  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_init),
 	(gtk_tree_model_filter_finalize), (gtk_tree_model_filter_row_deleted),
@@ -13,7 +13,7 @@
 	node (or one if its ancestors) is deleted, set virtual_root_deleted
 	so we only unref it once.
 
-2006-09-26  Kristian Rietveld  <kris@imendio.com>
+2006-09-27  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed),
 	(gtk_tree_model_sort_sort_level): ref count nodes the proper way,
