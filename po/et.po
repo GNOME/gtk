@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-04 00:06+0200\n"
-"PO-Revision-Date: 2006-09-21 16:17+0300\n"
+"PO-Revision-Date: 2006-09-25 11:35+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1457,7 +1457,7 @@ msgstr "As_ukohad"
 
 #: ../gtk/gtkfilechooserdefault.c:3507 ../gtk/gtkstock.c:317
 msgid "_Add"
-msgstr "_Lisa"
+msgstr "L_isa"
 
 #: ../gtk/gtkfilechooserdefault.c:3514
 msgid "Add the selected folder to the Bookmarks"
@@ -1515,7 +1515,7 @@ msgstr "_Nimi:"
 
 #: ../gtk/gtkfilechooserdefault.c:4275
 msgid "_Browse for other folders"
-msgstr "_Sirvi katalooge"
+msgstr "_Sirvi teisi katalooge"
 
 #: ../gtk/gtkfilechooserdefault.c:4510
 msgid "Type a file name"
@@ -4168,6 +4168,3 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-msgid "%1$s on %2$s"
-msgstr "%2$s hostil %1$s"
