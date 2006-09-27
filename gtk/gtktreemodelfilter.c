@@ -105,6 +105,7 @@ struct _GtkTreeModelFilterPrivate
   gboolean modify_func_set;
 
   gboolean in_row_deleted;
+  gboolean virtual_root_deleted;
 
   /* signal ids */
   guint changed_id;
@@ -290,6 +291,7 @@ gtk_tree_model_filter_init (GtkTreeModelFilter *filter)
   filter->priv->visible_method_set = FALSE;
   filter->priv->modify_func_set = FALSE;
   filter->priv->in_row_deleted = FALSE;
+  filter->priv->virtual_root_deleted = FALSE;
 }
 
 static void
@@ -359,8 +361,11 @@ gtk_tree_model_filter_finalize (GObject *object)
 {
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *) object;
 
-  if (filter->priv->virtual_root)
-    gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+  if (filter->priv->virtual_root && !filter->priv->virtual_root_deleted)
+    {
+      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+      filter->priv->virtual_root_deleted = TRUE;
+    }
 
   gtk_tree_model_filter_set_model (filter, NULL);
 
@@ -1620,6 +1625,9 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       GtkTreePath *path;
       FilterLevel *level = FILTER_LEVEL (filter->priv->root);
 
+      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+      filter->priv->virtual_root_deleted = TRUE;
+
       if (!level)
         return;
 
@@ -2835,7 +2843,10 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
 
   filter = GTK_TREE_MODEL_FILTER (retval);
   if (filter->priv->virtual_root)
-    gtk_tree_model_filter_ref_path (filter, filter->priv->virtual_root);
+    {
+      gtk_tree_model_filter_ref_path (filter, filter->priv->virtual_root);
+      filter->priv->virtual_root_deleted = FALSE;
+    }
 
   return retval;
 }

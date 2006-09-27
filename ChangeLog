@@ -1,5 +1,13 @@
 2006-09-26  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_init),
+	(gtk_tree_model_filter_finalize), (gtk_tree_model_filter_row_deleted),
+	(gtk_tree_model_filter_new): unref the virtual root path once that
+	node (or one if its ancestors) is deleted, set virtual_root_deleted
+	so we only unref it once.
+
+2006-09-26  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed),
 	(gtk_tree_model_sort_sort_level): ref count nodes the proper way,
 	(gtk_tree_model_sort_ref_node), (gtk_tree_model_sort_real_unref_node),
