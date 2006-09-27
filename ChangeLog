@@ -1,3 +1,15 @@
+2006-09-26  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed),
+	(gtk_tree_model_sort_sort_level): ref count nodes the proper way,
+	(gtk_tree_model_sort_ref_node), (gtk_tree_model_sort_real_unref_node),
+	(gtk_tree_model_sort_free_level): bring zero ref count loops in
+	sync,
+	(gtk_tree_model_sort_free_level): free child levels before
+	decreasing the zero ref count of the current level,
+	(gtk_tree_model_sort_clear_cache): only clear cache if zero_ref_count
+	is > 0.
+
 2006-09-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/*.c:
