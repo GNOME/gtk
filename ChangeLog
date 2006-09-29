@@ -1,3 +1,8 @@
+2006-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: Apply a patch by Padraig O'Briain
+	to avoid a deadlock.  
+
 2006-09-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (_gtk_menu_is_empty): Don't leak
