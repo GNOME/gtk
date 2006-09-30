@@ -1,3 +1,8 @@
+2006-09-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (update_combo_box): Protect
+	against base_path being NULL.  (#358405, many reporters)
+
 2006-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemunix.c: Apply a patch by Padraig O'Briain
