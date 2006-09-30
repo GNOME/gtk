@@ -2207,10 +2207,13 @@ update_combo_box (GtkFileChooserButton *button)
 	    GtkFilePath *base_path;
 
 	    base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
-	    row_found = (paths &&
-			 paths->data &&
-			 gtk_file_path_compare (base_path, paths->data) == 0);
-	    gtk_file_path_free (base_path);
+            if (base_path)
+              {
+	        row_found = (paths &&
+		  	     paths->data &&
+			     gtk_file_path_compare (base_path, paths->data) == 0);
+	        gtk_file_path_free (base_path);
+              }
 	  }
 	  break;
 	default:
