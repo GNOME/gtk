@@ -240,6 +240,7 @@ static GtkFileInfo *create_file_info       (GtkFileFolderWin32        *folder_wi
 					    const char                *mime_type);
 
 static gboolean execute_callbacks_idle (gpointer data);
+static void execute_callbacks (gpointer data);
 
 static gboolean fill_in_names        (GtkFileFolderWin32  *folder_win32,
 				      GError             **error);
@@ -460,7 +461,7 @@ gtk_file_system_win32_dispose (GObject *object)
       system_win32->execute_callbacks_idle_id = 0;
 
       /* call pending callbacks */
-      execute_callbacks_idle (system_win32);
+      execute_callbacks (system_win32);
     }
 
   G_OBJECT_CLASS (gtk_file_system_win32_parent_class)->dispose (object);
@@ -808,14 +809,12 @@ struct callback_info
 
 
 
-static gboolean
-execute_callbacks_idle (gpointer data)
+static void
+execute_callbacks (gpointer data)
 {
   GSList *l;
   gboolean unref_file_system = TRUE;
   GtkFileSystemWin32 *system_win32 = GTK_FILE_SYSTEM_WIN32 (data);
-
-  GDK_THREADS_ENTER ();
 
   if (!system_win32->execute_callbacks_idle_id)
     unref_file_system = FALSE;
@@ -855,6 +854,14 @@ execute_callbacks_idle (gpointer data)
     g_object_unref (system_win32);
 
   system_win32->execute_callbacks_idle_id = 0;
+}
+
+static gboolean
+execute_callbacks_idle (gpointer data)
+{
+  GDK_THREADS_ENTER ();
+
+  execute_callbacks(data);
 
   GDK_THREADS_LEAVE ();
 
