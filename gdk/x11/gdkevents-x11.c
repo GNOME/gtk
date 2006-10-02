@@ -41,8 +41,9 @@
 #include <string.h>
 
 #include "gdkinputprivate.h"
-
+#include "gdksettings.c"
 #include "gdkalias.h"
+
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -2811,7 +2812,6 @@ gdk_net_wm_supports (GdkAtom property)
   return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
 }
 
-#include "gdksettings.c"
 
 static void
 gdk_xsettings_notify_cb (const char       *name,
