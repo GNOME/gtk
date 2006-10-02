@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-04 00:06+0200\n"
-"PO-Revision-Date: 2006-09-25 11:35+0300\n"
+"PO-Revision-Date: 2006-09-30 13:10+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1787,7 +1787,7 @@ msgstr ""
 
 #: ../gtk/gtkfilesystemmodel.c:745
 msgid "Could not obtain root folder"
-msgstr ""
+msgstr "Juurkataloogi pole võimalik hankida"
 
 #: ../gtk/gtkfilesystemmodel.c:1339
 msgid "(Empty)"
@@ -2499,7 +2499,7 @@ msgstr "_Tühjenda loend"
 
 #: ../gtk/gtkrecentchooserdefault.c:1937
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "Näita _privaatressursse"
 
 #: ../gtk/gtkrecentchoosermenu.c:421 ../gtk/gtkrecentchoosermenu.c:482
 #, c-format
@@ -2946,11 +2946,11 @@ msgstr "ZWS _Null-laiusega tühik"
 
 #: ../gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "ZWJ Null-laiusega ühendaja"
 
 #: ../gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWJ Null-laiusega _mitteühendaja"
 
 #: ../gtk/gtkthemes.c:71
 #, c-format
@@ -3859,7 +3859,7 @@ msgstr "Paberi allikas"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1453
 msgid "Output Tray"
-msgstr ""
+msgstr "Väljastussalv"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "One Sided"
@@ -4026,7 +4026,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1017
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "Silti \"%s\" pole defineeritud."
 
 #: ../gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
@@ -4072,7 +4072,7 @@ msgstr "Silt \"%s\" on juba kirjeldatud"
 #: ../gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "Sildil \"%s\" on vigane tähtsus \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1344
 #, c-format
