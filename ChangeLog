@@ -1,3 +1,10 @@
+2006-10-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkexpander.c (gtk_expander_realize) 
+	(gtk_expander_size_allocate): Make the event_window large
+	enough to cover the full height of the label_widget.  (#358351,
+	Scott Horowitz)
+
 2006-10-01  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c: Same change as to gtkfilesystemunix.c.

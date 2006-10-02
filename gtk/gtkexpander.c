@@ -370,6 +370,7 @@ gtk_expander_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
   GdkRectangle expander_rect;
+  gint label_height;
 
   priv = GTK_EXPANDER (widget)->priv;
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -378,11 +379,21 @@ gtk_expander_realize (GtkWidget *widget)
 
   get_expander_bounds (GTK_EXPANDER (widget), &expander_rect);
   
+  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+    {
+      GtkRequisition label_requisition;
+
+      gtk_widget_get_child_requisition (priv->label_widget, &label_requisition);
+      label_height = label_requisition.height;
+    }
+  else
+    label_height = 0;
+
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
-  attributes.y = expander_rect.y;
+  attributes.y = widget->allocation.y + border_width;
   attributes.width = MAX (widget->allocation.width - 2 * border_width, 1);
-  attributes.height = expander_rect.width;
+  attributes.height = MAX (expander_rect.height, label_height - 2 * border_width);
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget)     |
 				GDK_BUTTON_PRESS_MASK        |
@@ -636,8 +647,10 @@ gtk_expander_size_allocate (GtkWidget     *widget,
       get_expander_bounds (expander, &rect);
 
       gdk_window_move_resize (priv->event_window,
-			      allocation->x + border_width, rect.y,
-			      MAX (allocation->width - 2 * border_width, 1), rect.width);
+			      allocation->x + border_width, 
+			      allocation->y + border_width, 
+			      MAX (allocation->width - 2 * border_width, 1), 
+			      MAX (rect.height, label_height - 2 * border_width));
     }
 
   if (child_visible)
