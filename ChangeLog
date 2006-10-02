@@ -1,5 +1,8 @@
 2006-10-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c (available_choices): 
+	Only use the group name field if cups is new enough.  (#357280)
+
 	* gtk/gtksizegroup.c: Make sure that the quarks are 
 	initialized before using them.  (#353736)
 
