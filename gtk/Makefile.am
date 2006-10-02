@@ -1094,15 +1094,24 @@ stamp-icons: $(STOCK_ICONS)
         fi &&									\
 	for i in 16 24; do							\
 	   (cd stock-icons/$$i							\
-	   && $(LN_S) -f gtk-go-forward-ltr.png gtk-go-back-rtl.png		\
-	   && $(LN_S) -f gtk-go-back-ltr.png gtk-go-forward-rtl.png		\
-	   && $(LN_S) -f gtk-goto-last-ltr.png gtk-goto-first-rtl.png		\
-	   && $(LN_S) -f gtk-goto-first-ltr.png gtk-goto-last-rtl.png		\
-	   && $(LN_S) -f gtk-media-rewind-ltr.png gtk-media-forward-rtl.png	\
-	   && $(LN_S) -f gtk-media-previous-ltr.png gtk-media-next-rtl.png	\
-	   && $(LN_S) -f gtk-media-next-ltr.png gtk-media-previous-rtl.png	\
-	   && $(LN_S) -f gtk-media-forward-ltr.png gtk-media-rewind-rtl.png	\
-	   && $(LN_S) -f gtk-floppy.png gtk-save.png)				\
+	   && $(RM) gtk-go-back-rtl.png 					\
+	   && $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png		\
+	   && $(RM) gtk-go-forward-rtl.png					\
+	   && $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png		\
+	   && $(RM) gtk-goto-first-rtl.png 					\
+	   && $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png		\
+	   && $(RM) gtk-goto-last-rtl.png					\
+	   && $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png		\
+	   && $(RM) gtk-media-forward-rtl.png 					\
+	   && $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png	\
+	   && $(RM) gtk-mdedia-next-rtl.png					\
+	   && $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png		\
+	   && $(RM) gtk-media-previous-rtl.png 					\
+	   && $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png		\
+	   && $(RM) gtk-media-rewind-rtl.png					\
+	   && $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png	\
+	   && $(RM) gtk-save.png						\
+	   && $(LN_S) gtk-floppy.png gtk-save.png)				\
 	done									\
 	&& touch stamp-icons
 
