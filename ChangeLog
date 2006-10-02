@@ -1,5 +1,8 @@
 2006-10-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c: Make sure that the quarks are 
+	initialized before using them.  (#353736)
+
 	* gtk/Makefile.am (stamp-icons): Use rm instead of ln -f to
 	replace existing links.  (#354849, James Evans)
 
