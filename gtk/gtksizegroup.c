@@ -254,6 +254,16 @@ queue_resize_on_group (GtkSizeGroup *size_group)
 }
 
 static void
+initialize_size_group_quarks (void)
+{
+  if (!size_groups_quark)
+    {
+      size_groups_quark = g_quark_from_static_string (size_groups_tag);
+      visited_quark = g_quark_from_string (visited_tag);
+    }
+}
+
+static void
 gtk_size_group_class_init (GtkSizeGroupClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -286,9 +296,8 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 							    "when determining the size of the group"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
-
-  size_groups_quark = g_quark_from_static_string (size_groups_tag);
-  visited_quark = g_quark_from_string (visited_tag);
+  
+  initialize_size_group_quarks ();
 }
 
 static void
@@ -356,7 +365,7 @@ gtk_size_group_get_property (GObject      *object,
  * Return value: a newly created #GtkSizeGroup
  **/
 GtkSizeGroup *
-gtk_size_group_new (GtkSizeGroupMode  mode)
+gtk_size_group_new (GtkSizeGroupMode mode)
 {
   GtkSizeGroup *size_group = g_object_new (GTK_TYPE_SIZE_GROUP, NULL);
 
@@ -510,8 +519,8 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
  * Removes a widget from a #GtkSizeGroup.
  **/
 void
-gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
-			      GtkWidget        *widget)
+gtk_size_group_remove_widget (GtkSizeGroup *size_group,
+			      GtkWidget    *widget)
 {
   GSList *groups;
   
@@ -548,7 +557,7 @@ gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
 GSList *
 gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 {
-     return size_group->widgets;
+  return size_group->widgets;
 }
 
 static gint
@@ -732,6 +741,8 @@ void
 _gtk_size_group_get_child_requisition (GtkWidget      *widget,
 				       GtkRequisition *requisition)
 {
+  initialize_size_group_quarks ();
+
   if (requisition)
     {
       if (get_size_groups (widget))
@@ -760,6 +771,8 @@ _gtk_size_group_compute_requisition (GtkWidget      *widget,
 {
   gint width;
   gint height;
+
+  initialize_size_group_quarks ();
 
   if (get_size_groups (widget))
     {
@@ -792,6 +805,8 @@ _gtk_size_group_compute_requisition (GtkWidget      *widget,
 void
 _gtk_size_group_queue_resize (GtkWidget *widget)
 {
+  initialize_size_group_quarks ();
+
   queue_resize_on_widget (widget, TRUE);
 }
 
