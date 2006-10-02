@@ -1104,7 +1104,7 @@ stamp-icons: $(STOCK_ICONS)
 	   && $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png		\
 	   && $(RM) gtk-media-forward-rtl.png 					\
 	   && $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png	\
-	   && $(RM) gtk-mdedia-next-rtl.png					\
+	   && $(RM) gtk-media-next-rtl.png					\
 	   && $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png		\
 	   && $(RM) gtk-media-previous-rtl.png 					\
 	   && $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png		\

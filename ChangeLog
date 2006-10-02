@@ -1,3 +1,7 @@
+2006-10-02  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/Makefile.am: Fix typo in file name.  (#358931)
+
 2006-10-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.5 ===
