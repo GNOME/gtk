@@ -1688,6 +1688,7 @@ available_choices (ppd_file_t     *ppd,
   conflicts = g_new0 (char, option->num_choices);
 
   installed_options = NULL;
+#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 18) 
   for (i = 0; i < ppd->num_groups; i++)
     {
       if (strcmp (ppd->groups[i].name, "InstallableOptions") == 0)
@@ -1696,6 +1697,7 @@ available_choices (ppd_file_t     *ppd,
 	  break;
 	}
     }
+#endif
 
   for (i = ppd->num_consts, constraint = ppd->consts; i > 0; i--, constraint++)
     {
