@@ -1,5 +1,12 @@
 2006-10-02  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gdk-pixbuf/Makefile.am:
+	* gdk/Makefile.am:
+	* gtk/Makefile.am:
+	Include pltcheck.sh in EXTRA_DIST.
+
+2006-10-02  Behdad Esfahbod  <behdad@gnome.org>
+
 	* gdk/x11/gdkevents-x11.c: Move all includes before including
 	gdkalias.h.
 

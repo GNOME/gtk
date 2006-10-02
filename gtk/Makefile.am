@@ -1146,6 +1146,7 @@ EXTRA_DIST +=                   \
 	makefile.msc		\
 	makefile.msc.in		\
 	makegtkalias.pl		\
-	abicheck.sh
+	abicheck.sh		\
+	pltcheck.sh
 
 install-data-local:

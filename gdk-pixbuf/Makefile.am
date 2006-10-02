@@ -432,6 +432,7 @@ EXTRA_DIST =					\
 	gdk-pixbuf.symbols			\
 	makegdkpixbufalias.pl			\
 	abicheck.sh				\
+	pltcheck.sh				\
 	gdk_pixbuf.def				\
 	gdk_pixbuf.rc				\
 	gdk-pixbuf-marshal.c			\

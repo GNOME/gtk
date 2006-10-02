@@ -16,7 +16,8 @@ EXTRA_DIST =			\
 	gdk.symbols		\
 	makegdkalias.pl		\
 	gdkaliasdef.c		\
-	abicheck.sh
+	abicheck.sh		\
+	pltcheck.sh
 
 INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -198,7 +199,7 @@ gdkaliasdef.c: gdk.symbols
 	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
 
 if OS_LINUX
-TESTS = pltcheck.sh abicheck.sh
+TESTS = abicheck.sh pltcheck.sh
 endif
 
 
