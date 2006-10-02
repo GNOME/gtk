@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-08-18 00:44+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1795,8 +1795,8 @@ msgid ""
 msgstr ""
 "폴더 이름 \"%s\"에는 파일 이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1170
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
+#: gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "'%s' 디렉토리를 만드는 데 오류가 발생했습니다: %s"
@@ -1900,23 +1900,23 @@ msgstr "루트 폴더를 가져올 수 없습니다"
 msgid "(Empty)"
 msgstr "(빈 파일)"
 
-#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
-#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
+#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
+#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
+#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 
-#: gtk/gtkfilesystemunix.c:1173
+#: gtk/gtkfilesystemunix.c:1180
 msgid "File System"
 msgstr "파일시스템"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
+#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1925,32 +1925,32 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
+#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
+#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
+#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
 
-#: gtk/gtkfilesystemwin32.c:1093
+#: gtk/gtkfilesystemwin32.c:1100
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "경로가 폴더가 아닙니다: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1295
+#: gtk/gtkfilesystemwin32.c:1302
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "네트워크 드라이브 (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1317
+#: gtk/gtkfilesystemwin32.c:1324
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3098,7 +3098,7 @@ msgstr "갑작스런 시작 태그 '%s' (%d번째 줄 문자 %d)"
 msgid "Unexpected character data on line %d char %d"
 msgstr "갑작스런 문자 데이터 (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:2224
+#: gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "비었음"
 
@@ -3997,51 +3997,51 @@ msgstr "자동 선택"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1920
+#: modules/printbackends/cups/gtkprintbackendcups.c:1922
 msgid "Printer Default"
 msgstr "프린터 기본값"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Urgent"
 msgstr "긴급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "High"
 msgstr "높음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Medium"
 msgstr "중간"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Low"
 msgstr "낮음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "None"
 msgstr "없음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Classified"
 msgstr "비밀 분류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Confidential"
 msgstr "기밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Secret"
 msgstr "비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Standard"
 msgstr "표준"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Top Secret"
 msgstr "일급 비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Unclassified"
 msgstr "비밀 분류 해제"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:54-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2005-08-14 10:09+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -4516,11 +4516,11 @@ msgstr "Színtér"
 msgid "A hash table representation of the color scheme."
 msgstr ""
 
-#: gtk/gtksizegroup.c:267
+#: gtk/gtksizegroup.c:277
 msgid "Mode"
 msgstr "Mód"
 
-#: gtk/gtksizegroup.c:268
+#: gtk/gtksizegroup.c:278
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -4528,11 +4528,11 @@ msgstr ""
 "Az irányok, amelyekben a méretcsoport befolyásolja az összetevő felületi "
 "elemeinek kért méretét"
 
-#: gtk/gtksizegroup.c:284
+#: gtk/gtksizegroup.c:294
 msgid "Ignore hidden"
 msgstr "Rejtettek mellőzése"
 
-#: gtk/gtksizegroup.c:285
+#: gtk/gtksizegroup.c:295
 #, fuzzy
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"

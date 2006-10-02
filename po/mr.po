@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-09-04 02:23+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
@@ -2048,8 +2048,8 @@ msgid ""
 msgstr "ह्या फोल्डरच्या नावात \"%s\" चिन्हे अशी आहेत की जी फाइलनावासाठी घेता येत नाही"
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1170
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
+#: gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "निर्देशिका '%s' निर्माण करण्यात चूक: %s"
@@ -2170,56 +2170,56 @@ msgid "(Empty)"
 msgstr "(रिकामे)"
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
-#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
+#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
+#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' साठी माहिती मिळवण्यात चूक: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
+#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "ही फाइल प्रणाली आरोहणास समर्थन करत नाही"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilesystemunix.c:1173
+#: gtk/gtkfilesystemunix.c:1180
 msgid "File System"
 msgstr "फाइल प्रणाली"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
+#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
+#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "खूणगाठ सुरक्षित करणे असफल: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
+#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' आधीच खूणगाठ यादीत अस्तित्वात आहे"
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
+#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' खूणगाठ यादीत अस्तित्वात नाही"
 
-#: gtk/gtkfilesystemwin32.c:1093
+#: gtk/gtkfilesystemwin32.c:1100
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "पथ फोल्डर नाही: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1295
+#: gtk/gtkfilesystemwin32.c:1302
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "संजाळ यंत्र (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1317
+#: gtk/gtkfilesystemwin32.c:1324
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3527,7 +3527,7 @@ msgstr ""
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2224
+#: gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "रिकामे"
 
@@ -4549,56 +4549,56 @@ msgstr "स्वयं निवडणे"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1920
+#: modules/printbackends/cups/gtkprintbackendcups.c:1922
 msgid "Printer Default"
 msgstr "मुलभूत प्रिंटर"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Urgent"
 msgstr "तातडीने"
 
 # gtk/gtklayout.c:642
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "High"
 msgstr "उंच"
 
 # gtk/gtkoptionmenu.c:188
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Medium"
 msgstr "मध्यम"
 
 # gtk/gtkruler.c:118
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Low"
 msgstr "खाली"
 
 # gtk/gtkinputdialog.c:519
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "None"
 msgstr "काहीच नाही"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Confidential"
 msgstr "गुप्त"
 
 # gtk/gtkinputdialog.c:246
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Secret"
 msgstr "गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Standard"
 msgstr "मानक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Top Secret"
 msgstr "उच्च गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Unclassified"
 msgstr "अवर्गिकृत"
 

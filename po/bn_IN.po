@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-09-13 11:04+0530\n"
 "Last-Translator: Runa Bhattacharjee <runabh@gmail.com>\n"
 "Language-Team: Bengali India\n"
@@ -1786,8 +1786,8 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" ফোল্ডারের নামের মধ্যে কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলি গ্রহণযোগ্য নয়"
 
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1170
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
+#: gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "'%s' ডিরেক্টরি নির্মাণের সমস্যা: %s"
@@ -1890,23 +1890,23 @@ msgstr "root ফোল্ডার প্রাপ্ত করতে ব্য�
 msgid "(Empty)"
 msgstr "(ফাঁকা)"
 
-#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
-#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
+#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
+#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' সংক্রান্ত তথ্য প্রাপ্ত করতে সমস্যা: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
+#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "এই ফাইল-সিস্টেমের দ্বারা মাউন্ট বৈশিষ্ট্য সমর্থিত নয়"
 
-#: gtk/gtkfilesystemunix.c:1173
+#: gtk/gtkfilesystemunix.c:1180
 msgid "File System"
 msgstr "ফাইল-সিস্টেম"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
+#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1915,32 +1915,32 @@ msgstr ""
 "\"%s\" নামের মধ্যে \"%s\" অক্ষরের উপস্থিতির ফলে সেটি বৈধ নয়। অনুগ্রহ করে একটি পৃথক "
 "নাম ব্যবহার করুন।"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
+#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "বুকমার্ক সংরক্ষণ করতে ব্যর্থ: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
+#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' বর্তমানে বুকমার্কের তালিকায় উপস্থিত রয়েছে"
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
+#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' বর্তমানে বুকমার্ক তালিকায় উপস্থিত নেই"
 
-#: gtk/gtkfilesystemwin32.c:1093
+#: gtk/gtkfilesystemwin32.c:1100
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "চিহ্নিত পাথ ফোল্ডার নয়: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1295
+#: gtk/gtkfilesystemwin32.c:1302
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "নেটওয়ার্ক ড্রাইভ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1317
+#: gtk/gtkfilesystemwin32.c:1324
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3086,7 +3086,7 @@ msgstr "অপ্রত্যাশিত প্রারম্ভিক ট্�
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d পংক্তির  %d অক্ষরে অপ্রত্যাশিত অক্ষরবিশিষ্ট তথ্য"
 
-#: gtk/gtkuimanager.c:2224
+#: gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "ফাঁকা"
 
@@ -3985,51 +3985,51 @@ msgstr "স্বয়ংক্রিয় নির্বাচন"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1920
+#: modules/printbackends/cups/gtkprintbackendcups.c:1922
 msgid "Printer Default"
 msgstr "প্রিন্টারের ডিফল্ট মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Urgent"
 msgstr "জরুরী"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "High"
 msgstr "উচ্চ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Medium"
 msgstr "মাঝারি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Low"
 msgstr "নিম্ন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "None"
 msgstr "(শূণ্য)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Classified"
 msgstr "শ্রেণীবদ্ধ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Confidential"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Secret"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Standard"
 msgstr "প্রমিত মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Top Secret"
 msgstr "অতিমাত্রায় গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Unclassified"
 msgstr "শ্রেণীবিহীন"
 

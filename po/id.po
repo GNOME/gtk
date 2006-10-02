@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-09-05 15:56+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -1808,8 +1808,8 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nama folder %s berisi simbol yang tidak boleh ada pada nama file"
 
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1170
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
+#: gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Error saat membuat direktori '%s': %s"
@@ -1912,23 +1912,23 @@ msgstr "Tidak bisa mendapatkan folder root"
 msgid "(Empty)"
 msgstr "(Kosong)"
 
-#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
-#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
+#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
+#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Informasi mengenai '%s' tidak tersedia: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
+#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Sistem berkas ini tidak dapat dikaitkan"
 
-#: gtk/gtkfilesystemunix.c:1173
+#: gtk/gtkfilesystemunix.c:1180
 msgid "File System"
 msgstr "Sistem Berkas"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
+#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1937,32 +1937,32 @@ msgstr ""
 "Jangan pakai nama \"%s\" karena ada karakter \"%s\" yang tidak sah. Silakan "
 "ganti dengan nama lain."
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
+#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Gagal menyimpan buku alamat: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
+#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' sudah ada dalam daftar buku alamat"
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
+#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' tidak ada dalam daftar buku alamat"
 
-#: gtk/gtkfilesystemwin32.c:1093
+#: gtk/gtkfilesystemwin32.c:1100
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "Path bukan folder: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1295
+#: gtk/gtkfilesystemwin32.c:1302
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Perangkat Jaringan (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1317
+#: gtk/gtkfilesystemwin32.c:1324
 #, c-format
 msgid "%s (%s)"
 msgstr "%s: (%s)"
@@ -3109,7 +3109,7 @@ msgstr "Tag awal '%s' pada baris %d kolom %d seharusnya tidak ada"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Data karakter pada baris %d kolom %d seharusnya tidak ada"
 
-#: gtk/gtkuimanager.c:2224
+#: gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "Kosong"
 
@@ -4008,51 +4008,51 @@ msgstr "Pilih Otomatis"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1920
+#: modules/printbackends/cups/gtkprintbackendcups.c:1922
 msgid "Printer Default"
 msgstr "Pencetak Awal"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Urgent"
 msgstr "Penting"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "High"
 msgstr "Tinggi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Medium"
 msgstr "Sedang"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Low"
 msgstr "Rendah"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "None"
 msgstr "Tidak ada"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Confidential"
 msgstr "Pribadi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Secret"
 msgstr "Rahasia"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Standard"
 msgstr "Standard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Top Secret"
 msgstr "Sangat Rahasia"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Unclassified"
 msgstr ""
 

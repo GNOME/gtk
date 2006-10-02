@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-06-06 12:53+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -1799,8 +1799,8 @@ msgstr ""
 "Li no do ridant «%s» eploye des senes ki n' sont nén permetous dins les nos "
 "d' fitchîs"
 
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
-#: gtk/gtkfilesystemwin32.c:1170
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
+#: gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Åk n' a nén stî tot-z ahivant l' ridant «%s»: %s"
@@ -1909,23 +1909,23 @@ msgstr "Dji n' a nén savou aveur li ridant raecene"
 msgid "(Empty)"
 msgstr "(Vude)"
 
-#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
-#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
-#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
+#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
+#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Åk n' a nén stî tot rascodant des informåcions po «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
+#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Ci sistinme di fitchîs chal èn sopoite nén l' montaedje"
 
-#: gtk/gtkfilesystemunix.c:1173
+#: gtk/gtkfilesystemunix.c:1180
 msgid "File System"
 msgstr "Sistinme di fitchîs"
 
-#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
+#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1934,32 +1934,32 @@ msgstr ""
 "Li no d' fitchî «%s» n' est nén valide ca il eploye li caractere «%s». "
 "Eployîz on no diferin s' i vs plait."
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
+#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Li schapaedje del rimåke a fwait berwete: %s"
 
-#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
+#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
+#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1093
+#: gtk/gtkfilesystemwin32.c:1100
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1295
+#: gtk/gtkfilesystemwin32.c:1302
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1317
+#: gtk/gtkfilesystemwin32.c:1324
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -3102,7 +3102,7 @@ msgstr ""
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2224
+#: gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "Vude"
 
@@ -4001,51 +4001,51 @@ msgstr "Tchoezi otomaticmint"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1920
+#: modules/printbackends/cups/gtkprintbackendcups.c:1922
 msgid "Printer Default"
 msgstr "Prémetowe valixhance del sicrirece"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Urgent"
 msgstr "Urdjint"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "High"
 msgstr "Hôte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Medium"
 msgstr "Moyene"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Low"
 msgstr "Basse"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "None"
 msgstr "Nole"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Classified"
 msgstr "Classifyî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Secret"
 msgstr "Sicret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Standard"
 msgstr "Tipike"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Top Secret"
 msgstr "Foû scret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2112
 msgid "Unclassified"
 msgstr "Nén classifyî"
 

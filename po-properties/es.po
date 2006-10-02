@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:54-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-07-06 18:58+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@tecknolabs.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -4499,11 +4499,11 @@ msgstr "Hash del color"
 msgid "A hash table representation of the color scheme."
 msgstr "Una representación en tabla hash del esquema de color."
 
-#: gtk/gtksizegroup.c:267
+#: gtk/gtksizegroup.c:277
 msgid "Mode"
 msgstr "Modo"
 
-#: gtk/gtksizegroup.c:268
+#: gtk/gtksizegroup.c:278
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -4511,11 +4511,11 @@ msgstr ""
 "Las direcciones en las cuales el tamaño del grupo afecta a los tamaños "
 "solicitados de sus widgets componentes"
 
-#: gtk/gtksizegroup.c:284
+#: gtk/gtksizegroup.c:294
 msgid "Ignore hidden"
 msgstr "Ignorar ocultas"
 
-#: gtk/gtksizegroup.c:285
+#: gtk/gtksizegroup.c:295
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

@@ -1,5 +1,9 @@
 2006-10-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.10.5 ===
+
+	* NEWS: Updates
+
 	* modules/printbackends/cups/gtkprintbackendcups.c (available_choices): 
 	Only use the group name field if cups is new enough.  (#357280)
 

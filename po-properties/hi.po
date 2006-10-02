@@ -888,7 +888,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:54-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2006-09-04 12:30+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -5198,21 +5198,21 @@ msgstr "रंग हैश"
 msgid "A hash table representation of the color scheme."
 msgstr "रंग योजना के रूपांकन की हैश तालिका"
 
-#: gtk/gtksizegroup.c:267
+#: gtk/gtksizegroup.c:277
 msgid "Mode"
 msgstr "मोड"
 
-#: gtk/gtksizegroup.c:268
+#: gtk/gtksizegroup.c:278
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr "वह दिशा जिसमें घटक विज़ेट के आकार समूह प्रभावित करेगा मांगे जाने वाले आकार को"
 
-#: gtk/gtksizegroup.c:284
+#: gtk/gtksizegroup.c:294
 msgid "Ignore hidden"
 msgstr "छुपे को अनदेखा करें"
 
-#: gtk/gtksizegroup.c:285
+#: gtk/gtksizegroup.c:295
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

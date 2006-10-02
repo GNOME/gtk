@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 22:54-0400\n"
+"POT-Creation-Date: 2006-10-02 02:14-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -4632,11 +4632,11 @@ msgstr "Назва _колеру:"
 msgid "A hash table representation of the color scheme."
 msgstr ""
 
-#: gtk/gtksizegroup.c:267
+#: gtk/gtksizegroup.c:277
 msgid "Mode"
 msgstr "Рэжым"
 
-#: gtk/gtksizegroup.c:268
+#: gtk/gtksizegroup.c:278
 #, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
@@ -4645,11 +4645,11 @@ msgstr ""
 "Накірункі ў якіх памер групы ўзьдзейнічае на запатрабаваныя памеры "
 "ўваходзячых у яе частак віджэтаў."
 
-#: gtk/gtksizegroup.c:284
+#: gtk/gtksizegroup.c:294
 msgid "Ignore hidden"
 msgstr ""
 
-#: gtk/gtksizegroup.c:285
+#: gtk/gtksizegroup.c:295
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

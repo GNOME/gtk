@@ -1,3 +1,19 @@
+Overview of Changes from GTK+ 2.10.4 to 2.10.5
+==============================================
+
+* Bugs fixed:
+ 358405 gtk_file_chooser_button_new
+ 353736 crash in Document Viewer: I had just viewed the pr...
+ 354849 Unable to build gtk+ under Solaris 9
+ 357280 Compile crashes
+ 357454 leak in _gtk_menu_is_empty()
+ 357566 [x11] Invalid unref for input windows
+ 357791 gtk_tree_selection_get_selected_rows does not always fill model
+ 358351 expander with multi-line label doesn't properly respond to mouse
+
+* Updated translations (dz,et,gl,ka)
+
+
 Overview of Changes from GTK+ 2.10.3 to 2.10.4
 ==============================================
 
