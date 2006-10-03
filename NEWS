@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.10.5 to 2.10.6
+==============================================
+
+* Bugs fixed:
+ 358931 2.10.5 build issue due to a typo
+ 357280 Compile crashes 
+ 359053 Reduce relocations
+ 
 Overview of Changes from GTK+ 2.10.4 to 2.10.5
 ==============================================
 
