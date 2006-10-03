@@ -5,7 +5,10 @@ Overview of Changes from GTK+ 2.10.5 to 2.10.6
  358931 2.10.5 build issue due to a typo
  357280 Compile crashes 
  359053 Reduce relocations
+ 359052 gtk_print_settings_get_duplex() return wrong 
+        value for one of vertical setting
  
+
 Overview of Changes from GTK+ 2.10.4 to 2.10.5
 ==============================================
 
