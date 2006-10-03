@@ -1,5 +1,7 @@
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.10.6 ===
 	
 	* gtk/gtkprintsettings.c (gtk_print_settings_get_duplex):
