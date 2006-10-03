@@ -33,7 +33,7 @@ gtk_cell_editable_get_type (void)
 
   if (! cell_editable_type)
     {
-      static const GTypeInfo cell_editable_info =
+      const GTypeInfo cell_editable_info =
       {
 	sizeof (GtkCellEditableIface), /* class_size */
 	gtk_cell_editable_base_init,   /* base_init */

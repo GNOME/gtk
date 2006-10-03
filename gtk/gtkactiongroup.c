@@ -95,7 +95,7 @@ gtk_action_group_get_type (void)
 
   if (!type)
     {
-      static const GTypeInfo type_info =
+      const GTypeInfo type_info =
       {
         sizeof (GtkActionGroupClass),
 	NULL,           /* base_init */

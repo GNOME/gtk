@@ -1,5 +1,8 @@
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c, gdk/*.c: Apply a patch by Behdad Esfahbod to
+	reduce relocations. (#359053)
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Complete
 	the fix for bug 357280.
 

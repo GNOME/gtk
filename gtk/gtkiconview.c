@@ -8092,7 +8092,7 @@ gtk_icon_view_item_accessible_get_type (void)
 
   if (!type)
     {
-      static const GTypeInfo tinfo =
+      const GTypeInfo tinfo =
       {
         sizeof (GtkIconViewItemAccessibleClass),
         (GBaseInitFunc) NULL, /* base init */
@@ -9100,7 +9100,7 @@ gtk_icon_view_accessible_factory_get_type (void)
 
   if (!type)
     {
-      static const GTypeInfo tinfo =
+      const GTypeInfo tinfo =
       {
         sizeof (AtkObjectFactoryClass),
         NULL,           /* base_init */

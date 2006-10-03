@@ -402,7 +402,7 @@ gtk_file_system_get_type (void)
 
   if (!file_system_type)
     {
-      static const GTypeInfo file_system_info =
+      const GTypeInfo file_system_info =
       {
 	sizeof (GtkFileSystemIface),  /* class_size */
 	gtk_file_system_base_init,    /* base_init */
@@ -1031,7 +1031,7 @@ gtk_file_folder_get_type (void)
 
   if (!file_folder_type)
     {
-      static const GTypeInfo file_folder_info =
+      const GTypeInfo file_folder_info =
       {
 	sizeof (GtkFileFolderIface),  /* class_size */
 	gtk_file_folder_base_init,    /* base_init */

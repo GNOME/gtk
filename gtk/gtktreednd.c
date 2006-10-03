@@ -30,7 +30,7 @@ gtk_tree_drag_source_get_type (void)
 
   if (!our_type)
     {
-      static const GTypeInfo our_info =
+      const GTypeInfo our_info =
       {
         sizeof (GtkTreeDragSourceIface), /* class_size */
 	NULL,		/* base_init */
@@ -59,7 +59,7 @@ gtk_tree_drag_dest_get_type (void)
 
   if (!our_type)
     {
-      static const GTypeInfo our_info =
+      const GTypeInfo our_info =
       {
         sizeof (GtkTreeDragDestIface), /* class_size */
 	NULL,		/* base_init */
