@@ -871,7 +871,7 @@ gtk_print_settings_get_duplex (GtkPrintSettings *settings)
     return GTK_PRINT_DUPLEX_HORIZONTAL;
   
   if (strcmp (val, "vertical") == 0)
-    return GTK_PRINT_DUPLEX_HORIZONTAL;
+    return GTK_PRINT_DUPLEX_VERTICAL;
   
   return GTK_PRINT_DUPLEX_SIMPLEX;
 }
