@@ -49,6 +49,7 @@
 #include "gtkcupsutils.h"
 #include "gtkdebug.h"
 
+
 typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 
 #define GTK_PRINT_BACKEND_CUPS_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_BACKEND_CUPS, GtkPrintBackendCupsClass))
@@ -1664,6 +1665,16 @@ value_is_off (const char *value)
 	   strcasecmp (value, "False") == 0);
 }
 
+static char *
+ppd_group_name (ppd_group_t *group)
+{
+#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 18) 
+  return group->name;
+#else
+  return group->text;
+#endif
+}
+
 static int
 available_choices (ppd_file_t     *ppd,
 		   ppd_option_t   *option,
@@ -1687,16 +1698,17 @@ available_choices (ppd_file_t     *ppd,
   conflicts = g_new0 (char, option->num_choices);
 
   installed_options = NULL;
-#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 18) 
   for (i = 0; i < ppd->num_groups; i++)
     {
-      if (strcmp (ppd->groups[i].name, "InstallableOptions") == 0)
+      char *name; 
+
+      name = ppd_group_name (&ppd->groups[i]);
+      if (strcmp (name, "InstallableOptions") == 0)
 	{
 	  installed_options = &ppd->groups[i];
 	  break;
 	}
     }
-#endif
 
   for (i = ppd->num_consts, constraint = ppd->consts; i > 0; i--, constraint++)
     {
@@ -2038,21 +2050,24 @@ handle_option (GtkPrinterOptionSet *set,
   
   if (option)
     {
-      if (STRING_IN_TABLE (toplevel_group->name,
+      char *name;
+
+      name = ppd_group_name (toplevel_group);
+      if (STRING_IN_TABLE (name,
 			   color_group_whitelist) ||
 	  STRING_IN_TABLE (ppd_option->keyword,
 			   color_option_whitelist))
 	{
 	  option->group = g_strdup ("ColorPage");
 	}
-      else if (STRING_IN_TABLE (toplevel_group->name,
+      else if (STRING_IN_TABLE (name,
 				image_quality_group_whitelist) ||
 	       STRING_IN_TABLE (ppd_option->keyword,
 				image_quality_option_whitelist))
 	{
 	  option->group = g_strdup ("ImageQualityPage");
 	}
-      else if (STRING_IN_TABLE (toplevel_group->name,
+      else if (STRING_IN_TABLE (name,
 				finishing_group_whitelist) ||
 	       STRING_IN_TABLE (ppd_option->keyword,
 				finishing_option_whitelist))
@@ -2080,9 +2095,11 @@ handle_group (GtkPrinterOptionSet *set,
 	      GtkPrintSettings    *settings)
 {
   gint i;
-
+  gchar *name;
+  
   /* Ignore installable options */
-  if (strcmp (toplevel_group->name, "InstallableOptions") == 0)
+  name = ppd_group_name (toplevel_group);
+  if (strcmp (name, "InstallableOptions") == 0)
     return;
   
   for (i = 0; i < group->num_options; i++)
