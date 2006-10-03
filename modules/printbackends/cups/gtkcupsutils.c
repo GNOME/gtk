@@ -30,6 +30,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 20)
+#define HAVE_HTTP_AUTHSTRING 1
+#endif
+
 typedef void (*GtkCupsRequestStateFunc) (GtkCupsRequest *request);
 
 static void _connect            (GtkCupsRequest *request);
@@ -534,7 +538,9 @@ _post_send (GtkCupsRequest *request)
   httpClearFields(request->http);
   httpSetField(request->http, HTTP_FIELD_CONTENT_LENGTH, length);
   httpSetField(request->http, HTTP_FIELD_CONTENT_TYPE, "application/ipp");
+#ifdef HAVE_HTTP_AUTHSTRING
   httpSetField(request->http, HTTP_FIELD_AUTHORIZATION, request->http->authstring);
+#endif
 
   if (httpPost(request->http, request->resource))
     {
@@ -821,7 +827,9 @@ _get_send (GtkCupsRequest *request)
     }
 
   httpClearFields(request->http);
+#ifdef HAVE_HTTP_AUTHSTRING
   httpSetField(request->http, HTTP_FIELD_AUTHORIZATION, request->http->authstring);
+#endif
 
   if (httpGet(request->http, request->resource))
     {

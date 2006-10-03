@@ -1,10 +1,15 @@
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+
+	* gtk/gtkprintsettings.c (gtk_print_settings_get_duplex):
+	Fix a typo.  (#359052, Ghee Teo)
+
 	* gtk/*.c, gdk/*.c: Apply a patch by Behdad Esfahbod to
 	reduce relocations. (#359053)
 
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkcupsutils.c:
 	* modules/printbackends/cups/gtkprintbackendcups.c: Complete
 	the fix for bug 357280.
 
