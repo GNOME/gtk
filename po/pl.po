@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 02:14-0400\n"
+"POT-Creation-Date: 2006-10-03 13:38-0400\n"
 "PO-Revision-Date: 2006-08-25 11:17+0200\n"
 "Last-Translator: Artur Flinta <aflinta@cvs.gnome.org>\n"
 "Language-Team: GNOME PL Team <translators@gnomepl.org>\n"
@@ -2622,36 +2622,36 @@ msgstr "Nie można odnaleźć dołączanego pliku: \"%s\""
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr "Wybiera jakie rodzaje dokumentów są wyświetlane"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Nie znaleziono elementu dla URI \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:1770
+#: gtk/gtkrecentchooserdefault.c:1767
 msgid "Could not remove item"
 msgstr "Nie można usunąć elementu"
 
-#: gtk/gtkrecentchooserdefault.c:1813
+#: gtk/gtkrecentchooserdefault.c:1810
 msgid "Could not clear list"
 msgstr "Nie można wyczyścić elementu"
 
-#: gtk/gtkrecentchooserdefault.c:1897
+#: gtk/gtkrecentchooserdefault.c:1894
 msgid "Copy _Location"
 msgstr "S_kopiuj położenie"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: gtk/gtkrecentchooserdefault.c:1907
 msgid "_Remove From List"
 msgstr "_Usuń z listy"
 
-#: gtk/gtkrecentchooserdefault.c:1919
+#: gtk/gtkrecentchooserdefault.c:1916
 msgid "_Clear List"
 msgstr "Wy_czyść listę"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: gtk/gtkrecentchooserdefault.c:1930
 msgid "Show _Private Resources"
 msgstr "Wyświetl zasoby p_rywatne"
 
@@ -3998,80 +3998,80 @@ msgstr "Wietnamska ((VIQR)"
 msgid "X Input Method"
 msgstr "Metoda wejściowa X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
 msgstr "Dwustronne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
 msgstr "Rodzaj papieru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Source"
 msgstr "Źródło papieru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
 msgstr "Tacka wyjściowa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
 msgstr "Jednostronne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
 msgid "Auto Select"
 msgstr "Wybór automatyczny"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1922
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1934
 msgid "Printer Default"
 msgstr "Domyślne drukarki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
 msgstr "Ważne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "High"
 msgstr "Wysoki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Medium"
 msgstr "Średni"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Low"
 msgstr "Niski"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "None"
 msgstr "Brak"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Classified"
 msgstr "Sklasyfikowane"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Confidential"
 msgstr "Poufne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
 msgstr "Tajne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
 msgstr "Standardowe"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
 msgstr "Ściśle tajne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
 msgstr "Niesklasyfikowane"
 

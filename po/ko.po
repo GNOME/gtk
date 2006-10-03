@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 02:14-0400\n"
+"POT-Creation-Date: 2006-10-03 13:38-0400\n"
 "PO-Revision-Date: 2006-08-18 00:44+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -2592,36 +2592,36 @@ msgstr "include 파일을 찾을 수 없습니다: \"%s\""
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr "어떤 종류의 문서를 표시할 지 선택합니다"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' URI에 대한 항목이 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1770
+#: gtk/gtkrecentchooserdefault.c:1767
 msgid "Could not remove item"
 msgstr "항목을 지울 수 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1813
+#: gtk/gtkrecentchooserdefault.c:1810
 msgid "Could not clear list"
 msgstr "목록을 비울 수 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1897
+#: gtk/gtkrecentchooserdefault.c:1894
 msgid "Copy _Location"
 msgstr "위치 복사(_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: gtk/gtkrecentchooserdefault.c:1907
 msgid "_Remove From List"
 msgstr "목록에서 지우기(_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1919
+#: gtk/gtkrecentchooserdefault.c:1916
 msgid "_Clear List"
 msgstr "목록 비우기(_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: gtk/gtkrecentchooserdefault.c:1930
 msgid "Show _Private Resources"
 msgstr "개인 리소스 표시(_P)"
 
@@ -3968,80 +3968,80 @@ msgstr "베트남어 (VIQR)"
 msgid "X Input Method"
 msgstr "X 입력기"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
 msgstr "양면"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
 msgstr "용지 종류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Source"
 msgstr "용지 공급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
 msgstr "출력 트레이"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
 msgstr "단면"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
 msgid "Auto Select"
 msgstr "자동 선택"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1922
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1934
 msgid "Printer Default"
 msgstr "프린터 기본값"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
 msgstr "긴급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "High"
 msgstr "높음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Medium"
 msgstr "중간"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Low"
 msgstr "낮음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "None"
 msgstr "없음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Classified"
 msgstr "비밀 분류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Confidential"
 msgstr "기밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
 msgstr "비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
 msgstr "표준"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
 msgstr "일급 비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
 msgstr "비밀 분류 해제"
 

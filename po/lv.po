@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.htk-2.10.lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 02:14-0400\n"
+"POT-Creation-Date: 2006-10-03 13:38-0400\n"
 "PO-Revision-Date: 2006-09-08 10:58+0300\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -2602,36 +2602,36 @@ msgstr "Nevar atrast iekļaujamo failu: \"%s\""
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nevar atrast attēla failu pixmap_path: \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr "Izvēlēties kuru tipu dokumenti tiek rādīti"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Nav atrasta neviena vienība priekš URI '%s'"
 
-#: gtk/gtkrecentchooserdefault.c:1770
+#: gtk/gtkrecentchooserdefault.c:1767
 msgid "Could not remove item"
 msgstr "Nevar aizvākt vienību"
 
-#: gtk/gtkrecentchooserdefault.c:1813
+#: gtk/gtkrecentchooserdefault.c:1810
 msgid "Could not clear list"
 msgstr "Nevar attīrīt sarakstu"
 
-#: gtk/gtkrecentchooserdefault.c:1897
+#: gtk/gtkrecentchooserdefault.c:1894
 msgid "Copy _Location"
 msgstr "Kopēt _vietu"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: gtk/gtkrecentchooserdefault.c:1907
 msgid "_Remove From List"
 msgstr "_Izņemt no saraksta"
 
-#: gtk/gtkrecentchooserdefault.c:1919
+#: gtk/gtkrecentchooserdefault.c:1916
 msgid "_Clear List"
 msgstr "_Attīrīt sarakstu"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: gtk/gtkrecentchooserdefault.c:1930
 msgid "Show _Private Resources"
 msgstr "Rādīt _privātos resursus"
 
@@ -3978,80 +3978,80 @@ msgstr "Vjetnamiešu (VIQR)"
 msgid "X Input Method"
 msgstr "X ievades metode"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
 msgstr "Divpusējs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
 msgstr "Papīra tips"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Source"
 msgstr "Papīra avots"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
 msgstr "Izvades paplāte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
 msgstr "Vienpusējs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
 msgid "Auto Select"
 msgstr "Auto izvēle"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1922
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1934
 msgid "Printer Default"
 msgstr "Printera noklusētais"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
 msgstr "Steidzams"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "High"
 msgstr "Augsts"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Medium"
 msgstr "Vidējs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Low"
 msgstr "Zems"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "None"
 msgstr "Nekas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Classified"
 msgstr "Klasificēts"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Confidential"
 msgstr "Konfidenciāls"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
 msgstr "Slepens"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
 msgstr "Standarta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
 msgstr "Pilnīgi slepens"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
 msgstr "Neklasificēts"
 

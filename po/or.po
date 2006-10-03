@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 02:14-0400\n"
+"POT-Creation-Date: 2006-10-03 13:38-0400\n"
 "PO-Revision-Date: 2006-09-05 16:57+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
@@ -2586,36 +2586,36 @@ msgstr "ଭରଣ ପାଇଁ \"%s\" ଫାଇଲ ମିଳିଲା ନାହ�
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "\"%s\" ପିକ୍ସମ୍ଯାପ_ପଥରେ ଚିତ୍ର ଫାଇଲ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr "କେଉଁ ପ୍ରକାରର ଦଲିଲ ମାନଙ୍କୁ ପ୍ରଦର୍ଶନ କରାଯାଇଛି ତାହାକୁ ବାଛନ୍ତୁ"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' ୟୁ.ଆର.ଆଇ. ପାଇଁ କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1770
+#: gtk/gtkrecentchooserdefault.c:1767
 msgid "Could not remove item"
 msgstr "ବସ୍ତୁକୁ ଅପସାରିତ ହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1813
+#: gtk/gtkrecentchooserdefault.c:1810
 msgid "Could not clear list"
 msgstr "ତାଲିକାକୁ ସଫା କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1897
+#: gtk/gtkrecentchooserdefault.c:1894
 msgid "Copy _Location"
 msgstr "ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: gtk/gtkrecentchooserdefault.c:1907
 msgid "_Remove From List"
 msgstr "ତାଲିକାରୁ ବାହାର କରି ଦିଅନ୍ତୁ (_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1919
+#: gtk/gtkrecentchooserdefault.c:1916
 msgid "_Clear List"
 msgstr "ତାଲିକାକୁ ସଫା କରନ୍ତୁ (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: gtk/gtkrecentchooserdefault.c:1930
 msgid "Show _Private Resources"
 msgstr "ବ୍ଯକ୍ତିଗତ ସମ୍ବଳ ଗୁଡିକୁ ଦେଖାନ୍ତୁ (_P)"
 
@@ -3962,80 +3962,80 @@ msgstr "ଭିଏତନାମୀ (ଭି.ଆଇ.କ୍ଯୁ.ଆର.)"
 msgid "X Input Method"
 msgstr "ଏକ୍ସ ନିବେଶ ପ୍ରଣାଳୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
 msgstr "ଉଭୟ ପାର୍ଶ୍ବ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
 msgstr "କାଗଜର ପ୍ରକାର"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Source"
 msgstr "କାଗଜ ଉତ୍ସ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
 msgstr "ନିର୍ଗମ ଟ୍ରେ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
 msgstr "ଗୋଟିଏ ପାଖ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
 msgid "Auto Select"
 msgstr "ସ୍ବତଃ ଚୟନ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1922
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1934
 msgid "Printer Default"
 msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
 msgstr "ଜରୁରୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "High"
 msgstr "ଉଚ୍ଚ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Medium"
 msgstr "ମଧ୍ଯମ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Low"
 msgstr "ନିମ୍ନ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "None"
 msgstr "(କିଛି ନୁହେଁ)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Classified"
 msgstr "ବର୍ଗୀକ୍ରୁତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Confidential"
 msgstr "ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
 msgstr "ଗୁପ୍ତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
 msgstr "ମାନକ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
 msgstr "ଅତ୍ଯନ୍ତ ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
 msgstr "ଅବର୍ଗୀକ୍ରୁତ"
 

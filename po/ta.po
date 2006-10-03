@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 02:14-0400\n"
+"POT-Creation-Date: 2006-10-03 13:38-0400\n"
 "PO-Revision-Date: 2006-09-13 13:32+0530\n"
 "Last-Translator: Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -2597,36 +2597,36 @@ msgstr "சேர்க்க வேண்டிய கோப்பு காண
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path'யில் படத்தின் கோப்பைக் கண்டுபிடிக்க முடியவில்லை: \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr "எந்த வகை ஆவணங்களை காட்ட வேண்டும் என தேர்ந்தெடு"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s'க்கு ஒரு உருப்படியும் இல்லை"
 
-#: gtk/gtkrecentchooserdefault.c:1770
+#: gtk/gtkrecentchooserdefault.c:1767
 msgid "Could not remove item"
 msgstr "உருப்படியை நீக்க முடியாது"
 
-#: gtk/gtkrecentchooserdefault.c:1813
+#: gtk/gtkrecentchooserdefault.c:1810
 msgid "Could not clear list"
 msgstr "பட்டியலை துடைக்க முடியவில்லை"
 
-#: gtk/gtkrecentchooserdefault.c:1897
+#: gtk/gtkrecentchooserdefault.c:1894
 msgid "Copy _Location"
 msgstr "இடத்தை நகலெடு (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: gtk/gtkrecentchooserdefault.c:1907
 msgid "_Remove From List"
 msgstr "பட்டியலிலிருந்து நீக்கு (_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1919
+#: gtk/gtkrecentchooserdefault.c:1916
 msgid "_Clear List"
 msgstr "பட்டியலை துடை (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: gtk/gtkrecentchooserdefault.c:1930
 msgid "Show _Private Resources"
 msgstr "தனிப்பட்ட மூலங்களை காட்டு (_P)"
 
@@ -3972,80 +3972,80 @@ msgstr "வியாட்நாமிஸ் (VIQR)"
 msgid "X Input Method"
 msgstr "X உள்ளீட்டு முறை"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
 msgstr "இரண்டு பக்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
 msgstr "தாள் வகை"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Source"
 msgstr "தாள் மூலம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
 msgstr "வெளியீடு தட்டு"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
 msgstr "ஒற்றை பக்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
 msgid "Auto Select"
 msgstr "தானாக தேர்ந்தெடுத்தல்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1922
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1934
 msgid "Printer Default"
 msgstr "முன்னிருப்பு அச்சடிப்பி"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
 msgstr "அவசரம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "High"
 msgstr "உயர்ந்த"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Medium"
 msgstr "நடுத்தரம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2110
+#: modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Low"
 msgstr "குறைந்த"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "None"
 msgstr "ஒன்றுமில்லை"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Classified"
 msgstr "வகைப்படுத்தல்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Confidential"
 msgstr "அந்தரங்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
 msgstr "இரகசியம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
 msgstr "இயல்பான"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
 msgstr "உயர்ந்த இரகசியம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2112
+#: modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
 msgstr "வகைப்படுத்தாதது"
 
