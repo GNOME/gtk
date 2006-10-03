@@ -7022,7 +7022,7 @@ gtk_window_group_get_type (void)
 
   if (!window_group_type)
     {
-      static const GTypeInfo window_group_info =
+      const GTypeInfo window_group_info =
       {
 	sizeof (GtkWindowGroupClass),
 	NULL,		/* base_init */

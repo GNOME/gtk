@@ -126,7 +126,7 @@ static void printer_status_cb                    (GtkPrintBackend        *backen
 
 
 
-static const gchar * const common_paper_sizes[] = {
+static const gchar const common_paper_sizes[][16] = {
   "na_letter",
   "na_legal",
   "iso_a4",

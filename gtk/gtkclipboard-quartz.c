@@ -152,7 +152,7 @@ gtk_clipboard_get_type (void)
   
   if (!clipboard_type)
     {
-      static const GTypeInfo clipboard_info =
+      const GTypeInfo clipboard_info =
       {
 	sizeof (GtkClipboardClass),
 	NULL,           /* base_init */

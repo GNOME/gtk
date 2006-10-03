@@ -29,7 +29,7 @@ gtk_cell_layout_get_type (void)
 
   if (! cell_layout_type)
     {
-      static const GTypeInfo cell_layout_info =
+      const GTypeInfo cell_layout_info =
       {
         sizeof (GtkCellLayoutIface),
         NULL,

@@ -141,7 +141,7 @@ _gtk_file_chooser_embed_get_type (void)
 
   if (!file_chooser_embed_type)
     {
-      static const GTypeInfo file_chooser_embed_info =
+      const GTypeInfo file_chooser_embed_info =
       {
 	sizeof (GtkFileChooserEmbedIface),  /* class_size */
 	NULL,                          /* base_init */

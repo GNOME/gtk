@@ -43,7 +43,7 @@ gtk_editable_get_type (void)
 
   if (!editable_type)
     {
-      static const GTypeInfo editable_info =
+      const GTypeInfo editable_info =
       {
 	sizeof (GtkEditableClass),  /* class_size */
 	gtk_editable_base_init,	    /* base_init */

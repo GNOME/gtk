@@ -35,7 +35,7 @@ gtk_print_operation_preview_get_type (void)
 
   if (!print_operation_preview_type)
     {
-      static const GTypeInfo print_operation_preview_info =
+      const GTypeInfo print_operation_preview_info =
       {
         sizeof (GtkPrintOperationPreviewIface), /* class_size */
 	gtk_print_operation_preview_base_init,   /* base_init */

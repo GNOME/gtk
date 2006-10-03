@@ -163,9 +163,6 @@ static const GtkTargetEntry recent_list_source_targets[] = {
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
 
-static const int num_recent_list_source_targets = (sizeof (recent_list_source_targets)
-                                                   / sizeof (recent_list_source_targets[0]));
-
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE  48
 #define FALLBACK_ITEM_LIMIT 20
@@ -445,7 +442,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
   gtk_drag_source_set (impl->recent_view,
 		       GDK_BUTTON1_MASK,
 		       recent_list_source_targets,
-		       num_recent_list_source_targets,
+		       G_N_ELEMENTS (recent_list_source_targets),
 		       GDK_ACTION_COPY);
 
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);

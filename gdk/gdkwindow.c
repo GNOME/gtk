@@ -218,7 +218,7 @@ _gdk_paintable_get_type (void)
 
   if (!paintable_type)
     {
-      static const GTypeInfo paintable_info =
+      const GTypeInfo paintable_info =
       {
 	sizeof (GdkPaintableIface),  /* class_size */
 	NULL,                        /* base_init */

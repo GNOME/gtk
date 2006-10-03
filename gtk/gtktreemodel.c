@@ -102,7 +102,7 @@ gtk_tree_model_get_type (void)
 
   if (! tree_model_type)
     {
-      static const GTypeInfo tree_model_info =
+      const GTypeInfo tree_model_info =
       {
         sizeof (GtkTreeModelIface), /* class_size */
 	gtk_tree_model_base_init,   /* base_init */

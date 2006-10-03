@@ -120,7 +120,7 @@ gtk_container_get_type (void)
 
   if (!container_type)
     {
-      static const GTypeInfo container_info =
+      const GTypeInfo container_info =
       {
 	sizeof (GtkContainerClass),
 	(GBaseInitFunc) gtk_container_base_class_init,

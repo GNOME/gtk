@@ -33,7 +33,7 @@ gtk_tree_sortable_get_type (void)
 
   if (! tree_sortable_type)
     {
-      static const GTypeInfo tree_sortable_info =
+      const GTypeInfo tree_sortable_info =
       {
 	sizeof (GtkTreeSortableIface), /* class_size */
 	gtk_tree_sortable_base_init,   /* base_init */
