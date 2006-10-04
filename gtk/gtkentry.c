@@ -5406,8 +5406,6 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return FALSE;
 
-  _gtk_entry_reset_im_context (GTK_ENTRY (widget));
-
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
   if (completion->priv->actions)
@@ -5500,6 +5498,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
     }
   else if (event->keyval == GDK_Escape) 
     {
+      _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
 
       return TRUE;
@@ -5511,6 +5510,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
 	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
 
+      _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
       
       gtk_widget_child_focus (gtk_widget_get_toplevel (widget), dir);
@@ -5521,6 +5521,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
            event->keyval == GDK_KP_Enter ||
 	   event->keyval == GDK_Return)
     {
+      _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
 
       if (completion->priv->current_selected < matches)
@@ -5562,6 +5563,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       else if (completion->priv->current_selected - matches >= 0)
         {
           GtkTreePath *path;
+
+          _gtk_entry_reset_im_context (GTK_ENTRY (widget));
 
           path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
 
