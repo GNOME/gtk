@@ -1,5 +1,15 @@
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix interaction of GtkEntryCompletion with input
+	methods.  (#354495, Diego Escalante Urrelo)
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Only reset
+	the im context if we actually handle the key event.
+
+	* gtk/gtkentrycompletion.c: Also propagate key release events
+	to the entry.
+
+2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintsettings.c (gtk_print_settings_get_duplex):
 	Fix a typo.  (#359052, Ghee Teo)

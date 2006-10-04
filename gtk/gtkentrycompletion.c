@@ -101,7 +101,7 @@ static void     gtk_entry_completion_reorder             (GtkCellLayout         
 static gboolean gtk_entry_completion_visible_func        (GtkTreeModel            *model,
                                                           GtkTreeIter             *iter,
                                                           gpointer                 data);
-static gboolean gtk_entry_completion_popup_key_press     (GtkWidget               *widget,
+static gboolean gtk_entry_completion_popup_key_event     (GtkWidget               *widget,
                                                           GdkEventKey             *event,
                                                           gpointer                 user_data);
 static gboolean gtk_entry_completion_popup_button_press  (GtkWidget               *widget,
@@ -436,7 +436,10 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   g_signal_connect (priv->popup_window, "key_press_event",
-                    G_CALLBACK (gtk_entry_completion_popup_key_press),
+                    G_CALLBACK (gtk_entry_completion_popup_key_event),
+                    completion);
+  g_signal_connect (priv->popup_window, "key_release_event",
+                    G_CALLBACK (gtk_entry_completion_popup_key_event),
                     completion);
   g_signal_connect (priv->popup_window, "button_press_event",
                     G_CALLBACK (gtk_entry_completion_popup_button_press),
@@ -749,7 +752,7 @@ gtk_entry_completion_visible_func (GtkTreeModel *model,
 }
 
 static gboolean
-gtk_entry_completion_popup_key_press (GtkWidget   *widget,
+gtk_entry_completion_popup_key_event (GtkWidget   *widget,
                                       GdkEventKey *event,
                                       gpointer     user_data)
 {
