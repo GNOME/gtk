@@ -93,7 +93,7 @@ check-aliases:
 
 .PHONY: check-aliases
 
-TESTS_ENVIRONMENT = gtk_all_c_sources="$(gtk_all_c_sources)"
+TESTS_ENVIRONMENT = srcdir="$(srcdir)" gtk_all_c_sources="$(gtk_all_c_sources)"
 TESTS = aliasfilescheck.sh
 if OS_LINUX
 TESTS += abicheck.sh pltcheck.sh
