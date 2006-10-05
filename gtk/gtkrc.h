@@ -217,6 +217,7 @@ typedef enum {
   GTK_RC_TOKEN_LTR,
   GTK_RC_TOKEN_RTL,
   GTK_RC_TOKEN_COLOR,
+  GTK_RC_TOKEN_UNBIND,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 

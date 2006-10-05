@@ -206,6 +206,7 @@ binding_entry_new (GtkBindingSet  *binding_set,
   entry->binding_set = binding_set,
   entry->destroyed = FALSE;
   entry->in_emission = FALSE;
+  entry->marks_unbound = FALSE;
   entry->signals = NULL;
 
   entry->set_next = binding_set->entries;
@@ -568,7 +569,7 @@ gtk_binding_set_new (const gchar    *set_name)
   g_return_val_if_fail (set_name != NULL, NULL);
   
   binding_set = g_new (GtkBindingSet, 1);
-  binding_set->set_name = g_intern_string (set_name);
+  binding_set->set_name = (gchar *) g_intern_string (set_name);
   binding_set->widget_path_pspecs = NULL;
   binding_set->widget_class_pspecs = NULL;
   binding_set->class_branch_pspecs = NULL;
@@ -666,6 +667,26 @@ gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 }
 
 void
+gtk_binding_entry_skip (GtkBindingSet  *binding_set,
+                        guint           keyval,
+                        GdkModifierType modifiers)
+{
+  GtkBindingEntry *entry;
+
+  g_return_if_fail (binding_set != NULL);
+
+  keyval = gdk_keyval_to_lower (keyval);
+  modifiers = modifiers & BINDING_MOD_MASK ();
+
+  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+  if (entry)
+    binding_entry_destroy (entry);
+
+  entry = binding_entry_new (binding_set, keyval, modifiers);
+  entry->marks_unbound = TRUE;
+}
+
+void
 gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 			  guint		  keyval,
 			  GdkModifierType modifiers)
@@ -684,10 +705,22 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-			       guint	       keyval,
-			       GdkModifierType modifiers,
-			       const gchar    *signal_name,
-			       GSList	      *binding_args)
+                               guint	       keyval,
+                               GdkModifierType modifiers,
+                               const gchar    *signal_name,
+                               GSList	      *binding_args)
+{
+  _gtk_binding_entry_add_signall (binding_set,
+                                  keyval, modifiers,
+                                  signal_name, binding_args);
+}
+
+void
+_gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
+                                guint	       keyval,
+                                GdkModifierType modifiers,
+                                const gchar    *signal_name,
+                                GSList	      *binding_args)
 {
   GtkBindingEntry *entry;
   GtkBindingSignal *signal, **signal_p;
@@ -929,9 +962,12 @@ binding_match_activate (GSList          *pspec_list,
 			GtkObject	*object,
 			guint	         path_length,
 			gchar           *path,
-			gchar           *path_reversed)
+			gchar           *path_reversed,
+                        gboolean        *unbound)
 {
   GSList *slist;
+
+  *unbound = FALSE;
 
   for (slist = pspec_list; slist; slist = slist->next)
     {
@@ -952,8 +988,17 @@ binding_match_activate (GSList          *pspec_list,
 	    binding_set = pspec->user_data;
         }
 
-      if (binding_set && gtk_binding_entry_activate (binding_set->current, object))
-        return TRUE;
+      if (binding_set)
+        {
+          if (binding_set->current->marks_unbound)
+            {
+              *unbound = TRUE;
+              return FALSE;
+            }
+
+          if (gtk_binding_entry_activate (binding_set->current, object))
+            return TRUE;
+        }
     }
 
   return FALSE;
@@ -1047,13 +1092,17 @@ gtk_bindings_activate_list (GtkObject *object,
       guint path_length;
       gchar *path, *path_reversed;
       GSList *patterns;
+      gboolean unbound;
 
       gtk_widget_path (widget, &path_length, &path, &path_reversed);
       patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET, is_release);
-      handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
+      handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
       g_slist_free (patterns);
       g_free (path);
       g_free (path_reversed);
+
+      if (unbound)
+        return FALSE;
     }
 
   if (!handled)
@@ -1061,20 +1110,25 @@ gtk_bindings_activate_list (GtkObject *object,
       guint path_length;
       gchar *path, *path_reversed;
       GSList *patterns;
+      gboolean unbound;
 
       gtk_widget_class_path (widget, &path_length, &path, &path_reversed);
       patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET_CLASS, is_release);
-      handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
+      handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
       g_slist_free (patterns);
       g_free (path);
       g_free (path_reversed);
+
+      if (unbound)
+        return FALSE;
     }
 
   if (!handled)
     {
       GSList *patterns;
       GType class_type;
-      
+      gboolean unbound = FALSE;
+
       patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_CLASS, is_release);
       class_type = G_TYPE_FROM_INSTANCE (object);
       while (class_type && !handled)
@@ -1082,18 +1136,24 @@ gtk_bindings_activate_list (GtkObject *object,
 	  guint path_length;
 	  gchar *path;
 	  gchar *path_reversed;
-	  
+
 	  path = g_strdup (g_type_name (class_type));
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
 	  path_length = strlen (path);
-	  handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
+	  handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
 	  g_free (path);
 	  g_free (path_reversed);
+
+          if (unbound)
+            break;
 
 	  class_type = g_type_parent (class_type);
 	}
       g_slist_free (patterns);
+
+      if (unbound)
+        return FALSE;
     }
 
   return handled;
@@ -1335,12 +1395,15 @@ gtk_binding_parse_bind (GScanner       *scanner,
 {
   guint keyval = 0;
   GdkModifierType modifiers = 0;
+  gboolean unbind = FALSE;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
   
   g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BIND)
+  if (scanner->token != GTK_RC_TOKEN_BIND &&
+      scanner->token != GTK_RC_TOKEN_UNBIND)
     return GTK_RC_TOKEN_BIND;
+  unbind = scanner->token == GTK_RC_TOKEN_UNBIND;
   g_scanner_get_next_token (scanner);
   if (scanner->token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
@@ -1349,7 +1412,14 @@ gtk_binding_parse_bind (GScanner       *scanner,
   if (keyval == 0)
     return G_TOKEN_STRING;
 
+  if (unbind)
+    {
+      gtk_binding_entry_skip (binding_set, keyval, modifiers);
+      return G_TOKEN_NONE;
+    }
+
   g_scanner_get_next_token (scanner);
+
   if (scanner->token != '{')
     return '{';
 
@@ -1382,7 +1452,13 @@ gtk_binding_parse_bind (GScanner       *scanner,
 }
 
 guint
-gtk_binding_parse_binding (GScanner       *scanner)
+gtk_binding_parse_binding (GScanner *scanner)
+{
+  return _gtk_binding_parse_binding (scanner);
+}
+
+guint
+_gtk_binding_parse_binding (GScanner *scanner)
 {
   gchar *name;
   GtkBindingSet *binding_set;
@@ -1420,6 +1496,7 @@ gtk_binding_parse_binding (GScanner       *scanner)
 	  guint expected_token;
 
 	case GTK_RC_TOKEN_BIND:
+	case GTK_RC_TOKEN_UNBIND:
 	  expected_token = gtk_binding_parse_bind (scanner, binding_set);
 	  if (expected_token != G_TOKEN_NONE)
 	    return expected_token;

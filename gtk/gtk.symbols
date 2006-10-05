@@ -372,11 +372,14 @@ gtk_aspect_frame_set
 
 #if IN_HEADER(__GTK_BINDINGS_H__)
 #if IN_FILE(__GTK_BINDINGS_C__)
-gtk_binding_entry_add_signal
-gtk_binding_entry_add_signall
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_binding_entry_clear
-gtk_binding_entry_remove
+gtk_binding_entry_add_signall
 gtk_binding_parse_binding
+#endif
+gtk_binding_entry_skip
+gtk_binding_entry_add_signal
+gtk_binding_entry_remove
 gtk_bindings_activate
 gtk_bindings_activate_event
 gtk_binding_set_activate

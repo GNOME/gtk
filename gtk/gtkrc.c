@@ -319,7 +319,8 @@ static const gchar symbol_names[] =
   "im_module_file\0"
   "LTR\0"
   "RTL\0"
-  "color\0";
+  "color\0"
+  "unbind\0";
 
 static const struct
 {
@@ -361,7 +362,8 @@ static const struct
   { 245, GTK_RC_TOKEN_IM_MODULE_FILE },
   { 260, GTK_RC_TOKEN_LTR },
   { 264, GTK_RC_TOKEN_RTL },
-  { 268, GTK_RC_TOKEN_COLOR }
+  { 268, GTK_RC_TOKEN_COLOR },
+  { 274, GTK_RC_TOKEN_UNBIND }
 };
 
 static GHashTable *realized_style_ht = NULL;
@@ -2858,7 +2860,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
       return gtk_rc_parse_style (context, scanner);
       
     case GTK_RC_TOKEN_BINDING:
-      return gtk_binding_parse_binding (scanner);
+      return _gtk_binding_parse_binding (scanner);
       
     case GTK_RC_TOKEN_PIXMAP_PATH:
       return gtk_rc_parse_pixmap_path (context, scanner);

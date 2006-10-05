@@ -1,3 +1,28 @@
+2006-10-05  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrc.[ch]: added new scanner token "unbind" which gets
+	rid of a key binding (in fact, it only lets it appear unbound).
+
+	* gtk/gtkbindings.[ch] (struct GtkBindingEntry): added
+	"guint marks_unbound : 1"
+
+	(gtk_binding_entry_skip): new API which marks the entry as unbound.
+
+	Changed code so it returns FALSE when "marks_unbound == TRUE" is
+	encountered while activating bindings, effectively letting the
+	binding appear unbound (regardless of still existing bindings in
+	lower binding priority levels). Fixes bug #358329.
+
+	(gtk_binding_entry_add)
+	(gtk_binding_entry_clear)
+	(gtk_binding_entry_add_signall)
+	(gtk_binding_parse_binding): deprected these functions.
+
+	(_gtk_binding_parse_binding)
+	(_gtk_binding_entry_add_signall): new internal API.
+
+	* gtk/gtk.symbols: changed accordingly.
+
 2006-10-03  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix interaction of GtkEntryCompletion with input
