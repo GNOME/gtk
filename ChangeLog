@@ -1,3 +1,9 @@
+2006-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellview.c: Don't set the background of the
+	window in a no-window widget.  (#359581, Xan Lopez)
+
+
 2006-10-05  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/Makefile.am, gtk/aliasfilescheck.sh:  Propagate srcdir into the
