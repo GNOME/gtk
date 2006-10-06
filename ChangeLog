@@ -1,5 +1,8 @@
 2006-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_select_multiple):
+	Fix the docs.  (#360112)
+
 	* gtk/gtkcellview.c: Don't set the background of the
 	window in a no-window widget.  (#359581, Xan Lopez)
 
