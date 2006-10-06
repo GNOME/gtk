@@ -390,8 +390,7 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
  * 
  * Sets whether multiple files can be selected in the file selector.  This is
  * only relevant if the action is set to be GTK_FILE_CHOOSER_ACTION_OPEN or
- * GTK_FILE_CHOOSER_ACTION_SAVE.  It cannot be set with either of the folder
- * actions.
+ * GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.  
  *
  * Since: 2.4
  **/
