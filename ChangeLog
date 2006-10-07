@@ -1,3 +1,19 @@
+2006-10-07  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Use the Win32 thread
+	locale's first day of week setting on Win32. (#339752, Bogdan
+	Nicula) Don't do this if one of the environment variables that
+	affect gettext is set, though. In that case use the week start day
+	from the corresponding message catalog.
+
+	Unfortunately the same logic isn't possible in the weekday and
+	month name lookup; there even if you have set one of the
+	aforementioned environment variables, you still get the weekday
+	and month names from the Win32 thread locale. Yes, this is
+	inconsistent.
+
+	Use only wide-character API in the Win32 code in this file, too.
+
 2006-10-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_select_multiple):
