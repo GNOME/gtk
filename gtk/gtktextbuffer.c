@@ -566,8 +566,6 @@ gtk_text_buffer_finalize (GObject *object)
 
   buffer = GTK_TEXT_BUFFER (object);
 
-  priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
-
   remove_all_selection_clipboards (buffer);
 
   if (buffer->tag_table)

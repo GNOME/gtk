@@ -170,7 +170,7 @@ get_mbi(struct wbmp_progressive_state *context, const guchar **buf, guint *buf_s
   gboolean rv;
 
   *val = 0;
-  n = i = 0;
+  n = 0;
   do {
     rv = getin(context, buf, buf_size, intbuf+n, 1);
     if(!rv)
