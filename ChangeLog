@@ -1,3 +1,7 @@
+2006-10-08 Michael Emmel <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkproperty-directfb.c strdup atom name (#357611) 
+
 2006-10-08  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.[ch] (gtk_tree_view_set_property),

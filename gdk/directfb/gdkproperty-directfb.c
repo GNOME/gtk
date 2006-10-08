@@ -191,8 +191,7 @@ gdk_atom_name (GdkAtom atom)
     
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;
-    
-  return g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom));
+  return g_strdup(g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom)));
 }
 
 
