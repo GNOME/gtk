@@ -1,3 +1,8 @@
+2006-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't 
+	leak a list.  (#360350, Benjamin Berg)
+
 2006-10-08  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c (do_pre_parse_initialization): On Win32, if
@@ -28,6 +33,7 @@
 	and month names from the Win32 thread locale. Yes, this is
 	inconsistent.
 
+>>>>>>> 1.8296.2.70
 2006-10-06  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_select_multiple):

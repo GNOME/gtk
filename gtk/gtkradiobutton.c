@@ -449,8 +449,6 @@ gtk_radio_button_focus (GtkWidget         *widget,
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
       GtkWidget *new_focus = NULL;
 
-      focus_list = g_slist_copy (radio_button->group);
-      
       switch (direction)
 	{
 	case GTK_DIR_TAB_FORWARD:
@@ -458,10 +456,12 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	  return FALSE;
 	case GTK_DIR_LEFT:
 	case GTK_DIR_RIGHT:
+	  focus_list = g_slist_copy (radio_button->group);
 	  focus_list = g_slist_sort_with_data (focus_list, left_right_compare, toplevel);
 	  break;
 	case GTK_DIR_UP:
 	case GTK_DIR_DOWN:
+	  focus_list = g_slist_copy (radio_button->group);
 	  focus_list = g_slist_sort_with_data (focus_list, up_down_compare, toplevel);
 	  break;
 	}
