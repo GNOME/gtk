@@ -1,3 +1,8 @@
+2006-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c (update_dialog_from_capabilities): Fix
+	a typo.  (#359542, Ghee Teo)
+
 2006-10-08 Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_reorder_tab): Only
