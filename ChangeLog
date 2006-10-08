@@ -1,3 +1,14 @@
+2006-10-08  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.[ch] (gtk_tree_view_set_property),
+	(gtk_tree_view_set_show_expanders),
+	(gtk_tree_view_get_show_expanders): add getter/setter for
+	show-expanders property, queue a redraw when this property
+	is toggled (#351167, Martin Ejdestig),
+	(gtk_tree_view_set_level_indentation),
+	(gtk_tree_view_get_level_indentation): also add getter/setter
+	and docs for level-indentation property.
+
 2006-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't 

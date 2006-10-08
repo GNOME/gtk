@@ -1370,10 +1370,7 @@ gtk_tree_view_set_property (GObject         *object,
       tree_view->priv->hover_expand = g_value_get_boolean (value);
       break;
     case PROP_SHOW_EXPANDERS:
-      if (g_value_get_boolean (value))
-	GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
-      else
-	GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
+      gtk_tree_view_set_show_expanders (tree_view, g_value_get_boolean (value));
       break;
     case PROP_LEVEL_INDENTATION:
       tree_view->priv->level_indentation = g_value_get_int (value);
@@ -14741,6 +14738,103 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
 
       g_object_notify (G_OBJECT (tree_view), "enable-tree-lines");
     }
+}
+
+
+/**
+ * gtk_tree_view_set_show_expanders:
+ * @tree_view: a #GtkTreeView
+ * @enabled: %TRUE to enable expander drawing, %FALSE otherwise.
+ *
+ * Sets whether to draw and enable expanders and indent child rows in
+ * @tree_view.  When disabled there will be no expanders visible in trees
+ * and there will be no way to expand and collapse rows by default.  Also
+ * note that hiding the expanders will disable the default indentation.  You
+ * can set a custom indentation in this case using
+ * gtk_tree_view_set_level_indentation().
+ * This does not have any visible effects for lists.
+ *
+ * Since: 2.12
+ */
+void
+gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
+				  gboolean     enabled)
+{
+  gboolean was_enabled;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  enabled = enabled != FALSE;
+  was_enabled = GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
+
+  if (enabled)
+    GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
+  else
+    GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
+
+  if (was_enabled != was_enabled)
+    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+}
+
+/**
+ * gtk_tree_view_get_show_expanders:
+ * @tree_view: a #GtkTreeView.
+ *
+ * Returns whether or not expanders are drawn in @tree_view.
+ *
+ * Return value: %TRUE if expanders are drawn in @tree_view, %FALSE
+ * otherwise.
+ *
+ * Since: 2.12
+ */
+gboolean
+gtk_tree_view_get_show_expanders (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  return GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
+}
+
+/**
+ * gtk_tree_view_set_level_indentation:
+ * @tree_view: a #GtkTreeView
+ * @indentation: the amount, in pixels, of extra indentation in @tree_view.
+ *
+ * Sets the amount of extra indentation for child levels to use in @tree_view
+ * in addition to the default indentation.  The value should be specified in
+ * pixels, a value of 0 disables this feature and in this case only the default
+ * indentation will be used.
+ * This does not have any visible effects for lists.
+ *
+ * Since: 2.12
+ */
+void
+gtk_tree_view_set_level_indentation (GtkTreeView *tree_view,
+				     gint         indentation)
+{
+  tree_view->priv->level_indentation = indentation;
+
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+}
+
+/**
+ * gtk_tree_view_get_level_indentation:
+ * @tree_view: a #GtkTreeView.
+ *
+ * Returns the amount, in pixels, of extra indentation for child levels
+ * in @tree_view.
+ *
+ * Return value: the amount of extra indentation for child levels in
+ * @tree_view.  A return value of 0 means that this feature is disabled.
+ *
+ * Since: 2.12
+ */
+gint
+gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
+
+  return tree_view->priv->level_indentation;
 }
 
 #define __GTK_TREE_VIEW_C__

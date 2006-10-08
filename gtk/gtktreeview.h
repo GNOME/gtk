@@ -358,6 +358,12 @@ void                        gtk_tree_view_set_grid_lines         (GtkTreeView   
 gboolean                    gtk_tree_view_get_enable_tree_lines  (GtkTreeView                *tree_view);
 void                        gtk_tree_view_set_enable_tree_lines  (GtkTreeView                *tree_view,
 								  gboolean                    enabled);
+void                        gtk_tree_view_set_show_expanders     (GtkTreeView                *tree_view,
+								  gboolean                    enabled);
+gboolean                    gtk_tree_view_get_show_expanders     (GtkTreeView                *tree_view);
+void                        gtk_tree_view_set_level_indentation  (GtkTreeView                *tree_view,
+								  gint                        indentation);
+gint                        gtk_tree_view_get_level_indentation  (GtkTreeView                *tree_view);
 
 G_END_DECLS
 
