@@ -1,3 +1,9 @@
+2006-10-08 Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_reorder_tab): Only
+	reorder tabs if the focus is in the tab.  (#350342, Carlos
+	Garnacho Parro)
+
 2006-10-08 Michael Emmel <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkproperty-directfb.c strdup atom name (#357611) 

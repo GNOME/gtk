@@ -1231,6 +1231,9 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   GList *last, *child;
   gint page_num;
 
+  if (!gtk_widget_is_focus (GTK_WIDGET (notebook)))
+    return;
+
   if (!notebook->cur_page ||
       !notebook->cur_page->reorderable)
     return;
