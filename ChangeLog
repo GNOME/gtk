@@ -1,3 +1,19 @@
+2006-10-08  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkmain.c (do_pre_parse_initialization): On Win32, if
+	environment variable LC_ALL or LANG is set, set the Win32 thread
+	locale to the corresponding locale. Then call the C library
+	setlocale() to set the C library locale accordingly. The
+	inconsistency mentioned below is gone. (#339756) Do some special
+	casing for Serbia and Montenegro. Handle the Latin and Cyrillic
+	scripts for Azeri, Uzbek and Serbian.
+	(enum_locale_proc): Helper function for the above functionality.
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): No longer need to check
+	if the environment variables are set here, as they have already
+	been taken into account and the Win32 thread locale has been
+	set.
+
 2006-10-07  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Use the Win32 thread

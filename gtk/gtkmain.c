@@ -417,6 +417,95 @@ static const GOptionEntry gtk_args[] = {
   { NULL }
 };
 
+#ifdef G_OS_WIN32
+
+static char *iso639_to_check = NULL;
+static char *iso3166_to_check = NULL;
+static char *script_to_check = NULL;
+static gboolean setlocale_called = FALSE;
+
+static BOOL CALLBACK
+enum_locale_proc (LPTSTR locale)
+{
+  LCID lcid;
+  char iso639[10];
+  char iso3166[10];
+  char *endptr;
+
+
+  lcid = strtoul (locale, &endptr, 16);
+  if (*endptr == '\0' &&
+      GetLocaleInfo (lcid, LOCALE_SISO639LANGNAME, iso639, sizeof (iso639)) &&
+      GetLocaleInfo (lcid, LOCALE_SISO3166CTRYNAME, iso3166, sizeof (iso3166)))
+    {
+      if (strcmp (iso639, iso639_to_check) == 0 &&
+	  ((iso3166_to_check != NULL &&
+	    strcmp (iso3166, iso3166_to_check) == 0) ||
+	   (iso3166_to_check == NULL &&
+	    SUBLANGID (LANGIDFROMLCID (lcid)) == SUBLANG_DEFAULT)))
+	{
+	  char language[100], country[100];
+	  char locale[300];
+
+	  if (script_to_check != NULL)
+	    {
+	      /* If lcid is the "other" script for this language,
+	       * return TRUE, i.e. continue looking.
+	       */
+	      if (strcmp (script_to_check, "Latn") == 0)
+		{
+		  switch (LANGIDFROMLCID (lcid))
+		    {
+		    case MAKELANGID (LANG_AZERI, SUBLANG_AZERI_CYRILLIC):
+		      return TRUE;
+		    case MAKELANGID (LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC):
+		      return TRUE;
+		    case MAKELANGID (LANG_SERBIAN, SUBLANG_SERBIAN_CYRILLIC):
+		      return TRUE;
+		    case MAKELANGID (LANG_SERBIAN, 0x07):
+		      /* Serbian in Bosnia and Herzegovina, Cyrillic */
+		      return TRUE;
+		    }
+		}
+	      else if (strcmp (script_to_check, "Cyrl") == 0)
+		{
+		  switch (LANGIDFROMLCID (lcid))
+		    {
+		    case MAKELANGID (LANG_AZERI, SUBLANG_AZERI_LATIN):
+		      return TRUE;
+		    case MAKELANGID (LANG_UZBEK, SUBLANG_UZBEK_LATIN):
+		      return TRUE;
+		    case MAKELANGID (LANG_SERBIAN, SUBLANG_SERBIAN_LATIN):
+		      return TRUE;
+		    case MAKELANGID (LANG_SERBIAN, 0x06):
+		      /* Serbian in Bosnia and Herzegovina, Latin */
+		      return TRUE;
+		    }
+		}
+	    }
+
+	  SetThreadLocale (lcid);
+
+	  if (GetLocaleInfo (lcid, LOCALE_SENGLANGUAGE, language, sizeof (language)) &&
+	      GetLocaleInfo (lcid, LOCALE_SENGCOUNTRY, country, sizeof (country)))
+	    {
+	      strcpy (locale, language);
+	      strcat (locale, "_");
+	      strcat (locale, country);
+
+	      if (setlocale (LC_ALL, locale) != NULL)
+		setlocale_called = TRUE;
+	    }
+
+	  return FALSE;
+	}
+    }
+
+  return TRUE;
+}
+  
+#endif
+
 static void
 do_pre_parse_initialization (int    *argc,
 			     char ***argv)
@@ -432,8 +521,64 @@ do_pre_parse_initialization (int    *argc,
 
   if (do_setlocale)
     {
+#ifdef G_OS_WIN32
+      /* If some of the POSIXish environment variables are set, set
+       * the Win32 thread locale correspondingly.
+       */ 
+      char *p = getenv ("LC_ALL");
+      if (p == NULL)
+	p = getenv ("LANG");
+
+      if (p != NULL)
+	{
+	  if (strcmp (p, "C") == 0)
+	    SetThreadLocale (LOCALE_SYSTEM_DEFAULT);
+	  else
+	    {
+	      /* Check if one of the supported locales match the
+	       * environment variable. If so, use that locale.
+	       */
+	      iso639_to_check = g_strdup (p);
+	      iso3166_to_check = strchr (iso639_to_check, '_');
+	      if (iso3166_to_check != NULL)
+		{
+		  *iso3166_to_check++ = '\0';
+
+		  script_to_check = strchr (iso3166_to_check, '@');
+		  if (script_to_check != NULL)
+		    *script_to_check++ = '\0';
+
+		  /* Handle special cases. */
+		  
+		  /* The standard code for Serbia and Montenegro was
+		   * "CS", but MSFT uses for some reason "SP". By now
+		   * (October 2006), SP has split into two, "RS" and
+		   * "ME", but don't bother trying to handle those
+		   * yet. Do handle the even older "YU", though.
+		   */
+		  if (strcmp (iso3166_to_check, "CS") == 0 ||
+		      strcmp (iso3166_to_check, "YU") == 0)
+		    iso3166_to_check = "SP";
+		}
+	      else
+		{
+		  script_to_check = strchr (iso639_to_check, '@');
+		  if (script_to_check != NULL)
+		    *script_to_check++ = '\0';
+		  /* LANG_SERBIAN == LANG_CROATIAN, recognize just "sr" */
+		  if (strcmp (iso639_to_check, "sr"))
+		    iso3166_to_check = "SP";
+		}
+
+	      EnumSystemLocales (enum_locale_proc, LCID_SUPPORTED);
+	    }
+	}
+      if (!setlocale_called)
+	setlocale (LC_ALL, "");
+#else
       if (!setlocale (LC_ALL, ""))
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
+#endif
     }
 
   gdk_pre_parse_libgtk_only ();
