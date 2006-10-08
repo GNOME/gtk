@@ -38,7 +38,6 @@
 	and month names from the Win32 thread locale. Yes, this is
 	inconsistent.
 
->>>>>>> 1.8296.2.70
 2006-10-06  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_select_multiple):
