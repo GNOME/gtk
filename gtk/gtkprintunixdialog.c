@@ -1033,7 +1033,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   gtk_widget_set_sensitive (priv->reverse_check,
 			    caps & GTK_PRINT_CAPABILITY_REVERSE);
   gtk_widget_set_sensitive (priv->scale_spin,
-			    caps & GTK_PRINT_CAPABILITY_PAGE_SET);
+			    caps & GTK_PRINT_CAPABILITY_SCALE);
 
   if (caps & GTK_PRINT_CAPABILITY_PREVIEW)
     gtk_widget_show (priv->preview_button);
