@@ -531,6 +531,7 @@ do_pre_parse_initialization (int    *argc,
 
       if (p != NULL)
 	{
+	  p = g_strdup (p);
 	  if (strcmp (p, "C") == 0)
 	    SetThreadLocale (LOCALE_SYSTEM_DEFAULT);
 	  else
@@ -538,7 +539,7 @@ do_pre_parse_initialization (int    *argc,
 	      /* Check if one of the supported locales match the
 	       * environment variable. If so, use that locale.
 	       */
-	      iso639_to_check = g_strdup (p);
+	      iso639_to_check = p;
 	      iso3166_to_check = strchr (iso639_to_check, '_');
 	      if (iso3166_to_check != NULL)
 		{
@@ -566,12 +567,13 @@ do_pre_parse_initialization (int    *argc,
 		  if (script_to_check != NULL)
 		    *script_to_check++ = '\0';
 		  /* LANG_SERBIAN == LANG_CROATIAN, recognize just "sr" */
-		  if (strcmp (iso639_to_check, "sr"))
+		  if (strcmp (iso639_to_check, "sr") == 0)
 		    iso3166_to_check = "SP";
 		}
 
 	      EnumSystemLocales (enum_locale_proc, LCID_SUPPORTED);
 	    }
+	  g_free (p);
 	}
       if (!setlocale_called)
 	setlocale (LC_ALL, "");
