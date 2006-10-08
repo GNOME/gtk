@@ -7981,7 +7981,7 @@ Thu Jun  4 02:20:42 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkwidget.h:
 	* gtk/gtkwidget.c: new function gtk_widget_stop_accelerator to stop
 	the emission of the "add-accelerator" signal on a widget. this is
-	usefull to prevent accelerator installation on certain widgets.
+	useful to prevent accelerator installation on certain widgets.
 
 	* gtk/gtknotebook.c (gtk_notebook_menu_item_create): keep the menu
 	labels left justified, by setting their alignment. stop accelerator

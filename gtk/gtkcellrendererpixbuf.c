@@ -439,7 +439,7 @@ gtk_cell_renderer_pixbuf_create_named_icon_pixbuf (GtkCellRendererPixbuf *cellpi
 					  priv->stock_size,
 					  &width, &height))
     {
-      g_warning ("Invalid icon size %d\n", priv->stock_size);
+      g_warning ("Invalid icon size %u\n", priv->stock_size);
       width = height = 24;
     }
 

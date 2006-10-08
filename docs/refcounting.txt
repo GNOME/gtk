@@ -22,10 +22,10 @@ GtkObjects also provide the following functions:
 GdkWindow
 ---------
 
-A GdkWindow has to be explicitely destroyed with gdk_window_destroy.
+A GdkWindow has to be explicitly destroyed with gdk_window_destroy.
 This will send out a request to destroy this window and all its
 children, and will decrement the ref_count of the GdkWindow by one.
-Thus, it releases the inital reference created by gdk_window_new.
+Thus, it releases the initial reference created by gdk_window_new.
 
 All GdkWindows are kept in a hash table to translate from their XId to
 the actual structure and the pointer in the hash table is reflected in
@@ -62,7 +62,7 @@ GdkVisual
 ---------
 
 There are no *_new or *_destroy functions and the *_ref and *_unref
-functions are noops.  GdkVisuals are static structures and thus do not
+functions are no-ops.  GdkVisuals are static structures and thus do not
 need reference counting.  The ref counting functions are only there
 for extra defensive programming.
 
@@ -220,13 +220,13 @@ Then, when the user wants to get rid of the window:
   /* The GdkWindow of `window' and all its child GdkWindows are
    * destroyed.
    *
-   * window is unregistered from the loplevel list and its ref_count
-   * drops to zero.  The destroy code of `window' destroyes `option_menu'.
+   * window is unregistered from the toplevel list and its ref_count
+   * drops to zero.  The destroy code of `window' destroys `option_menu'.
    *
    * The destroy code of `option_menu' causes the `menu' to be detached
    * from it and its reference count drops to zero.
    *
-   * The destroy code of `menu' destroyes `menu_item'.
+   * The destroy code of `menu' destroys `menu_item'.
    *
    * The destruction of `menu_item' removes it from its parent, the
    * menu_item->ref_count drops to zero and `menu_item' is finalized (freed).
@@ -241,7 +241,7 @@ Taking care of proper referencing
 
 There are some cases where referencing of widgets from outside the toolkit
 (on the application side) is needed.
-Once the application performes an operation on a widget that will cause
+Once the application performs an operation on a widget that will cause
 its reference count to drop, if it wants to take further actions on the
 widget, it needs to hold a reference to it.
 

@@ -47,7 +47,7 @@ gtk+ and glib.  You can do the following to get glib and gtk+ from cvs:
    $ cvs -z3 checkout atk
    $ cvs -z3 checkout gtk+
 
-For information about submitting patches and commiting changes
+For information about submitting patches and committing changes
 to CVS, see the README and README.cvs-commits files. In particular, 
 don't, under any circumstances, commit anything to CVS before
 reading and understanding README.cvs-commmits.

@@ -115,7 +115,7 @@ typedef enum {
   PART_LAST
 } Part;
 
-const char *part_names[PART_LAST] = {
+static const char *part_names[PART_LAST] = {
   "black",
   "dark",
   "mid",

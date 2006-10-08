@@ -228,7 +228,7 @@ gtk_toggle_action_activate (GtkAction *action)
 
   toggle_action->private_data->active = !toggle_action->private_data->active;
 
-  g_object_notify (action, "active");
+  g_object_notify (G_OBJECT (action), "active");
 
   gtk_toggle_action_toggled (toggle_action);
 }

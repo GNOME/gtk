@@ -300,21 +300,9 @@ iter_init_from_char_offset (GtkTextIter *iter,
 }
 
 static inline void
-invalidate_segment (GtkTextRealIter *iter)
-{
-  iter->segments_changed_stamp -= 1;
-}
-
-static inline void
 invalidate_char_index (GtkTextRealIter *iter)
 {
   iter->cached_char_index = -1;
-}
-
-static inline void
-invalidate_line_number (GtkTextRealIter *iter)
-{
-  iter->cached_line_number = -1;
 }
 
 static inline void
@@ -329,28 +317,6 @@ adjust_line_number (GtkTextRealIter *iter, gint count)
 {
   if (iter->cached_line_number >= 0)
     iter->cached_line_number += count;
-}
-
-static inline void
-adjust_char_offsets (GtkTextRealIter *iter, gint count)
-{
-  if (iter->line_char_offset >= 0)
-    {
-      iter->line_char_offset += count;
-      g_assert (iter->segment_char_offset >= 0);
-      iter->segment_char_offset += count;
-    }
-}
-
-static inline void
-adjust_byte_offsets (GtkTextRealIter *iter, gint count)
-{
-  if (iter->line_byte_offset >= 0)
-    {
-      iter->line_byte_offset += count;
-      g_assert (iter->segment_byte_offset >= 0);
-      iter->segment_byte_offset += count;
-    }
 }
 
 static inline void
@@ -3917,7 +3883,6 @@ gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
                                       gint         byte_on_line)
 {
   GtkTextRealIter *real;
-  gint bytes_in_line = 0;
   gint offset = 0;
   GtkTextIter pos;
   GtkTextLineSegment *seg;
@@ -3925,8 +3890,6 @@ gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
   g_return_if_fail (iter != NULL);
 
   gtk_text_iter_set_line_offset (iter, 0);
-
-  bytes_in_line = gtk_text_iter_get_bytes_in_line (iter);
 
   pos = *iter;
 

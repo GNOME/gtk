@@ -26,7 +26,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
 #include "gtkcombobox.h"

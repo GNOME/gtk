@@ -563,7 +563,6 @@ static void
 gtk_text_buffer_finalize (GObject *object)
 {
   GtkTextBuffer *buffer;
-  GtkTextBufferPrivate *priv;
 
   buffer = GTK_TEXT_BUFFER (object);
 
@@ -3237,9 +3236,6 @@ clipboard_rich_text_received (GtkClipboard *clipboard,
   GtkTextIter insert_point;
   gboolean retval = TRUE;
   GError *error = NULL;
-  GtkTextBufferPrivate *priv;
-
-  priv = GTK_TEXT_BUFFER_GET_PRIVATE (request_data->buffer);
 
   if (text != NULL && length > 0)
     {
@@ -3328,7 +3324,6 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
 {
   ClipboardRequest *request_data = data;
   GtkTextBuffer *src_buffer;
-  GtkTextBufferPrivate *priv;
 
   src_buffer = selection_data_get_buffer (selection_data, request_data); 
 
@@ -3352,8 +3347,6 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
     }
   else
     {
-      priv = GTK_TEXT_BUFFER_GET_PRIVATE (request_data->buffer);
-
       if (gtk_clipboard_wait_is_rich_text_available (clipboard,
                                                      request_data->buffer))
         {

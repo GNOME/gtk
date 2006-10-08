@@ -18,7 +18,7 @@ complicated data structure exercise).  I'm happy to answer questions.
 High level description:
 
 There are several layers of data structure to the widget.  They are
-seperated from each other as much as possible.  The first is a gapped
+separated from each other as much as possible.  The first is a gapped
 text segment similar to the data structure Emacs uses for representing
 text.  Then there is a property list, which stores text properties for
 various ranges of text.  There is no direct relation between the text
@@ -93,7 +93,7 @@ transition.  An important point is that all property marks are invalid
 after a buffer modification unless care is taken to keep them
 accurate.  That is the difficulty of the insert and delete operations,
 because as the next section describes, line data is cached and by
-neccesity contains text property marks.  The functions for operating
+necessity contains text property marks.  The functions for operating
 and computing property marks are:
 
  void advance_mark     (GtkPropertyMark* mark);
@@ -117,8 +117,8 @@ of the file for doing things like getting the current text property,
 or some component of the current property.  See the MARK_* macros.
 
 Next there is a LineParams structure which contains all the
-information neccesary to draw one line of text on screen.  When I say
-"line" here, I do not mean one line of text seperated by newlines,
+information necessary to draw one line of text on screen.  When I say
+"line" here, I do not mean one line of text separated by newlines,
 rather I mean one row of text on screen.  It is a matter of policy how
 visible lines are chosen and there are currently two policies,
 line-wrap and no-line-wrap.  I suspect it would not be difficult to
@@ -167,7 +167,7 @@ often, the last index is treated as a newline.
   is, its properties are always that of the preceding character,
   if any.
   
-  There is a fair bit of special case code to mantain this condition -
+  There is a fair bit of special case code to maintain this condition -
   which is needed so that user has control over the properties of
   characters inserted at the last position. OWT 2/9/98 ]
 
@@ -268,7 +268,7 @@ visible lines:
   guint first_onscreen_ver_pixel;
 
 LINE_START_CACHE is a doubly linked list of LineParams.  CURRENT_LINE
-is a transient piece of data which is set in varoius places such as
+is a transient piece of data which is set in various places such as
 the mouse click code.  Generally, it is the line on which the cursor
 property mark CURSOR_MARK is on.  LINE_START_CACHE points to the first
 visible line and may contain PREV pointers if the cached data of
@@ -331,7 +331,7 @@ The text properties list:
   GList *text_properties_end;
 
 A scratch area used for constructing a contiguous piece of the buffer
-which may otherwise span the gap.  It is not strictly neccesary
+which may otherwise span the gap.  It is not strictly necessary
 but simplifies the drawing code because it does not need to deal with
 the gap.
 
@@ -408,7 +408,7 @@ copy area call.  If the CURSOR argument to EXPOSE_TEXT is true, it
 also draws the cursor.
 
 The function DRAW_LINE draws a single line, doing all the tab and
-color computations neccesary.  The function DRAW_LINE_WRAP draws the
+color computations necessary.  The function DRAW_LINE_WRAP draws the
 line wrap bitmap at the end of the line if it wraps.  TEXT_EXPOSE will
 expand the cached line data list if it has to by calling
 FETCH_LINES_FORWARD.  The functions DRAW_CURSOR and UNDRAW_CURSOR draw
@@ -427,12 +427,12 @@ RECOMPUTE_GEOMETRY is called when the geometry of the window changes
 or when it is first drawn.  This is probably not done right.  My
 biggest weakness in writing this code is that I've never written a
 widget before so I got most of the event handling stuff wrong as far
-as Gtk is concerned.  Fortunatly, most of the code is unrelated and
+as Gtk is concerned.  Fortunately, most of the code is unrelated and
 simply an exercise in data structure manipulation.
 
 Scrolling:
 
-Scrolling is fairly straighforward.  It looks at the top line, and
+Scrolling is fairly straightforward.  It looks at the top line, and
 advances it pixel by pixel until the FIRST_CUT_PIXELS equals the line
 height and then advances the LINE_START_CACHE.  When it runs out of
 lines it fetches more.  The function SCROLL_INT is used to scroll from
@@ -454,7 +454,7 @@ character.  It's fairly complicated.  In order to do efficient pasting
 into the buffer, or write code that modifies the buffer while the
 buffer is drawn, it needs to do multiple characters at at time.  This
 is the hardest part of what remains.  Currently, gtk_text_insert does
-not reexpose the modified lines.  It needs to.  Pete did this wrong at
+not re-expose the modified lines.  It needs to.  Pete did this wrong at
 one point and I disabled modification completely, I don't know what
 the current state of things are.  The functions
 INSERT_CHAR_LINE_EXPOSE and DELETE_CHAR_LINE_EXPOSE do the work.
@@ -477,7 +477,7 @@ Here's pseudo code for insert.  Delete is quite similar.
 
 What needs to be done:
 
-Horizintal scrolling, robustness, testing, selection handling.  If you
+Horizontal scrolling, robustness, testing, selection handling.  If you
 want to work in the text widget pay attention to the debugging
 facilities I've written at the end of gtktext.c.  I'm sorry I waited
 so long to try and pass this off.  I'm super busy with school and

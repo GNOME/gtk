@@ -358,11 +358,9 @@ combo_box_set (GtkWidget   *combo,
 	       const gchar *value)
 {
   GtkTreeModel *model;
-  GtkListStore *store;
   struct ComboSet set_data;
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
-  store = GTK_LIST_STORE (model);
 
   set_data.combo = GTK_COMBO_BOX (combo);
   set_data.value = value;

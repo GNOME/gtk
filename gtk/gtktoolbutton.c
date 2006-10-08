@@ -32,7 +32,6 @@
 #include "gtkvbox.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
-#include "gtkiconfactory.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 

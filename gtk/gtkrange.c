@@ -33,7 +33,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkrange.h"
-#include "gtkintl.h"
 #include "gtkscrollbar.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"

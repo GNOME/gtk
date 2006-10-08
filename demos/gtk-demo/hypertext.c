@@ -165,9 +165,9 @@ event_after (GtkWidget *text_view,
   return FALSE;
 }
 
-gboolean hovering_over_link = FALSE;
-GdkCursor *hand_cursor = NULL;
-GdkCursor *regular_cursor = NULL;
+static gboolean hovering_over_link = FALSE;
+static GdkCursor *hand_cursor = NULL;
+static GdkCursor *regular_cursor = NULL;
 
 /* Looks at all tags covering the position (x, y) in the text view, 
  * and if one of them is a link, change the cursor to the "hands" cursor
@@ -179,11 +179,8 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
                            gint            y)
 {
   GSList *tags = NULL, *tagp = NULL;
-  GtkTextBuffer *buffer;
   GtkTextIter iter;
   gboolean hovering = FALSE;
-
-  buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
   

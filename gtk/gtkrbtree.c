@@ -1567,7 +1567,7 @@ count_parity (GtkRBTree *tree,
     g_print ("parity incorrect for node\n");
 
   if (get_parity (node) != 1)
-    g_error ("Node has incorrect parity %d", get_parity (node));
+    g_error ("Node has incorrect parity %u", get_parity (node));
   
   return res;
 }

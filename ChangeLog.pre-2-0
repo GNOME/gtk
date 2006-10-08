@@ -17108,7 +17108,7 @@ Tue Jan 16 13:13:13 GMT 2001  Tony Gale <gale@gtk.org>
 	Use fb_mem, fb_stride, fb_width, fb_height.
 	Added recompute_rowstride to reset the rowstride of all windows.
 	Added gdk_fb_recompute_all() which recomputes rootwindow size,
-	window abs positions and window rowstrides. Usefull when the
+	window abs positions and window rowstrides. Useful when the
 	rotation has changed.
 
 Thu Jan 11 13:16:50 GMT 2001  Tony Gale <gale@gtk.org>

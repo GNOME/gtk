@@ -112,7 +112,7 @@ Retrieves the selection that will be used to communicate
 the data for the drag context (valid on both source
 and dest sides)
 
-Cursors and window heirarchies
+Cursors and window hierarchies
 ==============================
 
 The DND code, when possible (and it isn't possible over
@@ -123,7 +123,7 @@ the cursor is in _ourselves_ so we can ignore the
 drag icon properly. (Oh for OutputOnly windows!)
 
 To avoid obscene amounts of server traffic (which are only
-slighly observerable locally, but would really kill a
+slightly observable locally, but would really kill a
 session over a slow link), the code in GDK does
 XGetWindowAttributes for every child of the root window at
 the beginning of the drag, then selects with

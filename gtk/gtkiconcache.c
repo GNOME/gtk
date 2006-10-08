@@ -433,7 +433,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
   if (type != 0)
     {
       GTK_NOTE (ICONTHEME,
-		g_print ("invalid pixel data type %d\n", type));
+		g_print ("invalid pixel data type %u\n", type));
       return NULL;
     }
 

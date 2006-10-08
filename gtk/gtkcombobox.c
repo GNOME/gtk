@@ -3671,7 +3671,6 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
   if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter ||
       event->keyval == GDK_space || event->keyval == GDK_KP_Space) 
   {
-    GtkTreeIter iter;
     GtkTreeModel *model = NULL;
     
     gtk_combo_box_popdown (combo_box);

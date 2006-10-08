@@ -357,10 +357,8 @@ gtk_cell_renderer_accel_set_property  (GObject      *object,
 
   if (changed)
     {
-      GtkCellRendererText *celltext;
       gchar *text;
 
-      celltext = GTK_CELL_RENDERER_TEXT (accel);
       text = convert_keysym_state_to_string (accel, accel->accel_key, accel->accel_mods, accel->keycode);
       g_object_set (accel, "text", text, NULL);
       g_free (text);
@@ -519,7 +517,7 @@ typedef GtkEventBoxClass GtkCellEditableEventBoxClass;
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellEditableEventBox, _gtk_cell_editable_event_box, GTK_TYPE_EVENT_BOX, { \
     G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE, _gtk_cell_editable_event_box_cell_editable_init)   \
-      });
+      })
 
 
 static void

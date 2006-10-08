@@ -179,9 +179,9 @@ struct _GtkNotebookPrivate
 
   guint32 timestamp;
 
-  gboolean during_reorder : 1;
-  gboolean during_detach  : 1;
-  gboolean has_scrolled   : 1;
+  guint during_reorder : 1;
+  guint during_detach  : 1;
+  guint has_scrolled   : 1;
 };
 
 static const GtkTargetEntry notebook_source_targets [] = {

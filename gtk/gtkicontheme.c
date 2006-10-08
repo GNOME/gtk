@@ -875,7 +875,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   char **dirs;
   char **themes;
   GtkIconThemePrivate *priv;
-  IconTheme *theme;
+  IconTheme *theme = NULL;
   char *path;
   GKeyFile *theme_file;
   GError *error = NULL;
@@ -1855,7 +1855,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
     suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
 
   GTK_NOTE (ICONTHEME, 
-	    g_print ("get_icon_suffix%s %d\n", dir->cache ? " (cached)" : "", suffix));
+	    g_print ("get_icon_suffix%s %u\n", dir->cache ? " (cached)" : "", suffix));
 
   return suffix;
 }

@@ -928,7 +928,7 @@ gtk_scrolled_window_screen_changed (GtkWidget *widget,
 
   window_placement_connection =
     g_signal_connect (settings, "notify::gtk-scrolled-window-placement",
-		      G_CALLBACK (gtk_scrolled_window_settings_changed), 0);
+		      G_CALLBACK (gtk_scrolled_window_settings_changed), NULL);
   g_object_set_data (G_OBJECT (settings), 
 		     I_("gtk-scrolled-window-connection"),
 		     GUINT_TO_POINTER (window_placement_connection));
@@ -1049,7 +1049,7 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
     case GTK_SCROLL_END:
       break;
     default:
-      g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
+      g_warning ("Invalid scroll type %u for GtkSpinButton::change-value", scroll);
       return;
     }
 

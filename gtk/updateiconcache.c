@@ -61,7 +61,7 @@ static gchar *var_name = "-";
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
-gboolean
+static gboolean
 is_cache_up_to_date (const gchar *path)
 {
   struct stat path_stat, cache_stat;
@@ -91,7 +91,7 @@ is_cache_up_to_date (const gchar *path)
   return cache_stat.st_mtime >= path_stat.st_mtime;
 }
 
-gboolean
+static gboolean
 has_theme_index (const gchar *path)
 {
   gboolean result;
@@ -450,7 +450,7 @@ maybe_cache_image_data (Image       *image,
     }
 }
 
-GList *
+static GList *
 scan_directory (const gchar *base_path, 
 		const gchar *subdir, 
 		GHashTable  *files, 
@@ -614,7 +614,7 @@ convert_to_hash (gpointer key, gpointer value, gpointer user_data)
   return TRUE;
 }
 
-gboolean
+static gboolean
 write_string (FILE *cache, const gchar *n)
 {
   gchar *s;
@@ -631,7 +631,7 @@ write_string (FILE *cache, const gchar *n)
   
 }
 
-gboolean
+static gboolean
 write_card16 (FILE *cache, guint16 n)
 {
   int i;
@@ -643,7 +643,7 @@ write_card16 (FILE *cache, guint16 n)
   return i == 1;
 }
 
-gboolean
+static gboolean
 write_card32 (FILE *cache, guint32 n)
 {
   int i;
@@ -656,7 +656,7 @@ write_card32 (FILE *cache, guint32 n)
 }
 
 
-gboolean
+static gboolean
 write_pixdata (FILE *cache, GdkPixdata *pixdata)
 {
   guint8 *s;
@@ -691,7 +691,7 @@ write_header (FILE *cache, guint32 dir_list_offset)
 	  write_card32 (cache, dir_list_offset));
 }
 
-guint
+static guint
 get_image_meta_data_size (Image *image)
 {
   gint i;
@@ -719,7 +719,7 @@ get_image_meta_data_size (Image *image)
   return len;
 }
 
-guint
+static guint
 get_image_pixel_data_size (Image *image)
 {
   if (image->pixel_data_size == 0)
@@ -735,7 +735,7 @@ get_image_pixel_data_size (Image *image)
   return image->pixel_data_size;
 }
 
-guint
+static guint
 get_image_data_size (Image *image)
 {
   guint len;
@@ -751,7 +751,7 @@ get_image_data_size (Image *image)
   return len;
 }
 
-guint
+static guint
 get_single_node_size (HashNode *node, gboolean include_image_data)
 {
   int len = 0;
@@ -778,7 +778,7 @@ get_single_node_size (HashNode *node, gboolean include_image_data)
   return len;
 }
 
-guint
+static guint
 get_bucket_size (HashNode *node)
 {
   int len = 0;
@@ -792,7 +792,7 @@ get_bucket_size (HashNode *node)
   return len;
 }
 
-gboolean
+static gboolean
 write_bucket (FILE *cache, HashNode *node, int *offset)
 {
   while (node != NULL)
@@ -1012,7 +1012,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
   return TRUE;
 }
 
-gboolean
+static gboolean
 write_hash_table (FILE *cache, HashContext *context, int *new_offset)
 {
   int offset = HASH_OFFSET;
@@ -1060,7 +1060,7 @@ write_hash_table (FILE *cache, HashContext *context, int *new_offset)
   return TRUE;
 }
 
-gboolean
+static gboolean
 write_dir_index (FILE *cache, int offset, GList *directories)
 {
   int n_dirs;
@@ -1094,7 +1094,7 @@ write_dir_index (FILE *cache, int offset, GList *directories)
   return TRUE;
 }
 
-gboolean
+static gboolean
 write_file (FILE *cache, GHashTable *files, GList *directories)
 {
   HashContext context;
@@ -1140,7 +1140,7 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
   return TRUE;
 }
 
-void
+static void
 build_cache (const gchar *path)
 {
   gchar *cache_path, *tmp_cache_path;
@@ -1243,7 +1243,7 @@ build_cache (const gchar *path)
     g_printerr (_("Cache file created successfully.\n"));
 }
 
-void
+static void
 write_csource (const gchar *path)
 {
   gchar *cache_path;

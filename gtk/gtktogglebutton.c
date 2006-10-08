@@ -76,12 +76,10 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
   GtkButtonClass *button_class;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
-  container_class = (GtkContainerClass*) class;
   button_class = (GtkButtonClass*) class;
 
   gobject_class->set_property = gtk_toggle_button_set_property;
@@ -243,11 +241,7 @@ void
 gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 			    gboolean         draw_indicator)
 {
-  GtkWidget *widget;
-
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
-
-  widget = GTK_WIDGET (toggle_button);
 
   draw_indicator = draw_indicator ? TRUE : FALSE;
 

@@ -55,7 +55,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkalias.h"
 

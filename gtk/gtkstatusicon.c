@@ -1044,7 +1044,7 @@ gtk_status_icon_set_image (GtkStatusIcon *status_icon,
       g_object_notify (G_OBJECT (status_icon), "icon-name");
       break;
     default:
-      g_warning ("Image type %d not handled by GtkStatusIcon", storage_type);
+      g_warning ("Image type %u not handled by GtkStatusIcon", storage_type);
     }
 
   g_object_thaw_notify (G_OBJECT (status_icon));

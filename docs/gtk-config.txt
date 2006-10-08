@@ -1,7 +1,7 @@
 CONFIGURING PACKAGES TO WORK WITH GTK
 -------------------------------------
 
-Compiling a program succesfully against the GTK, GDK, and GLIB
+Compiling a program successfully against the GTK, GDK, and GLIB
 libraries can require a large number of command line options
 to your compiler and linker that are hard to guess correctly.
 The additional libraries required may, for example, depend on the

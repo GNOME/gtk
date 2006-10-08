@@ -31,7 +31,7 @@
 #include <unistd.h>
 #endif
 
-#if USE_LA_MODULES
+#ifdef USE_LA_MODULES
 #define SOEXT ".la"
 #else
 #define SOEXT ("." G_MODULE_SUFFIX)

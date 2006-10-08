@@ -55,7 +55,6 @@
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
-#include "gtkimage.h"
 #include "gtkstock.h"
 #include "gtkaccessible.h"
 #include "gtkprivate.h"

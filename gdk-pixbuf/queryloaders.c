@@ -127,7 +127,7 @@ write_loader_info (const char *path, GdkPixbufFormat *info)
 	char **ext; 
 
 	g_printf("\"%s\"\n", path);
-	g_printf ("\"%s\" %d \"%s\" \"%s\"\n", 
+	g_printf ("\"%s\" %u \"%s\" \"%s\"\n", 
 		  info->name, info->flags, 
 		  info->domain ? info->domain : GETTEXT_PACKAGE, info->description);
 	for (mime = info->mime_types; *mime; mime++) {

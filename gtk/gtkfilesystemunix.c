@@ -833,8 +833,8 @@ gtk_file_system_unix_get_info (GtkFileSystem                *file_system,
   handle = create_handle (file_system);
 
   filename = gtk_file_path_get_string (path);
-  g_return_val_if_fail (filename != NULL, FALSE);
-  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   if (!stat_with_error (filename, &statbuf, &error))
     {
@@ -1042,8 +1042,8 @@ gtk_file_system_unix_create_folder (GtkFileSystem                     *file_syst
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
   filename = gtk_file_path_get_string (path);
-  g_return_val_if_fail (filename != NULL, FALSE);
-  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   handle = create_handle (file_system);
 

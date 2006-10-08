@@ -126,7 +126,7 @@ Release notes for 2.8
 Release notes for 2.6
 =====================
 
-* GTK+ 2.6 supports clipboard persistency. To make use of this feature,
+* GTK+ 2.6 supports clipboard persistence. To make use of this feature,
   a clipboard manager following the specification at
   http://www.freedesktop.org/wiki/Standards/clipboard-manager-spec
   must be running. A sample implementation of such a clipboard manager
@@ -137,11 +137,11 @@ Release notes for 2.6
 
 * Notification on clipboard ownership changes via GdkOwnerChange events 
   requires the XFIXES X extension. Applications can use the function
-  gdk_display_supports_selection_notification() to find out if ownerchip
+  gdk_display_supports_selection_notification() to find out if ownership
   change notification is available.
 
 * The icon theme code in GTK+ 2.6 follows the freedesktop.org icon theme 
-  specification. Setting the XDG_DATA_DIRS environtment variable may be 
+  specification. Setting the XDG_DATA_DIRS environment variable may be 
   necessary if your icons aren't installed in the default location 
   /usr/share/icons.
 
@@ -151,7 +151,7 @@ Release notes for 2.6
   see the gtk-update-icon-cache man page or the GTK+ documentation.
 
 * To reduce code size and improve efficiency, GTK+, when compiled 
-  with the GNU toolchain, has separate internal and external entry 
+  with the GNU tool chain, has separate internal and external entry 
   points for exported functions. The internal names, which begin with 
   IA__, may be seen when debugging a GTK+ program.
 
@@ -179,7 +179,7 @@ Release notes for 2.6
   compatibility are provided.
 
 * On Unix, the assumption of GLib and GTK+ by default is that filenames on 
-  the filesystem are encoded in UTF-8 rather than the encoding of the locale;
+  the file system are encoded in UTF-8 rather than the encoding of the locale;
   the GTK+ developers consider that having filenames whose interpretation
   depends on the current locale is fundamentally a bad idea.
 
@@ -197,7 +197,7 @@ Release notes for 2.6
 
   On Windows, filenames passed to GTK+ should always be in UTF-8, as
   in GLib 2.6. This is different than in previous versions of GTK+
-  where the system codepage was used. As in GLib, for DLL ABI
+  where the system code page was used. As in GLib, for DLL ABI
   stability, applications built against previous versions of GTK+ will
   use entry points providing the old semantics.
 
@@ -233,7 +233,7 @@ In the bug report please include:
   that can be downloaded.
 
 * If the bug was a crash, the exact text that was printed out when the
-  crash occured.
+  crash occurred.
 
 * Further information such as stack traces may be useful, but is not
   necessary. If you do send a stack trace, and the error is an X error,

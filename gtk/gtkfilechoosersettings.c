@@ -346,7 +346,7 @@ parse_config (GtkFileChooserSettings *settings,
 	      const char *contents,
 	      GError **error)
 {
-  GMarkupParser parser = { 0, };
+  GMarkupParser parser = { NULL, };
   GMarkupParseContext *context;
   struct parse_state state;
   gboolean retval;

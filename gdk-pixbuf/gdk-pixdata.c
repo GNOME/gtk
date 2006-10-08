@@ -737,7 +737,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 	      cdata.static_prefix, cdata.const_prefix, name);
       APPEND (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
 	      GDK_PIXBUF_MAGIC_NUMBER);
-      APPEND (gstring, "  %u + %lu, /* header length + pixel_data length */\n",
+      APPEND (gstring, "  %d + %lu, /* header length + pixel_data length */\n",
 	      GDK_PIXDATA_HEADER_LENGTH,
 	      rle_encoded ? (glong)(img_buffer_end - img_buffer) : (glong)rowstride * height);
       APPEND (gstring, "  0x%x, /* pixdata_type */\n",
@@ -779,7 +779,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       cdata.pos = 3;
       save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
-      APPEND (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
+      APPEND (gstring, "\"\n  /* length: header (%d) + pixel_data (%u) */\n  \"",
 	      GDK_PIXDATA_HEADER_LENGTH,
 	      rle_encoded ? pix_length : rowstride * height);
       cdata.pos = 3;

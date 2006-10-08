@@ -250,7 +250,6 @@ remove_settings_signal (GtkPathBar *path_bar,
 static void
 gtk_path_bar_dispose (GObject *object)
 {
-  GList *list;
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
 
   remove_settings_signal (path_bar, gtk_widget_get_screen (GTK_WIDGET (object)));

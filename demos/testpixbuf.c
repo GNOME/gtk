@@ -358,11 +358,11 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 static void
 config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 {
+#if 0
 	GdkPixbuf *pixbuf;
     
 	pixbuf = (GdkPixbuf *)g_object_get_data (G_OBJECT (drawing_area), "pixbuf");
 
-#if 0
 	if (((event->width) != gdk_pixbuf_get_width (pixbuf)) ||
 	    ((event->height) != gdk_pixbuf_get_height (pixbuf)))
 		gdk_pixbuf_scale (pixbuf, event->width, event->height);
@@ -504,7 +504,7 @@ progressive_updated_callback (GdkPixbufLoader* loader, guint x, guint y, guint w
 
 static int readlen = 4096;
 
-extern void pixbuf_init ();
+extern void pixbuf_init (void);
 
 void size_func (GdkPixbufLoader *loader, gint width, gint height, gpointer data)
 {

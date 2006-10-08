@@ -298,6 +298,11 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
  *      This procedure merges adjacent character segments into
  *      a single character segment, if possible.
  *
+ * Arguments:
+ *      segPtr: Pointer to the first of two adjacent segments to
+ *              join.
+ *      line:   Line containing segments (not used).
+ *
  * Results:
  *      The return value is a pointer to the first segment in
  *      the (new) list of segments that used to start with segPtr.
@@ -310,11 +315,7 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
 
         /* ARGSUSED */
 static GtkTextLineSegment *
-char_segment_cleanup_func (segPtr, line)
-     GtkTextLineSegment *segPtr;           /* Pointer to first of two adjacent
-                                         * segments to join. */
-     GtkTextLine *line;                /* Line containing segments (not
-                                        * used). */
+char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
   GtkTextLineSegment *segPtr2, *newPtr;
 
@@ -352,6 +353,12 @@ char_segment_cleanup_func (segPtr, line)
  *
  *      This procedure is invoked to delete a character segment.
  *
+ * Arguments:
+ *      segPtr   : Segment to delete
+ *      line     : Line containing segment
+ *      treeGone : Non-zero means the entire tree is being
+ *                 deleted, so everything must get cleaned up.
+ *
  * Results:
  *      Always returns 0 to indicate that the segment was deleted.
  *
@@ -363,12 +370,7 @@ char_segment_cleanup_func (segPtr, line)
 
         /* ARGSUSED */
 static int
-char_segment_delete_func (segPtr, line, treeGone)
-     GtkTextLineSegment *segPtr;           /* Segment to delete. */
-     GtkTextLine *line;                /* Line containing segment. */
-     int treeGone;                      /* Non-zero means the entire tree is
-                                         * being deleted, so everything must
-                                         * get cleaned up. */
+char_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int treeGone)
 {
   g_free ((char*) segPtr);
   return 0;
@@ -382,6 +384,10 @@ char_segment_delete_func (segPtr, line, treeGone)
  *      This procedure is invoked to perform consistency checks
  *      on character segments.
  *
+ * Arguments:
+ *      segPtr : Segment to check
+ *      line   : Line containing segment
+ *
  * Results:
  *      None.
  *
@@ -394,9 +400,7 @@ char_segment_delete_func (segPtr, line, treeGone)
 
         /* ARGSUSED */
 static void
-char_segment_check_func (segPtr, line)
-     GtkTextLineSegment *segPtr;           /* Segment to check. */
-     GtkTextLine *line;                /* Line containing segment. */
+char_segment_check_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
   char_segment_self_check (segPtr);
 
@@ -436,6 +440,12 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
  *
  *      This procedure is invoked to delete toggle segments.
  *
+ * Arguments:
+ *      segPtr   : Segment to check
+ *      line     : Line containing segment
+ *      treeGone : Non-zero means the entire tree is being
+ *                 deleted so everything must get cleaned up
+ *
  * Results:
  *      Returns 1 to indicate that the segment may not be deleted,
  *      unless the entire B-tree is going away.
@@ -449,12 +459,7 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
  */
 
 static int
-toggle_segment_delete_func (segPtr, line, treeGone)
-     GtkTextLineSegment *segPtr;           /* Segment to check. */
-     GtkTextLine *line;                /* Line containing segment. */
-     int treeGone;                      /* Non-zero means the entire tree is
-                                         * being deleted, so everything must
-                                         * get cleaned up. */
+toggle_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int treeGone)
 {
   if (treeGone)
     {
@@ -488,6 +493,10 @@ toggle_segment_delete_func (segPtr, line, treeGone)
  *      been modified in some way.  It's invoked after the
  *      modifications are complete.
  *
+ * Arguments:
+ *      segPtr : Segment to check
+ *      line   : Line that now contains segment
+ *
  * Results:
  *      The return value is the head segment in a new list
  *      that is to replace the tail of the line that used to
@@ -503,9 +512,7 @@ toggle_segment_delete_func (segPtr, line, treeGone)
  */
 
 static GtkTextLineSegment *
-toggle_segment_cleanup_func (segPtr, line)
-     GtkTextLineSegment *segPtr;   /* Segment to check. */
-     GtkTextLine *line;        /* Line that now contains segment. */
+toggle_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
   GtkTextLineSegment *segPtr2, *prevPtr;
   int counts;
@@ -563,6 +570,10 @@ toggle_segment_cleanup_func (segPtr, line)
  *      This procedure is invoked when a toggle segment is about
  *      to move from one line to another.
  *
+ * Arguments:
+ *      segPtr : Segment to check
+ *      line   : Line that used to contain segment
+ *
  * Results:
  *      None.
  *
@@ -573,9 +584,7 @@ toggle_segment_cleanup_func (segPtr, line)
  */
 
 static void
-toggle_segment_line_change_func (segPtr, line)
-     GtkTextLineSegment *segPtr;   /* Segment to check. */
-     GtkTextLine *line;        /* Line that used to contain segment. */
+toggle_segment_line_change_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
   if (segPtr->body.toggle.inNodeCounts)
     {

@@ -272,7 +272,7 @@ print_blurb (FILE    *bout,
   if (!print_help)
     {
       g_fprintf (bout, "%s version ", PRG_NAME);
-      g_fprintf (bout, "%u.%u.%u", GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+      g_fprintf (bout, "%d.%d.%d", GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
       g_fprintf (bout, "\n");
       g_fprintf (bout, "%s comes with ABSOLUTELY NO WARRANTY.\n", PRG_NAME);
       g_fprintf (bout, "You may redistribute copies of %s under the terms of\n", PRG_NAME);

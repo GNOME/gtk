@@ -50,7 +50,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-const gchar gtk_combo_string_key[] = "gtk-combo-string-value";
+static const gchar gtk_combo_string_key[] = "gtk-combo-string-value";
 
 #define COMBO_LIST_MAX_HEIGHT	(400)
 #define	EMPTY_LIST_HEIGHT	(15)
@@ -561,7 +561,7 @@ gtk_combo_popup_list (GtkCombo *combo)
     {
       gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
                                    GTK_WINDOW (combo->popwin));
-      gtk_window_set_transient_for (combo->popwin, GTK_WINDOW (toplevel));
+      gtk_window_set_transient_for (GTK_WINDOW (combo->popwin), GTK_WINDOW (toplevel));
     }
 
   gtk_widget_set_size_request (combo->popwin, width, height);

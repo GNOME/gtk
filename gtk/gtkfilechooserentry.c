@@ -646,8 +646,6 @@ out:
 static gboolean
 load_directory_callback (GtkFileChooserEntry *chooser_entry)
 {
-  GSList *child_paths = NULL;
-
   GDK_THREADS_ENTER ();
 
   chooser_entry->load_directory_idle = 0;

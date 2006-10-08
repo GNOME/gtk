@@ -219,7 +219,7 @@ static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *wi
 							    gint              x,
 							    gint              y,
 							    GtkSelectionData *data,
-							    guint             info,
+							    guint             type,
 							    guint             drag_time);
 static void     gtk_file_chooser_button_show_all           (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide_all           (GtkWidget        *widget);
@@ -1033,7 +1033,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 					    gint	      x,
 					    gint	      y,
 					    GtkSelectionData *data,
-					    guint	      info,
+					    guint	      type,
 					    guint	      drag_time)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
@@ -1045,13 +1045,13 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
     (*GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received) (widget,
 										    context,
 										    x, y,
-										    data, info,
+										    data, type,
 										    drag_time);
 
   if (widget == NULL || context == NULL || data == NULL || data->length < 0)
     return;
 
-  switch (info)
+  switch (type)
     {
     case TEXT_URI_LIST:
       {

@@ -178,11 +178,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkDialogClass *dialog_class;
 	
   object_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
-  dialog_class = (GtkDialogClass *)klass;
 	
   object_class->set_property = gtk_about_dialog_set_property;
   object_class->get_property = gtk_about_dialog_get_property;
@@ -1752,11 +1750,8 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
 {
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   GSList *tags = NULL, *tagp = NULL;
-  GtkTextBuffer *buffer;
   GtkTextIter iter;
   gboolean hovering_over_link = FALSE;
-
-  buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
   

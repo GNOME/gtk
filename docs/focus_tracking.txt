@@ -97,7 +97,7 @@ F2, F3: together these are exactly the cases where we get
 
 F4: we get an LeaveNotify with the focus flag set. An
   LeaveNotify with a focus flag set will also be sent if 
-  F==W, so we have to to explicity test for that case
+  F==W, so we have to to explicitly test for that case
   using has_focus_window(W).
 
 

@@ -60,7 +60,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
 #include "gtktable.h"
-#include "gtktreeview.h"
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtktreeselection.h"

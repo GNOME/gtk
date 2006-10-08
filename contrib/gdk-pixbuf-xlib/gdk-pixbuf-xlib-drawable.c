@@ -152,7 +152,6 @@ rgb1 (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	guint8 *s;
 	register guint8 data;
 	guint8 *o;
 	guint8 *srow = image->data, *orow = pixels;
@@ -167,7 +166,6 @@ rgb1 (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	bpl = image->bytes_per_line;
 
 	for (yy = 0; yy < height; yy++) {
-		s = srow;
 		o = orow;
 
 		for (xx = 0; xx < width; xx ++) {
@@ -191,7 +189,6 @@ rgb1a (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	guint8 *s;
 	register guint8 data;
 	guint8 *o;
 	guint8 *srow = image->data, *orow = pixels;
@@ -221,7 +218,6 @@ rgb1a (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	}
 
 	for (yy = 0; yy < height; yy++) {
-		s = srow;
 		o = orow;
 
 		for (xx = 0; xx < width; xx ++) {
@@ -988,7 +984,6 @@ convert_real_slow (XImage *image, guchar *pixels, int rowstride, xlib_colormap *
 	int width, height;
 	int bpl;
 	guint8 *srow = image->data, *orow = pixels;
-	guint8 *s;
 	guint8 *o;
 	guint32 pixel;
 	Visual *v;
@@ -1011,7 +1006,6 @@ convert_real_slow (XImage *image, guchar *pixels, int rowstride, xlib_colormap *
 		 red_prec, green_prec, blue_prec));
 
 	for (yy = 0; yy < height; yy++) {
-		s = srow;
 		o = orow;
 		for (xx = 0; xx < width; xx++) {
 			pixel = XGetPixel (image, xx, yy);

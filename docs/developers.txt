@@ -6,7 +6,7 @@ programming for/with Gtk, having the spirit of a developers FAQ.
 It is also the correct place to list up things that programmers should
 care about in general.
 
-In the hope that this text might be usefull to someone,
+In the hope that this text might be useful to someone,
 
         - Tim Janik <timj@gimp.org>
           1998/02/11
@@ -43,7 +43,7 @@ GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
 GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
                         GtkWidget::focus_out_event
 
-Events that are asured to have a valid GdkEvent.any.window field are
+Events that are assured to have a valid GdkEvent.any.window field are
 
 GDK_EXPOSE		GtkWidget::expose_event
 
@@ -61,7 +61,7 @@ Writing Gdk functions
 ---------------------
 
 When writing Gdk functions that operate on GdkWindow structures in any
-maeningfull sense, that is casting to a GdkWindowPrivate structure for
+meaningful sense, that is casting to a GdkWindowPrivate structure for
 access to fields other then GdkWindow.user_data, the programmer is
 recommended to check for the GdkWindowPrivate.destroyed field to be ==
 FALSE, especially if the GdkWindowPrivate.xwindow field is used.

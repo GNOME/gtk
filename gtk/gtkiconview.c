@@ -8539,7 +8539,6 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
 {
   GtkIconViewAccessiblePrivate *priv;
   GtkIconViewItemAccessibleInfo *info;
-  GtkIconViewAccessible *view;
   GtkIconView *icon_view;
   GtkIconViewItemAccessible *item;
   GList *items;
@@ -8547,7 +8546,6 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   icon_view = GTK_ICON_VIEW (user_data);
-  view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
 
   items = priv->items;
@@ -8923,7 +8921,6 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
   GtkWidget *widget;
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)

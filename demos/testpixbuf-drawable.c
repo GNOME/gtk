@@ -66,7 +66,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
    return FALSE;
 }
 
-extern void pixbuf_init ();
+extern void pixbuf_init (void);
 
 int
 main (int argc, char **argv)

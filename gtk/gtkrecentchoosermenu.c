@@ -45,13 +45,6 @@
 #include "gtkobject.h"
 #include "gtktooltips.h"
 #include "gtktypebuiltins.h"
-
-#include "gtkrecentmanager.h"
-#include "gtkrecentfilter.h"
-#include "gtkrecentchooser.h"
-#include "gtkrecentchooserutils.h"
-#include "gtkrecentchooserprivate.h"
-#include "gtkrecentchoosermenu.h"
 #include "gtkalias.h"
 
 struct _GtkRecentChooserMenuPrivate
@@ -915,7 +908,6 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   		    G_CALLBACK (item_activate_cb),
   		    menu);
 
-out:
   g_free (label);
 
   return item;

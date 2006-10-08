@@ -481,8 +481,10 @@ gtk_input_dialog_set_axis (GtkWidget *w,
   else
     old_use = GDK_AXIS_IGNORE;
 
-  if (axis == old_axis)
+  if (axis == old_axis) {
+    g_free (new_axes);
     return;
+  }
 
   /* we must always have an x and a y axis */
   if ((axis == -1 && (use == GDK_AXIS_X || use == GDK_AXIS_Y)) ||

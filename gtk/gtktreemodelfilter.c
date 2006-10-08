@@ -951,7 +951,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
 {
   FilterElt *elt, *parent;
   FilterLevel *level, *parent_level;
-  gint offset, i, length;
+  gint i, length;
 
   gboolean emit_child_toggled = FALSE;
 
@@ -962,7 +962,6 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
   parent_level = level->parent_level;
 
   length = level->array->len;
-  offset = elt->offset;
 
   /* we distinguish a couple of cases:
    *  - root level, length > 1: emit row-deleted and remove.
@@ -1604,8 +1603,8 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (data);
   GtkTreePath *path;
   GtkTreeIter iter;
-  FilterElt *elt, *parent;
-  FilterLevel *level, *parent_level;
+  FilterElt *elt, *parent = NULL;
+  FilterLevel *level, *parent_level = NULL;
   gboolean emit_child_toggled = FALSE;
   gint offset;
   gint i;

@@ -616,7 +616,7 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
 
   show_image_connection =
     g_signal_connect (settings, "notify::gtk-menu-images",
-		      G_CALLBACK (gtk_image_menu_item_setting_changed), 0);
+		      G_CALLBACK (gtk_image_menu_item_setting_changed), NULL);
   g_object_set_data (G_OBJECT (settings), 
 		     I_("gtk-image-menu-item-connection"),
 		     GUINT_TO_POINTER (show_image_connection));

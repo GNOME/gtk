@@ -5586,7 +5586,6 @@ validate_visible_area (GtkTreeView *tree_view)
   GtkRBNode *node = NULL;
   gboolean need_redraw = FALSE;
   gboolean size_changed = FALSE;
-  gboolean update_dy = FALSE;
   gint total_height;
   gint area_above = 0;
   gint area_below = 0;
@@ -5611,8 +5610,6 @@ validate_visible_area (GtkTreeView *tree_view)
       if (path && !_gtk_tree_view_find_node (tree_view, path, &tree, &node))
 	{
           /* we are going to scroll, and will update dy */
-	  update_dy = TRUE;
-
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	      GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
@@ -5655,8 +5652,6 @@ validate_visible_area (GtkTreeView *tree_view)
 	      else
 	        {
 		  /* row not visible */
-                  update_dy = TRUE;
-
 		  if (dy >= 0 && dy <= tree_view->priv->vadjustment->page_size)
 		    {
 		      /* row at the beginning -- fixed */
@@ -5905,7 +5900,6 @@ validate_visible_area (GtkTreeView *tree_view)
             }
 	}
       area_above -= ROW_HEIGHT (tree_view, new_height);
-      update_dy = TRUE;
     }
 
   /* if we scrolled to a path, we need to set the dy here,

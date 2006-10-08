@@ -45,7 +45,7 @@ GtkObject:
 GTK_DESTROYED:
 	This flagged is set for a GtkObject right before its
 	destruction code is executed. Its main use is the
-	prevention of multiple destruction invokations.
+	prevention of multiple destruction invocations.
 	
 GTK_FLOATING:
 	This flag reflects the fact that the holder of the
@@ -94,7 +94,7 @@ GTK_CHILD_VISIBLE
         and visible. Containers like GtkNotebook use this flag.
         A private flag, not a public flag, so if you need to check
         this flag, you should call gtk_widget_get_child_visible().
-        (Should be very rarely necesary.)
+        (Should be very rarely necessary.)
 
 GTK_SENSITIVE:
 	Set and unset by gtk_widget_set_sensitive.
@@ -155,7 +155,7 @@ GtkWidget, private flags:
 GTK_USER_STYLE:
 	A widget is flagged to have a user style, once gtk_widget_set_style
 	has been invoked for it. The use of this flag is to tell widgets
-	wich share a global user style from the ones which got a certain
+	which share a global user style from the ones which got a certain
 	style assign from outside the toolkit.
 	
 GTK_RESIZE_PENDING:
@@ -163,7 +163,7 @@ GTK_RESIZE_PENDING:
 	[some of the code should move to gtkcontainer.c therefore]
 	Relies on GTK_WIDGET_REALIZED(widget)
 	[this is not really enforced throughout the code, but should
-	 be. it only requires a few checks for GTK_WIDGET_RELIZED and
+	 be. it only requires a few checks for GTK_WIDGET_REALIZED and
 	 minor changes to gtk_widget_unrealize, we can then remove the check
 	 in gtk_widget_real_destroy]
 	Means: there is an idle handler waiting for the container to
@@ -176,7 +176,7 @@ GTK_RESIZE_NEEDED:
 	 can be avoided]
 	Means: a widget has been added to the resize_widgets list of
 	its _toplevel_ container (keep this in mind for GtkViewport).
-	Remark: this flag is also used internaly by gtkwindow.c during
+	Remark: this flag is also used internally by gtkwindow.c during
 	the evaluation of resizing worthy widgets.
 
 GTK_LEAVE_PENDING:
@@ -200,7 +200,7 @@ GTK_NEED_REQUEST:
 	requisition. If this flag is set, we must actually emit ::size-request
         when gtk_widget_size_request() is called. Otherwise, we can
         simply widget->requisition. We keep track of this all the time
-        howevever, widgets with this flag set are only added to the resize 
+        however, widgets with this flag set are only added to the resize 
 	queue if they are viewable.
 
 GTK_NEED_ALLOCATION:
@@ -291,7 +291,7 @@ gtk_widget_destroy:
 
 gtk_widget_realize:
  if !GTK_DESTROYED sets GTK_REALIZED
-- Calling gtk_widget_realize when the widget is not a descendent
+- Calling gtk_widget_realize when the widget is not a descendant
   of a toplevel is an ERROR.
 
 gtk_container_add (container, widget) [ and container-specific variants ]
@@ -358,7 +358,7 @@ Widgets are created in an unrealized state.
 The Realize signal
 ------------------
 
-When a widget recieves the "realize" signal it should:
+When a widget receives the "realize" signal it should:
 
  NO_WINDOW widgets: (probably OK to use default handler)
 
@@ -454,7 +454,7 @@ When a widget receives the destroy signal, it must:
 
 The "destroy" signal will only be received once. A widget
 will never receive any other signals after the destroy
-signal (but see the sectionalize on "Finalize" below)
+signal (but see the section on "Finalize" below)
 
 The widget must handle calls to all publically accessible
 functions in an innocuous manner even after a "destroy"

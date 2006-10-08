@@ -1323,7 +1323,7 @@ int main(int argc, char *argv[])
   gtk_container_set_border_width(GTK_CONTAINER (window), 10);
 #endif
 
-  /* add a button to do something usefull */
+  /* add a button to do something useful */
   button = gtk_button_new_with_label("Fork me!");
           
   gtk_signal_connect(GTK_OBJECT (button), "clicked",

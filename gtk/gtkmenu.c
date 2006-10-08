@@ -3956,7 +3956,6 @@ gtk_menu_stop_scrolling (GtkMenu *menu)
 {
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (menu));
   gboolean touchscreen_mode;
-  gboolean was_scrolling;
 
   gtk_menu_remove_scroll_timeout (menu);
   

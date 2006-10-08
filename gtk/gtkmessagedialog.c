@@ -333,7 +333,7 @@ setup_type (GtkMessageDialog *dialog,
       break;
 
     default:
-      g_warning ("Unknown GtkMessageType %d", type);
+      g_warning ("Unknown GtkMessageType %u", type);
       break;
     }
 

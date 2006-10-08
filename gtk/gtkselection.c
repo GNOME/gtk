@@ -1620,7 +1620,6 @@ gtk_selection_data_get_uris (GtkSelectionData *selection_data)
       selection_data->type == text_uri_list_atom)
     {
       gchar **list;
-      gint i;
       gint count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
       							       utf8_atom,
 						   	       selection_data->format, 

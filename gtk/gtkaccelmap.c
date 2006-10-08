@@ -37,7 +37,6 @@
 #ifdef G_OS_WIN32
 #include <io.h>
 #endif
-#include <errno.h>
 
 
 /* --- structures --- */

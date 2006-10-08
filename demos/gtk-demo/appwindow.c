@@ -156,7 +156,7 @@ typedef struct
   GtkActionClass parent_class;
 } ToolMenuActionClass;
 
-G_DEFINE_TYPE(ToolMenuAction, tool_menu_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE(ToolMenuAction, tool_menu_action, GTK_TYPE_ACTION)
 
 static void
 tool_menu_action_class_init (ToolMenuActionClass *class)

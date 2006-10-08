@@ -537,7 +537,7 @@ _gtk_tree_data_list_set_header (GList                  *header_list,
       header = g_slice_new0 (GtkTreeDataSortHeader);
       header->sort_column_id = sort_column_id;
       if (list)
-	g_list_append (list, header);
+	list = g_list_append (list, header);
       else
 	header_list = g_list_append (header_list, header);
     }

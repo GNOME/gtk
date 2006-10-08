@@ -774,10 +774,6 @@ connect_proxy (GtkAction     *action,
 	}
       else 
 	{
-	  GtkWidget *image;
-
-	  image = gtk_button_get_image (GTK_BUTTON (proxy));
-
 	  if (GTK_BIN (proxy)->child == NULL || 
 	      GTK_IS_LABEL (GTK_BIN (proxy)->child))
 	    {
@@ -1527,8 +1523,6 @@ gtk_action_set_icon_name (GtkAction   *action,
       else if (GTK_IS_BUTTON (proxy) &&
 	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
 	{
-	  GtkWidget *image;
-
 	  image = gtk_button_get_image (GTK_BUTTON (proxy));
 	  
 	  if (GTK_IS_IMAGE (image) &&

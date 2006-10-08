@@ -1618,7 +1618,6 @@ draw_row (GtkCList     *clist,
 {
   GtkWidget *widget;
   GtkCTree  *ctree;
-  GdkRectangle *rect;
   GdkRectangle *crect;
   GdkRectangle row_rectangle;
   GdkRectangle cell_rectangle; 
@@ -1680,7 +1679,6 @@ draw_row (GtkCList     *clist,
   /* draw the cell borders */
   if (area)
     {
-      rect = &intersect_rectangle;
       crect = &intersect_rectangle;
 
       if (gdk_rectangle_intersect (area, &cell_rectangle, crect))
@@ -1690,7 +1688,6 @@ draw_row (GtkCList     *clist,
     }
   else
     {
-      rect = &clip_rectangle;
       crect = &cell_rectangle;
 
       gdk_draw_rectangle (clist->clist_window,
@@ -2515,7 +2512,6 @@ real_tree_expand (GtkCTree     *ctree,
   GtkCTreeNode *work;
   GtkRequisition requisition;
   gboolean visible;
-  gint level;
 
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
@@ -2527,7 +2523,6 @@ real_tree_expand (GtkCTree     *ctree,
   GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
 
   GTK_CTREE_ROW (node)->expanded = TRUE;
-  level = GTK_CTREE_ROW (node)->level;
 
   visible = gtk_ctree_is_viewable (ctree, node);
   /* get cell width if tree_column is auto resized */
@@ -3513,7 +3508,6 @@ ctree_is_hot_spot (GtkCTree     *ctree,
 {
   GtkCTreeRow *tree_row;
   GtkCList *clist;
-  GtkCellPixText *cell;
   gint xl;
   gint yu;
   
@@ -3527,8 +3521,6 @@ ctree_is_hot_spot (GtkCTree     *ctree,
     return FALSE;
 
   tree_row = GTK_CTREE_ROW (node);
-
-  cell = GTK_CELL_PIXTEXT (tree_row->row.cell[ctree->tree_column]);
 
   yu = (ROW_TOP_YPIXEL (clist, row) + (clist->row_height - PM_SIZE) / 2 -
 	(clist->row_height - 1) % 2);
@@ -3852,9 +3844,6 @@ gtk_ctree_remove_node (GtkCTree     *ctree,
 
   if (node)
     {
-      gboolean visible;
-
-      visible = gtk_ctree_is_viewable (ctree, node);
       gtk_ctree_unlink (ctree, node, TRUE);
       gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_delete),
 				NULL);
@@ -4103,7 +4092,7 @@ gtk_ctree_node_nth (GtkCTree *ctree,
 {
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
 
-  if ((row < 0) || (row >= GTK_CLIST(ctree)->rows))
+  if ((row >= GTK_CLIST(ctree)->rows))
     return NULL;
  
   return GTK_CTREE_NODE (g_list_nth (GTK_CLIST (ctree)->row_list, row));

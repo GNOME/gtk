@@ -223,9 +223,6 @@ gtk_vscale_get_layout_offsets (GtkScale *scale,
 
     default:
       g_return_if_reached ();
-      *x = 0;
-      *y = 0;
-      break;
     }
 
   *x += widget->allocation.x;

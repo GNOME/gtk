@@ -32,7 +32,7 @@ Freetype can be found at ftp://ftp.freetype.org
 
 Hardware requirements:
 ----------------------
-You need a graphics card with an availible framebuffer driver that can
+You need a graphics card with an available framebuffer driver that can
 run in 8, 16, 24 or 32 bpp. I use the matroxfb driver, but i.e. vesafb
 should work too. You also need a supported mouse. Currently supported
 is ps2 mouse, ms serial mouse and fidmour touchscreen.
@@ -44,7 +44,7 @@ First build and install glib and pango as usual, in that order.
 Then configure Gtk by running configure (or autogen.sh if running from
 cvs) with --with-gdktarget=linux-fb.
 
-Then compile as ususal: make; make install
+Then compile as usual: make; make install
 
 Fonts:
 ------
@@ -124,7 +124,7 @@ GDK_MOUSE_TYPE:
  Default is ps2.
 
 GDK_KEYBOARD_TYPE:
- Specify keyboard type. Currently suppored is
+ Specify keyboard type. Currently supported is
   xlate - normal tty mode keyboard.
     Quite limited, cannot detect key up/key down events. Doesn't
     handle ctrl/alt/shift for all keys. This is the default driver,

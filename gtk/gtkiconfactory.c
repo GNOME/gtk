@@ -1020,7 +1020,7 @@ gtk_icon_size_register_alias (const gchar *alias,
   init_icon_sizes ();
 
   if (!icon_size_lookup_intern (NULL, target, NULL, NULL))
-    g_warning ("gtk_icon_size_register_alias: Icon size %d does not exist", target);
+    g_warning ("gtk_icon_size_register_alias: Icon size %u does not exist", target);
 
   ia = g_hash_table_lookup (icon_aliases, alias);
   if (ia)
@@ -1453,7 +1453,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 	}
       else
 	{
-	  g_warning ("Invalid icon size %d\n", size);
+	  g_warning ("Invalid icon size %u\n", size);
 	  width = height = 24;
 	}
     }

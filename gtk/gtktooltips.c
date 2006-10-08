@@ -438,9 +438,9 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   else
     y = y + widget->allocation.height + 4;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (widget));
   if (toplevel && GTK_IS_WINDOW (toplevel))
-    gtk_window_set_transient_for (tooltips->tip_window, toplevel);
+    gtk_window_set_transient_for (GTK_WINDOW (tooltips->tip_window), toplevel);
   
   gtk_window_move (GTK_WINDOW (tooltips->tip_window), x, y);
   gtk_widget_show (tooltips->tip_window);
