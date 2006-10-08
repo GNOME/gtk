@@ -38,7 +38,7 @@
 #include "gdk-pixbuf/gdk-pixbuf-private.h"
 #include "gdk-pixbuf/gdk-pixbuf-io.h"
 
-#if USE_LA_MODULES
+#ifdef USE_LA_MODULES
 #define SOEXT ".la"
 #else
 #define SOEXT ("." G_MODULE_SUFFIX)

@@ -45,7 +45,7 @@ struct _GtkWidgetProfilerClass {
 
 GType gtk_widget_profiler_get_type (void) G_GNUC_CONST;
 
-GtkWidgetProfiler *gtk_widget_profiler_new ();
+GtkWidgetProfiler *gtk_widget_profiler_new (void);
 
 void gtk_widget_profiler_set_num_iterations (GtkWidgetProfiler *profiler,
 					     gint               n_iterations);

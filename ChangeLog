@@ -1,3 +1,10 @@
+2006-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't 
+	leak a list.  (#360350, Benjamin Berg)
+
+	* Apply a cleanup patch by Kjartan Maraas  (#341812)
+
 2006-10-07  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Use the Win32 thread

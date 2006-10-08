@@ -26,12 +26,13 @@
 
 static GTimeVal start_time;
 
-void start_timing (void)
+static void 
+start_timing (void)
 {
   g_get_current_time (&start_time);
 }
 
-double
+static double
 stop_timing (const char *test, int iterations, int bytes)
 {
   GTimeVal stop_time;
@@ -53,7 +54,7 @@ stop_timing (const char *test, int iterations, int bytes)
   return ((double)bytes * iterations) / (1000*msecs);
 }
 
-void
+static void
 init_array (double times[3][3][4])
 {
   int i, j, k;
@@ -64,7 +65,7 @@ init_array (double times[3][3][4])
 	times[i][j][k] = -1;
 }
 
-void
+static void
 dump_array (double times[3][3][4])
 {
   int i, j;

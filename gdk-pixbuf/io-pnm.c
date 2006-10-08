@@ -108,19 +108,17 @@ explode_bitmap_into_buf (PnmLoaderContext *context)
 	guchar *from, *to, data;
 	gint bit;
 	guchar *dptr;
-	gint wid, x, y;
+	gint wid, x;
 	
 	g_return_if_fail (context != NULL);
 	g_return_if_fail (context->dptr != NULL);
 	
 	/* I'm no clever bit-hacker so I'm sure this can be optimized */
 	dptr = context->dptr;
-	y    = context->output_row;
 	wid  = context->width;
 	
 	from = dptr + ((wid - 1) / 8);
 	to   = dptr + (wid - 1) * 3;
-/*	bit  = 7 - (((y+1)*wid-1) % 8); */
 	bit  = 7 - ((wid-1) % 8);
 	
 	/* get first byte and align properly */
@@ -892,8 +890,6 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 {
 	PnmLoaderContext *context = (PnmLoaderContext *)data;
 	PnmIOBuffer *inbuf;
-	guchar *old_byte;
-	guint old_nbytes;
 	const guchar *bufhd;
 	guint num_left, spinguard;
 	gint retval;
@@ -905,8 +901,6 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 	
 	bufhd = buf;
 	inbuf = &context->inbuf;
-	old_nbytes = inbuf->nbytes;
-	old_byte  = inbuf->byte;
 	
 	num_left = size;
 	spinguard = 0;

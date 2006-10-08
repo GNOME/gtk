@@ -130,7 +130,7 @@ static void gdk_drag_context_finalize   (GObject              *object);
 
 static GList *contexts;
 
-const static struct {
+static const struct {
   const char *atom_name;
   GdkFilterFunc func;
 } xdnd_filters[] = {

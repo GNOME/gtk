@@ -105,7 +105,7 @@ static void miRegionOp   (GdkRegion      *newReg,
  * Returns: a new empty #GdkRegion
  */
 GdkRegion *
-gdk_region_new ()
+gdk_region_new (void)
 {
   GdkRegion *temp;
 

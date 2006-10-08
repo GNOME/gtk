@@ -485,7 +485,7 @@ gdk_rgb_set_gray_cmap (GdkRgbInfo  *image_info,
 {
   gint i;
   GdkColor color;
-  gint status;
+  gboolean status;
   gulong pixels[256];
   gint r, g, b, gray;
 

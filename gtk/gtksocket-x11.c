@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"

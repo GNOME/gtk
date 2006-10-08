@@ -30,7 +30,6 @@
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
 #include "gdkdrawable.h"
-#include "gdkpixmap.h"
 #include "gdkscreen.h"
 #include "gdkalias.h"
 

@@ -236,14 +236,12 @@ pcx_chop_context_buf(struct pcx_context *context, guint size)
 {
 	guint i, j;
 
-	if(size > context->buf_pos)
+	if (size > context->buf_pos)
 		return FALSE;
-	else if(size < 0)
-		return FALSE;
-	else if(size == 0)
+	else if (size == 0)
 		return TRUE;
 
-	for(i = 0, j = size; j < context->buf_pos; i++, j++)
+	for (i = 0, j = size; j < context->buf_pos; i++, j++)
 		context->buf[i] = context->buf[j];
 
 	context->buf_pos -= size;
@@ -629,7 +627,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 				case 4:
 				case 8:
 					if(context->num_planes != 1) {
-						g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported number of %d-bit planes"), context->bpp);
+					  g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported number of %d-bit planes"), (gint)context->bpp);
 						return FALSE;
 					}
 					break;

@@ -109,14 +109,9 @@ draw_simple_image(GtkStyle       *style,
 		  gint            height)
 {
   ThemeImage *image;
-  gboolean setbg = FALSE;
   
   if ((width == -1) && (height == -1))
-    {
-      gdk_drawable_get_size(window, &width, &height);
-      if (allow_setbg)
-      	setbg = TRUE;
-    }
+    gdk_drawable_get_size(window, &width, &height);
   else if (width == -1)
     gdk_drawable_get_size(window, &width, NULL);
   else if (height == -1)
@@ -172,13 +167,9 @@ draw_gap_image(GtkStyle       *style,
 	       gint            gap_width)
 {
   ThemeImage *image;
-  gboolean setbg = FALSE;
   
   if ((width == -1) && (height == -1))
-    {
-      gdk_drawable_get_size(window, &width, &height);
-      setbg = TRUE;
-    }
+    gdk_drawable_get_size(window, &width, &height);
   else if (width == -1)
     gdk_drawable_get_size(window, &width, NULL);
   else if (height == -1)

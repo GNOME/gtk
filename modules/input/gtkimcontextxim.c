@@ -147,7 +147,7 @@ static GObjectClass *parent_class;
 
 GType gtk_type_im_context_xim = 0;
 
-GSList *open_ims = NULL;
+static GSList *open_ims = NULL;
 
 /* List of status windows for different toplevels */
 static GSList *status_windows = NULL;

@@ -808,8 +808,6 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 				continue;
 		}
 	}
-
-	return TRUE;
 }
 
 /* Save */

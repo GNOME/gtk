@@ -430,7 +430,7 @@ tiff_load_seek (thandle_t handle, toff_t offset, int whence)
         
         switch (whence) {
         case SEEK_SET:
-                if (offset > context->used || offset < 0)
+                if (offset > context->used)
                         return -1;
                 context->pos = offset;
                 break;
@@ -446,7 +446,6 @@ tiff_load_seek (thandle_t handle, toff_t offset, int whence)
                 break;
         default:
                 return -1;
-                break;
         }
         return context->pos;
 }
@@ -622,8 +621,6 @@ tiff_save_seek (thandle_t handle, toff_t offset, int whence)
 
         switch (whence) {
         case SEEK_SET:
-                if (offset < 0)
-                        return -1;
                 context->pos = offset;
                 break;
         case SEEK_CUR:
@@ -634,7 +631,6 @@ tiff_save_seek (thandle_t handle, toff_t offset, int whence)
                 break;
         default:
                 return -1;
-                break;
         }
         return context->pos;
 }

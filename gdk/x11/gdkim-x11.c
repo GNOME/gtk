@@ -32,7 +32,6 @@
 
 #include "gdkx.h"
 #include "gdk.h"		/* For gdk_flush() */
-#include "gdkx.h"
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"

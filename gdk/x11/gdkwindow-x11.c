@@ -1577,7 +1577,6 @@ gdk_window_hide (GdkWindow *window)
     case GDK_WINDOW_TEMP: /* ? */
       gdk_window_withdraw (window);
       return;
-      break;
       
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
@@ -5737,7 +5736,6 @@ wmspec_resize_drag (GdkWindow     *window,
       g_warning ("gdk_window_begin_resize_drag: bad resize edge %d!",
                  edge);
       return;
-      break;
     }
   
   wmspec_moveresize (window, direction, root_x, root_y, timestamp);

@@ -1,3 +1,8 @@
+2006-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-xlib.c: Apply a cleanup patch by
+	Kjartan	Maraas  (#341812)
+
 2006-08-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.2 ===

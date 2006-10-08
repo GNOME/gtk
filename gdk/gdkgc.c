@@ -279,7 +279,6 @@ gdk_gc_set_values (GdkGC           *gc,
     gc->ts_y_origin = values->ts_y_origin;
   if (values_mask & GDK_GC_CLIP_MASK)
     {
-      GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
       if (priv->clip_region)
 	{
 	  gdk_region_destroy (priv->clip_region);

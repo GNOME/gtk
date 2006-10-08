@@ -166,7 +166,7 @@ static gboolean
 get_mbi(struct wbmp_progressive_state *context, const guchar **buf, guint *buf_size, int *val)
 {
   guchar intbuf[16];
-  int i, n;
+  int n;
   gboolean rv;
 
   *val = 0;

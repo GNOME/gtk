@@ -620,7 +620,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 			GdkPixdataDumpType dump_type)
 {
   CSourceData cdata = { 0, };
-  gchar *s_uint_8, *s_uint_32, *s_uint, *s_char, *s_null;
+  gchar *s_uint_8;
   guint bpp, width, height, rowstride;
   gboolean rle_encoded;
   gchar *macro_name;
@@ -670,37 +670,13 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   cdata.gstring = gstring;
 
   if (!cdata.dump_macros && cdata.dump_gtypes)
-    {
-      s_uint_8 =  "guint8 ";
-      s_uint_32 = "guint32";
-      s_uint =    "guint  ";
-      s_char =    "gchar  ";
-      s_null =    "NULL";
-    }
+    s_uint_8 =  "guint8 ";
   else if (!cdata.dump_macros)
-    {
-      s_uint_8 =  "unsigned char";
-      s_uint_32 = "unsigned int ";
-      s_uint =    "unsigned int ";
-      s_char =    "char         ";
-      s_null =    "(char*) 0";
-    }
+    s_uint_8 =  "unsigned char";
   else if (cdata.dump_macros && cdata.dump_gtypes)
-    {
-      s_uint_8 =  "guint8";
-      s_uint_32 = "guint32";
-      s_uint  =   "guint";
-      s_char =    "gchar";
-      s_null =    "NULL";
-    }
+    s_uint_8 =  "guint8";
   else /* cdata.dump_macros && !cdata.dump_gtypes */
-    {
-      s_uint_8 =  "unsigned char";
-      s_uint_32 = "unsigned int";
-      s_uint =    "unsigned int";
-      s_char =    "char";
-      s_null =    "(char*) 0";
-    }
+    s_uint_8 =  "unsigned char";
 
   /* initial comment
    */

@@ -1,3 +1,7 @@
+2006-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* Apply a cleanup patch by Kjartan Maraas  (#341812) 
+
 2006-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-pnm.c: Simplify and fix reading of ASCII images. 

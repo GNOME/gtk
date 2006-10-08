@@ -660,7 +660,7 @@ png_row_callback   (png_structp png_read_ptr,
         if (lc->fatal_error_occurred)
                 return;
 
-        if (row_num < 0 || row_num >= lc->pixbuf->height) {
+        if (row_num >= lc->pixbuf->height) {
                 lc->fatal_error_occurred = TRUE;
                 if (lc->error && *lc->error == NULL) {
                         g_set_error (lc->error,
