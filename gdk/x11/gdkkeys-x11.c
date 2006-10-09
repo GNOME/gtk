@@ -874,8 +874,8 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
- * @keys: return location for array of #GdkKeymapKey, or NULL
- * @keyvals: return location for array of keyvals, or NULL
+ * @keys: return location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: return location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -1301,11 +1301,11 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * @hardware_keycode: a keycode
  * @state: a modifier state 
  * @group: active keyboard group
- * @keyval: return location for keyval
- * @effective_group: return location for effective group
- * @level: return location for level
- * @consumed_modifiers: return location for modifiers that were used to determine the group or level
- * 
+ * @keyval: return location for keyval, or %NULL
+ * @effective_group: return location for effective group, or %NULL
+ * @level: return location for level, or %NULL
+ * @consumed_modifiers: return location for modifiers that were used to
+ *     determine the group or level, or %NULL
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that affected the translation and

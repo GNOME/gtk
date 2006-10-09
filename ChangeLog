@@ -1,3 +1,9 @@
+2006-10-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	Update the docs to state which out parameters may be NULL.
+	(#360870, Attilio Fiandrotti)
+
 2006-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c (update_dialog_from_capabilities): Fix
