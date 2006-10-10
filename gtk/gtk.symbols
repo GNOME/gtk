@@ -4707,7 +4707,6 @@ gtk_interface_age
 gtk_major_version
 gtk_minor_version
 gtk_micro_version
-gtk_combo_string_key
 gtk_debug_flags
 gtk_text_attr_appearance_type
 gtk_text_char_type

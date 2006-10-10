@@ -1,5 +1,10 @@
 2006-10-11  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtk.symbols: Remove gtk_combo_string_key, which is a static
+	variable.
+
+2006-10-11  Tor Lillqvist  <tml@novell.com>
+
 	Merge from 2.10 branch:
 
 	* gtk/gtkmain.c (do_pre_parse_initialization): On Win32, if
