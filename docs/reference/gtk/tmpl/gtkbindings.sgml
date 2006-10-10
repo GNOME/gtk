@@ -6,10 +6,10 @@ Key bindings for individual widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-GtkBinding provide a mechanism for configuring Gtk+ key bindings through RC files.
+GtkBinding provides a mechanism for configuring Gtk+ key bindings through RC files.
 This eases key binding adjustments for application developers as well as users and
 provides Gtk+ users or administrators with high key binding configurability which
-require no application or toolkit side changes.
+requires no application or toolkit side changes.
 </para>
 
 <refsect2>
@@ -68,7 +68,7 @@ The above example will not have the desired effect of causing "&lt;Control&gt;Ri
 and "&lt;Control&gt;Left" key presses to be ignored by Gtk+. Instead, it just causes
 any existing bindings from the bindings set "MoveCursor3" to be deleted, so when
 "&lt;Control&gt;Right" or "&lt;Control&gt;Left" are pressed, no binding for these keys
-is found in binding set "MoveCursor3". Gtk+ will thusly continue to search for matching
+is found in binding set "MoveCursor3". Gtk+ will thus continue to search for matching
 key bindings, and will eventually lookup and find the default Gtk+ bindings for entries
 which implement word movement. To keep Gtk+ from activating its default bindings, the
 "unbind" keyword can be used like this:
@@ -164,48 +164,6 @@ key binding signal emission as stored in #GtkBindingSignal.
 
 @arg_type: implementation detail
 
-<!-- ##### FUNCTION gtk_binding_set_new ##### -->
-<para>
-Gtk+ maintains a global list of binding sets. Each binding set has a unique name
-which needs to be specified upon creation.
-</para>
-
-@set_name: unique name of this binding set
-@Returns:  new binding set
-
-
-<!-- ##### FUNCTION gtk_binding_set_by_class ##### -->
-<para>
-This function returns the binding set named after the type name of the passed
-in class structure. New binding sets are created on demand by this function.
-</para>
-
-@object_class: a valid #GtkObject class
-@Returns:      the binding set corresponding to @object_class
-
-
-<!-- ##### FUNCTION gtk_binding_set_find ##### -->
-<para>
-Find a binding set by its globally unique name.
-The @set_name can either be a name used for gtk_binding_set_new() or the
-type name of a class used in gtk_binding_set_by_class().
-</para>
-
-@set_name: unique binding set name
-@Returns:  %NULL or the specified binding set
-
-
-<!-- ##### FUNCTION gtk_bindings_activate ##### -->
-<para>
-Find a key binding matching @keyval and @modifiers and activate the binding
-on @object.
-</para>
-
-@object: 	object to activate when binding found
-@keyval: 	key value of the binding
-@modifiers: 	key modifier of the binding
-@Returns: 	%TRUE if a binding was found and activated
-
 
 <!-- ##### FUNCTION gtk_bindings_activate_event ##### -->
 <para>
@@ -217,90 +175,7 @@ on @object.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_binding_set_activate ##### -->
-<para>
-Find a key binding matching @keyval and @modifiers within @binding_set
- and activate the binding on @object.
-</para>
-
-@binding_set: the binding set to constrain the search to
-@keyval: 	key value of the binding
-@modifiers: 	key modifier of the binding
-@object: 	object to activate when binding found
-@Returns: 	%TRUE if a binding was found and activated
-
-
 <!-- ##### MACRO gtk_binding_entry_add ##### -->
 <para>
 Deprecated.
 </para>
-
-
-
-<!-- ##### FUNCTION gtk_binding_entry_clear ##### -->
-<para>
-Deprecated as public API, used only internally.
-</para>
-
-@binding_set: 
-@keyval: 
-@modifiers: 
-
-
-<!-- ##### FUNCTION gtk_binding_entry_add_signal ##### -->
-<para>
-Override or install new key binding for @keyval with @modifiers on @binding_set.
-When the binding is activated, @signal_name will be emitted on the target widget,
-with @n_args @Varargs used as arguments.
-</para>
-
-@binding_set: 	@binding_set to install an entry for
-@keyval: 	key value of binding to install
-@modifiers: 	key modifier of binding to install
-@signal_name: 	signal to execute upon activation
-@n_args: 	number of arguments to @signal_name
-@Varargs: 	arguments to @signal_name
-
-
-<!-- ##### FUNCTION gtk_binding_set_add_path ##### -->
-<para>
-This function is used internally by the GtkRC parsing mechanism to assign match
-patterns to #GtkBindingSet structures.
-</para>
-
-@binding_set:  binding set to add a path to
-@path_type:    path type the pattern applies to
-@path_pattern: the actual match pattern
-@priority:     binding priority
-
-
-<!-- ##### FUNCTION gtk_binding_entry_remove ##### -->
-<para>
-Remove a binding previously installed via gtk_binding_entry_add_signal() on
-@binding_set.
-</para>
-
-@binding_set: 	@binding_set to remove an entry of
-@keyval: 	key value of binding to remove
-@modifiers: 	key modifier of binding to remove
-
-
-<!-- ##### FUNCTION gtk_binding_entry_add_signall ##### -->
-<para>
-Deprecated.
-</para>
-
-@binding_set:  binding set to add a signal to
-@keyval:       key value
-@modifiers:    key modifier
-@signal_name:  signal name to be bound
-@binding_args: list of #GtkBindingArg signal arguments
-
-
-<!-- ##### FUNCTION gtk_binding_parse_binding ##### -->
-<para>
-Deprecated as public API, used only internally.
-</para>
-
-@scanner: GtkRC scanner
-@Returns: expected token upon errors

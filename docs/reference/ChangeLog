@@ -1,3 +1,9 @@
+Tue Oct 10 16:38:23 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkbindings.sgml: 
+	* gtk/gtkbindings.c: applied patch from Michael Natterer to move to 
+	inline docs. applied wording fixes suggested by Martyn Russell.
+
 Tue Oct 10 15:29:15 2006  Tim Janik  <timj@imendio.com>
 
 	* gtk/tmpl/gtkbindings.sgml: documented GtkBinding*, #358329.
