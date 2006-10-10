@@ -674,31 +674,19 @@ gtk_calendar_init (GtkCalendar *calendar)
     g_warning ("Whoever translated calendar:MY did so wrongly.\n");
 
 #ifdef G_OS_WIN32
-  /* Check if any of those environment variables that affect the
-   * behaviour of gettext are set. If not, we use the thread's
-   * locale's week start day.
-   */
-  if (getenv ("LANGUAGE") == NULL &&
-      getenv ("LC_ALL") == NULL &&
-      getenv ("LC_MESSAGES") == NULL &&
-      getenv ("LANG") == NULL)
-    {
-      priv->week_start = 0;
-      week_start = NULL;
+  priv->week_start = 0;
+  week_start = NULL;
 
-      if (GetLocaleInfoW (GetThreadLocale (), LOCALE_IFIRSTDAYOFWEEK,
-			  wbuffer, G_N_ELEMENTS (wbuffer)))
-	week_start = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
+  if (GetLocaleInfoW (GetThreadLocale (), LOCALE_IFIRSTDAYOFWEEK,
+		      wbuffer, G_N_ELEMENTS (wbuffer)))
+    week_start = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
       
-      if (week_start != NULL)
-	{
-	  priv->week_start = (week_start[0] - '0' + 1) % 7;
-	  g_free(week_start);
-	}
-    }
-  else
+  if (week_start != NULL)
     {
-#endif
+      priv->week_start = (week_start[0] - '0' + 1) % 7;
+      g_free(week_start);
+    }
+#else
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   langinfo = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
   first_weekday = langinfo[0];
@@ -730,8 +718,6 @@ gtk_calendar_init (GtkCalendar *calendar)
       priv->week_start = 0;
     }
 #endif
-#ifdef G_OS_WIN32
-    }
 #endif
 
   calendar_compute_days (calendar);
