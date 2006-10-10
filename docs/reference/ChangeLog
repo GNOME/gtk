@@ -1,3 +1,7 @@
+Tue Oct 10 15:29:15 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkbindings.sgml: documented GtkBinding*, #358329.
+
 2006-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkpagesetup.sgml: Apply a patch

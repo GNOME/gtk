@@ -45,6 +45,7 @@ and parses the first of those that exists.
 </refsect2>
 
 <refsect2><title>Pathnames and patterns</title>
+<anchor id="gtkrc-pathnames-and-patterns"/>
 <para>
 A resource file defines a number of styles and key bindings and
 attaches them to particular widgets. The attachment is done

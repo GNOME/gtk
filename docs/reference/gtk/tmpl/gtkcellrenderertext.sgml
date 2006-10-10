@@ -40,6 +40,11 @@ the #GtkCellRendererText allows to edit its text using an entry.
 @arg1: 
 @arg2: 
 
+<!-- ##### ARG GtkCellRendererText:align-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererText:alignment ##### -->
 <para>
 

@@ -638,6 +638,14 @@ Registers a window as a potential drop destination.
 @new_height: 
 
 
+<!-- ##### FUNCTION gdk_window_beep ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gdk_window_begin_paint_rect ##### -->
 <para>
 

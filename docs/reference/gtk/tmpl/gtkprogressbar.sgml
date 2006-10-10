@@ -116,6 +116,16 @@ and should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkProgressBar:xspacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:yspacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_progress_bar_new ##### -->
 <para>
 Creates a new #GtkProgressBar.

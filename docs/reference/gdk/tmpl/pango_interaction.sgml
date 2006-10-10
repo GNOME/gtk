@@ -249,6 +249,15 @@ rendering the text.
 @attr: the #PangoAttribute.
 @stipple: the stipple bitmap.
 
+<!-- ##### FUNCTION gdk_pango_attr_emboss_color_new ##### -->
+<para>
+
+</para>
+
+@color: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pango_attr_embossed_new ##### -->
 <para>
 

@@ -63,6 +63,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-cursor-blink-timeout ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-cursor-theme-name ##### -->
 <para>
 

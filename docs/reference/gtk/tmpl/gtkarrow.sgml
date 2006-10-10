@@ -55,6 +55,11 @@ an application.)
 
 </para>
 
+<!-- ##### ARG GtkArrow:arrow-scaling ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_arrow_new ##### -->
 <para>
 Creates a new arrow widget.
