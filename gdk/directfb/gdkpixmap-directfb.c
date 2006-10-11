@@ -166,6 +166,8 @@ gdk_pixmap_new (GdkDrawable *drawable,
           format = DSPF_RGB16;
           break;
         case 24:
+          format = DSPF_RGB24;
+          break;
         case 32:
           format = DSPF_RGB32;
           break;

@@ -1,3 +1,7 @@
+2006-10-11  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdkpixmap-directfb.c: add missing RGB24 case (#361176) 
+
 2006-10-11  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Enable having some gdk-pixbuf loaders built-in
