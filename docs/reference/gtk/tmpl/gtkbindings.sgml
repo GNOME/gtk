@@ -141,8 +141,9 @@ Each key binding element of a binding sets binding list is represented by a #Gtk
 @binding_set: 	binding set this entry belongs to
 @destroyed:  	implementation detail
 @in_emission: 	implementation detail
+@marks_unbound: 
 @set_next: 	linked list of entries maintained by binding set
-@hash_next:	implementation detail
+@hash_next: 	implementation detail
 @signals: 	action signals of this entry
 
 <!-- ##### STRUCT GtkBindingSignal ##### -->
@@ -164,6 +165,43 @@ key binding signal emission as stored in #GtkBindingSignal.
 
 @arg_type: implementation detail
 
+<!-- ##### FUNCTION gtk_binding_set_new ##### -->
+<para>
+
+</para>
+
+@set_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_by_class ##### -->
+<para>
+
+</para>
+
+@object_class: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_find ##### -->
+<para>
+
+</para>
+
+@set_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_bindings_activate ##### -->
+<para>
+
+</para>
+
+@object: 
+@keyval: 
+@modifiers: 
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_bindings_activate_event ##### -->
 <para>
@@ -175,7 +213,59 @@ key binding signal emission as stored in #GtkBindingSignal.
 @Returns: 
 
 
-<!-- ##### MACRO gtk_binding_entry_add ##### -->
+<!-- ##### FUNCTION gtk_binding_set_activate ##### -->
 <para>
-Deprecated.
+
 </para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@object: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_add_signal ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@signal_name: 
+@n_args: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_skip ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_remove ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_add_path ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@path_type: 
+@path_pattern: 
+@priority: 
+
+

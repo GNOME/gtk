@@ -1,3 +1,8 @@
+Wed Oct 11 14:31:30 2006  Tim Janik  <timj@imendio.com>
+
+	* docs/reference/gtk/gtk-sections.txt:
+	* gtk/gtkbindings.c: document gtk_binding_entry_skip().
+
 2006-10-11  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtk.symbols: Remove gtk_combo_string_key, which is a static

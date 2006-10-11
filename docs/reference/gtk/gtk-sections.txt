@@ -5796,13 +5796,10 @@ gtk_binding_set_find
 gtk_bindings_activate
 gtk_bindings_activate_event
 gtk_binding_set_activate
-gtk_binding_entry_add
-gtk_binding_entry_clear
 gtk_binding_entry_add_signal
-gtk_binding_set_add_path
+gtk_binding_entry_skip
 gtk_binding_entry_remove
-gtk_binding_entry_add_signall
-gtk_binding_parse_binding
+gtk_binding_set_add_path
 </SECTION>
 
 <SECTION>

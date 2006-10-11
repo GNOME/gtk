@@ -1858,6 +1858,40 @@ get an array of #GtkArgs that this object accepts.
 @n_args_p: the number of arguments this object accepts.
 @Returns: the array of arguments (or NULL on error).
 
+<!-- ##### MACRO gtk_binding_entry_add ##### -->
+<para>
+Deprecated.
+</para>
+
+
+<!-- ##### FUNCTION gtk_binding_entry_add_signall ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@signal_name: 
+@binding_args: 
+
+<!-- ##### FUNCTION gtk_binding_entry_clear ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+<!-- ##### FUNCTION gtk_binding_parse_binding ##### -->
+<para>
+
+</para>
+
+@scanner: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
 <para>
 This is an internally used function and should never be called from an
