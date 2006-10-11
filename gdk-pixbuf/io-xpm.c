@@ -781,6 +781,12 @@ gdk_pixbuf__xpm_image_load_increment (gpointer data,
        return TRUE;
 }
 
+#ifndef INCLUDE_xpm
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (xpm, fill_vtable) (GdkPixbufModule *module)
 {

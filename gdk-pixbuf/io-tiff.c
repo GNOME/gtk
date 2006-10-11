@@ -806,6 +806,12 @@ gdk_pixbuf__tiff_image_save (FILE          *f,
                                                         values, error);
 }
 
+#ifndef INCLUDE_tiff
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
 {

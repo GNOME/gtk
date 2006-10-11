@@ -1649,6 +1649,12 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 	return animation;
 }
 
+#ifndef INCLUDE_gif
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (gif, fill_vtable) (GdkPixbufModule *module)
 {

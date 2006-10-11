@@ -339,6 +339,12 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 	return TRUE;
 }
 
+#ifndef INCLUDE_wbmp
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (wbmp, fill_vtable) (GdkPixbufModule *module)
 {

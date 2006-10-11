@@ -513,6 +513,12 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 	return TRUE;
 }
 
+#ifndef INCLUDE_ras
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (ras, fill_vtable) (GdkPixbufModule *module)
 {

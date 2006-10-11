@@ -1067,6 +1067,12 @@ gdk_pixbuf__jpeg_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 			       TRUE, NULL, save_func, user_data);
 }
 
+#ifndef INCLUDE_jpeg
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (jpeg, fill_vtable) (GdkPixbufModule *module)
 {

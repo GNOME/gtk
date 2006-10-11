@@ -723,6 +723,12 @@ gdk_pixbuf__pcx_stop_load(gpointer data, GError **error)
 	return TRUE;
 }
 
+#ifndef INCLUDE_pcx
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (pcx, fill_vtable) (GdkPixbufModule *module)
 {

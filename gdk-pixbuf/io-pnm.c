@@ -1036,6 +1036,12 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 	return TRUE;
 }
 
+#ifndef INCLUDE_pnm
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (pnm, fill_vtable) (GdkPixbufModule *module)
 {

@@ -96,12 +96,6 @@ GdkPixbuf *_gdk_pixbuf_generic_image_load (GdkPixbufModule *image_module,
 
 GdkPixbufFormat *_gdk_pixbuf_get_format (GdkPixbufModule *image_module);
 
-#ifdef USE_GMODULE
-#define MODULE_ENTRY(type,function) function
-#else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
-#endif
-
 #endif /* GDK_PIXBUF_ENABLE_BACKEND */
 
 #endif /* GDK_PIXBUF_PRIVATE_H */

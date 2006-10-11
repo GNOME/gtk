@@ -1,3 +1,24 @@
+2006-10-11  Tor Lillqvist  <tml@novell.com>
+
+	Enable having some loaders built-in even if loading the others
+	dynamically. Have loaders in the same order as in configure.in in
+	all places where they are handled/listed.
+
+	* Makefile.am: Define the STATIC_FOO_LIB and FOO_LIB macros
+	conditionally depending on whether said loader is built-in or
+	not. Use the names libstatic-pixbufloader-foo.la instead of
+	libpixbufloader-static-foo.la for the built-in ones so that the
+	"echo libpixbufloader-*.la" won't match them.
+	
+	* gdk-pixbuf-io.c: Reorganize code as to plumb the built-in
+	loaders also if USE_GMODULE. Don't warn about a missing
+	gdk-pixbuf.loaders file if we have at least one included loader.
+	
+	* gdk-pixbuf-private.h
+	* io-*.c: Don't define a generic MODULE_ENTRY, as we can't use it
+	in the loaders anyway. Each loader needs to check if INCLUDE_foo
+	is defined.
+
 2006-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* Apply a cleanup patch by Kjartan Maraas  (#341812) 

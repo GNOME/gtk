@@ -1,3 +1,10 @@
+2006-10-11  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in: Enable having some gdk-pixbuf loaders built-in
+	even if loading the others dynamically. Define Automake
+	conditional INCLUDE_FOO for each loader as TRUE if that loader is
+	built-in. See also gdk-pixbuf/ChangeLog.
+
 Wed Oct 11 14:31:30 2006  Tim Janik  <timj@imendio.com>
 
 	* docs/reference/gtk/gtk-sections.txt:

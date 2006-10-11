@@ -953,6 +953,12 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	return TRUE;
 }
 
+#ifndef INCLUDE_tga
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (tga, fill_vtable) (GdkPixbufModule *module)
 {

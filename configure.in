@@ -874,11 +874,10 @@ dnl AC_HELP_STRING([--with-included-loaders=LOADER1 LOADER2 ...],
 dnl                [build the specified loaders into gdk-pixbuf (only used if module loading disabled)])
 AC_ARG_WITH(included_loaders,
 [  --with-included-loaders=LOADER1,LOADER2,...
-                          build the specified loaders into gdk-pixbuf (only
-                          used if module loading disabled)])
+                          build the specified loaders into gdk-pixbuf])
 
 if $dynworks; then 
-        :
+   :
 else
    ## if the option was specified, leave it; otherwise disable included loaders
    if test x$with_included_loaders = xno; then
@@ -886,7 +885,7 @@ else
    fi
 fi
 
-all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,tga,pcx"
+all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,xbm,tga,pcx"
 included_loaders=""
 # If no loaders specified, include all
 if test "x$with_included_loaders" = xyes ; then
@@ -908,12 +907,28 @@ for loader in $included_loaders; do
    AC_MSG_ERROR([the specified loader $loader does not exist])
  fi
 
- INCLUDED_LOADER_OBJ="$INCLUDED_LOADER_OBJ libpixbufloader-static-$loader.la"
+ INCLUDED_LOADER_OBJ="$INCLUDED_LOADER_OBJ libstatic-pixbufloader-$loader.la"
  INCLUDED_LOADER_DEFINE="$INCLUDED_LOADER_DEFINE -DINCLUDE_$loader"
+ eval INCLUDE_$loader=yes
 done
 IFS="$gtk_save_ifs"
 AC_SUBST(INCLUDED_LOADER_OBJ)
 AC_SUBST(INCLUDED_LOADER_DEFINE)
+
+AM_CONDITIONAL(INCLUDE_PNG, [test x"$INCLUDE_png" = xyes])
+AM_CONDITIONAL(INCLUDE_BMP, [test x"$INCLUDE_bmp" = xyes])
+AM_CONDITIONAL(INCLUDE_WBMP, [test x"$INCLUDE_wbmp" = xyes])
+AM_CONDITIONAL(INCLUDE_GIF, [test x"$INCLUDE_gif" = xyes])
+AM_CONDITIONAL(INCLUDE_ICO, [test x"$INCLUDE_ico" = xyes])
+AM_CONDITIONAL(INCLUDE_ANI, [test x"$INCLUDE_ani" = xyes])
+AM_CONDITIONAL(INCLUDE_JPEG, [test x"$INCLUDE_jpeg" = xyes])
+AM_CONDITIONAL(INCLUDE_PNM, [test x"$INCLUDE_pnm" = xyes])
+AM_CONDITIONAL(INCLUDE_RAS, [test x"$INCLUDE_ras" = xyes])
+AM_CONDITIONAL(INCLUDE_TIFF, [test x"$INCLUDE_tiff" = xyes])
+AM_CONDITIONAL(INCLUDE_XPM, [test x"$INCLUDE_xpm" = xyes])
+AM_CONDITIONAL(INCLUDE_XBM, [test x"$INCLUDE_xbm" = xyes])
+AM_CONDITIONAL(INCLUDE_TGA, [test x"$INCLUDE_tga" = xyes])
+AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
 
 AC_HEADER_SYS_WAIT
 

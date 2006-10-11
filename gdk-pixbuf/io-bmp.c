@@ -1260,6 +1260,12 @@ gdk_pixbuf__bmp_image_save (FILE          *f,
 						       values, error);
 }
 
+#ifndef INCLUDE_bmp
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (bmp, fill_vtable) (GdkPixbufModule *module)
 {

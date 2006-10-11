@@ -61,81 +61,17 @@ loaderdir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/loaders
 module_libs = libgdk_pixbuf-$(GTK_API_VERSION).la $(GDK_PIXBUF_DEP_LIBS)
 
 #
-# The PNG plugin.
+# The PNG loader
 #
 libpixbufloader_png_la_SOURCES = io-png.c
 libpixbufloader_png_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_png_la_LIBADD = $(LIBPNG) $(module_libs)
-libpixbufloader_static_png_la_SOURCES = io-png.c
-
-#
-# The JPEG loader
-#
-libpixbufloader_static_jpeg_la_SOURCES = io-jpeg.c
-libpixbufloader_jpeg_la_SOURCES = io-jpeg.c
-libpixbufloader_jpeg_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG) $(module_libs)
-
-#
-# The XPM loader
-#
-libpixbufloader_static_xpm_la_SOURCES = io-xpm.c
-libpixbufloader_xpm_la_SOURCES = io-xpm.c
-libpixbufloader_xpm_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_xpm_la_LIBADD = $(module_libs)
-
-#
-# The GIF loader
-#
-libpixbufloader_static_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
-libpixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
-libpixbufloader_gif_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_gif_la_LIBADD = $(module_libs)
-
-#
-# The ICO loader
-#
-libpixbufloader_static_ico_la_SOURCES = io-ico.c
-libpixbufloader_ico_la_SOURCES = io-ico.c
-libpixbufloader_ico_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_ico_la_LIBADD = $(module_libs)
-
-#
-# The ANI loader
-#
-libpixbufloader_static_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
-libpixbufloader_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
-libpixbufloader_ani_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_ani_la_LIBADD = $(module_libs)
-
-#
-# The RAS loader
-#
-libpixbufloader_static_ras_la_SOURCES = io-ras.c
-libpixbufloader_ras_la_SOURCES = io-ras.c
-libpixbufloader_ras_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_ras_la_LIBADD = $(module_libs)
-
-#
-# The TIFF loader
-#
-libpixbufloader_static_tiff_la_SOURCES = io-tiff.c
-libpixbufloader_tiff_la_SOURCES = io-tiff.c
-libpixbufloader_tiff_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_tiff_la_LIBADD = $(LIBTIFF) $(module_libs)
-
-#
-# The PNM loader
-#
-libpixbufloader_static_pnm_la_SOURCES = io-pnm.c
-libpixbufloader_pnm_la_SOURCES = io-pnm.c
-libpixbufloader_pnm_la_LDFLAGS = -avoid-version -module $(no_undefined)
-libpixbufloader_pnm_la_LIBADD = $(module_libs)
+libstatic_pixbufloader_png_la_SOURCES = io-png.c
 
 #
 # The BMP loader
 #
-libpixbufloader_static_bmp_la_SOURCES = io-bmp.c
+libstatic_pixbufloader_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_bmp_la_LIBADD = $(module_libs)
@@ -143,15 +79,79 @@ libpixbufloader_bmp_la_LIBADD = $(module_libs)
 #
 # The WBMP loader
 #
-libpixbufloader_static_wbmp_la_SOURCES = io-wbmp.c
+libstatic_pixbufloader_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_wbmp_la_LIBADD = $(module_libs)
 
 #
+# The GIF loader
+#
+libstatic_pixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
+libpixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
+libpixbufloader_gif_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_gif_la_LIBADD = $(module_libs)
+
+#
+# The ICO loader
+#
+libstatic_pixbufloader_ico_la_SOURCES = io-ico.c
+libpixbufloader_ico_la_SOURCES = io-ico.c
+libpixbufloader_ico_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_ico_la_LIBADD = $(module_libs)
+
+#
+# The ANI loader
+#
+libstatic_pixbufloader_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
+libpixbufloader_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
+libpixbufloader_ani_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_ani_la_LIBADD = $(module_libs)
+
+#
+# The JPEG loader
+#
+libstatic_pixbufloader_jpeg_la_SOURCES = io-jpeg.c
+libpixbufloader_jpeg_la_SOURCES = io-jpeg.c
+libpixbufloader_jpeg_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG) $(module_libs)
+
+#
+# The PNM loader
+#
+libstatic_pixbufloader_pnm_la_SOURCES = io-pnm.c
+libpixbufloader_pnm_la_SOURCES = io-pnm.c
+libpixbufloader_pnm_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_pnm_la_LIBADD = $(module_libs)
+
+#
+# The RAS loader
+#
+libstatic_pixbufloader_ras_la_SOURCES = io-ras.c
+libpixbufloader_ras_la_SOURCES = io-ras.c
+libpixbufloader_ras_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_ras_la_LIBADD = $(module_libs)
+
+#
+# The TIFF loader
+#
+libstatic_pixbufloader_tiff_la_SOURCES = io-tiff.c
+libpixbufloader_tiff_la_SOURCES = io-tiff.c
+libpixbufloader_tiff_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_tiff_la_LIBADD = $(LIBTIFF) $(module_libs)
+
+#
+# The XPM loader
+#
+libstatic_pixbufloader_xpm_la_SOURCES = io-xpm.c
+libpixbufloader_xpm_la_SOURCES = io-xpm.c
+libpixbufloader_xpm_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_xpm_la_LIBADD = $(module_libs)
+
+#
 # The XBM loader
 #
-libpixbufloader_static_xbm_la_SOURCES = io-xbm.c
+libstatic_pixbufloader_xbm_la_SOURCES = io-xbm.c
 libpixbufloader_xbm_la_SOURCES = io-xbm.c
 libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_xbm_la_LIBADD = $(module_libs)
@@ -159,7 +159,7 @@ libpixbufloader_xbm_la_LIBADD = $(module_libs)
 #
 # The TGA loader
 #
-libpixbufloader_static_tga_la_SOURCES = io-tga.c
+libstatic_pixbufloader_tga_la_SOURCES = io-tga.c
 libpixbufloader_tga_la_SOURCES = io-tga.c
 libpixbufloader_tga_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tga_la_LIBADD = $(module_libs)
@@ -167,102 +167,140 @@ libpixbufloader_tga_la_LIBADD = $(module_libs)
 #
 # The PCX loader
 #
-libpixbufloader_static_pcx_la_SOURCES = io-pcx.c
+libstatic_pixbufloader_pcx_la_SOURCES = io-pcx.c
 libpixbufloader_pcx_la_SOURCES = io-pcx.c
 libpixbufloader_pcx_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_pcx_la_LIBADD = $(module_libs)
 
 if HAVE_PNG
+if INCLUDE_PNG
+STATIC_PNG_LIB = libstatic-pixbufloader-png.la
+else
 PNG_LIB = libpixbufloader-png.la
-STATIC_PNG_LIB = libpixbufloader-static-png.la
+endif
+endif
+
+if INCLUDE_BMP
+STATIC_BMP_LIB = libstatic-pixbufloader-bmp.la
+else
+BMP_LIB = libpixbufloader-bmp.la
+endif
+
+if INCLUDE_WBMP
+STATIC_WBMP_LIB = libstatic-pixbufloader-wbmp.la
+else
+WBMP_LIB = libpixbufloader-wbmp.la
+endif
+
+if INCLUDE_GIF
+STATIC_GIF_LIB = libstatic-pixbufloader-gif.la
+else
+GIF_LIB = libpixbufloader-gif.la
+endif
+
+if INCLUDE_ICO
+STATIC_ICO_LIB = libstatic-pixbufloader-ico.la
+else
+ICO_LIB = libpixbufloader-ico.la
+endif
+
+if INCLUDE_ANI
+STATIC_ANI_LIB = libstatic-pixbufloader-ani.la
+else
+ANI_LIB = libpixbufloader-ani.la
 endif
 
 if HAVE_JPEG
+if INCLUDE_JPEG
+STATIC_JPEG_LIB = libstatic-pixbufloader-jpeg.la
+else
 JPEG_LIB = libpixbufloader-jpeg.la
-STATIC_JPEG_LIB = libpixbufloader-static-jpeg.la
+endif
 endif
 
-GIF_LIB = libpixbufloader-gif.la
-STATIC_GIF_LIB = libpixbufloader-static-gif.la
+if INCLUDE_PNM
+STATIC_PNM_LIB = libstatic-pixbufloader-pnm.la
+else
+PNM_LIB = libpixbufloader-pnm.la
+endif
 
-ICO_LIB = libpixbufloader-ico.la
-STATIC_ICO_LIB = libpixbufloader-static-ico.la
-
-ANI_LIB = libpixbufloader-ani.la
-STATIC_ANI_LIB = libpixbufloader-static-ani.la
-
+if INCLUDE_RAS
+STATIC_RAS_LIB = libstatic-pixbufloader-ras.la
+else
 RAS_LIB = libpixbufloader-ras.la
-STATIC_RAS_LIB = libpixbufloader-static-ras.la
+endif
 
 if HAVE_TIFF
+if INCLUDE_TIFF
+STATIC_TIFF_LIB = libstatic-pixbufloader-tiff.la
+else
 TIFF_LIB = libpixbufloader-tiff.la
-STATIC_TIFF_LIB = libpixbufloader-static-tiff.la
+endif
 endif
 
+if INCLUDE_XPM
+STATIC_XPM_LIB = libstatic-pixbufloader-xpm.la
+else
 XPM_LIB = libpixbufloader-xpm.la
-STATIC_XPM_LIB = libpixbufloader-static-xpm.la
+endif
 
-PNM_LIB = libpixbufloader-pnm.la
-STATIC_PNM_LIB = libpixbufloader-static-pnm.la
-
-BMP_LIB = libpixbufloader-bmp.la
-STATIC_BMP_LIB = libpixbufloader-static-bmp.la
-
-WBMP_LIB = libpixbufloader-wbmp.la
-STATIC_WBMP_LIB = libpixbufloader-static-wbmp.la
-
+if INCLUDE_XBM
+STATIC_XBM_LIB = libstatic-pixbufloader-xbm.la
+else
 XBM_LIB = libpixbufloader-xbm.la
-STATIC_XBM_LIB = libpixbufloader-static-xbm.la
+endif
 
+if INCLUDE_TGA
+STATIC_TGA_LIB = libstatic-pixbufloader-tga.la
+else
 TGA_LIB = libpixbufloader-tga.la
-STATIC_TGA_LIB = libpixbufloader-static-tga.la
+endif
 
+if INCLUDE_PCX
+STATIC_PCX_LIB = libstatic-pixbufloader-pcx.la
+else
 PCX_LIB = libpixbufloader-pcx.la
-STATIC_PCX_LIB = libpixbufloader-static-pcx.la
+endif
 
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
 	$(PNG_LIB)	\
-	$(JPEG_LIB)	\
+	$(BMP_LIB)	\
+	$(WBMP_LIB)	\
 	$(GIF_LIB)	\
 	$(ICO_LIB)	\
 	$(ANI_LIB)	\
-	$(RAS_LIB)	\
-	$(XPM_LIB)	\
-	$(TIFF_LIB)	\
+	$(JPEG_LIB)	\
 	$(PNM_LIB)	\
-	$(BMP_LIB)	\
-	$(WBMP_LIB)	\
+	$(RAS_LIB)	\
+	$(TIFF_LIB)	\
+	$(XPM_LIB)	\
 	$(XBM_LIB)	\
 	$(TGA_LIB)	\
 	$(PCX_LIB)
 
 
-extra_sources = 
-builtin_objs = 
-else
-loader_LTLIBRARIES = 
+endif
 
 noinst_LTLIBRARIES =		\
 	$(STATIC_PNG_LIB)	\
-	$(STATIC_JPEG_LIB)	\
+	$(STATIC_BMP_LIB)	\
+	$(STATIC_WBMP_LIB)	\
 	$(STATIC_GIF_LIB)	\
 	$(STATIC_ICO_LIB)	\
 	$(STATIC_ANI_LIB)	\
-	$(STATIC_RAS_LIB)	\
-	$(STATIC_XPM_LIB)	\
-	$(STATIC_TIFF_LIB)	\
+	$(STATIC_JPEG_LIB)	\
 	$(STATIC_PNM_LIB)	\
-	$(STATIC_BMP_LIB)	\
-	$(STATIC_WBMP_LIB)	\
+	$(STATIC_RAS_LIB)	\
+	$(STATIC_TIFF_LIB)	\
+	$(STATIC_XPM_LIB)	\
 	$(STATIC_XBM_LIB)	\
 	$(STATIC_TGA_LIB)	\
 	$(STATIC_PCX_LIB)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
-endif
 
 DEPS = libgdk_pixbuf-$(GTK_API_VERSION).la
 INCLUDES = \

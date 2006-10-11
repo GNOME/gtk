@@ -644,6 +644,12 @@ gdk_pixbuf__ani_image_load_animation (FILE *f, GError **error)
 	return anim;
 }
 
+#ifndef INCLUDE_ani
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#endif
+
 void
 MODULE_ENTRY (ani, fill_vtable) (GdkPixbufModule *module)
 {
