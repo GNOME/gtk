@@ -534,41 +534,41 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 				"popup", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
   gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
   gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
-				"move-current", 1,
+				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
 
   /* properties */

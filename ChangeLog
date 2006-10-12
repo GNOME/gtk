@@ -1,5 +1,10 @@
 2006-10-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): fix commit below
+	(committed the wrong patch).
+
+2006-10-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcombobox.c: added "move-active" and "popup" signals and
 	bindings to trigger them. Removed gtk_combo_box_key_press(), it's
 	obsolete now. Fixes bug #358293.
