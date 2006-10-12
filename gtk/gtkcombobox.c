@@ -186,6 +186,8 @@ struct _GtkComboBoxPrivate
 
 enum {
   CHANGED,
+  MOVE_ACTIVE,
+  POPUP,
   LAST_SIGNAL
 };
 
@@ -285,12 +287,12 @@ static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
                                                     GdkEventScroll   *event);
 static void     gtk_combo_box_set_active_internal  (GtkComboBox      *combo_box,
 						    GtkTreePath      *path);
-static gboolean gtk_combo_box_key_press            (GtkWidget        *widget,
-						    GdkEventKey      *event,
-						    gpointer          data);
 
 static void     gtk_combo_box_check_appearance     (GtkComboBox      *combo_box);
 static gchar *  gtk_combo_box_real_get_active_text (GtkComboBox      *combo_box);
+static void     gtk_combo_box_real_move_active     (GtkComboBox      *combo_box,
+                                                    GtkScrollType     scroll);
+static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box);
 
 /* listening to the model */
 static void     gtk_combo_box_model_row_inserted   (GtkTreeModel     *model,
@@ -456,6 +458,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   GtkObjectClass *gtk_object_class;
   GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
+  GtkBindingSet *binding_set;
 
   klass->get_active_text = gtk_combo_box_real_get_active_text;
 
@@ -504,6 +507,69 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  combo_box_signals[MOVE_ACTIVE] =
+    _gtk_binding_signal_new (I_("move-active"),
+                             G_OBJECT_CLASS_TYPE (klass),
+                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                             G_CALLBACK (gtk_combo_box_real_move_active),
+                             NULL, NULL,
+                             g_cclosure_marshal_VOID__ENUM,
+                             G_TYPE_NONE, 1,
+                             GTK_TYPE_SCROLL_TYPE);
+
+  combo_box_signals[POPUP] =
+    _gtk_binding_signal_new (I_("popup"),
+                             G_OBJECT_CLASS_TYPE (klass),
+                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                             G_CALLBACK (gtk_combo_box_real_popup),
+                             NULL, NULL,
+                             g_cclosure_marshal_VOID__VOID,
+                             G_TYPE_NONE, 0);
+
+  /* key bindings */
+  binding_set = gtk_binding_set_by_class (widget_class);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Down, GDK_MOD1_MASK,
+				"popup", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
+				"move-current", 1,
+				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
 
   /* properties */
   /**
@@ -1660,11 +1726,17 @@ popup_grab_on_window (GdkWindow *window,
 void
 gtk_combo_box_popup (GtkComboBox *combo_box)
 {
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  g_signal_emit (combo_box, combo_box_signals[POPUP], 0);
+}
+
+static void
+gtk_combo_box_real_popup (GtkComboBox *combo_box)
+{
   gint x, y, width, height;
   GtkTreePath *path, *ppath;
   GtkWidget *toplevel;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   if (!GTK_WIDGET_REALIZED (combo_box))
     return;
@@ -2466,9 +2538,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
       g_signal_connect (combo_box->priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      g_signal_connect_after (combo_box->priv->button, 
-			      "key_press_event",
-			      G_CALLBACK (gtk_combo_box_key_press), combo_box);
       gtk_widget_set_parent (combo_box->priv->button,
                              GTK_BIN (combo_box)->child->parent);
 
@@ -2494,8 +2563,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
       g_signal_connect (combo_box->priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      g_signal_connect_after (combo_box, "key_press_event",
-			      G_CALLBACK (gtk_combo_box_key_press), combo_box);
       gtk_widget_set_parent (combo_box->priv->button,
                              GTK_BIN (combo_box)->child->parent);
 
@@ -3264,8 +3331,6 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                     G_CALLBACK (gtk_combo_box_list_button_pressed), combo_box);
   g_signal_connect (combo_box->priv->button, "toggled",
                     G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-  g_signal_connect_after (combo_box, "key_press_event",
-			  G_CALLBACK (gtk_combo_box_key_press), combo_box);
 
   combo_box->priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
   gtk_container_add (GTK_CONTAINER (combo_box->priv->button),
@@ -3556,74 +3621,6 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
   if (tree_column_row_is_sensitive (combo_box, &iter))
     gtk_combo_box_set_active_iter (combo_box, &iter);
 
-  return TRUE;
-}
-
-static gboolean
-gtk_combo_box_key_press (GtkWidget   *widget,
-			 GdkEventKey *event,
-			 gpointer     data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-  gboolean found;
-  GtkTreeIter iter;
-  GtkTreeIter new_iter;
-
-  if (combo_box->priv->model == NULL)
-    return FALSE;
-
-  if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down) && 
-      state == GDK_MOD1_MASK)
-    {
-      gtk_combo_box_popup (combo_box);
-
-      return TRUE;
-    }
-
-  if (state != 0)
-    return FALSE;
-
-  switch (event->keyval) 
-    {
-    case GDK_Down:
-    case GDK_KP_Down:
-      if (gtk_combo_box_get_active_iter (combo_box, &iter))
-	{
-	  found = tree_next (combo_box, combo_box->priv->model, 
-			     &iter, &new_iter, FALSE);
-	  break;
-	}
-      /* else fall through */
-    case GDK_Page_Up:
-    case GDK_KP_Page_Up:
-    case GDK_Home: 
-    case GDK_KP_Home:
-      found = tree_first (combo_box, combo_box->priv->model, &new_iter, FALSE);
-      break;
-
-    case GDK_Up:
-    case GDK_KP_Up:
-      if (gtk_combo_box_get_active_iter (combo_box, &iter))
-	{
-	  found = tree_prev (combo_box, combo_box->priv->model, 
-			     &iter, &new_iter, FALSE);
-	  break;
-	}
-      /* else fall through */      
-    case GDK_Page_Down:
-    case GDK_KP_Page_Down:
-    case GDK_End: 
-    case GDK_KP_End:
-      found = tree_last (combo_box, combo_box->priv->model, &new_iter, FALSE);
-      break;
-    default:
-      return FALSE;
-    }
-      
-  if (found)
-    gtk_combo_box_set_active_iter (combo_box, &new_iter);
-  
   return TRUE;
 }
 
@@ -4932,6 +4929,87 @@ gtk_combo_box_real_get_active_text (GtkComboBox *combo_box)
 			0, &text, -1);
 
   return text;
+}
+
+static void
+gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
+                                GtkScrollType  scroll)
+{
+  GtkTreeIter iter;
+  GtkTreeIter new_iter;
+  gboolean    active_iter;
+  gboolean    found;
+
+  if (!combo_box->priv->model)
+    return;
+
+  active_iter = gtk_combo_box_get_active_iter (combo_box, &iter);
+
+  switch (scroll)
+    {
+    case GTK_SCROLL_STEP_BACKWARD:
+    case GTK_SCROLL_STEP_UP:
+    case GTK_SCROLL_STEP_LEFT:
+      if (active_iter)
+        {
+	  found = tree_prev (combo_box, combo_box->priv->model,
+			     &iter, &new_iter, FALSE);
+	  break;
+        }
+      /* else fall through */
+
+    case GTK_SCROLL_PAGE_FORWARD:
+    case GTK_SCROLL_PAGE_DOWN:
+    case GTK_SCROLL_PAGE_RIGHT:
+    case GTK_SCROLL_END:
+      found = tree_last (combo_box, combo_box->priv->model, &new_iter, FALSE);
+      break;
+
+    case GTK_SCROLL_STEP_FORWARD:
+    case GTK_SCROLL_STEP_DOWN:
+    case GTK_SCROLL_STEP_RIGHT:
+      if (active_iter)
+        {
+	  found = tree_next (combo_box, combo_box->priv->model,
+			     &iter, &new_iter, FALSE);
+          break;
+        }
+      /* else fall through */
+
+    case GTK_SCROLL_PAGE_BACKWARD:
+    case GTK_SCROLL_PAGE_UP:
+    case GTK_SCROLL_PAGE_LEFT:
+    case GTK_SCROLL_START:
+      found = tree_first (combo_box, combo_box->priv->model, &new_iter, FALSE);
+      break;
+
+    default:
+      return;
+    }
+
+  if (found)
+    {
+      if (active_iter)
+        {
+          GtkTreePath *old_path;
+          GtkTreePath *new_path;
+
+          old_path = gtk_tree_model_get_path (combo_box->priv->model, &iter);
+          new_path = gtk_tree_model_get_path (combo_box->priv->model, &new_iter);
+
+          if (gtk_tree_path_compare (old_path, new_path) == 0)
+            found = FALSE;
+
+          gtk_tree_path_free (old_path);
+          gtk_tree_path_free (new_path);
+        }
+
+      if (found)
+        {
+          gtk_combo_box_set_active_iter (combo_box, &new_iter);
+          return;
+        }
+    }
 }
 
 static gboolean

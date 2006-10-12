@@ -1,3 +1,9 @@
+2006-10-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcombobox.c: added "move-active" and "popup" signals and
+	bindings to trigger them. Removed gtk_combo_box_key_press(), it's
+	obsolete now. Fixes bug #358293.
+
 2006-10-11  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdkpixmap-directfb.c: add missing RGB24 case (#361176) 
