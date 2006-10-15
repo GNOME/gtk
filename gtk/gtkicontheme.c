@@ -507,13 +507,15 @@ gtk_icon_theme_set_screen (GtkIconTheme *icon_theme,
 static gboolean
 pixbuf_supports_svg (void)
 {
-  GSList *formats = gdk_pixbuf_get_formats ();
+  GSList *formats;
   GSList *tmp_list;
   static gint found_svg = -1;
 
   if (found_svg != -1)
     return found_svg;
- 
+
+  formats = gdk_pixbuf_get_formats ();
+
   found_svg = FALSE; 
   for (tmp_list = formats; tmp_list && !found_svg; tmp_list = tmp_list->next)
     {
