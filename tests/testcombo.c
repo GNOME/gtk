@@ -1111,7 +1111,7 @@ main (int argc, char **argv)
 
         model = create_empty_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
-	g_signal_connect (combobox, "popup-show", 
+	g_signal_connect (combobox, "notify::popup-shown", 
 			  G_CALLBACK (populate_list_blaat), combobox);
 
 	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);

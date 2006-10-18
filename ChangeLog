@@ -1,3 +1,8 @@
+2006-10-18  Kristian Rietveld  <kris@imendio.com>
+
+	* tests/testcombo.c (main): connect to notify::popup-shown instead of
+	popup-show (the latter does not exist).
+
 2006-10-15  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkicontheme.c (pixbuf_supports_svg): plug memory leak.
