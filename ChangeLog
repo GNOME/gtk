@@ -1,3 +1,8 @@
+2006-10-23  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/modules/engines/ms-windows/msw_style.c (draw_expander): Remember
+	to free GDI Pen resources, introduced by bug 340201.(#364514)
+	
 2006-10-18  Kristian Rietveld  <kris@imendio.com>
 
 	* tests/testcombo.c (main): connect to notify::popup-shown instead of
