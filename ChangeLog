@@ -1,3 +1,8 @@
+2006-10-23  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* modules/engines/ms-windows/msw_style.c (draw_expander): Remember
+	to free GDI Pen resources, introduced by bug 340201.(#364514)
+	
 2006-09-12 Hong Jen Yee <pcman.tw@gmail.com>
 
 	signed off by: Dom Lachowicz

@@ -1285,6 +1285,7 @@ draw_expander (GtkStyle * style,
 		}
 
         SelectObject( dc, old_pen );
+	DeleteObject( pen );
         release_window_dc( style, window, state );
 	}
 
