@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-09-21 16:31+0300\n"
+"PO-Revision-Date: 2006-10-24 07:48+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -381,7 +381,7 @@ msgstr ""
 
 #: ../gtk/gtkactiongroup.c:138
 msgid "A name for the action group."
-msgstr ""
+msgstr "Tegevuste grupi nimi."
 
 #: ../gtk/gtkactiongroup.c:145
 msgid "Whether the action group is enabled."
@@ -1253,11 +1253,11 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:370 ../gtk/gtktexttag.c:456
 msgid "Strikethrough"
-msgstr ""
+msgstr "Läbikriipsutus"
 
 #: ../gtk/gtkcellrenderertext.c:371 ../gtk/gtktexttag.c:457
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Kas tekst on läbi kriipsutatud või mitte"
 
 #: ../gtk/gtkcellrenderertext.c:378 ../gtk/gtktexttag.c:464
 msgid "Underline"
