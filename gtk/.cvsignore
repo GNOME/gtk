@@ -28,3 +28,5 @@ gtkalias.h
 gtkaliasdef.c
 gtkbuiltincache.h
 gtk-update-icon-cache
+actual-abi
+expected-abi
