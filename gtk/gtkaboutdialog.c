@@ -429,7 +429,7 @@ static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
-  GtkWidget *vbox, *hbox, *button, *image;
+  GtkWidget *vbox, *hbox, *button, *close_button, *image;
 
   /* Data */
   priv = GTK_ABOUT_DIALOG_GET_PRIVATE (about);
@@ -494,7 +494,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_show (hbox);
 
   /* Add the OK button */
-  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
+  close_button = gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE,
+					GTK_RESPONSE_CANCEL);
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   /* Add the credits button */
@@ -524,6 +525,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_window_set_resizable (GTK_WINDOW (about), FALSE);
 
   gtk_widget_pop_composite_child ();
+
+  gtk_widget_grab_default (close_button);
+  gtk_widget_grab_focus (close_button);
 
   /* force defaults */
   gtk_about_dialog_set_name (about, NULL);
