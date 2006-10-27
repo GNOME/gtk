@@ -1,3 +1,12 @@
+2006-10-27  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD.
+
+	* gtk/gtktreeview.c (validate_visible_area): rework the area_above == 0
+	case to not overwrite the variables in the lower scope (which are
+	used later on ...), get the path correctly and bail out when there
+	isn't a node above us. (#359231).
+
 2006-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkaboutdialog.c: Put initial focus on Close button (#337261).

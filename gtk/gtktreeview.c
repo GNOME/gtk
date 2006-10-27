@@ -5749,32 +5749,30 @@ validate_visible_area (GtkTreeView *tree_view)
    */
   if (area_above == 0)
     {
-      GtkRBTree *tree;
-      GtkRBNode *node;
-      GtkTreePath *tmppath;
-      GtkTreeIter iter;
+      GtkRBTree *tmptree;
+      GtkRBNode *tmpnode;
 
-      _gtk_tree_view_find_node (tree_view, above_path, &tree, &node);
+      _gtk_tree_view_find_node (tree_view, above_path, &tmptree, &tmpnode);
+      _gtk_rbtree_prev_full (tmptree, tmpnode, &tmptree, &tmpnode);
 
-      tmppath = gtk_tree_path_copy (above_path);
-
-      _gtk_rbtree_prev_full (tree, node, &tree, &node);
-      if (! gtk_tree_path_prev (tmppath) && node != NULL)
+      if (tmpnode)
         {
-          gtk_tree_path_free (tmppath);
-          tmppath = _gtk_tree_view_find_path (tree_view, tree, node);
-        }
-      gtk_tree_model_get_iter (tree_view->priv->model, &iter, tmppath);
+	  GtkTreePath *tmppath;
+	  GtkTreeIter tmpiter;
 
-      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
-          GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
-        {
-	  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
-          if (validate_row (tree_view, tree, node, &iter, path))
-            size_changed = TRUE;
-        }
+	  tmppath = _gtk_tree_view_find_path (tree_view, tmptree, tmpnode);
+	  gtk_tree_model_get_iter (tree_view->priv->model, &tmpiter, tmppath);
 
-      gtk_tree_path_free (tmppath);
+	  if (GTK_RBNODE_FLAG_SET (tmpnode, GTK_RBNODE_INVALID) ||
+	      GTK_RBNODE_FLAG_SET (tmpnode, GTK_RBNODE_COLUMN_INVALID))
+	    {
+	      _gtk_tree_view_queue_draw_node (tree_view, tmptree, tmpnode, NULL);
+	      if (validate_row (tree_view, tmptree, tmpnode, &tmpiter, tmppath))
+		size_changed = TRUE;
+	    }
+
+	  gtk_tree_path_free (tmppath);
+	}
     }
 
   /* Now, we walk forwards and backwards, measuring rows. Unfortunately,
