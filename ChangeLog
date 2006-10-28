@@ -1,3 +1,8 @@
+2006-10-29  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (RegisterGdkClass): Improve handling
+	of the small icon of the window class. (#152620, Kazuki Iwamoto)
+
 2006-10-27  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): rework the area_above == 0
