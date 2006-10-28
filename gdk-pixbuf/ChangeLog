@@ -1,3 +1,13 @@
+2006-10-29  Tor Lillqvist  <tml@novell.com>
+
+	* pixbufloader_*.def
+	* Makefile.am (EXTRA_DIST): Remove pixbufloader_*.def, they are
+	not used. (#365388) They were all identical, and exported just two
+	symbols, so if somebody needs them for a MSVC build that doesn't
+	use built-in modules it's trivial to hack makefile.msc to produce
+	a common .def file for the loaders. The two symbols that need to
+	be exported are fill_info and fill_vtable.
+
 2006-10-11  Tor Lillqvist  <tml@novell.com>
 
 	Enable having some loaders built-in even if loading the others

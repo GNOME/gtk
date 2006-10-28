@@ -475,19 +475,6 @@ EXTRA_DIST =					\
 	gdk_pixbuf.rc				\
 	gdk-pixbuf-marshal.c			\
 	gdk-pixbuf-marshal.list			\
-	pixbufloader_ico.def			\
-	pixbufloader_ani.def			\
-	pixbufloader_pnm.def			\
-	pixbufloader_xpm.def			\
-	pixbufloader_bmp.def			\
-	pixbufloader_jpeg.def			\
-	pixbufloader_ras.def			\
-	pixbufloader_gif.def			\
-	pixbufloader_png.def			\
-	pixbufloader_tiff.def			\
-	pixbufloader_wbmp.def			\
-	pixbufloader_xbm.def			\
-	pixbufloader_tga.def			\
 	gen-color-table.pl
 
 if CROSS_COMPILING
