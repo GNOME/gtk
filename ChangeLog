@@ -1,3 +1,9 @@
+2006-10-29  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c
+	(gdk_win32_icon_to_pixbuf_libgtk_only): Implement for B&W cursors,
+	for instance the built-in GDK ones.
+
 2006-10-27  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.

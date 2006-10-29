@@ -421,7 +421,6 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
   HDC hdc;
   gchar *pixels, *bits, buf[32];
   gint rowstride, x, y, w, h;
-  gboolean no_alpha;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
     return NULL;
@@ -435,52 +434,132 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
   memset (&bmi, 0, sizeof (bmi));
   bmi.bi.biSize = sizeof (bmi.bi);
 
-  if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
-    goto out1;
-
-  w = bmi.bi.biWidth;
-  h = bmi.bi.biHeight;
-      
-  bmi.bi.biBitCount = 32;
-  bmi.bi.biCompression = BI_RGB;
-  bmi.bi.biHeight = -h;
-
-  bits = g_malloc0 (4 * w * h);
-      
-  /* color data */
-  if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
-    goto out2;
-  
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
-  pixels = gdk_pixbuf_get_pixels (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  no_alpha = TRUE;
-  for (y = 0; y < h; y++)
+  if (ii.hbmColor != NULL)
     {
-      for (x = 0; x < w; x++)
-	{
-	  pixels[2] = bits[(x+y*w) * 4];
-	  pixels[1] = bits[(x+y*w) * 4 + 1];
-	  pixels[0] = bits[(x+y*w) * 4 + 2];
-	  pixels[3] = bits[(x+y*w) * 4 + 3];
-	  if (no_alpha && pixels[3] > 0)
-	    no_alpha = FALSE;
-	  pixels += 4;
-	}
-      pixels += (w * 4 - rowstride);
-    }
+      /* Colour cursor */
 
-  /* mask */
-  if (no_alpha &&
-      GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
-    {
+      gboolean no_alpha;
+      
+      if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+	goto out1;
+
+      w = bmi.bi.biWidth;
+      h = bmi.bi.biHeight;
+
+      bmi.bi.biBitCount = 32;
+      bmi.bi.biCompression = BI_RGB;
+      bmi.bi.biHeight = -h;
+
+      bits = g_malloc0 (4 * w * h);
+      
+      /* color data */
+      if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+	goto out2;
+
+      pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
       pixels = gdk_pixbuf_get_pixels (pixbuf);
+      rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+      no_alpha = TRUE;
       for (y = 0; y < h; y++)
 	{
 	  for (x = 0; x < w; x++)
 	    {
-	      pixels[3] = 255 - bits[(x + y * w) * 4];
+	      pixels[2] = bits[(x+y*w) * 4];
+	      pixels[1] = bits[(x+y*w) * 4 + 1];
+	      pixels[0] = bits[(x+y*w) * 4 + 2];
+	      pixels[3] = bits[(x+y*w) * 4 + 3];
+	      if (no_alpha && pixels[3] > 0)
+		no_alpha = FALSE;
 	      pixels += 4;
+	    }
+	  pixels += (w * 4 - rowstride);
+	}
+
+      /* mask */
+      if (no_alpha &&
+	  GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+	{
+	  pixels = gdk_pixbuf_get_pixels (pixbuf);
+	  for (y = 0; y < h; y++)
+	    {
+	      for (x = 0; x < w; x++)
+		{
+		  pixels[3] = 255 - bits[(x + y * w) * 4];
+		  pixels += 4;
+		}
+	      pixels += (w * 4 - rowstride);
+	    }
+	}
+    }
+  else
+    {
+      /* B&W cursor */
+
+      int bpl;
+
+      if (!GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, 0, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+	goto out1;
+
+      w = bmi.bi.biWidth;
+      h = ABS (bmi.bi.biHeight) / 2;
+      
+      bits = g_malloc0 (4 * w * h);
+      
+      /* masks */
+      if (!GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, h*2, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+	goto out2;
+
+      pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+      pixels = gdk_pixbuf_get_pixels (pixbuf);
+      rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+      bpl = ((w-1)/32 + 1)*4;
+#if 0
+      for (y = 0; y < h*2; y++)
+	{
+	  for (x = 0; x < w; x++)
+	    {
+	      const gint bit = 7 - (x % 8);
+	      printf ("%c ", ((bits[bpl*y+x/8])&(1<<bit)) ? ' ' : 'X');
+	    }
+	  printf ("\n");
+	}
+#endif
+
+      for (y = 0; y < h; y++)
+	{
+	  const guchar *andp, *xorp;
+	  if (bmi.bi.biHeight < 0)
+	    {
+	      andp = bits + bpl*y;
+	      xorp = bits + bpl*(h+y);
+	    }
+	  else
+	    {
+	      andp = bits + bpl*(h-y-1);
+	      xorp = bits + bpl*(h+h-y-1);
+	    }
+	  for (x = 0; x < w; x++)
+	    {
+	      const gint bit = 7 - (x % 8);
+	      if ((*andp) & (1<<bit))
+		{
+		  if ((*xorp) & (1<<bit))
+		    pixels[2] = pixels[1] = pixels[0] = 0xFF;
+		  else
+		    pixels[2] = pixels[1] = pixels[0] = 0;
+		  pixels[3] = 0xFF;
+		}
+	      else
+		{
+		  pixels[2] = pixels[1] = pixels[0] = 0;
+		  pixels[3] = 0;
+		}
+	      pixels += 4;
+	      if (bit == 0)
+		{
+		  andp++;
+		  xorp++;
+		}
 	    }
 	  pixels += (w * 4 - rowstride);
 	}
