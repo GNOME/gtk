@@ -1,3 +1,10 @@
+2006-10-28  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines): only attempt
+	to create the GCs if the widget is realized. (Fixes #357578).
+
 2006-10-28  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from HEAD.
