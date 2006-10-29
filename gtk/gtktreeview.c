@@ -11787,7 +11787,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   install_presize_handler (tree_view);
 
   g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
-  if (open_all)
+  if (open_all && node->children)
     {
       _gtk_rbtree_traverse (node->children,
                             node->children->root,
