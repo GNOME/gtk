@@ -368,6 +368,7 @@ RegisterGdkClass (GdkWindowType wtype)
   static ATOM klassCHILD    = 0;
   static ATOM klassTEMP     = 0;
   static HICON hAppIcon = NULL;
+  static HICON hAppIconSm = NULL;
   static WNDCLASSEX wcl; 
   ATOM klass = 0;
 
@@ -380,26 +381,37 @@ RegisterGdkClass (GdkWindowType wtype)
   wcl.cbWndExtra = 0;
   wcl.hInstance = _gdk_app_hmodule;
   wcl.hIcon = 0;
+  wcl.hIconSm = 0;
   /* initialize once! */
-  if (0 == hAppIcon)
+  if (0 == hAppIcon && 0 == hAppIconSm)
     {
       gchar sLoc [MAX_PATH+1];
 
       if (0 != GetModuleFileName (_gdk_app_hmodule, sLoc, MAX_PATH))
-	{
-	  hAppIcon = ExtractIcon (_gdk_app_hmodule, sLoc, 0);
-	  if (0 == hAppIcon)
-	    {
-	      if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
-		hAppIcon = ExtractIcon (_gdk_dll_hinstance, sLoc, 0);
-	    }
-	}
-      if (0 == hAppIcon) 
-	hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
+        {
+          ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+          if (0 == hAppIcon && 0 == hAppIconSm)
+            {
+              if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
+                ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+            }
+        }
+      if (0 == hAppIcon && 0 == hAppIconSm)
+        {
+          hAppIcon = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
+                                GetSystemMetrics (SM_CXICON),
+                                GetSystemMetrics (SM_CYICON), 0);
+          hAppIconSm = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
+                                  GetSystemMetrics (SM_CXSMICON),
+                                  GetSystemMetrics (SM_CYSMICON), 0);
+        }
     }
+  if (0 == hAppIcon)
+    hAppIcon = hAppIconSm;
+  else if (0 == hAppIconSm)
+    hAppIconSm = hAppIcon;
 
   wcl.lpszMenuName = NULL;
-  wcl.hIconSm = 0;
 
   /* initialize once per class */
   /*
@@ -409,7 +421,7 @@ RegisterGdkClass (GdkWindowType wtype)
    */
 #define ONCE_PER_CLASS() \
   wcl.hIcon = CopyIcon (hAppIcon); \
-  wcl.hIconSm = CopyIcon (hAppIcon); \
+  wcl.hIconSm = CopyIcon (hAppIconSm); \
   wcl.hbrBackground = NULL; \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
   
