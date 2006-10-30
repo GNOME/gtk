@@ -843,7 +843,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 static void 
 gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 {
-  gint sort_column_id;
+  gint sort_column_id = -1;
   GtkWidget *hbox;
   GtkWidget *alignment;
   GtkWidget *arrow;
@@ -905,27 +905,27 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 					  "");
     }
 
-  if (GTK_IS_TREE_SORTABLE (model)
-      && gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
-					       &sort_column_id,
-					       NULL))
-    {
-      if (sort_column_id == tree_column->sort_column_id)
-	{
-	  switch (tree_column->sort_order)
-	    {
-	      case GTK_SORT_ASCENDING:
-		arrow_type = GTK_ARROW_DOWN;
-		break;
+  if (GTK_IS_TREE_SORTABLE (model))
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+					  &sort_column_id,
+					  NULL);
 
-	      case GTK_SORT_DESCENDING:
-		arrow_type = GTK_ARROW_UP;
-		break;
-          
-	      default:
-		g_warning (G_STRLOC": bad sort order");
-		break;
-	    }
+  if (tree_column->show_sort_indicator
+      || (sort_column_id >= 0 && sort_column_id == tree_column->sort_column_id))
+    {
+      switch (tree_column->sort_order)
+        {
+	  case GTK_SORT_ASCENDING:
+	    arrow_type = GTK_ARROW_DOWN;
+	    break;
+
+	  case GTK_SORT_DESCENDING:
+	    arrow_type = GTK_ARROW_UP;
+	    break;
+
+	  default:
+	    g_warning (G_STRLOC": bad sort order");
+	    break;
 	}
     }
 
@@ -952,7 +952,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     }
   g_object_unref (arrow);
 
-  if (GTK_IS_TREE_SORTABLE (model) && tree_column->sort_column_id >= 0)
+  if (tree_column->show_sort_indicator
+      || (GTK_IS_TREE_SORTABLE (model) && tree_column->sort_column_id >= 0))
     gtk_widget_show (arrow);
   else
     gtk_widget_hide (arrow);

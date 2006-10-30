@@ -1,3 +1,12 @@
+2006-10-30  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button): draw
+	the indicator if the column has a sort column id (and the model is
+	sortable) or if the user explicitly requested the indicator
+	to be shown.  (Fixes #352738, Chris Vine).
+
 2006-10-29  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD
