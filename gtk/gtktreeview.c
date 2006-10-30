@@ -9607,6 +9607,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
 
   y -= window_y;
   gtk_tree_view_scroll_to_point (tree_view, -1, y);
+  _gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
 }
 
 static void
