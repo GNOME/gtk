@@ -1542,20 +1542,21 @@ static gboolean
 gtk_range_key_press (GtkWidget   *widget,
 		     GdkEventKey *event)
 {
-  GtkRange *range = (GtkRange *)widget;
+  GtkRange *range = GTK_RANGE (widget);
 
-  if (event->keyval == GDK_Escape)
+  if (event->keyval == GDK_Escape &&
+      range->layout->grab_location != MOUSE_OUTSIDE)
     {
       stop_scrolling (range);
 
-      update_slider_position (range, 
+      update_slider_position (range,
 			      range->slide_initial_coordinate,
 			      range->slide_initial_coordinate);
 
       return TRUE;
     }
-  else
-    return GTK_WIDGET_CLASS (gtk_range_parent_class)->key_press_event (widget, event);
+
+  return GTK_WIDGET_CLASS (gtk_range_parent_class)->key_press_event (widget, event);
 }
 
 static gint
