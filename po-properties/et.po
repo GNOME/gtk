@@ -11,10 +11,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.10\n"
+"Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-10-24 07:48+0300\n"
+"PO-Revision-Date: 2006-11-01 09:41+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:166
 msgid "Pixels"
-msgstr "Pikslid"
+msgstr "Piksleid"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:167
 msgid "A pointer to the pixel data of the pixbuf"
@@ -90,11 +90,11 @@ msgstr ""
 
 #: ../gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
-msgstr "Vaikimisi displei"
+msgstr "Vaikimisi kuva"
 
 #: ../gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
-msgstr ""
+msgstr "GDK vaikimisi kuva"
 
 #: ../gdk/gdkpango.c:546 ../gtk/gtkinvisible.c:86 ../gtk/gtkwindow.c:530
 msgid "Screen"
@@ -102,7 +102,7 @@ msgstr "Ekraan"
 
 #: ../gdk/gdkpango.c:547
 msgid "the GdkScreen for the renderer"
-msgstr ""
+msgstr "Renderdaja GdkScreen"
 
 #: ../gdk/gdkscreen.c:74
 msgid "Font options"
@@ -144,7 +144,7 @@ msgstr "Autoriõiguste string"
 
 #: ../gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
-msgstr "Programmi kohta kehtivate autoriõiguste string"
+msgstr "Programmi kohta kehtivate autoriõiguste andmed"
 
 #: ../gtk/gtkaboutdialog.c:254
 msgid "Comments string"
@@ -164,13 +164,15 @@ msgstr "Programmi veebisaidi URL"
 
 #: ../gtk/gtkaboutdialog.c:306
 msgid "Website label"
-msgstr ""
+msgstr "Veebisaidi silt"
 
 #: ../gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
+"Programmi veebisaidi URL-i silt. Kui seda pole määratud, siis vaikimis on "
+"selleks URL ise"
 
 #: ../gtk/gtkaboutdialog.c:323
 msgid "Authors"
@@ -194,7 +196,7 @@ msgstr "Kunstnikud"
 
 #: ../gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
-msgstr "Programmile tehtud kunstiloomingu autorite nimekiri"
+msgstr "Programmile kunstiloomingu teinud autorite nimekiri"
 
 #: ../gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
@@ -214,6 +216,8 @@ msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"Programmi andmete kasti logo. Kui seda pole määratud, siis vaikimisi on "
+"selleks gtk_window_get_default_icon_list()"
 
 #: ../gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
@@ -225,11 +229,11 @@ msgstr "Nimeline ikoon, mida kasutatakse programmi andmete kastis."
 
 #: ../gtk/gtkaboutdialog.c:421
 msgid "Wrap license"
-msgstr ""
+msgstr "Litsensiridade murdmine"
 
 #: ../gtk/gtkaboutdialog.c:422
 msgid "Whether to wrap the license text."
-msgstr ""
+msgstr "Kas litsentsi tekstu murtakse või mitte."
 
 #: ../gtk/gtkaccellabel.c:111
 msgid "Accelerator Closure"
@@ -241,11 +245,11 @@ msgstr ""
 
 #: ../gtk/gtkaccellabel.c:118
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "Kiirendi vidin"
 
 #: ../gtk/gtkaccellabel.c:119
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "Vidin kiirendite muutumiste jälgimiseks"
 
 #: ../gtk/gtkaction.c:191 ../gtk/gtkactiongroup.c:137 ../gtk/gtkprinter.c:119
 msgid "Name"
@@ -263,6 +267,7 @@ msgstr "Silt"
 #: ../gtk/gtkaction.c:200
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
+"Selle toimingu aktiveerivatel menüükirjetel ja nuppudel kasutatav silt."
 
 #: ../gtk/gtkaction.c:207
 msgid "Short label"
@@ -270,15 +275,15 @@ msgstr "Lühike silt"
 
 #: ../gtk/gtkaction.c:208
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr ""
+msgstr "Tööriistariba nuppudel kasutatav lühike silt."
 
 #: ../gtk/gtkaction.c:214
 msgid "Tooltip"
-msgstr ""
+msgstr "Vihje"
 
 #: ../gtk/gtkaction.c:215
 msgid "A tooltip for this action."
-msgstr ""
+msgstr "Selle toimingu kohta käiv vihje."
 
 #: ../gtk/gtkaction.c:221
 msgid "Stock Icon"
@@ -327,7 +332,7 @@ msgstr "Nähtav kui vertikaalne"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr ""
+msgstr "Kas tööriistariba kirje on riba püstise suuna korral nähtav."
 
 #: ../gtk/gtkaction.c:278 ../gtk/gtktoolitem.c:144
 msgid "Is important"
@@ -442,7 +447,7 @@ msgstr ""
 
 #: ../gtk/gtkalignment.c:92
 msgid "Horizontal alignment"
-msgstr ""
+msgstr "Rõhtjoondus"
 
 #: ../gtk/gtkalignment.c:93 ../gtk/gtkbutton.c:250
 msgid ""
@@ -452,7 +457,7 @@ msgstr ""
 
 #: ../gtk/gtkalignment.c:102
 msgid "Vertical alignment"
-msgstr ""
+msgstr "Püstjoondus"
 
 #: ../gtk/gtkalignment.c:103 ../gtk/gtkbutton.c:269
 msgid ""
@@ -530,19 +535,19 @@ msgstr ""
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "Rõhtjoondus"
 
 #: ../gtk/gtkaspectframe.c:80
 msgid "X alignment of the child"
-msgstr ""
+msgstr "Lapse joondamine X-teljel"
 
 #: ../gtk/gtkaspectframe.c:86
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "Püstjoondus"
 
 #: ../gtk/gtkaspectframe.c:87
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "Lapse joondamine Y-teljel"
 
 #: ../gtk/gtkaspectframe.c:93
 msgid "Ratio"
@@ -562,19 +567,19 @@ msgstr ""
 
 #: ../gtk/gtkbbox.c:92
 msgid "Minimum child width"
-msgstr ""
+msgstr "Lapse vähim laius"
 
 #: ../gtk/gtkbbox.c:93
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "Kastis olevate nuppude väikseim laius"
 
 #: ../gtk/gtkbbox.c:101
 msgid "Minimum child height"
-msgstr ""
+msgstr "Lapse vähim kõrgus"
 
 #: ../gtk/gtkbbox.c:102
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "Kastis olevate nuppude väikseim kõrgus"
 
 #: ../gtk/gtkbbox.c:110
 msgid "Child internal width padding"
@@ -624,20 +629,20 @@ msgstr ""
 #: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:599 ../gtk/gtktable.c:165
 #: ../gtk/gtktoolbar.c:572
 msgid "Homogeneous"
-msgstr ""
+msgstr "Homogeensus"
 
 #: ../gtk/gtkbox.c:109
 msgid "Whether the children should all be the same size"
-msgstr ""
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
 
 #: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:105 ../gtk/gtktoolbar.c:564
 #: ../gtk/gtktreeviewcolumn.c:266
 msgid "Expand"
-msgstr "Laiene"
+msgstr "Laiendamine"
 
 #: ../gtk/gtkbox.c:117
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Kas laps saab rohkem ruumi, kui tema vanem suureneb"
+msgstr "Kas laps saab rohkem ruumi, kui tema vanema suurus kasvab"
 
 #: ../gtk/gtkbox.c:123
 msgid "Fill"
@@ -670,7 +675,7 @@ msgstr ""
 #: ../gtk/gtkbox.c:144 ../gtk/gtknotebook.c:630 ../gtk/gtkpaned.c:216
 #: ../gtk/gtkruler.c:110
 msgid "Position"
-msgstr ""
+msgstr "Asukoht"
 
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:631
 msgid "The index of the child in the parent"
@@ -692,6 +697,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Määramise korral tähendab tekstis olev alakriips, et sellest järgnevale "
+"märgile vastav klahv on mnemooniline kiirendusklahv"
 
 #: ../gtk/gtkbutton.c:215
 msgid "Use stock"
@@ -721,11 +728,11 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:249
 msgid "Horizontal alignment for child"
-msgstr ""
+msgstr "Lapse rõhtjoondus"
 
 #: ../gtk/gtkbutton.c:268
 msgid "Vertical alignment for child"
-msgstr ""
+msgstr "Lapse püstjoondus"
 
 #: ../gtk/gtkbutton.c:285 ../gtk/gtkimagemenuitem.c:101
 msgid "Image widget"
@@ -989,11 +996,11 @@ msgstr "Kiirklahvi väärtus"
 
 #: ../gtk/gtkcellrendereraccel.c:124
 msgid "Accelerator modifiers"
-msgstr ""
+msgstr "Kiirendi muuteklahvid"
 
 #: ../gtk/gtkcellrendereraccel.c:125
 msgid "The modifier mask of the accelerator"
-msgstr ""
+msgstr "Kiirendi muuteklahvi mask"
 
 #: ../gtk/gtkcellrendereraccel.c:142
 msgid "Accelerator keycode"
@@ -1005,11 +1012,11 @@ msgstr "Kiirklahvi raudvaraline klahvikood"
 
 #: ../gtk/gtkcellrendereraccel.c:162
 msgid "Accelerator Mode"
-msgstr ""
+msgstr "Kiirendi režiim"
 
 #: ../gtk/gtkcellrendereraccel.c:163
 msgid "The type of accelerators"
-msgstr ""
+msgstr "Kiirendite liik"
 
 #: ../gtk/gtkcellrenderercombo.c:89
 msgid "Model"
@@ -1324,7 +1331,7 @@ msgstr "Joondus"
 
 #: ../gtk/gtkcellrenderertext.c:485
 msgid "How to align the lines"
-msgstr ""
+msgstr "Kuidas jooni joondatakse"
 
 #: ../gtk/gtkcellrenderertext.c:495 ../gtk/gtkcellview.c:174
 #: ../gtk/gtktexttag.c:543
@@ -1919,6 +1926,8 @@ msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
+"Rõhtne joondus: 0 - vasakult, 1 - paremalt. RTL (vasakult paremale) "
+"paigustuste korral vastupidi."
 
 #: ../gtk/gtkentry.c:592
 msgid "Truncate multiline"
@@ -2295,19 +2304,19 @@ msgstr ""
 
 #: ../gtk/gtkframe.c:103
 msgid "Label xalign"
-msgstr ""
+msgstr "Sildi X-joondus"
 
 #: ../gtk/gtkframe.c:104
 msgid "The horizontal alignment of the label"
-msgstr ""
+msgstr "Sildi rõhtne joondamine"
 
 #: ../gtk/gtkframe.c:112
 msgid "Label yalign"
-msgstr ""
+msgstr "Sildi Y-joondus"
 
 #: ../gtk/gtkframe.c:113
 msgid "The vertical alignment of the label"
-msgstr ""
+msgstr "Sildi püstine joondamine"
 
 #: ../gtk/gtkframe.c:121 ../gtk/gtkhandlebox.c:169
 msgid "Deprecated property, use shadow_type instead"
@@ -2620,7 +2629,7 @@ msgstr "Kui reamurdmine on määratud, siis kuidas murdmist teostatakse"
 
 #: ../gtk/gtklabel.c:364
 msgid "Selectable"
-msgstr ""
+msgstr "Valitav"
 
 #: ../gtk/gtklabel.c:365
 msgid "Whether the label text can be selected with the mouse"
@@ -2628,19 +2637,19 @@ msgstr "Kas sildi teksti saab hiirega märkida või mitte"
 
 #: ../gtk/gtklabel.c:371
 msgid "Mnemonic key"
-msgstr ""
+msgstr "Mnemooniline klahv"
 
 #: ../gtk/gtklabel.c:372
 msgid "The mnemonic accelerator key for this label"
-msgstr ""
+msgstr "Selle sildi mnemooniline kiirendusklahv"
 
 #: ../gtk/gtklabel.c:380
 msgid "Mnemonic widget"
-msgstr ""
+msgstr "Mnemooniline vidin"
 
 #: ../gtk/gtklabel.c:381
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr ""
+msgstr "Mnemoonilise kiirendusklahvi vajutamise korral aktiveeritav vidin"
 
 #: ../gtk/gtklabel.c:425
 msgid ""
@@ -2943,7 +2952,7 @@ msgstr "Y-joondus"
 
 #: ../gtk/gtkmisc.c:84
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr "Püstine joondus vahemikus 0 (üleval) kuni 1 (all)"
+msgstr "Püstine joondus: 0 - ülevalt, 1 - alt"
 
 #: ../gtk/gtkmisc.c:93
 msgid "X pad"
@@ -3485,7 +3494,7 @@ msgstr "Kas edenemist näidatakse tekstina"
 
 #: ../gtk/gtkprogress.c:116
 msgid "Text x alignment"
-msgstr ""
+msgstr "Teksti X-joondus"
 
 #: ../gtk/gtkprogress.c:117
 msgid ""
@@ -3495,7 +3504,7 @@ msgstr ""
 
 #: ../gtk/gtkprogress.c:125
 msgid "Text y alignment"
-msgstr ""
+msgstr "Teksti Y-joondus"
 
 #: ../gtk/gtkprogress.c:126
 msgid ""
@@ -5039,6 +5048,8 @@ msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
+"Määramise korral tähendab sildi omadusel olev alakriips, et sellest "
+"järgnevale märgile vastav klahv on mnemooniline kiirendusklahv"
 
 #: ../gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
@@ -5390,7 +5401,7 @@ msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:292
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Veeru päiseteksti või -vidina rõhtjoondus"
 
 #: ../gtk/gtktreeviewcolumn.c:302
 msgid "Whether the column can be reordered around the headers"

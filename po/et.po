@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-04 00:06+0200\n"
-"PO-Revision-Date: 2006-10-23 23:03+0300\n"
+"PO-Revision-Date: 2006-10-29 18:54+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1443,7 +1443,7 @@ msgstr "Eemalda"
 
 #: ../gtk/gtkfilechooserdefault.c:3255
 msgid "Rename..."
-msgstr "Nimeta ümber..."
+msgstr "Muuda nime..."
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3397
@@ -1682,7 +1682,7 @@ msgstr "_Kustuta fail"
 
 #: ../gtk/gtkfilesel.c:1102
 msgid "_Rename File"
-msgstr "_Nimeta ümber"
+msgstr "Muuda faili _nime"
 
 #: ../gtk/gtkfilesel.c:1407
 #, c-format
@@ -1753,7 +1753,7 @@ msgstr "Faili \"%s\" ümbernimetamine:"
 
 #: ../gtk/gtkfilesel.c:1756
 msgid "_Rename"
-msgstr "_Nimeta ümber"
+msgstr "Muuda _nime"
 
 #: ../gtk/gtkfilesel.c:2188
 msgid "_Selection: "
@@ -2070,6 +2070,8 @@ msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>Iga printer</b>\n"
+"Portaablitele dokumentidele"
 
 #: ../gtk/gtkpagesetupunixdialog.c:906 ../gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
@@ -2504,7 +2506,7 @@ msgstr "Näita _privaatressursse"
 #: ../gtk/gtkrecentchoosermenu.c:421 ../gtk/gtkrecentchoosermenu.c:482
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "URI-ga `%s' ei leitud viimati kasutatud ressurssi"
 
 #: ../gtk/gtkrecentchoosermenu.c:506 ../gtk/gtkrecentchoosermenu.c:514
 #: ../gtk/gtkrecentchoosermenu.c:671 ../gtk/gtkrecentchoosermenu.c:680
@@ -2530,7 +2532,7 @@ msgstr "Kirjeid ei leitud"
 #: ../gtk/gtkrecentmanager.c:1216 ../gtk/gtkrecentmanager.c:1275
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr ""
+msgstr "URI-ga `%s' pole võimalik leida ühtegi kirjet"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -2922,11 +2924,11 @@ msgstr "RLM _Paremalt-vasakule märk"
 
 #: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE Va_sakult-paremale põimimine"
 
 #: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE Pa_remalt-vasakule põimimine"
 
 #: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
@@ -3924,7 +3926,7 @@ msgstr "Liigitamata"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr "Printimint LPR-i"
+msgstr "Printimine LPR-i"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
@@ -3961,11 +3963,11 @@ msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "directfb arg"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "system"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
@@ -3996,17 +3998,17 @@ msgstr "Vormingu %s jaoks ei leitud deserialiseerimise funktsiooni"
 #: ../gtk/gtktextbufferserialize.c:791 ../gtk/gtktextbufferserialize.c:817
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "<%s> kirjes leidub nii \"id\" kui ka \"name\""
 
 #: ../gtk/gtktextbufferserialize.c:801 ../gtk/gtktextbufferserialize.c:827
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "\"%s\" atribuuti on <%s> kirjes kaks korda"
 
 #: ../gtk/gtktextbufferserialize.c:841
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "<%s> kirjel on vigane id \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:851
 #, c-format
@@ -4030,12 +4032,12 @@ msgstr "Silti \"%s\" pole defineeritud."
 
 #: ../gtk/gtktextbufferserialize.c:1029
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Leiti anonüümne silt ja silte pole võimalik luua."
 
 #: ../gtk/gtktextbufferserialize.c:1040
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "Silti \"%s\" pole puhvris ja silte pole võimalik luua."
 
 #: ../gtk/gtktextbufferserialize.c:1139 ../gtk/gtktextbufferserialize.c:1214
 #: ../gtk/gtktextbufferserialize.c:1315 ../gtk/gtktextbufferserialize.c:1389
@@ -4096,6 +4098,8 @@ msgstr "Serialiseeritud andmed on vääralt vormindatud"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"Serialiseeritud andmed pole korrektselt vormindatud. Esimene sektsioon pole "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
@@ -4144,7 +4148,7 @@ msgstr "Puhverfail edukalt loodud.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+msgstr "Olemasoleva puhvri ülekirjutamine isegi värskeima puhvri korral"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
