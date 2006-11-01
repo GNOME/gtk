@@ -1,3 +1,10 @@
+2006-11-01  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init),
+	(gtk_combo_box_size_request): add arrow-size property to control
+	the minimum size of the arrow, have the arrow scale up with the
+	font by default. (#357950).
+
 2006-10-30  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): don't

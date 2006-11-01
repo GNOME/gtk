@@ -756,6 +756,25 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
+  /**
+   * GtkComboBox:arrow-size:
+   *
+   * Sets the minimum size of the arrow in the combo box.  Note
+   * that the arrow size is coupled to the font size, so in case
+   * a larger font is used, the arrow will be larger than set
+   * by arrow size.
+   *
+   * Since: 2.12
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("arrow-size",
+							     P_("Arrow Size"),
+							     P_("The minimum size of the arrow in the combo box"),
+							     0,
+							     G_MAXINT,
+							     15,
+							     GTK_PARAM_READABLE));
+
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
 }
 
@@ -1897,7 +1916,12 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 {
   gint width, height;
   gint focus_width, focus_pad;
+  gint font_size;
+  gint arrow_size;
   GtkRequisition bin_req;
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  PangoFontDescription *font_desc;
 
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
  
@@ -1910,7 +1934,20 @@ gtk_combo_box_size_request (GtkWidget      *widget,
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
+			"arrow-size", &arrow_size,
 			NULL);
+
+  font_desc = GTK_BIN (widget)->child->style->font_desc;
+  context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (context, font_desc,
+				       pango_context_get_language (context));
+  font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
+			    pango_font_metrics_get_descent (metrics));
+  pango_font_metrics_unref (metrics);
+
+  arrow_size = MAX (arrow_size, font_size);
+
+  gtk_widget_set_size_request (combo_box->priv->arrow, arrow_size, arrow_size);
 
   if (!combo_box->priv->tree_view)
     {
