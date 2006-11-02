@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-22 11:21+0200\n"
-"PO-Revision-Date: 2006-10-22 11:21+0200\n"
+"POT-Creation-Date: 2006-11-02 12:46+0100\n"
+"PO-Revision-Date: 2006-11-02 12:46+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1021,7 +1021,7 @@ msgstr "COULEURS"
 msgid "Make X calls synchronous"
 msgstr "Faire des appels X synchrone"
 
-#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2080
 msgid "License"
 msgstr "Licence"
 
@@ -1030,37 +1030,37 @@ msgid "The license of the program"
 msgstr "La licence du programme"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:503
+#: ../gtk/gtkaboutdialog.c:504
 msgid "C_redits"
 msgstr "_Crédits"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:516
+#: ../gtk/gtkaboutdialog.c:517
 msgid "_License"
 msgstr "_Licence"
 
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:758
 #, c-format
 msgid "About %s"
 msgstr "À propos de %s"
 
-#: ../gtk/gtkaboutdialog.c:2004
+#: ../gtk/gtkaboutdialog.c:2008
 msgid "Credits"
 msgstr "Crédits"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2034
 msgid "Written by"
 msgstr "Écrit par"
 
-#: ../gtk/gtkaboutdialog.c:2033
+#: ../gtk/gtkaboutdialog.c:2037
 msgid "Documented by"
 msgstr "Documenté par"
 
-#: ../gtk/gtkaboutdialog.c:2045
+#: ../gtk/gtkaboutdialog.c:2049
 msgid "Translated by"
 msgstr "Traduit par"
 
-#: ../gtk/gtkaboutdialog.c:2049
+#: ../gtk/gtkaboutdialog.c:2053
 msgid "Artwork by"
 msgstr "Graphisme par"
 
@@ -1449,20 +1449,20 @@ msgstr "%1$s sur %2$s"
 #: ../gtk/gtkfilechooserdefault.c:2593
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Ajouter le dossier « %s » aux signets"
+msgstr "Ajoute le dossier « %s » aux signets"
 
 #: ../gtk/gtkfilechooserdefault.c:2634
 msgid "Add the current folder to the bookmarks"
-msgstr "Ajouter le dossier actuel aux signets"
+msgstr "Ajoute le dossier actuel aux signets"
 
 #: ../gtk/gtkfilechooserdefault.c:2636
 msgid "Add the selected folders to the bookmarks"
-msgstr "Ajouter les dossiers sélectionnés aux signets"
+msgstr "Ajoute les dossiers sélectionnés aux signets"
 
 #: ../gtk/gtkfilechooserdefault.c:2676
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "Supprimer le signet « %s »"
+msgstr "Enlève le signet « %s »"
 
 #: ../gtk/gtkfilechooserdefault.c:3107
 #, c-format
@@ -1495,7 +1495,7 @@ msgstr "A_jouter"
 
 #: ../gtk/gtkfilechooserdefault.c:3606
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Ajouter le dossier sélectionné aux signets"
+msgstr "Ajoute le dossier sélectionné aux signets"
 
 #: ../gtk/gtkfilechooserdefault.c:3611 ../gtk/gtkstock.c:404
 msgid "_Remove"
@@ -1503,7 +1503,7 @@ msgstr "_Enlever"
 
 #: ../gtk/gtkfilechooserdefault.c:3618
 msgid "Remove the selected bookmark"
-msgstr "Supprimer le signet sélectionné"
+msgstr "Supprime le signet sélectionné"
 
 #: ../gtk/gtkfilechooserdefault.c:3714
 msgid "Could not select file"
@@ -1542,7 +1542,7 @@ msgstr "Modifié"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
 msgid "Select which types of files are shown"
-msgstr "Sélectionnez les types de fichiers à afficher"
+msgstr "Sélectionne les types de fichiers à afficher"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4322 ../gtk/gtkprinteroptionwidget.c:780
@@ -1560,7 +1560,7 @@ msgstr "Saisissez un nom de fichier"
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:4636
 msgid "Create Fo_lder"
-msgstr "Créer un _dossier"
+msgstr "_Créer un dossier"
 
 #: ../gtk/gtkfilechooserdefault.c:4646
 msgid "_Location:"
