@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-11-01 09:41+0200\n"
+"PO-Revision-Date: 2006-11-03 08:58+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -129,6 +129,8 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
+"Programmi nimi. Kui seda pole määratud, siis vaikimisi on "
+"g_get_application_name()"
 
 #: ../gtk/gtkaboutdialog.c:221
 msgid "Program version"
@@ -349,7 +351,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:287
 msgid "Hide if empty"
-msgstr ""
+msgstr "Peidetakse kui on tühi"
 
 #: ../gtk/gtkaction.c:288
 msgid "When TRUE, empty menu proxies for this action are hidden."
@@ -736,11 +738,11 @@ msgstr "Lapse püstjoondus"
 
 #: ../gtk/gtkbutton.c:285 ../gtk/gtkimagemenuitem.c:101
 msgid "Image widget"
-msgstr ""
+msgstr "Pildividin"
 
 #: ../gtk/gtkbutton.c:286
 msgid "Child widget to appear next to the button text"
-msgstr ""
+msgstr "Lapsvidin, mis ilmub nuputekstist järgmisena"
 
 #: ../gtk/gtkbutton.c:300
 msgid "Image position"
@@ -900,19 +902,19 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderer.c:201
 msgid "xalign"
-msgstr ""
+msgstr "x-joondus"
 
 #: ../gtk/gtkcellrenderer.c:202
 msgid "The x-align"
-msgstr ""
+msgstr "X-joondus"
 
 #: ../gtk/gtkcellrenderer.c:211
 msgid "yalign"
-msgstr ""
+msgstr "y-joondus"
 
 #: ../gtk/gtkcellrenderer.c:212
 msgid "The y-align"
-msgstr ""
+msgstr "Y-joondus"
 
 #: ../gtk/gtkcellrenderer.c:221
 msgid "xpad"
@@ -1769,7 +1771,7 @@ msgstr "Väikseim X"
 
 #: ../gtk/gtkcurve.c:133
 msgid "Minimum possible value for X"
-msgstr "X'i väikseim võimalik väärtus"
+msgstr "X-i väikseim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:141
 msgid "Maximum X"
@@ -1777,7 +1779,7 @@ msgstr "Suurim X"
 
 #: ../gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
-msgstr "X'i suurim võimalik väärtus"
+msgstr "X-i suurim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:150
 msgid "Minimum Y"
@@ -1785,7 +1787,7 @@ msgstr "Väikseim Y"
 
 #: ../gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr "Y'i väikseim võimalik väärtus"
+msgstr "Y-i väikseim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:159
 msgid "Maximum Y"
@@ -1793,7 +1795,7 @@ msgstr "Suurim Y"
 
 #: ../gtk/gtkcurve.c:160
 msgid "Maximum possible value for Y"
-msgstr "Y'i suurim võimalik väärtus"
+msgstr "Y-i suurim võimalik väärtus"
 
 #: ../gtk/gtkdialog.c:118
 msgid "Has separator"
@@ -2059,7 +2061,7 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:219 ../gtk/gtkframe.c:137 ../gtk/gtktoolbutton.c:194
 msgid "Label widget"
-msgstr ""
+msgstr "Sildividin"
 
 #: ../gtk/gtkexpander.c:220
 msgid "A widget to display in place of the usual expander label"
@@ -2111,20 +2113,21 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:222
 msgid "Preview widget"
-msgstr ""
+msgstr "Eelvaatevidin"
 
 #: ../gtk/gtkfilechooser.c:223
 msgid "Application supplied widget for custom previews."
-msgstr ""
+msgstr "Rakenduse poolt toetatud vidin kohandatud vaadete jaoks."
 
 #: ../gtk/gtkfilechooser.c:228
 msgid "Preview Widget Active"
-msgstr ""
+msgstr "Eelvaatevidin aktiivne"
 
 #: ../gtk/gtkfilechooser.c:229
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
+"Kas kohandatud vaadete eelvaatevidinat näidatakse või mitte."
 
 #: ../gtk/gtkfilechooser.c:234
 msgid "Use Preview Label"
@@ -2149,7 +2152,7 @@ msgstr "Mitmikvalik"
 
 #: ../gtk/gtkfilechooser.c:247 ../gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
-msgstr ""
+msgstr "Kas mitme faili valimine on lubatud või mitte"
 
 #: ../gtk/gtkfilechooser.c:253
 msgid "Show Hidden"
@@ -2161,13 +2164,15 @@ msgstr "Kas näidata peidetud faile ja katalooge või mitte"
 
 #: ../gtk/gtkfilechooser.c:269
 msgid "Do overwrite confirmation"
-msgstr ""
+msgstr "Ülekirjutamise kinnitus"
 
 #: ../gtk/gtkfilechooser.c:270
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
 msgstr ""
+"Kas failivalija peab salvestamisel küsima faili ülekirjutamise kohta "
+"kinnitust või mitte."
 
 #: ../gtk/gtkfilechooserbutton.c:355
 msgid "Dialog"
@@ -2175,7 +2180,7 @@ msgstr "Dialoog"
 
 #: ../gtk/gtkfilechooserbutton.c:356
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "Failivalimise dialoog."
 
 #: ../gtk/gtkfilechooserbutton.c:387
 msgid "The title of the file chooser dialog."
