@@ -285,6 +285,9 @@ static gboolean gtk_drag_key_cb                (GtkWidget         *widget,
 static gboolean gtk_drag_grab_broken_event_cb  (GtkWidget          *widget,
 						GdkEventGrabBroken *event,
 						gpointer            data);
+static void     gtk_drag_grab_notify_cb        (GtkWidget         *widget,
+						gboolean           was_grabbed,
+						gpointer           data);
 static gboolean gtk_drag_button_release_cb     (GtkWidget         *widget, 
 					        GdkEventButton    *event, 
 					        gpointer           data);
@@ -2331,6 +2334,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   g_signal_connect (info->ipc_widget, "grab_broken_event",
 		    G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
+  g_signal_connect (info->ipc_widget, "grab_notify",
+		    G_CALLBACK (gtk_drag_grab_notify_cb), info);
   g_signal_connect (info->ipc_widget, "button_release_event",
 		    G_CALLBACK (gtk_drag_button_release_cb), info);
   g_signal_connect (info->ipc_widget, "motion_notify_event",
@@ -3762,6 +3767,9 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 					gtk_drag_grab_broken_event_cb,
 					info);
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_grab_notify_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_button_release_cb,
 					info);
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
@@ -3924,6 +3932,9 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_grab_broken_event_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_grab_notify_cb,
 					info);
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_button_release_cb,
@@ -4116,6 +4127,24 @@ gtk_drag_grab_broken_event_cb (GtkWidget          *widget,
   gtk_drag_cancel (info, gtk_get_current_event_time ());
   return TRUE;
 }
+
+static void
+gtk_drag_grab_notify_cb (GtkWidget        *widget,
+			 gboolean          was_grabbed,
+			 gpointer          data)
+{
+  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
+
+  if (!was_grabbed)
+    {
+      /* We have to block callbacks to avoid recursion here, because
+	 gtk_drag_cancel calls gtk_grab_remove (via gtk_drag_end) */
+      g_signal_handlers_block_by_func (widget, gtk_drag_grab_notify_cb, data);
+      gtk_drag_cancel (info, gtk_get_current_event_time ());
+      g_signal_handlers_unblock_by_func (widget, gtk_drag_grab_notify_cb, data);
+    }
+}
+
 
 /*************************************************************
  * gtk_drag_button_release_cb:
