@@ -5028,6 +5028,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   gboolean allocate_at_bottom;
   gint tab_overlap, tab_pos, tab_extra_space;
   gint left_x, right_x, top_y, bottom_y, anchor;
+  gint xthickness, ythickness;
   gboolean gap_left, packing_changed;
   GtkAllocation child_allocation = { 0, };
   gboolean allocation_changed = FALSE;
@@ -5042,6 +5043,9 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
   child_allocation.x = widget->allocation.x + container->border_width;
   child_allocation.y = widget->allocation.y + container->border_width;
+
+  xthickness = widget->style->xthickness;
+  ythickness = widget->style->ythickness;
 
   switch (tab_pos)
     {
@@ -5222,14 +5226,34 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
       page->allocation = child_allocation;
 
-      if (page == notebook->cur_page &&
-	  (priv->operation == DRAG_OPERATION_REORDER ||
-	   priv->operation == DRAG_OPERATION_DETACH))
+      if (page == notebook->cur_page)
 	{
-	  /* needs to be allocated at 0,0
-	   * to be shown in the drag window */
-	  page->allocation.x = 0;
-	  page->allocation.y = 0;
+	  if (priv->operation == DRAG_OPERATION_REORDER ||
+	      priv->operation == DRAG_OPERATION_DETACH)
+	    {
+	      /* needs to be allocated at 0,0
+	       * to be shown in the drag window */
+	      page->allocation.x = 0;
+	      page->allocation.y = 0;
+	    }
+	}
+      else
+	{
+	  switch (tab_pos)
+	    {
+	    case GTK_POS_TOP:
+	      page->allocation.y += ythickness;
+	      /* fall through */
+	    case GTK_POS_BOTTOM:
+	      page->allocation.height = MAX (1, page->allocation.height - ythickness);
+	      break;
+	    case GTK_POS_LEFT:
+	      page->allocation.x += xthickness;
+	      /* fall through */
+	    case GTK_POS_RIGHT:
+	      page->allocation.width = MAX (1, page->allocation.width - xthickness);
+	      break;
+	    }
 	}
 
       /* calculate whether to leave a gap based on reorder operation or not */
