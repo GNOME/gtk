@@ -1,3 +1,8 @@
+2006-11-07  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_calculate_tabs_allocation): make
+	non-focused tabs xthickness/ythickness thinner. (#353962)
+
 2006-11-07  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_delete): avoid memory
