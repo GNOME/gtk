@@ -1,3 +1,8 @@
+2006-11-07  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): avoid memory
+	corruption (#357050).
+
 2006-11-06  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkdnd.c: (gtk_drag_begin_internal),

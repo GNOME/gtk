@@ -886,6 +886,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
               start_line->segments = seg;
             }
           else if (prev_seg->next &&
+		   prev_seg->next != last_seg &&
 		   seg->type == &gtk_text_toggle_off_type &&
 		   prev_seg->next->type == &gtk_text_toggle_on_type &&
 		   seg->body.toggle.info == prev_seg->next->body.toggle.info)
