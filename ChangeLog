@@ -1,3 +1,8 @@
+2006-11-08  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkpathbar.c (on_slider_unmap): added, do not leave the scroll
+	timeout running if the slider buttons are hidden. (#372527)
+
 2006-11-07  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_calculate_tabs_allocation): make
