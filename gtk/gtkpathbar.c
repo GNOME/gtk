@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* gtkpathbar.c
  * Copyright (C) 2004  Red Hat, Inc.,  Jonathan Blandford <jrb@gnome.org>
  *
@@ -116,6 +117,16 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
 						   gboolean          current_dir);
 
+static void
+on_slider_unmap (GtkWidget  *widget,
+		 GtkPathBar *path_bar)
+{
+  if (path_bar->timer &&
+      (widget == path_bar->up_slider_button && path_bar->scrolling_up) ||
+      (widget == path_bar->down_slider_button && path_bar->scrolling_down))
+     gtk_path_bar_stop_scrolling (path_bar);
+}
+
 static GtkWidget *
 get_slider_button (GtkPathBar  *path_bar,
 		   GtkArrowType arrow_type)
@@ -129,6 +140,9 @@ get_slider_button (GtkPathBar  *path_bar,
   gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (arrow_type, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
   gtk_widget_show_all (button);
+
+  g_signal_connect (G_OBJECT (button), "unmap",
+		    G_CALLBACK (on_slider_unmap), path_bar);
 
   gtk_widget_pop_composite_child ();
 
