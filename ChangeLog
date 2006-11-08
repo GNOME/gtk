@@ -1,3 +1,8 @@
+2006-11-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (browse_widgets_create): Don't make
+	the "Location" label bold. Bug #372449.
+
 2006-11-07  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_calculate_tabs_allocation): make
