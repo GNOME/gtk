@@ -9506,8 +9506,11 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 
   selection_count = gtk_tree_selection_count_selected_rows (tree_view->priv->selection);
 
-  if (selection_count == 0 && !tree_view->priv->ctrl_pressed)
+  if (selection_count == 0
+      && tree_view->priv->selection->type != GTK_SELECTION_NONE
+      && !tree_view->priv->ctrl_pressed)
     {
+      /* Don't move the cursor, but just select the current node */
       new_cursor_tree = cursor_tree;
       new_cursor_node = cursor_node;
     }
