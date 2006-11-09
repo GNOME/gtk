@@ -122,9 +122,9 @@ on_slider_unmap (GtkWidget  *widget,
 		 GtkPathBar *path_bar)
 {
   if (path_bar->timer &&
-      (widget == path_bar->up_slider_button && path_bar->scrolling_up) ||
-      (widget == path_bar->down_slider_button && path_bar->scrolling_down))
-     gtk_path_bar_stop_scrolling (path_bar);
+      ((widget == path_bar->up_slider_button && path_bar->scrolling_up) ||
+       (widget == path_bar->down_slider_button && path_bar->scrolling_down)))
+    gtk_path_bar_stop_scrolling (path_bar);
 }
 
 static GtkWidget *

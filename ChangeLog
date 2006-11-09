@@ -1,3 +1,7 @@
+2006-11-09  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkpathbar.c (on_slider_unmap): Fix parenthesis confusion.
+
 2006-11-08  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtkpathbar.c (on_slider_unmap): added, do not leave the scroll
