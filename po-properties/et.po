@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-11-03 08:58+0200\n"
+"PO-Revision-Date: 2006-11-11 23:18+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -304,7 +304,7 @@ msgstr "Ikooni nimi"
 #: ../gtk/gtkaction.c:240 ../gtk/gtkcellrendererpixbuf.c:173
 #: ../gtk/gtkimage.c:230 ../gtk/gtkstatusicon.c:171
 msgid "The name of the icon from the icon theme"
-msgstr ""
+msgstr "Ikooniteemas olev ikooni nimi"
 
 #: ../gtk/gtkaction.c:246 ../gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
@@ -601,7 +601,7 @@ msgstr ""
 
 #: ../gtk/gtkbbox.c:128
 msgid "Layout style"
-msgstr ""
+msgstr "Paigutuse laad"
 
 #: ../gtk/gtkbbox.c:129
 msgid ""
@@ -4495,11 +4495,11 @@ msgstr ""
 
 #: ../gtk/gtktext.c:557
 msgid "Line Wrap"
-msgstr ""
+msgstr "Reamurdmine"
 
 #: ../gtk/gtktext.c:558
 msgid "Whether lines are wrapped at widget edges"
-msgstr ""
+msgstr "Kas vidinate servas murtakse ridu või mitte"
 
 #: ../gtk/gtktext.c:565
 msgid "Word Wrap"
