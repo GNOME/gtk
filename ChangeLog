@@ -1,3 +1,8 @@
+2006-11-13  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_icon_source): plug small memory
+	leak (#370395)
+
 2006-11-09  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from HEAD.
