@@ -4206,9 +4206,9 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
                           gboolean       *icon_set_valid)
 {
   guint token;
-  GtkIconSource *source;
   gchar *full_filename;
-  
+  GtkIconSource *source = NULL;
+
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_CURLY)
     return G_TOKEN_LEFT_CURLY;
@@ -4218,12 +4218,11 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
   if (token != G_TOKEN_STRING && token != '@')
     return G_TOKEN_STRING;
   
-  source = gtk_icon_source_new ();
-
   if (token == G_TOKEN_STRING)
     {
       /* Filename */
-      
+
+      source = gtk_icon_source_new ();      
       full_filename = gtk_rc_find_pixmap_in_path (context->settings, scanner, scanner->value.v_string);
       if (full_filename)
 	{
@@ -4240,6 +4239,7 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
       if (token != G_TOKEN_STRING)
 	return G_TOKEN_STRING;
 
+      source = gtk_icon_source_new ();
       gtk_icon_source_set_icon_name (source, scanner->value.v_string);
     }
 
