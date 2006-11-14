@@ -1,3 +1,7 @@
+2006-11-14  Behdad Esfahbod  <behdad@gnome.org>
+
+	* configure.in: Make libtool magic robust. (#352795)
+
 2006-11-13  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkrc.c (gtk_rc_parse_icon_source): plug small memory

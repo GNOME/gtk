@@ -366,7 +366,7 @@ AC_ARG_ENABLE(explicit-deps,
 AC_MSG_CHECKING([Whether to write dependencies into .pc files])
 case $enable_explicit_deps in
   auto)
-    deplibs_check_method=`(./libtool --config; echo eval echo \\$deplibs_check_method) | sh`
+    deplibs_check_method=`(./libtool --config; echo 'eval echo $deplibs_check_method') | sh`
     if test "x$deplibs_check_method" '!=' xpass_all || test "x$enable_static" = xyes ; then
       enable_explicit_deps=yes  
     else
