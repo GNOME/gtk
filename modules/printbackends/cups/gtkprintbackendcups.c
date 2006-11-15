@@ -2197,14 +2197,27 @@ cups_printer_get_options (GtkPrinter           *printer,
     {
       GtkPaperSize *paper_size;
       ppd_option_t *option;
+      const gchar  *ppd_name;
 
       ppdMarkDefaults (ppd_file);
 
       paper_size = gtk_page_setup_get_paper_size (page_setup);
 
       option = ppdFindOption (ppd_file, "PageSize");
-      strncpy (option->defchoice, gtk_paper_size_get_ppd_name (paper_size),
-	       PPD_MAX_NAME);
+      ppd_name = gtk_paper_size_get_ppd_name (paper_size);
+      
+      if (ppd_name)
+	strncpy (option->defchoice, ppd_name, PPD_MAX_NAME);
+      else
+        {
+          gchar *custom_name;
+
+	  custom_name = g_strdup_printf ("Custom.%2fx%.2f",
+					 gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS),
+					 gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+          strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
+          g_free (custom_name);
+        }
 
       for (i = 0; i < ppd_file->num_groups; i++)
         handle_group (set, ppd_file, &ppd_file->groups[i], &ppd_file->groups[i], settings);

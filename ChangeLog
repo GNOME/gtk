@@ -1,3 +1,8 @@
+2006-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c (cups_printer_get_options): 
+	Don't pass NULL to strncpy.  (#359537, patch by  Carlos Garcia Campos)
+
 2006-11-14  Behdad Esfahbod  <behdad@gnome.org>
 
 	* configure.in: Make libtool magic robust. (#352795)
