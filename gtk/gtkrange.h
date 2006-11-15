@@ -160,7 +160,17 @@ void               gtk_range_set_value                     (GtkRange      *range
                                                             gdouble        value);
 gdouble            gtk_range_get_value                     (GtkRange      *range);
 
-gdouble	          _gtk_range_get_wheel_delta               (GtkRange      *range,
+void               gtk_range_set_show_fill_level           (GtkRange      *range,
+                                                            gboolean       show_fill_level);
+gboolean           gtk_range_get_show_fill_level           (GtkRange      *range);
+void               gtk_range_set_restrict_to_fill_level    (GtkRange      *range,
+                                                            gboolean       restrict_to_fill_level);
+gboolean           gtk_range_get_restrict_to_fill_level    (GtkRange      *range);
+void               gtk_range_set_fill_level                (GtkRange      *range,
+                                                            gdouble        fill_level);
+gdouble            gtk_range_get_fill_level                (GtkRange      *range);
+
+gdouble            _gtk_range_get_wheel_delta              (GtkRange      *range,
                                                             GdkScrollDirection direction);
 
 

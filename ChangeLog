@@ -1,3 +1,16 @@
+2006-11-15  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrange.[ch]: added properties "fill-level",
+	"show-fill-level" and "restrict-to-fill-level" and getters/setters
+	for them. The "fill level" is an additional marker on the range's
+	trough than can be e.g. used to indicate the amount of
+	pre-buffering in a range showing the play position of streamed
+	media. See the embedded API docs for details. Made GtkRangeLayout
+	a GTypeInstance private struct and removed finalize()
+	implementation. Fixes bug #349808
+
+	* gtk/gtk.symbols: added the new symbols.
+
 2006-11-14  Behdad Esfahbod  <behdad@gnome.org>
 
 	* configure.in: Make libtool magic robust. (#352795)
