@@ -1,5 +1,12 @@
 2006-11-16  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): don't use
+	gtk_widget_keynav_failed(). Instead, look at gtk-keynav-cursor-only
+	and gtk-keynav-wrap-around and wrap around, beep or continue outside
+	the group manually (bug #322640).
+
+2006-11-16  Michael Natterer  <mitch@imendio.com>
+
 	Add new infrastructure for notifications of failed keyboard
 	navigation and navigation with restricted set of keys.
 
