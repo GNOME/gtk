@@ -614,8 +614,10 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
     return NULL;
   
   limit = gtk_recent_chooser_get_limit (chooser);
-  sort_type = gtk_recent_chooser_get_sort_type (chooser);
+  if (limit == 0)
+    return NULL;
 
+  sort_type = gtk_recent_chooser_get_sort_type (chooser);
   switch (sort_type)
     {
     case GTK_RECENT_SORT_NONE:
@@ -634,7 +636,7 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
       g_assert_not_reached ();
       break;
     }
-  
+
   items = gtk_recent_manager_get_items (priv->manager);
   if (!items)
     return NULL;
@@ -648,6 +650,8 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
       GList *clamp, *l;
 
       clamp = g_list_nth (items, limit - 1);
+      if (!clamp)
+        return items;
 
       l = clamp->next;
       clamp->next = NULL;      

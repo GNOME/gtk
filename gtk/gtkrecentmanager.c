@@ -1322,6 +1322,9 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
   priv = manager->priv;
   if (!priv->recent_items)
     return NULL;
+
+  if (priv->limit == 0)
+    return NULL;
   
   uris = g_bookmark_file_get_uris (priv->recent_items, &uris_len);
   for (i = 0; i < uris_len; i++)

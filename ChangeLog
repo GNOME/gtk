@@ -1,3 +1,13 @@
+2006-11-16  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c: Provide a fast path returning
+	NULL when the limit is set to 0.
+
+	* gtk/gtkrecentchooserdefault.c:
+	* gtk/gtkrecentchoosermenu.c: Add the same fast path
+	inside the RecentChooser implementation; add a check
+	in the list clamping code. (#373466 and duplicates)
+
 2006-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c (cups_printer_get_options): 
