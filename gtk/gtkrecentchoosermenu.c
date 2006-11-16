@@ -854,16 +854,18 @@ gtk_recent_chooser_menu_add_tip (GtkRecentChooserMenu *menu,
     return;
   
   path = gtk_recent_info_get_uri_display (info);
-  
-  tip_text = g_strdup_printf (_("Open '%s'"), path);
- 
-  gtk_tooltips_set_tip (priv->tooltips,
-  			item,
-  			tip_text,
-  			NULL);
+  if (path)
+    {
+      tip_text = g_strdup_printf (_("Open '%s'"), path);
 
-  g_free (path);  
-  g_free (tip_text);
+      gtk_tooltips_set_tip (priv->tooltips,
+                            item,
+                            tip_text,
+                            NULL);
+      
+      g_free (path);
+      g_free (tip_text);
+    }
 }
 
 static GtkWidget *

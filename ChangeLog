@@ -1,5 +1,12 @@
 2006-11-16  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentchoosermenu.c:
+	(gtk_recent_chooser_menu_add_tip): Apply the tip only
+	if we have a displayable name for the item. (#365031,
+	patch by padraig.obriain(at)sun.com)
+
+2006-11-16  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkrecentmanager.c: Provide a fast path returning
 	NULL when the limit is set to 0.
 
