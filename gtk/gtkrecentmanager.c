@@ -2295,7 +2295,9 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
  * gtk_recent_info_get_uri_display:
  * @info: a #GtkRecentInfo
  *
- * Gets a displayable version of the resource's URI.
+ * Gets a displayable version of the resource's URI.  If the resource
+ * is local, it returns a local path; if the resource is not local,
+ * it returns the UTF-8 encoded content of gtk_recent_info_get_uri().
  *
  * Return value: a UTF-8 string containing the resource's URI or %NULL
  *
@@ -2304,18 +2306,28 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
 gchar *
 gtk_recent_info_get_uri_display (GtkRecentInfo *info)
 {
-  gchar *filename, *filename_utf8;
+  gchar *retval;
   
   g_return_val_if_fail (info != NULL, NULL);
-  
-  filename = g_filename_from_uri (info->uri, NULL, NULL);
-  if (!filename)
-    return NULL;
-      
-  filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-  g_free (filename);
 
-  return filename_utf8;
+  retval = NULL;
+  if (gtk_recent_info_is_local (info))
+    {
+      gchar *filename;
+
+      filename = g_filename_from_uri (info->uri, NULL, NULL);
+      if (!filename)
+        return NULL;
+      
+      retval = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      g_free (filename);
+    }
+  else
+    {
+      retval = make_valid_utf8 (info->uri);
+    }
+
+  return retval;
 }
 
 /**
