@@ -551,6 +551,14 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Ellipsize set"),
                 P_("Whether this tag affects the ellipsize mode"));
 
+  /**
+   * GtkCellRendererText::edited
+   * @renderer: the object which received the signal.
+   * @path: the path identifying the edited cell.
+   * @new_text: the new text.
+   *
+   * This signal is emitted after @renderer has been edited.
+   */
   text_cell_renderer_signals [EDITED] =
     g_signal_new (I_("edited"),
 		  G_OBJECT_CLASS_TYPE (object_class),
