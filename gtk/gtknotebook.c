@@ -1066,14 +1066,33 @@ gtk_notebook_change_current_page (GtkNotebook *notebook,
 
   while (offset != 0)
     {
-      current = gtk_notebook_search_page (notebook, current, offset < 0 ? STEP_PREV : STEP_NEXT, TRUE);
+      current = gtk_notebook_search_page (notebook, current,
+                                          offset < 0 ? STEP_PREV : STEP_NEXT,
+                                          TRUE);
+
+      if (!current)
+        {
+          gboolean wrap_around;
+
+          g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
+                        "gtk-keynav-wrap-around", &wrap_around,
+                        NULL);
+
+          if (wrap_around)
+            current = gtk_notebook_search_page (notebook, NULL,
+                                                offset < 0 ? STEP_PREV : STEP_NEXT,
+                                                TRUE);
+          else
+            break;
+        }
+
       offset += offset < 0 ? 1 : -1;
     }
 
   if (current)
     gtk_notebook_switch_page (notebook, current->data, -1);
   else
-    gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (notebook)));
+    gtk_widget_error_bell (GTK_WIDGET (notebook));
 }
 
 static GtkDirectionType
@@ -3589,11 +3608,24 @@ focus_tabs_move (GtkNotebook     *notebook,
 
   new_page = gtk_notebook_search_page (notebook, notebook->focus_tab,
 				       search_direction, TRUE);
+  if (!new_page)
+    {
+      gboolean wrap_around;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (notebook)),
+                    "gtk-keynav-wrap-around", &wrap_around,
+                    NULL);
+
+      if (wrap_around)
+        new_page = gtk_notebook_search_page (notebook, NULL,
+                                             search_direction, TRUE);
+    }
+
   if (new_page)
     gtk_notebook_switch_focus_tab (notebook, new_page);
   else
-    gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (notebook)));
-  
+    gtk_widget_error_bell (GTK_WIDGET (notebook));
+
   return TRUE;
 }
 

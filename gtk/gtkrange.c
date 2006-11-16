@@ -2457,6 +2457,42 @@ static void
 gtk_range_move_slider (GtkRange     *range,
                        GtkScrollType scroll)
 {
+  gboolean cursor_only;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (range)),
+                "gtk-keynav-cursor-only", &cursor_only,
+                NULL);
+
+  if (cursor_only)
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (range));
+
+      if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (scroll == GTK_SCROLL_STEP_UP ||
+              scroll == GTK_SCROLL_STEP_DOWN)
+            {
+              if (toplevel)
+                gtk_widget_child_focus (toplevel,
+                                        scroll == GTK_SCROLL_STEP_UP ?
+                                        GTK_DIR_UP : GTK_DIR_DOWN);
+              return;
+            }
+        }
+      else
+        {
+          if (scroll == GTK_SCROLL_STEP_LEFT ||
+              scroll == GTK_SCROLL_STEP_RIGHT)
+            {
+              if (toplevel)
+                gtk_widget_child_focus (toplevel,
+                                        scroll == GTK_SCROLL_STEP_LEFT ?
+                                        GTK_DIR_LEFT : GTK_DIR_RIGHT);
+              return;
+            }
+        }
+    }
+
   gtk_range_scroll (range, scroll);
 
   /* Policy DELAYED makes sense with key events,

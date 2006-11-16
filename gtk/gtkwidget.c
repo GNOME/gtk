@@ -121,6 +121,7 @@ enum {
   CAN_ACTIVATE_ACCEL,
   GRAB_BROKEN,
   COMPOSITED_CHANGED,
+  KEYNAV_FAILED,
   LAST_SIGNAL
 };
 
@@ -203,6 +204,8 @@ static gboolean		gtk_widget_real_focus_in_event   	 (GtkWidget       *widget,
 static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
+								 GtkDirectionType  direction);
+static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
@@ -806,6 +809,29 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::keynav-failed:
+   * @widget: the object which received the signal.
+   * @direction: the direction of movement
+   *
+   * See gtk_widget_keynav_failed() for details.
+   *
+   * Returns: %TRUE if stopping keyboard navigation is fine, %FALSE
+   *          if the emitting widget should try to handle the keyboard
+   *          navigation attempt in its parent container(s).
+   *
+   * Since: 2.12
+   **/
+  widget_signals[KEYNAV_FAILED] =
+    _gtk_binding_signal_new (I_("keynav-failed"),
+                             G_TYPE_FROM_CLASS (gobject_class),
+                             G_SIGNAL_RUN_LAST,
+                             G_CALLBACK (gtk_widget_real_keynav_failed),
+                             _gtk_boolean_handled_accumulator, NULL,
+                             _gtk_marshal_BOOLEAN__ENUM,
+                             G_TYPE_BOOLEAN, 1,
+                             GTK_TYPE_DIRECTION_TYPE);
 
 /**
  * GtkWidget::delete-event:
@@ -3642,7 +3668,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
     {
       g_warning ("widget `%s' isn't suitable for mnemonic activation",
 		 G_OBJECT_TYPE_NAME (widget));
-      gdk_display_beep (gtk_widget_get_display (widget));
+      gtk_widget_error_bell (widget);
     }
   return TRUE;
 }
@@ -4324,6 +4350,35 @@ gtk_widget_real_focus (GtkWidget         *widget,
     }
   else
     return FALSE;
+}
+
+static gboolean
+gtk_widget_real_keynav_failed (GtkWidget        *widget,
+                               GtkDirectionType  direction)
+{
+  gboolean cursor_only;
+
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_TAB_BACKWARD:
+      return FALSE;
+
+    case GTK_DIR_UP:
+    case GTK_DIR_DOWN:
+    case GTK_DIR_LEFT:
+    case GTK_DIR_RIGHT:
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-keynav-cursor-only", &cursor_only,
+                    NULL);
+      if (cursor_only)
+        return FALSE;
+      break;
+    }
+
+  gtk_widget_error_bell (widget);
+
+  return TRUE;
 }
 
 /**
@@ -5897,6 +5952,92 @@ gtk_widget_child_focus (GtkWidget       *widget,
 		 direction, &return_val);
 
   return return_val;
+}
+
+/**
+ * gtk_widget_keynav_failed:
+ * @widget:    a #GtkWidget
+ * @direction: direction of focus movement
+ *
+ * This function should be called whenever keyboard navigation within
+ * a single widget hits a boundary. The function emits the
+ * "keynav-changed" signal on the widget and its return value should
+ * be interpreted in a way similar to the return value of
+ * gtk_widget_child_focus():
+ *
+ * When %TRUE is returned, stay in the widget, the failed keyboard
+ * navigation is Ok and/or there is nowhere we can/should move the
+ * focus to.
+ *
+ * When %FALSE is returned, the caller should continue with keyboard
+ * navigation outside the widget, e.g. by calling
+ * gtk_widget_child_focus() on the widget's toplevel.
+ *
+ * The default implementation for the "keynav-failed" signal is to
+ * return %TRUE for %GTK_DIR_TAB_FORWARD and
+ * %GTK_DIR_TAB_BACKWARD. For the other values of #GtkDirectionType,
+ * it looks at the "gtk-keynav-cursor-only" settings property and
+ * returns %FALSE if the setting is %TRUE. This way the entire GUI
+ * becomes cursor-navigatable on input devices such as mobile phones
+ * which only have cursor keys but no tab key.
+ *
+ * Whenever the default implementation returns %TRUE, it also calls
+ * gtk_widget_error_bell() to notify the user of the failed keyboard
+ * navigation.
+ *
+ * A use case for providing an own implementation of keynav-failed (by
+ * either connecting to it or by overriding it) would be a row of
+ * #GtkEntry widgets where the user should be able to navigate the
+ * entire row with the cursor keys, as e.g. known from GUIs that
+ * require entering license keys.
+ *
+ * Return value: %TRUE if stopping keyboard navigation is fine, %FALSE
+ *               if the emitting widget should try to handle the keyboard
+ *               navigation attempt in its parent container(s).
+ *
+ * Since: 2.12
+ **/
+gboolean
+gtk_widget_keynav_failed (GtkWidget        *widget,
+                          GtkDirectionType  direction)
+{
+  gboolean return_val;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  g_signal_emit (widget, widget_signals[KEYNAV_FAILED], 0,
+		 direction, &return_val);
+
+  return return_val;
+}
+
+/**
+ * gtk_widget_error_bell:
+ * @widget: a #GtkWidget
+ *
+ * Notifies the user about an input-related error on this widget. If
+ * the gtk-error-bell settings property is %TRUE, it calls
+ * gdk_window_beep(), otherwise it does nothing.
+ *
+ * Note that the effect of gdk_window_beep() can be configured in many
+ * ways, depending on the windowing backend and the desktop environment
+ * or window manager that is used.
+ *
+ * Since: 2.12
+ **/
+void
+gtk_widget_error_bell (GtkWidget *widget)
+{
+  gboolean beep;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-error-bell", &beep,
+                NULL);
+
+  if (beep && widget->window)
+    gdk_window_beep (widget->window);
 }
 
 /**

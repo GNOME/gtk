@@ -1,3 +1,54 @@
+2006-11-16  Michael Natterer  <mitch@imendio.com>
+
+	Add new infrastructure for notifications of failed keyboard
+	navigation and navigation with restricted set of keys.
+
+	The patch handles configurable beeping, navigating the GUI with
+	cursor keys only (as in phone environments), and configurable
+	wrap-around. Fixes bugs #322640, #70986, #318827, #334726, #334742
+	and #309291.
+
+	* gtk/gtksettings.c: added properties gtk-keynav-cursor-only,
+	gtk-keynav-wrap-around and gtk-error-bell.
+
+	* gtk/gtkwidget.[ch]: added new signal "keynav-failed" and public
+	API to emit it. Added New function gtk_widget_error_bell() which
+	looks at the gtk-error-bell setting and calls gdk_window_beep()
+	accordingly.
+
+	* gtk/gtk.symbols: add the new widget symbols.
+
+	* gtk/gtkcellrendereraccel.c
+	* gtk/gtkimcontextsimple.c
+	* gtk/gtkmenu.c
+	* gtk/gtknotebook.c: use gtk_widget_error_bell() or look at the
+	gtk-error-bell setting instead of calling gdk_display_beep()
+	unconditionally.
+
+	* gtk/gtkcombobox.c
+	* gtk/gtkentry.c
+	* gtk/gtkiconview.c
+	* gtk/gtklabel.c
+	* gtk/gtkmenushell.c
+	* gtk/gtkspinbutton.c
+	* gtk/gtktextview.c
+	* gtk/gtktreeview.c: call gtk_widget_error_bell() on failed keynav.
+
+	* gtk/gtkentry.c
+	* gtk/gtklabel.c
+	* gtk/gtkrange.c
+	* gtk/gtktextview.c: consult gtk_widget_keynav_failed() on failed
+	cursor navigation and leave the widget if it returns FALSE.
+
+	* gtk/gtkmenushell.c
+	* gtk/gtknotebook.c: only wrap around if gtk-keynav-wrap-around
+	is TRUE.
+
+	* gtk/gtkradiobutton.c: ask gtk_widget_keynav_failed() to decide
+	whether to to wrap-around, and don't select active items on cursor
+	navigation if gtk-keynav-cursor-only is TRUE. Should look at
+	gtk-keynav-wrap-around too, will look into that.
+
 2006-11-16  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:

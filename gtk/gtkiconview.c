@@ -3796,7 +3796,10 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
     }
 
   if (!item)
-    return;
+    {
+      gtk_widget_error_bell (GTK_WIDGET (icon_view));
+      return;
+    }
 
   if (icon_view->priv->ctrl_pressed ||
       !icon_view->priv->shift_pressed ||
@@ -3846,6 +3849,9 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
     item = find_item_page_up_down (icon_view, 
 				   icon_view->priv->cursor_item,
 				   count);
+
+  if (item == icon_view->priv->cursor_item)
+    gtk_widget_error_bell (GTK_WIDGET (icon_view));
 
   if (!item)
     return;
@@ -3915,7 +3921,10 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
     }
 
   if (!item)
-    return;
+    {
+      gtk_widget_error_bell (GTK_WIDGET (icon_view));
+      return;
+    }
 
   if (icon_view->priv->ctrl_pressed ||
       !icon_view->priv->shift_pressed ||
@@ -3957,6 +3966,9 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
     list = g_list_last (icon_view->priv->items);
   
   item = list ? list->data : NULL;
+
+  if (item == icon_view->priv->cursor_item)
+    gtk_widget_error_bell (GTK_WIDGET (icon_view));
 
   if (!item)
     return;

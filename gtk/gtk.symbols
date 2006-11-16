@@ -4470,6 +4470,7 @@ gtk_widget_create_pango_layout
 gtk_widget_destroy
 gtk_widget_destroyed
 gtk_widget_ensure_style
+gtk_widget_error_bell
 gtk_widget_event
 gtk_widget_freeze_child_notify
 gtk_widget_get_accessible
@@ -4511,6 +4512,7 @@ gtk_widget_hide_on_delete
 gtk_widget_intersect
 gtk_widget_is_ancestor
 gtk_widget_is_focus
+gtk_widget_keynav_failed
 gtk_widget_list_accel_closures
 gtk_widget_list_mnemonic_labels
 gtk_widget_map

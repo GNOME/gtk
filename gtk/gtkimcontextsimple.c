@@ -23,6 +23,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"
+#include "gtksettings.h"
+#include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -1175,6 +1177,31 @@ check_hex (GtkIMContextSimple *context_simple,
   return TRUE;
 }
 
+static void
+beep_window (GdkWindow *window)
+{
+  GtkWidget *widget;
+
+  gdk_window_get_user_data (window, &widget);
+
+  if (GTK_IS_WIDGET (widget))
+    {
+      gtk_widget_error_bell (widget);
+    }
+  else
+    {
+      GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      gboolean   beep;
+
+      g_object_get (gtk_settings_get_for_screen (screen),
+                    "gtk-error-bell", &beep,
+                    NULL);
+
+      if (beep)
+        gdk_window_beep (window);
+    }
+}
+
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
@@ -1212,7 +1239,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       context_simple->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  gdk_display_beep (gdk_drawable_get_display (event->window));
+	  beep_window (event->window);
 	  return TRUE;
 	}
   
@@ -1317,7 +1344,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  else
 	    {
 	      /* invalid hex sequence */
-	      gdk_display_beep (gdk_drawable_get_display (event->window));
+	      beep_window (event->window);
 	      
 	      context_simple->tentative_match = 0;
 	      context_simple->in_hex_sequence = FALSE;
@@ -1403,7 +1430,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	{
 	  /* invalid hex sequence */
 	  if (n_compose > 0)
-	    gdk_display_beep (gdk_drawable_get_display (event->window));
+	    beep_window (event->window);
 	  
 	  context_simple->tentative_match = 0;
 	  context_simple->in_hex_sequence = FALSE;
@@ -1438,7 +1465,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       else if (!is_hex_end)
 	{
 	  /* non-hex character in hex sequence */
-	  gdk_display_beep (gdk_drawable_get_display (event->window));
+	  beep_window (event->window);
 	  
 	  return TRUE;
 	}
@@ -1465,7 +1492,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      else
 		{
 		  /* invalid hex sequence */
-		  gdk_display_beep (gdk_drawable_get_display (event->window));
+		  beep_window (event->window);
 
 		  context_simple->tentative_match = 0;
 		  context_simple->in_hex_sequence = FALSE;
@@ -1473,7 +1500,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 		}
             }
           else if (!check_hex (context_simple, n_compose))
-	    gdk_display_beep (gdk_drawable_get_display (event->window));
+	    beep_window (event->window);
 	  
 	  g_signal_emit_by_name (context_simple, "preedit_changed");
 

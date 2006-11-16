@@ -2756,7 +2756,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	   * (basically, those items are accelerator-locked).
 	   */
 	  /* g_print("item has no path or is locked, menu prefix: %s\n", menu->accel_path); */
-	  gdk_display_beep (display);
+	  gtk_widget_error_bell (widget);
 	}
       else
 	{
@@ -2785,7 +2785,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	       * locked already
 	       */
 	      /* g_print("failed to change\n"); */
-	      gdk_display_beep (display);
+	      gtk_widget_error_bell (widget);
 	    }
 	}
     }

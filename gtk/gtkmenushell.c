@@ -1044,17 +1044,27 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
       GList *node = g_list_find (menu_shell->children,
 				 menu_shell->active_menu_item);
       GList *start_node = node;
-      
+      gboolean wrap_around;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
+                    "gtk-keynav-wrap-around", &wrap_around,
+                    NULL);
+
       if (distance > 0)
 	{
 	  node = node->next;
 	  while (node != start_node && 
 		 (!node || !_gtk_menu_item_is_selectable (node->data)))
 	    {
-	      if (!node)
-		node = menu_shell->children;
-	      else
+	      if (node)
 		node = node->next;
+              else if (wrap_around)
+		node = menu_shell->children;
+              else
+                {
+                  gtk_widget_error_bell (GTK_WIDGET (menu_shell));
+                  break;
+                }
 	    }
 	}
       else
@@ -1063,10 +1073,15 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 	  while (node != start_node &&
 		 (!node || !_gtk_menu_item_is_selectable (node->data)))
 	    {
-	      if (!node)
-		node = g_list_last (menu_shell->children);
-	      else
+	      if (node)
 		node = node->prev;
+              else if (wrap_around)
+		node = g_list_last (menu_shell->children);
+              else
+                {
+                  gtk_widget_error_bell (GTK_WIDGET (menu_shell));
+                  break;
+                }
 	    }
 	}
       

@@ -891,8 +891,8 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 
   /* barf if there was nothing to activate */
   g_warning ("Couldn't find a target for a mnemonic activation.");
-  gdk_display_beep (gtk_widget_get_display (widget));
-  
+  gtk_widget_error_bell (widget);
+
   return FALSE;
 }
 
@@ -3871,12 +3871,13 @@ gtk_label_move_cursor (GtkLabel       *label,
 		       gint            count,
 		       gboolean        extend_selection)
 {
+  gint old_pos;
   gint new_pos;
   
   if (label->select_info == NULL)
     return;
-  
-  new_pos = label->select_info->selection_end;
+
+  old_pos = new_pos = label->select_info->selection_end;
 
   if (label->select_info->selection_end != label->select_info->selection_anchor &&
       !extend_selection)
@@ -3901,7 +3902,6 @@ gtk_label_move_cursor (GtkLabel       *label,
 	      new_pos = end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
 	    else
 	      new_pos = !end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
-
 	    break;
 	  }
 	case GTK_MOVEMENT_LOGICAL_POSITIONS:
@@ -3933,6 +3933,27 @@ gtk_label_move_cursor (GtkLabel       *label,
 	  break;
 	case GTK_MOVEMENT_VISUAL_POSITIONS:
 	  new_pos = gtk_label_move_visually (label, new_pos, count);
+          if (new_pos == old_pos)
+            {
+              if (!extend_selection)
+                {
+                  if (!gtk_widget_keynav_failed (GTK_WIDGET (label),
+                                                 count > 0 ?
+                                                 GTK_DIR_RIGHT : GTK_DIR_LEFT))
+                    {
+                      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+
+                      if (toplevel)
+                        gtk_widget_child_focus (toplevel,
+                                                count > 0 ?
+                                                GTK_DIR_RIGHT : GTK_DIR_LEFT);
+                    }
+                }
+              else
+                {
+                  gtk_widget_error_bell (GTK_WIDGET (label));
+                }
+            }
 	  break;
 	case GTK_MOVEMENT_WORDS:
 	  while (count > 0)
@@ -3945,12 +3966,16 @@ gtk_label_move_cursor (GtkLabel       *label,
 	      new_pos = gtk_label_move_backward_word (label, new_pos);
 	      count++;
 	    }
+          if (new_pos == old_pos)
+            gtk_widget_error_bell (GTK_WIDGET (label));
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  /* FIXME: Can do better here */
 	  new_pos = count < 0 ? 0 : strlen (label->text);
+          if (new_pos == old_pos)
+            gtk_widget_error_bell (GTK_WIDGET (label));
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:

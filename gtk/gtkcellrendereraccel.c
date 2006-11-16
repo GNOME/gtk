@@ -456,7 +456,7 @@ grab_key_callback (GtkWidget    *widget,
     {
       if (!gtk_accelerator_valid (accel_key, accel_mods))
 	{
-	  gdk_display_beep (display);
+	  gtk_widget_error_bell (widget);
 
 	  return TRUE;
 	}

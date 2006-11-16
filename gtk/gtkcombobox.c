@@ -4978,7 +4978,10 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
   gboolean    found;
 
   if (!combo_box->priv->model)
-    return;
+    {
+      gtk_widget_error_bell (GTK_WIDGET (combo_box));
+      return;
+    }
 
   active_iter = gtk_combo_box_get_active_iter (combo_box, &iter);
 
@@ -5024,28 +5027,28 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
       return;
     }
 
+  if (found && active_iter)
+    {
+      GtkTreePath *old_path;
+      GtkTreePath *new_path;
+
+      old_path = gtk_tree_model_get_path (combo_box->priv->model, &iter);
+      new_path = gtk_tree_model_get_path (combo_box->priv->model, &new_iter);
+
+      if (gtk_tree_path_compare (old_path, new_path) == 0)
+        found = FALSE;
+
+      gtk_tree_path_free (old_path);
+      gtk_tree_path_free (new_path);
+    }
+
   if (found)
     {
-      if (active_iter)
-        {
-          GtkTreePath *old_path;
-          GtkTreePath *new_path;
-
-          old_path = gtk_tree_model_get_path (combo_box->priv->model, &iter);
-          new_path = gtk_tree_model_get_path (combo_box->priv->model, &new_iter);
-
-          if (gtk_tree_path_compare (old_path, new_path) == 0)
-            found = FALSE;
-
-          gtk_tree_path_free (old_path);
-          gtk_tree_path_free (new_path);
-        }
-
-      if (found)
-        {
-          gtk_combo_box_set_active_iter (combo_box, &new_iter);
-          return;
-        }
+      gtk_combo_box_set_active_iter (combo_box, &new_iter);
+    }
+  else
+    {
+      gtk_widget_error_bell (GTK_WIDGET (combo_box));
     }
 }
 

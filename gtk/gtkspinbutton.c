@@ -1243,6 +1243,8 @@ static void
 gtk_spin_button_real_change_value (GtkSpinButton *spin,
 				   GtkScrollType  scroll)
 {
+  gdouble old_value = spin->adjustment->value;
+
   /* We don't test whether the entry is editable, since
    * this key binding conceptually corresponds to changing
    * the value with the buttons using the mouse, which
@@ -1320,6 +1322,9 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
     }
   
   gtk_spin_button_update (spin);
+
+  if (spin->adjustment->value == old_value)
+    gtk_widget_error_bell (GTK_WIDGET (spin));
 }
 
 static gint

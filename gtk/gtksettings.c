@@ -93,6 +93,9 @@ enum {
   PROP_COLOR_SCHEME,
   PROP_ENABLE_ANIMATIONS,
   PROP_TOUCHSCREEN_MODE,
+  PROP_KEYNAV_CURSOR_ONLY,
+  PROP_KEYNAV_WRAP_AROUND,
+  PROP_ERROR_BELL,
   PROP_COLOR_HASH
 };
 
@@ -507,7 +510,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-touchscreen-mode:
    *
-   * When TRUE, there are no motion notify events delivered on this screen,
+   * When %TRUE, there are no motion notify events delivered on this screen,
    * and widgets can't use the pointer hovering them for any essential
    * functionality.
    *
@@ -522,6 +525,64 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
 
   g_assert (result == PROP_TOUCHSCREEN_MODE);
+
+  /**
+   * GtkSettings:gtk-keynav-cursor-only:
+   *
+   * When %TRUE, keyboard navigation should be able to reach all widgets
+   * by using the cursor keys only. Tab, Shift etc. keys can't be expected
+   * to be present on the used input device.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-keynav-cursor-only",
+                                                                   P_("Keynav Cursor Only"),
+                                                                   P_("When TRUE, there are only cursor keys available to navigate widgets"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_KEYNAV_CURSOR_ONLY);
+
+  /**
+   * GtkSettings:gtk-keynav-wrap-around:
+   *
+   * When %TRUE, some widgets will wrap around when doing keyboard
+   * navigation, such as menus, menubars and notebooks.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-keynav-wrap-around",
+                                                                   P_("Keynav Wrap Around"),
+                                                                   P_("Whether to wrap around when keyboard-navigating widgets"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_KEYNAV_WRAP_AROUND);
+
+  /**
+   * GtkSettings:gtk-error-bell:
+   *
+   * When %TRUE, keyboard navigation and other input-related errors
+   * will cause a beep. Since the error bell is implemented using
+   * gdk_window_beep(), the windowing system may offer ways to
+   * configure the error bell in many ways, such as flashing the
+   * window or similar visual effects.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-error-bell",
+                                                                   P_("Error Bell"),
+                                                                   P_("When TRUE, keyboard navigation and other errors will cause a beep"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_ERROR_BELL);
 
   /**
    * GtkSettings:color-hash:
