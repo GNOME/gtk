@@ -1,3 +1,8 @@
+2006-11-16  Mariano Suárez-Alvarez <mariano@gnome.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init):
+	add gtk-doc blurb on GtkCellRendererText::edited (#376094)
+
 2006-11-16  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_focus): don't use
