@@ -3753,15 +3753,10 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   gtk_drag_remove_icon (info);
 
   if (info->icon_pixbuf)
-    g_object_unref (info->icon_pixbuf);
-
-  if (!info->proxy_dest)
-    g_signal_emit_by_name (info->widget, "drag_end", 
-			   info->context);
-
-  if (info->widget)
-    g_object_unref (info->widget);
-
+    {
+      g_object_unref (info->icon_pixbuf);
+      info->icon_pixbuf = NULL;
+    }
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_grab_broken_event_cb,
@@ -3781,6 +3776,13 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_selection_get,
 					info);
+
+  if (!info->proxy_dest)
+    g_signal_emit_by_name (info->widget, "drag_end", 
+			   info->context);
+
+  if (info->widget)
+    g_object_unref (info->widget);
 
   gtk_selection_remove_all (info->ipc_widget);
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), NULL);
@@ -3926,10 +3928,6 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   
   info->have_grab = FALSE;
   
-  gdk_display_pointer_ungrab (display, time);
-  gdk_display_keyboard_ungrab (display, time);
-  gtk_grab_remove (info->ipc_widget);
-
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_grab_broken_event_cb,
 					info);
@@ -3945,6 +3943,10 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
 					gtk_drag_key_cb,
 					info);
+
+  gdk_display_pointer_ungrab (display, time);
+  gdk_display_keyboard_ungrab (display, time);
+  gtk_grab_remove (info->ipc_widget);
 
   /* Send on a release pair to the original 
    * widget to convince it to release its grab. We need to

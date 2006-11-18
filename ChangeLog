@@ -1,3 +1,12 @@
+2006-11-17  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix problems with drag cancellation. (#376535, Michael Natterer)
+	
+	* gtk/gtkdnd.c (gtk_drag_source_info_destroy): Disconnect signal
+	handlers before emitting drag-end.
+	(gtk_drag_end): Disconnect signal handlers before removing
+	the grab.  
+
 2006-11-16  Mariano Suárez-Alvarez <mariano@gnome.org>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init):
