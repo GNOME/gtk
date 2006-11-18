@@ -11,14 +11,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-15 00:47+0000\n"
-"PO-Revision-Date: 2006-11-15 18:44+0200\n"
+"POT-Creation-Date: 2006-11-17 08:32+0000\n"
+"PO-Revision-Date: 2006-11-18 22:13+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==2 ? 1 : n>=3 && n<=10 ? 2 : 3\n"
+"\n"
 "\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -1201,7 +1202,7 @@ msgstr "مسرّع جديد..."
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
@@ -1826,7 +1827,7 @@ msgid "Path is not a folder: '%s'"
 msgstr "المسار ليس مجلدا: '%s'"
 
 #: ../gtk/gtkfilesystemwin32.c:1302
-#, fuzzy, c-format
+#, c-format
 msgid "Network Drive (%s)"
 msgstr "قرص شبكة (%s)"
 
@@ -2040,7 +2041,7 @@ msgstr "فراغ الأسهم"
 
 #: ../gtk/gtknotebook.c:773
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "فراغ سهم اللّف"
 
 #: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6801
 #, c-format
@@ -2472,52 +2473,50 @@ msgstr "اختر أنواع الوثائق التي ستعرض"
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1767
+#: ../gtk/gtkrecentchooserdefault.c:1771
 msgid "Could not remove item"
 msgstr "لم يمكن حذف عنصر"
 
-#: ../gtk/gtkrecentchooserdefault.c:1810
+#: ../gtk/gtkrecentchooserdefault.c:1814
 msgid "Could not clear list"
 msgstr "لم يمكن مسح القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1894
+#: ../gtk/gtkrecentchooserdefault.c:1898
 msgid "Copy _Location"
 msgstr "ا_نسخ الموقع"
 
-#: ../gtk/gtkrecentchooserdefault.c:1907
+#: ../gtk/gtkrecentchooserdefault.c:1911
 msgid "_Remove From List"
 msgstr "ا_حذف من القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1916
+#: ../gtk/gtkrecentchooserdefault.c:1920
 msgid "_Clear List"
 msgstr "امسح القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1930
+#: ../gtk/gtkrecentchooserdefault.c:1934
 msgid "Show _Private Resources"
 msgstr "اظهر المصادر ال_خاصة"
 
 #: ../gtk/gtkrecentchoosermenu.c:431 ../gtk/gtkrecentchoosermenu.c:487
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
-"لا توجد موارد حديثة الإستخدام بالعنوان "
-" (URI) `%s'"
+msgstr "لا توجد موارد حديثة الإستخدام بالعنوان  (URI) `%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:511 ../gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: ../gtk/gtkrecentchoosermenu.c:854
+#: ../gtk/gtkrecentchoosermenu.c:859
 #, c-format
 msgid "Open '%s'"
 msgstr "افتح '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:885
+#: ../gtk/gtkrecentchoosermenu.c:891
 msgid "Unknown item"
 msgstr "عنصر مجهول"
 
-#: ../gtk/gtkrecentchoosermenu.c:986
+#: ../gtk/gtkrecentchoosermenu.c:992
 msgid "No items found"
 msgstr "لم يُعثر على أي عنصر"
 
@@ -2525,9 +2524,7 @@ msgstr "لم يُعثر على أي عنصر"
 #: ../gtk/gtkrecentmanager.c:1219 ../gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr ""
-"لا أستطيع ايجاد عنصر بالعنوان"
-" (URI) '%s'"
+msgstr "لا أستطيع ايجاد عنصر بالعنوان (URI) '%s'"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:308
@@ -3378,47 +3375,47 @@ msgstr "JB9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "مظروف Choukei 2 "
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "مظروف  Choukei 3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "مظروف Choukei 4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (بطاقة بريدية)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "مظروف kahu"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "مظروف kaku2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (بطاقة رد بريدية)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "مظروف you4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:181
@@ -3588,7 +3585,7 @@ msgstr "فهرس 4x6 (بطاقة بريدية)"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr ""
+msgstr "فهرس 4x6 ext"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:251
@@ -3967,7 +3964,7 @@ msgstr "لم أستطع الحصول على معلومات الملف '%s': %s"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "معاملات directfb"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
