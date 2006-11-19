@@ -60,6 +60,7 @@ enum
   PROP_ICON_NAME,
   PROP_STORAGE_TYPE,
   PROP_SIZE,
+  PROP_SCREEN,
   PROP_VISIBLE,
   PROP_BLINKING
 };
@@ -190,6 +191,14 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 						     G_MAXINT,
 						     0,
 						     GTK_PARAM_READABLE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_object ("screen",
+ 							P_("Screen"),
+ 							P_("The screen where this status icon will be displayed"),
+							GDK_TYPE_SCREEN,
+ 							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_BLINKING,
@@ -509,6 +518,9 @@ gtk_status_icon_set_property (GObject      *object,
     case PROP_ICON_NAME:
       gtk_status_icon_set_from_icon_name (status_icon, g_value_get_string (value));
       break;
+    case PROP_SCREEN:
+      gtk_status_icon_set_screen (status_icon, g_value_get_object (value));
+      break;
     case PROP_BLINKING:
       gtk_status_icon_set_blinking (status_icon, g_value_get_boolean (value));
       break;
@@ -561,6 +573,9 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_SIZE:
       g_value_set_int (value, gtk_status_icon_get_size (status_icon));
+      break;
+    case PROP_SCREEN:
+      g_value_set_object (value, gtk_status_icon_get_screen (status_icon));
       break;
     case PROP_BLINKING:
       g_value_set_boolean (value, gtk_status_icon_get_blinking (status_icon));
@@ -1282,6 +1297,50 @@ gtk_status_icon_get_size (GtkStatusIcon *status_icon)
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), 0);
 
   return status_icon->priv->size;
+}
+
+/**
+ * gtk_status_icon_set_screen:
+ * @status_icon: a #GtkStatusIcon
+ * @screen: a #GdkScreen
+ *
+ * Sets the #GdkScreen where @status_icon is displayed; if
+ * the icon is already mapped, it will be unmapped, and
+ * then remapped on the new screen.
+ *
+ * Since: 2.12
+ */
+void
+gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
+                            GdkScreen     *screen)
+{
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+#ifdef GDK_WINDOWING_X11
+  gtk_window_set_screen (GTK_WINDOW (status_icon->priv->tray_icon), screen);
+#endif
+}
+
+/** 
+ * gtk_status_icon_get_screen:
+ * @window: a #GtkStatusIcon.
+ *
+ * Returns the #GdkScreen associated with @status_icon.
+ *
+ * Return value: a #GdkScreen.
+ *
+ * Since: 2.12
+ */
+GdkScreen *
+gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
+{
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
+
+#ifdef GDK_WINDOWING_X11   
+  return gtk_window_get_screen (GTK_WINDOW (status_icon->priv->tray_icon));
+#else
+  return gdk_screen_get_default ();
+#endif
 }
 
 /**

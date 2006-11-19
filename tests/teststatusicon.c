@@ -31,10 +31,12 @@ typedef enum
 
 static TestStatus status = TEST_STATUS_INFO;
 static gint timeout = 0;
+static GSList *icons = NULL;
 
 static void
-update_icon (GtkStatusIcon *status_icon)
+update_icons (void)
 {
+  GSList *l;
   gchar *icon_name;
   gchar *tooltip;
 
@@ -49,44 +51,50 @@ update_icon (GtkStatusIcon *status_icon)
       tooltip = "Some Question ...";
     }
 
-  gtk_status_icon_set_from_icon_name (status_icon, icon_name);
-  gtk_status_icon_set_tooltip (status_icon, tooltip);
+  for (l = icons; l; l = l->next)
+    {
+      GtkStatusIcon *status_icon = l->data;
+
+      gtk_status_icon_set_from_icon_name (status_icon, icon_name);
+      gtk_status_icon_set_tooltip (status_icon, tooltip);
+    }
 }
 
 static gboolean
 timeout_handler (gpointer data)
 {
-  GtkStatusIcon *icon = GTK_STATUS_ICON (data);
-
   if (status == TEST_STATUS_INFO)
     status = TEST_STATUS_QUESTION;
   else
     status = TEST_STATUS_INFO;
 
-  update_icon (icon);
+  update_icons ();
 
   return TRUE;
 }
 
 static void
-blink_toggle_toggled (GtkToggleButton *toggle,
-		      GtkStatusIcon   *icon)
+blink_toggle_toggled (GtkToggleButton *toggle)
 {
-  gtk_status_icon_set_blinking (icon, 
-				gtk_toggle_button_get_active (toggle));
+  GSList *l;
+
+  for (l = icons; l; l = l->next)
+    gtk_status_icon_set_blinking (GTK_STATUS_ICON (l->data), 
+                                  gtk_toggle_button_get_active (toggle));
 }
 
 static void
-visible_toggle_toggled (GtkToggleButton *toggle,
-			GtkStatusIcon   *icon)
+visible_toggle_toggled (GtkToggleButton *toggle)
 {
-  gtk_status_icon_set_visible (icon, 
-			       gtk_toggle_button_get_active (toggle));
+  GSList *l;
+
+  for (l = icons; l; l = l->next)
+    gtk_status_icon_set_visible (GTK_STATUS_ICON (l->data),
+                                 gtk_toggle_button_get_active (toggle));
 }
 
 static void
-timeout_toggle_toggled (GtkToggleButton *toggle,
-			GtkStatusIcon   *icon)
+timeout_toggle_toggled (GtkToggleButton *toggle)
 {
   if (timeout)
     {
@@ -95,7 +103,7 @@ timeout_toggle_toggled (GtkToggleButton *toggle,
     }
   else
     {
-      timeout = g_timeout_add (2000, timeout_handler, icon);
+      timeout = g_timeout_add (2000, timeout_handler, NULL);
     }
 }
 
@@ -113,7 +121,8 @@ icon_activated (GtkStatusIcon *icon)
 				       GTK_BUTTONS_CLOSE,
 				       "You wanna test the status icon ?");
 
-      gtk_window_set_position (dialog, GTK_WIN_POS_CENTER);
+      gtk_window_set_screen (GTK_WINDOW (dialog), gtk_status_icon_get_screen (icon));
+      gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 
       g_object_set_data_full (G_OBJECT (icon), "test-status-icon-dialog",
 			      dialog, (GDestroyNotify) gtk_widget_destroy);
@@ -130,7 +139,7 @@ icon_activated (GtkStatusIcon *icon)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
 				    gtk_status_icon_get_visible (icon));
       g_signal_connect (toggle, "toggled", 
-			G_CALLBACK (visible_toggle_toggled), icon);
+			G_CALLBACK (visible_toggle_toggled), NULL);
 
       toggle = gtk_toggle_button_new_with_mnemonic ("_Blink the icon");
       gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), toggle, TRUE, TRUE, 6);
@@ -139,7 +148,7 @@ icon_activated (GtkStatusIcon *icon)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
 				    gtk_status_icon_get_blinking (icon));
       g_signal_connect (toggle, "toggled", 
-			G_CALLBACK (blink_toggle_toggled), icon);
+			G_CALLBACK (blink_toggle_toggled), NULL);
 
       toggle = gtk_toggle_button_new_with_mnemonic ("_Change images");
       gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), toggle, TRUE, TRUE, 6);
@@ -148,26 +157,57 @@ icon_activated (GtkStatusIcon *icon)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
 				    timeout != 0);
       g_signal_connect (toggle, "toggled", 
-			G_CALLBACK (timeout_toggle_toggled), icon);
+			G_CALLBACK (timeout_toggle_toggled), NULL);
     }
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
-check_activated (GtkCheckMenuItem *item,
-		 GtkStatusIcon    *icon)
+check_activated (GtkCheckMenuItem *item)
 {
-  gtk_status_icon_set_blinking (icon, 
-				gtk_check_menu_item_get_active (item));
+  GSList *l;
+  GdkScreen *screen;
+
+  screen = NULL;
+
+  for (l = icons; l; l = l->next)
+    {
+      GtkStatusIcon *icon = l->data;
+      GdkScreen *orig_screen;
+
+      orig_screen = gtk_status_icon_get_screen (icon);
+
+      if (screen != NULL)
+        gtk_status_icon_set_screen (icon, screen);
+
+      screen = orig_screen;
+
+      gtk_status_icon_set_blinking (icon,
+                                    gtk_check_menu_item_get_active (item));
+    }
+
+  g_assert (screen != NULL);
+
+  gtk_status_icon_set_screen (GTK_STATUS_ICON (icons->data), screen);
 }
 
 static void
-do_quit (GtkMenuItem   *item,
-	 GtkStatusIcon *icon)
+do_quit (GtkMenuItem *item)
 {
-  gtk_status_icon_set_visible (icon, FALSE);
-  g_object_unref (icon);
+  GSList *l;
+
+  for (l = icons; l; l = l->next)
+    {
+      GtkStatusIcon *icon = l->data;
+
+      gtk_status_icon_set_visible (icon, FALSE);
+      g_object_unref (icon);
+    }
+
+  g_slist_free (icons);
+  icons = NULL;
+
   gtk_main_quit ();
 }
 
@@ -180,17 +220,20 @@ popup_menu (GtkStatusIcon *icon,
 
   menu = gtk_menu_new ();
 
+  gtk_menu_set_screen (GTK_MENU (menu),
+                       gtk_status_icon_get_screen (icon));
+
   menuitem = gtk_check_menu_item_new_with_label ("Blink");
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), 
 				  gtk_status_icon_get_blinking (icon));
-  g_signal_connect (menuitem, "activate", G_CALLBACK (check_activated), icon);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (check_activated), NULL);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_label ("Quit");
-  g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), icon);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), NULL);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -204,22 +247,35 @@ popup_menu (GtkStatusIcon *icon,
 int
 main (int argc, char **argv)
 {
-  GtkStatusIcon *icon;
+  GdkDisplay *display;
+  guint n_screens, i;
 
   gtk_init (&argc, &argv);
 
-  icon = gtk_status_icon_new ();
-  update_icon (icon);
+  display = gdk_display_get_default ();
 
-  gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), TRUE);
+  n_screens = gdk_display_get_n_screens (display);
 
-  g_signal_connect (icon, "activate",
-		    G_CALLBACK (icon_activated), NULL);
+  for (i = 0; i < n_screens; i++)
+    {
+      GtkStatusIcon *icon;
 
-  g_signal_connect (icon, "popup-menu",
-		    G_CALLBACK (popup_menu), NULL);
+      icon = gtk_status_icon_new ();
+      gtk_status_icon_set_screen (icon, gdk_display_get_screen (display, i));
+      update_icons ();
+
+      gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), TRUE);
+
+      g_signal_connect (icon, "activate",
+                        G_CALLBACK (icon_activated), NULL);
+
+      g_signal_connect (icon, "popup-menu",
+                        G_CALLBACK (popup_menu), NULL);
+
+      icons = g_slist_append (icons, icon);
  
-  timeout = g_timeout_add (2000, timeout_handler, icon);
+      timeout = g_timeout_add (2000, timeout_handler, icon);
+    }
 
   gtk_main ();
 

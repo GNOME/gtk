@@ -91,6 +91,10 @@ G_CONST_RETURN gchar *gtk_status_icon_get_icon_name      (GtkStatusIcon      *st
 
 gint                  gtk_status_icon_get_size           (GtkStatusIcon      *status_icon);
 
+void                  gtk_status_icon_set_screen         (GtkStatusIcon      *status_icon,
+                                                          GdkScreen          *screen);
+GdkScreen            *gtk_status_icon_get_screen         (GtkStatusIcon      *status_icon);
+
 void                  gtk_status_icon_set_tooltip        (GtkStatusIcon      *status_icon,
 							  const gchar        *tooltip_text);
 

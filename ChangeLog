@@ -1,3 +1,17 @@
+2006-11-19  Mark McLoughlin  <mark@skynet.ie>
+
+	Fixes bug #376502 - multi-screen support for GtkStatusIcon
+
+	* gtk/gtkstatusicon.[ch]:
+	(gtk_status_icon_set_screen),
+	(gtk_status_icon_get_screen): add multi-screen API. Allows
+	an app to display an icon on a non-default screen
+	(gtk_status_icon_class_init),
+	(gtk_status_icon_set_property),
+	(gtk_status_icon_get_property): add a "screen" property
+	
+	* tests/teststatusicon.c: update to test on multiple screens
+
 2006-11-17  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix problems with drag cancellation. (#376535, Michael Natterer)
