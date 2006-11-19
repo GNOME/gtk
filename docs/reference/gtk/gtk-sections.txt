@@ -3240,6 +3240,8 @@ gtk_status_icon_get_pixbuf
 gtk_status_icon_get_stock
 gtk_status_icon_get_icon_name
 gtk_status_icon_get_size
+gtk_status_icon_set_screen
+gtk_status_icon_get_screen
 gtk_status_icon_set_tooltip
 gtk_status_icon_set_visible
 gtk_status_icon_get_visible
