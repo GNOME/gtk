@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 19:34+0200\n"
+"POT-Creation-Date: 2006-11-19 08:32+0100\n"
 "PO-Revision-Date: 2006-04-13 20:09+0300\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -116,12 +116,12 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "אין מספיק זיכרון לשמירת התמונה לחוצץ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בתחילת טעינת תמונה, אך לא נתן "
+"שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בטעינת תמונה, אך לא נתן "
 "סיבה לכשלון זה"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
@@ -669,19 +669,16 @@ msgid "Failed to load TIFF image"
 msgstr "נכשל בטעינת תמונת TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:704
-#, fuzzy
 msgid "Failed to save TIFF image"
-msgstr "נכשל בפתיחת תמונת TIFF"
+msgstr "נכשל בשמירת תמונת TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:742
-#, fuzzy
 msgid "Failed to write TIFF data"
-msgstr "נכשל בפתיחת תמונת TIFF"
+msgstr "נכשל בכתיבת תמונת TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:794
-#, fuzzy
 msgid "Couldn't write to TIFF file"
-msgstr "לא ניתן לכתוב לקובץ ה BMP"
+msgstr "לא ניתן לכתוב לקובץ ה TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:844
 msgid "The TIFF image format"
@@ -1095,7 +1092,7 @@ msgstr "Meta"
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:619
 msgid "keyboard label|Space"
-msgstr ""
+msgstr "רווח"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:623
@@ -1632,13 +1629,13 @@ msgstr ""
 #: ../gtk/gtkfilechoosersettings.c:238 ../gtk/gtkfilechoosersettings.c:266
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
+msgstr ""
+"Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 
 #: ../gtk/gtkfilechoosersettings.c:516
 #, c-format
 msgid "Could not create directory: %s"
-msgstr ""
-"לא ניתן ליצור תיקייה: %s"
+msgstr "לא ניתן ליצור תיקייה: %s"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
@@ -1731,13 +1728,12 @@ msgstr "מחיקת קובץ"
 #: ../gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr ""
-"שגיאה בשינוי שם הקובץ ל-\"%s\": %s"
+msgstr "שגיאה בשינוי שם הקובץ ל-\"%s\": %s"
+
 #: ../gtk/gtkfilesel.c:1655
 #, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr ""
-"שגיאה בשינוי שם הקובץ \"%s\": %s"
+msgstr "שגיאה בשינוי שם הקובץ \"%s\": %s"
 
 #: ../gtk/gtkfilesel.c:1664
 #, c-format
@@ -2057,7 +2053,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6777
+#: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6801
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2202,7 +2198,7 @@ msgstr "ממתין"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1485
 msgid "print operation status|Blocking on issue"
-msgstr ""
+msgstr "חסום"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1487
@@ -2259,7 +2255,7 @@ msgstr "מופסק"
 
 #: ../gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
-msgstr ""
+msgstr "דרושה התערבות המשתמש"
 
 #: ../gtk/gtkprintoperation-win32.c:669
 msgid "Custom size"
@@ -2328,12 +2324,10 @@ msgid "Copie_s:"
 msgstr "_עותקים:"
 
 #: ../gtk/gtkprintunixdialog.c:1546
-#, fuzzy
 msgid "C_ollate"
-msgstr "_צור"
+msgstr "_אסוף"
 
 #: ../gtk/gtkprintunixdialog.c:1554
-#, fuzzy
 msgid "_Reverse"
 msgstr "_החזר"
 
@@ -2348,7 +2342,7 @@ msgstr ""
 #: ../gtk/gtkprintunixdialog.c:1962
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "עמודים בכל _דף:"
 
 #: ../gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
@@ -2356,7 +2350,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1993
 msgid "_Only print:"
-msgstr ""
+msgstr "_הדפס בלבד:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2008
@@ -2390,11 +2384,11 @@ msgstr "מ_קור נייר:"
 
 #: ../gtk/gtkprintunixdialog.c:2074
 msgid "Output t_ray:"
-msgstr ""
+msgstr "מ_גש פלט:"
 
 #: ../gtk/gtkprintunixdialog.c:2125
 msgid "Job Details"
-msgstr ""
+msgstr "פרטי עבודה"
 
 #: ../gtk/gtkprintunixdialog.c:2131
 msgid "Pri_ority:"
@@ -2427,15 +2421,15 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
-msgstr ""
+msgstr "ל_פני:"
 
 #: ../gtk/gtkprintunixdialog.c:2232
 msgid "_After:"
-msgstr ""
+msgstr "_אחרי:"
 
 #: ../gtk/gtkprintunixdialog.c:2247
 msgid "Job"
-msgstr ""
+msgstr "עבודה"
 
 #: ../gtk/gtkprintunixdialog.c:2313
 msgid "Advanced"
@@ -2488,27 +2482,27 @@ msgstr "בחר איזה סוגי מסמכים מוצגים"
 msgid "No item for URI '%s' found"
 msgstr "לא נמצא פריט עבור הכתובת '%s'"
 
-#: ../gtk/gtkrecentchooserdefault.c:1767
+#: ../gtk/gtkrecentchooserdefault.c:1771
 msgid "Could not remove item"
 msgstr "לא ניתן להסיר את הפריט"
 
-#: ../gtk/gtkrecentchooserdefault.c:1810
+#: ../gtk/gtkrecentchooserdefault.c:1814
 msgid "Could not clear list"
 msgstr "לא ניתן לנקות את הרשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1894
+#: ../gtk/gtkrecentchooserdefault.c:1898
 msgid "Copy _Location"
 msgstr "הע_תק מיקום"
 
-#: ../gtk/gtkrecentchooserdefault.c:1907
+#: ../gtk/gtkrecentchooserdefault.c:1911
 msgid "_Remove From List"
 msgstr "_הסר מהרשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1916
+#: ../gtk/gtkrecentchooserdefault.c:1920
 msgid "_Clear List"
 msgstr "_נקה רשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1930
+#: ../gtk/gtkrecentchooserdefault.c:1934
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2522,16 +2516,16 @@ msgstr "No recently used resource found with URI `%s'"
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "This function is not implemented for widgets of class '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:854
+#: ../gtk/gtkrecentchoosermenu.c:859
 #, c-format
 msgid "Open '%s'"
 msgstr "פתח '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:885
+#: ../gtk/gtkrecentchoosermenu.c:891
 msgid "Unknown item"
 msgstr "פריט לא ידוע"
 
-#: ../gtk/gtkrecentchoosermenu.c:986
+#: ../gtk/gtkrecentchoosermenu.c:992
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
@@ -3298,7 +3292,7 @@ msgstr "C9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "מעטפה DL"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:129
@@ -3474,21 +3468,22 @@ msgstr "5x7"
 #: ../gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
 msgstr ""
+"מעטפה 6x9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "מעטפה 7x9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "מעטפה 9x11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "מעטפה a2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
@@ -3523,32 +3518,32 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "מעטפה c5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:225
 msgid "paper size|e"
-msgstr ""
+msgstr "e"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "edp ארופאי"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
@@ -3558,7 +3553,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
@@ -3583,17 +3578,17 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "מכתב ממשלתי"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr ""
+msgstr "אינדקס 3x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr ""
+msgstr "אינדקס 4x6 (גלויה)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
@@ -3603,7 +3598,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
-msgstr ""
+msgstr "אינדקס 5x8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
@@ -3648,33 +3643,32 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "מעטפה #10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:271
-#, fuzzy
 msgid "paper size|#11 Envelope"
-msgstr "12x19"
+msgstr "מעטפה #11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "מעטפה #12"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "מעטפה #14"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "מעטפה #9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr ""
+msgstr "מעטפה אישית"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:281
@@ -3704,7 +3698,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr ""
+msgstr "פוליו"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:293
@@ -3714,12 +3708,12 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "מעטפת הזמנה"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "מעטפה איטלקית"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
@@ -3739,7 +3733,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
-msgstr ""
+msgstr "תמונה קטנה"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:307
@@ -3858,7 +3852,7 @@ msgstr "שיטת הקלט של X"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Two Sided"
-msgstr ""
+msgstr "שני צדדים"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Type"
@@ -3870,11 +3864,11 @@ msgstr "מקור נייר"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Output Tray"
-msgstr ""
+msgstr "מגש פלט"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
 msgid "One Sided"
-msgstr ""
+msgstr "צד אחד"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1469
@@ -3886,9 +3880,8 @@ msgstr "בחירה אוטומטית"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1471
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1934
-#, fuzzy
 msgid "Printer Default"
-msgstr "ברירת מחדל"
+msgstr "ברירת המחדל של המדפסת"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2127
 msgid "Urgent"
@@ -3920,32 +3913,31 @@ msgstr "חסוי"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Secret"
-msgstr "סוד"
+msgstr "סודי"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Standard"
-msgstr ""
+msgstr "רגיל"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Top Secret"
-msgstr ""
+msgstr "סודי ביותר"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Unclassified"
-msgstr ""
+msgstr "לא מסווג"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr ""
+msgstr "הדפס ל-LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
-#, fuzzy
 msgid "Pages Per Sheet"
-msgstr "לתמונה יש גובה אפס"
+msgstr "עמודים בכל דף"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
-msgstr ""
+msgstr "שורת פקודה"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:232
