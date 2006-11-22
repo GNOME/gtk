@@ -2225,7 +2225,7 @@ get_uri_shortname_for_display (const gchar *uri)
       
       local_file = g_filename_from_uri (uri, NULL, NULL);
       
-      if (local_file != NULL)
+      if (local_file)
         {
           name = g_filename_display_basename (local_file);
           validated = TRUE;
@@ -2233,7 +2233,8 @@ get_uri_shortname_for_display (const gchar *uri)
 		
       g_free (local_file);
     } 
-  else
+  
+  if (!name)
     {
       gchar *method;
       gchar *local_file;

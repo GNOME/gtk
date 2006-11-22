@@ -1,3 +1,10 @@
+2006-11-21  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c:
+	(get_uri_shortname_for_display): g_filename_from_uri() might
+	fail; catch the failure and fall back to the non-local URI
+	case. (#363437)
+
 2006-11-19  Mark McLoughlin  <mark@skynet.ie>
 
 	Fixes bug #376502 - multi-screen support for GtkStatusIcon
