@@ -167,8 +167,8 @@ static const GDebugKey gtk_debug_keys[] = {
 /**
  * gtk_check_version:
  * @required_major: the required major version.
- * @required_minor: the required major version.
- * @required_micro: the required major version.
+ * @required_minor: the required minor version.
+ * @required_micro: the required micro version.
  * 
  * Checks that the GTK+ library in use is compatible with the
  * given version. Generally you would pass in the constants
