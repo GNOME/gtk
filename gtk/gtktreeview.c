@@ -9513,6 +9513,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   GtkRBTree *new_cursor_tree = NULL;
   GtkRBNode *new_cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
+  gboolean grab_focus = TRUE;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
     return;
@@ -9585,10 +9586,32 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   else
     {
       gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
-      gtk_widget_error_bell (GTK_WIDGET (tree_view));
+
+      if (!tree_view->priv->shift_pressed)
+        {
+          if (! gtk_widget_keynav_failed (GTK_WIDGET (tree_view),
+                                          count < 0 ?
+                                          GTK_DIR_UP : GTK_DIR_DOWN))
+            {
+              GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
+
+              if (toplevel)
+                gtk_widget_child_focus (toplevel,
+                                        count < 0 ?
+                                        GTK_DIR_TAB_BACKWARD :
+                                        GTK_DIR_TAB_FORWARD);
+
+              grab_focus = FALSE;
+            }
+        }
+      else
+        {
+          gtk_widget_error_bell (GTK_WIDGET (tree_view));
+        }
     }
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  if (grab_focus)
+    gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 }
 
 static void

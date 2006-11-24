@@ -1,3 +1,9 @@
+2006-11-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): if we
+	can't go up/down, consult gtk_widget_keynav_failed() and leave the
+	widget if it returns FALSE (bug #322640).
+
 2006-11-23  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkmain.c: Fix minor typo in docs. (#378632, Hannes Mueller)
