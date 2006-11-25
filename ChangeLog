@@ -1,3 +1,9 @@
+2006-11-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Make
+	print dialog work when 'BrowseShortNames Off' is specified
+	in cups configuration. Patch by Tim Waugh.
+
 2006-11-22  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:

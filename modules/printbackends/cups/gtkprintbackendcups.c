@@ -1077,11 +1077,11 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 			resource);
 #endif
 
-          if (member_uris && !strncmp (resource, "/printers/", 10))
+          if (!strncmp (resource, "/printers/", 10))
 	    {
 	      cups_printer->ppd_name = g_strdup (resource + 10);
               GTK_NOTE (PRINTING,
-                        g_print ("CUPS Backend: Setting ppd name '%s' for printer class '%s'\n", cups_printer->ppd_name, printer_name));
+                        g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, printer_name));
             }
 
 	  gethostname (uri, sizeof(uri));
