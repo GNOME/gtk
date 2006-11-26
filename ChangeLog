@@ -1,3 +1,8 @@
+2006-11-26  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* gtk/gtkstyle.c: (gtk_default_draw_flat_box): Protect against NULL
+	  widget. (#379503)
+
 2006-11-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Make
