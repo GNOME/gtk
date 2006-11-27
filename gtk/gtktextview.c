@@ -859,7 +859,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_MOVEMENT_WORDS, -1);
 
   add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_WORDS, 1);
+                    GTK_MOVEMENT_WORDS, -1);
   
   add_move_binding (binding_set, GDK_Up, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);

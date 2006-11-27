@@ -1,3 +1,8 @@
+Mon Nov 27 12:27:06 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtktextview.c: applied patch by  Colin Leroy for
+	Control+GDK_KP_Left to move one word to the left, #356255.
+
 2006-11-26  Benjamin Berg  <benjamin@sipsolutions.net>
 
 	* gtk/gtkstyle.c: (gtk_default_draw_flat_box): Protect against NULL
