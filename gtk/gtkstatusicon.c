@@ -121,6 +121,8 @@ static void     gtk_status_icon_get_property     (GObject        *object,
 #ifdef GDK_WINDOWING_X11
 static void     gtk_status_icon_size_allocate    (GtkStatusIcon  *status_icon,
 						  GtkAllocation  *allocation);
+static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
+						  GdkScreen      *old_screen);
 #endif
 static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
@@ -411,6 +413,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 
   g_signal_connect_swapped (priv->tray_icon, "button-press-event",
 			    G_CALLBACK (gtk_status_icon_button_press), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "screen-changed",
+		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
 
@@ -968,6 +972,18 @@ gtk_status_icon_size_allocate (GtkStatusIcon *status_icon,
 
       if (!emit_size_changed_signal (status_icon, size))
 	gtk_status_icon_update_image (status_icon);
+    }
+}
+
+static void
+gtk_status_icon_screen_changed (GtkStatusIcon *status_icon,
+				GdkScreen *old_screen)
+{
+  GtkStatusIconPrivate *priv = status_icon->priv;
+
+  if (gtk_widget_get_screen (priv->tray_icon) != old_screen)
+    {
+      g_object_notify (G_OBJECT (status_icon), "screen");
     }
 }
 
