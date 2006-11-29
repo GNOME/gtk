@@ -58,9 +58,14 @@ im_ti_et_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_ti_et_la_SOURCES = imti-et.c
 im_ti_et_la_LIBADD = $(LDADDS)
 
-im_thai_broken_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
-im_thai_broken_la_SOURCES = imthai-broken.c
-im_thai_broken_la_LIBADD = $(LDADDS)
+im_thai_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_thai_la_SOURCES = 		\
+	thai-charprop.c 	\
+	thai-charprop.h 	\
+	gtkimcontextthai.c 	\
+	gtkimcontextthai.h	\
+	imthai.c
+im_thai_la_LIBADD = $(LDADDS)
 
 im_viqr_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_viqr_la_SOURCES = imviqr.c
@@ -123,7 +128,7 @@ module_LTLIBRARIES =				\
 	im-cyrillic-translit.la			\
 	im-inuktitut.la				\
 	im-ipa.la				\
-	im-thai-broken.la			\
+	im-thai.la				\
 	im-ti-er.la				\
 	im-ti-et.la				\
 	im-viqr.la				\

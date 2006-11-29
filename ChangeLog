@@ -1,3 +1,21 @@
+2006-11-28  Behdad Esfahbod  <behdad@gnome.org>
+
+	Remove the broken Thai input method and add a functional Thai and Lao
+	input method by Theppitak Karoonboonyanan. (#81031)
+
+	* modules/input/imthai.c:
+	* modules/input/gtkimcontextthai.c:
+	* modules/input/gtkimcontextthai.h:
+	* modules/input/thai-charprop.c:
+	* modules/input/thai-charprop.h:
+	Added.
+
+	* modules/input/imthai-broken.c:
+	Removed.
+	
+	* modules/input/Makefile.am:
+	Updated.
+
 2006-11-27  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkstatusicon.c: Notify when the screen changes. Bug #379793.
