@@ -952,6 +952,8 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   if (!dirs)
     {
       g_warning ("Theme file for %s has no directories\n", theme_name);
+      priv->themes = g_list_remove (priv->themes, theme);
+      g_free (theme->name);
       g_free (theme->display_name);
       g_free (theme);
       g_key_file_free (theme_file);
