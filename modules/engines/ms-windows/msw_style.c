@@ -2403,46 +2403,94 @@ draw_extension (GtkStyle * style,
     if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
 	{
 	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+	    GdkPixmap *pixmap = NULL;
+	    GdkDrawable *target = NULL;
 	    gint x2, y2, w2, h2;
 	    int tab_part = XP_THEME_ELEMENT_TAB_ITEM;
-		int real_gap_side = gtk_notebook_get_tab_pos (notebook);
+	    int real_gap_side = gtk_notebook_get_tab_pos (notebook);
 
-		/* why this differs from the above gap_side, i have no idea... */
-	    x2 = x;
-	    y2 = y;
-	    w2 = width;
-	    h2 = height;
+	    /* why this differs from the above gap_side, i have no idea... */
+	    if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
+	      {
+		/* Create "rotated" pixmap.. swap width and height */
+		pixmap = gdk_pixmap_new (window, height, width, -1);
+		target = pixmap;
+		x2 = 0;
+		y2 = 0;
+		w2 = height;
+		h2 = width;
+	      }
+	    else
+	      {
+		target = window;
+		x2 = x;
+		y2 = y;
+		w2 = width;
+		h2 = height;
+	      }
 
-	    if (xp_theme_draw (window, tab_part,
-			 style, x2, y2, w2, h2, (real_gap_side == GTK_POS_TOP ? state_type : GTK_STATE_SELECTED), area))
+	    if (xp_theme_draw (target, tab_part, style, x2, y2, w2, h2, state_type, NULL /*area*/))
 		{
-			return;
+		    GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
+		    if (real_gap_side == GTK_POS_BOTTOM)
+		        rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
+		    else if (real_gap_side == GTK_POS_LEFT)
+		        rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
+		    else if (real_gap_side == GTK_POS_RIGHT)
+		        rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
+
+		    if (rotation != GDK_PIXBUF_ROTATE_NONE)
+			{
+			   GdkPixbuf * pixbuf, * rotated;
+
+			   pixbuf = gdk_pixbuf_get_from_drawable (NULL, target, NULL, x2, y2, 0, 0, w2, h2);
+
+			   rotated = gdk_pixbuf_rotate_simple (pixbuf, rotation);
+			   g_object_unref (pixbuf);
+			   pixbuf = rotated;
+
+			   if (real_gap_side == GTK_POS_RIGHT || real_gap_side == GTK_POS_LEFT)
+			     {
+			       x2 = x;
+			       y2 = y;
+			       w2 = width;
+			       h2 = height;
+			     }
+
+			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
+
+			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
+			     {
+			       g_object_unref (pixmap);
+			     }
+			}
+		    return;
 		} else if (real_gap_side == GTK_POS_TOP || real_gap_side == GTK_POS_BOTTOM) {
-			/* experimental tab-drawing code from mozilla */
+		    /* experimental tab-drawing code from mozilla */
 		    RECT rect;
-    		HDC dc;
-			gint32 aPosition;
+		    HDC dc;
+		    gint32 aPosition;
 
-    		dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
+		    dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
 
-			if (real_gap_side == GTK_POS_TOP)
-				aPosition = BF_TOP;
-			else if (real_gap_side == GTK_POS_BOTTOM)
-				aPosition = BF_BOTTOM;
-			else if (real_gap_side == GTK_POS_LEFT)
-				aPosition = BF_LEFT;
-			else
-				aPosition = BF_RIGHT;
+		    if (real_gap_side == GTK_POS_TOP)
+		        aPosition = BF_TOP;
+		    else if (real_gap_side == GTK_POS_BOTTOM)
+		        aPosition = BF_BOTTOM;
+		    else if (real_gap_side == GTK_POS_LEFT)
+		        aPosition = BF_LEFT;
+		    else
+		        aPosition = BF_RIGHT;
 
                     if( state_type == GTK_STATE_PRELIGHT )
                         state_type = GTK_STATE_NORMAL;
-			if (area)
-				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
-			DrawTab (dc, rect, aPosition, state_type != GTK_STATE_PRELIGHT, (real_gap_side != GTK_POS_LEFT), (real_gap_side != GTK_POS_RIGHT));
-			if (area)
-				gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+		    if (area)
+		        gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+		    DrawTab (dc, rect, aPosition, state_type != GTK_STATE_PRELIGHT, (real_gap_side != GTK_POS_LEFT), (real_gap_side != GTK_POS_RIGHT));
+		    if (area)
+		        gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
 
-			release_window_dc (style, window, state_type);
+		    release_window_dc (style, window, state_type);
                     return;
 		}
 	}
