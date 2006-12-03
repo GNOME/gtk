@@ -45,7 +45,6 @@
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkprivate.h"
-#include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
 #include "gtkalias.h"
