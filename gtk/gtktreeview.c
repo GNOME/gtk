@@ -5657,7 +5657,8 @@ validate_visible_area (GtkTreeView *tree_view)
 		  /* row not visible */
                   update_dy = TRUE;
 
-		  if (dy >= 0 && dy <= tree_view->priv->vadjustment->page_size)
+		  if (dy >= 0
+		      && dy + height <= tree_view->priv->vadjustment->page_size)
 		    {
 		      /* row at the beginning -- fixed */
 		      area_above = dy;
@@ -5666,7 +5667,7 @@ validate_visible_area (GtkTreeView *tree_view)
 		    }
 		  else if (dy >= (tree_view->priv->vadjustment->upper -
 			          tree_view->priv->vadjustment->page_size)
-		           && dy <= tree_view->priv->vadjustment->upper)
+		           && dy + height <= tree_view->priv->vadjustment->upper)
 		    {
 		      /* row at the end -- fixed */
 		      area_above = dy - (tree_view->priv->vadjustment->upper -
