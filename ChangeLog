@@ -1,5 +1,20 @@
 2006-12-03  Kristian Rietveld  <kris@gtk.org>
 
+	Make sure [xy]_offset are always being initialized, fix pixbuf
+	renderer padding.  (#108235, Sven Neuman).
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_get_size),
+	(gtk_cell_renderer_pixbuf_render): add padding in _render instead
+	of _get_size.
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_get_size):
+	always initialize [xy]_offset.
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_size): ditto.
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_size):
+	ditto.
+
+2006-12-03  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (validate_visible_area): when not using an
 	explicit alignment, use the full area of the row (not just dy)
 	to determine how to implicitly align it.  (Fixes #363191, reported

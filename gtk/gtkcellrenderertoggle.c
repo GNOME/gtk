@@ -310,6 +310,11 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 	  *y_offset = MAX (*y_offset, 0);
 	}
     }
+  else
+    {
+      if (x_offset) *x_offset = 0;
+      if (y_offset) *y_offset = 0;
+    }
 }
 
 static void

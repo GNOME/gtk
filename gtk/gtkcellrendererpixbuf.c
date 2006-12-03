@@ -548,24 +548,26 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
   calc_width  = (gint) cell->xpad * 2 + pixbuf_width;
   calc_height = (gint) cell->ypad * 2 + pixbuf_height;
   
-  if (x_offset) *x_offset = 0;
-  if (y_offset) *y_offset = 0;
-
   if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
       if (x_offset)
 	{
 	  *x_offset = (((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ?
-                        1.0 - cell->xalign : cell->xalign) * 
-                       (cell_area->width - calc_width - 2 * cell->xpad));
-	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+                        (1.0 - cell->xalign) : cell->xalign) * 
+                       (cell_area->width - calc_width));
+	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
 	{
 	  *y_offset = (cell->yalign *
-                       (cell_area->height - calc_height - 2 * cell->ypad));
-          *y_offset = MAX (*y_offset, 0) + cell->ypad;
+                       (cell_area->height - calc_height));
+          *y_offset = MAX (*y_offset, 0);
 	}
+    }
+  else
+    {
+      if (x_offset) *x_offset = 0;
+      if (y_offset) *y_offset = 0;
     }
 
   if (width)
@@ -602,8 +604,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 				     &pix_rect.width,
 				     &pix_rect.height);
 
-  pix_rect.x += cell_area->x;
-  pix_rect.y += cell_area->y;
+  pix_rect.x += cell_area->x + cell->xpad;
+  pix_rect.y += cell_area->y + cell->ypad;
   pix_rect.width  -= cell->xpad * 2;
   pix_rect.height -= cell->ypad * 2;
 

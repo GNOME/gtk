@@ -319,6 +319,9 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
       if (height)
         *height = cell_area->height;
     }
+
+  if (x_offset) *x_offset = 0;
+  if (y_offset) *y_offset = 0;
 }
 
 static void
