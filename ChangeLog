@@ -1,7 +1,7 @@
 2006-12-03  Kristian Rietveld  <kris@gtk.org>
 
 	Make sure [xy]_offset are always being initialized, fix pixbuf
-	renderer padding.  (#108235, Sven Neuman).
+	renderer padding.  (#108235, Sven Neumann).
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_get_size),
 	(gtk_cell_renderer_pixbuf_render): add padding in _render instead
