@@ -1,3 +1,9 @@
+2006-12-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkpagesetup.c: (gtk_page_setup_get_paper_size),
+	(gtk_page_setup_set_paper_size): Don't leak the old page size when
+	setting a new one. Bug #382314.
+
 2006-12-03  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtktextview.c: remove FIXME #include that is no longer needed.
