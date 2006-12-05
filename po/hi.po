@@ -1235,7 +1235,7 @@ msgstr "calendar:MY"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:0"
+msgstr "calendar:week_start:1"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
