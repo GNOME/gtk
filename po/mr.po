@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-03 13:38-0400\n"
-"PO-Revision-Date: 2006-09-04 02:23+0530\n"
+"PO-Revision-Date: 2006-12-05 13:26+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
 "MIME-Version: 1.0\n"
@@ -73,8 +73,7 @@ msgstr "प्रतिमा फाइल '%s' मध्ये कोणती�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
 #: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही , बहुदा ही एक दुषित प्रतिमा फाइल "
 "असावी "
@@ -171,8 +170,7 @@ msgstr "%2s लिहण्यासाठी '%1s' ही फाइल उघ�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"लेखन करताना '%s' ला बन्द करता अाले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
+msgstr "लेखन करताना '%s' ला बन्द करता अाले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
 
 # gdk-pixbuf/io-xbm.c:293
 #: gdk-pixbuf/gdk-pixbuf-io.c:1991 gdk-pixbuf/gdk-pixbuf-io.c:2041
@@ -274,8 +272,7 @@ msgstr "प्रतिमा उघडण्यासाठी पुरेश�
 #: gdk-pixbuf/io-bmp.c:287
 #, c-format
 msgid "BMP image has unsupported header size"
-msgstr ""
-"BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता येणार नाहीत"
+msgstr "BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता येणार नाहीत"
 
 #: gdk-pixbuf/io-bmp.c:325
 #, c-format
@@ -378,8 +375,7 @@ msgstr "GIF फाइल मधील %s भागाला समर्थन �
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती उपलब्ध नाहीत"
+msgstr "GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती उपलब्ध नाहीत"
 
 # gdk-pixbuf/io-gif.c:1437
 #: gdk-pixbuf/io-gif.c:1528
@@ -422,8 +418,7 @@ msgstr "अक्षरमालिकेची उंची शुन्य आ
 #: gdk-pixbuf/io-ico.c:363
 #, c-format
 msgid "Compressed icons are not supported"
-msgstr ""
-"संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
+msgstr "संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
 
 # gdk-pixbuf/io-ico.c:428
 #: gdk-pixbuf/io-ico.c:396
@@ -469,8 +464,7 @@ msgstr "JPEG फाइल (%s) मधील चित्रणाचा अर�
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती वाढवावी"
+msgstr "प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती वाढवावी"
 
 # gdk-pixbuf/io-ico.c:428
 #: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
@@ -491,14 +485,12 @@ msgstr "JPEG मधील फाइल सुरु करण्यासाठ�
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"JPEG ची  गुणवत्ता ० ते १०० दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
+msgstr "JPEG ची  गुणवत्ता ० ते १०० दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
 
 # gdk-pixbuf/io-jpeg.c:679
 #: gdk-pixbuf/io-jpeg.c:941
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG मधील गुणवत्ता किंमत  ० ते १०० दरम्यान असायला हवी; '%d' वैध नाही."
 
 #: gdk-pixbuf/io-jpeg.c:1103
@@ -595,8 +587,7 @@ msgstr "परिवर्तित PNG, हे प्रतिमा RGB कि
 #: gdk-pixbuf/io-png.c:162
 #, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या ३ किंवा ४ असाव्यात."
+msgstr "परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या ३ किंवा ४ असाव्यात."
 
 # gdk-pixbuf/io-png.c:183
 #: gdk-pixbuf/io-png.c:183
@@ -635,8 +626,7 @@ msgstr "PNG प्रतिमेची %sफाइल वाचताना घ
 # gdk-pixbuf/io-png.c:800
 #: gdk-pixbuf/io-png.c:810
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG पाठ चंकसाठी कळा किमान १ आणि कमाल ७९ अक्षरी असाव्यात."
 
 # gdk-pixbuf/io-png.c:808
@@ -1335,7 +1325,7 @@ msgstr "कलाकारी यांद्वारे"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:89
+#: gtk/gtkaccellabel.c:89f
 msgid "keyboard label|Shift"
 msgstr "Shift"
 
@@ -1411,7 +1401,7 @@ msgstr "Backslash"
 #.
 #: gtk/gtkcalendar.c:695
 msgid "calendar:MY"
-msgstr "दिनदर्शिका:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1419,7 +1409,7 @@ msgstr "दिनदर्शिका:MY"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "दिनदर्शिका:सप्ताहारंभ(_s):0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1557,8 +1547,7 @@ msgstr ""
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"रंगनिवडक साधनावर क्लिक करा, त्यानंतर पडद्यावरील कोणत्याही भागावर क्लिक करूनरंग निवडा"
+msgstr "रंगनिवडक साधनावर क्लिक करा, त्यानंतर पडद्यावरील कोणत्याही भागावर क्लिक करूनरंग निवडा"
 
 # gtk/gtkcolorsel.c:1821
 #: gtk/gtkcolorsel.c:1971
@@ -1900,8 +1889,7 @@ msgstr "\"%s\" नावाची फाइल आधीच अस्तित�
 
 #: gtk/gtkfilechooserdefault.c:7326
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तिला बदली केल्याने तिच्यातील मजकूर गिरवला "
 "जाईल."
@@ -1973,13 +1961,11 @@ msgstr "ओळ %d, स्तंभ %d: अनपेक्षित घटक \"%
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
-msgstr ""
-"ओळ %d, स्तंभ %d: घटकाचा अपेक्षित अंत \"%s\", परंतु त्याऐवजी \"%s\" साठी घटक मिळाला"
+msgstr "ओळ %d, स्तंभ %d: घटकाचा अपेक्षित अंत \"%s\", परंतु त्याऐवजी \"%s\" साठी घटक मिळाला"
 
 #: gtk/gtkfilechoosersettings.c:202
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr "ओळ %d, स्तंभ %d: अपेक्षित \"%s\" उच्च स्तरावर, परंतु त्याऐवजी \"%s\" सापडले"
 
 #: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
@@ -2043,8 +2029,7 @@ msgstr "फाइलचे नाव बदला(_R)"
 # gtk/gtkfilesel.c:1358
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ह्या फोल्डरच्या नावात \"%s\" चिन्हे अशी आहेत की जी फाइलनावासाठी घेता येत नाही"
 
 # gtk/gtkfilesel.c:1369
@@ -4750,8 +4735,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -4790,8 +4774,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 
 #: gtk/updateiconcache.c:413
@@ -4879,6 +4862,3 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 
-# gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM प्रतिमेची रचना अवैध आहे."
