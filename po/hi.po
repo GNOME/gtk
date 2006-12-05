@@ -23,15 +23,6 @@ msgstr ""
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
 #: gdk-pixbuf/gdk-pixbuf-io.c:1113 tests/testfilechooser.c:218
@@ -1233,7 +1224,7 @@ msgstr "Backslash"
 #.
 #: gtk/gtkcalendar.c:695
 msgid "calendar:MY"
-msgstr "कैलेंडर:MY"
+msgstr "calendar:MY"
 
 #  Translate to calendar:week_start:0 if you want Sunday to be the
 #  * first day of the week to calendar:week_start:1 if you want Monday
@@ -1244,7 +1235,7 @@ msgstr "कैलेंडर:MY"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "कैलेंडर:week_start:1"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
