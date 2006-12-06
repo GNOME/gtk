@@ -1,3 +1,9 @@
+2006-12-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c (update_dialog_from_capabilities):
+	Update the sensitivity of the collate checkbutton more frequently,
+	proposed by Tim Waugh.
+
 2006-12-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmessagedialog.c (setup_type): Set a11y name and role

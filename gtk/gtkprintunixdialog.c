@@ -1018,8 +1018,10 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   GtkPrintCapabilities caps;
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   gboolean can_collate;
+  const gchar *copies;
 
-  can_collate = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->copies_spin)) > 1;
+  copies = gtk_entry_get_text (GTK_ENTRY (priv->copies_spin));
+  can_collate = (*copies != '\0' && atoi (copies) > 1);
 
   caps = priv->manual_capabilities | priv->printer_capabilities;
 
@@ -1541,6 +1543,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
   g_signal_connect_swapped (spinbutton, "value-changed", 
+			    G_CALLBACK (update_dialog_from_capabilities), dialog);
+  g_signal_connect_swapped (spinbutton, "changed", 
 			    G_CALLBACK (update_dialog_from_capabilities), dialog);
   
   check = gtk_check_button_new_with_mnemonic (_("C_ollate"));
