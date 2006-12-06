@@ -39,9 +39,9 @@
 
 enum
 {
-	PROP_0,
-	PROP_VALUE,
-	PROP_TEXT
+  PROP_0,
+  PROP_VALUE,
+  PROP_TEXT
 }; 
 
 struct _GtkCellRendererProgressPrivate
@@ -339,37 +339,37 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
   gint x, y, w, h, perc_w, pos;
   GdkRectangle clip;
   gboolean is_rtl;
-  cairo_t *cr;
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   
-  cr = gdk_cairo_create (window);
-  
   x = cell_area->x + cell->xpad;
   y = cell_area->y + cell->ypad;
-  
   w = cell_area->width - cell->xpad * 2;
   h = cell_area->height - cell->ypad * 2;
 
-  cairo_rectangle (cr, x, y, w, h);
-  gdk_cairo_set_source_color (cr, &widget->style->fg[GTK_STATE_NORMAL]);
-  cairo_fill (cr);
-  
-  x += widget->style->xthickness;
-  y += widget->style->ythickness;
-  w -= widget->style->xthickness * 2;
-  h -= widget->style->ythickness * 2;
-  
-  cairo_rectangle (cr, x, y, w, h);
-  gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_NORMAL]);
-  cairo_fill (cr);
-  
+  /* FIXME: GtkProgressBar draws the box with "trough" detail,
+   * but some engines don't paint anything with that detail for
+   * non-GtkProgressBar widgets.
+   */
+  gtk_paint_box (widget->style,
+		 window,
+		 GTK_STATE_NORMAL, GTK_SHADOW_IN, 
+		 NULL, widget, NULL,
+		 x, y, w, h);
+
   perc_w = w * MAX (0, cellprogress->priv->value) / 100;
-  
-  cairo_rectangle (cr, is_rtl ? (x + w - perc_w) : x, y, perc_w, h);
-  gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_SELECTED]);
-  cairo_fill (cr);
-  
+  clip.x = is_rtl ? (x + w - perc_w) : x;
+  clip.y = y;
+  clip.width = perc_w;
+  clip.height = h;
+
+  gtk_paint_box (widget->style,
+		 window,
+		 GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+		 &clip, widget, "bar",
+		 clip.x, clip.y,
+		 clip.width, clip.height);
+
   layout = gtk_widget_create_pango_layout (widget, cellprogress->priv->label);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
@@ -396,7 +396,6 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		    layout);
   
   g_object_unref (layout);
-  cairo_destroy (cr);
 }
 
 #define __GTK_CELL_RENDERER_PROGRESS_C__
