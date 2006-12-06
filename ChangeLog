@@ -1,3 +1,9 @@
+2006-12-06  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_render):
+	draw progress bar through theme engine instead of using our own
+	custom cairo drawing code (#377244, patch from Carlos Garnacho).
+
 2006-12-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c (update_dialog_from_capabilities):
