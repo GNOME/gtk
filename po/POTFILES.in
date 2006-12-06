@@ -227,7 +227,7 @@ modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
-modules/input/imthai-broken.c
+modules/input/imthai.c
 modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
