@@ -269,11 +269,11 @@ compute_dimensions (GtkCellRenderer *cell,
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   if (width)
-    *width = logical_rect.width + cell->xpad * 2 + widget->style->xthickness * 2;
+    *width = logical_rect.width + cell->xpad * 2;
   
   if (height)
-    *height = logical_rect.height + cell->ypad * 2 + widget->style->ythickness * 2;
-  
+    *height = logical_rect.height + cell->ypad * 2;
+
   g_object_unref (layout);
 }
 
