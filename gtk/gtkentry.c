@@ -4124,7 +4124,7 @@ gtk_entry_set_text (GtkEntry    *entry,
     return;
 
   completion = gtk_entry_get_completion (entry);
-  if (completion)
+  if (completion && completion->priv->changed_id > 0)
     g_signal_handler_block (entry, completion->priv->changed_id);
 
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
@@ -4132,7 +4132,7 @@ gtk_entry_set_text (GtkEntry    *entry,
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
 
-  if (completion)
+  if (completion && completion->priv->changed_id > 0)
     g_signal_handler_unblock (entry, completion->priv->changed_id);
 }
 
@@ -5548,9 +5548,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
                                   completion->priv->text_column, &str,
                                   -1);
 
-              g_signal_handler_block (widget, completion->priv->changed_id);
               gtk_entry_set_text (GTK_ENTRY (widget), str);
-              g_signal_handler_unblock (widget, completion->priv->changed_id);
 
               /* move the cursor to the end */
               gtk_editable_set_position (GTK_EDITABLE (widget), -1);
