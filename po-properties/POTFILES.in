@@ -20,6 +20,7 @@ gdk-pixbuf/io-tiff.c
 gdk-pixbuf/io-wbmp.c
 gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
+gdk/directfb/gdkdisplay-directfb.c
 gdk/gdk.c
 gdk/gdkdisplaymanager.c
 gdk/gdkpango.c
@@ -38,6 +39,7 @@ gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
+gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbox.c
@@ -50,11 +52,13 @@ gtk/gtkcellrendereraccel.c
 gtk/gtkcellrenderercombo.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrendererprogress.c
+gtk/gtkcellrendererspin.c
 gtk/gtkcellrenderertext.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcellview.c
 gtk/gtkcheckbutton.c
 gtk/gtkcheckmenuitem.c
+gtk/gtkclipboard-quartz.c
 gtk/gtkclipboard.c
 gtk/gtkclist.c
 gtk/gtkcolorbutton.c
@@ -67,6 +71,7 @@ gtk/gtkcontainer.c
 gtk/gtkctree.c
 gtk/gtkcurve.c
 gtk/gtkdialog.c
+gtk/gtkdnd-quartz.c
 gtk/gtkdnd.c
 gtk/gtkdrawingarea.c
 gtk/gtkeditable.c
@@ -80,6 +85,7 @@ gtk/gtkfilechooserdefault.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
+gtk/gtkfilechoosersettings.c
 gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
@@ -118,6 +124,7 @@ gtk/gtkitem.c
 gtk/gtkitemfactory.c
 gtk/gtklabel.c
 gtk/gtklayout.c
+gtk/gtklinkbutton.c
 gtk/gtklist.c
 gtk/gtklistitem.c
 gtk/gtkliststore.c
@@ -134,6 +141,7 @@ gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
 gtk/gtkoptionmenu.c
+gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
 gtk/gtkpathbar.c
 gtk/gtkpixmap.c
@@ -143,7 +151,10 @@ gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
+gtk/gtkprintoperation-unix.c
+gtk/gtkprintoperation-win32.c
 gtk/gtkprintoperation.c
+gtk/gtkprintoperationpreview.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogress.c
 gtk/gtkprogressbar.c
@@ -154,6 +165,7 @@ gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
 gtk/gtkrc.c
 gtk/gtkrecentchooser.c
+gtk/gtkrecentchooserdefault.c
 gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkruler.c
@@ -175,6 +187,8 @@ gtk/gtktable.c
 gtk/gtktearoffmenuitem.c
 gtk/gtktext.c
 gtk/gtktextbuffer.c
+gtk/gtktextbufferrichtext.c
+gtk/gtktextbufferserialize.c
 gtk/gtktextchild.c
 gtk/gtktextdisplay.c
 gtk/gtktextlayout.c
@@ -217,15 +231,21 @@ gtk/gtkvseparator.c
 gtk/gtkwidget.c
 gtk/gtkwindow-decorate.c
 gtk/gtkwindow.c
+gtk/paper_names.c
+gtk/paper_names_offsets.c
+gtk/updateiconcache.c
 modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
 modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
-modules/input/imthai-broken.c
+modules/input/imthai.c
 modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
+modules/printbackends/cups/gtkprintbackendcups.c
+modules/printbackends/file/gtkprintbackendfile.c
+modules/printbackends/lpr/gtkprintbackendlpr.c
 tests/testfilechooser.c
