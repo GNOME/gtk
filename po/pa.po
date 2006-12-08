@@ -1,4 +1,4 @@
-# translation of gtk+.HEAD.po to Punjabi
+# translation of pa.po to Punjabi
 # Copyright (C) 2004 THE gtk+.HEAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk+.HEAD package.
 #
@@ -9,17 +9,17 @@
 # A S Alam <apbrar@gmail.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD\n"
+"Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-03 13:38-0400\n"
-"PO-Revision-Date: 2006-07-15 05:21+0530\n"
+"PO-Revision-Date: 2006-12-08 16:21+0530\n"
 "Last-Translator: A S Alam <apbrar@gmail.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
 #: gdk-pixbuf/gdk-pixbuf-io.c:1113 tests/testfilechooser.c:218
@@ -35,8 +35,7 @@ msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ �
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
 #: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਚਿੱਤਰ ਫਾਇਲ "
 "ਨਿਕਾਰਾ ਹੈ"
@@ -125,13 +124,13 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਬਫਰ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ "
-"ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ।"
+"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, "
+"ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ।"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
@@ -291,8 +290,7 @@ msgstr "GIF ਫਾਇਲ ਫਾਰਮੈਟ ਦਾ ਵਰਜਨ %s ਸਹਾਇ�
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਲੋਕਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
+msgstr "GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਲੋਕਲ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-gif.c:1528
 #, c-format
@@ -390,8 +388,7 @@ msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰ�
 
 #: gdk-pixbuf/io-jpeg.c:941
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%d' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-jpeg.c:1103
@@ -508,8 +505,7 @@ msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤ�
 
 #: gdk-pixbuf/io-png.c:810
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
 
 #: gdk-pixbuf/io-png.c:818
@@ -1621,9 +1617,8 @@ msgid "Create Fo_lder"
 msgstr "ਫੋਲਡਰ ਬਣਾਓ(_l)"
 
 #: gtk/gtkfilechooserdefault.c:4646
-#, fuzzy
 msgid "_Location:"
-msgstr "ਟਿਕਾਣਾ"
+msgstr "ਟਿਕਾਣਾ(_L):"
 
 #: gtk/gtkfilechooserdefault.c:4886
 msgid "Save in _folder:"
@@ -1655,10 +1650,8 @@ msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ \"%s\" ਪਹਿਲਾਂ ਹੀ ਮੌ
 
 #: gtk/gtkfilechooserdefault.c:7326
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
 #: gtk/gtkfilechooserdefault.c:7331
 msgid "_Replace"
@@ -1726,14 +1719,13 @@ msgstr "ਸਤਰ %d, ਕਾਲਮ %d: ਇਕਾਈ \"%s\" ਦੇ ਅੰਤ ਦ�
 
 #: gtk/gtkfilechoosersettings.c:202
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr ""
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgstr "ਸਤਰ %d, ਕਾਲਮ %d: ਉੱਪਰੀ ਪੱਧਰ ਤੇ \"%s\" ਦੀ ਲੋੜ ਸੀ, ਪਰ \"%s\" ਮਿਲਿਆ"
 
 #: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr ""
+msgstr "ਸਤਰ %d, ਕਾਲਮ %d: \"%s\" ਜਾਂ \"%s\" ਦੀ ਲੋੜ ਸੀ, ਪਰ \"%s\" ਮਿਲਿਆ"
 
 #: gtk/gtkfilechoosersettings.c:516
 #, c-format
@@ -1781,8 +1773,7 @@ msgstr "ਫਾਇਲ ਨਾਂ-ਤਬਦੀਲ(_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ-ਨਾਂ ਵਿੱਚ ਨਹੀ ਹੋਣੇ ਚਾਹੀਦੇ"
 
 #: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
@@ -1910,8 +1901,7 @@ msgstr "ਫਾਇਲ ਸਿਸਟਮ"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
+msgstr "ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
 #: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
@@ -2632,9 +2622,8 @@ msgid "Unknown item"
 msgstr "ਅਣਜਾਣ ਇਕਾਈ"
 
 #: gtk/gtkrecentchoosermenu.c:986
-#, fuzzy
 msgid "No items found"
-msgstr "URI '%s' ਲਈ ਕੋਈ ਇਕਾਈ ਨਹੀਂ ਲੱਭੀ"
+msgstr "ਕੋਈ ਇਕਾਈ ਨਹੀਂ ਲੱਭੀ"
 
 #: gtk/gtkrecentmanager.c:1059 gtk/gtkrecentmanager.c:1209
 #: gtk/gtkrecentmanager.c:1219 gtk/gtkrecentmanager.c:1278
@@ -3752,9 +3741,8 @@ msgstr "#10 ਲਿਫ਼ਾਫਾ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
-#, fuzzy
 msgid "paper size|#11 Envelope"
-msgstr "#11 ਲਿਫ਼ਾਫਾ"
+msgstr "#11 ਲਿਫਾਫਾ"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:273
@@ -4049,7 +4037,7 @@ msgstr "ਕਮਾਂਡ ਸਤਰ"
 #: modules/printbackends/file/gtkprintbackendfile.c:232
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "ਆਉਟਪੁੱਟ.%s"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:457
 msgid "Print to File"
@@ -4118,7 +4106,7 @@ msgstr "ਦੋਵੇਂ \"id\" ਅਤੇ \"name\" ਇਕਾਈ <%s> ਲਈ ਲ�
 #: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "ਗੁਣ \"%s\" ਇਕਾਈ <%s> ਲਈ ਦੋ ਵਾਰ ਲੱਭਿਆ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:846
 #, c-format
@@ -4128,17 +4116,17 @@ msgstr "<%s> ਇਕਾਈ ਦਾ ਗਲਤ id \"%s\" ਹੈ"
 #: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "<%s> ਇਕਾਈ ਨਾ ਤਾਂ ਇੱਕ \"name\" ਗੁਣ ਹੈ ਅਤੇ ਨਾ ਹੀ \"id\""
 
 #: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "ਗੁਣ \"%s\" ਇਕਾਈ <%s> ਵਾਰ ਦੋ ਵਾਰ ਦੁਹਰਾਇਆ ਗਿਆ"
 
 #: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "ਗੁਣ \"%s\" ਇਸ ਸਬੰਧ ਵਿੱਚ <%s> ਇਕਾਈ ਲਈ ਗਲਤ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -4152,7 +4140,7 @@ msgstr "ਅਗਿਆਤ ਟੈਗ ਲੱਭਿਆ ਹੈ ਅਤੇ ਟੈਗ ਨ
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "ਟੈਗ \"%s\" ਬਫ਼ਰ 'ਚ ਨਹੀਂ ਹੈ ਅਤੇ ਟੈਗ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।"
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -4172,9 +4160,8 @@ msgstr "\"%s\" ਇੱਕ ਠੀਕ ਗੁਣ ਨਾਂ ਨਹੀਂ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr "\"%1$s\" \"%3$s\" ਗੁਣ ਲਈ  \"%2$s\" ਕਿਸਮ ਦੇ ਮੁੱਲ ਨੂੰ ਬਦਲ ਨਹੀਂ ਸਕਿਆ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -4194,7 +4181,7 @@ msgstr "ਟੈਗ \"%s\" ਦੀ ਗਲਤ ਤਰਜੀਹ \"%s\" ਹੈ"
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "ਪਾਠ ਵਿੱਚ ਬਾਹਰੀ ਇਕਾਈ <text_view_markup> ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਨਾਕਿ <%s>"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -4203,7 +4190,7 @@ msgstr "ਇੱਕ <%s> ਇਕਾਈ ਪਹਿਲਾਂ ਹੀ ਦੱਸੀ ਜ�
 
 #: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "ਇੱਕ<text> ਇਕਾਈ <tags> ਇਕਾਈ ਤੋਂ ਪਹਿਲਾਂ ਨਹੀਂ ਆ ਸਕਦਾ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:1788
 #, c-format
@@ -4212,14 +4199,13 @@ msgstr "ਸੀਰੀਲਾਈਜ਼ਡ ਡਾਟਾ ਨਿਕਾਰਾ ਹੈ"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "ਸੀਰੀਲਾਈਜ਼ਡ ਡਾਟਾ ਨਿਕਾਰਾ ਹੈ। ਪਹਿਲਾਂ ਭਾਗ GTKTEXTBUFFERCONTENTS-0001 ਨਹੀਂ ਹੈ"
 
 #: gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "symlinked '%s' ਅਤੇ '%s' ਲਈ ਵੱਖਰੇ idatas ਮਿਲੇ\n"
 
 #: gtk/updateiconcache.c:1116
 #, c-format
@@ -4254,7 +4240,7 @@ msgstr "%s ਦਾ ਨਾਂ %s ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ:
 #: gtk/updateiconcache.c:1214
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "%s ਦਾ ਨਾਂ-ਤਬਦੀਲ ਕਰਕੇ %s ਨਹੀਂ ਹੋ ਸਕਿਆ: %s\n"
+msgstr "%s ਦਾ ਨਾਂ %s ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ: %s\n"
 
 #: gtk/updateiconcache.c:1221
 #, c-format
@@ -4272,11 +4258,11 @@ msgstr "ਇੱਕ ਮੌਜੂਦਾ ਕੈਚੇ ਉੱਪਰ ਲਿਖੋ, ਭ
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr "ਮੌਜੂਦਾ index.theme ਦੀ ਜਾਂਚ ਨਾ ਕਰੋ"
+msgstr "ਮੌਜੂਦਾ index.theme ਦੀ ਮੌਜੂਦਗੀ ਦੀ ਜਾਂਚ ਨਾ ਕਰੋ"
 
 #: gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr "ਕੈਚੇ ਵਿੱਚ ਚਿੱਤਰ ਡਾਟਾ ਸ਼ਾਮਿਲ ਹੋ ਸਕਦਾ ਹੈ"
+msgstr "ਕੈਚੇ ਵਿੱਚ ਚਿੱਤਰ ਡਾਟਾ ਸ਼ਾਮਿਲ ਨਾ ਕਰੋ"
 
 #: gtk/updateiconcache.c:1285
 msgid "Output a C header file"
@@ -4292,495 +4278,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"'%s' ਵਿੱਚ ਕੋਈ ਸਰੂਪ ਤਤਕਰਾ ਫਾਇਲ ਨਹੀਂ ਹੈ।\n"
+"ਜੇਕਰ ਤੁਸੀਂ ਇੱਥੇ ਆਈਕਾਨ ਕੈਂਚੇ ਬਣਾਉਣ ਲਈ ਬਜ਼ਿੱਦ ਹੋ ਤਾਂ --ignore-theme-index ਵਰਤੋਂ\n"
 
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM ਚਿੱਤਰ ਫਾਰਮੈਟ ਠੀਕ ਨਹੀ ਹੈ"
-
-#~ msgid "asme_f"
-#~ msgstr "asme_f"
-
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A10"
-#~ msgstr "A10"
-
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A3 Extra"
-#~ msgstr "A3 ਵਾਧੂ"
-
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A4 Extra"
-#~ msgstr "A4 ਵਾਧੂ"
-
-#~ msgid "A4 Tab"
-#~ msgstr "A4 ਟੈਬ"
-
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A5 Extra"
-#~ msgstr "A5 ਵਾਧੂ"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B5 Extra"
-#~ msgstr "B5 ਵਾਧੂ"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "C0"
-#~ msgstr "C0"
-
-#~ msgid "C1"
-#~ msgstr "C1"
-
-#~ msgid "C10"
-#~ msgstr "C10"
-
-#~ msgid "C2"
-#~ msgstr "C2"
-
-#~ msgid "C3"
-#~ msgstr "C3"
-
-#~ msgid "C4"
-#~ msgstr "C4"
-
-#~ msgid "C5"
-#~ msgstr "C5"
-
-#~ msgid "C6"
-#~ msgstr "C6"
-
-#~ msgid "C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "C7"
-#~ msgstr "C7"
-
-#~ msgid "C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "C8"
-#~ msgstr "C8"
-
-#~ msgid "C9"
-#~ msgstr "C9"
-
-#~ msgid "DL Envelope"
-#~ msgstr "DL ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "RA0"
-#~ msgstr "RA0"
-
-#~ msgid "RA1"
-#~ msgstr "RA1"
-
-#~ msgid "RA2"
-#~ msgstr "RA2"
-
-#~ msgid "SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "JB0"
-#~ msgstr "JB0"
-
-#~ msgid "JB1"
-#~ msgstr "JB1"
-
-#~ msgid "JB10"
-#~ msgstr "JB10"
-
-#~ msgid "JB2"
-#~ msgstr "JB2"
-
-#~ msgid "JB3"
-#~ msgstr "JB3"
-
-#~ msgid "JB4"
-#~ msgstr "JB4"
-
-#~ msgid "JB5"
-#~ msgstr "JB5"
-
-#~ msgid "JB6"
-#~ msgstr "JB6"
-
-#~ msgid "JB7"
-#~ msgstr "JB7"
-
-#~ msgid "JB8"
-#~ msgstr "JB8"
-
-#~ msgid "JB9"
-#~ msgstr "JB9"
-
-#~ msgid "jis exec"
-#~ msgstr "jis exec"
-
-#~ msgid "Choukei 2 Envelope"
-#~ msgstr "Choukei 2 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Choukei 3 Envelope"
-#~ msgstr "Choukei 3 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Choukei 4 Envelope"
-#~ msgstr "Choukei 4 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "hagaki (postcard)"
-#~ msgstr "hagaki (ਪੋਸਟਕਾਰਡ)"
-
-#~ msgid "kahu Envelope"
-#~ msgstr "kahu ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "kaku2 Envelope"
-#~ msgstr "kaku2 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "oufuku (reply postcard)"
-#~ msgstr "oufuku (ਜਵਾਬੀ ਪੋਸਟਕਾਰਡ)"
-
-#~ msgid "you4 Envelope"
-#~ msgstr "you4 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#~ msgid "6x9 Envelope"
-#~ msgstr "6x9 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "7x9 Envelope"
-#~ msgstr "7x9 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "9x11 Envelope"
-#~ msgstr "9x11 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "a2 Envelope"
-#~ msgstr "a2 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Arch A"
-#~ msgstr "Arch A"
-
-#~ msgid "Arch B"
-#~ msgstr "Arch B"
-
-#~ msgid "Arch C"
-#~ msgstr "Arch C"
-
-#~ msgid "Arch D"
-#~ msgstr "Arch D"
-
-#~ msgid "Arch E"
-#~ msgstr "Arch E"
-
-#~ msgid "b-plus"
-#~ msgstr "b-plus"
-
-#~ msgid "c"
-#~ msgstr "c"
-
-#~ msgid "c5 Envelope"
-#~ msgstr "c5 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "e"
-#~ msgstr "e"
-
-#~ msgid "edp"
-#~ msgstr "edp"
-
-#~ msgid "European edp"
-#~ msgstr "ਯੂਰਪੀ edp"
-
-#~ msgid "Executive"
-#~ msgstr "ਐਕਗਵੀਕਿਊਟਿਵ"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "FanFold European"
-#~ msgstr "FanFold ਯੂਰਪੀ"
-
-#~ msgid "FanFold US"
-#~ msgstr "FanFold US"
-
-#~ msgid "FanFold German Legal"
-#~ msgstr "FanFold ਜਰਮਨ ਲੀਗਲ"
-
-#~ msgid "Government Legal"
-#~ msgstr "ਸਰਕਾਰੀ ਲੀਗਲ"
-
-#~ msgid "Government Letter"
-#~ msgstr "ਸਰਕਾਰੀ ਪੱਤਰ"
-
-#~ msgid "Index 3x5"
-#~ msgstr "Index 3x5"
-
-#~ msgid "Index 4x6 (postcard)"
-#~ msgstr "Index 4x6 (ਪੋਸਟ ਕਾਰਡ)"
-
-#~ msgid "Index 4x6 ext"
-#~ msgstr "Index 4x6 ext"
-
-#~ msgid "Index 5x8"
-#~ msgstr "Index 5x8"
-
-#~ msgid "Invoice"
-#~ msgstr "ਇਨਵਾਇਸ"
-
-#~ msgid "Tabloid"
-#~ msgstr "ਸਾਰਣੀਕਾਰ"
-
-#~ msgid "US Legal"
-#~ msgstr "US ਲੀਗਲ"
-
-#~ msgid "US Legal Extra"
-#~ msgstr "US ਲੀਗਲ ਵਾਧੂ"
-
-#~ msgid "US Letter"
-#~ msgstr "US ਪੱਤਰ"
-
-#~ msgid "US Letter Extra"
-#~ msgstr "US ਪੱਤਰ ਵਾਧੂ"
-
-#~ msgid "US Letter Plus"
-#~ msgstr "US ਪਲੱਗ ਪਲੱਸ"
-
-#~ msgid "Monarch Envelope"
-#~ msgstr "Monarch ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "#10 Envelope"
-#~ msgstr "#10 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "#11 Envelope"
-#~ msgstr "#11 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "#12 Envelope"
-#~ msgstr "2#12 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "#14 Envelope"
-#~ msgstr "#14 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "#9 Envelope"
-#~ msgstr "#9 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Personal Envelope"
-#~ msgstr "ਨਿੱਜੀ ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Quarto"
-#~ msgstr "Quarto"
-
-#~ msgid "Super A"
-#~ msgstr "ਸੁਪਰ A"
-
-#~ msgid "Super B"
-#~ msgstr "ਸੁਪਰ B"
-
-#~ msgid "Wide Format"
-#~ msgstr "ਚੌੜਾ ਫਾਰਮੈਟ"
-
-#~ msgid "Dai-pa-kai"
-#~ msgstr "Dai-pa-kai"
-
-#~ msgid "Folio"
-#~ msgstr "Folio"
-
-#~ msgid "Folio sp"
-#~ msgstr "Folio sp"
-
-#~ msgid "Invite Envelope"
-#~ msgstr "ਸੱਦਾ ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Italian Envelope"
-#~ msgstr "ਇਤਾਲਵੀ ਸਾਫਟਵੇਅਰ"
-
-#~ msgid "juuro-ku-kai"
-#~ msgstr "juuro-ku-kai"
-
-#~ msgid "pa-kai"
-#~ msgstr "pa-kai"
-
-#~ msgid "Postfix Envelope"
-#~ msgstr "ਪੋਸਟਫਿਕਸ ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "Small Photo"
-#~ msgstr "ਛੋਟੀ ਫੋਟੋ"
-
-#~ msgid "prc1 Envelope"
-#~ msgstr "prc1 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc10 Envelope"
-#~ msgstr "prc10 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc 16k"
-#~ msgstr "prc 16k"
-
-#~ msgid "prc2 Envelope"
-#~ msgstr "prc2 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc3 Envelope"
-#~ msgstr "prc3 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc 32k"
-#~ msgstr "prc 32k"
-
-#~ msgid "prc4 Envelope"
-#~ msgstr "prc4 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc5 Envelope"
-#~ msgstr "prc5 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc6 Envelope"
-#~ msgstr "prc6 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc7 Envelope"
-#~ msgstr "prc7 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "prc8 Envelope"
-#~ msgstr "prc8 ਲਿਫ਼ਾਫਾ"
-
-#~ msgid "ROC 16k"
-#~ msgstr "ROC 16k"
-
-#~ msgid "ROC 8k"
-#~ msgstr "ROC 8k"
