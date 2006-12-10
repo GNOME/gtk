@@ -1,3 +1,7 @@
+2006-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Correct a misapplied patch. 
+
 2006-12-10  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Put gdk-pixbuf-query-loaders.exe and

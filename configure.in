@@ -684,6 +684,10 @@ if test $gtk_uxtheme_h = yes; then
 fi
 AC_MSG_RESULT($gtk_uxtheme_h)
 
+# Checks for gdkspawn
+AC_CHECK_HEADERS(crt_externs.h)
+AC_CHECK_FUNCS(_NSGetEnviron)
+
 
 ##################################################
 # Checks for gdk-pixbuf
@@ -728,10 +732,6 @@ else
         pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
         pixbuf_deplibs_check=`$pixbuf_libtool_config | \
             grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
-# Checks for gdkspawn
-AC_CHECK_HEADERS(crt_externs.h)
-AC_CHECK_FUNCS(_NSGetEnviron)
-
             sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
         if test "x$pixbuf_deplibs_check" = "xnone" || \
            test "x$pixbuf_deplibs_check" = "xunknown" || \
