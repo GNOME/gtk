@@ -1805,7 +1805,9 @@ gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
   if (priv->in_entry_menu)
     return FALSE;
 
-  gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (entry), data);
+  GTK_ENTRY (entry)->editing_canceled = TRUE;
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 
   /* entry needs focus-out-event */
   return FALSE;

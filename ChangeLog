@@ -1,3 +1,9 @@
+2006-12-10  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_focus_out_event):
+	cancel editing (ie. don't accept changes) when the entry loses
+	focus. (Fixes #164494, reported by Chris Rouch).
+
 2006-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Correct a misapplied patch. 
