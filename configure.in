@@ -728,6 +728,10 @@ fi
 AC_MSG_RESULT($gtk_uxtheme_h)
 
 
+# Checks for gdkspawn
+AC_CHECK_HEADERS(crt_externs.h)
+AC_CHECK_FUNCS(_NSGetEnviron)
+
 ##################################################
 # Checks for gdk-pixbuf
 ##################################################
