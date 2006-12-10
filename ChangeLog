@@ -1,3 +1,10 @@
+2006-12-10  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Put gdk-pixbuf-query-loaders.exe and
+	gtk-query-immodules-2.0.exe in the runtime zipfile instead of
+	developer zipfile. Users might add pixbuf loaders or immodules
+	even if they are not interested in developing gtk+-using software.
+
 2006-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for crt_extern.h and _NSGetEnviron.

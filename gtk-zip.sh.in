@@ -15,6 +15,8 @@ etc/gtk-2.0/gtk.immodules
 bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+bin/gdk-pixbuf-query-loaders.exe
+bin/gtk-query-immodules-2.0.exe
 EOF
 
 zip $ZIP lib/gtk-2.0/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/immodules/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/engines/*.dll
@@ -31,8 +33,6 @@ rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
 include/gtk-2.0
 bin/gdk-pixbuf-csource.exe
-bin/gdk-pixbuf-query-loaders.exe
-bin/gtk-query-immodules-2.0.exe
 bin/gtk-demo.exe
 man/man1/gdk-pixbuf-csource.1
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
