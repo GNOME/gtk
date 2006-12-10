@@ -22,13 +22,25 @@
 #include <config.h>
 #include <string.h>
 
+#ifdef HAVE_CRT_EXTERNS_H 
+#include <crt_externs.h> /* for _NSGetEnviron */
+#endif
+
 #include "gdkspawn.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
 #include "gdkalias.h"
+  
+#ifdef HAVE__NSGETENVIRON
+#define environ (*_NSGetEnviron())
+#else
 
+/* According to the Single Unix Specification, environ is not in 
+ * any system header, although unistd.h often declares it.
+ */
 extern char **environ;
+#endif
 
 /**
  * gdk_make_spawn_environment_for_screen:
