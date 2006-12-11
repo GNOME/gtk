@@ -38,6 +38,7 @@ gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
+gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbox.c
@@ -50,6 +51,7 @@ gtk/gtkcellrendereraccel.c
 gtk/gtkcellrenderercombo.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrendererprogress.c
+gtk/gtkcellrendererspin.c
 gtk/gtkcellrenderertext.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcellview.c
@@ -140,6 +142,7 @@ gtk/gtkpixmap.c
 gtk/gtkplug.c
 gtk/gtkpreview.c
 gtk/gtkprintbackend.c
+gtk/gtkprintoperation-unix.c
 gtk/gtkprinter.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
@@ -223,7 +226,6 @@ modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
-modules/input/imthai-broken.c
 modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
