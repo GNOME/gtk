@@ -77,6 +77,8 @@ static gboolean gtk_progress_bar_expose    (GtkWidget           *widget,
 					    GdkEventExpose      *event);
 static void gtk_progress_bar_size_request  (GtkWidget           *widget,
 					    GtkRequisition      *requisition);
+static void gtk_progress_bar_style_set     (GtkWidget           *widget,
+					    GtkStyle            *previous);
 static void gtk_progress_bar_real_update   (GtkProgress         *progress);
 static void gtk_progress_bar_paint         (GtkProgress         *progress);
 static void gtk_progress_bar_act_mode_enter (GtkProgress        *progress);
@@ -109,6 +111,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   
   widget_class->expose_event = gtk_progress_bar_expose;
   widget_class->size_request = gtk_progress_bar_size_request;
+  widget_class->style_set = gtk_progress_bar_style_set;
 
   progress_class->paint = gtk_progress_bar_paint;
   progress_class->update = gtk_progress_bar_real_update;
@@ -545,6 +548,17 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 }
 
 static void
+gtk_progress_bar_style_set (GtkWidget      *widget,
+    GtkStyle *previous)
+{
+  GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
+
+  pbar->dirty = TRUE;
+
+  GTK_WIDGET_CLASS (gtk_progress_bar_parent_class)->style_set (widget, previous);
+}
+
+static void
 gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 {
   GtkProgressBar *pbar;
@@ -773,7 +787,7 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   GdkRectangle rect;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  GdkRectangle prelight_clip, normal_clip;
+  GdkRectangle prelight_clip, start_clip, end_clip;
   
   buf = gtk_progress_get_current_text (progress);
   
@@ -799,7 +813,7 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   rect.width = widget->allocation.width - 2 * widget->style->xthickness;
   rect.height = widget->allocation.height - 2 * widget->style->ythickness;
 
-  prelight_clip = normal_clip = rect;
+  prelight_clip = start_clip = end_clip = rect;
 
   switch (orientation)
     {
@@ -807,6 +821,9 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
       if (offset != -1)
 	prelight_clip.x = offset;
       prelight_clip.width = amount;
+      start_clip.width = prelight_clip.x - start_clip.x;
+      end_clip.x = start_clip.x + start_clip.width + prelight_clip.width;
+      end_clip.width -= prelight_clip.width + start_clip.width;
       break;
       
     case GTK_PROGRESS_RIGHT_TO_LEFT:
@@ -815,12 +832,18 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
       else
 	prelight_clip.x = rect.x + rect.width - amount;
       prelight_clip.width = amount;
+      start_clip.width = prelight_clip.x - start_clip.x;
+      end_clip.x = start_clip.x + start_clip.width + prelight_clip.width;
+      end_clip.width -= prelight_clip.width + start_clip.width;
       break;
        
     case GTK_PROGRESS_TOP_TO_BOTTOM:
       if (offset != -1)
 	prelight_clip.y = offset;
       prelight_clip.height = amount;
+      start_clip.height = prelight_clip.y - start_clip.y;
+      end_clip.y = start_clip.y + start_clip.height + prelight_clip.height;
+      end_clip.height -= prelight_clip.height + start_clip.height;
       break;
       
     case GTK_PROGRESS_BOTTOM_TO_TOP:
@@ -829,18 +852,33 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
       else
 	prelight_clip.y = rect.y + rect.height - amount;
       prelight_clip.height = amount;
+      start_clip.height = prelight_clip.y - start_clip.y;
+      end_clip.y = start_clip.y + start_clip.height + prelight_clip.height;
+      end_clip.height -= prelight_clip.height + start_clip.height;
       break;
     }
 
-  gtk_paint_layout (widget->style,
-		    progress->offscreen_pixmap,
-		    GTK_STATE_NORMAL,
-		    FALSE,
-		    &normal_clip,
-		    widget,
-		    "progressbar",
-		    x, y,
-		    layout);
+  if (start_clip.width > 0 && start_clip.height > 0)
+    gtk_paint_layout (widget->style,
+		      progress->offscreen_pixmap,
+		      GTK_STATE_NORMAL,
+		      FALSE,
+		      &start_clip,
+		      widget,
+		      "progressbar",
+		      x, y,
+		      layout);
+
+  if (end_clip.width > 0 && end_clip.height > 0)
+    gtk_paint_layout (widget->style,
+		      progress->offscreen_pixmap,
+		      GTK_STATE_NORMAL,
+		      FALSE,
+		      &end_clip,
+		      widget,
+		      "progressbar",
+		      x, y,
+		      layout);
 
   gtk_paint_layout (widget->style,
 		    progress->offscreen_pixmap,

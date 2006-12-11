@@ -1,6 +1,10 @@
 2006-12-11  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtksettings.c: Change the way in which color scheme information
+	* gtk/gtkprogressbar.c (gtk_progress_bar_paint_text): Be more
+	careful when overdrawing antialiased text.  (#352435, Alex Jones,
+	patch by Benjamin Otte)
+
+	* gtk/gtksettings.c: Change the way in which color scheme information
 	is merged to correctly handle vanishing colors.  (#374420, 
 	Benjamin Berg, patch by Callum McKenzie) 
 	Also allow to separate entries in color schemes by ';' 
