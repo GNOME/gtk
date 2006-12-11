@@ -1,3 +1,11 @@
+2006-12-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtksettings.c: Change the way in which color scheme information
+	is merged to correctly handle vanishing colors.  (#374420, 
+	Benjamin Berg, patch by Callum McKenzie) 
+	Also allow to separate entries in color schemes by ';' 
+	instead of newline.  
+
 2006-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkcupsutils.c (gtk_cups_request_encode_option):
