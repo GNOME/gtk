@@ -485,6 +485,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * merged, color specifications will be converted to hexadecimal form
    * when getting this property.
    *
+   * Starting with GTK+ 2.12, the entries can alternatively be separated
+   * by ';' instead of newlines:
+   * <programlisting>
+   * name1: color1; name2: color2; ...
+   * </programlisting>
+   *
    * Since: 2.10
    */
   result = settings_install_property_parser (class,
@@ -1727,31 +1733,40 @@ settings_update_color_scheme (GtkSettings *settings)
 
 typedef struct {
   GHashTable *color_hash;
-  gchar *tables[GTK_SETTINGS_SOURCE_APPLICATION + 1];
+  GHashTable *tables[GTK_SETTINGS_SOURCE_APPLICATION + 1];
+  gchar *lastentry[GTK_SETTINGS_SOURCE_APPLICATION + 1];
 } ColorSchemeData;
 
 
 static gboolean
-update_color_hash (ColorSchemeData   *data,
-		   const gchar       *str, 
-		   GtkSettingsSource  source)
+add_color_to_hash (gchar      *name, 
+		   GdkColor   *color, 
+		   GHashTable *target)
 {
-  gchar *copy, *s, *p, *name;
+  GdkColor *old, *new;
+
+  old = g_hash_table_lookup (target, name);
+  if (!old || !gdk_color_equal (old, color))
+    {
+      new = gdk_color_copy (color);
+      g_hash_table_insert (target, g_strdup (name), new);
+      
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+add_colors_to_hash_from_string (GHashTable  *hash, 
+				const gchar *colors)
+{
+  gchar *s, *p, *name;
   GdkColor color;
   gboolean changed = FALSE;
+  gchar *copy;
 
-  if (data->tables[source] == NULL && str == NULL)
-    return FALSE;
-
-  if (data->tables[source] != NULL && str != NULL &&
-      strcmp (data->tables[source], str) == 0)
-    return FALSE;
-
-  g_free (data->tables[source]);
-  data->tables[source] = g_strdup (str);
-
-  copy = g_strdup (str);
-
+  copy = g_strdup (colors);
   s = copy;
   while (s && *s)
     {
@@ -1771,7 +1786,7 @@ update_color_hash (ColorSchemeData   *data,
       s = p;
       while (*s) 
 	{
-	  if (*s == '\n')
+	  if (*s == '\n' || *s == ';')
 	    {
 	      *s = '\0';
 	      s++;
@@ -1781,28 +1796,65 @@ update_color_hash (ColorSchemeData   *data,
 	}
 
       if (gdk_color_parse (p, &color))
-	{
-	  GdkColor *old;
-
-	  old = g_hash_table_lookup (data->color_hash, name);
-	  if (!old || 
-	      (old->pixel <= source && !gdk_color_equal (old, &color)))
-	    {
-	      GdkColor *new;
-	      
-	      new = gdk_color_copy (&color);
-	      new->pixel = source;
-  
-	      g_hash_table_insert (data->color_hash, g_strdup (name), new);
- 
-	      changed = TRUE;
-	    }
-	}
+	changed = add_color_to_hash (name, &color, hash);
     }
 
   g_free (copy);
 
   return changed;
+}
+
+static gboolean
+update_color_hash (ColorSchemeData   *data,
+		   const gchar       *str, 
+		   GtkSettingsSource  source)
+{
+  gboolean changed = FALSE;
+  gint i;
+
+  if ((str == NULL || *str == '\0') && 
+      (data->lastentry[source] == NULL || data->lastentry[source][0] == '\0'))
+    return FALSE;
+
+  if (str && data->lastentry[source] && strcmp (str, data->lastentry[source]) == 0)
+    return FALSE;
+
+  /* For the RC_FILE source we merge the values rather than over-writing 
+   * them, since multiple rc files might define independent sets of colors
+   */
+  if ((source != GTK_SETTINGS_SOURCE_RC_FILE) && 
+      data->tables[source] && g_hash_table_size (data->tables[source]) > 0)
+    {
+      g_hash_table_unref (data->tables[source]);
+      data->tables[source] = NULL;
+      changed = TRUE; /* We can't rely on the code below since str might be "" */
+    }
+
+  if (data->tables[source] == NULL)
+    data->tables[source] = g_hash_table_new_full (g_str_hash, g_str_equal, 
+						  g_free,
+						  (GDestroyNotify) gdk_color_free);
+
+  g_free (data->lastentry[source]);
+  data->lastentry[source] = g_strdup (str);
+  
+  changed |= add_colors_to_hash_from_string (data->tables[source], str);
+
+  if (!changed)
+    return FALSE;
+    
+  /* Rebuild the merged hash table. */
+  g_hash_table_unref (data->color_hash);
+  data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+					    (GDestroyNotify) gdk_color_free);
+  for (i = 0; i <= GTK_SETTINGS_SOURCE_APPLICATION; i++)
+    {
+      if (data->tables[i])
+	g_hash_table_foreach (data->tables[i], (GHFunc) add_color_to_hash,
+			      data->color_hash);
+    }
+
+  return TRUE;
 }
 
 static void
@@ -1813,7 +1865,11 @@ color_scheme_data_free (ColorSchemeData *data)
   g_hash_table_unref (data->color_hash);
 
   for (i = 0; i <= GTK_SETTINGS_SOURCE_APPLICATION; i++)
-    g_free (data->tables[i]);
+    {
+      if (data->tables[i])
+	g_hash_table_unref (data->tables[i]);
+      g_free (data->lastentry[i]);
+    }
 
   g_free (data);
 }
@@ -1829,11 +1885,11 @@ merge_color_scheme (GtkSettings       *settings,
   colors = g_value_get_string (value);
 
   data = (ColorSchemeData *) g_object_get_data (G_OBJECT (settings),
-						 "gtk-color-scheme");
+						"gtk-color-scheme");
   if (!data)
     {
       data = g_new0 (ColorSchemeData, 1);
-      data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+      data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, 
 						(GDestroyNotify) gdk_color_free);
       g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
 			      data, (GDestroyNotify) color_scheme_data_free);
