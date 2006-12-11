@@ -3,39 +3,6 @@
 # translation of gtk+.gtk-2-10.hi.po to Hindi
 # translation of gtk+.gtk-2-10.hi.po to Hindi
 # translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
-# translation of gtk+.gtk-2-10.hi.po to Hindi
 # translation of gtk+.HEAD.hi.po to Hindi
 # translation of gk.hi.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
@@ -49,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.hi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-11 07:27+0100\n"
-"PO-Revision-Date: 2006-12-11 18:09+0530\n"
+"PO-Revision-Date: 2006-12-11 17:28+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -1474,7 +1441,7 @@ msgstr "%s हेतु पुस्तकचिह्न जोड़ नही
 
 #: ../gtk/gtkfilechooserdefault.c:3338
 msgid "Remove"
-msgstr "हटायें"
+msgstr "हटाओ"
 
 #: ../gtk/gtkfilechooserdefault.c:3347
 msgid "Rename..."
@@ -1961,7 +1928,7 @@ msgstr "चिह्न '%s' प्रसंग में उपस्थित 
 
 #: ../gtk/gtkimmodule.c:407
 msgid "Default"
-msgstr "मूलभूत"
+msgstr "डिफ़ॉल्ट"
 
 #: ../gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2735,7 +2702,7 @@ msgstr "मदद (_H)"
 
 #: ../gtk/gtkstock.c:355
 msgid "_Home"
-msgstr "घर (_H)"
+msgstr "घर  (_H)"
 
 #: ../gtk/gtkstock.c:356
 msgid "Increase Indent"
@@ -2824,7 +2791,7 @@ msgstr "रोकें (_S)"
 
 #: ../gtk/gtkstock.c:387
 msgid "_Network"
-msgstr "संजाल (_N)"
+msgstr "नेटवर्क (_N)"
 
 #: ../gtk/gtkstock.c:388
 msgid "_New"
@@ -3102,7 +3069,7 @@ msgstr "A3"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
-msgstr "A3 एक्सट्रा"
+msgstr "A3 Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:33
@@ -3137,12 +3104,12 @@ msgstr "A4"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
-msgstr "A4 एक्सट्रा"
+msgstr "A4 Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
-msgstr "A4 टैब"
+msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:49
@@ -3537,12 +3504,12 @@ msgstr "a2 लिफाफा"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
-msgstr "ऑर्क A"
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
-msgstr "ऑर्क B"
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:211
@@ -3552,17 +3519,17 @@ msgstr "Arch C"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
-msgstr "ऑर्क D"
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
-msgstr "ऑर्क E"
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr "b-प्लस"
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
@@ -3592,7 +3559,7 @@ msgstr "edp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr "यूरोपियन edp"
+msgstr "European edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
@@ -3607,37 +3574,37 @@ msgstr "f"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr "फैनफोल्ड यूरोपीय"
+msgstr "FanFold European"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr "फैनफोल्ड US"
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr "फैनफोल्ड जर्मन लीगल"
+msgstr "FanFold German Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr "सरकारी लीगल"
+msgstr "Government Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr "सरकारी लेटर"
+msgstr "Government Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr "इंडेक्स 3x5"
+msgstr "Index 3x5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr "इंडेक्स 4x6 (पोस्टकॉर्ड)"
+msgstr "Index 4x6 (postcard)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
@@ -3652,47 +3619,47 @@ msgstr "Index 5x8"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr "इनबॉयस"
+msgstr "Invoice"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
-msgstr "टैब्लॉयड"
+msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
-msgstr "US लीगल"
+msgstr "US Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr "US लीगल एक्स्ट्रा"
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
-msgstr "US लेटर"
+msgstr "US Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
-msgstr "US लेटर एक्स्ट्रा"
+msgstr "US Letter Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
-msgstr "US लेटर प्लस"
+msgstr "US Letter Plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr "मोनार्क लिफाफा"
+msgstr "Monarch Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr "#10 लिफाफा"
+msgstr "#10 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:271
@@ -3717,27 +3684,27 @@ msgstr "#9 लिफाफा"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr "निजी लिफाफा"
+msgstr "Personal Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
-msgstr "क्वार्ट्रो"
+msgstr "Quarto"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr "सुपर A"
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr "सुपर B"
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr "विस्तृत प्रारूप"
+msgstr "Wide Format"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
@@ -3747,12 +3714,12 @@ msgstr "Dai-pa-kai"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr "फोलियो"
+msgstr "Folio"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
-msgstr "फोलियो sp"
+msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
@@ -3792,7 +3759,7 @@ msgstr "prc1 लिफाफा"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr "prc10 लिफाफा"
+msgstr "prc10 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:311
@@ -3802,7 +3769,7 @@ msgstr "prc 16k"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr "prc2 लिफाफा"
+msgstr "prc2 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:315
@@ -3832,7 +3799,7 @@ msgstr "prc6 लिफाफा"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr "prc7 लिफाफा"
+msgstr "prc7 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:327
