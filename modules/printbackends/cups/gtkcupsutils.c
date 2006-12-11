@@ -474,12 +474,80 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
         }
 
       default:
-        ippAddString (request->ipp_request,
-                      IPP_TAG_OPERATION,
-                      option_tag,
-                      option,
-                      NULL,
-                      value);
+        {
+          char *values;
+          char *s;
+          int in_quotes;
+          char *next;
+          GPtrArray *strings;
+          
+          values = g_strdup (value);
+          strings = NULL;
+          in_quotes = 0;
+          
+          for (s = values, next = s; *s != '\0'; s++)
+            {
+              if (in_quotes != 2 && *s == '\'')
+                {
+                  /* skip quoted value */
+                  if (in_quotes == 0)
+                    in_quotes = 1;
+                  else
+                    in_quotes = 0;
+                }
+              else if (in_quotes != 1 && *s == '\"')
+                {
+                  /* skip quoted value */
+                  if (in_quotes == 0)
+                    in_quotes = 2;
+                  else
+                    in_quotes = 0;
+                }
+              else if (in_quotes == 0 && *s == ',')
+                {
+                  /* found delimiter, add to value array */
+                  *s = '\0';
+                  if (strings == NULL)
+                    strings = g_ptr_array_new ();
+                  g_ptr_array_add (strings, next);
+                  next = s + 1;
+                }
+              else if (in_quotes == 0 && *s == '\\' && s[1] != '\0')
+                {
+                  /* skip escaped character */
+                  s++;
+                }
+            }
+          
+          if (strings == NULL)
+            {
+              /* single value */
+              ippAddString (request->ipp_request,
+                            IPP_TAG_OPERATION,
+                            option_tag,
+                            option,
+                            NULL,
+                            value);
+            }
+          else
+            {
+              /* multiple values */
+              
+              /* add last value */
+              g_ptr_array_add (strings, next);
+              
+              ippAddStrings (request->ipp_request,
+                             IPP_TAG_OPERATION,
+                             option_tag,
+                             option,
+                             strings->len,
+                             NULL,
+                             (const char **) strings->pdata);
+              g_ptr_array_free (strings, TRUE);
+            }
+
+          g_free (values);
+        }
 
         break;
     }
