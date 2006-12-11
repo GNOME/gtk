@@ -1,6 +1,177 @@
 # translation of gtk+.gtk-2-10.gu.po to Gujarati
 # translation of gtk+.gtk-2-10.gu.po to Gujarati
 # translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
+# translation of gtk+.gtk-2-10.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
 # translation of gtk+.HEAD.gu.po to Gujarati
@@ -269,8 +440,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-07 07:13+0100\n"
-"PO-Revision-Date: 2006-12-07 12:10+0530\n"
+"POT-Creation-Date: 2006-12-11 07:27+0100\n"
+"PO-Revision-Date: 2006-12-11 16:18+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -301,59 +472,58 @@ msgstr ""
 "\n"
 "\n"
 "\n"
+"\n"
 "X-Generator: KBabel 1.9.1\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1113 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "'%s' ફાઈલ લાવવામાં નિષ્ફળ: %s"
+msgstr "'%s' ફાઈલ ખોલવામાં નિષ્ફળ: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:870
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "ચિત્ર ફાઈલ '%s'માં કોઇ માહિતી નથી"
+msgstr "ચિત્ર ફાઈલ '%s' કોઇ માહિતી સમાવતી નથી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:907
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1164 ../tests/testfilechooser.c:263
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી ચિત્ર ફાઈલ છે"
+msgstr "ચિત્ર '%s' લાવવામાં નિષ્ફળ: કારણ અજ્ઞાત, કદાચ બગડેલ ચિત્ર ફાઈલ હશે"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
+msgstr "એનીમેશન '%s' લાવવામાં નિષ્ફળ: કારણ અજ્ઞાત, કદાચ બગડેલ એનીમેશન ફાઈલ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:463
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "ચિત્ર લાવવા માટેનું મોડ્યુલ લાવી શકાયું નહિ: %s: %s"
+msgstr "ચિત્ર લાવવા માટેનું મોડ્યુલ લાવવામાં અસમર્થ: %s: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:478
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
-"ચિત્ર લાવવા માટેનું મોડ્યુલ %s યોગ્ય ઈન્ટરફેસનો નિકાસ કરતું નથી, કદાચ એ અલગ GTK "
-"અહેવાલમાંથી છે?"
+msgstr "ચિત્ર લાવવા માટેનું મોડ્યુલ %s યોગ્ય ઈન્ટરફેસનો નિકાસ કરતું નથી; કદાચ એ અલગ GTK આવૃત્તિમાંથી છે?"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:647 ../gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "ચિત્રનો પ્રકાર '%s' આધાર આપતો નથી"
+msgstr "ચિત્ર પ્રકાર '%s' આધારભૂત નથી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ફાઈલ %s માટે ચિત્રનું બંધારણ ઓળખી શકાતું નથી."
+msgstr "ફાઈલ '%s' માટે ચિત્ર ફાઈલ બંધારણ ઓળખી શક્યા નહિં"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:747
 msgid "Unrecognized image file format"
-msgstr "ચિત્ર ફાઈલનું બંધારણ અજાણ્યુ છે."
+msgstr "નહિં ઓળખાયેલ ચિત્ર ફાઈલ બંધારણ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:916
 #, c-format
@@ -363,16 +533,16 @@ msgstr "ચિત્ર '%s' લાવવામાં નિષ્ફળ: %s"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1392
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "ચિત્રની ફાઇલમાં લખવામાં ભૂલ: %s"
+msgstr "ચિત્ર ફાઇલમાં લખવામાં ભૂલ: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1438 ../gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "gdk-pixbfનું બંધારણ ચિત્રના બંધારણનો સંગ્રહ કરવા માટે આધાર આપતું નથી: %s"
+msgstr "gdk-pixbf નું બંધારણ ચિત્ર બંધારણનો સંગ્રહ કરવા માટે આધાર આપતું નથી: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1472
 msgid "Insufficient memory to save image to callback"
-msgstr "કૉલબેક માટે ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
+msgstr "કોલબેક માટે ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1485
 msgid "Failed to open temporary file"
@@ -392,52 +562,50 @@ msgstr "લખવા માટે '%s' ખોલવામાં નિષ્ફ�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
+msgstr "ચિત્ર લખતી વખતે '%s' બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1991 ../gdk-pixbuf/gdk-pixbuf-io.c:2041
 msgid "Insufficient memory to save image into a buffer"
-msgstr "અનામત મૅમરીમાં ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મૅમરી"
+msgstr "બફરમાં ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મેમરી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
-msgstr ""
-"આંતરિક ભૂલ: ચિત્ર લાવનાર મોડ્યુલ '%s' પ્રક્રિયા પૂર્ણ કરવામાં નિષ્ફળ, પરંતુ નિષ્ફળતા માટે "
-"તેણે કારણ આપ્યું ન હતું"
+msgstr "આંતરિક ભૂલ: ચિત્ર લાવનાર મોડ્યુલ '%s' પ્રક્રિયા પૂર્ણ કરવામાં નિષ્ફળ, પરંતુ નિષ્ફળતા માટે તેણે કારણ આપ્યું ન હતું"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "ચિત્રના પ્રકાર '%s'ને  ધીરેધીરે લાવવા માટે આધાર નથી"
+msgstr "ચિત્ર પ્રકાર '%s' ને  ધીરેધીરે લાવવા માટેનો આધાર નથી"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
-msgstr "ચિત્ર માટેનું હેડર બગડેલુ છે"
+msgstr "ચિત્ર હેડર બગડેલ છે"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
-msgstr "ચિત્ર માટેનુ બંધારણ જાણીતું નથી"
+msgstr "ચિત્ર બંધારણ અજ્ઞાત"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
-msgstr "ચિત્ર માટેની પિક્સેલ માહિતી બગડેલી છે"
+msgstr "ચિત્ર પિક્સેલ માહિતી બગડેલ છે"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "ચિત્ર માટેના %u બાઈટની અનામત મૅમરી ફાળવવામાં નિષ્ફળ છે"
-msgstr[1] "ચિત્ર માટેના %u બાઇટની અનામત મૅમરી ફાળવવામાં નિષ્ફળ છે"
+msgstr[0] "%u બાઈટનું ચિત્ર બફર ફાળવવામાં નિષ્ફળ"
+msgstr[1] "%u બાઈટોનું ચિત્ર બફર ફાળવવામાં નિષ્ફળ"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr "એનિમેશનમાં અણધાર્યો ચિહ્નનો કટકો છે"
+msgstr "એનિમેશનમાં અનિચ્છનીય ચિહ્ન કટકો"
 
 #: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr "એનિમેશનનો પ્રકાર આધારિત નથી"
+msgstr "બિનઆધારભૂત એનિમેશન પ્રકાર"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
 msgid "Invalid header in animation"
@@ -447,12 +615,12 @@ msgstr "એનિમેશનમાં અયોગ્ય હેડર"
 #: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
 #: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
 msgid "Not enough memory to load animation"
-msgstr "એનિમેશન લાવવા માટે પૂરતી મેમરી નથી."
+msgstr "એનિમેશન લાવવા માટે પૂરતી મેમરી નથી"
 
 #: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
 #: ../gdk-pixbuf/io-ani.c:426
 msgid "Malformed chunk in animation"
-msgstr "એનિમેશનમાં ખરાબ રચના વાળો કટકો"
+msgstr "એનિમેશનમાં મલીન કટકો"
 
 #: ../gdk-pixbuf/io-ani.c:674
 msgid "The ANI image format"
@@ -496,7 +664,7 @@ msgstr "GIF વાંચવામાં નિષ્ફળ: %s"
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1472
 #: ../gdk-pixbuf/io-gif.c:1633
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ફાઈલને કોઈ માહિતીની અછત વર્તાય છે (કદાચ તે કોઇક રીતે છેદાઇ ગયું?)"
+msgstr "GIF ફાઈલને કોઈ માહિતી ગુમ થયેલ છે (કદાચ તે કોઇક રીતે છેદાઇ ગયું?)"
 
 #: ../gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -505,19 +673,19 @@ msgstr "GIF લાવનારમાં આંતરિક ભૂલ (%s)"
 
 #: ../gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
-msgstr "સ્ટેક વધારેપડતુ ભરાઈ ગયુ છે"
+msgstr "સ્ટેક ઓવરફ્લો"
 
 #: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF ચિત્ર લાવનાર આ ચિત્રને સમજી શકતુ નથી"
+msgstr "GIF ચિત્ર લાવનાર આ ચિત્રને સમજી શકતુ નથી."
 
 #: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
-msgstr "ખરાબ કોડનો સામનો થયો"
+msgstr "ખરાબ કોડ ઉદ્ભવ્યો"
 
 #: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
-msgstr "GIF ફાઈલમાં ફરતો કોષ્ટક પ્રવેશ"
+msgstr "GIF ફાઈલમાં ચક્રિય કોષ્ટક પ્રવેશ"
 
 #: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1459
 #: ../gdk-pixbuf/io-gif.c:1506 ../gdk-pixbuf/io-gif.c:1621
@@ -530,28 +698,26 @@ msgstr "GIF ફાઈલમાં ચોકઠું સમાવવા મા�
 
 #: ../gdk-pixbuf/io-gif.c:1123
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ચિત્ર બગડેલુ છે (ખોટુ LZW સંકોચન)"
+msgstr "GIF ચિત્ર બગડેલ છે (ખોટુ LZW સંકોચન)"
 
 #: ../gdk-pixbuf/io-gif.c:1173
 msgid "File does not appear to be a GIF file"
-msgstr "આ ફાઈલ GIF ફાઈલ હોય એવું લાગતુ નથી"
+msgstr "આ ફાઈલ GIF ફાઈલ હોય એવી લાગતી નથી"
 
 #: ../gdk-pixbuf/io-gif.c:1185
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ફાઈલના બંધારણની %s આવૃત્તિ માટે આધાર નથી"
+msgstr "GIF ફાઈલના બંધારણની %s આવૃત્તિ આધારભૂત નથી"
 
 #: ../gdk-pixbuf/io-gif.c:1294
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF ચિત્ર માટે કોઈ વૈશ્વિક રંગનક્શો નથી, અને તેની અંદરના ચોકઠા માટે કોઈ પ્રાદેશિક રંગનક્શો "
-"નથી."
+msgstr "GIF ચિત્ર માટે કોઈ વૈશ્વિક રંગનક્શો નથી, અને તેની અંદરના ચોકઠા માટે કોઈ પ્રાદેશિક રંગનક્શો નથી."
 
 #: ../gdk-pixbuf/io-gif.c:1528
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF ચિત્ર છેદાયેલ અથવા અધૂરુ છે"
+msgstr "GIF ચિત્ર છેદાયેલ અથવા અધૂરુ છે."
 
 #: ../gdk-pixbuf/io-gif.c:1680
 msgid "The GIF image format"
@@ -561,7 +727,7 @@ msgstr "GIF ચિત્ર બંધારણ"
 #: ../gdk-pixbuf/io-ico.c:348 ../gdk-pixbuf/io-ico.c:411
 #: ../gdk-pixbuf/io-ico.c:441
 msgid "Not enough memory to load icon"
-msgstr "ચિહ્નને લાવવા માટે પૂરતી મેમરી નથી"
+msgstr "ચિહ્ન લાવવા માટે પૂરતી મેમરી નથી"
 
 #: ../gdk-pixbuf/io-ico.c:256 ../gdk-pixbuf/io-ico.c:269
 #: ../gdk-pixbuf/io-ico.c:338
@@ -578,11 +744,11 @@ msgstr "ચિહ્નની ઊંચાઈ શૂન્ય છે"
 
 #: ../gdk-pixbuf/io-ico.c:363
 msgid "Compressed icons are not supported"
-msgstr "સંકુચિત ચિહ્નો માટે આધાર નથી"
+msgstr "સંકુચિત ચિહ્નો આધારભૂત નથી"
 
 #: ../gdk-pixbuf/io-ico.c:396
 msgid "Unsupported icon type"
-msgstr "નિરાધારીત ચિહ્નનો પ્રકાર"
+msgstr "બિનઆધારભૂત ચિહ્ન પ્રકાર"
 
 #: ../gdk-pixbuf/io-ico.c:490
 msgid "Not enough memory to load ICO file"
@@ -590,7 +756,7 @@ msgstr "ICO ફાઈલ લાવવા માટે પૂરતી મેમ�
 
 #: ../gdk-pixbuf/io-ico.c:955
 msgid "Image too large to be saved as ICO"
-msgstr "ચિત્રનો ICO તરીકે સંગ્રહ કરવા માટે તે ખૂબ મોટુ છે"
+msgstr "ચિત્રનો ICO તરીકે સંગ્રહ કરવા માટે તે ખૂબ મોટું છે"
 
 #: ../gdk-pixbuf/io-ico.c:966
 msgid "Cursor hotspot outside image"
@@ -608,7 +774,7 @@ msgstr "ICO ચિત્ર બંધારણ"
 #: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG ફાઈલનાં(%s) અર્થઘટનમાં ભૂલ"
+msgstr "JPEG ફાઈલનાં (%s) અર્થઘટનમાં ભૂલ"
 
 #: ../gdk-pixbuf/io-jpeg.c:352
 msgid ""
@@ -631,14 +797,12 @@ msgstr "JPEG ફાઈલને લાવવા માટે કોઈ મેમ
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"JPEGની ગુણવત્તા માટેનુ કિંમત 0 થી 100 ની વચ્ચે હોવુ જરૂરી છે; કિંમત '%s' ને પદચ્છેદ કરી "
-"શકાતી નથી."
+msgstr "JPEG ની ગુણવત્તા માટેનુ કિંમત 0 થી 100 ની વચ્ચે હોવુ જરૂરી છે; કિંમત '%s' ને પદચ્છેદ કરી શક્યા નથી."
 
 #: ../gdk-pixbuf/io-jpeg.c:941
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
+msgstr "JPEG ની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' માન્ય નથી."
 
 #: ../gdk-pixbuf/io-jpeg.c:1103
 msgid "The JPEG image format"
@@ -650,11 +814,11 @@ msgstr "હેડર માટે મેમરી ફાળવી શકાત�
 
 #: ../gdk-pixbuf/io-pcx.c:206 ../gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
-msgstr "સંદર્ભની સંરચનાની અનામત મૅમરી માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "સંદર્ભ બફર માટે મેમરી ફાળવી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
-msgstr "ચિત્રને અયોગ્ય પહોળાઇ અને/અથવા ઊંચાઇ"
+msgstr "ચિત્રને અયોગ્ય પહોળાઇ અને/અથવા ઊંચાઇ છે"
 
 #: ../gdk-pixbuf/io-pcx.c:619 ../gdk-pixbuf/io-pcx.c:680
 msgid "Image has unsupported bpp"
@@ -667,23 +831,23 @@ msgstr "ચિત્રને %d-બીટ સમતલોની સંખ્ય
 
 #: ../gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
-msgstr "નવુ Pixbuf ફાળવી શકાતુ નથી"
+msgstr "નવું pixbuf બનાવી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
-msgstr "લીટી માહિતી માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "લીટી માહિતી માટે મેમરી ફાળવી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
-msgstr "પેલેટવાળી માહિતી માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "પેલેટવાળી માહિતી માટે મેમરી ફાળવી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
-msgstr "PCX ચિત્ર માટે બધી લીટીઓ મેળવી શકાતી નથી"
+msgstr "PCX ચિત્ર માટે બધી લીટીઓ મળી નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
-msgstr "PCX માહિતીના અંતે કોઇ પેલેટ મળતુ નથી"
+msgstr "PCX માહિતીના અંતે કોઇ પેલેટ મળી નહિં"
 
 #: ../gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
@@ -703,11 +867,11 @@ msgstr "રૂપાંતરિત PNG માટે બીટ્સ પ્ર�
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "રૂપાંતરિત PNG, RGB કે RGBA નથી."
+msgstr "રૂપાંતરિત PNG એ RGB કે RGBA નથી."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "રૂપાંતરિત PNG માટે નિરાધારીત ચેનલની સંખ્યા, 3 કે 4 હોવી જરૂરી છે."
+msgstr "રૂપાંતરિત PNG માટે બિનઆધારભૂત ચેનલની સંખ્યા, 3 કે 4 જ હોવી જોઈએ."
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
@@ -723,9 +887,7 @@ msgstr "PNG ફાઈલને લાવવા માટે અપૂરતી �
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr ""
-"%ld x %ld ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મેમરી; મેમરીનો વપરાશ ઓછો કરવા માટે કોઈક "
-"કાર્યક્રમમાંથી બહાર નીકળો"
+msgstr "%ld x %ld ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મેમરી; મેમરીનો વપરાશ ઘટાડવા માટે કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
 
 #: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -804,7 +966,7 @@ msgstr "PNM ચિત્રનો કાચો પ્રકાર અયોગ�
 
 #: ../gdk-pixbuf/io-pnm.c:656
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ચિત્ર લાવનાર PNMના આ ઉપ-બંધારણને આધાર આપતો નથી"
+msgstr "PNM ચિત્ર લાવનાર PNM ના આ ઉપ-બંધારણને આધાર આપતું નથી"
 
 #: ../gdk-pixbuf/io-pnm.c:711
 msgid "Premature end-of-file encountered"
@@ -832,7 +994,7 @@ msgstr "PNM ફાઈલને લાવવા માટે અપૂરતી �
 
 #: ../gdk-pixbuf/io-pnm.c:1083
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ચિત્રના બંધારણનું કુટુંબ"
+msgstr "PNM/PBM/PGM/PPM ચિત્રના બંધારણ પરિવાર"
 
 #: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
@@ -844,11 +1006,11 @@ msgstr "RAS ચિત્રનો પ્રકાર અજાણ્યો છ�
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "નિરાધારીત RAS ચિત્ર બદલાવો"
+msgstr "બિનઆધારભૂત RAS ચિત્ર ફેરફાર"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr "RAS ચિત્રને લાવવા માટે પૂરતી મેમરી નથી"
+msgstr "RAS ચિત્ર લાવવા માટે પૂરતી મેમરી નથી"
 
 #: ../gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
@@ -914,11 +1076,11 @@ msgstr "ટાર્ગા ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "ચિત્રની પહોળાઈ મેળવી શકાતી નથી (ખરાબ TIFF ફાઈલ)"
+msgstr "ચિત્રની પહોળાઈ મેળવી શક્યા નહિં (ખરાબ TIFF ફાઈલ)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr "ચિત્રની ઊંચાઈ મેળવી શકાતી નથી (ખરાબ TIFF ફાઈલ)"
+msgstr "ચિત્રની ઊંચાઈ મેળવી શક્યા નહિં (ખરાબ TIFF ફાઈલ)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
@@ -926,7 +1088,7 @@ msgstr "TIFF ચિત્રની પહોળાઈ કે ઊંચાઈ શ
 
 #: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
-msgstr "TIFF ચિત્રનુ પરિમાણ બહુ મોટુ છે"
+msgstr "TIFF ચિત્ર પરિમાણ ખૂબ મોટું છે"
 
 #: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
 #: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
@@ -947,7 +1109,7 @@ msgstr "TIFF બંધ કરવાની પ્રક્રિયા નિષ�
 
 #: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
-msgstr "TIFF ચિત્રને લાવવામાં નિષ્ફળ"
+msgstr "TIFF ચિત્ર લાવવામાં નિષ્ફળ"
 
 #: ../gdk-pixbuf/io-tiff.c:704
 msgid "Failed to save TIFF image"
@@ -963,23 +1125,23 @@ msgstr "TIFF ફાઈલમાં લખી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-tiff.c:844
 msgid "The TIFF image format"
-msgstr "TIFF ચિત્રનું બંધારણ"
+msgstr "TIFF ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "ચિત્રની શૂન્ય પહોળાઈ"
+msgstr "ચિત્રની પહોળાઈ શૂન્ય છે"
 
 #: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr "ચિત્રની શૂન્ય ઊંચાઈ"
+msgstr "ચિત્રની ઊંચાઈ શૂન્ય છે"
 
 #: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "ચિત્રને લાવવા માટે અપૂરતી મેમરી"
+msgstr "ચિત્રને લાવવા માટે પૂરતી મેમરી નથી"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr "બાકીનું સંગ્રહી શકાતુ નથી"
+msgstr "બાકીનું સંગ્રહી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -999,11 +1161,11 @@ msgstr "XBM ચિત્રને લાવતી વખતે કામપૂ�
 
 #: ../gdk-pixbuf/io-xbm.c:488
 msgid "The XBM image format"
-msgstr "XBM ચિત્ર બંધારણ."
+msgstr "XBM ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
-msgstr "કોઈ XPM હેડર મળતું નથી."
+msgstr "કોઈ XPM હેડર મળી નહિં"
 
 #: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
@@ -1011,32 +1173,32 @@ msgstr "અયોગ્ય XPM હેડર"
 
 #: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
-msgstr "XPM ફાઈલના ચિત્રની પહોળાઈ <= 0 છે."
+msgstr "XPM ફાઈલના ચિત્રની પહોળાઈ <= ૦ છે"
 
 #: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
-msgstr "XPM ફાઈલના ચિત્રની ઊંચાઈ <= 0 છે."
+msgstr "XPM ફાઈલના ચિત્રની ઊંચાઈ <= ૦ છે"
 
 #: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM પાસે પ્રતિ પીક્સેલ અયોગ્ય શબ્દની સંખ્યા."
+msgstr "XPM પાસે પીક્સેલ પ્રતિ અયોગ્ય સંખ્યાના શબ્દો છે"
 
 #: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
-msgstr "XPM ફાઈલ પાસે અયોગ્ય રંગની સંખ્યા છે."
+msgstr "XPM ફાઈલ પાસે અયોગ્ય સંખ્યાના રંગો છે"
 
 #: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ચિત્રને લાવવા માટે પૂરતી મેમરી ફાળવી શકાતી નથી."
+msgstr "XPM ચિત્ર લાવવા માટે મેમરી ફાળવી શક્યા નહિં"
 
 #: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
-msgstr "XPM રંગનક્શો વાંચી શકતુ નથી."
+msgstr "XPM રંગનક્શો વાંચી શકતા નથી"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ."
+msgstr "XPM ચિત્રને લાવતી વખતે કામચલાઉ ફાઈલમાં લખવામાં નિષ્ફળ"
 
 #: ../gdk-pixbuf/io-xpm.c:812
 msgid "The XPM image format"
@@ -1098,7 +1260,7 @@ msgstr "FLAGS"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:132
 msgid "Gdk debugging flags to unset"
-msgstr "નહિં સુયોજિત કરવાના Gdk ડિબગીંગ ફ્લેગો"
+msgstr "અસુયોજિત કરવાના Gdk ડિબગીંગ ફ્લેગો"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -1240,7 +1402,7 @@ msgstr "GDI અરજીઓ ભેગી કરો નહિં"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Wintab API નો ટેબ્લેટ આધાર માટે વાપરશો નહિં"
+msgstr "Wintab API ને ટેબ્લેટ આધાર માટે વાપરશો નહિં"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:64
@@ -1250,7 +1412,7 @@ msgstr "--no-wintab ની જેમ જ"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr "Wintab API [મૂળભુત] વાપરશો નહિં"
+msgstr "Wintab API [મૂળભુત] વાપરો"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:68
@@ -1273,7 +1435,7 @@ msgstr "લાઈસન્સ"
 
 #: ../gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
-msgstr "પ્રવેશના સમાવિષ્ટો"
+msgstr "કાર્યક્રમનું લાઈસન્સ"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:504
@@ -1495,44 +1657,35 @@ msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
-msgstr ""
-"પહેલા પસંદ કરાયેલો રંગ, અત્યારે પસંદ કરી રહેલા રંગ સાથે સરખામણી કરવા માટે. તમે ઘસેડીને "
-"પેલેટમાં આ રંગને પ્રવેશ કરાવી શકો છો અથવા તો આ રંગને બીજા રંગના નમૂનાઓની બાજુમાં ઘસેડીને આ "
-"રંગને તમે વર્તમાન રંગ તરીકે પસંદ કરી શકો છો."
+msgstr "પહેલા પસંદ કરાયેલો રંગ, અત્યારે પસંદ કરી રહેલા રંગ સાથે સરખામણી કરવા માટે. તમે ઘસેડીને પેલેટમાં આ રંગને પ્રવેશ કરાવી શકો છો અથવા તો આ રંગને બીજા રંગના નમૂનાઓની બાજુમાં ઘસેડીને આ રંગને તમે વર્તમાન રંગ તરીકે પસંદ કરી શકો છો."
 
 #: ../gtk/gtkcolorsel.c:567
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr ""
-"તમે જે રંગને પસંદ કર્યો છે તે. રંગનો ભવિષ્યમાં ફરીથી ઉપયોગ કરવા માટે તમે તેને પેલેટ વિગતમાં "
-"સંગ્રહી શકો છો"
+msgstr "તમે જે રંગને પસંદ કર્યો છે. આ રંગનો ભવિષ્યમાં ફરીથી ઉપયોગ કરવા માટે તમે તેને પેલેટ વિગતમાં સંગ્રહી શકો છો."
 
 #: ../gtk/gtkcolorsel.c:954
 msgid "_Save color here"
-msgstr "રંગનો અહીં સંગ્રહ કરો (_S)"
+msgstr "રંગ અહીં સંગ્રહો (_S)"
 
 #: ../gtk/gtkcolorsel.c:1159
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"વર્તમાન રંગ બનાવવા માટે પેલેટ પ્રવેશ ઉપર ક્લિક કરો. આ પ્રવેશને બદલવા માટે નમૂના માટેરંગને "
-"ઘસેડો અથવા તે રંગ પર જમણી બાજુનુ ક્લિક કરો અને \"રંગનો સંગ્રહ અહી કરો\" પસંદ કરો"
+msgstr "વર્તમાન રંગ બનાવવા માટે પેલેટ પ્રવેશ ઉપર ક્લિક કરો. આ પ્રવેશને બદલવા માટે નમૂના માટે રંગને ઘસેડો અથવા તે રંગ પર જમણી બાજુનુ ક્લિક કરો અને \"રંગ અહીં સંગ્રહો\" પસંદ કરો."
 
 #: ../gtk/gtkcolorsel.c:1937
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr ""
-"તમારે જે રંગ પસંદ કરવો હોય તે બહારની રીંંગમાંથી પસંદ કરો.અંદરના ત્રિકોણનો ઉપયોગ કરીને "
-"રંગનું ઘાટાપણું અને ઝાંખાપણું પસંદ કરો"
+msgstr "તમારે જે રંગ પસંદ કરવો હોય તે બહારની રીંગમાંથી પસંદ કરો. અંદરના ત્રિકોણનો ઉપયોગ કરીને રંગનું ઘાટાપણું અને ઝાંખાપણું પસંદ કરો."
 
 #: ../gtk/gtkcolorsel.c:1962
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "આઈડ્રોપર પર ક્લિક કરો, પછી રંગ પસંદ કરવા સ્ક્રીન પર ગમે ત્યાં એ રંગ પર ક્લિક કરો"
+msgstr "આઈડ્રોપર પર ક્લિક કરો, પછી રંગ પસંદ કરવા સ્ક્રીન પર ગમે ત્યાં એ રંગ પર ક્લિક કરો."
 
 #: ../gtk/gtkcolorsel.c:1971
 msgid "_Hue:"
@@ -1564,11 +1717,11 @@ msgstr "લાલ (_R):"
 
 #: ../gtk/gtkcolorsel.c:1979
 msgid "Amount of red light in the color."
-msgstr "રંગમાં લાલરંગનું પ્રમાણ."
+msgstr "રંગમાં લાલ રંગનું પ્રમાણ."
 
 #: ../gtk/gtkcolorsel.c:1980
 msgid "_Green:"
-msgstr "લીલું (_G):"
+msgstr "લીલો (_G):"
 
 #: ../gtk/gtkcolorsel.c:1981
 msgid "Amount of green light in the color."
@@ -1576,11 +1729,11 @@ msgstr "રંગમાં લીલા રંગનું પ્રમાણ."
 
 #: ../gtk/gtkcolorsel.c:1982
 msgid "_Blue:"
-msgstr "વાદળી (_B):"
+msgstr "ભૂરો (_B):"
 
 #: ../gtk/gtkcolorsel.c:1983
 msgid "Amount of blue light in the color."
-msgstr "રંગમાં વાદળીરંગનું પ્રમાણ."
+msgstr "રંગમાં ભૂરા રંગનું પ્રમાણ."
 
 #: ../gtk/gtkcolorsel.c:1986
 msgid "Op_acity:"
@@ -1598,9 +1751,7 @@ msgstr "રંગનું નામ (_n):"
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr ""
-"તમે HTML-શૈલીની ષષ્ટાંક રંગ કિંમત આપી શકો છો, અથવા તો માત્ર રંગનુ નામ જેમકે 'નારંગી' આપી "
-"શકો છો"
+msgstr "તમે HTML-શૈલીની ષષ્ટાંક રંગ કિંમત આપી શકો છો, અથવા તો માત્ર રંગનુ નામ જેમકે 'નારંગી' આપી શકો છો."
 
 #: ../gtk/gtkcolorsel.c:2057
 msgid "_Palette:"
@@ -1608,7 +1759,7 @@ msgstr "પેલેટ (_P):"
 
 #: ../gtk/gtkcolorsel.c:2086
 msgid "Color Wheel"
-msgstr "રંગ પૈંડુુ"
+msgstr "રંગ પૈંડુ"
 
 #: ../gtk/gtkcolorseldialog.c:89
 msgid "Color Selection"
@@ -1620,7 +1771,7 @@ msgstr "ઈનપુટ પધ્ધતિઓ (_M)"
 
 #: ../gtk/gtkentry.c:4932 ../gtk/gtktextview.c:7252
 msgid "_Insert Unicode Control Character"
-msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
+msgstr "યુનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
 
 #: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
 #: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
@@ -1664,9 +1815,7 @@ msgstr "ફોલ્ડર બનાવી શક્યા નહિં"
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"ફોલ્ડર બનાવી શક્યા નહિં, ફાઈલ તરીકે તેની સાથે આ જ નામ પહેલાથી જ હાજર છે.  ફોલ્ડર માટે "
-"અલગ નામ વાપરવાનો પ્રયત્ન કરો, અથવા ફાઈલનું પ્રથમ નામ બદલો."
+msgstr "ફોલ્ડર બનાવી શક્યા નહિં, ફાઈલ તરીકે તેની સાથે આ જ નામ પહેલાથી જ હાજર છે.  ફોલ્ડર માટે અલગ નામ વાપરવાનો પ્રયત્ન કરો, અથવા ફાઈલનું પ્રથમ નામ બદલો."
 
 #: ../gtk/gtkfilechooserdefault.c:977
 msgid "Invalid file name"
@@ -1683,7 +1832,7 @@ msgstr "ફોલ્ડર સમાવિષ્ટો દર્શાવી શ
 #: ../gtk/gtkfilechooserdefault.c:1494
 #, c-format
 msgid "%1$s on %2$s"
-msgstr "%1$s, %2$s પર"
+msgstr "%2$s પર %1$s"
 
 #: ../gtk/gtkfilechooserdefault.c:2593
 #, c-format
@@ -1744,7 +1893,7 @@ msgstr "પસંદિત બુકમાર્ક દૂર કરો"
 
 #: ../gtk/gtkfilechooserdefault.c:3714
 msgid "Could not select file"
-msgstr "ફાઈલ પસંદી કરી શક્યા નહિં"
+msgstr "ફાઈલ પસંદ કરી શક્યા નહિં"
 
 #: ../gtk/gtkfilechooserdefault.c:3851
 #, c-format
@@ -1777,7 +1926,7 @@ msgstr "સુધારેલ"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
 msgid "Select which types of files are shown"
-msgstr "કયા પ્રકારની ફાઈલ બતાવવી છે તે પસંદ કરો"
+msgstr "કયા પ્રકારની ફાઈલ બતાવેલ છે તે પસંદ કરો"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4322 ../gtk/gtkprinteroptionwidget.c:780
@@ -1795,7 +1944,7 @@ msgstr "ફાઈલ નામ લખો"
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:4636
 msgid "Create Fo_lder"
-msgstr "ફોલ્ડર બનાવો (_F)"
+msgstr "ફોલ્ડર બનાવો (_l)"
 
 #: ../gtk/gtkfilechooserdefault.c:4646
 msgid "_Location:"
@@ -1803,15 +1952,15 @@ msgstr "સ્થાન (_L):"
 
 #: ../gtk/gtkfilechooserdefault.c:4886
 msgid "Save in _folder:"
-msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_F):"
+msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_f):"
 
 #: ../gtk/gtkfilechooserdefault.c:4888
 msgid "Create in _folder:"
-msgstr "ફોલ્ડરમાં બનાવો (_F):"
+msgstr "ફોલ્ડરમાં બનાવો (_f):"
 
 #: ../gtk/gtkfilechooserdefault.c:6384
 msgid "Cannot change to folder because it is not local"
-msgstr "ફોલ્ડર બદલી શકતા નથી કારણ કે તે સ્થાનિક પથ નથી"
+msgstr "ફોલ્ડરમાં બદલી શકતા નથી કારણ કે તે સ્થાનિક નથી"
 
 #: ../gtk/gtkfilechooserdefault.c:6957 ../gtk/gtkfilechooserdefault.c:6978
 #, c-format
@@ -1831,7 +1980,7 @@ msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હ�
 #: ../gtk/gtkfilechooserdefault.c:7326
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
+msgstr "\"%s\" માં ફાઈલ પહેલાથી જ અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
 #: ../gtk/gtkfilechooserdefault.c:7331
 msgid "_Replace"
@@ -1844,7 +1993,7 @@ msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
 #: ../gtk/gtkfilechooserdefault.c:8421
 msgid "Type name of new folder"
-msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
+msgstr "નવા ફોલ્ડરનું નામ લખો"
 
 #: ../gtk/gtkfilechooserdefault.c:8466
 #, c-format
@@ -1897,9 +2046,7 @@ msgstr "લીટી %d, સ્તંભ %d: અનિચ્છનીય ઘટ�
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
-msgstr ""
-"લીટી %d, સ્તંભ %d: ઘટક \"%s\" નો અનિચ્છનીય અંત, પરંતુ તેની જગ્યાએ \"%s\" માટેનો ઘટક "
-"મળ્યો"
+msgstr "લીટી %d, સ્તંભ %d: ઘટક \"%s\" નો અનિચ્છનીય અંત, પરંતુ તેની જગ્યાએ \"%s\" માટેનો ઘટક મળ્યો"
 
 #: ../gtk/gtkfilechoosersettings.c:202
 #, c-format
@@ -1940,8 +2087,7 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"ફાઈલ \"%s\" બીજા મશીનમાં આવેલી છે (%s કહેવાય છે) અને કદાચઆ પ્રોગામ માટે ઉપલબ્ધ નહીં "
-"થાય.\n"
+"ફાઈલ \"%s\" બીજા મશીનમાં (%s કહેવાય છે) રહે છે અને કદાચ આ કાર્યક્રમ માટે ઉપલબ્ધ નહીં હોય.\n"
 "શું તમે ખરેખર તે પસંદ કરવા માગો છો?"
 
 #: ../gtk/gtkfilesel.c:1079
@@ -1959,7 +2105,7 @@ msgstr "ફાઈલનું નામ બદલો (_R)"
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ફોલ્ડરનું નામ \"%s\" સંકેતોનો સમાવેશ કરે છે જેની આ ફાઈલનામમાં પરવાનગી નથી"
+msgstr "ફોલ્ડર નામ \"%s\" સંજ્ઞાઓનો સમાવેશ કરે છે કે જેઓ ફાઈલનામમાં માન્ય નથી"
 
 #: ../gtk/gtkfilesel.c:1408 ../gtk/gtkfilesel.c:1417
 #: ../gtk/gtkfilesystemunix.c:1062 ../gtk/gtkfilesystemwin32.c:1177
@@ -1982,7 +2128,7 @@ msgstr "બનાવો (_r)"
 #: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ફાઈલનામ \"%s\" માં સંકેતો છે જેની ફાઈલનામમાં પરવાનગી નથી"
+msgstr "ફાઈલનામ \"%s\" સંજ્ઞાઓનો સમાવેશ કરે છે કે જેઓ ફાઈલનામોમાં માન્ય નથી"
 
 #: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
 #, c-format
@@ -1992,7 +2138,7 @@ msgstr "ફાઈલ '%s' કાઢવામાં ભૂલ: %s"
 #: ../gtk/gtkfilesel.c:1589
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "શું ખરેખર %s ફાઈલને કાઢી નાખવા માગો છો?"
+msgstr "શું ખરેખર ફાઈલ \"%s\" કાઢી નાંખવા માંગો છો?"
 
 #: ../gtk/gtkfilesel.c:1594
 msgid "Delete File"
@@ -2001,7 +2147,7 @@ msgstr "ફાઈલ કાઢી નાંખો"
 #: ../gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr "ફાઈલનું \"%s\" માં નામ બદલવામાં ભૂલ: %s"
+msgstr "ફાઈલ નું \"%s\" નામ આમાં બદલવામાં ભૂલ: %s"
 
 #: ../gtk/gtkfilesel.c:1655
 #, c-format
@@ -2028,16 +2174,14 @@ msgstr "ફરીથી નામ આપો (_R)"
 
 #: ../gtk/gtkfilesel.c:2187
 msgid "_Selection: "
-msgstr "પસંદગી (_S):"
+msgstr "પસંદગી (_S): "
 
 #: ../gtk/gtkfilesel.c:3112
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"ફાઈલનામ \"%s\" ને UTF-8 માં રૂપાંતરિત કરી શકાતુ નથી (G_BROKEN_FILENAMES ક્ષેત્રીય "
-"ચલને સુયોજિત કરવાનો પ્રયાસ કરો): %s"
+msgstr "ફાઈલનામ \"%s\" ને UTF-8 માં રૂપાંતરિત કરી શક્યા નહિં. (G_FILENAME_ENCODING પર્યાવરણીય ચલને સુયોજિત કરવાનો પ્રયાસ કરો): %s"
 
 #: ../gtk/gtkfilesel.c:3115
 msgid "Invalid UTF-8"
@@ -2049,7 +2193,7 @@ msgstr "નામ ખૂબ લાંબુ છે"
 
 #: ../gtk/gtkfilesel.c:3993
 msgid "Couldn't convert filename"
-msgstr "ફાઈલનામ રુપાંતરિત કરી શકાયુ નહિ"
+msgstr "ફાઈલનામ રુપાંતરિત કરી શકાયું નહિ"
 
 #: ../gtk/gtkfilesystem.c:322
 #, c-format
@@ -2073,7 +2217,7 @@ msgstr "'%s' માટેની જાણકારી મેળવવામા�
 
 #: ../gtk/gtkfilesystemunix.c:1168 ../gtk/gtkfilesystemwin32.c:1284
 msgid "This file system does not support mounting"
-msgstr "આ ફાઇલ સિસ્ટમ માઉન્ટ કરવાનુને આધાર આપતી નથી"
+msgstr "આ ફાઇલ સિસ્ટમ માઉન્ટ પ્રક્રિયાને આધાર આપતી નથી"
 
 #: ../gtk/gtkfilesystemunix.c:1180
 msgid "File System"
@@ -2084,12 +2228,12 @@ msgstr "ફાઈલ સિસ્ટમ"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે. મહેરબાની કરી બીજું નામ વાપરો."
+msgstr "નામ \"%s\" યોગ્ય નથી કારણ કે તે \"%s\" અક્ષર ધરાવે છે. મહેરબાની કરીને અલગ નામ વાપરો."
 
 #: ../gtk/gtkfilesystemunix.c:1893 ../gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
-msgstr "બૂકમાર્કનો સંગ્રહ કરવાનુ નિષ્ફળ: %s"
+msgstr "બૂકમાર્ક સંગ્રહવામાં નિષ્ફળ: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1948 ../gtk/gtkfilesystemwin32.c:2131
 #, c-format
@@ -2137,7 +2281,7 @@ msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: ../gtk/gtkfontsel.c:325
 msgid "_Family:"
-msgstr "કુટુંબ (_F):"
+msgstr "પરિવાર (_F):"
 
 #: ../gtk/gtkfontsel.c:331
 msgid "_Style:"
@@ -2150,11 +2294,11 @@ msgstr "માપ (_z):"
 #. create the text entry widget
 #: ../gtk/gtkfontsel.c:514
 msgid "_Preview:"
-msgstr "પૂર્વ દર્શન (_P):"
+msgstr "પૂર્વદર્શન (_P):"
 
 #: ../gtk/gtkfontsel.c:1348
 msgid "Font Selection"
-msgstr "ફોન્ટની પસંદગી"
+msgstr "ફોન્ટ પસંદગી"
 
 #: ../gtk/gtkgamma.c:408
 msgid "Gamma"
@@ -2162,7 +2306,7 @@ msgstr "ગામા"
 
 #: ../gtk/gtkgamma.c:418
 msgid "_Gamma value"
-msgstr "ગામાની કિંમત (_G)"
+msgstr "ગામા કિંમત (_G)"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2182,13 +2326,13 @@ msgid ""
 msgstr ""
 "'%s' ચિહ્ન શોધી શકાતુ નથી. '%s' થીમ પણ\n"
 "મળતી નથી, કદાચ તમારે તેને સ્થાપિત કરવાની જરુર છે.\n"
-"તમે માંથી નકલ મેળવી શકો છો:\n"
+"તમે આમાંથી નકલ મેળવી શકો છો:\n"
 "\t%s"
 
 #: ../gtk/gtkicontheme.c:1387
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "ચિહ્ન '%s' થીમમાં હાજર નથી"
+msgstr "થીમમાં ચિહ્ન '%s' હાજર નથી"
 
 #: ../gtk/gtkimmodule.c:407
 msgid "Default"
@@ -2200,7 +2344,7 @@ msgstr "ઈનપુટ"
 
 #: ../gtk/gtkinputdialog.c:205
 msgid "No extended input devices"
-msgstr "ઈનપુટ માટે કોઈ ઉપકરણ નથી"
+msgstr "કોઈ વિસ્તૃત ઈનપુટ ઉપકરણો નથી"
 
 #: ../gtk/gtkinputdialog.c:218
 msgid "_Device:"
@@ -2258,7 +2402,7 @@ msgstr "પૈંડુ (_W):"
 
 #: ../gtk/gtkinputdialog.c:573
 msgid "none"
-msgstr "કોઈ નહિ"
+msgstr "કંઈ નહિ"
 
 #: ../gtk/gtkinputdialog.c:610 ../gtk/gtkinputdialog.c:646
 msgid "(disabled)"
@@ -2348,7 +2492,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:906 ../gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
-msgstr "mm"
+msgstr "મિમિ"
 
 #: ../gtk/gtkpagesetupunixdialog.c:908 ../gtk/gtkpagesetupunixdialog.c:1418
 msgid "inch"
@@ -2440,7 +2584,7 @@ msgstr "ઉપલબ્ધ નથી"
 
 #: ../gtk/gtkprinteroptionwidget.c:792
 msgid "_Save in folder:"
-msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_S):"
+msgstr "ફોલ્ડરમાં સંગ્રહો (_S):"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1475
@@ -2507,7 +2651,7 @@ msgstr "પૂર્વદર્શન લોન્ચ કરવામાં ભ
 
 #: ../gtk/gtkprintoperation-unix.c:274
 msgid "Error printing"
-msgstr "ભૂલ છાપન"
+msgstr "છાપવામાં ભૂલ"
 
 #: ../gtk/gtkprintoperation-unix.c:375 ../gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
@@ -2515,7 +2659,7 @@ msgstr "કાર્યક્રમ"
 
 #: ../gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr "પ્રિન્ટર ઓફલાઈન છે"
+msgstr "પ્રિન્ટર ઓફલાઈન"
 
 #: ../gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
@@ -2659,7 +2803,7 @@ msgstr "આઉટપુટ ટ્રે (_r):"
 
 #: ../gtk/gtkprintunixdialog.c:2129
 msgid "Job Details"
-msgstr "જોબ વિગતો"
+msgstr "ક્રિયા વિગતો"
 
 #: ../gtk/gtkprintunixdialog.c:2135
 msgid "Pri_ority:"
@@ -2699,7 +2843,7 @@ msgstr "પછી (_A):"
 
 #: ../gtk/gtkprintunixdialog.c:2251
 msgid "Job"
-msgstr "જોબ"
+msgstr "ક્રિયા"
 
 #: ../gtk/gtkprintunixdialog.c:2317
 msgid "Advanced"
@@ -2719,7 +2863,7 @@ msgstr "સમાપ્ત કરી રહ્યા છીએ"
 
 #: ../gtk/gtkprintunixdialog.c:2368
 msgid "Some of the settings in the dialog conflict"
-msgstr "સંવાદના અમુક સુયોજનોની તકરાર થાય છે"
+msgstr "સંવાદમાં અમુક સુયોજનોની તકરાર થાય છે"
 
 #: ../gtk/gtkprintunixdialog.c:2391
 msgid "Print"
@@ -2731,17 +2875,17 @@ msgstr "જૂથ"
 
 #: ../gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
-msgstr "રેડિયો બટન કે જેના જૂથનો આ બટન ભાગ છે."
+msgstr "રેડિયો સાધન બટન કે જેના જૂથનો આ બટન ભાગ છે."
 
-#: ../gtk/gtkrc.c:2832
+#: ../gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "સમાવવા માટેની ફાઈલ ને શોધવામાં નિષ્ફળ: \"%s\""
+msgstr "સમાવવા માટેની ફાઈલ શોધવામાં નિષ્ફળ: \"%s\""
 
-#: ../gtk/gtkrc.c:3464 ../gtk/gtkrc.c:3467
+#: ../gtk/gtkrc.c:3471 ../gtk/gtkrc.c:3474
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "pixmap_path માં ચિત્ર ફાઈલ મેળવવામાં નિષ્ફળ: \"%s\""
+msgstr "pixmap_path માં ચિત્ર ફાઈલ સ્થિત કરવામાં નિષ્ફળ: \"%s\""
 
 #: ../gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
@@ -2784,7 +2928,7 @@ msgstr "કોઈ છેલ્લે વપરાયેલ સ્રોત URI `
 #: ../gtk/gtkrecentchoosermenu.c:511 ../gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr "આ વિધેય ક્લાસ'%s' ના વિજેટો સાથે અમલમાં મૂકાયેલ નથી"
+msgstr "આ વિધેય ક્લાસ '%s' ના વિજેટો સાથે અમલમાં મૂકાયેલ નથી"
 
 #: ../gtk/gtkrecentchoosermenu.c:859
 #, c-format
@@ -2831,7 +2975,7 @@ msgstr "વિશે (_A)"
 
 #: ../gtk/gtkstock.c:318
 msgid "_Apply"
-msgstr "અમલમાં મૂકો (_A)"
+msgstr "લાગુ કરો (_A)"
 
 #: ../gtk/gtkstock.c:319
 msgid "_Bold"
@@ -2883,7 +3027,7 @@ msgstr "ચલાવો (_E)"
 
 #: ../gtk/gtkstock.c:331
 msgid "_Edit"
-msgstr "ફેરફાર કરો (_E)"
+msgstr "ફેરફાર (_E)"
 
 #: ../gtk/gtkstock.c:332
 msgid "_Find"
@@ -2899,16 +3043,16 @@ msgstr "ફ્લોપી (_F)"
 
 #: ../gtk/gtkstock.c:335
 msgid "_Fullscreen"
-msgstr "પૂર્ણ સ્ક્રીન (_F)"
+msgstr "પૂર્ણસ્ક્રીન (_F)"
 
 #: ../gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
-msgstr "પૂર્ણ સ્ક્રીન છોડો (_L)"
+msgstr "પૂર્ણસ્ક્રીન છોડો (_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
-msgstr "તળિયે (_B)"
+msgstr "તળિયું (_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
@@ -3014,7 +3158,7 @@ msgstr "આગળ (_N)"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:376
 msgid "Media|P_ause"
-msgstr "વિરામ (_P)"
+msgstr "વિરામ (_a)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:378
@@ -3034,7 +3178,7 @@ msgstr "રેકોર્ડ (_R)"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:384
 msgid "Media|R_ewind"
-msgstr "ફરી ચલાવો (_e)"
+msgstr "ઉલટું ફેરવો (_e)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:386
@@ -3091,7 +3235,7 @@ msgstr "છાપો (_P)"
 
 #: ../gtk/gtkstock.c:399
 msgid "Print Pre_view"
-msgstr "છાપવા માટેનું પૂર્વદર્શન (_v)"
+msgstr "છાપન પૂર્વદર્શન (_v)"
 
 #: ../gtk/gtkstock.c:400
 msgid "_Properties"
@@ -3107,7 +3251,7 @@ msgstr "ફરીથી કરો (_R)"
 
 #: ../gtk/gtkstock.c:403
 msgid "_Refresh"
-msgstr "ફરી તાજુ કરો (_R)"
+msgstr "ફરી તાજું કરો (_R)"
 
 #: ../gtk/gtkstock.c:405
 msgid "_Revert"
@@ -3115,11 +3259,11 @@ msgstr "ઉલટાવો (_R)"
 
 #: ../gtk/gtkstock.c:406
 msgid "_Save"
-msgstr "સંગ્રહ કરો (_S)"
+msgstr "સંગ્રહો (_S)"
 
 #: ../gtk/gtkstock.c:407
 msgid "Save _As"
-msgstr "આ રીતે સંગ્રહ કરો (_A)"
+msgstr "આ રીતે સંગ્રહો (_A)"
 
 #: ../gtk/gtkstock.c:408
 msgid "Select _All"
@@ -3187,27 +3331,27 @@ msgstr "નાનું કરો (_O)"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
-msgstr "LRM ડાબેથી-જમણાની નિશાની (_L)"
+msgstr "LRM ડાબે-થી-જમણાની નિશાની (_L)"
 
 #: ../gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
-msgstr "RLM જમણેથી-ડાબેથી નિશાની (_R)"
+msgstr "RLM જમણે-થી-ડાબેથી નિશાની (_R)"
 
 #: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
-msgstr "LRE ડાબેથી જમણે જડવું (_e)"
+msgstr "LRE ડાબે-થી-જમણે જડવું (_e)"
 
 #: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
-msgstr "RLE જમણેથી ડાબે જડવું (_m)"
+msgstr "RLE જમણે-થી-ડાબે જડવું (_m)"
 
 #: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
-msgstr "LRO ડાબેથી જમણે ઉપર ચઢવુ (_o)"
+msgstr "LRO ડાબે-થી-જમણે ઉપર ચઢવુ (_o)"
 
 #: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO જમણેથી ડાબે ઉપર ચઢવુ (_v)"
+msgstr "RLO જમણે-થી-ડાબે ઉપર ચઢવુ (_v)"
 
 #: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
@@ -3215,7 +3359,7 @@ msgstr "PDF _Pop દિશાકીય ફોરમેટિંગ"
 
 #: ../gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
-msgstr "ZWS શૂન્ય પહોળાઈ (_Z)"
+msgstr "ZWS શૂન્ય પહોળાઈ જગ્યા (_Z)"
 
 #: ../gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
@@ -3228,7 +3372,7 @@ msgstr "ZWNJ શૂન્ય પહોળાઈ ન જોડનાર (_n)"
 #: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "મોડ્યુલ પથમાંથી થીમયંત્રને શોધવામાં અસમર્થ: \"%s\","
+msgstr "મોડ્યુલ પથમાંથી થીમયંત્રને શોધવામાં અસમર્થ (_p): \"%s\","
 
 #: ../gtk/gtktipsquery.c:187
 msgid "--- No Tip ---"
@@ -3237,17 +3381,17 @@ msgstr "--- કોઈ સંકેત નથી ---"
 #: ../gtk/gtkuimanager.c:1126
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "'%s' અજાણીતી લાક્ષણિકતા %d લીટી પર  %d અક્ષર"
+msgstr "અજાણીતી લાક્ષણિકતા '%s' એ %d લીટી %d અક્ષર પર"
 
 #: ../gtk/gtkuimanager.c:1343
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "'%s' અણધાર્યો શરુઆતનો ટૅગ %d લીટી પર  %d અક્ષર"
+msgstr "અણધાર્યો શરુઆતનો ટેગ '%s' એ %d લીટી %d અક્ષર પર"
 
 #: ../gtk/gtkuimanager.c:1433
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "%d લીટી  %d અક્ષર પર અણધાર્યા અક્ષરની માહિતી"
+msgstr "%d લીટી %d અક્ષર પર અણધાર્યા અક્ષરની માહિતી"
 
 #: ../gtk/gtkuimanager.c:2228
 msgid "Empty"
@@ -3671,7 +3815,7 @@ msgstr "Choukei 4 કવર"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr "hagaki (postcard)"
+msgstr "hagaki (પોસ્ટકાર્ડ)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:173
@@ -3686,7 +3830,7 @@ msgstr "kaku2 કવર"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr "oufuku (reply postcard)"
+msgstr "oufuku (પ્રત્યુત્તર પોસ્ટકાર્ડ)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:179
@@ -3856,7 +4000,7 @@ msgstr "Index 3x5"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr "Index 4x6 (postcard)"
+msgstr "Index 4x6 (પોસ્ટકાર્ડ)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
@@ -3916,7 +4060,7 @@ msgstr "#10 કવર"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Envelope"
-msgstr "#૧૧ કવર"
+msgstr "#11 કવર"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:273
@@ -4086,7 +4230,7 @@ msgstr "સીરીલીક (ભાષાંતરિત)"
 #. ID
 #: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "Inukitut (ભાષાંતરિત)"
+msgstr "ઈનુકીટુટ (ભાષાંતરિત)"
 
 #. ID
 #: ../modules/input/imipa.c:145
@@ -4101,12 +4245,12 @@ msgstr "થાઈ-લાઓ"
 #. ID
 #: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrigna-Eritrean (EZ+) "
+msgstr "ટીગ્રીગ્ના-ઈરીટ્રીયન (EZ+) "
 
 #. ID
 #: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr "ટીગ્રીગ્ના-ઈથોપીયન (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:244
@@ -4236,7 +4380,7 @@ msgstr "આઉટપુટ બંધારણ (_O)"
 #: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી: %s"
+msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શક્યા નહિં: %s"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -4290,7 +4434,7 @@ msgstr "<%s> ઘટકને અયોગ્ય id \"%s\" છે"
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "<%s> ઘટક નહિં તો \"name\" કે \"id\" ઘટક છે"
+msgstr "<%s> ઘટકને નહિં તો \"name\" કે \"id\" લક્ષણ છે"
 
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
@@ -4368,11 +4512,11 @@ msgstr "<text> ઘટક એ <tags> ઘટક પહેલાં થઈ શક�
 
 #: ../gtk/gtktextbufferserialize.c:1788
 msgid "Serialized data is malformed"
-msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે"
+msgstr "સીરીયલાઈઝ માહિતી મલીન છે"
 
 #: ../gtk/gtktextbufferserialize.c:1866
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે. પ્રથમ વિભાગ એ GTKTEXTBUFFERCONTENTS-0001 નથી"
+msgstr "સીરીયલાઈઝ માહિતી મલીન છે. પ્રથમ વિભાગ એ GTKTEXTBUFFERCONTENTS-0001 નથી"
 
 #: ../gtk/updateiconcache.c:413
 #, c-format
@@ -4421,7 +4565,7 @@ msgstr "કેશ ફાઈલ સફળતાપૂર્વક બનાવા
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "હાલની કેશ પર ફરીથી લખી રહ્યા છીએ, જો uptodate પણ હોય"
+msgstr "હાલની કેશ પર ફરીથી લખો, જો પરિપૂર્ણ હોય તો પણ"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
