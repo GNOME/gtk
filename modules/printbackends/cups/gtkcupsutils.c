@@ -60,21 +60,25 @@ struct _GtkCupsResult
 #define _GTK_CUPS_MAX_ATTEMPTS 10 
 #define _GTK_CUPS_MAX_CHUNK_SIZE 8192
 
-GtkCupsRequestStateFunc post_states[] = {_connect,
-                                         _post_send,
-                                         _post_write_request,
-                                         _post_write_data,
-                                         _post_check,
-                                         _post_read_response};
+static GtkCupsRequestStateFunc post_states[] = {
+  _connect,
+  _post_send,
+  _post_write_request,
+  _post_write_data,
+  _post_check,
+  _post_read_response
+};
 
-GtkCupsRequestStateFunc get_states[] = {_connect,
-                                        _get_send,
-                                        _get_check,
-                                        _get_read_data};
+static GtkCupsRequestStateFunc get_states[] = {
+  _connect,
+  _get_send,
+  _get_check,
+  _get_read_data
+};
 
 static void
 gtk_cups_result_set_error (GtkCupsResult *result, 
-                           const char *error_msg,
+                           const char    *error_msg,
 			   ...)
 {
   va_list args;
@@ -89,12 +93,12 @@ gtk_cups_result_set_error (GtkCupsResult *result,
 }
 
 GtkCupsRequest *
-gtk_cups_request_new (http_t *connection,
-                      GtkCupsRequestType req_type, 
-                      gint operation_id,
-                      GIOChannel *data_io,
-                      const char *server,
-                      const char *resource)
+gtk_cups_request_new (http_t             *connection,
+                      GtkCupsRequestType  req_type, 
+                      gint                operation_id,
+                      GIOChannel         *data_io,
+                      const char         *server,
+                      const char         *resource)
 {
   GtkCupsRequest *request;
   cups_lang_t *language;
@@ -238,11 +242,11 @@ gtk_cups_request_get_result (GtkCupsRequest *request)
 
 void            
 gtk_cups_request_ipp_add_string (GtkCupsRequest *request,
-                                 ipp_tag_t group,
-                                 ipp_tag_t tag,
-                                 const char *name,
-                                 const char *charset,
-                                 const char *value)
+                                 ipp_tag_t       group,
+                                 ipp_tag_t       tag,
+                                 const char     *name,
+                                 const char     *charset,
+                                 const char     *value)
 {
   ippAddString (request->ipp_request,
                 group,
@@ -253,13 +257,13 @@ gtk_cups_request_ipp_add_string (GtkCupsRequest *request,
 }
 
 void            
-gtk_cups_request_ipp_add_strings (GtkCupsRequest *request,
-				  ipp_tag_t group,
-				  ipp_tag_t tag,
-				  const char *name,
-				  int num_values,
-				  const char *charset,
-				  const char * const *values)
+gtk_cups_request_ipp_add_strings (GtkCupsRequest    *request,
+				  ipp_tag_t          group,
+				  ipp_tag_t          tag,
+				  const char        *name,
+				  int                num_values,
+				  const char        *charset,
+				  const char *const *values)
 {
   ippAddStrings (request->ipp_request,
 		 group,
@@ -278,41 +282,40 @@ typedef struct
   ipp_tag_t	value_tag;
 } ipp_option_t;
 
-static const ipp_option_t ipp_options[] =
-			{
-			  { "blackplot",		IPP_TAG_BOOLEAN },
-			  { "brightness",		IPP_TAG_INTEGER },
-			  { "columns",			IPP_TAG_INTEGER },
-			  { "copies",			IPP_TAG_INTEGER },
-			  { "finishings",		IPP_TAG_ENUM },
-			  { "fitplot",			IPP_TAG_BOOLEAN },
-			  { "gamma",			IPP_TAG_INTEGER },
-			  { "hue",			IPP_TAG_INTEGER },
-			  { "job-k-limit",		IPP_TAG_INTEGER },
-			  { "job-page-limit",		IPP_TAG_INTEGER },
-			  { "job-priority",		IPP_TAG_INTEGER },
-			  { "job-quota-period",		IPP_TAG_INTEGER },
-			  { "landscape",		IPP_TAG_BOOLEAN },
-			  { "media",			IPP_TAG_KEYWORD },
-			  { "mirror",			IPP_TAG_BOOLEAN },
-			  { "natural-scaling",		IPP_TAG_INTEGER },
-			  { "number-up",		IPP_TAG_INTEGER },
-			  { "orientation-requested",	IPP_TAG_ENUM },
-			  { "page-bottom",		IPP_TAG_INTEGER },
-			  { "page-left",		IPP_TAG_INTEGER },
-			  { "page-ranges",		IPP_TAG_RANGE },
-			  { "page-right",		IPP_TAG_INTEGER },
-			  { "page-top",			IPP_TAG_INTEGER },
-			  { "penwidth",			IPP_TAG_INTEGER },
-			  { "ppi",			IPP_TAG_INTEGER },
-			  { "prettyprint",		IPP_TAG_BOOLEAN },
-			  { "printer-resolution",	IPP_TAG_RESOLUTION },
-			  { "print-quality",		IPP_TAG_ENUM },
-			  { "saturation",		IPP_TAG_INTEGER },
-			  { "scaling",			IPP_TAG_INTEGER },
-			  { "sides",			IPP_TAG_KEYWORD },
-			  { "wrap",			IPP_TAG_BOOLEAN }
-			};
+static const ipp_option_t ipp_options[] = {
+  { "blackplot",		IPP_TAG_BOOLEAN },
+  { "brightness",		IPP_TAG_INTEGER },
+  { "columns",			IPP_TAG_INTEGER },
+  { "copies",			IPP_TAG_INTEGER },
+  { "finishings",		IPP_TAG_ENUM },
+  { "fitplot",			IPP_TAG_BOOLEAN },
+  { "gamma",			IPP_TAG_INTEGER },
+  { "hue",			IPP_TAG_INTEGER },
+  { "job-k-limit",		IPP_TAG_INTEGER },
+  { "job-page-limit",		IPP_TAG_INTEGER },
+  { "job-priority",		IPP_TAG_INTEGER },
+  { "job-quota-period",		IPP_TAG_INTEGER },
+  { "landscape",		IPP_TAG_BOOLEAN },
+  { "media",			IPP_TAG_KEYWORD },
+  { "mirror",			IPP_TAG_BOOLEAN },
+  { "natural-scaling",		IPP_TAG_INTEGER },
+  { "number-up",		IPP_TAG_INTEGER },
+  { "orientation-requested",	IPP_TAG_ENUM },
+  { "page-bottom",		IPP_TAG_INTEGER },
+  { "page-left",		IPP_TAG_INTEGER },
+  { "page-ranges",		IPP_TAG_RANGE },
+  { "page-right",		IPP_TAG_INTEGER },
+  { "page-top",			IPP_TAG_INTEGER },
+  { "penwidth",			IPP_TAG_INTEGER },
+  { "ppi",			IPP_TAG_INTEGER },
+  { "prettyprint",		IPP_TAG_BOOLEAN },
+  { "printer-resolution",	IPP_TAG_RESOLUTION },
+  { "print-quality",		IPP_TAG_ENUM },
+  { "saturation",		IPP_TAG_INTEGER },
+  { "scaling",			IPP_TAG_INTEGER },
+  { "sides",			IPP_TAG_KEYWORD },
+  { "wrap",			IPP_TAG_BOOLEAN }
+};
 
 
 static ipp_tag_t
@@ -363,8 +366,8 @@ _find_option_tag (const gchar *option)
 
 void
 gtk_cups_request_encode_option (GtkCupsRequest *request,
-                                const gchar *option,
-				const gchar *value)
+                                const gchar    *option,
+				const gchar    *value)
 {
   ipp_tag_t option_tag;
 
@@ -474,12 +477,80 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
         }
 
       default:
-        ippAddString (request->ipp_request,
-                      IPP_TAG_OPERATION,
-                      option_tag,
-                      option,
-                      NULL,
-                      value);
+        {
+          char *values;
+          char *s;
+          int in_quotes;
+          char *next;
+          GPtrArray *strings;
+          
+          values = g_strdup (value);
+          strings = NULL;
+	  in_quotes = 0;
+
+          for (s = values, next = s; *s != '\0'; s++)
+            {
+              if (in_quotes != 2 && *s == '\'')
+                {
+                  /* skip quoted value */
+                  if (in_quotes == 0)
+                    in_quotes = 1;
+                  else
+                    in_quotes = 0;
+                }
+              else if (in_quotes != 1 && *s == '\"')
+                {
+                  /* skip quoted value */
+                  if (in_quotes == 0)
+                    in_quotes = 2;
+                  else
+                    in_quotes = 0;
+                }
+              else if (in_quotes == 0 && *s == ',')
+                {
+                  /* found delimiter, add to value array */
+                  *s = '\0';
+                  if (strings == NULL)
+                    strings = g_ptr_array_new ();
+                  g_ptr_array_add (strings, next);
+                  next = s + 1;
+                }
+              else if (in_quotes == 0 && *s == '\\' && s[1] != '\0')
+                {
+                  /* skip escaped character */
+                  s++;
+                }
+            }
+          
+          if (strings == NULL)
+            {
+              /* single value */
+              ippAddString (request->ipp_request,
+                            IPP_TAG_OPERATION,
+                            option_tag,
+                            option,
+                            NULL,
+                            value);
+            }
+          else
+            {
+              /* multiple values */
+              
+              /* add last value */
+              g_ptr_array_add (strings, next);
+              
+              ippAddStrings (request->ipp_request,
+                             IPP_TAG_OPERATION,
+                             option_tag,
+                             option,
+                             strings->len,
+                             NULL,
+                             (const char **) strings->pdata);
+              g_ptr_array_free (strings, TRUE);
+            }
+
+          g_free (values);
+        }
 
         break;
     }
