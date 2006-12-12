@@ -1,4 +1,4 @@
-# translation of es.po to Spanish
+# translation of gtk+ to Spanish
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
@@ -12,10 +12,10 @@
 # This file is distributed under the same license as the gtk+ package.
 msgid ""
 msgstr ""
-"Project-Id-Version: es\n"
+"Project-Id-Version: gtk-2-12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-15 02:18+0200\n"
-"PO-Revision-Date: 2006-10-15 02:21+0200\n"
+"POT-Creation-Date: 2006-12-12 17:02+0100\n"
+"PO-Revision-Date: 2006-12-12 17:03+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1020,7 +1020,7 @@ msgstr "COLORES"
 msgid "Make X calls synchronous"
 msgstr "Hacer llamadas a X síncronas"
 
-#: ../gtk/gtkaboutdialog.c:271 ../gtk/gtkaboutdialog.c:2071
+#: ../gtk/gtkaboutdialog.c:271 ../gtk/gtkaboutdialog.c:2075
 msgid "License"
 msgstr "Licencia"
 
@@ -1029,37 +1029,37 @@ msgid "The license of the program"
 msgstr "La licencia del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:501
+#: ../gtk/gtkaboutdialog.c:502
 msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:514
+#: ../gtk/gtkaboutdialog.c:515
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:752
+#: ../gtk/gtkaboutdialog.c:756
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:1999
+#: ../gtk/gtkaboutdialog.c:2003
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2025
+#: ../gtk/gtkaboutdialog.c:2029
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2028
+#: ../gtk/gtkaboutdialog.c:2032
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2040
+#: ../gtk/gtkaboutdialog.c:2044
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2044
+#: ../gtk/gtkaboutdialog.c:2048
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -1371,11 +1371,11 @@ msgstr "Rueda de color"
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: ../gtk/gtkentry.c:4924 ../gtk/gtktextview.c:7293
+#: ../gtk/gtkentry.c:4977 ../gtk/gtktextview.c:7355
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:4938 ../gtk/gtktextview.c:7307
+#: ../gtk/gtkentry.c:4991 ../gtk/gtktextview.c:7369
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
@@ -1554,93 +1554,93 @@ msgstr "Teclee un nombre de archivo"
 
 # C en conflicto con Cancelar
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4635
+#: ../gtk/gtkfilechooserdefault.c:4634
 msgid "Create Fo_lder"
 msgstr "Crear car_peta"
 
-#: ../gtk/gtkfilechooserdefault.c:4645
+#: ../gtk/gtkfilechooserdefault.c:4644
 msgid "_Location:"
 msgstr "_Lugar:"
 
 # El acelerador c entra en conflicto con cancelar
-#: ../gtk/gtkfilechooserdefault.c:4885
+#: ../gtk/gtkfilechooserdefault.c:4881
 msgid "Save in _folder:"
 msgstr "_Guardar en la carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4883
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6383
+#: ../gtk/gtkfilechooserdefault.c:6379
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:6956 ../gtk/gtkfilechooserdefault.c:6977
+#: ../gtk/gtkfilechooserdefault.c:6952 ../gtk/gtkfilechooserdefault.c:6973
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7067
+#: ../gtk/gtkfilechooserdefault.c:7063
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7322
+#: ../gtk/gtkfilechooserdefault.c:7318
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:7325
+#: ../gtk/gtkfilechooserdefault.c:7321
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:7330
+#: ../gtk/gtkfilechooserdefault.c:7326
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8026
+#: ../gtk/gtkfilechooserdefault.c:8022
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8420
+#: ../gtk/gtkfilechooserdefault.c:8416
 msgid "Type name of new folder"
 msgstr "Teclee el nombre de la carpeta nueva"
 
-#: ../gtk/gtkfilechooserdefault.c:8465
+#: ../gtk/gtkfilechooserdefault.c:8461
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: ../gtk/gtkfilechooserdefault.c:8467
+#: ../gtk/gtkfilechooserdefault.c:8463
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f Kib"
 
-#: ../gtk/gtkfilechooserdefault.c:8469
+#: ../gtk/gtkfilechooserdefault.c:8465
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mib"
 
-#: ../gtk/gtkfilechooserdefault.c:8471
+#: ../gtk/gtkfilechooserdefault.c:8467
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Gib"
 
-#: ../gtk/gtkfilechooserdefault.c:8519 ../gtk/gtkfilechooserdefault.c:8543
+#: ../gtk/gtkfilechooserdefault.c:8515 ../gtk/gtkfilechooserdefault.c:8539
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:8530
+#: ../gtk/gtkfilechooserdefault.c:8526
 msgid "Today"
 msgstr "Hoy"
 
-#: ../gtk/gtkfilechooserdefault.c:8532
+#: ../gtk/gtkfilechooserdefault.c:8528
 msgid "Yesterday"
 msgstr "Ayer"
 
@@ -1948,7 +1948,7 @@ msgstr "Valor _gamma"
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
 
-#: ../gtk/gtkicontheme.c:1314
+#: ../gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1961,7 +1961,7 @@ msgstr ""
 "Puede obtener una copia desde:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1383
+#: ../gtk/gtkicontheme.c:1387
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
@@ -2100,7 +2100,7 @@ msgstr "Espaciado de las flechas"
 msgid "Scroll arrow spacing"
 msgstr "Espaciado de las flechas de desplazamiento"
 
-#: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6777
+#: ../gtk/gtknotebook.c:4254 ../gtk/gtknotebook.c:6833
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2162,7 +2162,7 @@ msgstr "Tamaño del _papel:"
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2102
+#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2106
 msgid "Page Setup"
 msgstr "Configuración de página"
 
@@ -2335,170 +2335,170 @@ msgstr "Error no especificado"
 msgid "Error from StartDoc"
 msgstr "Error desde StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1448
+#: ../gtk/gtkprintunixdialog.c:1450
 msgid "Printer"
 msgstr "Impresora"
 
-#: ../gtk/gtkprintunixdialog.c:1456
+#: ../gtk/gtkprintunixdialog.c:1458
 msgid "Location"
 msgstr "Lugar"
 
-#: ../gtk/gtkprintunixdialog.c:1465
+#: ../gtk/gtkprintunixdialog.c:1467
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:1487
+#: ../gtk/gtkprintunixdialog.c:1489
 msgid "Print Pages"
 msgstr "Páginas a imprimir"
 
-#: ../gtk/gtkprintunixdialog.c:1491
+#: ../gtk/gtkprintunixdialog.c:1493
 msgid "_All"
 msgstr "_Todas"
 
-#: ../gtk/gtkprintunixdialog.c:1498
+#: ../gtk/gtkprintunixdialog.c:1500
 msgid "C_urrent"
 msgstr "La a_ctual"
 
-#: ../gtk/gtkprintunixdialog.c:1507
+#: ../gtk/gtkprintunixdialog.c:1509
 msgid "Ra_nge: "
 msgstr "_Rango: "
 
-#: ../gtk/gtkprintunixdialog.c:1525
+#: ../gtk/gtkprintunixdialog.c:1527
 msgid "Copies"
 msgstr "Copias"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1530
+#: ../gtk/gtkprintunixdialog.c:1532
 msgid "Copie_s:"
 msgstr "_Copias:"
 
-#: ../gtk/gtkprintunixdialog.c:1546
+#: ../gtk/gtkprintunixdialog.c:1550
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.c:1554
+#: ../gtk/gtkprintunixdialog.c:1558
 msgid "_Reverse"
 msgstr "In_vertir"
 
-#: ../gtk/gtkprintunixdialog.c:1571
+#: ../gtk/gtkprintunixdialog.c:1575
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.c:1958
+#: ../gtk/gtkprintunixdialog.c:1962
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1966
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
 msgstr "Páginas por _hoja:"
 
-#: ../gtk/gtkprintunixdialog.c:1978
+#: ../gtk/gtkprintunixdialog.c:1982
 msgid "T_wo-sided:"
 msgstr "Por las _dos caras:"
 
-#: ../gtk/gtkprintunixdialog.c:1993
+#: ../gtk/gtkprintunixdialog.c:1997
 msgid "_Only print:"
 msgstr "_Sólo imprimir:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2008
+#: ../gtk/gtkprintunixdialog.c:2012
 msgid "All sheets"
 msgstr "Todas las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:2009
+#: ../gtk/gtkprintunixdialog.c:2013
 msgid "Even sheets"
 msgstr "Hojas pares"
 
-#: ../gtk/gtkprintunixdialog.c:2010
+#: ../gtk/gtkprintunixdialog.c:2014
 msgid "Odd sheets"
 msgstr "Hojas impares"
 
-#: ../gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2017
 msgid "Sc_ale:"
 msgstr "_Escala:"
 
-#: ../gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2044
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2048
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2059
+#: ../gtk/gtkprintunixdialog.c:2063
 msgid "Paper _source:"
 msgstr "_Fuente del papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2074
+#: ../gtk/gtkprintunixdialog.c:2078
 msgid "Output t_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.c:2125
+#: ../gtk/gtkprintunixdialog.c:2129
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2131
+#: ../gtk/gtkprintunixdialog.c:2135
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.c:2146
+#: ../gtk/gtkprintunixdialog.c:2150
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:2164
+#: ../gtk/gtkprintunixdialog.c:2168
 msgid "Print Document"
 msgstr "Imprimir documento"
 
-#: ../gtk/gtkprintunixdialog.c:2170
+#: ../gtk/gtkprintunixdialog.c:2174
 msgid "_Now"
 msgstr "_Ahora"
 
-#: ../gtk/gtkprintunixdialog.c:2177
+#: ../gtk/gtkprintunixdialog.c:2181
 msgid "A_t:"
 msgstr "_En:"
 
-#: ../gtk/gtkprintunixdialog.c:2192
+#: ../gtk/gtkprintunixdialog.c:2196
 msgid "On _hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2211
+#: ../gtk/gtkprintunixdialog.c:2215
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
-#: ../gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2221
 msgid "Be_fore:"
 msgstr "An_tes:"
 
-#: ../gtk/gtkprintunixdialog.c:2232
+#: ../gtk/gtkprintunixdialog.c:2236
 msgid "_After:"
 msgstr "_Después:"
 
-#: ../gtk/gtkprintunixdialog.c:2247
+#: ../gtk/gtkprintunixdialog.c:2251
 msgid "Job"
 msgstr "Tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2313
+#: ../gtk/gtkprintunixdialog.c:2317
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../gtk/gtkprintunixdialog.c:2348
+#: ../gtk/gtkprintunixdialog.c:2352
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
-#: ../gtk/gtkprintunixdialog.c:2351
+#: ../gtk/gtkprintunixdialog.c:2355
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2354
+#: ../gtk/gtkprintunixdialog.c:2358
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.c:2364
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkprintunixdialog.c:2387
+#: ../gtk/gtkprintunixdialog.c:2391
 msgid "Print"
 msgstr "Imprimir"
 
@@ -2510,12 +2510,12 @@ msgstr "Grupo"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "La herramienta de botón de radio a cuyo grupo pertenece este botón."
 
-#: ../gtk/gtkrc.c:2834
+#: ../gtk/gtkrc.c:2841
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No se ha podido encontrar el archivo «include»: «%s»"
 
-#: ../gtk/gtkrc.c:3466 ../gtk/gtkrc.c:3469
+#: ../gtk/gtkrc.c:3473 ../gtk/gtkrc.c:3476
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible encontrar un archivo imagen en pixmap_path: «%s»"
@@ -2529,27 +2529,27 @@ msgstr "Seleccione qué tipos de documentos se muestran"
 msgid "No item for URI '%s' found"
 msgstr "No se encontró ningún elementos para la URI «%s»"
 
-#: ../gtk/gtkrecentchooserdefault.c:1766
+#: ../gtk/gtkrecentchooserdefault.c:1770
 msgid "Could not remove item"
 msgstr "No se pudo quitar el elemento"
 
-#: ../gtk/gtkrecentchooserdefault.c:1809
+#: ../gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
 msgstr "No se pudo limpiar la lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1893
+#: ../gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
 msgstr "Copiar _lugar"
 
-#: ../gtk/gtkrecentchooserdefault.c:1906
+#: ../gtk/gtkrecentchooserdefault.c:1910
 msgid "_Remove From List"
 msgstr "_Quitar de la lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1915
+#: ../gtk/gtkrecentchooserdefault.c:1919
 msgid "_Clear List"
 msgstr "_Limpiar lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1929
+#: ../gtk/gtkrecentchooserdefault.c:1933
 msgid "Show _Private Resources"
 msgstr "Mostrar recursos _privados"
 
@@ -2563,16 +2563,16 @@ msgstr "No se encontró un recurso usado recientemente con la URI «%s»"
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Esta función no está implementada para los widgets de la clase «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:847
+#: ../gtk/gtkrecentchoosermenu.c:852
 #, c-format
 msgid "Open '%s'"
 msgstr "Abrir «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:878
+#: ../gtk/gtkrecentchoosermenu.c:884
 msgid "Unknown item"
 msgstr "Elemento desconocido"
 
-#: ../gtk/gtkrecentchoosermenu.c:978
+#: ../gtk/gtkrecentchoosermenu.c:984
 msgid "No items found"
 msgstr "No se encontró ningún elemento"
 
@@ -3873,9 +3873,9 @@ msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/imthai-broken.c:178
-msgid "Thai (Broken)"
-msgstr "Tailandés (Roto)"
+#: ../modules/input/imthai.c:35
+msgid "Thai-Lao"
+msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -3974,6 +3974,11 @@ msgstr "Alto secreto"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2128
 msgid "Unclassified"
 msgstr "Desclasificado"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2214
+#, c-format
+msgid "Custom.%2fx%.2f"
+msgstr "Personalizado.%2fx%.2f"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
@@ -4238,3 +4243,6 @@ msgstr ""
 "No hay archivo de índice del tema en «%s».\n"
 "Si realmente quiere crear un caché de iconos aquí, use --ignore-theme-"
 "index.\n"
+
+#~ msgid "Thai (Broken)"
+#~ msgstr "Tailandés (Roto)"
