@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-03 13:38-0400\n"
-"PO-Revision-Date: 2006-12-05 13:26+0530\n"
+"PO-Revision-Date: 2006-12-13 21:50+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
 "MIME-Version: 1.0\n"
@@ -1706,6 +1706,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"फोल्डर निर्माण करता आले नाही, कारण त्याच नावाची एक फाइल आधिच अस्तित्वात "
+"आहे. फोल्डरसाठी दुसरे नाव देऊन पहा किंवा त्या फाइलचे नाव आधी बदला."
 
 # gdk-pixbuf/io-xbm.c:283
 #: gtk/gtkfilechooserdefault.c:977
@@ -1749,7 +1751,7 @@ msgstr "खूणगाठ '%s' काढून टाका"
 #: gtk/gtkfilechooserdefault.c:3107
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
+msgstr "'%s' एक अवैध पथनाम असल्याने त्यासाठी खूणगाठ जोडू शकत नाही."
 
 # gtk/gtkstock.c:319
 #: gtk/gtkfilechooserdefault.c:3338
@@ -2122,6 +2124,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
+"फाइल नाव \"%s\" UTF-8 मध्ये रुपांतरित करता आले नाही: (पर्यावरण चलन "
+"G_FILENAME_ENCODING निर्धारित करून पहा): %s"
 
 # gtk/gtkfilesel.c:2986
 #: gtk/gtkfilesel.c:3115
@@ -2178,6 +2182,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
+"\"%s\" नाव वैध नाही कारण त्यात \"%s\" अक्षराचा समावेश आहे. "
+"कृपया दुसरे नाव वापरा."
 
 #: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
 #, c-format
@@ -2284,6 +2290,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"प्रतिक '%s' सापडू शकले नाही. '%s' थीमदेखील\n"
+"सापडली नाही, कदाचित तुम्हीस ती प्रतिष्ठापित करावी लागेल.\n"
+"तुम्हास एक प्रतिलिपी येथून मिळेल:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1383
 #, c-format
@@ -2357,15 +2367,13 @@ msgstr "दबाव(_P):"
 
 # gtk/gtkinputdialog.c:477
 #: gtk/gtkinputdialog.c:523
-#, fuzzy
 msgid "X _tilt:"
-msgstr "क्ष कडे झुकणे"
+msgstr "क्ष कडे झुकणे(_t):"
 
 # gtk/gtkinputdialog.c:478
 #: gtk/gtkinputdialog.c:524
-#, fuzzy
 msgid "Y t_ilt:"
-msgstr "य कडे झुकणे "
+msgstr "य कडे झुकणे(_i):"
 
 # gtk/gtkinputdialog.c:479
 #: gtk/gtkinputdialog.c:525
@@ -2439,15 +2447,13 @@ msgstr "GTK+ पर्याय दाखवा"
 
 # gtk/gtktable.c:174
 #: gtk/gtknotebook.c:772
-#, fuzzy
 msgid "Arrow spacing"
-msgstr "ओळीमधील रिकामी जागा"
+msgstr "बाणांमधील जागा"
 
 # gtk/gtktable.c:174
 #: gtk/gtknotebook.c:773
-#, fuzzy
 msgid "Scroll arrow spacing"
-msgstr "ओळीमधील रिकामी जागा"
+msgstr "सरकवण्याच्या बाणांमधील जागा"
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #: gtk/gtknotebook.c:4219 gtk/gtknotebook.c:6774
@@ -2760,7 +2766,7 @@ msgstr "प्रती(_s):"
 # gtk/gtkfilesel.c:1444
 #: gtk/gtkprintunixdialog.c:1546
 msgid "C_ollate"
-msgstr ""
+msgstr "संकलन(_o)"
 
 # gtk/gtkstock.c:320
 #: gtk/gtkprintunixdialog.c:1554
@@ -2856,11 +2862,11 @@ msgstr "इथे(_t):"
 # gtk/gtkstock.c:277
 #: gtk/gtkprintunixdialog.c:2192
 msgid "On _hold"
-msgstr ""
+msgstr "थांबवलेले(_h)"
 
 #: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
-msgstr ""
+msgstr "आवरण पृष्ठ जोडा"
 
 #: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
@@ -2890,7 +2896,7 @@ msgstr "रंग"
 
 #: gtk/gtkprintunixdialog.c:2354
 msgid "Finishing"
-msgstr ""
+msgstr "पूर्ण करत आहे"
 
 #: gtk/gtkprintunixdialog.c:2364
 msgid "Some of the settings in the dialog conflict"
@@ -2907,7 +2913,7 @@ msgstr "समुह"
 
 #: gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
-msgstr ""
+msgstr "रेडिओ उपकरण बटन ज्याच्या समुहातील हे बटन आहे."
 
 # gtk/gtkrc.c:2270
 #: gtk/gtkrc.c:2832
@@ -2961,12 +2967,12 @@ msgstr "खाजगी साधने दाखवा(_P)"
 #: gtk/gtkrecentchoosermenu.c:431 gtk/gtkrecentchoosermenu.c:487
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "नजिकच्या कालावधीत वापरलेली साधने `%s' URI सह सापडली नाहीत"
 
 #: gtk/gtkrecentchoosermenu.c:511 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "हे प्रकार्य '%s' वर्गाच्या विजेटसाठी अंमलीत नाही"
 
 #: gtk/gtkrecentchoosermenu.c:854
 #, c-format
@@ -3500,17 +3506,17 @@ msgstr "--- मदत नाही ---"
 #: gtk/gtkuimanager.c:1126
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr ""
+msgstr "अपरिचित गुण '%s' ओळ %d अक्षर %d वर"
 
 #: gtk/gtkuimanager.c:1343
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr ""
+msgstr "अनपेक्षित आरंभ टॅग '%s' ओळ %d अक्षर %d वर"
 
 #: gtk/gtkuimanager.c:1433
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr ""
+msgstr "अनपेक्षित अक्षर डेटा ओळ %d अक्षर %d वर"
 
 #: gtk/gtkuimanager.c:2228
 msgid "Empty"
@@ -4279,7 +4285,6 @@ msgstr "#10 पाकीट"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
-#, fuzzy
 msgid "paper size|#11 Envelope"
 msgstr "#11 पाकीट"
 
@@ -4649,9 +4654,8 @@ msgstr "URI"
 
 # gtk/gtkcellrenderertoggle.c:131
 #: gtk/gtklinkbutton.c:142
-#, fuzzy
 msgid "The URI bound to this button"
-msgstr "बटनाची परीवर्तन करण्याची स्थिती"
+msgstr "या बटनास संलग्न URI"
 
 # gtk/gtkstock.c:283
 #: gtk/gtklinkbutton.c:396
@@ -4664,196 +4668,195 @@ msgid "Invalid URI"
 msgstr "अवैध URI"
 
 #: gtk/gtktextbufferrichtext.c:651
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr "अपरिचित"
+msgstr "%s डीसिरियलाइज करण्याचा प्रयत्न करताना अपरिचित चूक"
 
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "%s स्वरूपासाठी डीसिरियलाइज प्रकार्य सापडले नाही"
 
 #: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "\"id\" आणि \"name\" दोन्ही <%s> घटकावर सापडले होते"
 
 #: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "गुण \"%s\" दोन वेळा <%s> घटकावर सापडले होते"
 
 #: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "<%s> घटकाचा id \"%s\" अवैध आहे"
 
 #: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "<%s> घटकास \"name\" आणि \"id\" यांपैकी कोणताही गुण नाही"
 
 #: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "\"%s\" गुणाची <%s> या एकाच घटकावर दोनवेळा पुनरावृत्ती झाली"
 
 #: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "गुण \"%s\" <%s> घटकावरील या संदर्भात अवैध आहे"
 
 #: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "\"%s\" टॅग व्याख्यीत केलेली नाही."
 
 #: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "निनावी टॅग सापडली आणि टॅग निर्माण करता येत नाहीत."
 
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "\"%s\"टॅग बफर मध्ये अस्तित्वात नाही आणि टॅग निर्माण करता येत नाहीत."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "<%s> घटक <%s> च्या खाली संमत नाही"
 
 #: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" हा वैध गुण प्रकार नाही"
 
 #: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" हा वैध गुण नाव नाही"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" मूल्य प्रकार \"%s\" मध्ये \"%s\" गुणासाठी रुपांतरित करता आला नाही"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" हे \"%s\" गुणासाठी वैध मूल्य नाही"
 
 #: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "\"%s\" टॅग आधिच व्याख्यित"
 
 #: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "\"%s\" टॅगला \"%s\" हा अवैध गुणधर्म आहे"
 
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "पाठामधील सर्वात बाहेरील घटक <text_view_markup> असावा <%s> नव्हे"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "<%s> घटक आधिच दर्शवला गेलाय"
 
 #: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "<text> घटक <tags> घटकाआधी येऊ शकत नाही"
 
 #: gtk/gtktextbufferserialize.c:1788
 #, c-format
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "सिरीयलाइज्ड डेटा खराब झालाय"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
+msgstr "सिरीयलाइज्ड डेटा खराब झालाय. पहिला विभाग GTKTEXTBUFFERCONTENTS-0001 नाही"
 
 #: gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "symlinked '%s' आणि '%s' साठी वेगवेगळे idatas सापडले\n"
 
 # gdk-pixbuf/io-tiff.c:273
 #: gtk/updateiconcache.c:1116
 #, c-format
 msgid "Failed to write header\n"
-msgstr ""
+msgstr "शिर्षक लिहीण्यास असफल\n"
 
 # gdk-pixbuf/io-tiff.c:273
 #: gtk/updateiconcache.c:1122
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "हॅश तक्ता लिहीण्यास असफल\n"
 
 # gdk-pixbuf/io-xbm.c:427
 #: gtk/updateiconcache.c:1128
 #, c-format
 msgid "Failed to write directory index\n"
-msgstr ""
+msgstr "निर्देशिका अनुक्रम लिहीण्यात असफल\n"
 
 # gdk-pixbuf/io-tiff.c:273
 #: gtk/updateiconcache.c:1136
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rewrite header\n"
-msgstr "TIFF प्रतिमा उघडण्यात असफल"
+msgstr "शिर्षक पुन्हा लिहीण्यात असफल\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #: gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "'%1s' फाइल उघडण्यात असफल: %2s"
+msgstr "कॅश फाइल लिहीण्यात असफल: %s\n"
 
 #: gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "%s चे नाव बदलून %s करता आले नाही: %s, मग %s काढत आहे.\n"
 
 # gtk/gtkfilesel.c:1369
 #: gtk/updateiconcache.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "फोल्डर \"%s\": निर्माण करण्यात चुक: %s\n"
+msgstr "%s चे नाव बदलून %s करता आले नाही: %s\n"
 
 # gtk/gtkfilesel.c:1369
 #: gtk/updateiconcache.c:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "फोल्डर \"%s\": निर्माण करण्यात चुक: %s\n"
+msgstr "%s चे नाव बदलून पुन्हा %s करता आले नाही: %s.\n"
 
 #: gtk/updateiconcache.c:1243
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "कॅश फाइल यशस्वीरित्या निर्माण केली.\n"
 
 #: gtk/updateiconcache.c:1282
-#, fuzzy
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "गिरवा"
+msgstr "अस्तित्वात असलेली कॅश गिरवा, अद्ययावत असली तरीही"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "index.theme च्या अस्तित्वासाठी तपासू नका"
 
 #: gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "प्रतिमा डेटा कॅशमध्ये समाविष्ट करू नका"
 
 #: gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "C हेडर फाइल प्रदान करा"
 
 #: gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "शब्दाळ प्रदान बंद करा"
 
 #: gtk/updateiconcache.c:1314
 #, c-format
@@ -4861,4 +4864,6 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"'%s' मध्ये थीम अनुक्रम फाइल नाही.\n"
+"जर तुम्ही खरच येथे प्रतिक कॅश बनवू इच्छित असाल, तर --ignore-theme-index वापरा.\n"
 
