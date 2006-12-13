@@ -1,27 +1,27 @@
-# translation of or.po to Oriya
+# translation of gtk+.po to Oriya
 # Oriya translation of gtk+.HEAD.pot.
 # Copyright (C) 2005, 2006, Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # $Id$
 # $Id$
+#
 # Gora Mohanty <gora_mohanty@yahoo.co.in>, 2005.
 # Subhransu Behera <arya_subhransu@yahoo.co.in>, 2006.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: or\n"
+"Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-03 13:38-0400\n"
-"PO-Revision-Date: 2006-09-05 16:57+0530\n"
-"Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
+"POT-Creation-Date: 2006-09-22 22:53-0400\n"
+"PO-Revision-Date: 2006-12-13 15:11+0530\n"
+"Last-Translator: Subhransu Behera <sbehera@redhat.com>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
 #: gdk-pixbuf/gdk-pixbuf-io.c:1113 tests/testfilechooser.c:218
@@ -37,10 +37,8 @@ msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
 #: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବ କି ଏହା ଗୋଟିଏ ତ୍ରୁଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ ଅଟେ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
@@ -48,8 +46,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"'%s' ଜୀବନାୟନ ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବ କି ଏହା ଗୋଟିଏ ତ୍ରୁଟିଯୁକ୍ତ "
-"ଜୀବନାୟନ ଫାଇଲ"
+"'%s' ଜୀବନାୟନ ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ "
+"ଜୀବନାୟନ ଫାଇଲ ଅଟେ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:463
 #, c-format
@@ -63,7 +61,7 @@ msgid ""
 "from a different GTK version?"
 msgstr ""
 "%s ଚିତ୍ର-ଧାରଣ ଏକକାଂଶ ଠିକ ଅନ୍ତରାପୃଷ୍ଠ ରପ୍ତାନି କରେ ନାହିଁ; ବୋଧହୁଏ ଏହା ଗୋଟିଏ ଅଲଗା ଜି.ଟି.କେ. "
-"ସଂସକରଣରୁ?"
+"ସଂସ୍କରଣରୁ ପ୍ରାପ୍ତ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:647 gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
@@ -73,7 +71,7 @@ msgstr "'%s' ଚିତ୍ର ପ୍ରକାର ଅସହାୟକ"
 #: gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ଚିତ୍ର ଫାଇଲ ଶୈଳୀ ଚିହ୍ନିହେଲା ନାହିଁ"
+msgstr "'%s' ଚିତ୍ର ଫାଇଲ ଶୈଳୀ ଚିହ୍ନିପାରିଲା ନାହିଁ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
@@ -88,17 +86,17 @@ msgstr "'%s' ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ: %s
 #: gdk-pixbuf/gdk-pixbuf-io.c:1392
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "ଚିତ୍ର ଫାଇଲକୁ ଲେଖିବାରେ ତ୍ରୁଟି: %s"
+msgstr "ଚିତ୍ର ଫାଇଲକୁ ଲେଖିବାରେ ତୃଟି: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1438 gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "ଜିଡିକେ-ପିକ୍ସବଫର ଏହି ସଂସ୍କରଣରେ %s ଚିତ୍ର ଶୈଳୀ ସଂରକ୍ଷଣ କରିବା ଅସହାୟକ"
+msgstr "ଜି.ଡି.କେ.-ପିକ୍ସବଫର ଏହି ସଂସ୍କରଣ ଚିତ୍ର ଶୈଳୀ ସଂରକ୍ଷଣକୁ ସମର୍ଥନ କରୁନାହିଁ:%s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1472
 #, c-format
 msgid "Insufficient memory to save image to callback"
-msgstr "ଚିତ୍ରକୁ କଲବାକରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+msgstr "ଚିତ୍ରକୁ କଲବ୍ଯାକରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1485
 #, c-format
@@ -108,7 +106,7 @@ msgstr "ଅସ୍ଥାୟୀ ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ
 #: gdk-pixbuf/gdk-pixbuf-io.c:1511
 #, c-format
 msgid "Failed to read from temporary file"
-msgstr "ଅସ୍ଥାୟୀ ଫାଇଲଠାରୁ ପଢ଼ିବାରେ ଅସଫଳ"
+msgstr "ଅସ୍ଥାୟୀ ଫାଇଲରୁ ପଢ଼ିବାରେ ଅସଫଳ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1746
 #, c-format
@@ -120,8 +118,7 @@ msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ �
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
+msgstr "ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1991 gdk-pixbuf/gdk-pixbuf-io.c:2041
 #, c-format
@@ -134,7 +131,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"ଆଭ୍ଯନ୍ତରୀଣ ତ୍ରୁଟି: '%s' ଚିତ୍ର ଧାରକ ଏକକାଂଶ ଏହି ପ୍ରକ୍ରିୟାକୁ ସମ୍ପନ୍ନ କରିବାରେ ଅସଫଳ ହେଲା, କିନ୍ତୁ "
+"ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି: '%s' ଚିତ୍ର ଧାରକ ଏକକାଂଶ ଏହି ପ୍ରକ୍ରିୟାକୁ ସମ୍ପନ୍ନ କରିବାରେ ଅସଫଳ ହେଲା, କିନ୍ତୁ "
 "ଅସଫଳତା ପାଇଁ କୌଣସି କାରଣ ପ୍ରଦାନ କଲା ନାହିଁ"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:364
@@ -145,7 +142,7 @@ msgstr "'%s' ଚିତ୍ର ପ୍ରକାରର କ୍ରମବର୍ଦ୍�
 #: gdk-pixbuf/gdk-pixdata.c:147
 #, c-format
 msgid "Image header corrupt"
-msgstr "ଚିତ୍ର ଶୀର୍ଷକ ତ୍ରୁଟିଯୁକ୍ତ"
+msgstr "ଚିତ୍ର ଶୀର୍ଷକ ତୃଟିଯୁକ୍ତ"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
 #, c-format
@@ -155,7 +152,7 @@ msgstr "ଚିତ୍ର ଶୈଳୀ ଅଜଣା"
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 #, c-format
 msgid "Image pixel data corrupt"
-msgstr "ଚିତ୍ର ପିକ୍ସେଲ ତଥ୍ଯ ତ୍ରୁଟିଯୁକ୍ତ"
+msgstr "ଚିତ୍ର ପିକ୍ସେଲ ତଥ୍ଯ ତୃଟିଯୁକ୍ତ"
 
 #: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
@@ -232,7 +229,7 @@ msgstr "BMP ଚିତ୍ର ଶୈଳୀ"
 #: gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "GIF ପଢ଼ିବାରେ ତ୍ରୁଟି: %s"
+msgstr "GIF ପଢ଼ିବାରେ ତୃଟି: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1472 gdk-pixbuf/io-gif.c:1633
 #, c-format
@@ -242,7 +239,7 @@ msgstr "GIF ଫାଇଲରେ କିଛି ତଥ୍ଯ ନ ଥିଲା (ବ�
 #: gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ଧାରକରେ ଆଭ୍ଯନ୍ତରୀଣ ତ୍ରୁଟି (%s)"
+msgstr "GIF ଧାରକରେ ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି (%s)"
 
 #: gdk-pixbuf/io-gif.c:579
 #, c-format
@@ -278,7 +275,7 @@ msgstr "GIF ଫାଇଲରେ ବନ୍ଧେଇ ମିଶ୍ରିତ କର�
 #: gdk-pixbuf/io-gif.c:1123
 #, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ଚିତ୍ର ତ୍ରୁଟିଯୁକ୍ତ (ଭୂଲ ଏଲ.ଜେଡ.ଡବ୍ଲୁ. ସଙ୍କୋଚନ)"
+msgstr "GIF ଚିତ୍ର ତୃଟିଯୁକ୍ତ (ଭୂଲ ଏଲ.ଜେଡ.ଡବ୍ଲୁ. ସଙ୍କୋଚନ)"
 
 #: gdk-pixbuf/io-gif.c:1173
 #, c-format
@@ -340,12 +337,12 @@ msgstr "ଅସହାୟକ ଚିତ୍ରସଙ୍କେତ ପ୍ରକାର"
 #: gdk-pixbuf/io-ico.c:490
 #, c-format
 msgid "Not enough memory to load ICO file"
-msgstr "ଆଇ.ସି.ଓ. ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+msgstr "ICO ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
 
 #: gdk-pixbuf/io-ico.c:955
 #, c-format
 msgid "Image too large to be saved as ICO"
-msgstr "ଆଇ.ସି.ଓ. ଭାବରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଚିତ୍ରଟି ଅତି ବଡ଼"
+msgstr "ICO ଭାବରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଚିତ୍ରଟି ଅତି ବଡ଼"
 
 #: gdk-pixbuf/io-ico.c:966
 #, c-format
@@ -364,15 +361,14 @@ msgstr "ICO ଚିତ୍ର ଶୈଳୀ"
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବାରେ ତ୍ରୁଟି (%s)"
+msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବାରେ ତୃଟି (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:352
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
+msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
 
 #: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
 #, c-format
@@ -394,8 +390,7 @@ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭ�
 
 #: gdk-pixbuf/io-jpeg.c:941
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
 
 #: gdk-pixbuf/io-jpeg.c:1103
@@ -430,7 +425,7 @@ msgstr "ଚିତ୍ରର %d-ବିଟ ସମତଳ କ୍ଷେତ୍ରର �
 #: gdk-pixbuf/io-pcx.c:648
 #, c-format
 msgid "Couldn't create new pixbuf"
-msgstr "ନୂଆ ପିକ୍ସବଫ ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
+msgstr "ନୂତନ ପିକ୍ସବଫ ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
 
 #: gdk-pixbuf/io-pcx.c:656
 #, c-format
@@ -484,7 +479,7 @@ msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଚ୍ଯାନେଲର ସ�
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "PNG ଚିତ୍ର ଫାଇଲରେ ମାରାତ୍ମକ ତ୍ରୁଟି: %s"
+msgstr "PNG ଚିତ୍ର ଫାଇଲରେ ମାରାତ୍ମକ ତୃଟି: %s"
 
 #: gdk-pixbuf/io-png.c:301
 #, c-format
@@ -503,17 +498,16 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:669
 #, c-format
 msgid "Fatal error reading PNG image file"
-msgstr "PNG ଫାଇଲ  ପଢ଼ିବାରେ ମାରାତ୍ମକ ତ୍ରୁଟି"
+msgstr "PNG ଫାଇଲ  ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି"
 
 #: gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତ୍ରୁଟି: %s"
+msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି: %s"
 
 #: gdk-pixbuf/io-png.c:810
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
 
 #: gdk-pixbuf/io-png.c:818
@@ -670,7 +664,7 @@ msgstr "ଅସ୍ଥାୟୀ ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ �
 #: gdk-pixbuf/io-tga.c:348
 #, c-format
 msgid "Cannot allocate new pixbuf"
-msgstr "ନୂଆ ପିକ୍ସବଫ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+msgstr "ନୂତନ ପିକ୍ସବଫ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
 
 #: gdk-pixbuf/io-tga.c:685
 #, c-format
@@ -909,7 +903,7 @@ msgstr "ପରଦା"
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:129
 msgid "Gdk debugging flags to set"
-msgstr "ବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତ୍ରୁଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
+msgstr "ବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -922,7 +916,7 @@ msgstr "ସୂଚକ"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:132
 msgid "Gdk debugging flags to unset"
-msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତ୍ରୁଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
+msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
 
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -1124,7 +1118,7 @@ msgstr "ଲେଖକ"
 
 #: gtk/gtkaboutdialog.c:2033
 msgid "Documented by"
-msgstr "ଦଲିଲିକରଣ ଲେଖକ"
+msgstr "ଦଲିଲକରଣ ଲେଖକ"
 
 #: gtk/gtkaboutdialog.c:2045
 msgid "Translated by"
@@ -1132,7 +1126,7 @@ msgstr "ଅନୁବାଦକ"
 
 #: gtk/gtkaboutdialog.c:2049
 msgid "Artwork by"
-msgstr "କଳାକାର"
+msgstr "ଚିତ୍ରକାର"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1223,7 +1217,7 @@ msgstr "calendar:MY"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1298,7 +1292,7 @@ msgstr "ନିଷ୍କ୍ରିୟ"
 #.
 #: gtk/gtkcellrendereraccel.c:384 gtk/gtkcellrendereraccel.c:595
 msgid "New accelerator..."
-msgstr "ନୂଆ ତ୍ବରକ..."
+msgstr "ନୂତନ ତ୍ବରକ..."
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
@@ -1354,8 +1348,7 @@ msgstr "ବାହାର ମଣ୍ଡଳରୁ ରଙ୍ଗ ବାଛନ୍ତୁ
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
+msgstr "ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
 
 #: gtk/gtkcolorsel.c:1971
 msgid "_Hue:"
@@ -1656,8 +1649,7 @@ msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପ
 
 #: gtk/gtkfilechooserdefault.c:7326
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
 #: gtk/gtkfilechooserdefault.c:7331
@@ -1671,7 +1663,7 @@ msgstr "%s ସ୍ଥାପନ କରିହେଲା ନାହିଁ"
 
 #: gtk/gtkfilechooserdefault.c:8421
 msgid "Type name of new folder"
-msgstr "ନୂଆ ଫୋଲ୍ଡରର ପ୍ରକାରର ନାମ"
+msgstr "ନୂତନ ଫୋଲ୍ଡରର ପ୍ରକାରର ନାମ"
 
 #: gtk/gtkfilechooserdefault.c:8466
 #, c-format
@@ -1728,8 +1720,7 @@ msgstr ""
 
 #: gtk/gtkfilechoosersettings.c:202
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr ""
 "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ଉପର ସ୍ତରରେ \"%s\"କୁ ଆଶା କରାଯାଉଥିଲା, କିନ୍ତୁ ଏହା ପରିବର୍ତ୍ତେ \"%s\" "
 "ମିଳିଲା"
@@ -1776,7 +1767,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1079
 msgid "_New Folder"
-msgstr "ନୂଆ ଫୋଲ୍ଡର (_N)"
+msgstr "ନୂତନ ଫୋଲ୍ଡର (_N)"
 
 #: gtk/gtkfilesel.c:1090
 msgid "De_lete File"
@@ -1788,19 +1779,18 @@ msgstr "ଫାଇଲର ନାମ ବଦଳାନ୍ତୁ (_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ଫୋଲ୍ଡରର ନାମ \"%s\"ରେ କିଛି ପ୍ରତୀକ ଅଛି ଯେଉଁଗୁଡ଼ିକ ଫାଇଲ ନାମରେ ମନା"
 
-#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
-#: gtk/gtkfilesystemwin32.c:1177
+#: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1055
+#: gtk/gtkfilesystemwin32.c:1170
 #, c-format
 msgid "Error creating directory '%s': %s"
-msgstr "'%s' ଡିରେକ୍ଟୋରି ସୃଷ୍ଟି କରିବାରେ ତ୍ରୁଟି: %s"
+msgstr "'%s' ଡିରେକ୍ଟୋରି ସୃଷ୍ଟି କରିବାରେ ତୃଟି: %s"
 
 #: gtk/gtkfilesel.c:1451
 msgid "New Folder"
-msgstr "ନୂଆ ଫୋଲ୍ଡର"
+msgstr "ନୂତନ ଫୋଲ୍ଡର"
 
 #: gtk/gtkfilesel.c:1466
 msgid "_Folder name:"
@@ -1818,12 +1808,12 @@ msgstr "ଫାଇଲ ନାମ \"%s\"ରେ କିଛି ପ୍ରତୀକ ଅ�
 #: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
-msgstr "'%s' ଫାଇଲକକୁ ଅପସାରଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+msgstr "'%s' ଫାଇଲକକୁ ଅପସାରଣ କରିବା ସମୟରେ ତୃଟି: %s"
 
 #: gtk/gtkfilesel.c:1589
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "\"%s\" କୁ ପ୍ରକ୍ରୁତରେ ଅପସାରଣ କରାଯିବ?"
+msgstr "\"%s\" କୁ ପ୍ରକୃତରେ ଅପସାରଣ କରାଯିବ?"
 
 #: gtk/gtkfilesel.c:1594
 msgid "Delete File"
@@ -1832,17 +1822,17 @@ msgstr "ଫାଇଲ ଲିଭାନ୍ତୁ"
 #: gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr "ଫାଇଲର ନାମ \"%s\"କୁ ବଦଳାଇବାରେ ତ୍ରୁଟି: %s"
+msgstr "ଫାଇଲର ନାମ \"%s\"କୁ ବଦଳାଇବାରେ ତୃଟି: %s"
 
 #: gtk/gtkfilesel.c:1655
 #, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr "\"%s\" ଫାଇଲର ନାମ ବଦଳାଇବାରେ ତ୍ରୁଟି: %s"
+msgstr "\"%s\" ଫାଇଲର ନାମ ବଦଳାଇବାରେ ତୃଟି: %s"
 
 #: gtk/gtkfilesel.c:1664
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "ଫାଇଲର ନାମ \"%s\"ରୁ \"%s\"ରେ ବଦଳାଇବାରେ ତ୍ରୁଟି: %s"
+msgstr "ଫାଇଲର ନାମ \"%s\"ରୁ \"%s\"ରେ ବଦଳାଇବାରେ ତୃଟି: %s"
 
 #: gtk/gtkfilesel.c:1711
 msgid "Rename File"
@@ -1896,56 +1886,55 @@ msgstr "ରୁଟ୍ ଫୋଲଡରକୁ ପାଇପାରିଲା ନାହ
 msgid "(Empty)"
 msgstr "(ଖାଲି)"
 
-#: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
-#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
-#: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
+#: gtk/gtkfilesystemunix.c:968 gtk/gtkfilesystemunix.c:1216
+#: gtk/gtkfilesystemunix.c:2204 gtk/gtkfilesystemunix.c:2244
+#: gtk/gtkfilesystemwin32.c:2389 gtk/gtkfilesystemwin32.c:2439
 #, c-format
 msgid "Error getting information for '%s': %s"
-msgstr "'%s' ପାଇଁ ସୂଚନା ଆଣିବାରେ ତ୍ରୁଟି: %s"
+msgstr "'%s' ପାଇଁ ସୂଚନା ଆଣିବାରେ ତୃଟି: %s"
 
-#: gtk/gtkfilesystemunix.c:1168 gtk/gtkfilesystemwin32.c:1284
+#: gtk/gtkfilesystemunix.c:1161 gtk/gtkfilesystemwin32.c:1277
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "ଏହି ଫାଇଲ ତନ୍ତ୍ର ପଠନକ୍ଷମ କରିବା ଅସହାୟକ"
 
-#: gtk/gtkfilesystemunix.c:1180
+#: gtk/gtkfilesystemunix.c:1173
 msgid "File System"
 msgstr "ଫାଇଲ ତନ୍ତ୍ର"
 
-#: gtk/gtkfilesystemunix.c:1344 gtk/gtkfilesystemwin32.c:1461
+#: gtk/gtkfilesystemunix.c:1337 gtk/gtkfilesystemwin32.c:1454
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"\"%s\" ନାମରେ \"%s\" ଅକ୍ଷର ଥିବାରୁ ଏହା ଅବୈଧ. ଦୟା କରି ଗୋଟିଏ ଅନ୍ଯ ନାମ ବ୍ଯବହାର କରନ୍ତୁ."
+msgstr "\"%s\" ନାମରେ \"%s\" ଅକ୍ଷର ଥିବାରୁ ଏହା ଅବୈଧ. ଦୟା କରି ଗୋଟିଏ ଅନ୍ଯ ନାମ ବ୍ଯବହାର କରନ୍ତୁ."
 
-#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
+#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2069
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ ସଂରକ୍ଷଣ ଅସଫଳ: %s"
 
-#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
+#: gtk/gtkfilesystemunix.c:1941 gtk/gtkfilesystemwin32.c:2124
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ ତାଲିକାରେ '%s' ପୂର୍ବରୁ ଅଛି"
 
-#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
+#: gtk/gtkfilesystemunix.c:2013 gtk/gtkfilesystemwin32.c:2196
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ ତାଲିକାରେ '%s' ଅବସ୍ଥିତ ନାହିଁ"
 
-#: gtk/gtkfilesystemwin32.c:1100
+#: gtk/gtkfilesystemwin32.c:1093
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "ପଥଟି ଗୋଟିଏ ଫୋଲଡର ନୁହେଁ: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1302
+#: gtk/gtkfilesystemwin32.c:1295
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "ଜାଲକ ଡ୍ରାଇଭ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1324
+#: gtk/gtkfilesystemwin32.c:1317
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -1984,7 +1973,7 @@ msgstr "ଆକାର: (_z)"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:514
 msgid "_Preview:"
-msgstr "ପ୍ରାକ୍ଦର୍ଶନ: (_P)"
+msgstr "ପୂର୍ବାବଲୋକନ: (_P)"
 
 #: gtk/gtkfontsel.c:1348
 msgid "Font Selection"
@@ -2004,7 +1993,7 @@ msgstr "ଗାମା ମୂଲ୍ଯ (_G)"
 #: gtk/gtkiconfactory.c:1371
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "ଚିତ୍ରସଙ୍କେତ ଧାରଣ କରିବାରେ ତ୍ରୁଟି: %s"
+msgstr "ଚିତ୍ରସଙ୍କେତ ଧାରଣ କରିବାରେ ତୃଟି: %s"
 
 #: gtk/gtkicontheme.c:1314
 #, c-format
@@ -2026,7 +2015,7 @@ msgstr "'%s' ଚିତ୍ରସଙ୍କେତ ପ୍ରସଙ୍ଗରେ ଅ�
 
 #: gtk/gtkimmodule.c:407
 msgid "Default"
-msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ"
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ"
 
 #: gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2125,12 +2114,12 @@ msgstr "ସବୁ ଚେତାବନୀ ମାରାତ୍ମକ କରନ୍ତ
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:411
 msgid "GTK+ debugging flags to set"
-msgstr "ବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତ୍ରୁଟିମୁକ୍ତିକରଣ ସୂଚକ"
+msgstr "ବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to unset"
-msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତ୍ରୁଟିମୁକ୍ତିକରଣ ସୂଚକ"
+msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2170,7 +2159,7 @@ msgstr "ପୃଷ୍ଠା %u"
 #.
 #: gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ:ମିମି"
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ:ମିମି"
 
 #: gtk/gtkpagesetupunixdialog.c:338
 msgid ""
@@ -2289,7 +2278,7 @@ msgstr "ମୂଦ୍ରଣ କରିବା ପାଇଁ ପ୍ରସ୍ତୁତ
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1479
 msgid "print operation status|Generating data"
-msgstr "ତଥ୍ଯ ସ୍ରୁଷ୍ଟି କରୁଅଛି"
+msgstr "ତଥ୍ଯ ସୃଷ୍ଟି କରୁଅଛି"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1481
@@ -2319,7 +2308,7 @@ msgstr "ସମାପ୍ତ"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1491
 msgid "print operation status|Finished with error"
-msgstr "ତ୍ରୁଟି ସହିତ ସମାପ୍ତ"
+msgstr "ତୃଟି ସହିତ ସମାପ୍ତ"
 
 #: gtk/gtkprintoperation.c:1966
 #, c-format
@@ -2339,12 +2328,12 @@ msgstr "%dକୁ ମୁଦ୍ରଣ କରୁଅଛି"
 #: gtk/gtkprintoperation-unix.c:240
 #, c-format
 msgid "Error launching preview"
-msgstr "ପ୍ରାକଦର୍ଶନକୁ ଚଲାଇବା ସମୟରେ ତ୍ରୁଟି"
+msgstr "ପ୍ରାକଦର୍ଶନକୁ ଚଲାଇବା ସମୟରେ ତୃଟି"
 
 #: gtk/gtkprintoperation-unix.c:274
 #, c-format
 msgid "Error printing"
-msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତ୍ରୁଟି"
+msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତୃଟି"
 
 #: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
@@ -2394,12 +2383,12 @@ msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ନିୟନ୍ତ୍ରକ"
 #: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Unspecified error"
-msgstr "ଅନିର୍ଦ୍ଦିଷ୍ଟ ତ୍ରୁଟି"
+msgstr "ଅନିର୍ଦ୍ଦିଷ୍ଟ ତୃଟି"
 
 #: gtk/gtkprintoperation-win32.c:1622
 #, c-format
 msgid "Error from StartDoc"
-msgstr "StartDoc ରୁ ତ୍ରୁଟି"
+msgstr "StartDoc ରୁ ତୃଟି"
 
 #: gtk/gtkprintunixdialog.c:1448
 msgid "Printer"
@@ -2415,7 +2404,7 @@ msgstr "ସ୍ଥିତି"
 
 #: gtk/gtkprintunixdialog.c:1487
 msgid "Print Pages"
-msgstr "ପ୍ରୁଷ୍ଠା ମାନଙ୍କୁ ମୂଦ୍ରଣ କରନ୍ତୁ"
+msgstr "ପୃଷ୍ଠା ମାନଙ୍କୁ ମୂଦ୍ରଣ କରନ୍ତୁ"
 
 #: gtk/gtkprintunixdialog.c:1491
 msgid "_All"
@@ -2457,7 +2446,7 @@ msgstr "ବିନ୍ଯାସ"
 #: gtk/gtkprintunixdialog.c:1962
 #: modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
-msgstr "ପ୍ରୁଷ୍ଠା ପ୍ରତି ସୀଟରେ (_s):"
+msgstr "ପୃଷ୍ଠା ପ୍ରତି ସୀଟରେ (_s):"
 
 #: gtk/gtkprintunixdialog.c:1978
 msgid "T_wo-sided:"
@@ -2530,7 +2519,7 @@ msgstr "ଆୟତ୍ତ ରେ (_h)"
 
 #: gtk/gtkprintunixdialog.c:2211
 msgid "Add Cover Page"
-msgstr "ଉପର ପ୍ରୁଷ୍ଠାକୁ ସଂଯୋଗ କରନ୍ତୁ"
+msgstr "ଉପର ପୃଷ୍ଠାକୁ ସଂଯୋଗ କରନ୍ତୁ"
 
 #: gtk/gtkprintunixdialog.c:2217
 msgid "Be_fore:"
@@ -2586,36 +2575,36 @@ msgstr "ଭରଣ ପାଇଁ \"%s\" ଫାଇଲ ମିଳିଲା ନାହ�
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "\"%s\" ପିକ୍ସମ୍ଯାପ_ପଥରେ ଚିତ୍ର ଫାଇଲ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:456
+#: gtk/gtkrecentchooserdefault.c:459
 msgid "Select which type of documents are shown"
 msgstr "କେଉଁ ପ୍ରକାରର ଦଲିଲ ମାନଙ୍କୁ ପ୍ରଦର୍ଶନ କରାଯାଇଛି ତାହାକୁ ବାଛନ୍ତୁ"
 
-#: gtk/gtkrecentchooserdefault.c:1123 gtk/gtkrecentchooserdefault.c:1160
+#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' ୟୁ.ଆର.ଆଇ. ପାଇଁ କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1767
+#: gtk/gtkrecentchooserdefault.c:1770
 msgid "Could not remove item"
 msgstr "ବସ୍ତୁକୁ ଅପସାରିତ ହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1810
+#: gtk/gtkrecentchooserdefault.c:1813
 msgid "Could not clear list"
 msgstr "ତାଲିକାକୁ ସଫା କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1894
+#: gtk/gtkrecentchooserdefault.c:1897
 msgid "Copy _Location"
 msgstr "ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1907
+#: gtk/gtkrecentchooserdefault.c:1910
 msgid "_Remove From List"
 msgstr "ତାଲିକାରୁ ବାହାର କରି ଦିଅନ୍ତୁ (_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1916
+#: gtk/gtkrecentchooserdefault.c:1919
 msgid "_Clear List"
 msgstr "ତାଲିକାକୁ ସଫା କରନ୍ତୁ (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1930
+#: gtk/gtkrecentchooserdefault.c:1933
 msgid "Show _Private Resources"
 msgstr "ବ୍ଯକ୍ତିଗତ ସମ୍ବଳ ଗୁଡିକୁ ଦେଖାନ୍ତୁ (_P)"
 
@@ -2627,7 +2616,7 @@ msgstr "`%s' ୟୁ.ଆର.ଆଇ. ରେ ନିକଟ ଅତୀତରେ ବ୍
 #: gtk/gtkrecentchoosermenu.c:511 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr "'%s' ଶ୍ରେଣୀର ଓ୍ବେଜେଟ ପାଇଁ ଏହି ପ୍ରକ୍ରିୟାଟି ଲାଗୁ କରାଯାଇ ନାହିଁ"
+msgstr "'%s' ଶ୍ରେଣୀର ୱିଜେଟଟ ପାଇଁ ଏହି ପ୍ରକ୍ରିୟାି  ଲାଗୁ କରାଯାଇ ନାହିଁ"
 
 #: gtk/gtkrecentchoosermenu.c:854
 #, c-format
@@ -2659,7 +2648,7 @@ msgstr "ଚେତାବନୀ"
 
 #: gtk/gtkstock.c:310
 msgid "Error"
-msgstr "ତ୍ରୁଟି"
+msgstr "ତୃଟି"
 
 #: gtk/gtkstock.c:311
 msgid "Question"
@@ -2670,11 +2659,11 @@ msgstr "ପ୍ରଶ୍ନ"
 #.
 #: gtk/gtkstock.c:316
 msgid "_About"
-msgstr "ବିଷୟରେ (_A)"
+msgstr "ବିବରଣୀ (_A)"
 
 #: gtk/gtkstock.c:318
 msgid "_Apply"
-msgstr "ଯୋଗ କରନ୍ତୁ (_A)"
+msgstr "ପ୍ରୟୋଗ କରନ୍ତୁ (_A)"
 
 #: gtk/gtkstock.c:319
 msgid "_Bold"
@@ -2698,7 +2687,7 @@ msgstr "ବନ୍ଦ କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:324
 msgid "C_onnect"
-msgstr "ରୂପାନ୍ତରିତ କରନ୍ତୁ (_o)"
+msgstr "ସଂଯୋଗ କରନ୍ତୁ (_o)"
 
 #: gtk/gtkstock.c:325
 msgid "_Convert"
@@ -2802,11 +2791,11 @@ msgstr "ଘର (_H)"
 
 #: gtk/gtkstock.c:356
 msgid "Increase Indent"
-msgstr "ଅନୁଚ୍ଛେଦ ଛାଡ଼ ବଢ଼ାନ୍ତୁ"
+msgstr "ଅନୁଚ୍ଛେଦ ବ୍ଯବଧାନ ବଢ଼ାନ୍ତୁ"
 
 #: gtk/gtkstock.c:357
 msgid "Decrease Indent"
-msgstr "ଅନୁଚ୍ଛେଦ ଛାଡ଼ କମାନ୍ତୁ"
+msgstr "ଅନୁଚ୍ଛେଦ ବ୍ଯବଧାନ କମାନ୍ତୁ"
 
 #: gtk/gtkstock.c:358
 msgid "_Index"
@@ -2832,7 +2821,7 @@ msgstr "କେନ୍ଦ୍ରିତ କରନ୍ତୁ (_C)"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Fill"
-msgstr "ପୂରଣ (_F)"
+msgstr "ପୂରଣ କରନ୍ତୁ (_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
@@ -2886,7 +2875,7 @@ msgstr "ବିରାମ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:387
 msgid "_Network"
-msgstr "ନେଟଓ୍ବାର୍କ (_N)"
+msgstr "ନେଟୱାର୍କ (_N)"
 
 #: gtk/gtkstock.c:388
 msgid "_New"
@@ -2906,7 +2895,7 @@ msgstr "ଖୋଲନ୍ତୁ (_O)"
 
 #: gtk/gtkstock.c:392
 msgid "Landscape"
-msgstr "ଭୂଦ୍ରୁଶ୍ଯ"
+msgstr "ଭୂ-ଦୃଶ୍ଯ"
 
 #: gtk/gtkstock.c:393
 msgid "Portrait"
@@ -2914,7 +2903,7 @@ msgstr "ଚିତ୍ରପଟ"
 
 #: gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr "ଓଲଟା ଭୂଦ୍ରୁଶ୍ଯ"
+msgstr "ଓଲଟା ଭୂ-ଦୃଶ୍ଯ"
 
 #: gtk/gtkstock.c:395
 msgid "Reverse portrait"
@@ -2934,7 +2923,7 @@ msgstr "ମୁଦ୍ରଣ କରନ୍ତୁ (_P)"
 
 #: gtk/gtkstock.c:399
 msgid "Print Pre_view"
-msgstr "ମୁଦ୍ରଣ ପ୍ରାକ୍ଦର୍ଶନ (_v)"
+msgstr "ମୁଦ୍ରଣ ପୂର୍ବାବଲୋକନ (_v)"
 
 #: gtk/gtkstock.c:400
 msgid "_Properties"
@@ -3030,7 +3019,7 @@ msgstr "ସାନ କରନ୍ତୁ (_O)"
 
 #: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
-msgstr "ଏଲ.ଆର.ଏମ. ବାମରୁ ଡାହାଣ ଚିହ୍ନ (_L)"
+msgstr "LRM ବାମରୁ ଡାହାଣ ଚିହ୍ନ (_L)"
 
 #: gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
@@ -3092,7 +3081,7 @@ msgstr "ଧାଡ଼ି %2$d ଅକ୍ଷର %3$dରେ ଅପ୍ରତ୍ଯା
 msgid "Unexpected character data on line %d char %d"
 msgstr "ଧାଡ଼ି %d ଅକ୍ଷର %dରେ ଅପ୍ରତ୍ଯାଶିତ ଅକ୍ଷର ତଥ୍ଯ"
 
-#: gtk/gtkuimanager.c:2228
+#: gtk/gtkuimanager.c:2224
 msgid "Empty"
 msgstr "ଖାଲି"
 
@@ -3758,7 +3747,6 @@ msgstr "#10 ଲଫାପା"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
-#, fuzzy
 msgid "paper size|#11 Envelope"
 msgstr "#11 ଲଫାପା"
 
@@ -3962,82 +3950,82 @@ msgstr "ଭିଏତନାମୀ (ଭି.ଆଇ.କ୍ଯୁ.ଆର.)"
 msgid "X Input Method"
 msgstr "ଏକ୍ସ ନିବେଶ ପ୍ରଣାଳୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: modules/printbackends/cups/gtkprintbackendcups.c:1454
 msgid "Two Sided"
 msgstr "ଉଭୟ ପାର୍ଶ୍ବ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1455
 msgid "Paper Type"
 msgstr "କାଗଜର ପ୍ରକାର"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Paper Source"
 msgstr "କାଗଜ ଉତ୍ସ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1458
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Output Tray"
 msgstr "ନିର୍ଗମ ଟ୍ରେ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "One Sided"
 msgstr "ଗୋଟିଏ ପାଖ"
 
+#: modules/printbackends/cups/gtkprintbackendcups.c:1467
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
-#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Auto Select"
 msgstr "ସ୍ବତଃ ଚୟନ"
 
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #: modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: modules/printbackends/cups/gtkprintbackendcups.c:1471
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
-#: modules/printbackends/cups/gtkprintbackendcups.c:1934
+#: modules/printbackends/cups/gtkprintbackendcups.c:1920
 msgid "Printer Default"
-msgstr "ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Urgent"
 msgstr "ଜରୁରୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "High"
 msgstr "ଉଚ୍ଚ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Medium"
 msgstr "ମଧ୍ଯମ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2108
 msgid "Low"
 msgstr "ନିମ୍ନ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "None"
 msgstr "(କିଛି ନୁହେଁ)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Classified"
-msgstr "ବର୍ଗୀକ୍ରୁତ"
+msgstr "ବର୍ଗୀକୃତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Confidential"
 msgstr "ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Secret"
 msgstr "ଗୁପ୍ତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Standard"
 msgstr "ମାନକ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Top Secret"
 msgstr "ଅତ୍ଯନ୍ତ ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: modules/printbackends/cups/gtkprintbackendcups.c:2110
 msgid "Unclassified"
-msgstr "ଅବର୍ଗୀକ୍ରୁତ"
+msgstr "ଅବର୍ଗୀକୃତ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
@@ -4045,7 +4033,7 @@ msgstr "LPR ରେ ମୂଦ୍ରଣ କରନ୍ତୁ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
-msgstr "ପ୍ରୁଷ୍ଠା ପ୍ରତି ସୀଟରେ"
+msgstr "ପୃଷ୍ଠା ପ୍ରତି ସୀଟରେ"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
@@ -4109,7 +4097,7 @@ msgstr "ଅବୈଧ ୟୁ.ଆର.ଆଇ."
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr "%s କ୍ରମନ୍ବୟକୁ ହଟାଇବାର (ଡି-ସିରିଏଲାଇଜ) ପ୍ରଚେଷ୍ଟା କରୁଥିବା ସମୟରେ ଅଜଣା ତ୍ରୁଟି"
+msgstr "%s କ୍ରମନ୍ବୟକୁ ହଟାଇବାର (ଡି-ସିରିଏଲାଇଜ) ପ୍ରଚେଷ୍ଟା କରୁଥିବା ସମୟରେ ଅଜଣା ତୃଟି"
 
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
@@ -4153,12 +4141,12 @@ msgstr "\"%s\" ସୂଚକକୁ ବ୍ଯାଖ୍ଯ କରାଯାଇ ନ�
 
 #: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
-msgstr "ଅଜ୍ଞାତ ସୂଚକ ମିଳିଲା ଏବଂ ସୂଚକ ଗୁଡିକୁ ସ୍ରୁଷ୍ଟି କରିହେବ ନାହିଁ।"
+msgstr "ଅଜ୍ଞାତ ସୂଚକ ମିଳିଲା ଏବଂ ସୂଚକ ଗୁଡିକୁ ସୃଷ୍ଟି କରିହେବ ନାହିଁ।"
 
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "\"%s\" ସୂଚକ ବଫରରେ ଅବସ୍ଥିତ ନାହିଁ ଏବଂ ସୂଚକ ଗୁଡିକୁ ସ୍ରୁଷ୍ଟି କରିହେବ ନାହିଁ।"
+msgstr "\"%s\" ସୂଚକ ବଫରରେ ଅବସ୍ଥିତ ନାହିଁ ଏବଂ ସୂଚକ ଗୁଡିକୁ ସୃଷ୍ଟି କରିହେବ ନାହିଁ।"
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -4178,8 +4166,7 @@ msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେ
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -4209,19 +4196,17 @@ msgstr "ଗୋଟିଏ <%s> ବସ୍ତୁକୁ ପୂର୍ବରୁ ନି�
 
 #: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr "ଗୋଟିଏ <text> ତତ୍ବ ଗୋଟିଏ <tags> ତତ୍ବ ପୂର୍ବରୁ ଆସି ପାରିବ ନାହିଁ"
+msgstr "ଗୋଟିଏ <text> ତତ୍ବ ଗୋଟିଏ ତତ୍ବ ପୂର୍ବରୁ <tags> ଆସି ପାରିବ ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1788
 #, c-format
 msgid "Serialized data is malformed"
-msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକ୍ରୁତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ଧାରାବହିକ ତଥ୍ଯକୁ ବିକ୍ରୁତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: gtk/updateiconcache.c:413
 #, c-format
@@ -4236,7 +4221,7 @@ msgstr "ଶୀର୍ଷକକୁ ଲେଖିବାରେ ବିଫଳ\n"
 #: gtk/updateiconcache.c:1122
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "ଦ୍ରୁତାନ୍ବେଷଣ ସାରଣୀରେ ଲେଖିବାରେ ବିଫଳ\n"
+msgstr "ଦୃତାନ୍ବେଷଣ ସାରଣୀରେ ଲେଖିବାରେ ବିଫଳ\n"
 
 #: gtk/updateiconcache.c:1128
 #, c-format
@@ -4246,12 +4231,12 @@ msgstr "ଡିରେକ୍ଟୋରି ଅନୁକ୍ରମଣିକାକୁ �
 #: gtk/updateiconcache.c:1136
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr "ଶୀର୍ଷକର ପୁନଃ ଲିଖନରେ ବିଫଳ\n"
+msgstr "ଶୀର୍ଷକର ପୁନଃଲିଖନରେ ବିଫଳ\n"
 
 #: gtk/updateiconcache.c:1162
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "କ୍ଯାଶ ଫାଇଲରେ ଲେଖିବାରେ ବିଫଳ: %s\n"
+msgstr "ସଞ୍ଚୟ ଫାଇଲରେ ଲେଖିବାରେ ବିଫଳ: %s\n"
 
 #: gtk/updateiconcache.c:1202
 #, c-format
@@ -4271,11 +4256,11 @@ msgstr "%sର ନାମକୁ ତାହାର ପୂର୍ବ ନାମ %sରେ
 #: gtk/updateiconcache.c:1243
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "କ୍ଯାେଶ ଫାଇଲକୁ ସଫଳତାର ସହିତ ସ୍ରୁଷ୍ଟି କରାଗଲା।\n"
+msgstr "ସଞ୍ଚୟ ଫାଇଲକୁ ସଫଳତାର ସହିତ ସୃଷ୍ଟି କରାଯାଇଛି।\n"
 
 #: gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "ଗୋଟିଏ ଅବସ୍ଥିତ କ୍ଯାେଶ କୁ ନବଲିଖନ କରନ୍ତୁ, ଯଦିଚ ଏହା ଅଦ୍ଯତିତ ହୋଇଛି"
+msgstr "ଗୋଟିଏ ଅବସ୍ଥିତ ସଞ୍ଚୟକୁ ନବଲିଖନ କରନ୍ତୁ, ଯଦିଚ ଏହା ଅଦ୍ଯତିତ ହୋଇଛି"
 
 #: gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
@@ -4283,15 +4268,15 @@ msgstr "index.theme ଅସ୍ତିତ୍ବକୁ ଯାଞ୍ଚ କରନ୍�
 
 #: gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr "କ୍ଯାଶେରେ ଗୋଟିଏ ପ୍ରତିଛବିକୁ ଅନ୍ତର୍ଭୂକ୍ତ କରନ୍ତୁ ନାହିଁ"
+msgstr "ସଞ୍ଚୟରେ ଗୋଟିଏ ପ୍ରତିଛବିକୁ ଅନ୍ତର୍ଭୂକ୍ତ କରନ୍ତୁ ନାହିଁ"
 
 #: gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr "ଗୋଟିଏ C ହେଟର ଫାଇଲ ନିର୍ଗମ କରନ୍ତୁ"
+msgstr "ଗୋଟିଏ C ଶୀର୍ଷକ ଫାଇଲ ନିର୍ଗମ କରନ୍ତୁ"
 
 #: gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr "ଦ୍ରୁଷ୍ଟି ସୂଚନାଯୁକ୍ତ ନିର୍ଗମକୁ ବନ୍ଦ କରନ୍ତୁ"
+msgstr "ଦୃଷ୍ଟି ସୂଚନାଯୁକ୍ତ ନିର୍ଗମକୁ ବନ୍ଦ କରନ୍ତୁ"
 
 #: gtk/updateiconcache.c:1314
 #, c-format
@@ -4300,8 +4285,6 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "'%s' ରେ କୌଣସି ପ୍ରସଙ୍ଗ ଅନୁକ୍ରମଣିକା ଫାଇଲ ନାହିଁ।\n"
-"ଯଦି ଆପଣ ପ୍ରକ୍ରୁତରେ ଏଠାରେ ଗୋଟିଏ ଚିତ୍ରସଙ୍କେତ କ୍ଯାଶେକୁ ସ୍ରୁଷ୍ଟି କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି, ତାହାହେଲେ--"
+"ଯଦି ଆପଣ ପ୍ରକୃତରେ ଏଠାରେ ଗୋଟିଏ ଚିତ୍ରସଙ୍କେତ ସଞ୍ଚୟେକୁ ସୃଷ୍ଟି କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି, ତାହାହେଲେ--"
 "ignore-theme-index ନିର୍ଦ୍ଦେଶ କୁ ବ୍ଯବହାର କରନ୍ତୁ।\n"
 
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM ଚିତ୍ର ଶୈଳୀ ଅବୈଧ"
