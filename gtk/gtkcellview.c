@@ -54,6 +54,8 @@ struct _GtkCellViewPrivate
 
   GdkColor background;
   gboolean background_set;
+
+  gboolean use_fg;
 };
 
 
@@ -113,7 +115,8 @@ enum
   PROP_BACKGROUND,
   PROP_BACKGROUND_GDK,
   PROP_BACKGROUND_SET,
-  PROP_MODEL
+  PROP_MODEL,
+  PROP_USE_FG
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
@@ -165,6 +168,21 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							 GTK_TYPE_TREE_MODEL,
 							 GTK_PARAM_READWRITE));
   
+  /**
+   * GtkCellView:use-fg
+   *
+   * If set to %TRUE hint the cell renderer to use foreground colors for text drawing.
+   *
+   * since 2.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_FG,
+                                   g_param_spec_boolean ("use-fg",
+                                                         P_("Use foreground color when rendering text"),
+                                                         P_("If set the cell view will get a hint to use the foreground color when rendering text."),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
@@ -208,6 +226,9 @@ gtk_cell_view_get_property (GObject    *object,
       case PROP_BACKGROUND_SET:
         g_value_set_boolean (value, view->priv->background_set);
         break;
+      case PROP_USE_FG:
+        g_value_set_boolean (value, view->priv->use_fg);
+        break;
       case PROP_MODEL:
 	g_value_set_object (value, view->priv->model);
 	break;
@@ -246,6 +267,9 @@ gtk_cell_view_set_property (GObject      *object,
         break;
       case PROP_BACKGROUND_SET:
         view->priv->background_set = g_value_get_boolean (value);
+        break;
+      case PROP_USE_FG:
+        gtk_cell_view_set_use_fg (view, g_value_get_boolean (value));
         break;
       case PROP_MODEL:
 	gtk_cell_view_set_model (view, g_value_get_object (value));
@@ -428,7 +452,10 @@ gtk_cell_view_expose (GtkWidget      *widget,
     state = GTK_CELL_RENDERER_PRELIT;
   else
     state = 0;
-      
+
+  if (cellview->priv->use_fg)
+    state |= GTK_CELL_RENDERER_USE_FG;
+
   /* PACK_START */
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
@@ -1027,6 +1054,52 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
+}
+
+/**
+ * gtk_cell_view_set_use_fg
+ * @cell_view: a #GtkCellView
+ * @use_fg: %TRUE if foreground colors should be used for text
+ *
+ * Sets whether to hint the cell renderer that foreground colors should be used when rendering text.
+ *
+ * Since: 2.12
+ */
+void
+gtk_cell_view_set_use_fg (GtkCellView *cell_view,
+                          gboolean     use_fg)
+{
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+
+  use_fg = (use_fg != FALSE);
+
+  if (use_fg != cell_view->priv->use_fg)
+    {
+      cell_view->priv->use_fg = use_fg;
+
+      gtk_widget_queue_draw (GTK_WIDGET (cell_view));
+
+      g_object_notify (G_OBJECT (cell_view), "use-fg");
+    }
+}
+
+/**
+ * gtk_cell_view_get_use_fg
+ * @cell_view: a #GtkCellView
+ *
+ * Get whether the #GtkCellView hints the cell renderer that foreground colors
+ * should be used when rendering text. See gtk_cell_view_set_use_fg().
+ *
+ * Returns: The value of the "use-fg" property
+ *
+ * Since: 2.12
+ */
+gboolean
+gtk_cell_view_get_use_fg (GtkCellView *cell_view)
+{
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
+
+  return cell_view->priv->use_fg;
 }
 
 /**
