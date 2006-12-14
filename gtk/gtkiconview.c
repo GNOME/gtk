@@ -5264,7 +5264,7 @@ gtk_icon_view_unselect_all (GtkIconView *icon_view)
  * @path: A #GtkTreePath to check selection on.
  * 
  * Returns %TRUE if the icon pointed to by @path is currently
- * selected. If @icon does not point to a valid location, %FALSE is returned.
+ * selected. If @path does not point to a valid location, %FALSE is returned.
  * 
  * Return value: %TRUE if @path is selected.
  *
