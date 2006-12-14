@@ -1,3 +1,8 @@
+2006-12-14  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkcalendar.c: draw arrows pointing to the right correctly
+	placed inside their GdkWindow. Bug #385672.
+
 2006-12-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkiconview.c: Fix docs typo. Bug #385642.

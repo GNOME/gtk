@@ -2299,7 +2299,7 @@ calendar_paint_arrow (GtkCalendar *calendar,
 	gtk_paint_arrow (widget->style, window, state, 
 			 GTK_SHADOW_OUT, NULL, widget, "calendar",
 			 GTK_ARROW_RIGHT, TRUE, 
-			 width/2 - 2, height/2 - 4, 8, 8);
+			 width/2 - 4, height/2 - 4, 8, 8);
     }
 }
 
