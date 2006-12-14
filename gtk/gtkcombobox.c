@@ -2569,8 +2569,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
   if (combo_box->priv->cell_view)
     {
-      gtk_cell_view_set_use_fg (GTK_CELL_VIEW (combo_box->priv->cell_view), TRUE);
-
       combo_box->priv->button = gtk_toggle_button_new ();
       gtk_button_set_focus_on_click (GTK_BUTTON (combo_box->priv->button),
 				     combo_box->priv->focus_on_click);
@@ -2674,7 +2672,6 @@ gtk_cell_view_menu_item_new (GtkComboBox  *combo_box,
   GtkRequisition req;
 
   cell_view = gtk_cell_view_new ();
-  gtk_cell_view_set_use_fg (GTK_CELL_VIEW (cell_view), TRUE);
   item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (item), cell_view);
 
@@ -3380,7 +3377,6 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   if (combo_box->priv->cell_view)
     {
-      gtk_cell_view_set_use_fg (GTK_CELL_VIEW (combo_box->priv->cell_view), FALSE);
       gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
 					  &GTK_WIDGET (combo_box)->style->base[GTK_WIDGET_STATE (combo_box)]);
 

@@ -1624,7 +1624,6 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gint x_offset;
   gint y_offset;
   GtkCellRendererTextPrivate *priv;
-  gboolean use_text;
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
@@ -1676,8 +1675,6 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       cairo_destroy (cr);
     }
 
-  use_text = !(flags & GTK_CELL_RENDERER_USE_FG);
-
   if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
     pango_layout_set_width (layout, 
 			    (cell_area->width - x_offset - 2 * cell->xpad) * PANGO_SCALE);
@@ -1687,7 +1684,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gtk_paint_layout (widget->style,
                     window,
                     state,
-		    use_text,
+		    TRUE,
                     expose_area,
                     widget,
                     "cellrenderertext",
