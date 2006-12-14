@@ -1,3 +1,8 @@
+2006-12-14  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtkcalendar.c: draw arrows pointing to the right correctly
+	placed inside their GdkWindow. Bug #385672.
+
 2006-12-14  Amitakhya Phukan  <aphukan@redhat.com>
 
 	* configure.in: Added 'as' in ALL_LINGUAS
