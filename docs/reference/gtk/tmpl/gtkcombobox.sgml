@@ -55,6 +55,21 @@ gtk_combo_box_get_active_text().
 
 @combobox: the object which received the signal.
 
+<!-- ##### SIGNAL GtkComboBox::move-active ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkComboBox::popup ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
 <!-- ##### ARG GtkComboBox:active ##### -->
 <para>
 
@@ -106,6 +121,11 @@ gtk_combo_box_get_active_text().
 </para>
 
 <!-- ##### ARG GtkComboBox:appears-as-list ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:arrow-size ##### -->
 <para>
 
 </para>

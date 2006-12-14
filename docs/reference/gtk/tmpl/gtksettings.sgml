@@ -108,6 +108,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-error-bell ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-fallback-icon-theme ##### -->
 <para>
 
@@ -129,6 +134,16 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-keynav-cursor-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-keynav-wrap-around ##### -->
 <para>
 
 </para>

@@ -165,6 +165,44 @@ key binding signal emission as stored in #GtkBindingSignal.
 
 @arg_type: implementation detail
 
+<!-- ##### MACRO gtk_binding_entry_add ##### -->
+<para>
+Deprecated.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_binding_entry_add_signall ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@signal_name: 
+@binding_args: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_clear ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_binding_parse_binding ##### -->
+<para>
+
+</para>
+
+@scanner: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_binding_set_new ##### -->
 <para>
 

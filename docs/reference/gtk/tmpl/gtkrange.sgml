@@ -63,12 +63,27 @@ Emitted when the range value changes.
 
 </para>
 
+<!-- ##### ARG GtkRange:fill-level ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:inverted ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkRange:lower-stepper-sensitivity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:restrict-to-fill-level ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:show-fill-level ##### -->
 <para>
 
 </para>
@@ -127,6 +142,60 @@ Emitted when the range value changes.
 <para>
 
 </para>
+
+<!-- ##### FUNCTION gtk_range_get_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_restrict_to_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_show_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@fill_level: 
+
+
+<!-- ##### FUNCTION gtk_range_set_restrict_to_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@restrict_to_fill_level: 
+
+
+<!-- ##### FUNCTION gtk_range_set_show_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@show_fill_level: 
+
 
 <!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
 <para>

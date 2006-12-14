@@ -672,61 +672,6 @@ gtk_widget_destroy (chooser);
 
 @filechooser: the object which received the signal.
 
-<!-- ##### ARG GtkFileChooser:action ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:do-overwrite-confirmation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:file-system-backend ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:filter ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:local-only ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileChooser:use-preview-label ##### -->
-<para>
-
-</para>
-
 <!-- ##### ENUM GtkFileChooserAction ##### -->
     <para>
       Describes whether a #GtkFileChooser is being used to open

@@ -341,6 +341,15 @@ a widget changes from un-anchored to anchored or vice-versa.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
+<!-- ##### SIGNAL GtkWidget::keynav-failed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::leave-notify-event ##### -->
 <para>
 
@@ -2408,6 +2417,24 @@ This function is deprecated; it does nothing.
 </para>
 
 @widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_error_bell ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_keynav_failed ##### -->
+<para>
+
+</para>
+
+@widget: 
+@direction: 
 @Returns: 
 
 

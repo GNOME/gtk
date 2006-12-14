@@ -46,6 +46,29 @@ and drag and drop.
 
 </para>
 
+<!-- ##### ARG GtkCellView:use-fg ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_cell_view_get_use_fg ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_set_use_fg ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@use_fg: 
+
+
 <!-- ##### FUNCTION gtk_cell_view_new ##### -->
 <para>
 

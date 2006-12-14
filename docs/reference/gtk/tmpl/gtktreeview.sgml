@@ -392,6 +392,42 @@ has some similarity to strcmp() returning 0 for equal strings.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_level_indentation ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_show_expanders ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_level_indentation ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@indentation: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_show_expanders ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enabled: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_new_with_model ##### -->
 <para>
 

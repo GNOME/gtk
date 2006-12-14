@@ -1,3 +1,7 @@
+Thu Dec 14 15:48:14 2006  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtk-sections.txt: added new docs.
+
 2006-11-19  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtk-sections.txt: add gtk_status_icon_(get|set)_screen

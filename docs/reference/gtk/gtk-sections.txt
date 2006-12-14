@@ -2731,6 +2731,12 @@ gtk_radio_menu_item_get_type
 <FILE>gtkrange</FILE>
 <TITLE>GtkRange</TITLE>
 GtkRange
+gtk_range_get_fill_level
+gtk_range_get_restrict_to_fill_level
+gtk_range_get_show_fill_level
+gtk_range_set_fill_level
+gtk_range_set_restrict_to_fill_level
+gtk_range_set_show_fill_level
 gtk_range_get_adjustment
 gtk_range_set_update_policy
 gtk_range_set_adjustment
@@ -4428,6 +4434,10 @@ GtkTreeViewColumnDropFunc
 GtkTreeViewMappingFunc
 GtkTreeViewSearchEqualFunc
 gtk_tree_view_new
+gtk_tree_view_get_level_indentation
+gtk_tree_view_get_show_expanders
+gtk_tree_view_set_level_indentation
+gtk_tree_view_set_show_expanders
 gtk_tree_view_new_with_model
 gtk_tree_view_get_model
 gtk_tree_view_set_model
@@ -4531,6 +4541,8 @@ gtk_tree_view_get_type
 <FILE>gtkcellview</FILE>
 <TITLE>GtkCellView</TITLE>
 GtkCellView
+gtk_cell_view_get_use_fg
+gtk_cell_view_set_use_fg
 gtk_cell_view_new
 gtk_cell_view_new_with_text
 gtk_cell_view_new_with_markup
@@ -5094,6 +5106,8 @@ gtk_widget_add_mnemonic_label
 gtk_widget_remove_mnemonic_label
 gtk_widget_get_action
 gtk_widget_is_composited
+gtk_widget_error_bell
+gtk_widget_keynav_failed
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -5792,6 +5806,10 @@ GtkBindingSet
 GtkBindingEntry
 GtkBindingSignal
 GtkBindingArg
+gtk_binding_entry_add
+gtk_binding_entry_add_signall
+gtk_binding_entry_clear
+gtk_binding_parse_binding
 gtk_binding_set_new
 gtk_binding_set_by_class
 gtk_binding_set_find

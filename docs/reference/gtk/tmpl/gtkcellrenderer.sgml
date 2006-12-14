@@ -62,6 +62,7 @@ probably has a selection colored background to render to.
 @GTK_CELL_RENDERER_INSENSITIVE: The cell is drawn in an insensitive manner
 @GTK_CELL_RENDERER_SORTED: The cell is in a sorted row
 @GTK_CELL_RENDERER_FOCUSED: 
+@GTK_CELL_RENDERER_USE_FG: 
 
 <!-- ##### ENUM GtkCellRendererMode ##### -->
 <para>

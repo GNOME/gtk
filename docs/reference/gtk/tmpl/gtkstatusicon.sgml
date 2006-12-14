@@ -93,6 +93,11 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 </para>
 
+<!-- ##### ARG GtkStatusIcon:screen ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkStatusIcon:size ##### -->
 <para>
 
@@ -230,6 +235,24 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 
 <!-- ##### FUNCTION gtk_status_icon_get_size ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_screen ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_screen ##### -->
 <para>
 
 </para>
