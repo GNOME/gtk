@@ -1,3 +1,9 @@
+2006-12-13  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/modules/engines/ms-windows/msw_style.c: Bug 351679 - Notebooks 
+	drawn with extra line below tab in MS-Windows theme. Patch by 
+	Cody Russell
+	
 2006-12-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Add --unlink-tempfile to the evince call

@@ -2405,12 +2405,14 @@ draw_extension (GtkStyle * style,
 	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 	    GdkPixmap *pixmap = NULL;
 	    GdkDrawable *target = NULL;
-	    gint x2, y2, w2, h2;
+	    gint x2 = 0, y2 = 0, w2 = width, h2 = height;
 	    int tab_part = XP_THEME_ELEMENT_TAB_ITEM;
 	    int real_gap_side = gtk_notebook_get_tab_pos (notebook);
+	    int border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
+	    gboolean last_tab;
 
 	    /* why this differs from the above gap_side, i have no idea... */
-	    if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
+	    if (real_gap_side == GTK_POS_LEFT)
 	      {
 		/* Create "rotated" pixmap.. swap width and height */
 		pixmap = gdk_pixmap_new (window, height, width, -1);
@@ -2418,15 +2420,64 @@ draw_extension (GtkStyle * style,
 		x2 = 0;
 		y2 = 0;
 		w2 = height;
-		h2 = width;
+		h2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
+
+		/* If we are currently rendering the bottom-most tab, and if that tab is the selected tab... */
+		if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
+		    state_type == GTK_STATE_NORMAL)
+		  {
+		    w2--;
+		  }
 	      }
-	    else
+	    else if (real_gap_side == GTK_POS_RIGHT)
+	      {
+		/* Create "rotated" pixmap.. swap width and height */
+		x2 = 0;
+		y2 = 0;
+		w2 = height;
+		h2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
+		pixmap = gdk_pixmap_new (window, w2, h2, -1);
+		target = pixmap;
+
+		/* If we are currently rendering the bottom-most tab, and if that tab is the selected tab... */
+		if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
+		    state_type == GTK_STATE_NORMAL)
+		  {
+		    w2--;
+		  }
+	      }
+	    else if (real_gap_side == GTK_POS_TOP)
 	      {
 		target = window;
 		x2 = x;
 		y2 = y;
 		w2 = width;
-		h2 = height;
+		if (state_type == GTK_STATE_NORMAL)
+		  h2 = height;
+		else
+		  h2 = height - notebook->tab_vborder;
+
+		/* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
+		if (widget->allocation.x + widget->allocation.width - border_width == x + width &&
+		    state_type == GTK_STATE_NORMAL)
+		  {
+		    x2--;
+		  }
+	      }
+	    else if (real_gap_side == GTK_POS_BOTTOM)
+	      {
+		x2 = x;
+		y2 = y + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder);
+		w2 = width;
+		h2 = height - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder * 2);
+		target = window;
+
+		/* If we are currently drawing the right-most tab (any state)... */
+		if (widget->allocation.x + widget->allocation.width - border_width == x + width)
+		  {
+		    x2--;
+		    w2--;
+		  }
 	      }
 
 	    if (xp_theme_draw (target, tab_part, style, x2, y2, w2, h2, state_type, NULL /*area*/))
@@ -2449,12 +2500,31 @@ draw_extension (GtkStyle * style,
 			   g_object_unref (pixbuf);
 			   pixbuf = rotated;
 
-			   if (real_gap_side == GTK_POS_RIGHT || real_gap_side == GTK_POS_LEFT)
+			   if (real_gap_side == GTK_POS_RIGHT)
+			     {
+			       x2 = x + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
+			       y2 = y;
+			       w2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
+			       h2 = height;
+
+			       if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
+				   state_type == GTK_STATE_NORMAL)
+				 {
+				   h2--;
+				 }
+			     }
+			   else if (real_gap_side == GTK_POS_LEFT)
 			     {
 			       x2 = x;
 			       y2 = y;
-			       w2 = width;
+			       w2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
 			       h2 = height;
+
+			       if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
+				   state_type == GTK_STATE_NORMAL)
+				 {
+				   h2--;
+				 }
 			     }
 
 			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
@@ -2508,12 +2578,46 @@ draw_box_gap (GtkStyle * style, GdkWindow * window, GtkStateType state_type,
 {
     if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "notebook"))
 	{
-	    if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style, x,
-				  y, width, height, state_type, area))
+	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+	    int side = gtk_notebook_get_tab_pos (notebook);
+	    int x2 = x, y2 = y, w2 = width, h2 = height;
+
+	    if (side == GTK_POS_TOP)
+	      {
+		x2 = x;
+		y2 = y - notebook->tab_vborder;
+		w2 = width;
+		h2 = height + notebook->tab_vborder * 2;
+	      }
+	    else if (side == GTK_POS_BOTTOM)
+	      {
+		x2 = x;
+		y2 = y;
+		w2 = width;
+		h2 = height + notebook->tab_vborder * 2;
+	      }
+	    else if (side == GTK_POS_LEFT)
+	      {
+		x2 = x - notebook->tab_hborder;
+		y2 = y;
+		w2 = width + notebook->tab_hborder;
+		h2 = height;
+	      }
+	    else if (side == GTK_POS_RIGHT)
+	      {
+		x2 = x;
+		y2 = y;
+		w2 = width + notebook->tab_hborder * 2;
+		h2 = height;
+	      }
+
+	    if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
+			       x2, y2, w2, h2, state_type, area))
 		{
 		    return;
 		}
 	}
+
     parent_class->draw_box_gap (style, window, state_type, shadow_type,
 				area, widget, detail, x, y, width, height,
 				gap_side, gap_x, gap_width);
