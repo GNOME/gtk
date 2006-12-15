@@ -1,3 +1,12 @@
+2006-12-15  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkmenu.c (gtk_menu_set_title): Don't try to optimize for
+	the case where the new title is the same as the old title, to
+	preserve the behavior from GTK+ 2.8 (NULL and "" titles are not
+	equivalent).  Handle the case where title == priv->title.  This
+	was found by the LSB compatibility tests:
+	https://bugzilla.novell.com/show_bug.cgi?id=223882
+
 2006-12-14  Ankit Patel  <ankit644@yahoo.com>
 
 	* configure.in: Added 'si' in ALL_LINGUAS

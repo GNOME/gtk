@@ -1913,26 +1913,27 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
  * @title: a string containing the title for the menu.
  * 
  * Sets the title string for the menu.  The title is displayed when the menu
- * is shown as a tearoff menu.
+ * is shown as a tearoff menu.  If @title is %NULL, the menu will see if it is
+ * attached to a parent menu item, and if so it will try to use the same text as
+ * that menu item's label.
  **/
-void       
+void
 gtk_menu_set_title (GtkMenu     *menu,
 		    const gchar *title)
 {
   GtkMenuPrivate *priv;
+  char *old_title;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
   priv = gtk_menu_get_private (menu);
 
-  if (strcmp (title ? title : "", priv->title ? priv->title : "") != 0)
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
+  old_title = priv->title;
+  priv->title = g_strdup (title);
+  g_free (old_title);
        
-      gtk_menu_update_title (menu);
-      g_object_notify (G_OBJECT (menu), "tearoff-title");
-    }
+  gtk_menu_update_title (menu);
+  g_object_notify (G_OBJECT (menu), "tearoff-title");
 }
 
 /**
