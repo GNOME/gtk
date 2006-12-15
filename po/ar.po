@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-17 08:32+0000\n"
-"PO-Revision-Date: 2006-11-18 22:02+0100\n"
+"POT-Creation-Date: 2006-12-15 20:44+0000\n"
+"PO-Revision-Date: 2006-12-15 20:54+0100\n"
 "Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -1899,7 +1899,7 @@ msgstr "قيمة _جاما"
 msgid "Error loading icon: %s"
 msgstr "خطأ عند تحميل الأيقونة: %s"
 
-#: ../gtk/gtkicontheme.c:1316
+#: ../gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1912,7 +1912,7 @@ msgstr ""
 "يمكنك تلقي نسخة من:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1385
+#: ../gtk/gtkicontheme.c:1387
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "الأيقونة '%s' غير موجودة في التّيمة"
@@ -2117,7 +2117,7 @@ msgid "_Orientation:"
 msgstr "الا_تجاه:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1148
-#: ../gtk/gtkprintunixdialog.c:2102
+#: ../gtk/gtkprintunixdialog.c:2106
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
@@ -2293,170 +2293,170 @@ msgstr "خطأ غير محدد"
 msgid "Error from StartDoc"
 msgstr "خطأ من StartDoc "
 
-#: ../gtk/gtkprintunixdialog.c:1448
+#: ../gtk/gtkprintunixdialog.c:1450
 msgid "Printer"
 msgstr "الطابعة"
 
-#: ../gtk/gtkprintunixdialog.c:1456
+#: ../gtk/gtkprintunixdialog.c:1458
 msgid "Location"
 msgstr "الموقع"
 
-#: ../gtk/gtkprintunixdialog.c:1465
+#: ../gtk/gtkprintunixdialog.c:1467
 msgid "Status"
 msgstr "الحالة"
 
-#: ../gtk/gtkprintunixdialog.c:1487
+#: ../gtk/gtkprintunixdialog.c:1489
 msgid "Print Pages"
 msgstr "اطبع الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:1491
+#: ../gtk/gtkprintunixdialog.c:1493
 msgid "_All"
 msgstr "ال_كل"
 
-#: ../gtk/gtkprintunixdialog.c:1498
+#: ../gtk/gtkprintunixdialog.c:1500
 msgid "C_urrent"
 msgstr "ال_حالي"
 
-#: ../gtk/gtkprintunixdialog.c:1507
+#: ../gtk/gtkprintunixdialog.c:1509
 msgid "Ra_nge: "
 msgstr "ال_مدى:"
 
-#: ../gtk/gtkprintunixdialog.c:1525
+#: ../gtk/gtkprintunixdialog.c:1527
 msgid "Copies"
 msgstr "نُسَخْ"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1530
+#: ../gtk/gtkprintunixdialog.c:1532
 msgid "Copie_s:"
 msgstr "نُسَ_خ:"
 
-#: ../gtk/gtkprintunixdialog.c:1546
+#: ../gtk/gtkprintunixdialog.c:1550
 msgid "C_ollate"
 msgstr "_صفحة بصفحة"
 
-#: ../gtk/gtkprintunixdialog.c:1554
+#: ../gtk/gtkprintunixdialog.c:1558
 msgid "_Reverse"
 msgstr "م_قلوب"
 
-#: ../gtk/gtkprintunixdialog.c:1571
+#: ../gtk/gtkprintunixdialog.c:1575
 msgid "General"
 msgstr "عامّ"
 
-#: ../gtk/gtkprintunixdialog.c:1958
+#: ../gtk/gtkprintunixdialog.c:1962
 msgid "Layout"
 msgstr "التصميم"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1966
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
 msgstr "الصفحات لكل _ورقة :"
 
-#: ../gtk/gtkprintunixdialog.c:1978
+#: ../gtk/gtkprintunixdialog.c:1982
 msgid "T_wo-sided:"
 msgstr "ذو _وجهين:"
 
-#: ../gtk/gtkprintunixdialog.c:1993
+#: ../gtk/gtkprintunixdialog.c:1997
 msgid "_Only print:"
 msgstr "اطبع _فقط:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2008
+#: ../gtk/gtkprintunixdialog.c:2012
 msgid "All sheets"
 msgstr "كل الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:2009
+#: ../gtk/gtkprintunixdialog.c:2013
 msgid "Even sheets"
 msgstr "الصفحات الزوجية"
 
-#: ../gtk/gtkprintunixdialog.c:2010
+#: ../gtk/gtkprintunixdialog.c:2014
 msgid "Odd sheets"
 msgstr "الصفحات الفردية"
 
-#: ../gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2017
 msgid "Sc_ale:"
 msgstr "_مقياس:"
 
-#: ../gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2044
 msgid "Paper"
 msgstr "ورق"
 
-#: ../gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2048
 msgid "Paper _type:"
 msgstr "نوع الورق:"
 
-#: ../gtk/gtkprintunixdialog.c:2059
+#: ../gtk/gtkprintunixdialog.c:2063
 msgid "Paper _source:"
 msgstr "_مصدر الورق:"
 
-#: ../gtk/gtkprintunixdialog.c:2074
+#: ../gtk/gtkprintunixdialog.c:2078
 msgid "Output t_ray:"
 msgstr "_لوحة الخَرْج:"
 
-#: ../gtk/gtkprintunixdialog.c:2125
+#: ../gtk/gtkprintunixdialog.c:2129
 msgid "Job Details"
 msgstr "تفاصيل المهمة"
 
-#: ../gtk/gtkprintunixdialog.c:2131
+#: ../gtk/gtkprintunixdialog.c:2135
 msgid "Pri_ority:"
 msgstr "الأو_لوية:"
 
-#: ../gtk/gtkprintunixdialog.c:2146
+#: ../gtk/gtkprintunixdialog.c:2150
 msgid "_Billing info:"
 msgstr " "
 
-#: ../gtk/gtkprintunixdialog.c:2164
+#: ../gtk/gtkprintunixdialog.c:2168
 msgid "Print Document"
 msgstr "اطبع المستند"
 
-#: ../gtk/gtkprintunixdialog.c:2170
+#: ../gtk/gtkprintunixdialog.c:2174
 msgid "_Now"
 msgstr "الآ_ن"
 
-#: ../gtk/gtkprintunixdialog.c:2177
+#: ../gtk/gtkprintunixdialog.c:2181
 msgid "A_t:"
 msgstr "_في:"
 
-#: ../gtk/gtkprintunixdialog.c:2192
+#: ../gtk/gtkprintunixdialog.c:2196
 msgid "On _hold"
 msgstr "تحت الان_تظار"
 
-#: ../gtk/gtkprintunixdialog.c:2211
+#: ../gtk/gtkprintunixdialog.c:2215
 msgid "Add Cover Page"
 msgstr "أضف صفحة غلاف"
 
-#: ../gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2221
 msgid "Be_fore:"
 msgstr "ق_بل:"
 
-#: ../gtk/gtkprintunixdialog.c:2232
+#: ../gtk/gtkprintunixdialog.c:2236
 msgid "_After:"
 msgstr "ب_عد:"
 
-#: ../gtk/gtkprintunixdialog.c:2247
+#: ../gtk/gtkprintunixdialog.c:2251
 msgid "Job"
 msgstr "مهمة"
 
-#: ../gtk/gtkprintunixdialog.c:2313
+#: ../gtk/gtkprintunixdialog.c:2317
 msgid "Advanced"
 msgstr "متقدم"
 
-#: ../gtk/gtkprintunixdialog.c:2348
+#: ../gtk/gtkprintunixdialog.c:2352
 msgid "Image Quality"
 msgstr "جودة الصورة"
 
-#: ../gtk/gtkprintunixdialog.c:2351
+#: ../gtk/gtkprintunixdialog.c:2355
 msgid "Color"
 msgstr "اللون"
 
-#: ../gtk/gtkprintunixdialog.c:2354
+#: ../gtk/gtkprintunixdialog.c:2358
 msgid "Finishing"
 msgstr "جاري الإنهاء"
 
-#: ../gtk/gtkprintunixdialog.c:2364
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعض الإعدادات في الحوار تتعارض"
 
-#: ../gtk/gtkprintunixdialog.c:2387
+#: ../gtk/gtkprintunixdialog.c:2391
 msgid "Print"
 msgstr "اطبع"
 
@@ -2468,13 +2468,13 @@ msgstr "المجموعة"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "زرّ أداة المذياعة الذي ينتمي هذا الزرّ إلى مجموعته."
 
-#: ../gtk/gtkrc.c:2832
+#: ../gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "لا يمكن إيجاد ملف الاحتواء: \"%s\""
 
-#: ../gtk/gtkrc.c:3464
-#: ../gtk/gtkrc.c:3467
+#: ../gtk/gtkrc.c:3471
+#: ../gtk/gtkrc.c:3474
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "لا يمكن إيجاد موقع ملف الصورة في pixmap_path: \"%s\""
@@ -3836,9 +3836,9 @@ msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/imthai-broken.c:178
-msgid "Thai (Broken)"
-msgstr "التايلاندية (مكسور)"
+#: ../modules/input/imthai.c:35
+msgid "Thai-Lao"
+msgstr "تايلندي-لاوو"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -4195,4 +4195,7 @@ msgid ""
 msgstr ""
 "لا ملف نسق رئيسي موجود في  '%s'.\n"
 "إذا أردت فعلا بناء مخزن إيقونات هنا، استعمل --ignore-theme-index .\n"
+
+#~ msgid "Thai (Broken)"
+#~ msgstr "التايلاندية (مكسور)"
 
