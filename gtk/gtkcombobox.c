@@ -1288,7 +1288,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
           combo_box->priv->popup_frame = gtk_frame_new (NULL);
           gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->popup_frame),
-                                     GTK_SHADOW_ETCHED_IN);
+                                     GTK_SHADOW_NONE);
           gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_window),
                              combo_box->priv->popup_frame);
 
@@ -1486,7 +1486,9 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   GtkRequisition popup_req;
   GtkPolicyType hpolicy, vpolicy;
   
-  sample = GTK_BIN (combo_box)->child;
+  /* under windows, the drop down list is as wide as the combo box itself.
+     see bug #340204 */
+  sample = combo_box;
 
   gdk_window_get_origin (sample->window, x, y);
 

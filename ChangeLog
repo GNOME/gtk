@@ -1,3 +1,8 @@
+2006-12-15  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* gtk/gtkcombobox.c: Make GtkComboBox in "appears-as-list" mode
+	more closely resemble its Win32 counterpart. Bug #340204.
+
 2006-12-14  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtkcalendar.c: draw arrows pointing to the right correctly
