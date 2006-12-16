@@ -1,3 +1,9 @@
+2006-12-16  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtkscrolledwindow.c: Fixed a bug in set_property()
+	(setting "window-placement-set" could result in a crash because
+	of boolean/enum mixup)
+
 2006-12-15  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkmenu.c (gtk_menu_set_title): Don't try to optimize for

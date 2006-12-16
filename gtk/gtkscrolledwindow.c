@@ -825,7 +825,7 @@ gtk_scrolled_window_set_property (GObject      *object,
       break;
     case PROP_WINDOW_PLACEMENT_SET:
       gtk_scrolled_window_set_placement_set (scrolled_window,
-		      			     g_value_get_enum (value),
+		      			     g_value_get_boolean (value),
 					     TRUE);
       break;
     case PROP_SHADOW_TYPE:
