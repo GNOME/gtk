@@ -1,21 +1,21 @@
-# translation of gtk+.gtk-2-10.po to Assamese
+# translation of as.po to Assamese
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Amitakhya Phukan <aphukan@redhat.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-10\n"
+"Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-10 07:15+0100\n"
-"PO-Revision-Date: 2006-12-14 05:01+0530\n"
+"PO-Revision-Date: 2006-12-18 11:42+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: Assamese <assam@mm.assam-glug.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1113 ../tests/testfilechooser.c:218
@@ -1095,7 +1095,7 @@ msgstr "Backslash"
 #.
 #: ../gtk/gtkcalendar.c:695
 msgid "calendar:MY"
-msgstr "পঞ্জিকা:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1103,7 +1103,7 @@ msgstr "পঞ্জিকা:MY"
 #.
 #: ../gtk/gtkcalendar.c:743
 msgid "calendar:week_start:0"
-msgstr "পঞ্জিকা:সপ্তাহ আৰম্ভ(_s):0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1991,7 +1991,7 @@ msgstr "GTK+ ডিবাগৰ পতাকা কৰ্মৰত নকৰি�
 #.
 #: ../gtk/gtkmain.c:645
 msgid "default:LTR"
-msgstr "অবিকল্পিত:LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:742
 msgid "GTK+ Options"
