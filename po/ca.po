@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-22 00:00+0200\n"
-"PO-Revision-Date: 2006-10-22 00:01+0200\n"
+"POT-Creation-Date: 2006-12-19 07:38+0100\n"
+"PO-Revision-Date: 2006-12-19 07:40+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -1007,7 +1007,7 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "Fes les crides a X sincronitzades"
 
-#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2080
 msgid "License"
 msgstr "Llicència"
 
@@ -1016,37 +1016,37 @@ msgid "The license of the program"
 msgstr "La llicència del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:503
+#: ../gtk/gtkaboutdialog.c:504
 msgid "C_redits"
 msgstr "C_rèdits"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:516
+#: ../gtk/gtkaboutdialog.c:517
 msgid "_License"
 msgstr "_Llicència"
 
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:758
 #, c-format
 msgid "About %s"
 msgstr "Quant a %s"
 
-#: ../gtk/gtkaboutdialog.c:2004
+#: ../gtk/gtkaboutdialog.c:2008
 msgid "Credits"
 msgstr "Crèdits"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2034
 msgid "Written by"
 msgstr "Escrit per"
 
-#: ../gtk/gtkaboutdialog.c:2033
+#: ../gtk/gtkaboutdialog.c:2037
 msgid "Documented by"
 msgstr "Documentat per"
 
-#: ../gtk/gtkaboutdialog.c:2045
+#: ../gtk/gtkaboutdialog.c:2049
 msgid "Translated by"
 msgstr "Traduït per"
 
-#: ../gtk/gtkaboutdialog.c:2049
+#: ../gtk/gtkaboutdialog.c:2053
 msgid "Artwork by"
 msgstr "Art per"
 
@@ -1931,7 +1931,7 @@ msgstr "Valor de la _gamma"
 msgid "Error loading icon: %s"
 msgstr "S'ha produït un error en carregar la icona: %s"
 
-#: ../gtk/gtkicontheme.c:1316
+#: ../gtk/gtkicontheme.c:1318
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1944,7 +1944,7 @@ msgstr ""
 "Podeu obtenir-ne una còpia de:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1385
+#: ../gtk/gtkicontheme.c:1387
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "La icona «%s» no es troba al tema"
@@ -2084,7 +2084,7 @@ msgstr "Espaiat de les fletxes"
 msgid "Scroll arrow spacing"
 msgstr "Espaiat de les fletxes de desplaçament"
 
-#: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6777
+#: ../gtk/gtknotebook.c:4222 ../gtk/gtknotebook.c:6801
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -2148,7 +2148,7 @@ msgstr "Mida del _paper:"
 msgid "_Orientation:"
 msgstr "_Orientació:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2102
+#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2106
 msgid "Page Setup"
 msgstr "Configuració de la pàgina"
 
@@ -2322,172 +2322,172 @@ msgstr "Error no especificat"
 msgid "Error from StartDoc"
 msgstr "Error de StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1448
+#: ../gtk/gtkprintunixdialog.c:1450
 msgid "Printer"
 msgstr "Impressora"
 
-#: ../gtk/gtkprintunixdialog.c:1456
+#: ../gtk/gtkprintunixdialog.c:1458
 msgid "Location"
 msgstr "Ubicació"
 
-#: ../gtk/gtkprintunixdialog.c:1465
+#: ../gtk/gtkprintunixdialog.c:1467
 msgid "Status"
 msgstr "Estat"
 
-#: ../gtk/gtkprintunixdialog.c:1487
+#: ../gtk/gtkprintunixdialog.c:1489
 msgid "Print Pages"
 msgstr "Imprimeix les pàgines"
 
-#: ../gtk/gtkprintunixdialog.c:1491
+#: ../gtk/gtkprintunixdialog.c:1493
 msgid "_All"
 msgstr "_Totes"
 
-#: ../gtk/gtkprintunixdialog.c:1498
+#: ../gtk/gtkprintunixdialog.c:1500
 msgid "C_urrent"
 msgstr "Act_ual"
 
-#: ../gtk/gtkprintunixdialog.c:1507
+#: ../gtk/gtkprintunixdialog.c:1509
 msgid "Ra_nge: "
 msgstr "Ra_ng: "
 
-#: ../gtk/gtkprintunixdialog.c:1525
+#: ../gtk/gtkprintunixdialog.c:1527
 msgid "Copies"
 msgstr "Còpies"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1530
+#: ../gtk/gtkprintunixdialog.c:1532
 msgid "Copie_s:"
 msgstr "Còpie_s:"
 
-#: ../gtk/gtkprintunixdialog.c:1546
+#: ../gtk/gtkprintunixdialog.c:1550
 msgid "C_ollate"
 msgstr "C_ompagina"
 
-#: ../gtk/gtkprintunixdialog.c:1554
+#: ../gtk/gtkprintunixdialog.c:1558
 msgid "_Reverse"
 msgstr "Inve_rteix"
 
-#: ../gtk/gtkprintunixdialog.c:1571
+#: ../gtk/gtkprintunixdialog.c:1575
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.c:1958
+#: ../gtk/gtkprintunixdialog.c:1962
 msgid "Layout"
 msgstr "Disposició"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1966
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
 msgstr "Pàgines per _full:"
 
-#: ../gtk/gtkprintunixdialog.c:1978
+#: ../gtk/gtkprintunixdialog.c:1982
 msgid "T_wo-sided:"
 msgstr "_Doble cara:"
 
-#: ../gtk/gtkprintunixdialog.c:1993
+#: ../gtk/gtkprintunixdialog.c:1997
 msgid "_Only print:"
 msgstr "N_omés imprimeix:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2008
+#: ../gtk/gtkprintunixdialog.c:2012
 msgid "All sheets"
 msgstr "Tots els fulls"
 
-#: ../gtk/gtkprintunixdialog.c:2009
+#: ../gtk/gtkprintunixdialog.c:2013
 msgid "Even sheets"
 msgstr "Fulls parells"
 
-#: ../gtk/gtkprintunixdialog.c:2010
+#: ../gtk/gtkprintunixdialog.c:2014
 msgid "Odd sheets"
 msgstr "Fulls senars"
 
-#: ../gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2017
 msgid "Sc_ale:"
 msgstr "Esc_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2044
 msgid "Paper"
 msgstr "Paper"
 
-#: ../gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2048
 msgid "Paper _type:"
 msgstr "_Tipus de paper:"
 
-#: ../gtk/gtkprintunixdialog.c:2059
+#: ../gtk/gtkprintunixdialog.c:2063
 msgid "Paper _source:"
 msgstr "Font del pape_r:"
 
-#: ../gtk/gtkprintunixdialog.c:2074
+#: ../gtk/gtkprintunixdialog.c:2078
 msgid "Output t_ray:"
 msgstr "Safata de so_rtida:"
 
-#: ../gtk/gtkprintunixdialog.c:2125
+#: ../gtk/gtkprintunixdialog.c:2129
 msgid "Job Details"
 msgstr "Detalls del treball"
 
-#: ../gtk/gtkprintunixdialog.c:2131
+#: ../gtk/gtkprintunixdialog.c:2135
 msgid "Pri_ority:"
 msgstr "Pri_oritat:"
 
-#: ../gtk/gtkprintunixdialog.c:2146
+#: ../gtk/gtkprintunixdialog.c:2150
 msgid "_Billing info:"
 msgstr "Informació de _facturació:"
 
-#: ../gtk/gtkprintunixdialog.c:2164
+#: ../gtk/gtkprintunixdialog.c:2168
 msgid "Print Document"
 msgstr "Imprimeix el document"
 
-#: ../gtk/gtkprintunixdialog.c:2170
+#: ../gtk/gtkprintunixdialog.c:2174
 msgid "_Now"
 msgstr "A_ra"
 
-#: ../gtk/gtkprintunixdialog.c:2177
+#: ../gtk/gtkprintunixdialog.c:2181
 msgid "A_t:"
 msgstr "_a:"
 
-#: ../gtk/gtkprintunixdialog.c:2192
+#: ../gtk/gtkprintunixdialog.c:2196
 msgid "On _hold"
 msgstr "En es_pera"
 
-#: ../gtk/gtkprintunixdialog.c:2211
+#: ../gtk/gtkprintunixdialog.c:2215
 msgid "Add Cover Page"
 msgstr "Afegeix pàgina de coberta"
 
 # Possiblement sigui "abans de" (josep)
-#: ../gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2221
 msgid "Be_fore:"
 msgstr "A_bans:"
 
 # Possiblement "després de" (josep)
-#: ../gtk/gtkprintunixdialog.c:2232
+#: ../gtk/gtkprintunixdialog.c:2236
 msgid "_After:"
 msgstr "_Després:"
 
-#: ../gtk/gtkprintunixdialog.c:2247
+#: ../gtk/gtkprintunixdialog.c:2251
 msgid "Job"
 msgstr "Treball"
 
-#: ../gtk/gtkprintunixdialog.c:2313
+#: ../gtk/gtkprintunixdialog.c:2317
 msgid "Advanced"
 msgstr "Avançat"
 
-#: ../gtk/gtkprintunixdialog.c:2348
+#: ../gtk/gtkprintunixdialog.c:2352
 msgid "Image Quality"
 msgstr "Qualitat de la imatge"
 
-#: ../gtk/gtkprintunixdialog.c:2351
+#: ../gtk/gtkprintunixdialog.c:2355
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2354
+#: ../gtk/gtkprintunixdialog.c:2358
 msgid "Finishing"
 msgstr "Acabaments"
 
-#: ../gtk/gtkprintunixdialog.c:2364
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alguns paràmetres del diàleg estan en conflicte"
 
-#: ../gtk/gtkprintunixdialog.c:2387
+#: ../gtk/gtkprintunixdialog.c:2391
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -2499,12 +2499,12 @@ msgstr "Grup"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "El botó d'eina de ràdio al qual pertany aquest grup."
 
-#: ../gtk/gtkrc.c:2832
+#: ../gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No s'ha pogut trobar el fitxer per a incloure: «%s»"
 
-#: ../gtk/gtkrc.c:3464 ../gtk/gtkrc.c:3467
+#: ../gtk/gtkrc.c:3471 ../gtk/gtkrc.c:3474
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
@@ -2518,27 +2518,27 @@ msgstr "Seleccioneu quins tipus de documents s'han de mostrar"
 msgid "No item for URI '%s' found"
 msgstr "No s'ha trobat cap element per a la URI «%s»"
 
-#: ../gtk/gtkrecentchooserdefault.c:1767
+#: ../gtk/gtkrecentchooserdefault.c:1771
 msgid "Could not remove item"
 msgstr "No s'ha pogut suprimir l'element"
 
-#: ../gtk/gtkrecentchooserdefault.c:1810
+#: ../gtk/gtkrecentchooserdefault.c:1814
 msgid "Could not clear list"
 msgstr "No s'ha pogut netejar la llista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1894
+#: ../gtk/gtkrecentchooserdefault.c:1898
 msgid "Copy _Location"
 msgstr "Copia la _ubicació"
 
-#: ../gtk/gtkrecentchooserdefault.c:1907
+#: ../gtk/gtkrecentchooserdefault.c:1911
 msgid "_Remove From List"
 msgstr "Sup_rimeix de la llista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1916
+#: ../gtk/gtkrecentchooserdefault.c:1920
 msgid "_Clear List"
 msgstr "_Neteja la llista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1930
+#: ../gtk/gtkrecentchooserdefault.c:1934
 msgid "Show _Private Resources"
 msgstr "Mostra els recursos _privats"
 
@@ -2552,16 +2552,16 @@ msgstr "No hi ha cap recurs emprat recentment amb l'URI «%s»"
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Aquesta funció no està implementada per a ginys de la classe «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:854
+#: ../gtk/gtkrecentchoosermenu.c:859
 #, c-format
 msgid "Open '%s'"
 msgstr "Obre «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:885
+#: ../gtk/gtkrecentchoosermenu.c:891
 msgid "Unknown item"
 msgstr "Element desconegut"
 
-#: ../gtk/gtkrecentchoosermenu.c:986
+#: ../gtk/gtkrecentchoosermenu.c:992
 msgid "No items found"
 msgstr "No s'ha trobat cap element"
 
@@ -3867,9 +3867,9 @@ msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/imthai-broken.c:178
-msgid "Thai (Broken)"
-msgstr "Thai (Trencat)"
+#: ../modules/input/imthai.c:35
+msgid "Thai-Lao"
+msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -4233,6 +4233,9 @@ msgstr ""
 "No hi ha el fitxer index de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-"
 "theme-index.\n"
+
+#~ msgid "Thai (Broken)"
+#~ msgstr "Thai (Trencat)"
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "El format d'imatge PNM no és vàlid"
