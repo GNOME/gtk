@@ -1052,7 +1052,11 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 
   if (!nswindow)
     return NULL;
-
+ 
+  /* Window where not created by GDK so the event should be handled by Quartz */
+  if (![[nswindow contentView] isKindOfClass:[GdkQuartzView class]]) 
+    return NULL;
+  
   if (event_type == NSMouseMoved ||
       event_type == NSLeftMouseDragged ||
       event_type == NSRightMouseDragged ||
@@ -1160,9 +1164,8 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	GdkWindow *mouse_window;
 
 	point = [nsevent locationInWindow];
-
 	toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
-
+	
 	mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
 	
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
@@ -1567,9 +1570,9 @@ _gdk_events_queue (GdkDisplay *display)
 {  
   if (current_event)
     {
-      if (!gdk_event_translate (current_event))
+      if (!gdk_event_translate (current_event)) 
 	[NSApp sendEvent:current_event];
-      
+		
       [current_event release];
       current_event = NULL;
     }

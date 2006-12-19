@@ -1,3 +1,15 @@
+2006-12-19  Mikael Hallendal  <micke@imendio.com>
+
+	* gdk/quartz/gdkcursor-quartz.c: Splitted out the GdkPixbuf to NSImage
+	routine so that it can be used from libgtk as well (needed for
+	upcoming GtkStatusIcon support in the Quartz port).
+	* gdk/quartz/gdkevents-quartz.c: Don't assume that all NSWindows are
+	created from GDK, this is not true for the status icon.
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkquartz.h: Added 
+	gdk_quartz_pixbuf_to_ns_image_libgtk_only so that it is available to 
+	the status icon code.
+
 2006-12-16  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkmessagedialog.c: Added return_if_fail (image) to

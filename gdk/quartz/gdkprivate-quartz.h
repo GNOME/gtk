@@ -162,4 +162,6 @@ GdkEventMask _gdk_quartz_get_current_event_mask (void);
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
 
+NSImage *_gdk_quartz_pixbuf_to_ns_image (GdkPixbuf *pixbuf);
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

@@ -9,7 +9,8 @@
 
 G_BEGIN_DECLS
 
-NSView *gdk_quartz_window_get_nsview (GdkWindow *window);
+NSView  *gdk_quartz_window_get_nsview  (GdkWindow *window);
+NSImage *gdk_quartz_pixbuf_to_ns_image_libgtk_only (GdkPixbuf *pixbuf);
 
 G_END_DECLS
 
