@@ -699,8 +699,8 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   
         priv = loader->priv;
   
-        /* we expect it's not closed */
-        g_return_val_if_fail (priv->closed == FALSE, TRUE);
+        if (priv->closed)
+                return TRUE;
   
         /* We have less the LOADER_HEADER_SIZE bytes in the image.  
          * Flush it, and keep going. 
