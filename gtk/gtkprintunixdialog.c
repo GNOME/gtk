@@ -87,6 +87,7 @@ static void     update_collate_icon                (GtkToggleButton    *toggle_b
 						    GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
+static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
 enum {
   PROP_0,
@@ -1333,10 +1334,13 @@ draw_collate_cb (GtkWidget	    *widget,
   gint size;
   gfloat scale;
   gboolean collate, reverse, rtl;
+  gint copies;
   gint text_x;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
+  copies = dialog_get_n_copies (dialog);
+
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
   settings = gtk_widget_get_settings (widget);
@@ -1349,12 +1353,20 @@ draw_collate_cb (GtkWidget	    *widget,
 
   cr = gdk_cairo_create (widget->window);
 
-  paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
-  paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
+  if (copies == 1)
+    {
+      paint_page (widget, cr, scale, rtl ? 40: 15, 5, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
+    }
+  else
+    {
+      paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
 
-  paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
-  paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
-  
+      paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
+    }
+
   cairo_destroy (cr);
 
   return TRUE;
