@@ -490,8 +490,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 
   priv->status_item = [[GtkQuartzStatusIcon alloc] initWithStatusIcon:status_icon];
 
-  priv->image_height = [priv->status_item getHeight];
-  priv->image_width = [priv->status_item getWidth];
+  priv->image_width = priv->image_height = [priv->status_item getHeight];
+  priv->size = priv->image_height;
 
   QUARTZ_POOL_RELEASE;
 
