@@ -3,6 +3,7 @@
  * Copyright (C) 2003 Sun Microsystems, Inc.
  * Copyright (C) 2005 Hans Breuer <hans@breuer.org>
  * Copyright (C) 2005 Novell, Inc.
+ * Copyright (C) 2006 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
  *	Mark McLoughlin <mark@skynet.ie>
  *	Hans Breuer <hans@breuer.org>
  *	Tor Lillqvist <tml@novell.com>
+ *	Mikael Hallendal <micke@imendio.com>
  */
 
 #include <config.h>
@@ -46,6 +48,11 @@
 #include "win32/gdkwin32.h"
 #define WM_GTK_TRAY_NOTIFICATION (WM_USER+1)
 #endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+#include "gtkicontheme.h"
+#include "gtklabel.h"
+#endif	
 
 #include "gtkalias.h"
 
@@ -73,6 +80,12 @@ enum
   LAST_SIGNAL
 };
 
+static guint status_icon_signals [LAST_SIGNAL] = { 0 };
+
+#ifdef GDK_WINDOWING_QUARTZ
+#include "gtkstatusicon-quartz.c"
+#endif
+
 struct _GtkStatusIconPrivate
 {
 #ifdef GDK_WINDOWING_X11
@@ -84,6 +97,11 @@ struct _GtkStatusIconPrivate
 #ifdef GDK_WINDOWING_WIN32
   GtkWidget     *dummy_widget;
   NOTIFYICONDATAW nid;
+#endif
+	
+#ifdef GDK_WINDOWING_QUARTZ
+  GtkWidget     *dummy_widget;
+  GtkQuartzStatusIcon *status_item;
 #endif
 
   gint          size;
@@ -129,8 +147,6 @@ static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
 					   
-
-static guint status_icon_signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GtkStatusIcon, gtk_status_icon, G_TYPE_OBJECT)
 
@@ -466,6 +482,20 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
       priv->nid.hWnd = NULL;
     }
 #endif
+	
+#ifdef GDK_WINDOWING_QUARTZ
+  priv->dummy_widget = gtk_label_new ("");
+
+  QUARTZ_POOL_ALLOC;
+
+  priv->status_item = [[GtkQuartzStatusIcon alloc] initWithStatusIcon:status_icon];
+
+  priv->image_height = [priv->status_item getHeight];
+  priv->image_width = [priv->status_item getWidth];
+
+  QUARTZ_POOL_RELEASE;
+
+#endif 
 }
 
 static void
@@ -495,6 +525,12 @@ gtk_status_icon_finalize (GObject *object)
     Shell_NotifyIconW (NIM_DELETE, &priv->nid);
 
   gtk_widget_destroy (priv->dummy_widget);
+#endif
+	
+#ifdef GDK_WINDOWING_QUARTZ
+  QUARTZ_POOL_ALLOC;
+  [priv->status_item release];
+  QUARTZ_POOL_RELEASE;
 #endif
 
   G_OBJECT_CLASS (gtk_status_icon_parent_class)->finalize (object);
@@ -816,6 +852,11 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
 #endif
+#ifdef GDK_WINDOWING_QUARTZ
+      QUARTZ_POOL_ALLOC;
+      [priv->status_item setImage:gtk_status_icon_blank_icon (status_icon)];
+      QUARTZ_POOL_RELEASE;
+#endif
       return;
     }
 
@@ -857,6 +898,12 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 		  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
 #endif
+#ifdef GDK_WINDOWING_QUARTZ
+      QUARTZ_POOL_ALLOC;
+      [priv->status_item setImage:scaled];
+      QUARTZ_POOL_RELEASE;
+#endif
+			
 	    g_object_unref (scaled);
 	  }
 	else
@@ -869,6 +916,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 		g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+      [priv->status_item setImage:NULL];
 #endif
 	  }
       }
@@ -897,6 +947,20 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  g_object_unref (pixbuf);
 	}
 #endif
+#ifdef GDK_WINDOWING_QUARTZ
+	{
+	  GdkPixbuf *pixbuf;
+
+	  pixbuf = gtk_widget_render_icon (priv->dummy_widget,
+					   priv->image_data.stock_id,
+					   GTK_ICON_SIZE_SMALL_TOOLBAR,
+					   NULL);
+	  QUARTZ_POOL_ALLOC;
+	  [priv->status_item setImage:pixbuf];
+	  QUARTZ_POOL_RELEASE;
+	  g_object_unref (pixbuf);
+	}	
+#endif
       }
       break;
       
@@ -924,6 +988,22 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  g_object_unref (pixbuf);
 	}
 #endif
+#ifdef GDK_WINDOWING_QUARTZ
+	{
+	  GdkPixbuf *pixbuf;
+
+	  pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+					     priv->image_data.icon_name,
+					     priv->size,
+					     0, NULL);
+
+	  QUARTZ_POOL_ALLOC;
+	  [priv->status_item setImage:pixbuf];
+	  QUARTZ_POOL_RELEASE;
+	  g_object_unref (pixbuf);
+	}
+#endif
+	
       }
       break;
       
@@ -936,6 +1016,13 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+        {
+          QUARTZ_POOL_ALLOC;
+          [priv->status_item setImage:NULL];
+          QUARTZ_POOL_RELEASE;
+        }
 #endif
       break;
     default:
@@ -1398,6 +1485,11 @@ gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
     if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
       g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
 #endif
+#ifdef GDK_WINDOWING_QUARTZ
+  QUARTZ_POOL_ALLOC;
+  [priv->status_item setToolTip:tooltip_text];
+  QUARTZ_POOL_RELEASE;
+#endif
 }
 
 static gboolean
@@ -1482,6 +1574,11 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
 	  else
 	    Shell_NotifyIconW (NIM_DELETE, &priv->nid);
 	}
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+      QUARTZ_POOL_ALLOC;
+      [priv->status_item setVisible:visible];
+      QUARTZ_POOL_RELEASE;
 #endif
       g_object_notify (G_OBJECT (status_icon), "visible");
     }
@@ -1594,6 +1691,9 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
     return FALSE;
 #endif
 #ifdef GDK_WINDOWING_WIN32
+  return TRUE;
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
   return TRUE;
 #endif
 }

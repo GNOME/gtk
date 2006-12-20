@@ -1,3 +1,10 @@
+2006-12-20  Mikael Hallendal  <micke@imendio.com>
+
+	* gtk/Makefile.am: Added gtkstatusicon-quartz.c
+	* gtk/gtkstatusicon-quartz.c: Implements the quartz backend for the
+	status icon.
+	* gtk/gtkstatusicon.c: Hooked in the new quartz backend. Bug #387874.
+
 2006-12-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c: Add a tooltip explaining the

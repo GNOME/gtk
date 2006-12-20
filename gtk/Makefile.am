@@ -697,6 +697,7 @@ gtk_extra_sources =				\
 	paper_names.c				\
 	paper_names_offsets.c			\
 	gen-paper-names.c			\
+	gtkstatusicon-quartz.c                  \
 	gtk.symbols				\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
