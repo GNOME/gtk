@@ -354,7 +354,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 				   g_param_spec_object ("dialog",
 							P_("Dialog"),
 							P_("The file chooser dialog to use."),
-							GTK_TYPE_FILE_CHOOSER_DIALOG,
+							GTK_TYPE_FILE_CHOOSER,
 							(GTK_PARAM_WRITABLE |
 							 G_PARAM_CONSTRUCT_ONLY)));
 
@@ -2755,11 +2755,12 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
 
 /**
  * gtk_file_chooser_button_new_with_dialog:
- * @dialog: the #GtkFileChooserDialog widget to use.
+ * @dialog: the widget to use as dialog
  * 
  * Creates a #GtkFileChooserButton widget which uses @dialog as it's
- * file-picking window. Note that @dialog must be a #GtkFileChooserDialog (or
- * subclass) and must not have %GTK_DIALOG_DESTROY_WITH_PARENT set.
+ * file-picking window. Note that @dialog must be a #GtkDialog (or
+ * subclass) which implements the #GtkFileChooser interface and must 
+ * not have %GTK_DIALOG_DESTROY_WITH_PARENT set.
  * 
  * Returns: a new button widget.
  * 
@@ -2768,7 +2769,7 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
 GtkWidget *
 gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
 {
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_DIALOG (dialog), NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (dialog) && GTK_IS_DIALOG (dialog), NULL);
 
   return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
 		       "dialog", dialog,

@@ -1,3 +1,9 @@
+2006-12-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_new_with_dialog):
+	Allow any GtkDialog that implements GtkFileChooser as
+	dialog.  (#335473, Tommi Komulainen)
+
 2006-12-20  Mikael Hallendal  <micke@imendio.com>
 
 	* gtk/gtkstatusicon.c: (gtk_status_icon_init): Fixed a last minute
