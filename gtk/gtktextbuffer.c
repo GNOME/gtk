@@ -262,6 +262,25 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                        GTK_TYPE_TARGET_LIST,
                                                        GTK_PARAM_READABLE));
 
+  /**
+   * GtkTextBuffer::insert-text:
+   * @textbuffer: the object which received the signal
+   * @location: position to insert @text in @textbuffer
+   * @text: the UTF-8 text to be inserted
+   * @len: length of the inserted text in bytes
+   * 
+   * The insert_text signal is emitted to insert text in a #GtkTextBuffer.
+   * Insertion actually occurs in the default handler.  
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @location iter (or has to revalidate it). 
+   * The default signal handler revalidates it to point to the end of the 
+   * inserted text.
+   * 
+   * See also: 
+   * gtk_text_buffer_insert(), 
+   * gtk_text_buffer_insert_range().
+   */
   signals[INSERT_TEXT] =
     g_signal_new (I_("insert_text"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -275,6 +294,24 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                   G_TYPE_INT);
 
+  /**
+   * GtkTextBuffer::insert-pixbuf:
+   * @textbuffer: the object which received the signal
+   * @location: position to insert @pixbuf in @textbuffer
+   * @pixbuf: the #GdkPixbuf to be inserted
+   * 
+   * The insert_pixbuf signal is emitted to insert a
+   * #GdkPixbuf in a #GtkTextBuffer.
+   * Insertion actually occurs in the default handler.
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @location iter (or has to revalidate it). 
+   * The default signal handler revalidates it to be placed after the 
+   * inserted @pixbuf.
+   * 
+   * See also:
+   * gtk_text_buffer_insert_pixbuf().
+   */
   signals[INSERT_PIXBUF] =
     g_signal_new (I_("insert_pixbuf"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -287,6 +324,25 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GDK_TYPE_PIXBUF);
 
+
+  /**
+   * GtkTextBuffer::insert-child-anchor:
+   * @textbuffer: the object which received the signal
+   * @location: position to insert @anchor in @textbuffer
+   * @anchor: the #GtkTextChildAnchor to be inserted
+   * 
+   * The insert_child_anchor signal is emitted to insert a
+   * #GtkTextChildAnchor in a #GtkTextBuffer.
+   * Insertion actually occurs in the default handler.
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @location iter (or has to revalidate it). 
+   * The default signal handler revalidates it to be placed after the 
+   * inserted @anchor.
+   * 
+   * See also:
+   * gtk_text_buffer_insert_child_anchor().
+   */
   signals[INSERT_CHILD_ANCHOR] =
     g_signal_new (I_("insert_child_anchor"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -300,17 +356,23 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_CHILD_ANCHOR);
   
   /**
-   * GtkTextBuffer::delete_range:
-   * @buffer: the object which received the signal.
+   * GtkTextBuffer::delete-range:
+   * @textbuffer: the object which received the signal
    * @start: the start of the range to be deleted
    * @end: the end of the range to be deleted
-   *
-   * The ::delete_range signal is emitted to delete a range from 
-   * a #GtkTextBuffer. Note that your handler must not invalidate the
-   * @start and @end iters (or has to revalidate them), if it runs before the 
-   * default handler. There is no need to keep the iters valid in handlers
-   * which run after the default handler (see g_signal_connect_after()), but
-   * those don't have access to the deleted text.
+   * 
+   * The delete_range signal is emitted to delete a range 
+   * from a #GtkTextBuffer. 
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @start and @end iters (or has to revalidate them). 
+   * The default signal handler revalidates the @start and @end iters to 
+   * both point point to the location where text was deleted. Handlers
+   * which run after the default handler (see g_signal_connect_after())
+   * do not have access to the deleted text.
+   * 
+   * See also:
+   * gtk_text_buffer_delete().
    */
   signals[DELETE_RANGE] =
     g_signal_new (I_("delete_range"),
@@ -324,6 +386,13 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  /**
+   * GtkTextBuffer::changed:
+   * @textbuffer: the object which received the signal
+   * 
+   * The changed signal is emitted when the content of a #GtkTextBuffer 
+   * has changed.
+   */
   signals[CHANGED] =
     g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -334,6 +403,16 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkTextBuffer::modified-changed:
+   * @textbuffer: the object which received the signal
+   * 
+   * The modified_changed signal is emitted when the modified bit of a 
+   * #GtkTextBuffer flips.
+   * 
+   * See also:
+   * gtk_text_buffer_set_modified().
+   */
   signals[MODIFIED_CHANGED] =
     g_signal_new (I_("modified_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -344,6 +423,19 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkTextBuffer::mark-set:
+   * @textbuffer: the object which received the signal
+   * @location: The location of @mark in @textbuffer
+   * @mark: The mark that is set
+   * 
+   * The mark_set signal is emitted as notification
+   * after a #GtkTextMark is set.
+   * 
+   * See also: 
+   * gtk_text_buffer_create_mark(),
+   * gtk_text_buffer_move_mark().
+   */
   signals[MARK_SET] =
     g_signal_new (I_("mark_set"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -356,6 +448,17 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_MARK);
 
+  /**
+   * GtkTextBuffer::mark-deleted:
+   * @textbuffer: the object which received the signal
+   * @mark: The mark that was deleted
+   * 
+   * The mark_deleted signal is emitted as notification
+   * after a #GtkTextMark is deleted. 
+   * 
+   * See also:
+   * gtk_text_buffer_delete_mark().
+   */
   signals[MARK_DELETED] =
     g_signal_new (I_("mark_deleted"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -366,7 +469,26 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_MARK);
-  
+
+   /**
+   * GtkTextBuffer::apply-tag:
+   * @textbuffer: the object which received the signal
+   * @tag: the applied tag
+   * @start: the start of the range the tag is applied to
+   * @end: the end of the range the tag is applied to
+   * 
+   * The apply_tag signal is emitted to apply a tag to a
+   * range of text in a #GtkTextBuffer. 
+   * Applying actually occurs in the default handler.
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @start and @end iters (or has to revalidate them). 
+   * 
+   * See also: 
+   * gtk_text_buffer_apply_tag(),
+   * gtk_text_buffer_insert_with_tags(),
+   * gtk_text_buffer_insert_range().
+   */ 
   signals[APPLY_TAG] =
     g_signal_new (I_("apply_tag"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -380,6 +502,24 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_ITER);
 
+
+   /**
+   * GtkTextBuffer::remove-tag:
+   * @textbuffer: the object which received the signal
+   * @tag: the tag to be removed
+   * @start: the start of the range the tag is removed from
+   * @end: the end of the range the tag is removed from
+   * 
+   * The remove_tag signal is emitted to remove all occurrences of @tag from a
+   * range of text in a #GtkTextBuffer. 
+   * Removal actually occurs in the default handler.
+   * 
+   * Note that if your handler runs before the default handler it must not 
+   * invalidate the @start and @end iters (or has to revalidate them). 
+   * 
+   * See also: 
+   * gtk_text_buffer_remove_tag(). 
+   */ 
   signals[REMOVE_TAG] =
     g_signal_new (I_("remove_tag"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -393,6 +533,21 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_ITER);
 
+   /**
+   * GtkTextBuffer::begin-user-action:
+   * @textbuffer: the object which received the signal
+   * 
+   * The begin_user_action signal is emitted at the beginning of a single
+   * user-visible operation on a #GtkTextBuffer.
+   * 
+   * See also: 
+   * gtk_text_buffer_begin_user_action(),
+   * gtk_text_buffer_insert_interactive(),
+   * gtk_text_buffer_insert_range_interactive(),
+   * gtk_text_buffer_delete_interactive(),
+   * gtk_text_buffer_backspace(),
+   * gtk_text_buffer_delete_selection().
+   */ 
   signals[BEGIN_USER_ACTION] =
     g_signal_new (I_("begin_user_action"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -403,6 +558,22 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_NONE,
                   0);
 
+   /**
+   * GtkTextBuffer::end-user-action:
+   * @textbuffer: the object which received the signal
+   * 
+   * The end_user_action signal is emitted at the end of a single
+   * user-visible operation #GtkTextBuffer.
+   * 
+   * See also: 
+   * gtk_text_buffer_end_user_action(),
+   * gtk_text_buffer_insert_interactive(),
+   * gtk_text_buffer_insert_range_interactive(),
+   * gtk_text_buffer_delete_interactive(),
+   * gtk_text_buffer_backspace(),
+   * gtk_text_buffer_delete_selection(),
+   * gtk_text_buffer_backspace().
+   */ 
   signals[END_USER_ACTION] =
     g_signal_new (I_("end_user_action"),
                   G_OBJECT_CLASS_TYPE (object_class),
