@@ -1,3 +1,9 @@
+2006-12-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c: Add a tooltip explaining the
+	format of page ranges, and improve the page sequence icon
+	for the case of n_copies == 1.
+ 
 2006-12-19  Mikael Hallendal  <micke@imendio.com>
 
 	* gdk/quartz/gdkcursor-quartz.c: Splitted out the GdkPixbuf to NSImage

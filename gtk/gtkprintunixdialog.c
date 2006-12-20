@@ -45,6 +45,8 @@
 #include "gtkframe.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
+#include "gtktooltips.h"
+#include "gtkeventbox.h"
 
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
@@ -87,6 +89,7 @@ static void     update_collate_icon                (GtkToggleButton    *toggle_b
 						    GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
+static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
 enum {
   PROP_0,
@@ -120,6 +123,7 @@ struct GtkPrintUnixDialogPrivate
 
   GtkPageSetup *page_setup;
 
+  GtkTooltips *tooltips;
   GtkWidget *all_pages_radio;
   GtkWidget *current_page_radio;
   GtkWidget *page_range_radio;
@@ -267,6 +271,9 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->print_backends = NULL;
   priv->current_page = -1;
 
+  priv->tooltips = gtk_tooltips_new ();
+  g_object_ref_sink (priv->tooltips);
+
   priv->page_setup = gtk_page_setup_new ();
 
   g_signal_connect (dialog, 
@@ -307,6 +314,12 @@ gtk_print_unix_dialog_finalize (GObject *object)
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
+
+  if (priv->tooltips)
+    {
+      g_object_unref (priv->tooltips);
+      priv->tooltips = NULL;
+    }
 
   if (priv->request_details_tag)
     {
@@ -1333,10 +1346,13 @@ draw_collate_cb (GtkWidget	    *widget,
   gint size;
   gfloat scale;
   gboolean collate, reverse, rtl;
+  gint copies;
   gint text_x;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
+  copies = dialog_get_n_copies (dialog);
+
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
   settings = gtk_widget_get_settings (widget);
@@ -1349,12 +1365,20 @@ draw_collate_cb (GtkWidget	    *widget,
 
   cr = gdk_cairo_create (widget->window);
 
-  paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
-  paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
+  if (copies == 1)
+    {
+      paint_page (widget, cr, scale, rtl ? 40: 15, 5, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
+    }
+  else
+    {
+      paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
 
-  paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
-  paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
-  
+      paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
+    }
+
   cairo_destroy (cr);
 
   return TRUE;
@@ -1405,7 +1429,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_vbox, *label, *vbox, *hbox;
   GtkWidget *scrolled, *treeview, *frame, *table;
-  GtkWidget *entry, *spinbutton;
+  GtkWidget *entry, *spinbutton, *event_box;
   GtkWidget *radio, *check, *image;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
@@ -1505,8 +1529,10 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
-  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					      _("Ra_nge: "));
+ 
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Ra_nge"));
+  gtk_tooltips_set_tip (priv->tooltips, radio, _("Specify one or more page ranges,\n e.g. 1-3,7,11"), NULL);
+ 
   priv->page_range_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
