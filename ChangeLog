@@ -1,5 +1,9 @@
 2006-12-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_start_selection_drag): 
+	Silently return if a drag is already in progress, rather
+	than asserting.  (#335622, Li Yuan, testcase by Erwann Chenede)
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_new_with_dialog):
 	Allow any GtkDialog that implements GtkFileChooser as 
 	dialog.  (#335473, Tommi Komulainen)

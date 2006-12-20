@@ -4116,6 +4116,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   gtk_widget_queue_draw (widget);
 
   DV(g_print (G_STRLOC": focus_out_event\n"));
+  g_print (G_STRLOC": focus_out_event\n");
   
   if (text_view->cursor_visible && text_view->layout)
     {
@@ -5662,8 +5663,9 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   GtkTextBuffer *buffer;
   SelectionData *data;
 
-  g_assert (text_view->selection_drag_handler == 0);
-  
+  if (text_view->selection_drag_handler != 0)
+    return;
+
   data = g_new0 (SelectionData, 1);
 
   if (button->type == GDK_2BUTTON_PRESS)
