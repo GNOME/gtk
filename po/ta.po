@@ -1,3 +1,4 @@
+# translation of gtk-new.po to Tamil
 # translation of gtk+.gtk-2-10.ta.po to Tamil
 # translation of gtk+.gtk-2-10.ta.po to Tamil
 # translation of gtk+.gtk-2-10.ta.po to Tamil
@@ -29,10 +30,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-10.ta\n"
+"Project-Id-Version: gtk-new\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-10 23:23+0100\n"
-"PO-Revision-Date: 2006-12-11 11:36+0530\n"
+"POT-Creation-Date: 2006-12-20 07:52+0100\n"
+"PO-Revision-Date: 2006-12-20 15:44+0530\n"
 "Last-Translator: Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,6 +41,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -296,8 +298,8 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF படத்தில் முழுமை நிற ஒப்பீடு கிடையாது மற்றும் அதில் இருக்கும் ஓர் சட்டத்திற்கு "
-"நிற ஒப்பீடு கிடையாது."
+"GIF படத்தில் முழுமை நிற ஒப்பீடு கிடையாது மற்றும் அதில் இருக்கும் ஓர் சட்டத்திற்கு நிற "
+"ஒப்பீடு கிடையாது."
 
 #: ../gdk-pixbuf/io-gif.c:1528
 msgid "GIF image was truncated or incomplete."
@@ -2054,7 +2056,7 @@ msgstr "GTK+ பிழைத்திருத்தும் கொடிகள
 #.
 #: ../gtk/gtkmain.c:645
 msgid "default:LTR"
-msgstr "முன்னிருப்பு:LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:742
 msgid "GTK+ Options"
@@ -2085,7 +2087,7 @@ msgstr "பக்கம் %u"
 #.
 #: ../gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "முன்னிருப்பு:mm"
+msgstr "default:mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:338
 msgid ""
@@ -2134,7 +2136,7 @@ msgstr "தாள் அளவு (_P):"
 msgid "_Orientation:"
 msgstr "திசையமைப்பு (_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2106
+#: ../gtk/gtkpagesetupunixdialog.c:1148 ../gtk/gtkprintunixdialog.c:2118
 msgid "Page Setup"
 msgstr "பக்க அமைவு"
 
@@ -2307,170 +2309,170 @@ msgstr "குறிப்பிடப்படாத பிழை"
 msgid "Error from StartDoc"
 msgstr "StartDocலிருந்து பிழை"
 
-#: ../gtk/gtkprintunixdialog.c:1450
+#: ../gtk/gtkprintunixdialog.c:1462
 msgid "Printer"
 msgstr "அச்சடிப்பி"
 
-#: ../gtk/gtkprintunixdialog.c:1458
+#: ../gtk/gtkprintunixdialog.c:1470
 msgid "Location"
 msgstr "இடம்"
 
-#: ../gtk/gtkprintunixdialog.c:1467
+#: ../gtk/gtkprintunixdialog.c:1479
 msgid "Status"
 msgstr "நிலை"
 
-#: ../gtk/gtkprintunixdialog.c:1489
+#: ../gtk/gtkprintunixdialog.c:1501
 msgid "Print Pages"
 msgstr "அச்சிடும் பக்கங்கள்"
 
-#: ../gtk/gtkprintunixdialog.c:1493
+#: ../gtk/gtkprintunixdialog.c:1505
 msgid "_All"
 msgstr "அனைத்தும் (_A)"
 
-#: ../gtk/gtkprintunixdialog.c:1500
+#: ../gtk/gtkprintunixdialog.c:1512
 msgid "C_urrent"
 msgstr "நடப்பு (_u)"
 
-#: ../gtk/gtkprintunixdialog.c:1509
+#: ../gtk/gtkprintunixdialog.c:1521
 msgid "Ra_nge: "
 msgstr "வரையறை (_n):"
 
-#: ../gtk/gtkprintunixdialog.c:1527
+#: ../gtk/gtkprintunixdialog.c:1539
 msgid "Copies"
 msgstr "நகல்கள்"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1532
+#: ../gtk/gtkprintunixdialog.c:1544
 msgid "Copie_s:"
 msgstr "நகல்கள் (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:1550
+#: ../gtk/gtkprintunixdialog.c:1562
 msgid "C_ollate"
 msgstr "அடுக்குதல் (_o)"
 
-#: ../gtk/gtkprintunixdialog.c:1558
+#: ../gtk/gtkprintunixdialog.c:1570
 msgid "_Reverse"
 msgstr "தலைகீழ் (_R)"
 
-#: ../gtk/gtkprintunixdialog.c:1575
+#: ../gtk/gtkprintunixdialog.c:1587
 msgid "General"
 msgstr "பொது"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1974
 msgid "Layout"
 msgstr "அமைப்பு"
 
-#: ../gtk/gtkprintunixdialog.c:1966
+#: ../gtk/gtkprintunixdialog.c:1978
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
 msgstr "தாளுக்கான பக்கங்கள் (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:1982
+#: ../gtk/gtkprintunixdialog.c:1994
 msgid "T_wo-sided:"
 msgstr "இரட்டை பக்கங்கள் (_w):"
 
-#: ../gtk/gtkprintunixdialog.c:1997
+#: ../gtk/gtkprintunixdialog.c:2009
 msgid "_Only print:"
 msgstr "அச்சிடுதல் மட்டும் (_O):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2012
+#: ../gtk/gtkprintunixdialog.c:2024
 msgid "All sheets"
 msgstr "அனைத்து தாள்கள்"
 
-#: ../gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2025
 msgid "Even sheets"
 msgstr "இரட்டை தாள்கள்"
 
-#: ../gtk/gtkprintunixdialog.c:2014
+#: ../gtk/gtkprintunixdialog.c:2026
 msgid "Odd sheets"
 msgstr "ஒற்றை தாள்கள்"
 
-#: ../gtk/gtkprintunixdialog.c:2017
+#: ../gtk/gtkprintunixdialog.c:2029
 msgid "Sc_ale:"
 msgstr "அளவு (_a):"
 
-#: ../gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Paper"
 msgstr "தாள்"
 
-#: ../gtk/gtkprintunixdialog.c:2048
+#: ../gtk/gtkprintunixdialog.c:2060
 msgid "Paper _type:"
 msgstr "தாள் வகை (_t):"
 
-#: ../gtk/gtkprintunixdialog.c:2063
+#: ../gtk/gtkprintunixdialog.c:2075
 msgid "Paper _source:"
 msgstr "தாள் மூலம் (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:2078
+#: ../gtk/gtkprintunixdialog.c:2090
 msgid "Output t_ray:"
 msgstr "வெளிப்பாடு தட்டு (_r):"
 
-#: ../gtk/gtkprintunixdialog.c:2129
+#: ../gtk/gtkprintunixdialog.c:2141
 msgid "Job Details"
 msgstr "பணி விவரங்கள்"
 
-#: ../gtk/gtkprintunixdialog.c:2135
+#: ../gtk/gtkprintunixdialog.c:2147
 msgid "Pri_ority:"
 msgstr "முன்னுரிமை (_o):"
 
-#: ../gtk/gtkprintunixdialog.c:2150
+#: ../gtk/gtkprintunixdialog.c:2162
 msgid "_Billing info:"
 msgstr "இரசீது தகவல் (_B):"
 
-#: ../gtk/gtkprintunixdialog.c:2168
+#: ../gtk/gtkprintunixdialog.c:2180
 msgid "Print Document"
 msgstr "ஆவணத்தை அச்சிடவும்"
 
-#: ../gtk/gtkprintunixdialog.c:2174
+#: ../gtk/gtkprintunixdialog.c:2186
 msgid "_Now"
 msgstr "இப்போது (_N)"
 
-#: ../gtk/gtkprintunixdialog.c:2181
+#: ../gtk/gtkprintunixdialog.c:2193
 msgid "A_t:"
 msgstr "A_t:"
 
-#: ../gtk/gtkprintunixdialog.c:2196
+#: ../gtk/gtkprintunixdialog.c:2208
 msgid "On _hold"
 msgstr "நிறுத்திவைப்பு (_h)"
 
-#: ../gtk/gtkprintunixdialog.c:2215
+#: ../gtk/gtkprintunixdialog.c:2227
 msgid "Add Cover Page"
 msgstr "அட்டை பக்கத்தையும் சேர்க்கவும்"
 
-#: ../gtk/gtkprintunixdialog.c:2221
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Be_fore:"
 msgstr "முன் (_f):"
 
-#: ../gtk/gtkprintunixdialog.c:2236
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "_After:"
 msgstr "பின் (_A):"
 
-#: ../gtk/gtkprintunixdialog.c:2251
+#: ../gtk/gtkprintunixdialog.c:2263
 msgid "Job"
 msgstr "பணி"
 
-#: ../gtk/gtkprintunixdialog.c:2317
+#: ../gtk/gtkprintunixdialog.c:2329
 msgid "Advanced"
 msgstr "கூடுதல்"
 
-#: ../gtk/gtkprintunixdialog.c:2352
+#: ../gtk/gtkprintunixdialog.c:2364
 msgid "Image Quality"
 msgstr "உருவின் தரம்"
 
-#: ../gtk/gtkprintunixdialog.c:2355
+#: ../gtk/gtkprintunixdialog.c:2367
 msgid "Color"
 msgstr "நிறம்"
 
-#: ../gtk/gtkprintunixdialog.c:2358
+#: ../gtk/gtkprintunixdialog.c:2370
 msgid "Finishing"
 msgstr "முடிக்கிறது"
 
-#: ../gtk/gtkprintunixdialog.c:2368
+#: ../gtk/gtkprintunixdialog.c:2380
 msgid "Some of the settings in the dialog conflict"
 msgstr "இந்த உரையாடலிலுள்ள சில அமைவுகள் முரணாக உள்ளது"
 
-#: ../gtk/gtkprintunixdialog.c:2391
+#: ../gtk/gtkprintunixdialog.c:2403
 msgid "Print"
 msgstr "அச்சிடவும்"
 
