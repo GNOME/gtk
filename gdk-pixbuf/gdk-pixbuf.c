@@ -224,11 +224,11 @@ free_buffer (guchar *pixels, gpointer data)
 
 /**
  * gdk_pixbuf_new:
- * @colorspace: Color space for image.
- * @has_alpha: Whether the image should have transparency information.
- * @bits_per_sample: Number of bits per color sample.
- * @width: Width of image in pixels.
- * @height: Height of image in pixels.
+ * @colorspace: Color space for image
+ * @has_alpha: Whether the image should have transparency information
+ * @bits_per_sample: Number of bits per color sample
+ * @width: Width of image in pixels, must be > 0
+ * @height: Height of image in pixels, must be > 0
  *
  * Creates a new #GdkPixbuf structure and allocates a buffer for it.  The 
  * buffer has an optimal rowstride.  Note that the buffer is not cleared;
@@ -253,9 +253,6 @@ gdk_pixbuf_new (GdkColorspace colorspace,
 	g_return_val_if_fail (bits_per_sample == 8, NULL);
 	g_return_val_if_fail (width > 0, NULL);
 	g_return_val_if_fail (height > 0, NULL);
-
-        if (width <= 0 || height <= 0)
-                return NULL;
 
 	channels = has_alpha ? 4 : 3;
         rowstride = width * channels;
