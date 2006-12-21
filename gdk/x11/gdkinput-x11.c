@@ -579,6 +579,10 @@ _gdk_input_common_other_event (GdkEvent         *event,
       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
+      if (event->button.type == GDK_BUTTON_PRESS)
+	_gdk_event_button_generate (gdk_drawable_get_display (event->button.window),
+				    event);
+
       GDK_NOTE (EVENTS,
 	g_print ("button %s:\t\twindow: %ld  device: %ld  x,y: %f %f  button: %d\n",
 		 (event->button.type == GDK_BUTTON_PRESS) ? "press" : "release",
