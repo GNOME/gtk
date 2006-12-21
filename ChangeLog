@@ -1,5 +1,9 @@
 2006-12-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x1/gdkinput-xfree.c (_gdk_input_configure_event):
+	(_gdk_input_enter_event): Correct return_if_fail checks.
+	(#379803, Tommi Komulainen)
+
 	* gdk/gdkdisplay.c: Improve the docs of some functions operating
 	on the default display.  (##353438, Mariano Suárez-Alvarez)
 
