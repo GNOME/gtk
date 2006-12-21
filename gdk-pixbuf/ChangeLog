@@ -1,5 +1,9 @@
 2006-12-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* io-gif.c (gif_get_lzw): Handle invalid gif animations
+	a little bit more robustly.  (#357974, Vassilis Pandis,
+	patch by Felix Riemann)
+
 	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data):
 	* gdk-pixbuf.c (gdk_pixbuf_new): Remove redundant size
 	checks, and document that width, height must be > 0.

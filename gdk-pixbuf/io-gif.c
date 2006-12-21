@@ -908,6 +908,11 @@ gif_get_lzw (GifContext *context)
 
                 /* Only call prepare_func for the first frame */
 		if (context->animation->frames->next == NULL) { 
+			if (context->animation->width == 0 )
+				context->animation->width = gdk_pixbuf_get_width(context->frame->pixbuf);
+			if (context->animation->height == 0)
+				context->animation->height = gdk_pixbuf_get_height (context->frame->pixbuf);
+
                         if (context->prepare_func)
                                 (* context->prepare_func) (context->frame->pixbuf,
                                                            GDK_PIXBUF_ANIMATION (context->animation),
