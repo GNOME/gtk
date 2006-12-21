@@ -69,8 +69,8 @@ _gtk_file_chooser_embed_delegate_iface_init (GtkFileChooserEmbedIface *iface)
  *
  * Establishes that calls on @receiver for #GtkFileChooser methods should be
  * delegated to @delegate, and that #GtkFileChooser signals emitted on @delegate
- * should be forwarded to @receiver. Must be used in confunction with
- * _gtk_file_chooser_delegate_iface_init().
+ * should be forwarded to @receiver. Must be used in conjunction with
+ * _gtk_file_chooser_embed_delegate_iface_init().
  **/
 void
 _gtk_file_chooser_embed_set_delegate (GtkFileChooserEmbed *receiver,
