@@ -305,7 +305,7 @@ gdk_keyboard_ungrab (guint32 time)
 /**
  * gdk_beep:
  * 
- * Emits a short beep.
+ * Emits a short beep on the default display.
  **/
 void
 gdk_beep (void)
