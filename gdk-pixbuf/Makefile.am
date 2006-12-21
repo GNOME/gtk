@@ -280,7 +280,7 @@ INCLUDES = \
 	-DGDK_PIXBUF_ENABLE_BACKEND
 
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
-LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la
+LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la $(GLIB_LIBS)
 
 noinst_PROGRAMS = test-gdk-pixbuf
 test_gdk_pixbuf_LDADD = $(LDADDS)
