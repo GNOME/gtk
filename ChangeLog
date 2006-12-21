@@ -1,4 +1,9 @@
 2006-12-20  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/keynames.txt: Mark arrow keys as translatable.  (#369506,
+	Bastian Nocera)
+
+	* gdk/keyname-table.h: Regenerated
 
 	* gtk/gtktextbuffer.c: Add signal documentation.  (#317064,
 	Søren Wedel Nielsen)

@@ -1186,10 +1186,10 @@
 0x00ff3e PreviousCandidate
 0x00ff3f Hangul_Special
 0x00ff50 Home			1
-0x00ff51 Left
-0x00ff52 Up
-0x00ff53 Right
-0x00ff54 Down
+0x00ff51 Left			1
+0x00ff52 Up			1
+0x00ff53 Right			1
+0x00ff54 Down			1
 0x00ff55 Page_Up		1
 0x00ff55 Prior
 0x00ff56 Page_Down		1
