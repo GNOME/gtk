@@ -265,7 +265,8 @@ gdk_display_put_event (GdkDisplay *display,
  * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no 
  *  timestamp is available.
  *
- * Ungrabs the pointer, if it is grabbed by this application.
+ * Ungrabs the pointer on the default display, if it is grabbed by this 
+ * application.
  **/
 void
 gdk_pointer_ungrab (guint32 time)
@@ -276,7 +277,8 @@ gdk_pointer_ungrab (guint32 time)
 /**
  * gdk_pointer_is_grabbed:
  * 
- * Returns %TRUE if the pointer is currently grabbed by this application.
+ * Returns %TRUE if the pointer on the default display is currently 
+ * grabbed by this application.
  *
  * Note that this does not take the inmplicit pointer grab on button
  * presses into account.
@@ -294,7 +296,8 @@ gdk_pointer_is_grabbed (void)
  * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no
  *        timestamp is available.
  * 
- * Ungrabs the keyboard, if it is grabbed by this application.
+ * Ungrabs the keyboard on the default display, if it is grabbed by this 
+ * application.
  **/
 void
 gdk_keyboard_ungrab (guint32 time)
@@ -305,7 +308,7 @@ gdk_keyboard_ungrab (guint32 time)
 /**
  * gdk_beep:
  * 
- * Emits a short beep.
+ * Emits a short beep on the default display.
  **/
 void
 gdk_beep (void)
