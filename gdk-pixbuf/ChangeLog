@@ -1,3 +1,7 @@
+2006-12-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.am: Link against GLib.  (#341158, Alexey Rusakov)
+
 2006-12-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Don't
