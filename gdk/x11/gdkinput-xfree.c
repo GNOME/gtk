@@ -150,7 +150,7 @@ _gdk_input_configure_event (XConfigureEvent *xevent,
   gint root_x, root_y;
 
   input_window = _gdk_input_window_find(window);
-  g_return_if_fail (window != NULL);
+  g_return_if_fail (input_window != NULL);
 
   _gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
 					GDK_WINDOW_XWINDOW (window),
@@ -168,7 +168,7 @@ _gdk_input_enter_event (XCrossingEvent *xevent,
   gint root_x, root_y;
 
   input_window = _gdk_input_window_find (window);
-  g_return_if_fail (window != NULL);
+  g_return_if_fail (input_window != NULL);
 
   gdk_input_check_proximity(GDK_WINDOW_DISPLAY (window));
 
@@ -192,7 +192,7 @@ _gdk_input_other_event (GdkEvent *event,
   GdkDisplayX11 *display_impl = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
   input_window = _gdk_input_window_find(window);
-  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (input_window != NULL, FALSE);
 
   /* This is a sort of a hack, as there isn't any XDeviceAnyEvent -
      but it's potentially faster than scanning through the types of
