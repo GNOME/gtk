@@ -127,13 +127,14 @@ void     gdk_colormap_query_color (GdkColormap *colormap,
 
 GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
      
-GdkColor *gdk_color_copy  (const GdkColor *color);
-void      gdk_color_free  (GdkColor       *color);
-gboolean  gdk_color_parse (const gchar    *spec,
-			   GdkColor       *color);
-guint     gdk_color_hash  (const GdkColor *colora);
-gboolean  gdk_color_equal (const GdkColor *colora,
-			   const GdkColor *colorb);
+GdkColor *gdk_color_copy      (const GdkColor *color);
+void      gdk_color_free      (GdkColor       *color);
+gboolean  gdk_color_parse     (const gchar    *spec,
+			       GdkColor       *color);
+guint     gdk_color_hash      (const GdkColor *colora);
+gboolean  gdk_color_equal     (const GdkColor *colora,
+			       const GdkColor *colorb);
+gchar *   gdk_color_to_string (const GdkColor *color);
 
 GType     gdk_color_get_type (void) G_GNUC_CONST;
 

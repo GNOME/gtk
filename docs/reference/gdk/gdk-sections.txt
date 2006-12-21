@@ -385,6 +385,7 @@ gdk_color_alloc
 gdk_color_change
 gdk_color_equal
 gdk_color_hash
+gdk_color_to_string
 
 <SUBSECTION Standard>
 GDK_COLORMAP
