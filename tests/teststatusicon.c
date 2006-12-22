@@ -66,7 +66,7 @@ update_icons (void)
   if (status == TEST_STATUS_INFO)
     {
       icon_name = GTK_STOCK_DIALOG_INFO;
-      tooltip = "Some Infromation ...";
+      tooltip = "Some Information ...";
     }
   else
     {
