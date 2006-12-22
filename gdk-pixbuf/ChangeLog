@@ -1,5 +1,11 @@
 2006-12-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Emit
+	the closed signal when closing the loader, pointed out
+	by David Ne¿as.
+
+2006-12-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* io-gif.c (gif_get_lzw): Handle invalid gif animations
 	a little bit more robustly.  (#357974, Vassilis Pandis,
 	patch by Felix Riemann)

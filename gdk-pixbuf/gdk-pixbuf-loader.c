@@ -481,6 +481,8 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
                 	priv->holds_threadlock = FALSE;
         	}
 
+        g_signal_emit (loader, pixbuf_loader_signals[CLOSED], 0);
+
         return FALSE;
 }
 
