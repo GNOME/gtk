@@ -159,6 +159,7 @@ struct bmp_progressive_state {
 
 	guchar *buff;
 	guint BufferSize;
+	guint BufferPadding;
 	guint BufferDone;
 
 	guchar (*Colormap)[3];
@@ -181,6 +182,7 @@ struct bmp_progressive_state {
 	int r_mask, r_shift, r_bits;
 	int g_mask, g_shift, g_bits;
 	int b_mask, b_shift, b_bits;
+	int a_mask, a_shift, a_bits;
 
 	GdkPixbuf *pixbuf;	/* Our "target" */
 };
@@ -245,6 +247,11 @@ static gboolean grow_buffer (struct bmp_progressive_state *State,
   return TRUE;
 }
 
+static gboolean
+decode_bitmasks (guchar *buf,
+		 struct bmp_progressive_state *State, 
+		 GError **error);
+
 static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
                              struct bmp_progressive_state *State,
                              GError **error)
@@ -252,7 +259,6 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	gint clrUsed;
 
         /* FIXME this is totally unrobust against bogus image data. */
-
 	if (State->BufferSize < lsb_32 (&BIH[0]) + 14) {
 		State->BufferSize = lsb_32 (&BIH[0]) + 14;
 		if (!grow_buffer (State, error))
@@ -265,17 +271,32 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 #endif    
 
 	State->Header.size = lsb_32 (&BIH[0]);
-	if (State->Header.size == 108) {
+	if (State->Header.size == 124) {
+                /* BMP v5 */
+		State->Header.width = lsb_32 (&BIH[4]);
+		State->Header.height = lsb_32 (&BIH[8]);
+		State->Header.depth = lsb_16 (&BIH[14]);
+		State->Compressed = lsb_32 (&BIH[16]);
+	} else if (State->Header.size == 108) {
+                /* BMP v4 */
+		State->Header.width = lsb_32 (&BIH[4]);
+		State->Header.height = lsb_32 (&BIH[8]);
+		State->Header.depth = lsb_16 (&BIH[14]);
+		State->Compressed = lsb_32 (&BIH[16]);
+	} else if (State->Header.size == 64) {
+                /* BMP OS/2 v2 */
 		State->Header.width = lsb_32 (&BIH[4]);
 		State->Header.height = lsb_32 (&BIH[8]);
 		State->Header.depth = lsb_16 (&BIH[14]);
 		State->Compressed = lsb_32 (&BIH[16]);
 	} else if (State->Header.size == 40) {
+                /* BMP v3 */ 
 		State->Header.width = lsb_32 (&BIH[4]);
 		State->Header.height = lsb_32 (&BIH[8]);
 		State->Header.depth = lsb_16 (&BIH[14]);
 		State->Compressed = lsb_32 (&BIH[16]);
 	} else if (State->Header.size == 12) {
+                /* BMP OS/2 */
 		State->Header.width = lsb_16 (&BIH[4]);
 		State->Header.height = lsb_16 (&BIH[6]);
 		State->Header.depth = lsb_16 (&BIH[10]);
@@ -297,9 +318,9 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	if (clrUsed != 0)
 		State->Header.n_colors = clrUsed;
 	else
-            State->Header.n_colors = 1 << State->Header.depth;
+            State->Header.n_colors = (1 << State->Header.depth);
 	
-	if (State->Header.n_colors > 1 << State->Header.depth) {
+	if (State->Header.n_colors > (1 << State->Header.depth)) {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
@@ -417,8 +438,19 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
+                gint samples;
+
 		State->read_state = READ_STATE_PALETTE;
-		State->BufferSize = lsb_32 (&BFH[10]) - 14 - State->Header.size; 
+
+		/* Allocate enough to hold the palette */
+	        samples = (State->Header.size == 12 ? 3 : 4);
+		State->BufferSize = State->Header.n_colors * samples;
+
+		/* Skip over everything between the palette and the data.
+		   This protects us against a malicious BFH[10] value.
+                */
+		State->BufferPadding = (lsb_32 (&BFH[10]) - 14 - State->Header.size) - State->BufferSize;
+
 	} else if (State->Compressed == BI_RGB) {
 		if (State->BufferSize < lsb_32 (&BFH[10]))
 		{
@@ -433,8 +465,19 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 			State->BufferSize = State->LineWidth;
 		}
 	} else if (State->Compressed == BI_BITFIELDS) {
-		State->read_state = READ_STATE_BITMASKS;
-		State->BufferSize = 12;
+               if (State->Header.size == 108 || State->Header.size == 124) 
+               {
+			/* v4 and v5 have the bitmasks in the header */
+			if (!decode_bitmasks (&BIH[40], State, error)) {
+			       State->read_state = READ_STATE_ERROR;
+			       return FALSE;
+                        }
+               }
+               else 
+               {
+		       State->read_state = READ_STATE_BITMASKS;
+		       State->BufferSize = 12;
+               }
 	} else {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
@@ -511,12 +554,13 @@ find_bits (int n, int *lowest, int *n_set)
 		}
 }
 
-/* Decodes the 3 shorts that follow for the bitmasks for BI_BITFIELDS coding */
+/* Decodes the bitmasks for BI_BITFIELDS coding */
 static gboolean
 decode_bitmasks (guchar *buf,
 		 struct bmp_progressive_state *State, 
 		 GError **error)
 {
+        State->a_mask = State->a_shift = State->a_bits = 0;
 	State->r_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
 	buf += 4;
 
@@ -529,15 +573,36 @@ decode_bitmasks (guchar *buf,
 	find_bits (State->g_mask, &State->g_shift, &State->g_bits);
 	find_bits (State->b_mask, &State->b_shift, &State->b_bits);
 
-	if (State->r_bits == 0 || State->g_bits == 0 || State->b_bits == 0) {
-		State->r_mask = 0x7c00;
-		State->r_shift = 10;
-		State->g_mask = 0x03e0;
-		State->g_shift = 5;
-		State->b_mask = 0x001f;
-		State->b_shift = 0;
+        /* v4 and v5 have an alpha mask */
+        if (State->Header.size == 108 || State->Header.size == 124) {
+	      buf += 4;
+	      State->a_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+	      find_bits (State->a_mask, &State->a_shift, &State->a_bits);
+        }
 
-		State->r_bits = State->g_bits = State->b_bits = 5;
+	if (State->r_bits == 0 || State->g_bits == 0 || State->b_bits == 0) {
+                if (State->Type == 16) {
+		       State->r_mask = 0x7c00;
+		       State->r_shift = 10;
+		       State->g_mask = 0x03e0;
+		       State->g_shift = 5;
+		       State->b_mask = 0x001f;
+		       State->b_shift = 0;
+
+		       State->r_bits = State->g_bits = State->b_bits = 5;
+                }
+                else {
+		       State->r_mask = 0x00ff0000;
+		       State->r_shift = 16;
+		       State->g_mask = 0x0000ff00;
+		       State->g_shift = 8;
+		       State->b_mask = 0x000000ff;
+		       State->b_shift = 0;
+		       State->a_mask = 0xff000000;
+		       State->a_shift = 24;
+
+		       State->r_bits = State->g_bits = State->b_bits = State->a_bits = 8;
+                }
 	}
 
 	State->read_state = READ_STATE_DATA;
@@ -573,6 +638,7 @@ gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
 	context->read_state = READ_STATE_HEADERS;
 
 	context->BufferSize = 26;
+	context->BufferPadding = 0;
 	context->buff = g_malloc(26);
 	context->BufferDone = 0;
 	/* 14 for the BitmapFileHeader, 12 for the BitmapImageHeader */
@@ -644,28 +710,35 @@ static void OneLine32(struct bmp_progressive_state *context)
 		int r_lshift, r_rshift;
 		int g_lshift, g_rshift;
 		int b_lshift, b_rshift;
+		int a_lshift, a_rshift;
 
 		r_lshift = 8 - context->r_bits;
 		g_lshift = 8 - context->g_bits;
 		b_lshift = 8 - context->b_bits;
+		a_lshift = 8 - context->a_bits;
 
 		r_rshift = context->r_bits - r_lshift;
 		g_rshift = context->g_bits - g_lshift;
 		b_rshift = context->b_bits - b_lshift;
+		a_rshift = context->a_bits - a_lshift;
 
 		for (i = 0; i < context->Header.width; i++) {
-			int v, r, g, b;
+			int v, r, g, b, a;
 
-			v = src[0] | (src[1] << 8) | (src[2] << 16);
+			v = src[0] | (src[1] << 8) | (src[2] << 16) | (src[3] << 24);
 
 			r = (v & context->r_mask) >> context->r_shift;
 			g = (v & context->g_mask) >> context->g_shift;
 			b = (v & context->b_mask) >> context->b_shift;
+			a = (v & context->a_mask) >> context->a_shift;
 
 			*pixels++ = (r << r_lshift) | (r >> r_rshift);
 			*pixels++ = (g << g_lshift) | (g >> g_rshift);
 			*pixels++ = (b << b_lshift) | (b >> b_rshift);
-			*pixels++ = 0xff;
+                        if (context->a_bits)
+			  *pixels++ = 0xff - (a << a_lshift) | (a >> a_rshift);
+                        else
+                          *pixels++ = 0xff;
 
 			src += 4;
 		}
@@ -1078,6 +1151,7 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 	    (struct bmp_progressive_state *) data;
 
 	gint BytesToCopy;
+	gint BytesToRemove;
 
 	if (context->read_state == READ_STATE_DONE)
 		return TRUE;
@@ -1100,6 +1174,19 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 			context->BufferDone += BytesToCopy;
 
 			if (context->BufferDone != context->BufferSize)
+				break;
+		}
+
+		/* context->buff is full.  Now we discard all "padding" */
+		if (context->BufferPadding != 0) {
+			BytesToRemove = context->BufferPadding - size;
+			if (BytesToRemove > size) {
+				BytesToRemove = size;
+			}
+			size -= BytesToRemove;
+			context->BufferPadding -= BytesToRemove;
+
+			if (context->BufferPadding != 0)
 				break;
 		}
 
