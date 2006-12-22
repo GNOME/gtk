@@ -1,5 +1,9 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* io-bmp.c (decode_bitmasks): Handle bmps
+	with more than 8 bits per channel.  (#172584,
+	David Costanzo)
+
 	* io-bmp.c: Handle offsets more carefully. (#172188,
 	David Costanzo)
 
