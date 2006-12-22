@@ -218,6 +218,16 @@ checkerboard_expose (GtkWidget	    *da,
   return TRUE;
 }
 
+static void
+close_window (void)
+{
+  window = NULL;
+
+  if (pixmap)
+    g_object_unref (pixmap);
+  pixmap = NULL;
+}
+
 GtkWidget *
 do_drawingarea (GtkWidget *do_widget)
 {
@@ -233,7 +243,7 @@ do_drawingarea (GtkWidget *do_widget)
 			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -309,14 +319,9 @@ do_drawingarea (GtkWidget *do_widget)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    {
       gtk_widget_show_all (window);
-    }
   else
-    {
       gtk_widget_destroy (window);
-      window = NULL;
-    }
 
   return window;
 }

@@ -300,6 +300,8 @@ display_changed_cb (GtkTreeSelection  *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
 
+  if (info->current_display)
+    g_object_unref (info->current_display);
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     gtk_tree_model_get (model, &iter,
 			DISPLAY_COLUMN_DISPLAY, &info->current_display,
@@ -320,6 +322,8 @@ screen_changed_cb (GtkTreeSelection  *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
 
+  if (info->current_screen)
+    g_object_unref (info->current_screen);
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     gtk_tree_model_get (model, &iter,
 			SCREEN_COLUMN_SCREEN, &info->current_screen,
@@ -562,6 +566,14 @@ destroy_info (ChangeDisplayInfo *info)
   g_slist_free (tmp_list);
 
   g_object_unref (info->size_group);
+  g_object_unref (info->display_model);
+  g_object_unref (info->screen_model);
+
+  if (info->current_display)
+    g_object_unref (info->current_display);
+  if (info->current_screen)
+    g_object_unref (info->current_screen);
+
   g_free (info);
 }
 

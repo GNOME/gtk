@@ -467,6 +467,7 @@ do_appwindow (GtkWidget *do_widget)
 				  "stock-id", GTK_STOCK_OPEN,
 				  NULL);
       gtk_action_group_add_action (action_group, open_action);
+      g_object_unref (open_action);
       gtk_action_group_add_actions (action_group, 
 				    entries, n_entries, 
 				    window);

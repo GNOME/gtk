@@ -1,5 +1,10 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/*.c: Fix some leaks.  (#348108, Chris
+	Wilson)
+
+2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Check for getc_unlocked.
 
 	* gtk/xdgmime/xdgmimemagic.c: Use getc if getc_unlocked is

@@ -74,6 +74,7 @@ create_stock_icon_store (void)
 			      PIXBUF_COL, pixbuf,
 			      TEXT_COL, label,
 			      -1);
+	  g_object_unref (pixbuf);
 	  g_free (label);
 	}
       else
