@@ -36,6 +36,10 @@
 
 #include "gtkalias.h"
 
+static void            gtk_plug_get_property          (GObject     *object,
+						       guint        prop_id,
+						       GValue      *value,
+						       GParamSpec  *pspec);
 static void            gtk_plug_finalize              (GObject          *object);
 static void            gtk_plug_realize               (GtkWidget        *widget);
 static void            gtk_plug_unrealize             (GtkWidget        *widget);
@@ -65,6 +69,11 @@ typedef struct
 } GrabbedKey;
 
 enum {
+  PROP_0,
+  PROP_EMBEDDED,
+};
+
+enum {
   EMBEDDED,
   LAST_SIGNAL
 }; 
@@ -72,6 +81,25 @@ enum {
 static guint plug_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GtkPlug, gtk_plug, GTK_TYPE_WINDOW)
+
+static void
+gtk_plug_get_property (GObject    *object,
+		       guint       prop_id,
+		       GValue     *value,
+		       GParamSpec *pspec)
+{
+  GtkPlug *plug = GTK_PLUG (object);
+
+  switch (prop_id)
+    {
+    case PROP_EMBEDDED:
+      g_value_set_boolean (value, plug->socket_window != NULL);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_plug_class_init (GtkPlugClass *class)
@@ -83,6 +111,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 
   bin_class = g_type_class_peek (GTK_TYPE_BIN);
 
+  gobject_class->get_property = gtk_plug_get_property;
   gobject_class->finalize = gtk_plug_finalize;
   
   widget_class->realize = gtk_plug_realize;
@@ -103,6 +132,21 @@ gtk_plug_class_init (GtkPlugClass *class)
 
   window_class->set_focus = gtk_plug_set_focus;
   window_class->keys_changed = gtk_plug_keys_changed;
+
+  /**
+   * GtkPlug:embedded:
+   *
+   * %TRUE if the plug is embedded in a socket.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_EMBEDDED,
+				   g_param_spec_boolean ("embedded",
+							 P_("Embedded"),
+							 P_("Whether or not the plug is embedded"),
+							 FALSE,
+							 GTK_PARAM_READABLE));
 
   plug_signals[EMBEDDED] =
     g_signal_new (I_("embedded"),

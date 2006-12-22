@@ -278,6 +278,8 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 		  {
 		    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: calling gtk_plug_send_delete_event()\n"));
 		    _gtk_plug_send_delete_event (widget);
+
+		    g_object_notify (G_OBJECT (plug), "embedded");
 		  }
 	      }
 	    else
@@ -299,7 +301,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 		  {
 		    g_warning (G_STRLOC "Plug reparented unexpectedly into window in the same process");
 		    plug->socket_window = NULL;
-		    break;
+		    break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 		  }
 
 		g_object_ref (plug->socket_window);
@@ -308,13 +310,15 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	      {
 		plug->socket_window = gdk_window_foreign_new_for_display (display, xre->parent);
 		if (!plug->socket_window) /* Already gone */
-		  break;
+		  break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 	      }
 
 	    _gtk_plug_add_all_grabbed_keys (plug);
 
 	    if (!was_embedded)
 	      g_signal_emit_by_name (plug, "embedded");
+
+	    g_object_notify (G_OBJECT (plug), "embedded");
 	  }
 
       done:

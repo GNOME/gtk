@@ -1,5 +1,14 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	Make it possible to track the embeddedness of
+	statusicon (#387215, Martyn Russell, patch by Christian
+	Persch)
+
+	* gtk/gtkstatusicon.c: Add orientation and embedded properties.
+	* gtk/gtkplug.c: 
+	* gtk/gtkplug-x11.c: Add an embedded property.
+	* tests/teststatusicon.c: Test the new properties.
+
 	* gtk/gtkwidget.c (gtk_widget_get_draw_rectangle): Don't
 	leak draw_border.  (#387170, Kjartan Maraas)
 

@@ -69,6 +69,8 @@ enum
   PROP_SIZE,
   PROP_SCREEN,
   PROP_VISIBLE,
+  PROP_ORIENTATION,
+  PROP_EMBEDDED,
   PROP_BLINKING
 };
 
@@ -141,6 +143,9 @@ static void     gtk_status_icon_size_allocate    (GtkStatusIcon  *status_icon,
 						  GtkAllocation  *allocation);
 static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 						  GdkScreen      *old_screen);
+static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
+
 #endif
 static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
@@ -233,6 +238,39 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							 P_("Whether or not the status icon is visible"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+
+
+  /**
+   * GtkStatusIcon:embedded: 
+   *
+   * %TRUE if the statusicon is embedded in a notification area.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_EMBEDDED,
+				   g_param_spec_boolean ("embedded",
+							 P_("Embedded"),
+							 P_("Whether or not the status icon is embedded"),
+							 FALSE,
+							 GTK_PARAM_READABLE));
+
+  /**
+   * GtkStatusIcon:orientation:
+   *
+   * The orientation of the tray in which the statusicon 
+   * is embedded. 
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ORIENTATION,
+				   g_param_spec_enum ("orientation",
+						      P_("Orientation"),
+						      P_("The orientation of the tray"),
+						      GTK_TYPE_ORIENTATION,
+						      GTK_ORIENTATION_HORIZONTAL,
+						      GTK_PARAM_READABLE));
 
 
   /**
@@ -427,6 +465,10 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   gtk_widget_add_events (GTK_WIDGET (priv->tray_icon),
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
+  g_signal_connect_swapped (priv->tray_icon, "notify::embedded",
+			    G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
+			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "button-press-event",
 			    G_CALLBACK (gtk_status_icon_button_press), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "screen-changed",
@@ -622,6 +664,12 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, gtk_status_icon_get_visible (status_icon));
+      break;
+    case PROP_EMBEDDED:
+      g_value_set_boolean (value, gtk_status_icon_is_embedded (status_icon));
+      break;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, _gtk_tray_icon_get_orientation (status_icon->priv->tray_icon));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1075,6 +1123,18 @@ gtk_status_icon_screen_changed (GtkStatusIcon *status_icon,
 }
 
 #endif
+
+static void
+gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon)
+{
+  g_object_notify (G_OBJECT (status_icon), "embedded");
+}
+
+static void
+gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon)
+{
+  g_object_notify (G_OBJECT (status_icon), "orientation");
+}
 
 static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,

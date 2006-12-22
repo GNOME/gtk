@@ -34,6 +34,29 @@ static gint timeout = 0;
 static GSList *icons = NULL;
 
 static void
+size_changed_cb (GtkStatusIcon *icon,
+		 int size)
+{
+  g_print ("status icon %p size-changed size = %d\n", icon, size);
+}
+
+static void
+embedded_changed_cb (GtkStatusIcon *icon)
+{
+  g_print ("status icon %p embedded changed to %d\n", icon,
+	   gtk_status_icon_is_embedded (icon));
+}
+
+static void
+orientation_changed_cb (GtkStatusIcon *icon)
+{
+  GtkOrientation orientation;
+
+  g_object_get (icon, "orientation", &orientation, NULL);
+  g_print ("status icon %p orientation changed to %d\n", icon, orientation);
+}
+
+static void
 update_icons (void)
 {
   GSList *l;
@@ -264,7 +287,11 @@ main (int argc, char **argv)
       gtk_status_icon_set_screen (icon, gdk_display_get_screen (display, i));
       update_icons ();
 
-      gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), TRUE);
+      g_signal_connect (icon, "size-changed", G_CALLBACK (size_changed_cb), NULL);
+      g_signal_connect (icon, "notify::embedded", G_CALLBACK (embedded_changed_cb), NULL);
+      g_signal_connect (icon, "notify::orientation", G_CALLBACK (orientation_changed_cb), NULL);
+      g_print ("icon size %d\n", gtk_status_icon_get_size (icon));
+      gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), FALSE);
 
       g_signal_connect (icon, "activate",
                         G_CALLBACK (icon_activated), NULL);
