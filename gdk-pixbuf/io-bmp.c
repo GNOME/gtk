@@ -605,6 +605,23 @@ decode_bitmasks (guchar *buf,
                 }
 	}
 
+        if (State->r_bits > 8) { 
+          State->r_shift += State->r_bits - 8;
+          State->r_bits = 8;
+        }
+        if (State->g_bits > 8) { 
+          State->g_shift += State->g_bits - 8;
+          State->g_bits = 8;
+        }
+        if (State->b_bits > 8) { 
+          State->b_shift += State->b_bits - 8;
+          State->b_bits = 8;
+        }
+        if (State->a_bits > 8) { 
+          State->a_shift += State->a_bits - 8;
+          State->a_bits = 8;
+        }
+
 	State->read_state = READ_STATE_DATA;
 	State->BufferDone = 0;
 	State->BufferSize = State->LineWidth;
