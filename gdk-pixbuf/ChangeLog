@@ -1,3 +1,12 @@
+2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c: Handle offsets more carefully. (#172188,
+	David Costanzo)
+
+	* io-bmp.c: Handle v5 and OS/2 v2 bmps.
+
+	* io-bmp.c: Handle alpha masks in v4 and v5 bmps.
+
 2006-12-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Emit
