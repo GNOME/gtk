@@ -251,85 +251,6 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
   pango_cairo_show_glyph_string (cr, font, glyphs);
 }
 
-/* Draws an error underline that looks like one of:
- *              H       E                H
- *     /\      /\      /\        /\      /\               -
- *   A/  \    /  \    /  \     A/  \    /  \              |
- *    \   \  /    \  /   /D     \   \  /    \             |
- *     \   \/  C   \/   /        \   \/   C  \            | height = HEIGHT_SQUARES * square
- *      \      /\  F   /          \  F   /\   \           | 
- *       \    /  \    /            \    /  \   \G         |
- *        \  /    \  /              \  /    \  /          |
- *         \/      \/                \/      \/           -
- *         B                         B       
- *    |----|
- *   unit_width = (HEIGHT_SQUARES - 1) * square
- *
- * The x, y, width, height passed in give the desired bounding box;
- * x/width are adjusted to make the underline a integer number of units
- * wide.
- */
-#define HEIGHT_SQUARES 2.5
-
-/* Cut-and-pasted between here and pango/pango/pangocairo-render.c */
-static void
-draw_error_underline (cairo_t *cr,
-		      double  x,
-		      double  y,
-		      double  width,
-		      double  height)
-{
-  double square = height / HEIGHT_SQUARES;
-  double unit_width = (HEIGHT_SQUARES - 1) * square;
-  int width_units = (width + unit_width / 2) / unit_width;
-  double y_top, y_bottom;
-  int i;
-
-  x += (width - width_units * unit_width) / 2;
-  width = width_units * unit_width;
-
-  y_top = y;
-  y_bottom = y + height;
-  
-  /* Bottom of squiggle */
-  cairo_move_to (cr, x - square / 2, y_top + square / 2); /* A */
-  for (i = 0; i < width_units; i += 2)
-    {
-      double x_middle = x + (i + 1) * unit_width;
-      double x_right = x + (i + 2) * unit_width;
-    
-      cairo_line_to (cr, x_middle, y_bottom); /* B */
-      
-      if (i + 1 == width_units)
-	/* Nothing */;
-      else if (i + 2 == width_units)
-	cairo_line_to (cr, x_right + square / 2, y_top + square / 2); /* D */
-      else
-	cairo_line_to (cr, x_right, y_top + square); /* C */
-    }
-  
-  /* Top of squiggle */
-  for (i -= 2; i >= 0; i -= 2)
-    {
-      double x_left = x + i * unit_width;
-      double x_middle = x + (i + 1) * unit_width;
-      double x_right = x + (i + 2) * unit_width;
-      
-      if (i + 1 == width_units)
-	cairo_line_to (cr, x_middle + square / 2, y_bottom - square / 2); /* G */
-      else {
-	if (i + 2 == width_units)
-	  cairo_line_to (cr, x_right, y_top); /* E */
-	cairo_line_to (cr, x_middle, y_bottom - square); /* F */
-      }
-      
-      cairo_line_to (cr, x_left, y_top);   /* H */
-    }
-
-  cairo_close_path (cr);
-  cairo_fill (cr);
-}
-
 static void
 gdk_pango_renderer_draw_rectangle (PangoRenderer    *renderer,
 				   PangoRenderPart   part,
@@ -379,15 +300,15 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
     {
       cairo_save (cr);
       emboss_context (gdk_renderer, cr);
-      draw_error_underline (cr,
-			    (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
-			    (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+      pango_cairo_show_error_underline (cr,
+            (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
+            (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
       cairo_restore (cr);
     }
 
-  draw_error_underline (cr,
-			(double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
-			(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+  pango_cairo_show_error_underline (cr,
+	(double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
+	(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 }
 
 static void
