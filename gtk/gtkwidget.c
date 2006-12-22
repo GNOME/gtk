@@ -2683,6 +2683,8 @@ gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 	  rect->y -= draw_border->left;
 	  rect->width += draw_border->left + draw_border->right;
 	  rect->height += draw_border->top + draw_border->bottom;
+        
+          gtk_border_free (draw_border);
 	}
 
       if (GTK_IS_CONTAINER (widget))
