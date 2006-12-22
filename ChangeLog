@@ -1,5 +1,12 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Check for getc_unlocked.
+
+	* gtk/xdgmime/xdgmimemagic.c: Use getc if getc_unlocked is
+	unavailable.   (#381499)
+
+2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c (gtk_widget_get_draw_rectangle): Don't
 	leak draw_border.  (#387170, Kjartan Maraas)
 
