@@ -1,4 +1,12 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.symbols:
+	* gdk/gdk.h:
+	* gdk/gdk.c: Add functions to allow threadsafe handling
+	of idles and timeouts wrt. to the GDK lock.  (#321886,
+	Chris Wilson)
+	
+2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gdk/gdkpango.c: Use pango_cairo_show_error_underline.  
 	(#340141, Behdad Esfahbod)
