@@ -1088,8 +1088,6 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
-  GDK_THREADS_ENTER ();
-
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
    * the queue still got processed. we better just ignore such case
@@ -1111,8 +1109,6 @@ gtk_container_idle_sizer (gpointer data)
     }
 
   gdk_window_process_all_updates ();
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1151,7 +1147,7 @@ _gtk_container_queue_resize (GtkContainer *container)
 		{
 		  GTK_PRIVATE_SET_FLAG (resize_container, GTK_RESIZE_PENDING);
 		  if (container_resize_queue == NULL)
-		    g_idle_add_full (GTK_PRIORITY_RESIZE,
+		    gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
 				     gtk_container_idle_sizer,
 				     NULL, NULL);
 		  container_resize_queue = g_slist_prepend (container_resize_queue, resize_container);

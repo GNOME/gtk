@@ -2240,9 +2240,7 @@ static gboolean debug_updates = FALSE;
 static gboolean
 gdk_window_update_idle (gpointer data)
 {
-  GDK_THREADS_ENTER ();
   gdk_window_process_all_updates ();
-  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -2255,7 +2253,7 @@ gdk_window_schedule_update (GdkWindow *window)
 
   if (!update_idle)
     {
-      update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
+      update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
 				     gdk_window_update_idle, NULL, NULL);
     }
 }

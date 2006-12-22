@@ -628,7 +628,7 @@ main (int argc, char **argv)
 
 			status.readlen = readlen;
 
-                        status.timeout = g_timeout_add (100, update_timeout, &status);
+                        status.timeout = gdk_threads_add_timeout (100, update_timeout, &status);
                 }
 #endif
 	}

@@ -310,6 +310,7 @@ unix_end_run (GtkPrintOperation *op,
 
   if (wait)
     {
+      g_object_ref (op);
       if (!op_unix->data_sent)
 	{
 	  GDK_THREADS_LEAVE ();  
@@ -317,6 +318,8 @@ unix_end_run (GtkPrintOperation *op,
 	  GDK_THREADS_ENTER ();  
 	}
       g_main_loop_unref (op_unix->loop);
+      op_unix->loop = NULL;
+      g_object_unref (op);
     }
 }
 

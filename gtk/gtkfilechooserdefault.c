@@ -5709,8 +5709,6 @@ load_timeout_cb (gpointer data)
 
   profile_start ("start", NULL);
 
-  GDK_THREADS_ENTER ();
-
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
   g_assert (impl->load_state == LOAD_PRELOAD);
   g_assert (impl->load_timeout_id != 0);
@@ -5720,8 +5718,6 @@ load_timeout_cb (gpointer data)
   impl->load_state = LOAD_LOADING;
 
   load_set_model (impl);
-
-  GDK_THREADS_LEAVE ();
 
   profile_end ("end", NULL);
 
@@ -5735,7 +5731,7 @@ load_setup_timer (GtkFileChooserDefault *impl)
   g_assert (impl->load_timeout_id == 0);
   g_assert (impl->load_state != LOAD_PRELOAD);
 
-  impl->load_timeout_id = g_timeout_add (MAX_LOADING_TIME, load_timeout_cb, impl);
+  impl->load_timeout_id = gdk_threads_add_timeout (MAX_LOADING_TIME, load_timeout_cb, impl);
   impl->load_state = LOAD_PRELOAD;
 }
 

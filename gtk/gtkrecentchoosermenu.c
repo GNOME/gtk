@@ -969,8 +969,6 @@ idle_populate_func (gpointer data)
   gboolean retval;
   GtkWidget *item;
 
-  GDK_THREADS_ENTER ();
-
   pdata = (MenuPopulateData *) data;
   priv = pdata->menu->priv;
 
@@ -1076,8 +1074,6 @@ check_and_return:
   else
     retval = TRUE;
 
-  GDK_THREADS_LEAVE ();
-
   return retval;
 }
 
@@ -1106,7 +1102,7 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   /* dispose our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
   
-  menu->priv->populate_id = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 30,
+  menu->priv->populate_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
   					     idle_populate_func,
 					     pdata,
 					     idle_populate_clean_up);

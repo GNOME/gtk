@@ -383,8 +383,6 @@ preview_print_idle_done (gpointer data)
   GtkPrintOperation *op;
   PreviewOp *pop = (PreviewOp *) data;
 
-  GDK_THREADS_ENTER ();
-  
   op = GTK_PRINT_OPERATION (pop->preview);
 
   cairo_surface_finish (pop->surface);
@@ -398,8 +396,6 @@ preview_print_idle_done (gpointer data)
 
   gtk_print_operation_preview_end_preview (pop->preview);
   g_free (pop);
-  
-  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
@@ -409,8 +405,6 @@ preview_print_idle (gpointer data)
   GtkPrintOperation *op;
   gboolean retval = TRUE;
   cairo_t *cr;
-
-  GDK_THREADS_ENTER ();
 
   pop = (PreviewOp *) data;
   op = GTK_PRINT_OPERATION (pop->preview);
@@ -424,8 +418,6 @@ preview_print_idle (gpointer data)
   pop->page_nr++;
   if (op->priv->nr_of_pages <= pop->page_nr)
     retval = FALSE;
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -454,10 +446,10 @@ preview_ready (GtkPrintOperationPreview *preview,
   pop->page_nr = 0;
   pop->print_context = context;
 
-  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
-	           preview_print_idle,
-		   pop,
-		   preview_print_idle_done);
+  gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
+	                     preview_print_idle,
+		             pop,
+		             preview_print_idle_done);
 }
 
 
@@ -1918,8 +1910,6 @@ print_pages_idle_done (gpointer user_data)
   PrintPagesData *data;
   GtkPrintOperationPrivate *priv;
 
-  GDK_THREADS_ENTER ();
-
   data = (PrintPagesData*)user_data;
   priv = data->op->priv;
 
@@ -1946,8 +1936,6 @@ print_pages_idle_done (gpointer user_data)
   g_object_unref (data->op);
 
   g_free (data);
-
-  GDK_THREADS_LEAVE ();
 }
 
 static void
@@ -2029,8 +2017,6 @@ print_pages_idle (gpointer user_data)
   GtkPrintOperationPrivate *priv; 
   GtkPageSetup *page_setup;
   gboolean done = FALSE;
-
-  GDK_THREADS_ENTER ();
 
   data = (PrintPagesData*)user_data;
   priv = data->op->priv;
@@ -2162,8 +2148,6 @@ print_pages_idle (gpointer user_data)
 
   update_progress (data);
 
-  GDK_THREADS_LEAVE ();
-
   return !done;
 }
   
@@ -2181,13 +2165,9 @@ handle_progress_response (GtkWidget *dialog,
 static gboolean
 show_progress_timeout (PrintPagesData *data)
 {
-  GDK_THREADS_ENTER ();
-
   gtk_window_present (GTK_WINDOW (data->progress));
 
   data->op->priv->show_progress_timeout_id = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -2226,7 +2206,7 @@ print_pages (GtkPrintOperation       *op,
 			G_CALLBACK (handle_progress_response), op);
 
       priv->show_progress_timeout_id = 
-	g_timeout_add (SHOW_PROGRESS_TIME, 
+	gdk_threads_add_timeout (SHOW_PROGRESS_TIME, 
 		       (GSourceFunc)show_progress_timeout,
 		       data);
 
@@ -2265,22 +2245,24 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_orientation = TRUE;
     }
   
-  priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
-					       print_pages_idle, 
-					       data, 
-					       print_pages_idle_done);
+  priv->print_pages_idle_id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
+					                 print_pages_idle, 
+					                 data, 
+					                 print_pages_idle_done);
   
   /* Recursive main loop to make sure we don't exit  on sync operations  */
   if (priv->is_sync)
     {
       priv->rloop = g_main_loop_new (NULL, FALSE);
 
+      g_object_ref (op);
       GDK_THREADS_LEAVE ();
       g_main_loop_run (priv->rloop);
       GDK_THREADS_ENTER ();
       
       g_main_loop_unref (priv->rloop);
       priv->rloop = NULL;
+      g_object_unref (op);
     }
 }
 

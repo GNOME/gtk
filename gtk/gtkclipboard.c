@@ -1862,6 +1862,8 @@ gtk_clipboard_store (GtkClipboard *clipboard)
   if (!gdk_display_supports_clipboard_persistence (clipboard->display))
     return;
 
+  g_object_ref (clipboard);
+
   clipboard_widget = get_clipboard_widget (clipboard->display);
   clipboard->notify_signal_id = g_signal_connect (clipboard_widget, "selection_notify_event",
 						  G_CALLBACK (gtk_clipboard_selection_notify), clipboard);
@@ -1893,6 +1895,8 @@ gtk_clipboard_store (GtkClipboard *clipboard)
   clipboard->notify_signal_id = 0;
   
   clipboard->storing_selection = FALSE;
+
+  g_object_unref (clipboard);
 }
 
 /* Stores all clipboard selections on all displays, called from

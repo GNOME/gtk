@@ -1004,7 +1004,7 @@ gtk_expander_drag_motion (GtkWidget        *widget,
       settings = gtk_widget_get_settings (widget);
       g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
 
-      priv->expand_timer = g_timeout_add (timeout, (GSourceFunc) expand_timeout, expander);
+      priv->expand_timer = gdk_threads_add_timeout (timeout, (GSourceFunc) expand_timeout, expander);
     }
 
   return TRUE;
@@ -1276,8 +1276,6 @@ gtk_expander_animation_timeout (GtkExpander *expander)
   GdkRectangle area;
   gboolean finish = FALSE;
 
-  GDK_THREADS_ENTER();
-
   if (GTK_WIDGET_REALIZED (expander))
     {
       get_expander_bounds (expander, &area);
@@ -1317,8 +1315,6 @@ gtk_expander_animation_timeout (GtkExpander *expander)
       gtk_widget_queue_resize (GTK_WIDGET (expander));
     }
 
-  GDK_THREADS_LEAVE();
-
   return !finish;
 }
 
@@ -1331,7 +1327,7 @@ gtk_expander_start_animation (GtkExpander *expander)
     g_source_remove (priv->animation_timeout);
 
   priv->animation_timeout =
-		g_timeout_add (50,
+		gdk_threads_add_timeout (50,
 			       (GSourceFunc) gtk_expander_animation_timeout,
 			       expander);
 }

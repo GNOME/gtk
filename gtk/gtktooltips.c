@@ -446,20 +446,16 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   gtk_widget_show (tooltips->tip_window);
 }
 
-static gint
+static gboolean
 gtk_tooltips_timeout (gpointer data)
 {
   GtkTooltips *tooltips = (GtkTooltips *) data;
 
-  GDK_THREADS_ENTER ();
-  
   if (tooltips->active_tips_data != NULL &&
       GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     gtk_tooltips_draw_tips (tooltips);
 
   tooltips->timer_tag = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -620,7 +616,7 @@ gtk_tooltips_start_delay (GtkTooltips *tooltips,
 	delay = STICKY_DELAY;
       else
 	delay = tooltips->delay;
-      tooltips->timer_tag = g_timeout_add (delay,
+      tooltips->timer_tag = gdk_threads_add_timeout (delay,
 					   gtk_tooltips_timeout,
 					   (gpointer) tooltips);
     }

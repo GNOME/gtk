@@ -1741,16 +1741,12 @@ popdown_timeout (gpointer data)
 {
   GtkCellRendererTextPrivate *priv;
 
-  GDK_THREADS_ENTER ();
-
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
 
   priv->entry_menu_popdown_timeout = 0;
 
   if (!GTK_WIDGET_HAS_FOCUS (priv->entry))
     gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (priv->entry), data);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1768,7 +1764,7 @@ gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
   if (priv->entry_menu_popdown_timeout)
     return;
 
-  priv->entry_menu_popdown_timeout = g_timeout_add (500, popdown_timeout,
+  priv->entry_menu_popdown_timeout = gdk_threads_add_timeout (500, popdown_timeout,
                                                     data);
 }
 

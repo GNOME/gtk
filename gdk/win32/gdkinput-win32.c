@@ -690,7 +690,7 @@ set_ignore_core (gboolean ignore)
     }
   else
     if (!ignore_core_timer)
-      ignore_core_timer = g_timeout_add (PROXIMITY_OUT_DELAY,
+      ignore_core_timer = gdk_threads_add_timeout (PROXIMITY_OUT_DELAY,
 					 ignore_core_timefunc, NULL);
 }
 #endif /* HAVE_WINTAB */

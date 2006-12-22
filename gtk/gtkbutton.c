@@ -1490,11 +1490,7 @@ gtk_real_button_released (GtkButton *button)
 static gboolean
 button_activate_timeout (gpointer data)
 {
-  GDK_THREADS_ENTER ();
-  
   gtk_button_finish_activate (data, TRUE);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1520,7 +1516,7 @@ gtk_real_button_activate (GtkButton *button)
 
       gtk_grab_add (widget);
       
-      button->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT,
+      button->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
 						button_activate_timeout,
 						button);
       button->button_down = TRUE;

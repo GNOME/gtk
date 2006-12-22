@@ -90,7 +90,7 @@ static void
 realize_callback (GtkWidget  *widget,
 		  WidgetInfo *info)
 {
-  g_timeout_add (500, (GSourceFunc)adjust_size_callback, info);
+  gdk_threads_add_timeout (500, (GSourceFunc)adjust_size_callback, info);
 }
 
 static WidgetInfo *

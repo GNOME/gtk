@@ -254,8 +254,7 @@ static GtkFileInfo *create_file_info              (GtkFileFolderUnix *folder_uni
 						   struct stat *statbuf,
 						   const char *mime_type);
 
-static gboolean execute_callbacks_idle (gpointer data);
-static void execute_callbacks (gpointer data);
+static gboolean execute_callbacks (gpointer data);
 
 static gboolean fill_in_names     (GtkFileFolderUnix  *folder_unix,
 				   GError            **error);
@@ -700,7 +699,7 @@ struct callback_info
 
 
 
-static void
+static gboolean
 execute_callbacks (gpointer data)
 {
   GSList *l;
@@ -747,18 +746,6 @@ execute_callbacks (gpointer data)
   system_unix->execute_callbacks_idle_id = 0;
 }
 
-static gboolean
-execute_callbacks_idle (gpointer data)
-{
-  GDK_THREADS_ENTER ();
-
-  execute_callbacks(data);
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-
 static void
 queue_callback (GtkFileSystemUnix   *system_unix,
 		enum callback_types  type,
@@ -791,7 +778,7 @@ queue_callback (GtkFileSystemUnix   *system_unix,
   system_unix->callbacks = g_slist_append (system_unix->callbacks, info);
 
   if (!system_unix->execute_callbacks_idle_id)
-    system_unix->execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, system_unix);
+    system_unix->execute_callbacks_idle_id = gdk_threads_add_idle (execute_callbacks, system_unix);
 }
 
 static GtkFileSystemHandle *
@@ -865,8 +852,6 @@ load_folder (gpointer data)
   GtkFileFolderUnix *folder_unix = data;
   GSList *children;
 
-  GDK_THREADS_ENTER ();
-
   if ((folder_unix->types & STAT_NEEDED_MASK) != 0)
     fill_in_stats (folder_unix);
 
@@ -883,8 +868,6 @@ load_folder (gpointer data)
   folder_unix->load_folder_id = 0;
 
   g_signal_emit_by_name (folder_unix, "finished-loading", 0);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1020,7 +1003,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
   /* Start loading the folder contents in an idle */
   if (!folder_unix->load_folder_id)
     folder_unix->load_folder_id =
-      g_idle_add ((GSourceFunc) load_folder, folder_unix);
+      gdk_threads_add_idle ((GSourceFunc) load_folder, folder_unix);
 
   return handle;
 }

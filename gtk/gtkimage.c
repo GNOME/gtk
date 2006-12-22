@@ -1356,8 +1356,6 @@ animation_timeout (gpointer data)
 {
   GtkImage *image;
 
-  GDK_THREADS_ENTER ();
-
   image = GTK_IMAGE (data);
   
   image->data.anim.frame_timeout = 0;
@@ -1366,7 +1364,7 @@ animation_timeout (gpointer data)
 
   if (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter) >= 0)
     image->data.anim.frame_timeout =
-      g_timeout_add (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
+      gdk_threads_add_timeout (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
                      animation_timeout,
                      image);
 
@@ -1374,8 +1372,6 @@ animation_timeout (gpointer data)
 
   if (GTK_WIDGET_DRAWABLE (image))
     gdk_window_process_updates (GTK_WIDGET (image)->window, TRUE);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1677,7 +1673,7 @@ gtk_image_expose (GtkWidget      *widget,
                 
                 if (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter) >= 0)
                   image->data.anim.frame_timeout =
-                    g_timeout_add (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
+                    gdk_threads_add_timeout (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
                                    animation_timeout,
                                    image);
               }

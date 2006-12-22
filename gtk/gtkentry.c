@@ -3072,8 +3072,6 @@ recompute_idle_func (gpointer data)
 {
   GtkEntry *entry;
 
-  GDK_THREADS_ENTER ();
-
   entry = GTK_ENTRY (data);
 
   entry->recompute_idle = 0;
@@ -3086,8 +3084,6 @@ recompute_idle_func (gpointer data)
       update_im_cursor_location (entry);
     }
 
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -3099,7 +3095,7 @@ gtk_entry_recompute (GtkEntry *entry)
   
   if (!entry->recompute_idle)
     {
-      entry->recompute_idle = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 15, /* between resize and redraw */
+      entry->recompute_idle = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 15, /* between resize and redraw */
 					       recompute_idle_func, entry, NULL); 
     }
 }
@@ -3126,12 +3122,8 @@ append_char (GString *str,
 static gboolean
 gtk_entry_remove_password_hint (gpointer data)
 {
-  GDK_THREADS_ENTER();
-
   /* Force the string to be redrawn, but now without a visible character */
   gtk_entry_recompute (GTK_ENTRY (data));
-
-  GDK_THREADS_LEAVE();
 
   return FALSE;
 }
@@ -3299,7 +3291,7 @@ gtk_entry_create_layout (GtkEntry *entry,
               password_hint->password_hint_length = 0;
 
               password_hint->password_hint_timeout_id =
-                g_timeout_add (password_hint_timeout,
+                gdk_threads_add_timeout (password_hint_timeout,
                                (GSourceFunc) gtk_entry_remove_password_hint,
                                entry);
             }
@@ -5325,8 +5317,6 @@ blink_cb (gpointer data)
   GtkEntryPrivate *priv; 
   gint blink_timeout;
 
-  GDK_THREADS_ENTER ();
-
   entry = GTK_ENTRY (data);
   priv = GTK_ENTRY_GET_PRIVATE (entry);
  
@@ -5351,7 +5341,7 @@ blink_cb (gpointer data)
   else if (entry->cursor_visible)
     {
       hide_cursor (entry);
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+      entry->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
@@ -5359,12 +5349,10 @@ blink_cb (gpointer data)
     {
       show_cursor (entry);
       priv->blink_time += get_cursor_time (entry);
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+      entry->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
-
-  GDK_THREADS_LEAVE ();
 
   /* Remove ourselves */
   return FALSE;
@@ -5382,7 +5370,7 @@ gtk_entry_check_cursor_blink (GtkEntry *entry)
       if (!entry->blink_timeout)
 	{
 	  show_cursor (entry);
-	  entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+	  entry->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						blink_cb,
 						entry);
 	}
@@ -5408,7 +5396,7 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       if (entry->blink_timeout != 0)
 	g_source_remove (entry->blink_timeout);
       
-      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
+      entry->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
       show_cursor (entry);
@@ -5431,8 +5419,6 @@ static gint
 gtk_entry_completion_timeout (gpointer data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
-
-  GDK_THREADS_ENTER ();
 
   completion->priv->completion_timeout = 0;
 
@@ -5469,8 +5455,6 @@ gtk_entry_completion_timeout (gpointer data)
     }
   else if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
     _gtk_entry_completion_popdown (completion);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -5698,7 +5682,7 @@ gtk_entry_completion_changed (GtkWidget *entry,
     }
 
   completion->priv->completion_timeout =
-    g_timeout_add (COMPLETION_TIMEOUT,
+    gdk_threads_add_timeout (COMPLETION_TIMEOUT,
                    gtk_entry_completion_timeout,
                    completion);
 }

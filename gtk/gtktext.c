@@ -1580,8 +1580,6 @@ gtk_text_scroll_timeout (gpointer data)
   gint x, y;
   GdkModifierType mask;
   
-  GDK_THREADS_ENTER ();
-
   text = GTK_TEXT (data);
   
   text->timer = 0;
@@ -1601,8 +1599,6 @@ gtk_text_scroll_timeout (gpointer data)
       gdk_event_free (event);
     }
 
-  GDK_THREADS_LEAVE ();
-  
   return FALSE;
 }
 
@@ -1803,7 +1799,7 @@ gtk_text_motion_notify (GtkWidget      *widget,
     {
       if (text->timer == 0)
 	{
-	  text->timer = g_timeout_add (SCROLL_TIME, 
+	  text->timer = gdk_threads_add_timeout (SCROLL_TIME, 
 				       gtk_text_scroll_timeout,
 				       text);
 	  

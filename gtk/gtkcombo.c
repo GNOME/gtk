@@ -69,7 +69,7 @@ static void         gtk_combo_unrealize		 (GtkWidget	   *widget);
 static void         gtk_combo_destroy            (GtkObject        *combo);
 static GtkListItem *gtk_combo_find               (GtkCombo         *combo);
 static gchar *      gtk_combo_func               (GtkListItem      *li);
-static gint         gtk_combo_focus_idle         (GtkCombo         *combo);
+static gboolean     gtk_combo_focus_idle         (GtkCombo         *combo);
 static gint         gtk_combo_entry_focus_out    (GtkEntry         *entry,
 						  GdkEventFocus    *event,
 						  GtkCombo         *combo);
@@ -411,6 +411,7 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
 			    g_cclosure_new_object (G_CALLBACK (gtk_combo_focus_idle),
 						   G_OBJECT (combo)));
       g_source_attach (focus_idle, NULL);
+	g_source_unref (focus_idle);
       
       /*g_signal_stop_emission_by_name (entry, "focus_out_event"); */
       return TRUE;

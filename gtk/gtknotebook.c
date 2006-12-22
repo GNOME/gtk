@@ -2744,8 +2744,6 @@ scroll_notebook_timer (gpointer data)
   GtkNotebookPointerPosition pointer_position;
   GList *element, *first_tab;
 
-  GDK_THREADS_ENTER ();
-
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   pointer_position = get_pointer_position (notebook);
 
@@ -2766,8 +2764,6 @@ scroll_notebook_timer (gpointer data)
 			      notebook->cur_page->allocation.height);
       gdk_window_raise (priv->drag_window);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -2875,8 +2871,8 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 	      settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
 	      g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
-	      priv->dnd_timer = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
-					       (GSourceFunc) scroll_notebook_timer, 
+	      priv->dnd_timer = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
+					       scroll_notebook_timer, 
 					       (gpointer) notebook);
 	    }
 	}
@@ -3090,8 +3086,6 @@ gtk_notebook_switch_tab_timeout (gpointer data)
   GList *tab;
   gint x, y;
 
-  GDK_THREADS_ENTER ();
-
   notebook = GTK_NOTEBOOK (data);
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
 
@@ -3107,8 +3101,6 @@ gtk_notebook_switch_tab_timeout (gpointer data)
       notebook->child_has_focus = FALSE;
       gtk_notebook_switch_focus_tab (notebook, tab);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -3189,8 +3181,8 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
           settings = gtk_widget_get_settings (widget);
 
           g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
-	  priv->switch_tab_timer = g_timeout_add (timeout,
-						  (GSourceFunc) gtk_notebook_switch_tab_timeout,
+	  priv->switch_tab_timer = gdk_threads_add_timeout (timeout,
+						  gtk_notebook_switch_tab_timeout,
 						  widget);
 	}
     }
@@ -4076,12 +4068,10 @@ gtk_notebook_redraw_arrows (GtkNotebook *notebook)
     }
 }
 
-static gint
+static gboolean
 gtk_notebook_timer (GtkNotebook *notebook)
 {
   gboolean retval = FALSE;
-
-  GDK_THREADS_ENTER ();
 
   if (notebook->timer)
     {
@@ -4096,15 +4086,13 @@ gtk_notebook_timer (GtkNotebook *notebook)
           g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
 	  notebook->need_timer = FALSE;
-	  notebook->timer = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
+	  notebook->timer = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
 					   (GSourceFunc) gtk_notebook_timer,
 					   (gpointer) notebook);
 	}
       else
 	retval = TRUE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -4121,7 +4109,7 @@ gtk_notebook_set_scroll_timer (GtkNotebook *notebook)
 
       g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
 
-      notebook->timer = g_timeout_add (timeout,
+      notebook->timer = gdk_threads_add_timeout (timeout,
 				       (GSourceFunc) gtk_notebook_timer,
 				       (gpointer) notebook);
       notebook->need_timer = TRUE;

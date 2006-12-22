@@ -140,7 +140,7 @@ static void
 toggle_dynamic (GtkWidget    *button, 
 		GtkUIManager *merge)
 {
-  g_timeout_add (2000, (GSourceFunc)delayed_toggle_dynamic, merge);
+  gdk_threads_add_timeout (2000, (GSourceFunc)delayed_toggle_dynamic, merge);
 }
 
 static void

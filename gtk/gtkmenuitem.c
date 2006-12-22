@@ -902,7 +902,7 @@ gtk_real_menu_item_select (GtkItem *item)
 	{
 	  GdkEvent *event = gtk_get_current_event ();
 	  
-	  menu_item->timer = g_timeout_add (popup_delay,
+	  menu_item->timer = gdk_threads_add_timeout (popup_delay,
 					    gtk_menu_item_select_timeout,
 					    menu_item);
 	  if (event &&
@@ -1018,8 +1018,6 @@ gtk_menu_item_select_timeout (gpointer data)
   GtkMenuItem *menu_item;
   GtkWidget *parent;
   
-  GDK_THREADS_ENTER ();
-
   menu_item = GTK_MENU_ITEM (data);
 
   parent = GTK_WIDGET (menu_item)->parent;
@@ -1031,8 +1029,6 @@ gtk_menu_item_select_timeout (gpointer data)
       if (menu_item->timer_from_keypress && menu_item->submenu)
 	GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;  
 }

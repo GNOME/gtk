@@ -296,7 +296,7 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->filename = g_build_filename (g_get_home_dir (),
 				     GTK_RECENTLY_USED_FILE,
 				     NULL);
-  priv->poll_timeout = g_timeout_add (POLL_DELTA,
+  priv->poll_timeout = gdk_threads_add_timeout (POLL_DELTA,
 		  		      gtk_recent_manager_poll_timeout,
 				      manager);
 
@@ -508,7 +508,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
     }
 
   priv->filename = g_strdup (filename);
-  priv->poll_timeout = g_timeout_add (POLL_DELTA,
+  priv->poll_timeout = gdk_threads_add_timeout (POLL_DELTA,
 		  		      gtk_recent_manager_poll_timeout,
 				      manager);
 

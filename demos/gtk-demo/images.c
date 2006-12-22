@@ -255,7 +255,7 @@ start_progressive_loading (GtkWidget *image)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (150,
+  load_timeout = gdk_threads_add_timeout (150,
 				progressive_timeout,
 				image);
 }

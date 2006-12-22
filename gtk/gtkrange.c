@@ -3297,10 +3297,8 @@ second_timeout (gpointer data)
 {
   GtkRange *range;
 
-  GDK_THREADS_ENTER ();
   range = GTK_RANGE (data);
   gtk_range_scroll (range, range->timer->step);
-  GDK_THREADS_LEAVE ();
   
   return TRUE;
 }
@@ -3312,16 +3310,13 @@ initial_timeout (gpointer data)
   GtkSettings *settings;
   guint        timeout;
 
-  GDK_THREADS_ENTER ();
   settings = gtk_widget_get_settings (GTK_WIDGET (data));
   g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
   range = GTK_RANGE (data);
-  range->timer->timeout_id = g_timeout_add (timeout * SCROLL_DELAY_FACTOR,
+  range->timer->timeout_id = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
                                             second_timeout,
                                             range);
-  GDK_THREADS_LEAVE ();
-
   /* remove self */
   return FALSE;
 }
@@ -3341,7 +3336,7 @@ gtk_range_add_step_timer (GtkRange      *range,
 
   range->timer = g_new (GtkRangeStepTimer, 1);
 
-  range->timer->timeout_id = g_timeout_add (timeout,
+  range->timer->timeout_id = gdk_threads_add_timeout (timeout,
                                             initial_timeout,
                                             range);
   range->timer->step = step;
@@ -3368,11 +3363,9 @@ update_timeout (gpointer data)
 {
   GtkRange *range;
 
-  GDK_THREADS_ENTER ();
   range = GTK_RANGE (data);
   gtk_range_update_value (range);
   range->update_timeout_id = 0;
-  GDK_THREADS_LEAVE ();
 
   /* self-remove */
   return FALSE;
@@ -3383,7 +3376,7 @@ gtk_range_reset_update_timer (GtkRange *range)
 {
   gtk_range_remove_update_timer (range);
 
-  range->update_timeout_id = g_timeout_add (UPDATE_DELAY,
+  range->update_timeout_id = gdk_threads_add_timeout (UPDATE_DELAY,
                                             update_timeout,
                                             range);
 }

@@ -2620,9 +2620,7 @@ do_updates (GtkUIManager *self)
 static gboolean
 do_updates_idle (GtkUIManager *self)
 {
-  GDK_THREADS_ENTER ();
   do_updates (self);
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -2633,7 +2631,8 @@ queue_update (GtkUIManager *self)
   if (self->private_data->update_tag != 0)
     return;
 
-  self->private_data->update_tag = g_idle_add ((GSourceFunc)do_updates_idle, 
+  self->private_data->update_tag = gdk_threads_add_idle (
+					       (GSourceFunc)do_updates_idle, 
 					       self);
 }
 

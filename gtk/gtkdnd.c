@@ -3453,7 +3453,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	   * to respond really late, we still are OK.
 	   */
 	  gtk_drag_clear_source_info (info->context);
-	  g_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
+	  gdk_threads_add_timeout (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
     }
 }
@@ -3531,7 +3531,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 	gtk_widget_hide (info->icon_window);
 	
       gdk_drag_drop (info->context, time);
-      info->drop_timeout = g_timeout_add (DROP_ABORT_TIME,
+      info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
 					  gtk_drag_abort_timeout,
 					  info);
     }
@@ -3680,8 +3680,6 @@ gtk_drag_anim_timeout (gpointer data)
   gint x, y;
   gboolean retval;
 
-  GDK_THREADS_ENTER ();
-  
   if (anim->step == anim->n_steps)
     {
       gtk_drag_source_info_destroy (anim->info);
@@ -3710,8 +3708,6 @@ gtk_drag_anim_timeout (gpointer data)
 
       retval = TRUE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -3812,8 +3808,6 @@ gtk_drag_update_idle (gpointer data)
   GdkDragAction possible_actions;
   guint32 time;
 
-  GDK_THREADS_ENTER ();
-
   info->update_idle = 0;
     
   if (info->last_event)
@@ -3847,8 +3841,6 @@ gtk_drag_update_idle (gpointer data)
 
     }
 
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -3859,7 +3851,7 @@ gtk_drag_add_update_idle (GtkDragSourceInfo *info)
    * from the last move can catch up before we move again.
    */
   if (!info->update_idle)
-    info->update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW + 5,
+    info->update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW + 5,
 					 gtk_drag_update_idle,
 					 info,
 					 NULL);
@@ -4185,15 +4177,11 @@ gtk_drag_abort_timeout (gpointer data)
   GtkDragSourceInfo *info = data;
   guint32 time = GDK_CURRENT_TIME;
 
-  GDK_THREADS_ENTER ();
-
   if (info->proxy_dest)
     time = info->proxy_dest->proxy_drop_time;
 
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, FALSE, time);
-  
-  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

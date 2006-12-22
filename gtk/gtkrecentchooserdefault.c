@@ -754,8 +754,6 @@ load_recent_items (gpointer user_data)
   const gchar *uri, *name;
   gboolean retval;
   
-  GDK_THREADS_ENTER ();
-  
   impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
   
   g_assert ((impl->load_state == LOAD_EMPTY) ||
@@ -767,8 +765,6 @@ load_recent_items (gpointer user_data)
       impl->recent_items = gtk_recent_chooser_get_items (GTK_RECENT_CHOOSER (impl));
       if (!impl->recent_items)
         {
-          GDK_THREADS_LEAVE ();
-
 	  impl->load_state = LOAD_FINISHED;
           
           return FALSE;
@@ -831,8 +827,6 @@ load_recent_items (gpointer user_data)
       retval = TRUE;
     }
   
-  GDK_THREADS_LEAVE ();
-  
   return retval;
 }
 
@@ -840,8 +834,6 @@ static void
 cleanup_after_load (gpointer user_data)
 {
   GtkRecentChooserDefault *impl;
-  
-  GDK_THREADS_ENTER ();
   
   impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
 
@@ -864,8 +856,6 @@ cleanup_after_load (gpointer user_data)
 	      (impl->load_state == LOAD_FINISHED));
 
   set_busy_cursor (impl, FALSE);
-  
-  GDK_THREADS_LEAVE ();
 }
 
 /* clears the current model and reloads the recently used resources */
@@ -888,7 +878,7 @@ reload_recent_items (GtkRecentChooserDefault *impl)
   set_busy_cursor (impl, TRUE);
 
   impl->load_state = LOAD_EMPTY;
-  impl->load_id = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 30,
+  impl->load_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
 		      		   load_recent_items,
 				   impl,
 				   cleanup_after_load);

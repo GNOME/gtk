@@ -97,7 +97,7 @@ blink (GtkWidget *widget,
   
   if (!blink_timeout)
     {
-      blink_timeout = g_timeout_add (1000, blink_cb, window);
+      blink_timeout = gdk_threads_add_timeout (1000, blink_cb, window);
       gtk_widget_hide (window);
 
       g_object_set_data (G_OBJECT (window), "blink", GUINT_TO_POINTER (blink_timeout));

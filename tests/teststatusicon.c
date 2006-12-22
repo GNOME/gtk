@@ -126,7 +126,7 @@ timeout_toggle_toggled (GtkToggleButton *toggle)
     }
   else
     {
-      timeout = g_timeout_add (2000, timeout_handler, NULL);
+      timeout = gdk_threads_add_timeout (2000, timeout_handler, NULL);
     }
 }
 
@@ -301,7 +301,7 @@ main (int argc, char **argv)
 
       icons = g_slist_append (icons, icon);
  
-      timeout = g_timeout_add (2000, timeout_handler, icon);
+      timeout = gdk_threads_add_timeout (2000, timeout_handler, icon);
     }
 
   gtk_main ();

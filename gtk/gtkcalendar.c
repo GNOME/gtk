@@ -2374,8 +2374,6 @@ calendar_timer (gpointer data)
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   gboolean retval = FALSE;
   
-  GDK_THREADS_ENTER ();
-
   if (priv->timer)
     {
       calendar_arrow_action (calendar, priv->click_child);
@@ -2389,7 +2387,7 @@ calendar_timer (gpointer data)
           g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
 	  priv->need_timer = FALSE;
-	  priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
+	  priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
 					    timeout * SCROLL_DELAY_FACTOR,
 					    (GSourceFunc) calendar_timer,
 					    (gpointer) calendar, NULL);
@@ -2397,8 +2395,6 @@ calendar_timer (gpointer data)
       else 
 	retval = TRUE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -2420,7 +2416,7 @@ calendar_start_spinning (GtkCalendar *calendar,
       g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
 
       priv->need_timer = TRUE;
-      priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
+      priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
 					timeout,
 					(GSourceFunc) calendar_timer,
 					(gpointer) calendar, NULL);

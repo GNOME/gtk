@@ -223,7 +223,7 @@ toplevel_expose_event_cb (GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
   profiler = GTK_WIDGET_PROFILER (data);
 
-  g_idle_add_full (G_PRIORITY_HIGH, toplevel_idle_after_expose_cb, profiler, NULL);
+  gdk_threads_add_idle_full (G_PRIORITY_HIGH, toplevel_idle_after_expose_cb, profiler, NULL);
   return FALSE;
 }
 

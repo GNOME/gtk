@@ -591,8 +591,6 @@ reset_styles_idle (gpointer user_data)
   GtkIconTheme *icon_theme;
   GtkIconThemePrivate *priv;
 
-  GDK_THREADS_ENTER ();
-
   icon_theme = GTK_ICON_THEME (user_data);
   priv = icon_theme->priv;
 
@@ -603,8 +601,6 @@ reset_styles_idle (gpointer user_data)
     }
 
   priv->reset_styles_idle = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -621,7 +617,7 @@ do_theme_change (GtkIconTheme *icon_theme)
 
   if (!priv->reset_styles_idle)
     priv->reset_styles_idle = 
-      g_idle_add_full (GTK_PRIORITY_RESIZE - 2, 
+      gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, 
 		       reset_styles_idle, icon_theme, NULL);
 }
 

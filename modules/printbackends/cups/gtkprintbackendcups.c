@@ -1158,6 +1158,9 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       !cups_backend->got_default_printer)
     return TRUE;
 
+  g_object_ref (cups_backend);
+  GDK_THREADS_LEAVE ();
+
   cups_backend->list_printers_pending = TRUE;
 
   request = gtk_cups_request_new (NULL,
@@ -1176,6 +1179,8 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
                         (GtkPrintCupsResponseCallbackFunc) cups_request_printer_list_cb,
 		        request,
 		        NULL);
+  GDK_THREADS_ENTER ();
+  g_object_unref (cups_backend);
 
   return TRUE;
 }
@@ -1189,7 +1194,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
   if (cups_backend->list_printers_poll == 0)
     {
       cups_request_printer_list (cups_backend);
-      cups_backend->list_printers_poll = g_timeout_add (3000,
+      cups_backend->list_printers_poll = gdk_threads_add_timeout (3000,
                                                         (GSourceFunc) cups_request_printer_list,
                                                         backend);
     }

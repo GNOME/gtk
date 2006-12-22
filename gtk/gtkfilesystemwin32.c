@@ -239,8 +239,7 @@ static GtkFileInfo *create_file_info       (GtkFileFolderWin32        *folder_wi
 					    WIN32_FILE_ATTRIBUTE_DATA *wfad,
 					    const char                *mime_type);
 
-static gboolean execute_callbacks_idle (gpointer data);
-static void execute_callbacks (gpointer data);
+static gboolean execute_callbacks (gpointer data);
 
 static gboolean fill_in_names        (GtkFileFolderWin32  *folder_win32,
 				      GError             **error);
@@ -336,7 +335,9 @@ check_volumes (gpointer data)
   g_return_val_if_fail (system_win32, FALSE);
 
   if (system_win32->drives != GetLogicalDrives())
-    g_signal_emit_by_name (system_win32, "volumes-changed", 0);
+		{
+			g_signal_emit_by_name (system_win32, "volumes-changed", 0);
+		}
 
   return TRUE;
 }
@@ -370,7 +371,7 @@ gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
   /* Set up an idle handler for volume changes. Once a second should
    * be enough.
    */
-  system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
+  system_win32->timeout = gdk_threads_add_timeout_full (0, 1000, check_volumes, system_win32, NULL);
 
   system_win32->handles = g_hash_table_new (g_direct_hash, g_direct_equal);
 
@@ -809,7 +810,7 @@ struct callback_info
 
 
 
-static void
+static gboolean
 execute_callbacks (gpointer data)
 {
   GSList *l;
@@ -854,18 +855,8 @@ execute_callbacks (gpointer data)
     g_object_unref (system_win32);
 
   system_win32->execute_callbacks_idle_id = 0;
-}
 
-static gboolean
-execute_callbacks_idle (gpointer data)
-{
-  GDK_THREADS_ENTER ();
-
-  execute_callbacks(data);
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
+  return FALSE:
 }
 
 static void
@@ -900,7 +891,7 @@ queue_callback (GtkFileSystemWin32  *system_win32,
   system_win32->callbacks = g_slist_append (system_win32->callbacks, info);
 
   if (!system_win32->execute_callbacks_idle_id)
-    system_win32->execute_callbacks_idle_id = g_idle_add (execute_callbacks_idle, system_win32);
+    system_win32->execute_callbacks_idle_id = gdk_threads_add_idle (execute_callbacks, system_win32);
 }
 
 static GtkFileSystemHandle *
@@ -1007,8 +998,6 @@ load_folder (gpointer data)
   GtkFileFolderWin32 *folder_win32 = data;
   GSList *children;
 
-  GDK_THREADS_ENTER ();
-
   if ((folder_win32->types & STAT_NEEDED_MASK) != 0)
     fill_in_stats (folder_win32);
 
@@ -1025,8 +1014,6 @@ load_folder (gpointer data)
   folder_win32->load_folder_id = 0;
 
   g_signal_emit_by_name (folder_win32, "finished-loading", 0);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1136,7 +1123,7 @@ gtk_file_system_win32_get_folder (GtkFileSystem                 *file_system,
   /* Start loading the folder contents in an idle */
   if (!folder_win32->load_folder_id)
     folder_win32->load_folder_id =
-      g_idle_add ((GSourceFunc) load_folder, folder_win32);
+      gdk_threads_add_idle ((GSourceFunc) load_folder, folder_win32);
 
   return handle;
 }

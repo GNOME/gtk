@@ -1116,8 +1116,6 @@ slide_idle_handler (gpointer data)
   GtkToolbarPrivate *priv;
   GList *list;
   
-  GDK_THREADS_ENTER ();
-  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   if (priv->need_sync)
@@ -1193,7 +1191,6 @@ slide_idle_handler (gpointer data)
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
 
-  GDK_THREADS_LEAVE();
   return FALSE;
 }
 
@@ -1230,7 +1227,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
   priv->is_sliding = TRUE;
   
   if (!priv->idle_id)
-    priv->idle_id = g_idle_add (slide_idle_handler, toolbar);
+    priv->idle_id = gdk_threads_add_idle (slide_idle_handler, toolbar);
   
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   vertical = (toolbar->orientation == GTK_ORIENTATION_VERTICAL);

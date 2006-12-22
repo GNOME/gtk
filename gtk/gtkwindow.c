@@ -1360,7 +1360,6 @@ handle_keys_changed (gpointer data)
 {
   GtkWindow *window;
 
-  GDK_THREADS_ENTER ();
   window = GTK_WINDOW (data);
 
   if (window->keys_changed_handler)
@@ -1370,7 +1369,6 @@ handle_keys_changed (gpointer data)
     }
 
   g_signal_emit (window, window_signals[KEYS_CHANGED], 0);
-  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -1379,7 +1377,7 @@ static void
 gtk_window_notify_keys_changed (GtkWindow *window)
 {
   if (!window->keys_changed_handler)
-    window->keys_changed_handler = g_idle_add (handle_keys_changed, window);
+    window->keys_changed_handler = gdk_threads_add_idle (handle_keys_changed, window);
 }
 
 /**

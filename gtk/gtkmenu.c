@@ -3022,8 +3022,6 @@ gtk_menu_scroll_timeout (gpointer  data)
   GtkSettings *settings;
   gboolean     touchscreen_mode;
 
-  GDK_THREADS_ENTER ();
-
   menu = GTK_MENU (data);
 
   settings = gtk_widget_get_settings (GTK_WIDGET (menu));
@@ -3032,8 +3030,6 @@ gtk_menu_scroll_timeout (gpointer  data)
                 NULL);
 
   gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
-
-  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -3045,8 +3041,6 @@ gtk_menu_scroll_timeout_initial (gpointer data)
   GtkSettings *settings;
   guint        timeout;
   gboolean     touchscreen_mode;
-
-  GDK_THREADS_ENTER ();
 
   menu = GTK_MENU (data);
 
@@ -3060,9 +3054,7 @@ gtk_menu_scroll_timeout_initial (gpointer data)
 
   gtk_menu_remove_scroll_timeout (menu);
 
-  menu->timeout_id = g_timeout_add (timeout, gtk_menu_scroll_timeout, menu);
-
-  GDK_THREADS_LEAVE ();
+  menu->timeout_id = gdk_threads_add_timeout (timeout, gtk_menu_scroll_timeout, menu);
 
   return FALSE;
 }
@@ -3082,7 +3074,7 @@ gtk_menu_start_scrolling (GtkMenu *menu)
 
   gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
 
-  menu->timeout_id = g_timeout_add (timeout, gtk_menu_scroll_timeout_initial,
+  menu->timeout_id = gdk_threads_add_timeout (timeout, gtk_menu_scroll_timeout_initial,
                                     menu);
 }
 
@@ -3228,7 +3220,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                     -MENU_SCROLL_STEP2 : -MENU_SCROLL_STEP1;
 
                   menu->timeout_id =
-                    g_timeout_add (scroll_fast ?
+                    gdk_threads_add_timeout (scroll_fast ?
                                    MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
                                    gtk_menu_scroll_timeout, menu);
                 }
@@ -3322,7 +3314,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                     MENU_SCROLL_STEP2 : MENU_SCROLL_STEP1;
 
                   menu->timeout_id =
-                    g_timeout_add (scroll_fast ?
+                    gdk_threads_add_timeout (scroll_fast ?
                                    MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
                                    gtk_menu_scroll_timeout, menu);
                 }
@@ -3485,8 +3477,6 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
   GtkMenu *menu = user_data;
   GdkWindow *child_window;
 
-  GDK_THREADS_ENTER ();
-
   gtk_menu_stop_navigating_submenu (menu);
   
   if (GTK_WIDGET_REALIZED (menu))
@@ -3506,8 +3496,6 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 	  gdk_event_free (send_event);
 	}
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE; 
 }
@@ -3682,7 +3670,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 		    "gtk-menu-popdown-delay", &popdown_delay,
 		    NULL);
 
-      menu->navigation_timeout = g_timeout_add (popdown_delay,
+      menu->navigation_timeout = gdk_threads_add_timeout (popdown_delay,
 						gtk_menu_stop_navigating_submenu_cb, menu);
 
 #ifdef DRAW_STAY_UP_TRIANGLE

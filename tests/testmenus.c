@@ -151,7 +151,7 @@ main (int argc, char **argv)
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
-      g_timeout_add (250, change_item, submenu);
+      gdk_threads_add_timeout (250, change_item, submenu);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));

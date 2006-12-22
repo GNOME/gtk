@@ -608,7 +608,7 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), NULL);
   add_item_to_list (store, item, "New");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-  g_timeout_add (3000, (GSourceFunc) timeout_cb, item);
+  gdk_threads_add_timeout (3000, (GSourceFunc) timeout_cb, item);
   gtk_tool_item_set_expand (item, TRUE);
 
   menu = gtk_menu_new ();
@@ -626,7 +626,7 @@ main (gint argc, gchar **argv)
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-  g_timeout_add (3000, (GSourceFunc) timeout_cb1, item);
+  gdk_threads_add_timeout (3000, (GSourceFunc) timeout_cb1, item);
  
   menu = gtk_menu_new ();
   for (i = 0; i < 20; i++)

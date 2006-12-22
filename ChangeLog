@@ -1,5 +1,8 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* *.c: Replace a lot of idle and timeout calls by
+	the new gdk_threads api. 
+
 	* gdk/gdk.symbols:
 	* gdk/gdk.h:
 	* gdk/gdk.c: Add functions to allow threadsafe handling

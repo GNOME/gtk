@@ -1332,7 +1332,7 @@ main (int argc, char **argv)
         gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combobox), &iter);
 
 #if 1
-	g_timeout_add (1000, (GSourceFunc) capital_animation, model);
+	gdk_threads_add_timeout (1000, (GSourceFunc) capital_animation, model);
 #endif
 
         gtk_widget_show_all (window);

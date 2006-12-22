@@ -105,7 +105,7 @@ timeout_cb (gpointer data)
 static void
 wait_for_callback (TestCallbackClosure *closure)
 {
-  g_timeout_add (CALLBACK_TIMEOUT_MS, timeout_cb, closure);
+  gdk_threads_add_timeout (CALLBACK_TIMEOUT_MS, timeout_cb, closure);
   gtk_main ();
 }
 

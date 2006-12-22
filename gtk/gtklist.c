@@ -557,7 +557,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
     {
       if (list->htimer == 0)
 	{
-	  list->htimer = g_timeout_add
+	  list->htimer = gdk_threads_add_timeout
 	    (SCROLL_TIME, (GSourceFunc) gtk_list_horizontal_timeout, widget);
 	  
 	  if (!((x < adj->value && adj->value <= 0) ||
@@ -605,7 +605,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
 
   if (!((y < 0 && focus_row == 0) ||
 	(y > widget->allocation.height && focus_row >= length - 1)))
-    list->vtimer = g_timeout_add (SCROLL_TIME,
+    list->vtimer = gdk_threads_add_timeout (SCROLL_TIME,
 				  (GSourceFunc) gtk_list_vertical_timeout,
 				  list);
 
@@ -2338,25 +2338,17 @@ do_fake_motion (GtkWidget *list)
 static gint
 gtk_list_horizontal_timeout (GtkWidget *list)
 {
-  GDK_THREADS_ENTER ();
-
   GTK_LIST (list)->htimer = 0;
   do_fake_motion (list);
   
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
 static gint
 gtk_list_vertical_timeout (GtkWidget *list)
 {
-  GDK_THREADS_ENTER ();
-
   GTK_LIST (list)->vtimer = 0;
   do_fake_motion (list);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

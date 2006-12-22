@@ -187,7 +187,9 @@ timeout (gpointer data)
 			       : MAX (127, fabs (255 * cos (f * 2.0 * G_PI)))));
     }
 
+  GDK_THREADS_ENTER ();
   gtk_widget_queue_draw (da);
+  GDK_THREADS_LEAVE ();
 
   frame_num++;
   return TRUE;

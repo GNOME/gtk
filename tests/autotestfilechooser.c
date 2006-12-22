@@ -122,7 +122,7 @@ test_set_filename (GtkFileChooserAction action,
 
   (* set_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
 
-  g_timeout_add (2000, set_filename_timeout_cb, &closure);
+  gdk_threads_add_timeout (2000, set_filename_timeout_cb, &closure);
   gtk_dialog_run (GTK_DIALOG (chooser));
 
   retval = (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
@@ -332,7 +332,7 @@ test_confirm_overwrite_for_path (const char *path)
 
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (closure.chooser), path);
 
-  g_timeout_add (2000, confirm_overwrite_timeout_cb, &closure);
+  gdk_threads_add_timeout (2000, confirm_overwrite_timeout_cb, &closure);
   gtk_dialog_run (GTK_DIALOG (closure.chooser));
 
   filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (closure.chooser));
@@ -899,7 +899,7 @@ sleep_timeout_cb (gpointer data)
 static void
 sleep_in_main_loop (int milliseconds)
 {
-  g_timeout_add (milliseconds, sleep_timeout_cb, NULL);
+  gdk_threads_add_timeout (milliseconds, sleep_timeout_cb, NULL);
   gtk_main ();
 }
 

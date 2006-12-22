@@ -5264,7 +5264,7 @@ gtk_clist_motion (GtkWidget      *widget,
       if (clist->htimer)
 	return FALSE;
 
-      clist->htimer = g_timeout_add
+      clist->htimer = gdk_threads_add_timeout
 	(SCROLL_TIME, (GSourceFunc) horizontal_timeout, clist);
 
       if (!((x < 0 && clist->hadjustment->value == 0) ||
@@ -5296,7 +5296,7 @@ gtk_clist_motion (GtkWidget      *widget,
       if (clist->vtimer)
 	return FALSE;
 
-      clist->vtimer = g_timeout_add (SCROLL_TIME,
+      clist->vtimer = gdk_threads_add_timeout (SCROLL_TIME,
 				     (GSourceFunc) vertical_timeout, clist);
 
       if (clist->drag_button &&
@@ -7039,25 +7039,17 @@ do_fake_motion (GtkWidget *widget)
 static gint
 horizontal_timeout (GtkCList *clist)
 {
-  GDK_THREADS_ENTER ();
-
   clist->htimer = 0;
   do_fake_motion (GTK_WIDGET (clist));
 
-  GDK_THREADS_LEAVE ();
-  
   return FALSE;
 }
 
 static gint
 vertical_timeout (GtkCList *clist)
 {
-  GDK_THREADS_ENTER ();
-
   clist->vtimer = 0;
   do_fake_motion (GTK_WIDGET (clist));
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

@@ -112,7 +112,7 @@ static void gtk_spin_button_state_changed  (GtkWidget          *widget,
 					    GtkStateType        previous_state);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
 					    GtkArrowType        arrow_type);
-static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
+static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
 static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
 					    GtkSpinButton      *spin_button); 
@@ -1036,7 +1036,7 @@ start_spinning (GtkSpinButton *spin,
 
       spin->timer_step = step;
       spin->need_timer = TRUE;
-      spin->timer = g_timeout_add (timeout,
+      spin->timer = gdk_threads_add_timeout (timeout,
 				   (GSourceFunc) gtk_spin_button_timer,
 				   (gpointer) spin);
     }
@@ -1176,8 +1176,6 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
   gboolean retval = FALSE;
   
-  GDK_THREADS_ENTER ();
-
   if (spin_button->timer)
     {
       if (spin_button->click_child == GTK_ARROW_UP)
@@ -1193,7 +1191,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
           g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
 	  spin_button->need_timer = FALSE;
-	  spin_button->timer = g_timeout_add (timeout,
+	  spin_button->timer = gdk_threads_add_timeout (timeout,
 					      (GSourceFunc) gtk_spin_button_timer, 
 					      (gpointer) spin_button);
 	}
@@ -1213,8 +1211,6 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 	  retval = TRUE;
 	}
     }
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }

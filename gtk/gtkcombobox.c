@@ -3032,8 +3032,6 @@ list_popup_resize_idle (gpointer user_data)
   GtkComboBox *combo_box;
   gint x, y, width, height;
 
-  GDK_THREADS_ENTER ();
-
   combo_box = GTK_COMBO_BOX (user_data);
 
   if (combo_box->priv->tree_view &&
@@ -3047,8 +3045,6 @@ list_popup_resize_idle (gpointer user_data)
 
   combo_box->priv->resize_idle_id = 0;
 
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -3057,7 +3053,7 @@ gtk_combo_box_list_popup_resize (GtkComboBox *combo_box)
 {
   if (!combo_box->priv->resize_idle_id)
     combo_box->priv->resize_idle_id = 
-      g_idle_add (list_popup_resize_idle, combo_box);
+      gdk_threads_add_idle (list_popup_resize_idle, combo_box);
 }
 
 static void
@@ -3582,7 +3578,7 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
 
   combo_box->priv->auto_scroll = FALSE;
   if (combo_box->priv->scroll_timer == 0)
-    combo_box->priv->scroll_timer = g_timeout_add (SCROLL_TIME, 
+    combo_box->priv->scroll_timer = gdk_threads_add_timeout (SCROLL_TIME, 
 						   (GSourceFunc) gtk_combo_box_list_scroll_timeout, 
 						   combo_box);
 
@@ -3776,16 +3772,12 @@ gtk_combo_box_list_scroll_timeout (GtkComboBox *combo_box)
 {
   gint x, y;
 
-  GDK_THREADS_ENTER ();
-
   if (combo_box->priv->auto_scroll)
     {
       gdk_window_get_pointer (combo_box->priv->tree_view->window, 
 			      &x, &y, NULL);
       gtk_combo_box_list_auto_scroll (combo_box, x, y);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -5175,16 +5167,12 @@ popdown_idle (gpointer data)
 {
   GtkComboBox *combo_box;
 
-  GDK_THREADS_ENTER ();
-
   combo_box = GTK_COMBO_BOX (data);
   
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
 
   g_object_unref (combo_box);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -5193,15 +5181,13 @@ static void
 popdown_handler (GtkWidget *widget,
 		 gpointer   data)
 {
-  g_idle_add (popdown_idle, g_object_ref (data));
+  gdk_threads_add_idle (popdown_idle, g_object_ref (data));
 }
 
 static gboolean
 popup_idle (gpointer data)
 {
   GtkComboBox *combo_box;
-
-  GDK_THREADS_ENTER ();
 
   combo_box = GTK_COMBO_BOX (data);
 
@@ -5216,8 +5202,6 @@ popup_idle (gpointer data)
   gtk_combo_box_popup (combo_box);
 
   combo_box->priv->popup_idle_id = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -5253,7 +5237,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
    */  
   if (combo_box->priv->is_cell_renderer && 
       combo_box->priv->cell_view && !combo_box->priv->tree_view)
-    combo_box->priv->popup_idle_id = g_idle_add (popup_idle, combo_box);
+    combo_box->priv->popup_idle_id = gdk_threads_add_idle (popup_idle, combo_box);
 }
 
 

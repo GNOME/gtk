@@ -3240,8 +3240,6 @@ first_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
 
-  GDK_THREADS_ENTER ();
-  
   /* Note that some of this code is duplicated at the end of size_allocate,
    * keep in sync with that.
    */
@@ -3249,8 +3247,6 @@ first_validate_callback (gpointer data)
   DV(g_print(G_STRLOC"\n"));
 
   gtk_text_view_flush_first_validate (text_view);
-  
-  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -3261,8 +3257,6 @@ incremental_validate_callback (gpointer data)
   GtkTextView *text_view = data;
   gboolean result = TRUE;
 
-  GDK_THREADS_ENTER ();
-  
   DV(g_print(G_STRLOC"\n"));
   
   gtk_text_layout_validate (text_view->layout, 2000);
@@ -3274,8 +3268,6 @@ incremental_validate_callback (gpointer data)
       text_view->incremental_validate_idle = 0;
       result = FALSE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return result;
 }
@@ -3294,14 +3286,14 @@ gtk_text_view_invalidate (GtkTextView *text_view)
   
   if (!text_view->first_validate_idle)
     {
-      text_view->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
+      text_view->first_validate_idle = gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
       DV (g_print (G_STRLOC": adding first validate idle %d\n",
                    text_view->first_validate_idle));
     }
       
   if (!text_view->incremental_validate_idle)
     {
-      text_view->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
+      text_view->incremental_validate_idle = gdk_threads_add_idle_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
       DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
                    text_view->incremental_validate_idle));
     }
@@ -4513,8 +4505,6 @@ blink_cb (gpointer data)
   gboolean visible;
   gint blink_timeout;
 
-  GDK_THREADS_ENTER ();
-
   text_view = GTK_TEXT_VIEW (data);
   priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
@@ -4540,12 +4530,12 @@ blink_cb (gpointer data)
       text_view->blink_timeout = 0;
     } 
   else if (visible)
-    text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+    text_view->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 					      blink_cb,
 					      text_view);
   else 
     {
-      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+      text_view->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						blink_cb,
 						text_view);
       priv->blink_time += get_cursor_time (text_view);
@@ -4564,8 +4554,6 @@ blink_cb (gpointer data)
                                      text_view);
 
   text_window_invalidate_cursors (text_view->text_window);
-
-  GDK_THREADS_LEAVE ();
 
   /* Remove ourselves */
   return FALSE;
@@ -4595,7 +4583,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	    {
 	      gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
 	      
-	      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+	      text_view->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 							blink_cb,
 							text_view);
 	    }
@@ -4624,7 +4612,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
       
-      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
+      text_view->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
 						blink_cb,
 						text_view);
     }
@@ -5558,13 +5546,11 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
                G_STRLOC, text_view->first_validate_idle));
 }
 
-static gint
+static gboolean
 selection_scan_timeout (gpointer data)
 {
   GtkTextView *text_view;
 
-  GDK_THREADS_ENTER ();
-  
   text_view = GTK_TEXT_VIEW (data);
 
   DV(g_print (G_STRLOC": calling move_mark_to_pointer_and_scroll\n"));
@@ -5572,8 +5558,6 @@ selection_scan_timeout (gpointer data)
 				      gtk_text_buffer_get_mark (get_buffer (text_view),
 								"insert"));
 
-  GDK_THREADS_LEAVE ();
-  
   return TRUE; /* remain installed. */
 }
 
@@ -5585,8 +5569,6 @@ drag_scan_timeout (gpointer data)
   GtkTextView *text_view;
   GtkTextIter newplace;
 
-  GDK_THREADS_ENTER ();
-  
   text_view = GTK_TEXT_VIEW (data);
 
   get_iter_at_pointer (text_view, &newplace);
@@ -5600,8 +5582,6 @@ drag_scan_timeout (gpointer data)
                                 text_view->dnd_mark,
                                 DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
 
-  GDK_THREADS_LEAVE ();
-  
   return TRUE;
 }
 
@@ -5753,7 +5733,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
     g_source_remove (text_view->scroll_timeout);
   
   text_view->scroll_timeout =
-    g_timeout_add (50, selection_scan_timeout, text_view);
+    gdk_threads_add_timeout (50, selection_scan_timeout, text_view);
 
   return TRUE;
 }
@@ -6335,7 +6315,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     g_source_remove (text_view->scroll_timeout);
       
   text_view->scroll_timeout =
-    g_timeout_add (50, drag_scan_timeout, text_view);
+    gdk_threads_add_timeout (50, drag_scan_timeout, text_view);
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.

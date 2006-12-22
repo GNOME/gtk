@@ -1574,7 +1574,7 @@ gtk_status_icon_enable_blinking (GtkStatusIcon *status_icon)
       gtk_status_icon_blinker (status_icon);
 
       priv->blinking_timeout =
-	g_timeout_add (BLINK_TIMEOUT, 
+	gdk_threads_add_timeout (BLINK_TIMEOUT, 
 		       (GSourceFunc) gtk_status_icon_blinker, 
 		       status_icon);
     }

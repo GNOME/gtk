@@ -2460,7 +2460,7 @@ buffer_set_colors (Buffer  *buffer,
   gdouble hue = 0.0;
 
   if (enabled && buffer->color_cycle_timeout == 0)
-    buffer->color_cycle_timeout = g_timeout_add (200, color_cycle_timeout, buffer);
+    buffer->color_cycle_timeout = gdk_threads_add_timeout (200, color_cycle_timeout, buffer);
   else if (!enabled && buffer->color_cycle_timeout != 0)
     {
       g_source_remove (buffer->color_cycle_timeout);

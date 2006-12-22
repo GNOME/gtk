@@ -225,7 +225,7 @@ main (int argc, char **argv)
 
 	gtk_container_add (GTK_CONTAINER (window), da);
 
-	timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
+	timeout_id = gdk_threads_add_timeout (FRAME_DELAY, timeout, NULL);
 
 	gtk_widget_show_all (window);
 	gtk_main ();

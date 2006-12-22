@@ -459,7 +459,7 @@ static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
 						      gint        *tx,
 						      gint        *ty);
 
-static gint scroll_row_timeout                       (gpointer     data);
+static gboolean scroll_row_timeout                       (gpointer     data);
 static void remove_scroll_timeout                    (GtkTreeView *tree_view);
 
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
@@ -2980,8 +2980,6 @@ auto_expand_timeout (gpointer data)
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   GtkTreePath *path;
 
-  GDK_THREADS_ENTER ();
-
   if (tree_view->priv->prelight_node)
     {
       path = _gtk_tree_view_find_path (tree_view,
@@ -2997,8 +2995,6 @@ auto_expand_timeout (gpointer data)
     }
 
   tree_view->priv->auto_expand_timeout = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -3105,7 +3101,7 @@ do_prelight (GtkTreeView *tree_view,
   if (tree_view->priv->hover_expand)
     {
       tree_view->priv->auto_expand_timeout = 
-	g_timeout_add (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
+	gdk_threads_add_timeout (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
     }
 }
 
@@ -3920,7 +3916,7 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
       if (tree_view->priv->scroll_timeout == 0)
         {
-	  tree_view->priv->scroll_timeout = g_timeout_add (150, scroll_row_timeout, tree_view);
+	  tree_view->priv->scroll_timeout = gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
 	}
     }
 
@@ -6190,16 +6186,12 @@ validate_rows_handler (GtkTreeView *tree_view)
 {
   gboolean retval;
 
-  GDK_THREADS_ENTER ();
-
   retval = do_validate_rows (tree_view, TRUE);
   if (! retval && tree_view->priv->validate_rows_timer)
     {
       g_source_remove (tree_view->priv->validate_rows_timer);
       tree_view->priv->validate_rows_timer = 0;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -6235,12 +6227,8 @@ do_presize_handler (GtkTreeView *tree_view)
 static gboolean
 presize_handler_callback (gpointer data)
 {
-  GDK_THREADS_ENTER ();
-
   do_presize_handler (GTK_TREE_VIEW (data));
 		   
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -6253,21 +6241,18 @@ install_presize_handler (GtkTreeView *tree_view)
   if (! tree_view->priv->presize_handler_timer)
     {
       tree_view->priv->presize_handler_timer =
-	g_idle_add_full (GTK_PRIORITY_RESIZE - 2, presize_handler_callback, tree_view, NULL);
+	gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, presize_handler_callback, tree_view, NULL);
     }
   if (! tree_view->priv->validate_rows_timer)
     {
       tree_view->priv->validate_rows_timer =
-	g_idle_add_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows_handler, tree_view, NULL);
+	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows_handler, tree_view, NULL);
     }
 }
 
 static gboolean
 scroll_sync_handler (GtkTreeView *tree_view)
 {
-
-  GDK_THREADS_ENTER ();
-
   if (tree_view->priv->height <= tree_view->priv->vadjustment->page_size)
     gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment), 0);
   else if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
@@ -6276,8 +6261,6 @@ scroll_sync_handler (GtkTreeView *tree_view)
     gtk_tree_view_dy_to_top_row (tree_view);
 
   tree_view->priv->scroll_sync_timer = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -6291,7 +6274,7 @@ install_scroll_sync_handler (GtkTreeView *tree_view)
   if (!tree_view->priv->scroll_sync_timer)
     {
       tree_view->priv->scroll_sync_timer =
-	g_idle_add_full (GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC, (GSourceFunc) scroll_sync_handler, tree_view, NULL);
+	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC, (GSourceFunc) scroll_sync_handler, tree_view, NULL);
     }
 }
 
@@ -6689,8 +6672,6 @@ open_row_timeout (gpointer data)
   GtkTreeViewDropPosition pos;
   gboolean result = FALSE;
 
-  GDK_THREADS_ENTER ();
-
   gtk_tree_view_get_drag_dest_row (tree_view,
                                    &dest_path,
                                    &pos);
@@ -6712,24 +6693,18 @@ open_row_timeout (gpointer data)
       result = TRUE;
     }
 
-  GDK_THREADS_LEAVE ();
-
   return result;
 }
 
-static gint
+static gboolean
 scroll_row_timeout (gpointer data)
 {
   GtkTreeView *tree_view = data;
-
-  GDK_THREADS_ENTER ();
 
   gtk_tree_view_vertical_autoscroll (tree_view);
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     gtk_tree_view_update_rubber_band (tree_view);
-
-  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -7180,12 +7155,12 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
            pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE))
         {
           tree_view->priv->open_dest_timeout =
-            g_timeout_add (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
+            gdk_threads_add_timeout (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
         }
       else if (tree_view->priv->scroll_timeout == 0)
         {
 	  tree_view->priv->scroll_timeout =
-	    g_timeout_add (150, scroll_row_timeout, tree_view);
+	    gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
@@ -10053,12 +10028,8 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
-  GDK_THREADS_ENTER ();
-
   gtk_tree_view_search_dialog_hide (tree_view->priv->search_window, tree_view);
   tree_view->priv->typeselect_flush_timeout = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -10225,7 +10196,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     }
 
   tree_view->priv->typeselect_flush_timeout =
-    g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+    gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		   (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		   tree_view);
 
@@ -11602,15 +11573,7 @@ gtk_tree_view_expand_all (GtkTreeView *tree_view)
 static gboolean
 expand_collapse_timeout (gpointer data)
 {
-  gboolean retval;
-
-  GDK_THREADS_ENTER ();
-
-  retval = do_expand_collapse (data);
-
-  GDK_THREADS_LEAVE ();
-
-  return retval;
+  return do_expand_collapse (data);
 }
 
 static gboolean
@@ -11851,7 +11814,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 
   if (animate)
     {
-      tree_view->priv->expand_collapse_timeout = g_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expand_collapse_timeout = gdk_threads_add_timeout (50, expand_collapse_timeout, tree_view);
       tree_view->priv->expanded_collapsed_node = node;
       tree_view->priv->expanded_collapsed_tree = tree;
 
@@ -12055,7 +12018,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   
   if (animate)
     {
-      tree_view->priv->expand_collapse_timeout = g_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expand_collapse_timeout = gdk_threads_add_timeout (50, expand_collapse_timeout, tree_view);
       tree_view->priv->expanded_collapsed_node = node;
       tree_view->priv->expanded_collapsed_tree = tree;
 
@@ -13827,7 +13790,7 @@ gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
-	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
     }
@@ -13865,11 +13828,7 @@ gtk_tree_view_real_search_enable_popdown (gpointer data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
 
-  GDK_THREADS_ENTER ();
-
   tree_view->priv->disable_popdown = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -13878,7 +13837,7 @@ static void
 gtk_tree_view_search_enable_popdown (GtkWidget *widget,
 				     gpointer   data)
 {
-  g_timeout_add (200, gtk_tree_view_real_search_enable_popdown, data);
+  gdk_threads_add_timeout_full (G_PRIORITY_HIGH, 200, gtk_tree_view_real_search_enable_popdown, g_object_ref (data), g_object_unref);
 }
 
 static gboolean
@@ -13932,7 +13891,7 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
-	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
     }
@@ -14003,7 +13962,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
-	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
     }
@@ -14261,7 +14220,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
-	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
     }

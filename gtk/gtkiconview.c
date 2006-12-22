@@ -1461,8 +1461,6 @@ rubberband_scroll_timeout (gpointer data)
   GtkIconView *icon_view;
   gdouble value;
 
-  GDK_THREADS_ENTER ();
-  
   icon_view = data;
 
   value = MIN (icon_view->priv->vadjustment->value +
@@ -1474,8 +1472,6 @@ rubberband_scroll_timeout (gpointer data)
 
   gtk_icon_view_update_rubberband (icon_view);
   
-  GDK_THREADS_LEAVE ();
-
   return TRUE;
 }
 
@@ -1510,7 +1506,7 @@ gtk_icon_view_motion (GtkWidget      *widget,
 	  icon_view->priv->event_last_y = event->y;
 
 	  if (icon_view->priv->scroll_timeout_id == 0)
-	    icon_view->priv->scroll_timeout_id = g_timeout_add (30, rubberband_scroll_timeout, 
+	    icon_view->priv->scroll_timeout_id = gdk_threads_add_timeout (30, rubberband_scroll_timeout, 
 								icon_view);
  	}
       else 
@@ -3067,16 +3063,12 @@ layout_callback (gpointer user_data)
 {
   GtkIconView *icon_view;
 
-  GDK_THREADS_ENTER ();
-
   icon_view = GTK_ICON_VIEW (user_data);
   
   icon_view->priv->layout_idle_id = 0;
 
   gtk_icon_view_layout (icon_view);
   
-  GDK_THREADS_LEAVE();
-
   return FALSE;
 }
 
@@ -3086,7 +3078,7 @@ gtk_icon_view_queue_layout (GtkIconView *icon_view)
   if (icon_view->priv->layout_idle_id != 0)
     return;
 
-  icon_view->priv->layout_idle_id = g_idle_add (layout_callback, icon_view);
+  icon_view->priv->layout_idle_id = gdk_threads_add_idle (layout_callback, icon_view);
 }
 
 static void
@@ -5868,11 +5860,7 @@ drag_scroll_timeout (gpointer data)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (data);
 
-  GDK_THREADS_ENTER ();
-
   gtk_icon_view_autoscroll (icon_view);
-
-  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -6270,7 +6258,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
       if (icon_view->priv->scroll_timeout_id == 0)
 	{
 	  icon_view->priv->scroll_timeout_id =
-	    g_timeout_add (50, drag_scroll_timeout, icon_view);
+	    gdk_threads_add_timeout (50, drag_scroll_timeout, icon_view);
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
@@ -6911,8 +6899,6 @@ gtk_icon_view_item_accessible_idle_do_action (gpointer data)
   GtkIconView *icon_view;
   GtkTreePath *path;
 
-  GDK_THREADS_ENTER ();
-
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (data);
   item->action_idle_handler = 0;
 
@@ -6923,8 +6909,6 @@ gtk_icon_view_item_accessible_idle_do_action (gpointer data)
       gtk_icon_view_item_activated (icon_view, path);
       gtk_tree_path_free (path);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -6950,7 +6934,7 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
     {
     case ACTION_ACTIVATE:
       if (!item->action_idle_handler)
-        item->action_idle_handler = g_idle_add (gtk_icon_view_item_accessible_idle_do_action, item);
+        item->action_idle_handler = gdk_threads_add_idle (gtk_icon_view_item_accessible_idle_do_action, item);
       break;
     default:
       g_assert_not_reached ();

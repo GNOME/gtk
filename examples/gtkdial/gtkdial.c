@@ -585,8 +585,8 @@ gtk_dial_update_mouse( GtkDial *dial, gint x, gint y )
 	      if (dial->timer)
 		g_source_remove (dial->timer);
 
-	      dial->timer = g_timeout_add (SCROLL_DELAY_LENGTH,
-					   (GtkFunction) gtk_dial_timer,
+	      dial->timer = gdk_threads_add_timeout (SCROLL_DELAY_LENGTH,
+					   (GSourceFunc) gtk_dial_timer,
 					   (gpointer) dial);
 	    }
 	}
