@@ -1,4 +1,9 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+	
+	* configure.in: Check for getc_unlocked.
+
+	* gtk/xdgmime/xdgmimemagic.c: Use getc if getc_unlocked is
+	unavailable.   (#381499)
 
 	* tests/teststatusicon.c: Fix a typo
 

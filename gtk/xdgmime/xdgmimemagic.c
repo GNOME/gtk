@@ -47,6 +47,10 @@
 #define	TRUE	(!FALSE)
 #endif
 
+#if !defined getc_unlocked && !defined HAVE_GETC_UNLOCKED
+# define getc_unlocked(fp) getc (fp)
+#endif
+
 typedef struct XdgMimeMagicMatch XdgMimeMagicMatch;
 typedef struct XdgMimeMagicMatchlet XdgMimeMagicMatchlet;
 
