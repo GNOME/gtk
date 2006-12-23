@@ -188,19 +188,19 @@ struct _ThemeImage
 };
 
 
-ThemePixbuf *theme_pixbuf_new          (void) G_GNUC_INTERNAL;
-void         theme_pixbuf_destroy      (ThemePixbuf  *theme_pb) G_GNUC_INTERNAL;
-void         theme_pixbuf_set_filename (ThemePixbuf  *theme_pb,
-					const char   *filename) G_GNUC_INTERNAL;
-GdkPixbuf *  theme_pixbuf_get_pixbuf   (ThemePixbuf  *theme_pb) G_GNUC_INTERNAL;
-void         theme_pixbuf_set_border   (ThemePixbuf  *theme_pb,
+G_GNUC_INTERNAL ThemePixbuf *theme_pixbuf_new          (void);
+G_GNUC_INTERNAL void         theme_pixbuf_destroy      (ThemePixbuf  *theme_pb);
+G_GNUC_INTERNAL void         theme_pixbuf_set_filename (ThemePixbuf  *theme_pb,
+					const char   *filename);
+G_GNUC_INTERNAL GdkPixbuf *  theme_pixbuf_get_pixbuf   (ThemePixbuf  *theme_pb);
+G_GNUC_INTERNAL void         theme_pixbuf_set_border   (ThemePixbuf  *theme_pb,
 					gint          left,
 					gint          right,
 					gint          top,
-					gint          bottom) G_GNUC_INTERNAL;
-void         theme_pixbuf_set_stretch  (ThemePixbuf  *theme_pb,
-					gboolean      stretch) G_GNUC_INTERNAL;
-void         theme_pixbuf_render       (ThemePixbuf  *theme_pb,
+					gint          bottom);
+G_GNUC_INTERNAL void         theme_pixbuf_set_stretch  (ThemePixbuf  *theme_pb,
+					gboolean      stretch);
+G_GNUC_INTERNAL void         theme_pixbuf_render       (ThemePixbuf  *theme_pb,
 					GdkWindow    *window,
 					GdkBitmap    *mask,
 					GdkRectangle *clip_rect,
@@ -209,7 +209,7 @@ void         theme_pixbuf_render       (ThemePixbuf  *theme_pb,
 					gint          dest_x,
 					gint          dest_y,
 					gint          dest_width,
-					gint          dest_height) G_GNUC_INTERNAL;
+					gint          dest_height);
 
 
 

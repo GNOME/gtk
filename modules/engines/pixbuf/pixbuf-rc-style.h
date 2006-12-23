@@ -25,7 +25,7 @@
 typedef struct _PixbufRcStyle PixbufRcStyle;
 typedef struct _PixbufRcStyleClass PixbufRcStyleClass;
 
-extern GType pixbuf_type_rc_style G_GNUC_INTERNAL;
+extern G_GNUC_INTERNAL GType pixbuf_type_rc_style;
 
 #define PIXBUF_TYPE_RC_STYLE              pixbuf_type_rc_style
 #define PIXBUF_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PIXBUF_TYPE_RC_STYLE, PixbufRcStyle))
@@ -46,4 +46,4 @@ struct _PixbufRcStyleClass
   GtkRcStyleClass parent_class;
 };
 
-void pixbuf_rc_style_register_type (GTypeModule *module) G_GNUC_INTERNAL;
+G_GNUC_INTERNAL  void pixbuf_rc_style_register_type (GTypeModule *module);

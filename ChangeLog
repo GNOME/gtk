@@ -1,5 +1,13 @@
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/engines/pixbuf/pixbuf.h:
+	* modules/engines/pixbuf/pixbuf-rc-style.h:
+	* modules/engines/pixbuf/pixbuf-style.h: Move
+	G_GNUC_INTERNAL before function declarations.  (#352276,
+	Damien Carbery)
+
+2006-12-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/*.c: Fix some leaks.  (#348108, Chris
 	Wilson)
 
