@@ -243,6 +243,18 @@ home_clicked (GtkToolItem *item,
 			    TRUE);
 }
 
+static void close_window(void)
+{
+  gtk_widget_destroy (window);
+  window = NULL;
+
+  g_object_unref (file_pixbuf);
+  file_pixbuf = NULL;
+
+  g_object_unref (folder_pixbuf);
+  folder_pixbuf = NULL;
+}
+
 GtkWidget *
 do_iconview (GtkWidget *do_widget)
 {
@@ -258,7 +270,7 @@ do_iconview (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkIconView demo");
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (close_window), NULL);
 
       error = NULL;
       if (!load_pixbufs (&error))
