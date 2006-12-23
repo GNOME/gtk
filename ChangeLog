@@ -1,5 +1,8 @@
 2006-12-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c: Allow composing l with 
+	stroke.  (#349638, Daniel Lublin)
+
 	* gtk/gen-paper-names.c: Fix a thinko in the suffix
 	calculation.  (#382369, Christian Persch)
 

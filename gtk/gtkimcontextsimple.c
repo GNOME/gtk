@@ -446,11 +446,13 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_slash,	GDK_slash,	0,	0,	0x005C,	/* REVERSE_SOLIDUS */
   GDK_Multi_key,	GDK_slash,	GDK_less,	0,	0,	0x005C,	/* REVERSE_SOLIDUS */
   GDK_Multi_key,	GDK_slash,	GDK_C,	0,	0,	0x00A2,	/* CENT_SIGN */
+  GDK_Multi_key,	GDK_slash,	GDK_L,	0,	0,	0x0141, /* LATIN_CAPITAL_LETTER_L_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_O,	0,	0,	0x00D8,	/* LATIN_CAPITAL_LETTER_O_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_T,	0,	0,	0x0166,	/* LATIN_CAPITAL_LETTER_T_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_U,	0,	0,	0x00B5,	/* MICRO_SIGN */
   GDK_Multi_key,	GDK_slash,	GDK_asciicircum,	0,	0,	0x007C,	/* VERTICAL_LINE */
   GDK_Multi_key,	GDK_slash,	GDK_c,	0,	0,	0x00A2,	/* CENT_SIGN */
+  GDK_Multi_key,	GDK_slash,	GDK_l,	0,	0,	0x0142, /* LATIN_SMALL_LETTER_L_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_o,	0,	0,	0x00F8,	/* LATIN_SMALL_LETTER_O_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_t,	0,	0,	0x0167,	/* LATIN_SMALL_LETTER_T_WITH_STROKE */
   GDK_Multi_key,	GDK_slash,	GDK_u,	0,	0,	0x00B5,	/* MICRO_SIGN */
@@ -577,6 +579,7 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_L,  GDK_apostrophe,	0,      0,      0x0139, /* LATIN_CAPITAL_LETTER_L_WITH_ACUTE */
   GDK_Multi_key,	GDK_L,	GDK_comma,	0,	0,	0x013B,	/* LATIN_CAPITAL_LETTER_L_WITH_CEDILLA */
   GDK_Multi_key,	GDK_L,	GDK_minus,	0,	0,	0x00A3,	/* POUND_SIGN */
+  GDK_Multi_key,	GDK_L,	GDK_slash,	0,	0,	0x0141, /* LATIN_CAPITAL_LETTER_L_WITH_STROKE */
   GDK_Multi_key,	GDK_L,	GDK_less,	0,	0,	0x013D,	/* LATIN_CAPITAL_LETTER_L_WITH_CARON */
   GDK_Multi_key,	GDK_L,	GDK_equal,	0,	0,	0x00A3,	/* POUND_SIGN */
   GDK_Multi_key,	GDK_L,	GDK_V,	0,	0,	0x007C,	/* VERTICAL_LINE */
@@ -765,6 +768,7 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_l,	GDK_apostrophe,	0,	0,	0x013A,	/* LATIN_SMALL_LETTER_L_WITH_ACUTE */
   GDK_Multi_key,	GDK_l,	GDK_comma,	0,	0,	0x013C,	/* LATIN_SMALL_LETTER_L_WITH_CEDILLA */
   GDK_Multi_key,	GDK_l,	GDK_minus,	0,	0,	0x00A3,	/* POUND_SIGN */
+  GDK_Multi_key,	GDK_l,	GDK_slash,	0,	0,	0x0142, /* LATIN_SMALL_LETTER_L_WITH_STROKE */
   GDK_Multi_key,	GDK_l,	GDK_less,	0,	0,	0x013E,	/* LATIN_SMALL_LETTER_L_WITH_CARON */
   GDK_Multi_key,	GDK_l,	GDK_equal,	0,	0,	0x00A3,	/* POUND_SIGN */
   GDK_Multi_key,	GDK_l,	GDK_v,	0,	0,	0x007C,	/* VERTICAL_LINE */
