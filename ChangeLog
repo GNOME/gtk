@@ -1,3 +1,10 @@
+2006-12-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gen-paper-names.c: Fix a thinko in the suffix
+	calculation.  (#382369, Christian Persch)
+
+	* gtk/paper_names_offsets.c: Regenerated.
+
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/engines/pixbuf/pixbuf.h:
