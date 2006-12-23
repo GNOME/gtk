@@ -89,8 +89,8 @@ cedilla_init (GtkIMContextSimple *im_context)
 static const GtkIMContextInfo cedilla_info = { 
   "cedilla",		           /* ID */
   N_("Cedilla"),                   /* Human readable name */
-  "gtk+",			   /* Translation domain */
-   GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
+  GETTEXT_PACKAGE,		   /* Translation domain */
+  GTK_LOCALEDIR,		   /* Dir for bindtextdomain */
   "az:ca:co:fr:gv:oc:pt:sq:tr:wa"  /* Languages for which this module is the default */
 };
 

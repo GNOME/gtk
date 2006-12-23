@@ -1,5 +1,12 @@
 2006-12-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimmulticontext.c: Be careful to not override
+	GTK+ translations with the translations of the input
+	method.  (#317080, Tor Lillqvist)
+
+	* modules/input/imcedilla.c: Use standard macros
+	for translation domain and locale dir.
+
 	* gtk/gtkimcontextsimple.c: Allow composing l with
 	stroke.  (#349638, Daniel Lublin)
 
