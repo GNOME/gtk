@@ -491,7 +491,6 @@ do_appwindow (GtkWidget *do_widget)
       gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window), 
 				  gtk_ui_manager_get_accel_group (merge));
-      g_object_unref (open_action);
       
       if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
 	{
