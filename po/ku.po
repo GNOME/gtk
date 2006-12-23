@@ -1,928 +1,812 @@
 # translation of ku.po to Kurdish
-# This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER.
-#
-# PCKurd group, <pckurd@hotmail.com>, 2005.
-# Erdal Ronahi <erdal.ronahi@gmail.com>, 2005.
+# This file is distributed under the same license as the gtk+ package.
+# Copyright (C) 2005 THE gtk+'S COPYRIGHT HOLDER.
 # Erdal Ronahi <erdal.ronahi@gmail.com, pckurd@hotmail.com>, 2005, 2006.
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-17 23:42-0400\n"
-"PO-Revision-Date: 2006-08-17 14:45+0200\n"
+"POT-Creation-Date: 2006-12-23 22:19+0100\n"
+"PO-Revision-Date: 2006-12-23 22:32+0100\n"
 "Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural= n != 1\n"
+"Plural-Forms: nplurals=2; plural= n != 1"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
-#: gdk-pixbuf/gdk-pixbuf-io.c:1113 tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:847
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1102
+#: ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Vekirina dosiya '%s' bi ser neket: %s"
+msgstr "Vekirina pelê '%s' biserneket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:870
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Di dosiya wêne '%s' de qet agahî nîn e"
+msgstr "Di pelê wêne '%s' de qet agahî nîn e"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
-#: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:896
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1153
+#: ../tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe dosiya wêne xerabe be"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe pelê wêne xerabe be"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:242
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Zindîkirina '%s' nehate barkirin: sedem nayê zanîn, dibe dosiya zindîkirinê "
-"xerabe be"
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+msgstr "Zindîkirina '%s' nehate barkirin: sedem nayê zanîn, dibe pelê zindîkirinê xerabe be"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:463
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:527
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Modula barkirina wêne nehate dîtin: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:478
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modula barkirina wêne %s ji navrûyê rastî re nehatiye şandin. Gelo dibe ew "
-"guhertoyeke cuda ya GTK'ê be?"
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgstr "Modula barkirina wêne %s ji navrûyê rastî re nehatiye şandin. Gelo dibe ew guhertoyeke cuda ya GTK'ê be?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:647 gdk-pixbuf/gdk-pixbuf-io.c:699
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:659
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:688
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Cureyê Wêne %s' destekê nade"
+msgstr "Cureyê wêne %s' destekê nade"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:739
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:728
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Nikare dosya wêne nasbike ji bo formata dosya'%s'"
+msgstr "Nikare formata pelê wêne nasbike ji bo pelê '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:747
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:736
 msgid "Unrecognized image file format"
-msgstr "Formata dosya wêne nenaskirî ye"
+msgstr "Formata pelê wêne nenaskirî ye"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:916
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:905
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Barkirina wêneya '%s' serneket: %s"
+msgstr "Barkirina wêneya '%s' biserneket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1392
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1381
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "Çewtiya nivisandinê ya dosya wêne : %s"
+msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1438 gdk-pixbuf/gdk-pixbuf-io.c:1569
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1427
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ev avakirina gdk-pixbuf destekê nade tomarkirina formata wêne: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1472
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1461
 msgid "Insufficient memory to save image to callback"
 msgstr "Ji bo paş de vegerandinê dema wêne dihate tomarkirin bîr têrê nake"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1485
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to open temporary file"
-msgstr "Vekirina dosiya demîn serneket"
+msgstr "Vekirina pelê demîn serneket"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1511
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1500
 msgid "Failed to read from temporary file"
-msgstr "Xwendina ji dosya demî biserneket"
+msgstr "Xwendina ji pelê demî biserneket"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1746
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1735
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Vekirina '%s' ji bo nivîsandinê bi ser neket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1771
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Çewtiya girtinê'%s' di dema nivisandina wêne de, dibe ku hemû dane nehatibin "
-"tomar kirin: %s"
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgstr "Çewtiya girtinê'%s' di dema nivisandina wêne de, dibe ku hemû dane nehatibin tomar kirin: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1991 gdk-pixbuf/gdk-pixbuf-io.c:2041
-#, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2030
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Bîr têr nake ku wêne di Bîra navbênkar de were tomarkirin"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:321
-#, fuzzy, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Çewtiyek hundirî: Barkirina wêne bi ser neket %s' sedemê biserneketinê ne "
-"hate destnîşankirin"
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
+#, c-format
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
+msgstr "Çewtiyek hundirî: Modula barkirina wêneyan '%s' di temamkirina operasiyonekê de biserneket, sedemê biserneketinê ne hate destnîşankirin"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:364
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Daxistina zêdeyî ya cureyê wêne  '%s' destekê nade"
 
-#: gdk-pixbuf/gdk-pixdata.c:147
-#, c-format
+#: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "Sernavê wêne xerabe ye"
 
-#: gdk-pixbuf/gdk-pixdata.c:152
-#, c-format
+#: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "Fomata wêne nenase"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
-#, c-format
+#: ../gdk-pixbuf/gdk-pixdata.c:157
+#: ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "Daneya pixel na xebite"
 
-#: gdk-pixbuf/gdk-pixdata.c:431
+#: ../gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
-msgstr[1] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+msgstr[0] "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+msgstr[1] "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
 
-#: gdk-pixbuf/io-ani.c:244
-#, c-format
+#: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "Perçeyek ikona ne bitexmîn di wêneyên bi liv de"
 
-#: gdk-pixbuf/io-ani.c:337
-#, c-format
+#: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
 msgstr "cureyê wêneyên bi liv yên ku nayên destekirin"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:536
-#, c-format
+#: ../gdk-pixbuf/io-ani.c:348
+#: ../gdk-pixbuf/io-ani.c:536
 msgid "Invalid header in animation"
 msgstr "Di hundirê sêwirandinê de sernavê nederbasdar"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:439
-#: gdk-pixbuf/io-ani.c:458 gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
-#, c-format
+#: ../gdk-pixbuf/io-ani.c:358
+#: ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:439
+#: ../gdk-pixbuf/io-ani.c:458
+#: ../gdk-pixbuf/io-ani.c:509
+#: ../gdk-pixbuf/io-ani.c:581
 msgid "Not enough memory to load animation"
 msgstr "Bîr têra barkirina wêneyên bi liv nake"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415 gdk-pixbuf/io-ani.c:426
-#, c-format
+#: ../gdk-pixbuf/io-ani.c:398
+#: ../gdk-pixbuf/io-ani.c:415
+#: ../gdk-pixbuf/io-ani.c:426
 msgid "Malformed chunk in animation"
 msgstr "Perçeyek beloq di wêneyên bi liv de"
 
-#: gdk-pixbuf/io-ani.c:674
+#: ../gdk-pixbuf/io-ani.c:680
 msgid "The ANI image format"
 msgstr "Amadekariya ANI bo wêne"
 
-#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:230
+#: ../gdk-pixbuf/io-bmp.c:327
+#: ../gdk-pixbuf/io-bmp.c:359
+#: ../gdk-pixbuf/io-bmp.c:382
+#: ../gdk-pixbuf/io-bmp.c:485
 msgid "BMP image has bogus header data"
 msgstr "Sernavê wêneyê BMP daneyên şaş dihundirîne"
 
-#: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:401
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:241
+#: ../gdk-pixbuf/io-bmp.c:422
 msgid "Not enough memory to load bitmap image"
 msgstr "Bîr têra tomarkirina wêneyê bitmap nake"
 
-#: gdk-pixbuf/io-bmp.c:287
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:308
 msgid "BMP image has unsupported header size"
 msgstr "Wêneyê BMP ne li gor mezinahiya serike"
 
-#: gdk-pixbuf/io-bmp.c:325
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:346
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Ji jor ber bi jêr wêneyên BMP tayê tengkirin"
 
-#: gdk-pixbuf/io-bmp.c:1203
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:1307
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Nikarî ku bîreke ji bo barkirina dosya BMP veqetîne"
+msgstr "Nikarî ku bîreke ji bo barkirina pelê BMP veqetîne"
 
-#: gdk-pixbuf/io-bmp.c:1244
-#, c-format
+#: ../gdk-pixbuf/io-bmp.c:1348
 msgid "Couldn't write to BMP file"
-msgstr "Nikarî ku di dosya BMP de binvîse"
+msgstr "Nikarî ku di pelê BMP de binvîse"
 
-#: gdk-pixbuf/io-bmp.c:1293
+#: ../gdk-pixbuf/io-bmp.c:1403
 msgid "The BMP image format"
 msgstr "Formata wêneya BMP"
 
-#: gdk-pixbuf/io-gif.c:222
+#: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Çewtî di dema xwendina GIF: %s de"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1472 gdk-pixbuf/io-gif.c:1633
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:496
+#: ../gdk-pixbuf/io-gif.c:1477
+#: ../gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Dosya GIF hin dane winda kirin"
+msgstr "Pelê GIF hin dane winda kirin (dibe ku hatiye qudkirin?)"
 
-#: gdk-pixbuf/io-gif.c:505
+#: ../gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Çewtiyek hundirîn di barkerê dosya GIF(%s) de"
+msgstr "Çewtiyek hundirîn di barkerê GIF (%s) de"
 
-#: gdk-pixbuf/io-gif.c:579
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
 msgstr "Lod pir zêdeye"
 
-#: gdk-pixbuf/io-gif.c:639
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
 msgstr "Barkerê wêneyê GIF nikare vî wêneyî fam bike."
 
-#: gdk-pixbuf/io-gif.c:668
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
 msgstr "Şifreyek ne durust hate dîtin"
 
-#: gdk-pixbuf/io-gif.c:678
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
-msgstr "Malika gilover di dosya GIF de"
+msgstr "Malika gilover di pelê GIF de"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1459 gdk-pixbuf/io-gif.c:1506
-#: gdk-pixbuf/io-gif.c:1621
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:866
+#: ../gdk-pixbuf/io-gif.c:1464
+#: ../gdk-pixbuf/io-gif.c:1511
+#: ../gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
-msgstr "Bîr têra barkirina dosya GIF nake"
+msgstr "Bîr têra barkirina pelê GIF nake"
 
-#: gdk-pixbuf/io-gif.c:951
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Bîr têra barkirina frame bo dosya GIF nake"
 
-#: gdk-pixbuf/io-gif.c:1123
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Wêneyê GIF xerabe ye (şidandina LZW ne duriste)"
 
-#: gdk-pixbuf/io-gif.c:1173
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
 msgstr "Xuyaye ku dosya ne GIF e"
 
-#: gdk-pixbuf/io-gif.c:1185
+#: ../gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Guhertoya %s dosya GIF nayê destekirin"
 
-#: gdk-pixbuf/io-gif.c:1294
-#, c-format
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Nexşeya reng a wêneyê GIF tuneye û nexşeya rengan a herêmî jî di çarçoveya "
-"hidurê wê de tuneye."
+#: ../gdk-pixbuf/io-gif.c:1299
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgstr "Nexşeya reng a wêneyê GIF tuneye û nexşeya rengan a herêmî jî di çarçoveya hidurê wê de tuneye."
 
-#: gdk-pixbuf/io-gif.c:1528
-#, c-format
+#: ../gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
 msgstr "Wêneyê GIF kême an perçekiriye."
 
-#: gdk-pixbuf/io-gif.c:1680
+#: ../gdk-pixbuf/io-gif.c:1691
 msgid "The GIF image format"
 msgstr "Formata wêneya GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:279 gdk-pixbuf/io-ico.c:348
-#: gdk-pixbuf/io-ico.c:411 gdk-pixbuf/io-ico.c:441
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:219
+#: ../gdk-pixbuf/io-ico.c:279
+#: ../gdk-pixbuf/io-ico.c:348
+#: ../gdk-pixbuf/io-ico.c:411
+#: ../gdk-pixbuf/io-ico.c:441
 msgid "Not enough memory to load icon"
 msgstr "Bîr têra barkirina ikonê nake"
 
-#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:338
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:256
+#: ../gdk-pixbuf/io-ico.c:269
+#: ../gdk-pixbuf/io-ico.c:338
 msgid "Invalid header in icon"
 msgstr "Sernivîsek çewt di ikonê de"
 
-#: gdk-pixbuf/io-ico.c:301
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero width"
 msgstr "Firehiya ikonê sifire"
 
-#: gdk-pixbuf/io-ico.c:311
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:311
 msgid "Icon has zero height"
 msgstr "Bilidiya İkonê sifire"
 
-#: gdk-pixbuf/io-ico.c:363
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:363
 msgid "Compressed icons are not supported"
 msgstr "Îkonê şidandî nayên destekirin"
 
-#: gdk-pixbuf/io-ico.c:396
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:396
 msgid "Unsupported icon type"
 msgstr "Cureyek îkonê nayê destekirin"
 
-#: gdk-pixbuf/io-ico.c:490
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:490
 msgid "Not enough memory to load ICO file"
 msgstr "Bîr têra barkirina dosya ICO nake"
 
-#: gdk-pixbuf/io-ico.c:955
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:955
 msgid "Image too large to be saved as ICO"
 msgstr "Wêne gelekî mezine ji bo tomarkirina wek ICO"
 
-#: gdk-pixbuf/io-ico.c:966
-#, c-format
+#: ../gdk-pixbuf/io-ico.c:966
 msgid "Cursor hotspot outside image"
 msgstr "Nîşankera nîşanekê derveyî wêne ye"
 
-#: gdk-pixbuf/io-ico.c:989
+#: ../gdk-pixbuf/io-ico.c:989
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Firehiya dosya ICO nayê destekirin: %d"
 
-#: gdk-pixbuf/io-ico.c:1218
+#: ../gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "Formata wêneya ICO"
 
-#: gdk-pixbuf/io-jpeg.c:117
+#: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Çewtiya wergera dosya wêneyê JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:352
-#, c-format
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
+#: ../gdk-pixbuf/io-jpeg.c:352
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
 msgstr "Bîr têra tomarkirinê nake, hin gavan jêbibin da cih di bîrê de çêbibe"
 
-#: gdk-pixbuf/io-jpeg.c:386 gdk-pixbuf/io-jpeg.c:588
+#: ../gdk-pixbuf/io-jpeg.c:386
+#: ../gdk-pixbuf/io-jpeg.c:588
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Asoya rengên JPEG (%s)nayê destekirin"
 
-#: gdk-pixbuf/io-jpeg.c:484 gdk-pixbuf/io-jpeg.c:741 gdk-pixbuf/io-jpeg.c:975
-#: gdk-pixbuf/io-jpeg.c:984
-#, c-format
+#: ../gdk-pixbuf/io-jpeg.c:484
+#: ../gdk-pixbuf/io-jpeg.c:741
+#: ../gdk-pixbuf/io-jpeg.c:973
+#: ../gdk-pixbuf/io-jpeg.c:982
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nikare bîrekê bo barkirina dosya JPEG veqetîne"
 
-#: gdk-pixbuf/io-jpeg.c:926
+#: ../gdk-pixbuf/io-jpeg.c:924
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê şîrovekirin."
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgstr "Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê şîrovekirin."
 
-#: gdk-pixbuf/io-jpeg.c:941
+#: ../gdk-pixbuf/io-jpeg.c:939
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Pêwiste ku nirxê kalîteya JPEG  di navbera 0 û 100 de be; nirxa  '%d' ne "
-"gengaz e."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Pêwiste ku nirxê kalîteya JPEG  di navbera 0 û 100 de be; nirxa  '%d' ne gengaz e."
 
-#: gdk-pixbuf/io-jpeg.c:1103
+#: ../gdk-pixbuf/io-jpeg.c:1107
 msgid "The JPEG image format"
 msgstr "Formata wêneya JPEG"
 
-#: gdk-pixbuf/io-pcx.c:191
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
 msgstr "Ji bo sernavê bîr nehate veqetandin"
 
-#: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:206
+#: ../gdk-pixbuf/io-pcx.c:564
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Bîrek ji bîra navbênkar re nayê veqetandin"
 
-#: gdk-pixbuf/io-pcx.c:607
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:605
 msgid "Image has invalid width and/or height"
 msgstr "Bilidî an jî firehiya wêne ne raste"
 
-#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:617
+#: ../gdk-pixbuf/io-pcx.c:678
 msgid "Image has unsupported bpp"
 msgstr "Wêne bpp destek nake"
 
-#: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
+#: ../gdk-pixbuf/io-pcx.c:622
+#: ../gdk-pixbuf/io-pcx.c:630
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Gelek astên ne destekirî yên wêne hene %d-bit planes"
 
-#: gdk-pixbuf/io-pcx.c:648
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:646
 msgid "Couldn't create new pixbuf"
 msgstr "Nikare pixbufeke nû avabike"
 
-#: gdk-pixbuf/io-pcx.c:656
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:654
 msgid "Couldn't allocate memory for line data"
 msgstr "Nikare bîrê ji rêza daneyê re veqetîne"
 
-#: gdk-pixbuf/io-pcx.c:663
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:661
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Nikare bîrê ji daneyên rêzkirî re veqetîne"
 
-#: gdk-pixbuf/io-pcx.c:710
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:708
 msgid "Didn't get all lines of PCX image"
 msgstr "Hemû rêzikên wêneyê PCX ne girtin"
 
-#: gdk-pixbuf/io-pcx.c:717
-#, c-format
+#: ../gdk-pixbuf/io-pcx.c:715
 msgid "No palette found at end of PCX data"
 msgstr "Di dawiya daneyên pcx de tabloya rengan nîne"
 
-#: gdk-pixbuf/io-pcx.c:758
+#: ../gdk-pixbuf/io-pcx.c:762
 msgid "The PCX image format"
 msgstr "Amadekariya formata PCX"
 
-#: gdk-pixbuf/io-png.c:55
-#, c-format
+#: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Hejmara bitan di her qenalên wêneyê PNG de çewt e."
 
-#: gdk-pixbuf/io-png.c:136
-#, c-format
+#: ../gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
 msgstr "Nirxê wêneyê PNG ê sarkirî sifire."
 
-#: gdk-pixbuf/io-png.c:144
-#, c-format
+#: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Bitên her qenalekî yên wêneyê guheztî yê PNG nake 8."
 
-#: gdk-pixbuf/io-png.c:153
-#, c-format
+#: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Wêneyê PNG ne RGB an jî RGBA ye."
 
-#: gdk-pixbuf/io-png.c:162
-#, c-format
+#: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr "Qenalên wêneyê PNG yê guhestî ne destnîşankirîne pêwiste ku 3 an 4 be."
 
-#: gdk-pixbuf/io-png.c:183
+#: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Çewtiyek mezin di dosya wêneyê PNG de: %s"
 
-#: gdk-pixbuf/io-png.c:301
-#, c-format
+#: ../gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
 msgstr "Bîr têra barkirina dosya PNG nake"
 
-#: gdk-pixbuf/io-png.c:618
+#: ../gdk-pixbuf/io-png.c:618
 #, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Bîr têra bicihkirina  %ld nake ji alî wêneyên %ld, hewl bide ku tu hinek "
-"sepanan bavêjî da ku cih vale bibe"
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr "Bîr têra bicihkirina  %ld nake ji alî wêneyên %ld, hewl bide ku tu hinek sepanan bavêjî da ku cih vale bibe"
 
-#: gdk-pixbuf/io-png.c:669
-#, c-format
+#: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
 msgstr "Çewtiyek mezin di dosya wêneyê PNG de"
 
-#: gdk-pixbuf/io-png.c:718
+#: ../gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Çewtiyek mezin di dema xwendina dosya wêneyê PNG de: %s"
 
-#: gdk-pixbuf/io-png.c:810
-#, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Mifteyên lodên tekstê yê PNG herî kêm divê 1 karakter û herî zêde jî divê 79 "
-"karakter be."
+#: ../gdk-pixbuf/io-png.c:810
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "Mifteyên lodên tekstê yê PNG herî kêm divê 1 karakter û herî zêde jî divê 79 karakter be."
 
-#: gdk-pixbuf/io-png.c:818
-#, c-format
+#: ../gdk-pixbuf/io-png.c:818
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Pêwiste ku şifreyên PNG yê nivîskî  ASCII be."
 
-#: gdk-pixbuf/io-png.c:831
+#: ../gdk-pixbuf/io-png.c:831
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Pêwiste ku nirxa JPEG di navbera 0 û 100 de be '%s' lewra nirx nehate şîrove "
-"kirin."
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+msgstr "Pêwiste ku nirxa JPEG di navbera 0 û 100 de be '%s' lewra nirx nehate şîrove kirin."
 
-#: gdk-pixbuf/io-png.c:843
+#: ../gdk-pixbuf/io-png.c:843
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê destekirin."
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+msgstr "Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê destekirin."
 
-#: gdk-pixbuf/io-png.c:883
+#: ../gdk-pixbuf/io-png.c:883
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "Nirxa perçeyê PNG yên niviskî %s snayên sembolkirin bo ISO-8859-1."
 
-#: gdk-pixbuf/io-png.c:1026
+#: ../gdk-pixbuf/io-png.c:1032
 msgid "The PNG image format"
 msgstr "Formata wêneya PNG"
 
-#: gdk-pixbuf/io-pnm.c:252
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "Lêkerê PNM pêrgî hejmarake rast nebû"
 
-#: gdk-pixbuf/io-pnm.c:284
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
 msgstr "Byteke destpêkî ya ne rast bo dosya PNM"
 
-#: gdk-pixbuf/io-pnm.c:314
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Dosya PNM ne di amadekariyek şaxikî de ye, dikare were xuyakirin"
 
-#: gdk-pixbuf/io-pnm.c:339
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
-msgstr "Firehûna wêneyê di hundirê dosyaya PNM de 0"
+msgstr "Firehûna wêneyê di hundirê pelê PNM de 0"
 
-#: gdk-pixbuf/io-pnm.c:360
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
-msgstr "Dirêjahiya wêneyê di hundirê dosyaya PNM de 0"
+msgstr "Dirêjahiya wêneyê di hundirê pelê PNM de 0"
 
-#: gdk-pixbuf/io-pnm.c:383
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
-msgstr "Asta herî bilind a nirxa reng di dosya PNM de 0"
+msgstr "Asta herî bilind a nirxa reng di pelê PNM de 0"
 
-#: gdk-pixbuf/io-pnm.c:391
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
 msgstr "Asta herî bilind a nirxa reng di dosya PNM de"
 
-#: gdk-pixbuf/io-pnm.c:431 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:506
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:429
+#: ../gdk-pixbuf/io-pnm.c:459
+#: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "Cureyê wêneyê PNM yê bingeh ne derbasdar e"
 
-#: gdk-pixbuf/io-pnm.c:570 gdk-pixbuf/io-pnm.c:612
-#, c-format
-msgid "PNM image format is invalid"
-msgstr "Cureyê wêneyên PNM ne derbasdar e"
-
-#: gdk-pixbuf/io-pnm.c:671
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Barkera wêneyan a PNM vê jêrecureyê destek nake"
 
-#: gdk-pixbuf/io-pnm.c:726
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "Pêrgî dawiya dosyeyê ya zû hat"
 
-#: gdk-pixbuf/io-pnm.c:758 gdk-pixbuf/io-pnm.c:989
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:741
+#: ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Pêwistiya amadekirina PNM bi valehiyekê heye beriya daxuyaniya daneyê"
 
-#: gdk-pixbuf/io-pnm.c:785
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Ji wêneyê PNM were barkirin bîr nayê veqetandin"
 
-#: gdk-pixbuf/io-pnm.c:835
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Ji bo barkirina avahiya naveroka PNM bîr têrê nake"
 
-#: gdk-pixbuf/io-pnm.c:886
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "Dawiya daneyan a wêneyên PNM encama kes ne li bendê"
 
-#: gdk-pixbuf/io-pnm.c:1018
-#, c-format
+#: ../gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
 msgstr "Ji bo barkirina dosyaya PNM bîr têrê nake"
 
-#: gdk-pixbuf/io-pnm.c:1098
+#: ../gdk-pixbuf/io-pnm.c:1083
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Malbata şêwazên wêneyên PNM/PBM/PGM/PPM"
 
-#: gdk-pixbuf/io-ras.c:126
-#, c-format
+#: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "Daneyên çewt ê wêneyê Ras"
 
-#: gdk-pixbuf/io-ras.c:148
-#, c-format
+#: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "Wêneyê RAS xwedî cureyeke nenase"
 
-#: gdk-pixbuf/io-ras.c:156
-#, c-format
+#: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "Bialîkirina wêneyê RAS ne destekiriye"
+msgstr "Bihêkirina wêneyê RAS ne destekiriye"
 
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, c-format
+#: ../gdk-pixbuf/io-ras.c:171
+#: ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Bîr têra barkirina wêneyê RAS nake"
 
-#: gdk-pixbuf/io-ras.c:543
+#: ../gdk-pixbuf/io-ras.c:549
 msgid "The Sun raster image format"
 msgstr "Amadekirinên wêne yên Sun raster"
 
-#: gdk-pixbuf/io-tga.c:154
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Ji bo binyada IOBufferê di bîrê de cih nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:173
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Ji bo daneya IOBufferê di bîrê de cih nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:184
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Ji bo daneya IOBufferê di bîrê de dîsa cih nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:214
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Ji bo daneya derbasdar ya IOBuffer di bîrê de cih nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:348
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
 msgstr "Ji bo pixbufa nû bîr nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:685
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:685
 msgid "Cannot allocate colormap structure"
 msgstr "Nikare bingehekê ji nexşeya rengan re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:692
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:692
 msgid "Cannot allocate colormap entries"
 msgstr "Malik ji bo nexşiya rengan nikarin werin veqetandin"
 
-#: gdk-pixbuf/io-tga.c:714
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:714
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Kûrahiyek ne di hesêb de ya malikên nexşeya rengan"
 
-#: gdk-pixbuf/io-tga.c:732
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:732
 msgid "Cannot allocate TGA header memory"
 msgstr "Nikare bîrekê ji serikê TGA re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:765
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:765
 msgid "TGA image has invalid dimensions"
 msgstr "pîvanên wêneyê TGA ne rastin"
 
-#: gdk-pixbuf/io-tga.c:771 gdk-pixbuf/io-tga.c:780 gdk-pixbuf/io-tga.c:790
-#: gdk-pixbuf/io-tga.c:800 gdk-pixbuf/io-tga.c:807
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:771
+#: ../gdk-pixbuf/io-tga.c:780
+#: ../gdk-pixbuf/io-tga.c:790
+#: ../gdk-pixbuf/io-tga.c:800
+#: ../gdk-pixbuf/io-tga.c:807
 msgid "TGA image type not supported"
 msgstr "Cureyê wêneyê TGA ne destekirî ye"
 
-#: gdk-pixbuf/io-tga.c:854
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:854
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Nikare bîrekê ji TGA re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:919
-#, c-format
+#: ../gdk-pixbuf/io-tga.c:919
 msgid "Excess data in file"
 msgstr "Daneyên zêde di dosya de hene"
 
-#: gdk-pixbuf/io-tga.c:988
+#: ../gdk-pixbuf/io-tga.c:994
 msgid "The Targa image format"
 msgstr "Formata wêneya Targa"
 
-#: gdk-pixbuf/io-tiff.c:173
+#: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Firehiya wêne nayê pejirandin (dosya TIFF ya ne baş )"
 
-#: gdk-pixbuf/io-tiff.c:180
+#: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Bilidahiya wêne napejirîne (dosya TIFF ya ne baş )"
 
-#: gdk-pixbuf/io-tiff.c:188
-#, c-format
+#: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
 msgstr "Firehî an bilindahiya wêneyê TIFF sifire"
 
-#: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
-#, c-format
+#: ../gdk-pixbuf/io-tiff.c:197
+#: ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
 msgstr "pîvanên wêneyê TIFF gelekî mezinin"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:572
-#, c-format
+#: ../gdk-pixbuf/io-tiff.c:225
+#: ../gdk-pixbuf/io-tiff.c:237
+#: ../gdk-pixbuf/io-tiff.c:286
+#: ../gdk-pixbuf/io-tiff.c:571
 msgid "Insufficient memory to open TIFF file"
 msgstr "Bîr têra vekirina dosya TIFF nake"
 
-#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
+#: ../gdk-pixbuf/io-tiff.c:251
+#: ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Barkirina dane ya RGB ye ji dosya TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:361
+#: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
 msgstr "Vekirina wêneya TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:373 gdk-pixbuf/io-tiff.c:756
+#: ../gdk-pixbuf/io-tiff.c:373
+#: ../gdk-pixbuf/io-tiff.c:752
 msgid "TIFFClose operation failed"
 msgstr "Girtina TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
+#: ../gdk-pixbuf/io-tiff.c:503
+#: ../gdk-pixbuf/io-tiff.c:516
 msgid "Failed to load TIFF image"
 msgstr "Barkirina wêneya TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:704
-#, fuzzy
+#: ../gdk-pixbuf/io-tiff.c:700
 msgid "Failed to save TIFF image"
-msgstr "Vekirina wêneya TIFF biserneket"
+msgstr "Tomarkirina wêneya TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:742
-#, fuzzy
+#: ../gdk-pixbuf/io-tiff.c:738
 msgid "Failed to write TIFF data"
-msgstr "Vekirina wêneya TIFF biserneket"
+msgstr "Nivîsandina daneyên TIFF biserneket"
 
-#: gdk-pixbuf/io-tiff.c:794
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-tiff.c:790
 msgid "Couldn't write to TIFF file"
-msgstr "Nikarî ku di dosya BMP de binvîse"
+msgstr "Nikarî ku di dosya TIFF de binvîse"
 
-#: gdk-pixbuf/io-tiff.c:844
+#: ../gdk-pixbuf/io-tiff.c:846
 msgid "The TIFF image format"
 msgstr "Formata wêneya TIFF"
 
-#: gdk-pixbuf/io-wbmp.c:246
-#, c-format
+#: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
 msgstr "Firehiya wêne sifire"
 
-#: gdk-pixbuf/io-wbmp.c:264
-#, c-format
+#: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "bilidahiya wêne sifire"
 
-#: gdk-pixbuf/io-wbmp.c:275
-#, c-format
+#: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
 msgstr "Bîr têra barkirina wêne nake"
 
-#: gdk-pixbuf/io-wbmp.c:334
-#, c-format
+#: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "Nikare yê mayî tomar bike"
 
-#: gdk-pixbuf/io-wbmp.c:368
+#: ../gdk-pixbuf/io-wbmp.c:374
 msgid "The WBMP image format"
 msgstr "Formata wêneya WMBP"
 
-#: gdk-pixbuf/io-xbm.c:295
-#, c-format
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
-msgstr "Dosiya XBM ya nederbasdar"
+msgstr "Pelê XBM ya nederbasdar"
 
-#: gdk-pixbuf/io-xbm.c:305
-#, c-format
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Bîr têra vekirina dosya wêneyê XBM nake"
 
-#: gdk-pixbuf/io-xbm.c:453
-#, c-format
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Nivîs di dosya demî de"
+msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:488
+#: ../gdk-pixbuf/io-xbm.c:494
 msgid "The XBM image format"
 msgstr "Şêwaza wêneyê XBM"
 
-#: gdk-pixbuf/io-xpm.c:468
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
 msgstr "serikê XPM nîne"
 
-#: gdk-pixbuf/io-xpm.c:477
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
 msgstr "Serikê XPM çewte"
 
-#: gdk-pixbuf/io-xpm.c:485
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
 msgstr "Firehiya wêne di dosya XPM <= 0 ye"
 
-#: gdk-pixbuf/io-xpm.c:493
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
 msgstr "Bilindahiya wêneyê dosya XPM <= 0"
 
-#: gdk-pixbuf/io-xpm.c:501
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Dosya XPM xwedî hejmarek ne rast a sembolane"
 
-#: gdk-pixbuf/io-xpm.c:510
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
 msgstr "Dosya XPM xwedî hejmarek ne rast a rengane"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:522
+#: ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Nikare bîrekê ji bo barkirina wêneyê XPM veqetîne"
 
-#: gdk-pixbuf/io-xpm.c:545
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
 msgstr "Nikare nexşeya rengan XPM bixwîne"
 
-#: gdk-pixbuf/io-xpm.c:777
-#, c-format
+#: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Di dema barkirina wêneyê XPM de Nivîsîna di dosya demî de biserneket"
+msgstr "Di dema barkirina wêneyê XPM de Nivîsîna di pelê demî de biserneket"
 
-#: gdk-pixbuf/io-xpm.c:812
+#: ../gdk-pixbuf/io-xpm.c:818
 msgid "The XPM image format"
 msgstr "Formata wêneya XPM"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:116
+#: ../gdk/gdk.c:126
 msgid "Program class as used by the window manager"
-msgstr ""
-"Dabeşkirina bernameyê weke ku ji alî gerînendeyê paceyan ve tê bikaranîn"
+msgstr "Dabeşkirina bernameyê weke ku ji alî gerînendeyê paceyan ve tê bikaranîn"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:117
+#: ../gdk/gdk.c:127
 msgid "CLASS"
 msgstr "Celeb"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:119
+#: ../gdk/gdk.c:129
 msgid "Program name as used by the window manager"
 msgstr "Navê bernameyê wekî ku ji alî gerînendeyê paceyan ve tê bikaranîn"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:120
+#: ../gdk/gdk.c:130
 msgid "NAME"
 msgstr "NAV"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:122
+#: ../gdk/gdk.c:132
 msgid "X display to use"
 msgstr "Dîmendêra X ya ku dê were bikaranîn"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:123
+#: ../gdk/gdk.c:133
 msgid "DISPLAY"
-msgstr "Nîşandan"
+msgstr "DÎMEN"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:125
+#: ../gdk/gdk.c:135
 msgid "X screen to use"
 msgstr "Dîmender a X ya bikaranînê"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:126
+#: ../gdk/gdk.c:136
 msgid "SCREEN"
 msgstr "Dîmender"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:129
+#: ../gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
 msgstr "Nîşanên Gdk bo çespandinê"
 
@@ -930,222 +814,242 @@ msgstr "Nîşanên Gdk bo çespandinê"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:130 gdk/gdk.c:133 gtk/gtkmain.c:412 gtk/gtkmain.c:415
+#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:143
+#: ../gtk/gtkmain.c:412
+#: ../gtk/gtkmain.c:415
 msgid "FLAGS"
 msgstr "Al"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:132
+#: ../gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
 msgstr "Nîşanekên neqandina çewtiyan yên Gdk yên divê were rakirin"
 
-#: gdk/keyname-table.h:3940
+#: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
 msgstr "BackSpace"
 
-#: gdk/keyname-table.h:3941
+#: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
 msgstr "Tab"
 
-#: gdk/keyname-table.h:3942
+#: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
 msgstr "Return"
 
-#: gdk/keyname-table.h:3943
+#: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
 msgstr "Pause"
 
-#: gdk/keyname-table.h:3944
+#: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: gdk/keyname-table.h:3945
+#: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
 msgstr "Sys_Req"
 
-#: gdk/keyname-table.h:3946
+#: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
 msgstr "Esc"
 
-#: gdk/keyname-table.h:3947
+#: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
 msgstr "Multi_key"
 
-#: gdk/keyname-table.h:3948
+#: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "Home (mal)"
+msgstr "Home (Mal)"
 
-#: gdk/keyname-table.h:3949
+#: ../gdk/keyname-table.h:3949
+msgid "keyboard label|Left"
+msgstr "Çep"
+
+#: ../gdk/keyname-table.h:3950
+msgid "keyboard label|Up"
+msgstr "Jor"
+
+#: ../gdk/keyname-table.h:3951
+msgid "keyboard label|Right"
+msgstr "Rast"
+
+#: ../gdk/keyname-table.h:3952
+msgid "keyboard label|Down"
+msgstr "Jêr"
+
+#: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
 msgstr "Rûpela_Jor"
 
-#: gdk/keyname-table.h:3950
+#: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
 msgstr "Rûpela_Jêr"
 
-#: gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3955
 msgid "keyboard label|End"
 msgstr "End (Dawî)"
 
-#: gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3956
 msgid "keyboard label|Begin"
 msgstr "Begin (Destpêk)"
 
-#: gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
-msgstr "Print (Çap)"
+msgstr "Çap bike"
 
-#: gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
 msgstr "Insert"
 
-#: gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
 msgstr "Num-Lock"
 
-#: gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
 msgstr "KP_Space"
 
-#: gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Tab"
 msgstr "KP_Tab"
 
-#: gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Enter"
 msgstr "KP_Enter"
 
-#: gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Home"
 msgstr "KP_Home"
 
-#: gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Left"
 msgstr "KP_Left"
 
-#: gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Up"
 msgstr "KP_Up"
 
-#: gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Right"
 msgstr "KP_Right"
 
-#: gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Down"
 msgstr "KP_Down"
 
-#: gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Prior"
 msgstr "KP_Prior"
 
-#: gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Next"
 msgstr "KP_Next"
 
-#: gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3972
 msgid "keyboard label|KP_End"
 msgstr "KP_End"
 
-#: gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3973
 msgid "keyboard label|KP_Begin"
 msgstr "KP_Begin"
 
-#: gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3974
 msgid "keyboard label|KP_Insert"
 msgstr "KP_Insert"
 
-#: gdk/keyname-table.h:3971
+#: ../gdk/keyname-table.h:3975
 msgid "keyboard label|KP_Delete"
 msgstr "KP_Delete"
 
-#: gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3976
 msgid "keyboard label|Delete"
 msgstr "Delete (Jêbirin)"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:60
+#: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "Koma GDI ne pêwiste"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: ../gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Wintab API ji bo li hevhatinê nede bikaranîn"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:64
+#: ../gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "wekî --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:66
+#: ../gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Wintab APIyê bikar bîne [pêşravekî]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:68
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "Mezinahiya paletê ya di moda 8 bîtan de"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:69
+#: ../gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "RENG"
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:92
+#: ../gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
 msgstr "Lêdanên X hevdem bike"
 
-#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:271
+#: ../gtk/gtkaboutdialog.c:2075
 msgid "License"
-msgstr "Lîsans"
+msgstr "Peyman"
 
-#: gtk/gtkaboutdialog.c:274
+#: ../gtk/gtkaboutdialog.c:272
 msgid "The license of the program"
-msgstr "Peymana bernameyê"
+msgstr "Lîsansa bernameyê"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:503
+#: ../gtk/gtkaboutdialog.c:502
 msgid "C_redits"
-msgstr "_Spas"
+msgstr "_pêbawerî"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:516
+#: ../gtk/gtkaboutdialog.c:515
 msgid "_License"
-msgstr "_Lîsans"
+msgstr "_Peyman"
 
-#: gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:756
 #, c-format
 msgid "About %s"
 msgstr "Der barê %s de"
 
-#: gtk/gtkaboutdialog.c:2004
+#: ../gtk/gtkaboutdialog.c:2003
 msgid "Credits"
-msgstr "Lîsteya pêbaweran"
+msgstr "Spas"
 
-#: gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2029
 msgid "Written by"
 msgstr "Nivîskar"
 
-#: gtk/gtkaboutdialog.c:2033
+#: ../gtk/gtkaboutdialog.c:2032
 msgid "Documented by"
-msgstr "Hate Pelgekirin ji aliyê"
+msgstr "Belgekirin"
 
-#: gtk/gtkaboutdialog.c:2045
+#: ../gtk/gtkaboutdialog.c:2044
 msgid "Translated by"
 msgstr "Wergêr"
 
-#: gtk/gtkaboutdialog.c:2049
+#: ../gtk/gtkaboutdialog.c:2048
 msgid "Artwork by"
 msgstr "Huner"
 
@@ -1155,7 +1059,7 @@ msgstr "Huner"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:89
+#: ../gtk/gtkaccellabel.c:89
 msgid "keyboard label|Shift"
 msgstr "Shift"
 
@@ -1165,7 +1069,7 @@ msgstr "Shift"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:96
+#: ../gtk/gtkaccellabel.c:96
 msgid "keyboard label|Ctrl"
 msgstr "Ctrl"
 
@@ -1175,7 +1079,7 @@ msgstr "Ctrl"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:103
+#: ../gtk/gtkaccellabel.c:103
 msgid "keyboard label|Alt"
 msgstr "Alt"
 
@@ -1185,10 +1089,9 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:577
-#, fuzzy
+#: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Super"
-msgstr "Space"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1196,10 +1099,9 @@ msgstr "Space"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:591
-#, fuzzy
+#: ../gtk/gtkaccellabel.c:591
 msgid "keyboard label|Hyper"
-msgstr "Home (mal)"
+msgstr "Hîper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1207,18 +1109,17 @@ msgstr "Home (mal)"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:605
-#, fuzzy
+#: ../gtk/gtkaccellabel.c:605
 msgid "keyboard label|Meta"
-msgstr "Tab"
+msgstr "Meta"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:619
+#: ../gtk/gtkaccellabel.c:619
 msgid "keyboard label|Space"
 msgstr "Space"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:623
+#: ../gtk/gtkaccellabel.c:623
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
@@ -1231,7 +1132,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:696
+#: ../gtk/gtkcalendar.c:670
 msgid "calendar:MY"
 msgstr "calendar: ya min"
 
@@ -1239,7 +1140,7 @@ msgstr "calendar: ya min"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: ../gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
 msgstr "Salname:Hefte_destpêk:0"
 
@@ -1251,7 +1152,7 @@ msgstr "Salname:Hefte_destpêk:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1606
+#: ../gtk/gtkcalendar.c:1595
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1266,10 +1167,11 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1637 gtk/gtkcalendar.c:2215
+#: ../gtk/gtkcalendar.c:1626
+#: ../gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1282,10 +1184,11 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1671 gtk/gtkcalendar.c:2089
-#, fuzzy, c-format
+#: ../gtk/gtkcalendar.c:1660
+#: ../gtk/gtkcalendar.c:2078
+#, c-format
 msgid "calendar:week:digits|%d"
-msgstr "Salname:Hefte_destpêk:0"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1298,7 +1201,7 @@ msgstr "Salname:Hefte_destpêk:0"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1880
+#: ../gtk/gtkcalendar.c:1869
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1306,724 +1209,704 @@ msgstr "%Y"
 #. * a disabled accelerator key combination. Only include
 #. * the text after the | in the translation.
 #.
-#: gtk/gtkcellrendereraccel.c:245
+#: ../gtk/gtkcellrendereraccel.c:245
 msgid "Accelerator|Disabled"
-msgstr ""
+msgstr "Bêbandor"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:384 gtk/gtkcellrendereraccel.c:595
+#: ../gtk/gtkcellrendereraccel.c:382
+#: ../gtk/gtkcellrendereraccel.c:593
 msgid "New accelerator..."
-msgstr ""
+msgstr "Lezkera nû..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
+#: ../gtk/gtkcellrendererprogress.c:237
+#: ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%% %d"
 
-#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
+#: ../gtk/gtkcolorbutton.c:189
+#: ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
-msgstr "Rengekî hilbijêre"
+msgstr "Rengeke hilbijêre"
 
-#: gtk/gtkcolorbutton.c:449
+#: ../gtk/gtkcolorbutton.c:449
 msgid "Received invalid color data\n"
-msgstr "Daneya rengan ne tekûz\n"
+msgstr "Daneya rengan ne tekûze\n"
 
-#: gtk/gtkcolorsel.c:562
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"Rengê ku berê hatiye hilbijartin bi danberhevkirina rengê ku te niha "
-"hilbijartiye. tu dikarî vî rengî bibî malikên rengan an jî wekî rengê "
-"bikaranînê hilbijêrî."
+#: ../gtk/gtkcolorsel.c:561
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "Rengê ku berê hatiye hilbijartin bi danberhevkirina rengê ku te niha hilbijartiye. tu dikarî vî rengî bibî malikên rengan an jî wekî rengê bikaranînê hilbijêrî."
 
-#: gtk/gtkcolorsel.c:567
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"Tu dikarî rengê ku te niha hilbijartiye di malikên rengan de tomar bikî ji "
-"bo di pêşerojê de tu bikaribî bikar bînî."
+#: ../gtk/gtkcolorsel.c:566
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr "Tu dikarî rengê ku te niha hilbijartiye di malikên rengan de tomar bikî ji bo di pêşerojê de tu bikaribî bikar bînî."
 
-#: gtk/gtkcolorsel.c:954
+#: ../gtk/gtkcolorsel.c:953
 msgid "_Save color here"
 msgstr "Reng li vir _tomar bike"
 
-#: gtk/gtkcolorsel.c:1159
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Malika rengan bitikîne da tu bikî rengê bikaranîne. ji bo guhertina vê "
-"malikê bişkoja rastê ya mişk bitikîne û \"reng li vir tomar bike\" hilbijêre"
+#: ../gtk/gtkcolorsel.c:1158
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "Malika rengan bitikîne da tu bikî rengê bikaranîne. ji bo guhertina vê malikê bişkoja rastê ya mişk bitikîne û \"reng li vir tomar bike\" hilbijêre"
 
-#: gtk/gtkcolorsel.c:1926
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Ji giloverîka ku derve ye rengekî hilbijêrin. Tu dikarî ji sêgoşeya ku li "
-"hundir e tarîbûn û vekirîbûna reng hilbijêre."
+#: ../gtk/gtkcolorsel.c:1936
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr "Ji giloverîka ku derve ye rengekî hilbijêrin. Tu dikarî ji sêgoşeya ku li hundir e tarîbûn û vekirîbûna reng hilbijêre."
 
-#: gtk/gtkcolorsel.c:1951
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Piştî ku te dilopdank tikand tu dikarî rengekî ku li ser dîmendera te ye "
-"bitikîne û reng hilbijêre"
+#: ../gtk/gtkcolorsel.c:1961
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgstr "Piştî ku te dilopdank tikand, tu dikarî rengekî ku li ser dîmendera te ye bitikîne û reng hilbijêre."
 
-#: gtk/gtkcolorsel.c:1960
+#: ../gtk/gtkcolorsel.c:1970
 msgid "_Hue:"
 msgstr "_Reng:"
 
-#: gtk/gtkcolorsel.c:1961
+#: ../gtk/gtkcolorsel.c:1971
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Cihê li ser dolaba rengan."
 
-#: gtk/gtkcolorsel.c:1963
+#: ../gtk/gtkcolorsel.c:1973
 msgid "_Saturation:"
-msgstr "_Têrkirin"
+msgstr "_Têrkirin:"
 
-#: gtk/gtkcolorsel.c:1964
+#: ../gtk/gtkcolorsel.c:1974
 msgid "\"Deepness\" of the color."
-msgstr "\"Kûrbûn\" a rengan"
+msgstr "\"Kûrbûn\" a rengan."
 
-#: gtk/gtkcolorsel.c:1965
+#: ../gtk/gtkcolorsel.c:1975
 msgid "_Value:"
 msgstr "_Nirx:"
 
-#: gtk/gtkcolorsel.c:1966
+#: ../gtk/gtkcolorsel.c:1976
 msgid "Brightness of the color."
 msgstr "Biriqandina rengî."
 
-#: gtk/gtkcolorsel.c:1967
+#: ../gtk/gtkcolorsel.c:1977
 msgid "_Red:"
 msgstr "_Sor:"
 
-#: gtk/gtkcolorsel.c:1968
+#: ../gtk/gtkcolorsel.c:1978
 msgid "Amount of red light in the color."
 msgstr "Asta rengê sor."
 
-#: gtk/gtkcolorsel.c:1969
+#: ../gtk/gtkcolorsel.c:1979
 msgid "_Green:"
 msgstr "_Kesk:"
 
-#: gtk/gtkcolorsel.c:1970
+#: ../gtk/gtkcolorsel.c:1980
 msgid "Amount of green light in the color."
 msgstr "Asta rengê kesk di reng de."
 
-#: gtk/gtkcolorsel.c:1971
+#: ../gtk/gtkcolorsel.c:1981
 msgid "_Blue:"
 msgstr "_Şîn:"
 
-#: gtk/gtkcolorsel.c:1972
+#: ../gtk/gtkcolorsel.c:1982
 msgid "Amount of blue light in the color."
 msgstr "Asta rengê şîn di reng de."
 
-#: gtk/gtkcolorsel.c:1975
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:1985
 msgid "Op_acity:"
 msgstr "_Tarîkirin:"
 
-#: gtk/gtkcolorsel.c:1983 gtk/gtkcolorsel.c:1994
+#: ../gtk/gtkcolorsel.c:1993
+#: ../gtk/gtkcolorsel.c:2004
 msgid "Transparency of the color."
 msgstr "Zelaliya rengî."
 
-#: gtk/gtkcolorsel.c:2001
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:2011
 msgid "Color _name:"
-msgstr "Navê _Reng:"
+msgstr "Navê _reng:"
 
-#: gtk/gtkcolorsel.c:2016
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Tu dikarî wek şêweyê HTML reng derbasbikî, an jî bi hesanî dikarî navê reng "
-"binvîsî wekî mînak 'sor'."
+#: ../gtk/gtkcolorsel.c:2026
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "Tu dikarî wek şêweyê HTML reng derbasbikî, an jî bi hesanî dikarî navê reng binvîsî wekî mînak 'sor'."
 
-#: gtk/gtkcolorsel.c:2046
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:2056
 msgid "_Palette:"
-msgstr "_tabloya rengan"
+msgstr "_Palet:"
 
-#: gtk/gtkcolorsel.c:2075
+#: ../gtk/gtkcolorsel.c:2085
 msgid "Color Wheel"
 msgstr "Dolabê rengan"
 
-#: gtk/gtkcolorseldialog.c:89
+#: ../gtk/gtkcolorseldialog.c:89
 msgid "Color Selection"
 msgstr "Hilbijartina rengan"
 
-#: gtk/gtkentry.c:4919 gtk/gtktextview.c:7243
+#: ../gtk/gtkentry.c:4969
+#: ../gtk/gtktextview.c:7336
 msgid "Input _Methods"
-msgstr "Rêyên_Têketinê"
+msgstr "Riyên_Têketinê"
 
-#: gtk/gtkentry.c:4933 gtk/gtktextview.c:7257
+#: ../gtk/gtkentry.c:4983
+#: ../gtk/gtktextview.c:7350
 msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
-#: gtk/gtkfilechooser.c:1695 gtk/gtkfilechooser.c:1739
-#: gtk/gtkfilechooser.c:1814 gtk/gtkfilechooser.c:1858
+#: ../gtk/gtkfilechooser.c:1694
+#: ../gtk/gtkfilechooser.c:1738
+#: ../gtk/gtkfilechooser.c:1813
+#: ../gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
-msgstr "Navê dosya çewte: %s"
+msgstr "Navê pelê nederbasdar: %s"
 
-#: gtk/gtkfilechooserbutton.c:67
+#: ../gtk/gtkfilechooserbutton.c:67
 msgid "Select A File"
-msgstr "Dosiyekê Hilbijêre"
+msgstr "Pelekî Hilbijêre"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1598
+#: ../gtk/gtkfilechooserbutton.c:68
+#: ../gtk/gtkfilechooserdefault.c:1689
 msgid "Desktop"
 msgstr "Sermasê"
 
-#: gtk/gtkfilechooserbutton.c:69
+#: ../gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
-msgstr "(Tune)"
+msgstr "(Ne yek jî)"
 
-#: gtk/gtkfilechooserbutton.c:1877
+#: ../gtk/gtkfilechooserbutton.c:2017
 msgid "Other..."
 msgstr "Yên din..."
 
-#: gtk/gtkfilechooserdefault.c:918
+#: ../gtk/gtkfilechooserdefault.c:917
 msgid "Could not retrieve information about the file"
-msgstr "Nikare agahiyên li ser dosya bibîne"
+msgstr "Nikare agahiyên li ser pelî bibîne"
 
-#: gtk/gtkfilechooserdefault.c:929
+#: ../gtk/gtkfilechooserdefault.c:928
 msgid "Could not add a bookmark"
 msgstr "Nikare beyanameyekê lê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:940
+#: ../gtk/gtkfilechooserdefault.c:939
 msgid "Could not remove bookmark"
 msgstr "Nikare beyanameyekê jê bibe"
 
-#: gtk/gtkfilechooserdefault.c:951
+#: ../gtk/gtkfilechooserdefault.c:950
 msgid "The folder could not be created"
 msgstr "Reng nehatiye avakirin"
 
-#: gtk/gtkfilechooserdefault.c:964
-msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"Peldank pêk nehat, bi vî navî jixwe peldankek heye. Ji bo peldankê yan "
-"navekî din bikar bîne an jî berê berê navê dosyeyê biguherîne."
+#: ../gtk/gtkfilechooserdefault.c:963
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr "Peldank pêk nehat, bi vî navî jixwe peldankek heye. Ji bo peldankê yan navekî din bikar bîne an jî berê berê navê pelê biguherîne."
 
-#: gtk/gtkfilechooserdefault.c:977
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Invalid file name"
-msgstr "Navê dosiya ne derbasbare"
+msgstr "Navê pelî ne derbasbare"
 
-#: gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:986
 msgid "The folder contents could not be displayed"
 msgstr "Naveroka peldankê nehate nîşandan"
 
-#: gtk/gtkfilechooserdefault.c:2497
+#. Translators: the first string is a path and the second string
+#. * is a hostname. Nautilus and the panel contain the same string
+#. * to translate.
+#.
+#: ../gtk/gtkfilechooserdefault.c:1493
+#, c-format
+msgid "%1$s on %2$s"
+msgstr "%1$s di %2$s de"
+
+#: ../gtk/gtkfilechooserdefault.c:2592
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Belgedankekê  '%s' li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2538
-#, c-format
+#: ../gtk/gtkfilechooserdefault.c:2633
 msgid "Add the current folder to the bookmarks"
 msgstr "Belgedanka heyî li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2540
-#, c-format
+#: ../gtk/gtkfilechooserdefault.c:2635
 msgid "Add the selected folders to the bookmarks"
 msgstr "Belgedanka hilbijartî li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2580
+#: ../gtk/gtkfilechooserdefault.c:2675
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Bijareya '%s' rake"
 
-#: gtk/gtkfilechooserdefault.c:3011
+#: ../gtk/gtkfilechooserdefault.c:3106
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "nikare beyanameyê zêde bike bo '%s' ji ber ku navê rêya xebatê çewte."
 
-#: gtk/gtkfilechooserdefault.c:3242
+#: ../gtk/gtkfilechooserdefault.c:3337
 msgid "Remove"
-msgstr "Jê bibe"
+msgstr "Rake"
 
-#: gtk/gtkfilechooserdefault.c:3251
+#: ../gtk/gtkfilechooserdefault.c:3346
 msgid "Rename..."
 msgstr "Nav biguherîne..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3393
+#: ../gtk/gtkfilechooserdefault.c:3488
 msgid "Places"
-msgstr ""
+msgstr "Cih"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3447
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:3542
 msgid "_Places"
-msgstr "_Guhestin"
+msgstr "_Cih"
 
-#: gtk/gtkfilechooserdefault.c:3503 gtk/gtkstock.c:317
+#: ../gtk/gtkfilechooserdefault.c:3598
+#: ../gtk/gtkstock.c:317
 msgid "_Add"
-msgstr "_lê zêde bike"
+msgstr "_Têxê"
 
-#: gtk/gtkfilechooserdefault.c:3510
+#: ../gtk/gtkfilechooserdefault.c:3605
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Beyanameya hilbijartî li peldankê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:3515 gtk/gtkstock.c:404
+#: ../gtk/gtkfilechooserdefault.c:3610
+#: ../gtk/gtkstock.c:404
 msgid "_Remove"
-msgstr "_Jê bibe"
+msgstr "_Rake"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: ../gtk/gtkfilechooserdefault.c:3617
 msgid "Remove the selected bookmark"
 msgstr "Beyanameya hilbijartî jê bibe"
 
-#: gtk/gtkfilechooserdefault.c:3618
+#: ../gtk/gtkfilechooserdefault.c:3713
 msgid "Could not select file"
-msgstr "Nikare dosya hilbijêre"
+msgstr "Nikare pel hilbijêre"
 
-#: gtk/gtkfilechooserdefault.c:3755
+#: ../gtk/gtkfilechooserdefault.c:3850
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr "Nikare dosya hilbijêre%s' ji ber çewtî di navê rê de heye."
+msgstr "Nikare pelê '%s' hilbijêre ji ber çewtî di navê rêç de heye."
 
-#: gtk/gtkfilechooserdefault.c:3812
+#: ../gtk/gtkfilechooserdefault.c:3907
 msgid "_Add to Bookmarks"
 msgstr "_Li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:3826
+#: ../gtk/gtkfilechooserdefault.c:3921
 msgid "Show _Hidden Files"
-msgstr "Dosiyên veşartî _nîşan bide"
+msgstr "Pelên veşartî _nîşan bide"
 
-#: gtk/gtkfilechooserdefault.c:3963 gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4058
+#: ../gtk/gtkfilesel.c:729
 msgid "Files"
-msgstr "Dosya"
+msgstr "Pel"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: ../gtk/gtkfilechooserdefault.c:4103
 msgid "Name"
 msgstr "Nav"
 
-#: gtk/gtkfilechooserdefault.c:4033
+#: ../gtk/gtkfilechooserdefault.c:4128
 msgid "Size"
 msgstr "Mezinahî"
 
-#: gtk/gtkfilechooserdefault.c:4046
+#: ../gtk/gtkfilechooserdefault.c:4141
 msgid "Modified"
 msgstr "Hatiye guherandin"
 
-#: gtk/gtkfilechooserdefault.c:4078
+#: ../gtk/gtkfilechooserdefault.c:4173
 msgid "Select which types of files are shown"
-msgstr "Hilbijêre kîjan cureyê dosyayan hatiye nîşandan"
+msgstr "Hilbijêre kîjan cureyê pelan hatiye nîşandan"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4226 gtk/gtkprinteroptionwidget.c:771
+#: ../gtk/gtkfilechooserdefault.c:4321
+#: ../gtk/gtkprinteroptionwidget.c:778
 msgid "_Name:"
 msgstr "_Nav:"
 
-#: gtk/gtkfilechooserdefault.c:4268
+#: ../gtk/gtkfilechooserdefault.c:4363
 msgid "_Browse for other folders"
 msgstr "_Li peldankên din binere"
 
-#: gtk/gtkfilechooserdefault.c:4503
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:4598
 msgid "Type a file name"
-msgstr "Navê dosiya ne derbasbare"
+msgstr "Navê pelekî binivîse"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4540
+#: ../gtk/gtkfilechooserdefault.c:4634
 msgid "Create Fo_lder"
 msgstr "_Peldankê biafirîne"
 
-#: gtk/gtkfilechooserdefault.c:4550
+#: ../gtk/gtkfilechooserdefault.c:4644
 msgid "_Location:"
 msgstr "_Cih:"
 
-#: gtk/gtkfilechooserdefault.c:4790
+#: ../gtk/gtkfilechooserdefault.c:4881
 msgid "Save in _folder:"
 msgstr "Di _peldankê de tomar bike:"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: ../gtk/gtkfilechooserdefault.c:4883
 msgid "Create in _folder:"
 msgstr "Di peldankê de _biafirîne:"
 
-#: gtk/gtkfilechooserdefault.c:6241
-#, c-format
+#: ../gtk/gtkfilechooserdefault.c:6375
 msgid "Cannot change to folder because it is not local"
 msgstr "Nikare peldank biguhêre ji ber ne herîmiye"
 
-#: gtk/gtkfilechooserdefault.c:6814 gtk/gtkfilechooserdefault.c:6835
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:6948
+#: ../gtk/gtkfilechooserdefault.c:6969
+#, c-format
 msgid "Shortcut %s already exists"
-msgstr "Kurterê %s tuneye"
+msgstr "Kurterê %s jixwe heye"
 
-#: gtk/gtkfilechooserdefault.c:6925
+#: ../gtk/gtkfilechooserdefault.c:7059
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kurterê %s tuneye"
 
-#: gtk/gtkfilechooserdefault.c:7180
+#: ../gtk/gtkfilechooserdefault.c:7314
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr "Navê dosya \"%s\" ji berê ve heye. tu dixwazî biguhêrî?"
+msgstr "Pelek bi navê \"%s\" ji berê ve heye. Tu dixwazî ser wî binivîsî?"
 
-#: gtk/gtkfilechooserdefault.c:7183
+#: ../gtk/gtkfilechooserdefault.c:7317
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"Navê dosya ji berê ve heye\"%s\" . Heke tu biguhêrî dê di ser naveroka dosya "
-"berê de were nivisandin."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "Ev pel ji berê ve di \"%s\" de heye. Heke tu biguhêrî dê di ser naveroka pelê berê de were nivisandin."
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: ../gtk/gtkfilechooserdefault.c:7322
 msgid "_Replace"
 msgstr "_Guhestin"
 
-#: gtk/gtkfilechooserdefault.c:7838
+#: ../gtk/gtkfilechooserdefault.c:8018
 #, c-format
 msgid "Could not mount %s"
 msgstr "Siwarkirina %s biserneket"
 
-#: gtk/gtkfilechooserdefault.c:8232
+#: ../gtk/gtkfilechooserdefault.c:8412
 msgid "Type name of new folder"
 msgstr "Navê celebê peldanka nû"
 
-#: gtk/gtkfilechooserdefault.c:8277
+#: ../gtk/gtkfilechooserdefault.c:8457
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
 msgstr[1] "%d bayt"
 
-#: gtk/gtkfilechooserdefault.c:8279
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8459
+#, c-format
 msgid "%.1f KB"
-msgstr "%.1f K"
+msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:8281
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8461
+#, c-format
 msgid "%.1f MB"
-msgstr "%.1f M"
+msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:8283
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:8463
+#, c-format
 msgid "%.1f GB"
-msgstr "%.1f G"
+msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:8331 gtk/gtkfilechooserdefault.c:8355
+#: ../gtk/gtkfilechooserdefault.c:8511
+#: ../gtk/gtkfilechooserdefault.c:8535
 msgid "Unknown"
 msgstr "Nenas"
 
-#: gtk/gtkfilechooserdefault.c:8342
+#: ../gtk/gtkfilechooserdefault.c:8522
 msgid "Today"
 msgstr "Îro"
 
-#: gtk/gtkfilechooserdefault.c:8344
+#: ../gtk/gtkfilechooserdefault.c:8524
 msgid "Yesterday"
-msgstr "Doh"
+msgstr "Do"
 
-#: gtk/gtkfilechoosersettings.c:122
+#: ../gtk/gtkfilechoosersettings.c:123
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
-msgstr ""
+msgstr "Rêzik %d, stûn %d: çawaniya kem \"%s\""
 
-#: gtk/gtkfilechoosersettings.c:139
+#: ../gtk/gtkfilechoosersettings.c:140
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
-msgstr ""
+msgstr "Rêzik %d, stûn %d: hêmana ne li bendê \"%s\""
 
-#: gtk/gtkfilechoosersettings.c:157
+#: ../gtk/gtkfilechoosersettings.c:158
 #, c-format
-msgid ""
-"Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
-"\" instead"
-msgstr ""
+msgid "Line %d, column %d: expected end of element \"%s\", but found end for element \"%s\" instead"
+msgstr "Rêzika %d, stûn %d: dawiya texmînkirî ya \"%s\", lê li şûnê wê dawiya hêmana \"%s\" hatiye dîtin"
 
-#: gtk/gtkfilechoosersettings.c:201
+#: ../gtk/gtkfilechoosersettings.c:202
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr ""
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgstr "Rêzika %d, stûnê %d: texmînkirî \"%s\" di asta serî de, lê li şûnê \"%s\" dibîne"
 
-#: gtk/gtkfilechoosersettings.c:237 gtk/gtkfilechoosersettings.c:265
+#: ../gtk/gtkfilechoosersettings.c:238
+#: ../gtk/gtkfilechoosersettings.c:266
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-msgstr ""
+msgstr "Rêza %d, stûn %d: texmînkirî \"%s\" an \"%s\", li şûna wê \"%s\" dibîne"
 
-#: gtk/gtkfilechoosersettings.c:515
-#, fuzzy, c-format
+#: ../gtk/gtkfilechoosersettings.c:516
+#, c-format
 msgid "Could not create directory: %s"
-msgstr "nikare ikona lodkirî bibîne ji bo %s"
+msgstr "Nikare pelrêçê biafirîne :%s"
 
-#: gtk/gtkfilesel.c:694
+#: ../gtk/gtkfilesel.c:693
 msgid "Folders"
 msgstr "Peldank"
 
-#: gtk/gtkfilesel.c:698
+#: ../gtk/gtkfilesel.c:697
 msgid "Fol_ders"
 msgstr "Pel_dank"
 
-#: gtk/gtkfilesel.c:734
+#: ../gtk/gtkfilesel.c:733
 msgid "_Files"
-msgstr "_Dosya"
+msgstr "_Pel"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2208
+#: ../gtk/gtkfilesel.c:820
+#: ../gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Peldank nayê xwendin: %s"
 
-#: gtk/gtkfilesel.c:950
+#: ../gtk/gtkfilesel.c:949
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Dosya \"%s\" di makîneyeke din deye(jê re tê gotin)%s) û dibe ne li gor vê "
-"bernameyê be. Tu bawerî ku dixwazî wê hilbijêrî?"
+"Pelê \"%s\" di makîneyeke din de ye (jê re tê gotin %s) û dibe ne li gor vê bernameyê be.\n"
+"Tu bawerî ku dixwazî wê hilbijêrî?"
 
-#: gtk/gtkfilesel.c:1080
+#: ../gtk/gtkfilesel.c:1079
 msgid "_New Folder"
 msgstr "_Peldanka nû"
 
-#: gtk/gtkfilesel.c:1091
+#: ../gtk/gtkfilesel.c:1090
 msgid "De_lete File"
-msgstr "Dosiya _jê bibe"
+msgstr "Pel _jê bibe"
 
-#: gtk/gtkfilesel.c:1102
+#: ../gtk/gtkfilesel.c:1101
 msgid "_Rename File"
-msgstr "_Navê dosiyê biguherîne"
+msgstr "_Navê pelê biguherîne"
 
-#: gtk/gtkfilesel.c:1407
+#: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Di navê peldankê de\"%s\" sembolên ne li gor navê dosyayan heye."
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Di navê peldankê de\"%s\" sembolên henu ku di navên pelan de qedexe ne"
 
-#: gtk/gtkfilesel.c:1409 gtk/gtkfilesel.c:1418 gtk/gtkfilesystemunix.c:928
-#: gtk/gtkfilesystemwin32.c:1019
+#: ../gtk/gtkfilesel.c:1408
+#: ../gtk/gtkfilesel.c:1417
+#: ../gtk/gtkfilesystemunix.c:1045
+#: ../gtk/gtkfilesystemwin32.c:1164
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Di afirandina peldanka '%s' de çewtî: %s"
 
-#: gtk/gtkfilesel.c:1452
+#: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
 msgstr "Peldanka Nû"
 
-#: gtk/gtkfilesel.c:1467
+#: ../gtk/gtkfilesel.c:1466
 msgid "_Folder name:"
 msgstr "_Navê peldankê:"
 
-#: gtk/gtkfilesel.c:1491
+#: ../gtk/gtkfilesel.c:1490
 msgid "C_reate"
 msgstr "Bi_afirîne"
 
-#: gtk/gtkfilesel.c:1534 gtk/gtkfilesel.c:1641 gtk/gtkfilesel.c:1654
+#: ../gtk/gtkfilesel.c:1533
+#: ../gtk/gtkfilesel.c:1640
+#: ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Di navê dosya de \"%s\" sembolên qedexe hene"
+msgstr "Di navê pelî de \"%s\" sembolên qedexe hene"
 
-#: gtk/gtkfilesel.c:1537 gtk/gtkfilesel.c:1547
-#, fuzzy, c-format
+#: ../gtk/gtkfilesel.c:1536
+#: ../gtk/gtkfilesel.c:1546
+#, c-format
 msgid "Error deleting file '%s': %s"
-msgstr "Bi çewtî jêbirina dosya \"%s\": %s"
+msgstr "Di jêbirina pelê '%s' de çewtî: %s"
 
-#: gtk/gtkfilesel.c:1590
+#: ../gtk/gtkfilesel.c:1589
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "Bi rastî bila dosiya \"%s\" were jê birin?"
+msgstr "Bi rastî bila pelê \"%s\" were jê birin?"
 
-#: gtk/gtkfilesel.c:1595
+#: ../gtk/gtkfilesel.c:1594
 msgid "Delete File"
-msgstr "Dosyeyê jê bibe"
+msgstr "Pel jê bibe"
 
-#: gtk/gtkfilesel.c:1643
-#, fuzzy, c-format
+#: ../gtk/gtkfilesel.c:1642
+#, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr ""
-"Çewtiya guhertina navê dosya \"%s\": %s↵\n"
-"%s"
+msgstr "Çewtiya guhertina navê pelê bi \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1656
-#, fuzzy, c-format
+#: ../gtk/gtkfilesel.c:1655
+#, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr ""
-"Çewtî di guhertina navê dosya de\"%s\": %s↵\n"
-"%s"
+msgstr "Çewtî di ji nû navlêkirina pelê \"%s\": %s de"
 
-#: gtk/gtkfilesel.c:1665
+#: ../gtk/gtkfilesel.c:1664
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Dema dosyeya \"%s\"  weke \"%s\"  ji nû ve dihate navandin çewtî: %s"
+msgstr "Dema pelê \"%s\"  weke \"%s\"  ji nû ve dihate navandin çewtî: %s"
 
-#: gtk/gtkfilesel.c:1712
+#: ../gtk/gtkfilesel.c:1711
 msgid "Rename File"
-msgstr "Dosyeyê ji nû ve binav bike"
+msgstr "Pel ji nû ve binav bike"
 
-#: gtk/gtkfilesel.c:1727
+#: ../gtk/gtkfilesel.c:1726
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Navê dosya biguherîne \"%s\" bo:"
+msgstr "Navê pelî biguherîne \"%s\" bo:"
 
-#: gtk/gtkfilesel.c:1756
+#: ../gtk/gtkfilesel.c:1755
 msgid "_Rename"
 msgstr "_Ji nû ve binav bike"
 
-#: gtk/gtkfilesel.c:2188
+#: ../gtk/gtkfilesel.c:2187
 msgid "_Selection: "
 msgstr "_Hilbijartin: "
 
-#: gtk/gtkfilesel.c:3113
+#: ../gtk/gtkfilesel.c:3112
 #, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"navê dosya  \"%s\" nehate guhertin bo  UTF-8. hewl dibe ku tu "
-"G_FILENAME_ENCODING): %s biguhêrî."
+msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
+msgstr "Navê pelê  \"%s\" nehate guhertin bo  UTF-8. (hewl bide ku tu G_FILENAME_ENCODING eyar bikî): %s"
 
-#: gtk/gtkfilesel.c:3116
+#: ../gtk/gtkfilesel.c:3115
 msgid "Invalid UTF-8"
 msgstr "UTF-8 ya nederbasdar"
 
-#: gtk/gtkfilesel.c:3992
+#: ../gtk/gtkfilesel.c:3991
 msgid "Name too long"
 msgstr "Nav gelekî dirêje"
 
-#: gtk/gtkfilesel.c:3994
+#: ../gtk/gtkfilesel.c:3993
 msgid "Couldn't convert filename"
-msgstr "Navê dosya nehate guhertin"
+msgstr "Navê pelê nehate guhertin"
 
-#: gtk/gtkfilesystem.c:322
-#, fuzzy, c-format
+#: ../gtk/gtkfilesystem.c:322
+#, c-format
 msgid "Could not get a stock icon for %s\n"
-msgstr "nikare ikona lodkirî bibîne ji bo %s"
+msgstr "Nikare ikona lodkirî bibîne ji bo %s\n"
 
-#: gtk/gtkfilesystemmodel.c:745
-#, fuzzy, c-format
+#: ../gtk/gtkfilesystemmodel.c:745
 msgid "Could not obtain root folder"
-msgstr "nikare ikona lodkirî bibîne ji bo %s"
+msgstr "Nikare ikona lodkirî bibîne"
 
-#: gtk/gtkfilesystemmodel.c:1339
+#: ../gtk/gtkfilesystemmodel.c:1339
 msgid "(Empty)"
 msgstr "(Vala)"
 
-#: gtk/gtkfilesystemunix.c:842 gtk/gtkfilesystemunix.c:1089
-#: gtk/gtkfilesystemunix.c:2077 gtk/gtkfilesystemunix.c:2117
-#: gtk/gtkfilesystemwin32.c:2222 gtk/gtkfilesystemwin32.c:2272
+#: ../gtk/gtkfilesystemunix.c:958
+#: ../gtk/gtkfilesystemunix.c:1206
+#: ../gtk/gtkfilesystemunix.c:2194
+#: ../gtk/gtkfilesystemunix.c:2234
+#: ../gtk/gtkfilesystemwin32.c:2383
+#: ../gtk/gtkfilesystemwin32.c:2433
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Gihiştina agahiyên şaş bo %s': %s"
 
-#: gtk/gtkfilesystemunix.c:1034 gtk/gtkfilesystemwin32.c:1125
-#, c-format
+#: ../gtk/gtkfilesystemunix.c:1151
+#: ../gtk/gtkfilesystemwin32.c:1271
 msgid "This file system does not support mounting"
-msgstr "Pergala v3e dosyayê ne li gor mercên amadekirinê ne"
+msgstr "Ev pergala pelan desteka mountkirinê nade"
 
-#: gtk/gtkfilesystemunix.c:1046
+#: ../gtk/gtkfilesystemunix.c:1163
 msgid "File System"
-msgstr "Pergala Dosiyan"
+msgstr "Pergala Pelan"
 
-#: gtk/gtkfilesystemunix.c:1210
+#: ../gtk/gtkfilesystemunix.c:1327
+#: ../gtk/gtkfilesystemwin32.c:1448
 #, c-format
-msgid ""
-"The name \"%s\" is not valid because it contains the character \"%s\". "
-"Please use a different name."
-msgstr ""
-"Nav \"%s\" çewte ji ber ku tê de sembolên \"%s\" hene. Ji kerema xwe re "
-"navekî din hilbijêre."
+msgid "The name \"%s\" is not valid because it contains the character \"%s\". Please use a different name."
+msgstr "Nav \"%s\" çewte ji ber ku tê de sembolên \"%s\" hene. Ji kerema xwe re navekî din hilbijêre."
 
-#: gtk/gtkfilesystemunix.c:1759 gtk/gtkfilesystemwin32.c:1902
+#: ../gtk/gtkfilesystemunix.c:1876
+#: ../gtk/gtkfilesystemwin32.c:2063
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Tomarkirina beyanameyê nehate pejirandin: %s"
 
-#: gtk/gtkfilesystemunix.c:1814 gtk/gtkfilesystemwin32.c:1957
+#: ../gtk/gtkfilesystemunix.c:1931
+#: ../gtk/gtkfilesystemwin32.c:2118
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' ji berê ve di lîsteya beyanameyê de heye"
 
-#: gtk/gtkfilesystemunix.c:1886 gtk/gtkfilesystemwin32.c:2029
+#: ../gtk/gtkfilesystemunix.c:2003
+#: ../gtk/gtkfilesystemwin32.c:2190
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' di lîsteya beyanameyê de tuneye"
 
-#: gtk/gtkfilesystemwin32.c:943
+#: ../gtk/gtkfilesystemwin32.c:1087
 #, c-format
 msgid "Path is not a folder: '%s'"
-msgstr ""
+msgstr "Pelrêç ne peldank e: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1143
+#: ../gtk/gtkfilesystemwin32.c:1289
 #, c-format
 msgid "Network Drive (%s)"
-msgstr "Ajokerê torê (%s)"
+msgstr "Ajokerê Torê (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1165
+#: ../gtk/gtkfilesystemwin32.c:1311
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
+#: ../gtk/gtkfontbutton.c:145
+#: ../gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr "Curetîpekê Hilbijêre"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:261
+#: ../gtk/gtkfontbutton.c:261
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:781
+#: ../gtk/gtkfontbutton.c:781
 msgid "Font"
-msgstr "Curenivîs"
+msgstr "Cureyê nivîsê"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:74
+#: ../gtk/gtkfontsel.c:74
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abçdêfghîjşû ABÇDÊFGHÎJKŞÛ"
 
-#: gtk/gtkfontsel.c:325
+#: ../gtk/gtkfontsel.c:325
 msgid "_Family:"
 msgstr "_Malbat:"
 
-#: gtk/gtkfontsel.c:331
+#: ../gtk/gtkfontsel.c:331
 msgid "_Style:"
 msgstr "_Teşe:"
 
-#: gtk/gtkfontsel.c:337
+#: ../gtk/gtkfontsel.c:337
 msgid "Si_ze:"
 msgstr "_Mezinahî:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:514
+#: ../gtk/gtkfontsel.c:514
 msgid "_Preview:"
 msgstr "_Pêşdîtin:"
 
-#: gtk/gtkfontsel.c:1348
+#: ../gtk/gtkfontsel.c:1348
 msgid "Font Selection"
-msgstr "Hilbijartina Cureyê Nivîsê"
+msgstr "Hilbijartina Curetîpan"
 
-#: gtk/gtkgamma.c:408
+#: ../gtk/gtkgamma.c:408
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:418
+#: ../gtk/gtkgamma.c:418
 msgid "_Gamma value"
 msgstr "Nirxa _Gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1371
+#: ../gtk/gtkiconfactory.c:1371
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Çewtî di dema barkirina îkonê de: %s"
 
-#: gtk/gtkicontheme.c:1314
+#: ../gtk/gtkicontheme.c:1314
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2031,128 +1914,122 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
-"Min îkon ne dît %s'. nav jî nehate dîtin '%s' dibe ku pêwistî bi daxistina "
-"wê hebe.  Tu dikarî copya li vir bibînî\t%s"
+"Min îkona '%s' nedît. Dirba '%s'\n"
+" jî nehate dîtin dibe ku pêwistî bi daxistina wê hebe.\n"
+" Tu dikarî copya li vir bibînî\n"
+"\t%s"
 
-#: gtk/gtkicontheme.c:1383
+#: ../gtk/gtkicontheme.c:1383
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "îkon %s' ne têde ye"
 
-#: gtk/gtkimmodule.c:407
+#: ../gtk/gtkimmodule.c:407
 msgid "Default"
 msgstr "Wekî heyî"
 
-#: gtk/gtkinputdialog.c:191
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:190
 msgid "Input"
 msgstr "Têketan"
 
-#: gtk/gtkinputdialog.c:206
+#: ../gtk/gtkinputdialog.c:205
 msgid "No extended input devices"
 msgstr "Amûrên têketinan bê dûmahîkin"
 
-#: gtk/gtkinputdialog.c:219
+#: ../gtk/gtkinputdialog.c:218
 msgid "_Device:"
 msgstr "_Amûr:"
 
-#: gtk/gtkinputdialog.c:236
+#: ../gtk/gtkinputdialog.c:235
 msgid "Disabled"
 msgstr "Ne çalak"
 
-#: gtk/gtkinputdialog.c:243
+#: ../gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "Dîmender"
 
-#: gtk/gtkinputdialog.c:250
+#: ../gtk/gtkinputdialog.c:249
 msgid "Window"
 msgstr "Pace"
 
-#: gtk/gtkinputdialog.c:257
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:256
 msgid "_Mode:"
-msgstr "_Şêwaz: "
+msgstr "_Mod:"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:278
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:277
 msgid "Axes"
-msgstr "_Tewere"
+msgstr "Tewere"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:296
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:295
 msgid "Keys"
-msgstr "_Kilît"
+msgstr "_Bişkok"
 
-#: gtk/gtkinputdialog.c:521
+#: ../gtk/gtkinputdialog.c:522
 msgid "_X:"
-msgstr ""
+msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:522
+#: ../gtk/gtkinputdialog.c:523
 msgid "_Y:"
-msgstr ""
+msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:523
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:524
 msgid "_Pressure:"
-msgstr "Pest"
+msgstr "Pe_st:"
 
-#: gtk/gtkinputdialog.c:524
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:525
 msgid "X _tilt:"
-msgstr "X Paldayî"
+msgstr "X_paldayî:"
 
-#: gtk/gtkinputdialog.c:525
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:526
 msgid "Y t_ilt:"
-msgstr "Y Paldayî"
+msgstr "Y p_aldayî:"
 
-#: gtk/gtkinputdialog.c:526
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:527
 msgid "_Wheel:"
-msgstr "Dolab"
+msgstr "_Dolab:"
 
-#: gtk/gtkinputdialog.c:574
+#: ../gtk/gtkinputdialog.c:575
 msgid "none"
 msgstr "tune"
 
-#: gtk/gtkinputdialog.c:611 gtk/gtkinputdialog.c:647
+#: ../gtk/gtkinputdialog.c:612
+#: ../gtk/gtkinputdialog.c:648
 msgid "(disabled)"
 msgstr "(ne çalak)"
 
-#: gtk/gtkinputdialog.c:640
+#: ../gtk/gtkinputdialog.c:641
 msgid "(unknown)"
 msgstr "(nenas)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:740
-#, fuzzy
+#: ../gtk/gtkinputdialog.c:741
 msgid "Cl_ear"
-msgstr "_Jê bibe"
+msgstr "Jê_bibe"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:405
+#: ../gtk/gtkmain.c:405
 msgid "Load additional GTK+ modules"
 msgstr "Modulên GTK+ yên pêvek bar bike"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:406
+#: ../gtk/gtkmain.c:406
 msgid "MODULES"
 msgstr "MODUL"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:408
+#: ../gtk/gtkmain.c:408
 msgid "Make all warnings fatal"
 msgstr "Hemû hişyariyan xedar bike"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:411
+#: ../gtk/gtkmain.c:411
 msgid "GTK+ debugging flags to set"
 msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine tayînkirin"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: ../gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to unset"
 msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine rakirin"
 
@@ -2161,27 +2038,28 @@ msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine rakirin"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:498
+#: ../gtk/gtkmain.c:645
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:594
+#: ../gtk/gtkmain.c:742
 msgid "GTK+ Options"
 msgstr "Vebijarkên GTK+"
 
-#: gtk/gtkmain.c:594
+#: ../gtk/gtkmain.c:742
 msgid "Show GTK+ Options"
 msgstr "Vebijarkên GTK+ Nîşan Bide"
 
-#: gtk/gtknotebook.c:772
+#: ../gtk/gtknotebook.c:772
 msgid "Arrow spacing"
-msgstr ""
+msgstr "Valahiyên tîran"
 
-#: gtk/gtknotebook.c:773
+#: ../gtk/gtknotebook.c:773
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "Valahiyên tîrên şemitandinê"
 
-#: gtk/gtknotebook.c:4219 gtk/gtknotebook.c:6774
+#: ../gtk/gtknotebook.c:4242
+#: ../gtk/gtknotebook.c:6821
 #, c-format
 msgid "Page %u"
 msgstr "Rûpela %u"
@@ -2192,26 +2070,29 @@ msgstr "Rûpela %u"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkpagesetupunixdialog.c:153
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "default:LTR"
+msgstr "default:mm"
 
-#: gtk/gtkpagesetupunixdialog.c:338
+#: ../gtk/gtkpagesetupunixdialog.c:338
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>Kîjan çaper be</b>\n"
+"Ji bo belgeyên guhêrbar"
 
-#: gtk/gtkpagesetupunixdialog.c:906 gtk/gtkpagesetupunixdialog.c:1420
+#: ../gtk/gtkpagesetupunixdialog.c:906
+#: ../gtk/gtkpagesetupunixdialog.c:1420
 msgid "mm"
-msgstr ""
+msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:908 gtk/gtkpagesetupunixdialog.c:1418
+#: ../gtk/gtkpagesetupunixdialog.c:908
+#: ../gtk/gtkpagesetupunixdialog.c:1418
 msgid "inch"
-msgstr ""
+msgstr "înç"
 
-#: gtk/gtkpagesetupunixdialog.c:927
+#: ../gtk/gtkpagesetupunixdialog.c:927
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2220,2208 +2101,2118 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"Valahiyên qeraxan:\n"
+" Çep: %s %s\n"
+" Rast: %s %s\n"
+" Jor: %s %s\n"
+" Jêr: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:978
+#: ../gtk/gtkpagesetupunixdialog.c:978
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "Mezinahiyên Taybet Bi Rê Ve Bibe..."
 
-#: gtk/gtkpagesetupunixdialog.c:1026
+#: ../gtk/gtkpagesetupunixdialog.c:1026
 msgid "_Format for:"
-msgstr ""
+msgstr "_Wê were teşekirin:"
 
-#: gtk/gtkpagesetupunixdialog.c:1047
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1047
 msgid "_Paper size:"
-msgstr "_Taybetî"
+msgstr "_Mezinahiya rûpelê:"
 
-#: gtk/gtkpagesetupunixdialog.c:1083
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1083
 msgid "_Orientation:"
-msgstr "_Têrkirin"
+msgstr "_Alî:"
 
-#: gtk/gtkpagesetupunixdialog.c:1148 gtk/gtkprintunixdialog.c:2102
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1148
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Page Setup"
-msgstr "Rûpela %u"
+msgstr "Mîhengên Rûpelê"
 
-#: gtk/gtkpagesetupunixdialog.c:1465
+#: ../gtk/gtkpagesetupunixdialog.c:1465
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "Sînorên Çaperê..."
 
-#: gtk/gtkpagesetupunixdialog.c:1625
+#: ../gtk/gtkpagesetupunixdialog.c:1625
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Mezinahiya %d"
 
-#: gtk/gtkpagesetupunixdialog.c:1853
+#: ../gtk/gtkpagesetupunixdialog.c:1853
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "Gerînendeya mezinahiyên taybet bike"
 
-#: gtk/gtkpagesetupunixdialog.c:1949
+#: ../gtk/gtkpagesetupunixdialog.c:1949
 msgid "_Width:"
-msgstr ""
+msgstr "_Firehî:"
 
-#: gtk/gtkpagesetupunixdialog.c:1961
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1961
 msgid "_Height:"
-msgstr "_Reng:"
+msgstr "_Bilindahî:"
 
-#: gtk/gtkpagesetupunixdialog.c:1973
+#: ../gtk/gtkpagesetupunixdialog.c:1973
 msgid "Paper Size"
-msgstr ""
+msgstr "Mezinahiya kaxizê"
 
-#: gtk/gtkpagesetupunixdialog.c:1983
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Top:"
-msgstr "_Raweste"
+msgstr "_Jor:"
 
-#: gtk/gtkpagesetupunixdialog.c:1995
+#: ../gtk/gtkpagesetupunixdialog.c:1995
 msgid "_Bottom:"
-msgstr ""
+msgstr "_jêr:"
 
-#: gtk/gtkpagesetupunixdialog.c:2007
+#: ../gtk/gtkpagesetupunixdialog.c:2007
 msgid "_Left:"
-msgstr ""
+msgstr "_Çep:"
 
-#: gtk/gtkpagesetupunixdialog.c:2019
+#: ../gtk/gtkpagesetupunixdialog.c:2019
 msgid "_Right:"
-msgstr ""
+msgstr "_Rast:"
 
-#: gtk/gtkpagesetupunixdialog.c:2060
+#: ../gtk/gtkpagesetupunixdialog.c:2060
 msgid "Paper Margins"
-msgstr ""
+msgstr "Valehiyên rûpel"
 
-#: gtk/gtkprinteroptionwidget.c:670
+#: ../gtk/gtkprinteroptionwidget.c:677
 msgid "Not available"
-msgstr ""
+msgstr "Ne amade ye"
 
-#: gtk/gtkprinteroptionwidget.c:783
-#, fuzzy
+#: ../gtk/gtkprinteroptionwidget.c:790
 msgid "_Save in folder:"
 msgstr "Di _peldankê de tomar bike:"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1475
+#: ../gtk/gtkprintoperation.c:1467
 msgid "print operation status|Initial state"
-msgstr ""
+msgstr "Rewşa destpêkê"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1477
+#: ../gtk/gtkprintoperation.c:1469
 msgid "print operation status|Preparing to print"
-msgstr ""
+msgstr "Ji bo çapkirinê tê amadekirin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1479
+#: ../gtk/gtkprintoperation.c:1471
 msgid "print operation status|Generating data"
-msgstr ""
+msgstr "Dane tê çêkirin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1481
+#: ../gtk/gtkprintoperation.c:1473
 msgid "print operation status|Sending data"
-msgstr ""
+msgstr "Dane tê şandin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1483
+#: ../gtk/gtkprintoperation.c:1475
 msgid "print operation status|Waiting"
-msgstr ""
+msgstr "Tê rawestandin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1485
+#: ../gtk/gtkprintoperation.c:1477
 msgid "print operation status|Blocking on issue"
-msgstr ""
+msgstr "Astengî ji ber pirsgirêkekê heye"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1487
+#: ../gtk/gtkprintoperation.c:1479
 msgid "print operation status|Printing"
-msgstr ""
+msgstr "Tê çapkirin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1489
+#: ../gtk/gtkprintoperation.c:1481
 msgid "print operation status|Finished"
-msgstr ""
+msgstr "Qediya"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1491
+#: ../gtk/gtkprintoperation.c:1483
 msgid "print operation status|Finished with error"
-msgstr ""
+msgstr "Qediya lê çewtiyek derket"
 
-#: gtk/gtkprintoperation.c:1966
+#: ../gtk/gtkprintoperation.c:1954
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "%d tê amadekirin"
 
-#: gtk/gtkprintoperation.c:1968 gtk/gtkprintoperation.c:2224
-#, fuzzy, c-format
+#: ../gtk/gtkprintoperation.c:1956
+#: ../gtk/gtkprintoperation.c:2204
 msgid "Preparing"
-msgstr "Hişyarî"
+msgstr "Tê amadekirin"
 
-#: gtk/gtkprintoperation.c:1971
+#: ../gtk/gtkprintoperation.c:1959
 #, c-format
 msgid "Printing %d"
-msgstr ""
+msgstr "%d tê çapkirin"
 
-#: gtk/gtkprintoperation-unix.c:240
-#, c-format
+#: ../gtk/gtkprintoperation-unix.c:240
 msgid "Error launching preview"
-msgstr ""
+msgstr "Çewtî di dema destpêkirinê"
 
-#: gtk/gtkprintoperation-unix.c:274
-#, c-format
+#: ../gtk/gtkprintoperation-unix.c:274
 msgid "Error printing"
-msgstr ""
+msgstr "Çewtiya çapkirinê"
 
-#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1390
+#: ../gtk/gtkprintoperation-unix.c:376
+#: ../gtk/gtkprintoperation-win32.c:1390
 msgid "Application"
-msgstr ""
+msgstr "Sepan"
 
-#: gtk/gtkprintoperation-win32.c:563
+#: ../gtk/gtkprintoperation-win32.c:563
 msgid "Printer offline"
-msgstr ""
+msgstr "Çaper ne girêdayî ye"
 
-#: gtk/gtkprintoperation-win32.c:565
+#: ../gtk/gtkprintoperation-win32.c:565
 msgid "Out of paper"
-msgstr ""
+msgstr "Li derveyî rûpel"
 
-#: gtk/gtkprintoperation-win32.c:567
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:567
 msgid "Paused"
-msgstr "_Pêve bike"
+msgstr "Hatiye rawestandin"
 
-#: gtk/gtkprintoperation-win32.c:569
+#: ../gtk/gtkprintoperation-win32.c:569
 msgid "Need user intervention"
-msgstr ""
+msgstr "Pêwistî bi destwerdana bikarhêner heye"
 
-#: gtk/gtkprintoperation-win32.c:669
+#: ../gtk/gtkprintoperation-win32.c:669
 msgid "Custom size"
-msgstr ""
+msgstr "Mezinahiya taybet"
 
-#: gtk/gtkprintoperation-win32.c:1480 gtk/gtkprintoperation-win32.c:1503
-#: gtk/gtkprintoperation-win32.c:1551
-#, fuzzy, c-format
+#: ../gtk/gtkprintoperation-win32.c:1480
+#: ../gtk/gtkprintoperation-win32.c:1503
+#: ../gtk/gtkprintoperation-win32.c:1551
 msgid "Not enough free memory"
-msgstr "Bîr têra barkirina ikonê nake"
+msgstr "Têra xwe bîra vala tuneye"
 
-#: gtk/gtkprintoperation-win32.c:1556
-#, c-format
+#: ../gtk/gtkprintoperation-win32.c:1556
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "Di çapkirina DlgEx de parametre çewte"
 
-#: gtk/gtkprintoperation-win32.c:1561
-#, c-format
+#: ../gtk/gtkprintoperation-win32.c:1561
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "Di çapkirina PrintDlgEx de nîşanker çewte"
 
-#: gtk/gtkprintoperation-win32.c:1566
-#, fuzzy, c-format
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Sernivîsek çewt di ikonê de"
+msgstr "Ji bo PrintDlgEx xebatkera nederbasdar"
 
-#: gtk/gtkprintoperation-win32.c:1571
-#, c-format
+#: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Unspecified error"
-msgstr ""
+msgstr "Çewtiyeke nenas"
 
-#: gtk/gtkprintoperation-win32.c:1622
-#, c-format
+#: ../gtk/gtkprintoperation-win32.c:1622
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "Ji StartDocê çewtî"
 
-#: gtk/gtkprintunixdialog.c:1448
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1474
 msgid "Printer"
-msgstr "_Çap"
+msgstr "Çaper"
 
-#: gtk/gtkprintunixdialog.c:1456
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1482
 msgid "Location"
-msgstr "_Cih:"
+msgstr "Cih"
 
-#: gtk/gtkprintunixdialog.c:1465
+#: ../gtk/gtkprintunixdialog.c:1491
 msgid "Status"
-msgstr ""
+msgstr "Rewş"
 
-#: gtk/gtkprintunixdialog.c:1487
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1513
 msgid "Print Pages"
-msgstr "_Pêşdîtina Çapê"
+msgstr "Rûpelan Çap bike"
 
-#: gtk/gtkprintunixdialog.c:1491
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1517
 msgid "_All"
-msgstr "Bise_pîne"
+msgstr "_Hemû"
 
-#: gtk/gtkprintunixdialog.c:1498
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1524
 msgid "C_urrent"
-msgstr "Bi_afirîne"
+msgstr "_Heyî"
 
-#: gtk/gtkprintunixdialog.c:1507
-msgid "Ra_nge: "
+#: ../gtk/gtkprintunixdialog.c:1533
+#, fuzzy
+msgid "Ra_nge"
+msgstr "Dabeşkirin: "
+
+#: ../gtk/gtkprintunixdialog.c:1534
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1525
+#: ../gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
-msgstr ""
+msgstr "Kopî"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1530
+#: ../gtk/gtkprintunixdialog.c:1558
 msgid "Copie_s:"
-msgstr ""
+msgstr "Kopî:"
 
-#: gtk/gtkprintunixdialog.c:1546
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1576
 msgid "C_ollate"
-msgstr "Bi_afirîne"
+msgstr "B_irêzkirin"
 
-#: gtk/gtkprintunixdialog.c:1554
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:1584
 msgid "_Reverse"
-msgstr "_Bizivirîne Paş"
+msgstr "_Berevajî bike"
 
-#: gtk/gtkprintunixdialog.c:1571
+#: ../gtk/gtkprintunixdialog.c:1601
 msgid "General"
-msgstr ""
+msgstr "Giştî"
 
-#: gtk/gtkprintunixdialog.c:1958
+#: ../gtk/gtkprintunixdialog.c:1988
 msgid "Layout"
-msgstr ""
+msgstr "Bicihkirin"
 
-#: gtk/gtkprintunixdialog.c:1962
-#: modules/printbackends/file/gtkprintbackendfile.c:493
+#: ../gtk/gtkprintunixdialog.c:1992
+#: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "Rûpelê her ka_xizekê:"
 
-#: gtk/gtkprintunixdialog.c:1978
+#: ../gtk/gtkprintunixdialog.c:2008
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "Du_alî:"
 
-#: gtk/gtkprintunixdialog.c:1993
+#: ../gtk/gtkprintunixdialog.c:2023
 msgid "_Only print:"
-msgstr ""
+msgstr "_tenê bide çapê:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2008
+#: ../gtk/gtkprintunixdialog.c:2038
 msgid "All sheets"
-msgstr ""
+msgstr "Hemû kaxiz"
 
-#: gtk/gtkprintunixdialog.c:2009
+#: ../gtk/gtkprintunixdialog.c:2039
 msgid "Even sheets"
-msgstr ""
+msgstr "Kaxizên cot"
 
-#: gtk/gtkprintunixdialog.c:2010
+#: ../gtk/gtkprintunixdialog.c:2040
 msgid "Odd sheets"
-msgstr ""
+msgstr "Kaxizên fer"
 
-#: gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2043
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Nirx:"
 
-#: gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2070
 msgid "Paper"
-msgstr ""
+msgstr "Kaxiz"
 
-#: gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2074
 msgid "Paper _type:"
-msgstr ""
+msgstr "_Cureyê rûpel:"
 
-#: gtk/gtkprintunixdialog.c:2059
+#: ../gtk/gtkprintunixdialog.c:2089
 msgid "Paper _source:"
-msgstr ""
+msgstr "Çavkaniya _rûpelan:"
 
-#: gtk/gtkprintunixdialog.c:2074
+#: ../gtk/gtkprintunixdialog.c:2104
 msgid "Output t_ray:"
-msgstr ""
+msgstr "Tepsiya _derketanê:"
 
-#: gtk/gtkprintunixdialog.c:2125
+#: ../gtk/gtkprintunixdialog.c:2155
 msgid "Job Details"
-msgstr ""
+msgstr "Kîtekîtên Kar"
 
-#: gtk/gtkprintunixdialog.c:2131
+#: ../gtk/gtkprintunixdialog.c:2161
 msgid "Pri_ority:"
-msgstr ""
+msgstr "Pê_şikî:"
 
-#: gtk/gtkprintunixdialog.c:2146
+#: ../gtk/gtkprintunixdialog.c:2176
 msgid "_Billing info:"
-msgstr ""
+msgstr "_Agahiyên fatorê:"
 
-#: gtk/gtkprintunixdialog.c:2164
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Print Document"
-msgstr ""
+msgstr "Belgeyê çap bike"
 
-#: gtk/gtkprintunixdialog.c:2170
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2200
 msgid "_Now"
-msgstr "_Na"
+msgstr "_Niha"
 
-#: gtk/gtkprintunixdialog.c:2177
+#: ../gtk/gtkprintunixdialog.c:2207
 msgid "A_t:"
-msgstr ""
+msgstr "_Li:"
 
-#: gtk/gtkprintunixdialog.c:2192
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2222
 msgid "On _hold"
-msgstr "_Qalind"
+msgstr "Li _bendê ye"
 
-#: gtk/gtkprintunixdialog.c:2211
+#: ../gtk/gtkprintunixdialog.c:2241
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Rûpelê xuya lê zêde bike"
 
-#: gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2247
 msgid "Be_fore:"
-msgstr ""
+msgstr "_Berê:"
 
-#: gtk/gtkprintunixdialog.c:2232
+#: ../gtk/gtkprintunixdialog.c:2262
 msgid "_After:"
-msgstr ""
+msgstr "_Piştî:"
 
-#: gtk/gtkprintunixdialog.c:2247
+#: ../gtk/gtkprintunixdialog.c:2277
 msgid "Job"
-msgstr ""
+msgstr "Kar"
 
-#: gtk/gtkprintunixdialog.c:2313
+#: ../gtk/gtkprintunixdialog.c:2343
 msgid "Advanced"
-msgstr ""
+msgstr "Pêşketî"
 
-#: gtk/gtkprintunixdialog.c:2348
+#: ../gtk/gtkprintunixdialog.c:2378
 msgid "Image Quality"
-msgstr ""
+msgstr "Kalîteya Dîmen"
 
-#: gtk/gtkprintunixdialog.c:2351
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2381
 msgid "Color"
-msgstr "_Reng"
+msgstr "Reng"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: ../gtk/gtkprintunixdialog.c:2384
 msgid "Finishing"
-msgstr ""
+msgstr "Bidawîkirin"
 
-#: gtk/gtkprintunixdialog.c:2364
+#: ../gtk/gtkprintunixdialog.c:2394
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Hin mîhengên ku di paceyê de ne li hev nakin"
 
-#: gtk/gtkprintunixdialog.c:2387
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2417
 msgid "Print"
-msgstr "_Çap"
+msgstr "Çap"
 
-#: gtk/gtkradiotoolbutton.c:65
+#: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Kom"
 
-#: gtk/gtkradiotoolbutton.c:66
+#: ../gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Bişkoja amûrên radio ya ku ev bişkoj bi w^ve girêdayî ye."
 
-#: gtk/gtkrc.c:2813
+#: ../gtk/gtkrc.c:2841
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Nikare dosya hundirandinê bibîne: \"%s\""
+msgstr "Nikare pelê hundirandinê bibîne: \"%s\""
 
-#: gtk/gtkrc.c:3445 gtk/gtkrc.c:3448
+#: ../gtk/gtkrc.c:3473
+#: ../gtk/gtkrc.c:3476
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Dosyeya wêneyê di pixmap_path de nehat dîtin: \"%s\""
+msgstr "Pelê wêneyê di pixmap_path de nehat dîtin: \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:459
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:455
 msgid "Select which type of documents are shown"
-msgstr "Hilbijêre kîjan cureyê dosyayan hatiye nîşandan"
+msgstr "Hilbijêre kîjan cureyê pelan were nîşandan"
 
-#: gtk/gtkrecentchooserdefault.c:1126 gtk/gtkrecentchooserdefault.c:1163
+#: ../gtk/gtkrecentchooserdefault.c:1112
+#: ../gtk/gtkrecentchooserdefault.c:1149
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "Ti hêman ji bo URI '%s' nehate xuyakirin"
 
-#: gtk/gtkrecentchooserdefault.c:1770
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1760
 msgid "Could not remove item"
-msgstr "Hêman nehate hilbijartin"
+msgstr "Rakirina hêmanê biserneket"
 
-#: gtk/gtkrecentchooserdefault.c:1813
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1803
 msgid "Could not clear list"
-msgstr "Hêman nehate hilbijartin"
+msgstr "Lîste nehate paqijkirin"
 
-#: gtk/gtkrecentchooserdefault.c:1897
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1887
 msgid "Copy _Location"
-msgstr "Cih _veke"
+msgstr "_Cih kopî bike"
 
-#: gtk/gtkrecentchooserdefault.c:1910
+#: ../gtk/gtkrecentchooserdefault.c:1900
 msgid "_Remove From List"
-msgstr ""
+msgstr "_Ji Lîsteyê _Ji Bibe"
 
-#: gtk/gtkrecentchooserdefault.c:1919
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1909
 msgid "_Clear List"
-msgstr "_Jê bibe"
+msgstr "Lîsteyê _Paqij Bike"
 
-#: gtk/gtkrecentchooserdefault.c:1933
+#: ../gtk/gtkrecentchooserdefault.c:1923
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "Çavkaniyên-berê nîşan bide"
 
-#: gtk/gtkrecentchoosermenu.c:424 gtk/gtkrecentchoosermenu.c:485
+#: ../gtk/gtkrecentchoosermenu.c:424
+#: ../gtk/gtkrecentchoosermenu.c:480
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "Ti çavkaniya bikarhênerên dawî ên URI `%s' nehate dîtin"
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:517
+#: ../gtk/gtkrecentchoosermenu.c:504
+#: ../gtk/gtkrecentchoosermenu.c:512
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "Ev kar ji bo perçekên di pola '%s' de ne nehatiye sepandin"
 
-#: gtk/gtkrecentchoosermenu.c:852
+#: ../gtk/gtkrecentchoosermenu.c:852
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "'%s' Veke"
 
-#: gtk/gtkrecentchoosermenu.c:883
-#, fuzzy
+#: ../gtk/gtkrecentchoosermenu.c:884
 msgid "Unknown item"
-msgstr "Nenas"
+msgstr "Hêmana nenas"
 
-#: gtk/gtkrecentchoosermenu.c:984
-#, fuzzy
+#: ../gtk/gtkrecentchoosermenu.c:982
 msgid "No items found"
-msgstr "serikê XPM nîne"
+msgstr "Hêman nehatine dîtin"
 
-#: gtk/gtkrecentmanager.c:1058 gtk/gtkrecentmanager.c:1208
-#: gtk/gtkrecentmanager.c:1218 gtk/gtkrecentmanager.c:1277
-#, fuzzy, c-format
+#: ../gtk/gtkrecentmanager.c:1059
+#: ../gtk/gtkrecentmanager.c:1209
+#: ../gtk/gtkrecentmanager.c:1219
+#: ../gtk/gtkrecentmanager.c:1278
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Nikare dosya hundirandinê bibîne: \"%s\""
+msgstr "Hêmaneke ku bi URIya '%s' têkildar e nehate dîtin"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:308
+#: ../gtk/gtkstock.c:308
 msgid "Information"
 msgstr "Agahî"
 
-#: gtk/gtkstock.c:309
+#: ../gtk/gtkstock.c:309
 msgid "Warning"
-msgstr "Hişyarî"
+msgstr "Hişyar"
 
-#: gtk/gtkstock.c:310
+#: ../gtk/gtkstock.c:310
 msgid "Error"
 msgstr "Çewtî"
 
-#: gtk/gtkstock.c:311
+#: ../gtk/gtkstock.c:311
 msgid "Question"
 msgstr "Pirs"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:316
 msgid "_About"
 msgstr "_Der barê"
 
-#: gtk/gtkstock.c:318
+#: ../gtk/gtkstock.c:318
 msgid "_Apply"
 msgstr "Bise_pîne"
 
-#: gtk/gtkstock.c:319
+#: ../gtk/gtkstock.c:319
 msgid "_Bold"
 msgstr "_Qalind"
 
-#: gtk/gtkstock.c:320
+#: ../gtk/gtkstock.c:320
 msgid "_Cancel"
 msgstr "_Betal"
 
-#: gtk/gtkstock.c:321
+#: ../gtk/gtkstock.c:321
 msgid "_CD-Rom"
 msgstr "_CD-Rom"
 
-#: gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:322
 msgid "_Clear"
 msgstr "_Jê bibe"
 
-#: gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:323
 msgid "_Close"
 msgstr "_Bigire"
 
-#: gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:324
 msgid "C_onnect"
 msgstr "_Girêbide"
 
-#: gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:325
 msgid "_Convert"
 msgstr "_Veguherîne"
 
-#: gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:326
 msgid "_Copy"
 msgstr "_Ji ber bigire"
 
-#: gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:327
 msgid "Cu_t"
 msgstr "_Jê bike"
 
-#: gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:328
 msgid "_Delete"
-msgstr "_Jê bibe"
+msgstr "_Rake"
 
-#: gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:329
 msgid "_Disconnect"
 msgstr "Girêdanê _qut bike"
 
-#: gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:330
 msgid "_Execute"
 msgstr "Bisepîne"
 
-#: gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:331
 msgid "_Edit"
-msgstr "_Sererast bike"
+msgstr "_Biguherîne"
 
-#: gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:332
 msgid "_Find"
 msgstr "_Bibîne"
 
-#: gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:333
 msgid "Find and _Replace"
 msgstr "Bibîne û _Biguherîne"
 
-#: gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:334
 msgid "_Floppy"
 msgstr "_Dîsket"
 
-#: gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:335
 msgid "_Fullscreen"
 msgstr "_Dîmender tijî"
 
-#: gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
 msgstr "_Ji dîmendera tije derkeve"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
 msgstr "_Jêr"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:340
 msgid "Navigation|_First"
 msgstr "Pêş_în"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:342
 msgid "Navigation|_Last"
 msgstr "_Dawî"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:344
 msgid "Navigation|_Top"
 msgstr "_Ser"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:346
 msgid "Navigation|_Back"
 msgstr "P_aş"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
 msgstr "_Jêr"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
 msgstr "_Pêş"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:352
+#: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
 msgstr "J_or"
 
-#: gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
 msgstr "_Dîska Sabît"
 
-#: gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:354
 msgid "_Help"
 msgstr "_Alîkarî"
 
-#: gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:355
 msgid "_Home"
 msgstr "_Mal"
 
-#: gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:356
 msgid "Increase Indent"
 msgstr "Çalikê mezintir bike"
 
-#: gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:357
 msgid "Decrease Indent"
 msgstr "Bialîkirinê kêmtir bike"
 
-#: gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:358
 msgid "_Index"
 msgstr "_Pêrist"
 
-#: gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:359
 msgid "_Information"
 msgstr "_Agahî"
 
-#: gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:360
 msgid "_Italic"
 msgstr "_Paldayî"
 
-#: gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:361
 msgid "_Jump to"
 msgstr "_Qevastin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:363
 msgid "Justify|_Center"
 msgstr "_Navîn"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:365
 msgid "Justify|_Fill"
 msgstr "_Dagire"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:367
 msgid "Justify|_Left"
 msgstr "_Çep"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:369
+#: ../gtk/gtkstock.c:369
 msgid "Justify|_Right"
 msgstr "_Rast"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:372
 msgid "Media|_Forward"
 msgstr "Pêş_"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:374
 msgid "Media|_Next"
 msgstr "_Ya pişt re"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:376
 msgid "Media|P_ause"
 msgstr "_Rawestîne"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:378
 msgid "Media|_Play"
 msgstr "Bi_lîze"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:380
 msgid "Media|Pre_vious"
 msgstr "Ya berê"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:382
+#: ../gtk/gtkstock.c:382
 msgid "Media|_Record"
 msgstr "_Tomar bike"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:384
+#: ../gtk/gtkstock.c:384
 msgid "Media|R_ewind"
 msgstr "D_îtin"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:386
+#: ../gtk/gtkstock.c:386
 msgid "Media|_Stop"
 msgstr "_Bide sekinandin"
 
-#: gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:387
 msgid "_Network"
 msgstr "_Tor"
 
-#: gtk/gtkstock.c:388
+#: ../gtk/gtkstock.c:388
 msgid "_New"
 msgstr "_Nû"
 
-#: gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:389
 msgid "_No"
 msgstr "_Na"
 
-#: gtk/gtkstock.c:390
+#: ../gtk/gtkstock.c:390
 msgid "_OK"
 msgstr "_Temam"
 
-#: gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:391
 msgid "_Open"
 msgstr "_Veke"
 
-#: gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:392
 msgid "Landscape"
-msgstr ""
+msgstr "Serpahnayê"
 
-#: gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:393
 msgid "Portrait"
-msgstr ""
+msgstr "Portre"
 
-#: gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:394
 msgid "Reverse landscape"
-msgstr ""
+msgstr "serbahnaya berevajî"
 
-#: gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:395
 msgid "Reverse portrait"
-msgstr ""
+msgstr "serdirêjahiya berevajî"
 
-#: gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:396
 msgid "_Paste"
 msgstr "_Pêve bike"
 
-#: gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:397
 msgid "_Preferences"
 msgstr "_Vebijêrk"
 
-#: gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:398
 msgid "_Print"
 msgstr "_Çap"
 
-#: gtk/gtkstock.c:399
+#: ../gtk/gtkstock.c:399
 msgid "Print Pre_view"
 msgstr "_Pêşdîtina Çapê"
 
-#: gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:400
 msgid "_Properties"
 msgstr "_Taybetî"
 
-#: gtk/gtkstock.c:401
+#: ../gtk/gtkstock.c:401
 msgid "_Quit"
 msgstr "_Derkeve"
 
-#: gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:402
 msgid "_Redo"
-msgstr "_Dubare bike"
+msgstr "_Dîsa bikeDubare bike"
 
-#: gtk/gtkstock.c:403
+#: ../gtk/gtkstock.c:403
 msgid "_Refresh"
 msgstr "_Teze bike"
 
-#: gtk/gtkstock.c:405
+#: ../gtk/gtkstock.c:405
 msgid "_Revert"
 msgstr "_Bizivirîne Paş"
 
-#: gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:406
 msgid "_Save"
 msgstr "_Tomar bike"
 
-#: gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:407
 msgid "Save _As"
 msgstr "_Cuda Tomar bike"
 
-#: gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:408
 msgid "Select _All"
 msgstr "Hemûyî _Hilbijêre"
 
-#: gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:409
 msgid "_Color"
 msgstr "_Reng"
 
-#: gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:410
 msgid "_Font"
 msgstr "_Curenivîs"
 
-#: gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:411
 msgid "_Ascending"
 msgstr "_Ber bi Jor"
 
-#: gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:412
 msgid "_Descending"
 msgstr "_Ber bi jêr"
 
-#: gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:413
 msgid "_Spell Check"
 msgstr "_Kontrola Nivîsînê"
 
-#: gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:414
 msgid "_Stop"
-msgstr "_Raweste"
+msgstr "_Bisekine"
 
-#: gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:415
 msgid "_Strikethrough"
 msgstr "_xêzkirin"
 
-#: gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:416
 msgid "_Undelete"
 msgstr "_Xelas Bike"
 
-#: gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:417
 msgid "_Underline"
 msgstr "_Binxêz"
 
-#: gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:418
 msgid "_Undo"
 msgstr "_jê veger"
 
-#: gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:419
 msgid "_Yes"
 msgstr "_Erê"
 
-#: gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:420
 msgid "_Normal Size"
 msgstr "_Mezinahiya Asayî"
 
-#: gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:421
 msgid "Best _Fit"
 msgstr "Bila tê de hilê"
 
-#: gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:422
 msgid "Zoom _In"
 msgstr "Nê_zîk bîne"
 
-#: gtk/gtkstock.c:423
+#: ../gtk/gtkstock.c:423
 msgid "Zoom _Out"
 msgstr "_Dûr bibe"
 
-#: gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
 msgstr "LRM nîşankirina ji çepê ya ber bi rastê ve"
 
-#: gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
 msgstr "Nîşankirina ji rastê ber bi çepê ya RLM"
 
-#: gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE ji çepê ber bi rastê de"
 
-#: gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE ji rastê ber bi çepê de_"
 
-#: gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
 msgstr "LRO ji çepê-ya- ber bi rastê de_guhnedan"
 
-#: gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO zordayîna ji çepê_ya ber bi rastê"
 
-#: gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
 msgstr "Dirûvkirina alî ya PDF_POP"
 
-#: gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
 msgstr "Qada firehbûna sifirê_ya ZWS"
 
-#: gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ di firehiya sifirê de_ bi gîrêdan"
 
-#: gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ di firehiya sifirê de_ bê girêdan"
 
-#: gtk/gtkthemes.c:71
+#: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Cîhaza têmayan di hundirê module_path \"%s\" de nehate dîtin,"
 
-#: gtk/gtktipsquery.c:187
+#: ../gtk/gtktipsquery.c:187
 msgid "--- No Tip ---"
 msgstr "--- Qîl tune ---"
 
-#: gtk/gtkuimanager.c:1126
+#: ../gtk/gtkuimanager.c:1126
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "Rûçikek ne nas '%s' li ser rêzika %d sembol %d"
+msgstr "Rûçikek ne nas '%s' li ser rêzika %d karaktera %d"
 
-#: gtk/gtkuimanager.c:1343
+#: ../gtk/gtkuimanager.c:1343
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Etîketa destpêkirinê ya tu ne li hêvîyê bû '%s' rêzik %d karakter %d"
 
-#: gtk/gtkuimanager.c:1433
+#: ../gtk/gtkuimanager.c:1433
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Daneyê karakteran ya tu ne li hêviyê bû, rêzik %d karakter %d"
 
-#: gtk/gtkuimanager.c:2224
+#: ../gtk/gtkuimanager.c:2228
 msgid "Empty"
 msgstr "Vala"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:5
+#: ../gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr ""
+msgstr "Mezinahiya rûpel |asme_f"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:7
+#: ../gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:9
+#: ../gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
-msgstr ""
+msgstr "A0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:11
+#: ../gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr ""
+msgstr "Mezinahiya rûpel |A0x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:13
+#: ../gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
-msgstr ""
+msgstr "mezinahiya rûpel |A1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:15
+#: ../gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
-msgstr ""
+msgstr "mezinahiya rûpel |A10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:17
+#: ../gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:19
+#: ../gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:21
+#: ../gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
-msgstr ""
+msgstr "A2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:23
+#: ../gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:25
+#: ../gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:27
+#: ../gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:29
+#: ../gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
-msgstr ""
+msgstr "A3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:31
+#: ../gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
-msgstr ""
+msgstr "A3 Ekstra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:33
+#: ../gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:35
+#: ../gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:37
+#: ../gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:39
+#: ../gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:41
+#: ../gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:43
+#: ../gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
-msgstr ""
+msgstr "A4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:45
+#: ../gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:47
+#: ../gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:49
+#: ../gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:51
+#: ../gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:53
+#: ../gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:55
+#: ../gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:57
+#: ../gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:59
+#: ../gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:61
+#: ../gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:63
+#: ../gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
-msgstr ""
+msgstr "A5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:65
+#: ../gtk/paper_names_offsets.c:65
 msgid "paper size|A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:67
+#: ../gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
-msgstr ""
+msgstr "A6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:69
+#: ../gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
-msgstr ""
+msgstr "A7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
-msgstr ""
+msgstr "A8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
-msgstr ""
+msgstr "A9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
-msgstr ""
+msgstr "B0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
-msgstr ""
+msgstr "B1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
-msgstr ""
+msgstr "B10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
-msgstr ""
+msgstr "B2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
-msgstr ""
+msgstr "B3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
-msgstr ""
+msgstr "B4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
-msgstr ""
+msgstr "B5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:89
 msgid "paper size|B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
-msgstr ""
+msgstr "B6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:93
+#: ../gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:95
+#: ../gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
-msgstr ""
+msgstr "B7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:97
+#: ../gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
-msgstr ""
+msgstr "B8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:99
+#: ../gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
-msgstr ""
+msgstr "B9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:101
+#: ../gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
-msgstr ""
+msgstr "C0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:103
+#: ../gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
-msgstr ""
+msgstr "C1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
-msgstr ""
+msgstr "C10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
-msgstr ""
+msgstr "C2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
-msgstr ""
+msgstr "C3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
-msgstr ""
+msgstr "C4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
-msgstr ""
+msgstr "C5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
-msgstr ""
+msgstr "C6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
-msgstr ""
+msgstr "C7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
-msgstr ""
+msgstr "C8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
-msgstr ""
+msgstr "C9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "DL Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "Choukei 2 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "Choukei 3 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:169
+#: ../gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "Choukei 4 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:171
+#: ../gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (postcard)"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:173
+#: ../gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "kahu Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:175
+#: ../gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "kaku2 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:177
+#: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (reply postcard)"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:179
+#: ../gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "you4 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:181
+#: ../gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr ""
+msgstr "10x11"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:183
+#: ../gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
-msgstr ""
+msgstr "10x13"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:185
+#: ../gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
-msgstr ""
+msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
+#: ../gtk/paper_names_offsets.c:187
+#: ../gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
-msgstr ""
+msgstr "10x15"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:191
+#: ../gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
-msgstr ""
+msgstr "11x12"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:193
+#: ../gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
-msgstr ""
+msgstr "11x15"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:195
+#: ../gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
-msgstr ""
+msgstr "12x19"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:197
+#: ../gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
-msgstr ""
+msgstr "5x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:199
+#: ../gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "6x9 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:201
+#: ../gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "7x9 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:203
+#: ../gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "9x11 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:205
+#: ../gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "a2 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:207
+#: ../gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:209
+#: ../gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:211
+#: ../gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:213
+#: ../gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:215
+#: ../gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:217
+#: ../gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:219
+#: ../gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:221
+#: ../gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "c5 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:223
+#: ../gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:225
+#: ../gtk/paper_names_offsets.c:225
 msgid "paper size|e"
-msgstr ""
+msgstr "e"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:227
+#: ../gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:229
+#: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "edp ya ewropî"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:231
+#: ../gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr ""
+msgstr "Executive"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:233
+#: ../gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:235
+#: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "FanFold European"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:237
+#: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:239
+#: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr ""
+msgstr "FanFold German Legal"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:241
+#: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr ""
+msgstr "Government Legal"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:243
+#: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "Government Letter"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:245
+#: ../gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr ""
+msgstr "Index 3x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:247
+#: ../gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
-msgstr ""
+msgstr "Index 4x6 (kart)"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:249
+#: ../gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr ""
+msgstr "Index 4x6 ext"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:251
+#: ../gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
-msgstr ""
+msgstr "Index 5x8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:253
+#: ../gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:255
+#: ../gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:257
+#: ../gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:259
+#: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr ""
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:261
+#: ../gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
-msgstr ""
+msgstr "US Letter"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:263
+#: ../gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
-msgstr ""
+msgstr "US Letter Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:265
+#: ../gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
-msgstr ""
+msgstr "US Letter Plus"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:267
+#: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "Monarch Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:269
+#: ../gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "#10 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:271
-msgid "paper size|#11 Eenvelope"
-msgstr ""
+#: ../gtk/paper_names_offsets.c:271
+msgid "paper size|#11 Envelope"
+msgstr "#11 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:273
+#: ../gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "#12 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:275
+#: ../gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "#14 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:277
+#: ../gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "#9 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:279
+#: ../gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr ""
+msgstr "Personal Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:281
+#: ../gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:283
+#: ../gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr ""
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:285
+#: ../gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr ""
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:287
+#: ../gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr ""
+msgstr "Teşeya fireh"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:289
+#: ../gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:291
+#: ../gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr ""
+msgstr "Folio"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:293
+#: ../gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:295
+#: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "Invite Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:297
+#: ../gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "Italian Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:299
+#: ../gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:301
+#: ../gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:303
+#: ../gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "Postfix Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:305
+#: ../gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
-msgstr ""
+msgstr "Small Photo"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:307
+#: ../gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "prc1 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:309
+#: ../gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "prc10 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:311
+#: ../gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:313
+#: ../gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "prc2 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:315
+#: ../gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "prc3 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:317
+#: ../gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:319
+#: ../gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "prc4 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:321
+#: ../gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "prc5 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:323
+#: ../gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "Enveloppe prc6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:325
+#: ../gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "prc7 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:327
+#: ../gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "prc8 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:329
+#: ../gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
-msgstr ""
+msgstr "prc8 Envelope"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:331
+#: ../gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
-msgstr ""
+msgstr "prc8 Envelope"
 
 #. ID
-#: modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Habeşî (EZ+)"
 
 #. ID
-#: modules/input/imcedilla.c:91
+#: ../modules/input/imcedilla.c:91
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:217
+#: ../modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Suryalî (bi tîpîn zimaneke din hatine neqişandin)"
 
 #. ID
-#: modules/input/iminuktitut.c:127
+#: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "Inuktitut(bi tîpîn zimaneke din hatine neqişandin)"
+msgstr "Inuktitut(bi tîpên zimanekî din hatine neqişandin)"
 
 #. ID
-#: modules/input/imipa.c:145
+#: ../modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/imthai-broken.c:178
-msgid "Thai (Broken)"
-msgstr "Taylendî (şikestî)"
+#: ../modules/input/imthai.c:35
+msgid "Thai-Lao"
+msgstr "Tay-Lao"
 
 #. ID
-#: modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Erîteriya  (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tîgrîgna-Etiyopî (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "(VIQR) a Vetnamî"
 
 #. ID
-#: modules/input/imxim.c:28
+#: ../modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "Metoda Ketana X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1450
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Two Sided"
-msgstr ""
+msgstr "Du alî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1460
 msgid "Paper Type"
-msgstr ""
+msgstr "Cureyê rûpel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1461
 msgid "Paper Source"
-msgstr ""
+msgstr "Çavkaniya rûpel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "Output Tray"
-msgstr ""
+msgstr "Tepsiya derketanê"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1471
 msgid "One Sided"
-msgstr ""
+msgstr "Yek alî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1477
 msgid "Auto Select"
-msgstr "Hilbijartina Cureyê Nivîsê"
+msgstr "Hilbijartina bixweber"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1916
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1474
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1475
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1476
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1938
 msgid "Printer Default"
-msgstr "Wekî heyî"
+msgstr "Standarda Çapgerê"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2131
 msgid "Urgent"
-msgstr ""
+msgstr "Bilez"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2131
 msgid "High"
-msgstr ""
+msgstr "Bilind"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2131
 msgid "Medium"
-msgstr ""
+msgstr "Orte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2131
 msgid "Low"
-msgstr ""
+msgstr "Nizim"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "None"
-msgstr "(Tune)"
+msgstr "Ne yek jî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Classified"
-msgstr ""
+msgstr "Taybet"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Confidential"
-msgstr ""
+msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Secret"
-msgstr "Dîmender"
+msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Standard"
-msgstr ""
+msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Top Secret"
-msgstr ""
+msgstr "Gelekî Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2133
 msgid "Unclassified"
+msgstr "Ji rêzê"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2219
+#, c-format
+msgid "Custom.%2fx%.2f"
 msgstr ""
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
-msgstr ""
+msgstr "Li ser LPR çap bike"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:422
-#, fuzzy
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
-msgstr "bilidahiya wêne sifire"
+msgstr "Serê Kaxiz Rûpelek"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:429
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
-msgstr ""
+msgstr "Rêzika Fermanê"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:232
+#: ../modules/printbackends/file/gtkprintbackendfile.c:232
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "Derketan %s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:457
+#: ../modules/printbackends/file/gtkprintbackendfile.c:457
 msgid "Print to File"
-msgstr ""
+msgstr "Li ser pelê (file) çap bike"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:481
+#: ../modules/printbackends/file/gtkprintbackendfile.c:481
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:481
+#: ../modules/printbackends/file/gtkprintbackendfile.c:481
 msgid "Postscript"
-msgstr ""
+msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:534
-#, fuzzy
+#: ../modules/printbackends/file/gtkprintbackendfile.c:534
 msgid "File"
-msgstr "Dosya"
+msgstr "Pel"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:542
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "_Output format"
-msgstr ""
+msgstr "_Şêweyê derketanê"
 
-#: tests/testfilechooser.c:205
+#: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Nikarî agahiya dosiya '%s' bistîne: %s"
+msgstr "Nikarî agahiya pelê '%s' bistîne: %s"
 
-#: gdk/directfb/gdkdisplay-directfb.c:55
+#: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "directfb arg"
 
-#: gdk/directfb/gdkdisplay-directfb.c:55
+#: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "pergala/sdl"
 
-#: gtk/gtklinkbutton.c:141
+#: ../gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
-#: gtk/gtklinkbutton.c:142
+#: ../gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr ""
+msgstr "URI bi bişkokê sînorkirî ye"
 
-#: gtk/gtklinkbutton.c:395
-#, fuzzy
+#: ../gtk/gtklinkbutton.c:396
 msgid "Copy URL"
-msgstr "_Ji ber bigire"
+msgstr "URL kopî bike"
 
-#: gtk/gtklinkbutton.c:535
-#, fuzzy
+#: ../gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
-msgstr "UTF-8 ya nederbasdar"
+msgstr "URI nederbasdar e"
 
-#: gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Çewtiyeke nenas di dema hewildana vegerandina %s de"
 
-#: gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "ji bo vegerandina şêwazê %s ti pêwir nayê dîtin"
 
-#: gtk/gtktextbufferserialize.c:791 gtk/gtktextbufferserialize.c:817
+#: ../gtk/gtktextbufferserialize.c:796
+#: ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "\"id\" û  \"nav\" herdu di endama <%s> de hatin dîtin"
 
-#: gtk/gtktextbufferserialize.c:801 gtk/gtktextbufferserialize.c:827
+#: ../gtk/gtktextbufferserialize.c:806
+#: ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "Nirxdariya \"%s\" du caran di endamê <%s> de hate dîtin"
 
-#: gtk/gtktextbufferserialize.c:841
+#: ../gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "elemanê <%s> nedarbasbare di id a \"%s\""
 
-#: gtk/gtktextbufferserialize.c:851
+#: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "Ne \"nav\" ne jî \"id\" ji bo pêşbîra endam <%s> heye"
 
-#: gtk/gtktextbufferserialize.c:938
+#: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Pêşbîr \"%s\"  hatiye dubare kirin di heman endamê <%s> de"
 
-#: gtk/gtktextbufferserialize.c:956 gtk/gtktextbufferserialize.c:981
+#: ../gtk/gtktextbufferserialize.c:961
+#: ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "Pêşbîr \"%s\" di têkileya endam <%s> de ne derbasbare"
 
-#: gtk/gtktextbufferserialize.c:1017
+#: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "Etîketa \"%s\" ne hatiye danasîn."
 
-#: gtk/gtktextbufferserialize.c:1029
+#: ../gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Etîketa anonîm hate dîtin û etîket nikarin werin afirandin."
 
-#: gtk/gtktextbufferserialize.c:1040
+#: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "Etîketa \"%s\" di tamponê de nayê xuyakirin û etîket nikare were afirandin."
 
-#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
-#: gtk/gtktextbufferserialize.c:1315 gtk/gtktextbufferserialize.c:1389
+#: ../gtk/gtktextbufferserialize.c:1144
+#: ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320
+#: ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "Endam <%s> ne derbasbare li jêr <%s>"
 
-#: gtk/gtktextbufferserialize.c:1170
+#: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" ne cureyeke derbasbar ê pêşbîrê ye"
 
-#: gtk/gtktextbufferserialize.c:1178
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" ne navekî derbasbare ji bo pêşbîrê"
 
-#: gtk/gtktextbufferserialize.c:1188
+#: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr "\"%s\" nikare were veguhertin ji bo nirxa cureyê \"%s\" yê nirxdariya \"%s\" ye"
 
-#: gtk/gtktextbufferserialize.c:1197
+#: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" Ne nirxeke derbasbare ji bo \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1280
+#: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "Etîketa \"%s\" berê hatiye danasîn"
 
-#: gtk/gtktextbufferserialize.c:1291
+#: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "Etîketa \"%s\" xwedî destûreke ne derbasbare \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1344
+#: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "Hêmana herî derve ya di nivîsê de ye divê <text_view_markup> be, divê ne <%s> be"
 
-#: gtk/gtktextbufferserialize.c:1353 gtk/gtktextbufferserialize.c:1369
+#: ../gtk/gtktextbufferserialize.c:1358
+#: ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "Endamekî <%s> berê hatiye taybetkirin"
 
-#: gtk/gtktextbufferserialize.c:1375
+#: ../gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Endamê <text> nikare berî endamê <tags> xuya bike"
 
-#: gtk/gtktextbufferserialize.c:1783
-#, c-format
+#: ../gtk/gtktextbufferserialize.c:1788
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Daneya vegerandî xirabûye"
 
-#: gtk/gtktextbufferserialize.c:1861
-#, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
+#: ../gtk/gtktextbufferserialize.c:1866
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Xirakirina Daneya vegerandî. Beşa destpêkê ne eve GTKTEXTBUFFERCONTENTS-0001"
 
-#: gtk/updateiconcache.c:413
+#: ../gtk/updateiconcache.c:413
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "Gelek idata ji bo symlinka '%s' û '%s' hatin dîtin\n"
 
-#: gtk/updateiconcache.c:1116
-#, c-format
+#: ../gtk/updateiconcache.c:1116
 msgid "Failed to write header\n"
-msgstr ""
+msgstr "Di sernivîsê de têkçûn\n"
 
-#: gtk/updateiconcache.c:1122
-#, c-format
+#: ../gtk/updateiconcache.c:1122
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "Çewtî di nivisandina hash tabloyê de\n"
 
-#: gtk/updateiconcache.c:1128
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1128
 msgid "Failed to write directory index\n"
-msgstr "Xwendina ji dosya demî biserneket"
+msgstr "Nivisîna ji pêrista rêveberiyê biserneket\n"
 
-#: gtk/updateiconcache.c:1136
-#, c-format
+#: ../gtk/updateiconcache.c:1136
 msgid "Failed to rewrite header\n"
-msgstr ""
+msgstr "Ji nû nivisîna sernivîsê biserneket\n"
 
-#: gtk/updateiconcache.c:1162
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1162
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Vekirina dosiya '%s' bi ser neket: %s"
+msgstr "Nivisîna pelê pêşbîrê biserneket: %s\n"
 
-#: gtk/updateiconcache.c:1202
+#: ../gtk/updateiconcache.c:1202
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s, wê gavê %s jê dibe\n"
 
-#: gtk/updateiconcache.c:1214
-#, fuzzy, c-format
-msgid "Could not rename %s to %s: %s\n"
-msgstr "Dema dosyeya \"%s\"  weke \"%s\"  ji nû ve dihate navandin çewtî: %s"
-
-#: gtk/updateiconcache.c:1221
-#, fuzzy, c-format
-msgid "Could not rename %s back to %s: %s.\n"
-msgstr "nikare ikona lodkirî bibîne ji bo %s"
-
-#: gtk/updateiconcache.c:1243
+#: ../gtk/updateiconcache.c:1214
 #, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s\n"
+
+#: ../gtk/updateiconcache.c:1221
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr "Nikare %s ji nû nav lê bike, vegere  %s: %s.\n"
+
+#: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Pelê pêşbîr bi rengekî serkeftî hate afirandin.\n"
 
-#: gtk/updateiconcache.c:1282
-msgid "Overwrite an existing cache, even if uptodate"
-msgstr ""
+#: ../gtk/updateiconcache.c:1282
+msgid "Overwrite an existing cache, even if up to date"
+msgstr "Wê li ser pêşbîreke heyî were nivîsîn, ew rojane be jî"
 
-#: gtk/updateiconcache.c:1283
+#: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "Kontrol neke bê ka index.theme heye yan jî tuneye"
 
-#: gtk/updateiconcache.c:1284
+#: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "Di pêşbîrê de daneya wêne tuneye"
 
-#: gtk/updateiconcache.c:1285
+#: ../gtk/updateiconcache.c:1285
 msgid "Output a C header file"
-msgstr ""
+msgstr "Derana pelekî C header"
 
-#: gtk/updateiconcache.c:1286
+#: ../gtk/updateiconcache.c:1286
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Derana kîtekît bigire"
 
-#: gtk/updateiconcache.c:1314
+#: ../gtk/updateiconcache.c:1314
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"Pelê îndeksa dirban di hundirê '%s' de tuneye.\n"
+"Heke bi rastî jî tu dixwazî li vir pêşbîreke îkonan çêbike, --ignore-theme-index bikar bîne.\n"
 
-#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr ""
-#~ "Nikari desteka dosyayên PNM bike bi nirxên rengan ên ji 255 an zêdetir"
-
-#~ msgid "Could not get information about '%s': %s"
-#~ msgstr "Nikare agahiyan derbarê '%s': %s de bibîne"
-
-#~ msgid "Shortcuts"
-#~ msgstr "Kurterê"
-
-#~ msgid "Folder"
-#~ msgstr "Peldank"
-
-#~ msgid "Cannot change folder"
-#~ msgstr "Nikare peldank biguhêre"
-
-#~ msgid "The folder you specified is an invalid path."
-#~ msgstr "Peldanka ku te diyar kiriye ne riyeke derbasdar e."
-
-#~ msgid "Could not build file name from '%s' and '%s'"
-#~ msgstr "Bi xebitandina '%s' ya ligel  '%s navê dosyeyê çênebû"
-
-#~ msgid "Open Location"
-#~ msgstr "Cih veke"
-
-#~ msgid "Save in Location"
-#~ msgstr "Li cih tomar bike"
-
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Di afirandina peldanka de\"%s\" çewtî: %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "Dibe ku te sembolên qedexe di dosyayan de bikaranîbe."
-
-#~ msgid "Error creating folder \"%s\": %s\n"
-#~ msgstr "Di afirandinê peldanka \"%s\" de çewtî: %s\n"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Bi çewtî jêbirina dosya \"%s\": %s↵\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "Dibe sembolên qedexe di dosyan de hebin."
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Di navê dosya de \"%s\" sembolên ji bo dosyan qedexe hene."
-
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "Çewtiya gihiştina agahiyan ji bo/': %s"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#~ msgid "Y"
-#~ msgstr "Y"
-
-#~ msgid "clear"
-#~ msgstr "Jê bibe"
-
-#~ msgid "Select All"
-#~ msgstr "Hemûyî Hilbijêre"
-
-#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-#~ msgstr "Endamê nexşeya Pix: \"%s\" Pêwiste ku bê kêmasî be  %s, rêzik %d"
-
-msgid "%1$s on %2$s"
-msgstr "%1$s di %2$s de"
