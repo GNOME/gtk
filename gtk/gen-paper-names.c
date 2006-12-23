@@ -169,7 +169,10 @@ main (int argc, char *argv[])
     {
       if (names[i].suffix != -1)
 	{
-	  j = names[i].suffix;
+	  j = i;
+	  do {
+	    j = names[j].suffix;
+	  } while (names[j].suffix != -1);
 	  names[i].offset = names[j].offset + names[j].len - names[i].len;
 	}
     }
