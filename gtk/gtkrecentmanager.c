@@ -614,7 +614,7 @@ build_recent_items_list (GtkRecentManager *manager)
  * monitors the recently used resources list, and emits the "changed" signal
  * each time something inside the list changes.
  *
- * #GtkRecentManager objects are expansive: be sure to create them only when
+ * #GtkRecentManager objects are expensive: be sure to create them only when
  * needed. You should use the gtk_recent_manager_new_for_screen() or the
  * gtk_recent_manager_get_default() functions instead.
  *
