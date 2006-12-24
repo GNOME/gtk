@@ -2610,6 +2610,7 @@ gtk_printer_get_location
 gtk_printer_get_icon_name
 gtk_printer_get_job_count
 gtk_printer_is_virtual
+gtk_printer_list_papers
 gtk_printer_accepts_pdf
 gtk_printer_accepts_ps
 gtk_printer_compare

@@ -1,3 +1,12 @@
+2006-12-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* docs/reference/gtk/gtk-sections.txt:
+	* gtk/gtk.symbols:
+	* gtk/gtkpagesetupunixdialog.c: (fill_paper_sizes_from_printer):
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.c: (gtk_printer_list_papers):
+	* gtk/gtkprinter.h: Make gtk_printer_list_papers public. Bug #345587.
+
 2006-12-24  Carlos Garcia Campos  <carlosgc@gnome.org>
 
 	* gtk/gtkpagesetupunixdialog.c: Don't ignore reverse portrait option

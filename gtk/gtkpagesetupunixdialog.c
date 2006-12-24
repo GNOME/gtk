@@ -723,7 +723,7 @@ fill_paper_sizes_from_printer (GtkPageSetupUnixDialog *dialog,
     }
   else
     {
-      list = _gtk_printer_list_papers (printer);
+      list = gtk_printer_list_papers (printer);
       /* TODO: We should really sort this list so interesting size
 	 are at the top */
       for (l = list; l != NULL; l = l->next)

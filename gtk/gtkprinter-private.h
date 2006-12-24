@@ -49,7 +49,6 @@ cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter         
 							     gdouble              width,
 							     gdouble              height,
 							     GIOChannel          *cache_io);
-GList  *             _gtk_printer_list_papers               (GtkPrinter          *printer);
 void                 _gtk_printer_get_hard_margins          (GtkPrinter          *printer,
 							     gdouble             *top,
 							     gdouble             *bottom,

@@ -79,6 +79,7 @@ gboolean                 gtk_printer_is_virtual        (GtkPrinter      *printer
 gboolean                 gtk_printer_is_default        (GtkPrinter      *printer);
 gboolean                 gtk_printer_accepts_pdf       (GtkPrinter      *printer);
 gboolean                 gtk_printer_accepts_ps        (GtkPrinter      *printer);
+GList                   *gtk_printer_list_papers       (GtkPrinter      *printer);
 
 gint                     gtk_printer_compare           (GtkPrinter *a,
 							GtkPrinter *b);
@@ -90,7 +91,7 @@ void                     gtk_enumerate_printers        (GtkPrinterFunc   func,
 							gpointer         data,
 							GDestroyNotify   destroy,
 							gboolean         wait);
-						      
+
 G_END_DECLS
 
 #endif /* __GTK_PRINTER_H__ */

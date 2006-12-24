@@ -784,11 +784,24 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 						      width, height, cache_io);
 }
 
+/**
+ * gtk_printer_list_papers:
+ * @printer:
+ * 
+ * Lists all the page sizes @printer supports.
+ * 
+ * Return value: a newly allocated list of newly allocated #GtkPageSetup:s.
+ *
+ * Since: 2.12
+ */
 GList  *
-_gtk_printer_list_papers (GtkPrinter *printer)
+gtk_printer_list_papers (GtkPrinter *printer)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrintBackendClass *backend_class;
 
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
+
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
   return backend_class->printer_list_papers (printer);
 }
 

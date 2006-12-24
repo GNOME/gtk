@@ -6210,6 +6210,7 @@ gtk_printer_is_virtual
 gtk_printer_is_default
 gtk_printer_accepts_ps
 gtk_printer_accepts_pdf
+gtk_printer_list_papers
 gtk_printer_compare
 GtkPrinterFunc
 gtk_enumerate_printers
