@@ -1,3 +1,8 @@
+2006-12-24  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	* gtk/gtkpagesetupunixdialog.c: Don't ignore reverse portrait option
+	when is selected in page setup dialog. Fixes bug #365047.
+
 2006-12-24  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkentry.c (_gtk_entry_effective_inner_border):

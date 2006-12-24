@@ -78,6 +78,7 @@ struct GtkPageSetupUnixDialogPrivate
   GtkTooltips *tooltips;
 
   GtkWidget *portrait_radio;
+  GtkWidget *reverse_portrait_radio;
   GtkWidget *landscape_radio;
   GtkWidget *reverse_landscape_radio;
 
@@ -1095,7 +1096,7 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 
   radio_button = create_radio_button (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button)),
 				      GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT);
-  priv->reverse_landscape_radio = radio_button;
+  priv->reverse_portrait_radio = radio_button;
   gtk_table_attach (GTK_TABLE (table), radio_button,
 		    2, 3, 3, 4,
 		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
@@ -1168,7 +1169,7 @@ get_orientation (GtkPageSetupUnixDialog *dialog)
     return GTK_PAGE_ORIENTATION_LANDSCAPE;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->reverse_landscape_radio)))
     return GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE;
-  return GTK_PAGE_ORIENTATION_PORTRAIT;
+  return GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT;
 }
 
 static void
@@ -1180,6 +1181,8 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
   switch (orientation)
     {
     case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->reverse_portrait_radio), TRUE);
+      break;
     case GTK_PAGE_ORIENTATION_PORTRAIT:
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->portrait_radio), TRUE);
       break;
