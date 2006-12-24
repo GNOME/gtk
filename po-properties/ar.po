@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-15 20:44+0000\n"
-"PO-Revision-Date: 2006-12-23 20:10+0100\n"
+"PO-Revision-Date: 2006-12-24 17:57+0100\n"
 "Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -121,18 +121,16 @@ msgid "Font resolution"
 msgstr "استبانة الخط"
 
 #: ../gdk/gdkscreen.c:83
-#, fuzzy
 msgid "The resolution for fonts on the screen"
-msgstr "القرار للخطوط على الشاشه"
+msgstr "استبانة الخطوط على الشاشة"
 
 #: ../gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "اسم البرنامج"
 
 #: ../gtk/gtkaboutdialog.c:207
-#, fuzzy
 msgid "The name of the program. If this is not set, it defaults to g_get_application_name()"
-msgstr "اسم البرنامج.واذا لم يحدد ، الى مشكلات g_get_application_name (...)"
+msgstr "اسم البرنامج. اذا لم يحدد ، الإفتراضي هو g_get_application_name()"
 
 #: ../gtk/gtkaboutdialog.c:221
 msgid "Program version"
@@ -163,18 +161,16 @@ msgid "Website URL"
 msgstr "موقع الانترنت"
 
 #: ../gtk/gtkaboutdialog.c:290
-#, fuzzy
 msgid "The URL for the link to the website of the program"
-msgstr "في موقع للصلة الى موقع البرنامج"
+msgstr "وصلة موقع البرنامج."
 
 #: ../gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "عنوان موقع الويب"
 
 #: ../gtk/gtkaboutdialog.c:307
-#, fuzzy
 msgid "The label for the link to the website of the program. If this is not set, it defaults to the URL"
-msgstr "العلامه على وصلة الى موقع البرنامج.واذا لم يكن هذا هو وضعها في موقع التقصير"
+msgstr "تسمية الوصلة الى موقع البرنامج. إذا لم تكن محدّدة، الإفتراضي هو العنوان"
 
 #: ../gtk/gtkaboutdialog.c:323
 msgid "Authors"
@@ -326,9 +322,8 @@ msgid "Visible when overflown"
 msgstr "مرئي عندما يكون فوقيا"
 
 #: ../gtk/gtkaction.c:263
-#, fuzzy
 msgid "When TRUE, toolitem proxies for this action are represented in the toolbar overflow menu."
-msgstr "عندما يكون TRUE، تخفى قوائم البروكسي الفارغة لهذه العملية."
+msgstr "عندما يكون TRUE، قوائم أدوات الوكيل لهذه العملية توضع في قائمة الأدوات الفائضة."
 
 #: ../gtk/gtkaction.c:270
 #: ../gtk/gtktoolitem.c:137
@@ -840,14 +835,12 @@ msgid "How far in the y direction to move the child when the button is depressed
 msgstr "مقدار نقل الابن في اتجاه ص اثر تحرير الزر"
 
 #: ../gtk/gtkbutton.c:448
-#, fuzzy
 msgid "Displace focus"
-msgstr "له تركيز"
+msgstr "إزاحة التركيز"
 
 #: ../gtk/gtkbutton.c:449
-#, fuzzy
 msgid "Whether the child_displacement_x/_y properties should also affect the focus rectangle"
-msgstr "كان child_displacement_x / _y ممتلكات ينبغي التركيز ايضا على المستطيل"
+msgstr "إذا كانت خصائص child_displacement_x/_y تؤثر أيضا عل مستطيل التركيز"
 
 #: ../gtk/gtkbutton.c:462
 #: ../gtk/gtkentry.c:514
@@ -948,9 +941,8 @@ msgid "Display the cell"
 msgstr "عرض الخلية"
 
 #: ../gtk/gtkcellrenderer.c:194
-#, fuzzy
 msgid "Display the cell sensitive"
-msgstr "كلمة مفتاح حاسة للحالة"
+msgstr "عرض حساسية الخلية"
 
 #: ../gtk/gtkcellrenderer.c:201
 msgid "xalign"
@@ -1077,9 +1069,8 @@ msgid "Model"
 msgstr "النّموذج"
 
 #: ../gtk/gtkcellrenderercombo.c:90
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "نموذج لصندوق المجموعات"
+msgstr "النموذج المحتوي على القيم الممكنة لصندوق الإختيار"
 
 #: ../gtk/gtkcellrenderercombo.c:110
 #: ../gtk/gtkcomboboxentry.c:91
@@ -1096,9 +1087,8 @@ msgid "Has Entry"
 msgstr "له مَدخل"
 
 #: ../gtk/gtkcellrenderercombo.c:129
-#, fuzzy
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "اذا كاذبة ، لا يسمح بالدخول الى قيود بخلاف تلك المختاره"
+msgstr "اذا كان  FALSE، لا يسمح بإدخال نصوص غير المختارة"
 
 #: ../gtk/gtkcellrendererpixbuf.c:112
 msgid "Pixbuf Object"
@@ -1157,9 +1147,8 @@ msgid "Follow State"
 msgstr "اتبع الحالة"
 
 #: ../gtk/gtkcellrendererpixbuf.c:189
-#, fuzzy
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr "فيما إذا كان سيتم عرض الحد أم لا"
+msgstr "فيما إذا كان يتم تلوين pixbuf المرسوم حسب الحالة"
 
 #: ../gtk/gtkcellrendererprogress.c:117
 msgid "Value of the progress bar"
@@ -1603,9 +1592,8 @@ msgid "Ellipsize set"
 msgstr "تم تحديد القطع"
 
 #: ../gtk/gtkcellrenderertext.c:552
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "إن كانت هذه العلامة تؤثر في نظام التواء السطر"
+msgstr "إن كانت هذه الوسمة تؤثر في نسق القطع"
 
 #: ../gtk/gtkcellrenderertoggle.c:126
 msgid "Toggle state"
@@ -1820,7 +1808,6 @@ msgid "The model for the combo box"
 msgstr "نموذج لصندوق المجموعات"
 
 #: ../gtk/gtkcombobox.c:538
-#, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "عرض اللف عند تصميم العناصر في الشبكة"
 
@@ -1854,9 +1841,8 @@ msgid "Add tearoffs to menus"
 msgstr "إضافة قاطفات للقوائم"
 
 #: ../gtk/gtkcombobox.c:624
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "فيما إذا وجب أن يكون للألسنة أحجام متناسقة"
+msgstr "فيما إذا وجب أن يكون للقوائم النازلة عنصر قطع"
 
 #: ../gtk/gtkcombobox.c:639
 #: ../gtk/gtkentry.c:506
@@ -1864,14 +1850,12 @@ msgid "Has Frame"
 msgstr "له إطار"
 
 #: ../gtk/gtkcombobox.c:640
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "إذا ما كان من الممكن أن يعاد ترتيب العمود حول الترويسات"
+msgstr "إذا ما كان صندوق الإختيار يرسم إطارا حول الإبن"
 
 #: ../gtk/gtkcombobox.c:648
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "فيما إذا سيقبض الزر التركيز عند نقره بالفأرة"
+msgstr "فيما إذا سيأخذ الزر التركيز عند نقره بالفأرة"
 
 #: ../gtk/gtkcombobox.c:663
 #: ../gtk/gtkmenu.c:484
@@ -1887,16 +1871,14 @@ msgid "Popup shown"
 msgstr "نافذة قافزة معروضة"
 
 #: ../gtk/gtkcombobox.c:682
-#, fuzzy
 msgid "Whether the combo's dropdown is shown"
-msgstr "فيما إذا كان التقدم سيعرض كنص"
+msgstr "فيما إذا يتم عرض قائمة الصندوق"
 
 #: ../gtk/gtkcombobox.c:688
 msgid "Appears as list"
 msgstr "يظهر كقائمة"
 
 #: ../gtk/gtkcombobox.c:689
-#, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "فما إذا القوائم النازلة لصناديق المجموعات يجب أن تكون قوائم بسيطة عوض قوائم حاسوب"
 
@@ -2087,7 +2069,6 @@ msgstr "تنسيق س"
 
 #: ../gtk/gtkentry.c:574
 #: ../gtk/gtkmisc.c:74
-#, fuzzy
 msgid "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."
 msgstr "الترصيف الأفقي، من 0 (يسار) إلى 1 (يمين). مقلوب لتصاميم RTL"
 
@@ -2096,9 +2077,8 @@ msgid "Truncate multiline"
 msgstr "قطع السطور المتعددة"
 
 #: ../gtk/gtkentry.c:591
-#, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
-msgstr "ما إذا سيتم السماح بانتقاء ملفات متعددة"
+msgstr "ما إذا سيتم قطع نص ملصوق متعدد السطور إلى سطر واحد"
 
 #: ../gtk/gtkentry.c:858
 msgid "Border between text and frame."
@@ -2114,14 +2094,12 @@ msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
 #: ../gtk/gtkentry.c:878
-#, fuzzy
 msgid "Password Hint Timeout"
-msgstr "NAT Binding Timeout"
+msgstr "مدة عرض تلميحة كلمة السر"
 
 #: ../gtk/gtkentry.c:879
-#, fuzzy
 msgid "How long to show the last inputted character in hidden entries"
-msgstr "متى تظهر آخر ادخل الطابع الخفي في الدخول"
+msgstr "مدة ظهور الحرف المدخل الأخير في المداخل المخفية"
 
 #: ../gtk/gtkentrycompletion.c:236
 msgid "Completion Model"
@@ -2145,9 +2123,8 @@ msgid "Text column"
 msgstr "عمود النص"
 
 #: ../gtk/gtkentrycompletion.c:260
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "قائمة عن السلاسل المحتوية على اللوحات المتوفرة"
+msgstr "عمود النموذج المحتوي على النصوص."
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Inline completion"
@@ -2166,23 +2143,20 @@ msgid "Whether the completions should be shown in a popup window"
 msgstr "فيما إذا كان سيتم عرض التكملة على نافضة منبثقة"
 
 #: ../gtk/gtkentrycompletion.c:310
-#, fuzzy
 msgid "Popup set width"
-msgstr "ملائمة بعرض الصفحة"
+msgstr "حدد عرض النافذة المنبثقة"
 
 #: ../gtk/gtkentrycompletion.c:311
-#, fuzzy
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "وإذا كان هذا صحيحا ، قافزه النافذة سوف يكون نفس حجم الدخول"
+msgstr "إذا كان هذا صحيحا ، سيكون حجم النافذة المنبثقة كحجم المدخل"
 
 #: ../gtk/gtkentrycompletion.c:329
 msgid "Popup single match"
 msgstr "انبثاق مطابقة واحدة"
 
 #: ../gtk/gtkentrycompletion.c:330
-#, fuzzy
 msgid "If TRUE, the popup window will appear for a single match."
-msgstr "وإذا كان هذا صحيحا ، سوف تظهر نافذة قافزه للمباراة الواحدة."
+msgstr "إذا كان هذا صحيحا ، ستظهر النافذة المنبثقة لمطابقة وحيدة."
 
 #: ../gtk/gtkeventbox.c:91
 msgid "Visible Window"
@@ -2335,32 +2309,28 @@ msgid "Whether the hidden files and folders should be displayed"
 msgstr "فيما اذا وجب عرض الملفات و الدلائل المخفية"
 
 #: ../gtk/gtkfilechooser.c:269
-#, fuzzy
 msgid "Do overwrite confirmation"
-msgstr "ال_سماح بالتشغيل الآلي"
+msgstr "تأكيد الكتابة الفوقية"
 
 #: ../gtk/gtkfilechooser.c:270
-#, fuzzy
 msgid "Whether a file chooser in save mode will present an overwrite confirmation dialog if necessary."
-msgstr "اذا كان الملف المختار في طريقه انقاذ ستقدم اكتب تأكيد الحوار اذا لزم الامر."
+msgstr "اذا كان حوار اختيار الملف في حالة الحفظ سيعرض سؤال لتأكيد الكتابة الفوقية ان كان ذلك مطلوبا."
 
 #: ../gtk/gtkfilechooserbutton.c:355
 msgid "Dialog"
 msgstr "حوار"
 
 #: ../gtk/gtkfilechooserbutton.c:356
-#, fuzzy
 msgid "The file chooser dialog to use."
-msgstr "صرب ملف القواعد الذي سيستعمل"
+msgstr "حوار اختيار الملف المستعمل"
 
 #: ../gtk/gtkfilechooserbutton.c:387
 msgid "The title of the file chooser dialog."
 msgstr "عنوان لحوار تصفّح الملفات."
 
 #: ../gtk/gtkfilechooserbutton.c:401
-#, fuzzy
 msgid "The desired width of the button widget, in characters."
-msgstr "المطلوب عرضها الزر قطعة في الاشخاص."
+msgstr "العرض المطلوب لقطعة الزر، بالمحارف"
 
 #: ../gtk/gtkfilechooserdefault.c:613
 msgid "Default file chooser backend"
@@ -2394,9 +2364,8 @@ msgid "Cancelled"
 msgstr "أُلغيت"
 
 #: ../gtk/gtkfilesystem.c:390
-#, fuzzy
 msgid "Whether or not the operation has been successfully cancelled"
-msgstr "اذا كانت العملية قد تم بنجاح إلغاء"
+msgstr "اذا تم إلغاء العملية بنجاح "
 
 #: ../gtk/gtkfixed.c:90
 #: ../gtk/gtklayout.c:582
@@ -2569,23 +2538,20 @@ msgid "Pixbuf column"
 msgstr "عمود Pixbuf"
 
 #: ../gtk/gtkiconview.c:537
-#, fuzzy
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr "استخدم العمود نموذج استعادة الايقونه من بيكسبف"
+msgstr "نموذج العمود المستخدم لاستعادة ايقونة pixbuf"
 
 #: ../gtk/gtkiconview.c:555
-#, fuzzy
 msgid "Model column used to retrieve the text from"
-msgstr "استخدم العمود نموذج استعادة النص من"
+msgstr "نموذج العمود المستخدم لاستعادة النص"
 
 #: ../gtk/gtkiconview.c:574
 msgid "Markup column"
 msgstr "عمود الترميز"
 
 #: ../gtk/gtkiconview.c:575
-#, fuzzy
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr "استخدم العمود نموذج استعادة النص باستخدام ترميز اذا بانغو"
+msgstr "نموذج العمود المستخدم لاستعادة النص اذا تم استخدام ترميز بانغو"
 
 #: ../gtk/gtkiconview.c:582
 msgid "Icon View Model"
@@ -2849,9 +2815,8 @@ msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "القطعة التي ستفعل عند نقر مفتاح الإختصار المسطر"
 
 #: ../gtk/gtklabel.c:425
-#, fuzzy
 msgid "The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"
-msgstr "المكان المفضل ليليبسيزي الخيط اذا العلامه لا تملك غرفة لعرض كامل سلسلة"
+msgstr "المكان المفضل لوضع القطع في النص، إذا كانت التسمية لا تملك المكان الكافي لعرض كل النص"
 
 #: ../gtk/gtklabel.c:465
 msgid "Single Line Mode"
@@ -2874,14 +2839,12 @@ msgid "Maximum Width In Characters"
 msgstr "العرض الأكبر بالحروف"
 
 #: ../gtk/gtklabel.c:505
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "المطلوب اقصى عرض العلامه في الاشخاص"
+msgstr "العرض الأقصى المطلوب للتسمية، بالمحارف"
 
 #: ../gtk/gtklabel.c:621
-#, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
+msgstr "فيما اذا سيتم اختيار محتويات التسمية عند التركيز عليها"
 
 #: ../gtk/gtklayout.c:602
 #: ../gtk/gtkviewport.c:106
@@ -3026,19 +2989,16 @@ msgid "Pack direction"
 msgstr "اتّجاه الجمع"
 
 #: ../gtk/gtkmenubar.c:176
-#, fuzzy
 msgid "The pack direction of the menubar"
-msgstr "نوع حزم الألسنة"
+msgstr "اتجاه الحزمة لشريط القائمة"
 
 #: ../gtk/gtkmenubar.c:192
-#, fuzzy
 msgid "Child Pack direction"
-msgstr "نوع حزم الألسنة"
+msgstr "اتجاه حزمة الإبن"
 
 #: ../gtk/gtkmenubar.c:193
-#, fuzzy
 msgid "The child pack direction of the menubar"
-msgstr "اتجاه شريط ا?دوات"
+msgstr "اتجاه حزمة الإبن  لشريط القائمة"
 
 #: ../gtk/gtkmenubar.c:202
 msgid "Style of bevel around the menubar"
@@ -3552,18 +3512,16 @@ msgid "Track Print Status"
 msgstr "متابعة حالة الطبع"
 
 #: ../gtk/gtkprintjob.c:153
-#, fuzzy
 msgid "TRUE if the print job will continue to emit status-changed signals after the print data has been sent to the printer or print server."
-msgstr "صحيح اذا عمل المطبوعه ستظل تنبعث مركز تتغير الاشارات بعد طباعة البيانات تم ارسالها الى الطابعه او خادم طباعة."
+msgstr "صحيح اذا شغل الطبع سيظل يبعث إشارات تغيير الحالة بعد ارسال بيانات الطبع لخادم الطباعة."
 
 #: ../gtk/gtkprintoperation.c:857
 msgid "Default Page Setup"
 msgstr "إعداد الصفحة الإفتراضي"
 
 #: ../gtk/gtkprintoperation.c:858
-#, fuzzy
 msgid "The GtkPageSetup used by default"
-msgstr "الإسم الأساسي لالتيمة الإفتراضية المستعملة من طرف gtk+."
+msgstr "الـ GtkPageSetup المستعمل افتراضيا"
 
 #: ../gtk/gtkprintoperation.c:876
 #: ../gtk/gtkprintunixdialog.c:244
@@ -3572,9 +3530,8 @@ msgstr "تعيينات الطبع"
 
 #: ../gtk/gtkprintoperation.c:877
 #: ../gtk/gtkprintunixdialog.c:245
-#, fuzzy
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr "غتكبرينتسيتينغس المستخدمة في تشغيل الحوار"
+msgstr "الـ GtkPrintSettings المستعمل لبدأ الحوار"
 
 #: ../gtk/gtkprintoperation.c:895
 msgid "Job Name"
@@ -3607,14 +3564,12 @@ msgid "Use full page"
 msgstr "استعمل صفحة كاملة"
 
 #: ../gtk/gtkprintoperation.c:964
-#, fuzzy
 msgid "TRUE if the the origin of the context should be at the corner of the page and not the corner of the imageable area"
-msgstr "صحيح إذا كان أصل السياق يجب ان تكون في زاويه الصفحه وليس في ركن من أركان المنطقة يماغابلي"
+msgstr "صحيح إذا كان أصل السياق يجب أن يكون في زاوية الصفحة وليس عند زاوية المنطقة الصورية"
 
 #: ../gtk/gtkprintoperation.c:985
-#, fuzzy
 msgid "TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."
-msgstr "صحيح اذا المطبوعه ستستمر العملية لتقديم تقرير عن حاله الطباعه عمل بعد طباعة البيانات تم ارسالها الى الطابعه او خادم طباعة."
+msgstr "صحيح اذا كانت عملية الطبع ستظل تبعث إشارات تغيير الحالة بعد ارسال بيانات الطبع لخادم الطباعة."
 
 #: ../gtk/gtkprintoperation.c:1002
 msgid "Unit"
@@ -3629,9 +3584,8 @@ msgid "Show Dialog"
 msgstr "اظهر الحوار"
 
 #: ../gtk/gtkprintoperation.c:1021
-#, fuzzy
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr "صحيح إذا تبين تقدم الحوار مع الطباعه."
+msgstr "صحيح إذا كان حوار التقدم معروضا عند الطبع"
 
 #: ../gtk/gtkprintoperation.c:1044
 msgid "Allow Async"
@@ -3667,9 +3621,8 @@ msgid "Custom tab label"
 msgstr "عنوان لسان مخصص"
 
 #: ../gtk/gtkprintoperation.c:1124
-#, fuzzy
 msgid "Label for the tab containing custom widgets."
-msgstr "علامة لحبه تحتوي عادة القطع."
+msgstr "تسمية اللسان المحتوي على القطع المخصصة"
 
 #: ../gtk/gtkprintunixdialog.c:227
 msgid "The GtkPageSetup to use"
@@ -3688,7 +3641,6 @@ msgid "Activity mode"
 msgstr "نمط النشاط"
 
 #: ../gtk/gtkprogress.c:100
-#, fuzzy
 msgid "If TRUE, the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"
 msgstr "إذا ضبط لـ TRUE فسيكون GtkProgress في نسق الشاغل، مما يعني أنه يشير إلى حصول شيء ما لكنه لن يشير إلى كمية النشاط المكتملة. يستعمل هذا عندما تكون تفعلُ شيئا لا تعلم كم سيستغرق"
 
@@ -3777,9 +3729,8 @@ msgid "Text to be displayed in the progress bar"
 msgstr "النص الذي سيعرض في عمود التقدم"
 
 #: ../gtk/gtkprogressbar.c:222
-#, fuzzy
 msgid "The preferred place to ellipsize the string, if the progressbar does not have enough room to display the entire string, if at all"
-msgstr "المكان المفضل ليليبسيزي الخيط ،اذا بروغريسبار لا يكون متسعا لعرض كامل الخيط أصلا"
+msgstr "المكان المفضل لوضع القطع في النص، إذا كان شريط التقدم لا يملك المكان الكافي لعرض كل النص"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -3796,28 +3747,24 @@ msgid "Group"
 msgstr "مجموعة"
 
 #: ../gtk/gtkradioaction.c:129
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "زرّ أداة المذياعة الذي ينتمي هذا الزرّ إلى مجموعته."
+msgstr "عمل الراديو صاحب المجموعة المحتوية على هذه القطعة"
 
 #: ../gtk/gtkradioaction.c:144
 msgid "The current value"
 msgstr "القيمة الحالية"
 
 #: ../gtk/gtkradioaction.c:145
-#, fuzzy
 msgid "The value property of the currently active member of the group to which this action belongs."
-msgstr "قيمة ممتلكات حاليا عضو نشط في الجماعة التي ينتمي اليها هذا العمل."
+msgstr "خاصية القيمة للعضو الفعال حاليا المحتوي على هذا العمل."
 
 #: ../gtk/gtkradiobutton.c:83
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "زرّ أداة المذياعة الذي ينتمي هذا الزرّ إلى مجموعته."
+msgstr "زر الراديو صاحب المجموعة المحتوية على هذه القطعة"
 
 #: ../gtk/gtkradiomenuitem.c:343
-#, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "الزر المشع الذي إلى مجموعته تنتمي هذه القطعة."
+msgstr "عنصر قائمة الراديو صاحب المجموعة المحتوية على هذه القطعة"
 
 #: ../gtk/gtkrange.c:315
 msgid "Update policy"
@@ -3844,18 +3791,16 @@ msgid "Lower stepper sensitivity"
 msgstr "تخفيض حساسية المدرج"
 
 #: ../gtk/gtkrange.c:341
-#, fuzzy
 msgid "The sensitivity policy for the stepper that points to the adjustment's lower side"
-msgstr "حساسيه سياسة لسائر يشير الى تعديل في الجانب السفلي"
+msgstr "سياسة الحساسية للدرج الموجه لتعديل الجانب السّفلي "
 
 #: ../gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
 msgstr "زيادة حساسية المدرج"
 
 #: ../gtk/gtkrange.c:350
-#, fuzzy
 msgid "The sensitivity policy for the stepper that points to the adjustment's upper side"
-msgstr "حساسيه سياسة لسائر يشير الى تعديل في الجانب الاعلى"
+msgstr "سياسة الحساسية للدرج الموجه لتعديل الجانب العلوي "
 
 #: ../gtk/gtkrange.c:357
 msgid "Slider Width"
@@ -3907,30 +3852,27 @@ msgstr "مقدار·تحريك·السهم·باتجاه·ص·عند·تحرير
 
 #: ../gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "رسم المتزلّج نشطا عند السّحب"
 
 #: ../gtk/gtkrange.c:415
-#, fuzzy
 msgid "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow IN while they are dragged"
-msgstr "هذا الخيار مجموعة الحقيقي ، المتزلجون ستوضع نشطة والظل في حين يزج"
+msgstr "إذا كان صحيحا، يتم الرسم المزلجات كـ ACTIVE بظل IN عند سحبها"
 
 #: ../gtk/gtkrange.c:426
 msgid "Trough Side Details"
 msgstr "انخفاض التفاصيل الجانبية"
 
 #: ../gtk/gtkrange.c:427
-#, fuzzy
 msgid "When TRUE, the parts of the trough on the two sides of the slider are drawn with different details"
-msgstr "عندما صحيح اجزاء المنخفض على جانبي المتزلج هي وضع تفاصيل مختلفة"
+msgstr "إذا كان صحيحا، يتم رسم أجزاء المنخفض على الجانبين الإثنين للمتزلج بتفاصيل مختلفة"
 
 #: ../gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
 msgstr "انخفاض تحت المدرج"
 
 #: ../gtk/gtkrange.c:444
-#, fuzzy
 msgid "Whether to draw trought for full length of range or exclude the steppers and spacing"
-msgstr "اما تروغت الاستفادة الكاملة من طول المدى او استبعاد ستيبرس والمباعده"
+msgstr "فيما اذا يتم رسم الطول الكامل للمدى أو استثناء المباعدة و الدرجات"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
@@ -4002,23 +3944,20 @@ msgid "The sorting order of the items displayed"
 msgstr "كيفية تصنيف العناصر المعروضة"
 
 #: ../gtk/gtkrecentchooser.c:170
-#, fuzzy
 msgid "The current filter for selecting which resources are displayed"
-msgstr "المرشح الحالي لانتقاء الملفات للعرض"
+msgstr "المرشّح الحالي لانتقاء الموارد المعروضة"
 
 #: ../gtk/gtkrecentchoosermenu.c:208
 msgid "Show Numbers"
 msgstr "اعرض الأرقام"
 
 #: ../gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "فيما إذا ستضاف عناصر القوائم القابلة للقطف للقوائم"
+msgstr "فيما إذا يتم عرض العناصر بعدد"
 
 #: ../gtk/gtkrecentmanager.c:217
-#, fuzzy
 msgid "The full path to the file to be used to store and read the list"
-msgstr "في الطريق الى كامل الملف يستخدم لتخزين وقراءة القائمة"
+msgstr "المسار الكامل للملف المستعمل لحفظ وقراءة القائمة."
 
 #: ../gtk/gtkrecentmanager.c:232
 msgid "The maximum number of items to be returned by gtk_recent_manager_get_items()"
@@ -4157,18 +4096,16 @@ msgid "Window Placement"
 msgstr "موضع النافذة"
 
 #: ../gtk/gtkscrolledwindow.c:253
-#, fuzzy
 msgid "Where the contents are located with respect to the scrollbars. This property only takes effect if \"window-placement-set\" is TRUE."
-msgstr "موقع المحتويات باعتبار أعمدة اللف"
+msgstr "موقع المحتويات باعتبار أعمدة اللف. الخاصية صحيحة فقط إذا كانت \"window-placement-set\" صحيحة TRUE."
 
 #: ../gtk/gtkscrolledwindow.c:270
 msgid "Window Placement Set"
 msgstr "تم تحديد مكان النافذة"
 
 #: ../gtk/gtkscrolledwindow.c:271
-#, fuzzy
 msgid "Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."
-msgstr "موقع المحتويات باعتبار أعمدة اللف"
+msgstr "إذا كان \"window-placement\" يستخدم لتحديد موقع المحتويات حسب أشرطة اللّف."
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4187,14 +4124,12 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "عدد البكسلات بين أعمدة اللف و النافذة الملفوفة"
 
 #: ../gtk/gtkscrolledwindow.c:301
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "وضع المكبّر في الأسفل"
+msgstr "وضع النافذة الملفوفة"
 
 #: ../gtk/gtkscrolledwindow.c:302
-#, fuzzy
 msgid "Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "موقع المحتويات باعتبار أعمدة اللف"
+msgstr "موقع محتويات النافذة الملفوفة باعتبار أعمدة اللف، إذا لم يتم تجاوزها بوضع النافذة الملفوفة نفسها."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4337,9 +4272,8 @@ msgid "Xft Hint Style"
 msgstr "أسلوب تركيز Xft"
 
 #: ../gtk/gtksettings.c:333
-#, fuzzy
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
-msgstr "درجة التركيز التس ستستخدم، لا تركيز أو ضعيف أو متوسّط أو كامل"
+msgstr "درجة التركيز مستعمل; hintnone, hintslight, hintmedium, أو hintfull"
 
 #: ../gtk/gtksettings.c:342
 msgid "Xft RGBA"
@@ -4362,63 +4296,56 @@ msgid "Cursor theme name"
 msgstr "اسم ملف سِمة المؤشّر"
 
 #: ../gtk/gtksettings.c:363
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "اسم تيمة الأيقونات لاستخدامها"
+msgstr "اسم نسق المؤشر المستخدم، أو NULL لاستعمال النسق الإفتراضي"
 
 #: ../gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "حجم سِمة المؤشر"
 
 #: ../gtk/gtksettings.c:372
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "اللون للاستخدام للسطور الغريبة"
+msgstr "الحجم المستعمل للمؤشرات، أو 0 لاستعمال الحجم الإفتراضي"
 
 #: ../gtk/gtksettings.c:382
 msgid "Alternative button order"
 msgstr "ترتيب الأزرار البديل"
 
 #: ../gtk/gtksettings.c:383
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "فيما إذا سيتم عرض أيقونات المخزون في الأزرار"
+msgstr "فيما إذا تستعمل الأزرار في الحوارات الترتيب البديل"
 
 #: ../gtk/gtksettings.c:391
 msgid "Show the 'Input Methods' menu"
 msgstr "عرض قائمة 'انماط الإدخال'"
 
 #: ../gtk/gtksettings.c:392
-#, fuzzy
 msgid "Whether the context menus of entries and text views should offer to change the input method"
-msgstr "سواء في اطار من القيود والقوائم الآراء عرض النص على تغيير طريقة المساهمة"
+msgstr "فيما اذا كانت القوائم السياقية للمداخل و مظاهر النص تعطي امكانية تغيير كيفية الإدخال"
 
 #: ../gtk/gtksettings.c:400
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "عرض قائمة 'Y]ohg "
 
 #: ../gtk/gtksettings.c:401
-#, fuzzy
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
-msgstr "سواء في اطار من القيود والقوائم النص الى عرض وجهات النظر يجب ان تدرج مراقبة الاشخاص"
+msgstr "فيما اذا كانت القوائم السياقية للمداخل و مظاهر النص تعطي امكانية ادخال محارف التغيير"
 
 #: ../gtk/gtksettings.c:409
 msgid "Start timeout"
 msgstr "انقضاء مدة البدأ"
 
 #: ../gtk/gtksettings.c:410
-#, fuzzy
 msgid "Starting value for timeouts, when button is pressed"
-msgstr "بدء القيمه عند الخروج هو الضغط على زر"
+msgstr "القيمة البدئية لمهلة الإنتهاء، عند ضغط الزر"
 
 #: ../gtk/gtksettings.c:419
 msgid "Repeat timeout"
 msgstr "انقضاء مدة الإعادة"
 
 #: ../gtk/gtksettings.c:420
-#, fuzzy
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr "اعادة القيمه للخروج عند الضغط على الزر هو"
+msgstr "القيمة الإعادية لمهلة الإنتهاء، عند ضغط الزر"
 
 #: ../gtk/gtksettings.c:429
 msgid "Expand timeout"
@@ -4426,7 +4353,7 @@ msgstr "مدة انقضاء التوسيع"
 
 #: ../gtk/gtksettings.c:430
 msgid "Expand value for timeouts, when a widget is expanding a new region"
-msgstr ""
+msgstr "قيمة تمديد المهلة, عند امتداد القطعة إلى منطقة جديدة"
 
 #: ../gtk/gtksettings.c:459
 msgid "Color scheme"
@@ -4441,18 +4368,16 @@ msgid "Enable Animations"
 msgstr "مكّن الرسوم المتحركة"
 
 #: ../gtk/gtksettings.c:470
-#, fuzzy
 msgid "Whether to enable toolkit-wide animations."
-msgstr "هل يمكن لأدوات نطاق الرسوم المتحركه."
+msgstr "فيما أذا يتم تفعيل الحرَاكة "
 
 #: ../gtk/gtksettings.c:488
 msgid "Enable Touchscreen Mode"
 msgstr "مكّن نمط شاشة اللمسض"
 
 #: ../gtk/gtksettings.c:489
-#, fuzzy
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr "عندما صحيح ، لا يوجد طلب تسليم اخطار هذه الاحداث على الشاشه"
+msgstr "عندما يكون صحيحا ، لا يوجد طلب تسليم اخطار هذه الاحداث على الشاشة"
 
 #: ../gtk/gtksettings.c:507
 msgid "Color Hash"
@@ -4460,25 +4385,23 @@ msgstr "هاش اللون"
 
 #: ../gtk/gtksettings.c:508
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "تمثيل جدول هاش لنظام الألوان"
 
 #: ../gtk/gtksizegroup.c:277
 msgid "Mode"
 msgstr "النسق"
 
 #: ../gtk/gtksizegroup.c:278
-#, fuzzy
 msgid "The directions in which the size group affects the requested sizes of its component widgets"
-msgstr "الإتجاه الذي فيه تؤثر مجموعة الأحجام، الأحجام المطلوبة لقِطع مكوّناتها"
+msgstr "الإتجاه الذي تؤثر فيه مجموعة الحجم على الحجوم المطلوبة لقطعها "
 
 #: ../gtk/gtksizegroup.c:294
 msgid "Ignore hidden"
 msgstr "أهمل المخفي"
 
 #: ../gtk/gtksizegroup.c:295
-#, fuzzy
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr "واذا كان ذلك صحيحا ، غير مخطط قطع تجاهل عند تحديد حجم المجموعة"
+msgstr "اذا كان صحيحا ، يتم تجاهل القطع غير المرسومة عند تحديد حجم المجموعة"
 
 #: ../gtk/gtkspinbutton.c:205
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4697,27 +4620,24 @@ msgid "Cursor position"
 msgstr "موقع المؤشّر"
 
 #: ../gtk/gtktextbuffer.c:229
-#, fuzzy
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr "موقع  الملحق مارك (جزئيا منذ بداية الاحتياطيه)"
+msgstr "موقع علامة الإدخال (تعديل من بداية المخزن)"
 
 #: ../gtk/gtktextbuffer.c:244
 msgid "Copy target list"
 msgstr "انسخ القائمة الوجهة"
 
 #: ../gtk/gtktextbuffer.c:245
-#, fuzzy
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr "قائمة اهداف هذا احتياطية لذاكرة النصوص يدعم النسخ والمصدر داكار"
+msgstr "قائمة الأهداف الممكنة لهذا المخزن لِنسخ الحافضة و مصدر د.ن.د DND"
 
 #: ../gtk/gtktextbuffer.c:260
 msgid "Paste target list"
 msgstr "قائمة أهداف اللصق"
 
 #: ../gtk/gtktextbuffer.c:261
-#, fuzzy
 msgid "The list of targets this buffer supports for clipboard pasting and DND destination"
-msgstr "قائمة اهداف هذا احتياطية لذاكرة النصوص تؤيد وجهة لصق داكار"
+msgstr "قائمة الأهداف الممكنة لهذا المخزن لِلَصق الحافضة و إتجاه د.ن.د DND"
 
 #: ../gtk/gtktexttag.c:171
 msgid "Tag name"
@@ -4829,9 +4749,8 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "مقدار إزاحة الفقرات، بالبكسل"
 
 #: ../gtk/gtktexttag.c:417
-#, fuzzy
 msgid "Offset of text above the baseline (below the baseline if rise is negative) in Pango units"
-msgstr "تعويض النص فوق السطر الرئيسي (تحت السطر الرئيسي إذا كان الرفع سلبيّا) بالبكسل"
+msgstr "تعديل النص فوق السطر الرئيسي (تحت السطر الرئيسي إذا كان الرفع سلبيّا) بوحدات بونغو"
 
 #: ../gtk/gtktexttag.c:426
 msgid "Pixels above lines"
@@ -5448,7 +5367,7 @@ msgstr "تفاصيل نهاية الصف"
 
 #: ../gtk/gtktreeview.c:794
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "تفعيل التنسيق الممدّد لخلفية الأعمدة"
 
 #: ../gtk/gtktreeview.c:800
 msgid "Grid line width"
