@@ -1447,7 +1447,7 @@ _gtk_entry_effective_inner_border (GtkEntry  *entry,
   if (tmp_border)
     {
       *border = *tmp_border;
-      g_free (tmp_border);
+      gtk_border_free (tmp_border);
       return;
     }
 
