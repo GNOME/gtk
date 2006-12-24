@@ -83,6 +83,8 @@ struct _GtkEntryPrivate
   gfloat xalign;
   gint insert_pos;
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
+  guint real_changed : 1;
+  guint change_count : 8;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -369,6 +371,9 @@ static void         disconnect_completion_signals      (GtkEntry           *entr
 static void         connect_completion_signals         (GtkEntry           *entry,
 							GtkEntryCompletion *completion);
 
+static void         begin_change                       (GtkEntry *entry);
+static void         end_change                         (GtkEntry *entry);
+static void         emit_changed                       (GtkEntry *entry);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -1089,6 +1094,46 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
   g_signal_connect (entry->im_context, "delete_surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
+}
+
+static void
+begin_change (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  priv->change_count++;
+}
+
+static void
+end_change (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+ 
+  g_return_if_fail (priv->change_count > 0);
+
+  priv->change_count--;
+
+  if (priv->change_count == 0)
+    {
+       if (priv->real_changed) 
+         {
+           g_signal_emit_by_name (editable, "changed");
+           priv->real_changed = FALSE;
+         }
+    } 
+}
+
+static void
+emit_changed (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (priv->change_count == 0)
+    g_signal_emit_by_name (editable, "changed");
+  else 
+    priv->real_changed = TRUE;
 }
 
 /*
@@ -2432,7 +2477,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 
   gtk_entry_recompute (entry);
 
-  g_signal_emit_by_name (editable, "changed");
+  emit_changed (entry);
   g_object_notify (G_OBJECT (editable), "text");
 }
 
@@ -2482,7 +2527,7 @@ gtk_entry_real_delete_text (GtkEditable *editable,
       
       gtk_entry_recompute (entry);
 
-      g_signal_emit_by_name (editable, "changed");
+      emit_changed (entry);
       g_object_notify (G_OBJECT (editable), "text");
     }
 }
@@ -4020,12 +4065,16 @@ paste_received (GtkClipboard *clipboard,
             g_signal_handler_block (entry, completion->priv->changed_id);
 	}
 
+      begin_change (entry);
+      g_object_freeze_notify (G_OBJECT (entry));
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
         gtk_editable_delete_text (editable, start, end);
 
       pos = entry->current_pos;
       gtk_editable_insert_text (editable, text, length, &pos);
       gtk_editable_set_position (editable, pos);
+      g_object_thaw_notify (G_OBJECT (entry));
+      end_change (entry);
 
       if (completion &&
           !popup_completion && completion->priv->changed_id > 0)
@@ -4178,10 +4227,14 @@ gtk_entry_set_text (GtkEntry    *entry,
   if (completion && completion->priv->changed_id > 0)
     g_signal_handler_block (entry, completion->priv->changed_id);
 
+  begin_change (entry);
+  g_object_freeze_notify (G_OBJECT (entry));
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
 
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
+  g_object_thaw_notify (G_OBJECT (entry));
+  end_change (entry);
 
   if (completion && completion->priv->changed_id > 0)
     g_signal_handler_unblock (entry, completion->priv->changed_id);
@@ -5183,8 +5236,12 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
       else
 	{
 	  /* Replacing selection */
+          begin_change (entry);
+          g_object_freeze_notify (G_OBJECT (entry));
 	  gtk_editable_delete_text (editable, sel1, sel2);
 	  gtk_editable_insert_text (editable, str, length, &sel1);
+          g_object_thaw_notify (G_OBJECT (entry));
+          end_change (entry);
 	}
       
       gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);

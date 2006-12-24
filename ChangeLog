@@ -1,3 +1,10 @@
+2006-12-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_set_text): Emit changed
+	and notify:text only once. The same fix was applied
+	for replacing the selection via DND or copy-and-paste.
+	(#64998, Damon Chaplin, Sven Herzberg)
+
 2006-12-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimmulticontext.c: Be careful to not override
