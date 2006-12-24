@@ -1057,7 +1057,7 @@ gtk_button_get_props (GtkButton *button,
       if (tmp_border)
 	{
 	  *default_border = *tmp_border;
-	  g_free (tmp_border);
+	  gtk_border_free (tmp_border);
 	}
       else
 	*default_border = default_default_border;
@@ -1070,7 +1070,7 @@ gtk_button_get_props (GtkButton *button,
       if (tmp_border)
 	{
 	  *default_outside_border = *tmp_border;
-	  g_free (tmp_border);
+	  gtk_border_free (tmp_border);
 	}
       else
 	*default_outside_border = default_default_outside_border;
@@ -1083,7 +1083,7 @@ gtk_button_get_props (GtkButton *button,
       if (tmp_border)
 	{
 	  *inner_border = *tmp_border;
-	  g_free (tmp_border);
+	  gtk_border_free (tmp_border);
 	}
       else
 	*inner_border = default_inner_border;

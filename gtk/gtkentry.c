@@ -1665,8 +1665,11 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  
 	  if (tmp_pos > sel_start && tmp_pos < sel_end)
 	    {
-	      /* Truncate current selection */
-	      gtk_entry_set_positions (entry, tmp_pos, -1);
+	      /* Truncate current selection, but keep it as big as possible */
+	      if (tmp_pos - sel_start > sel_end - tmp_pos)
+		gtk_entry_set_positions (entry, sel_start, tmp_pos);
+	      else
+		gtk_entry_set_positions (entry, tmp_pos, sel_end);
 	    }
 	  else
 	    {
@@ -3608,7 +3611,7 @@ gtk_entry_find_position (GtkEntry *entry,
   PangoLayoutLine *line;
   gint index;
   gint pos;
-  gboolean trailing;
+  gint trailing;
   const gchar *text;
   gint cursor_index;
   
