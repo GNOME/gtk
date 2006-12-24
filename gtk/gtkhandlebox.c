@@ -744,12 +744,12 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
 
 static void
 draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow,
-		     GdkRectangle *clip)
+		     GdkRectangle *clip, GtkOrientation orientation)
 {
    gtk_paint_handle (widget->style, window, GTK_STATE_NORMAL, shadow,
 		     clip, widget, "handlebox",
 		     rect->x, rect->y, rect->width, rect->height, 
-		     GTK_ORIENTATION_VERTICAL);
+		     orientation);
 }
 
 void
@@ -861,6 +861,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
   GdkRectangle rect;
   GdkRectangle dest;
   gint handle_position;
+  GtkOrientation handle_orientation;
 
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
@@ -899,31 +900,36 @@ gtk_handle_box_paint (GtkWidget      *widget,
       rect.y = 0; 
       rect.width = DRAG_HANDLE_SIZE;
       rect.height = height;
+      handle_orientation = GTK_ORIENTATION_VERTICAL;
       break;
     case GTK_POS_RIGHT:
       rect.x = width - DRAG_HANDLE_SIZE; 
       rect.y = 0;
       rect.width = DRAG_HANDLE_SIZE;
       rect.height = height;
+      handle_orientation = GTK_ORIENTATION_VERTICAL;
       break;
     case GTK_POS_TOP:
       rect.x = 0;
       rect.y = 0; 
       rect.width = width;
       rect.height = DRAG_HANDLE_SIZE;
+      handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
     case GTK_POS_BOTTOM:
       rect.x = 0;
       rect.y = height - DRAG_HANDLE_SIZE;
       rect.width = width;
       rect.height = DRAG_HANDLE_SIZE;
+      handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
     }
 
   if (gdk_rectangle_intersect (event ? &event->area : area, &rect, &dest))
     draw_textured_frame (widget, hb->bin_window, &rect,
 			 GTK_SHADOW_OUT,
-			 event ? &event->area : area);
+			 event ? &event->area : area,
+			 handle_orientation);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     (* GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event) (widget, event);
