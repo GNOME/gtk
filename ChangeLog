@@ -1,5 +1,10 @@
 2006-12-24  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gtk/gtkstyle.c (gtk_border_copy), (gtk_border_free): Use gslice for
+	GtkBorder (#383557).
+
+2006-12-24  Behdad Esfahbod  <behdad@gnome.org>
+
 	Bug 340141 – Update to Pango 1.16 API
 
 	* gdk/gdkpango.c (layout_iter_get_line_clip_region),
