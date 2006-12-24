@@ -1,3 +1,8 @@
+2006-12-24  Bastien Nocera  <hadess@hadess.net>
+
+	* gtk/gtkrecentmanager.c: Fix typo (s/expansive/expensive)
+	(#389183)
+
 2006-12-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* docs/reference/gtk/gtk-sections.txt:
@@ -75,6 +80,7 @@
 	for replacing the selection via DND or copy-and-paste.
 	(#64998, Damon Chaplin, Sven Herzberg)
 
+>>>>>>> 1.8517
 2006-12-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimmulticontext.c: Be careful to not override
