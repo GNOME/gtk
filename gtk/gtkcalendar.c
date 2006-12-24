@@ -1643,7 +1643,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
     for (i = 0; i < 7; i++)
       {
 	pango_layout_set_text (layout, default_abbreviated_dayname[i], -1);
-	pango_layout_line_get_pixel_extents (pango_layout_get_lines (layout)->data, NULL, &logical_rect);
+	pango_layout_line_get_pixel_extents (pango_layout_get_lines_readonly (layout)->data, NULL, &logical_rect);
 
 	priv->min_day_width = MAX (priv->min_day_width, logical_rect.width);
 	priv->max_label_char_ascent = MAX (priv->max_label_char_ascent,

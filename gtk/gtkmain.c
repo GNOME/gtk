@@ -1089,8 +1089,10 @@ _gtk_get_lc_ctype (void)
  * effect. (Note that this can change over the life of an
  * application.)  The default language is derived from the current
  * locale. It determines, for example, whether GTK+ uses the
- * right-to-left or left-to-right text direction. See
- * _gtk_get_lc_ctype() for notes on behaviour on Windows.
+ * right-to-left or left-to-right text direction.
+ *
+ * This function is equivalent to pango_language_get_default().  See
+ * that function for details.
  * 
  * Return value: the default language as a #PangoLanguage, must not be
  * freed
@@ -1098,22 +1100,7 @@ _gtk_get_lc_ctype (void)
 PangoLanguage *
 gtk_get_default_language (void)
 {
-  gchar *lang;
-  PangoLanguage *result;
-  gchar *p;
-  
-  lang = _gtk_get_lc_ctype ();
-  p = strchr (lang, '.');
-  if (p)
-    *p = '\0';
-  p = strchr (lang, '@');
-  if (p)
-    *p = '\0';
-
-  result = pango_language_from_string (lang);
-  g_free (lang);
-  
-  return result;
+  return pango_language_get_default ();
 }
 
 void

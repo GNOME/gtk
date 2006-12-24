@@ -157,7 +157,7 @@ limit_layout_lines (PangoLayout *layout)
     {
       text  = pango_layout_get_text (layout);
       str   = g_string_new (NULL);
-      lines = pango_layout_get_lines (layout);
+      lines = pango_layout_get_lines_readonly (layout);
 
       /* get first lines */
       elem = lines;

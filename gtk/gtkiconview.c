@@ -7216,7 +7216,7 @@ get_pango_text_offsets (PangoLayout     *layout,
   iter = pango_layout_get_iter (layout);
   do
     {
-      line = pango_layout_iter_get_line (iter);
+      line = pango_layout_iter_get_line_readonly (iter);
       start_index = line->start_index;
       end_index = start_index + line->length;
 
@@ -7257,7 +7257,7 @@ get_pango_text_offsets (PangoLayout     *layout,
                 {
                 case ATK_TEXT_BOUNDARY_LINE_START:
                   if (pango_layout_iter_next_line (iter))
-                    end_index = pango_layout_iter_get_line (iter)->start_index;
+                    end_index = pango_layout_iter_get_line_readonly (iter)->start_index;
                   break;
                 case ATK_TEXT_BOUNDARY_LINE_END:
                   if (prev_line)
@@ -7274,13 +7274,13 @@ get_pango_text_offsets (PangoLayout     *layout,
                 */
               if (pango_layout_iter_next_line (iter))
                 {
-                  line = pango_layout_iter_get_line (iter);
+                  line = pango_layout_iter_get_line_readonly (iter);
                   switch (boundary_type)
                     {
                     case ATK_TEXT_BOUNDARY_LINE_START:
                       start_index = line->start_index;
                       if (pango_layout_iter_next_line (iter))
-                        end_index = pango_layout_iter_get_line (iter)->start_index;
+                        end_index = pango_layout_iter_get_line_readonly (iter)->start_index;
                       else
                         end_index = start_index + line->length;
                       break;

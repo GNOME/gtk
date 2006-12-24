@@ -2327,7 +2327,7 @@ get_cursor_direction (GtkLabel *label)
 
   gtk_label_ensure_layout (label);
 
-  for (l = pango_layout_get_lines (label->layout); l; l = l->next)
+  for (l = pango_layout_get_lines_readonly (label->layout); l; l = l->next)
     {
       PangoLayoutLine *line = l->data;
 

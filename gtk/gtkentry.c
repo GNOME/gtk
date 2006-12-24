@@ -1568,7 +1568,7 @@ gtk_entry_get_pixel_ranges (GtkEntry  *entry,
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_char, &end_char))
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
-      PangoLayoutLine *line = pango_layout_get_lines (layout)->data;
+      PangoLayoutLine *line = pango_layout_get_lines_readonly (layout)->data;
       const char *text = pango_layout_get_text (layout);
       gint start_index = g_utf8_offset_to_pointer (text, start_char) - text;
       gint end_index = g_utf8_offset_to_pointer (text, end_char) - text;
@@ -3394,7 +3394,7 @@ get_layout_position (GtkEntry *entry,
 
   area_height = PANGO_SCALE * (area_height - inner_border.top - inner_border.bottom);
 
-  line = pango_layout_get_lines (layout)->data;
+  line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
   
   /* Align primarily for locale's ascent/descent */
@@ -3616,7 +3616,7 @@ gtk_entry_find_position (GtkEntry *entry,
   text = pango_layout_get_text (layout);
   cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos) - text;
   
-  line = pango_layout_get_lines (layout)->data;
+  line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
 
   if (index >= cursor_index && entry->preedit_length)
@@ -3712,7 +3712,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
     text_area_width = 0;
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
-  line = pango_layout_get_lines (layout)->data;
+  line = pango_layout_get_lines_readonly (layout)->data;
 
   pango_layout_line_get_extents (line, NULL, &logical_rect);
 

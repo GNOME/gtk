@@ -1246,7 +1246,7 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
   gint baseline;
   gint i;
 
-  line = pango_layout_iter_get_line (iter);
+  line = pango_layout_iter_get_line_readonly (iter);
 
   clip_region = gdk_region_new ();
 
@@ -1330,7 +1330,7 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
   g_return_val_if_fail (index_ranges != NULL, NULL);
   
   iter = pango_layout_get_iter (line->layout);
-  while (pango_layout_iter_get_line (iter) != line)
+  while (pango_layout_iter_get_line_readonly (iter) != line)
     pango_layout_iter_next_line (iter);
   
   clip_region = layout_iter_get_line_clip_region(iter, x_origin, y_origin, index_ranges, n_ranges);

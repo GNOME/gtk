@@ -1,3 +1,32 @@
+2006-12-24  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 340141 – Update to Pango 1.16 API
+
+	* gdk/gdkpango.c (layout_iter_get_line_clip_region),
+	(gdk_pango_layout_line_get_clip_region):
+	* gtk/gtkcalendar.c (gtk_calendar_size_request):
+	* gtk/gtkentry.c (gtk_entry_get_pixel_ranges),
+	(get_layout_position), (gtk_entry_find_position),
+	(gtk_entry_adjust_scroll):
+	* gtk/gtkiconview.c (get_pango_text_offsets):
+	* gtk/gtklabel.c (get_cursor_direction):
+	* gtk/gtkstyle.c (get_insensitive_layout):
+	* gtk/gtktextdisplay.c (render_para):
+	* gtk/gtktextlayout.c (allocate_child_widgets),
+	(find_display_line_below), (find_display_line_above),
+	(gtk_text_layout_move_iter_to_previous_line),
+	(gtk_text_layout_move_iter_to_next_line),
+	(gtk_text_layout_move_iter_to_line_end),
+	(gtk_text_layout_iter_starts_line),
+	(gtk_text_layout_move_iter_to_x):
+	* gtk/gtktextutil.c (limit_layout_lines):
+	Use the _readonly version of pango_layout_iter_get_line(),
+	pango_layout_iter_get_run(), pango_layout_get_line(), and
+	pango_layout_get_lines().
+
+	* gtk/gtkmain.c (gtk_get_default_language): Use
+	pango_get_default_language().
+
 2006-12-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): Emit changed

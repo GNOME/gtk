@@ -1651,7 +1651,7 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
   
   do
     {
-      PangoLayoutRun *run = pango_layout_iter_get_run (iter);
+      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
 
       if (run && is_shape (run))
         {
@@ -2565,7 +2565,7 @@ find_display_line_below (GtkTextLayout *layout,
       do
         {
           gint first_y, last_y;
-          PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
+          PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
           found_byte = layout_line->start_index;
           
@@ -2636,7 +2636,7 @@ find_display_line_above (GtkTextLayout *layout,
       do
         {
           gint first_y, last_y;
-          PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
+          PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
           found_byte = layout_line->start_index;
 
@@ -2767,7 +2767,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
       update_byte = TRUE;
     }
   
-  tmp_list = pango_layout_get_lines (display->layout);
+  tmp_list = pango_layout_get_lines_readonly (display->layout);
   layout_line = tmp_list->data;
 
   if (update_byte)
@@ -2793,7 +2793,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
           if (display->height > 0)
             {
-              tmp_list = g_slist_last (pango_layout_get_lines (display->layout));
+              tmp_list = g_slist_last (pango_layout_get_lines_readonly (display->layout));
               layout_line = tmp_list->data;
 
               line_display_index_to_iter (layout, display, iter,
@@ -2879,7 +2879,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
       else
 	line_byte = 0;
 	
-      tmp_list = pango_layout_get_lines (display->layout);
+      tmp_list = pango_layout_get_lines_readonly (display->layout);
       while (tmp_list && !found_after)
         {
           PangoLayoutLine *layout_line = tmp_list->data;
@@ -2939,7 +2939,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
 
-  tmp_list = pango_layout_get_lines (display->layout);
+  tmp_list = pango_layout_get_lines_readonly (display->layout);
   while (tmp_list)
     {
       PangoLayoutLine *layout_line = tmp_list->data;
@@ -2995,7 +2995,7 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
 
-  tmp_list = pango_layout_get_lines (display->layout);
+  tmp_list = pango_layout_get_lines_readonly (display->layout);
   while (tmp_list)
     {
       PangoLayoutLine *layout_line = tmp_list->data;
@@ -3064,7 +3064,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 
   do
     {
-      PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
+      PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
       if (line_byte < layout_line->start_index + layout_line->length ||
           pango_layout_iter_at_last_line (layout_iter))

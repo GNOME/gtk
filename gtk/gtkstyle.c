@@ -4938,7 +4938,7 @@ get_insensitive_layout (GdkDrawable *drawable,
       gboolean need_stipple = FALSE;
       ByteRange *br;
       
-      run = pango_layout_iter_get_run (iter);
+      run = pango_layout_iter_get_run_readonly (iter);
 
       if (run)
         {

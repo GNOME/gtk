@@ -481,7 +481,7 @@ render_para (GtkTextRenderer    *text_renderer,
 
   do
     {
-      PangoLayoutLine *line = pango_layout_iter_get_line (iter);
+      PangoLayoutLine *line = pango_layout_iter_get_line_readonly (iter);
       int selection_y, selection_height;
       int first_y, last_y;
       PangoRectangle line_rect;
