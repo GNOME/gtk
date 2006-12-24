@@ -84,21 +84,24 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
    * that use the shift key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   * And do not translate the part before the |.
+   * 
+   * Don't include the prefix "keyboard label|" in the translation.
    */
   class->mod_name_shift = g_strdup (Q_("keyboard label|Shift"));
   /* This is the text that should appear next to menu accelerators
    * that use the control key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   * And do not translate the part before the |.
+   *
+   * Don't include the prefix "keyboard label|" in the translation.
    */
   class->mod_name_control = g_strdup (Q_("keyboard label|Ctrl"));
   /* This is the text that should appear next to menu accelerators
    * that use the alt key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   * And do not translate the part before the |.
+   *
+   * Don't include the prefix "keyboard label|" in the translation.
    */
   class->mod_name_alt = g_strdup (Q_("keyboard label|Alt"));
   class->mod_separator = g_strdup ("+");
