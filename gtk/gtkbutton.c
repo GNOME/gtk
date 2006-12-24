@@ -1932,11 +1932,18 @@ gtk_button_grab_notify (GtkWidget *widget,
 			gboolean   was_grabbed)
 {
   GtkButton *button = GTK_BUTTON (widget);
+  gboolean save_in;
 
   if (!was_grabbed)
     {
-      button->in_button = FALSE;
+      save_in = button->in_button;
+      button->in_button = FALSE; 
       gtk_real_button_released (button);
+      if (save_in != button->in_button)
+        {
+          button->in_button = save_in;
+          gtk_button_update_state (button);
+        }
     }
 }
 
