@@ -1,5 +1,9 @@
 2006-12-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c (gtk_button_grab_notify): Be more
+	careful when faking a button release.  (#323146,
+	Travis Abbott)
+
 	* gtk/gtkhandlebox.c (draw_textured_frame): Draw the
 	handle with the right orientation, depending on the
 	position of the handlebox.  (#159764, Benjamin Berg)
