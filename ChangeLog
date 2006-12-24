@@ -1,5 +1,9 @@
 2006-12-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_button_press): When
+	shift-clicking, keep the larger part of the selection
+	selected.  (#353709, Benjamin Otte)
+
 	* gtk/gtkbutton.c (gtk_button_grab_notify): Be more
 	careful when faking a button release.  (#323146,
 	Travis Abbott)
