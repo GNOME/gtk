@@ -45,7 +45,6 @@
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkprivate.h"
-#include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
 #include "gtkalias.h"
@@ -5414,7 +5413,9 @@ gtk_text_view_unselect (GtkTextView *text_view)
 
 static void
 get_iter_at_pointer (GtkTextView *text_view,
-                     GtkTextIter *iter)
+                     GtkTextIter *iter,
+		     gint        *xp,
+		     gint        *yp)
 {
   gint x, y;
   GdkModifierType state;
@@ -5426,6 +5427,11 @@ get_iter_at_pointer (GtkTextView *text_view,
                                      iter,
                                      x + text_view->xoffset,
                                      y + text_view->yoffset);
+  if (xp)
+    *xp = x;
+
+  if (yp)
+    *yp = y;
 }
 
 static void
@@ -5435,7 +5441,7 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
   GtkTextIter newplace;
   GtkTextMark *mark;
 
-  get_iter_at_pointer (text_view, &newplace);
+  get_iter_at_pointer (text_view, &newplace, NULL, NULL);
   
   mark = gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
   
@@ -5472,28 +5478,57 @@ selection_scan_timeout (gpointer data)
   return TRUE; /* remain installed. */
 }
 
-#define DND_SCROLL_MARGIN 0.20
+#define UPPER_OFFSET_ANCHOR 0.8
+#define LOWER_OFFSET_ANCHOR 0.2
+
+static gboolean
+check_scroll (gdouble offset, GtkAdjustment *adj)
+{
+  if ((offset > UPPER_OFFSET_ANCHOR &&
+       adj->value + adj->page_size < adj->upper) ||
+      (offset < LOWER_OFFSET_ANCHOR &&
+       adj->value > adj->lower))
+    return TRUE;
+
+  return FALSE;
+}
 
 static gint
 drag_scan_timeout (gpointer data)
 {
   GtkTextView *text_view;
   GtkTextIter newplace;
+  gint x, y, width, height;
+  gdouble pointer_xoffset, pointer_yoffset;
 
   GDK_THREADS_ENTER ();
   
   text_view = GTK_TEXT_VIEW (data);
 
-  get_iter_at_pointer (text_view, &newplace);
+  get_iter_at_pointer (text_view, &newplace, &x, &y);
+  gdk_drawable_get_size (text_view->text_window->bin_window, &width, &height);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              text_view->dnd_mark,
                              &newplace);
 
-  DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_to_mark (text_view,
-                                text_view->dnd_mark,
-                                DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
+  pointer_xoffset = (gdouble) x / width;
+  pointer_yoffset = (gdouble) y / height;
+
+  if (check_scroll (pointer_xoffset, text_view->hadjustment) ||
+      check_scroll (pointer_yoffset, text_view->vadjustment))
+    {
+      /* do not make offsets surpass lower nor upper anchors, this makes
+       * scrolling speed relative to the distance of the pointer to the
+       * anchors when it moves beyond them.
+       */
+      pointer_xoffset = CLAMP (pointer_xoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
+      pointer_yoffset = CLAMP (pointer_yoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
+
+      gtk_text_view_scroll_to_mark (text_view,
+				    text_view->dnd_mark,
+				    0., TRUE, pointer_xoffset, pointer_yoffset);
+    }
 
   GDK_THREADS_LEAVE ();
   
@@ -5624,7 +5659,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
 
-      get_iter_at_pointer (text_view, &cursor);
+      get_iter_at_pointer (text_view, &cursor, NULL, NULL);
       
       start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
@@ -6216,21 +6251,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gdk_drag_status (context, 0, time);
       gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
     }
-      
-  gtk_text_buffer_move_mark (get_buffer (text_view),
-                             text_view->dnd_mark,
-                             &newplace);
 
-  DV(g_print (G_STRLOC": scrolling to mark\n"));
-  gtk_text_view_scroll_to_mark (text_view,
-                                text_view->dnd_mark,
-                                DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
-  
-  if (text_view->scroll_timeout != 0) /* reset on every motion event */
-    g_source_remove (text_view->scroll_timeout);
-      
-  text_view->scroll_timeout =
-    g_timeout_add (50, drag_scan_timeout, text_view);
+  if (!text_view->scroll_timeout)
+    text_view->scroll_timeout =
+      g_timeout_add (100, drag_scan_timeout, text_view);
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.

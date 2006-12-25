@@ -1,6 +1,11 @@
+2006-12-24  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtktextview.c: Improve the DND scrolling
+	behaviour.  (#92387, Carlos Garnacho Parro)
+
 2006-12-24  Bastien Nocera  <hadess@hadess.net>
 
-        * gtk/gtkrecentmanager.c: Fix typo (s/expansive/expensive)
+	* gtk/gtkrecentmanager.c: Fix typo (s/expansive/expensive)
 	(#389183)
 
 2006-12-24  Carlos Garcia Campos  <carlosgc@gnome.org>
@@ -9,7 +14,7 @@
 	when is selected in page setup dialog. Fixes bug #365047.
 
 2006-12-24  Matthias Clasen  <mclasen@redhat.com>
-
+	
 	* gtk/gtkentry.c (gtk_entry_button_press): When
 	shift-clicking, keep the larger part of the selection
 	selected.  (#353709, Benjamin Otte)
