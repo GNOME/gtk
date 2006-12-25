@@ -1,5 +1,10 @@
 2006-12-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextutil.c: Remove debug output.
+
+	* gtk/gtktextview.c: Improve the DND scrolling
+	behaviour.  (#92387, Carlos Garnacho Parro)
+
 	* gtk/gtkaccellabel.c: Improve translators comments.  
 	(#389298, Christian Persch)
 
