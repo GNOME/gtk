@@ -1,5 +1,12 @@
 2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* gtk/gtkplug.c: (gtk_plug_construct_for_display),
+	(gtk_plug_unrealize): Notify the "embedded" property also on
+	normal construction and when destroying the socket window.
+	Bug #388738.
+
+2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* gtk/gtkaboutdialog.c: (gtk_about_dialog_class_init),
 	(gtk_about_dialog_init), (display_credits_dialog),
 	(display_license_dialog):

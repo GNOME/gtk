@@ -422,8 +422,11 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	    }
 	}
 
-      if (plug->socket_window)
+      if (plug->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
+
+        g_object_notify (G_OBJECT (plug), "embedded");
+      }
     }
 }
 
@@ -493,6 +496,8 @@ gtk_plug_unrealize (GtkWidget *widget)
       gdk_window_set_user_data (plug->socket_window, NULL);
       g_object_unref (plug->socket_window);
       plug->socket_window = NULL;
+
+      g_object_notify (G_OBJECT (widget), "embedded");
     }
 
   if (!plug->same_app)
