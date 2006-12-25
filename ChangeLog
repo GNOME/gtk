@@ -1,5 +1,11 @@
 2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* gtk/gtkstatusbar.c: (gtk_statusbar_size_allocate):
+	Don't assume statusbar->label is the statusbar's frame's child when
+	shrinking the size allocation when the grip is shown. Bug #372452.
+
+2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* gtk/gtkpagesetupunixdialog.c: (printer_status_cb),
 	(add_custom_paper): Fix mem leaks. Bug #389194.
 

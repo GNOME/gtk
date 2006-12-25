@@ -802,15 +802,23 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 	}
       else
 	{
-	  if (statusbar->label->allocation.width + rect.width > statusbar->frame->allocation.width)
+	  GtkWidget *child;
+
+	  /* Use the frame's child instead of statusbar->label directly, in case
+	   * the label has been replaced by a container as the frame's child
+	   * (and the label reparented into that container).
+	   */
+	  child = gtk_bin_get_child (GTK_BIN (statusbar->frame));
+
+	  if (child->allocation.width + rect.width > statusbar->frame->allocation.width)
 	    {
 	      /* shrink the label to make room for the grip */
-	      *allocation = statusbar->label->allocation;
+	      *allocation = child->allocation;
 	      allocation->width = MAX (1, allocation->width - rect.width);
 	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
-		allocation->x += statusbar->label->allocation.width - allocation->width;
+		allocation->x += child->allocation.width - allocation->width;
 
-	      gtk_widget_size_allocate (statusbar->label, allocation);
+	      gtk_widget_size_allocate (child, allocation);
 	    }
 	}
     }
