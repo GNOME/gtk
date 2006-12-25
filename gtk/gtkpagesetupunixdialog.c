@@ -490,6 +490,7 @@ printer_status_cb (GtkPrintBackend        *backend,
   gtk_list_store_set (priv->printer_list, iter,
                       PRINTER_LIST_COL_NAME, str,
                       -1);
+  g_free (str);
 }
 
 static void
@@ -1647,6 +1648,7 @@ add_custom_paper (CustomPaperDialog *data)
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (data->treeview), path,
 			    data->text_column, TRUE);
   gtk_tree_path_free (path);
+  g_free (name);
 }
 
 static void
