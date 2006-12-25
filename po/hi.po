@@ -2195,7 +2195,7 @@ msgstr "पृष्ठ %u"
 #.
 #: gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "मूलभूत:मिमी"
+msgstr "default:mm"
 
 #: gtk/gtkpagesetupunixdialog.c:338
 msgid ""
@@ -3927,17 +3927,17 @@ msgstr "prc7 Envelope"
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr "paper size|prc8 Envelope"
+msgstr "prc8 Envelope"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
-msgstr "paper size|ROC 16k"
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
-msgstr "paper size|ROC 8k"
+msgstr "ROC 8k"
 
 #  ID
 #. ID
