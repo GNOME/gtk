@@ -2082,7 +2082,7 @@ msgstr "पृष्ठ %u"
 #.
 #: ../gtk/gtkpagesetupunixdialog.c:153
 msgid "default:mm"
-msgstr "मूलभूत:मिमी"
+msgstr "default:mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:338
 msgid ""
