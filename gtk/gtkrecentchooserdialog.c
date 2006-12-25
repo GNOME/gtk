@@ -57,9 +57,6 @@ static void gtk_recent_chooser_dialog_get_property (GObject      *object,
 
 static void gtk_recent_chooser_dialog_map       (GtkWidget *widget);
 static void gtk_recent_chooser_dialog_unmap     (GtkWidget *widget);
-static void gtk_recent_chooser_dialog_style_set (GtkWidget *widget,
-						 GtkStyle  *old_style);
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDialog,
 			 gtk_recent_chooser_dialog,
@@ -80,7 +77,6 @@ gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass)
   
   widget_class->map = gtk_recent_chooser_dialog_map;
   widget_class->unmap = gtk_recent_chooser_dialog_unmap;
-  widget_class->style_set = gtk_recent_chooser_dialog_style_set;
   
   _gtk_recent_chooser_install_properties (gobject_class);
   
@@ -93,10 +89,15 @@ gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
   GtkRecentChooserDialogPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
   								     GTK_TYPE_RECENT_CHOOSER_DIALOG,
   								     GtkRecentChooserDialogPrivate);
+  GtkDialog *rc_dialog = GTK_DIALOG (dialog);
   
   dialog->priv = priv;
-  
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+
+  gtk_dialog_set_has_separator (rc_dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (rc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog->action_area), 5);
+
 }
 
 /* we intercept the GtkRecentChooser::item_activated signal and try to
@@ -165,7 +166,8 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
   g_signal_connect (priv->chooser, "item_activated",
   		    G_CALLBACK (gtk_recent_chooser_item_activated_cb),
   		    object);
-  
+
+  gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox),
                       priv->chooser, TRUE, TRUE, 0);
   gtk_widget_show (priv->chooser);
@@ -243,30 +245,6 @@ gtk_recent_chooser_dialog_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->unmap (widget);
   
   gtk_widget_unmap (priv->chooser);
-}
-
-/* taken from gtkfilechooserdialog.c */
-static void
-gtk_recent_chooser_dialog_style_set (GtkWidget *widget,
-				     GtkStyle  *old_style)
-{
-  GtkDialog *dialog;
-
-  dialog = GTK_DIALOG (widget);
-
-  /* Override the style properties with HIG-compliant spacings.  Ugh.
-   * http://developer.gnome.org/projects/gup/hig/1.0/layout.html#layout-dialogs
-   * http://developer.gnome.org/projects/gup/hig/1.0/windows.html#alert-spacing
-   */
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
-  
-  if (GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->style_set (widget, old_style);
 }
 
 static GtkWidget *

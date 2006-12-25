@@ -124,11 +124,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
 							     guint               prop_id,
 							     const GValue       *value,
 							     GParamSpec         *pspec);
-static void                 gtk_about_dialog_style_set      (GtkWidget          *widget,
-			                                     GtkStyle           *previous_style);
-static void                 dialog_style_set                (GtkWidget          *widget,
-		                                             GtkStyle           *previous_style,
-		                                             gpointer            data);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
 static void                 activate_url                    (GtkWidget          *widget,
@@ -186,8 +181,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->get_property = gtk_about_dialog_get_property;
 
   object_class->finalize = gtk_about_dialog_finalize;
-
-  widget_class->style_set = gtk_about_dialog_style_set;
 
 
   /**
@@ -428,6 +421,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
+  GtkDialog *dialog = GTK_DIALOG (about);
   GtkAboutDialogPrivate *priv;
   GtkWidget *vbox, *hbox, *button, *close_button, *image;
 
@@ -452,13 +446,17 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->hovering_over_link = FALSE;
   priv->wrap_license = FALSE;
 
-  gtk_dialog_set_has_separator (GTK_DIALOG (about), FALSE);
-  
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+
   /* Widgets */
   gtk_widget_push_composite_child ();
-  vbox = gtk_vbox_new (FALSE, 8);
 
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (about)->vbox), vbox, TRUE, TRUE, 0);
+  vbox = gtk_vbox_new (FALSE, 8);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
 
   priv->logo_image = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (vbox), priv->logo_image, FALSE, FALSE, 0);
@@ -689,37 +687,6 @@ gtk_about_dialog_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-dialog_style_set (GtkWidget *widget,
-		  GtkStyle *previous_style,
-		  gpointer data)
-{
-  GtkDialog *dialog;
-
-  dialog = GTK_DIALOG (widget);
-
-  /* Override the style properties with HIG-compliant spacings.  Ugh.
-   * http://developer.gnome.org/projects/gup/hig/1.0/layout.html#layout-dialogs
-   * http://developer.gnome.org/projects/gup/hig/1.0/windows.html#alert-spacing
-   */
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 12);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
-}
-
-static void
-gtk_about_dialog_style_set (GtkWidget *widget,
-			    GtkStyle  *previous_style)
-{
-  if (GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->style_set (widget, previous_style);
-
-  dialog_style_set (widget, previous_style, NULL);
 }
 
 /**
@@ -1993,6 +1960,7 @@ display_credits_dialog (GtkWidget *button,
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   GtkWidget *dialog, *notebook;
+  GtkDialog *credits_dialog;
 
   if (priv->credits_dialog != NULL)
     {
@@ -2005,11 +1973,15 @@ display_credits_dialog (GtkWidget *button,
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-  
+  credits_dialog = GTK_DIALOG (dialog);
+  gtk_dialog_set_has_separator (credits_dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (credits_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog->action_area), 5);
+
   priv->credits_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  gtk_dialog_set_default_response (credits_dialog, GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -2019,10 +1991,9 @@ display_credits_dialog (GtkWidget *button,
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (gtk_widget_destroyed),
 		    &(priv->credits_dialog));
-  g_signal_connect (dialog, "style_set",
-		    G_CALLBACK (dialog_style_set), NULL);
 
   notebook = gtk_notebook_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (notebook), 5);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), notebook, TRUE, TRUE, 0);
 
   if (priv->authors != NULL) 
@@ -2065,6 +2036,7 @@ display_license_dialog (GtkWidget *button,
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   GtkWidget *dialog, *view, *sw;
+  GtkDialog *licence_dialog;
 
   if (priv->license_dialog != NULL)
     {
@@ -2077,10 +2049,15 @@ display_license_dialog (GtkWidget *button,
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 					NULL);
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+  licence_dialog = GTK_DIALOG (dialog);
+  gtk_dialog_set_has_separator (licence_dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (licence_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog->action_area), 5);
+
   priv->license_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  gtk_dialog_set_default_response (licence_dialog, GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -2090,10 +2067,9 @@ display_license_dialog (GtkWidget *button,
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (gtk_widget_destroyed),
 		    &(priv->license_dialog));
-  g_signal_connect (dialog, "style_set",
-		    G_CALLBACK (dialog_style_set), NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (sw), 5);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
 				       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

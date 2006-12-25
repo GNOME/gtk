@@ -49,8 +49,6 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
-static void     gtk_file_chooser_dialog_style_set    (GtkWidget             *widget,
-						      GtkStyle              *previous_style);
 
 static void response_cb (GtkDialog *dialog,
 			 gint       response_id);
@@ -72,7 +70,6 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
 
   widget_class->map       = gtk_file_chooser_dialog_map;
   widget_class->unmap     = gtk_file_chooser_dialog_unmap;
-  widget_class->style_set = gtk_file_chooser_dialog_style_set;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -85,6 +82,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   GtkFileChooserDialogPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
 								   GTK_TYPE_FILE_CHOOSER_DIALOG,
 								   GtkFileChooserDialogPrivate);
+  GtkDialog *fc_dialog = GTK_DIALOG (dialog);
+
   dialog->priv = priv;
   dialog->priv->default_width = -1;
   dialog->priv->default_height = -1;
@@ -92,7 +91,10 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv->resize_vertically = TRUE;
   dialog->priv->response_requested = FALSE;
 
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+  gtk_dialog_set_has_separator (fc_dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), 5);
 
   /* We do a signal connection here rather than overriding the method in
    * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
@@ -380,6 +382,7 @@ gtk_file_chooser_dialog_constructor (GType                  type,
   g_signal_connect (priv->widget, "response-requested",
 		    G_CALLBACK (file_chooser_widget_response_requested), object);
 
+  gtk_container_set_border_width (GTK_CONTAINER (priv->widget), 5);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
 
   gtk_widget_show (priv->widget);
@@ -506,29 +509,6 @@ gtk_file_chooser_dialog_unmap (GtkWidget *widget)
    * a new file chooser every time they need one.
    */
   gtk_widget_unmap (priv->widget);
-}
-
-static void
-gtk_file_chooser_dialog_style_set (GtkWidget *widget,
-				   GtkStyle  *previous_style)
-{
-  GtkDialog *dialog;
-
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->style_set (widget, previous_style);
-
-  dialog = GTK_DIALOG (widget);
-
-  /* Override the style properties with HIG-compliant spacings.  Ugh.
-   * http://developer.gnome.org/projects/gup/hig/1.0/layout.html#layout-dialogs
-   * http://developer.gnome.org/projects/gup/hig/1.0/windows.html#alert-spacing
-   */
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 }
 
 /* GtkDialog::response handler */

@@ -1,5 +1,24 @@
 2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* gtk/gtkaboutdialog.c: (gtk_about_dialog_class_init),
+	(gtk_about_dialog_init), (display_credits_dialog),
+	(display_license_dialog):
+	* gtk/gtkfilechooserdialog.c: (gtk_file_chooser_dialog_class_init),
+	(gtk_file_chooser_dialog_init),
+	(gtk_file_chooser_dialog_constructor),
+	(gtk_file_chooser_dialog_unmap):
+	* gtk/gtkrecentchooserdefault.c:
+	(_gtk_recent_chooser_default_init):
+	* gtk/gtkrecentchooserdialog.c:
+	(gtk_recent_chooser_dialog_class_init),
+	(gtk_recent_chooser_dialog_init),
+	(gtk_recent_chooser_dialog_constructor),
+	(gtk_recent_chooser_dialog_unmap): Set the HIG spacings directly
+	instead of using style-set handlers. Fix the filechooser's spacing
+	between content and action area to 12px. Bug #372447.
+
+2006-12-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* gtk/gtkstatusbar.c: (gtk_statusbar_size_allocate):
 	Don't assume statusbar->label is the statusbar's frame's child when
 	shrinking the size allocation when the grip is shown. Bug #372452.

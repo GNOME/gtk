@@ -327,7 +327,7 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
 static void
 _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 {
-  gtk_box_set_spacing (GTK_BOX (impl), 12);
+  gtk_box_set_spacing (GTK_BOX (impl), 6);
 
   /* by default, we use the global manager */
   impl->local_manager = FALSE;
