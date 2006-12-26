@@ -14210,7 +14210,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   /* search */
   gtk_tree_selection_unselect_all (selection);
   if (tree_view->priv->typeselect_flush_timeout
-      && tree_view->priv->search_custom_entry_set)
+      && !tree_view->priv->search_custom_entry_set)
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =

@@ -1,5 +1,11 @@
 2006-12-26  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_init): fix typo causing
+	the search dialog timeout never to be refreshed. (#389581,
+	Andrzej Szombierski).
+
+2006-12-26  Kristian Rietveld  <kris@gtk.org>
+
 	Lots of scrolling fixes.  Made scrolling work properly in not fully
 	validated tree views; fixed a bunch of corner cases.
 
