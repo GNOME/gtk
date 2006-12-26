@@ -129,17 +129,17 @@ static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
 static void gtk_range_map            (GtkWidget        *widget);
 static void gtk_range_unmap          (GtkWidget        *widget);
-static gint gtk_range_expose         (GtkWidget        *widget,
+static gboolean gtk_range_expose         (GtkWidget        *widget,
                                       GdkEventExpose   *event);
-static gint gtk_range_button_press   (GtkWidget        *widget,
+static gboolean gtk_range_button_press   (GtkWidget        *widget,
                                       GdkEventButton   *event);
-static gint gtk_range_button_release (GtkWidget        *widget,
+static gboolean gtk_range_button_release (GtkWidget        *widget,
                                       GdkEventButton   *event);
-static gint gtk_range_motion_notify  (GtkWidget        *widget,
+static gboolean gtk_range_motion_notify  (GtkWidget        *widget,
                                       GdkEventMotion   *event);
-static gint gtk_range_enter_notify   (GtkWidget        *widget,
+static gboolean gtk_range_enter_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
-static gint gtk_range_leave_notify   (GtkWidget        *widget,
+static gboolean gtk_range_leave_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
 static gboolean gtk_range_grab_broken (GtkWidget          *widget,
 				       GdkEventGrabBroken *event);
@@ -147,7 +147,7 @@ static void gtk_range_grab_notify    (GtkWidget          *widget,
 				      gboolean            was_grabbed);
 static void gtk_range_state_changed  (GtkWidget          *widget,
 				      GtkStateType        previous_state);
-static gint gtk_range_scroll_event   (GtkWidget        *widget,
+static gboolean gtk_range_scroll_event   (GtkWidget        *widget,
                                       GdkEventScroll   *event);
 static void gtk_range_style_set      (GtkWidget        *widget,
                                       GtkStyle         *previous_style);
@@ -1381,7 +1381,7 @@ draw_stepper (GtkRange     *range,
 		   arrow_x, arrow_y, arrow_width, arrow_height);
 }
 
-static gint
+static gboolean
 gtk_range_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
@@ -2011,11 +2011,6 @@ stop_scrolling (GtkRange *range)
   gtk_range_remove_step_timer (range);
   /* Flush any pending discontinuous/delayed updates */
   gtk_range_update_value (range);
-  
-  /* Just be lazy about this, if we scrolled it will all redraw anyway,
-   * so no point optimizing the button deactivate case
-   */
-  gtk_widget_queue_draw (GTK_WIDGET (range));
 }
 
 static gboolean
@@ -2102,7 +2097,7 @@ _gtk_range_get_wheel_delta (GtkRange           *range,
   return delta;
 }
       
-static gint
+static gboolean
 gtk_range_scroll_event (GtkWidget      *widget,
 			GdkEventScroll *event)
 {
@@ -2131,7 +2126,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_range_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
@@ -2155,7 +2150,7 @@ gtk_range_motion_notify (GtkWidget      *widget,
   return range->layout->mouse_location != MOUSE_OUTSIDE;
 }
 
-static gint
+static gboolean
 gtk_range_enter_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
@@ -2170,7 +2165,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_range_leave_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
