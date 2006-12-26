@@ -744,6 +744,8 @@ execute_callbacks (gpointer data)
     g_object_unref (system_unix);
 
   system_unix->execute_callbacks_idle_id = 0;
+
+  return FALSE;
 }
 
 static void
