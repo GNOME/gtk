@@ -1,3 +1,13 @@
+2006-12-26  Carlos Garnacho  <carlosg@gnome.org>
+
+	Expose improvements for GtkNotebook. Bug #383435
+
+	* gtk/gtknotebook.c (gtk_notebook_expose): propagate the event to tab
+	labels.
+	(gtk_notebook_draw_focus): do not repaint the whole focused tab again.
+	(gtk_notebook_draw_tab): do not send handmade expose events to tab
+	labels.
+
 2006-12-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrange.c (stop_scrolling): Avoid spurious
