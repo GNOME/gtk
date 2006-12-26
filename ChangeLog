@@ -1,3 +1,9 @@
+2006-12-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtknotebook.c: (gtk_notebook_real_insert_page):
+	Return the correct value from gtk_notebook_insert_page if the
+	page-added handler reorders the tabs. Bug #345094.
+
 2006-12-26  Carlos Garnacho  <carlosg@gnome.org>
 
 	Fix small regressions in GtkNotebook tab detaching. Bug #378852.

@@ -3998,7 +3998,8 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
 
-  return position;
+  /* The page-added handler might have reordered the pages, re-get the position */
+  return gtk_notebook_page_num (notebook, child);
 }
 
 /* Private GtkNotebook Functions:
