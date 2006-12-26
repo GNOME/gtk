@@ -1,5 +1,20 @@
 2006-12-26  Carlos Garnacho  <carlosg@gnome.org>
 
+	Fix small regressions in GtkNotebook tab detaching. Bug #378852.
+
+	* gtk/gtknotebook.c (gtk_notebook_do_arrow): grab focus to allow tabs
+	scrolling when hovering with a detached tab.
+	(gtk_notebook_stop_reorder): Do not deparent the wrong tab if the
+	focus tab has changed during a tab DND operation.
+	(gtk_notebook_drag_end): ensure that the dropped tab gets focused.
+	(gtk_notebook_paint): do not take cur_page as a reference to paint the
+	box if it's detached.
+	(gtk_notebook_calculate_tabs_allocation): focus_tab may be different
+	to the detached tab if we hover the arrows during a tabs detaching 
+	operation, do not allocate it unconditionally in 0,0.
+
+2006-12-26  Carlos Garnacho  <carlosg@gnome.org>
+
 	Expose improvements for GtkNotebook. Bug #383435
 
 	* gtk/gtknotebook.c (gtk_notebook_expose): propagate the event to tab

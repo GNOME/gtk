@@ -2184,6 +2184,8 @@ gtk_notebook_do_arrow (GtkNotebook     *notebook,
 	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_UP : GTK_DIR_DOWN;
       else
 	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+
+      gtk_widget_grab_focus (widget);
       gtk_widget_child_focus (widget, dir);
     }
 }
@@ -2600,7 +2602,11 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
   GtkNotebookPage *page;
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
-  page = notebook->cur_page;
+
+  if (priv->operation == DRAG_OPERATION_DETACH)
+    page = priv->detached_tab;
+  else
+    page = notebook->cur_page;
 
   if (!page)
     return;
@@ -3074,6 +3080,9 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (widget);
 
   gtk_notebook_stop_reorder (GTK_NOTEBOOK (widget));
+
+  if (priv->detached_tab)
+    gtk_notebook_switch_page (GTK_NOTEBOOK (widget), priv->detached_tab, -1);
 
   GTK_BIN (priv->dnd_window)->child = NULL;
   gtk_widget_destroy (priv->dnd_window);
@@ -4417,8 +4426,7 @@ gtk_notebook_paint (GtkWidget    *widget,
   if (!notebook->first_tab)
     notebook->first_tab = notebook->children;
 
-  if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, notebook->cur_page) ||
-      !GTK_WIDGET_MAPPED (notebook->cur_page->tab_label))
+  if (!GTK_WIDGET_MAPPED (notebook->cur_page->tab_label))
     page = GTK_NOTEBOOK_PAGE (notebook->first_tab);
   else
     page = notebook->cur_page;
@@ -5214,18 +5222,16 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
       page->allocation = child_allocation;
 
-      if (page == notebook->cur_page)
+      if ((page == priv->detached_tab && priv->operation == DRAG_OPERATION_DETACH) ||
+	  (page == notebook->cur_page && priv->operation == DRAG_OPERATION_REORDER))
 	{
-	  if (priv->operation == DRAG_OPERATION_REORDER ||
-	      priv->operation == DRAG_OPERATION_DETACH)
-	    {
-	      /* needs to be allocated at 0,0
-	       * to be shown in the drag window */
-	      page->allocation.x = 0;
-	      page->allocation.y = 0;
-	    }
+	  /* needs to be allocated at 0,0
+	   * to be shown in the drag window */
+	  page->allocation.x = 0;
+	  page->allocation.y = 0;
 	}
-      else
+      
+      if (page != notebook->cur_page)
 	{
 	  switch (tab_pos)
 	    {
