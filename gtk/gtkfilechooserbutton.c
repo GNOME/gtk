@@ -48,6 +48,7 @@
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserutils.h"
+#include "gtkmarshalers.h"
 
 #include "gtkfilechooserbutton.h"
 
@@ -84,6 +85,13 @@ enum
   PROP_FOCUS_ON_CLICK,
   PROP_TITLE,
   PROP_WIDTH_CHARS
+};
+
+/* Signals */
+enum
+{
+  FILE_SET,
+  LAST_SIGNAL
 };
 
 /* TreeModel Columns */
@@ -301,6 +309,7 @@ static void     dialog_response_cb               (GtkDialog      *dialog,
 						  gint            response,
 						  gpointer        user_data);
 
+static guint file_chooser_button_signals[LAST_SIGNAL] = { 0 };
 
 /* ******************* *
  *  GType Declaration  *
@@ -342,6 +351,26 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->style_set = gtk_file_chooser_button_style_set;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
+  
+  /**
+   * GtkFileChooserButtons::file-set:
+   * @widget: the object which received the signal.
+   *
+   * The ::file-set signal is emitted when the user selects a file.
+   * 
+   * Note that this signal is only emitted when the <emphasis>user</emphasis>
+   * changes the file. 
+   *
+   * Since: 2.12
+   */
+  file_chooser_button_signals[FILE_SET] =
+    g_signal_new (I_("file-set"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkFileChooserButtonClass, file_set),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   /**
    * GtkFileChooserButton:dialog:
@@ -2695,6 +2724,8 @@ dialog_response_cb (GtkDialog *dialog,
 
   gtk_widget_set_sensitive (priv->combo_box, TRUE);
   gtk_widget_hide (priv->dialog);
+
+  g_signal_emit_by_name (user_data, "file-set");
 }
 
 
