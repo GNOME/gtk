@@ -2643,10 +2643,9 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 	      
 	      gtk_combo_box_menu_fill_level (combo_box, submenu, &iter);
 	    }
-	  else
-	    g_signal_connect (item, "activate",
-			      G_CALLBACK (gtk_combo_box_menu_item_activate),
-			      combo_box);
+	  g_signal_connect (item, "activate",
+			    G_CALLBACK (gtk_combo_box_menu_item_activate),
+			    combo_box);
 	}
       
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -2840,7 +2839,10 @@ gtk_combo_box_menu_item_activate (GtkWidget *item,
   path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (cell_view));
 
   if (gtk_tree_model_get_iter (combo_box->priv->model, &iter, path))
-    gtk_combo_box_set_active_iter (combo_box, &iter);
+  {
+    if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)) == NULL)
+      gtk_combo_box_set_active_iter (combo_box, &iter);
+  }
 
   gtk_tree_path_free (path);
 
@@ -3167,6 +3169,24 @@ gtk_combo_box_menu_row_deleted (GtkTreeModel *model,
   item = find_menu_by_path (combo_box->priv->popup_widget, path, FALSE);
   menu = gtk_widget_get_parent (item);
   gtk_container_remove (GTK_CONTAINER (menu), item);
+
+  if (gtk_tree_path_get_depth (path) > 1)
+    {
+      GtkTreePath *parent_path;
+      GtkTreeIter iter;
+      GtkWidget *parent;
+
+      parent_path = gtk_tree_path_copy (path);
+      gtk_tree_path_up (parent_path);
+      gtk_tree_model_get_iter (model, &iter, parent_path);
+
+      if (!gtk_tree_model_iter_has_child (model, &iter))
+	{
+	  parent = find_menu_by_path (combo_box->priv->popup_widget, 
+				      parent_path, FALSE);
+	  gtk_menu_item_remove_submenu (GTK_MENU_ITEM (parent));
+	}
+    }
 }
 
 static void
