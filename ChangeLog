@@ -1,4 +1,10 @@
-2006-12-17  Matthias Clasen  <mclasen@redhat.com>
+2006-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (update_node): If a required action
+	is missing, don't recurse over the children.  (#349119,
+	Chris Moller)
+
+2006-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix a few problems with nested menus in comboboxes
 	(#386694, Yevgen Muntyan)
