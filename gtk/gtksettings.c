@@ -85,6 +85,7 @@ enum {
   PROP_CURSOR_THEME_SIZE,
 #endif
   PROP_ALTERNATIVE_BUTTON_ORDER,
+  PROP_ALTERNATIVE_SORT_ARROWS,
   PROP_SHOW_INPUT_METHOD_MENU,
   PROP_SHOW_UNICODE_MENU,
   PROP_TIMEOUT_INITIAL,
@@ -418,6 +419,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ALTERNATIVE_BUTTON_ORDER);
+
+  /**
+   * GtkSettings:gtk-alternative-sort-arrows:
+   *
+   * Controls the direction of the sort indicators in sorted list and tree
+   * views.  By default an arrow pointing down means the column is sorted
+   * in ascending order.  When set to %TRUE, this order will be inverted.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-alternative-sort-arrows",
+								   P_("Alternative sort indicator direction"),
+								   P_("Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"),
+								   FALSE,
+								   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ALTERNATIVE_SORT_ARROWS);
 
   result = settings_install_property_parser (class,
 					     g_param_spec_boolean ("gtk-show-input-method-menu",

@@ -913,14 +913,20 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   if (tree_column->show_sort_indicator
       || (sort_column_id >= 0 && sort_column_id == tree_column->sort_column_id))
     {
+      gboolean alternative;
+
+      g_object_get (gtk_widget_get_settings (tree_column->tree_view),
+		    "gtk-alternative-sort-arrows", &alternative,
+		    NULL);
+
       switch (tree_column->sort_order)
         {
 	  case GTK_SORT_ASCENDING:
-	    arrow_type = GTK_ARROW_DOWN;
+	    arrow_type = alternative ? GTK_ARROW_UP : GTK_ARROW_DOWN;
 	    break;
 
 	  case GTK_SORT_DESCENDING:
-	    arrow_type = GTK_ARROW_UP;
+	    arrow_type = alternative ? GTK_ARROW_DOWN : GTK_ARROW_UP;
 	    break;
 
 	  default:

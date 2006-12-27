@@ -1,3 +1,19 @@
+2006-12-27  Kristian Rietveld  <kris@gtk.org>
+
+	Support inverting arrows via XSetting. (#377979, Yevgen Muntyan).
+
+	* gtk/gtksettings.c (gtk_settings_class_init): add new setting
+	gtk-alternative-sort-arrows.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting): add
+	new setting.
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: set new
+	gtk-alternative-sort-arrows setting to true.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	invert direction if gtk-alternative-sort-arrows is TRUE.
+
 2006-12-27  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtk.symbols: Add gtk_status_icon_get_screen and
