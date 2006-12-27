@@ -2133,9 +2133,9 @@ update_node (GtkUIManager *self,
       info->type != NODE_TYPE_MENU_PLACEHOLDER &&
       info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
     {
-      g_warning ("%s: missing action", info->name);
+      g_warning ("%s: missing action %s", info->name, action_name);
       
-      goto recurse_children;
+      return;
     }
   
   if (action)
