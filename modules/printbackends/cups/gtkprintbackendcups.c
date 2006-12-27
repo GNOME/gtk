@@ -270,7 +270,7 @@ _cairo_write_to_cups (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, data, length, &written, &error);
+      g_io_channel_write_chars (io, (gchar *)data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -503,27 +503,24 @@ cups_dispatch_watch_check (GSource *source)
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
   poll_state = gtk_cups_request_get_poll_state (dispatch->request);
-  
-  if (dispatch->data_poll == NULL && 
-      dispatch->request->http != NULL)
-    {
-      dispatch->data_poll = g_new0 (GPollFD, 1);
-      dispatch->data_poll->fd = dispatch->request->http->fd;
 
-      g_source_add_poll (source, dispatch->data_poll);
-    }
-            
-  if (dispatch->data_poll != NULL && dispatch->request->http != NULL)
+  if (dispatch->request->http != NULL)
     {
-      if (dispatch->data_poll->fd != dispatch->request->http->fd)
-        dispatch->data_poll->fd = dispatch->request->http->fd;
-
-      if (poll_state == GTK_CUPS_HTTP_READ)
-        dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
-      else if (poll_state == GTK_CUPS_HTTP_WRITE)
-        dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
+      if (dispatch->data_poll == NULL)
+	{
+	  dispatch->data_poll = g_new0 (GPollFD, 1);
+	  g_source_add_poll (source, dispatch->data_poll);
+	}
       else
-        dispatch->data_poll->events = 0;
+	{
+	  if (poll_state == GTK_CUPS_HTTP_READ)
+	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
+	  else if (poll_state == GTK_CUPS_HTTP_WRITE)
+	    dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
+	  else
+	    dispatch->data_poll->events = 0;
+	}
+      dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
     }
     
   if (poll_state != GTK_CUPS_HTTP_IDLE)  
