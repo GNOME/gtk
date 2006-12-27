@@ -1,3 +1,15 @@
+2006-12-17  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix a few problems with nested menus in comboboxes
+	(#386694, Yevgen Muntyan)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill_level): Always
+	connect the activate callback.
+	(gtk_combo_box_menu_item_activate): Do nothing if called on
+	an item with a submenu.
+	(gtk_combo_box_menu_row_deleted): Remove a submenu when it
+	is empty.
+
 2006-12-26  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	* gtk/gtkfilechooserbuuton.[hc]: Add a file-set signal to the
