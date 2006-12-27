@@ -856,7 +856,7 @@ execute_callbacks (gpointer data)
 
   system_win32->execute_callbacks_idle_id = 0;
 
-  return FALSE:
+  return FALSE;
 }
 
 static void

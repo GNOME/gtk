@@ -1,3 +1,8 @@
+2006-12-27  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c (execute_callbacks): Fix
+	typo. (#390035, Kazuki Iwamoto)
+
 2006-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellview.c (gtk_cell_view_set_model): Accept NULL.
