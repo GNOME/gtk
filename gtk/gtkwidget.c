@@ -2214,6 +2214,8 @@ gtk_widget_destroyed (GtkWidget      *widget,
 void
 gtk_widget_show (GtkWidget *widget)
 {
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       g_object_ref (widget);
