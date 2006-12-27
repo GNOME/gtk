@@ -875,7 +875,7 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
                          GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   if (cell_view->priv->model)
     {
