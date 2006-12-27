@@ -1,5 +1,14 @@
 2006-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellview.c (gtk_cell_view_set_model): Accept NULL.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model):
+	(gtk_combo_box_unset_model): Handle repeated unsetting
+	of models without warnings.  (#367529, Robert Ancell)
+
+2006-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkcupsutils.c: 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Use
 	getters for http fields where available.  (#364866, 
 	Björn Lindqvist)

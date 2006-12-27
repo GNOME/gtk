@@ -2224,7 +2224,7 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
     }
 
   if (combo_box->priv->cell_view)
-    gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
+    gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
 }
 
 static void
@@ -4714,20 +4714,15 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
                          GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-
-  if (!model)
-    {
-      gtk_combo_box_unset_model (combo_box);
-      return;
-    }
-
-  g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   if (model == combo_box->priv->model)
     return;
   
-  if (combo_box->priv->model)
-    gtk_combo_box_unset_model (combo_box);
+  gtk_combo_box_unset_model (combo_box);
+
+  if (model == NULL)
+    return;
 
   combo_box->priv->model = model;
   g_object_ref (combo_box->priv->model);
