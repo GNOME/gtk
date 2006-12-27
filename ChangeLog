@@ -1,3 +1,13 @@
+2006-12-27  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkstatusicon.c: Implement gtk_status_icon_position_menu()
+	on Windows. Keep track of where the last button click on the
+	taskbar icon took place, and return that. Obviously not correct if
+	no button has ever been clicked on the icon, or if the geometry of
+	the taskbar has changed since. But for most use cases where a menu
+	is going to be displayed as a direct result of a button click on
+	the status icon, works fine. (#377349)
+
 2006-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellview.c (gtk_cell_view_set_model): Accept NULL.

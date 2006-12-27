@@ -83,6 +83,7 @@ struct _GtkStatusIconPrivate
 #ifdef GDK_WINDOWING_WIN32
   GtkWidget     *dummy_widget;
   NOTIFYICONDATAW nid;
+  gint		last_click_x, last_click_y;
 #endif
 
   gint          size;
@@ -289,9 +290,10 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 #ifdef GDK_WINDOWING_WIN32
 
 static void
-build_button_event (GdkEventButton *e,
-		    GdkEventType    type,
-		    guint           button)
+build_button_event (GtkStatusIconPrivate *priv,
+		    GdkEventButton       *e,
+		    GdkEventType          type,
+		    guint                 button)
 {
   POINT pos;
   GdkRectangle monitor0;
@@ -303,8 +305,8 @@ build_button_event (GdkEventButton *e,
   e->send_event = TRUE;
   e->time = GetTickCount ();
   GetCursorPos (&pos);
-  e->x = pos.x + monitor0.x;
-  e->y = pos.y + monitor0.y;
+  priv->last_click_x = e->x = pos.x + monitor0.x;
+  priv->last_click_y = e->y = pos.y + monitor0.y;
   e->axes = NULL;
   e->state = 0;
   e->button = button;
@@ -328,7 +330,7 @@ wndproc (HWND   hwnd,
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
-	  build_button_event (&e, GDK_BUTTON_PRESS,
+	  build_button_event (status_icon->priv, &e, GDK_BUTTON_PRESS,
 			      (lparam == WM_LBUTTONDOWN) ? 1 : 3);
 	  gtk_status_icon_button_press (status_icon, &e);
 	  break;
@@ -432,6 +434,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
       orientation = GTK_ORIENTATION_HORIZONTAL;
   }
 #endif
+
+  priv->last_click_x = priv->last_click_y = 0;
 
   /* Are the system tray icons always 16 pixels square? */
   priv->size         = 16;
@@ -1629,6 +1633,21 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 
   *push_in = FALSE;
 #endif /* GDK_WINDOWING_X11 */
+
+#ifdef GDK_WINDOWING_WIN32
+  GtkStatusIcon *status_icon;
+  GtkStatusIconPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GTK_IS_STATUS_ICON (user_data));
+
+  status_icon = GTK_STATUS_ICON (user_data);
+  priv = status_icon->priv;
+
+  *x = priv->last_click_x;
+  *y = priv->last_click_y;
+  *push_in = TRUE;
+#endif
 }
 
 /**
