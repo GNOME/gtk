@@ -1,3 +1,25 @@
+2006-12-28  Carlos Garnacho  <carlosg@gnome.org>
+
+	Make GtkNotebook able to drop detached tabs anywhere. Bug #360225.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): add "drag-failed" signal.
+	* gtk/gtkmarshalers.list: add new marshaler definition.
+	* gtk/gtkenums.h: add GtkDragResult enum.
+
+	* gtk/gtkdnd.c (gtk_drag_drop_finished): emit "drag-failed" if DND
+	operation wasn't successful.
+	(_gtk_drag_source_handle_event) (gtk_drag_drop)
+	(gtk_drag_selection_get) (gtk_drag_cancel) (gtk_drag_key_cb)
+	(gtk_drag_grab_broken_event_cb) (gtk_drag_grab_notify_cb)
+	(gtk_drag_button_release_cb) (gtk_drag_abort_timeout): tell
+	gtk_drag_drop_finished() the operation result.
+
+	* gtk/gtknotebook.c (gtk_notebook_drag_failed): new function.
+	(gtk_notebook_drag_data_get): do not call window creation hook here.
+	(gtk_notebook_init): do not set "application/x-rootwindow-drop"
+	target, instead connect to "drag-failed".
+	(gtk_notebook_draw_focus): fix potential crasher if cur_page is NULL.
+
 2006-12-28  Mikael Hallendal  <micke@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: Factored out the event loop 

@@ -122,6 +122,7 @@ enum {
   GRAB_BROKEN,
   COMPOSITED_CHANGED,
   KEYNAV_FAILED,
+  DRAG_FAILED,
   LAST_SIGNAL
 };
 
@@ -1123,6 +1124,32 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_DRAG_CONTEXT);
+
+  /**
+   * GtkWidget::drag-failed:
+   * @widget: the object which received the signal.
+   * @drag_context: the drag context.
+   * @result: the result of the drag operation.
+   *
+   * The ::drag-failed signal is emitted on the drag source when a drag has
+   * failed. The signal handler may hook custom code to handle a failed DND
+   * operation based on the type of error, it returns %TRUE is the failure has
+   * been already handled (not showing the default "drag operation failed"
+   * animation), otherwise it returns %FALSE.
+   *
+   * Return value: %TRUE if the failed drag operation has been already handled.
+   *
+   * Since: 2.12
+   */
+  widget_signals[DRAG_FAILED] =
+    g_signal_new (I_("drag_failed"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__OBJECT_ENUM,
+		  G_TYPE_BOOLEAN, 2,
+		  GDK_TYPE_DRAG_CONTEXT,
+		  GTK_TYPE_DRAG_RESULT);
 
   /**
    * GtkWidget::drag-motion:

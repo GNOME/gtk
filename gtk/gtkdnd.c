@@ -252,9 +252,10 @@ static void gtk_drag_source_release_selections (GtkDragSourceInfo *info,
 static void gtk_drag_drop                      (GtkDragSourceInfo *info,
 						guint32            time);
 static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
-						gboolean           success,
+						GtkDragResult      result,
 						guint              time);
 static void gtk_drag_cancel                    (GtkDragSourceInfo *info,
+						GtkDragResult      result,
 						guint32            time);
 
 static gboolean gtk_drag_source_event_cb       (GtkWidget         *widget,
@@ -2974,7 +2975,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   gtk_widget_pop_colormap ();
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
+  gtk_widget_set_app_paintable (window, TRUE);
 
   if (stock_id)
     {
@@ -3333,7 +3334,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
       break;
       
     case GDK_DROP_FINISHED:
-      gtk_drag_drop_finished (info, TRUE, event->dnd.time);
+      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, event->dnd.time);
       break;
     default:
       g_assert_not_reached ();
@@ -3413,9 +3414,12 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
 
 static void
 gtk_drag_drop_finished (GtkDragSourceInfo *info,
-			gboolean           success,
+			GtkDragResult      result,
 			guint              time)
 {
+  gboolean success;
+
+  success = (result == GTK_DRAG_RESULT_SUCCESS);
   gtk_drag_source_release_selections (info, time); 
 
   if (info->proxy_dest)
@@ -3427,6 +3431,10 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
     }
   else
     {
+      if (!success)
+	g_signal_emit_by_name (info->widget, "drag_failed",
+			       info->context, result, &success);
+
       if (success)
 	{
 	  gtk_drag_source_info_destroy (info);
@@ -3518,12 +3526,12 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 				     time);
 	      
 	      /* FIXME: Should we check for length >= 0 here? */
-	      gtk_drag_drop_finished (info, TRUE, time);
+	      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
 	      return;
 	    }
 	  tmp_list = tmp_list->next;
 	}
-      gtk_drag_drop_finished (info, FALSE, time);
+      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
     }
   else
     {
@@ -3635,11 +3643,11 @@ gtk_drag_selection_get (GtkWidget        *widget,
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     case TARGET_MOTIF_SUCCESS:
-      gtk_drag_drop_finished (info, TRUE, time);
+      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     case TARGET_MOTIF_FAILURE:
-      gtk_drag_drop_finished (info, FALSE, time);
+      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     default:
@@ -3975,11 +3983,11 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
  *************************************************************/
 
 static void
-gtk_drag_cancel (GtkDragSourceInfo *info, guint32 time)
+gtk_drag_cancel (GtkDragSourceInfo *info, GtkDragResult result, guint32 time)
 {
   gtk_drag_end (info, time);
   gdk_drag_abort (info->context, time);
-  gtk_drag_drop_finished (info, FALSE, time);
+  gtk_drag_drop_finished (info, result, time);
 }
 
 /*************************************************************
@@ -4044,7 +4052,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
       switch (event->keyval)
 	{
 	case GDK_Escape:
-	  gtk_drag_cancel (info, event->time);
+	  gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
 	  return TRUE;
 
 	case GDK_space:
@@ -4118,7 +4126,7 @@ gtk_drag_grab_broken_event_cb (GtkWidget          *widget,
       || event->grab_window == info->ipc_widget->window)
     return FALSE;
 
-  gtk_drag_cancel (info, gtk_get_current_event_time ());
+  gtk_drag_cancel (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
   return TRUE;
 }
 
@@ -4134,7 +4142,7 @@ gtk_drag_grab_notify_cb (GtkWidget        *widget,
       /* We have to block callbacks to avoid recursion here, because
 	 gtk_drag_cancel calls gtk_grab_remove (via gtk_drag_end) */
       g_signal_handlers_block_by_func (widget, gtk_drag_grab_notify_cb, data);
-      gtk_drag_cancel (info, gtk_get_current_event_time ());
+      gtk_drag_cancel (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
       g_signal_handlers_unblock_by_func (widget, gtk_drag_grab_notify_cb, data);
     }
 }
@@ -4165,7 +4173,7 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
     }
   else
     {
-      gtk_drag_cancel (info, event->time);
+      gtk_drag_cancel (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
     }
 
   return TRUE;
@@ -4181,7 +4189,7 @@ gtk_drag_abort_timeout (gpointer data)
     time = info->proxy_dest->proxy_drop_time;
 
   info->drop_timeout = 0;
-  gtk_drag_drop_finished (info, FALSE, time);
+  gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED, time);
   
   return FALSE;
 }

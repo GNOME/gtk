@@ -184,13 +184,8 @@ struct _GtkNotebookPrivate
   guint has_scrolled   : 1;
 };
 
-static const GtkTargetEntry notebook_source_targets [] = {
+static const GtkTargetEntry notebook_targets [] = {
   { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
-  { "application/x-rootwindow-drop", 0, 1 }
-};
-
-static const GtkTargetEntry notebook_dest_targets[] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 }
 };
 
 #ifdef G_DISABLE_CHECKS
@@ -267,6 +262,10 @@ static void gtk_notebook_drag_begin          (GtkWidget        *widget,
 					      GdkDragContext   *context);
 static void gtk_notebook_drag_end            (GtkWidget        *widget,
 					      GdkDragContext   *context);
+static gboolean gtk_notebook_drag_failed     (GtkWidget        *widget,
+					      GdkDragContext   *context,
+					      GtkDragResult     result,
+					      gpointer          data);
 static gboolean gtk_notebook_drag_motion     (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      gint              x,
@@ -406,6 +405,11 @@ static gboolean focus_child_in (GtkNotebook      *notebook,
 				GtkDirectionType  direction);
 
 static void stop_scrolling (GtkNotebook *notebook);
+static void do_detach_tab  (GtkNotebook *from,
+			    GtkNotebook *to,
+			    GtkWidget   *child,
+			    gint         x,
+			    gint         y);
 
 
 static GtkNotebookWindowCreationFunc window_creation_hook = NULL;
@@ -1000,8 +1004,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->pressed_button = -1;
   priv->dnd_timer = 0;
   priv->switch_tab_timer = 0;
-  priv->source_targets = gtk_target_list_new (notebook_source_targets,
-					      G_N_ELEMENTS (notebook_source_targets));
+  priv->source_targets = gtk_target_list_new (notebook_targets,
+					      G_N_ELEMENTS (notebook_targets));
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
   priv->during_detach = FALSE;
@@ -1009,8 +1013,11 @@ gtk_notebook_init (GtkNotebook *notebook)
 
   gtk_drag_dest_set (GTK_WIDGET (notebook),
 		     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-		     notebook_dest_targets, G_N_ELEMENTS (notebook_dest_targets),
+		     notebook_targets, G_N_ELEMENTS (notebook_targets),
                      GDK_ACTION_MOVE);
+
+  g_signal_connect (G_OBJECT (notebook), "drag-failed",
+		    G_CALLBACK (gtk_notebook_drag_failed), NULL);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
 }
@@ -1470,6 +1477,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_style_set
  * gtk_notebook_drag_begin
  * gtk_notebook_drag_end
+ * gtk_notebook_drag_failed
  * gtk_notebook_drag_motion
  * gtk_notebook_drag_drop
  * gtk_notebook_drag_data_get
@@ -2975,8 +2983,8 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && GTK_WIDGET_DRAWABLE (widget) &&
-      notebook->cur_page->tab_label->window == event->window &&
-      notebook->show_tabs && notebook->cur_page)
+      notebook->show_tabs && notebook->cur_page &&
+      notebook->cur_page->tab_label->window == event->window)
     {
       GtkNotebookPage *page;
       GdkRectangle area;
@@ -3104,6 +3112,38 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   priv->dnd_window = NULL;
 
   priv->operation = DRAG_OPERATION_NONE;
+}
+
+static gboolean
+gtk_notebook_drag_failed (GtkWidget      *widget,
+			  GdkDragContext *context,
+			  GtkDragResult   result,
+			  gpointer        data)
+{
+  if (result == GTK_DRAG_RESULT_NO_TARGET)
+    {
+      GtkNotebookPrivate *priv;
+      GtkNotebook *notebook, *dest_notebook;
+      GdkDisplay *display;
+      gint x, y;
+
+      notebook = GTK_NOTEBOOK (widget);
+      priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
+
+      display = gtk_widget_get_display (widget);
+      gdk_display_get_pointer (display, NULL, &x, &y, NULL);
+
+      dest_notebook = (* window_creation_hook) (notebook,
+						priv->detached_tab->child,
+						x, y,
+						window_creation_hook_data);
+      if (dest_notebook)
+	do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -3332,39 +3372,17 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 			    guint             info,
 			    guint             time)
 {
-  GtkNotebook *dest_notebook, *notebook;
   GtkNotebookPrivate *priv;
-
-  if (data->target != gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB") &&
-      (data->target != gdk_atom_intern_static_string ("application/x-rootwindow-drop") ||
-       !window_creation_hook))
-    return;
-
-  notebook = GTK_NOTEBOOK (widget);
-  priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
 
   if (data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
+      priv = GTK_NOTEBOOK_GET_PRIVATE (widget);
+
       gtk_selection_data_set (data,
 			      data->target,
 			      8,
 			      (void*) &priv->detached_tab->child,
 			      sizeof (gpointer));
-    }
-  else
-    {
-      GdkDisplay *display;
-      gint x, y;
-
-      display = gtk_widget_get_display (widget);
-      gdk_display_get_pointer (display, NULL, &x, &y, NULL);
-
-      dest_notebook = (* window_creation_hook) (notebook,
-						priv->detached_tab->child,
-						x, y,
-						window_creation_hook_data);
-      if (dest_notebook)
-	do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
     }
 }
 
