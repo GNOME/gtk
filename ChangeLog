@@ -1,3 +1,9 @@
+2006-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/lpr/gtkprintbackendlpr.c 
+	(gtk_print_backend_lpr_print_stream): Close the io channel
+	on unref.  (#390159, Joe Markus Clarke)
+
 2006-12-27  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkstatusicon.c: Implement gtk_status_icon_position_menu()
