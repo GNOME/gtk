@@ -484,6 +484,8 @@ gtk_status_icon_finalize (GObject *object)
 #ifdef GDK_WINDOWING_WIN32
   if (priv->nid.hWnd != NULL && priv->visible)
     Shell_NotifyIconW (NIM_DELETE, &priv->nid);
+  if (priv->nid.hIcon)
+    DestroyIcon (priv->nid.hIcon);
 
   gtk_widget_destroy (priv->dummy_widget);
 #endif
@@ -787,6 +789,9 @@ static void
 gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
+#ifdef GDK_WINDOWING_WIN32
+  HICON prev_hicon;
+#endif
 
   if (priv->blink_off)
     {
@@ -795,11 +800,14 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 				 gtk_status_icon_blank_icon (status_icon));
 #endif
 #ifdef GDK_WINDOWING_WIN32
+      prev_hicon = priv->nid.hIcon;
       priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (gtk_status_icon_blank_icon (status_icon));
       priv->nid.uFlags |= NIF_ICON;
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+      if (prev_hicon)
+	DestroyIcon (prev_hicon);
 #endif
       return;
     }
@@ -836,11 +844,14 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), scaled);
 #endif
 #ifdef GDK_WINDOWING_WIN32
+	    prev_hicon = priv->nid.hIcon;
 	    priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (scaled);
 	    priv->nid.uFlags |= NIF_ICON;
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 		  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	    if (prev_hicon)
+	      DestroyIcon (prev_hicon);
 #endif
 	    g_object_unref (scaled);
 	  }
@@ -874,11 +885,15 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 				    priv->image_data.stock_id,
 				    GTK_ICON_SIZE_SMALL_TOOLBAR,
 				    NULL);
+
+	  prev_hicon = priv->nid.hIcon;
 	  priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  if (prev_hicon)
+	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
 	}
 #endif
@@ -901,11 +916,14 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 				      priv->size,
 				      0, NULL);
 	  
+	  prev_hicon = priv->nid.hIcon;
 	  priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
 	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  if (prev_hicon)
+	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
 	}
 #endif

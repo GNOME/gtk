@@ -1,3 +1,9 @@
+2006-12-28  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_finalize)
+	(gtk_status_icon_update_image): Don't leak HICONs on
+	Win32. (#364868, Hiroyuki Yamamoto)
+
 2006-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/lpr/gtkprintbackendlpr.c 
