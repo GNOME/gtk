@@ -89,7 +89,7 @@ gtk_arrow_class_init (GtkArrowClass *class)
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_float ("arrow-scaling",
                                                                P_("Arrow Scaling"),
-                                                               P_("Amount of space sed up by arrow"),
+                                                               P_("Amount of space used up by arrow"),
                                                                0.0, 1.0, 0.7,
                                                                GTK_PARAM_READABLE));
 
