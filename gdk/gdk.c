@@ -508,26 +508,26 @@ gdk_threads_dispatch_free (gpointer data)
  * static gboolean idle_callback (gpointer data)
  * {
  *    SomeWidget *self = data;
- * 
+ *     
  *    /<!-- -->* do stuff with self *<!-- -->/
- * 
+ *     
  *    self->idle_id = 0;
- * 
+ *    
  *    return FALSE;
  * }
- * 
+ *  
  * static void some_widget_do_stuff_later (SomeWidget *self)
  * {
  *    self->idle_id = g_idle_add (idle_callback, self)
  * }
- * 
+ *   
  * static void some_widget_finalize (GObject *object)
  * {
  *    SomeWidget *self = SOME_WIDGET(object);
- * 
+ *    
  *    if (self->idle_id)
  *      g_source_remove (self->idle_id);
- * 
+ *    
  *    G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
  * </programlisting></informalexample>
@@ -604,33 +604,33 @@ gdk_threads_add_idle (GSourceFunc    function,
  * This variant of g_timeout_add_full() can be thought of a MT-safe version 
  * for GTK+ widgets for the following use case:
  *
- * <example>
+ * <informalexample><programlisting>
  * static gboolean timeout_callback (gpointer data)
  * {
  *    SomeWidget *self = data;
- * 
+ *    
  *    /<!-- -->* do stuff with self *<!-- -->/
- * 
+ *    
  *    self->timeout_id = 0;
- * 
+ *    
  *    return FALSE;
  * }
- * 
+ *  
  * static void some_widget_do_stuff_later (SomeWidget *self)
  * {
  *    self->timeout_id = g_timeout_add (timeout_callback, self)
  * }
- * 
+ *  
  * static void some_widget_finalize (GObject *object)
  * {
  *    SomeWidget *self = SOME_WIDGET(object);
- * 
+ *    
  *    if (self->timeout_id)
  *      g_source_remove (self->timeout_id);
- * 
+ *    
  *    G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
- * </example>
+ * </programlisting></informalexample>
  *
  * Return value: the ID (greater than 0) of the event source.
  * 
