@@ -1,3 +1,10 @@
+2006-12-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (blink_cb):
+	* gtk/gtktextview.c (blink_cb): Don't die in an assertion
+	if focus went missing. Just warn, clean up and continue.
+	(#374378)
+
 2006-12-29  Carlos Garnacho  <carlosg@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_scroll): return if the widget that

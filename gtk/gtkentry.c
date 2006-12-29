@@ -5385,9 +5385,12 @@ blink_cb (gpointer data)
       g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
 		 "connect a handler to this signal, it must return\n"
 		 "FALSE so the entry gets the event as well");
+
+      gtk_entry_check_cursor_blink (entry);
+
+      return FALSE;
     }
   
-  g_assert (GTK_WIDGET_HAS_FOCUS (entry));
   g_assert (entry->selection_bound == entry->current_pos);
   
   blink_timeout = get_cursor_blink_timeout (entry);

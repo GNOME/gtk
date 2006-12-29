@@ -4514,10 +4514,13 @@ blink_cb (gpointer data)
       g_warning ("GtkTextView - did not receive focus-out-event. If you\n"
                  "connect a handler to this signal, it must return\n"
                  "FALSE so the text view gets the event as well");
+
+      gtk_text_view_check_cursor_blink (text_view);
+
+      return FALSE;
     }
 
   g_assert (text_view->layout);
-  g_assert (GTK_WIDGET_HAS_FOCUS (text_view));
   g_assert (text_view->cursor_visible);
 
   visible = gtk_text_layout_get_cursor_visible (text_view->layout);
