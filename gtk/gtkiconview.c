@@ -2659,6 +2659,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
 	wrap_width = item->width - pixbuf_width - icon_view->priv->spacing;
 
       g_object_set (text_info->cell, "wrap-width", wrap_width, NULL);
+      g_object_set (text_info->cell, "width", wrap_width, NULL);
     }
 }
 
@@ -4150,7 +4151,8 @@ gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
       GtkTreePath *path;
 
       path = gtk_tree_path_new_from_indices (item->index, -1);
-      gtk_tree_model_get_iter (icon_view->priv->model, &iter, path);
+      if (!gtk_tree_model_get_iter (icon_view->priv->model, &iter, path))
+        return;
       gtk_tree_path_free (path);
     }
   else
@@ -4826,14 +4828,16 @@ update_text_cell (GtkIconView *icon_view)
 
       if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	g_object_set (info->cell,
-		      "wrap-mode", PANGO_WRAP_CHAR,
+                      "alignment", PANGO_ALIGN_CENTER,
+		      "wrap-mode", PANGO_WRAP_WORD,
 		      "wrap-width", icon_view->priv->item_width,
-		      "xalign", 0.5,
+		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
       else
 	g_object_set (info->cell,
-		      "wrap-mode", PANGO_WRAP_CHAR,
+                      "alignment", PANGO_ALIGN_LEFT,
+		      "wrap-mode", PANGO_WRAP_WORD,
 		      "wrap-width", icon_view->priv->item_width,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
@@ -8852,10 +8856,10 @@ static AtkObject*
 gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
                                         gint          i)
 {
+  GList *l;
   GtkWidget *widget;
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)

@@ -1,5 +1,13 @@
 2006-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c: Use word wrapping by default, and
+	center multiline labels.  (#318763, Ross Burton)
+
+	* gtk/gtkcellrenderertext.c (get_layout): Remove a special
+	case for single-line layouts.
+
+2006-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkarrow.c: Fix a typo in the docs.  (#390423,
 	David Lodge)
 
