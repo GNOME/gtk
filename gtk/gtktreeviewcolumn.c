@@ -112,6 +112,7 @@ static void gtk_tree_view_column_cell_layout_clear_attributes   (GtkCellLayout  
 static void gtk_tree_view_column_cell_layout_reorder            (GtkCellLayout         *cell_layout,
                                                                  GtkCellRenderer       *cell,
                                                                  gint                   position);
+static GList *gtk_tree_view_column_cell_layout_get_cells        (GtkCellLayout         *cell_layout);
 
 /* Button handling code */
 static void gtk_tree_view_column_create_button                 (GtkTreeViewColumn       *tree_column);
@@ -332,6 +333,7 @@ gtk_tree_view_column_cell_layout_init (GtkCellLayoutIface *iface)
   iface->set_cell_data_func = gtk_tree_view_column_cell_layout_set_cell_data_func;
   iface->clear_attributes = gtk_tree_view_column_cell_layout_clear_attributes;
   iface->reorder = gtk_tree_view_column_cell_layout_reorder;
+  iface->get_cells = gtk_tree_view_column_cell_layout_get_cells;
 }
 
 static void
@@ -1550,6 +1552,12 @@ gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
     }
 
   return retval;
+}
+
+static GList *
+gtk_tree_view_column_cell_layout_get_cells (GtkCellLayout *layout)
+{
+  return gtk_tree_view_column_get_cell_renderers (GTK_TREE_VIEW_COLUMN (layout));
 }
 
 /**

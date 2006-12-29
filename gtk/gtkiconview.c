@@ -383,6 +383,8 @@ static void                 gtk_icon_view_cell_layout_set_cell_data_func (GtkCel
 static void                 gtk_icon_view_cell_layout_reorder            (GtkCellLayout          *layout,
 									  GtkCellRenderer        *cell,
 									  gint                    position);
+static GList *              gtk_icon_view_cell_layout_get_cells          (GtkCellLayout          *layout);
+
 static void                 gtk_icon_view_item_activate_cell             (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item,
 									  GtkIconViewCellInfo    *cell_info,
@@ -893,6 +895,7 @@ gtk_icon_view_cell_layout_init (GtkCellLayoutIface *iface)
   iface->set_cell_data_func = gtk_icon_view_cell_layout_set_cell_data_func;
   iface->clear_attributes = gtk_icon_view_cell_layout_clear_attributes;
   iface->reorder = gtk_icon_view_cell_layout_reorder;
+  iface->get_cells = gtk_icon_view_cell_layout_get_cells;
 }
 
 static void
@@ -4373,6 +4376,22 @@ gtk_icon_view_cell_layout_reorder (GtkCellLayout   *layout,
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (icon_view));
+}
+
+static GList *
+gtk_icon_view_cell_layout_get_cells (GtkCellLayout *layout)
+{
+  GtkIconView *icon_view = (GtkIconView *)layout;
+  GList *retval = NULL, *l;
+
+  for (l = icon_view->priv->cell_list; l; l = l->next)
+    {
+      GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
+
+      retval = g_list_prepend (retval, info->cell);
+    }
+
+  return g_list_reverse (retval);
 }
 
 /* Public API */

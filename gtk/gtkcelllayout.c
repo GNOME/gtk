@@ -283,5 +283,31 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
                                                         position);
 }
 
+/**
+ * gtk_cell_layout_get_cells:
+ * @cell_layout: a #GtkCellLayout
+ * 
+ * Returns the cell renderers which have been added to @cell_layout.
+ *
+ * Return value: a list of cell renderers. The list, but not the
+ *   renderers has been newly allocated and should be freed with
+ *   g_list_free() when no longer needed.
+ * 
+ * Since: 2.12
+ */
+GList *
+gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
+{
+  GtkCellLayoutIface *iface;
+
+  g_return_val_if_fail (GTK_IS_CELL_LAYOUT (cell_layout), NULL);
+
+  iface = GTK_CELL_LAYOUT_GET_IFACE (cell_layout);  
+  if (iface->get_cells)
+    return iface->get_cells (cell_layout);
+
+  return NULL;
+}
+
 #define __GTK_CELL_LAYOUT_C__
 #include "gtkaliasdef.c"

@@ -68,6 +68,7 @@ struct _GtkCellLayoutIface
   void (* reorder)            (GtkCellLayout         *cell_layout,
                                GtkCellRenderer       *cell,
                                gint                   position);
+  GList* (* get_cells)        (GtkCellLayout         *cell_layout);
 };
 
 GType gtk_cell_layout_get_type           (void) G_GNUC_CONST;
@@ -77,6 +78,7 @@ void  gtk_cell_layout_pack_start         (GtkCellLayout         *cell_layout,
 void  gtk_cell_layout_pack_end           (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
                                           gboolean               expand);
+GList *gtk_cell_layout_get_cells         (GtkCellLayout         *cell_layout);
 void  gtk_cell_layout_clear              (GtkCellLayout         *cell_layout);
 void  gtk_cell_layout_set_attributes     (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,

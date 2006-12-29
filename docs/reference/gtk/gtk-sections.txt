@@ -4574,6 +4574,7 @@ GtkCellLayoutIface
 GtkCellLayoutDataFunc
 gtk_cell_layout_pack_start
 gtk_cell_layout_pack_end
+gtk_cell_layout_get_cells
 gtk_cell_layout_reorder
 gtk_cell_layout_clear
 gtk_cell_layout_set_attributes
