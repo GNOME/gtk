@@ -1,3 +1,9 @@
+2006-12-29  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_scroll): return if the widget that
+	originally received the event is a notebook page. (#315440, reported
+	by Mateusz Stefek)
+
 2006-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (update_node): Only use the results
