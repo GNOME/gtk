@@ -678,10 +678,6 @@ gtk_style_new (void)
  * gtk_style_attach:
  * @style: a #GtkStyle.
  * @window: a #GdkWindow.
- * @returns: Either @style, or a newly-created #GtkStyle.
- *   If the style is newly created, the style parameter
- *   will be dereferenced, and the new style will have
- *   a reference count belonging to the caller.
  *
  * Attaches a style to a window; this process allocates the
  * colors and creates the GC's for the style - it specializes
@@ -692,7 +688,12 @@ gtk_style_new (void)
  * Since this function may return a new object, you have to use it 
  * in the following way: 
  * <literal>style = gtk_style_attach (style, window)</literal>
- **/
+ *
+ * Returns: Either @style, or a newly-created #GtkStyle.
+ *   If the style is newly created, the style parameter
+ *   will be unref'ed, and the new style will have
+ *   a reference count belonging to the caller.
+ */
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)
