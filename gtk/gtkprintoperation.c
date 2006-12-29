@@ -2332,7 +2332,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *   			                     GTK_DIALOG_DESTROY_WITH_PARENT,
  * 					     GTK_MESSAGE_ERROR,
  * 					     GTK_BUTTONS_CLOSE,
- * 					     "Error printing file:\n%s",
+ * 					     "Error printing file:\n&percnt;s",
  * 					     error->message);
  *    g_signal_connect (error_dialog, "response", 
  *                      G_CALLBACK (gtk_widget_destroy), NULL);
