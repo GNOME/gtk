@@ -1,5 +1,10 @@
 2006-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkcolor.c (gdk_color_hash): Fix a typo. (#390613,
+	Paolo Borelli)
+
+2006-12-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/prop-editor.c: Display children of containers
 	and cell renderers of cell layouts.
 

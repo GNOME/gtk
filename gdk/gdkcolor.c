@@ -267,7 +267,7 @@ gdk_color_alloc (GdkColormap *colormap,
  * A hash function suitable for using for a hash
  * table that stores #GdkColor's.
  * 
- * Return value: The hash function appled to @colora
+ * Return value: The hash function applied to @colora
  **/
 guint
 gdk_color_hash (const GdkColor *colora)
