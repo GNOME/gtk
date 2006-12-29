@@ -1,5 +1,8 @@
 2006-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/prop-editor.c: Display children of containers
+	and cell renderers of cell layouts.
+
 	* gtk/gtk.symbols:
 	* gtk/gtkcelllayout.[hc] (gtk_cell_layout_get_cells):
 	New function to get the cell renderers of a cell layout.
