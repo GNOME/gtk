@@ -1,3 +1,10 @@
+2006-12-31  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c: Move the signal and idle
+	disconnections into the dispose function, as well as the
+	object unrefs; reset every handler id and the
+	pointers. (suggested by Paolo Borelli, #390873)
+
 2006-12-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-win32.c: Include windows.h (#391229,
