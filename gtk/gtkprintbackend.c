@@ -241,34 +241,6 @@ _gtk_print_backend_create (const gchar *backend_name)
   return pb;
 }
 
-static void
-gtk_print_backend_initialize (void)
-{
-  static gboolean initialized = FALSE;
-
-  if (!initialized)
-    {
-      /**
-       * GtkSettings:gtk-print-backends:
-       *
-       * A comma-separated list of print backends to use in the print
-       * dialog. Available print backends depend on the GTK+ installation,
-       * and may include "pdf", "cups" or "lpr".
-       *
-       * Since: 2.10
-       */
-      gtk_settings_install_property (g_param_spec_string ("gtk-print-backends",
-							  P_("Default print backend"),
-							  P_("List of the GtkPrintBackend backends to use by default"),
-							  GTK_PRINT_BACKENDS,
-							  GTK_PARAM_READWRITE));
-
-      initialized = TRUE;
-    }
-}
-
-
-
 GList *
 gtk_print_backend_load_modules (void)
 {
@@ -281,8 +253,6 @@ gtk_print_backend_load_modules (void)
 
   result = NULL;
 
-  gtk_print_backend_initialize ();
-  
   settings = gtk_settings_get_default ();
   if (settings)
     g_object_get (settings, "gtk-print-backends", &setting, NULL);

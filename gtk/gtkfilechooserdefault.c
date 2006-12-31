@@ -607,12 +607,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				  1, G_TYPE_INT, i);
 
   _gtk_file_chooser_install_properties (gobject_class);
-
-  gtk_settings_install_property (g_param_spec_string ("gtk-file-chooser-backend",
-						      P_("Default file chooser backend"),
-						      P_("Name of the GtkFileChooser backend to use by default"),
-						      NULL,
-						      GTK_PARAM_READWRITE));
 }
 
 static void

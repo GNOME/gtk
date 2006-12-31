@@ -165,34 +165,6 @@ shell_command_substitute_file (const gchar *cmd,
   return result;
 }
 
-static void
-gtk_print_operation_unix_initialize (void)
-{
-  static gboolean initialized = FALSE;
-
-  if (!initialized)
-    {
-      /**
-       * GtkSettings:gtk-print-preview-command:
-       *
-       * A command to run for displaying the print preview. The command
-       * should contain a %f placeholder, which will get replaced by
-       * the path to the pdf file.
-       *
-       * The preview application is responsible for removing the pdf file
-       * when it is done.
-       *
-       * Since: 2.10
-       */
-      gtk_settings_install_property (g_param_spec_string ("gtk-print-preview-command",
-							  P_("Default command to run when displaying a print preview"),
-							  P_("Command to run when displaying a print preview"),
-							  GTK_PRINT_PREVIEW_COMMAND,
-							  GTK_PARAM_READWRITE)); 
-      initialized = TRUE;
-    }
-}
-
 void
 _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 						      cairo_surface_t   *surface,
@@ -207,8 +179,6 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *quoted_filename;
   GdkScreen *screen;
   GError *error = NULL;
-
-  gtk_print_operation_unix_initialize ();
 
   cairo_surface_destroy (surface);
  

@@ -97,7 +97,10 @@ enum {
   PROP_KEYNAV_CURSOR_ONLY,
   PROP_KEYNAV_WRAP_AROUND,
   PROP_ERROR_BELL,
-  PROP_COLOR_HASH
+  PROP_COLOR_HASH,
+  PROP_FILE_CHOOSER_BACKEND,
+  PROP_PRINT_BACKENDS,
+  PROP_PRINT_PREVIEW_COMMAND
 };
 
 
@@ -624,8 +627,55 @@ gtk_settings_class_init (GtkSettingsClass *class)
 						       P_("A hash table representation of the color scheme."),
 						       G_TYPE_HASH_TABLE,
 						       GTK_PARAM_READABLE));
-
   class_n_properties++;
+
+  result = settings_install_property_parser (class, 
+                                             g_param_spec_string ("gtk-file-chooser-backend",
+                                                                  P_("Default file chooser backend"),
+                                                                  P_("Name of the GtkFileChooser backend to use by default"),
+                                                                  NULL,
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_FILE_CHOOSER_BACKEND);
+
+  /**
+   * GtkSettings:gtk-print-backends:
+   *
+   * A comma-separated list of print backends to use in the print
+   * dialog. Available print backends depend on the GTK+ installation,
+   * and may include "pdf", "cups" or "lpr".
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-print-backends",
+                                                                  P_("Default print backend"),
+                                                                  P_("List of the GtkPrintBackend backends to use by default"),
+                                                                  GTK_PRINT_BACKENDS,
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_PRINT_BACKENDS);
+
+  /**
+   * GtkSettings:gtk-print-preview-command:
+   *
+   * A command to run for displaying the print preview. The command
+   * should contain a %f placeholder, which will get replaced by
+   * the path to the pdf file.
+   *
+   * The preview application is responsible for removing the pdf file
+   * when it is done.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-print-preview-command",
+                                                                  P_("Default command to run when displaying a print preview"),
+                                                                  P_("Command to run when displaying a print preview"),
+                                                                  GTK_PRINT_PREVIEW_COMMAND,
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL); 
+  g_assert (result == PROP_PRINT_PREVIEW_COMMAND);
 }
 
 static void
