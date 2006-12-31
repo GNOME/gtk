@@ -1,3 +1,8 @@
+2006-12-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c: Include windows.h (#391229,
+	Kazuki Iwamoto)
+
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_destroy): Remove the

@@ -32,6 +32,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include <cairo-win32.h>
 #include <glib.h>
 #include "gtkprintoperation-private.h"
