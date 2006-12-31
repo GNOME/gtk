@@ -101,6 +101,7 @@ enum {
 #define GTK_RECENT_CHOOSER_MENU_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_CHOOSER_MENU, GtkRecentChooserMenuPrivate))
 
 static void     gtk_recent_chooser_menu_finalize    (GObject                   *object);
+static void     gtk_recent_chooser_menu_dispose     (GObject                   *object);
 static GObject *gtk_recent_chooser_menu_constructor (GType                      type,
 						     guint                      n_construct_properties,
 						     GObjectConstructParam     *construct_params);
@@ -189,6 +190,7 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 
   gobject_class->constructor = gtk_recent_chooser_menu_constructor;
   gobject_class->finalize = gtk_recent_chooser_menu_finalize;
+  gobject_class->dispose = gtk_recent_chooser_menu_dispose;
   gobject_class->set_property = gtk_recent_chooser_menu_set_property;
   gobject_class->get_property = gtk_recent_chooser_menu_get_property;
 
@@ -247,30 +249,53 @@ gtk_recent_chooser_menu_finalize (GObject *object)
   GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (object);
   GtkRecentChooserMenuPrivate *priv = menu->priv;
   
-  g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
-  priv->manager_changed_id = 0;
-
-  if (priv->populate_id)
-    g_source_remove (priv->populate_id);
-
   priv->manager = NULL;
   
   if (priv->sort_data_destroy)
     {
       priv->sort_data_destroy (priv->sort_data);
-      
       priv->sort_data_destroy = NULL;
-      priv->sort_data = NULL;
-      priv->sort_func = NULL;
     }
   
-  if (priv->tooltips)
-    g_object_unref (priv->tooltips);
-  
-  if (priv->current_filter)
-    g_object_unref (priv->current_filter);
+  priv->sort_data = NULL;
+  priv->sort_func = NULL;
   
   G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->finalize (object);
+}
+
+static void
+gtk_recent_chooser_menu_dispose (GObject *object)
+{
+  GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (object);
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+
+  if (priv->manager_changed_id)
+    {
+      if (priv->manager)
+        g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
+
+      priv->manager_changed_id = 0;
+    }
+
+  if (priv->populate_id)
+    {
+      g_source_remove (priv->populate_id);
+      priv->populate_id = 0;
+    }
+
+  if (priv->tooltips)
+    {
+      g_object_unref (priv->tooltips);
+      priv->tooltips = NULL;
+    }
+
+  if (priv->current_filter)
+    {
+      g_object_unref (priv->current_filter);
+      priv->current_filter = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->dipose (object);
 }
 
 static GObject *
@@ -1146,21 +1171,25 @@ static void
 set_recent_manager (GtkRecentChooserMenu *menu,
 		    GtkRecentManager     *manager)
 {
-  if (menu->priv->manager)
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+
+  if (priv->manager)
     {
-      g_signal_handler_disconnect (menu, menu->priv->manager_changed_id);
-      menu->priv->manager = NULL;
+      if (priv->manager_changed_id)
+        g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
+
+      priv->manager = NULL;
     }
   
   if (manager)
-    menu->priv->manager = manager;
+    priv->manager = manager;
   else
-    menu->priv->manager = gtk_recent_manager_get_default ();
+    priv->manager = gtk_recent_manager_get_default ();
   
-  if (menu->priv->manager)
-    menu->priv->manager_changed_id = g_signal_connect (menu->priv->manager, "changed",
-      						       G_CALLBACK (manager_changed_cb),
-      						       menu);
+  if (priv->manager)
+    priv->manager_changed_id = g_signal_connect (priv->manager, "changed",
+      						 G_CALLBACK (manager_changed_cb),
+      						 menu);
   /* (re)populate the menu */
   gtk_recent_chooser_menu_populate (menu);
 }
