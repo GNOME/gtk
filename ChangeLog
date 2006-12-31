@@ -1,5 +1,9 @@
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/prop-editor.c: Implement editing of flags.
+
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c:
 	* gtk/gtklabel.c:
 	* gtk/gtkpaned.c:

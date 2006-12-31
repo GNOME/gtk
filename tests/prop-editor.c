@@ -450,6 +450,77 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
 }
 
+static void
+flags_modified (GtkCheckButton *button, gpointer data)
+{
+  ObjectProperty *p = data;
+  gboolean active;
+  GFlagsClass *fclass;
+  guint flags;
+  gint i;
+  
+  fclass = G_FLAGS_CLASS (g_type_class_peek (p->spec->value_type));
+  
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "index"));
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_get (GTK_CONTAINER (parent), 
+			       widget, p->spec->name, &flags, NULL);
+      if (active)
+        flags |= fclass->values[i].value;
+      else
+        flags &= ~fclass->values[i].value;
+
+      gtk_container_child_set (GTK_CONTAINER (parent), 
+			       widget, p->spec->name, flags, NULL);
+    }
+  else
+    {
+      g_object_get (p->obj, p->spec->name, &flags, NULL);
+
+      if (active)
+        flags |= fclass->values[i].value;
+      else
+        flags &= ~fclass->values[i].value;
+
+      g_object_set (p->obj, p->spec->name, flags, NULL);
+    }
+}
+
+static void
+flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GList *children, *c;
+  GValue val = { 0, };  
+  GFlagsClass *fclass;
+  guint flags;
+  gint i;
+
+  fclass = G_FLAGS_CLASS (g_type_class_peek (pspec->value_type));
+  
+  g_value_init (&val, pspec->value_type);
+  get_property_value (object, pspec, &val);
+  flags = g_value_get_flags (&val);
+  g_value_unset (&val);
+
+  children = gtk_container_get_children (GTK_CONTAINER (data));
+
+  for (c = children, i = 0; c; c = c->next, i++)
+    {
+      block_controller (G_OBJECT (c->data));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c->data),
+                                    (fclass->values[i].value & flags) != 0);
+      unblock_controller (G_OBJECT (c->data));
+    }
+
+  g_list_free (children);
+}
+
 static gunichar
 unichar_get_value (GtkEntry *entry)
 {
@@ -738,6 +809,36 @@ property_widget (GObject    *object,
 	if (can_modify)
 	  connect_controller (G_OBJECT (prop_edit), "changed",
 			      object, spec, (GtkSignalFunc) enum_modified);
+      }
+    }
+  else if (type == G_TYPE_PARAM_FLAGS)
+    {
+      {
+	GFlagsClass *fclass;
+	gint j;
+	
+	prop_edit = gtk_vbox_new (FALSE, 0);
+	
+	fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
+	
+	for (j = 0; j < fclass->n_values; j++)
+	  {
+	    GtkWidget *b;
+	    
+	    b = gtk_check_button_new_with_label (fclass->values[j].value_name);
+            g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
+	    gtk_widget_show (b);
+	    gtk_box_pack_start (GTK_BOX (prop_edit), b, FALSE, FALSE, 0);
+	    if (can_modify) 
+	      connect_controller (G_OBJECT (b), "toggled",
+	     	                  object, spec, (GtkSignalFunc) flags_modified);
+	  }
+	
+	g_type_class_unref (fclass);
+	
+	g_object_connect_property (object, spec,
+				   G_CALLBACK (flags_changed),
+				   prop_edit, G_OBJECT (prop_edit));
       }
     }
   else if (type == G_TYPE_PARAM_UNICHAR)
