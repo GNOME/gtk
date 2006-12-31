@@ -501,7 +501,7 @@ gtk_range_class_init (GtkRangeClass *class)
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("trough-under-steppers",
                                                                  P_("Trough Under Steppers"),
-                                                                 P_("Whether to draw trought for full length of range or exclude the steppers and spacing"),
+                                                                 P_("Whether to draw trough for full length of range or exclude the steppers and spacing"),
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE));
 

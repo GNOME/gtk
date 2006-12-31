@@ -1,5 +1,9 @@
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrange.c: Typo fix.  (#352121, Clytie Siddall)
+
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaction.c: Improve the docs of the "label" 
 	property.  (#341730, Kristof Vansant)
 
