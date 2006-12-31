@@ -1,5 +1,19 @@
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_destroy): Remove the
+	scroll timeout.  (#390872, Yevgen Muntyan)
+
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintbackend.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtksettings.c: Move a few settings to gtksettings.c
+	to make sure they show up in the docs.  (#365364, Christian
+	Persch)
+
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkassistant.c: Redraw assistant on reallocate
 	to avoid rendering glitches.  (#343956, Christian
 	Persch, Carlos Garnacho)

@@ -2552,6 +2552,12 @@ gtk_text_view_destroy (GtkObject *object)
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
 
+  if (text_view->scroll_timeout)
+    {
+      g_source_remove (text_view->scroll_timeout);
+      text_view->scroll_timeout = 0;
+    }
+
   (* GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy) (object);
 }
 
