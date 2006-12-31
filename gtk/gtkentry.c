@@ -1242,14 +1242,19 @@ gtk_entry_realize (GtkWidget *widget)
   gdk_window_set_user_data (widget->window, entry);
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
-
-  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
-  attributes_mask |= GDK_WA_CURSOR;
+ 
+  if (GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      attributes_mask |= GDK_WA_CURSOR;
+    }
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
+
   gdk_window_set_user_data (entry->text_area, entry);
 
-  gdk_cursor_unref (attributes.cursor);
+  if (attributes_mask & GDK_WA_CURSOR)
+    gdk_cursor_unref (attributes.cursor);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
@@ -2139,11 +2144,24 @@ gtk_entry_state_changed (GtkWidget      *widget,
 			 GtkStateType    previous_state)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GdkCursor *cursor;
   
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      else 
+        cursor = NULL;
+      
+      gdk_window_set_cursor (entry->text_area, cursor);
+
+      if (cursor)
+        gdk_cursor_unref (cursor);
+
+      entry->mouse_cursor_obscured = FALSE;
     }
 
   if (!GTK_WIDGET_IS_SENSITIVE (widget))

@@ -412,7 +412,7 @@ static GtkTextWindow *text_window_new             (GtkTextWindowType  type,
                                                    gint               height_request);
 static void           text_window_free            (GtkTextWindow     *win);
 static void           text_window_realize         (GtkTextWindow     *win,
-                                                   GdkWindow         *parent);
+                                                   GtkWidget         *widget);
 static void           text_window_unrealize       (GtkTextWindow     *win);
 static void           text_window_size_allocate   (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
@@ -3478,23 +3478,19 @@ gtk_text_view_realize (GtkWidget *widget)
   gdk_window_set_background (widget->window,
                              &widget->style->bg[GTK_WIDGET_STATE (widget)]);
 
-  text_window_realize (text_view->text_window, widget->window);
+  text_window_realize (text_view->text_window, widget);
 
   if (text_view->left_window)
-    text_window_realize (text_view->left_window,
-                         widget->window);
+    text_window_realize (text_view->left_window, widget);
 
   if (text_view->top_window)
-    text_window_realize (text_view->top_window,
-                         widget->window);
+    text_window_realize (text_view->top_window, widget);
 
   if (text_view->right_window)
-    text_window_realize (text_view->right_window,
-                         widget->window);
+    text_window_realize (text_view->right_window, widget);
 
   if (text_view->bottom_window)
-    text_window_realize (text_view->bottom_window,
-                         widget->window);
+    text_window_realize (text_view->bottom_window, widget);
 
   gtk_text_view_ensure_layout (text_view);
 
@@ -3634,10 +3630,23 @@ gtk_text_view_state_changed (GtkWidget      *widget,
 		 	     GtkStateType    previous_state)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GdkCursor *cursor;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
       gtk_text_view_set_background (text_view);
+
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      else
+        cursor = NULL;
+
+      gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
+
+      if (cursor)
+      gdk_cursor_unref (cursor);
+
+      text_view->mouse_cursor_obscured = FALSE;
     }
 
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
@@ -7486,7 +7495,7 @@ text_window_free (GtkTextWindow *win)
 
 static void
 text_window_realize (GtkTextWindow *win,
-                     GdkWindow     *parent)
+                     GtkWidget     *widget)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -7504,7 +7513,7 @@ text_window_realize (GtkTextWindow *win,
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  win->window = gdk_window_new (parent,
+  win->window = gdk_window_new (widget->window,
                                 &attributes,
                                 attributes_mask);
 
@@ -7536,23 +7545,26 @@ text_window_realize (GtkTextWindow *win,
 
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
-      /* I-beam cursor */
-      cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (parent),
-					   GDK_XTERM);
-      gdk_window_set_cursor (win->bin_window, cursor);
-      gdk_cursor_unref (cursor);
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+        {
+          /* I-beam cursor */
+          cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (widget->window),
+					       GDK_XTERM);
+          gdk_window_set_cursor (win->bin_window, cursor);
+          gdk_cursor_unref (cursor);
+        } 
 
-      gtk_im_context_set_client_window (GTK_TEXT_VIEW (win->widget)->im_context,
+      gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->im_context,
                                         win->window);
 
 
       gdk_window_set_background (win->bin_window,
-                                 &win->widget->style->base[GTK_WIDGET_STATE (win->widget)]);
+                                 &widget->style->base[GTK_WIDGET_STATE (widget)]);
     }
   else
     {
       gdk_window_set_background (win->bin_window,
-                                 &win->widget->style->bg[GTK_WIDGET_STATE (win->widget)]);
+                                 &widget->style->bg[GTK_WIDGET_STATE (widget)]);
     }
 
   g_object_set_qdata (G_OBJECT (win->window),

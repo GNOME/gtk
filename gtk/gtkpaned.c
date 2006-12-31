@@ -83,6 +83,8 @@ static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_map                   (GtkWidget        *widget);
 static void     gtk_paned_unmap                 (GtkWidget        *widget);
+static void     gtk_paned_state_changed         (GtkWidget        *widget,
+                                                 GtkStateType      previous_state);
 static gboolean gtk_paned_expose                (GtkWidget        *widget,
 						 GdkEventExpose   *event);
 static gboolean gtk_paned_enter                 (GtkWidget        *widget,
@@ -194,6 +196,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->motion_notify_event = gtk_paned_motion;
   widget_class->grab_broken_event = gtk_paned_grab_broken;
   widget_class->grab_notify = gtk_paned_grab_notify;
+  widget_class->state_changed = gtk_paned_state_changed;
   
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -638,8 +641,6 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.y = paned->handle_pos.y;
   attributes.width = paned->handle_pos.width;
   attributes.height = paned->handle_pos.height;
-  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-						  paned->cursor_type);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
@@ -647,12 +648,19 @@ gtk_paned_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_POINTER_MOTION_MASK |
 			    GDK_POINTER_MOTION_HINT_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_CURSOR;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+  if (GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+						      paned->cursor_type);
+      attributes_mask |= GDK_WA_CURSOR;
+    }
 
   paned->handle = gdk_window_new (widget->window,
 				  &attributes, attributes_mask);
   gdk_window_set_user_data (paned->handle, paned);
-  gdk_cursor_unref (attributes.cursor);
+  if (attributes_mask & GDK_WA_CURSOR)
+    gdk_cursor_unref (attributes.cursor);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
@@ -914,6 +922,28 @@ gtk_paned_grab_notify (GtkWidget *widget,
 
   if (!was_grabbed && paned->in_drag)
     stop_drag (paned);
+}
+
+static void
+gtk_paned_state_changed (GtkWidget    *widget,
+                         GtkStateType  previous_state)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GdkCursor *cursor;
+
+  if (GTK_WIDGET_REALIZED (paned))
+    {
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+                                             paned->cursor_type); 
+      else
+        cursor = NULL;
+
+      gdk_window_set_cursor (paned->handle, cursor);
+
+      if (cursor)
+        gdk_cursor_unref (cursor);
+    }
 }
 
 static gboolean
