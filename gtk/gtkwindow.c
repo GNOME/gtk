@@ -5122,6 +5122,8 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
          {
 	   gint base_width = 0;
 	   gint base_height = 0;
+	   gint min_width = 0;
+	   gint min_height = 0;
 	   gint width_inc = 1;
 	   gint height_inc = 1;
 	   
@@ -5138,10 +5140,10 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 		   base_width = geometry.base_width;
 		   base_height = geometry.base_height;
 		 }
-	       else if (flags & GDK_HINT_MIN_SIZE)
+	       if (flags & GDK_HINT_MIN_SIZE)
 		 {
-		   base_width = geometry.min_width;
-		   base_height = geometry.min_height;
+		   min_width = geometry.min_width;
+		   min_height = geometry.min_height;
 		 }
 	       if (flags & GDK_HINT_RESIZE_INC)
 		 {
@@ -5151,10 +5153,10 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 	     }
 	     
 	   if (info->default_width > 0)
-	     *width = info->default_width * width_inc + base_width;
+	     *width = MAX (info->default_width * width_inc + base_width, min_width);
 	   
 	   if (info->default_height > 0)
-	     *height = info->default_height * height_inc + base_height;
+	     *height = MAX (info->default_height * height_inc + base_height, min_height);
          }
     }
   else
