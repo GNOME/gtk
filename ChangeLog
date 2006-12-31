@@ -1,5 +1,10 @@
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_compute_configure_request_size):
+	Correctly handle min size. (#320465, Philipp Langdale)
+
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/prop-editor.c: Implement editing of flags.
 
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
