@@ -678,6 +678,8 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   priv = assistant->priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
+  gtk_container_set_reallocate_redraws (GTK_CONTAINER (assistant), TRUE);
+
   gtk_widget_push_composite_child ();
 
   /* Header */
