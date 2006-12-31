@@ -203,7 +203,8 @@ gtk_action_group_add_actions() to construct actions.
 @stock_id: The stock id for the action, or the name of an icon from the icon 
     theme.
 @label: The label for the action. This field should typically be marked for 
-    translation, see gtk_action_group_set_translation_domain().
+    translation, see gtk_action_group_set_translation_domain(). If @label
+    is %NULL, the label of the stock item with id @stock_id is used.
 @accelerator: The accelerator for the action, in the format understood by 
     gtk_accelerator_parse().
 @tooltip: The tooltip for the action. This field should typically be marked 

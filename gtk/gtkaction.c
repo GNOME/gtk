@@ -193,6 +193,14 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
 							GTK_PARAM_READWRITE | 
 							G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkAction:label:
+   *
+   * The label used for menu items and buttons that activate
+   * this action. If the label is %NULL, GTK+ uses the stock 
+   * label specified via the stock-id property.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL,
 				   g_param_spec_string ("label",
