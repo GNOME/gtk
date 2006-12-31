@@ -1,3 +1,12 @@
+2006-12-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkstatusbar.c:
+	* gtk/gtktextview.c: Don't install cursors on insensitive
+	widgets.  (#358864, Jan Schampera)
+
 2006-12-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (blink_cb):

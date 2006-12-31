@@ -2210,11 +2210,27 @@ gtk_label_state_changed (GtkWidget   *widget,
                          GtkStateType prev_state)
 {
   GtkLabel *label;
+  GdkCursor *cursor;
   
   label = GTK_LABEL (widget);
 
   if (label->select_info)
-    gtk_label_select_region (label, 0, 0);
+    {
+      gtk_label_select_region (label, 0, 0);
+
+      if (GTK_WIDGET_REALIZED (widget))
+        {
+          if (GTK_WIDGET_IS_SENSITIVE (widget))
+            cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+          else
+            cursor = NULL;
+
+          gdk_window_set_cursor (label->select_info->window, cursor);
+
+          if (cursor)
+            gdk_cursor_unref (cursor);
+        }
+    }
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed)
     GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed (widget, prev_state);
@@ -3085,20 +3101,25 @@ gtk_label_create_window (GtkLabel *label)
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.override_redirect = TRUE;
-  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-						  GDK_XTERM);
   attributes.event_mask = gtk_widget_get_events (widget) |
     GDK_BUTTON_PRESS_MASK        |
     GDK_BUTTON_RELEASE_MASK      |
     GDK_BUTTON_MOTION_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR; 
+  if (GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+						      GDK_XTERM);
+      attributes_mask |= GDK_WA_CURSOR;
+    }
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR | GDK_WA_CURSOR;
 
   label->select_info->window = gdk_window_new (widget->window,
                                                &attributes, attributes_mask);
   gdk_window_set_user_data (label->select_info->window, widget);
 
-  gdk_cursor_unref (attributes.cursor);
+  if (attributes_mask & GDK_WA_CURSOR)
+    gdk_cursor_unref (attributes.cursor);
 }
 
 static void

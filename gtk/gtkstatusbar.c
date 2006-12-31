@@ -77,6 +77,8 @@ static void     gtk_statusbar_size_allocate     (GtkWidget         *widget,
 						 GtkAllocation     *allocation);
 static void     gtk_statusbar_direction_changed (GtkWidget         *widget,
 						 GtkTextDirection   prev_dir);
+static void     gtk_statusbar_state_changed     (GtkWidget        *widget,
+                                                 GtkStateType      previous_state);
 static void     gtk_statusbar_create_window     (GtkStatusbar      *statusbar);
 static void     gtk_statusbar_destroy_window    (GtkStatusbar      *statusbar);
 static void     gtk_statusbar_get_property      (GObject           *object,
@@ -116,14 +118,12 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   widget_class->unrealize = gtk_statusbar_unrealize;
   widget_class->map = gtk_statusbar_map;
   widget_class->unmap = gtk_statusbar_unmap;
-  
   widget_class->button_press_event = gtk_statusbar_button_press;
   widget_class->expose_event = gtk_statusbar_expose_event;
-
   widget_class->size_request = gtk_statusbar_size_request;
   widget_class->size_allocate = gtk_statusbar_size_allocate;
-
   widget_class->direction_changed = gtk_statusbar_direction_changed;
+  widget_class->state_changed = gtk_statusbar_state_changed;
   
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
@@ -523,14 +523,19 @@ set_grip_cursor (GtkStatusbar *statusbar)
       GdkCursorType cursor_type;
       GdkCursor *cursor;
       
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	cursor_type = GDK_BOTTOM_RIGHT_CORNER;
-      else
-	cursor_type = GDK_BOTTOM_LEFT_CORNER;
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+        {
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	    cursor_type = GDK_BOTTOM_RIGHT_CORNER;
+          else
+	    cursor_type = GDK_BOTTOM_LEFT_CORNER;
 
-      cursor = gdk_cursor_new_for_display (display, cursor_type);
-      gdk_window_set_cursor (statusbar->grip_window, cursor);
-      gdk_cursor_unref (cursor);
+          cursor = gdk_cursor_new_for_display (display, cursor_type);
+          gdk_window_set_cursor (statusbar->grip_window, cursor);
+          gdk_cursor_unref (cursor);
+        }
+      else
+        gdk_window_set_cursor (statusbar->grip_window, NULL);
     }
 }
 
@@ -571,6 +576,15 @@ gtk_statusbar_create_window (GtkStatusbar *statusbar)
 static void
 gtk_statusbar_direction_changed (GtkWidget        *widget,
 				 GtkTextDirection  prev_dir)
+{
+  GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
+
+  set_grip_cursor (statusbar);
+}
+
+static void
+gtk_statusbar_state_changed (GtkWidget    *widget,
+	                     GtkStateType  previous_state)   
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
 
