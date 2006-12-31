@@ -1,5 +1,11 @@
 2006-12-31  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentchoosermenu.c (set_recent_manager): Use the
+	right object when disconnecting from the GtkRecentManager::changed
+	signal; save us a few indirections using a variable.
+
+2006-12-31  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkrecentchoosermenu.c: Move the signal and idle
 	disconnections into the dispose function, as well as the
 	object unrefs; reset every handler id and the

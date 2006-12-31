@@ -264,7 +264,9 @@ gtk_recent_chooser_menu_dispose (GObject *object)
 
   if (priv->manager_changed_id)
     {
-      g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
+      if (priv->manager)
+        g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
+
       priv->manager_changed_id = 0;
     }
   
@@ -1157,21 +1159,25 @@ static void
 set_recent_manager (GtkRecentChooserMenu *menu,
 		    GtkRecentManager     *manager)
 {
-  if (menu->priv->manager)
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+
+  if (priv->manager)
     {
-      g_signal_handler_disconnect (menu, menu->priv->manager_changed_id);
-      menu->priv->manager = NULL;
+      if (priv->manager_changed_id)
+        g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
+
+      priv->manager = NULL;
     }
   
   if (manager)
-    menu->priv->manager = manager;
+    priv->manager = manager;
   else
-    menu->priv->manager = gtk_recent_manager_get_default ();
+    priv->manager = gtk_recent_manager_get_default ();
   
-  if (menu->priv->manager)
-    menu->priv->manager_changed_id = g_signal_connect (menu->priv->manager, "changed",
-      						       G_CALLBACK (manager_changed_cb),
-      						       menu);
+  if (priv->manager)
+    priv->manager_changed_id = g_signal_connect (priv->manager, "changed",
+                                                 G_CALLBACK (manager_changed_cb),
+                                                 menu);
   /* (re)populate the menu */
   gtk_recent_chooser_menu_populate (menu);
 }
