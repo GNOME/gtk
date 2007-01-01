@@ -364,10 +364,15 @@ _find_option_tag (const gchar *option)
     }
 }
 
+/*
+ * Note that this function uses IPP_TAG_JOB, so it is
+ * only suitable for IPP Group 2 attributes.
+ * See RFC 2911.
+ */
 void
 gtk_cups_request_encode_option (GtkCupsRequest *request,
                                 const gchar    *option,
-				const gchar    *value)
+			        const gchar    *value)
 {
   ipp_tag_t option_tag;
 
@@ -391,7 +396,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
       case IPP_TAG_INTEGER:
       case IPP_TAG_ENUM:
         ippAddInteger (request->ipp_request,
-                       IPP_TAG_OPERATION,
+                       IPP_TAG_JOB,
                        option_tag,
                        option,
                        strtol (value, NULL, 0));
@@ -407,7 +412,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
 	    b = 1;
 	  
           ippAddBoolean(request->ipp_request,
-                        IPP_TAG_OPERATION,
+                        IPP_TAG_JOB,
                         option,
                         b);
         
@@ -439,7 +444,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
 	    upper = lower;
          
           ippAddRange (request->ipp_request,
-                       IPP_TAG_OPERATION,
+                       IPP_TAG_JOB,
                        option,
                        lower,
                        upper);
@@ -467,7 +472,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
             units = IPP_RES_PER_INCH;
           
           ippAddResolution (request->ipp_request,
-                            IPP_TAG_OPERATION,
+                            IPP_TAG_JOB,
                             option,
                             units,
                             xres,
@@ -526,7 +531,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
             {
               /* single value */
               ippAddString (request->ipp_request,
-                            IPP_TAG_OPERATION,
+                            IPP_TAG_JOB,
                             option_tag,
                             option,
                             NULL,
@@ -540,7 +545,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
               g_ptr_array_add (strings, next);
               
               ippAddStrings (request->ipp_request,
-                             IPP_TAG_OPERATION,
+                             IPP_TAG_JOB,
                              option_tag,
                              option,
                              strings->len,

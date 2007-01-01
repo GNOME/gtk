@@ -422,9 +422,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI, "printer-uri",
                                    NULL, cups_printer->printer_uri);
 
-  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME, "requesting-user-name",
-                                   NULL, cupsUser());
-
   title = gtk_print_job_get_title (job);
   if (title)
     gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME, "job-name", NULL,
