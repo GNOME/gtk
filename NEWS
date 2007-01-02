@@ -1,3 +1,155 @@
+Overview of Changes from GTK+ 2.10.6 to 2.10.7
+==============================================
+
+* GtkNotebook 
+ - Tab reordering is a less intrusive
+ - Rendering fixes on win32
+
+* GtkTreeView
+  - Column resizing works correctly in right-to-left languages
+  - Many scrolling bugs have been fixed
+
+* GtkTextView:
+  - Improved scrolling during DND.
+
+* GtkRecentManager is more robust against bad URIs
+
+* Print support:
+ - The cups backend works with 'BrowseShortNames Off' 
+   in the cups configuration
+ - Multi-valued options are properly passed to cups
+ - Fix build with cups 1.3
+ - A few IPP compliance issues have been fixed
+ - Make the lpr backend work on BSD
+
+* Input methods:
+ - GtkEntryCompletion works with input methods
+ - The Thai input method has been replace by a functional
+   Thai and Lao input method based on libthai
+
+* Accessibility support:
+ - GtkMessageDialog sets accessible name role explicitly
+
+* Theme support:
+ - The semantics of the gtk-color-scheme setting has been
+   slightly changed. Values from rc files are still merged
+   together, but the X setting just overrides the prior table.
+
+* GdkPixbuf:
+ - gdk_pixbuf_loader_write() now closes the loader when 
+   returning FALSE, as documented
+ - The BMP loader supports more BMP variants, including 
+   transparency and 10-bit channels.
+
+* Bugs fixed:
+ 122688 modal dialog popup + drag in progress = mouse freeze
+ 315732	gnome-session crash on login
+ 335622	Click Description field causes Evolution to crash.
+ 357050	Crash replacing \n\n with \n or undoing after paste
+ 359537	printing custom page
+ 373466	crash in Text Editor:
+ 388041	crash in Open Folder: nada
+ 390873	crash in Text Editor: I had just opened it up ...
+ 367529	gtk_combo_box_set_model(combo, NULL) generates warning wh...
+ 381499	xdgmime requires getc_unlocked, darwin 6 lacks
+ 349119	GtkUIManager crashes on wrong action names in an XML file
+ 363437	gnome-panel crash to gtkrecentmanager code
+ 366782	GtkTreeView "expand_all" can crash if a node's children a...
+ 374378	Crash as GTK tries to blink cursor in defocused spinbutto...
+ 381236	apps crash when using a mouse cursor theme as icon theme
+ 320465 gtk_window_parse_geometry is almost completely broken
+ 355350 Page Setup, Range and Copy information ignored
+ 387170 Fairly large leak in gtk+
+ 390159 printing with BSD lpr does not work properly
+  64998 GtkEntry - gtk_entry_set_text emits "changed" twice
+  92387 unfriendly drag-n-drop in textview - scrolls too fast
+ 172188	io-bmp.c should sanity check the size given by the OffBit...
+ 304482	GtkComboBoxEntry editable entry should be centered vertic...
+ 315440	Problem with gtkpaned inside gtknotebook(mouse wheel over...
+ 317064	GtkTextBuffer signals documentation
+ 317080	Incorrect gtk.immodules might make GTK+ lose its translation
+ 330683	Changing selection by up/down does not move to top/bottom.
+ 335473	gtk_file_chooser_button_new_with_dialog() is too strict
+ 337261	about dialogue initial focus
+ 339752	Please use LOCALE_IFIRSTDAYOFWEEK for GtkCalendar on Windows
+ 339756	LANG and LC_* environment variables should affect the C r...
+ 349638	Cannot Compose (multi_key) polish l (or L) with stroke, "ł"
+ 350342	Alt+Left/Right reorders tabs if not swallowed by Gecko
+ 351678	Notebooks not with PositionType.Top drawn incorrectly
+ 351679	Notebooks drawn with extra line below tab in MS-Windows t...
+ 352276	Location of G_GNUC_INTERNAL breaks Solaris build
+ 352435 GtkProgressBar text rendering errors
+ 352738	gtk_tree_view_column_set_sort_indicator() fails to show a...
+ 352795	configure.in: Bug in "checking Whether to write dependenc...
+ 353438	Add tiny extra docs to gdk_beep
+ 353709	GtkEntry shift-click inside selected text can behave funny
+ 354495	Compose key doesn't work on location entry
+ 357578	No grid lines are drawn
+ 357974	Crashes (failed assertatin)
+ 359231	validate_visible_area() sometimes passes mismatches (tree...
+ 359542	scale capability for Unix print dialog box can not be set...
+ 359581	GtkCellView clobbers parent's GdkWindow on style-set
+ 360350	leak in gtk_radio_button_focus
+ 362439	gtkicontheme::pixbuf_supports_svg leaks GList
+ 362614	gtk_widget_show does not check for NULL arg
+ 363191	gtk_tree_view_set_cursor() does not make row fully visible
+ 364514	gtk leaks GDI objects on the win32 classic look and feel
+ 364866	CUPS http_t type is becoming opaque
+ 364868	GDI resource leak in GtkStatusIcon on win32
+ 365031	gedit crashes with .recently-used.xbel file
+ 365047	GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT is never used in Gt...
+ 365388	gdk-pixbuf/Makefile.am: pixbufloader_pcx.def is not distr...
+ 366548	Clicking removed Focus frame
+ 370395	leak in gtk_rc_parse_icon_source
+ 374420	symbolic colors not reset correctly
+ 376094	Add gtk-doc on GtkCellRendererText::edited
+ 376535	crashes in gtk_drag_source_info_destroy()
+ 377349	gtk_status_icon_position_menu is not implemented for Win32
+ 378852	Fixes for notebook tab detaching
+ 379503	possible crash in gtk_default_draw_flat_box
+ 379803	Bad g_return_if_fail in gdkinput-xfree.c
+ 380421	Enabling extension events stops GDK_2BUTTON_PRESS
+ 382314	gtkpagesetup leaks when setting new paper size
+ 382369	some builtin papers have wrong display names
+ 383373	child properties getter returns not-NULL array, but no sp...
+ 383407	gtk_entry_set_text does not check for completion->priv->c...
+ 383435	expose improvements to GtkNotebook
+ 384168	gdk x11 backend doesn't build on Darwin
+ 386694	set_active_iter is called on rows with children
+ 388123	_gtk_file_chooser_embed_set_delegate() docs typo.
+ 389183	Typo in API docs (s/expansive/expensive)
+ 389194	mem leaks in gtkpagesetupunixdialog
+ 390468	Unbreak GtkNotebook keybindings
+ 390872	Scroll timeout isn't removed when widget destroyed
+ 391229	gtkprintoperation-win32.c: windows.h with WIN32_LEAN_AND_...
+ 172584	32 bpp windows bitmap files with 10-11-10 RGB masks are d...
+ 323146	gtk_button_grab_notify clears button->in_button (shouldn't)
+ 340135	page switching with keynav 'stuck'
+ 341158	Gdk-pixbuf programs need glib, but are not linked with it
+ 343330	gdk_pixbuf_new has redundant size checks
+ 343956	drawing problem in gtkassistant
+ 345094	gtk_notebook_insert_page can return wrong position
+ 353962	Tabs are all the same height
+ 360112	Wrong documentation for gtk_file_chooser_set_select_multiple
+ 365364	gtksettings doesn't list printpreview settings
+ 371756	GtkTreeView cursor not easily moved when set to GTK_SELEC...
+ 378462	En Dash Compose Keystrokes Yield an Em Dash Character
+ 389581	The interactive search window disappears during typing
+ 358864	Shows "xterm" cursor when insensitive
+ 385672	calendars draw arrows pointing to the right sligthly misp...
+ 391523	IPP glitches in GtkPrint
+ 391725	gtkicontheme::load_themes attempts to open dir after ENOENT
+  58389 Add some method of cancellation to GtkRange?
+  81031 immodules for Thai
+ 152620	Small icon (hIconSm member)
+ 159764	handles of GtkHandleBox are always drawn vertically
+ 348108	Refleaks in gtk-demo
+
+* Updated translations (ar,as,bn_IN,ca,en_CA,en_GB,
+    es,et,fi,fr,gu,he,hi,hy,hu,ka,mk,ml,mr,nb,nl,
+    or,pl,pt,si,sq,sv,ta,th)
+
+
 Overview of Changes from GTK+ 2.10.5 to 2.10.6
 ==============================================
 

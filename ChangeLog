@@ -1,5 +1,9 @@
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Try to fix #315732, reported by Luke Hutchinson:
 
 	* gdk/x11/xsettings-client.[hc]:
@@ -49,11 +53,6 @@
 
 	* gtk/gtkicontheme.c (load_themes): Waste less time
 	with non-directories.  (#391725, Chris Wilson)
-
-2007-01-01  Matthias Clasen  <mclasen@redhat.com>
-
-	* gtk/gtkcellrendererprogress.c: Implement activity mode
-	for GtkCellRendererProgress.  (#377851, Brad Taylor)
 
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
