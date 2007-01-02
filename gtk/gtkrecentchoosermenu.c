@@ -295,7 +295,7 @@ gtk_recent_chooser_menu_dispose (GObject *object)
       priv->current_filter = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->dipose (object);
+  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->dispose (object);
 }
 
 static GObject *

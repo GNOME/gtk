@@ -1,3 +1,8 @@
+2007-01-02  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_dispose):
+	Fix typo.
+
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (get_text_area_size): Center in the frame.  
