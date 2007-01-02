@@ -206,11 +206,11 @@ static gboolean gtk_notebook_select_page         (GtkNotebook      *notebook,
 						  gboolean          move_focus);
 static gboolean gtk_notebook_focus_tab           (GtkNotebook      *notebook,
 						  GtkNotebookTab    type);
-static void     gtk_notebook_change_current_page (GtkNotebook      *notebook,
+static gboolean gtk_notebook_change_current_page (GtkNotebook      *notebook,
 						  gint              offset);
 static void     gtk_notebook_move_focus_out      (GtkNotebook      *notebook,
 						  GtkDirectionType  direction_type);
-static void     gtk_notebook_reorder_tab         (GtkNotebook      *notebook,
+static gboolean gtk_notebook_reorder_tab         (GtkNotebook      *notebook,
 						  GtkDirectionType  direction_type,
 						  gboolean          move_to_last);
 
@@ -811,8 +811,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, change_current_page),
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT,
-                  G_TYPE_NONE, 1,
+                  _gtk_marshal_BOOLEAN__INT,
+                  G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
   notebook_signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move_focus_out"),
@@ -829,8 +829,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, reorder_tab),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_BOOLEAN,
-                  G_TYPE_NONE, 2,
+                  _gtk_marshal_BOOLEAN__ENUM_BOOLEAN,
+                  G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_DIRECTION_TYPE,
 		  G_TYPE_BOOLEAN);
   /**
@@ -1019,7 +1019,7 @@ static gboolean
 gtk_notebook_select_page (GtkNotebook *notebook,
                           gboolean     move_focus)
 {
-  if (gtk_widget_is_focus (GTK_WIDGET (notebook)))
+  if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && notebook->show_tabs)
     {
       gtk_notebook_page_select (notebook, move_focus);
       return TRUE;
@@ -1034,7 +1034,7 @@ gtk_notebook_focus_tab (GtkNotebook       *notebook,
 {
   GList *list;
 
-  if (gtk_widget_is_focus (GTK_WIDGET (notebook)))
+  if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && notebook->show_tabs)
     {
       switch (type)
 	{
@@ -1056,11 +1056,14 @@ gtk_notebook_focus_tab (GtkNotebook       *notebook,
     return FALSE;
 }
 
-static void
+static gboolean
 gtk_notebook_change_current_page (GtkNotebook *notebook,
 				  gint         offset)
 {
   GList *current = NULL;
+
+  if (!notebook->show_tabs)
+    return FALSE;
 
   if (notebook->cur_page)
     current = g_list_find (notebook->children, notebook->cur_page);
@@ -1075,6 +1078,8 @@ gtk_notebook_change_current_page (GtkNotebook *notebook,
     gtk_notebook_switch_page (notebook, current->data, -1);
   else
     gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (notebook)));
+
+  return TRUE;
 }
 
 static GtkDirectionType
@@ -1222,7 +1227,7 @@ reorder_tab (GtkNotebook *notebook, GList *position, GList *tab)
   return g_list_position (notebook->children, tab);
 }
 
-static void
+static gboolean
 gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 			  GtkDirectionType  direction_type,
 			  gboolean          move_to_last)
@@ -1232,16 +1237,16 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   GList *last, *child;
   gint page_num;
 
-  if (!gtk_widget_is_focus (GTK_WIDGET (notebook)))
-    return;
+  if (!gtk_widget_is_focus (GTK_WIDGET (notebook)) || !notebook->show_tabs)
+    return FALSE;
 
   if (!notebook->cur_page ||
       !notebook->cur_page->reorderable)
-    return;
+    return FALSE;
 
   if (effective_direction != GTK_DIR_LEFT &&
       effective_direction != GTK_DIR_RIGHT)
-    return;
+    return FALSE;
 
   if (move_to_last)
     {
@@ -1264,7 +1269,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 				      TRUE);
 
   if (!child || child->data == notebook->cur_page)
-    return;
+    return FALSE;
 
   page = child->data;
 
@@ -1282,7 +1287,11 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 		     0,
 		     ((GtkNotebookPage *) notebook->focus_tab->data)->child,
 		     page_num);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 /**
