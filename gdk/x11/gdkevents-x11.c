@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2007.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -177,15 +177,13 @@ _gdk_x11_events_init_screen (GdkScreen *screen)
   /* Keep a flag to avoid extra notifies that we don't need
    */
   screen_x11->xsettings_in_init = TRUE;
-  screen_x11->xsettings_client = xsettings_client_new (screen_x11->xdisplay,
-						       screen_x11->screen_num,
-						       gdk_xsettings_notify_cb,
-						       gdk_xsettings_watch_cb,
-						       screen);
-  xsettings_client_set_grab_func (screen_x11->xsettings_client,
-				  refcounted_grab_server);
-  xsettings_client_set_ungrab_func (screen_x11->xsettings_client,
-				    refcounted_ungrab_server);
+  screen_x11->xsettings_client = xsettings_client_new_with_grab_funcs (screen_x11->xdisplay,
+						                       screen_x11->screen_num,
+						                       gdk_xsettings_notify_cb,
+						                       gdk_xsettings_watch_cb,
+						                       screen,
+                                                                       refcounted_grab_server,
+                                                                       refcounted_ungrab_server);
   screen_x11->xsettings_in_init = FALSE;
 }
 
@@ -3008,16 +3006,13 @@ gdk_xsettings_watch_cb (Window   window,
     {
       if (!gdkwin)
 	gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
-      else
-	g_object_ref (gdkwin);
       
       gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
     }
   else
     {
-      g_assert (gdkwin);
-      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-      g_object_unref (gdkwin);
+      if (gdkwin)
+        gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
     }
 }
 
