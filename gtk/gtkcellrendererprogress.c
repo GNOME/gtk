@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 /*
- * Modified by the GTK+ Team and others 1997-2004.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2007.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -41,7 +41,8 @@ enum
 {
   PROP_0,
   PROP_VALUE,
-  PROP_TEXT
+  PROP_TEXT,
+  PROP_PULSE
 }; 
 
 struct _GtkCellRendererProgressPrivate
@@ -51,6 +52,8 @@ struct _GtkCellRendererProgressPrivate
   gchar *label;
   gint min_h;
   gint min_w;
+  gint pulse;
+  gint offset;
 };
 
 static void gtk_cell_renderer_progress_finalize     (GObject                 *object);
@@ -66,6 +69,8 @@ static void gtk_cell_renderer_progress_set_value    (GtkCellRendererProgress *ce
 						     gint                     value);
 static void gtk_cell_renderer_progress_set_text     (GtkCellRendererProgress *cellprogress,
 						     const gchar             *text);
+static void gtk_cell_renderer_progress_set_pulse    (GtkCellRendererProgress *cellprogress,
+						     gint                     pulse);
 static void compute_dimensions                      (GtkCellRenderer         *cell,
 						     GtkWidget               *widget,
 						     const gchar             *text,
@@ -136,6 +141,30 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 							NULL,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererProgress:pulse:
+   * 
+   * Setting this to a non-negative value causes the cell renderer to
+   * enter "activity mode", where a block bounces back and forth to 
+   * indicate that some progress is made, with specifying exactly how
+   * much.
+   *
+   * Each increment of the property causes the block to move by a little 
+   * bit.
+   *
+   * To indicate that the activity has not started yet, set the property
+   * to zero. To indicate completion, set the property to %G_MAXINT.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PULSE,
+                                   g_param_spec_int ("pulse",
+                                                     P_("Pulse"),
+                                                     P_("Set this to positive values to indicate that some progress is made, but you don't know how much."),
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, 
 			    sizeof (GtkCellRendererProgressPrivate));
 }
@@ -143,12 +172,17 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 static void
 gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
 {
-  cellprogress->priv = GTK_CELL_RENDERER_PROGRESS_GET_PRIVATE (cellprogress);
-  cellprogress->priv->value = 0;
-  cellprogress->priv->text = NULL;
-  cellprogress->priv->label = NULL;
-  cellprogress->priv->min_w = -1;
-  cellprogress->priv->min_h = -1;
+  GtkCellRendererProgressPrivate *priv = GTK_CELL_RENDERER_PROGRESS_GET_PRIVATE (cellprogress);
+
+  priv->value = 0;
+  priv->text = NULL;
+  priv->label = NULL;
+  priv->min_w = -1;
+  priv->min_h = -1;
+  priv->pulse = -1;
+  priv->offset = 0;
+
+  cellprogress->priv = priv;
 }
 
 
@@ -171,9 +205,10 @@ static void
 gtk_cell_renderer_progress_finalize (GObject *object)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (object);
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
   
-  g_free (cellprogress->priv->text);
-  g_free (cellprogress->priv->label);
+  g_free (priv->text);
+  g_free (priv->label);
   
   G_OBJECT_CLASS (gtk_cell_renderer_progress_parent_class)->finalize (object);
 }
@@ -185,14 +220,18 @@ gtk_cell_renderer_progress_get_property (GObject *object,
 					 GParamSpec *pspec)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (object);
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
   
   switch (param_id)
     {
     case PROP_VALUE:
-      g_value_set_int (value, cellprogress->priv->value);
+      g_value_set_int (value, priv->value);
       break;
     case PROP_TEXT:
-      g_value_set_string (value, cellprogress->priv->text);
+      g_value_set_string (value, priv->text);
+      break;
+    case PROP_PULSE:
+      g_value_set_int (value, priv->pulse);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -217,28 +256,40 @@ gtk_cell_renderer_progress_set_property (GObject *object,
       gtk_cell_renderer_progress_set_text (cellprogress,
 					   g_value_get_string (value));
       break;
+    case PROP_PULSE:
+      gtk_cell_renderer_progress_set_pulse (cellprogress, 
+					    g_value_get_int (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
 }
 
 static void
+recompute_label (GtkCellRendererProgress *cellprogress)
+{
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
+  gchar *label;
+
+  if (priv->text)
+    label = g_strdup (priv->text);
+  else if (priv->pulse < 0)
+    /* do not translate the part before the | */
+    label = g_strdup_printf (Q_("progress bar label|%d %%"), priv->value);
+  else
+    label = NULL;
+ 
+  g_free (priv->label);
+  priv->label = label;
+}
+
+static void
 gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress, 
 				      gint                     value)
 {
-  gchar *text;
-  
   cellprogress->priv->value = value;
 
-  if (cellprogress->priv->text)
-    text = g_strdup (cellprogress->priv->text);
-  else
-    /* do not translate the part before the | */
-    text = g_strdup_printf (Q_("progress bar label|%d %%"), 
-			    cellprogress->priv->value);
-  
-  g_free (cellprogress->priv->label);
-  cellprogress->priv->label = text;
+  recompute_label (cellprogress);
 }
 
 static void
@@ -251,8 +302,26 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
   g_free (cellprogress->priv->text);
   cellprogress->priv->text = new_text;
 
-  /* Update the label */
-  gtk_cell_renderer_progress_set_value (cellprogress, cellprogress->priv->value);
+  recompute_label (cellprogress);
+}
+
+static void
+gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress, 
+				      gint                     pulse)
+{
+   GtkCellRendererProgressPrivate *priv = cellprogress->priv;
+
+   if (pulse != priv->pulse)
+     {
+       if (priv->pulse <= 0)
+         priv->offset = 0;
+       else
+         priv->offset++;
+     }
+
+   priv->pulse = pulse;
+
+   recompute_label (cellprogress);
 }
 
 static void
@@ -287,25 +356,26 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
 				     gint            *height)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
   gint w, h;
   gchar *text;
 
-  if (cellprogress->priv->min_w < 0)
+  if (priv->min_w < 0)
     {
       text = g_strdup_printf (Q_("progress bar label|%d %%"), 100);
       compute_dimensions (cell, widget, text,
-			  &cellprogress->priv->min_w,
-			  &cellprogress->priv->min_h);
+			  &priv->min_w,
+			  &priv->min_h);
       g_free (text);
     }
   
-  compute_dimensions (cell, widget, cellprogress->priv->label, &w, &h);
+  compute_dimensions (cell, widget, priv->label, &w, &h);
   
   if (width)
-    *width = MAX (cellprogress->priv->min_w, w);
+    *width = MAX (priv->min_w, w);
   
   if (height)
-    *height = MIN (cellprogress->priv->min_h, h);
+    *height = MIN (priv->min_h, h);
 
   /* FIXME: at the moment cell_area is only set when we are requesting
    * the size for drawing the focus rectangle. We now just return
@@ -334,9 +404,10 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 				   guint            flags)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
+  GtkCellRendererProgressPrivate *priv= cellprogress->priv; 
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint x, y, w, h, perc_w, pos;
+  gint x, y, w, h, x_pos, y_pos, bar_x, bar_width;
   GdkRectangle clip;
   gboolean is_rtl;
 
@@ -357,11 +428,31 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		 NULL, widget, NULL,
 		 x, y, w, h);
 
-  perc_w = w * MAX (0, cellprogress->priv->value) / 100;
-  clip.x = is_rtl ? (x + w - perc_w) : x;
   clip.y = y;
-  clip.width = perc_w;
   clip.height = h;
+  if (priv->pulse < 0)
+    {
+      clip.width = w * MAX (0, priv->value) / 100;
+      clip.x = is_rtl ? (x + w - clip.width) : x;
+    }
+  else if (priv->pulse == 0)
+    {
+      clip.x = x;
+      clip.width = 0;
+    }
+  else if (priv->pulse == G_MAXINT)
+    {
+      clip.x = x;
+      clip.width = w;
+    }
+  else
+    {
+      clip.width = MAX (2, w / 5);
+      x_pos = (is_rtl ? priv->offset + 12 : priv->offset) % 24;
+      if (x_pos > 12)
+        x_pos = 24 - x_pos;
+      clip.x = x + w * x_pos / 15; 
+    }
 
   gtk_paint_box (widget->style,
 		 window,
@@ -370,32 +461,48 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		 clip.x, clip.y,
 		 clip.width, clip.height);
 
-  layout = gtk_widget_create_pango_layout (widget, cellprogress->priv->label);
-  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+  if (priv->label)
+    {
+      layout = gtk_widget_create_pango_layout (widget, priv->label);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      
+      x_pos = x + (w - logical_rect.width) / 2;
+      y_pos = y + (h - logical_rect.height) / 2;
   
-  pos = (w - logical_rect.width)/2;
-  
-  clip.x = x;
-  clip.y = y;
-  clip.width = is_rtl ? w - perc_w : perc_w;
-  clip.height = h; 
+      gtk_paint_layout (widget->style, window, 
+	  	        GTK_STATE_SELECTED,
+		        FALSE, &clip, widget, "progressbar",
+		        x_pos, y_pos, 
+		        layout);
 
-  gtk_paint_layout (widget->style, window, 
-		    is_rtl ? GTK_STATE_NORMAL : GTK_STATE_SELECTED,
-		    FALSE, &clip, widget, "progressbar",
-		    x + pos, y + (h - logical_rect.height)/2,
-		    layout);
+      bar_x = clip.x;
+      bar_width = clip.width;
+      if (bar_x > x)
+        {
+          clip.x = x;
+          clip.width = bar_x - x;
 
-  clip.x = clip.x + clip.width;
-  clip.width = w - clip.width;
+          gtk_paint_layout (widget->style, window, 
+	  	            GTK_STATE_NORMAL,
+		            FALSE, &clip, widget, "progressbar",
+		            x_pos, y_pos,
+		            layout);
+        }
 
-  gtk_paint_layout (widget->style, window, 
-		    is_rtl ?  GTK_STATE_SELECTED : GTK_STATE_NORMAL,
-		    FALSE, &clip, widget, "progressbar",
-		    x + pos, y + (h - logical_rect.height)/2,
-		    layout);
-  
-  g_object_unref (layout);
+      if (bar_x + bar_width < x + w)
+        {
+          clip.x = bar_x + bar_width;
+          clip.width = x + w - (bar_x + bar_width);  
+
+          gtk_paint_layout (widget->style, window, 
+		            GTK_STATE_NORMAL,
+		            FALSE, &clip, widget, "progressbar",
+		            x_pos, y_pos,
+		            layout);
+        }
+
+      g_object_unref (layout);
+    }
 }
 
 #define __GTK_CELL_RENDERER_PROGRESS_C__
