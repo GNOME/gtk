@@ -1,4 +1,8 @@
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/updateiconcache.c: Include locale.h
+
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/updateiconcache.c (main): Call setlocale().
 
