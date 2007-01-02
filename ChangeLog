@@ -1,3 +1,8 @@
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (get_text_area_size): Center in the frame.  
+	(#304482, Rob Staudinger, patch by  Richard Stellingwerff)
+
 2007-01-02  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdkwindow-directfb.c: fixed leak of dfb resource on destroy 

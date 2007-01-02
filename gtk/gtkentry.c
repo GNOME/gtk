@@ -1377,10 +1377,23 @@ get_text_area_size (GtkEntry *entry,
                     gint     *width,
                     gint     *height)
 {
+  gint frame_height;
   gint xborder, yborder;
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
+  gboolean interior_focus;
+  gint focus_width;
 
+  gtk_widget_style_get (widget,
+                        "interior-focus", &interior_focus,
+                        "focus-line-width", &focus_width,
+                        NULL);
+
+  gdk_drawable_get_size (widget->window, NULL, &frame_height);
+
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+      height -= 2 * focus_width;
+  
   gtk_widget_get_child_requisition (widget, &requisition);
 
   _gtk_entry_get_borders (entry, &xborder, &yborder);
@@ -1389,8 +1402,8 @@ get_text_area_size (GtkEntry *entry,
     *x = xborder;
 
   if (y)
-    *y = yborder;
-  
+    *y = frame_height / 2 - (requisition.height - yborder * 2) / 2;
+
   if (width)
     *width = GTK_WIDGET (entry)->allocation.width - xborder * 2;
 
