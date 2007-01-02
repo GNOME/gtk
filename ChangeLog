@@ -1,3 +1,14 @@
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	Try to fix #315732, reported by Luke Hutchinson:
+
+	* gdk/x11/xsettings-client.[hc]:
+	* gdk/x11/gdkdevents-x11.c: Don't assume that ref'ing a GdkWindow
+	will guarantee that it can be looked up in the xid hash later.
+	Also, use the nesting server grab function during the xsettings
+	client initialization. Finally, make xsettings client not
+	eat DestroyNotifys so that GDK can do its regular cleanup. 
+
 2007-01-02  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_dispose):

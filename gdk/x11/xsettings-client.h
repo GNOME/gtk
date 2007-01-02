@@ -1,5 +1,5 @@
 /*
- * Copyright © 2001 Red Hat, Inc.
+ * Copyright © 2001, 2007 Red Hat, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -54,6 +54,13 @@ XSettingsClient *xsettings_client_new             (Display             *display,
 						   XSettingsNotifyFunc  notify,
 						   XSettingsWatchFunc   watch,
 						   void                *cb_data);
+XSettingsClient *xsettings_client_new_with_grab_funcs (Display             *display,
+						       int                  screen,
+						       XSettingsNotifyFunc  notify,
+						       XSettingsWatchFunc   watch,
+						       void                *cb_data,
+                                                       XSettingsGrabFunc    grab,
+                                                       XSettingsGrabFunc    ungrab);
 void             xsettings_client_set_grab_func   (XSettingsClient     *client,
 						   XSettingsGrabFunc    grab);
 void             xsettings_client_set_ungrab_func (XSettingsClient     *client,
