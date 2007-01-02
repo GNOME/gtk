@@ -1,5 +1,9 @@
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbufferrichtext.c: Small documentation fixes.
+
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (get_text_area_size): Center in the frame.  
 	(#304482, Rob Staudinger, patch by  Richard Stellingwerff)
 

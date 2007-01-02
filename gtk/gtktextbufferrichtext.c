@@ -62,10 +62,10 @@ static GQuark    deserialize_quark (void);
  * @mime_type: the format's mime-type
  * @function: the serialize function to register
  * @user_data: %function's user_data
- * @user_data_destroy: a function to call when user_data is no longer needed
+ * @user_data_destroy: a function to call when @user_data is no longer needed
  *
- * This function registers a rich text serialization %function along with
- * its %mime_type with the passed %buffer.
+ * This function registers a rich text serialization @function along with
+ * its @mime_type with the passed @buffer.
  *
  * Return value: the #GdkAtom that corresponds to the newly registered
  *               format's mime-type.
@@ -107,18 +107,18 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  * @tagset_name: an optional tagset name, on %NULL
  *
  * This function registers GTK+'s internal rich text serialization
- * format with the passed %buffer. The internal format does not comply
+ * format with the passed @buffer. The internal format does not comply
  * to any standard rich text format and only works between #GtkTextBuffer
  * instances. It is capable of serializing all of a text buffer's tags
  * and embedded pixbufs.
  *
  * This function is just a wrapper around
- * gtk_text_buffer_register_serialize_format(). The %mime_type used
+ * gtk_text_buffer_register_serialize_format(). The mime type used
  * for registering is "application/x-gtk-text-buffer-rich-text", or
- * "application/x-gtk-text-buffer-rich-text;format=%tagset_name" if a
- * %tagset_name was passed.
+ * "application/x-gtk-text-buffer-rich-text;format=@tagset_name" if a
+ * @tagset_name was passed.
  *
- * The %tagset_name can be used to restrict the transfer of rich text
+ * The @tagset_name can be used to restrict the transfer of rich text
  * to buffers with compatible sets of tags, in order to avoid unknown
  * tags from being pasted. It is probably the common case to pass an
  * identifier != %NULL here, since the %NULL tagset requires the
@@ -159,11 +159,11 @@ gtk_text_buffer_register_serialize_tagset (GtkTextBuffer *buffer,
  * @buffer: a #GtkTextBuffer
  * @mime_type: the format's mime-type
  * @function: the deserialize function to register
- * @user_data: %function's user_data
- * @user_data_destroy: a function to call when user_data is no longer needed
+ * @user_data: @function's user_data
+ * @user_data_destroy: a function to call when @user_data is no longer needed
  *
- * This function registers a rich text deserialization %function along with
- * its %mime_type with the passed %buffer.
+ * This function registers a rich text deserialization @function along with
+ * its @mime_type with the passed @buffer.
  *
  * Return value: the #GdkAtom that corresponds to the newly registered
  *               format's mime-type.
@@ -205,7 +205,7 @@ gtk_text_buffer_register_deserialize_format (GtkTextBuffer                *buffe
  * @tagset_name: an optional tagset name, on %NULL
  *
  * This function registers GTK+'s internal rich text serialization
- * format with the passed %buffer. See
+ * format with the passed @buffer. See
  * gtk_text_buffer_register_serialize_tagset() for details.
  *
  * Return value: the #GdkAtom that corresponds to the newly registered
@@ -275,7 +275,7 @@ gtk_text_buffer_unregister_serialize_format (GtkTextBuffer *buffer,
  *
  * This function unregisters a rich text format that was previously
  * registered using gtk_text_buffer_register_deserialize_format() or
- * gtk_text_buffer_register_deserialize_tagset()
+ * gtk_text_buffer_register_deserialize_tagset().
  *
  * Since: 2.10
  **/
@@ -406,7 +406,7 @@ gtk_text_buffer_deserialize_get_can_create_tags (GtkTextBuffer *buffer,
  * @n_formats: return location for the number of formats
  *
  * This function returns the rich text serialize formats registered
- * with %buffer using gtk_text_buffer_register_serialize_format() or
+ * with @buffer using gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset()
  *
  * Return value: an array of #GdkAtom<!-- -->s representing the registered
@@ -434,7 +434,7 @@ gtk_text_buffer_get_serialize_formats (GtkTextBuffer *buffer,
  * @n_formats: return location for the number of formats
  *
  * This function returns the rich text deserialize formats registered
- * with %buffer using gtk_text_buffer_register_deserialize_format() or
+ * with @buffer using gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset()
  *
  * Return value: an array of #GdkAtom<!-- -->s representing the registered
@@ -458,21 +458,21 @@ gtk_text_buffer_get_deserialize_formats (GtkTextBuffer *buffer,
 
 /**
  * gtk_text_buffer_serialize:
- * @register_buffer: the #GtkTextBuffer %format is registered with
+ * @register_buffer: the #GtkTextBuffer @format is registered with
  * @content_buffer: the #GtkTextBuffer to serialize
  * @format: the rich text format to use for serializing
  * @start: start of block of text to serialize
  * @end: end of block of test to serialize
  * @length: return location for the length of the serialized data
  *
- * This function serializes the portion of text between %start
- * and %end in the rich text format represented by %format.
+ * This function serializes the portion of text between @start
+ * and @end in the rich text format represented by @format.
  *
- * %format<!-- -->s to be used must be registered using
+ * @format<!-- -->s to be used must be registered using
  * gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset() beforehand.
  *
- * Return value: the serialized data, encoded as %format
+ * Return value: the serialized data, encoded as @format
  *
  * Since: 2.10
  **/
@@ -517,18 +517,18 @@ gtk_text_buffer_serialize (GtkTextBuffer     *register_buffer,
 
 /**
  * gtk_text_buffer_deserialize:
- * @register_buffer: the #GtkTextBuffer %format is registered with
+ * @register_buffer: the #GtkTextBuffer @format is registered with
  * @content_buffer: the #GtkTextBuffer to deserialize into
  * @format: the rich text format to use for deserializing
  * @iter: insertion point for the deserialized text
  * @data: data to deserialize
- * @length: length of %data
- * @error: return loaction for a #GError
+ * @length: length of @data
+ * @error: return location for a #GError
  *
- * This function deserializes rich text in format %format and inserts
- * it at %iter.
+ * This function deserializes rich text in format @format and inserts
+ * it at @iter.
  *
- * %format<!-- -->s to be used must be registered using
+ * @format<!-- -->s to be used must be registered using
  * gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset() beforehand.
  *
