@@ -101,11 +101,11 @@ struct _GtkNotebookClass
                                 gboolean           move_focus);
   gboolean (* focus_tab)       (GtkNotebook       *notebook,
                                 GtkNotebookTab     type);
-  void (* change_current_page) (GtkNotebook       *notebook,
+  gboolean (* change_current_page) (GtkNotebook   *notebook,
                                 gint               offset);
   void (* move_focus_out)      (GtkNotebook       *notebook,
 				GtkDirectionType   direction);
-  void (* reorder_tab)         (GtkNotebook       *notebook,
+  gboolean (* reorder_tab)     (GtkNotebook       *notebook,
 				GtkDirectionType   direction,
 				gboolean           move_to_last);
 

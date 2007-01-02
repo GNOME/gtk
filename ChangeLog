@@ -1,5 +1,14 @@
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.h:
+	* gtk/gtknotebook.c: Only handle key bindings for
+	tab reordering if the tabs are shown and reorderable. 
+	(#390468, Yevgen Muntyan)
+
+	* gtk/gtkmarshalers.list: Add required marshaler
+
+2007-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcontainer.c (gtk_container_class_list_child_properties):
 	Mention in the docs that the return value is
 	NULL-terminated.  (#383373, Christian Neumair)
