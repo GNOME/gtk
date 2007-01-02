@@ -146,7 +146,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * 
    * Setting this to a non-negative value causes the cell renderer to
    * enter "activity mode", where a block bounces back and forth to 
-   * indicate that some progress is made, with specifying exactly how
+   * indicate that some progress is made, without specifying exactly how
    * much.
    *
    * Each increment of the property causes the block to move by a little 

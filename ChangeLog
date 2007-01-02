@@ -1,3 +1,8 @@
+2007-01-03  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrendererprogress.c
+	(gtk_cell_renderer_progress_class_init): fix docs.
+
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/updateiconcache.c: Include locale.h
