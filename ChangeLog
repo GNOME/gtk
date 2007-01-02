@@ -1,5 +1,11 @@
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.c (gtk_text_view_key_press_event):
+	Try harder not to beep on events which are not meant to
+	insert stuff in the buffer.  (#390514, Yevgen Muntyan) 
+
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextbufferrichtext.c: Small documentation fixes.
 
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>

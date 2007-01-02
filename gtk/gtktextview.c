@@ -3901,7 +3901,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     }
   /* Pass through Tab as literal tab, unless Control is held down */
   else if ((event->keyval == GDK_Tab ||
-            event->keyval == GDK_KP_Tab) &&
+            event->keyval == GDK_KP_Tab ||
+            event->keyval == GDK_ISO_Left_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
       /* If the text widget isn't editable overall, or if the application
@@ -3929,8 +3930,17 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
-  if (!retval && event->length)
-    gtk_widget_error_bell (widget);
+  if (!retval)
+    {
+      /* We only want to beep if we are reasonably sure
+       * the event was meant to insert some character into
+       * the buffer, but failed.  We don't beep on events 
+       * which look like attempts to activate an accelerator.
+       */
+      if (!event->is_modifier && 
+          ((event->state & (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK)) == 0))
+        gtk_widget_error_bell (widget);
+    } 
 
   return retval;
 }
