@@ -1,5 +1,12 @@
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c: Only handle key bindings
+	for scrolling if the scrollbars are visible.
+	(#340135, Christian Persch)
+
+2007-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_scroll_hpages):
 	Don't segfault on horizontal scrolling.  
 

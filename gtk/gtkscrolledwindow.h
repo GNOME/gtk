@@ -81,9 +81,9 @@ struct _GtkScrolledWindowClass
    * no horizontal/vertical variants for GTK_SCROLL_START/END,
    * so we have to add an additional boolean flag.
    */
-  void (*scroll_child) (GtkScrolledWindow *scrolled_window,
-			GtkScrollType      scroll,
-			gboolean           horizontal);
+  gboolean (*scroll_child) (GtkScrolledWindow *scrolled_window,
+	  		    GtkScrollType      scroll,
+			    gboolean           horizontal);
 
   void (* move_focus_out) (GtkScrolledWindow *scrolled_window,
 			   GtkDirectionType   direction);
