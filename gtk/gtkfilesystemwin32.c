@@ -1161,7 +1161,7 @@ gtk_file_system_win32_create_folder (GtkFileSystem                    *file_syst
       g_set_error (&error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("Error creating directory '%s': %s"),
+		   _("Error creating folder '%s': %s"),
 		   display_filename,
 		   g_strerror (save_errno));
       

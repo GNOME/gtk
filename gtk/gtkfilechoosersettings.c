@@ -513,8 +513,8 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 	  g_set_error (error,
 		       G_FILE_ERROR,
 		       g_file_error_from_errno (saved_errno),
-		       _("Could not create directory: %s"),
-		       dirname);
+		       _("Error creating folder '%s': %s"),
+		       dirname, g_strerror (saved_errno));
 	  goto out;
 	}
 

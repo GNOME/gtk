@@ -1125,7 +1125,7 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
 
   if (!write_dir_index (cache, new_offset, directories))
     {
-      g_printerr (_("Failed to write directory index\n"));
+      g_printerr (_("Failed to write folder index\n"));
       return FALSE;
     }
   
@@ -1296,6 +1296,8 @@ main (int argc, char **argv)
   if (argc < 2)
     return 0;
   
+  setlocale (LC_ALL, "");
+
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 

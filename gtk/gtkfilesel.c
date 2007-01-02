@@ -1405,7 +1405,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
 	buf = g_strdup_printf (_("The folder name \"%s\" contains symbols that are not allowed in filenames"), dirname);
       else
-	buf = g_strdup_printf (_("Error creating directory '%s': %s"), 
+	buf = g_strdup_printf (_("Error creating folder '%s': %s"), 
 			       dirname, error->message);
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
@@ -1414,7 +1414,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 
   if (g_mkdir (sys_full_path, 0777) < 0)
     {
-      buf = g_strdup_printf (_("Error creating directory '%s': %s"), 
+      buf = g_strdup_printf (_("Error creating folder '%s': %s"), 
 			     dirname, g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
