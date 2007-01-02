@@ -1,5 +1,10 @@
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (load_themes): Waste less time
+	with non-directories.  (#391725, Chris Wilson)
+
+2007-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcellrendererprogress.c: Implement activity mode
 	for GtkCellRendererProgress.  (#377851, Brad Taylor)
 
