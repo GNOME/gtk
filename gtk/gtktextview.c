@@ -5100,8 +5100,8 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
                                     &old_insert,
                                     gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
-  gtk_text_layout_get_line_yrange (text_view->layout, &new_insert, &y, &height);
-  gtk_text_layout_validate_yrange (text_view->layout, &new_insert, y, y + height);
+  gtk_text_layout_get_line_yrange (text_view->layout, &old_insert, &y, &height);
+  gtk_text_layout_validate_yrange (text_view->layout, &old_insert, y, y + height);
   /* FIXME do we need to update the adjustment ranges here? */
 
   new_insert = old_insert;

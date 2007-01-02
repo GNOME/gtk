@@ -1,5 +1,10 @@
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_scroll_hpages):
+	Don't segfault on horizontal scrolling.  
+
+2007-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtknotebook.h:
 	* gtk/gtknotebook.c: Only handle key bindings for
 	tab reordering if the tabs are shown and reorderable. 
