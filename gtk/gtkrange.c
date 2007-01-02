@@ -162,7 +162,7 @@ static void gtk_range_move_slider              (GtkRange         *range,
                                                 GtkScrollType     scroll);
 
 /* Internals */
-static void          gtk_range_scroll                   (GtkRange      *range,
+static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
 static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
 static void          gtk_range_calc_layout              (GtkRange      *range,
@@ -2353,10 +2353,12 @@ scroll_end (GtkRange *range)
                  &handled);
 }
 
-static void
+static gboolean
 gtk_range_scroll (GtkRange     *range,
                   GtkScrollType scroll)
 {
+  gdouble old_value = range->adjustment->value;
+
   switch (scroll)
     {
     case GTK_SCROLL_STEP_LEFT:
@@ -2446,6 +2448,8 @@ gtk_range_scroll (GtkRange     *range,
     case GTK_SCROLL_NONE:
       break;
     }
+
+  return range->adjustment->value != old_value;
 }
 
 static void
@@ -2488,7 +2492,8 @@ gtk_range_move_slider (GtkRange     *range,
         }
     }
 
-  gtk_range_scroll (range, scroll);
+  if (! gtk_range_scroll (range, scroll))
+    gtk_widget_error_bell (GTK_WIDGET (range));
 
   /* Policy DELAYED makes sense with key events,
    * but DISCONTINUOUS doesn't, so we update immediately

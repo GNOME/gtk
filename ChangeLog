@@ -1,3 +1,8 @@
+2007-01-02  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrange.c (gtk_range_scroll) (gtk_range_move_slider): beep
+	when a keybinding didn't change adjustment->value.
+
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_view_key_press_event):
