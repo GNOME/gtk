@@ -1051,20 +1051,21 @@ load_themes (GtkIconTheme *icon_theme)
       dir = icon_theme->priv->search_path[base];
 
       dir_mtime = g_slice_new (IconThemeDirMtime);
-      dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
-      dir_mtime->dir = g_strdup (dir);
-      if (g_stat (dir, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
-	dir_mtime->mtime = stat_buf.st_mtime;
-      else
-	dir_mtime->mtime = 0;
-      
       priv->dir_mtimes = g_list_append (priv->dir_mtimes, dir_mtime);
       
+      dir_mtime->dir = g_strdup (dir);
+      dir_mtime->mtime = 0;
+      dir_mtime->cache = NULL;
+
+      if (g_stat (dir, &stat_buf) != 0 || !S_ISDIR (stat_buf.st_mode))
+	continue;
+      dir_mtime->mtime = stat_buf.st_mtime;
+
+      dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
       if (dir_mtime->cache != NULL)
 	continue;
 
       gdir = g_dir_open (dir, 0, NULL);
-
       if (gdir == NULL)
 	continue;
 
