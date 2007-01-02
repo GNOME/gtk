@@ -1,3 +1,7 @@
+2007-01-02  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdkwindow-directfb.c: fixed leak of dfb resource on destroy 
+
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscrolledwindow.h:
