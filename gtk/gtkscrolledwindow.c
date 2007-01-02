@@ -131,7 +131,7 @@ static void gtk_scrolled_window_forall             (GtkContainer           *cont
 						    gboolean		    include_internals,
 						    GtkCallback             callback,
 						    gpointer                callback_data);
-static void gtk_scrolled_window_scroll_child       (GtkScrolledWindow      *scrolled_window,
+static gboolean gtk_scrolled_window_scroll_child   (GtkScrolledWindow      *scrolled_window,
 						    GtkScrollType           scroll,
 						    gboolean                horizontal);
 static void gtk_scrolled_window_move_focus_out     (GtkScrolledWindow      *scrolled_window,
@@ -311,8 +311,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, scroll_child),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_BOOLEAN,
-                  G_TYPE_NONE, 2,
+                  _gtk_marshal_BOOLEAN__ENUM_BOOLEAN,
+                  G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_SCROLL_TYPE,
 		  G_TYPE_BOOLEAN);
   signals[MOVE_FOCUS_OUT] =
@@ -1000,7 +1000,7 @@ gtk_scrolled_window_forall (GtkContainer *container,
     }
 }
 
-static void
+static gboolean
 gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 				  GtkScrollType      scroll,
 				  gboolean           horizontal)
@@ -1050,8 +1050,12 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
       break;
     default:
       g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
-      return;
+      return FALSE;
     }
+
+  if ((horizontal && (!scrolled_window->hscrollbar || !scrolled_window->hscrollbar_visible)) ||
+      (!horizontal && (!scrolled_window->vscrollbar || !scrolled_window->vscrollbar_visible)))
+    return FALSE;
 
   if (horizontal)
     {
@@ -1096,7 +1100,11 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
       value = CLAMP (value, adjustment->lower, adjustment->upper - adjustment->page_size);
       
       gtk_adjustment_set_value (adjustment, value);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 static void

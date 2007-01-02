@@ -1,5 +1,12 @@
 2007-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c: Only handle key bindings
+	for scrolling if the scrollbars are visible.
+	(#340135, Christian Persch)
+
+2007-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtknotebook.h:
 	* gtk/gtknotebook.c: Only handle key bindings for
 	tab reordering if the tabs are shown and reorderable. 
