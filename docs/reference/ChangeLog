@@ -1,3 +1,8 @@
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktextbuffer.sgml: Document rich text
+	serialization functions.  (#347940, Murray Cumming)
+
 2006-12-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkactiongroup.sgml: Document that action

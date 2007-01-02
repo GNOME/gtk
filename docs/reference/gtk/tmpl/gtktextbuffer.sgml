@@ -771,19 +771,20 @@ types related to the text widget and how they work together.
 
 <!-- ##### USER_FUNCTION GtkTextBufferDeserializeFunc ##### -->
 <para>
-
+A function that is called to deserialize rich text that has been
+serialized with gtk_text_buffer_serialize(), and insert it at @iter.
 </para>
 
-@register_buffer: 
-@content_buffer: 
-@iter: 
-@data: 
-@length: 
-@create_tags: 
-@user_data: 
-@error: 
-@Returns: 
-
+@register_buffer: the #GtkTextBuffer the format is registered with
+@content_buffer: the #GtkTextBuffer to deserialize into
+@iter: insertion point for the deserialized text
+@data: data to deserialize
+@length: length of %data
+@create_tags: %TRUE if deserializing may create tags
+@user_data: user data that was specified when registering the format
+@error: return location for a #GError
+@Returns: %TRUE on success, %FALSE otherwise
+ 
 
 <!-- ##### FUNCTION gtk_text_buffer_deserialize ##### -->
 <para>
@@ -906,16 +907,18 @@ types related to the text widget and how they work together.
 
 <!-- ##### USER_FUNCTION GtkTextBufferSerializeFunc ##### -->
 <para>
-
+A function that is called to serialize the content of a text buffer.
+It must return the serialized form of the content.
 </para>
 
-@register_buffer: 
-@content_buffer: 
-@start: 
-@end: 
-@length: 
-@user_data: 
-@Returns: 
+@register_buffer: the #GtkTextBuffer for which the format is registered
+@content_buffer: the #GtkTextsBuffer to serialize
+@start: start of the block of text to serialize
+@end: end of the block of text to serialize
+@length: Return location for the length of the serialized data
+@user_data: user data that was specified when registering the format
+@Returns: a newly-allocated array of guint8 which contains the serialized
+          data, or %NULL if an error occurred
 
 
 <!-- ##### FUNCTION gtk_text_buffer_serialize ##### -->
