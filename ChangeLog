@@ -1,5 +1,10 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinteroptionwidget.c (filesave_changed_cb):
+	Fix memory leaks.  
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkassistant.c (remove_page): If the current page
 	is removed, always pick a different one.  (#392457, 
 	Colin Watson)
