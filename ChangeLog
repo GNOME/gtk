@@ -1,5 +1,12 @@
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_move_resize): Only process
+	updates on the window at hand, not on all windows, to
+	avoid violating resize/redraw ordering constraints.
+	(#362406, Owen Taylor)
+	
+2007-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>

@@ -5699,7 +5699,7 @@ gtk_window_move_resize (GtkWindow *window)
       allocation = widget->allocation;
       gtk_widget_size_allocate (widget, &allocation);
 
-      gdk_window_process_all_updates ();
+      gdk_window_process_updates (widget->window, TRUE);
       
       gdk_window_configure_finished (widget->window);
 
