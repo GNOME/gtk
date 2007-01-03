@@ -1,5 +1,9 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackend/cups/*.c: Coding style cleanups.
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Export SED to make sourcing of
 	libtool work. Tighten up the directfb pkgconfig check.
 

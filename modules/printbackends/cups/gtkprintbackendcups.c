@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkprintbackendcups.h: Default implementation of GtkPrintBackend 
  * for the Common Unix Print System (CUPS)
- * Copyright (C) 2003, Red Hat, Inc.
+ * Copyright (C) 2006, 2007 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -419,13 +419,15 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 				  NULL,
 				  cups_printer->device_uri);
 
-  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI, "printer-uri",
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, 
+                                   IPP_TAG_URI, "printer-uri",
                                    NULL, cups_printer->printer_uri);
 
   title = gtk_print_job_get_title (job);
   if (title)
-    gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME, "job-name", NULL,
-                                     title);
+    gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, 
+                                     IPP_TAG_NAME, "job-name", 
+                                     NULL, title);
 
   gtk_print_settings_foreach (settings, add_cups_options, request);
   
@@ -868,7 +870,7 @@ static void
 cups_request_job_info (CupsJobPollData *data)
 {
   GtkCupsRequest *request;
-  gchar *printer_uri;
+  gchar *job_uri;
 
   request = gtk_cups_request_new (NULL,
                                   GTK_CUPS_POST,
@@ -877,10 +879,10 @@ cups_request_job_info (CupsJobPollData *data)
 				  NULL,
 				  NULL);
 
-  printer_uri = g_strdup_printf ("ipp://localhost/jobs/%d", data->job_id);
+  job_uri = g_strdup_printf ("ipp://localhost/jobs/%d", data->job_id);
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI,
-                                   "job-uri", NULL, printer_uri);
-  g_free (printer_uri);
+                                   "job-uri", NULL, job_uri);
+  g_free (job_uri);
 
   cups_request_execute (data->print_backend,
                         request,
@@ -959,7 +961,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
   if (gtk_cups_result_is_error (result))
     {
-      g_warning ("Error getting printer list: %s", gtk_cups_result_get_error_string (result));
+      g_warning ("Error getting printer list: %s", 
+                 gtk_cups_result_get_error_string (result));
 
       goto done;
     }
@@ -992,13 +995,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       member_uris = NULL;
       while (attr != NULL && attr->group_tag == IPP_TAG_PRINTER)
       {
-        if (!strcmp (attr->name, "printer-name") &&
+        if (strcmp (attr->name, "printer-name") == 0 &&
 	    attr->value_tag == IPP_TAG_NAME)
 	  printer_name = attr->values[0].string.text;
-	else if (!strcmp (attr->name, "printer-uri-supported") &&
+	else if (strcmp (attr->name, "printer-uri-supported") == 0 &&
 		 attr->value_tag == IPP_TAG_URI)
 	  printer_uri = attr->values[0].string.text;
-	else if (!strcmp (attr->name, "member-uris") &&
+	else if (strcmp (attr->name, "member-uris") == 0 &&
 		 attr->value_tag == IPP_TAG_URI)
 	  member_uris = attr->values[0].string.text;
         else
@@ -1071,14 +1074,14 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 			resource);
 #endif
 
-          if (!strncmp (resource, "/printers/", 10))
+          if (strncmp (resource, "/printers/", 10) == 0)
 	    {
 	      cups_printer->ppd_name = g_strdup (resource + 10);
               GTK_NOTE (PRINTING,
                         g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, printer_name));
             }
 
-	  gethostname (uri, sizeof(uri));
+	  gethostname (uri, sizeof (uri));
 	  if (strcasecmp (uri, hostname) == 0)
 	    strcpy (hostname, "localhost");
 
@@ -1115,7 +1118,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       /* The ref is held by GtkPrintBackend, in add_printer() */
       g_object_unref (printer);
-
       
       if (attr == NULL)
         break;
@@ -1153,6 +1155,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
     return TRUE;
 
   g_object_ref (cups_backend);
+
   GDK_THREADS_LEAVE ();
 
   cups_backend->list_printers_pending = TRUE;
@@ -1173,7 +1176,9 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
                         (GtkPrintCupsResponseCallbackFunc) cups_request_printer_list_cb,
 		        request,
 		        NULL);
+
   GDK_THREADS_ENTER ();
+
   g_object_unref (cups_backend);
 
   return TRUE;
