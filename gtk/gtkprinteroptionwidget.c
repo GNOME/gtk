@@ -453,11 +453,9 @@ filesave_changed_cb (GtkWidget              *button,
                      GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *uri, *directory, *path;
-  const gchar *file;
+  gchar *uri, *file;
 
   /* TODO: how do we support nonlocal file systems? */
-  directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
   file = g_filename_from_utf8 (gtk_entry_get_text (GTK_ENTRY (priv->entry)),
 			       -1, NULL, NULL, NULL);
   if (file == NULL)
@@ -470,24 +468,34 @@ filesave_changed_cb (GtkWidget              *button,
     uri = g_filename_to_uri (file, NULL, NULL);
   else
     {
+      gchar *path;
+
 #ifdef G_OS_UNIX
       if (file[0] == '~' && file[1] == '/')
         {
-          directory = g_strdup (g_get_home_dir ());
-	  file += 2;
+          path = g_build_filename (g_get_home_dir (), file + 2, NULL);
 	}
+      else
 #endif
-    
-      path = g_build_filename (directory, file, NULL);
+        {
+          gchar *directory;
+
+          directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
+          path = g_build_filename (directory, file, NULL);
+
+          g_free (directory);
+        }
+
       uri = g_filename_to_uri (path, NULL, NULL);
+
       g_free (path);
     }
 
   if (uri)
     gtk_printer_option_set (priv->source, uri);
 
-  g_free (directory);
   g_free (uri);
+  g_free (file);
 
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
@@ -508,7 +516,7 @@ filter_numeric (const gchar *val,
 
   for (i = 0, j = 0; i < len; i++)
     {
-      if (isdigit(val[i]))
+      if (isdigit (val[i]))
         {
           filtered_val[j] = val[i];
 	  j++;
