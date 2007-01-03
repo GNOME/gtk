@@ -1,3 +1,8 @@
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Export SED to make sourcing of
+	libtool work. Tighten up the directfb pkgconfig check.
+
 2007-01-03  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkstyle.c (option_menu_get_props)
