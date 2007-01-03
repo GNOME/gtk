@@ -1,3 +1,14 @@
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (get_text_area_size): Work when the
+	entry is not realized.  (#392315, Yevgen Muntyan)
+
+	* gtk/gtkentry.c (gtk_entry_queue_draw): Use 
+	GTK_WIDGET_DRAWABLE() here.  (#392227, Chris Wilson)
+
+	* gtk/gtkentry.c (cursor_blinks): Don't get settings
+	unnecessarily.  (#392227)
+
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Only process

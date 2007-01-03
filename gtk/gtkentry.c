@@ -1389,14 +1389,16 @@ get_text_area_size (GtkEntry *entry,
                         "focus-line-width", &focus_width,
                         NULL);
 
-  gdk_drawable_get_size (widget->window, NULL, &frame_height);
+  gtk_widget_get_child_requisition (widget, &requisition);
+  _gtk_entry_get_borders (entry, &xborder, &yborder);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_drawable_get_size (widget->window, NULL, &frame_height);
+  else
+    frame_height = requisition.height;
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
-      height -= 2 * focus_width;
-  
-  gtk_widget_get_child_requisition (widget, &requisition);
-
-  _gtk_entry_get_borders (entry, &xborder, &yborder);
+      frame_height -= 2 * focus_width;
 
   if (x)
     *x = xborder;
@@ -3620,7 +3622,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 static void
 gtk_entry_queue_draw (GtkEntry *entry)
 {
-  if (GTK_WIDGET_REALIZED (entry))
+  if (GTK_WIDGET_DRAWABLE (entry))
     gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
 }
 
@@ -5338,14 +5340,16 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
 static gboolean
 cursor_blinks (GtkEntry *entry)
 {
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
-  gboolean blink;
-
   if (GTK_WIDGET_HAS_FOCUS (entry) &&
       entry->editable &&
       entry->selection_bound == entry->current_pos)
     {
+      GtkSettings *settings;
+      gboolean blink;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (entry));
       g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+
       return blink;
     }
   else
