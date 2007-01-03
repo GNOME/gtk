@@ -3253,7 +3253,7 @@ option_menu_get_props (GtkWidget      *widget,
   if (tmp_spacing)
     {
       *indicator_spacing = *tmp_spacing;
-      g_free (tmp_spacing);
+      gtk_border_free (tmp_spacing);
     }
   else
     *indicator_spacing = default_option_indicator_spacing;

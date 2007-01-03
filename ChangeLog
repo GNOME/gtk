@@ -1,3 +1,9 @@
+2007-01-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstyle.c (option_menu_get_props)
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_props): Use 
+	gtk_border_free when freeing borders.
+
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (get_text_area_size): Work when the
