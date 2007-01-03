@@ -1,3 +1,9 @@
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkassistant.c (remove_page): If the current page
+	is removed, always pick a different one.  (#392457, 
+	Colin Watson)
+
 2007-01-03  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from HEAD.
