@@ -849,12 +849,29 @@ remove_page (GtkAssistant *assistant,
 {
   GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
+  GList *page_node;
 
   page_info = element->data;
 
-  /* If we are mapped and visible, we want to deal with changing the page. */
-  if ((GTK_WIDGET_MAPPED (page_info->page)) && (page_info == priv->current_page))
-    compute_next_step (assistant);
+  /* If this is the current page, we need to switch away. */
+  if (page_info == priv->current_page)
+    {
+      if (!compute_next_step (assistant))
+        {
+  	  /* The best we can do at this point is probably to pick the first
+	   * visible page.
+	   */
+	  page_node = priv->pages;
+
+	  while (page_node && !GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
+	    page_node = page_node->next;
+
+	  if (page_node)
+	    priv->current_page = page_node->data;
+	  else
+	    priv->current_page = NULL;
+        }
+    }
 
   priv->pages = g_list_remove_link (priv->pages, element);
   priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
