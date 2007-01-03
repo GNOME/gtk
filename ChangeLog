@@ -1,3 +1,11 @@
+2007-01-03  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from HEAD.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_focus_out_event):
+	cancel editing (ie. don't accept changes) when the entry loses
+	focus. (Fixes #164494, reported by Chris Rouch).
+
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Export SED to make sourcing of
