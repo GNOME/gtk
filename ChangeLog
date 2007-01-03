@@ -1,5 +1,10 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Export SED to make sourcing of
+	libtool work. Tighten up the directfb pkgconfig check.
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (get_text_area_size): Work when the
 	entry is not realized.  (#392315, Yevgen Muntyan)
 

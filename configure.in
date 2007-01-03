@@ -370,6 +370,7 @@ AC_ARG_ENABLE(explicit-deps,
 AC_MSG_CHECKING([Whether to write dependencies into .pc files])
 case $enable_explicit_deps in
   auto)
+    export SED
     deplibs_check_method=`(./libtool --config; echo 'eval echo $deplibs_check_method') | sh`
     if test "x$deplibs_check_method" '!=' xpass_all || test "x$enable_static" = xyes ; then
       enable_explicit_deps=yes  
@@ -1417,14 +1418,15 @@ if test "x$gdktarget" = "xdirectfb"; then
   DIRECTFB_REQUIRED_VERSION=0.9.24
   AC_MSG_CHECKING(for DirectFB)
 
-  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb ; then
+  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb -a $PKG_CONFIG --exists cairo-directfb ; then
       AC_MSG_RESULT(found)
       GDK_EXTRA_CFLAGS="`$PKG_CONFIG --cflags cairo-directfb` $GDK_EXTRA_CFLAGS"
       GDK_EXTRA_LIBS="`$PKG_CONFIG --libs cairo-directfb` $GDK_EXTRA_LIBS"
   else
       AC_MSG_ERROR([
-*** DirectFB $DIRECTFB_REQUIRED_VERSION or newer is required. The latest
-*** version of DirectFB is always available from http://www.directfb.org/.
+*** DirectFB $DIRECTFB_REQUIRED_VERSION or newer and the cairo backend 
+*** are required. The latest version of DirectFB is always available 
+*** from http://www.directfb.org/.
   ])
   fi
 
@@ -1597,6 +1599,7 @@ CPPFLAGS="$gtk_save_cppflags"
 #
 # We are using gmodule-no-export now, but I'm leaving the stripping
 # code in place for now, since pango and atk still require gmodule.
+export SED
 export_dynamic=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
 if test -n "$export_dynamic"; then
   GDK_PIXBUF_DEP_LIBS=`echo $GDK_PIXBUF_DEP_LIBS | sed -e "s/$export_dynamic//"`
