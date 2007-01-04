@@ -1202,6 +1202,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
 typedef struct {
   GtkPrinterCups *printer;
   GIOChannel *ppd_io;
+  http_t *http;
 } GetPPDData;
 
 static void
@@ -1209,7 +1210,7 @@ get_ppd_data_free (GetPPDData *data)
 {
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
-
+  httpClose (data->http);
   g_io_channel_unref (data->ppd_io);
   g_object_unref (data->printer);
   g_free (data);
@@ -1265,11 +1266,10 @@ cups_request_ppd (GtkPrinter *printer)
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
-  /* FIXME this can return NULL! */
   http = httpConnectEncrypt (cups_printer->hostname, 
 			     cups_printer->port,
 			     cupsEncryption ());
-
+  
   data = g_new0 (GetPPDData, 1);
 
   fd = g_file_open_tmp ("gtkprint_ppd_XXXXXX", 
@@ -1296,6 +1296,7 @@ cups_request_ppd (GtkPrinter *printer)
       return;
     }
     
+  data->http = http;
   fchmod (fd, S_IRUSR | S_IWUSR);
   data->ppd_io = g_io_channel_unix_new (fd);
   g_io_channel_set_encoding (data->ppd_io, NULL, NULL);
@@ -1304,8 +1305,9 @@ cups_request_ppd (GtkPrinter *printer)
   data->printer = g_object_ref (printer);
 
   resource = g_strdup_printf ("/printers/%s.ppd", 
-                              gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS(printer)));
-  request = gtk_cups_request_new (http,
+                              gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
+
+  request = gtk_cups_request_new (data->http,
                                   GTK_CUPS_GET,
 				  0,
                                   data->ppd_io,
