@@ -1,3 +1,7 @@
+2007-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcolorsel.c: Fix some compiler warnings.
+
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c: Rework the beep-on-uninserted-text
