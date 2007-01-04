@@ -1,5 +1,13 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry):
+	Exit early if we can't get file info - this happens
+	if the iter points to the row where we are editing
+	the name for a newly created folder.  (#392191, Michael
+	Partridge, patch by Kristian Rietveld)
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/*.c:
 	* gdk/x11/*.c: Apply a patch by Chris Wilson to
 	avoid spurious valgrind warnings from XSendEvent() 
