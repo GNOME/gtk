@@ -1,3 +1,7 @@
+2007-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c (OneLine32): Fix a warning
+
 2006-12-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-bmp.c (decode_bitmasks): Handle bmps
