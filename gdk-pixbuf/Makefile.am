@@ -6,7 +6,7 @@ no_undefined = -no-undefined
 endif
 
 if OS_WIN32
-gdk_pixbuf_def = $(srcdir)/gdk_pixbuf.def
+gdk_pixbuf_def = gdk_pixbuf.def
 gdk_pixbuf_symbols = -export-symbols $(gdk_pixbuf_def)
 
 gdk_pixbuf_win32_res = gdk_pixbuf-win32-res.o
