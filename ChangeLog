@@ -1,5 +1,13 @@
 2007-01-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am:
+	* gdk-pixbuf/Makefile.am:
+	* configure.in:
+	* gdk/win32/rc/gdk.rc.in: Cross-compilation fixes.
+	(#392646, Yevgen Muntyan)
+
+2007-01-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/textscroll.c:
 	* gtk/gtkiconview.c:
 	* gtk/gtkicontheme.c:

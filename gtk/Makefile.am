@@ -1115,11 +1115,19 @@ stamp-icons: $(STOCK_ICONS)
 	done									\
 	&& touch stamp-icons
 
+if CROSS_COMPILING
+gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
+else
+gtk_update_icon_cache_program =							\
+	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
+	   ./gtk-update-icon-cache
+endif
+
 gtkbuiltincache.h: @REBUILD@ stamp-icons
 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
-	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
-	   ./gtk-update-icon-cache --force --ignore-theme-index 		\
-	   --source builtin_icons stock-icons > gtkbuiltincache.h
+	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
+	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
+	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
 EXTRA_DIST +=                   \
 	$(STOCK_ICONS)		\
