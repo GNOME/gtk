@@ -2192,7 +2192,18 @@ gtk_label_size_allocate (GtkWidget     *widget,
   if (label->ellipsize)
     {
       if (label->layout)
-	pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
+	{
+	  gint width;
+	  PangoRectangle logical;
+
+	  width = (allocation->width - label->misc.xpad * 2) * PANGO_SCALE;
+
+	  pango_layout_set_width (label->layout, -1);
+	  pango_layout_get_extents (label->layout, NULL, &logical);
+
+	  if (logical.width > width)
+	    pango_layout_set_width (label->layout, width);
+	}
     }
 
   if (label->select_info && label->select_info->window)
@@ -2285,12 +2296,14 @@ get_layout_location (GtkLabel  *label,
   if (label->ellipsize || priv->width_chars > 0)
     {
       int width;
+      PangoRectangle logical;
 
-      width = pango_layout_get_width (label->layout);
-      if (width == -1)
-	pango_layout_get_pixel_size (label->layout, &req_width, NULL);
-      else
-	req_width = PANGO_PIXELS (width);
+      pango_layout_get_pixel_extents (label->layout, NULL, &logical);
+
+      req_width = logical.width;
+      if (width != -1)
+	req_width = MIN(PANGO_PIXELS (width), req_width);
+      req_width += 2 * misc->xpad;
     }
   else
     req_width = widget->requisition.width;
