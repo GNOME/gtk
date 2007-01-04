@@ -1777,12 +1777,13 @@ available_choices (ppd_file_t     *ppd,
 	all_default = FALSE;
     }
 
-  if (all_default && !keep_if_only_one_option)
-    return 0;
-  
-  if (num_conflicts == option->num_choices)
-    return 0;
+  if ((all_default && !keep_if_only_one_option) ||
+      (num_conflicts == option->num_choices))
+    {
+      g_free (conflicts);
 
+      return 0;
+    }
 
   /* Some ppds don't have a "use printer default" option for
    * InputSlot. This means you always have to select a particular slot,
@@ -1821,7 +1822,6 @@ available_choices (ppd_file_t     *ppd,
   
   if (available)
     {
-      
       *available = g_new (ppd_choice_t *, option->num_choices - num_conflicts + add_auto);
 
       i = 0;
@@ -1834,6 +1834,8 @@ available_choices (ppd_file_t     *ppd,
       if (add_auto) 
 	(*available)[i++] = NULL;
     }
+
+  g_free (conflicts);
   
   return option->num_choices - num_conflicts + add_auto;
 }
