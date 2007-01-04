@@ -6139,6 +6139,12 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
       info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
 
+      /* If the cursor moved to the row of the newly created folder, 
+       * retrieving info will return NULL.
+       */
+      if (!info)
+	return;
+
       g_free (impl->browse_files_last_selected_name);
       impl->browse_files_last_selected_name = g_strdup (gtk_file_info_get_display_name (info));
 
