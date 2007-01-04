@@ -1009,7 +1009,8 @@ AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
 if test $cross_compiling = yes; then
   AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
-  if test x$GDK_PIXBUF_CSOURCE = xno; then
+  AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
+  if test x$GTK_UPDATE_ICON_CACHE = xno; then
     REBUILD_PNGS=#
   fi
 fi
@@ -1019,7 +1020,7 @@ if test ! -f $srcdir/gtk/gtkbuiltincache.h &&
      AC_MSG_ERROR([
 *** gtkbuiltincache.h is not in the tree, and cannot be built
 *** because you don't have libpng, or (when cross-compiling) you 
-*** don't have a prebuilt gdk-pixbuf-csource on the host system.])
+*** don't have a prebuilt gtk-update-icon-cache on the build system.])
 fi
 
 AC_SUBST(REBUILD_PNGS)

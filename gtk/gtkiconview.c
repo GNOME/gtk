@@ -440,6 +440,8 @@ static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView             *icon_
 					   	  GdkEventMotion          *event);
 
 static void     remove_scroll_timeout            (GtkIconView *icon_view);
+static void     clear_dest_info                  (GtkIconView *icon_view);
+static void     clear_source_info                (GtkIconView *icon_view);
 
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
@@ -970,6 +972,9 @@ gtk_icon_view_destroy (GtkObject *object)
       icon_view->priv->vadjustment = NULL;
     }
   
+  clear_dest_info (icon_view);
+  clear_source_info (icon_view);
+
   (* GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy) (object);
 }
 
