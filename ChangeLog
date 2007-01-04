@@ -1,5 +1,9 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix #332604, reported by Joe Wreschnig, patch
 	by Jan Arne Petersen and Behdad Esfahbod.
 
